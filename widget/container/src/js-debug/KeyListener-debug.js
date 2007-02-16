@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * KeyListener is a utility that provides an easy interface for listening for keydown/keyup events fired against DOM elements.
 * @namespace YAHOO.util
@@ -14,7 +7,7 @@ Version 0.12.2
 * @param {String}	attachTo	The element or element ID to which the key event should be attached
 * @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
 * @param {Function}	handler		The CustomEvent handler to fire when the key event is detected
-* @param {Object}	handler		An object literal representing the handler. 
+* @param {Object}	handler		An object literal representing the handler.
 * @param {String}	event		Optional. The event (keydown or keyup) to listen for. Defaults automatically to keydown.
 */
 YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
@@ -39,7 +32,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	* @param {Object}	keyData		The object literal representing the key(s) to detect. Possible attributes are shift(boolean), alt(boolean), ctrl(boolean) and keys(either an int or an array of ints representing keycodes).
 	*/
 	var keyEvent = new YAHOO.util.CustomEvent("keyPressed");
-	
+
 	/**
 	* The CustomEvent fired when the KeyListener is enabled via the enable() function
 	* @event enabledEvent
@@ -72,10 +65,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	* @private
 	*/
 	function handleKeyPress(e, obj) {
-		if (! keyData.shift) {	
-			keyData.shift = false; 
+		if (! keyData.shift) {
+			keyData.shift = false;
 		}
-		if (! keyData.alt) {	
+		if (! keyData.alt) {
 			keyData.alt = false;
 		}
 		if (! keyData.ctrl) {
@@ -83,10 +76,10 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 		}
 
 		// check held down modifying keys first
-		if (e.shiftKey == keyData.shift && 
+		if (e.shiftKey == keyData.shift &&
 			e.altKey   == keyData.alt &&
 			e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
-			
+
 			var dataItem;
 			var keyPressed;
 
@@ -146,7 +139,7 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
 	* Returns a String representation of the object.
 	* @method toString
 	* @return {String}	The string representation of the KeyListener
-	*/ 
+	*/
 	this.toString = function() {
 		return "KeyListener [" + keyData.keys + "] " + attachTo.tagName + (attachTo.id ? "[" + attachTo.id + "]" : "");
 	};

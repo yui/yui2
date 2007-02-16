@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * OverlayManager is used for maintaining the focus status of multiple Overlays.* @namespace YAHOO.widget
 * @namespace YAHOO.widget
@@ -44,7 +37,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	/**
 	* Initializes the default configuration of the OverlayManager
 	* @method initDefaultConfig
-	*/	
+	*/
 	initDefaultConfig : function() {
 		/**
 		* The collection of registered Overlays in use by the OverlayManager
@@ -61,7 +54,7 @@ YAHOO.widget.OverlayManager.prototype = {
 		* @default "mousedown"
 		*/
 		this.cfg.addProperty("focusevent", { value:"mousedown" } );
-	}, 
+	},
 
 	/**
 	* Initializes the OverlayManager
@@ -153,11 +146,11 @@ YAHOO.widget.OverlayManager.prototype = {
 			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
 				YAHOO.util.Dom.removeClass(this.overlays[o].element, YAHOO.widget.OverlayManager.CSS_FOCUSED);
-			}		
+			}
 		};
 
 		var overlays = this.cfg.getProperty("overlays");
-		
+
 		if (! this.overlays) {
 			this.overlays = [];
 		}
@@ -181,7 +174,7 @@ YAHOO.widget.OverlayManager.prototype = {
 
 			overlay.focusEvent = new YAHOO.util.CustomEvent("focus");
 			overlay.blurEvent = new YAHOO.util.CustomEvent("blur");
-			
+
 			var mgr=this;
 
 			overlay.focus = function() {
@@ -197,7 +190,7 @@ YAHOO.widget.OverlayManager.prototype = {
 			var focusOnDomEvent = function(e,obj) {
 				overlay.focus();
 			};
-			
+
 			var focusevent = this.cfg.getProperty("focusevent");
 			YAHOO.util.Event.addListener(overlay.element,focusevent,focusOnDomEvent,this,true);
 
@@ -207,7 +200,7 @@ YAHOO.widget.OverlayManager.prototype = {
 			} else {
 				overlay.cfg.setProperty("zIndex", 0);
 			}
-			
+
 			this.overlays.push(overlay);
 			return true;
 		} else if (overlay instanceof Array) {
@@ -244,7 +237,7 @@ YAHOO.widget.OverlayManager.prototype = {
 				if (this.overlays[p].id == overlay) {
 					return this.overlays[p];
 				}
-			}			
+			}
 		}
 		return null;
 	},
@@ -292,7 +285,7 @@ YAHOO.widget.OverlayManager.prototype = {
 	* Returns a string representation of the object.
 	* @method toString
 	* @return {String}	The string representation of the OverlayManager
-	*/ 
+	*/
 	toString : function() {
 		return "OverlayManager";
 	}

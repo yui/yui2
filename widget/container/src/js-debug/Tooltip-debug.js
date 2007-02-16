@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * Tooltip is an implementation of Overlay that behaves like an OS tooltip, displaying when the user mouses over a particular element, and disappearing on mouse out.
 * @namespace YAHOO.widget
@@ -28,7 +21,7 @@ YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 * @final
 * @type String
 */
-YAHOO.widget.Tooltip.CSS_TOOLTIP = "tt";
+YAHOO.widget.Tooltip.CSS_TOOLTIP = "yui-tt";
 
 /**
 * The Tooltip initialization method. This method is automatically called by the constructor. A Tooltip is automatically rendered by the init method, and it also is set to be invisible by default, and constrained to viewport by default as well.
@@ -55,7 +48,7 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 		if (userConfig) {
 			this.cfg.applyConfig(userConfig, true);
 		}
-		
+
 		this.cfg.queueProperty("visible",false);
 		this.cfg.queueProperty("constraintoviewport",true);
 
@@ -88,7 +81,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @default 200
 	*/
 	this.cfg.addProperty("showdelay",			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
-	
+
 	/**
 	* The number of milliseconds to wait before automatically dismissing a Tooltip after the mouse has been resting on the context element.
 	* @config autodismissdelay
@@ -96,7 +89,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @default 5000
 	*/
 	this.cfg.addProperty("autodismissdelay",	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
-	
+
 	/**
 	* The number of milliseconds to wait before hiding a Tooltip on mouseover.
 	* @config hidedelay
@@ -112,7 +105,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @default null
 	*/
 	this.cfg.addProperty("text",				{ handler:this.configText, suppressEvent:true } );
-	
+
 	/**
 	* Specifies the container element that the Tooltip's markup should be rendered into.
 	* @config container
@@ -170,7 +163,7 @@ YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 	var context = args[0];
 	if (context) {
-		
+
 		// Normalize parameter into an array
 		if (! (context instanceof Array)) {
 			if (typeof context == "string") {
@@ -232,7 +225,7 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOver = function(e, obj) {
 		obj.logger.log("Clearing hide timer: " + obj.hideProcId, "time");
 		obj.hideProcId = null;
 	}
-	
+
 	var context = this;
 	YAHOO.util.Event.addListener(context, "mousemove", obj.onContextMouseMove, obj);
 
@@ -262,11 +255,11 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 		el.title = obj._tempTitle;
 		obj._tempTitle = null;
 	}
-	
+
 	if (obj.showProcId) {
 		clearTimeout(obj.showProcId);
 		obj.logger.log("Clearing show timer: " + obj.showProcId, "time");
-		obj.showProcId = null;		
+		obj.showProcId = null;
 	}
 
 	if (obj.hideProcId) {
@@ -290,7 +283,7 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 * @return {Number}	The process ID of the timeout function associated with doShow
 */
 YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
-	
+
 	var yOffset = 25;
 	if (this.browser == "opera" && context.tagName == "A") {
 		yOffset += 12;
@@ -310,7 +303,7 @@ YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 			if (me.cfg.getProperty("preventoverlap")) {
 				me.preventOverlap(me.pageX, me.pageY);
 			}
-			
+
 			YAHOO.util.Event.removeListener(context, "mousemove", me.onContextMouseMove);
 
 			me.show();
@@ -342,9 +335,9 @@ YAHOO.widget.Tooltip.prototype.doHide = function() {
 * @param {Number} pageY	The y coordinate position of the mouse pointer
 */
 YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
-	
+
 	var height = this.element.offsetHeight;
-	
+
 	var elementRegion = YAHOO.util.Dom.getRegion(this.element);
 
 	elementRegion.top -= 5;
@@ -353,7 +346,7 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 	elementRegion.bottom += 5;
 
 	var mousePoint = new YAHOO.util.Point(pageX, pageY);
-	
+
 	this.logger.log("context " + elementRegion, "ttip");
 	this.logger.log("mouse " + mousePoint, "ttip");
 
@@ -367,7 +360,7 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 * Returns a string representation of the object.
 * @method toString
 * @return {String}	The string representation of the Tooltip
-*/ 
+*/
 YAHOO.widget.Tooltip.prototype.toString = function() {
 	return "Tooltip " + this.id;
 };

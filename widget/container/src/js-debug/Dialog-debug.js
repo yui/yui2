@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * Dialog is an implementation of Panel that can be used to submit form data. Built-in functionality for buttons with event handlers is included, and button sets can be build dynamically, or the preincluded ones for Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
 * @namespace YAHOO.widget
@@ -28,7 +21,7 @@ YAHOO.extend(YAHOO.widget.Dialog, YAHOO.widget.Panel);
 * @final
 * @type String
 */
-YAHOO.widget.Dialog.CSS_DIALOG = "dialog";
+YAHOO.widget.Dialog.CSS_DIALOG = "yui-dialog";
 
 /**
 * Initializes the class's configurable properties which can be changed using the Dialog's Config object (cfg).
@@ -64,14 +57,14 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	};
 
 	// Add form dialog config properties //
-	
+
 	/**
 	* The method to use for posting the Dialog's form. Possible values are "async", "form", and "manual".
-	* @config postmethod 
+	* @config postmethod
 	* @type String
 	* @default async
 	*/
-	this.cfg.addProperty("postmethod", { value:"async", handler:this.configPostMethod, validator:function(val) { 
+	this.cfg.addProperty("postmethod", { value:"async", handler:this.configPostMethod, validator:function(val) {
 													if (val != "form" && val != "async" && val != "none" && val != "manual") {
 														return false;
 													} else {
@@ -98,9 +91,9 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	/**
 	* CustomEvent fired prior to submission
 	* @event beforeSumitEvent
-	*/	
+	*/
 	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent("beforeSubmit");
-	
+
 	/**
 	* CustomEvent fired after submission
 	* @event submitEvent
@@ -116,7 +109,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	/**
 	* CustomEvent fired prior to asynchronous submission
 	* @event asyncSubmitEvent
-	*/	
+	*/
 	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent("asyncSubmit");
 
 	/**
@@ -141,7 +134,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 */
 YAHOO.widget.Dialog.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Dialog.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
-	
+
 	this.beforeInitEvent.fire(YAHOO.widget.Dialog);
 
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Dialog.CSS_DIALOG);
@@ -197,12 +190,12 @@ YAHOO.widget.Dialog.prototype.doSubmit = function() {
 * @method registerForm
 */
 YAHOO.widget.Dialog.prototype.registerForm = function() {
-	var form = this.element.getElementsByTagName("FORM")[0];
+	var form = this.element.getElementsByTagName("form")[0];
 
 	if (! form) {
 		var formHTML = "<form name=\"frm_" + this.id + "\" action=\"\"></form>";
 		this.body.innerHTML += formHTML;
-		form = this.element.getElementsByTagName("FORM")[0];
+		form = this.element.getElementsByTagName("form")[0];
 	}
 
 	this.firstFormElement = function() {
@@ -234,7 +227,7 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 	if (this.cfg.getProperty("modal") && this.form) {
 
 		var me = this;
-		
+
 		var firstElement = this.firstFormElement || this.firstButton;
 		if (firstElement) {
 			this.preventBackTab = new YAHOO.util.KeyListener(firstElement, { shift:true, keys:9 }, {fn:me.focusLast, scope:me, correctScope:true} );
@@ -269,18 +262,12 @@ YAHOO.widget.Dialog.prototype.configClose = function(type, args, obj) {
 
 	if (val) {
 		if (! this.close) {
-			this.close = document.createElement("DIV");
-			YAHOO.util.Dom.addClass(this.close, "close");
-
-			if (this.isSecure) {
-				YAHOO.util.Dom.addClass(this.close, "secure");
-			} else {
-				YAHOO.util.Dom.addClass(this.close, "nonsecure");
-			}
+			this.close = document.createElement("div");
+			YAHOO.util.Dom.addClass(this.close, "container-close");
 
 			this.close.innerHTML = "&#160;";
 			this.innerElement.appendChild(this.close);
-			YAHOO.util.Event.addListener(this.close, "click", doCancel, this);	
+			YAHOO.util.Event.addListener(this.close, "click", doCancel, this);
 		} else {
 			this.close.style.display = "block";
 		}
@@ -302,13 +289,13 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 	var buttons = args[0];
 	if (buttons != "none") {
 		this.buttonSpan = null;
-		this.buttonSpan = document.createElement("SPAN");
+		this.buttonSpan = document.createElement("span");
 		this.buttonSpan.className = "button-group";
 
 		for (var b=0;b<buttons.length;b++) {
 			var button = buttons[b];
 
-			var htmlButton = document.createElement("BUTTON");
+			var htmlButton = document.createElement("button");
 			htmlButton.setAttribute("type", "button");
 
 			if (button.isDefault) {
@@ -319,7 +306,7 @@ YAHOO.widget.Dialog.prototype.configButtons = function(type, args, obj) {
 			htmlButton.appendChild(document.createTextNode(button.text));
 			YAHOO.util.Event.addListener(htmlButton, "click", button.handler, this, true);
 
-			this.buttonSpan.appendChild(htmlButton);		
+			this.buttonSpan.appendChild(htmlButton);
 			button.htmlButton = htmlButton;
 
 			if (b === 0) {
@@ -459,7 +446,7 @@ YAHOO.widget.Dialog.prototype.configPostMethod = function(type, args, obj) {
 														YAHOO.util.Event.stopEvent(e);
 														this.submit();
 														this.form.blur();
-													  }, this, true); 
+													  }, this, true);
 };
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
@@ -494,7 +481,7 @@ YAHOO.widget.Dialog.prototype.submit = function() {
 */
 YAHOO.widget.Dialog.prototype.cancel = function() {
 	this.cancelEvent.fire();
-	this.hide();	
+	this.hide();
 };
 
 /**
@@ -533,16 +520,16 @@ YAHOO.widget.Dialog.prototype.getData = function() {
                         case "INPUT":
 
                             if(sType == "checkbox") {
-        
+
                                 oData[sName] = oElement.checked;
-                            
+
                             }
                             else if(sType != "radio") {
-        
+
                                 oData[sName] = oElement.value;
-        
+
                             }
-                        
+
                         break;
 
                         case "TEXTAREA":
@@ -575,7 +562,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
                                     }
 
                                     aValues[aValues.length] = sValue;
-                                
+
                                 }
 
                             }
@@ -615,7 +602,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
                             }
 
                         break;
-                        
+
                         case "checkbox":
 
                             var aValues = [],
@@ -632,7 +619,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
                                 }
 
                             }
-                            
+
                             oData[sName] = aValues;
 
                         break;
@@ -640,9 +627,9 @@ YAHOO.widget.Dialog.prototype.getData = function() {
                     }
 
                 }
-            
+
             }
-        
+
         }
 
     }
@@ -656,7 +643,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 * Returns a string representation of the object.
 * @method toString
 * @return {String}	The string representation of the Dialog
-*/ 
+*/
 YAHOO.widget.Dialog.prototype.toString = function() {
 	return "Dialog " + this.id;
 };

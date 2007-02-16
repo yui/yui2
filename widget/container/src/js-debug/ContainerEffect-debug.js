@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * ContainerEffect encapsulates animation transitions that are executed when an Overlay is shown or hidden.
 * @namespace YAHOO.widget
@@ -147,7 +140,7 @@ YAHOO.widget.ContainerEffect.prototype.handleCompleteAnimateOut = function(type,
 * Returns a string representation of the object.
 * @method toString
 * @return {String}	The string representation of the ContainerEffect
-*/ 
+*/
 YAHOO.widget.ContainerEffect.prototype.toString = function() {
 	var output = "ContainerEffect";
 	if (this.overlay) {
@@ -169,7 +162,7 @@ YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
 
 	fade.handleStartAnimateIn = function(type,args,obj) {
 		YAHOO.util.Dom.addClass(obj.overlay.element, "hide-select");
-		
+
 		if (! obj.overlay.underlay) {
 			obj.overlay.cfg.refireEvent("underlay");
 		}
@@ -179,7 +172,7 @@ YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
 			obj.overlay.underlay.style.filter = null;
 		}
 
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible"); 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "visible");
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 0);
 	};
 
@@ -188,8 +181,8 @@ YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
 
 		if (obj.overlay.element.style.filter) {
 			obj.overlay.element.style.filter = null;
-		}			
-		
+		}
+
 		if (obj.overlay.underlay) {
 			YAHOO.util.Dom.setStyle(obj.overlay.underlay, "opacity", obj.initialUnderlayOpacity);
 		}
@@ -206,18 +199,18 @@ YAHOO.widget.ContainerEffect.FADE = function(overlay, dur) {
 		}
 	};
 
-	fade.handleCompleteAnimateOut =  function(type, args, obj) { 
+	fade.handleCompleteAnimateOut =  function(type, args, obj) {
 		YAHOO.util.Dom.removeClass(obj.overlay.element, "hide-select");
 		if (obj.overlay.element.style.filter) {
 			obj.overlay.element.style.filter = null;
-		}				
+		}
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
-		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 1); 
+		YAHOO.util.Dom.setStyle(obj.overlay.element, "opacity", 1);
 
 		obj.overlay.cfg.refireEvent("iframe");
 
 		obj.animateOutCompleteEvent.fire();
-	};	
+	};
 
 	fade.init();
 	return fade;
@@ -239,25 +232,25 @@ YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 	var clientWidth = YAHOO.util.Dom.getClientWidth();
 	var offsetWidth = overlay.element.offsetWidth;
 
-	var slide = new YAHOO.widget.ContainerEffect(overlay, { 
-															attributes:{ points: { to:[x, y] } }, 
-															duration:dur, 
-															method:YAHOO.util.Easing.easeIn 
-														}, 
-														{ 
+	var slide = new YAHOO.widget.ContainerEffect(overlay, {
+															attributes:{ points: { to:[x, y] } },
+															duration:dur,
+															method:YAHOO.util.Easing.easeIn
+														},
+														{
 															attributes:{ points: { to:[(clientWidth+25), y] } },
-															duration:dur, 
+															duration:dur,
 															method:YAHOO.util.Easing.easeOut
 														},
 														overlay.element,
 														YAHOO.util.Motion);
-												
+
 
 	slide.handleStartAnimateIn = function(type,args,obj) {
 		obj.overlay.element.style.left = (-25-offsetWidth) + "px";
 		obj.overlay.element.style.top  = y + "px";
 	};
-	
+
 	slide.handleTweenAnimateIn = function(type, args, obj) {
 
 
@@ -273,7 +266,7 @@ YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 		obj.overlay.cfg.setProperty("xy", [currentX,currentY], true);
 		obj.overlay.cfg.refireEvent("iframe");
 	};
-	
+
 	slide.handleCompleteAnimateIn = function(type, args, obj) {
 		obj.overlay.cfg.setProperty("xy", [x,y], true);
 		obj.startX = x;
@@ -284,7 +277,7 @@ YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 
 	slide.handleStartAnimateOut = function(type, args, obj) {
 		var vw = YAHOO.util.Dom.getViewportWidth();
-		
+
 		var pos = YAHOO.util.Dom.getXY(obj.overlay.element);
 
 		var yso = pos[1];
@@ -303,12 +296,12 @@ YAHOO.widget.ContainerEffect.SLIDE = function(overlay, dur) {
 		obj.overlay.cfg.refireEvent("iframe");
 	};
 
-	slide.handleCompleteAnimateOut = function(type, args, obj) { 
+	slide.handleCompleteAnimateOut = function(type, args, obj) {
 		YAHOO.util.Dom.setStyle(obj.overlay.element, "visibility", "hidden");
 
 		obj.overlay.cfg.setProperty("xy", [x,y]);
 		obj.animateOutCompleteEvent.fire();
-	};	
+	};
 
 	slide.init();
 	return slide;
