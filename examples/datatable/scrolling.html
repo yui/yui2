@@ -23,6 +23,47 @@
 </div>
 <div id="bd">
     <div id="scroll"></div>
+
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+#scroll {margin:1em;}
+#scroll table {border-collapse:collapse;}
+#scroll th, #scroll td {border:1px solid #000;}
+#scroll th {background-color:#696969;color:#fff;}/*dark gray*/
+#scroll .yui-dt-odd {background-color:#eee;} /*light gray*/
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+<div id="scroll"></div>
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+var myColumnHeaders = [
+    {key:"areacode"},
+    {key:"state"}
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["areacode","state"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnSet,myDataSource,{scrollable:true});
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -34,6 +75,10 @@
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 
 var myColumnHeaders = [
     {key:"areacode"},
@@ -48,6 +93,10 @@ myDataSource.responseSchema = {
 };
 
 var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnSet,myDataSource,{scrollable:true});
+</script>
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>

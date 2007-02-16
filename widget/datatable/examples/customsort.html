@@ -20,8 +20,6 @@
 #sort .yui-dt-sortedbyasc .yui-dt-headtext {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;}/*arrow up*/
 #sort .yui-dt-sortedbydesc .yui-dt-headtext {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;}/*arrow down*/
 #sort .yui-dt-odd {background-color:#eee;} /*light gray zebra stripe*/
-
-
 </style>
 </head>
 <body>
@@ -30,6 +28,70 @@
 </div>
 <div id="bd">
     <div id="sort"></div>
+
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+#sort {margin:1em;}
+#sort table {border-collapse:collapse;}
+#sort th, #sort td {border:1px solid #000;}
+#sort th {background-color:#696969;}/*dark gray*/
+#sort th a {color:#fff;}
+#sort th .yui-dt-headtext {margin-right:5px;padding-right:15px;} /*room for arrow*/
+#sort .yui-dt-sortedbyasc, #sort .yui-dt-sortedbydesc {background-color:#3F3F3F;}/*dark gray*/
+#sort .yui-dt-sortedbyasc .yui-dt-headtext {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;}/*arrow up*/
+#sort .yui-dt-sortedbydesc .yui-dt-headtext {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;}/*arrow down*/
+#sort .yui-dt-odd {background-color:#eee;} /*light gray zebra stripe*/
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+<div id="sort"></div>
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+// Custom sort functionality to sort by areacode within states
+YAHOO.example.sortStatesAsc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareAsc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+};
+YAHOO.example.sortStatesDesc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareDesc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+};
+
+var myColumnHeaders = [
+    {key:"areacode",text:"Area Codes",sortable:true},
+    {key:"state",text:"States",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}}
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["areacode","state"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("sort",myColumnSet,myDataSource,{caption:"Example: Custom Sorting",sortedBy:{colKey:"areacode",dir:"asc"}});
+var onColumnSort = function(oArgs) {
+    var column = oArgs.column;
+    var dir = oArgs.dir;
+    YAHOO.log("Column \"" + column.key + "\" sorted " + dir,"info","SortExample");
+};
+myDataTable.subscribe("columnSortEvent",onColumnSort);
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -41,6 +103,10 @@
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 
 // Custom sort functionality to sort by areacode within states
 YAHOO.example.sortStatesAsc = function(a, b) {
@@ -73,7 +139,10 @@ var onColumnSort = function(oArgs) {
     YAHOO.log("Column \"" + column.key + "\" sorted " + dir,"info","SortExample");
 };
 myDataTable.subscribe("columnSortEvent",onColumnSort);
-
+</script>
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>

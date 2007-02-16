@@ -14,7 +14,6 @@
 #markup table {border-collapse:collapse;}
 #markup th {border:1px solid #000;padding:.25em;background-color:#696969;color:#fff;}/*dark gray*/
 #markup td {border-bottom:1px solid #000;padding:.25em;}
-#basic .small {font-size:77%}
 </style>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -103,6 +102,107 @@ YAHOO.util.Event.onAvailable("markup",YAHOO.example.enhanceFromMarkup,YAHOO.exam
         </tbody>
     </table>
     </div>
-</div>
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+#markup {margin:1em;}
+#markup table {border-collapse:collapse;}
+#markup th {border:1px solid #000;padding:.25em;background-color:#696969;color:#fff;}/*dark gray*/
+#markup td {border-bottom:1px solid #000;padding:.25em;}
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+    <div id="markup">
+    <table id="accounts">
+        <thead>
+            <tr>
+                <th>Due Date</th>
+                <th>Account Number</th>
+                <th>Quantity</th>
+                <th>Amount Due</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1/23/1999</td>
+                <td>29e8548592d8c82</td>
+                <td>12</td>
+                <td>$150.00</td>
+            </tr>
+            <tr>
+                <td>5/19/1999</td>
+                <td>83849</td>
+                <td>8</td>
+                <td>$60.00</td>
+            </tr>
+            <tr>
+                <td>8/9/1999</td>
+                <td>11348</td>
+                <td>1</td>
+                <td>$34.99</td>
+            </tr>
+            <tr>
+                <td>1/23/2000</td>
+                <td>29e8548592d8c82</td>
+                <td>10</td>
+                <td>$150.00</td>
+            </tr>
+            <tr>
+                <td>4/28/2000</td>
+                <td>37892857482836437378273</td>
+                <td>123</td>
+                <td>$33.32</td>
+            </tr>
+            <tr>
+                <td>1/23/2001</td>
+                <td>83849</td>
+                <td>5</td>
+                <td>$150.00</td>
+            </tr>
+            <tr>
+                <td>9/30/2001</td>
+                <td>224747</td>
+                <td>14</td>
+                <td>$56.78</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+YAHOO.example.enhanceFromMarkup = function() {
+    this.logger = new YAHOO.widget.LogReader();
+
+    this.columnHeaders = [
+        {key:"due",text:"Due Date",type:"date",sortable:true},
+        {key:"account",text:"Account Number",sortable:true},
+        {key:"quantity",text:"Quantity",type:"number",sortable:true},
+        {key:"amount",text:"Amount Due",type:"currency",sortable:true}
+    ];
+    this.columnSet = new YAHOO.widget.ColumnSet(this.columnHeaders);
+
+    var markup = YAHOO.util.Dom.get("markup");
+    this.dataTable = new YAHOO.widget.DataTable(markup,this.columnSet,null,{caption:"Example: Progressively Enhanced Table from Markup"});
+};
+
+YAHOO.util.Event.onAvailable("markup",YAHOO.example.enhanceFromMarkup,YAHOO.example.enhanceFromMarkup,true);
+        </textarea>
+    </div>
+    <!-- Code sample ends --></div>
+
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
 </body>
 </html>

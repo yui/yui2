@@ -23,6 +23,102 @@
 </div>
 <div id="bd">
     <div id="rowselect"></div>
+
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+#rowselect {margin:1em;}
+#rowselect table {border-collapse:collapse;}
+#rowselect th, #rowselect td {border:1px solid #000;padding:.25em;}
+#rowselect th {background-color:#696969;color:#fff;}/*dark gray*/
+#rowselect .yui-dt-odd {background-color:#eee;} /*light gray*/
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+<div id="rowselect"></div>
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+// Define a custom formatter for one of the Columns
+var myFormatter = function(elCell, oRecord, oColumn, oData) {
+    if(oRecord["Unread"]) {
+        elCell.innerHTML = "X";
+    }
+};
+
+var myColumnHeaders = [
+    {text:"New",formatter:myFormatter},
+    {key:"Date",type:"date"},
+    {key:"To"},
+    {key:"Subject"}
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+myDataSource.responseSchema = {
+    resultsList: ["messages"],
+    fields: ["Date","To","From","Subject","XID","Date","Unread"]
+};
+
+// Override the built-in Column formatter
+YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
+    var oDate = oData;
+    var sMonth;
+    switch(oDate.getMonth()) {
+        case 1:
+            sMonth = "Jan";
+            break;
+        case 2:
+            sMonth = "Feb";
+            break;
+        case 3:
+            sMonth = "Mar";
+            break;
+        case 4:
+            sMonth = "Apr";
+            break;
+        case 5:
+            sMonth = "May";
+            break;
+        case 6:
+            sMonth = "Jun";
+            break;
+        case 7:
+            sMonth = "Jul";
+            break;
+        case 8:
+            sMonth = "Aug";
+            break;
+        case 9:
+            sMonth = "Sep";
+            break;
+        case 10:
+            sMonth = "Oct";
+            break;
+        case 11:
+            sMonth = "Nov";
+            break;
+        case 12:
+            sMonth = "Dec";
+            break;
+    }
+    elCell.innerHTML = sMonth + " " + oDate.getDate()  + ", " + oDate.getFullYear();
+};
+
+var myDataTable = new YAHOO.widget.DataTable("rowselect",myColumnSet,myDataSource,{caption:"Example: Custom Formatting",rowSingleSelect:true});
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -34,6 +130,10 @@
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 
 // Define a custom formatter for one of the Columns
 var myFormatter = function(elCell, oRecord, oColumn, oData) {
@@ -103,6 +203,10 @@ YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
 };
 
 var myDataTable = new YAHOO.widget.DataTable("rowselect",myColumnSet,myDataSource,{caption:"Example: Custom Formatting",rowSingleSelect:true});
+</script>
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>

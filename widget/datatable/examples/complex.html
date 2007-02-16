@@ -27,6 +27,74 @@
 </div>
 <div id="bd">
     <div id="complex"></div>
+
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+#complex {margin:1em;}
+#complex table {border-collapse:collapse;}
+#complex th, #paginated td {border:1px solid #000;width:10em;}
+#complex th {background-color:#696969;color:#fff;}/*dark gray*/
+#complex .yui-dt-odd {background-color:#eee;} /*light gray*/
+#complex .yui-dt-selected {background-color:#97C0A5;} /*green*/
+
+.areacodestyle {text-align:center;}
+.statestyle {padding-left:1em;}
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+<div id="complex"></div>
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+// Custom sort functionality to sort by areacode within states
+YAHOO.example.sortStatesAsc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareAsc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+};
+YAHOO.example.sortStatesDesc = function(a, b) {
+    var comp = YAHOO.util.Sort.compareDesc;
+    var compState = comp(a.state, b.state);
+    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+};
+
+var myColumnHeaders = [
+    {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
+    {key:"state",text:"States",width:"16em",className:"statestyle",sortable:true,sortOptions:{ascHandler:YAHOO.example.sortStatesAsc,descHandler:YAHOO.example.sortStatesDesc}}
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: ["areacode","state"]
+};
+
+var myConfigs = {
+    caption:"Example: Integrated Feature Set",
+    sortedBy:"areacode",
+    sortedByDir:"asc",
+    pageCurrent: 1,
+    rowsPerPage: 25,
+    startRecordIndex: 1,
+    rowsPerPageDropdown: [10,25,50,100]
+}
+
+var myDataTable = new YAHOO.widget.DataTable("complex",myColumnSet,myDataSource,myConfigs);
+myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -74,11 +142,15 @@ var myConfigs = {
     pageCurrent: 1,
     rowsPerPage: 25,
     startRecordIndex: 1,
-    rowsPerPageDropdown: []//10,25,50,100
+    rowsPerPageDropdown: [10,25,50,100]
 }
 
 var myDataTable = new YAHOO.widget.DataTable("complex",myColumnSet,myDataSource,myConfigs);
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
+</script>
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>

@@ -25,6 +25,92 @@
 <div id="bd">
     <div id="singleselect" class="selectionexample"></div>
     <div id="multiselect" class="selectionexample"></div>
+
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+.selectionexample {margin:1em;}
+.selectionexample table {border-collapse:collapse;}
+.selectionexample th, #rowselect td {border:1px solid #000;padding:.25em;}
+.selectionexample th {background-color:#696969;color:#fff;}/*dark gray*/
+.selectionexample .yui-dt-odd {background-color:#eee;} /*light gray*/
+.selectionexample .yui-dt-selected {background-color:#97C0A5;} /*green*/
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+<div id="singleselect" class="selectionexample"></div>
+<div id="multiselect" class="selectionexample"></div>
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+var myColumnHeaders = [
+    {key:"Date",type:"date"},
+    {key:"To"},
+    {key:"From"},
+    {key:"Subject"}
+];
+
+// Single select example
+var myColumnSet1 = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource1 = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+myDataSource1.responseType = YAHOO.util.DataSource.TYPE_JSON;
+myDataSource1.responseSchema = {
+    resultsList: ["messages"],
+    fields: ["Date","To","From","Subject","XID","Date","Attachment"]
+};
+
+var myDataTable1 = new YAHOO.widget.DataTable("singleselect",myColumnSet1,myDataSource1,
+        {caption:"Example: Row Single-Selection, First Row Selected By Default",rowSingleSelect:true});
+myDataTable1.subscribe("cellClickEvent",myDataTable1.onEventSelectRow);
+myDataTable1.select(myDataTable1.getRow(0));
+
+
+// Multi select example
+var myColumnSet2 = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource2 = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+myDataSource2.responseType = YAHOO.util.DataSource.TYPE_JSON;
+myDataSource2.responseSchema = {
+    resultsList: ["messages"],
+    fields: ["Date","To","From","Subject","XID","Date","Attachment"]
+};
+
+var outputSelections = function(oArgs) {
+    var thisselection = oArgs.els;
+
+    thisselection = thisselection.join(", ");
+    YAHOO.log("This selection/unselection: " + thisselection);
+
+    var allrecords = this.getSelectedRecordIds();
+    allrecords = allrecords.join(", ");
+    YAHOO.log("All selected records: " + allrecords);
+
+    var allrows = this.getSelectedRows();
+    allrows = allrows.join(", ");
+    YAHOO.log("All selected rows: " + allrows);
+}
+var myDataTable2 = new YAHOO.widget.DataTable("multiselect",myColumnSet2,myDataSource2,
+        {caption:"Example: Row Multi-Selection"});
+myDataTable2.subscribe("cellClickEvent",myDataTable2.onEventSelectRow);
+
+
+myDataTable1.subscribe("selectEvent",outputSelections);
+myDataTable1.subscribe("unselectEvent",outputSelections);
+myDataTable2.subscribe("selectEvent",outputSelections);
+myDataTable2.subscribe("unselectEvent",outputSelections);
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -36,6 +122,10 @@
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
 var myLogger = new YAHOO.widget.LogReader();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 
 var myColumnHeaders = [
     {key:"Date",type:"date"},
@@ -91,6 +181,10 @@ myDataTable1.subscribe("selectEvent",outputSelections);
 myDataTable1.subscribe("unselectEvent",outputSelections);
 myDataTable2.subscribe("selectEvent",outputSelections);
 myDataTable2.subscribe("unselectEvent",outputSelections);
+</script>
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>
