@@ -55,15 +55,15 @@
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
 					// Build overlay1 based on markup, initially hidden, fixed to the center of the viewport, and 300px wide
-					YAHOO.example.container.overlay1 = new YAHOO.widget.Overlay("overlay1", { fixedcenter:true, 
-																							  visible:false, 
+					YAHOO.example.container.overlay1 = new YAHOO.widget.Overlay("overlay1", { fixedcenter:true,
+																							  visible:false,
 																							  width:"300px" } );
 					YAHOO.example.container.overlay1.render();
 
 
 					// Build overlay2 dynamically, initially hidden, at position x:400,y:500, and 300px wide
-					YAHOO.example.container.overlay2 = new YAHOO.widget.Overlay("overlay2", { xy:[400,500], 
-																							  visible:false, 
+					YAHOO.example.container.overlay2 = new YAHOO.widget.Overlay("overlay2", { xy:[400,500],
+																							  visible:false,
 																							  width:"300px" } );
 					YAHOO.example.container.overlay2.setHeader("Overlay #2 from Script");
 					YAHOO.example.container.overlay2.setBody("This is a dynamically generated Overlay.");
@@ -71,8 +71,8 @@
 					YAHOO.example.container.overlay2.render(document.body);
 
 					// Build overlay3 dynamically, initially hidden, aligned to context element "context", and 200px wide
-					YAHOO.example.container.overlay3 = new YAHOO.widget.Overlay("overlay3", { context:["ctx","tl","bl"], 
-																							  visible:false, 
+					YAHOO.example.container.overlay3 = new YAHOO.widget.Overlay("overlay3", { context:["ctx","tl","bl"],
+																							  visible:false,
 																							  width:"200px" } );
 					YAHOO.example.container.overlay3.setHeader("Overlay #3 from Script");
 					YAHOO.example.container.overlay3.setBody("This is a dynamically generated Overlay.");
@@ -81,7 +81,7 @@
 
 					YAHOO.util.Event.addListener("show1", "click", YAHOO.example.container.overlay1.show, YAHOO.example.container.overlay1, true);
 					YAHOO.util.Event.addListener("hide1", "click", YAHOO.example.container.overlay1.hide, YAHOO.example.container.overlay1, true);
-					
+
 					YAHOO.util.Event.addListener("show2", "click", YAHOO.example.container.overlay2.show, YAHOO.example.container.overlay2, true);
 					YAHOO.util.Event.addListener("hide2", "click", YAHOO.example.container.overlay2.hide, YAHOO.example.container.overlay2, true);
 
@@ -97,10 +97,10 @@
 
 			<textarea name="code" class="HTML" cols="60" rows="1">
 				<style>
-					.overlay { border:1px dotted black;padding:5px;margin:10px; }
-					.overlay .hd { border:1px solid red;padding:5px; }
-					.overlay .bd { border:1px solid green;padding:5px; }
-					.overlay .ft { border:1px solid blue;padding:5px; }
+					.yui-overlay { border:1px dotted black;padding:5px;margin:10px; }
+					.yui-overlay .hd { border:1px solid red;padding:5px; }
+					.yui-overlay .bd { border:1px solid green;padding:5px; }
+					.yui overlay .ft { border:1px solid blue;padding:5px; }
 
 					#ctx { background:orange;width:100px;height:25px; }
 				</style>
@@ -110,18 +110,18 @@
 
 			<textarea name="code" class="HTML" cols="60" rows="1">
 				<div>
-					overlay1: 
-					<button id="show1">Show</button> 
+					overlay1:
+					<button id="show1">Show</button>
 					<button id="hide1">Hide</button>
 				</div>
 				<div>
-					overlay2: 
-					<button id="show2">Show</button> 
+					overlay2:
+					<button id="show2">Show</button>
 					<button id="hide2">Hide</button>
 				</div>
 				<div>
-					overlay3: 
-					<button id="show3">Show</button> 
+					overlay3:
+					<button id="show3">Show</button>
 					<button id="hide3">Hide</button>
 				</div>
 
@@ -141,11 +141,11 @@
 		</div>
 
 		<div id="ft">&nbsp;</div>
-	</div>	
+	</div>
 
 	<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
-	<script language="javascript"> 
-		dp.SyntaxHighlighter.HighlightAll('code'); 
+	<script language="javascript">
+		dp.SyntaxHighlighter.HighlightAll('code');
 	</script>
 
 </body>
