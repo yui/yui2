@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd"><html>
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>Example: Push Buttons (YUI Library)</title>
+
+        <!-- Reset and Fonts -->
+        <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
+        <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
+ 
+        <!-- CSS for Button -->
+        <link rel="stylesheet" type="text/css" href="../../build/button/assets/button.css">
+ 
+        <!-- Page-specific styles -->
+        <style type="text/css">
+
+            body { margin:.5em; }
+
+            h1 { font-weight:bold; }
+
+            fieldset, 
+            fieldset div {
+
+                border:2px groove #ccc;
+                margin:.5em;
+                padding:.5em;
+
+            }
+
+            .yuibutton#pushbutton2 button,
+            .yuibutton#pushbutton5 button, 
+            .yuibutton#pushbutton8 button {
+
+                background:url(img/add.gif) center center no-repeat;
+                text-indent:-4em;
+                overflow:hidden;
+                padding:.25em .75em;
+
+                width:2em;
+                *margin-left:4em;   /* IE only */
+                *padding:.25em 1.75em;  /* IE only */
+            }
+            
+            .yuibutton#pushbutton3 button,
+            .yuibutton#pushbutton6 button, 
+            .yuibutton#pushbutton9 button {
+
+                padding-left:2em;
+                background:url(img/add.gif) 10% 50% no-repeat;
+            
+            }
+
+        </style>
+
+        
+        <!-- Dependency source files -->
+        <script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
+        <script type="text/javascript" src="../../build/element/element-beta.js"></script>
+
+        <!-- Button source file -->
+        <script type="text/javascript" src="../../build/button/button-beta.js"></script>
+
+        <!-- Page-specific JavaScript -->
+        <script type="text/javascript">
+        
+            var oPushButton1 = new YAHOO.widget.Button("pushbutton1src", { id:"pushbutton1" });
+            var oPushButton2 = new YAHOO.widget.Button("pushbutton2src", { id:"pushbutton2" });
+            var oPushButton3 = new YAHOO.widget.Button("pushbutton3src", { id:"pushbutton3" });
+
+            var oPushButton4 = new YAHOO.widget.Button("pushbutton4");
+            var oPushButton5 = new YAHOO.widget.Button("pushbutton5");
+            var oPushButton6 = new YAHOO.widget.Button("pushbutton6");
+
+            var oPushButton7 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton7", container:"pushbuttonsfromjavascript" });
+            var oPushButton8 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton8", container:"pushbuttonsfromjavascript" });
+            var oPushButton9 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton9", container:"pushbuttonsfromjavascript" });
+
+        </script>
+
+    </head>
+    <body>
+
+        <h1>Example: Push Buttons (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
+
+        <form id="example" name="example" method="post" action="example01.html">
+
+            <fieldset id="pushbuttons">
+                <legend>Push Buttons</legend>
+
+                <fieldset id="pushbuttonsfrommarkup">
+                    <legend>From Markup</legend>
+
+                    <div>
+                        <input type="button" id="pushbutton1src" name="button1" value="Add">
+                        <input type="button" id="pushbutton2src" name="button2" value="Add">
+                        <input type="button" id="pushbutton3src" name="button3" value="Add">
+                    </div>
+
+                    <div>
+                        <span id="pushbutton4" class="yuibutton"><span class="first-child"><button type="button" name="button4">Add</button></span></span>
+                        <span id="pushbutton5" class="yuibutton"><span class="first-child"><button type="button" name="button5">Add</button></span></span>
+                        <span id="pushbutton6" class="yuibutton"><span class="first-child"><button type="button" name="button6">Add</button></span></span>
+                    </div>
+
+                </fieldset>
+                
+                <fieldset id="pushbuttonsfromjavascript">
+                    <legend>From JavaScript</legend>
+                </fieldset>
+
+            </fieldset>
+
+        </form>
+
+    </body>
+</html>
