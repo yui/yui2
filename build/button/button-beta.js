@@ -257,28 +257,55 @@ function getFirstElement(p_oElement) {
 * @private
 * @param {String} p_sType String specifying the type of 
 * <code>&#60;input&#62;</code> element to create.
+* @param {String} p_sName String specifying the name of 
+* <code>&#60;input&#62;</code> element to create.
+* @param {String} p_sValue String specifying the value of 
+* <code>&#60;input&#62;</code> element to create.
+* @param {String} p_bChecked Boolean specifying if the  
+* <code>&#60;input&#62;</code> element is to be checked.
 * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-6043025">HTMLInputElement</a>}
 */
-function createInputElement(p_sType) {
+function createInputElement(p_sType, p_sName, p_sValue, p_bChecked) {
 
     var oInput;
 
     if(navigator.userAgent.indexOf("MSIE") != -1) {
 
-        oInput = document.createElement(
-                        "<input type=\"" + p_sType + "\" name=\" \">"
-                    );
+        /*
+            For IE it is necessary to create the element with the 
+            "type," "name," "value," and "checked" properties set all at once.
+        */
+    
+        var sInput = "<input type=\"" + p_sType + "\" name=\"" + p_sName + "\"";
+
+        if(p_bChecked) {
+
+            sInput += " checked";
+        
+        }
+        
+        sInput += ">";
+
+        oInput = document.createElement(sInput);
 
     }
     else {
     
         oInput = document.createElement("input");
+        oInput.name = p_sName;
         oInput.type = p_sType;
+
+        if(p_bChecked) {
+
+            oInput.checked = true;
+        
+        }
 
     }
 
-
+    oInput.value = p_sValue;
+    
     return oInput;
 
 }
@@ -1935,6 +1962,13 @@ _onClick: function(p_oEvent) {
 */
 _onAppendTo: function(p_oEvent) {
 
+    /*
+        It is necessary to call "getForm" using "setTimeout" to make sure that 
+        the button's "form" property returns a node reference.  Sometimes, if
+        you try to get the reference immediately after appending the field, it
+        is null.
+    */
+
     var me = this;
 
     window.setTimeout(function() {
@@ -1993,10 +2027,11 @@ _onFormSubmit: function(p_oEvent, p_oButton) {
 
             if(oValue) {
     
-                var oField = createInputElement("hidden");
-    
-                oField.name = this.get("name") + "_options";
-                oField.value = oValue;
+                var oField = createInputElement(
+                                    "hidden", 
+                                    (this.get("name") + "_options"),
+                                    oValue
+                                );
     
                 oForm.appendChild(oField);
     
@@ -2308,20 +2343,21 @@ createHiddenField: function () {
             bCheckable = (sType == "checkbox" || sType == "radio"),
         
             oField = createInputElement(
-                        (bCheckable ? this.get("type") : "hidden")
-                    );
+                        (bCheckable ? this.get("type") : "hidden"),
+                        this.get("name"),
+                        this.get("value"),
+                        this.get("checked")
+                    ),
+                    
+            oForm = this.getForm();
+    
 
-        oField.name = this.get("name");
-        oField.value = this.get("value");
+        if(oField && bCheckable) {
     
-        if(bCheckable) {
-    
-            oField.checked = this.get("checked");
-            oField.style.display = "none";        
+            oField.style.display = "none";      
+
         }
-    
 
-        var oForm = this.getForm();
     
         if(oForm) {
     
@@ -2941,10 +2977,11 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 
                         if(oValue) {
     
-                            var oField = createInputElement("hidden");
-        
-                            oField.name = oButton.get("name") + "_options";
-                            oField.value = oValue;
+                            var oField = createInputElement(
+                                            "hidden",
+                                            (oButton.get("name") + "_options"),
+                                            oValue
+                                        );
         
                             oButton.getForm().appendChild(oField);
     
