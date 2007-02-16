@@ -1,19 +1,17 @@
 .yuibutton  {
 
-    display:-moz-inline-box; /* Mozilla */
+    display:-moz-inline-stack; /* Gecko */
     display:inline-block; /* IE, Opera and Safari */
 
     border-width:1px 0;
     border-style:solid;
     border-color:#999;
-    
-    background-color:#ecece3;
-    background-position:left center;
-    background-image:url(../img/background.png);
 
-    /* Give the transparent background image to IE */
+    background:#ecece3 url(../img/background.png) left center;
+
+    /* Give the transparent background image to IE 6 */
     _background-image:none;
-    _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/background.png', sizingMethod = 'scale');
+    _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../src/img/background.png', sizingMethod = 'scale');
     
     margin:auto .25em;
     
@@ -21,8 +19,7 @@
 
 .yuibutton .first-child {
 
-    display:-moz-inline-box; /* Mozilla */
-    display:block; /* Opera and Safari */
+    display:block; /* Gecko, Opera and Safari */
     *display:inline-block; /* IE */
 
     border-width:0 1px;
@@ -35,18 +32,21 @@
 
 }
 
-.yuibutton button {
+.yuibutton button,
+.yuibutton a {
 
-    display:-moz-inline-box; /* Mozilla */
     display:block; /* Opera and Safari */
+    display:-moz-inline-block; /* Gecko */
     *display:inline-block; /* IE */
-
-    overflow:visible; /* Remove superfluous padding for IE */
-    font-size:100%; /* Makes form controls resizable in IE */
-    
     padding:.25em .5em;
     border:1px solid #ccc;
 
+}
+
+.yuibutton button {
+
+    overflow:visible; /* Remove superfluous padding for IE */
+    font-size:100%; /* Makes form controls resizable in IE */
     background-color:transparent;
     cursor:pointer;
     cursor:hand;
@@ -55,12 +55,6 @@
 
 .yuibutton a {
 
-    display:-moz-inline-box; /* Mozilla */
-    display:block; /* Opera and Safari */              
-    *display:inline-block; /* IE */
-    
-    padding:.25em .5em;
-    border:1px solid #ccc;
     text-decoration:none;
     color:#000;           
 

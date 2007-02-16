@@ -1,15 +1,21 @@
 /**
 * @module button
-* @description <p>The button module enables the creation of rich, graphical 
-* buttons that function like traditional HTML form buttons.  With the optional 
-* menu module, the button module can be used to create menu buttons and split 
-* buttons; widgets that are not available natively in HTML.  In total, the 
-* button module supports the following types:</p>
-* 
+* @description <p>The Button Control enables the creation of rich, graphical 
+* buttons that function like traditional HTML form buttons.  <em>Unlike</em> 
+* tradition HTML form buttons, buttons created with the Button Control can have 
+* a label that is different from its value.  With the inclusion of the optional 
+* <a href="module_menu.html">Menu Control</a>, the Button Control can also be
+* used to create menu buttons and split buttons, controls that are not 
+* available natively in HTML.  The Button Control can also be thought of as a 
+* way to create more visually engaging implementations of the browser's 
+* default radio-button and check-box controls.</p>
+* <p>The Button Control supports the following types:</p>
 * <dl>
 * <dt>button</dt>
 * <dd>Basic push button that can execute a user-specified command when 
 * pressed.</dd>
+* <dt>link</dt>
+* <dd>Navigates to a specified url when pressed.</dd>
 * <dt>submit</dt>
 * <dd>Submits the parent form when pressed.</dd>
 * <dt>reset</dt>
@@ -19,14 +25,14 @@
 * <dt>radio</dt>
 * <dd>Maintains a "checked" state that can be toggled on and off.  Use with 
 * the ButtonGroup class to create a set of controls that are mutually 
-* exclusive; checking one button in the set will uncheck all others in the 
-* group.</dd>
+* exclusive; checking one button in the set will uncheck all others in 
+* the group.</dd>
 * <dt>menubutton</dt>
 * <dd>When pressed will show/hide a menu.</dd>
 * <dt>splitbutton</dt>
 * <dd>Can execute a user-specified command or display a menu when pressed.</dd>
 * </dl>
-* @title Button Library
+* @title Button
 * @namespace YAHOO.widget
 * @requires yahoo, dom, element, event
 * @optional container, menu
@@ -54,22 +60,20 @@ var Dom = YAHOO.util.Dom,
 
 
 /**
-* The Button class Creates a rich, graphical button.
+* The Button class creates a rich, graphical button.
 * @param {String} p_oElement String specifying the id attribute of the 
 * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
 * <code>&#60;span&#62;</code> element to be used to create the button.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-* one-html.html#ID-6043025">HTMLInputElement</a>|<a href="http://www.w3.org/
-* TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-
-* 48250443">HTMLAnchorElement</a>|<a href="http://www.w3.org/TR/2000/WD-
-* DOM-Level-1-20000929/level-one-html.html#ID-33759296">HTMLElement</a>} 
-* p_oElement Object reference for the <code>&#60;input&#62;</code>, 
-* <code>&#60;a&#62;</code> or <code>&#60;span&#62;</code> element to be 
-* used to create the button.
-* @param {Object} p_oElement Object literal specifying a set of attributes 
-* used to configure the button.
+* one-html.html#ID-6043025">HTMLInputElement</a>|<a href="
+* http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#
+* ID-33759296">HTMLElement</a>} p_oElement Object reference for the 
+* <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
+* <code>&#60;span&#62;</code> element to be used to create the button.
+* @param {Object} p_oElement Object literal specifying a set of configuration  
+* attributes used to create the button.
 * @param {Object} p_oAttributes Optional. Object literal specifying a set of 
-* attributes used to configure the button.
+* configuration attributes used to create the button.
 * @namespace YAHOO.widget
 * @class Button
 * @constructor
@@ -101,7 +105,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
 
         this.logger.log(
                 "No source HTML element.  "  +
-                "Building the button using the set of attributes."
+                "Building the button using the set of configuration attributes."
             );
 
         fnSuperClass.call(
@@ -333,8 +337,8 @@ function createInputElement(p_sType) {
 * @method setAttributesFromSrcElement
 * @description Gets the values for all the attributes of the source element 
 * (either <code>&#60;input&#62;</code> or <code>&#60;a&#62;</code>) that map to
-* YAHOO.widget.Button attributes and sets them into a collection that is
-* passed to the YAHOO.widget.Button constructor.
+* Button configuration attributes and sets them into a collection that is
+* passed to the Button constructor.
 * @private
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-6043025">HTMLInputElement</a>|<a href="http://www.w3.org/
@@ -343,7 +347,7 @@ function createInputElement(p_sType) {
 * element (either <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code>) 
 * used to create the button.
 * @param {Object} p_oAttributes Object reference for the collection of 
-* attributes used to configure the button.
+* configuration attributes used to create the button.
 */
 function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
@@ -352,7 +356,8 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
     /**
     * @method setAttributeFromDOMAttribute
     * @description Gets the value of the specified DOM attribute and sets it 
-    * into the collection of attributes used to configure the button.
+    * into the collection of configuration attributes used to configure 
+    * the button.
     * @private
     * @param {String} p_sAttribute String representing the name of the 
     * attribute to retrieve from the DOM element.
@@ -364,8 +369,8 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
             /*
                 Need to use "getAttributeNode" instead of "getAttribute" 
                 because using "getAttribute," IE will return the innerText of 
-                a <BUTTON> for the value attribute rather than the value of 
-                the "value" attribute.
+                a <code>&#60;button&#62;</code> for the value attribute rather 
+                than the value of the "value" attribute.
             */
     
             var oAttribute = p_oElement.getAttributeNode(p_sAttribute);
@@ -391,7 +396,8 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
     /**
     * @method setFormElementProperties
     * @description Gets the value of the attributes from the form element and 
-    * sets them into the collection of attributes used to configure the button.
+    * sets them into the collection of configuration attributes used to 
+    * configure the button.
     * @private
     */
     function setFormElementProperties() {
@@ -461,7 +467,21 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
         case "BUTTON":
 
             setFormElementProperties();
+
+            var oRootNode = p_oElement.parentNode.parentNode;
+
+            if(Dom.hasClass(oRootNode, "checked")) {
             
+                p_oAttributes.checked = true;
+            
+            }
+
+            if(Dom.hasClass(oRootNode, "disabled")) {
+
+                p_oAttributes.disabled = true;
+            
+            }
+
             p_oElement.removeAttribute("name");
             p_oElement.removeAttribute("value");
 
@@ -476,8 +496,8 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
 /**
 * @method initConfig
-* @description Initializes the set of attributes that are used to instantiate 
-* the button.
+* @description Initializes the set of configuration attributes that are used to  
+* instantiate the button.
 * @private
 * @param {Object} Object representing the button's set of 
 * configuration attributes.
@@ -556,20 +576,20 @@ _button: null,
 * @description Object reference to the button's menu.
 * @default null
 * @protected
-* @type YAHOO.widget.Menu
+* @type <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>
 */
 _menu: null,
 
 
 /** 
-* @property _onclick
+* @property _onclickAttributeValue
 * @description Object reference to the button's current value for the "onclick"
 * configuration attribute.
 * @default null
 * @protected
 * @type Object
 */
-_onclick: null,
+_onclickAttributeValue: null,
 
 
 /** 
@@ -614,16 +634,6 @@ _hasKeyEventHandlers: false,
 * @type Boolean
 */
 _hasMouseEventHandlers: false,
-
-
-/** 
-* @property _checkable
-* @description Boolean indicating if the button is of type "radio" or "checbox." 
-* @default false
-* @protected
-* @type Boolean
-*/
-_checkable: false,
 
 
 
@@ -755,7 +765,8 @@ MENUBUTTON_MENU_VISIBLE_TITLE:
 * @property SPLITBUTTON_DEFAULT_TITLE
 * @description  String representing the default title applied to buttons of 
 * type "splitebutton." 
-* @default "Menu collapsed.  Click inside option region or press Ctrl + Shift + M to show the menu."
+* @default "Menu collapsed.  Click inside option region or press 
+* Ctrl + Shift + M to show the menu."
 * @final
 * @type String
 */
@@ -799,8 +810,6 @@ SUBMIT_TITLE: "Click to submit form.",
 */
 _setType: function(p_sType) {
 
-    this._checkable = (p_sType == "checkbox" || p_sType == "radio");
-    
     if(p_sType == "splitbutton") {
 
         this.on("option", this._onOption);
@@ -995,10 +1004,10 @@ _setTarget: function(p_sTarget) {
 */
 _setChecked: function(p_bChecked) {
 
-    if(this._checkable) {
+    var sType = this.get("type"),
+        sTitle;
 
-        var sType = this.get("type"),
-            sTitle;
+    if(sType == "checkbox" || sType == "radio") {
 
         if(p_bChecked) {
 
@@ -1040,24 +1049,27 @@ _setOnClick: function(p_oObject) {
         been specified.
     */
 
-    if(this._onclick && (this._onclick != p_oObject)) {
+    if(
+        this._onclickAttributeValue && 
+        (this._onclickAttributeValue != p_oObject)
+    ) {
 
-        this.removeListener("click", this._onclick.fn);
+        this.removeListener("click", this._onclickAttributeValue.fn);
 
-        this._onclick = null;
+        this._onclickAttributeValue = null;
 
     }
 
 
     if(
-        !this._onclick && 
+        !this._onclickAttributeValue && 
         Lang.isObject(p_oObject) && 
         Lang.isFunction(p_oObject.fn)
     ) {
 
         this.on("click", p_oObject.fn, p_oObject.obj, p_oObject.scope);
 
-        this._onclick = p_oObject;
+        this._onclickAttributeValue = p_oObject;
 
     }
 
@@ -1073,7 +1085,11 @@ _setOnClick: function(p_oObject) {
 */
 _setMenu: function(p_oMenu) {
 
-    if(!YAHOO.widget.Menu) {
+    var Menu = YAHOO.widget.Menu,
+        oMenu,
+        me = this;
+
+    if(!Menu) {
 
         this.logger.log("YAHOO.widget.Menu dependency not met.", "error");
 
@@ -1081,7 +1097,6 @@ _setMenu: function(p_oMenu) {
     
     }
 
-    var oMenu;
 
     function initMenu() {
     
@@ -1090,25 +1105,18 @@ _setMenu: function(p_oMenu) {
             oMenu.showEvent.subscribe(this._onMenuShow, this, true);
             oMenu.hideEvent.subscribe(this._onMenuHide, this, true);
             oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
-    
+            oMenu.renderEvent.subscribe(this._onMenuRender, this, true);
+            oMenu.clickEvent.subscribe(this._onMenuClick, this, true);
+            oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, this, true);
+
             var oSrcElement = oMenu.srcElement;
     
             if(oSrcElement && oSrcElement.tagName.toUpperCase() == "SELECT") {
     
                 oSrcElement.style.display = "none";
-    
-                oMenu.renderEvent.subscribe(this._onMenuRender, this, true);
+                oSrcElement.parentNode.removeChild(oSrcElement);
     
             }
-    
-            oMenu.cfg.setProperty(
-                        "container", 
-                        (
-                            this.get("container") || 
-                            this.get("srcelement").parentNode || 
-                            document.body
-                        )
-                    );
     
             this._menu = oMenu;
     
@@ -1123,37 +1131,60 @@ _setMenu: function(p_oMenu) {
     }
 
 
-    if(p_oMenu instanceof YAHOO.widget.Menu) {
+    if(p_oMenu instanceof Menu) {
 
         oMenu = p_oMenu;
         
+        var aItems = oMenu.getItems(),
+            nItems = aItems.length,
+            oItem;
+    
+        if(nItems > 0) {
+    
+            var i = nItems - 1;
+    
+            do {
+    
+                oItem = aItems[i];
+    
+                if(oItem) {
+    
+                    oItem.cfg.subscribeToConfigEvent(
+                                "selected", 
+                                this._onMenuItemSelected, 
+                                oItem, 
+                                this
+                            );
+    
+                }
+            
+            }
+            while(i--);
+    
+        }
+
         initMenu.call(this);
 
     }
     else if(Lang.isArray(p_oMenu)) {
 
-        var me = this;
-
         this.on("appendTo", function() {
 
-            oMenu = new YAHOO.widget.Menu(
-                                        Dom.generateId(), 
-                                        { lazyload: true, itemdata: p_oMenu }
-                                    );
+            oMenu = new Menu(
+                            Dom.generateId(), 
+                            { lazyload: true, itemdata: p_oMenu }
+                        );
     
             initMenu.call(me);
         
         });
-
        
     }
     else if(Lang.isString(p_oMenu)) {
 
-        var me = this;
-
         Event.onContentReady(p_oMenu, function() {
 
-            oMenu = new YAHOO.widget.Menu(this, { lazyload: true });
+            oMenu = new Menu(this, { lazyload: true });
 
             initMenu.call(me);
         
@@ -1162,7 +1193,7 @@ _setMenu: function(p_oMenu) {
     }
     else if(p_oMenu && p_oMenu.nodeName) {
 
-        oMenu = new YAHOO.widget.Menu(p_oMenu, { lazyload: true });
+        oMenu = new Menu(p_oMenu, { lazyload: true });
     
         initMenu.call(this);
     
@@ -1209,7 +1240,8 @@ _createButtonElement: function(p_sType) {
 */
 _isActivationKey: function(p_nKeyCode) {
 
-    var aKeyCodes = this._checkable ? 
+    var sType = this.get("type"),
+        aKeyCodes = (sType == "checkbox" || sType == "radio") ? 
             this.CHECK_ACTIVATION_KEYS : this.ACTIVATION_KEYS,
 
         nKeyCodes = aKeyCodes.length;
@@ -1496,12 +1528,7 @@ _onMouseDown: function(p_oEvent) {
                 var oElement = this.get("element"),
                     nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
 
-                if(
-                    (
-                        oElement.offsetWidth - 
-                        this.OPTION_AREA_WIDTH
-                    ) < nX
-                ) {
+                if((oElement.offsetWidth - this.OPTION_AREA_WIDTH) < nX) {
                     
                     this.fireEvent("option", p_oEvent);
 
@@ -1589,8 +1616,9 @@ _onMouseUp: function(p_oEvent) {
 
         }
 
+        var sType = this.get("type");
 
-        if(this._checkable) {
+        if(sType == "checkbox" || sType == "radio") {
 
             this.set("checked", !(this.get("checked")));
         
@@ -1781,8 +1809,9 @@ _onKeyUp: function(p_oEvent, p_oButton) {
 
         if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
 
+            var sType = this.get("type");
 
-            if(this._checkable) {
+            if(sType == "checkbox" || sType == "radio") {
 
                 this.set("checked", !(this.get("checked")));
             
@@ -1812,9 +1841,32 @@ _onKeyUp: function(p_oEvent, p_oButton) {
 */
 _onClick: function(p_oEvent) {
 
-    var sType = this.get("type");
+    var sType = this.get("type"),
+        sTitle;
 
     switch(sType) {
+
+        case "radio":
+        case "checkbox":
+
+            if(this.get("checked")) {
+                
+                sTitle = (sType == "radio") ? 
+                            this.RADIO_CHECKED_TITLE : 
+                            this.CHECKBOX_CHECKED_TITLE;
+            
+            }
+            else {
+            
+                sTitle = (sType == "radio") ? 
+                            this.RADIO_DEFAULT_TITLE : 
+                            this.CHECKBOX_DEFAULT_TITLE;
+            
+            }
+            
+            this.set("title", sTitle);
+
+        break;
 
         case "submit":
 
@@ -1834,18 +1886,46 @@ _onClick: function(p_oEvent) {
 
         break;
 
+        case "menubutton":
+
+            sTitle = this._menu.cfg.getProperty("visible") ? 
+                            this.MENUBUTTON_MENU_VISIBLE_TITLE : 
+                            this.MENUBUTTON_DEFAULT_TITLE;
+
+            this.set("title", sTitle);
+
+        break;
+
         case "splitbutton":
 
-            this._hideMenu();
+            var oElement = this.get("element"),
+                nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
 
-            var oSrcElement = this.get("srcelement");
+            if((oElement.offsetWidth - this.OPTION_AREA_WIDTH) < nX) {
 
-            if(oSrcElement && oSrcElement.type == "submit") {
-
-                this._submitForm();
+                return false;
             
             }
-        
+            else {
+
+                this._hideMenu();
+    
+                var oSrcElement = this.get("srcelement");
+    
+                if(oSrcElement && oSrcElement.type == "submit") {
+    
+                    this._submitForm();
+                
+                }
+            
+            }
+
+            sTitle = this._menu.cfg.getProperty("visible") ? 
+                            this.SPLITBUTTON_OPTION_VISIBLE_TITLE : 
+                            this.SPLITBUTTON_DEFAULT_TITLE;
+
+            this.set("title", sTitle);
+
         break;
 
     }
@@ -1862,14 +1942,20 @@ _onClick: function(p_oEvent) {
 */
 _onAppendTo: function(p_oEvent) {
 
-    var oForm = this.getForm();
-    
-    if(oForm) {
+    var me = this;
 
-        Event.on(oForm, "reset", this._onFormReset, this, true);
-        Event.on(oForm, "submit", this._onFormSubmit, this, true);
+    window.setTimeout(function() {
+
+        var oForm = me.getForm();
+
+        if(oForm) {
     
-    }
+            Event.on(oForm, "reset", me._onFormReset, me, true);
+            Event.on(oForm, "submit", me._onFormSubmit, me, true);
+        
+        }
+
+    }, 0);
 
 },
 
@@ -1885,7 +1971,8 @@ _onAppendTo: function(p_oEvent) {
 _onFormSubmit: function(p_oEvent, p_oButton) {
 
     var sType = this.get("type"),
-        oMenu = this.getMenu();
+        oMenuItem = this.get("selectedMenuItem"),
+        oForm = this.getForm();
     
     
     if(sType == "radio" || sType == "checkbox") {
@@ -1895,38 +1982,23 @@ _onFormSubmit: function(p_oEvent, p_oButton) {
         this.createHiddenField();
     
     }
-    else if(oMenu) {
+    else if(oMenuItem) {
     
-        var oSrcElement = oMenu.srcElement;
+        var oSrcElement = this._menu.srcElement;
+
+        if(oSrcElement && oSrcElement.tagName.toUpperCase() == "SELECT") {
+
+            oForm.appendChild(oSrcElement);
+            oSrcElement.selectedIndex = oMenuItem.index;
+
+        }
+        else {
     
-        if(
-            !oSrcElement || 
-            (oSrcElement && oSrcElement.tagName.toUpperCase() != "SELECT")
-        ) {
-    
-            var aItems = oMenu.getItems(),
-                nItems = aItems.length,
-                oValue = null,
-                oItem = null;
-            
-        
-            for(var n=0; n<nItems; n++) {
-            
-                oItem = aItems[n];
-                
-                if(oItem.cfg.getProperty("selected")) {
-        
-                    oValue = (!oItem.value || oItem.value === "") ? 
-                                oItem.cfg.getProperty("text") : 
-                                oItem.value;
-    
-                    break;
-                
-                }
-            
-            }
-            
-    
+            var oValue = (oMenuItem.value === null || oMenuItem.value === "") ? 
+                                oMenuItem.cfg.getProperty("text") : 
+                                oMenuItem.value;
+
+
             if(oValue) {
     
                 var oField = createInputElement("hidden");
@@ -1934,7 +2006,7 @@ _onFormSubmit: function(p_oEvent, p_oButton) {
                 oField.name = this.get("name") + "_options";
                 oField.value = oValue;
     
-                this.getForm().appendChild(oField);
+                oForm.appendChild(oField);
     
             }
     
@@ -1955,12 +2027,20 @@ _onFormSubmit: function(p_oEvent, p_oButton) {
 */
 _onFormReset: function(p_oEvent, p_oButton) {
 
-    if(this._checkable) {
+    var sType = this.get("type");
+
+    if(sType == "checkbox" || sType == "radio") {
 
         this.resetValue("checked");
 
     }
-    
+
+    if(this._menu) {
+
+        this.resetValue("selectedMenuItem");
+
+    }
+
 },
 
 
@@ -2139,56 +2219,78 @@ _onMenuKeyDown: function(p_sType, p_aArgs, p_oButton) {
 */
 _onMenuRender: function(p_sType, p_aArgs, p_oButton) {
 
-    var aItems = this._menu.getItems(),
-        nItems = aItems.length,
-        oItem;
-
-    if(nItems > 0) {
-
-        var i = nItems - 1;
-
-        do {
-
-            oItem = aItems[i];
-
-            if(oItem) {
-
-                oItem.cfg.setProperty("onclick", {
-                
-                    fn: this._onMenuItemClick,
-                    obj: oItem,
-                    scope: this
-                
-                });
-
-            }
-        
-        }
-        while(i--);
-
-    }
+    this.get("element").parentNode.appendChild(this._menu.element);
 
 },
 
 
 /**
-* @method _onMenuItemClick
-* @description "click" event handler for the items in the button's menu.
+* @method _onMenuItemSelected
+* @description "selectedchange" event handler for each item in the 
+* button's menu.
 * @private
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
-* that fired the event.
+* @param {<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>} 
+* p_oItem Object representing the menu item that subscribed to the event.
 */
-_onMenuItemClick: function(p_sType, p_aArgs, p_oItem) {
+_onMenuItemSelected: function(p_sType, p_aArgs, p_oItem) {
+    
+    this.set("selectedMenuItem", p_oItem);
 
-    this._menu.srcElement.selectedIndex = p_oItem.index;
+},
 
-    if(this.get("srcelement").type == "submit") {
 
-        this._submitForm();
+/**
+* @method _onMenuItemAdded
+* @description "itemadded" event handler for the button's menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {<a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>} 
+* p_oItem Object representing the menu item that subscribed to the event.
+*/
+_onMenuItemAdded: function(p_sType, p_aArgs, p_oItem) {
+    
+    var oItem = p_aArgs[0];
 
+    oItem.cfg.subscribeToConfigEvent(
+                "selected", 
+                this._onMenuItemSelected, 
+                oItem, 
+                this
+            );
+
+},
+
+
+/**
+* @method _onMenuClick
+* @description "click" event handler for the button's menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {YAHOO.widget.Button} p_oButton Object representing the menu's button.
+*/
+_onMenuClick: function(p_sType, p_aArgs, p_oButton) {
+
+    var oItem = p_aArgs[0];
+
+    if(oItem) {
+
+        var oSrcElement = this.get("srcelement");
+    
+        if(oSrcElement && oSrcElement.type == "submit") {
+    
+            this._submitForm();
+    
+        }
+    
+        this._hideMenu();
+    
     }
 
 },
@@ -2209,8 +2311,12 @@ createHiddenField: function () {
 
     if(!this.get("disabled")) {
 
-        var oField = createInputElement(
-                        (this._checkable ? this.get("type") : "hidden")
+        var sType = this.get("type"),
+        
+            bCheckable = (sType == "checkbox" || sType == "radio"),
+        
+            oField = createInputElement(
+                        (bCheckable ? this.get("type") : "hidden")
                     );
     
     
@@ -2218,7 +2324,7 @@ createHiddenField: function () {
         oField.name = this.get("name");
         oField.value = this.get("value");
     
-        if(this._checkable) {
+        if(bCheckable) {
     
             oField.checked = this.get("checked");
             oField.style.display = "none";        
@@ -2248,17 +2354,15 @@ createHiddenField: function () {
 * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
 * <code>&#60;span&#62;</code> element to be used to create the button.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-* one-html.html#ID-6043025">HTMLInputElement</a>|<a href="http://www.w3.org/
-* TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-
-* 48250443">HTMLAnchorElement</a>|<a href="http://www.w3.org/TR/2000/WD-
-* DOM-Level-1-20000929/level-one-html.html#ID-33759296">HTMLElement</a>} 
-* p_oElement Object reference for the <code>&#60;input&#62;</code>, 
-* <code>&#60;a&#62;</code> or <code>&#60;span&#62;</code> element to be 
-* used to create the button.
-* @param {Object} p_oElement Object literal specifying a set of attributes 
-* used to configure the button.
-* @param {Object} p_oAttributes Optional. Object literal specifying a set of 
-* attributes used to configure the button.
+* one-html.html#ID-6043025">HTMLInputElement</a>|<a href="
+* http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#
+* ID-33759296">HTMLElement</a>} p_oElement Object reference for the 
+* <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
+* <code>&#60;span&#62;</code> element to be used to create the button.
+* @param {Object} p_oElement Object literal specifying a set of configuration 
+* attributes used to create the button.
+* @param {Object} p_oAttributes Optional. Object literal specifying a set of  
+* configuration attributes used to create the button.
 */
 init: function(p_oElement, p_oAttributes) {
 
@@ -2359,9 +2463,10 @@ init: function(p_oElement, p_oAttributes) {
 
 /**
 * @method initAttributes
-* @description Initializes all of the attributes used to configure the button.
+* @description Initializes all of the configuration attributes used to create 
+* the button.
 * @param {Object} p_oAttributes Object literal specifying a set of 
-* attributes used to configure the button.
+* configuration attributes used to create the button.
 */
 initAttributes: function(p_oAttributes) {
 
@@ -2577,17 +2682,47 @@ initAttributes: function(p_oAttributes) {
 
 	/**
 	* @config menu
-    * @description Object reference to the HTML element (either 
-    * <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code>) used to 
-    * create the button.
+    * @description Object specifying the menu for the button.  The value can be
+    * one of the following:
+    * <ul>
+    * <li>Object specifying a <a href="YAHOO.widget.Menu.html">
+    * YAHOO.widget.Menu</a> instance.</li>
+    * <li>String specifying the id attribute of the <code>&#60;div&#62;</code> 
+    * element used to create the menu.</li>
+    * <li>String specifying the id attribute of the 
+    * <code>&#60;select&#62;</code> element used to create the menu.</li>
+    * <li>Object specifying the <code>&#60;div&#62;</code> element used to 
+    * create the menu.</li>
+    * <li>Object specifying the <code>&#60;select&#62;</code> element used to 
+    * create the menu.</li>
+    * <li>Array of object literals, each representing a set of 
+    * <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a> 
+    * configuration attributes.</li>
+    * <li>Array of strings representing the text labels for each menu item in 
+    * the menu.</li>
+    * </ul>
 	* @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-	* level-one-html.html#ID-58190037">HTMLElement</a>|String
+	* level-one-html.html#ID-58190037">HTMLElement</a>|String|Array
 	* @default null
 	*/
     this.setAttributeConfig("menu", {
 
         value: null,
         method: this._setMenu
+    
+    });
+
+
+	/**
+	* @config selectedMenuItem
+    * @description Reference to the item in the button's menu that is
+    * currently selected.
+	* @type <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>
+	* @default null
+	*/
+    this.setAttributeConfig("selectedMenuItem", {
+
+        value: null
     
     });
 
@@ -2653,7 +2788,7 @@ isActive: function() {
 /**
 * @method getMenu
 * @description Returns a reference to the button's menu.
-* @return {YAHOO.widget.Menu}
+* @return {<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>}
 */
 getMenu: function() {
 
@@ -2759,6 +2894,7 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 
         var oButton = null,
             sType = null,
+            oMenuItem = null,
             oMenu = null;
 
         for(var i=0; i<nButtons; i++) {
@@ -2768,7 +2904,7 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
             if(oButton) {
 
                 sType = oButton.get("type");
-                oMenu = oButton.getMenu();
+                oMenuItem = oButton.get("selectedMenuItem");
 
 
                 if(sType == "radio" || sType == "checkbox") {
@@ -2778,41 +2914,29 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
                     oButton.createHiddenField();
                 
                 }
-                else if(oMenu) {
+                else if(oMenuItem) {
+    
+                    oMenu = oButton.getMenu();
     
                     var oSrcElement = oMenu.srcElement;
-        
+                        
                     if(
-                        !oSrcElement || 
-                        (
-                            oSrcElement && 
-                            oSrcElement.tagName.toUpperCase() != "SELECT"
-                        )
+                        oSrcElement && 
+                        oSrcElement.tagName.toUpperCase() == "SELECT"
                     ) {
+            
+                        oButton.getForm().appendChild(oSrcElement);
+                        oSrcElement.selectedIndex = oMenuItem.index;
+            
+                    }
+                    else {
     
-                        var aItems = oMenu.getItems(),
-                            nItems = aItems.length,
-                            oValue = null,
-                            oItem = null;
-                        
-                    
-                        for(var n=0; n<nItems; n++) {
-                        
-                            oItem = aItems[n];
-                            
-                            if(oItem.cfg.getProperty("selected")) {
-                    
-                                oValue = (!oItem.value || oItem.value === "") ? 
-                                            oItem.cfg.getProperty("text") : 
-                                            oItem.value;
-    
-                                break;
-                            
-                            }
-                        
-                        }
-                        
-    
+                        var oValue = (
+                                        oMenuItem.value === null || 
+                                        oMenuItem.value === ""
+                                    ) ? oMenuItem.cfg.getProperty("text") : 
+                                    oMenuItem.value;
+
                         if(oValue) {
     
                             var oField = createInputElement("hidden");

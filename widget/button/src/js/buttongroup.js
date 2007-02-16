@@ -22,9 +22,9 @@ var Dom = YAHOO.util.Dom,
 * level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object 
 * specifying the <code>&#60;div&#62;</code> element of the button group.
 * @param {Object} p_oElement Object literal specifying a set of 
-* attributes used to configure the button group.
+* configuration attributes used to create the button group.
 * @param {Object} p_oAttributes Optional. Object literal specifying a set of 
-* attributes used to configure the button group.
+* configuration attributes used to create the button group.
 * @namespace YAHOO.widget
 * @class ButtonGroup
 * @constructor
@@ -58,7 +58,8 @@ YAHOO.widget.ButtonGroup = function(p_oElement, p_oAttributes) {
 
         this.logger.log(
                 "No source HTML element.  "  +
-                "Building the button group using the set of attributes."
+                "Building the button group using the set of " + 
+                "configuration attributes."
             );
 
         fnSuperClass.call(this, (this._createGroupElement()), p_oElement);
@@ -251,13 +252,29 @@ _onKeyDown: function(p_oEvent) {
 },
 
 
+_onAppendTo: function(p_oEvent) {
+
+    var aButtons = this._buttons,
+        nButtons = aButtons.length;
+
+    for(var i=0; i<nButtons; i++) {
+
+        aButtons[i].appendTo(this.get("element"));
+
+    }
+
+},
+
+
+
 /**
 * @method _onButtonCheckedChange
 * @description "checkedChange" event handler for each button in the 
 * button group.
 * @protected
 * @param {Event} p_oEvent Object representing the event that was fired.
-* @param {YAHOO.widget.Button} p_oButton Object representing the button that 
+* @param {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>} p_oButton 
+* Object representing the button that 
 * fired the event.
 */
 _onButtonCheckedChange: function(p_oEvent, p_oButton) {
@@ -277,7 +294,7 @@ _onButtonCheckedChange: function(p_oEvent, p_oButton) {
         this.set("value", p_oButton.get("value"));
 
     }
-    else if(!oCheckedButton.set("checked")) {
+    else if(oCheckedButton && !oCheckedButton.set("checked")) {
 
         oCheckedButton.set("checked", true, true);
 
@@ -298,10 +315,10 @@ _onButtonCheckedChange: function(p_oEvent, p_oButton) {
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
 * level-one-html.html#ID-22445964">HTMLDivElement</a>} p_oElement Object 
 * specifying the <code>&#60;div&#62;</code> element of the button group.
-* @param {Object} p_oElement Object literal specifying a set of 
-* attributes used to configure the button group.
+* @param {Object} p_oElement Object literal specifying a set of configuration 
+* attributes used to create the button group.
 * @param {Object} p_oAttributes Optional. Object literal specifying a set of 
-* attributes used to configure the button group.
+* configuration attributes used to create the button group.
 */
 init: function(p_oElement, p_oAttributes) {
 
@@ -359,7 +376,7 @@ init: function(p_oElement, p_oAttributes) {
     }
 
     this.on("keydown", this._onKeyDown);
-
+    this.on("appendTo", this._onAppendTo);
 
     var oContainer = this.get("container");
 
@@ -392,10 +409,10 @@ init: function(p_oElement, p_oAttributes) {
 
 /**
 * @method initAttributes
-* @description Initializes all of the attributes used to configure the 
-* button group.
+* @description Initializes all of the configuration attributes used to create  
+* the button group.
 * @param {Object} p_oAttributes Object literal specifying a set of 
-* attributes used to configure the button group.
+* configuration attributes used to create the button group.
 */
 initAttributes: function(p_oAttributes) {
 
@@ -473,7 +490,7 @@ initAttributes: function(p_oAttributes) {
 	* @config checkedButton
     * @description Reference for the button in the button group that 
     * is checked.
-	* @type YAHOO.widget.Button
+	* @type {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>}
 	* @default null
 	*/
     this.setAttributeConfig("checkedButton", {
@@ -488,21 +505,22 @@ initAttributes: function(p_oAttributes) {
 /**
 * @method addButton
 * @description Adds the button to the button group.
-* @param {YAHOO.widget.Button} p_oButton Object reference for the 
-* YAHOO.widget.Button instance to be added to the button group.
+* @param {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>} p_oButton 
+* Object reference for the <a href="YAHOO.widget.Button.html">
+* YAHOO.widget.Button</a> instance to be added to the button group.
 * @param {String} p_oButton String specifying the id attribute of the 
 * <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code> element to be 
 * used to create the button to be added to the button group.
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-* one-html.html#ID-6043025">HTMLInputElement</a>|<a href="http://www.w3.org/TR
-* /2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-48250443">
-* HTMLAnchorElement</a>|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-
-* 20000929/level-one-html.html#ID-33759296">HTMLElement</a>} p_oButton Object 
-* reference for the <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code> 
-* element to be used to create the button to be added to the button group.
-* @param {Object} p_oButton Object literal specifying a set of attributes used 
-* to configure the button to be added to the button group.
-* @return {YAHOO.widget.Button} 
+* one-html.html#ID-6043025">HTMLInputElement</a>|<a href="
+* http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#
+* ID-33759296">HTMLElement</a>} p_oButton Object reference for the 
+* <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code> element to be 
+* used to create the button to be added to the button group.
+* @param {Object} p_oButton Object literal specifying a set of 
+* <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> configuration 
+* attributes used to configure the button to be added to the button group.
+* @return {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>} 
 */
 addButton: function(p_oButton) {
 
@@ -554,7 +572,12 @@ addButton: function(p_oButton) {
         }
 
 
-        oButton.appendTo(this.get("element"));
+        if(oButton.get("checked")) {
+
+            this.set("checkedButton", oButton);
+
+        }
+
         
         oButton.on("checkedChange", this._onButtonCheckedChange, oButton, this);
 
@@ -570,7 +593,8 @@ addButton: function(p_oButton) {
 /**
 * @method addButtons
 * @description Adds the array of buttons to the button group.
-* @param {Array} p_aButtons Array of YAHOO.widget.Button instances to be added 
+* @param {Array} p_aButtons Array of <a href="YAHOO.widget.Button.html">
+* YAHOO.widget.Button</a> instances to be added 
 * to the button group.
 * @param {Array} p_aButtons Array of strings specifying the id attribute of 
 * the <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code> elements to 
@@ -578,7 +602,8 @@ addButton: function(p_oButton) {
 * @param {Array} p_aButtons Array of object references for the 
 * <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code> elements to be 
 * used to create the buttons to be added to the button group.
-* @param {Array} p_aButtons Array of object literals, each specifying the 
+* @param {Array} p_aButtons Array of object literals, each containing a set of 
+* <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> configuration 
 * attributes used to configure each button to be added to the button group.
 * @return {Array}
 */
@@ -667,7 +692,7 @@ removeButton: function(p_nIndex) {
 * @description Returns the button at the specified index.
 * @param {Number} p_nIndex The index of the button to retrieve from the 
 * button group.
-* @return {YAHOO.widget.Button}
+* @return {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>}
 */
 getButton: function(p_nIndex) {
 
