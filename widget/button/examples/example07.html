@@ -61,18 +61,14 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menubutton", menu: "menubutton4select" });
+            var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menubutton", menu: "menubutton1select" });
 
-            var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menubutton", menu: "menubutton5select" });
+            var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menubutton", menu: "menubutton2select" });
 
 
             function onMenuItemClick(p_sType, p_aArgs, p_oItem) {
 
                 oMenuButton3.set("label", p_oItem.cfg.getProperty("text"));
-                
-                //YAHOO.widget.Button.addHiddenFieldsToForm(oMenuButton3.getForm());
-                
-                //oMenuButton3.getForm().submit();
             
             }
 
@@ -80,14 +76,7 @@
             
                 { text: "one", value: 1, onclick: { fn: onMenuItemClick } },
                 { text: "two", value: 2, onclick: { fn: onMenuItemClick } },
-                { text: "three", value: 3, onclick: { fn: onMenuItemClick } },
-                { text: "four", value: 4, onclick: { fn: onMenuItemClick } },
-                { text: "five", value: 5, onclick: { fn: onMenuItemClick } },
-                { text: "six", value: 6, onclick: { fn: onMenuItemClick } },
-                { text: "seven", value: 7, onclick: { fn: onMenuItemClick } },
-                { text: "eight", value: 8, onclick: { fn: onMenuItemClick } },
-                { text: "nine", value: 9, onclick: { fn: onMenuItemClick } },
-                { text: "ten", value: 10, onclick: { fn: onMenuItemClick } }
+                { text: "three", value: 3, onclick: { fn: onMenuItemClick } }
             
             ];
 
@@ -97,6 +86,21 @@
 
     </head>
     <body>
+
+<?php
+    if($g_sBuildType == "dev" && isset($_POST) && count($_POST) > 0) {
+?>
+        <div id="postdata">
+            <h2>Post Data</h2>
+            <pre>
+<?php    
+print_r($_POST);        
+?>
+            </pre>
+        </div>
+<?php    
+    }
+?>
 
         <h1><?php writeTitle(); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
@@ -109,7 +113,7 @@
                     <legend>From Markup</legend>
                     
                     <input type="submit" id="menubutton1" name="menubutton1" value="Menu Button 1">
-                    <select id="menubutton4select" name="menubutton4select">
+                    <select id="menubutton1select" name="menubutton1select">
                         <option value="0">One</option>
                         <option value="1">Two</option>
                         <option value="2">Three</option>                
@@ -117,7 +121,7 @@
 
 
                     <input type="button" id="menubutton2" name="menubutton2" value="Menu Button 2">
-                    <select id="menubutton5select" name="menubutton5select">
+                    <select id="menubutton2select" name="menubutton2select">
                         <option value="0">One</option>
                         <option value="1">Two</option>
                         <option value="2">Three</option>                

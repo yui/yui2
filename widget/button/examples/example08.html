@@ -81,6 +81,21 @@
     </head>
     <body>
 
+<?php
+    if($g_sBuildType == "dev" && isset($_POST) && count($_POST) > 0) {
+?>
+        <div id="postdata">
+            <h2>Post Data</h2>
+            <pre>
+<?php    
+print_r($_POST);        
+?>
+            </pre>
+        </div>
+<?php    
+    }
+?>
+
         <h1><?php writeTitle(); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
         <form id="example" name="example" method="post" action="<?php echo $g_sFileName; ?>">

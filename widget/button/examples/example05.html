@@ -1,4 +1,24 @@
-<?php require_once("titles.inc"); ?>
+<?php 
+
+require_once("titles.inc"); 
+
+$sMonthOptions = "";
+
+for($i=1; $i<13; $i++) {
+
+    $sMonthOptions .= "<option value=\"$i\">$i</option>";
+
+}
+
+$sDayOptions = "";
+
+for($i=1; $i<32; $i++) {
+
+    $sDayOptions .= "<option value=\"$i\">$i</option>";
+
+}
+
+?>
 <html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
@@ -30,17 +50,57 @@
         <script type="text/javascript">
 
             var oSubmitButton1 = new YAHOO.widget.Button("submitbutton1src", { id:"submitbutton1" });
-            var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2", { type:"submit" });
-            var oSubmitButton3 = new YAHOO.widget.Button({ type:"submit", label:"Submit Form", id:"submitbutton3", name:"submitbutton3", container:"submitbuttonsfromjavascript" });
+            var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2", { type:"submit", value: "submitbutton2value" });
+            var oSubmitButton3 = new YAHOO.widget.Button({ type:"submit", label:"Submit Form", id:"submitbutton3", name:"submitbutton3", value: "submitbutton3value", container:"submitbuttonsfromjavascript" });
 
         </script>
 
     </head>
     <body>
 
+<?php
+    if($g_sBuildType == "dev" && isset($_POST) && count($_POST) > 0) {
+?>
+        <div id="postdata">
+            <h2>Post Data</h2>
+            <pre>
+<?php    
+print_r($_POST);        
+?>
+            </pre>
+        </div>
+<?php    
+    }
+?>
+
         <h1><?php writeTitle(); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
         <form id="example" name="example" method="post" action="<?php echo $g_sFileName; ?>">
+
+            <fieldset>
+                <legend>Info</legend>
+
+                <label for="firstname">First Name: </label><input type="text" id="firstname" name="firstname" value="">
+                <label for="lastname">Last Name: </label><input type="text" id="lastname" name="lastname" value="">
+    
+                <div>
+                    <label for="male">Gender: </label>
+                    
+                    <label for="male">Male </label>
+                    <input type="radio" id="male" name="gender" value="male" checked>
+                    
+                    <label for="female">Female </label>
+                    <input type="radio" id="female" name="gender" value="female">
+                </div>
+    
+                <div>
+                    <label for="month">Birthday: </label>
+                    <select id="month" name="month"><?php echo $sMonthOptions ?></select>
+                    <select name="day"><?php echo $sDayOptions ?></select>
+                    <input type="text" name="year" value="">
+                </div>
+
+            </fieldset>
 
             <fieldset id="submitbuttons">
                 <legend>Submit Buttons</legend>
@@ -48,9 +108,9 @@
                 <fieldset id="submitbuttonsfrommarkup">
                     <legend>From Markup</legend>
 
-                    <input id="submitbutton1src" type="submit" name="submitbutton1" value="Submit Form">
+                    <input id="submitbutton1src" type="submit" name="submitfield1" value="Submit Form">
 
-                    <span id="submitbutton2" class="yuibutton"><span class="first-child"><button type="button" name="submitbutton2">Submit Form</button></span></span>
+                    <span id="submitbutton2" class="yuibutton"><span class="first-child"><button type="button" name="submitfield2">Submit Form</button></span></span>
 
                 </fieldset>
 
