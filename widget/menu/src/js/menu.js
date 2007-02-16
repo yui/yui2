@@ -3708,16 +3708,20 @@ addItems: function(p_aItems, p_nGroupIndex) {
 
             oItem = p_aItems[i];
 
-            if(Lang.isArray(oItem)) {
+            if(oItem) {
 
-                aItems[aItems.length] = this.addItems(oItem, i);
+                if(Lang.isArray(oItem)) {
+    
+                    aItems[aItems.length] = this.addItems(oItem, i);
+    
+                }
+                else {
+    
+                    aItems[aItems.length] = 
+                        this._addItemToGroup(p_nGroupIndex, oItem);
+                
+                }
 
-            }
-            else {
-
-                aItems[aItems.length] = 
-                    this._addItemToGroup(p_nGroupIndex, oItem);
-            
             }
     
         }
