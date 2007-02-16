@@ -259,13 +259,13 @@ YAHOO.lang = {
     },
         
     /**
-     * Determines whether or not the provided object is a number
+     * Determines whether or not the provided object is a legal number
      * @method isNumber
      * @param {any} obj The object being testing
      * @return Boolean
      */
     isNumber: function(obj) {
-        return !isNaN(obj);
+        return typeof obj == 'number' && isFinite(obj);
     },
       
     /**
