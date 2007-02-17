@@ -1162,8 +1162,10 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this._checkDOMNode(oHelpText)) {
 
-            if(this._oHelpTextEM) {
+            oHelpText.className = "helptext";
 
+            if(this._oHelpTextEM) {
+            
                 this._oHelpTextEM.parentNode.replaceChild(
                     oHelpText, 
                     this._oHelpTextEM
@@ -1193,6 +1195,7 @@ YAHOO.widget.MenuItem.prototype = {
                 if(!this._oHelpTextEM) {
 
                     this._oHelpTextEM = document.createElement("em");
+                    this._oHelpTextEM.className = "helptext";
 
                     oEl.insertBefore(this._oHelpTextEM, oSubmenuIndicator);
 
