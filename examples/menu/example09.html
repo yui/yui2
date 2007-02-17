@@ -116,27 +116,24 @@
 
                 var oMenu = new YAHOO.widget.Menu("mymenu");
 
-                oMenu.addItems(["Item One","Item Two","Item Three"]);
+                oMenu.addItems(
+                    [
+                        { text: "Item One", onclick: { fn:onMenuItemClick } },
+
+                        /*
+                             Register a "click" event handler for the first item, 
+                             passing a string arguemnt ("foo") to the event handler.
+                        */
+                        { text: "Item Two", onclick: { fn:onMenuItemClick, obj:"foo" } },
 
 
-                oMenu.getItem(0).clickEvent.subscribe(onMenuItemClick);
-
-
-                /*
-                     Register a "click" event handler for the first item, 
-                     passing a string arguemnt ("foo") to the event handler.
-                */
-
-                oMenu.getItem(1).clickEvent.subscribe(onMenuItemClick, "foo");
-
-
-                /*
-                     Register a "click" event handler for the third item and
-                     passing and array as an argument to the event handler.
-                */
-                
-                oMenu.getItem(2).clickEvent.subscribe(onMenuItemClick, ["foo", "bar"]);
-
+                        /*
+                             Register a "click" event handler for the third item and
+                             passing and array as an argument to the event handler.
+                        */
+                        { text: "Item Three", onclick: { fn:onMenuItemClick, obj: ["foo", "bar"] } },
+                    ]
+                );
 
                 oMenu.clickEvent.subscribe(onMenuClick, oMenu, true);
 
