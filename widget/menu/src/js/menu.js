@@ -1528,7 +1528,7 @@ _disableScrollHeader: function() {
 
     if(!this._bHeaderDisabled) {
 
-        Dom.addClass(this.header, "disabled");
+        Dom.addClass(this.header, "topscrollbar_disabled");
         this._bHeaderDisabled = true;
 
     }
@@ -1545,7 +1545,7 @@ _disableScrollFooter: function() {
 
     if(!this._bFooterDisabled) {
 
-        Dom.addClass(this.footer, "disabled");
+        Dom.addClass(this.footer, "bottomscrollbar_disabled");
         this._bFooterDisabled = true;
 
     }
@@ -1562,7 +1562,7 @@ _enableScrollHeader: function() {
 
     if(this._bHeaderDisabled) {
 
-        Dom.removeClass(this.header, "disabled");
+        Dom.removeClass(this.header, "topscrollbar_disabled");
         this._bHeaderDisabled = false;
 
     }
@@ -1579,7 +1579,7 @@ _enableScrollFooter: function() {
 
     if(this._bFooterDisabled) {
 
-        Dom.removeClass(this.footer, "disabled");
+        Dom.removeClass(this.footer, "bottomscrollbar_disabled");
         this._bFooterDisabled = false;
 
     }
@@ -3465,7 +3465,10 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
             oHeader = this.header;
             oFooter = this.footer;
-   
+
+            Dom.addClass(oHeader, "topscrollbar");
+            Dom.addClass(oFooter, "bottomscrollbar");
+            
             this.element.insertBefore(oHeader, oBody);
             this.element.appendChild(oFooter);
 
