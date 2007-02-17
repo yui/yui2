@@ -98,7 +98,7 @@ var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
 var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getBody() } );
 myContextMenu.addItem("Delete Item");
 myContextMenu.render(document.body);
-myContextMenu.clickEvent.subscribe(onContextMenuClick, myContextMenu, true);
+myContextMenu.clickEvent.subscribe(onContextMenuClick);
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -137,7 +137,7 @@ myDataSource.responseSchema = {
 var myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnSet, myDataSource,{caption:"Example: Integration with ContextMenu"});
 
 var onRowDelete = function(oArgs) {
-    YAHOO.log("Deleted row index " +oArgs.rowIndex);
+    YAHOO.log("Deleted row indexes: " +oArgs.rowIndexes);
 };
 myDataTable.subscribe("rowDeleteEvent", onRowDelete);
 
@@ -168,7 +168,7 @@ var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
 var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getBody() } );
 myContextMenu.addItem("Delete Item");
 myContextMenu.render(document.body);
-myContextMenu.clickEvent.subscribe(onContextMenuClick, myContextMenu, true);
+myContextMenu.clickEvent.subscribe(onContextMenuClick);
 </script>
 <script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

@@ -102,29 +102,50 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
      * @param oArgs.callback {Function} The callback function.
      * @param oArgs.caller {Object} The parent object of the callback function.
      */
-    this.createEvent("getCachedResponseEvent");
+    this.createEvent("cacheResponseEvent");
 
     /**
-     * Fired when a request is made to the live data source.
+     * Fired when a request is sent to the live data source.
      *
      * @event requestEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.callback {Function} The callback function.
      * @param oArgs.caller {Object} The parent object of the callback function.
      */
-    this.createEvent("makeConnectionEvent");
+    this.createEvent("requestEvent");
 
     /**
-     * Fired when response is received from the live data source.
+     * Fired when live data source sends response.
      *
-     * @event handleResponseEvent
+     * @event parseResponseEvent
      * @param oArgs.request {Object} The request object.
-     * @param oArgs.response {Object} The response object.
+     * @param oArgs.response {Object} The raw response object.
      * @param oArgs.callback {Function} The callback function.
      * @param oArgs.caller {Object} The parent object of the callback function.
      */
-    this.createEvent("handleResponseEvent");
+    this.createEvent("responseEvent");
 
+    /**
+     * Fired when response is parsed.
+     *
+     * @event responseParseEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.response {Object} The parsed response object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} The parent object of the callback function.
+     */
+    this.createEvent("responseParseEvent");
+
+    /**
+     * Fired when response is cached.
+     *
+     * @event responseCacheEvent
+     * @param oArgs.request {Object} The request object.
+     * @param oArgs.response {Object} The parsed response object.
+     * @param oArgs.callback {Function} The callback function.
+     * @param oArgs.caller {Object} The parent object of the callback function.
+     */
+    this.createEvent("responseCacheEvent");
     /**
      * Fired when an error is encountered with the live data source.
      *
@@ -399,7 +420,7 @@ YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback
                 aCache.splice(i,1);
                 // Add as newest
                 this.addToCache(oRequest, oResponse);
-                this.fireEvent("getCachedResponseEvent", {request:oRequest,response:oResponse,callback:oCallback,caller:oCaller});
+                this.fireEvent("cacheResponseEvent", {request:oRequest,response:oResponse,callback:oCallback,caller:oCaller});
                 break;
             }
         }
@@ -445,6 +466,8 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
     // Add to cache in the newest position, at the end of the array
     var oCacheElem = {request:oRequest,response:oResponse};
     aCache.push(oCacheElem);
+    this.fireEvent("responseCacheEvent",{request:oRequest,response:oResponse});
+
 };
 
 /**
@@ -476,7 +499,6 @@ YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCal
     }
 
     // Not in cache, so forward request to live data
-    this.fireEvent("makeConnectionEvent", {request:oRequest,callback:oCallback,caller:oCaller});
     this.makeConnection(oRequest, oCallback, oCaller);
 };
 
@@ -492,6 +514,7 @@ YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCal
  * @param oCaller {Object} The Calling object that is making the request
  */
 YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, oCaller) {
+    this.fireEvent("requestEvent", {request:oRequest,callback:oCallback,caller:oCaller});
     var oRawResponse = null;
     
     // How to make the connection depends on the type of data
@@ -596,15 +619,16 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 };
 
 /**
- * Parses a raw response for data to be consumed by a widget.
+ * Handles raw data response from live data source.
  *
- * @method parseResponse
+ * @method handleResponse
  * @param oRequest {Object} Request object
  * @param oRawResponse {Object} The raw response from the live database
  * @param oCallback {Function} Handler function to receive the response
  * @param oCaller {Object} The calling object that is making the request
  */
 YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller) {
+    this.fireEvent("responseEvent", {request:oRequest,response:oRawResponse,callback:oCallback,caller:oCaller});
     var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     //TODO: break out into overridable methods
@@ -641,9 +665,9 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     }
 
     if(oParsedResponse) {
+        this.fireEvent("responseParseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
         // Cache the response
         this.addToCache(oRequest, oParsedResponse);
-        this.fireEvent("handleResponseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
     }
     else {
         this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
