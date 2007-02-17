@@ -1797,7 +1797,7 @@ YAHOO.widget.MenuItem.prototype = {
             this.clickEvent.subscribe(
                     oObject.fn, 
                     (oObject.obj || this), 
-                    (oObject.scope || true)
+                    oObject.scope
                 );
 
             this._oOnclickAttributeValue = oObject;
