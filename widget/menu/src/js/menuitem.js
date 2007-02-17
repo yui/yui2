@@ -1409,14 +1409,14 @@ YAHOO.widget.MenuItem.prototype = {
 
             var oSubmenu = this.cfg.getProperty("submenu");
 
-            if(oSubmenu) {
+            if(oSubmenu && oSubmenu.element) {
 
                 oEl.insertBefore(oEM, oSubmenu.element);
 
             }
             else {
 
-                oEl.appendChild(oEM);            
+                oEl.appendChild(oEM);
 
             }
 
