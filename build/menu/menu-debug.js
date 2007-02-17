@@ -2104,7 +2104,7 @@ _disableScrollHeader: function() {
 
     if(!this._bHeaderDisabled) {
 
-        Dom.addClass(this.header, "disabled");
+        Dom.addClass(this.header, "topscrollbar_disabled");
         this._bHeaderDisabled = true;
 
     }
@@ -2121,7 +2121,7 @@ _disableScrollFooter: function() {
 
     if(!this._bFooterDisabled) {
 
-        Dom.addClass(this.footer, "disabled");
+        Dom.addClass(this.footer, "bottomscrollbar_disabled");
         this._bFooterDisabled = true;
 
     }
@@ -2138,7 +2138,7 @@ _enableScrollHeader: function() {
 
     if(this._bHeaderDisabled) {
 
-        Dom.removeClass(this.header, "disabled");
+        Dom.removeClass(this.header, "topscrollbar_disabled");
         this._bHeaderDisabled = false;
 
     }
@@ -2155,7 +2155,7 @@ _enableScrollFooter: function() {
 
     if(this._bFooterDisabled) {
 
-        Dom.removeClass(this.footer, "disabled");
+        Dom.removeClass(this.footer, "bottomscrollbar_disabled");
         this._bFooterDisabled = false;
 
     }
@@ -4041,7 +4041,10 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
             oHeader = this.header;
             oFooter = this.footer;
-   
+
+            Dom.addClass(oHeader, "topscrollbar");
+            Dom.addClass(oFooter, "bottomscrollbar");
+            
             this.element.insertBefore(oHeader, oBody);
             this.element.appendChild(oFooter);
 
@@ -6055,8 +6058,10 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(this._checkDOMNode(oHelpText)) {
 
-            if(this._oHelpTextEM) {
+            oHelpText.className = "helptext";
 
+            if(this._oHelpTextEM) {
+            
                 this._oHelpTextEM.parentNode.replaceChild(
                     oHelpText, 
                     this._oHelpTextEM
@@ -6086,6 +6091,7 @@ YAHOO.widget.MenuItem.prototype = {
                 if(!this._oHelpTextEM) {
 
                     this._oHelpTextEM = document.createElement("em");
+                    this._oHelpTextEM.className = "helptext";
 
                     oEl.insertBefore(this._oHelpTextEM, oSubmenuIndicator);
 
@@ -6299,14 +6305,14 @@ YAHOO.widget.MenuItem.prototype = {
 
             var oSubmenu = this.cfg.getProperty("submenu");
 
-            if(oSubmenu) {
+            if(oSubmenu && oSubmenu.element) {
 
                 oEl.insertBefore(oEM, oSubmenu.element);
 
             }
             else {
 
-                oEl.appendChild(oEM);            
+                oEl.appendChild(oEM);
 
             }
 
@@ -6690,7 +6696,7 @@ YAHOO.widget.MenuItem.prototype = {
             this.clickEvent.subscribe(
                     oObject.fn, 
                     (oObject.obj || this), 
-                    (oObject.scope || true)
+                    oObject.scope
                 );
 
             this._oOnclickAttributeValue = oObject;

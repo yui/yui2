@@ -114,8 +114,8 @@ div.yuimenu h6.first-of-type {
     value of the "maxheight" configuration property.
 */
 
-div.yuimenu div.hd,
-div.yuimenu div.ft {
+div.yuimenu div.topscrollbar,
+div.yuimenu div.bottomscrollbar {
 
     height:16px;
     background-image:url(map.gif);
@@ -124,29 +124,33 @@ div.yuimenu div.ft {
 }
 
 
-div.yuimenu div.hd {
+div.yuimenu div.topscrollbar {
 
+    background-image:url(map.gif);
     background-position:center -72px;
 
 }
 
 
-div.yuimenu div.hd.disabled {
+div.yuimenu div.topscrollbar_disabled {
 
+    background-image:url(map.gif);
     background-position:center -88px;
 
 }
 
 
-div.yuimenu div.ft {
+div.yuimenu div.bottomscrollbar {
 
+    background-image:url(map.gif);
     background-position:center -104px;
 
 }
 
 
-div.yuimenu div.ft.disabled {
+div.yuimenu div.bottomscrollbar_disabled {
 
+    background-image:url(map.gif);
     background-position:center -120px;
 
 }
@@ -181,16 +185,10 @@ div.yuimenubar li li {
 
 /* Matches the help text for a menu item */
 
-div.yuimenu li em {
+div.yuimenu li.hashelptext em.helptext {
 
     font-style:normal;
     margin:0 0 0 40px;
-
-}
-
-div.yuimenu li a em {
-
-    margin:0;
 
 }
 
@@ -288,8 +286,8 @@ div.yuimenubar li.yuimenubaritem.first-of-type {
 
 /* Styles for the the submenu indicator for menu items */
 
-div.yuimenu li em.submenuindicator, 
-div.yuimenubar li em.submenuindicator {
+div.yuimenu li.hassubmenu em.submenuindicator, 
+div.yuimenubar li.hassubmenu em.submenuindicator {
 
     display:-moz-inline-box; /* Mozilla */
     display:inline-block; /* IE, Opera and Safari */
@@ -304,39 +302,39 @@ div.yuimenubar li em.submenuindicator {
 
 }
 
-div.yuimenubar li em.submenuindicator {
+div.yuimenubar li.hassubmenu em.submenuindicator {
 
     background-position:0 -24px;
     margin:0 0 0 10px;
 
 }
 
-div.yuimenubar li em.submenuindicator.selected {
+div.yuimenubar li.hassubmenu em.submenuindicator.selected {
 
     background-position:0 -32px;
 
 }
 
-div.yuimenubar li em.submenuindicator.disabled {
+div.yuimenubar li.hassubmenu em.submenuindicator.disabled {
 
     background-position:0 -40px;
 
 }
 
-div.yuimenu li em.submenuindicator {
+div.yuimenu li.hassubmenu em.submenuindicator {
 
     background-position:0 0;
     margin:0 -16px 0 10px;
 
 }
 
-div.yuimenu li em.submenuindicator.selected {
+div.yuimenu li.hassubmenu em.submenuindicator.selected {
 
     background-position:0 -8px;
 
 }
 
-div.yuimenu li em.submenuindicator.disabled {
+div.yuimenu li.hassubmenu em.submenuindicator.disabled {
 
     background-position:0 -16px;
 
@@ -351,7 +349,7 @@ div.yuimenu li.checked {
 
 }
 
-div.yuimenu li em.checkedindicator {
+div.yuimenu li.checked em.checkedindicator {
 
     height:8px;
     width:8px;
@@ -364,17 +362,16 @@ div.yuimenu li em.checkedindicator {
     left:6px;
     _left:-16px; /* Underscore hack b/c this is for IE 6 only */
     top:.5em;
-    margin:0;
 
 }
 
-div.yuimenu li em.checkedindicator.selected {
+div.yuimenu li.checked em.checkedindicator.selected {
 
     background-position:0 -56px;
 
 }
 
-div.yuimenu li em.checkedindicator.disabled {
+div.yuimenu li.checked em.checkedindicator.disabled {
 
     background-position:0 -64px;
 
