@@ -24,15 +24,15 @@ if(_browser=="unknown"){throw new Error("Your web browser is not supported by th
 if(!iframeTarget){iframeTarget="blank.html";}
 if(typeof iframeTarget!="string"||_trim(iframeTarget)===""){throw new Error("Invalid argument passed to YAHOO.util.History.initialize");}
 document.write('<input type="hidden" id="yui_hist_field">');if(_browser=="msie"){document.write('<iframe id="yui_hist_iframe" src="'+iframeTarget+'" style="position:absolute;visibility:hidden;"></iframe>');}
-YAHOO.util.Event.addListener(window,"load",_initialize);_initialized=true;},navigate:function(module,state){if(typeof module!="string"||_trim(module)===""||typeof state!="string"){throw new Error("Missing or invalid argument passed to YAHOO.util.History.navigate");}
+YAHOO.util.Event.addListener(window,"load",_initialize);_initialized=true;},navigate:function(module,state){if(typeof module!="string"||typeof state!="string"){throw new Error("Missing or invalid argument passed to YAHOO.util.History.navigate");}
 if(!_bhmReady){throw new Error("The Browser History Manager is not initialized");}
 if(!_modules[module]){throw new Error("The following module has not been registered: "+module);}
 module=escape(module);state=escape(state);var currentStates=[];for(var moduleName in _modules){var moduleObj=_modules[moduleName];var currentState=(moduleName==module)?state:moduleObj.currentState;currentStates.push(moduleName+"="+currentState);}
-var fqstate=currentStates.join("&");if(_browser=="msie"){var html='<html><body><div id="state">'+fqstate+'</div></body></html>';try{var doc=_iframe.contentWindow.document;doc.open();doc.write(html);doc.close();}catch(e){}}else{top.location.hash=fqstate;if(_browser=="safari"){_fqstates[history.length]=fqstate;_storeStates();}}
-return true;},getCurrentState:function(module){if(typeof module!="string"||_trim(module)===""){throw new Error("Missing or invalid argument passed to YAHOO.util.History.getCurrentState");}
+var fqstate=currentStates.join("&");if(_browser=="msie"){var html='<html><body><div id="state">'+fqstate+'</div></body></html>';try{var doc=_iframe.contentWindow.document;doc.open();doc.write(html);doc.close();}catch(e){return false;}}else{top.location.hash=fqstate;if(_browser=="safari"){_fqstates[history.length]=fqstate;_storeStates();}}
+return true;},getCurrentState:function(module){if(typeof module!="string"){throw new Error("Missing or invalid argument passed to YAHOO.util.History.getCurrentState");}
 if(!_storageFieldReady){throw new Error("The Browser History Manager is not initialized");}
 var moduleObj=_modules[module];if(!moduleObj){throw new Error("No such registered module: "+module);}
-return unescape(moduleObj.currentState);},getBookmarkedState:function(module){if(typeof module!="string"||_trim(module)===""){throw new Error("Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState");}
+return unescape(moduleObj.currentState);},getBookmarkedState:function(module){if(typeof module!="string"){throw new Error("Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState");}
 var hash=top.location.hash.substr(1);var states=hash.split("&");for(var idx=0,len=states.length;idx<len;idx++){var tokens=states[idx].split("=");if(tokens.length==2){var moduleName=tokens[0];if(moduleName==module){return tokens[1];}}}
 return null;},getQueryStringParameter:function(paramName,url){url=url||top.location.href;var idx=url.indexOf("?");var queryString=idx>=0?url.substr(idx+1):url;var params=queryString.split("&");for(var i=0,len=params.length;i<len;i++){var tokens=params[i].split("=");if(tokens.length>=2){if(tokens[0]==paramName){return tokens[1];}}}
 return null;}};})();YAHOO.register("history",YAHOO.util.History,{version:"@VERSION@",build:"@BUILD@"});

@@ -18,8 +18,10 @@
     <target name="examples" description="Component Specific Over-ride">
         <copy todir="${srcdir}/examples/history" preservelastmodified="true">
             <fileset dir="${component.basedir}/examples">
-                <include name="**/*.html"/>
+                <include name="**/*.*"/>
+                <!--
                 <include name="**/assets/*"/>
+                -->
             </fileset>
         </copy>
     </target>
