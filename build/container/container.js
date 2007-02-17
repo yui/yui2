@@ -4241,7 +4241,7 @@ YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_BLOCK = "yui-blckicon";
+YAHOO.widget.SimpleDialog.ICON_BLOCK = "blckicon";
 
 /**
 * Constant for the standard network icon for alarm
@@ -4250,7 +4250,7 @@ YAHOO.widget.SimpleDialog.ICON_BLOCK = "yui-blckicon";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_ALARM = "yui-alrticon";
+YAHOO.widget.SimpleDialog.ICON_ALARM = "alrticon";
 
 /**
 * Constant for the standard network icon for help
@@ -4259,7 +4259,7 @@ YAHOO.widget.SimpleDialog.ICON_ALARM = "yui-alrticon";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_HELP  = "yui-hlpicon";
+YAHOO.widget.SimpleDialog.ICON_HELP  = "hlpicon";
 
 /**
 * Constant for the standard network icon for info
@@ -4268,7 +4268,7 @@ YAHOO.widget.SimpleDialog.ICON_HELP  = "yui-hlpicon";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_INFO  = "yui-infoicon";
+YAHOO.widget.SimpleDialog.ICON_INFO  = "infoicon";
 
 /**
 * Constant for the standard network icon for warn
@@ -4277,7 +4277,7 @@ YAHOO.widget.SimpleDialog.ICON_INFO  = "yui-infoicon";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_WARN  = "yui-warnicon";
+YAHOO.widget.SimpleDialog.ICON_WARN  = "warnicon";
 
 /**
 * Constant for the standard network icon for a tip
@@ -4286,7 +4286,7 @@ YAHOO.widget.SimpleDialog.ICON_WARN  = "yui-warnicon";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_TIP   = "yui-tipicon";
+YAHOO.widget.SimpleDialog.ICON_TIP   = "tipicon";
 
 /**
 * Constant representing the default CSS class used for a SimpleDialog
