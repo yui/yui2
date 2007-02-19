@@ -52,17 +52,16 @@
 			<p>The first step to subclassing the Panel is writing the constructor for the new subclass (ResizePanel, in this case) and specifying its inheritance from the Panel class using <em>YAHOO.extend</em>:</p>
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
+				YAHOO.namespace("example.container");
 
-				// BEGIN PHOTOBOX SUBCLASS //
-				YAHOO.widget.PhotoBox = function(el, userConfig) {
+				// BEGIN RESIZEPANEL SUBCLASS //
+				YAHOO.widget.ResizePanel = function(el, userConfig) {
 					if (arguments.length > 0) {
-						YAHOO.widget.PhotoBox.superclass.constructor.call(this, el, userConfig);
+						YAHOO.widget.ResizePanel.superclass.constructor.call(this, el, userConfig);
 					}
 				}
 
-				// Inherit from YAHOO.widget.Panel
-				YAHOO.extend(YAHOO.widget.PhotoBox, YAHOO.widget.Panel);
-
+				YAHOO.extend(YAHOO.widget.ResizePanel, YAHOO.widget.Panel);
 			</textarea>
 
 			<p>Next, we will define a few constants for use by the ResizePanel class: "CSS_PANEL_RESIZE", which defines the CSS class to apply to the Panel, and "CSS_RESIZE_HANDLE", the CSS class to apply to the resize handler.</p>
