@@ -18,7 +18,6 @@ With: XMLHttpRequest".
 * uploadFile() will now correctly handle the absence of a callback object,
 allowing the transaction to complete silently.
 
-
 *** version 0.12.2 ***
 
 * The Opera/Connection Manager concurrent object condition, described in version

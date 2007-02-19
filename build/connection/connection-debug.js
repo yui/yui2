@@ -1073,3 +1073,4 @@ YAHOO.util.Connect =
 		o = null;
 	}
 };
+YAHOO.register("connection", YAHOO.widget.Module, {version: "@VERSION@", build: "@BUILD@"});
