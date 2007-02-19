@@ -59,12 +59,12 @@
 						YAHOO.widget.PhotoBox.superclass.constructor.call(this, el, userConfig);
 					}
 				}
-				
+
 				// Inherit from YAHOO.widget.Panel
 				YAHOO.extend(YAHOO.widget.PhotoBox, YAHOO.widget.Panel);
 
 			</textarea>
-			
+
 			<p>Next, we will define a few constants for use by the ResizePanel class: "CSS_PANEL_RESIZE", which defines the CSS class to apply to the Panel, and "CSS_RESIZE_HANDLE", the CSS class to apply to the resize handler.</p>
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
@@ -89,21 +89,21 @@
 
 					YAHOO.util.Dom.addClass(this.innerElement, YAHOO.widget.ResizePanel.CSS_PANEL_RESIZE);
 
-					this.resizeHandle = document.createElement("DIV");
+					this.resizeHandle = document.createElement("div");
 					this.resizeHandle.id = this.id + "_r";
 					this.resizeHandle.className = YAHOO.widget.ResizePanel.CSS_RESIZE_HANDLE;
-						
+
 					this.beforeRenderEvent.subscribe(function() {
 							if (! this.footer) {
 								this.setFooter("");
 							}
-						}, 
+						},
 						this, true
 					);
 
 					this.renderEvent.subscribe(function() {
 						var me = this;
-						
+
 						me.innerElement.appendChild(me.resizeHandle);
 
 						this.ddResize = new YAHOO.util.DragDrop(this.resizeHandle.id, this.id);
@@ -115,7 +115,7 @@
 
 							this.startWidth = me.innerElement.offsetWidth;
 							this.startHeight = me.innerElement.offsetHeight;
-							
+
 							me.cfg.setProperty("width", this.startWidth + "px");
 							me.cfg.setProperty("height", this.startHeight + "px");
 
@@ -125,14 +125,14 @@
 							me.innerElement.style.overflow = "hidden";
 							me.body.style.overflow = "auto";
 						}
-						
+
 						this.ddResize.onDrag = function(e) {
 							var newPos = [YAHOO.util.Event.getPageX(e),
 										  YAHOO.util.Event.getPageY(e)];
-							
+
 							var offsetX = newPos[0] - this.startPos[0];
 							var offsetY = newPos[1] - this.startPos[1];
-					
+
 							var newWidth = Math.max(this.startWidth + offsetX, 10);
 							var newHeight = Math.max(this.startHeight + offsetY, 10);
 
@@ -175,11 +175,11 @@
 		</div>
 
 		<div id="ft">&nbsp;</div>
-	</div>	
+	</div>
 
 	<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
-	<script language="javascript"> 
-		dp.SyntaxHighlighter.HighlightAll('code'); 
+	<script language="javascript">
+		dp.SyntaxHighlighter.HighlightAll('code');
 	</script>
 
 </body>

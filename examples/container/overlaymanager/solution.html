@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">
 		<link type="text/css" rel="stylesheet" href="../../../build/fonts/fonts.css">
-		
+
 		<script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 		<script type="text/javascript" src="../../../build/event/event.js" ></script>
 		<script type="text/javascript" src="../../../build/dom/dom.js" ></script>
@@ -12,10 +12,10 @@
 
 		<script type="text/javascript" src="../../../build/container/container.js"></script>
 		<link type="text/css" rel="stylesheet" href="../../../build/container/assets/container.css">
-		
+
 		<style>
 			body { background-color:#eee }
-			.panel-container.focused .hd { background-color:red; }
+			.yui-panel-container.focused .hd { background-color:red; }
 		</style>
 
 		<script>
@@ -23,22 +23,22 @@
 
 				function init() {
 					// Build panel1 based on markup
-					YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { xy:[150,100], 
-																						visible:false, 
+					YAHOO.example.container.panel1 = new YAHOO.widget.Panel("panel1", { xy:[150,100],
+																						visible:false,
 																						width:"300px"
 																					  } );
 					YAHOO.example.container.panel1.render();
 
 					// Build panel2 based on markup
-					YAHOO.example.container.panel2 = new YAHOO.widget.Panel("panel2", { xy:[250,200], 
-																						visible:false, 
+					YAHOO.example.container.panel2 = new YAHOO.widget.Panel("panel2", { xy:[250,200],
+																						visible:false,
 																						width:"300px"
 																					  } );
 					YAHOO.example.container.panel2.render();
 
 					// Build panel3 based on markup
-					YAHOO.example.container.panel3 = new YAHOO.widget.Panel("panel3", { xy:[350,300], 
-																						visible:false, 
+					YAHOO.example.container.panel3 = new YAHOO.widget.Panel("panel3", { xy:[350,300],
+																						visible:false,
 																						width:"300px"
 																					  } );
 					YAHOO.example.container.panel3.render();
@@ -51,7 +51,7 @@
 					YAHOO.util.Event.addListener("show1", "click", YAHOO.example.container.panel1.show, YAHOO.example.container.panel1, true);
 					YAHOO.util.Event.addListener("hide1", "click", YAHOO.example.container.panel1.hide, YAHOO.example.container.panel1, true);
 					YAHOO.util.Event.addListener("focus1", "click", YAHOO.example.container.panel1.focus, YAHOO.example.container.panel1, true);
-					
+
 					YAHOO.util.Event.addListener("show2", "click", YAHOO.example.container.panel2.show, YAHOO.example.container.panel2, true);
 					YAHOO.util.Event.addListener("hide2", "click", YAHOO.example.container.panel2.hide, YAHOO.example.container.panel2, true);
 					YAHOO.util.Event.addListener("focus2", "click", YAHOO.example.container.panel2.focus, YAHOO.example.container.panel2, true);
@@ -72,26 +72,26 @@
 	<body>
 
 		<div>
-			panel1: 
-			<button id="show1">Show</button> 
+			panel1:
+			<button id="show1">Show</button>
 			<button id="hide1">Hide</button>
 			<button id="focus1">Focus</button>
 		</div>
 		<div>
-			panel2: 
-			<button id="show2">Show</button> 
+			panel2:
+			<button id="show2">Show</button>
 			<button id="hide2">Hide</button>
 			<button id="focus2">Focus</button>
 		</div>
 		<div>
-			panel3: 
-			<button id="show3">Show</button> 
+			panel3:
+			<button id="show3">Show</button>
 			<button id="hide3">Hide</button>
 			<button id="focus3">Focus</button>
 		</div>
 		<div>
-			All Panels: 
-			<button id="showAll">Show All</button> 
+			All Panels:
+			<button id="showAll">Show All</button>
 			<button id="hideAll">Hide All</button>
 			<button id="blurAll">Blur All</button>
 		</div>
