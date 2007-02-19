@@ -1,5 +1,24 @@
 Connection Manager Release Notes
 
+*** version 2.2.0 ***
+
+* initHeader() now accepts a third argument as a boolean.  When set to true,
+this specific header will automatically be sent with each transaction.
+Otherwise, the header will be set and sent for the specific transaction only.
+Example: initHeader('X-YUI-State','Beta', true); all transactions will send this
+header.
+   * resetDefaultHeaders() will clear the default headers collection.
+
+* All Connection Mananger transactions will broadcast the header: "X-Requested-
+With: XMLHttpRequest".
+   * This can be turned off: YAHOO.util.Connect.setDefaultXhrHeader(false);
+
+* The HTTP method argument in asyncRequest is now case-insensitive.
+
+* uploadFile() will now correctly handle the absence of a callback object,
+allowing the transaction to complete silently.
+
+
 *** version 0.12.2 ***
 
 * The Opera/Connection Manager concurrent object condition, described in version
@@ -143,6 +162,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
 
 
 
