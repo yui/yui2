@@ -7,6 +7,7 @@
  * @requires yahoo, event
  * @optional xhr
  * @title DataSource Utility
+ * @beta
  */
 
 /****************************************************************************/

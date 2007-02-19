@@ -6,6 +6,7 @@
  * @requires yahoo, dom, event, datasource
  * @optional dragdrop
  * @title DataTable Widget
+ * @beta
  */
 
 /****************************************************************************/
