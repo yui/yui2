@@ -1,5 +1,9 @@
 Animation Release Notes
 
+*** version 2.2.0 **
+
+* Fixed AnimMgr.stop() when called without tween
+
 *** version 0.12.2 ***
 
 * raised AnimMgr.fps to 1000
