@@ -1,5 +1,36 @@
 YUI Library Release Notes
 
+*** version 2.2.0 ***
+
+This release synchronizes the SourceForge version with Yahoo!'s version of YUI
+-- version number 2.2.0.  Please see the following blog article for information
+on this specific version increment at:
+http://www.yuiblog.com/blog/2007/02/20/yui-220-released
+
+The following new components are introduced with this release:
+
+   * Button
+   * DataTable
+   * Browser History Manager
+
+   The following components are now available as utilities:
+   * Element
+   * DataSource
+
+These new components are introduced as "beta", with the exception of Browser
+History Manager as an experimental component.  Please see the YUI FAQ on the
+definition of beta and experimental at:
+http://developer.yahoo.com/yui/articles/faq/#beta
+
+* CSS customizations *
+Calendar, Container, and Menu have been revised to allow image customizations
+through their respective CSS files.  Please refer to each component's README to
+see the full details on affected properties.
+
+Additional details for fixes and updates can be found in the README files for
+each updated component.  All YUI API cheatsheets have been updated for the
+current version and can be found at: yui/docs/assets/cheatsheets.zip.
+
 *** version 0.12.2 ***
 
 This update contains general fixes to the YUI library.  Please see the
@@ -158,3 +189,6 @@ stored as sub-directories: yui/examples/dom/css and yui/examples/dom/img.
 Each functional example is also available and functional on
 developer.yahoo.com/yui/.  They reproduced here as part of the distribution
 for your convenience.
+
+
+
