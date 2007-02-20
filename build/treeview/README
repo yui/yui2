@@ -5,6 +5,8 @@ TreeView - Release Notes
   * Node::insertAfter properly nulls the nextSibling attribute when the
     inserted before the firstChild.
 
+  * MenuNodes inserted at the root level will no longer lose the menu behavior.
+
   * TextNode::setUpLabel sets the data.label property as well as the label property.
 
   * TaskNode example: made the logger optional, and moved the creation of the logger
