@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
 
-$COMPONENT = "YUI Calendar";
+$COMPONENT = "YUI Container";
 
 $_section = $_GET["section"];
 
@@ -26,8 +26,8 @@ $stepCount = count($sections[$_section]["pages"]);
 	<script type="text/javascript" src="/build/event/event.js" ></script>
 	<script type="text/javascript" src="/build/dom/dom.js" ></script>
 
-	<script type="text/javascript" src="/build/calendar/calendar.js"></script>
-	<link type="text/css" rel="stylesheet" href="/build/calendar/assets/calendar.css">	
+	<script type="text/javascript" src="/build/container/container.js"></script>
+	<link type="text/css" rel="stylesheet" href="/build/container/assets/container.css">	
 
 	<style>
 		#hd { margin:0; width:7.5in }
