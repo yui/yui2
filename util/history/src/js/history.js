@@ -145,9 +145,11 @@ YAHOO.util.History = ( function() {
         var initialStates = [];
         var currentStates = [];
         for ( var moduleName in _modules ) {
-            var moduleObj = _modules[moduleName];
-            initialStates.push( moduleName + "=" + moduleObj.initialState );
-            currentStates.push( moduleName + "=" + moduleObj.currentState );
+            if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                var moduleObj = _modules[moduleName];
+                initialStates.push( moduleName + "=" + moduleObj.initialState );
+                currentStates.push( moduleName + "=" + moduleObj.currentState );
+            }
         }
         _storageField.value = initialStates.join( "&" ) + "|" + currentStates.join( "&" );
         if ( _browser == "safari" ) {
@@ -194,8 +196,10 @@ YAHOO.util.History = ( function() {
                 if ( !fqstate ) {
                     var states = [];
                     for ( var moduleName in _modules ) {
-                        var moduleObj = _modules[moduleName];
-                        states.push( moduleName + "=" + moduleObj.initialState );
+                        if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                            var moduleObj = _modules[moduleName];
+                            states.push( moduleName + "=" + moduleObj.initialState );
+                        }
                     }
                     hash = states.join( "&" );
                 } else {
@@ -229,9 +233,11 @@ YAHOO.util.History = ( function() {
         if ( !fqstate ) {
             // Notifies all modules
             for ( moduleName in _modules ) {
-                moduleObj = _modules[moduleName];
-                moduleObj.currentState = moduleObj.initialState;
-                moduleObj.onStateChange( moduleObj.currentState );
+                if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                    moduleObj = _modules[moduleName];
+                    moduleObj.currentState = moduleObj.initialState;
+                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                }
             }
             return;
         }
@@ -248,11 +254,13 @@ YAHOO.util.History = ( function() {
         }
 
         for ( moduleName in _modules ) {
-            moduleObj = _modules[moduleName];
-            currentState = modules[moduleName];
-            if ( !currentState || moduleObj.currentState != currentState ) {
-                moduleObj.currentState = currentState || moduleObj.initialState;
-                moduleObj.onStateChange( moduleObj.currentState );
+            if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                moduleObj = _modules[moduleName];
+                currentState = modules[moduleName];
+                if ( !currentState || moduleObj.currentState != currentState ) {
+                    moduleObj.currentState = currentState || moduleObj.initialState;
+                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                }
             }
         }
     }
@@ -506,9 +514,11 @@ YAHOO.util.History = ( function() {
             // Generate our new full state string mod1=xxx&mod2=yyy
             var currentStates = [];
             for ( var moduleName in _modules ) {
-                var moduleObj = _modules[moduleName];
-                var currentState = ( moduleName == module ) ? state : moduleObj.currentState;
-                currentStates.push( moduleName + "=" + currentState );
+                if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                    var moduleObj = _modules[moduleName];
+                    var currentState = ( moduleName == module ) ? state : moduleObj.currentState;
+                    currentStates.push( moduleName + "=" + currentState );
+                }
             }
 
             var fqstate = currentStates.join( "&" );
@@ -599,7 +609,7 @@ YAHOO.util.History = ( function() {
                 if ( tokens.length == 2 ) {
                     var moduleName = tokens[0];
                     if ( moduleName == module ) {
-                        return tokens[1];
+                        return unescape( tokens[1] );
                     }
                 }
             }
@@ -630,7 +640,7 @@ YAHOO.util.History = ( function() {
                 var tokens = params[i].split( "=" );
                 if ( tokens.length >= 2 ) {
                     if ( tokens[0] == paramName ) {
-                        return tokens[1];
+                        return unescape( tokens[1] );
                     }
                 }
             }
