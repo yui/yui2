@@ -1,5 +1,9 @@
 YAHOO Global - Release Notes
 
+2.2.0 R2
+
+  * Fixed a typo that prevented the proper detection of multiple YAHOO_config listeners
+
 2.2.0
 
   * Added configuration of the library via a YAHOO_config object defined
