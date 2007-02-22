@@ -110,7 +110,7 @@ YAHOO.init = function() {
             // this is a new config object.  If it is, add the new component
             // load listener to the stack
             for (i=0;i<ls.length;i=i+1) {
-                if (ls[1]==l) {
+                if (ls[i]==l) {
                     unique=false;
                     break;
                 }
