@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="YuiBuild" default="local">
 
-    <description>AutoComplete Build File</description>
+    <description>DataTable Build File</description>
 
     <dirname property="buildfile.dir" file="${ant.file}" />
     <property environment="env" />
