@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: Logger - Customizing LogReader UI (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
+<style type="text/css">
+.example, .container{position:relative;}
+.example {margin:1em;padding:1em;border:1px solid black;background-color:#EEE;}
+.container {float:right;}
+
+.yui-log .mytype {background-color:#FF99CC;}
+</style>
+</head>
+
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">Logger Widget</a> :: Customizing LogReader UI</h1>
+</div>
+
+<div id="bd">
+    <!-- Content begins -->
+    <div id="intro">
+        <h3>Customizing LogReader</h3>
+        <p>The UI of LogReader can be customized to a certain extent. These
+        examples demonstrate some of the properties and methods of LogReader.
+        <a href="#" id="logit">Click here</a> to log a simple message.</p>
+    </div>
+
+    <div class="example">
+        <div class="content">
+            <h4>Example 1</h4>
+            <p><a href="#" id="show">Show this LogReader</a> | <a href="#" id="hide">Hide this LogReader</a></p>
+            <ul>
+                <li>LogReader is hidden by default. Click the link above to show it.</li>
+                <li>LogReader has been appended to the DIV <code>container1</code>,
+                which has been floated right.</li>
+                <li>The title has been customized via <code>setTitle()</code>.</li>
+                <li>Draggability has been disabled.</li>
+            </ul>
+        </div>
+        <div id="container1" class="container"></div>
+        
+        <!-- Sample code begins -->
+        <div id="code">
+            <h4>Sample Code</h4>
+
+            <textarea name="code" class="HTML" cols="60" rows="1">
+&lt;style type="text/css"&gt;
+.example, .container{position:relative;}
+.example {margin:1em;padding:1em;border:1px solid black;background-color:#EEE;}
+.container {float:right;}
+&lt;/style&gt;
+
+&lt;body&gt;
+    &lt;div class="example"&gt;
+        &lt;div id="container1" class="container"&gt;&lt;/div&gt;
+    &lt;/div&gt;
+    
+&lt;script type="text/javascript"&gt;
+var myLogReader1 = new YAHOO.widget.LogReader("container1",{draggable:false});
+myLogReader1.setTitle("Example 1 LogReader");
+&lt;/script&gt;
+&lt;/body&gt;
+            </textarea>
+        </div>
+        <!-- Code sample ends -->
+    </div>
+
+    <div class="example">
+        <div class="content">
+            <h4>Example 2</h4>
+            <ul>
+                <li>LogReader has been appended to the DIV <code>container2</code>,
+                which has been floated right.</li>
+                <li>LogReader has been collapsed.</li>
+                <li>Output has been paused.</li>
+            </ul>
+        </div>
+        <div id="container2" class="container"></div>
+
+        <!-- Sample code begins -->
+        <div id="code">
+            <h4>Sample Code</h4>
+
+            <textarea name="code" class="HTML" cols="60" rows="1">
+            </textarea>
+        </div>
+        <!-- Code sample ends -->
+    </div>
+    
+    <div class="example">
+        <div class="content">
+            <h4>Example 3</h4>
+            <ul>
+                <li>LogReader has been appended to the DIV <code>container3</code>,
+                which has been floated right.</li>
+                <li>Verbose output has been disabled.</li>
+                <li>New messages get appended to the bottom.</li>
+            </ul>
+        </div>
+        <div id="container3" class="container"></div>
+
+        <!-- Sample code begins -->
+        <div id="code">
+            <h4>Sample Code</h4>
+
+            <textarea name="code" class="HTML" cols="60" rows="1">
+            </textarea>
+        </div>
+        <!-- Code sample ends -->
+    </div>
+</div>
+
+<!-- Libary begins -->
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<!-- Library ends -->
+
+<script type="text/javascript">
+var myLogReader1 = new YAHOO.widget.LogReader("container1",{draggable:false});
+myLogReader1.setTitle("Example 1 LogReader");
+myLogReader1.hide();
+
+var myLogReader2 = new YAHOO.widget.LogReader("container2");
+myLogReader2.collapse();
+myLogReader2.pause();
+
+var myLogReader3 = new YAHOO.widget.LogReader("container3", {verboseOutput:false,newestOnTop:false});
+myLogReader3.hideCategory("warn");
+myLogReader3.hideCategory("error");
+myLogReader3.hideCategory("time");
+myLogReader3.hideCategory("window");
+myLogReader3.hideSource("global");
+
+// Click to log
+var clickToLog = function(e) {
+    YAHOO.util.Event.stopEvent(e);
+    YAHOO.log("This is a simple log message.");
+};
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("logit"),"click",clickToLog);
+
+// Click to Show
+var clickToShow = function(e,LogReader) {
+    YAHOO.util.Event.stopEvent(e);
+    LogReader.show();
+};
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("show"),"click",clickToShow,myLogReader1);
+
+// Click to hide
+var clickToHide = function(e,LogReader) {
+    YAHOO.util.Event.stopEvent(e);
+    LogReader.hide();
+};
+YAHOO.util.Event.addListener(YAHOO.util.Dom.get("hide"),"click",clickToHide,myLogReader1);
+
+</script>
+
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+</body>
+</html>
