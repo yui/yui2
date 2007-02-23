@@ -1,8 +1,9 @@
 /* logger default styles */
-/* font size is controlled here: default 77% */
-#yui-log {position:absolute;top:1em;right:1em;font-size:77%;text-align:left;}
-/* width is controlled here: default 31em */
-.yui-log {padding:1em;width:31em;background-color:#AAA;border:1px solid black;font-family:monospace;z-index:9000;}
+/* default width: 31em */
+/* default font-size 77% */
+.yui-log {padding:1em;width:31em;background-color:#AAA;border:1px solid black;font-family:monospace;font-size:77%;text-align:left;z-index:9000;}
+/* for containers built from scratch */
+.yui-log-container {position:absolute;top:1em;right:1em;}
 .yui-log p {margin:1px;padding:.1em;}
 .yui-log button {font-family:monospace;}
 .yui-log .yui-log-hd {margin-top:1em;padding:.5em;background-color:#575757;color:#FFF;}
