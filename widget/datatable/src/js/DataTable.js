@@ -1421,6 +1421,9 @@ YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
                     case "body":
                         knownTag = true;
                         break;
+                    case "a":
+                        knownTag = true;
+                        break;
                     case "td":
                         oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
                         knownTag = true;
@@ -1461,6 +1464,9 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
             while(!knownTag) {
                 switch(elTag) {
                     case "body":
+                        knownTag = true;
+                        break;
+                    case "a":
                         knownTag = true;
                         break;
                     case "td":
@@ -1504,6 +1510,9 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
             while(!knownTag) {
                 switch(elTag) {
                     case "body":
+                        knownTag = true;
+                        break;
+                    case "a":
                         knownTag = true;
                         break;
                     case "td":
@@ -1568,6 +1577,9 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
                     }
                     knownTag = true;
                     break;
+                case "a":
+                    knownTag = true;
+                    break;
                 case "td":
                     YAHOO.util.Event.stopEvent(e);
                     oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
@@ -1615,6 +1627,9 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
         while(!knownTag) {
             switch(elTag) {
                 case "body":
+                    knownTag = true;
+                    break;
+                case "a":
                     knownTag = true;
                     break;
                 case "td":
