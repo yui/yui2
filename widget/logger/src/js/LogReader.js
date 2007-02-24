@@ -281,6 +281,15 @@ YAHOO.widget.LogReader.prototype.verboseOutput = true;
 YAHOO.widget.LogReader.prototype.newestOnTop = true;
 
 /**
+ * Output timeout buffer in milliseconds.
+ *
+ * @property outputBuffer
+ * @type Number
+ * @default 100
+ */
+YAHOO.widget.LogReader.prototype.outputBuffer = 100;
+
+/**
  * Maximum number of messages a LogReader console will display.
  *
  * @property thresholdMax
@@ -1190,7 +1199,7 @@ YAHOO.widget.LogReader.prototype._onNewLog = function(sType, aArgs, oSelf) {
     oSelf._buffer.push(logEntry);
 
     if (oSelf.logReaderEnabled === true && oSelf._timeout === null) {
-        oSelf._timeout = setTimeout(function(){oSelf._printBuffer();}, 100);
+        oSelf._timeout = setTimeout(function(){oSelf._printBuffer();}, oSelf.outputBuffer);
     }
 };
 
