@@ -282,7 +282,7 @@ YAHOO.widget.MenuManager = function() {
     
             for(var i in m_oMenus) {
     
-                if(m_oMenus.hasOwnProperty(i)) {
+                if(YAHOO.lang.hasOwnProperty(m_oMenus,i)) {
     
                     oMenu = m_oMenus[i];
     
@@ -510,7 +510,7 @@ YAHOO.widget.MenuManager = function() {
     
             for(var i in m_oVisibleMenus) {
     
-                if(m_oVisibleMenus.hasOwnProperty(i)) {
+                if(YAHOO.lang.hasOwnProperty(m_oVisibleMenus,i)) {
     
                     oMenu = m_oVisibleMenus[i];
     
