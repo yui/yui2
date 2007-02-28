@@ -433,7 +433,6 @@ init: function(p_oElement, p_oConfig) {
     this._aListElements = [];
     this._aGroupTitleElements = [];
 
-
     if(!this.ITEM_TYPE) {
 
         this.ITEM_TYPE = YAHOO.widget.MenuItem;
@@ -3535,7 +3534,69 @@ configClassName: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
+
 // Public methods
+
+
+/**
+* @method on
+* @description Adds an event listener to the menu and its 
+* corresponding submenus.
+* @param {String} p_sEvent The name of the event to listen for.
+* @param {Object} p_fnListener The function to execute.
+* @param {Object} p_oObject An object to be passed along when the event fires.
+*/
+on: function(p_sEvent, p_fnListener, p_oObject) {
+
+    function addCustomEventListener(p_oMenu) {
+
+        p_oMenu.on(p_sEvent, p_fnListener, p_oObject, p_oMenu);
+
+    }
+
+
+    function onItemAdded(p_sType, p_aArgs) {
+
+        var oItem = p_aArgs[0],
+            oSubmenu = oItem.cfg.getProperty("submenu");
+
+        if(oSubmenu) {
+
+            addCustomEventListener(oSubmenu);
+
+        }
+    
+    }
+
+
+    this[p_sEvent].subscribe(p_fnListener, p_oObject, this);
+
+    this.itemAddedEvent.subscribe(onItemAdded);
+
+
+    var aSubmenus = this.getSubmenus(),
+        nSubmenus = aSubmenus.length,
+        oSubmenu;
+
+
+    if(nSubmenus > 0) {
+    
+        var i = nSubmenus - 1;
+        
+        do {
+
+            oSubmenu = aSubmenus[i];
+
+            addCustomEventListener(oSubmenu);
+            
+            oSubmenu.itemAddedEvent.subscribe(onItemAdded);
+
+        }
+        while(i--);
+    
+    }
+
+},
 
 
 /**
@@ -3814,10 +3875,52 @@ removeItem: function(p_oObject, p_nGroupIndex) {
 
 
 /**
+* @method getSubmenus
+* @description Returns an array of all of the submenus that are immediate 
+* children of the menu.
+* @return {Array}
+*/
+getSubmenus: function() {
+
+    var aItems = this.getItems(),
+        nItems = aItems.length,
+        aSubmenus = [],
+        oSubmenu,
+        oItem;
+
+
+    if(nItems > 0) {
+        
+        for(var i=0; i<nItems; i++) {
+
+            oItem = aItems[i];
+            
+            if(oItem) {
+
+                oSubmenu = oItem.cfg.getProperty("submenu");
+                
+                if(oSubmenu) {
+
+                    aSubmenus[aSubmenus.length] = oSubmenu;
+
+                }
+            
+            }
+        
+        }
+    
+    }
+
+    return aSubmenus;
+
+},
+
+
+/**
 * @method getItems
 * @description Returns an array of all of the items in the menu.
 * @return {Array}
-*/        
+*/
 getItems: function() {
 
     var aGroups = this._aItemGroups,
