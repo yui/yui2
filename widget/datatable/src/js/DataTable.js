@@ -2133,7 +2133,10 @@ YAHOO.widget.DataTable.prototype.getBody = function() {
  * @return {HTMLElement} Reference to TR element.
  */
 YAHOO.widget.DataTable.prototype.getRow = function(index) {
-    return(this._elBody.rows[index]);
+    if(!isNaN(index)) {
+        return(this._elBody.rows[index]);
+    }
+    return null;
 };
 
 /**
@@ -2145,7 +2148,10 @@ YAHOO.widget.DataTable.prototype.getRow = function(index) {
  * @return {HTMLElement} Reference to TD element.
  */
 YAHOO.widget.DataTable.prototype.getCell = function(row, col) {
-    return(this._elBody.rows[row].cells[col]);
+    if(!isNaN(row) && !isNaN(col)) {
+        return(this._elBody.rows[row].cells[col]);
+    }
+    return null;
 };
 
 /**

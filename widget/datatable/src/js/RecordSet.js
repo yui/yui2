@@ -119,8 +119,11 @@ YAHOO.widget.RecordSet.prototype.getLength = function() {
  * @return {Object} Record object
  */
 YAHOO.widget.RecordSet.prototype.getRecord = function(identifier) {
-    if(identifier) {
-        if(identifier.constructor == String) {
+    if((identifier !== undefined) && (identifier !== null)) {
+        if(!isNaN(identifier)) {
+            return this._records[identifier];
+        }
+        else if(identifier.constructor == String) {
             for(var i=0; i<this._records.length; i++) {
                 if(this._records[i].id == identifier) {
                     return this._records[i];
@@ -128,11 +131,9 @@ YAHOO.widget.RecordSet.prototype.getRecord = function(identifier) {
             }
             return null;
         }
-        else {
-            return this._records[identifier];
-        }
     }
     return null;
+
 };
 
 /**
@@ -393,9 +394,7 @@ YAHOO.widget.RecordSet.prototype.reset = function() {
 YAHOO.widget.Record = function(oLiteral) {
     if(typeof oLiteral == "object") {
         for(var sKey in oLiteral) {
-            if(sKey) {
-                this[sKey] = oLiteral[sKey];
-            }
+            this[sKey] = oLiteral[sKey];
         }
     }
     this.id = "yui-dtrec"+YAHOO.widget.Record._nCount;
