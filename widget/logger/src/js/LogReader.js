@@ -605,20 +605,20 @@ YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
 
     // Verbose output includes extra line breaks
     var output =  (this.verboseOutput) ?
-        ["<p><span class='", category, "'>", label, "</span> ",
+        ["<p class='verbose'><span class='", category, "'>", label, "</span> ",
         totalTime, "ms (+", elapsedTime, ") ",
         localTime, ": ",
-        "</p><p>",
+        "</p><p class='verbose'>",
         sourceAndDetail,
-        ": </p><p>",
+        ": </p><p class='verbose'>",
         msg,
         "</p>"] :
 
-        ["<p><span class='", category, "'>", label, "</span> ",
+        ["<p class='compact'><span class='", category, "'>", label, "</span> ",
         totalTime, "ms (+", elapsedTime, ") ",
         localTime, ": ",
         sourceAndDetail, ": ",
-        msg,"</p>"];
+        msg, "</p>"];
 
     return output.join("");
 };
@@ -1052,13 +1052,20 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             var output = this.formatMsg(entry);
 
             // Verbose output uses <code> tag instead of <pre> tag (for wrapping)
-            var container = (this.verboseOutput) ? "CODE" : "PRE";
+            /*var container = (this.verboseOutput) ? "CODE" : "PRE";
             var oNewElement = (this.newestOnTop) ?
                 this._elConsole.insertBefore(
                     document.createElement(container),this._elConsole.firstChild):
                 this._elConsole.appendChild(document.createElement(container));
 
-            oNewElement.innerHTML = output;
+           oNewElement.innerHTML = output;*/
+            
+            if(this.newestOnTop) {
+                this._elConsole.innerHTML = output + this._elConsole.innerHTML;
+            }
+            else {
+                this._elConsole.innerHTML += output;
+            }
             this._consoleMsgCount++;
             this._lastTime = entry.time.getTime();
         }
