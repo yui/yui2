@@ -4,15 +4,30 @@
 <link rel="stylesheet" type="text/css" href="./css/screen.css">
 </head>
   
-<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
-<script type="text/javascript" src="../../build/event/event.js" ></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/yahoo/yahoo-min.js" ></script>
+<script type="text/javascript" src="../../build/event/event-min.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom-min.js"></script>
+<script type="text/javascript" src="../../build/logger/logger-min.js"></script>
 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop-debug.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
+
 <style>
 
 /*ul { height: 200px; overflow:auto } */
+li.group1 {
+  background-color: #D1E6EC;
+  border:1px solid #7EA6B2;
+  margin: 2px;
+  cursor: move;
+}
+
+li.group2 {
+  background-color: #D8D4E2;
+  border:1px solid #6B4C86;
+  margin: 2px;
+  cursor:move; 
+}
 
 </style>
 
@@ -21,32 +36,24 @@
 <script type="text/javascript">
 
 YAHOO.example.DDApp = function() {
+    var Dom = YAHOO.util.Dom;
+    var DDM = YAHOO.util.DragDropMgr;
     return {
         init: function() {
 
-            var i = 0;
-            for (j=0;j < 20;++j) {
-                new YAHOO.example.DDList("li" + j);
-                new YAHOO.example.DDList("li" + (j + 20));
-                new YAHOO.example.DDList("li" + (j + 40), "right");
-            }
+            new YAHOO.example.DDList("li1_1");
+            new YAHOO.example.DDList("li1_2");
+            new YAHOO.example.DDList("li1_3");
+            new YAHOO.example.DDList("li2_1");
+            new YAHOO.example.DDList("li2_2");
+            new YAHOO.example.DDList("li2_3");
 
-            new YAHOO.example.DDListBoundary("hidden1");
-            new YAHOO.example.DDListBoundary("hidden2");
-            new YAHOO.example.DDListBoundary("hidden3", "right");
-
-            // dd11 = new YAHOO.example.DDList("li11");
-            // dd11.addToGroup("right");
-            // dd12 = new YAHOO.example.DDList("li12");
-            // dd12.addToGroup("right");
-            YAHOO.util.DDM.mode = 
-                    document.getElementById("ddmode").selectedIndex;
+            DDM.mode = Dom.get("ddmode").selectedIndex;
         }
     };
 } ();
 
 YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
-// YAHOO.util.DDM.useCache = false;
     
 </script>
 <body>
@@ -147,53 +154,35 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
     <div class="newsItem">
       <h3>Sortable List</h3>
       <p>
-        This example extends
-        DDProxy
-        to implement a sortable list.  When a list item is dragged past the center
-        of another list item, it is inserted before that item.
-        The items in the first two columns can interact with items in the other
-        column.  The items in the third column are defined as a separate group,
-        so they can only interact with other items in the third column.
-      </p>
 
         Mode: 
         <select id="ddmode" onchange="YAHOO.util.DDM.mode = this.selectedIndex">
           <option value="0" selected>Point</point>
           <option value="1">Intersect</point>
         </select>
-<p>
-<strong>The logger is paused for performance reasons.  Click "Resume" to re-enable it.</strong>
-</p>
 
-    <table border="0">
-    <tr>
-    <td >
-    <ul class="listGroup1">
-        <li id="hidden6" class="sortListHidden">Hidden</li>
-        <li id="li0" class="sortList">li 0</li><li id="li1" class="sortList">li 1</li><li id="li2" class="sortList">li 2</li><li id="li3" class="sortList">li 3</li><li id="li4" class="sortList">li 4</li><li id="li5" class="sortList">li 5</li><li id="li6" class="sortList">li 6</li><li id="li7" class="sortList">li 7</li><li id="li8" class="sortList">li 8</li><li id="li9" class="sortList">li 9</li><li id="li10" class="sortList">li 10</li><li id="li11" class="sortList">li 11</li><li id="li12" class="sortList">li 12</li><li id="li13" class="sortList">li 13</li><li id="li14" class="sortList">li 14</li><li id="li15" class="sortList">li 15</li><li id="li16" class="sortList">li 16</li><li id="li17" class="sortList">li 17</li><li id="li18" class="sortList">li 18</li><li id="li19" class="sortList">li 19</li>        <li id="hidden1" class="sortListHidden">Hidden</li>
+      </p>
 
-    </ul>
-    </td>
 
-    <td>&nbsp;</td>
-<td>
-    <ul class="listGroup1">
-        <li id="hidden5" class="sortListHidden">Hidden</li>
-        <li id="li20" class="sortList">li 20</li><li id="li21" class="sortList">li 21</li><li id="li22" class="sortList">li 22</li><li id="li23" class="sortList">li 23</li><li id="li24" class="sortList">li 24</li><li id="li25" class="sortList">li 25</li><li id="li26" class="sortList">li 26</li><li id="li27" class="sortList">li 27</li><li id="li28" class="sortList">li 28</li><li id="li29" class="sortList">li 29</li><li id="li30" class="sortList">li 30</li><li id="li31" class="sortList">li 31</li><li id="li32" class="sortList">li 32</li><li id="li33" class="sortList">li 33</li><li id="li34" class="sortList">li 34</li><li id="li35" class="sortList">li 35</li><li id="li36" class="sortList">li 36</li><li id="li37" class="sortList">li 37</li><li id="li38" class="sortList">li 38</li><li id="li39" class="sortList">li 39</li>
-        <li id="hidden2" class="sortListHidden">Hidden</li>
-    </ul>
-    </td>
+<div style="height:200px;">
+<div style="float:left;">
+<h3>List 1</h3>
+ <ul id="list1" style="width:250px;">
+   <li class="group1" id="li1_1">list 1, item 1</li>
+   <li class="group1" id="li1_2">list 1, item 2</li>
+   <li class="group1" id="li1_3">list 1, item 3</li>
+ </ul>
+</div>
+ <div style="float:left;">
+ <h3>List 2</h3>
+ <ul id="list2" style="width:250px;">
+   <li class="group2" id="li2_1">list 2, item 1</li>
+   <li class="group2" id="li2_2">list 2, item 2</li>
+   <li class="group2" id="li2_3">list 2, item 3</li>
+ </ul>
+</div>
+</div>
 
-    <td>&nbsp;</td>
-<td>
-    <ul class="listGroup2">
-        <li id="hidden4" class="sortListHidden">Hidden</li>
-        <li id="li40" class="sortList">li 40</li><li id="li41" class="sortList">li 41</li><li id="li42" class="sortList">li 42</li><li id="li43" class="sortList">li 43</li><li id="li44" class="sortList">li 44</li><li id="li45" class="sortList">li 45</li><li id="li46" class="sortList">li 46</li><li id="li47" class="sortList">li 47</li><li id="li48" class="sortList">li 48</li><li id="li49" class="sortList">li 49</li><li id="li50" class="sortList">li 50</li><li id="li51" class="sortList">li 51</li><li id="li52" class="sortList">li 52</li><li id="li53" class="sortList">li 53</li><li id="li54" class="sortList">li 54</li><li id="li55" class="sortList">li 55</li><li id="li56" class="sortList">li 56</li><li id="li57" class="sortList">li 57</li><li id="li58" class="sortList">li 58</li><li id="li59" class="sortList">li 59</li>        <li id="hidden3" class="sortListHidden">Hidden</li>
-    </ul>
-    </td>
-
-    </tr>
-    </table>
 
     </div>
     </form>
