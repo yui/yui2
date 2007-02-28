@@ -605,20 +605,20 @@ YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
 
     // Verbose output includes extra line breaks
     var output =  (this.verboseOutput) ?
-        ["<p class='verbose'><span class='", category, "'>", label, "</span> ",
+        ["<pre><p><span class='", category, "'>", label, "</span> ",
         totalTime, "ms (+", elapsedTime, ") ",
         localTime, ": ",
-        "</p><p class='verbose'>",
+        "</p><p>",
         sourceAndDetail,
-        ": </p><p class='verbose'>",
+        ": </p><p>",
         msg,
-        "</p>"] :
+        "</p></pre>"] :
 
-        ["<p class='compact'><span class='", category, "'>", label, "</span> ",
+        ["<pre><p><span class='", category, "'>", label, "</span> ",
         totalTime, "ms (+", elapsedTime, ") ",
         localTime, ": ",
         sourceAndDetail, ": ",
-        msg, "</p>"];
+        msg, "</p></pre>"];
 
     return output.join("");
 };
