@@ -641,16 +641,18 @@ YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
     // Make it dollars
     var nAmount = oData;
     var markup;
-        if(nAmount) {
+        if(nAmount && !isNaN(parseFloat(nAmount))) {
+             // Round to the penny
+             nAmount = Math.round(nAmount*100)/100;
              markup = "$"+nAmount;
 
-            // Normalize to the penny
+            // Normalize digits
             var dotIndex = markup.indexOf(".");
             if(dotIndex < 0) {
                 markup += ".00";
             }
             else {
-                while(dotIndex != markup.length-3) {
+                while(dotIndex > markup.length-3) {
                     markup += "0";
                 }
             }
