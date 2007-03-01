@@ -891,7 +891,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         for(var j = aSchema.length-1; j >= 0 ; j--) {
             // ...and capture data into an array mapped according to the schema...
             var dataFieldValue = jsonResult[aSchema[j]];
-            if(!dataFieldValue) {
+            if((dataFieldValue === undefined) || (dataFieldValue === null)) {
                 dataFieldValue = "";
             }
             //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());

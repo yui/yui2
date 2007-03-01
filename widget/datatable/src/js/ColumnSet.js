@@ -641,7 +641,7 @@ YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
     // Make it dollars
     var nAmount = oData;
     var markup;
-        if(nAmount && !isNaN(parseFloat(nAmount))) {
+        if((nAmount !== undefined) && (nAmount !== null) && !isNaN(parseFloat(nAmount))) {
              // Round to the penny
              nAmount = Math.round(nAmount*100)/100;
              markup = "$"+nAmount;
@@ -735,7 +735,7 @@ YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
  */
 YAHOO.widget.Column.formatNumber = function(elCell, oRecord, oColumn, oData) {
     var nNumber = oData;
-    if(nNumber) {
+    if((nNumber !== undefined) && (nNumber !== null)) {
         elCell.innerHTML = nNumber.toString();
     }
     else {
