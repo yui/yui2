@@ -4018,8 +4018,26 @@ configContainer: function(p_sType, p_aArgs, p_oMenu) {
 configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
     var nMaxHeight = p_aArgs[0],
-        oBody = this.body,
-        oHeader = this.header,
+        oBody = this.body;
+
+
+    if(this.lazyLoad && !oBody) {
+    
+        function onRender() {
+
+            this.cfg.setProperty("maxheight", nMaxHeight);
+            this.renderEvent.unsubscribe(onRender);
+
+        }
+    
+        this.renderEvent.subscribe(onRender, this, true);
+
+        return;
+    
+    }
+
+
+    var oHeader = this.header,
         oFooter = this.footer,
         fnMouseOver = this._onScrollTargetMouseOver,
         fnMouseOut = this._onScrollTargetMouseOut;
@@ -5004,11 +5022,7 @@ initDefaultConfig: function() {
 
 var Dom = YAHOO.util.Dom,
     Module = YAHOO.widget.Module,
-    Menu = YAHOO.widget.Menu,
-
-    m_oMenuItemElement = null,
-    m_oSubmenuIndicator = null,
-    m_oCheckedIndicator = null;
+    Menu = YAHOO.widget.Menu;
 
 
 /**
@@ -5055,83 +5069,6 @@ YAHOO.widget.MenuItem.prototype = {
 
 
     /**
-    * @property SUBMENU_INDICATOR_IMAGE_PATH
-    * @description String representing the path to the image to be used for the 
-    * menu item's submenu arrow indicator.
-    * @default "nt/ic/ut/alt1/menuarorght8_nrm_1.gif"
-    * @final
-    * @type String
-    * @deprecated All submenu indicator images are applied via a CSS 
-    * background image.  See "submenuindicator" class name in menu.css.
-    */
-    SUBMENU_INDICATOR_IMAGE_PATH: "nt/ic/ut/alt1/menuarorght8_nrm_1.gif",
-
-
-    /**
-    * @property SELECTED_SUBMENU_INDICATOR_IMAGE_PATH
-    * @description String representing the path to the image to be used for the 
-    * submenu arrow indicator when the menu item is selected.
-    * @default "nt/ic/ut/alt1/menuarorght8_hov_1.gif"
-    * @final
-    * @type String
-    * @deprecated All submenu indicator images are applied via a CSS 
-    * background image.  See "submenuindicator" class name in menu.css.
-    */
-    SELECTED_SUBMENU_INDICATOR_IMAGE_PATH: 
-        "nt/ic/ut/alt1/menuarorght8_hov_1.gif",
-
-
-    /**
-    * @property DISABLED_SUBMENU_INDICATOR_IMAGE_PATH
-    * @description String representing the path to the image to be used for the 
-    * submenu arrow indicator when the menu item is disabled.
-    * @default "nt/ic/ut/alt1/menuarorght8_dim_1.gif"
-    * @final
-    * @type String
-    * @deprecated All submenu indicator images are applied via a CSS 
-    * background image.  See "submenuindicator" class name in menu.css.
-    */
-    DISABLED_SUBMENU_INDICATOR_IMAGE_PATH: 
-        "nt/ic/ut/alt1/menuarorght8_dim_1.gif",
-
-
-    /**
-    * @property COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT
-    * @description String representing the alt text for the image to be used 
-    * for the submenu arrow indicator.
-    * @default "Collapsed.  Click to expand."
-    * @final
-    * @type String
-    * @deprecated Use COLLAPSED_SUBMENU_INDICATOR_TEXT.
-    */
-    COLLAPSED_SUBMENU_INDICATOR_ALT_TEXT: "Collapsed.  Click to expand.",
-
-
-    /**
-    * @property EXPANDED_SUBMENU_INDICATOR_ALT_TEXT
-    * @description String representing the alt text for the image to be used 
-    * for the submenu arrow indicator when the submenu is visible.
-    * @default "Expanded.  Click to collapse."
-    * @final
-    * @type String
-    * @deprecated Use EXPANDED_SUBMENU_INDICATOR_TEXT.
-    */
-    EXPANDED_SUBMENU_INDICATOR_ALT_TEXT: "Expanded.  Click to collapse.",
-
-
-    /**
-    * @property DISABLED_SUBMENU_INDICATOR_ALT_TEXT
-    * @description String representing the alt text for the image to be used 
-    * for the submenu arrow indicator when the menu item is disabled.
-    * @default "Disabled."
-    * @final
-    * @type String
-    * @deprecated Use DISABLED_SUBMENU_INDICATOR_TEXT.
-    */
-    DISABLED_SUBMENU_INDICATOR_ALT_TEXT: "Disabled.",
-
-
-    /**
     * @property COLLAPSED_SUBMENU_INDICATOR_TEXT
     * @description String representing the text for the <code>&#60;em&#62;<code>
     * element used for the submenu arrow indicator.
@@ -5164,69 +5101,6 @@ YAHOO.widget.MenuItem.prototype = {
     * @type String
     */
     DISABLED_SUBMENU_INDICATOR_TEXT: "Submenu collapsed.  (Item disabled.)",
-
-
-    /**
-    * @property CHECKED_IMAGE_PATH
-    * @description String representing the path to the image to be used for 
-    * the checked state.
-    * @default "nt/ic/ut/bsc/menuchk8_nrm_1.gif"
-    * @final
-    * @type String
-    * @deprecated All checked indicator images are applied via a CSS 
-    * background image.  See "checkedindicator" class name in menu.css.
-    */
-    CHECKED_IMAGE_PATH: "nt/ic/ut/bsc/menuchk8_nrm_1.gif",
-    
-
-    /**
-    * @property SELECTED_CHECKED_IMAGE_PATH
-    * @description String representing the path to the image to be used for 
-    * the selected checked state.
-    * @default "nt/ic/ut/bsc/menuchk8_hov_1.gif"
-    * @final
-    * @type String
-    * @deprecated All checked indicator images are applied via a CSS 
-    * background image.  See "checkedindicator" class name in menu.css.
-    */
-    SELECTED_CHECKED_IMAGE_PATH: "nt/ic/ut/bsc/menuchk8_hov_1.gif",
-    
-
-    /**
-    * @property DISABLED_CHECKED_IMAGE_PATH
-    * @description String representing the path to the image to be used for 
-    * the disabled checked state.
-    * @default "nt/ic/ut/bsc/menuchk8_dim_1.gif"
-    * @final
-    * @type String
-    * @deprecated All checked indicator images are applied via a CSS 
-    * background image.
-    */
-    DISABLED_CHECKED_IMAGE_PATH: "nt/ic/ut/bsc/menuchk8_dim_1.gif",
-
-
-    /**
-    * @property CHECKED_IMAGE_ALT_TEXT
-    * @description String representing the alt text for the image to be used 
-    * for the checked image.
-    * @default "Checked."
-    * @final
-    * @type String
-    * @deprecated Use CHECKED_TEXT.
-    */
-    CHECKED_IMAGE_ALT_TEXT: "Checked.",
-    
-    
-    /**
-    * @property DISABLED_CHECKED_IMAGE_ALT_TEXT
-    * @description String representing the alt text for the image to be used 
-    * for the checked image when the item is disabled.
-    * @default "Checked. (Item disabled.)"
-    * @final
-    * @type String
-    * @deprecated Use DISABLED_CHECKED_TEXT.
-    */
-    DISABLED_CHECKED_IMAGE_ALT_TEXT: "Checked. (Item disabled.)",
 
 
     /**
@@ -5271,30 +5145,6 @@ YAHOO.widget.MenuItem.prototype = {
     * @type YAHOO.widget.Menu
     */
     SUBMENU_TYPE: null,
-
-
-    /**
-    * @property IMG_ROOT
-    * @description String representing the prefix path to use for 
-    * non-secure images.
-    * @default "http://us.i1.yimg.com/us.yimg.com/i/"
-    * @type String
-    * @deprecated All menu item images are now applied via CSS 
-    * background images.
-    */
-    IMG_ROOT: "http://us.i1.yimg.com/us.yimg.com/i/",
-    
-
-    /**
-    * @property IMG_ROOT_SSL
-    * @description String representing the prefix path to use for securely 
-    * served images.
-    * @default "https://a248.e.akamai.net/sec.yimg.com/i/"
-    * @type String
-    * @deprecated All menu item images are now applied via CSS 
-    * background images.
-    */
-    IMG_ROOT_SSL: "https://a248.e.akamai.net/sec.yimg.com/i/",
 
 
 
@@ -5346,18 +5196,6 @@ YAHOO.widget.MenuItem.prototype = {
     
 
     /**
-    * @property _checkImage
-    * @description Object reference to the menu item's checkmark image.
-    * @default null
-    * @private
-    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-    * one-html.html#ID-17701901">HTMLImageElement</a>
-    * @deprecated Use _oCheckedIndicator.
-    */
-    _checkImage: null,   
-
-
-    /**
     * @property _oCheckedIndicator
     * @description Object reference to the menu item's checkmark image.
     * @default <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
@@ -5401,28 +5239,6 @@ YAHOO.widget.MenuItem.prototype = {
 	* @type YAHOO.widget.MenuItem
 	*/
 	constructor: YAHOO.widget.MenuItem,
-
-
-	/**
-    * @property imageRoot
-	* @description String representing the root path for all of the menu 
-	* item's images.
-	* @type String
-    * @deprecated All menu item images are now applied via CSS 
-    * background images.
-	*/
-	imageRoot: null,
-
-
-	/**
-    * @property isSecure
-	* @description Boolean representing whether or not the current browsing 
-	* context is secure (HTTPS).
-	* @type Boolean
-    * @deprecated All menu item images are now applied via CSS 
-    * background images.
-	*/
-	isSecure: Module.prototype.isSecure,
 
 
     /**
@@ -5958,14 +5774,18 @@ YAHOO.widget.MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
-        if(!m_oMenuItemElement) {
+        var oTemplate = YAHOO.widget.MenuItem._MenuItemTemplate;
 
-            m_oMenuItemElement = document.createElement("li");
-            m_oMenuItemElement.innerHTML = "<a href=\"#\">s</a>";
+        if(!oTemplate) {
+
+            oTemplate = document.createElement("li");
+            oTemplate.innerHTML = "<a href=\"#\">s</a>";
+
+            YAHOO.widget.MenuItem._MenuItemTemplate = oTemplate;
 
         }
 
-        this.element = m_oMenuItemElement.cloneNode(true);
+        this.element = oTemplate.cloneNode(true);
         this._oAnchor = this.element.firstChild;
         this._oText = this._oAnchor.firstChild;
 
@@ -6051,34 +5871,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         }
 
-    },
-
-
-    /**
-    * @method _preloadImage
-    * @description Preloads an image by creating an image element from the 
-    * specified path and appending the image to the body of the document.
-    * @private
-    * @param {String} p_sPath String specifying the path to the image.  
-    * @deprecated All menu item images are now applied via CSS 
-    * background images.
-    */
-    _preloadImage: function(p_sPath) {
-
-        var sPath = this.imageRoot + p_sPath;
-
-        if(!document.images[sPath]) {
-
-            var oImage = document.createElement("img");
-            oImage.src = sPath;
-            oImage.name = sPath;
-            oImage.id = sPath;
-            oImage.style.display = "none";
-            
-            document.body.appendChild(oImage);
-
-        }
-    
     },
 
 
@@ -6396,15 +6188,19 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(bChecked) {
 
-            if(!m_oCheckedIndicator) {
+            var oTemplate = YAHOO.widget.MenuItem._CheckedIndicatorTemplate;
 
-                m_oCheckedIndicator = document.createElement("em");
-                m_oCheckedIndicator.innerHTML = this.CHECKED_TEXT;
-                m_oCheckedIndicator.className = "checkedindicator";
+            if(!oTemplate) {
+
+                oTemplate = document.createElement("em");
+                oTemplate.innerHTML = this.CHECKED_TEXT;
+                oTemplate.className = "checkedindicator";
+
+                YAHOO.widget.MenuItem._CheckedIndicatorTemplate = oTemplate;
 
             }
 
-            oEM = m_oCheckedIndicator.cloneNode(true);
+            oEM = oTemplate.cloneNode(true);
 
             var oSubmenu = this.cfg.getProperty("submenu");
 
@@ -6669,18 +6465,23 @@ YAHOO.widget.MenuItem.prototype = {
 
                 if(!oSubmenuIndicator) { 
 
+                    var oTemplate = 
+                            YAHOO.widget.MenuItem._oSubmenuIndicatorTemplate;
 
-                    if(!m_oSubmenuIndicator) {
-                    
-                        m_oSubmenuIndicator = document.createElement("em");
-                        m_oSubmenuIndicator.innerHTML = 
+                    if(!oTemplate) {
+                   
+                        oTemplate = document.createElement("em");
+                        oTemplate.innerHTML =  
                             this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
-                        m_oSubmenuIndicator.className = "submenuindicator";
+                        oTemplate.className = "submenuindicator";
+                        
+                        YAHOO.widget.MenuItem._oSubmenuIndicatorTemplate = 
+                            oTemplate;
 
                     }
 
 
-                    oSubmenuIndicator = m_oSubmenuIndicator.cloneNode(true);
+                    oSubmenuIndicator = oTemplate.cloneNode(true);
 
 
                     if(oMenu.element.parentNode == oEl) {
