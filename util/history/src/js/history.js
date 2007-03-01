@@ -1,7 +1,6 @@
 /**
- *
- * The Browser History Manager provides the ability to use the 
- * back/forward navigation buttons in a DHTML application. It also allows 
+ * The Browser History Manager provides the ability to use the
+ * back/forward navigation buttons in a DHTML application. It also allows
  * a DHTML application to be bookmarked in a specific state.
  *
  * @module history
@@ -403,8 +402,12 @@ YAHOO.util.History = ( function() {
          *     module corresponding to its earliest history entry.
          * @param {function} onStateChange Callback called when the
          *     state of the specified module has changed.
+         * @param {object} obj An arbitrary object that will be passed as a
+         *     parameter to the handler.
+         * @param {boolean} override If true, the obj passed in becomes the
+         *     execution scope of the listener.
          */
-        register : function( module, initialState, onStateChange ) {
+        register : function( module, initialState, onStateChange, obj, override ) {
             if ( typeof module != "string" || _trim( module ) === "" ||
                  typeof initialState != "string" ||
                  typeof onStateChange != "function" ) {
@@ -430,11 +433,24 @@ YAHOO.util.History = ( function() {
             module = escape( module );
             initialState = escape( initialState );
 
+            // If the user chooses to override the scope, we use the
+            // custom object passed in as the execution scope.
+            var scope = null;
+            if ( override === true ) {
+                scope = obj;
+            } else {
+                scope = override;
+            }
+
+            var wrappedFn = function( state ) {
+                return onStateChange.call( scope, state, obj );
+            };
+
             _modules[module] = {
                 name : module,
                 initialState : initialState,
                 currentState : initialState,
-                onStateChange : onStateChange
+                onStateChange : wrappedFn
             };
         },
 
