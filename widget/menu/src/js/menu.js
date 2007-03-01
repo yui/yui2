@@ -3442,8 +3442,26 @@ configContainer: function(p_sType, p_aArgs, p_oMenu) {
 configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
 
     var nMaxHeight = p_aArgs[0],
-        oBody = this.body,
-        oHeader = this.header,
+        oBody = this.body;
+
+
+    if(this.lazyLoad && !oBody) {
+    
+        function onRender() {
+
+            this.cfg.setProperty("maxheight", nMaxHeight);
+            this.renderEvent.unsubscribe(onRender);
+
+        }
+    
+        this.renderEvent.subscribe(onRender, this, true);
+
+        return;
+    
+    }
+
+
+    var oHeader = this.header,
         oFooter = this.footer,
         fnMouseOver = this._onScrollTargetMouseOver,
         fnMouseOut = this._onScrollTargetMouseOut;
