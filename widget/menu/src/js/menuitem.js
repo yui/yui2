@@ -5,11 +5,7 @@
 
 var Dom = YAHOO.util.Dom,
     Module = YAHOO.widget.Module,
-    Menu = YAHOO.widget.Menu,
-
-    m_oMenuItemElement = null,
-    m_oSubmenuIndicator = null,
-    m_oCheckedIndicator = null;
+    Menu = YAHOO.widget.Menu;
 
 
 /**
@@ -959,14 +955,18 @@ YAHOO.widget.MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
-        if(!m_oMenuItemElement) {
+        var oTemplate = YAHOO.widget.MenuItem._MenuItemTemplate;
 
-            m_oMenuItemElement = document.createElement("li");
-            m_oMenuItemElement.innerHTML = "<a href=\"#\">s</a>";
+        if(!oTemplate) {
+
+            oTemplate = document.createElement("li");
+            oTemplate.innerHTML = "<a href=\"#\">s</a>";
+
+            YAHOO.widget.MenuItem._MenuItemTemplate = oTemplate;
 
         }
 
-        this.element = m_oMenuItemElement.cloneNode(true);
+        this.element = oTemplate.cloneNode(true);
         this._oAnchor = this.element.firstChild;
         this._oText = this._oAnchor.firstChild;
 
@@ -1397,15 +1397,19 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(bChecked) {
 
-            if(!m_oCheckedIndicator) {
+            var oTemplate = YAHOO.widget.MenuItem._CheckedIndicatorTemplate;
 
-                m_oCheckedIndicator = document.createElement("em");
-                m_oCheckedIndicator.innerHTML = this.CHECKED_TEXT;
-                m_oCheckedIndicator.className = "checkedindicator";
+            if(!oTemplate) {
+
+                oTemplate = document.createElement("em");
+                oTemplate.innerHTML = this.CHECKED_TEXT;
+                oTemplate.className = "checkedindicator";
+
+                YAHOO.widget.MenuItem._CheckedIndicatorTemplate = oTemplate;
 
             }
 
-            oEM = m_oCheckedIndicator.cloneNode(true);
+            oEM = oTemplate.cloneNode(true);
 
             var oSubmenu = this.cfg.getProperty("submenu");
 
@@ -1670,18 +1674,23 @@ YAHOO.widget.MenuItem.prototype = {
 
                 if(!oSubmenuIndicator) { 
 
+                    var oTemplate = 
+                            YAHOO.widget.MenuItem._oSubmenuIndicatorTemplate;
 
-                    if(!m_oSubmenuIndicator) {
-                    
-                        m_oSubmenuIndicator = document.createElement("em");
-                        m_oSubmenuIndicator.innerHTML = 
+                    if(!oTemplate) {
+                   
+                        oTemplate = document.createElement("em");
+                        oTemplate.innerHTML =  
                             this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
-                        m_oSubmenuIndicator.className = "submenuindicator";
+                        oTemplate.className = "submenuindicator";
+                        
+                        YAHOO.widget.MenuItem._oSubmenuIndicatorTemplate = 
+                            oTemplate;
 
                     }
 
 
-                    oSubmenuIndicator = m_oSubmenuIndicator.cloneNode(true);
+                    oSubmenuIndicator = oTemplate.cloneNode(true);
 
 
                     if(oMenu.element.parentNode == oEl) {
