@@ -109,12 +109,6 @@ myDataSource.responseSchema = {
     fields: ["POID","Date","Quantity","Amount","Title"]
 };
 var myDataTable = new YAHOO.widget.DataTable("basic", myColumnSet, myDataSource,{caption:"Example: Basic Table"});
-var record = myDataTable._oRecordSet.getRecord(0);
-var string;
-for(x in record) {
-    string += x + " is " + record[x] + "\n";
-}
-alert(string);
 </script>
 <script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

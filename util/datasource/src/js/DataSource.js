@@ -692,7 +692,7 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
     var fields = this.responseSchema.fields;
     for(var i=oRawResponse.length-1; i>-1; i--) {
         var oResult = {};
-        for(var j=fields.length; j>-1; j--) {
+        for(var j=fields.length-1; j>-1; j--) {
             oResult[fields[j]] = oRawResponse[i][j] || oRawResponse[i][fields[j]];
         }
         oParsedResponse.unshift(oResult);
