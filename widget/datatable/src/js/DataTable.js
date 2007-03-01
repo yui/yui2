@@ -158,6 +158,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
     YAHOO.util.Event.addListener(elTable, "keypress", this._onKeypress, this);
     YAHOO.util.Event.addListener(document, "keyup", this._onDocumentKeyup, this);
+    YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
     YAHOO.util.Event.addListener(elTable, "keyup", this._onKeyup, this);
     //YAHOO.util.Event.addListener(elTable, "focus", this._onFocus, this);
     YAHOO.util.Event.addListener(elTable, "blur", this._onBlur, this);
@@ -1807,6 +1808,40 @@ YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
         // Editor causes widget to lose focus
         oSelf._bFocused = false;
         oSelf.focusTable();
+        oSelf.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
+    }
+};
+
+/**
+ * Handles click events on the DOCUMENT. Hides active editor.
+ *
+ * @method _onDocumentClick
+ * @param e {HTMLEvent} The click event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
+    // enter Saves active editor data
+    if(oSelf.activeEditor) {
+        var elCell = oSelf.activeEditor.cell;
+        var oColumn = oSelf.activeEditor.column;
+        var oRecord = oSelf.activeEditor.record;
+        var oldValue = oRecord[oColumn.key];
+        var newValue = oSelf.activeEditor.getValue();
+
+        //Update Record
+        //TODO: Column.key may be null!
+        oSelf._oRecordSet.updateRecord(oRecord,oColumn.key,newValue);
+
+        //Update cell
+        oSelf.formatCell(elCell);
+
+        // Hide editor
+        oSelf.activeEditor.hide();
+        oSelf.activeEditor = null;
+
+        // Editor causes widget to lose focus
+        oSelf._bFocused = false;
         oSelf.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
     }
 };
