@@ -1955,7 +1955,9 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
     oSelf._oTextbox.setAttribute("autocomplete","off");
     oSelf._bFocused = true;
-    oSelf.textboxFocusEvent.fire(oSelf);
+    if(!oSelf._bItemSelected) {
+        oSelf.textboxFocusEvent.fire(oSelf);
+    }
 };
 
 /**

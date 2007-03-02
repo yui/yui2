@@ -1077,7 +1077,19 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
             }
         }
     }
-
+    else {
+        for(var i = aData.length-1; i >= 0; i--) {
+            if(aData[i]) {
+                if(aData[i].constructor == String) {
+                    aResults.unshift([aData[i]]);
+                }
+                else if(aData[i].constructor == Array) {
+                    aResults.unshift(aData[i]);
+                }
+            }
+        }
+    }
+    
     this.getResultsEvent.fire(this, oParent, sQuery, aResults);
     oCallbackFn(sQuery, aResults, oParent);
 };
