@@ -2864,6 +2864,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
  * Shows editor for given cell.
  *
  * @method editCell
+ * @param elCell {HTMLElement} Cell element to edit.
  */
 YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
     if(elCell && !isNaN(elCell.columnIndex)) {
@@ -2880,6 +2881,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
  * Formats given cell.
  *
  * @method formatCell
+ * @param elCell {HTMLElement} Cell element to format.
  */
 YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
     if(elCell && !isNaN(elCell.columnIndex)) {
