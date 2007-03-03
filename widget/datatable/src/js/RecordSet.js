@@ -360,10 +360,11 @@ YAHOO.widget.RecordSet.prototype.sort = function(fnSort) {
  * @param range {Number} (optional) Range of records to remove, or null.
  */
 YAHOO.widget.RecordSet.prototype.deleteRecord = function(i, range) {
-    if(!range || isNaN(range)) {
+    if(typeof range != "number") {
         range = 1;
     }
-    if(i && !isNaN(i)) {
+    // TODO: validate for negative values
+    if(typeof i == "number") {
         this._records.splice(i, range);
         this._length = this._length - range;
     }
