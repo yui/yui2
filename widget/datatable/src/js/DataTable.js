@@ -2413,11 +2413,12 @@ YAHOO.widget.DataTable.prototype.updateRow = function(oRecord, index) {
 };
 
 /**
- * Calls delete on selected rows.
+ * Calls delete on given rows.
  *
- * @method deleteSelectedRows
+ * @method deleteRows
+ * @param elRows {HTMLElement[]} Array of HTML table row element reference.
  */
-YAHOO.widget.DataTable.prototype.deleteRows = function(rows) {
+YAHOO.widget.DataTable.prototype.deleteRows = function(elRows) {
     var rowIndexes = [];
     for(var i=0; i<rows.length; i++) {
         var rowIndex = (rows[i].sectionRowIndex !== undefined) ? rows[i].sectionRowIndex : null;
@@ -2431,7 +2432,7 @@ YAHOO.widget.DataTable.prototype.deleteRows = function(rows) {
  * Deletes a given row element as well its corresponding Record in the RecordSet.
  *
  * @method deleteRow
- * @param elRow {element} HTML table row element reference.
+ * @param elRow {HTMLElement} HTML table row element reference.
  */
 YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
     if(elRow) {
