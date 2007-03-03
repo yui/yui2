@@ -455,6 +455,14 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("rowAppendEvent");
 
     /**
+     * Fired when one or more TR elements are updated.
+     *
+     * @event rowUpdateEvent
+     * @param oArgs.rowIds {Array} The IDs of the updated rows.
+     */
+    this.createEvent("rowUpdateEvent");
+
+    /**
      * Fired when a Record is updated in the RecordSet.
      *
      * @event recordSetUpdateEvent
