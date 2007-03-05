@@ -3460,6 +3460,8 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
     
     }
 
+    Dom.setStyle(oBody, "height", "auto");
+    Dom.setStyle(oBody, "overflow", "visible");    
 
     var oHeader = this.header,
         oFooter = this.footer,
