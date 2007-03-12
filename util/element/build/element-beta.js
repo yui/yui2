@@ -566,14 +566,14 @@ YAHOO.util.Element.prototype = {
         var scope = scope || this;
         
         el = this.get('id') || el;
-        
+        var self = this; 
         if (!this._events[type]) { // create on the fly
             if ( this.DOM_EVENTS[type] ) {
                 YAHOO.util.Event.addListener(el, type, function(e) {
                     if (e.srcElement && !e.target) { // supplement IE with target
                         e.target = e.srcElement;
                     }
-                    this.fireEvent(type, e);
+                    self.fireEvent(type, e);
                 }, obj, scope);
             }
             
@@ -798,6 +798,7 @@ YAHOO.util.Element.prototype = {
 
         this.DOM_EVENTS = {
             'click': true,
+            'dblclick': true,
             'keydown': true,
             'keypress': true,
             'keyup': true,
