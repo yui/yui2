@@ -18,7 +18,17 @@
  * @class History
  * @constructor
  */
-YAHOO.util.History = ( function() {
+YAHOO.util.History = ( function () {
+
+    /**
+     * User agent string used for browser detection.
+     *
+     * @property _ua
+     * @type string
+     * @default null
+     * @private
+     */
+    var _ua = null;
 
     /**
      * String identifying which browser we are in.
@@ -126,9 +136,13 @@ YAHOO.util.History = ( function() {
      * @private
      */
     function _getHash() {
-        var href = top.location.href;
-        var idx = href.indexOf( "#" );
-        return idx >= 0 ? href.substr( idx+1 ) : null;
+
+        var href;
+        var i;
+
+        href = top.location.href;
+        i = href.indexOf( "#" );
+        return i >= 0 ? href.substr( i + 1 ) : null;
     }
 
     /**
@@ -141,16 +155,22 @@ YAHOO.util.History = ( function() {
      * @private
      */
     function _storeStates() {
+
+        var moduleName;
+        var moduleObj;
         var initialStates = [];
         var currentStates = [];
-        for ( var moduleName in _modules ) {
+
+        for ( moduleName in _modules ) {
             if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
-                var moduleObj = _modules[moduleName];
+                moduleObj = _modules[moduleName];
                 initialStates.push( moduleName + "=" + moduleObj.initialState );
                 currentStates.push( moduleName + "=" + moduleObj.currentState );
             }
         }
+
         _storageField.value = initialStates.join( "&" ) + "|" + currentStates.join( "&" );
+
         if ( _browser == "safari" ) {
             _storageField.value += "|" + _fqstates.join( "," );
         }
@@ -163,6 +183,11 @@ YAHOO.util.History = ( function() {
      * @private
      */
     function _checkIframeLoaded() {
+
+        var doc;
+        var elem;
+        var fqstate;
+
         if ( !_iframe.contentWindow || !_iframe.contentWindow.document ) {
             // Check again in 10 msec...
             setTimeout( _checkIframeLoaded, 10 );
@@ -175,28 +200,35 @@ YAHOO.util.History = ( function() {
         // YAHOO.util.History.navigate has been called or after
         // the user has hit the back/forward button.
 
-        var doc = _iframe.contentWindow.document;
-        var elem = doc.getElementById( "state" );
+        doc = _iframe.contentWindow.document;
+        elem = doc.getElementById( "state" );
         // We must use innerText, and not innerHTML because our string contains
         // the "&" character (which would end up being escaped as "&amp;") and
         // the string comparison would fail...
-        var fqstate = elem ? elem.innerText : null;
+        fqstate = elem ? elem.innerText : null;
 
-        setInterval( function() {
+        setInterval( function () {
+
+            var newfqstate;
+            var hash;
+            var states;
+            var moduleName;
+            var moduleObj;
+
             doc = _iframe.contentWindow.document;
             elem = doc.getElementById( "state" );
             // See my comment above about using innerText instead of innerHTML...
-            var newfqstate = elem ? elem.innerText : null;
+            newfqstate = elem ? elem.innerText : null;
+
             if ( newfqstate != fqstate ) {
                 fqstate = newfqstate;
                 _handleFQStateChange( fqstate );
 
-                var hash;
                 if ( !fqstate ) {
-                    var states = [];
-                    for ( var moduleName in _modules ) {
+                    states = [];
+                    for ( moduleName in _modules ) {
                         if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
-                            var moduleObj = _modules[moduleName];
+                            moduleObj = _modules[moduleName];
                             states.push( moduleName + "=" + moduleObj.initialState );
                         }
                     }
@@ -227,7 +259,15 @@ YAHOO.util.History = ( function() {
      * @private
      */
     function _handleFQStateChange( fqstate ) {
-        var moduleName, moduleObj, currentState;
+
+        var i;
+        var len;
+        var moduleName;
+        var moduleObj;
+        var modules;
+        var states;
+        var tokens;
+        var currentState;
 
         if ( !fqstate ) {
             // Notifies all modules
@@ -241,10 +281,10 @@ YAHOO.util.History = ( function() {
             return;
         }
 
-        var modules = [];
-        var states = fqstate.split( "&" );
-        for ( var idx=0, len=states.length ; idx<len ; idx++ ) {
-            var tokens = states[idx].split( "=" );
+        modules = [];
+        states = fqstate.split( "&" );
+        for ( i = 0, len = states.length ; i < len ; i++ ) {
+            tokens = states[i].split( "=" );
             if ( tokens.length == 2 ) {
                 moduleName = tokens[0];
                 currentState = tokens[1];
@@ -272,21 +312,32 @@ YAHOO.util.History = ( function() {
      */
     function _initialize() {
 
+        var i;
+        var len;
+        var parts;
+        var tokens;
+        var moduleName;
+        var moduleObj;
+        var initialStates;
+        var initialState;
+        var currentStates;
+        var currentState;
+        var counter;
+        var hash;
+
         _storageField = document.getElementById( "yui_hist_field" );
 
         // Decode the content of our storage field...
-        var parts = _storageField.value.split( "|" );
+        parts = _storageField.value.split( "|" );
 
         if ( parts.length > 1 ) {
 
-            var idx, len, tokens, moduleName, moduleObj;
-
-            var initialStates = parts[0].split( "&" );
-            for ( idx=0, len=initialStates.length ; idx<len ; idx++ ) {
-                tokens = initialStates[idx].split( "=" );
+            initialStates = parts[0].split( "&" );
+            for ( i = 0, len = initialStates.length ; i < len ; i++ ) {
+                tokens = initialStates[i].split( "=" );
                 if ( tokens.length == 2 ) {
                     moduleName = tokens[0];
-                    var initialState = tokens[1];
+                    initialState = tokens[1];
                     moduleObj = _modules[moduleName];
                     if ( moduleObj ) {
                         moduleObj.initialState = initialState;
@@ -294,12 +345,12 @@ YAHOO.util.History = ( function() {
                 }
             }
 
-            var currentStates = parts[1].split( "&" );
-            for ( idx=0, len=currentStates.length ; idx<len ; idx++ ) {
-                tokens = currentStates[idx].split( "=" );
+            currentStates = parts[1].split( "&" );
+            for ( i = 0, len = currentStates.length ; i < len ; i++ ) {
+                tokens = currentStates[i].split( "=" );
                 if ( tokens.length >= 2 ) {
                     moduleName = tokens[0];
-                    var currentState = tokens[1];
+                    currentState = tokens[1];
                     moduleObj = _modules[moduleName];
                     if ( moduleObj ) {
                         moduleObj.currentState = currentState;
@@ -335,15 +386,19 @@ YAHOO.util.History = ( function() {
             // because the hash thing will be fixed in the next major
             // version of Safari. So even if they fix the history.length
             // bug, all this will still work!
-            var counter = history.length;
+            counter = history.length;
 
             // On Gecko and Opera, we just need to watch the hash...
-            var hash = _getHash();
+            hash = _getHash();
 
-            setInterval( function() {
+            setInterval( function () {
+
                 var state;
-                var newHash = _getHash();
-                var newCounter = history.length;
+                var newHash;
+                var newCounter;
+
+                newHash = _getHash();
+                newCounter = history.length;
                 if ( newHash != hash ) {
                     hash = newHash;
                     counter = newCounter;
@@ -353,7 +408,7 @@ YAHOO.util.History = ( function() {
                     // If we ever get here, we should be on Safari...
                     hash = newHash;
                     counter = newCounter;
-                    state = _fqstates[counter-1];
+                    state = _fqstates[counter - 1];
                     _handleFQStateChange( state );
                     _storeStates();
                 }
@@ -368,17 +423,17 @@ YAHOO.util.History = ( function() {
     // Simple browser detection code
     // After talking with Matt Sweeney, I moved back to using the
     // user agent string instead of doing browser detection.
-    var ua = navigator.userAgent.toLowerCase();
-    if ( ua.indexOf( "opera" ) != -1 ) {
+    _ua = navigator.userAgent.toLowerCase();
+    if ( _ua.indexOf( "opera" ) != -1 ) {
         // Opera (check first in case of spoof)
         _browser = "opera";
-    } else if ( ua.indexOf( "msie" ) != -1 ) {
+    } else if ( _ua.indexOf( "msie" ) != -1 ) {
         // Microsoft Internet Explorer and derivatives...
         _browser = "msie";
-    } else if ( ua.indexOf( "safari" ) != -1 ) {
+    } else if ( _ua.indexOf( "safari" ) != -1 ) {
         // Safari (check before Gecko because it includes "like Gecko")
         _browser = "safari";
-    } else if ( ua.indexOf( "gecko" ) != -1 ) {
+    } else if ( _ua.indexOf( "gecko" ) != -1 ) {
         // Gecko
         _browser = "gecko";
     }
@@ -390,7 +445,7 @@ YAHOO.util.History = ( function() {
          *
          * @event onLoadEvent
          */
-        onLoadEvent : new YAHOO.util.CustomEvent( "onLoad" ),
+        onLoadEvent: new YAHOO.util.CustomEvent( "onLoad" ),
 
         /**
          * Registers a new module.
@@ -407,7 +462,11 @@ YAHOO.util.History = ( function() {
          * @param {boolean} override If true, the obj passed in becomes the
          *     execution scope of the listener.
          */
-        register : function( module, initialState, onStateChange, obj, override ) {
+        register: function ( module, initialState, onStateChange, obj, override ) {
+
+            var scope;
+            var wrappedFn;
+
             if ( typeof module != "string" || _trim( module ) === "" ||
                  typeof initialState != "string" ||
                  typeof onStateChange != "function" ) {
@@ -435,22 +494,22 @@ YAHOO.util.History = ( function() {
 
             // If the user chooses to override the scope, we use the
             // custom object passed in as the execution scope.
-            var scope = null;
+            scope = null;
             if ( override === true ) {
                 scope = obj;
             } else {
                 scope = override;
             }
 
-            var wrappedFn = function( state ) {
+            wrappedFn = function ( state ) {
                 return onStateChange.call( scope, state, obj );
             };
 
             _modules[module] = {
-                name : module,
-                initialState : initialState,
-                currentState : initialState,
-                onStateChange : wrappedFn
+                name: module,
+                initialState: initialState,
+                currentState: initialState,
+                onStateChange: wrappedFn
             };
         },
 
@@ -464,7 +523,8 @@ YAHOO.util.History = ( function() {
          *     specified, defaults to "blank.html"
          * @public
          */
-        initialize : function( iframeTarget ) {
+        initialize: function ( iframeTarget ) {
+
             // Return if the browser history manager has already been initialized
             if ( _initialized ) {
                 return;
@@ -483,6 +543,7 @@ YAHOO.util.History = ( function() {
             }
 
             document.write( '<input type="hidden" id="yui_hist_field">' );
+
             if ( _browser == "msie" ) {
                 // Pointing the IFrame to a file on the server is absolutely
                 // essential. I tried to point it to nothing (by setting
@@ -510,7 +571,16 @@ YAHOO.util.History = ( function() {
          * @return {boolean} Indicates whether the new state was successfully added to the history.
          * @public
          */
-        navigate : function( module, state ) {
+        navigate: function ( module, state ) {
+
+            var currentStates;
+            var moduleName;
+            var moduleObj;
+            var currentState;
+            var fqstate;
+            var html;
+            var doc;
+
             if ( typeof module != "string" || typeof state != "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.navigate" );
             }
@@ -528,23 +598,23 @@ YAHOO.util.History = ( function() {
             state = escape( state );
 
             // Generate our new full state string mod1=xxx&mod2=yyy
-            var currentStates = [];
-            for ( var moduleName in _modules ) {
+            currentStates = [];
+            for ( moduleName in _modules ) {
                 if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
-                    var moduleObj = _modules[moduleName];
-                    var currentState = ( moduleName == module ) ? state : moduleObj.currentState;
+                    moduleObj = _modules[moduleName];
+                    currentState = ( moduleName == module ) ? state : moduleObj.currentState;
                     currentStates.push( moduleName + "=" + currentState );
                 }
             }
 
-            var fqstate = currentStates.join( "&" );
+            fqstate = currentStates.join( "&" );
 
             if ( _browser == "msie" ) {
 
                 // Add a new entry to the browser's history...
-                var html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
+                html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
                 try {
-                    var doc = _iframe.contentWindow.document;
+                    doc = _iframe.contentWindow.document;
                     doc.open();
                     doc.write( html );
                     doc.close();
@@ -586,7 +656,10 @@ YAHOO.util.History = ( function() {
          * @return {string} The current state of the specified module.
          * @public
          */
-        getCurrentState : function( module ) {
+        getCurrentState: function ( module ) {
+
+            var moduleObj;
+
             if ( typeof module != "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getCurrentState" );
             }
@@ -595,7 +668,7 @@ YAHOO.util.History = ( function() {
                 throw new Error( "The Browser History Manager is not initialized" );
             }
 
-            var moduleObj = _modules[module];
+            moduleObj = _modules[module];
             if ( !moduleObj ) {
                 throw new Error( "No such registered module: " + module );
             }
@@ -613,17 +686,25 @@ YAHOO.util.History = ( function() {
          * @return {string} The bookmarked state of the specified module.
          * @public
          */
-        getBookmarkedState : function( module ) {
+        getBookmarkedState: function ( module ) {
+
+            var i;
+            var len;
+            var hash;
+            var states;
+            var tokens;
+            var moduleName;
+
             if ( typeof module != "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState" );
             }
 
-            var hash = top.location.hash.substr(1);
-            var states = hash.split( "&" );
-            for ( var idx=0, len=states.length ; idx<len ; idx++ ) {
-                var tokens = states[idx].split( "=" );
+            hash = top.location.hash.substr(1);
+            states = hash.split( "&" );
+            for ( i = 0, len = states.length ; i < len ; i++ ) {
+                tokens = states[i].split( "=" );
                 if ( tokens.length == 2 ) {
-                    var moduleName = tokens[0];
+                    moduleName = tokens[0];
                     if ( moduleName == module ) {
                         return unescape( tokens[1] );
                     }
@@ -647,19 +728,30 @@ YAHOO.util.History = ( function() {
          * @return {string} The value of the specified parameter, or null.
          * @public
          */
-        getQueryStringParameter : function( paramName, url ) {
+        getQueryStringParameter: function ( paramName, url ) {
+
+            var i;
+            var len;
+            var idx;
+            var queryString;
+            var params;
+            var tokens;
+
             url = url || top.location.href;
-            var idx = url.indexOf( "?" );
-            var queryString = idx >= 0 ? url.substr( idx+1 ) : url;
-            var params = queryString.split( "&" );
-            for ( var i=0, len=params.length ; i<len ; i++ ) {
-                var tokens = params[i].split( "=" );
+
+            idx = url.indexOf( "?" );
+            queryString = idx >= 0 ? url.substr( idx + 1 ) : url;
+            params = queryString.split( "&" );
+
+            for ( i = 0, len = params.length ; i < len ; i++ ) {
+                tokens = params[i].split( "=" );
                 if ( tokens.length >= 2 ) {
                     if ( tokens[0] == paramName ) {
                         return unescape( tokens[1] );
                     }
                 }
             }
+
             return null;
         }
 
