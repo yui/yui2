@@ -118,7 +118,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     /**
      * Fired when live data source sends response.
      *
-     * @event parseResponseEvent
+     * @event responseEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The raw response object.
      * @param oArgs.callback {Function} The callback function.
@@ -722,9 +722,9 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
         // Split along record delimiter to get an array of strings
         var recordsarray = oRawResponse.split(recDelim);
         // Cycle through each record, except the first which contains header info
-        for(var i = recordsarray.length-1; i >= 1; i--) {
+        for(var i = recordsarray.length-1; i>-1; i--) {
             var dataobject = {};
-            for(var j=aSchema.length-1; j >= 0; j--) {
+            for(var j=aSchema.length-1; j>-1; j--) {
                 // Split along field delimter to get each data value
                 var fielddataarray = recordsarray[i].split(fieldDelim);
 
@@ -738,7 +738,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
                 }
                 dataobject[aSchema[j]] = string;
             }
-            oParsedResponse.push(dataobject);
+            oParsedResponse.unshift(dataobject);
         }
     }
     return oParsedResponse;
