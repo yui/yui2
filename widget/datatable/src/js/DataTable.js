@@ -26,7 +26,7 @@
  */
 YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     // Internal vars
-    var i;
+    var i, ok;
     this._nIndex = YAHOO.widget.DataTable._nCount;
     this._sName = "instance" + this._nIndex;
     this.id = "yui-dt"+this._nIndex;
@@ -105,17 +105,27 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             
             this._initTable();
             
-            var ok = this.doBeforeLoadData(aRecords);
+            ok = this.doBeforeLoadData(null,aRecords);
             if(ok) {
                 this._oRecordSet.addRecords(aRecords);
                 this.paginateRows();
+            }
+            else {
+                YAHOO.log("The function doBeforeLoadData returned false","error",this);
             }
         }
         // Create markup from scratch using the provided DataSource
         else if(this.dataSource) {
                 this._initTable();
-                // Send out for data in an asynchronous request
-                oDataSource.sendRequest(this.initialRequest, this.onDataReturnPaginateRows, this);
+
+                ok = this.doBeforeLoadData(this.initialRequest,aRecords);
+                if(ok) {
+                    // Send out for data in an asynchronous request
+                    oDataSource.sendRequest(this.initialRequest, this.onDataReturnPaginateRows, this);
+                }
+                else {
+                    YAHOO.log("The function doBeforeLoadData returned false","error",this);
+                }
         }
         // Else there is no data
         else {
