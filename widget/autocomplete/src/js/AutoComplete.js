@@ -866,7 +866,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         if(typeof aDelimChar == "string") {
             this.delimChar = [aDelimChar];
         }
-        else if(aDelimChar.constructor != Array) {
+        else if(aDelimChar.constructor.toString().indexOf("Array") == -1) {
             this.delimChar = null;
         }
     }
