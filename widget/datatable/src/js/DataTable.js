@@ -61,11 +61,11 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this._oRecordSet = new YAHOO.widget.RecordSet();
 
     // Validate HTML Element
+    var elTable = null;
     elContainer = YAHOO.util.Dom.get(elContainer);
     if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
         this._elContainer = elContainer;
         // Peek in container child nodes to see if TABLE already exists
-        var elTable = null;
         if(elContainer.hasChildNodes()) {
             var children = elContainer.childNodes;
             for(i=0; i<children.length; i++) {
@@ -494,6 +494,17 @@ else {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Class name assigned to TABLE element.
+ *
+ * @property CLASS_TABLE
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt"
+ */
+YAHOO.widget.DataTable.CLASS_TABLE = "yui-dt";
+
+/**
  * Class name assigned to TBODY element that holds data rows.
  *
  * @property CLASS_BODY
@@ -537,13 +548,35 @@ YAHOO.widget.DataTable.CLASS_HEADRESIZER = "yui-dt-headresizer";
 YAHOO.widget.DataTable.CLASS_HEADTEXT = "yui-dt-headtext";
 
 /**
+ * Class name assigned to FIRST elements.
+ *
+ * @property CLASS_FIRST
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-first"
+ */
+YAHOO.widget.DataTable.CLASS_FIRST = "yui-dt-first";
+
+/**
+ * Class name assigned to LAST elements.
+ *
+ * @property CLASS_LAST
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-last"
+ */
+YAHOO.widget.DataTable.CLASS_LAST = "yui-dt-last";
+
+/**
  * Class name assigned to even TR elements.
  *
  * @property CLASS_EVEN
  * @type String
  * @static
  * @final
- * @default "yui-dt-even
+ * @default "yui-dt-even"
  */
 YAHOO.widget.DataTable.CLASS_EVEN = "yui-dt-even";
 
@@ -791,6 +824,17 @@ YAHOO.widget.DataTable.CLASS_PAGELINKS = "yui-dt-pagelinks";
 YAHOO.widget.DataTable.CLASS_EDITABLE = "yui-dt-editable";
 
 /**
+ * Class name assigned to editor DIV elements.
+ *
+ * @property CLASS_EDITOR
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-editor"
+ */
+YAHOO.widget.DataTable.CLASS_EDITOR = "yui-dt-editor";
+
+/**
  * Class name assigned to TD elements of type "checkbox".
  *
  * @property CLASS_CHECKBOX
@@ -954,6 +998,24 @@ YAHOO.widget.DataTable.prototype._elTable = null;
 YAHOO.widget.DataTable.prototype._elBody = null;
 
 /**
+ * First TR element reference pointer.
+ *
+ * @property _elFirstRow
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elFirstRow = null;
+
+/**
+ * Last TR element reference pointer.
+ *
+ * @property _elLastRow
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elLastRow = null;
+
+/**
  * ColumnSet instance.
  *
  * @property _oColumnSet
@@ -1025,6 +1087,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
     this._elTable = this._elContainer.appendChild(document.createElement("table"));
     var elTable = this._elTable;
     elTable.tabIndex = 0;
+    elTable.id = "yui-dt-table"+this._nIndex;
 
     // Create SUMMARY, if applicable
     if(this.summary) {
@@ -1186,7 +1249,7 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
 
 /**
  * Add a new row to table body at position i if given, or to the bottom
- * otherwise. Does not fire any events.
+ * otherwise. Does not fire any events or apply any classes.
  *
  * @method _addRow
  * @param oRecord {YAHOO.widget.Record} Record instance.
@@ -1222,7 +1285,7 @@ YAHOO.widget.DataTable.prototype._addRow = function(oRecord, index) {
         elCell.columnIndex = j;
         elCell.headers = oColumnSet.headers[j];
 
-        oColumn.format(elCell, oRecord);
+        this.formatCell(elCell, oRecord);
         /*p.abx {word-wrap:break-word;}
 ought to solve the problem for Safari (the long words will wrap in your
 tds, instead of overflowing to the next td.
@@ -1259,6 +1322,32 @@ One thing, though: it doesn't work in combination with
     }
     
     return elRow.id;
+};
+
+/**
+ * Resets first row being tracked by class YAHOO.widget.DataTable.CLASS_FIRST.
+ *
+ * @method _resetFirstRow
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._resetFirstRow = function() {
+    YAHOO.util.Dom.removeClass(this.getFirstRow(),YAHOO.widget.DataTable.CLASS_FIRST);
+    var elFirstRow = this._elBody.rows[0];
+    YAHOO.util.Dom.addClass(elFirstRow,YAHOO.widget.DataTable.CLASS_FIRST);
+    this._elFirstRow = elFirstRow;
+};
+
+/**
+ * Resets last row being tracked by class YAHOO.widget.DataTable.CLASS_LAST.
+ *
+ * @method _resetLastRow
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._resetLastRow = function() {
+    YAHOO.util.Dom.removeClass(this.getLastRow(),YAHOO.widget.DataTable.CLASS_LAST);
+    var elLastRow = this._elBody.rows[this._elBody.rows.length-1];
+    YAHOO.util.Dom.addClass(elLastRow,YAHOO.widget.DataTable.CLASS_LAST);
+    this._elLastRow = elLastRow;
 };
 
 /**
@@ -1304,10 +1393,9 @@ YAHOO.widget.DataTable.prototype._updateRow = function(oRecord, index) {
     var elRow = this._elBody.rows[index];
     elRow.recordId = oRecord.id;
 
-    var columns = this._oColumnSet.keys;
     // ...Update TBODY cells with new data
-    for(var j=0; j<columns.length; j++) {
-        columns[j].format(elRow.cells[j], oRecord);
+    for(var j=0; j<elRow.cells.length; j++) {
+        this.formatCell(elRow.cells[j]);
     }
     return elRow.id;
 };
@@ -2169,21 +2257,41 @@ YAHOO.widget.DataTable.prototype.getBody = function() {
 };
 
 /**
- * Returns element reference to given TR cell.
+ * Returns element reference to TR element at given index.
  *
  * @method getRow
  * @param index {Number} Row number.
  * @return {HTMLElement} Reference to TR element.
  */
 YAHOO.widget.DataTable.prototype.getRow = function(index) {
-    if(!isNaN(index)) {
+    if((typeof index == "number") && (index > -1)) {
         return(this._elBody.rows[index]);
     }
     return null;
 };
 
 /**
- * Returns element reference to given TD cell.
+ * Returns element reference to first TR element.
+ *
+ * @method getFirstRow
+ * @return {HTMLElement} Reference to first TR element.
+ */
+YAHOO.widget.DataTable.prototype.getFirstRow = function() {
+    return this._elFirstRow;
+};
+
+/**
+ * Returns element reference to last TR element.
+ *
+ * @method getLastRow
+ * @return {HTMLElement} Reference to last TR element.
+ */
+YAHOO.widget.DataTable.prototype.getLastRow = function() {
+    return this._elLastRow;
+};
+
+/**
+ * Returns element reference to TD element at given row and column positions.
  *
  * @method getCell
  * @param row {Number} Row number.
@@ -2191,7 +2299,8 @@ YAHOO.widget.DataTable.prototype.getRow = function(index) {
  * @return {HTMLElement} Reference to TD element.
  */
 YAHOO.widget.DataTable.prototype.getCell = function(row, col) {
-    if(!isNaN(row) && !isNaN(col)) {
+    if((typeof row == "number") &&  (typeof col == "number") &&
+            (row > -1) && (row > -1)) {
         return(this._elBody.rows[row].cells[col]);
     }
     return null;
@@ -2299,6 +2408,9 @@ YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
             var rowId = this._addRow(aRecords[i]);
             rowIds.push(rowId);
         }
+
+        // Reset last-row tracker
+        this._resetLastRow();
         
         this.fireEvent("rowAppendEvent", {rowIds:rowIds});
     }
@@ -2320,6 +2432,9 @@ YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
             rowIds.push(rowId);
         }
         
+        // Reset first-row tracker
+        this._resetFirstRow();
+
         this.fireEvent("rowInsertEvent", {rowIds:rowIds});
     }
 };
@@ -2374,6 +2489,10 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
             }
         }
         
+        // Reset first-row and last-row trackers
+        this._resetFirstRow();
+        this._resetLastRow();
+
         this.fireEvent("rowReplaceEvent", {rowIds:rowIds});
     }
 };
@@ -2389,10 +2508,14 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
 YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
     if(oRecord) {
         var rowId = this._addRow(oRecord, index);
-        if(index !== undefined) {
+        if(typeof index == "number") {
+            if(index === 0) {
+                this._resetFirstRow();
+            }
             this.fireEvent("rowInsertEvent", {rowIds:[rowId]});
         }
         else {
+            this._resetLastRow();
             this.fireEvent("rowAppendEvent", {rowIds:[rowId]});
         }
     }
@@ -2426,6 +2549,11 @@ YAHOO.widget.DataTable.prototype.deleteRows = function(elRows) {
         this._deleteRow(rows[i]);
         this.fireEvent("rowDeleteEvent", {rowIndexes:rowIndexes});
     }
+    
+    //TODO: can be optimized?
+    // Reset first-row and last-row trackers
+    this._resetFirstRow();
+    this._resetLastRow();
 };
 
 /**
@@ -2440,6 +2568,11 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
         this._deleteRow(elRow);
         this.fireEvent("rowDeleteEvent", {rowIndexes:[rowIndex]});
     }
+    
+    //TODO: can be optimized?
+    // Reset first-row and last-row trackers
+    this._resetFirstRow();
+    this._resetLastRow();
 };
 
 /**
@@ -2893,9 +3026,16 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
  * @param elCell {HTMLElement} Cell element to format.
  */
 YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
-    if(elCell && !isNaN(elCell.columnIndex)) {
-        var column = this._oColumnSet.keys[elCell.columnIndex];
+    if (elCell && (typeof elCell.columnIndex == "number")) {
+        var index = elCell.columnIndex;
+        var column = this._oColumnSet.keys[index];
         column.format(elCell,this._oRecordSet.getRecord(elCell.parentNode.recordId));
+        if (index === 0) {
+            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_FIRST);
+        }
+        else if (index === this._oColumnSet.keys.length-1) {
+            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_LAST);
+        }
         this.fireEvent("cellFormatEvent", {el:elCell});
     }
 };

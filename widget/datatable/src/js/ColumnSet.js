@@ -934,7 +934,8 @@ YAHOO.widget.ColumnEditor = function(sType) {
     var container = document.body.appendChild(document.createElement("div"));//this.tableContainer.appendChild(document.createElement("div"));
     container.style.position = "absolute";
     container.style.zIndex = 9000;
-    container.id = "yui-dt-coled" + YAHOO.widget.ColumnEditor._nCount;
+    container.id = "yui-dt-editor" + YAHOO.widget.ColumnEditor._nCount;
+    container.className = YAHOO.widget.DataTable.CLASS_EDITOR;
     this.container = container;
 
     switch(this.type) {
