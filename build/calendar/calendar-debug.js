@@ -1004,24 +1004,26 @@ YAHOO.widget.Calendar.prototype.init = function(id, containerId, config) {
 YAHOO.widget.Calendar.prototype.configIframe = function(type, args, obj) {
 	var useIframe = args[0];
 
-	if (YAHOO.util.Dom.inDocument(this.oDomContainer)) {
-		if (useIframe) {
-			var pos = YAHOO.util.Dom.getStyle(this.oDomContainer, "position");
+	if (!this.parent) {
+		if (YAHOO.util.Dom.inDocument(this.oDomContainer)) {
+			if (useIframe) {
+				var pos = YAHOO.util.Dom.getStyle(this.oDomContainer, "position");
 
-			if (this.browser == "ie" && (pos == "absolute" || pos == "relative")) {
-				if (! YAHOO.util.Dom.inDocument(this.iframe)) {
-					this.iframe = document.createElement("iframe");
-					this.iframe.src = "javascript:false;";
-					YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
-					this.oDomContainer.insertBefore(this.iframe, this.oDomContainer.firstChild);
+				if (this.browser == "ie" && (pos == "absolute" || pos == "relative")) {
+					if (! YAHOO.util.Dom.inDocument(this.iframe)) {
+						this.iframe = document.createElement("iframe");
+						this.iframe.src = "javascript:false;";
+						YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
+						this.oDomContainer.insertBefore(this.iframe, this.oDomContainer.firstChild);
+					}
 				}
-			}
-		} else {
-			if (this.iframe) {
-				if (this.iframe.parentNode) {
-					this.iframe.parentNode.removeChild(this.iframe);
+			} else {
+				if (this.iframe) {
+					if (this.iframe.parentNode) {
+						this.iframe.parentNode.removeChild(this.iframe);
+					}
+					this.iframe = null;
 				}
-				this.iframe = null;
 			}
 		}
 	}
@@ -1070,9 +1072,9 @@ YAHOO.widget.Calendar.prototype.configClose = function(type, args, obj) {
 
 	if (close === true) {
 		linkClose = YAHOO.util.Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0] || document.createElement("a");
-		linkClose.href = "javascript:void(null);";
+		linkClose.href = "#";
 		linkClose.className = "link-close";
-		YAHOO.util.Event.addListener(linkClose, "click", this.hide, this, true);
+		YAHOO.util.Event.addListener(linkClose, "click", function(e, cal) {cal.hide(); YAHOO.util.Event.preventDefault(e); }, this);
 		
 		if (YAHOO.widget.Calendar.IMG_ROOT !== null) {
 			var imgClose = document.createElement("img");
@@ -1169,7 +1171,6 @@ YAHOO.widget.Calendar.prototype.initEvents = function() {
 	this.clearEvent.subscribe(this.onClear, this, true);
 };
 
-
 /**
 * The default event function that is attached to a date link within a calendar cell
 * when the calendar is rendered.
@@ -1178,17 +1179,30 @@ YAHOO.widget.Calendar.prototype.initEvents = function() {
 * @param {Calendar} cal	A reference to the calendar passed by the Event utility
 */
 YAHOO.widget.Calendar.prototype.doSelectCell = function(e, cal) {
-	var target = YAHOO.util.Event.getTarget(e);
-
 	var cell,index,d,date;
 
-	while (target.tagName.toLowerCase() != "td" && ! YAHOO.util.Dom.hasClass(target, cal.Style.CSS_CELL_SELECTABLE)) {
+	var target = YAHOO.util.Event.getTarget(e);
+	var tagName = target.tagName.toLowerCase();
+	var defSelector = false;
+
+	while (tagName != "td" && ! YAHOO.util.Dom.hasClass(target, cal.Style.CSS_CELL_SELECTABLE)) {
+
+		if (!defSelector && tagName == "a" && YAHOO.util.Dom.hasClass(target, cal.Style.CSS_CELL_SELECTOR)) {
+			defSelector = true;	
+		}
+
 		target = target.parentNode;
-		if (target.tagName.toLowerCase() == "html") {
+		tagName = target.tagName.toLowerCase(); 
+		if (tagName == "html") {
 			return;
 		}
 	}
-	
+
+	if (defSelector) {
+		// Stop link href navigation for default renderer
+		YAHOO.util.Event.preventDefault(e);
+	}
+
 	cell = target;
 
 	if (YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_SELECTABLE)) {
@@ -1204,16 +1218,16 @@ YAHOO.widget.Calendar.prototype.doSelectCell = function(e, cal) {
 			if (link) {
 				link.blur();
 			}
-			
+
 			var cellDate = cal.cellDates[index];
 			var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
-			
+
 			if (cellDateIndex > -1) {	
 				cal.deselectCell(index);
 			} else {
 				cal.selectCell(index);
 			}	
-			
+
 		} else {
 			link = cell.getElementsByTagName("a")[0];
 			if (link) {
@@ -1710,6 +1724,10 @@ YAHOO.widget.Calendar.prototype.initStyles = function() {
 		* @property Style.CSS_CELL
 		*/
 		CSS_CELL : "calcell",
+		/**
+		* @property Style.CSS_CELL_SELECTOR
+		*/
+		CSS_CELL_SELECTOR : "selector",
 		/**
 		* @property Style.CSS_CELL_SELECTED
 		*/
@@ -2355,7 +2373,7 @@ YAHOO.widget.Calendar.prototype.renderRowFooter = function(weekNum, html) {
 * @param {HTMLTableCellElement}	cell			The current working cell in the calendar
 */
 YAHOO.widget.Calendar.prototype.renderCellDefault = function(workingDate, cell) {
-	cell.innerHTML = '<a href="javascript:void(null);" >' + this.buildDayLabel(workingDate) + "</a>";
+	cell.innerHTML = '<a href="#" class="' + this.Style.CSS_CELL_SELECTOR + '">' + this.buildDayLabel(workingDate) + "</a>";
 };
 
 /**
@@ -2630,7 +2648,9 @@ YAHOO.widget.Calendar.prototype.selectCell = function(cellIndex) {
 
 	var selectDate = cellDate.concat();
 
-	selected[selected.length] = selectDate;
+	if (this._indexOfSelectedFieldArray(selectDate) == -1) {
+		selected[selected.length] = selectDate;
+	}
 
 	if (this.parent) {
 		this.parent.cfg.setProperty("selected", selected);
@@ -3417,7 +3437,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* @type Boolean
 	* @default true
 	*/
-	this.cfg.addProperty("iframe", { value:true, handler:this.delegateConfig, validator:this.cfg.checkBoolean } );
+	this.cfg.addProperty("iframe", { value:true, handler:this.configIframe, validator:this.cfg.checkBoolean } );
 
 	/**
 	* The minimum selectable date in the current Calendar (mm/dd/yyyy)
@@ -4106,7 +4126,6 @@ YAHOO.widget.CalendarGroup.prototype.previousYear = function() {
 YAHOO.widget.CalendarGroup.prototype.getSelectedDates = function() { 
 	var returnDates = [];
 	var selected = this.cfg.getProperty("selected");
-
 	for (var d=0;d<selected.length;++d) {
 		var dateArray = selected[d];
 
@@ -4291,6 +4310,7 @@ YAHOO.augment(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buildDayLabel"
 																 "initStyles",
 																 "configTitle",
 																 "configClose",
+																 "configIframe",
 																 "hide",
 																 "show",
 																 "browser");

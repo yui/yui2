@@ -1,5 +1,11 @@
 Calendar Release Notes
 
+*** version 2.2.1 ***
+
+    - Fixed problem with selectCell adding duplicate selected date entries for dates which were already selected
+    - Fixed problem with CalendarGroup iframe shim not covering the CalendarGroup title area
+    - Removed javascript:void(null) from close button/cell links which was interrupting form submission and firing onbeforeunload in IE
+
 *** version 2.2.0 ***
 
 	- Image customization can now be done through CSS. Images for Close, Left and Right Arrows are now pulled in using CSS defined in calendar.css and by default use relative paths to the images in the same directory as calendar.css. 

@@ -163,7 +163,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* @type Boolean
 	* @default true
 	*/
-	this.cfg.addProperty("iframe", { value:true, handler:this.delegateConfig, validator:this.cfg.checkBoolean } );
+	this.cfg.addProperty("iframe", { value:true, handler:this.configIframe, validator:this.cfg.checkBoolean } );
 
 	/**
 	* The minimum selectable date in the current Calendar (mm/dd/yyyy)
@@ -852,7 +852,6 @@ YAHOO.widget.CalendarGroup.prototype.previousYear = function() {
 YAHOO.widget.CalendarGroup.prototype.getSelectedDates = function() { 
 	var returnDates = [];
 	var selected = this.cfg.getProperty("selected");
-
 	for (var d=0;d<selected.length;++d) {
 		var dateArray = selected[d];
 
@@ -1037,6 +1036,7 @@ YAHOO.augment(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buildDayLabel"
 																 "initStyles",
 																 "configTitle",
 																 "configClose",
+																 "configIframe",
 																 "hide",
 																 "show",
 																 "browser");
