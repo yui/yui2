@@ -188,8 +188,8 @@ http://developer.yahoo.net/yui/license.txt
             var f = function(el) {
     
             // has to be part of document to have pageXY
-                if (el.parentNode === null || el.offsetParent === null ||
-                        this.getStyle(el, 'display') == 'none') {
+                if ( (el.parentNode === null || el.offsetParent === null ||
+                        this.getStyle(el, 'display') == 'none') && el != document.body) {
                     return false;
                 }
                 
@@ -704,6 +704,58 @@ http://developer.yahoo.net/yui/license.txt
                         document.body.clientWidth; // Quirks
             }
             return width;
+        },
+
+        /**
+         * Returns the nearest ancestor that passes the test applied by supplied boolean method.
+         * @method getAncestorBy
+         * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
+
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @return {Object} HTMLElement
+         */
+        getAncestorBy: function(method, node) {
+            node = Y.Dom.get(node);
+
+            if (!node) { // if no node, then no ancestor
+                return false;
+            }
+           
+            while (node.parentNode) {
+                node = node.parentNode; 
+                if ( method(node) ) {
+                    return node;
+                }
+            } 
+
+            return false;
+        },
+        
+        /**
+         * Returns the nearest ancestor with the given className.
+         * @method getAncestorByClassName
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @param {String} className
+         * @return {Object} HTMLElement
+         */
+        getAncestorByClassName: function(node, className) {
+            var method = function(el) { return Y.Dom.hasClass(el, className); };
+            return Y.Dom.getAncestorBy(method, node);
+        },
+
+        /**
+         * Returns the nearest ancestor with the given tagName.
+         * @method getAncestorByTagName
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @param {String} tagName
+         * @return {Object} HTMLElement
+         */
+        getAncestorByTagName: function(node, tagName) {
+            var method = function(el) {
+                 return el.tagName && el.tagName.toUpperCase() == tagName.toUpperCase();
+            };
+
+            return Y.Dom.getAncestorBy(method, node);
         }
     };
 })();
