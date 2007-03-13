@@ -2608,7 +2608,7 @@ YAHOO.widget.DataTable.prototype.highlight = function(els) {
  * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
  */
 YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
-    if(els.constructor != Array) {
+    if(els.constructor.toString().indexOf("Array") == -1) {
         els = [els];
     }
     YAHOO.util.Dom.removeClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
@@ -2625,7 +2625,7 @@ YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
  */
 YAHOO.widget.DataTable.prototype.select = function(els) {
     if(els) {
-        if(els.constructor != Array) {
+        if(els.constructor.toString().indexOf("Array") == -1) {
             els = [els];
         }
         this._select(els);
@@ -2664,7 +2664,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
  */
 YAHOO.widget.DataTable.prototype.unselect = function(els) {
     if(els) {
-        if(els.constructor != Array) {
+        if(els.constructor.toString().indexOf("Array") == -1) {
             els = [els];
         }
         this._unselect(els);
@@ -2858,7 +2858,7 @@ YAHOO.widget.DataTable.prototype.paginateRows = function() {
         // Markup for rows-per-page dropdowns
         var dropdown = this.rowsPerPageDropdown;
         var select1, select2;
-        if(dropdown && (dropdown.constructor == Array) && (dropdown.length > 0)) {
+        if(dropdown && (dropdown.constructor.toString().indexOf("Array") > -1) && (dropdown.length > 0)) {
             select1 = document.createElement("select");
             select1.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
             select2 = document.createElement("select");
