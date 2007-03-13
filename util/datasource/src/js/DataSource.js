@@ -197,7 +197,7 @@ YAHOO.util.DataSource.TYPE_JSARRAY = 0;
 /**
  * Type is a JavaScript Function.
  *
- * @property TYPE_JSFUNCTIOn
+ * @property TYPE_JSFUNCTION
  * @type Number
  * @final
  * @default 1
@@ -371,6 +371,56 @@ YAHOO.util.DataSource.prototype.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
  * @default YAHOO.util.DataSource.TYPE_UNKNOWN
  */
 YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOWN;
+
+/**
+ * Response schema object literal takes a combination of the following properties:
+ *
+ * <dl>
+ * <dt>resultsList</dt> <dd>Pointer to array of tabular data</dd>
+ * <dt>resultNode</dt> <dd>Pointer to node name of row data (XML data only)</dd>
+ * <dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
+ * <dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
+ * <dt>fields</dt> <dd>Array of field names (aka keys), or array of object literals
+ * as such: {key:"fieldname",type:"datatype"}</dd>
+ * </dl>
+ *
+ * @property responseSchema
+ * @type Object
+ */
+YAHOO.util.DataSource.prototype.responseSchema = null;
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public static methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Converts data from String to Date objects.
+ *
+ * @method convertNumber
+ * @method sData {String} Number string.
+ * @return {Number} Number object.
+ * @static
+ */
+YAHOO.util.DataSource.convertNumber = function(sData) {
+    return parseFloat(sData);
+};
+
+/**
+ * Converts data from String to Date objects.
+ *
+ * @method convertDate
+ * @method sData {String} Date string.
+ * @return {Date} Date object.
+ * @static
+ */
+YAHOO.util.DataSource.convertDate = function(sData) {
+    var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
+    sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
+    var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
+    var yy = sMarkup.substring(sMarkup.indexOf("/")+1);
+    return new Date(yy, mm, dd);
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -693,7 +743,13 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
     for(var i=oRawResponse.length-1; i>-1; i--) {
         var oResult = {};
         for(var j=fields.length-1; j>-1; j--) {
-            oResult[fields[j]] = oRawResponse[i][j] || oRawResponse[i][fields[j]];
+            var field = fields[j];
+            var key = field.key || field;
+            var data = oRawResponse[i][j] || oRawResponse[i][key];
+            if(field.converter) {
+                data = field.converter(data);
+            }
+            oResult[key] = data;
         }
         oParsedResponse.unshift(oResult);
     }
@@ -712,7 +768,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
     var oParsedResponse = [];
     var recDelim = this.responseSchema.recordDelim;
     var fieldDelim = this.responseSchema.fieldDelim;
-    var aSchema = this.responseSchema.fields;
+    var fields = this.responseSchema.fields;
     if(oRawResponse.length > 0) {
         // Delete the last line delimiter at the end of the data if it exists
         var newLength = oRawResponse.length-recDelim.length;
@@ -723,22 +779,27 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
         var recordsarray = oRawResponse.split(recDelim);
         // Cycle through each record, except the first which contains header info
         for(var i = recordsarray.length-1; i>-1; i--) {
-            var dataobject = {};
-            for(var j=aSchema.length-1; j>-1; j--) {
+            var oResult = {};
+            for(var j=fields.length-1; j>-1; j--) {
                 // Split along field delimter to get each data value
                 var fielddataarray = recordsarray[i].split(fieldDelim);
 
                 // Remove quotation marks from edges, if applicable
-                var string = fielddataarray[j];
-                if(string.charAt(0) == "\"") {
-                    string = string.substr(1);
+                var data = fielddataarray[j];
+                if(data.charAt(0) == "\"") {
+                    data = data.substr(1);
                 }
-                if(string.charAt(string.length-1) == "\"") {
-                    string = string.substr(0,string.length-1);
+                if(data.charAt(data.length-1) == "\"") {
+                    data = data.substr(0,data.length-1);
                 }
-                dataobject[aSchema[j]] = string;
+                var field = fields[j];
+                var key = field.key || field;
+                if(field.converter) {
+                    data = field.converter(data);
+                }
+                oResult[key] = data;
             }
-            oParsedResponse.unshift(dataobject);
+            oParsedResponse.unshift(oResult);
         }
     }
     return oParsedResponse;
@@ -767,24 +828,28 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
             // Loop through each data field in each result using the schema
             for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
                 var field = this.responseSchema.fields[m];
-                var sValue = null;
+                var key = field.key || field;
+                var data = null;
                 // Values may be held in an attribute...
-                var xmlAttr = result.attributes.getNamedItem(field);
+                var xmlAttr = result.attributes.getNamedItem(key);
                 if(xmlAttr) {
-                    sValue = xmlAttr.value;
+                    data = xmlAttr.value;
                 }
                 // ...or in a node
                 else {
-                    var xmlNode = result.getElementsByTagName(field);
+                    var xmlNode = result.getElementsByTagName(key);
                     if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
-                        sValue = xmlNode.item(0).firstChild.nodeValue;
+                        data = xmlNode.item(0).firstChild.nodeValue;
                     }
                     else {
-                           sValue = "";
+                           data = "";
                     }
                 }
+                if(field.converter) {
+                    data = field.converter(data);
+                }
                 // Capture the schema-mapped data field values into an array
-                oResult[field] = sValue;
+                oResult[key] = data;
             }
             // Capture each array of values into an array of results
             oParsedResponse.unshift(oResult);
@@ -808,7 +873,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
     //TODO: validate oRawResponse
     var bError = false;
     var oParsedResponse = [];
-    var aSchema = this.responseSchema.fields;
+    var fields = this.responseSchema.fields;
 
     var jsonObj,jsonList;
     if(oRawResponse) {
@@ -888,14 +953,19 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         var oResult = {};
         var jsonResult = jsonList[i];
         // ...and loop through each data field value of each response
-        for(var j = aSchema.length-1; j >= 0 ; j--) {
+        for(var j = fields.length-1; j >= 0 ; j--) {
+            var field = fields[j];
+            var key = field.key || field;
             // ...and capture data into an array mapped according to the schema...
-            var dataFieldValue = jsonResult[aSchema[j]];
-            if((dataFieldValue === undefined) || (dataFieldValue === null)) {
-                dataFieldValue = "";
+            var data = jsonResult[key];
+            if((data === undefined) || (data === null)) {
+                data = "";
             }
             //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
-            oResult[aSchema[j]] = dataFieldValue;
+            if(field.converter) {
+                data = field.converter(data);
+            }
+            oResult[key] = data;
         }
         // Capture the array of data field values in an array of results
         oParsedResponse.unshift(oResult);
