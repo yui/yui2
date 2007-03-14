@@ -1248,7 +1248,8 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
         //TODO: Make title configurable
         //TODO: Separate contentText from an accessibility link that says
         // Click to sort ascending and push it offscreen
-        elHeadContent.innerHTML = "<a href=\"#\" title=\"Click to sort\">" + contentText + "</a>";
+        var sortLink = "?key=" + oColumn.key;
+        elHeadContent.innerHTML = "<a href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + contentText + "</a>";
          //elHeadContent.innerHTML = contentText;
 
     }
@@ -1618,7 +1619,6 @@ YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
-        //YAHOO.util.Event.stopEvent(e);
         var elTarget = YAHOO.util.Event.getTarget(e);
         var elTag = elTarget.tagName.toLowerCase();
         var knownTag = false;
@@ -1695,7 +1695,9 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
                     knownTag = true;
                     break;
                 case "a":
-                    knownTag = true;
+                    if(!YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_SORTABLE)) {
+                        knownTag = true;
+                    }
                     break;
                 case "td":
                     YAHOO.util.Event.stopEvent(e);
