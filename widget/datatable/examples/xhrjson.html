@@ -1,0 +1,85 @@
+<!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Example: DataTable - JSON Data Over XHR (YUI Library)</title>
+<link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
+<link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
+<link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
+<link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
+<link type="text/css" rel="stylesheet" href="./css/examples.css">
+<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<style type="text/css">
+/* custom css*/
+#json {margin:1em;}
+#json table {border-collapse:collapse;}
+#json th, #json td {padding:.5em;border:1px solid #000;}
+#json th {background-color:#696969;color:#fff;}/*dark gray*/
+#json .yui-dt-odd {background-color:#eee;} /*light gray*/
+</style>
+</head>
+<body>
+<div id="hd">
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: JSON Data Over XHR</h1>
+</div>
+<div id="bd">
+    <div id="json"></div>
+    
+    <!-- Sample code begins -->
+    <div id="code">
+        <h3>Sample Code</h3>
+
+        <p>CSS:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+        </textarea>
+
+        <p>Markup:</p>
+
+        <textarea name="code" class="HTML" cols="60" rows="1">
+        </textarea>
+
+        <p>JavaScript:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
+<script type="text/javascript">
+var myLogger = new YAHOO.widget.LogReader();
+myLogger.collapse();
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+var myColumnHeaders = [
+    {key:"Title",text:"Name"},
+    {key:"Phone"},
+    {key:"City"},
+    {key:"Rating.AverageRating",text:"Rating"},
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+myDataSource.responseSchema = {
+    resultsList: "ResultSet.Result",
+    fields: ["Title","Phone","City","Rating.AverageRating"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("json", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10&output=json"});
+</script>
+<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+</body>
+</html>
