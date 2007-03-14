@@ -3430,6 +3430,26 @@ configContainer: function(p_sType, p_aArgs, p_oMenu) {
 
 
 /**
+* @method _setMaxHeight
+* @description "renderEvent" handler used to defer the setting of the 
+* "maxheight" configuration property until the menu is rendered in lazy 
+* load scenarios.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+* @param {Number} p_nMaxHeight Number representing the value to set for the 
+* "maxheight" configuration property.
+* @private
+*/
+_setMaxHeight: function(p_sType, p_aArgs, p_nMaxHeight) {
+
+    this.cfg.setProperty("maxheight", p_nMaxHeight);
+    this.renderEvent.unsubscribe(this._setMaxHeight);
+
+},
+
+
+/**
 * @method configMaxHeight
 * @description Event handler for when the "maxheight" configuration property of 
 * a Menu changes.
@@ -3445,16 +3465,15 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
         oBody = this.body;
 
 
-    if(this.lazyLoad && (nMaxHeight > 0) && !oBody) {
-    
-        function onRender() {
+    if(this.lazyLoad && !oBody) {
 
-            this.cfg.setProperty("maxheight", nMaxHeight);
-            this.renderEvent.unsubscribe(onRender);
+        this.renderEvent.unsubscribe(this._setMaxHeight);
+    
+        if(nMaxHeight > 0) {
+
+            this.renderEvent.subscribe(this._setMaxHeight, nMaxHeight, this);
 
         }
-    
-        this.renderEvent.subscribe(onRender, this, true);
 
         return;
     
