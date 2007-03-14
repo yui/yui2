@@ -3974,7 +3974,7 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
         oBody = this.body;
 
 
-    if(this.lazyLoad && !oBody) {
+    if(this.lazyLoad && (nMaxHeight > 0) && !oBody) {
     
         function onRender() {
 
