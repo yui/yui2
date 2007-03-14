@@ -1365,10 +1365,13 @@ YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
  * @param e {string} The drag event
  */
 YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
-    var newPos = YAHOO.util.Dom.getX(this.getDragEl());//YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
-    var offsetX = newPos - this.startPos;//YAHOO.log("offset:"+offsetX,"warn");
+    var newPos = YAHOO.util.Dom.getX(this.getDragEl());
+    //YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
+    var offsetX = newPos - this.startPos;
+    //YAHOO.log("offset:"+offsetX,"warn");
     //YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");
-    var newWidth = this.startWidth + offsetX;//YAHOO.log("newwidth:"+newWidth,"warn");
+    var newWidth = this.startWidth + offsetX;
+    //YAHOO.log("newwidth:"+newWidth,"warn");
 
     if(newWidth < this.minWidth) {
         newWidth = this.minWidth;
