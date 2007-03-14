@@ -2482,18 +2482,18 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
 
         var elBody = this._elBody;
         var elRows = this._elBody.rows;
-        
+
         // Remove extra rows
         while(elBody.hasChildNodes() && (elRows.length > aRecords.length)) {
             elBody.deleteRow(0);
         }
-        
+
         // Unselect rows in the UI but keep tracking selected rows
         var selectedRecords = this.getSelectedRecordIds();
         if(selectedRecords.length > 0) {
             this._unselectAllRows();
         }
-        
+
         var rowIds = [];
         // Format in-place existing rows
         for(i=0; i<elRows.length; i++) {
@@ -2877,58 +2877,66 @@ YAHOO.widget.DataTable.prototype.paginateRows = function() {
         }
         markup += nextPageLink + lastPageLink;
 
-        // Markup for rows-per-page dropdowns
-        var dropdown = this.rowsPerPageDropdown;
-        var select1, select2;
-        if(dropdown && (dropdown.constructor.toString().indexOf("Array") > -1) && (dropdown.length > 0)) {
-            select1 = document.createElement("select");
-            select1.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
-            select2 = document.createElement("select");
-            select2.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
-            
-            for(i=0; i<dropdown.length; i++) {
-                var option1 = document.createElement("option");
-                var option2 = document.createElement("option");
-                option1.value = dropdown[i];
-                option2.value = dropdown[i];
-                option1.innerHTML = dropdown[i];
-                option2.innerHTML = dropdown[i];
+        var pager1, pager2, select1, select2;
 
-                if(this.rowsPerPage === dropdown[i]) {
-                    option1.selected = true;
-                    option2.selected = true;
-                }
-                option1 = select1.appendChild(option1);
-                option2 = select2.appendChild(option2);
-            }
-        }
+        // Is the rows-per-page dropdowns enabled?
+        var rowsPerPageDropdown = this.rowsPerPageDropdown;
+        var dropdownEnabled = (rowsPerPageDropdown &&
+                (rowsPerPageDropdown.constructor.toString().indexOf("Array") > -1) &&
+                (rowsPerPageDropdown.length > 0));
 
-        // Populate each pager container with markup
+        // Create pager container elements
         if(!this.pagers || (this.pagers.length === 0)) {
-            var pager1 = document.createElement("span");
+            if(dropdownEnabled) {
+                select1 = document.createElement("select");
+                select1.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+                select2 = document.createElement("select");
+                select2.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+            }
+
+            pager1 = document.createElement("span");
             pager1.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
             
-            var pager2 = document.createElement("span");
+            pager2 = document.createElement("span");
             pager2.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
 
             pager1 = this._elContainer.insertBefore(pager1, this._elTable);
             select1 = (select1 === undefined) ? null :
                     this._elContainer.insertBefore(select1, this._elTable);
+                    
             select2 = (select2 === undefined) ? null :
                     this._elContainer.insertBefore(select2, this._elTable.nextSibling);
             pager2 = this._elContainer.insertBefore(pager2, this._elTable.nextSibling);
+                    
             this.pagers = [
                 {links:pager1,select:select1},
                 {links:pager2,select:select2}
             ];
         }
+        // Populate each pager container with markup
         for(i=0; i<this.pagers.length; i++) {
-            this.pagers[i].links.innerHTML = markup;
             YAHOO.util.Event.purgeElement(this.pagers[i].links);
+
             if(this.pagers[i].select) {
                 YAHOO.util.Event.purgeElement(this.pagers[i].select);
             }
-            this.pagers[i].innerHTML = markup;
+            
+            this.pagers[i].links.innerHTML = markup;
+            
+            if(dropdownEnabled) {
+                this.pagers[i].select.innerHTML = "";
+                for(var j=0; j<rowsPerPageDropdown.length; j++) {
+                    var option = document.createElement("option");
+                    option.value = rowsPerPageDropdown[j];
+                    option.innerHTML = rowsPerPageDropdown[j];
+
+                    if(this.rowsPerPage === rowsPerPageDropdown[j]) {
+                        option.selected = true;
+                    }
+                    option = this.pagers[i].select.appendChild(option);
+                }
+            }
+            
             YAHOO.util.Event.addListener(this.pagers[i].links,"click",this._onPagerClick,this);
             if(this.pagers[i].select) {
                 YAHOO.util.Event.addListener(this.pagers[i].select,"change",this._onPagerSelect,this);
@@ -3263,7 +3271,7 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
-    
+
     var ok = this.doBeforeLoadData(sRequest, oResponse);
     if(ok && oResponse) {
         // Update the RecordSet from the response
