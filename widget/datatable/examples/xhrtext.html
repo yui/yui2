@@ -1,7 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - XML Data Over XHR (YUI Library)</title>
+<title>Example: DataTable - Delimited Textual Data Over XHR (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -10,19 +10,19 @@
 <link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
 <style type="text/css">
 /* custom css*/
-#xml {margin:1em;}
-#xml table {border-collapse:collapse;}
-#xml th, #xml td {padding:.5em;border:1px solid #000;}
-#xml th {background-color:#696969;color:#fff;}/*dark gray*/
-#xml .yui-dt-odd {background-color:#eee;} /*light gray*/
+#text {margin:1em;}
+#text table {border-collapse:collapse;}
+#text th, #text td {padding:.5em;border:1px solid #000;}
+#text th {background-color:#696969;color:#fff;}/*dark gray*/
+#text .yui-dt-odd {background-color:#eee;} /*light gray*/
 </style>
 </head>
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: XML Data Over XHR</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Delimited Textual Data Over XHR</h1>
 </div>
 <div id="bd">
-    <div id="xml"></div>
+    <div id="text"></div>
     
     <!-- Sample code begins -->
     <div id="code">
@@ -60,22 +60,24 @@ myLogger.collapse();
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
+
 var myColumnHeaders = [
-    {key:"Title",text:"Name"},
+    {key:"Name"},
     {key:"Phone"},
     {key:"City"},
-    {key:"AverageRating",text:"Rating"}
+    {key:"Rating"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
+var myDataSource = new YAHOO.util.DataSource("./php/text_proxy.php");
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
 myDataSource.responseSchema = {
-    resultNode: "Result",
-    fields: ["Title","Phone","City","AverageRating"]
+    recordDelim: "\n",
+    fieldDelim: "|",
+    fields: ["Name","Address","City","Phone","Rating","Url"]
 };
 
-var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
+var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
 </script>
 <script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">
