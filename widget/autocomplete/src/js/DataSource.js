@@ -1039,6 +1039,7 @@ YAHOO.widget.DS_JSArray.prototype.data = null;
  * @param oParent {Object} The object instance that has requested data.
  */
 YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
+    var i;
     var aData = this.data; // the array
     var aResults = []; // container for results
     var bMatchFound = false;
@@ -1050,7 +1051,7 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
 
         // Loop through each element of the array...
         // which can be a string or an array of strings
-        for(var i = aData.length-1; i >= 0; i--) {
+        for(i = aData.length-1; i >= 0; i--) {
             var aDataset = [];
 
             if(aData[i]) {
@@ -1078,7 +1079,7 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
         }
     }
     else {
-        for(var i = aData.length-1; i >= 0; i--) {
+        for(i = aData.length-1; i >= 0; i--) {
             if(aData[i]) {
                 if(aData[i].constructor == String) {
                     aResults.unshift([aData[i]]);

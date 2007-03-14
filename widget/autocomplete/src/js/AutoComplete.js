@@ -960,7 +960,7 @@ YAHOO.widget.AutoComplete.prototype._initList = function() {
     while(this._oContainer._oContent._oBody.hasChildNodes()) {
         var oldListItems = this.getListItems();
         if(oldListItems) {
-            for(var oldi = oldListItems.length-1; oldi >= 0; i--) {
+            for(var oldi = oldListItems.length-1; oldi >= 0; oldi--) {
                 oldListItems[oldi] = null;
             }
         }
