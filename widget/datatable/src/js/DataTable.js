@@ -1341,10 +1341,15 @@ One thing, though: it doesn't work in combination with
  * @private
  */
 YAHOO.widget.DataTable.prototype._resetFirstRow = function() {
-    YAHOO.util.Dom.removeClass(this.getFirstRow(),YAHOO.widget.DataTable.CLASS_FIRST);
-    var elFirstRow = this._elBody.rows[0];
-    YAHOO.util.Dom.addClass(elFirstRow,YAHOO.widget.DataTable.CLASS_FIRST);
-    this._elFirstRow = elFirstRow;
+    if(this._elBody.rows.length > 0) {
+        YAHOO.util.Dom.removeClass(this.getFirstRow(),YAHOO.widget.DataTable.CLASS_FIRST);
+        var elFirstRow = this._elBody.rows[0];
+        YAHOO.util.Dom.addClass(elFirstRow,YAHOO.widget.DataTable.CLASS_FIRST);
+        this._elFirstRow = elFirstRow;
+    }
+    else {
+        this._elFirstRow = null;
+    }
 };
 
 /**
@@ -1354,10 +1359,15 @@ YAHOO.widget.DataTable.prototype._resetFirstRow = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._resetLastRow = function() {
-    YAHOO.util.Dom.removeClass(this.getLastRow(),YAHOO.widget.DataTable.CLASS_LAST);
-    var elLastRow = this._elBody.rows[this._elBody.rows.length-1];
-    YAHOO.util.Dom.addClass(elLastRow,YAHOO.widget.DataTable.CLASS_LAST);
-    this._elLastRow = elLastRow;
+    if(this._elBody.rows.length > 0) {
+        YAHOO.util.Dom.removeClass(this.getLastRow(),YAHOO.widget.DataTable.CLASS_LAST);
+        var elLastRow = this._elBody.rows[this._elBody.rows.length-1];
+        YAHOO.util.Dom.addClass(elLastRow,YAHOO.widget.DataTable.CLASS_LAST);
+        this._elLastRow = elLastRow;
+    }
+    else {
+        this._elLastRow = null;
+    }
 };
 
 /**
@@ -2208,6 +2218,15 @@ YAHOO.widget.DataTable.prototype.pagers = null;
 YAHOO.widget.DataTable.prototype.isEmpty = false;
 
 /**
+ * True if the DataTable is loading data. False if DataTable is populated with
+ * data from RecordSet.
+ *
+ * @property isEmpty
+ * @type Boolean
+ */
+YAHOO.widget.DataTable.prototype.isLoading = false;
+
+/**
  * Object literal holds sort metadata:
  *  sortedBy.colKey
  *  sortedBy.dir
@@ -2504,6 +2523,9 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
         this._resetLastRow();
 
         this.fireEvent("rowReplaceEvent", {rowIds:rowIds});
+    }
+    else {
+        this.showEmptyMessage();
     }
 };
 
@@ -3243,7 +3265,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, o
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
     var ok = this.doBeforeLoadData(sRequest, oResponse);
-    if(ok) {
+    if(ok && oResponse) {
         // Update the RecordSet from the response
         var newRecords = this._oRecordSet.append(oResponse);
         if(newRecords) {
@@ -3251,6 +3273,9 @@ YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, o
             this.paginateRows();
             YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
         }
+    }
+    else {
+        this.showEmptyMessage();
     }
 };
 
