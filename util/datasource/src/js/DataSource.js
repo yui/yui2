@@ -476,6 +476,7 @@ YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback
             }
         }
     }
+    YAHOO.log("Cached response for \"" + oRequest + "\" = " + oResponse,"info",this.toString());
     return oResponse;
 };
 
@@ -518,6 +519,7 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
     var oCacheElem = {request:oRequest,response:oResponse};
     aCache.push(oCacheElem);
     this.fireEvent("responseCacheEvent",{request:oRequest,response:oResponse});
+    YAHOO.log("Cached response for \"" +  oRequest + "\"","info",this.toString());
 
 };
 
@@ -531,6 +533,7 @@ YAHOO.util.DataSource.prototype.flushCache = function() {
         this._aCache = [];
     }
     this.fireEvent("cacheFlushEvent");
+    YAHOO.log("Flushed cache","info",this.toString());
 };
 
 /**
@@ -550,6 +553,7 @@ YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCal
     }
 
     // Not in cache, so forward request to live data
+    YAHOO.log("Making connection to live data for \"" + oRequest + "\"","info",this.toString());
     this.makeConnection(oRequest, oCallback, oCaller);
 };
 
@@ -626,8 +630,8 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
              * @private
              */
             var _xhrFailure = function(oResponse) {
-                this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAXHR});
-                YAHOO.log(this.ERROR_DATAXHR + ": " + oResp.statusText, "error", this.toString());
+                this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAINVALID});
+                YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID + ": " + oResponse.statusText, "error", this.toString());
                 return null;
             };
 
@@ -680,6 +684,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
  */
 YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller) {
     this.fireEvent("responseEvent", {request:oRequest,response:oRawResponse,callback:oCallback,caller:oCaller});
+    YAHOO.log("Live data response for \"" + oRequest + "\" = " + oRawResponse,"info",this.toString());
     var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     //TODO: break out into overridable methods
@@ -753,6 +758,7 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
         }
         oParsedResponse.unshift(oResult);
     }
+    YAHOO.log("Parsed array data = " + oParsedResponse,"info",this.toString());
     return oParsedResponse;
 };
 
@@ -802,6 +808,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
             oParsedResponse.unshift(oResult);
         }
     }
+    YAHOO.log("Parsed text data = " + oParsedResponse,"info",this.toString());
     return oParsedResponse;
 };
 
@@ -856,8 +863,10 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
         }
     }
     if(bError) {
+        YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
         return null;
     }
+    YAHOO.log("Parsed XML data = " + oParsedResponse,"info",this.toString());
     return oParsedResponse;
 };
 
@@ -940,7 +949,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         }
     }
     if(bError || !jsonList) {
-        // Something went wrong
+        YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
         return null;
    }
 
@@ -957,7 +966,8 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             var field = fields[j];
             var key = field.key || field;
             // ...and capture data into an array mapped according to the schema...
-            var data = jsonResult[key];
+            // eval is necessary here since schema can be of unknown depth
+            var data = eval("jsonResult." + key);
             if((data === undefined) || (data === null)) {
                 data = "";
             }
@@ -970,5 +980,6 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         // Capture the array of data field values in an array of results
         oParsedResponse.unshift(oResult);
     }
+    YAHOO.log("Parsed JSON data = " + oParsedResponse,"info",this.toString());
     return oParsedResponse;
 };
