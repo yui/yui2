@@ -866,7 +866,8 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         if(typeof aDelimChar == "string") {
             this.delimChar = [aDelimChar];
         }
-        else if(aDelimChar.constructor.toString().indexOf("Array") == -1) {
+        else if((aDelimChar.constructor != Array) &&
+                (aDelimChar.constructor.toString().indexOf("Array") == -1)) {
             this.delimChar = null;
         }
     }
@@ -1875,17 +1876,13 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
             switch (nKeyCode) {
             case 9: // tab
                 if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                    if(oSelf._bContainerOpen) {
-                        YAHOO.util.Event.stopEvent(v);
-                    }
+                    YAHOO.util.Event.stopEvent(v);
                 }
                 break;
             case 13: // enter
-                    if(oSelf._nKeyCode != nKeyCode) {
-                        if(oSelf._bContainerOpen) {
-                            YAHOO.util.Event.stopEvent(v);
-                        }
-                    }
+                if(oSelf._nKeyCode != nKeyCode) {
+                    YAHOO.util.Event.stopEvent(v);
+                }
                 break;
             case 38: // up
             case 40: // down

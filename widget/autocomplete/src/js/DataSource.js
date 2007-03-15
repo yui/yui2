@@ -130,7 +130,6 @@ YAHOO.widget.DataSource.prototype.getResults = function(oCallbackFn, sQuery, oPa
     
     // First look in cache
     var aResults = this._doQueryCache(oCallbackFn,sQuery,oParent);
-    
     // Not in cache, so get results from server
     if(aResults.length === 0) {
         this.queryEvent.fire(this, oParent, sQuery);
@@ -456,9 +455,11 @@ YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
-    
+
     // Initialization sequence
-    if(!aSchema || (aSchema.constructor.toString().indexOf("Array") == -1)) {
+    if(!aSchema ||
+            ((aSchema.constructor != Array) &&
+            (aSchema.constructor.toString().indexOf("Array") == -1))) {
         YAHOO.log("Could not instantiate XHR DataSource due to invalid arguments", "error", this.toString());
         return;
     }
@@ -777,7 +778,8 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 break;
             }
 
-            if(jsonList.constructor.toString().indexOf("Array") == -1) {
+            if((jsonList.constructor != Array) &&
+                    (jsonList.constructor.toString().indexOf("Array") == -1)) {
                 jsonList = [jsonList];
             }
             
@@ -996,7 +998,9 @@ YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
     }
 
     // Initialization sequence
-    if(!aData || (aData.constructor.toString().indexOf("Array") == -1)) {
+    if(!aData ||
+            ((aData.constructor != Array) &&
+            (aData.constructor.toString().indexOf("Array") == -1))) {
         YAHOO.log("Could not instantiate JSArray DataSource due to invalid arguments", "error", this.toString());
         return;
     }
@@ -1058,7 +1062,8 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
                 if(aData[i].constructor == String) {
                     aDataset[0] = aData[i];
                 }
-                else if(aData[i].constructor.toString().indexOf("Array") > -1) {
+                else if((aData[i].constructor == Array) ||
+                        (aData[i].constructor.toString().indexOf("Array") > -1)) {
                     aDataset = aData[i];
                 }
             }
@@ -1084,7 +1089,8 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
                 if(aData[i].constructor == String) {
                     aResults.unshift([aData[i]]);
                 }
-                else if(aData[i].constructor.toString().indexOf("Array") > -1) {
+                else if((aData[i].constructor == Array) ||
+                        (aData[i].constructor.toString().indexOf("Array") > -1)) {
                     aResults.unshift(aData[i]);
                 }
             }
