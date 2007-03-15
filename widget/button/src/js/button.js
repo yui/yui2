@@ -127,15 +127,15 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
 
         if(Lang.isString(p_oElement)) {
 
-            var me = this;
+            var oElement = Dom.get(p_oElement);
 
-            Event.onAvailable(p_oElement, function() {
+            if (oElement) {
 
-                var sTagName = this.tagName.toUpperCase();
+                var sTagName = oElement.tagName.toUpperCase();
             
-                if(sTagName == me.TAG_NAME) {
+                if(sTagName == this.TAG_NAME) {
             
-                    oConfig.attributes.id = this.id;
+                    oConfig.attributes.id = oElement.id;
             
                 }
                 else if(sTagName == "INPUT" && !oConfig.attributes.id) {
@@ -151,36 +151,36 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
                 
                 }
             
-                me.logger = new YAHOO.widget.LogWriter(
+                this.logger = new YAHOO.widget.LogWriter(
                                     "Button " + oConfig.attributes.id
                                         );
             
-                me.logger.log(
+                this.logger.log(
                         "Building the button using an existing HTML " + 
                         "element as a source element." 
                     );
             
             
-                oConfig.attributes.srcelement = this;
+                oConfig.attributes.srcelement = oElement;
             
-                initConfig.call(me, oConfig);
+                initConfig.call(this, oConfig);
             
             
                 if(!oConfig.element) {
             
-                    me.logger.log(
+                    this.logger.log(
                             "Source element could not be used as is.  " +
                             "Creating a new HTML element for the button."
                         );
             
                     oConfig.element = 
-                        me._createButtonElement(oConfig.attributes.type);
+                        this._createButtonElement(oConfig.attributes.type);
             
                 }
             
-                fnSuperClass.call(me, oConfig.element, oConfig.attributes);
+                fnSuperClass.call(this, oConfig.element, oConfig.attributes);
 
-            });
+            }
 
         }
         else {
@@ -1488,33 +1488,29 @@ _submitForm: function() {
 */
 _onMouseOver: function(p_oEvent) {
 
-    if(!this.get("disabled")) {
+    if(!this._hasMouseEventHandlers) {
 
-        if(!this._hasMouseEventHandlers) {
+        this.on("mouseout", this._onMouseOut);
+        this.on("mousedown", this._onMouseDown);
+        this.on("mouseup", this._onMouseUp);
 
-            this.on("mouseout", this._onMouseOut);
-            this.on("mousedown", this._onMouseDown);
-            this.on("mouseup", this._onMouseUp);
+        this._hasMouseEventHandlers = true;
 
-            this._hasMouseEventHandlers = true;
+    }
 
-        }
+    this.addClass("hover");
 
-        this.addClass("hover");
+    if(this._activationButtonPressed) {
 
-        if(this._activationButtonPressed) {
+        this.addClass("active");
 
-            this.addClass("active");
-
-        }
+    }
 
 
-        if(this._bOptionPressed) {
+    if(this._bOptionPressed) {
 
-            this.addClass("activeoption");
-        
-        }
-
+        this.addClass("activeoption");
+    
     }
 
 },
@@ -1529,21 +1525,17 @@ _onMouseOver: function(p_oEvent) {
 */
 _onMouseOut: function(p_oEvent) {
 
-    if(!this.get("disabled")) {
+    this.removeClass("hover");
 
-        this.removeClass("hover");
+    if(this.get("type") != "menubutton") {
 
-        if(this.get("type") != "menubutton") {
+        this.removeClass("active");
 
-            this.removeClass("active");
+    }
 
-        }
+    if(this._activationButtonPressed || this._bOptionPressed) {
 
-        if(this._activationButtonPressed || this._bOptionPressed) {
-
-            Event.on(document, "mouseup", this._onDocumentMouseUp, this, true);
-
-        }
+        Event.on(document, "mouseup", this._onDocumentMouseUp, this, true);
 
     }
     
@@ -1587,87 +1579,83 @@ _onDocumentMouseUp: function(p_oEvent, p_oButton) {
 */
 _onMouseDown: function(p_oEvent) {
 
-    if(!this.get("disabled")) {
+    if((p_oEvent.which || p_oEvent.button) == 1) {
 
-        if((p_oEvent.which || p_oEvent.button) == 1) {
-
-            if(!this.hasFocus()) {
-            
-                this.focus();
-            
-            }
+        if(!this.hasFocus()) {
+        
+            this.focus();
+        
+        }
 
 
-            var sType = this.get("type");
+        var sType = this.get("type");
 
 
-            if(sType == "splitbutton") {
-            
-                var oElement = this.get("element"),
-                    nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
+        if(sType == "splitbutton") {
+        
+            var oElement = this.get("element"),
+                nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
 
-                if((oElement.offsetWidth - this.OPTION_AREA_WIDTH) < nX) {
-                    
-                    this.fireEvent("option", p_oEvent);
-
-                }
-                else {
-
-                    this.addClass("active");
-
-                    this._activationButtonPressed = true;
-
-                }
-
-            }
-            else if(sType == "menubutton") {
-
-                if(this.hasClass("active")) {
-
-                    this._hideMenu();
-
-                    this._activationButtonPressed = false;
-
-                }
-                else {
-
-                    this._showMenu();
-
-                    this._activationButtonPressed = true;
+            if((oElement.offsetWidth - this.OPTION_AREA_WIDTH) < nX) {
                 
-                }
+                this.fireEvent("option", p_oEvent);
 
             }
             else {
-    
+
                 this.addClass("active");
+
+                this._activationButtonPressed = true;
+
+            }
+
+        }
+        else if(sType == "menubutton") {
+
+            if(this.hasClass("active")) {
+
+                this._hideMenu();
+
+                this._activationButtonPressed = false;
+
+            }
+            else {
+
+                this._showMenu();
 
                 this._activationButtonPressed = true;
             
             }
 
+        }
+        else {
+
+            this.addClass("active");
+
+            this._activationButtonPressed = true;
+        
+        }
 
 
-            if(sType == "splitbutton" || sType == "menubutton") {
 
-                var me = this;
+        if(sType == "splitbutton" || sType == "menubutton") {
 
-                
-                function onMouseUp() {
-                
-                    me._hideMenu();
-                    me.removeListener("mouseup", onMouseUp);
-                
-                }
+            var me = this;
 
-
-                this._hideMenuTimerId = window.setTimeout(function() {
-                
-                    me.on("mouseup", onMouseUp);
-                
-                }, 250);
-
+            
+            function onMouseUp() {
+            
+                me._hideMenu();
+                me.removeListener("mouseup", onMouseUp);
+            
             }
+
+
+            this._hideMenuTimerId = window.setTimeout(function() {
+            
+                me.on("mouseup", onMouseUp);
+            
+            }, 250);
 
         }
 
@@ -1685,32 +1673,27 @@ _onMouseDown: function(p_oEvent) {
 */
 _onMouseUp: function(p_oEvent) {
 
-    if(!this.get("disabled")) {
+    if(this._hideMenuTimerId) {
+
+        window.clearTimeout(this._hideMenuTimerId);
+
+    }
+
+    var sType = this.get("type");
+
+    if(sType == "checkbox" || sType == "radio") {
+
+        this.set("checked", !(this.get("checked")));
+    
+    }
 
 
-        if(this._hideMenuTimerId) {
+    this._activationButtonPressed = false;
+    
 
-            window.clearTimeout(this._hideMenuTimerId);
+    if(this.get("type") != "menubutton") {
 
-        }
-
-        var sType = this.get("type");
-
-        if(sType == "checkbox" || sType == "radio") {
-
-            this.set("checked", !(this.get("checked")));
-        
-        }
-
-
-        this._activationButtonPressed = false;
-        
-
-        if(this.get("type") != "menubutton") {
-
-            this.removeClass("active");
-        
-        }
+        this.removeClass("active");
     
     }
     
@@ -1728,35 +1711,31 @@ _onMouseUp: function(p_oEvent) {
 */
 _onFocus: function(p_oEvent, p_oButton) {
 
-    if(!this.get("disabled")) {
+    this.addClass("focus");
 
-        this.addClass("focus");
+    if(this._activationKeyPressed) {
 
-        if(this._activationKeyPressed) {
+        this.addClass("active");
+   
+    }
 
-            this.addClass("active");
-       
-        }
-
-        m_oFocusedButton = this;
+    m_oFocusedButton = this;
 
 
-        if(!this._hasKeyEventHandlers) {
+    if(!this._hasKeyEventHandlers) {
 
-            var oElement = this._button;
+        var oElement = this._button;
 
-            Event.on(oElement, "blur", this._onBlur, this, true);
-            Event.on(oElement, "keydown", this._onKeyDown, this, true);
-            Event.on(oElement, "keyup", this._onKeyUp, this, true);
+        Event.on(oElement, "blur", this._onBlur, this, true);
+        Event.on(oElement, "keydown", this._onKeyDown, this, true);
+        Event.on(oElement, "keyup", this._onKeyUp, this, true);
 
-            this._hasKeyEventHandlers = true;
-
-        }
-
-
-        this.fireEvent("focus", p_oEvent);
+        this._hasKeyEventHandlers = true;
 
     }
+
+
+    this.fireEvent("focus", p_oEvent);
 
 },
 
@@ -1771,28 +1750,24 @@ _onFocus: function(p_oEvent, p_oButton) {
 */
 _onBlur: function(p_oEvent, p_oButton) {
 
-    if(!this.get("disabled")) {
+    this.removeClass("focus");
 
-        this.removeClass("focus");
+    if(this.get("type") != "menubutton") {
 
-        if(this.get("type") != "menubutton") {
+        this.removeClass("active");
 
-            this.removeClass("active");
+    }    
 
-        }    
+    if(this._activationKeyPressed) {
 
-        if(this._activationKeyPressed) {
-
-            Event.on(document, "keyup", this._onDocumentKeyUp, this, true);
-
-        }
-
-
-        m_oFocusedButton = null;
-
-        this.fireEvent("blur", p_oEvent);
+        Event.on(document, "keyup", this._onDocumentKeyUp, this, true);
 
     }
+
+
+    m_oFocusedButton = null;
+
+    this.fireEvent("blur", p_oEvent);
    
 },
 
@@ -1828,46 +1803,42 @@ _onDocumentKeyUp: function(p_oEvent, p_oButton) {
 */
 _onKeyDown: function(p_oEvent, p_oButton) {
 
-    if(!this.get("disabled")) {
+    if(
+        this.get("type") == "splitbutton" && 
+        this._isSplitButtonOptionKey(p_oEvent)
+    ) {
 
-        if(
-            this.get("type") == "splitbutton" && 
-            this._isSplitButtonOptionKey(p_oEvent)
-        ) {
+        this.fireEvent("option", p_oEvent);
 
-            this.fireEvent("option", p_oEvent);
+    }
+    else if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
+
+        if(this.get("type") == "menubutton") {
+
+            this._showMenu();
 
         }
-        else if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
+        else {
 
-            if(this.get("type") == "menubutton") {
-
-                this._showMenu();
-
-            }
-            else {
-
-                this._activationKeyPressed = true;
-                
-                this.addClass("active");
+            this._activationKeyPressed = true;
             
-            }
+            this.addClass("active");
         
         }
+    
+    }
 
 
-        var oMenu = this._menu;
+    var oMenu = this._menu;
 
-        if(
-            oMenu && oMenu.cfg.getProperty("visible") && 
-            Event.getCharCode(p_oEvent) == 27
-        ) {
-        
-            oMenu.hide();
-            this.focus();
-        
-        }
-
+    if(
+        oMenu && oMenu.cfg.getProperty("visible") && 
+        Event.getCharCode(p_oEvent) == 27
+    ) {
+    
+        oMenu.hide();
+        this.focus();
+    
     }
 
 },
@@ -1883,29 +1854,40 @@ _onKeyDown: function(p_oEvent, p_oButton) {
 */
 _onKeyUp: function(p_oEvent, p_oButton) {
 
-    if(!this.get("disabled")) {
+    if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
 
-        if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
+        var sType = this.get("type");
 
-            var sType = this.get("type");
+        if(sType == "checkbox" || sType == "radio") {
 
-            if(sType == "checkbox" || sType == "radio") {
+            this.set("checked", !(this.get("checked")));
+        
+        }
 
-                this.set("checked", !(this.get("checked")));
-            
-            }
+        this._activationKeyPressed = false;
 
-            this._activationKeyPressed = false;
+        if(this.get("type") != "menubutton") {
 
-            if(this.get("type") != "menubutton") {
-
-                this.removeClass("active");
-
-            }
+            this.removeClass("active");
 
         }
 
     }
+
+},
+
+
+fireEvent: function(p_sType , p_aArgs) {
+
+    //  Disabled buttons should not respond to DOM events
+
+    if(this.DOM_EVENTS[p_sType] && this.get("disabled")) {
+
+        return;
+
+    }
+
+    YAHOO.widget.Button.superclass.fireEvent.call(this, p_sType, p_aArgs);
 
 },
 

@@ -67,20 +67,20 @@ YAHOO.widget.ButtonGroup = function(p_oElement, p_oAttributes) {
     }
     else if(Lang.isString(p_oElement)) {
 
-        var me = this;
+        var oElement = Dom.get(p_oElement);
 
-        Event.onContentReady(p_oElement, function() {
+        if (oElement) {
         
-            if(this.nodeName.toUpperCase() == me.TAG_NAME) {
+            if(oElement.nodeName.toUpperCase() == this.TAG_NAME) {
 
-                me.logger = 
+                this.logger = 
                     new YAHOO.widget.LogWriter("ButtonGroup " + p_oElement);
         
-                fnSuperClass.call(me, this, p_oAttributes);
+                fnSuperClass.call(this, oElement, p_oAttributes);
 
             }
 
-        });
+        }
     
     }
     else {
@@ -330,8 +330,7 @@ _onAppendTo: function(p_oEvent) {
 * @protected
 * @param {Event} p_oEvent Object representing the event that was fired.
 * @param {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>} p_oButton 
-* Object representing the button that 
-* fired the event.
+* Object representing the button that fired the event.
 */
 _onButtonCheckedChange: function(p_oEvent, p_oButton) {
 
