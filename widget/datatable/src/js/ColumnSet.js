@@ -1223,7 +1223,18 @@ YAHOO.util.Sort = {
      * @param b {object} Second sort argument.
      */
     compareAsc: function(a, b) {
-        //TODO: is typeof better or is constructor property better?
+        if((a === null) || (typeof a == "undefined")) {
+            if((b === null) || (typeof b == "undefined")) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        else if((b === null) || (typeof b == "undefined")) {
+            return -1;
+        }
+    
         if(a.constructor == String) {
             a = a.toLowerCase();
         }
@@ -1249,7 +1260,18 @@ YAHOO.util.Sort = {
      * @param b {object} Second sort argument.
      */
     compareDesc: function(a, b) {
-        //TODO: is typeof better or is constructor property better?
+        if((a === null) || (typeof a == "undefined")) {
+            if((b === null) || (typeof b == "undefined")) {
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else if((b === null) || (typeof b == "undefined")) {
+            return 1;
+        }
+
         if(a.constructor == String) {
             a = a.toLowerCase();
         }
