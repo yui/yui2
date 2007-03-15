@@ -675,11 +675,12 @@ YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
  */
 YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
     var oDate = oData;
-    if(oDate) {
-        elCell.innerHTML = oDate.getMonth() + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
+    if(oDate instanceof Date) {
+        elCell.innerHTML = (oDate.getMonth()+1) + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
     }
     else {
         elCell.innerHTML = "";
+        YAHOO.log("Could not format date","warn",this.toString());
     }
 };
 
