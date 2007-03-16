@@ -126,29 +126,28 @@ http://developer.yahoo.net/yui/license.txt
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if (!el) { return null; } // nothing to work with
-            
-            if (typeof el != 'string' && !(el instanceof Array) ) { // assuming HTMLElement or HTMLCollection, so pass back as is
-                logger.log('get(' + el + ') returning ' + el, 'info', 'Dom');
-                return el;
-            }
-            
-            if (typeof el == 'string') { // ID
-                logger.log('get("' + el + '") returning ' + document.getElementById(el), 'info', 'Dom');
+            if ( YAHOO.lang.isString(el) ) { // ID 
+                logger.log('get(' + el + ') returning ' + document.getElementById(el), 'info', 'Dom');
                 return document.getElementById(el);
             }
-            else { // array of ID's and/or elements
-                var collection = [];
+            
+            if ( YAHOO.lang.isArray(el) ) { // Array of ID's and/or HTMLElements
+                var c = [];
                 for (var i = 0, len = el.length; i < len; ++i) {
-                    collection[collection.length] = Y.Dom.get(el[i]);
+                    c[c.length] = Y.Dom.get(el[i]);
                 }
                 
-                logger.log('get("' + el + '") returning ' + collection, 'info', 'Dom');
-                return collection;
+                logger.log('get("' + el + '") returning ' + c, 'info', 'Dom');
+                return c;
+            }
+
+            if (el) { // assuming HTMLElement or HTMLCollection, just pass back 
+                logger.log('get("' + el + '") returning ' + el, 'info', 'Dom');
+                return el;
             }
 
             logger.log('element ' + el + ' not found', 'error', 'Dom');
-            return null; // safety, should never happen
+            return null; // el is likely null or undefined 
         },
     
         /**
