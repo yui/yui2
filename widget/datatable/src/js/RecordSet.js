@@ -125,7 +125,7 @@ YAHOO.widget.RecordSet.prototype.getRecord = function(identifier) {
         }
         else if(identifier.constructor == String) {
             for(var i=0; i<this._records.length; i++) {
-                if(this._records[i].id == identifier) {
+                if(this._records[i].yuiRecordId == identifier) {
                     return this._records[i];
                 }
             }
@@ -398,7 +398,7 @@ YAHOO.widget.Record = function(oLiteral) {
             this[sKey] = oLiteral[sKey];
         }
     }
-    this.id = "yui-dtrec"+YAHOO.widget.Record._nCount;
+    this.yuiRecordId = "yui-dtrec"+YAHOO.widget.Record._nCount;
     YAHOO.widget.Record._nCount++;
 };
 
@@ -427,7 +427,7 @@ YAHOO.widget.Record._nCount = 0;
 /**
  * Unique name assigned at instantation, indicates original order.
  *
- * @property id
+ * @property yuiRecordId
  * @type string
  */
-YAHOO.widget.Record.prototype.id = null;
+YAHOO.widget.Record.prototype.yuiRecordId = null;

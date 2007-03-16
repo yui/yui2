@@ -94,11 +94,11 @@ var myLogger = new YAHOO.widget.LogReader();
 /****************************************************************************/
 /****************************************************************************/
 var myColumnHeaders = [
-    {key:"POID", abbr:"Purchase order ID", sortable:true, resizeable:true},
-    {key:"Date", type:"date", sortable:true, resizeable:true},
-    {key:"Quantity", type:"number", sortable:true, resizeable:true},
-    {key:"Amount", type:"currency", sortable:true, resizeable:true},
-    {key:"Title", type:"html", sortable:true, resizeable:true}
+    {key:"id", sortable:true, resizeable:true},
+    {key:"date", type:"date", sortable:true, resizeable:true},
+    {key:"quantity", type:"number", sortable:true, resizeable:true},
+    {key:"amount", type:"currency", sortable:true, resizeable:true},
+    {key:"title", type:"html", sortable:true, resizeable:true}
 ];
 
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
@@ -106,7 +106,7 @@ var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
 myDataSource.responseSchema = {
-    fields: ["POID","Date","Quantity","Amount","Title"]
+    fields: ["id","date","quantity","amount","title"]
 };
 var myDataTable = new YAHOO.widget.DataTable("basic", myColumnSet, myDataSource,{caption:"Example: Basic Table"});
 </script>

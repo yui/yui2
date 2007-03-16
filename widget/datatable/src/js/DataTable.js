@@ -1283,9 +1283,9 @@ YAHOO.widget.DataTable.prototype._addRow = function(oRecord, index) {
     var elRow = (insert && this._elBody.rows[index]) ?
         this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[index]) :
         this._elBody.appendChild(document.createElement("tr"));
-    var recId = oRecord.id;
+    var recId = oRecord.yuiRecordId;
     elRow.id = this.id+"-bdrow"+index;
-    elRow.recordId = recId;
+    elRow.yuiRecordId = recId;
 
     // Create TBODY cells
     for(var j=0; j<oColumnSet.keys.length; j++) {
@@ -1412,7 +1412,7 @@ YAHOO.widget.DataTable.prototype._updateRow = function(oRecord, index) {
     this.hideTableMessages();
 
     var elRow = this._elBody.rows[index];
-    elRow.recordId = oRecord.id;
+    elRow.yuiRecordId = oRecord.yuiRecordId;
 
     // ...Update TBODY cells with new data
     for(var j=0; j<elRow.cells.length; j++) {
@@ -1488,7 +1488,7 @@ YAHOO.widget.DataTable.prototype._deleteRow = function(elRow) {
 //TODO: sniff elRow.rowIndex
     var allRows = this._elBody.rows;
     var id = elRow.id;
-    var recordId = elRow.recordId;
+    var recordId = elRow.yuiRecordId;
     for(var i=0; i< allRows.length; i++) {
         if(id == allRows[i].id) {
             this._elBody.deleteRow(i);
@@ -2514,7 +2514,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
         for(i=0; i<selectedRecords.length; i++) {
             var allRows = elBody.rows;
             for(var j=0; j<allRows.length; j++) {
-                if(selectedRecords[i] == allRows[j].recordId) {
+                if(selectedRecords[i] == allRows[j].yuiRecordId) {
                     this._select([allRows[j]]);
                 }
             }
@@ -2657,7 +2657,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
         // Add Record ID to internal tracker
         var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
-            var id = els[i].recordId;
+            var id = els[i].yuiRecordId;
             // Remove if already there
             // Use Array.indexOf if available...
             if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
@@ -2695,7 +2695,7 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
         // Remove Record ID from internal tracker
         var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
-            var id = els[i].recordId;
+            var id = els[i].yuiRecordId;
         
             // Use Array.indexOf if available...
             if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
@@ -3054,7 +3054,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
     if(elCell && !isNaN(elCell.columnIndex)) {
         var column = this._oColumnSet.keys[elCell.columnIndex];
         if(column && column.editor) {
-            this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.recordId));
+            this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.yuiRecordId));
         }
         this._bFocused = true;
         this.fireEvent("editorShowEvent",{target:elCell,column:column});
@@ -3071,7 +3071,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
     if (elCell && (typeof elCell.columnIndex == "number")) {
         var index = elCell.columnIndex;
         var column = this._oColumnSet.keys[index];
-        column.format(elCell,this._oRecordSet.getRecord(elCell.parentNode.recordId));
+        column.format(elCell,this._oRecordSet.getRecord(elCell.parentNode.yuiRecordId));
         if (index === 0) {
             YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_FIRST);
         }
