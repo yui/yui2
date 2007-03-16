@@ -381,7 +381,7 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
  * <dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
  * <dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
  * <dt>fields</dt> <dd>Array of field names (aka keys), or array of object literals
- * as such: {key:"fieldname",type:"datatype"}</dd>
+ * such as: {key:"fieldname",converter:YAHOO.util.DataSource.convertDate}</dd>
  * </dl>
  *
  * @property responseSchema
