@@ -738,4 +738,5 @@ http://developer.yahoo.net/yui/license.txt
             logger.log('getViewportWidth returning ' + width, 'info', 'Dom');
             return width;
         }
+    }
 })();
