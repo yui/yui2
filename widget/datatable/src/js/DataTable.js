@@ -2716,13 +2716,14 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
 };
 
 /**
- * Unselects all selected rows.
+ * Unselects all selected rows (across all pages, if applicable).
  *
  * @method unselectAllRows
  */
 YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
     var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
     this.unselect(selectedRows);
+    this._aSelectedRecords = [];
     this.fireEvent("unselectEvent", {els:selectedRows});
 };
 
