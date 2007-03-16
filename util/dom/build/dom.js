@@ -705,6 +705,7 @@ http://developer.yahoo.net/yui/license.txt
             }
             return width;
         }
+    }
 })();
 /**
  * A region is a representation of an object on a grid.  It is defined

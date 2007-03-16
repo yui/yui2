@@ -738,6 +738,7 @@ http://developer.yahoo.net/yui/license.txt
             logger.log('getViewportWidth returning ' + width, 'info', 'Dom');
             return width;
         }
+    }
 })();
 /**
  * A region is a representation of an object on a grid.  It is defined
