@@ -525,6 +525,17 @@ YAHOO.widget.Column.prototype.getId = function() {
 };
 
 /**
+ * Public accessor returns Column's index within its ColumnSet's key array, or
+ * null if not applicable.
+ *
+ * @property getIndex
+ * @return {Number} Column's index within its ColumnSet key array, if applicable.
+ */
+YAHOO.widget.Column.prototype.getIndex = function() {
+    return this._index;
+};
+
+/**
  * Public accessor returns Column's colspan number.
  *
  * @method getColSpan

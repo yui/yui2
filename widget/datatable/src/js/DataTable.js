@@ -1208,7 +1208,7 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
-    elHeadCell.columnIndex = col;
+    elHeadCell.columnIndex = oColumn.getIndex();
     if(oColumn.abbr) {
         elHeadCell.abbr = oColumn.abbr;
     }
@@ -3036,6 +3036,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this.sortedBy._id = oColumn.getId();
 
             this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
+            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir, "info", this.toString());
         }
     }
     else {
@@ -3051,7 +3052,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
  * @param elCell {HTMLElement} Cell element to edit.
  */
 YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
-    if(elCell && !isNaN(elCell.columnIndex)) {
+    if(elCell && (typeof elCell.columnIndex == "number")) {
         var column = this._oColumnSet.keys[elCell.columnIndex];
         if(column && column.editor) {
             this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.yuiRecordId));
@@ -3102,9 +3103,12 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
     YAHOO.util.Event.stopEvent(evt);
     
     //TODO: traverse DOM to find a columnIndex, incl safety net if none exists
-    var columnIndex = target.columnIndex;
-    if(!isNaN(columnIndex)) {
-        this.sortColumn(this._oColumnSet.keys[columnIndex]);
+    if(typeof target.columnIndex == "number") {
+        this.sortColumn(this._oColumnSet.keys[target.columnIndex]);
+    }
+    else {
+        //TODO: support sort on parent of nested header
+        YAHOO.log("Could not sort due to invalid column","warn",this.toString());
     }
 };
 
