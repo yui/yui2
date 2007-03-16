@@ -51,6 +51,11 @@ var Dom = YAHOO.util.Dom,
 
     // Private member variables
 
+    m_oUserAgent = navigator.userAgent.toLowerCase(),
+    m_bOpera = (m_oUserAgent.indexOf('opera') > -1),
+    m_bSafari = (m_oUserAgent.indexOf('safari') > -1),
+    m_bGecko = (!m_bOpera && !m_bSafari && m_oUserAgent.indexOf('gecko') > -1),
+    m_bIE = (!m_bOpera && m_oUserAgent.indexOf('msie') > -1),
     m_oButtons = {},
     m_oFocusedButton = null;
 
@@ -606,6 +611,18 @@ _button: null,
 * @type <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>
 */
 _menu: null,
+
+
+/** 
+* @property _hiddenField
+* @description Object reference to the <code>&#60;input&#62;</code> element 
+* used when the button's parent form is submitted.
+* @default null
+* @protected
+* @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+* one-html.html#ID-6043025">HTMLInputElement</a>
+*/
+_hiddenField: null,
 
 
 /** 
@@ -1453,27 +1470,6 @@ _hideMenu: function() {
 },
 
 
-/**
-* @method _submitForm
-* @description Submits the form to which the button belongs.
-* @protected
-*/
-_submitForm: function() {
-
-    var oForm = this.getForm();
-
-    if(oForm) {
-
-        YAHOO.widget.Button.addHiddenFieldsToForm(oForm);
-
-        this.createHiddenField();
-        
-        oForm.submit();
-    
-    }
-
-},
-
 
 
 // Protected event handlers
@@ -1930,7 +1926,7 @@ _onClick: function(p_oEvent) {
 
         case "submit":
 
-            this._submitForm();
+            this.submitForm();
         
         break;
 
@@ -1974,7 +1970,7 @@ _onClick: function(p_oEvent) {
     
                 if(oSrcElement && oSrcElement.type == "submit") {
     
-                    this._submitForm();
+                    this.submitForm();
                 
                 }
             
@@ -2345,7 +2341,7 @@ _onMenuItemAdded: function(p_sType, p_aArgs, p_oItem) {
 */
 _onMenuClick: function(p_sType, p_aArgs, p_oButton) {
 
-    var oItem = p_aArgs[0];
+    var oItem = p_aArgs[1];
 
     if(oItem) {
 
@@ -2353,7 +2349,7 @@ _onMenuClick: function(p_sType, p_aArgs, p_oButton) {
     
         if(oSrcElement && oSrcElement.type == "submit") {
     
-            this._submitForm();
+            this.submitForm();
     
         }
     
@@ -2377,14 +2373,21 @@ _onMenuClick: function(p_sType, p_aArgs, p_oButton) {
 */
 createHiddenField: function () {
 
-    if(!this.get("disabled")) {
+    if (!this.get("disabled")) {
 
         var sType = this.get("type"),
         
             bCheckable = (sType == "checkbox" || sType == "radio"),
         
             oField = createInputElement(
-                        (bCheckable ? this.get("type") : "hidden"),
+            
+                        /*
+                            Use "submit" type for IE so that the input 
+                            element will be able to be clicked via a call to 
+                            the "click" method by the "submitForm" method.
+                        */
+            
+                        (bCheckable ? sType : (m_bIE ? "submit" : "hidden")),
                         this.get("name"),
                         this.get("value"),
                         this.get("checked")
@@ -2393,22 +2396,90 @@ createHiddenField: function () {
             oForm = this.getForm();
     
 
-        if(oField && bCheckable) {
+        if (oField) {
+
+            if (bCheckable || oField.type == "submit") {
+
+                oField.style.display = "none";
+
+            }
+
+
+            if (oForm) {
+        
+                var oHiddenField = this._hiddenField;
+        
+                if (oHiddenField && Dom.inDocument(oHiddenField)) {
+        
+                    oForm.replaceChild(oField, oHiddenField);
+        
+                }
+                else {
+        
+                    oForm.appendChild(oField);
+                    
+                }
+            
+            }
     
-            oField.style.display = "none";      
+            this._hiddenField = oField;
+    
+            return oField;
 
         }
 
+    }
+
+},
+
+
+/**
+* @method submitForm
+* @description Submits the form to which the button belongs.
+* @protected
+*/
+submitForm: function(p_oMenuItem) {
+
+    var oForm = this.getForm();
+
+    if (oForm) {
+
+        var oInput = this.createHiddenField();
+
+        if (m_bIE) {
+
+            /*
+                Clicking the button via a call to the "click" method will 
+                cause IE to both fire the form's "submit" event as well as 
+                submit the form.  Originally tried just firing the "submit"
+                event via "fireEvent," but then the event could not 
+                be cancelled.
+            */            
+
+            oInput.click();
+
+        }
+        else {  // Gecko, Opera, and Safari
+
+            var oEvent = document.createEvent("HTMLEvents");
+            oEvent.initEvent("submit", true, true);
+
+            oForm.dispatchEvent(oEvent);
+
+            /*
+                In Safari, dispatching a "submit" event to a form WILL cause  
+                the form's "submit" event to fire, but WILL NOT submit the   
+                form.  Therefore, we need to call the "submit" method as well.
+            */
     
-        if(oForm) {
-    
-            oForm.appendChild(oField);
+            if (m_bSafari) {
+            
+                oForm.submit();
+            
+            }
         
         }
-
-
-        return oField;
-
+    
     }
 
 },
@@ -2886,13 +2957,27 @@ getMenu: function() {
 
 /**
 * @method getForm
-* @description Returns a reference to the button's menu.
+* @description Returns a reference to the button's parent form.
 * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-40002357">HTMLFormElement</a>}
 */
 getForm: function() {
 
     return this._button.form;
+
+},
+
+
+/** 
+* @method getHiddenField
+* @description Returns a reference to the <code>&#60;input&#62;</code> element 
+* used when the button's parent form is submitted.
+* @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+* one-html.html#ID-6043025">HTMLInputElement</a>}
+*/
+getHiddenField: function() {
+
+    return this._hiddenField;
 
 },
 
@@ -3012,7 +3097,7 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
                         oSrcElement.tagName.toUpperCase() == "SELECT"
                     ) {
             
-                        oButton.getForm().appendChild(oSrcElement);
+                        p_oForm.appendChild(oSrcElement);
                         oSrcElement.selectedIndex = oMenuItem.index;
             
                     }
@@ -3025,14 +3110,25 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
                                     oMenuItem.value;
 
                         if(oValue) {
+
+                            var oHiddenField = oButton.getHiddenField(),
     
-                            var oField = createInputElement(
+                                oField = createInputElement(
                                             "hidden",
                                             (oButton.get("name") + "_options"),
                                             oValue
                                         );
-        
-                            oButton.getForm().appendChild(oField);
+                                        
+                            if(oHiddenField && Dom.inDocument(oHiddenField)) {
+
+                                p_oForm.replaceChild(oField, oHiddenField);
+
+                            }
+                            else {
+
+                                p_oForm.appendChild(oField);
+                            
+                            }
     
                         }
     
