@@ -2464,20 +2464,20 @@ submitForm: function(p_oMenuItem) {
             var oEvent = document.createEvent("HTMLEvents");
             oEvent.initEvent("submit", true, true);
 
-            oForm.dispatchEvent(oEvent);
-
             /*
                 In Safari, dispatching a "submit" event to a form WILL cause  
                 the form's "submit" event to fire, but WILL NOT submit the   
                 form.  Therefore, we need to call the "submit" method as well.
             */
-    
-            if (m_bSafari) {
-            
+
+            var bSubmitForm = oForm.dispatchEvent(oEvent);
+
+            if(m_bSafari && bSubmitForm) {
+
                 oForm.submit();
             
             }
-        
+
         }
     
     }
