@@ -37,14 +37,16 @@ http://developer.yahoo.net/yui/license.txt
         if (propertyCache[property]) { // already converted
             return propertyCache[property];
         }
-        
-        while( patterns.HYPHEN.exec(property) ) {
-            property = property.replace(RegExp.$1,
+       
+        var converted = property;
+ 
+        while( patterns.HYPHEN.exec(converted) ) {
+            converted = converted.replace(RegExp.$1,
                     RegExp.$1.substr(1).toUpperCase());
         }
         
-        propertyCache[property] = property;
-        return property;
+        propertyCache[property] = converted;
+        return converted;
         //return property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}) // cant use function as 2nd arg yet due to safari bug
     };
     
@@ -53,6 +55,10 @@ http://developer.yahoo.net/yui/license.txt
         getStyle = function(el, property) {
             var value = null;
             
+            if (property == 'float') { // fix reserved word
+                property = 'cssFloat';
+            }
+
             var computed = document.defaultView.getComputedStyle(el, '');
             if (computed) { // test computed before touching for safari
                 value = computed[toCamel(property)];
@@ -78,6 +84,8 @@ http://developer.yahoo.net/yui/license.txt
                     }
                     return val / 100;
                     break;
+                case 'float': // fix reserved word
+                    property = 'styleFloat'; // fall through
                 default: 
                     // test currentStyle before touching
                     var value = el.currentStyle ? el.currentStyle[property] : null;
@@ -128,7 +136,7 @@ http://developer.yahoo.net/yui/license.txt
                 return document.getElementById(el);
             }
             
-            if ( YAHOO.lang.isArray(el) ) { // Array of ID's and/or HTMLElements
+            if ( YAHOO.lang.isArray(el) ) { // Array of IDs and/or HTMLElements
                 var c = [];
                 for (var i = 0, len = el.length; i < len; ++i) {
                     c[c.length] = Y.Dom.get(el[i]);
