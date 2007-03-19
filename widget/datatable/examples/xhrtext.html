@@ -14,6 +14,8 @@
 #text table {border-collapse:collapse;}
 #text th, #text td {padding:.5em;border:1px solid #000;}
 #text th {background-color:#696969;color:#fff;}/*dark gray*/
+#text th a {color:white;}
+#text th a:hover {color:blue;}
 #text .yui-dt-odd {background-color:#eee;} /*light gray*/
 </style>
 </head>
@@ -31,16 +33,47 @@
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+#text {margin:1em;}
+#text table {border-collapse:collapse;}
+#text th, #text td {padding:.5em;border:1px solid #000;}
+#text th {background-color:#696969;color:#fff;}/*dark gray*/
+#text th a {color:white;}
+#text th a:hover {color:blue;}
+#text .yui-dt-odd {background-color:#eee;} /*light gray*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
+<div id="text"></div>
         </textarea>
 
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
+var formatUrl = function(elCell, oRecord, oColumn, sData) {
+    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+};
+
+var myColumnHeaders = [
+    {key:"Name", sortable:true, formatter:formatUrl},
+    {key:"Phone"},
+    {key:"City"},
+    {key:"Rating", sortable:true}
+
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource("./php/text_proxy.php");
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
+myDataSource.responseSchema = {
+    recordDelim: "\n",
+    fieldDelim: "|",
+    fields: ["Name","Address","City","Phone","Rating","Url"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -60,12 +93,16 @@ myLogger.collapse();
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
+var formatUrl = function(elCell, oRecord, oColumn, sData) {
+    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+};
 
 var myColumnHeaders = [
-    {key:"Name"},
+    {key:"Name", sortable:true, formatter:formatUrl},
     {key:"Phone"},
     {key:"City"},
-    {key:"Rating"}
+    {key:"Rating", sortable:true}
+
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 

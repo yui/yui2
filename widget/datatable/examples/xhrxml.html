@@ -14,6 +14,8 @@
 #xml table {border-collapse:collapse;}
 #xml th, #xml td {padding:.5em;border:1px solid #000;}
 #xml th {background-color:#696969;color:#fff;}/*dark gray*/
+#xml th a {color:white;}
+#xml th a:hover {color:blue;}
 #xml .yui-dt-odd {background-color:#eee;} /*light gray*/
 </style>
 </head>
@@ -31,16 +33,45 @@
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
+/* custom css*/
+#xml {margin:1em;}
+#xml table {border-collapse:collapse;}
+#xml th, #xml td {padding:.5em;border:1px solid #000;}
+#xml th {background-color:#696969;color:#fff;}/*dark gray*/
+#xml th a {color:white;}
+#xml th a:hover {color:blue;}
+#xml .yui-dt-odd {background-color:#eee;} /*light gray*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
+<div id="xml"></div>
         </textarea>
 
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
+var formatUrl = function(elCell, oRecord, oColumn, sData) {
+    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+};
+
+var myColumnHeaders = [
+    {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
+    {key:"Phone"},
+    {key:"City"},
+    {key:"AverageRating", text:"Rating", sortable:true}
+];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
+myDataSource.responseSchema = {
+    resultNode: "Result",
+    fields: ["Title","Phone","City","AverageRating","ClickUrl"]
+};
+
+var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -60,11 +91,15 @@ myLogger.collapse();
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
+var formatUrl = function(elCell, oRecord, oColumn, sData) {
+    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+};
+
 var myColumnHeaders = [
-    {key:"Title",text:"Name"},
+    {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
     {key:"Phone"},
     {key:"City"},
-    {key:"AverageRating",text:"Rating"}
+    {key:"AverageRating", text:"Rating", sortable:true}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
@@ -72,7 +107,7 @@ var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
 myDataSource.responseSchema = {
     resultNode: "Result",
-    fields: ["Title","Phone","City","AverageRating"]
+    fields: ["Title","Phone","City","AverageRating","ClickUrl"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
