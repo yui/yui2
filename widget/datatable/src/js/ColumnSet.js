@@ -360,7 +360,7 @@ YAHOO.widget.Column.prototype._width = null;
 
 /**
  * Minimum width the Column can support (in pixels). Value is populated only if table
- * is fixedwidth, null otherwise.
+ * is fixedWidth, null otherwise.
  *
  * @property _minWidth
  * @type Number
@@ -1348,11 +1348,11 @@ YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
     this.startWidth = this.cell.offsetWidth;
     this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
 
-    if(this.datatable.fixedwidth) {
-        var cellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_COLUMNTEXT,"span",this.cell)[0];
+    if(this.datatable.fixedWidth) {
+        var cellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",this.cell)[0];
         this.minWidth = cellText.offsetWidth + 6;
         var sib = this.cell.nextSibling;
-        var sibCellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_COLUMNTEXT,"span",sib)[0];
+        var sibCellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",sib)[0];
         this.sibMinWidth = sibCellText.offsetWidth + 6;
 //!!
         var left = ((this.startWidth - this.minWidth) < 0) ? 0 : (this.startWidth - this.minWidth);
@@ -1419,7 +1419,7 @@ YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
     //YAHOO.log(newWidth + " AND "+ elColumn.offsetWidth + " AND " + elColumn.id,"warn");
 
     // Resize the other Columns
-    if(oDataTable.fixedwidth) {
+    if(oDataTable.fixedWidth) {
         // Moving right or left?
         var sib = elCell.nextSibling;
         //var sibIndex = elCell.index + 1;

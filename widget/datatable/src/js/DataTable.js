@@ -1164,14 +1164,17 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
 
     this._elHead = this._elTable.appendChild(elHead);
     
-    // Add Resizer only after DOM has been updated...
-    // ...and skip the last column
-    for(i=0; i<this._oColumnSet.keys.length-1; i++) {
+    // Add Resizer only after DOM has been updated
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
         oColumn = this._oColumnSet.keys[i];
         if(oColumn.resizeable && YAHOO.util.DD) {
             //TODO: deal with fixed width tables
-            //TODO: no more oColumn.isLast
-            if(!this.fixedWidth || (this.fixedwidth && !oColumn.isLast)) {
+            // Skip the last column for fixed-width tables
+            if(!this.fixedWidth ||
+                    (this.fixedWidth &&
+                    (oColumn.getIndex() != this._oColumnSet.keys.length-1)
+                    )
+            ) {
                 // TODO: better way to get elHeadContainer
                 var elHeadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADCONTAINER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
                 var elHeadResizer = elHeadContainer.appendChild(document.createElement("span"));
@@ -1185,8 +1188,10 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
                 YAHOO.util.Event.addListener(elHeadResizer,"click",cancelClick);
             }
             if(this.fixedWidth) {
-                elHeadContainer.style.overflow = "hidden";
-                elHeadContent.style.overflow = "hidden";
+                //elHeadContainer.style.overflow = "hidden";
+                // TODO: better way to get elHeadText
+                var elHeadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                elHeadText.style.overflow = "hidden";
             }
         }
     }
@@ -1230,6 +1235,8 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     }
 
     elHeadCell.innerHTML = "";
+    elHeadCell.rowSpan = oColumn.getRowSpan();
+    elHeadCell.colSpan = oColumn.getColSpan();
 
     var elHeadContainer = elHeadCell.appendChild(document.createElement("div"));
     elHeadContainer.id = this.id+"-hdrow"+row+"-container"+col;
@@ -1237,9 +1244,6 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
     var elHeadContent = elHeadContainer.appendChild(document.createElement("span"));
     elHeadContent.id = this.id+"-hdrow"+row+"-text"+col;
     YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_HEADTEXT);
-
-    elHeadCell.rowSpan = oColumn.getRowSpan();
-    elHeadCell.colSpan = oColumn.getColSpan();
 
     var contentText = oColumn.text || oColumn.key || "";
     if(oColumn.sortable) {
@@ -2953,13 +2957,14 @@ YAHOO.widget.DataTable.prototype.paginateRows = function() {
  * Sort given column.
  *
  * @method sortColumn
- * @param oColumn {YAHOO.widget.Column} Column to sort. TODO: accept the TH or TH.key
+ * @param oColumn {YAHOO.widget.Column} Column instance.
  */
 YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
     if(!oColumn) {
         return;
     }
     if(!oColumn instanceof YAHOO.widget.Column) {
+        //TODO: accept the TH or TH.key
         //TODO: Figure out the column based on TH ref or TH.key
         return;
     }
@@ -2992,7 +2997,6 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         // Custom function was not provided so use the built-in sorter
         // ONLY IF column key is defined
-        // TODO: use diff default functions based on column data type
         // TODO: nested/cumulative/hierarchical sorting
         if(!sortFnc && oColumn.key) {
             var sorted;
