@@ -448,6 +448,15 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("unhighlightEvent");
     
     /**
+     * Fired when a TR element is selected.
+     *
+     * @event rowSelectEvent
+     * @param oArgs.el {HTMLElement} The selected TR element.
+     * @param oArgs.record {YAHOO.widget.Record} The associated Record instance.
+     */
+    this.createEvent("rowSelectEvent");
+
+    /**
      * Fired when one or more TR elements are deleted.
      *
      * @event rowDeleteEvent
@@ -1430,11 +1439,15 @@ YAHOO.widget.DataTable.prototype._updateRow = function(oRecord, index) {
  * internal tracker.
  *
  * @method _select
- * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
+ * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element by
+ * reference or ID string, or array of HTML elements by reference or ID string.
  * @private
  */
 YAHOO.widget.DataTable.prototype._select = function(els) {
-//TODO: put els in an array if it is just one element?
+    if((els.constructor != Array) || (els.constructor.toString().indexOf("Array") > -1)) {
+        els = [els];
+    }
+
     for(var i=0; i<els.length; i++) {
         // Set the style
         YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
@@ -1823,7 +1836,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                                 oSelf.unselectAllRows();
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
-                            oSelf.select(newSelected);
+                            oSelf.selectRow(newSelected);
                             
                 }
             }
@@ -1853,7 +1866,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                                 oSelf.unselectAllRows();
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
-                            oSelf.select(newSelected);
+                            oSelf.selectRow(newSelected);
                 }
             }
             // cell mode
@@ -2614,6 +2627,52 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
 };
 
 /**
+ * Sets a row to the selected state.
+ *
+ * @method selectRow
+ * @param row {HTMLElement | String} HTML TR element reference or ID.
+ */
+YAHOO.widget.DataTable.prototype.selectRow = function(row) {
+    // Validate the row
+    if(row !== null && (typeof row != "undefined")) {
+        row = YAHOO.util.Dom.get(row);
+        if(row && (typeof row.yuiRecordId != "undefined") && (row.yuiRecordId !== null)) {
+            var recordId = row.yuiRecordId;
+
+            // Update internal tracker
+            var tracker = this._aSelectedRecords || [];
+            // Remove Record ID if already there...
+            if(tracker.length > 0) {
+                // ...using Array.indexOf if available...
+                if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
+                    tracker.splice(tracker.indexOf(recordId), 1);
+                }
+                // ...or do it the old-fashioned way
+                else {
+                    for(var i=0; i<tracker.length; i++) {
+                       if(tracker[i] === recordId) {
+                            tracker.splice(i, 1);
+                        }
+                    }
+                }
+            }
+
+            // Update UI
+            this._select(row);
+            
+            // Add to the end of internal tracker
+            tracker.push(recordId);
+            this._aSelectedRecords = tracker;
+
+            this.fireEvent("rowSelectEvent",{el:row, record:this._oRecordSet.getRecord(recordId)});
+            YAHOO.log("Row selected: ID=\"" + row.id + "\", " +
+                    "Record=" + this._oRecordSet.getRecord(recordId),
+                    "info",this.toString());
+        }
+    }
+};
+
+/**
  * Sets one or more elements to the highlighted state.
  *
  * @method highlight
@@ -3148,21 +3207,21 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
                 this.unselectAllRows();
                 if(startRow.sectionRowIndex < target.sectionRowIndex) {
                     for(i=startRow.sectionRowIndex; i<=target.sectionRowIndex; i++) {
-                        this.select(this._elBody.rows[i]);
+                        this.selectRow(this._elBody.rows[i]);
                     }
                 }
                 else {
                     for(i=target.sectionRowIndex; i<=startRow.sectionRowIndex; i++) {
-                        this.select(this._elBody.rows[i]);
+                        this.selectRow(this._elBody.rows[i]);
                     }
                 }
             }
             else {
-                this.select(target);
+                this.selectRow(target);
             }
         }
         else {
-            this.select(target);
+            this.selectRow(target);
         }
     }
 };

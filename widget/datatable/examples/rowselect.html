@@ -72,7 +72,10 @@ myDataSource1.responseSchema = {
 var myDataTable1 = new YAHOO.widget.DataTable("singleselect",myColumnSet1,myDataSource1,
         {caption:"Example: Row Single-Selection, First Row Selected By Default",rowSingleSelect:true});
 myDataTable1.subscribe("cellClickEvent",myDataTable1.onEventSelectRow);
+
+// Select the first row immediately
 myDataTable1.select(myDataTable1.getRow(0));
+
 
 
 // Multi select example
@@ -146,7 +149,11 @@ myDataSource1.responseSchema = {
 
 var myDataTable1 = new YAHOO.widget.DataTable("singleselect",myColumnSet1,myDataSource1,{caption:"Example: Row Single-Selection, First Row Selected By Default  ",rowSingleSelect:true});
 myDataTable1.subscribe("cellClickEvent",myDataTable1.onEventSelectRow);
+
+// Select the first row immediately
 myDataTable1.select(myDataTable1.getRow(0));
+
+
 
 
 // Multi select example
@@ -159,28 +166,8 @@ myDataSource2.responseSchema = {
     fields: ["Date","To","From","Subject","XID","Date","Attachment"]
 };
 
-var outputSelections = function(oArgs) {
-    var thisselection = oArgs.els;
-
-    thisselection = thisselection.join(", ");
-    YAHOO.log("This selection/unselection: " + thisselection);
-
-    var allrecords = this.getSelectedRecordIds();
-    allrecords = allrecords.join(", ");
-    YAHOO.log("All selected records: " + allrecords);
-
-    var allrows = this.getSelectedRows();
-    allrows = allrows.join(", ");
-    YAHOO.log("All selected rows: " + allrows);
-}
 var myDataTable2 = new YAHOO.widget.DataTable("multiselect",myColumnSet2,myDataSource2,{caption:"Example: Row Multi-Selection"});
 myDataTable2.subscribe("cellClickEvent",myDataTable2.onEventSelectRow);
-
-
-myDataTable1.subscribe("selectEvent",outputSelections);
-myDataTable1.subscribe("unselectEvent",outputSelections);
-myDataTable2.subscribe("selectEvent",outputSelections);
-myDataTable2.subscribe("unselectEvent",outputSelections);
 </script>
 <script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">
