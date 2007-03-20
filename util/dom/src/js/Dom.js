@@ -232,14 +232,23 @@ http://developer.yahoo.net/yui/license.txt
                 else { // safari, opera, & gecko
                     pos = [el.offsetLeft, el.offsetTop];
                     parentNode = el.offsetParent;
+
+                    // safari: if el is abs or any parent is abs, subtract body offsets
+                    var hasAbs = this.getStyle(el, 'position') == 'absolute';
+
                     if (parentNode != el) {
                         while (parentNode) {
                             pos[0] += parentNode.offsetLeft;
                             pos[1] += parentNode.offsetTop;
+                            if (isSafari && !hasAbs && 
+                                    this.getStyle(parentNode,'position') == 'absolute' ) {
+                                hasAbs = true; // we need to offset if any parent is absolutely positioned
+                            }
                             parentNode = parentNode.offsetParent;
                         }
                     }
-                    if (isSafari && this.getStyle(el, 'position') == 'absolute' ) { // safari doubles in some cases
+
+                    if (isSafari && hasAbs) { //safari doubles in this case
                         pos[0] -= document.body.offsetLeft;
                         pos[1] -= document.body.offsetTop;
                     } 
