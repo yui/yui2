@@ -108,12 +108,17 @@ http://developer.yahoo.net/yui/license.txt
                         }
                     }
                     break;
+                case 'float':
+                    property = 'styleFloat';
                 default:
                 el.style[property] = val;
             }
         };
     } else {
         setStyle = function(el, property, val) {
+            if (property == 'float') {
+                property = 'cssFloat';
+            }
             el.style[property] = val;
         };
     }
