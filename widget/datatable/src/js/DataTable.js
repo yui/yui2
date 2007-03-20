@@ -1444,7 +1444,7 @@ YAHOO.widget.DataTable.prototype._updateRow = function(oRecord, index) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._select = function(els) {
-    if((els.constructor != Array) || (els.constructor.toString().indexOf("Array") > -1)) {
+    if((els.constructor != Array) && (els.constructor.toString().indexOf("Array") == -1)) {
         els = [els];
     }
 
@@ -2680,7 +2680,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
  * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
  */
 YAHOO.widget.DataTable.prototype.highlight = function(els) {
-    if(els.constructor != Array) {
+    if((els.constructor != Array) && (els.constructor.toString().indexOf("Array") == -1)) {
         els = [els];
     }
     YAHOO.util.Dom.addClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
@@ -2695,7 +2695,7 @@ YAHOO.widget.DataTable.prototype.highlight = function(els) {
  * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
  */
 YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
-    if(els.constructor.toString().indexOf("Array") == -1) {
+    if((els.constructor != Array) && (els.constructor.toString().indexOf("Array") == -1)) {
         els = [els];
     }
     YAHOO.util.Dom.removeClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
@@ -2712,7 +2712,7 @@ YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
  */
 YAHOO.widget.DataTable.prototype.select = function(els) {
     if(els) {
-        if(els.constructor.toString().indexOf("Array") == -1) {
+        if((els.constructor != Array) && (els.constructor.toString().indexOf("Array") == -1)) {
             els = [els];
         }
         this._select(els);
@@ -2751,7 +2751,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
  */
 YAHOO.widget.DataTable.prototype.unselect = function(els) {
     if(els) {
-        if(els.constructor.toString().indexOf("Array") == -1) {
+        if((els.constructor != Array) && (els.constructor.toString().indexOf("Array") == -1)) {
             els = [els];
         }
         this._unselect(els);
@@ -2948,7 +2948,8 @@ YAHOO.widget.DataTable.prototype.paginateRows = function() {
         // Is the rows-per-page dropdowns enabled?
         var rowsPerPageDropdown = this.rowsPerPageDropdown;
         var dropdownEnabled = (rowsPerPageDropdown &&
-                (rowsPerPageDropdown.constructor.toString().indexOf("Array") > -1) &&
+                ((rowsPerPageDropdown.constructor == Array) ||
+                (rowsPerPageDropdown.constructor.toString().indexOf("Array") > -1)) &&
                 (rowsPerPageDropdown.length > 0));
 
         // Create pager container elements

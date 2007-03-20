@@ -953,7 +953,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         return null;
    }
 
-    if(jsonList.constructor.toString().indexOf("Array") == -1) {
+    if((jsonList.constructor != Array) && (jsonList.constructor.toString().indexOf("Array") == -1)) {
         jsonList = [jsonList];
     }
 

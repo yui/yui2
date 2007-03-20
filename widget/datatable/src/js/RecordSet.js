@@ -15,7 +15,7 @@ YAHOO.widget.RecordSet = function(data) {
     this._records = [];
     
     if(data) {
-        if(data.constructor.toString().indexOf("Array") > -1) {
+        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
             this.addRecords(data);
         }
         else if(data.constructor == Object) {
@@ -249,7 +249,7 @@ YAHOO.widget.RecordSet.prototype.addRecord = function(oObjectLiteral, index) {
  */
 YAHOO.widget.RecordSet.prototype.addRecords = function(data, index) {
     if(data) {
-        if(data.constructor.toString().indexOf("Array") > -1) {
+        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
             var newRecords = [];
             // Can't go backwards bc we need to preserve order
             for(var i=0; i<data.length; i++) {
@@ -276,7 +276,7 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(data, index) {
  */
 YAHOO.widget.RecordSet.prototype.append = function(data) {
     if(data) {
-        if(data.constructor.toString().indexOf("Array") > -1) {
+        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
             var newRecords = [];
             // Cant't go backwards bc we need to preserve order
             for(var i=0; i<data.length; i++) {
@@ -304,7 +304,7 @@ YAHOO.widget.RecordSet.prototype.append = function(data) {
  */
 YAHOO.widget.RecordSet.prototype.insert = function(data) {
     if(data) {
-        if(data.constructor.toString().indexOf("Array") > -1) {
+        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
             var newRecords = [];
             // Can't go backwards bc we need to preserve order
             for(var i=data.length-1; i>-1; i--) {
