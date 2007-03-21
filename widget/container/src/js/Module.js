@@ -47,7 +47,7 @@ YAHOO.widget.Module.IMG_ROOT_SSL = null;
 * @final
 * @type String
 */
-YAHOO.widget.Module.CSS_MODULE = "module";
+YAHOO.widget.Module.CSS_MODULE = "yui-module";
 
 /**
 * Constant representing the module header
