@@ -137,7 +137,7 @@ if ( location.protocol.substr( 0, 4 ) == "file" ) {
     // coming back to a page, and the back - or forward button depending on the
     // situation - is disabled...)
     try {
-        YAHOO.util.History.initialize( "../../../../build/history/assets/blank.html" );
+        YAHOO.util.History.initialize();
     } catch ( e ) {
         // The only exception that gets thrown here is when the browser is not A-grade.
         // Since scripting is enabled, we still try to provide the user with a better
