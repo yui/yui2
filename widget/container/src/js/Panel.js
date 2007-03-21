@@ -100,15 +100,41 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	};
 
 	this.showMaskEvent.subscribe(function() {
+
 		var checkFocusable = function(el) {
-			if ((el.tagName == "A" || el.tagName == "BUTTON" || el.tagName == "SELECT" || el.tagName == "INPUT" || el.tagName == "TEXTAREA") && el.type != "hidden") {
-				if (! YAHOO.util.Dom.isAncestor(me.element, el)) {
-					YAHOO.util.Event.addListener(el, "focus", doBlur, el, true);
-					return true;
-				}
-			} else {
-				return false;
-			}
+
+            var sTagName = el.tagName.toUpperCase(),
+                bFocusable = false;
+            
+            switch(sTagName) {
+            
+                case "A":
+                case "BUTTON":
+                case "SELECT":
+                case "TEXTAREA":
+
+                    if (! YAHOO.util.Dom.isAncestor(me.element, el)) {
+                        YAHOO.util.Event.addListener(el, "focus", doBlur, el, true);
+                        bFocusable = true;
+                    }
+
+                break;
+
+                case "INPUT":
+
+                    if (el.type != "hidden" && ! YAHOO.util.Dom.isAncestor(me.element, el)) {
+
+                        YAHOO.util.Event.addListener(el, "focus", doBlur, el, true);
+                        bFocusable = true;
+
+                    }
+
+                break;
+            
+            }
+
+            return bFocusable;
+
 		};
 
 		this.focusableElements = YAHOO.util.Dom.getElementsBy(checkFocusable);

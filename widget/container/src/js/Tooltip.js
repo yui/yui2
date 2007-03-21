@@ -303,7 +303,7 @@ YAHOO.widget.Tooltip.prototype.onContextMouseOut = function(e, obj) {
 YAHOO.widget.Tooltip.prototype.doShow = function(e, context) {
 
 	var yOffset = 25;
-	if (this.browser == "opera" && context.tagName == "A") {
+	if (this.browser == "opera" && context.tagName && context.tagName.toUpperCase() == "A") {
 		yOffset += 12;
 	}
 
