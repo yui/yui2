@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.1
-*/
-
 /**
 * Panel is an implementation of Overlay that behaves like an OS window, with a draggable header and an optional close icon at the top right.
 * @namespace YAHOO.widget
@@ -28,7 +21,7 @@ YAHOO.extend(YAHOO.widget.Panel, YAHOO.widget.Overlay);
 * @final
 * @type String
 */
-YAHOO.widget.Panel.CSS_PANEL = "panel";
+YAHOO.widget.Panel.CSS_PANEL = "yui-panel";
 
 /**
 * Constant representing the default CSS class used for a Panel's wrapping container
@@ -37,7 +30,7 @@ YAHOO.widget.Panel.CSS_PANEL = "panel";
 * @final
 * @type String
 */
-YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "panel-container";
+YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "yui-panel-container";
 
 /**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
@@ -48,13 +41,13 @@ YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "panel-container";
 */
 YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Panel.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
-	
+
 	this.beforeInitEvent.fire(YAHOO.widget.Panel);
 
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Panel.CSS_PANEL);
 
-	this.buildWrapper();			
-	
+	this.buildWrapper();
+
 	if (userConfig) {
 		this.cfg.applyConfig(userConfig, true);
 	}
@@ -85,7 +78,7 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 				return false;
 			}
 		};
-		
+
 		this.focusableElements = YAHOO.util.Dom.getElementsBy(checkFocusable);
 	}, this, true);
 
@@ -99,7 +92,6 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 	this.beforeShowEvent.subscribe(function() {
 		this.cfg.refireEvent("underlay");
 	}, this, true);
-
 	this.initEvent.fire(YAHOO.widget.Panel);
 };
 
@@ -142,7 +134,7 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @config close
 	* @type Boolean
 	* @default true
-	*/	
+	*/
 	this.cfg.addProperty("close", { value:true, handler:this.configClose, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
 	/**
@@ -150,7 +142,7 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @config draggable
 	* @type Boolean
 	* @default true
-	*/	
+	*/
 	this.cfg.addProperty("draggable", { value:true,	handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
 	/**
@@ -166,7 +158,7 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @config modal
 	* @type Boolean
 	* @default false
-	*/	
+	*/
 	this.cfg.addProperty("modal",	{ value:false, handler:this.configModal, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
 	/**
@@ -174,7 +166,7 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @config keylisteners
 	* @type YAHOO.util.KeyListener[]
 	* @default null
-	*/	
+	*/
 	this.cfg.addProperty("keylisteners", { handler:this.configKeyListeners, suppressEvent:true, supercedes:["visible"] } );
 };
 
@@ -196,18 +188,11 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 
 	if (val) {
 		if (! this.close) {
-			this.close = document.createElement("DIV");
-			YAHOO.util.Dom.addClass(this.close, "close");
-
-			if (this.isSecure) {
-				YAHOO.util.Dom.addClass(this.close, "secure");
-			} else {
-				YAHOO.util.Dom.addClass(this.close, "nonsecure");
-			}
-
+			this.close = document.createElement("span");
+			YAHOO.util.Dom.addClass(this.close, "container-close");
 			this.close.innerHTML = "&#160;";
 			this.innerElement.appendChild(this.close);
-			YAHOO.util.Event.addListener(this.close, "click", doHide, this);	
+			YAHOO.util.Event.addListener(this.close, "click", doHide, this);
 		} else {
 			this.close.style.display = "block";
 		}
@@ -258,11 +243,11 @@ YAHOO.widget.Panel.prototype.configUnderlay = function(type, args, obj) {
 			YAHOO.util.Dom.addClass(this.element, "shadow");
 
 			if (! this.underlay) { // create if not already in DOM
-				this.underlay = document.createElement("DIV");
+				this.underlay = document.createElement("div");
 				this.underlay.className = "underlay";
 				this.underlay.innerHTML = "&#160;";
 				this.element.appendChild(this.underlay);
-			} 
+			}
 
 			this.sizeUnderlay();
 			break;
@@ -354,10 +339,10 @@ YAHOO.widget.Panel.prototype.configKeyListeners = function(type, args, obj) {
 			}
 			if (! YAHOO.util.Config.alreadySubscribed(this.hideEvent, listeners.disable, listeners)) {
 				this.hideEvent.subscribe(listeners.disable, listeners, true);
-				this.destroyEvent.subscribe(listeners.disable, listeners, true); 
+				this.destroyEvent.subscribe(listeners.disable, listeners, true);
 			}
 		}
-	} 
+	}
 };
 
 /**
@@ -399,10 +384,10 @@ YAHOO.widget.Panel.prototype.configWidth = function(type, args, obj) {
 */
 YAHOO.widget.Panel.prototype.configzIndex = function(type, args, obj) {
 	YAHOO.widget.Panel.superclass.configzIndex.call(this, type, args, obj);
-	
+
 	var maskZ = 0;
 	var currentZ = YAHOO.util.Dom.getStyle(this.element, "zIndex");
-	
+
 	if (this.mask) {
 		if (! currentZ || isNaN(currentZ)) {
 			currentZ = 0;
@@ -420,6 +405,7 @@ YAHOO.widget.Panel.prototype.configzIndex = function(type, args, obj) {
 
 // END BUILT-IN PROPERTY EVENT HANDLERS //
 
+
 /**
 * Builds the wrapping container around the Panel that is used for positioning the shadow and matte underlays. The container element is assigned to a  local instance variable called container, and the element is reinserted inside of it.
 * @method buildWrapper
@@ -427,11 +413,11 @@ YAHOO.widget.Panel.prototype.configzIndex = function(type, args, obj) {
 YAHOO.widget.Panel.prototype.buildWrapper = function() {
 	var elementParent = this.element.parentNode;
 	var originalElement = this.element;
-	
-	var wrapper = document.createElement("DIV");
+
+	var wrapper = document.createElement("div");
 	wrapper.className = YAHOO.widget.Panel.CSS_PANEL_CONTAINER;
 	wrapper.id = originalElement.id + "_c";
-	
+
 	if (elementParent) {
 		elementParent.insertBefore(wrapper, originalElement);
 	}
@@ -461,7 +447,7 @@ YAHOO.widget.Panel.prototype.sizeUnderlay = function() {
 * @param {DOMEvent} e	The resize DOM event
 * @param {Object} obj	The scope object
 */
-YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) { 
+YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) {
 	YAHOO.widget.Panel.superclass.onDomResize.call(this, e, obj);
 	var me = this;
 	setTimeout(function() {
@@ -480,7 +466,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 		if (! this.header.id) {
 			this.header.id = this.id + "_h";
 		}
-		
+
 		var me = this;
 
 		this.dd.startDrag = function() {
@@ -518,7 +504,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 
 			me.dragEvent.fire("startDrag", arguments);
 		};
-		
+
 		this.dd.onDrag = function() {
 			me.syncPosition();
 			me.cfg.refireEvent("iframe");
@@ -550,7 +536,7 @@ YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 */
 YAHOO.widget.Panel.prototype.buildMask = function() {
 	if (! this.mask) {
-		this.mask = document.createElement("DIV");
+		this.mask = document.createElement("div");
 		this.mask.id = this.id + "_mask";
 		this.mask.className = "mask";
 		this.mask.innerHTML = "&#160;";
@@ -608,7 +594,7 @@ YAHOO.widget.Panel.prototype.sizeMask = function() {
 * Renders the Panel by inserting the elements that are not already in the main Panel into their correct places. Optionally appends the Panel to the specified node prior to the render's execution. NOTE: For Panels without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
 * @method render
 * @param {String}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
-* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering	
+* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering
 * @return {boolean} Success or failure of the render
 */
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
@@ -619,7 +605,7 @@ YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 * Returns a String representation of the object.
 * @method toString
 * @return {String} The string representation of the Panel.
-*/ 
+*/
 YAHOO.widget.Panel.prototype.toString = function() {
 	return "Panel " + this.id;
 };

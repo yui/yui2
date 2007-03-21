@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * SimpleDialog is a simple implementation of Dialog that can be used to submit a single value. Forms can be processed in 3 ways -- via an asynchronous Connection utility call, a simple form POST or GET, or manually.
 * @namespace YAHOO.widget
@@ -28,7 +21,7 @@ YAHOO.extend(YAHOO.widget.SimpleDialog, YAHOO.widget.Dialog);
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_BLOCK = "nt/ic/ut/bsc/blck16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_BLOCK = "blckicon";
 
 /**
 * Constant for the standard network icon for alarm
@@ -37,7 +30,7 @@ YAHOO.widget.SimpleDialog.ICON_BLOCK = "nt/ic/ut/bsc/blck16_1.gif";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_ALARM = "nt/ic/ut/bsc/alrt16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_ALARM = "alrticon";
 
 /**
 * Constant for the standard network icon for help
@@ -46,7 +39,7 @@ YAHOO.widget.SimpleDialog.ICON_ALARM = "nt/ic/ut/bsc/alrt16_1.gif";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_HELP  = "nt/ic/ut/bsc/hlp16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_HELP  = "hlpicon";
 
 /**
 * Constant for the standard network icon for info
@@ -55,7 +48,7 @@ YAHOO.widget.SimpleDialog.ICON_HELP  = "nt/ic/ut/bsc/hlp16_1.gif";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_INFO  = "nt/ic/ut/bsc/info16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_INFO  = "infoicon";
 
 /**
 * Constant for the standard network icon for warn
@@ -64,7 +57,7 @@ YAHOO.widget.SimpleDialog.ICON_INFO  = "nt/ic/ut/bsc/info16_1.gif";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_WARN  = "nt/ic/ut/bsc/warn16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_WARN  = "warnicon";
 
 /**
 * Constant for the standard network icon for a tip
@@ -73,7 +66,7 @@ YAHOO.widget.SimpleDialog.ICON_WARN  = "nt/ic/ut/bsc/warn16_1.gif";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.ICON_TIP   = "nt/ic/ut/bsc/tip16_1.gif";
+YAHOO.widget.SimpleDialog.ICON_TIP   = "tipicon";
 
 /**
 * Constant representing the default CSS class used for a SimpleDialog
@@ -82,7 +75,7 @@ YAHOO.widget.SimpleDialog.ICON_TIP   = "nt/ic/ut/bsc/tip16_1.gif";
 * @final
 * @type String
 */
-YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "simple-dialog";
+YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "yui-simple-dialog";
 
 /**
 * Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
@@ -100,7 +93,7 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 	* @default "none"
 	*/
 	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
-	
+
 	/**
 	* Sets the text for the SimpleDialog
 	* @config text
@@ -161,7 +154,12 @@ YAHOO.widget.SimpleDialog.prototype.registerForm = function() {
 YAHOO.widget.SimpleDialog.prototype.configIcon = function(type,args,obj) {
 	var icon = args[0];
 	if (icon && icon != "none") {
-		var iconHTML = "<img src=\"" + this.imageRoot + icon + "\" class=\"icon\" />";
+		var iconHTML = "";
+		if (icon.indexOf(".") == -1) {
+			iconHTML = "<span class=\"yui-icon " + icon +"\" >&#160;</span>";
+		} else {
+			iconHTML = "<img src=\"" + this.imageRoot + icon + "\" class=\"yui-icon\" />";
+		}
 		this.body.innerHTML = iconHTML + this.body.innerHTML;
 	}
 };
@@ -186,7 +184,7 @@ YAHOO.widget.SimpleDialog.prototype.configText = function(type,args,obj) {
 * Returns a string representation of the object.
 * @method toString
 * @return {String}	The string representation of the SimpleDialog
-*/ 
+*/
 YAHOO.widget.SimpleDialog.prototype.toString = function() {
 	return "SimpleDialog " + this.id;
 };

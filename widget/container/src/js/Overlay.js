@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 * Overlay is a Module that is absolutely positioned above the page flow. It has convenience methods for positioning and sizing, as well as options for controlling zIndex and constraining the Overlay's position to the current visible viewport. Overlay also contains a dynamicly generated IFRAME which is placed beneath it for Internet Explorer 6 and 5.x so that it will be properly rendered above SELECT elements.
 * @namespace YAHOO.widget
@@ -73,7 +66,7 @@ YAHOO.widget.Overlay.BOTTOM_RIGHT = "br";
 * @final
 * @type String
 */
-YAHOO.widget.Overlay.CSS_OVERLAY = "overlay";
+YAHOO.widget.Overlay.CSS_OVERLAY = "yui-overlay";
 
 /**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
@@ -84,7 +77,7 @@ YAHOO.widget.Overlay.CSS_OVERLAY = "overlay";
 */
 YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 	YAHOO.widget.Overlay.superclass.init.call(this, el/*, userConfig*/);  // Note that we don't pass the user config in here yet because we only want it executed once, at the lowest subclass level
-	
+
 	this.beforeInitEvent.fire(YAHOO.widget.Overlay);
 
 	YAHOO.util.Dom.addClass(this.element, YAHOO.widget.Overlay.CSS_OVERLAY);
@@ -103,6 +96,7 @@ YAHOO.widget.Overlay.prototype.init = function(el, userConfig) {
 	}
 
 	this.initEvent.fire(YAHOO.widget.Overlay);
+
 };
 
 /**
@@ -143,7 +137,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @config x
 	* @type Number
 	* @default null
-	*/	
+	*/
 	this.cfg.addProperty("x", { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
@@ -151,7 +145,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @config y
 	* @type Number
 	* @default null
-	*/	
+	*/
 	this.cfg.addProperty("y", { handler:this.configY, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
@@ -159,7 +153,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @config xy
 	* @type Number[]
 	* @default null
-	*/	
+	*/
 	this.cfg.addProperty("xy",{ handler:this.configXY, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
@@ -167,7 +161,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @config context
 	* @type Array
 	* @default null
-	*/	
+	*/
 	this.cfg.addProperty("context",	{ handler:this.configContext, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
@@ -260,21 +254,20 @@ YAHOO.widget.Overlay.prototype.showMacGeckoScrollbars = function() {
 */
 YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 	var visible = args[0];
-
 	var currentVis = YAHOO.util.Dom.getStyle(this.element, "visibility");
 
-	if (currentVis == "inherit") { 
+	if (currentVis == "inherit") {
 		var e = this.element.parentNode;
 		while (e.nodeType != 9 && e.nodeType != 11) {
 			currentVis = YAHOO.util.Dom.getStyle(e, "visibility");
 			if (currentVis != "inherit") { break; }
 			e = e.parentNode;
 		}
-		if (currentVis == "inherit") { 
+		if (currentVis == "inherit") {
 			currentVis = "visible";
 		}
 	}
-	
+
 	var effect = this.cfg.getProperty("effect");
 
 	var effectInstances = [];
@@ -294,7 +287,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 	if (visible) { // Show
 		if (isMacGecko) {
 			this.showMacGeckoScrollbars();
-		}	
+		}
 
 		if (effect) { // Animate in
 			if (visible) { // Animate in if not showing
@@ -321,14 +314,14 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 	} else { // Hide
 		if (isMacGecko) {
 			this.hideMacGeckoScrollbars();
-		}	
+		}
 
 		if (effect) { // Animate out if showing
 			if (currentVis == "visible") {
 				this.beforeHideEvent.fire();
 				for (var k=0;k<effectInstances.length;k++) {
 					var h = effectInstances[k];
-					if (k === 0 && ! YAHOO.util.Config.alreadySubscribed(h.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {				
+					if (k === 0 && ! YAHOO.util.Config.alreadySubscribed(h.animateOutCompleteEvent,this.hideEvent.fire,this.hideEvent)) {
 						h.animateOutCompleteEvent.subscribe(this.hideEvent.fire,this.hideEvent,true); // Delegate hideEvent until end of animateOutComplete
 					}
 					h.animateOut();
@@ -343,7 +336,7 @@ YAHOO.widget.Overlay.prototype.configVisible = function(type, args, obj) {
 				this.cfg.refireEvent("iframe");
 				this.hideEvent.fire();
 			}
-		}	
+		}
 	}
 };
 
@@ -369,11 +362,11 @@ YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 
 	if (val) {
 		this.center();
-			
+
 		if (! YAHOO.util.Config.alreadySubscribed(this.beforeShowEvent, this.center, this)) {
 			this.beforeShowEvent.subscribe(this.center, this, true);
 		}
-		
+
 		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowResizeEvent, this.doCenterOnDOMEvent, this)) {
 			YAHOO.widget.Overlay.windowResizeEvent.subscribe(this.doCenterOnDOMEvent, this, true);
 		}
@@ -465,6 +458,8 @@ YAHOO.widget.Overlay.prototype.configXY = function(type, args, obj) {
 	x = this.cfg.getProperty("x");
 	y = this.cfg.getProperty("y");
 
+	YAHOO.log("xy: " + [x,y], "iframe");
+
 	this.cfg.refireEvent("iframe");
 	this.moveEvent.fire([x,y]);
 };
@@ -489,7 +484,7 @@ YAHOO.widget.Overlay.prototype.configX = function(type, args, obj) {
 	y = this.cfg.getProperty("y");
 
 	YAHOO.util.Dom.setX(this.element, x, true);
-	
+
 	this.cfg.setProperty("xy", [x, y], true);
 
 	this.cfg.refireEvent("iframe");
@@ -572,13 +567,15 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 			y = this.cfg.getProperty("y");
 		}
 
+		YAHOO.log("iframe positioning to: " + [x,y], "iframe");
+
 		if (! isNaN(x) && ! isNaN(y)) {
 			if (! this.iframe) {
 				this.iframe = document.createElement("iframe");
 				if (this.isSecure) {
 					this.iframe.src = YAHOO.widget.Overlay.IFRAME_SRC;
 				}
-				
+
 				var parent = this.element.parentNode;
 				if (parent) {
 					parent.appendChild(this.iframe);
@@ -597,7 +594,7 @@ YAHOO.widget.Overlay.prototype.configIframe = function(type, args, obj) {
 					this.hideIframe();
 				}
 			}
-			
+
 			var iframeDisplay = YAHOO.util.Dom.getStyle(this.iframe, "display");
 
 			if (iframeDisplay == "none") {
@@ -663,11 +660,11 @@ YAHOO.widget.Overlay.prototype.configContext = function(type, args, obj) {
 			if (typeof contextEl == "string") {
 				this.cfg.setProperty("context", [document.getElementById(contextEl),elementMagnetCorner,contextMagnetCorner], true);
 			}
-			
+
 			if (elementMagnetCorner && contextMagnetCorner) {
 				this.align(elementMagnetCorner, contextMagnetCorner);
 			}
-		}	
+		}
 	}
 };
 
@@ -684,7 +681,7 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 	var contextArgs = this.cfg.getProperty("context");
 	if (contextArgs) {
 		var context = contextArgs[0];
-		
+
 		var element = this.element;
 		var me = this;
 
@@ -697,7 +694,6 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 		}
 
 		if (element && context) {
-
 			var contextRegion = YAHOO.util.Dom.getRegion(context);
 
 			var doAlign = function(v,h) {
@@ -723,7 +719,7 @@ YAHOO.widget.Overlay.prototype.align = function(elementAlign, contextAlign) {
 					break;
 				case YAHOO.widget.Overlay.TOP_RIGHT:
 					doAlign(contextRegion.top, contextRegion.right);
-					break;		
+					break;
 				case YAHOO.widget.Overlay.BOTTOM_LEFT:
 					doAlign(contextRegion.bottom, contextRegion.left);
 					break;
@@ -761,7 +757,7 @@ YAHOO.widget.Overlay.prototype.enforceConstraints = function(type, args, obj) {
 	var leftConstraint = scrollX + 10;
 	var bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10;
 	var rightConstraint = scrollX + viewPortWidth - offsetWidth - 10;
-	
+
 	if (x < leftConstraint) {
 		x = leftConstraint;
 	} else if (x > rightConstraint) {
@@ -795,7 +791,7 @@ YAHOO.widget.Overlay.prototype.center = function() {
 
 	var x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX;
 	var y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
-		
+
 	this.cfg.setProperty("xy", [parseInt(x, 10), parseInt(y, 10)]);
 
 	this.cfg.refireEvent("iframe");
@@ -836,20 +832,20 @@ YAHOO.widget.Overlay.prototype.destroy = function() {
 	if (this.iframe) {
 		this.iframe.parentNode.removeChild(this.iframe);
 	}
-	
+
 	this.iframe = null;
 
 	YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 	YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 
-	YAHOO.widget.Overlay.superclass.destroy.call(this);  
+	YAHOO.widget.Overlay.superclass.destroy.call(this);
 };
 
 /**
 * Returns a String representation of the object.
 * @method toString
 * @return {String} The string representation of the Overlay.
-*/ 
+*/
 YAHOO.widget.Overlay.prototype.toString = function() {
 	return "Overlay " + this.id;
 };
@@ -915,4 +911,4 @@ if (YAHOO.widget.Overlay._initialized === null) {
 	YAHOO.util.Event.addListener(window, "resize", YAHOO.widget.Overlay.windowResizeHandler);
 
 	YAHOO.widget.Overlay._initialized = true;
-}	
+}

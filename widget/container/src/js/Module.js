@@ -1,10 +1,3 @@
-/*
-Copyright (c) 2006, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-Version 0.12.2
-*/
-
 /**
 *  The Container family of components is designed to enable developers to create different kinds of content-containing modules on the web. Module and Overlay are the most basic containers, and they can be used directly or extended to build custom containers. Also part of the Container family are four UI controls that extend Module and Overlay: Tooltip, Panel, Dialog, and SimpleDialog.
 * @module container
@@ -22,8 +15,10 @@ Version 0.12.2
 * @param {Object} userConfig	The configuration Object literal containing the configuration that should be set for this module. See configuration documentation for more details.
 */
 YAHOO.widget.Module = function(el, userConfig) {
-	if (el) { 
-		this.init(el, userConfig); 
+	if (el) {
+		this.init(el, userConfig);
+	} else {
+		YAHOO.log("No element or element ID specified for Module instantiation", "error");
 	}
 };
 
@@ -34,7 +29,7 @@ YAHOO.widget.Module = function(el, userConfig) {
 * @final
 * @type String
 */
-YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
+YAHOO.widget.Module.IMG_ROOT = null;
 
 /**
 * Constant representing the prefix path to use for securely served images
@@ -43,7 +38,7 @@ YAHOO.widget.Module.IMG_ROOT = "http://us.i1.yimg.com/us.yimg.com/i/";
 * @final
 * @type String
 */
-YAHOO.widget.Module.IMG_ROOT_SSL = "https://a248.e.akamai.net/sec.yimg.com/i/";
+YAHOO.widget.Module.IMG_ROOT_SSL = null;
 
 /**
 * Constant for the default CSS class name that represents a Module
@@ -94,7 +89,7 @@ YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
 * Singleton CustomEvent fired when the font size is changed in the browser.
 * Opera's "zoom" functionality currently does not support text size detection.
 * @event YAHOO.widget.Module.textResizeEvent
-*/	
+*/
 YAHOO.widget.Module.textResizeEvent = new YAHOO.util.CustomEvent("textResize");
 
 YAHOO.widget.Module.prototype = {
@@ -110,7 +105,7 @@ YAHOO.widget.Module.prototype = {
 	* @property element
 	* @type HTMLElement
 	*/
-	element : null, 
+	element : null,
 
 	/**
 	* The header element, denoted with CSS class "hd"
@@ -146,7 +141,7 @@ YAHOO.widget.Module.prototype = {
 	* @type String
 	*/
 	imageRoot : YAHOO.widget.Module.IMG_ROOT,
-		
+
 	/**
 	* Initializes the custom events for Module which are fired automatically at appropriate times by the Module class.
 	* @method initEvents
@@ -164,7 +159,7 @@ YAHOO.widget.Module.prototype = {
 		* CustomEvent fired after class initalization.
 		* @event initEvent
 		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
-		*/		
+		*/
 		this.initEvent = new YAHOO.util.CustomEvent("init");
 
 		/**
@@ -184,21 +179,21 @@ YAHOO.widget.Module.prototype = {
 		* @event renderEvent
 		*/
 		this.renderEvent = new YAHOO.util.CustomEvent("render");
-	
+
 		/**
 		* CustomEvent fired when the header content of the Module is modified
 		* @event changeHeaderEvent
 		* @param {String/HTMLElement} content	String/element representing the new header content
 		*/
 		this.changeHeaderEvent = new YAHOO.util.CustomEvent("changeHeader");
-		
+
 		/**
 		* CustomEvent fired when the body content of the Module is modified
 		* @event changeBodyEvent
 		* @param {String/HTMLElement} content	String/element representing the new body content
-		*/		
+		*/
 		this.changeBodyEvent = new YAHOO.util.CustomEvent("changeBody");
-		
+
 		/**
 		* CustomEvent fired when the footer content of the Module is modified
 		* @event changeFooterEvent
@@ -217,7 +212,7 @@ YAHOO.widget.Module.prototype = {
 		* @event destroyEvent
 		*/
 		this.destroyEvent = new YAHOO.util.CustomEvent("destroy");
-		
+
 		/**
 		* CustomEvent fired before the Module is shown
 		* @event beforeShowEvent
@@ -241,7 +236,7 @@ YAHOO.widget.Module.prototype = {
 		* @event hideEvent
 		*/
 		this.hideEvent = new YAHOO.util.CustomEvent("hide");
-	}, 
+	},
 
 	/**
 	* String representing the current user-agent platform
@@ -299,7 +294,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	initDefaultConfig : function() {
 		// Add properties //
-		
+
 		/**
 		* Specifies whether the Module is visible on the page.
 		* @config visible
@@ -307,7 +302,7 @@ YAHOO.widget.Module.prototype = {
 		* @default true
 		*/
 		this.cfg.addProperty("visible", { value:true, handler:this.configVisible, validator:this.cfg.checkBoolean } );
-		
+
 		/**
 		* Object or array of objects representing the ContainerEffect classes that are active for animating the container.
 		* @config effect
@@ -315,7 +310,7 @@ YAHOO.widget.Module.prototype = {
 		* @default null
 		*/
 		this.cfg.addProperty("effect", { suppressEvent:true, supercedes:["visible"] } );
-		
+
 		/**
 		* Specifies whether to create a special proxy iframe to monitor for user font resizing in the document
 		* @config monitorresize
@@ -344,7 +339,7 @@ YAHOO.widget.Module.prototype = {
 		* @type YAHOO.util.Config
 		*/
 		this.cfg = new YAHOO.util.Config(this);
-		
+
 		if (this.isSecure) {
 			this.imageRoot = YAHOO.widget.Module.IMG_ROOT_SSL;
 		}
@@ -354,16 +349,16 @@ YAHOO.widget.Module.prototype = {
 
 			el = document.getElementById(el);
 			if (! el) {
-				el = document.createElement("DIV");
+				el = document.createElement("div");
 				el.id = elId;
 			}
 		}
 
 		this.element = el;
-		
+
 		if (el.id) {
 			this.id = el.id;
-		} 
+		}
 
 		var childNodes = this.element.childNodes;
 
@@ -410,61 +405,56 @@ YAHOO.widget.Module.prototype = {
         if(this.browser != "opera") {
 
             var resizeMonitor = document.getElementById("_yuiResizeMonitor");
-    
+
             if (! resizeMonitor) {
-    
+
                 resizeMonitor = document.createElement("iframe");
-    
+
                 var bIE = (this.browser.indexOf("ie") === 0);
-    
-                if(this.isSecure && 
-                   YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && 
-                   bIE) {
-    
-                  resizeMonitor.src = 
-                       YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL;
-    
-                }                
+
+                if(this.isSecure && YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL && bIE) {
+                   resizeMonitor.src = YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL;
+                }
 
                 resizeMonitor.id = "_yuiResizeMonitor";
                 resizeMonitor.style.visibility = "hidden";
-                
+
                 document.body.appendChild(resizeMonitor);
-    
+
                 resizeMonitor.style.width = "10em";
                 resizeMonitor.style.height = "10em";
                 resizeMonitor.style.position = "absolute";
-                
-                var nLeft = -1 * resizeMonitor.offsetWidth,
-                    nTop = -1 * resizeMonitor.offsetHeight;
-    
+
+                var nLeft = -1 * resizeMonitor.offsetWidth;
+                var nTop = -1 * resizeMonitor.offsetHeight;
+
                 resizeMonitor.style.top = nTop + "px";
-                resizeMonitor.style.left =  nLeft + "px";
+                resizeMonitor.style.left = nLeft + "px";
                 resizeMonitor.style.borderStyle = "none";
                 resizeMonitor.style.borderWidth = "0";
                 YAHOO.util.Dom.setStyle(resizeMonitor, "opacity", "0");
-                
+
                 resizeMonitor.style.visibility = "visible";
-    
+
                 if(!bIE) {
-    
+
                     var doc = resizeMonitor.contentWindow.document;
-    
+
                     doc.open();
                     doc.close();
-                
+
                 }
             }
-    
+
 			var fireTextResize = function() {
 				YAHOO.widget.Module.textResizeEvent.fire();
 			};
 
             if(resizeMonitor && resizeMonitor.contentWindow) {
                 this.resizeMonitor = resizeMonitor;
-				
+
 				YAHOO.widget.Module.textResizeEvent.subscribe(this.onDomResize, this, true);
-				
+
 				if (! YAHOO.widget.Module.textResizeInitialized) {
 					if (! YAHOO.util.Event.addListener(this.resizeMonitor.contentWindow, "resize", fireTextResize)) {
 						// This will fail in IE if document.domain has changed, so we must change the listener to
@@ -474,7 +464,7 @@ YAHOO.widget.Module.prototype = {
 					YAHOO.widget.Module.textResizeInitialized = true;
 				}
             }
-        
+
         }
 
 	},
@@ -485,13 +475,14 @@ YAHOO.widget.Module.prototype = {
 	* @param {DOMEvent} e	The DOM resize event
 	* @param {Object} obj	The scope object passed to the handler
 	*/
-	onDomResize : function(e, obj) { 
+	onDomResize : function(e, obj) {
+
         var nLeft = -1 * this.resizeMonitor.offsetWidth,
             nTop = -1 * this.resizeMonitor.offsetHeight;
-        
+
         this.resizeMonitor.style.top = nTop + "px";
         this.resizeMonitor.style.left =  nLeft + "px";
-	
+
 	},
 
 	/**
@@ -499,13 +490,13 @@ YAHOO.widget.Module.prototype = {
 	* @method setHeader
 	* @param {String}	headerContent	The HTML used to set the header <em>OR</em>
 	* @param {HTMLElement}	headerContent	The HTMLElement to append to the header
-	*/	
+	*/
 	setHeader : function(headerContent) {
 		if (! this.header) {
-			this.header = document.createElement("DIV");
+			this.header = document.createElement("div");
 			this.header.className = YAHOO.widget.Module.CSS_HEADER;
 		}
-		
+
 		if (typeof headerContent == "string") {
 			this.header.innerHTML = headerContent;
 		} else {
@@ -521,13 +512,13 @@ YAHOO.widget.Module.prototype = {
 	* Appends the passed element to the header. If no header is present, one will be automatically created.
 	* @method appendToHeader
 	* @param {HTMLElement}	element	The element to append to the header
-	*/	
+	*/
 	appendToHeader : function(element) {
 		if (! this.header) {
-			this.header = document.createElement("DIV");
+			this.header = document.createElement("div");
 			this.header.className = YAHOO.widget.Module.CSS_HEADER;
 		}
-		
+
 		this.header.appendChild(element);
 		this.changeHeaderEvent.fire(element);
 		this.changeContentEvent.fire();
@@ -538,10 +529,10 @@ YAHOO.widget.Module.prototype = {
 	* @method setBody
 	* @param {String}	bodyContent	The HTML used to set the body <em>OR</em>
 	* @param {HTMLElement}	bodyContent	The HTMLElement to append to the body
-	*/		
+	*/
 	setBody : function(bodyContent) {
 		if (! this.body) {
-			this.body = document.createElement("DIV");
+			this.body = document.createElement("div");
 			this.body.className = YAHOO.widget.Module.CSS_BODY;
 		}
 
@@ -564,7 +555,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	appendToBody : function(element) {
 		if (! this.body) {
-			this.body = document.createElement("DIV");
+			this.body = document.createElement("div");
 			this.body.className = YAHOO.widget.Module.CSS_BODY;
 		}
 
@@ -578,10 +569,10 @@ YAHOO.widget.Module.prototype = {
 	* @method setFooter
 	* @param {String}	footerContent	The HTML used to set the footer <em>OR</em>
 	* @param {HTMLElement}	footerContent	The HTMLElement to append to the footer
-	*/	
+	*/
 	setFooter : function(footerContent) {
 		if (! this.footer) {
-			this.footer = document.createElement("DIV");
+			this.footer = document.createElement("div");
 			this.footer.className = YAHOO.widget.Module.CSS_FOOTER;
 		}
 
@@ -603,7 +594,7 @@ YAHOO.widget.Module.prototype = {
 	*/
 	appendToFooter : function(element) {
 		if (! this.footer) {
-			this.footer = document.createElement("DIV");
+			this.footer = document.createElement("div");
 			this.footer.className = YAHOO.widget.Module.CSS_FOOTER;
 		}
 
@@ -616,8 +607,8 @@ YAHOO.widget.Module.prototype = {
 	* Renders the Module by inserting the elements that are not already in the main Module into their correct places. Optionally appends the Module to the specified node prior to the render's execution. NOTE: For Modules without existing markup, the appendToNode argument is REQUIRED. If this argument is ommitted and the current element is not present in the document, the function will return false, indicating that the render was a failure.
 	* @method render
 	* @param {String}	appendToNode	The element id to which the Module should be appended to prior to rendering <em>OR</em>
-	* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering	
-	* @param {HTMLElement}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container. 
+	* @param {HTMLElement}	appendToNode	The element to which the Module should be appended to prior to rendering
+	* @param {HTMLElement}	moduleElement	OPTIONAL. The element that represents the actual Standard Module container.
 	* @return {Boolean} Success or failure of the render
 	*/
 	render : function(appendToNode, moduleElement) {
@@ -632,7 +623,7 @@ YAHOO.widget.Module.prototype = {
 			if (typeof element == "string") {
 				element = document.getElementById(element);
 			}
-			
+
 			if (element) {
 				element.appendChild(me.element);
 				me.appendEvent.fire();
@@ -643,12 +634,13 @@ YAHOO.widget.Module.prototype = {
 			appendTo(appendToNode);
 		} else { // No node was passed in. If the element is not pre-marked up, this fails
 			if (! YAHOO.util.Dom.inDocument(this.element)) {
+				YAHOO.log("Render failed. Must specify appendTo node if Module isn't already in the DOM.", "error");
 				return false;
 			}
 		}
 
 		// Need to get everything into the DOM if it isn't already
-		
+
 		if (this.header && ! YAHOO.util.Dom.inDocument(this.header)) {
 			// There is a header, but it's not in the DOM yet... need to add it
 			var firstChild = moduleElement.firstChild;
@@ -769,7 +761,7 @@ YAHOO.widget.Module.prototype = {
 * Returns a String representation of the Object.
 * @method toString
 * @return {String}	The string representation of the Module
-*/ 
+*/
 YAHOO.widget.Module.prototype.toString = function() {
 	return "Module " + this.id;
 };
