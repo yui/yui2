@@ -24,6 +24,24 @@ YAHOO.extend(YAHOO.widget.Tooltip, YAHOO.widget.Overlay);
 YAHOO.widget.Tooltip.CSS_TOOLTIP = "yui-tt";
 
 /**
+* Constant representing the Tooltip's configuration properties
+* @property YAHOO.widget.Tooltip.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.Tooltip.DEFAULT_CONFIG = {
+
+    "PREVENT_OVERLAP": "preventoverlap",
+    "SHOW_DELAY": "showdelay", 
+    "AUTO_DISMISS_DELAY": "autodismissdelay", 
+    "HIDE_DELAY": "hidedelay", 
+    "TEXT": "text", 
+    "CONTAINER": "container" 
+
+};
+
+/**
 * The Tooltip initialization method. This method is automatically called by the constructor. A Tooltip is automatically rendered by the init method, and it also is set to be invisible by default, and constrained to viewport by default as well.
 * @method init
 * @param {String}	el	The element ID representing the Tooltip <em>OR</em>
@@ -72,7 +90,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type Boolean
 	* @default true
 	*/
-	this.cfg.addProperty("preventoverlap",		{ value:true, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
+	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.PREVENT_OVERLAP,		{ value:true, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
 
 	/**
 	* The number of milliseconds to wait before showing a Tooltip on mouseover.
@@ -80,7 +98,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default 200
 	*/
-	this.cfg.addProperty("showdelay",			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.SHOW_DELAY,			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
 
 	/**
 	* The number of milliseconds to wait before automatically dismissing a Tooltip after the mouse has been resting on the context element.
@@ -88,7 +106,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default 5000
 	*/
-	this.cfg.addProperty("autodismissdelay",	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.AUTO_DISMISS_DELAY,	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
 
 	/**
 	* The number of milliseconds to wait before hiding a Tooltip on mouseover.
@@ -96,7 +114,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default 250
 	*/
-	this.cfg.addProperty("hidedelay",			{ value:250, handler:this.configHideDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.HIDE_DELAY,			{ value:250, handler:this.configHideDelay, validator:this.cfg.checkNumber } );
 
 	/**
 	* Specifies the Tooltip's text.
@@ -104,7 +122,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default null
 	*/
-	this.cfg.addProperty("text",				{ handler:this.configText, suppressEvent:true } );
+	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.TEXT,				{ handler:this.configText, suppressEvent:true } );
 
 	/**
 	* Specifies the container element that the Tooltip's markup should be rendered into.
@@ -112,14 +130,14 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type HTMLElement/String
 	* @default document.body
 	*/
-	this.cfg.addProperty("container",			{ value:document.body, handler:this.configContainer } );
+	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.CONTAINER,			{ value:document.body, handler:this.configContainer } );
 
 	/**
 	* Specifies the element or elements that the Tooltip should be anchored to on mouseover.
 	* @config context
 	* @type HTMLElement[]/String[]
 	* @default null
-	*/
+	*/	
 
 };
 

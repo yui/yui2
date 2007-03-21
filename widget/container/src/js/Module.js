@@ -92,6 +92,47 @@ YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL = "javascript:false;";
 */
 YAHOO.widget.Module.textResizeEvent = new YAHOO.util.CustomEvent("textResize");
 
+/**
+* Constant representing the name of the Module's events
+* @property YAHOO.widget.Module.EVENTS
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.Module.EVENTS = {
+
+    "BEFORE_INIT": "beforeInit",
+    "INIT": "init",
+    "APPEND": "append",
+    "BEFORE_RENDER": "beforeRender",
+    "RENDER": "render",
+    "CHANGE_HEADER": "changeHeader",
+    "CHANGE_BODY": "changeBody",
+    "CHANGE_FOOTER": "changeFooter",
+    "CHANGE_CONTENT": "changeContent",
+    "DESTORY": "destroy",
+    "BEFORE_SHOW": "beforeShow",
+    "SHOW": "show",
+    "BEFORE_HIDE": "beforeHide",
+    "HIDE": "hide"
+
+};
+
+/**
+* Constant representing the Module's configuration properties
+* @property YAHOO.widget.Module.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.Module.DEFAULT_CONFIG = {
+
+    "VISIBLE": "visible",
+    "EFFECT": "effect",
+    "MONITOR_RESIZE": "monitorresize"
+
+};
+
 YAHOO.widget.Module.prototype = {
 	/**
 	* The class's constructor function
@@ -153,90 +194,90 @@ YAHOO.widget.Module.prototype = {
 		* @event beforeInitEvent
 		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
 		*/
-		this.beforeInitEvent = new YAHOO.util.CustomEvent("beforeInit");
+		this.beforeInitEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_INIT);
 
 		/**
 		* CustomEvent fired after class initalization.
 		* @event initEvent
 		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
-		*/
-		this.initEvent = new YAHOO.util.CustomEvent("init");
+		*/		
+		this.initEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.INIT);
 
 		/**
 		* CustomEvent fired when the Module is appended to the DOM
 		* @event appendEvent
 		*/
-		this.appendEvent = new YAHOO.util.CustomEvent("append");
+		this.appendEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.APPEND);
 
 		/**
 		* CustomEvent fired before the Module is rendered
 		* @event beforeRenderEvent
 		*/
-		this.beforeRenderEvent = new YAHOO.util.CustomEvent("beforeRender");
+		this.beforeRenderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_RENDER);
 
 		/**
 		* CustomEvent fired after the Module is rendered
 		* @event renderEvent
 		*/
-		this.renderEvent = new YAHOO.util.CustomEvent("render");
-
+		this.renderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.RENDER);
+	
 		/**
 		* CustomEvent fired when the header content of the Module is modified
 		* @event changeHeaderEvent
 		* @param {String/HTMLElement} content	String/element representing the new header content
 		*/
-		this.changeHeaderEvent = new YAHOO.util.CustomEvent("changeHeader");
-
+		this.changeHeaderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_HEADER);
+		
 		/**
 		* CustomEvent fired when the body content of the Module is modified
 		* @event changeBodyEvent
 		* @param {String/HTMLElement} content	String/element representing the new body content
-		*/
-		this.changeBodyEvent = new YAHOO.util.CustomEvent("changeBody");
-
+		*/		
+		this.changeBodyEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_BODY);
+		
 		/**
 		* CustomEvent fired when the footer content of the Module is modified
 		* @event changeFooterEvent
 		* @param {String/HTMLElement} content	String/element representing the new footer content
 		*/
-		this.changeFooterEvent = new YAHOO.util.CustomEvent("changeFooter");
+		this.changeFooterEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_FOOTER);
 
 		/**
 		* CustomEvent fired when the content of the Module is modified
 		* @event changeContentEvent
 		*/
-		this.changeContentEvent = new YAHOO.util.CustomEvent("changeContent");
+		this.changeContentEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_CONTENT);
 
 		/**
 		* CustomEvent fired when the Module is destroyed
 		* @event destroyEvent
 		*/
-		this.destroyEvent = new YAHOO.util.CustomEvent("destroy");
-
+		this.destroyEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.DESTORY);
+		
 		/**
 		* CustomEvent fired before the Module is shown
 		* @event beforeShowEvent
 		*/
-		this.beforeShowEvent = new YAHOO.util.CustomEvent("beforeShow");
+		this.beforeShowEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_SHOW);
 
 		/**
 		* CustomEvent fired after the Module is shown
 		* @event showEvent
 		*/
-		this.showEvent = new YAHOO.util.CustomEvent("show");
+		this.showEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.SHOW);
 
 		/**
 		* CustomEvent fired before the Module is hidden
 		* @event beforeHideEvent
 		*/
-		this.beforeHideEvent = new YAHOO.util.CustomEvent("beforeHide");
+		this.beforeHideEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_HIDE);
 
 		/**
 		* CustomEvent fired after the Module is hidden
 		* @event hideEvent
 		*/
-		this.hideEvent = new YAHOO.util.CustomEvent("hide");
-	},
+		this.hideEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.HIDE);
+	}, 
 
 	/**
 	* String representing the current user-agent platform
@@ -301,7 +342,7 @@ YAHOO.widget.Module.prototype = {
 		* @type Boolean
 		* @default true
 		*/
-		this.cfg.addProperty("visible", { value:true, handler:this.configVisible, validator:this.cfg.checkBoolean } );
+		this.cfg.addProperty(YAHOO.widget.Module.DEFAULT_CONFIG.VISIBLE, { value:true, handler:this.configVisible, validator:this.cfg.checkBoolean } );
 
 		/**
 		* Object or array of objects representing the ContainerEffect classes that are active for animating the container.
@@ -309,7 +350,7 @@ YAHOO.widget.Module.prototype = {
 		* @type Object
 		* @default null
 		*/
-		this.cfg.addProperty("effect", { suppressEvent:true, supercedes:["visible"] } );
+		this.cfg.addProperty(YAHOO.widget.Module.DEFAULT_CONFIG.EFFECT, { suppressEvent:true, supercedes:["visible"] } );
 
 		/**
 		* Specifies whether to create a special proxy iframe to monitor for user font resizing in the document
@@ -317,7 +358,8 @@ YAHOO.widget.Module.prototype = {
 		* @type Boolean
 		* @default true
 		*/
-		this.cfg.addProperty("monitorresize", { value:true, handler:this.configMonitorResize } );
+		this.cfg.addProperty(YAHOO.widget.Module.DEFAULT_CONFIG.MONITOR_RESIZE, { value:true, handler:this.configMonitorResize } );
+		
 	},
 
 	/**

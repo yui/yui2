@@ -69,6 +69,42 @@ YAHOO.widget.Overlay.BOTTOM_RIGHT = "br";
 YAHOO.widget.Overlay.CSS_OVERLAY = "yui-overlay";
 
 /**
+* Constant representing the name of the Overlay's events
+* @property YAHOO.widget.Overlay.EVENTS
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.Overlay.EVENTS = {
+
+    "BEFORE_MOVE": "beforeMove",
+    "MOVE": "move"
+
+};
+
+/**
+* Constant representing the Overlay's configuration properties
+* @property YAHOO.widget.Overlay.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.Overlay.DEFAULT_CONFIG = {
+
+    "X": "x",
+    "Y": "y",
+    "XY": "xy",
+    "CONTEXT": "context",
+    "FIXED_CENTER": "fixedcenter",
+    "WIDTH": "width", 
+    "HEIGHT": "height", 
+    "ZINDEX": "zindex", 
+    "CONSTRAIN_TO_VIEWPORT": "constraintoviewport", 
+    "IFRAME": "iframe" 
+
+};
+
+/**
 * The Overlay initialization method, which is executed for Overlay and all of its subclasses. This method is automatically called by the constructor, and  sets up all DOM references for pre-existing markup, and creates required markup if it is not already present.
 * @method init
 * @param {String}	el	The element ID representing the Overlay <em>OR</em>
@@ -112,7 +148,7 @@ YAHOO.widget.Overlay.prototype.initEvents = function() {
 	* @param {Number} x	x coordinate
 	* @param {Number} y	y coordinate
 	*/
-	this.beforeMoveEvent = new YAHOO.util.CustomEvent("beforeMove", this);
+	this.beforeMoveEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Overlay.EVENTS.BEFORE_MOVE, this);
 
 	/**
 	* CustomEvent fired after the Overlay is moved.
@@ -120,7 +156,7 @@ YAHOO.widget.Overlay.prototype.initEvents = function() {
 	* @param {Number} x	x coordinate
 	* @param {Number} y	y coordinate
 	*/
-	this.moveEvent = new YAHOO.util.CustomEvent("move", this);
+	this.moveEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Overlay.EVENTS.MOVE, this);
 };
 
 /**
@@ -138,7 +174,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default null
 	*/
-	this.cfg.addProperty("x", { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.X, { handler:this.configX, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
 	* The absolute y-coordinate position of the Overlay
@@ -146,7 +182,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default null
 	*/
-	this.cfg.addProperty("y", { handler:this.configY, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.Y, { handler:this.configY, validator:this.cfg.checkNumber, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
 	* An array with the absolute x and y positions of the Overlay
@@ -154,7 +190,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Number[]
 	* @default null
 	*/
-	this.cfg.addProperty("xy",{ handler:this.configXY, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.XY,{ handler:this.configXY, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
 	* The array of context arguments for context-sensitive positioning. The format is: [id or element, element corner, context corner]. For example, setting this property to ["img1", "tl", "bl"] would align the Overlay's top left corner to the context element's bottom left corner.
@@ -162,7 +198,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Array
 	* @default null
 	*/
-	this.cfg.addProperty("context",	{ handler:this.configContext, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.CONTEXT,	{ handler:this.configContext, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
 	* True if the Overlay should be anchored to the center of the viewport.
@@ -170,7 +206,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Boolean
 	* @default false
 	*/
-	this.cfg.addProperty("fixedcenter", { value:false, handler:this.configFixedCenter, validator:this.cfg.checkBoolean, supercedes:["iframe","visible"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.FIXED_CENTER, { value:false, handler:this.configFixedCenter, validator:this.cfg.checkBoolean, supercedes:["iframe","visible"] } );
 
 	/**
 	* CSS width of the Overlay.
@@ -178,7 +214,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default null
 	*/
-	this.cfg.addProperty("width", { handler:this.configWidth, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.WIDTH, { handler:this.configWidth, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
 	* CSS height of the Overlay.
@@ -186,7 +222,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default null
 	*/
-	this.cfg.addProperty("height", { handler:this.configHeight, suppressEvent:true, supercedes:["iframe"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.HEIGHT, { handler:this.configHeight, suppressEvent:true, supercedes:["iframe"] } );
 
 	/**
 	* CSS z-index of the Overlay.
@@ -194,7 +230,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default null
 	*/
-	this.cfg.addProperty("zIndex", { value:null, handler:this.configzIndex } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.ZINDEX, { value:null, handler:this.configzIndex } );
 
 	/**
 	* True if the Overlay should be prevented from being positioned out of the viewport.
@@ -202,7 +238,7 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Boolean
 	* @default false
 	*/
-	this.cfg.addProperty("constraintoviewport", { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT, { value:false, handler:this.configConstrainToViewport, validator:this.cfg.checkBoolean, supercedes:["iframe","x","y","xy"] } );
 
 	/**
 	* True if the Overlay should have an IFRAME shim (for correcting the select z-index bug in IE6 and below).
@@ -210,7 +246,8 @@ YAHOO.widget.Overlay.prototype.initDefaultConfig = function() {
 	* @type Boolean
 	* @default true for IE6 and below, false for all others
 	*/
-	this.cfg.addProperty("iframe", { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["zIndex"] } );
+	this.cfg.addProperty(YAHOO.widget.Overlay.DEFAULT_CONFIG.IFRAME, { value:(this.browser == "ie" ? true : false), handler:this.configIframe, validator:this.cfg.checkBoolean, supercedes:["zIndex"] } );
+
 };
 
 /**

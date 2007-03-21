@@ -78,6 +78,20 @@ YAHOO.widget.SimpleDialog.ICON_TIP   = "tipicon";
 YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "yui-simple-dialog";
 
 /**
+* Constant representing the SimpleDialog's configuration properties
+* @property YAHOO.widget.SimpleDialog.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.SimpleDialog.DEFAULT_CONFIG = {
+
+    "ICON": "icon",
+    "TEXT": "text"
+
+};
+
+/**
 * Initializes the class's configurable properties which can be changed using the SimpleDialog's Config object (cfg).
 * @method initDefaultConfig
 */
@@ -92,7 +106,7 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default "none"
 	*/
-	this.cfg.addProperty("icon",	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
+	this.cfg.addProperty(YAHOO.widget.SimpleDialog.DEFAULT_CONFIG.ICON,	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
 
 	/**
 	* Sets the text for the SimpleDialog
@@ -100,7 +114,8 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default ""
 	*/
-	this.cfg.addProperty("text",	{ value:"", handler:this.configText, suppressEvent:true, supercedes:["icon"] } );
+	this.cfg.addProperty(YAHOO.widget.SimpleDialog.DEFAULT_CONFIG.TEXT,	{ value:"", handler:this.configText, suppressEvent:true, supercedes:["icon"] } );
+
 };
 
 
