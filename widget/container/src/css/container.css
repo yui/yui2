@@ -181,13 +181,15 @@
 	background: url("tip16_1.gif") no-repeat;
 }
 
-.yui-dialog .ft, .simple-dialog .ft {
+.yui-dialog .ft, 
+.yui-simple-dialog .ft {
 	padding-bottom:5px;
 	padding-right:5px;
 	text-align:right;
 }
 
-.yui-dialog form, .yui-simple-dialog form {
+.yui-dialog form, 
+.yui-simple-dialog form {
 	margin:0;
 }
 
@@ -209,7 +211,8 @@
 	font-weight:bold;
 }
 
-.button-group button:hover, .button-group button.hover {
+.button-group button:hover, 
+.button-group button.hover {
 	border:2px solid #90A029;
 	background-color:#EBF09E;
 	border-top-color:#FFF;
