@@ -611,8 +611,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
                 else {
 
                     var nElements = oElement.length,
-                        sType = oElement[0].type,
-                        sTagName = oElement[0].tagName.toUpperCase();
+                        sType = oElement[0].type;
 
 
                     switch(sType) {
