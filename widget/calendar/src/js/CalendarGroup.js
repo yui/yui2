@@ -139,7 +139,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* @type String
 	* @default []
 	*/
-	this.cfg.addProperty("selected", { value:[], handler:this.delegateConfig } );
+	this.cfg.addProperty("selected", { value:[], handler:this.configSelected } );
 
 	/**
 	* The title to display above the CalendarGroup's month header
@@ -564,6 +564,20 @@ YAHOO.widget.CalendarGroup.prototype.configPageDate = function(type, args, obj) 
 		}
 	}
 };
+
+/**
+* The default Config handler for the CalendarGroup "selected" property
+* @method configSelected
+* @param {String} type	The CustomEvent type (usually the property name)
+* @param {Object[]}	args	The CustomEvent arguments. For configuration handlers, args[0] will equal the newly applied value for the property.
+* @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
+*/
+YAHOO.widget.CalendarGroup.prototype.configSelected = function(type, args, obj) {
+	this.delegateConfig(type, args, obj);
+	var selected = (this.pages.length > 0) ? this.pages[0].cfg.getProperty("selected") : []; 
+	this.cfg.setProperty("selected", selected, true);
+};
+
 
 /**
 * Delegates a configuration property to the CustomEvents associated with the CalendarGroup's children
