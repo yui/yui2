@@ -130,7 +130,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
         // Else there is no data
         else {
             this._initTable();
-            this.showEmptyMessage();
+            this.showTableMessage();
         }
     }
     // Container element not found in document
@@ -633,6 +633,17 @@ YAHOO.widget.DataTable.CLASS_EMPTY = "yui-dt-empty";
 YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
 
 /**
+ * Class name assigned to elements with error messaging.
+ *
+ * @property CLASS_ERROR
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-error"
+ */
+YAHOO.widget.DataTable.CLASS_ERROR = "yui-dt-error";
+
+/**
  * Class name assigned to selected elements.
  *
  * @property CLASS_SELECTED
@@ -952,6 +963,16 @@ YAHOO.widget.DataTable.MSG_EMPTY = "No records found.";
  */
 YAHOO.widget.DataTable.MSG_LOADING = "Loading data...";
 
+/**
+ * Message to display while DataTable has data error.
+ *
+ * @property MSG_ERROR
+ * @type String
+ * @static
+ * @final
+ * @default "Data error."
+ */
+YAHOO.widget.DataTable.MSG_ERROR = "Data error.";
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private member variables
@@ -1132,7 +1153,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
     elMsgCell.colSpan = this._oColumnSet.keys.length;
     this._elMsgCell = elMsgCell;
     this._elMsgBody = elTable.appendChild(elMsgBody);
-    this.showLoadingMessage();
+    this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
 
     // Create TBODY for data
     this._elBody = elTable.appendChild(document.createElement("tbody"));
@@ -1282,7 +1303,7 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
  * @private
  */
 YAHOO.widget.DataTable.prototype._addRow = function(oRecord, index) {
-    this.hideTableMessages();
+    this.hideTableMessage();
 
     // Is this an insert or an append?
     var insert = (isNaN(index)) ? false : true;
@@ -1422,7 +1443,7 @@ YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._updateRow = function(oRecord, index) {
-    this.hideTableMessages();
+    this.hideTableMessage();
 
     var elRow = this._elBody.rows[index];
     elRow.yuiRecordId = oRecord.yuiRecordId;
@@ -1516,7 +1537,7 @@ YAHOO.widget.DataTable.prototype._deleteRow = function(elRow) {
         }
     }
     if(this._elBody.rows.length === 0) {
-        this.showEmptyMessage();
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
 };
 /////////////////////////////////////////////////////////////////////////////
@@ -2233,6 +2254,7 @@ YAHOO.widget.DataTable.prototype.pagers = null;
  *
  * @property isEmpty
  * @type Boolean
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.isEmpty = false;
 
@@ -2242,6 +2264,7 @@ YAHOO.widget.DataTable.prototype.isEmpty = false;
  *
  * @property isEmpty
  * @type Boolean
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.isLoading = false;
 
@@ -2355,9 +2378,38 @@ YAHOO.widget.DataTable.prototype.getCell = function(row, col) {
 };
 
 /**
+ * Displays placeholder row with a message when there are no data rows.
+ *
+ * @method showTableMessage
+ * @param sHTML {String} (optional) Value for innerHTML.
+ * @param sClassName {String} (optional) Classname.
+ */
+YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) {
+    var elCell = this._elMsgCell;
+    if(sHTML) {
+        elCell.innerHTML = sHTML;
+    }
+    if(sClassName) {
+        elCell.className = sClassName;
+    }
+    this._elMsgBody.style.display = "";
+};
+
+/**
+ * Hide placeholder message.
+ *
+ * @method hideTableMessage
+ */
+YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
+    this._elMsgBody.style.display = "none";
+};
+
+
+/**
  * Placeholder row to indicate table data is empty.
  *
  * @method showEmptyMessage
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.showEmptyMessage = function() {
     if(this.isEmpty) {
@@ -2378,6 +2430,7 @@ YAHOO.widget.DataTable.prototype.showEmptyMessage = function() {
  * Placeholder row to indicate table data is loading.
  *
  * @method showLoadingMessage
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.showLoadingMessage = function() {
     if(this.isLoading) {
@@ -2398,6 +2451,7 @@ YAHOO.widget.DataTable.prototype.showLoadingMessage = function() {
  * Hide any placeholder message row.
  *
  * @method hideTableMessages
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.hideTableMessages = function() {
     if(!this.isEmpty && !this.isLoading) {
@@ -2449,7 +2503,7 @@ YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse
  */
 YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
     if(aRecords && aRecords.length > 0) {
-        this.hideTableMessages();
+        this.hideTableMessage();
 
         var rowIds = [];
         for(var i=0; i<aRecords.length; i++) {
@@ -2472,7 +2526,7 @@ YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
  */
 YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
     if(aRecords && aRecords.length > 0) {
-        this.hideTableMessages();
+        this.hideTableMessage();
 
         var rowIds = [];
         for(var i=0; i<aRecords.length; i++) {
@@ -2497,7 +2551,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
     var i;
     
     if(aRecords && aRecords.length > 0) {
-        this.hideTableMessages();
+        this.hideTableMessage();
 
         var elBody = this._elBody;
         var elRows = this._elBody.rows;
@@ -2544,7 +2598,7 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
         this.fireEvent("rowReplaceEvent", {rowIds:rowIds});
     }
     else {
-        this.showEmptyMessage();
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
 };
 
@@ -3339,12 +3393,13 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
  * @method onDataReturnPaginateRows
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
+ * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, oResponse, bError) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
 
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
-    if(ok && oResponse) {
+    var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
+    if(ok && oResponse && !bError) {
         // Update the RecordSet from the response
         var newRecords = this._oRecordSet.append(oResponse);
         if(newRecords) {
@@ -3353,8 +3408,11 @@ YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, o
             YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
         }
     }
+    else if(bError) {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
+    }
     else {
-        this.showEmptyMessage();
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
 };
 
@@ -3364,11 +3422,12 @@ YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, o
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
+ * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse, bError) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
     if(ok) {
         // Update the RecordSet from the response
         var newRecords = this._oRecordSet.append(oResponse);
@@ -3386,11 +3445,12 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
+ * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse, bError) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
     if(ok) {
         // Update the RecordSet from the response
         var newRecords = this._oRecordSet.insert(oResponse);
@@ -3408,11 +3468,12 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
  * @method onDataReturnReplaceRows
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
+ * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse, bError) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
     if(ok) {
         // Update the RecordSet from the response
         var newRecords = this._oRecordSet.replace(oResponse);

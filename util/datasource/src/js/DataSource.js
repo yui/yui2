@@ -604,16 +604,21 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
              * @private
              */
             var _xhrSuccess = function(oResponse) {
-                // Error if no response
-                if(!oResponse) {
-                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
-                    YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
-                    return null;
-                }
-                // Error if response ID does not match last made request ID.
-               else if(!this._oConn || (oResponse.tId != this._oConn.tId)) {
+                // If response ID does not match last made request ID,
+                // silently fail and wait for the next response
+                if(oResponse && (!this._oConn || (oResponse.tId != this._oConn.tId))) {
                     this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAINVALID});
                     YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID, "error", this.toString());
+                    return null;
+                }
+                // Error if no response
+                else if(!oResponse) {
+                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
+                    YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
+
+                    // Send error response back to the caller with the error flag on
+                    oCallback.call(oCaller, oRequest, oResponse, true);
+
                     return null;
                 }
                 // Forward to handler
@@ -632,6 +637,10 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             var _xhrFailure = function(oResponse) {
                 this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAINVALID});
                 YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID + ": " + oResponse.statusText, "error", this.toString());
+
+                // Send failure response back to the caller with the error flag on
+                oCallback.call(oCaller, oRequest, oResponse, true);
+                    
                 return null;
             };
 
@@ -664,6 +673,8 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             }
             else {
                 YAHOO.log("Could not find a valid Connection Manager","error",this.toString());
+                // Send null response back to the caller with the error flag on
+                oCallback.call(oCaller, oRequest, null, true);
             }
 
             break;
@@ -728,6 +739,9 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     else {
         this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
         YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
+
+        // Send null response back to the caller with the error flag on
+        oCallback.call(oCaller, oRequest, null, true);
     }
 
     // Send the response back to the caller
@@ -743,23 +757,28 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse) {
-    var oParsedResponse = [];
-    var fields = this.responseSchema.fields;
-    for(var i=oRawResponse.length-1; i>-1; i--) {
-        var oResult = {};
-        for(var j=fields.length-1; j>-1; j--) {
-            var field = fields[j];
-            var key = field.key || field;
-            var data = oRawResponse[i][j] || oRawResponse[i][key];
-            if(field.converter) {
-                data = field.converter(data);
+    try {
+        var oParsedResponse = [];
+        var fields = this.responseSchema.fields;
+        for(var i=oRawResponse.length-1; i>-1; i--) {
+            var oResult = {};
+            for(var j=fields.length-1; j>-1; j--) {
+                var field = fields[j];
+                var key = field.key || field;
+                var data = oRawResponse[i][j] || oRawResponse[i][key];
+                if(field.converter) {
+                    data = field.converter(data);
+                }
+                oResult[key] = data;
             }
-            oResult[key] = data;
+            oParsedResponse.unshift(oResult);
         }
-        oParsedResponse.unshift(oResult);
+        YAHOO.log("Parsed array data = " + oParsedResponse,"info",this.toString());
+        return oParsedResponse;
     }
-    YAHOO.log("Parsed array data = " + oParsedResponse,"info",this.toString());
-    return oParsedResponse;
+    catch(e) {
+        return null;
+    }
 };
 
 /**
@@ -771,45 +790,50 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse) {
-    var oParsedResponse = [];
-    var recDelim = this.responseSchema.recordDelim;
-    var fieldDelim = this.responseSchema.fieldDelim;
-    var fields = this.responseSchema.fields;
-    if(oRawResponse.length > 0) {
-        // Delete the last line delimiter at the end of the data if it exists
-        var newLength = oRawResponse.length-recDelim.length;
-        if(oRawResponse.substr(newLength) == recDelim) {
-            oRawResponse = oRawResponse.substr(0, newLength);
-        }
-        // Split along record delimiter to get an array of strings
-        var recordsarray = oRawResponse.split(recDelim);
-        // Cycle through each record, except the first which contains header info
-        for(var i = recordsarray.length-1; i>-1; i--) {
-            var oResult = {};
-            for(var j=fields.length-1; j>-1; j--) {
-                // Split along field delimter to get each data value
-                var fielddataarray = recordsarray[i].split(fieldDelim);
-
-                // Remove quotation marks from edges, if applicable
-                var data = fielddataarray[j];
-                if(data.charAt(0) == "\"") {
-                    data = data.substr(1);
-                }
-                if(data.charAt(data.length-1) == "\"") {
-                    data = data.substr(0,data.length-1);
-                }
-                var field = fields[j];
-                var key = field.key || field;
-                if(field.converter) {
-                    data = field.converter(data);
-                }
-                oResult[key] = data;
+    try {
+        var oParsedResponse = [];
+        var recDelim = this.responseSchema.recordDelim;
+        var fieldDelim = this.responseSchema.fieldDelim;
+        var fields = this.responseSchema.fields;
+        if(oRawResponse.length > 0) {
+            // Delete the last line delimiter at the end of the data if it exists
+            var newLength = oRawResponse.length-recDelim.length;
+            if(oRawResponse.substr(newLength) == recDelim) {
+                oRawResponse = oRawResponse.substr(0, newLength);
             }
-            oParsedResponse.unshift(oResult);
+            // Split along record delimiter to get an array of strings
+            var recordsarray = oRawResponse.split(recDelim);
+            // Cycle through each record, except the first which contains header info
+            for(var i = recordsarray.length-1; i>-1; i--) {
+                var oResult = {};
+                for(var j=fields.length-1; j>-1; j--) {
+                    // Split along field delimter to get each data value
+                    var fielddataarray = recordsarray[i].split(fieldDelim);
+
+                    // Remove quotation marks from edges, if applicable
+                    var data = fielddataarray[j];
+                    if(data.charAt(0) == "\"") {
+                        data = data.substr(1);
+                    }
+                    if(data.charAt(data.length-1) == "\"") {
+                        data = data.substr(0,data.length-1);
+                    }
+                    var field = fields[j];
+                    var key = field.key || field;
+                    if(field.converter) {
+                        data = field.converter(data);
+                    }
+                    oResult[key] = data;
+                }
+                oParsedResponse.unshift(oResult);
+            }
         }
+        YAHOO.log("Parsed text data = " + oParsedResponse,"info",this.toString());
+        return oParsedResponse;
     }
-    YAHOO.log("Parsed text data = " + oParsedResponse,"info",this.toString());
-    return oParsedResponse;
+    catch(e) {
+        return null;
+    }
 };
 
 /**
@@ -821,53 +845,58 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
-    var bError = false;
-    var oParsedResponse = [];
-    var xmlList = oRawResponse.getElementsByTagName(this.responseSchema.resultNode);
-    if(!xmlList) {
-        bError = true;
-    }
-    // Loop through each result
-    else {
-        for(var k = xmlList.length-1; k >= 0 ; k--) {
-            var result = xmlList.item(k);
-            var oResult = {};
-            // Loop through each data field in each result using the schema
-            for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
-                var field = this.responseSchema.fields[m];
-                var key = field.key || field;
-                var data = null;
-                // Values may be held in an attribute...
-                var xmlAttr = result.attributes.getNamedItem(key);
-                if(xmlAttr) {
-                    data = xmlAttr.value;
-                }
-                // ...or in a node
-                else {
-                    var xmlNode = result.getElementsByTagName(key);
-                    if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
-                        data = xmlNode.item(0).firstChild.nodeValue;
-                    }
-                    else {
-                           data = "";
-                    }
-                }
-                if(field.converter) {
-                    data = field.converter(data);
-                }
-                // Capture the schema-mapped data field values into an array
-                oResult[key] = data;
-            }
-            // Capture each array of values into an array of results
-            oParsedResponse.unshift(oResult);
+    try {
+        var bError = false;
+        var oParsedResponse = [];
+        var xmlList = oRawResponse.getElementsByTagName(this.responseSchema.resultNode);
+        if(!xmlList) {
+            bError = true;
         }
+        // Loop through each result
+        else {
+            for(var k = xmlList.length-1; k >= 0 ; k--) {
+                var result = xmlList.item(k);
+                var oResult = {};
+                // Loop through each data field in each result using the schema
+                for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
+                    var field = this.responseSchema.fields[m];
+                    var key = field.key || field;
+                    var data = null;
+                    // Values may be held in an attribute...
+                    var xmlAttr = result.attributes.getNamedItem(key);
+                    if(xmlAttr) {
+                        data = xmlAttr.value;
+                    }
+                    // ...or in a node
+                    else {
+                        var xmlNode = result.getElementsByTagName(key);
+                        if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
+                            data = xmlNode.item(0).firstChild.nodeValue;
+                        }
+                        else {
+                               data = "";
+                        }
+                    }
+                    if(field.converter) {
+                        data = field.converter(data);
+                    }
+                    // Capture the schema-mapped data field values into an array
+                    oResult[key] = data;
+                }
+                // Capture each array of values into an array of results
+                oParsedResponse.unshift(oResult);
+            }
+        }
+        if(bError) {
+            YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
+            return null;
+        }
+        YAHOO.log("Parsed XML data = " + oParsedResponse,"info",this.toString());
+        return oParsedResponse;
     }
-    if(bError) {
-        YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
+    catch(e) {
         return null;
     }
-    YAHOO.log("Parsed XML data = " + oParsedResponse,"info",this.toString());
-    return oParsedResponse;
 };
 
 /**
@@ -879,107 +908,111 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse) {
-    //TODO: validate oRawResponse
-    var bError = false;
-    var oParsedResponse = [];
-    var fields = this.responseSchema.fields;
+    try {
+        var bError = false;
+        var oParsedResponse = [];
+        var fields = this.responseSchema.fields;
 
-    var jsonObj,jsonList;
-    if(oRawResponse) {
-        // Parse JSON object out if it's a string
-        if(oRawResponse.constructor == String) {
-            // Check for latest JSON lib but divert KHTML clients
-            if(oRawResponse.parseJSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
-                // Use the new JSON utility if available
-                jsonObj = oRawResponse.parseJSON();
-                if(!jsonObj) {
-                    bError = true;
-                }
-            }
-            // Check for older JSON lib but divert KHTML clients
-            else if(window.JSON && JSON.parse && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
-                // Use the JSON utility if available
-                jsonObj = JSON.parse(oRawResponse);
-                if(!jsonObj) {
-                    bError = true;
-                }
-            }
-            // No JSON lib found so parse the string
-            else {
-                try {
-                    // Trim leading spaces
-                    while (oRawResponse.length > 0 &&
-                            (oRawResponse.charAt(0) != "{") &&
-                            (oRawResponse.charAt(0) != "[")) {
-                        oRawResponse = oRawResponse.substring(1, oResponse.length);
+        var jsonObj,jsonList;
+        if(oRawResponse) {
+            // Parse JSON object out if it's a string
+            if(oRawResponse.constructor == String) {
+                // Check for latest JSON lib but divert KHTML clients
+                if(oRawResponse.parseJSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
+                    // Use the new JSON utility if available
+                    jsonObj = oRawResponse.parseJSON();
+                    if(!jsonObj) {
+                        bError = true;
                     }
-
-                    if(oRawResponse.length > 0) {
-                        // Strip extraneous stuff at the end
-                        var objEnd = Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));
-                        oRawResponse = oRawResponse.substring(0,objEnd+1);
-
-                        // Turn the string into an object literal...
-                        // ...eval is necessary here
-                        jsonObj = eval("(" + oRawResponse + ")");
-                        if(!jsonObj) {
-                            bError = true;
+                }
+                // Check for older JSON lib but divert KHTML clients
+                else if(window.JSON && JSON.parse && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
+                    // Use the JSON utility if available
+                    jsonObj = JSON.parse(oRawResponse);
+                    if(!jsonObj) {
+                        bError = true;
+                    }
+                }
+                // No JSON lib found so parse the string
+                else {
+                    try {
+                        // Trim leading spaces
+                        while (oRawResponse.length > 0 &&
+                                (oRawResponse.charAt(0) != "{") &&
+                                (oRawResponse.charAt(0) != "[")) {
+                            oRawResponse = oRawResponse.substring(1, oResponse.length);
                         }
 
+                        if(oRawResponse.length > 0) {
+                            // Strip extraneous stuff at the end
+                            var objEnd = Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));
+                            oRawResponse = oRawResponse.substring(0,objEnd+1);
+
+                            // Turn the string into an object literal...
+                            // ...eval is necessary here
+                            jsonObj = eval("(" + oRawResponse + ")");
+                            if(!jsonObj) {
+                                bError = true;
+                            }
+
+                        }
                     }
+                    catch(e) {
+                        bError = true;
+                   }
+                }
+            }
+            // Response must already be a JSON object
+            else if(oRawResponse.constructor == Object) {
+                jsonObj = oRawResponse;
+            }
+            // Now that we have a JSON object, parse a jsonList out of it
+            if(jsonObj && jsonObj.constructor == Object) {
+                try {
+                    // eval is necessary here since schema can be of unknown depth
+                    jsonList = eval("jsonObj." + this.responseSchema.resultsList);
                 }
                 catch(e) {
                     bError = true;
-               }
+                }
             }
         }
-        // Response must already be a JSON object
-        else if(oRawResponse.constructor == Object) {
-            jsonObj = oRawResponse;
+        if(bError || !jsonList) {
+            YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
+            return null;
+       }
+
+        if((jsonList.constructor != Array) && (jsonList.constructor.toString().indexOf("Array") == -1)) {
+            jsonList = [jsonList];
         }
-        // Now that we have a JSON object, parse a jsonList out of it
-        if(jsonObj && jsonObj.constructor == Object) {
-            try {
+
+        // Loop through the array of all responses...
+        for(var i = jsonList.length-1; i >= 0 ; i--) {
+            var oResult = {};
+            var jsonResult = jsonList[i];
+            // ...and loop through each data field value of each response
+            for(var j = fields.length-1; j >= 0 ; j--) {
+                var field = fields[j];
+                var key = field.key || field;
+                // ...and capture data into an array mapped according to the schema...
                 // eval is necessary here since schema can be of unknown depth
-                jsonList = eval("jsonObj." + this.responseSchema.resultsList);
+                var data = eval("jsonResult." + key);
+                if((data === undefined) || (data === null)) {
+                    data = "";
+                }
+                //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
+                if(field.converter) {
+                    data = field.converter(data);
+                }
+                oResult[key] = data;
             }
-            catch(e) {
-                bError = true;
-            }
+            // Capture the array of data field values in an array of results
+            oParsedResponse.unshift(oResult);
         }
+        YAHOO.log("Parsed JSON data = " + oParsedResponse,"info",this.toString());
+        return oParsedResponse;
     }
-    if(bError || !jsonList) {
-        YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
+    catch(e) {
         return null;
-   }
-
-    if((jsonList.constructor != Array) && (jsonList.constructor.toString().indexOf("Array") == -1)) {
-        jsonList = [jsonList];
     }
-
-    // Loop through the array of all responses...
-    for(var i = jsonList.length-1; i >= 0 ; i--) {
-        var oResult = {};
-        var jsonResult = jsonList[i];
-        // ...and loop through each data field value of each response
-        for(var j = fields.length-1; j >= 0 ; j--) {
-            var field = fields[j];
-            var key = field.key || field;
-            // ...and capture data into an array mapped according to the schema...
-            // eval is necessary here since schema can be of unknown depth
-            var data = eval("jsonResult." + key);
-            if((data === undefined) || (data === null)) {
-                data = "";
-            }
-            //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
-            if(field.converter) {
-                data = field.converter(data);
-            }
-            oResult[key] = data;
-        }
-        // Capture the array of data field values in an array of results
-        oParsedResponse.unshift(oResult);
-    }
-    YAHOO.log("Parsed JSON data = " + oParsedResponse,"info",this.toString());
-    return oParsedResponse;
 };
