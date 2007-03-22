@@ -1434,6 +1434,11 @@ YAHOO.util.CustomEvent.prototype = {
      *                                   the execution scope.
      */
     subscribe: function(fn, obj, override) {
+
+        if (!fn) {
+throw new Error("Invalid callback for subscriber to '" + this.type + "'");
+        }
+
         if (this.subscribeEvent) {
             this.subscribeEvent.fire(fn, obj, override);
         }

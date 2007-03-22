@@ -1,6 +1,14 @@
 
 YUI Library - Event - Release Notes
 
+2.2.1
+
+  * CustomEvent subscribers supplying undefined callbacks will be notified
+    when subscribing rather than having an abiguous error thrown when the
+    event is fired.
+
+  * Fixed missing html tags in the examples
+
 2.2.0
 
   * YAHOO.util.KeyListener was moved from the container package into event.
