@@ -518,9 +518,13 @@ YAHOO.util.History = ( function () {
          * from a script block located right after the opening body tag.
          *
          * @method initialize
+         * @param {string} iframeTarget Optional - Path to an existing
+         *     HTML document accessible from the same domain. If not
+         *     specified, defaults to "blank.html". This is only useful
+         *     if you use https.
          * @public
          */
-        initialize: function () {
+        initialize: function ( iframeTarget ) {
 
             // Return if the browser history manager has already been initialized
             if ( _initialized ) {
@@ -531,11 +535,25 @@ YAHOO.util.History = ( function () {
                 throw new Error( "Your web browser is not supported by the Browser History Manager" );
             }
 
+            if ( !iframeTarget ) {
+                iframeTarget = "blank.html";
+            }
+
+            if ( typeof iframeTarget != "string" || _trim( iframeTarget ) === "" ) {
+                throw new Error( "Invalid argument passed to YAHOO.util.History.initialize" );
+            }
+
             document.write( '<input type="hidden" id="yui_hist_field">' );
 
             if ( _browser == "msie" ) {
-                // Thanks to David Bloom for contributing this piece of code!
-                document.write( '<iframe id="yui_hist_iframe" src="javascript:document.open();document.write(&quot;' + new Date().getTime() + '&quot;);document.close();" style="position:absolute;visibility:hidden;"></iframe>' );
+                if ( location.protocol == "https:" ) {
+                    // If we use https, we MUST point the IFrame to a valid
+                    // document on the same server. If we don't, we will get
+                    // a warning (do you want to display non secure items?)
+                    document.write( '<iframe id="yui_hist_iframe" src="' + iframeTarget + '" style="position:absolute;visibility:hidden;"></iframe>' );
+                } else {
+                    document.write( '<iframe id="yui_hist_iframe" src="javascript:document.open();document.write(&quot;' + new Date().getTime() + '&quot;);document.close();" style="position:absolute;visibility:hidden;"></iframe>' );
+                }
             }
 
             // We have to wait for the window's onload handler. Otherwise, our
@@ -596,11 +614,22 @@ YAHOO.util.History = ( function () {
             if ( _browser == "msie" ) {
 
                 // Add a new entry to the browser's history...
-                // The <img> tag is a hack that prevents the throbber from appearing...
-                // Thanks to David Bloom for contributing this piece of code!
-                var html = '<html><body><div id="state">' + fqstate + '</div><img src="javascript:void(0);"></body></html>';
-                html = html.replace( /\\/g, "\\\\" ).replace( /\"/g, "\\\"" ).replace( /\'/g, "\\\'" ).replace( /\n/g, "\\\n" ).replace( /\t/g, "\\\t" ).replace( /\//g, "\\\/" );
-                _iframe.src = 'javascript:document.open();document.write("' + html + '");document.close();';
+                if ( location.protocol == "https:" ) {
+                    html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
+                    try {
+                        doc = _iframe.contentWindow.document;
+                        doc.open();
+                        doc.write( html );
+                        doc.close();
+                    } catch ( e ) {
+                        return false;
+                    }
+                } else {
+                    // The <img> tag is a hack that prevents the throbber from appearing...
+                    html = '<html><body><div id="state">' + fqstate + '</div><img src="javascript:void(0);"></body></html>';
+                    html = html.replace( /\\/g, "\\\\" ).replace( /\"/g, "\\\"" ).replace( /\'/g, "\\\'" ).replace( /\n/g, "\\\n" ).replace( /\t/g, "\\\t" ).replace( /\//g, "\\\/" );
+                    _iframe.src = 'javascript:document.open();document.write("' + html + '");document.close();';
+                }
 
             } else {
 
