@@ -11,7 +11,7 @@
  */
  YAHOO.widget.LogMsg = function(oConfigs) {
     // Parse configs
-    if (typeof oConfigs == "object") {
+    if (oConfigs && (oConfigs.constructor == Object)) {
         for(var param in oConfigs) {
             this[param] = oConfigs[param];
         }

@@ -28,9 +28,9 @@
  */
 YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     // Set any config params passed in to override defaults
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
-            if (sConfig) {
+            if(sConfig) {
                 this[sConfig] = oConfigs[sConfig];
             }
         }
@@ -40,30 +40,28 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
         YAHOO.log("Could not instantiate DataSource due to invalid live database.","error",this.toString());
         return;
     }
-    else {
-        switch(oLiveData.constructor) {
-            case Function:
-                this.dataType = YAHOO.util.DataSource.TYPE_JSFUNCTION;
-                break;
-            case Array:
-                this.dataType = YAHOO.util.DataSource.TYPE_JSARRAY;
-                break;
-            case String:
-                this.dataType = YAHOO.util.DataSource.TYPE_XHR;
-                break;
-            case Object:
-                this.dataType = YAHOO.util.DataSource.TYPE_JSON;
-                break;
-            default:
-                this.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
-                break;
-        }
-        this.liveData = oLiveData;
+    
+    if(YAHOO.lang.isArray(oLiveData)) {
+        this.dataType = YAHOO.util.DataSource.TYPE_JSARRAY;
     }
+    else if(YAHOO.lang.isString(oLiveData)) {
+        this.dataType = YAHOO.util.DataSource.TYPE_XHR;
+    }
+    else if(YAHOO.lang.isFunction(oLiveData)) {
+        this.dataType = YAHOO.util.DataSource.TYPE_JSFUNCTION;
+    }
+    else if(YAHOO.lang.isObject(oLiveData)) {
+        this.dataType = YAHOO.util.DataSource.TYPE_JSON;
+    }
+    else {
+        this.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
+    }
+
+    this.liveData = oLiveData;
 
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
-    if(isNaN(maxCacheEntries) || (maxCacheEntries < 0)) {
+    if(!YAHOO.lang.isNumber(maxCacheEntries) || (maxCacheEntries < 0)) {
         maxCacheEntries = 0;
     }
 
@@ -503,12 +501,12 @@ YAHOO.util.DataSource.prototype.isCacheHit = function(oRequest, oCachedRequest) 
  * @param oResponse {Object} Response object to cache.
  */
 YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
-    //TODO: check for duplicate entries
     var aCache = this._aCache;
-    // Don't add if anything important is missing.
-    if(!aCache || !oRequest || !oResponse) {
+    if(!aCache) {
         return;
     }
+
+    //TODO: check for duplicate entries
 
     // If the cache is full, make room by removing stalest element (index=0)
     while(aCache.length >= this.maxCacheEntries) {
@@ -520,7 +518,6 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
     aCache.push(oCacheElem);
     this.fireEvent("responseCacheEvent",{request:oRequest,response:oResponse});
     YAHOO.log("Cached response for \"" +  oRequest + "\"","info",this.toString());
-
 };
 
 /**
@@ -531,9 +528,9 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
 YAHOO.util.DataSource.prototype.flushCache = function() {
     if(this._aCache) {
         this._aCache = [];
+        this.fireEvent("cacheFlushEvent");
+        YAHOO.log("Flushed cache","info",this.toString());
     }
-    this.fireEvent("cacheFlushEvent");
-    YAHOO.log("Flushed cache","info",this.toString());
 };
 
 /**
@@ -658,7 +655,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             };
 
             //TODO: connTimeout config
-            if(this.connTimeout && !isNaN(this.connTimeout) && this.connTimeout > 0) {
+            if(YAHOO.lang.isNumber(this.connTimeout) && (this.connTimeout > 0)) {
                 _xhrCallback.timeout = this.connTimeout;
             }
 
@@ -735,17 +732,17 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
         this.fireEvent("responseParseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
         // Cache the response
         this.addToCache(oRequest, oParsedResponse);
+
+        // Send the response back to the caller
+        oCallback.call(oCaller, oRequest, oParsedResponse);
     }
     else {
         this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
         YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
-
+        
         // Send null response back to the caller with the error flag on
         oCallback.call(oCaller, oRequest, null, true);
     }
-
-    // Send the response back to the caller
-    oCallback.call(oCaller, oRequest, oParsedResponse);
 };
 
 /**
@@ -757,7 +754,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse) {
-    try {
+    if(YAHOO.lang.isArray(oRawResponse) && YAHOO.lang.isArray(this.responseSchema.fields)) {
         var oParsedResponse = [];
         var fields = this.responseSchema.fields;
         for(var i=oRawResponse.length-1; i>-1; i--) {
@@ -776,7 +773,8 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
         YAHOO.log("Parsed array data = " + oParsedResponse,"info",this.toString());
         return oParsedResponse;
     }
-    catch(e) {
+    else {
+        YAHOO.log("Array data could not be parsed" + oRawResponse,"error",this.toString());
         return null;
     }
 };
@@ -790,7 +788,10 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse) {
-    try {
+    if(YAHOO.lang.isString(oRawResponse) &&
+            YAHOO.lang.isArray(this.responseSchema.fields) &&
+            YAHOO.lang.isString(this.responseSchema.recordDelim) &&
+            YAHOO.lang.isString(this.responseSchema.fieldDelim)) {
         var oParsedResponse = [];
         var recDelim = this.responseSchema.recordDelim;
         var fieldDelim = this.responseSchema.fieldDelim;
@@ -831,7 +832,8 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
         YAHOO.log("Parsed text data = " + oParsedResponse,"info",this.toString());
         return oParsedResponse;
     }
-    catch(e) {
+    else {
+        YAHOO.log("Text data could not be parsed" + oRawResponse,"error",this.toString());
         return null;
     }
 };
@@ -845,11 +847,12 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
-    try {
         var bError = false;
         var oParsedResponse = [];
-        var xmlList = oRawResponse.getElementsByTagName(this.responseSchema.resultNode);
-        if(!xmlList) {
+        var xmlList = (oRawResponse.getElementsByTagName && this.responseSchema.resultNode) ?
+                oRawResponse.getElementsByTagName(this.responseSchema.resultNode) :
+                null;
+        if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
             bError = true;
         }
         // Loop through each result
@@ -888,15 +891,11 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
             }
         }
         if(bError) {
-            YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
+            YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
             return null;
         }
         YAHOO.log("Parsed XML data = " + oParsedResponse,"info",this.toString());
         return oParsedResponse;
-    }
-    catch(e) {
-        return null;
-    }
 };
 
 /**
@@ -908,81 +907,84 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse) {
-    try {
+    if(oRawResponse && YAHOO.lang.isArray(this.responseSchema.fields)) {
+        var fields = this.responseSchema.fields;
         var bError = false;
         var oParsedResponse = [];
-        var fields = this.responseSchema.fields;
-
         var jsonObj,jsonList;
-        if(oRawResponse) {
-            // Parse JSON object out if it's a string
-            if(oRawResponse.constructor == String) {
-                // Check for latest JSON lib but divert KHTML clients
-                if(oRawResponse.parseJSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
-                    // Use the new JSON utility if available
-                    jsonObj = oRawResponse.parseJSON();
-                    if(!jsonObj) {
-                        bError = true;
-                    }
-                }
-                // Check for older JSON lib but divert KHTML clients
-                else if(window.JSON && JSON.parse && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
-                    // Use the JSON utility if available
-                    jsonObj = JSON.parse(oRawResponse);
-                    if(!jsonObj) {
-                        bError = true;
-                    }
-                }
-                // No JSON lib found so parse the string
-                else {
-                    try {
-                        // Trim leading spaces
-                        while (oRawResponse.length > 0 &&
-                                (oRawResponse.charAt(0) != "{") &&
-                                (oRawResponse.charAt(0) != "[")) {
-                            oRawResponse = oRawResponse.substring(1, oResponse.length);
-                        }
 
-                        if(oRawResponse.length > 0) {
-                            // Strip extraneous stuff at the end
-                            var objEnd = Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));
-                            oRawResponse = oRawResponse.substring(0,objEnd+1);
-
-                            // Turn the string into an object literal...
-                            // ...eval is necessary here
-                            jsonObj = eval("(" + oRawResponse + ")");
-                            if(!jsonObj) {
-                                bError = true;
-                            }
-
-                        }
-                    }
-                    catch(e) {
-                        bError = true;
-                   }
-                }
-            }
-            // Response must already be a JSON object
-            else if(oRawResponse.constructor == Object) {
-                jsonObj = oRawResponse;
-            }
-            // Now that we have a JSON object, parse a jsonList out of it
-            if(jsonObj && jsonObj.constructor == Object) {
-                try {
-                    // eval is necessary here since schema can be of unknown depth
-                    jsonList = eval("jsonObj." + this.responseSchema.resultsList);
-                }
-                catch(e) {
+        // Parse JSON object out if it's a string
+        if(YAHOO.lang.isString(oRawResponse)) {
+            // Check for latest JSON lib but divert KHTML clients
+            var isNotMac = (navigator.userAgent.toLowerCase().indexOf('khtml')== -1);
+            if(oRawResponse.parseJSON && isNotMac) {
+                // Use the new JSON utility if available
+                jsonObj = oRawResponse.parseJSON();
+                if(!jsonObj) {
                     bError = true;
                 }
             }
-        }
-        if(bError || !jsonList) {
-            YAHOO.log("JSON data could not be parsed" + oParsedResponse,"error",this.toString());
-            return null;
-       }
+            // Check for older JSON lib but divert KHTML clients
+            else if(window.JSON && JSON.parse && isNotMac) {
+                // Use the JSON utility if available
+                jsonObj = JSON.parse(oRawResponse);
+                if(!jsonObj) {
+                    bError = true;
+                }
+            }
+            // No JSON lib found so parse the string
+            else {
+                try {
+                    // Trim leading spaces
+                    while (oRawResponse.length > 0 &&
+                            (oRawResponse.charAt(0) != "{") &&
+                            (oRawResponse.charAt(0) != "[")) {
+                        oRawResponse = oRawResponse.substring(1, oResponse.length);
+                    }
 
-        if((jsonList.constructor != Array) && (jsonList.constructor.toString().indexOf("Array") == -1)) {
+                    if(oRawResponse.length > 0) {
+                        // Strip extraneous stuff at the end
+                        var objEnd = Math.max(oRawResponse.lastIndexOf("]"),oRawResponse.lastIndexOf("}"));
+                        oRawResponse = oRawResponse.substring(0,objEnd+1);
+
+                        // Turn the string into an object literal...
+                        // ...eval is necessary here
+                        jsonObj = eval("(" + oRawResponse + ")");
+                        if(!jsonObj) {
+                            bError = true;
+                        }
+
+                    }
+                }
+                catch(e) {
+                    bError = true;
+               }
+            }
+        }
+        // Response must already be a JSON object
+        else if(oRawResponse.constructor == Object) {
+            jsonObj = oRawResponse;
+        }
+        // Not a string or an object
+        else {
+            bError = true;
+        }
+        // Now that we have a JSON object, parse a jsonList out of it
+        if(jsonObj && jsonObj.constructor == Object) {
+            try {
+                // eval is necessary here since schema can be of unknown depth
+                jsonList = eval("jsonObj." + this.responseSchema.resultsList);
+            }
+            catch(e) {
+                bError = true;
+            }
+        }
+
+        if(bError || !jsonList) {
+            YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
+            return null;
+        }
+        else if(!YAHOO.lang.isArray(jsonList)) {
             jsonList = [jsonList];
         }
 
@@ -997,7 +999,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                 // ...and capture data into an array mapped according to the schema...
                 // eval is necessary here since schema can be of unknown depth
                 var data = eval("jsonResult." + key);
-                if((data === undefined) || (data === null)) {
+                if((typeof data == "undefined") || (data === null)) {
                     data = "";
                 }
                 //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
@@ -1012,7 +1014,8 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         YAHOO.log("Parsed JSON data = " + oParsedResponse,"info",this.toString());
         return oParsedResponse;
     }
-    catch(e) {
+    else {
+        YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
         return null;
     }
 };

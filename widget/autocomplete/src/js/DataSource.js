@@ -283,7 +283,7 @@ YAHOO.widget.DataSource.prototype._aCache = null;
 YAHOO.widget.DataSource.prototype._init = function() {
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
-    if(isNaN(maxCacheEntries) || (maxCacheEntries < 0)) {
+    if(!YAHOO.lang.isNumber(maxCacheEntries) || (maxCacheEntries < 0)) {
         maxCacheEntries = 0;
     }
     // Initialize local cache
@@ -450,23 +450,21 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
  */
 YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
     // Set any config params passed in to override defaults
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
 
     // Initialization sequence
-    if(!aSchema ||
-            ((aSchema.constructor != Array) &&
-            (aSchema.constructor.toString().indexOf("Array") == -1))) {
+    if(!YAHOO.lang.isArray(aSchema) || !YAHOO.lang.isString(sScriptURI)) {
         YAHOO.log("Could not instantiate XHR DataSource due to invalid arguments", "error", this.toString());
         return;
     }
-    else {
-        this.schema = aSchema;
-    }
+
+    this.schema = aSchema;
     this.scriptURI = sScriptURI;
+    
     this._init();
     YAHOO.log("XHR DataSource initialized","info",this.toString());
 };
@@ -681,7 +679,7 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
         failure:responseFailure
     };
     
-    if(!isNaN(this.connTimeout) && this.connTimeout > 0) {
+    if(YAHOO.lang.isNumber(this.connTimeout) && (this.connTimeout > 0)) {
         oCallback.timeout = this.connTimeout;
     }
     
@@ -778,8 +776,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 break;
             }
 
-            if((jsonList.constructor != Array) &&
-                    (jsonList.constructor.toString().indexOf("Array") == -1)) {
+            if(!YAHOO.lang.isArray(jsonList)) {
                 jsonList = [jsonList];
             }
             
@@ -905,14 +902,14 @@ YAHOO.widget.DS_XHR.prototype._oConn = null;
  */
 YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
     // Set any config params passed in to override defaults
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
 
     // Initialization sequence
-    if(!oFunction  || (oFunction.constructor != Function)) {
+    if(!YAHOO.lang.isFunction(oFunction)) {
         YAHOO.log("Could not instantiate JSFunction DataSource due to invalid arguments", "error", this.toString());
         return;
     }
@@ -991,16 +988,14 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
  */
 YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
     // Set any config params passed in to override defaults
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
 
     // Initialization sequence
-    if(!aData ||
-            ((aData.constructor != Array) &&
-            (aData.constructor.toString().indexOf("Array") == -1))) {
+    if(!YAHOO.lang.isArray(aData)) {
         YAHOO.log("Could not instantiate JSArray DataSource due to invalid arguments", "error", this.toString());
         return;
     }
@@ -1058,17 +1053,14 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
         for(i = aData.length-1; i >= 0; i--) {
             var aDataset = [];
 
-            if(aData[i]) {
-                if(aData[i].constructor == String) {
-                    aDataset[0] = aData[i];
-                }
-                else if((aData[i].constructor == Array) ||
-                        (aData[i].constructor.toString().indexOf("Array") > -1)) {
-                    aDataset = aData[i];
-                }
+            if(YAHOO.lang.isString(aData[i])) {
+                aDataset[0] = aData[i];
+            }
+            else if(YAHOO.lang.isArray(aData[i])) {
+                aDataset = aData[i];
             }
 
-            if(aDataset[0] && (aDataset[0].constructor == String)) {
+            if(YAHOO.lang.isString(aDataset[0])) {
                 var sKeyIndex = (this.queryMatchCase) ?
                 encodeURIComponent(aDataset[0]).indexOf(sQuery):
                 encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
@@ -1085,14 +1077,11 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
     }
     else {
         for(i = aData.length-1; i >= 0; i--) {
-            if(aData[i]) {
-                if(aData[i].constructor == String) {
-                    aResults.unshift([aData[i]]);
-                }
-                else if((aData[i].constructor == Array) ||
-                        (aData[i].constructor.toString().indexOf("Array") > -1)) {
-                    aResults.unshift(aData[i]);
-                }
+            if(YAHOO.lang.isString(aData[i])) {
+                aResults.unshift([aData[i]]);
+            }
+            else if(YAHOO.lang.isArray(aData[i])) {
+                aResults.unshift(aData[i]);
             }
         }
     }

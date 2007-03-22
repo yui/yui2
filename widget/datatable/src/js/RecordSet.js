@@ -15,7 +15,7 @@ YAHOO.widget.RecordSet = function(data) {
     this._records = [];
     
     if(data) {
-        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
+        if(YAHOO.lang.isArray(data)) {
             this.addRecords(data);
         }
         else if(data.constructor == Object) {
@@ -119,17 +119,14 @@ YAHOO.widget.RecordSet.prototype.getLength = function() {
  * @return {Object} Record object
  */
 YAHOO.widget.RecordSet.prototype.getRecord = function(identifier) {
-    if((identifier !== undefined) && (identifier !== null)) {
-        if(!isNaN(identifier)) {
-            return this._records[identifier];
-        }
-        else if(identifier.constructor == String) {
-            for(var i=0; i<this._records.length; i++) {
-                if(this._records[i].yuiRecordId == identifier) {
-                    return this._records[i];
-                }
+    if(YAHOO.lang.isNumber(identifier)) {
+        return this._records[identifier];
+    }
+    else if(YAHOO.lang.isString(identifier)) {
+        for(var i=0; i<this._records.length; i++) {
+            if(this._records[i].yuiRecordId == identifier) {
+                return this._records[i];
             }
-            return null;
         }
     }
     return null;
@@ -140,25 +137,17 @@ YAHOO.widget.RecordSet.prototype.getRecord = function(identifier) {
  * Returns an array of Records from the RecordSet.
  *
  * @method getRecords
- * @param i {number} Index of which record to start at
+ * @param i {number} (optional) Index of which record to start at
  * @param range {number} (optional) Number of records to get
  * @return {Array} Array of records starting at given index and lenth equal to
- * given range. If range is null, entire RecordSet array is returned.
+ * given range. If i is null, entire RecordSet array is returned.
  */
 YAHOO.widget.RecordSet.prototype.getRecords = function(i, range) {
-    if(i === undefined) {
+    if(!YAHOO.lang.isNumber(i)) {
         return this._records;
     }
-    i = parseInt(i,10);
-    if(isNaN(i)) {
-        return null;
-    }
-    if(range === undefined) {
+    if(!YAHOO.lang.isNumber(range)) {
         return this._records.slice(i);
-    }
-    range = parseInt(range,10);
-    if(isNaN(range)) {
-        return null;
     }
     return this._records.slice(i, i+range);
 };
@@ -222,9 +211,9 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(oRecord, sKey, oData) {
  * @return {YAHOO.widget.Record} A Record instance.
  */
 YAHOO.widget.RecordSet.prototype.addRecord = function(oObjectLiteral, index) {
-    if(oObjectLiteral) {
+    if(oObjectLiteral && (oObjectLiteral.constructor == Object)) {
         var oRecord = new YAHOO.widget.Record(oObjectLiteral);
-        if(!isNaN(index) && (index > -1)) {
+        if(YAHOO.lang.isNumber(index) && (index > -1)) {
             this._records.splice(index,0,oRecord);
         }
         else {
@@ -248,19 +237,17 @@ YAHOO.widget.RecordSet.prototype.addRecord = function(oObjectLiteral, index) {
  * @return {YAHOO.widget.Record} An array of Record instances.
  */
 YAHOO.widget.RecordSet.prototype.addRecords = function(data, index) {
-    if(data) {
-        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
-            var newRecords = [];
-            // Can't go backwards bc we need to preserve order
-            for(var i=0; i<data.length; i++) {
-                var record = this.addRecord(data[i], index);
-                newRecords.push(record);
-           }
-           return newRecords;
-        }
-        else if(data.constructor == Object) {
-            return this.addRecord(data);
-        }
+    if(YAHOO.lang.isArray(data)) {
+        var newRecords = [];
+        // Can't go backwards bc we need to preserve order
+        for(var i=0; i<data.length; i++) {
+            var record = this.addRecord(data[i], index);
+            newRecords.push(record);
+       }
+       return newRecords;
+    }
+    else if(data && (data.constructor == Object)) {
+        return this.addRecord(data);
     }
     else {
         return null;
@@ -275,19 +262,17 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(data, index) {
  * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.
  */
 YAHOO.widget.RecordSet.prototype.append = function(data) {
-    if(data) {
-        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
-            var newRecords = [];
-            // Cant't go backwards bc we need to preserve order
-            for(var i=0; i<data.length; i++) {
-                var record = this.addRecord(data[i]);
-                newRecords.push(record);
-           }
-           return newRecords;
-        }
-        else if(data.constructor == Object) {
-            return this.addRecord(data);
-        }
+    if(YAHOO.lang.isArray(data)) {
+        var newRecords = [];
+        // Cant't go backwards bc we need to preserve order
+        for(var i=0; i<data.length; i++) {
+            var record = this.addRecord(data[i]);
+            newRecords.push(record);
+       }
+       return newRecords;
+    }
+    else if(data && (data.constructor == Object)) {
+        return this.addRecord(data);
     }
     else {
         return null;
@@ -303,19 +288,17 @@ YAHOO.widget.RecordSet.prototype.append = function(data) {
  * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.
  */
 YAHOO.widget.RecordSet.prototype.insert = function(data) {
-    if(data) {
-        if((data.constructor == Array) || (data.constructor.toString().indexOf("Array") > -1)) {
-            var newRecords = [];
-            // Can't go backwards bc we need to preserve order
-            for(var i=data.length-1; i>-1; i--) {
-                var record = this.addRecord(data[i], 0);
-                newRecords.push(record);
-           }
-           return newRecords;
-        }
-        else if(data.constructor == Object) {
-            return this.addRecord(data, 0);
-        }
+    if(YAHOO.lang.isArray(data)) {
+        var newRecords = [];
+        // Can't go backwards bc we need to preserve order
+        for(var i=data.length-1; i>-1; i--) {
+            var record = this.addRecord(data[i], 0);
+            newRecords.push(record);
+       }
+       return newRecords;
+    }
+    else if(data && (data.constructor == Object)) {
+        return this.addRecord(data, 0);
     }
     else {
         return null;
@@ -360,11 +343,11 @@ YAHOO.widget.RecordSet.prototype.sort = function(fnSort) {
  * @param range {Number} (optional) Range of records to remove, or null.
  */
 YAHOO.widget.RecordSet.prototype.deleteRecord = function(i, range) {
-    if(typeof range != "number") {
+    if(!YAHOO.lang.isNumber(range)) {
         range = 1;
     }
     // TODO: validate for negative values
-    if(typeof i == "number") {
+    if(!YAHOO.lang.isNumber(i)) {
         this._records.splice(i, range);
         this._length = this._length - range;
     }
@@ -393,13 +376,13 @@ YAHOO.widget.RecordSet.prototype.reset = function() {
  * @param oConfigs {Object} (optional) Object literal of key/value pairs.
  */
 YAHOO.widget.Record = function(oLiteral) {
-    if(typeof oLiteral == "object") {
+    if(oLiteral && (oLiteral.constructor == Object)) {
         for(var sKey in oLiteral) {
             this[sKey] = oLiteral[sKey];
         }
+        this.yuiRecordId = "yui-dtrec"+YAHOO.widget.Record._nCount;
+        YAHOO.widget.Record._nCount++;
     }
-    this.yuiRecordId = "yui-dtrec"+YAHOO.widget.Record._nCount;
-    YAHOO.widget.Record._nCount++;
 };
 
 /////////////////////////////////////////////////////////////////////////////

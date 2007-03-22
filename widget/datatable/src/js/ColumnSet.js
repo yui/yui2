@@ -265,7 +265,7 @@ YAHOO.widget.Column = function(oConfigs) {
     this._id = "yui-dtcol"+YAHOO.widget.Column._nCount;
     
     // Object literal defines Column attributes
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
             if(sConfig) {
                 this[sConfig] = oConfigs[sConfig];
@@ -903,7 +903,7 @@ YAHOO.widget.Column.parseSelect = function(sMarkup) {
 YAHOO.widget.Column.prototype.getEditor = function(elCell, oRecord) {
 //Sync up the arg signature for ColumnEditor constructor and show()
     var oEditor = this.editor;
-    if(oEditor.constructor == String) {
+    if(YAHOO.lang.isString(oEditor)) {
         oEditor = new YAHOO.widget.ColumnEditor(this.editor);
         oEditor.show(elCell, oRecord, this);
         this.editor = oEditor;
