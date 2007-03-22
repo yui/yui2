@@ -5,7 +5,7 @@ var Dom = YAHOO.util.Dom;
 var Event = YAHOO.util.Event;
 var DDM = YAHOO.util.DragDropMgr;
 
-YAHOO.example.DDList = function(id, sGroup, config) {
+YAHOO.example.DDListItem = function(id, sGroup, config) {
 
     if (id) {
         this.init(id, sGroup, config);
@@ -15,13 +15,14 @@ YAHOO.example.DDList = function(id, sGroup, config) {
 
     var el = this.getDragEl();
     Dom.setStyle(el, "opacity", 0.67);
+    this.host= config && config.hostId;
 
     this.setPadding(-4);
     this.goingUp = false;
     this.lastY = 0;
 };
 
-YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
+YAHOO.extend(YAHOO.example.DDListItem, YAHOO.util.DDProxy, {
 
     startDrag: function(x, y) {
         this.logger.log(this.id + " startDrag");
@@ -61,8 +62,6 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
                 Dom.setStyle(id, "visibility", "");
             });
         a.animate();
-
-
     },
 
     onDragDrop: function(e, id) {
@@ -85,26 +84,59 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
     },
 
     onDragOver: function(e, id) {
+
+        
     
         var srcEl = this.getEl();
         var destEl;
 
-        if ("string" == typeof id) {
-            // POINT mode
+        if ("string" == typeof id) { // POINT mode
             destEl = Dom.get(id);
-        } else { 
-            // INTERSECT mode
+        } else { // INTERSECT mode
             destEl= YAHOO.util.DDM.getBestMatch(id).getEl();
         }
-        var p = destEl.parentNode;
 
-        if (this.goingUp) {
-            p.insertBefore(srcEl, destEl);
+        var destDD = DDM.getDDById(destEl.id);
+
+        if (destDD.isContainer) {
+
+            if (this.isEmpty) {
+                destEl.appendChild(this.getEl());
+                this.isEmpty = false;
+                DDM.refreshCache();
+            }
+
         } else {
-            p.insertBefore(srcEl, destEl.nextSibling);
-        }
 
-        DDM.refreshCache();
+            var orig_p = srcEl.parentNode;
+            var p = destEl.parentNode;
+
+            //YAHOO.log("destEl: " + destEl.id, "error");
+            //YAHOO.log("p: " + p.id, "error");
+
+            if (this.goingUp) {
+                p.insertBefore(srcEl, destEl);
+            } else {
+                p.insertBefore(srcEl, destEl.nextSibling);
+            }
+
+            if (p != orig_p) {
+
+                // set the new parent
+                this.hostId = p.id;
+
+                // check to se if the original parent is empty
+                if (orig_p.getElementsByTagName("li").length === 0) {
+                    // mark the list dd instance empty
+                    DDM.getDDById(orig_p.id).isEmpty = true;
+                }
+
+                // the new parent can't be empty if it was previously
+                DDM.getDDById(p.id).isEmpty = false;
+            }
+
+            DDM.refreshCache();
+        }
     },
 
     onDragEnter: function(e, id) {
@@ -114,8 +146,26 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
     },
 
     toString: function() {
-        return "DDList " + this.id;
+        return "DDListItem " + this.id;
     }
+
+});
+
+
+YAHOO.example.DDList = function(id, sGroup, config) {
+
+    if (id) {
+        this.initTarget(id, sGroup, config);
+        this.logger = this.logger || YAHOO;
+    }
+
+    this.isContainer = true;
+    this.isEmpty = false;
+
+};
+
+YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
+
 
 });
 

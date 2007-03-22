@@ -1,15 +1,11 @@
-/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
 
-/**
- * @class a YAHOO.util.DDProxy implementation. During the drag over event, the
- * dragged element is inserted before the dragged-over element.
- *
- * @extends YAHOO.util.DDProxy
- * @constructor
- * @param {String} id the id of the linked element
- * @param {String} sGroup the group of related DragDrop objects
- */
-YAHOO.example.DDList = function(id, sGroup, config) {
+(function() {
+
+var Dom = YAHOO.util.Dom;
+var Event = YAHOO.util.Event;
+var DDM = YAHOO.util.DragDropMgr;
+
+YAHOO.example.DDListItem = function(id, sGroup, config) {
 
     if (id) {
         this.init(id, sGroup, config);
@@ -17,90 +13,160 @@ YAHOO.example.DDList = function(id, sGroup, config) {
         this.logger = this.logger || YAHOO;
     }
 
-    var s = this.getDragEl().style;
-    s.borderColor = "transparent";
-    s.backgroundColor = "#f6f5e5";
-    s.opacity = 0.76;
-    s.filter = "alpha(opacity=76)";
+    var el = this.getDragEl();
+    Dom.setStyle(el, "opacity", 0.67);
+    this.host= config && config.hostId;
+
+    this.setPadding(-4);
+    this.goingUp = false;
+    this.lastY = 0;
 };
 
-// YAHOO.example.DDList.prototype = new YAHOO.util.DDProxy();
-YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy);
+YAHOO.extend(YAHOO.example.DDListItem, YAHOO.util.DDProxy, {
 
-YAHOO.example.DDList.prototype.startDrag = function(x, y) {
-    this.logger.log(this.id + " startDrag");
+    startDrag: function(x, y) {
+        this.logger.log(this.id + " startDrag");
 
-    var dragEl = this.getDragEl();
-    var clickEl = this.getEl();
+        var dragEl = this.getDragEl();
+        var clickEl = this.getEl();
+        Dom.setStyle(clickEl, "visibility", "hidden");
 
-    dragEl.innerHTML = clickEl.innerHTML;
-    dragEl.className = clickEl.className;
-    dragEl.style.color = clickEl.style.color;
-    dragEl.style.border = "1px solid blue";
+        dragEl.innerHTML = clickEl.innerHTML;
 
-};
 
-YAHOO.example.DDList.prototype.endDrag = function(e) {
-    // disable moving the linked element
-};
+        Dom.setStyle(dragEl, "color", Dom.getStyle(clickEl, "color"));
+        Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
+        Dom.setStyle(dragEl, "border", "2px solid gray");
+    },
 
-YAHOO.example.DDList.prototype.onDragDrop = function(e, id) {
-    YAHOO.log("DROP: " + id, "warn");
-};
+    endDrag: function(e) {
 
-YAHOO.example.DDList.prototype.onDrag = function(e, id) {
+        var srcEl = this.getEl();
+        var proxy = this.getDragEl();
+        Dom.setStyle(proxy, "visibility", "visible");
+
+        // animate the proxy element to the src element's location
+        var a = new YAHOO.util.Motion( 
+            proxy, { 
+                points: { 
+                    to: Dom.getXY(srcEl)
+                }
+            }, 
+            0.3, 
+            YAHOO.util.Easing.easeOut 
+        )
+        var proxyid = proxy.id;
+        var id = this.id;
+        a.onComplete.subscribe(function() {
+                Dom.setStyle(proxyid, "visibility", "hidden");
+                Dom.setStyle(id, "visibility", "");
+            });
+        a.animate();
+    },
+
+    onDragDrop: function(e, id) {
+        YAHOO.log("DROP: " + id, "warn");
+    },
+
+    onDrag: function(e, id) {
+
+        // figure out which direction we are moving
+        var y = Event.getPageY(e);
+
+        if (y < this.lastY) {
+            this.goingUp = true;
+        } else if (y > this.lastY) {
+            this.goingUp = false;
+        }
+
+        this.lastY = y;
+        
+    },
+
+    onDragOver: function(e, id) {
+
+        
     
-};
+        var srcEl = this.getEl();
+        var destEl;
 
-YAHOO.example.DDList.prototype.onDragOver = function(e, id) {
-    // this.logger.log(this.id.toString() + " onDragOver " + id);
-    var el;
-    
-    if ("string" == typeof id) {
-        el = YAHOO.util.DDM.getElement(id);
-    } else { 
-        el = YAHOO.util.DDM.getBestMatch(id).getEl();
+        if ("string" == typeof id) { // POINT mode
+            destEl = Dom.get(id);
+        } else { // INTERSECT mode
+            destEl= YAHOO.util.DDM.getBestMatch(id).getEl();
+        }
+
+        var destDD = DDM.getDDById(destEl.id);
+
+        if (destDD.isContainer) {
+
+            if (this.isEmpty) {
+                destEl.appendChild(this.getEl());
+                this.isEmpty = false;
+                DDM.refreshCache();
+            }
+
+        } else {
+
+            var orig_p = srcEl.parentNode;
+            var p = destEl.parentNode;
+
+            //YAHOO.log("destEl: " + destEl.id, "error");
+            //YAHOO.log("p: " + p.id, "error");
+
+            if (this.goingUp) {
+                p.insertBefore(srcEl, destEl);
+            } else {
+                p.insertBefore(srcEl, destEl.nextSibling);
+            }
+
+            if (p != orig_p) {
+
+                // set the new parent
+                this.hostId = p.id;
+
+                // check to se if the original parent is empty
+                if (orig_p.getElementsByTagName("li").length === 0) {
+                    // mark the list dd instance empty
+                    DDM.getDDById(orig_p.id).isEmpty = true;
+                }
+
+                // the new parent can't be empty if it was previously
+                DDM.getDDById(p.id).isEmpty = false;
+            }
+
+            DDM.refreshCache();
+        }
+    },
+
+    onDragEnter: function(e, id) {
+    },
+
+    onDragOut: function(e, id) {
+    },
+
+    toString: function() {
+        return "DDListItem " + this.id;
     }
-    
-    var mid = YAHOO.util.DDM.getPosY(el) + ( Math.floor(el.offsetTop / 2));
-    this.logger.log("mid: " + mid);
 
-    if (YAHOO.util.Event.getPageY(e) < mid) {
-        var el2 = this.getEl();
-        var p = el.parentNode;
-        p.insertBefore(el2, el);
-    }
-};
-
-YAHOO.example.DDList.prototype.onDragEnter = function(e, id) {
-    // this.logger.log(this.id.toString() + " onDragEnter " + id);
-    // this.getDragEl().style.border = "1px solid #449629";
-};
-
-YAHOO.example.DDList.prototype.onDragOut = function(e, id) {
-    // I need to know when we are over nothing
-    // this.getDragEl().style.border = "1px solid #964428";
-};
-
-YAHOO.example.DDList.prototype.toString = function() {
-    return "DDList " + this.id;
-};
+});
 
 
-/////////////////////////////////////////////////////////////////////////////
+YAHOO.example.DDList = function(id, sGroup, config) {
 
-YAHOO.example.DDListBoundary = function(id, sGroup, config) {
     if (id) {
-        this.init(id, sGroup, config);
+        this.initTarget(id, sGroup, config);
         this.logger = this.logger || YAHOO;
-        this.isBoundary = true;
     }
+
+    this.isContainer = true;
+    this.isEmpty = false;
+
 };
 
-// YAHOO.example.DDListBoundary.prototype = new YAHOO.util.DDTarget();
-YAHOO.extend(YAHOO.example.DDListBoundary, YAHOO.util.DDTarget);
+YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
 
-YAHOO.example.DDListBoundary.prototype.toString = function() {
-    return "DDListBoundary " + this.id;
-};
 
+});
+
+})();

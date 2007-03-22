@@ -1,4 +1,5 @@
   <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
 <title>Yahoo! UI Library - Drag and Drop</title>
 <link rel="stylesheet" type="text/css" href="./css/screen.css">
@@ -120,21 +121,22 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 
 <script type="text/javascript">
 //<![CDATA[
-    YAHOO.example.logApp = function() {
-        return {
-            init: function() {
-                if (YAHOO.widget.Logger) {
-                    var reader = new YAHOO.widget.LogReader( "logDiv", 
-                            { newestOnTop: true, height: "400px" } );
+    YAHOO.example.logApp =  {
 
-                    reader._onClickPauseBtn(null, reader);
+       reader: null,
 
-                }
+       init:  function() {
+            if (YAHOO.widget.Logger) {
+                this.reader = new YAHOO.widget.LogReader( "logDiv", 
+                        { newestOnTop: true, height: "400px" } );
+
+                this.reader._onClickPauseBtn(null, this.reader);
             }
-        };
-    } (); 
+        }
+    };
 
     YAHOO.util.Event.on(window, "load", YAHOO.example.logApp.init);
+
 //]]>
 </script>
 
