@@ -672,6 +672,50 @@ YAHOO.widget.Dialog.prototype.getData = function() {
 };
 
 /**
+* Removes the Panel element from the DOM and sets all child elements to null.
+* @method destroy
+*/
+YAHOO.widget.Dialog.prototype.destroy = function() {
+
+    var Event = YAHOO.util.Event,
+        oForm = this.form,
+        oFooter = this.footer;
+
+    if(oFooter) {
+
+        var aButtons = oFooter.getElementsByTagName("button");
+
+        if(aButtons && aButtons.length > 0) {
+
+            var i = aButtons.length - 1;
+            
+            do {
+            
+                Event.purgeElement(aButtons[i], false, "click");
+            
+            }
+            while(i--);
+        
+        }
+
+    }
+    
+
+    if(oForm) {
+       
+        Event.purgeElement(oForm);
+
+        this.body.removeChild(oForm);
+        
+        this.form = null;
+
+    }
+
+    YAHOO.widget.Dialog.superclass.destroy.call(this);  
+
+};
+
+/**
 * Returns a string representation of the object.
 * @method toString
 * @return {String}	The string representation of the Dialog

@@ -361,12 +361,29 @@ YAHOO.widget.Panel.prototype.configModal = function(type, args, obj) {
 * @method removeMask
 */
 YAHOO.widget.Panel.prototype.removeMask = function() {
-	if (this.mask) {
-		if (this.mask.parentNode) {
-			this.mask.parentNode.removeChild(this.mask);
-		}
-		this.mask = null;
-	}
+
+    var oMask = this.mask;
+
+    if(oMask) {
+    
+        /*
+            Hide the mask before destroying it to ensure that DOM
+            event handlers on focusable elements get removed.
+        */
+
+        this.hideMask();
+    
+        var oParentNode = oMask.parentNode;
+
+        if(oParentNode) {
+
+            oParentNode.removeChild(oMask);
+
+        }
+
+        this.mask = null;
+    }
+    
 };
 
 /**
@@ -658,6 +675,24 @@ YAHOO.widget.Panel.prototype.sizeMask = function() {
 */
 YAHOO.widget.Panel.prototype.render = function(appendToNode) {
 	return YAHOO.widget.Panel.superclass.render.call(this, appendToNode, this.innerElement);
+};
+
+/**
+* Removes the Panel element from the DOM and sets all child elements to null.
+* @method destroy
+*/
+YAHOO.widget.Panel.prototype.destroy = function() {
+
+    YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
+
+    if(this.close) {
+    
+        YAHOO.util.Event.purgeElement(this.close);
+
+    }
+
+    YAHOO.widget.Panel.superclass.destroy.call(this);  
+
 };
 
 /**
