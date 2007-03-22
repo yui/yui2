@@ -163,19 +163,19 @@ YAHOO.widget.Panel.prototype.initEvents = function() {
 	* CustomEvent fired after the modality mask is shown
 	* @event showMaskEvent
 	*/
-	this.showMaskEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.SHOW_MASK);
+	this.showMaskEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.SHOW_MASK, this);
 
 	/**
 	* CustomEvent fired after the modality mask is hidden
 	* @event hideMaskEvent
 	*/
-	this.hideMaskEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.HIDE_MASK);
+	this.hideMaskEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.HIDE_MASK, this);
 
 	/**
 	* CustomEvent when the Panel is dragged
 	* @event dragEvent
 	*/
-	this.dragEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.DRAG);
+	this.dragEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.DRAG, this);
 };
 
 /**

@@ -194,89 +194,89 @@ YAHOO.widget.Module.prototype = {
 		* @event beforeInitEvent
 		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
 		*/
-		this.beforeInitEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_INIT);
+		this.beforeInitEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_INIT, this);
 
 		/**
 		* CustomEvent fired after class initalization.
 		* @event initEvent
 		* @param {class} classRef	class reference of the initializing class, such as this.beforeInitEvent.fire(YAHOO.widget.Module)
 		*/		
-		this.initEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.INIT);
+		this.initEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.INIT, this);
 
 		/**
 		* CustomEvent fired when the Module is appended to the DOM
 		* @event appendEvent
 		*/
-		this.appendEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.APPEND);
+		this.appendEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.APPEND, this);
 
 		/**
 		* CustomEvent fired before the Module is rendered
 		* @event beforeRenderEvent
 		*/
-		this.beforeRenderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_RENDER);
+		this.beforeRenderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_RENDER, this);
 
 		/**
 		* CustomEvent fired after the Module is rendered
 		* @event renderEvent
 		*/
-		this.renderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.RENDER);
+		this.renderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.RENDER, this);
 	
 		/**
 		* CustomEvent fired when the header content of the Module is modified
 		* @event changeHeaderEvent
 		* @param {String/HTMLElement} content	String/element representing the new header content
 		*/
-		this.changeHeaderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_HEADER);
+		this.changeHeaderEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_HEADER, this);
 		
 		/**
 		* CustomEvent fired when the body content of the Module is modified
 		* @event changeBodyEvent
 		* @param {String/HTMLElement} content	String/element representing the new body content
 		*/		
-		this.changeBodyEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_BODY);
+		this.changeBodyEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_BODY, this);
 		
 		/**
 		* CustomEvent fired when the footer content of the Module is modified
 		* @event changeFooterEvent
 		* @param {String/HTMLElement} content	String/element representing the new footer content
 		*/
-		this.changeFooterEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_FOOTER);
+		this.changeFooterEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_FOOTER, this);
 
 		/**
 		* CustomEvent fired when the content of the Module is modified
 		* @event changeContentEvent
 		*/
-		this.changeContentEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_CONTENT);
+		this.changeContentEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.CHANGE_CONTENT, this);
 
 		/**
 		* CustomEvent fired when the Module is destroyed
 		* @event destroyEvent
 		*/
-		this.destroyEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.DESTORY);
+		this.destroyEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.DESTORY, this);
 		
 		/**
 		* CustomEvent fired before the Module is shown
 		* @event beforeShowEvent
 		*/
-		this.beforeShowEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_SHOW);
+		this.beforeShowEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_SHOW, this);
 
 		/**
 		* CustomEvent fired after the Module is shown
 		* @event showEvent
 		*/
-		this.showEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.SHOW);
+		this.showEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.SHOW, this);
 
 		/**
 		* CustomEvent fired before the Module is hidden
 		* @event beforeHideEvent
 		*/
-		this.beforeHideEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_HIDE);
+		this.beforeHideEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.BEFORE_HIDE, this);
 
 		/**
 		* CustomEvent fired after the Module is hidden
 		* @event hideEvent
 		*/
-		this.hideEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.HIDE);
+		this.hideEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Module.EVENTS.HIDE, this);
 	}, 
 
 	/**

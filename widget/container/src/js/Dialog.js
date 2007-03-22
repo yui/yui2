@@ -125,37 +125,37 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	* CustomEvent fired prior to submission
 	* @event beforeSumitEvent
 	*/	
-	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.BEFORE_SUBMIT);
+	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.BEFORE_SUBMIT, this);
 	
 	/**
 	* CustomEvent fired after submission
 	* @event submitEvent
 	*/
-	this.submitEvent		= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.SUBMIT);
+	this.submitEvent		= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.SUBMIT, this);
 
 	/**
 	* CustomEvent fired prior to manual submission
 	* @event manualSubmitEvent
 	*/
-	this.manualSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.MANUAL_SUBMIT);
+	this.manualSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.MANUAL_SUBMIT, this);
 
 	/**
 	* CustomEvent fired prior to asynchronous submission
 	* @event asyncSubmitEvent
 	*/	
-	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.ASYNC_SUBMIT);
+	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.ASYNC_SUBMIT, this);
 
 	/**
 	* CustomEvent fired prior to form-based submission
 	* @event formSubmitEvent
 	*/
-	this.formSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.FORM_SUBMIT);
+	this.formSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.FORM_SUBMIT, this);
 
 	/**
 	* CustomEvent fired after cancel
 	* @event cancelEvent
 	*/
-	this.cancelEvent		= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.CANCEL);
+	this.cancelEvent		= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.CANCEL, this);
 };
 
 /**

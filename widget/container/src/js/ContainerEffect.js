@@ -51,11 +51,11 @@ YAHOO.widget.ContainerEffect = function(overlay, attrIn, attrOut, targetElement,
 * @method init
 */
 YAHOO.widget.ContainerEffect.prototype.init = function() {
-	this.beforeAnimateInEvent = new YAHOO.util.CustomEvent("beforeAnimateIn");
-	this.beforeAnimateOutEvent = new YAHOO.util.CustomEvent("beforeAnimateOut");
+	this.beforeAnimateInEvent = new YAHOO.util.CustomEvent("beforeAnimateIn", this);
+	this.beforeAnimateOutEvent = new YAHOO.util.CustomEvent("beforeAnimateOut", this);
 
-	this.animateInCompleteEvent = new YAHOO.util.CustomEvent("animateInComplete");
-	this.animateOutCompleteEvent = new YAHOO.util.CustomEvent("animateOutComplete");
+	this.animateInCompleteEvent = new YAHOO.util.CustomEvent("animateInComplete", this);
+	this.animateOutCompleteEvent = new YAHOO.util.CustomEvent("animateOutComplete", this);
 
 	this.animIn = new this.animClass(this.targetElement, this.attrIn.attributes, this.attrIn.duration, this.attrIn.method);
 	this.animIn.onStart.subscribe(this.handleStartAnimateIn, this);

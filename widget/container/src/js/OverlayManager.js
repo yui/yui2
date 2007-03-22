@@ -172,8 +172,8 @@ YAHOO.widget.OverlayManager.prototype = {
 		if (overlay instanceof YAHOO.widget.Overlay) {
 			overlay.cfg.addProperty("manager", { value:this } );
 
-			overlay.focusEvent = new YAHOO.util.CustomEvent("focus");
-			overlay.blurEvent = new YAHOO.util.CustomEvent("blur");
+			overlay.focusEvent = new YAHOO.util.CustomEvent("focus", overlay);
+			overlay.blurEvent = new YAHOO.util.CustomEvent("blur", overlay);
 
 			var mgr=this;
 

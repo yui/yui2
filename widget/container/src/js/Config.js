@@ -72,7 +72,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* Object reference to the owner of this Config Object
 	* @event configChangedEvent
 	*/
-	this.configChangedEvent = new YAHOO.util.CustomEvent("configChanged");
+	this.configChangedEvent = new YAHOO.util.CustomEvent("configChanged", this);
 	this.queueInProgress = false;
 
 	/* Private Members */
@@ -133,11 +133,11 @@ YAHOO.util.Config.prototype.init = function(owner) {
 
 		config[key] = propertyObject;
 
-		propertyObject.event = new YAHOO.util.CustomEvent(key);
+		propertyObject.event = new YAHOO.util.CustomEvent(key, this.owner);
 		propertyObject.key = key;
 
 		if (propertyObject.handler) {
-			propertyObject.event.subscribe(propertyObject.handler, this.owner, true);
+			propertyObject.event.subscribe(propertyObject.handler);
 		}
 
 		this.setProperty(key, propertyObject.value, true);
