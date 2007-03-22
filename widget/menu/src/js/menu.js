@@ -1669,7 +1669,7 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 
         this._nCurrentMouseX = 0;
 
-        Event.addListener(
+        Event.on(
                 this.element, 
                 "mousemove", 
                 this._onMouseMove, 
@@ -2816,8 +2816,8 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
 
             }
 
-            Event.addListener(document, "mousedown", disableAutoSubmenuDisplay);                             
-            Event.addListener(document, "keydown", disableAutoSubmenuDisplay);
+            Event.on(document, "mousedown", disableAutoSubmenuDisplay);                             
+            Event.on(document, "keydown", disableAutoSubmenuDisplay);
 
         }
 
@@ -3559,10 +3559,10 @@ configMaxHeight: function(p_sType, p_aArgs, p_oMenu) {
             this.element.insertBefore(oHeader, oBody);
             this.element.appendChild(oFooter);
 
-            Event.addListener(oHeader, "mouseover", fnMouseOver, this, true);
-            Event.addListener(oHeader, "mouseout", fnMouseOut, this, true);
-            Event.addListener(oFooter, "mouseover", fnMouseOver, this, true);
-            Event.addListener(oFooter, "mouseout", fnMouseOut, this, true);
+            Event.on(oHeader, "mouseover", fnMouseOver, this, true);
+            Event.on(oHeader, "mouseout", fnMouseOut, this, true);
+            Event.on(oFooter, "mouseover", fnMouseOver, this, true);
+            Event.on(oFooter, "mouseout", fnMouseOut, this, true);
         
         }
 
