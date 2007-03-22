@@ -552,6 +552,8 @@ YAHOO.util.History = ( function () {
                     // a warning (do you want to display non secure items?)
                     document.write( '<iframe id="yui_hist_iframe" src="' + iframeTarget + '" style="position:absolute;visibility:hidden;"></iframe>' );
                 } else {
+                    // This trick allows us to do without having to download
+                    // the asset, saving one HTTP request...
                     document.write( '<iframe id="yui_hist_iframe" src="javascript:document.open();document.write(&quot;' + new Date().getTime() + '&quot;);document.close();" style="position:absolute;visibility:hidden;"></iframe>' );
                 }
             }
@@ -613,22 +615,14 @@ YAHOO.util.History = ( function () {
 
             if ( _browser == "msie" ) {
 
-                // Add a new entry to the browser's history...
-                if ( location.protocol == "https:" ) {
-                    html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
-                    try {
-                        doc = _iframe.contentWindow.document;
-                        doc.open();
-                        doc.write( html );
-                        doc.close();
-                    } catch ( e ) {
-                        return false;
-                    }
-                } else {
-                    // The <img> tag is a hack that prevents the throbber from appearing...
-                    html = '<html><body><div id="state">' + fqstate + '</div><img src="javascript:void(0);"></body></html>';
-                    html = html.replace( /\\/g, "\\\\" ).replace( /\"/g, "\\\"" ).replace( /\'/g, "\\\'" ).replace( /\n/g, "\\\n" ).replace( /\t/g, "\\\t" ).replace( /\//g, "\\\/" );
-                    _iframe.src = 'javascript:document.open();document.write("' + html + '");document.close();';
+                html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
+                try {
+                    doc = _iframe.contentWindow.document;
+                    doc.open();
+                    doc.write( html );
+                    doc.close();
+                } catch ( e ) {
+                    return false;
                 }
 
             } else {
