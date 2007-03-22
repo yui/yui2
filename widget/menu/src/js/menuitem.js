@@ -5,8 +5,8 @@
 
 var Dom = YAHOO.util.Dom,
     Module = YAHOO.widget.Module,
-    Menu = YAHOO.widget.Menu;
-
+    Menu = YAHOO.widget.Menu,
+    CustomEvent = YAHOO.util.CustomEvent;
 
 /**
 * Creates an item for a menu.
@@ -42,6 +42,57 @@ YAHOO.widget.MenuItem = function(p_oObject, p_oConfig) {
         this.init(p_oObject, p_oConfig);
 
     }
+
+};
+
+
+/**
+* Constant representing the name of the MenuItem's events
+* @property YAHOO.widget.MenuItem.EVENTS
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.MenuItem.EVENTS = {
+
+    "MOUSE_OVER": "mouseover",
+    "MOUSE_OUT": "mouseout",
+    "MOUSE_DOWN": "mousedown",
+    "MOUSE_UP": "mouseup",
+    "CLICK": "click",
+    "KEY_PRESS": "keypress",
+    "KEY_DOWN": "keydown",
+    "KEY_UP": "keyup",
+    "ITEM_ADDED": "itemAdded",
+    "ITEM_REMOVED": "itemRemoved",
+    "FOCUS": "focus",
+    "BLUR": "blur",
+    "DESTROY": "destroy"
+
+};
+
+
+/**
+* Constant representing the MenuItem's configuration properties
+* @property YAHOO.widget.MenuItem.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.MenuItem.DEFAULT_CONFIG = {
+
+    "TEXT": "text", 
+    "HELP_TEXT": "helptext",
+    "URL": "url", 
+    "TARGET": "target", 
+    "EMPHASIS": "emphasis", 
+    "STRONG_EMPHASIS": "strongemphasis",
+    "CHECKED": "checked", 
+    "DISABLED": "disabled",
+    "SELECTED": "selected",
+    "SUBMENU": "submenu",
+    "ONCLICK": "onclick",
+    "CLASS_NAME": "classname"
 
 };
 
@@ -635,21 +686,18 @@ YAHOO.widget.MenuItem.prototype = {
 
 
             // Create custom events
-    
-            var CustomEvent = YAHOO.util.CustomEvent;
-    
-            this.destroyEvent = new CustomEvent("destroyEvent", this);
-            this.mouseOverEvent = new CustomEvent("mouseOverEvent", this);
-            this.mouseOutEvent = new CustomEvent("mouseOutEvent", this);
-            this.mouseDownEvent = new CustomEvent("mouseDownEvent", this);
-            this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
-            this.clickEvent = new CustomEvent("clickEvent", this);
-            this.keyPressEvent = new CustomEvent("keyPressEvent", this);
-            this.keyDownEvent = new CustomEvent("keyDownEvent", this);
-            this.keyUpEvent = new CustomEvent("keyUpEvent", this);
-            this.focusEvent = new CustomEvent("focusEvent", this);
-            this.blurEvent = new CustomEvent("blurEvent", this);
 
+            this.mouseOverEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.MOUSE_OVER, this);
+            this.mouseOutEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.MOUSE_OUT, this);
+            this.mouseDownEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.MOUSE_DOWN, this);
+            this.mouseUpEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.MOUSE_UP, this);
+            this.clickEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.CLICK, this);
+            this.keyPressEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.KEY_PRESS, this);
+            this.keyDownEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.KEY_DOWN, this);
+            this.keyUpEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.KEY_UP, this);
+            this.focusEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.FOCUS, this);
+            this.blurEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.BLUR, this);
+            this.destroyEvent = new CustomEvent(YAHOO.widget.MenuItem.EVENTS.DESTROY, this);
 
             if(p_oConfig) {
     
@@ -658,9 +706,6 @@ YAHOO.widget.MenuItem.prototype = {
             }        
 
             oConfig.fireQueue();
-
-
-
 
         }
 
@@ -1644,7 +1689,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type String
         */
         oConfig.addProperty(
-            "text", 
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.TEXT, 
             { 
                 value: "", 
                 handler: this.configText, 
@@ -1663,7 +1708,10 @@ YAHOO.widget.MenuItem.prototype = {
         * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
         * HTMLElement</a>
         */
-        oConfig.addProperty("helptext", { handler: this.configHelpText });
+        oConfig.addProperty(
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.HELP_TEXT,
+            { handler: this.configHelpText }
+        );
 
 
         /**
@@ -1675,7 +1723,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type String
         */        
         oConfig.addProperty(
-            "url", 
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.URL, 
             { value: "#", handler: this.configURL, suppressEvent: true }
         );
 
@@ -1692,7 +1740,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type String
         */        
         oConfig.addProperty(
-            "target", 
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.TARGET, 
             { handler: this.configTarget, suppressEvent: true }
         );
 
@@ -1706,7 +1754,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            "emphasis", 
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.EMPHASIS, 
             { 
                 value: false, 
                 handler: this.configEmphasis, 
@@ -1726,7 +1774,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            "strongemphasis",
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.STRONG_EMPHASIS,
             {
                 value: false,
                 handler: this.configStrongEmphasis,
@@ -1744,7 +1792,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            "checked", 
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.CHECKED, 
             {
                 value: false, 
                 handler: this.configChecked, 
@@ -1764,7 +1812,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            "disabled",
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.DISABLED,
             {
                 value: false,
                 handler: this.configDisabled,
@@ -1782,7 +1830,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type Boolean
         */
         oConfig.addProperty(
-            "selected",
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.SELECTED,
             {
                 value: false,
                 handler: this.configSelected,
@@ -1808,7 +1856,10 @@ YAHOO.widget.MenuItem.prototype = {
         * WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
         * HTMLElement</a>
         */
-        oConfig.addProperty("submenu", { handler: this.configSubmenu });
+        oConfig.addProperty(
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.SUBMENU, 
+            { handler: this.configSubmenu }
+        );
 
 
         /**
@@ -1823,7 +1874,10 @@ YAHOO.widget.MenuItem.prototype = {
         * @type Object
         * @default null
         */
-        oConfig.addProperty("onclick", { handler: this.configOnClick });
+        oConfig.addProperty(
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.ONCLICK, 
+            { handler: this.configOnClick }
+        );
 
 
         /**
@@ -1836,7 +1890,7 @@ YAHOO.widget.MenuItem.prototype = {
         * @type String
         */
         oConfig.addProperty(
-            "classname", 
+            YAHOO.widget.MenuItem.DEFAULT_CONFIG.CLASS_NAME, 
             { 
                 value: null, 
                 handler: this.configClassName,

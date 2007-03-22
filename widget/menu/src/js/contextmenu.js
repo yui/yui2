@@ -36,6 +36,39 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 };
 
 
+/**
+* Constant representing the name of the ContextMenu's events
+* @property YAHOO.widget.ContextMenu.EVENTS
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.ContextMenu.EVENTS = {
+
+    "TRIGGER_CONTEXT_MENU": "triggerContextMenuEvent",
+    "CONTEXT_MENU": (
+                        (YAHOO.widget.Module.prototype.browser == "opera" ? 
+                            "mousedown" : "contextmenu")
+                    ),
+    "CLICK": "click"
+
+};
+
+
+/**
+* Constant representing the ContextMenu's configuration properties
+* @property YAHOO.widget.ContextMenu.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.ContextMenu.DEFAULT_CONFIG = {
+
+    "TRIGGER": "trigger"
+
+};
+
+
 YAHOO.lang.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
 
 
@@ -66,6 +99,7 @@ _oTrigger: null,
 _bCancelled: false,
 
 
+
 // Public properties
 
 
@@ -92,8 +126,6 @@ contextEventTarget: null,
 * the context menu.
 */
 triggerContextMenuEvent: null,
-
-
 
 
 
@@ -158,7 +190,11 @@ initEvents: function() {
     // Create custom events
 
     this.triggerContextMenuEvent = 
-            new YAHOO.util.CustomEvent("triggerContextMenuEvent", this);
+
+            new YAHOO.util.CustomEvent(
+                    YAHOO.widget.ContextMenu.EVENTS.TRIGGER_CONTEXT_MENU, 
+                    this
+                );
 
 },
 
@@ -188,21 +224,24 @@ cancel: function() {
 _removeEventHandlers: function() {
 
     var Event = YAHOO.util.Event,
-        oTrigger = this._oTrigger,
-        bOpera = (this.browser == "opera");
+        oTrigger = this._oTrigger;
 
 
     // Remove the event handlers from the trigger(s)
 
     Event.removeListener(
         oTrigger, 
-        (bOpera ? "mousedown" : "contextmenu"), 
+        YAHOO.widget.ContextMenu.EVENTS.CONTEXT_MENU, 
         this._onTriggerContextMenu
     );    
     
-    if(bOpera) {
+    if(this.browser == "opera") {
     
-        Event.removeListener(oTrigger, "click", this._onTriggerClick);
+        Event.removeListener(
+            oTrigger, 
+            YAHOO.widget.ContextMenu.EVENTS.CLICK, 
+            this._onTriggerClick
+        );
 
     }
 
@@ -324,7 +363,10 @@ initDefaultConfig: function() {
     * @type String|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
-    this.cfg.addProperty("trigger", { handler: this.configTrigger });
+    this.cfg.addProperty(
+        YAHOO.widget.ContextMenu.DEFAULT_CONFIG.TRIGGER, 
+        { handler: this.configTrigger }
+    );
 
 },
 
@@ -388,11 +430,9 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             support the "contextmenu" event
         */ 
   
-        var bOpera = (this.browser == "opera");
-
-        Event.addListener(
+        Event.on(
             oTrigger, 
-            (bOpera ? "mousedown" : "contextmenu"), 
+            YAHOO.widget.ContextMenu.EVENTS.CONTEXT_MENU, 
             this._onTriggerContextMenu,
             this,
             true
@@ -404,11 +444,11 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             Opera to prevent default browser behaviors.
         */
 
-        if(bOpera) {
+        if(this.browser == "opera") {
         
-            Event.addListener(
+            Event.on(
                 oTrigger, 
-                "click", 
+                YAHOO.widget.ContextMenu.EVENTS.CLICK, 
                 this._onTriggerClick,
                 this,
                 true

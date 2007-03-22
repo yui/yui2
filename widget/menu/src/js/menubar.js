@@ -34,6 +34,23 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
 };
 
+
+/**
+* Constant representing the MenuBar's configuration properties
+* @property YAHOO.widget.MenuBar.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.MenuBar.DEFAULT_CONFIG = {
+
+    "POSITION": "position", 
+    "SUBMENU_ALIGNMENT": "submenualignment",
+    "AUTO_SUBMENU_DISPLAY": "autosubmenudisplay"
+
+};
+
+
 YAHOO.lang.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
 
 /**
@@ -347,6 +364,7 @@ initDefaultConfig: function() {
         to "static" by re-adding the property.
     */
 
+
     /**
     * @config position
     * @description String indicating how a menu bar should be positioned on the 
@@ -359,7 +377,7 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        "position", 
+        YAHOO.widget.MenuBar.DEFAULT_CONFIG.POSITION, 
         {
             value: "static", 
             handler: this.configPosition, 
@@ -381,7 +399,10 @@ initDefaultConfig: function() {
     * @default ["tl","bl"]
     * @type Array
     */
-    oConfig.addProperty("submenualignment", { value: ["tl","bl"] } );
+    oConfig.addProperty(
+        YAHOO.widget.MenuBar.DEFAULT_CONFIG.SUBMENU_ALIGNMENT, 
+        { value: ["tl","bl"] }
+    );
 
 
     /*
@@ -397,7 +418,7 @@ initDefaultConfig: function() {
     * @type Boolean
     */
 	oConfig.addProperty(
-	   "autosubmenudisplay", 
+	   YAHOO.widget.MenuBar.DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY, 
 	   { value: false, validator: oConfig.checkBoolean } 
     );
 

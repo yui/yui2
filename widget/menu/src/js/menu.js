@@ -29,6 +29,7 @@
 
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
+    CustomEvent = YAHOO.util.CustomEvent,
     Lang = YAHOO.lang;
 
 
@@ -48,6 +49,54 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
         p_oElement, 
         p_oConfig
     );
+
+};
+
+
+/**
+* Constant representing the name of the Menu's events
+* @property YAHOO.widget.Menu.EVENTS
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.Menu.EVENTS = {
+
+    "MOUSE_OVER": "mouseover",
+    "MOUSE_OUT": "mouseout",
+    "MOUSE_DOWN": "mousedown",
+    "MOUSE_UP": "mouseup",
+    "CLICK": "click",
+    "KEY_PRESS": "keypress",
+    "KEY_DOWN": "keydown",
+    "KEY_UP": "keyup",
+    "ITEM_ADDED": "itemAdded",
+    "ITEM_REMOVED": "itemRemoved"
+
+};
+
+
+/**
+* Constant representing the Menu's configuration properties
+* @property YAHOO.widget.Menu.DEFAULT_CONFIG
+* @static
+* @final
+* @type Object
+*/
+YAHOO.widget.Menu.DEFAULT_CONFIG = {
+
+    "VISIBLE": "visible", 
+    "CONSTRAIN_TO_VIEWPORT": "constraintoviewport", 
+    "POSITION": "position", 
+    "SUBMENU_ALIGNMENT": "submenualignment",
+    "AUTO_SUBMENU_DISPLAY": "autosubmenudisplay", 
+    "SHOW_DELAY": "showdelay", 
+    "HIDE_DELAY": "hidedelay", 
+    "SUBMENU_HIDE_DELAY": "submenuhidedelay", 
+    "CLICK_TO_HIDE": "clicktohide",
+    "CONTAINER": "container", 
+    "MAX_HEIGHT": "maxheight", 
+    "CLASS_NAME": "classname"
 
 };
 
@@ -3648,18 +3697,16 @@ initEvents: function() {
 
     // Create custom events
 
-    var CustomEvent = YAHOO.util.CustomEvent;
-
-    this.mouseOverEvent = new CustomEvent("mouseOverEvent", this);
-    this.mouseOutEvent = new CustomEvent("mouseOutEvent", this);
-    this.mouseDownEvent = new CustomEvent("mouseDownEvent", this);
-    this.mouseUpEvent = new CustomEvent("mouseUpEvent", this);
-    this.clickEvent = new CustomEvent("clickEvent", this);
-    this.keyPressEvent = new CustomEvent("keyPressEvent", this);
-    this.keyDownEvent = new CustomEvent("keyDownEvent", this);
-    this.keyUpEvent = new CustomEvent("keyUpEvent", this);
-    this.itemAddedEvent = new CustomEvent("itemAddedEvent", this);
-    this.itemRemovedEvent = new CustomEvent("itemRemovedEvent", this);
+    this.mouseOverEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_OVER, this);
+    this.mouseOutEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_OUT, this);
+    this.mouseDownEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_DOWN, this);
+    this.mouseUpEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_UP, this);
+    this.clickEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.CLICK, this);
+    this.keyPressEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_PRESS, this);
+    this.keyDownEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_DOWN, this);
+    this.keyUpEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_UP, this);
+    this.itemAddedEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.ITEM_ADDED, this);
+    this.itemRemovedEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.ITEM_REMOVED, this);
 
 },
 
@@ -4251,7 +4298,7 @@ initDefaultConfig: function() {
     * @type Boolean
     */
     oConfig.addProperty(
-        "visible", 
+        YAHOO.widget.Menu.DEFAULT_CONFIG.VISIBLE, 
         {
             value:false, 
             handler:this.configVisible, 
@@ -4273,7 +4320,7 @@ initDefaultConfig: function() {
     * @type Boolean
     */
     oConfig.addProperty(
-        "constraintoviewport", 
+        YAHOO.widget.Menu.DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT, 
         {
             value:true, 
             handler:this.configConstrainToViewport, 
@@ -4295,7 +4342,7 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        "position", 
+        YAHOO.widget.Menu.DEFAULT_CONFIG.POSITION, 
         {
             value: "dynamic", 
             handler: this.configPosition, 
@@ -4314,7 +4361,12 @@ initDefaultConfig: function() {
     * @default ["tl","tr"]
     * @type Array
     */
-    oConfig.addProperty("submenualignment", { value: ["tl","tr"] } );
+    oConfig.addProperty(
+        YAHOO.widget.Menu.DEFAULT_CONFIG.SUBMENU_ALIGNMENT, 
+        { 
+            value: ["tl","tr"] 
+        }
+    );
 
 
     /**
@@ -4325,7 +4377,7 @@ initDefaultConfig: function() {
     * @type Boolean
     */
 	oConfig.addProperty(
-	   "autosubmenudisplay", 
+	   YAHOO.widget.Menu.DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY, 
 	   { 
 	       value: true, 
 	       validator: oConfig.checkBoolean
@@ -4342,7 +4394,7 @@ initDefaultConfig: function() {
     * @type Number
     */
 	oConfig.addProperty(
-	   "showdelay", 
+	   YAHOO.widget.Menu.DEFAULT_CONFIG.SHOW_DELAY, 
 	   { 
 	       value: 250, 
 	       validator: oConfig.checkNumber
@@ -4358,7 +4410,7 @@ initDefaultConfig: function() {
     * @type Number
     */
 	oConfig.addProperty(
-	   "hidedelay", 
+	   YAHOO.widget.Menu.DEFAULT_CONFIG.HIDE_DELAY, 
 	   { 
 	       value: 0, 
 	       validator: oConfig.checkNumber, 
@@ -4378,7 +4430,7 @@ initDefaultConfig: function() {
     * @type Number
     */
 	oConfig.addProperty(
-	   "submenuhidedelay", 
+	   YAHOO.widget.Menu.DEFAULT_CONFIG.SUBMENU_HIDE_DELAY, 
 	   { 
 	       value: 250, 
 	       validator: oConfig.checkNumber
@@ -4394,7 +4446,7 @@ initDefaultConfig: function() {
     * @type Boolean
     */
     oConfig.addProperty(
-        "clicktohide",
+        YAHOO.widget.Menu.DEFAULT_CONFIG.CLICK_TO_HIDE,
         {
             value: true,
             validator: oConfig.checkBoolean
@@ -4412,7 +4464,7 @@ initDefaultConfig: function() {
 	* @default document.body
 	*/
 	oConfig.addProperty(
-	   "container", 
+	   YAHOO.widget.Menu.DEFAULT_CONFIG.CONTAINER, 
 	   { 
 	       value:document.body, 
 	       handler:this.configContainer 
@@ -4428,7 +4480,7 @@ initDefaultConfig: function() {
     * @type Number
     */
     oConfig.addProperty(
-       "maxheight", 
+       YAHOO.widget.Menu.DEFAULT_CONFIG.MAX_HEIGHT, 
        {
             value: 0,
             validator: oConfig.checkNumber, 
@@ -4447,7 +4499,7 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        "classname", 
+        YAHOO.widget.Menu.DEFAULT_CONFIG.CLASS_NAME, 
         { 
             value: null, 
             handler: this.configClassName,

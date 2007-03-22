@@ -24,7 +24,20 @@
 (function() {
 
 var Dom = YAHOO.util.Dom,
-    Event = YAHOO.util.Event;
+    Event = YAHOO.util.Event,
+
+    // Map of DOM event types to their equivalent CustomEvent types
+
+    m_oEventTypes =  {
+        "click": "clickEvent",
+        "mousedown": "mouseDownEvent",
+        "mouseup": "mouseUpEvent",
+        "mouseover": "mouseOverEvent",
+        "mouseout": "mouseOutEvent",
+        "keydown": "keyDownEvent",
+        "keyup": "keyUpEvent",
+        "keypress": "keyPressEvent"
+    };
 
 /**
 * Singleton that manages a collection of all menus and menu items.  Listens for 
@@ -245,18 +258,7 @@ YAHOO.widget.MenuManager = function() {
 
             // Map of DOM event names to CustomEvent names
         
-            var oEventTypes =  {
-                    "click": "clickEvent",
-                    "mousedown": "mouseDownEvent",
-                    "mouseup": "mouseUpEvent",
-                    "mouseover": "mouseOverEvent",
-                    "mouseout": "mouseOutEvent",
-                    "keydown": "keyDownEvent",
-                    "keyup": "keyUpEvent",
-                    "keypress": "keyPressEvent"
-                },
-    
-                sCustomEventType = oEventTypes[p_oEvent.type];
+            var sCustomEventType = m_oEventTypes[p_oEvent.type];
 
 
             // Fire the Custom Even that corresponds the current DOM event    
@@ -446,14 +448,14 @@ YAHOO.widget.MenuManager = function() {
         
                     var oDoc = document;
             
-                    Event.addListener(oDoc, "mouseover", onDOMEvent, me, true);
-                    Event.addListener(oDoc, "mouseout", onDOMEvent, me, true);
-                    Event.addListener(oDoc, "mousedown", onDOMEvent, me, true);
-                    Event.addListener(oDoc, "mouseup", onDOMEvent, me, true);
-                    Event.addListener(oDoc, "click", onDOMEvent, me, true);
-                    Event.addListener(oDoc, "keydown", onDOMEvent, me, true);
-                    Event.addListener(oDoc, "keyup", onDOMEvent, me, true);
-                    Event.addListener(oDoc, "keypress", onDOMEvent, me, true);
+                    Event.on(oDoc, "mouseover", onDOMEvent, me, true);
+                    Event.on(oDoc, "mouseout", onDOMEvent, me, true);
+                    Event.on(oDoc, "mousedown", onDOMEvent, me, true);
+                    Event.on(oDoc, "mouseup", onDOMEvent, me, true);
+                    Event.on(oDoc, "click", onDOMEvent, me, true);
+                    Event.on(oDoc, "keydown", onDOMEvent, me, true);
+                    Event.on(oDoc, "keyup", onDOMEvent, me, true);
+                    Event.on(oDoc, "keypress", onDOMEvent, me, true);
         
                     m_bInitializedEventHandlers = true;
                     
