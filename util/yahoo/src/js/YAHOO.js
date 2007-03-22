@@ -221,7 +221,8 @@ YAHOO.lang = {
      * @return Boolean
      */
     isArray: function(obj) { // frames lose type, so test constructor string
-        if (obj.constructor && obj.constructor.toString().indexOf('Array') > -1) {
+        if (obj && obj.constructor && 
+                   obj.constructor.toString().indexOf('Array') > -1) {
             return true;
         } else {
             return YAHOO.lang.isObject(obj) && obj.constructor == Array;
@@ -276,7 +277,7 @@ YAHOO.lang = {
      * @return Boolean
      */  
     isObject: function(obj) {
-        return typeof obj == 'object' || YAHOO.lang.isFunction(obj);
+        return obj && (typeof obj == 'object' || YAHOO.lang.isFunction(obj));
     },
         
     /**
