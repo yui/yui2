@@ -8,6 +8,13 @@
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
 <link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css" />
 <style type="text/css">
+#styled .yui-log {font-family:verdana;}
+#styled .info {background-color:blue;}
+#styled .warn {background-color:green;}
+#styled .error {background-color:red;}
+#styled .time {background-color:orange;}
+#styled .window {background-color:yellow;}
+
 </style>
 </head>
 
@@ -20,10 +27,9 @@
     <!-- Intro -->
     <div id="intro">
         <h3>Customizing LogReader</h3>
-        <p>The UI of LogReader can be customized to a certain extent. These
-        examples demonstrate some of the properties and methods of LogReader.
-        Each LogReader has been floated right using CSS.
-        <a href="#" class="logit">Click here</a> to log a simple message.</p>
+        <p>The UI of LogReader can be customized via certain properties and
+        methods, as well as CSS classes. Please refer to the
+        Sample Code section for details on how to achieve the following effects.</p>
     </div>
 
     <!-- Example: Compact Output -->
@@ -33,14 +39,16 @@
             <h4>Example: Compact Ouput</h4>
             <p><a href="#" class="logit">Log a simple message</a></p>
             
-            <p>Verbose output has been disabled so each message gets output on
+            <p>By default, log messages are printed to the console with a good
+            deal of whitespace for better readability. In this example, verbose
+            output has been disabled so each message gets output on
             a single line without wrapping.</p>
 
             <!-- Sample code begins -->
             <div class="code">
                 <h4>Sample Code</h4>
 
-                <textarea name="code" class="HTML" cols="60" rows="1">
+                <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="compact"&gt;&lt;/div&gt;
 
@@ -62,8 +70,9 @@ myCompact.setTitle("Compact Output");
             <h4>Example: Oldest On Top</h4>
             <p><a href="#" class="logit">Log a simple message</a></p>
 
-            <p>New messages get attached to the bottom of the console, rather
-            than at the top.</p>
+            <p>By default, new messages get prepended at the top of the console.
+            In this example, new messages get appended at the bottom of the
+            console.</p>
         </div>
         
 
@@ -71,7 +80,7 @@ myCompact.setTitle("Compact Output");
         <div class="code">
             <h4>Sample Code</h4>
 
-            <textarea name="code" class="HTML" cols="60" rows="1">
+            <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="oldestOnTop"&gt;&lt;/div&gt;
 
@@ -101,7 +110,7 @@ myOldestOnTop.setTitle("Oldest On Top");
         <div class="code">
             <h4>Sample Code</h4>
 
-            <textarea name="code" class="HTML" cols="60" rows="1">
+            <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="undraggable"&gt;&lt;/div&gt;
 
@@ -132,7 +141,7 @@ myUndraggable.setTitle("Undraggable");
         <div class="code">
             <h4>Sample Code</h4>
 
-            <textarea name="code" class="HTML" cols="60" rows="1">
+            <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="filtered"&gt;&lt;/div&gt;
 
@@ -173,7 +182,7 @@ myFiltered2.setTitle("Filtered LogReader: LogReader Messages Only");
         <div class="code">
             <h4>Sample Code</h4>
 
-            <textarea name="code" class="HTML" cols="60" rows="1">
+            <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="paused"&gt;&lt;/div&gt;
 
@@ -201,7 +210,7 @@ myPaused.setTitle("3 Second Output Buffer");
         <div class="code">
             <h4>Sample Code</h4>
 
-            <textarea name="code" class="HTML" cols="60" rows="1">
+            <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="paused"&gt;&lt;/div&gt;
 
@@ -230,7 +239,7 @@ myPaused.setTitle("Paused LogReader");
         <div class="code">
             <h4>Sample Code</h4>
 
-            <textarea name="code" class="HTML" cols="60" rows="1">
+            <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="collapsed"&gt;&lt;/div&gt;
 
@@ -259,12 +268,12 @@ myCollapsed.setTitle("Collapsed LogReader");
         <div class="code">
             <h4>Sample Code</h4>
 
-            <textarea name="code" class="HTML" cols="60" rows="1">
+            <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;body&gt;
 &lt;div id="hidden"&gt;&lt;/div&gt;
 
 &lt;script type="text/javascript"&gt;
-var myHidden = new YAHOO.widget.LogReader("hidden",{draggable:false});
+var myHidden = new YAHOO.widget.LogReader("hidden");
 myHidden.hide();
 myHidden.setTitle("Hidden LogReader");
 &lt;/script&gt;
@@ -273,6 +282,41 @@ myHidden.setTitle("Hidden LogReader");
         </div>
         <!-- Code sample ends -->
     </div>
+
+    <!-- Example: Styled via CSS -->
+    <div class="example">
+        <div id="styled" class="container"></div>
+        <div class="content">
+            <h4>Example: Styled via CSS</h4>
+            <p><a href="#" class="logit">Log a simple message</a></p>
+
+            <p>The UI has been customized via CSS.</p>
+        </div>
+
+
+        <!-- Sample code begins -->
+        <div class="code">
+            <h4>Sample Code</h4>
+
+            <textarea name="code" class="JScript" cols="60" rows="1">
+&lt;head&gt;
+&lt;style type="text/css"&gt;
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+&lt;div id="styled"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript"&gt;
+var myStyled = new YAHOO.widget.LogReader("styled");
+myStyled.setTitle("Styled via CSS");
+&lt;/script&gt;
+&lt;/body&gt;
+            </textarea>
+        </div>
+        <!-- Code sample ends -->
+    </div>
+
 </div>
 
 <!-- Libary begins -->
@@ -319,9 +363,12 @@ var myCollapsed = new YAHOO.widget.LogReader("collapsed");
 myCollapsed.collapse();
 myCollapsed.setTitle("Collapsed LogReader");
 
-var myHidden = new YAHOO.widget.LogReader("hidden",{draggable:false});
+var myHidden = new YAHOO.widget.LogReader("hidden");
 myHidden.hide();
 myHidden.setTitle("Hidden LogReader");
+
+var myStyled = new YAHOO.widget.LogReader("styled");
+myStyled.setTitle("Styled via CSS");
 
 // Click to log
 var clickToLog = function(e) {
