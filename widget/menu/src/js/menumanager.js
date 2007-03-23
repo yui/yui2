@@ -280,8 +280,6 @@ YAHOO.widget.MenuManager = function() {
                 dynamically positioned menus
             */
             
-            var oActiveItem;
-    
             for(var i in m_oMenus) {
     
                 if(YAHOO.lang.hasOwnProperty(m_oMenus,i)) {
