@@ -457,6 +457,15 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("rowSelectEvent");
 
     /**
+     * Fired when a TR element is unselected.
+     *
+     * @event rowUnselectEvent
+     * @param oArgs.el {HTMLElement} The unselected TR element.
+     * @param oArgs.record {YAHOO.widget.Record} The associated Record instance.
+     */
+    this.createEvent("rowUnselectEvent");
+
+    /**
      * Fired when one or more TR elements are deleted.
      *
      * @event rowDeleteEvent
@@ -1074,6 +1083,15 @@ YAHOO.widget.DataTable.prototype._oColumnSet = null;
 YAHOO.widget.DataTable.prototype._oRecordSet = null;
 
 /**
+ * Id of anchor row for multiple selections.
+ *
+ * @property _selectRowAnchorId
+ * @type String
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._selectRowAnchorId = null;
+
+/**
  * Array of Records that are in the selected state.
  *
  * @property _aSelectedRecords
@@ -1468,7 +1486,7 @@ YAHOO.widget.DataTable.prototype._select = function(els) {
         // Set the style
         YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
     }
-    this._lastSelected = els[els.length-1];
+    this._lastSelectedId = els[els.length-1].id;
 };
 
 /**
@@ -1476,10 +1494,15 @@ YAHOO.widget.DataTable.prototype._select = function(els) {
  * affect internal tracker.
  *
  * @method _unselect
- * @param els {HTMLElement[] | String[]} Array of HTML elements by reference or ID string.
+ * @param els {HTMLElement | String | HTMLElement[] | String[]} HTMLElement by
+ * reference or ID string, or array of HTML elements by reference or ID string.
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselect = function(els) {
+    if(!YAHOO.lang.isArray(els)) {
+        els = [els];
+    }
+    
     for(var i=0; i<els.length; i++) {
         // Remove the style
         YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
@@ -1835,11 +1858,12 @@ YAHOO.widget.DataTable.prototype._onKeypress = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
-    var oldSelected = oSelf._lastSelected;
+    var oldSelectedId = oSelf._lastSelectedId;
     // Only move selection if one is already selected
     // TODO: config to allow selection even if one is NOT already selected
     // TODO: if something isn't selected already, arrow key should select first or last one
-    if(oldSelected && oSelf.isSelected(oldSelected)) {
+    if(oldSelectedId && oSelf.isSelected(oldSelectedId)) {
+        var oldSelected = YAHOO.util.Dom.get(oldSelectedId);
         var newSelected;
         // arrow down
         if(e.keyCode == 40) {
@@ -1848,7 +1872,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
             if(oldSelected.tagName.toLowerCase() == "tr") {
                 // We have room to move down
                 if(oldSelected.sectionRowIndex+1 < oSelf._elBody.rows.length) {
-                            if(!e.shiftKey) {
+                            if(!e.shiftKey || oSelf.rowSingleSelect) {
                                 oSelf.unselectAllRows();
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
@@ -1878,7 +1902,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
             if(oldSelected.tagName.toLowerCase() == "tr") {
                 // We have room to move up
                 if((oldSelected.sectionRowIndex > 0)) {
-                            if(!e.shiftKey) {
+                            if(!e.shiftKey || oSelf.rowSingleSelect) {
                                 oSelf.unselectAllRows();
                             }
                             newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
@@ -2721,6 +2745,46 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
 };
 
 /**
+ * Sets a row to the unselected state.
+ *
+ * @method unselectRow
+ * @param row {HTMLElement | String} HTML TR element reference or ID.
+ */
+YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
+    // Validate the row
+    row = YAHOO.util.Dom.get(row);
+    if(row && row.yuiRecordId) {
+        var recordId = row.yuiRecordId;
+
+        // Update internal tracker
+        var tracker = this._aSelectedRecords || [];
+        // Remove Record ID if there...
+        if(tracker.length > 0) {
+            // ...using Array.indexOf if available...
+            if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
+                tracker.splice(tracker.indexOf(recordId), 1);
+            }
+            // ...or do it the old-fashioned way
+            else {
+                for(var i=0; i<tracker.length; i++) {
+                   if(tracker[i] === recordId) {
+                        tracker.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        // Update UI
+        this._unselect(row);
+
+        this.fireEvent("rowUnselectEvent",{el:row, record:this._oRecordSet.getRecord(recordId)});
+        YAHOO.log("Row unselected: ID=\"" + row.id + "\", " +
+                "Record=" + this._oRecordSet.getRecord(recordId),
+                "info",this.toString());
+    }
+};
+
+/**
  * Sets one or more elements to the highlighted state.
  *
  * @method highlight
@@ -2791,6 +2855,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
         }
         this._aSelectedRecords = tracker;
         this.fireEvent("selectEvent",{els:els});
+        YAHOO.log(els.length + " element(s) selected", "info", this.toString());
     }
 };
 
@@ -2827,6 +2892,7 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
         }
         this._aSelectedRecords = tracker;
         this.fireEvent("unselectEvent",{els:els});
+        YAHOO.log(els.length + " element(s) unselected", "info", this.toString());
     }
 };
 
@@ -2858,8 +2924,8 @@ YAHOO.widget.DataTable.prototype.unselectAllCells = function() {
  * Returns true if given element is select, false otherwise.
  *
  * @method isSelected
- * @param el {element} HTML element reference.
- * @return {boolean} True if element is selected.
+ * @param el {HTMLElement} HTML element reference or ID.
+ * @return {Boolean} True if element is selected.
  */
 YAHOO.widget.DataTable.prototype.isSelected = function(el) {
     return YAHOO.util.Dom.hasClass(el,YAHOO.widget.DataTable.CLASS_SELECTED);
@@ -3228,52 +3294,150 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
 };
 
 /**
- * Overridable custom event handler to select row.
+ * Overridable custom event handler to select row according to desktop paradigm.
  *
  * @method onEventSelectRow
  * @param oArgs.event {HTMLEvent} Event object.
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
-    var i;
     var evt = oArgs.event;
-    var target = oArgs.target;
+    var elTarget = oArgs.target;
+    var elTag = elTarget.tagName.toLowerCase();
+    var bSingleSelect = this.rowSingleSelect;
+    var bSHIFT = evt.shiftKey;
+    var bCTRL = evt.ctrlKey;
+    var i;
 
-    //TODO: add a safety net in case TR is never reached
-    // Walk up the DOM until we get to the TR
-    while(target.tagName.toLowerCase() != "tr") {
-        target = target.parentNode;
-    }
-
-    if(this.isSelected(target)) {
-        this.unselect(target);
-    }
-    else {
-        if(this.rowSingleSelect && !evt.ctrlKey && !evt.shiftKey) {
-            this.unselectAllRows();
+    // Traverse up the DOM to find the row
+    while(elTag != "tr") {
+        // Bail out
+        if(elTag == "body") {
+            return;
         }
-        if(evt.shiftKey) {
-            var startRow = this._lastSelected;
-            if(startRow && this.isSelected(startRow)) {
-                this.unselectAllRows();
-                if(startRow.sectionRowIndex < target.sectionRowIndex) {
-                    for(i=startRow.sectionRowIndex; i<=target.sectionRowIndex; i++) {
-                        this.selectRow(this._elBody.rows[i]);
+        // Maybe it's the parent
+        elTarget = elTarget.parentNode;
+        elTag = elTarget.tagName.toLowerCase();
+    }
+    var sTargetId = elTarget.id;
+    var rows = this._elBody.rows;
+    var anchor = YAHOO.util.Dom.get(this._selectRowAnchorId);
+    var anchorIndex;
+    var targetIndex = elTarget.sectionRowIndex;
+
+    // Both SHIFT and CTRL
+    if(!bSingleSelect && bSHIFT && bCTRL) {
+        // Validate anchor
+        if(anchor) {
+            anchorIndex = anchor.sectionRowIndex;
+            if(this.isSelected(YAHOO.util.Dom.get(this._selectRowAnchorId))) {
+                // Select all rows between anchor row and target row, inclusive
+                if(anchorIndex < targetIndex) {
+                    for(i=anchorIndex+1; i<=targetIndex; i++) {
+                        if(!this.isSelected(rows[i])) {
+                            this.selectRow(rows[i]);
+                        }
                     }
                 }
+                // Select from target to anchor
                 else {
-                    for(i=target.sectionRowIndex; i<=startRow.sectionRowIndex; i++) {
-                        this.selectRow(this._elBody.rows[i]);
+                    for(i=targetIndex; i<=anchorIndex-1; i++) {
+                        if(!this.isSelected(rows[i])) {
+                            this.selectRow(rows[i]);
+                        }
                     }
                 }
             }
             else {
-                this.selectRow(target);
+                // Unselect all rows between anchor row and target row, exclusive
+                if(anchorIndex < targetIndex) {
+                    for(i=anchorIndex+1; i<=targetIndex-1; i++) {
+                        if(this.isSelected(rows[i])) {
+                            this.unselectRow(rows[i]);
+                        }
+                    }
+                }
+                // Select from target to anchor
+                else {
+                    for(i=targetIndex+1; i<=anchorIndex-1; i++) {
+                        if(this.isSelected(rows[i])) {
+                            this.unselectRow(rows[i]);
+                        }
+                    }
+                }
+                this.select(elTarget);
             }
         }
+        // Invalid anchor
         else {
-            this.selectRow(target);
+            // Set anchor
+            this._selectRowAnchorId = sTargetId;
+            
+            // Toggle selection of target
+            if(this.isSelected(elTarget)) {
+                this.unselect(elTarget);
+            }
+            else {
+                this.select(elTarget);
+            }
         }
+    }
+    // Only SHIFT
+    else if(!bSingleSelect && bSHIFT) {
+        this.unselectAllRows();
+
+        // Validate anchor
+        if(anchor) {
+            anchorIndex = anchor.sectionRowIndex;
+            
+            // Select all rows between anchor row and target row inclusive
+            if(anchorIndex < targetIndex) {
+                for(i=anchorIndex; i<=targetIndex; i++) {
+                    this.selectRow(rows[i]);
+                }
+            }
+            // Select from target to anchor
+            else {
+                for(i=targetIndex; i<=anchorIndex; i++) {
+                    this.selectRow(rows[i]);
+                }
+            }
+        }
+        // Invalid anchor
+        else {
+            // Set anchor
+            this._selectRowAnchorId = sTargetId;
+            
+            // Select target only
+            this.selectRow(elTarget);
+        }
+    }
+    // Only CTRL
+    else if(!bSingleSelect && bCTRL) {
+        // Set anchor
+        this._selectRowAnchorId = sTargetId;
+        
+        // Toggle selection of target
+        if(this.isSelected(elTarget)) {
+            this.unselect(elTarget);
+        }
+        else {
+            this.select(elTarget);
+        }
+    }
+    // Neither SHIFT nor CTRL
+    else if(bSingleSelect) {
+        this.unselect(this._lastSelectedId);
+        this.select(elTarget);
+    }
+    // Neither SHIFT nor CTRL
+    else {
+        // Set anchor
+        this._selectRowAnchorId = sTargetId;
+        
+        // Select only target
+        this.unselectAllRows();
+        this.selectRow(elTarget);
     }
 };
 
