@@ -2052,12 +2052,22 @@ YAHOO.widget.MenuItem.prototype = {
 
         var oParent = this.parent,
             oAnchor = this._oAnchor,
-            oActiveItem = oParent.activeItem;
+            oActiveItem = oParent.activeItem,
+            me = this;
 
 
         function setFocus() {
 
             try {
+
+                if (
+                    (me.browser == "ie" || me.browser == "ie7") && 
+                    !document.hasFocus()
+                ) {
+                
+                    return;
+                
+                }
 
                 oAnchor.focus();
 
@@ -2101,7 +2111,7 @@ YAHOO.widget.MenuItem.prototype = {
     /**
     * @method blur
     * @description Causes the menu item to lose focus and fires the 
-    * onblur event.
+    * blur event.
     */    
     blur: function() {
 
@@ -2119,6 +2129,19 @@ YAHOO.widget.MenuItem.prototype = {
 
         }
 
+    },
+
+
+    /**
+    * @method hasFocus
+    * @description Returns a boolean indicating whether or not the menu item
+    * has focus.
+    * @return {Boolean}
+    */
+    hasFocus: function() {
+    
+        return (YAHOO.widget.MenuManager.getFocusedMenuItem() == this);
+    
     },
 
 

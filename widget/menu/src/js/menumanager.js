@@ -24,20 +24,8 @@
 (function() {
 
 var Dom = YAHOO.util.Dom,
-    Event = YAHOO.util.Event,
+    Event = YAHOO.util.Event;
 
-    // Map of DOM event types to their equivalent CustomEvent types
-
-    m_oEventTypes =  {
-        "click": "clickEvent",
-        "mousedown": "mouseDownEvent",
-        "mouseup": "mouseUpEvent",
-        "mouseover": "mouseOverEvent",
-        "mouseout": "mouseOutEvent",
-        "keydown": "keyDownEvent",
-        "keyup": "keyUpEvent",
-        "keypress": "keyPressEvent"
-    };
 
 /**
 * Singleton that manages a collection of all menus and menu items.  Listens for 
@@ -72,7 +60,22 @@ YAHOO.widget.MenuManager = function() {
     
         m_oVisibleMenus = {},
 
-        me = this;
+
+        // Map of DOM event types to their equivalent CustomEvent types
+    
+        m_oEventTypes =  {
+            "click": "clickEvent",
+            "mousedown": "mouseDownEvent",
+            "mouseup": "mouseUpEvent",
+            "mouseover": "mouseOverEvent",
+            "mouseout": "mouseOutEvent",
+            "keydown": "keyDownEvent",
+            "keyup": "keyUpEvent",
+            "keypress": "keyPressEvent"
+        },
+
+
+        m_oFocusedMenuItem = null;
 
 
     var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
@@ -95,8 +98,10 @@ YAHOO.widget.MenuManager = function() {
         if(p_oItem && m_oItems[sId] != p_oItem) {
     
             m_oItems[sId] = p_oItem;
-    
-            p_oItem.destroyEvent.subscribe(onItemDestroy, p_oItem);
+
+            p_oItem.destroyEvent.subscribe(onItemDestroy);
+            p_oItem.focusEvent.subscribe(onItemFocus);
+            p_oItem.blurEvent.subscribe(onItemBlur);
 
             m_oLogger.log("Item: " + 
                 p_oItem.toString() + " successfully registered.");
@@ -254,25 +259,49 @@ YAHOO.widget.MenuManager = function() {
 
         }
 
+
         if(oMenu) {
 
-            // Map of DOM event names to CustomEvent names
-        
             var sCustomEventType = m_oEventTypes[p_oEvent.type];
 
 
-            // Fire the Custom Even that corresponds the current DOM event    
+            // Fire the Custom Event that corresponds the current DOM event    
     
             if(oMenuItem && !oMenuItem.cfg.getProperty("disabled")) {
-            
+
                 oMenuItem[sCustomEventType].fire(p_oEvent);                   
-            
+
+
+                if (p_oEvent.type == "keyup" || p_oEvent.type == "mousedown") {
+
+                    if (m_oFocusedMenuItem != oMenuItem) {
+                    
+                        if(m_oFocusedMenuItem) {
+
+                            m_oFocusedMenuItem.blurEvent.fire();
+                        
+                        }
+
+                        oMenuItem.focusEvent.fire();
+                    
+                    }
+                
+                }
+
             }
     
             oMenu[sCustomEventType].fire(p_oEvent, oMenuItem);
         
         }
         else if(p_oEvent.type == "mousedown") {
+
+            if(m_oFocusedMenuItem) {
+
+                m_oFocusedMenuItem.blurEvent.fire();
+
+                m_oFocusedMenuItem = null;
+
+            }
 
 
             /*
@@ -305,6 +334,17 @@ YAHOO.widget.MenuManager = function() {
             } 
 
         }
+        else if(p_oEvent.type == "keyup") { 
+
+            if(m_oFocusedMenuItem) {
+
+                m_oFocusedMenuItem.blurEvent.fire();
+
+                m_oFocusedMenuItem = null
+
+            }
+
+        }
 
     }
 
@@ -316,19 +356,47 @@ YAHOO.widget.MenuManager = function() {
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-    * fired the event.
     */
-    function onMenuDestroy(p_sType, p_aArgs, p_oMenu) {
+    function onMenuDestroy(p_sType, p_aArgs) {
 
-        if(p_oMenu && m_oMenus[p_oMenu.id]) {
+        if(m_oMenus[this.id]) {
 
-            delete m_oMenus[p_oMenu.id];
+            delete m_oMenus[this.id];
 
             m_oLogger.log("Menu: " + 
-                p_oMenu.toString() + " successfully unregistered.");
+                this.toString() + " successfully unregistered.");
 
         }
+
+    }
+
+
+    /**
+    * @method onItemFocus
+    * @description "focus" event handler for a MenuItem instance.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    function onItemFocus(p_sType, p_aArgs) {
+
+        m_oFocusedMenuItem = this;
+
+    }
+
+
+    /**
+    * @method onItemBlur
+    * @description "blur" event handler for a MenuItem instance.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    function onItemBlur(p_sType, p_aArgs) {
+
+        m_oFocusedMenuItem = null;
 
     }
 
@@ -340,10 +408,8 @@ YAHOO.widget.MenuManager = function() {
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-    * @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
-    * that fired the event.
     */
-    function onItemDestroy(p_sType, p_aArgs, p_oItem) {
+    function onItemDestroy(p_sType, p_aArgs) {
 
         var sId = p_oItem.id;
 
@@ -364,28 +430,26 @@ YAHOO.widget.MenuManager = function() {
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-    * @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-    * fired the event.
     */
-    function onMenuVisibleConfigChange(p_sType, p_aArgs, p_oMenu) {
+    function onMenuVisibleConfigChange(p_sType, p_aArgs) {
 
         var bVisible = p_aArgs[0];
         
         if(bVisible) {
 
-            m_oVisibleMenus[p_oMenu.id] = p_oMenu;
+            m_oVisibleMenus[this.id] = this;
             
             m_oLogger.log("Menu: " + 
-                p_oMenu.toString() + 
+                this.toString() + 
                 " registered with the collection of visible menus.");
         
         }
-        else if(m_oVisibleMenus[p_oMenu.id]) {
+        else if(m_oVisibleMenus[this.id]) {
         
-            delete m_oVisibleMenus[p_oMenu.id];
+            delete m_oVisibleMenus[this.id];
             
             m_oLogger.log("Menu: " + 
-                p_oMenu.toString() + 
+                this.toString() + 
                 " unregistered from the collection of visible menus.");
         
         }
@@ -446,27 +510,27 @@ YAHOO.widget.MenuManager = function() {
         
                     var oDoc = document;
             
-                    Event.on(oDoc, "mouseover", onDOMEvent, me, true);
-                    Event.on(oDoc, "mouseout", onDOMEvent, me, true);
-                    Event.on(oDoc, "mousedown", onDOMEvent, me, true);
-                    Event.on(oDoc, "mouseup", onDOMEvent, me, true);
-                    Event.on(oDoc, "click", onDOMEvent, me, true);
-                    Event.on(oDoc, "keydown", onDOMEvent, me, true);
-                    Event.on(oDoc, "keyup", onDOMEvent, me, true);
-                    Event.on(oDoc, "keypress", onDOMEvent, me, true);
-        
+                    Event.on(oDoc, "mouseover", onDOMEvent, this, true);
+                    Event.on(oDoc, "mouseout", onDOMEvent, this, true);
+                    Event.on(oDoc, "mousedown", onDOMEvent, this, true);
+                    Event.on(oDoc, "mouseup", onDOMEvent, this, true);
+                    Event.on(oDoc, "click", onDOMEvent, this, true);
+                    Event.on(oDoc, "keydown", onDOMEvent, this, true);
+                    Event.on(oDoc, "keyup", onDOMEvent, this, true);
+                    Event.on(oDoc, "keypress", onDOMEvent, this, true);
+
+
                     m_bInitializedEventHandlers = true;
                     
                     m_oLogger.log("DOM event handlers initialized.");
         
                 }
         
-                p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, me);
+                p_oMenu.destroyEvent.subscribe(onMenuDestroy);
                 
                 p_oMenu.cfg.subscribeToConfigEvent(
                     "visible", 
-                    onMenuVisibleConfigChange, 
-                    p_oMenu
+                    onMenuVisibleConfigChange
                 );
         
                 p_oMenu.itemAddedEvent.subscribe(onItemAdded);
@@ -555,6 +619,35 @@ YAHOO.widget.MenuManager = function() {
             
             }
         
+        },
+
+
+        /**
+        * @method getFocusedMenuItem
+        * @description Returns a reference to the menu item that currently 
+        * has focus.
+        * @return {YAHOO.widget.MenuItem}
+        */
+        getFocusedMenuItem: function() {
+
+            return m_oFocusedMenuItem;
+
+        },
+
+
+        /**
+        * @method getFocusedMenu
+        * @description Returns a reference to the menu that currently has focus.
+        * @return {YAHOO.widget.Menu}
+        */
+        getFocusedMenu: function() {
+
+            if(m_oFocusedMenuItem) {
+
+                return (m_oFocusedMenuItem.parent.getRoot());
+            
+            }
+
         },
 
     

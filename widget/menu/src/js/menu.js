@@ -70,6 +70,8 @@ YAHOO.widget.Menu.EVENTS = {
     "KEY_PRESS": "keypress",
     "KEY_DOWN": "keydown",
     "KEY_UP": "keyup",
+    "FOCUS": "focus",
+    "BLUR": "blur",
     "ITEM_ADDED": "itemAdded",
     "ITEM_REMOVED": "itemRemoved"
 
@@ -331,7 +333,7 @@ itemData: null,
 
 /**
 * @property activeItem
-* @description Object reference to the item in the menu that has focus.
+* @description Object reference to the item in the menu that has is selected.
 * @default null
 * @type YAHOO.widget.MenuItem
 */
@@ -1321,17 +1323,8 @@ _configureSubmenu: function(p_oItem) {
                 true
             );
 
-        oSubmenu.showEvent.subscribe(
-                this._onSubmenuShow, 
-                oSubmenu, 
-                true
-            );
-
-        oSubmenu.hideEvent.subscribe(
-                this._onSubmenuHide, 
-                oSubmenu, 
-                true
-            );
+        oSubmenu.showEvent.subscribe(this._onSubmenuShow, null, p_oItem);
+        oSubmenu.hideEvent.subscribe(this._onSubmenuHide, null, p_oItem);
 
     }
 
@@ -1347,9 +1340,9 @@ _configureSubmenu: function(p_oItem) {
 */
 _subscribeToItemEvents: function(p_oItem) {
 
-    p_oItem.focusEvent.subscribe(this._onMenuItemFocus, p_oItem, this);
+    p_oItem.focusEvent.subscribe(this._onMenuItemFocus);
 
-    p_oItem.blurEvent.subscribe(this._onMenuItemBlur, this, true);
+    p_oItem.blurEvent.subscribe(this._onMenuItemBlur);
 
     p_oItem.cfg.configChangedEvent.subscribe(
         this._onMenuItemConfigChange,
@@ -1635,7 +1628,6 @@ _enableScrollFooter: function() {
 },
 
 
-
 /**
 * @method _onMouseOver
 * @description "mouseover" event handler for the menu.
@@ -1736,7 +1728,13 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
         // Select and focus the current menu item
     
         oItemCfg.setProperty("selected", true);
-        oItem.focus();
+
+
+        if (this.hasFocus()) {
+        
+            oItem.focus();
+        
+        }
 
 
         if(this.cfg.getProperty("autosubmenudisplay")) {
@@ -2168,7 +2166,7 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
                     }
     
                     oSubmenu.show();
-    
+                    oSubmenu.setInitialFocus();
                     oSubmenu.setInitialSelection();
     
                 }
@@ -2742,8 +2740,6 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 */
 _onShow: function(p_sType, p_aArgs, p_oMenu) {
 
-    this.setInitialFocus();
-
     var oParent = this.parent;
     
     if(oParent) {
@@ -2859,8 +2855,12 @@ _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 
         }
 
-        oActiveItem.blur();
+    }
 
+    if (this == this.getRoot()) {
+
+        this.blur();
+    
     }
 
 },
@@ -3041,15 +3041,11 @@ _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oSubmenu Object representing the submenu that 
-* subscribed to the event.
 */
-_onSubmenuShow: function(p_sType, p_aArgs, p_oSubmenu) {
+_onSubmenuShow: function(p_sType, p_aArgs) {
     
-    var oParent = this.parent;
-
-    oParent.submenuIndicator.firstChild.nodeValue = 
-        oParent.EXPANDED_SUBMENU_INDICATOR_TEXT;
+    this.submenuIndicator.firstChild.nodeValue = 
+        this.EXPANDED_SUBMENU_INDICATOR_TEXT;
 
 },
 
@@ -3061,17 +3057,14 @@ _onSubmenuShow: function(p_sType, p_aArgs, p_oSubmenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oSubmenu Object representing the submenu that 
-* subscribed to the event.
 */
-_onSubmenuHide: function(p_sType, p_aArgs, p_oSubmenu) {
+_onSubmenuHide: function(p_sType, p_aArgs) {
     
-    var oParent = this.parent;
-
-    oParent.submenuIndicator.firstChild.nodeValue =
-        oParent.COLLAPSED_SUBMENU_INDICATOR_TEXT;
+    this.submenuIndicator.firstChild.nodeValue =
+        this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
 },
+
 
 
 /**
@@ -3081,12 +3074,10 @@ _onSubmenuHide: function(p_sType, p_aArgs, p_oSubmenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
-* that fired the event.
 */
-_onMenuItemFocus: function(p_sType, p_aArgs, p_oItem) {
+_onMenuItemFocus: function(p_sType, p_aArgs) {
 
-    this.activeItem = p_oItem;
+    this.parent.focusEvent.fire(this);
 
 },
 
@@ -3101,8 +3092,7 @@ _onMenuItemFocus: function(p_sType, p_aArgs, p_oItem) {
 */
 _onMenuItemBlur: function(p_sType, p_aArgs) {
 
-    this.activeItem = null;
-
+    this.parent.blurEvent.fire(this);
 },
 
 
@@ -3121,6 +3111,12 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
     var sProperty = p_aArgs[0][0];
 
     switch(sProperty) {
+
+        case "selected":
+
+            this.activeItem = p_oItem;
+
+        break;
 
         case "submenu":
 
@@ -3705,6 +3701,8 @@ initEvents: function() {
     this.keyPressEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_PRESS, this);
     this.keyDownEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_DOWN, this);
     this.keyUpEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_UP, this);
+    this.focusEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.FOCUS, this);
+    this.blurEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.BLUR, this);
     this.itemAddedEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.ITEM_ADDED, this);
     this.itemRemovedEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.ITEM_REMOVED, this);
 
@@ -4198,9 +4196,10 @@ setInitialFocus: function() {
 
     var oItem = this._getFirstEnabledItem();
     
-    if(oItem) {
+    if (oItem) {
 
         oItem.focus();
+
     }
     
 },
@@ -4262,6 +4261,54 @@ clearActiveItem: function(p_bBlur) {
         }
 
     }
+
+},
+
+
+/**
+* @method focus
+* @description Causes the menu to receive focus and fires the "focus" event.
+*/
+focus: function() {
+
+    if (!this.hasFocus()) {
+
+        this.setInitialFocus();
+    
+    }
+
+},
+
+
+/**
+* @method blur
+* @description Causes the menu to lose focus and fires the "blur" event.
+*/    
+blur: function() {
+
+    if (this.hasFocus()) {
+    
+        var oItem = YAHOO.widget.MenuManager.getFocusedMenuItem();
+        
+        if (oItem) {
+
+            oItem.blur();
+
+        }
+
+    }
+
+},
+
+
+/**
+* @method hasFocus
+* @description Returns a boolean indicating whether or not the menu has focus.
+* @return {Boolean}
+*/
+hasFocus: function() {
+
+    return (YAHOO.widget.MenuManager.getFocusedMenu() == this.getRoot());
 
 },
 

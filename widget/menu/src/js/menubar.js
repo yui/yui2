@@ -176,8 +176,6 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
                             if(oSubmenu) {
                         
                                 oSubmenu.show();
-                                oSubmenu.activeItem.blur();
-                                oSubmenu.activeItem = null;
                             
                             }
                 
@@ -296,12 +294,9 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
             this.clearActiveItem();
     
         }
-    
-    
-        // Select and focus the current item
+
     
         oItem.cfg.setProperty("selected", true);
-        oItem.focus();
     
 
         // Show the submenu for the item
