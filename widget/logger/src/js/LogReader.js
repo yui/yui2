@@ -605,7 +605,7 @@ YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
 
     // Verbose output includes extra line breaks
     var output =  (this.verboseOutput) ?
-        ["<pre><p><span class='", category, "'>", label, "</span> ",
+        ["<pre class=\"yui-log-verbose\"><p><span class='", category, "'>", label, "</span> ",
         totalTime, "ms (+", elapsedTime, ") ",
         localTime, ": ",
         "</p><p>",
@@ -1050,16 +1050,6 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
         }
         if(okToPrint) {
             var output = this.formatMsg(entry);
-
-            // Verbose output uses <code> tag instead of <pre> tag (for wrapping)
-            /*var container = (this.verboseOutput) ? "CODE" : "PRE";
-            var oNewElement = (this.newestOnTop) ?
-                this._elConsole.insertBefore(
-                    document.createElement(container),this._elConsole.firstChild):
-                this._elConsole.appendChild(document.createElement(container));
-
-           oNewElement.innerHTML = output;*/
-            
             if(this.newestOnTop) {
                 this._elConsole.innerHTML = output + this._elConsole.innerHTML;
             }
