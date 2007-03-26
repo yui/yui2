@@ -196,12 +196,12 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.CLOSE, { value:true, handler:this.configClose, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
 	/**
-	* True if the Panel should be draggable
+	* True if the Panel should be draggable.  Default value is "true" if the Drag and Drop utility is included, otherwise it is "false."
 	* @config draggable
 	* @type Boolean
 	* @default true
 	*/
-	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.DRAGGABLE, { value:true,	handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.DRAGGABLE, { value:(YAHOO.util.DD ? true : false), handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
 
 	/**
 	* Sets the type of underlay to display for the Panel. Valid values are "shadow", "matte", and "none".
@@ -270,8 +270,20 @@ YAHOO.widget.Panel.prototype.configClose = function(type, args, obj) {
 * @param {Object} obj	The scope object. For configuration handlers, this will usually equal the owner.
 */
 YAHOO.widget.Panel.prototype.configDraggable = function(type, args, obj) {
+
 	var val = args[0];
 	if (val) {
+
+        if (!YAHOO.util.DD) {
+    
+            YAHOO.log("YAHOO.util.DD dependency not met.", "error");
+
+            this.cfg.setProperty("draggable", false);
+    
+            return;
+        
+        }
+
 		if (this.header) {
 			YAHOO.util.Dom.setStyle(this.header,"cursor","move");
 			this.registerDragDrop();
@@ -537,6 +549,15 @@ YAHOO.widget.Panel.prototype.onDomResize = function(e, obj) {
 */
 YAHOO.widget.Panel.prototype.registerDragDrop = function() {
 	if (this.header) {
+
+        if(!YAHOO.util.DD) {
+
+            YAHOO.log("YAHOO.util.DD dependency not met.", "error");
+
+            return;
+        
+        }
+
 		this.dd = new YAHOO.util.DD(this.element.id, this.id);
 
 		if (! this.header.id) {
