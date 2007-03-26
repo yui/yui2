@@ -2678,7 +2678,8 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
             else {
 
                 this.render(this.cfg.getProperty("container"));
-                
+                this.cfg.refireEvent("xy");
+
             }                
 
         }
@@ -2816,11 +2817,6 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
             Event.on(document, "keydown", disableAutoSubmenuDisplay);
 
         }
-
-    }
-    else if(!oParent && this.lazyLoad) {
-
-        this.cfg.refireEvent("xy");
 
     }
 
