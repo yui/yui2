@@ -1365,6 +1365,7 @@ _isActivationKey: function(p_nKeyCode) {
 * @method _isSplitButtonOptionKey
 * @description Determines if the specified keycode is one that toggles the 
 * display of the split button's menu.
+* @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
 * @return {Boolean}
@@ -1376,6 +1377,78 @@ _isSplitButtonOptionKey: function(p_oEvent) {
         p_oEvent.shiftKey && 
         Event.getCharCode(p_oEvent) == 77
     );
+
+},
+
+
+/**
+* @method _addListenersToForm
+* @description Adds event handlers to the button's form.
+* @protected
+*/
+_addListenersToForm: function() {
+
+    var oForm = this.getForm();
+
+    if(oForm) {
+
+        Event.on(oForm, "reset", this._onFormReset, null, this);
+        Event.on(oForm, "submit", this._onFormSubmit, null, this);
+
+        var oSrcElement = this.get("srcelement");
+
+
+        if (
+            this.get("type") == "submit" || 
+            (oSrcElement && oSrcElement.type == "submit")
+        ) {
+        
+            var aListeners = Event.getListeners(oForm, "keydown"),
+                bHasKeyDownListener = false;
+    
+            if(aListeners) {
+    
+                var nListeners = aListeners.length;
+    
+                if(nListeners > 0) {
+    
+                    var i = nListeners - 1;
+                    
+                    do {
+       
+                        if(
+                            aListeners[i].fn == 
+                            YAHOO.widget.Button.onFormKeyDown
+                        ) {
+        
+                            bHasKeyDownListener = true;
+                            break;
+                        
+                        }
+        
+                    }
+                    while(i--);
+                
+                }
+            
+            }
+    
+    
+            if(!bHasKeyDownListener) {
+    
+                Event.on(
+                        oForm, 
+                        "keydown", 
+                        YAHOO.widget.Button.onFormKeyDown, 
+                        null, 
+                        this
+                    );
+    
+            }
+
+        }
+    
+    }
 
 },
 
@@ -1873,21 +1946,6 @@ _onKeyUp: function(p_oEvent, p_oButton) {
 },
 
 
-fireEvent: function(p_sType , p_aArgs) {
-
-    //  Disabled buttons should not respond to DOM events
-
-    if(this.DOM_EVENTS[p_sType] && this.get("disabled")) {
-
-        return;
-
-    }
-
-    YAHOO.widget.Button.superclass.fireEvent.call(this, p_sType, p_aArgs);
-
-},
-
-
 /**
 * @method _onClick
 * @description "click" event handler for the button.
@@ -2009,14 +2067,7 @@ _onAppendTo: function(p_oEvent) {
 
     window.setTimeout(function() {
 
-        var oForm = me.getForm();
-
-        if(oForm) {
-    
-            Event.on(oForm, "reset", me._onFormReset, me, true);
-            Event.on(oForm, "submit", me._onFormSubmit, me, true);
-        
-        }
+        me._addListenersToForm();
 
     }, 0);
 
@@ -2029,9 +2080,8 @@ _onAppendTo: function(p_oEvent) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onFormSubmit: function(p_oEvent, p_oButton) {
+_onFormSubmit: function(p_oEvent) {
 
     var sType = this.get("type"),
         oMenuItem = this.get("selectedMenuItem"),
@@ -2087,9 +2137,8 @@ _onFormSubmit: function(p_oEvent, p_oButton) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onFormReset: function(p_oEvent, p_oButton) {
+_onFormReset: function(p_oEvent) {
 
     var sType = this.get("type");
 
@@ -2471,7 +2520,7 @@ submitForm: function(p_oMenuItem) {
             */
 
             var bSubmitForm = oForm.dispatchEvent(oEvent);
-
+          
             if(m_bSafari && bSubmitForm) {
 
                 oForm.submit();
@@ -2582,14 +2631,7 @@ init: function(p_oElement, p_oAttributes) {
         oSrcElement.tagName.toUpperCase() == "SPAN"
     ) {
 
-        var oForm = this.getForm();
-        
-        if(oForm) {
-    
-            Event.on(oForm, "reset", this._onFormReset, this, true);
-            Event.on(oForm, "submit", this._onFormSubmit, this, true);
-        
-        }
+        this._addListenersToForm();
 
     }
 
@@ -3011,12 +3053,14 @@ destroy: function() {
     Event.removeListener(document, "keyup", this._onDocumentKeyUp);
     Event.removeListener(document, "mousedown", this._onDocumentMouseDown);
 
+
     var oForm = this.getForm();
     
     if(oForm) {
 
         Event.removeListener(oForm, "reset", this._onFormReset);
-    
+        Event.removeListener(oForm, "submit", this._onFormSubmit);
+
     }
 
 
@@ -3027,6 +3071,21 @@ destroy: function() {
     delete m_oButtons[this.get("id")];
 
     this.logger.log("Destroyed.");
+
+},
+
+
+fireEvent: function(p_sType , p_aArgs) {
+
+    //  Disabled buttons should not respond to DOM events
+
+    if(this.DOM_EVENTS[p_sType] && this.get("disabled")) {
+
+        return;
+
+    }
+
+    YAHOO.widget.Button.superclass.fireEvent.call(this, p_sType, p_aArgs);
 
 },
 
@@ -3043,6 +3102,84 @@ toString: function() {
 }
 
 });
+
+
+/**
+* @method onFormKeyDown
+* @description "keydown" event handler for the button's form.
+* @param {Event} p_oEvent Object representing the DOM event object passed 
+* back by the event utility (YAHOO.util.Event).
+*/
+YAHOO.widget.Button.onFormKeyDown = function(p_oEvent) {
+
+    var oTarget = Event.getTarget(p_oEvent),
+        nCharCode = Event.getCharCode(p_oEvent);
+
+
+    if (
+        nCharCode == 13 && 
+        oTarget.tagName && 
+        oTarget.tagName.toUpperCase() == "INPUT"
+    ) {
+
+        var sType = oTarget.type;
+
+
+        if(
+            sType == "text" || sType == "password" || sType == "checkbox" || 
+            sType == "radio" || sType == "file"
+        ) {
+
+
+            function isYUISubmitButton(p_oElement) {
+    
+                var sId = p_oElement.id;
+    
+                if (sId) {
+    
+                    var oButton = m_oButtons[sId];
+        
+                    if (oButton) {
+        
+                        var sType = oButton.get("type"),
+                            oSrcElement = oButton.get("srcelement");
+        
+                        return (
+                                    sType == "submit" || 
+                                    (
+                                        oSrcElement && 
+                                        oSrcElement.type == "submit"
+                                    )
+                                );
+        
+                    }
+                
+                }
+            
+            }
+    
+    
+            var aButtons = Dom.getElementsBy(
+                                isYUISubmitButton,
+                                this.TAG_NAME, 
+                                this.getForm()
+                            ),
+    
+                nButtons = aButtons.length;
+    
+    
+            if (nButtons > 0) {
+    
+                m_oButtons[aButtons[0].id].submitForm();
+            
+            }
+
+        
+        }
+
+    }
+
+};
 
 
 /**
