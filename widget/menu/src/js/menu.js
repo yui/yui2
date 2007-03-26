@@ -1384,13 +1384,13 @@ _getOffsetWidth: function() {
 */
 _setWidth: function() {
 
-    if(this.cfg.getProperty("position") == "dynamic") {
+    var sWidth = this.cfg.getProperty("width");
 
-        var sWidth;
+    if (this.cfg.getProperty("position") == "dynamic" && !sWidth) {
 
-        if(this.element.parentNode.tagName.toUpperCase() == "BODY") {
+        if (this.element.parentNode.tagName.toUpperCase() == "BODY") {
 
-            if(this.browser == "opera") {
+            if (this.browser == "opera") {
 
                 sWidth = this._getOffsetWidth();
             
