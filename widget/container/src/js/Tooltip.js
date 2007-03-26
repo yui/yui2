@@ -172,6 +172,42 @@ YAHOO.widget.Tooltip.prototype.configContainer = function(type, args, obj) {
 };
 
 /**
+* @method _removeEventListeners
+* @description Removes all of the DOM event handlers from the HTML element(s) 
+* that trigger the display of the tooltip.
+* @protected
+*/
+YAHOO.widget.Tooltip.prototype._removeEventListeners = function() {
+
+    var aElements = this._context;
+    
+    if (aElements) {
+
+        var nElements = aElements.length;
+        
+        if (nElements > 0) {
+        
+            var i = nElements - 1,
+                oElement;
+            
+            do {
+
+                oElement = aElements[i];
+
+                YAHOO.util.Event.removeListener(oElement, "mouseover", this.onContextMouseOver);
+                YAHOO.util.Event.removeListener(oElement, "mousemove", this.onContextMouseMove);
+                YAHOO.util.Event.removeListener(oElement, "mouseout", this.onContextMouseOut);
+            
+            }
+            while(i--);
+        
+        }
+
+    }
+
+};
+
+/**
 * The default event handler fired when the "context" property is changed.
 * @method configContext
 * @param {String} type	The CustomEvent type (usually the property name)
@@ -194,23 +230,37 @@ YAHOO.widget.Tooltip.prototype.configContext = function(type, args, obj) {
 
 
 		// Remove any existing mouseover/mouseout listeners
-		if (this._context) {
-			for (var c=0;c<this._context.length;++c) {
-				var el = this._context[c];
-				YAHOO.util.Event.removeListener(el, "mouseover", this.onContextMouseOver);
-				YAHOO.util.Event.removeListener(el, "mousemove", this.onContextMouseMove);
-				YAHOO.util.Event.removeListener(el, "mouseout", this.onContextMouseOut);
-			}
-		}
+        this._removeEventListeners();
 
 		// Add mouseover/mouseout listeners to context elements
 		this._context = context;
-		for (var d=0;d<this._context.length;++d) {
-			var el2 = this._context[d];
-			YAHOO.util.Event.addListener(el2, "mouseover", this.onContextMouseOver, this);
-			YAHOO.util.Event.addListener(el2, "mousemove", this.onContextMouseMove, this);
-			YAHOO.util.Event.addListener(el2, "mouseout", this.onContextMouseOut, this);
-		}
+
+        var aElements = this._context;
+        
+        if (aElements) {
+    
+            var nElements = aElements.length;
+            
+            if (nElements > 0) {
+            
+                var i = nElements - 1,
+                    oElement;
+                
+                do {
+    
+                    oElement = aElements[i];
+    
+                    YAHOO.util.Event.addListener(oElement, "mouseover", this.onContextMouseOver, this);
+                    YAHOO.util.Event.addListener(oElement, "mousemove", this.onContextMouseMove, this);
+                    YAHOO.util.Event.addListener(oElement, "mouseout", this.onContextMouseOut, this);
+                
+                }
+                while(i--);
+            
+            }
+    
+        }
+
 	}
 };
 
@@ -372,6 +422,19 @@ YAHOO.widget.Tooltip.prototype.preventOverlap = function(pageX, pageY) {
 		this.logger.log("OVERLAP", "warn");
 		this.cfg.setProperty("y", (pageY-height-5));
 	}
+};
+
+/**
+* Removes the Tooltip element from the DOM and sets all child elements to null.
+* @method destroy
+*/
+YAHOO.widget.Tooltip.prototype.destroy = function() {
+
+    // Remove any existing mouseover/mouseout listeners
+    this._removeEventListeners();
+
+    YAHOO.widget.Tooltip.superclass.destroy.call(this);  
+
 };
 
 /**

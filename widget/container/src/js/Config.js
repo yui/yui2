@@ -137,7 +137,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		propertyObject.key = key;
 
 		if (propertyObject.handler) {
-			propertyObject.event.subscribe(propertyObject.handler);
+			propertyObject.event.subscribe(propertyObject.handler, this.owner);
 		}
 
 		this.setProperty(key, propertyObject.value, true);
