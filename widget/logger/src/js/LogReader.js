@@ -547,6 +547,26 @@ YAHOO.widget.LogReader.prototype.hideSource = function(sSource) {
 };
 
 /**
+ * Does not delete any log messages, but clears all printed log messages from
+ * the console. Log messages will be printed out again if user re-filters. The
+ * static method YAHOO.widget.Logger.reset() should be called in order to
+ * actually delete log messages.
+ *
+ * @method clearConsole
+ */
+YAHOO.widget.LogReader.prototype.clearConsole = function() {
+    // Clear the buffer of any pending messages
+    this._timeout = null;
+    this._buffer = [];
+    this._consoleMsgCount = 0;
+
+    var elConsole = this._elConsole;
+    while(elConsole.hasChildNodes()) {
+        elConsole.removeChild(elConsole.firstChild);
+    }
+};
+
+/**
  * Updates title to given string.
  *
  * @method setTitle
@@ -947,30 +967,8 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(sSource) {
 YAHOO.widget.LogReader.prototype._filterLogs = function() {
     // Reprint stack with new filters
     if (this._elConsole !== null) {
-        this._clearConsole();
+        this.clearConsole();
         this._printToConsole(YAHOO.widget.Logger.getStack());
-    }
-};
-
-/**
- * Clears all outputted log messages from the console and resets the time of the
- * last output log message.
- *
- * @method _clearConsole
- * @private
- */
-YAHOO.widget.LogReader.prototype._clearConsole = function() {
-    // Clear the buffer of any pending messages
-    this._timeout = null;
-    this._buffer = [];
-    this._consoleMsgCount = 0;
-
-    // Reset the rolling timer
-    this._lastTime = YAHOO.widget.Logger.getStartTime();
-
-    var elConsole = this._elConsole;
-    while(elConsole.hasChildNodes()) {
-        elConsole.removeChild(elConsole.firstChild);
     }
 };
 
@@ -1179,7 +1177,7 @@ YAHOO.widget.LogReader.prototype._onClickPauseBtn = function(v, oSelf) {
  * @private
  */
 YAHOO.widget.LogReader.prototype._onClickClearBtn = function(v, oSelf) {
-    oSelf._clearConsole();
+    oSelf.clearConsole();
 };
 
 /**
