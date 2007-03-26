@@ -3099,12 +3099,12 @@ YAHOO.widget.DataTable.prototype.paginateRows = function() {
         // Populate each pager container with markup
         for(i=0; i<this.pagers.length; i++) {
             YAHOO.util.Event.purgeElement(this.pagers[i].links);
+            this.pagers[i].links.innerHTML = markup;
 
             if(this.pagers[i].select) {
                 YAHOO.util.Event.purgeElement(this.pagers[i].select);
+                this.pagers[i].select.innerHTML = "";
             }
-            
-            this.pagers[i].links.innerHTML = markup;
             
             if(dropdownEnabled) {
                 this.pagers[i].select.innerHTML = "";
@@ -3112,18 +3112,22 @@ YAHOO.widget.DataTable.prototype.paginateRows = function() {
                     var option = document.createElement("option");
                     option.value = rowsPerPageDropdown[j];
                     option.innerHTML = rowsPerPageDropdown[j];
-
+                    option = this.pagers[i].select.appendChild(option);
                     if(this.rowsPerPage === rowsPerPageDropdown[j]) {
                         option.selected = true;
                     }
-                    option = this.pagers[i].select.appendChild(option);
                 }
             }
+            
             
             YAHOO.util.Event.addListener(this.pagers[i].links,"click",this._onPagerClick,this);
             if(this.pagers[i].select) {
                 YAHOO.util.Event.addListener(this.pagers[i].select,"change",this._onPagerSelect,this);
             }
+        }
+        // For Opera
+        if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+            document.body.style += '';
         }
     }
     this.fireEvent("paginateEvent");
