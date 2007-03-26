@@ -2687,11 +2687,20 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
     }
 
 
-
     if(this.cfg.getProperty("position") == "dynamic") {
 
         var nViewportHeight = Dom.getViewportHeight();
-    
+
+
+        if(this.parent && this.parent.parent instanceof YAHOO.widget.MenuBar) {
+           
+            var oRegion = YAHOO.util.Region.getRegion(this.parent.element);
+            
+            nViewportHeight = (nViewportHeight - oRegion.bottom);
+
+        }
+
+
         if(this.element.offsetHeight >= nViewportHeight) {
     
             var nMaxHeight = this.cfg.getProperty("maxheight");
@@ -3166,86 +3175,91 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 */
 enforceConstraints: function(type, args, obj) {
 
-    var oConfig = this.cfg,
-        pos = args[0],
-        
-        x = pos[0],
-        y = pos[1],
-        
-        offsetHeight = this.element.offsetHeight,
-        offsetWidth = this.element.offsetWidth,
-        
-        viewPortWidth = YAHOO.util.Dom.getViewportWidth(),
-        viewPortHeight = YAHOO.util.Dom.getViewportHeight(),
-        
-        scrollX = Math.max(
-                document.documentElement.scrollLeft, 
-                document.body.scrollLeft
-            ),
-        
-        scrollY = Math.max(
-                document.documentElement.scrollTop, 
-                document.body.scrollTop
-            ),
-        
-        nPadding = (
-                        this.parent && 
-                        this.parent.parent instanceof YAHOO.widget.MenuBar
-                    ) ? 0 : 10,
-        
-        topConstraint = scrollY + nPadding,
-        leftConstraint = scrollX + nPadding,
-        bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding,
-        rightConstraint = scrollX + viewPortWidth - offsetWidth - nPadding,
-        
-        aContext = oConfig.getProperty("context"),
-        oContextElement = aContext ? aContext[0] : null;
-
-
-    if (x < 10) {
-
-        x = leftConstraint;
-
-    } else if ((x + offsetWidth) > viewPortWidth) {
-
-        if(
-            oContextElement &&
-            ((x - oContextElement.offsetWidth) > offsetWidth)
-        ) {
-
-            x = (x - (oContextElement.offsetWidth + offsetWidth));
-
+    if(this.parent && !(this.parent.parent instanceof YAHOO.widget.MenuBar)) {
+    
+        var oConfig = this.cfg,
+            pos = args[0],
+            
+            x = pos[0],
+            y = pos[1],
+            
+            offsetHeight = this.element.offsetHeight,
+            offsetWidth = this.element.offsetWidth,
+            
+            viewPortWidth = YAHOO.util.Dom.getViewportWidth(),
+            viewPortHeight = YAHOO.util.Dom.getViewportHeight(),
+            
+            scrollX = Math.max(
+                    document.documentElement.scrollLeft, 
+                    document.body.scrollLeft
+                ),
+            
+            scrollY = Math.max(
+                    document.documentElement.scrollTop, 
+                    document.body.scrollTop
+                ),
+            
+            nPadding = (
+                            this.parent && 
+                            this.parent.parent instanceof YAHOO.widget.MenuBar
+                        ) ? 0 : 10,
+            
+            topConstraint = scrollY + nPadding,
+            leftConstraint = scrollX + nPadding,
+            bottomConstraint = 
+                scrollY + viewPortHeight - offsetHeight - nPadding,
+            rightConstraint = scrollX + viewPortWidth - offsetWidth - nPadding,
+            
+            aContext = oConfig.getProperty("context"),
+            oContextElement = aContext ? aContext[0] : null;
+    
+    
+        if (x < 10) {
+    
+            x = leftConstraint;
+    
+        } else if ((x + offsetWidth) > viewPortWidth) {
+    
+            if(
+                oContextElement &&
+                ((x - oContextElement.offsetWidth) > offsetWidth)
+            ) {
+    
+                x = (x - (oContextElement.offsetWidth + offsetWidth));
+    
+            }
+            else {
+    
+                x = rightConstraint;
+    
+            }
+    
         }
-        else {
-
-            x = rightConstraint;
-
+    
+        if (y < 10) {
+    
+            y = topConstraint;
+    
+        } else if (y > bottomConstraint) {
+    
+            if(oContextElement && (y > offsetHeight)) {
+    
+                y = ((y + oContextElement.offsetHeight) - offsetHeight);
+    
+            }
+            else {
+    
+                y = bottomConstraint;
+    
+            }
+    
         }
-
+    
+        oConfig.setProperty("x", x, true);
+        oConfig.setProperty("y", y, true);
+        oConfig.setProperty("xy", [x,y], true);
+    
     }
-
-    if (y < 10) {
-
-        y = topConstraint;
-
-    } else if (y > bottomConstraint) {
-
-        if(oContextElement && (y > offsetHeight)) {
-
-            y = ((y + oContextElement.offsetHeight) - offsetHeight);
-
-        }
-        else {
-
-            y = bottomConstraint;
-
-        }
-
-    }
-
-    oConfig.setProperty("x", x, true);
-    oConfig.setProperty("y", y, true);
-    oConfig.setProperty("xy", [x,y], true);
 
 },
 
