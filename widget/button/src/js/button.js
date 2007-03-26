@@ -1604,7 +1604,7 @@ _onMouseOut: function(p_oEvent) {
 
     if(this._activationButtonPressed || this._bOptionPressed) {
 
-        Event.on(document, "mouseup", this._onDocumentMouseUp, this, true);
+        Event.on(document, "mouseup", this._onDocumentMouseUp, null, this);
 
     }
     
@@ -1617,9 +1617,8 @@ _onMouseOut: function(p_oEvent) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onDocumentMouseUp: function(p_oEvent, p_oButton) {
+_onDocumentMouseUp: function(p_oEvent) {
 
     this._activationButtonPressed = false;
     this._bOptionPressed = false;
@@ -1775,10 +1774,8 @@ _onMouseUp: function(p_oEvent) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button that
-* fired the event.
 */
-_onFocus: function(p_oEvent, p_oButton) {
+_onFocus: function(p_oEvent) {
 
     this.addClass("focus");
 
@@ -1795,9 +1792,9 @@ _onFocus: function(p_oEvent, p_oButton) {
 
         var oElement = this._button;
 
-        Event.on(oElement, "blur", this._onBlur, this, true);
-        Event.on(oElement, "keydown", this._onKeyDown, this, true);
-        Event.on(oElement, "keyup", this._onKeyUp, this, true);
+        Event.on(oElement, "blur", this._onBlur, null, this);
+        Event.on(oElement, "keydown", this._onKeyDown, null, this);
+        Event.on(oElement, "keyup", this._onKeyUp, null, this);
 
         this._hasKeyEventHandlers = true;
 
@@ -1815,9 +1812,8 @@ _onFocus: function(p_oEvent, p_oButton) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onBlur: function(p_oEvent, p_oButton) {
+_onBlur: function(p_oEvent) {
 
     this.removeClass("focus");
 
@@ -1829,7 +1825,7 @@ _onBlur: function(p_oEvent, p_oButton) {
 
     if(this._activationKeyPressed) {
 
-        Event.on(document, "keyup", this._onDocumentKeyUp, this, true);
+        Event.on(document, "keyup", this._onDocumentKeyUp, null, this);
 
     }
 
@@ -1847,9 +1843,8 @@ _onBlur: function(p_oEvent, p_oButton) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onDocumentKeyUp: function(p_oEvent, p_oButton) {
+_onDocumentKeyUp: function(p_oEvent) {
 
     if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
 
@@ -1868,9 +1863,8 @@ _onDocumentKeyUp: function(p_oEvent, p_oButton) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onKeyDown: function(p_oEvent, p_oButton) {
+_onKeyDown: function(p_oEvent) {
 
     if(
         this.get("type") == "splitbutton" && 
@@ -1919,9 +1913,8 @@ _onKeyDown: function(p_oEvent, p_oButton) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onKeyUp: function(p_oEvent, p_oButton) {
+_onKeyUp: function(p_oEvent) {
 
     if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
 
@@ -2163,9 +2156,8 @@ _onFormReset: function(p_oEvent) {
 * @protected
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onDocumentMouseDown: function(p_oEvent, p_oButton) {
+_onDocumentMouseDown: function(p_oEvent) {
 
     var oTarget = Event.getTarget(p_oEvent),
         oButtonElement = this.get("element"),
@@ -2225,11 +2217,10 @@ _onOption: function(p_oEvent) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onMenuShow: function(p_sType, p_aArgs, p_oButton) {
+_onMenuShow: function(p_sType, p_aArgs) {
 
-    Event.on(document, "mousedown", this._onDocumentMouseDown, this, true);
+    Event.on(document, "mousedown", this._onDocumentMouseDown, null, this);
 
     var sTitle,
         sClass;
@@ -2260,9 +2251,8 @@ _onMenuShow: function(p_sType, p_aArgs, p_oButton) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onMenuHide: function(p_sType, p_aArgs, p_oButton) {
+_onMenuHide: function(p_sType, p_aArgs) {
     
     if(this._originalMaxHeight != -1) {
     
@@ -2300,9 +2290,8 @@ _onMenuHide: function(p_sType, p_aArgs, p_oButton) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onMenuKeyDown: function(p_sType, p_aArgs, p_oButton) {
+_onMenuKeyDown: function(p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0];
 
@@ -2328,9 +2317,8 @@ _onMenuKeyDown: function(p_sType, p_aArgs, p_oButton) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Button} p_oButton Object representing the button.
 */
-_onMenuRender: function(p_sType, p_aArgs, p_oButton) {
+_onMenuRender: function(p_sType, p_aArgs) {
 
     this.get("element").parentNode.appendChild(this._menu.element);
 
@@ -2386,9 +2374,8 @@ _onMenuItemAdded: function(p_sType, p_aArgs, p_oItem) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Button} p_oButton Object representing the menu's button.
 */
-_onMenuClick: function(p_sType, p_aArgs, p_oButton) {
+_onMenuClick: function(p_sType, p_aArgs) {
 
     var oItem = p_aArgs[1];
 
@@ -2572,7 +2559,7 @@ init: function(p_oElement, p_oAttributes) {
     this.addClass(this.CSS_CLASS_NAME);
     this.addClass(this.get("type"));
 
-    Event.on(this._button, "focus", this._onFocus, this, true);
+    Event.on(this._button, "focus", this._onFocus, null, this);
     this.on("mouseover", this._onMouseOver);
     this.on("click", this._onClick);
     this.on("appendTo", this._onAppendTo);
