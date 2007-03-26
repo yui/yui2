@@ -53,7 +53,7 @@
 
         <textarea name="code" class="JScript" cols="60" rows="1">
 var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+    elCell.innerHTML = "<a href='" + oRecord.Url + "' target='_blank'>" + sData + "</a>";
 };
 
 var myColumnHeaders = [
@@ -94,7 +94,7 @@ myLogger.collapse();
 /****************************************************************************/
 /****************************************************************************/
 var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+    elCell.innerHTML = "<a href='" + oRecord.Url + "' target='_blank'>" + sData + "</a>";
 };
 
 var myColumnHeaders = [
