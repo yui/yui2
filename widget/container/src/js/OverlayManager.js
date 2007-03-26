@@ -101,18 +101,41 @@ YAHOO.widget.OverlayManager.prototype = {
 		* @param {String} overlay	The id of the Overlay to focus
 		*/
 		this.focus = function(overlay) {
+
 			var o = this.find(overlay);
+
 			if (o) {
-				this.blurAll();
-				activeOverlay = o;
-				YAHOO.util.Dom.addClass(activeOverlay.element, YAHOO.widget.OverlayManager.CSS_FOCUSED);
-				this.overlays.sort(this.compareZIndexDesc);
-				var topZIndex = YAHOO.util.Dom.getStyle(this.overlays[0].element, "zIndex");
-				if (! isNaN(topZIndex) && this.overlays[0] != overlay) {
-					activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex, 10) + 2));
-				}
-				this.overlays.sort(this.compareZIndexDesc);
+
+                if (activeOverlay != o) {
+
+                    if(activeOverlay) {
+    
+                        activeOverlay.blur();
+    
+                    }
+    
+                    activeOverlay = o;
+    
+                    YAHOO.util.Dom.addClass(activeOverlay.element, YAHOO.widget.OverlayManager.CSS_FOCUSED);
+    
+                    this.overlays.sort(this.compareZIndexDesc);
+    
+                    var topZIndex = YAHOO.util.Dom.getStyle(this.overlays[0].element, "zIndex");
+    
+                    if (! isNaN(topZIndex) && this.overlays[0] != overlay) {
+    
+                        activeOverlay.cfg.setProperty("zIndex", (parseInt(topZIndex, 10) + 2));
+    
+                    }
+    
+                    this.overlays.sort(this.compareZIndexDesc);
+    
+                    o.focusEvent.fire();
+                
+                }
+
 			}
+
 		};
 
 		/**
@@ -143,11 +166,16 @@ YAHOO.widget.OverlayManager.prototype = {
 		* @method blurAll
 		*/
 		this.blurAll = function() {
-			activeOverlay = null;
 			for (var o=0;o<this.overlays.length;o++) {
-				YAHOO.util.Dom.removeClass(this.overlays[o].element, YAHOO.widget.OverlayManager.CSS_FOCUSED);
+                this.overlays[o].blur();
 			}
 		};
+
+
+        this._onOverlayBlur = function(p_sType, p_aArgs) {
+            activeOverlay = null;
+        };
+
 
 		var overlays = this.cfg.getProperty("overlays");
 
@@ -179,13 +207,16 @@ YAHOO.widget.OverlayManager.prototype = {
 
 			overlay.focus = function() {
 				mgr.focus(this);
-				this.focusEvent.fire();
 			};
 
 			overlay.blur = function() {
-				mgr.blurAll();
-				this.blurEvent.fire();
+                if(mgr.getActive() == this) {
+                    YAHOO.util.Dom.removeClass(this.element, YAHOO.widget.OverlayManager.CSS_FOCUSED);
+                    this.blurEvent.fire();
+				}
 			};
+
+            overlay.blurEvent.subscribe(mgr._onOverlayBlur);
 
 			var focusOnDomEvent = function(e,obj) {
 				overlay.focus();
