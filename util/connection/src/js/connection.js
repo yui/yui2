@@ -195,6 +195,43 @@ YAHOO.util.Connect =
      _transaction_id:0,
 
   /**
+   * @description Tracks the name-value pair of the "clicked" submit button if multiple submit
+   * buttons are present in an HTML form; and, if YAHOO.util.Event is available.
+   * @property _submitElementValue
+   * @private
+   * @static
+   * @type string
+   */
+	 _submitElementValue:null,
+
+  /**
+   * @description Determines whether YAHOO.util.Event is available and returns true or false.
+   * If true, an event listener is bound at the document level to trap click events that
+   * resolve to a target type of "Submit".  This listener will enable setForm() to determine
+   * the clicked "Submit" value in a multi-Submit button, HTML form.
+   * @property _hasSubmitListener
+   * @private
+   * @static
+   * @type boolean
+   */
+	 _hasSubmitListener:(function()
+	 {
+		if(YAHOO.util.Event){
+			YAHOO.util.Event.addListener(
+				document,
+				'click',
+				function(e){
+					var obj = YAHOO.util.Event.getTarget(e);
+					if(obj.type == 'submit'){
+						YAHOO.util.Connect._submitElementValue = encodeURIComponent(obj.name) + "=" + encodeURIComponent(obj.value);
+					}
+				})
+			return true;
+	    }
+	    return false;
+	 })(),
+
+  /**
    * @description Member to add an ActiveX id to the existing xml_progid array.
    * In the event(unlikely) a new ActiveX id is introduced, it can be added
    * without internal code modifications.
@@ -420,7 +457,7 @@ YAHOO.util.Connect =
 
 		this._poll[o.tId] = window.setInterval(
 			function(){
-				if(o.conn && o.conn.readyState == 4){
+				if(o.conn && o.conn.readyState === 4){
 					window.clearInterval(oConn._poll[o.tId]);
 					delete oConn._poll[o.tId];
 
@@ -459,7 +496,7 @@ YAHOO.util.Connect =
 
 		try
 		{
-			if(o.conn.status !== undefined && o.conn.status != 0){
+			if(o.conn.status !== undefined && o.conn.status !== 0){
 				httpStatus = o.conn.status;
 			}
 			else{
@@ -473,7 +510,7 @@ YAHOO.util.Connect =
 			httpStatus = 13030;
 		}
 
-		if(httpStatus >= 200 && httpStatus < 300){
+		if(httpStatus >= 200 && httpStatus < 300 || httpStatus === 1223){
 			responseObject = this.createResponseObject(o, callback.argument);
 			if(callback.success){
 				if(!callback.scope){
@@ -558,8 +595,10 @@ YAHOO.util.Connect =
 		catch(e){}
 
 		obj.tId = o.tId;
-		obj.status = o.conn.status;
-		obj.statusText = o.conn.statusText;
+		// Normalize IE's response to HTTP 204 when Win error 1223.
+		obj.status = (o.conn.status == 1223)?204:o.conn.status;
+		// Normalize IE's statusText to "No Content" instead of "Unknown".
+		obj.statusText = (o.conn.status == 1223)?"No Content":o.conn.statusText;
 		obj.getResponseHeader = headerObj;
 		obj.getAllResponseHeaders = headerStr;
 		obj.responseText = o.conn.responseText;
@@ -792,8 +831,14 @@ YAHOO.util.Connect =
 						// stub case for input type button elements.
 						break;
 					case 'submit':
-						if(hasSubmit == false){
-							this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oValue) + '&';
+						if(hasSubmit === false){
+							if(this._hasSubmitListener){
+								this._sFormData += this._submitElementValue + '&';
+							}
+							else{
+								this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oValue) + '&';
+							}
+
 							hasSubmit = true;
 						}
 						break;
@@ -917,9 +962,9 @@ YAHOO.util.Connect =
 
 		// Initialize the HTML form properties in case they are
 		// not defined in the HTML form.
-		this._formNode.action = uri;
-		this._formNode.method = 'POST';
-		this._formNode.target = frameId;
+		this._formNode.setAttribute('action', uri);
+		this._formNode.setAttribute('method', 'POST');
+		this._formNode.setAttribute("target", frameId);
 
 		if(this._formNode.encoding){
 			// IE does not respect property enctype for HTML forms.
@@ -952,7 +997,6 @@ YAHOO.util.Connect =
 
 		var uploadCallback = function()
 		{
-
 			var obj = {};
 			obj.tId = id;
 			obj.argument = callback.argument;
@@ -1049,7 +1093,7 @@ YAHOO.util.Connect =
 		// if the XHR object assigned to the transaction has not been dereferenced,
 		// then check its readyState status.  Otherwise, return false.
 		if(o.conn){
-			return o.conn.readyState != 4 && o.conn.readyState != 0;
+			return o.conn.readyState !== 4 && o.conn.readyState !== 0;
 		}
 		else{
 			//The XHR object has been destroyed.
