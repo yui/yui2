@@ -55,6 +55,7 @@ var Dom = YAHOO.util.Dom,
     m_bOpera = (m_oUserAgent.indexOf('opera') > -1),
     m_bSafari = (m_oUserAgent.indexOf('safari') > -1),
     m_bGecko = (!m_bOpera && !m_bSafari && m_oUserAgent.indexOf('gecko') > -1),
+    m_bIE7 = (!m_bOpera && m_oUserAgent.indexOf('msie 7') > -1),
     m_bIE = (!m_bOpera && m_oUserAgent.indexOf('msie') > -1),
     m_oButtons = {},
     m_oFocusedButton = null;
@@ -324,7 +325,7 @@ function createInputElement(p_sType, p_sName, p_sValue, p_bChecked) {
 
     var oInput;
 
-    if(navigator.userAgent.indexOf("MSIE") != -1) {
+    if(m_bIE) {
 
         /*
             For IE it is necessary to create the element with the 
@@ -2557,6 +2558,13 @@ init: function(p_oElement, p_oAttributes) {
 
 
     this.addClass(this.CSS_CLASS_NAME);
+    
+    if(m_bIE && !m_bIE7) {
+
+        this.addClass("ie6");
+
+    }
+    
     this.addClass(this.get("type"));
 
     Event.on(this._button, "focus", this._onFocus, null, this);

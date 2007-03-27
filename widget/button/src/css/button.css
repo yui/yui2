@@ -8,13 +8,16 @@
     border-color:#999;
 
     background:#ecece3 url(../img/background.png) left center;
-
-    /* Give the transparent background image to IE 6 */
-    _background-image:none;
-    _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../src/img/background.png', sizingMethod = 'scale');
-    
     margin:auto .25em;
     
+}
+
+.yuibutton.ie6 {
+
+    /* Give the transparent background image to IE 6 */
+    background-image:none;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../src/img/background.png', sizingMethod = 'scale');
+
 }
 
 .yuibutton .first-child {
@@ -191,7 +194,7 @@
     border-color:#cbcdc5;
     background:#ecece3;
 
-    _filter:none;
+    filter:none;
     
 }
 
