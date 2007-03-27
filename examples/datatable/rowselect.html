@@ -23,8 +23,8 @@
     <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Row Selection</h1>
 </div>
 <div id="bd">
+    <div id="standardselect" class="selectionexample"></div>
     <div id="singleselect" class="selectionexample"></div>
-    <div id="multiselect" class="selectionexample"></div>
 
     <!-- Sample code begins -->
     <div id="code">
@@ -45,8 +45,8 @@
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-<div id="singleselect" class="selectionexample"></div>
-<div id="multiselect" class="selectionexample"></div>
+&lt;div id="standardselect" class="selectionexample"&gt;&lt;/div&gt;
+&lt;div id="singleselect" class="selectionexample">&gt;&lt;/div&gt;
         </textarea>
 
         <p>JavaScript:</p>
@@ -58,56 +58,27 @@ var myColumnHeaders = [
     {key:"From"},
     {key:"Subject"}
 ];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-// Single select example
-var myColumnSet1 = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource1 = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
-myDataSource1.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource1.responseSchema = {
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+myDataSource.responseSchema = {
     resultsList: ["messages"],
     fields: ["Date","To","From","Subject","XID","Date","Attachment"]
 };
 
-var myDataTable1 = new YAHOO.widget.DataTable("singleselect",myColumnSet1,myDataSource1,
-        {caption:"Example: Row Single-Selection, First Row Selected By Default",rowSingleSelect:true});
-myDataTable1.subscribe("cellClickEvent",myDataTable1.onEventSelectRow);
-myDataTable1.select(myDataTable1.getRow(0));
+// Default selection mode
+var defaultDataTable = new YAHOO.widget.DataTable("standardselect",myColumnSet,myDataSource,
+        {caption:"Example: Default Selection Mode"});
+defaultDataTable.subscribe("cellClickEvent",defaultDataTable.onEventSelectRow);
 
+// Single-row selection mode
+var singleRowDataTable = new YAHOO.widget.DataTable("singleselect",myColumnSet,myDataSource,
+        {caption:"Example: Single-row Selection Mode", rowSingleSelect:true});
+singleRowDataTable.subscribe("cellClickEvent",singleRowDataTable.onEventSelectRow);
 
-// Multi select example
-var myColumnSet2 = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource2 = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
-myDataSource2.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource2.responseSchema = {
-    resultsList: ["messages"],
-    fields: ["Date","To","From","Subject","XID","Date","Attachment"]
-};
-
-var outputSelections = function(oArgs) {
-    var thisselection = oArgs.els;
-
-    thisselection = thisselection.join(", ");
-    YAHOO.log("This selection/unselection: " + thisselection);
-
-    var allrecords = this.getSelectedRecordIds();
-    allrecords = allrecords.join(", ");
-    YAHOO.log("All selected records: " + allrecords);
-
-    var allrows = this.getSelectedRows();
-    allrows = allrows.join(", ");
-    YAHOO.log("All selected rows: " + allrows);
-}
-var myDataTable2 = new YAHOO.widget.DataTable("multiselect",myColumnSet2,myDataSource2,
-        {caption:"Example: Row Multi-Selection"});
-myDataTable2.subscribe("cellClickEvent",myDataTable2.onEventSelectRow);
-
-
-myDataTable1.subscribe("selectEvent",outputSelections);
-myDataTable1.subscribe("unselectEvent",outputSelections);
-myDataTable2.subscribe("selectEvent",outputSelections);
-myDataTable2.subscribe("unselectEvent",outputSelections);
+// Select the first row immediately
+singleRowDataTable.select(singleRowDataTable.getRow(0));
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -133,54 +104,27 @@ var myColumnHeaders = [
     {key:"From"},
     {key:"Subject"}
 ];
+var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-// Single select example
-var myColumnSet1 = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource1 = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
-myDataSource1.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource1.responseSchema = {
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+myDataSource.responseSchema = {
     resultsList: ["messages"],
     fields: ["Date","To","From","Subject","XID","Date","Attachment"]
 };
 
-var myDataTable1 = new YAHOO.widget.DataTable("singleselect",myColumnSet1,myDataSource1,{caption:"Example: Row Single-Selection, First Row Selected By Default  ",rowSingleSelect:true});
-myDataTable1.subscribe("cellClickEvent",myDataTable1.onEventSelectRow);
-myDataTable1.select(myDataTable1.getRow(0));
+// Default selection mode
+var defaultDataTable = new YAHOO.widget.DataTable("standardselect",myColumnSet,myDataSource,
+        {caption:"Example: Default Selection Mode"});
+defaultDataTable.subscribe("cellClickEvent",defaultDataTable.onEventSelectRow);
 
+// Single-row selection mode
+var singleRowDataTable = new YAHOO.widget.DataTable("singleselect",myColumnSet,myDataSource,
+        {caption:"Example: Single-row Selection Mode", rowSingleSelect:true});
+singleRowDataTable.subscribe("cellClickEvent",singleRowDataTable.onEventSelectRow);
 
-// Multi select example
-var myColumnSet2 = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource2 = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
-myDataSource2.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource2.responseSchema = {
-    resultsList: ["messages"],
-    fields: ["Date","To","From","Subject","XID","Date","Attachment"]
-};
-
-var outputSelections = function(oArgs) {
-    var thisselection = oArgs.els;
-
-    thisselection = thisselection.join(", ");
-    YAHOO.log("This selection/unselection: " + thisselection);
-
-    var allrecords = this.getSelectedRecordIds();
-    allrecords = allrecords.join(", ");
-    YAHOO.log("All selected records: " + allrecords);
-
-    var allrows = this.getSelectedRows();
-    allrows = allrows.join(", ");
-    YAHOO.log("All selected rows: " + allrows);
-}
-var myDataTable2 = new YAHOO.widget.DataTable("multiselect",myColumnSet2,myDataSource2,{caption:"Example: Row Multi-Selection"});
-myDataTable2.subscribe("cellClickEvent",myDataTable2.onEventSelectRow);
-
-
-myDataTable1.subscribe("selectEvent",outputSelections);
-myDataTable1.subscribe("unselectEvent",outputSelections);
-myDataTable2.subscribe("selectEvent",outputSelections);
-myDataTable2.subscribe("unselectEvent",outputSelections);
+// Select the first row immediately
+singleRowDataTable.select(singleRowDataTable.getRow(0));
 </script>
 <script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

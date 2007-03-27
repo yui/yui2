@@ -9,6 +9,32 @@
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
 <link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
 <style type="text/css">
+/* customized css for scrolling */
+.yui-dt-scrollable  {
+    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure it adds up) */
+    height:30em; /* SET HEIGHT HERE for ie */
+}
+.yui-dt-scrollbody {
+    height:30em; /* SET HEIGHT HERE for non-ie */
+    *height:auto; /* for ie */
+}
+.yui-dt-scrollable  thead {
+    background:#696969; /* for ie */
+}
+
+/* SET WIDTHS FOR EACH TH TO HELP ALIGN COLUMNS */
+/* IF ALL COLS CAN BE SAME WIDTH USE THIS:
+.yui-dt-scrollable th, .yui-dt-scrollbody td {
+    width:20em; 
+}*/
+/* OTHERWISE SET EACH COL WIDTH EXPLICITLY:*/
+.yui-dt-scrollable .col1 {
+    width:10em; /* this column was assigned "col1" as "className" */
+}
+.yui-dt-scrollable .col2 {
+    width:20em; /* this column was assigned "col2" as "className" */
+}
+
 /* custom css*/
 #scroll {margin:1em;}
 #scroll table {border-collapse:collapse;}
@@ -31,6 +57,32 @@
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
+/* customized css for scrolling */
+.yui-dt-scrollable  {
+    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure it adds up) */
+    height:30em; /* SET HEIGHT HERE for ie */
+}
+.yui-dt-scrollbody {
+    height:30em; /* SET HEIGHT HERE for non-ie */
+    *height:auto; /* for ie */
+}
+.yui-dt-scrollable  thead {
+    background:#696969; /* for ie */
+}
+
+/* SET WIDTHS FOR EACH TH TO HELP ALIGN COLUMNS */
+/* IF ALL COLS CAN BE SAME WIDTH USE THIS:
+.yui-dt-scrollable th, .yui-dt-scrollbody td {
+    width:20em;
+}*/
+/* OTHERWISE SET EACH COL WIDTH EXPLICITLY:*/
+.yui-dt-scrollable .col1 {
+    width:10em; /* this column was assigned "col1" as "className" */
+}
+.yui-dt-scrollable .col2 {
+    width:20em; /* this column was assigned "col2" as "className" */
+}
+
 /* custom css*/
 #scroll {margin:1em;}
 #scroll table {border-collapse:collapse;}
@@ -49,8 +101,8 @@
 
         <textarea name="code" class="JScript" cols="60" rows="1">
 var myColumnHeaders = [
-    {key:"areacode"},
-    {key:"state"}
+    {key:"areacode",className:"col1"},
+    {key:"state",className:"col2"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
@@ -81,8 +133,8 @@ var myLogger = new YAHOO.widget.LogReader();
 /****************************************************************************/
 
 var myColumnHeaders = [
-    {key:"areacode"},
-    {key:"state"}
+    {key:"areacode",className:"col1"},
+    {key:"state",className:"col2"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 

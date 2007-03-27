@@ -1,5 +1,19 @@
 DataSource Release Notes
 
-*** version 2.2.0 ***
+*** version 2.2.1 ***
+
+* Fixed parseTextData() to longer reverse-order data or truncate first record.
+* Fixed bug where data values of 0 (zero) were being converted to empty string.
+* Fixed erroneous undefined values created by parseDataArray().
+* Callback functions now receive an additional argument in the form of a boolean
+to indicate data error.
+* Support for nested JSON data.
+* Support for responseShema.fields.converter to take string response and custom
+convert data type.
+* Improved type checking with YAHOO.lang.
+
+
+
+**** version 2.2.0 ***
 
 * Beta release.

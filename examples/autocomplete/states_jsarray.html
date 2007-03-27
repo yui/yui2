@@ -145,6 +145,8 @@
             oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
             oAutoComp.typeAhead = true;
             oAutoComp.useShadow = true;
+            oAutoComp.minQueryLength = 0;
+            oAutoComp.textboxFocusEvent.subscribe(function(){oAutoComp.sendQuery("");});
 
             // Instantiate second JS Array DataSource
             oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
@@ -636,6 +638,8 @@ YAHOO.example.ACJSArray = function() {
             oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
             oAutoComp.typeAhead = true;
             oAutoComp.useShadow = true;
+            oAutoComp.minQueryLength = 0;
+            oAutoComp.textboxFocusEvent.subscribe(function(){oAutoComp.sendQuery("");});
             
             // Instantiate second JS Array DataSource
             oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);

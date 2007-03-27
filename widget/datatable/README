@@ -1,9 +1,46 @@
 DataTable Release Notes
 
-*** version 2.2.0 ***
+*** version 2.2.1 ***
+
+* Removed deleteSelectedRows() and added deleteRows().
+* Deprecated showLoadingMessage(), showEmptyMessage(), and hideTableMessages()
+in favor of showTableMessage() and hideTableMessage().
+* Fixed unclickable links.
+* Fix to support data values of 0 (zero).
+* Fixed broken validation in multiple places when the value 0 (zero) is passed
+in as an argument.
+* Fixed incorrect month output in formatDate().
+* Fixed broken empty message when there are zero rows.
+* Allow implementers to use data with field name "id".
+* Fixed Column resizeability in -min builds.
+* Fixed Column sorting of null, undefined, and empty values.
+* Fixed Column sorting of nested headers.
+* Fixed paginator dropdowns to stay in sync when paginating.
+* Fixed rowSingleSelect for paginated DataTable.
+* Fix for currency values with more than 2 decimal places.
+* Fixed broken TR ID assignments in replaceRows().
+* Fixed Opera UI artifacting problem when repaginating via dropdowns.
+* Fixed orphaned ColumnEditor during pagination or other de facto blur interaction.
+* Extracted non-foundational CSS for scrollable DataTables to make UI easier to
+customize.
+* Updated methods select() and unselect() to also accept an array of elements or
+an array of strings.
+* Improved row selection behavior to model the desktop paradigm (i.e., require
+CONTROL and/or SHIFT keys to multi-select).
+* Accept an error boolean from DataSource in case of data error and show error
+message.
+* Added selectRow(), rowSelectEvent, unselectRow(), rowUnselectEvent, and
+rowUpdateEvent.
+* Added constants CLASS_TABLE, CLASS_EDITOR, CLASS_FIRST, and CLASS_LAST.
+* Add IDs and class hooks to TABLE element and ColumnEditor's container DIV.
+* Add class hooks to first and last TR elements.
+* Added hook to doBeforeLoadData() for the not-from-markup constructor flow.
+* Improved type checking with YAHOO.lang.
+
+
+
+**** version 2.2.0 ***
 
 * Beta release.
-
 * Caption is not supported when scrolling is enabled.
-
 * Resizeability is not supported for fixed-width DataTables.

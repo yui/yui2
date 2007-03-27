@@ -36,7 +36,7 @@
 YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
     if(elInput && elContainer && oDataSource) {
         // Validate DataSource
-        if (oDataSource && (oDataSource instanceof YAHOO.widget.DataSource)) {
+        if(oDataSource instanceof YAHOO.widget.DataSource) {
             this.dataSource = oDataSource;
         }
         else {
@@ -45,7 +45,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
 
         // Validate input element
         if(YAHOO.util.Dom.inDocument(elInput)) {
-            if(typeof elInput == "string") {
+            if(YAHOO.lang.isString(elInput)) {
                     this._sName = "instance" + YAHOO.widget.AutoComplete._nIndex + " " + elInput;
                     this._oTextbox = document.getElementById(elInput);
             }
@@ -62,7 +62,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
 
         // Validate container element
         if(YAHOO.util.Dom.inDocument(elContainer)) {
-            if(typeof elContainer == "string") {
+            if(YAHOO.lang.isString(elContainer)) {
                     this._oContainer = document.getElementById(elContainer);
             }
             else {
@@ -76,9 +76,9 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         }
 
         // Set any config params passed in to override defaults
-        if (typeof oConfigs == "object") {
+        if(oConfigs && (oConfigs.constructor == Object)) {
             for(var sConfig in oConfigs) {
-                if (sConfig) {
+                if(sConfig) {
                     this[sConfig] = oConfigs[sConfig];
                 }
             }
@@ -844,40 +844,38 @@ YAHOO.widget.AutoComplete.prototype._sLastTextboxValue = null;
 YAHOO.widget.AutoComplete.prototype._initProps = function() {
     // Correct any invalid values
     var minQueryLength = this.minQueryLength;
-    if(isNaN(minQueryLength) || (minQueryLength < 1)) {
+    if(!YAHOO.lang.isNumber(minQueryLength) || (minQueryLength < 1)) {
         minQueryLength = 1;
     }
     var maxResultsDisplayed = this.maxResultsDisplayed;
-    if(isNaN(this.maxResultsDisplayed) || (this.maxResultsDisplayed < 1)) {
-        this.maxResultsDisplayed = 10;
+    if(!YAHOO.lang.isNumber(maxResultsDisplayed) || (maxResultsDisplayed < 1)) {
+        maxResultsDisplayed = 10;
     }
     var queryDelay = this.queryDelay;
-    if(isNaN(this.queryDelay) || (this.queryDelay < 0)) {
-        this.queryDelay = 0.5;
+    if(!YAHOO.lang.isNumber(queryDelay) || (queryDelay < 0)) {
+        queryDelay = 0.5;
     }
-    var aDelimChar = (this.delimChar) ? this.delimChar : null;
-    if(aDelimChar) {
-        if(typeof aDelimChar == "string") {
-            this.delimChar = [aDelimChar];
-        }
-        else if(aDelimChar.constructor != Array) {
-            this.delimChar = null;
-        }
+    var delimChar = this.delimChar;
+    if(YAHOO.lang.isString(delimChar)) {
+        delimChar = [delimChar];
+    }
+    else if(!YAHOO.lang.isArray(delimChar)) {
+        delimChar = null;
     }
     var animSpeed = this.animSpeed;
     if((this.animHoriz || this.animVert) && YAHOO.util.Anim) {
-        if(isNaN(animSpeed) || (animSpeed < 0)) {
+        if(!YAHOO.lang.isNumber(animSpeed) || (animSpeed < 0)) {
             animSpeed = 0.3;
         }
         if(!this._oAnim ) {
-            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
+            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, animSpeed);
             this._oAnim = oAnim;
         }
         else {
             this._oAnim.duration = animSpeed;
         }
     }
-    if(this.forceSelection && this.delimChar) {
+    if(this.forceSelection && delimChar) {
     }
 };
 
@@ -952,7 +950,7 @@ YAHOO.widget.AutoComplete.prototype._initList = function() {
     while(this._oContainer._oContent._oBody.hasChildNodes()) {
         var oldListItems = this.getListItems();
         if(oldListItems) {
-            for(var oldi = oldListItems.length-1; oldi >= 0; i--) {
+            for(var oldi = oldListItems.length-1; oldi >= 0; oldi--) {
                 oldListItems[oldi] = null;
             }
         }
@@ -1042,7 +1040,7 @@ YAHOO.widget.AutoComplete.prototype._cancelIntervalDetection = function(oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
-    if ((nKeyCode == 9) || (nKeyCode == 13)  || // tab, enter
+    if((nKeyCode == 9) || (nKeyCode == 13)  || // tab, enter
             (nKeyCode == 16) || (nKeyCode == 17) || // shift, ctl
             (nKeyCode >= 18 && nKeyCode <= 20) || // alt,pause/break,caps lock
             (nKeyCode == 27) || // esc
@@ -1092,7 +1090,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
             }
         }
         // A delimiter has been found so extract the latest query
-        if (nDelimIndex > -1) {
+        if(nDelimIndex > -1) {
             var nQueryStart = nDelimIndex + 1;
             // Trim any white space from the beginning...
             while(sQuery.charAt(nQueryStart) == " ") {
@@ -1109,8 +1107,8 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     }
 
     // Don't search queries that are too short
-    if (sQuery && (sQuery.length < this.minQueryLength) || (!sQuery && this.minQueryLength > 0)) {
-        if (this._nDelayID != -1) {
+    if(sQuery && (sQuery.length < this.minQueryLength) || (!sQuery && this.minQueryLength > 0)) {
+        if(this._nDelayID != -1) {
             clearTimeout(this._nDelayID);
         }
         this._toggleContainer(false);
@@ -1139,7 +1137,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
     if(aResults === null) {
         oSelf.dataErrorEvent.fire(oSelf, sQuery);
     }
-    if (!oSelf._bFocused || !aResults) {
+    if(!oSelf._bFocused || !aResults) {
         return;
     }
 
@@ -1158,7 +1156,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
 
     var nItems = Math.min(aResults.length,oSelf.maxResultsDisplayed);
     oSelf._nDisplayedItems = nItems;
-    if (nItems > 0) {
+    if(nItems > 0) {
         oSelf._initContainerHelpers();
         var aItems = oSelf._aListItems;
 
@@ -1241,7 +1239,7 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
     for(var i = this._nDisplayedItems-1; i >= 0 ; i--) {
         var oItem = this._aListItems[i];
         var sMatch = oItem._sResultKey.toLowerCase();
-        if (sMatch == this._sCurQuery.toLowerCase()) {
+        if(sMatch == this._sCurQuery.toLowerCase()) {
             foundMatch = true;
             break;
         }
@@ -1260,7 +1258,7 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
  */
 YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     // Don't update if turned off
-    if (!this.typeAhead || (this._nKeyCode == 8)) {
+    if(!this.typeAhead || (this._nKeyCode == 8)) {
         return;
     }
 
@@ -1291,10 +1289,10 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._selectText = function(oTextbox, nStart, nEnd) {
-    if (oTextbox.setSelectionRange) { // For Mozilla
+    if(oTextbox.setSelectionRange) { // For Mozilla
         oTextbox.setSelectionRange(nStart,nEnd);
     }
-    else if (oTextbox.createTextRange) { // For IE
+    else if(oTextbox.createTextRange) { // For IE
         var oTextRange = oTextbox.createTextRange();
         oTextRange.moveStart("character", nStart);
         oTextRange.moveEnd("character", nEnd-oTextbox.value.length);
@@ -1367,7 +1365,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
             }
         }
 
-        if (this._oCurItem) {
+        if(this._oCurItem) {
             this._toggleHighlight(this._oCurItem,"from");
         }
 
@@ -1377,14 +1375,14 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     }
 
     // Container is already closed
-    if (!bShow && !this._bContainerOpen) {
+    if(!bShow && !this._bContainerOpen) {
         oContainer._oContent.style.display = "none";
         return;
     }
 
     // If animation is enabled...
     var oAnim = this._oAnim;
-    if (oAnim && oAnim.getEl() && (this.animHoriz || this.animVert)) {
+    if(oAnim && oAnim.getEl() && (this.animHoriz || this.animVert)) {
         // If helpers need to be collapsed, do it right away...
         // but if helpers need to be expanded, wait until after the container expands
         if(!bShow) {
@@ -1598,7 +1596,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
         var oCurItem = this._oCurItem;
         var nCurItemIndex = -1;
 
-        if (oCurItem) {
+        if(oCurItem) {
             nCurItemIndex = oCurItem._nItemIndex;
         }
 
@@ -1606,19 +1604,19 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
                 (nCurItemIndex + 1) : (nCurItemIndex - 1);
 
         // Out of bounds
-        if (nNewItemIndex < -2 || nNewItemIndex >= this._nDisplayedItems) {
+        if(nNewItemIndex < -2 || nNewItemIndex >= this._nDisplayedItems) {
             return;
         }
 
-        if (oCurItem) {
+        if(oCurItem) {
             // Unhighlight current item
             this._toggleHighlight(oCurItem, "from");
             this.itemArrowFromEvent.fire(this, oCurItem);
         }
-        if (nNewItemIndex == -1) {
+        if(nNewItemIndex == -1) {
            // Go back to query (remove type-ahead string)
             if(this.delimChar && this._sSavedQuery) {
-                if (!this._textMatchesOption()) {
+                if(!this._textMatchesOption()) {
                     this._oTextbox.value = this._sSavedQuery;
                 }
                 else {
@@ -1631,7 +1629,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             this._oCurItem = null;
             return;
         }
-        if (nNewItemIndex == -2) {
+        if(nNewItemIndex == -2) {
             // Close container
             this._toggleContainer(false);
             return;
@@ -1867,17 +1865,13 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
             switch (nKeyCode) {
             case 9: // tab
                 if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                    if(oSelf._bContainerOpen) {
-                        YAHOO.util.Event.stopEvent(v);
-                    }
+                    YAHOO.util.Event.stopEvent(v);
                 }
                 break;
             case 13: // enter
-                    if(oSelf._nKeyCode != nKeyCode) {
-                        if(oSelf._bContainerOpen) {
-                            YAHOO.util.Event.stopEvent(v);
-                        }
-                    }
+                if(oSelf._nKeyCode != nKeyCode) {
+                    YAHOO.util.Event.stopEvent(v);
+                }
                 break;
             case 38: // up
             case 40: // down
@@ -1912,7 +1906,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     var sText = this.value; //string in textbox
 
     // Filter out chars that don't trigger queries
-    if (oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == oSelf._sCurQuery)) {
+    if(oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == oSelf._sCurQuery)) {
         return;
     }
     else {
@@ -1920,11 +1914,11 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     }
 
     // Set timeout on the request
-    if (oSelf.queryDelay > 0) {
+    if(oSelf.queryDelay > 0) {
         var nDelayID =
             setTimeout(function(){oSelf._sendQuery(sText);},(oSelf.queryDelay * 1000));
 
-        if (oSelf._nDelayID != -1) {
+        if(oSelf._nDelayID != -1) {
             clearTimeout(oSelf._nDelayID);
         }
 
@@ -1947,7 +1941,9 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
     oSelf._oTextbox.setAttribute("autocomplete","off");
     oSelf._bFocused = true;
-    oSelf.textboxFocusEvent.fire(oSelf);
+    if(!oSelf._bItemSelected) {
+        oSelf.textboxFocusEvent.fire(oSelf);
+    }
 };
 
 /**
@@ -2131,7 +2127,6 @@ YAHOO.widget.DataSource.prototype.getResults = function(oCallbackFn, sQuery, oPa
     
     // First look in cache
     var aResults = this._doQueryCache(oCallbackFn,sQuery,oParent);
-    
     // Not in cache, so get results from server
     if(aResults.length === 0) {
         this.queryEvent.fire(this, oParent, sQuery);
@@ -2285,7 +2280,7 @@ YAHOO.widget.DataSource.prototype._aCache = null;
 YAHOO.widget.DataSource.prototype._init = function() {
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
-    if(isNaN(maxCacheEntries) || (maxCacheEntries < 0)) {
+    if(!YAHOO.lang.isNumber(maxCacheEntries) || (maxCacheEntries < 0)) {
         maxCacheEntries = 0;
     }
     // Initialize local cache
@@ -2452,20 +2447,20 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
  */
 YAHOO.widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
     // Set any config params passed in to override defaults
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
-    
+
     // Initialization sequence
-    if(!aSchema || (aSchema.constructor != Array)) {
+    if(!YAHOO.lang.isArray(aSchema) || !YAHOO.lang.isString(sScriptURI)) {
         return;
     }
-    else {
-        this.schema = aSchema;
-    }
+
+    this.schema = aSchema;
     this.scriptURI = sScriptURI;
+    
     this._init();
 };
 
@@ -2671,7 +2666,7 @@ for(var foo in oResp) {
         failure:responseFailure
     };
     
-    if(!isNaN(this.connTimeout) && this.connTimeout > 0) {
+    if(YAHOO.lang.isNumber(this.connTimeout) && (this.connTimeout > 0)) {
         oCallback.timeout = this.connTimeout;
     }
     
@@ -2768,7 +2763,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 break;
             }
 
-            if(jsonList.constructor != Array) {
+            if(!YAHOO.lang.isArray(jsonList)) {
                 jsonList = [jsonList];
             }
             
@@ -2888,14 +2883,14 @@ YAHOO.widget.DS_XHR.prototype._oConn = null;
  */
 YAHOO.widget.DS_JSFunction = function(oFunction, oConfigs) {
     // Set any config params passed in to override defaults
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
 
     // Initialization sequence
-    if(!oFunction  || (oFunction.constructor != Function)) {
+    if(!YAHOO.lang.isFunction(oFunction)) {
         return;
     }
     else {
@@ -2971,14 +2966,14 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
  */
 YAHOO.widget.DS_JSArray = function(aData, oConfigs) {
     // Set any config params passed in to override defaults
-    if(typeof oConfigs == "object") {
+    if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
             this[sConfig] = oConfigs[sConfig];
         }
     }
 
     // Initialization sequence
-    if(!aData || (aData.constructor != Array)) {
+    if(!YAHOO.lang.isArray(aData)) {
         return;
     }
     else {
@@ -3019,6 +3014,7 @@ YAHOO.widget.DS_JSArray.prototype.data = null;
  * @param oParent {Object} The object instance that has requested data.
  */
 YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
+    var i;
     var aData = this.data; // the array
     var aResults = []; // container for results
     var bMatchFound = false;
@@ -3030,19 +3026,17 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
 
         // Loop through each element of the array...
         // which can be a string or an array of strings
-        for(var i = aData.length-1; i >= 0; i--) {
+        for(i = aData.length-1; i >= 0; i--) {
             var aDataset = [];
 
-            if(aData[i]) {
-                if(aData[i].constructor == String) {
-                    aDataset[0] = aData[i];
-                }
-                else if(aData[i].constructor == Array) {
-                    aDataset = aData[i];
-                }
+            if(YAHOO.lang.isString(aData[i])) {
+                aDataset[0] = aData[i];
+            }
+            else if(YAHOO.lang.isArray(aData[i])) {
+                aDataset = aData[i];
             }
 
-            if(aDataset[0] && (aDataset[0].constructor == String)) {
+            if(YAHOO.lang.isString(aDataset[0])) {
                 var sKeyIndex = (this.queryMatchCase) ?
                 encodeURIComponent(aDataset[0]).indexOf(sQuery):
                 encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
@@ -3057,7 +3051,17 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
             }
         }
     }
-
+    else {
+        for(i = aData.length-1; i >= 0; i--) {
+            if(YAHOO.lang.isString(aData[i])) {
+                aResults.unshift([aData[i]]);
+            }
+            else if(YAHOO.lang.isArray(aData[i])) {
+                aResults.unshift(aData[i]);
+            }
+        }
+    }
+    
     this.getResultsEvent.fire(this, oParent, sQuery, aResults);
     oCallbackFn(sQuery, aResults, oParent);
 };

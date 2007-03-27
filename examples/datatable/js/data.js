@@ -37,10 +37,10 @@ YAHOO.example.Data = {
     ],
 
     bookorders: [
-        {POID: "po-0167", Date:new Date(1980, 2, 24), Quantity:4, Amount:4.00, Title:"A Book About Nothing"},
-        {POID: "po-0297", Date:new Date(1981, 1, 11), Quantity:3, Amount:12.12, Title:"The Meaning of Life"},
-        {POID: "po-0783", Date:new Date(1978, 11, 12), Quantity:12, Amount:6.25, Title:"This Book Was Meant to Be Read Aloud"},
-        {POID: "po-1482", Date:new Date(1974, 1, 11), Quantity:6, Amount:3.50, Title:"Read Me Twice"}
+        {id: "po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing"},
+        {id: "po-0297", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life"},
+        {id: "po-0783", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud"},
+        {id: "po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice"}
     ],
     
     areacodes: [

@@ -1,5 +1,13 @@
 AutoComplete Release Notes
 
+*** version 2.2.1 ***
+
+* Fixed form submission in Safari bug.
+* Fixed broken DS_JSArray support for minQueryLength=0.
+* Improved type checking with YAHOO.lang.
+
+
+
 *** version 2.2.0 ***
 
 * No changes.

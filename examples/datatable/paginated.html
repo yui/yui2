@@ -127,9 +127,9 @@ var myColumnHeaders = [
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
 // Show over 1000 records
-var myDataSource = new YAHOO.util.DataSource("./php/data_proxy.php");
+var myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
 // Show 5000 records -- FireBug must be disabled!
-//var myDataSource = new YAHOO.util.DataSource("./php/data5000_proxy.php");
+//var myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
     resultsList: "result",
