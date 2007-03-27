@@ -1681,8 +1681,6 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 
             var oParentMenu = this.parent.parent;
 
-            oParentMenu.activeItem = this.parent;
-
             oParentMenu._bHandledMouseOutEvent = true;
             oParentMenu._bHandledMouseOverEvent = false;
 
@@ -1956,8 +1954,6 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
 
                 this.clearActiveItem();
 
-                this.activeItem = oItem;
-
                 oItem.cfg.setProperty("selected", true);
 
                 oSubmenu.show();
@@ -2083,68 +2079,57 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
             case 38:    // Up arrow
             case 40:    // Down arrow
     
-                if(
-                    oItem == this.activeItem && 
-                    !oItemCfg.getProperty("selected")
-                ) {
-    
-                    oItemCfg.setProperty("selected", true);
-    
-                }
-                else {
-    
-                    oNextItem = (oEvent.keyCode == 38) ? 
-                        oItem.getPreviousEnabledSibling() : 
-                        oItem.getNextEnabledSibling();
-            
-                    if(oNextItem) {
-    
-                        this.clearActiveItem();
-    
-                        oNextItem.cfg.setProperty("selected", true);
-                        oNextItem.focus();
+                oNextItem = (oEvent.keyCode == 38) ? 
+                    oItem.getPreviousEnabledSibling() : 
+                    oItem.getNextEnabledSibling();
+        
+                if(oNextItem) {
+
+                    this.clearActiveItem();
+
+                    oNextItem.cfg.setProperty("selected", true);
+                    oNextItem.focus();
 
 
-                        if(this.cfg.getProperty("maxheight") > 0) {
+                    if(this.cfg.getProperty("maxheight") > 0) {
 
-                            var oBody = this.body;
+                        var oBody = this.body;
 
-                            oBody.scrollTop = 
+                        oBody.scrollTop = 
 
-                                (
-                                    oNextItem.element.offsetTop + 
-                                    oNextItem.element.offsetHeight
-                                ) - oBody.offsetHeight;
+                            (
+                                oNextItem.element.offsetTop + 
+                                oNextItem.element.offsetHeight
+                            ) - oBody.offsetHeight;
 
 
-                            var nScrollTop = oBody.scrollTop,
-                                nScrollTarget = 
-                                    oBody.scrollHeight - oBody.offsetHeight;
+                        var nScrollTop = oBody.scrollTop,
+                            nScrollTarget = 
+                                oBody.scrollHeight - oBody.offsetHeight;
 
-                            if(nScrollTop === 0) {
+                        if(nScrollTop === 0) {
 
-                                this._disableScrollHeader();
-                                this._enableScrollFooter();
+                            this._disableScrollHeader();
+                            this._enableScrollFooter();
 
-                            }
-                            else if(nScrollTop == nScrollTarget) {
+                        }
+                        else if(nScrollTop == nScrollTarget) {
 
-                                 this._enableScrollHeader();
-                                 this._disableScrollFooter();
+                             this._enableScrollHeader();
+                             this._disableScrollFooter();
 
-                            }
-                            else {
+                        }
+                        else {
 
-                                this._enableScrollHeader();
-                                this._enableScrollFooter();
-
-                            }
+                            this._enableScrollHeader();
+                            this._enableScrollFooter();
 
                         }
 
                     }
-    
+
                 }
+
     
                 Event.preventDefault(oEvent);
 
@@ -2285,8 +2270,8 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
             }
             else {
 
-                this.activeItem.cfg.setProperty("selected", false);
                 this.activeItem.blur();
+                this.activeItem.cfg.setProperty("selected", false);
         
             }
         
@@ -3113,13 +3098,18 @@ _onMenuItemBlur: function(p_sType, p_aArgs) {
 */
 _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 
-    var sProperty = p_aArgs[0][0];
+    var sPropertyName = p_aArgs[0][0],
+        oPropertyValue = p_aArgs[0][1];
 
-    switch(sProperty) {
+    switch(sPropertyName) {
 
         case "selected":
 
-            this.activeItem = p_oItem;
+            if(oPropertyValue == true) {
+
+                this.activeItem = p_oItem;
+            
+            }
 
         break;
 
@@ -4254,6 +4244,12 @@ clearActiveItem: function(p_bBlur) {
 
         var oConfig = oActiveItem.cfg;
 
+        if(p_bBlur) {
+
+            oActiveItem.blur();
+        
+        }
+
         oConfig.setProperty("selected", false);
 
         var oSubmenu = oConfig.getProperty("submenu");
@@ -4264,11 +4260,7 @@ clearActiveItem: function(p_bBlur) {
 
         }
 
-        if(p_bBlur) {
-
-            oActiveItem.blur();
-        
-        }
+        this.activeItem = null;            
 
     }
 
