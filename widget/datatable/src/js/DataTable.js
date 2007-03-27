@@ -2586,9 +2586,9 @@ YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
         var elBody = this._elBody;
         var elRows = this._elBody.rows;
 
-        // Remove extra rows
+        // Remove extra rows from the bottom so as to preserve ID order
         while(elBody.hasChildNodes() && (elRows.length > aRecords.length)) {
-            elBody.deleteRow(0);
+            elBody.deleteRow(elRows.length-1);
         }
 
         // Unselect rows in the UI but keep tracking selected rows
