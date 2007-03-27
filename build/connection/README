@@ -1,5 +1,22 @@
 Connection Manager Release Notes
 
+*** version 2.2.1 ***
+
+* setForm() will include the correct name-value of the HTML Submit button
+clicked where multiple HTML Submit button options are present in an HTML form.
+To enable this feature, include the Event utility source file as a dependency
+before the Connection Manager source file.
+
+* The XHR implementation in IE6 and IE7 does not properly handle an HTTP 204
+response, instead returning Win error 1223.  handleTransactionResponse() will
+treat 1223 as an HTTP 204, and route the response appropriately to the success
+callback.  createResponseObject() will normalize the response object's status
+and statusText values to 204 and "No Content" respectively.  However, no headers
+are returned.
+
+FireFox, Opera, and Safari -- per the Graded Browser Support Matrix -- are
+unaffected.
+
 *** version 2.2.0 ***
 
 * initHeader() now accepts a third argument as a boolean.  When set to true,
@@ -161,6 +178,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
 
 
 
