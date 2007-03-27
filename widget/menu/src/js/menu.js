@@ -301,6 +301,15 @@ _bStopMouseEventHandlers: false,
 _sClassName: null,
 
 
+/**
+* @property _bRendered
+* @description Boolean indicating if the menu has been rendered.
+* @default false
+* @private
+* @type Boolean
+*/
+_bRendered: false,
+
 
 // Public properties
 
@@ -594,7 +603,7 @@ init: function(p_oElement, p_oConfig) {
 
         this.initEvent.subscribe(this._onInit, this, true);
         this.beforeRenderEvent.subscribe(this._onBeforeRender, this, true);
-        this.renderEvent.subscribe(this._setWidth, this, true);
+        this.renderEvent.subscribe(this._onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow, this, true);
         this.showEvent.subscribe(this._onShow, this, true);
         this.beforeHideEvent.subscribe(this._onBeforeHide, this, true);
@@ -1384,35 +1393,31 @@ _getOffsetWidth: function() {
 */
 _setWidth: function() {
 
-    var sWidth = this.cfg.getProperty("width");
+    var sWidth;
 
-    if (this.cfg.getProperty("position") == "dynamic" && !sWidth) {
+    if (this.element.parentNode.tagName.toUpperCase() == "BODY") {
 
-        if (this.element.parentNode.tagName.toUpperCase() == "BODY") {
+        if (this.browser == "opera") {
 
-            if (this.browser == "opera") {
-
-                sWidth = this._getOffsetWidth();
-            
-            }
-            else {
-
-                Dom.setStyle(this.element, "width", "auto");
-                
-                sWidth = this.element.offsetWidth;
-            
-            }
-
-        }
-        else {
-        
             sWidth = this._getOffsetWidth();
         
         }
-    
-        this.cfg.setProperty("width", (sWidth + "px"));
+        else {
+
+            Dom.setStyle(this.element, "width", "auto");
+            
+            sWidth = this.element.offsetWidth;
+        
+        }
 
     }
+    else {
+    
+        sWidth = this._getOffsetWidth();
+    
+    }
+
+    this.cfg.setProperty("width", (sWidth + "px"));
 
 },
 
@@ -2578,6 +2583,38 @@ _onBeforeRender: function(p_sType, p_aArgs, p_oMenu) {
 
 
 /**
+* @method _onRender
+* @description "render" event handler for the menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onRender: function(p_sType, p_aArgs) {
+
+    if (
+        this.cfg.getProperty("position") == "dynamic" && 
+        !this.cfg.getProperty("width")
+    ) {
+
+        this._setWidth();
+    
+    }
+
+
+    if(!this._bRendered) {
+
+        this.itemAddedEvent.subscribe(this._setWidth);
+        this.itemRemovedEvent.subscribe(this._setWidth);
+
+        this._bRendered = true;
+    
+    }
+
+},
+
+
+/**
 * @method _onBeforeShow
 * @description "beforeshow" event handler for the menu.
 * @private
@@ -3058,7 +3095,6 @@ _onSubmenuHide: function(p_sType, p_aArgs) {
         this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
 },
-
 
 
 /**
