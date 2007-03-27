@@ -93,6 +93,27 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 		}
 	}, this, true);
 
+
+    this.renderEvent.subscribe(function() {
+
+        /*
+            If no value for the "width" configuration property was specified, 
+            set it to the offsetWidth. If the "width" is not set, then in IE 
+            you can only drag the panel when you put the cursor on the
+            header's text.
+        */
+
+        var sWidth = this.cfg.getProperty("width");
+        
+        if(!sWidth) {
+
+            this.cfg.setProperty("width", (this.element.offsetWidth + "px"));
+        
+        }
+    
+    });
+
+
 	var me = this;
 
 	var doBlur = function() {
