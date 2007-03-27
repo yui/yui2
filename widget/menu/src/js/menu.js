@@ -2674,6 +2674,8 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 
     if(this.cfg.getProperty("position") == "dynamic") {
 
+        Dom.addClass(this.element, "visible");
+
         var nViewportHeight = Dom.getViewportHeight();
 
 
@@ -2828,6 +2830,8 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
 * the event.
 */
 _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
+
+    Dom.removeClass(this.element, "visible");
 
     var oActiveItem = this.activeItem;
 
