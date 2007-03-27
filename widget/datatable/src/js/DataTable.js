@@ -152,6 +152,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
 
     // Set up event model
     elTable = this._elTable;
+    elTable.className = YAHOO.widget.DataTable.CLASS_TABLE;
     /////////////////////////////////////////////////////////////////////////////
     //
     // DOM Events
@@ -530,7 +531,7 @@ else {
  * @final
  * @default "yui-dt"
  */
-YAHOO.widget.DataTable.CLASS_TABLE = "yui-dt";
+YAHOO.widget.DataTable.CLASS_TABLE = "yui-dt-table";
 
 /**
  * Class name assigned to TBODY element that holds data rows.
