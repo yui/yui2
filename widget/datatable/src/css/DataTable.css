@@ -1,6 +1,3 @@
-/*debug css
-.example span, .example .yui-dt-columntext {border:1px solid red;}*/
-
 /*foundational css*/
 td {
     overflow:hidden;
@@ -33,44 +30,17 @@ td {
     text-decoration:underline;
 }
 
+/* foundational scrolling css */
 .yui-dt-scrollable  {
-   width:20em;
-   margin-bottom:3em;
+    *overflow-y:auto; /* for ie */
 }
-
-
 .yui-dt-scrollable  thead {
-   background:#696969; /*  IE needs a bgcolor to hide tbody as it scrolls */
-   border:1px solid #000;
-   display:block; /* enables tbody scrolling for safari and opera */
+    display:block; /* for safari and opera */
 }
-
-.yui-dt-scrollable  thead th {
-   width:10em; /* any value seems to here, just need something */
-}
-
-tbody.yui-dt-scrollable {
-   display:block; /* enables tbody scrolling for safari and opera */
-   height:10em;
-   overflow:auto; /* for scrolling other than IE */
-}
-
-/* IE specific */
-.yui-dt-scrollable  {
-   height:10em;
-   *overflow-y:auto;
-}
-
-.yui-dt-scrollable  tbody {
-   *height:auto; /* override the non IE height */
-}
-
 .yui-dt-scrollable thead tr {
-   position:relative;  /* IE cant scroll tbody, so trick it into fixing thead */
+    position:relative;  /* for ie */
 }
-
-.yui-dt-scrollable tbody td {
-    width:10em;
+.yui-dt-scrollbody {
+    display:block; /* for safari and opera */
+    overflow:auto; /* for gecko */
 }
-
-

@@ -675,7 +675,7 @@ YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
 YAHOO.widget.DataTable.CLASS_HIGHLIGHT = "yui-dt-highlight";
 
 /**
- * Class name assigned to certain elements of a scrollable DataTable.
+ * Class name assigned to container of a scrollable DataTable.
  *
  * @property CLASS_SCROLLABLE
  * @type String
@@ -684,6 +684,17 @@ YAHOO.widget.DataTable.CLASS_HIGHLIGHT = "yui-dt-highlight";
  * @default "yui-dt-scrollable"
  */
 YAHOO.widget.DataTable.CLASS_SCROLLABLE = "yui-dt-scrollable";
+
+/**
+ * Class name assigned to scrolling TBODY element of a scrollable DataTable.
+ *
+ * @property CLASS_SCROLLBODY
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-scrollbody"
+ */
+YAHOO.widget.DataTable.CLASS_SCROLLBODY = "yui-dt-scrollbody";
 
 /**
  * Class name assigned to column headers of sortable Columns.
@@ -1178,7 +1189,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
     this._elBody.tabIndex = -1;
     YAHOO.util.Dom.addClass(this._elBody,YAHOO.widget.DataTable.CLASS_BODY);
     if(this.scrollable) {
-        YAHOO.util.Dom.addClass(this._elBody,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
+        YAHOO.util.Dom.addClass(this._elBody,YAHOO.widget.DataTable.CLASS_SCROLLBODY);
     }
 };
 
