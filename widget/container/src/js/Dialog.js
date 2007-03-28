@@ -219,6 +219,40 @@ YAHOO.widget.Dialog.prototype.doSubmit = function() {
 };
 
 /**
+* @method _onFormKeyDown
+* @description "keydown" event handler for the dialog's form.
+* @protected
+* @param {Event} p_oEvent Object representing the DOM event object passed 
+* back by the event utility (YAHOO.util.Event).
+*/
+YAHOO.widget.Dialog.prototype._onFormKeyDown = function(p_oEvent) {
+
+    var oTarget = YAHOO.util.Event.getTarget(p_oEvent),
+        nCharCode = YAHOO.util.Event.getCharCode(p_oEvent);
+
+    if (
+        nCharCode == 13 && 
+        oTarget.tagName && 
+        oTarget.tagName.toUpperCase() == "INPUT"
+    ) {
+
+        var sType = oTarget.type;
+
+        if(
+            sType == "text" || sType == "password" || sType == "checkbox" || 
+            sType == "radio" || sType == "file"
+        ) {
+
+            // Fire the "click" event on the dialog's default button
+            this.defaultHtmlButton.click();
+        
+        }
+
+    }
+
+};
+
+/**
 * Prepares the Dialog's internal FORM object, creating one if one is not currently present.
 * @method registerForm
 */
@@ -256,6 +290,13 @@ YAHOO.widget.Dialog.prototype.registerForm = function() {
 	}();
 
 	this.form = form;
+
+    if(this.form && (this.browser == "ie" || this.browser == "ie7" || this.browser == "gecko")) {
+
+        YAHOO.util.Event.addListener(this.form, "keydown", this._onFormKeyDown, null, this);
+    
+    }
+
 
 	if (this.cfg.getProperty("modal") && this.form) {
 
