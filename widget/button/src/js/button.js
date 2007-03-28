@@ -128,7 +128,9 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
             element: null,
             attributes: (p_oAttributes || {})
             
-        };
+        },
+
+        sTagName;
 
 
         if(Lang.isString(p_oElement)) {
@@ -137,7 +139,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
 
             if (oElement) {
 
-                var sTagName = oElement.tagName.toUpperCase();
+                sTagName = oElement.tagName.toUpperCase();
             
                 if(sTagName == this.TAG_NAME) {
             
@@ -191,7 +193,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
         }
         else {
 
-            var sTagName = p_oElement.tagName.toUpperCase();
+            sTagName = p_oElement.tagName.toUpperCase();
 
             if(sTagName == this.TAG_NAME) {
 
@@ -635,17 +637,6 @@ _hiddenField: null,
 * @type Object
 */
 _onclickAttributeValue: null,
-
-
-/** 
-* @property _oninitAttributeValue
-* @description Object reference to the button's current value for the "oninit"
-* configuration attribute.
-* @default null
-* @protected
-* @type Object
-*/
-_oninitAttributeValue: null,
 
 
 /** 
@@ -1252,46 +1243,6 @@ _setOnClick: function(p_oObject) {
         this.on("click", p_oObject.fn, p_oObject.obj, p_oObject.scope);
 
         this._onclickAttributeValue = p_oObject;
-
-    }
-
-},
-
-/**
-* @method _setOnInit
-* @description Sets the value of the button's "init" attribute.
-* @protected
-* @param {Object} p_oObject Object indicating the value for the button's 
-* "oninit" attribute.
-*/
-_setOnInit: function(p_oObject) {
-
-    /*
-        Remove any existing listeners if a "init" event handler has already 
-        been specified.
-    */
-
-    if(
-        this._oninitAttributeValue && 
-        (this._oninitAttributeValue != p_oObject)
-    ) {
-
-        this.removeListener("init", this._oninitAttributeValue.fn);
-
-        this._oninitAttributeValue = null;
-
-    }
-
-
-    if(
-        !this._oninitAttributeValue && 
-        Lang.isObject(p_oObject) && 
-        Lang.isFunction(p_oObject.fn)
-    ) {
-
-        this.on("init", p_oObject.fn, p_oObject.obj, p_oObject.scope);
-
-        this._oninitAttributeValue = p_oObject;
 
     }
 
@@ -2630,8 +2581,6 @@ init: function(p_oElement, p_oAttributes) {
 
     }
 
-    this.fireEvent("init");
-
     this.logger.log("Initialization completed.");
 
 },
@@ -2745,7 +2694,7 @@ initAttributes: function(p_oAttributes) {
     * @config disabled
     * @description Boolean indicating if the button should be disabled.  
     * (Disabled buttons are dimmed and will not respond to user input 
-    * or fire events.)
+    * or fire events.  Does not apply to button's of type "link.")
     * @default false
     * @type Boolean
     */
@@ -2899,25 +2848,6 @@ initAttributes: function(p_oAttributes) {
 
         value: oAttributes.onclick,
         method: this._setOnClick
-    
-    });
-
-
-	/**
-	* @config oninit
-    * @description Object literal representing the code to be executed when 
-    * the button is initialized.  Format:<br> <code> {<br> 
-    * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when the 
-    * event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object to 
-    * pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
-    * The object to use for the scope of the handler.<br> } </code>
-    * @type Object
-	* @default null
-	*/
-    this.setAttributeConfig("oninit", {
-
-        value: oAttributes.oninit,
-        method: this._setOnInit
     
     });
 
@@ -3136,11 +3066,10 @@ YAHOO.widget.Button.onFormKeyDown = function(p_oEvent) {
         
                     if (oButton) {
         
-                        var sType = oButton.get("type"),
-                            oSrcElement = oButton.get("srcelement");
+                        var oSrcElement = oButton.get("srcelement");
         
                         return (
-                                    sType == "submit" || 
+                                    oButton.get("type") == "submit" || 
                                     (
                                         oSrcElement && 
                                         oSrcElement.type == "submit"
@@ -3310,18 +3239,6 @@ YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 * "keydown") that caused the "option" event to fire.  See <a href="
 * YAHOO.util.Element.html#addListener">Element.addListener</a> for more 
 * information on listening for this event.
-* @type YAHOO.util.CustomEvent
-*/
-
-
-/**
-* @event init
-* @description Fires when the Button is initialized.  Subscribe to this event
-* by specifying a value for the "oninit" configuration attribute.  Format:<br> 
-* <code> {<br> <strong>fn:</strong> Function,   &#47;&#47; The handler to call  
-* when the event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object
-* to pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
-* The object to use for the scope of the handler.<br> } </code>
 * @type YAHOO.util.CustomEvent
 */
 
