@@ -849,7 +849,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
         var bError = false;
         var oParsedResponse = [];
-        var xmlList = (oRawResponse.getElementsByTagName && this.responseSchema.resultNode) ?
+        var xmlList = (this.responseSchema.resultNode) ?
                 oRawResponse.getElementsByTagName(this.responseSchema.resultNode) :
                 null;
         if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
