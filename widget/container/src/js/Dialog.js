@@ -25,12 +25,12 @@ YAHOO.widget.Dialog.CSS_DIALOG = "yui-dialog";
 
 /**
 * Constant representing the name of the Dialog's events
-* @property YAHOO.widget.Dialog.EVENTS
-* @static
+* @property YAHOO.widget.Dialog._EVENT_TYPES
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.Dialog.EVENTS = {
+YAHOO.widget.Dialog._EVENT_TYPES = {
 
 	"BEFORE_SUBMIT": "beforeSubmit",
 	"SUBMIT": "submit",
@@ -43,15 +43,22 @@ YAHOO.widget.Dialog.EVENTS = {
 
 /**
 * Constant representing the Dialog's configuration properties
-* @property YAHOO.widget.Dialog.DEFAULT_CONFIG
-* @static
+* @property YAHOO.widget.Dialog._DEFAULT_CONFIG
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.Dialog.DEFAULT_CONFIG = {
+YAHOO.widget.Dialog._DEFAULT_CONFIG = {
 
-	"POST_METHOD": "postmethod",
-	"BUTTONS": "buttons"
+	"POST_METHOD": { 
+	   key: "postmethod", 
+	   value: "async" 
+    },
+
+	"BUTTONS": { 
+	   key: "buttons", 
+	   value: "none" 
+    }
 
 };
 
@@ -90,19 +97,28 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 
 	// Add form dialog config properties //
 	
+	var DEFAULT_CONFIG = YAHOO.widget.Dialog._DEFAULT_CONFIG;
+	
 	/**
 	* The method to use for posting the Dialog's form. Possible values are "async", "form", and "manual".
 	* @config postmethod
 	* @type String
 	* @default async
 	*/
-	this.cfg.addProperty(YAHOO.widget.Dialog.DEFAULT_CONFIG.POST_METHOD, { value:"async", handler:this.configPostMethod, validator:function(val) {
-													if (val != "form" && val != "async" && val != "none" && val != "manual") {
-														return false;
-													} else {
-														return true;
-													}
-												} });
+	this.cfg.addProperty(
+	           DEFAULT_CONFIG.POST_METHOD.key, 
+                {
+                    handler: this.configPostMethod, 
+                    value: DEFAULT_CONFIG.POST_METHOD.value, 
+                    validator: function(val) {
+                        if (val != "form" && val != "async" && val != "none" && val != "manual") {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            );
 
 	/**
 	* Object literal(s) defining the buttons for the Dialog's footer.
@@ -110,7 +126,13 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 	* @type Object[]
 	* @default "none"
 	*/
-	this.cfg.addProperty(YAHOO.widget.Dialog.DEFAULT_CONFIG.BUTTONS,		{ value:"none",	handler:this.configButtons } );	
+	this.cfg.addProperty(
+	           DEFAULT_CONFIG.BUTTONS.key,
+	           {
+	               handler: this.configButtons,
+	               value: DEFAULT_CONFIG.BUTTONS.value
+               }
+           );	
 	
 };
 
@@ -121,35 +143,37 @@ YAHOO.widget.Dialog.prototype.initDefaultConfig = function() {
 YAHOO.widget.Dialog.prototype.initEvents = function() {
 	YAHOO.widget.Dialog.superclass.initEvents.call(this);
 
+    var EVENT_TYPES = YAHOO.widget.Dialog._EVENT_TYPES;
+
 	/**
 	* CustomEvent fired prior to submission
 	* @event beforeSumitEvent
 	*/	
-	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.BEFORE_SUBMIT, this);
+	this.beforeSubmitEvent	= new YAHOO.util.CustomEvent(EVENT_TYPES.BEFORE_SUBMIT, this);
 	
 	/**
 	* CustomEvent fired after submission
 	* @event submitEvent
 	*/
-	this.submitEvent		= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.SUBMIT, this);
+	this.submitEvent		= new YAHOO.util.CustomEvent(EVENT_TYPES.SUBMIT, this);
 
 	/**
 	* CustomEvent fired prior to manual submission
 	* @event manualSubmitEvent
 	*/
-	this.manualSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.MANUAL_SUBMIT, this);
+	this.manualSubmitEvent	= new YAHOO.util.CustomEvent(EVENT_TYPES.MANUAL_SUBMIT, this);
 
 	/**
 	* CustomEvent fired prior to asynchronous submission
 	* @event asyncSubmitEvent
 	*/	
-	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.ASYNC_SUBMIT, this);
+	this.asyncSubmitEvent	= new YAHOO.util.CustomEvent(EVENT_TYPES.ASYNC_SUBMIT, this);
 
 	/**
 	* CustomEvent fired prior to form-based submission
 	* @event formSubmitEvent
 	*/
-	this.formSubmitEvent	= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.EVENTS.FORM_SUBMIT, this);
+	this.formSubmitEvent	= new YAHOO.util.CustomEvent(EVENT_TYPES.FORM_SUBMIT, this);
 
 	/**
 	* CustomEvent fired after cancel

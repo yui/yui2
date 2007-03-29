@@ -79,15 +79,25 @@ YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG = "yui-simple-dialog";
 
 /**
 * Constant representing the SimpleDialog's configuration properties
-* @property YAHOO.widget.SimpleDialog.DEFAULT_CONFIG
-* @static
+* @property YAHOO.widget.SimpleDialog._DEFAULT_CONFIG
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.SimpleDialog.DEFAULT_CONFIG = {
+YAHOO.widget.SimpleDialog._DEFAULT_CONFIG = {
 
-    "ICON": "icon",
-    "TEXT": "text"
+    "ICON": { 
+        key: "icon", 
+        value:"none", 
+        suppressEvent:true  
+    },
+
+    "TEXT": { 
+        key: "text", 
+        value:"", 
+        suppressEvent:true, 
+        supercedes:["icon"] 
+    }
 
 };
 
@@ -100,13 +110,22 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 
 	// Add dialog config properties //
 
+    var DEFAULT_CONFIG = YAHOO.widget.SimpleDialog._DEFAULT_CONFIG;
+
 	/**
 	* Sets the informational icon for the SimpleDialog
 	* @config icon
 	* @type String
 	* @default "none"
 	*/
-	this.cfg.addProperty(YAHOO.widget.SimpleDialog.DEFAULT_CONFIG.ICON,	{ value:"none",	handler:this.configIcon, suppressEvent:true } );
+	this.cfg.addProperty(
+                DEFAULT_CONFIG.ICON.key,
+                {
+                    handler: this.configIcon,
+                    value: DEFAULT_CONFIG.ICON.value,
+                    suppressEvent: DEFAULT_CONFIG.ICON.suppressEvent
+                }
+            );
 
 	/**
 	* Sets the text for the SimpleDialog
@@ -114,7 +133,15 @@ YAHOO.widget.SimpleDialog.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default ""
 	*/
-	this.cfg.addProperty(YAHOO.widget.SimpleDialog.DEFAULT_CONFIG.TEXT,	{ value:"", handler:this.configText, suppressEvent:true, supercedes:["icon"] } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.TEXT.key,	
+                { 
+                    handler: this.configText, 
+                    value: DEFAULT_CONFIG.TEXT.value, 
+                    suppressEvent: DEFAULT_CONFIG.TEXT.suppressEvent, 
+                    supercedes: DEFAULT_CONFIG.TEXT.supercedes 
+                } 
+            );
 
 };
 

@@ -25,19 +25,47 @@ YAHOO.widget.Tooltip.CSS_TOOLTIP = "yui-tt";
 
 /**
 * Constant representing the Tooltip's configuration properties
-* @property YAHOO.widget.Tooltip.DEFAULT_CONFIG
-* @static
+* @property YAHOO.widget.Tooltip._DEFAULT_CONFIG
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.Tooltip.DEFAULT_CONFIG = {
+YAHOO.widget.Tooltip._DEFAULT_CONFIG = {
 
-    "PREVENT_OVERLAP": "preventoverlap",
-    "SHOW_DELAY": "showdelay", 
-    "AUTO_DISMISS_DELAY": "autodismissdelay", 
-    "HIDE_DELAY": "hidedelay", 
-    "TEXT": "text", 
-    "CONTAINER": "container" 
+    "PREVENT_OVERLAP": { 
+        key: "preventoverlap", 
+        value:true, 
+        validator:YAHOO.lang.isBoolean, 
+        supercedes:["x","y","xy"] 
+    },
+
+    "SHOW_DELAY": { 
+        key: "showdelay", 
+        value:200, 
+        validator:YAHOO.lang.isNumber 
+    }, 
+
+    "AUTO_DISMISS_DELAY": { 
+        key: "autodismissdelay", 
+        value:5000, 
+        validator:YAHOO.lang.isNumber 
+    }, 
+
+    "HIDE_DELAY": { 
+        key: "hidedelay", 
+        value:250, 
+        validator:YAHOO.lang.isNumber 
+    }, 
+
+    "TEXT": { 
+        key: "text", 
+        suppressEvent:true 
+    }, 
+
+    "CONTAINER": { 
+        key: "container", 
+        value:document.body 
+    }
 
 };
 
@@ -84,13 +112,22 @@ YAHOO.widget.Tooltip.prototype.init = function(el, userConfig) {
 YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	YAHOO.widget.Tooltip.superclass.initDefaultConfig.call(this);
 
+    var DEFAULT_CONFIG = YAHOO.widget.Tooltip._DEFAULT_CONFIG;
+
 	/**
 	* Specifies whether the Tooltip should be kept from overlapping its context element.
 	* @config preventoverlap
 	* @type Boolean
 	* @default true
 	*/
-	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.PREVENT_OVERLAP,		{ value:true, validator:this.cfg.checkBoolean, supercedes:["x","y","xy"] } );
+	this.cfg.addProperty(
+	           DEFAULT_CONFIG.PREVENT_OVERLAP.key,
+	           {
+	               value: DEFAULT_CONFIG.PREVENT_OVERLAP.value, 
+	               validator: DEFAULT_CONFIG.PREVENT_OVERLAP.validator, 
+	               supercedes: DEFAULT_CONFIG.PREVENT_OVERLAP.supercedes
+               }
+           );
 
 	/**
 	* The number of milliseconds to wait before showing a Tooltip on mouseover.
@@ -98,7 +135,14 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default 200
 	*/
-	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.SHOW_DELAY,			{ value:200, handler:this.configShowDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty(
+                DEFAULT_CONFIG.SHOW_DELAY.key,
+                {
+                    handler: this.configShowDelay,
+                    value: 200, 
+                    validator: DEFAULT_CONFIG.SHOW_DELAY.validator
+                }
+          );
 
 	/**
 	* The number of milliseconds to wait before automatically dismissing a Tooltip after the mouse has been resting on the context element.
@@ -106,7 +150,14 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default 5000
 	*/
-	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.AUTO_DISMISS_DELAY,	{ value:5000, handler:this.configAutoDismissDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty(
+                DEFAULT_CONFIG.AUTO_DISMISS_DELAY.key,	
+                {
+                    handler: this.configAutoDismissDelay,
+                    value: DEFAULT_CONFIG.AUTO_DISMISS_DELAY.value,
+                    validator: DEFAULT_CONFIG.AUTO_DISMISS_DELAY.validator
+                }
+            );
 
 	/**
 	* The number of milliseconds to wait before hiding a Tooltip on mouseover.
@@ -114,7 +165,14 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type Number
 	* @default 250
 	*/
-	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.HIDE_DELAY,			{ value:250, handler:this.configHideDelay, validator:this.cfg.checkNumber } );
+	this.cfg.addProperty(
+                DEFAULT_CONFIG.HIDE_DELAY.key,
+                {
+                    handler: this.configHideDelay,
+                    value: DEFAULT_CONFIG.HIDE_DELAY.value, 
+                    validator: DEFAULT_CONFIG.HIDE_DELAY.validator
+                }
+            );
 
 	/**
 	* Specifies the Tooltip's text.
@@ -122,7 +180,13 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default null
 	*/
-	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.TEXT,				{ handler:this.configText, suppressEvent:true } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.TEXT.key,
+                {
+                    handler: this.configText,
+                    suppressEvent: DEFAULT_CONFIG.TEXT.suppressEvent
+                }
+            );
 
 	/**
 	* Specifies the container element that the Tooltip's markup should be rendered into.
@@ -130,7 +194,13 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
 	* @type HTMLElement/String
 	* @default document.body
 	*/
-	this.cfg.addProperty(YAHOO.widget.Tooltip.DEFAULT_CONFIG.CONTAINER,			{ value:document.body, handler:this.configContainer } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.CONTAINER.key,
+                {
+                    handler: this.configContainer,
+                    value: DEFAULT_CONFIG.CONTAINER.value
+                }
+            );
 
 	/**
 	* Specifies the element or elements that the Tooltip should be anchored to on mouseover.

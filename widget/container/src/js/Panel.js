@@ -34,12 +34,12 @@ YAHOO.widget.Panel.CSS_PANEL_CONTAINER = "yui-panel-container";
 
 /**
 * Constant representing the name of the Panel's events
-* @property YAHOO.widget.Panel.EVENTS
-* @static
+* @property YAHOO.widget.Panel._EVENT_TYPES
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.Panel.EVENTS = {
+YAHOO.widget.Panel._EVENT_TYPES = {
 
 	"SHOW_MASK": "showMask",
 	"HIDE_MASK": "hideMask",
@@ -49,18 +49,45 @@ YAHOO.widget.Panel.EVENTS = {
 
 /**
 * Constant representing the Panel's configuration properties
-* @property YAHOO.widget.Panel.DEFAULT_CONFIG
-* @static
+* @property YAHOO.widget.Panel._DEFAULT_CONFIG
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.Panel.DEFAULT_CONFIG = {
+YAHOO.widget.Panel._DEFAULT_CONFIG = {
 
-    "CLOSE": "close",
-    "DRAGGABLE": "draggable",
-    "UNDERLAY": "underlay",
-    "MODAL": "modal",
-    "KEY_LISTENERS": "keylisteners"
+    "CLOSE": { 
+        key: "close", 
+        value:true, 
+        validator:YAHOO.lang.isBoolean, 
+        supercedes:["visible"] 
+    },
+
+    "DRAGGABLE": { 
+        key: "draggable", 
+        value:(YAHOO.util.DD ? true : false), 
+        validator:YAHOO.lang.isBoolean, 
+        supercedes:["visible"]  
+    },
+
+    "UNDERLAY": { 
+        key: "underlay", 
+        value:"shadow", 
+        supercedes:["visible"] 
+    },
+
+    "MODAL": { 
+        key: "modal", 
+        value:false, 
+        validator:YAHOO.lang.isBoolean, 
+        supercedes:["visible"] 
+    },
+
+    "KEY_LISTENERS": { 
+        key: "keylisteners", 
+        suppressEvent:true, 
+        supercedes:["visible"] 
+    }
 
 };
 
@@ -180,23 +207,25 @@ YAHOO.widget.Panel.prototype.init = function(el, userConfig) {
 YAHOO.widget.Panel.prototype.initEvents = function() {
 	YAHOO.widget.Panel.superclass.initEvents.call(this);
 
+    var EVENT_TYPES = YAHOO.widget.Panel._EVENT_TYPES;
+
 	/**
 	* CustomEvent fired after the modality mask is shown
 	* @event showMaskEvent
 	*/
-	this.showMaskEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.SHOW_MASK, this);
+	this.showMaskEvent = new YAHOO.util.CustomEvent(EVENT_TYPES.SHOW_MASK, this);
 
 	/**
 	* CustomEvent fired after the modality mask is hidden
 	* @event hideMaskEvent
 	*/
-	this.hideMaskEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.HIDE_MASK, this);
+	this.hideMaskEvent = new YAHOO.util.CustomEvent(EVENT_TYPES.HIDE_MASK, this);
 
 	/**
 	* CustomEvent when the Panel is dragged
 	* @event dragEvent
 	*/
-	this.dragEvent = new YAHOO.util.CustomEvent(YAHOO.widget.Panel.EVENTS.DRAG, this);
+	this.dragEvent = new YAHOO.util.CustomEvent(EVENT_TYPES.DRAG, this);
 };
 
 /**
@@ -208,13 +237,23 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 
     // Add panel config properties //
 
+    var DEFAULT_CONFIG = YAHOO.widget.Panel._DEFAULT_CONFIG;
+
 	/**
 	* True if the Panel should display a "close" button
 	* @config close
 	* @type Boolean
 	* @default true
 	*/
-	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.CLOSE, { value:true, handler:this.configClose, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.CLOSE.key,
+                { 
+                    handler: this.configClose, 
+                    value: DEFAULT_CONFIG.CLOSE.value, 
+                    validator: DEFAULT_CONFIG.CLOSE.validator, 
+                    supercedes: DEFAULT_CONFIG.CLOSE.supercedes
+                } 
+            );
 
 	/**
 	* True if the Panel should be draggable.  Default value is "true" if the Drag and Drop utility is included, otherwise it is "false."
@@ -222,7 +261,15 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @type Boolean
 	* @default true
 	*/
-	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.DRAGGABLE, { value:(YAHOO.util.DD ? true : false), handler:this.configDraggable, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.DRAGGABLE.key, 
+                { 
+                    handler: this.configDraggable, 
+                    value: DEFAULT_CONFIG.DRAGGABLE.value, 
+                    validator: DEFAULT_CONFIG.DRAGGABLE.validator, 
+                    supercedes: DEFAULT_CONFIG.DRAGGABLE.supercedes 
+                } 
+            );
 
 	/**
 	* Sets the type of underlay to display for the Panel. Valid values are "shadow", "matte", and "none".
@@ -230,7 +277,14 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @type String
 	* @default shadow
 	*/
-	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.UNDERLAY, { value:"shadow", handler:this.configUnderlay, supercedes:["visible"] } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.UNDERLAY.key, 
+                { 
+                    handler: this.configUnderlay, 
+                    value: DEFAULT_CONFIG.UNDERLAY.value, 
+                    supercedes: DEFAULT_CONFIG.UNDERLAY.supercedes
+                } 
+            );
 
 	/**
 	* True if the Panel should be displayed in a modal fashion, automatically creating a transparent mask over the document that will not be removed until the Panel is dismissed.
@@ -238,7 +292,15 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @type Boolean
 	* @default false
 	*/
-	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.MODAL,	{ value:false, handler:this.configModal, validator:this.cfg.checkBoolean, supercedes:["visible"] } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.MODAL.key,
+                { 
+                    handler: this.configModal, 
+                    value: DEFAULT_CONFIG.MODAL.value,
+                    validator: DEFAULT_CONFIG.MODAL.validator, 
+                    supercedes: DEFAULT_CONFIG.MODAL.supercedes 
+                } 
+            );
 
 	/**
 	* A KeyListener (or array of KeyListeners) that will be enabled when the Panel is shown, and disabled when the Panel is hidden.
@@ -246,7 +308,14 @@ YAHOO.widget.Panel.prototype.initDefaultConfig = function() {
 	* @type YAHOO.util.KeyListener[]
 	* @default null
 	*/
-	this.cfg.addProperty(YAHOO.widget.Panel.DEFAULT_CONFIG.KEY_LISTENERS, { handler:this.configKeyListeners, suppressEvent:true, supercedes:["visible"] } );
+    this.cfg.addProperty(
+                DEFAULT_CONFIG.KEY_LISTENERS.key, 
+                { 
+                    handler: this.configKeyListeners, 
+                    suppressEvent: DEFAULT_CONFIG.KEY_LISTENERS.suppressEvent, 
+                    supercedes: DEFAULT_CONFIG.KEY_LISTENERS.supercedes
+                } 
+            );
 
 };
 
