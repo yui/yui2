@@ -1,3 +1,12 @@
 *** Version 2.2.0 ***
 
 * Button Control introduced
+
+
+*** Version 2.2.1 ***
+
+Fixed the following bugs:
+
++ Removed built in onAvailable functionality as it was preventing users from being able to add listeners to Buttons created from existing markup (See SourceForge bug 1668511)
+
++ Modified code so that disabled Buttons never fire events (See SourceForge bug 1680880)

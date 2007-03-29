@@ -215,9 +215,26 @@ div.yuimenu li.hashelptext {
 div.yuimenu li.hassubmenu a.hassubmenu,
 div.yuimenu li.hashelptext a.hashelptext {
 
-    float:left;
-    display:inline; /* Prevent margin doubling in IE */
+    /*
+        Need to apply float immediately for IE or help text will jump to the 
+        next line 
+    */
+
+    *float:left;
+    *display:inline; /* Prevent margin doubling in IE */
     text-align:left;
+
+}
+
+div.yuimenu.visible li.hassubmenu a.hassubmenu, 
+div.yuimenu.visible li.hashelptext a.hashelptext {
+
+    /*
+        Apply the float only when the menu is visible to prevent the help
+        text from wrapping to the next line in Opera.
+    */
+
+    float:left;
 
 }
 
