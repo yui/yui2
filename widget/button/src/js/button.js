@@ -1351,8 +1351,11 @@ _addListenersToForm: function() {
 
 
         if (
-            this.get("type") == "submit" || 
-            (oSrcElement && oSrcElement.type == "submit")
+            (m_bIE || m_bGecko) && 
+            (
+                this.get("type") == "submit" || 
+                (oSrcElement && oSrcElement.type == "submit")
+            )
         ) {
         
             var aListeners = Event.getListeners(oForm, "keydown"),
