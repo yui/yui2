@@ -1,5 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"><html>
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example: Link Buttons (YUI Library)</title>
@@ -61,14 +62,31 @@
 
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
-        
-            var oLinkButton1 = new YAHOO.widget.Button("linkbutton1");
-            var oLinkButton2 = new YAHOO.widget.Button("linkbutton2");
-            var oLinkButton3 = new YAHOO.widget.Button("linkbutton3");
 
-            var oLinkButton4 = new YAHOO.widget.Button({ type:"link", id:"linkbutton4", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
-            var oLinkButton5 = new YAHOO.widget.Button({ type:"link", id:"linkbutton5", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
-            var oLinkButton6 = new YAHOO.widget.Button({ type:"link", id:"linkbutton6", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+            YAHOO.example.init = function () {
+
+                // "contentready" event handler for the "linkbuttonsfrommarkup" <div>
+
+                function onLinkButtonsMarkupReady() {
+    
+                    // Create Buttons from existing markup
+            
+                    var oLinkButton1 = new YAHOO.widget.Button("linkbutton1");
+                    var oLinkButton2 = new YAHOO.widget.Button("linkbutton2");
+                    var oLinkButton3 = new YAHOO.widget.Button("linkbutton3");
+
+                }
+
+                YAHOO.util.Event.onContentReady("linkbuttonsfrommarkup", onLinkButtonsMarkupReady);
+    
+
+                // Create Buttons without using existing markup
+    
+                var oLinkButton4 = new YAHOO.widget.Button({ type:"link", id:"linkbutton4", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+                var oLinkButton5 = new YAHOO.widget.Button({ type:"link", id:"linkbutton5", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+                var oLinkButton6 = new YAHOO.widget.Button({ type:"link", id:"linkbutton6", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+
+            } ();
 
         </script>
 
@@ -77,17 +95,21 @@
     
         <h1>Example: Link Buttons (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
-        <div id="linkbuttonsfrommarkup">
-            <h2>From Markup</h2>
+        <div id="example">
 
-            <span id="linkbutton1"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
-            <span id="linkbutton2"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
-            <span id="linkbutton3"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+            <div id="linkbuttonsfrommarkup">
+                <h2>From Markup</h2>
+    
+                <span id="linkbutton1"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+                <span id="linkbutton2"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+                <span id="linkbutton3"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+    
+            </div>
+            
+            <div id="linkbuttonsfromjavascript">
+                <h2>From JavaScript</h2>
+            </div>
 
-        </div>
-        
-        <div id="linkbuttonsfromjavascript">
-            <h2>From JavaScript</h2>
         </div>
 
     </body>

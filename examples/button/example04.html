@@ -1,5 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"><html>
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example: Radio Buttons (YUI Library)</title>
@@ -57,49 +58,73 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            YAHOO.example.onButtonGroupInit = function(p_oEvent) {
+            YAHOO.example.init = function () {
+
+                // "checkedButtonChange" event handler for each ButtonGroup instance
 
                 function onCheckedButtonChange(p_oEvent) {
-                
-                    YAHOO.log(p_oEvent.prevValue, "info", "example4");
-                    YAHOO.log(p_oEvent.newValue, "info", "example4");
+    
+                    if(p_oEvent.prevValue) {
+    
+                        YAHOO.log(p_oEvent.prevValue.get("name"), "info", "example4");
+                    
+                    }
+                    
+                    if(p_oEvent.newValue) {
+    
+                        YAHOO.log(p_oEvent.newValue.get("name"), "info", "example4");
+    
+                    }
                 
                 }
 
-                this.on("checkedButtonChange", onCheckedButtonChange);
-            
-            };
 
+                // "contentready" event handler for the "radiobuttonsfrommarkup" <fieldset>    
+    
+                function onRadioButtonMarkupReady() {
+    
+                    var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1");
+                    oButtonGroup1.on("checkedButtonChange", onCheckedButtonChange);
+    
+                    var oButtonGroup2 = new YAHOO.widget.ButtonGroup("buttongroup2");
+                    oButtonGroup2.on("checkedButtonChange", onCheckedButtonChange);
+    
+                }
+    
+                YAHOO.util.Event.onContentReady("radiobuttonsfrommarkup", onRadioButtonMarkupReady);
+    
+    
+                // Create a ButtonGroup without using existing markup
 
-            var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1", { oninit: { fn: YAHOO.example.onButtonGroupInit } });
-
-            var oButtonGroup2 = new YAHOO.widget.ButtonGroup("buttongroup2", { oninit: { fn: YAHOO.example.onButtonGroupInit } });
-
-            var oButtonGroup3 = new YAHOO.widget.ButtonGroup({ id: "buttongroup3", name: "radiofield3", container:"radiobuttonsfromjavascript", oninit: { fn: YAHOO.example.onButtonGroupInit } });
-
-            oButtonGroup3.addButtons([
-
-                { label:"Radio 9", value:"Radio 9", checked:true },
-                { label:"Radio 10", value:"Radio 10" }, 
-                { label:"Radio 11", value:"Radio 11" }, 
-                { label:"Radio 12", value:"Radio 12" }
-
-            ]);
-
-
-            YAHOO.example.onLogsAvailable = function() {
-
-                var oLogReader = new YAHOO.widget.LogReader("logs");
+                var oButtonGroup3 = new YAHOO.widget.ButtonGroup({ id: "buttongroup3", name: "radiofield3", container:"radiobuttonsfromjavascript" });
+    
+                oButtonGroup3.addButtons([
+    
+                    { label:"Radio 9", value:"Radio 9", checked:true },
+                    { label:"Radio 10", value:"Radio 10" }, 
+                    { label:"Radio 11", value:"Radio 11" }, 
+                    { label:"Radio 12", value:"Radio 12" }
+    
+                ]);
                 
-            };
-
-            YAHOO.util.Event.onAvailable("logs", YAHOO.example.onLogsAvailable);
+                oButtonGroup3.on("checkedButtonChange", onCheckedButtonChange);
+    
+                // "available" event handler for the "logs" <div>
+    
+                function onLogsAvailable() {
+    
+                    var oLogReader = new YAHOO.widget.LogReader("logs");
+                    
+                }
+    
+                YAHOO.util.Event.onAvailable("logs", onLogsAvailable);
+            
+            } ();
 
         </script>
 
     </head>
     <body>
-
 
         <h1>Example: Radio Buttons (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
@@ -108,7 +133,7 @@
             <fieldset id="radiobuttons">
                 <legend>Radio Buttons</legend>
 
-                <fieldset>
+                <fieldset id="radiobuttonsfrommarkup">
                     <legend>From Markup</legend>
 
                     <div id="buttongroup1">
@@ -133,8 +158,10 @@
 
             </fieldset>
 
-            <input type="reset" name="resetbutton" value="Reset Form">
-            <input type="submit" name="submitbutton" value="Submit Form">
+            <div>
+                <input type="reset" name="resetbutton" value="Reset Form">
+                <input type="submit" name="submitbutton" value="Submit Form">
+            </div>
 
         </form>
         

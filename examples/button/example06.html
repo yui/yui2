@@ -1,5 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"><html>
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example: Reset Buttons (YUI Library)</title>
@@ -40,9 +41,31 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            var oResetButton1 = new YAHOO.widget.Button("resetbutton1src", { id:"resetbutton1" });
-            var oResetButton2 = new YAHOO.widget.Button("resetbutton2", { type:"reset" });
-            var oResetButton3 = new YAHOO.widget.Button({ type:"reset", label:"Reset Form", id:"resetfield3", container: "resetbuttonsfromjavascript" });
+            YAHOO.example.init = function () {
+
+                // "contentready" event handler for the "resetbuttonsfrommarkup" <fieldset>
+
+                function onResetButtonsMarkupReady() {
+
+                    // Create a Button using an existing <input> element as a data source
+
+                    var oResetButton1 = new YAHOO.widget.Button("resetbutton1src", { id:"resetbutton1" });
+
+
+                    // Create a Button using the YUI Button markup
+
+                    var oResetButton2 = new YAHOO.widget.Button("resetbutton2", { type:"reset" });
+
+                }
+
+                YAHOO.util.Event.onContentReady("resetbuttonsfrommarkup", onResetButtonsMarkupReady);
+
+
+                // Create a Button without using existing markup
+
+                var oResetButton3 = new YAHOO.widget.Button({ type:"reset", label:"Reset Form", id:"resetfield3", container: "resetbuttonsfromjavascript" });
+
+            } ();
 
         </script>
 

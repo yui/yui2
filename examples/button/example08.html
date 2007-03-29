@@ -1,5 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"><html>
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example: Split Buttons (YUI Library)</title>
@@ -50,25 +51,58 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            var oSplitButton1 = new YAHOO.widget.Button("splitbutton1", { type: "splitbutton", menu: "splitbutton1select" });
+            YAHOO.example.init = function () {
 
-            var oSplitButton2 = new YAHOO.widget.Button("splitbutton2", { type: "splitbutton", menu: "splitbutton2select" });
+                // "contentready" event handler for the "splitbuttonsfrommarkup" <fieldset>
 
-            var aSplitButton3Menu = [
+                function onSplitButtonsMarkupReady() {
+
+                    // Create a Button using an existing <input> element as a data source
+    
+                    var oSplitButton1 = new YAHOO.widget.Button("splitbutton1", { type: "splitbutton", menu: "splitbutton1select" });
+
+
+                    // Create a Button using the YUI Button markup
+
+                    var oSplitButton2 = new YAHOO.widget.Button("splitbutton2", { type: "splitbutton", menu: "splitbutton2select" });
+
+                }
+    
+                YAHOO.util.Event.onContentReady("splitbuttonsfrommarkup", onSplitButtonsMarkupReady);
+
+
+                // Create a Button without using existing markup    
+    
+                var aSplitButton3Menu = [
+                
+                    { text: "one", value: 1 },
+                    { text: "two", value: 2 },
+                    { text: "three", value: 3 }
+                
+                ];
+    
+                var oSplitButton3 = new YAHOO.widget.Button({ type: "splitbutton",  label: "Split Button 3", menu: aSplitButton3Menu, container: "splitbuttonsfromjavascript" });
+
+                function onExampleSubmit(p_oEvent) {
+
+                    var bSubmit = window.confirm("Are you sure you want to submit this form?");
+
+                    if(!bSubmit) {
+                    
+                        YAHOO.util.Event.preventDefault(p_oEvent);
+                    
+                    }
+
+                }
+
+                YAHOO.util.Event.on("example", "submit", onExampleSubmit);
             
-                { text: "one", value: 1 },
-                { text: "two", value: 2 },
-                { text: "three", value: 3 },
-            
-            ];
-
-            var oSplitButton3 = new YAHOO.widget.Button({ type: "splitbutton",  label: "Split Button 3", menu: aSplitButton3Menu, container: "splitbuttonsfromjavascript" });
+            } ();
 
         </script>
 
     </head>
     <body>
-
 
         <h1>Example: Split Buttons (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
 

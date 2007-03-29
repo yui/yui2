@@ -1,5 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"><html>
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example: Push Buttons (YUI Library)</title>
@@ -7,7 +8,6 @@
         <!-- Reset and Fonts -->
         <link rel="stylesheet" type="text/css" href="../../build/reset/reset.css">
         <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
-            
 
         <!-- Logger CSS -->
 
@@ -80,33 +80,62 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            YAHOO.example.onButtonClick = function(p_oEvent) {
+            YAHOO.example.init = function () {
 
-                YAHOO.log("You clicked button: " + this.get("id"), "info", "example1");
-            
-            };
-
-        
-            var oPushButton1 = new YAHOO.widget.Button("pushbutton1src", { id:"pushbutton1", onclick: { fn: YAHOO.example.onButtonClick } });
-            var oPushButton2 = new YAHOO.widget.Button("pushbutton2src", { id:"pushbutton2", onclick: { fn: YAHOO.example.onButtonClick } });
-            var oPushButton3 = new YAHOO.widget.Button("pushbutton3src", { id:"pushbutton3", onclick: { fn: YAHOO.example.onButtonClick } });
-
-            var oPushButton4 = new YAHOO.widget.Button("pushbutton4", { onclick: { fn: YAHOO.example.onButtonClick } });
-            var oPushButton5 = new YAHOO.widget.Button("pushbutton5", { onclick: { fn: YAHOO.example.onButtonClick } });
-            var oPushButton6 = new YAHOO.widget.Button("pushbutton6", { onclick: { fn: YAHOO.example.onButtonClick } });
-
-            var oPushButton7 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton7", container:"pushbuttonsfromjavascript", onclick: { fn: YAHOO.example.onButtonClick } });
-            var oPushButton8 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton8", container:"pushbuttonsfromjavascript", onclick: { fn: YAHOO.example.onButtonClick } });
-            var oPushButton9 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton9", container:"pushbuttonsfromjavascript", onclick: { fn: YAHOO.example.onButtonClick } });
-
-
-            YAHOO.example.onLogsAvailable = function() {
-
-                var oLogReader = new YAHOO.widget.LogReader("logs");
+                // "click" event handler for each Button instance
+    
+                function onButtonClick(p_oEvent) {
+    
+                    YAHOO.log("You clicked button: " + this.get("id"), "info", "example1");
                 
-            };
+                }
+    
+    
+                // "contentready" event handler for the "pushbuttonsfrommarkup" <fieldset>
+    
+                function onPushButtonsMarkupReady() {
+    
+                    // Create Buttons using existing <input> elements as a data source
+    
+                    var oPushButton1 = new YAHOO.widget.Button("pushbutton1src", { id:"pushbutton1" });
+                    oPushButton1.on("click", onButtonClick);
+                    
+                    var oPushButton2 = new YAHOO.widget.Button("pushbutton2src", { id:"pushbutton2", onclick: { fn: onButtonClick } });
+                    var oPushButton3 = new YAHOO.widget.Button("pushbutton3src", { id:"pushbutton3", onclick: { fn: onButtonClick } });
+    
+    
+                    // Create Buttons using the YUI Button markup
+        
+                    var oPushButton4 = new YAHOO.widget.Button("pushbutton4");
+                    oPushButton4.on("click", onButtonClick);
+    
+                    var oPushButton5 = new YAHOO.widget.Button("pushbutton5", { onclick: { fn: onButtonClick } });
+                    var oPushButton6 = new YAHOO.widget.Button("pushbutton6", { onclick: { fn: onButtonClick } });
 
-            YAHOO.util.Event.onAvailable("logs", YAHOO.example.onLogsAvailable);
+                }
+    
+                YAHOO.util.Event.onContentReady("pushbuttonsfrommarkup", onPushButtonsMarkupReady);
+    
+    
+                // Create Buttons without using existing markup
+    
+                var oPushButton7 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton7", container:"pushbuttonsfromjavascript" });
+                oPushButton7.on("click", onButtonClick);
+    
+                var oPushButton8 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton8", container:"pushbuttonsfromjavascript", onclick: { fn: onButtonClick } });
+                var oPushButton9 = new YAHOO.widget.Button({ label:"Add", id:"pushbutton9", container:"pushbuttonsfromjavascript", onclick: { fn: onButtonClick } });
+
+                // "available" event handler for the "logs" <div>
+    
+                function onLogsAvailable() {
+    
+                    var oLogReader = new YAHOO.widget.LogReader("logs");
+                    
+                }
+    
+                YAHOO.util.Event.onAvailable("logs", onLogsAvailable);
+
+            } ();
 
         </script>
 

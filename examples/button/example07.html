@@ -1,5 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
-        "http://www.w3.org/TR/html4/strict.dtd"><html>
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>Example: Menu Buttons (YUI Library)</title>
@@ -48,32 +49,67 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menubutton", menu: "menubutton1select" });
+            YAHOO.example.init = function () {
 
-            var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menubutton", menu: "menubutton2select" });
+                // "contentready" event handler for the "menubuttonsfrommarkup" <fieldset>
+
+                function onMenuButtonsMarkupReady() {
+
+                    // Create a Button using an existing <input> element as a data source
+
+                    var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menubutton", menu: "menubutton1select" });
 
 
-            function onMenuItemClick(p_sType, p_aArgs, p_oItem) {
+                    // Create a Button using the YUI Button markup
 
-                oMenuButton3.set("label", p_oItem.cfg.getProperty("text"));
-            
-            }
+                    var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menubutton", menu: "menubutton2select" });
 
-            var aMenuButton3Menu = [
-            
-                { text: "one", value: 1, onclick: { fn: onMenuItemClick } },
-                { text: "two", value: 2, onclick: { fn: onMenuItemClick } },
-                { text: "three", value: 3, onclick: { fn: onMenuItemClick } }
-            
-            ];
+                }
+    
+                YAHOO.util.Event.onContentReady("menubuttonsfrommarkup", onMenuButtonsMarkupReady)
+    
 
-            var oMenuButton3 = new YAHOO.widget.Button({ type: "menubutton", label: "one", name:"mymenubutton", menu: aMenuButton3Menu, container: "menubuttonsfromjavascript" });
+                // "click" event handler for each item in the Button's menu
+
+                function onMenuItemClick(p_sType, p_aArgs, p_oItem) {
+    
+                    oMenuButton3.set("label", p_oItem.cfg.getProperty("text"));
+                
+                }
+
+
+                // Create a Button without using existing markup
+
+                var aMenuButton3Menu = [
+                
+                    { text: "one", value: 1, onclick: { fn: onMenuItemClick } },
+                    { text: "two", value: 2, onclick: { fn: onMenuItemClick } },
+                    { text: "three", value: 3, onclick: { fn: onMenuItemClick } }
+                
+                ];
+
+                var oMenuButton3 = new YAHOO.widget.Button({ type: "menubutton", label: "one", name:"mymenubutton", menu: aMenuButton3Menu, container: "menubuttonsfromjavascript" });            
+
+                function onExampleSubmit(p_oEvent) {
+
+                    var bSubmit = window.confirm("Are you sure you want to submit this form?");
+
+                    if(!bSubmit) {
+                    
+                        YAHOO.util.Event.preventDefault(p_oEvent);
+                    
+                    }
+
+                }
+
+                YAHOO.util.Event.on("example", "submit", onExampleSubmit);
+
+            } ();
 
         </script>
 
     </head>
     <body>
-
 
         <h1>Example: Menu Buttons (YUI Library) <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
@@ -105,6 +141,8 @@
                 <fieldset id="menubuttonsfromjavascript">
                     <legend>From JavaScript</legend>
                 </fieldset>
+                
+            </fieldset>
 
         </form>
 
