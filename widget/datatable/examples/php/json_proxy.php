@@ -66,7 +66,7 @@ function returnData($results, $start, $sort, $dir) {
 
 function initArray() {
 return array(
-array('extid'=>'702', 'name'=>'xmlqoyzgmykrphvyiz', 'date'=>'13-Sep-2002', 'price'=>'8370', 'number'=>'8056', 'address'=>'qdfbc', 'company'=>'taufrid', 'desc'=>'pppzhfhcdqcvbirw', 'age'=>'5512', 'title'=>'zticbcd', 'phone'=>'hvdkltabshgakjqmfrvxo', 'email'=>'eodnqepua', 'zip'=>'eodnqepua', 'country'=>'pdibxicpqipbsgnxyjumsza'),
+array('id'=>'702', 'name'=>'xmlqoyzgmykrphvyiz', 'date'=>'13-Sep-2002', 'price'=>'8370', 'number'=>'8056', 'address'=>'qdfbc', 'company'=>'taufrid', 'desc'=>'pppzhfhcdqcvbirw', 'age'=>'5512', 'title'=>'zticbcd', 'phone'=>'hvdkltabshgakjqmfrvxo', 'email'=>'eodnqepua', 'zip'=>'eodnqepua', 'country'=>'pdibxicpqipbsgnxyjumsza'),
 array('id'=>'8654', 'name'=>'rbdmbabficcre', 'date'=>'10-Sep-2004', 'price'=>'3075', 'number'=>'3627', 'address'=>'oxcm', 'company'=>'xyzwzv', 'desc'=>'rwndyoedxh', 'age'=>'2134', 'title'=>'lxxyfgdtdffjce', 'phone'=>'zeejvbwy', 'email'=>'ldcikhxwfuulaxeedkogpxftb', 'zip'=>'ldcikhxwfuulaxeedkogpxftb', 'country'=>'pcmobxrdfclcyrx'),
 array('id'=>'7469', 'name'=>'yr', 'date'=>'04-Mar-2007', 'price'=>'7129', 'number'=>'6614', 'address'=>'i', 'company'=>'gcpvrshftfxxlz', 'desc'=>'nyalrdjjl', 'age'=>'4728', 'title'=>'ddfl', 'phone'=>'mnhifzqltvirgiaug', 'email'=>'f', 'zip'=>'f', 'country'=>'epipbmtfsfxetenyedjxzsog'),
 array('id'=>'240', 'name'=>'bhqggvwolybfdtk', 'date'=>'26-Dec-2000', 'price'=>'1867', 'number'=>'4288', 'address'=>'jo', 'company'=>'goevufkvmbct', 'desc'=>'zhixinabyazbfleozrvovr', 'age'=>'3423', 'title'=>'b', 'phone'=>'odhh', 'email'=>'g', 'zip'=>'g', 'country'=>'idxvdztezvkkaz'),
