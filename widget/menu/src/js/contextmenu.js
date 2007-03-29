@@ -366,7 +366,7 @@ initDefaultConfig: function() {
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
     this.cfg.addProperty(
-        YAHOO.widget.ContextMenu._DEFAULT_CONFIG.TRIGGER, 
+        YAHOO.widget.ContextMenu._DEFAULT_CONFIG.TRIGGER.key, 
         { handler: this.configTrigger }
     );
 
