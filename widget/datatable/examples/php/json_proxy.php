@@ -8,13 +8,17 @@ $results = $_GET['results'];
 // Start at which record?
 $start = $_GET['start'];
 
-// TODO
 // Sorted?
 $sort = $_GET['sort'];
 
-// TODO
 // Sort dir?
 $dir = $_GET['dir'];
+if($dir == 'desc') {
+    $dir = SORT_DESC;
+}
+else {
+    $dir = SORT_ASC;
+}
 
 // Return the data
 returnData($results, $start, $sort, $dir);
@@ -22,6 +26,22 @@ returnData($results, $start, $sort, $dir);
 function returnData($results, $start, $sort, $dir) {
     // All records
     $allRecords = initArray();
+
+    // Need to sort records
+    if(!is_null($sort)) {
+
+        // Obtain a list of columns
+        foreach ($allRecords as $key => $row) {
+            $sorted[$key] = $row[$sort];
+        }
+        
+        // Valid sort value
+        if(count($sorted) > 0) {
+            // Sort the original data
+            // Add $allRecords as the last parameter, to sort by the common key
+            array_multisort($sorted, $dir, $allRecords);
+        }
+    }
 
     // Invalid start value
     if(is_null($start) || !is_numeric($start) || ($start < 0)) {
