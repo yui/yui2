@@ -12,6 +12,24 @@ YAHOO.util.Config = function(owner) {
 	if (!owner) { YAHOO.log("No owner specified for Config object", "error"); }
 };
 
+/**
+ * Constant representing the CustomEvent type for the config changed event.
+ * @property YAHOO.util.Config.CONFIG_CHANGED_EVENT
+ * @private
+ * @static
+ * @final
+ */
+YAHOO.util.Config.CONFIG_CHANGED_EVENT = "configChanged";
+
+/**
+ * Constant representing the boolean type string
+ * @property YAHOO.util.Config.BOOLEAN_TYPE
+ * @private
+ * @static
+ * @final
+ */
+YAHOO.util.Config.BOOLEAN_TYPE = "boolean";
+
 YAHOO.util.Config.prototype = {
 	
 	/**
@@ -28,6 +46,36 @@ YAHOO.util.Config.prototype = {
 	*/
 	queueInProgress : false,
 
+	/**
+	* Maintains the local collection of configuration property objects and their specified values
+	* @property config
+	* @private
+	* @type Object
+	*/ 
+	config : null,
+
+	/**
+	* Maintains the local collection of configuration property objects as they were initially applied.
+	* This object is used when resetting a property.
+	* @property initialConfig
+	* @private
+	* @type Object
+	*/ 
+	initialConfig : null,
+
+	/**
+	* Maintains the local, normalized CustomEvent queue
+	* @property eventQueue
+	* @private
+	* @type Object
+	*/ 
+	eventQueue : null,
+
+	/**
+	* Custom Event, notifying subscribers when Config properties are set (setProperty is called without the silent flag
+	* @event configChangedEvent
+	*/
+	configChangedEvent : null,
 
 	/**
 	* Validates that the value passed in is a Boolean.
@@ -36,11 +84,7 @@ YAHOO.util.Config.prototype = {
 	* @return	{Boolean}	true, if the value is valid
 	*/	
 	checkBoolean: function(val) {
-		if (typeof val == 'boolean') {
-			return true;
-		} else {
-			return false;
-		}
+		return (typeof val == YAHOO.util.Config.BOOLEAN_TYPE);
 	},
 
 	/**
@@ -50,57 +94,8 @@ YAHOO.util.Config.prototype = {
 	* @return	{Boolean}	true, if the value is valid
 	*/
 	checkNumber: function(val) {
-		if (isNaN(val)) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-};
-
-
-/**
-* Initializes the configuration Object and all of its local members.
-* @method init
-* @param {Object}	owner	The owner Object to which this Config Object belongs
-*/
-YAHOO.util.Config.prototype.init = function(owner) {
-
-	this.owner = owner;
-
-	/**
-	* Object reference to the owner of this Config Object
-	* @event configChangedEvent
-	*/
-	this.configChangedEvent = new YAHOO.util.CustomEvent("configChanged", this);
-	this.queueInProgress = false;
-
-	/* Private Members */
-
-	/**
-	* Maintains the local collection of configuration property objects and their specified values
-	* @property config
-	* @private
-	* @type Object
-	*/ 
-	var config = {};
-
-	/**
-	* Maintains the local collection of configuration property objects as they were initially applied.
-	* This object is used when resetting a property.
-	* @property initialConfig
-	* @private
-	* @type Object
-	*/ 
-	var initialConfig = {};
-
-	/**
-	* Maintains the local, normalized CustomEvent queue
-	* @property eventQueue
-	* @private
-	* @type Object
-	*/ 
-	var eventQueue = [];
+		return (!isNaN(val));
+	},
 
 	/**
 	* Fires a configuration property event using the specified value. 
@@ -109,16 +104,14 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {String}	key			The configuration property's name
 	* @param {value}	Object		The value of the correct type for the property
 	*/ 
-	var fireEvent = function( key, value ) {
+	fireEvent : function( key, value ) {
 		YAHOO.log("Firing Config event: " + key + "=" + value, "info");
+		var property = this.config[key];
 
-		var property = config[key];
-
-		if (typeof property != 'undefined' && property.event) {
+		if (property && property.event) {
 			property.event.fire(value);
 		}	
-	};
-	/* End Private Members */
+	},
 
 	/**
 	* Adds a property to the Config Object's private config hash.
@@ -126,11 +119,11 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {String}	key	The configuration property's name
 	* @param {Object}	propertyObject	The Object containing all of this property's arguments
 	*/
-	this.addProperty = function( key, propertyObject ) {
+	addProperty : function( key, propertyObject ) {
 		key = key.toLowerCase();
 		YAHOO.log("Added property: " + key, "info");
 
-		config[key] = propertyObject;
+		this.config[key] = propertyObject;
 
 		propertyObject.event = new YAHOO.util.CustomEvent(key, this.owner);
 		propertyObject.key = key;
@@ -144,25 +137,26 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		if (! propertyObject.suppressEvent) {
 			this.queueProperty(key, propertyObject.value);
 		}
-	};
+		
+	},
 
 	/**
 	* Returns a key-value configuration map of the values currently set in the Config Object.
 	* @method getConfig
 	* @return {Object} The current config, represented in a key-value map
 	*/
-	this.getConfig = function() {
+	getConfig : function() {
 		var cfg = {};
 			
-		for (var prop in config) {
-			var property = config[prop];
-			if (typeof property != 'undefined' && property.event) {
+		for (var prop in this.config) {
+			var property = this.config[prop];
+			if (property && property.event) {
 				cfg[prop] = property.value;
 			}
 		}
 		
 		return cfg;
-	};
+	},
 
 	/**
 	* Returns the value of specified property.
@@ -170,16 +164,14 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {String} key	The name of the property
 	* @return {Object}		The value of the specified property
 	*/
-	this.getProperty = function(key) {
-		key = key.toLowerCase();
-
-		var property = config[key];
-		if (typeof property != 'undefined' && property.event) {
+	getProperty : function(key) {
+		var property = this.config[key.toLowerCase()];
+		if (property && property.event) {
 			return property.value;
 		} else {
 			return undefined;
 		}
-	};
+	},
 
 	/**
 	* Resets the specified property's value to its initial value.
@@ -187,19 +179,19 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {String} key	The name of the property
 	* @return {Boolean} True is the property was reset, false if not
 	*/
-	this.resetProperty = function(key) {
+	resetProperty : function(key) {
 		key = key.toLowerCase();
 
-		var property = config[key];
-		if (typeof property != 'undefined' && property.event) {
-			if (initialConfig[key] && initialConfig[key] != 'undefined')	{
-				this.setProperty(key, initialConfig[key]);
+		var property = this.config[key];
+		if (property && property.event) {
+			if (this.initialConfig[key] && !YAHOO.lang.isUndefined(this.initialConfig[key]))	{
+				this.setProperty(key, this.initialConfig[key]);
 			}
 			return true;
 		} else {
 			return false;
 		}
-	};
+	},
 
 	/**
 	* Sets the value of a property. If the silent property is passed as true, the property's event will not be fired.
@@ -209,7 +201,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {Boolean} silent	Whether the value should be set silently, without firing the property event.
 	* @return {Boolean}			True, if the set was successful, false if it failed.
 	*/
-	this.setProperty = function(key, value, silent) {
+	setProperty : function(key, value, silent) {
 		key = key.toLowerCase();
 		YAHOO.log("setProperty: " + key + "=" + value, "info");
 
@@ -217,14 +209,14 @@ YAHOO.util.Config.prototype.init = function(owner) {
 			this.queueProperty(key,value); // Currently running through a queue... 
 			return true;
 		} else {
-			var property = config[key];
-			if (typeof property != 'undefined' && property.event) {
+			var property = this.config[key];
+			if (property && property.event) {
 				if (property.validator && ! property.validator(value)) { // validator
 					return false;
 				} else {
 					property.value = value;
 					if (! silent) {
-						fireEvent(key, value);
+						this.fireEvent(key, value);
 						this.configChangedEvent.fire([key, value]);
 					}
 					return true;
@@ -233,7 +225,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 				return false;
 			}
 		}
-	};
+	},
 
 	/**
 	* Sets the value of a property and queues its event to execute. If the event is already scheduled to execute, it is
@@ -243,27 +235,27 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {String} value	The value to set the property to
 	* @return {Boolean}		true, if the set was successful, false if it failed.
 	*/	
-	this.queueProperty = function(key, value) {
+	queueProperty : function(key, value) {
 		key = key.toLowerCase();
 		YAHOO.log("queueProperty: " + key + "=" + value, "info");
 
-		var property = config[key];
+		var property = this.config[key];
 							
-		if (typeof property != 'undefined' && property.event) {
-			if (typeof value != 'undefined' && property.validator && ! property.validator(value)) { // validator
+		if (property && property.event) {
+			if (!YAHOO.lang.isUndefined(value) && property.validator && ! property.validator(value)) { // validator
 				return false;
 			} else {
 
-				if (typeof value != 'undefined') {
+				if (!YAHOO.lang.isUndefined(value)) {
 					property.value = value;
 				} else {
 					value = property.value;
 				}
 
 				var foundDuplicate = false;
-
-				for (var i=0;i<eventQueue.length;i++) {
-					var queueItem = eventQueue[i];
+				var iLen = this.eventQueue.length;
+				for (var i=0; i < iLen; i++) {
+					var queueItem = this.eventQueue[i];
 
 					if (queueItem) {
 						var queueItemKey = queueItem[0];
@@ -271,33 +263,34 @@ YAHOO.util.Config.prototype.init = function(owner) {
 						
 						if (queueItemKey == key) {
 							// found a dupe... push to end of queue, null current item, and break
-							eventQueue[i] = null;
-							eventQueue.push([key, (typeof value != 'undefined' ? value : queueItemValue)]);
+							this.eventQueue[i] = null;
+							this.eventQueue.push([key, (!YAHOO.lang.isUndefined(value) ? value : queueItemValue)]);
 							foundDuplicate = true;
 							break;
 						}
 					}
 				}
 				
-				if (! foundDuplicate && typeof value != 'undefined') { // this is a refire, or a new property in the queue
-					eventQueue.push([key, value]);
+				if (! foundDuplicate && !YAHOO.lang.isUndefined(value)) { // this is a refire, or a new property in the queue
+					this.eventQueue.push([key, value]);
 				}
 			}
 
 			if (property.supercedes) {
-				for (var s=0;s<property.supercedes.length;s++) {
+				var sLen = property.supercedes.length;
+				for (var s=0; s < sLen; s++) {
 					var supercedesCheck = property.supercedes[s];
-
-					for (var q=0;q<eventQueue.length;q++) {
-						var queueItemCheck = eventQueue[q];
+					var qLen = this.eventQueue.length;
+					for (var q=0; q < qLen; q++) {
+						var queueItemCheck = this.eventQueue[q];
 
 						if (queueItemCheck) {
 							var queueItemCheckKey = queueItemCheck[0];
 							var queueItemCheckValue = queueItemCheck[1];
 							
 							if ( queueItemCheckKey == supercedesCheck.toLowerCase() ) {
-								eventQueue.push([queueItemCheckKey, queueItemCheckValue]);
-								eventQueue[q] = null;
+								this.eventQueue.push([queueItemCheckKey, queueItemCheckValue]);
+								this.eventQueue[q] = null;
 								break;
 							}
 						}
@@ -310,25 +303,25 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	};
+	},
 
 	/**
 	* Fires the event for a property using the property's current value.
 	* @method refireEvent
 	* @param {String} key	The name of the property
 	*/
-	this.refireEvent = function(key) {
+	refireEvent : function(key) {
 		key = key.toLowerCase();
 
-		var property = config[key];
-		if (typeof property != 'undefined' && property.event && typeof property.value != 'undefined') {
+		var property = this.config[key];
+		if (property && property.event && !YAHOO.lang.isUndefined(property.value)) {
 			if (this.queueInProgress) {
 				this.queueProperty(key);
 			} else {
-				fireEvent(key, property.value);
+				this.fireEvent(key, property.value);
 			}
 		}
-	};
+	},
 
 	/**
 	* Applies a key-value Object literal to the configuration, replacing any existing values, and queueing the property events.
@@ -337,47 +330,47 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {Object}	userConfig	The configuration Object literal
 	* @param {Boolean}	init		When set to true, the initialConfig will be set to the userConfig passed in, so that calling a reset will reset the properties to the passed values.
 	*/
-	this.applyConfig = function(userConfig, init) {
+	applyConfig : function(userConfig, init) {
 		if (init) {
-			initialConfig = userConfig;
+			this.initialConfig = userConfig;
 		}
 		for (var prop in userConfig) {
 			this.queueProperty(prop, userConfig[prop]);
 		}
-	};
+	},
 
 	/**
 	* Refires the events for all configuration properties using their current values.
 	* @method refresh
 	*/
-	this.refresh = function() {
-		for (var prop in config) {
+	refresh : function() {
+		for (var prop in this.config) {
 			this.refireEvent(prop);
 		}
-	};
+	},
 
 	/**
 	* Fires the normalized list of queued property change events
 	* @method fireQueue
 	*/
-	this.fireQueue = function() {
+	fireQueue : function() {
 		this.queueInProgress = true;
-		for (var i=0;i<eventQueue.length;i++) {
-			var queueItem = eventQueue[i];
+		for (var i=0;i<this.eventQueue.length;i++) {
+			var queueItem = this.eventQueue[i];
 			if (queueItem) {
 				var key = queueItem[0];
 				var value = queueItem[1];
 				
-				var property = config[key];
+				var property = this.config[key];
 				property.value = value;
 
-				fireEvent(key,value);
+				this.fireEvent(key,value);
 			}
 		}
 		
 		this.queueInProgress = false;
-		eventQueue = [];
-	};
+		this.eventQueue = [];
+	},
 
 	/**
 	* Subscribes an external handler to the change event for any given property. 
@@ -388,11 +381,9 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {Boolean}	override	Optional. If true, will override "this" within the handler to map to the scope Object passed into the method.
 	* @return {Boolean}				True, if the subscription was successful, otherwise false.
 	*/	
-	this.subscribeToConfigEvent = function(key, handler, obj, override) {
-		key = key.toLowerCase();
-
-		var property = config[key];
-		if (typeof property != 'undefined' && property.event) {
+	subscribeToConfigEvent : function(key, handler, obj, override) {
+		var property = this.config[key.toLowerCase()];
+		if (property && property.event) {
 			if (! YAHOO.util.Config.alreadySubscribed(property.event, handler, obj)) {
 				property.event.subscribe(handler, obj, override);
 			}
@@ -400,7 +391,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 		} else {
 			return false;
 		}
-	};
+	},
 
 	/**
 	* Unsubscribes an external handler from the change event for any given property. 
@@ -410,45 +401,58 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	* @param {Object}	obj			The Object to use for scoping the event handler (see CustomEvent documentation)
 	* @return {Boolean}				True, if the unsubscription was successful, otherwise false.
 	*/
-	this.unsubscribeFromConfigEvent = function(key, handler, obj) {
-		key = key.toLowerCase();
-
-		var property = config[key];
-		if (typeof property != 'undefined' && property.event) {
+	unsubscribeFromConfigEvent : function(key, handler, obj) {
+		var property = this.config[key.toLowerCase()];
+		if (property && property.event) {
 			return property.event.unsubscribe(handler, obj);
 		} else {
 			return false;
 		}
-	};
+	},
 
 	/**
 	* Returns a string representation of the Config object
 	* @method toString
 	* @return {String}	The Config object in string format.
 	*/
-	this.toString = function() {
+	toString : function() {
 		var output = "Config";
 		if (this.owner) {
 			output += " [" + this.owner.toString() + "]";
 		}
 		return output;
-	};
+	},
 
 	/**
 	* Returns a string representation of the Config object's current CustomEvent queue
 	* @method outputEventQueue
 	* @return {String}	The string list of CustomEvents currently queued for execution
 	*/
-	this.outputEventQueue = function() {
+	outputEventQueue : function() {
 		var output = "";
-		for (var q=0;q<eventQueue.length;q++) {
-			var queueItem = eventQueue[q];
+		for (var q=0;q<this.eventQueue.length;q++) {
+			var queueItem = this.eventQueue[q];
 			if (queueItem) {
 				output += queueItem[0] + "=" + queueItem[1] + ", ";
 			}
 		}
 		return output;
-	};
+	}
+};
+
+
+/**
+* Initializes the configuration Object and all of its local members.
+* @method init
+* @param {Object}	owner	The owner Object to which this Config Object belongs
+*/
+YAHOO.util.Config.prototype.init = function(owner) {
+	this.owner = owner;
+	this.configChangedEvent = new YAHOO.util.CustomEvent(YAHOO.util.CONFIG_CHANGED_EVENT, this);
+	this.queueInProgress = false;
+	this.config = {};
+	this.initialConfig = {};
+	this.eventQueue = [];
 };
 
 /**
