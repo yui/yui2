@@ -38,12 +38,12 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
 /**
 * Constant representing the name of the ContextMenu's events
-* @property YAHOO.widget.ContextMenu.EVENTS
-* @static
+* @property YAHOO.widget.ContextMenu._EVENT_TYPES
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.ContextMenu.EVENTS = {
+YAHOO.widget.ContextMenu._EVENT_TYPES = {
 
     "TRIGGER_CONTEXT_MENU": "triggerContextMenuEvent",
     "CONTEXT_MENU": (
@@ -57,14 +57,16 @@ YAHOO.widget.ContextMenu.EVENTS = {
 
 /**
 * Constant representing the ContextMenu's configuration properties
-* @property YAHOO.widget.ContextMenu.DEFAULT_CONFIG
-* @static
+* @property YAHOO.widget.ContextMenu._DEFAULT_CONFIG
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.ContextMenu.DEFAULT_CONFIG = {
+YAHOO.widget.ContextMenu._DEFAULT_CONFIG = {
 
-    "TRIGGER": "trigger"
+    "TRIGGER": { 
+        key: "trigger" 
+    }
 
 };
 
@@ -192,7 +194,7 @@ initEvents: function() {
     this.triggerContextMenuEvent = 
 
             new YAHOO.util.CustomEvent(
-                    YAHOO.widget.ContextMenu.EVENTS.TRIGGER_CONTEXT_MENU, 
+                    YAHOO.widget.ContextMenu._EVENT_TYPES.TRIGGER_CONTEXT_MENU, 
                     this
                 );
 
@@ -231,7 +233,7 @@ _removeEventHandlers: function() {
 
     Event.removeListener(
         oTrigger, 
-        YAHOO.widget.ContextMenu.EVENTS.CONTEXT_MENU, 
+        YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
         this._onTriggerContextMenu
     );    
     
@@ -239,7 +241,7 @@ _removeEventHandlers: function() {
     
         Event.removeListener(
             oTrigger, 
-            YAHOO.widget.ContextMenu.EVENTS.CLICK, 
+            YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
             this._onTriggerClick
         );
 
@@ -364,7 +366,7 @@ initDefaultConfig: function() {
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
     this.cfg.addProperty(
-        YAHOO.widget.ContextMenu.DEFAULT_CONFIG.TRIGGER, 
+        YAHOO.widget.ContextMenu._DEFAULT_CONFIG.TRIGGER, 
         { handler: this.configTrigger }
     );
 
@@ -432,7 +434,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
   
         Event.on(
             oTrigger, 
-            YAHOO.widget.ContextMenu.EVENTS.CONTEXT_MENU, 
+            YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
             this._onTriggerContextMenu,
             this,
             true
@@ -448,7 +450,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
         
             Event.on(
                 oTrigger, 
-                YAHOO.widget.ContextMenu.EVENTS.CLICK, 
+                YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
                 this._onTriggerClick,
                 this,
                 true

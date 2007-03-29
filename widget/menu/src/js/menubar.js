@@ -37,18 +37,33 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
 /**
 * Constant representing the MenuBar's configuration properties
-* @property YAHOO.widget.MenuBar.DEFAULT_CONFIG
-* @static
+* @property YAHOO.widget.MenuBar._DEFAULT_CONFIG
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.MenuBar.DEFAULT_CONFIG = {
+YAHOO.widget.MenuBar._DEFAULT_CONFIG = {
 
-    "POSITION": "position", 
-    "SUBMENU_ALIGNMENT": "submenualignment",
-    "AUTO_SUBMENU_DISPLAY": "autosubmenudisplay"
+    "POSITION": { 
+        key: "position", 
+        value: "static", 
+        validator: YAHOO.widget.Menu._checkPosition, 
+        supercedes: ["visible"] 
+    }, 
+
+    "SUBMENU_ALIGNMENT": { 
+        key: "submenualignment", 
+        value: ["tl","bl"] 
+    },
+
+    "AUTO_SUBMENU_DISPLAY": { 
+        key: "autosubmenudisplay", 
+        value: false, 
+        validator: YAHOO.lang.isBoolean 
+    }
 
 };
+
 
 
 YAHOO.lang.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
@@ -349,7 +364,8 @@ initDefaultConfig: function() {
 
     YAHOO.widget.MenuBar.superclass.initDefaultConfig.call(this);
 
-    var oConfig = this.cfg;
+    var oConfig = this.cfg,
+        DEFAULT_CONFIG = YAHOO.widget.MenuBar._DEFAULT_CONFIG;
 
 	// Add configuration properties
 
@@ -372,12 +388,12 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        YAHOO.widget.MenuBar.DEFAULT_CONFIG.POSITION, 
+        DEFAULT_CONFIG.POSITION.key, 
         {
-            value: "static", 
             handler: this.configPosition, 
-            validator: this._checkPosition,
-            supercedes: ["visible"]
+            value: DEFAULT_CONFIG.POSITION.value, 
+            validator: DEFAULT_CONFIG.POSITION.validator,
+            supercedes: DEFAULT_CONFIG.POSITION.supercedes
         }
     );
 
@@ -395,8 +411,10 @@ initDefaultConfig: function() {
     * @type Array
     */
     oConfig.addProperty(
-        YAHOO.widget.MenuBar.DEFAULT_CONFIG.SUBMENU_ALIGNMENT, 
-        { value: ["tl","bl"] }
+        DEFAULT_CONFIG.SUBMENU_ALIGNMENT.key, 
+        {
+            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value
+        }
     );
 
 
@@ -413,8 +431,11 @@ initDefaultConfig: function() {
     * @type Boolean
     */
 	oConfig.addProperty(
-	   YAHOO.widget.MenuBar.DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY, 
-	   { value: false, validator: oConfig.checkBoolean } 
+	   DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.key, 
+	   {
+	       value: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.value, 
+	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator
+       } 
     );
 
 }

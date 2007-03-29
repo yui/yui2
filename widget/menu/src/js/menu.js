@@ -55,12 +55,12 @@ YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
 
 /**
 * Constant representing the name of the Menu's events
-* @property YAHOO.widget.Menu.EVENTS
-* @static
+* @property YAHOO.widget.Menu._EVENT_TYPES
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.Menu.EVENTS = {
+YAHOO.widget.Menu._EVENT_TYPES = {
 
     "MOUSE_OVER": "mouseover",
     "MOUSE_OUT": "mouseout",
@@ -78,27 +78,110 @@ YAHOO.widget.Menu.EVENTS = {
 };
 
 
+
+/**
+* @method _checkPosition
+* @description Checks to make sure that the value of the "position" property 
+* is one of the supported strings. Returns true if the position is supported.
+* @private
+* @param {Object} p_sPosition String specifying the position of the menu.
+* @return {Boolean}
+*/
+YAHOO.widget.Menu._checkPosition = function(p_sPosition) {
+
+    if(typeof p_sPosition == "string") {
+
+        var sPosition = p_sPosition.toLowerCase();
+
+        return ("dynamic,static".indexOf(sPosition) != -1);
+
+    }
+
+};
+
+
+
 /**
 * Constant representing the Menu's configuration properties
-* @property YAHOO.widget.Menu.DEFAULT_CONFIG
-* @static
+* @property YAHOO.widget.Menu._DEFAULT_CONFIG
+* @private
 * @final
 * @type Object
 */
-YAHOO.widget.Menu.DEFAULT_CONFIG = {
+YAHOO.widget.Menu._DEFAULT_CONFIG = {
 
-    "VISIBLE": "visible", 
-    "CONSTRAIN_TO_VIEWPORT": "constraintoviewport", 
-    "POSITION": "position", 
-    "SUBMENU_ALIGNMENT": "submenualignment",
-    "AUTO_SUBMENU_DISPLAY": "autosubmenudisplay", 
-    "SHOW_DELAY": "showdelay", 
-    "HIDE_DELAY": "hidedelay", 
-    "SUBMENU_HIDE_DELAY": "submenuhidedelay", 
-    "CLICK_TO_HIDE": "clicktohide",
-    "CONTAINER": "container", 
-    "MAX_HEIGHT": "maxheight", 
-    "CLASS_NAME": "classname"
+    "VISIBLE": { 
+        key: "visible", 
+        value: false, 
+        validator: Lang.isBoolean
+    }, 
+
+    "CONSTRAIN_TO_VIEWPORT": {
+        key: "constraintoviewport", 
+        value: true, 
+        validator: Lang.isBoolean, 
+        supercedes: ["iframe","x","y","xy"]
+    }, 
+
+    "POSITION": { 
+        key: "position", 
+        value: "dynamic", 
+        validator: YAHOO.widget.Menu._checkPosition, 
+        supercedes: ["visible"] 
+    }, 
+
+    "SUBMENU_ALIGNMENT": { 
+        key: "submenualignment", 
+        value: ["tl","tr"]
+    },
+
+    "AUTO_SUBMENU_DISPLAY": { 
+        key: "autosubmenudisplay", 
+        value: true, 
+        validator: Lang.isBoolean 
+    }, 
+
+    "SHOW_DELAY": { 
+        key: "showdelay", 
+        value: 250, 
+        validator: Lang.isNumber 
+    }, 
+
+    "HIDE_DELAY": { 
+        key: "hidedelay", 
+        value: 0, 
+        validator: Lang.isNumber, 
+        suppressEvent: true
+    }, 
+
+    "SUBMENU_HIDE_DELAY": { 
+        key: "submenuhidedelay", 
+        value: 250, 
+        validator: Lang.isNumber
+    }, 
+
+    "CLICK_TO_HIDE": { 
+        key: "clicktohide", 
+        value: true, 
+        validator: Lang.isBoolean
+    },
+
+    "CONTAINER": { 
+        key: "container", 
+        value: document.body
+    }, 
+
+    "MAX_HEIGHT": { 
+        key: "maxheight", 
+        value: 0, 
+        validator: Lang.isNumber
+    }, 
+
+    "CLASS_NAME": { 
+        key: "classname", 
+        value: null, 
+        validator: Lang.isString
+    }
 
 };
 
@@ -841,27 +924,6 @@ _getFirstEnabledItem: function() {
     
     }
     
-},
-
-
-/**
-* @method _checkPosition
-* @description Checks to make sure that the value of the "position" property 
-* is one of the supported strings. Returns true if the position is supported.
-* @private
-* @param {Object} p_sPosition String specifying the position of the menu.
-* @return {Boolean}
-*/
-_checkPosition: function(p_sPosition) {
-
-    if(typeof p_sPosition == "string") {
-
-        var sPosition = p_sPosition.toLowerCase();
-
-        return ("dynamic,static".indexOf(sPosition) != -1);
-
-    }
-
 },
 
 
@@ -3145,7 +3207,7 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 
         case "selected":
 
-            if(oPropertyValue == true) {
+            if(oPropertyValue === true) {
 
                 this.activeItem = p_oItem;
             
@@ -3733,18 +3795,20 @@ initEvents: function() {
 
     // Create custom events
 
-    this.mouseOverEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_OVER, this);
-    this.mouseOutEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_OUT, this);
-    this.mouseDownEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_DOWN, this);
-    this.mouseUpEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.MOUSE_UP, this);
-    this.clickEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.CLICK, this);
-    this.keyPressEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_PRESS, this);
-    this.keyDownEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_DOWN, this);
-    this.keyUpEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.KEY_UP, this);
-    this.focusEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.FOCUS, this);
-    this.blurEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.BLUR, this);
-    this.itemAddedEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.ITEM_ADDED, this);
-    this.itemRemovedEvent = new CustomEvent(YAHOO.widget.Menu.EVENTS.ITEM_REMOVED, this);
+    var EVENT_TYPES = YAHOO.widget.Menu._EVENT_TYPES;
+
+    this.mouseOverEvent = new CustomEvent(EVENT_TYPES.MOUSE_OVER, this);
+    this.mouseOutEvent = new CustomEvent(EVENT_TYPES.MOUSE_OUT, this);
+    this.mouseDownEvent = new CustomEvent(EVENT_TYPES.MOUSE_DOWN, this);
+    this.mouseUpEvent = new CustomEvent(EVENT_TYPES.MOUSE_UP, this);
+    this.clickEvent = new CustomEvent(EVENT_TYPES.CLICK, this);
+    this.keyPressEvent = new CustomEvent(EVENT_TYPES.KEY_PRESS, this);
+    this.keyDownEvent = new CustomEvent(EVENT_TYPES.KEY_DOWN, this);
+    this.keyUpEvent = new CustomEvent(EVENT_TYPES.KEY_UP, this);
+    this.focusEvent = new CustomEvent(EVENT_TYPES.FOCUS, this);
+    this.blurEvent = new CustomEvent(EVENT_TYPES.BLUR, this);
+    this.itemAddedEvent = new CustomEvent(EVENT_TYPES.ITEM_ADDED, this);
+    this.itemRemovedEvent = new CustomEvent(EVENT_TYPES.ITEM_REMOVED, this);
 
 },
 
@@ -4364,7 +4428,8 @@ initDefaultConfig: function() {
 
     YAHOO.widget.Menu.superclass.initDefaultConfig.call(this);
 
-    var oConfig = this.cfg;
+    var oConfig = this.cfg,
+        DEFAULT_CONFIG = YAHOO.widget.Menu._DEFAULT_CONFIG;
 
 	// Add configuration attributes
 
@@ -4387,11 +4452,11 @@ initDefaultConfig: function() {
     * @type Boolean
     */
     oConfig.addProperty(
-        YAHOO.widget.Menu.DEFAULT_CONFIG.VISIBLE, 
+        DEFAULT_CONFIG.VISIBLE.key, 
         {
-            value:false, 
-            handler:this.configVisible, 
-            validator:this.cfg.checkBoolean
+            handler: this.configVisible, 
+            value: DEFAULT_CONFIG.VISIBLE.value, 
+            validator: DEFAULT_CONFIG.VISIBLE.validator
          }
      );
 
@@ -4409,12 +4474,12 @@ initDefaultConfig: function() {
     * @type Boolean
     */
     oConfig.addProperty(
-        YAHOO.widget.Menu.DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT, 
+        DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.key, 
         {
-            value:true, 
-            handler:this.configConstrainToViewport, 
-            validator:this.cfg.checkBoolean, 
-            supercedes:["iframe","x","y","xy"] 
+            handler: this.configConstrainToViewport, 
+            value: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.value, 
+            validator: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.validator, 
+            supercedes: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.supercedes 
         } 
     );
 
@@ -4431,12 +4496,12 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        YAHOO.widget.Menu.DEFAULT_CONFIG.POSITION, 
+        DEFAULT_CONFIG.POSITION.key, 
         {
-            value: "dynamic", 
-            handler: this.configPosition, 
-            validator: this._checkPosition,
-            supercedes: ["visible"]
+            handler: this.configPosition,
+            value: DEFAULT_CONFIG.POSITION.value, 
+            validator: DEFAULT_CONFIG.POSITION.validator,
+            supercedes: DEFAULT_CONFIG.POSITION.supercedes
         }
     );
 
@@ -4451,9 +4516,9 @@ initDefaultConfig: function() {
     * @type Array
     */
     oConfig.addProperty(
-        YAHOO.widget.Menu.DEFAULT_CONFIG.SUBMENU_ALIGNMENT, 
+        DEFAULT_CONFIG.SUBMENU_ALIGNMENT.key, 
         { 
-            value: ["tl","tr"] 
+            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value 
         }
     );
 
@@ -4466,10 +4531,10 @@ initDefaultConfig: function() {
     * @type Boolean
     */
 	oConfig.addProperty(
-	   YAHOO.widget.Menu.DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY, 
+	   DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.key, 
 	   { 
-	       value: true, 
-	       validator: oConfig.checkBoolean
+	       value: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.value, 
+	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator
        } 
     );
 
@@ -4483,10 +4548,10 @@ initDefaultConfig: function() {
     * @type Number
     */
 	oConfig.addProperty(
-	   YAHOO.widget.Menu.DEFAULT_CONFIG.SHOW_DELAY, 
+	   DEFAULT_CONFIG.SHOW_DELAY.key, 
 	   { 
-	       value: 250, 
-	       validator: oConfig.checkNumber
+	       value: DEFAULT_CONFIG.SHOW_DELAY.value, 
+	       validator: DEFAULT_CONFIG.SHOW_DELAY.validator
        } 
     );
 
@@ -4499,12 +4564,12 @@ initDefaultConfig: function() {
     * @type Number
     */
 	oConfig.addProperty(
-	   YAHOO.widget.Menu.DEFAULT_CONFIG.HIDE_DELAY, 
+	   DEFAULT_CONFIG.HIDE_DELAY.key, 
 	   { 
-	       value: 0, 
-	       validator: oConfig.checkNumber, 
 	       handler: this.configHideDelay,
-	       suppressEvent: true
+	       value: DEFAULT_CONFIG.HIDE_DELAY.value, 
+	       validator: DEFAULT_CONFIG.HIDE_DELAY.validator, 
+	       suppressEvent: DEFAULT_CONFIG.HIDE_DELAY.suppressEvent
        } 
     );
 
@@ -4519,10 +4584,10 @@ initDefaultConfig: function() {
     * @type Number
     */
 	oConfig.addProperty(
-	   YAHOO.widget.Menu.DEFAULT_CONFIG.SUBMENU_HIDE_DELAY, 
+	   DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.key, 
 	   { 
-	       value: 250, 
-	       validator: oConfig.checkNumber
+	       value: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.value, 
+	       validator: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.validator
        } 
     );
 
@@ -4535,10 +4600,10 @@ initDefaultConfig: function() {
     * @type Boolean
     */
     oConfig.addProperty(
-        YAHOO.widget.Menu.DEFAULT_CONFIG.CLICK_TO_HIDE,
+        DEFAULT_CONFIG.CLICK_TO_HIDE.key,
         {
-            value: true,
-            validator: oConfig.checkBoolean
+            value: DEFAULT_CONFIG.CLICK_TO_HIDE.value,
+            validator: DEFAULT_CONFIG.CLICK_TO_HIDE.validator
         }
     );
 
@@ -4553,10 +4618,10 @@ initDefaultConfig: function() {
 	* @default document.body
 	*/
 	oConfig.addProperty(
-	   YAHOO.widget.Menu.DEFAULT_CONFIG.CONTAINER, 
+	   DEFAULT_CONFIG.CONTAINER.key, 
 	   { 
-	       value:document.body, 
-	       handler:this.configContainer 
+	       handler: this.configContainer,
+	       value: DEFAULT_CONFIG.CONTAINER.value
        } 
    );
 
@@ -4569,11 +4634,11 @@ initDefaultConfig: function() {
     * @type Number
     */
     oConfig.addProperty(
-       YAHOO.widget.Menu.DEFAULT_CONFIG.MAX_HEIGHT, 
+       DEFAULT_CONFIG.MAX_HEIGHT.key, 
        {
-            value: 0,
-            validator: oConfig.checkNumber, 
-            handler: this.configMaxHeight
+            handler: this.configMaxHeight,
+            value: DEFAULT_CONFIG.MAX_HEIGHT.value,
+            validator: DEFAULT_CONFIG.MAX_HEIGHT.validator
        } 
     );
 
@@ -4588,11 +4653,11 @@ initDefaultConfig: function() {
     * @type String
     */
     oConfig.addProperty(
-        YAHOO.widget.Menu.DEFAULT_CONFIG.CLASS_NAME, 
+        DEFAULT_CONFIG.CLASS_NAME.key, 
         { 
-            value: null, 
             handler: this.configClassName,
-            validator: this._checkString
+            value: DEFAULT_CONFIG.CLASS_NAME.value, 
+            validator: DEFAULT_CONFIG.CLASS_NAME.validator
         }
     );
 

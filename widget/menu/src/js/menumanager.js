@@ -340,7 +340,7 @@ YAHOO.widget.MenuManager = function() {
 
                 m_oFocusedMenuItem.blurEvent.fire();
 
-                m_oFocusedMenuItem = null
+                m_oFocusedMenuItem = null;
 
             }
 
