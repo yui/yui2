@@ -3527,7 +3527,7 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
 
         if(!this._bHideDelayEventHandlersAssigned) {
 
-            oMouseOutEvent.subscribe(this._execHideDelay, true);
+            oMouseOutEvent.subscribe(this._execHideDelay, this);
             oMouseOverEvent.subscribe(this._cancelHideDelay, this, true);
             oKeyDownEvent.subscribe(this._cancelHideDelay, this, true);
 
