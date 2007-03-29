@@ -111,7 +111,6 @@ YAHOO.util.Config.prototype.init = function(owner) {
 	*/ 
 	var fireEvent = function( key, value ) {
 		YAHOO.log("Firing Config event: " + key + "=" + value, "info");
-		key = key.toLowerCase();
 
 		var property = config[key];
 
@@ -270,7 +269,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 						var queueItemKey = queueItem[0];
 						var queueItemValue = queueItem[1];
 						
-						if (queueItemKey.toLowerCase() == key) {
+						if (queueItemKey == key) {
 							// found a dupe... push to end of queue, null current item, and break
 							eventQueue[i] = null;
 							eventQueue.push([key, (typeof value != 'undefined' ? value : queueItemValue)]);
@@ -296,7 +295,7 @@ YAHOO.util.Config.prototype.init = function(owner) {
 							var queueItemCheckKey = queueItemCheck[0];
 							var queueItemCheckValue = queueItemCheck[1];
 							
-							if ( queueItemCheckKey.toLowerCase() == supercedesCheck.toLowerCase() ) {
+							if ( queueItemCheckKey == supercedesCheck.toLowerCase() ) {
 								eventQueue.push([queueItemCheckKey, queueItemCheckValue]);
 								eventQueue[q] = null;
 								break;
