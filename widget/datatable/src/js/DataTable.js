@@ -2394,47 +2394,32 @@ YAHOO.widget.DataTable.prototype.startRecordIndex = 1;
 YAHOO.widget.DataTable.prototype.pageLinksStart = 1;
 
 /**
- * Current page number.
- * @deprecated
+ * @deprecated Deprecated in favor of paginatorOptions.currentPage
  * @property pageCurrent
- * @type Number
- * @default 1
  */
 YAHOO.widget.DataTable.prototype.pageCurrent = 1;
 
 /**
- * Rows per page.
- * @deprecated
+ * @deprecated Deprecated in favor of paginatorOptions.rowsPerPage
  * @property rowsPerPage
- * @type Number
- * @default 500
  */
 YAHOO.widget.DataTable.prototype.rowsPerPage = 500;
 
 /**
- * Maximum number of pagination page links to show. Any page links beyond this number are
- * available through the "&lt;" and "&gt;" links. A negative value will display all page links.
- * @deprecated
+ * @deprecated Deprecated in favor of paginatorOptions.pageLinks
  * @property pageLinksLength
- * @type Number
- * @default -1
  */
 YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
 
 /**
- * Options to show in the rows-per-page pagination dropdown, should be an array
- * of numbers. Null or an empty array causes no dropdown to be displayed.
- * @deprecated
+ * @deprecated Deprecated in favor of paginatorOptions.dropdownOptions
  * @property rowsPerPageDropdown
- * @type Number[]
  */
 YAHOO.widget.DataTable.prototype.rowsPerPageDropdown = null;
 
 /**
- * An array of DIV elements into which pagination elements can go.
- * @deprecated
+ * @deprecated Deprecated in favor of paginatorOptions.containers
  * @property pagers
- * @type HTMLElement[]
  */
 YAHOO.widget.DataTable.prototype.pagers = null;
 
