@@ -78,11 +78,11 @@ myDataSource.responseSchema = {
 
 var oConfigs = {
         caption:"Example: Client-side Pagination of Large RecordSet",
-        pageCurrent: 1,
-        rowsPerPage: 100,
-        startRecordIndex: 1,
-        pageLinksLength: 10,
-        rowsPerPageDropdown: [25,50,100,500]
+        paginator:true,
+        paginatorOptions:{
+            rowsPerPage: 100,
+            dropdownOptions: [25,50,100,500]
+        }
 };
 var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnSet, myDataSource, oConfigs);
         </textarea>
@@ -134,12 +134,12 @@ myDataSource.responseSchema = {
 };
 
 var oConfigs = {
-        caption:"Example: Client-side Pagination of Large RecordSet",
-        pageCurrent: 1,
-        rowsPerPage: 100,
-        startRecordIndex: 1,
-        pageLinksLength: 10,
-        rowsPerPageDropdown: [25,50,100,500]
+        caption:"Example: Client-side Pagination of Large RecordSet",initialRequest:"results=102",
+        paginator:true,
+        paginatorOptions:{
+            rowsPerPage: 100,
+            dropdownOptions: [25,50,100,500]
+        }
 };
 var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnSet, myDataSource, oConfigs);
 </script>
