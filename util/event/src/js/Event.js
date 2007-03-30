@@ -34,6 +34,15 @@ if (!YAHOO.util.Event) {
         var loadComplete =  false;
 
         /**
+         * True when the document is initially usable
+         * @property DOMReady
+         * @type boolean
+         * @static
+         * @private
+         */
+        var DOMReady = false;
+
+        /**
          * Cache of wrapped listeners
          * @property listeners
          * @type array
@@ -88,6 +97,14 @@ if (!YAHOO.util.Event) {
         var onAvailStack = [];
 
         /**
+         * We sort the stack when this is true
+         * @propery onAvailStackDirty
+         * @private
+         * @static
+         */
+        var onAvailStackDirty = true;
+
+        /**
          * Lookup table for legacy events
          * @property legacyMap
          * @static
@@ -134,7 +151,7 @@ if (!YAHOO.util.Event) {
              * @static
              * @final
              */
-            POLL_INTERVAL: 20,
+            POLL_INTERVAL: 10,
 
             /**
              * Element to bind, int constant
@@ -209,7 +226,9 @@ if (!YAHOO.util.Event) {
             
             /**
              * If WebKit is detected, we keep track of the version number of
-             * the engine.
+             * the engine.  The webkit property will contain a string with
+             * the webkit version number if webkit is detected, null
+             * otherwise.
              * Safari 1.3.2 (312.6): 312.8.1 <-- currently the latest
              *                       available on Mac OSX 10.3.
              * Safari 2.0.2: 416 <-- hasOwnProperty introduced
@@ -218,6 +237,8 @@ if (!YAHOO.util.Event) {
              *
              * http://developer.apple.com/internet/safari/uamatrix.html
              * @property webkit
+             * @type string
+             * @static
              */
             webkit: function() {
                 var v=navigator.userAgent.match(/AppleWebKit\/([^ ]*)/);
@@ -256,7 +277,6 @@ if (!YAHOO.util.Event) {
                     var self = this;
                     var callback = function() { self._tryPreloadAttach(); };
                     this._interval = setInterval(callback, this.POLL_INTERVAL);
-                    // this.timeout = setTimeout(callback, i);
                 }
             },
 
@@ -285,9 +305,27 @@ if (!YAHOO.util.Event) {
                                      obj:        p_obj, 
                                      override:   p_override, 
                                      checkReady: false    } );
-
+                onAvailStackDirty = true;
                 retryCount = this.POLL_RETRYS;
                 this.startInterval();
+            },
+
+            /**
+             * Executes the supplied callback when the DOM is first usable.
+             *
+             * @method onDOMReady
+             *
+             * @param {function} p_fn what to execute when the element is found.
+             * @param {object}   p_obj an optional object to be passed back as
+             *                   a parameter to p_fn.
+             * @param {boolean}  p_scope If set to true, p_fn will execute
+             *                   in the scope of p_obj, if set to an object it
+             *                   will execute in the scope of that object
+             *
+             * @static
+             */
+            onDOMReady: function(p_fn, p_obj, p_override) {
+                this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
             },
 
             /**
@@ -313,6 +351,7 @@ if (!YAHOO.util.Event) {
                                      override:   p_override,
                                      checkReady: true      } );
 
+                onAvailStackDirty = true;
                 retryCount = this.POLL_RETRYS;
                 this.startInterval();
             },
@@ -917,6 +956,7 @@ if (!YAHOO.util.Event) {
              * @property elCache
              * DOM element cache
              * @static
+             * @deprecated Elements are not cached any longer
              */
             elCache: {},
 
@@ -926,6 +966,7 @@ if (!YAHOO.util.Event) {
              * @method getEl
              * @static
              * @private
+             * @deprecated Elements are not cached any longer
              */
             getEl: function(id) {
                 return document.getElementById(id);
@@ -941,6 +982,24 @@ if (!YAHOO.util.Event) {
             clearCache: function() { },
 
             /**
+             * Custom event the fires when the dom is initially usable
+             * @event DOMReadyEvent
+             */
+            DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", this),
+
+            /**
+             * Fires the DOMReady event if it has not fired by the time
+             * the document has loaded
+             * @method _DOMReadyFailsafe
+             * @private
+             */
+            _DOMReadyFailsafe: function() {
+                if (!DOMReady) {
+                    this._ready();
+                }
+            },
+
+            /**
              * hook up any deferred listeners
              * @method _load
              * @static
@@ -949,11 +1008,31 @@ if (!YAHOO.util.Event) {
             _load: function(e) {
                 loadComplete = true;
                 var EU = YAHOO.util.Event;
+
+                EU._DOMReadyFailsafe();
+
                 // Remove the listener to assist with the IE memory issue, but not
                 // for other browsers because FF 1.0x does not like it.
                 if (this.isIE) {
                     EU._simpleRemove(window, "load", EU._load);
                 }
+            },
+
+            /**
+             * Executed when the document is ready
+             * @method _ready
+             * @static
+             * @private
+             */
+            _ready: function(e) {
+                DOMReady=true;
+                var EU = YAHOO.util.Event;
+
+                // Fire the content ready custom event
+                EU.DOMReadyEvent.fire();
+
+                // Remove the DOMContentLoaded (FF/Opera)
+                EU._simpleRemove(document, "DOMContentLoaded", EU._ready);
             },
 
             /**
@@ -967,6 +1046,11 @@ if (!YAHOO.util.Event) {
             _tryPreloadAttach: function() {
 
                 if (this.locked) {
+                    return false;
+                }
+
+
+                if (this.isIE && !DOMReady) {
                     return false;
                 }
 
@@ -985,6 +1069,21 @@ if (!YAHOO.util.Event) {
 
                 // onAvailable
                 var notAvail = [];
+
+                // process onAvailable items first
+                if (onAvailStackDirty) {
+                    onAvailStack.sort(function(a, b) {
+                                if (b.checkReady) {
+                                    return -1;
+                                } else if (a.checkReady) {
+                                    return 1;
+                                } else {
+                                    return 0;
+                                }
+                            });
+                    onAvailStackDirty = false;
+                }
+
                 for (var i=0,len=onAvailStack.length; i<len ; ++i) {
                     var item = onAvailStack[i];
                     if (item) {
@@ -992,13 +1091,10 @@ if (!YAHOO.util.Event) {
 
                         if (el) {
                             // The element is available, but not necessarily ready
-                            // @todo verify IE7 compatibility
                             // @todo should we test parentNode.nextSibling?
-                            // @todo re-evaluate global content ready
                             if ( !item.checkReady || 
                                     loadComplete || 
-                                    el.nextSibling ||
-                                    (document && document.body) ) {
+                                    el.nextSibling ) {
 
                                 var scope = el;
                                 if (item.override) {
@@ -1009,8 +1105,6 @@ if (!YAHOO.util.Event) {
                                     }
                                 }
                                 item.fn.call(scope, item.obj);
-                                //delete onAvailStack[i];
-                                // null out instead of delete for Opera
                                 onAvailStack[i] = null;
                             }
                         } else {
@@ -1287,14 +1381,60 @@ if (!YAHOO.util.Event) {
          */
         EU.on = EU.addListener;
 
-        // YAHOO.mix(EU, YAHOO.util.EventProvider.prototype);
-        // EU.createEvent("DOMContentReady");
-        // EU.subscribe("DOMContentReady", EU._load);
+        /////////////////////////////////////////////////////////////
+        // DOMReady
+        // based on work by: Dean Edwards/John Resig/Matthias Miller 
+
+        // Internet Explorer: use the readyState of a defered script.
+        // This isolates what appears to be a safe moment to manipulate
+        // the DOM prior to when the document's readyState suggests
+        // it is safe to do so.
+        if (EU.isIE) {
+	
+            document.write(
+'<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"></script>');
+        
+            var el = document.getElementById("_yui_eu_dr");
+            el.onreadystatechange = function() {
+                if ("complete" == this.readyState) {
+                    this.parentNode.removeChild(this);
+                    YAHOO.util.Event._ready();
+                }
+            };
+
+            el=null;
+
+            // Process onAvailable/onContentReady items when when the 
+            // DOM is ready.
+            YAHOO.util.Event.onDOMReady(
+                    YAHOO.util.Event._tryPreloadAttach,
+                    YAHOO.util.Event, true);
+        
+        // Safari: The document's readyState in Safari currently will
+        // change to loaded/complete before images are loaded.
+        } else if (EU.webkit) {
+
+            EU._drwatch = setInterval(function(){
+                var rs=document.readyState;
+                if ("loaded" == rs || "complete" == rs) {
+                    clearInterval(EU._drwatch);
+                    EU._drwatch = null;
+                    EU._ready();
+                }
+            }, EU.POLL_INTERVAL); 
+
+        // FireFox and Opera: These browsers provide a event for this
+        // moment.
+        } else {
+
+            EU._simpleAdd(document, "DOMContentLoaded", EU._ready);
+
+        }
+        /////////////////////////////////////////////////////////////
 
         if (document && document.body) {
             EU._load();
         } else {
-            // EU._simpleAdd(document, "DOMContentLoaded", EU._load);
             EU._simpleAdd(window, "load", EU._load);
         }
         EU._simpleAdd(window, "unload", EU._unload);

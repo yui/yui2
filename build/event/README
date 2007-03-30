@@ -2,12 +2,20 @@
 YUI Library - Event - Release Notes
 
 2.2.1
-
+  * onAvailable listeners are processed before onContentReady listeners so
+    they fire in the logical order when an element is found to be available 
+    and ready in the same pass.
+  * Added onDOMReady for receiving notification when the DOM is first usable.
+  * In Internet Explorer, onAvailable/onContentReady checks now start when
+    DOMReady fires to reduce the possibility of receiving an "operation
+    aborted" errors when inserting DOM nodes during in the onAvailable/
+    onContentReady listener execution.
   * CustomEvent subscribers supplying undefined callbacks will be notified
-    when subscribing rather than having an abiguous error thrown when the
+    when subscribing rather than having an ambiguous error thrown when the
     event is fired.
-
-  * Fixed missing html tags in the examples
+  * Fixed missing html tags in the examples.
+  * POLL_INTERVAL is 10 ms.
+  * YAHOO.util.CustomEvent is now declared before YAHOO.util.Event.
 
 2.2.0
 
