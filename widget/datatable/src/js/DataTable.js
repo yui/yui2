@@ -3059,6 +3059,16 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
 };
 
 /**
+ * Returns paginator object literal.
+ *
+ * @method getPaginator
+ * @return {Object} Paginator object literal.
+ */
+YAHOO.widget.DataTable.prototype.getPaginator = function() {
+    return this._paginator;
+};
+
+/**
  * Displays a specific page of a paginated DataTable.
  *
  * @method showPage
