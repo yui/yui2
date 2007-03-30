@@ -474,7 +474,7 @@ YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback
             }
         }
     }
-    YAHOO.log("Cached response for \"" + oRequest + "\" = " + oResponse,"info",this.toString());
+    YAHOO.log("The cached response for \"" + oRequest + "\" is " + oResponse,"info",this.toString());
     return oResponse;
 };
 
@@ -692,7 +692,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
  */
 YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller) {
     this.fireEvent("responseEvent", {request:oRequest,response:oRawResponse,callback:oCallback,caller:oCaller});
-    YAHOO.log("Live data response for \"" + oRequest + "\" = " + oRawResponse,"info",this.toString());
+    YAHOO.log("The live data response for \"" + oRequest + "\" is " + oRawResponse,"info",this.toString());
     var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     //TODO: break out into overridable methods
