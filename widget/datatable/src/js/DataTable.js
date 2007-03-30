@@ -168,7 +168,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     //YAHOO.util.Event.addListener(elTable, "mousemove", this._onMousemove, this);
     YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
     YAHOO.util.Event.addListener(elTable, "keypress", this._onKeypress, this);
-    YAHOO.util.Event.addListener(document, "keyup", this._onDocumentKeyup, this);
+    YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
     YAHOO.util.Event.addListener(elTable, "keyup", this._onKeyup, this);
     //YAHOO.util.Event.addListener(elTable, "focus", this._onFocus, this);
@@ -2029,14 +2029,14 @@ YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
 };
 
 /**
- * Handles keyup events on the DOCUMENT. Executes interaction with editor.
+ * Handles keydown events on the DOCUMENT. Executes interaction with editor.
  *
- * @method _onDocumentKeyup
+ * @method _onDocumentKeydown
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
     // esc Clears active editor
     if((e.keyCode == 27) && (oSelf.activeEditor)) {
         oSelf.activeEditor.hide();
@@ -2048,6 +2048,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeyup = function(e, oSelf) {
     }
     // enter Saves active editor data
     if((e.keyCode == 13) && (oSelf.activeEditor)) {
+        YAHOO.util.Event.stopEvent(e);
         var elCell = oSelf.activeEditor.cell;
         var oColumn = oSelf.activeEditor.column;
         var oRecord = oSelf.activeEditor.record;
