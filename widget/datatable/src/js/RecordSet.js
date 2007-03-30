@@ -268,10 +268,13 @@ YAHOO.widget.RecordSet.prototype.append = function(data) {
         for(var i=0; i<data.length; i++) {
             var record = this.addRecord(data[i]);
             newRecords.push(record);
+            
        }
+       YAHOO.log("RecordSet appended with " + newRecords.length + " Record(s)","info",this.toString());
        return newRecords;
     }
     else if(data && (data.constructor == Object)) {
+        YAHOO.log("RecordSet appended with 1 Record","info",this.toString());
         return this.addRecord(data);
     }
     else {

@@ -2299,16 +2299,21 @@ YAHOO.widget.DataTable.prototype.contextMenu = null;
 YAHOO.widget.DataTable.prototype.paginator = false;
 
 /**
+ * Object literal of initial paginator key:value properties.
+ *
+ * @property paginatorOptions
+ * @type Object
+ * @default {}
+ */
+/**
  * If built-in paginator is enabled, each page will display up to the given
- * number of rows per page. A value less than 1 (one) will display all available
+ * number of rows per page. A value less than 1 will display all available
  * rows.
  *
  * @property paginatorOptions.rowsPerPage
  * @type Number
  * @default 500
  */
-YAHOO.widget.DataTable.prototype.rowsPerPage = 500;
-
 /**
  * If built-in paginator is enabled, current page to display.
  *
@@ -2316,8 +2321,6 @@ YAHOO.widget.DataTable.prototype.rowsPerPage = 500;
  * @type Number
  * @default 1
  */
-YAHOO.widget.DataTable.prototype.currentPage = 1;
-
 /**
  * Array of container elements to hold paginator UI, if enabled. If null,
  * 2 containers will be created dynamically, one before and one after the
@@ -2327,8 +2330,6 @@ YAHOO.widget.DataTable.prototype.currentPage = 1;
  * @type HTMLElement[]
  * @default null
  */
-YAHOO.widget.DataTable.prototype.containers = null;
-
 /**
  * Values to show in the SELECT dropdown. Can be an array of numbers to populate
  * each OPTION's value and text with the same value, or an array of object
@@ -2339,18 +2340,33 @@ YAHOO.widget.DataTable.prototype.containers = null;
  * @property paginatorOptions.dropdownOptions
  * @type Number[] | Object{}
  */
-YAHOO.widget.DataTable.prototype.dropdownOptions = null;
-
 /**
  * Maximum number of links to page numbers to show in paginator UI. Any pages
  * not linked would be available through the next/previous style links. A 0
- * (zero) value displays all page links. A negative value disables all page links.
+ * value displays all page links. A negative value disables all page links.
  *
  * @property paginatorOptions.pageLinks
  * @type Number
  * @default 0
  */
-YAHOO.widget.DataTable.prototype.pageLinks = 0;
+YAHOO.widget.DataTable.prototype.paginatorOptions = null;
+
+/**
+ * Object literal holds sort metadata:
+ *  sortedBy.colKey
+ *  sortedBy.dir
+ *
+ *
+ * @property sortedBy
+ * @type Object
+ */
+YAHOO.widget.DataTable.prototype.sortedBy = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Deprecated public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
 
 /**
  * @deprecated No longer used.
@@ -2366,16 +2382,61 @@ YAHOO.widget.DataTable.prototype.isEmpty = false;
 YAHOO.widget.DataTable.prototype.isLoading = false;
 
 /**
- * Object literal holds sort metadata:
- *  sortedBy.colKey
- *  sortedBy.dir
- *
- *
- * @property sortedBy
- * @type Object
+ * @deprecated No longer used.
+ * @property startRecordIndex
  */
-YAHOO.widget.DataTable.prototype.sortedBy = null;
+YAHOO.widget.DataTable.prototype.startRecordIndex = 1;
 
+/**
+ * @deprecated No longer used.
+ * @property pageLinksStart
+ */
+YAHOO.widget.DataTable.prototype.pageLinksStart = 1;
+
+/**
+ * Current page number.
+ * @deprecated
+ * @property pageCurrent
+ * @type Number
+ * @default 1
+ */
+YAHOO.widget.DataTable.prototype.pageCurrent = 1;
+
+/**
+ * Rows per page.
+ * @deprecated
+ * @property rowsPerPage
+ * @type Number
+ * @default 500
+ */
+YAHOO.widget.DataTable.prototype.rowsPerPage = 500;
+
+/**
+ * Maximum number of pagination page links to show. Any page links beyond this number are
+ * available through the "&lt;" and "&gt;" links. A negative value will display all page links.
+ * @deprecated
+ * @property pageLinksLength
+ * @type Number
+ * @default -1
+ */
+YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
+
+/**
+ * Options to show in the rows-per-page pagination dropdown, should be an array
+ * of numbers. Null or an empty array causes no dropdown to be displayed.
+ * @deprecated
+ * @property rowsPerPageDropdown
+ * @type Number[]
+ */
+YAHOO.widget.DataTable.prototype.rowsPerPageDropdown = null;
+
+/**
+ * An array of DIV elements into which pagination elements can go.
+ * @deprecated
+ * @property pagers
+ * @type HTMLElement[]
+ */
+YAHOO.widget.DataTable.prototype.pagers = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3062,7 +3123,22 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
  * Returns paginator object literal.
  *
  * @method getPaginator
- * @return {Object} Paginator object literal.
+ * @return {Object} Paginator object literal with following properties:
+ *     <ul>
+ *     <li>currentPage: current page number</li>
+ *     <li>dropdownOptions: array of numbers to show in dropdown</li>
+ *     <li>elements: array of object literals that define where to show
+ *     paginator UI with following properties:
+ *         <ul>
+ *         <li>container: element reference to paginator container</li>
+ *         <li>links: element reference to page links container</li>
+ *         <li>select: element reference to dropdown</li>
+ *         </ul>
+ *     </li>
+ *     <li>pageLinks: number of page links displayed</li>
+ *     <li>rowsPerPage: number of rows displayed</li>
+ *     <li>totalPages: total number of pages</li>
+ *     </ul>
  */
 YAHOO.widget.DataTable.prototype.getPaginator = function() {
     return this._paginator;
@@ -3102,16 +3178,47 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
     };
     var elements = paginator.elements;
     
+    // Deal with unused deprecated values
+    if(this.startRecordIndex != 1) {
+        YAHOO.log("The property startRecordIndex is no longer used.","warn", this.toString());
+    }
+    if(this.pageLinksStart != 1) {
+        YAHOO.log("The property pageLinksStart is no longer used.","warn", this.toString());
+    }
+    
+    // Validate deprecated rowsPerPage value
+    if(this.rowsPerPage && YAHOO.util.Lang.isNumber(this.rowsPerPage)) {
+        paginator.rowsPerPage = this.rowsPerPage;
+        YAHOO.log("The property rowsPerPage is deprecated in favor of " +
+                " paginatorOptions.rowsPerPage.","warn", this.toString());
+    }
     // Validate rowsPerPage value
     if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.rowsPerPage)) {
         paginator.rowsPerPage = this.paginatorOptions.rowsPerPage;
     }
     
+    // Validate deprecated currentPage value
+    if(this.pageCurrent && YAHOO.util.Lang.isNumber(this.pageCurrent)) {
+        paginator.currentPage = this.pageCurrent;
+        YAHOO.log("The property pageCurrent is deprecated in favor of " +
+                " paginatorOptions.currentPage.","warn", this.toString());
+    }
     // Validate currentPage value
     if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.currentPage)) {
         paginator.currentPage = this.paginatorOptions.currentPage;
     }
 
+    // Validate deprecated pagers values
+    if(this.pagers && YAHOO.util.Lang.isArray(this.pagers)) {
+        var dep_containers = this.pagers;
+        for(i=0; i<dep_containers.length; i++) {
+            if(YAHOO.util.Dom.inDocument(dep_containers[i])) {
+                elements.push({container:YAHOO.util.Dom.get(dep_containers[i])});
+            }
+        }
+        YAHOO.log("The property pagers is deprecated in favor of " +
+                " paginatorOptions.containers.","warn", this.toString());
+    }
     // Validate container values
     if(this.paginatorOptions && YAHOO.util.Lang.isArray(this.paginatorOptions.containers)) {
         var containers = this.paginatorOptions.containers;
@@ -3140,6 +3247,16 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
         elements = [{container:pag0}, {container:pag1}];
     }
 
+    // Validate deprecated pageLinksLength value, accounting for neg value means show all
+    if(this.pageLinksLength &&
+            YAHOO.util.Lang.isNumber(this.pageLinksLength)) {
+        paginator.pageLinks = this.pageLinksLength;
+        if(this.pageLinksLength < 0) {
+            paginator.pageLinks = 0;
+        }
+        YAHOO.log("The property pageLinksLength is deprecated in favor of " +
+                " paginatorOptions.pageLinks.","warn", this.toString());
+    }
     // Validate pageLinks value
     if(this.paginatorOptions &&
             YAHOO.util.Lang.isNumber(this.paginatorOptions.pageLinks)) {
@@ -3163,6 +3280,13 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
         }
     }
     
+    // Validate deprecated rowsPerPageDropdown value
+    if(this.rowsPerPageDropdown &&
+            YAHOO.util.Lang.isArray(this.rowsPerPageDropdown)) {
+        paginator.dropdownOptions = this.rowsPerPageDropdown;
+        YAHOO.log("The property rowsPerPageDropdown is deprecated in favor of " +
+                " paginatorOptions.dropdownOptions.","warn", this.toString());
+    }
     // Validate dropdownOptions value
     if(this.paginatorOptions &&
             YAHOO.util.Lang.isArray(this.paginatorOptions.dropdownOptions)) {
@@ -3259,7 +3383,7 @@ YAHOO.widget.DataTable.prototype.populateTable = function() {
     if(!this.paginator) {
         // Paginator must be destroyed
         if(this._paginator !== null) {
-            //TODO: this._destroyPaginator();
+            //TODO: this.destroyPaginator();
         }
     }
     // Paginator is enabled
@@ -3316,7 +3440,7 @@ YAHOO.widget.DataTable.prototype.populateTable = function() {
             if(this._paginator.elements[i].select && this._paginator.elements[i].select.options) {
                 var options = this._paginator.elements[i].select.options;
                 for(var j=0; j<options.length; j++) {
-                    if(rowsPerPage === options[j]) {
+                    if((rowsPerPage + "") === options[j].value) {
                         options[j].selected = true;
                     }
                 }
@@ -3328,12 +3452,16 @@ YAHOO.widget.DataTable.prototype.populateTable = function() {
             document.body.style += '';
         }
 
-        this.fireEvent("paginateEvent");
+        this.fireEvent("paginateEvent", {paginator:this._paginator});
+        YAHOO.log("Currently displaying page " + currentPage + " of " +
+                this._paginator.totalPages + " with " + rowsPerPage +
+                " rows per page", "info", this.toString());
     }
     else {
         records = this._oRecordSet.getRecords();
     }
     this.replaceRows(records);
+    YAHOO.log("Table populated with " + records.length + " rows", "info", this.toString());
 };
 
 /**
@@ -3780,7 +3908,6 @@ YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, 
         if(newRecords) {
             // Update markup
             this.populateTable();
-            YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
         }
     }
     else if(bError) {
