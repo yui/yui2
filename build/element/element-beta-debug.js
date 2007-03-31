@@ -387,6 +387,7 @@ YAHOO.util.Attribute.prototype = {
          * @param {String} key The attribute's name.
          * @param {Object} map A key-value map of attribute properties
          * @param {Boolean} init Whether or not this should become the intial config.
+         * @deprecated Use setAttributeConfig
          */
         configureAttribute: function(key, map, init) {
             this.setAttributeConfig(key, map, init);
@@ -434,7 +435,6 @@ YAHOO.util.Attribute.prototype = {
 (function() {
 // internal shorthand
 var Dom = YAHOO.util.Dom,
-    EventPublisher = YAHOO.util.EventPublisher,
     AttributeProvider = YAHOO.util.AttributeProvider;
 
 /**
@@ -463,48 +463,48 @@ YAHOO.util.Element = function(el, map) {
 };
 
 YAHOO.util.Element.prototype = {
-	/**
+    /**
      * Dom events supported by the Element instance.
-	 * @property DOM_EVENTS
-	 * @type Object
-	 */
+     * @property DOM_EVENTS
+     * @type Object
+     */
     DOM_EVENTS: null,
 
-	/**
+    /**
      * Wrapper for HTMLElement method.
-	 * @method appendChild
-	 * @param {Boolean} deep Whether or not to do a deep clone
-	 */
+     * @method appendChild
+     * @param {Boolean} deep Whether or not to do a deep clone
+     */
     appendChild: function(child) {
         child = child.get ? child.get('element') : child;
         this.get('element').appendChild(child);
     },
     
-	/**
+    /**
      * Wrapper for HTMLElement method.
-	 * @method getElementsByTagName
-	 * @param {String} tag The tagName to collect
-	 */
+     * @method getElementsByTagName
+     * @param {String} tag The tagName to collect
+     */
     getElementsByTagName: function(tag) {
         return this.get('element').getElementsByTagName(tag);
     },
     
-	/**
+    /**
      * Wrapper for HTMLElement method.
-	 * @method hasChildNodes
-	 * @return {Boolean} Whether or not the element has childNodes
-	 */
+     * @method hasChildNodes
+     * @return {Boolean} Whether or not the element has childNodes
+     */
     hasChildNodes: function() {
         return this.get('element').hasChildNodes();
     },
     
-	/**
+    /**
      * Wrapper for HTMLElement method.
-	 * @method insertBefore
-	 * @param {HTMLElement} element The HTMLElement to insert
-	 * @param {HTMLElement} before The HTMLElement to insert
+     * @method insertBefore
+     * @param {HTMLElement} element The HTMLElement to insert
+     * @param {HTMLElement} before The HTMLElement to insert
      * the element before.
-	 */
+     */
     insertBefore: function(element, before) {
         element = element.get ? element.get('element') : element;
         before = (before && before.get) ? before.get('element') : before;
@@ -512,23 +512,23 @@ YAHOO.util.Element.prototype = {
         this.get('element').insertBefore(element, before);
     },
     
-	/**
+    /**
      * Wrapper for HTMLElement method.
-	 * @method removeChild
-	 * @param {HTMLElement} child The HTMLElement to remove
-	 */
+     * @method removeChild
+     * @param {HTMLElement} child The HTMLElement to remove
+     */
     removeChild: function(child) {
         child = child.get ? child.get('element') : child;
         this.get('element').removeChild(child);
         return true;
     },
     
-	/**
+    /**
      * Wrapper for HTMLElement method.
-	 * @method replaceChild
-	 * @param {HTMLElement} newNode The HTMLElement to insert
-	 * @param {HTMLElement} oldNode The HTMLElement to replace
-	 */
+     * @method replaceChild
+     * @param {HTMLElement} newNode The HTMLElement to insert
+     * @param {HTMLElement} oldNode The HTMLElement to replace
+     */
     replaceChild: function(newNode, oldNode) {
         newNode = newNode.get ? newNode.get('element') : newNode;
         oldNode = oldNode.get ? oldNode.get('element') : oldNode;
@@ -542,18 +542,6 @@ YAHOO.util.Element.prototype = {
      * @param {Object} map A key-value map of initial attribute configs
      */
     initAttributes: function(map) {
-        map = map || {}; 
-        var element = Dom.get(map.element) || null;
-        
-        /**
-         * The HTMLElement the Element instance refers to.
-         * @config element
-         * @type HTMLElement
-         */
-        this.setAttributeConfig('element', {
-            value: element,
-            readOnly: true
-         });
     },
 
     /**
@@ -568,7 +556,7 @@ YAHOO.util.Element.prototype = {
      */
     addListener: function(type, fn, obj, scope) {
         var el = this.get('element');
-        var scope = scope || this;
+        scope = scope || this;
         
         el = this.get('id') || el;
         var self = this; 
@@ -611,87 +599,87 @@ YAHOO.util.Element.prototype = {
         this.unsubscribe.apply(this, arguments);
     },
     
-	/**
+    /**
      * Wrapper for Dom method.
-	 * @method addClass
-	 * @param {String} className The className to add
-	 */
+     * @method addClass
+     * @param {String} className The className to add
+     */
     addClass: function(className) {
         Dom.addClass(this.get('element'), className);
     },
     
-	/**
+    /**
      * Wrapper for Dom method.
-	 * @method getElementsByClassName
-	 * @param {String} className The className to collect
-	 * @param {String} tag (optional) The tag to use in
+     * @method getElementsByClassName
+     * @param {String} className The className to collect
+     * @param {String} tag (optional) The tag to use in
      * conjunction with class name
      * @return {Array} Array of HTMLElements
-	 */
+     */
     getElementsByClassName: function(className, tag) {
         return Dom.getElementsByClassName(className, tag,
                 this.get('element') );
     },
     
-	/**
+    /**
      * Wrapper for Dom method.
-	 * @method hasClass
-	 * @param {String} className The className to add
+     * @method hasClass
+     * @param {String} className The className to add
      * @return {Boolean} Whether or not the element has the class name
-	 */
+     */
     hasClass: function(className) {
         return Dom.hasClass(this.get('element'), className); 
     },
     
-	/**
+    /**
      * Wrapper for Dom method.
-	 * @method removeClass
-	 * @param {String} className The className to remove
-	 */
+     * @method removeClass
+     * @param {String} className The className to remove
+     */
     removeClass: function(className) {
         return Dom.removeClass(this.get('element'), className);
     },
     
-	/**
+    /**
      * Wrapper for Dom method.
-	 * @method replaceClass
-	 * @param {String} oldClassName The className to replace
-	 * @param {String} newClassName The className to add
-	 */
+     * @method replaceClass
+     * @param {String} oldClassName The className to replace
+     * @param {String} newClassName The className to add
+     */
     replaceClass: function(oldClassName, newClassName) {
         return Dom.replaceClass(this.get('element'), 
                 oldClassName, newClassName);
     },
     
-	/**
+    /**
      * Wrapper for Dom method.
-	 * @method setStyle
-	 * @param {String} property The style property to set
-	 * @param {String} value The value to apply to the style property
-	 */
+     * @method setStyle
+     * @param {String} property The style property to set
+     * @param {String} value The value to apply to the style property
+     */
     setStyle: function(property, value) {
         var el = this.get('element');
         if (!el) {
-            this._queue[this._queue.length] = ['setStyle', arguments];
-            return false;
-        }        
-        return Dom.setStyle(this.get('element'),  property, value);
+            return this._queue[this._queue.length] = ['setStyle', arguments];
+        }
+
+        return Dom.setStyle(el,  property, value); // TODO: always queuing?
     },
     
-	/**
+    /**
      * Wrapper for Dom method.
-	 * @method getStyle
-	 * @param {String} property The style property to retrieve
-	 * @return {String} The current value of the property
-	 */
+     * @method getStyle
+     * @param {String} property The style property to retrieve
+     * @return {String} The current value of the property
+     */
     getStyle: function(property) {
         return Dom.getStyle(this.get('element'),  property);
     },
     
-	/**
+    /**
      * Apply any queued set calls.
-	 * @method fireQueue
-	 */
+     * @method fireQueue
+     */
     fireQueue: function() {
         var queue = this._queue;
         for (var i = 0, len = queue.length; i < len; ++i) {
@@ -699,12 +687,12 @@ YAHOO.util.Element.prototype = {
         }
     },
     
-	/**
+    /**
      * Appends the HTMLElement into either the supplied parentNode.
-	 * @method appendTo
-	 * @param {HTMLElement | Element} parentNode The node to append to
-	 * @param {HTMLElement | Element} before An optional node to insert before
-	 */
+     * @method appendTo
+     * @param {HTMLElement | Element} parentNode The node to append to
+     * @param {HTMLElement | Element} before An optional node to insert before
+     */
     appendTo: function(parent, before) {
         parent = (parent.get) ?  parent.get('element') : Dom.get(parent);
         
@@ -800,52 +788,80 @@ YAHOO.util.Element.prototype = {
     },
     
     init: function(el, attr) {
-        this._queue = this._queue || [];
-        this._events = this._events || {};
-        this._configs = this._configs || {};
-        attr = attr || {};
-        attr.element = attr.element || el || null;
-
-        this.DOM_EVENTS = {
-            'click': true,
-            'dblclick': true,
-            'keydown': true,
-            'keypress': true,
-            'keyup': true,
-            'mousedown': true,
-            'mousemove': true,
-            'mouseout': true, 
-            'mouseover': true, 
-            'mouseup': true
-        };
-        
-        var readyHandler = function() {
-            this.initAttributes(attr);
-            this.setAttributes(attr, true);
-            this.fireQueue();
-            this.fireEvent('contentReady', {
-                type: 'contentReady',
-                target: attr.element
-            });
-        };
-
-        if ( YAHOO.lang.isString(el) ) {
-            _registerHTMLAttr.call(this, 'id', { value: el });
-            YAHOO.util.Event.onAvailable(el, function() {
-                attr.element = Dom.get(el);
-                this.fireEvent('available', {
-                    type: 'available',
-                    target: attr.element
-                }); 
-            }, this, true);
-            
-            YAHOO.util.Event.onContentReady(el, function() {
-                readyHandler.call(this);
-            }, this, true);
-        } else {
-            readyHandler.call(this);
-        }        
+        _initElement.apply(this, arguments); 
     }
+};
+
+var _initElement = function(el, attr) {
+    this._queue = this._queue || [];
+    this._events = this._events || {};
+    this._configs = this._configs || {};
+    attr = attr || {};
+    attr.element = attr.element || el || null;
+
+    this.DOM_EVENTS = {
+        'click': true,
+        'dblclick': true,
+        'keydown': true,
+        'keypress': true,
+        'keyup': true,
+        'mousedown': true,
+        'mousemove': true,
+        'mouseout': true, 
+        'mouseover': true, 
+        'mouseup': true,
+        'focus': true,
+        'blur': true,
+        'submit': true
+    };
+
+    if (YAHOO.lang.isString(el) ) { // defer until available/ready
+        _registerHTMLAttr.call(this, 'id', { value: attr.element });
+    }
+
+    if (Dom.get(el)) {
+        _availableHandler.call(this, attr);  
+        _readyHandler.call(this, attr);
+        return; // note return
+    } 
+
+    YAHOO.util.Event.onAvailable(attr.element, function() {
+        _availableHandler.call(this, attr);  
+    }, this, true);
+    
+    YAHOO.util.Event.onContentReady(attr.element, function() {
+        _readyHandler.call(this, attr);
+    }, this, true);
+};
+
+var _availableHandler = function(attr) {
+    attr.element = Dom.get(attr.element);
+
+    /**
+     * The HTMLElement the Element instance refers to.
+     * @config element
+     * @type HTMLElement
+     */
+    this.setAttributeConfig('element', {
+        value: attr.element,
+        readOnly: true
+     });
+
+    this.fireEvent('available', {
+        type: 'available',
+        target: attr.element
+    }); 
+};
+
+var _readyHandler = function(attr) {
+    this.initAttributes(attr);
+    this.setAttributes(attr, true);
+    this.fireQueue();
+
+    this.fireEvent('contentReady', {
+        type: 'contentReady',
+        target: attr.element
+    });
 };
 
 /**
