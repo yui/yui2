@@ -100,7 +100,7 @@ http://developer.yahoo.net/yui/license.txt
         setStyle = function(el, property, val) {
             switch (property) {
                 case 'opacity':
-                    if ( typeof el.style.filter == 'string' ) { // in case not appended
+                    if ( YAHOO.lang.isString(el.style.filter) ) { // in case not appended
                         el.style.filter = 'alpha(opacity=' + val * 100 + ')';
                         
                         if (!el.currentStyle || !el.currentStyle.hasLayout) {
@@ -259,19 +259,17 @@ http://developer.yahoo.net/yui/license.txt
                     } 
                 }
                 
-                if (el.parentNode) { parentNode = el.parentNode; }
-                else { parentNode = null; }
-        
-                while (parentNode && parentNode.tagName.toUpperCase() != 'BODY' && parentNode.tagName.toUpperCase() != 'HTML') 
-                { // account for any scrolled ancestors
-                    if (Y.Dom.getStyle(parentNode, 'display') != 'inline') { // work around opera inline scrollLeft/Top bug
+                parentNode = el.parentNode;
+
+                // account for any scrolled ancestors
+                while (parentNode.tagName) { // stop at document 
+                    // Opera incorrectly accounts for scroll on inline elements. 
+                    if ( this.getStyle(parentNode, 'display') != 'inline') { 
                         pos[0] -= parentNode.scrollLeft;
                         pos[1] -= parentNode.scrollTop;
                     }
-                    
-                    if (parentNode.parentNode) {
-                        parentNode = parentNode.parentNode; 
-                    } else { parentNode = null; }
+
+                    parentNode = parentNode.parentNode; 
                 }
         
                 YAHOO.log('getXY returning ' + pos, 'info', 'Dom');
@@ -447,8 +445,8 @@ http://developer.yahoo.net/yui/license.txt
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
             
             var f = function(el) {
-                YAHOO.log('hasClass returning ' + re.test(el['className']), 'info', 'Dom');
-                return re.test(el['className']);
+                YAHOO.log('hasClass returning ' + re.test(el.className), 'info', 'Dom');
+                return re.test(el.className);
             };
             
             return Y.Dom.batch(el, f, Y.Dom, true);
@@ -466,7 +464,7 @@ http://developer.yahoo.net/yui/license.txt
                 
                 YAHOO.log('addClass adding ' + className, 'info', 'Dom');
                 
-                el['className'] = [el['className'], className].join(' ');
+                el.className = [el.className, className].join(' ');
             };
             
             Y.Dom.batch(el, f, Y.Dom, true);
@@ -482,12 +480,14 @@ http://developer.yahoo.net/yui/license.txt
             var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
 
             var f = function(el) {
-                if (!this.hasClass(el, className)) { return; } // not present
-                
+                if (!this.hasClass(el, className)) {
+                    return; // not present
+                }                 
+
                 YAHOO.log('removeClass removing ' + className, 'info', 'Dom');
                 
-                var c = el['className'];
-                el['className'] = c.replace(re, ' ');
+                var c = el.className;
+                el.className = c.replace(re, ' ');
                 if ( this.hasClass(el, className) ) { // in case of multiple adjacent
                     this.removeClass(el, className);
                 }
@@ -520,7 +520,7 @@ http://developer.yahoo.net/yui/license.txt
                     return; // note return
                 }
             
-                el['className'] = el['className'].replace(re, ' ' + newClassName + ' ');
+                el.className = el.className.replace(re, ' ' + newClassName + ' ');
 
                 if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
                     this.replaceClass(el, oldClassName, newClassName);
