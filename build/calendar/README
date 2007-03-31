@@ -6,6 +6,7 @@ Calendar Release Notes
     - Fixed problem with CalendarGroup iframe shim not covering the CalendarGroup title area
     - Removed javascript:void(null) from close button and cell links which was interrupting form submission and firing onbeforeunload in IE
     - Fixed problem with CalendarGroup getSelectedDates returning invalid results, when used in conjunction with the "selected" Config property (either passed in the constructor config argument or set seperately after construction)
+    - Refactored Calendar and CalendarGroup to improve performance, especially when working with a large number of instances in IE6
 
 *** version 2.2.0 ***
 
