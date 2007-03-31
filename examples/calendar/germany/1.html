@@ -6,7 +6,7 @@
 
 	<link type="text/css" rel="stylesheet" href="../../../build/reset-fonts-grids/reset-fonts-grids.css">
 
-	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css">
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
 	<link type="text/css" rel="stylesheet" href="../assets/style.css">
 </head>
 
@@ -43,7 +43,7 @@
 				<div class="yui-b">
 					<h1 class="first">Setting up the Calendar</h1>
 
-					
+
 			<p>Calendar provides easy configuration properties that can be used to localize the Calendar's various data labels to be used in international locales. There are several properties that are used to change localization settings:</p>
 
 			<ul class="properties">
@@ -52,7 +52,7 @@
 
 				<li><strong>MONTHS_SHORT  </strong> - The short month labels for the current locale. Default: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]</li>
 				<li><strong>MONTHS_LONG</strong> - The long month labels for the current locale. Default: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]</li>
-				
+
 				<li><strong>WEEKDAYS_1CHAR</strong> - The 1-character weekday labels for the current locale. Default: ["S", "M", "T", "W", "T", "F", "S"]</li>
 				<li><strong>WEEKDAYS_SHORT</strong> - The short weekday labels for the current locale. Default: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]</li>
 				<li><strong>WEEKDAYS_MEDIUM</strong> - The medium weekday labels for the current locale. Default: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]</li>
@@ -70,7 +70,7 @@
 				<li><strong>MDY_DAY_POSITION</strong> - The position of the day in a month/day/year date string. Default: 2</li>
 				<li><strong>MDY_YEAR_POSITION</strong> - The position of the year in a month/day/year date string. Default: 3</li>
 
-				
+
 				<li><strong>MD_MONTH_POSITION</strong> - The position of the month in a month/day date string. Default: 1</li>
 				<li><strong>MD_DAY_POSITION</strong> - The position of the day in a month/day date string. Default: 2</li>
 
@@ -81,8 +81,8 @@
 			<p>In our tutorial, we will create a German Calendar that is set up both to accept dates in the standard German format (dd.mm.yyyy) and present the labels in German. Note that all of our date label values will contain special characters in Unicode notation. Also, we will present the weekday labels in the "medium" format, which will amount to 3 characters in this example.</p>
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
-					YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("cal1","cal1Container", 
-																				{ LOCALE_WEEKDAYS:"medium", 
+					YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("cal1","cal1Container",
+																				{ LOCALE_WEEKDAYS:"medium",
 																				  START_WEEKDAY: 1,
 																				  MULTI_SELECT: true
 																				 } );
@@ -97,7 +97,7 @@
 
 					YAHOO.example.calendar.cal1.cfg.setProperty("MD_DAY_POSITION", 1);
 					YAHOO.example.calendar.cal1.cfg.setProperty("MD_MONTH_POSITION", 2);
-					
+
 					// Date labels for German locale
 
 					YAHOO.example.calendar.cal1.cfg.setProperty("MONTHS_SHORT",   ["Jan", "Feb", "M\u00E4r", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]);
@@ -110,7 +110,7 @@
 
 			<p>Next, we can set some selected dates using our newly configured date format, and render the Calendar:</p>
 
-			<textarea name="code" class="JScript" cols="60" rows="1">			
+			<textarea name="code" class="JScript" cols="60" rows="1">
 					YAHOO.example.calendar.cal1.select("1.10.2006-8.10.2006");
 					YAHOO.example.calendar.cal1.render();
 			</textarea>
@@ -121,11 +121,11 @@
 		</div>
 
 		<div id="ft">&nbsp;</div>
-	</div>	
+	</div>
 
-	<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
-	<script language="javascript"> 
-		dp.SyntaxHighlighter.HighlightAll('code'); 
+	<script src="../../assets/dpSyntaxHighlighter.js"></script>
+	<script language="javascript">
+		dp.SyntaxHighlighter.HighlightAll('code');
 	</script>
 
 </body>

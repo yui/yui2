@@ -6,7 +6,7 @@
 
 	<link type="text/css" rel="stylesheet" href="../../../build/reset-fonts-grids/reset-fonts-grids.css">
 
-	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css">
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
 	<link type="text/css" rel="stylesheet" href="../assets/style.css">
 </head>
 
@@ -43,9 +43,9 @@
 				<div class="yui-b">
 					<h1 class="first">Setting up the Calendar</h1>
 
-					
+
 			<p>Calendar employs a feature called the <em>Render Stack</em> to allow you to customize the way that certain date cells are rendered on the Calendar. The Render Stack consists of a collection of functions that can be executed when rendering certain dates. When the Calendar is rendered, each function in the Render Stack is executed for each applicable date. This functionality allows developers implementing the Calendar to alter the contents of date cells based on a set of rules.</p>
-			
+
 			<p>The built-in renderers are:</p>
 
 			<ul class="properties">
@@ -64,7 +64,7 @@
 			<p>In this tutorial, we will create a Calendar that makes use of the built-in renderers, and we will also create one of our own. To begin, we will instantiate a new Calendar and apply the restricted renderer to 2/29 of any year, and the "highlight1" style to the range of dates between 2/1/2008 and 2/7/2008.</p>
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
-					YAHOO.example.calendar.cal1 = new YAHOO.widget.CalendarGroup("cal1","cal1Container", 
+					YAHOO.example.calendar.cal1 = new YAHOO.widget.CalendarGroup("cal1","cal1Container",
 																			    { pagedate:"2/2008" } );
 
 					YAHOO.example.calendar.cal1.addRenderer("2/29", YAHOO.example.calendar.cal1.renderBodyCellRestricted);
@@ -90,11 +90,11 @@
 		</div>
 
 		<div id="ft">&nbsp;</div>
-	</div>	
+	</div>
 
-	<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
-	<script language="javascript"> 
-		dp.SyntaxHighlighter.HighlightAll('code'); 
+	<script src="../../assets/dpSyntaxHighlighter.js"></script>
+	<script language="javascript">
+		dp.SyntaxHighlighter.HighlightAll('code');
 	</script>
 
 </body>

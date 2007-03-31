@@ -6,7 +6,7 @@
 
 	<link type="text/css" rel="stylesheet" href="../../../build/reset-fonts-grids/reset-fonts-grids.css">
 
-	<link rel="stylesheet" type="text/css" href="../../../docs/assets/dpSyntaxHighlighter.css">
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
 	<link type="text/css" rel="stylesheet" href="../assets/style.css">
 </head>
 
@@ -43,11 +43,11 @@
 				<div class="yui-b">
 					<h1 class="first">Setting up the Calendar</h1>
 
-					
+
 			<p>In this example, we will build a Calendar that can accept selections on any date from 1/1/2006 to 12/31/2008, and we will set up a series of select boxes that can be used to change the selected date. First, we will construct the Calendar with the minimum and maximum dates specified:</p>
-			
+
 			<textarea name="code" class="JScript" cols="60" rows="1">
-					YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("cal1","cal1Container", 
+					YAHOO.example.calendar.cal1 = new YAHOO.widget.Calendar("cal1","cal1Container",
 																				{ mindate:"1/1/2006",
 																				  maxdate:"12/31/2008" });
 			</textarea>
@@ -59,7 +59,7 @@
 
 				<form name="dates">
 					<select id="selMonth" name="selMonth">
-						... 
+						...
 					</select>
 
 					<select name="selDay" id="selDay">
@@ -77,14 +77,14 @@
 
 			<textarea name="code" class="JScript" cols="60" rows="1">
 				function handleSelect(type,args,obj) {
-					var dates = args[0]; 
+					var dates = args[0];
 					var date = dates[0];
 					var year = date[0], month = date[1], day = date[2];
 
 					var selMonth = document.getElementById("selMonth");
 					var selDay = document.getElementById("selDay");
 					var selYear = document.getElementById("selYear");
-					
+
 					selMonth.selectedIndex = month;
 					selDay.selectedIndex = day;
 
@@ -110,11 +110,11 @@
 					var selMonth = document.getElementById("selMonth");
 					var selDay = document.getElementById("selDay");
 					var selYear = document.getElementById("selYear");
-					
+
 					var month = parseInt(selMonth.options[selMonth.selectedIndex].text);
 					var day = parseInt(selDay.options[selDay.selectedIndex].value);
 					var year = parseInt(selYear.options[selYear.selectedIndex].value);
-					
+
 					if (! isNaN(month) && ! isNaN(day) && ! isNaN(year)) {
 						var date = month + "/" + day + "/" + year;
 
@@ -139,11 +139,11 @@
 		</div>
 
 		<div id="ft">&nbsp;</div>
-	</div>	
+	</div>
 
-	<script src="../../../docs/assets/dpSyntaxHighlighter.js"></script>
-	<script language="javascript"> 
-		dp.SyntaxHighlighter.HighlightAll('code'); 
+	<script src="../../assets/dpSyntaxHighlighter.js"></script>
+	<script language="javascript">
+		dp.SyntaxHighlighter.HighlightAll('code');
 	</script>
 
 </body>
