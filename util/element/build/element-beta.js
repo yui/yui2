@@ -472,7 +472,7 @@ YAHOO.util.Element.prototype = {
      */
     appendChild: function(child) {
         child = child.get ? child.get('element') : child;
-        this.get(element).appendChild(child);
+        this.get('element').appendChild(child);
     },
     
     /**
@@ -809,8 +809,14 @@ var _initElement = function(el, attr) {
         _registerHTMLAttr.call(this, 'id', { value: attr.element });
     }
 
+    if (Dom.get(el)) {
+        _availableHandler.call(this, attr);  
+        _readyHandler.call(this, attr);
+        return; // note return
+    } 
+
     YAHOO.util.Event.onAvailable(attr.element, function() {
-        _availableHandler.call(this, attr);  // TODO: available always before ready?
+        _availableHandler.call(this, attr);  
     }, this, true);
     
     YAHOO.util.Event.onContentReady(attr.element, function() {
