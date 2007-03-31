@@ -194,6 +194,7 @@
          * @param {String} key The attribute's name.
          * @param {Object} map A key-value map of attribute properties
          * @param {Boolean} init Whether or not this should become the intial config.
+         * @deprecated Use setAttributeConfig
          */
         configureAttribute: function(key, map, init) {
             this.setAttributeConfig(key, map, init);
