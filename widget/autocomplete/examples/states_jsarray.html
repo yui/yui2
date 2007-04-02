@@ -59,11 +59,9 @@
     configured to have a query delay of zero
     seconds.</p>
 
-    <p>A few configurations have also been made to aid usability. The properties
-    <code>autoHighlight</code> and <code>typeAhead</code> have been enabled to
-    help reduce the number of user interactions. Enabling the
-    <code>prehighlightClassName</code> paramter provides supplemental visual
-    feedback for mouse events.</p>
+    <p>Enabling the
+    <code>prehighlightClassName</code> feature provides supplemental visual
+    feedback for mouse events on results in the container.</p>
 
     <p>The <code>formatResult</code> method of the second AutoComplete instance
     has been enhanced to display two data fields in the container, and the
@@ -143,7 +141,6 @@
             oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
             oAutoComp.queryDelay = 0;
             oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
-            oAutoComp.typeAhead = true;
             oAutoComp.useShadow = true;
             oAutoComp.minQueryLength = 0;
             oAutoComp.textboxFocusEvent.subscribe(function(){oAutoComp.sendQuery("");});
@@ -155,7 +152,6 @@
             oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
             oAutoComp2.queryDelay = 0;
             oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-            oAutoComp2.typeAhead = true;
             oAutoComp2.useShadow = true;
             oAutoComp2.forceSelection = true;
             oAutoComp2.formatResult = function(oResultItem, sQuery) {
@@ -636,7 +632,7 @@ YAHOO.example.ACJSArray = function() {
             oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
             oAutoComp.queryDelay = 0;
             oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
-            oAutoComp.typeAhead = true;
+            //oAutoComp.typeAhead = true;
             oAutoComp.useShadow = true;
             oAutoComp.minQueryLength = 0;
             oAutoComp.textboxFocusEvent.subscribe(function(){oAutoComp.sendQuery("");});
@@ -648,7 +644,7 @@ YAHOO.example.ACJSArray = function() {
             oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
             oAutoComp2.queryDelay = 0;
             oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-            oAutoComp2.typeAhead = true;
+            //oAutoComp2.typeAhead = true;
             oAutoComp2.useShadow = true;
             oAutoComp2.forceSelection = true;
             oAutoComp2.formatResult = function(oResultItem, sQuery) {
