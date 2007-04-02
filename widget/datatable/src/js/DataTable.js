@@ -3538,7 +3538,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this.sortedBy._id = oColumn.getId();
 
             this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
-            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir, "info", this.toString());
+            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
         }
     }
     else {
