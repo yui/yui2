@@ -724,7 +724,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
         default:
             //TODO: pass off to custom function
             //var contentType = oRawResponse.getResponseHeader["Content-Type"];
-            YAHOO.log("Unknown response type","warn",this.toStrin());
+            YAHOO.log("Unknown response type","warn",this.toString());
             break;
     }
 
