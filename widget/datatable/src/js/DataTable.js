@@ -1816,8 +1816,8 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
         oSelf.activeEditor = null;
 
         // Editor causes widget to lose focus
-        oSelf._bFocused = false;
-        oSelf.focusTable();
+        //oSelf._bFocused = false;
+        //oSelf.focusTable();
     }
 
     if (elTag != "table") {
@@ -1857,7 +1857,7 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
             elTag = elTarget.tagName.toLowerCase();
         }
     }
-    oSelf.focusTable();
+    //oSelf.focusTable();
     oSelf.fireEvent("tableClickEvent",{target:elTarget,event:e});
 };
 
@@ -1879,8 +1879,8 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
         oSelf.activeEditor = null;
         
         // Editor causes widget to lose focus
-        oSelf._bFocused = false;
-        oSelf.focusTable();
+        //oSelf._bFocused = false;
+        //oSelf.focusTable();
     }
 
     if (elTag != "table") {
@@ -1977,8 +1977,8 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                 }*/
             }
             // Arrows can cause widget to lose focus
-            oSelf._bFocused = false;
-            oSelf.focusTable();
+            //oSelf._bFocused = false;
+            //oSelf.focusTable();
         }
         // arrow up
         else if(e.keyCode == 38) {
@@ -2006,8 +2006,8 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                 }
             }
             // Arrows can cause widget to lose focus
-            oSelf._bFocused = false;
-            oSelf.focusTable();
+            //oSelf._bFocused = false;
+            //oSelf.focusTable();
         }
     }
 };
@@ -2043,8 +2043,8 @@ YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
         oSelf.activeEditor = null;
         
         // Editor causes widget to lose focus
-        oSelf._bFocused = false;
-        oSelf.focusTable();
+        //oSelf._bFocused = false;
+        //oSelf.focusTable();
     }
     // enter Saves active editor data
     if((e.keyCode == 13) && (oSelf.activeEditor)) {
@@ -2067,8 +2067,8 @@ YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
         oSelf.activeEditor = null;
 
         // Editor causes widget to lose focus
-        oSelf._bFocused = false;
-        oSelf.focusTable();
+        //oSelf._bFocused = false;
+        //oSelf.focusTable();
         oSelf.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
     }
 };
@@ -3561,6 +3561,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
         }
         this._bFocused = true;
         this.fireEvent("editorShowEvent",{target:elCell,column:column});
+        YAHOO.log("Editor \"" + this.activeEditor.type + "\" activated for cell \"" + elCell.id + "\"", "info", this.toString());
     }
 };
 
