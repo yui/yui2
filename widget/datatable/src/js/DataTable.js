@@ -3558,10 +3558,12 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
         var column = this._oColumnSet.keys[elCell.columnIndex];
         if(column && column.editor) {
             this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.yuiRecordId));
+            this._bFocused = true;
+            if(this.activeEditor) {
+                this.fireEvent("editorShowEvent",{target:elCell,column:column});
+                YAHOO.log("Editor \"" + this.activeEditor.type + "\" activated for cell \"" + elCell.id + "\"", "info", this.toString());
+            }
         }
-        this._bFocused = true;
-        this.fireEvent("editorShowEvent",{target:elCell,column:column});
-        YAHOO.log("Editor \"" + this.activeEditor.type + "\" activated for cell \"" + elCell.id + "\"", "info", this.toString());
     }
 };
 
