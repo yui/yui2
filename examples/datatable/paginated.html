@@ -1,13 +1,13 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - Paginated Over XHR (YUI Library)</title>
+<title>Example: DataTable - Client-side Pagination of Large RecordSet (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
 <link type="text/css" rel="stylesheet" href="../../build/datatable/assets/datatable.css">
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
-<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../assets/dpSyntaxHighlighter.css">
 <style type="text/css">
 /* custom css*/
 #paginated {margin:1em;}
@@ -19,7 +19,7 @@
 </head>
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Paginated Over XHR</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Client-side Pagination of Large RecordSet</h1>
 </div>
 <div id="bd">
     <div id="paginated"></div>
@@ -49,7 +49,7 @@
 
         <textarea name="code" class="JScript" cols="60" rows="1">
 var myColumnHeaders = [
-    {key:"extid",text:"ID"},
+    {key:"id",text:"ID"},
     {key:"name",text:"Name"},
     {key:"date",text:"Date"},
     {key:"price",text:"Price"},
@@ -67,25 +67,22 @@ var myColumnHeaders = [
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
 // Show over 1000 records
-var myDataSource = new YAHOO.util.DataSource("./php/data_proxy.php");
+var myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
 // Show 5000 records -- FireBug must be disabled!
-//var myDataSource = new YAHOO.util.DataSource("./php/data5000_proxy.php");
+//var myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
-    resultsList: "result",
-    fields: ["extid","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+    resultsList: "records",
+    fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
 };
 
-var initialRequest = "get=all&output=json";
 var oConfigs = {
-        caption:"Example: Paginated Over XHR",
-        initialRequest:initialRequest,
-
-        pageCurrent: 1,
-        rowsPerPage: 100,
-        startRecordIndex: 1,
-        pageLinksLength: 10,
-        rowsPerPageDropdown: [25,50,100,500]
+        caption:"Example: Client-side Pagination of Large RecordSet",
+        paginator:true,
+        paginatorOptions:{
+            rowsPerPage: 100,
+            dropdownOptions: [25,50,100,500]
+        }
 };
 var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnSet, myDataSource, oConfigs);
         </textarea>
@@ -109,7 +106,7 @@ myLogger.collapse();
 /****************************************************************************/
 
 var myColumnHeaders = [
-    {key:"extid",text:"ID"},
+    {key:"id",text:"ID"},
     {key:"name",text:"Name"},
     {key:"date",text:"Date"},
     {key:"price",text:"Price"},
@@ -132,24 +129,21 @@ var myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
 //var myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
-    resultsList: "result",
-    fields: ["extid","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+    resultsList: "records",
+    fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
 };
 
-var initialRequest = "get=all&output=json";
 var oConfigs = {
-        caption:"Example: Paginated Over XHR",
-        initialRequest:initialRequest,
-
-        pageCurrent: 1,
-        rowsPerPage: 100,
-        startRecordIndex: 1,
-        pageLinksLength: 10,
-        rowsPerPageDropdown: [25,50,100,500]
+        caption:"Example: Client-side Pagination of Large RecordSet",
+        paginator:true,
+        paginatorOptions:{
+            rowsPerPage: 100,
+            dropdownOptions: [25,50,100,500]
+        }
 };
 var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnSet, myDataSource, oConfigs);
 </script>
-<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">
 dp.SyntaxHighlighter.HighlightAll('code');
 </script>

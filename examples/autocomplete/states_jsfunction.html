@@ -6,7 +6,7 @@
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
-<link type="text/css" rel="stylesheet" href="../../docs/assets/dpSyntaxHighlighter.css">
+<link type="text/css" rel="stylesheet" href="../assets/dpSyntaxHighlighter.css">
 
 <style type="text/css">
     #statesmod {position:relative;padding:1em;}
@@ -239,7 +239,6 @@ YAHOO.example.ACJSFunction = function(){
 
             // Subscribe to Custom Events
             oAutoComp.dataReturnEvent.subscribe(YAHOO.example.ACJSFunction.myOnDataReturn);
-            oAutoComp.containerCollapseEvent.subscribe(YAHOO.example.ACJSFunction.myOnContainerCollapse);
             
             // Set initial content in the container
             oAutoComp.sendQuery("");
@@ -266,7 +265,7 @@ YAHOO.example.ACJSFunction = function(){
 YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACJSFunction.init);
 </script>
 
-<script type="text/javascript" src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">
 dp.SyntaxHighlighter.HighlightAll('code');
 </script>

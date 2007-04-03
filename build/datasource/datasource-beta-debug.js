@@ -474,7 +474,7 @@ YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback
             }
         }
     }
-    YAHOO.log("Cached response for \"" + oRequest + "\" = " + oResponse,"info",this.toString());
+    YAHOO.log("The cached response for \"" + oRequest + "\" is " + oResponse,"info",this.toString());
     return oResponse;
 };
 
@@ -692,7 +692,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
  */
 YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller) {
     this.fireEvent("responseEvent", {request:oRequest,response:oRawResponse,callback:oCallback,caller:oCaller});
-    YAHOO.log("Live data response for \"" + oRequest + "\" = " + oRawResponse,"info",this.toString());
+    YAHOO.log("The live data response for \"" + oRequest + "\" is " + oRawResponse,"info",this.toString());
     var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     //TODO: break out into overridable methods
@@ -724,7 +724,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
         default:
             //TODO: pass off to custom function
             //var contentType = oRawResponse.getResponseHeader["Content-Type"];
-            YAHOO.log("Unknown response type","warn",this.toStrin());
+            YAHOO.log("Unknown response type","warn",this.toString());
             break;
     }
 
@@ -849,7 +849,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
         var bError = false;
         var oParsedResponse = [];
-        var xmlList = (oRawResponse.getElementsByTagName && this.responseSchema.resultNode) ?
+        var xmlList = (this.responseSchema.resultNode) ?
                 oRawResponse.getElementsByTagName(this.responseSchema.resultNode) :
                 null;
         if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
