@@ -988,18 +988,6 @@ if (!YAHOO.util.Event) {
             DOMReadyEvent: new YAHOO.util.CustomEvent("DOMReady", this),
 
             /**
-             * Fires the DOMReady event if it has not fired by the time
-             * the document has loaded
-             * @method _DOMReadyFailsafe
-             * @private
-             */
-            _DOMReadyFailsafe: function() {
-                if (!DOMReady) {
-                    this._ready();
-                }
-            },
-
-            /**
              * hook up any deferred listeners
              * @method _load
              * @static
@@ -1009,7 +997,8 @@ if (!YAHOO.util.Event) {
                 loadComplete = true;
                 var EU = YAHOO.util.Event;
 
-                EU._DOMReadyFailsafe();
+                // just in case DOMReady did not go off for some reason
+                EU._ready();
 
                 // Remove the listener to assist with the IE memory issue, but not
                 // for other browsers because FF 1.0x does not like it.
@@ -1019,20 +1008,23 @@ if (!YAHOO.util.Event) {
             },
 
             /**
-             * Executed when the document is ready
+             * Fires the DOMReady event listeners the first time the document is
+             * usable.
              * @method _ready
              * @static
              * @private
              */
             _ready: function(e) {
-                DOMReady=true;
-                var EU = YAHOO.util.Event;
+                if (!DOMReady) {
+                    DOMReady=true;
+                    var EU = YAHOO.util.Event;
 
-                // Fire the content ready custom event
-                EU.DOMReadyEvent.fire();
+                    // Fire the content ready custom event
+                    EU.DOMReadyEvent.fire();
 
-                // Remove the DOMContentLoaded (FF/Opera)
-                EU._simpleRemove(document, "DOMContentLoaded", EU._ready);
+                    // Remove the DOMContentLoaded (FF/Opera)
+                    EU._simpleRemove(document, "DOMContentLoaded", EU._ready);
+                }
             },
 
             /**
