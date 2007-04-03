@@ -1338,7 +1338,7 @@ YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
 YAHOO.widget.Overlay._EVENT_TYPES = {
 
     "BEFORE_MOVE": "beforeMove",
-    "EVENT_TYPES.MOVE": "move"
+    "MOVE": "move"
 
 };
 
@@ -4215,7 +4215,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	* CustomEvent fired after cancel
 	* @event cancelEvent
 	*/
-	this.cancelEvent		= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.CANCEL, this);
+	this.cancelEvent		= new YAHOO.util.CustomEvent(EVENT_TYPES.CANCEL, this);
 };
 
 /**

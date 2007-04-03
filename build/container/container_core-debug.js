@@ -1346,7 +1346,7 @@ YAHOO.extend(YAHOO.widget.Overlay, YAHOO.widget.Module);
 YAHOO.widget.Overlay._EVENT_TYPES = {
 
     "BEFORE_MOVE": "beforeMove",
-    "EVENT_TYPES.MOVE": "move"
+    "MOVE": "move"
 
 };
 
