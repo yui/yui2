@@ -1053,6 +1053,35 @@ YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
 };
 
 /**
+ * Positions container over given element, aligning upper-left corners.
+ *
+ * @method moveContainerTo
+ * @param elCell {HTMLElement} The element.
+ */
+YAHOO.widget.ColumnEditor.prototype.moveContainerTo = function(el) {
+    var x,y;
+
+    // Don't use getXY for Opera
+    if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+        x = el.offsetLeft;
+        y = el.offsetTop;
+        while(el.offsetParent) {
+            x += el.offsetParent.offsetLeft;
+            y += el.offsetParent.offsetTop;
+            el = el.offsetParent;
+        }
+    }
+    else {
+        var xy = YAHOO.util.Dom.getXY(el);
+        x = parseInt(YAHOO.util.Dom.getX(el),10);//xy[0] + 1;
+        y = parseInt(YAHOO.util.Dom.getY(el),10);//xy[1] + 1;
+    }
+    this.container.style.left = x + "px";
+    this.container.style.top = y + "px";
+};
+
+
+/**
  * Returns ColumnEditor data value.
  *
  * @method getValue
@@ -1098,7 +1127,7 @@ YAHOO.widget.ColumnEditor.prototype.createTextareaEditor = function() {
 };
 
 /**
- * Shows ColumnEditor
+ * Shows textbox.
  *
  * @method showTextboxEditor
  * @param elCell {HTMLElement} The cell to edit.
@@ -1106,40 +1135,25 @@ YAHOO.widget.ColumnEditor.prototype.createTextareaEditor = function() {
  * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
  */
 YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord, oColumn) {
-    // Size and value
-    this.input.style.width = (parseInt(elCell.offsetWidth,10)-7) + "px";
-    this.input.style.height = (parseInt(elCell.offsetHeight,10)-7) + "px";
-    this.input.value = elCell.innerHTML;
+    // Position container
+    this.moveContainerTo(elCell);
 
-    // Position and show
-    var x,y;
-    
-    // Don't use getXY for Opera
-    if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
-        x = elCell.offsetLeft;
-        y = elCell.offsetTop;
-        while(elCell.offsetParent) {
-            x += elCell.offsetParent.offsetLeft;
-            y += elCell.offsetParent.offsetTop;
-            elCell = elCell.offsetParent;
-        }
-    }
-    else {
-        var xy = YAHOO.util.Dom.getXY(elCell);
-        x = parseInt(YAHOO.util.Dom.getX(elCell),10);//xy[0] + 1;
-        y = parseInt(YAHOO.util.Dom.getY(elCell),10);//xy[1] + 1;
-    }
-    this.container.style.left = x + "px";
-    this.container.style.top = y + "px";
+    // Update form field
+    this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
+    this.input.style.height = (parseInt(elCell.offsetHeight,10)) + "px";
+    this.input.value = elCell.innerHTML || "";
+    this.input.tabIndex = 0;
+
+    // Display container
     this.container.style.display = "block";
 
-    this.input.tabIndex = 0;
+    // Highlight input
     this.input.focus();
     this.input.select();
 };
 
 /**
- * Shows ColumnEditor
+ * Shows textarea.
  *
  * @method showTextareaEditor
  * @param elCell {HTMLElement} The cell to edit.
@@ -1147,34 +1161,19 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
  * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
  */
 YAHOO.widget.ColumnEditor.prototype.showTextareaEditor = function(elCell, oRecord, oColumn) {
-    // Size and value
-    this.input.style.width = (parseInt(elCell.offsetWidth,10)-7) + "px";
-    this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)-7) + "px";
-    this.input.value = elCell.innerHTML;
-
-    // Position and show
-    var x,y;
-
-    // Don't use getXY for Opera
-    if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
-        x = elCell.offsetLeft;
-        y = elCell.offsetTop;
-        while(elCell.offsetParent) {
-            x += elCell.offsetParent.offsetLeft;
-            y += elCell.offsetParent.offsetTop;
-            elCell = elCell.offsetParent;
-        }
-    }
-    else {
-        var xy = YAHOO.util.Dom.getXY(elCell);
-        x = parseInt(YAHOO.util.Dom.getX(elCell),10);//xy[0] + 1;
-        y = parseInt(YAHOO.util.Dom.getY(elCell),10);//xy[1] + 1;
-    }
-    this.container.style.left = x + "px";
-    this.container.style.top = y + "px";
-    this.container.style.display = "block";
-
+    // Position container
+    this.moveContainerTo(elCell);
+    
+    // Update form field
+    this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
+    this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)) + "px";
+    this.input.value = elCell.innerHTML || "";
     this.input.tabIndex = 0;
+
+    // Display container
+    this.container.style.display = "block";
+    
+    // Highlight input
     this.input.focus();
     this.input.select();
 };

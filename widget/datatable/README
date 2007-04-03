@@ -34,12 +34,14 @@ customize.
 an array of strings.
 * Improved row selection behavior to model the desktop paradigm (i.e., require
 CONTROL and/or SHIFT keys to multi-select).
+* Tweaked inline editing for better Mac performance.
 * Refactored pagination code to be easier to implement, configure, and extend.
 * Accept an error boolean from DataSource in case of data error and show error
 message.
 * Added selectRow(), rowSelectEvent, unselectRow(), rowUnselectEvent, and
 rowUpdateEvent.
 * Added constants CLASS_TABLE, CLASS_EDITOR, CLASS_FIRST, and CLASS_LAST.
+* Added ColumnEditor class moveContainerTo().
 * Add IDs and class hooks to TABLE element and ColumnEditor's container DIV.
 * Add class hooks to first and last TR elements.
 * Added hook to doBeforeLoadData() for the not-from-markup constructor flow.

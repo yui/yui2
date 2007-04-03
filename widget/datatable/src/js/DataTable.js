@@ -3560,6 +3560,10 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
             this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.yuiRecordId));
             this._bFocused = true;
             if(this.activeEditor) {
+                // Explicitly call unhighlight for SF2
+                if(YAHOO.util.Dom.hasClass(elCell, YAHOO.widget.DataTable.CLASS_HIGHLIGHT)) {
+                    this.unhighlight(elCell);
+                }
                 this.fireEvent("editorShowEvent",{target:elCell,column:column});
                 YAHOO.log("Editor \"" + this.activeEditor.type + "\" activated for cell \"" + elCell.id + "\"", "info", this.toString());
             }
@@ -3775,11 +3779,17 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
 YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     var evt = oArgs.event;
     var target = oArgs.target;
+    var elTag = target.tagName.toLowerCase();
 
-    //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(target.tagName.toLowerCase() != "td") {
+    while(elTag != "td") {
+        // Bail out
+        if(elTag == "body") {
+            return;
+        }
+        
         target = target.parentNode;
+        elTag = target.tagName.toLowerCase();
     }
 
     if(this.isSelected(target)) {
@@ -3802,15 +3812,21 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
     var evt = oArgs.event;
-    var element = oArgs.target;
+    var target = oArgs.target;
+    var elTag = target.tagName.toLowerCase();
 
-    //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(element.tagName.toLowerCase() != "td") {
-        element = element.parentNode;
+    while(elTag != "td") {
+        // Bail out
+        if(elTag == "body") {
+            return;
+        }
+
+        target = target.parentNode;
+        elTag = target.tagName.toLowerCase();
     }
 
-    this.formatCell(element);
+    this.formatCell(target);
 };
 
 /**
@@ -3822,14 +3838,21 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
     var evt = oArgs.event;
-    var element = oArgs.target;
+    var target = oArgs.target;
+    var elTag = target.tagName.toLowerCase();
 
-    //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(element.tagName.toLowerCase() != "td") {
-        element = element.parentNode;
+    while(elTag != "td") {
+        // Bail out
+        if(elTag == "body") {
+            return;
+        }
+
+        target = target.parentNode;
+        elTag = target.tagName.toLowerCase();
     }
-    this.highlight(element);
+
+    this.highlight(target);
 };
 
 /**
@@ -3841,15 +3864,21 @@ YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
     var evt = oArgs.event;
-    var element = oArgs.target;
+    var target = oArgs.target;
+    var elTag = target.tagName.toLowerCase();
 
-    //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(element.tagName.toLowerCase() != "td") {
-        element = element.parentNode;
+    while(elTag != "td") {
+        // Bail out
+        if(elTag == "body") {
+            return;
+        }
+
+        target = target.parentNode;
+        elTag = target.tagName.toLowerCase();
     }
-    
-    this.unhighlight(element);
+
+    this.unhighlight(target);
 };
 /**
  * Overridable custom event handler to edit cell.
@@ -3860,15 +3889,21 @@ YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
     var evt = oArgs.event;
-    var element = oArgs.target;
+    var target = oArgs.target;
+    var elTag = target.tagName.toLowerCase();
 
-    //TODO: add a safety net in case TD is never reached
     // Walk up the DOM until we get to the TD
-    while(element.tagName.toLowerCase() != "td") {
-        element = element.parentNode;
+    while(elTag != "td") {
+        // Bail out
+        if(elTag == "body") {
+            return;
+        }
+
+        target = target.parentNode;
+        elTag = target.tagName.toLowerCase();
     }
 
-    this.editCell(element);
+    this.editCell(target);
 };
 
 /**
