@@ -31,29 +31,26 @@ The following code example provides a step-by-step approach to creating a simple
 
 <h3>The Callback Object</h3>
 <p>Create a callback object to handle the response, and pass an object literal to both success and failure as the argument.</p>
-<pre><textarea name="code" class="JScript" cols="60" rows="1">var handleSuccess = function(o){
+<pre><textarea name="code" class="JScript" cols="60" rows="1">
+var div = document.getElementById('container');
 
-	function parseHeaders(){
-		var allHeaders = headerStr.split("\n");
-		var headers;
-		for(var i=0; i < headers.length; i++){
-			var delimitPos = header[i].indexOf(':');
-			if(delimitPos != -1){
-				headers[i] = "&lt;p&gt" +
-				headers[i].substring(0,delimitPos) + ":"+
-				headers[i].substring(delimitPos+1) + "&lt;/p&gt;";
-			}
-		return headers;
-	}
-
+var handleSuccess = function(o){
 	if(o.responseText !== undefined){
-		div.innerHTML = "Transaction id: " + o.tId;
-		div.innerHTML += "HTTP status: " + o.status;
-		div.innerHTML += "Status code message: " + o.statusText;
-		div.innerHTML += "HTTP headers: " + parseHeaders();
-		div.innerHTML += "Server response: " + o.responseText;
-		div.innerHTML += "Argument object: property foo = " + o.argument.foo +
-						 "and property bar = " + o.argument.bar;
+		div.innerHTML = "&lt;li&gt;Transaction id: " + o.tId + "&lt;/li&gt;";
+		div.innerHTML += "&lt;li&gt;HTTP status: " + o.status + "&lt;/li&gt;";
+		div.innerHTML += "&lt;li&gt;Status code message: " + o.statusText + "&lt;/li&gt;";
+		div.innerHTML += "&lt;li&gt;HTTP headers: &lt;ul&gt;" + o.getAllResponseHeaders + "&lt;/ul&gt;&lt;/li&gt;";
+		div.innerHTML += "&lt;li&gt;Server response: " + o.responseText + "&lt;/li&gt;";
+		div.innerHTML += "&lt;li&gt;Argument object: Object ( [foo] =&gt; " + o.argument.foo +
+						 " [bar] =&gt; " + o.argument.bar +" )&lt;/li&gt;";
+	}
+}
+
+var handleFailure = function(o){
+	if(o.responseText !== undefined){
+		div.innerHTML = "&lt;li&gt;Transaction id: " + o.tId + "&lt;/li&gt;";
+		div.innerHTML += "&lt;li&gt;HTTP status: " + o.status + "&lt;/li&gt;";
+		div.innerHTML += "&lt;li&gt;Status code message: " + o.statusText + "&lt;/li&gt;";
 	}
 }
 
@@ -115,7 +112,7 @@ function makeRequest(){
 </script>
 <form><input type="button" value="Send a GET Request" onClick="makeRequest();"></form>
 
-<script src="../../docs/assets/dpSyntaxHighlighter.js"></script>
+<script src="../../examples/assets/dpSyntaxHighlighter.js"></script>
 <script language="javascript">
 dp.SyntaxHighlighter.HighlightAll('code');
 </script>
