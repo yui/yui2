@@ -476,14 +476,6 @@ if (!YAHOO.util.Event) {
         var onAvailStack = [];
 
         /**
-         * We sort the stack when this is true
-         * @propery onAvailStackDirty
-         * @private
-         * @static
-         */
-        var onAvailStackDirty = true;
-
-        /**
          * Lookup table for legacy events
          * @property legacyMap
          * @static
@@ -684,7 +676,6 @@ if (!YAHOO.util.Event) {
                                      obj:        p_obj, 
                                      override:   p_override, 
                                      checkReady: false    } );
-                onAvailStackDirty = true;
                 retryCount = this.POLL_RETRYS;
                 this.startInterval();
             },
@@ -730,7 +721,6 @@ if (!YAHOO.util.Event) {
                                      override:   p_override,
                                      checkReady: true      } );
 
-                onAvailStackDirty = true;
                 retryCount = this.POLL_RETRYS;
                 this.startInterval();
             },
@@ -1441,41 +1431,45 @@ if (!YAHOO.util.Event) {
                 // onAvailable
                 var notAvail = [];
 
-                // process onAvailable items first
-                if (onAvailStackDirty) {
-                    onAvailStack.sort(function(a, b) {
-                                if (b.checkReady && !a.checkReady) {
-                                    return -1;
-                                } else if (a.checkReady && !b.checkReady) {
-                                    return 1;
-                                } else {
-                                    return 0;
-                                }
-                            });
-                    onAvailStackDirty = false;
+                var executeItem = function (el, item) {
+                    var scope = el;
+                    if (item.override) {
+                        if (item.override === true) {
+                            scope = item.obj;
+                        } else {
+                            scope = item.override;
+                        }
+                    }
+                    item.fn.call(scope, item.obj);
+                };
+
+                var i,len,item,el;
+
+                // onAvailable
+                for (i=0,len=onAvailStack.length; i<len; ++i) {
+                    item = onAvailStack[i];
+                    if (item && !item.checkReady) {
+                        el = this.getEl(item.id);
+                        if (el) {
+                            executeItem(el, item);
+                            onAvailStack[i] = null;
+                        } else {
+                            notAvail.push(item);
+                        }
+                    }
                 }
 
-                for (var i=0,len=onAvailStack.length; i<len ; ++i) {
-                    var item = onAvailStack[i];
-                    if (item) {
-                        var el = this.getEl(item.id);
+                // onContentReady
+                for (i=0,len=onAvailStack.length; i<len; ++i) {
+                    item = onAvailStack[i];
+                    if (item && item.checkReady) {
+                        el = this.getEl(item.id);
 
                         if (el) {
                             // The element is available, but not necessarily ready
                             // @todo should we test parentNode.nextSibling?
-                            if ( !item.checkReady || 
-                                    loadComplete || 
-                                    el.nextSibling ) {
-
-                                var scope = el;
-                                if (item.override) {
-                                    if (item.override === true) {
-                                        scope = item.obj;
-                                    } else {
-                                        scope = item.override;
-                                    }
-                                }
-                                item.fn.call(scope, item.obj);
+                            if (loadComplete || el.nextSibling) {
+                                executeItem(el, item);
                                 onAvailStack[i] = null;
                             }
                         } else {
