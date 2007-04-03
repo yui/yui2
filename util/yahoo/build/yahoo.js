@@ -343,6 +343,10 @@ YAHOO.lang = {
      *                              if present.
      */
     extend: function(subc, superc, overrides) {
+        if (!superc||!subc) {
+            throw new Error("YAHOO.lang.extend failed, please check that " +
+                            "all dependencies are included.");
+        }
         var F = function() {};
         F.prototype=superc.prototype;
         subc.prototype=new F();
@@ -375,6 +379,10 @@ YAHOO.lang = {
      *                             overwrite an existing property in the receiver
      */
     augment: function(r, s) {
+        if (!s||!r) {
+            throw new Error("YAHOO.lang.augment failed, please check that " +
+                            "all dependencies are included.");
+        }
         var rp=r.prototype, sp=s.prototype, a=arguments, i, p;
         if (a[2]) {
             for (i=2; i<a.length; i=i+1) {

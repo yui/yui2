@@ -4,6 +4,8 @@ YAHOO Global - Release Notes
 
   * YAHOO.lang.isObject returns false for null
   * YAHOO.lang.isArray no longer generates an error when the argument is null/undefined
+  * Better error messages for YAHOO.lang.augment/extend failures that are usually due 
+    to missing dependencies.
 
 2.2.0a
 
