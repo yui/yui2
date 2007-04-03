@@ -2,6 +2,12 @@ Drag and Drop Release Notes
 
 2.2.1
 
+  * Added YAHOO.util.DragDropMgr.interactionInfo, which is
+    a repository of interaction information accumulated during
+    the current event loop result, and accessible from the
+    handlers for the events.
+  * The region for the dragged element is now cached while
+    processing the drag and drop events
   * List example supports moving an item to an empty list
   * Fixed missing html tags in the examples
 

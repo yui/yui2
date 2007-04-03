@@ -620,7 +620,7 @@ YAHOO.util.DragDrop.prototype = {
         this.lastPageX = p[0];
         this.lastPageY = p[1];
 
-        this.logger.log(this.id + " inital position: " + this.initPageX + 
+        this.logger.log(this.id + " initial position: " + this.initPageX + 
                 ", " + this.initPageY);
 
 
@@ -635,7 +635,7 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setStartPosition: function(pos) {
-        var p = pos || Dom.getXY( this.getEl() );
+        var p = pos || Dom.getXY(this.getEl());
 
         this.deltaSetXY = null;
 

@@ -12,40 +12,6 @@
 
 <script type="text/javascript" src="../../build/dragdrop/dragdrop-debug.js" ></script>
 <script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-
-<style>
-
-div.workarea { padding:10px; float:left }
-
-ul.draglist { 
-    position: relative;
-    width: 200px; 
-    height:400px;
-    background: #f7f7f7;
-    border: 1px solid gray;
-    list-style: none;
-    overflow: visible;
-    margin:0;
-    padding:0;
-}
-
-ul.draglist li {
-    margin: 2px;
-    cursor: move; 
-}
-
-ul.draglist li.list1 {
-    background-color: #D1E6EC;
-    border:1px solid #7EA6B2;
-}
-
-ul.draglist li.list2 {
-    background-color: #D8D4E2;
-    border:1px solid #6B4C86;
-}
-
-</style>
-
 <script type="text/javascript">
 
 //////////////////////////////////////////////////////////////////////////////
@@ -71,6 +37,7 @@ YAHOO.example.DDApp = function() {
             new YAHOO.example.DDList("li2_3");
 
             Event.on("showButton", "click", this.showOrder);
+            Event.on("switchButton", "click", this.switchStyles);
         },
 
         showOrder: function() {
@@ -92,7 +59,13 @@ YAHOO.example.DDApp = function() {
 
             alert(out);
 
+        },
+
+        switchStyles: function() {
+            Dom.get("ul1").className = "draglist_alt";
+            Dom.get("ul2").className = "draglist_alt";
         }
+
     };
 } ();
 
@@ -107,17 +80,13 @@ var DDM = YAHOO.util.DragDropMgr;
 
 YAHOO.example.DDList = function(id, sGroup, config) {
 
-    if (id) {
-        this.init(id, sGroup, config);
-        this.initFrame();
-        this.logger = this.logger || YAHOO;
-    }
+    YAHOO.example.DDList.superclass.constructor.call(this, id, sGroup, config);
 
+    this.logger = this.logger || YAHOO;
     var el = this.getDragEl();
     Dom.setStyle(el, "opacity", 0.67);
     this.host= config && config.hostId;
 
-    this.setPadding(-3);
     this.goingUp = false;
     this.lastY = 0;
 };
@@ -125,8 +94,6 @@ YAHOO.example.DDList = function(id, sGroup, config) {
 YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
 
     startDrag: function(x, y) {
-
-
         this.logger.log(this.id + " startDrag");
 
         // make the proxy look like the source element
@@ -170,9 +137,24 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
 
     onDragDrop: function(e, id) {
         YAHOO.log("DROP: " + id, "warn");
-        // we could try to apply logic to detect the case when the item
-        // is dropped below the last item in the list, and append it to
-        // that list.
+
+
+        // If there is one drop interaction, the li was dropped either on the list,
+        // or it was dropped on the current location of the source element.
+        if (DDM.interactionInfo.drop.length === 1) {
+            // Check to see if we are over the source element's location.  We will
+            // append to the bottom of the list once we are sure it was a white
+            // space drop
+            var pt = DDM.interactionInfo.point;
+            var region = DDM.interactionInfo.sourceRegion;
+            if (!region.intersect(pt)) {
+                var destEl = Dom.get(id);
+                var destDD = DDM.getDDById(id);
+                destEl.appendChild(this.getEl());
+                destDD.isEmpty = false;
+                DDM.refreshCache();
+            }
+        }
     },
 
     onDrag: function(e, id) {
@@ -195,18 +177,8 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
         var srcEl = this.getEl();
         var destEl = Dom.get(id);
 
-        // if the destination element is not a list item, then
-        // it is the list.  We will ignore all events that
-        // happen on the list unless that list is empty.
-        if (destEl.nodeName.toLowerCase() != "li") {
-            var destDD = DDM.getDDById(destEl.id);
-            if (destDD.isEmpty) {
-                destEl.appendChild(this.getEl());
-                destDD.isEmpty = false;
-                DDM.refreshCache();
-            }
-        } else {
-
+        // We are only concerned with dragovers
+        if (destEl.nodeName.toLowerCase() == "li") {
             var orig_p = srcEl.parentNode;
             var p = destEl.parentNode;
 
@@ -235,12 +207,6 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
         }
     },
 
-    onDragEnter: function(e, id) {
-    },
-
-    onDragOut: function(e, id) {
-    },
-
     toString: function() {
         return "DDList " + this.id;
     }
@@ -254,11 +220,64 @@ YAHOO.util.Event.addListener(window, "load",
         YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
     
 </script>
+<style type="text/css">
+
+div.workarea { padding:10px; float:left }
+
+ul.draglist { 
+    position: relative;
+    width: 200px; 
+    height:300px;
+    background: #f7f7f7;
+    border: 1px solid gray;
+    list-style: none;
+    margin:0;
+    padding:0;
+}
+
+ul.draglist li {
+    margin: 1px;
+    cursor: move; 
+}
+
+ul.draglist_alt { 
+    position: relative;
+    width: 200px; 
+    list-style: none;
+    margin:0;
+    padding:0;
+    /*
+       The bottom padding provides the cushion that makes the empty 
+       list targetable.  Alternatively, we could leave the padding 
+       off by default, adding it when we detect that the list is empty.
+    */
+    padding-bottom:20px;
+}
+
+ul.draglist_alt li {
+    margin: 1px;
+    cursor: move; 
+}
+
+
+li.list1 {
+    background-color: #D1E6EC;
+    border:1px solid #7EA6B2;
+}
+
+li.list2 {
+    background-color: #D8D4E2;
+    border:1px solid #6B4C86;
+}
+
+#user_actions { float:right }
+
+</style>
+
 <body>
 
 <div id="pageTitle"><h3>Drag and Drop - DDProxy</h3></div>
-
-
+  
 <style type="text/css">
 
 /* logger default styles */
@@ -347,41 +366,52 @@ YAHOO.util.Event.addListener(window, "load",
 
 
 </div>
-
-
   <div id="content">
     <form name="dragDropForm" action="javscript:;">
     <div class="newsItem">
+      <span id="user_actions">
+        <input type="button" id="showButton" value="Show Current Order" />
+        <input type="button" id="switchButton" value="Remove List Background" />
+      </span>
       <h3>Sortable List</h3>
       <p>
-
-        <input type="button" id="showButton" value="Show Current Order" />
+In the sortable list example, we extend DDProxy instead of DD
+so that we can use the source element as the "insertion point". 
+When the drag starts, the proxy element style and content is
+adjusted to match the source element, and visibility:hidden is
+applied to the source element.</p>
+<p>
+To facilitate dragging into an empty list, we make the two list
+elements DDTargets.  When interacting with the list item, we
+will get two notifications (one for the list, one for the list
+item).  We ignore all dragOver events that happen on the list 
+and ignore all dragDrop events unless the drop was in the 
+list's white space (not over another list item).
       </p>
 
- <div class="workarea">
- <h3>List 1</h3>
- <ul id="ul1" class="draglist">
-   <li class="list1" id="li1_1">list 1, item 1</li>
-   <li class="list1" id="li1_2">list 1, item 2</li>
-   <li class="list1" id="li1_3">list 1, item 3</li>
- </ul>
- </div>
+      <div class="workarea">
+        <h3>List 1</h3>
+        <ul id="ul1" class="draglist">
+          <li class="list1" id="li1_1">list 1, item 1</li>
+          <li class="list1" id="li1_2">list 1, item 2</li>
+          <li class="list1" id="li1_3">list 1, item 3</li>
+        </ul>
+      </div>
 
 
- <div class="workarea">
- <h3>List 2</h3>
- <ul id="ul2" class="draglist">
-   <li class="list2" id="li2_1">list 2, item 1</li>
-   <li class="list2" id="li2_2">list 2, item 2</li>
-   <li class="list2" id="li2_3">list 2, item 3</li>
- </ul>
- </div>
+      <div class="workarea">
+        <h3>List 2</h3>
+        <ul id="ul2" class="draglist">
+          <li class="list2" id="li2_1">list 2, item 1</li>
+          <li class="list2" id="li2_2">list 2, item 2</li>
+          <li class="list2" id="li2_3">list 2, item 3</li>
+        </ul>
+      </div>
 
     </div>
     </form>
   </div>
-    
-      <div id="footerContainer">
+        <div id="footerContainer">
         <div id="footer">
           <p>&nbsp;</p>
         </div>

@@ -124,6 +124,28 @@ YAHOO.util.DragDropMgr = function() {
          */
         locked: false,
 
+
+        /**
+         * Provides additional information about the the current set of
+         * interactions.  Can be accessed from the event handlers. It
+         * contains the following properties:
+         *
+         *       out:       onDragOut interactions
+         *       enter:     onDragEnter interactions
+         *       over:      onDragOver interactions
+         *       drop:      onDragDrop interactions
+         *       point:     The location of the cursor
+         *       draggedRegion: The location of dragged element at the time
+         *                      of the interaction
+         *       sourceRegion: The location of the source elemtn at the time
+         *                     of the interaction
+         *       validDrop: boolean
+         * @property interactionInfo
+         * @type object
+         * @static
+         */
+        interactionInfo: null,
+
         /**
          * Called the first time an element is registered.
          * @method init
@@ -693,7 +715,12 @@ YAHOO.util.DragDropMgr = function() {
             var x = YAHOO.util.Event.getPageX(e);
             var y = YAHOO.util.Event.getPageY(e);
             var pt = new YAHOO.util.Point(x,y);
-
+            var pos = dc.getTargetCoord(pt.x, pt.y);
+            var el = dc.getDragEl();
+            curRegion = new YAHOO.util.Region( pos.y, 
+                                               pos.x + el.offsetWidth,
+                                               pos.y + el.offsetHeight, 
+                                               pos.x );
             // cache the previous dragOver array
             var oldOvers = [];
 
@@ -701,6 +728,7 @@ YAHOO.util.DragDropMgr = function() {
             var overEvts  = [];
             var dropEvts  = [];
             var enterEvts = [];
+
 
             // Check to see if the object(s) we were hovering over is no longer 
             // being hovered over so we can fire the onDragOut event
@@ -712,7 +740,7 @@ YAHOO.util.DragDropMgr = function() {
                     continue;
                 }
 
-                if (! this.isOverTarget(pt, ddo, this.mode)) {
+                if (! this.isOverTarget(pt, ddo, this.mode, curRegion)) {
                     outEvts.push( ddo );
                 }
 
@@ -734,7 +762,7 @@ YAHOO.util.DragDropMgr = function() {
                     }
 
                     if (oDD.isTarget && !oDD.isLocked() && oDD != dc) {
-                        if (this.isOverTarget(pt, oDD, this.mode)) {
+                        if (this.isOverTarget(pt, oDD, this.mode, curRegion)) {
                             // look for drop interactions
                             if (isDrop) {
                                 dropEvts.push( oDD );
@@ -755,6 +783,25 @@ YAHOO.util.DragDropMgr = function() {
                     }
                 }
             }
+
+            this.interactionInfo = {
+                out:       outEvts,
+                enter:     enterEvts,
+                over:      overEvts,
+                drop:      dropEvts,
+                point:     pt,
+                draggedRegion:    curRegion,
+                sourceRegion: this.locationCache[dc.id],
+                validDrop: isDrop
+            };
+
+            // notify about a drop that did not find a target
+            if (isDrop && !dropEvts.length) {
+                this.logger.log(dc.id + " dropped, but not on a target");
+                this.interactionInfo.validDrop = false;
+                dc.onInvalidDrop(e);
+            }
+
 
             if (this.mode) {
                 if (outEvts.length) {
@@ -811,13 +858,6 @@ YAHOO.util.DragDropMgr = function() {
                 }
 
             }
-
-            // notify about a drop that did not find a target
-            if (isDrop && !dropEvts.length) {
-                this.logger.log(dc.id + " dropped, but not on a target");
-                dc.onInvalidDrop(e);
-            }
-
         },
 
         /**
@@ -977,11 +1017,13 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
          * @method isOverTarget
          * @param {YAHOO.util.Point} pt The point to evaluate
          * @param {DragDrop} oTarget the DragDrop object we are inspecting
+         * @param {boolean} intersect true if we are in intersect mode
+         * @param {YAHOO.util.Region} pre-cached location of the dragged element
          * @return {boolean} true if the mouse is over the target
          * @private
          * @static
          */
-        isOverTarget: function(pt, oTarget, intersect) {
+        isOverTarget: function(pt, oTarget, intersect, curRegion) {
             // use cache if available
             var loc = this.locationCache[oTarget.id];
             if (!loc || !this.useCache) {
@@ -1022,13 +1064,15 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
             // location of the mouse event less the delta that represents
             // where the original mousedown happened on the element.  We
             // need to consider constraints and ticks as well.
-            var pos = dc.getTargetCoord(pt.x, pt.y);
 
-            var el = dc.getDragEl();
-            var curRegion = new YAHOO.util.Region( pos.y, 
+            if (!curRegion) {
+                var pos = dc.getTargetCoord(pt.x, pt.y);
+                var el = dc.getDragEl();
+                curRegion = new YAHOO.util.Region( pos.y, 
                                                    pos.x + el.offsetWidth,
                                                    pos.y + el.offsetHeight, 
                                                    pos.x );
+            }
 
             var overlap = curRegion.intersect(loc);
 
@@ -1987,7 +2031,7 @@ YAHOO.util.DragDrop.prototype = {
         this.lastPageX = p[0];
         this.lastPageY = p[1];
 
-        this.logger.log(this.id + " inital position: " + this.initPageX + 
+        this.logger.log(this.id + " initial position: " + this.initPageX + 
                 ", " + this.initPageY);
 
 
@@ -2002,7 +2046,7 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     setStartPosition: function(pos) {
-        var p = pos || Dom.getXY( this.getEl() );
+        var p = pos || Dom.getXY(this.getEl());
 
         this.deltaSetXY = null;
 
