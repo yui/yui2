@@ -179,7 +179,7 @@ YAHOO.widget.Dialog.prototype.initEvents = function() {
 	* CustomEvent fired after cancel
 	* @event cancelEvent
 	*/
-	this.cancelEvent		= new YAHOO.util.CustomEvent(YAHOO.widget.Dialog.CANCEL, this);
+	this.cancelEvent		= new YAHOO.util.CustomEvent(EVENT_TYPES.CANCEL, this);
 };
 
 /**
