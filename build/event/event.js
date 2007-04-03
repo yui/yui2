@@ -1427,9 +1427,9 @@ if (!YAHOO.util.Event) {
                 // process onAvailable items first
                 if (onAvailStackDirty) {
                     onAvailStack.sort(function(a, b) {
-                                if (b.checkReady) {
+                                if (b.checkReady && !a.checkReady) {
                                     return -1;
-                                } else if (a.checkReady) {
+                                } else if (a.checkReady && !b.checkReady) {
                                     return 1;
                                 } else {
                                     return 0;
