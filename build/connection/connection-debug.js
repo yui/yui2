@@ -71,7 +71,7 @@ YAHOO.util.Connect =
   * @static
   * @type boolean
   */
-    _default_post_header:'application/x-www-form-urlencoded',
+    _default_post_header:'application/x-www-form-urlencoded; charset=UTF-8',
 
  /**
   * @description Determines if a default header of
@@ -504,9 +504,10 @@ YAHOO.util.Connect =
 			}
 		}
 		catch(e){
-			// 13030 is the custom code to indicate the condition -- in Mozilla/FF --
-			// when the o object's status and statusText properties are
-			// unavailable, and a query attempt throws an exception.
+
+			 // 13030 is the custom code to indicate the condition -- in Mozilla/FF --
+			 // when the o object's status and statusText properties are
+			 // unavailable, and a query attempt throws an exception.
 			httpStatus = 13030;
 		}
 
