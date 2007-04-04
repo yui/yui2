@@ -5,7 +5,7 @@ DataTable Release Notes
 * Changed default pagination from enabled to disabled. Must set property
 paginator to true to enable built-in client-side pagination.
 * Removed deleteSelectedRows() and added deleteRows().
-* Deprecated properties isEmpty and isLoadings, and methods showLoadingMessage(),
+* Deprecated properties isEmpty and isLoading, and methods showLoadingMessage(),
 showEmptyMessage(), and hideTableMessages(). Implementers should now use
 showTableMessage() and hideTableMessage().
 * Deprecated methods paginateRows() and onDataReturnPaginateRows(). Implementers
@@ -23,12 +23,12 @@ in as an argument.
 * Fixed Column sorting of null, undefined, and empty values.
 * Fixed Column sorting of nested headers.
 * Fixed paginator dropdowns to stay in sync when paginating.
-* Changing page saves editor data.
 * Fixed rowSingleSelect for paginated DataTable.
 * Fix for currency values with more than 2 decimal places.
 * Fixed broken TR ID assignments in replaceRows().
 * Fixed Opera UI artifacting problem when repaginating via dropdowns.
-* Fixed orphaned ColumnEditor during pagination or other de facto blur interaction.
+* Fixed orphaned ColumnEditor during pagination or other de facto blur
+interaction. Data gets saved.
 * Extracted non-foundational CSS for scrollable DataTables to make UI easier to
 customize.
 * Updated methods select() and unselect() to also accept an array of elements or
@@ -39,6 +39,8 @@ CONTROL and/or SHIFT keys to multi-select).
 * Refactored pagination code to be easier to implement, configure, and extend.
 * Accept an error boolean from DataSource in case of data error and show error
 message.
+* The CustomEvent rowDeleteEvent now sends argument rowIndexes as an Array of
+row index values.
 * Added selectRow(), rowSelectEvent, unselectRow(), rowUnselectEvent, and
 rowUpdateEvent.
 * Added constants CLASS_TABLE, CLASS_EDITOR, CLASS_FIRST, and CLASS_LAST.
