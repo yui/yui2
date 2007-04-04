@@ -20,7 +20,7 @@ if ($_section && $_step) {
 
 	$include = "include/$_section$_step.php";
 	$buildPath = "../../../build";
-	$docPath = "../../../docs";
+	$examplesPath = "../../../examples";
 	$assetPath = "../assets";
 } else {
 	$SECTION_NAME = "Tutorials";
@@ -28,7 +28,7 @@ if ($_section && $_step) {
 
 	$include = "include/landing.php";
 	$buildPath = "../../build";
-	$docPath = "../../docs";
+	$examplesPath = "../../examples";
 	$assetPath = "assets";
 }
 ?>
@@ -38,7 +38,7 @@ if ($_section && $_step) {
 
 	<link type="text/css" rel="stylesheet" href="<?=$buildPath?>/reset-fonts-grids/reset-fonts-grids.css">
 
-	<link rel="stylesheet" type="text/css" href="<?=$docPath?>/assets/dpSyntaxHighlighter.css">
+	<link rel="stylesheet" type="text/css" href="<?=$examplesPath?>/assets/dpSyntaxHighlighter.css">
 	<link type="text/css" rel="stylesheet" href="<?=$assetPath?>/style.css">
 </head>
 
@@ -81,7 +81,7 @@ if ($_section && $_step) {
 		<div id="ft">&nbsp;</div>
 	</div>	
 
-	<script src="<?=$docPath?>/assets/dpSyntaxHighlighter.js"></script>
+	<script src="<?=$examplesPath?>/assets/dpSyntaxHighlighter.js"></script>
 	<script language="javascript"> 
 		dp.SyntaxHighlighter.HighlightAll('code'); 
 	</script>

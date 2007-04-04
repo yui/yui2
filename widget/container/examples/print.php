@@ -20,7 +20,7 @@ $stepCount = count($sections[$_section]["pages"]);
 
 	<link type="text/css" rel="stylesheet" href="/examples/css/style.css">
 
-	<link rel="stylesheet" type="text/css" href="/docs/assets/dpSyntaxHighlighter.css">
+	<link rel="stylesheet" type="text/css" href="/examples/assets/dpSyntaxHighlighter.css">
 
 	<script type="text/javascript" src="/build/yahoo/yahoo.js"></script>
 	<script type="text/javascript" src="/build/event/event.js" ></script>
@@ -71,7 +71,7 @@ $stepCount = count($sections[$_section]["pages"]);
 
 	<div id="ft">&nbsp;</div>
 
-	<script src="/docs/assets/dpSyntaxHighlighter.js"></script>
+	<script src="/examples/assets/dpSyntaxHighlighter.js"></script>
 	<script language="javascript"> 
 		dp.SyntaxHighlighter.HighlightAll('code'); 
 	</script>
