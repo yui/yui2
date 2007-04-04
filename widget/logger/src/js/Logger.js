@@ -27,7 +27,7 @@
  * @static
  */
 YAHOO.widget.Logger = {
-    // Initialize members
+    // Initialize properties
     loggerEnabled: true,
     _browserConsoleEnabled: false,
     categories: ["info","warn","error","time","window"],
@@ -38,6 +38,86 @@ YAHOO.widget.Logger = {
     _lastTime: null // timestamp of last logged message
 };
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public properties
+//
+/////////////////////////////////////////////////////////////////////////////
+/**
+ * True if Logger is enabled, false otherwise.
+ *
+ * @property loggerEnabled
+ * @type Boolean
+ * @static
+ * @default true
+ */
+
+/**
+ * Array of categories.
+ *
+ * @property categories
+ * @type String[]
+ * @static
+ * @default ["info","warn","error","time","window"]
+ */
+
+/**
+ * Array of sources.
+ *
+ * @property sources
+ * @type String[]
+ * @static
+ * @default ["global"]
+ */
+
+/**
+ * Upper limit on size of internal stack.
+ *
+ * @property maxStackEntries
+ * @type Number
+ * @static
+ * @default 2500
+ */
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private properties
+//
+/////////////////////////////////////////////////////////////////////////////
+/**
+ * Internal property to track whether output to browser console is enabled.
+ *
+ * @property _browserConsoleEnabled
+ * @type Boolean
+ * @static
+ * @default false
+ * @private
+ */
+
+/**
+ * Array to hold all log messages.
+ *
+ * @property _stack
+ * @type Array
+ * @static
+ * @private
+ */
+/**
+ * Static timestamp of Logger initialization.
+ *
+ * @property _startTime
+ * @type Date
+ * @static
+ * @private
+ */
+/**
+ * Timestamp of last logged message.
+ *
+ * @property _lastTime
+ * @type Date
+ * @static
+ * @private
+ */
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
