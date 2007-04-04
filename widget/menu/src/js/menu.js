@@ -167,8 +167,7 @@ YAHOO.widget.Menu._DEFAULT_CONFIG = {
     },
 
     "CONTAINER": { 
-        key: "container", 
-        value: document.body
+        key: "container"
     }, 
 
     "MAX_HEIGHT": { 
@@ -2747,7 +2746,7 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
             }
             else {
 
-                this.render();                
+                this.render();
 
             }
 
@@ -4561,7 +4560,7 @@ initDefaultConfig: function() {
 	   DEFAULT_CONFIG.CONTAINER.key, 
 	   { 
 	       handler: this.configContainer,
-	       value: DEFAULT_CONFIG.CONTAINER.value
+	       value: document.body
        } 
    );
 
