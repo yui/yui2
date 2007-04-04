@@ -45,7 +45,8 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 */
 YAHOO.widget.ContextMenu._EVENT_TYPES = {
 
-    "TRIGGER_CONTEXT_MENU": "triggerContextMenuEvent",
+    "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
+
     "CONTEXT_MENU": (
                         (YAHOO.widget.Module.prototype.browser == "opera" ? 
                             "mousedown" : "contextmenu")
