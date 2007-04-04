@@ -4656,18 +4656,46 @@ YAHOO.widget.Dialog.prototype.getData = function() {
             nTotalElements = aElements.length,
             oData = {},
             sName,
-            oElement;
-
+            oElement,
+            nElements;
 
         for(var i=0; i<nTotalElements; i++) {
 
-            sName = aElements[i].name,
-            oElement = aElements[sName];
+            sName = aElements[i].name;
 
+            function isFormElement(p_oElement) {
+            
+                var sTagName = p_oElement.tagName.toUpperCase();
+                
+                return (
+                    (
+                        sTagName == "INPUT" || 
+                        sTagName == "TEXTAREA" || 
+                        sTagName == "SELECT"
+                    ) && 
+                    p_oElement.name == sName
+                );
 
-            if(oElement) {
+            }
 
-                if(oElement.tagName) {
+            /*
+                Using "YAHOO.util.Dom.getElementsBy" to safeguard
+                user from JS errors that result from giving a form field (or 
+                set of fields) the same name as a native method of a form 
+                (like "submit") or a DOM collection (such as the "item" method).
+                Originally tried accessing fields via the "namedItem" method of 
+                the "element" collection, but discovered that it won't return
+                a collection of fields in Gecko.
+            */
+
+            oElement = YAHOO.util.Dom.getElementsBy(isFormElement, "*", oForm);
+            nElements = oElement.length;
+
+            if(nElements > 0) {
+
+                if(nElements == 1) {
+
+                    oElement = oElement[0];
 
                     var sType = oElement.type,
                         sTagName = oElement.tagName.toUpperCase();
@@ -4734,9 +4762,7 @@ YAHOO.widget.Dialog.prototype.getData = function() {
                 }
                 else {
 
-                    var nElements = oElement.length,
-                        sType = oElement[0].type;
-
+                    var sType = oElement[0].type;
 
                     switch(sType) {
 
