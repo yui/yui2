@@ -411,7 +411,7 @@ YAHOO.widget.MenuManager = function() {
     */
     function onItemDestroy(p_sType, p_aArgs) {
 
-        var sId = p_oItem.id;
+        var sId = this.id;
 
         if(sId && m_oItems[sId]) {
 
