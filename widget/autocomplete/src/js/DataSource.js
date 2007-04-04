@@ -62,11 +62,11 @@ YAHOO.widget.DataSource.ERROR_DATAPARSE = "Response data could not be parsed";
 YAHOO.widget.DataSource.prototype.maxCacheEntries = 15;
 
 /**
- * Use this to equate cache matching with the type of matching done by your live
- * data source. If caching is on and queryMatchContains is true, the cache
- * returns results that "contain" the query string. By default,
- * queryMatchContains is set to false, meaning the cache only returns results
- * that "start with" the query string.
+ * Use this to fine-tune the matching algorithm used against JS Array types of
+ * DataSource and DataSource caches. If queryMatchContains is true, then the JS
+ * Array or cache returns results that "contain" the query string. By default,
+ * queryMatchContains is set to false, so that only results that "start with"
+ * the query string are returned.
  *
  * @property queryMatchContains
  * @type Boolean
@@ -90,9 +90,9 @@ YAHOO.widget.DataSource.prototype.queryMatchContains = false;
 YAHOO.widget.DataSource.prototype.queryMatchSubset = false;
 
 /**
- * Enables query case-sensitivity matching. If caching is on and
- * queryMatchCase is true, queries will only return results for case-sensitive
- * matches.
+ * Enables case-sensitivity in the matching algorithm used against JS Array
+ * types of DataSources and DataSource caches. If queryMatchCase is true, only
+ * case-sensitive matches will return.
  *
  * @property queryMatchCase
  * @type Boolean
