@@ -2,7 +2,7 @@
 
 	header('Content-type: text/plain');
 	$search_queries = initArray();
-	$query = $_GET['query'];
+	$query = htmlspecialchars_decode($_GET['query']);
 	$results = search($search_queries, $query);
 	sendResults($query,$results);
 
