@@ -43,6 +43,11 @@
                 margin-top:1em;
             
             }
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.css");
+    }
+?>
 
         </style>
 
@@ -67,49 +72,128 @@
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            YAHOO.example.onButtonGroupInit = function(p_oEvent) {
+            YAHOO.example.init = function () {
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.js");
+?>        
+
+        var aGroups = [];
+
+        function onDisabledToggleClick(p_oEvent) {
+
+            var bDisable = false;
+            
+            if(this.value == "Disable All") {
+            
+                bDisable = true;
+
+                this.value = "Enable All";                        
+
+            }
+            else {
+            
+                this.value = "Disable All";
+            
+            }
+
+            aGroups[0].set("disabled", bDisable);
+            aGroups[1].set("disabled", bDisable);
+            aGroups[2].set("disabled", bDisable);
+
+        }
+
+        function onDestoryAllClick(p_oEvent) {
+
+            aGroups[0].destroy();
+            aGroups[1].destroy();
+            aGroups[2].destroy();
+        
+        }
+<?php
+    }
+?>
+
+                // "checkedButtonChange" event handler for each ButtonGroup instance
 
                 function onCheckedButtonChange(p_oEvent) {
-                
-                    YAHOO.log(p_oEvent.prevValue, "info", "example4");
-                    YAHOO.log(p_oEvent.newValue, "info", "example4");
+    
+                    if(p_oEvent.prevValue) {
+    
+                        YAHOO.log(p_oEvent.prevValue.get("name"), "info", "example4");
+                    
+                    }
+                    
+                    if(p_oEvent.newValue) {
+    
+                        YAHOO.log(p_oEvent.newValue.get("name"), "info", "example4");
+    
+                    }
                 
                 }
 
-                this.on("checkedButtonChange", onCheckedButtonChange);
-            
-            };
 
+                // "contentready" event handler for the "radiobuttonsfrommarkup" <fieldset>    
+    
+                function onRadioButtonMarkupReady() {
+    
+                    var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1");
+                    oButtonGroup1.on("checkedButtonChange", onCheckedButtonChange);
+    
+                    var oButtonGroup2 = new YAHOO.widget.ButtonGroup("buttongroup2");
+                    oButtonGroup2.on("checkedButtonChange", onCheckedButtonChange);
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                    aGroups[0] = oButtonGroup1;
+                    aGroups[1] = oButtonGroup2;
+<?php
+    }
+?>
+    
+                }
+    
+                YAHOO.util.Event.onContentReady("radiobuttonsfrommarkup", onRadioButtonMarkupReady);
+    
+    
+                // Create a ButtonGroup without using existing markup
 
-            var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1", { oninit: { fn: YAHOO.example.onButtonGroupInit } });
-
-            var oButtonGroup2 = new YAHOO.widget.ButtonGroup("buttongroup2", { oninit: { fn: YAHOO.example.onButtonGroupInit } });
-
-            var oButtonGroup3 = new YAHOO.widget.ButtonGroup({ id: "buttongroup3", name: "radiofield3", container:"radiobuttonsfromjavascript", oninit: { fn: YAHOO.example.onButtonGroupInit } });
-
-            oButtonGroup3.addButtons([
-
-                { label:"Radio 9", value:"Radio 9", checked:true },
-                { label:"Radio 10", value:"Radio 10" }, 
-                { label:"Radio 11", value:"Radio 11" }, 
-                { label:"Radio 12", value:"Radio 12" }
-
-            ]);
-
-
-            YAHOO.example.onLogsAvailable = function() {
-
-                var oLogReader = new YAHOO.widget.LogReader("logs");
+                var oButtonGroup3 = new YAHOO.widget.ButtonGroup({ id: "buttongroup3", name: "radiofield3", container:"radiobuttonsfromjavascript" });
+    
+                oButtonGroup3.addButtons([
+    
+                    { label:"Radio 9", value:"Radio 9", checked:true },
+                    { label:"Radio 10", value:"Radio 10" }, 
+                    { label:"Radio 11", value:"Radio 11" }, 
+                    { label:"Radio 12", value:"Radio 12" }
+    
+                ]);
                 
-            };
-
-            YAHOO.util.Event.onAvailable("logs", YAHOO.example.onLogsAvailable);
+                oButtonGroup3.on("checkedButtonChange", onCheckedButtonChange);
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                aGroups[2] = oButtonGroup3;
+<?php
+    }
+?>
+    
+                // "available" event handler for the "logs" <div>
+    
+                function onLogsAvailable() {
+    
+                    var oLogReader = new YAHOO.widget.LogReader("logs");
+                    
+                }
+    
+                YAHOO.util.Event.onAvailable("logs", onLogsAvailable);
+            
+            } ();
 
         </script>
 
     </head>
     <body>
-
 <?php
     if($g_sBuildType == "dev" && isset($_POST) && count($_POST) > 0) {
 ?>
@@ -132,7 +216,7 @@ print_r($_POST);
             <fieldset id="radiobuttons">
                 <legend>Radio Buttons</legend>
 
-                <fieldset>
+                <fieldset id="radiobuttonsfrommarkup">
                     <legend>From Markup</legend>
 
                     <div id="buttongroup1">
@@ -157,8 +241,10 @@ print_r($_POST);
 
             </fieldset>
 
-            <input type="reset" name="resetbutton" value="Reset Form">
-            <input type="submit" name="submitbutton" value="Submit Form">
+            <div>
+                <input type="reset" name="resetbutton" value="Reset Form">
+                <input type="submit" name="submitbutton" value="Submit Form">
+            </div>
 
         </form>
         

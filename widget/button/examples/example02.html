@@ -43,6 +43,11 @@
                 background:url(img/yahoo.gif) 10% 50% no-repeat;
             
             }
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.css");
+    }
+?>
 
         </style>
 
@@ -50,14 +55,54 @@
 
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
-        
-            var oLinkButton1 = new YAHOO.widget.Button("linkbutton1");
-            var oLinkButton2 = new YAHOO.widget.Button("linkbutton2");
-            var oLinkButton3 = new YAHOO.widget.Button("linkbutton3");
 
-            var oLinkButton4 = new YAHOO.widget.Button({ type:"link", id:"linkbutton4", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
-            var oLinkButton5 = new YAHOO.widget.Button({ type:"link", id:"linkbutton5", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
-            var oLinkButton6 = new YAHOO.widget.Button({ type:"link", id:"linkbutton6", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+            YAHOO.example.init = function () {
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.js");
+    }
+?>
+
+                // "contentready" event handler for the "linkbuttonsfrommarkup" <div>
+
+                function onLinkButtonsMarkupReady() {
+    
+                    // Create Buttons from existing markup
+            
+                    var oLinkButton1 = new YAHOO.widget.Button("linkbutton1");
+                    var oLinkButton2 = new YAHOO.widget.Button("linkbutton2");
+                    var oLinkButton3 = new YAHOO.widget.Button("linkbutton3");
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                    registerButton(oLinkButton1);
+                    registerButton(oLinkButton2);
+                    registerButton(oLinkButton3);
+<?php
+    }
+?>
+
+                }
+
+                YAHOO.util.Event.onContentReady("linkbuttonsfrommarkup", onLinkButtonsMarkupReady);
+    
+
+                // Create Buttons without using existing markup
+    
+                var oLinkButton4 = new YAHOO.widget.Button({ type:"link", id:"linkbutton4", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+                var oLinkButton5 = new YAHOO.widget.Button({ type:"link", id:"linkbutton5", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+                var oLinkButton6 = new YAHOO.widget.Button({ type:"link", id:"linkbutton6", label:"Yahoo!", href:"http://www.yahoo.com", container:"linkbuttonsfromjavascript" });
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                registerButton(oLinkButton4);
+                registerButton(oLinkButton5);
+                registerButton(oLinkButton6);
+<?php
+    }
+?>
+
+            } ();
 
         </script>
 
@@ -66,17 +111,21 @@
     
         <h1><?php writeTitle(); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
 
-        <div id="linkbuttonsfrommarkup">
-            <h2>From Markup</h2>
+        <div id="example">
 
-            <span id="linkbutton1"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
-            <span id="linkbutton2"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
-            <span id="linkbutton3"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+            <div id="linkbuttonsfrommarkup">
+                <h2>From Markup</h2>
+    
+                <span id="linkbutton1"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+                <span id="linkbutton2"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+                <span id="linkbutton3"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+    
+            </div>
+            
+            <div id="linkbuttonsfromjavascript">
+                <h2>From JavaScript</h2>
+            </div>
 
-        </div>
-        
-        <div id="linkbuttonsfromjavascript">
-            <h2>From JavaScript</h2>
         </div>
 
     </body>

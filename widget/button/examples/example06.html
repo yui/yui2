@@ -41,6 +41,11 @@ for($i=1; $i<32; $i++) {
                 padding:.5em;
 
             }
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.css");
+    }
+?>
 
         </style>
 
@@ -49,9 +54,51 @@ for($i=1; $i<32; $i++) {
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            var oResetButton1 = new YAHOO.widget.Button("resetbutton1src", { id:"resetbutton1" });
-            var oResetButton2 = new YAHOO.widget.Button("resetbutton2", { type:"reset" });
-            var oResetButton3 = new YAHOO.widget.Button({ type:"reset", label:"Reset Form", id:"resetfield3", container: "resetbuttonsfromjavascript" });
+            YAHOO.example.init = function () {
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.js");
+    }
+?>
+
+                // "contentready" event handler for the "resetbuttonsfrommarkup" <fieldset>
+
+                function onResetButtonsMarkupReady() {
+
+                    // Create a Button using an existing <input> element as a data source
+
+                    var oResetButton1 = new YAHOO.widget.Button("resetbutton1src", { id:"resetbutton1" });
+
+
+                    // Create a Button using the YUI Button markup
+
+                    var oResetButton2 = new YAHOO.widget.Button("resetbutton2", { type:"reset" });
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                    registerButton(oResetButton1);
+                    registerButton(oResetButton2);
+<?php
+    }
+?>
+
+                }
+
+                YAHOO.util.Event.onContentReady("resetbuttonsfrommarkup", onResetButtonsMarkupReady);
+
+
+                // Create a Button without using existing markup
+
+                var oResetButton3 = new YAHOO.widget.Button({ type:"reset", label:"Reset Form", id:"resetfield3", container: "resetbuttonsfromjavascript" });
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                    registerButton(oResetButton3);
+<?php
+    }
+?>
+
+            } ();
 
         </script>
 

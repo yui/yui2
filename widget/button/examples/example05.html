@@ -41,6 +41,11 @@ for($i=1; $i<32; $i++) {
                 padding:.5em;
 
             }
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.css");
+    }
+?>
 
         </style>
 
@@ -49,15 +54,70 @@ for($i=1; $i<32; $i++) {
         <!-- Page-specific JavaScript -->
         <script type="text/javascript">
 
-            var oSubmitButton1 = new YAHOO.widget.Button("submitbutton1src", { id:"submitbutton1" });
-            var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2", { type:"submit", value: "submitbutton2value" });
-            var oSubmitButton3 = new YAHOO.widget.Button({ type:"submit", label:"Submit Form", id:"submitbutton3", name:"submitbutton3", value: "submitbutton3value", container:"submitbuttonsfromjavascript" });
+            YAHOO.example.init = function () {
+<?php
+    if($g_sBuildType == "dev") {
+        require_once("button_toolbar.js");
+    }
+?>
+
+                // "contentready" event handler for the "submitbuttonsfrommarkup" <fieldset>
+
+                function onSubmitButtonsMarkupReady() {
+
+                    // Create a Button using an existing <input> element as a data source
+
+                    var oSubmitButton1 = new YAHOO.widget.Button("submitbutton1src", { id:"submitbutton1" });
+                    
+
+                    // Create a Button using the YUI Button markup
+
+                    var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2", { type:"submit", value: "submitbutton2value" });
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                    registerButton(oSubmitButton1);
+                    registerButton(oSubmitButton2);
+<?php
+    }
+?>
+
+                }
+                
+                YAHOO.util.Event.onContentReady("submitbuttonsfrommarkup", onSubmitButtonsMarkupReady);
+                
+
+                // Create a Button without using existing markup
+
+                var oSubmitButton3 = new YAHOO.widget.Button({ type:"submit", label:"Submit Form", id:"submitbutton3", name:"submitbutton3", value: "submitbutton3value", container:"submitbuttonsfromjavascript" });
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                    registerButton(oSubmitButton3);
+<?php
+    }
+?>
+
+                function onExampleSubmit(p_oEvent) {
+
+                    var bSubmit = window.confirm("Are you sure you want to submit this form?");
+
+                    if(!bSubmit) {
+                    
+                        YAHOO.util.Event.preventDefault(p_oEvent);
+                    
+                    }
+
+                }
+
+                YAHOO.util.Event.on("example", "submit", onExampleSubmit);
+
+            } ();
 
         </script>
 
     </head>
     <body>
-
 <?php
     if($g_sBuildType == "dev" && isset($_POST) && count($_POST) > 0) {
 ?>
