@@ -1396,6 +1396,171 @@ YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row
 };
 
 /**
+ * If pagination is enabled, initializes paginator container elements and sets
+ * internal tracking variables.
+ *
+ * @method _initPaginator
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initPaginator = function() {
+    var i,j;
+
+    // Set up default values
+    var paginator = {
+        elements:[], // element references
+        pageLinks:0,    // show all links
+        dropdownOptions:null, // no dropdown
+        rowsPerPage:500, // 500 rows
+        currentPage:1  // page one
+    };
+    var elements = paginator.elements;
+
+    // Deal with unused deprecated values
+    if(this.startRecordIndex != 1) {
+        YAHOO.log("The property startRecordIndex is no longer used.","warn", this.toString());
+    }
+    if(this.pageLinksStart != 1) {
+        YAHOO.log("The property pageLinksStart is no longer used.","warn", this.toString());
+    }
+
+    // Validate deprecated rowsPerPage value
+    if(this.rowsPerPage && YAHOO.util.Lang.isNumber(this.rowsPerPage)) {
+        paginator.rowsPerPage = this.rowsPerPage;
+        YAHOO.log("The property rowsPerPage is deprecated in favor of " +
+                " paginatorOptions.rowsPerPage.","warn", this.toString());
+    }
+    // Validate rowsPerPage value
+    if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.rowsPerPage)) {
+        paginator.rowsPerPage = this.paginatorOptions.rowsPerPage;
+    }
+
+    // Validate deprecated currentPage value
+    if(this.pageCurrent && YAHOO.util.Lang.isNumber(this.pageCurrent)) {
+        paginator.currentPage = this.pageCurrent;
+        YAHOO.log("The property pageCurrent is deprecated in favor of " +
+                " paginatorOptions.currentPage.","warn", this.toString());
+    }
+    // Validate currentPage value
+    if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.currentPage)) {
+        paginator.currentPage = this.paginatorOptions.currentPage;
+    }
+
+    // Validate deprecated pagers values
+    if(this.pagers && YAHOO.util.Lang.isArray(this.pagers)) {
+        var dep_containers = this.pagers;
+        for(i=0; i<dep_containers.length; i++) {
+            if(YAHOO.util.Dom.inDocument(dep_containers[i])) {
+                elements.push({container:YAHOO.util.Dom.get(dep_containers[i])});
+            }
+        }
+        YAHOO.log("The property pagers is deprecated in favor of " +
+                " paginatorOptions.containers.","warn", this.toString());
+    }
+    // Validate container values
+    if(this.paginatorOptions && YAHOO.util.Lang.isArray(this.paginatorOptions.containers)) {
+        var containers = this.paginatorOptions.containers;
+        for(i=0; i<containers.length; i++) {
+            if(YAHOO.util.Dom.inDocument(containers[i])) {
+                elements.push({container:YAHOO.util.Dom.get(containers[i])});
+            }
+        }
+    }
+
+    // No containers found, create from scratch
+    if(elements.length === 0) {
+        // One before TABLE
+        var pag0 = document.createElement("span");
+        pag0.id = "yui-dt-pagcontainer0";
+        pag0.className = YAHOO.widget.DataTable.CLASS_PAGINATOR;
+        pag0 = this._elContainer.insertBefore(pag0, this._elTable);
+
+        // One after TABLE
+        var pag1 = document.createElement("span");
+        pag1.id = "yui-dt-pagcontainer1";
+        pag1.className = YAHOO.widget.DataTable.CLASS_PAGINATOR;
+        pag1 = this._elContainer.insertBefore(pag1, this._elTable.nextSibling);
+
+        // Add to tracker
+        elements = [{container:pag0}, {container:pag1}];
+    }
+
+    // Validate deprecated pageLinksLength value, accounting for neg value means show all
+    if(this.pageLinksLength &&
+            YAHOO.util.Lang.isNumber(this.pageLinksLength)) {
+        paginator.pageLinks = this.pageLinksLength;
+        if(this.pageLinksLength < 0) {
+            paginator.pageLinks = 0;
+        }
+        YAHOO.log("The property pageLinksLength is deprecated in favor of " +
+                " paginatorOptions.pageLinks.","warn", this.toString());
+    }
+    // Validate pageLinks value
+    if(this.paginatorOptions &&
+            YAHOO.util.Lang.isNumber(this.paginatorOptions.pageLinks)) {
+        paginator.pageLinks = this.paginatorOptions.pageLinks;
+    }
+
+    // Page links are enabled
+    if(paginator.pageLinks > -1) {
+        for(i=0; i<elements.length; i++) {
+            // Create one page links container per paginator
+            var links = document.createElement("span");
+            links.id = "yui-dt-pagselect"+i;
+            links.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
+            links = elements[i].container.appendChild(links);
+
+            // Add event listener
+            YAHOO.util.Event.addListener(links,"click",this._onPagerClick,this);
+
+            // Add to tracker
+            elements[i].links = links;
+        }
+    }
+
+    // Validate deprecated rowsPerPageDropdown value
+    if(this.rowsPerPageDropdown &&
+            YAHOO.util.Lang.isArray(this.rowsPerPageDropdown)) {
+        paginator.dropdownOptions = this.rowsPerPageDropdown;
+        YAHOO.log("The property rowsPerPageDropdown is deprecated in favor of " +
+                " paginatorOptions.dropdownOptions.","warn", this.toString());
+    }
+    // Validate dropdownOptions value
+    if(this.paginatorOptions &&
+            YAHOO.util.Lang.isArray(this.paginatorOptions.dropdownOptions)) {
+        paginator.dropdownOptions = this.paginatorOptions.dropdownOptions;
+    }
+
+    // Dropdown is enabled
+    if(paginator.dropdownOptions !== null) {
+        var dropdownOptions = paginator.dropdownOptions;
+        for(i=0; i<elements.length; i++) {
+            // Create one SELECT element per paginator
+            var select = document.createElement("select");
+            select.id = "yui-dt-pagselect"+i;
+            select.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+            select = elements[i].container.appendChild(select);
+
+            // Create OPTION elements
+            for(j=0; j<dropdownOptions.length; j++) {
+                var option = document.createElement("option");
+                option.value = dropdownOptions[j].value || dropdownOptions[j];
+                option.innerHTML = dropdownOptions[j].text || dropdownOptions[j];
+                option = select.appendChild(option);
+            }
+
+            // Add event listener
+            YAHOO.util.Event.addListener(select,"change",this._onPagerSelect,this);
+
+            // Add to tracker
+            elements[i].select = select;
+        }
+    }
+
+    this._paginator = paginator;
+    this._paginator.elements = elements;
+};
+
+/**
  * Add a new row to table body at position i if given, or to the bottom
  * otherwise. Does not fire any events or apply any classes.
  *
@@ -1807,18 +1972,11 @@ YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
+    oSelf.cancelEditorData();
+    
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false; // True if event should stop propagating
-
-    if(oSelf.activeEditor) { //&& (oSelf.activeEditor.column != column)
-        oSelf.activeEditor.hide();
-        oSelf.activeEditor = null;
-
-        // Editor causes widget to lose focus
-        //oSelf._bFocused = false;
-        //oSelf.focusTable();
-    }
 
     if (elTag != "table") {
         while(!knownTag) {
@@ -1873,15 +2031,6 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false;
-
-    if(oSelf.activeEditor) { //&& (oSelf.activeEditor.column != column)
-        oSelf.activeEditor.hide();
-        oSelf.activeEditor = null;
-        
-        // Editor causes widget to lose focus
-        //oSelf._bFocused = false;
-        //oSelf.focusTable();
-    }
 
     if (elTag != "table") {
         while(!knownTag) {
@@ -2038,38 +2187,13 @@ YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
  */
 YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
     // esc Clears active editor
-    if((e.keyCode == 27) && (oSelf.activeEditor)) {
-        oSelf.activeEditor.hide();
-        oSelf.activeEditor = null;
-        
-        // Editor causes widget to lose focus
-        //oSelf._bFocused = false;
-        //oSelf.focusTable();
+    if((e.keyCode == 27)) {
+        oSelf.cancelEditorData();
     }
     // enter Saves active editor data
-    if((e.keyCode == 13) && (oSelf.activeEditor)) {
+    if(e.keyCode == 13) {
         YAHOO.util.Event.stopEvent(e);
-        var elCell = oSelf.activeEditor.cell;
-        var oColumn = oSelf.activeEditor.column;
-        var oRecord = oSelf.activeEditor.record;
-        var oldValue = oRecord[oColumn.key];
-        var newValue = oSelf.activeEditor.getValue();
-        
-        //Update Record
-        //TODO: Column.key may be null!
-        oSelf._oRecordSet.updateRecord(oRecord,oColumn.key,newValue);
-
-        //Update cell
-        oSelf.formatCell(elCell);
-
-        // Hide editor
-        oSelf.activeEditor.hide();
-        oSelf.activeEditor = null;
-
-        // Editor causes widget to lose focus
-        //oSelf._bFocused = false;
-        //oSelf.focusTable();
-        oSelf.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
+        oSelf.saveEditorData();
     }
 };
 
@@ -2082,29 +2206,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
-    // enter Saves active editor data
-    if(oSelf.activeEditor) {
-        var elCell = oSelf.activeEditor.cell;
-        var oColumn = oSelf.activeEditor.column;
-        var oRecord = oSelf.activeEditor.record;
-        var oldValue = oRecord[oColumn.key];
-        var newValue = oSelf.activeEditor.getValue();
-
-        //Update Record
-        //TODO: Column.key may be null!
-        oSelf._oRecordSet.updateRecord(oRecord,oColumn.key,newValue);
-
-        //Update cell
-        oSelf.formatCell(elCell);
-
-        // Hide editor
-        oSelf.activeEditor.hide();
-        oSelf.activeEditor = null;
-
-        // Editor causes widget to lose focus
-        oSelf._bFocused = false;
-        oSelf.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
-    }
+    oSelf.saveEditorData();
 };
 
 /**
@@ -2116,6 +2218,8 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
+    oSelf.saveEditorData();
+    
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false; // True if event should stop propagating
@@ -3146,170 +3250,6 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 };
 
 /**
- * If pagination is enabled, initializes paginator container elements and sets
- * internal tracking variables.
- *
- * @method _initPaginator
- */
-YAHOO.widget.DataTable.prototype._initPaginator = function() {
-    var i,j;
-    
-    // Set up default values
-    var paginator = {
-        elements:[], // element references
-        pageLinks:0,    // show all links
-        dropdownOptions:null, // no dropdown
-        rowsPerPage:500, // 500 rows
-        currentPage:1  // page one
-    };
-    var elements = paginator.elements;
-    
-    // Deal with unused deprecated values
-    if(this.startRecordIndex != 1) {
-        YAHOO.log("The property startRecordIndex is no longer used.","warn", this.toString());
-    }
-    if(this.pageLinksStart != 1) {
-        YAHOO.log("The property pageLinksStart is no longer used.","warn", this.toString());
-    }
-    
-    // Validate deprecated rowsPerPage value
-    if(this.rowsPerPage && YAHOO.util.Lang.isNumber(this.rowsPerPage)) {
-        paginator.rowsPerPage = this.rowsPerPage;
-        YAHOO.log("The property rowsPerPage is deprecated in favor of " +
-                " paginatorOptions.rowsPerPage.","warn", this.toString());
-    }
-    // Validate rowsPerPage value
-    if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.rowsPerPage)) {
-        paginator.rowsPerPage = this.paginatorOptions.rowsPerPage;
-    }
-    
-    // Validate deprecated currentPage value
-    if(this.pageCurrent && YAHOO.util.Lang.isNumber(this.pageCurrent)) {
-        paginator.currentPage = this.pageCurrent;
-        YAHOO.log("The property pageCurrent is deprecated in favor of " +
-                " paginatorOptions.currentPage.","warn", this.toString());
-    }
-    // Validate currentPage value
-    if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.currentPage)) {
-        paginator.currentPage = this.paginatorOptions.currentPage;
-    }
-
-    // Validate deprecated pagers values
-    if(this.pagers && YAHOO.util.Lang.isArray(this.pagers)) {
-        var dep_containers = this.pagers;
-        for(i=0; i<dep_containers.length; i++) {
-            if(YAHOO.util.Dom.inDocument(dep_containers[i])) {
-                elements.push({container:YAHOO.util.Dom.get(dep_containers[i])});
-            }
-        }
-        YAHOO.log("The property pagers is deprecated in favor of " +
-                " paginatorOptions.containers.","warn", this.toString());
-    }
-    // Validate container values
-    if(this.paginatorOptions && YAHOO.util.Lang.isArray(this.paginatorOptions.containers)) {
-        var containers = this.paginatorOptions.containers;
-        for(i=0; i<containers.length; i++) {
-            if(YAHOO.util.Dom.inDocument(containers[i])) {
-                elements.push({container:YAHOO.util.Dom.get(containers[i])});
-            }
-        }
-    }
-
-    // No containers found, create from scratch
-    if(elements.length === 0) {
-        // One before TABLE
-        var pag0 = document.createElement("span");
-        pag0.id = "yui-dt-pagcontainer0";
-        pag0.className = YAHOO.widget.DataTable.CLASS_PAGINATOR;
-        pag0 = this._elContainer.insertBefore(pag0, this._elTable);
-
-        // One after TABLE
-        var pag1 = document.createElement("span");
-        pag1.id = "yui-dt-pagcontainer1";
-        pag1.className = YAHOO.widget.DataTable.CLASS_PAGINATOR;
-        pag1 = this._elContainer.insertBefore(pag1, this._elTable.nextSibling);
-        
-        // Add to tracker
-        elements = [{container:pag0}, {container:pag1}];
-    }
-
-    // Validate deprecated pageLinksLength value, accounting for neg value means show all
-    if(this.pageLinksLength &&
-            YAHOO.util.Lang.isNumber(this.pageLinksLength)) {
-        paginator.pageLinks = this.pageLinksLength;
-        if(this.pageLinksLength < 0) {
-            paginator.pageLinks = 0;
-        }
-        YAHOO.log("The property pageLinksLength is deprecated in favor of " +
-                " paginatorOptions.pageLinks.","warn", this.toString());
-    }
-    // Validate pageLinks value
-    if(this.paginatorOptions &&
-            YAHOO.util.Lang.isNumber(this.paginatorOptions.pageLinks)) {
-        paginator.pageLinks = this.paginatorOptions.pageLinks;
-    }
-    
-    // Page links are enabled
-    if(paginator.pageLinks > -1) {
-        for(i=0; i<elements.length; i++) {
-            // Create one page links container per paginator
-            var links = document.createElement("span");
-            links.id = "yui-dt-pagselect"+i;
-            links.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
-            links = elements[i].container.appendChild(links);
-            
-            // Add event listener
-            YAHOO.util.Event.addListener(links,"click",this._onPagerClick,this);
-
-            // Add to tracker
-            elements[i].links = links;
-        }
-    }
-    
-    // Validate deprecated rowsPerPageDropdown value
-    if(this.rowsPerPageDropdown &&
-            YAHOO.util.Lang.isArray(this.rowsPerPageDropdown)) {
-        paginator.dropdownOptions = this.rowsPerPageDropdown;
-        YAHOO.log("The property rowsPerPageDropdown is deprecated in favor of " +
-                " paginatorOptions.dropdownOptions.","warn", this.toString());
-    }
-    // Validate dropdownOptions value
-    if(this.paginatorOptions &&
-            YAHOO.util.Lang.isArray(this.paginatorOptions.dropdownOptions)) {
-        paginator.dropdownOptions = this.paginatorOptions.dropdownOptions;
-    }
-    
-    // Dropdown is enabled
-    if(paginator.dropdownOptions !== null) {
-        var dropdownOptions = paginator.dropdownOptions;
-        for(i=0; i<elements.length; i++) {
-            // Create one SELECT element per paginator
-            var select = document.createElement("select");
-            select.id = "yui-dt-pagselect"+i;
-            select.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
-            select = elements[i].container.appendChild(select);
-
-            // Create OPTION elements
-            for(j=0; j<dropdownOptions.length; j++) {
-                var option = document.createElement("option");
-                option.value = dropdownOptions[j].value || dropdownOptions[j];
-                option.innerHTML = dropdownOptions[j].text || dropdownOptions[j];
-                option = select.appendChild(option);
-            }
-            
-            // Add event listener
-            YAHOO.util.Event.addListener(select,"change",this._onPagerSelect,this);
-            
-            // Add to tracker
-            elements[i].select = select;
-        }
-    }
-    
-    this._paginator = paginator;
-    this._paginator.elements = elements;
-};
-
-/**
  * Updates paginator links container with markup.
  *
  * @method formatPaginatorLinks
@@ -3568,6 +3508,60 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
                 YAHOO.log("Editor \"" + this.activeEditor.type + "\" activated for cell \"" + elCell.id + "\"", "info", this.toString());
             }
         }
+    }
+};
+
+/**
+ * Hides active editor, not saving any data.
+ *
+ * @method cancelEditorData
+ */
+YAHOO.widget.DataTable.prototype.cancelEditorData = function() {
+    if(this.activeEditor) {
+        this.activeEditor.hide();
+        this.activeEditor = null;
+
+        // Editor causes widget to lose focus
+        //oSelf._bFocused = false;
+        //oSelf.focusTable();
+
+        //TODO: need an event here
+    }
+};
+
+/**
+ * Saves data in active editor.
+ *
+ * @method saveEditorData
+ */
+YAHOO.widget.DataTable.prototype.saveEditorData = function() {
+    if(this.activeEditor) {
+        var elCell = this.activeEditor.cell;
+        var oColumn = this.activeEditor.column;
+        var oRecord = this.activeEditor.record;
+        var oldValue = oRecord[oColumn.key];
+        var newValue = this.activeEditor.getValue();
+
+        //Update Record
+        if(YAHOO.util.Lang.isString(oColumn.key)) {
+            // Update Record
+            this._oRecordSet.updateRecord(oRecord,oColumn.key,newValue);
+
+            //Update cell
+            this.formatCell(elCell);
+        }
+        else {
+            YAHOO.log("Could not save edit due to invalid Column key", "warn", this.toString());
+        }
+
+        // Hide editor
+        this.activeEditor.hide();
+        this.activeEditor = null;
+
+        // Editor causes widget to lose focus
+        //this._bFocused = false;
+        //this.focusTable();
+        this.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
     }
 };
 

@@ -14,7 +14,7 @@
 #complex table {border-collapse:collapse;}
 #complex th, #paginated td {border:1px solid #000;width:10em;}
 #complex th {background-color:#696969;}/* gray*/
-#complex th .yui-dt-headtext {margin-right:5px;padding-right:15px;} /*room for arrow*/
+#complex th .yui-dt-headtext {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
 #complex th a {color:#fff;} /* white */
 #complex .yui-dt-sortedbyasc, #complex .yui-dt-sortedbydesc {background-color:#3F3F3F;}/*dark gray*/
 #complex .yui-dt-sortedbyasc .yui-dt-headtext {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;}/*arrow up*/
@@ -23,7 +23,7 @@
 #complex .yui-dt-selected {background-color:#97C0A5;} /*green*/
 
 .areacodestyle {text-align:center;}
-.statestyle {padding-left:1em;}
+.statestyle, .notesstyle {padding-left:1em;}
 </style>
 </head>
 <body>
@@ -54,7 +54,7 @@
 #complex .yui-dt-selected {background-color:#97C0A5;} /*green*/
 
 .areacodestyle {text-align:center;}
-.statestyle {padding-left:1em;}
+.statestyle, .notesstyle {padding-left:1em;}
         </textarea>
 
         <p>Markup:</p>
@@ -102,7 +102,8 @@ YAHOO.example.sortStatesDesc = function(a, b) {
 
 var myColumnHeaders = [
     {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
-    {key:"state",text:"States",width:"16em",className:"statestyle",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}}
+    {key:"state",text:"States",width:"16em",className:"statestyle",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}},
+    {key:"notes",text:"Notes (editable)",editor:"textbox"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
@@ -125,6 +126,14 @@ var myConfigs = {
 
 var myDataTable = new YAHOO.widget.DataTable("complex",myColumnSet,myDataSource,myConfigs);
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
+myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
+
+var onCellEdit = function(oArgs) {
+    YAHOO.log("Cell \"" + oArgs.target.id +
+            "\" was updated from \"" + oArgs.oldData + "\" to \"" +
+            oArgs.newData + "\"", "info", this.toString());
+}
+myDataTable.subscribe("cellEditEvent",onCellEdit);
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -180,7 +189,8 @@ YAHOO.example.sortStatesDesc = function(a, b) {
 
 var myColumnHeaders = [
     {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
-    {key:"state",text:"States",width:"16em",className:"statestyle",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}}
+    {key:"state",text:"States",width:"16em",className:"statestyle",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}},
+    {key:"notes",text:"Notes (editable)",className:"notesstyle",editor:"textbox"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
@@ -203,6 +213,14 @@ var myConfigs = {
 
 var myDataTable = new YAHOO.widget.DataTable("complex",myColumnSet,myDataSource,myConfigs);
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
+myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
+
+var onCellEdit = function(oArgs) {
+    YAHOO.log("Cell \"" + oArgs.target.id +
+            "\" was updated from \"" + oArgs.oldData + "\" to \"" +
+            oArgs.newData + "\"", "info", this.toString());
+}
+myDataTable.subscribe("cellEditEvent",onCellEdit);
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

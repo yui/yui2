@@ -23,6 +23,7 @@ in as an argument.
 * Fixed Column sorting of null, undefined, and empty values.
 * Fixed Column sorting of nested headers.
 * Fixed paginator dropdowns to stay in sync when paginating.
+* Changing page saves editor data.
 * Fixed rowSingleSelect for paginated DataTable.
 * Fix for currency values with more than 2 decimal places.
 * Fixed broken TR ID assignments in replaceRows().
@@ -46,6 +47,7 @@ rowUpdateEvent.
 * Add class hooks to first and last TR elements.
 * Added hook to doBeforeLoadData() for the not-from-markup constructor flow.
 * Added properties paginator and paginatorOptions, as well as method getPaginator().
+* Added methods saveEditorData() and cancelEditorData().
 * Improved type checking with YAHOO.lang.
 
 
