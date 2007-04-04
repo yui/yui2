@@ -63,8 +63,7 @@ YAHOO.widget.Tooltip._DEFAULT_CONFIG = {
     }, 
 
     "CONTAINER": { 
-        key: "container", 
-        value:document.body 
+        key: "container"
     }
 
 };
@@ -198,7 +197,7 @@ YAHOO.widget.Tooltip.prototype.initDefaultConfig = function() {
                 DEFAULT_CONFIG.CONTAINER.key,
                 {
                     handler: this.configContainer,
-                    value: DEFAULT_CONFIG.CONTAINER.value
+                    value: document.body
                 }
             );
 
