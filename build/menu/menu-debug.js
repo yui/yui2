@@ -836,8 +836,7 @@ YAHOO.widget.Menu._DEFAULT_CONFIG = {
     },
 
     "CONTAINER": { 
-        key: "container", 
-        value: document.body
+        key: "container"
     }, 
 
     "MAX_HEIGHT": { 
@@ -1052,15 +1051,6 @@ _bStopMouseEventHandlers: false,
 */
 _sClassName: null,
 
-
-/**
-* @property _bRendered
-* @description Boolean indicating if the menu has been rendered.
-* @default false
-* @private
-* @type Boolean
-*/
-_bRendered: false,
 
 
 // Public properties
@@ -2154,6 +2144,35 @@ _setWidth: function() {
 
 
 /**
+* @method _onWidthChange
+* @description Change event handler for the the menu's "width" configuration
+* property.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onWidthChange: function(p_sType, p_aArgs) {
+
+    var sWidth = p_aArgs[0];
+    
+    if (sWidth) {
+
+        this.itemAddedEvent.subscribe(this._setWidth);
+        this.itemRemovedEvent.subscribe(this._setWidth);
+
+    }
+    else {
+
+        this.itemAddedEvent.unsubscribe(this._setWidth);
+        this.itemRemovedEvent.unsubscribe(this._setWidth);
+
+    }
+
+},
+
+
+/**
 * @method _cancelHideDelay
 * @description Cancels the call to "hideMenu."
 * @private
@@ -3202,6 +3221,8 @@ _onScrollTargetMouseOut: function(p_oEvent, p_oMenu) {
 */
 _onInit: function(p_sType, p_aArgs, p_oMenu) {
 
+    this.cfg.subscribeToConfigEvent("width", this._onWidthChange);
+
     if(
         (
             (this.parent && !this.lazyLoad) || 
@@ -3332,16 +3353,6 @@ _onRender: function(p_sType, p_aArgs) {
     
     }
 
-
-    if(!this._bRendered) {
-
-        this.itemAddedEvent.subscribe(this._setWidth);
-        this.itemRemovedEvent.subscribe(this._setWidth);
-
-        this._bRendered = true;
-    
-    }
-
 },
 
 
@@ -3416,7 +3427,7 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
             }
             else {
 
-                this.render();                
+                this.render();
 
             }
 
@@ -4850,6 +4861,8 @@ clearContent: function() {
     this._aItemGroups = [];
     this._aListElements = [];
     this._aGroupTitleElements = [];
+    
+    this.cfg.setProperty("width", null);
 
 },
 
@@ -5230,7 +5243,7 @@ initDefaultConfig: function() {
 	   DEFAULT_CONFIG.CONTAINER.key, 
 	   { 
 	       handler: this.configContainer,
-	       value: DEFAULT_CONFIG.CONTAINER.value
+	       value: document.body
        } 
    );
 
@@ -7595,7 +7608,8 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 */
 YAHOO.widget.ContextMenu._EVENT_TYPES = {
 
-    "TRIGGER_CONTEXT_MENU": "triggerContextMenuEvent",
+    "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
+
     "CONTEXT_MENU": (
                         (YAHOO.widget.Module.prototype.browser == "opera" ? 
                             "mousedown" : "contextmenu")
