@@ -99,8 +99,6 @@ YAHOO.widget.MenuManager = function() {
             m_oItems[sId] = p_oItem;
 
             p_oItem.destroyEvent.subscribe(onItemDestroy);
-            p_oItem.focusEvent.subscribe(onItemFocus);
-            p_oItem.blurEvent.subscribe(onItemBlur);
 
 
         }
@@ -365,29 +363,35 @@ YAHOO.widget.MenuManager = function() {
 
 
     /**
-    * @method onItemFocus
+    * @method onMenuFocus
     * @description "focus" event handler for a MenuItem instance.
     * @private
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
     */
-    function onItemFocus(p_sType, p_aArgs) {
+    function onMenuFocus(p_sType, p_aArgs) {
 
-        m_oFocusedMenuItem = this;
+        var oItem = p_aArgs[0];
+        
+        if (oItem) {
+
+            m_oFocusedMenuItem = oItem;
+        
+        }
 
     }
 
 
     /**
-    * @method onItemBlur
+    * @method onMenuBlur
     * @description "blur" event handler for a MenuItem instance.
     * @private
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
     */
-    function onItemBlur(p_sType, p_aArgs) {
+    function onMenuBlur(p_sType, p_aArgs) {
 
         m_oFocusedMenuItem = null;
 
@@ -521,6 +525,8 @@ YAHOO.widget.MenuManager = function() {
         
                 p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                 p_oMenu.itemRemovedEvent.subscribe(onItemRemoved);
+                p_oMenu.focusEvent.subscribe(onMenuFocus);
+                p_oMenu.blurEvent.subscribe(onMenuBlur);
     
     
             }
@@ -3818,6 +3824,7 @@ _onMenuItemFocus: function(p_sType, p_aArgs) {
 _onMenuItemBlur: function(p_sType, p_aArgs) {
 
     this.parent.blurEvent.fire(this);
+
 },
 
 
@@ -4627,48 +4634,6 @@ removeItem: function(p_oObject, p_nGroupIndex) {
         }
 
     }
-
-},
-
-
-/**
-* @method getSubmenus
-* @description Returns an array of all of the submenus that are immediate 
-* children of the menu.
-* @return {Array}
-*/
-getSubmenus: function() {
-
-    var aItems = this.getItems(),
-        nItems = aItems.length,
-        aSubmenus = [],
-        oSubmenu,
-        oItem;
-
-
-    if(nItems > 0) {
-        
-        for(var i=0; i<nItems; i++) {
-
-            oItem = aItems[i];
-            
-            if(oItem) {
-
-                oSubmenu = oItem.cfg.getProperty("submenu");
-                
-                if(oSubmenu) {
-
-                    aSubmenus[aSubmenus.length] = oSubmenu;
-
-                }
-            
-            }
-        
-        }
-    
-    }
-
-    return aSubmenus;
 
 },
 
