@@ -1,15 +1,20 @@
 *** Version 2.2.1 ***
 
+Added the following features:
+-----------------------------
+
++ Added "getHiddenField" method to YAHOO.widget.Button.
+
+
 Fixed the following bugs:
 -------------------------
 
 + Removed built-in use of the Event utility's "onAvailable" method from the
-  constructor of YAHOO.widget.Button and YAHOO.widget.ButtonGroup as it 
-  was preventing the addition of event listeners on instances created from 
-  existing markup.  Going forward Button and ButtonGroup instances created from 
-  existing markup can only be instantiated once their source HTML element is 
-  available in the DOM.  The Button examples illustrate how this can
-  be accomplished.
+  constructor of Button and ButtonGroup as it was preventing the addition of 
+  event listeners on instances created from existing markup.  Going forward 
+  Button and ButtonGroup instances created from existing markup can only be 
+  instantiated once their source HTML element is available in the DOM.  The 
+  Button examples illustrate how this can be accomplished.
 
 + Modified code so that disabled Button instances no longer fire DOM events.
 
@@ -35,8 +40,6 @@ Changes:
 
 + Removed "init" event and corresponding "oninit" configuration attribute
   from YAHOO.widget.Button and YAHOO.widget.ButtonGroup.
-
-+ Added "getHiddenField" method to YAHOO.widget.Button.
 
 + Added the CSS class "ie6" to button.css.  This classname is append to root 
   DOM element of Button instances created with IE 6.  By default this class
