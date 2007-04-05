@@ -26,7 +26,8 @@ http://developer.yahoo.net/yui/license.txt
     
     // regex cache
     var patterns = {
-        HYPHEN: /(-[a-z])/i
+        HYPHEN: /(-[a-z])/i, // to normalize get/setStyle
+        ROOT_TAG: /body|html/i // body for quirks mode, html for standards
     };
 
     var toCamel = function(property) {
@@ -253,13 +254,14 @@ http://developer.yahoo.net/yui/license.txt
                 parentNode = el.parentNode;
 
                 // account for any scrolled ancestors
-                while (parentNode.tagName) { // stop at document 
-                    // Opera incorrectly accounts for scroll on inline elements. 
-                    if ( this.getStyle(parentNode, 'display') != 'inline') { 
+                while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
+                {
+                   // work around opera inline scrollLeft/Top bug
+                   if (isOpera && Y.Dom.getStyle(parentNode, 'display') != 'inline') { 
                         pos[0] -= parentNode.scrollLeft;
                         pos[1] -= parentNode.scrollTop;
                     }
-
+                    
                     parentNode = parentNode.parentNode; 
                 }
         
