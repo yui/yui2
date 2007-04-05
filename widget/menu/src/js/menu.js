@@ -3196,6 +3196,7 @@ _onMenuItemFocus: function(p_sType, p_aArgs) {
 _onMenuItemBlur: function(p_sType, p_aArgs) {
 
     this.parent.blurEvent.fire(this);
+
 },
 
 
@@ -4009,48 +4010,6 @@ removeItem: function(p_oObject, p_nGroupIndex) {
         }
 
     }
-
-},
-
-
-/**
-* @method getSubmenus
-* @description Returns an array of all of the submenus that are immediate 
-* children of the menu.
-* @return {Array}
-*/
-getSubmenus: function() {
-
-    var aItems = this.getItems(),
-        nItems = aItems.length,
-        aSubmenus = [],
-        oSubmenu,
-        oItem;
-
-
-    if(nItems > 0) {
-        
-        for(var i=0; i<nItems; i++) {
-
-            oItem = aItems[i];
-            
-            if(oItem) {
-
-                oSubmenu = oItem.cfg.getProperty("submenu");
-                
-                if(oSubmenu) {
-
-                    aSubmenus[aSubmenus.length] = oSubmenu;
-
-                }
-            
-            }
-        
-        }
-    
-    }
-
-    return aSubmenus;
 
 },
 
