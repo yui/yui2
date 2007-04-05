@@ -1,5 +1,10 @@
 TreeView - Release Notes
 
+2.2.1
+
+  * Fixed the default value in the documentation for the nowrap property in Node
+    (the default value is false).
+
 2.2.0
 
   * Node::insertAfter properly nulls the nextSibling attribute when the

@@ -876,7 +876,7 @@ YAHOO.widget.Node.prototype = {
      * to wrap.
      * @property nowrap
      * @type boolean
-     * @default true
+     * @default false
      */
     nowrap: false,
 
