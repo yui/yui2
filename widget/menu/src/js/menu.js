@@ -959,6 +959,13 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
     if(oItem) {
 
+        if (oItem.cfg.getProperty("selected")) {
+
+            this.activeItem = oItem;
+        
+        }
+
+
         var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
             aGroup = this._getItemGroup(nGroupIndex),
             oGroupItem;
@@ -3243,7 +3250,7 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 
         case "selected":
 
-            if(oPropertyValue === true) {
+            if (oPropertyValue === true) {
 
                 this.activeItem = p_oItem;
             
