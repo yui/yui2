@@ -3,6 +3,79 @@
 Added the following features:
 -----------------------------
 
++ Added the following methods to YAHOO.widget.Menu:
+  - "focus"
+  - "blur"
+  - "hasFocus"
+
++ Added the following Custom Events to YAHOO.widget.Menu:
+    + "focusEvent"
+    + "blurEvent"
+
++ Added the following methods to YAHOO.widget.MenuManager:
+  - "getFocusedMenuItem"
+  - "getFocusedMenu"
+
++ Added "hasFocus" method to YAHOO.widget.MenuItem
+
+
+Fixed the following bugs:
+-------------------------
+
++ Menu instances no longer set focus to themselves by default when made 
+  visible.  Menus only receive focus in response to the following events: 
+    - The user mouses down on a MenuItem instance
+    - The user tabs into a MenuItem instance
+
++ Application of the "maxheight" configuration property is now correctly 
+  deferred until the "render" event fires when Menu instance is being 
+  lazy loaded.
+
++ The "maxheight" configuration property can now be set multiple times without 
+  a Menu instance restoring itself to its original default height.
+
++ The "maxheight" configuration property can now be set on hidden Menu 
+  instances that use lazy loading. 
+
++ Menu instances with a "width" configuration property set will now render 
+  at the specified width rather than shrink wrapping to their contents.
+
++ Menu item help text no longer wraps to the next line in Opera 9.
+
++ Immediate submenus of a Menubar instance will no longer shift their position 
+  to try and remain inside the confines of the browser's viewport.
+
++ Lazy loaded ContextMenu instances now appear in the correct position when 
+  they are made visible for the first time.
+
++ MenuBar instances no longer throw JavaScript errors when navigating items with
+  submenus containing no active items using the keyboard.
+
++ Replaced use of native "hasOwnProperty" method 
+  with YAHOO.lang.hasOwnProperty.
+
++ Rendered Menu instances will now update their width when items are added 
+  or removed.
+
++ Mousing over a Menu instance in an IE window that does not have focus will 
+  no longer cause the window to receive focus.
+
+
+Changes:
+--------
+
++ "activeItem" property of YAHOO.widget.Menu now returns a reference to the 
+  Menu's currently selected item.
+
++ Added a "visible" CSS class that is applied to visible Menu instances.
+
+
+
+*** version 2.2.0 ***
+
+Added the following features:
+-----------------------------
+
 * Added two new methods to YAHOO.widget.Menu:
 
     * "getItems" - Returns a flat array of the items in a menu.
