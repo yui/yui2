@@ -79,44 +79,6 @@
         <script type="text/javascript">
 
             /*
-                 Utility function used to return the parent TR element of the
-                 actual node in the "dataset" table that fired the 
-                 "contextmenu" event
-            */
-
-            function GetTableRowFromEventTarget(p_oNode) {
-
-                if(p_oNode.tagName.toUpperCase() == "TR") {
-                
-                    return p_oNode;
-
-                }
-                else {
-
-                    /*
-                         If the target of the event was a child of a TR, 
-                         get the parent TR element
-                    */
-
-                    do {
-    
-                        if(p_oNode.tagName.toUpperCase() == "TR") {
-
-                            return p_oNode;                            
-
-                            break;
-                        
-                        }
-    
-                    }
-                    while((p_oNode = p_oNode.parentNode));
-                
-                }
-            
-            }
-
-            
-            /*
                  Utility function for triming the extra white space from the 
                  begining and end of a string.
             */
@@ -131,7 +93,45 @@
 
             // "contentready" handler for the "dataset" table
             
-            function onDataSetReady(p_oEvent) {
+            YAHOO.example.onDataSetReady = function (p_oEvent) {
+
+                /*
+                     Utility function used to return the parent TR element of the
+                     actual node in the "dataset" table that fired the 
+                     "contextmenu" event
+                */
+    
+                function GetTableRowFromEventTarget(p_oNode) {
+    
+                    if(p_oNode.tagName.toUpperCase() == "TR") {
+                    
+                        return p_oNode;
+    
+                    }
+                    else {
+    
+                        /*
+                             If the target of the event was a child of a TR, 
+                             get the parent TR element
+                        */
+    
+                        do {
+        
+                            if(p_oNode.tagName.toUpperCase() == "TR") {
+    
+                                return p_oNode;                            
+    
+                                break;
+                            
+                            }
+        
+                        }
+                        while((p_oNode = p_oNode.parentNode));
+                    
+                    }
+                
+                }
+
 
                 var oContextMenuItems = {
                 
@@ -220,9 +220,10 @@
                 oContextMenu.beforeShowEvent.subscribe(onContextMenuBeforeShow, oContextMenu, true);
                 oContextMenu.hideEvent.subscribe(onContextMenuHide, oContextMenu, true);
 
-            }
+            };
 
-            YAHOO.util.Event.onContentReady("dataset", onDataSetReady);
+
+            YAHOO.util.Event.onContentReady("dataset", YAHOO.example.onDataSetReady);
 
         </script>
 

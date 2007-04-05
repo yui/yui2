@@ -34,7 +34,7 @@
 
         <script type="text/javascript">
 
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+            YAHOO.example.onDOMReady = function(p_sType) {
 
                 var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
 
@@ -75,21 +75,12 @@
     
                 oMenu.show();
 
+                YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu);
 
-                function onMenuToggleMouseDown(p_oEvent) {
-
-                    YAHOO.util.Event.stopPropagation(p_oEvent);
-                                    
-                    oMenu.show();
-                
-                }
-
-                YAHOO.util.Event.addListener("menutoggle", "mousedown", onMenuToggleMouseDown);
-
-            }
+            };
 
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onDOMReady(YAHOO.example.onDOMReady);
             
         </script>
 
