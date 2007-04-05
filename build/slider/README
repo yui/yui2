@@ -1,5 +1,9 @@
 Slider - Release Notes
 
+2.2.1
+
+   * No change
+
 2.2.0
 
    * Added the missing "force" parameter to the signature for setRegionValue
