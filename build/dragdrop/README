@@ -10,6 +10,7 @@ Drag and Drop Release Notes
     processing the drag and drop events
   * List example supports moving an item to an empty list
   * Fixed missing html tags in the examples
+  * The debug version now works when included before the logger is included.
 
 2.2.0
 

@@ -1961,6 +1961,7 @@ YAHOO.util.DragDrop.prototype = {
      * @method setInitialPosition
      * @param {int} diffX   the X offset, default 0
      * @param {int} diffY   the Y offset, default 0
+     * @private
      */
     setInitPosition: function(diffX, diffY) {
         var el = this.getEl();

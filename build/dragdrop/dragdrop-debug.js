@@ -153,7 +153,6 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         init: function() {
-            this.logger = new YAHOO.widget.LogWriter("DragDropMgr");
             this.initialized = true;
         },
 
@@ -224,7 +223,7 @@ YAHOO.util.DragDropMgr = function() {
 
             this.init();
 
-            this.logger.log("DDM onload");
+            YAHOO.log("DragDropMgr onload", "info", "DragDropMgr");
 
             Event.on(document, "mouseup",   this.handleMouseUp, this, true);
             Event.on(document, "mousemove", this.handleMouseMove, this, true);
@@ -241,7 +240,7 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         _onResize: function(e) {
-            this.logger.log("window resize");
+            YAHOO.log("window resize", "info", "DragDropMgr");
             this._execOnAll("resetConstraints", []);
         },
 
@@ -388,7 +387,7 @@ YAHOO.util.DragDropMgr = function() {
             for (var g in oDD.groups) {
                 if (g && this.ids[g][oDD.id]) {
                     delete this.ids[g][oDD.id];
-                    //this.logger.log("NEW LEN " + this.ids.length, "warn");
+                    //YAHOO.log("NEW LEN " + this.ids.length, "warn");
                 }
             }
             delete this.handleIds[oDD.id];
@@ -528,7 +527,6 @@ YAHOO.util.DragDropMgr = function() {
 
             this.currentTarget = YAHOO.util.Event.getTarget(e);
 
-            this.logger.log("mousedown - adding event handlers");
             this.dragCurrent = oDD;
 
             var el = oDD.getEl();
@@ -559,7 +557,7 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         startDrag: function(x, y) {
-            this.logger.log("firing drag start events");
+            YAHOO.log("firing drag start events", "info", "DragDropMgr");
             clearTimeout(this.clickTimeout);
             if (this.dragCurrent) {
                 this.dragCurrent.b4StartDrag(x, y);
@@ -585,10 +583,10 @@ YAHOO.util.DragDropMgr = function() {
             clearTimeout(this.clickTimeout);
 
             if (this.dragThreshMet) {
-                this.logger.log("mouseup detected - completing drag");
+                YAHOO.log("mouseup detected - completing drag", "info", "DragDropMgr");
                 this.fireEvents(e, true);
             } else {
-                this.logger.log("drag threshold not met");
+                YAHOO.log("drag threshold not met", "info", "DragDropMgr");
             }
 
             this.stopDrag(e);
@@ -622,17 +620,17 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         stopDrag: function(e) {
-            // this.logger.log("mouseup - removing event handlers");
+            // YAHOO.log("mouseup - removing event handlers");
 
             // Fire the drag end event for the item that was dragged
             if (this.dragCurrent) {
                 if (this.dragThreshMet) {
-                    this.logger.log("firing endDrag events");
+                    YAHOO.log("firing endDrag events", "info", "DragDropMgr");
                     this.dragCurrent.b4EndDrag(e);
                     this.dragCurrent.endDrag(e);
                 }
 
-                this.logger.log("firing mouseUp event");
+                YAHOO.log("firing dragdrop onMouseUp event", "info", "DragDropMgr");
                 this.dragCurrent.onMouseUp(e);
             }
 
@@ -656,18 +654,18 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         handleMouseMove: function(e) {
-            //this.logger.log("handlemousemove");
+            //YAHOO.log("handlemousemove");
             if (! this.dragCurrent) {
-                // this.logger.log("no current drag obj");
+                // YAHOO.log("no current drag obj");
                 return true;
             }
 
             // var button = e.which || e.button;
-            // this.logger.log("which: " + e.which + ", button: "+ e.button);
+            // YAHOO.log("which: " + e.which + ", button: "+ e.button);
 
             // check for IE mouseup outside of page boundary
             if (YAHOO.util.Event.isIE && !e.button) {
-                this.logger.log("button failure");
+                YAHOO.log("button failure", "info", "DragDropMgr");
                 this.stopEvent(e);
                 return this.handleMouseUp(e);
             }
@@ -675,10 +673,10 @@ YAHOO.util.DragDropMgr = function() {
             if (!this.dragThreshMet) {
                 var diffX = Math.abs(this.startX - YAHOO.util.Event.getPageX(e));
                 var diffY = Math.abs(this.startY - YAHOO.util.Event.getPageY(e));
-                // this.logger.log("diffX: " + diffX + "diffY: " + diffY);
+                // YAHOO.log("diffX: " + diffX + "diffY: " + diffY);
                 if (diffX > this.clickPixelThresh || 
                             diffY > this.clickPixelThresh) {
-                    this.logger.log("pixel threshold met");
+                    YAHOO.log("pixel threshold met", "info", "DragDropMgr");
                     this.startDrag(this.startX, this.startY);
                 }
             }
@@ -749,7 +747,7 @@ YAHOO.util.DragDropMgr = function() {
             }
 
             for (var sGroup in dc.groups) {
-                // this.logger.log("Processing group " + sGroup);
+                // YAHOO.log("Processing group " + sGroup);
                 
                 if ("string" != typeof sGroup) {
                     continue;
@@ -797,7 +795,7 @@ YAHOO.util.DragDropMgr = function() {
 
             // notify about a drop that did not find a target
             if (isDrop && !dropEvts.length) {
-                this.logger.log(dc.id + " dropped, but not on a target");
+                YAHOO.log(dc.id + " dropped, but not on a target", "info", "DragDropMgr");
                 this.interactionInfo.validDrop = false;
                 dc.onInvalidDrop(e);
             }
@@ -805,24 +803,24 @@ YAHOO.util.DragDropMgr = function() {
 
             if (this.mode) {
                 if (outEvts.length) {
-                    this.logger.log(dc.id+" onDragOut: " + outEvts);
+                    YAHOO.log(dc.id+" onDragOut: " + outEvts, "info", "DragDropMgr");
                     dc.b4DragOut(e, outEvts);
                     dc.onDragOut(e, outEvts);
                 }
 
                 if (enterEvts.length) {
-                    this.logger.log(dc.id+" onDragEnter: " + enterEvts);
+                    YAHOO.log(dc.id+" onDragEnter: " + enterEvts, "info", "DragDropMgr");
                     dc.onDragEnter(e, enterEvts);
                 }
 
                 if (overEvts.length) {
-                    this.logger.log(dc.id+" onDragOver: " + overEvts);
+                    YAHOO.log(dc.id+" onDragOver: " + overEvts, "info", "DragDropMgr");
                     dc.b4DragOver(e, overEvts);
                     dc.onDragOver(e, overEvts);
                 }
 
                 if (dropEvts.length) {
-                    this.logger.log(dc.id+" onDragDrop: " + dropEvts);
+                    YAHOO.log(dc.id+" onDragDrop: " + dropEvts, "info", "DragDropMgr");
                     dc.b4DragDrop(e, dropEvts);
                     dc.onDragDrop(e, dropEvts);
                 }
@@ -831,28 +829,28 @@ YAHOO.util.DragDropMgr = function() {
                 // fire dragout events
                 var len = 0;
                 for (i=0, len=outEvts.length; i<len; ++i) {
-                    this.logger.log(dc.id+" onDragOut: " + outEvts[i].id);
+                    YAHOO.log(dc.id+" onDragOut: " + outEvts[i].id, "info", "DragDropMgr");
                     dc.b4DragOut(e, outEvts[i].id);
                     dc.onDragOut(e, outEvts[i].id);
                 }
                  
                 // fire enter events
                 for (i=0,len=enterEvts.length; i<len; ++i) {
-                    this.logger.log(dc.id + " onDragEnter " + enterEvts[i].id);
+                    YAHOO.log(dc.id + " onDragEnter " + enterEvts[i].id, "info", "DragDropMgr");
                     // dc.b4DragEnter(e, oDD.id);
                     dc.onDragEnter(e, enterEvts[i].id);
                 }
          
                 // fire over events
                 for (i=0,len=overEvts.length; i<len; ++i) {
-                    this.logger.log(dc.id + " onDragOver " + overEvts[i].id);
+                    YAHOO.log(dc.id + " onDragOver " + overEvts[i].id, "info", "DragDropMgr");
                     dc.b4DragOver(e, overEvts[i].id);
                     dc.onDragOver(e, overEvts[i].id);
                 }
 
                 // fire drop events
                 for (i=0, len=dropEvts.length; i<len; ++i) {
-                    this.logger.log(dc.id + " dropped on " + dropEvts[i].id);
+                    YAHOO.log(dc.id + " dropped on " + dropEvts[i].id, "info", "DragDropMgr");
                     dc.b4DragDrop(e, dropEvts[i].id);
                     dc.onDragDrop(e, dropEvts[i].id);
                 }
@@ -921,7 +919,7 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         refreshCache: function(groups) {
-            this.logger.log("refreshing element location cache");
+            YAHOO.log("refreshing element location cache", "info", "DragDropMgr");
 
             // refresh everything if group array is not provided
             var g = groups || this.ids;
@@ -939,7 +937,7 @@ YAHOO.util.DragDropMgr = function() {
                             this.locationCache[oDD.id] = loc;
                         } else {
                             delete this.locationCache[oDD.id];
-this.logger.log("Could not get the loc for " + oDD.id, "warn");
+YAHOO.log("Could not get the loc for " + oDD.id, "warn", "DragDropMgr");
                         }
                     }
                 }
@@ -965,7 +963,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
                     }
                 }
             } catch(e) {
-                this.logger.log("detected problem with an element");
+                YAHOO.log("detected problem with an element", "info", "DragDropMgr");
             }
 
             return false;
@@ -984,7 +982,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
          */
         getLocation: function(oDD) {
             if (! this.isTypeOfDD(oDD)) {
-                this.logger.log(oDD + " is not a DD obj");
+                YAHOO.log(oDD + " is not a DD obj", "info", "DragDropMgr");
                 return null;
             }
 
@@ -995,7 +993,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
             } catch (e) { }
 
             if (!pos) {
-                this.logger.log("getXY failed");
+                YAHOO.log("getXY failed", "info", "DragDropMgr");
                 return null;
             }
 
@@ -1027,19 +1025,19 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
             // use cache if available
             var loc = this.locationCache[oTarget.id];
             if (!loc || !this.useCache) {
-                this.logger.log("cache not populated");
+                YAHOO.log("cache not populated", "info", "DragDropMgr");
                 loc = this.getLocation(oTarget);
                 this.locationCache[oTarget.id] = loc;
 
-                this.logger.log("cache: " + loc);
+                YAHOO.log("cache: " + loc, "info", "DragDropMgr");
             }
 
             if (!loc) {
-                this.logger.log("could not get the location of the element");
+                YAHOO.log("could not get the location of the element", "info", "DragDropMgr");
                 return false;
             }
 
-            //this.logger.log("loc: " + loc + ", pt: " + pt);
+            //YAHOO.log("loc: " + loc + ", pt: " + pt);
             oTarget.cursorIsOver = loc.contains( pt );
 
             // DragDrop is using this as a sanity check for the initial mousedown
@@ -1053,7 +1051,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
                     (!intersect && !dc.constrainX && !dc.constrainY)) {
 
                 //if (oTarget.cursorIsOver) {
-                    //this.logger.log("over " + oTarget + ", " + loc + ", " + pt, "warn");
+                    //YAHOO.log("over " + oTarget + ", " + loc + ", " + pt, "warn");
                 //}
                 return oTarget.cursorIsOver;
             }
@@ -1101,7 +1099,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
          * @static
          */
         unregAll: function() {
-            this.logger.log("unregister all");
+            YAHOO.log("unregister all", "info", "DragDropMgr");
 
             if (this.dragCurrent) {
                 this.stopDrag();
@@ -1261,7 +1259,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
                 t = db.scrollTop;
                 l = db.scrollLeft;
             } else {
-                YAHOO.log("could not get scroll property");
+                YAHOO.log("could not get scroll property", "info", "DragDropMgr");
             }
             return { top: t, left: l };
         },
@@ -1305,7 +1303,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
          */
         moveToEl: function (moveEl, targetEl) {
             var aCoord = YAHOO.util.Dom.getXY(targetEl);
-            this.logger.log("moveToEl: " + aCoord);
+            YAHOO.log("moveToEl: " + aCoord, "info", "DragDropMgr");
             YAHOO.util.Dom.setXY(moveEl, aCoord);
         },
 
@@ -1359,7 +1357,7 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
                 DDM._onLoad();
             } else {
                 if (DDM._timeoutCount > 2000) {
-                    DDM.logger.log("DragDrop requires the Event Utility");
+                    YAHOO.log("DragDrop requires the Event Utility", "error", "DragDropMgr");
                 } else {
                     setTimeout(DDM._addListeners, 10);
                     if (document && document.body) {
@@ -1379,18 +1377,18 @@ this.logger.log("Could not get the loc for " + oDD.id, "warn");
          */
         handleWasClicked: function(node, id) {
             if (this.isHandle(id, node.id)) {
-                this.logger.log("clicked node is a handle");
+                YAHOO.log("clicked node is a handle", "info", "DragDropMgr");
                 return true;
             } else {
                 // check to see if this is a text node child of the one we want
                 var p = node.parentNode;
-                // this.logger.log("p: " + p);
+                // YAHOO.log("p: " + p);
 
                 while (p) {
                     if (this.isHandle(id, p.id)) {
                         return true;
                     } else {
-                        this.logger.log(p.id + " is not a handle");
+                        YAHOO.log(p.id + " is not a handle", "info", "DragDropMgr");
                         p = p.parentNode;
                     }
                 }
@@ -2011,6 +2009,7 @@ YAHOO.util.DragDrop.prototype = {
      * @method setInitialPosition
      * @param {int} diffX   the X offset, default 0
      * @param {int} diffY   the Y offset, default 0
+     * @private
      */
     setInitPosition: function(diffX, diffY) {
         var el = this.getEl();
