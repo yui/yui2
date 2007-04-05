@@ -2,38 +2,7 @@
     $templateRelativePath = '.';
     include('inc/inc-top.php');
   ?>
-
 <body>
-
-<?php include('inc/inc-alljs.php'); ?>
-
-<script type="text/javascript">
-
-YAHOO.example.DDApp = function() {
-    var dd, dd2, dd3;
-    return {
-        init: function() {
-
-            dd = new YAHOO.util.DD("dragDiv1");
-
-            /*
-            dd.onDragDrop = function(e, id) {
-                var draggedEl = this.getEl();
-                var targetedEl = document.getElementById(id);
-                var DOM = YAHOO.util.Dom;
-                DOM.setX(draggedEl, DOM.getX(targetedEl));
-            };
-            */
-
-            dd2 = new YAHOO.util.DD("dragDiv2");
-            dd3 = new YAHOO.util.DD("dragDiv3");
-        }
-    }
-} ();
-    
-YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
-    
-</script>
 
 <style type="text/css">
 
@@ -53,6 +22,22 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 }
 
 </style>
+<?php include('inc/inc-alljs.php'); ?>
+
+<script type="text/javascript">
+YAHOO.example.DDApp = function() {
+    var dd, dd2, dd3;
+    return {
+        init: function() {
+            dd = new YAHOO.util.DD("dragDiv1");
+            dd2 = new YAHOO.util.DD("dragDiv2");
+            dd3 = new YAHOO.util.DD("dragDiv3");
+        }
+    }
+}();
+    
+YAHOO.util.Event.onDOMReady(YAHOO.example.DDApp.init);
+</script>
 
 <div id="pageTitle"><h3>Drag and Drop - YAHOO.util.DD</h3></div>
 
@@ -75,30 +60,10 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 </form>
 </div>
 
-<?php
-include('inc/inc-bottom.php');
-?>
+<?php include('inc/inc-bottom.php'); ?>
 <div id="dragDiv1" class="testSquare" >YAHOO.util.DD</div>
 <div id="dragDiv2" class="testSquare" >YAHOO.util.DD</div>
 <div id="dragDiv3" class="testSquare" >YAHOO.util.DD</div>
-<form name="formTest" action="http://www.yahoo.com" method="get">                                                                                                    
-<!--
-<input type="text" id="txtTest" />                                                                                                                   
--->
-                                                                                                                                                     
-<script>                                                                                                                                             
-//YAHOO.util.Event.addListener('txtTest','keypress',txtTest_keydown);                                                                                   
-                                                                                                                                                     
-/*
-function txtTest_keydown (e) {                                                                                                                       
-    YAHOO.util.Event.stopEvent(e);                                                                                                                   
-    alert(YAHOO.util.Event.getCharCode(e));                                                                                                       
-    // return false;
-}                                                                                                                                                    
-*/
-</script>                                                                                                                                            
-</form>   
-
 
 </body>
 </html>

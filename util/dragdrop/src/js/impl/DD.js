@@ -202,43 +202,6 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
         }
     },
 
-    /**
-     * Finds the location the element should be placed if we want to move
-     * it to where the mouse location less the click offset would place us.
-     * @method getTargetCoord
-     * @param {int} iPageX the X coordinate of the click
-     * @param {int} iPageY the Y coordinate of the click
-     * @return an object that contains the coordinates (Object.x and Object.y)
-     * @private
-     */
-    getTargetCoord: function(iPageX, iPageY) {
-
-        // this.logger.log("getTargetCoord: " + iPageX + ", " + iPageY);
-
-        var x = iPageX - this.deltaX;
-        var y = iPageY - this.deltaY;
-
-        if (this.constrainX) {
-            if (x < this.minX) { x = this.minX; }
-            if (x > this.maxX) { x = this.maxX; }
-        }
-
-        if (this.constrainY) {
-            if (y < this.minY) { y = this.minY; }
-            if (y > this.maxY) { y = this.maxY; }
-        }
-
-        x = this.getTick(x, this.xTicks);
-        y = this.getTick(y, this.yTicks);
-
-        // this.logger.log("getTargetCoord " + 
-                // " iPageX: " + iPageX +
-                // " iPageY: " + iPageY +
-                // " x: " + x + ", y: " + y);
-
-        return {x:x, y:y};
-    },
-
     /*
      * Sets up config options specific to this class. Overrides
      * YAHOO.util.DragDrop, but all versions of this method through the 

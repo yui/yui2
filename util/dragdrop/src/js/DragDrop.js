@@ -245,6 +245,22 @@ YAHOO.util.DragDrop.prototype = {
     maxY: 0,
 
     /**
+     * The difference between the click position and the source element's location
+     * @property deltaX
+     * @type int
+     * @private
+     */
+    deltaX: 0,
+
+    /**
+     * The difference between the click position and the source element's location
+     * @property deltaY
+     * @type int
+     * @private
+     */
+    deltaY: 0,
+
+    /**
      * Maintain offsets when we resetconstraints.  Set to true when you want
      * the position of the element relative to its parent to stay the same
      * when the page changes
@@ -812,6 +828,43 @@ this.logger.log("clickValidator returned false, drag not initiated");
         return ( this.isValidHandleChild(target) &&
                     (this.id == this.handleElId || 
                         this.DDM.handleWasClicked(target, this.id)) );
+    },
+
+    /**
+     * Finds the location the element should be placed if we want to move
+     * it to where the mouse location less the click offset would place us.
+     * @method getTargetCoord
+     * @param {int} iPageX the X coordinate of the click
+     * @param {int} iPageY the Y coordinate of the click
+     * @return an object that contains the coordinates (Object.x and Object.y)
+     * @private
+     */
+    getTargetCoord: function(iPageX, iPageY) {
+
+        // this.logger.log("getTargetCoord: " + iPageX + ", " + iPageY);
+
+        var x = iPageX - this.deltaX;
+        var y = iPageY - this.deltaY;
+
+        if (this.constrainX) {
+            if (x < this.minX) { x = this.minX; }
+            if (x > this.maxX) { x = this.maxX; }
+        }
+
+        if (this.constrainY) {
+            if (y < this.minY) { y = this.minY; }
+            if (y > this.maxY) { y = this.maxY; }
+        }
+
+        x = this.getTick(x, this.xTicks);
+        y = this.getTick(y, this.yTicks);
+
+        // this.logger.log("getTargetCoord " + 
+                // " iPageX: " + iPageX +
+                // " iPageY: " + iPageY +
+                // " x: " + x + ", y: " + y);
+
+        return {x:x, y:y};
     },
 
     /**

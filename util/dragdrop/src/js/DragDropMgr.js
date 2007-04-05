@@ -1047,8 +1047,7 @@ YAHOO.log("Could not get the loc for " + oDD.id, "warn", "DragDropMgr");
             // overlaps with it.
             
             var dc = this.dragCurrent;
-            if (!dc || !dc.getTargetCoord || 
-                    (!intersect && !dc.constrainX && !dc.constrainY)) {
+            if (!dc || (!intersect && !dc.constrainX && !dc.constrainY)) {
 
                 //if (oTarget.cursorIsOver) {
                     //YAHOO.log("over " + oTarget + ", " + loc + ", " + pt, "warn");

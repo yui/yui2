@@ -235,7 +235,6 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
             DDM.refreshCache();
         }
     }
-
 });
 
 Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
@@ -243,7 +242,6 @@ Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
 })();
 
 </script>
-
 
 <body>
 
@@ -345,20 +343,20 @@ Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
         <input type="button" id="switchButton" value="Remove List Background" />
       </span>
       <h3>Sortable List - POINT mode</h3>
-      <p>
-In the sortable list example, we extend DDProxy instead of DD
-so that we can use the source element as the "insertion point". 
-When the drag starts, the proxy element style and content is
-adjusted to match the source element, and visibility:hidden is
-applied to the source element.</p>
-<p>
-To facilitate dragging into an empty list, we make the two list
-elements DDTargets.  When interacting with the list items, we
-will get two notifications (one for the list, one for the list
-item).  We ignore all dragOver events that happen on the list 
-and ignore all dragDrop events unless the drop was in the 
-list's negative space (not over another list item).
-</p>
+        <p>
+        In the sortable list example, we extend DDProxy instead of DD
+        so that we can use the source element as the "insertion point". 
+        When the drag starts, the proxy element style and content is
+        adjusted to match the source element, and visibility:hidden is
+        applied to the source element.
+        </p><p>
+        To facilitate dragging into an empty list, we make the two list
+        elements DDTargets.  When interacting with the list items, we
+        will get two notifications (one for the list, one for the list
+        item).  We ignore all dragOver events that happen on the list 
+        and ignore all dragDrop events unless the drop was in the 
+        list's negative space (not over another list item).
+        </p>
 
       <div class="workarea">
         <h3>List 1</h3>
@@ -368,7 +366,6 @@ list's negative space (not over another list item).
           <li class="list1" id="li1_3">list 1, item 3</li>
         </ul>
       </div>
-
 
       <div class="workarea">
         <h3>List 2</h3>

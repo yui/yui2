@@ -1013,8 +1013,7 @@ YAHOO.util.DragDropMgr = function() {
             // overlaps with it.
             
             var dc = this.dragCurrent;
-            if (!dc || !dc.getTargetCoord || 
-                    (!intersect && !dc.constrainX && !dc.constrainY)) {
+            if (!dc || (!intersect && !dc.constrainX && !dc.constrainY)) {
 
                 //if (oTarget.cursorIsOver) {
                 //}
@@ -1612,6 +1611,22 @@ YAHOO.util.DragDrop.prototype = {
     maxY: 0,
 
     /**
+     * The difference between the click position and the source element's location
+     * @property deltaX
+     * @type int
+     * @private
+     */
+    deltaX: 0,
+
+    /**
+     * The difference between the click position and the source element's location
+     * @property deltaY
+     * @type int
+     * @private
+     */
+    deltaY: 0,
+
+    /**
      * Maintain offsets when we resetconstraints.  Set to true when you want
      * the position of the element relative to its parent to stay the same
      * when the page changes
@@ -2160,6 +2175,38 @@ YAHOO.util.DragDrop.prototype = {
     },
 
     /**
+     * Finds the location the element should be placed if we want to move
+     * it to where the mouse location less the click offset would place us.
+     * @method getTargetCoord
+     * @param {int} iPageX the X coordinate of the click
+     * @param {int} iPageY the Y coordinate of the click
+     * @return an object that contains the coordinates (Object.x and Object.y)
+     * @private
+     */
+    getTargetCoord: function(iPageX, iPageY) {
+
+
+        var x = iPageX - this.deltaX;
+        var y = iPageY - this.deltaY;
+
+        if (this.constrainX) {
+            if (x < this.minX) { x = this.minX; }
+            if (x > this.maxX) { x = this.maxX; }
+        }
+
+        if (this.constrainY) {
+            if (y < this.minY) { y = this.minY; }
+            if (y > this.maxY) { y = this.maxY; }
+        }
+
+        x = this.getTick(x, this.xTicks);
+        y = this.getTick(y, this.yTicks);
+
+
+        return {x:x, y:y};
+    },
+
+    /**
      * Allows you to specify a tag name that should not start a drag operation
      * when clicked.  This is designed to facilitate embedding links within a
      * drag handle that do something other than start the drag.
@@ -2661,38 +2708,6 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
                 window.scrollTo(sl - scrAmt, st);
             }
         }
-    },
-
-    /**
-     * Finds the location the element should be placed if we want to move
-     * it to where the mouse location less the click offset would place us.
-     * @method getTargetCoord
-     * @param {int} iPageX the X coordinate of the click
-     * @param {int} iPageY the Y coordinate of the click
-     * @return an object that contains the coordinates (Object.x and Object.y)
-     * @private
-     */
-    getTargetCoord: function(iPageX, iPageY) {
-
-
-        var x = iPageX - this.deltaX;
-        var y = iPageY - this.deltaY;
-
-        if (this.constrainX) {
-            if (x < this.minX) { x = this.minX; }
-            if (x > this.maxX) { x = this.maxX; }
-        }
-
-        if (this.constrainY) {
-            if (y < this.minY) { y = this.minY; }
-            if (y > this.maxY) { y = this.maxY; }
-        }
-
-        x = this.getTick(x, this.xTicks);
-        y = this.getTick(y, this.yTicks);
-
-
-        return {x:x, y:y};
     },
 
     /*
