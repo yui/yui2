@@ -1,5 +1,52 @@
 Container Release Notes
 
+*** version 2.2.1 ***
+
++ Made the default scope for all Custom Events published by Module, Overlay, 
+  Panel, Tooltip, Dialog and SimpleDialog the widget instance.  Previously the 
+  default scope for Custom Events was inconsistent across classes; the default
+  scope for Custom Events published by Overlay was always the Overlay instance
+  whereas the Custom Events published by all of the other classes had no 
+  default scope.  
+
++ Added default scope for CustomEvents published by YAHOO.util.Config:
+  - Default scope for the "configChangedEvent" is now the Config instance.
+  - Default scope for Config property events is now the Config's owner (widget).
+
++ Panel and Tooltip now always convert the value of a DOM element's "tagName" 
+  property to uppercase before evaluating it.  This improves 
+  XHTML compatibility.
+  
++ Pressing the enter key while focused on a form field inside a Dialog will 
+  now trigger the "click" event handler defined by the Dialog's default 
+  button in IE and Firefox.  Previously, this behavior only worked in Safari 
+  and Opera.
+
++ Added a "yui" prefix to the default CSS class name for Module to be 
+  consistent with the other Container family widgets.
+
++ Container/Panel's underlay shadow is now defined as partially-transparent
+  black rather than gray.  This prevents the shadow from lightening the 
+  background color of elements beneath it.
+
++ Fixed memory leaks in Panel and Dialog.
+
++ The Drag and Drop library is now a truly optional dependency for Panel and its 
+  subclasses.
+
++ Panel "focus" and "blur" events are now fired when Panels are focused and 
+  blurred via the "focus" and "blurAll" methods of YAHOO.widget.OverlayManager.
+
++ Panel instances rendered without setting the value for the "width" 
+  configuration property will now have their "width" configuration 
+  property set to the value of the Panel's element's "offsetWidth" property 
+  when rendered.  This fixes an issue in IE 6 and 7 where Panels that are 
+  rendered without setting the "width" configuration property will only be 
+  draggable by mousing down on the text inside the header, rather than anywhere 
+  inside the header.
+
+
+
 *** version 2.2.0 ***
 
 	Module
