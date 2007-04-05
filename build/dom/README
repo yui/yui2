@@ -1,6 +1,14 @@
 Dom Release Notes
 
-** version 2.2.0 **
+*** version 2.2.1 ***
+* fixed toCamel propertyCache used by set/getStyle
+* added set/getStyle support for float property
+* optimized get() for common use case
+* fixed getXY for safari when el has absolute ancestors
+* using className property instead of string literal for class mgmt methods
+* added getXY/getRegion support for body element
+
+*** version 2.2.0 ***
 * no change
 
 
