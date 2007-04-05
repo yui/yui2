@@ -4165,11 +4165,14 @@ YAHOO.widget.CalendarGroup.prototype.select = function(date) {
 };
 
 /**
-* Selects a date on the current calendar by referencing the index of the cell that should be selected.
-* This method is used to easily select a single cell (usually with a mouse click) without having to do
-* a full render. The selected style is applied to the cell directly.
+* Selects dates in the CalendarGroup based on the cell index provided. This method is used to select cells without having to do a full render. The selected style is applied to the cells directly.
+* The value of the MULTI_SELECT Configuration attribute will determine the set of dates which get selected. 
+* <ul>
+*    <li>If MULTI_SELECT is false, selectCell will select the cell at the specified index for only the last displayed Calendar page.</li>
+*    <li>If MULTI_SELECT is true, selectCell will select the cell at the specified index, on each displayed Calendar page.</li>
+* </ul>
 * @method selectCell
-* @param	{Number}	cellIndex	The index of the cell to select in the current calendar. 
+* @param	{Number}	cellIndex	The index of the cell to be selected. 
 * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
 */
 YAHOO.widget.CalendarGroup.prototype.selectCell = function(cellIndex) {
@@ -4216,11 +4219,11 @@ YAHOO.widget.CalendarGroup.prototype.deselectAll = function() {
 };
 
 /**
-* Deselects a date on the current calendar by referencing the index of the cell that should be deselected.
-* This method is used to easily deselect a single cell (usually with a mouse click) without having to do
-* a full render. The selected style is removed from the cell directly.
+* Deselects dates in the CalendarGroup based on the cell index provided. This method is used to select cells without having to do a full render. The selected style is applied to the cells directly.
+* deselectCell will deselect the cell at the specified index on each displayed Calendar page.
+*
 * @method deselectCell
-* @param	{Number}	cellIndex	The index of the cell to deselect in the current calendar. 
+* @param	{Number}	cellIndex	The index of the cell to deselect. 
 * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
 */
 YAHOO.widget.CalendarGroup.prototype.deselectCell = function(cellIndex) {
