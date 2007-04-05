@@ -3378,17 +3378,6 @@ YAHOO.extend(YAHOO.widget.ButtonGroup, YAHOO.util.Element, {
 _buttons: null,
 
 
-/** 
-* @property _oninitAttributeValue
-* @description Object reference to the button group's current value for the 
-* "oninit" configuration attribute.
-* @default null
-* @protected
-* @type Object
-*/
-_oninitAttributeValue: null,
-
-
 
 // Constants
 
@@ -3466,46 +3455,6 @@ _setDisabled: function(p_bDisabled) {
 
 },
 
-
-/**
-* @method _setOnInit
-* @description Sets the value of the button group's "init" attribute.
-* @protected
-* @param {Object} p_oObject Object indicating the value for the button's 
-* "oninit" attribute.
-*/
-_setOnInit: function(p_oObject) {
-
-    /*
-        Remove any existing listeners if a "init" event handler has already 
-        been specified.
-    */
-
-    if(
-        this._oninitAttributeValue && 
-        (this._oninitAttributeValue != p_oObject)
-    ) {
-
-        this.removeListener("init", this._oninitAttributeValue.fn);
-
-        this._oninitAttributeValue = null;
-
-    }
-
-
-    if(
-        !this._oninitAttributeValue && 
-        Lang.isObject(p_oObject) && 
-        Lang.isFunction(p_oObject.fn)
-    ) {
-
-        this.on("init", p_oObject.fn, p_oObject.obj, p_oObject.scope);
-
-        this._oninitAttributeValue = p_oObject;
-
-    }
-
-},
 
 
 // Protected event handlers
@@ -3705,8 +3654,6 @@ init: function(p_oElement, p_oAttributes) {
     }
 
 
-    this.fireEvent("init");
-
     this.logger.log("Initialization completed.");
 
 },
@@ -3802,25 +3749,6 @@ initAttributes: function(p_oAttributes) {
 
         value: null
 
-    });
-
-
-	/**
-	* @config oninit
-    * @description Object literal representing the code to be executed when 
-    * the button group is initialized.  Format:<br> <code> {<br> 
-    * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when the 
-    * event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An object to 
-    * pass back to the handler.<br> <strong>scope:</strong> Object &#47;&#47; 
-    * The object to use for the scope of the handler.<br> } </code>
-    * @type Object
-	* @default null
-	*/
-    this.setAttributeConfig("oninit", {
-
-        value: oAttributes.oninit,
-        method: this._setOnInit
-    
     });
 
 },
@@ -4129,7 +4057,7 @@ destroy: function() {
     if(nButtons > 0) {
 
         var i = this._buttons.length - 1;
-        
+
         do {
 
             this._buttons[i].destroy();
@@ -4162,23 +4090,6 @@ toString: function() {
 }
 
 });
-
-
-
-// Events
-
-
-/**
-* @event init
-* @description Fires when the button group is initialized.  Subscribe to this 
-* event by specifying a value for the "oninit" configuration attribute.  
-* Format:<br> <code> {<br> <strong>fn:</strong> Function,   &#47;&#47; The 
-* handler to call when the event fires.<br> <strong>obj:</strong> Object, 
-* &#47;&#47; An object to pass back to the handler.<br> <strong>scope:</strong>
-* Object &#47;&#47; The object to use for the scope of the handler.<br> 
-* } </code>
-* @type YAHOO.util.CustomEvent
-*/
 
 })();
 YAHOO.register("button", YAHOO.widget.Button, {version: "@VERSION@", build: "@BUILD@"});
