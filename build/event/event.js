@@ -1347,16 +1347,18 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _load: function(e) {
-                loadComplete = true;
-                var EU = YAHOO.util.Event;
+                if (!loadComplete) {
+                    loadComplete = true;
+                    var EU = YAHOO.util.Event;
 
-                // just in case DOMReady did not go off for some reason
-                EU._ready();
+                    // just in case DOMReady did not go off for some reason
+                    EU._ready();
 
-                // Remove the listener to assist with the IE memory issue, but not
-                // for other browsers because FF 1.0x does not like it.
-                if (this.isIE) {
-                    EU._simpleRemove(window, "load", EU._load);
+                    // Remove the listener to assist with the IE memory issue, but not
+                    // for other browsers because FF 1.0x does not like it.
+                    if (this.isIE) {
+                        EU._simpleRemove(window, "load", EU._load);
+                    }
                 }
             },
 
@@ -1780,11 +1782,7 @@ if (!YAHOO.util.Event) {
         }
         /////////////////////////////////////////////////////////////
 
-        if (document && document.body) {
-            EU._load();
-        } else {
-            EU._simpleAdd(window, "load", EU._load);
-        }
+        EU._simpleAdd(window, "load", EU._load);
         EU._simpleAdd(window, "unload", EU._unload);
         EU._tryPreloadAttach();
     })();
