@@ -84,10 +84,8 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            // "load" event handler for the "window" object
-
-            YAHOO.example.onTreeViewAvailble = function(p_oEvent) {
-
+            YAHOO.example.onTreeViewAvailble = function() {
+            
                 var oTreeView,      // The YAHOO.widget.TreeView instance
                     oContextMenu,       // The YAHOO.widget.ContextMenu instance
                     oTextNodeMap = {},      // Hash of YAHOO.widget.TextNode instances in the tree
@@ -235,7 +233,7 @@
 
                 oContextMenu.triggerContextMenuEvent.subscribe(onTriggerContextMenu, oContextMenu, true);
 
-            }
+            };
 
 
             // Build the tree view when the "mytreeview" DIV is available in the DOM

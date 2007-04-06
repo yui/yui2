@@ -65,7 +65,7 @@
 
         <script type="text/javascript">
 
-            YAHOO.example.onMenuReady = function(p_oEvent) {
+            YAHOO.example.onMenuReady = function() {
 
                 var oMenu = new YAHOO.widget.Menu("basicmenu", { fixedcenter: true });
 
@@ -73,18 +73,9 @@
 
                 oMenu.show();
 
-
-                function onMenuToggleMouseDown(p_oEvent) {
-
-                    YAHOO.util.Event.stopPropagation(p_oEvent);
-                                    
-                    oMenu.show();
-                
-                }
-
-                YAHOO.util.Event.addListener("menutoggle", "mousedown", onMenuToggleMouseDown);
+                YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu);
              
-            }
+            };
 
 
             YAHOO.util.Event.onContentReady("basicmenu", YAHOO.example.onMenuReady);

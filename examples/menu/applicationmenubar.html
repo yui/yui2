@@ -120,9 +120,7 @@
         <!-- Page-specific script -->
         <script type="text/javascript">
 
-            // "load" event handler for the window
-
-            YAHOO.example.onWindowLoad = function(p_oEvent) {
+            YAHOO.example.onDOMReady = function(p_sType) {
 
                 var aItemData = [
 
@@ -218,12 +216,12 @@
               
                 oPanel.show();
 
-            }
+            };
 
 
             // Add a "load" handler for the window
 
-            YAHOO.util.Event.addListener(window, "load", YAHOO.example.onWindowLoad);
+            YAHOO.util.Event.onDOMReady(YAHOO.example.onDOMReady);
 
         </script>
 

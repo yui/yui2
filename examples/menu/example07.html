@@ -63,7 +63,7 @@
         
         <script type="text/javascript">
 
-            YAHOO.example.onMenuReady = function(p_oEvent) {
+            YAHOO.example.onMenuReady = function() {
 
                 // Instantiate and render the menu bar and corresponding submenus
 
@@ -71,18 +71,9 @@
 
                 oMenu.render();
 
+                YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu);
 
-                function onMenuToggleMouseDown(p_oEvent) {
-
-                    YAHOO.util.Event.stopPropagation(p_oEvent);
-                                    
-                    oMenu.show();
-                
-                }
-
-                YAHOO.util.Event.addListener("menutoggle", "mousedown", onMenuToggleMouseDown);
-
-            }
+            };
 
 
             // Initialize and render the menu bar when it is available
