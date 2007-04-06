@@ -1,5 +1,9 @@
 Animation Release Notes
 
+*** version 2.2.1 **
+
+* no change
+
 *** version 2.2.0 **
 
 * Fixed AnimMgr.stop() when called without tween
