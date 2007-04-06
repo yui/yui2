@@ -2077,6 +2077,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
                 oItem.cfg.setProperty("selected", true);
 
                 oSubmenu.show();
+                
+                oSubmenu.setInitialFocus();
     
             }
     
@@ -2099,6 +2101,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
             ) {
 
                 Event.preventDefault(oEvent);
+
+                oItem.focus();
             
             }
 
