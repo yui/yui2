@@ -124,7 +124,7 @@ var myColumnHeaders = [
     {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
     {key:"Phone"},
     {key:"City"},
-    {key:"AverageRating", text:"Rating", sortable:true}
+    {key:"AverageRating", text:"Rating", type:"number", sortable:true}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
@@ -132,7 +132,7 @@ var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
 myDataSource.responseSchema = {
     resultNode: "Result",
-    fields: ["Title","Phone","City","AverageRating","ClickUrl"]
+    fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
@@ -163,7 +163,7 @@ var myColumnHeaders = [
     {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
     {key:"Phone"},
     {key:"City"},
-    {key:"AverageRating", text:"Rating", sortable:true}
+    {key:"AverageRating", text:"Rating", type:"number", sortable:true}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
@@ -171,7 +171,7 @@ var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
 myDataSource.responseSchema = {
     resultNode: "Result",
-    fields: ["Title","Phone","City","AverageRating","ClickUrl"]
+    fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});

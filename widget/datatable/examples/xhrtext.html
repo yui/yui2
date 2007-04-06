@@ -68,7 +68,7 @@ var myColumnHeaders = [
     {key:"Name", sortable:true, formatter:formatUrl},
     {key:"Phone"},
     {key:"City"},
-    {key:"Rating", sortable:true}
+    {key:"Rating", type:"number", sortable:true}
 
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
@@ -78,7 +78,7 @@ myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
 myDataSource.responseSchema = {
     recordDelim: "\n",
     fieldDelim: "|",
-    fields: ["Name","Address","City","Phone","Rating","Url"]
+    fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertNumber},"Url"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
@@ -109,7 +109,7 @@ var myColumnHeaders = [
     {key:"Name", sortable:true, formatter:formatUrl},
     {key:"Phone"},
     {key:"City"},
-    {key:"Rating", sortable:true}
+    {key:"Rating", type:"number", sortable:true}
 
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
@@ -119,7 +119,7 @@ myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
 myDataSource.responseSchema = {
     recordDelim: "\n",
     fieldDelim: "|",
-    fields: ["Name","Address","City","Phone","Rating","Url"]
+    fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertNumber},"Url"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);

@@ -10,6 +10,8 @@ to indicate data error.
 * Support for nested JSON data.
 * Support for responseShema.fields.converter to take string response and custom
 convert data type.
+* Added static converter methods YAHOO.util.DataSource.convertNumber and
+YAHOO.util.DataSource.convertDate.
 * Improved type checking with YAHOO.lang.
 
 

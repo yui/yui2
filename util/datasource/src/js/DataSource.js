@@ -386,6 +386,7 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
  * @type Object
  */
 YAHOO.util.DataSource.prototype.responseSchema = null;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public static methods
@@ -393,7 +394,7 @@ YAHOO.util.DataSource.prototype.responseSchema = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Converts data from String to Date objects.
+ * Converts data from String to Number objects.
  *
  * @method convertNumber
  * @method sData {String} Number string.
@@ -401,7 +402,7 @@ YAHOO.util.DataSource.prototype.responseSchema = null;
  * @static
  */
 YAHOO.util.DataSource.convertNumber = function(sData) {
-    return parseFloat(sData);
+    return sData * 1;
 };
 
 /**
