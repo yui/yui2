@@ -11,7 +11,7 @@
 <style type="text/css">
 /* customized css for scrolling */
 .yui-dt-scrollable  {
-    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure it adds up) */
+    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure columns add up to this total) */
     height:30em; /* SET HEIGHT HERE for ie */
 }
 .yui-dt-scrollbody {
@@ -54,12 +54,30 @@
     <div id="code">
         <h3>Sample Code</h3>
 
+        <p>Data:</p>
+
+        <textarea name="code" class="JScript" cols="60" rows="1">
+YAHOO.example.Data.areacodes = [
+    {areacode: "201", state: "New Jersey"},
+    ...,
+    {areacode: "989", state: "Michigan"}
+];
+        </textarea>
+
         <p>CSS:</p>
+        
+        <p>All of the CSS rules shown below build upon the foundational CSS that
+        is provided with DataTable. When a DataTable's <code>scrollable</code>
+        property is set to <code>true</code>, the classes <code>yui-dt-scrollable</code>
+        and <code>yui-dt-scrollbody</code> are applied to the appropriate
+        elements by the DataTable. These classes are defined in the foundational
+        CSS, and this example shows how to modify them to get specific
+        characteristics with respect to column width, table height, and so on.</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
 /* customized css for scrolling */
 .yui-dt-scrollable  {
-    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure it adds up) */
+    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure columns add up to this total) */
     height:30em; /* SET HEIGHT HERE for ie */
 }
 .yui-dt-scrollbody {
@@ -98,6 +116,9 @@
         </textarea>
 
         <p>JavaScript:</p>
+        
+        <p>To make a DataTable instance scrollable, set the <code>scrollable</code>
+        property to <code>true</code> at instantiation (as in line 13 below).</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
 var myColumnHeaders = [
