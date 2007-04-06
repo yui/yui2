@@ -48,6 +48,12 @@
                     ]);
 
                 oMenu.render(document.body);
+
+                oMenu.showEvent.subscribe(function() {
+
+                    this.focus();
+                
+                });
     
                 oMenu.show();
 

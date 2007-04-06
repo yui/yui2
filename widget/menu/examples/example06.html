@@ -72,7 +72,13 @@
                 oMenu.setItemGroupTitle("Yahoo! Communications", 2);
 
                 oMenu.render(document.body);
-    
+
+                oMenu.showEvent.subscribe(function() {
+
+                    this.focus();
+                
+                });
+
                 oMenu.show();
 
                 YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu);
