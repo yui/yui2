@@ -1360,8 +1360,11 @@ _originalMaxHeight: -1,
 * @method _showMenu
 * @description Shows the button's menu.
 * @protected
+* @param {Event} p_oEvent Object representing the DOM event object passed 
+* back by the event utility (YAHOO.util.Event) that triggered the display of
+* the menu.
 */
-_showMenu: function() {
+_showMenu: function(p_oEvent) {
 
     var oMenu = this._menu;
 
@@ -1377,6 +1380,20 @@ _showMenu: function() {
             });
             
         oMenu.cfg.fireQueue();
+
+        /*
+            Stop the propagation of the event so that the MenuManager 
+            doesn't blur the menu after it gets focus.
+        */
+
+        if(p_oEvent.type == "mousedown") {
+
+            Event.stopPropagation(p_oEvent);
+
+        }
+
+        this._menu.focus(); 
+
 
         var nViewportHeight = Dom.getViewportHeight(),
             nMenuHeight = oMenu.element.offsetHeight;
@@ -1586,7 +1603,7 @@ _onMouseDown: function(p_oEvent) {
             }
             else {
 
-                this._showMenu();
+                this._showMenu(p_oEvent);
 
                 this._activationButtonPressed = true;
             
@@ -1775,7 +1792,7 @@ _onKeyDown: function(p_oEvent) {
 
         if(this.get("type") == "menubutton") {
 
-            this._showMenu();
+            this._showMenu(p_oEvent);
 
         }
         else {
@@ -2097,7 +2114,7 @@ _onOption: function(p_oEvent) {
     }
     else {
 
-        this._showMenu();    
+        this._showMenu(p_oEvent);    
 
         this._bOptionPressed = true;
 
@@ -2161,10 +2178,10 @@ _onMenuHide: function(p_sType, p_aArgs) {
         sClass;
     
     if(this.get("type") == "splitbutton") {
-    
+
         sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
         sClass = "activeoption";
-    
+
     }
     else {
 
@@ -2175,6 +2192,13 @@ _onMenuHide: function(p_sType, p_aArgs) {
 
     this.removeClass(sClass);
     this.set("title", sTitle);
+
+
+    if(this.get("type") == "splitbutton") {
+
+        this._bOptionPressed = false;
+    
+    }
 
 },
 
