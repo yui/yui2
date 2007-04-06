@@ -1595,6 +1595,13 @@ _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
     if(oItem) {
 
+        if (oItem.cfg.getProperty("selected")) {
+
+            this.activeItem = oItem;
+        
+        }
+
+
         var nGroupIndex = typeof p_nGroupIndex == "number" ? p_nGroupIndex : 0,
             aGroup = this._getItemGroup(nGroupIndex),
             oGroupItem;
@@ -2125,6 +2132,33 @@ _onWidthChange: function(p_sType, p_aArgs) {
 
         this.itemAddedEvent.unsubscribe(this._setWidth);
         this.itemRemovedEvent.unsubscribe(this._setWidth);
+
+    }
+
+},
+
+
+/**
+* @method _onVisibleChange
+* @description Change event handler for the the menu's "visible" configuration
+* property.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onVisibleChange: function(p_sType, p_aArgs) {
+
+    var bVisible = p_aArgs[0];
+    
+    if (bVisible) {
+
+        Dom.addClass(this.element, "visible");
+
+    }
+    else {
+
+        Dom.removeClass(this.element, "visible");
 
     }
 
@@ -2671,6 +2705,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
                 oItem.cfg.setProperty("selected", true);
 
                 oSubmenu.show();
+                
+                oSubmenu.setInitialFocus();
     
             }
     
@@ -2693,6 +2729,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
             ) {
 
                 Event.preventDefault(oEvent);
+
+                oItem.focus();
             
             }
 
@@ -3181,6 +3219,7 @@ _onScrollTargetMouseOut: function(p_oEvent, p_oMenu) {
 _onInit: function(p_sType, p_aArgs, p_oMenu) {
 
     this.cfg.subscribeToConfigEvent("width", this._onWidthChange);
+    this.cfg.subscribeToConfigEvent("visible", this._onVisibleChange);
 
     if(
         (
@@ -3412,8 +3451,6 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 
     if(this.cfg.getProperty("position") == "dynamic") {
 
-        Dom.addClass(this.element, "visible");
-
         var nViewportHeight = Dom.getViewportHeight();
 
 
@@ -3568,8 +3605,6 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
 * the event.
 */
 _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
-
-    Dom.removeClass(this.element, "visible");
 
     var oActiveItem = this.activeItem;
 
@@ -3847,7 +3882,7 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 
         case "selected":
 
-            if(oPropertyValue === true) {
+            if (oPropertyValue === true) {
 
                 this.activeItem = p_oItem;
             
