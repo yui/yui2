@@ -232,19 +232,23 @@ _removeEventHandlers: function() {
 
     // Remove the event handlers from the trigger(s)
 
-    Event.removeListener(
-        oTrigger, 
-        YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
-        this._onTriggerContextMenu
-    );    
-    
-    if(this.browser == "opera") {
-    
+    if (oTrigger) {
+
         Event.removeListener(
             oTrigger, 
-            YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
-            this._onTriggerClick
-        );
+            YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
+            this._onTriggerContextMenu
+        );    
+        
+        if(this.browser == "opera") {
+        
+            Event.removeListener(
+                oTrigger, 
+                YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
+                this._onTriggerClick
+            );
+    
+        }
 
     }
 
@@ -461,7 +465,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
 
     }
     else {
-    
+   
         this._removeEventHandlers();
     
     }

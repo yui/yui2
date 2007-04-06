@@ -1494,16 +1494,20 @@ _onWidthChange: function(p_sType, p_aArgs) {
 
     var sWidth = p_aArgs[0];
     
-    if (sWidth) {
+    if (sWidth && !this._hasSetWidthHandlers) {
 
         this.itemAddedEvent.subscribe(this._setWidth);
         this.itemRemovedEvent.subscribe(this._setWidth);
 
+        this._hasSetWidthHandlers = true;
+
     }
-    else {
+    else if (this._hasSetWidthHandlers) {
 
         this.itemAddedEvent.unsubscribe(this._setWidth);
         this.itemRemovedEvent.unsubscribe(this._setWidth);
+
+        this._hasSetWidthHandlers = false;
 
     }
 
@@ -4214,8 +4218,21 @@ destroy: function() {
     this.keyPressEvent.unsubscribeAll();
     this.keyDownEvent.unsubscribeAll();
     this.keyUpEvent.unsubscribeAll();
+    this.focusEvent.unsubscribeAll();
+    this.blurEvent.unsubscribeAll();
     this.itemAddedEvent.unsubscribeAll();
     this.itemRemovedEvent.unsubscribeAll();
+    this.cfg.unsubscribeFromConfigEvent("width", this._onWidthChange);
+    this.cfg.unsubscribeFromConfigEvent("visible", this._onVisibleChange);
+
+    if (this._hasSetWidthHandlers) {
+
+        this.itemAddedEvent.unsubscribe(this._setWidth);
+        this.itemRemovedEvent.unsubscribe(this._setWidth);
+
+        this._hasSetWidthHandlers = false;
+
+    }
 
     YAHOO.widget.Module.textResizeEvent.unsubscribe(this._onTextResize, this);
 
