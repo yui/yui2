@@ -70,7 +70,13 @@
                 var oMenu = new YAHOO.widget.Menu("menuwithgroups", { fixedcenter: true });
 
                 oMenu.render();
-    
+
+                oMenu.showEvent.subscribe(function() {
+
+                    this.focus();
+                
+                });
+
                 oMenu.show();
 
                 YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu);

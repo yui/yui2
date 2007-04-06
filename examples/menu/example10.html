@@ -167,14 +167,15 @@
                 }
 
                 oMenu.render(document.body);
+
+                oMenu.showEvent.subscribe(function() {
+
+                    this.focus();
+                
+                });
     
                 oMenu.show();
 
-
-                // Focus the first menu item
-
-                oMenu.focus();
-                
 
                 // Disable the third menu item instance
 

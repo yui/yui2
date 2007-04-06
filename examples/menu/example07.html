@@ -69,6 +69,12 @@
 
                 var oMenu = new YAHOO.widget.Menu("productsandservices", { fixedcenter:true, visible:true });
 
+                oMenu.showEvent.subscribe(function() {
+
+                    this.focus();
+                
+                });
+
                 oMenu.render();
 
                 YAHOO.util.Event.addListener("menutoggle", "click", oMenu.show, null, oMenu);
