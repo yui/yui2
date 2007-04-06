@@ -2122,16 +2122,20 @@ _onWidthChange: function(p_sType, p_aArgs) {
 
     var sWidth = p_aArgs[0];
     
-    if (sWidth) {
+    if (sWidth && !this._hasSetWidthHandlers) {
 
         this.itemAddedEvent.subscribe(this._setWidth);
         this.itemRemovedEvent.subscribe(this._setWidth);
 
+        this._hasSetWidthHandlers = true;
+
     }
-    else {
+    else if (this._hasSetWidthHandlers) {
 
         this.itemAddedEvent.unsubscribe(this._setWidth);
         this.itemRemovedEvent.unsubscribe(this._setWidth);
+
+        this._hasSetWidthHandlers = false;
 
     }
 
@@ -4838,8 +4842,21 @@ destroy: function() {
     this.keyPressEvent.unsubscribeAll();
     this.keyDownEvent.unsubscribeAll();
     this.keyUpEvent.unsubscribeAll();
+    this.focusEvent.unsubscribeAll();
+    this.blurEvent.unsubscribeAll();
     this.itemAddedEvent.unsubscribeAll();
     this.itemRemovedEvent.unsubscribeAll();
+    this.cfg.unsubscribeFromConfigEvent("width", this._onWidthChange);
+    this.cfg.unsubscribeFromConfigEvent("visible", this._onVisibleChange);
+
+    if (this._hasSetWidthHandlers) {
+
+        this.itemAddedEvent.unsubscribe(this._setWidth);
+        this.itemRemovedEvent.unsubscribe(this._setWidth);
+
+        this._hasSetWidthHandlers = false;
+
+    }
 
     YAHOO.widget.Module.textResizeEvent.unsubscribe(this._onTextResize, this);
 
@@ -7743,19 +7760,23 @@ _removeEventHandlers: function() {
 
     // Remove the event handlers from the trigger(s)
 
-    Event.removeListener(
-        oTrigger, 
-        YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
-        this._onTriggerContextMenu
-    );    
-    
-    if(this.browser == "opera") {
-    
+    if (oTrigger) {
+
         Event.removeListener(
             oTrigger, 
-            YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
-            this._onTriggerClick
-        );
+            YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
+            this._onTriggerContextMenu
+        );    
+        
+        if(this.browser == "opera") {
+        
+            Event.removeListener(
+                oTrigger, 
+                YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
+                this._onTriggerClick
+            );
+    
+        }
 
     }
 
@@ -7972,7 +7993,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
 
     }
     else {
-    
+   
         this._removeEventHandlers();
     
     }
