@@ -15,6 +15,8 @@
 #formatting th, #formatting td {border:1px solid #000;padding:.25em;}
 #formatting th {background-color:#696969;color:#fff;}/*dark gray*/
 #formatting .yui-dt-odd {background-color:#eee;} /*light gray*/
+
+#formatting .unread {font-weight:bold;}
 </style>
 </head>
 <body>
@@ -54,6 +56,8 @@ YAHOO.example.Data.emails = {
 #formatting th, #formatting td {border:1px solid #000;padding:.25em;}
 #formatting th {background-color:#696969;color:#fff;}/*dark gray*/
 #formatting .yui-dt-odd {background-color:#eee;} /*light gray*/
+
+#formatting .unread {font-weight:bold;}
         </textarea>
 
         <p>Markup:</p>
@@ -65,17 +69,24 @@ YAHOO.example.Data.emails = {
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-// Define a custom formatter for one of the Columns
+// Define a custom formatter for the "New" column
 var myFormatter = function(elCell, oRecord, oColumn, oData) {
     if(oRecord["Unread"]) {
-        elCell.innerHTML = "X";
+        elCell.innerHTML = "X"; // show an "X" in the column
+        YAHOO.util.Dom.addClass(elCell.parentNode, "unread"); // style the row
     }
 };
 
+// Override the built-in link formatter
+YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
+    var user = oData;
+    elCell.innerHTML = "<a href=\"mailto:" + user + "@foo.com\">" + user + "</a>";
+};
+
 var myColumnHeaders = [
-    {text:"New",formatter:myFormatter},
-    {key:"Date",type:"date"},
-    {key:"To"},
+    {text:"New",formatter:myFormatter}, // use a custom formatter
+    {key:"Date",type:"date"}, // use a built-in formatter
+    {key:"To", type:"link"}, // override the built-in formatter
     {key:"Subject"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
@@ -87,52 +98,7 @@ myDataSource.responseSchema = {
     fields: ["Date","To","From","Subject","XID","Date","Unread"]
 };
 
-// Override the built-in Column formatter
-YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
-    var oDate = oData;
-    var sMonth;
-    switch(oDate.getMonth()) {
-        case 1:
-            sMonth = "Jan";
-            break;
-        case 2:
-            sMonth = "Feb";
-            break;
-        case 3:
-            sMonth = "Mar";
-            break;
-        case 4:
-            sMonth = "Apr";
-            break;
-        case 5:
-            sMonth = "May";
-            break;
-        case 6:
-            sMonth = "Jun";
-            break;
-        case 7:
-            sMonth = "Jul";
-            break;
-        case 8:
-            sMonth = "Aug";
-            break;
-        case 9:
-            sMonth = "Sep";
-            break;
-        case 10:
-            sMonth = "Oct";
-            break;
-        case 11:
-            sMonth = "Nov";
-            break;
-        case 12:
-            sMonth = "Dec";
-            break;
-    }
-    elCell.innerHTML = sMonth + " " + oDate.getDate()  + ", " + oDate.getFullYear();
-};
-
-var myDataTable = new YAHOO.widget.DataTable("formatting",myColumnSet,myDataSource,{caption:"Example: Custom Formatting",rowSingleSelect:true});
+var myDataTable = new YAHOO.widget.DataTable("formatting",myColumnSet,myDataSource,{caption:"Example: Custom Formatting"});
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -152,17 +118,24 @@ var myLogger = new YAHOO.widget.LogReader();
 /****************************************************************************/
 /****************************************************************************/
 
-// Define a custom formatter for one of the Columns
+// Define a custom formatter for the "New" column
 var myFormatter = function(elCell, oRecord, oColumn, oData) {
     if(oRecord["Unread"]) {
-        elCell.innerHTML = "X";
+        elCell.innerHTML = "X"; // show an "X" in the column
+        YAHOO.util.Dom.addClass(elCell.parentNode, "unread"); // style the row
     }
 };
 
+// Override the built-in formatter
+YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
+    var user = oData;
+    elCell.innerHTML = "<a href=\"mailto:" + user + "@foo.com\">" + user + "</a>";
+};
+
 var myColumnHeaders = [
-    {text:"New",formatter:myFormatter},
-    {key:"Date",type:"date"},
-    {key:"To"},
+    {text:"New",formatter:myFormatter}, // use a custom formatter
+    {key:"Date",type:"date"}, // use a built-in formatter
+    {key:"To", type:"link"}, // override the built-in formatter
     {key:"Subject"}
 ];
 var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
@@ -174,52 +147,7 @@ myDataSource.responseSchema = {
     fields: ["Date","To","From","Subject","XID","Date","Unread"]
 };
 
-// Override the built-in Column formatter
-YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
-    var oDate = oData;
-    var sMonth;
-    switch(oDate.getMonth()) {
-        case 1:
-            sMonth = "Jan";
-            break;
-        case 2:
-            sMonth = "Feb";
-            break;
-        case 3:
-            sMonth = "Mar";
-            break;
-        case 4:
-            sMonth = "Apr";
-            break;
-        case 5:
-            sMonth = "May";
-            break;
-        case 6:
-            sMonth = "Jun";
-            break;
-        case 7:
-            sMonth = "Jul";
-            break;
-        case 8:
-            sMonth = "Aug";
-            break;
-        case 9:
-            sMonth = "Sep";
-            break;
-        case 10:
-            sMonth = "Oct";
-            break;
-        case 11:
-            sMonth = "Nov";
-            break;
-        case 12:
-            sMonth = "Dec";
-            break;
-    }
-    elCell.innerHTML = sMonth + " " + oDate.getDate()  + ", " + oDate.getFullYear();
-};
-
-var myDataTable = new YAHOO.widget.DataTable("formatting",myColumnSet,myDataSource,{caption:"Example: Custom Formatting",rowSingleSelect:true});
+var myDataTable = new YAHOO.widget.DataTable("formatting",myColumnSet,myDataSource,{caption:"Example: Custom Formatting"});
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">
