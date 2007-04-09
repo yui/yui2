@@ -7,15 +7,16 @@ clicked where multiple HTML Submit button options are present in an HTML form.
 To enable this feature, include the Event utility source file as a dependency
 before the Connection Manager source file.
 
-* The XHR implementation in IE6 and IE7 does not properly handle an HTTP 204
-response, instead returning Win error 1223.  handleTransactionResponse() will
-treat 1223 as an HTTP 204, and route the response appropriately to the success
-callback.  createResponseObject() will normalize the response object's status
-and statusText values to 204 and "No Content" respectively.  However, no headers
-are returned.
+* The XHR implementation in IE6 and IE7, Opera, and Safari do not properly
+handle an HTTP 204 response.  IE6/7 will instead return a Win error 1223.
+handleTransactionResponse() will treat 1223 as an HTTP 204, and route the
+response appropriately to the success callback.  createResponseObject() will
+normalize the response object's status and statusText values to 204 and "No
+Content" respectively.  However, no headers are returned.
 
-FireFox, Opera, and Safari -- per the Graded Browser Support Matrix -- are
-unaffected.
+Opera and Safari provide no discernable response with HTTP 204(e.g., response
+object's properties are undefined).  This response will trigger the failure
+callback with a status of 0 and statusText of "communication failure".
 
 *** version 2.2.0 ***
 
@@ -178,6 +179,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
 
 
 
