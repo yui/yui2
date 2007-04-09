@@ -44,6 +44,9 @@ Container Release Notes
   rendered without setting the "width" configuration property will only be 
   draggable by mousing down on the text inside the header, rather than anywhere 
   inside the header.
+  
++ Refactored the Container family including the Config class to improve 
+  performance, especially when working with a large number of instances in IE6.
 
 
 
