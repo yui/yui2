@@ -5471,7 +5471,7 @@ YAHOO.widget.MenuItem.prototype = {
 
     /**
     * @property COLLAPSED_SUBMENU_INDICATOR_TEXT
-    * @description String representing the text for the <code>&#60;em&#62;<code>
+    * @description String representing the text for the <code>&#60;em&#62;</code>
     * element used for the submenu arrow indicator.
     * @default "Submenu collapsed.  Click to expand submenu."
     * @final
@@ -5484,7 +5484,7 @@ YAHOO.widget.MenuItem.prototype = {
     /**
     * @property EXPANDED_SUBMENU_INDICATOR_TEXT
     * @description String representing the text for the submenu arrow indicator 
-    * element (<code>&#60;em&#62;<code>) when the submenu is visible.
+    * element (<code>&#60;em&#62;</code>) when the submenu is visible.
     * @default "Submenu expanded.  Click to collapse submenu."
     * @final
     * @type String
@@ -5496,7 +5496,7 @@ YAHOO.widget.MenuItem.prototype = {
     /**
     * @property DISABLED_SUBMENU_INDICATOR_TEXT
     * @description String representing the text for the submenu arrow indicator 
-    * element (<code>&#60;em&#62;<code>) when the menu item is disabled.
+    * element (<code>&#60;em&#62;</code>) when the menu item is disabled.
     * @default "Submenu collapsed.  (Item disabled.)."
     * @final
     * @type String
@@ -5507,7 +5507,7 @@ YAHOO.widget.MenuItem.prototype = {
     /**
     * @property CHECKED_TEXT
     * @description String representing the text to be used for the checked 
-    * indicator element (<code>&#60;em&#62;<code>).
+    * indicator element (<code>&#60;em&#62;</code>).
     * @default "Checked."
     * @final
     * @type String
@@ -5518,7 +5518,7 @@ YAHOO.widget.MenuItem.prototype = {
     /**
     * @property DISABLED_CHECKED_TEXT
     * @description String representing the text to be used for the checked 
-    * indicator element (<code>&#60;em&#62;<code>) when the menu item 
+    * indicator element (<code>&#60;em&#62;</code>) when the menu item 
     * is disabled.
     * @default "Checked. (Item disabled.)"
     * @final
