@@ -2743,7 +2743,7 @@ YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse
 /**
  * Add rows to bottom of table body.
  *
- * @method appendRow
+ * @method appendRows
  * @param aRecords {YAHOO.widget.Record[]} Array of Records.
  */
 YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
