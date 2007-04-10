@@ -35,7 +35,7 @@
 "totalRecords":"1396",
 "startIndex":0,
 "records":[
-    {"id":"702",
+    {"extid":"702",
     "name":"xmlqoyzgmykrphvyiz",
     "date":"13-Sep-2002",
     "price":"8370",
@@ -52,7 +52,7 @@
     
     ...
     
-    {"id":"2047",
+    {"extid":"2047",
     "name":"sqrvpfpibtavxbpjba",
     "date":"22-Jun-2004",
     "price":"864",
@@ -90,7 +90,7 @@
 
         <textarea name="code" class="JScript" cols="60" rows="1">
 var myColumnHeaders = [
-    {key:"id",text:"ID"},
+    {key:"extid",text:"ID"},
     {key:"name",text:"Name"},
     {key:"date",text:"Date"},
     {key:"price",text:"Price"},
@@ -113,8 +113,8 @@ var myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
 //var myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
-    resultsList: "records",
-    fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+    resultsList: "result",
+    fields: ["extid","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
 };
 
 var oConfigs = {
@@ -147,7 +147,7 @@ myLogger.collapse();
 /****************************************************************************/
 
 var myColumnHeaders = [
-    {key:"id",text:"ID"},
+    {key:"extid",text:"ID"},
     {key:"name",text:"Name"},
     {key:"date",text:"Date"},
     {key:"price",text:"Price"},
@@ -170,8 +170,8 @@ var myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
 //var myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
-    resultsList: "records",
-    fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+    resultsList: "result",
+    fields: ["extid","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
 };
 
 var oConfigs = {
