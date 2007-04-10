@@ -170,8 +170,6 @@ _createGroupElement: function() {
 
     var oElement = document.createElement(this.TAG_NAME);
 
-    oElement.className = this.CSS_CLASS_NAME;
-
     return oElement;
 
 },
@@ -333,6 +331,7 @@ init: function(p_oElement, p_oAttributes) {
             p_oAttributes
         );
 
+    this.addClass(this.CSS_CLASS_NAME);
 
     this.logger.log(
         "Searching for child nodes with the class name " +
