@@ -696,6 +696,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     YAHOO.log("The live data response for \"" + oRequest + "\" is " + oRawResponse,"info",this.toString());
     var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
+    var bError = false;
     //TODO: break out into overridable methods
     switch(this.responseType) {
         case YAHOO.util.DataSource.TYPE_JSARRAY:
@@ -729,21 +730,41 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
             break;
     }
 
+    // Last chance to touch the raw response or the parsed response
+    oParsedResponse = this.doBeforeCallback(oRequest, oRawResponse, oParsedResponse);
+
     if(oParsedResponse) {
         this.fireEvent("responseParseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
         // Cache the response
         this.addToCache(oRequest, oParsedResponse);
-
-        // Send the response back to the caller
-        oCallback.call(oCaller, oRequest, oParsedResponse);
     }
     else {
         this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
         YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
         
-        // Send null response back to the caller with the error flag on
-        oCallback.call(oCaller, oRequest, null, true);
+        // Send response back to the caller with the error flag on
+        oParsedResponse.error = true;
     }
+    
+    // Send the response back to the caller
+    oCallback.call(oCaller, oRequest, oParsedResponse);
+};
+
+/**
+ * Overridable method gives implementers access to the original raw response and
+ * the parsed response (parsed against the given schema) before the data
+ * is added to the cache (if applicable) and then sent back to callback function.
+ * This is your chance to access the raw response and/or populate the parsed
+ * response with any custom data.
+ *
+ * @method doBeforeCallback
+ * @param oRequest {Object} Request object.
+ * @param oRawResponse {Object} The raw response from the live database.
+ * @param oParsedResponse {Object} The parsed response to return to calling object.
+ * @return {Object} Parsed response object
+ */
+YAHOO.util.DataSource.prototype.doBeforeCallback = function(oRequest, oRawResponse, oParsedResponse) {
+    return oParsedResponse;
 };
 
 /**
@@ -751,12 +772,12 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
  *
  * @method parseArrayData
  * @param oRequest {Object} Request object.
- * @param oRawResponse {Object} The raw response from the live database
- * @return {Object} Parsed response object
+ * @param oRawResponse {Object} The raw response from the live database.
+ * @return {Object} Parsed response object.
  */
 YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse) {
     if(YAHOO.lang.isArray(oRawResponse) && YAHOO.lang.isArray(this.responseSchema.fields)) {
-        var oParsedResponse = [];
+        var oParsedResponse = {results:[]};
         var fields = this.responseSchema.fields;
         for(var i=oRawResponse.length-1; i>-1; i--) {
             var oResult = {};
@@ -769,7 +790,7 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
                 }
                 oResult[key] = data;
             }
-            oParsedResponse.unshift(oResult);
+            oParsedResponse.results.unshift(oResult);
         }
         YAHOO.log("Parsed array data = " + oParsedResponse,"info",this.toString());
         return oParsedResponse;
@@ -789,11 +810,12 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse) {
+    var oParsedResponse = {};
     if(YAHOO.lang.isString(oRawResponse) &&
             YAHOO.lang.isArray(this.responseSchema.fields) &&
             YAHOO.lang.isString(this.responseSchema.recordDelim) &&
             YAHOO.lang.isString(this.responseSchema.fieldDelim)) {
-        var oParsedResponse = [];
+        oParsedResponse.results = [];
         var recDelim = this.responseSchema.recordDelim;
         var fieldDelim = this.responseSchema.fieldDelim;
         var fields = this.responseSchema.fields;
@@ -827,16 +849,16 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
                     }
                     oResult[key] = data;
                 }
-                oParsedResponse.unshift(oResult);
+                oParsedResponse.results.unshift(oResult);
             }
         }
         YAHOO.log("Parsed text data = " + oParsedResponse,"info",this.toString());
-        return oParsedResponse;
     }
     else {
         YAHOO.log("Text data could not be parsed" + oRawResponse,"error",this.toString());
-        return null;
+        oParsedResponse.error = true;
     }
+    return oParsedResponse;
 };
 
 /**
@@ -849,7 +871,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
  */
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
         var bError = false;
-        var oParsedResponse = [];
+        var oParsedResponse = {};
         var xmlList = (this.responseSchema.resultNode) ?
                 oRawResponse.getElementsByTagName(this.responseSchema.resultNode) :
                 null;
@@ -858,6 +880,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
         }
         // Loop through each result
         else {
+            oParsedResponse.results = [];
             for(var k = xmlList.length-1; k >= 0 ; k--) {
                 var result = xmlList.item(k);
                 var oResult = {};
@@ -888,14 +911,16 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
                     oResult[key] = data;
                 }
                 // Capture each array of values into an array of results
-                oParsedResponse.unshift(oResult);
+                oParsedResponse.results.unshift(oResult);
             }
         }
         if(bError) {
             YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
-            return null;
+            oParsedResponse.error = true;
         }
-        YAHOO.log("Parsed XML data = " + oParsedResponse,"info",this.toString());
+        else {
+            YAHOO.log("Parsed XML data = " + oParsedResponse,"info",this.toString());
+        }
         return oParsedResponse;
 };
 
@@ -908,10 +933,11 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
  * @return {Object} Parsed response object
  */
 YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse) {
+    var oParsedResponse = {};
     if(oRawResponse && YAHOO.lang.isArray(this.responseSchema.fields)) {
         var fields = this.responseSchema.fields;
         var bError = false;
-        var oParsedResponse = [];
+        oParsedResponse.results = [];
         var jsonObj,jsonList;
 
         // Parse JSON object out if it's a string
@@ -983,7 +1009,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
 
         if(bError || !jsonList) {
             YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
-            return null;
+            oParsedResponse.error = true;
         }
         else if(!YAHOO.lang.isArray(jsonList)) {
             jsonList = [jsonList];
@@ -1010,13 +1036,13 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                 oResult[key] = data;
             }
             // Capture the array of data field values in an array of results
-            oParsedResponse.unshift(oResult);
+            oParsedResponse.results.unshift(oResult);
         }
         YAHOO.log("Parsed JSON data = " + oParsedResponse,"info",this.toString());
-        return oParsedResponse;
     }
     else {
         YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
-        return null;
+        oParsedResponse.error = true;
     }
+    return oParsedResponse;
 };

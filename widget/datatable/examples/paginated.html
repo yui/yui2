@@ -31,9 +31,11 @@
         <p>Data:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-{"recordsReturned":null,
-"totalRecords":"1396",
+{"recordsReturned":1396,
+"totalRecords":1396,
 "startIndex":0,
+"sort":null,
+"dir":"asc",
 "records":[
     {"extid":"702",
     "name":"xmlqoyzgmykrphvyiz",
@@ -147,7 +149,7 @@ myLogger.collapse();
 /****************************************************************************/
 
 var myColumnHeaders = [
-    {key:"extid",text:"ID"},
+    {key:"id",text:"ID"},
     {key:"name",text:"Name"},
     {key:"date",text:"Date"},
     {key:"price",text:"Price"},
@@ -170,8 +172,8 @@ var myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
 //var myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
-    resultsList: "result",
-    fields: ["extid","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+    resultsList: "records",
+    fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
 };
 
 var oConfigs = {

@@ -1530,32 +1530,6 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
         paginator.dropdownOptions = this.paginatorOptions.dropdownOptions;
     }
 
-    // Dropdown is enabled
-    if(paginator.dropdownOptions !== null) {
-        var dropdownOptions = paginator.dropdownOptions;
-        for(i=0; i<elements.length; i++) {
-            // Create one SELECT element per paginator
-            var select = document.createElement("select");
-            select.id = "yui-dt-pagselect"+i;
-            select.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
-            select = elements[i].container.appendChild(select);
-
-            // Create OPTION elements
-            for(j=0; j<dropdownOptions.length; j++) {
-                var option = document.createElement("option");
-                option.value = dropdownOptions[j].value || dropdownOptions[j];
-                option.innerHTML = dropdownOptions[j].text || dropdownOptions[j];
-                option = select.appendChild(option);
-            }
-
-            // Add event listener
-            YAHOO.util.Event.addListener(select,"change",this._onPagerSelect,this);
-
-            // Add to tracker
-            elements[i].select = select;
-        }
-    }
-
     this._paginator = paginator;
     this._paginator.elements = elements;
 };
@@ -2478,55 +2452,38 @@ YAHOO.widget.DataTable.prototype.sortedBy = null;
  * @property isEmpty
  * 
  */
-YAHOO.widget.DataTable.prototype.isEmpty = false;
-
 /**
  * @deprecated No longer used.
  * @property isEmpty
  */
-YAHOO.widget.DataTable.prototype.isLoading = false;
-
 /**
  * @deprecated No longer used.
  * @property startRecordIndex
  */
-YAHOO.widget.DataTable.prototype.startRecordIndex = 1;
-
 /**
  * @deprecated No longer used.
  * @property pageLinksStart
  */
-YAHOO.widget.DataTable.prototype.pageLinksStart = 1;
-
 /**
  * @deprecated Deprecated in favor of paginatorOptions.currentPage
  * @property pageCurrent
  */
-YAHOO.widget.DataTable.prototype.pageCurrent = 1;
-
 /**
  * @deprecated Deprecated in favor of paginatorOptions.rowsPerPage
  * @property rowsPerPage
  */
-YAHOO.widget.DataTable.prototype.rowsPerPage = 500;
-
 /**
  * @deprecated Deprecated in favor of paginatorOptions.pageLinks
  * @property pageLinksLength
  */
-YAHOO.widget.DataTable.prototype.pageLinksLength = -1;
-
 /**
  * @deprecated Deprecated in favor of paginatorOptions.dropdownOptions
  * @property rowsPerPageDropdown
  */
-YAHOO.widget.DataTable.prototype.rowsPerPageDropdown = null;
-
 /**
  * @deprecated Deprecated in favor of paginatorOptions.containers
  * @property pagers
  */
-YAHOO.widget.DataTable.prototype.pagers = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -3226,6 +3183,7 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
  *         </ul>
  *     </li>
  *     <li>pageLinks: number of page links displayed</li>
+ *     <li>pageLinkStart: page number of first link</li>
  *     <li>rowsPerPage: number of rows displayed</li>
  *     <li>totalPages: total number of pages</li>
  *     </ul>
@@ -3250,7 +3208,96 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 };
 
 /**
- * Updates paginator links container with markup.
+ * Updates Paginator containers with markup. Override this method to customize pagination UI.
+ *
+ * @method formatPaginators
+ */
+ YAHOO.widget.DataTable.prototype.formatPaginators = function() {
+    var pag = this._paginator;
+    
+    // For Opera workaround
+    var dropdownEnabled = false;
+    
+    // Update markup of each known Paginator container
+    for(var i=0; i<pag.elements.length; i++) {
+        var oElReferences = pag.elements[i];
+        
+        // Links are enabled
+        if(pag.pageLinks > -1) {
+            this.formatPaginatorLinks(oElReferences.links, pag.currentPage, pag.pageLinksStart, pag.pageLinks, pag.totalPages);
+        }
+
+        // Dropdown is enabled
+        if(pag.dropdownOptions) {
+            dropdownEnabled = true;
+            this.formatPaginatorDropdown(oElReferences);
+        }
+    }
+
+    // For Opera artifacting in dropdowns
+    if(dropdownEnabled && navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+        document.body.style += '';
+    }
+};
+
+/**
+ * Updates Paginator dropdown. If dropdown doesn't exist, the markup is created.
+ * Sets dropdown's "selected" value.
+ *
+ * @method formatPaginatorDropdown
+ * @param oElReferences {Object} Object literal of pointers to Paginator UI
+ * elements.
+ */
+YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(oElReferences) {
+    var i;
+    
+    // Dropdown doesn't exist, so let's create it
+    if(!oElReferences.select) {
+        // Validate dropdownOptions
+        if(YAHOO.lang.isArray(this._paginator.dropdownOptions)) {
+            // Show these options in the dropdown
+            var dropdownOptions = this._paginator.dropdownOptions;
+            
+            // Create one SELECT element per Paginator container
+            var select = document.createElement("select");
+            select.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+            select = oElReferences.container.appendChild(select);
+
+            // Create OPTION elements
+            for(i=0; i<dropdownOptions.length; i++) {
+                var option = document.createElement("option");
+                option.value = dropdownOptions[i].value || dropdownOptions[i];
+                option.innerHTML = dropdownOptions[i].text || dropdownOptions[i];
+                option = select.appendChild(option);
+            }
+
+            // Add event listener
+            YAHOO.util.Event.addListener(select,"change",this._onPagerSelect,this);
+
+            // Add DOM reference to tracker
+            oElReferences.select = select;
+        }
+        else {
+            YAHOO.log("Could not create Paginator dropdown due to invalid dropdownOptions","error",this.toString());
+        }
+    }
+    
+    if(oElReferences.select && oElReferences.select.options) {
+        var options = oElReferences.select.options;
+        // Update dropdown's "selected" value
+        for(i=options.length-1; i>-1; i--) {
+            if((this._paginator.rowsPerPage + "") === options[i].value) {
+                options[i].selected = true;
+            }
+        }
+    }
+    else {
+        YAHOO.log("Could not update Paginator dropdown","error",this.toString());
+    }
+};
+
+/**
+ * Updates Paginator links container with markup.
  *
  * @method formatPaginatorLinks
  */
@@ -3273,6 +3320,10 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elLinksContaine
     markup = firstPageLink + prevPageLink;
     var maxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
         nPageLinksStart+nPageLinksLength-1 : nTotalPages;
+    // Special case for pageLinksLength 0 => show all links
+    if(nPageLinksLength === 0) {
+        maxLinks = nTotalPages;
+    }
     for(var i=nPageLinksStart; i<=maxLinks; i++) {
          if(i != nCurrentPage) {
             markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
@@ -3285,6 +3336,58 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elLinksContaine
     elLinksContainer.innerHTML = markup;
 };
 
+/**
+ * Updates Paginator internal values and UI.
+ * @method updatePaginator
+ */
+YAHOO.widget.DataTable.prototype.updatePaginator = function() {
+    // Paginator values must be initialized
+    if(this._paginator === null) {
+        this._initPaginator();
+    }
+
+    // How many total Records
+    var recordsLength = this._oRecordSet.getLength();
+
+    // If rowsPerPage < 1, show all rows
+    this._paginator.rowsPerPage = (this._paginator.rowsPerPage > 0) ?
+        this._paginator.rowsPerPage : recordsLength;
+    var rowsPerPage = this._paginator.rowsPerPage;
+
+
+    // How many rows this page
+    var maxRows = (rowsPerPage < recordsLength) ?
+            rowsPerPage : recordsLength;
+
+    // How many total pages
+    this._paginator.totalPages = Math.ceil(recordsLength / maxRows);
+
+    // What is current page
+    var currentPage = this._paginator.currentPage;
+
+    // First row of this page
+    this._paginator.startRecordIndex =  (currentPage-1) * rowsPerPage;
+
+    // How many page links to display
+    var pageLinksLength = this._paginator.pageLinks;
+    // Show all links
+    if(pageLinksLength === 0) {
+        pageLinksLength = this._paginator.totalPages;
+    }
+    // Page links are enabled
+    if(pageLinksLength > -1) {
+        // First page link for this page
+        this._paginator.pageLinksStart = (pageLinksLength == 1) ? currentPage :
+                (Math.ceil(currentPage/pageLinksLength-1) * pageLinksLength) + 1;
+    }
+
+    this.formatPaginators();
+
+    this.fireEvent("paginateEvent", {paginator:this._paginator});
+    YAHOO.log("Currently displaying page " + currentPage + " of " +
+            this._paginator.totalPages + " with " + rowsPerPage +
+            " rows per page", "info", this.toString());
+};
 
 /**
  * @deprecated Deprecated in favor of populateTable().
@@ -3314,78 +3417,14 @@ YAHOO.widget.DataTable.prototype.populateTable = function() {
     }
     // Paginator is enabled
     if(this.paginator) {
-        // Paginator must be initialized
-        if(this._paginator === null) {
-            this._initPaginator();
-        }
-
-        // How many total Records
-        var recordsLength = this._oRecordSet.getLength();
-
-        // If rowsPerPage < 1, show all rows
-        var rowsPerPage = (this._paginator.rowsPerPage > 0) ?
-            this._paginator.rowsPerPage : recordsLength;
-
-        // How many rows this page
-        var maxRows = (rowsPerPage < recordsLength) ?
-                rowsPerPage : recordsLength;
-
-        // How many total pages
-        this._paginator.totalPages = Math.ceil(recordsLength / maxRows);
-
-        // What is current page
-        var currentPage = this._paginator.currentPage;
-
-        // First row of this page
-        var startRecordIndex =  (currentPage-1) * rowsPerPage;
-
-        // How many page links to display
-        var pageLinksLength = this._paginator.pageLinks;
-        // Show all links
-        if(pageLinksLength === 0) {
-            pageLinksLength = this._paginator.totalPages;
-        }
-        // Page links are enabled
-        if(pageLinksLength > -1) {
-            // First page link for this page
-            var pageLinksStart = (pageLinksLength == 1) ? currentPage :
-                    (Math.ceil(currentPage/pageLinksLength-1) * pageLinksLength) + 1;
-        }
-
-        // Show rows for this page
-        records = this._oRecordSet.getRecords(startRecordIndex, rowsPerPage);
-
-        // Update UI of each paginator
-        for(var i=0; i<this._paginator.elements.length; i++) {
-            // Format page links
-            if(this._paginator.elements[i].links && (pageLinksLength > -1)) {
-                this.formatPaginatorLinks(this._paginator.elements[i].links, currentPage, pageLinksStart, pageLinksLength, this._paginator.totalPages);
-            }
-
-            // Update SELECT dropdown
-            if(this._paginator.elements[i].select && this._paginator.elements[i].select.options) {
-                var options = this._paginator.elements[i].select.options;
-                for(var j=0; j<options.length; j++) {
-                    if((rowsPerPage + "") === options[j].value) {
-                        options[j].selected = true;
-                    }
-                }
-            }
-        }
-
-        // For Opera artifacting in dropdown
-        if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
-            document.body.style += '';
-        }
-
-        this.fireEvent("paginateEvent", {paginator:this._paginator});
-        YAHOO.log("Currently displaying page " + currentPage + " of " +
-                this._paginator.totalPages + " with " + rowsPerPage +
-                " rows per page", "info", this.toString());
+        this.updatePaginator();
+        records = this._oRecordSet.getRecords(this._paginator.startRecordIndex, this._paginator.rowsPerPage);
     }
+    // Show all records
     else {
         records = this._oRecordSet.getRecords();
     }
+
     this.replaceRows(records);
     YAHOO.log("Table populated with " + records.length + " rows", "info", this.toString());
 };
@@ -3916,19 +3955,19 @@ YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, o
  * @param oResponse {Object} Response object.
  * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, oResponse, bError) {
+YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
 
-    var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
-    if(ok && oResponse && !bError) {
+    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.append(oResponse);
+        var newRecords = this._oRecordSet.append(oResponse.results);
         if(newRecords) {
             // Update markup
             this.populateTable();
         }
     }
-    else if(bError) {
+    else if(oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
     else {
@@ -3944,18 +3983,21 @@ YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, 
  * @param oResponse {Object} Response object.
  * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse, bError) {
+YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
-    var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
-    if(ok) {
+    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.append(oResponse);
+        var newRecords = this._oRecordSet.append(oResponse.results);
         if(newRecords) {
             // Update markup
             this.appendRows(newRecords);
             YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
         }
+    }
+    else {
+        //TODO
     }
 };
 
@@ -3967,18 +4009,21 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
  * @param oResponse {Object} Response object.
  * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse, bError) {
+YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
     var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
-    if(ok) {
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.insert(oResponse);
+        var newRecords = this._oRecordSet.insert(oResponse.results);
         if(newRecords) {
             // Update markup
             this.insertRows(newRecords);
             YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
         }
+    }
+    else {
+        //TODO
     }
 };
 
@@ -3990,17 +4035,20 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
  * @param oResponse {Object} Response object.
  * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse, bError) {
+YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
     var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
-    if(ok) {
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.replace(oResponse);
+        var newRecords = this._oRecordSet.replace(oResponse.results);
         if(newRecords) {
             this.replaceRows(newRecords);
             YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
         }
+    }
+    else {
+    
     }
 };
 
