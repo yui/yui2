@@ -188,17 +188,31 @@ YAHOO.widget.RecordSet.prototype.getRecords = function(i, range) {
 };*/
 
 /**
- * Updates given Record at given key with given data.
+ * Updates Record at given position with given data.
  *
  * @method updateRecord
  * @param oRecord {YAHOO.widget.Record} A Record instance.
  * @param sKey {String} Key.
  * @param oData {Object) New data.
  */
-YAHOO.widget.RecordSet.prototype.updateRecord = function(oRecord, sKey, oData) {
+YAHOO.widget.RecordSet.prototype.updateRecord = function(index, oData) {
+    var oldData = this._records[index];
+    this._records[index] = oData;
+    this.fireEvent("recordUpdateEvent",{record:oRecord,index:index,newData:oData,oldData:oldData});
+};
+
+/**
+ * Updates given key of given Record with given data.
+ *
+ * @method updateRecordField
+ * @param oRecord {YAHOO.widget.Record} A Record instance.
+ * @param sKey {String} Key.
+ * @param oData {Object) New data.
+ */
+YAHOO.widget.RecordSet.prototype.updateRecordField = function(oRecord, sKey, oData) {
     var oldData = oRecord[sKey];
     oRecord[sKey] = oData;
-    this.fireEvent("recordUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
+    this.fireEvent("recordFieldUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
 };
 
 /**

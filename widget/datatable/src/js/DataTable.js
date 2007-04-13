@@ -107,8 +107,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             
             ok = this.doBeforeLoadData(null,aRecords);
             if(ok) {
-                this._oRecordSet.addRecords(aRecords);
-                this.populateTable();
+                this.populateTable(aRecords);
             }
             else {
                 YAHOO.log("The function doBeforeLoadData returned false","error",this);
@@ -384,6 +383,13 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      * @event tableInitEvent
      */
     this.createEvent("tableInitEvent");
+
+    /**
+     * Fired when DataTable view is refreshed.
+     *
+     * @event tableRefreshEvent
+     */
+    this.createEvent("tableRefreshEvent");
 
     /**
      * Fired when DataTable instance is focused.
@@ -1175,30 +1181,23 @@ YAHOO.widget.DataTable.prototype._bFocused = false;
  * @private
  */
 /**
- * Array of paginator UI references.
+ * Array of pagination container elements.
  *
- * @property _paginator.elements
- * @type Object[]
- * @private
- */
-/**
- * Reference to overall container element.
- *
- * @property _paginator.elements.container
+ * @property _paginator.containers
  * @type HTMLElement
  * @private
  */
 /**
- * Reference to SELECT element.
+ * Array of pagination SELECT elements.
  *
- * @property _paginator.elements.select
+ * @property _paginator.dropdowns
  * @type HTMLElement
  * @private
  */
 /**
- * Reference to page links container element.
+ * Array of pagination link container elements.
  *
- * @property _paginator.elements.links
+ * @property _paginator.links
  * @type HTMLElement
  * @private
  */
@@ -1209,6 +1208,20 @@ YAHOO.widget.DataTable.prototype._paginator = null;
 // Private methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+// INIT FUNCTIONS
+
+
+
+
 
 /**
  * Creates HTML markup for TABLE, THEAD, TBODY.
@@ -1407,67 +1420,56 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
 
     // Set up default values
     var paginator = {
-        elements:[], // element references
-        pageLinks:0,    // show all links
-        dropdownOptions:null, // no dropdown
+        containers:[], // UI container elements
         rowsPerPage:500, // 500 rows
-        currentPage:1  // page one
+        currentPage:1,  // page one
+        pageLinks:0,    // show all links
+        pageLinksStart:1, // first link is page 1
+        dropdownOptions:null, // no dropdown
+        links: [], // links elements
+        dropdowns: [] //dropdown elements
     };
-    var elements = paginator.elements;
+    var containers = paginator.containers;
 
-    // Deal with unused deprecated values
-    if(this.startRecordIndex != 1) {
-        YAHOO.log("The property startRecordIndex is no longer used.","warn", this.toString());
-    }
-    if(this.pageLinksStart != 1) {
-        YAHOO.log("The property pageLinksStart is no longer used.","warn", this.toString());
-    }
-
-    // Validate deprecated rowsPerPage value
-    if(this.rowsPerPage && YAHOO.util.Lang.isNumber(this.rowsPerPage)) {
-        paginator.rowsPerPage = this.rowsPerPage;
-        YAHOO.log("The property rowsPerPage is deprecated in favor of " +
-                " paginatorOptions.rowsPerPage.","warn", this.toString());
-    }
-    // Validate rowsPerPage value
-    if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.rowsPerPage)) {
-        paginator.rowsPerPage = this.paginatorOptions.rowsPerPage;
-    }
-
-    // Validate deprecated currentPage value
-    if(this.pageCurrent && YAHOO.util.Lang.isNumber(this.pageCurrent)) {
-        paginator.currentPage = this.pageCurrent;
-        YAHOO.log("The property pageCurrent is deprecated in favor of " +
-                " paginatorOptions.currentPage.","warn", this.toString());
-    }
-    // Validate currentPage value
-    if(this.paginatorOptions && YAHOO.util.Lang.isNumber(this.paginatorOptions.currentPage)) {
-        paginator.currentPage = this.paginatorOptions.currentPage;
-    }
-
-    // Validate deprecated pagers values
-    if(this.pagers && YAHOO.util.Lang.isArray(this.pagers)) {
-        var dep_containers = this.pagers;
-        for(i=0; i<dep_containers.length; i++) {
-            if(YAHOO.util.Dom.inDocument(dep_containers[i])) {
-                elements.push({container:YAHOO.util.Dom.get(dep_containers[i])});
+    // Pagination configuration options
+    if(this.paginatorOptions) {
+        // Validate container values
+        if(YAHOO.util.Lang.isArray(this.paginatorOptions.containers)) {
+            for(i=0; i<containers.length; i++) {
+                if(YAHOO.util.Dom.inDocument(containers[i])) {
+                    containers.push(containers[i]);
+                }
             }
         }
-        YAHOO.log("The property pagers is deprecated in favor of " +
-                " paginatorOptions.containers.","warn", this.toString());
-    }
-    // Validate container values
-    if(this.paginatorOptions && YAHOO.util.Lang.isArray(this.paginatorOptions.containers)) {
-        var containers = this.paginatorOptions.containers;
-        for(i=0; i<containers.length; i++) {
-            if(YAHOO.util.Dom.inDocument(containers[i])) {
-                elements.push({container:YAHOO.util.Dom.get(containers[i])});
-            }
+
+        // Validate rowsPerPage value
+        if(YAHOO.util.Lang.isNumber(this.paginatorOptions.rowsPerPage)) {
+            paginator.rowsPerPage = this.paginatorOptions.rowsPerPage;
+        }
+
+        // Validate currentPage value
+        if(YAHOO.util.Lang.isNumber(this.paginatorOptions.currentPage)) {
+            paginator.currentPage = this.paginatorOptions.currentPage;
+        }
+
+        // Validate pageLinks value
+        if(YAHOO.util.Lang.isNumber(this.paginatorOptions.pageLinks)) {
+            paginator.pageLinks = this.paginatorOptions.pageLinks;
+        }
+
+        // Validate pageLinksStart value
+        if(YAHOO.util.Lang.isNumber(this.paginatorOptions.pageLinksStart)) {
+            paginator.pageLinksStart = this.paginatorOptions.pageLinksStart;
+        }
+
+        // Validate dropdownOptions value
+        if(YAHOO.util.Lang.isArray(this.paginatorOptions.dropdownOptions)) {
+            paginator.dropdownOptions = this.paginatorOptions.dropdownOptions;
         }
     }
 
     // No containers found, create from scratch
-    if(elements.length === 0) {
+    if(containers.length === 0) {
         // One before TABLE
         var pag0 = document.createElement("span");
         pag0.id = "yui-dt-pagcontainer0";
@@ -1481,70 +1483,171 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
         pag1 = this._elContainer.insertBefore(pag1, this._elTable.nextSibling);
 
         // Add to tracker
-        elements = [{container:pag0}, {container:pag1}];
-    }
-
-    // Validate deprecated pageLinksLength value, accounting for neg value means show all
-    if(this.pageLinksLength &&
-            YAHOO.util.Lang.isNumber(this.pageLinksLength)) {
-        paginator.pageLinks = this.pageLinksLength;
-        if(this.pageLinksLength < 0) {
-            paginator.pageLinks = 0;
-        }
-        YAHOO.log("The property pageLinksLength is deprecated in favor of " +
-                " paginatorOptions.pageLinks.","warn", this.toString());
-    }
-    // Validate pageLinks value
-    if(this.paginatorOptions &&
-            YAHOO.util.Lang.isNumber(this.paginatorOptions.pageLinks)) {
-        paginator.pageLinks = this.paginatorOptions.pageLinks;
+        containers = [pag0, pag1];
     }
 
     // Page links are enabled
     if(paginator.pageLinks > -1) {
-        for(i=0; i<elements.length; i++) {
+        for(i=0; i<containers.length; i++) {
             // Create one page links container per paginator
-            var links = document.createElement("span");
-            links.id = "yui-dt-pagselect"+i;
-            links.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
-            links = elements[i].container.appendChild(links);
+            var linkEl = document.createElement("span");
+            linkEl.id = "yui-dt-pagselect"+i;
+            linkEl.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
+            linkEl = containers[i].appendChild(linkEl);
 
             // Add event listener
-            YAHOO.util.Event.addListener(links,"click",this._onPagerClick,this);
+            YAHOO.util.Event.addListener(linkEl,"click",this._onPagerClick,this);
 
-            // Add to tracker
-            elements[i].links = links;
+             // Add to tracker
+            paginator.links.push(linkEl);
+       }
+    }
+
+    // Dropdown enabled
+    if(paginator.dropdownOptions) {
+        // Show these options in the dropdown
+        var dropdownOptions = paginator.dropdownOptions;
+
+        for(i=0; i<containers.length; i++) {
+            // Create one SELECT element per Paginator container
+            var selectEl = document.createElement("select");
+            selectEl.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+            selectEl = containers[i].appendChild(selectEl);
+
+            // Create OPTION elements
+            for(j=0; j<dropdownOptions.length; j++) {
+                var optionEl = document.createElement("option");
+                optionEl.value = dropdownOptions[j].value || dropdownOptions[j];
+                optionEl.innerHTML = dropdownOptions[j].text || dropdownOptions[j];
+                optionEl = selectEl.appendChild(optionEl);
+            }
+            
+            // Add event listener
+            YAHOO.util.Event.addListener(selectEl,"change",this._onPagerSelect,this);
+
+            // Add DOM reference to tracker
+           paginator.dropdowns.push(selectEl);
         }
     }
-
-    // Validate deprecated rowsPerPageDropdown value
-    if(this.rowsPerPageDropdown &&
-            YAHOO.util.Lang.isArray(this.rowsPerPageDropdown)) {
-        paginator.dropdownOptions = this.rowsPerPageDropdown;
-        YAHOO.log("The property rowsPerPageDropdown is deprecated in favor of " +
-                " paginatorOptions.dropdownOptions.","warn", this.toString());
-    }
-    // Validate dropdownOptions value
-    if(this.paginatorOptions &&
-            YAHOO.util.Lang.isArray(this.paginatorOptions.dropdownOptions)) {
-        paginator.dropdownOptions = this.paginatorOptions.dropdownOptions;
+    else {
+        YAHOO.log("Could not create Paginator dropdown due to invalid dropdownOptions","error",this.toString());
     }
 
     this._paginator = paginator;
-    this._paginator.elements = elements;
+    this._paginator.containers = containers;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// RECORD FUNCTIONS
+
+
+
+
+/**
+ * Creates a new Record to add to RecordSet at position i if given, or to the
+ * end otherwise.
+ *
+ * @method _addRecords
+ * @param oData {YAHOO.widget.Record} Array of object literals containing data.
+ * @param index {Number} Index position at which to add Record.
+ * @return {String} Array of Records.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._addRecords = function(aData, index) {
+    return this._oRecordSet.addRecords(aData);
 };
 
 /**
- * Add a new row to table body at position i if given, or to the bottom
- * otherwise. Does not fire any events or apply any classes.
+ * Deletes a given Record from the RecordSet.
  *
- * @method _addRow
+ * @method _deleteRecord
+ * @param identifier {Number | String} Record identifier.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._deleteRecord = function(identifier) {
+    this._oRecordSet.deleteRecord(identifier);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ROW FUNCTIONS
+
+
+
+
+/**
+ * Add a new TR element to table body at position i if given, or to the bottom
+ * otherwise. Populates cells with data from given Record.
+ *
+ * @method _addRowEl
  * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} Position at which to add row.
+ * @param index {Number} Index position at which to add TR.
  * @return {String} ID of the added TR element.
  * @private
  */
-YAHOO.widget.DataTable.prototype._addRow = function(oRecord, index) {
+YAHOO.widget.DataTable.prototype._addRowEl = function(oRecord, index) {
     this.hideTableMessage();
 
     // Is this an insert or an append?
@@ -1590,7 +1693,8 @@ One thing, though: it doesn't work in combination with
     }
 
     // Striping
-    if(!insert) {
+    //TODO: move this to somewhere useful
+    /*if(!insert) {
         if(index%2) {
             YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_ODD);
         }
@@ -1600,19 +1704,98 @@ One thing, though: it doesn't work in combination with
     }
     else {
         //TODO: pass in a subset for better performance
-        this._restripeRows();
-    }
+        this._setRowStripes();
+    }*/
     
     return elRow.id;
 };
 
 /**
- * Resets first row being tracked by class YAHOO.widget.DataTable.CLASS_FIRST.
+ * Updates all cells of existing TR element at given position with data from the
+ * given Record.
  *
- * @method _resetFirstRow
+ * @method _updateRowEl
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param index {Number} Position at which to update row.
+ * @return {String} ID of the updated TR element.
  * @private
  */
-YAHOO.widget.DataTable.prototype._resetFirstRow = function() {
+YAHOO.widget.DataTable.prototype._updateRowEl = function(oRecord, index) {
+    this.hideTableMessage();
+
+    var elRow = this._elBody.rows[index];
+    elRow.yuiRecordId = oRecord.yuiRecordId;
+
+    // ...Update TBODY cells with new data
+    for(var j=0; j<elRow.cells.length; j++) {
+        this.formatCell(elRow.cells[j]);
+    }
+    return elRow.id;
+};
+
+
+/**
+ * Deletes a given TR element.
+ *
+ * @method _deleteRowEl
+ * @param row {HTMLElement | Number} HTML TR element reference or position index.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._deleteRowEl = function(row) {
+    if(YAHOO.util.Dom.inDocument(row)) {
+        row = row.sectionRowIndex;
+    }
+    if(YAHOO.lang.isNumber(row)) {
+        this._elBody.deleteRow(i);
+
+        if(this._elBody.rows.length === 0) {
+            this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+        }
+    }
+    else {
+        YAHOO.log("Could not delete row " + row, "warn", this.toString());
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// STATE FUNCTIONS
+
+
+
+
+/**
+ * Sets first row with class YAHOO.widget.DataTable.CLASS_FIRST.
+ *
+ * @method _setFirstRow
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._setFirstRow = function() {
+    // Table has rows
     if(this._elBody.rows.length > 0) {
         YAHOO.util.Dom.removeClass(this.getFirstRow(),YAHOO.widget.DataTable.CLASS_FIRST);
         var elFirstRow = this._elBody.rows[0];
@@ -1620,17 +1803,19 @@ YAHOO.widget.DataTable.prototype._resetFirstRow = function() {
         this._elFirstRow = elFirstRow;
     }
     else {
+        //TODO: is this necessary?
         this._elFirstRow = null;
     }
 };
 
 /**
- * Resets last row being tracked by class YAHOO.widget.DataTable.CLASS_LAST.
+ * Sets last row with class YAHOO.widget.DataTable.CLASS_LAST.
  *
- * @method _resetLastRow
+ * @method _setLastRow
  * @private
  */
-YAHOO.widget.DataTable.prototype._resetLastRow = function() {
+YAHOO.widget.DataTable.prototype._setLastRow = function() {
+    // Table has rows
     if(this._elBody.rows.length > 0) {
         YAHOO.util.Dom.removeClass(this.getLastRow(),YAHOO.widget.DataTable.CLASS_LAST);
         var elLastRow = this._elBody.rows[this._elBody.rows.length-1];
@@ -1643,14 +1828,14 @@ YAHOO.widget.DataTable.prototype._resetLastRow = function() {
 };
 
 /**
- * Restripes rows by applying class YAHOO.widget.DataTable.CLASS_EVEN or
+ * Stripes rows by applying class YAHOO.widget.DataTable.CLASS_EVEN or
  * YAHOO.widget.DataTable.CLASS_ODD.
  *
- * @method _restripeRows
- * @param range {Number} (optional) Range defines a subset of rows to restripe.
+ * @method _setRowStripes
+ * @param range {Number} (optional) Range defines a subset of rows to stripe.
  * @private
  */
-YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
+YAHOO.widget.DataTable.prototype._setRowStripes = function(range) {
     if(!range) {
         var rows = this._elBody.rows;
         for(var i=0; i<rows.length; i++) {
@@ -1665,31 +1850,8 @@ YAHOO.widget.DataTable.prototype._restripeRows = function(range) {
         }
     }
     else {
-        //TODO: allow restriping of a subset of rows for performance
+        //TODO: allow striping of a subset of rows for performance
     }
-};
-
-/**
- * Updates existing row at position i with data from the given Record. Does not
- * fire any events.
- *
- * @method _updateRow
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} Position at which to update row.
- * @return {String} ID of the updated TR element.
- * @private
- */
-YAHOO.widget.DataTable.prototype._updateRow = function(oRecord, index) {
-    this.hideTableMessage();
-
-    var elRow = this._elBody.rows[index];
-    elRow.yuiRecordId = oRecord.yuiRecordId;
-
-    // ...Update TBODY cells with new data
-    for(var j=0; j<elRow.cells.length; j++) {
-        this.formatCell(elRow.cells[j]);
-    }
-    return elRow.id;
 };
 
 /**
@@ -1756,32 +1918,23 @@ YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
     this._unselect(selectedCells);
 };
 
-/**
- * Deletes a given row element as well its corresponding Record in the RecordSet.
- * Does not fire any events.
- *
- * @method _deleteRow
- * @param elRow {element} HTML table row element reference.
- * @private
- */
-YAHOO.widget.DataTable.prototype._deleteRow = function(elRow) {
-//TODO: sniff elRow.rowIndex
-    var allRows = this._elBody.rows;
-    var id = elRow.id;
-    var recordId = elRow.yuiRecordId;
-    for(var i=0; i< allRows.length; i++) {
-        if(id == allRows[i].id) {
-            this._elBody.deleteRow(i);
 
-            // Update the RecordSet
-            this._oRecordSet.deleteRecord(i);
-            break;
-        }
-    }
-    if(this._elBody.rows.length === 0) {
-        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
-    }
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private DOM Event Handlers
@@ -2259,9 +2412,27 @@ YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
             oSelf._paginator.currentPage = 1;
         }
         oSelf._paginator.rowsPerPage = rowsPerPage;
-        oSelf.populateTable();
+        oSelf.refreshTable();
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2277,7 +2448,7 @@ YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
-    this._restripeRows();
+    this._setRowStripes();
 };
 
 /**
@@ -2293,6 +2464,31 @@ YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
 YAHOO.widget.DataTable.prototype._onRecordUpdate = function(oArgs) {
     this.fireEvent("recordSetUpdateEvent",oArgs);
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -2441,55 +2637,54 @@ YAHOO.widget.DataTable.prototype.paginatorOptions = null;
  */
 YAHOO.widget.DataTable.prototype.sortedBy = null;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Deprecated public member variables
-//
-/////////////////////////////////////////////////////////////////////////////
 
-/**
- * @deprecated No longer used.
- * @property isEmpty
- * 
- */
-/**
- * @deprecated No longer used.
- * @property isEmpty
- */
-/**
- * @deprecated No longer used.
- * @property startRecordIndex
- */
-/**
- * @deprecated No longer used.
- * @property pageLinksStart
- */
-/**
- * @deprecated Deprecated in favor of paginatorOptions.currentPage
- * @property pageCurrent
- */
-/**
- * @deprecated Deprecated in favor of paginatorOptions.rowsPerPage
- * @property rowsPerPage
- */
-/**
- * @deprecated Deprecated in favor of paginatorOptions.pageLinks
- * @property pageLinksLength
- */
-/**
- * @deprecated Deprecated in favor of paginatorOptions.dropdownOptions
- * @property rowsPerPageDropdown
- */
-/**
- * @deprecated Deprecated in favor of paginatorOptions.containers
- * @property pagers
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// INTERNAL ACCESSORS
 
 /**
  * Public accessor to the unique name of the DataSource instance.
@@ -2501,6 +2696,85 @@ YAHOO.widget.DataTable.prototype.sortedBy = null;
 YAHOO.widget.DataTable.prototype.toString = function() {
     return "DataTable " + this._sName;
 };
+
+/**
+ * Returns pointer to the DataTable instance's ColumnSet instance.
+ *
+ * @method getColumnSet
+ * @return {YAHOO.widget.ColumnSet} ColumnSet instance.
+ */
+YAHOO.widget.DataTable.prototype.getColumnSet = function() {
+    return this._oColumnSet;
+};
+
+/**
+ * Returns pointer to the DataTable instance's RecordSet instance.
+ *
+ * @method getRecordSet
+ * @return {YAHOO.widget.RecordSet} RecordSet instance.
+ */
+YAHOO.widget.DataTable.prototype.getRecordSet = function() {
+    return this._oRecordSet;
+};
+
+/**
+ * Returns paginator object literal.
+ *
+ * @method getPaginator
+ * @return {Object} Paginator object literal with following properties:
+ *     <ul>
+ *     <li>currentPage: current page number</li>
+ *     <li>dropdownOptions: array of numbers to show in dropdown</li>
+ *     <li>elements: array of object literals that define where to show
+ *     paginator UI with following properties:
+ *         <ul>
+ *         <li>container: element reference to paginator container</li>
+ *         <li>links: element reference to page links container</li>
+ *         <li>select: element reference to dropdown</li>
+ *         </ul>
+ *     </li>
+ *     <li>pageLinks: number of page links displayed</li>
+ *     <li>pageLinkStart: page number of first link</li>
+ *     <li>rowsPerPage: number of rows displayed</li>
+ *     <li>totalPages: total number of pages</li>
+ *     </ul>
+ */
+YAHOO.widget.DataTable.prototype.getPaginator = function() {
+    return this._paginator;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// DOM ACCESSORS
+
+
 
 /**
  * Returns element reference to TABLE.
@@ -2582,120 +2856,118 @@ YAHOO.widget.DataTable.prototype.getCell = function(rowIndex, colIndex) {
     return null;
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ROW FUNCTIONS
+
+
 /**
- * Displays placeholder row with a message when there are no data rows.
+ * Convenience method to add a new row to table body at position index if given,
+ * or to the bottom otherwise.
  *
- * @method showTableMessage
- * @param sHTML {String} (optional) Value for innerHTML.
- * @param sClassName {String} (optional) Classname.
+ * @method addRow
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param index {Number} (optional) Position at which to add row.
  */
-YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) {
-    var elCell = this._elMsgCell;
-    if(YAHOO.lang.isString(sHTML)) {
-        elCell.innerHTML = sHTML;
+YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
+    if(oRecord && (oRecord instanceof YAHOO.widget.Record)) {
+        var rowId = this._addRowEl(oRecord, index);
+        // TODO: row may be inserted into middle... so don't set first/last
+        if(YAHOO.lang.isNumber(index)) {
+            if(index === 0) {
+                this._setFirstRow();
+            }
+            this.fireEvent("rowInsertEvent", {rowIds:[rowId]});
+        }
+        else {
+            this._setLastRow();
+            this.fireEvent("rowAppendEvent", {rowIds:[rowId]});
+        }
     }
-    if(YAHOO.lang.isString(sClassName)) {
-        elCell.className = sClassName;
-    }
-    this._elMsgBody.style.display = "";
 };
 
 /**
- * Hide placeholder message.
+ * Updates existing Record and row at position index with given data.
  *
- * @method hideTableMessage
+ * @method updateRow
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param index {Number} Position at which to update row.
  */
-YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
-    this._elMsgBody.style.display = "none";
-};
+YAHOO.widget.DataTable.prototype.updateRow = function(oData, index) {
 
-
-/**
- * @deprecated Deprecated in favor of showTableMessage().
- * @method showEmptyMessage
- * 
- */
-YAHOO.widget.DataTable.prototype.showEmptyMessage = function() {
-    if(this.isEmpty) {
-        return;
+    if(oRecord && (oRecord instanceof YAHOO.widget.Record)) {
+        var rowId = this._updateRowEl(oRecord, index);
+        this.fireEvent("rowUpdateEvent", {rowIds:[rowId]});
     }
-    if(this.isLoading) {
-        this.hideTableMessages();
-    }
-
-    this._elMsgBody.style.display = "";
-    var elCell = this._elMsgCell;
-    elCell.className = YAHOO.widget.DataTable.CLASS_EMPTY;
-    elCell.innerHTML = YAHOO.widget.DataTable.MSG_EMPTY;
-    this.isEmpty = true;
 };
 
 /**
- * @deprecated Deprecated in favor of showTableMessage().
+ * Calls delete on given rows.
  *
- * @method showLoadingMessage
+ * @method deleteRows
+ * @param elRows {HTMLElement[]} Array of HTML table row element reference.
  */
-YAHOO.widget.DataTable.prototype.showLoadingMessage = function() {
-    if(this.isLoading) {
-        return;
-    }
-    if(this.isEmpty) {
-        this.hideTableMessages();
+YAHOO.widget.DataTable.prototype.deleteRows = function(elRows) {
+    var rowIndexes = [];
+    for(var i=0; i<rows.length; i++) {
+        var rowIndex = (rows[i].sectionRowIndex !== undefined) ? rows[i].sectionRowIndex : null;
+        rowIndexes.push(rowIndex);
+        this._deleteRecord(rows[i].yuiRecordId);
+        this._deleteRowEl(rows[i]);
+        this.fireEvent("rowDeleteEvent", {rowIndexes:rowIndexes});
     }
 
-    this._elMsgBody.style.display = "";
-    var elCell = this._elMsgCell;
-    elCell.className = YAHOO.widget.DataTable.CLASS_LOADING;
-    elCell.innerHTML = YAHOO.widget.DataTable.MSG_LOADING;
-    this.isLoading = true;
+    //TODO: can be optimized?
+    // Set first-row and last-row trackers
+    this._setFirstRow();
+    this._setLastRow();
 };
 
 /**
- * @deprecated Deprecated in favor of hideTableMessage().
- * @method hideTableMessages
- * 
- */
-YAHOO.widget.DataTable.prototype.hideTableMessages = function() {
-    if(!this.isEmpty && !this.isLoading) {
-        return;
-    }
-
-    this._elMsgBody.style.display = "none";
-
-    this.isEmpty = false;
-    this.isLoading = false;
-};
-
-/**
- * Sets focus on the TABLE element.
+ * Deletes a given row element as well its corresponding Record in the RecordSet.
  *
- * @method focusTable
+ * @method deleteRow
+ * @param elRow {HTMLElement} HTML table row element reference.
  */
-YAHOO.widget.DataTable.prototype.focusTable = function() {
-    var elTable = this._elTable;
-    if(!this._bFocused) {
-        // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
-        // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
-        // strange unexpected things as the user clicks on buttons and other controls.
-        setTimeout(function() { elTable.focus(); },0);
-        this._bFocused = true;
-        this.fireEvent("tableFocusEvent");
+YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
+    if(elRow && YAHOO.util.Dom.inDocument(elRow)) {
+        var rowIndex = (elRow.sectionRowIndex !== undefined) ? elRow.sectionRowIndex : null;
+        this._deleteRecord(elRow.yuiRecordId);
+        this._deleteRowEl(elRow);
+        this.fireEvent("rowDeleteEvent", {rowIndexes:[rowIndex]});
+
+        //TODO: can be optimized?
+        // Set first-row and last-row trackers
+        this._setFirstRow();
+        this._setLastRow();
     }
+
 };
 
-/**
- * Overridable method gives implementers a hook to access data before
- * it gets added to RecordSet and rendered to the TBODY.
- *
- * @method doBeforeLoadData
- * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
- * @return {Boolean} Return true to continue loading data into RecordSet and
- * updating DataTable with new Records, false to cancel.
- */
-YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse) {
-    return true;
-};
+
+
+
+
 
 /**
  * Add rows to bottom of table body.
@@ -2709,13 +2981,13 @@ YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
 
         var rowIds = [];
         for(var i=0; i<aRecords.length; i++) {
-            var rowId = this._addRow(aRecords[i]);
+            var rowId = this._addRowEl(aRecords[i]);
             rowIds.push(rowId);
         }
 
-        // Reset last-row tracker
-        this._resetLastRow();
-        
+        // Set last-row tracker
+        this._setLastRow();
+
         this.fireEvent("rowAppendEvent", {rowIds:rowIds});
     }
 };
@@ -2732,155 +3004,15 @@ YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
 
         var rowIds = [];
         for(var i=0; i<aRecords.length; i++) {
-            var rowId = this._addRow(aRecords[i],0);
+            var rowId = this._addRowEl(aRecords[i],0);
             rowIds.push(rowId);
         }
-        
-        // Reset first-row tracker
-        this._resetFirstRow();
+
+        // Set first-row tracker
+        this._setFirstRow();
 
         this.fireEvent("rowInsertEvent", {rowIds:rowIds});
     }
-};
-
-/**
- * Replaces existing rows of table body with new Records.
- *
- * @method replaceRows
- * @param aRecords {YAHOO.widget.Record[]} Array of Records.
- */
-YAHOO.widget.DataTable.prototype.replaceRows = function(aRecords) {
-    var i;
-    
-    if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
-        this.hideTableMessage();
-
-        var elBody = this._elBody;
-        var elRows = this._elBody.rows;
-
-        // Remove extra rows from the bottom so as to preserve ID order
-        while(elBody.hasChildNodes() && (elRows.length > aRecords.length)) {
-            elBody.deleteRow(elRows.length-1);
-        }
-
-        // Unselect rows in the UI but keep tracking selected rows
-        var selectedRecords = this.getSelectedRecordIds();
-        if(selectedRecords.length > 0) {
-            this._unselectAllRows();
-        }
-
-        var rowIds = [];
-        // Format in-place existing rows
-        for(i=0; i<elRows.length; i++) {
-            if(aRecords[i]) {
-                rowIds.push(this._updateRow(aRecords[i],i));
-            }
-        }
-
-        // Add rows as necessary
-        for(i=elRows.length; i<aRecords.length; i++) {
-            rowIds.push(this._addRow(aRecords[i]));
-        }
-        
-        // Select any rows as necessary
-        for(i=0; i<selectedRecords.length; i++) {
-            var allRows = elBody.rows;
-            for(var j=0; j<allRows.length; j++) {
-                if(selectedRecords[i] == allRows[j].yuiRecordId) {
-                    this._select([allRows[j]]);
-                }
-            }
-        }
-        
-        // Reset first-row and last-row trackers
-        this._resetFirstRow();
-        this._resetLastRow();
-
-        this.fireEvent("rowReplaceEvent", {rowIds:rowIds});
-    }
-    else {
-        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
-    }
-};
-
-/**
- * Convenience method to add a new row to table body at position index if given,
- * or to the bottom otherwise.
- *
- * @method addRow
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} Position at which to add row.
- */
-YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
-    if(oRecord && (oRecord instanceof YAHOO.widget.Record)) {
-        var rowId = this._addRow(oRecord, index);
-        // TODO: row may be inserted into middle... so don't reset first/last
-        if(YAHOO.lang.isNumber(index)) {
-            if(index === 0) {
-                this._resetFirstRow();
-            }
-            this.fireEvent("rowInsertEvent", {rowIds:[rowId]});
-        }
-        else {
-            this._resetLastRow();
-            this.fireEvent("rowAppendEvent", {rowIds:[rowId]});
-        }
-    }
-};
-
-/**
- * Updates existing row at position index with data from the given Record.
- *
- * @method updateRow
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} Position at which to update row.
- */
-YAHOO.widget.DataTable.prototype.updateRow = function(oRecord, index) {
-    if(oRecord && (oRecord instanceof YAHOO.widget.Record)) {
-        var rowId = this._updateRow(oRecord, index);
-        this.fireEvent("rowUpdateEvent", {rowIds:[rowId]});
-    }
-};
-
-/**
- * Calls delete on given rows.
- *
- * @method deleteRows
- * @param elRows {HTMLElement[]} Array of HTML table row element reference.
- */
-YAHOO.widget.DataTable.prototype.deleteRows = function(elRows) {
-    var rowIndexes = [];
-    for(var i=0; i<rows.length; i++) {
-        var rowIndex = (rows[i].sectionRowIndex !== undefined) ? rows[i].sectionRowIndex : null;
-        rowIndexes.push(rowIndex);
-        this._deleteRow(rows[i]);
-        this.fireEvent("rowDeleteEvent", {rowIndexes:rowIndexes});
-    }
-    
-    //TODO: can be optimized?
-    // Reset first-row and last-row trackers
-    this._resetFirstRow();
-    this._resetLastRow();
-};
-
-/**
- * Deletes a given row element as well its corresponding Record in the RecordSet.
- *
- * @method deleteRow
- * @param elRow {HTMLElement} HTML table row element reference.
- */
-YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
-    if(elRow && YAHOO.util.Dom.inDocument(elRow)) {
-        var rowIndex = (elRow.sectionRowIndex !== undefined) ? elRow.sectionRowIndex : null;
-        this._deleteRow(elRow);
-        this.fireEvent("rowDeleteEvent", {rowIndexes:[rowIndex]});
-        
-        //TODO: can be optimized?
-        // Reset first-row and last-row trackers
-        this._resetFirstRow();
-        this._resetLastRow();
-    }
-    
 };
 
 /**
@@ -2915,7 +3047,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
 
         // Update UI
         this._select(row);
-        
+
         // Add to the end of internal tracker
         tracker.push(recordId);
         this._aSelectedRecords = tracker;
@@ -2966,6 +3098,589 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
                 "info",this.toString());
     }
 };
+
+
+/**
+ * Unselects all selected rows (across all pages, if applicable).
+ *
+ * @method unselectAllRows
+ */
+YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
+    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
+    this.unselect(selectedRows);
+    this._aSelectedRecords = [];
+    this.fireEvent("unselectEvent", {els:selectedRows});
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// MESSAGING
+
+
+/**
+ * Displays placeholder row with a message when there are no data rows.
+ *
+ * @method showTableMessage
+ * @param sHTML {String} (optional) Value for innerHTML.
+ * @param sClassName {String} (optional) Classname.
+ */
+YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) {
+    var elCell = this._elMsgCell;
+    if(YAHOO.lang.isString(sHTML)) {
+        elCell.innerHTML = sHTML;
+    }
+    if(YAHOO.lang.isString(sClassName)) {
+        elCell.className = sClassName;
+    }
+    this._elMsgBody.style.display = "";
+};
+
+/**
+ * Hide placeholder message.
+ *
+ * @method hideTableMessage
+ */
+YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
+    this._elMsgBody.style.display = "none";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// PAGINATION
+
+
+
+
+
+
+/**
+ * Displays a specific page of a paginated DataTable.
+ *
+ * @method showPage
+ * @param nPage {Number} Which page.
+ */
+YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
+    // Validate input
+    if(!YAHOO.lang.isNumber(nPage) || (nPage < 1) || (nPage > this._paginator.totalPages)) {
+        nPage = 1;
+    }
+    this._paginator.currentPage = nPage;
+    this.refreshTable();
+};
+
+/**
+ * Updates Paginator containers with markup. Override this method to customize pagination UI.
+ *
+ * @method formatPaginators
+ */
+ YAHOO.widget.DataTable.prototype.formatPaginators = function() {
+    var pag = this._paginator;
+    var i;
+
+    // For Opera workaround
+    var dropdownEnabled = false;
+    
+    // Links are enabled
+    if(pag.pageLinks > -1) {
+        for(i=0; i<pag.links.length; i++) {
+            this.formatPaginatorLinks(pag.links[i], pag.currentPage, pag.pageLinksStart, pag.pageLinks, pag.totalPages);
+        }
+    }
+
+    // Dropdown is enabled
+    if(pag.dropdownOptions) {
+        dropdownEnabled = true;
+        for(i=0; i<pag.dropdowns.length; i++) {
+            this.formatPaginatorDropdown(pag.dropdowns[i]);
+        }
+    }
+
+    // For Opera artifacting in dropdowns
+    if(dropdownEnabled && navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+        document.body.style += '';
+    }
+};
+
+/**
+ * Updates Paginator dropdown. If dropdown doesn't exist, the markup is created.
+ * Sets dropdown's "selected" value.
+ *
+ * @method formatPaginatorDropdown
+ * @param oElReferences {Object} Object literal of pointers to Paginator UI
+ * elements.
+ */
+YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown) {
+    if(elDropdown.options) {
+        var options = elDropdown.options;
+        // Update dropdown's "selected" value
+        for(var i=options.length-1; i>-1; i--) {
+            if((this._paginator.rowsPerPage + "") === options[i].value) {
+                options[i].selected = true;
+            }
+        }
+    }
+    else {
+        YAHOO.log("Could not update Paginator dropdown","error",this.toString());
+    }
+};
+
+/**
+ * Updates Paginator links container with markup.
+ *
+ * @method formatPaginatorLinks
+ */
+YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nCurrentPage, nPageLinksStart, nPageLinksLength, nTotalPages) {
+    // Markup for page links
+    var isFirstPage = (nCurrentPage == 1) ? true : false;
+    var isLastPage = (nCurrentPage == nTotalPages) ? true : false;
+    var firstPageLink = (isFirstPage) ?
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTPAGE + "\">&lt;&lt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
+    var prevPageLink = (isFirstPage) ?
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_PREVPAGE + "\">&lt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVLINK + "\">&lt;</a> " ;
+    var nextPageLink = (isLastPage) ?
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_NEXTPAGE + "\">&gt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXTLINK + "\">&gt;</a> " ;
+    var lastPageLink = (isLastPage) ?
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_LASTPAGE + "\">&gt;&gt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
+    markup = firstPageLink + prevPageLink;
+    var maxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
+        nPageLinksStart+nPageLinksLength-1 : nTotalPages;
+    // Special case for pageLinksLength 0 => show all links
+    if(nPageLinksLength === 0) {
+        maxLinks = nTotalPages;
+    }
+    for(var i=nPageLinksStart; i<=maxLinks; i++) {
+         if(i != nCurrentPage) {
+            markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
+        }
+        else {
+            markup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_CURRENTPAGE + "\">" + i + "</span>";
+        }
+    }
+    markup += nextPageLink + lastPageLink;
+    elContainer.innerHTML = markup;
+};
+
+/**
+ * Updates Paginator internal values and UI.
+ * @method updatePaginator
+ */
+YAHOO.widget.DataTable.prototype.updatePaginator = function() {
+    // Paginator values must be initialized
+    if(this._paginator === null) {
+        this._initPaginator();
+    }
+
+    // How many total Records
+    var recordsLength = this._oRecordSet.getLength();
+
+    // If rowsPerPage < 1, show all rows
+    this._paginator.rowsPerPage = (this._paginator.rowsPerPage > 0) ?
+        this._paginator.rowsPerPage : recordsLength;
+    var rowsPerPage = this._paginator.rowsPerPage;
+
+
+    // How many rows this page
+    var maxRows = (rowsPerPage < recordsLength) ?
+            rowsPerPage : recordsLength;
+
+    // How many total pages
+    this._paginator.totalPages = Math.ceil(recordsLength / maxRows);
+
+    // What is current page
+    var currentPage = this._paginator.currentPage;
+
+    // First row of this page
+    this._paginator.startRecordIndex =  (currentPage-1) * rowsPerPage;
+
+    // How many page links to display
+    var pageLinksLength = this._paginator.pageLinks;
+    // Show all links
+    if(pageLinksLength === 0) {
+        pageLinksLength = this._paginator.totalPages;
+    }
+    // Page links are enabled
+    if(pageLinksLength > -1) {
+        // First page link for this page
+        this._paginator.pageLinksStart = (pageLinksLength == 1) ? currentPage :
+                (Math.ceil(currentPage/pageLinksLength-1) * pageLinksLength) + 1;
+    }
+
+    this.formatPaginators();
+
+    this.fireEvent("paginateEvent", {paginator:this._paginator});
+    YAHOO.log("Currently displaying page " + currentPage + " of " +
+            this._paginator.totalPages + " with " + rowsPerPage +
+            " rows per page", "info", this.toString());
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TABLE FUNCTIONS
+
+/**
+ * Sets focus on the TABLE element.
+ *
+ * @method focusTable
+ */
+YAHOO.widget.DataTable.prototype.focusTable = function() {
+    var elTable = this._elTable;
+    if(!this._bFocused) {
+        // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
+        // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
+        // strange unexpected things as the user clicks on buttons and other controls.
+        setTimeout(function() { elTable.focus(); },0);
+        this._bFocused = true;
+        this.fireEvent("tableFocusEvent");
+    }
+};
+
+
+/**
+ * Replaces all Records in RecordSet and populates TBODY rows with the
+ * new data. Blows away old data. If pagination is enabled, displays only
+ * current page, otherwise displays all rows.
+ *
+ * @method populateTable
+ * @param oData {Object | Object[]} An object literal of data or an array of
+ * object literals containing data.
+ */
+YAHOO.widget.DataTable.prototype.populateTable = function(oData) {
+    // Add data to RecordSet
+    var records = this._oRecordSet.append(oData);
+    
+    
+    // Update table view
+    this.refreshTable();
+};
+
+/**
+ * Refreshes table view into existing RecordSet. For performance, reuses
+ * existing rows while deleting extraneous rows.
+ *
+ * @method refreshTable
+ */
+YAHOO.widget.DataTable.prototype.refreshTable = function() {
+    var aRecords;
+    
+    // Paginator is disabled
+    if(!this.paginator) {
+        // Paginator must be destroyed
+        if(this._paginator !== null) {
+            //TODO: this.destroyPaginator();
+        }
+    }
+    // Paginator is enabled
+    if(this.paginator) {
+        this.updatePaginator();
+        aRecords = this._oRecordSet.getRecords(this._paginator.startRecordIndex, this._paginator.rowsPerPage);
+    }
+    // Show all records
+    else {
+        aRecords = this._oRecordSet.getRecords();
+    }
+
+    if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
+        this.hideTableMessage();
+
+        var elBody = this._elBody;
+        var elRows = this._elBody.rows;
+
+        // Remove extra rows from the bottom so as to preserve ID order
+        while(elBody.hasChildNodes() && (elRows.length > aRecords.length)) {
+            elBody.deleteRow(elRows.length-1);
+        }
+
+        // Unselect rows in the UI but keep tracking selected rows
+        var selectedRecords = this.getSelectedRecordIds();
+        if(selectedRecords.length > 0) {
+            this._unselectAllRows();
+        }
+
+        var rowIds = [];
+        // Format in-place existing rows
+        for(i=0; i<elRows.length; i++) {
+            if(aRecords[i]) {
+                rowIds.push(this._updateRowEl(aRecords[i],i));
+            }
+        }
+
+        // Add rows as necessary
+        for(i=elRows.length; i<aRecords.length; i++) {
+            rowIds.push(this._addRowEl(aRecords[i]));
+        }
+
+        // Select any rows as necessary
+        for(i=0; i<selectedRecords.length; i++) {
+            var allRows = elBody.rows;
+            for(var j=0; j<allRows.length; j++) {
+                if(selectedRecords[i] == allRows[j].yuiRecordId) {
+                    this._select([allRows[j]]);
+                }
+            }
+        }
+
+        // Set first-row and last-row trackers
+        this._setFirstRow();
+        this._setLastRow();
+
+        this.fireEvent("tableRefreshEvent", {records:aRecords});
+
+        YAHOO.log("Table refreshed with " + aRecords.length + " rows", "info", this.toString());
+    }
+    else {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// COLUMN FUNCTIONS
+
+
+
+
+/**
+ * Sort given column.
+ *
+ * @method sortColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
+    if(!oColumn) {
+        return;
+    }
+    if(!oColumn instanceof YAHOO.widget.Column) {
+        //TODO: accept the TH or TH.key
+        //TODO: Figure out the column based on TH ref or TH.key
+        return;
+    }
+    if(oColumn.sortable) {
+        // What is the default sort direction?
+        var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
+
+        //TODO: what if column doesn't have key?
+        // Is this column sorted already?
+        if(oColumn.key && this.sortedBy && (this.sortedBy.colKey == oColumn.key)) {
+            if(this.sortedBy.dir) {
+                sortDir = (this.sortedBy.dir == "asc") ? "desc" : "asc";
+            }
+            else {
+                sortDir = (sortDir == "asc") ? "desc" : "asc";
+            }
+        }
+        else if(!this.sortedBy) {
+            this.sortedBy = {};
+        }
+
+        // Define the sort handler function based on the direction
+        var sortFnc = null;
+        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
+            sortFnc = oColumn.sortOptions.descFunction;
+        }
+        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
+            sortFnc = oColumn.sortOptions.ascFunction;
+        }
+
+        // Custom function was not provided so use the built-in sorter
+        // ONLY IF column key is defined
+        // TODO: nested/cumulative/hierarchical sorting
+        if(!sortFnc && oColumn.key) {
+            var sorted;
+            sortFnc = function(a, b) {
+                if(sortDir == "desc") {
+                    sorted = YAHOO.util.Sort.compareDesc(a[oColumn.key],b[oColumn.key]);
+                    if(sorted === 0) {
+                        return YAHOO.util.Sort.compareDesc(a.id,b.id);
+                    }
+                    else {
+                        return sorted;
+                    }
+                }
+                else {
+                    sorted = YAHOO.util.Sort.compareAsc(a[oColumn.key],b[oColumn.key]);
+                    if(sorted === 0) {
+                        return YAHOO.util.Sort.compareAsc(a.id,b.id);
+                    }
+                    else {
+                        return sorted;
+                    }
+                }
+            };
+        }
+
+        if(sortFnc) {
+            // Do the actual sort
+            this._oRecordSet.sort(sortFnc);
+
+            // Update the UI
+            //TODO
+            this.refreshTable();
+
+            // Update classes
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
+            var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
+            YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
+
+            // Keep track of currently sorted column
+            this.sortedBy.colKey = oColumn.key;
+            this.sortedBy.dir = sortDir;
+            this.sortedBy._id = oColumn.getId();
+
+            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
+            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
+        }
+    }
+    else {
+        //TODO
+        YAHOO.log("Column is not sortable", "info", this.toString());
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+// CSS
+
+
 
 /**
  * Sets one or more elements to the highlighted state.
@@ -3080,18 +3795,6 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
 };
 
 /**
- * Unselects all selected rows (across all pages, if applicable).
- *
- * @method unselectAllRows
- */
-YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
-    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
-    this.unselect(selectedRows);
-    this._aSelectedRecords = [];
-    this.fireEvent("unselectEvent", {els:selectedRows});
-};
-
-/**
  * Unselects all selected cells.
  *
  * @method unselectAllCells
@@ -3146,385 +3849,125 @@ YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
     return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elBody);
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ABSTRACT
+
+
+
 /**
- * Returns pointer to the DataTable instance's ColumnSet instance.
+ * Overridable method gives implementers a hook to access data before
+ * it gets added to RecordSet and rendered to the TBODY.
  *
- * @method getColumnSet
- * @return {YAHOO.widget.ColumnSet} ColumnSet instance.
+ * @method doBeforeLoadData
+ * @param sRequest {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @return {Boolean} Return true to continue loading data into RecordSet and
+ * updating DataTable with new Records, false to cancel.
  */
-YAHOO.widget.DataTable.prototype.getColumnSet = function() {
-    return this._oColumnSet;
+YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse) {
+    return true;
 };
 
-/**
- * Returns pointer to the DataTable instance's RecordSet instance.
- *
- * @method getRecordSet
- * @return {YAHOO.widget.RecordSet} RecordSet instance.
- */
-YAHOO.widget.DataTable.prototype.getRecordSet = function() {
-    return this._oRecordSet;
-};
-
-/**
- * Returns paginator object literal.
- *
- * @method getPaginator
- * @return {Object} Paginator object literal with following properties:
- *     <ul>
- *     <li>currentPage: current page number</li>
- *     <li>dropdownOptions: array of numbers to show in dropdown</li>
- *     <li>elements: array of object literals that define where to show
- *     paginator UI with following properties:
- *         <ul>
- *         <li>container: element reference to paginator container</li>
- *         <li>links: element reference to page links container</li>
- *         <li>select: element reference to dropdown</li>
- *         </ul>
- *     </li>
- *     <li>pageLinks: number of page links displayed</li>
- *     <li>pageLinkStart: page number of first link</li>
- *     <li>rowsPerPage: number of rows displayed</li>
- *     <li>totalPages: total number of pages</li>
- *     </ul>
- */
-YAHOO.widget.DataTable.prototype.getPaginator = function() {
-    return this._paginator;
-};
-
-/**
- * Displays a specific page of a paginated DataTable.
- *
- * @method showPage
- * @param nPage {Number} Which page.
- */
-YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
-    // Validate input
-    if(!YAHOO.lang.isNumber(nPage) || (nPage < 1) || (nPage > this._paginator.totalPages)) {
-        nPage = 1;
-    }
-    this._paginator.currentPage = nPage;
-    this.populateTable();
-};
-
-/**
- * Updates Paginator containers with markup. Override this method to customize pagination UI.
- *
- * @method formatPaginators
- */
- YAHOO.widget.DataTable.prototype.formatPaginators = function() {
-    var pag = this._paginator;
-    
-    // For Opera workaround
-    var dropdownEnabled = false;
-    
-    // Update markup of each known Paginator container
-    for(var i=0; i<pag.elements.length; i++) {
-        var oElReferences = pag.elements[i];
-        
-        // Links are enabled
-        if(pag.pageLinks > -1) {
-            this.formatPaginatorLinks(oElReferences.links, pag.currentPage, pag.pageLinksStart, pag.pageLinks, pag.totalPages);
-        }
-
-        // Dropdown is enabled
-        if(pag.dropdownOptions) {
-            dropdownEnabled = true;
-            this.formatPaginatorDropdown(oElReferences);
-        }
-    }
-
-    // For Opera artifacting in dropdowns
-    if(dropdownEnabled && navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
-        document.body.style += '';
-    }
-};
-
-/**
- * Updates Paginator dropdown. If dropdown doesn't exist, the markup is created.
- * Sets dropdown's "selected" value.
- *
- * @method formatPaginatorDropdown
- * @param oElReferences {Object} Object literal of pointers to Paginator UI
- * elements.
- */
-YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(oElReferences) {
-    var i;
-    
-    // Dropdown doesn't exist, so let's create it
-    if(!oElReferences.select) {
-        // Validate dropdownOptions
-        if(YAHOO.lang.isArray(this._paginator.dropdownOptions)) {
-            // Show these options in the dropdown
-            var dropdownOptions = this._paginator.dropdownOptions;
-            
-            // Create one SELECT element per Paginator container
-            var select = document.createElement("select");
-            select.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
-            select = oElReferences.container.appendChild(select);
-
-            // Create OPTION elements
-            for(i=0; i<dropdownOptions.length; i++) {
-                var option = document.createElement("option");
-                option.value = dropdownOptions[i].value || dropdownOptions[i];
-                option.innerHTML = dropdownOptions[i].text || dropdownOptions[i];
-                option = select.appendChild(option);
-            }
-
-            // Add event listener
-            YAHOO.util.Event.addListener(select,"change",this._onPagerSelect,this);
-
-            // Add DOM reference to tracker
-            oElReferences.select = select;
-        }
-        else {
-            YAHOO.log("Could not create Paginator dropdown due to invalid dropdownOptions","error",this.toString());
-        }
-    }
-    
-    if(oElReferences.select && oElReferences.select.options) {
-        var options = oElReferences.select.options;
-        // Update dropdown's "selected" value
-        for(i=options.length-1; i>-1; i--) {
-            if((this._paginator.rowsPerPage + "") === options[i].value) {
-                options[i].selected = true;
-            }
-        }
-    }
-    else {
-        YAHOO.log("Could not update Paginator dropdown","error",this.toString());
-    }
-};
-
-/**
- * Updates Paginator links container with markup.
- *
- * @method formatPaginatorLinks
- */
-YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elLinksContainer, nCurrentPage, nPageLinksStart, nPageLinksLength, nTotalPages) {
-    // Markup for page links
-    var isFirstPage = (nCurrentPage == 1) ? true : false;
-    var isLastPage = (nCurrentPage == nTotalPages) ? true : false;
-    var firstPageLink = (isFirstPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTPAGE + "\">&lt;&lt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
-    var prevPageLink = (isFirstPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_PREVPAGE + "\">&lt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVLINK + "\">&lt;</a> " ;
-    var nextPageLink = (isLastPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_NEXTPAGE + "\">&gt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXTLINK + "\">&gt;</a> " ;
-    var lastPageLink = (isLastPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_LASTPAGE + "\">&gt;&gt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
-    markup = firstPageLink + prevPageLink;
-    var maxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
-        nPageLinksStart+nPageLinksLength-1 : nTotalPages;
-    // Special case for pageLinksLength 0 => show all links
-    if(nPageLinksLength === 0) {
-        maxLinks = nTotalPages;
-    }
-    for(var i=nPageLinksStart; i<=maxLinks; i++) {
-         if(i != nCurrentPage) {
-            markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
-        }
-        else {
-            markup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_CURRENTPAGE + "\">" + i + "</span>";
-        }
-    }
-    markup += nextPageLink + lastPageLink;
-    elLinksContainer.innerHTML = markup;
-};
-
-/**
- * Updates Paginator internal values and UI.
- * @method updatePaginator
- */
-YAHOO.widget.DataTable.prototype.updatePaginator = function() {
-    // Paginator values must be initialized
-    if(this._paginator === null) {
-        this._initPaginator();
-    }
-
-    // How many total Records
-    var recordsLength = this._oRecordSet.getLength();
-
-    // If rowsPerPage < 1, show all rows
-    this._paginator.rowsPerPage = (this._paginator.rowsPerPage > 0) ?
-        this._paginator.rowsPerPage : recordsLength;
-    var rowsPerPage = this._paginator.rowsPerPage;
 
 
-    // How many rows this page
-    var maxRows = (rowsPerPage < recordsLength) ?
-            rowsPerPage : recordsLength;
 
-    // How many total pages
-    this._paginator.totalPages = Math.ceil(recordsLength / maxRows);
 
-    // What is current page
-    var currentPage = this._paginator.currentPage;
 
-    // First row of this page
-    this._paginator.startRecordIndex =  (currentPage-1) * rowsPerPage;
 
-    // How many page links to display
-    var pageLinksLength = this._paginator.pageLinks;
-    // Show all links
-    if(pageLinksLength === 0) {
-        pageLinksLength = this._paginator.totalPages;
-    }
-    // Page links are enabled
-    if(pageLinksLength > -1) {
-        // First page link for this page
-        this._paginator.pageLinksStart = (pageLinksLength == 1) ? currentPage :
-                (Math.ceil(currentPage/pageLinksLength-1) * pageLinksLength) + 1;
-    }
 
-    this.formatPaginators();
 
-    this.fireEvent("paginateEvent", {paginator:this._paginator});
-    YAHOO.log("Currently displaying page " + currentPage + " of " +
-            this._paginator.totalPages + " with " + rowsPerPage +
-            " rows per page", "info", this.toString());
-};
 
-/**
- * @deprecated Deprecated in favor of populateTable().
- * @method populateTable
- */
-YAHOO.widget.DataTable.prototype.paginateRows = function() {
-    this.populateTable();
-};
 
-/**
- * Populates TBODY rows with data from RecordSet. If pagination is enabled,
- * displays only rows for current page and updates paginator UI, otherwise
- * displays all rows.
- *
- * @method populateTable
- */
-YAHOO.widget.DataTable.prototype.populateTable = function() {
-    // Records with which to populate the table
-    var records;
-    
-    // Paginator is disabled
-    if(!this.paginator) {
-        // Paginator must be destroyed
-        if(this._paginator !== null) {
-            //TODO: this.destroyPaginator();
-        }
-    }
-    // Paginator is enabled
-    if(this.paginator) {
-        this.updatePaginator();
-        records = this._oRecordSet.getRecords(this._paginator.startRecordIndex, this._paginator.rowsPerPage);
-    }
-    // Show all records
-    else {
-        records = this._oRecordSet.getRecords();
-    }
 
-    this.replaceRows(records);
-    YAHOO.log("Table populated with " + records.length + " rows", "info", this.toString());
-};
 
-/**
- * Sort given column.
- *
- * @method sortColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
- */
-YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
-    if(!oColumn) {
-        return;
-    }
-    if(!oColumn instanceof YAHOO.widget.Column) {
-        //TODO: accept the TH or TH.key
-        //TODO: Figure out the column based on TH ref or TH.key
-        return;
-    }
-    if(oColumn.sortable) {
-        // What is the default sort direction?
-        var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
-        //TODO: what if column doesn't have key?
-        // Is this column sorted already?
-        if(oColumn.key && this.sortedBy && (this.sortedBy.colKey == oColumn.key)) {
-            if(this.sortedBy.dir) {
-                sortDir = (this.sortedBy.dir == "asc") ? "desc" : "asc";
-            }
-            else {
-                sortDir = (sortDir == "asc") ? "desc" : "asc";
-            }
-        }
-        else if(!this.sortedBy) {
-            this.sortedBy = {};
-        }
 
-        // Define the sort handler function based on the direction
-        var sortFnc = null;
-        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
-            sortFnc = oColumn.sortOptions.descFunction;
-        }
-        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
-            sortFnc = oColumn.sortOptions.ascFunction;
-        }
 
-        // Custom function was not provided so use the built-in sorter
-        // ONLY IF column key is defined
-        // TODO: nested/cumulative/hierarchical sorting
-        if(!sortFnc && oColumn.key) {
-            var sorted;
-            sortFnc = function(a, b) {
-                if(sortDir == "desc") {
-                    sorted = YAHOO.util.Sort.compareDesc(a[oColumn.key],b[oColumn.key]);
-                    if(sorted === 0) {
-                        return YAHOO.util.Sort.compareDesc(a.id,b.id);
-                    }
-                    else {
-                        return sorted;
-                    }
-                }
-                else {
-                    sorted = YAHOO.util.Sort.compareAsc(a[oColumn.key],b[oColumn.key]);
-                    if(sorted === 0) {
-                        return YAHOO.util.Sort.compareAsc(a.id,b.id);
-                    }
-                    else {
-                        return sorted;
-                    }
-                }
-            };
-        }
 
-        if(sortFnc) {
-            // Do the actual sort
-            this._oRecordSet.sort(sortFnc);
 
-            // Update the UI
-            this.populateTable();
 
-            // Update classes
-            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
-            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
-            var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
-            YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
 
-            // Keep track of currently sorted column
-            this.sortedBy.colKey = oColumn.key;
-            this.sortedBy.dir = sortDir;
-            this.sortedBy._id = oColumn.getId();
 
-            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
-            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
-        }
-    }
-    else {
-        //TODO
-        YAHOO.log("Column is not sortable", "info", this.toString());
-    }
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// CELL FUNCTIONS
 
 /**
  * Shows editor for given cell.
@@ -3581,10 +4024,9 @@ YAHOO.widget.DataTable.prototype.saveEditorData = function() {
         var oldValue = oRecord[oColumn.key];
         var newValue = this.activeEditor.getValue();
 
-        //Update Record
         if(YAHOO.util.Lang.isString(oColumn.key)) {
-            // Update Record
-            this._oRecordSet.updateRecord(oRecord,oColumn.key,newValue);
+            // Update Record field
+            this._oRecordSet.updateRecordField(oRecord,oColumn.key,newValue);
 
             //Update cell
             this.formatCell(elCell);
@@ -3624,6 +4066,40 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
         this.fireEvent("cellFormatEvent", {el:elCell});
     }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3940,15 +4416,7 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
 };
 
 /**
- * @deprecated Deprecated in favor of onDataReturnPopulateTable().
- * @method onDataReturnPaginateRows
- */
-YAHOO.widget.DataTable.prototype.onDataReturnPaginateRows = function(sRequest, oResponse, bError) {
-
-};
-
-/**
- * Handles data return for adding new rows to table, including updating pagination.
+ * Calls populateTable() with new data.
  *
  * @method onDataReturnPopulateTable
  * @param sRequest {String} Original request.
@@ -3960,12 +4428,8 @@ YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, 
 
     var ok = this.doBeforeLoadData(sRequest, oResponse);
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.append(oResponse.results);
-        if(newRecords) {
-            // Update markup
-            this.populateTable();
-        }
+        // Populate table with data
+        this.populateTable(oResponse.results);
     }
     else if(oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
@@ -3976,7 +4440,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, 
 };
 
 /**
- * Handles data return for adding new rows to bottom of table.
+ * Add new data to end of table.
  *
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
@@ -3989,7 +4453,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
     var ok = this.doBeforeLoadData(sRequest, oResponse);
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.append(oResponse.results);
+        var newRecords = this._addRecords(oResponse.results);
         if(newRecords) {
             // Update markup
             this.appendRows(newRecords);
@@ -4051,4 +4515,71 @@ YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oR
     
     }
 };
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Deprecated
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @deprecated No longer used.
+ * @property isEmpty
+ */
+/**
+ * @deprecated No longer used.
+ * @property isLoading
+ */
+ /**
+ * @deprecated Deprecated. Please use showTableMessage().
+ * @method showEmptyMessage
+ */
+/**
+ * @deprecated Deprecated. Please use showTableMessage().
+ * @method showLoadingMessage
+ */
+/**
+ * @deprecated Deprecated. Please use hideTableMessage().
+ * @method hideTableMessages
+ */
+/**
+ * @deprecated Deprecated. Please use paginatorOptions.startRecordIndex.
+ * @property startRecordIndex
+ */
+/**
+ * @deprecated Deprecated. Please use paginatorOptions.pageLinksStart.
+ * @property pageLinksStart
+ */
+/**
+ * @deprecated Deprecated. Please use paginatorOptions.currentPage
+ * @property pageCurrent
+ */
+/**
+ * @deprecated Deprecated. Please use paginatorOptions.rowsPerPage
+ * @property rowsPerPage
+ */
+/**
+ * @deprecated Deprecated. Please use paginatorOptions.pageLinks
+ * @property pageLinksLength
+ */
+/**
+ * @deprecated Deprecated. Please use paginatorOptions.dropdownOptions
+ * @property rowsPerPageDropdown
+ */
+/**
+ * @deprecated Deprecated. Please use paginatorOptions.containers
+ * @property pagers
+ */
+/**
+ * @deprecated Deprecated in favor of populateTable().
+ * @method populateTable
+ */
+ /**
+ * @deprecated Deprecated. Please use onDataReturnPopulateTable().
+ * @method onDataReturnPaginateRows
+ */
+
+
+
+
 
