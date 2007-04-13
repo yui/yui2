@@ -134,7 +134,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* @type String
 	* @default today's date
 	*/
-	this.cfg.addProperty(defCfg.PAGEDATE.key, { value:defCfg.PAGEDATE.value, handler:this.configPageDate } );
+	this.cfg.addProperty(defCfg.PAGEDATE.key, { value:new Date(), handler:this.configPageDate } );
 
 	/**
 	* The date or range of dates representing the current Calendar selection
@@ -142,7 +142,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* @type String
 	* @default []
 	*/
-	this.cfg.addProperty(defCfg.SELECTED.key, { value:defCfg.SELECTED.value, handler:this.configSelected } );
+	this.cfg.addProperty(defCfg.SELECTED.key, { value:[], handler:this.configSelected } );
 
 	/**
 	* The title to display above the CalendarGroup's month header

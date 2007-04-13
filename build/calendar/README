@@ -1,5 +1,9 @@
 Calendar Release Notes
 
+*** version 2.2.2 ***
+
+    - Fixed problem with selected dates being shared across instances, when more than one Calendar/CalendarGroup was on the page
+
 *** version 2.2.1 ***
 
     - Fixed problem with selectCell adding duplicate selected date entries for dates which were already selected

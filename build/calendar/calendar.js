@@ -889,14 +889,15 @@ YAHOO.widget.Calendar.ONE_CHAR = "1char";
 * @type Object
 */
 YAHOO.widget.Calendar._DEFAULT_CONFIG = {
-	PAGEDATE : {key:"pagedate", value:new Date()},
-	SELECTED : {key:"selected", value:[]},
+	// Default values for pagedate and selected are not class level constants - they are set during instance creation 
+	PAGEDATE : {key:"pagedate", value:null},
+	SELECTED : {key:"selected", value:null},
 	TITLE : {key:"title", value:""},
 	CLOSE : {key:"close", value:false},
 	IFRAME : {key:"iframe", value:true},
 	MINDATE : {key:"mindate", value:null},
 	MAXDATE : {key:"maxdate", value:null},
-	MULTI_SELECT : {key:"multi_select",	value:false},
+	MULTI_SELECT : {key:"multi_select", value:false},
 	START_WEEKDAY : {key:"start_weekday", value:0},
 	SHOW_WEEKDAYS : {key:"show_weekdays", value:true},
 	SHOW_WEEK_HEADER : {key:"show_week_header", value:false},
@@ -904,7 +905,7 @@ YAHOO.widget.Calendar._DEFAULT_CONFIG = {
 	HIDE_BLANK_WEEKS : {key:"hide_blank_weeks", value:false},
 	NAV_ARROW_LEFT: {key:"nav_arrow_left", value:null} ,
 	NAV_ARROW_RIGHT : {key:"nav_arrow_right", value:null} ,
-	MONTHS_SHORT : {key:"months_short",	value:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]},
+	MONTHS_SHORT : {key:"months_short", value:["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]},
 	MONTHS_LONG: {key:"months_long", value:["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]},
 	WEEKDAYS_1CHAR: {key:"weekdays_1char", value:["S", "M", "T", "W", "T", "F", "S"]},
 	WEEKDAYS_SHORT: {key:"weekdays_short", value:["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]},
@@ -945,7 +946,7 @@ YAHOO.widget.Calendar._EVENT_TYPES = {
 };
 
 /**
-* Collection of Default Style constants for the Calendar
+* The set of default style constants for the Calendar
 * @property YAHOO.widget.Calendar._STYLES
 * @final
 * @static
@@ -1438,7 +1439,7 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 	* @type String
 	* @default today's date
 	*/
-	this.cfg.addProperty(defCfg.PAGEDATE.key, { value:defCfg.PAGEDATE.value, handler:this.configPageDate } );
+	this.cfg.addProperty(defCfg.PAGEDATE.key, { value:new Date(), handler:this.configPageDate } );
 
 	/**
 	* The date or range of dates representing the current Calendar selection
@@ -1446,7 +1447,7 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 	* @type String
 	* @default []
 	*/
-	this.cfg.addProperty(defCfg.SELECTED.key, { value:defCfg.SELECTED.value, handler:this.configSelected } );
+	this.cfg.addProperty(defCfg.SELECTED.key, { value:[], handler:this.configSelected } );
 
 	/**
 	* The title to display above the Calendar's month header
@@ -3554,7 +3555,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* @type String
 	* @default today's date
 	*/
-	this.cfg.addProperty(defCfg.PAGEDATE.key, { value:defCfg.PAGEDATE.value, handler:this.configPageDate } );
+	this.cfg.addProperty(defCfg.PAGEDATE.key, { value:new Date(), handler:this.configPageDate } );
 
 	/**
 	* The date or range of dates representing the current Calendar selection
@@ -3562,7 +3563,7 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	* @type String
 	* @default []
 	*/
-	this.cfg.addProperty(defCfg.SELECTED.key, { value:defCfg.SELECTED.value, handler:this.configSelected } );
+	this.cfg.addProperty(defCfg.SELECTED.key, { value:[], handler:this.configSelected } );
 
 	/**
 	* The title to display above the CalendarGroup's month header
