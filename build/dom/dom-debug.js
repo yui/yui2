@@ -266,7 +266,7 @@ http://developer.yahoo.net/yui/license.txt
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
                    // work around opera inline scrollLeft/Top bug
-                   if (isOpera && Y.Dom.getStyle(parentNode, 'display') != 'inline') { 
+                   if (Y.Dom.getStyle(parentNode, 'display') != 'inline') { 
                         pos[0] -= parentNode.scrollLeft;
                         pos[1] -= parentNode.scrollTop;
                     }
