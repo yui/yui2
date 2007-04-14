@@ -30,7 +30,7 @@ else{pos=[el.offsetLeft,el.offsetTop];parentNode=el.offsetParent;var hasAbs=this
 parentNode=parentNode.offsetParent;}}
 if(isSafari&&hasAbs){pos[0]-=document.body.offsetLeft;pos[1]-=document.body.offsetTop;}}
 parentNode=el.parentNode;while(parentNode.tagName&&!patterns.ROOT_TAG.test(parentNode.tagName))
-{if(isOpera&&Y.Dom.getStyle(parentNode,'display')!='inline'){pos[0]-=parentNode.scrollLeft;pos[1]-=parentNode.scrollTop;}
+{if(Y.Dom.getStyle(parentNode,'display')!='inline'){pos[0]-=parentNode.scrollLeft;pos[1]-=parentNode.scrollTop;}
 parentNode=parentNode.parentNode;}
 return pos;};return Y.Dom.batch(el,f,Y.Dom,true);},getX:function(el){var f=function(el){return Y.Dom.getXY(el)[0];};return Y.Dom.batch(el,f,Y.Dom,true);},getY:function(el){var f=function(el){return Y.Dom.getXY(el)[1];};return Y.Dom.batch(el,f,Y.Dom,true);},setXY:function(el,pos,noRetry){var f=function(el){var style_pos=this.getStyle(el,'position');if(style_pos=='static'){this.setStyle(el,'position','relative');style_pos='relative';}
 var pageXY=this.getXY(el);if(pageXY===false){return false;}
