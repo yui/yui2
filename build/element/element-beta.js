@@ -566,7 +566,6 @@ YAHOO.util.Element.prototype = {
             }
             
             this.createEvent(type, this);
-            this._events[type] = true;
         }
         
         this.subscribe.apply(this, arguments); // notify via customEvent
@@ -776,6 +775,11 @@ YAHOO.util.Element.prototype = {
         
         return keys;
     },
+
+    createEvent: function(type, scope) {
+        this._events[type] = true;
+        AttributeProvider.prototype.createEvent.apply(this, arguments);
+    },
     
     init: function(el, attr) {
         _initElement.apply(this, arguments); 
@@ -805,53 +809,51 @@ var _initElement = function(el, attr) {
         'submit': true
     };
 
+    var isReady = false;  // to determine when to init HTMLElement and content
+
     if (YAHOO.lang.isString(el) ) { // defer until available/ready
         _registerHTMLAttr.call(this, 'id', { value: attr.element });
     }
 
     if (Dom.get(el)) {
-        _availableHandler.call(this, attr);  
-        _readyHandler.call(this, attr);
-        return; // note return
+        isReady = true;
+        _initHTMLElement.call(this, attr);
+        _initContent.call(this, attr);
     } 
 
     YAHOO.util.Event.onAvailable(attr.element, function() {
-        _availableHandler.call(this, attr);  
+        if (!isReady) { // otherwise already done
+            _initHTMLElement.call(this, attr);
+        }
+
+        this.fireEvent('available', { type: 'available', target: attr.element });  
     }, this, true);
     
     YAHOO.util.Event.onContentReady(attr.element, function() {
-        _readyHandler.call(this, attr);
+        if (!isReady) { // otherwise already done
+            _initContent.call(this, attr);
+        }
+        this.fireEvent('contentReady', { type: 'contentReady', target: attr.element });  
     }, this, true);
 };
 
-var _availableHandler = function(attr) {
-    attr.element = Dom.get(attr.element);
-
+var _initHTMLElement = function(attr) {
     /**
      * The HTMLElement the Element instance refers to.
      * @config element
      * @type HTMLElement
      */
     this.setAttributeConfig('element', {
-        value: attr.element,
+        value: Dom.get(attr.element),
         readOnly: true
      });
-
-    this.fireEvent('available', {
-        type: 'available',
-        target: attr.element
-    }); 
 };
 
-var _readyHandler = function(attr) {
+var _initContent = function(attr) {
     this.initAttributes(attr);
     this.setAttributes(attr, true);
     this.fireQueue();
 
-    this.fireEvent('contentReady', {
-        type: 'contentReady',
-        target: attr.element
-    });
 };
 
 /**
