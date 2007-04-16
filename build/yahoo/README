@@ -1,5 +1,9 @@
 YAHOO Global - Release Notes
 
+2.2.2
+
+  * No change
+
 2.2.1
 
   * YAHOO.lang.isObject returns false for null

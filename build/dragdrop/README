@@ -1,5 +1,8 @@
 Drag and Drop Release Notes
 
+2.2.2
+  * No change
+
 2.2.1
 
   * Added YAHOO.util.DragDropMgr.interactionInfo, which is

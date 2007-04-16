@@ -1,6 +1,9 @@
 
 YUI Library - Event - Release Notes
 
+2.2.2
+  * No change
+
 2.2.1
   * onAvailable listeners are processed before onContentReady listeners so
     they fire in the logical order when an element is found to be available 
