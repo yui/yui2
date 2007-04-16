@@ -1,5 +1,9 @@
 Connection Manager Release Notes
 
+*** version 2.2.2 ***
+
+* No revisions.
+
 *** version 2.2.1 ***
 
 * setForm() will include the correct name-value of the HTML Submit button
