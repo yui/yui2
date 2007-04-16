@@ -1,10 +1,15 @@
 TabView Release Notes
 
-*** version 2.2.1 **
+*** version 2.2.2 ***
 
-* No Change
+* no change
 
-*** version 2.2.0 **
+
+*** version 2.2.1 ***
+
+* no change
+
+*** version 2.2.0 ***
 
 * Element broken out into seperate pkg
   NOTE: new dependency required - element-beta.js

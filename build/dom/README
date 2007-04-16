@@ -1,5 +1,9 @@
 Dom Release Notes
 
+*** version 2.2.2 ***
+
+* fixed getXY scroll regression
+
 *** version 2.2.1 ***
 * fixed toCamel propertyCache used by set/getStyle
 * added set/getStyle support for float property
