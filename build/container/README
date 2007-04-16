@@ -1,5 +1,25 @@
 Container Release Notes
 
+*** version 2.2.2 ***
+
++ Clicking the close button of a Panel (or any instance of a Panel subclass) 
+  registered with an OverlayManager will no longer result in the Panel 
+  receiving focus.
+
++ Overlay instances registered with an OverlayManager will now correctly 
+  blur themselves when hidden.
+
++ Calling the "destroy" method of an Overlay instance will now result in it 
+  being removed from its OverlayManager instance(s).
+
++ The DOM event listener for the event defined by the "focusevent" 
+  configuration property of an OverlayManager instance is now removed from each 
+  Overlay instance when it is removed from its OverlayManager.
+
++ All subscribers for an Overlay instance's "focus" and "blur" events are 
+  now unsubscribed when it is removed from its OverlayManager.
+
+
 *** version 2.2.1 ***
 
 + Made the default scope for all Custom Events published by Module, Overlay, 
