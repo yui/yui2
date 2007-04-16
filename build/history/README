@@ -1,5 +1,8 @@
 YUI Library - History - Release Notes
 
+2.2.2
+  * No change
+
 2.2.1
 
   * Use YAHOO.lang.hasOwnProperty when iterating over the _modules associative
