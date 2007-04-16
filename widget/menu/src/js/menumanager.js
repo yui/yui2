@@ -78,7 +78,7 @@ YAHOO.widget.MenuManager = function() {
         m_oFocusedMenuItem = null;
 
 
-    var m_oLogger = new YAHOO.widget.LogWriter(this.toString());
+    var m_oLogger = new YAHOO.widget.LogWriter("MenuManager");
 
 
     // Private methods
