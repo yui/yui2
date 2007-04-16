@@ -346,7 +346,16 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 */
 toString: function() {
 
-    return ("ContextMenu " + this.id);
+    var sReturnVal = "ContextMenu",
+        sId = this.id;
+
+    if(sId) {
+
+        sReturnVal += (" " + sId);
+    
+    }
+
+    return sReturnVal;
 
 },
 

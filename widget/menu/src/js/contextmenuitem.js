@@ -98,7 +98,15 @@ init: function(p_oObject, p_oConfig) {
 */
 toString: function() {
 
-    return ("ContextMenuItem: " + this.cfg.getProperty("text"));
+    var sReturnVal = "ContextMenuItem";
+
+    if(this.cfg && this.cfg.getProperty("text")) {
+
+        sReturnVal += (": " + this.cfg.getProperty("text"));
+
+    }
+
+    return sReturnVal;
 
 }
     

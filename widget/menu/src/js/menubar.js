@@ -350,7 +350,16 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 */
 toString: function() {
 
-    return ("MenuBar " + this.id);
+    var sReturnVal = "MenuBar",
+        sId = this.id;
+
+    if(sId) {
+
+        sReturnVal += (" " + sId);
+    
+    }
+
+    return sReturnVal;
 
 },
 

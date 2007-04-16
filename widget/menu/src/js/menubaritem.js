@@ -110,7 +110,15 @@ CSS_CLASS_NAME: "yuimenubaritem",
 */
 toString: function() {
 
-    return ("MenuBarItem: " + this.cfg.getProperty("text"));
+    var sReturnVal = "MenuBarItem";
+
+    if(this.cfg && this.cfg.getProperty("text")) {
+
+        sReturnVal += (": " + this.cfg.getProperty("text"));
+
+    }
+
+    return sReturnVal;
 
 }
     

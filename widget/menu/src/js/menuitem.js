@@ -2263,8 +2263,16 @@ YAHOO.widget.MenuItem.prototype = {
     * @return {String}
     */
     toString: function() {
+
+        var sReturnVal = "MenuItem";
+
+        if(this.cfg && this.cfg.getProperty("text")) {
     
-        return ("MenuItem: " + this.cfg.getProperty("text"));
+            sReturnVal += (": " + this.cfg.getProperty("text"));
+    
+        }
+
+        return sReturnVal;
     
     }
 

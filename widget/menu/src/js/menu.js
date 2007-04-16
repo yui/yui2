@@ -3835,7 +3835,16 @@ getRoot: function() {
 */
 toString: function() {
 
-    return ("Menu " + this.id);
+    var sReturnVal = "Menu",
+        sId = this.id;
+
+    if(sId) {
+
+        sReturnVal += (" " + sId);
+    
+    }
+
+    return sReturnVal;
 
 },
 
