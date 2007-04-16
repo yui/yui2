@@ -4463,7 +4463,16 @@ getRoot: function() {
 */
 toString: function() {
 
-    return ("Menu " + this.id);
+    var sReturnVal = "Menu",
+        sId = this.id;
+
+    if(sId) {
+
+        sReturnVal += (" " + sId);
+    
+    }
+
+    return sReturnVal;
 
 },
 
@@ -7518,8 +7527,16 @@ YAHOO.widget.MenuItem.prototype = {
     * @return {String}
     */
     toString: function() {
+
+        var sReturnVal = "MenuItem";
+
+        if(this.cfg && this.cfg.getProperty("text")) {
     
-        return ("MenuItem: " + this.cfg.getProperty("text"));
+            sReturnVal += (": " + this.cfg.getProperty("text"));
+    
+        }
+
+        return sReturnVal;
     
     }
 
@@ -7874,7 +7891,16 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 */
 toString: function() {
 
-    return ("ContextMenu " + this.id);
+    var sReturnVal = "ContextMenu",
+        sId = this.id;
+
+    if(sId) {
+
+        sReturnVal += (" " + sId);
+    
+    }
+
+    return sReturnVal;
 
 },
 
@@ -8101,7 +8127,15 @@ init: function(p_oObject, p_oConfig) {
 */
 toString: function() {
 
-    return ("ContextMenuItem: " + this.cfg.getProperty("text"));
+    var sReturnVal = "ContextMenuItem";
+
+    if(this.cfg && this.cfg.getProperty("text")) {
+
+        sReturnVal += (": " + this.cfg.getProperty("text"));
+
+    }
+
+    return sReturnVal;
 
 }
     
@@ -8458,7 +8492,16 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 */
 toString: function() {
 
-    return ("MenuBar " + this.id);
+    var sReturnVal = "MenuBar",
+        sId = this.id;
+
+    if(sId) {
+
+        sReturnVal += (" " + sId);
+    
+    }
+
+    return sReturnVal;
 
 },
 
@@ -8661,7 +8704,15 @@ CSS_CLASS_NAME: "yuimenubaritem",
 */
 toString: function() {
 
-    return ("MenuBarItem: " + this.cfg.getProperty("text"));
+    var sReturnVal = "MenuBarItem";
+
+    if(this.cfg && this.cfg.getProperty("text")) {
+
+        sReturnVal += (": " + this.cfg.getProperty("text"));
+
+    }
+
+    return sReturnVal;
 
 }
     
