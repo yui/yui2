@@ -1,3 +1,20 @@
+*** version 2.2.2 ***
+
+Fixed the following bugs:
+-------------------------
+
++ "toString" method of MenuItem, MenuBarItem and ContextMenuItem classes will
+  no longer throw a JavaScript error when using the debug version 
+  of the Event utility.
+
++ "toString" method of Menu, MenuBar and ContextMenu classes will
+  no longer attempt to output the instance's id if it is not available.
+
++ Logger statements output by debug version of MenuManager are now properly 
+  categorized as "MenuManager"
+
+
+
 *** version 2.2.1 ***
 
 Added the following features:
