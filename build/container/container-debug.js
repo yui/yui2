@@ -2554,11 +2554,25 @@ YAHOO.widget.OverlayManager.prototype = {
 				o.cfg.setProperty("zIndex", -1000, true);
 				this.overlays.sort(this.compareZIndexDesc);
 				this.overlays = this.overlays.slice(0, this.overlays.length-1);
-				o.cfg.setProperty("zIndex", originalZ, true);
 
+                o.hideEvent.unsubscribe(o.blur);
+                o.destroyEvent.unsubscribe(this._onOverlayDestroy, o);
+
+                if (o.element) {
+
+        			YAHOO.util.Event.removeListener(o.element, this.cfg.getProperty("focusevent"), this._onOverlayElementFocus);
+
+                }
+
+				o.cfg.setProperty("zIndex", originalZ, true);
 				o.cfg.setProperty("manager", null);
+
+                o.focusEvent.unsubscribeAll();
+                o.blurEvent.unsubscribeAll();
+
 				o.focusEvent = null;
 				o.blurEvent = null;
+
 				o.focus = null;
 				o.blur = null;
 			}
@@ -2592,6 +2606,58 @@ YAHOO.widget.OverlayManager.prototype = {
 		}
 	},
 
+
+    /**
+    * @method _onOverlayElementFocus
+    * @description Event handler for the DOM event that is used to focus 
+    * the Overlay instance as specified by the "focusevent" 
+    * configuration property.
+    * @private
+    * @param {Event} p_oEvent Object representing the DOM event object passed 
+    * back by the event utility (YAHOO.util.Event).
+    */
+    _onOverlayElementFocus: function(p_oEvent) {
+    
+        var oTarget = YAHOO.util.Event.getTarget(p_oEvent),
+            oClose = this.close;
+
+        
+        if (
+            oClose && 
+            (
+                oTarget == oClose ||  
+                YAHOO.util.Dom.isAncestor(oClose, oTarget)
+            )
+        ) {
+        
+            this.blur();
+        
+        }
+        else {
+        
+            this.focus();
+        
+        }
+    
+    },
+
+
+    /**
+    * @method _onOverlayDestroy
+    * @description "destroy" event handler for the Overlay.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    * @param {YAHOO.widget.Overlay} p_oOverlay Object representing the menu that 
+    * fired the event.
+    */
+    _onOverlayDestroy: function(p_sType, p_aArgs, p_oOverlay) {
+
+        this.remove(p_oOverlay);
+    
+    },
+
 	/**
 	* Registers an Overlay or an array of Overlays with the manager. Upon registration, the Overlay receives functions for focus and blur, along with CustomEvents for each.
 	* @method register
@@ -2621,12 +2687,11 @@ YAHOO.widget.OverlayManager.prototype = {
 
             overlay.blurEvent.subscribe(mgr._onOverlayBlur);
 
-			var focusOnDomEvent = function(e,obj) {
-				overlay.focus();
-			};
+            overlay.hideEvent.subscribe(overlay.blur);
+            
+            overlay.destroyEvent.subscribe(this._onOverlayDestroy, overlay, this);
 
-			var focusevent = this.cfg.getProperty("focusevent");
-			YAHOO.util.Event.addListener(overlay.element,focusevent,focusOnDomEvent,this,true);
+			YAHOO.util.Event.addListener(overlay.element, this.cfg.getProperty("focusevent"), this._onOverlayElementFocus, null, overlay);
 
 			var zIndex = YAHOO.util.Dom.getStyle(overlay.element, "zIndex");
 			if (! isNaN(zIndex)) {
