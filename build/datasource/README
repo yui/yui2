@@ -1,6 +1,12 @@
 DataSource Release Notes
 
-*** version 2.2.1 ***
+**** version 2.2.2 ***
+
+* No changes.
+
+
+
+**** version 2.2.1 ***
 
 * Fixed parseTextData() to longer reverse-order data or truncate first record.
 * Fixed bug where data values of 0 (zero) were being converted to empty string.

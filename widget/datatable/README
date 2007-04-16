@@ -1,6 +1,13 @@
 DataTable Release Notes
 
-*** version 2.2.1 ***
+*** version 2.2.2 ***
+
+* Removed workaround for a fixed Dom.getXY() bug that was causing a positioning
+problem for inline editors on scrolled pages.
+
+
+
+**** version 2.2.1 ***
 
 * Changed default pagination from enabled to disabled. Must set property
 paginator to true to enable built-in client-side pagination.
