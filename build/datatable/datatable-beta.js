@@ -5039,13 +5039,6 @@ YAHOO.widget.ColumnEditor.prototype.moveContainerTo = function(el) {
     else {
         x = parseInt(YAHOO.util.Dom.getX(el),10);//xy[0] + 1;
         y = parseInt(YAHOO.util.Dom.getY(el),10);//xy[1] + 1;
-            // Workaround getXY scroll bug for FF and SF
-            if(window.scrollX !== undefined) {
-                x += window.scrollX;
-            }
-            if(window.scrollY !== undefined) {
-                y += window.scrollY;
-            }
     }
     this.container.style.left = x + "px";
     this.container.style.top = y + "px";
