@@ -1,5 +1,11 @@
 YUI Library Release Notes
 
+*** version 2.2.2 ***
+
+This update contains general fixes to the YUI library.  Please see the
+README file for each component in the build directory for specific updates since
+version 2.2.1.
+
 *** version 2.2.1 ***
 
 This update contains general fixes to the YUI library.  Please see the
