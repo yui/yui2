@@ -80,7 +80,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
         // while using the markup as the source of data
         if(elTable && !this.dataSource) {
             // Fill RecordSet with data parsed out of table
-            var aRecords = [];
+            var aData = [];
 
             // Iterate through each TBODY
             for(i=0; i<elTable.tBodies.length; i++) {
@@ -89,7 +89,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
                 // Iterate through each TR
                 for(var j=0; j<elBody.rows.length; j++) {
                     var elRow = elBody.rows[j];
-                    var oRecord = {};
+                    var oData = {};
 
                     // Iterate through each TD
                     for(var k=0; k<elRow.cells.length; k++) {
@@ -97,17 +97,18 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
                         //var elCell = elRow.cells[l];
                         //elCell.id = this.id+"-bdrow"+k+"-cell"+l;
                         //TODO: can we parse a column with null key?
-                        oRecord[oColumnSet.keys[k].key] = oColumnSet.keys[k].parse(elRow.cells[k].innerHTML);
+                        oData[oColumnSet.keys[k].key] = oColumnSet.keys[k].parse(elRow.cells[k].innerHTML);
                     }
-                    aRecords.push(oRecord);
+                    aData.push(oData);
                 }
             }
             
-            this._initTable();
+            // Initialize DOM elements
+            this._initTableEl();
             
-            ok = this.doBeforeLoadData(null,aRecords);
+            ok = this.doBeforeLoadData(null,aData);
             if(ok) {
-                this.populateTable(aRecords);
+                this.populateTable(aData);
             }
             else {
                 YAHOO.log("The function doBeforeLoadData returned false","error",this);
@@ -115,21 +116,19 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
         }
         // Create markup from scratch using the provided DataSource
         else if(this.dataSource) {
-                this._initTable();
+                // Initialize DOM elements
+                this._initTableEl();
 
-                ok = this.doBeforeLoadData(this.initialRequest,aRecords);
-                if(ok) {
-                    // Send out for data in an asynchronous request
-                    oDataSource.sendRequest(this.initialRequest, this.onDataReturnPopulateTable, this);
-                }
-                else {
-                    YAHOO.log("The function doBeforeLoadData returned false","error",this);
-                }
+                // Send out for data in an asynchronous request
+                oDataSource.sendRequest(this.initialRequest, this.onDataReturnPopulateTable, this);
         }
         // Else there is no data
         else {
-            this._initTable();
-            this.showTableMessage();
+            // Initialize DOM elements
+            this._initTableEl();
+            
+            // Show empty message
+            this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
         }
     }
     // Container element not found in document
@@ -1217,19 +1216,27 @@ YAHOO.widget.DataTable.prototype._paginator = null;
 
 
 
+
+
+
+
+
+
+
+
+
+
 // INIT FUNCTIONS
-
-
 
 
 
 /**
  * Creates HTML markup for TABLE, THEAD, TBODY.
  *
- * @method _initTable
+ * @method _initTableEl
  * @private
  */
-YAHOO.widget.DataTable.prototype._initTable = function() {
+YAHOO.widget.DataTable.prototype._initTableEl = function() {
     // Clear the container
     this._elContainer.innerHTML = "";
 
@@ -1257,7 +1264,7 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
     }
 
     // Create THEAD
-    this._initHead(elTable, this._oColumnSet);
+    this._initTheadEl(elTable, this._oColumnSet);
 
 
     // Create TBODY for messages
@@ -1283,10 +1290,10 @@ YAHOO.widget.DataTable.prototype._initTable = function() {
 /**
  * Populates THEAD element with TH cells as defined by ColumnSet.
  *
- * @method _initHead
+ * @method _initTheadEl
  * @private
  */
-YAHOO.widget.DataTable.prototype._initHead = function() {
+YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     var i,oColumn;
     
     // Create THEAD
@@ -1304,7 +1311,7 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
             oColumn = colTree[i][j];
             var elHeadCell = elHeadRow.appendChild(document.createElement("th"));
             elHeadCell.id = oColumn.getId();
-            this._initHeadCell(elHeadCell,oColumn,i,j);
+            this._initThEl(elHeadCell,oColumn,i,j);
         }
     }
 
@@ -1348,14 +1355,14 @@ YAHOO.widget.DataTable.prototype._initHead = function() {
 /**
  * Populates TH cell as defined by Column.
  *
- * @method _initHeadCell
+ * @method _initThEl
  * @param elHeadCell {HTMLElement} TH cell element reference.
  * @param oColumn {YAHOO.widget.Column} Column object.
  * @param row {number} Row index.
  * @param col {number} Column index.
  * @private
  */
-YAHOO.widget.DataTable.prototype._initHeadCell = function(elHeadCell,oColumn,row,col) {
+YAHOO.widget.DataTable.prototype._initThEl = function(elHeadCell,oColumn,row,col) {
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
@@ -1570,25 +1577,40 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
  * Creates a new Record to add to RecordSet at position i if given, or to the
  * end otherwise.
  *
- * @method _addRecords
- * @param oData {YAHOO.widget.Record} Array of object literals containing data.
- * @param index {Number} Index position at which to add Record.
- * @return {String} Array of Records.
+ * @method _addRecord
+ * @param oObjectLiteral {Object} An object literal of data.
+ * @param index {Number} (optional) Index position at which to add Record.
+ * @return {YAHOO.widget.Record} A Record instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._addRecords = function(aData, index) {
-    return this._oRecordSet.addRecords(aData);
+YAHOO.widget.DataTable.prototype._addRecord = function(oObjectLiteral, index) {
+    return this._oRecordSet.addRecord(oObjectLiteral, index);
 };
 
 /**
- * Deletes a given Record from the RecordSet.
+ * Creates multiple Records to add to RecordSet at position i if given, or to the
+ * end otherwise.
  *
- * @method _deleteRecord
- * @param identifier {Number | String} Record identifier.
+ * @method _addRecords
+ * @param aObjectLiterals {Object[]} An array of object literals containing data.
+ * @param index {Number} (optional) Index position at which to add Record.
+ * @return {YAHOO.widget.Record[]} An array of Record instances.
  * @private
  */
-YAHOO.widget.DataTable.prototype._deleteRecord = function(identifier) {
-    this._oRecordSet.deleteRecord(identifier);
+YAHOO.widget.DataTable.prototype._addRecords = function(aObjectLiterals, index) {
+    return this._oRecordSet.addRecords(aObjectLiterals, index);
+};
+
+/**
+ * Deletes the Record at the given RecordSet position index.
+ *
+ * @method _deleteRecord
+ * @param index {Number} Record's RecordSet position index.
+ * @param range {Number} (optional) How many Records to delete.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._deleteRecord = function(index, range) {
+    this._oRecordSet.deleteRecord(index, range);
 };
 
 
@@ -1638,16 +1660,16 @@ YAHOO.widget.DataTable.prototype._deleteRecord = function(identifier) {
 
 
 /**
- * Add a new TR element to table body at position i if given, or to the bottom
+ * Add a new TR element to main TBODY at position i if given, or to the bottom
  * otherwise. Populates cells with data from given Record.
  *
- * @method _addRowEl
+ * @method _addTrEl
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param index {Number} Index position at which to add TR.
  * @return {String} ID of the added TR element.
  * @private
  */
-YAHOO.widget.DataTable.prototype._addRowEl = function(oRecord, index) {
+YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     this.hideTableMessage();
 
     // Is this an insert or an append?
@@ -1714,13 +1736,13 @@ One thing, though: it doesn't work in combination with
  * Updates all cells of existing TR element at given position with data from the
  * given Record.
  *
- * @method _updateRowEl
+ * @method _updateTrEl
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param index {Number} Position at which to update row.
  * @return {String} ID of the updated TR element.
  * @private
  */
-YAHOO.widget.DataTable.prototype._updateRowEl = function(oRecord, index) {
+YAHOO.widget.DataTable.prototype._updateTrEl = function(oRecord, index) {
     this.hideTableMessage();
 
     var elRow = this._elBody.rows[index];
@@ -1737,16 +1759,16 @@ YAHOO.widget.DataTable.prototype._updateRowEl = function(oRecord, index) {
 /**
  * Deletes a given TR element.
  *
- * @method _deleteRowEl
+ * @method _deleteTrEl
  * @param row {HTMLElement | Number} HTML TR element reference or position index.
  * @private
  */
-YAHOO.widget.DataTable.prototype._deleteRowEl = function(row) {
+YAHOO.widget.DataTable.prototype._deleteTrEl = function(row) {
     if(YAHOO.util.Dom.inDocument(row)) {
         row = row.sectionRowIndex;
     }
     if(YAHOO.lang.isNumber(row)) {
-        this._elBody.deleteRow(i);
+        this._elBody.deleteRow(row);
 
         if(this._elBody.rows.length === 0) {
             this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
@@ -1783,7 +1805,7 @@ YAHOO.widget.DataTable.prototype._deleteRowEl = function(row) {
 
 
 
-// STATE FUNCTIONS
+// CSS/STATE FUNCTIONS
 
 
 
@@ -2856,10 +2878,121 @@ YAHOO.widget.DataTable.prototype.getCell = function(rowIndex, colIndex) {
     return null;
 };
 
+/**
+ * Returns index position of given TR element within containing TBODY element.
+ *
+ * @method getRowIndex
+ * @param elRow {HTMLElement} Reference to TR element.
+ * @return {Number} Index position within TBODY element.
+ */
+YAHOO.widget.DataTable.prototype.getRowIndex = function(elRow) {
+    return elRow.sectionRowIndex || null;
+};
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// RECORD FUNCTIONS
+
+/**
+ * Returns Record index for given row or row index.
+ *
+ * @method getRecordIndex
+ * @param row {Number | HTMLElement} Row index or reference to an element
+ * within the TBODY.
+ * @return {Number} Record's RecordSet index.
+ */
+YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
+    // By row index
+    if(YAHOO.lang.isNumber(row)) {
+        if(this._paginator && this._paginator.startRecordIndex) {
+            return this._paginator.startRecordIndex + row;
+        }
+        else {
+            return row;
+        }
+    }
+    // By element reference
+    else if(YAHOO.util.Dom.inDocument(row)) {
+        var elTarget = YAHOO.util.Dom.get(row);
+        var elTag = elTarget.tagName.toLowerCase();
+
+        // Traverse up the DOM to find the corresponding TR element
+        while(elTag != "tr") {
+            // Bail out
+            if(elTag == "body") {
+                return null;
+            }
+            // Maybe it's the parent
+            elTarget = elTarget.parentNode;
+            elTag = elTarget.tagName.toLowerCase();
+        }
+
+        // Make sure the TR is in the correct TBODY
+        if(elTarget.parentNode == this.getBody()) {
+            var rowIndex = elTarget.sectionRowIndex;
+            if(this._paginator && this._paginator.startRecordIndex) {
+                return this._paginator.startRecordIndex + rowIndex;
+            }
+            else {
+                return rowIndex;
+            }
+        }
+    }
+    // Invalid identifier
+    return null;
+};
+
+/**
+ * Returns Record instance for given Record index.
+ *
+ * @method getRecord
+ * @param identifier {Number | HTMLElement} Row index or reference to an element
+ * within the TBODY.
+ * @return {YAHOO.widget.Record} Record instance.
+ */
+YAHOO.widget.DataTable.prototype.getRecord = function(identifier) {
+    // By Record index
+    if(YAHOO.lang.isNumber(identifier)) {
+        return this._oRecordSet._records[identifier];
+    }
+    // By element reference
+    else if(YAHOO.util.Dom.inDocument(identifier)) {
+        var elTarget = YAHOO.util.Dom.get(identifier);
+        var elTag = elTarget.tagName.toLowerCase();
+        
+        // Traverse up the DOM to find the corresponding TR element
+        while(elTag != "tr") {
+            // Bail out
+            if(elTag == "body") {
+                return null;
+            }
+            // Maybe it's the parent
+            elTarget = elTarget.parentNode;
+            elTag = elTarget.tagName.toLowerCase();
+        }
+
+        // Make sure the TR is in the correct TBODY
+        if(elTarget.parentNode == this.getBody()) {
+            return this._oRecordSet._records[this.getRecordIndex(elTarget)];
+        }
+    }
+    // Invalid identifier
+    return null;
+};
 
 
 
@@ -2882,27 +3015,37 @@ YAHOO.widget.DataTable.prototype.getCell = function(rowIndex, colIndex) {
 
 
 /**
- * Convenience method to add a new row to table body at position index if given,
- * or to the bottom otherwise.
+ * Adds a new Record to the RecordSet and a new TR element to the TBDOY (at the
+ * specified position index, if given) with the given object literal of data.
  *
  * @method addRow
- * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oData {Object} Object literal of data for the row.
  * @param index {Number} (optional) Position at which to add row.
  */
-YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
-    if(oRecord && (oRecord instanceof YAHOO.widget.Record)) {
-        var rowId = this._addRowEl(oRecord, index);
-        // TODO: row may be inserted into middle... so don't set first/last
-        if(YAHOO.lang.isNumber(index)) {
-            if(index === 0) {
-                this._setFirstRow();
+YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
+    if(oData && (oData.constructor == Object)) {
+        var oRecord = this._addRecord(oData, index);
+        if(oRecord) {
+            // TODO: only add if new Record is in view.
+            var rowId = this._addTrEl(oRecord, index);
+            // TODO: row may be inserted into middle... so don't set first/last
+
+            if(YAHOO.lang.isNumber(index)) {
+                if(index === 0) {
+                    this._setFirstRow();
+                }
+                this.fireEvent("rowInsertEvent", {rowIds:[rowId]});
             }
-            this.fireEvent("rowInsertEvent", {rowIds:[rowId]});
+            else {
+                this._setLastRow();
+                this.fireEvent("rowAppendEvent", {rowIds:[rowId]});
+            }
+            // TODO: what to return?
         }
-        else {
-            this._setLastRow();
-            this.fireEvent("rowAppendEvent", {rowIds:[rowId]});
-        }
+        YAHOO.log("Could not add row because Record could not be created","error",this.toString());
+    }
+    else {
+        YAHOO.log("Could not add row due to invalid data","error",this.toString());
     }
 };
 
@@ -2916,24 +3059,71 @@ YAHOO.widget.DataTable.prototype.addRow = function(oRecord, index) {
 YAHOO.widget.DataTable.prototype.updateRow = function(oData, index) {
 
     if(oRecord && (oRecord instanceof YAHOO.widget.Record)) {
-        var rowId = this._updateRowEl(oRecord, index);
+        var rowId = this._updateTrEl(oRecord, index);
         this.fireEvent("rowUpdateEvent", {rowIds:[rowId]});
     }
 };
 
 /**
- * Calls delete on given rows.
+ * Deletes a row's Record from the RecordSet. If the row's TR element is in view
+ * deletes it from TBODY as well.
+ *
+ * @method deleteRow
+ * @param row {Number | HTMLElement} RecordSet position index or element reference.
+ */
+YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
+    // By Record index
+    if(YAHOO.lang.isNumber(row)) {
+
+    }
+    // By element reference
+    else if(row && YAHOO.util.Dom.inDocument(row)) {
+        var rowIndex = this.getRowIndex(row);
+        if(rowIndex !== null) {
+            // Copy data from the Record for the event that gets fired later
+            var oRecord = this.getRecord(row);
+            var oData = {};
+            for(var key in oRecord) {
+                oData[key] = oRecord[key];
+            }
+            
+            var recordIndex = this.getRecordIndex(rowIndex);
+            this._deleteRecord(recordIndex);
+            this._deleteTrEl(row);
+            
+            //TODO: doesn't need to be called every time
+            // Set first-row and last-row trackers
+            this._setFirstRow();
+            this._setLastRow();
+            
+            this.fireEvent("rowDeleteEvent",
+                    {rowIndex:rowIndex,
+                    recordIndex: recordIndex,
+                    recordData: oData});
+            YAHOO.log("Deleted row " + rowIndex + " and Record " + recordIndex + " of data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+
+            
+            //TODO: what to return?
+            return;
+        }
+    }
+    YAHOO.log("Could not delete given row: " + row, "warn", this.toString());
+
+};
+
+/*REMOVED FROM API DOC
+ * Calls delete on given rows and deletes corresponding Records from RecordSets.
  *
  * @method deleteRows
  * @param elRows {HTMLElement[]} Array of HTML table row element reference.
  */
-YAHOO.widget.DataTable.prototype.deleteRows = function(elRows) {
+/*YAHOO.widget.DataTable.prototype.deleteRows = function(elRows) {
     var rowIndexes = [];
     for(var i=0; i<rows.length; i++) {
         var rowIndex = (rows[i].sectionRowIndex !== undefined) ? rows[i].sectionRowIndex : null;
         rowIndexes.push(rowIndex);
-        this._deleteRecord(rows[i].yuiRecordId);
-        this._deleteRowEl(rows[i]);
+        this._deleteRecord(this.getRecordIndex(rows[i]));
+        this._deleteTrEl(rows[i]);
         this.fireEvent("rowDeleteEvent", {rowIndexes:rowIndexes});
     }
 
@@ -2941,28 +3131,7 @@ YAHOO.widget.DataTable.prototype.deleteRows = function(elRows) {
     // Set first-row and last-row trackers
     this._setFirstRow();
     this._setLastRow();
-};
-
-/**
- * Deletes a given row element as well its corresponding Record in the RecordSet.
- *
- * @method deleteRow
- * @param elRow {HTMLElement} HTML table row element reference.
- */
-YAHOO.widget.DataTable.prototype.deleteRow = function(elRow) {
-    if(elRow && YAHOO.util.Dom.inDocument(elRow)) {
-        var rowIndex = (elRow.sectionRowIndex !== undefined) ? elRow.sectionRowIndex : null;
-        this._deleteRecord(elRow.yuiRecordId);
-        this._deleteRowEl(elRow);
-        this.fireEvent("rowDeleteEvent", {rowIndexes:[rowIndex]});
-
-        //TODO: can be optimized?
-        // Set first-row and last-row trackers
-        this._setFirstRow();
-        this._setLastRow();
-    }
-
-};
+};*/
 
 
 
@@ -2981,7 +3150,7 @@ YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
 
         var rowIds = [];
         for(var i=0; i<aRecords.length; i++) {
-            var rowId = this._addRowEl(aRecords[i]);
+            var rowId = this._addTrEl(aRecords[i]);
             rowIds.push(rowId);
         }
 
@@ -3004,7 +3173,7 @@ YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
 
         var rowIds = [];
         for(var i=0; i<aRecords.length; i++) {
-            var rowId = this._addRowEl(aRecords[i],0);
+            var rowId = this._addTrEl(aRecords[i],0);
             rowIds.push(rowId);
         }
 
@@ -3052,9 +3221,10 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         tracker.push(recordId);
         this._aSelectedRecords = tracker;
 
-        this.fireEvent("rowSelectEvent",{el:row, record:this._oRecordSet.getRecord(recordId)});
+        //TODO: getRecord API has changed
+        this.fireEvent("rowSelectEvent",{el:row, record:this.getRecord(row)});
         YAHOO.log("Row selected: ID=\"" + row.id + "\", " +
-                "Record=" + this._oRecordSet.getRecord(recordId),
+                "Record=" + this.getRecord(row),
                 "info",this.toString());
     }
 };
@@ -3092,9 +3262,10 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
         // Update UI
         this._unselect(row);
 
-        this.fireEvent("rowUnselectEvent",{el:row, record:this._oRecordSet.getRecord(recordId)});
+        //TODO: getRecord API has changed
+        this.fireEvent("rowUnselectEvent",{el:row, record:this.getRecord(row)});
         YAHOO.log("Row unselected: ID=\"" + row.id + "\", " +
-                "Record=" + this._oRecordSet.getRecord(recordId),
+                "Record=" + this.getRecord(row),
                 "info",this.toString());
     }
 };
@@ -3494,13 +3665,13 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
         // Format in-place existing rows
         for(i=0; i<elRows.length; i++) {
             if(aRecords[i]) {
-                rowIds.push(this._updateRowEl(aRecords[i],i));
+                rowIds.push(this._updateTrEl(aRecords[i],i));
             }
         }
 
         // Add rows as necessary
         for(i=elRows.length; i<aRecords.length; i++) {
-            rowIds.push(this._addRowEl(aRecords[i]));
+            rowIds.push(this._addTrEl(aRecords[i]));
         }
 
         // Select any rows as necessary
@@ -3513,9 +3684,10 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
             }
         }
 
-        // Set first-row and last-row trackers
+        // Set classes
         this._setFirstRow();
         this._setLastRow();
+        this._setRowStripes();
 
         this.fireEvent("tableRefreshEvent", {records:aRecords});
 
@@ -3979,7 +4151,8 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
     if(elCell && YAHOO.lang.isNumber(elCell.columnIndex)) {
         var column = this._oColumnSet.keys[elCell.columnIndex];
         if(column && column.editor) {
-            this.activeEditor = column.getEditor(elCell,this._oRecordSet.getRecord(elCell.parentNode.yuiRecordId));
+            //TODO: getRecord API has changed
+            this.activeEditor = column.getEditor(elCell,this.getRecord(elCell));
             this._bFocused = true;
             if(this.activeEditor) {
                 // Explicitly call unhighlight for SF2
@@ -4056,7 +4229,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
     if(elCell && YAHOO.lang.isNumber(elCell.columnIndex)) {
         var index = elCell.columnIndex;
         var column = this._oColumnSet.keys[index];
-        column.format(elCell,this._oRecordSet.getRecord(elCell.parentNode.yuiRecordId));
+        column.format(elCell,this.getRecord(elCell));
         if (index === 0) {
             YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_FIRST);
         }
@@ -4428,7 +4601,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, 
 
     var ok = this.doBeforeLoadData(sRequest, oResponse);
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        // Populate table with data
+        // Populate table with data returned by DataSource
         this.populateTable(oResponse.results);
     }
     else if(oResponse.error) {

@@ -246,22 +246,22 @@ YAHOO.widget.RecordSet.prototype.addRecord = function(oObjectLiteral, index) {
  * then adds the Records to the end of the RecordSet.
  *
  * @method addRecords
- * @param data {Object[]} An array of object literal data.
+ * @param aObjectLiterals {Object[]} An array of object literal data.
  * @param index {Number} (optional) Position index.
  * @return {YAHOO.widget.Record} An array of Record instances.
  */
-YAHOO.widget.RecordSet.prototype.addRecords = function(data, index) {
-    if(YAHOO.lang.isArray(data)) {
+YAHOO.widget.RecordSet.prototype.addRecords = function(aObjectLiterals, index) {
+    if(YAHOO.lang.isArray(aObjectLiterals)) {
         var newRecords = [];
         // Can't go backwards bc we need to preserve order
-        for(var i=0; i<data.length; i++) {
-            var record = this.addRecord(data[i], index);
+        for(var i=0; i<aObjectLiterals.length; i++) {
+            var record = this.addRecord(aObjectLiterals[i], index);
             newRecords.push(record);
        }
        return newRecords;
     }
-    else if(data && (data.constructor == Object)) {
-        return this.addRecord(data);
+    else if(aObjectLiterals && (aObjectLiterals.constructor == Object)) {
+        return this.addRecord(aObjectLiterals);
     }
     else {
         return null;
@@ -344,7 +344,7 @@ YAHOO.widget.RecordSet.prototype.replace = function(data) {
  *
  * @method sort
  * @param fnSort {Function} Reference to a sort function.
- * @return {Array} Sorted array of Records
+ * @return {Array} Sorted array of Records.
  */
 YAHOO.widget.RecordSet.prototype.sort = function(fnSort) {
     return this._records.sort(fnSort);
@@ -352,21 +352,23 @@ YAHOO.widget.RecordSet.prototype.sort = function(fnSort) {
 
 
 /**
- * Removes the record at the given index from the RecordSet. If a range is
- * given, starts at the given index and removes all records in the range.
+ * Removes the Record at the given position index from the RecordSet. If a range
+ * is also provided, removes that many Records, starting from the index.
  *
  * @method deleteRecord
- * @param i {Number} Record index
- * @param range {Number} (optional) Range of records to remove, or null.
+ * @param i {Number} Record's RecordSet index.
+ * @param range {Number} (optional) How many Records to delete.
  */
 YAHOO.widget.RecordSet.prototype.deleteRecord = function(i, range) {
     if(!YAHOO.lang.isNumber(range)) {
         range = 1;
     }
-    // TODO: validate for negative values
-    if(!YAHOO.lang.isNumber(i)) {
+    if(YAHOO.lang.isNumber(i) && (i > -1)) {
         this._records.splice(i, range);
-        this._length = this._length - range;
+        this._length--;
+    }
+    else {
+        // invalid index
     }
 };
 
