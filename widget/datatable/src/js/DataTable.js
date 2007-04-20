@@ -1706,7 +1706,7 @@ One thing, though: it doesn't work in combination with
         //TODO: pass in a subset for better performance
         this._setRowStripes();
     }*/
-    
+
     return elRow.id;
 };
 
