@@ -851,34 +851,34 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     // Correct any invalid values
     var minQueryLength = this.minQueryLength;
     if(!YAHOO.lang.isNumber(minQueryLength) || (minQueryLength < 1)) {
-        minQueryLength = 1;
+        this.minQueryLength = 1;
     }
     var maxResultsDisplayed = this.maxResultsDisplayed;
     if(!YAHOO.lang.isNumber(maxResultsDisplayed) || (maxResultsDisplayed < 1)) {
-        maxResultsDisplayed = 10;
+        this.maxResultsDisplayed = 10;
     }
     var queryDelay = this.queryDelay;
     if(!YAHOO.lang.isNumber(queryDelay) || (queryDelay < 0)) {
-        queryDelay = 0.5;
+        this.queryDelay = 0.5;
     }
     var delimChar = this.delimChar;
     if(YAHOO.lang.isString(delimChar)) {
-        delimChar = [delimChar];
+        this.delimChar = [delimChar];
     }
     else if(!YAHOO.lang.isArray(delimChar)) {
-        delimChar = null;
+        this.delimChar = null;
     }
     var animSpeed = this.animSpeed;
     if((this.animHoriz || this.animVert) && YAHOO.util.Anim) {
         if(!YAHOO.lang.isNumber(animSpeed) || (animSpeed < 0)) {
-            animSpeed = 0.3;
+            this.animSpeed = 0.3;
         }
         if(!this._oAnim ) {
-            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, animSpeed);
+            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
             this._oAnim = oAnim;
         }
         else {
-            this._oAnim.duration = animSpeed;
+            this._oAnim.duration = this.animSpeed;
         }
     }
     if(this.forceSelection && delimChar) {
