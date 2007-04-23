@@ -2,6 +2,7 @@
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
  *
+ * @namespace YAHOO.widget
  * @module datatable
  * @requires yahoo, dom, event, datasource
  * @optional dragdrop
@@ -501,7 +502,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      *
      * @event recordSetUpdateEvent
      * @param oArgs.record {YAHOO.widget.Record} The Record instance.
-     * @param oArgs.key {String} The Record key.
      * @param oArgs.newData {Object} New data.
      * @param oArgs.oldData {Object} New data.
      */
@@ -1569,25 +1569,26 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
 
 
 // RECORD FUNCTIONS
+//TODO: delete all these
 
 
 
 
-/**
+/*TODO: delete
  * Creates a new Record to add to RecordSet at position i if given, or to the
  * end otherwise.
  *
  * @method _addRecord
- * @param oObjectLiteral {Object} An object literal of data.
+ * @param oData {Object} An object literal of data.
  * @param index {Number} (optional) Index position at which to add Record.
  * @return {YAHOO.widget.Record} A Record instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._addRecord = function(oObjectLiteral, index) {
-    return this._oRecordSet.addRecord(oObjectLiteral, index);
-};
+/*YAHOO.widget.DataTable.prototype._addRecord = function(oData, index) {
+    return this._oRecordSet.addRecord(oData, index);
+};*/
 
-/**
+/*TODO: delete
  * Creates multiple Records to add to RecordSet at position i if given, or to the
  * end otherwise.
  *
@@ -1597,11 +1598,11 @@ YAHOO.widget.DataTable.prototype._addRecord = function(oObjectLiteral, index) {
  * @return {YAHOO.widget.Record[]} An array of Record instances.
  * @private
  */
-YAHOO.widget.DataTable.prototype._addRecords = function(aObjectLiterals, index) {
+/*YAHOO.widget.DataTable.prototype._addRecords = function(aObjectLiterals, index) {
     return this._oRecordSet.addRecords(aObjectLiterals, index);
-};
+};*/
 
-/**
+/*TODO: delete
  * Deletes the Record at the given RecordSet position index.
  *
  * @method _deleteRecord
@@ -1609,10 +1610,33 @@ YAHOO.widget.DataTable.prototype._addRecords = function(aObjectLiterals, index) 
  * @param range {Number} (optional) How many Records to delete.
  * @private
  */
-YAHOO.widget.DataTable.prototype._deleteRecord = function(index, range) {
+/*YAHOO.widget.DataTable.prototype._deleteRecord = function(index, range) {
     this._oRecordSet.deleteRecord(index, range);
-};
+};*/
 
+/*TODO: delete
+ * Updates the Record at the given RecordSet position index with the given data.
+ *
+ * @method _updateRecord
+ * @param index {Number} Record's RecordSet position index.
+ * @param oData {Object} Object literal of new data.
+ * @private
+ */
+/*YAHOO.widget.DataTable.prototype._updateRecord = function(index, oData) {
+    this._oRecordSet.updateRecord(index, oData);
+};*/
+
+/*TODO: delete
+ * Updates the Record at the given RecordSet position index with the given data.
+ *
+ * @method _updateRecord
+ * @param index {Number} Record's RecordSet position index.
+ * @param oData {Object} Object literal of new data.
+ * @private
+ */
+/*YAHOO.widget.DataTable.prototype._updateField = function(index, oData) {
+    this._oRecordSet.updateField(index, oData);
+};*/
 
 
 
@@ -2478,7 +2502,6 @@ YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
  *
  * @event _onRecordUpdate
  * @param oArgs.record {YAHOO.widget.Record} The Record instance.
- * @param oArgs.key {String} The Record key.
  * @param oArgs.newData {Object} New data.
  * @param oArgs.oldData {Object} New data.
  * @private
@@ -2957,20 +2980,18 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
 };
 
 /**
- * Returns Record instance for given Record index.
+ * For the given identifier, returns the associated Record instance.
  *
  * @method getRecord
- * @param identifier {Number | HTMLElement} Row index or reference to an element
- * within the TBODY.
+ * @param identifier {YAHOO.widget.Record | Number | HTMLElement | String}
+ * Identifies which Record to get: By Record instance, by Record's RecordSet
+ * position index, by HTMLElement reference to a DOM element within the TBODY,
+ * or by ID string to a DOM element within the TBODY.
  * @return {YAHOO.widget.Record} Record instance.
  */
 YAHOO.widget.DataTable.prototype.getRecord = function(identifier) {
-    // By Record index
-    if(YAHOO.lang.isNumber(identifier)) {
-        return this._oRecordSet._records[identifier];
-    }
-    // By element reference
-    else if(YAHOO.util.Dom.inDocument(identifier)) {
+    // By HTML element reference or ID string
+    if(YAHOO.util.Dom.inDocument(identifier)) {
         var elTarget = YAHOO.util.Dom.get(identifier);
         var elTag = elTarget.tagName.toLowerCase();
         
@@ -2987,8 +3008,15 @@ YAHOO.widget.DataTable.prototype.getRecord = function(identifier) {
 
         // Make sure the TR is in the correct TBODY
         if(elTarget.parentNode == this.getBody()) {
-            return this._oRecordSet._records[this.getRecordIndex(elTarget)];
+            identifier = this.getRecordIndex(elTarget);
         }
+    }
+    // By Record index
+    if(YAHOO.lang.isNumber(identifier)) {
+        return this._oRecordSet.getRecord(identifier);
+    }
+    else if(identifier instanceof YAHOO.widget.Record) {
+        return identifier;
     }
     // Invalid identifier
     return null;
@@ -3024,7 +3052,7 @@ YAHOO.widget.DataTable.prototype.getRecord = function(identifier) {
  */
 YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
     if(oData && (oData.constructor == Object)) {
-        var oRecord = this._addRecord(oData, index);
+        var oRecord = this._oRecordSet.addRecord(oData, index);
         if(oRecord) {
             // TODO: only add if new Record is in view.
             var rowId = this._addTrEl(oRecord, index);
@@ -3045,22 +3073,41 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
         YAHOO.log("Could not add row because Record could not be created","error",this.toString());
     }
     else {
-        YAHOO.log("Could not add row due to invalid data","error",this.toString());
+        YAHOO.log("Could not add row due to invalid data", "error", this.toString());
     }
 };
 
 /**
- * Updates existing Record and row at position index with given data.
+ * For the given row, updates the associated Record with the given data. If the
+ * row is in view, the UI for the associated TR element will also be updated.
  *
  * @method updateRow
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} Position at which to update row.
+ * @param row {YAHOO.widget.Record | Number | HTMLElement | String}
+ * Which row to update: By Record instance, by Record's RecordSet
+ * position index, by HTMLElement reference to the TR element, or by ID string
+ * of the TR element.
+ * @param oData {Object} Object literal of data for the row.
  */
-YAHOO.widget.DataTable.prototype.updateRow = function(oData, index) {
-
-    if(oRecord && (oRecord instanceof YAHOO.widget.Record)) {
-        var rowId = this._updateTrEl(oRecord, index);
-        this.fireEvent("rowUpdateEvent", {rowIds:[rowId]});
+YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
+    var oRecord = this.getRecord(row);
+    if(oRecord !== null) {
+        if(oData && (oData.constructor == Object)) {
+            // Update the Record
+            this._oRecordSet.updateRecord(oRecord, oData);
+        
+            // Update the TR element if it is in view
+            var trElId = this._updateTrEl(oRecord, row);
+            
+            //TODO: Event passes TR ID old data, new data.
+            this.fireEvent("rowUpdateEvent", {rowElId:trElId});
+        }
+        else {
+            YAHOO.log("Could not update row " + row +
+                    " due to invalid data: " + oData, "error", this.toString());
+        }
+    }
+    else {
+        YAHOO.log("Could not update row " + row, "error", this.toString());
     }
 };
 
@@ -3081,14 +3128,14 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
         var rowIndex = this.getRowIndex(row);
         if(rowIndex !== null) {
             // Copy data from the Record for the event that gets fired later
-            var oRecord = this.getRecord(row);
+            var oRecordData = this.getRecord(row).getData();
             var oData = {};
-            for(var key in oRecord) {
-                oData[key] = oRecord[key];
+            for(var key in oRecordData) {
+                oData[key] = oRecordData[key];
             }
             
             var recordIndex = this.getRecordIndex(rowIndex);
-            this._deleteRecord(recordIndex);
+            this._oRecordSet.deleteRecord(recordIndex);
             this._deleteTrEl(row);
             
             //TODO: doesn't need to be called every time
@@ -3122,7 +3169,7 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
     for(var i=0; i<rows.length; i++) {
         var rowIndex = (rows[i].sectionRowIndex !== undefined) ? rows[i].sectionRowIndex : null;
         rowIndexes.push(rowIndex);
-        this._deleteRecord(this.getRecordIndex(rows[i]));
+        this._oRecordSet.deleteRecord(this.getRecordIndex(rows[i]));
         this._deleteTrEl(rows[i]);
         this.fireEvent("rowDeleteEvent", {rowIndexes:rowIndexes});
     }
@@ -3611,7 +3658,7 @@ YAHOO.widget.DataTable.prototype.focusTable = function() {
  */
 YAHOO.widget.DataTable.prototype.populateTable = function(oData) {
     // Add data to RecordSet
-    var records = this._oRecordSet.append(oData);
+    var records = this._oRecordSet.replaceRecords(oData);
     
     
     // Update table view
@@ -3619,8 +3666,9 @@ YAHOO.widget.DataTable.prototype.populateTable = function(oData) {
 };
 
 /**
- * Refreshes table view into existing RecordSet. For performance, reuses
- * existing rows while deleting extraneous rows.
+ * Refreshes table view of existing RecordSet, maintaining sort, pagination, and
+ * selection states. For performance, reuses existing rows while deleting
+ * extraneous rows.
  *
  * @method refreshTable
  */
@@ -3661,12 +3709,12 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
             this._unselectAllRows();
         }
 
+        //TODO: Keep track of updated TR IDs?
         var rowIds = [];
-        // Format in-place existing rows
+        
+        // From the top, update in-place existing rows
         for(i=0; i<elRows.length; i++) {
-            if(aRecords[i]) {
-                rowIds.push(this._updateTrEl(aRecords[i],i));
-            }
+            rowIds.push(this._updateTrEl(i));
         }
 
         // Add rows as necessary
@@ -3811,7 +3859,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         if(sortFnc) {
             // Do the actual sort
-            this._oRecordSet.sort(sortFnc);
+            this._oRecordSet.sortRecords(sortFnc);
 
             // Update the UI
             //TODO
@@ -4194,12 +4242,12 @@ YAHOO.widget.DataTable.prototype.saveEditorData = function() {
         var elCell = this.activeEditor.cell;
         var oColumn = this.activeEditor.column;
         var oRecord = this.activeEditor.record;
-        var oldValue = oRecord[oColumn.key];
+        var oldValue = oRecord.getData()[oColumn.key];
         var newValue = this.activeEditor.getValue();
 
         if(YAHOO.util.Lang.isString(oColumn.key)) {
             // Update Record field
-            this._oRecordSet.updateRecordField(oRecord,oColumn.key,newValue);
+            this._updateField(oRecord,oColumn.key,newValue);
 
             //Update cell
             this.formatCell(elCell);
@@ -4652,7 +4700,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
     var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.insert(oResponse.results);
+        var newRecords = this._oRecordSet.addRecords(oResponse.results, 0);
         if(newRecords) {
             // Update markup
             this.insertRows(newRecords);
