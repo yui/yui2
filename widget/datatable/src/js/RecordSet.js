@@ -215,21 +215,22 @@ YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
  */
 YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     var oRecord = null;
-    // TODO: copy by value for non-primitives?
     if(YAHOO.lang.isNumber(record)) {
         oRecord = this._records[record];
     }
     else if(record instanceof YAHOO.widget.Record) {
         oRecord = record;
     }
-    if(oRecord) {
-        var oldData = oRecord;
-        oRecord = oData;
+    if(oRecord && oData && (oData.constructor == Object)) {
+        var oldData = {};
+        for(var key in oRecord) {
+            oldData[key] = oRecord._data[key];
+        }
+        oRecord._data = oData;
         this.fireEvent("recordUpdateEvent",{record:oRecord,newData:oData,oldData:oldData});
     }
     else {
-        YAHOO.log("Could not update Record due to invalid identifier: " +
-                identifier, "error", this.toString());
+        YAHOO.log("Could not update Record " + record, "error", this.toString());
     }
 };
 

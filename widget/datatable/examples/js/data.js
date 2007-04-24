@@ -1,4 +1,14 @@
 YAHOO.example.Data = {
+    apitester: [
+        {number:0, date:new Date(1999, 1, 1), string:"1"},
+        {number:1, date:new Date(1999, 10, 10), string:"12"},
+        {number:10, date:new Date(2000, 1, 1), string:"123"},
+        {number:11, date:new Date(2000, 10, 1), string:"10"},
+        {number:12, date:new Date(2001, 10, 12), string:"1"},
+        {number:112, date:new Date(2001, 1, 12), string:"123"},
+        {number:123, date:new Date(2001, 10, 1), string:"11"}
+    ],
+
     webstats: [
         ["home.html",20,400,44,657],
         ["blog.html",24,377,97,567],

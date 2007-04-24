@@ -85,11 +85,11 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
 
             // Iterate through each TBODY
             for(i=0; i<elTable.tBodies.length; i++) {
-                var elBody = elTable.tBodies[i];
+                var elTbody = elTable.tBodies[i];
 
                 // Iterate through each TR
-                for(var j=0; j<elBody.rows.length; j++) {
-                    var elRow = elBody.rows[j];
+                for(var j=0; j<elTbody.rows.length; j++) {
+                    var elRow = elTbody.rows[j];
                     var oData = {};
 
                     // Iterate through each TD
@@ -144,7 +144,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     // Set up context menu
     //TODO: does trigger have to exist? can trigger be TBODY rather than rows?
     if(this.contextMenu && this.contextMenuOptions) {
-        this.contextMenu = new YAHOO.widget.ContextMenu(this.id+"-cm", { trigger: this._elBody.rows } );
+        this.contextMenu = new YAHOO.widget.ContextMenu(this.id+"-cm", { trigger: this._elTbody.rows } );
         this.contextMenu.addItem("delete item");
         this.contextMenu.render(document.body);
     }
@@ -473,29 +473,39 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("rowUnselectEvent");
 
     /**
+     * Fired when a row is added.
+     *
+     * @event rowAddEvent
+     * @param oArgs.data {Object} The data added.
+     * @param oArgs.trElId {String} The ID of the added TR element, if any.
+     */
+    this.createEvent("rowAddEvent");
+    
+    /**
+     * Fired when a row is updated.
+     *
+     * @event rowUpdateEvent
+     * @param oArgs.newData {Object} The new data.
+     * @param oArgs.oldData {Object} The old data.
+     * @param oArgs.trElId {Array} The ID of the updated TR element, if any.
+     */
+    this.createEvent("rowUpdateEvent");
+
+    /**
      * Fired when one or more TR elements are deleted.
      *
      * @event rowDeleteEvent
      * @param oArgs.rowIndexes {Array} The indexes of the deleted rows.
      */
     this.createEvent("rowDeleteEvent");
-    this.subscribe("rowDeleteEvent", this._onRowDelete);
     
-    /**
+    /*TODO: delete
      * Fired when one or more TR elements are appended.
      *
      * @event rowAppendEvent
      * @param oArgs.rowIds {Array} The IDs of the appended rows.
      */
-    this.createEvent("rowAppendEvent");
-
-    /**
-     * Fired when one or more TR elements are updated.
-     *
-     * @event rowUpdateEvent
-     * @param oArgs.rowIds {Array} The IDs of the updated rows.
-     */
-    this.createEvent("rowUpdateEvent");
+    //this.createEvent("rowAppendEvent");
 
     /**
      * Fired when a Record is updated in the RecordSet.
@@ -1066,31 +1076,31 @@ YAHOO.widget.DataTable.prototype._elContainer = null;
 YAHOO.widget.DataTable.prototype._elTable = null;
 
 /**
- * TBODY element reference.
+ * Main TBODY element reference.
  *
- * @property _elBody
+ * @property _elTbody
  * @type HTMLElement
  * @private
  */
-YAHOO.widget.DataTable.prototype._elBody = null;
+YAHOO.widget.DataTable.prototype._elTbody = null;
 
 /**
- * First TR element reference pointer.
+ * ID of first TR element in main TBODY.
  *
- * @property _elFirstRow
- * @type HTMLElement
+ * @property _elFirstTrId
+ * @type String
  * @private
  */
-YAHOO.widget.DataTable.prototype._elFirstRow = null;
+YAHOO.widget.DataTable.prototype._elFirstTrId = null;
 
 /**
- * Last TR element reference pointer.
+ * ID of last TR element in main TBODY.
  *
- * @property _elLastRow
- * @type HTMLElement
+ * @property _elLastTrId
+ * @type String
  * @private
  */
-YAHOO.widget.DataTable.prototype._elLastRow = null;
+YAHOO.widget.DataTable.prototype._elLastTrId = null;
 
 /**
  * ColumnSet instance.
@@ -1268,22 +1278,22 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
 
 
     // Create TBODY for messages
-    var elMsgBody = document.createElement("tbody");
-    elMsgBody.tabIndex = -1;
-    this._elMsgRow = elMsgBody.appendChild(document.createElement("tr"));
+    var elMsgTbody = document.createElement("tbody");
+    elMsgTbody.tabIndex = -1;
+    this._elMsgRow = elMsgTbody.appendChild(document.createElement("tr"));
     var elMsgRow = this._elMsgRow;
     var elMsgCell = elMsgRow.appendChild(document.createElement("td"));
     elMsgCell.colSpan = this._oColumnSet.keys.length;
     this._elMsgCell = elMsgCell;
-    this._elMsgBody = elTable.appendChild(elMsgBody);
+    this._elMsgTbody = elTable.appendChild(elMsgTbody);
     this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
 
     // Create TBODY for data
-    this._elBody = elTable.appendChild(document.createElement("tbody"));
-    this._elBody.tabIndex = -1;
-    YAHOO.util.Dom.addClass(this._elBody,YAHOO.widget.DataTable.CLASS_BODY);
+    this._elTbody = elTable.appendChild(document.createElement("tbody"));
+    this._elTbody.tabIndex = -1;
+    YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_BODY);
     if(this.scrollable) {
-        YAHOO.util.Dom.addClass(this._elBody,YAHOO.widget.DataTable.CLASS_SCROLLBODY);
+        YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_SCROLLBODY);
     }
 };
 
@@ -1377,8 +1387,8 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elHeadCell,oColumn,row,col
         YAHOO.util.Dom.addClass(elHeadCell,oColumn.className);
     }
     // Apply CSS for sorted tables
-    if(this.sortedBy && this.sortedBy.colKey) {
-        if(this.sortedBy.colKey == oColumn.key) {
+    if(this.sortedBy && this.sortedBy.key) {
+        if(this.sortedBy.key === oColumn.key) {
             var sortClass = (this.sortedBy.dir && (this.sortedBy.dir != "asc")) ?
                     YAHOO.widget.DataTable.CLASS_SORTEDBYDESC :
                     YAHOO.widget.DataTable.CLASS_SORTEDBYASC;
@@ -1678,7 +1688,7 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
 
 
 
-// ROW FUNCTIONS
+// DOM MUTATION FUNCTIONS
 
 
 
@@ -1698,8 +1708,8 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
 
     // Is this an insert or an append?
     var insert = (!YAHOO.lang.isNumber(index) || (index < 0)) ? false : true;
-    if(!insert || !this._elBody.rows[index]) {
-        index = this._elBody.rows.length;
+    if(!insert || (index > this._elTbody.rows.length)) {
+        index = this._elTbody.rows.length;
         insert = false;
     }
 
@@ -1707,11 +1717,10 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     var oRecordSet = this._oRecordSet;
 
     var elRow = (insert) ?
-        this._elBody.insertBefore(document.createElement("tr"),this._elBody.rows[index]) :
-        this._elBody.appendChild(document.createElement("tr"));
-    var recId = oRecord.yuiRecordId;
+        this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]) :
+        this._elTbody.appendChild(document.createElement("tr"));
     elRow.id = this.id+"-bdrow"+index;
-    elRow.yuiRecordId = recId;
+    elRow.yuiRecordId = oRecord.id;
 
     // Create TBODY cells
     for(var j=0; j<oColumnSet.keys.length; j++) {
@@ -1738,39 +1747,22 @@ One thing, though: it doesn't work in combination with
         }
     }
 
-    // Striping
-    //TODO: move this to somewhere useful
-    /*if(!insert) {
-        if(index%2) {
-            YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_ODD);
-        }
-        else {
-            YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_EVEN);
-        }
-    }
-    else {
-        //TODO: pass in a subset for better performance
-        this._setRowStripes();
-    }*/
-
     return elRow.id;
 };
 
 /**
- * Updates all cells of existing TR element at given position with data from the
- * given Record.
+ * Updates all cells of given TR element with data from the corresponding Record.
  *
  * @method _updateTrEl
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} Position at which to update row.
+ * @param elRow {HTMLElement} The row element to update.
  * @return {String} ID of the updated TR element.
  * @private
  */
-YAHOO.widget.DataTable.prototype._updateTrEl = function(oRecord, index) {
+YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow) {
     this.hideTableMessage();
 
-    var elRow = this._elBody.rows[index];
-    elRow.yuiRecordId = oRecord.yuiRecordId;
+    var oRecord = this.getRecord(elRow);
+    elRow.yuiRecordId = oRecord.id;
 
     // ...Update TBODY cells with new data
     for(var j=0; j<elRow.cells.length; j++) {
@@ -1784,18 +1776,24 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(oRecord, index) {
  * Deletes a given TR element.
  *
  * @method _deleteTrEl
- * @param row {HTMLElement | Number} HTML TR element reference or position index.
+ * @param row {HTMLElement | Number} HTML TR element reference or TBODY position index.
  * @private
  */
 YAHOO.widget.DataTable.prototype._deleteTrEl = function(row) {
+    // Convert to index
     if(YAHOO.util.Dom.inDocument(row)) {
         row = row.sectionRowIndex;
     }
-    if(YAHOO.lang.isNumber(row)) {
-        this._elBody.deleteRow(row);
+    if(YAHOO.lang.isNumber(row) && (row > -2) && (row < this._elTbody.rows.length)) {
+        this._elTbody.deleteRow(row);
 
-        if(this._elBody.rows.length === 0) {
+        // Empty body
+        if(this._elTbody.rows.length === 0) {
             this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+        }
+        // If TR was deleted from the middle, restripe all rows
+        else if((row > 0) && (row < this._elTbody.rows.length)) {
+            this._setRowStripes();
         }
     }
     else {
@@ -1835,55 +1833,65 @@ YAHOO.widget.DataTable.prototype._deleteTrEl = function(row) {
 
 
 /**
- * Sets first row with class YAHOO.widget.DataTable.CLASS_FIRST.
+ * Assigns the class YAHOO.widget.DataTable.CLASS_FIRST to the first TR element
+ * of the main TBODY and updates internal tracker.
  *
  * @method _setFirstRow
  * @private
  */
 YAHOO.widget.DataTable.prototype._setFirstRow = function() {
-    // Table has rows
-    if(this._elBody.rows.length > 0) {
-        YAHOO.util.Dom.removeClass(this.getFirstRow(),YAHOO.widget.DataTable.CLASS_FIRST);
-        var elFirstRow = this._elBody.rows[0];
-        YAHOO.util.Dom.addClass(elFirstRow,YAHOO.widget.DataTable.CLASS_FIRST);
-        this._elFirstRow = elFirstRow;
+    var rowEl = this.getFirstTrEl();
+    if(rowEl) {
+        // Unassign previous class
+        if(this._elFirstTrId) {
+            YAHOO.util.Dom.removeClass(this._firstTrId, YAHOO.widget.DataTable.CLASS_FIRST);
+        }
+        // Assign class
+        YAHOO.util.Dom.addClass(rowEl, YAHOO.widget.DataTable.CLASS_FIRST);
+        this._firstTrId = rowEl.id;
     }
     else {
-        //TODO: is this necessary?
-        this._elFirstRow = null;
+        this._elFirstTrId = null;
     }
 };
 
 /**
- * Sets last row with class YAHOO.widget.DataTable.CLASS_LAST.
+ * Assigns the class YAHOO.widget.DataTable.CLASS_LAST to the last TR element
+ * of the main TBODY and updates internal tracker.
  *
  * @method _setLastRow
  * @private
  */
 YAHOO.widget.DataTable.prototype._setLastRow = function() {
-    // Table has rows
-    if(this._elBody.rows.length > 0) {
-        YAHOO.util.Dom.removeClass(this.getLastRow(),YAHOO.widget.DataTable.CLASS_LAST);
-        var elLastRow = this._elBody.rows[this._elBody.rows.length-1];
-        YAHOO.util.Dom.addClass(elLastRow,YAHOO.widget.DataTable.CLASS_LAST);
-        this._elLastRow = elLastRow;
+    var rowEl = this.getLastTrEl();
+    if(rowEl) {
+        // Unassign previous class
+        if(this._elLastTrId) {
+            YAHOO.util.Dom.removeClass(this._elLastTrId, YAHOO.widget.DataTable.CLASS_LAST);
+        }
+        // Assign class
+        YAHOO.util.Dom.addClass(rowEl, YAHOO.widget.DataTable.CLASS_LAST);
     }
     else {
-        this._elLastRow = null;
+        this._elLastTrId = null;
     }
 };
 
 /**
- * Stripes rows by applying class YAHOO.widget.DataTable.CLASS_EVEN or
- * YAHOO.widget.DataTable.CLASS_ODD.
+ * Assigns the classes YAHOO.widget.DataTable.CLASS_EVEN and
+ * YAHOO.widget.DataTable.CLASS_ODD to alternating TR elements of the main TBODY.
+ * For performance, a subset of rows may be specified by passing in a row value
+ * (and a range value).
  *
  * @method _setRowStripes
+ * @param row {HTMLElement | Number} (optional) HTML TR element reference or
+ * TBODY position index of where to start striping.
  * @param range {Number} (optional) Range defines a subset of rows to stripe.
  * @private
  */
-YAHOO.widget.DataTable.prototype._setRowStripes = function(range) {
-    if(!range) {
-        var rows = this._elBody.rows;
+YAHOO.widget.DataTable.prototype._setRowStripes = function(row, range) {
+    if(!row && !range) {
+        var rows = this._elTbody.rows;
         for(var i=0; i<rows.length; i++) {
             if(i%2) {
                 YAHOO.util.Dom.removeClass(rows[i], YAHOO.widget.DataTable.CLASS_EVEN);
@@ -1901,15 +1909,15 @@ YAHOO.widget.DataTable.prototype._setRowStripes = function(range) {
 };
 
 /**
- * Sets elements to selected state. Does not fire any events. Does not affect
- * internal tracker.
+ * Sets given element(s) to selected the state. Does not fire any events.
+ * Does not affect internal tracker.
  *
- * @method _select
+ * @method _selectEl
  * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element by
  * reference or ID string, or array of HTML elements by reference or ID string.
  * @private
  */
-YAHOO.widget.DataTable.prototype._select = function(els) {
+YAHOO.widget.DataTable.prototype._selectEl = function(els) {
     if(!YAHOO.lang.isArray(els)) {
         els = [els];
     }
@@ -1922,15 +1930,15 @@ YAHOO.widget.DataTable.prototype._select = function(els) {
 };
 
 /**
- * Sets elements to the unselected state. Does not fire any events. Does not
- * affect internal tracker.
+ * Sets given element(s) to the unselected state. Does not fire any events. Does
+ * not affect internal tracker.
  *
- * @method _unselect
+ * @method _unselectEl
  * @param els {HTMLElement | String | HTMLElement[] | String[]} HTMLElement by
  * reference or ID string, or array of HTML elements by reference or ID string.
  * @private
  */
-YAHOO.widget.DataTable.prototype._unselect = function(els) {
+YAHOO.widget.DataTable.prototype._unselectEl = function(els) {
     if(!YAHOO.lang.isArray(els)) {
         els = [els];
     }
@@ -1942,26 +1950,26 @@ YAHOO.widget.DataTable.prototype._unselect = function(els) {
 };
 
 /**
- * Unselects all selected rows. Does not fire any events. Does not affect internal
- * tracker.
+ * Unselects all selected TR elements. Does not fire any events. Does not affect
+ * internal tracker.
  *
- * @method _unselectAllRows
+ * @method _unselectAllTrEls
  * @private
  */
-YAHOO.widget.DataTable.prototype._unselectAllRows = function() {
-    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
-    this._unselect(selectedRows);
+YAHOO.widget.DataTable.prototype._unselectAllTrEls = function() {
+    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
+    this._unselectEl(selectedRows);
 };
 
 /**
  * Unselects all selected cells.
  *
- * @method _unselectAllCells
+ * @method _unselectAllTdEls
  * @private
  */
-YAHOO.widget.DataTable.prototype._unselectAllCells = function() {
-    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elBody);
-    this._unselect(selectedCells);
+YAHOO.widget.DataTable.prototype._unselectAllTdEls = function() {
+    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
+    this._unselectEl(selectedCells);
 };
 
 
@@ -2278,11 +2286,11 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
             // row mode
             if(oldSelected.tagName.toLowerCase() == "tr") {
                 // We have room to move down
-                if(oldSelected.sectionRowIndex+1 < oSelf._elBody.rows.length) {
+                if(oldSelected.sectionRowIndex+1 < oSelf._elTbody.rows.length) {
                             if(!e.shiftKey || oSelf.rowSingleSelect) {
                                 oSelf.unselectAllRows();
                             }
-                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
+                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex+1];
                             oSelf.selectRow(newSelected);
                             
                 }
@@ -2290,11 +2298,11 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
             // cell mode
             else if(oldSelected.tagName.toLowerCase() == "td") {
                 /*// We have room to move down
-                if(oldSelected.sectionRowIndex+1 < oSelf._elBody.rows.length) {
+                if(oldSelected.sectionRowIndex+1 < oSelf._elTbody.rows.length) {
                             if(!e.shiftKey) {
                                 oSelf.unselectAllRows();
                             }
-                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex+1];
+                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex+1];
                             oSelf.select(newSelected);
                 }*/
             }
@@ -2312,7 +2320,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             if(!e.shiftKey || oSelf.rowSingleSelect) {
                                 oSelf.unselectAllRows();
                             }
-                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
+                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex-1];
                             oSelf.selectRow(newSelected);
                 }
             }
@@ -2323,7 +2331,7 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
                             if(!e.shiftKey) {
                                 oSelf.unselectAllRows();
                             }
-                            newSelected = oSelf._elBody.rows[oldSelected.sectionRowIndex-1];
+                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex-1];
                             oSelf.select(newSelected);
                 }
             }
@@ -2485,17 +2493,6 @@ YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
 // Private Custom Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Handles row delete events.
- *
- * @method _onRowDelete
- * @param oArgs.rowIndexes {Number[]} The indexes of the deleted rows.
- * @private
- */
-YAHOO.widget.DataTable.prototype._onRowDelete = function(oArgs) {
-    this._setRowStripes();
-};
 
 /**
  * Passes along recordSetUpdate Event when recordUpdateEvent is caught from RecordSet.
@@ -2673,7 +2670,7 @@ YAHOO.widget.DataTable.prototype.paginatorOptions = null;
 
 /**
  * Object literal holds sort metadata:
- *  sortedBy.colKey
+ *  sortedBy.key
  *  sortedBy.dir
  *
  *
@@ -2707,27 +2704,6 @@ YAHOO.widget.DataTable.prototype.sortedBy = null;
 // Public methods
 //
 /////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // INTERNAL ACCESSORS
 
@@ -2819,96 +2795,129 @@ YAHOO.widget.DataTable.prototype.getPaginator = function() {
 
 // DOM ACCESSORS
 
-
-
 /**
- * Returns element reference to TABLE.
+ * Returns reference to TABLE element.
  *
- * @method getTable
+ * @method getTableEl
  * @return {HTMLElement} Reference to TABLE element.
  */
-YAHOO.widget.DataTable.prototype.getTable = function() {
+YAHOO.widget.DataTable.prototype.getTableEl = function() {
     return(this._elTable);
 };
 
 /**
- * Returns element reference to THEAD.
+ * Returns reference to THEAD element.
  *
- * @method getHead
+ * @method getTheadEl
  * @return {HTMLElement} Reference to THEAD element.
  */
-YAHOO.widget.DataTable.prototype.getHead = function() {
+YAHOO.widget.DataTable.prototype.getTheadEl = function() {
     return(this._elHead);
 };
 
 /**
- * Returns element reference to TBODY.
+ * Returns reference to main TBODY element.
  *
- * @method getBody
+ * @method getTbodyEl
  * @return {HTMLElement} Reference to TBODY element.
  */
-YAHOO.widget.DataTable.prototype.getBody = function() {
-    return(this._elBody);
+YAHOO.widget.DataTable.prototype.getTbodyEl = function() {
+    return(this._elTbody);
 };
 
 /**
- * Returns element reference to TR element at given index.
+ * Returns reference to secondary TBODY element that is used to display messages.
  *
- * @method getRow
- * @param index {Number} Row number.
+ * @method getMsgTbodyEl
+ * @return {HTMLElement} Reference to TBODY element.
+ */
+YAHOO.widget.DataTable.prototype.getMsgTbodyEl = function() {
+    return(this._elMsgTbody);
+};
+
+/**
+ * Returns reference to TD element that is used to display messages.
+ *
+ * @method getMsgTdEl
+ * @return {HTMLElement} Reference to TD element.
+ */
+YAHOO.widget.DataTable.prototype.getMsgTdEl = function() {
+    return(this._elMsgCell);
+};
+
+/**
+ * Returns reference to TR element at given TBODY row index.
+ *
+ * @method getTrEl
+ * @param index {Number} TBODY row index.
  * @return {HTMLElement} Reference to TR element.
  */
-YAHOO.widget.DataTable.prototype.getRow = function(index) {
-    if(YAHOO.lang.isNumber(index) && (index > -1)) {
-        return(this._elBody.rows[index]);
+YAHOO.widget.DataTable.prototype.getTrEl = function(index) {
+    var rows = this._elTbody.rows;
+    if(YAHOO.lang.isNumber(index) && (index > -1) && (index < rows.length)) {
+        return(rows[index]);
     }
+    YAHOO.log("Could not get TR element at index " + index, "warn", this.toString());
     return null;
 };
 
 /**
- * Returns element reference to first TR element.
+ * Returns reference to first TR element if main TBODY.
  *
- * @method getFirstRow
- * @return {HTMLElement} Reference to first TR element.
+ * @method getFirstTrEl
+ * @return {HTMLElement} Reference to TR element.
  */
-YAHOO.widget.DataTable.prototype.getFirstRow = function() {
-    return this._elFirstRow;
+YAHOO.widget.DataTable.prototype.getFirstTrEl = function() {
+    return this.getTrEl(0);
 };
 
 /**
  * Returns element reference to last TR element.
  *
- * @method getLastRow
+ * @method getLastTrEl
  * @return {HTMLElement} Reference to last TR element.
  */
-YAHOO.widget.DataTable.prototype.getLastRow = function() {
-    return this._elLastRow;
+YAHOO.widget.DataTable.prototype.getLastTrEl = function() {
+    var index = this._elTbody.rows.length-1;
+    if(index > -1) {
+        return this.getTrEl(this._elTbody.rows.length-1);
+    }
+    else {
+        YAHOO.log("Could not get last TR element", "warn", this.toString());
+    }
 };
 
 /**
- * Returns element reference to TD element at given row and column positions.
+ * Returns reference to TD element at given TBODY row and column position indexes.
  *
  * @method getCell
- * @param rowIndex {Number} Row index.
- * @param colIndex {Number} Column index.
+ * @param rowIndex {Number} TBODY row index.
+ * @param colIndex {Number} TBODY column index.
  * @return {HTMLElement} Reference to TD element.
  */
-YAHOO.widget.DataTable.prototype.getCell = function(rowIndex, colIndex) {
+YAHOO.widget.DataTable.prototype.getTdEl = function(rowIndex, colIndex) {
+    var rows = this._elTbody.rows;
     if(YAHOO.lang.isNumber(rowIndex) && YAHOO.lang.isNumber(colIndex) &&
-            (rowIndex > -1) && (colIndex > -1)) {
-        return(this._elBody.rows[rowIndex].cells[colIndex]);
+            (rowIndex > -1) && (rowIndex < rows.length) && (colIndex > -1)) {
+        var cells = rows[rowIndex].cells;
+        if(colIndex < cells.length) {
+            return(cells[colIndex]);
+        }
     }
+    YAHOO.log("Could not get TD element at row " + rowIndex + " and column " +
+            colIndex, "warn", this.toString());
     return null;
 };
 
 /**
- * Returns index position of given TR element within containing TBODY element.
+ * Returns index position of given TR element within the main TBODY element.
  *
- * @method getRowIndex
+ * @method getTrIndex
  * @param elRow {HTMLElement} Reference to TR element.
  * @return {Number} Index position within TBODY element.
  */
-YAHOO.widget.DataTable.prototype.getRowIndex = function(elRow) {
+YAHOO.widget.DataTable.prototype.getTrIndex = function(elRow) {
+    //TODO: accept a Record and return a row index if the Record is in view
     return elRow.sectionRowIndex || null;
 };
 
@@ -2965,7 +2974,7 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
         }
 
         // Make sure the TR is in the correct TBODY
-        if(elTarget.parentNode == this.getBody()) {
+        if(elTarget.parentNode == this.getTbodyEl()) {
             var rowIndex = elTarget.sectionRowIndex;
             if(this._paginator && this._paginator.startRecordIndex) {
                 return this._paginator.startRecordIndex + rowIndex;
@@ -3007,7 +3016,7 @@ YAHOO.widget.DataTable.prototype.getRecord = function(identifier) {
         }
 
         // Make sure the TR is in the correct TBODY
-        if(elTarget.parentNode == this.getBody()) {
+        if(elTarget.parentNode == this.getTbodyEl()) {
             identifier = this.getRecordIndex(elTarget);
         }
     }
@@ -3051,29 +3060,47 @@ YAHOO.widget.DataTable.prototype.getRecord = function(identifier) {
  * @param index {Number} (optional) Position at which to add row.
  */
 YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
-    if(oData && (oData.constructor == Object)) {
-        var oRecord = this._oRecordSet.addRecord(oData, index);
-        if(oRecord) {
-            // TODO: only add if new Record is in view.
-            var rowId = this._addTrEl(oRecord, index);
-            // TODO: row may be inserted into middle... so don't set first/last
+    var oRecord = this._oRecordSet.addRecord(oData, index);
+    if(oRecord) {
+        // TODO: add/update TR el if in view
+        //var updatedRowId = this._updateTrEl(oRecord, index);
+        var rowId = this._addTrEl(oRecord, index);
+        // New TR el was added to DOM
+        if(rowId) {
+            // Is this an insert or an append?
+            var append = (YAHOO.lang.isNumber(index) &&
+                    (index > -1) && (index < this._elTbody.rows.length)) ? false : true;
 
-            if(YAHOO.lang.isNumber(index)) {
-                if(index === 0) {
-                    this._setFirstRow();
+            // Stripe the one new row
+            if(append) {
+                if((this._elTbody.rows.length-1)%2) {
+                    YAHOO.util.Dom.addClass(rowId, YAHOO.widget.DataTable.CLASS_ODD);
                 }
-                this.fireEvent("rowInsertEvent", {rowIds:[rowId]});
+                else {
+                    YAHOO.util.Dom.addClass(rowId, YAHOO.widget.DataTable.CLASS_EVEN);
+                }
             }
+            // Restripe all the rows
             else {
+                //TODO: pass in a subset for better performance
+                this._setRowStripes();
+            }
+
+            // If new row is at the bottom
+            if(append) {
                 this._setLastRow();
-                this.fireEvent("rowAppendEvent", {rowIds:[rowId]});
+            }
+            // If new row is at the top
+            else if(YAHOO.lang.isNumber(index) && (index === 0)) {
+                this._setFirstRow();
             }
             // TODO: what to return?
+            
+            this.fireEvent("rowAddEvent", {data:oData, trElId:rowId});
         }
-        YAHOO.log("Could not add row because Record could not be created","error",this.toString());
     }
     else {
-        YAHOO.log("Could not add row due to invalid data", "error", this.toString());
+        YAHOO.log("Could not add row because Record could not be created","error",this.toString());
     }
 };
 
@@ -3089,17 +3116,19 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
  * @param oData {Object} Object literal of data for the row.
  */
 YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
+    var elRow = this.getTrEl(row);
+    
     var oRecord = this.getRecord(row);
     if(oRecord !== null) {
         if(oData && (oData.constructor == Object)) {
             // Update the Record
             this._oRecordSet.updateRecord(oRecord, oData);
         
-            // Update the TR element if it is in view
-            var trElId = this._updateTrEl(oRecord, row);
+            // TODO: Update the TR element only if it is in view
+            var rowId = this._updateTrEl(elRow);
             
             //TODO: Event passes TR ID old data, new data.
-            this.fireEvent("rowUpdateEvent", {rowElId:trElId});
+            this.fireEvent("rowUpdateEvent", {newData:oData, oldData:"todo", trElId:rowId});
         }
         else {
             YAHOO.log("Could not update row " + row +
@@ -3112,20 +3141,20 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
 };
 
 /**
- * Deletes a row's Record from the RecordSet. If the row's TR element is in view
- * deletes it from TBODY as well.
+ * Deletes a row's Record from the RecordSet. If the row is in view, the
+ * associated TR element is deleted as well.
  *
  * @method deleteRow
  * @param row {Number | HTMLElement} RecordSet position index or element reference.
  */
 YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
-    // By Record index
+    // TODO: By Record index
     if(YAHOO.lang.isNumber(row)) {
 
     }
     // By element reference
     else if(row && YAHOO.util.Dom.inDocument(row)) {
-        var rowIndex = this.getRowIndex(row);
+        var rowIndex = this.getTrIndex(row);
         if(rowIndex !== null) {
             // Copy data from the Record for the event that gets fired later
             var oRecordData = this.getRecord(row).getData();
@@ -3134,9 +3163,12 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
                 oData[key] = oRecordData[key];
             }
             
+            // Delete Record from RecordSet
             var recordIndex = this.getRecordIndex(rowIndex);
             this._oRecordSet.deleteRecord(recordIndex);
-            this._deleteTrEl(row);
+            
+            // Delete TR from DOM
+            this._deleteTrEl(rowIndex);
             
             //TODO: doesn't need to be called every time
             // Set first-row and last-row trackers
@@ -3185,13 +3217,13 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
 
 
 
-/**
+/*TODO: delete
  * Add rows to bottom of table body.
  *
  * @method appendRows
  * @param aRecords {YAHOO.widget.Record[]} Array of Records.
  */
-YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
+/*YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
     if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
         this.hideTableMessage();
 
@@ -3206,15 +3238,15 @@ YAHOO.widget.DataTable.prototype.appendRows = function(aRecords) {
 
         this.fireEvent("rowAppendEvent", {rowIds:rowIds});
     }
-};
+};*/
 
-/**
+/*TODO: delete
  * Add rows to top of table body.
  *
  * @method insertRows
  * @param aRecords {YAHOO.widget.Record[]} Array of Records.
  */
-YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
+/*YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
     if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
         this.hideTableMessage();
 
@@ -3229,7 +3261,7 @@ YAHOO.widget.DataTable.prototype.insertRows = function(aRecords) {
 
         this.fireEvent("rowInsertEvent", {rowIds:rowIds});
     }
-};
+};*/
 
 /**
  * Sets a row to the selected state.
@@ -3262,7 +3294,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         }
 
         // Update UI
-        this._select(row);
+        this._selectEl(row);
 
         // Add to the end of internal tracker
         tracker.push(recordId);
@@ -3307,7 +3339,7 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
         }
 
         // Update UI
-        this._unselect(row);
+        this._unselectEl(row);
 
         //TODO: getRecord API has changed
         this.fireEvent("rowUnselectEvent",{el:row, record:this.getRecord(row)});
@@ -3324,7 +3356,7 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
  * @method unselectAllRows
  */
 YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
-    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
+    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
     this.unselect(selectedRows);
     this._aSelectedRecords = [];
     this.fireEvent("unselectEvent", {els:selectedRows});
@@ -3376,7 +3408,7 @@ YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) 
     if(YAHOO.lang.isString(sClassName)) {
         elCell.className = sClassName;
     }
-    this._elMsgBody.style.display = "";
+    this._elMsgTbody.style.display = "";
 };
 
 /**
@@ -3385,7 +3417,7 @@ YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) 
  * @method hideTableMessage
  */
 YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
-    this._elMsgBody.style.display = "none";
+    this._elMsgTbody.style.display = "none";
 };
 
 
@@ -3660,7 +3692,6 @@ YAHOO.widget.DataTable.prototype.populateTable = function(oData) {
     // Add data to RecordSet
     var records = this._oRecordSet.replaceRecords(oData);
     
-    
     // Update table view
     this.refreshTable();
 };
@@ -3695,18 +3726,18 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
     if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
         this.hideTableMessage();
 
-        var elBody = this._elBody;
-        var elRows = this._elBody.rows;
+        var elTbody = this._elTbody;
+        var elRows = elTbody.rows;
 
         // Remove extra rows from the bottom so as to preserve ID order
-        while(elBody.hasChildNodes() && (elRows.length > aRecords.length)) {
-            elBody.deleteRow(elRows.length-1);
+        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
+            elTbody.deleteRow(-1);
         }
 
         // Unselect rows in the UI but keep tracking selected rows
         var selectedRecords = this.getSelectedRecordIds();
         if(selectedRecords.length > 0) {
-            this._unselectAllRows();
+            this._unselectAllTrEls();
         }
 
         //TODO: Keep track of updated TR IDs?
@@ -3714,7 +3745,7 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
         
         // From the top, update in-place existing rows
         for(i=0; i<elRows.length; i++) {
-            rowIds.push(this._updateTrEl(i));
+            rowIds.push(this._updateTrEl(elRows[i]));
         }
 
         // Add rows as necessary
@@ -3724,10 +3755,10 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
 
         // Select any rows as necessary
         for(i=0; i<selectedRecords.length; i++) {
-            var allRows = elBody.rows;
+            var allRows = elTbody.rows;
             for(var j=0; j<allRows.length; j++) {
                 if(selectedRecords[i] == allRows[j].yuiRecordId) {
-                    this._select([allRows[j]]);
+                    this._selectEl([allRows[j]]);
                 }
             }
         }
@@ -3809,7 +3840,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         //TODO: what if column doesn't have key?
         // Is this column sorted already?
-        if(oColumn.key && this.sortedBy && (this.sortedBy.colKey == oColumn.key)) {
+        if(oColumn.key && this.sortedBy && (this.sortedBy.key === oColumn.key)) {
             if(this.sortedBy.dir) {
                 sortDir = (this.sortedBy.dir == "asc") ? "desc" : "asc";
             }
@@ -3837,7 +3868,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             var sorted;
             sortFnc = function(a, b) {
                 if(sortDir == "desc") {
-                    sorted = YAHOO.util.Sort.compareDesc(a[oColumn.key],b[oColumn.key]);
+                    sorted = YAHOO.util.Sort.compareDesc(a._data[oColumn.key],b._data[oColumn.key]);
                     if(sorted === 0) {
                         return YAHOO.util.Sort.compareDesc(a.id,b.id);
                     }
@@ -3846,7 +3877,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
                     }
                 }
                 else {
-                    sorted = YAHOO.util.Sort.compareAsc(a[oColumn.key],b[oColumn.key]);
+                    sorted = YAHOO.util.Sort.compareAsc(a._data[oColumn.key],b._data[oColumn.key]);
                     if(sorted === 0) {
                         return YAHOO.util.Sort.compareAsc(a.id,b.id);
                     }
@@ -3872,7 +3903,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
 
             // Keep track of currently sorted column
-            this.sortedBy.colKey = oColumn.key;
+            this.sortedBy.key = oColumn.key;
             this.sortedBy.dir = sortDir;
             this.sortedBy._id = oColumn.getId();
 
@@ -3949,7 +3980,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
         if(!YAHOO.lang.isArray(els)) {
             els = [els];
         }
-        this._select(els);
+        this._selectEl(els);
 
         // Add Record ID to internal tracker
         var tracker = this._aSelectedRecords || [];
@@ -3989,7 +4020,7 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
         if(!YAHOO.lang.isArray(els)) {
             els = [els];
         }
-        this._unselect(els);
+        this._unselectEl(els);
         // Remove Record ID from internal tracker
         var tracker = this._aSelectedRecords || [];
         for(var i=0; i<els.length; i++) {
@@ -4020,7 +4051,7 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
  * @method unselectAllCells
  */
 YAHOO.widget.DataTable.prototype.unselectAllCells = function() {
-    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elBody);
+    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
     this.unselect(selectedCells);
     this.fireEvent("unselectEvent", {els:selectedCells});
 };
@@ -4055,7 +4086,7 @@ YAHOO.widget.DataTable.prototype.getSelectedRecordIds = function() {
  */
 YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
     //TODO: keep internal array if this is non performant
-    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elBody);
+    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this.__elTbody);
 };
 
 /**
@@ -4066,7 +4097,7 @@ YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
  */
 YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
     //TODO: keep internal array
-    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elBody);
+    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this.__elTbody);
 };
 
 
@@ -4108,7 +4139,7 @@ YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
 
 
 
-// ABSTRACT
+// ABSTRACT METHODS
 
 
 
@@ -4378,7 +4409,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
         elTag = elTarget.tagName.toLowerCase();
     }
     var sTargetId = elTarget.id;
-    var rows = this._elBody.rows;
+    var rows = this._elTbody.rows;
     var anchor = YAHOO.util.Dom.get(this._selectRowAnchorId);
     var anchorIndex;
     var targetIndex = elTarget.sectionRowIndex;
@@ -4637,7 +4668,8 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
 };
 
 /**
- * Calls populateTable() with new data.
+ * Callback function receives data from DataSource and populates an entire
+ * DataTable with Records and TR elements.
  *
  * @method onDataReturnPopulateTable
  * @param sRequest {String} Original request.
@@ -4647,21 +4679,27 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
 YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
 
+    // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(sRequest, oResponse);
+    
+    // Data ok to populate
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        // Populate table with data returned by DataSource
         this.populateTable(oResponse.results);
     }
-    else if(oResponse.error) {
+    // Error
+    else if(ok && oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
-    else {
+    // Empty
+    else if(ok){
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
 };
 
 /**
- * Add new data to end of table.
+ * Callback function receives data from DataSource and appends to an existing
+ * DataTable new Records and, if applicable, creates or updates
+ * corresponding TR elements.
  *
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
@@ -4671,23 +4709,23 @@ YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, 
 YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
+    // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(sRequest, oResponse);
+    
+    // Data ok to append
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        // Update the RecordSet from the response
-        var newRecords = this._addRecords(oResponse.results);
-        if(newRecords) {
-            // Update markup
-            this.appendRows(newRecords);
-            YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
-        }
+        this.addRows(oResponse.results);
     }
-    else {
-        //TODO
+    // Error
+    else if(ok && oResponse.error) {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
 };
 
 /**
- * Handles data return for inserting new rows to top of table.
+ * Callback function receives data from DataSource and inserts into top of an
+ * existing DataTable new Records and, if applicable, creates or updates
+ * corresponding TR elements.
  *
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
@@ -4697,22 +4735,20 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
 YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
+    // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
+    
+    // Data ok to append
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        // Update the RecordSet from the response
-        var newRecords = this._oRecordSet.addRecords(oResponse.results, 0);
-        if(newRecords) {
-            // Update markup
-            this.insertRows(newRecords);
-            YAHOO.log("Data returned for " + newRecords.length + " rows","info",this.toString());
-        }
+        this.addRows(oResponse.results, 0);
     }
-    else {
-        //TODO
+    // Error
+    else if(ok && oResponse.error) {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
 };
 
-/**
+/*TODO: delete
  * Handles data return for replacing all existing of table with new rows.
  *
  * @method onDataReturnReplaceRows
@@ -4720,7 +4756,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
  * @param oResponse {Object} Response object.
  * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
+/*YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
     var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
@@ -4735,7 +4771,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oR
     else {
     
     }
-};
+};*/
 
 /////////////////////////////////////////////////////////////////////////////
 //
