@@ -40,13 +40,15 @@ YAHOO.widget.Overlay._DEFAULT_CONFIG = {
     "X": { 
         key: "x", 
         validator:YAHOO.lang.isNumber, 
-        suppressEvent:true, supercedes:["iframe"] 
+        suppressEvent:true, 
+        supercedes:["iframe"] 
     },
 
     "Y": { 
         key: "y", 
         validator:YAHOO.lang.isNumber, 
-        suppressEvent:true, supercedes:["iframe"] 
+        suppressEvent:true, 
+        supercedes:["iframe"] 
     },
 
     "XY": { 
