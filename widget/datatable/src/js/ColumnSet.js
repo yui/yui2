@@ -1,3 +1,15 @@
+/**
+ * The DataTable widget provides a progressively enhanced DHTML control for
+ * displaying tabular data across A-grade browsers.
+ *
+ * @namespace YAHOO.widget
+ * @module datatable
+ * @requires yahoo, dom, event, datasource
+ * @optional dragdrop
+ * @title DataTable Widget
+ * @beta
+ */
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
