@@ -2221,27 +2221,70 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 
                     if(this.cfg.getProperty("maxheight") > 0) {
 
-                        var oBody = this.body;
-
-                        oBody.scrollTop = 
-
-                            (
-                                oNextItem.element.offsetTop + 
-                                oNextItem.element.offsetHeight
-                            ) - oBody.offsetHeight;
+                        var oBody = this.body,
+                            nBodyScrollTop = oBody.scrollTop,
+                            nBodyOffsetHeight = oBody.offsetHeight,
+                            aItems = this.getItems(),
+                            nItems = aItems.length - 1,
+                            nNextItemOffsetTop = oNextItem.element.offsetTop;
 
 
-                        var nScrollTop = oBody.scrollTop,
-                            nScrollTarget = 
+                        if (oEvent.keyCode == 40 ) {    // Down
+                       
+                            if (nNextItemOffsetTop >= (nBodyOffsetHeight + nBodyScrollTop)) {
+
+                                oBody.scrollTop = nNextItemOffsetTop - nBodyOffsetHeight;
+
+                            }
+                            else if (nNextItemOffsetTop <= nBodyScrollTop) {
+                            
+                                oBody.scrollTop = 0;
+                            
+                            }
+
+
+                            if (oNextItem == aItems[nItems]) {
+
+                                oBody.scrollTop = oNextItem.element.offsetTop;
+
+                            }
+
+                        }
+                        else {  // Up
+
+                            if (nNextItemOffsetTop <= nBodyScrollTop) {
+
+                                oBody.scrollTop = nNextItemOffsetTop - oNextItem.element.offsetHeight;
+                            
+                            }
+                            else if (nNextItemOffsetTop >= (nBodyScrollTop + nBodyOffsetHeight)) {
+                            
+                                oBody.scrollTop = nNextItemOffsetTop;
+                            
+                            }
+
+
+                            if (oNextItem == aItems[0]) {
+                            
+                                oBody.scrollTop = 0;
+                            
+                            }
+
+                        }
+
+
+                        nBodyScrollTop = oBody.scrollTop;
+
+                        var nScrollTarget = 
                                 oBody.scrollHeight - oBody.offsetHeight;
 
-                        if(nScrollTop === 0) {
+                        if(nBodyScrollTop === 0) {
 
                             this._disableScrollHeader();
                             this._enableScrollFooter();
 
                         }
-                        else if(nScrollTop == nScrollTarget) {
+                        else if(nBodyScrollTop == nScrollTarget) {
 
                              this._enableScrollHeader();
                              this._disableScrollFooter();
