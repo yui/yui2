@@ -12,8 +12,9 @@
 /* custom css*/
 #nested {margin:1em;}
 #nested table {border-collapse:collapse;}
-#nested th, #nested td {border:1px solid #000;padding:.25em;}
 #nested th {background-color:#696969;color:#fff;}/*dark gray*/
+#nested th a {color:#fff;}
+#nested th, #nested td {border:1px solid #000;padding:.25em;}
 #nested .yui-dt-odd {background-color:#eee;} /*light gray*/
 </style>
 </head>
@@ -100,39 +101,42 @@ var myDataTable = new YAHOO.widget.DataTable("nested", myColumnSet, myDataSource
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
+YAHOO.example.NestedHeaders = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-var myColumnHeaders = [
-    {key:"page", text:"Page",sortable:true},
-    {text:"Statistics", type:"number", children:[
-        {text:"Visits",
-            children: [
-                {key:"visitsmonth", text:"This Month",sortable:true},
-                {key:"visitsytd", text:"YTD", abbr:"Year to Date",sortable:true}
-            ]
-        },
-        {text:"Views",
-            children: [
-                {key:"viewsmonth", text:"This Month",sortable:true},
-                {key:"viewsytd", text:"YTD", abbr:"Year to Date",sortable:true}
-            ]
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    var myColumnHeaders = [
+        {key:"page", text:"Page",sortable:true},
+        {text:"Statistics", type:"number", children:[
+            {text:"Visits",
+                children: [
+                    {key:"visitsmonth", text:"This Month",sortable:true},
+                    {key:"visitsytd", text:"YTD", abbr:"Year to Date",sortable:true}
+                ]
+            },
+            {text:"Views",
+                children: [
+                    {key:"viewsmonth", text:"This Month",sortable:true},
+                    {key:"viewsytd", text:"YTD", abbr:"Year to Date",sortable:true}
+                ]
 
-        }
-    ]}
-];
+            }
+        ]}
+    ];
 
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.webstats);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["page","visitsmonth","visitsytd","viewsmonth","viewsytd"]
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.webstats);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+    this.myDataSource.responseSchema = {
+        fields: ["page","visitsmonth","visitsytd","viewsmonth","viewsytd"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("nested", this.myColumnSet,
+            this.myDataSource, {caption:"Example: Nested Headers"});
 };
-
-var myDataTable = new YAHOO.widget.DataTable("nested", myColumnSet, myDataSource,{caption:"Example: Nested Headers"});
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

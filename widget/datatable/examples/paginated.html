@@ -141,50 +141,53 @@ var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnSet, myDataSou
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
-myLogger.collapse();
+YAHOO.example.ClientPagination = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
+    this.myLogger.collapse();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
 
-var myColumnHeaders = [
-    {key:"id",text:"ID"},
-    {key:"name",text:"Name"},
-    {key:"date",text:"Date"},
-    {key:"price",text:"Price"},
-    {key:"number",text:"Number"},
-    {key:"address",text:"Address"},
-    {key:"company",text:"Company"},
-    {key:"desc",text:"Description"},
-    {key:"age",text:"Age"},
-    {key:"title",text:"Title"},
-    {key:"phone",text:"Phone"},
-    {key:"email",text:"Email"},
-    {key:"zip",text:"Zip"},
-    {key:"country",text:"Country"}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+    var myColumnHeaders = [
+        {key:"id",text:"ID"},
+        {key:"name",text:"Name"},
+        {key:"date",text:"Date"},
+        {key:"price",text:"Price"},
+        {key:"number",text:"Number"},
+        {key:"address",text:"Address"},
+        {key:"company",text:"Company"},
+        {key:"desc",text:"Description"},
+        {key:"age",text:"Age"},
+        {key:"title",text:"Title"},
+        {key:"phone",text:"Phone"},
+        {key:"email",text:"Email"},
+        {key:"zip",text:"Zip"},
+        {key:"country",text:"Country"}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-// Show over 1000 records
-var myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
-// Show 5000 records -- FireBug must be disabled!
-//var myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource.responseSchema = {
-    resultsList: "records",
-    fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+    // Show over 1000 records
+    this.myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
+    // Show 5000 records -- FireBug must be disabled!
+    //this.myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+    this.myDataSource.responseSchema = {
+        resultsList: "records",
+        fields: ["id","name","date","price","number","address","company","desc","age","title","phone","email","zip","country"]
+    };
+
+    var oConfigs = {
+            caption:"Example: Client-side Pagination of Large RecordSet",
+            paginator:true,
+            paginatorOptions:{
+                rowsPerPage: 100,
+                dropdownOptions: [25,50,100,500]
+            }
+    };
+    this.myDataTable = new YAHOO.widget.DataTable("paginated", this.myColumnSet,
+            this.myDataSource, oConfigs);
 };
-
-var oConfigs = {
-        caption:"Example: Client-side Pagination of Large RecordSet",
-        paginator:true,
-        paginatorOptions:{
-            rowsPerPage: 100,
-            dropdownOptions: [25,50,100,500]
-        }
-};
-var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnSet, myDataSource, oConfigs);
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

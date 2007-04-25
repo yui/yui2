@@ -19,6 +19,7 @@
 #complex .yui-dt-sortedbyasc, #complex .yui-dt-sortedbydesc {background-color:#3F3F3F;}/*dark gray*/
 #complex .yui-dt-sortedbyasc .yui-dt-headtext {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;}/*arrow up*/
 #complex .yui-dt-sortedbydesc .yui-dt-headtext {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;}/*arrow down*/
+#complex .yui-dt-even {background-color:#fff;} /*white*/
 #complex .yui-dt-odd {background-color:#eee;} /*light gray*/
 #complex .yui-dt-selected {background-color:#97C0A5;} /*green*/
 
@@ -60,6 +61,7 @@ YAHOO.example.Data.areacodes = [
 #complex .yui-dt-sortedbyasc, #complex .yui-dt-sortedbydesc {background-color:#3F3F3F;}/*dark gray*/
 #complex .yui-dt-sortedbyasc .yui-dt-headtext {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;}/*arrow up*/
 #complex .yui-dt-sortedbydesc .yui-dt-headtext {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;}/*arrow down*/
+#complex .yui-dt-even {background-color:#fff;} /*white*/
 #complex .yui-dt-odd {background-color:#eee;} /*light gray*/
 #complex .yui-dt-selected {background-color:#97C0A5;} /*green*/
 
@@ -76,95 +78,6 @@ YAHOO.example.Data.areacodes = [
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-// Custom sort functionality to sort by areacode within states
-YAHOO.example.sortStatesAsc = function(a, b) {
-    if((a === null) || (typeof a == "undefined")) {
-        if((b === null) || (typeof b == "undefined")) {
-            return 0;
-        }
-        else {
-            return 1;
-        }
-    }
-    else if((b === null) || (typeof b == "undefined")) {
-        return -1;
-    }
-    var comp = YAHOO.util.Sort.compareAsc;
-    var compState = comp(a.state, b.state);
-    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
-};
-YAHOO.example.sortStatesDesc = function(a, b) {
-    if((a === null) || (typeof a == "undefined")) {
-        if((b === null) || (typeof b == "undefined")) {
-            return 0;
-        }
-        else {
-            return -1;
-        }
-    }
-    else if((b === null) || (typeof b == "undefined")) {
-        return 1;
-    }
-    var comp = YAHOO.util.Sort.compareDesc;
-    var compState = comp(a.state, b.state);
-    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
-};
-
-var myColumnHeaders = [
-    {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
-    {key:"state",text:"States",width:"16em",className:"statestyle",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}},
-    {key:"notes",text:"Notes (editable)",editor:"textbox"}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["areacode","state"]
-};
-
-var myConfigs = {
-    caption:"Example: Integrated Feature Set",
-    sortedBy:{colKey:"areacode",dir:"asc"},
-    paginator:true,
-    paginatorOptions: {
-        rowsPerPage: 25,
-        dropdownOptions: [10,25,50,100],
-        pageLinks: 5
-    }
-}
-
-var myDataTable = new YAHOO.widget.DataTable("complex",myColumnSet,myDataSource,myConfigs);
-myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
-myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
-
-var onCellEdit = function(oArgs) {
-    var oldData = oArgs.oldData || "";
-    var newData = oArgs.newData || "";
-    YAHOO.log("Cell \"" + oArgs.target.id +
-            "\" was updated from \"" + oldData + "\" to \"" +
-            newData + "\"", "info", this.toString());
-}
-myDataTable.subscribe("cellEditEvent",onCellEdit);
-        </textarea>
-    </div>
-    <!-- Code sample ends -->
-</div>
-
-<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event.js"></script>
-<script type="text/javascript" src="../../build/logger/logger.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
-<script type="text/javascript" src="./js/data.js"></script>
-<script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
-
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-
 // Custom sort functionality to sort by areacode within states
 YAHOO.example.sortStatesAsc = function(a, b) {
     if((a === null) || (typeof a == "undefined")) {
@@ -227,14 +140,134 @@ var myDataTable = new YAHOO.widget.DataTable("complex",myColumnSet,myDataSource,
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventSelectRow);
 myDataTable.subscribe("cellClickEvent",myDataTable.onEventEditCell);
 
+// When cell is edited, pulse the color of the row yellow
 var onCellEdit = function(oArgs) {
-    var oldData = oArgs.oldData || "";
-    var newData = oArgs.newData || "";
-    YAHOO.log("Cell \"" + oArgs.target.id +
-            "\" was updated from \"" + oldData + "\" to \"" +
-            newData + "\"", "info", this.toString());
+    var elCell = oArgs.target;
+    var oOldData = oArgs.oldData;
+    var oNewData = oArgs.newData;
+
+    // Grab the row el and the 2 colors
+    var elRow = myDataTable.getTrEl(elCell);
+    var origColor = YAHOO.util.Dom.getStyle(elRow, "backgroundColor");
+    var pulseColor = "#ff0";
+
+    // Create a temp anim instance that nulls out when anim is complete
+    var rowColorAnim = new YAHOO.util.ColorAnim(elRow, {
+            backgroundColor:{to:origColor, from:pulseColor}, duration:2});
+    var onComplete = function() {
+        rowColorAnim = null;
+    }
+    rowColorAnim.onComplete.subscribe(onComplete);
+    rowColorAnim.animate();
 }
-myDataTable.subscribe("cellEditEvent",onCellEdit);
+myDataTable.subscribe("cellEditEvent", onCellEdit);
+        </textarea>
+    </div>
+    <!-- Code sample ends -->
+</div>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/animation/animation.js"></script>
+<script type="text/javascript" src="../../build/logger/logger.js"></script>
+<script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
+<script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
+<script type="text/javascript">
+YAHOO.example.IntegratedFeatureSet = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
+
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+
+    // Custom sort functionality to sort by areacode within states
+    this.sortStatesAsc = function(a, b) {
+        if((a === null) || (typeof a == "undefined")) {
+            if((b === null) || (typeof b == "undefined")) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        else if((b === null) || (typeof b == "undefined")) {
+            return -1;
+        }
+        var comp = YAHOO.util.Sort.compareAsc;
+        var compState = comp(a.state, b.state);
+        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+    };
+    
+    this.sortStatesDesc = function(a, b) {
+        if((a === null) || (typeof a == "undefined")) {
+            if((b === null) || (typeof b == "undefined")) {
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else if((b === null) || (typeof b == "undefined")) {
+            return 1;
+        }
+        var comp = YAHOO.util.Sort.compareDesc;
+        var compState = comp(a.state, b.state);
+        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+    };
+
+    var myColumnHeaders = [
+        {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
+        {key:"state",text:"States",width:"16em",className:"statestyle", sortable:true,
+                sortOptions:{ascFunction:this.sortStatesAsc,descFunction:this.sortStatesDesc}},
+        {key:"notes",text:"Notes (editable)",className:"notesstyle",editor:"textbox"}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+    this.myDataSource.responseSchema = {
+        fields: ["areacode","state"]
+    };
+
+    var myConfigs = {
+        caption:"Example: Integrated Feature Set",
+        sortedBy:{key:"areacode",dir:"asc"},
+        paginator:true,
+        paginatorOptions: {
+            rowsPerPage: 25,
+            dropdownOptions: [10,25,50,100],
+            pageLinks: 5
+        }
+    }
+
+    this.myDataTable = new YAHOO.widget.DataTable("complex", this.myColumnSet, this.myDataSource, myConfigs);
+    this.myDataTable.subscribe("cellClickEvent",this.myDataTable.onEventSelectRow);
+    this.myDataTable.subscribe("cellClickEvent",this.myDataTable.onEventEditCell);
+
+    // When cell is edited, pulse the color of the row yellow
+    this.onCellEdit = function(oArgs) {
+        var elCell = oArgs.target;
+        var oOldData = oArgs.oldData;
+        var oNewData = oArgs.newData;
+
+        // Grab the row el and the 2 colors
+        var elRow = this.getTrEl(elCell);
+        var origColor = YAHOO.util.Dom.getStyle(elRow, "backgroundColor");
+        var pulseColor = "#ff0";
+
+        // Create a temp anim instance that nulls out when anim is complete
+        var rowColorAnim = new YAHOO.util.ColorAnim(elRow, {
+                backgroundColor:{to:origColor, from:pulseColor}, duration:2});
+        var onComplete = function() {
+            rowColorAnim = null;
+        }
+        rowColorAnim.onComplete.subscribe(onComplete);
+        rowColorAnim.animate();
+    }
+    this.myDataTable.subscribe("cellEditEvent", this.onCellEdit);
+};
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

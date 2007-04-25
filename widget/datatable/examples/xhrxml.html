@@ -149,32 +149,35 @@ var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{i
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
-myLogger.collapse();
+YAHOO.example.XHR_XML = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
+    this.myLogger.collapse();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    this.formatUrl = function(elCell, oRecord, oColumn, sData) {
+        elCell.innerHTML = "<a href='" + oRecord.getData("ClickUrl") + "' target='_blank'>" + sData + "</a>";
+    };
+
+    var myColumnHeaders = [
+        {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
+        {key:"Phone"},
+        {key:"City"},
+        {key:"AverageRating", text:"Rating", type:"number", sortable:true}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+    this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
+    this.myDataSource.responseSchema = {
+        resultNode: "Result",
+        fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("xml", this.myColumnSet,
+            this.myDataSource, {initialRequest:"query=pizza&zip=94089&results=10"});
 };
-
-var myColumnHeaders = [
-    {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
-    {key:"Phone"},
-    {key:"City"},
-    {key:"AverageRating", text:"Rating", type:"number", sortable:true}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
-myDataSource.responseSchema = {
-    resultNode: "Result",
-    fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

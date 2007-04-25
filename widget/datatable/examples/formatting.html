@@ -12,8 +12,9 @@
 /* custom css*/
 #formatting {margin:1em;}
 #formatting table {border-collapse:collapse;}
+#formatting th {background-color:#696969; color:#fff;}/*dark gray*/
+#formatting th a {color:#fff;}
 #formatting th, #formatting td {border:1px solid #000;padding:.25em;}
-#formatting th {background-color:#696969;color:#fff;}/*dark gray*/
 #formatting .yui-dt-odd {background-color:#eee;} /*light gray*/
 
 #formatting .unread {font-weight:bold;}
@@ -112,42 +113,51 @@ var myDataTable = new YAHOO.widget.DataTable("formatting",myColumnSet,myDataSour
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
+YAHOO.example.CustomFormatting = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
 
-// Define a custom formatter for the "New" column
-var myFormatter = function(elCell, oRecord, oColumn, oData) {
-    if(oRecord["Unread"]) {
-        elCell.innerHTML = "X"; // show an "X" in the column
-        YAHOO.util.Dom.addClass(elCell.parentNode, "unread"); // style the row
-    }
+    // Define a custom formatter for the "New" column
+    this.myFormatter = function(elCell, oRecord, oColumn, oData) {
+        // Give unread messages a different UI
+        if(oRecord.getData("Unread") === true) {
+            elCell.innerHTML = "X"; // show an "X" in the column
+            YAHOO.util.Dom.addClass(elCell.parentNode, "unread"); // style the row
+        }
+        // Explicitly style read messages in case of sort
+        else {
+            elCell.innerHTML = ""; // show an "X" in the column
+            YAHOO.util.Dom.removeClass(elCell.parentNode, "unread"); // style the row
+        }
+    };
+
+    // Override the built-in formatter
+    YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
+        var user = oData;
+        elCell.innerHTML = "<a href=\"mailto:" + user + "@foo.com\">" + user + "</a>";
+    };
+
+    var myColumnHeaders = [
+        {text:"New", formatter:this.myFormatter}, // use a custom formatter
+        {key:"Date", sortable:true, type:"date"}, // use a built-in formatter
+        {key:"To", sortable:true, type:"link"}, // override the built-in formatter
+        {key:"Subject", sortable:true}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+    this.myDataSource.responseSchema = {
+        resultsList: ["messages"],
+        fields: ["Date","To","From","Subject","XID","Date","Unread"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("formatting", this.myColumnSet,
+            this.myDataSource, {caption:"Example: Custom Formatting"});
 };
-
-// Override the built-in formatter
-YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
-    var user = oData;
-    elCell.innerHTML = "<a href=\"mailto:" + user + "@foo.com\">" + user + "</a>";
-};
-
-var myColumnHeaders = [
-    {text:"New",formatter:myFormatter}, // use a custom formatter
-    {key:"Date",type:"date"}, // use a built-in formatter
-    {key:"To", type:"link"}, // override the built-in formatter
-    {key:"Subject"}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource.responseSchema = {
-    resultsList: ["messages"],
-    fields: ["Date","To","From","Subject","XID","Date","Unread"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("formatting",myColumnSet,myDataSource,{caption:"Example: Custom Formatting"});
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

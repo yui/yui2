@@ -147,25 +147,28 @@ var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnSet,myDataSource,{
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
+YAHOO.example.Scrolling = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
 
-var myColumnHeaders = [
-    {key:"areacode",className:"col1"},
-    {key:"state",className:"col2"}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+    var myColumnHeaders = [
+        {key:"areacode",className:"col1"},
+        {key:"state",className:"col2"}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["areacode","state"]
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+    this.myDataSource.responseSchema = {
+        fields: ["areacode","state"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("scroll", this.myColumnSet,
+            this.myDataSource, {scrollable:true});
 };
-
-var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnSet,myDataSource,{scrollable:true});
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

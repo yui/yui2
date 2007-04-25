@@ -249,8 +249,8 @@ YAHOO.widget.RecordSet.prototype.updateField = function(record, sField, oData) {
     }
     if(record instanceof YAHOO.widget.Record) {
         // TODO: copy by value for non-primitives?
-        var oldData = record[sField];
-        record[sField] = oData;
+        var oldData = record._data[sField];
+        record._data[sField] = oData;
         this.fireEvent("fieldUpdateEvent",{record:record,field:sField,newData:oData,oldData:oldData});
     }
     else {
@@ -490,12 +490,19 @@ YAHOO.widget.Record.prototype.getId = function() {
 };
 
 /**
- * Returns data for the Record in an object literal.
+ * Returns data for the Record for a field if given, or the entire object
+ * literal otherwise.
  *
  * @method getData
+ * @param sField {String} (Optional) The field name to retrive a single data value.
  * @return Object
  */
-YAHOO.widget.Record.prototype.getData = function() {
-    return this._data;
+YAHOO.widget.Record.prototype.getData = function(sField) {
+    if(YAHOO.lang.isString(sField)) {
+        return this._data[sField];
+    }
+    else {
+        return this._data;
+    }
 };
 

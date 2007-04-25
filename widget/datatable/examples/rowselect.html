@@ -95,7 +95,7 @@ var singleRowDataTable = new YAHOO.widget.DataTable("singleselect",myColumnSet,m
 singleRowDataTable.subscribe("cellClickEvent",singleRowDataTable.onEventSelectRow);
 
 // Select the first row immediately
-singleRowDataTable.select(singleRowDataTable.getRow(0));
+singleRowDataTable.select(singleRowDataTable.getTrEl(0));
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -109,39 +109,42 @@ singleRowDataTable.select(singleRowDataTable.getRow(0));
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
+YAHOO.example.RowSelection = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
 
-var myColumnHeaders = [
-    {key:"Date",type:"date"},
-    {key:"To"},
-    {key:"From"},
-    {key:"Subject"}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+    var myColumnHeaders = [
+        {key:"Date",type:"date"},
+        {key:"To"},
+        {key:"From"},
+        {key:"Subject"}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource.responseSchema = {
-    resultsList: ["messages"],
-    fields: ["Date","To","From","Subject","XID","Date","Attachment"]
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+    this.myDataSource.responseSchema = {
+        resultsList: ["messages"],
+        fields: ["Date","To","From","Subject","XID","Date","Attachment"]
+    };
+
+    // Default selection mode
+    this.defaultDataTable = new YAHOO.widget.DataTable("standardselect",
+            this.myColumnSet, this.myDataSource, {caption:"Example: Default Selection Mode"});
+    this.defaultDataTable.subscribe("cellClickEvent", this.defaultDataTable.onEventSelectRow);
+
+    // Single-row selection mode
+    this.singleSelectDataTable = new YAHOO.widget.DataTable("singleselect",
+            this.myColumnSet, this.myDataSource,
+            {caption:"Example: Single-row Selection Mode", rowSingleSelect:true});
+    this.singleSelectDataTable.subscribe("cellClickEvent", this.singleSelectDataTable.onEventSelectRow);
+
+    // Select the first row immediately
+    this.singleSelectDataTable.select(this.singleSelectDataTable.getTrEl(0));
 };
-
-// Default selection mode
-var defaultDataTable = new YAHOO.widget.DataTable("standardselect",myColumnSet,myDataSource,
-        {caption:"Example: Default Selection Mode"});
-defaultDataTable.subscribe("cellClickEvent",defaultDataTable.onEventSelectRow);
-
-// Single-row selection mode
-var singleRowDataTable = new YAHOO.widget.DataTable("singleselect",myColumnSet,myDataSource,
-        {caption:"Example: Single-row Selection Mode", rowSingleSelect:true});
-singleRowDataTable.subscribe("cellClickEvent",singleRowDataTable.onEventSelectRow);
-
-// Select the first row immediately
-singleRowDataTable.select(singleRowDataTable.getRow(0));
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

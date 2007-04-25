@@ -98,7 +98,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
             
             ok = this.doBeforeLoadData(null,aData);
             if(ok) {
-                this.populateTable(aData);
+                this.initializeTable(aData);
             }
             else {
                 YAHOO.log("The function doBeforeLoadData returned false","error",this);
@@ -110,7 +110,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
                 this._initTableEl();
 
                 // Send out for data in an asynchronous request
-                oDataSource.sendRequest(this.initialRequest, this.onDataReturnPopulateTable, this);
+                oDataSource.sendRequest(this.initialRequest, this.onDataReturnInitializeTable, this);
         }
         // Else there is no data
         else {
@@ -488,14 +488,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      */
     this.createEvent("rowDeleteEvent");
     
-    /*TODO: delete
-     * Fired when one or more TR elements are appended.
-     *
-     * @event rowAppendEvent
-     * @param oArgs.rowIds {Array} The IDs of the appended rows.
-     */
-    //this.createEvent("rowAppendEvent");
-
     /**
      * Fired when a Record is updated in the RecordSet.
      *
@@ -2189,7 +2181,6 @@ YAHOO.widget.DataTable.prototype._onKeypress = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
     var oldSelectedId = oSelf._lastSelectedId;
     // Only move selection if one is already selected
-    // TODO: config to allow selection even if one is NOT already selected
     // TODO: if something isn't selected already, arrow key should select first or last one
     if(oldSelectedId && oSelf.isSelected(oldSelectedId)) {
         var oldSelected = YAHOO.util.Dom.get(oldSelectedId);
@@ -3130,7 +3121,7 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
         
         // If row is in view, delete the TR element
         var pageRowIndex = this.getPageIndex(recordIndex);
-        if(pageRowIndex) {
+        if(YAHOO.lang.isNumber(pageRowIndex)) {
             this._deleteTrEl(pageRowIndex);
             
             //TODO: doesn't need to be called every time
@@ -3188,7 +3179,6 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         tracker.push(recordId);
         this._aSelectedRecords = tracker;
 
-        //TODO: getRecord API has changed
         this.fireEvent("rowSelectEvent",{el:row, record:this.getRecord(row)});
         YAHOO.log("Row selected: ID=\"" + row.id + "\", " +
                 "Record=" + this.getRecord(row),
@@ -3230,7 +3220,6 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
         // Update UI
         this._unselectEl(row);
 
-        //TODO: getRecord API has changed
         this.fireEvent("rowUnselectEvent",{el:row, record:this.getRecord(row)});
         YAHOO.log("Row unselected: ID=\"" + row.id + "\", " +
                 "Record=" + this.getRecord(row),
@@ -3571,11 +3560,11 @@ YAHOO.widget.DataTable.prototype.focusTable = function() {
  * all rows. For performance, reuses existing DOM elements when possible while
  * deleting extraneous elements.
  *
- * @method populateTable
+ * @method initializeTable
  * @param oData {Object | Object[]} An object literal of data or an array of
  * object literals containing data.
  */
-YAHOO.widget.DataTable.prototype.populateTable = function(oData) {
+YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
     // Add data to RecordSet
     var records = this._oRecordSet.replaceRecords(oData);
     
@@ -3593,7 +3582,7 @@ YAHOO.widget.DataTable.prototype.populateTable = function(oData) {
  * @method refreshTable
  */
 YAHOO.widget.DataTable.prototype.refreshTable = function() {
-    var aRecords;
+    var i, aRecords;
     
     // Paginator is disabled
     if(!this.paginator) {
@@ -3659,7 +3648,7 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
 
         this.fireEvent("tableRefreshEvent", {records:aRecords});
 
-        YAHOO.log("Table refreshed with " + aRecords.length + " rows", "info", this.toString());
+        YAHOO.log("DataTable refreshed showing " + aRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
     }
     else {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
@@ -3755,9 +3744,10 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         // TODO: nested/cumulative/hierarchical sorting
         if(!sortFnc && oColumn.key) {
             var sorted;
+            // Here "a" and "b" are 2 Records to sort by oColumn.key
             sortFnc = function(a, b) {
                 if(sortDir == "desc") {
-                    sorted = YAHOO.util.Sort.compareDesc(a._data[oColumn.key],b._data[oColumn.key]);
+                    sorted = YAHOO.util.Sort.compareDesc(a.getData(oColumn.key),b.getData(oColumn.key));
                     if(sorted === 0) {
                         return YAHOO.util.Sort.compareDesc(a.id,b.id);
                     }
@@ -3766,7 +3756,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
                     }
                 }
                 else {
-                    sorted = YAHOO.util.Sort.compareAsc(a._data[oColumn.key],b._data[oColumn.key]);
+                    sorted = YAHOO.util.Sort.compareAsc(a.getData(oColumn.key),b.getData(oColumn.key));
                     if(sorted === 0) {
                         return YAHOO.util.Sort.compareAsc(a.id,b.id);
                     }
@@ -3781,10 +3771,6 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             // Do the actual sort
             this._oRecordSet.sortRecords(sortFnc);
 
-            // Update the UI
-            //TODO
-            this.refreshTable();
-
             // Update classes
             YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
             YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
@@ -3797,7 +3783,11 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this.sortedBy._id = oColumn.getId();
 
             this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
-            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
+            YAHOO.log("RecordSet sorted on Column \"" + oColumn.key + "\" direction \"" + sortDir + "\"", "info", this.toString());
+            
+            // Update the UI
+            //TODO
+            this.refreshTable();
         }
     }
     else {
@@ -4162,12 +4152,12 @@ YAHOO.widget.DataTable.prototype.saveEditorData = function() {
         var elCell = this.activeEditor.cell;
         var oColumn = this.activeEditor.column;
         var oRecord = this.activeEditor.record;
-        var oldValue = oRecord.getData()[oColumn.key];
+        var oldValue = oRecord.getData(oColumn.key);
         var newValue = this.activeEditor.getValue();
 
         if(YAHOO.util.Lang.isString(oColumn.key)) {
             // Update Record field
-            this._updateField(oRecord,oColumn.key,newValue);
+            this._oRecordSet.updateField(oRecord,oColumn.key,newValue);
 
             //Update cell
             this.formatCell(elCell);
@@ -4278,7 +4268,7 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
  * @param oArgs.event {HTMLEvent} Event object.
  * @param oArgs.target {HTMLElement} Target element.
  */
-YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
+YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {debugger;
     var evt = oArgs.event;
     var elTarget = oArgs.target;
     var elTag = elTarget.tagName.toLowerCase();
@@ -4560,12 +4550,12 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
  * Callback function receives data from DataSource and populates an entire
  * DataTable with Records and TR elements, clearing previous Records, if any.
  *
- * @method onDataReturnPopulateTable
+ * @method onDataReturnInitializeTable
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
  * @param bError {Boolean} (optional) True if there was a data error.
  */
-YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
@@ -4573,7 +4563,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnPopulateTable = function(sRequest, 
     
     // Data ok to populate
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        this.populateTable(oResponse.results);
+        this.initializeTable(oResponse.results);
     }
     // Error
     else if(ok && oResponse.error) {

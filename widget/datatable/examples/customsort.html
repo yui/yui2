@@ -133,64 +133,63 @@ myDataTable.subscribe("columnSortEvent",onColumnSort);
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
+YAHOO.example.CustomSort = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
 
-// Custom sort functionality to sort by areacode within states
-YAHOO.example.sortStatesAsc = function(a, b) {
-    if((a === null) || (typeof a == "undefined")) {
-        if((b === null) || (typeof b == "undefined")) {
-            return 0;
+    // Custom sort functionality to sort by areacode within states
+    this.sortStatesAsc = function(a, b) {
+        if((a === null) || (typeof a == "undefined")) {
+            if((b === null) || (typeof b == "undefined")) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
         }
-        else {
-            return 1;
-        }
-    }
-    else if((b === null) || (typeof b == "undefined")) {
-        return -1;
-    }
-    var comp = YAHOO.util.Sort.compareAsc;
-    var compState = comp(a.state, b.state);
-    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
-};
-YAHOO.example.sortStatesDesc = function(a, b) {
-    if((a === null) || (typeof a == "undefined")) {
-        if((b === null) || (typeof b == "undefined")) {
-            return 0;
-        }
-        else {
+        else if((b === null) || (typeof b == "undefined")) {
             return -1;
         }
-    }
-    else if((b === null) || (typeof b == "undefined")) {
-        return 1;
-    }
-    var comp = YAHOO.util.Sort.compareDesc;
-    var compState = comp(a.state, b.state);
-    return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
-};
+        var comp = YAHOO.util.Sort.compareAsc;
+        var compState = comp(a.state, b.state);
+        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+    };
 
-var myColumnHeaders = [
-    {key:"areacode",text:"Area Codes",sortable:true},
-    {key:"state",text:"States",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+    this.sortStatesDesc = function(a, b) {
+        if((a === null) || (typeof a == "undefined")) {
+            if((b === null) || (typeof b == "undefined")) {
+                return 0;
+            }
+            else {
+                return -1;
+            }
+        }
+        else if((b === null) || (typeof b == "undefined")) {
+            return 1;
+        }
+        var comp = YAHOO.util.Sort.compareDesc;
+        var compState = comp(a.state, b.state);
+        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+    };
 
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["areacode","state"]
-};
+    var myColumnHeaders = [
+        {key:"areacode",text:"Area Codes",sortable:true},
+        {key:"state",text:"States",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-var myDataTable = new YAHOO.widget.DataTable("sort",myColumnSet,myDataSource,{caption:"Example: Custom Sorting",sortedBy:{colKey:"areacode",dir:"asc"}});
-var onColumnSort = function(oArgs) {
-    var column = oArgs.column;
-    var dir = oArgs.dir;
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+    this.myDataSource.responseSchema = {
+        fields: ["areacode","state"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("sort", this.myColumnSet,
+            this.myDataSource, {caption:"Example: Custom Sorting", sortedBy:{key:"areacode", dir:"asc"}});
 };
-myDataTable.subscribe("columnSortEvent",onColumnSort);
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

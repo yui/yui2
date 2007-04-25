@@ -95,34 +95,36 @@ var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
-myLogger.collapse();
+YAHOO.example.XHR_Text = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
+    this.myLogger.collapse();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.Url + "' target='_blank'>" + sData + "</a>";
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    this.formatUrl = function(elCell, oRecord, oColumn, sData) {
+        elCell.innerHTML = "<a href='" + oRecord.getData("Url") + "' target='_blank'>" + sData + "</a>";
+    };
+
+    var myColumnHeaders = [
+        {key:"Name", sortable:true, formatter:this.formatUrl},
+        {key:"Phone"},
+        {key:"City"},
+        {key:"Rating", type:"number", sortable:true}
+
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+    this.myDataSource = new YAHOO.util.DataSource("./php/text_proxy.txt");
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
+    this.myDataSource.responseSchema = {
+        recordDelim: "\n",
+        fieldDelim: "|",
+        fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertNumber},"Url"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("text", this.myColumnSet, this.myDataSource);
 };
-
-var myColumnHeaders = [
-    {key:"Name", sortable:true, formatter:formatUrl},
-    {key:"Phone"},
-    {key:"City"},
-    {key:"Rating", type:"number", sortable:true}
-
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource("./php/text_proxy.txt");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
-myDataSource.responseSchema = {
-    recordDelim: "\n",
-    fieldDelim: "|",
-    fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertNumber},"Url"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

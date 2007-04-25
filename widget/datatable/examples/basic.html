@@ -99,27 +99,31 @@ var myDataTable = new YAHOO.widget.DataTable("basic", myColumnSet, myDataSource,
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
+YAHOO.example.Basic = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-var myColumnHeaders = [
-    {key:"id", sortable:true, resizeable:true},
-    {key:"date", type:"date", sortable:true, resizeable:true},
-    {key:"quantity", type:"number", sortable:true, resizeable:true},
-    {key:"amount", type:"currency", sortable:true, resizeable:true},
-    {key:"title", type:"html", sortable:true, resizeable:true}
-];
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    var myColumnHeaders = [
+        {key:"id", sortable:true, resizeable:true},
+        {key:"date", type:"date", sortable:true, resizeable:true},
+        {key:"quantity", type:"number", sortable:true, resizeable:true},
+        {key:"amount", type:"currency", sortable:true, resizeable:true},
+        {key:"title", type:"html", sortable:true, resizeable:true}
+    ];
 
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["id","date","quantity","amount","title"]
-};
-var myDataTable = new YAHOO.widget.DataTable("basic", myColumnSet, myDataSource,{caption:"Example: Basic Table"});
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+    this.myDataSource.responseSchema = {
+        fields: ["id","date","quantity","amount","title"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("basic",
+            this.myColumnSet, this.myDataSource, {caption:"Example: Basic Table"});
+}
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

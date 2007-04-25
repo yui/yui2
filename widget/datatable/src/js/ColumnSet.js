@@ -577,7 +577,7 @@ YAHOO.widget.Column.prototype.getRowSpan = function() {
  * @return {HTML} Markup.
  */
 YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
-    var oData = (this.key) ? oRecord.getData()[this.key] : null;
+    var oData = (this.key) ? oRecord.getData(this.key) : null;
     if(this.formatter) {
         this.formatter(elCell, oRecord, this, oData);
     }

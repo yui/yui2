@@ -98,9 +98,9 @@ YAHOO.example.Data.inventory = [
 
         <textarea name="code" class="JScript" cols="60" rows="1">
 var myColumnHeaders = [
-    {key:"SKU"},
-    {key:"Quantity"},
-    {key:"Item"},
+    {key:"SKU", sortable:true},
+    {key:"Quantity", sortable:true},
+    {key:"Item", sortable:true},
     {key:"Description"}
 ];
 
@@ -114,24 +114,21 @@ myDataSource.responseSchema = {
 
 var myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnSet, myDataSource,{caption:"Example: Integration with ContextMenu"});
 
-var onRowDelete = function(oArgs) {
-    YAHOO.log("Deleted row index " +oArgs.rowIndex);
-};
-myDataTable.subscribe("rowDeleteEvent", onRowDelete);
-
 var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
     var task = p_aArgs[1];
     if(task) {
-        // Extract which row was context-clicked
-        var row = this.contextEventTarget;
-        row = myDataTable.getTrEl(row);
+        // Extract which TR element triggered the context menu
+        var elRow = this.contextEventTarget;
+        elRow = myDataTable.getTrEl(elRow);
 
-        if(row) {
+        if(elRow) {
             switch(task.index) {
-                case 0:     // Delete Item
-                    YAHOO.log("Deleting item: " + row.cells[2].innerHTML);
-                    myDataTable.deleteRow(row);
-                    break;
+                case 0:     // Delete row upon confirmation
+                    if(confirm("Are you sure you want to delete SKU " +
+                            elRow.cells[0].innerHTML + " (" +
+                            elRow.cells[2].innerHTML + ")?")) {
+                        myDataTable.deleteRow(elRow);
+                    }
             }
         }
     }
@@ -156,55 +153,56 @@ myContextMenu.clickEvent.subscribe(onContextMenuClick);
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
+YAHOO.example.ContextMenu = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-var myColumnHeaders = [
-    {key:"SKU", sortable:true},
-    {key:"Quantity", sortable:true},
-    {key:"Item", sortable:true},
-    {key:"Description"}
-];
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    var myColumnHeaders = [
+        {key:"SKU", sortable:true},
+        {key:"Quantity", sortable:true},
+        {key:"Item", sortable:true},
+        {key:"Description"}
+    ];
 
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["SKU","Quantity","Item","Description"]
-};
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+    this.myDataSource.responseSchema = {
+        fields: ["SKU","Quantity","Item","Description"]
+    };
 
-var myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnSet, myDataSource,{caption:"Example: Integration with ContextMenu"});
+    this.myDataTable = new YAHOO.widget.DataTable("contextmenu", this.myColumnSet,
+            this.myDataSource,{caption:"Example: Integration with ContextMenu"});
 
-var onRowDelete = function(oArgs) {
-    YAHOO.log("Deleted row indexes: " +oArgs.rowIndexes);
-};
-myDataTable.subscribe("rowDeleteEvent", onRowDelete);
+    this.onContextMenuClick = function(p_sType, p_aArgs, p_myDataTable) {
+        var task = p_aArgs[1];
+        if(task) {
+            // Extract which TR element triggered the context menu
+            var elRow = this.contextEventTarget;
+            elRow = p_myDataTable.getTrEl(elRow);
 
-var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
-    var task = p_aArgs[1];
-    if(task) {
-        // Extract which row was context-clicked
-        var row = this.contextEventTarget;
-        row = myDataTable.getTrEl(row);
-
-        if(row) {
-            switch(task.index) {
-                case 0:     // Delete Item
-                    YAHOO.log("Deleting item: " + row.cells[2].innerHTML);
-                    myDataTable.deleteRow(row);
-                    break;
+            if(elRow) {
+                switch(task.index) {
+                    case 0:     // Delete row upon confirmation
+                        if(confirm("Are you sure you want to delete SKU " +
+                                elRow.cells[0].innerHTML + " (" +
+                                elRow.cells[2].innerHTML + ")?")) {
+                            myDataTable.deleteRow(elRow);
+                        }
+                }
             }
         }
-    }
-};
+    };
 
-var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getTbodyEl() } );
-myContextMenu.addItem("Delete Item");
-myContextMenu.render(document.body);
-myContextMenu.clickEvent.subscribe(onContextMenuClick);
+    this.myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu",
+            {trigger:this.myDataTable.getTbodyEl()});
+    this.myContextMenu.addItem("Delete Item");
+    this.myContextMenu.render(document.body);
+    this.myContextMenu.clickEvent.subscribe(this.onContextMenuClick, this.myDataTable);
+};
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">
