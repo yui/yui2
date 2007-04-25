@@ -124,13 +124,7 @@ var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
     if(task) {
         // Extract which row was context-clicked
         var row = this.contextEventTarget;
-        while(row.tagName.toLowerCase() != "tr") {
-            row = row.parentNode;
-            if(row.tagName.toLowerCase == "body") {
-                row = null;
-                break;
-            }
-        }
+        row = myDataTable.getTrEl(row);
 
         if(row) {
             switch(task.index) {
@@ -143,7 +137,7 @@ var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
     }
 };
 
-var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getBody() } );
+var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getTbodyEl() } );
 myContextMenu.addItem("Delete Item");
 myContextMenu.render(document.body);
 myContextMenu.clickEvent.subscribe(onContextMenuClick);
@@ -194,13 +188,7 @@ var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
     if(task) {
         // Extract which row was context-clicked
         var row = this.contextEventTarget;
-        while(row.tagName.toLowerCase() != "tr") {
-            row = row.parentNode;
-            if(row.tagName.toLowerCase == "body") {
-                row = null;
-                break;
-            }
-        }
+        row = myDataTable.getTrEl(row);
 
         if(row) {
             switch(task.index) {
@@ -213,7 +201,7 @@ var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
     }
 };
 
-var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getBody() } );
+var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getTbodyEl() } );
 myContextMenu.addItem("Delete Item");
 myContextMenu.render(document.body);
 myContextMenu.clickEvent.subscribe(onContextMenuClick);

@@ -1694,9 +1694,9 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._deleteTrEl = function(row) {
-    // Convert to index
-    if(YAHOO.util.Dom.inDocument(row)) {
-        row = row.sectionRowIndex;
+    // Convert to page row index
+    if(!YAHOO.lang.isNumber(row)) {
+        row = YAHOO.util.Dom.get(row).sectionRowIndex;
     }
     if(YAHOO.lang.isNumber(row) && (row > -2) && (row < this._elTbody.rows.length)) {
         this._elTbody.deleteRow(row);
@@ -2764,23 +2764,49 @@ YAHOO.widget.DataTable.prototype.getMsgTdEl = function() {
 };
 
 /**
- * Returns DOM reference to the TR element at given page index.
+ * Returns DOM reference to the TR element for given child element or directly
+ * by page row index.
  *
  * @method getTrEl
- * @param index {Number} TBODY row index.
- * @return {HTMLElement} Reference to TR element.
+ * @param row {HTMLElement | String | Number} DOM or ID string reference to an
+ * element in the DataTable page or a TR element's page row index.
+ * @return {HTMLElement} Reference to TR element, or null.
  */
-YAHOO.widget.DataTable.prototype.getTrEl = function(index) {
-    var rows = this._elTbody.rows;
-    if(YAHOO.lang.isNumber(index) && (index > -1) && (index < rows.length)) {
-        return(rows[index]);
+YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
+    var pageRows = this._elTbody.rows;
+    // By page row index
+    if(YAHOO.lang.isNumber(row) && (row > -1) && (row < pageRows.length)) {
+        return pageRows[row];
     }
-    YAHOO.log("Could not get TR element at index " + index, "warn", this.toString());
-    return null;
+    // By element reference
+    else if(YAHOO.util.Dom.inDocument(row)) {
+        var elTarget = YAHOO.util.Dom.get(row);
+        var elTag = elTarget.tagName.toLowerCase();
+
+        // Traverse up the DOM to find the corresponding TR element
+        while(elTag != "tr") {
+            // Bail out
+            if(elTag == "body") {
+                break;
+            }
+            // Check the parent
+            elTarget = elTarget.parentNode;
+            elTag = elTarget.tagName.toLowerCase();
+        }
+
+        // Make sure the TR is in the correct TBODY
+        if((elTag == "tr") && (elTarget.parentNode == this._elTbody)) {
+            return elTarget;
+        }
+    }
+    else {
+        YAHOO.log("Could not get TR element for row " + row, "warn", this.toString());
+        return null;
+    }
 };
 
 /**
- * Returns DOM reference to the first TR element in the DataTable page.
+ * Returns DOM reference to the first TR element in the DataTable page, or null.
  *
  * @method getFirstTrEl
  * @return {HTMLElement} Reference to TR element.
@@ -2790,23 +2816,17 @@ YAHOO.widget.DataTable.prototype.getFirstTrEl = function() {
 };
 
 /**
- * Returns DOM reference to the last TR element in the DataTable page.
+ * Returns DOM reference to the last TR element in the DataTable page, or null.
  *
  * @method getLastTrEl
  * @return {HTMLElement} Reference to last TR element.
  */
 YAHOO.widget.DataTable.prototype.getLastTrEl = function() {
-    var index = this._elTbody.rows.length-1;
-    if(index > -1) {
-        return this.getTrEl(this._elTbody.rows.length-1);
-    }
-    else {
-        YAHOO.log("Could not get last TR element", "warn", this.toString());
-    }
+    return this.getTrEl(this._elTbody.rows.length-1);
 };
 
 /**
- * Returns DOM reference to the TD element at given DataTable page coordinates.
+ * Returns DOM reference to the TD element at given DataTable page coordinates, or null.
  *
  * @method getCell
  * @param rowIndex {Number} Page row index.
@@ -2828,16 +2848,54 @@ YAHOO.widget.DataTable.prototype.getTdEl = function(rowIndex, colIndex) {
 };
 
 /**
- * Returns the row index of given TR element within the DataTable page.
+ * Returns the page row index of given row. Returns null if the row is not in
+ * view on the current DataTable page.
  *
  * @method getPageIndex
- * @param elRow {HTMLElement} Reference to TR element.
- * @return {Number} Index position within TBODY element.
+ * @param row {HTMLElement | String | YAHOO.widget.Record | Number} DOM or ID
+ * string reference to an element within the DataTable page, a Record instance,
+ * or a Record's RecordSet index.
+ * @return {Number} Page row index, or null.
  */
-YAHOO.widget.DataTable.prototype.getPageIndex = function(elRow) {
-    //TODO: accept a Record and return a row index if the Record is in view
-    return elRow.sectionRowIndex || null;
+YAHOO.widget.DataTable.prototype.getPageIndex = function(row) {
+    // By Record
+    if(row instanceof YAHOO.widget.Record) {
+        row = this.getRecordIndex(row);
+    }
+    // By Record index
+    if(YAHOO.lang.isNumber(row)) {
+        // DataTable is paginated, need to calculate the page index
+        if(this._paginator && this._paginator.startRecordIndex) {
+            // Is this record in view?
+            var startRecordIndex = this._paginator.startRecordIndex;
+            var endRecordIndex = startRecordIndex + this._paginator.rowsPerPage - 1;
+            if((row >= startRecordIndex) && (row <= endRecordIndex)) {
+                return row - startRecordIndex;
+            }
+        }
+        // Not paginated, just return the Record index
+        else {
+            return row;
+        }
+
+    }
+    // By element reference or ID string
+    else {
+        var elRow = YAHOO.util.Dom.get(row);
+        if(elRow) {
+            elRow = this.getTrEl(row);
+            return row.sectionRowIndex;
+        }
+        else {
+            YAHOO.log("Could not get page index for row " + row, "warn", this.toString());
+            return null;
+        }
+    }
 };
+
+
+
+
 
 
 
@@ -2858,14 +2916,17 @@ YAHOO.widget.DataTable.prototype.getPageIndex = function(elRow) {
 // RECORD FUNCTIONS
 
 /**
- * Returns Record index for given row or row index.
+ * Returns Record index for given TR element or page row index.
  *
  * @method getRecordIndex
- * @param row {Number | HTMLElement} Row index or reference to an element
- * within the TBODY.
+ * @param row {HTMLElement | Number} TR element reference or page row index.
  * @return {Number} Record's RecordSet index.
  */
 YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
+    // By element reference
+    if(YAHOO.util.Dom.inDocument(row)) {
+        row = row.sectionRowIndex;
+    }
     // By row index
     if(YAHOO.lang.isNumber(row)) {
         if(this._paginator && this._paginator.startRecordIndex) {
@@ -2875,78 +2936,37 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
             return row;
         }
     }
-    // By element reference
-    else if(YAHOO.util.Dom.inDocument(row)) {
-        var elTarget = YAHOO.util.Dom.get(row);
-        var elTag = elTarget.tagName.toLowerCase();
-
-        // Traverse up the DOM to find the corresponding TR element
-        while(elTag != "tr") {
-            // Bail out
-            if(elTag == "body") {
-                return null;
-            }
-            // Maybe it's the parent
-            elTarget = elTarget.parentNode;
-            elTag = elTarget.tagName.toLowerCase();
-        }
-
-        // Make sure the TR is in the correct TBODY
-        if(elTarget.parentNode == this.getTbodyEl()) {
-            var rowIndex = elTarget.sectionRowIndex;
-            if(this._paginator && this._paginator.startRecordIndex) {
-                return this._paginator.startRecordIndex + rowIndex;
-            }
-            else {
-                return rowIndex;
-            }
-        }
-    }
     // Invalid identifier
-    return null;
+    else {
+        YAHOO.log("Could not get Record index for row " + row, "warn", this.toString());
+        return null;
+    }
 };
 
 /**
  * For the given identifier, returns the associated Record instance.
  *
  * @method getRecord
- * @param identifier {YAHOO.widget.Record | Number | HTMLElement | String}
- * Identifies which Record to get: by Record instance, by Record's RecordSet
- * position index, by HTMLElement reference to a DOM element within the TBODY,
- * or by ID string to a DOM element within the TBODY.
+ * @param record {HTMLElement | String | Number} Record's RecordSet position
+ * index, DOM element reference within the DataTable page, or by ID string to a
+ * DOM element within the DataTable page.
  * @return {YAHOO.widget.Record} Record instance.
  */
-YAHOO.widget.DataTable.prototype.getRecord = function(identifier) {
-    // By HTML element reference or ID string
-    if(YAHOO.util.Dom.inDocument(identifier)) {
-        var elTarget = YAHOO.util.Dom.get(identifier);
-        var elTag = elTarget.tagName.toLowerCase();
-        
-        // Traverse up the DOM to find the corresponding TR element
-        while(elTag != "tr") {
-            // Bail out
-            if(elTag == "body") {
-                return null;
-            }
-            // Maybe it's the parent
-            elTarget = elTarget.parentNode;
-            elTag = elTarget.tagName.toLowerCase();
-        }
-
-        // Make sure the TR is in the correct TBODY
-        if(elTarget.parentNode == this.getTbodyEl()) {
-            identifier = this.getRecordIndex(elTarget);
-        }
+YAHOO.widget.DataTable.prototype.getRecord = function(record) {
+    // By element reference or ID string
+    if(!YAHOO.lang.isNumber(record) && YAHOO.util.Dom.inDocument(record)) {
+        record = this.getTrEl(record);
+        record = this.getRecordIndex(record);
     }
     // By Record index
-    if(YAHOO.lang.isNumber(identifier)) {
-        return this._oRecordSet.getRecord(identifier);
+    if(YAHOO.lang.isNumber(record)) {
+        return this._oRecordSet.getRecord(record);
     }
-    else if(identifier instanceof YAHOO.widget.Record) {
-        return identifier;
+    // Invalid record
+    else {
+        YAHOO.log("Could not get Record at " + record, "warn", this.toString());
+        return null;
     }
-    // Invalid identifier
-    return null;
 };
 
 
@@ -3079,49 +3099,55 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
  * corresponding DOM elements are also deleted.
  *
  * @method deleteRow
- * @param row {Number | HTMLElement} RecordSet position index or element reference.
+ * @param row {HTMLElement | String | Number} DOM element reference or ID string
+ * to DataTable page element or RecordSet index.
  */
 YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
-    // TODO: By Record index
+    // Get the Record index...
+    var recordIndex = null;
+    // ...by Record index
     if(YAHOO.lang.isNumber(row)) {
-
+        recordIndex = row;
     }
-    // By element reference
-    else if(row && YAHOO.util.Dom.inDocument(row)) {
-        var rowIndex = this.getPageIndex(row);
-        if(rowIndex !== null) {
-            // Copy data from the Record for the event that gets fired later
-            var oRecordData = this.getRecord(row).getData();
-            var oData = {};
-            for(var key in oRecordData) {
-                oData[key] = oRecordData[key];
-            }
-            
-            // Delete Record from RecordSet
-            var recordIndex = this.getRecordIndex(rowIndex);
-            this._oRecordSet.deleteRecord(recordIndex);
-            
-            // Delete TR from DOM
-            this._deleteTrEl(rowIndex);
+    // ...by element reference
+    else {
+        var elRow = YAHOO.util.Dom.get(row);
+        elRow = this.getTrEl(elRow);
+        if(elRow) {
+            recordIndex = this.getRecordIndex(elRow);
+        }
+    }
+    if(recordIndex !== null) {
+        // Copy data from the Record for the event that gets fired later
+        var oRecordData = this.getRecord(recordIndex).getData();
+        var oData = {};
+        for(var key in oRecordData) {
+            oData[key] = oRecordData[key];
+        }
+        
+        // Delete Record from RecordSet
+        this._oRecordSet.deleteRecord(recordIndex);
+        
+        // If row is in view, delete the TR element
+        var pageRowIndex = this.getPageIndex(recordIndex);
+        if(pageRowIndex) {
+            this._deleteTrEl(pageRowIndex);
             
             //TODO: doesn't need to be called every time
             // Set first-row and last-row trackers
             this._setFirstRow();
             this._setLastRow();
-            
-            this.fireEvent("rowDeleteEvent",
-                    {rowIndex:rowIndex,
-                    recordIndex: recordIndex,
-                    recordData: oData});
-            YAHOO.log("Deleted row " + rowIndex + " and Record " + recordIndex + " of data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
-
-            
-            //TODO: what to return?
-            return;
         }
+        
+        this.fireEvent("rowDeleteEvent",
+                {pageRowIndex:pageRowIndex,
+                recordIndex: recordIndex,
+                recordData: oData});
+        YAHOO.log("Deleted row " + pageRowIndex + " and Record " + recordIndex + " of data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
     }
-    YAHOO.log("Could not delete given row: " + row, "warn", this.toString());
-
+    else {
+        YAHOO.log("Could not delete given row: " + row, "warn", this.toString());
+    }
 };
 
 /**
