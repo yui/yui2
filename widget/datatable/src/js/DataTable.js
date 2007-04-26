@@ -3741,16 +3741,33 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
     }
 };
 
-/*TODO: wait for EventProvider.unsubscribeAll()
- * Destroys DataTable instance, removes all attached event listeners, and clears
- * out all DOM elements.
+/**
+ * Nulls out the DataTable instance and related objects, removes attached event
+ * listeners, and clears out DOM elements inside the container. After calling
+ * this method, the instance reference should be expliclitly nulled by
+ * implementer, as in myDataTable = null. Use with caution!
  *
  * @method destroyTable
  */
-/*YAHOO.widget.DataTable.prototype.destroyTable = function() {
+YAHOO.widget.DataTable.prototype.destroyTable = function() {
     var elContainer = this._elContainer;
+    
+    // Unhook custom events
+    this.unsubscribeAll();
+
+    // Unhook DOM events
     YAHOO.util.Event.purgeElement(elContainer, true);
-};*/
+    
+    // Remove DOM elements
+    elContainer.innerHTML = "";
+    
+    // Null out objects
+    for(var key in this) {
+        if(this.hasOwnProperty(key)) {
+            this[key] = null;
+        }
+    }
+};
 
 
 
