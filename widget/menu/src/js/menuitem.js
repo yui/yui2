@@ -1361,7 +1361,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(oCheckedIndicator) {
             
-            oCheckedIndicator.firstChild.nodeValue = bDisabled ? 
+            oCheckedIndicator.innerHTML = bDisabled ? 
                 this.DISABLED_CHECKED_TEXT : 
                 this.CHECKED_TEXT;
 
@@ -1373,7 +1373,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         if(oSubmenuIndicator) {
 
-            oSubmenuIndicator.firstChild.nodeValue = bDisabled ? 
+            oSubmenuIndicator.innerHTML = bDisabled ? 
                 this.DISABLED_SUBMENU_INDICATOR_TEXT : 
                 this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
@@ -1547,7 +1547,7 @@ YAHOO.widget.MenuItem.prototype = {
                     if(!oTemplate) {
                    
                         oTemplate = document.createElement("em");
-                        oTemplate.innerHTML =  
+                        oTemplate.innerHTML = 
                             this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
                         oTemplate.className = "submenuindicator";
                         

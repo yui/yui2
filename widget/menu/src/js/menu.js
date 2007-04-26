@@ -3230,8 +3230,7 @@ _onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
 */
 _onSubmenuShow: function(p_sType, p_aArgs) {
     
-    this.submenuIndicator.firstChild.nodeValue = 
-        this.EXPANDED_SUBMENU_INDICATOR_TEXT;
+    this.submenuIndicator.innerHTML = this.EXPANDED_SUBMENU_INDICATOR_TEXT;
 
 },
 
@@ -3246,8 +3245,7 @@ _onSubmenuShow: function(p_sType, p_aArgs) {
 */
 _onSubmenuHide: function(p_sType, p_aArgs) {
     
-    this.submenuIndicator.firstChild.nodeValue =
-        this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
+    this.submenuIndicator.innerHTML = this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
 },
 
