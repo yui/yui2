@@ -241,7 +241,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
                 if (false === ret) {
                     if (!this.silent) {
                         YAHOO.log("Event cancelled, subscriber " + i + 
-                                  " of " + len);
+                                  " of " + len, "info", "Event");
                     }
 
                     //break;
@@ -591,9 +591,9 @@ if (!YAHOO.util.Event) {
              * @property isSafari
              * @private
              * @static
-             * @deprecated
+             * @deprecated use YAHOO.env.ua.webkit
              */
-            isSafari: (/KHTML/gi).test(navigator.userAgent),
+            isSafari: YAHOO.env.ua.webkit,
             
             /**
              * If WebKit is detected, we keep track of the version number of
@@ -609,15 +609,11 @@ if (!YAHOO.util.Event) {
              * http://developer.apple.com/internet/safari/uamatrix.html
              * @property webkit
              * @type string
+             * @private
              * @static
+             * @deprecated use YAHOO.env.ua.webkit
              */
-            webkit: function() {
-                var v=navigator.userAgent.match(/AppleWebKit\/([^ ]*)/);
-                if (v&&v[1]) {
-                    return v[1];
-                }
-                return null;
-            }(),
+            webkit: YAHOO.env.ua.webkit,
             
             /**
              * IE detection needed to properly calculate pageX and pageY.  
@@ -627,9 +623,9 @@ if (!YAHOO.util.Event) {
              * @property isIE
              * @private
              * @static
+             * @deprecated use YAHOO.env.ua.ie
              */
-            isIE: (!this.webkit && !navigator.userAgent.match(/opera/gi) && 
-                    navigator.userAgent.match(/msie/gi)),
+            isIE: YAHOO.env.ua.ie,
 
             /**
              * poll handle
@@ -1363,16 +1359,18 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _load: function(e) {
-                loadComplete = true;
-                var EU = YAHOO.util.Event;
+                if (!loadComplete) {
+                    loadComplete = true;
+                    var EU = YAHOO.util.Event;
 
-                // just in case DOMReady did not go off for some reason
-                EU._ready();
+                    // just in case DOMReady did not go off for some reason
+                    EU._ready();
 
-                // Remove the listener to assist with the IE memory issue, but not
-                // for other browsers because FF 1.0x does not like it.
-                if (this.isIE) {
-                    EU._simpleRemove(window, "load", EU._load);
+                    // Remove the listener to assist with the IE memory issue, but not
+                    // for other browsers because FF 1.0x does not like it.
+                    if (this.isIE) {
+                        EU._simpleRemove(window, "load", EU._load);
+                    }
                 }
             },
 
@@ -1797,11 +1795,7 @@ if (!YAHOO.util.Event) {
         }
         /////////////////////////////////////////////////////////////
 
-        if (document && document.body) {
-            EU._load();
-        } else {
-            EU._simpleAdd(window, "load", EU._load);
-        }
+        EU._simpleAdd(window, "load", EU._load);
         EU._simpleAdd(window, "unload", EU._unload);
         EU._tryPreloadAttach();
     })();
@@ -1868,7 +1862,9 @@ YAHOO.util.EventProvider.prototype = {
     /**
      * Unsubscribes one or more listeners the from the specified event
      * @method unsubscribe
-     * @param p_type {string}   The type, or name of the event
+     * @param p_type {string}   The type, or name of the event.  If the type
+     *                          is not specified, it will attempt to remove
+     *                          the listener from all hosted events.
      * @param p_fn   {Function} The subscribed function to unsubscribe, if not
      *                          supplied, all subscribers will be removed.
      * @param p_obj  {Object}   The custom object passed to subscribe.  This is
@@ -1880,16 +1876,29 @@ YAHOO.util.EventProvider.prototype = {
      */
     unsubscribe: function(p_type, p_fn, p_obj) {
         this.__yui_events = this.__yui_events || {};
-        var ce = this.__yui_events[p_type];
-        if (ce) {
-            return ce.unsubscribe(p_fn, p_obj);
+        var evts = this.__yui_events;
+        if (p_type) {
+            var ce = evts[p_type];
+            if (ce) {
+                return ce.unsubscribe(p_fn, p_obj);
+            }
         } else {
-            return false;
+            for (var i in evts) {
+                var ret = true;
+                if (YAHOO.lang.hasOwnProperty(evts, i)) {
+                    ret = ret && evts[i].unsubscribe(p_fn, p_obj);
+                }
+            }
+            return ret;
         }
+
+        return false;
     },
     
     /**
-     * Removes all listeners from the specified event
+     * Removes all listeners from the specified event.  If the event type
+     * is not specified, all listeners from all hosted custom events will
+     * be removed.
      * @method unsubscribeAll
      * @param p_type {string}   The type, or name of the event
      */
@@ -1934,7 +1943,7 @@ YAHOO.util.EventProvider.prototype = {
         var events = this.__yui_events;
 
         if (events[p_type]) {
-            YAHOO.log("EventProvider: error, event already exists");
+YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         } else {
 
             var scope  = opts.scope  || this;
@@ -1971,28 +1980,30 @@ YAHOO.util.EventProvider.prototype = {
      *   <li>The custom object (if any) that was passed into the subscribe() 
      *       method</li>
      *   </ul>
+     * If the custom event has not been explicitly created, it will be
+     * created now with the default config, scoped to the host object
      * @method fireEvent
      * @param p_type    {string}  the type, or name of the event
      * @param arguments {Object*} an arbitrary set of parameters to pass to 
      *                            the handler.
-     * @return {boolean} the return value from CustomEvent.fire, or null if 
-     *                   the custom event does not exist.
+     * @return {boolean} the return value from CustomEvent.fire
+     *                   
      */
     fireEvent: function(p_type, arg1, arg2, etc) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
 
-        if (ce) {
-            var args = [];
-            for (var i=1; i<arguments.length; ++i) {
-                args.push(arguments[i]);
-            }
-            return ce.fire.apply(ce, args);
-        } else {
-            YAHOO.log("EventProvider.fire could not find event: " + p_type);
-            return null;
+        if (!ce) {
+YAHOO.log(p_type + "event fired before it was created... creating now ");
+            ce = this.createEvent(p_type);
         }
+
+        var args = [];
+        for (var i=1; i<arguments.length; ++i) {
+            args.push(arguments[i]);
+        }
+        return ce.fire.apply(ce, args);
     },
 
     /**

@@ -212,9 +212,9 @@ if (!YAHOO.util.Event) {
              * @property isSafari
              * @private
              * @static
-             * @deprecated
+             * @deprecated use YAHOO.env.ua.webkit
              */
-            isSafari: (/KHTML/gi).test(navigator.userAgent),
+            isSafari: YAHOO.env.ua.webkit,
             
             /**
              * If WebKit is detected, we keep track of the version number of
@@ -230,15 +230,11 @@ if (!YAHOO.util.Event) {
              * http://developer.apple.com/internet/safari/uamatrix.html
              * @property webkit
              * @type string
+             * @private
              * @static
+             * @deprecated use YAHOO.env.ua.webkit
              */
-            webkit: function() {
-                var v=navigator.userAgent.match(/AppleWebKit\/([^ ]*)/);
-                if (v&&v[1]) {
-                    return v[1];
-                }
-                return null;
-            }(),
+            webkit: YAHOO.env.ua.webkit,
             
             /**
              * IE detection needed to properly calculate pageX and pageY.  
@@ -248,9 +244,9 @@ if (!YAHOO.util.Event) {
              * @property isIE
              * @private
              * @static
+             * @deprecated use YAHOO.env.ua.ie
              */
-            isIE: (!this.webkit && !navigator.userAgent.match(/opera/gi) && 
-                    navigator.userAgent.match(/msie/gi)),
+            isIE: YAHOO.env.ua.ie,
 
             /**
              * poll handle
@@ -984,16 +980,18 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _load: function(e) {
-                loadComplete = true;
-                var EU = YAHOO.util.Event;
+                if (!loadComplete) {
+                    loadComplete = true;
+                    var EU = YAHOO.util.Event;
 
-                // just in case DOMReady did not go off for some reason
-                EU._ready();
+                    // just in case DOMReady did not go off for some reason
+                    EU._ready();
 
-                // Remove the listener to assist with the IE memory issue, but not
-                // for other browsers because FF 1.0x does not like it.
-                if (this.isIE) {
-                    EU._simpleRemove(window, "load", EU._load);
+                    // Remove the listener to assist with the IE memory issue, but not
+                    // for other browsers because FF 1.0x does not like it.
+                    if (this.isIE) {
+                        EU._simpleRemove(window, "load", EU._load);
+                    }
                 }
             },
 
@@ -1418,11 +1416,7 @@ if (!YAHOO.util.Event) {
         }
         /////////////////////////////////////////////////////////////
 
-        if (document && document.body) {
-            EU._load();
-        } else {
-            EU._simpleAdd(window, "load", EU._load);
-        }
+        EU._simpleAdd(window, "load", EU._load);
         EU._simpleAdd(window, "unload", EU._unload);
         EU._tryPreloadAttach();
     })();

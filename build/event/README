@@ -1,6 +1,12 @@
 
 YUI Library - Event - Release Notes
 
+2.3.0
+  * EventProvider fireEvent will now create the event implicitly if it
+    does not already exist.
+  * EventProvider unsubscribeAll will unsubscribe all listeners from
+    all hosted custom events if the type is not specified.
+
 2.2.2
   * No change
 

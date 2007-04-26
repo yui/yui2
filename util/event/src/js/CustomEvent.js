@@ -241,7 +241,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
                 if (false === ret) {
                     if (!this.silent) {
                         YAHOO.log("Event cancelled, subscriber " + i + 
-                                  " of " + len);
+                                  " of " + len, "info", "Event");
                     }
 
                     //break;

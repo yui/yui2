@@ -60,7 +60,9 @@ YAHOO.util.EventProvider.prototype = {
     /**
      * Unsubscribes one or more listeners the from the specified event
      * @method unsubscribe
-     * @param p_type {string}   The type, or name of the event
+     * @param p_type {string}   The type, or name of the event.  If the type
+     *                          is not specified, it will attempt to remove
+     *                          the listener from all hosted events.
      * @param p_fn   {Function} The subscribed function to unsubscribe, if not
      *                          supplied, all subscribers will be removed.
      * @param p_obj  {Object}   The custom object passed to subscribe.  This is
@@ -72,16 +74,29 @@ YAHOO.util.EventProvider.prototype = {
      */
     unsubscribe: function(p_type, p_fn, p_obj) {
         this.__yui_events = this.__yui_events || {};
-        var ce = this.__yui_events[p_type];
-        if (ce) {
-            return ce.unsubscribe(p_fn, p_obj);
+        var evts = this.__yui_events;
+        if (p_type) {
+            var ce = evts[p_type];
+            if (ce) {
+                return ce.unsubscribe(p_fn, p_obj);
+            }
         } else {
-            return false;
+            for (var i in evts) {
+                var ret = true;
+                if (YAHOO.lang.hasOwnProperty(evts, i)) {
+                    ret = ret && evts[i].unsubscribe(p_fn, p_obj);
+                }
+            }
+            return ret;
         }
+
+        return false;
     },
     
     /**
-     * Removes all listeners from the specified event
+     * Removes all listeners from the specified event.  If the event type
+     * is not specified, all listeners from all hosted custom events will
+     * be removed.
      * @method unsubscribeAll
      * @param p_type {string}   The type, or name of the event
      */
@@ -126,7 +141,7 @@ YAHOO.util.EventProvider.prototype = {
         var events = this.__yui_events;
 
         if (events[p_type]) {
-            YAHOO.log("EventProvider: error, event already exists");
+YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         } else {
 
             var scope  = opts.scope  || this;
@@ -163,28 +178,30 @@ YAHOO.util.EventProvider.prototype = {
      *   <li>The custom object (if any) that was passed into the subscribe() 
      *       method</li>
      *   </ul>
+     * If the custom event has not been explicitly created, it will be
+     * created now with the default config, scoped to the host object
      * @method fireEvent
      * @param p_type    {string}  the type, or name of the event
      * @param arguments {Object*} an arbitrary set of parameters to pass to 
      *                            the handler.
-     * @return {boolean} the return value from CustomEvent.fire, or null if 
-     *                   the custom event does not exist.
+     * @return {boolean} the return value from CustomEvent.fire
+     *                   
      */
     fireEvent: function(p_type, arg1, arg2, etc) {
 
         this.__yui_events = this.__yui_events || {};
         var ce = this.__yui_events[p_type];
 
-        if (ce) {
-            var args = [];
-            for (var i=1; i<arguments.length; ++i) {
-                args.push(arguments[i]);
-            }
-            return ce.fire.apply(ce, args);
-        } else {
-            YAHOO.log("EventProvider.fire could not find event: " + p_type);
-            return null;
+        if (!ce) {
+YAHOO.log(p_type + "event fired before it was created... creating now ");
+            ce = this.createEvent(p_type);
         }
+
+        var args = [];
+        for (var i=1; i<arguments.length; ++i) {
+            args.push(arguments[i]);
+        }
+        return ce.fire.apply(ce, args);
     },
 
     /**
