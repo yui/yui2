@@ -4204,8 +4204,8 @@ clearContent: function() {
                                     );
 
                 }
-
-                oItem.destroy();
+                
+                this.removeItem(oItem);
 
             }
         
@@ -4273,7 +4273,7 @@ destroy: function() {
     this.focusEvent.unsubscribeAll();
     this.blurEvent.unsubscribeAll();
     this.itemAddedEvent.unsubscribeAll();
-    this.itemRemovedEvent.unsubscribeAll();
+
     this.cfg.unsubscribeFromConfigEvent("width", this._onWidthChange);
     this.cfg.unsubscribeFromConfigEvent("visible", this._onVisibleChange);
 
@@ -4293,6 +4293,7 @@ destroy: function() {
 
     this.clearContent();
 
+    this.itemRemovedEvent.unsubscribeAll();
 
     this._aItemGroups = null;
     this._aListElements = null;
