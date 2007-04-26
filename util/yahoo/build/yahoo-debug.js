@@ -165,10 +165,10 @@ YAHOO.register = function(name, mainClass, data) {
  * YAHOO.env is used to keep track of what is known about the YUI library and
  * the browsing environment
  * @class YAHOO.env
- * @type Object
  * @static
  */
 YAHOO.env = YAHOO.env || {
+
     /**
      * Keeps the version info for all YUI modules that have reported themselves
      * @property modules
@@ -182,33 +182,107 @@ YAHOO.env = YAHOO.env || {
      * @property listeners
      * @type Function[]
      */
-    listeners: [],
-    
-    /**
-     * Returns the version data for the specified module:
-     *      <dl>
-     *      <dt>name:</dt>      <dd>The name of the module</dd>
-     *      <dt>version:</dt>   <dd>The version in use</dd>
-     *      <dt>build:</dt>     <dd>The build number in use</dd>
-     *      <dt>versions:</dt>  <dd>All versions that were registered</dd>
-     *      <dt>builds:</dt>    <dd>All builds that were registered.</dd>
-     *      <dt>mainClass:</dt> <dd>An object that was was stamped with the
-     *                 current version and build. If 
-     *                 mainClass.VERSION != version or mainClass.BUILD != build,
-     *                 multiple versions of pieces of the library have been
-     *                 loaded, potentially causing issues.</dd>
-     *       </dl>
-     *
-     * @method getVersion
-     * @static
-     * @param {String}  name the name of the module (event, slider, etc)
-     * @return {Object} The version info
-     */
-    getVersion: function(name) {
-        return YAHOO.env.modules[name] || null;
-    }
+    listeners: []
 };
 
+/**
+ * Returns the version data for the specified module:
+ *      <dl>
+ *      <dt>name:</dt>      <dd>The name of the module</dd>
+ *      <dt>version:</dt>   <dd>The version in use</dd>
+ *      <dt>build:</dt>     <dd>The build number in use</dd>
+ *      <dt>versions:</dt>  <dd>All versions that were registered</dd>
+ *      <dt>builds:</dt>    <dd>All builds that were registered.</dd>
+ *      <dt>mainClass:</dt> <dd>An object that was was stamped with the
+ *                 current version and build. If 
+ *                 mainClass.VERSION != version or mainClass.BUILD != build,
+ *                 multiple versions of pieces of the library have been
+ *                 loaded, potentially causing issues.</dd>
+ *       </dl>
+ *
+ * @method getVersion
+ * @static
+ * @param {String}  name the name of the module (event, slider, etc)
+ * @return {Object} The version info
+ */
+YAHOO.env.getVersion = function(name) {
+    return YAHOO.env.modules[name] || null;
+};
+
+/**
+ * Do not fork for a browser if it can be avoided.  Use feature detection when
+ * you can.  Use the user agent as a last resort.  YAHOO.env.ua stores a version
+ * number for the browser engine, 0 otherwise.  This value may or may not map
+ * to the version number of the browser.
+ * @class YAHOO.env.ua
+ * @static
+ */
+YAHOO.env.ua = function() {
+    var o={
+
+        /**
+         * Internet Explorer version number or 0
+         * @property ie
+         * @type float
+         */
+        ie:0,
+
+        /**
+         * Opera version number or 0
+         * @property opera
+         * @type float
+         */
+        opera:0,
+
+        /**
+         * Gecko engine version or 0
+         * @property gecko
+         * @type float
+         */
+        gecko:0,
+
+        /**
+         * AppleWebKit version number.  KHTML browsers that are not WebKit
+         * browsers will evaluate to 1, other browsers 0.
+         * @property webkit
+         * @type float
+         */
+        webkit:0
+    };
+
+    var ua=navigator.userAgent, m;
+
+    // Modern KHTML browsers should qualify as Safari X-Grade
+    if ((/KHTML/).test(ua)) {
+        o.webkit=1;
+    }
+    // Modern WebKit browsers are at least X-Grade
+    m=ua.match(/AppleWebKit\/([^\s]*)/);
+    if (m&&m[1]) {
+        o.webkit=parseFloat(m[1]);
+    }
+
+    if (!o.webkit) { // not webkit
+        // @todo check Opera/8.01 (J2ME/MIDP; Opera Mini/2.0.4509/1316; fi; U; ssr)
+        m=ua.match(/Opera[\s\/]([^\s]*)/);
+        if (m&&m[1]) {
+            o.opera=parseFloat(m[1]);
+        } else { // not opera or webkit
+            m=ua.match(/MSIE\s([^;]*)/);
+            if (m&&m[1]) {
+                o.ie=parseFloat(m[1]);
+            } else { // not opera, webkit, or ie
+                m=ua.match(/Gecko\/([^\s]*)/);
+                if (m&&m[1]) {
+                    o.gecko=parseFloat(m[1]);
+                }
+            }
+        }
+    }
+    
+    return o;
+}();
+    
 /**
  * Provides the language utilites and extensions used by the library
  * @class YAHOO.lang
@@ -277,7 +351,7 @@ YAHOO.lang = {
      * @return Boolean
      */  
     isObject: function(obj) {
-        return obj && (typeof obj == 'object' || YAHOO.lang.isFunction(obj));
+return (obj && (typeof obj == 'object' || YAHOO.lang.isFunction(obj))) || false;
     },
         
     /**
@@ -328,7 +402,29 @@ YAHOO.lang = {
         return !YAHOO.lang.isUndefined(obj[prop]) && 
                 obj.constructor.prototype[prop] !== obj[prop];
     },
-        
+ 
+    /**
+     * IE will not enumerate native functions in a derived object even if the
+     * function was overridden.  This is a workaround for specific functions 
+     * we care about on the Object prototype. 
+     * @property _IEEnumFix
+     * @param {Function} r  the object to receive the augmentation
+     * @param {Function} s  the object that supplies the properties to augment
+     * @static
+     * @private
+     */
+    _IEEnumFix: function(r, s) {
+        if (YAHOO.env.ua.ie) {
+            var add=["toString", "valueOf"];
+            for (i=0;i<add.length;i=i+1) {
+                var fname=add[i],f=s[fname];
+                if (YAHOO.lang.isFunction(f) && f!=Object.prototype[fname]) {
+                    r[fname]=f;
+                }
+            }
+        }
+    },
+       
     /**
      * Utility to set up the prototype, constructor and superclass properties to
      * support an inheritance strategy that can chain constructors and methods.
@@ -360,42 +456,78 @@ YAHOO.lang = {
             for (var i in overrides) {
                 subc.prototype[i]=overrides[i];
             }
+
+            YAHOO.lang._IEEnumFix(subc.prototype, overrides);
         }
     },
-    
+   
     /**
-     * Applies all prototype properties in the supplier to the receiver if the
+     * Applies all properties in the supplier to the receiver if the
      * receiver does not have these properties yet.  Optionally, one or more
      * methods/properties can be specified (as additional parameters).  This
-     * option will overwrite the property if receiver has it already.
+     * option will overwrite the property if receiver has it already.  If true
+     * is passed as the third parameter, all properties will be applied and
+     * _will_ overwrite properties in the receiver.
      *
+     * @method absorb
+     * @static
+     * @param {Function} r  the object to receive the augmentation
+     * @param {Function} s  the object that supplies the properties to augment
+     * @param {String*|boolean}  arguments zero or more properties methods to augment the
+     *                             receiver with.  If none specified, everything
+     *                             in the supplier will be used unless it would
+     *                             overwrite an existing property in the receiver. If true
+     *                             is specified as the third parameter, all properties will
+     *                             be applied and will overwrite an existing property in
+     *                             the receiver
+     */
+    absorb: function(r, s) {
+        if (!s||!r) {
+            throw new Error("Absorb failed, verify dependencies.");
+        }
+        var a=arguments, i, p, override=a[2];
+        if (override && override!==true) { // only absorb the specified properties
+            for (i=2; i<a.length; i=i+1) {
+                r[a[i]] = s[a[i]];
+            }
+        } else { // take everything, overwriting only if the third parameter is true
+            for (p in s) { 
+                if (override || !r[p]) {
+                    r[p] = s[p];
+                }
+            }
+            
+            YAHOO.lang._IEEnumFix(r, s);
+        }
+    },
+ 
+    /**
+     * Same as YAHOO.lang.absorb, except it only applies prototype properties
+     * @see YAHOO.lang.absorb
      * @method augment
      * @static
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
-     * @param {String*}  arguments zero or more properties methods to augment the
+     * @param {String*|boolean}  arguments zero or more properties methods to augment the
      *                             receiver with.  If none specified, everything
      *                             in the supplier will be used unless it would
-     *                             overwrite an existing property in the receiver
+     *                             overwrite an existing property in the receiver.  if true
+     *                             is specified as the third parameter, all properties will
+     *                             be applied and will overwrite an existing property in
+     *                             the receiver
      */
     augment: function(r, s) {
         if (!s||!r) {
-            throw new Error("YAHOO.lang.augment failed, please check that " +
-                            "all dependencies are included.");
+            throw new Error("Augment failed, verify dependencies.");
         }
-        var rp=r.prototype, sp=s.prototype, a=arguments, i, p;
-        if (a[2]) {
-            for (i=2; i<a.length; i=i+1) {
-                rp[a[i]] = sp[a[i]];
-            }
-        } else {
-            for (p in sp) { 
-                if (!rp[p]) {
-                    rp[p] = sp[p];
-                }
-            }
+        //var a=[].concat(arguments);
+        a=[r.prototype,s.prototype];
+        for (var i=2;i<arguments.length;i=i+1) {
+            a.push(arguments[i]);
         }
+        YAHOO.lang.absorb.apply(this, a);
     }
+
 };
 
 YAHOO.init();
