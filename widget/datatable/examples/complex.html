@@ -196,8 +196,9 @@ YAHOO.example.IntegratedFeatureSet = new function() {
             return -1;
         }
         var comp = YAHOO.util.Sort.compareAsc;
-        var compState = comp(a.state, b.state);
-        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+        var compState = comp(a.getData("state"), b.getData("state"));
+        return (compState !== 0) ?
+                compState : comp(a.getData("areacode"), b.getData("areacode"));
     };
     
     this.sortStatesDesc = function(a, b) {
@@ -213,8 +214,9 @@ YAHOO.example.IntegratedFeatureSet = new function() {
             return 1;
         }
         var comp = YAHOO.util.Sort.compareDesc;
-        var compState = comp(a.state, b.state);
-        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
+        var compState = comp(a.getData("state"), b.getData("state"));
+        return (compState !== 0) ? compState :
+                comp(a.getData("areacode"), b.getData("areacode"));
     };
 
     var myColumnHeaders = [
@@ -267,6 +269,8 @@ YAHOO.example.IntegratedFeatureSet = new function() {
         rowColorAnim.animate();
     }
     this.myDataTable.subscribe("cellEditEvent", this.onCellEdit);
+    
+    this.myDataTable.addRow({areacode:"xxx", state:"yyy"});
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

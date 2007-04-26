@@ -174,7 +174,7 @@ YAHOO.widget.RecordSet.prototype.getRecords = function(index, range) {
 
 YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
     for(var i=this._records.length-1; i>-1; i--) {
-        if(oRecord === this._records[i]) {
+        if(oRecord.getId() === this._records[i].getId()) {
             return i;
         }
     }
@@ -224,9 +224,9 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     if(oRecord && oData && (oData.constructor == Object)) {
         var oldData = {};
         for(var key in oRecord) {
-            oldData[key] = oRecord._data[key];
+            oldData[key] = oRecord._oData[key];
         }
-        oRecord._data = oData;
+        oRecord._oData = oData;
         this.fireEvent("recordUpdateEvent",{record:oRecord,newData:oData,oldData:oldData});
     }
     else {
@@ -249,8 +249,8 @@ YAHOO.widget.RecordSet.prototype.updateField = function(record, sField, oData) {
     }
     if(record instanceof YAHOO.widget.Record) {
         // TODO: copy by value for non-primitives?
-        var oldData = record._data[sField];
-        record._data[sField] = oData;
+        var oldData = record._oData[sField];
+        record._oData[sField] = oData;
         this.fireEvent("fieldUpdateEvent",{record:record,field:sField,newData:oData,oldData:oldData});
     }
     else {
@@ -433,12 +433,12 @@ YAHOO.widget.RecordSet.prototype.deleteAllRecords = function() {
  * @param oConfigs {Object} (optional) Object literal of key/value pairs.
  */
 YAHOO.widget.Record = function(oLiteral) {
-    this._data = {};
+    this._oData = {};
     if(oLiteral && (oLiteral.constructor == Object)) {
         for(var sKey in oLiteral) {
-            this._data[sKey] = oLiteral[sKey];
+            this._oData[sKey] = oLiteral[sKey];
         }
-        this.id = YAHOO.widget.Record._nCount;
+        this._nId = YAHOO.widget.Record._nCount;
         YAHOO.widget.Record._nCount++;
     }
 };
@@ -448,23 +448,34 @@ YAHOO.widget.Record = function(oLiteral) {
 // Private member variables
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * Internal class variable to give unique indexes to Record instances.
+ *
+ * @property _nCount
+ * @type Number
+ * @private
+ * @static
+ */
+YAHOO.widget.Record._nCount = 0;
 
 /**
  * Unique number assigned at instantation, indicates original order within
  * RecordSet.
  *
- * @property id
+ * @property _nId
  * @type Number
+ * @private
  */
-YAHOO.widget.Record.prototype._id = null;
+YAHOO.widget.Record.prototype._nId = null;
 
 /**
  * Holds data for the Record in an object literal.
  *
- * @property data
+ * @property _oData
  * @type Object
+ * @private
  */
-YAHOO.widget.Record.prototype._data = null;
+YAHOO.widget.Record.prototype._oData = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -486,7 +497,7 @@ YAHOO.widget.Record.prototype._data = null;
  * @return Number
  */
 YAHOO.widget.Record.prototype.getId = function() {
-    return this._id;
+    return this._nId;
 };
 
 /**
@@ -499,10 +510,10 @@ YAHOO.widget.Record.prototype.getId = function() {
  */
 YAHOO.widget.Record.prototype.getData = function(sField) {
     if(YAHOO.lang.isString(sField)) {
-        return this._data[sField];
+        return this._oData[sField];
     }
     else {
-        return this._data;
+        return this._oData;
     }
 };
 
