@@ -1672,12 +1672,12 @@ YAHOO.widget.MenuItem.prototype = {
             typeof oObject == "object" && 
             typeof oObject.fn == "function"
         ) {
-
+            
             this.clickEvent.subscribe(
-                    oObject.fn, 
-                    (oObject.obj || this), 
-                    oObject.scope
-                );
+                                oObject.fn, 
+                                ((!YAHOO.lang.isUndefined(oObject.obj)) ? 
+                                        oObject.obj : this), 
+                                oObject.scope);
 
             this._oOnclickAttributeValue = oObject;
 
@@ -2264,12 +2264,13 @@ YAHOO.widget.MenuItem.prototype = {
     */
     toString: function() {
 
-        var sReturnVal = "MenuItem";
+        var sReturnVal = "MenuItem",
+            sId = this.id;
 
-        if(this.cfg && this.cfg.getProperty("text")) {
+        if(sId) {
     
-            sReturnVal += (": " + this.cfg.getProperty("text"));
-    
+            sReturnVal += (" " + sId);
+        
         }
 
         return sReturnVal;
