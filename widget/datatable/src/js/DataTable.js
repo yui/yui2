@@ -16,7 +16,7 @@
  */
 YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     // Internal vars
-    var i, ok;
+    var i, ok, elTable, elThead, elTbody;
     this._nIndex = YAHOO.widget.DataTable._nCount;
     this._sName = "instance" + this._nIndex;
     this.id = "yui-dt"+this._nIndex;
@@ -51,7 +51,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this._oRecordSet = new YAHOO.widget.RecordSet();
 
     // Validate HTML Element
-    var elTable = null;
     elContainer = YAHOO.util.Dom.get(elContainer);
     if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
         this._elContainer = elContainer;
@@ -74,7 +73,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
 
             // Iterate through each TBODY
             for(i=0; i<elTable.tBodies.length; i++) {
-                var elTbody = elTable.tBodies[i];
+                elTbody = elTable.tBodies[i];
 
                 // Iterate through each TR
                 for(var j=0; j<elTbody.rows.length; j++) {
@@ -127,46 +126,54 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
         return;
     }
 
-    // Set up sort
-    this.subscribe("headCellClickEvent",this.onEventSortColumn);
-
-    // Set up context menu
-    //TODO: does trigger have to exist? can trigger be TBODY rather than rows?
-    if(this.contextMenu && this.contextMenuOptions) {
-        this.contextMenu = new YAHOO.widget.ContextMenu(this.id+"-cm", { trigger: this._elTbody.rows } );
-        this.contextMenu.addItem("delete item");
-        this.contextMenu.render(document.body);
-    }
-
-    // Set up event model
+    // DOM elements are now available
     elTable = this._elTable;
     elTable.className = YAHOO.widget.DataTable.CLASS_TABLE;
+    elThead = this._elThead;
+    elTbody = this._elTbody;
+    
     /////////////////////////////////////////////////////////////////////////////
     //
     // DOM Events
     //
     /////////////////////////////////////////////////////////////////////////////
-    //YAHOO.util.Event.addListener(this._elContainer, "focus", this._onFocus, this);
-    YAHOO.util.Event.addListener(elTable, "click", this._onClick, this);
-    YAHOO.util.Event.addListener(elTable, "dblclick", this._onDoubleclick, this);
-    YAHOO.util.Event.addListener(elTable, "mouseout", this._onMouseout, this);
-    YAHOO.util.Event.addListener(elTable, "mouseover", this._onMouseover, this);
-    YAHOO.util.Event.addListener(elTable, "mousedown", this._onMousedown, this);
-    //YAHOO.util.Event.addListener(elTable, "mouseup", this._onMouseup, this);
-    //YAHOO.util.Event.addListener(elTable, "mousemove", this._onMousemove, this);
-    YAHOO.util.Event.addListener(elTable, "keydown", this._onKeydown, this);
-    YAHOO.util.Event.addListener(elTable, "keypress", this._onKeypress, this);
-    YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
+
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
-    YAHOO.util.Event.addListener(elTable, "keyup", this._onKeyup, this);
-    //YAHOO.util.Event.addListener(elTable, "focus", this._onFocus, this);
-    YAHOO.util.Event.addListener(elTable, "blur", this._onBlur, this);
+    YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
+    
+    //YAHOO.util.Event.addListener(this._elContainer, "focus", this._onContainerFocus, this);
+    //YAHOO.util.Event.addListener(this._elContainer, "blur", this._onContainerBlur, this);
+
+    //YAHOO.util.Event.addListener(elTable, "focus", this._onTableFocus, this);
+    YAHOO.util.Event.addListener(elTable, "blur", this._onTableBlur, this);
+    
+    // Must add click and dblclick listeners to different elements
+    YAHOO.util.Event.addListener(elTable, "click", this._onTableClick, this);
+    YAHOO.util.Event.addListener(elThead, "dblclick", this._onTheadDblclick, this);
+    YAHOO.util.Event.addListener(elTbody, "dblclick", this._onTbodyDblclick, this);
+
+    YAHOO.util.Event.addListener(elTable, "mouseover", this._onTableMouseover, this);
+    YAHOO.util.Event.addListener(elTable, "mouseout", this._onTableMouseout, this);
+    YAHOO.util.Event.addListener(elTable, "mousedown", this._onTableMousedown, this);
+    //YAHOO.util.Event.addListener(elTable, "mouseup", this._onTableMouseup, this);
+    //YAHOO.util.Event.addListener(elTable, "mousemove", this._onTableMousemove, this);
+
+    YAHOO.util.Event.addListener(elTable, "keydown", this._onTableKeydown, this);
+    YAHOO.util.Event.addListener(elTable, "keyup", this._onTableKeyup, this);
+    YAHOO.util.Event.addListener(elTable, "keypress", this._onTableKeypress, this);
 
     /////////////////////////////////////////////////////////////////////////////
     //
     // Custom Events
     //
     /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Fired when DataTable instance initialization is complete.
+     *
+     * @event dataTableInitEvent
+     */
+    this.createEvent("dataTableInitEvent");
 
     /**
      * Fired when a mouseover occurs on a TD element.
@@ -261,8 +268,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The CHECKBOX element.
      */
-    this.checkboxClickEvent = this.createEvent("checkboxClickEvent");
-    //this.checkboxClickEvent.subscribeEvent.subscribe(this._registerEvent,{type:"checkboxClickEvent"},this);
+    this.createEvent("checkboxClickEvent");
 
     /**
      * Fired when a RADIO element is clicked.
@@ -299,35 +305,35 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      * @param oArgs.target {HTMLElement} The TABLE element.
      *
      */
-    this.createEvent("tableClickEvent");
+    var tableClickEvent = this.createEvent("tableClickEvent");
 
     /**
      * Fired when a TD element is doubleclicked.
      *
-     * @event cellDoubleclickEvent
+     * @event cellDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TD element.
      */
-    this.createEvent("cellDoubleclickEvent");
+    this.createEvent("cellDblclickEvent");
 
     /**
      * Fired when a TH cell element is doubleclicked.
      *
-     * @event headCellDoubleclickEvent
+     * @event headCellDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      */
-    this.createEvent("headCellDoubleclickEvent");
+    this.createEvent("headCellDblclickEvent");
 
     /**
      * Fired when a TABLE element is doubleclicked.
      *
-     * @event tableDoubleclickEvent
+     * @event tableDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TABLE element.
      *
      */
-    this.createEvent("tableDoubleclickEvent");
+    this.createEvent("tableDblclickEvent");
 
     /**
      * Fired when a column is sorted.
@@ -347,7 +353,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      */
     this.createEvent("editorShowEvent");
 
-
     /**
      * Fired when a cell is edited.
      *
@@ -365,13 +370,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      * @param oArgs.target {HTMLElement} The TH element.
      */
     this.createEvent("columnResizeEvent");
-
-    /**
-     * Fired when DataTable instance is first initialized.
-     *
-     * @event tableInitEvent
-     */
-    this.createEvent("tableInitEvent");
 
     /**
      * Fired when DataTable view is refreshed.
@@ -499,10 +497,20 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("recordSetUpdateEvent");
     this._oRecordSet.subscribe("recordUpdateEvent", this._onRecordUpdate, this, true);
     
-    
+    // Set up sort
+    this.subscribe("headCellClickEvent",this.onEventSortColumn);
+
+    // Set up context menu
+    //TODO: does trigger have to exist? can trigger be TBODY rather than rows?
+    if(this.contextMenu && this.contextMenuOptions) {
+        this.contextMenu = new YAHOO.widget.ContextMenu(this.id+"-cm", { trigger: this._elTbody.rows } );
+        this.contextMenu.addItem("delete item");
+        this.contextMenu.render(document.body);
+    }
+
     YAHOO.widget.DataTable._nCount++;
     YAHOO.log("DataTable initialized", "info", this.toString());
-    this.fireEvent("tableInitEvent");
+    this.fireEvent("dataTableInitEvent");
 };
 
 if(YAHOO.util.EventProvider) {
@@ -1047,6 +1055,15 @@ YAHOO.widget.DataTable.prototype._sName = null;
 YAHOO.widget.DataTable.prototype._elContainer = null;
 
 /**
+ * DOM reference to the CAPTION element for the DataTable instance.
+ *
+ * @property _elCaption
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elCaption = null;
+
+/**
  * DOM reference to the TABLE element for the DataTable instance.
  *
  * @property _elTable
@@ -1056,6 +1073,15 @@ YAHOO.widget.DataTable.prototype._elContainer = null;
 YAHOO.widget.DataTable.prototype._elTable = null;
 
 /**
+ * DOM reference to the THEAD element for the DataTable instance.
+ *
+ * @property _elThead
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elThead = null;
+
+/**
  * DOM reference to the primary TBODY element for the DataTable instance.
  *
  * @property _elTbody
@@ -1063,6 +1089,33 @@ YAHOO.widget.DataTable.prototype._elTable = null;
  * @private
  */
 YAHOO.widget.DataTable.prototype._elTbody = null;
+
+/**
+ * DOM reference to the secondary TBODY element used to display DataTable messages.
+ *
+ * @property _elMsgTbody
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elMsgTbody = null;
+
+/**
+ * DOM reference to the secondary TBODY element's single TR element used to display DataTable messages.
+ *
+ * @property _elMsgTbody
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elMsgTbodyRow = null;
+
+/**
+ * DOM reference to the secondary TBODY element's single TD element used to display DataTable messages.
+ *
+ * @property _elMsgTbody
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elMsgTbodyCell = null;
 
 /**
  * DataSource instance for the DataTable instance.
@@ -1318,25 +1371,25 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     var i,oColumn;
     
     // Create THEAD
-    var elHead = document.createElement("thead");
-    elHead.tabIndex = -1;
+    var elThead = document.createElement("thead");
+    elThead.tabIndex = -1;
 
     // Iterate through each row of Column headers...
     var colTree = this._oColumnSet.tree;
     for(i=0; i<colTree.length; i++) {
-        var elHeadRow = elHead.appendChild(document.createElement("tr"));
-        elHeadRow.id = this.id+"-hdrow"+i;
+        var elTheadRow = elThead.appendChild(document.createElement("tr"));
+        elTheadRow.id = this.id+"-hdrow"+i;
 
         // ...and create THEAD cells
         for(var j=0; j<colTree[i].length; j++) {
             oColumn = colTree[i][j];
-            var elHeadCell = elHeadRow.appendChild(document.createElement("th"));
-            elHeadCell.id = oColumn.getId();
-            this._initThEl(elHeadCell,oColumn,i,j);
+            var elTheadCell = elTheadRow.appendChild(document.createElement("th"));
+            elTheadCell.id = oColumn.getId();
+            this._initThEl(elTheadCell,oColumn,i,j);
         }
     }
 
-    this._elHead = this._elTable.appendChild(elHead);
+    this._elThead = this._elTable.appendChild(elThead);
     
     // Add Resizer only after DOM has been updated
     for(i=0; i<this._oColumnSet.keys.length; i++) {
@@ -1349,23 +1402,23 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                     (oColumn.getIndex() != this._oColumnSet.keys.length-1)
                     )
             ) {
-                // TODO: better way to get elHeadContainer
-                var elHeadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADCONTAINER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
-                var elHeadResizer = elHeadContainer.appendChild(document.createElement("span"));
-                elHeadResizer.id = oColumn.getId() + "-resizer";
-                YAHOO.util.Dom.addClass(elHeadResizer,YAHOO.widget.DataTable.CLASS_HEADRESIZER);
+                // TODO: better way to get elTheadContainer
+                var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADCONTAINER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                var elTheadResizer = elTheadContainer.appendChild(document.createElement("span"));
+                elTheadResizer.id = oColumn.getId() + "-resizer";
+                YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_HEADRESIZER);
                 oColumn.ddResizer = new YAHOO.util.WidthResizer(
-                        this, oColumn.getId(), elHeadResizer.id, elHeadResizer.id);
+                        this, oColumn.getId(), elTheadResizer.id, elTheadResizer.id);
                 var cancelClick = function(e) {
                     YAHOO.util.Event.stopPropagation(e);
                 };
-                YAHOO.util.Event.addListener(elHeadResizer,"click",cancelClick);
+                YAHOO.util.Event.addListener(elTheadResizer,"click",cancelClick);
             }
             if(this.fixedWidth) {
-                //elHeadContainer.style.overflow = "hidden";
-                // TODO: better way to get elHeadText
-                var elHeadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
-                elHeadText.style.overflow = "hidden";
+                //elTheadContainer.style.overflow = "hidden";
+                // TODO: better way to get elTheadText
+                var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                elTheadText.style.overflow = "hidden";
             }
         }
     }
@@ -1377,25 +1430,25 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
  * Populates TH cell as defined by Column.
  *
  * @method _initThEl
- * @param elHeadCell {HTMLElement} TH cell element reference.
+ * @param elTheadCell {HTMLElement} TH cell element reference.
  * @param oColumn {YAHOO.widget.Column} Column object.
  * @param row {number} Row index.
  * @param col {number} Column index.
  * @private
  */
-YAHOO.widget.DataTable.prototype._initThEl = function(elHeadCell,oColumn,row,col) {
+YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,col) {
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
-    elHeadCell.columnIndex = oColumn.getIndex();
+    elTheadCell.columnIndex = oColumn.getIndex();
     if(oColumn.abbr) {
-        elHeadCell.abbr = oColumn.abbr;
+        elTheadCell.abbr = oColumn.abbr;
     }
     if(oColumn.width) {
-        elHeadCell.style.width = oColumn.width;
+        elTheadCell.style.width = oColumn.width;
     }
     if(oColumn.className) {
-        YAHOO.util.Dom.addClass(elHeadCell,oColumn.className);
+        YAHOO.util.Dom.addClass(elTheadCell,oColumn.className);
     }
     // Apply CSS for sorted tables
     if(this.sortedBy && this.sortedBy.key) {
@@ -1403,36 +1456,36 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elHeadCell,oColumn,row,col
             var sortClass = (this.sortedBy.dir && (this.sortedBy.dir != "asc")) ?
                     YAHOO.widget.DataTable.CLASS_SORTEDBYDESC :
                     YAHOO.widget.DataTable.CLASS_SORTEDBYASC;
-            YAHOO.util.Dom.addClass(elHeadCell,sortClass);
-            this.sortedBy._id = elHeadCell.id;
+            YAHOO.util.Dom.addClass(elTheadCell,sortClass);
+            this.sortedBy._id = elTheadCell.id;
         }
     }
 
-    elHeadCell.innerHTML = "";
-    elHeadCell.rowSpan = oColumn.getRowSpan();
-    elHeadCell.colSpan = oColumn.getColSpan();
+    elTheadCell.innerHTML = "";
+    elTheadCell.rowSpan = oColumn.getRowSpan();
+    elTheadCell.colSpan = oColumn.getColSpan();
 
-    var elHeadContainer = elHeadCell.appendChild(document.createElement("div"));
-    elHeadContainer.id = this.id+"-hdrow"+row+"-container"+col;
-    YAHOO.util.Dom.addClass(elHeadContainer,YAHOO.widget.DataTable.CLASS_HEADCONTAINER);
-    var elHeadContent = elHeadContainer.appendChild(document.createElement("span"));
-    elHeadContent.id = this.id+"-hdrow"+row+"-text"+col;
-    YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_HEADTEXT);
+    var elTheadContainer = elTheadCell.appendChild(document.createElement("div"));
+    elTheadContainer.id = this.id+"-hdrow"+row+"-container"+col;
+    YAHOO.util.Dom.addClass(elTheadContainer,YAHOO.widget.DataTable.CLASS_HEADCONTAINER);
+    var elTheadContent = elTheadContainer.appendChild(document.createElement("span"));
+    elTheadContent.id = this.id+"-hdrow"+row+"-text"+col;
+    YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_HEADTEXT);
 
     var contentText = oColumn.text || oColumn.key || "";
     if(oColumn.sortable) {
-        YAHOO.util.Dom.addClass(elHeadContent,YAHOO.widget.DataTable.CLASS_SORTABLE);
+        YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_SORTABLE);
         //TODO: Make hash configurable to be a server link
         //TODO: Make title configurable
         //TODO: Separate contentText from an accessibility link that says
         // Click to sort ascending and push it offscreen
         var sortLink = "?key=" + oColumn.key;
-        elHeadContent.innerHTML = "<a href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + contentText + "</a>";
-         //elHeadContent.innerHTML = contentText;
+        elTheadContent.innerHTML = "<a href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + contentText + "</a>";
+         //elTheadContent.innerHTML = contentText;
 
     }
     else {
-        elHeadContent.innerHTML = contentText;
+        elTheadContent.innerHTML = contentText;
     }
 };
 
@@ -1524,7 +1577,7 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
             linkEl = containers[i].appendChild(linkEl);
 
             // Add event listener
-            YAHOO.util.Event.addListener(linkEl,"click",this._onPagerClick,this);
+            YAHOO.util.Event.addListener(linkEl,"click",this._onPaginatorLinkClick,this);
 
              // Add to tracker
             paginator.links.push(linkEl);
@@ -1551,7 +1604,7 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
             }
             
             // Add event listener
-            YAHOO.util.Event.addListener(selectEl,"change",this._onPagerSelect,this);
+            YAHOO.util.Event.addListener(selectEl,"change",this._onPaginatorDropdownChange,this);
 
             // Add DOM reference to tracker
            paginator.dropdowns.push(selectEl);
@@ -1612,20 +1665,18 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
 YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     this.hideTableMessage();
 
-    // Is this an insert or an append?
-    var insert = (!YAHOO.lang.isNumber(index) || (index < 0)) ? false : true;
-    if(!insert || (index > this._elTbody.rows.length)) {
-        index = this._elTbody.rows.length;
-        insert = false;
-    }
+    // It's an append if no index provided, or index is negative or too big
+    var append = (!YAHOO.lang.isNumber(index) || (index < 0) ||
+            index > this._elTbody.rows.length-1) ? true : false;
+            
 
     var oColumnSet = this._oColumnSet;
     var oRecordSet = this._oRecordSet;
 
-    var elRow = (insert) ?
-        this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]) :
-        this._elTbody.appendChild(document.createElement("tr"));
-    elRow.id = this.id+"-bdrow"+index;
+    var elRow = (append) ? this._elTbody.appendChild(document.createElement("tr")) :
+        this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]);
+        
+    elRow.id = this.id+"-bdrow"+this._elTbody.rows.length-1;
     elRow.yuiRecordId = oRecord.getId();
 
     // Create TBODY cells
@@ -1911,165 +1962,66 @@ YAHOO.widget.DataTable.prototype._unselectAllTdEls = function() {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Handles click events on the DOCUMENT.
+ *
+ * @method _onDocumentClick
+ * @param e {HTMLEvent} The click event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
+    //TODO: abstract this into firing a custom event which handles the editor save
+    //Hide active editor
+    oSelf.saveEditorData();
+};
+
+/**
+ * Handles keydown events on the DOCUMENT.
+ *
+ * @method _onDocumentKeydown
+ * @param e {HTMLEvent} The key event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
+    // Special keys sxecutes interaction with active editor.
+    // esc Clears active editor
+    if((e.keyCode == 27)) {
+        oSelf.cancelEditorData();
+    }
+    //TODO: move this block to editor event handling
+    // enter Saves active editor data
+    if(e.keyCode == 13) {
+        // Only if we are not in a text area
+        YAHOO.util.Event.stopEvent(e);
+        oSelf.saveEditorData();
+    }
+};
+
+/**
  * Handles blur events on the TABLE element.
  *
- * @method _onBlur
+ * @method _onTableBlur
  * @param e {HTMLEvent} The blur event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onBlur = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTableBlur = function(e, oSelf) {
+    //TODO: fixme
     this._bFocused = false;
-};
-
-/**
- * Handles mouseover events on the TABLE element.
- *
- * @method _onMouseover
- * @param e {HTMLEvent} The mouseover event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-YAHOO.widget.DataTable.prototype._onMouseover = function(e, oSelf) {
-        var elTarget = YAHOO.util.Event.getTarget(e);
-        var elTag = elTarget.tagName.toLowerCase();
-        var knownTag = false;
-
-        if (elTag != "table") {
-            while(!knownTag) {
-                switch(elTag) {
-                    case "body":
-                        knownTag = true;
-                        break;
-                    case "a":
-                        knownTag = true;
-                        break;
-                    case "td":
-                        oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
-                        knownTag = true;
-                        break;
-                    case "th":
-                        oSelf.fireEvent("headCellMouseoverEvent",{target:elTarget,event:e});
-                        knownTag = true;
-                        break;
-                    default:
-                        break;
-                }
-                elTarget = elTarget.parentNode;
-                if(elTarget) {
-                    elTag = elTarget.tagName.toLowerCase();
-                }
-                else {
-                    break;
-                }
-            }
-        }
-        oSelf.fireEvent("tableMouseoverEvent",{target:elTarget,event:e});
-};
-
-/**
- * Handles mouseout events on the TABLE element.
- *
- * @method _onMouseout
- * @param e {HTMLEvent} The mouseout event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-YAHOO.widget.DataTable.prototype._onMouseout = function(e, oSelf) {
-        var elTarget = YAHOO.util.Event.getTarget(e);
-        var elTag = elTarget.tagName.toLowerCase();
-        var knownTag = false;
-
-        if (elTag != "table") {
-            while(!knownTag) {
-                switch(elTag) {
-                    case "body":
-                        knownTag = true;
-                        break;
-                    case "a":
-                        knownTag = true;
-                        break;
-                    case "td":
-                        oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
-                        knownTag = true;
-                        break;
-                    case "th":
-                        oSelf.fireEvent("headCellMouseoutEvent",{target:elTarget,event:e});
-                        knownTag = true;
-                        break;
-                    default:
-                        break;
-                }
-                elTarget = elTarget.parentNode;
-                if(elTarget) {
-                    elTag = elTarget.tagName.toLowerCase();
-                }
-                else {
-                    break;
-                }
-            }
-        }
-        oSelf.fireEvent("tableMouseoutEvent",{target:elTarget,event:e});
-};
-
-/**
- * Handles mousedown events on the TABLE element.
- *
- * @method _onMousedown
- * @param e {HTMLEvent} The mousedown event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-YAHOO.widget.DataTable.prototype._onMousedown = function(e, oSelf) {
-        var elTarget = YAHOO.util.Event.getTarget(e);
-        var elTag = elTarget.tagName.toLowerCase();
-        var knownTag = false;
-
-        if (elTag != "table") {
-            while(!knownTag) {
-                switch(elTag) {
-                    case "body":
-                        knownTag = true;
-                        break;
-                    case "a":
-                        knownTag = true;
-                        break;
-                    case "td":
-                        YAHOO.util.Event.stopEvent(e);
-                        oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
-                        knownTag = true;
-                        break;
-                    case "th":
-                        YAHOO.util.Event.stopEvent(e);
-                        oSelf.fireEvent("headCellMousedownEvent",{target:elTarget,event:e});
-                        knownTag = true;
-                        break;
-                    default:
-                        break;
-                }
-                elTarget = elTarget.parentNode;
-                if(elTarget) {
-                    elTag = elTarget.tagName.toLowerCase();
-                }
-                else {
-                    break;
-                }
-            }
-        }
-        oSelf.fireEvent("tableMousedownEvent",{target:elTarget,event:e});
 };
 
 /**
  * Handles click events on the TABLE element.
  *
- * @method _onClick
+ * @method _onTableClick
  * @param e {HTMLEvent} The click event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTableClick = function(e, oSelf) {
     oSelf.cancelEditorData();
-    
+
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false; // True if event should stop propagating
@@ -2116,19 +2068,56 @@ YAHOO.widget.DataTable.prototype._onClick = function(e, oSelf) {
 };
 
 /**
- * Handles doubleclick events on the TABLE element.
+ * Handles dblclick events on the THEAD element.
  *
- * @method _onDoubleclick
- * @param e {HTMLEvent} The doubleclick event.
+ * @method _onTheadDblclick
+ * @param e {HTMLEvent} The dblclick event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTheadDblclick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
     var knownTag = false;
 
-    if (elTag != "table") {
+    if (elTag != "thead") {
+        while(!knownTag) {
+            switch(elTag) {
+                case "body":
+                    knownTag = true;
+                    break;
+                case "a":
+                    knownTag = true;
+                    break;
+                case "th":
+                    YAHOO.util.Event.stopEvent(e);
+                    oSelf.fireEvent("headCellDblclickEvent",{target:elTarget,event:e});
+                    knownTag = true;
+                    break;
+                default:
+                    break;
+            }
+            elTarget = elTarget.parentNode;
+            elTag = elTarget.tagName.toLowerCase();
+        }
+    }
+    oSelf.fireEvent("tableDblclickEvent",{target:elTarget,event:e});
+};
+
+/**
+ * Handles dblclick events on the primary TBODY element.
+ *
+ * @method _onTbodyDblclick
+ * @param e {HTMLEvent} The dblclick event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onTbodyDblclick = function(e, oSelf) {
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+    var knownTag = false;
+
+    if (elTag != "tbody") {
         while(!knownTag) {
             switch(elTag) {
                 case "body":
@@ -2139,12 +2128,7 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
                     break;
                 case "td":
                     YAHOO.util.Event.stopEvent(e);
-                    oSelf.fireEvent("cellDoubleclickEvent",{target:elTarget,event:e});
-                    knownTag = true;
-                    break;
-                case "th":
-                    YAHOO.util.Event.stopEvent(e);
-                    oSelf.fireEvent("headCellDoubleclickEvent",{target:elTarget,event:e});
+                    oSelf.fireEvent("cellDblclickEvent",{target:elTarget,event:e});
                     knownTag = true;
                     break;
                 default:
@@ -2154,40 +2138,156 @@ YAHOO.widget.DataTable.prototype._onDoubleclick = function(e, oSelf) {
             elTag = elTarget.tagName.toLowerCase();
         }
     }
-    oSelf.fireEvent("tableDoubleclickEvent",{target:elTarget,event:e});
+    oSelf.fireEvent("tableDblclickEvent",{target:elTarget,event:e});
 };
 
+
 /**
- * Handles keypress events on the TABLE. Mainly to support stopEvent on Mac.
+ * Handles mouseover events on the TABLE element.
  *
- * @method _onKeypress
- * @param e {HTMLEvent} The key event.
+ * @method _onTableMouseover
+ * @param e {HTMLEvent} The mouseover event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onKeypress = function(e, oSelf) {
-    var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
-    if(isMac) {
-        // arrow down
-        if(e.keyCode == 40) {
-            YAHOO.util.Event.stopEvent(e);
+YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
+        var elTarget = YAHOO.util.Event.getTarget(e);
+        var elTag = elTarget.tagName.toLowerCase();
+        var knownTag = false;
+
+        if (elTag != "table") {
+            while(!knownTag) {
+                switch(elTag) {
+                    case "body":
+                        knownTag = true;
+                        break;
+                    case "a":
+                        knownTag = true;
+                        break;
+                    case "td":
+                        oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    case "th":
+                        oSelf.fireEvent("headCellMouseoverEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    default:
+                        break;
+                }
+                elTarget = elTarget.parentNode;
+                if(elTarget) {
+                    elTag = elTarget.tagName.toLowerCase();
+                }
+                else {
+                    break;
+                }
+            }
         }
-        // arrow up
-        else if(e.keyCode == 38) {
-            YAHOO.util.Event.stopEvent(e);
+        oSelf.fireEvent("tableMouseoverEvent",{target:elTarget,event:e});
+};
+
+/**
+ * Handles mouseout events on the TABLE element.
+ *
+ * @method _onTableMouseout
+ * @param e {HTMLEvent} The mouseout event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
+        var elTarget = YAHOO.util.Event.getTarget(e);
+        var elTag = elTarget.tagName.toLowerCase();
+        var knownTag = false;
+
+        if (elTag != "table") {
+            while(!knownTag) {
+                switch(elTag) {
+                    case "body":
+                        knownTag = true;
+                        break;
+                    case "a":
+                        knownTag = true;
+                        break;
+                    case "td":
+                        oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    case "th":
+                        oSelf.fireEvent("headCellMouseoutEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    default:
+                        break;
+                }
+                elTarget = elTarget.parentNode;
+                if(elTarget) {
+                    elTag = elTarget.tagName.toLowerCase();
+                }
+                else {
+                    break;
+                }
+            }
         }
-    }
+        oSelf.fireEvent("tableMouseoutEvent",{target:elTarget,event:e});
+};
+
+/**
+ * Handles mousedown events on the TABLE element.
+ *
+ * @method _onTableMousedown
+ * @param e {HTMLEvent} The mousedown event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
+        var elTarget = YAHOO.util.Event.getTarget(e);
+        var elTag = elTarget.tagName.toLowerCase();
+        var knownTag = false;
+
+        if (elTag != "table") {
+            while(!knownTag) {
+                switch(elTag) {
+                    case "body":
+                        knownTag = true;
+                        break;
+                    case "a":
+                        knownTag = true;
+                        break;
+                    case "td":
+                        YAHOO.util.Event.stopEvent(e);
+                        oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    case "th":
+                        YAHOO.util.Event.stopEvent(e);
+                        oSelf.fireEvent("headCellMousedownEvent",{target:elTarget,event:e});
+                        knownTag = true;
+                        break;
+                    default:
+                        break;
+                }
+                elTarget = elTarget.parentNode;
+                if(elTarget) {
+                    elTag = elTarget.tagName.toLowerCase();
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        oSelf.fireEvent("tableMousedownEvent",{target:elTarget,event:e});
 };
 
 /**
  * Handles keydown events on the TABLE. Executes arrow selection.
  *
- * @method _onKeydown
+ * @method _onTableKeydown
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
     var oldSelectedId = oSelf._lastSelectedId;
     // Only move selection if one is already selected
     // TODO: if something isn't selected already, arrow key should select first or last one
@@ -2259,12 +2359,12 @@ YAHOO.widget.DataTable.prototype._onKeydown = function(e, oSelf) {
 /**
  * Handles keyup events on the TABLE. Executes deletion
  *
- * @method _onKeyup
+ * @method _onTableKeyup
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTableKeyup = function(e, oSelf) {
     var key = YAHOO.util.Event.getCharCode(e);
     // delete
     if(key == 46) {//TODO: && this.isFocused
@@ -2273,46 +2373,36 @@ YAHOO.widget.DataTable.prototype._onKeyup = function(e, oSelf) {
 };
 
 /**
- * Handles keydown events on the DOCUMENT. Executes interaction with editor.
+ * Handles keypress events on the TABLE. Mainly to support stopEvent on Mac.
  *
- * @method _onDocumentKeydown
+ * @method _onTableKeypress
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
-    // esc Clears active editor
-    if((e.keyCode == 27)) {
-        oSelf.cancelEditorData();
+YAHOO.widget.DataTable.prototype._onTableKeypress = function(e, oSelf) {
+    var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
+    if(isMac) {
+        // arrow down
+        if(e.keyCode == 40) {
+            YAHOO.util.Event.stopEvent(e);
+        }
+        // arrow up
+        else if(e.keyCode == 38) {
+            YAHOO.util.Event.stopEvent(e);
+        }
     }
-    // enter Saves active editor data
-    if(e.keyCode == 13) {
-        YAHOO.util.Event.stopEvent(e);
-        oSelf.saveEditorData();
-    }
-};
-
-/**
- * Handles click events on the DOCUMENT. Hides active editor.
- *
- * @method _onDocumentClick
- * @param e {HTMLEvent} The click event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
-    oSelf.saveEditorData();
 };
 
 /**
  * Handles click events on paginator links.
  *
- * @method _onPagerClick
+ * @method _onPaginatorLinkClick
  * @param e {HTMLEvent} The click event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
     oSelf.saveEditorData();
     
     var elTarget = YAHOO.util.Event.getTarget(e);
@@ -2361,14 +2451,14 @@ YAHOO.widget.DataTable.prototype._onPagerClick = function(e, oSelf) {
 };
 
 /**
- * Handles change events on paginator SELECT.
+ * Handles change events on paginator SELECT element.
  *
- * @method _onPagerSelect
+ * @method _onPaginatorDropdownChange
  * @param e {HTMLEvent} The change event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onPagerSelect = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var value = elTarget[elTarget.selectedIndex].value;
 
@@ -2728,7 +2818,7 @@ YAHOO.widget.DataTable.prototype.getTableEl = function() {
  * @return {HTMLElement} Reference to THEAD element.
  */
 YAHOO.widget.DataTable.prototype.getTheadEl = function() {
-    return this._elHead;
+    return this._elThead;
 };
 
 /**
@@ -3227,7 +3317,7 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
 YAHOO.widget.DataTable.prototype.selectRow = function(row) {
     // Validate the row
     row = YAHOO.util.Dom.get(row);
-    if(row && row.yuiRecordId) {
+    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
         var recordId = row.yuiRecordId;
 
         // Update internal tracker
@@ -3272,7 +3362,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
 YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
     // Validate the row
     row = YAHOO.util.Dom.get(row);
-    if(row && row.yuiRecordId) {
+    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
         var recordId = row.yuiRecordId;
 
         // Update internal tracker
@@ -3721,7 +3811,7 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
         for(i=0; i<selectedRecords.length; i++) {
             var allRows = elTbody.rows;
             for(var j=0; j<allRows.length; j++) {
-                if(selectedRecords[i] == allRows[j].yuiRecordId) {
+                if(selectedRecords[i].id === allRows[j].yuiRecordId) {
                     this._selectEl([allRows[j]]);
                 }
             }
