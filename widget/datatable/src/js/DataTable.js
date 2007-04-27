@@ -1723,11 +1723,8 @@ One thing, though: it doesn't work in combination with
  * @return {String} ID of the updated TR element.
  * @private
  */
-YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow) {
+YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     this.hideTableMessage();
-
-    var oRecord = this.getRecord(elRow);
-    elRow.yuiRecordId = oRecord.getId();
 
     // ...Update TD elements with new data
     for(var j=0; j<elRow.cells.length; j++) {
@@ -2865,10 +2862,15 @@ YAHOO.widget.DataTable.prototype.getMsgTdEl = function() {
  * @return {HTMLElement} Reference to TR element, or null.
  */
 YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
-    //TODO: By Record
-    // By page row index
     var allRows = this._elTbody.rows;
-    if(YAHOO.lang.isNumber(row) && (row > -1) && (row < allRows.length)) {
+    
+    // By Record
+    if(row instanceof YAHOO.widget.Record) {
+        var pageRowIndex = this.getPageRowIndex(row);
+        return allRows[pageRowIndex];
+    }
+    // By page row index
+    else if(YAHOO.lang.isNumber(row) && (row > -1) && (row < allRows.length)) {
         return allRows[row];
     }
     // By ID string or element reference
@@ -3054,9 +3056,9 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
         // By element reference
         else {
             // Find the TR element
-            var el = this.getTrEl(row);
+            var el = this.getTrEl(row);YAHOO.log('1'+el);
             if(el) {
-                pageRowIndex = el.sectionRowIndex;
+                pageRowIndex = el.sectionRowIndex;YAHOO.log('2'+pageRowIndex);
             }
         }
     }
@@ -3227,28 +3229,37 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
  * @param oData {Object} Object literal of data for the row.
  */
 YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
-    var elRow = this.getTrEl(row);
-    
-    var oRecord = this.getRecord(elRow);
-    if(oRecord !== null) {
-        if(oData && (oData.constructor == Object)) {
-            // Update the Record
-            this._oRecordSet.updateRecord(oRecord, oData);
-        
-            // TODO: Update the TR element only if it is in view
-            var rowId = this._updateTrEl(elRow);
-            
-            //TODO: Event passes TR ID old data, new data.
-            this.fireEvent("rowUpdateEvent", {newData:oData, oldData:"todo", trElId:rowId});
-        }
-        else {
-            YAHOO.log("Could not update row " + row +
-                    " due to invalid data: " + oData, "error", this.toString());
-        }
+    var oRecord, elRow;
+
+    // First update the Record
+    if((row instanceof YAHOO.widget.Record) || (YAHOO.lang.isNumber(row))) {
+            // Update the Record directly
+            oRecord = this._oRecordSet.updateRecord(row, oData);
+            elRow = this.getTrEl(oRecord);
     }
     else {
-        YAHOO.log("Could not update row " + row, "error", this.toString());
+        // Update the Record by TR element
+        elRow = this.getTrEl(row);
+        if(elRow) {
+            oRecord = this._oRecordSet.updateRecord(this.getRecordIndex(elRow), oData);
+        }
     }
+
+    if(!oRecord) {
+        YAHOO.log("Could not update row " + row + " with the data : " +
+                YAHOO.widget.Logger.dump(oData), "error", this.toString());
+        return;
+    }
+    // Next update the TR only if row is in view
+    else if(elRow !== null) {
+        this._updateTrEl(elRow, oRecord);
+    }
+
+    //TODO: Event passes TR ID old data, new data.
+    this.fireEvent("rowUpdateEvent", {newData:oData, oldData:"todo", elRow:elRow});
+    YAHOO.log("Updated row: " + row + " with the data : " +
+                YAHOO.widget.Logger.dump(oData) + " Record (and possibly TR)", "info", this.toString());
+
 };
 
 /**
@@ -3799,7 +3810,7 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
         
         // From the top, update in-place existing rows
         for(i=0; i<elRows.length; i++) {
-            rowIds.push(this._updateTrEl(elRows[i]));
+            rowIds.push(this._updateTrEl(elRows[i], aRecords[i]));
         }
 
         // Add rows as necessary

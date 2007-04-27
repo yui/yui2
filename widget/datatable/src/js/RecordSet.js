@@ -212,6 +212,7 @@ YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
  * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
  * RecordSet position index.
  * @param oData {Object) Object literal of new data.
+ * @param {YAHOO.widget.Record} Updated Record, or null.
  */
 YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     var oRecord = null;
@@ -228,9 +229,13 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
         }
         oRecord._oData = oData;
         this.fireEvent("recordUpdateEvent",{record:oRecord,newData:oData,oldData:oldData});
+        YAHOO.log("Record at index " + this.getRecordIndex(oRecord) +
+                "updated with data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+        return oRecord;
     }
     else {
         YAHOO.log("Could not update Record " + record, "error", this.toString());
+        return null;
     }
 };
 
