@@ -2813,6 +2813,7 @@ initAttributes: function(p_oAttributes) {
     });
 
 
+
 	/**
 	* @config menu
     * @description Object specifying the menu for the button.  The value can be
@@ -2834,8 +2835,9 @@ initAttributes: function(p_oAttributes) {
     * <li>Array of strings representing the text labels for each menu item in 
     * the menu.</li>
     * </ul>
-	* @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-	* level-one-html.html#ID-58190037">HTMLElement</a>|String|Array
+	* @type <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>|<a href="
+	* http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html
+	* #ID-58190037">HTMLElement</a>|String|Array
 	* @default null
 	*/
     this.setAttributeConfig("menu", {
