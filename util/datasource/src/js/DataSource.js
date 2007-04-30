@@ -37,7 +37,8 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     }
 
     if(!oLiveData) {
-        YAHOO.log("Could not instantiate DataSource due to invalid live database.","error",this.toString());
+        YAHOO.log("Could not instantiate DataSource due to invalid live database",
+                "error", this.toString());
         return;
     }
     
@@ -68,7 +69,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     // Initialize local cache
     if(maxCacheEntries > 0 && !this._aCache) {
         this._aCache = [];
-        YAHOO.log("Cache initialized","info",this.toString());
+        YAHOO.log("Cache initialized", "info", this.toString());
     }
 
     this._sName = "instance" + YAHOO.util.DataSource._nIndex;
@@ -475,7 +476,8 @@ YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback
             }
         }
     }
-    YAHOO.log("The cached response for \"" + oRequest + "\" is " + oResponse,"info",this.toString());
+    YAHOO.log("The cached response for \"" + YAHOO.widget.Logger.dump(oRequest) +
+            "\" is " + YAHOO.widget.Logger.dump(oResponse), "info", this.toString());
     return oResponse;
 };
 
@@ -517,8 +519,8 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
     // Add to cache in the newest position, at the end of the array
     var oCacheElem = {request:oRequest,response:oResponse};
     aCache.push(oCacheElem);
-    this.fireEvent("responseCacheEvent",{request:oRequest,response:oResponse});
-    YAHOO.log("Cached response for \"" +  oRequest + "\"","info",this.toString());
+    this.fireEvent("responseCacheEvent", {request:oRequest,response:oResponse});
+    YAHOO.log("Cached the response for \"" +  oRequest + "\"", "info", this.toString());
 };
 
 /**
@@ -530,7 +532,7 @@ YAHOO.util.DataSource.prototype.flushCache = function() {
     if(this._aCache) {
         this._aCache = [];
         this.fireEvent("cacheFlushEvent");
-        YAHOO.log("Flushed cache","info",this.toString());
+        YAHOO.log("Flushed the cache", "info", this.toString());
     }
 };
 
@@ -551,7 +553,7 @@ YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCal
     }
 
     // Not in cache, so forward request to live data
-    YAHOO.log("Making connection to live data for \"" + oRequest + "\"","info",this.toString());
+    YAHOO.log("Making connection to live data for \"" + oRequest + "\"", "info", this.toString());
     this.makeConnection(oRequest, oCallback, oCaller);
 };
 
@@ -605,13 +607,17 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                 // If response ID does not match last made request ID,
                 // silently fail and wait for the next response
                 if(oResponse && (!this._oConn || (oResponse.tId != this._oConn.tId))) {
-                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAINVALID});
+                    this.fireEvent("dataErrorEvent", {request:oRequest,
+                            callback:oCallback, caller:oCaller,
+                            message:YAHOO.util.DataSource.ERROR_DATAINVALID});
                     YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID, "error", this.toString());
                     return null;
                 }
                 // Error if no response
                 else if(!oResponse) {
-                    this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
+                    this.fireEvent("dataErrorEvent", {request:oRequest,
+                            callback:oCallback, caller:oCaller,
+                            message:YAHOO.util.DataSource.ERROR_DATANULL});
                     YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
 
                     // Send error response back to the caller with the error flag on
@@ -633,12 +639,14 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
              * @private
              */
             var _xhrFailure = function(oResponse) {
-                this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATAINVALID});
-                YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID + ": " + oResponse.statusText, "error", this.toString());
+                this.fireEvent("dataErrorEvent", {request:oRequest,
+                        callback:oCallback, caller:oCaller,
+                        message:YAHOO.util.DataSource.ERROR_DATAINVALID});
+                YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID + ": " +
+                        oResponse.statusText, "error", this.toString());
 
                 // Send failure response back to the caller with the error flag on
                 oCallback.call(oCaller, oRequest, oResponse, true);
-                    
                 return null;
             };
 
@@ -670,7 +678,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                 this._oConn = this.connMgr.asyncRequest("GET", sUri, _xhrCallback, null);
             }
             else {
-                YAHOO.log("Could not find a valid Connection Manager","error",this.toString());
+                YAHOO.log("Could not find a valid Connection Manager", "error", this.toString());
                 // Send null response back to the caller with the error flag on
                 oCallback.call(oCaller, oRequest, null, true);
             }
@@ -692,8 +700,9 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
  * @param oCaller {Object} The calling object that is making the request
  */
 YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller) {
-    this.fireEvent("responseEvent", {request:oRequest,response:oRawResponse,callback:oCallback,caller:oCaller});
-    YAHOO.log("The live data response for \"" + oRequest + "\" is " + oRawResponse,"info",this.toString());
+    this.fireEvent("responseEvent", {request:oRequest, response:oRawResponse,
+            callback:oCallback, caller:oCaller});
+    YAHOO.log("Received live data response for \"" + oRequest + "\"", "info", this.toString());
     var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     var bError = false;
@@ -726,7 +735,8 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
         default:
             //TODO: pass off to custom function
             //var contentType = oRawResponse.getResponseHeader["Content-Type"];
-            YAHOO.log("Unknown response type","warn",this.toString());
+            YAHOO.log("Could not parse data for request \"" + oRequest +
+                    "\" due to unknown response type", "warn", this.toString());
             break;
     }
 
@@ -734,12 +744,14 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     oParsedResponse = this.doBeforeCallback(oRequest, oRawResponse, oParsedResponse);
 
     if(oParsedResponse) {
-        this.fireEvent("responseParseEvent", {request:oRequest,response:oParsedResponse,callback:oCallback,caller:oCaller});
+        this.fireEvent("responseParseEvent", {request:oRequest,
+                response:oParsedResponse, callback:oCallback, caller:oCaller});
         // Cache the response
         this.addToCache(oRequest, oParsedResponse);
     }
     else {
-        this.fireEvent("dataErrorEvent", {request:oRequest,callback:oCallback,caller:oCaller,message:YAHOO.util.DataSource.ERROR_DATANULL});
+        this.fireEvent("dataErrorEvent", {request:oRequest, callback:oCallback,
+                caller:oCaller, message:YAHOO.util.DataSource.ERROR_DATANULL});
         YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
         
         // Send response back to the caller with the error flag on
@@ -792,11 +804,13 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
             }
             oParsedResponse.results.unshift(oResult);
         }
-        YAHOO.log("Parsed array data = " + oParsedResponse,"info",this.toString());
+        YAHOO.log("Parsed array data is " +
+                YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
         return oParsedResponse;
     }
     else {
-        YAHOO.log("Array data could not be parsed" + oRawResponse,"error",this.toString());
+        YAHOO.log("Array data could not be parsed: " +
+                YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
         return null;
     }
 };
@@ -852,10 +866,12 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
                 oParsedResponse.results.unshift(oResult);
             }
         }
-        YAHOO.log("Parsed text data = " + oParsedResponse,"info",this.toString());
+        YAHOO.log("Parsed text data is " +
+                YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
     }
     else {
-        YAHOO.log("Text data could not be parsed" + oRawResponse,"error",this.toString());
+        YAHOO.log("Text data could not be parsed: " +
+                YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
         oParsedResponse.error = true;
     }
     return oParsedResponse;
@@ -915,11 +931,13 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
             }
         }
         if(bError) {
-            YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
+            YAHOO.log("JSON data could not be parsed: " +
+                    YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
             oParsedResponse.error = true;
         }
         else {
-            YAHOO.log("Parsed XML data = " + oParsedResponse,"info",this.toString());
+            YAHOO.log("Parsed XML data is " +
+                    YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
         }
         return oParsedResponse;
 };
@@ -1008,7 +1026,8 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         }
 
         if(bError || !jsonList) {
-            YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
+            YAHOO.log("JSON data could not be parsed: " +
+                    YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
             oParsedResponse.error = true;
         }
         else if(!YAHOO.lang.isArray(jsonList)) {
@@ -1038,10 +1057,12 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             // Capture the array of data field values in an array of results
             oParsedResponse.results.unshift(oResult);
         }
-        YAHOO.log("Parsed JSON data = " + oParsedResponse,"info",this.toString());
+        YAHOO.log("Parsed JSON data is " +
+                YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
     }
     else {
-        YAHOO.log("JSON data could not be parsed" + oRawResponse,"error",this.toString());
+        YAHOO.log("JSON data could not be parsed: " +
+                YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
         oParsedResponse.error = true;
     }
     return oParsedResponse;

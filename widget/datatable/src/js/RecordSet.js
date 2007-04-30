@@ -25,16 +25,60 @@ YAHOO.widget.RecordSet = function(data) {
     }
 
     /**
+     * Fired when a new Record is added to the RecordSet.
+     *
+     * @event recordAddEvent
+     * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+     * @param oArgs.data {Object} Data added.
+     */
+    this.createEvent("recordAddEvent");
+
+    /**
+     * Fired when multiple Records are added to the RecordSet at once.
+     *
+     * @event recordAddEvent
+     * @param oArgs.records {YAHOO.widget.Record[]} An array of Record instances.
+     * @param oArgs.data {Object[]} Data added.
+     */
+    this.createEvent("recordsAddEvent");
+
+    /**
      * Fired when a Record is updated with new data.
      *
      * @event recordUpdateEvent
      * @param oArgs.record {YAHOO.widget.Record} The Record instance.
      * @param oArgs.newData {Object} New data.
      * @param oArgs.oldData {Object} Old data.
-     *
      */
     this.createEvent("recordUpdateEvent");
     
+    /**
+     * Fired when a Record is deleted from the RecordSet.
+     *
+     * @event recordDeleteEvent
+     * @param oArgs.data {Object} A copy of the data held by the Record,
+     * or an array of data object literals if multiple Records were deleted at once.
+     * @param oArgs.index {Object} Index of the deleted Record.
+     */
+    this.createEvent("recordDeleteEvent");
+
+    /**
+     * Fired when multiple Records are deleted from the RecordSet at once.
+     *
+     * @event recordsDeleteEvent
+     * @param oArgs.data {Object[]} An array of data object literals copied
+     * from the Records.
+     * @param oArgs.index {Object} Index of the first deleted Record.
+     */
+    this.createEvent("recordsDeleteEvent");
+    
+    /**
+     * Fired when all Records are deleted from the RecordSet at once.
+     *
+     * @event resetEvent
+     */
+    this.createEvent("resetEvent");
+
     /**
      * Fired when a Record field is updated with new data.
      *
@@ -95,6 +139,46 @@ YAHOO.widget.RecordSet.prototype._length = null;
 // Private methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Adds one Record to the RecordSet at the given index. If index is null,
+ * then adds the Record to the end of the RecordSet.
+ *
+ * @method _addRecord
+ * @param oData {Object} An object literal of data.
+ * @param index {Number} (optional) Position index.
+ * @return {YAHOO.widget.Record} A Record instance.
+ * @private
+ */
+YAHOO.widget.RecordSet.prototype._addRecord = function(oData, index) {
+    var oRecord = new YAHOO.widget.Record(oData);
+    if(YAHOO.lang.isNumber(index) && (index > -1)) {
+        this._records.splice(index,0,oRecord);
+    }
+    else {
+        index = this.getLength();
+        this._records.push(oRecord);
+    }
+    this._length++;
+    return oRecord;
+};
+
+/**
+ * Deletes Records from the RecordSet at the given index. If range is null,
+ * then only one Record is deleted.
+ *
+ * @method _deleteRecord
+ * @param index {Number} Position index.
+ * @param range {Number} (optional) How many Records to delete
+ * @private
+ */
+YAHOO.widget.RecordSet.prototype._deleteRecord = function(index, range) {
+    if(!YAHOO.lang.isNumber(range) || (range < 0)) {
+        range = 1;
+    }
+    this._records.splice(index, range);
+    this._length = this._length - range;
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -206,6 +290,68 @@ YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
 };*/
 
 /**
+ * Adds one Record to the RecordSet at the given index. If index is null,
+ * then adds the Record to the end of the RecordSet.
+ *
+ * @method addRecord
+ * @param oData {Object} An object literal of data.
+ * @param index {Number} (optional) Position index.
+ * @return {YAHOO.widget.Record} A Record instance.
+ */
+YAHOO.widget.RecordSet.prototype.addRecord = function(oData, index) {
+    if(oData && (oData.constructor == Object)) {
+        var oRecord = this._addRecord(oData, index);
+        this.fireEvent("recordAddEvent",{record:oRecord,data:oData});
+        YAHOO.log("Added Record at index " + index +
+                " with data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+        return oRecord;
+    }
+    else {
+        YAHOO.log("Could not add Record with data" +
+                YAHOO.widget.Logger.dump(oData), "info", this.toString());
+        return null;
+    }
+};
+
+/**
+ * Adds multiple Records at once to the RecordSet at the given index with the
+ * given data. If index is null, then the new Records are added to the end of
+ * the RecordSet.
+ *
+ * @method addRecords
+ * @param aData {Object[]} An array of object literal data.
+ * @param index {Number} (optional) Position index.
+ * @return {YAHOO.widget.Record[]} An array of Record instances.
+ */
+YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
+    if(YAHOO.lang.isArray(aData)) {
+        var newRecords = [];
+        // Can't go backwards bc we need to preserve order
+        for(var i=0; i<aData.length; i++) {
+            if(aData[i] && (aData[i].constructor == Object)) {
+                var record = this._addRecord(aData[i], index);
+                newRecords.push(record);
+            }
+       }
+        this.fireEvent("recordsAddEvent",{records:newRecords,data:aData});
+        YAHOO.log("Added " + newRecords.length + " Record(s) at index " + index +
+                " with data " + YAHOO.widget.Logger.dump(aData), "info", this.toString());
+       return newRecords;
+    }
+    else if(aData && (aData.constructor == Object)) {
+        var oRecord = this._addRecord(aData);
+        this.fireEvent("recordsAddEvent",{records:[oRecord],data:aData});
+        YAHOO.log("Added 1 Record at index " + index +
+                " with data " + YAHOO.widget.Logger.dump(aData), "info", this.toString());
+        return oRecord;
+    }
+    else {
+        YAHOO.log("Could not add Records with data " +
+                YAHOO.widget.Logger.dump(aData), "info", this.toString());
+    }
+};
+
+/**
  * Updates given Record with given data.
  *
  * @method updateRecord
@@ -223,6 +369,7 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
         oRecord = record;
     }
     if(oRecord && oData && (oData.constructor == Object)) {
+        // Copy data from the Record for the event that gets fired later
         var oldData = {};
         for(var key in oRecord) {
             oldData[key] = oRecord._oData[key];
@@ -230,7 +377,7 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
         oRecord._oData = oData;
         this.fireEvent("recordUpdateEvent",{record:oRecord,newData:oData,oldData:oldData});
         YAHOO.log("Record at index " + this.getRecordIndex(oRecord) +
-                "updated with data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+                " updated with data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
         return oRecord;
     }
     else {
@@ -249,123 +396,24 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
  * @param oData {Object) New data.
  */
 YAHOO.widget.RecordSet.prototype.updateField = function(record, sField, oData) {
+    var oRecord;
+    
     if(YAHOO.lang.isNumber(record)) {
-        record = this._records[record];
+        oRecord = this._records[record];
     }
     if(record instanceof YAHOO.widget.Record) {
-        // TODO: copy by value for non-primitives?
-        var oldData = record._oData[sField];
-        record._oData[sField] = oData;
-        this.fireEvent("fieldUpdateEvent",{record:record,field:sField,newData:oData,oldData:oldData});
+        oRecord = record;
+        var oldData = oRecord._oData[sField];
+        oRecord._oData[sField] = oData;
+        this.fireEvent("fieldUpdateEvent",{record:oRecord,field:sField,newData:oData,oldData:oldData});
+        YAHOO.log("Field " + sField +
+                " for Record at index " + this.getRecordIndex(oRecord) +
+                " updated to " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
     }
     else {
-        YAHOO.log("Could not update field due to invalid Record: " + record, "error", this.toString());
+        YAHOO.log("Could not update field " + sField + " for Record " + record, "error", this.toString());
     }
 };
-
-/**
- * Adds one Record to the RecordSet at the given index. If index is null,
- * then adds the Record to the end of the RecordSet.
- *
- * @method addRecord
- * @param oData {Object} An object literal of data.
- * @param index {Number} (optional) Position index.
- * @return {YAHOO.widget.Record} A Record instance.
- */
-YAHOO.widget.RecordSet.prototype.addRecord = function(oData, index) {
-    if(oData && (oData.constructor == Object)) {
-        var oRecord = new YAHOO.widget.Record(oData);
-        if(YAHOO.lang.isNumber(index) && (index > -1)) {
-            this._records.splice(index,0,oRecord);
-        }
-        else {
-            this._records.push(oRecord);
-        }
-        this._length++;
-        return oRecord;
-    }
-    else {
-        return null;
-    }
-};
-
-/**
- * Adds multiple Records to the RecordSet at the given index. If index is null,
- * then adds the Records to the end of the RecordSet.
- *
- * @method addRecords
- * @param aData {Object[]} An array of object literal data.
- * @param index {Number} (optional) Position index.
- * @return {YAHOO.widget.Record[]} An array of Record instances.
- */
-YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
-    if(YAHOO.lang.isArray(aData)) {
-        var newRecords = [];
-        // Can't go backwards bc we need to preserve order
-        for(var i=0; i<aData.length; i++) {
-            var record = this.addRecord(aData[i], index);
-            newRecords.push(record);
-       }
-       return newRecords;
-    }
-    else {
-        return this.addRecord(aData);
-    }
-};
-
-/*TODO: remove
- * Convenience method to append the given data to the end of the RecordSet.
- *
- * @method append
- * @param data {Object || Object[]} An object literal or array of data.
- * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.
- */
-/*YAHOO.widget.RecordSet.prototype.append = function(data) {
-    if(YAHOO.lang.isArray(data)) {
-        var newRecords = [];
-        // Cant't go backwards bc we need to preserve order
-        for(var i=0; i<data.length; i++) {
-            var record = this.addRecord(data[i]);
-            newRecords.push(record);
-            
-       }
-       YAHOO.log("RecordSet appended with " + newRecords.length + " Record(s)","info",this.toString());
-       return newRecords;
-    }
-    else if(data && (data.constructor == Object)) {
-        YAHOO.log("RecordSet appended with 1 Record","info",this.toString());
-        return this.addRecord(data);
-    }
-    else {
-        return null;
-    }
-    
-};*/
-
-/**TODO: remove
- * Convenience method to insert the given data into the beginning of the RecordSet.
- *
- * @method insert
- * @param data {Object || Object[]} An object literal or array of data.
- * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record or array of Records.
- */
-/*YAHOO.widget.RecordSet.prototype.insert = function(data) {
-    if(YAHOO.lang.isArray(data)) {
-        var newRecords = [];
-        // Can't go backwards bc we need to preserve order
-        for(var i=data.length-1; i>-1; i--) {
-            var record = this.addRecord(data[i], 0);
-            newRecords.push(record);
-       }
-       return newRecords;
-    }
-    else if(data && (data.constructor == Object)) {
-        return this.addRecord(data, 0);
-    }
-    else {
-        return null;
-    }
-};*/
 
 /**
  * Replaces all Records in RecordSet with new data.
@@ -377,7 +425,7 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
  * an array of Records.
  */
 YAHOO.widget.RecordSet.prototype.replaceRecords = function(data) {
-    this.deleteAllRecords();
+    this.reset();
     return this.addRecords(data);
 };
 
@@ -401,28 +449,76 @@ YAHOO.widget.RecordSet.prototype.sortRecords = function(fnSort) {
  * @method deleteRecord
  * @param index {Number} Record's RecordSet position index.
  * @param range {Number} (optional) How many Records to delete.
+ * @return {Object} A copy of the data held by the deleted Record.
  */
-YAHOO.widget.RecordSet.prototype.deleteRecord = function(index, range) {
+YAHOO.widget.RecordSet.prototype.deleteRecord = function(index) {
+    if(YAHOO.lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
+        // Copy data from the Record for the event that gets fired later
+        var oRecordData = this.getRecord(index).getData();
+        var oData = {};
+        for(var key in oRecordData) {
+            oData[key] = oRecordData[key];
+        }
+        
+        this._deleteRecord(index);
+        this.fireEvent("recordDeleteEvent",{data:oData,index:index});
+        YAHOO.log("Record deleted at index " + index +
+                " and containing data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+        return oData;
+    }
+    else {
+        YAHOO.log("Could not delete Record at index " + index, "error", this.toString());
+        return null;
+    }
+};
+
+/**
+ * Removes the Record at the given position index from the RecordSet. If a range
+ * is also provided, removes that many Records, starting from the index. Length
+ * of RecordSet is correspondingly shortened.
+ *
+ * @method deleteRecords
+ * @param index {Number} Record's RecordSet position index.
+ * @param range {Number} (optional) How many Records to delete.
+ */
+YAHOO.widget.RecordSet.prototype.deleteRecords = function(index, range) {
     if(!YAHOO.lang.isNumber(range)) {
         range = 1;
     }
-    if(YAHOO.lang.isNumber(index) && (index > -1)) {
-        this._records.splice(index, range);
-        this._length = this._length - range;
+    if(YAHOO.lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
+        var recordsToDelete = this.getRecords(index, range);
+        // Copy data from each Record for the event that gets fired later
+        var deletedData = [];
+        for(var i=0; i<recordsToDelete.length; i++) {
+            var oData = {};
+            for(var key in recordsToDelete[i]) {
+                oData[key] = recordsToDelete[i][key];
+            }
+            deletedData.push(oData);
+        }
+        this._deleteRecord(index, range);
+
+
+        this.fireEvent("recordsDeleteEvent",{data:deletedData,index:index});
+        YAHOO.log(range + "Record(s) deleted at index " + index +
+                " and containing data " + YAHOO.widget.Logger.dump(deletedData), "info", this.toString());
+
     }
     else {
-        YAHOO.log("Could not delete Record due to invalid index");
+        YAHOO.log("Could not delete Records at index " + index, "error", this.toString());
     }
 };
 
 /**
  * Deletes all Records from the RecordSet.
  *
- * @method deleteAllRecords
+ * @method reset
  */
-YAHOO.widget.RecordSet.prototype.deleteAllRecords = function() {
+YAHOO.widget.RecordSet.prototype.reset = function() {
     this._records = [];
     this._length = 0;
+    this.fireEvent("resetEvent");
+    YAHOO.log("All Records deleted from RecordSet", "info", this.toString());
 };
 
 

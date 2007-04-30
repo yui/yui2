@@ -2,11 +2,17 @@ YAHOO.example.Data = {
     apitester: [
         {number:0, date:new Date(1999, 1, 1), string:"1"},
         {number:1, date:new Date(1999, 10, 10), string:"12"},
-        {number:10, date:new Date(2000, 1, 1), string:"123"},
-        {number:11, date:new Date(2000, 10, 1), string:"10"},
-        {number:12, date:new Date(2001, 10, 12), string:"1"},
-        {number:112, date:new Date(2001, 1, 12), string:"123"},
-        {number:123, date:new Date(2001, 10, 1), string:"11"}
+        {number:2, date:new Date(2000, 1, 1), string:"123"},
+        {number:3, date:new Date(2000, 10, 1), string:"10"},
+        {number:4, date:new Date(2001, 10, 12), string:"1"},
+        {number:5, date:new Date(2001, 1, 12), string:"123"},
+        {number:6, date:new Date(2001, 10, 1), string:"11"},
+        {number:7, date:new Date(2001, 10, 1), string:"16"},
+        {number:8, date:new Date(2001, 10, 1), string:"8"},
+        {number:9, date:new Date(2001, 10, 1), string:"6"},
+        {number:10, date:new Date(2001, 10, 1), string:"66"},
+        {number:11, date:new Date(2001, 10, 1), string:"111"},
+        {number:12, date:new Date(2001, 10, 1), string:"110"}
     ],
 
     webstats: [
