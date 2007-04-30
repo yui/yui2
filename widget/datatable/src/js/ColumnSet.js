@@ -620,13 +620,12 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
                 classname = YAHOO.widget.DataTable.CLASS_STRING;
                 break;
         }
-
-        YAHOO.util.Dom.addClass(elCell, classname);
-        if(this.className) {
-            YAHOO.util.Dom.addClass(elCell, this.className);
-        }
     }
     
+    if(this.className) {
+        YAHOO.util.Dom.addClass(elCell, this.className);
+    }
+
     if(this.editor) {
         YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
     }

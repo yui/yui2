@@ -1687,7 +1687,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
 
     // It's an append if no index provided, or index is negative or too big
     var append = (!YAHOO.lang.isNumber(index) || (index < 0) ||
-            index > this._elTbody.rows.length-1) ? true : false;
+            index > (this._elTbody.rows.length-2)) ? true : false;
             
 
     var oColumnSet = this._oColumnSet;
@@ -1696,7 +1696,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     var elRow = (append) ? this._elTbody.appendChild(document.createElement("tr")) :
         this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]);
         
-    elRow.id = this.id+"-bdrow"+this._elTbody.rows.length-1;
+    elRow.id = this.id+"-bdrow"+(this._elTbody.rows.length-1);
     elRow.yuiRecordId = oRecord.getId();
 
     // Create TBODY cells
