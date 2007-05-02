@@ -58,19 +58,15 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             
             // Add the new Column to the flat list
             flat.push(oColumn);
-            
+
             // Assign its parent as an attribute, if applicable
             if(parent) {
-                oColumn._parent = parent;
+                oColumn.parent = parent;
             }
 
             // The Column has descendants
             if(YAHOO.lang.isArray(currentNode.children)) {
-                oColumn._children = [];
-                // Copy by value
-                for(var x=0; x<currentNode.children; x++) {
-                    oColumn._children[x] = currentNode.children[x];
-                }
+                oColumn.children = currentNode.children;
             
                 // Determine COLSPAN value for this Column
                 var terminalChildNodes = 0;
@@ -150,16 +146,19 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         var currentRow;
         var currentColumn;
         
+        // Calculate the max depth of descendants for this row
         var countMaxRowDepth = function(row, tmpRowDepth) {
             tmpRowDepth = tmpRowDepth || 1;
 
             for(var n=0; n<row.length; n++) {
                 var col = row[n];
+                // Column has children, so keep counting
                 if(YAHOO.lang.isArray(col.children)) {
                     tmpRowDepth++;
                     countMaxRowDepth(col.children, tmpRowDepth);
                     tmpRowDepth--;
                 }
+                // No children, is it the max depth?
                 else {
                     if(tmpRowDepth > maxRowDepth) {
                         maxRowDepth = tmpRowDepth;
@@ -181,7 +180,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     currentColumn._rowspan = maxRowDepth;
                 }
                 else {
-                    currentColumn._rowSpan = 1;
+                    currentColumn._rowspan = 1;
                 }
             }
 
@@ -199,8 +198,8 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     // Store header relationships in an array for HEADERS attribute
     var recurseAncestorsForHeaders = function(i, oColumn) {
         headers[i].push(oColumn._id);
-        if(oColumn._parent) {
-            recurseAncestorsForHeaders(i, oColumn._parent);
+        if(oColumn.parent) {
+            recurseAncestorsForHeaders(i, oColumn.parent);
         }
     };
     for(var i=0; i<keys.length; i++) {
@@ -278,7 +277,7 @@ YAHOO.widget.ColumnSet.prototype.flat = null;
 YAHOO.widget.ColumnSet.prototype.keys = null;
 
 /**
- * ID index of nested parent heirarchies for HEADERS accessibility attribute.
+ * ID index of nested parent hierarchies for HEADERS accessibility attribute.
  *
  * @property headers
  * @type String[]
@@ -385,24 +384,13 @@ YAHOO.widget.Column.prototype._colspan = 1;
 YAHOO.widget.Column.prototype._rowspan = 1;
 
 /**
- * Column's parent, or null.
+ * Column's parent Column instance, or null.
  *
  * @property _parent
  * @type YAHOO.widget.Column
  * @private
  */
 YAHOO.widget.Column.prototype._parent = null;
-
-/**
- * Array of Column's chilren, or null.
- *
- * @property _children
- * @type YAHOO.widget.Column[]
- * @private
- */
-YAHOO.widget.Column.prototype._children = null;
-
-//TODO: clean these up
 
 /**
  * Current offsetWidth of the Column (in pixels).
@@ -591,26 +579,34 @@ YAHOO.widget.Column.prototype.getIndex = function() {
 };
 
 /**
- * Public accessor returns Column's colspan number.
+ * Public accessor returns Column's parent instance if any, or null otherwise.
  *
- * @method getColSpan
- * @return {Number} Column's colspan number.
+ * @property getParent
+ * @return {YAHOO.widget.Column} Column's parent instance.
  */
-YAHOO.widget.Column.prototype.getColSpan = function() {
+YAHOO.widget.Column.prototype.getParent = function() {
+    return this._parent;
+};
+
+/**
+ * Public accessor returns Column's calculated COLSPAN value.
+ *
+ * @property getColspan
+ * @return {Number} Column's COLSPAN value.
+ */
+YAHOO.widget.Column.prototype.getColspan = function() {
     return this._colspan;
 };
 
 /**
- * Public accessor returns Column's rowspan number.
+ * Public accessor returns Column's calculated ROWSPAN value.
  *
- * @method getRowSpan
- * @return {Number} Column's rowspan number.
+ * @property getRowspan
+ * @return {Number} Column's ROWSPAN value.
  */
-YAHOO.widget.Column.prototype.getRowSpan = function() {
+YAHOO.widget.Column.prototype.getRowspan = function() {
     return this._rowspan;
 };
-
-
 /**
  * Outputs markup into the given TD based on given Record.
  *

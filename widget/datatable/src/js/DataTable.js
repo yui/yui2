@@ -1516,8 +1516,8 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     }
 
     elTheadCell.innerHTML = "";
-    elTheadCell.rowSpan = oColumn.getRowSpan();
-    elTheadCell.colSpan = oColumn.getColSpan();
+    elTheadCell.rowSpan = oColumn.getRowspan();
+    elTheadCell.colSpan = oColumn.getColspan();
 
     var elTheadContainer = elTheadCell.appendChild(document.createElement("div"));
     elTheadContainer.id = this.id+"-hdrow"+row+"-container"+col;
