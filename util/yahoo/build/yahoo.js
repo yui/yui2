@@ -213,7 +213,11 @@ YAHOO.env.getVersion = function(name) {
  * Do not fork for a browser if it can be avoided.  Use feature detection when
  * you can.  Use the user agent as a last resort.  YAHOO.env.ua stores a version
  * number for the browser engine, 0 otherwise.  This value may or may not map
- * to the version number of the browser.
+ * to the version number of the browser using the engine.  The value is 
+ * presented as a float so that it can easily be used for boolean evaluation 
+ * as well as for looking for a particular range of versions.  Because of this, 
+ * some of the granularity of the version info may be lost (e.g., Gecko 1.8.0.9 
+ * reports 1.8).
  * @class YAHOO.env.ua
  * @static
  */
@@ -221,29 +225,50 @@ YAHOO.env.ua = function() {
     var o={
 
         /**
-         * Internet Explorer version number or 0
+         * Internet Explorer version number or 0.  Example: 6
          * @property ie
          * @type float
          */
         ie:0,
 
         /**
-         * Opera version number or 0
+         * Opera version number or 0.  Example: 9.2
          * @property opera
          * @type float
          */
         opera:0,
 
         /**
-         * Gecko engine version or 0
+         * Gecko engine revision number.  Will evaluate to 1 if Gecko 
+         * is detected but the revision could not be found. Other browsers
+         * will be 0.  Example: 1.8
+         * <pre>
+         * Firefox 1.0.0.4: 1.7.8   <-- Reports 1.7
+         * Firefox 1.5.0.9: 1.8.0.9 <-- Reports 1.8
+         * Firefox 2.0.0.3: 1.8.1.3 <-- Reports 1.8
+         * Firefox 3 alpha: 1.9a4   <-- Reports 1.9
+         * </pre>
          * @property gecko
          * @type float
          */
         gecko:0,
 
         /**
-         * AppleWebKit version number.  KHTML browsers that are not WebKit
-         * browsers will evaluate to 1, other browsers 0.
+         * AppleWebKit version.  KHTML browsers that are not WebKit browsers 
+         * will evaluate to 1, other browsers 0.  Example: 418.9.1
+         * <pre>
+         * Safari 1.3.2 (312.6): 312.8.1 <-- Reports 312.8 -- currently the 
+         *                                   latest available for Mac OSX 10.3.
+         * Safari 2.0.2:         416     <-- hasOwnProperty introduced
+         * Safari 2.0.4:         418     <-- preventDefault fixed
+         * Safari 2.0.4 (419.3): 418.9.1 <-- One version of Safari may run
+         *                                   different versions of webkit
+         * Safari 2.0.4 (419.3): 419     <-- Current Safari release
+         * Webkit 212 nightly:   522+    <-- Safari 3.0 (with native SVG) should
+         *                                   be higher than this
+         *                                   
+         * </pre>
+         * http://developer.apple.com/internet/safari/uamatrix.html
          * @property webkit
          * @type float
          */
@@ -273,8 +298,12 @@ YAHOO.env.ua = function() {
                 o.ie=parseFloat(m[1]);
             } else { // not opera, webkit, or ie
                 m=ua.match(/Gecko\/([^\s]*)/);
-                if (m&&m[1]) {
-                    o.gecko=parseFloat(m[1]);
+                if (m) {
+                    o.gecko=1; // Gecko detected, look for revision
+                    m=ua.match(/rv:([^\s\)]*)/);
+                    if (m&&m[1]) {
+                        o.gecko=parseFloat(m[1]);
+                    }
                 }
             }
         }
@@ -289,89 +318,92 @@ YAHOO.env.ua = function() {
  */
 YAHOO.lang = {
     /**
-     * Determines whether or not the provided object is an array
+     * Determines whether or not the provided object is an array.
+     * Testing typeof/instanceof/constructor of arrays across frame 
+     * boundaries isn't possible in Safari unless you have a reference
+     * to the other frame to test against its Array prototype.  To
+     * handle this case, we test well-known array properties instead.
+     * properties.
      * @method isArray
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    isArray: function(obj) { // frames lose type, so test constructor string
-        if (obj && obj.constructor && 
-                   obj.constructor.toString().indexOf('Array') > -1) {
-            return true;
-        } else {
-            return YAHOO.lang.isObject(obj) && obj.constructor == Array;
-        }
+    isArray: function(o) { 
+        return YAHOO.lang.isObject(o) && 
+               YAHOO.lang.isNumber(o.length) && 
+               YAHOO.lang.isFunction(o.splice) && 
+               !YAHOO.lang.hasOwnProperty(o.length);
     },
 
     /**
      * Determines whether or not the provided object is a boolean
      * @method isBoolean
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    isBoolean: function(obj) {
-        return typeof obj == 'boolean';
+    isBoolean: function(o) {
+        return typeof o === 'boolean';
     },
     
     /**
      * Determines whether or not the provided object is a function
      * @method isFunction
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    isFunction: function(obj) {
-        return typeof obj == 'function';
+    isFunction: function(o) {
+        return typeof o === 'function';
     },
         
     /**
      * Determines whether or not the provided object is null
      * @method isNull
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    isNull: function(obj) {
-        return obj === null;
+    isNull: function(o) {
+        return o === null;
     },
         
     /**
      * Determines whether or not the provided object is a legal number
      * @method isNumber
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    isNumber: function(obj) {
-        return typeof obj == 'number' && isFinite(obj);
+    isNumber: function(o) {
+        return typeof o === 'number' && isFinite(o);
     },
       
     /**
      * Determines whether or not the provided object is of type object
      * or function
      * @method isObject
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */  
-    isObject: function(obj) {
-return (obj && (typeof obj == 'object' || YAHOO.lang.isFunction(obj))) || false;
+    isObject: function(o) {
+return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     },
         
     /**
      * Determines whether or not the provided object is a string
      * @method isString
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    isString: function(obj) {
-        return typeof obj == 'string';
+    isString: function(o) {
+        return typeof o === 'string';
     },
         
     /**
      * Determines whether or not the provided object is undefined
      * @method isUndefined
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    isUndefined: function(obj) {
-        return typeof obj == 'undefined';
+    isUndefined: function(o) {
+        return typeof o === 'undefined';
     },
     
     /**
@@ -391,16 +423,16 @@ return (obj && (typeof obj == 'object' || YAHOO.lang.isFunction(obj))) || false;
      * alert(YAHOO.lang.hasOwnProperty(a, 'foo')); // false when using fallback
      * </pre>
      * @method hasOwnProperty
-     * @param {any} obj The object being testing
+     * @param {any} o The object being testing
      * @return Boolean
      */
-    hasOwnProperty: function(obj, prop) {
+    hasOwnProperty: function(o, prop) {
         if (Object.prototype.hasOwnProperty) {
-            return obj.hasOwnProperty(prop);
+            return o.hasOwnProperty(prop);
         }
         
-        return !YAHOO.lang.isUndefined(obj[prop]) && 
-                obj.constructor.prototype[prop] !== obj[prop];
+        return !YAHOO.lang.isUndefined(o[prop]) && 
+                o.constructor.prototype[prop] !== o[prop];
     },
  
     /**
