@@ -1,7 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - Row Selection (YUI Library)</title>
+<title>Example: DataTable - Row and Cell Selection (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -23,8 +23,8 @@
     <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Row Selection</h1>
 </div>
 <div id="bd">
-    <div id="standardselect" class="selectionexample"></div>
-    <div id="singleselect" class="selectionexample"></div>
+    <div id="rowmultiselect" class="selectionexample"></div>
+    <div id="cellsingleselect" class="selectionexample"></div>
 
     <!-- Sample code begins -->
     <div id="code">
@@ -131,19 +131,33 @@ YAHOO.example.RowSelection = new function() {
         fields: ["Date","To","From","Subject","XID","Date","Attachment"]
     };
 
-    // Default selection mode
-    this.defaultDataTable = new YAHOO.widget.DataTable("standardselect",
-            this.myColumnSet, this.myDataSource, {caption:"Example: Default Selection Mode"});
-    this.defaultDataTable.subscribe("cellClickEvent", this.defaultDataTable.onEventSelectRow);
+    // Row selection model
+    var rowSelectionModel = {
+        mode:"row",
+        eventName:"cellClickEvent",
+        enableMulti:true,
+        enableWraparound:true
+    };
+    this.myDataTable1 = new YAHOO.widget.DataTable("rowmultiselect",
+            this.myColumnSet, this.myDataSource, {
+                caption:"Example: Row Selection Mode on Click with Multi-Select & Wraparound Enabled",
+                selectionModel:rowSelectionModel
+            });
+    // Programmatically elect the first row immediately
+    this.myDataTable1.select(this.myDataTable1.getTrEl(0));
 
-    // Single-row selection mode
-    this.singleSelectDataTable = new YAHOO.widget.DataTable("singleselect",
-            this.myColumnSet, this.myDataSource,
-            {caption:"Example: Single-row Selection Mode", rowSingleSelect:true});
-    this.singleSelectDataTable.subscribe("cellClickEvent", this.singleSelectDataTable.onEventSelectRow);
-
-    // Select the first row immediately
-    this.singleSelectDataTable.select(this.singleSelectDataTable.getTrEl(0));
+    // Cell selection model
+    var cellSelectionModel = {
+        mode:"cell",
+        eventName:"cellDblclickEvent",
+        enableMulti:false,
+        enableWraparound:false
+    };
+    this.singleSelectDataTable = new YAHOO.widget.DataTable("cellsingleselect",
+            this.myColumnSet, this.myDataSource, {
+                caption:"Example: Single-row Selection Mode",
+                selectionModel:cellSelectionModel
+            });
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

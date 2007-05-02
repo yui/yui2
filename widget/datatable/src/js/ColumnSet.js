@@ -24,67 +24,77 @@
  * @param aHeaders {Object[]} Array of object literals that define header cells.
  */
 YAHOO.widget.ColumnSet = function(aHeaders) {
-//TODO: break out nested functions into private methods
     this._sName = "instance" + YAHOO.widget.ColumnSet._nCount;
 
-    // Top-down tree representation of all Columns
+    // DOM tree representation of all Columns
     var tree = [];
     // Flat representation of all Columns
     var flat = [];
-    // Flat representation of only Columns that display data
+    // Flat representation of only Columns that are meant to display data
     var keys = [];
-    // ID index of nested parent heirarchies for HEADERS attribute
+    // Array of HEADERS attribute values for all keys in the "keys" array
     var headers = [];
 
-    var nodelevel = -1;
+    // Tracks current node list depth being tracked
+    var nodeDepth = -1;
 
-    // Internal recursive function to parse Columns out of object literal defs
+    // Internal recursive function to defined Column instances
     var parseColumns = function(nodeList, parent) {
-        nodelevel++;
-        // A node level is an array of Columns
-        if(!tree[nodelevel]) {
-            tree[nodelevel] = [];
+        // One level down
+        nodeDepth++;
+        
+        // Create corresponding tree node if not already there for this depth
+        if(!tree[nodeDepth]) {
+            tree[nodeDepth] = [];
         }
 
-        // Determine depth of descendants at this level for node's rowspan
-        var nodeLevelMaxChildren = 0;
-        var recurseChildren = function(nodeList) {
-            var tmpMax = 0;
-            for(var i=0; i<nodeList.length; i++) {
-                if(nodeList[i].children) {
-                    tmpMax++;
-                    recurseChildren(nodeList[i].children);
-                }
-                if(tmpMax > nodeLevelMaxChildren) {
-                    nodeLevelMaxChildren = tmpMax;
-                }
-            }
-        };
-        recurseChildren(nodeList);
 
-        // Parse each node for attributes and any children
+        // Parse each node at this depth for attributes and any children
         for(var j=0; j<nodeList.length; j++) {
-            // Instantiate a Column for each node
-            var oColumn = new YAHOO.widget.Column(nodeList[j]);
+            var currentNode = nodeList[j];
+            
+            // Instantiate a new Column for each node
+            var oColumn = new YAHOO.widget.Column(currentNode);
+            
+            // Add the new Column to the flat list
             flat.push(oColumn);
             
-            // Assign parent, if applicable
+            // Assign its parent as an attribute, if applicable
             if(parent) {
                 oColumn._parent = parent;
             }
 
-            // Start with default values
-            oColumn._rowspan = 1;
-            oColumn._colspan = 1;
-
-            // Column may have children
-            if(nodeList[j].children) {
-                var children = nodeList[j].children;
-                var length = children.length;
+            // The Column has descendants
+            if(YAHOO.lang.isArray(currentNode.children)) {
+                oColumn._children = [];
+                // Copy by value
+                for(var x=0; x<currentNode.children; x++) {
+                    oColumn._children[x] = currentNode.children[x];
+                }
+            
+                // Determine COLSPAN value for this Column
+                var terminalChildNodes = 0;
+                var countTerminalChildNodes = function(ancestor) {
+                    var descendants = ancestor.children;
+                    // Drill down each branch and count terminal nodes
+                    for(var k=0; k<descendants.length; k++) {
+                        // Keep drilling down
+                        if(YAHOO.lang.isArray(descendants[k].children)) {
+                            countTerminalChildNodes(descendants[k]);
+                        }
+                        // Reached branch terminus
+                        else {
+                            terminalChildNodes++;
+                        }
+                    }
+                };
+                countTerminalChildNodes(currentNode);
+                oColumn._colspan = terminalChildNodes;
                 
                 // Cascade certain properties to children if not defined on their own
-                for(var k=0; k<length; k++) {
-                    var child = children[k];
+                var currentChildren = currentNode.children;
+                for(k=0; k<currentChildren.length; k++) {
+                    var child = currentChildren[k];
                     if(oColumn.className && (child.className === undefined)) {
                         child.className = oColumn.className;
                     }
@@ -108,66 +118,99 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     }
                 }
                 
-                // Children increase colspan of the Column
-                oColumn._colspan = length;
-
-                // Children increase colspan of the Column's parent
-                if (parent && parent._colspan) {
-                    parent._colspan += length-1;
-                    parent._children = [];
-                    parent._children.push(oColumn);
+                // The children themselves must also be parsed for Column instances
+                if(!tree[nodeDepth+1]) {
+                    tree[nodeDepth+1] = [];
                 }
-                
-                // Children must also be parsed
-                if(!tree[nodelevel+1]) {
-                    tree[nodelevel+1] = [];
-                }
-               parseColumns(children, oColumn);
+                parseColumns(currentChildren, oColumn);
             }
-            
-            // This Column does not have children,
-            // but other Columns at this level do
-            else if(nodeLevelMaxChildren > 0) {
-                // Children of siblings increase the rowspan of the Column
-                oColumn._rowspan += nodeLevelMaxChildren;
-                //if(oColumn.key) {
-                    oColumn._index = keys.length;
-                    keys.push(oColumn);
-                //}
-            }
-            // This entire node level does not have any children
+            // This Column does not have any children
             else {
                 //if(oColumn.key) {
                     oColumn._index = keys.length;
                     keys.push(oColumn);
                 //}
+                oColumn._colspan = 1;
             }
 
             // Add the Column to the top-down tree
-            tree[nodelevel].push(oColumn);
+            tree[nodeDepth].push(oColumn);
         }
-        nodelevel--;
+        nodeDepth--;
     };
 
-    // Do the parsing
-    if(aHeaders.length > 0) {
+    // Parse out Column instances from the array of object literals
+    if(YAHOO.lang.isArray(aHeaders)) {
         parseColumns(aHeaders);
     }
 
-    // Store header nesting in an array
-    var recurseAncestors = function(i, oColumn) {
+    // Determine ROWSPAN value for each Column in the tree
+    var parseTreeForRowspan = function(tree) {
+        var maxRowDepth = 1;
+        var currentRow;
+        var currentColumn;
+        
+        var countMaxRowDepth = function(row, tmpRowDepth) {
+            tmpRowDepth = tmpRowDepth || 1;
+
+            for(var n=0; n<row.length; n++) {
+                var col = row[n];
+                if(YAHOO.lang.isArray(col.children)) {
+                    tmpRowDepth++;
+                    countMaxRowDepth(col.children, tmpRowDepth);
+                    tmpRowDepth--;
+                }
+                else {
+                    if(tmpRowDepth > maxRowDepth) {
+                        maxRowDepth = tmpRowDepth;
+                    }
+                }
+                
+            }
+        };
+
+        // Count max row depth for each row
+        for(var m=0; m<tree.length; m++) {
+            currentRow = tree[m];
+            countMaxRowDepth(currentRow);
+
+            // Assign the right ROWSPAN values to each Column in the row
+            for(var p=0; p<currentRow.length; p++) {
+                currentColumn = currentRow[p];
+                if(!YAHOO.lang.isArray(currentColumn.children)) {
+                    currentColumn._rowspan = maxRowDepth;
+                }
+                else {
+                    currentColumn._rowSpan = 1;
+                }
+            }
+
+            // Reset row counters for next row
+            maxRowDepth = 1;
+            tmpRowDepth = 1;
+        }
+    };
+    parseTreeForRowspan(tree);
+
+
+
+
+
+    // Store header relationships in an array for HEADERS attribute
+    var recurseAncestorsForHeaders = function(i, oColumn) {
         headers[i].push(oColumn._id);
         if(oColumn._parent) {
-            recurseAncestors(i, oColumn._parent);
+            recurseAncestorsForHeaders(i, oColumn._parent);
         }
     };
     for(var i=0; i<keys.length; i++) {
         headers[i] = [];
-        recurseAncestors(i, keys[i]);
+        recurseAncestorsForHeaders(i, keys[i]);
         headers[i] = headers[i].reverse();
         headers[i] = headers[i].join(" ");
     }
 
+    // Save to the ColumnSet instance
     this.tree = tree;
     this.flat = flat;
     this.keys = keys;

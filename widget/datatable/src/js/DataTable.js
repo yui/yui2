@@ -161,6 +161,246 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
 
     /////////////////////////////////////////////////////////////////////////////
     //
+    // Custom Event Wrappers for DOM Events
+    //
+    /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Fired when DataTable has a focus.
+     *
+     * @event tableFocusEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
+     */
+    this.createEvent("tableFocusEvent");
+
+    /**
+     * Fired when the DataTable has a mouseover.
+     *
+     * @event tableMouseoverEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
+     *
+     */
+    this.createEvent("tableMouseoverEvent");
+
+    /**
+     * Fired when the DataTable has a mouseout.
+     *
+     * @event tableMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
+     *
+     */
+    this.createEvent("tableMouseoutEvent");
+
+    /**
+     * Fired when the DataTable has a mousedown.
+     *
+     * @event tableMousedownEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
+     *
+     */
+    this.createEvent("tableMousedownEvent");
+
+    /**
+     * Fired when the DataTable has a click.
+     *
+     * @event tableClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
+     *
+     */
+    this.createEvent("tableClickEvent");
+
+    /**
+     * Fired when the DataTable has a dblclick.
+     *
+     * @event tableDblclickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
+     *
+     */
+    this.createEvent("tableDblclickEvent");
+    
+    /**
+     * Fired when a head cell has a mouseover.
+     *
+     * @event headCellMouseoverEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     *
+     */
+    this.createEvent("headCellMouseoverEvent");
+
+    /**
+     * Fired when a head cell has a mouseout.
+     *
+     * @event headCellMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     *
+     */
+    this.createEvent("headCellMouseoutEvent");
+
+    /**
+     * Fired when a head cell has a mousedown.
+     *
+     * @event headCellMousedownEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     */
+    this.createEvent("headCellMousedownEvent");
+
+    /**
+     * Fired when a head cell has a click.
+     *
+     * @event headCellClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     */
+    this.createEvent("headCellClickEvent");
+
+    /**
+     * Fired when a head cell has a dblclick.
+     *
+     * @event headCellDblclickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     */
+    this.createEvent("headCellDblclickEvent");
+
+    /**
+     * Fired when a head label has a mouseover.
+     *
+     * @event headLabelMouseoverEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The SPAN element.
+     *
+     */
+    this.createEvent("headLabelMouseoverEvent");
+
+    /**
+     * Fired when a head label has a mouseout.
+     *
+     * @event headLabelMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The SPAN element.
+     *
+     */
+    this.createEvent("headLabelMouseoutEvent");
+
+    /**
+     * Fired when a head label has a mousedown.
+     *
+     * @event headLabelMousedownEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The SPAN element.
+     */
+    this.createEvent("headLabelMousedownEvent");
+
+    /**
+     * Fired when a head label has a click.
+     *
+     * @event headLabelClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The SPAN element.
+     */
+    this.createEvent("headLabelClickEvent");
+
+    /**
+     * Fired when a head label has a dblclick.
+     *
+     * @event headLabelDblclickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The SPAN element.
+     */
+    this.createEvent("headLabelDblclickEvent");
+
+    /**
+     * Fired when a cell has a mouseover.
+     *
+     * @event cellMouseoverEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellMouseoverEvent");
+
+    /**
+     * Fired when a cell has a mouseout.
+     *
+     * @event cellMouseoutEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellMouseoutEvent");
+
+    /**
+     * Fired when a cell has a mousedown.
+     *
+     * @event cellMousedownEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellMousedownEvent");
+
+    /**
+     * Fired when a cell has a click.
+     *
+     * @event cellClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellClickEvent");
+
+    /**
+     * Fired when a cell has a dblclick.
+     *
+     * @event cellDblclickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+    this.createEvent("cellDblclickEvent");
+
+    /**
+     * Fired when a link has a click.
+     *
+     * @event linkClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The A element.
+     */
+    this.createEvent("linkClickEvent");
+
+    /**
+     * Fired when a CHECKBOX element is clicked.
+     *
+     * @event checkboxClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The CHECKBOX element.
+     */
+    this.createEvent("checkboxClickEvent");
+
+    /**
+     * Fired when a SELECT element is changed.
+     *
+     * @event selectChangeEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The SELECT element.
+     */
+    this.createEvent("selectChangeEvent");
+    
+    /**
+     * Fired when a RADIO element is clicked.
+     *
+     * @event radioClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The RADIO element.
+     */
+    this.createEvent("radioClickEvent");
+    
+    /////////////////////////////////////////////////////////////////////////////
+    //
     // Custom Events
     //
     /////////////////////////////////////////////////////////////////////////////
@@ -173,164 +413,54 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("initEvent");
 
     /**
-     * Fired when a mouseover occurs on a TD element.
+     * Fired when DataTable view is refreshed.
      *
-     * @event cellMouseoverEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TD element.
+     * @event tableRefreshEvent
      */
-    this.createEvent("cellMouseoverEvent");
+    this.createEvent("tableRefreshEvent");
 
     /**
-     * Fired when a mouseout occurs on a TD element.
+     * Fired when DataTable paginator is updated.
      *
-     * @event cellMouseoutEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TD element.
+     * @event paginatorUpdateEvent
      */
-    this.createEvent("cellMouseoutEvent");
+    this.createEvent("paginatorUpdateEvent");
 
     /**
-     * Fired when a TH cell element is mouseover.
+     * Fired when data is returned from DataSource.
      *
-     * @event headCellMouseoverEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TH element.
-     *
+     * @event dataReturnEvent
+     * @param oArgs.request {String} Original request.
+     * @param oArgs.response {Object} Response object.
      */
-    this.createEvent("headCellMouseoverEvent");
-
-    /**
-     * Fired when a TH cell element is mouseout.
-     *
-     * @event headCellMouseoutEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TH element.
-     *
-     */
-    this.createEvent("headCellMouseoutEvent");
-
-    /**
-     * Fired when a TABLE element is mouseover.
-     *
-     * @event tableMouseoverEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
-     */
-    this.createEvent("tableMouseoverEvent");
-
-    /**
-     * Fired when a TABLE element is mouseout.
-     *
-     * @event tableMouseoutEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
-     */
-    this.createEvent("tableMouseoutEvent");
-
-    /**
-     * Fired when a mousedown occurs on a TD element.
-     *
-     * @event cellMousedownEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TD element.
-     */
-    this.createEvent("cellMousedownEvent");
-
-    /**
-     * Fired when a TH cell element is mousedown.
-     *
-     * @event headCellMousedownEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TH element.
-     */
-    this.createEvent("headCellMousedownEvent");
-
-    /**
-     * Fired when a TABLE element is mousedown.
-     *
-     * @event tableMousedownEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
-     */
-    this.createEvent("tableMousedownEvent");
-
-    /**
-     * Fired when a CHECKBOX element is clicked.
-     *
-     * @event checkboxClickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The CHECKBOX element.
-     */
-    this.createEvent("checkboxClickEvent");
-
-    /**
-     * Fired when a RADIO element is clicked.
-     *
-     * @event radioClickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The RADIO element.
-     */
-    this.createEvent("radioClickEvent");
+    this.createEvent("dataReturnEvent");
     
     /**
-     * Fired when a TD element is clicked.
+     * Fired when a row is added.
      *
-     * @event cellClickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TD element.
+     * @event rowAddEvent
+     * @param oArgs.data {Object} The data added.
+     * @param oArgs.trElId {String} The ID of the added TR element, if any.
      */
-    this.createEvent("cellClickEvent");
+    this.createEvent("rowAddEvent");
 
     /**
-     * Fired when a TH cell element is clicked.
+     * Fired when a row is updated.
      *
-     * @event headCellClickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TH element.
+     * @event rowUpdateEvent
+     * @param oArgs.newData {Object} The new data.
+     * @param oArgs.oldData {Object} The old data.
+     * @param oArgs.trElId {Array} The ID of the updated TR element, if any.
      */
-    this.createEvent("headCellClickEvent");
+    this.createEvent("rowUpdateEvent");
 
     /**
-     * Fired when a TABLE element is clicked.
+     * Fired when one or more TR elements are deleted.
      *
-     * @event tableClickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
+     * @event rowDeleteEvent
+     * @param oArgs.rowIndexes {Array} The indexes of the deleted rows.
      */
-    this.createEvent("tableClickEvent");
-
-    /**
-     * Fired when a TD element is doubleclicked.
-     *
-     * @event cellDblclickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TD element.
-     */
-    this.createEvent("cellDblclickEvent");
-
-    /**
-     * Fired when a TH cell element is doubleclicked.
-     *
-     * @event headCellDblclickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TH element.
-     */
-    this.createEvent("headCellDblclickEvent");
-
-    /**
-     * Fired when a TABLE element is doubleclicked.
-     *
-     * @event tableDblclickEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The TABLE element.
-     *
-     */
-    this.createEvent("tableDblclickEvent");
+    this.createEvent("rowDeleteEvent");
 
     /**
      * Fired when a column is sorted.
@@ -340,6 +470,14 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      * @param oArgs.dir {String} Sort direction "asc" or "desc".
      */
     this.createEvent("columnSortEvent");
+
+    /**
+     * Fired when a column is resized.
+     *
+     * @event columnResizeEvent
+     * @param oArgs.target {HTMLElement} The TH element.
+     */
+    this.createEvent("columnResizeEvent");
 
     /**
      * Fired when an editor is activated.
@@ -360,98 +498,25 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      */
     this.createEvent("cellEditEvent");
 
-
-
-
-
-
-
-
-
-
-
     /**
-     * Fired when DataTable paginator is updated.
-     *
-     * @event paginatorUpdateEvent
-     */
-    this.createEvent("paginatorUpdateEvent");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Fired when a column is resized.
-     *
-     * @event columnResizeEvent
-     * @param oArgs.target {HTMLElement} The TH element.
-     */
-    this.createEvent("columnResizeEvent");
-
-    /**
-     * Fired when DataTable view is refreshed.
-     *
-     * @event tableRefreshEvent
-     */
-    this.createEvent("tableRefreshEvent");
-
-    /**
-     * Fired when DataTable instance is focused.
-     *
-     * @event tableFocusEvent
-     */
-    this.createEvent("tableFocusEvent");
-
-    /**
-     * Fired when data is returned from DataSource.
-     *
-     * @event dataReturnEvent
-     * @param oArgs.request {String} Original request.
-     * @param oArgs.response {Object} Response object.
-     */
-    this.createEvent("dataReturnEvent");
-
-    /*TODO: delete
-     * Fired when a TD element is formatted.
-     *
-     * @event cellFormatEvent
-     * @param oArgs.el {HTMLElement} Reference to the TD element.
-     */
-    //this.createEvent("cellFormatEvent");
-
-    /**
-     * Fired when an element is selected.
+     * Fired when an item is selected.
      *
      * @event selectEvent
-     * @param oArgs.els {Array} An array of the selected element(s).
+     * @param oArgs.el {HTMLElement} The selected TD or TR element.
+     * @param oArgs.record {YAHOO.widget.Record} The selected Record.
+     * @param oArgs.recordIndex {Number} The index of the selected Record.
+     * @param oArgs.field {String} The selected field name, if applicable.
      */
     this.createEvent("selectEvent");
 
     /**
-     * Fired when an element is unselected.
+     * Fired when an item is unselected.
      *
      * @event unselectEvent
-     * @param oArgs.els {Array} An array of the unselected element(s).
+     * @param oArgs.el {HTMLElement} The selected TD or TR element.
+     * @param oArgs.record {YAHOO.widget.Record} The selected Record.
+     * @param oArgs.recordIndex {Number} The index of the selected Record.
+     * @param oArgs.field {String} The selected field name, if applicable.
      */
     this.createEvent("unselectEvent");
 
@@ -459,7 +524,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      * Fired when an element is highlighted.
      *
      * @event highlightEvent
-     * @param oArgs.els {Array} An array of the highlighted element(s).
+     * @param oArgs.el {HTMLElement} The highlighted TD or TR element.
      */
     this.createEvent("highlightEvent");
 
@@ -467,54 +532,42 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      * Fired when an element is unhighlighted.
      *
      * @event unhighlightEvent
-     * @param oArgs.els {Array} An array of the unhighlighted element(s).
+     * @param oArgs.el {HTMLElement} The highlighted TD or TR element.
      */
     this.createEvent("unhighlightEvent");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-    /**
-     * Fired when a TR element is selected.
-     *
-     * @event rowSelectEvent
-     * @param oArgs.el {HTMLElement} The selected TR element.
-     * @param oArgs.record {YAHOO.widget.Record} The associated Record instance.
-     */
-    this.createEvent("rowSelectEvent");
-
-    /**
-     * Fired when a TR element is unselected.
-     *
-     * @event rowUnselectEvent
-     * @param oArgs.el {HTMLElement} The unselected TR element.
-     * @param oArgs.record {YAHOO.widget.Record} The associated Record instance.
-     */
-    this.createEvent("rowUnselectEvent");
-
-    /**
-     * Fired when a row is added.
-     *
-     * @event rowAddEvent
-     * @param oArgs.data {Object} The data added.
-     * @param oArgs.trElId {String} The ID of the added TR element, if any.
-     */
-    this.createEvent("rowAddEvent");
     
-    /**
-     * Fired when a row is updated.
-     *
-     * @event rowUpdateEvent
-     * @param oArgs.newData {Object} The new data.
-     * @param oArgs.oldData {Object} The old data.
-     * @param oArgs.trElId {Array} The ID of the updated TR element, if any.
-     */
-    this.createEvent("rowUpdateEvent");
-
-    /**
-     * Fired when one or more TR elements are deleted.
-     *
-     * @event rowDeleteEvent
-     * @param oArgs.rowIndexes {Array} The indexes of the deleted rows.
-     */
-    this.createEvent("rowDeleteEvent");
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     // Set up sort
     this.subscribe("headCellClickEvent",this.onEventSortColumn);
@@ -1180,24 +1233,6 @@ YAHOO.widget.DataTable.prototype._sFirstTrId = null;
  * @private
  */
 YAHOO.widget.DataTable.prototype._sLastTrId = null;
-
-/**
- * ID string of the selection anchor element.
- *
- * @property _sSelectionAnchorId
- * @type String
- * @private
- */
-YAHOO.widget.DataTable.prototype._sSelectionAnchorId = null;
-
-/**
- * Array of Record instances that are in the selected state.
- *
- * @property _aSelectedRecords
- * @type YAHOO.widget.Record[]
- * @private
- */
-YAHOO.widget.DataTable.prototype._aSelectedRecords = null;
 
 /**
  * Internal variable to track whether the DataTable instance has page focus.
@@ -1892,70 +1927,32 @@ YAHOO.widget.DataTable.prototype._setRowStripes = function(row, range) {
     }
 };
 
-/**
- * Assigns the class YAHOO.widget.DataTable.CLASS_SELECTED to the given
- * element(s) and updates internal tracker.
- *
- * @method _selectEl
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element by
- * reference or ID string, or array of HTML elements by reference or ID string.
- * @private
- */
-YAHOO.widget.DataTable.prototype._selectEl = function(els) {
-    if(!YAHOO.lang.isArray(els)) {
-        els = [els];
-    }
 
-    for(var i=0; i<els.length; i++) {
-        // Set the style
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
-    }
-    this._lastSelectedId = els[els.length-1].id;
-};
 
-/**
- * Removes the class YAHOO.widget.DataTable.CLASS_SELECTED from the given
- * element(s) and updates internal tracker.
- *
- * @method _unselectEl
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTMLElement by
- * reference or ID string, or array of HTML elements by reference or ID string.
- * @private
- */
-YAHOO.widget.DataTable.prototype._unselectEl = function(els) {
-    if(!YAHOO.lang.isArray(els)) {
-        els = [els];
-    }
-    
-    for(var i=0; i<els.length; i++) {
-        // Remove the style
-        YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
-    }
-};
 
-/**
- * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
- * from all TR elements in the internal tracker.
- *
- * @method _unselectAllTrEls
- * @private
- */
-YAHOO.widget.DataTable.prototype._unselectAllTrEls = function() {
-    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
-    this._unselectEl(selectedRows);
-};
 
-/**
- * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
- * from all TD elements in the internal tracker.
- *
- * @method _unselectAllTdEls
- * @private
- */
-YAHOO.widget.DataTable.prototype._unselectAllTdEls = function() {
-    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
-    this._unselectEl(selectedCells);
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2376,7 +2373,7 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
 };
 
 /**
- * Handles keyup events on the TABLE. Executes deletion
+ * Handles keyup events on the TABLE. Executes deletion.
  *
  * @method _onTableKeyup
  * @param e {HTMLEvent} The key event.
@@ -2580,15 +2577,6 @@ YAHOO.widget.DataTable.prototype.fixedWidth = false;
 YAHOO.widget.DataTable.prototype.scrollable = false;
 
 /**
- * True if only one TR element may be selected at a time.
- *
- * @property rowSingleSelect
- * @type Boolean
- * @default false
- */
-YAHOO.widget.DataTable.prototype.rowSingleSelect = false;
-
-/**
  * ContextMenu instance.
  *
  * @property contextMenu
@@ -2610,7 +2598,6 @@ YAHOO.widget.DataTable.prototype.paginator = false;
  *
  * @property paginatorOptions
  * @type Object
- * @default {}
  */
 /**
  * If built-in paginator is enabled, each page will display up to the given
@@ -2660,14 +2647,25 @@ YAHOO.widget.DataTable.prototype.paginatorOptions = null;
 
 /**
  * Object literal holds sort metadata:
- *  sortedBy.key
- *  sortedBy.dir
- *
+ *     <ul>
+ *         <li>sortedBy.key</li>
+ *         <li>sortedBy.dir</li>
+ *      </ul>
  *
  * @property sortedBy
  * @type Object
  */
 YAHOO.widget.DataTable.prototype.sortedBy = null;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2695,7 +2693,7 @@ YAHOO.widget.DataTable.prototype.sortedBy = null;
 //
 /////////////////////////////////////////////////////////////////////////////
 
-// ACCESSORS
+// OBJECT ACCESSORS
 
 /**
  * Public accessor to the unique name of the DataSource instance.
@@ -2763,6 +2761,21 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
 YAHOO.widget.DataTable.prototype.getPaginator = function() {
     return this._paginator;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3300,6 +3313,8 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
         }
     }
     if(recordIndex !== null) {
+        //TODO: remove from selection tracker
+    
         var oRecord = this._oRecordSet.getRecord(recordIndex);
 
         // Copy data from the Record for the event that gets fired later
@@ -3335,136 +3350,215 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
     }
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TABLE FUNCTIONS
+
 /**
- * Sets a row to the selected state. If the row is in view, the corresponding
- * DOM elements are also updated.
+ * Sets focus on the TABLE element.
  *
- * @method selectRow
- * @param row {HTMLElement | String} HTML TR element reference or ID.
+ * @method focusTable
  */
-YAHOO.widget.DataTable.prototype.selectRow = function(row) {
-    // Validate the row
-    row = YAHOO.util.Dom.get(row);
-    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
-        var recordId = row.yuiRecordId;
-
-        // Update internal tracker
-        var tracker = this._aSelectedRecords || [];
-        // Remove Record ID if already there...
-        if(tracker.length > 0) {
-            // ...using Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
-                tracker.splice(tracker.indexOf(recordId), 1);
-            }
-            // ...or do it the old-fashioned way
-            else {
-                for(var i=0; i<tracker.length; i++) {
-                   if(tracker[i] === recordId) {
-                        tracker.splice(i, 1);
-                    }
-                }
-            }
-        }
-
-        // Update UI
-        this._selectEl(row);
-
-        // Add to the end of internal tracker
-        tracker.push(recordId);
-        this._aSelectedRecords = tracker;
-
-        this.fireEvent("rowSelectEvent",{el:row, record:this.getRecord(row)});
-        YAHOO.log("DataTable row selected: Record ID = " + recordId +
-                ", Record index = " + "TODO" +
-                ", page row index = " + "TODO", "info", this.toString());
-    }
-};
-
-/**
- * Sets a row to the unselected state. If the row is in view, the corresponding
- * DOM elements are also updated.
- *
- * @method unselectRow
- * @param row {HTMLElement | String} HTML TR element reference or ID.
- */
-YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
-    // Validate the row
-    row = YAHOO.util.Dom.get(row);
-    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
-        var recordId = row.yuiRecordId;
-
-        // Update internal tracker
-        var tracker = this._aSelectedRecords || [];
-        // Remove Record ID if there...
-        if(tracker.length > 0) {
-            // ...using Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
-                tracker.splice(tracker.indexOf(recordId), 1);
-            }
-            // ...or do it the old-fashioned way
-            else {
-                for(var i=0; i<tracker.length; i++) {
-                   if(tracker[i] === recordId) {
-                        tracker.splice(i, 1);
-                    }
-                }
-            }
-        }
-
-        // Update UI
-        this._unselectEl(row);
-
-        this.fireEvent("rowUnselectEvent",{el:row, record:this.getRecord(row)});
-        YAHOO.log("DataTable row unselected: Record ID = " + recordId +
-                ", Record index = " + "TODO" +
-                ", page row index = " + "TODO", "info", this.toString());
+YAHOO.widget.DataTable.prototype.focusTable = function() {
+    var elTable = this._elTable;
+    if(!this._bFocused) {
+        // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
+        // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
+        // strange unexpected things as the user clicks on buttons and other controls.
+        setTimeout(function() { elTable.focus(); },0);
+        this._bFocused = true;
+        this.fireEvent("tableFocusEvent");
     }
 };
 
 
 /**
- * Unselects all selected rows (across all pages).
+ * Initializes a RecordSet with the given data and populates the page view
+ * with the new data. Any previous states of sorting and selection are cleared.
+ * If pagination is enabled, displays only the current page, otherwise displays
+ * all rows. For performance, reuses existing DOM elements when possible while
+ * deleting extraneous elements.
  *
- * @method unselectAllRows
+ * @method initializeTable
+ * @param oData {Object | Object[]} An object literal of data or an array of
+ * object literals containing data.
  */
-YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
-    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
-    this.unselect(selectedRows);
-    this._aSelectedRecords = [];
-    this.fireEvent("unselectEvent", {els:selectedRows});
-    YAHOO.log("All DataTable row unselected", "info", this.toString());
+YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
+    // Clean up previous RecordSet, if any
+    if(this._oRecordSet) {
+        this._oRecordSet.unsubscribeAll();
+    }
+    
+    // Create RecordSet
+    this._oRecordSet = new YAHOO.widget.RecordSet();
+
+    // Add data to RecordSet
+    var records = this._oRecordSet.addRecords(oData);
+    
+    //TODO: clear selection tracker, clear sorts
+    
+    // Update table view
+    this.refreshTable();
 };
 
+/**
+ * Refreshes page view with existing Records from the RecordSet while
+ * maintaining sort, pagination, and selection states. For performance, reuses
+ * existing DOM elements when possible while deleting extraneous elements.
+ *
+ * @method refreshTable
+ */
+YAHOO.widget.DataTable.prototype.refreshTable = function() {
+    var i, aRecords;
+    
+    // Paginator is disabled
+    if(!this.paginator) {
+        // Paginator must be destroyed
+        if(this._paginator !== null) {
+            //TODO: this.destroyPaginator();
+        }
+    }
+    // Paginator is enabled
+    if(this.paginator) {
+        this.updatePaginator();
+        aRecords = this._oRecordSet.getRecords(this._paginator.startRecordIndex, this._paginator.rowsPerPage);
+    }
+    // Show all records
+    else {
+        aRecords = this._oRecordSet.getRecords();
+    }
 
+    if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
+        this.hideTableMessage();
 
+        var elTbody = this._elTbody;
+        var elRows = elTbody.rows;
 
+        // Remove extra rows from the bottom so as to preserve ID order
+        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
+            elTbody.deleteRow(-1);
+        }
 
+        //TODO: remove selections
+        // Unselect rows in the UI but keep tracking selected rows
+        var selectedRecords = this.getSelectedRecordIds();
+        if(selectedRecords.length > 0) {
+            this._unselectAllTrEls();
+        }
 
+        //TODO: Keep track of updated TR IDs?
+        var rowIds = [];
+        
+        // From the top, update in-place existing rows
+        for(i=0; i<elRows.length; i++) {
+            rowIds.push(this._updateTrEl(elRows[i], aRecords[i]));
+        }
 
+        // Add rows as necessary
+        for(i=elRows.length; i<aRecords.length; i++) {
+            rowIds.push(this._addTrEl(aRecords[i]));
+        }
 
+        //TODO: reapply selections
+        // Select any rows as necessary
+        for(i=0; i<selectedRecords.length; i++) {
+            var allRows = elTbody.rows;
+            for(var j=0; j<allRows.length; j++) {
+                if(selectedRecords[i].id === allRows[j].yuiRecordId) {
+                    this._selectEl([allRows[j]]);
+                }
+            }
+        }
 
+        // Set classes
+        this._setFirstRow();
+        this._setLastRow();
+        this._setRowStripes();
 
+        this.fireEvent("tableRefreshEvent", {records:aRecords});
 
+        YAHOO.log("DataTable showing " + aRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
+    }
+    else {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+    }
+};
 
+/**
+ * Nulls out the DataTable instance and related objects, removes attached event
+ * listeners, and clears out DOM elements inside the container. After calling
+ * this method, the instance reference should be expliclitly nulled by
+ * implementer, as in myDataTable = null. Use with caution!
+ *
+ * @method destroyTable
+ */
+YAHOO.widget.DataTable.prototype.destroyTable = function() {
+    var instanceName = this.toString();
+    var elContainer = this._elContainer;
 
+    // Unhook custom events
+    this.unsubscribeAll();
 
+    // Unhook DOM events
+    YAHOO.util.Event.purgeElement(elContainer, true);
 
+    // Remove DOM elements
+    elContainer.innerHTML = "";
 
+    // Null out objects
+    for(var key in this) {
+        if(this.hasOwnProperty(key)) {
+            this[key] = null;
+        }
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-// MESSAGING
-
+    YAHOO.log("DataTable destroyed: " + instanceName);
+};
 
 /**
  * Displays message within secondary TBODY.
@@ -3492,6 +3586,42 @@ YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) 
 YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
     this._elMsgTbody.style.display = "none";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3562,7 +3692,7 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 
     // For Opera workaround
     var dropdownEnabled = false;
-    
+
     // Links are enabled
     if(pag.pageLinks > -1) {
         for(i=0; i<pag.links.length; i++) {
@@ -3737,195 +3867,6 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function() {
 
 
 
-// TABLE FUNCTIONS
-
-/**
- * Sets focus on the TABLE element.
- *
- * @method focusTable
- */
-YAHOO.widget.DataTable.prototype.focusTable = function() {
-    var elTable = this._elTable;
-    if(!this._bFocused) {
-        // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
-        // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
-        // strange unexpected things as the user clicks on buttons and other controls.
-        setTimeout(function() { elTable.focus(); },0);
-        this._bFocused = true;
-        this.fireEvent("tableFocusEvent");
-    }
-};
-
-
-/**
- * Initializes a RecordSet with the given data and populates the page view
- * with the new data. Any previous states of sorting and selection are cleared.
- * If pagination is enabled, displays only the current page, otherwise displays
- * all rows. For performance, reuses existing DOM elements when possible while
- * deleting extraneous elements.
- *
- * @method initializeTable
- * @param oData {Object | Object[]} An object literal of data or an array of
- * object literals containing data.
- */
-YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
-    // Clean up previous RecordSet, if any
-    if(this._oRecordSet) {
-        this._oRecordSet.unsubscribeAll();
-    }
-    
-    // Create RecordSet
-    this._oRecordSet = new YAHOO.widget.RecordSet();
-
-    // Add data to RecordSet
-    var records = this._oRecordSet.addRecords(oData);
-    
-    //TODO: clear selections, clear sorts
-    
-    // Update table view
-    this.refreshTable();
-};
-
-/**
- * Refreshes page view with existing Records from the RecordSet while
- * maintaining sort, pagination, and selection states. For performance, reuses
- * existing DOM elements when possible while deleting extraneous elements.
- *
- * @method refreshTable
- */
-YAHOO.widget.DataTable.prototype.refreshTable = function() {
-    var i, aRecords;
-    
-    // Paginator is disabled
-    if(!this.paginator) {
-        // Paginator must be destroyed
-        if(this._paginator !== null) {
-            //TODO: this.destroyPaginator();
-        }
-    }
-    // Paginator is enabled
-    if(this.paginator) {
-        this.updatePaginator();
-        aRecords = this._oRecordSet.getRecords(this._paginator.startRecordIndex, this._paginator.rowsPerPage);
-    }
-    // Show all records
-    else {
-        aRecords = this._oRecordSet.getRecords();
-    }
-
-    if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
-        this.hideTableMessage();
-
-        var elTbody = this._elTbody;
-        var elRows = elTbody.rows;
-
-        // Remove extra rows from the bottom so as to preserve ID order
-        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
-            elTbody.deleteRow(-1);
-        }
-
-        // Unselect rows in the UI but keep tracking selected rows
-        var selectedRecords = this.getSelectedRecordIds();
-        if(selectedRecords.length > 0) {
-            this._unselectAllTrEls();
-        }
-
-        //TODO: Keep track of updated TR IDs?
-        var rowIds = [];
-        
-        // From the top, update in-place existing rows
-        for(i=0; i<elRows.length; i++) {
-            rowIds.push(this._updateTrEl(elRows[i], aRecords[i]));
-        }
-
-        // Add rows as necessary
-        for(i=elRows.length; i<aRecords.length; i++) {
-            rowIds.push(this._addTrEl(aRecords[i]));
-        }
-
-        // Select any rows as necessary
-        for(i=0; i<selectedRecords.length; i++) {
-            var allRows = elTbody.rows;
-            for(var j=0; j<allRows.length; j++) {
-                if(selectedRecords[i].id === allRows[j].yuiRecordId) {
-                    this._selectEl([allRows[j]]);
-                }
-            }
-        }
-
-        // Set classes
-        this._setFirstRow();
-        this._setLastRow();
-        this._setRowStripes();
-
-        this.fireEvent("tableRefreshEvent", {records:aRecords});
-
-        YAHOO.log("DataTable showing " + aRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
-    }
-    else {
-        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
-    }
-};
-
-/**
- * Nulls out the DataTable instance and related objects, removes attached event
- * listeners, and clears out DOM elements inside the container. After calling
- * this method, the instance reference should be expliclitly nulled by
- * implementer, as in myDataTable = null. Use with caution!
- *
- * @method destroyTable
- */
-YAHOO.widget.DataTable.prototype.destroyTable = function() {
-    var instanceName = this.toString();
-    var elContainer = this._elContainer;
-
-    // Unhook custom events
-    this.unsubscribeAll();
-
-    // Unhook DOM events
-    YAHOO.util.Event.purgeElement(elContainer, true);
-
-    // Remove DOM elements
-    elContainer.innerHTML = "";
-
-    // Null out objects
-    for(var key in this) {
-        if(this.hasOwnProperty(key)) {
-            this[key] = null;
-        }
-    }
-
-    YAHOO.log("DataTable destroyed: " + instanceName);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -3935,9 +3876,6 @@ YAHOO.widget.DataTable.prototype.destroyTable = function() {
 
 
 // COLUMN FUNCTIONS
-
-
-
 
 /**
  * Sorts given Column.
@@ -4051,9 +3989,398 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
 
 
-// CSS
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// SELECTION/HIGHLIGHTING
+
+/**
+ * Object literal of initial configuration values for selection model. By default
+ * row and cell selection is disabled.
+ *
+ * @property selectionOptions
+ * @type Object
+ * @default null
+ */
+/**
+ * Enable selection by "rows" or by "cells".
+ *
+ * @property selectionModel.mode
+ * @type String
+ */
+/**
+ * Name of the custom event that triggers selection. For example, to enable
+ * cell selection by a mouse click, set this value to "cellClickEvent". To enable
+ * row selection by a mouse dblclick, set this value to "rowDblclickEvent".
+ *
+ * @property selectionModel.eventName
+ * @type String
+ */
+/**
+ * Enable multiple selections via shift and control key modifiers.
+ *
+ * @property selectionModel.enableMulti
+ * @type Boolean
+ */
+/**
+ * Selection by arrows should wrap around to first row or cell when last row or
+ * cell is reached.
+ *
+ * @property selectionModel.enableWraparound
+ * @type Boolean
+ */
+YAHOO.widget.DataTable.prototype.selectionModel = null;
+
+
+
+/**
+ * ID string of the selection anchor element.
+ *
+ * @property _sSelectionAnchorId
+ * @type String
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._sSelectionAnchorId = null;
+
+/**
+ * Array of selections.
+ *
+ * @property _aSelections
+ * @type Object[]
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._aSelections = null;
+
+/**
+ * Assigns the class YAHOO.widget.DataTable.CLASS_SELECTED to the given
+ * element(s) and updates internal tracker.
+ *
+ * @method _selectEl
+ * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element by
+ * reference or ID string, or array of HTML elements by reference or ID string.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._selectEl = function(els) {
+    if(!YAHOO.lang.isArray(els)) {
+        els = [els];
+    }
+
+    for(var i=0; i<els.length; i++) {
+        // Set the style
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
+    }
+    this._lastSelectedId = els[els.length-1].id;
+};
+
+/**
+ * Removes the class YAHOO.widget.DataTable.CLASS_SELECTED from the given
+ * element(s) and updates internal tracker.
+ *
+ * @method _unselectEl
+ * @param els {HTMLElement | String | HTMLElement[] | String[]} HTMLElement by
+ * reference or ID string, or array of HTML elements by reference or ID string.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._unselectEl = function(els) {
+    if(!YAHOO.lang.isArray(els)) {
+        els = [els];
+    }
+
+    for(var i=0; i<els.length; i++) {
+        // Remove the style
+        YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
+    }
+};
+
+/**
+ * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
+ * from all TR elements in the internal tracker.
+ *
+ * @method _unselectAllTrEls
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._unselectAllTrEls = function() {
+    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
+    this._unselectEl(selectedRows);
+};
+
+/**
+ * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
+ * from all TD elements in the internal tracker.
+ *
+ * @method _unselectAllTdEls
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._unselectAllTdEls = function() {
+    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
+    this._unselectEl(selectedCells);
+};
+
+/**
+ * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHT to the given element(s).
+ *
+ * @method select
+ * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
+ * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
+ */
+YAHOO.widget.DataTable.prototype.select = function(els) {
+    if(els) {
+        if(!YAHOO.lang.isArray(els)) {
+            els = [els];
+        }
+        this._selectEl(els);
+
+        // Add Record ID to internal tracker
+        var tracker = this._aSelections || [];
+        for(var i=0; i<els.length; i++) {
+            var id = els[i].yuiRecordId;
+            // Remove if already there
+            // Use Array.indexOf if available...
+            if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
+                tracker.splice(tracker.indexOf(id),1);
+            }
+            // ...or do it the old-fashioned way
+            else {
+                for(var j=0; j<tracker.length; j++) {
+                   if(tracker[j] === id){
+                        tracker.splice(j,1);
+                    }
+                }
+            }
+            // Add to the end
+            tracker.push(id);
+        }
+        this._aSelections = tracker;
+        this.fireEvent("selectEvent",{els:els});
+        YAHOO.log(els.length + " element(s) selected", "info", this.toString());
+    }
+};
+
+/**
+ * Sets one or more elements to the unselected state.
+ *
+ * @method unselect
+ * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element
+ * reference, element ID, array of HTML elements, or array of element IDs
+ */
+YAHOO.widget.DataTable.prototype.unselect = function(els) {
+    if(els) {
+        if(!YAHOO.lang.isArray(els)) {
+            els = [els];
+        }
+        this._unselectEl(els);
+        // Remove Record ID from internal tracker
+        var tracker = this._aSelections || [];
+        for(var i=0; i<els.length; i++) {
+            var id = els[i].yuiRecordId;
+        
+            // Use Array.indexOf if available...
+            if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
+                tracker.splice(tracker.indexOf(id),1);
+            }
+            // ...or do it the old-fashioned way
+            else {
+                for(var j=0; j<tracker.length; j++) {
+                    if(tracker[j] === id){
+                        tracker.splice(j,1);
+                    }
+                }
+            }
+        }
+        this._aSelections = tracker;
+        this.fireEvent("unselectEvent",{els:els});
+        YAHOO.log(els.length + " element(s) unselected", "info", this.toString());
+    }
+};
+
+/**
+ * Unselects all selected cells.
+ *
+ * @method unselectAllCells
+ */
+YAHOO.widget.DataTable.prototype.unselectAllCells = function() {
+    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
+    this.unselect(selectedCells);
+    this.fireEvent("unselectEvent", {els:selectedCells});
+    //TODO
+    //YAHOO.log();
+};
+
+
+/**
+ * Returns true if given element is select, false otherwise.
+ *
+ * @method isSelected
+ * @param el {HTMLElement} HTML element reference or ID.
+ * @return {Boolean} True if element is selected.
+ */
+YAHOO.widget.DataTable.prototype.isSelected = function(el) {
+    return YAHOO.util.Dom.hasClass(el,YAHOO.widget.DataTable.CLASS_SELECTED);
+};
+
+/**
+ * Returns array of selected Record IDs.
+ *
+ * @method getSelectedRecordIds
+ * @return {HTMLElement[]} Array of selected TR elements.
+ */
+YAHOO.widget.DataTable.prototype.getSelectedRecordIds = function() {
+    //TODO: parse out the Record IDs from internal tracker
+    return this._aSelections || [];
+};
+
+/**
+ * Returns array of selected rows.
+ *
+ * @method getSelectedRows
+ * @return {HTMLElement[]} Array of selected TR elements.
+ */
+YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
+    //TODO: keep internal array if this is non performant
+    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this.__elTbody);
+};
+
+/**
+ * Returns array of selected TD cells.
+ *
+ * @method getSelectedCells
+ * @return {HTMLElement[]} Array of selected TD elements.
+ */
+YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
+    //TODO: keep internal array
+    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this.__elTbody);
+};
+
+
+/**
+ * Sets a row to the selected state. If the row is in view, the corresponding
+ * DOM elements are also updated.
+ *
+ * @method selectRow
+ * @param row {HTMLElement | String} HTML TR element reference or ID.
+ */
+YAHOO.widget.DataTable.prototype.selectRow = function(row) {
+    // Validate the row
+    row = YAHOO.util.Dom.get(row);
+    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
+        var recordId = row.yuiRecordId;
+
+        // Update internal tracker
+        var tracker = this._aSelections || [];
+        // Remove Record ID if already there...
+        if(tracker.length > 0) {
+            // ...using Array.indexOf if available...
+            if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
+                tracker.splice(tracker.indexOf(recordId), 1);
+            }
+            // ...or do it the old-fashioned way
+            else {
+                for(var i=0; i<tracker.length; i++) {
+                   if(tracker[i] === recordId) {
+                        tracker.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        // Update UI
+        this._selectEl(row);
+
+        // Add to the end of internal tracker
+        tracker.push(recordId);
+        this._aSelections = tracker;
+
+        this.fireEvent("rowSelectEvent",{el:row, record:this.getRecord(row)});
+        YAHOO.log("DataTable row selected: Record ID = " + recordId +
+                ", Record index = " + "TODO" +
+                ", page row index = " + "TODO", "info", this.toString());
+    }
+};
+
+/**
+ * Sets a row to the unselected state. If the row is in view, the corresponding
+ * DOM elements are also updated.
+ *
+ * @method unselectRow
+ * @param row {HTMLElement | String} HTML TR element reference or ID.
+ */
+YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
+    // Validate the row
+    row = YAHOO.util.Dom.get(row);
+    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
+        var recordId = row.yuiRecordId;
+
+        // Update internal tracker
+        var tracker = this._aSelections || [];
+        // Remove Record ID if there...
+        if(tracker.length > 0) {
+            // ...using Array.indexOf if available...
+            if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
+                tracker.splice(tracker.indexOf(recordId), 1);
+            }
+            // ...or do it the old-fashioned way
+            else {
+                for(var i=0; i<tracker.length; i++) {
+                   if(tracker[i] === recordId) {
+                        tracker.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        // Update UI
+        this._unselectEl(row);
+
+        this.fireEvent("rowUnselectEvent",{el:row, record:this.getRecord(row)});
+        YAHOO.log("DataTable row unselected: Record ID = " + recordId +
+                ", Record index = " + "TODO" +
+                ", page row index = " + "TODO", "info", this.toString());
+    }
+};
+
+
+/**
+ * Unselects all selected rows (across all pages).
+ *
+ * @method unselectAllRows
+ */
+YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
+    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
+    this.unselect(selectedRows);
+    this._aSelections = [];
+    this.fireEvent("unselectEvent", {els:selectedRows});
+    YAHOO.log("All DataTable row unselected", "info", this.toString());
+};
 
 /**
  * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHT to the given element(s).
@@ -4094,139 +4421,12 @@ YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
 };
 
 
-/**
- * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHT to the given element(s).
- *
- * @method select
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
- * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
- */
-YAHOO.widget.DataTable.prototype.select = function(els) {
-    if(els) {
-        if(!YAHOO.lang.isArray(els)) {
-            els = [els];
-        }
-        this._selectEl(els);
-
-        // Add Record ID to internal tracker
-        var tracker = this._aSelectedRecords || [];
-        for(var i=0; i<els.length; i++) {
-            var id = els[i].yuiRecordId;
-            // Remove if already there
-            // Use Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
-                tracker.splice(tracker.indexOf(id),1);
-            }
-            // ...or do it the old-fashioned way
-            else {
-                for(var j=0; j<tracker.length; j++) {
-                   if(tracker[j] === id){
-                        tracker.splice(j,1);
-                    }
-                }
-            }
-            // Add to the end
-            tracker.push(id);
-        }
-        this._aSelectedRecords = tracker;
-        this.fireEvent("selectEvent",{els:els});
-        YAHOO.log(els.length + " element(s) selected", "info", this.toString());
-    }
-};
-
-/**
- * Sets one or more elements to the unselected state.
- *
- * @method unselect
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element
- * reference, element ID, array of HTML elements, or array of element IDs
- */
-YAHOO.widget.DataTable.prototype.unselect = function(els) {
-    if(els) {
-        if(!YAHOO.lang.isArray(els)) {
-            els = [els];
-        }
-        this._unselectEl(els);
-        // Remove Record ID from internal tracker
-        var tracker = this._aSelectedRecords || [];
-        for(var i=0; i<els.length; i++) {
-            var id = els[i].yuiRecordId;
-        
-            // Use Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
-                tracker.splice(tracker.indexOf(id),1);
-            }
-            // ...or do it the old-fashioned way
-            else {
-                for(var j=0; j<tracker.length; j++) {
-                    if(tracker[j] === id){
-                        tracker.splice(j,1);
-                    }
-                }
-            }
-        }
-        this._aSelectedRecords = tracker;
-        this.fireEvent("unselectEvent",{els:els});
-        YAHOO.log(els.length + " element(s) unselected", "info", this.toString());
-    }
-};
 
-/**
- * Unselects all selected cells.
- *
- * @method unselectAllCells
- */
-YAHOO.widget.DataTable.prototype.unselectAllCells = function() {
-    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
-    this.unselect(selectedCells);
-    this.fireEvent("unselectEvent", {els:selectedCells});
-    //TODO
-    //YAHOO.log();
-};
 
 
-/**
- * Returns true if given element is select, false otherwise.
- *
- * @method isSelected
- * @param el {HTMLElement} HTML element reference or ID.
- * @return {Boolean} True if element is selected.
- */
-YAHOO.widget.DataTable.prototype.isSelected = function(el) {
-    return YAHOO.util.Dom.hasClass(el,YAHOO.widget.DataTable.CLASS_SELECTED);
-};
 
-/**
- * Returns array of selected Record IDs.
- *
- * @method getSelectedRecordIds
- * @return {HTMLElement[]} Array of selected TR elements.
- */
-YAHOO.widget.DataTable.prototype.getSelectedRecordIds = function() {
-    return this._aSelectedRecords || [];
-};
 
-/**
- * Returns array of selected rows.
- *
- * @method getSelectedRows
- * @return {HTMLElement[]} Array of selected TR elements.
- */
-YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
-    //TODO: keep internal array if this is non performant
-    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this.__elTbody);
-};
 
-/**
- * Returns array of selected TD cells.
- *
- * @method getSelectedCells
- * @return {HTMLElement[]} Array of selected TD elements.
- */
-YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
-    //TODO: keep internal array
-    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this.__elTbody);
-};
 
 
 
@@ -4262,91 +4462,7 @@ YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
 
 
 
-
-
-
-
-
-// ABSTRACT METHODS
-
-
-
-/**
- * Overridable method gives implementers a hook to access data before
- * it gets added to RecordSet and rendered to the TBODY.
- *
- * @method doBeforeLoadData
- * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
- * @return {Boolean} Return true to continue loading data into RecordSet and
- * updating DataTable with new Records, false to cancel.
- */
-YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse) {
-    return true;
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// CELL FUNCTIONS
+// INLINE EDITING
 
 /**
  * Shows editor for given cell.
@@ -4428,27 +4544,84 @@ YAHOO.widget.DataTable.prototype.saveEditorData = function() {
     }
 };
 
-/*TODO: delete
- * Formats given cell.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ABSTRACT METHODS
+
+/**
+ * Overridable method gives implementers a hook to access data before
+ * it gets added to RecordSet and rendered to the TBODY.
  *
- * @method formatCell
- * @param elCell {HTMLElement} Cell element to format.
- * @param oRecord {YAHOO.widget.Record} (Optional) Record instance.
+ * @method doBeforeLoadData
+ * @param sRequest {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @return {Boolean} Return true to continue loading data into RecordSet and
+ * updating DataTable with new Records, false to cancel.
  */
-/*YAHOO.widget.DataTable.prototype.formatCell = function(elCell) {
-    if(elCell && YAHOO.lang.isNumber(elCell.columnIndex)) {
-        var index = elCell.columnIndex;
-        var column = this._oColumnSet.keys[index];
-        column.format(elCell,this.getRecord(elCell));
-        if (index === 0) {
-            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_FIRST);
-        }
-        else if (index === this._oColumnSet.keys.length-1) {
-            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_LAST);
-        }
-        this.fireEvent("cellFormatEvent", {el:elCell});
-    }
-};*/
+YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse) {
+    return true;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
