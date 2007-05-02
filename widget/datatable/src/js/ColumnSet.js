@@ -302,6 +302,23 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
     return "ColumnSet " + this._sName;
 };
 
+/**
+ * Returns Column instance with given ID string.
+ *
+ * @method getColumn
+ * @param column {String} ID string.
+ * @return {YAHOO.widget.Column} Column instance.
+ */
+
+YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
+    for(var i=0; i<this.keys.length; i++) {
+        if(this.keys[i]._id === column) {
+            return this.keys[i];
+        }
+    }
+    return null;
+};
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/

@@ -79,10 +79,6 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
 
                     // Iterate through each TD
                     for(var k=0; k<elRow.cells.length; k++) {
-
-                        //var elCell = elRow.cells[l];
-                        //elCell.id = this.id+"-bdrow"+k+"-cell"+l;
-                        //TODO: can we parse a column with null key?
                         oData[oColumnSet.keys[k].key] = oColumnSet.keys[k].parse(elRow.cells[k].innerHTML);
                     }
                     aData.push(oData);
@@ -225,98 +221,98 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("tableDblclickEvent");
     
     /**
-     * Fired when a head cell has a mouseover.
+     * Fired when a header cell has a mouseover.
      *
-     * @event headCellMouseoverEvent
+     * @event headerCellMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      *
      */
-    this.createEvent("headCellMouseoverEvent");
+    this.createEvent("headerCellMouseoverEvent");
 
     /**
-     * Fired when a head cell has a mouseout.
+     * Fired when a header cell has a mouseout.
      *
-     * @event headCellMouseoutEvent
+     * @event headerCellMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      *
      */
-    this.createEvent("headCellMouseoutEvent");
+    this.createEvent("headerCellMouseoutEvent");
 
     /**
-     * Fired when a head cell has a mousedown.
+     * Fired when a header cell has a mousedown.
      *
-     * @event headCellMousedownEvent
+     * @event headerCellMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      */
-    this.createEvent("headCellMousedownEvent");
+    this.createEvent("headerCellMousedownEvent");
 
     /**
-     * Fired when a head cell has a click.
+     * Fired when a header cell has a click.
      *
-     * @event headCellClickEvent
+     * @event headerCellClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      */
-    this.createEvent("headCellClickEvent");
+    this.createEvent("headerCellClickEvent");
 
     /**
-     * Fired when a head cell has a dblclick.
+     * Fired when a header cell has a dblclick.
      *
-     * @event headCellDblclickEvent
+     * @event headerCellDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      */
-    this.createEvent("headCellDblclickEvent");
+    this.createEvent("headerCellDblclickEvent");
 
     /**
-     * Fired when a head label has a mouseover.
+     * Fired when a header label has a mouseover.
      *
-     * @event headLabelMouseoverEvent
+     * @event headerLabelMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      *
      */
-    this.createEvent("headLabelMouseoverEvent");
+    this.createEvent("headerLabelMouseoverEvent");
 
     /**
-     * Fired when a head label has a mouseout.
+     * Fired when a header label has a mouseout.
      *
-     * @event headLabelMouseoutEvent
+     * @event headerLabelMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      *
      */
-    this.createEvent("headLabelMouseoutEvent");
+    this.createEvent("headerLabelMouseoutEvent");
 
     /**
-     * Fired when a head label has a mousedown.
+     * Fired when a header label has a mousedown.
      *
-     * @event headLabelMousedownEvent
+     * @event headerLabelMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      */
-    this.createEvent("headLabelMousedownEvent");
+    this.createEvent("headerLabelMousedownEvent");
 
     /**
-     * Fired when a head label has a click.
+     * Fired when a header label has a click.
      *
-     * @event headLabelClickEvent
+     * @event headerLabelClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      */
-    this.createEvent("headLabelClickEvent");
+    this.createEvent("headerLabelClickEvent");
 
     /**
-     * Fired when a head label has a dblclick.
+     * Fired when a header label has a dblclick.
      *
-     * @event headLabelDblclickEvent
+     * @event headerLabelDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      */
-    this.createEvent("headLabelDblclickEvent");
+    this.createEvent("headerLabelDblclickEvent");
 
     /**
      * Fired when a cell has a mouseover.
@@ -499,26 +495,56 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("cellEditEvent");
 
     /**
-     * Fired when an item is selected.
+     * Fired when a row is selected.
      *
-     * @event selectEvent
-     * @param oArgs.el {HTMLElement} The selected TD or TR element.
+     * @event selectRowEvent
+     * @param oArgs.el {HTMLElement} The selected TR element, if applicable.
      * @param oArgs.record {YAHOO.widget.Record} The selected Record.
-     * @param oArgs.recordIndex {Number} The index of the selected Record.
-     * @param oArgs.field {String} The selected field name, if applicable.
      */
-    this.createEvent("selectEvent");
+    this.createEvent("selectRowEvent");
 
     /**
-     * Fired when an item is unselected.
+     * Fired when a row is unselected.
      *
-     * @event unselectEvent
-     * @param oArgs.el {HTMLElement} The selected TD or TR element.
-     * @param oArgs.record {YAHOO.widget.Record} The selected Record.
-     * @param oArgs.recordIndex {Number} The index of the selected Record.
-     * @param oArgs.field {String} The selected field name, if applicable.
+     * @event unselectRowEvent
+     * @param oArgs.el {HTMLElement} The unselected TR element, if applicable.
+     * @param oArgs.record {YAHOO.widget.Record} The unselected Record.
      */
-    this.createEvent("unselectEvent");
+    this.createEvent("unselectRowEvent");
+
+    /**
+     * Fired when all row selections are cleared.
+     *
+     * @event unselectAllRowsEvent
+     */
+    this.createEvent("unselectAllRowsEvent");
+
+    /**
+     * Fired when a cell is selected.
+     *
+     * @event selectCellEvent
+     * @param oArgs.el {HTMLElement} The selected TD element, if applicable.
+     * @param oArgs.record {YAHOO.widget.Record} The selected Record.
+     * @param oArgs.key {String} The key of the selected cell, if applicable.
+     */
+    this.createEvent("selectCellEvent");
+
+    /**
+     * Fired when a cell is unselected.
+     *
+     * @event unselectCellEvent
+     * @param oArgs.el {HTMLElement} The unselected TD element, if applicable.
+     * @param oArgs.record {YAHOO.widget.Record} The unselected Record.
+     * @param oArgs.key {String} The key of the unselected cell, if applicable.
+     */
+    this.createEvent("unselectCellEvent");
+
+    /**
+     * Fired when all cell selections are cleared.
+     *
+     * @event unselectAllCellsEvent
+     */
+    this.createEvent("unselectAllCellsEvent");
 
     /**
      * Fired when an element is highlighted.
@@ -568,9 +594,27 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     
     
     
-    
+    // Set up selection
+    if(!this.selectionModel) {
+        // Default values
+        this.selectionModel = {
+            eventName:null,
+            cellMode:false,
+            enableMulti:false,
+            enableWraparound:false
+        };
+    }
+    else if(this.selectionModel.eventName) {
+        if(this.selectionModel.cellMode) {
+            this.subscribe(this.selectionModel.eventName,this.onEventSelectCell);
+        }
+        else {
+            this.subscribe(this.selectionModel.eventName,this.onEventSelectRow);
+        }
+    }
+
     // Set up sort
-    this.subscribe("headCellClickEvent",this.onEventSortColumn);
+    this.subscribe("headerCellClickEvent",this.onEventSortColumn);
 
     // Set up context menu
     //TODO: does trigger have to exist? can trigger be TBODY rather than rows?
@@ -623,34 +667,34 @@ YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
 /**
  * Class name assigned to container element within THEAD.
  *
- * @property YAHOO.widget.DataTable.CLASS_HEADCONTAINER
+ * @property YAHOO.widget.DataTable.CLASS_HEADERCONTAINER
  * @type String
  * @static
  * @final
  */
-YAHOO.widget.DataTable.CLASS_HEADCONTAINER = "yui-dt-headcontainer";
+YAHOO.widget.DataTable.CLASS_HEADERCONTAINER = "yui-dt-headercontainer";
 
 /**
  * Class name assigned to resizer handle element within THEAD.
  *
- * @property YAHOO.widget.DataTable.CLASS_HEADRESIZER
+ * @property YAHOO.widget.DataTable.CLASS_HEADERRESIZER
  * @type String
  * @static
  * @final
- * @default "yui-dt-headresizer"
+ * @default "yui-dt-headerresizer"
  */
-YAHOO.widget.DataTable.CLASS_HEADRESIZER = "yui-dt-headresizer";
+YAHOO.widget.DataTable.CLASS_HEADERRESIZER = "yui-dt-headerresizer";
 
 /**
  * Class name assigned to text displayed within THEAD.
  *
- * @property YAHOO.widget.DataTable.CLASS_HEADTEXT
+ * @property YAHOO.widget.DataTable.CLASS_HEADERTEXT
  * @type String
  * @static
  * @final
- * @default "yui-dt-headtext"
+ * @default "yui-dt-headertext"
  */
-YAHOO.widget.DataTable.CLASS_HEADTEXT = "yui-dt-headtext";
+YAHOO.widget.DataTable.CLASS_HEADERTEXT = "yui-dt-headertext";
 
 /**
  * Class name assigned to FIRST elements.
@@ -1457,10 +1501,10 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                     )
             ) {
                 // TODO: better way to get elTheadContainer
-                var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADCONTAINER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADERCONTAINER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
                 var elTheadResizer = elTheadContainer.appendChild(document.createElement("span"));
                 elTheadResizer.id = oColumn.getId() + "-resizer";
-                YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_HEADRESIZER);
+                YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_HEADERRESIZER);
                 oColumn.ddResizer = new YAHOO.util.WidthResizer(
                         this, oColumn.getId(), elTheadResizer.id, elTheadResizer.id);
                 var cancelClick = function(e) {
@@ -1471,7 +1515,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
             if(this.fixedWidth) {
                 //elTheadContainer.style.overflow = "hidden";
                 // TODO: better way to get elTheadText
-                var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADERTEXT,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
                 elTheadText.style.overflow = "hidden";
             }
         }
@@ -1494,7 +1538,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
-    elTheadCell.columnIndex = oColumn.getIndex();
+    elTheadCell.yuiColumnId = oColumn.getId();
     if(oColumn.abbr) {
         elTheadCell.abbr = oColumn.abbr;
     }
@@ -1521,10 +1565,10 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
 
     var elTheadContainer = elTheadCell.appendChild(document.createElement("div"));
     elTheadContainer.id = this.id+"-hdrow"+row+"-container"+col;
-    YAHOO.util.Dom.addClass(elTheadContainer,YAHOO.widget.DataTable.CLASS_HEADCONTAINER);
+    YAHOO.util.Dom.addClass(elTheadContainer,YAHOO.widget.DataTable.CLASS_HEADERCONTAINER);
     var elTheadContent = elTheadContainer.appendChild(document.createElement("span"));
     elTheadContent.id = this.id+"-hdrow"+row+"-text"+col;
-    YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_HEADTEXT);
+    YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_HEADERTEXT);
 
     var contentText = oColumn.text || oColumn.key || "";
     if(oColumn.sortable) {
@@ -1724,13 +1768,12 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     var append = (!YAHOO.lang.isNumber(index) || (index < 0) ||
             index > (this._elTbody.rows.length-2)) ? true : false;
             
-
     var oColumnSet = this._oColumnSet;
     var oRecordSet = this._oRecordSet;
 
     var elRow = (append) ? this._elTbody.appendChild(document.createElement("tr")) :
         this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]);
-        
+
     elRow.id = this.id+"-bdrow"+(this._elTbody.rows.length-1);
     elRow.yuiRecordId = oRecord.getId();
 
@@ -1738,9 +1781,8 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     for(var j=0; j<oColumnSet.keys.length; j++) {
         var oColumn = oColumnSet.keys[j];
         var elCell = elRow.appendChild(document.createElement("td"));
-        elCell.id = this.id+"-bdrow"+index+"-cell"+j;
-        elCell.headers = oColumn.id;
-        elCell.columnIndex = j;
+        elCell.id = elRow.id+"-cell"+j;
+        elCell.yuiColumnId = oColumn.getId();
         elCell.headers = oColumnSet.headers[j];
 
         // Update UI
@@ -1781,11 +1823,15 @@ One thing, though: it doesn't work in combination with
 YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     this.hideTableMessage();
 
-    // ...Update TD elements with new data
+    // Update TD elements with new data
     for(var j=0; j<elRow.cells.length; j++) {
         var oColumn = this._oColumnSet.keys[j];
         oColumn.format(elRow.cells[j], oRecord);
     }
+
+    // Update Record ID
+    elRow.yuiRecordId = oRecord.getId();
+    
     return elRow.id || null;
 };
 
@@ -2069,7 +2115,7 @@ YAHOO.widget.DataTable.prototype._onTableClick = function(e, oSelf) {
                     break;
                 case "th":
                     YAHOO.util.Event.stopEvent(e);
-                    oSelf.fireEvent("headCellClickEvent",{target:elTarget,event:e});
+                    oSelf.fireEvent("headerCellClickEvent",{target:elTarget,event:e});
                     knownTag = true;
                     break;
                 default:
@@ -2107,7 +2153,7 @@ YAHOO.widget.DataTable.prototype._onTheadDblclick = function(e, oSelf) {
                     break;
                 case "th":
                     YAHOO.util.Event.stopEvent(e);
-                    oSelf.fireEvent("headCellDblclickEvent",{target:elTarget,event:e});
+                    oSelf.fireEvent("headerCellDblclickEvent",{target:elTarget,event:e});
                     knownTag = true;
                     break;
                 default:
@@ -2185,7 +2231,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
                         knownTag = true;
                         break;
                     case "th":
-                        oSelf.fireEvent("headCellMouseoverEvent",{target:elTarget,event:e});
+                        oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
                         knownTag = true;
                         break;
                     default:
@@ -2230,7 +2276,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
                         knownTag = true;
                         break;
                     case "th":
-                        oSelf.fireEvent("headCellMouseoutEvent",{target:elTarget,event:e});
+                        oSelf.fireEvent("headerCellMouseoutEvent",{target:elTarget,event:e});
                         knownTag = true;
                         break;
                     default:
@@ -2277,7 +2323,7 @@ YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
                         break;
                     case "th":
                         YAHOO.util.Event.stopEvent(e);
-                        oSelf.fireEvent("headCellMousedownEvent",{target:elTarget,event:e});
+                        oSelf.fireEvent("headerCellMousedownEvent",{target:elTarget,event:e});
                         knownTag = true;
                         break;
                     default:
@@ -2876,8 +2922,8 @@ YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
     
     // By Record
     if(row instanceof YAHOO.widget.Record) {
-        var pageRowIndex = this.getPageRowIndex(row);
-        return allRows[pageRowIndex];
+        var nTrIndex = this.getTrIndex(row);
+        return allRows[nTrIndex];
     }
     // By page row index
     else if(YAHOO.lang.isNumber(row) && (row > -1) && (row < allRows.length)) {
@@ -2900,12 +2946,11 @@ YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
             }
 
             // Make sure the TR is in this TBODY
-            if(elRow.parentNode == this._elTbody) {
+            if(elRow && (elRow.parentNode == this._elTbody)) {
                 // Now we can return the TR element
                 return elRow;
             }
         }
-
     }
     
     YAHOO.log("Could not get TR element for row " + row, "warn", this.toString());
@@ -2935,35 +2980,66 @@ YAHOO.widget.DataTable.prototype.getLastTrEl = function() {
 /**
  * Returns DOM reference to the TD element at given DataTable page coordinates, or null.
  *
- * @method getCell
- * @param row {Number} Page row index.
- * @param col {Number} Page column index.
+ * @method getTdEl
+ * @param row {HTMLElement | String} DOM element reference or string ID.
  * @return {HTMLElement} Reference to TD element.
  */
-YAHOO.widget.DataTable.prototype.getTdEl = function(row, col) {
-    //TODO: accept other row and column identifers
-    
-    var pageRowIndex, colIndex;
-    var allRows = this._elTbody.rows;
-    if(YAHOO.lang.isNumber(row)) {
-        if((row > -1) && (row < allRows.length)) {
-            pageRowIndex = row;
+YAHOO.widget.DataTable.prototype.getTdEl = function(cell) {
+        var elCell;
+        var el = YAHOO.util.Dom.get(cell);
 
-            // We have a valid page row index, let's get the column index
-            if(YAHOO.lang.isNumber(col)) {
-                var cells = allRows[pageRowIndex].cells;
-                if((col > -1) && (colIndex < cells.length)) {
-                    colIndex = col;
-                
-                    // We have a valid column index, let's get the TD element
-                    return cells[colIndex];
-                }
+        // Validate HTML element
+        if(el && (el.ownerDocument == document)) {
+            // Validate TD element
+            if(el.tagName.toLowerCase() != "td") {
+                // Traverse up the DOM to find the corresponding TR element
+                elCell = YAHOO.util.Dom.getAncestorByTagName(el,"td");
+            }
+            else {
+                elCell = el;
+            }
+
+            // Make sure the TD is in this TBODY
+            if(elCell && (elCell.parentNode.parentNode == this._elTbody)) {
+                // Now we can return the TD element
+                return elCell;
             }
         }
-    }
     
-    YAHOO.log("Could not get TD element at row " + row + " and column " + col,
-            "warn", this.toString());
+    YAHOO.log("Could not get TD element for cell " + cell, "warn", this.toString());
+    return null;
+};
+
+/**
+ * Returns DOM reference to the TH element at given DataTable page coordinates, or null.
+ *
+ * @method getThEl
+ * @param header {HTMLElement | String} DOM element reference or string ID.
+ * @return {HTMLElement} Reference to TH element.
+ */
+YAHOO.widget.DataTable.prototype.getThEl = function(header) {
+    var elHeader;
+    var el = YAHOO.util.Dom.get(header);
+
+    // Validate HTML element
+    if(el && (el.ownerDocument == document)) {
+        // Validate TH element
+        if(el.tagName.toLowerCase() != "th") {
+            // Traverse up the DOM to find the corresponding TR element
+            elHeader = YAHOO.util.Dom.getAncestorByTagName(el,"th");
+        }
+        else {
+            elHeader = el;
+        }
+    }
+
+        // Make sure the TH is in this THEAD
+        if(elHeader && (elHeader.parentNode.parentNode == this._elThead)) {
+            // Now we can return the TD element
+            return elHeader;
+        }
+
+    YAHOO.log("Could not get TH element for header " + header, "warn", this.toString());
     return null;
 };
 
@@ -2971,26 +3047,26 @@ YAHOO.widget.DataTable.prototype.getTdEl = function(row, col) {
  * Returns the page row index of given row. Returns null if the row is not in
  * view on the current DataTable page.
  *
- * @method getPageRowIndex
+ * @method getTrIndex
  * @param row {HTMLElement | String | YAHOO.widget.Record | Number} DOM or ID
  * string reference to an element within the DataTable page, a Record instance,
  * or a Record's RecordSet index.
  * @return {Number} Page row index, or null if row does not exist or is not in view.
  */
-YAHOO.widget.DataTable.prototype.getPageRowIndex = function(row) {
-    var recordIndex;
+YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
+    var nRecordIndex;
     
     // By Record
     if(row instanceof YAHOO.widget.Record) {
-        recordIndex = this._oRecordSet.getRecordIndex(row);
+        nRecordIndex = this._oRecordSet.getRecordIndex(row);
     }
     // By Record index
     else {
-        recordIndex = row;
+        nRecordIndex = row;
     }
     
     // Calculate page row index from Record index
-    if(YAHOO.lang.isNumber(recordIndex)) {
+    if(YAHOO.lang.isNumber(nRecordIndex)) {
 
         // DataTable is paginated
         if(this.isPaginated()) {
@@ -2998,8 +3074,8 @@ YAHOO.widget.DataTable.prototype.getPageRowIndex = function(row) {
             var startRecordIndex = this._paginator.startRecordIndex;
             var endRecordIndex = startRecordIndex + this._paginator.rowsPerPage - 1;
             // This Record is in view
-            if((recordIndex >= startRecordIndex) && (recordIndex <= endRecordIndex)) {
-                return recordIndex - startRecordIndex;
+            if((nRecordIndex >= startRecordIndex) && (nRecordIndex <= endRecordIndex)) {
+                return nRecordIndex - startRecordIndex;
             }
             // This Record is not in view
             else {
@@ -3008,7 +3084,7 @@ YAHOO.widget.DataTable.prototype.getPageRowIndex = function(row) {
         }
         // Not paginated, just return the Record index
         else {
-            return recordIndex;
+            return nRecordIndex;
         }
 
     }
@@ -3045,7 +3121,7 @@ YAHOO.widget.DataTable.prototype.getPageRowIndex = function(row) {
 
 
 
-// RECORD FUNCTIONS
+// RECORDSET FUNCTIONS
 
 /**
  * Returns Record index for given TR element or page row index.
@@ -3056,7 +3132,7 @@ YAHOO.widget.DataTable.prototype.getPageRowIndex = function(row) {
  * @return {Number} Record's RecordSet index, or null.
  */
 YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
-    var pageRowIndex;
+    var nTrIndex;
 
     if(!YAHOO.lang.isNumber(row)) {
         // By Record
@@ -3066,23 +3142,23 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
         // By element reference
         else {
             // Find the TR element
-            var el = this.getTrEl(row);YAHOO.log('1'+el);
+            var el = this.getTrEl(row);
             if(el) {
-                pageRowIndex = el.sectionRowIndex;YAHOO.log('2'+pageRowIndex);
+                nTrIndex = el.sectionRowIndex;
             }
         }
     }
     // By page row index
     else {
-        pageRowIndex = row;
+        nTrIndex = row;
     }
 
-    if(YAHOO.lang.isNumber(pageRowIndex)) {
+    if(YAHOO.lang.isNumber(nTrIndex)) {
         if(this._paginator && this._paginator.startRecordIndex) {
-            return this._paginator.startRecordIndex + pageRowIndex;
+            return this._paginator.startRecordIndex + nTrIndex;
         }
         else {
-            return pageRowIndex;
+            return nTrIndex;
         }
     }
     // Invalid identifier
@@ -3096,35 +3172,30 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
  * For the given identifier, returns the associated Record instance.
  *
  * @method getRecord
- * @param record {HTMLElement | String | Number} Record's RecordSet position
- * index, DOM element reference within the DataTable page, or by ID string to a
- * DOM element within the DataTable page.
+ * @param row {HTMLElement | String | Number} RecordSet position index, DOM
+ * reference or ID string to an element within the DataTable page.
  * @return {YAHOO.widget.Record} Record instance.
  */
-YAHOO.widget.DataTable.prototype.getRecord = function(record) {
-    var recordIndex;
+YAHOO.widget.DataTable.prototype.getRecord = function(row) {
+    var nRecordIndex;
     
     // By element reference or ID string
-    if(!YAHOO.lang.isNumber(record)) {
+    if(!YAHOO.lang.isNumber(row)) {
         // Validate TR element
-        var elRow = this.getTrEl(record);
+        var elRow = this.getTrEl(row);
         if(elRow) {
-            recordIndex = this.getRecordIndex(elRow);
+            nRecordIndex = this.getRecordIndex(elRow);
         }
     }
     // By Record index
-    if(YAHOO.lang.isNumber(recordIndex)) {
-        return this._oRecordSet.getRecord(recordIndex);
+    if(YAHOO.lang.isNumber(nRecordIndex)) {
+        return this._oRecordSet.getRecord(nRecordIndex);
     }
     else {
-        YAHOO.log("Could not get Record for " + record, "warn", this.toString());
+        YAHOO.log("Could not get Record for row " + row, "warn", this.toString());
         return null;
     }
 };
-
-
-
-
 
 
 
@@ -3169,15 +3240,15 @@ YAHOO.widget.DataTable.prototype.getRecord = function(record) {
 YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
     var oRecord = this._oRecordSet.addRecord(oData, index);
     if(oRecord) {
-        var pageRowIndex = this.getPageRowIndex(oRecord);
+        var nTrIndex = this.getTrIndex(oRecord);
         
         // Not paginated, so insert a new TR element
         if(!this.isPaginated()) {
-            var newRowId = this._addTrEl(oRecord, pageRowIndex);
+            var newRowId = this._addTrEl(oRecord, nTrIndex);
             if(newRowId) {
                 // Is this an insert or an append?
-                var append = (YAHOO.lang.isNumber(pageRowIndex) && (pageRowIndex > -1)
-                        && (pageRowIndex < this._elTbody.rows.length)) ? false : true;
+                var append = (YAHOO.lang.isNumber(nTrIndex) && (nTrIndex > -1)
+                        && (nTrIndex < this._elTbody.rows.length)) ? false : true;
 
                 // Stripe the one new row
                 if(append) {
@@ -3199,13 +3270,13 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
                     this._setLastRow();
                 }
                 // If new row is at the top
-                else if(YAHOO.lang.isNumber(index) && (pageRowIndex === 0)) {
+                else if(YAHOO.lang.isNumber(index) && (nTrIndex === 0)) {
                     this._setFirstRow();
                 }
             }
         }
         // Paginated and Record is in view, so refresh the table to keep pagination state
-        else if(pageRowIndex !== null) {
+        else if(nTrIndex !== null) {
             this.refreshTable();
         }
         // Paginated but Record is not in view so just update pagination UI
@@ -3217,12 +3288,12 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
         this.fireEvent("rowAddEvent", {data:oData, trElId:newRowId});
         
         // For log message
-        if(pageRowIndex === null) {
-            pageRowIndex = "n/a";
+        if(nTrIndex === null) {
+            nTrIndex = "n/a";
         }
         YAHOO.log("DataTable row added: Record ID = " + oRecord.getId() +
                 ", Record index = " + this.getRecordIndex(oRecord) +
-                ", page row index = " + pageRowIndex, "info", this.toString());
+                ", page row index = " + nTrIndex, "info", this.toString());
     }
     else {
         YAHOO.log("Could not add row because Record could not be created", "error", this.toString());
@@ -3286,7 +3357,7 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
     this.fireEvent("rowUpdateEvent", {newData:oData, oldData:oldData, elRow:elRow});
     YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
             ", Record index = " + this.getRecordIndex(updatedRecord) +
-            ", page row index = " + this.getPageRowIndex(updatedRecord), "info", this.toString());
+            ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
 };
 
 /**
@@ -3299,26 +3370,26 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
  */
 YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
     // Get the Record index...
-    var recordIndex = null;
+    var nRecordIndex = null;
     // ...by Record index
     if(YAHOO.lang.isNumber(row)) {
-        recordIndex = row;
+        nRecordIndex = row;
     }
     // ...by element reference
     else {
         var elRow = YAHOO.util.Dom.get(row);
         elRow = this.getTrEl(elRow);
         if(elRow) {
-            recordIndex = this.getRecordIndex(elRow);
+            nRecordIndex = this.getRecordIndex(elRow);
         }
     }
-    if(recordIndex !== null) {
+    if(nRecordIndex !== null) {
         //TODO: remove from selection tracker
     
-        var oRecord = this._oRecordSet.getRecord(recordIndex);
+        var oRecord = this._oRecordSet.getRecord(nRecordIndex);
 
         // Copy data from the Record for the event that gets fired later
-        var recordId = oRecord.getId();
+        var nRecordId = oRecord.getId();
         var oRecordData = oRecord.getData();
         var oData = {};
         for(var key in oRecordData) {
@@ -3326,12 +3397,12 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
         }
         
         // Delete Record from RecordSet
-        this._oRecordSet.deleteRecord(recordIndex);
+        this._oRecordSet.deleteRecord(nRecordIndex);
         
         // If row is in view, delete the TR element
-        var pageRowIndex = this.getPageRowIndex(recordIndex);
-        if(YAHOO.lang.isNumber(pageRowIndex)) {
-            this._deleteTrEl(pageRowIndex);
+        var nTrIndex = this.getTrIndex(nRecordIndex);
+        if(YAHOO.lang.isNumber(nTrIndex)) {
+            this._deleteTrEl(nTrIndex);
             
             //TODO: doesn't need to be called every time
             // Set first-row and last-row trackers
@@ -3339,11 +3410,11 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
             this._setLastRow();
         }
         
-        this.fireEvent("rowDeleteEvent", {recordIndex:recordIndex,
-                recordData:oData, pageRowIndex:pageRowIndex});
-        YAHOO.log("DataTable row deleted: Record ID = " + recordId +
-                ", Record index = " + recordIndex +
-                ", page row index = " + pageRowIndex, "info", this.toString());
+        this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
+                recordData:oData, nTrIndex:nTrIndex});
+        YAHOO.log("DataTable row deleted: Record ID = " + nRecordId +
+                ", Record index = " + nRecordIndex +
+                ", page row index = " + nTrIndex, "info", this.toString());
     }
     else {
         YAHOO.log("Could not delete row: " + row, "warn", this.toString());
@@ -3454,7 +3525,7 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
  * @method refreshTable
  */
 YAHOO.widget.DataTable.prototype.refreshTable = function() {
-    var i, aRecords;
+    var i, j, aRecords;
     
     // Paginator is disabled
     if(!this.paginator) {
@@ -3484,33 +3555,48 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
             elTbody.deleteRow(-1);
         }
 
-        //TODO: remove selections
-        // Unselect rows in the UI but keep tracking selected rows
-        var selectedRecords = this.getSelectedRecordIds();
-        if(selectedRecords.length > 0) {
+        // Keep track of selected rows
+        var aSelectedRows = this.getSelectedRows();
+        
+        // Keep track of selected cells
+        var aSelectedCells = this.getSelectedCells();
+
+        // Unselect TR elements in the UI
+        if(aSelectedRows.length > 0) {
             this._unselectAllTrEls();
         }
 
-        //TODO: Keep track of updated TR IDs?
-        var rowIds = [];
-        
+        // Unselect TD elements in the UI
+        if(aSelectedCells.length > 0) {
+            this._unselectAllTdEls();
+        }
+
+
         // From the top, update in-place existing rows
         for(i=0; i<elRows.length; i++) {
-            rowIds.push(this._updateTrEl(elRows[i], aRecords[i]));
+            this._updateTrEl(elRows[i], aRecords[i]);
         }
 
-        // Add rows as necessary
+        // Add TR elements as necessary
         for(i=elRows.length; i<aRecords.length; i++) {
-            rowIds.push(this._addTrEl(aRecords[i]));
+            this._addTrEl(aRecords[i]);
         }
 
-        //TODO: reapply selections
-        // Select any rows as necessary
-        for(i=0; i<selectedRecords.length; i++) {
-            var allRows = elTbody.rows;
-            for(var j=0; j<allRows.length; j++) {
-                if(selectedRecords[i].id === allRows[j].yuiRecordId) {
-                    this._selectEl([allRows[j]]);
+        // Re-select any TR or TD elements as necessary
+        var allSelections = aSelectedRows.concat(aSelectedCells);
+        var allRows = elTbody.rows;
+        for(i=0; i<allSelections.length; i++) {
+            for(j=0; j<allRows.length; j++) {
+                var thisRow = allRows[j];
+                if(allSelections[i] === thisRow.yuiRecordId) {
+                    YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
+                }
+                else if(allSelections[i].recordId === thisRow.yuiRecordId) {
+                    for(var k=0; k<thisRow.cells.length; k++) {
+                        if(thisRow.cells[k].yuiColumnId === allSelections[i].columnId) {
+                            YAHOO.util.Dom.addClass(thisRow.cells[k], YAHOO.widget.DataTable.CLASS_SELECTED);
+                        }
+                    }
                 }
             }
         }
@@ -4033,10 +4119,10 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
  * @default null
  */
 /**
- * Enable selection by "rows" or by "cells".
+ * Enable selection by cell with the value true, otherwise selections are by row.
  *
- * @property selectionModel.mode
- * @type String
+ * @property selectionModel.cellMode
+ * @type Boolean
  */
 /**
  * Name of the custom event that triggers selection. For example, to enable
@@ -4061,7 +4147,14 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
  */
 YAHOO.widget.DataTable.prototype.selectionModel = null;
 
-
+/**
+ * Array of selections: {recordId:nRecordId, cellIndex:nCellIndex}
+ *
+ * @property _aSelections
+ * @type Object[]
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._aSelections = null;
 
 /**
  * ID string of the selection anchor element.
@@ -4072,99 +4165,66 @@ YAHOO.widget.DataTable.prototype.selectionModel = null;
  */
 YAHOO.widget.DataTable.prototype._sSelectionAnchorId = null;
 
-/**
- * Array of selections.
+
+/*
+ * Adds row to selection tracker.
  *
- * @property _aSelections
- * @type Object[]
+ * @method _selectRow
+ * @param oRecord {YAHOO.widget.Record} Record instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._aSelections = null;
+//YAHOO.widget.DataTable.prototype._selectRow = function(oRecord) {
+//};
 
-/**
- * Assigns the class YAHOO.widget.DataTable.CLASS_SELECTED to the given
- * element(s) and updates internal tracker.
+/*
+ * Removes row from selection tracker.
  *
- * @method _selectEl
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element by
- * reference or ID string, or array of HTML elements by reference or ID string.
+ * @method _unselectRow
+ * @param oRecord {YAHOO.widget.Record} Record instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._selectEl = function(els) {
-    if(!YAHOO.lang.isArray(els)) {
-        els = [els];
-    }
-
-    for(var i=0; i<els.length; i++) {
-        // Set the style
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
-    }
-    this._lastSelectedId = els[els.length-1].id;
-};
-
-/**
- * Removes the class YAHOO.widget.DataTable.CLASS_SELECTED from the given
- * element(s) and updates internal tracker.
- *
- * @method _unselectEl
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTMLElement by
- * reference or ID string, or array of HTML elements by reference or ID string.
- * @private
- */
-YAHOO.widget.DataTable.prototype._unselectEl = function(els) {
-    if(!YAHOO.lang.isArray(els)) {
-        els = [els];
-    }
-
-    for(var i=0; i<els.length; i++) {
-        // Remove the style
-        YAHOO.util.Dom.removeClass(YAHOO.util.Dom.get(els[i]),YAHOO.widget.DataTable.CLASS_SELECTED);
-    }
-};
+//YAHOO.widget.DataTable.prototype._unselectRow = function(oRecord) {
+//};
 
 /**
  * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
- * from all TR elements in the internal tracker.
+ * from all TR elements on the page.
  *
  * @method _unselectAllTrEls
  * @private
  */
 YAHOO.widget.DataTable.prototype._unselectAllTrEls = function() {
     var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
-    this._unselectEl(selectedRows);
+    YAHOO.util.Dom.removeClass(selectedRows, YAHOO.widget.DataTable.CLASS_SELECTED);
 };
 
 /**
- * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
- * from all TD elements in the internal tracker.
+ * Returns array of selected TR elements on the page.
  *
- * @method _unselectAllTdEls
- * @private
+ * @method getSelectedTrEls
+ * @return {HTMLElement[]} Array of selected TR elements.
  */
-YAHOO.widget.DataTable.prototype._unselectAllTdEls = function() {
-    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
-    this._unselectEl(selectedCells);
+YAHOO.widget.DataTable.prototype.getSelectedTrEls = function() {
+    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
 };
 
 /**
- * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHT to the given element(s).
+ * Sets given row to the selected state.
  *
- * @method select
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
- * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
+ * @method selectRow
+ * @param row {HTMLElement | String} HTML element reference or ID.
  */
-YAHOO.widget.DataTable.prototype.select = function(els) {
-    if(els) {
-        if(!YAHOO.lang.isArray(els)) {
-            els = [els];
-        }
-        this._selectEl(els);
-
-        // Add Record ID to internal tracker
-        var tracker = this._aSelections || [];
-        for(var i=0; i<els.length; i++) {
-            var id = els[i].yuiRecordId;
+YAHOO.widget.DataTable.prototype.selectRow = function(row) {
+    // Validate the row
+    var elRow = this.getTrEl(row);
+    if(elRow) {
+        var oRecord = this.getRecord(elRow);
+        if(oRecord) {
+            // Get Record ID
+            var tracker = this._aSelections || [];
+            var id = oRecord.getId();
             // Remove if already there
+
             // Use Array.indexOf if available...
             if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
                 tracker.splice(tracker.indexOf(id),1);
@@ -4179,31 +4239,44 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
             }
             // Add to the end
             tracker.push(id);
+
+            // Update trackers
+            this._lastSelectedId = elRow.id;
+            if(!this._sSelectionAnchorId) {
+                this._sSelectionAnchorId = elRow.id;
+            }
+            this._aSelections = tracker;
+        
+            // Update UI
+            YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
+
+            this.fireEvent("selectEvent", {record:oRecord, el:elRow});
+            YAHOO.log("DataTable row selected " + row, "info", this.toString());
+
+            return;
         }
-        this._aSelections = tracker;
-        this.fireEvent("selectEvent",{els:els});
-        YAHOO.log(els.length + " element(s) selected", "info", this.toString());
     }
+    YAHOO.log("Could not select " + row, "warn", this.toString());
 };
 
 /**
- * Sets one or more elements to the unselected state.
+ * Sets given row to the unselected state.
  *
- * @method unselect
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML element
- * reference, element ID, array of HTML elements, or array of element IDs
+ * @method unselectRow
+ * @param row {HTMLElement | String} HTML TR element reference or ID.
  */
-YAHOO.widget.DataTable.prototype.unselect = function(els) {
-    if(els) {
-        if(!YAHOO.lang.isArray(els)) {
-            els = [els];
-        }
-        this._unselectEl(els);
-        // Remove Record ID from internal tracker
-        var tracker = this._aSelections || [];
-        for(var i=0; i<els.length; i++) {
-            var id = els[i].yuiRecordId;
-        
+YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
+    // Validate the row
+    var elRow = this.getTrEl(row);
+    if(elRow) {
+        var oRecord = this.getRecord(elRow);
+        if(oRecord) {
+            // Get Record ID
+            var tracker = this._aSelections || [];
+            var id = oRecord.getId();
+
+            // Remove if there
+
             // Use Array.indexOf if available...
             if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
                 tracker.splice(tracker.indexOf(id),1);
@@ -4211,31 +4284,187 @@ YAHOO.widget.DataTable.prototype.unselect = function(els) {
             // ...or do it the old-fashioned way
             else {
                 for(var j=0; j<tracker.length; j++) {
-                    if(tracker[j] === id){
+                   if(tracker[j] === id){
                         tracker.splice(j,1);
                     }
                 }
             }
+
+            // Update tracker
+            this._aSelections = tracker;
+
+            // Update the UI
+            YAHOO.util.Dom.removeClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
+
+            this.fireEvent("unselectRowEvent", {record:oRecord, el:elRow});
+            YAHOO.log("DataTable row unselected " + row, "info", this.toString());
+
+            return;
         }
-        this._aSelections = tracker;
-        this.fireEvent("unselectEvent",{els:els});
-        YAHOO.log(els.length + " element(s) unselected", "info", this.toString());
     }
+    YAHOO.log("Could not unselect row " + row, "warn", this.toString());
 };
 
 /**
- * Unselects all selected cells.
+ * Clears out all row selections.
+ *
+ * @method unselectAllRows
+ */
+YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
+    // Remove from tracker
+    var tracker = this._aSelections || [];
+    for(var j=0; j<tracker.length; j++) {
+       if(YAHOO.lang.isNumber(tracker[j])){
+            tracker.splice(j,1);
+        }
+    }
+
+    // Update tracker
+    this._aSelections = tracker;
+
+    // Update UI
+    this._unselectAllTrEls();
+
+    this.fireEvent("unselectAllRowsEvent");
+    YAHOO.log("All row selections were cleared", "info", this.toString());
+};
+
+/**
+ * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
+ * from all TD elements in the internal tracker.
+ *
+ * @method _unselectAllTdEls
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._unselectAllTdEls = function() {
+    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
+    YAHOO.util.Dom.removeClass(selectedCells, YAHOO.widget.DataTable.CLASS_SELECTED);
+};
+
+/**
+ * Returns array of selected TD elements on the page.
+ *
+ * @method getSelectedTdEls
+ * @return {HTMLElement[]} Array of selected TD elements.
+ */
+YAHOO.widget.DataTable.prototype.getSelectedTdEls = function() {
+    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
+};
+
+/**
+ * Sets given cell to the selected state.
+ *
+ * @method selectCell
+ * @param cell {HTMLElement | String} DOM element reference or ID string
+ * to DataTable page element or RecordSet index.
+ */
+YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
+    var elCell = this.getTdEl(cell);
+    
+    if(elCell) {
+        var oRecord = this.getRecord(elCell);
+        var sColumnId = elCell.yuiColumnId;
+
+        if(oRecord && sColumnId) {
+            // Get Record ID
+            var tracker = this._aSelections || [];
+            var id = oRecord.getId();
+
+            // Remove if there
+            for(var j=0; j<tracker.length; j++) {
+               if((tracker[j].recordId === id) && (tracker[j].columnId === sColumnId)){
+                    tracker.splice(j,1);
+                }
+            }
+
+            // Add to the end
+            tracker.push({recordId:id, columnId:sColumnId});
+
+            // Update trackers
+            this._aSelections = tracker;
+            this._lastSelectedId = elCell.id;
+            if(!this._sSelectionAnchorId) {
+                this._sSelectionAnchorId = elRow.id;
+            }
+
+            // Update the UI
+            YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
+
+            this.fireEvent("selectCellEvent", {record:oRecord,
+                    key: this._oColumnSet.getColumn(sColumnId).key, el:elCell});
+            YAHOO.log("DataTable selected cell " + cell, "info", this.toString());
+
+            return;
+        }
+    }
+    YAHOO.log("Could not select " + item, "warn", this.toString());
+};
+
+/**
+ * Sets given cell to the unselected state.
+ *
+ * @method unselectCell
+ * @param cell {HTMLElement | String} DOM element reference or ID string
+ * to DataTable page element or RecordSet index.
+ */
+YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
+    var elCell = this.getTdEl(cell);
+
+    if(elCell) {
+        var oRecord = this.getRecord(elCell);
+        var sColumnId = elCell.yuiColumnId;
+
+        if(oRecord && sColumnId) {
+            // Get Record ID
+            var tracker = this._aSelections || [];
+            var id = oRecord.getId();
+
+            // Remove if there
+            if((tracker[j].recordId === id) && (tracker[j].columnId === sColumnId)){
+               if(tracker[j].recordId === id){
+                    tracker.splice(j,1);
+                }
+            }
+
+            // Update tracker
+            this._aSelections = tracker;
+
+            // Update the UI
+            YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
+
+            this.fireEvent("unselectCellEvent", {record:oRecord,
+                    key:this._oColumnSet.getColumn(sColumnId).key, el:elCell});
+            YAHOO.log("DataTable unselected cell " + cell, "info", this.toString());
+
+            return;
+        }
+    }
+    YAHOO.log("Could not unselect " + item, "warn", this.toString());
+};
+
+/**
+ * Clears out all cell selections.
  *
  * @method unselectAllCells
  */
-YAHOO.widget.DataTable.prototype.unselectAllCells = function() {
-    var selectedCells = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this._elTbody);
-    this.unselect(selectedCells);
-    this.fireEvent("unselectEvent", {els:selectedCells});
-    //TODO
-    //YAHOO.log();
-};
+YAHOO.widget.DataTable.prototype.unselectAllCells= function() {
+    // Remove from tracker
+    var tracker = this._aSelections || [];
+    for(var j=0; j<tracker.length; j++) {
+       if(tracker[j] && (tracker[j].constructor == Object)){
+            tracker.splice(j,1);
+        }
+    }
 
+    // Update tracker
+    this._aSelections = tracker;
+
+    // Update UI
+    this._unselectAllTdEls();
+    
+    this.fireEvent("unselectAllCellsEvent");
+    YAHOO.log("All cell selections were cleared", "info", this.toString());
+};
 
 /**
  * Returns true if given element is select, false otherwise.
@@ -4249,138 +4478,47 @@ YAHOO.widget.DataTable.prototype.isSelected = function(el) {
 };
 
 /**
- * Returns array of selected Record IDs.
- *
- * @method getSelectedRecordIds
- * @return {HTMLElement[]} Array of selected TR elements.
- */
-YAHOO.widget.DataTable.prototype.getSelectedRecordIds = function() {
-    //TODO: parse out the Record IDs from internal tracker
-    return this._aSelections || [];
-};
-
-/**
- * Returns array of selected rows.
+ * Returns selected rows as an array of Record IDs.
  *
  * @method getSelectedRows
  * @return {HTMLElement[]} Array of selected TR elements.
  */
 YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
-    //TODO: keep internal array if this is non performant
-    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this.__elTbody);
+    var aSelectedRows = [];
+    var tracker = this._aSelections || [];
+    for(var j=0; j<tracker.length; j++) {
+       if(YAHOO.lang.isNumber(tracker[j])){
+            aSelectedRows.push(tracker[j]);
+        }
+    }
+    return aSelectedRows;
 };
 
 /**
- * Returns array of selected TD cells.
+ * Returns selected cells as an array of object literals:
+ *     {recordId:nRecordID, columnId:sColumnId}.
  *
- * @method getSelectedCells
- * @return {HTMLElement[]} Array of selected TD elements.
+ * @method getSelectedRows
+ * @return {HTMLElement[]} Array of selected TR elements.
  */
 YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
-    //TODO: keep internal array
-    return YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"td",this.__elTbody);
-};
-
-
-/**
- * Sets a row to the selected state. If the row is in view, the corresponding
- * DOM elements are also updated.
- *
- * @method selectRow
- * @param row {HTMLElement | String} HTML TR element reference or ID.
- */
-YAHOO.widget.DataTable.prototype.selectRow = function(row) {
-    // Validate the row
-    row = YAHOO.util.Dom.get(row);
-    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
-        var recordId = row.yuiRecordId;
-
-        // Update internal tracker
-        var tracker = this._aSelections || [];
-        // Remove Record ID if already there...
-        if(tracker.length > 0) {
-            // ...using Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
-                tracker.splice(tracker.indexOf(recordId), 1);
-            }
-            // ...or do it the old-fashioned way
-            else {
-                for(var i=0; i<tracker.length; i++) {
-                   if(tracker[i] === recordId) {
-                        tracker.splice(i, 1);
-                    }
-                }
-            }
+    var aSelectedCells = [];
+    var tracker = this._aSelections || [];
+    for(var j=0; j<tracker.length; j++) {
+       if(tracker[j] && (tracker[j].constructor == Object)){
+            aSelectedCells.push({recordId:tracker[j].recordId, columnId:tracker[j].columnId});
         }
-
-        // Update UI
-        this._selectEl(row);
-
-        // Add to the end of internal tracker
-        tracker.push(recordId);
-        this._aSelections = tracker;
-
-        this.fireEvent("rowSelectEvent",{el:row, record:this.getRecord(row)});
-        YAHOO.log("DataTable row selected: Record ID = " + recordId +
-                ", Record index = " + "TODO" +
-                ", page row index = " + "TODO", "info", this.toString());
     }
-};
-
-/**
- * Sets a row to the unselected state. If the row is in view, the corresponding
- * DOM elements are also updated.
- *
- * @method unselectRow
- * @param row {HTMLElement | String} HTML TR element reference or ID.
- */
-YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
-    // Validate the row
-    row = YAHOO.util.Dom.get(row);
-    if(row && YAHOO.lang.isNumber(row.yuiRecordId)) {
-        var recordId = row.yuiRecordId;
-
-        // Update internal tracker
-        var tracker = this._aSelections || [];
-        // Remove Record ID if there...
-        if(tracker.length > 0) {
-            // ...using Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(recordId) > -1)) {
-                tracker.splice(tracker.indexOf(recordId), 1);
-            }
-            // ...or do it the old-fashioned way
-            else {
-                for(var i=0; i<tracker.length; i++) {
-                   if(tracker[i] === recordId) {
-                        tracker.splice(i, 1);
-                    }
-                }
-            }
-        }
-
-        // Update UI
-        this._unselectEl(row);
-
-        this.fireEvent("rowUnselectEvent",{el:row, record:this.getRecord(row)});
-        YAHOO.log("DataTable row unselected: Record ID = " + recordId +
-                ", Record index = " + "TODO" +
-                ", page row index = " + "TODO", "info", this.toString());
-    }
+    return aSelectedCells;
 };
 
 
-/**
- * Unselects all selected rows (across all pages).
- *
- * @method unselectAllRows
- */
-YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
-    var selectedRows = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_SELECTED,"tr",this._elTbody);
-    this.unselect(selectedRows);
-    this._aSelections = [];
-    this.fireEvent("unselectEvent", {els:selectedRows});
-    YAHOO.log("All DataTable row unselected", "info", this.toString());
-};
+
+
+
+
+
+
 
 /**
  * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHT to the given element(s).
@@ -4462,6 +4600,7 @@ YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
 
 
 
+
 // INLINE EDITING
 
 /**
@@ -4471,8 +4610,8 @@ YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
  * @param elCell {HTMLElement} Cell element to edit.
  */
 YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
-    if(elCell && YAHOO.lang.isNumber(elCell.columnIndex)) {
-        var column = this._oColumnSet.keys[elCell.columnIndex];
+    if(elCell && YAHOO.lang.isString(elCell.yuiColumnId)) {
+        var column = this._oColumnSet.getColumn(elCell.yuiColumnId);
         if(column && column.editor) {
             //TODO: getRecord API has changed
             this.activeEditor = column.getEditor(elCell,this.getRecord(elCell));
@@ -4521,8 +4660,8 @@ YAHOO.widget.DataTable.prototype.saveEditorData = function() {
         var newValue = this.activeEditor.getValue();
 
         if(YAHOO.util.Lang.isString(oColumn.key)) {
-            // Update Record field
-            this._oRecordSet.updateField(oRecord,oColumn.key,newValue);
+            // Update Record data
+            this._oRecordSet.updateKey(oRecord,oColumn.key,newValue);
 
             //Update TD element
             oColumn.format(elCell, oRecord);
@@ -4672,17 +4811,17 @@ YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
+//TODO: support nested header column sorting
     var evt = oArgs.event;
     var target = oArgs.target;
     YAHOO.util.Event.stopEvent(evt);
     
-    //TODO: traverse DOM to find a columnIndex, incl safety net if none exists
-    if(YAHOO.lang.isNumber(target.columnIndex)) {
-        this.sortColumn(this._oColumnSet.keys[target.columnIndex]);
+    var el = this.getThEl(target) || this.getTdEl(target);
+    if(el && YAHOO.lang.isString(el.yuiColumnId)) {
+        this.sortColumn(this._oColumnSet.getColumn(el.yuiColumnId));
     }
     else {
-        //TODO: support sort on parent of nested header
-        YAHOO.log("Could not sort due to invalid column","warn",this.toString());
+        YAHOO.log("Could not sort column " + target, "warn", this.toString());
     }
 };
 
@@ -4696,141 +4835,150 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
 YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
     var evt = oArgs.event;
     var elTarget = oArgs.target;
-    var elTag = elTarget.tagName.toLowerCase();
-    var bSingleSelect = this.rowSingleSelect;
+    var bSingleSelect = this.selectionModel && !this.selectionModel.enableMulti;
     var bSHIFT = evt.shiftKey;
     var bCTRL = evt.ctrlKey;
-    var i;
+    var i, nAnchorIndex;
 
-    // Traverse up the DOM to find the row
-    while(elTag != "tr") {
-        // Bail out
-        if(elTag == "body") {
-            return;
+    var elRow = this.getTrEl(elTarget);
+    if(elRow) {
+        var allRows = this._elTbody.rows;
+        var nTargetIndex = elRow.sectionRowIndex;
+        var elAnchor = YAHOO.util.Dom.get(this._sSelectionAnchorId);
+        
+        /*// Traverse up the DOM to find the row
+        while(elTag != "tr") {
+            // Bail out
+            if(elTag == "body") {
+                return;
+            }
+            // Maybe it's the parent
+            elTarget = elTarget.parentNode;
+            elTag = elTarget.tagName.toLowerCase();
         }
-        // Maybe it's the parent
-        elTarget = elTarget.parentNode;
-        elTag = elTarget.tagName.toLowerCase();
-    }
-    var sTargetId = elTarget.id;
-    var rows = this._elTbody.rows;
-    var anchor = YAHOO.util.Dom.get(this._sSelectionAnchorId);
-    var anchorIndex;
-    var targetIndex = elTarget.sectionRowIndex;
+        var sTargetId = elTarget.id;
+        var rows = this._elTbody.rows;
+        
+        var anchorIndex;
+        var targetIndex = elTarget.sectionRowIndex;*/
 
-    // Both SHIFT and CTRL
-    if(!bSingleSelect && bSHIFT && bCTRL) {
-        // Validate anchor
-        if(anchor) {
-            anchorIndex = anchor.sectionRowIndex;
-            if(this.isSelected(YAHOO.util.Dom.get(this._sSelectionAnchorId))) {
-                // Select all rows between anchor row and target row, inclusive
-                if(anchorIndex < targetIndex) {
-                    for(i=anchorIndex+1; i<=targetIndex; i++) {
-                        if(!this.isSelected(rows[i])) {
-                            this.selectRow(rows[i]);
+        // Both SHIFT and CTRL
+        if(!bSingleSelect && bSHIFT && bCTRL) {
+            // Validate anchor
+            if(elAnchor) {
+                nAnchorIndex = elAnchor.sectionRowIndex;
+                if(this.isSelected(elAnchor)) {
+                    // Select all rows between anchor and target, inclusive
+                    if(nAnchorIndex < nTargetIndex) {
+                        for(i=nAnchorIndex+1; i<=nTargetIndex; i++) {
+                            if(!this.isSelected(allRows[i])) {
+                                this.selectRow(allRows[i]);
+                            }
+                        }
+                    }
+                    // Select all rows from target to anchor, inclusive
+                    else {
+                        for(i=nTargetIndex; i<=nAnchorIndex-1; i++) {
+                            if(!this.isSelected(allRows[i])) {
+                                this.selectRow(allRows[i]);
+                            }
                         }
                     }
                 }
-                // Select from target to anchor
                 else {
-                    for(i=targetIndex; i<=anchorIndex-1; i++) {
-                        if(!this.isSelected(rows[i])) {
-                            this.selectRow(rows[i]);
+                    // Unselect all rows between anchor row and target row
+                    if(nAnchorIndex < nTargetIndex) {
+                        for(i=nAnchorIndex+1; i<=nTargetIndex-1; i++) {
+                            if(this.isSelected(allRows[i])) {
+                                this.unselectRow(allRows[i]);
+                            }
                         }
                     }
+                    // Select from target to anchor
+                    else {
+                        for(i=nTargetIndex+1; i<=nAnchorIndex-1; i++) {
+                            if(this.isSelected(allRows[i])) {
+                                this.unselectRow(allRows[i]);
+                            }
+                        }
+                    }
+                    this.selectRow(elRow);
                 }
             }
+            // Invalid anchor
             else {
-                // Unselect all rows between anchor row and target row, exclusive
-                if(anchorIndex < targetIndex) {
-                    for(i=anchorIndex+1; i<=targetIndex-1; i++) {
-                        if(this.isSelected(rows[i])) {
-                            this.unselectRow(rows[i]);
-                        }
-                    }
+                // Set anchor
+                this._sSelectionAnchorId = elRow.id;
+
+                // Toggle selection of target
+                if(this.isSelected(elRow)) {
+                    this.unselectRow(elRow);
                 }
-                // Select from target to anchor
                 else {
-                    for(i=targetIndex+1; i<=anchorIndex-1; i++) {
-                        if(this.isSelected(rows[i])) {
-                            this.unselectRow(rows[i]);
-                        }
-                    }
+                    this.selectRow(elRow);
                 }
-                this.select(elTarget);
             }
         }
-        // Invalid anchor
-        else {
+        // Only SHIFT
+        else if(!bSingleSelect && bSHIFT) {
+            this.unselectAllRows();
+
+            // Validate anchor
+            if(elAnchor) {
+                nAnchorIndex = elAnchor.sectionRowIndex;
+
+                // Select all rows between anchor and target, inclusive
+                if(nAnchorIndex < nTargetIndex) {
+                    for(i=nAnchorIndex; i<=nTargetIndex; i++) {
+                        this.selectRow(allRows[i]);
+                    }
+                }
+                // Select all rows from target to anchor
+                else {
+                    for(i=nTargetIndex; i<=nAnchorIndex; i++) {
+                        this.selectRow(allRows[i]);
+                    }
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._sSelectionAnchorId = elRow.id;
+
+                // Select target only
+                this.selectRow(elRow);
+            }
+        }
+        // Only CTRL
+        else if(!bSingleSelect && bCTRL) {
             // Set anchor
-            this._sSelectionAnchorId = sTargetId;
-            
+            this._sSelectionAnchorId = elRow.id;
+
             // Toggle selection of target
-            if(this.isSelected(elTarget)) {
-                this.unselect(elTarget);
+            if(this.isSelected(elRow)) {
+                this.unselectRow(elRow);
             }
             else {
-                this.select(elTarget);
+                this.selectRow(elRow);
             }
         }
-    }
-    // Only SHIFT
-    else if(!bSingleSelect && bSHIFT) {
-        this.unselectAllRows();
-
-        // Validate anchor
-        if(anchor) {
-            anchorIndex = anchor.sectionRowIndex;
-            
-            // Select all rows between anchor row and target row inclusive
-            if(anchorIndex < targetIndex) {
-                for(i=anchorIndex; i<=targetIndex; i++) {
-                    this.selectRow(rows[i]);
-                }
-            }
-            // Select from target to anchor
-            else {
-                for(i=targetIndex; i<=anchorIndex; i++) {
-                    this.selectRow(rows[i]);
-                }
-            }
+        // Neither SHIFT nor CTRL
+        else if(bSingleSelect) {
+            this.unselectRow(this._lastSelectedId);
+            this.selectRow(elRow);
         }
-        // Invalid anchor
+        // Neither SHIFT nor CTRL
         else {
             // Set anchor
-            this._sSelectionAnchorId = sTargetId;
-            
-            // Select target only
-            this.selectRow(elTarget);
+            this._sSelectionAnchorId = elRow.id;
+
+            // Select only target
+            this.unselectAllRows();
+            this.selectRow(elRow);
         }
     }
-    // Only CTRL
-    else if(!bSingleSelect && bCTRL) {
-        // Set anchor
-        this._sSelectionAnchorId = sTargetId;
-        
-        // Toggle selection of target
-        if(this.isSelected(elTarget)) {
-            this.unselect(elTarget);
-        }
-        else {
-            this.select(elTarget);
-        }
-    }
-    // Neither SHIFT nor CTRL
-    else if(bSingleSelect) {
-        this.unselect(this._lastSelectedId);
-        this.select(elTarget);
-    }
-    // Neither SHIFT nor CTRL
     else {
-        // Set anchor
-        this._sSelectionAnchorId = sTargetId;
-        
-        // Select only target
-        this.unselectAllRows();
-        this.selectRow(elTarget);
+        YAHOO.log("Could not select row " + elTarget, "warn", this.toString());
     }
 };
 
@@ -4843,30 +4991,143 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     var evt = oArgs.event;
-    var target = oArgs.target;
-    var elTag = target.tagName.toLowerCase();
+    var elTarget = oArgs.target;
+    var bSingleSelect = this.selectionModel && !this.selectionModel.enableMulti;
+    var bSHIFT = evt.shiftKey;
+    var bCTRL = evt.ctrlKey;
+    var i, nAchorRowIndex, nAnchorCellIndex;
 
-    // Walk up the DOM until we get to the TD
-    while(elTag != "td") {
-        // Bail out
-        if(elTag == "body") {
-            return;
+    var elCell = this.getTdEl(elTarget);
+    if(elCell) {
+        var elRow = this.getTrEl(elCell);
+        var allRows = this._elTbody.rows;
+        var nTargetRowIndex = elRow.sectionRowIndex;
+        var elAnchor = YAHOO.util.Dom.get(this._sSelectionAnchorId);
+
+        // Both SHIFT and CTRL
+        if(!bSingleSelect && bSHIFT && bCTRL) {
+            // Validate anchor
+            if(elAnchor) {
+                nAnchorRowIndex = elAnchor.parentNode.sectionRowIndex;
+                nAnchorCellIndex = elAnchor.cellIndex;
+                
+                if(this.isSelected(elAnchor)) {
+                    //TODO: cell logic
+                                // Select all rows between anchor and target, inclusive
+                                if(nAnchorRowIndex < nTargetRowIndex) {
+                                    for(i=nAnchorRowIndex+1; i<=nTargetRowIndex; i++) {
+                                        if(!this.isSelected(allRows[i])) {
+                                            this.selectRow(allRows[i]);
+                                        }
+                                    }
+                                }
+                                // Select all rows from target to anchor, inclusive
+                                else {
+                                    for(i=nTargetRowIndex; i<=nAnchorRowIndex-1; i++) {
+                                        if(!this.isSelected(allRows[i])) {
+                                            this.selectRow(allRows[i]);
+                                        }
+                                    }
+                                }
+                }
+                else {
+                    //TODO: cell logic
+                                // Unselect all rows between anchor row and target row
+                                if(nAnchorRowIndex < nTargetRowIndex) {
+                                    for(i=nAnchorRowIndex+1; i<=nTargetRowIndex-1; i++) {
+                                        if(this.isSelected(allRows[i])) {
+                                            this.unselectCell(allRows[i]);
+                                        }
+                                    }
+                                }
+                                // Select from target to anchor
+                                else {
+                                    for(i=nTargetRowIndex+1; i<=nAnchorRowIndex-1; i++) {
+                                        if(this.isSelected(allRows[i])) {
+                                            this.unselectCell(allRows[i]);
+                                        }
+                                    }
+                                }
+                    this.selectCell(elCell);
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._sSelectionAnchorId = elCell.id;
+
+                // Toggle selection of target
+                if(this.isSelected(elCell)) {
+                    this.unselectCell(elCell);
+                }
+                else {
+                    this.selectCell(elCell);
+                }
+            }
         }
-        
-        target = target.parentNode;
-        elTag = target.tagName.toLowerCase();
-    }
+        // Only SHIFT
+        else if(!bSingleSelect && bSHIFT) {
+            this.unselectAllCells();
 
-    if(this.isSelected(target)) {
-        this.unselect(target);
+            // Validate anchor
+            if(elAnchor) {
+                nAnchorRowIndex = elAnchor.parentNode.sectionRowIndex;
+                nAnchorCellIndex = elAnchor.cellIndex;
+
+                //TODO: Cell logic
+                            // Select all cells between anchor and target, inclusive
+                            if(nAnchorRowIndex < nTargetRowIndex) {
+                                for(i=nAnchorRowIndex; i<=nTargetRowIndex; i++) {
+                                    this.selectRow(allRows[i]);
+                                }
+                            }
+                            // Select all rows from target to anchor
+                            else {
+                                for(i=nTargetRowIndex; i<=nAnchorRowIndex; i++) {
+                                    this.selectRow(allRows[i]);
+                                }
+                            }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._sSelectionAnchorId = elCell.id;
+
+                // Select target only
+                this.selectCell(elCell);
+            }
+        }
+        // Only CTRL
+        else if(!bSingleSelect && bCTRL) {
+            // Set anchor
+            this._sSelectionAnchorId = elCell.id;
+
+            // Toggle selection of target
+            if(this.isSelected(elCell)) {
+                this.unselectCell(elCell);
+            }
+            else {
+                this.selectCell(elCell);
+            }
+        }
+        // Multi-selection has been disabled
+        /*else if(bSingleSelect) {
+            this.unselectCell(this._lastSelectedId);
+            this.selectCell(elCell);
+        }*/
+        // Neither SHIFT nor CTRL or multi-selection has been disabled
+        else {
+            // Set anchor
+            this._sSelectionAnchorId = elCell.id;
+
+            // Select only target
+            this.unselectAllCells();
+            this.selectCell(elCell);
+        }
     }
     else {
-        if(this.rowSingleSelect && !evt.ctrlKey) {
-            this.unselectAllCells();
-        }
-        this.select(target);
-    }
-};
+        YAHOO.log("Could not select cell " + elTarget, "warn", this.toString());
+    }};
 
 /**
  * Overridable custom event handler to format cell.
@@ -4880,20 +5141,11 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
     var target = oArgs.target;
     var elTag = target.tagName.toLowerCase();
 
-    // Walk up the DOM until we get to the TD
-    while(elTag != "td") {
-        // Bail out
-        if(elTag == "body") {
-            return;
-        }
-
-        target = target.parentNode;
-        elTag = target.tagName.toLowerCase();
+    var elCell = this.getTdEl(target);
+    if(elCell && YAHOO.lang.isString(elCell.yuiColumnId)) {
+        var oColumn = this._oColumnSet.getColumn(elCell.yuiColumnId);
+        oColumn.format(elCell, this.getRecord(elCell));
     }
-
-    var index = target.columnIndex;
-    var oColumn = this._oColumnSet.keys[index];
-    oColumn.format(target, this.getRecord(target));
 };
 
 /**

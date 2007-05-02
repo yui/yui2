@@ -80,16 +80,16 @@ YAHOO.widget.RecordSet = function(data) {
     this.createEvent("resetEvent");
 
     /**
-     * Fired when a Record field is updated with new data.
+     * Fired when a Record Key is updated with new data.
      *
-     * @event fieldUpdateEvent
+     * @event keyUpdateEvent
      * @param oArgs.record {YAHOO.widget.Record} The Record instance.
-     * @param oArgs.field {String} The Record's field name.
+     * @param oArgs.key {String} The updated key.
      * @param oArgs.newData {Object} New data.
      * @param oArgs.oldData {Object} Old data.
      *
      */
-    this.createEvent("fieldUpdateEvent");
+    this.createEvent("keyUpdateEvent");
 
     YAHOO.log("RecordSet initialized", "info", this.toString());
 };
@@ -267,15 +267,15 @@ YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
 };
 
 /*TODO: Removed from API doc
- * Returns the Record(s) with the given value at the given field name.
+ * Returns the Record(s) with the given value at the given key.
  *
  * @method getRecordBy
- * @param sField {String} Name of the field to search.
+ * @param sKey {String} Name of the key to search.
  * @param oValue {Object} to match against.
  * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} Record or array of
- * Records with the given value at the given field name, or null.
+ * Records with the given value at the given key, or null.
  */
-/*YAHOO.widget.RecordSet.prototype.getRecordBy = function(sField, oValue) {
+/*YAHOO.widget.RecordSet.prototype.getRecordBy = function(sKey, oValue) {
      TODO: redo to match new algorithm
     var record = null;
     var length = this._records.length;
@@ -387,15 +387,15 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
 };
 
 /**
- * Updates given Record at given field name with given data.
+ * Updates given Record at given key with given data.
  *
- * @method updateField
+ * @method updateKey
  * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
  * RecordSet position index.
- * @param sField {String} Field name.
+ * @param sKey {String} Key name.
  * @param oData {Object) New data.
  */
-YAHOO.widget.RecordSet.prototype.updateField = function(record, sField, oData) {
+YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
     var oRecord;
     
     if(YAHOO.lang.isNumber(record)) {
@@ -403,15 +403,15 @@ YAHOO.widget.RecordSet.prototype.updateField = function(record, sField, oData) {
     }
     if(record instanceof YAHOO.widget.Record) {
         oRecord = record;
-        var oldData = oRecord._oData[sField];
-        oRecord._oData[sField] = oData;
-        this.fireEvent("fieldUpdateEvent",{record:oRecord,field:sField,newData:oData,oldData:oldData});
-        YAHOO.log("Field " + sField +
+        var oldData = oRecord._oData[sKey];
+        oRecord._oData[sKey] = oData;
+        this.fireEvent("keyUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
+        YAHOO.log("Key " + sKey +
                 " for Record at index " + this.getRecordIndex(oRecord) +
                 " updated to " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
     }
     else {
-        YAHOO.log("Could not update field " + sField + " for Record " + record, "error", this.toString());
+        YAHOO.log("Could not update key " + sKey + " for Record " + record, "error", this.toString());
     }
 };
 
@@ -602,16 +602,16 @@ YAHOO.widget.Record.prototype.getId = function() {
 };
 
 /**
- * Returns data for the Record for a field if given, or the entire object
+ * Returns data for the Record for a key if given, or the entire object
  * literal otherwise.
  *
  * @method getData
- * @param sField {String} (Optional) The field name to retrive a single data value.
+ * @param sKey {String} (Optional) The key to retrieve a single data value.
  * @return Object
  */
-YAHOO.widget.Record.prototype.getData = function(sField) {
-    if(YAHOO.lang.isString(sField)) {
-        return this._oData[sField];
+YAHOO.widget.Record.prototype.getData = function(sKey) {
+    if(YAHOO.lang.isString(sKey)) {
+        return this._oData[sKey];
     }
     else {
         return this._oData;

@@ -133,8 +133,8 @@ YAHOO.example.RowSelection = new function() {
 
     // Row selection model
     var rowSelectionModel = {
-        mode:"row",
         eventName:"cellClickEvent",
+        cellMode:false,
         enableMulti:true,
         enableWraparound:true
     };
@@ -143,13 +143,13 @@ YAHOO.example.RowSelection = new function() {
                 caption:"Example: Row Selection Mode on Click with Multi-Select & Wraparound Enabled",
                 selectionModel:rowSelectionModel
             });
-    // Programmatically elect the first row immediately
-    this.myDataTable1.select(this.myDataTable1.getTrEl(0));
+    // Programmatically select the first row immediately
+    this.myDataTable1.selectRow(this.myDataTable1.getTrEl(0));
 
     // Cell selection model
     var cellSelectionModel = {
-        mode:"cell",
         eventName:"cellDblclickEvent",
+        cellMode:true,
         enableMulti:false,
         enableWraparound:false
     };
