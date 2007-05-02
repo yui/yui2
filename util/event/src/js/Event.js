@@ -363,7 +363,6 @@ if (!YAHOO.util.Event) {
              */
             addListener: function(el, sType, fn, obj, override) {
 
-
                 if (!fn || !fn.call) {
                     // this.logger.debug("Error, function is not valid " + fn);
                     return false;
@@ -602,7 +601,8 @@ if (!YAHOO.util.Event) {
                             li[0] == el && 
                             li[1] == sType && 
                             li[2] == fn) {
-                                unloadListeners.splice(i, 1);
+                                //unloadListeners.splice(i, 1);
+                                unloadListeners[i]=null;
                                 return true;
                         }
                     }
@@ -642,7 +642,8 @@ if (!YAHOO.util.Event) {
                                 li[this.EL] == el && 
                                 li[this.TYPE] == sType && 
                                 li[this.FN] == fn) {
-                                    llist.splice(i, 1);
+                                    //llist.splice(i, 1);
+                                    llist[i]=null;
                                     break;
                             }
                         }
@@ -660,7 +661,8 @@ if (!YAHOO.util.Event) {
                 // removed the wrapped handler
                 delete listeners[index][this.WFN];
                 delete listeners[index][this.FN];
-                listeners.splice(index, 1);
+                //listeners.splice(index, 1);
+                listeners[index]=null;
 
                 return true;
 
@@ -1131,8 +1133,8 @@ if (!YAHOO.util.Event) {
                     for (var i=0,len=elListeners.length; i<len ; ++i) {
                         var l = elListeners[i];
                         // can't use the index on the changing collection
-                        //this.removeListener(el, l.type, l.fn, l.index);
-                        this.removeListener(el, l.type, l.fn);
+                        this.removeListener(el, l.type, l.fn, l.index);
+                        //this.removeListener(el, l.type, l.fn);
                     }
                 }
 
@@ -1227,8 +1229,7 @@ if (!YAHOO.util.Event) {
                         index = j-1;
                         l = listeners[index];
                         if (l) {
-                            EU.removeListener(l[EU.EL], l[EU.TYPE], 
-                                    l[EU.FN], index);
+                            EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], index);
                         } 
                         j = j - 1;
                     }

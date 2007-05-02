@@ -204,7 +204,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             return true;
         }
 
-        var args=[], ret=true, i;
+        var args=[], ret=true, i, rebuild=false;
 
         for (i=0; i<arguments.length; ++i) {
             args.push(arguments[i]);
@@ -221,7 +221,9 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         for (i=0; i<len; ++i) {
             var s = this.subscribers[i];
-            if (s) {
+            if (!s) {
+                rebuild=true;
+            } else {
                 if (!this.silent) {
                     YAHOO.log( this.type + "->" + (i+1) + ": " +  s, 
                                 "info", "Event" );
@@ -250,6 +252,16 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             }
         }
 
+        if (rebuild) {
+            var newlist=[],subs=this.subscribers;
+            for (i=0,len=subs.length; i<len; ++i) {
+                s = subs[i];
+                newlist.push(subs[i]);
+            }
+
+            this.subscribers=newlist;
+        }
+
         return true;
     },
 
@@ -262,6 +274,8 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
         for (var i=0, len=this.subscribers.length; i<len; ++i) {
             this._delete(len - 1 - i);
         }
+
+        this.subscribers=[];
 
         return i;
     },
@@ -277,8 +291,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             delete s.obj;
         }
 
-        // delete this.subscribers[index];
-        this.subscribers.splice(index, 1);
+        this.subscribers[index]=null;
     },
 
     /**
@@ -317,7 +330,7 @@ YAHOO.util.Subscriber = function(fn, obj, override) {
      * @property obj
      * @type object
      */
-    this.obj = obj || null;
+    this.obj = YAHOO.lang.isUndefined(obj) ? null : obj;
 
     /**
      * The default execution scope for the event listener is defined when the
@@ -373,7 +386,7 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
  * @method toString
  */
 YAHOO.util.Subscriber.prototype.toString = function() {
-    return "Subscriber { obj: " + (this.obj || "")  + 
+    return "Subscriber { obj: " + this.obj  + 
            ", override: " +  (this.override || "no") + " }";
 };
 
@@ -742,7 +755,6 @@ if (!YAHOO.util.Event) {
              */
             addListener: function(el, sType, fn, obj, override) {
 
-
                 if (!fn || !fn.call) {
                     // this.logger.debug("Error, function is not valid " + fn);
                     return false;
@@ -981,7 +993,8 @@ if (!YAHOO.util.Event) {
                             li[0] == el && 
                             li[1] == sType && 
                             li[2] == fn) {
-                                unloadListeners.splice(i, 1);
+                                //unloadListeners.splice(i, 1);
+                                unloadListeners[i]=null;
                                 return true;
                         }
                     }
@@ -1021,7 +1034,8 @@ if (!YAHOO.util.Event) {
                                 li[this.EL] == el && 
                                 li[this.TYPE] == sType && 
                                 li[this.FN] == fn) {
-                                    llist.splice(i, 1);
+                                    //llist.splice(i, 1);
+                                    llist[i]=null;
                                     break;
                             }
                         }
@@ -1039,7 +1053,8 @@ if (!YAHOO.util.Event) {
                 // removed the wrapped handler
                 delete listeners[index][this.WFN];
                 delete listeners[index][this.FN];
-                listeners.splice(index, 1);
+                //listeners.splice(index, 1);
+                listeners[index]=null;
 
                 return true;
 
@@ -1510,8 +1525,8 @@ if (!YAHOO.util.Event) {
                     for (var i=0,len=elListeners.length; i<len ; ++i) {
                         var l = elListeners[i];
                         // can't use the index on the changing collection
-                        //this.removeListener(el, l.type, l.fn, l.index);
-                        this.removeListener(el, l.type, l.fn);
+                        this.removeListener(el, l.type, l.fn, l.index);
+                        //this.removeListener(el, l.type, l.fn);
                     }
                 }
 
@@ -1606,8 +1621,7 @@ if (!YAHOO.util.Event) {
                         index = j-1;
                         l = listeners[index];
                         if (l) {
-                            EU.removeListener(l[EU.EL], l[EU.TYPE], 
-                                    l[EU.FN], index);
+                            EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], index);
                         } 
                         j = j - 1;
                     }
@@ -1835,7 +1849,6 @@ YAHOO.util.EventProvider.prototype = {
      * @method subscribe
      * @param p_type     {string}   the type, or name of the event
      * @param p_fn       {function} the function to exectute when the event fires
-     * @param p_obj
      * @param p_obj      {Object}   An object to be passed along when the event 
      *                              fires
      * @param p_override {boolean}  If true, the obj passed in becomes the 
@@ -1947,7 +1960,7 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         } else {
 
             var scope  = opts.scope  || this;
-            var silent = opts.silent || null;
+            var silent = (opts.silent);
 
             var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
                     YAHOO.util.CustomEvent.FLAT);
@@ -1995,8 +2008,8 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         var ce = this.__yui_events[p_type];
 
         if (!ce) {
-YAHOO.log(p_type + "event fired before it was created... creating now ");
-            ce = this.createEvent(p_type);
+YAHOO.log(p_type + "event fired before it was created.");
+            return null;
         }
 
         var args = [];

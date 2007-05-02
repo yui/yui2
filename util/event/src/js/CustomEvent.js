@@ -204,7 +204,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             return true;
         }
 
-        var args=[], ret=true, i;
+        var args=[], ret=true, i, rebuild=false;
 
         for (i=0; i<arguments.length; ++i) {
             args.push(arguments[i]);
@@ -221,7 +221,9 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         for (i=0; i<len; ++i) {
             var s = this.subscribers[i];
-            if (s) {
+            if (!s) {
+                rebuild=true;
+            } else {
                 if (!this.silent) {
                     YAHOO.log( this.type + "->" + (i+1) + ": " +  s, 
                                 "info", "Event" );
@@ -250,6 +252,16 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             }
         }
 
+        if (rebuild) {
+            var newlist=[],subs=this.subscribers;
+            for (i=0,len=subs.length; i<len; ++i) {
+                s = subs[i];
+                newlist.push(subs[i]);
+            }
+
+            this.subscribers=newlist;
+        }
+
         return true;
     },
 
@@ -262,6 +274,8 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
         for (var i=0, len=this.subscribers.length; i<len; ++i) {
             this._delete(len - 1 - i);
         }
+
+        this.subscribers=[];
 
         return i;
     },
@@ -277,8 +291,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             delete s.obj;
         }
 
-        // delete this.subscribers[index];
-        this.subscribers.splice(index, 1);
+        this.subscribers[index]=null;
     },
 
     /**
@@ -317,7 +330,7 @@ YAHOO.util.Subscriber = function(fn, obj, override) {
      * @property obj
      * @type object
      */
-    this.obj = obj || null;
+    this.obj = YAHOO.lang.isUndefined(obj) ? null : obj;
 
     /**
      * The default execution scope for the event listener is defined when the
@@ -373,7 +386,7 @@ YAHOO.util.Subscriber.prototype.contains = function(fn, obj) {
  * @method toString
  */
 YAHOO.util.Subscriber.prototype.toString = function() {
-    return "Subscriber { obj: " + (this.obj || "")  + 
+    return "Subscriber { obj: " + this.obj  + 
            ", override: " +  (this.override || "no") + " }";
 };
 

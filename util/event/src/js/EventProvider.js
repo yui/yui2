@@ -33,7 +33,6 @@ YAHOO.util.EventProvider.prototype = {
      * @method subscribe
      * @param p_type     {string}   the type, or name of the event
      * @param p_fn       {function} the function to exectute when the event fires
-     * @param p_obj
      * @param p_obj      {Object}   An object to be passed along when the event 
      *                              fires
      * @param p_override {boolean}  If true, the obj passed in becomes the 
@@ -145,7 +144,7 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         } else {
 
             var scope  = opts.scope  || this;
-            var silent = opts.silent || null;
+            var silent = (opts.silent);
 
             var ce = new YAHOO.util.CustomEvent(p_type, scope, silent,
                     YAHOO.util.CustomEvent.FLAT);
@@ -193,8 +192,8 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
         var ce = this.__yui_events[p_type];
 
         if (!ce) {
-YAHOO.log(p_type + "event fired before it was created... creating now ");
-            ce = this.createEvent(p_type);
+YAHOO.log(p_type + "event fired before it was created.");
+            return null;
         }
 
         var args = [];
