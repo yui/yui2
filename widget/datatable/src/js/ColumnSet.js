@@ -668,7 +668,7 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
                 break;
             case "select":
                 YAHOO.widget.Column.formatSelect(elCell, oRecord, this, oData);
-                classname = YAHOO.widget.DataTable.CLASS_SELECT;
+                classname = YAHOO.widget.DataTable.CLASS_DROPDOWN;
                 break;
            default:
                 elCell.innerHTML = (oData) ? oData.toString() : "";
@@ -1421,10 +1421,10 @@ YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
     this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
 
     if(this.datatable.fixedWidth) {
-        var cellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",this.cell)[0];
+        var cellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",this.cell)[0];
         this.minWidth = cellText.offsetWidth + 6;
         var sib = this.cell.nextSibling;
-        var sibCellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADTEXT,"span",sib)[0];
+        var sibCellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",sib)[0];
         this.sibMinWidth = sibCellText.offsetWidth + 6;
 //!!
         var left = ((this.startWidth - this.minWidth) < 0) ? 0 : (this.startWidth - this.minWidth);

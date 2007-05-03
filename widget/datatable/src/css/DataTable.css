@@ -3,17 +3,17 @@ td {
     overflow:hidden;
 }
 
-.yui-dt-headcontainer {
+th .yui-dt-header {
     position:relative;
     
 }
 
-.yui-dt-headtext {
+th .yui-dt-label {
     position:relative;
     border-right:10px;
 }
 
-.yui-dt-headresizer {
+th .yui-dt-resizer {
     position:absolute;
     margin-right:-6px;
     right:0;
@@ -24,11 +24,15 @@ td {
     cursor:col-resize;
 }
 
-.yui-dt-firstlink,.yui-dt-prevlink,.yui-dt-nextlink,.yui-dt-lastlink,.yui-dt-pagelink {
+/*.yui-dt-paginator .yui-dt-first,
+.yui-dt-paginator .yui-dt-previous,
+.yui-dt-paginator .yui-dt-next
+.yui-dt-paginator .yui-dt-last,
+.yui-dt-paginator .yui-dt-number {
     cursor:hand;
     cursor:pointer;
     text-decoration:underline;
-}
+}*/
 
 /* foundational scrolling css */
 .yui-dt-scrollable  {

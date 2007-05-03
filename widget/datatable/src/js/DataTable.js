@@ -686,7 +686,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     }
 
     // Set up sort
-    this.subscribe("headerCellClickEvent", this.onEventSortColumn);
+    this.subscribe("headerLabelClickEvent", this.onEventSortColumn);
     
     // Set up inline editing
     this.subscribe("editorKeydownEvent", this.onEditorKeydown);
@@ -724,12 +724,23 @@ else {
  * @type String
  * @static
  * @final
- * @default "yui-dt"
+ * @default "yui-dt-table"
  */
 YAHOO.widget.DataTable.CLASS_TABLE = "yui-dt-table";
 
 /**
- * Class name assigned the primary TBODY element that holds data rows.
+ * Class name assigned to header container elements within each TH element.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_HEADER
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-header"
+ */
+YAHOO.widget.DataTable.CLASS_HEADER = "yui-dt-header";
+
+/**
+ * Class name assigned to the primary TBODY element.
  *
  * @property YAHOO.widget.DataTable.CLASS_BODY
  * @type String
@@ -740,39 +751,63 @@ YAHOO.widget.DataTable.CLASS_TABLE = "yui-dt-table";
 YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
 
 /**
- * Class name assigned to container element within THEAD.
+ * Class name assigned to the scrolling TBODY element of a scrollable DataTable.
  *
- * @property YAHOO.widget.DataTable.CLASS_HEADERCONTAINER
+ * @property YAHOO.widget.DataTable.CLASS_SCROLLBODY
  * @type String
  * @static
  * @final
+ * @default "yui-dt-scrollbody"
  */
-YAHOO.widget.DataTable.CLASS_HEADERCONTAINER = "yui-dt-headercontainer";
+YAHOO.widget.DataTable.CLASS_SCROLLBODY = "yui-dt-scrollbody";
 
 /**
- * Class name assigned to resizer handle element within THEAD.
+ * Class name assigned to display label elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_HEADERRESIZER
+ * @property YAHOO.widget.DataTable.CLASS_LABEL
  * @type String
  * @static
  * @final
- * @default "yui-dt-headerresizer"
+ * @default "yui-dt-label"
  */
-YAHOO.widget.DataTable.CLASS_HEADERRESIZER = "yui-dt-headerresizer";
+YAHOO.widget.DataTable.CLASS_LABEL = "yui-dt-label";
 
 /**
- * Class name assigned to text displayed within THEAD.
+ * Class name assigned to resizer handle elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_HEADERTEXT
+ * @property YAHOO.widget.DataTable.CLASS_RESIZER
  * @type String
  * @static
  * @final
- * @default "yui-dt-headertext"
+ * @default "yui-dt-resizer"
  */
-YAHOO.widget.DataTable.CLASS_HEADERTEXT = "yui-dt-headertext";
+YAHOO.widget.DataTable.CLASS_RESIZER = "yui-dt-resizer";
 
 /**
- * Class name assigned to FIRST elements.
+ * Class name assigned to paginator container elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_PAGINATOR
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-paginator"
+ */
+YAHOO.widget.DataTable.CLASS_PAGINATOR = "yui-dt-paginator";
+
+
+/**
+ * Class name assigned to editor container elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_EDITOR
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-editor"
+ */
+YAHOO.widget.DataTable.CLASS_EDITOR = "yui-dt-editor";
+
+/**
+ * Class name assigned to first elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_FIRST
  * @type String
@@ -783,7 +818,7 @@ YAHOO.widget.DataTable.CLASS_HEADERTEXT = "yui-dt-headertext";
 YAHOO.widget.DataTable.CLASS_FIRST = "yui-dt-first";
 
 /**
- * Class name assigned to LAST elements.
+ * Class name assigned to last elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_LAST
  * @type String
@@ -794,7 +829,7 @@ YAHOO.widget.DataTable.CLASS_FIRST = "yui-dt-first";
 YAHOO.widget.DataTable.CLASS_LAST = "yui-dt-last";
 
 /**
- * Class name assigned to even TR elements.
+ * Class name assigned to even elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_EVEN
  * @type String
@@ -805,7 +840,7 @@ YAHOO.widget.DataTable.CLASS_LAST = "yui-dt-last";
 YAHOO.widget.DataTable.CLASS_EVEN = "yui-dt-even";
 
 /**
- * Class name assigned to odd TR elements.
+ * Class name assigned to odd elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_ODD
  * @type String
@@ -816,37 +851,26 @@ YAHOO.widget.DataTable.CLASS_EVEN = "yui-dt-even";
 YAHOO.widget.DataTable.CLASS_ODD = "yui-dt-odd";
 
 /**
- * Class name assigned to empty elements.
+ * Class name assigned to previous indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_EMPTY
+ * @property YAHOO.widget.DataTable.CLASS_PREVIOUS
  * @type String
  * @static
  * @final
- * @default "yui-dt-empty"
+ * @default "yui-dt-previous"
  */
-YAHOO.widget.DataTable.CLASS_EMPTY = "yui-dt-empty";
+YAHOO.widget.DataTable.CLASS_PREVIOUS = "yui-dt-previous";
 
 /**
- * Class name assigned to loading message.
+ * Class name assigned next indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_LOADING
+ * @property YAHOO.widget.DataTable.CLASS_NEXT
  * @type String
  * @static
  * @final
- * @default "yui-dt-loading"
+ * @default "yui-dt-next"
  */
-YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
-
-/**
- * Class name assigned to elements with error messaging.
- *
- * @property YAHOO.widget.DataTable.CLASS_ERROR
- * @type String
- * @static
- * @final
- * @default "yui-dt-error"
- */
-YAHOO.widget.DataTable.CLASS_ERROR = "yui-dt-error";
+YAHOO.widget.DataTable.CLASS_NEXT = "yui-dt-next";
 
 /**
  * Class name assigned to selected elements.
@@ -860,217 +884,62 @@ YAHOO.widget.DataTable.CLASS_ERROR = "yui-dt-error";
 YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
 
 /**
- * Class name assigned to highlighted element.
+ * Class name assigned to highlighted elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_HIGHLIGHT
+ * @property YAHOO.widget.DataTable.CLASS_HIGHLIGHTED
  * @type String
  * @static
  * @final
- * @default "yui-dt-highlight"
+ * @default "yui-dt-highlighted"
  */
-YAHOO.widget.DataTable.CLASS_HIGHLIGHT = "yui-dt-highlight";
+YAHOO.widget.DataTable.CLASS_HIGHLIGHTED = "yui-dt-highlighted";
 
 /**
- * Class name assigned to container of a scrollable DataTable.
+ * Class name assigned to disabled elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_SCROLLABLE
+ * @property YAHOO.widget.DataTable.CLASS_DISABLED
  * @type String
  * @static
  * @final
- * @default "yui-dt-scrollable"
+ * @default "yui-dt-disabled"
  */
-YAHOO.widget.DataTable.CLASS_SCROLLABLE = "yui-dt-scrollable";
+YAHOO.widget.DataTable.CLASS_DISABLED = "yui-dt-disabled";
 
 /**
- * Class name assigned to scrolling TBODY element of a scrollable DataTable.
+ * Class name assigned to empty indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_SCROLLBODY
+ * @property YAHOO.widget.DataTable.CLASS_EMPTY
  * @type String
  * @static
  * @final
- * @default "yui-dt-scrollbody"
+ * @default "yui-dt-empty"
  */
-YAHOO.widget.DataTable.CLASS_SCROLLBODY = "yui-dt-scrollbody";
+YAHOO.widget.DataTable.CLASS_EMPTY = "yui-dt-empty";
 
 /**
- * Class name assigned to column headers of sortable Columns.
+ * Class name assigned to loading indicatorx.
  *
- * @property YAHOO.widget.DataTable.CLASS_SORTABLE
+ * @property YAHOO.widget.DataTable.CLASS_LOADING
  * @type String
  * @static
  * @final
- * @default "yui-dt-sortable"
+ * @default "yui-dt-loading"
  */
-YAHOO.widget.DataTable.CLASS_SORTABLE = "yui-dt-sortable";
+YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
 
 /**
- * Class name assigned to column headers when sorted in ascending order.
+ * Class name assigned to error indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_SORTEDBYASC
+ * @property YAHOO.widget.DataTable.CLASS_ERROR
  * @type String
  * @static
  * @final
- * @default "yui-dt-sortedbyasc"
+ * @default "yui-dt-error"
  */
-YAHOO.widget.DataTable.CLASS_SORTEDBYASC = "yui-dt-sortedbyasc";
+YAHOO.widget.DataTable.CLASS_ERROR = "yui-dt-error";
 
 /**
- * Class name assigned to column headers when sorted in descending order.
- *
- * @property YAHOO.widget.DataTable.CLASS_SORTEDBYDESC
- * @type String
- * @static
- * @final
- * @default "yui-dt-sortedbydesc"
- */
-YAHOO.widget.DataTable.CLASS_SORTEDBYDESC = "yui-dt-sortedbydesc";
-
-/**
- * Class name assigned to the paginator container element.
- *
- * @property YAHOO.widget.DataTable.CLASS_PAGINATOR
- * @type String
- * @static
- * @final
- * @default "yui-dt-paginator"
- */
-YAHOO.widget.DataTable.CLASS_PAGINATOR = "yui-dt-paginator";
-
-/**
- * Class name assigned to the pagination link "&lt;&lt;".
- *
- * @property YAHOO.widget.DataTable.CLASS_FIRSTLINK
- * @type String
- * @static
- * @final
- * @default "yui-dt-firstlink"
- */
-YAHOO.widget.DataTable.CLASS_FIRSTLINK = "yui-dt-firstlink";
-
-/**
- * Class name assigned to the pagination link "&lt;&lt;" when it is disabled.
- *
- * @property YAHOO.widget.DataTable.CLASS_FIRSTPAGE
- * @type String
- * @static
- * @final
- * @default "yui-dt-firstpage"
- */
-YAHOO.widget.DataTable.CLASS_FIRSTPAGE = "yui-dt-firstpage";
-
-/**
- * Class name assigned to the pagination link "&gt;&gt;".
- *
- * @property YAHOO.widget.DataTable.CLASS_LASTLINK
- * @type String
- * @static
- * @final
- * @default "yui-dt-lastlink"
- */
-YAHOO.widget.DataTable.CLASS_LASTLINK = "yui-dt-lastlink";
-
-/**
- * Class name assigned to the pagination link "&gt;&gt;" when it is disabled.
- *
- * @property YAHOO.widget.DataTable.CLASS_LASTPAGE
- * @type String
- * @static
- * @final
- * @default "yui-dt-lastpage"
- */
-YAHOO.widget.DataTable.CLASS_LASTPAGE = "yui-dt-lastpage";
-
-/**
- * Class name assigned to the pagination link "&lt;".
- *
- * @property YAHOO.widget.DataTable.CLASS_PREVLINK
- * @type String
- * @static
- * @final
- * @default "yui-dt-prevlink"
- */
-YAHOO.widget.DataTable.CLASS_PREVLINK = "yui-dt-prevlink";
-
-/**
- * Class name assigned to the pagination link "&lt;" when it is disabled.
- *
- * @property YAHOO.widget.DataTable.CLASS_PREVPAGE
- * @type String
- * @static
- * @final
- * @default "yui-dt-prevpage"
- */
-YAHOO.widget.DataTable.CLASS_PREVPAGE = "yui-dt-prevpage";
-
-/**
- * Class name assigned to the pagination link "&gt;".
- *
- * @property YAHOO.widget.DataTable.CLASS_NEXTLINK
- * @type String
- * @static
- * @final
- * @default "yui-dt-nextlink"
- */
-YAHOO.widget.DataTable.CLASS_NEXTLINK = "yui-dt-nextlink";
-
-/**
- * Class name assigned to the pagination link "&gt;" when it is disabled.
- *
- * @property YAHOO.widget.DataTable.CLASS_NEXTPAGE
- * @type String
- * @static
- * @final
- * @default "yui-dt-nextpage"
- */
-YAHOO.widget.DataTable.CLASS_NEXTPAGE = "yui-dt-nextpage";
-
-
-/**
- * Class name assigned to pagination links to specific page numbers.
- *
- * @property YAHOO.widget.DataTable.CLASS_PAGELINK
- * @type String
- * @static
- * @final
- * @default "yui-dt-pagelink"
- */
-YAHOO.widget.DataTable.CLASS_PAGELINK = "yui-dt-pagelink";
-
-/**
- * Class name assigned to pagination links for specific page numbers that are disabled.
- *
- * @property YAHOO.widget.DataTable.CLASS_CURRENTPAGE
- * @type String
- * @static
- * @final
- * @default "yui-dt-currentpage"
- */
-YAHOO.widget.DataTable.CLASS_CURRENTPAGE = "yui-dt-currentpage";
-
-/**
- * Class name assigned to the pagination SELECT element.
- *
- * @property YAHOO.widget.DataTable.CLASS_PAGESELECT
- * @type String
- * @static
- * @final
- * @default "yui-dt-pageselect"
- */
-YAHOO.widget.DataTable.CLASS_PAGESELECT = "yui-dt-pageselect";
-
-/**
- * Class name assigned to the pagination links container element.
- *
- * @property YAHOO.widget.DataTable.CLASS_PAGELINKS
- * @type String
- * @static
- * @final
- * @default "yui-dt-pagelinks"
- */
-YAHOO.widget.DataTable.CLASS_PAGELINKS = "yui-dt-pagelinks";
-
-/**
- * Class name assigned to editable TD elements.
+ * Class name assigned to editable elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_EDITABLE
  * @type String
@@ -1081,18 +950,62 @@ YAHOO.widget.DataTable.CLASS_PAGELINKS = "yui-dt-pagelinks";
 YAHOO.widget.DataTable.CLASS_EDITABLE = "yui-dt-editable";
 
 /**
- * Class name assigned to editor DIV elements.
+ * Class name assigned to scrollable elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_EDITOR
+ * @property YAHOO.widget.DataTable.CLASS_SCROLLABLE
  * @type String
  * @static
  * @final
- * @default "yui-dt-editor"
+ * @default "yui-dt-scrollable"
  */
-YAHOO.widget.DataTable.CLASS_EDITOR = "yui-dt-editor";
+YAHOO.widget.DataTable.CLASS_SCROLLABLE = "yui-dt-scrollable";
 
 /**
- * Class name assigned to TD elements of type "checkbox".
+ * Class name assigned to sortable elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_SORTABLE
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-sortable"
+ */
+YAHOO.widget.DataTable.CLASS_SORTABLE = "yui-dt-sortable";
+
+/**
+ * Class name assigned to ascending elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_ASC
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-asc"
+ */
+YAHOO.widget.DataTable.CLASS_ASC = "yui-dt-asc";
+
+/**
+ * Class name assigned to descending elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_DESC
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-desc"
+ */
+YAHOO.widget.DataTable.CLASS_DESC = "yui-dt-desc";
+
+/**
+ * Class name assigned to SELECT container elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_DROPDOWN
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-dropdown"
+ */
+YAHOO.widget.DataTable.CLASS_DROPDOWN = "yui-dt-dropdown";
+
+/**
+ * Class name assigned to INPUT TYPE=CHECKBOX container elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_CHECKBOX
  * @type String
@@ -1103,7 +1016,30 @@ YAHOO.widget.DataTable.CLASS_EDITOR = "yui-dt-editor";
 YAHOO.widget.DataTable.CLASS_CHECKBOX = "yui-dt-checkbox";
 
 /**
- * Class name assigned to TD elements of type "currency".
+ * Class name assigned to string container elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_STRING
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-string"
+ */
+YAHOO.widget.DataTable.CLASS_STRING = "yui-dt-string";
+
+/**
+ * Class name assigned to number container elements.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_NUMBER
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-number"
+ */
+YAHOO.widget.DataTable.CLASS_NUMBER = "yui-dt-number";
+
+
+/**
+ * Class name assigned to currency container elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_CURRENCY
  * @type String
@@ -1114,7 +1050,7 @@ YAHOO.widget.DataTable.CLASS_CHECKBOX = "yui-dt-checkbox";
 YAHOO.widget.DataTable.CLASS_CURRENCY = "yui-dt-currency";
 
 /**
- * Class name assigned to TD elements of type "date".
+ * Class name assigned to date container elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_DATE
  * @type String
@@ -1125,7 +1061,7 @@ YAHOO.widget.DataTable.CLASS_CURRENCY = "yui-dt-currency";
 YAHOO.widget.DataTable.CLASS_DATE = "yui-dt-date";
 
 /**
- * Class name assigned to TD elements of type "email".
+ * Class name assigned to email container elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_EMAIL
  * @type String
@@ -1136,7 +1072,7 @@ YAHOO.widget.DataTable.CLASS_DATE = "yui-dt-date";
 YAHOO.widget.DataTable.CLASS_EMAIL = "yui-dt-email";
 
 /**
- * Class name assigned to TD elements of type "link".
+ * Class name assigned to link container elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_LINK
  * @type String
@@ -1145,28 +1081,6 @@ YAHOO.widget.DataTable.CLASS_EMAIL = "yui-dt-email";
  * @default "yui-dt-link"
  */
 YAHOO.widget.DataTable.CLASS_LINK = "yui-dt-link";
-
-/**
- * Class name assigned to TD elements of type "number".
- *
- * @property YAHOO.widget.DataTable.CLASS_NUMBER
- * @type String
- * @static
- * @final
- * @default "yui-dt-number"
- */
-YAHOO.widget.DataTable.CLASS_NUMBER = "yui-dt-number";
-
-/**
- * Class name assigned to TD elements of type "string".
- *
- * @property YAHOO.widget.DataTable.CLASS_STRING
- * @type String
- * @static
- * @final
- * @default "yui-dt-string"
- */
-YAHOO.widget.DataTable.CLASS_STRING = "yui-dt-string";
 
 /**
  * Message to display if DataTable has no data.
@@ -1576,10 +1490,10 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                     )
             ) {
                 // TODO: better way to get elTheadContainer
-                var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADERCONTAINER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
                 var elTheadResizer = elTheadContainer.appendChild(document.createElement("span"));
                 elTheadResizer.id = oColumn.getId() + "-resizer";
-                YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_HEADERRESIZER);
+                YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
                 oColumn.ddResizer = new YAHOO.util.WidthResizer(
                         this, oColumn.getId(), elTheadResizer.id, elTheadResizer.id);
                 var cancelClick = function(e) {
@@ -1590,7 +1504,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
             if(this.fixedWidth) {
                 //elTheadContainer.style.overflow = "hidden";
                 // TODO: better way to get elTheadText
-                var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADERTEXT,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
                 elTheadText.style.overflow = "hidden";
             }
         }
@@ -1640,10 +1554,10 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
 
     var elTheadContainer = elTheadCell.appendChild(document.createElement("div"));
     elTheadContainer.id = this.id+"-hdrow"+row+"-container"+col;
-    YAHOO.util.Dom.addClass(elTheadContainer,YAHOO.widget.DataTable.CLASS_HEADERCONTAINER);
+    YAHOO.util.Dom.addClass(elTheadContainer,YAHOO.widget.DataTable.CLASS_HEADER);
     var elTheadContent = elTheadContainer.appendChild(document.createElement("span"));
     elTheadContent.id = this.id+"-hdrow"+row+"-text"+col;
-    YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_HEADERTEXT);
+    YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_LABEL);
 
     var contentText = oColumn.text || oColumn.key || "";
     if(oColumn.sortable) {
@@ -1746,7 +1660,6 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
             // Create one page links container per paginator
             var linkEl = document.createElement("span");
             linkEl.id = "yui-dt-pagselect"+i;
-            linkEl.className = YAHOO.widget.DataTable.CLASS_PAGELINKS;
             linkEl = containers[i].appendChild(linkEl);
 
             // Add event listener
@@ -1765,7 +1678,7 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
         for(i=0; i<containers.length; i++) {
             // Create one SELECT element per Paginator container
             var selectEl = document.createElement("select");
-            selectEl.className = YAHOO.widget.DataTable.CLASS_PAGESELECT;
+            selectEl.className = YAHOO.widget.DataTable.CLASS_DROPDOWN;
             selectEl = containers[i].appendChild(selectEl);
 
             // Create OPTION elements
@@ -2320,7 +2233,7 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
                 case "body":
                     break;
                 case "span":
-                    if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_HEADERTEXT)) {
+                    if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
                         oSelf.fireEvent("headerLabelClickEvent",{target:elTarget,event:e});
                     }
                     break;
@@ -2519,29 +2432,29 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
     while(elTag != "table") {
         switch(elTag) {
             case "body":
-                break;
+                return;
             case "a":
                 YAHOO.util.Event.stopEvent(e);
                 switch(elTarget.className) {
-                    case YAHOO.widget.DataTable.CLASS_PAGELINK:
+                    case YAHOO.widget.DataTable.CLASS_NUMBER:
                         oSelf.showPage(parseInt(elTarget.innerHTML,10));
                         return;
-                    case YAHOO.widget.DataTable.CLASS_FIRSTLINK:
+                    case YAHOO.widget.DataTable.CLASS_FIRST:
                         oSelf.showPage(1);
                         return;
-                    case YAHOO.widget.DataTable.CLASS_LASTLINK:
+                    case YAHOO.widget.DataTable.CLASS_LAST:
                         oSelf.showPage(oSelf._paginator.totalPages);
                         return;
-                    case YAHOO.widget.DataTable.CLASS_PREVLINK:
+                    case YAHOO.widget.DataTable.CLASS_PREVIOUS:
                         oSelf.showPage(oSelf._paginator.currentPage-1);
                         return;
-                    case YAHOO.widget.DataTable.CLASS_NEXTLINK:
+                    case YAHOO.widget.DataTable.CLASS_NEXT:
                         oSelf.showPage(oSelf._paginator.currentPage+1);
                         return;
                 }
                 break;
             default:
-                break;
+                return;
         }
         elTarget = elTarget.parentNode;
         elTag = elTarget.tagName.toLowerCase();
@@ -3878,17 +3791,17 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
     var isFirstPage = (nCurrentPage == 1) ? true : false;
     var isLastPage = (nCurrentPage == nTotalPages) ? true : false;
     var firstPageLink = (isFirstPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTPAGE + "\">&lt;&lt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRSTLINK + "\">&lt;&lt;</a> ";
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED + "\">&lt;&lt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRST + "\">&lt;&lt;</a> ";
     var prevPageLink = (isFirstPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_PREVPAGE + "\">&lt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVLINK + "\">&lt;</a> " ;
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED + "\">&lt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVIOUS + "\">&lt;</a> " ;
     var nextPageLink = (isLastPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_NEXTPAGE + "\">&gt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXTLINK + "\">&gt;</a> " ;
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED + "\">&gt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXT + "\">&gt;</a> " ;
     var lastPageLink = (isLastPage) ?
-            " <span class=\"" + YAHOO.widget.DataTable.CLASS_LASTPAGE + "\">&gt;&gt;</span> " :
-            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LASTLINK + "\">&gt;&gt;</a> ";
+            " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED + "\">&gt;&gt;</span> " :
+            " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LAST + "\">&gt;&gt;</a> ";
     var markup = firstPageLink + prevPageLink;
     var maxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
         nPageLinksStart+nPageLinksLength-1 : nTotalPages;
@@ -3898,10 +3811,10 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
     }
     for(var i=nPageLinksStart; i<=maxLinks; i++) {
          if(i != nCurrentPage) {
-            markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGELINK + "\">" + i + "</a> ";
+            markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NUMBER + "\">" + i + "</a> ";
         }
         else {
-            markup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_CURRENTPAGE + "\">" + i + "</span>";
+            markup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_SELECTED + "\">" + i + "</span>";
         }
     }
     markup += nextPageLink + lastPageLink;
@@ -4544,7 +4457,7 @@ YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
 
 
 /**
- * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHT to the given element(s).
+ * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to the given element(s).
  *
  * @method highlight
  * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
@@ -4555,7 +4468,7 @@ YAHOO.widget.DataTable.prototype.highlight = function(els) {
         if(!YAHOO.lang.isArray(els)) {
             els = [els];
         }
-        YAHOO.util.Dom.addClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
+        YAHOO.util.Dom.addClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
         this.fireEvent("highlightEvent",{els:els});
         //TODO
         //YAHOO.log();
@@ -4563,7 +4476,7 @@ YAHOO.widget.DataTable.prototype.highlight = function(els) {
 };
 
 /**
- * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHT from the given element(s).
+ * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED from the given element(s).
  *
  * @method unhighlight
  * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
@@ -4574,7 +4487,7 @@ YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
         if(!YAHOO.lang.isArray(els)) {
             els = [els];
         }
-        YAHOO.util.Dom.removeClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHT);
+        YAHOO.util.Dom.removeClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
         this.fireEvent("unhighlightEvent",{els:els});
         //TODO
         //YAHOO.log();
@@ -4640,7 +4553,7 @@ YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
             this._bFocused = true;
             if(this.activeEditor) {
                 // Explicitly call unhighlight for SF2
-                if(YAHOO.util.Dom.hasClass(elCell, YAHOO.widget.DataTable.CLASS_HIGHLIGHT)) {
+                if(YAHOO.util.Dom.hasClass(elCell, YAHOO.widget.DataTable.CLASS_HIGHLIGHTED)) {
                     this.unhighlight(elCell);
                 }
                 this.fireEvent("editorShowEvent",{target:elCell,column:column});
