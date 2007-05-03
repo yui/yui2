@@ -736,15 +736,14 @@ YAHOO.util.Connect =
   /**
    * @description This method assembles the form label and value pairs and
    * constructs an encoded string.
-   * asyncRequest() will automatically initialize the
-   * transaction with a HTTP header Content-Type of
-   * application/x-www-form-urlencoded.
+   * asyncRequest() will automatically initialize the transaction with a
+   * a HTTP header Content-Type of application/x-www-form-urlencoded.
    * @method setForm
    * @public
    * @static
    * @param {string || object} form id or name attribute, or form object.
-   * @param {string} optional boolean to indicate SSL environment.
-   * @param {string || boolean} optional qualified path of iframe resource for SSL in IE.
+   * @param {boolean} optional enable file upload.
+   * @param {boolean} optional enable file upload over SSL in IE only.
    * @return {string} string of the HTML form field name and value pairs..
    */
 	setForm:function(formId, isUpload, secureUri)
