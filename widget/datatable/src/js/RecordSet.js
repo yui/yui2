@@ -406,9 +406,9 @@ YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
         var oldData = oRecord._oData[sKey];
         oRecord._oData[sKey] = oData;
         this.fireEvent("keyUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
-        YAHOO.log("Key " + sKey +
-                " for Record at index " + this.getRecordIndex(oRecord) +
-                " updated to " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+        YAHOO.log("Key \"" + sKey +
+                "\" for Record at index " + this.getRecordIndex(oRecord) +
+                " updated to \"" + YAHOO.widget.Logger.dump(oData) + "\"", "info", this.toString());
     }
     else {
         YAHOO.log("Could not update key " + sKey + " for Record " + record, "error", this.toString());

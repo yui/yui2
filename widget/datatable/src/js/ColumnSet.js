@@ -1010,12 +1010,12 @@ YAHOO.widget.ColumnEditor = function(sType) {
     //}
     //this.tableContainer = elCell.parentNode;
     
-    var container = document.body.appendChild(document.createElement("div"));//this.tableContainer.appendChild(document.createElement("div"));
-    container.style.position = "absolute";
-    container.style.zIndex = 9000;
-    container.id = "yui-dt-editor" + YAHOO.widget.ColumnEditor._nCount;
-    container.className = YAHOO.widget.DataTable.CLASS_EDITOR;
-    this.container = container;
+    var elContainer = document.body.appendChild(document.createElement("div"));//this.tableContainer.appendChild(document.createElement("div"));
+    elContainer.style.position = "absolute";
+    elContainer.style.zIndex = 9000;
+    elContainer.id = "yui-dt-editor" + YAHOO.widget.ColumnEditor._nCount;
+    elContainer.className = YAHOO.widget.DataTable.CLASS_EDITOR;
+    this.container = elContainer;
 
     switch(this.type) {
         case "textbox":
@@ -1048,6 +1048,13 @@ YAHOO.widget.ColumnEditor = function(sType) {
  * @default 0
  */
 YAHOO.widget.ColumnEditor._nCount =0;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

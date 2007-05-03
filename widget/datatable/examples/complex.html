@@ -245,8 +245,8 @@ YAHOO.example.IntegratedFeatureSet = new function() {
     }
 
     this.myDataTable = new YAHOO.widget.DataTable("complex", this.myColumnSet, this.myDataSource, myConfigs);
-    this.myDataTable.subscribe("cellClickEvent",this.myDataTable.onEventSelectRow);
-    this.myDataTable.subscribe("cellClickEvent",this.myDataTable.onEventEditCell);
+    this.myDataTable.subscribe("rowClickEvent",this.myDataTable.onEventSelectRow);
+    this.myDataTable.subscribe("cellDblclickEvent",this.myDataTable.onEventEditCell);
 
     // When cell is edited, pulse the color of the row yellow
     this.onCellEdit = function(oArgs) {
@@ -266,10 +266,13 @@ YAHOO.example.IntegratedFeatureSet = new function() {
             rowColorAnim = null;
         }
         rowColorAnim.onComplete.subscribe(onComplete);
-        rowColorAnim.animate();
+        //rowColorAnim.animate();
     }
     this.myDataTable.subscribe("cellEditEvent", this.onCellEdit);
-    
+    this.myDataTable.subscribe("editorBlurEvent", this.myDataTable.saveEditorData);
+
+    //this.myDataTable.subscribe("tableBlurEvent", this.myDataTable.saveEditorData);
+
     this.myDataTable.addRow({areacode:"xxx", state:"yyy"});
 };
 </script>

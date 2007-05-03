@@ -133,6 +133,7 @@ YAHOO.example.InlineEditing = new function() {
     this.myDataTable = new YAHOO.widget.DataTable("editing", this.myColumnSet,
             this.myDataSource, {caption:"Example: Inline Editing"});
     this.myDataTable.subscribe("cellClickEvent", this.myDataTable.onEventEditCell);
+    this.myDataTable.subscribe("editorBlurEvent", this.myDataTable.saveEditorData);
     this.myDataTable.subscribe("cellMouseoverEvent", this.myDataTable.onEventHighlightCell);
     this.myDataTable.subscribe("cellMouseoutEvent", this.myDataTable.onEventUnhighlightCell);
 };
