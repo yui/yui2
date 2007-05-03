@@ -1813,10 +1813,11 @@ One thing, though: it doesn't work in combination with
 };
 
 /**
- * Formats all TD elements of given TR element with data from the appropriate Record.
+ * Formats all TD elements of given TR element with data from the given Record.
  *
  * @method _updateTrEl
  * @param elRow {HTMLElement} The TR element to update.
+ * @param oRecord {YAHOO.widget.Record} The associated Record instance.
  * @return {String} ID of the updated TR element, or null.
  * @private
  */
@@ -3384,37 +3385,46 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
         }
     }
     if(nRecordIndex !== null) {
-        //TODO: remove from selection tracker
-    
         var oRecord = this._oRecordSet.getRecord(nRecordIndex);
-
-        // Copy data from the Record for the event that gets fired later
-        var nRecordId = oRecord.getId();
-        var oRecordData = oRecord.getData();
-        var oData = {};
-        for(var key in oRecordData) {
-            oData[key] = oRecordData[key];
-        }
-        
-        // Delete Record from RecordSet
-        this._oRecordSet.deleteRecord(nRecordIndex);
-        
-        // If row is in view, delete the TR element
-        var nTrIndex = this.getTrIndex(nRecordIndex);
-        if(YAHOO.lang.isNumber(nTrIndex)) {
-            this._deleteTrEl(nTrIndex);
+        if(oRecord) {
+            var nRecordId = oRecord.getId();
             
-            //TODO: doesn't need to be called every time
-            // Set first-row and last-row trackers
-            this._setFirstRow();
-            this._setLastRow();
+            // Remove from selection tracker if there
+            var tracker = this._aSelections || [];
+            for(var j=0; j<tracker.length; j++) {
+                if((YAHOO.lang.isNumber(tracker[j]) && (tracker[j] === nRecordId)) ||
+                        ((tracker[j].constructor == Object) && (tracker[j].recordId === nRecordId))) {
+                    tracker.splice(j,1);
+                }
+            }
+
+            // Copy data from the Record for the event that gets fired later
+            var oRecordData = oRecord.getData();
+            var oData = {};
+            for(var key in oRecordData) {
+                oData[key] = oRecordData[key];
+            }
+
+            // Delete Record from RecordSet
+            this._oRecordSet.deleteRecord(nRecordIndex);
+
+            // If row is in view, delete the TR element
+            var nTrIndex = this.getTrIndex(nRecordIndex);
+            if(YAHOO.lang.isNumber(nTrIndex)) {
+                this._deleteTrEl(nTrIndex);
+
+                //TODO: doesn't need to be called every time
+                // Set first-row and last-row trackers
+                this._setFirstRow();
+                this._setLastRow();
+            }
+
+            this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
+                    recordData:oData, nTrIndex:nTrIndex});
+            YAHOO.log("DataTable row deleted: Record ID = " + nRecordId +
+                    ", Record index = " + nRecordIndex +
+                    ", page row index = " + nTrIndex, "info", this.toString());
         }
-        
-        this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                recordData:oData, nTrIndex:nTrIndex});
-        YAHOO.log("DataTable row deleted: Record ID = " + nRecordId +
-                ", Record index = " + nRecordIndex +
-                ", page row index = " + nTrIndex, "info", this.toString());
     }
     else {
         YAHOO.log("Could not delete row: " + row, "warn", this.toString());
@@ -4165,27 +4175,6 @@ YAHOO.widget.DataTable.prototype._aSelections = null;
  */
 YAHOO.widget.DataTable.prototype._sSelectionAnchorId = null;
 
-
-/*
- * Adds row to selection tracker.
- *
- * @method _selectRow
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @private
- */
-//YAHOO.widget.DataTable.prototype._selectRow = function(oRecord) {
-//};
-
-/*
- * Removes row from selection tracker.
- *
- * @method _unselectRow
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @private
- */
-//YAHOO.widget.DataTable.prototype._unselectRow = function(oRecord) {
-//};
-
 /**
  * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
  * from all TR elements on the page.
@@ -4276,7 +4265,6 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
             var id = oRecord.getId();
 
             // Remove if there
-
             // Use Array.indexOf if available...
             if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
                 tracker.splice(tracker.indexOf(id),1);
@@ -4451,7 +4439,7 @@ YAHOO.widget.DataTable.prototype.unselectAllCells= function() {
     // Remove from tracker
     var tracker = this._aSelections || [];
     for(var j=0; j<tracker.length; j++) {
-       if(tracker[j] && (tracker[j].constructor == Object)){
+       if(tracker[j].constructor == Object){
             tracker.splice(j,1);
         }
     }
@@ -5146,6 +5134,9 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
         var oColumn = this._oColumnSet.getColumn(elCell.yuiColumnId);
         oColumn.format(elCell, this.getRecord(elCell));
     }
+    else {
+        YAHOO.log("Could not format cell " + target, "warn", this.toString());
+    }
 };
 
 /**
@@ -5160,18 +5151,13 @@ YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
     var target = oArgs.target;
     var elTag = target.tagName.toLowerCase();
 
-    // Walk up the DOM until we get to the TD
-    while(elTag != "td") {
-        // Bail out
-        if(elTag == "body") {
-            return;
-        }
-
-        target = target.parentNode;
-        elTag = target.tagName.toLowerCase();
+    var elCell = this.getTdEl(target);
+    if(elCell) {
+        this.highlight(elCell);
     }
-
-    this.highlight(target);
+    else {
+        YAHOO.log("Could not highlight cell " + target, "warn", this.toString());
+    }
 };
 
 /**
@@ -5186,18 +5172,13 @@ YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
     var target = oArgs.target;
     var elTag = target.tagName.toLowerCase();
 
-    // Walk up the DOM until we get to the TD
-    while(elTag != "td") {
-        // Bail out
-        if(elTag == "body") {
-            return;
-        }
-
-        target = target.parentNode;
-        elTag = target.tagName.toLowerCase();
+    var elCell = this.getTdEl(target);
+    if(elCell) {
+        this.unhighlight(elCell);
     }
-
-    this.unhighlight(target);
+    else {
+        YAHOO.log("Could not unhighlight cell " + target, "warn", this.toString());
+    }
 };
 /**
  * Overridable custom event handler to edit cell.
@@ -5211,18 +5192,13 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
     var target = oArgs.target;
     var elTag = target.tagName.toLowerCase();
 
-    // Walk up the DOM until we get to the TD
-    while(elTag != "td") {
-        // Bail out
-        if(elTag == "body") {
-            return;
-        }
-
-        target = target.parentNode;
-        elTag = target.tagName.toLowerCase();
+    var elCell = this.getTdEl(target);
+    if(elCell) {
+        this.editCell(target);
     }
-
-    this.editCell(target);
+    else {
+        YAHOO.log("Could not edit cell " + target, "warn", this.toString());
+    }
 };
 
 /**
