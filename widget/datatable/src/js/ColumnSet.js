@@ -42,7 +42,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     var parseColumns = function(nodeList, parent) {
         // One level down
         nodeDepth++;
-        
+
         // Create corresponding tree node if not already there for this depth
         if(!tree[nodeDepth]) {
             tree[nodeDepth] = [];
@@ -52,10 +52,10 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         // Parse each node at this depth for attributes and any children
         for(var j=0; j<nodeList.length; j++) {
             var currentNode = nodeList[j];
-            
+
             // Instantiate a new Column for each node
             var oColumn = new YAHOO.widget.Column(currentNode);
-            
+
             // Add the new Column to the flat list
             flat.push(oColumn);
 
@@ -67,7 +67,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             // The Column has descendants
             if(YAHOO.lang.isArray(currentNode.children)) {
                 oColumn.children = currentNode.children;
-            
+
                 // Determine COLSPAN value for this Column
                 var terminalChildNodes = 0;
                 var countTerminalChildNodes = function(ancestor) {
@@ -86,7 +86,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                 };
                 countTerminalChildNodes(currentNode);
                 oColumn._colspan = terminalChildNodes;
-                
+
                 // Cascade certain properties to children if not defined on their own
                 var currentChildren = currentNode.children;
                 for(k=0; k<currentChildren.length; k++) {
@@ -113,7 +113,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                         child.width = oColumn.width;
                     }
                 }
-                
+
                 // The children themselves must also be parsed for Column instances
                 if(!tree[nodeDepth+1]) {
                     tree[nodeDepth+1] = [];
@@ -145,7 +145,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         var maxRowDepth = 1;
         var currentRow;
         var currentColumn;
-        
+
         // Calculate the max depth of descendants for this row
         var countMaxRowDepth = function(row, tmpRowDepth) {
             tmpRowDepth = tmpRowDepth || 1;
@@ -164,7 +164,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                         maxRowDepth = tmpRowDepth;
                     }
                 }
-                
+
             }
         };
 
@@ -214,7 +214,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     this.flat = flat;
     this.keys = keys;
     this.headers = headers;
-    
+
     YAHOO.widget.ColumnSet._nCount++;
     YAHOO.log("ColumnSet initialized", "info", this.toString());
 };
@@ -334,7 +334,8 @@ YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
 YAHOO.widget.Column = function(oConfigs) {
     // Internal variables
     this._id = "yui-dtcol"+YAHOO.widget.Column._nCount;
-    
+    this._sName = "Column instance" + YAHOO.widget.Column._nCount;
+
     // Object literal defines Column attributes
     if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
@@ -343,7 +344,7 @@ YAHOO.widget.Column = function(oConfigs) {
             }
         }
     }
-    
+
     YAHOO.widget.Column._nCount++;
 };
 
@@ -362,6 +363,15 @@ YAHOO.widget.Column = function(oConfigs) {
  * @default 0
  */
 YAHOO.widget.Column._nCount = 0;
+
+/**
+ * Unique instance name.
+ *
+ * @property _sName
+ * @type String
+ * @private
+ */
+YAHOO.widget.Column.prototype._sName = null;
 
 
 /**
@@ -443,12 +453,12 @@ YAHOO.widget.Column.prototype._minWidth = null;
 YAHOO.widget.Column.prototype.key = null;
 
 /**
- * Text or HTML for display in Column's assocated TH element.
+ * Text or HTML for display as Column's label in the TH element.
  *
- * @property text
+ * @property label
  * @type String
  */
-YAHOO.widget.Column.prototype.text = null;
+YAHOO.widget.Column.prototype.label = null;
 
 /**
  * Data types: "string", "number", "date", "currency", "checkbox", "select",
@@ -575,6 +585,16 @@ YAHOO.widget.Column.prototype.ascFunction = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Public accessor to the unique name of the Column instance.
+ *
+ * @method toString
+ * @return {String} Column's unique name.
+ */
+YAHOO.widget.Column.prototype.toString = function() {
+    return this._sName;
+};
+
+/**
  * Public accessor returns Column's ID string.
  *
  * @method getId
@@ -677,7 +697,7 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
                 break;
         }
     }
-    
+
     if(this.className) {
         YAHOO.util.Dom.addClass(elCell, this.className);
     }
@@ -695,7 +715,10 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oData {Object} Data value for the cell, or null
+ * @param oData {Object | Boolean} Data value for the cell. Can be a simple
+ * Boolean to indicate whether checkbox is checked or not. Can be object literal
+ * {checked:bBoolean, label:sLabel}. Other forms of oData require a custom
+ * formatter.
  * @static
  */
 YAHOO.widget.Column.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
@@ -706,39 +729,42 @@ YAHOO.widget.Column.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
 };
 
 /**
- * Formats cells in Columns of type "currency". Can be overridden for custom formatting.
+ * Formats Number data for Columns of type "currency". Can be overridden for custom formatting.
  *
  * @method formatCurrency
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oData {Object} Data value for the cell, or null
+ * @param oData {Number} Data value for the cell.
  * @static
  */
 YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
-    // Make it dollars
-    var nAmount = oData;
-    var markup;
-        if((nAmount !== undefined) && (nAmount !== null) && !isNaN(parseFloat(nAmount))) {
-             // Round to the penny
-             nAmount = Math.round(nAmount*100)/100;
-             markup = "$"+nAmount;
+    if(YAHOO.lang.isNumber(oData)) {
+        var nAmount = oData;
+        var markup;
 
-            // Normalize digits
-            var dotIndex = markup.indexOf(".");
-            if(dotIndex < 0) {
-                markup += ".00";
-            }
-            else {
-                while(dotIndex > markup.length-3) {
-                    markup += "0";
-                }
-            }
+        // Round to the penny
+        nAmount = Math.round(nAmount*100)/100;
+
+        // Default currency is USD
+        markup = "$"+nAmount;
+
+        // Normalize digits
+        var dotIndex = markup.indexOf(".");
+        if(dotIndex < 0) {
+            markup += ".00";
         }
         else {
-            markup = "";
+            while(dotIndex > markup.length-3) {
+                markup += "0";
+            }
         }
         elCell.innerHTML = markup;
+    }
+    else {
+        elCell.innerHTML = "";
+        YAHOO.log("Could not format currency " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatCurrency");
+    }
 };
 
 /**
@@ -758,7 +784,7 @@ YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
     }
     else {
         elCell.innerHTML = "";
-        YAHOO.log("Could not format date","warn",this.toString());
+        YAHOO.log("Could not format date " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatDate");
     }
 };
 
@@ -779,6 +805,7 @@ YAHOO.widget.Column.formatEmail = function(elCell, oRecord, oColumn, oData) {
     }
     else {
         elCell.innerHTML = "";
+        YAHOO.log("Could not format email " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatEmail");
     }
 };
 
@@ -799,6 +826,7 @@ YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
     }
     else {
         elCell.innerHTML = "";
+        YAHOO.log("Could not format link " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatLink");
     }
 };
 
@@ -819,6 +847,7 @@ YAHOO.widget.Column.formatNumber = function(elCell, oRecord, oColumn, oData) {
     }
     else {
         elCell.innerHTML = "";
+        YAHOO.log("Could not format Number " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatNumber");
     }
 };
 
@@ -1009,7 +1038,7 @@ YAHOO.widget.ColumnEditor = function(sType) {
     //    elCell = elCell.parentNode;
     //}
     //this.tableContainer = elCell.parentNode;
-    
+
     var elContainer = document.body.appendChild(document.createElement("div"));//this.tableContainer.appendChild(document.createElement("div"));
     elContainer.style.position = "absolute";
     elContainer.style.zIndex = 9000;
@@ -1236,7 +1265,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
 YAHOO.widget.ColumnEditor.prototype.showTextareaEditor = function(elCell, oRecord, oColumn) {
     // Position container
     this.moveContainerTo(elCell);
-    
+
     // Update form field
     this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
     this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)) + "px";
@@ -1245,7 +1274,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextareaEditor = function(elCell, oRecor
 
     // Display container
     this.container.style.display = "block";
-    
+
     // Highlight input
     this.input.focus();
     this.input.select();
@@ -1317,7 +1346,7 @@ YAHOO.util.Sort = {
         else if((b === null) || (typeof b == "undefined")) {
             return -1;
         }
-    
+
         if(a.constructor == String) {
             a = a.toLowerCase();
         }

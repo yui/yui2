@@ -108,18 +108,18 @@ YAHOO.example.NestedHeaders = new function() {
     /****************************************************************************/
     /****************************************************************************/
     var myColumnHeaders = [
-        {key:"page", text:"Page",sortable:true},
-        {text:"Statistics", type:"number", children:[
-            {text:"Visits",
+        {key:"page", label:"Page",sortable:true},
+        {label:"Statistics", type:"number", children:[
+            {label:"Visits",
                 children: [
-                    {key:"visitsmonth", text:"This Month",sortable:true},
-                    {key:"visitsytd", text:"YTD", abbr:"Year to Date",sortable:true}
+                    {key:"visitsmonth", label:"This Month",sortable:true},
+                    {key:"visitsytd", label:"YTD", abbr:"Year to Date",sortable:true}
                 ]
             },
-            {text:"Views",
+            {label:"Views",
                 children: [
-                    {key:"viewsmonth", text:"This Month",sortable:true},
-                    {key:"viewsytd", text:"YTD", abbr:"Year to Date",sortable:true}
+                    {key:"viewsmonth", label:"This Month",sortable:true},
+                    {key:"viewsytd", label:"YTD", abbr:"Year to Date",sortable:true}
                 ]
 
             }

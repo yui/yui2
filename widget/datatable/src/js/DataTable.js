@@ -1541,8 +1541,8 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     if(this.sortedBy && this.sortedBy.key) {
         if(this.sortedBy.key === oColumn.key) {
             var sortClass = (this.sortedBy.dir && (this.sortedBy.dir != "asc")) ?
-                    YAHOO.widget.DataTable.CLASS_SORTEDBYDESC :
-                    YAHOO.widget.DataTable.CLASS_SORTEDBYASC;
+                    YAHOO.widget.DataTable.CLASS_DESC :
+                    YAHOO.widget.DataTable.CLASS_ASC;
             YAHOO.util.Dom.addClass(elTheadCell,sortClass);
             this.sortedBy._id = elTheadCell.id;
         }
@@ -1555,24 +1555,23 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     var elTheadContainer = elTheadCell.appendChild(document.createElement("div"));
     elTheadContainer.id = this.id+"-hdrow"+row+"-container"+col;
     YAHOO.util.Dom.addClass(elTheadContainer,YAHOO.widget.DataTable.CLASS_HEADER);
-    var elTheadContent = elTheadContainer.appendChild(document.createElement("span"));
-    elTheadContent.id = this.id+"-hdrow"+row+"-text"+col;
-    YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_LABEL);
+    var elTheadLabel = elTheadContainer.appendChild(document.createElement("span"));
+    elTheadLabel.id = this.id+"-hdrow"+row+"-label"+col;
+    YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
-    var contentText = oColumn.text || oColumn.key || "";
+    var sLabel = oColumn.label || oColumn.key || "";
     if(oColumn.sortable) {
-        YAHOO.util.Dom.addClass(elTheadContent,YAHOO.widget.DataTable.CLASS_SORTABLE);
+        YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_SORTABLE);
         //TODO: Make hash configurable to be a server link
         //TODO: Make title configurable
-        //TODO: Separate contentText from an accessibility link that says
-        // Click to sort ascending and push it offscreen
+        //TODO: Separate label from an accessibility link that says
+        // "Click to sort ascending" and push it offscreen
         var sortLink = "?key=" + oColumn.key;
-        elTheadContent.innerHTML = "<a href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + contentText + "</a>";
-         //elTheadContent.innerHTML = contentText;
+        elTheadLabel.innerHTML = "<a href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
 
     }
     else {
-        elTheadContent.innerHTML = contentText;
+        elTheadLabel.innerHTML = sLabel;
     }
 };
 
@@ -1834,7 +1833,7 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._deleteTrEl = function(row) {
-    // Convert to page row index
+    // Get page row index for the element
     if(!YAHOO.lang.isNumber(row)) {
         row = YAHOO.util.Dom.get(row).sectionRowIndex;
     }
@@ -4007,9 +4006,9 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this._oRecordSet.sortRecords(sortFnc);
 
             // Update classes
-            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYASC);
-            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_SORTEDBYDESC);
-            var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_SORTEDBYASC : YAHOO.widget.DataTable.CLASS_SORTEDBYDESC;
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_ASC);
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_DESC);
+            var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_ASC : YAHOO.widget.DataTable.CLASS_DESC;
             YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
 
             // Keep track of currently sorted column

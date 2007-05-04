@@ -78,7 +78,7 @@ myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
 myDataSource.responseSchema = {
     recordDelim: "\n",
     fieldDelim: "|",
-    fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertNumber},"Url"]
+    fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertToNumber},"Url"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
@@ -120,7 +120,7 @@ YAHOO.example.XHR_Text = new function() {
     this.myDataSource.responseSchema = {
         recordDelim: "\n",
         fieldDelim: "|",
-        fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertNumber},"Url"]
+        fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertToNumber},"Url"]
     };
 
     this.myDataTable = new YAHOO.widget.DataTable("text", this.myColumnSet, this.myDataSource);

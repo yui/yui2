@@ -15,6 +15,21 @@ YAHOO.example.Data = {
         {number:12, date:new Date(2001, 10, 1), string:"110"}
     ],
 
+    formatting: {
+        items: [
+            {field1: "001", field2:new Date(2007, 1, 1), field3:111, field4:"23.4", field5:"ann", field6:"http://www.yahoo.com"},
+            {field1: undefined, field2:new Date(2006, 1, 1), field3:12.3, field4:"35.12", field5:"bob", field6:"http://www.yahoo.com"},
+            {field1: 001, field2:new Date(2007, 11, 1), field3:1, field4:34.12, field5:"charlie", field6:"http://www.yahoo.com"},
+            {field1: "aaab", field2:new Date(2007, 1, 11), field3:1112, field4:"03", field5:"diane", field6:"http://www.yahoo.com"},
+            {field1: "1", field2:new Date(1999, 1, 11), field3:124, field4:03, field5:"edgar", field6:"http://www.yahoo.com"},
+            {field1: new Date(1999, 1, 11), field2:"January 10, 2005", field3:"12", field4:"34", field5:"francine", field6:"http://www.yahoo.com"},
+            {field1: "11", field2:"January 1, 2005", field3:"19.1", field4:"234.5", field5:"george", field6:"http://www.yahoo.com"},
+            {field1: null, field2:"1/11/05", field3:"10.02", field4:"345.654", field5:"hannah", field6:"http://www.yahoo.com"},
+            {field1: 110, field2:"1/11/2005", field3:"109", field4:23.456, field5:"igor", field6:"http://www.yahoo.com"},
+            {field1: [1,2,3], field2:"November 1, 2005", field3:"11111", field4:23.0123, field5:"julie", field6:"http://www.yahoo.com"}
+        ]
+    },
+
     webstats: [
         ["home.html",20,400,44,657],
         ["blog.html",24,377,97,567],

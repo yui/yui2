@@ -119,7 +119,7 @@ var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
 myDataSource.responseSchema = {
     resultsList: "ResultSet.Result",
-    fields: ["Title","Phone","City",{key:"Rating.AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
+    fields: ["Title","Phone","City",{key:"Rating.AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("json", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10&output=json"});
@@ -159,7 +159,7 @@ YAHOO.example.XHR_JSON = new function() {
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
     this.myDataSource.responseSchema = {
         resultsList: "ResultSet.Result",
-        fields: ["Title","Phone","City",{key:"Rating.AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
+        fields: ["Title","Phone","City",{key:"Rating.AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
     };
 
     this.myDataTable = new YAHOO.widget.DataTable("json", this.myColumnSet,

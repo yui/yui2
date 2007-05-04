@@ -72,7 +72,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
         YAHOO.log("Cache initialized", "info", this.toString());
     }
 
-    this._sName = "instance" + YAHOO.util.DataSource._nIndex;
+    this._sName = "DataSource instance" + YAHOO.util.DataSource._nIndex;
     YAHOO.util.DataSource._nIndex++;
     YAHOO.log("DataSource initialized", "info", this.toString());
 
@@ -395,31 +395,84 @@ YAHOO.util.DataSource.prototype.responseSchema = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Converts data from String to Number objects.
+ * Converts data to type String.
  *
- * @method convertNumber
- * @method sData {String} Number string.
- * @return {Number} Number object.
+ * @method convertToString
+ * @method oData {String | Number | Boolean | Date | Array | Object} Data to convert.
+ * The special values null and undefined will return null.
+ * @return {Number} A string, or null.
  * @static
  */
-YAHOO.util.DataSource.convertNumber = function(sData) {
-    return sData * 1;
+YAHOO.util.DataSource.convertToString = function(oData) {
+    // Special case null and undefined
+    if((oData === null) || (oData === undefined)) {
+        return null;
+    }
+    
+    //Convert to string
+    var string = oData + "";
+
+    // Validate
+    if(YAHOO.lang.isString(string)) {
+        return string;
+    }
+    else {
+        YAHOO.log("Could not convert data " + YAHOO.widget.Logger.dump(oData) + " to type String", "warn", "YAHOO.util.DataSource.convertToString");
+        return null;
+    }
 };
 
 /**
- * Converts data from String to Date objects.
+ * Converts data to type Number.
  *
- * @method convertDate
- * @method sData {String} Date string.
- * @return {Date} Date object.
+ * @method convertToNumber
+ * @method oData {String | Number | Boolean | Null} Data to convert. Beware, null
+ * returns as 0.
+ * @return {Number} A number, or null if NaN.
  * @static
  */
-YAHOO.util.DataSource.convertDate = function(sData) {
-    var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
-    sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
-    var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
-    var yy = sMarkup.substring(sMarkup.indexOf("/")+1);
-    return new Date(yy, mm, dd);
+YAHOO.util.DataSource.convertToNumber = function(oData) {
+    //Convert to number
+    var number = oData * 1;
+    
+    // Validate
+    if(YAHOO.lang.isNumber(number)) {
+        return number;
+    }
+    else {
+        YAHOO.log("Could not convert data " + YAHOO.widget.Logger.dump(oData) + " to type Number", "warn", "YAHOO.util.DataSource.convertToNumber");
+        return null;
+    }
+};
+
+/**
+ * Converts data to type Date.
+ *
+ * @method convertToDate
+ * @method oData {Date | String | Number} Data to convert.
+ * @return {Date} A Date instance.
+ * @static
+ */
+YAHOO.util.DataSource.convertToDate = function(oData) {
+    var date = null;
+    
+    //Convert to date
+    if(!(oData instanceof Date)) {
+        date = new Date(oData);
+    }
+    else {
+        return oData;
+    }
+    
+    // Validate
+    if(date instanceof Date) {
+        return date;
+    }
+    else {
+        YAHOO.log("Could not convert data " + YAHOO.widget.Logger.dump(oData) + " to type Date", "warn", "YAHOO.util.DataSource.convertToDate");
+        return null;
+    }
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -435,7 +488,7 @@ YAHOO.util.DataSource.convertDate = function(sData) {
  * @return {String} Unique name of the DataSource instance.
  */
 YAHOO.util.DataSource.prototype.toString = function() {
-    return "DataSource " + this._sName;
+    return this._sName;
 };
 
 /**
@@ -800,6 +853,10 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
                 if(field.converter) {
                     data = field.converter(data);
                 }
+                // Safety measure
+                if(data === undefined) {
+                    data = null;
+                }
                 oResult[key] = data;
             }
             oParsedResponse.results.unshift(oResult);
@@ -860,6 +917,10 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
                     var key = field.key || field;
                     if(field.converter) {
                         data = field.converter(data);
+                    }
+                    // Safety measure
+                    if(data === undefined) {
+                        data = null;
                     }
                     oResult[key] = data;
                 }
@@ -923,7 +984,10 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
                     if(field.converter) {
                         data = field.converter(data);
                     }
-                    // Capture the schema-mapped data field values into an array
+                    // Safety measure
+                    if(data === undefined) {
+                        data = null;
+                    }
                     oResult[key] = data;
                 }
                 // Capture each array of values into an array of results
@@ -1045,12 +1109,13 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                 // ...and capture data into an array mapped according to the schema...
                 // eval is necessary here since schema can be of unknown depth
                 var data = eval("jsonResult." + key);
-                if((typeof data == "undefined") || (data === null)) {
-                    data = "";
-                }
                 //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
                 if(field.converter) {
                     data = field.converter(data);
+                }
+                // Safety measure
+                if(data === undefined) {
+                    data = null;
                 }
                 oResult[key] = data;
             }

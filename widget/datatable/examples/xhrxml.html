@@ -132,7 +132,7 @@ var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
 myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
 myDataSource.responseSchema = {
     resultNode: "Result",
-    fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
+    fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
 };
 
 var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
@@ -172,7 +172,7 @@ YAHOO.example.XHR_XML = new function() {
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
     this.myDataSource.responseSchema = {
         resultNode: "Result",
-        fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
+        fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
     };
 
     this.myDataTable = new YAHOO.widget.DataTable("xml", this.myColumnSet,
