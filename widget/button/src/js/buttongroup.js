@@ -5,7 +5,7 @@
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang,
-    Button = YAHOO.widget.Button;    
+    Button = YAHOO.widget.Button,  
 
     // Private collection of radio buttons
 
