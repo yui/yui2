@@ -4936,6 +4936,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
             this.unselectAllRows();
             this.selectRow(elRow);
         }
+        YAHOO.util.Event.stopEvent(evt);
     }
     else {
         YAHOO.log("Could not select row " + elTarget, "warn", this.toString());
@@ -4956,7 +4957,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     var bSHIFT = evt.shiftKey;
     var bCTRL = evt.ctrlKey;
     var i, nAchorRowIndex, nAnchorCellIndex;
-
+    
     var elCell = this.getTdEl(elTarget);
     if(elCell) {
         var elRow = this.getTrEl(elCell);
@@ -5084,10 +5085,34 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
             this.unselectAllCells();
             this.selectCell(elCell);
         }
+
+        YAHOO.util.Event.stopEvent(evt);
+
+        // Clear any selections that are a byproduct of the dblclick
+        var sel;
+        if(window.getSelection) { // doesn't work for opera -- try removeallranges?
+        	sel = window.getSelection();
+        }
+         if(document.getSelection) {// works for opera but w/a context menu -- try removeallranges?
+        	sel = document.getSelection();
+        }
+        else if(document.selection) {
+        	sel = document.selection;
+        }
+        if(sel) {
+            if(sel.empty) {
+                sel.empty();
+            }
+            else if(sel.collapse) {
+                sel.collapse();
+            }
+        }
+
     }
     else {
         YAHOO.log("Could not select cell " + elTarget, "warn", this.toString());
-    }};
+    }
+};
 
 /**
  * Overridable custom event handler to format cell.
