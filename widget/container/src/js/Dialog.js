@@ -263,8 +263,11 @@ YAHOO.widget.Dialog.prototype._onFormKeyDown = function(p_oEvent) {
         var sType = oTarget.type;
 
         if(
-            sType == "text" || sType == "password" || sType == "checkbox" || 
-            sType == "radio" || sType == "file"
+            this.defaultHtmlButton && 
+            (
+                sType == "text" || sType == "password" || 
+                sType == "checkbox" || sType == "radio" || sType == "file"
+            )
         ) {
 
             // Fire the "click" event on the dialog's default button
