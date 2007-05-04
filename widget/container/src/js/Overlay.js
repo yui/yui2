@@ -533,7 +533,7 @@ YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 		this.center();
 
 		if (! YAHOO.util.Config.alreadySubscribed(this.beforeShowEvent, this.center, this)) {
-			this.beforeShowEvent.subscribe(this.center, this, true);
+			this.beforeShowEvent.subscribe(this.center);
 		}
 
 		if (! YAHOO.util.Config.alreadySubscribed(YAHOO.widget.Overlay.windowResizeEvent, this.doCenterOnDOMEvent, this)) {
@@ -544,6 +544,7 @@ YAHOO.widget.Overlay.prototype.configFixedCenter = function(type, args, obj) {
 			YAHOO.widget.Overlay.windowScrollEvent.subscribe( this.doCenterOnDOMEvent, this, true);
 		}
 	} else {
+        this.beforeShowEvent.unsubscribe(this.center);
 		YAHOO.widget.Overlay.windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 		YAHOO.widget.Overlay.windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
 	}
