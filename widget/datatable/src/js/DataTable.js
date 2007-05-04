@@ -1279,49 +1279,49 @@ YAHOO.widget.DataTable.prototype._bFocused = false;
 /**
  * Internal object literal to track paginator values.
  *
- * @property _paginator
+ * @property _oPaginator
  * @type Object
  * @private
  */
 /**
  * Internal variable to track paginator dropdown options.
  *
- * @property _paginator.dropdownOptions
+ * @property _oPaginator.dropdownOptions
  * @type Number[] | Object[]
  * @private
  */
 /**
  * Internal variable to track how many page links to display.
  *
- * @property _paginator.pageLinks
+ * @property _oPaginator.pageLinks
  * @type Number
  * @private
  */
 /**
  * Internal variable to track total number of pages, calculated on the fly.
  *
- * @property _paginator.totalPages
+ * @property _oPaginator.totalPages
  * @type Number
  * @private
  */
 /**
  * Internal variable to track current page.
  *
- * @property _paginator.currentPage
+ * @property _oPaginator.currentPage
  * @type Number
  * @private
  */
 /**
  * Internal variable to track how many rows per page to display.
  *
- * @property _paginator.rowsPerPage
+ * @property _oPaginator.rowsPerPage
  * @type Number
  * @private
  */
 /**
  * Array of container elements for paginator UI.
  *
- * @property _paginator.containers
+ * @property _oPaginator.containers
  * @type HTMLElement[]
  * @private
  */
@@ -1330,18 +1330,18 @@ YAHOO.widget.DataTable.prototype._bFocused = false;
  * like [10, 25, 100]; or an array of object literals, like
  * [{value:10, text:"ten"}, {value:25, text:"twenty-five"}, {value:100, text:"one-hundred"}]
  *
- * @property _paginator.dropdowns
+ * @property _oPaginator.dropdowns
  * @type Number[] | Object[]
  * @private
  */
 /**
  * Array of container elements for paginator links.
  *
- * @property _paginator.links
+ * @property _oPaginator.links
  * @type HTMLElement[]
  * @private
  */
-YAHOO.widget.DataTable.prototype._paginator = null;
+YAHOO.widget.DataTable.prototype._oPaginator = null;
 
 
 
@@ -1700,9 +1700,9 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
         YAHOO.log("Could not create Paginator dropdown due to invalid dropdownOptions","error",this.toString());
     }
 
-    this._paginator = paginator;
-    this._paginator.containers = containers;
-    YAHOO.log("Paginator initialized: " + YAHOO.widget.Logger.dump(this._paginator), "info", this.toString());
+    this._oPaginator = paginator;
+    this._oPaginator.containers = containers;
+    YAHOO.log("Paginator initialized: " + YAHOO.widget.Logger.dump(this._oPaginator), "info", this.toString());
 };
 
 
@@ -1899,11 +1899,11 @@ YAHOO.widget.DataTable.prototype._setFirstRow = function() {
     if(rowEl) {
         // Unassign previous class
         if(this._sFirstTrId) {
-            YAHOO.util.Dom.removeClass(this._firstTrId, YAHOO.widget.DataTable.CLASS_FIRST);
+            YAHOO.util.Dom.removeClass(this._sFirstTrId, YAHOO.widget.DataTable.CLASS_FIRST);
         }
         // Assign class
         YAHOO.util.Dom.addClass(rowEl, YAHOO.widget.DataTable.CLASS_FIRST);
-        this._firstTrId = rowEl.id;
+        this._sFirstTrId = rowEl.id;
     }
     else {
         this._sFirstTrId = null;
@@ -1926,6 +1926,7 @@ YAHOO.widget.DataTable.prototype._setLastRow = function() {
         }
         // Assign class
         YAHOO.util.Dom.addClass(rowEl, YAHOO.widget.DataTable.CLASS_LAST);
+        this._sLastTrId = rowEl.id;
     }
     else {
         this._sLastTrId = null;
@@ -2307,7 +2308,7 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
-    var oldSelectedId = oSelf._lastSelectedId;
+    var oldSelectedId = oSelf._sLastSelectedId;
     // Only move selection if one is already selected
     // TODO: if something isn't selected already, arrow key should select first or last one
     if(oldSelectedId && oSelf.isSelected(oldSelectedId)) {
@@ -2443,13 +2444,13 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
                         oSelf.showPage(1);
                         return;
                     case YAHOO.widget.DataTable.CLASS_LAST:
-                        oSelf.showPage(oSelf._paginator.totalPages);
+                        oSelf.showPage(oSelf._oPaginator.totalPages);
                         return;
                     case YAHOO.widget.DataTable.CLASS_PREVIOUS:
-                        oSelf.showPage(oSelf._paginator.currentPage-1);
+                        oSelf.showPage(oSelf._oPaginator.currentPage-1);
                         return;
                     case YAHOO.widget.DataTable.CLASS_NEXT:
-                        oSelf.showPage(oSelf._paginator.currentPage+1);
+                        oSelf.showPage(oSelf._oPaginator.currentPage+1);
                         return;
                 }
                 break;
@@ -2474,13 +2475,13 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
     var value = elTarget[elTarget.selectedIndex].value;
 
     // How many rows per page
-    var oldRowsPerPage = oSelf._paginator.rowsPerPage;
+    var oldRowsPerPage = oSelf._oPaginator.rowsPerPage;
     var rowsPerPage = parseInt(value,10) || null;
     if(rowsPerPage && (rowsPerPage != oldRowsPerPage)) {
         if(rowsPerPage > oldRowsPerPage) {
-            oSelf._paginator.currentPage = 1;
+            oSelf._oPaginator.currentPage = 1;
         }
-        oSelf._paginator.rowsPerPage = rowsPerPage;
+        oSelf._oPaginator.rowsPerPage = rowsPerPage;
         oSelf.refreshTable();
     }
 };
@@ -2754,7 +2755,7 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
  *     </ul>
  */
 YAHOO.widget.DataTable.prototype.getPaginator = function() {
-    return this._paginator;
+    return this._oPaginator;
 };
 
 
@@ -2913,7 +2914,7 @@ YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
  * @return {HTMLElement} Reference to TR element.
  */
 YAHOO.widget.DataTable.prototype.getFirstTrEl = function() {
-    return this.getTrEl(0);
+    return this._elTbody.rows[0];
 };
 
 /**
@@ -2923,7 +2924,10 @@ YAHOO.widget.DataTable.prototype.getFirstTrEl = function() {
  * @return {HTMLElement} Reference to last TR element.
  */
 YAHOO.widget.DataTable.prototype.getLastTrEl = function() {
-    return this.getTrEl(this._elTbody.rows.length-1);
+    var allRows = this._elTbody.rows;
+        if(allRows.length > 0) {
+            return allRows[allRows.length-1];
+        }
 };
 
 /**
@@ -3020,8 +3024,8 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
         // DataTable is paginated
         if(this.isPaginated()) {
             // Get the first and last Record on this page
-            var startRecordIndex = this._paginator.startRecordIndex;
-            var endRecordIndex = startRecordIndex + this._paginator.rowsPerPage - 1;
+            var startRecordIndex = this._oPaginator.startRecordIndex;
+            var endRecordIndex = startRecordIndex + this._oPaginator.rowsPerPage - 1;
             // This Record is in view
             if((nRecordIndex >= startRecordIndex) && (nRecordIndex <= endRecordIndex)) {
                 return nRecordIndex - startRecordIndex;
@@ -3103,8 +3107,8 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
     }
 
     if(YAHOO.lang.isNumber(nTrIndex)) {
-        if(this._paginator && this._paginator.startRecordIndex) {
-            return this._paginator.startRecordIndex + nTrIndex;
+        if(this._oPaginator && this._oPaginator.startRecordIndex) {
+            return this._oPaginator.startRecordIndex + nTrIndex;
         }
         else {
             return nTrIndex;
@@ -3448,10 +3452,12 @@ YAHOO.widget.DataTable.prototype.focusTable = function() {
 
 /**
  * Initializes a RecordSet with the given data and populates the page view
- * with the new data. Any previous states of sorting and selection are cleared.
- * If pagination is enabled, displays only the current page, otherwise displays
- * all rows. For performance, reuses existing DOM elements when possible while
- * deleting extraneous elements.
+ * with the new data. Any previous data and selection states are cleared.
+ * However, sort states are not cleared, so if the given data is in a particular
+ * sort order, implementers should take care to reset the sortedBy property. If
+ * pagination is enabled, the currentPage is shown and Paginator UI updated,
+ * otherwise all rows are displayed as a single page. For performance, existing
+ * DOM elements are reused when possible.
  *
  * @method initializeTable
  * @param oData {Object | Object[]} An object literal of data or an array of
@@ -3469,7 +3475,12 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
     // Add data to RecordSet
     var records = this._oRecordSet.addRecords(oData);
     
-    //TODO: clear selection tracker, clear sorts
+    // Clear selections
+    this._unselectAllTrEls();
+    this._unselectAllTdEls();
+    this._aSelections = null;
+    this._sLastSelectedId = null;
+    this._sSelectionAnchorId = null;
     
     // Update table view
     this.refreshTable();
@@ -3488,14 +3499,14 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
     // Paginator is disabled
     if(!this.paginator) {
         // Paginator must be destroyed
-        if(this._paginator !== null) {
+        if(this._oPaginator !== null) {
             //TODO: this.destroyPaginator();
         }
     }
     // Paginator is enabled
     if(this.paginator) {
         this.updatePaginator();
-        aRecords = this._oRecordSet.getRecords(this._paginator.startRecordIndex, this._paginator.rowsPerPage);
+        aRecords = this._oRecordSet.getRecords(this._oPaginator.startRecordIndex, this._oPaginator.rowsPerPage);
     }
     // Show all records
     else {
@@ -3707,7 +3718,7 @@ YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
  * @return {Boolean} Returns true if paginated, false otherwise.
  */
 YAHOO.widget.DataTable.prototype.isPaginated = function() {
-    return (this.paginator || (this._paginator));
+    return (this.paginator || (this._oPaginator));
 };
 
 /**
@@ -3718,10 +3729,10 @@ YAHOO.widget.DataTable.prototype.isPaginated = function() {
  */
 YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     // Validate input
-    if(!YAHOO.lang.isNumber(nPage) || (nPage < 1) || (nPage > this._paginator.totalPages)) {
+    if(!YAHOO.lang.isNumber(nPage) || (nPage < 1) || (nPage > this._oPaginator.totalPages)) {
         nPage = 1;
     }
-    this._paginator.currentPage = nPage;
+    this._oPaginator.currentPage = nPage;
     this.refreshTable();
 };
 
@@ -3731,7 +3742,7 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
  * @method formatPaginators
  */
  YAHOO.widget.DataTable.prototype.formatPaginators = function() {
-    var pag = this._paginator;
+    var pag = this._oPaginator;
     var i;
 
     // For Opera workaround
@@ -3771,7 +3782,7 @@ YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown) 
         var options = elDropdown.options;
         // Update dropdown's "selected" value
         for(var i=options.length-1; i>-1; i--) {
-            if((this._paginator.rowsPerPage + "") === options[i].value) {
+            if((this._oPaginator.rowsPerPage + "") === options[i].value) {
                 options[i].selected = true;
             }
         }
@@ -3827,7 +3838,7 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
  */
 YAHOO.widget.DataTable.prototype.updatePaginator = function() {
     // Paginator values must be initialized
-    if(this._paginator === null) {
+    if(this._oPaginator === null) {
         this._initPaginator();
     }
 
@@ -3835,9 +3846,9 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function() {
     var recordsLength = this._oRecordSet.getLength();
 
     // If rowsPerPage < 1, show all rows
-    this._paginator.rowsPerPage = (this._paginator.rowsPerPage > 0) ?
-        this._paginator.rowsPerPage : recordsLength;
-    var rowsPerPage = this._paginator.rowsPerPage;
+    this._oPaginator.rowsPerPage = (this._oPaginator.rowsPerPage > 0) ?
+        this._oPaginator.rowsPerPage : recordsLength;
+    var rowsPerPage = this._oPaginator.rowsPerPage;
 
 
     // How many rows this page
@@ -3845,32 +3856,32 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function() {
             rowsPerPage : recordsLength;
 
     // How many total pages
-    this._paginator.totalPages = Math.ceil(recordsLength / maxRows);
+    this._oPaginator.totalPages = Math.ceil(recordsLength / maxRows);
 
     // What is current page
-    var currentPage = this._paginator.currentPage;
+    var currentPage = this._oPaginator.currentPage;
 
     // First row of this page
-    this._paginator.startRecordIndex =  (currentPage-1) * rowsPerPage;
+    this._oPaginator.startRecordIndex =  (currentPage-1) * rowsPerPage;
 
     // How many page links to display
-    var pageLinksLength = this._paginator.pageLinks;
+    var pageLinksLength = this._oPaginator.pageLinks;
     // Show all links
     if(pageLinksLength === 0) {
-        pageLinksLength = this._paginator.totalPages;
+        pageLinksLength = this._oPaginator.totalPages;
     }
     // Page links are enabled
     if(pageLinksLength > -1) {
         // First page link for this page
-        this._paginator.pageLinksStart = (pageLinksLength == 1) ? currentPage :
+        this._oPaginator.pageLinksStart = (pageLinksLength == 1) ? currentPage :
                 (Math.ceil(currentPage/pageLinksLength-1) * pageLinksLength) + 1;
     }
 
     this.formatPaginators();
 
-    this.fireEvent("paginatorUpdateEvent", {paginator:this._paginator});
+    this.fireEvent("paginatorUpdateEvent", {paginator:this._oPaginator});
     YAHOO.log("Paginator updated: " +
-            YAHOO.widget.Logger.dump(this._paginator), "info", this.toString());
+            YAHOO.widget.Logger.dump(this._oPaginator), "info", this.toString());
 };
 
 
@@ -4115,6 +4126,15 @@ YAHOO.widget.DataTable.prototype.selectionModel = null;
 YAHOO.widget.DataTable.prototype._aSelections = null;
 
 /**
+ * ID string of last selected element
+ *
+ * @property _sLastSelectedId
+ * @type String
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._sLastSelectedId = null;
+
+/**
  * ID string of the selection anchor element.
  *
  * @property _sSelectionAnchorId
@@ -4178,7 +4198,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
             tracker.push(id);
 
             // Update trackers
-            this._lastSelectedId = elRow.id;
+            this._sLastSelectedId = elRow.id;
             if(!this._sSelectionAnchorId) {
                 this._sSelectionAnchorId = elRow.id;
             }
@@ -4318,7 +4338,7 @@ YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
 
             // Update trackers
             this._aSelections = tracker;
-            this._lastSelectedId = elCell.id;
+            this._sLastSelectedId = elCell.id;
             if(!this._sSelectionAnchorId) {
                 this._sSelectionAnchorId = elRow.id;
             }
@@ -5096,7 +5116,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
         }
         // Multi-selection has been disabled
         /*else if(bSingleSelect) {
-            this.unselectCell(this._lastSelectedId);
+            this.unselectCell(this._sLastSelectedId);
             this.selectCell(elCell);
         }*/
         // Neither SHIFT nor CTRL or multi-selection has been disabled
