@@ -4937,6 +4937,29 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
             this.selectRow(elRow);
         }
         YAHOO.util.Event.stopEvent(evt);
+
+        // Clear any selections that are a byproduct of the click or dblclick
+        var sel;
+        if(window.getSelection) {
+        	sel = window.getSelection();
+        }
+        else if(document.getSelection) {
+        	sel = document.getSelection();
+        }
+        else if(document.selection) {
+        	sel = document.selection;
+        }
+        if(sel) {
+            if(sel.empty) {
+                sel.empty();
+            }
+            else if (sel.removeAllRanges) {
+                sel.removeAllRanges();
+            }
+            else if(sel.collapse) {
+                sel.collapse();
+            }
+        }
     }
     else {
         YAHOO.log("Could not select row " + elTarget, "warn", this.toString());
@@ -5088,12 +5111,12 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
 
         YAHOO.util.Event.stopEvent(evt);
 
-        // Clear any selections that are a byproduct of the dblclick
+        // Clear any selections that are a byproduct of the click or dblclick
         var sel;
-        if(window.getSelection) { // doesn't work for opera -- try removeallranges?
+        if(window.getSelection) {
         	sel = window.getSelection();
         }
-         if(document.getSelection) {// works for opera but w/a context menu -- try removeallranges?
+        else if(document.getSelection) {
         	sel = document.getSelection();
         }
         else if(document.selection) {
@@ -5103,11 +5126,13 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
             if(sel.empty) {
                 sel.empty();
             }
+            else if (sel.removeAllRanges) {
+                sel.removeAllRanges();
+            }
             else if(sel.collapse) {
                 sel.collapse();
             }
         }
-
     }
     else {
         YAHOO.log("Could not select cell " + elTarget, "warn", this.toString());
