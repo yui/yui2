@@ -371,7 +371,7 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     if(oRecord && oData && (oData.constructor == Object)) {
         // Copy data from the Record for the event that gets fired later
         var oldData = {};
-        for(var key in oRecord) {
+        for(var key in oRecord._oData) {
             oldData[key] = oRecord._oData[key];
         }
         oRecord._oData = oData;
@@ -403,7 +403,21 @@ YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
     }
     if(record instanceof YAHOO.widget.Record) {
         oRecord = record;
-        var oldData = oRecord._oData[sKey];
+
+        var oldData = null;
+        var keyValue = oRecord._oData[sKey];
+        // Copy data from the Record for the event that gets fired later
+        if(keyValue && keyValue.constructor == Object) {
+            oldData = {};
+            for(var key in keyValue) {
+                oldData[key] = keyValue[key];
+            }
+        }
+        // Copy by value
+        else {
+            oldData = keyValue;
+        }
+
         oRecord._oData[sKey] = oData;
         this.fireEvent("keyUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
         YAHOO.log("Key \"" + sKey +
@@ -497,7 +511,6 @@ YAHOO.widget.RecordSet.prototype.deleteRecords = function(index, range) {
             deletedData.push(oData);
         }
         this._deleteRecord(index, range);
-
 
         this.fireEvent("recordsDeleteEvent",{data:deletedData,index:index});
         YAHOO.log(range + "Record(s) deleted at index " + index +

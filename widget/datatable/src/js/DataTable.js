@@ -1479,35 +1479,45 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     this._elThead = this._elTable.appendChild(elThead);
     
     // Add Resizer only after DOM has been updated
+    var foundDD = (YAHOO.util.DD) ? true : false;
+    var needDD = false;
     for(i=0; i<this._oColumnSet.keys.length; i++) {
         oColumn = this._oColumnSet.keys[i];
-        if(oColumn.resizeable && YAHOO.util.DD) {
-            //TODO: deal with fixed width tables
-            // Skip the last column for fixed-width tables
-            if(!this.fixedWidth ||
-                    (this.fixedWidth &&
-                    (oColumn.getIndex() != this._oColumnSet.keys.length-1)
-                    )
-            ) {
-                // TODO: better way to get elTheadContainer
-                var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
-                var elTheadResizer = elTheadContainer.appendChild(document.createElement("span"));
-                elTheadResizer.id = oColumn.getId() + "-resizer";
-                YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
-                oColumn.ddResizer = new YAHOO.util.WidthResizer(
-                        this, oColumn.getId(), elTheadResizer.id, elTheadResizer.id);
-                var cancelClick = function(e) {
-                    YAHOO.util.Event.stopPropagation(e);
-                };
-                YAHOO.util.Event.addListener(elTheadResizer,"click",cancelClick);
+        if(oColumn.resizeable) {
+            if(foundDD) {
+                //TODO: deal with fixed width tables
+                // Skip the last column for fixed-width tables
+                if(!this.fixedWidth ||
+                        (this.fixedWidth &&
+                        (oColumn.getIndex() != this._oColumnSet.keys.length-1)
+                        )
+                ) {
+                    // TODO: better way to get elTheadContainer
+                    var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                    var elTheadResizer = elTheadContainer.appendChild(document.createElement("span"));
+                    elTheadResizer.id = oColumn.getId() + "-resizer";
+                    YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
+                    oColumn.ddResizer = new YAHOO.util.WidthResizer(
+                            this, oColumn.getId(), elTheadResizer.id, elTheadResizer.id);
+                    var cancelClick = function(e) {
+                        YAHOO.util.Event.stopPropagation(e);
+                    };
+                    YAHOO.util.Event.addListener(elTheadResizer,"click",cancelClick);
+                }
+                if(this.fixedWidth) {
+                    //elTheadContainer.style.overflow = "hidden";
+                    // TODO: better way to get elTheadText
+                    var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                    elTheadText.style.overflow = "hidden";
+                }
             }
-            if(this.fixedWidth) {
-                //elTheadContainer.style.overflow = "hidden";
-                // TODO: better way to get elTheadText
-                var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
-                elTheadText.style.overflow = "hidden";
+            else {
+                needDD = true;
             }
         }
+    }
+    if(needDD) {
+        YAHOO.log("Could not find DragDrop dependancy for resizeable Columns", "warn", this.toString());
     }
 
     YAHOO.log("Column headers for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
