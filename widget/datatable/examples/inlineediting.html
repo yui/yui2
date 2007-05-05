@@ -16,6 +16,7 @@
 #editing th {background-color:#696969;color:#fff;}/*dark gray*/
 #editing tr.yui-dt-odd {background-color:#eee;} /*light gray*/
 #editing td.yui-dt-editable.yui-dt-highlighted {background-color:#BEDAFF;} /*light blue*/
+#editing pre {font-family:verdana,arial; font-size:100%;}
 </style>
 </head>
 <body>
@@ -116,11 +117,15 @@ YAHOO.example.InlineEditing = new function() {
     /****************************************************************************/
     /****************************************************************************/
     /****************************************************************************/
+    this.formatDescription = function(elCell, oRecord, oColumn, oData) {
+        elCell.innerHTML = "<pre>" + oData + "</pre>";
+    };
+    
     var myColumnHeaders = [
         {key:"SKU"},
         {key:"Quantity",editor:"textbox"},
         {key:"Item",editor:"textbox"},
-        {key:"Description",editor:"textarea"}
+        {key:"Description",editor:"textarea",formatter:this.formatDescription}
     ];
     this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 

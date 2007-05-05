@@ -1243,7 +1243,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     // Update form field
     this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
     this.input.style.height = (parseInt(elCell.offsetHeight,10)) + "px";
-    this.input.value = elCell.innerHTML || "";
+    this.input.value = oRecord.getData(oColumn.key) || null;
     this.input.tabIndex = 0;
 
     // Display container
@@ -1269,7 +1269,7 @@ YAHOO.widget.ColumnEditor.prototype.showTextareaEditor = function(elCell, oRecor
     // Update form field
     this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
     this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)) + "px";
-    this.input.value = elCell.innerHTML || "";
+    this.input.value = oRecord.getData(oColumn.key) || null;
     this.input.tabIndex = 0;
 
     // Display container

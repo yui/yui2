@@ -3,7 +3,7 @@
     h3 {font-size:114%;}
     h4 {font-size:100%;}
     h1,h2,h3,h4 {font-weight:bold;}
-    body {margin:1em;font-family:verdana,arial,sans-serif;}
+    body {margin:1em;font-family:verdana,arial;}
     
     #hd {position:relative;}
     #hd .logo {width:65px;height:38px;vertical-align:middle;padding-right:10px;}
