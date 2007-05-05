@@ -991,7 +991,7 @@ YAHOO.widget.Column.parseSelect = function(sMarkup) {
 /**
  * Outputs editor markup into the given TD based on given Record.
  *
- * @method showEditor
+ * @method getEditor
  * @param elCell {HTMLElement} The cell to edit.
  * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
  * @return YAHOO.widget.ColumnEditor
@@ -1243,7 +1243,11 @@ YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord
     // Update form field
     this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
     this.input.style.height = (parseInt(elCell.offsetHeight,10)) + "px";
-    this.input.value = oRecord.getData(oColumn.key) || null;
+
+    //TODO: Need a hook to format data out of RecordSet and into form field
+    var value = oRecord.getData(oColumn.key);
+    this.input.value = ((value !== null) && (value !== undefined)) ?
+            oRecord.getData(oColumn.key) : "";
     this.input.tabIndex = 0;
 
     // Display container
@@ -1269,8 +1273,12 @@ YAHOO.widget.ColumnEditor.prototype.showTextareaEditor = function(elCell, oRecor
     // Update form field
     this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
     this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)) + "px";
-    this.input.value = oRecord.getData(oColumn.key) || null;
     this.input.tabIndex = 0;
+
+    //TODO: Need a hook to format data out of RecordSet and into form field
+    var value = oRecord.getData(oColumn.key);
+    this.input.value = ((value !== null) && (value !== undefined)) ?
+            oRecord.getData(oColumn.key) : "";
 
     // Display container
     this.container.style.display = "block";
@@ -1297,6 +1305,7 @@ YAHOO.widget.ColumnEditor.prototype.hide = function() {
  * @return String
  */
 YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
+    //TODO: convert value for RecordSet
     return this.input.value;
 };
 
@@ -1307,6 +1316,7 @@ YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
  * @return String
  */
 YAHOO.widget.ColumnEditor.prototype.getTextareaEditorValue = function() {
+    //TODO: convert value for RecordSet
     return this.input.value;
 };
 

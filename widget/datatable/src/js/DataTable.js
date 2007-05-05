@@ -2067,14 +2067,14 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(!YAHOO.util.Dom.isAncestor(oSelf._elContainer, elTarget)) {
+    if(!YAHOO.util.Dom.isAncestor(oSelf._elTable, elTarget)) {
         oSelf._bFocused = false;
         oSelf.fireEvent("tableBlurEvent");
 
-        // Fires editorBlurEvent when click is not within the container.
-        // For cases when click is within the container, due to timing issues,
+        // Fires editorBlurEvent when click is not within the TABLE.
+        // For cases when click is within the TABLE, due to timing issues,
         // the editorBlurevent needs to get fired by the lower-level DOM click
-        // handlers below.
+        // handlers below rather than by the TABLE click handler directly.
         if(oSelf.activeEditor) {
             // Only if the click was not within the editor container
             if(!YAHOO.util.Dom.isAncestor(oSelf.activeEditor.container, elTarget)) {
@@ -4655,6 +4655,7 @@ YAHOO.widget.DataTable.prototype.saveEditorData = function() {
         var oRecord = this.activeEditor.record;
         var oldValue = oRecord.getData(oColumn.key);
         var newValue = this.activeEditor.getValue();
+        //TODO: need to convert string value into proper type for RecordSet
 
         if(YAHOO.util.Lang.isString(oColumn.key)) {
             // Update Record data
