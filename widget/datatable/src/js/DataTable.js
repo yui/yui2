@@ -154,6 +154,9 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     YAHOO.util.Event.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
     YAHOO.util.Event.addListener(elTbody, "keyup", this._onTbodyKeyup, this);
     YAHOO.util.Event.addListener(elTbody, "keypress", this._onTbodyKeypress, this);
+    
+    YAHOO.util.Event.addListener(elContainer, "scroll", this._onScroll, this); // for IE
+    YAHOO.util.Event.addListener(elTbody, "scroll", this._onScroll, this); // for everyone else
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -229,6 +232,17 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
      */
     this.createEvent("tableDblclickEvent");
     
+    /**
+     * Fired when a scrollable DataTable has a scroll.
+     *
+     * @event tableScrollEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's CONTAINER (IE) element
+     * or the DataTable's TBODY element.     .
+     *
+     */
+    this.createEvent("tableScrollEvent");
+
     /**
      * Fired when a header cell has a mouseover.
      *
@@ -2021,6 +2035,25 @@ YAHOO.widget.DataTable.prototype._setRowStripes = function(row, range) {
 // Private DOM Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Handles scroll events on the CONTAINER (for IE) and TBODY elements (for everyone else).
+ *
+ * @method _onScroll
+ * @param e {HTMLEvent} The scroll event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+    
+    if(oSelf.activeEditor) {
+        oSelf.fireEvent("editorBlurEvent");
+    }
+    
+    oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
+};
 
 /**
  * Handles click events on the DOCUMENT.
