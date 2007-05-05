@@ -1488,9 +1488,27 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
             elTheadCell.id = oColumn.getId();
             this._initThEl(elTheadCell,oColumn,i,j);
         }
+
+        // Set first and last classes on THEAD rows
+        if(i === 0) {
+            YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_FIRST);
+        }
+        if(i === (colTree.length-1)) {
+            YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_LAST);
+        }
     }
 
     this._elThead = this._elTable.appendChild(elThead);
+
+    // Set first and last classes on THEAD cells using the values in ColumnSet headers array
+    var aFirstHeaders = this._oColumnSet.headers[0].split(" ");
+    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1].split(" ");
+    for(i=0; i<aFirstHeaders.length; i++) {
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
+    }
+    for(i=0; i<aLastHeaders.length; i++) {
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
+    }
     
     // Add Resizer only after DOM has been updated
     var foundDD = (YAHOO.util.DD) ? true : false;
@@ -1799,10 +1817,10 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         // Update UI
         oColumn.format(elCell, oRecord);
         if (j === 0) {
-            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_FIRST);
+            YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_FIRST);
         }
-        else if (index === this._oColumnSet.keys.length-1) {
-            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_LAST);
+        else if (j === this._oColumnSet.keys.length-1) {
+            YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_LAST);
         }
 
         /*p.abx {word-wrap:break-word;}
