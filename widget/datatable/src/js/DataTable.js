@@ -1469,7 +1469,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initTheadEl = function() {
-    var i,oColumn;
+    var i,oColumn, colId;
     
     // Create THEAD
     var elThead = document.createElement("thead");
@@ -1484,8 +1484,9 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
         // ...and create THEAD cells
         for(var j=0; j<colTree[i].length; j++) {
             oColumn = colTree[i][j];
+            colId = oColumn.getId();
             var elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-            elTheadCell.id = oColumn.getId();
+            elTheadCell.id = this.id + "-col" + colId;
             this._initThEl(elTheadCell,oColumn,i,j);
         }
 
@@ -1515,6 +1516,8 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     var needDD = false;
     for(i=0; i<this._oColumnSet.keys.length; i++) {
         oColumn = this._oColumnSet.keys[i];
+        colId = oColumn.getId();
+        var elTheadId = YAHOO.util.Dom.get(this.id + "-col" + colId);
         if(oColumn.resizeable) {
             if(foundDD) {
                 //TODO: deal with fixed width tables
@@ -1525,12 +1528,12 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                         )
                 ) {
                     // TODO: better way to get elTheadContainer
-                    var elTheadContainer = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                    var elTheadContainer = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",elTheadId)[0];
                     var elTheadResizer = elTheadContainer.appendChild(document.createElement("span"));
-                    elTheadResizer.id = oColumn.getId() + "-resizer";
+                    elTheadResizer.id = this.id + "-resizer" + colId;
                     YAHOO.util.Dom.addClass(elTheadResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
                     oColumn.ddResizer = new YAHOO.util.WidthResizer(
-                            this, oColumn.getId(), elTheadResizer.id, elTheadResizer.id);
+                            this, elTheadId, elTheadResizer.id, elTheadResizer.id);
                     var cancelClick = function(e) {
                         YAHOO.util.Event.stopPropagation(e);
                     };
@@ -1539,7 +1542,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                 if(this.fixedWidth) {
                     //elTheadContainer.style.overflow = "hidden";
                     // TODO: better way to get elTheadText
-                    var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",YAHOO.util.Dom.get(oColumn.getId())))[0];
+                    var elTheadText = (YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",elTheadId))[0];
                     elTheadText.style.overflow = "hidden";
                 }
             }
@@ -1569,7 +1572,8 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
-    elTheadCell.yuiColumnId = oColumn.getId();
+    var colId = oColumn.getId();
+    elTheadCell.yuiColumnId = colId;
     if(oColumn.abbr) {
         elTheadCell.abbr = oColumn.abbr;
     }
@@ -1595,10 +1599,10 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadCell.colSpan = oColumn.getColspan();
 
     var elTheadContainer = elTheadCell.appendChild(document.createElement("div"));
-    elTheadContainer.id = this.id+"-hdrow"+row+"-container"+col;
+    elTheadContainer.id = this.id + "-container" + colId;
     YAHOO.util.Dom.addClass(elTheadContainer,YAHOO.widget.DataTable.CLASS_HEADER);
     var elTheadLabel = elTheadContainer.appendChild(document.createElement("span"));
-    elTheadLabel.id = this.id+"-hdrow"+row+"-label"+col;
+    elTheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
     var sLabel = oColumn.label || oColumn.key || "";
@@ -4076,12 +4080,12 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_ASC);
             YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_DESC);
             var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_ASC : YAHOO.widget.DataTable.CLASS_DESC;
-            YAHOO.util.Dom.addClass(oColumn.getId(), newClass);
+            YAHOO.util.Dom.addClass(this.id + "-col" + oColumn.getId(), newClass);
 
             // Keep track of currently sorted column
             this.sortedBy.key = oColumn.key;
             this.sortedBy.dir = sortDir;
-            this.sortedBy._id = oColumn.getId();
+            this.sortedBy._id = this.id + "-col" + oColumn.getId();
 
             this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
             YAHOO.log("DataTable sorted on Column key = \"" + oColumn.key +
@@ -4632,7 +4636,7 @@ YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
  * @param elCell {HTMLElement} Cell element to edit.
  */
 YAHOO.widget.DataTable.prototype.editCell = function(elCell) {
-    if(elCell && YAHOO.lang.isString(elCell.yuiColumnId)) {
+    if(elCell && YAHOO.lang.isNumber(elCell.yuiColumnId)) {
         var column = this._oColumnSet.getColumn(elCell.yuiColumnId);
         if(column && column.editor) {
             this.activeEditor = column.getEditor(elCell,this.getRecord(elCell));
@@ -4864,7 +4868,7 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
     YAHOO.util.Event.stopEvent(evt);
     
     var el = this.getThEl(target) || this.getTdEl(target);
-    if(el && YAHOO.lang.isString(el.yuiColumnId)) {
+    if(el && YAHOO.lang.isNumber(el.yuiColumnId)) {
         this.sortColumn(this._oColumnSet.getColumn(el.yuiColumnId));
     }
     else {
@@ -5239,7 +5243,7 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
     var elTag = target.tagName.toLowerCase();
 
     var elCell = this.getTdEl(target);
-    if(elCell && YAHOO.lang.isString(elCell.yuiColumnId)) {
+    if(elCell && YAHOO.lang.isNumber(elCell.yuiColumnId)) {
         var oColumn = this._oColumnSet.getColumn(elCell.yuiColumnId);
         oColumn.format(elCell, this.getRecord(elCell));
     }

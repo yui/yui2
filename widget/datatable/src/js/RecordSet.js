@@ -573,7 +573,7 @@ YAHOO.widget.Record = function(oLiteral) {
 YAHOO.widget.Record._nCount = 0;
 
 /**
- * Unique number assigned at instantation, indicates original order within
+ * Unique number assigned at instantiation, indicates original order within
  * RecordSet.
  *
  * @property _nId
@@ -604,7 +604,7 @@ YAHOO.widget.Record.prototype._oData = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns unique number assigned at instantation, indicates original order
+ * Returns unique number assigned at instantiation, indicates original order
  * within RecordSet.
  *
  * @method getId

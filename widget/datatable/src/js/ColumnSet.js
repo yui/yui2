@@ -197,7 +197,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
     // Store header relationships in an array for HEADERS attribute
     var recurseAncestorsForHeaders = function(i, oColumn) {
-        headers[i].push(oColumn._id);
+        headers[i].push(oColumn._nId);
         if(oColumn.parent) {
             recurseAncestorsForHeaders(i, oColumn.parent);
         }
@@ -303,16 +303,16 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
 };
 
 /**
- * Returns Column instance with given ID string.
+ * Returns Column instance with given ID number.
  *
  * @method getColumn
- * @param column {String} ID string.
+ * @param column {Number} ID number.
  * @return {YAHOO.widget.Column} Column instance.
  */
 
 YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
     for(var i=0; i<this.keys.length; i++) {
-        if(this.keys[i]._id === column) {
+        if(this.keys[i]._nId === column) {
             return this.keys[i];
         }
     }
@@ -333,8 +333,8 @@ YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
  */
 YAHOO.widget.Column = function(oConfigs) {
     // Internal variables
-    this._id = "yui-dtcol"+YAHOO.widget.Column._nCount;
-    this._sName = "Column instance" + YAHOO.widget.Column._nCount;
+    this._nId = YAHOO.widget.Column._nCount;
+    this._sName = "Column instance" + this._nId;
 
     // Object literal defines Column attributes
     if(oConfigs && (oConfigs.constructor == Object)) {
@@ -375,13 +375,14 @@ YAHOO.widget.Column.prototype._sName = null;
 
 
 /**
- * Unique ID, also assigned as DOM ID.
+ * Unique number assigned at instantiation, indicates original order within
+ * ColumnSet.
  *
- * @property _id
+ * @property _nId
  * @type String
  * @private
  */
-YAHOO.widget.Column.prototype._id = null;
+YAHOO.widget.Column.prototype._nId = null;
 
 /**
  * Reference to Column's index within its ColumnSet's key array, or null if not applicable.
@@ -601,7 +602,7 @@ YAHOO.widget.Column.prototype.toString = function() {
  * @return {String} Column's ID string.
  */
 YAHOO.widget.Column.prototype.getId = function() {
-    return this._id;
+    return this._nId;
 };
 
 /**
