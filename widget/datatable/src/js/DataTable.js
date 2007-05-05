@@ -3573,11 +3573,12 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
         aRecords = this._oRecordSet.getRecords();
     }
 
+    var elTbody = this._elTbody;
+    var elRows = elTbody.rows;
+
+    // Has rows
     if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
         this.hideTableMessage();
-
-        var elTbody = this._elTbody;
-        var elRows = elTbody.rows;
 
         // Remove extra rows from the bottom so as to preserve ID order
         while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
@@ -3599,7 +3600,6 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
         if(aSelectedCells.length > 0) {
             this._unselectAllTdEls();
         }
-
 
         // From the top, update in-place existing rows
         for(i=0; i<elRows.length; i++) {
@@ -3639,7 +3639,13 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
 
         YAHOO.log("DataTable showing " + aRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
     }
+    // Empty
     else {
+        // Remove all rows
+        while(elTbody.hasChildNodes()) {
+            elTbody.deleteRow(-1);
+        }
+
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
 };
