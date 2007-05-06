@@ -4054,7 +4054,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
                 if(sortDir == "desc") {
                     sorted = YAHOO.util.Sort.compareDesc(a.getData(oColumn.key),b.getData(oColumn.key));
                     if(sorted === 0) {
-                        return YAHOO.util.Sort.compareDesc(a.id,b.id);
+                        return YAHOO.util.Sort.compareDesc(a.getId(),b.getId());
                     }
                     else {
                         return sorted;
@@ -4063,7 +4063,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
                 else {
                     sorted = YAHOO.util.Sort.compareAsc(a.getData(oColumn.key),b.getData(oColumn.key));
                     if(sorted === 0) {
-                        return YAHOO.util.Sort.compareAsc(a.id,b.id);
+                        return YAHOO.util.Sort.compareAsc(a.getId(),b.getId());
                     }
                     else {
                         return sorted;
