@@ -13,7 +13,14 @@
 #markup {margin:1em;}
 #markup table {border-collapse:collapse;}
 #markup th {border:1px solid #000;padding:.25em;background-color:#696969;color:#fff;}/*dark gray*/
+#markup th a {color:#fff;} /* white */
 #markup td {border-bottom:1px solid #000;padding:.25em;}
+
+/* sorting */
+#markup th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
+#markup th.yui-dt-asc, #markup th.yui-dt-desc {background-color:#3F3F3F;} /*dark gray*/
+#markup th.yui-dt-asc .yui-dt-label {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;} /*arrow up*/
+#markup th.yui-dt-desc .yui-dt-label {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;} /*arrow down*/
 </style>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
@@ -39,7 +46,8 @@ YAHOO.example.EnhanceFromMarkup = new function() {
 
         var markup = YAHOO.util.Dom.get("markup");
         this.dataTable = new YAHOO.widget.DataTable(markup, this.columnSet, null,
-                {caption:"Example: Progressively Enhanced Table from Markup"});
+                {caption:"Example: Progressively Enhanced Table from Markup",
+                sortedBy:{key:"due",dir:"asc"}});
     };
 };
 
@@ -83,7 +91,7 @@ YAHOO.util.Event.onAvailable("markup",YAHOO.example.EnhanceFromMarkup.init,YAHOO
                 <td>1/23/2000</td>
                 <td>29e8548592d8c82</td>
                 <td>10</td>
-                <td>$150.00</td>
+                <td>$1.00</td>
             </tr>
             <tr>
                 <td>4/28/2000</td>
@@ -95,7 +103,7 @@ YAHOO.util.Event.onAvailable("markup",YAHOO.example.EnhanceFromMarkup.init,YAHOO
                 <td>1/23/2001</td>
                 <td>83849</td>
                 <td>5</td>
-                <td>$150.00</td>
+                <td>$15.00</td>
             </tr>
             <tr>
                 <td>9/30/2001</td>
@@ -196,7 +204,9 @@ YAHOO.example.enhanceFromMarkup = function() {
     this.columnSet = new YAHOO.widget.ColumnSet(this.columnHeaders);
 
     var markup = YAHOO.util.Dom.get("markup");
-    this.dataTable = new YAHOO.widget.DataTable(markup,this.columnSet,null,{caption:"Example: Progressively Enhanced Table from Markup"});
+    this.dataTable = new YAHOO.widget.DataTable(markup,this.columnSet,null,
+            {caption:"Example: Progressively Enhanced Table from Markup",
+            sortedBy:{key:"due",dir:"asc"}});
 };
 
 YAHOO.util.Event.onAvailable("markup",YAHOO.example.enhanceFromMarkup,YAHOO.example.enhanceFromMarkup,true);

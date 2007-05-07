@@ -14,9 +14,15 @@
 #xml table {border-collapse:collapse;}
 #xml th, #xml td {padding:.5em;border:1px solid #000;}
 #xml th {background-color:#696969;color:#fff;}/*dark gray*/
-#xml th a {color:white;}
-#xml th a:hover {color:blue;}
+#xml th a {color:#fff;} /* white */
 #xml tr.yui-dt-odd {background-color:#eee;} /*light gray*/
+
+/* sorting */
+#xml th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
+#xml th.yui-dt-asc, #xml th.yui-dt-desc {background-color:#3F3F3F;} /*dark gray*/
+#xml th.yui-dt-asc .yui-dt-label {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;} /*arrow up*/
+#xml th.yui-dt-desc .yui-dt-label {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;} /*arrow down*/
+
 </style>
 </head>
 <body>

@@ -2500,6 +2500,8 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
                 return;
             case "a":
                 YAHOO.util.Event.stopEvent(e);
+                //TODO: after the showPage call, figure out which link
+                //TODO: was clicked and reset focus to the new version of it
                 switch(elTarget.className) {
                     case YAHOO.widget.DataTable.CLASS_NUMBER:
                         oSelf.showPage(parseInt(elTarget.innerHTML,10));
@@ -4351,6 +4353,9 @@ YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
     // Update UI
     this._unselectAllTrEls();
 
+    //TODO: send an array of [{el:el,record:record}]
+    //TODO: or convert this to an unselectRows method
+    //TODO: that takes an array of rows or unselects all if none given
     this.fireEvent("unselectAllRowsEvent");
     YAHOO.log("All row selections were cleared", "info", this.toString());
 };
@@ -4488,6 +4493,9 @@ YAHOO.widget.DataTable.prototype.unselectAllCells= function() {
     // Update UI
     this._unselectAllTdEls();
     
+    //TODO: send an array of [{el:el,record:record}]
+    //TODO: or convert this to an unselectRows method
+    //TODO: that takes an array of rows or unselects all if none given
     this.fireEvent("unselectAllCellsEvent");
     YAHOO.log("All cell selections were cleared", "info", this.toString());
 };
@@ -4510,6 +4518,7 @@ YAHOO.widget.DataTable.prototype.isSelected = function(el) {
  * @return {HTMLElement[]} Array of selected TR elements.
  */
 YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
+//TODO: is this better as returning an array of Records?
     var aSelectedRows = [];
     var tracker = this._aSelections || [];
     for(var j=0; j<tracker.length; j++) {
@@ -4528,6 +4537,7 @@ YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
  * @return {HTMLElement[]} Array of selected TR elements.
  */
 YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
+//TODO: is this better as returning an array of Records and keys?
     var aSelectedCells = [];
     var tracker = this._aSelections || [];
     for(var j=0; j<tracker.length; j++) {

@@ -15,7 +15,14 @@
 #contextmenu table {border-collapse:collapse;}
 #contextmenu th, #contextmenu td {border:1px solid #000;padding:.25em;}
 #contextmenu th {background-color:#696969;color:#fff;}/*dark gray*/
+#contextmenu th a {color:#fff;} /* white */
 #contextmenu tr.yui-dt-odd {background-color:#eee;} /*light gray*/
+
+/* sorting */
+#contextmenu th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
+#contextmenu th.yui-dt-asc, #contextmenu th.yui-dt-desc {background-color:#3F3F3F;} /*dark gray*/
+#contextmenu th.yui-dt-asc .yui-dt-label {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;} /*arrow up*/
+#contextmenu th.yui-dt-desc .yui-dt-label {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;} /*arrow down*/
 </style>
 </head>
 <body>

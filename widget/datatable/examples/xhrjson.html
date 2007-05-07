@@ -14,9 +14,14 @@
 #json table {border-collapse:collapse;}
 #json th, #json td {padding:.5em;border:1px solid #000;}
 #json th {background-color:#696969;color:#fff;}/*dark gray*/
-#json th a {color:white;}
-#json th a:hover {color:blue;}
+#json th a {color:#fff;} /* white */
 #json tr.yui-dt-odd {background-color:#eee;} /*light gray*/
+
+/* sorting */
+#json th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
+#json th.yui-dt-asc, #json th.yui-dt-desc {background-color:#3F3F3F;} /*dark gray*/
+#json th.yui-dt-asc .yui-dt-label {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;} /*arrow up*/
+#json th.yui-dt-desc .yui-dt-label {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;} /*arrow down*/
 </style>
 </head>
 <body>
