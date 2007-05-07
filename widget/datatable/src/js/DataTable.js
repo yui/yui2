@@ -1879,20 +1879,25 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._deleteTrEl = function(row) {
+    var rowIndex;
+    
     // Get page row index for the element
     if(!YAHOO.lang.isNumber(row)) {
-        row = YAHOO.util.Dom.get(row).sectionRowIndex;
+        rowIndex = YAHOO.util.Dom.get(row).sectionRowIndex;
     }
-    if(YAHOO.lang.isNumber(row) && (row > -2) && (row < this._elTbody.rows.length)) {
-        this._elTbody.deleteRow(row);
+    else {
+        rowIndex = row;
+    }
+    if(YAHOO.lang.isNumber(rowIndex) && (rowIndex > -2) && (rowIndex < this._elTbody.rows.length)) {
+        this._elTbody.deleteRow(rowIndex);
 
         // Empty body
         if(this._elTbody.rows.length === 0) {
             this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
         }
-        // If TR was deleted from the middle, restripe all rows
-        else if((row > 0) && (row < this._elTbody.rows.length)) {
-            this._setRowStripes();
+        // If TR was deleted from the middle, restripe only the rows after it
+        else if((rowIndex > 0) && (rowIndex < this._elTbody.rows.length)) {
+            this._setRowStripes(rowIndex);
         }
         return true;
     }
@@ -1984,27 +1989,41 @@ YAHOO.widget.DataTable.prototype._setLastRow = function() {
  * page. For performance, a subset of rows may be specified.
  *
  * @method _setRowStripes
- * @param row {HTMLElement | Number} (optional) HTML TR element reference or
- * TBODY position index of where to start striping.
- * @param range {Number} (optional) Range defines a subset of rows to stripe.
+ * @param row {HTMLElement | String | Number} (optional) HTML TR element reference
+ * or string ID, or page row index of where to start striping.
+ * @param range {Number} (optional) If given, how many rows to stripe, otherwise
+ * stripe all the rows until the end.
  * @private
  */
 YAHOO.widget.DataTable.prototype._setRowStripes = function(row, range) {
-    if(!row && !range) {
-        var rows = this._elTbody.rows;
-        for(var i=0; i<rows.length; i++) {
-            if(i%2) {
-                YAHOO.util.Dom.removeClass(rows[i], YAHOO.widget.DataTable.CLASS_EVEN);
-                YAHOO.util.Dom.addClass(rows[i], YAHOO.widget.DataTable.CLASS_ODD);
-            }
-            else {
-                YAHOO.util.Dom.removeClass(rows[i], YAHOO.widget.DataTable.CLASS_ODD);
-                YAHOO.util.Dom.addClass(rows[i], YAHOO.widget.DataTable.CLASS_EVEN);
+    // Default values stripe all rows
+    var allRows = this._elTbody.rows;
+    var nStartIndex = 0;
+    var nEndIndex = allRows.length;
+    
+    // Stripe a subset
+    if((row !== null) && (row !== undefined)) {
+        // Validate given start row
+        var elStartRow = this.getTrEl(row);
+        if(elStartRow) {
+            nStartIndex = elStartRow.sectionRowIndex;
+            
+            // Validate given range
+            if(YAHOO.lang.isNumber(range) && (range > 1)) {
+                nEndIndex = nStartIndex + range;
             }
         }
     }
-    else {
-        //TODO: allow striping of a subset of rows for performance
+
+    for(var i=nStartIndex; i<nEndIndex; i++) {
+        if(i%2) {
+            YAHOO.util.Dom.removeClass(allRows[i], YAHOO.widget.DataTable.CLASS_EVEN);
+            YAHOO.util.Dom.addClass(allRows[i], YAHOO.widget.DataTable.CLASS_ODD);
+        }
+        else {
+            YAHOO.util.Dom.removeClass(allRows[i], YAHOO.widget.DataTable.CLASS_ODD);
+            YAHOO.util.Dom.addClass(allRows[i], YAHOO.widget.DataTable.CLASS_EVEN);
+        }
     }
 };
 
@@ -3079,14 +3098,11 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
     if(row instanceof YAHOO.widget.Record) {
         nRecordIndex = this._oRecordSet.getRecordIndex(row);
     }
-    // By Record index
-    else {
+    // Calculate page row index from Record index
+    else if(YAHOO.lang.isNumber(row)) {
         nRecordIndex = row;
     }
-    
-    // Calculate page row index from Record index
     if(YAHOO.lang.isNumber(nRecordIndex)) {
-
         // DataTable is paginated
         if(this.isPaginated()) {
             // Get the first and last Record on this page
@@ -3110,7 +3126,7 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
     // By element reference or ID string
     else {
         // Validate TR element
-        elRow = this.getTrEl(elRow);
+        elRow = this.getTrEl(row);
         if(elRow) {
             return elRow.sectionRowIndex;
         }
@@ -3261,50 +3277,52 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
     if(oRecord) {
         var nTrIndex = this.getTrIndex(oRecord);
         
-        // Not paginated, so insert a new TR element
-        if(!this.isPaginated()) {
-            var newRowId = this._addTrEl(oRecord, nTrIndex);
-            if(newRowId) {
-                // Is this an insert or an append?
-                var append = (YAHOO.lang.isNumber(nTrIndex) && (nTrIndex > -1)
-                        && (nTrIndex < this._elTbody.rows.length)) ? false : true;
+        // Row is in view
+        if(YAHOO.lang.isNumber(nTrIndex)) {
+            // Paginated so just refresh the table to keep pagination state
+            if(this.isPaginated()) {
+                this.refreshTable();
+            }
+            // Add the TR element
+            else {
+                var newTrId = this._addTrEl(oRecord, nTrIndex);
+                if(newTrId) {
+                    // Is this an insert or an append?
+                    var append = (YAHOO.lang.isNumber(nTrIndex) && (nTrIndex > -1)
+                            && (nTrIndex < this._elTbody.rows.length)) ? false : true;
 
-                // Stripe the one new row
-                if(append) {
-                    if((this._elTbody.rows.length-1)%2) {
-                        YAHOO.util.Dom.addClass(newRowId, YAHOO.widget.DataTable.CLASS_ODD);
+                    // Stripe the one new row
+                    if(append) {
+                        if((this._elTbody.rows.length-1)%2) {
+                            YAHOO.util.Dom.addClass(newTrId, YAHOO.widget.DataTable.CLASS_ODD);
+                        }
+                        else {
+                            YAHOO.util.Dom.addClass(newTrId, YAHOO.widget.DataTable.CLASS_EVEN);
+                        }
                     }
+                    // Restripe all the rows after the new one
                     else {
-                        YAHOO.util.Dom.addClass(newRowId, YAHOO.widget.DataTable.CLASS_EVEN);
+                        this._setRowStripes(nTrIndex);
                     }
-                }
-                // Restripe all the rows
-                else {
-                    //TODO: pass in a subset for better performance
-                    this._setRowStripes();
-                }
 
-                // If new row is at the bottom
-                if(append) {
-                    this._setLastRow();
-                }
-                // If new row is at the top
-                else if(YAHOO.lang.isNumber(index) && (nTrIndex === 0)) {
-                    this._setFirstRow();
+                    // If new row is at the bottom
+                    if(append) {
+                        this._setLastRow();
+                    }
+                    // If new row is at the top
+                    else if(YAHOO.lang.isNumber(index) && (nTrIndex === 0)) {
+                        this._setFirstRow();
+                    }
                 }
             }
         }
-        // Paginated and Record is in view, so refresh the table to keep pagination state
-        else if(nTrIndex !== null) {
-            this.refreshTable();
-        }
-        // Paginated but Record is not in view so just update pagination UI
+        // Record is not in view so just update pagination UI
         else {
             this.updatePaginator();
         }
         
         // TODO: what args to pass?
-        this.fireEvent("rowAddEvent", {data:oData, trElId:newRowId});
+        this.fireEvent("rowAddEvent", {data:oData, trElId:newTrId});
         
         // For log message
         if(nTrIndex === null) {
@@ -3657,14 +3675,14 @@ YAHOO.widget.DataTable.prototype.refreshTable = function() {
 };
 
 /**
- * Nulls out the DataTable instance and related objects, removes attached event
- * listeners, and clears out DOM elements inside the container. After calling
- * this method, the instance reference should be expliclitly nulled by
+ * Nulls out the entire DataTable instance and related objects, removes attached
+ * event listeners, and clears out DOM elements inside the container. After
+ * calling this method, the instance reference should be expliclitly nulled by
  * implementer, as in myDataTable = null. Use with caution!
  *
- * @method destroyTable
+ * @method destroy
  */
-YAHOO.widget.DataTable.prototype.destroyTable = function() {
+YAHOO.widget.DataTable.prototype.destroy = function() {
     var instanceName = this.toString();
     var elContainer = this._elContainer;
 
