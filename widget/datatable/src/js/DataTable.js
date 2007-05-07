@@ -571,14 +571,14 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("editorShowEvent");
 
     /**
-     * Fired when a cell is edited.
+     * Fired when editor input is saved.
      *
-     * @event cellEditEvent
+     * @event editorSaveEvent
      * @param oArgs.target {HTMLElement} The TD element.
      * @param oArgs.newData {Object} New data value.
      * @param oArgs.oldData {Object} Old data value.
      */
-    this.createEvent("cellEditEvent");
+    this.createEvent("editorSaveEvent");
 
     /**
      * Fired when a row is selected.
@@ -4731,7 +4731,7 @@ YAHOO.widget.DataTable.prototype.saveEditorData = function() {
         // Editor causes widget to lose focus
         //this._bFocused = false;
         //this.focusTable();
-        this.fireEvent("cellEditEvent",{target:elCell,oldData:oldValue,newData:newValue});
+        this.fireEvent("editorSaveEvent",{target:elCell,oldData:oldValue,newData:newValue});
         //TODO
         //YAHOO.log();
     }
