@@ -1046,7 +1046,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                     while (oRawResponse.length > 0 &&
                             (oRawResponse.charAt(0) != "{") &&
                             (oRawResponse.charAt(0) != "[")) {
-                        oRawResponse = oRawResponse.substring(1, oResponse.length);
+                        oRawResponse = oRawResponse.substring(1, oRawResponse.length);
                     }
 
                     if(oRawResponse.length > 0) {
@@ -1061,6 +1061,10 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                             bError = true;
                         }
 
+                    }
+                    else {
+                        jsonObj = null;
+                        bError = true;
                     }
                 }
                 catch(e) {
@@ -1092,8 +1096,11 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                     YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
             oParsedResponse.error = true;
         }
-        else if(!YAHOO.lang.isArray(jsonList)) {
+        if(jsonList && !YAHOO.lang.isArray(jsonList)) {
             jsonList = [jsonList];
+        }
+        else if(!jsonList) {
+            jsonList = [];
         }
 
         // Loop through the array of all responses...
