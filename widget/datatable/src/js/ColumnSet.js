@@ -667,6 +667,10 @@ YAHOO.widget.Column.prototype.format = function(elCell,oRecord) {
                 YAHOO.widget.Column.formatCheckbox(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
                 break;
+            /*case "counter":
+                YAHOO.widget.Column.formatCounter(elCell);
+                classname = YAHOO.widget.DataTable.CLASS_COUNTER;
+                break;*/
             case "currency":
                 YAHOO.widget.Column.formatCurrency(elCell, oRecord, this, oData);
                 classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
@@ -728,6 +732,19 @@ YAHOO.widget.Column.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
     elCell.innerHTML = "<input type=\"checkbox\"" + bChecked +
             " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
 };
+
+/*WITHHOLD FROM API DOC
+ * Formats cells in Columns of type "counter".
+ *
+ * @method formatCounter
+ * @param elCell {HTMLElement} Table cell element.
+ * @static
+ */
+/*YAHOO.widget.Column.formatCounter = function(elCell) {
+    //TODO: This breaks with pagination
+    var nTrIndex = elCell.parentNode.sectionRowIndex;
+    elCell.innerHTML = nTrIndex;
+};*/
 
 /**
  * Formats Number data for Columns of type "currency". Can be overridden for custom formatting.
@@ -1418,21 +1435,25 @@ YAHOO.util.Sort = {
 /****************************************************************************/
 
 /**
- * WidthResizer subclasses DragDrop to support resizeable Columns.
+ * ColumnResizer subclasses DragDrop to support resizeable Columns.
  *
- * @class WidthResizer
+ * @class ColumnResizer
  * @extends YAHOO.util.DragDrop
  * @constructor
- * @param colElId {string} ID of the Column's TH element being resized
- * @param handleElId {string} ID of the handle element that causes the resize
- * @param sGroup {string} Group name of related DragDrop items
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param elThead {HTMLElement} TH element reference.
+ * @param sHandleElId {String} DOM ID of the handle element that causes the resize.
+ * @param sGroup {String} Group name of related DragDrop items.
+ * @param oConfig {Object} (Optional) Object literal of config values.
  */
-YAHOO.util.WidthResizer = function(oDataTable, colId, handleId, sGroup, config) {
-    if (colId) {
-        this.cell = YAHOO.util.Dom.get(colId);
-        this.init(handleId, sGroup, config);
-        //this.initFrame();
+YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, sGroup, oConfig) {
+    if(oDataTable && oColumn && elThead && sHandleId) {
         this.datatable = oDataTable;
+        this.column = oColumn;
+        this.cell = elThead;
+        this.init(sHandleId, sGroup, oConfig);
+        //this.initFrame();
         this.setYConstraint(0,0);
     }
     else {
@@ -1441,7 +1462,7 @@ YAHOO.util.WidthResizer = function(oDataTable, colId, handleId, sGroup, config) 
 };
 
 if(YAHOO.util.DD) {
-    YAHOO.extend(YAHOO.util.WidthResizer, YAHOO.util.DD);
+    YAHOO.extend(YAHOO.util.ColumnResizer, YAHOO.util.DD);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1456,16 +1477,16 @@ if(YAHOO.util.DD) {
  * @method onMouseDown
  * @param e {string} The mousedown event
  */
-YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
+YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
     this.startWidth = this.cell.offsetWidth;
     this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
 
     if(this.datatable.fixedWidth) {
-        var cellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",this.cell)[0];
-        this.minWidth = cellText.offsetWidth + 6;
+        var cellLabel = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",this.cell)[0];
+        this.minWidth = cellLabel.offsetWidth + 6;
         var sib = this.cell.nextSibling;
-        var sibCellText = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",sib)[0];
-        this.sibMinWidth = sibCellText.offsetWidth + 6;
+        var sibCellLabel = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",sib)[0];
+        this.sibMinWidth = sibCellLabel.offsetWidth + 6;
 //!!
         var left = ((this.startWidth - this.minWidth) < 0) ? 0 : (this.startWidth - this.minWidth);
         var right = ((sib.offsetWidth - this.sibMinWidth) < 0) ? 0 : (sib.offsetWidth - this.sibMinWidth);
@@ -1485,7 +1506,7 @@ YAHOO.util.WidthResizer.prototype.onMouseDown = function(e) {
  * @method onMouseUp
  * @param e {string} The mouseup event
  */
-YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
+YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
     //TODO: replace the resizer where it belongs:
     var resizeStyle = YAHOO.util.Dom.get(this.handleElId).style;
     resizeStyle.left = "auto";
@@ -1501,7 +1522,7 @@ YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
     //}
 
     //TODO: set new ColumnSet width values
-    this.datatable.fireEvent("columnResizeEvent",{datatable:this.datatable,target:YAHOO.util.Dom.get(this.id)});
+    this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.cell});
 };
 
 /**
@@ -1510,7 +1531,7 @@ YAHOO.util.WidthResizer.prototype.onMouseUp = function(e) {
  * @method onDrag
  * @param e {string} The drag event
  */
-YAHOO.util.WidthResizer.prototype.onDrag = function(e) {
+YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
     var newPos = YAHOO.util.Dom.getX(this.getDragEl());
     //YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
     var offsetX = newPos - this.startPos;
