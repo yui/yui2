@@ -729,8 +729,8 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
         this.selectionModel = {
             eventName:null,
             cellMode:false,
-            enableMulti:false,
-            enableWraparound:false
+            singleSelect:false,
+            wrapAround:false
         };
     }
     else if(this.selectionModel.eventName) {
@@ -1439,6 +1439,31 @@ YAHOO.widget.DataTable.prototype._oPaginator = null;
 // Private methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Sets focus on the given element.
+ *
+ * @method _focusEl
+ * @param el {HTMLElement} Element.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._focusEl = function(el) {
+    el = el || this._elTable;
+    // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
+    // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
+    // strange unexpected things as the user clicks on buttons and other controls.
+    setTimeout(function() { el.focus(); },0);
+
+    //if(!this._bFocused) {
+        // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
+        // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
+        // strange unexpected things as the user clicks on buttons and other controls.
+        //setTimeout(function() { el.focus(); },0);
+
+        //this._bFocused = true;
+        //this.fireEvent("focusEvent");
+    //}
+};
 
 
 
@@ -2449,45 +2474,45 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
 };
 
 /**
- * Handles keydown events on the TABLE. Executes arrow selection.
+ * Handles keydown events on the TBODY element. Executes arrow selection.
  *
- * @method _onTableKeydown
+ * @method _onTbodyKeydown
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
     var oldSelectedId = oSelf._sLastSelectedId;
     // Only move selection if one is already selected
     // TODO: if something isn't selected already, arrow key should select first or last one
     if(oldSelectedId && oSelf.isSelected(oldSelectedId)) {
+        var allRows = oSelf._elTbody.rows;
         var oldSelected = YAHOO.util.Dom.get(oldSelectedId);
         var newSelected;
         // arrow down
         if(e.keyCode == 40) {
             YAHOO.util.Event.stopEvent(e);
-            // row mode
-            if(oldSelected.tagName.toLowerCase() == "tr") {
+            // cell mode
+            if(this.selectionModel && this.selectionModel.cellMode) {
                 // We have room to move down
-                if(oldSelected.sectionRowIndex+1 < oSelf._elTbody.rows.length) {
-                            if(!e.shiftKey || oSelf.rowSingleSelect) {
-                                oSelf.unselectAllRows();
-                            }
-                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex+1];
-                            oSelf.selectRow(newSelected);
-                            
+                if(oldSelected.parentNode.sectionRowIndex+1 < allRows.length) {
+                    if(!e.shiftKey) {
+                        oSelf.unselectAllCells();
+                    }
+                    newSelected = allRows[oldSelected.parentNode.sectionRowIndex+1].cells[oldSelected.cellIndex];
+                    oSelf.selectCell(newSelected);
                 }
             }
-            // cell mode
-            else if(oldSelected.tagName.toLowerCase() == "td") {
-                /*// We have room to move down
+            // row mode
+            else {
+                // We have room to move down
                 if(oldSelected.sectionRowIndex+1 < oSelf._elTbody.rows.length) {
-                            if(!e.shiftKey) {
-                                oSelf.unselectAllRows();
-                            }
-                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex+1];
-                            oSelf.select(newSelected);
-                }*/
+                    if(!e.shiftKey || oSelf.rowSingleSelect) {
+                        oSelf.unselectAllRows();
+                    }
+                    newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex+1];
+                    oSelf.selectRow(newSelected);
+                }
             }
             // Arrows can cause widget to lose focus
             //oSelf._bFocused = false;
@@ -2496,26 +2521,26 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
         // arrow up
         else if(e.keyCode == 38) {
             YAHOO.util.Event.stopEvent(e);
-            // row mode
-            if(oldSelected.tagName.toLowerCase() == "tr") {
+            // cell mode
+            if(this.selectionModel && this.selectionModel.cellMode) {
                 // We have room to move up
-                if((oldSelected.sectionRowIndex > 0)) {
-                            if(!e.shiftKey || oSelf.rowSingleSelect) {
-                                oSelf.unselectAllRows();
-                            }
-                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex-1];
-                            oSelf.selectRow(newSelected);
+                if((oldSelected.parentNode.sectionRowIndex > 0)) {
+                    if(!e.shiftKey) {
+                        oSelf.unselectAllRows();
+                    }
+                    newSelected = allRows[oldSelected.parentNode.sectionRowIndex-1].cells[oldSelected.cellIndex];
+                    oSelf.selectCell(newSelected);
                 }
             }
-            // cell mode
-            else if(oldSelected.tagName.toLowerCase() == "td") {
+            // row mode
+            else {
                 // We have room to move up
                 if((oldSelected.sectionRowIndex > 0)) {
-                            if(!e.shiftKey) {
-                                oSelf.unselectAllRows();
-                            }
-                            newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex-1];
-                            oSelf.select(newSelected);
+                    if(!e.shiftKey || oSelf.rowSingleSelect) {
+                        oSelf.unselectAllRows();
+                    }
+                    newSelected = oSelf._elTbody.rows[oldSelected.sectionRowIndex-1];
+                    oSelf.selectRow(newSelected);
                 }
             }
             // Arrows can cause widget to lose focus
@@ -2526,14 +2551,14 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
 };
 
 /**
- * Handles keyup events on the TABLE. Executes deletion.
+ * Handles keyup events on the TBODY. Executes deletion.
  *
- * @method _onTableKeyup
+ * @method _onTbodyKeyup
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTableKeyup = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTbodyKeyup = function(e, oSelf) {
     var key = YAHOO.util.Event.getCharCode(e);
     // delete
     if(key == 46) {//TODO: && this.isFocused
@@ -2542,14 +2567,14 @@ YAHOO.widget.DataTable.prototype._onTableKeyup = function(e, oSelf) {
 };
 
 /**
- * Handles keypress events on the TABLE. Mainly to support stopEvent on Mac.
+ * Handles keypress events on the TBODY. Mainly to support stopEvent on Mac.
  *
- * @method _onTableKeypress
+ * @method _onTbodyKeypress
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTableKeypress = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTbodyKeypress = function(e, oSelf) {
     var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
     if(isMac) {
         // arrow down
@@ -3598,24 +3623,6 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
 // TABLE FUNCTIONS
 
 /**
- * Sets focus on the TABLE element.
- *
- * @method focusTable
- */
-YAHOO.widget.DataTable.prototype.focusTable = function() {
-    var elTable = this._elTable;
-    if(!this._bFocused) {
-        // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
-        // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
-        // strange unexpected things as the user clicks on buttons and other controls.
-        setTimeout(function() { elTable.focus(); },0);
-        this._bFocused = true;
-        this.fireEvent("tableFocusEvent");
-    }
-};
-
-
-/**
  * Initializes a RecordSet with the given data and populates the page view
  * with the new data. Any previous data and selection states are cleared.
  * However, sort states are not cleared, so if the given data is in a particular
@@ -3783,7 +3790,7 @@ YAHOO.widget.DataTable.prototype.destroy = function() {
         }
     }
 
-    YAHOO.log("DataTable destroyed: " + instanceName);
+    YAHOO.log("DataTable instance destroyed: " + instanceName);
 };
 
 /**
@@ -4202,13 +4209,11 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this.sortedBy.dir = sortDir;
             this.sortedBy._id = this.id + "-col" + oColumn.getId();
 
-            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
-            YAHOO.log("DataTable sorted on Column key = \"" + oColumn.key +
-                    "\", direction = \"" + sortDir + "\"", "info", this.toString());
-            
             // Update the UI
-            //TODO
             this.refreshView();
+            
+            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
+            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
         }
     }
     else {
@@ -4287,16 +4292,16 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
  * @type String
  */
 /**
- * Enable multiple selections via shift and control key modifiers.
+ * Disable shift and control key modifiers to multi-select.
  *
- * @property selectionModel.enableMulti
+ * @property selectionModel.singleSelect
  * @type Boolean
  */
 /**
  * Selection by arrows should wrap around to first row or cell when last row or
  * cell is reached.
  *
- * @property selectionModel.enableWraparound
+ * @property selectionModel.wrapAround
  * @type Boolean
  */
 YAHOO.widget.DataTable.prototype.selectionModel = null;
@@ -4391,9 +4396,10 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         
             // Update UI
             YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
+            this._focusEl(this._elTbody);
 
             this.fireEvent("rowSelectEvent", {record:oRecord, el:elRow});
-            YAHOO.log("DataTable row selected " + row, "info", this.toString());
+            YAHOO.log("Row selected " + row, "info", this.toString());
 
             return;
         }
@@ -4438,7 +4444,7 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
             YAHOO.util.Dom.removeClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
 
             this.fireEvent("rowUnselectEvent", {record:oRecord, el:elRow});
-            YAHOO.log("DataTable row unselected " + row, "info", this.toString());
+            YAHOO.log("Row unselected " + row, "info", this.toString());
 
             return;
         }
@@ -4507,22 +4513,22 @@ YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
     
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnId = elCell.yuiColumnId;
+        var nColumnId = elCell.yuiColumnId;
 
-        if(oRecord && sColumnId) {
+        if(oRecord && YAHOO.lang.isNumber(nColumnId)) {
             // Get Record ID
             var tracker = this._aSelections || [];
             var id = oRecord.getId();
 
             // Remove if there
             for(var j=0; j<tracker.length; j++) {
-               if((tracker[j].recordId === id) && (tracker[j].columnId === sColumnId)){
+               if((tracker[j].recordId === id) && (tracker[j].columnId === nColumnId)){
                     tracker.splice(j,1);
                 }
             }
 
             // Add to the end
-            tracker.push({recordId:id, columnId:sColumnId});
+            tracker.push({recordId:id, columnId:nColumnId});
 
             // Update trackers
             this._aSelections = tracker;
@@ -4535,13 +4541,13 @@ YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
             YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
 
             this.fireEvent("cellSelectEvent", {record:oRecord,
-                    key: this._oColumnSet.getColumn(sColumnId).key, el:elCell});
-            YAHOO.log("DataTable selected cell " + cell, "info", this.toString());
+                    key: this._oColumnSet.getColumn(nColumnId).key, el:elCell});
+            YAHOO.log("Cell selected " + cell, "info", this.toString());
 
             return;
         }
     }
-    YAHOO.log("Could not select " + item, "warn", this.toString());
+    YAHOO.log("Could not select " + cell, "warn", this.toString());
 };
 
 /**
@@ -4556,16 +4562,16 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnId = elCell.yuiColumnId;
+        var nColumnId = elCell.yuiColumnId;
 
-        if(oRecord && sColumnId) {
+        if(oRecord && YAHOO.lang.isNumber(nColumnId)) {
             // Get Record ID
             var tracker = this._aSelections || [];
             var id = oRecord.getId();
 
             // Remove if there
-            if((tracker[j].recordId === id) && (tracker[j].columnId === sColumnId)){
-               if(tracker[j].recordId === id){
+            for(var j=0; j<tracker.length; j++) {
+                if((tracker[j].recordId === id) && (tracker[j].columnId === nColumnId)){
                     tracker.splice(j,1);
                 }
             }
@@ -4577,13 +4583,13 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
             YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
 
             this.fireEvent("cellUnselectEvent", {record:oRecord,
-                    key:this._oColumnSet.getColumn(sColumnId).key, el:elCell});
-            YAHOO.log("DataTable unselected cell " + cell, "info", this.toString());
+                    key:this._oColumnSet.getColumn(nColumnId).key, el:elCell});
+            YAHOO.log("Cell unselected " + cell, "info", this.toString());
 
             return;
         }
     }
-    YAHOO.log("Could not unselect " + item, "warn", this.toString());
+    YAHOO.log("Could not unselect " + cell, "warn", this.toString());
 };
 
 /**
@@ -5011,50 +5017,35 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
 YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
     var evt = oArgs.event;
     var elTarget = oArgs.target;
-    var bSingleSelect = this.selectionModel && !this.selectionModel.enableMulti;
+    var bSingleSelect = this.selectionModel && this.selectionModel.singleSelect;
     var bSHIFT = evt.shiftKey;
     var bCTRL = evt.ctrlKey;
-    var i, nAnchorIndex;
+    var i, nAnchorTrIndex;
 
-    var elRow = this.getTrEl(elTarget);
-    if(elRow) {
+    // Validate target row
+    var elTargetRow = this.getTrEl(elTarget);
+    if(elTargetRow) {
         var allRows = this._elTbody.rows;
-        var nTargetIndex = elRow.sectionRowIndex;
-        var elAnchor = YAHOO.util.Dom.get(this._sSelectionAnchorId);
+        var nTargetTrIndex = elTargetRow.sectionRowIndex;
+        var elAnchorRow = YAHOO.util.Dom.get(this._sSelectionAnchorId);
         
-        /*// Traverse up the DOM to find the row
-        while(elTag != "tr") {
-            // Bail out
-            if(elTag == "body") {
-                return;
-            }
-            // Maybe it's the parent
-            elTarget = elTarget.parentNode;
-            elTag = elTarget.tagName.toLowerCase();
-        }
-        var sTargetId = elTarget.id;
-        var rows = this._elTbody.rows;
-        
-        var anchorIndex;
-        var targetIndex = elTarget.sectionRowIndex;*/
-
         // Both SHIFT and CTRL
         if(!bSingleSelect && bSHIFT && bCTRL) {
-            // Validate anchor
-            if(elAnchor) {
-                nAnchorIndex = elAnchor.sectionRowIndex;
-                if(this.isSelected(elAnchor)) {
-                    // Select all rows between anchor and target, inclusive
-                    if(nAnchorIndex < nTargetIndex) {
-                        for(i=nAnchorIndex+1; i<=nTargetIndex; i++) {
+            // Validate anchor row
+            if(elAnchorRow && YAHOO.lang.isNumber(elAnchorRow.sectionRowIndex)) {
+                nAnchorTrIndex = elAnchorRow.sectionRowIndex;
+                if(this.isSelected(elAnchorRow)) {
+                    // Select all rows between anchor row and target row, including target row
+                    if(nAnchorTrIndex < nTargetTrIndex) {
+                        for(i=nAnchorTrIndex+1; i<=nTargetTrIndex; i++) {
                             if(!this.isSelected(allRows[i])) {
                                 this.selectRow(allRows[i]);
                             }
                         }
                     }
-                    // Select all rows from target to anchor, inclusive
+                    // Select all rows between target row and anchor row, including target row
                     else {
-                        for(i=nTargetIndex; i<=nAnchorIndex-1; i++) {
+                        for(i=nTargetTrIndex; i<=nAnchorTrIndex-1; i++) {
                             if(!this.isSelected(allRows[i])) {
                                 this.selectRow(allRows[i]);
                             }
@@ -5063,35 +5054,36 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
                 }
                 else {
                     // Unselect all rows between anchor row and target row
-                    if(nAnchorIndex < nTargetIndex) {
-                        for(i=nAnchorIndex+1; i<=nTargetIndex-1; i++) {
+                    if(nAnchorTrIndex < nTargetTrIndex) {
+                        for(i=nAnchorTrIndex+1; i<=nTargetTrIndex-1; i++) {
                             if(this.isSelected(allRows[i])) {
                                 this.unselectRow(allRows[i]);
                             }
                         }
                     }
-                    // Select from target to anchor
+                    // Unselect all rows between target row and anchor row
                     else {
-                        for(i=nTargetIndex+1; i<=nAnchorIndex-1; i++) {
+                        for(i=nTargetTrIndex+1; i<=nAnchorTrIndex-1; i++) {
                             if(this.isSelected(allRows[i])) {
                                 this.unselectRow(allRows[i]);
                             }
                         }
                     }
-                    this.selectRow(elRow);
+                    // Select the target row
+                    this.selectRow(elTargetRow);
                 }
             }
             // Invalid anchor
             else {
                 // Set anchor
-                this._sSelectionAnchorId = elRow.id;
+                this._sSelectionAnchorId = elTargetRow.id;
 
                 // Toggle selection of target
-                if(this.isSelected(elRow)) {
-                    this.unselectRow(elRow);
+                if(this.isSelected(elTargetRow)) {
+                    this.unselectRow(elTargetRow);
                 }
                 else {
-                    this.selectRow(elRow);
+                    this.selectRow(elTargetRow);
                 }
             }
         }
@@ -5100,18 +5092,20 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
             this.unselectAllRows();
 
             // Validate anchor
-            if(elAnchor) {
-                nAnchorIndex = elAnchor.sectionRowIndex;
+            if(elAnchorRow && YAHOO.lang.isNumber(elAnchorRow.sectionRowIndex)) {
+                nAnchorTrIndex = elAnchorRow.sectionRowIndex;
 
-                // Select all rows between anchor and target, inclusive
-                if(nAnchorIndex < nTargetIndex) {
-                    for(i=nAnchorIndex; i<=nTargetIndex; i++) {
+                // Select all rows between anchor row and target row,
+                // including the anchor row and target row
+                if(nAnchorTrIndex < nTargetTrIndex) {
+                    for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
                         this.selectRow(allRows[i]);
                     }
                 }
-                // Select all rows from target to anchor
+                // Select all rows between target row and anchor row,
+                // including the target row and anchor row
                 else {
-                    for(i=nTargetIndex; i<=nAnchorIndex; i++) {
+                    for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
                         this.selectRow(allRows[i]);
                     }
                 }
@@ -5119,38 +5113,38 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
             // Invalid anchor
             else {
                 // Set anchor
-                this._sSelectionAnchorId = elRow.id;
+                this._sSelectionAnchorId = elTargetRow.id;
 
-                // Select target only
-                this.selectRow(elRow);
+                // Select target row only
+                this.selectRow(elTargetRow);
             }
         }
         // Only CTRL
         else if(!bSingleSelect && bCTRL) {
             // Set anchor
-            this._sSelectionAnchorId = elRow.id;
+            this._sSelectionAnchorId = elTargetRow.id;
 
             // Toggle selection of target
-            if(this.isSelected(elRow)) {
-                this.unselectRow(elRow);
+            if(this.isSelected(elTargetRow)) {
+                this.unselectRow(elTargetRow);
             }
             else {
-                this.selectRow(elRow);
+                this.selectRow(elTargetRow);
             }
         }
         // Neither SHIFT nor CTRL
         else if(bSingleSelect) {
             this.unselectAllRows();
-            this.selectRow(elRow);
+            this.selectRow(elTargetRow);
         }
         // Neither SHIFT nor CTRL
         else {
             // Set anchor
-            this._sSelectionAnchorId = elRow.id;
+            this._sSelectionAnchorId = elTargetRow.id;
 
             // Select only target
             this.unselectAllRows();
-            this.selectRow(elRow);
+            this.selectRow(elTargetRow);
         }
         YAHOO.util.Event.stopEvent(evt);
 
@@ -5192,76 +5186,177 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
 YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     var evt = oArgs.event;
     var elTarget = oArgs.target;
-    var bSingleSelect = this.selectionModel && !this.selectionModel.enableMulti;
+    var bSingleSelect = this.selectionModel && this.selectionModel.singleSelect;
     var bSHIFT = evt.shiftKey;
     var bCTRL = evt.ctrlKey;
-    var i, nAchorRowIndex, nAnchorCellIndex;
+    var i, j, nAnchorTrIndex, nAnchorTdIndex, currentRow;
     
-    var elCell = this.getTdEl(elTarget);
-    if(elCell) {
-        var elRow = this.getTrEl(elCell);
+    var elTargetCell = this.getTdEl(elTarget);
+    if(elTargetCell) {
+        var elTargetRow = this.getTrEl(elTargetCell);
         var allRows = this._elTbody.rows;
-        var nTargetRowIndex = elRow.sectionRowIndex;
-        var elAnchor = YAHOO.util.Dom.get(this._sSelectionAnchorId);
+        var nTargetTrIndex = elTargetRow.sectionRowIndex;
+        var nTargetTdIndex = elTarget.cellIndex;
+        var elAnchorCell = YAHOO.util.Dom.get(this._sSelectionAnchorId);
 
         // Both SHIFT and CTRL
         if(!bSingleSelect && bSHIFT && bCTRL) {
             // Validate anchor
-            if(elAnchor) {
-                nAnchorRowIndex = elAnchor.parentNode.sectionRowIndex;
-                nAnchorCellIndex = elAnchor.cellIndex;
+            if(elAnchorCell && YAHOO.lang.isNumber(elAnchorCell.cellIndex)) {
+                nAnchorTrIndex = elAnchorCell.parentNode.sectionRowIndex;
+                nAnchorTdIndex = elAnchorCell.cellIndex;
                 
-                if(this.isSelected(elAnchor)) {
-                    //TODO: cell logic
-                                // Select all rows between anchor and target, inclusive
-                                if(nAnchorRowIndex < nTargetRowIndex) {
-                                    for(i=nAnchorRowIndex+1; i<=nTargetRowIndex; i++) {
-                                        if(!this.isSelected(allRows[i])) {
-                                            this.selectRow(allRows[i]);
-                                        }
+                // Anchor is selected
+                if(this.isSelected(elAnchorCell)) {
+                    // All cells are on the same row
+                    if(nAnchorTrIndex == nTargetTrIndex) {
+                        // Select all cells between anchor cell and target cell, including target cell
+                        if(nAnchorTdIndex < nTargetTdIndex) {
+                            for(i=nAnchorTdIndex+1; i<=nTargetTdIndex; i++) {
+                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                            }
+                        }
+                        // Select all cells between target cell and anchor cell, including target cell
+                        else if(nTargetTdIndex < nAnchorTdIndex) {
+                            for(i=nTargetTdIndex; i<nAnchorTdIndex; i++) {
+                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                            }
+                        }
+                    }
+                    // Select cells from anchor row to target row
+                    else if(nAnchorTrIndex < nTargetTrIndex) {
+                        // Select all cells from anchor cell to target cell, including target cell
+                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the anchor row, only select cells after the anchor cell
+                                if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j>nAnchorTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
                                     }
                                 }
-                                // Select all rows from target to anchor, inclusive
+                                // This is the target row, only select the target cell and before
+                                else if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j<=nTargetTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Select all cells on this row
                                 else {
-                                    for(i=nTargetRowIndex; i<=nAnchorRowIndex-1; i++) {
-                                        if(!this.isSelected(allRows[i])) {
-                                            this.selectRow(allRows[i]);
-                                        }
+                                    this.selectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
+                    // Select cells from target row to anchor row
+                    else {
+                        // Select all cells from target cell to anchor cell, including target cell
+                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the target row, only select the target cell and after
+                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j>=nTargetTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
                                     }
                                 }
+                                // This is the anchor row, only select cells before the anchor cell
+                                else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j<nAnchorTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Select all cells on this row
+                                else {
+                                    this.selectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
                 }
+                // Anchor cell is unselected
                 else {
-                    //TODO: cell logic
-                                // Unselect all rows between anchor row and target row
-                                if(nAnchorRowIndex < nTargetRowIndex) {
-                                    for(i=nAnchorRowIndex+1; i<=nTargetRowIndex-1; i++) {
-                                        if(this.isSelected(allRows[i])) {
-                                            this.unselectCell(allRows[i]);
-                                        }
+                    // All cells are on the same row
+                    if(nAnchorTrIndex == nTargetTrIndex) {
+                        // Unselect all cells between anchor cell and target cell
+                        if(nAnchorTdIndex < nTargetTdIndex) {
+                            for(i=nAnchorTdIndex+1; i<nTargetTdIndex; i++) {
+                                this.unselectCell(allRows[nTargetTrIndex].cells[i]);
+                            }
+                        }
+                        // Select all cells between target cell and anchor cell
+                        else if(nTargetTdIndex < nAnchorTdIndex) {
+                            for(i=nTargetTdIndex+1; i<nAnchorTdIndex; i++) {
+                                this.unselectCell(allRows[nTargetTrIndex].cells[i]);
+                            }
+                        }
+                    }
+                    // Unselect cells from anchor row to target row
+                    if(nAnchorTrIndex < nTargetTrIndex) {
+                        // Unselect all cells from anchor cell to target cell
+                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the anchor row, only unselect cells after the anchor cell
+                                if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j>nAnchorTdIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
                                     }
                                 }
-                                // Select from target to anchor
+                                // This is the target row, only unelect cells before the target cell
+                                else if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j<nTargetTdIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Unselect all cells on this row
                                 else {
-                                    for(i=nTargetRowIndex+1; i<=nAnchorRowIndex-1; i++) {
-                                        if(this.isSelected(allRows[i])) {
-                                            this.unselectCell(allRows[i]);
-                                        }
+                                    this.unselectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
+                    // Unselect cells from target row to anchor row
+                    else {
+                        // Unselect all cells from target cell to anchor cell
+                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the target row, only unselect cells after the target cell
+                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j>nTargetTdIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
                                     }
                                 }
-                    this.selectCell(elCell);
+                                // This is the anchor row, only unselect cells before the anchor cell
+                                else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j<nAnchorTdIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Unselect all cells on this row
+                                else {
+                                    this.unselectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
+
+                    // Select the target cell
+                    this.selectCell(elTargetCell);
                 }
             }
             // Invalid anchor
             else {
                 // Set anchor
-                this._sSelectionAnchorId = elCell.id;
+                this._sSelectionAnchorId = elTargetCell.id;
 
                 // Toggle selection of target
-                if(this.isSelected(elCell)) {
-                    this.unselectCell(elCell);
+                if(this.isSelected(elTargetCell)) {
+                    this.unselectCell(elTargetCell);
                 }
                 else {
-                    this.selectCell(elCell);
+                    this.selectCell(elTargetCell);
                 }
             }
         }
@@ -5270,59 +5365,135 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
             this.unselectAllCells();
 
             // Validate anchor
-            if(elAnchor) {
-                nAnchorRowIndex = elAnchor.parentNode.sectionRowIndex;
-                nAnchorCellIndex = elAnchor.cellIndex;
+            if(elAnchorCell && YAHOO.lang.isNumber(elAnchorCell.cellIndex)) {
+                nAnchorTrIndex = elAnchorCell.parentNode.sectionRowIndex;
+                nAnchorTdIndex = elAnchorCell.cellIndex;
 
-                //TODO: Cell logic
-                            // Select all cells between anchor and target, inclusive
-                            if(nAnchorRowIndex < nTargetRowIndex) {
-                                for(i=nAnchorRowIndex; i<=nTargetRowIndex; i++) {
-                                    this.selectRow(allRows[i]);
+
+
+
+
+
+
+                    // All cells are on the same row
+                    if(nAnchorTrIndex == nTargetTrIndex) {
+                        // Select all cells between anchor cell and target cell,
+                        // including the anchor cell and target cell
+                        if(nAnchorTdIndex < nTargetTdIndex) {
+                            for(i=nAnchorTdIndex; i<=nTargetTdIndex; i++) {
+                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                            }
+                        }
+                        // Select all cells between target cell and anchor cell
+                        // including the target cell and anchor cell
+                        else if(nTargetTdIndex < nAnchorTdIndex) {
+                            for(i=nTargetTdIndex; i<=nAnchorTdIndex; i++) {
+                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                            }
+                        }
+                    }
+                    // Select cells from anchor row to target row
+                    else if(nAnchorTrIndex < nTargetTrIndex) {
+                        // Select all cells from anchor cell to target cell
+                        // including the anchor cell and target cell
+                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the anchor row, only select the anchor cell and after
+                                if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j>=nAnchorTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // This is the target row, only select the target cell and before
+                                else if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j<=nTargetTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Select all cells on this row
+                                else {
+                                    this.selectCell(currentRow.cells[j]);
                                 }
                             }
-                            // Select all rows from target to anchor
-                            else {
-                                for(i=nTargetRowIndex; i<=nAnchorRowIndex; i++) {
-                                    this.selectRow(allRows[i]);
+                        }
+                    }
+                    // Select cells from target row to anchor row
+                    else {
+                        // Select all cells from target cell to anchor cell,
+                        // including the target cell and anchor cell
+                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the target row, only select the target cell and after
+                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j>=nTargetTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // This is the anchor row, only select the anchor cell and before
+                                else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j<=nAnchorTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Select all cells on this row
+                                else {
+                                    this.selectCell(currentRow.cells[j]);
                                 }
                             }
+                        }
+                    }
+
+
+
+
+
+
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
             }
             // Invalid anchor
             else {
                 // Set anchor
-                this._sSelectionAnchorId = elCell.id;
+                this._sSelectionAnchorId = elTargetCell.id;
 
                 // Select target only
-                this.selectCell(elCell);
+                this.selectCell(elTargetCell);
             }
         }
         // Only CTRL
         else if(!bSingleSelect && bCTRL) {
             // Set anchor
-            this._sSelectionAnchorId = elCell.id;
+            this._sSelectionAnchorId = elTargetCell.id;
 
             // Toggle selection of target
-            if(this.isSelected(elCell)) {
-                this.unselectCell(elCell);
+            if(this.isSelected(elTargetCell)) {
+                this.unselectCell(elTargetCell);
             }
             else {
-                this.selectCell(elCell);
+                this.selectCell(elTargetCell);
             }
         }
-        // Multi-selection has been disabled
-        /*else if(bSingleSelect) {
-            this.unselectCell(this._sLastSelectedId);
-            this.selectCell(elCell);
-        }*/
         // Neither SHIFT nor CTRL or multi-selection has been disabled
         else {
             // Set anchor
-            this._sSelectionAnchorId = elCell.id;
+            this._sSelectionAnchorId = elTargetCell.id;
 
             // Select only target
             this.unselectAllCells();
-            this.selectCell(elCell);
+            this.selectCell(elTargetCell);
         }
 
         YAHOO.util.Event.stopEvent(evt);

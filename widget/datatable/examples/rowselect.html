@@ -1,7 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - Row and Cell Selection (YUI Library)</title>
+<title>Example: DataTable - Row Selection (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -12,10 +12,10 @@
 /* custom css*/
 .selectionexample {margin:1em;}
 .selectionexample table {border-collapse:collapse;}
-.selectionexample th, #rowselect td {border:1px solid #000;padding:.25em;}
+.selectionexample th, .selectionexample td {border:1px solid #000;padding:.25em;}
 .selectionexample th {background-color:#696969;color:#fff;}/*dark gray*/
 .selectionexample tr.yui-dt-odd {background-color:#eee;} /*light gray*/
-.selectionexample tr.yui-dt-selected, .selectionexample td.yui-dt-selected {background-color:#97C0A5;} /*green*/
+.selectionexample tr.yui-dt-selected {background-color:#97C0A5;} /*green*/
 </style>
 </head>
 <body>
@@ -23,8 +23,8 @@
     <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Row Selection</h1>
 </div>
 <div id="bd">
-    <div id="rowmultiselect" class="selectionexample"></div>
-    <div id="cellsingleselect" class="selectionexample"></div>
+    <div id="multiselect" class="selectionexample"></div>
+    <div id="singleselect" class="selectionexample"></div>
 
     <!-- Sample code begins -->
     <div id="code">
@@ -131,32 +131,27 @@ YAHOO.example.RowSelection = new function() {
         fields: ["Date","To","From","Subject","XID","Date","Attachment"]
     };
 
-    // Row selection model
-    var rowSelectionModel = {
-        eventName:"cellClickEvent",
-        cellMode:false,
-        enableMulti:true,
-        enableWraparound:true
-    };
-    this.myDataTable1 = new YAHOO.widget.DataTable("rowmultiselect",
+    this.myDataTable1 = new YAHOO.widget.DataTable("multiselect",
             this.myColumnSet, this.myDataSource, {
-                caption:"Example: Row Selection Mode on Click with Multi-Select & Wraparound Enabled",
-                selectionModel:rowSelectionModel
+                caption:"Example: Standard Row Selection Triggered by Click"
             });
+            
+    // Subscribe directly to the row selection
+    this.myDataTable1.subscribe("rowClickEvent", this.myDataTable1.onEventSelectRow);
+    
     // Programmatically select the first row immediately
     this.myDataTable1.selectRow(this.myDataTable1.getTrEl(0));
 
-    // Cell selection model
-    var cellSelectionModel = {
-        eventName:"cellDblclickEvent",
-        cellMode:true,
-        enableMulti:false,
-        enableWraparound:false
+    // Selection model
+    var singleSelectionModel = {
+        eventName:"rowDblclickEvent",
+        singleSelect:true,
+        wrapAround:true
     };
-    this.singleSelectDataTable = new YAHOO.widget.DataTable("cellsingleselect",
+    this.singleSelectDataTable = new YAHOO.widget.DataTable("singleselect",
             this.myColumnSet, this.myDataSource, {
-                caption:"Example: Single-row Selection Mode",
-                selectionModel:cellSelectionModel
+                caption:"Example: Single-Row Selection Triggered by Dblclick with Wraparound Enabled",
+                selectionModel:singleSelectionModel
             });
 };
 </script>
