@@ -474,7 +474,9 @@ YAHOO.util.History = ( function () {
             }
 
             if ( _modules[module] ) {
-                throw new Error( "A module cannot be registered twice" );
+                // Here, we used to throw an exception. However, users have
+                // complained about this behavior, so we now just return.
+                return;
             }
 
             // Note: A module CANNOT be registered after calling
