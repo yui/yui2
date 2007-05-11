@@ -4892,29 +4892,35 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
             var id = oRecord.getId();
 
             // Remove if there
+            var bFound = false;
+            
             // Use Array.indexOf if available...
             if(tracker.indexOf && (tracker.indexOf(id) >  -1)) {
                 tracker.splice(tracker.indexOf(id),1);
+                bFound = true;
             }
             // ...or do it the old-fashioned way
             else {
                 for(var j=0; j<tracker.length; j++) {
                    if(tracker[j] === id){
                         tracker.splice(j,1);
+                        bFound = true;
                     }
                 }
             }
 
-            // Update tracker
-            this._aSelections = tracker;
+            if(bFound) {
+                // Update tracker
+                this._aSelections = tracker;
 
-            // Update the UI
-            YAHOO.util.Dom.removeClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
+                // Update the UI
+                YAHOO.util.Dom.removeClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
 
-            this.fireEvent("rowUnselectEvent", {record:oRecord, el:elRow});
-            YAHOO.log("Row unselected " + row, "info", this.toString());
+                this.fireEvent("rowUnselectEvent", {record:oRecord, el:elRow});
+                YAHOO.log("Row unselected " + row, "info", this.toString());
 
-            return;
+                return;
+            }
         }
     }
     YAHOO.log("Could not unselect row " + row, "warn", this.toString());
@@ -5037,24 +5043,25 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
             var tracker = this._aSelections || [];
             var id = oRecord.getId();
 
-            // Remove if there
+            // Is it selected?
             for(var j=0; j<tracker.length; j++) {
                 if((tracker[j].recordId === id) && (tracker[j].columnId === nColumnId)){
+                    // Remove from tracker
                     tracker.splice(j,1);
+                    
+                    // Update tracker
+                    this._aSelections = tracker;
+
+                    // Update the UI
+                    YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
+
+                    this.fireEvent("cellUnselectEvent", {record:oRecord,
+                            key:this._oColumnSet.getColumn(nColumnId).key, el:elCell});
+                    YAHOO.log("Cell unselected " + cell, "info", this.toString());
+
+                    return;
                 }
             }
-
-            // Update tracker
-            this._aSelections = tracker;
-
-            // Update the UI
-            YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
-
-            this.fireEvent("cellUnselectEvent", {record:oRecord,
-                    key:this._oColumnSet.getColumn(nColumnId).key, el:elCell});
-            YAHOO.log("Cell unselected " + cell, "info", this.toString());
-
-            return;
         }
     }
     YAHOO.log("Could not unselect " + cell, "warn", this.toString());
@@ -5666,7 +5673,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
 
     var bSHIFT = evt.shiftKey;
     var bCTRL = evt.ctrlKey;
-    var i, j, nAnchorTrIndex, nAnchorTdIndex, currentRow;
+    var i, j, nAnchorTrIndex, nAnchorTdIndex, currentRow, startIndex, endIndex;
     
     var elTargetCell = this.getTdEl(elTarget);
     if(elTargetCell) {
@@ -5703,59 +5710,65 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
                     // Anchor row is above target row
                     else if(nAnchorTrIndex < nTargetTrIndex) {
                         if(sMode == "cellrange") {
-                            // Select all cells from anchor cell to target cell, including target cell
-                            for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
-                                currentRow = allRows[i];
-                                for(j=0; j<currentRow.cells.length; j++) {
-                                    // This is the anchor row, only select cells after the anchor cell
-                                    if(currentRow.sectionRowIndex == nAnchorTrIndex) {
-                                        if(j>nAnchorTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // This is the target row, only select the target cell and before
-                                    else if(currentRow.sectionRowIndex == nTargetTrIndex) {
-                                        if(j<=nTargetTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // Select all cells on this row
-                                    else {
-                                        this.selectCell(currentRow.cells[j]);
-                                    }
+                            // Select all cells on anchor row from anchor cell to the end of the row
+                            for(i=nAnchorTdIndex+1; i<allRows[nAnchorTrIndex].cells.length; i++) {
+                                this.selectCell(allRows[nAnchorTrIndex].cells[i]);
+                            }
+                            
+                            // Select all cells on all rows between anchor row and target row
+                            for(i=nAnchorTrIndex+1; i<nTargetTrIndex; i++) {
+                                for(j=0; j<allRows[i].cells.length; j++){
+                                    this.selectCell(allRows[i].cells[j]);
                                 }
+                            }
+
+                            // Select all cells on target row from first cell to the target cell
+                            for(i=0; i<=nTargetTdIndex; i++) {
+                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
                             }
                         }
                         else if(sMode == "cellblock") {
+                            startIndex = Math.min(nAnchorTdIndex, nTargetTdIndex);
+                            endIndex = Math.max(nAnchorTdIndex, nTargetTdIndex);
+                            
+                            // Select all cells from startIndex to endIndex on rows between anchor row and target row
+                            for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
+                                for(j=startIndex; j<=endIndex; j++) {
+                                    this.selectCell(allRows[i].cells[j]);
+                                }
+                            }
                         }
                     }
                     // Anchor row is below target row
                     else {
                         if(sMode == "cellrange") {
-                            // Select all cells from target cell to anchor cell, including target cell
-                            for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
-                                currentRow = allRows[i];
-                                for(j=0; j<currentRow.cells.length; j++) {
-                                    // This is the target row, only select the target cell and after
-                                    if(currentRow.sectionRowIndex == nTargetTrIndex) {
-                                        if(j>=nTargetTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // This is the anchor row, only select cells before the anchor cell
-                                    else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
-                                        if(j<nAnchorTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // Select all cells on this row
-                                    else {
-                                        this.selectCell(currentRow.cells[j]);
-                                    }
+                            // Select all cells on target row from target cell to the end of the row
+                            for(i=nTargetTdIndex; i<allRows[nTargetTrIndex].cells.length; i++) {
+                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                            }
+
+                            // Select all cells on all rows between target row and anchor row
+                            for(i=nTargetTrIndex+1; i<nAnchorTrIndex; i++) {
+                                for(j=0; j<allRows[i].cells.length; j++){
+                                    this.selectCell(allRows[i].cells[j]);
                                 }
+                            }
+
+                            // Select all cells on anchor row from first cell to the anchor cell
+                            for(i=0; i<nAnchorTdIndex; i++) {
+                                this.selectCell(allRows[nAnchorTrIndex].cells[i]);
                             }
                         }
                         else if(sMode == "cellblock") {
+                            startIndex = Math.min(nAnchorTdIndex, nTargetTdIndex);
+                            endIndex = Math.max(nAnchorTdIndex, nTargetTdIndex);
+
+                            // Select all cells from startIndex to endIndex on rows between target row and anchor row
+                            for(i=nAnchorTrIndex; i>=nTargetTrIndex; i--) {
+                                for(j=endIndex; j>=startIndex; j--) {
+                                    this.selectCell(allRows[i].cells[j]);
+                                }
+                            }
                         }
                     }
                 }
@@ -5854,83 +5867,107 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
                 nAnchorTrIndex = elAnchorCell.parentNode.sectionRowIndex;
                 nAnchorTdIndex = elAnchorCell.cellIndex;
                 
-                    // All cells are on the same row
-                    if(nAnchorTrIndex == nTargetTrIndex) {
-                        // Select all cells between anchor cell and target cell,
+                // All cells are on the same row
+                if(nAnchorTrIndex == nTargetTrIndex) {
+                    // Select all cells between anchor cell and target cell,
+                    // including the anchor cell and target cell
+                    if(nAnchorTdIndex < nTargetTdIndex) {
+                        for(i=nAnchorTdIndex; i<=nTargetTdIndex; i++) {
+                            this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                        }
+                    }
+                    // Select all cells between target cell and anchor cell
+                    // including the target cell and anchor cell
+                    else if(nTargetTdIndex < nAnchorTdIndex) {
+                        for(i=nTargetTdIndex; i<=nAnchorTdIndex; i++) {
+                            this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                        }
+                    }
+                }
+                // Anchor row is above target row
+                else if(nAnchorTrIndex < nTargetTrIndex) {
+                    if(sMode == "cellrange") {
+                        // Select all cells from anchor cell to target cell
                         // including the anchor cell and target cell
-                        if(nAnchorTdIndex < nTargetTdIndex) {
-                            for(i=nAnchorTdIndex; i<=nTargetTdIndex; i++) {
-                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
+                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the anchor row, only select the anchor cell and after
+                                if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j>=nAnchorTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // This is the target row, only select the target cell and before
+                                else if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j<=nTargetTdIndex) {
+                                        this.selectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Select all cells on this row
+                                else {
+                                    this.selectCell(currentRow.cells[j]);
+                                }
                             }
                         }
-                        // Select all cells between target cell and anchor cell
+                    }
+                    else if(sMode == "cellblock") {
+                        // Select the cellblock from anchor cell to target cell
+                        // including the anchor cell and the target cell
+                        startIndex = Math.min(nAnchorTdIndex, nTargetTdIndex);
+                        endIndex = Math.max(nAnchorTdIndex, nTargetTdIndex);
+
+                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
+                            for(j=startIndex; j<=endIndex; j++) {
+                                this.selectCell(allRows[i].cells[j]);
+                            }
+                        }
+                        
+                        this._sLastSelectedId = allRows[nTargetTrIndex].cells[nTargetTdIndex].id;
+                    }
+                }
+                // Anchor row is below target row
+                else {
+                    if(sMode == "cellrange") {
+                        // Select all cells from target cell to anchor cell,
                         // including the target cell and anchor cell
-                        else if(nTargetTdIndex < nAnchorTdIndex) {
-                            for(i=nTargetTdIndex; i<=nAnchorTdIndex; i++) {
-                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
-                            }
-                        }
-                    }
-                    // Anchor row is above target row
-                    else if(nAnchorTrIndex < nTargetTrIndex) {
-                        if(sMode == "cellrange") {
-                            // Select all cells from anchor cell to target cell
-                            // including the anchor cell and target cell
-                            for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
-                                currentRow = allRows[i];
-                                for(j=0; j<currentRow.cells.length; j++) {
-                                    // This is the anchor row, only select the anchor cell and after
-                                    if(currentRow.sectionRowIndex == nAnchorTrIndex) {
-                                        if(j>=nAnchorTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // This is the target row, only select the target cell and before
-                                    else if(currentRow.sectionRowIndex == nTargetTrIndex) {
-                                        if(j<=nTargetTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // Select all cells on this row
-                                    else {
+                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the target row, only select the target cell and after
+                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j>=nTargetTdIndex) {
                                         this.selectCell(currentRow.cells[j]);
                                     }
                                 }
-                            }
-                        }
-                        else if(sMode == "cellblock") {
-                        }
-                    }
-                    // Anchor row is below target row
-                    else {
-                        if(sMode == "cellrange") {
-                            // Select all cells from target cell to anchor cell,
-                            // including the target cell and anchor cell
-                            for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
-                                currentRow = allRows[i];
-                                for(j=0; j<currentRow.cells.length; j++) {
-                                    // This is the target row, only select the target cell and after
-                                    if(currentRow.sectionRowIndex == nTargetTrIndex) {
-                                        if(j>=nTargetTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // This is the anchor row, only select the anchor cell and before
-                                    else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
-                                        if(j<=nAnchorTdIndex) {
-                                            this.selectCell(currentRow.cells[j]);
-                                        }
-                                    }
-                                    // Select all cells on this row
-                                    else {
+                                // This is the anchor row, only select the anchor cell and before
+                                else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
+                                    if(j<=nAnchorTdIndex) {
                                         this.selectCell(currentRow.cells[j]);
                                     }
                                 }
+                                // Select all cells on this row
+                                else {
+                                    this.selectCell(currentRow.cells[j]);
+                                }
                             }
                         }
-                        else if(sMode == "cellblock") {
-                        }
                     }
+                    else if(sMode == "cellblock") {
+                        // Select the cellblock from target cell to anchor cell
+                        // including the target cell and the anchor cell
+                        startIndex = Math.min(nAnchorTdIndex, nTargetTdIndex);
+                        endIndex = Math.max(nAnchorTdIndex, nTargetTdIndex);
+
+                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
+                            for(j=startIndex; j<=endIndex; j++) {
+                                this.selectCell(allRows[i].cells[j]);
+                            }
+                        }
+                        
+                        this._sLastSelectedId = allRows[nTargetTrIndex].cells[nTargetTdIndex].id;
+                    }
+                }
             }
             // Invalid anchor
             else {
