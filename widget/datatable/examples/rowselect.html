@@ -23,8 +23,8 @@
     <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Row Selection</h1>
 </div>
 <div id="bd">
-    <div id="multiselect" class="selectionexample"></div>
-    <div id="singleselect" class="selectionexample"></div>
+    <div id="standard" class="selectionexample"></div>
+    <div id="single" class="selectionexample"></div>
 
     <!-- Sample code begins -->
     <div id="code">
@@ -131,28 +131,25 @@ YAHOO.example.RowSelection = new function() {
         fields: ["Date","To","From","Subject","XID","Date","Attachment"]
     };
 
-    this.myDataTable1 = new YAHOO.widget.DataTable("multiselect",
+    this.standardSelectDataTable = new YAHOO.widget.DataTable("standard",
             this.myColumnSet, this.myDataSource, {
                 caption:"Example: Standard Row Selection Triggered by Click"
             });
             
-    // Subscribe directly to the row selection
-    this.myDataTable1.subscribe("rowClickEvent", this.myDataTable1.onEventSelectRow);
+    // Subscribe to event for row selection
+    this.standardSelectDataTable.subscribe("rowClickEvent", this.standardSelectDataTable.onEventSelectRow);
     
     // Programmatically select the first row immediately
-    this.myDataTable1.selectRow(this.myDataTable1.getTrEl(0));
+    this.standardSelectDataTable.selectRow(this.standardSelectDataTable.getTrEl(0));
 
-    // Selection model
-    var singleSelectionModel = {
-        eventName:"rowDblclickEvent",
-        singleSelect:true,
-        wrapAround:true
-    };
-    this.singleSelectDataTable = new YAHOO.widget.DataTable("singleselect",
+    this.singleSelectDataTable = new YAHOO.widget.DataTable("single",
             this.myColumnSet, this.myDataSource, {
-                caption:"Example: Single-Row Selection Triggered by Dblclick with Wraparound Enabled",
-                selectionModel:singleSelectionModel
+                caption:"Example: Single-Row Selection Triggered by Dblclick",
+                selectionMode:"single"
             });
+            
+    // Subscribe to event for row selection
+    this.singleSelectDataTable.subscribe("rowDblclickEvent", this.singleSelectDataTable.onEventSelectRow);
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
