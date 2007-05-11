@@ -58,6 +58,7 @@ var Dom = YAHOO.util.Dom,
     m_bIE7 = (!m_bOpera && m_oUserAgent.indexOf('msie 7') > -1),
     m_bIE = (!m_bOpera && m_oUserAgent.indexOf('msie') > -1),
     m_oButtons = {},
+    m_oSubmitTrigger = null,    // The button that submitted the form 
     m_oFocusedButton = null;
 
 
@@ -325,45 +326,51 @@ function getFirstElement(p_oElement) {
 */
 function createInputElement(p_sType, p_sName, p_sValue, p_bChecked) {
 
-    var oInput;
+    var oInput,
+        sInput;
 
-    if(m_bIE) {
-
-        /*
-            For IE it is necessary to create the element with the 
-            "type," "name," "value," and "checked" properties set all at once.
-        */
+    if (Lang.isString(p_sType) && Lang.isString(p_sName)) {
     
-        var sInput = "<input type=\"" + p_sType + "\" name=\"" + p_sName + "\"";
-
-        if(p_bChecked) {
-
-            sInput += " checked";
+        if(m_bIE) {
+    
+            /*
+                For IE it is necessary to create the element with the 
+                "type," "name," "value," and "checked" properties set all 
+                at once.
+            */
         
+            sInput = "<input type=\"" + p_sType + "\" name=\"" + p_sName + "\"";
+    
+            if(p_bChecked) {
+    
+                sInput += " checked";
+            
+            }
+            
+            sInput += ">";
+    
+            oInput = document.createElement(sInput);
+    
         }
+        else {
         
-        sInput += ">";
-
-        oInput = document.createElement(sInput);
-
-    }
-    else {
+            oInput = document.createElement("input");
+            oInput.name = p_sName;
+            oInput.type = p_sType;
     
-        oInput = document.createElement("input");
-        oInput.name = p_sName;
-        oInput.type = p_sType;
-
-        if(p_bChecked) {
-
-            oInput.checked = true;
-        
+            if(p_bChecked) {
+    
+                oInput.checked = true;
+            
+            }
+    
         }
-
-    }
-
-    oInput.value = p_sValue;
     
-    return oInput;
+        oInput.value = p_sValue;
+        
+        return oInput;
+    
+    }
 
 }
 
@@ -617,15 +624,16 @@ _menu: null,
 
 
 /** 
-* @property _hiddenField
-* @description Object reference to the <code>&#60;input&#62;</code> element 
-* used when the button's parent form is submitted.
+* @property _hiddenFields
+* @description Object reference to the <code>&#60;input&#62;</code> element, 
+* or array of HTML form elements used to represent the button when its parent
+* form is submitted.
 * @default null
 * @protected
 * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-* one-html.html#ID-6043025">HTMLInputElement</a>
+* one-html.html#ID-6043025">HTMLInputElement</a>|Array
 */
-_hiddenField: null,
+_hiddenFields: null,
 
 
 /** 
@@ -811,7 +819,7 @@ MENUBUTTON_MENU_VISIBLE_TITLE:
 /**
 * @property SPLITBUTTON_DEFAULT_TITLE
 * @description  String representing the default title applied to buttons of 
-* type "splitebutton." 
+* type "splitbutton." 
 * @default "Menu collapsed.  Click inside option region or press 
 * Ctrl + Shift + M to show the menu."
 * @final
@@ -1340,43 +1348,44 @@ _isSplitButtonOptionKey: function(p_oEvent) {
 */
 _addListenersToForm: function() {
 
-    var oForm = this.getForm();
+    var oForm = this.getForm(),
+        oSrcElement,
+        aListeners,
+        nListeners,
+        i,
+        bHasKeyPressListener;
 
-    if(oForm) {
+
+    if (oForm) {
 
         Event.on(oForm, "reset", this._onFormReset, null, this);
-        Event.on(oForm, "submit", this._onFormSubmit, null, this);
+        Event.on(oForm, "submit", this.createHiddenFields, null, this);
 
-        var oSrcElement = this.get("srcelement");
+        oSrcElement = this.get("srcelement");
 
 
-        if (
-            (m_bIE || m_bGecko) && 
-            (
-                this.get("type") == "submit" || 
-                (oSrcElement && oSrcElement.type == "submit")
-            )
-        ) {
+        if (this.get("type") == "submit" || 
+            (oSrcElement && oSrcElement.type == "submit")) 
+        {
         
-            var aListeners = Event.getListeners(oForm, "keydown"),
-                bHasKeyDownListener = false;
+            aListeners = Event.getListeners(oForm, "keypress");
+            bHasKeyPressListener = false;
     
-            if(aListeners) {
+            if (aListeners) {
     
-                var nListeners = aListeners.length;
+                nListeners = aListeners.length;
+
+                if (nListeners > 0) {
     
-                if(nListeners > 0) {
-    
-                    var i = nListeners - 1;
+                    i = nListeners - 1;
                     
                     do {
        
-                        if(
-                            aListeners[i].fn == 
-                            YAHOO.widget.Button.onFormKeyDown
-                        ) {
+                        if (aListeners[i].fn == 
+                            YAHOO.widget.Button.onFormKeyPress) 
+                        {
         
-                            bHasKeyDownListener = true;
+                            bHasKeyPressListener = true;
                             break;
                         
                         }
@@ -1389,15 +1398,9 @@ _addListenersToForm: function() {
             }
     
     
-            if(!bHasKeyDownListener) {
-    
-                Event.on(
-                        oForm, 
-                        "keydown", 
-                        YAHOO.widget.Button.onFormKeyDown, 
-                        null, 
-                        this
-                    );
+            if (!bHasKeyPressListener) {
+
+                Event.on(oForm, "keypress", YAHOO.widget.Button.onFormKeyPress);
     
             }
 
@@ -1992,7 +1995,7 @@ _onClick: function(p_oEvent) {
                 var oSrcElement = this.get("srcelement");
     
                 if(oSrcElement && oSrcElement.type == "submit") {
-    
+
                     this.submitForm();
                 
                 }
@@ -2035,63 +2038,6 @@ _onAppendTo: function(p_oEvent) {
         me._addListenersToForm();
 
     }, 0);
-
-},
-
-
-/**
-* @method _onFormSubmit
-* @description "submit" event handler for the button's form.
-* @protected
-* @param {Event} p_oEvent Object representing the DOM event object passed 
-* back by the event utility (YAHOO.util.Event).
-*/
-_onFormSubmit: function(p_oEvent) {
-
-    var sType = this.get("type"),
-        oMenuItem = this.get("selectedMenuItem"),
-        oForm = this.getForm();
-    
-    
-    if(sType == "radio" || sType == "checkbox") {
-    
-        YAHOO.log("Creating hidden field for button: " + this);
-    
-        this.createHiddenField();
-    
-    }
-    else if(oMenuItem) {
-    
-        var oSrcElement = this._menu.srcElement;
-
-        if(oSrcElement && oSrcElement.tagName.toUpperCase() == "SELECT") {
-
-            oForm.appendChild(oSrcElement);
-            oSrcElement.selectedIndex = oMenuItem.index;
-
-        }
-        else {
-    
-            var oValue = (oMenuItem.value === null || oMenuItem.value === "") ? 
-                                oMenuItem.cfg.getProperty("text") : 
-                                oMenuItem.value;
-
-
-            if(oValue) {
-    
-                var oField = createInputElement(
-                                    "hidden", 
-                                    (this.get("name") + "_options"),
-                                    oValue
-                                );
-    
-                oForm.appendChild(oField);
-    
-            }
-    
-        }                
-    
-    }
 
 },
 
@@ -2363,7 +2309,7 @@ _onMenuClick: function(p_sType, p_aArgs) {
         var oSrcElement = this.get("srcelement");
     
         if(oSrcElement && oSrcElement.type == "submit") {
-    
+
             this.submitForm();
     
         }
@@ -2380,68 +2326,115 @@ _onMenuClick: function(p_sType, p_aArgs) {
 
 
 /**
-* @method createHiddenField
+* @method createHiddenFields
 * @description Creates the button's hidden form field and appends it to its
 * parent form.
 * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-* one-html.html#ID-6043025">HTMLInputElement</a>}
+* one-html.html#ID-6043025">HTMLInputElement</a>|Array}
 */
-createHiddenField: function () {
+createHiddenFields: function () {
 
-    if (!this.get("disabled")) {
+    this.removeHiddenFields();
 
-        var sType = this.get("type"),
+    var oForm = this.getForm(),
+        oButtonField,
+        sType,     
+        bCheckable,
+        oMenu,
+        oMenuItem,
+        sName,
+        oValue,
+        oMenuField;
+
+
+    if (oForm && !this.get("disabled")) {
+
+        sType = this.get("type");
+        bCheckable = (sType == "checkbox" || sType == "radio");
+
+
+        if (bCheckable || (m_oSubmitTrigger == this)) {
         
-            bCheckable = (sType == "checkbox" || sType == "radio"),
-        
-            oField = createInputElement(
-            
-                        /*
-                            Use "submit" type for IE so that the input 
-                            element will be able to be clicked via a call to 
-                            the "click" method by the "submitForm" method.
-                        */
-            
-                        (bCheckable ? sType : (m_bIE ? "submit" : "hidden")),
-                        this.get("name"),
-                        this.get("value"),
-                        this.get("checked")
-                    ),
-                    
-            oForm = this.getForm();
+            this.logger.log("Creating hidden field.");
+
+            oButtonField = createInputElement((bCheckable ? sType : "hidden"),
+                                this.get("name"),
+                                this.get("value"),
+                                this.get("checked"));
     
-
-        if (oField) {
-
-            if (bCheckable || oField.type == "submit") {
-
-                oField.style.display = "none";
-
-            }
-
-
-            if (oForm) {
-        
-                var oHiddenField = this._hiddenField;
-        
-                if (oHiddenField && Dom.inDocument(oHiddenField)) {
-        
-                    oForm.replaceChild(oField, oHiddenField);
-        
+    
+            if (oButtonField) {
+    
+                if (bCheckable) {
+    
+                    oButtonField.style.display = "none";
+    
                 }
-                else {
-        
-                    oForm.appendChild(oField);
-                    
-                }
-            
+    
+                oForm.appendChild(oButtonField);
+    
             }
-    
-            this._hiddenField = oField;
-    
-            return oField;
 
         }
+            
+
+        oMenu = this._menu;
+    
+    
+        if (oMenu) {
+
+            this.logger.log("Creating hidden field for menu.");
+
+            oMenuField = oMenu.srcElement;
+            oMenuItem = this.get("selectedMenuItem");
+
+            if (oMenuField && oMenuField.tagName.toUpperCase() == "SELECT") {
+
+                oForm.appendChild(oMenuField);
+                oMenuField.selectedIndex = oMenuItem.index;
+
+            }
+            else {
+
+                oValue = (oMenuItem.value === null || oMenuItem.value === "") ? 
+                                    oMenuItem.cfg.getProperty("text") : 
+                                    oMenuItem.value;
+
+                sName = this.get("name");
+
+                if (oValue && sName) {
+
+                    oMenuField = createInputElement("hidden", 
+                                        (sName + "_options"),
+                                        oValue);
+
+                    oForm.appendChild(oMenuField);
+
+                }
+
+            }  
+
+        }
+    
+    
+        if (oButtonField && oMenuField) {
+
+            this._hiddenFields = [oButtonField, oMenuField];
+
+        }
+        else if (!oButtonField && oMenuField) {
+
+            this._hiddenFields = oMenuField;
+        
+        }
+        else if (oButtonField && !oMenuField) {
+
+            this._hiddenFields = oButtonField;
+        
+        }
+
+
+        return this._hiddenFields;
 
     }
 
@@ -2449,29 +2442,94 @@ createHiddenField: function () {
 
 
 /**
-* @method submitForm
-* @description Submits the form to which the button belongs.
-* @protected
+* @method removeHiddenFields
+* @description Removes the button's hidden form field(s) from its parent form.
 */
-submitForm: function(p_oMenuItem) {
+removeHiddenFields: function () {
 
-    var oForm = this.getForm();
+    var oField = this._hiddenFields,
+        nFields,
+        i;
+
+    function removeChild(p_oElement) {
+
+        if (Dom.inDocument(p_oElement)) {
+
+            p_oElement.parentNode.removeChild(p_oElement);
+        
+        }
+        
+    }
+    
+
+    if (oField) {
+
+        if (Lang.isArray(oField)) {
+
+            nFields = oField.length;
+            
+            if (nFields > 0) {
+            
+                i = nFields - 1;
+                
+                do {
+
+                    removeChild(oField[i]);
+
+                }
+                while(i--);
+            
+            }
+        
+        }
+        else {
+
+            removeChild(oField);
+
+        }
+
+        this._hiddenFields = null;
+    
+    }
+
+},
+
+
+/**
+* @method submitForm
+* @description Submits the form to which the button belongs.  Returns true if 
+* the form was submitted successfully, false if the submission was cancelled.
+* @protected
+* @return {Boolean}
+*/
+submitForm: function() {
+
+    var oForm = this.getForm(),
+
+        oSrcElement = this.get("srcelement"),
+
+        /*
+            Boolean indicating if the event fired successfully 
+            (was not cancelled by any handlers)
+        */
+
+        bSubmitForm = false;
+
 
     if (oForm) {
 
-        var oInput = this.createHiddenField();
+        if (this.get("type") == "submit" || 
+            (oSrcElement && oSrcElement.type == "submit")) 
+        {
+
+            m_oSubmitTrigger = this;
+            
+        }
+
 
         if (m_bIE) {
 
-            /*
-                Clicking the button via a call to the "click" method will 
-                cause IE to both fire the form's "submit" event as well as 
-                submit the form.  Originally tried just firing the "submit"
-                event via "fireEvent," but then the event could not 
-                be cancelled.
-            */            
-
-            oInput.click();
+            bSubmitForm = oForm.fireEvent("onsubmit");
 
         }
         else {  // Gecko, Opera, and Safari
@@ -2479,24 +2537,27 @@ submitForm: function(p_oMenuItem) {
             var oEvent = document.createEvent("HTMLEvents");
             oEvent.initEvent("submit", true, true);
 
-            /*
-                In Safari, dispatching a "submit" event to a form WILL cause  
-                the form's "submit" event to fire, but WILL NOT submit the   
-                form.  Therefore, we need to call the "submit" method as well.
-            */
+            bSubmitForm = oForm.dispatchEvent(oEvent);
 
-            var bSubmitForm = oForm.dispatchEvent(oEvent);
-          
-            if(m_bSafari && bSubmitForm) {
+        }
 
-                oForm.submit();
-            
-            }
 
+        /*
+            In IE and Safari, dispatching a "submit" event to a form WILL cause  
+            the form's "submit" event to fire, but WILL NOT submit the   
+            form.  Therefore, we need to call the "submit" method as well.
+        */
+      
+        if((m_bIE || m_bSafari) && bSubmitForm) {
+
+            oForm.submit();
+        
         }
     
     }
 
+    return bSubmitForm;
+    
 },
 
 
@@ -2857,7 +2918,7 @@ initAttributes: function(p_oAttributes) {
 	*/
     this.setAttributeConfig("selectedMenuItem", {
 
-        value: null
+        value: 0
     
     });
 
@@ -2965,15 +3026,14 @@ getForm: function() {
 
 
 /** 
-* @method getHiddenField
-* @description Returns a reference to the <code>&#60;input&#62;</code> element 
-* used when the button's parent form is submitted.
+* @method getHiddenFields
+* @description Returns an <code>&#60;input&#62;</code> element or array of form elements used to represent the button when its parent form is submitted.
 * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-* one-html.html#ID-6043025">HTMLInputElement</a>}
+* one-html.html#ID-6043025">HTMLInputElement</a>|Array}
 */
-getHiddenField: function() {
+getHiddenFields: function() {
 
-    return this._hiddenField;
+    return this._hiddenFields;
 
 },
 
@@ -3013,7 +3073,7 @@ destroy: function() {
     if(oForm) {
 
         Event.removeListener(oForm, "reset", this._onFormReset);
-        Event.removeListener(oForm, "submit", this._onFormSubmit);
+        Event.removeListener(oForm, "submit", this.createHiddenFields);
 
     }
 
@@ -3059,77 +3119,156 @@ toString: function() {
 
 
 /**
-* @method onFormKeyDown
-* @description "keydown" event handler for the button's form.
+* @method YAHOO.widget.Button.onFormKeyPress
+* @description "keypress" event handler for the button's form.
 * @param {Event} p_oEvent Object representing the DOM event object passed 
 * back by the event utility (YAHOO.util.Event).
 */
-YAHOO.widget.Button.onFormKeyDown = function(p_oEvent) {
+YAHOO.widget.Button.onFormKeyPress = function(p_oEvent) {
 
     var oTarget = Event.getTarget(p_oEvent),
-        nCharCode = Event.getCharCode(p_oEvent);
+        nCharCode = Event.getCharCode(p_oEvent),
+        sTagName = oTarget.tagName && oTarget.tagName.toUpperCase(),
+        sType = oTarget.type,
 
+        /*
+            Boolean indicating if the form contains any enabled or disabled YUI
+            submit buttons
+        */
 
-    if (
-        nCharCode == 13 && 
-        oTarget.tagName && 
-        oTarget.tagName.toUpperCase() == "INPUT"
-    ) {
+        bFormContainsYUIButtons = false,
 
-        var sType = oTarget.type;
+        oButton,
 
+        oYUISubmitButton,   // The form's first, enabled YUI submit button
 
-        if(
-            sType == "text" || sType == "password" || sType == "checkbox" || 
-            sType == "radio" || sType == "file"
-        ) {
+        /*
+             The form's first, enabled HTML submit button that precedes any 
+             YUI submit button
+        */
 
-
-            function isYUISubmitButton(p_oElement) {
-    
-                var sId = p_oElement.id;
-    
-                if (sId) {
-    
-                    var oButton = m_oButtons[sId];
+        oPrecedingSubmitButton,
         
-                    if (oButton) {
+
+        /*
+             The form's first, enabled HTML submit button that follows a 
+             YUI button
+        */
         
-                        var oSrcElement = oButton.get("srcelement");
+        oFollowingSubmitButton; 
+
+
+    if (nCharCode == 13 && ((sTagName == "INPUT" && (sType == "text" || 
+        sType == "password" || sType == "checkbox" || sType == "radio" || 
+        sType == "file") ) || sTagName == "SELECT"))
+    {
+
+
+        function isSubmitButton(p_oElement) {
+    
+            var sId,
+                oSrcElement;
+    
+            switch (p_oElement.tagName.toUpperCase()) {
+    
+                case "INPUT":
+                case "BUTTON":
+                
+                    if (p_oElement.type == "submit" && !p_oElement.disabled) {
+                        
+                        if (!bFormContainsYUIButtons && 
+                            !oPrecedingSubmitButton) 
+                        {
+
+                            oPrecedingSubmitButton = p_oElement;
+
+                        }
+                        
+                        if (oYUISubmitButton && !oFollowingSubmitButton) {
+                        
+                            oFollowingSubmitButton = p_oElement;
+                        
+                        }
+                    
+                    }
+    
+                    break;
+                
+    
+                default:
+                
+                    sId = p_oElement.id;
         
-                        return (
-                                    oButton.get("type") == "submit" || 
+                    if (sId) {
+        
+                        oButton = m_oButtons[sId];
+            
+                        if (oButton) {
+
+                            bFormContainsYUIButtons = true;
+            
+                            if (!oButton.get("disabled")) {
+
+                                oSrcElement = oButton.get("srcelement");
+        
+                                if (!oYUISubmitButton &&
+                                    (oButton.get("type") == "submit" || 
                                     (
                                         oSrcElement && 
                                         oSrcElement.type == "submit"
-                                    )
-                                );
-        
-                    }
-                
-                }
-            
-            }
-    
-    
-            var aButtons = Dom.getElementsBy(
-                                isYUISubmitButton,
-                                this.TAG_NAME, 
-                                this.getForm()
-                            ),
-    
-                nButtons = aButtons.length;
-    
-    
-            if (nButtons > 0) {
-    
-                m_oButtons[aButtons[0].id].submitForm();
-            
-            }
+                                    ))) 
+                                {
 
+                                    oYUISubmitButton = oButton;
+                                
+                                }
+                            
+                            }
+                            
+                        }
+                    
+                    }
+    
+                    break;
+    
+            }
+    
+        }
+        
+
+        Dom.getElementsBy(isSubmitButton, "*", this);
+
+
+        if (oPrecedingSubmitButton) {
+
+            /*
+                 Need to set focus to the first enabled submit button
+                 to make sure that IE includes its name and value 
+                 in the form's data set.
+            */
+
+            oPrecedingSubmitButton.focus();
         
         }
+        else if (!oPrecedingSubmitButton && oYUISubmitButton) {
 
+            if (oFollowingSubmitButton) {
+
+                /*
+                    Need to call "preventDefault" to ensure that 
+                    the name and value of the regular submit button 
+                    following the YUI button doesn't get added to the 
+                    form's data set when it is submitted.
+                */
+
+                Event.preventDefault(p_oEvent);
+            
+            }
+
+            oYUISubmitButton.submitForm();
+
+        }
+        
     }
 
 };
@@ -3146,86 +3285,33 @@ YAHOO.widget.Button.onFormKeyDown = function(p_oEvent) {
 */
 YAHOO.widget.Button.addHiddenFieldsToForm = function(p_oForm) {
 
-    var aButtons = Dom.getElementsByClassName("yuibutton", "*", p_oForm),
-        nButtons = aButtons.length;
+    var aButtons = Dom.getElementsByClassName(
+                        YAHOO.widget.Button.prototype.CSS_CLASS_NAME, 
+                        "*", 
+                        p_oForm),
 
+        nButtons = aButtons.length,
+        oButton,
+        sId;
 
-    if(nButtons > 0) {
+    if (nButtons > 0) {
 
         YAHOO.log("Form contains " + nButtons + " YUI buttons.");
 
-        var oButton = null,
-            sType = null,
-            oMenuItem = null,
-            oMenu = null;
+        for (var i=0; i<nButtons; i++) {
 
-        for(var i=0; i<nButtons; i++) {
+            sId = aButtons[i].id;
 
-            oButton = m_oButtons[aButtons[i].id];
+            if (sId) {
 
-            if(oButton) {
-
-                sType = oButton.get("type");
-                oMenuItem = oButton.get("selectedMenuItem");
-
-
-                if(sType == "radio" || sType == "checkbox") {
+                oButton = m_oButtons[sId];
     
-                    YAHOO.log("Creating hidden field for button: " + oButton);
-    
-                    oButton.createHiddenField();
-                
+                if (oButton) {
+       
+                    oButton.createHiddenFields();
+                    
                 }
-                else if(oMenuItem) {
-    
-                    oMenu = oButton.getMenu();
-    
-                    var oSrcElement = oMenu.srcElement;
-                        
-                    if(
-                        oSrcElement && 
-                        oSrcElement.tagName.toUpperCase() == "SELECT"
-                    ) {
             
-                        p_oForm.appendChild(oSrcElement);
-                        oSrcElement.selectedIndex = oMenuItem.index;
-            
-                    }
-                    else {
-    
-                        var oValue = (
-                                        oMenuItem.value === null || 
-                                        oMenuItem.value === ""
-                                    ) ? oMenuItem.cfg.getProperty("text") : 
-                                    oMenuItem.value;
-
-                        if(oValue) {
-
-                            var oHiddenField = oButton.getHiddenField(),
-    
-                                oField = createInputElement(
-                                            "hidden",
-                                            (oButton.get("name") + "_options"),
-                                            oValue
-                                        );
-                                        
-                            if(oHiddenField && Dom.inDocument(oHiddenField)) {
-
-                                p_oForm.replaceChild(oField, oHiddenField);
-
-                            }
-                            else {
-
-                                p_oForm.appendChild(oField);
-                            
-                            }
-    
-                        }
-    
-                    }                
-    
-                }
-                
             }
         
         }
