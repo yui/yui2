@@ -3149,9 +3149,6 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
     var oldRowsPerPage = oSelf._oPaginator.rowsPerPage;
     var rowsPerPage = parseInt(value,10) || null;
     if(rowsPerPage && (rowsPerPage != oldRowsPerPage)) {
-        if(rowsPerPage > oldRowsPerPage) {
-            oSelf._oPaginator.currentPage = 1;
-        }
         oSelf._oPaginator.rowsPerPage = rowsPerPage;
         oSelf.refreshView();
     }
@@ -4546,7 +4543,8 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function() {
     this._oPaginator.totalPages = Math.ceil(recordsLength / maxRows);
 
     // What is current page
-    var currentPage = this._oPaginator.currentPage;
+    var currentPage = Math.min(this._oPaginator.currentPage, this._oPaginator.totalPages);
+    this._oPaginator.currentPage = currentPage;
 
     // First row of this page
     this._oPaginator.startRecordIndex =  (currentPage-1) * rowsPerPage;

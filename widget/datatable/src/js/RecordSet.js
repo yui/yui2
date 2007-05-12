@@ -126,6 +126,15 @@ YAHOO.widget.RecordSet._nCount = 0;
 YAHOO.widget.RecordSet.prototype._sName = null;
 
 /**
+ * Internal variable to give unique indexes to Record instances.
+ *
+ * @property _nCount
+ * @type Number
+ * @private
+ */
+YAHOO.widget.RecordSet.prototype._nRecordCount = 0;
+
+/**
  * Internal counter of how many Records are in the RecordSet.
  *
  * @property _length
@@ -152,6 +161,9 @@ YAHOO.widget.RecordSet.prototype._length = null;
  */
 YAHOO.widget.RecordSet.prototype._addRecord = function(oData, index) {
     var oRecord = new YAHOO.widget.Record(oData);
+    oRecord._nId = this._nRecordCount;
+    this._nRecordCount++;
+    
     if(YAHOO.lang.isNumber(index) && (index > -1)) {
         this._records.splice(index,0,oRecord);
     }
@@ -552,8 +564,6 @@ YAHOO.widget.Record = function(oLiteral) {
         for(var sKey in oLiteral) {
             this._oData[sKey] = oLiteral[sKey];
         }
-        this._nId = YAHOO.widget.Record._nCount;
-        YAHOO.widget.Record._nCount++;
     }
 };
 
@@ -562,16 +572,6 @@ YAHOO.widget.Record = function(oLiteral) {
 // Private member variables
 //
 /////////////////////////////////////////////////////////////////////////////
-/**
- * Internal class variable to give unique indexes to Record instances.
- *
- * @property _nCount
- * @type Number
- * @private
- * @static
- */
-YAHOO.widget.Record._nCount = 0;
-
 /**
  * Unique number assigned at instantiation, indicates original order within
  * RecordSet.
