@@ -171,8 +171,63 @@ YAHOO.util.History = ( function () {
 
         _storageField.value = initialStates.join( "&" ) + "|" + currentStates.join( "&" );
 
-        if ( _browser == "safari" ) {
+        if ( _browser === "safari" ) {
             _storageField.value += "|" + _fqstates.join( "," );
+        }
+    }
+
+    /**
+     * Sets the new currentState attribute of all modules depending on the new
+     * fully qualified state. Also notifies the modules which current state has
+     * changed.
+     *
+     * @method _handleFQStateChange
+     * @param {string} fqstate Fully qualified state
+     * @private
+     */
+    function _handleFQStateChange( fqstate ) {
+
+        var i;
+        var len;
+        var moduleName;
+        var moduleObj;
+        var modules;
+        var states;
+        var tokens;
+        var currentState;
+
+        if ( !fqstate ) {
+            // Notifies all modules
+            for ( moduleName in _modules ) {
+                if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                    moduleObj = _modules[moduleName];
+                    moduleObj.currentState = moduleObj.initialState;
+                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                }
+            }
+            return;
+        }
+
+        modules = [];
+        states = fqstate.split( "&" );
+        for ( i = 0, len = states.length ; i < len ; i++ ) {
+            tokens = states[i].split( "=" );
+            if ( tokens.length === 2 ) {
+                moduleName = tokens[0];
+                currentState = tokens[1];
+                modules[moduleName] = currentState;
+            }
+        }
+
+        for ( moduleName in _modules ) {
+            if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                moduleObj = _modules[moduleName];
+                currentState = modules[moduleName];
+                if ( !currentState || moduleObj.currentState !== currentState ) {
+                    moduleObj.currentState = currentState || moduleObj.initialState;
+                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                }
+            }
         }
     }
 
@@ -220,7 +275,7 @@ YAHOO.util.History = ( function () {
             // See my comment above about using innerText instead of innerHTML...
             newfqstate = elem ? elem.innerText : null;
 
-            if ( newfqstate != fqstate ) {
+            if ( newfqstate !== fqstate ) {
                 fqstate = newfqstate;
                 _handleFQStateChange( fqstate );
 
@@ -247,61 +302,6 @@ YAHOO.util.History = ( function () {
         _bhmReady = true;
 
         YAHOO.util.History.onLoadEvent.fire();
-    }
-
-    /**
-     * Sets the new currentState attribute of all modules depending on the new
-     * fully qualified state. Also notifies the modules which current state has
-     * changed.
-     *
-     * @method _handleFQStateChange
-     * @param {string} fqstate Fully qualified state
-     * @private
-     */
-    function _handleFQStateChange( fqstate ) {
-
-        var i;
-        var len;
-        var moduleName;
-        var moduleObj;
-        var modules;
-        var states;
-        var tokens;
-        var currentState;
-
-        if ( !fqstate ) {
-            // Notifies all modules
-            for ( moduleName in _modules ) {
-                if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
-                    moduleObj = _modules[moduleName];
-                    moduleObj.currentState = moduleObj.initialState;
-                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
-                }
-            }
-            return;
-        }
-
-        modules = [];
-        states = fqstate.split( "&" );
-        for ( i = 0, len = states.length ; i < len ; i++ ) {
-            tokens = states[i].split( "=" );
-            if ( tokens.length == 2 ) {
-                moduleName = tokens[0];
-                currentState = tokens[1];
-                modules[moduleName] = currentState;
-            }
-        }
-
-        for ( moduleName in _modules ) {
-            if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
-                moduleObj = _modules[moduleName];
-                currentState = modules[moduleName];
-                if ( !currentState || moduleObj.currentState != currentState ) {
-                    moduleObj.currentState = currentState || moduleObj.initialState;
-                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
-                }
-            }
-        }
     }
 
     /**
@@ -335,7 +335,7 @@ YAHOO.util.History = ( function () {
             initialStates = parts[0].split( "&" );
             for ( i = 0, len = initialStates.length ; i < len ; i++ ) {
                 tokens = initialStates[i].split( "=" );
-                if ( tokens.length == 2 ) {
+                if ( tokens.length === 2 ) {
                     moduleName = tokens[0];
                     initialState = tokens[1];
                     moduleObj = _modules[moduleName];
@@ -365,7 +365,7 @@ YAHOO.util.History = ( function () {
 
         _storageFieldReady = true;
 
-        if ( _browser == "msie" ) {
+        if ( _browser === "msie" ) {
 
             _iframe = document.getElementById( "yui_hist_iframe" );
             _checkIframeLoaded();
@@ -399,12 +399,12 @@ YAHOO.util.History = ( function () {
 
                 newHash = _getHash();
                 newCounter = history.length;
-                if ( newHash != hash ) {
+                if ( newHash !== hash ) {
                     hash = newHash;
                     counter = newCounter;
                     _handleFQStateChange( hash );
                     _storeStates();
-                } else if ( newCounter != counter ) {
+                } else if ( newCounter !== counter ) {
                     // If we ever get here, we should be on Safari...
                     hash = newHash;
                     counter = newCounter;
@@ -424,16 +424,16 @@ YAHOO.util.History = ( function () {
     // After talking with Matt Sweeney, I moved back to using the
     // user agent string instead of doing browser detection.
     _ua = navigator.userAgent.toLowerCase();
-    if ( _ua.indexOf( "opera" ) != -1 ) {
+    if ( _ua.indexOf( "opera" ) !== -1 ) {
         // Opera (check first in case of spoof)
         _browser = "opera";
-    } else if ( _ua.indexOf( "msie" ) != -1 ) {
+    } else if ( _ua.indexOf( "msie" ) !== -1 ) {
         // Microsoft Internet Explorer and derivatives...
         _browser = "msie";
-    } else if ( _ua.indexOf( "safari" ) != -1 ) {
+    } else if ( _ua.indexOf( "safari" ) !== -1 ) {
         // Safari (check before Gecko because it includes "like Gecko")
         _browser = "safari";
-    } else if ( _ua.indexOf( "gecko" ) != -1 ) {
+    } else if ( _ua.indexOf( "gecko" ) !== -1 ) {
         // Gecko
         _browser = "gecko";
     }
@@ -467,9 +467,9 @@ YAHOO.util.History = ( function () {
             var scope;
             var wrappedFn;
 
-            if ( typeof module != "string" || _trim( module ) === "" ||
-                 typeof initialState != "string" ||
-                 typeof onStateChange != "function" ) {
+            if ( typeof module !== "string" || _trim( module ) === "" ||
+                 typeof initialState !== "string" ||
+                 typeof onStateChange !== "function" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.register" );
             }
 
@@ -533,7 +533,7 @@ YAHOO.util.History = ( function () {
                 return;
             }
 
-            if ( _browser == "unknown" ) {
+            if ( _browser === "unknown" ) {
                 throw new Error( "Your web browser is not supported by the Browser History Manager" );
             }
 
@@ -541,14 +541,14 @@ YAHOO.util.History = ( function () {
                 iframeTarget = "blank.html";
             }
 
-            if ( typeof iframeTarget != "string" || _trim( iframeTarget ) === "" ) {
+            if ( typeof iframeTarget !== "string" || _trim( iframeTarget ) === "" ) {
                 throw new Error( "Invalid argument passed to YAHOO.util.History.initialize" );
             }
 
             document.write( '<input type="hidden" id="yui_hist_field">' );
 
-            if ( _browser == "msie" ) {
-                if ( location.protocol == "https:" ) {
+            if ( _browser === "msie" ) {
+                if ( location.protocol === "https:" ) {
                     // If we use https, we MUST point the IFrame to a valid
                     // document on the same server. If we don't, we will get
                     // a warning (do you want to display non secure items?)
@@ -583,39 +583,73 @@ YAHOO.util.History = ( function () {
             var moduleName;
             var moduleObj;
             var currentState;
+            var states;
+
+            if ( typeof module !== "string" || typeof state !== "string" ) {
+                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.navigate" );
+            }
+
+            states = {};
+            states[module] = state;
+
+            return YAHOO.util.History.multiNavigate( states );
+        },
+
+        /**
+         * Call this method when you want to store a new entry in the browser's history.
+         *
+         * @method multiNavigate
+         * @param {object} states Associative array of module-state pairs to set simultaneously.
+         * @return {boolean} Indicates whether the new state was successfully added to the history.
+         * @public
+         */
+        multiNavigate: function ( states ) {
+
+            var currentStates;
+            var moduleName;
+            var moduleObj;
+            var currentState;
             var fqstate;
             var html;
             var doc;
 
-            if ( typeof module != "string" || typeof state != "string" ) {
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.navigate" );
+            if ( typeof states !== "object" ) {
+                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.multiNavigate" );
             }
 
             if ( !_bhmReady ) {
                 throw new Error( "The Browser History Manager is not initialized" );
             }
 
-            if ( !_modules[module] ) {
-                throw new Error( "The following module has not been registered: " + module );
+            for ( moduleName in states ) {
+                if ( !_modules[moduleName] ) {
+                    throw new Error( "The following module has not been registered: " + moduleName );
+                }
             }
-
-            // Make sure the strings passed in do not contain our separators "," and "|"
-            module = escape( module );
-            state = escape( state );
 
             // Generate our new full state string mod1=xxx&mod2=yyy
             currentStates = [];
+
             for ( moduleName in _modules ) {
                 if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
                     moduleObj = _modules[moduleName];
-                    currentState = ( moduleName == module ) ? state : moduleObj.currentState;
+                    if ( YAHOO.lang.hasOwnProperty( states, moduleName ) ) {
+                        currentState = states[moduleName];
+                    } else {
+                        currentState = moduleObj.currentState;
+                    }
+
+                    // Make sure the strings passed in do not contain our separators "," and "|"
+                    moduleName = escape( moduleName );
+                    currentState = escape( currentState );
+
                     currentStates.push( moduleName + "=" + currentState );
                 }
             }
 
             fqstate = currentStates.join( "&" );
 
-            if ( _browser == "msie" ) {
+            if ( _browser === "msie" ) {
 
                 html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
                 try {
@@ -638,7 +672,7 @@ YAHOO.util.History = ( function () {
                 // we'll consider this an acceptable bug, and hope that Apple
                 // comes out with their next version of Safari very soon.
                 top.location.hash = fqstate;
-                if ( _browser == "safari" ) {
+                if ( _browser === "safari" ) {
                     // The following two lines are only useful for Safari 1.x
                     // and 2.0. Recent nightly builds of WebKit do not require
                     // that, but unfortunately, it is not easy to differentiate
@@ -665,7 +699,7 @@ YAHOO.util.History = ( function () {
 
             var moduleObj;
 
-            if ( typeof module != "string" ) {
+            if ( typeof module !== "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getCurrentState" );
             }
 
@@ -700,7 +734,7 @@ YAHOO.util.History = ( function () {
             var tokens;
             var moduleName;
 
-            if ( typeof module != "string" ) {
+            if ( typeof module !== "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState" );
             }
 
@@ -708,9 +742,9 @@ YAHOO.util.History = ( function () {
             states = hash.split( "&" );
             for ( i = 0, len = states.length ; i < len ; i++ ) {
                 tokens = states[i].split( "=" );
-                if ( tokens.length == 2 ) {
+                if ( tokens.length === 2 ) {
                     moduleName = tokens[0];
-                    if ( moduleName == module ) {
+                    if ( moduleName === module ) {
                         return unescape( tokens[1] );
                     }
                 }
@@ -751,7 +785,7 @@ YAHOO.util.History = ( function () {
             for ( i = 0, len = params.length ; i < len ; i++ ) {
                 tokens = params[i].split( "=" );
                 if ( tokens.length >= 2 ) {
-                    if ( tokens[0] == paramName ) {
+                    if ( tokens[0] === paramName ) {
                         return unescape( tokens[1] );
                     }
                 }
