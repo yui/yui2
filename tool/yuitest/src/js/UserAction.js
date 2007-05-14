@@ -130,18 +130,18 @@ YAHOO.util.UserAction = {
                 
             } catch (ex /*:Error*/){
             
-                //create regular UI event
-                event = document.createEvent("UIEvents");
-                
-                //try to use initUIEvent (Safari 2.x can't do this)
-                try {
-                    event.initUIEvent(type, bubbles, cancelable, view, 0);
-                } catch (uiError /*:Error*/) {
-                    event.initEvent(type, bubbles, cancelable);
-                    event.view = view;                
-                }
+                /*
+                 * Technically, key events are subclasses are UI events, however
+                 * creating a UI Event means that you can't dynamically assign
+                 * key event properties like keyCode and charCode. So, fallback
+                 * to using regular old events that allow you to assign these
+                 * properties.
+                 */
+                event = document.createEvent("Events");
+                event.initEvent(type, bubbles, cancelable);
 
                 //initialize
+                event.view = view;
                 event.altKey = altKey;
                 event.ctrlKey = ctrlKey;
                 event.shiftKey = shiftKey;
@@ -407,68 +407,7 @@ YAHOO.util.UserAction = {
             throw new Error("simulateMouseEvent(): No event simulation framework present.");
         }
     },
-
-    //--------------------------------------------------------------------------
-    // Generic event methods
-    //--------------------------------------------------------------------------
-
-    /**
-     * Fires an event that normally would be fired by the keyboard (keyup,
-     * keydown, keypress). Make sure to specify either keyCode or charCode as
-     * an option.
-     * @private
-     * @param {String} type The type of event ("keyup", "keydown" or "keypress").
-     * @param {HTMLElement} target The target of the event.
-     * @param {Object} options Options for the event. Either keyCode or charCode
-     *                         are required.
-     * @method fireKeyEvent
-     * @static
-     */
-    xfireKeyEvent : function (type /*:String*/, target /*:HTMLElement*/,  
-                             options /*:Object*/) /*:Void*/ {
-        var event /*:Event*/ = null; 
-        options = options || {};   
-        target = YAHOO.util.Dom.get(target);
-
-        //official DOM way
-        if (YAHOO.lang.isFunction(document.createEvent)){ //DOM Level 2
-            if (!YAHOO.lang.isUndefined(window.KeyEvent)) { //Firefox
-                event = document.createEvent("KeyEvents");
-                event.initKeyEvent(type, true, true, window, 
-                                   options.ctrlKey||false, 
-                                   options.altKey||false,
-                                   options.shiftKey||false,
-                                   options.metaKey||false,
-                                   options.keyCode||0, 
-                                   options.charCode||0);                            
-            } else { //DOM Level 2
-                event = document.createEvent("UIEvents");
-                event.initUIEvent(type, true, true, window, 1);   
-                event.keyCode = options.keyCode||options.charCode||0;
-                event.altKey = options.altKey||false;
-                event.ctrlKey = options.ctrlKey||false;
-                event.shiftKey = options.shiftKey||false;
-                event.metaKey = options.metaKey||false;
-                event.charCode = options.charCode||options.keyCode||0;     
-            }
-            
-            //fire the event
-            target.dispatchEvent(event);
-        } else if (YAHOO.lang.isObject(document.createEventObject)){ //IE
-            event = document.createEventObject();
-            event.ctrlKey = options.ctrlKey||false;
-            event.altKey = options.AltKey||false;
-            event.shiftKey = options.shiftKey||false;
-            event.metaKey = options.metaKey||false;
-            event.keyCode = options.keyCode|options.charCode||0;
-            
-            target.fireEvent("on" + type, event);       
-        } else {
-            throw new Error("Could not fire event '" + type + "'.");
-        }
-    
-    },        
-    
+   
     //--------------------------------------------------------------------------
     // Mouse events
     //--------------------------------------------------------------------------
