@@ -801,6 +801,17 @@ YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
 YAHOO.widget.DataTable.CLASS_SCROLLBODY = "yui-dt-scrollbody";
 
 /**
+ * Class name assigned to cell container elements within each TD element.
+ *
+ * @property YAHOO.widget.DataTable.CLASS_CELL
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-cell"
+ */
+YAHOO.widget.DataTable.CLASS_CELL = "yui-dt-cell";
+
+/**
  * Class name assigned to display label elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_LABEL
@@ -1867,9 +1878,13 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         elCell.id = elRow.id+"-cell"+j;
         elCell.yuiColumnId = oColumn.getId();
         elCell.headers = oColumnSet.headers[j];
+        
+        /*var elContainer = document.createElement("div");
+        elContainer.className = YAHOO.widget.DataTable.CLASS_CELL;
+        elCell.appendChild(elContainer);*/
 
         // Update UI
-        oColumn.format(elCell, oRecord);
+        this.formatCell(elCell, oRecord, oColumn);
         if (j === 0) {
             YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_FIRST);
         }
@@ -1910,7 +1925,7 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     // Update TD elements with new data
     for(var j=0; j<elRow.cells.length; j++) {
         var oColumn = this._oColumnSet.keys[j];
-        oColumn.format(elRow.cells[j], oRecord);
+        this.formatCell(elRow.cells[j], oRecord, oColumn);
     }
 
     // Update Record ID
@@ -3740,6 +3755,299 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// TABLE FUNCTIONS
+
+/**
+ * Initializes a RecordSet with the given data and populates the page view
+ * with the new data. Any previous data and selection states are cleared.
+ * However, sort states are not cleared, so if the given data is in a particular
+ * sort order, implementers should take care to reset the sortedBy property. If
+ * pagination is enabled, the currentPage is shown and Paginator UI updated,
+ * otherwise all rows are displayed as a single page. For performance, existing
+ * DOM elements are reused when possible.
+ *
+ * @method initializeTable
+ * @param oData {Object | Object[]} An object literal of data or an array of
+ * object literals containing data.
+ */
+YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
+    // Clean up previous RecordSet, if any
+    if(this._oRecordSet) {
+        this._oRecordSet.unsubscribeAll();
+    }
+
+    // Create RecordSet
+    this._oRecordSet = new YAHOO.widget.RecordSet();
+
+    // Add data to RecordSet
+    var records = this._oRecordSet.addRecords(oData);
+
+    // Clear selections
+    this._unselectAllTrEls();
+    this._unselectAllTdEls();
+    this._aSelections = null;
+    this._sLastSelectedId = null;
+    this._sSelectionAnchorId = null;
+
+    // Refresh the view
+    this.refreshView();
+};
+
+/**
+ * Refreshes the view with existing Records from the RecordSet while
+ * maintaining sort, pagination, and selection states. For performance, reuses
+ * existing DOM elements when possible while deleting extraneous elements.
+ *
+ * @method refreshView
+ */
+YAHOO.widget.DataTable.prototype.refreshView = function() {
+    var i, j, aRecords;
+
+    // Paginator is disabled
+    if(!this.paginator) {
+        // Paginator must be destroyed
+        if(this._oPaginator !== null) {
+            //TODO: this.destroyPaginator();
+        }
+    }
+    // Paginator is enabled
+    if(this.paginator) {
+        this.updatePaginator();
+        aRecords = this._oRecordSet.getRecords(this._oPaginator.startRecordIndex, this._oPaginator.rowsPerPage);
+    }
+    // Show all records
+    else {
+        aRecords = this._oRecordSet.getRecords();
+    }
+
+    var elTbody = this._elTbody;
+    var elRows = elTbody.rows;
+
+    // Has rows
+    if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
+        this.hideTableMessage();
+
+        // Remove extra rows from the bottom so as to preserve ID order
+        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
+            elTbody.deleteRow(-1);
+        }
+
+        // Keep track of selected rows
+        var aSelectedRows = this.getSelectedRows();
+
+        // Keep track of selected cells
+        var aSelectedCells = this.getSelectedCells();
+
+        // Unselect TR elements in the UI
+        if(aSelectedRows.length > 0) {
+            this._unselectAllTrEls();
+        }
+
+        // Unselect TD elements in the UI
+        if(aSelectedCells.length > 0) {
+            this._unselectAllTdEls();
+        }
+
+        // From the top, update in-place existing rows
+        for(i=0; i<elRows.length; i++) {
+            this._updateTrEl(elRows[i], aRecords[i]);
+        }
+
+        // Add TR elements as necessary
+        for(i=elRows.length; i<aRecords.length; i++) {
+            this._addTrEl(aRecords[i]);
+        }
+
+        // Re-select any TR or TD elements as necessary
+        var allSelections = aSelectedRows.concat(aSelectedCells);
+        var allRows = elTbody.rows;
+        for(i=0; i<allSelections.length; i++) {
+            for(j=0; j<allRows.length; j++) {
+                var thisRow = allRows[j];
+                if(allSelections[i] === thisRow.yuiRecordId) {
+                    YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
+                }
+                else if(allSelections[i].recordId === thisRow.yuiRecordId) {
+                    for(var k=0; k<thisRow.cells.length; k++) {
+                        if(thisRow.cells[k].yuiColumnId === allSelections[i].columnId) {
+                            YAHOO.util.Dom.addClass(thisRow.cells[k], YAHOO.widget.DataTable.CLASS_SELECTED);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Set classes
+        this._setFirstRow();
+        this._setLastRow();
+        this._setRowStripes();
+
+        this.fireEvent("refreshEvent");
+
+        YAHOO.log("DataTable showing " + aRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
+    }
+    // Empty
+    else {
+        // Remove all rows
+        while(elTbody.hasChildNodes()) {
+            elTbody.deleteRow(-1);
+        }
+
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+    }
+};
+
+/**
+ * Nulls out the entire DataTable instance and related objects, removes attached
+ * event listeners, and clears out DOM elements inside the container. After
+ * calling this method, the instance reference should be expliclitly nulled by
+ * implementer, as in myDataTable = null. Use with caution!
+ *
+ * @method destroy
+ */
+YAHOO.widget.DataTable.prototype.destroy = function() {
+    var instanceName = this.toString();
+    var elContainer = this._elContainer;
+
+    // Unhook custom events
+    this.unsubscribeAll();
+
+    // Unhook DOM events
+    YAHOO.util.Event.purgeElement(elContainer, true);
+
+    // Remove DOM elements
+    elContainer.innerHTML = "";
+
+    // Null out objects
+    for(var key in this) {
+        if(this.hasOwnProperty(key)) {
+            this[key] = null;
+        }
+    }
+
+    YAHOO.log("DataTable instance destroyed: " + instanceName);
+};
+
+/**
+ * Displays message within secondary TBODY.
+ *
+ * @method showTableMessage
+ * @param sHTML {String} (optional) Value for innerHTML.
+ * @param sClassName {String} (optional) Classname.
+ */
+YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) {
+    var elCell = this._elMsgCell;
+    if(YAHOO.lang.isString(sHTML)) {
+        elCell.innerHTML = sHTML;
+    }
+    if(YAHOO.lang.isString(sClassName)) {
+        elCell.className = sClassName;
+    }
+    this._elMsgTbody.style.display = "";
+    this.fireEvent("tableMsgShowEvent", {html:sHTML, className:sClassName});
+};
+
+/**
+ * Hides secondary TBODY.
+ *
+ * @method hideTableMessage
+ */
+YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
+    this._elMsgTbody.style.display = "none";
+    this.fireEvent("tableMsgHideEvent");
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // RECORDSET FUNCTIONS
 
 /**
@@ -3842,6 +4150,167 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// COLUMN FUNCTIONS
+
+/**
+ * Sorts given Column.
+ *
+ * @method sortColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
+    if(!oColumn) {
+        return;
+    }
+    if(!oColumn instanceof YAHOO.widget.Column) {
+        //TODO: accept the TH or TH.key
+        //TODO: Figure out the column based on TH ref or TH.key
+        return;
+    }
+    if(oColumn.sortable) {
+        // What is the default sort direction?
+        var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
+
+        //TODO: what if column doesn't have key?
+        // Is this column sorted already?
+        if(oColumn.key && this.sortedBy && (this.sortedBy.key === oColumn.key)) {
+            if(this.sortedBy.dir) {
+                sortDir = (this.sortedBy.dir == "asc") ? "desc" : "asc";
+            }
+            else {
+                sortDir = (sortDir == "asc") ? "desc" : "asc";
+            }
+        }
+        else if(!this.sortedBy) {
+            this.sortedBy = {};
+        }
+
+        // Define the sort handler function based on the direction
+        var sortFnc = null;
+        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
+            sortFnc = oColumn.sortOptions.descFunction;
+        }
+        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
+            sortFnc = oColumn.sortOptions.ascFunction;
+        }
+
+        // Custom function was not provided so use the built-in sorter
+        // ONLY IF column key is defined
+        // TODO: nested/cumulative/hierarchical sorting
+        if(!sortFnc && oColumn.key) {
+            var sorted;
+            // Here "a" and "b" are 2 Records to sort by oColumn.key
+            sortFnc = function(a, b) {
+                if(sortDir == "desc") {
+                    sorted = YAHOO.util.Sort.compareDesc(a.getData(oColumn.key),b.getData(oColumn.key));
+                    if(sorted === 0) {
+                        return YAHOO.util.Sort.compareDesc(a.getId(),b.getId());
+                    }
+                    else {
+                        return sorted;
+                    }
+                }
+                else {
+                    sorted = YAHOO.util.Sort.compareAsc(a.getData(oColumn.key),b.getData(oColumn.key));
+                    if(sorted === 0) {
+                        return YAHOO.util.Sort.compareAsc(a.getId(),b.getId());
+                    }
+                    else {
+                        return sorted;
+                    }
+                }
+            };
+        }
+
+        if(sortFnc) {
+            // Do the actual sort
+            this._oRecordSet.sortRecords(sortFnc);
+
+            // Update classes
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_ASC);
+            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_DESC);
+            var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_ASC : YAHOO.widget.DataTable.CLASS_DESC;
+            YAHOO.util.Dom.addClass(this.id + "-col" + oColumn.getId(), newClass);
+
+            // Keep track of currently sorted column
+            this.sortedBy.key = oColumn.key;
+            this.sortedBy.dir = sortDir;
+            this.sortedBy._id = this.id + "-col" + oColumn.getId();
+
+            // Update the UI
+            this.refreshView();
+
+            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
+            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
+        }
+    }
+    else {
+        //TODO
+        YAHOO.log("Column is not sortable", "info", this.toString());
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ROW FUNCTIONS
 
 
@@ -3914,6 +4383,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
             YAHOO.log("Added row: Record ID = " + oRecord.getId() +
                     ", Record index = " + this.getRecordIndex(oRecord) +
                     ", page row index = " + nTrIndex, "info", this.toString());
+            return;
         }
     }
     YAHOO.log("Could not add row with " + YAHOO.widget.Logger.dump(oData), "error", this.toString());
@@ -4110,227 +4580,281 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
 
 
 
-
-
-// TABLE FUNCTIONS
+// CELL FUNCTIONS
 
 /**
- * Initializes a RecordSet with the given data and populates the page view
- * with the new data. Any previous data and selection states are cleared.
- * However, sort states are not cleared, so if the given data is in a particular
- * sort order, implementers should take care to reset the sortedBy property. If
- * pagination is enabled, the currentPage is shown and Paginator UI updated,
- * otherwise all rows are displayed as a single page. For performance, existing
- * DOM elements are reused when possible.
+ * Outputs markup into the given TD based on given Record.
  *
- * @method initializeTable
- * @param oData {Object | Object[]} An object literal of data or an array of
- * object literals containing data.
+ * @method formatCell
+ * @param elCell {HTMLElement} TD Element.
+ * @param oRecord {YAHOO.widget.Record} Record that holds data for the row.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @return {HTML} Markup.
  */
-YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
-    // Clean up previous RecordSet, if any
-    if(this._oRecordSet) {
-        this._oRecordSet.unsubscribeAll();
+YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn) {
+    /*// Work with the container element within the TD
+    if(elCell.firstChild && YAHOO.util.Dom.hasClass(elCell.firstChild.className, YAHOO.widget.DataTable.CLASS_CELL)) {
+        elCell = elCell.firstChild;
+    }
+    else {
+        YAHOO.log("Formatting a cell without a proper container", "warn", this.toString());
+    }*/
+    
+    if(!oRecord) {
+        //TODO: figure out the Record and make the argument optional?
+    }
+    if(!oColumn) {
+        //TODO: figure out the Column and make the argument optional?
     }
     
-    // Create RecordSet
-    this._oRecordSet = new YAHOO.widget.RecordSet();
+    var oData = (oColumn.key) ? oRecord.getData(oColumn.key) : null;
+    if(oColumn.formatter) {
+        oColumn.formatter(elCell, oRecord, oColumn, oData);
+    }
+    else {
+        var type = oColumn.type;
+        var markup = "";
+        var classname = "";
+        switch(type) {
+            case "checkbox":
+                YAHOO.widget.DataTable.formatCheckbox(elCell, oRecord, oColumn, oData);
+                classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
+                break;
+            /*case "counter":
+                YAHOO.widget.DataTable.formatCounter(elContainer);
+                classname = YAHOO.widget.DataTable.CLASS_COUNTER;
+                break;*/
+            case "currency":
+                YAHOO.widget.DataTable.formatCurrency(elCell, oRecord, oColumn, oData);
+                classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
+                break;
+            case "date":
+                YAHOO.widget.DataTable.formatDate(elCell, oRecord, oColumn, oData);
+                classname = YAHOO.widget.DataTable.CLASS_DATE;
+                break;
+            case "email":
+                YAHOO.widget.DataTable.formatEmail(elCell, oRecord, oColumn, oData);
+                classname = YAHOO.widget.DataTable.CLASS_EMAIL;
+                break;
+            case "link":
+                YAHOO.widget.DataTable.formatLink(elCell, oRecord, oColumn, oData);
+                classname = YAHOO.widget.DataTable.CLASS_LINK;
+                break;
+            case "number":
+                YAHOO.widget.DataTable.formatNumber(elCell, oRecord, oColumn, oData);
+                classname = YAHOO.widget.DataTable.CLASS_NUMBER;
+                break;
+            case "select":
+                YAHOO.widget.DataTable.formatSelect(elCell, oRecord, oColumn, oData);
+                classname = YAHOO.widget.DataTable.CLASS_DROPDOWN;
+                break;
+           default:
+                elCell.innerHTML = (oData) ? oData.toString() : "";
+                //elCell.innerHTML = (oData) ? "<a href=\"#\">"+oData.toString()+"</a>" : "";
+                classname = YAHOO.widget.DataTable.CLASS_STRING;
+                break;
+        }
+    }
 
-    // Add data to RecordSet
-    var records = this._oRecordSet.addRecords(oData);
-    
-    // Clear selections
-    this._unselectAllTrEls();
-    this._unselectAllTdEls();
-    this._aSelections = null;
-    this._sLastSelectedId = null;
-    this._sSelectionAnchorId = null;
-    
-    // Refresh the view
-    this.refreshView();
+    if(oColumn.className) {
+        YAHOO.util.Dom.addClass(elCell, oColumn.className);
+    }
+
+    if(oColumn.editor) {
+        YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
+    }
 };
 
+
 /**
- * Refreshes the view with existing Records from the RecordSet while
- * maintaining sort, pagination, and selection states. For performance, reuses
- * existing DOM elements when possible while deleting extraneous elements.
+ * Formats cells for Columns of type "checkbox".
  *
- * @method refreshView
+ * @method formatCheckbox
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object | Boolean} Data value for the cell. Can be a simple
+ * Boolean to indicate whether checkbox is checked or not. Can be object literal
+ * {checked:bBoolean, label:sLabel}. Other forms of oData require a custom
+ * formatter.
+ * @static
  */
-YAHOO.widget.DataTable.prototype.refreshView = function() {
-    var i, j, aRecords;
-    
-    // Paginator is disabled
-    if(!this.paginator) {
-        // Paginator must be destroyed
-        if(this._oPaginator !== null) {
-            //TODO: this.destroyPaginator();
+YAHOO.widget.DataTable.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
+    var bChecked = oData;
+    bChecked = (bChecked) ? " checked" : "";
+    elCell.innerHTML = "<input type=\"checkbox\"" + bChecked +
+            " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
+};
+
+/*WITHHOLD FROM API DOC
+ * Formats cells for Columns of type "counter".
+ *
+ * @method formatCounter
+ * @param elCell {HTMLElement} Table cell element.
+ * @static
+ */
+/*YAHOO.widget.DataTable.formatCounter = function(elCell) {
+    //TODO: This breaks with pagination
+    var nTrIndex = elCell.parentNode.sectionRowIndex;
+    elCell.innerHTML = nTrIndex;
+};*/
+
+/**
+ * Formats Number data for Columns of type "currency".
+ *
+ * @method formatCurrency
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Number} Data value for the cell.
+ * @static
+ */
+YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData) {
+    if(YAHOO.lang.isNumber(oData)) {
+        var nAmount = oData;
+        var markup;
+
+        // Round to the penny
+        nAmount = Math.round(nAmount*100)/100;
+
+        // Default currency is USD
+        markup = "$"+nAmount;
+
+        // Normalize digits
+        var dotIndex = markup.indexOf(".");
+        if(dotIndex < 0) {
+            markup += ".00";
         }
-    }
-    // Paginator is enabled
-    if(this.paginator) {
-        this.updatePaginator();
-        aRecords = this._oRecordSet.getRecords(this._oPaginator.startRecordIndex, this._oPaginator.rowsPerPage);
-    }
-    // Show all records
-    else {
-        aRecords = this._oRecordSet.getRecords();
-    }
-
-    var elTbody = this._elTbody;
-    var elRows = elTbody.rows;
-
-    // Has rows
-    if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
-        this.hideTableMessage();
-
-        // Remove extra rows from the bottom so as to preserve ID order
-        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
-            elTbody.deleteRow(-1);
-        }
-
-        // Keep track of selected rows
-        var aSelectedRows = this.getSelectedRows();
-        
-        // Keep track of selected cells
-        var aSelectedCells = this.getSelectedCells();
-
-        // Unselect TR elements in the UI
-        if(aSelectedRows.length > 0) {
-            this._unselectAllTrEls();
-        }
-
-        // Unselect TD elements in the UI
-        if(aSelectedCells.length > 0) {
-            this._unselectAllTdEls();
-        }
-
-        // From the top, update in-place existing rows
-        for(i=0; i<elRows.length; i++) {
-            this._updateTrEl(elRows[i], aRecords[i]);
-        }
-
-        // Add TR elements as necessary
-        for(i=elRows.length; i<aRecords.length; i++) {
-            this._addTrEl(aRecords[i]);
-        }
-
-        // Re-select any TR or TD elements as necessary
-        var allSelections = aSelectedRows.concat(aSelectedCells);
-        var allRows = elTbody.rows;
-        for(i=0; i<allSelections.length; i++) {
-            for(j=0; j<allRows.length; j++) {
-                var thisRow = allRows[j];
-                if(allSelections[i] === thisRow.yuiRecordId) {
-                    YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
-                }
-                else if(allSelections[i].recordId === thisRow.yuiRecordId) {
-                    for(var k=0; k<thisRow.cells.length; k++) {
-                        if(thisRow.cells[k].yuiColumnId === allSelections[i].columnId) {
-                            YAHOO.util.Dom.addClass(thisRow.cells[k], YAHOO.widget.DataTable.CLASS_SELECTED);
-                        }
-                    }
-                }
+        else {
+            while(dotIndex > markup.length-3) {
+                markup += "0";
             }
         }
-
-        // Set classes
-        this._setFirstRow();
-        this._setLastRow();
-        this._setRowStripes();
-
-        this.fireEvent("refreshEvent");
-
-        YAHOO.log("DataTable showing " + aRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
+        elCell.innerHTML = markup;
     }
-    // Empty
     else {
-        // Remove all rows
-        while(elTbody.hasChildNodes()) {
-            elTbody.deleteRow(-1);
+        elCell.innerHTML = "";
+        YAHOO.log("Could not format currency " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatCurrency");
+    }
+};
+
+/**
+ * Formats cells for Columns of type "date".
+ *
+ * @method formatDate
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
+    var oDate = oData;
+    if(oDate instanceof Date) {
+        elCell.innerHTML = (oDate.getMonth()+1) + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
+    }
+    else {
+        elCell.innerHTML = "";
+        YAHOO.log("Could not format date " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatDate");
+    }
+};
+
+/**
+ * Formats cells for Columns of type "email".
+ *
+ * @method formatEmail
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
+    var sEmail = oData;
+    if(sEmail) {
+        elCell.innerHTML = "<a href=\"mailto:" + sEmail + "\">" + sEmail + "</a>";
+    }
+    else {
+        elCell.innerHTML = "";
+        YAHOO.log("Could not format email " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatEmail");
+    }
+};
+
+/**
+ * Formats cells for Columns of type "link".
+ *
+ * @method formatLink
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
+    var sLink = oData;
+    if(sLink) {
+        elCell.innerHTML = "<a href=\"" + sLink + "\">" + sLink + "</a>";
+    }
+    else {
+        elCell.innerHTML = "";
+        YAHOO.log("Could not format link " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatLink");
+    }
+};
+
+/**
+ * Formats cells for Columns of type "number".
+ *
+ * @method formatNumber
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) {
+    var nNumber = oData;
+    if((nNumber !== undefined) && (nNumber !== null)) {
+        elCell.innerHTML = nNumber.toString();
+    }
+    else {
+        elCell.innerHTML = "";
+        YAHOO.log("Could not format Number " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatNumber");
+    }
+};
+
+/**
+ * Formats cells for Columns of type "select".
+ *
+ * @method formatSelect
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object} Data value for the cell, or null
+ * @static
+ */
+YAHOO.widget.DataTable.formatSelect = function(elCell, oRecord, oColumn, oData) {
+    var selectedValue = oData;
+    var options = oColumn.selectOptions;
+
+    var markup = "<select>";
+    if(options) {
+        for(var i=0; i<options.length; i++) {
+            var option = options[i];
+            markup += "<option value=\"" + option + "\"";
+            if(selectedValue === option) {
+                markup += " selected";
+            }
+            markup += ">" + option + "</option>";
         }
-
-        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
-};
-
-/**
- * Nulls out the entire DataTable instance and related objects, removes attached
- * event listeners, and clears out DOM elements inside the container. After
- * calling this method, the instance reference should be expliclitly nulled by
- * implementer, as in myDataTable = null. Use with caution!
- *
- * @method destroy
- */
-YAHOO.widget.DataTable.prototype.destroy = function() {
-    var instanceName = this.toString();
-    var elContainer = this._elContainer;
-
-    // Unhook custom events
-    this.unsubscribeAll();
-
-    // Unhook DOM events
-    YAHOO.util.Event.purgeElement(elContainer, true);
-
-    // Remove DOM elements
-    elContainer.innerHTML = "";
-
-    // Null out objects
-    for(var key in this) {
-        if(this.hasOwnProperty(key)) {
-            this[key] = null;
+    else {
+        if(selectedValue) {
+            markup += "<option value=\"" + selectedValue + "\" selected>" + selectedValue + "</option>";
         }
     }
-
-    YAHOO.log("DataTable instance destroyed: " + instanceName);
+    markup += "</select>";
+    elCell.innerHTML = markup;
 };
-
-/**
- * Displays message within secondary TBODY.
- *
- * @method showTableMessage
- * @param sHTML {String} (optional) Value for innerHTML.
- * @param sClassName {String} (optional) Classname.
- */
-YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) {
-    var elCell = this._elMsgCell;
-    if(YAHOO.lang.isString(sHTML)) {
-        elCell.innerHTML = sHTML;
-    }
-    if(YAHOO.lang.isString(sClassName)) {
-        elCell.className = sClassName;
-    }
-    this._elMsgTbody.style.display = "";
-    this.fireEvent("tableMsgShowEvent", {html:sHTML, className:sClassName});
-};
-
-/**
- * Hides secondary TBODY.
- *
- * @method hideTableMessage
- */
-YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
-    this._elMsgTbody.style.display = "none";
-    this.fireEvent("tableMsgHideEvent");
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -4570,150 +5094,6 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function() {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// COLUMN FUNCTIONS
-
-/**
- * Sorts given Column.
- *
- * @method sortColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
- */
-YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
-    if(!oColumn) {
-        return;
-    }
-    if(!oColumn instanceof YAHOO.widget.Column) {
-        //TODO: accept the TH or TH.key
-        //TODO: Figure out the column based on TH ref or TH.key
-        return;
-    }
-    if(oColumn.sortable) {
-        // What is the default sort direction?
-        var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
-
-        //TODO: what if column doesn't have key?
-        // Is this column sorted already?
-        if(oColumn.key && this.sortedBy && (this.sortedBy.key === oColumn.key)) {
-            if(this.sortedBy.dir) {
-                sortDir = (this.sortedBy.dir == "asc") ? "desc" : "asc";
-            }
-            else {
-                sortDir = (sortDir == "asc") ? "desc" : "asc";
-            }
-        }
-        else if(!this.sortedBy) {
-            this.sortedBy = {};
-        }
-
-        // Define the sort handler function based on the direction
-        var sortFnc = null;
-        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
-            sortFnc = oColumn.sortOptions.descFunction;
-        }
-        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
-            sortFnc = oColumn.sortOptions.ascFunction;
-        }
-
-        // Custom function was not provided so use the built-in sorter
-        // ONLY IF column key is defined
-        // TODO: nested/cumulative/hierarchical sorting
-        if(!sortFnc && oColumn.key) {
-            var sorted;
-            // Here "a" and "b" are 2 Records to sort by oColumn.key
-            sortFnc = function(a, b) {
-                if(sortDir == "desc") {
-                    sorted = YAHOO.util.Sort.compareDesc(a.getData(oColumn.key),b.getData(oColumn.key));
-                    if(sorted === 0) {
-                        return YAHOO.util.Sort.compareDesc(a.getId(),b.getId());
-                    }
-                    else {
-                        return sorted;
-                    }
-                }
-                else {
-                    sorted = YAHOO.util.Sort.compareAsc(a.getData(oColumn.key),b.getData(oColumn.key));
-                    if(sorted === 0) {
-                        return YAHOO.util.Sort.compareAsc(a.getId(),b.getId());
-                    }
-                    else {
-                        return sorted;
-                    }
-                }
-            };
-        }
-
-        if(sortFnc) {
-            // Do the actual sort
-            this._oRecordSet.sortRecords(sortFnc);
-
-            // Update classes
-            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_ASC);
-            YAHOO.util.Dom.removeClass(this.sortedBy._id,YAHOO.widget.DataTable.CLASS_DESC);
-            var newClass = (sortDir == "asc") ? YAHOO.widget.DataTable.CLASS_ASC : YAHOO.widget.DataTable.CLASS_DESC;
-            YAHOO.util.Dom.addClass(this.id + "-col" + oColumn.getId(), newClass);
-
-            // Keep track of currently sorted column
-            this.sortedBy.key = oColumn.key;
-            this.sortedBy.dir = sortDir;
-            this.sortedBy._id = this.id + "-col" + oColumn.getId();
-
-            // Update the UI
-            this.refreshView();
-            
-            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
-            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
-        }
-    }
-    else {
-        //TODO
-        YAHOO.log("Column is not sortable", "info", this.toString());
-    }
-};
 
 
 
@@ -5297,7 +5677,7 @@ YAHOO.widget.DataTable.prototype.saveEditorInput = function() {
             this._oRecordSet.updateKey(oRecord,oColumn.key,newValue);
 
             //Update TD element
-            oColumn.format(elCell, oRecord);
+            this.formatCell(elCell, oRecord, oColumn);
 
             // Hide editor
             this.activeEditor.hide();
@@ -6044,7 +6424,7 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
     var elCell = this.getTdEl(target);
     if(elCell && YAHOO.lang.isNumber(elCell.yuiColumnId)) {
         var oColumn = this._oColumnSet.getColumn(elCell.yuiColumnId);
-        oColumn.format(elCell, this.getRecord(elCell));
+        this.formatCell(elCell, this.getRecord(elCell), oColumn);
     }
     else {
         YAHOO.log("Could not format cell " + target, "warn", this.toString());
