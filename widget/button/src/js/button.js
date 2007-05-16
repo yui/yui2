@@ -27,9 +27,9 @@
 * the ButtonGroup class to create a set of controls that are mutually 
 * exclusive; checking one button in the set will uncheck all others in 
 * the group.</dd>
-* <dt>menubutton</dt>
+* <dt>menu</dt>
 * <dd>When pressed will show/hide a menu.</dd>
-* <dt>splitbutton</dt>
+* <dt>split</dt>
 * <dd>Can execute a user-specified command or display a menu when pressed.</dd>
 * </dl>
 * @title Button
@@ -469,7 +469,7 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
         var sText = sSrcElementTagName == "INPUT" ? 
                         p_oElement.value : p_oElement.innerHTML;
     
-    
+
         if(sText && sText.length > 0) {
             
             p_oAttributes.label = sText;
@@ -512,13 +512,13 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
             var oRootNode = p_oElement.parentNode.parentNode;
 
-            if(Dom.hasClass(oRootNode, "checked")) {
+            if(Dom.hasClass(oRootNode, this.CSS_CLASS_NAME + "-checked")) {
             
                 p_oAttributes.checked = true;
             
             }
 
-            if(Dom.hasClass(oRootNode, "disabled")) {
+            if(Dom.hasClass(oRootNode, this.CSS_CLASS_NAME + "-disabled")) {
 
                 p_oAttributes.disabled = true;
             
@@ -742,11 +742,11 @@ OPTION_AREA_WIDTH: 20,
 * @property CSS_CLASS_NAME
 * @description String representing the CSS class(es) to be applied to the 
 * button's root element.
-* @default "yuibutton"
+* @default "yui-button"
 * @final
 * @type String
 */
-CSS_CLASS_NAME: "yuibutton",
+CSS_CLASS_NAME: "yui-button",
 
 
 /**
@@ -796,7 +796,7 @@ CHECKBOX_CHECKED_TITLE: "Checked.  Click to uncheck.",
 /**
 * @property MENUBUTTON_DEFAULT_TITLE
 * @description String representing the default title applied to buttons of 
-* type "menubutton." 
+* type "menu." 
 * @default "Menu collapsed.  Click to expand."
 * @final
 * @type String
@@ -807,7 +807,7 @@ MENUBUTTON_DEFAULT_TITLE: "Menu collapsed.  Click to expand.",
 /**
 * @property MENUBUTTON_MENU_VISIBLE_TITLE
 * @description String representing the title applied to buttons of type 
-* "menubutton" when the button's menu is visible. 
+* "menu" when the button's menu is visible. 
 * @default "Menu expanded.  Click or press Esc to collapse."
 * @final
 * @type String
@@ -819,7 +819,7 @@ MENUBUTTON_MENU_VISIBLE_TITLE:
 /**
 * @property SPLITBUTTON_DEFAULT_TITLE
 * @description  String representing the default title applied to buttons of 
-* type "splitbutton." 
+* type "split." 
 * @default "Menu collapsed.  Click inside option region or press 
 * Ctrl + Shift + M to show the menu."
 * @final
@@ -832,7 +832,7 @@ SPLITBUTTON_DEFAULT_TITLE:
 /**
 * @property SPLITBUTTON_OPTION_VISIBLE_TITLE
 * @description String representing the title applied to buttons of type 
-* "splitbutton" when the button's menu is visible. 
+* "split" when the button's menu is visible. 
 * @default "Menu expanded.  Press Esc or Ctrl + Shift + M to hide the menu."
 * @final
 * @type String
@@ -865,7 +865,7 @@ SUBMIT_TITLE: "Click to submit form.",
 */
 _setType: function(p_sType) {
 
-    if(p_sType == "splitbutton") {
+    if(p_sType == "split") {
 
         this.on("option", this._onOption);
 
@@ -934,13 +934,13 @@ _setTitle: function(p_sTitle) {
 
                 break;
                 
-                case "menubutton":
+                case "menu":
 
                     sTitle = this.MENUBUTTON_DEFAULT_TITLE;
 
                 break;
 
-                case "splitbutton":
+                case "split":
 
                     sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
 
@@ -984,14 +984,14 @@ _setDisabled: function(p_bDisabled) {
 
             this._button.setAttribute("disabled", "disabled");
 
-            this.addClass("disabled");
+            this.addStateCSSClasses("disabled");
 
         }
         else {
 
             this._button.removeAttribute("disabled");
 
-            this.removeClass("disabled");
+            this.removeStateCSSClasses("disabled");
         
         }
 
@@ -1066,7 +1066,7 @@ _setChecked: function(p_bChecked) {
 
         if(p_bChecked) {
 
-            this.addClass("checked");
+            this.addStateCSSClasses("checked");
             
             sTitle = (sType == "radio") ? 
                         this.RADIO_CHECKED_TITLE : 
@@ -1075,7 +1075,7 @@ _setChecked: function(p_bChecked) {
         }
         else {
 
-            this.removeClass("checked");
+            this.removeStateCSSClasses("checked");
 
             sTitle = (sType == "radio") ? 
                         this.RADIO_DEFAULT_TITLE : 
@@ -1542,18 +1542,18 @@ _onMouseOver: function(p_oEvent) {
 
     }
 
-    this.addClass("hover");
+    this.addStateCSSClasses("hover");
 
     if(this._activationButtonPressed) {
 
-        this.addClass("active");
+        this.addStateCSSClasses("active");
 
     }
 
 
     if(this._bOptionPressed) {
 
-        this.addClass("activeoption");
+        this.addStateCSSClasses("activeoption");
     
     }
 
@@ -1569,11 +1569,11 @@ _onMouseOver: function(p_oEvent) {
 */
 _onMouseOut: function(p_oEvent) {
 
-    this.removeClass("hover");
+    this.removeStateCSSClasses("hover");
 
-    if(this.get("type") != "menubutton") {
+    if(this.get("type") != "menu") {
 
-        this.removeClass("active");
+        this.removeStateCSSClasses("active");
 
     }
 
@@ -1600,9 +1600,9 @@ _onDocumentMouseUp: function(p_oEvent) {
 
     var sType = this.get("type");
 
-    if(sType == "menubutton" || sType == "splitbutton") {
+    if(sType == "menu" || sType == "split") {
 
-        this.removeClass((sType == "menubutton" ? "active" : "activeoption"));
+        this.removeStateCSSClasses((sType == "menu" ? "active" : "activeoption"));
 
         this._hideMenu();
 
@@ -1634,7 +1634,7 @@ _onMouseDown: function(p_oEvent) {
         var sType = this.get("type");
 
 
-        if(sType == "splitbutton") {
+        if(sType == "split") {
         
             var oElement = this.get("element"),
                 nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
@@ -1646,16 +1646,16 @@ _onMouseDown: function(p_oEvent) {
             }
             else {
 
-                this.addClass("active");
+                this.addStateCSSClasses("active");
 
                 this._activationButtonPressed = true;
 
             }
 
         }
-        else if(sType == "menubutton") {
+        else if(sType == "menu") {
 
-            if(this.hasClass("active")) {
+            if(this.isActive()) {
 
                 this._hideMenu();
 
@@ -1673,7 +1673,7 @@ _onMouseDown: function(p_oEvent) {
         }
         else {
 
-            this.addClass("active");
+            this.addStateCSSClasses("active");
 
             this._activationButtonPressed = true;
         
@@ -1681,7 +1681,7 @@ _onMouseDown: function(p_oEvent) {
 
 
 
-        if(sType == "splitbutton" || sType == "menubutton") {
+        if(sType == "split" || sType == "menu") {
 
             var me = this;
 
@@ -1734,9 +1734,9 @@ _onMouseUp: function(p_oEvent) {
     this._activationButtonPressed = false;
     
 
-    if(this.get("type") != "menubutton") {
+    if(this.get("type") != "menu") {
 
-        this.removeClass("active");
+        this.removeStateCSSClasses("active");
     
     }
     
@@ -1752,11 +1752,11 @@ _onMouseUp: function(p_oEvent) {
 */
 _onFocus: function(p_oEvent) {
 
-    this.addClass("focus");
+    this.addStateCSSClasses("focus");
 
     if(this._activationKeyPressed) {
 
-        this.addClass("active");
+        this.addStateCSSClasses("active");
    
     }
 
@@ -1790,11 +1790,11 @@ _onFocus: function(p_oEvent) {
 */
 _onBlur: function(p_oEvent) {
 
-    this.removeClass("focus");
+    this.removeStateCSSClasses("focus");
 
-    if(this.get("type") != "menubutton") {
+    if(this.get("type") != "menu") {
 
-        this.removeClass("active");
+        this.removeStateCSSClasses("active");
 
     }    
 
@@ -1842,7 +1842,7 @@ _onDocumentKeyUp: function(p_oEvent) {
 _onKeyDown: function(p_oEvent) {
 
     if(
-        this.get("type") == "splitbutton" && 
+        this.get("type") == "split" && 
         this._isSplitButtonOptionKey(p_oEvent)
     ) {
 
@@ -1851,7 +1851,7 @@ _onKeyDown: function(p_oEvent) {
     }
     else if(this._isActivationKey(Event.getCharCode(p_oEvent))) {
 
-        if(this.get("type") == "menubutton") {
+        if(this.get("type") == "menu") {
 
             this._showMenu(p_oEvent);
 
@@ -1860,7 +1860,7 @@ _onKeyDown: function(p_oEvent) {
 
             this._activationKeyPressed = true;
             
-            this.addClass("active");
+            this.addStateCSSClasses("active");
         
         }
     
@@ -1903,9 +1903,9 @@ _onKeyUp: function(p_oEvent) {
 
         this._activationKeyPressed = false;
 
-        if(this.get("type") != "menubutton") {
+        if(this.get("type") != "menu") {
 
-            this.removeClass("active");
+            this.removeStateCSSClasses("active");
 
         }
 
@@ -1968,7 +1968,7 @@ _onClick: function(p_oEvent) {
 
         break;
 
-        case "menubutton":
+        case "menu":
 
             sTitle = this._menu.cfg.getProperty("visible") ? 
                             this.MENUBUTTON_MENU_VISIBLE_TITLE : 
@@ -1978,7 +1978,7 @@ _onClick: function(p_oEvent) {
 
         break;
 
-        case "splitbutton":
+        case "split":
 
             var oElement = this.get("element"),
                 nX = Event.getPageX(p_oEvent) - Dom.getX(oElement);
@@ -2110,7 +2110,7 @@ _onDocumentMouseDown: function(p_oEvent) {
 */
 _onOption: function(p_oEvent) {
 
-    if(this.hasClass("activeoption")) {
+    if(this.hasClass("yui-split-button-activeoption")) {
 
         this._hideMenu();
 
@@ -2141,22 +2141,22 @@ _onMenuShow: function(p_sType, p_aArgs) {
     Event.on(document, "mousedown", this._onDocumentMouseDown, null, this);
 
     var sTitle,
-        sClass;
+        sState;
     
-    if(this.get("type") == "splitbutton") {
+    if(this.get("type") == "split") {
 
         sTitle = this.SPLITBUTTON_OPTION_VISIBLE_TITLE;
-        sClass = "activeoption";
+        sState = "activeoption";
     
     }
     else {
 
         sTitle = this.MENUBUTTON_MENU_VISIBLE_TITLE;        
-        sClass = "active";
+        sState = "active";
 
     }
 
-    this.addClass(sClass);
+    this.addStateCSSClasses(sState);
     this.set("title", sTitle);
 
 },
@@ -2180,26 +2180,26 @@ _onMenuHide: function(p_sType, p_aArgs) {
 
 
     var sTitle,
-        sClass;
+        sState;
     
-    if(this.get("type") == "splitbutton") {
+    if(this.get("type") == "split") {
 
         sTitle = this.SPLITBUTTON_DEFAULT_TITLE;
-        sClass = "activeoption";
+        sState = "activeoption";
 
     }
     else {
 
         sTitle = this.MENUBUTTON_DEFAULT_TITLE;        
-        sClass = "active";
+        sState = "active";
     }
 
 
-    this.removeClass(sClass);
+    this.removeStateCSSClasses(sState);
     this.set("title", sTitle);
 
 
-    if(this.get("type") == "splitbutton") {
+    if(this.get("type") == "split") {
 
         this._bOptionPressed = false;
     
@@ -2224,7 +2224,7 @@ _onMenuKeyDown: function(p_sType, p_aArgs) {
 
         this.focus();
 
-        if(this.get("type") == "splitbutton") {
+        if(this.get("type") == "split") {
         
             this._bOptionPressed = false;
         
@@ -2323,6 +2323,49 @@ _onMenuClick: function(p_sType, p_aArgs) {
 
 
 // Public methods
+
+
+/**
+* @method addStateCSSClasses
+* @description Appends state-specific CSS classes to the button's root 
+* DOM element.
+*/
+addStateCSSClasses: function(p_sState) {
+
+    var sType = this.get("type");
+
+    if (Lang.isString(p_sState)) {
+
+        if (p_sState != "activeoption") {
+
+            this.addClass(this.CSS_CLASS_NAME + ("-" + p_sState));
+
+        }
+
+        this.addClass("yui-" + sType + ("-button-" + p_sState));
+    
+    }
+
+},
+
+
+/**
+* @method removeStateCSSClasses
+* @description Removes state-specific CSS classes to the button's root 
+* DOM element.
+*/
+removeStateCSSClasses: function(p_sState) {
+
+    var sType = this.get("type");
+
+    if (Lang.isString(p_sState)) {
+
+        this.removeClass(this.CSS_CLASS_NAME + ("-" + p_sState));
+        this.removeClass("yui-" + sType + ("-button-" + p_sState));
+    
+    }
+
+},
 
 
 /**
@@ -2604,7 +2647,7 @@ init: function(p_oElement, p_oAttributes) {
 
     }
     
-    this.addClass(this.get("type"));
+    this.addClass("yui-" + this.get("type") + "-button");
 
     Event.on(this._button, "focus", this._onFocus, null, this);
     this.on("mouseover", this._onMouseOver);
@@ -2691,14 +2734,14 @@ initAttributes: function(p_oAttributes) {
     /**
     * @config type
     * @description String specifying the button's type.  Possible values are: 
-    * "button," "link," "submit," "reset," "checkbox," "radio," "menubutton," 
-    * and "splitbutton."
-    * @default "button"
+    * "push," "link," "submit," "reset," "checkbox," "radio," "menu," 
+    * and "split."
+    * @default "push"
     * @type String
     */
     this.setAttributeConfig("type", {
 
-        value: (oAttributes.type || "button"),
+        value: (oAttributes.type || "push"),
         validator: Lang.isString,
         writeOnce: true,
         method: this._setType
@@ -2995,7 +3038,7 @@ hasFocus: function() {
 */
 isActive: function() {
 
-    return this.hasClass("active");
+    return this.hasClass(this.CSS_CLASS_NAME + "-active");
 
 },
 
@@ -3277,8 +3320,8 @@ YAHOO.widget.Button.onFormKeyPress = function(p_oEvent) {
 /**
 * @method addHiddenFieldsToForm
 * @description Searches the specified form and adds hidden fields for instances 
-* of YAHOO.widget.Button that are of type "radio," "checkbox," "menubutton," 
-* and "splitbutton."
+* of YAHOO.widget.Button that are of type "radio," "checkbox," "menu," 
+* and "split."
 * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-40002357">HTMLFormElement</a>} p_oForm Object reference 
 * for the form to search.

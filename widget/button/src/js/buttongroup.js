@@ -148,11 +148,11 @@ TAG_NAME: "DIV",
 * @property CSS_CLASS_NAME
 * @description String representing the CSS class(es) to be applied to the 
 * button group's element.
-* @default "yuibuttongroup"
+* @default "yui-buttongroup"
 * @final
 * @type String
 */
-CSS_CLASS_NAME: "yuibuttongroup",
+CSS_CLASS_NAME: "yui-buttongroup",
 
 
 
@@ -335,17 +335,17 @@ init: function(p_oElement, p_oAttributes) {
 
     this.logger.log(
         "Searching for child nodes with the class name " +
-        "\"yuibutton\" to add to the button group."
+        "\"yui-radio-button\" to add to the button group."
     );
 
-    var aButtons = this.getElementsByClassName("yuibutton");
+    var aButtons = this.getElementsByClassName("yui-radio-button");
 
 
     if(aButtons.length > 0) {
 
         this.logger.log(
             "Found " + aButtons.length + " child nodes with the class " + 
-            "name \"yuibutton.\"  Attempting to add to button group."
+            "name \"yui-radio-button.\"  Attempting to add to button group."
         );
 
         this.addButtons(aButtons);

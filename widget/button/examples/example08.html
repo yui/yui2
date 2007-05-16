@@ -80,12 +80,12 @@
 
                     // Create a Button using an existing <input> element as a data source
     
-                    var oSplitButton1 = new YAHOO.widget.Button("splitbutton1", { type: "splitbutton", menu: "splitbutton1select" });
+                    var oSplitButton1 = new YAHOO.widget.Button("splitbutton1", { type: "split", menu: "splitbutton1select" });
 
 
                     // Create a Button using the YUI Button markup
 
-                    var oSplitButton2 = new YAHOO.widget.Button("splitbutton2", { type: "splitbutton", menu: "splitbutton2select" });
+                    var oSplitButton2 = new YAHOO.widget.Button("splitbutton2", { type: "split", menu: "splitbutton2select" });
 <?php
     if($g_sBuildType == "dev") {
 ?>
@@ -110,7 +110,7 @@
                 
                 ];
     
-                var oSplitButton3 = new YAHOO.widget.Button({ type: "splitbutton",  label: "Split Button 3", menu: aSplitButton3Menu, container: "splitbuttonsfromjavascript" });
+                var oSplitButton3 = new YAHOO.widget.Button({ type: "split",  label: "Split Button 3", name: "splitbutton3", menu: aSplitButton3Menu, container: "splitbuttonsfromjavascript" });
 <?php
     if($g_sBuildType == "dev") {
 ?>

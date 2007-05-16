@@ -79,12 +79,12 @@
 
                     // Create a Button using an existing <input> element as a data source
 
-                    var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menubutton", menu: "menubutton1select" });
+                    var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menu", menu: "menubutton1select" });
 
 
                     // Create a Button using the YUI Button markup
 
-                    var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menubutton", menu: "menubutton2select" });
+                    var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menu", menu: "menubutton2select" });
 <?php
     if($g_sBuildType == "dev") {
 ?>
@@ -118,7 +118,7 @@
                 
                 ];
 
-                var oMenuButton3 = new YAHOO.widget.Button({ type: "menubutton", label: "one", name:"mymenubutton", menu: aMenuButton3Menu, container: "menubuttonsfromjavascript" });            
+                var oMenuButton3 = new YAHOO.widget.Button({ type: "menu", label: "one", name:"mymenubutton", menu: aMenuButton3Menu, container: "menubuttonsfromjavascript" });            
 <?php
     if($g_sBuildType == "dev") {
 ?>
