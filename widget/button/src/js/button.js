@@ -922,11 +922,17 @@ _setTitle: function(p_sTitle) {
 */
 _setDisabled: function(p_bDisabled) {
 
-    if(this.get("type") != "link") {
+    if (this.get("type") != "link") {
 
-        if(p_bDisabled) {
+        if (p_bDisabled) {
 
-            if(this.hasFocus()) {
+            if (this._menu) {
+
+                this._menu.hide();
+
+            }
+
+            if (this.hasFocus()) {
             
                 this.blur();
             
