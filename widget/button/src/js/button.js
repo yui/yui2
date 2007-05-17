@@ -100,20 +100,15 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
 
             p_oElement.id = Dom.generateId();
 
-            YAHOO.log(
-                "No value specified for the button's \"id\" attribute. " +
-                "Setting  button id to \"" + p_oElement.id + "\".",
-                "warn"
-            );
+            YAHOO.log("No value specified for the button's \"id\" attribute. " +
+                "Setting button id to \"" + p_oElement.id + "\".", "warn");
 
         }
 
         this.logger = new YAHOO.widget.LogWriter("Button " + p_oElement.id);
 
-        this.logger.log(
-                "No source HTML element.  "  +
-                "Building the button using the set of configuration attributes."
-            );
+        this.logger.log("No source HTML element.  Building the button using"  +
+                " the set of configuration attributes.");
 
         fnSuperClass.call(
             this,
@@ -129,9 +124,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
             element: null,
             attributes: (p_oAttributes || {})
             
-        },
-
-        sTagName;
+        };
 
 
         if(Lang.isString(p_oElement)) {
@@ -140,34 +133,11 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
 
             if (oElement) {
 
-                sTagName = oElement.tagName.toUpperCase();
+                this.logger = new YAHOO.widget.LogWriter("Button " + 
+                                    (oConfig.attributes.id || p_oElement));
             
-                if(sTagName == this.TAG_NAME) {
-            
-                    oConfig.attributes.id = oElement.id;
-            
-                }
-                else if(sTagName == "INPUT" && !oConfig.attributes.id) {
-            
-                    oConfig.attributes.id = Dom.generateId();
-            
-                    YAHOO.log(
-                        "No value specified for the button's \"id\" " +
-                        "attribute. Setting button id to \"" + 
-                        oConfig.attributes.id + "\".",
-                        "warn"
-                    );
-                
-                }
-            
-                this.logger = new YAHOO.widget.LogWriter(
-                                    "Button " + oConfig.attributes.id
-                                        );
-            
-                this.logger.log(
-                        "Building the button using an existing HTML " + 
-                        "element as a source element." 
-                    );
+                this.logger.log("Building the button using an existing HTML " + 
+                        "element as a source element.");
             
             
                 oConfig.attributes.srcelement = oElement;
@@ -177,10 +147,8 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
             
                 if(!oConfig.element) {
             
-                    this.logger.log(
-                            "Source element could not be used as is.  " +
-                            "Creating a new HTML element for the button."
-                        );
+                    this.logger.log("Source element could not be used as is." +
+                            "  Creating a new HTML element for the button.");
             
                     oConfig.element = 
                         this._createButtonElement(oConfig.attributes.type);
@@ -192,52 +160,33 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
             }
 
         }
-        else {
+        else if (p_oElement.tagName) {
 
-            sTagName = p_oElement.tagName.toUpperCase();
-
-            if(sTagName == this.TAG_NAME) {
+            if (!oConfig.attributes.id) {
 
                 if(p_oElement.id) {
-
+    
                     oConfig.attributes.id = p_oElement.id;
                 
                 }
                 else {
-
+    
                     oConfig.attributes.id = Dom.generateId();
-
-                    YAHOO.log(
-                        "No value specified for the button's \"id\" " +
+    
+                    YAHOO.log("No value specified for the button's \"id\" " +
                         "attribute. Setting button id to \"" + 
-                        oConfig.attributes.id + "\".",
-                        "warn"
-                    );
-
+                        oConfig.attributes.id + "\".", "warn");
+    
                 }
 
-
             }
-            else if(sTagName == "INPUT" && !oConfig.attributes.id) {
 
-                oConfig.attributes.id = Dom.generateId();
-
-                YAHOO.log(
-                    "No value specified for the button's \"id\" " +
-                    "attribute. Setting button id to \"" + 
-                    oConfig.attributes.id + "\".",
-                    "warn"
-                );
-            
-            }
 
             this.logger = 
                 new YAHOO.widget.LogWriter("Button " + oConfig.attributes.id);
 
-            this.logger.log(
-                    "Building the button using an existing HTML element as " + 
-                    "a source element." 
-                );
+            this.logger.log("Building the button using an existing HTML " + 
+                "element as a source element.");
 
 
             oConfig.attributes.srcelement = p_oElement;
@@ -247,10 +196,8 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
     
             if(!oConfig.element) {
 
-                this.logger.log(
-                        "Source element could not be used as is.  " +
-                        "Creating a new HTML element for the button."
-                    );
+                this.logger.log("Source element could not be used as is.  " +
+                        "Creating a new HTML element for the button.");
         
                 oConfig.element = 
                     this._createButtonElement(oConfig.attributes.type);
@@ -496,6 +443,9 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
         case "INPUT":
 
+            setAttributeFromDOMAttribute("id");
+            p_oElement.removeAttribute("id");
+
             setFormElementProperties();
 
             if( !("checked" in p_oAttributes) ) {
@@ -554,6 +504,7 @@ function initConfig(p_oConfig) {
     if(sSrcElementTagName == this.TAG_NAME) {
 
         p_oConfig.element = oSrcElement;
+        p_oConfig.id = oSrcElement.id;
 
         var oFirstChild = getFirstElement(p_oConfig.element);
 
