@@ -117,11 +117,11 @@
     
                     // Create Buttons using existing <input> elements as a data source
     
-                    var oPushButton1 = new YAHOO.widget.Button("pushbutton1src", { id:"pushbutton1" });
+                    var oPushButton1 = new YAHOO.widget.Button("pushbutton1");
                     oPushButton1.on("click", onButtonClick);
                     
-                    var oPushButton2 = new YAHOO.widget.Button("pushbutton2src", { id:"pushbutton2", onclick: { fn: onButtonClick } });
-                    var oPushButton3 = new YAHOO.widget.Button("pushbutton3src", { id:"pushbutton3", onclick: { fn: onButtonClick } });
+                    var oPushButton2 = new YAHOO.widget.Button("pushbutton2", { onclick: { fn: onButtonClick } });
+                    var oPushButton3 = new YAHOO.widget.Button("pushbutton3", { onclick: { fn: onButtonClick } });
     
     
                     // Create Buttons using the YUI Button markup
@@ -194,9 +194,9 @@
                     <legend>From Markup</legend>
 
                     <div>
-                        <input type="button" id="pushbutton1src" name="button1" value="Add">
-                        <input type="button" id="pushbutton2src" name="button2" value="Add">
-                        <input type="button" id="pushbutton3src" name="button3" value="Add">
+                        <input type="button" id="pushbutton1" name="button1" value="Add">
+                        <input type="button" id="pushbutton2" name="button2" value="Add">
+                        <input type="button" id="pushbutton3" name="button3" value="Add">
                     </div>
 
                     <div>
