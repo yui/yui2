@@ -408,28 +408,6 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
     var sSrcElementTagName = p_oElement.tagName.toUpperCase();
 
-
-    if( !("label" in p_oAttributes) ) {
-
-        // Set the "label" property
-    
-        var sText = sSrcElementTagName == "INPUT" ? 
-                        p_oElement.value : p_oElement.innerHTML;
-    
-
-        if(sText && sText.length > 0) {
-            
-            p_oAttributes.label = sText;
-            
-        } 
-
-    }
-
-
-    setAttributeFromDOMAttribute("tabindex");
-    setAttributeFromDOMAttribute("accesskey");
-
-
     switch(sSrcElementTagName) {
     
         case "A":
@@ -481,6 +459,27 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
         break;
     
+    }
+
+
+    setAttributeFromDOMAttribute("tabindex");
+    setAttributeFromDOMAttribute("accesskey");
+
+
+    if( !("label" in p_oAttributes) ) {
+
+        // Set the "label" property
+    
+        var sText = sSrcElementTagName == "INPUT" ? 
+                        p_oElement.value : p_oElement.innerHTML;
+    
+
+        if(sText && sText.length > 0) {
+            
+            p_oAttributes.label = sText;
+            
+        } 
+
     }
 
 }
@@ -2655,6 +2654,7 @@ init: function(p_oElement, p_oAttributes) {
 
     }
     else if(
+        this.get("type") != "link" && 
         Dom.inDocument(oElement) && 
         oSrcElement.tagName.toUpperCase() == "SPAN"
     ) {
