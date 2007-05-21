@@ -135,7 +135,8 @@ YAHOO.tool.TestRunner = (function(){
                             } else if (YAHOO.lang.isObject(shouldError[tests[i]])){
                             
                                 //if it's an object, check the instance and message
-                                if (!(thrown instanceof shouldError[tests[i]].constructor) || thrown.message != shouldError[tests[i]]){
+                                if (!(thrown instanceof shouldError[tests[i]].constructor) 
+                                        || thrown.message != shouldError[tests[i]].message){
                                     error = new YAHOO.util.UnexpectedError(thrown);
                                     failed = true;                                    
                                 }
