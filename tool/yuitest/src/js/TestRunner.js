@@ -119,9 +119,29 @@ YAHOO.tool.TestRunner = (function(){
                             failed = true;
                         }
                     } else {
-                        if (!shouldError[tests[i]]) {
+                        //first check to see if it should error
+                        if (!shouldError[tests[i]]) {                        
                             error = new YAHOO.util.UnexpectedError(thrown);
                             failed = true;
+                        } else {
+                            //check to see what type of data we have
+                            if (YAHOO.lang.isString(shouldError[tests[i]])){
+                                
+                                //if it's a string, check the error message
+                                if (thrown.message != shouldError[tests[i]]){
+                                    error = new YAHOO.util.UnexpectedError(thrown);
+                                    failed = true;                                    
+                                }
+                            } else if (YAHOO.lang.isObject(shouldError[tests[i]])){
+                            
+                                //if it's an object, check the instance and message
+                                if (!(thrown instanceof shouldError[tests[i]].constructor) || thrown.message != shouldError[tests[i]]){
+                                    error = new YAHOO.util.UnexpectedError(thrown);
+                                    failed = true;                                    
+                                }
+                            
+                            }
+                        
                         }
                     }
                     
