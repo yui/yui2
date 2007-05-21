@@ -2662,7 +2662,7 @@ init: function(p_oElement, p_oAttributes) {
     else if(
         this.get("type") != "link" && 
         Dom.inDocument(oElement) && 
-        oSrcElement.tagName.toUpperCase() == "SPAN"
+        oSrcElement.tagName.toUpperCase() == this.TAG_NAME
     ) {
 
         this._addListenersToForm();
