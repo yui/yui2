@@ -20,7 +20,8 @@ YAHOO.util.UserAction = {
      * Simulates a key event using the given event information to populate
      * the generated event object. This method does browser-equalizing
      * calculations to account for differences in the DOM and IE event models
-     * as well as different browser quirks.
+     * as well as different browser quirks. Note: keydown causes Safari 2.x to
+     * crash.
      * @method simulateKeyEvent
      * @private
      * @static
@@ -98,6 +99,9 @@ YAHOO.util.UserAction = {
         if (!YAHOO.lang.isBoolean(shiftKey)){
             shiftKey = false;
         }
+        if (!YAHOO.lang.isBoolean(metaKey)){
+            metaKey = false;
+        }
         if (!YAHOO.lang.isNumber(keyCode)){
             keyCode = 0;
         }
@@ -129,25 +133,41 @@ YAHOO.util.UserAction = {
                     altKey, shiftKey, metaKey, keyCode, charCode);       
                 
             } catch (ex /*:Error*/){
-            
-                /*
-                 * Technically, key events are subclasses are UI events, however
-                 * creating a UI Event means that you can't dynamically assign
-                 * key event properties like keyCode and charCode. So, fallback
-                 * to using regular old events that allow you to assign these
-                 * properties.
-                 */
-                event = document.createEvent("Events");
-                event.initEvent(type, bubbles, cancelable);
 
-                //initialize
-                event.view = view;
-                event.altKey = altKey;
-                event.ctrlKey = ctrlKey;
-                event.shiftKey = shiftKey;
-                event.metaKey = metaKey;
-                event.keyCode = keyCode;
-                event.charCode = charCode;              
+                /*
+                 * If it got here, that means key events aren't officially supported. 
+                 * Safari/WebKit is a real problem now. WebKit 522 won't let you
+                 * set keyCode, charCode, or other properties if you use a
+                 * UIEvent, so we first must try to create a generic event. The
+                 * fun part is that this will throw an error on Safari 2.x. The
+                 * end result is that we need another try...catch statement just to
+                 * deal with this mess.
+                 */
+                try {
+
+                    //try to create generic event - will fail in Safari 2.x
+                    event = document.createEvent("Events");
+
+                } catch (uierror /*:Error*/){
+
+                    //the above failed, so create a UIEvent for Safari 2.x
+                    event = document.createEvent("UIEvents");
+
+                } finally {
+
+                    event.initEvent(type, bubbles, cancelable);
+    
+                    //initialize
+                    event.view = view;
+                    event.altKey = altKey;
+                    event.ctrlKey = ctrlKey;
+                    event.shiftKey = shiftKey;
+                    event.metaKey = metaKey;
+                    event.keyCode = keyCode;
+                    event.charCode = charCode;
+          
+                }          
+             
             }
             
             //fire the event
