@@ -16,7 +16,7 @@
     <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
 
     <target name="examples" description="Component Specific Over-ride">
-        <copy todir="${srcdir}/examples/history" preservelastmodified="true">
+        <copy todir="${srcdir}/examples/${component}" preservelastmodified="true">
             <fileset dir="${component.basedir}/examples">
                 <include name="**/*.*"/>
                 <!--
@@ -36,7 +36,7 @@
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/tool/yuitest"/>
+                <argument value="yahoo/presentation/2.x/tool/${component}"/>
             </commandline>
         </cvs>
         <echo message="commit: build dir" />
@@ -45,7 +45,7 @@
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/build/yuitest"/>
+                <argument value="yahoo/presentation/2.x/build/${component}"/>
             </commandline>
         </cvs>
         <echo message="commit: examples dir" />
@@ -54,7 +54,7 @@
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/examples/yuitest"/>
+                <argument value="yahoo/presentation/2.x/examples/${component}"/>
             </commandline>
         </cvs>
 
