@@ -47,9 +47,13 @@
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang,
+    Overlay = YAHOO.widget.Overlay,
+    Menu = YAHOO.widget.Menu,
 
 
     // Private member variables
+
+    // Browser detection
 
     m_oUserAgent = navigator.userAgent.toLowerCase(),
     m_bOpera = (m_oUserAgent.indexOf('opera') > -1),
@@ -57,9 +61,12 @@ var Dom = YAHOO.util.Dom,
     m_bGecko = (!m_bOpera && !m_bSafari && m_oUserAgent.indexOf('gecko') > -1),
     m_bIE7 = (!m_bOpera && m_oUserAgent.indexOf('msie 7') > -1),
     m_bIE = (!m_bOpera && m_oUserAgent.indexOf('msie') > -1),
-    m_oButtons = {},
+
+
+    m_oButtons = {},    // Collection of all Button instances
+    m_oOverlayManager = null,   // YAHOO.widget.OverlayManager instance
     m_oSubmitTrigger = null,    // The button that submitted the form 
-    m_oFocusedButton = null;
+    m_oFocusedButton = null;    // The button that has focus
 
 
 
@@ -160,7 +167,7 @@ YAHOO.widget.Button = function(p_oElement, p_oAttributes) {
             }
 
         }
-        else if (p_oElement.tagName) {
+        else if (p_oElement.nodeName) {
 
             if (!oConfig.attributes.id) {
 
@@ -406,9 +413,9 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
     }
 
 
-    var sSrcElementTagName = p_oElement.tagName.toUpperCase();
+    var sSrcElementNodeName = p_oElement.nodeName.toUpperCase();
 
-    switch(sSrcElementTagName) {
+    switch(sSrcElementNodeName) {
     
         case "A":
         
@@ -470,7 +477,7 @@ function setAttributesFromSrcElement(p_oElement, p_oAttributes) {
 
         // Set the "label" property
     
-        var sText = sSrcElementTagName == "INPUT" ? 
+        var sText = sSrcElementNodeName == "INPUT" ? 
                         p_oElement.value : p_oElement.innerHTML;
     
 
@@ -497,10 +504,10 @@ function initConfig(p_oConfig) {
 
     var oAttributes = p_oConfig.attributes,
         oSrcElement = oAttributes.srcelement,
-        sSrcElementTagName = oSrcElement.tagName.toUpperCase();
+        sSrcElementNodeName = oSrcElement.nodeName.toUpperCase();
 
 
-    if(sSrcElementTagName == this.TAG_NAME) {
+    if(sSrcElementNodeName == this.NODE_NAME) {
 
         p_oConfig.element = oSrcElement;
         p_oConfig.id = oSrcElement.id;
@@ -516,10 +523,10 @@ function initConfig(p_oConfig) {
 
             if(oButton) {
 
-                var sButtonTagName = oButton.tagName.toUpperCase();
+                var sButtonNodeName = oButton.nodeName.toUpperCase();
 
 
-                if(sButtonTagName == "A" || sButtonTagName == "BUTTON") {
+                if(sButtonNodeName == "A" || sButtonNodeName == "BUTTON") {
 
                     setAttributesFromSrcElement.call(
                             this, 
@@ -534,7 +541,7 @@ function initConfig(p_oConfig) {
         }
     
     }
-    else if(sSrcElementTagName == "INPUT") {
+    else if(sSrcElementNodeName == "INPUT") {
 
         setAttributesFromSrcElement.call(this, oSrcElement, oAttributes);
     
@@ -568,7 +575,8 @@ _button: null,
 * @description Object reference to the button's menu.
 * @default null
 * @protected
-* @type <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>
+* @type {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>|
+* <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>}
 */
 _menu: null,
 
@@ -646,13 +654,13 @@ _hasMouseEventHandlers: false,
 
 
 /**
-* @property TAG_NAME
-* @description The name of the tag to be used for the button's root element. 
+* @property NODE_NAME
+* @description The name of the node to be used for the button's root element. 
 * @default "SPAN"
 * @final
 * @type String
 */
-TAG_NAME: "SPAN",
+NODE_NAME: "SPAN",
 
 
 /**
@@ -1055,11 +1063,36 @@ _setChecked: function(p_bChecked) {
 */
 _setMenu: function(p_oMenu) {
 
-    var Menu = YAHOO.widget.Menu,
-        oMenu,
-        me = this;
+    var bLazyLoad = this.get("lazyloadmenu"),
+        oButtonElement = this.get("element"),
 
-    if(!Menu) {
+        /*
+            Boolean indicating if the value of p_oMenu is an instance of 
+            YAHOO.widget.Menu or YAHOO.widget.Overlay.
+        */
+
+        bInstance = false,
+
+        me = this,
+        oMenu,
+        oMenuElement,
+        oSrcElement,
+        aItems,
+        nItems,
+        oItem,
+        i;
+
+
+    if (!Overlay) {
+
+        this.logger.log("YAHOO.widget.Overlay dependency not met.", "error");
+
+        return false;
+    
+    }
+
+
+    if (!Menu) {
 
         this.logger.log("YAHOO.widget.Menu dependency not met.", "error");
 
@@ -1069,103 +1102,213 @@ _setMenu: function(p_oMenu) {
 
 
     function initMenu() {
-    
-        if(oMenu) {
-    
-            oMenu.showEvent.subscribe(this._onMenuShow, this, true);
-            oMenu.hideEvent.subscribe(this._onMenuHide, this, true);
-            oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
-            oMenu.renderEvent.subscribe(this._onMenuRender, this, true);
-            oMenu.clickEvent.subscribe(this._onMenuClick, this, true);
-            oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, this, true);
 
-            var oSrcElement = oMenu.srcElement;
-    
-            if(oSrcElement && oSrcElement.tagName.toUpperCase() == "SELECT") {
-    
-                oSrcElement.style.display = "none";
-                oSrcElement.parentNode.removeChild(oSrcElement);
-    
+        if (oMenu) {
+
+            oMenu.showEvent.subscribe(this._onMenuShow, null, this);
+            oMenu.hideEvent.subscribe(this._onMenuHide, null, this);
+            oMenu.renderEvent.subscribe(this._onMenuRender, null, this);
+
+
+            if (oMenu instanceof Menu) {
+
+                oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
+                oMenu.clickEvent.subscribe(this._onMenuClick, this, true);
+                oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, 
+                    this, true);
+
+                oSrcElement = oMenu.srcElement;
+
+                if (oSrcElement && 
+                    oSrcElement.nodeName.toUpperCase() == "SELECT") {
+        
+                    oSrcElement.style.display = "none";
+                    oSrcElement.parentNode.removeChild(oSrcElement);
+
+                }
+
             }
-    
+            else if (oMenu instanceof Overlay) {
+
+                if (!m_oOverlayManager) {
+
+                    m_oOverlayManager = new YAHOO.widget.OverlayManager();
+                
+                }
+                
+                m_oOverlayManager.register(oMenu);
+                
+            }
+
+
             this._menu = oMenu;
+            
+
+            if (!bInstance) {
+
+                if (bLazyLoad && !(oMenu instanceof Menu)) {
+
+                    /*
+                        Mimic Menu's "lazyload" functionality by adding a 
+                        "beforeshow" event listener that renders the 
+                        Overlay instance before it is made visible by  
+                        the button.
+                    */
+
+                    oMenu.beforeShowEvent.subscribe(this._onOverlayBeforeShow, 
+                        null, this);
     
+                }
+                else if (!bLazyLoad) {
+
+                    if (Dom.inDocument(oButtonElement)) {
+
+                        oMenu.render(oButtonElement.parentNode);
+                    
+                    }
+                    else {
+    
+                        function onAppendTo() {
+    
+                            oMenu.render(oButtonElement.parentNode);
+                            
+                            me.removeListener("appendTo", onAppendTo);
+                        
+                        }
+    
+                        this.on("appendTo", onAppendTo);
+                    
+                    }
+                
+                }
+            
+            }
+
         }
         else {
-    
+
             this._menu.destroy();
             this._menu = null;
-    
+
         }
-    
+
     }
 
 
-    if(p_oMenu instanceof Menu) {
+    if (p_oMenu instanceof Menu) {
 
         oMenu = p_oMenu;
-        
-        var aItems = oMenu.getItems(),
-            nItems = aItems.length,
-            oItem;
-    
-        if(nItems > 0) {
-    
-            var i = nItems - 1;
-    
+        aItems = oMenu.getItems();
+        nItems = aItems.length;
+        bInstance = true;
+
+
+        if (nItems > 0) {
+
+            i = nItems - 1;
+
             do {
-    
+
                 oItem = aItems[i];
-    
-                if(oItem) {
-    
+
+                if (oItem) {
+
                     oItem.cfg.subscribeToConfigEvent(
                                 "selected", 
                                 this._onMenuItemSelected, 
                                 oItem, 
                                 this
                             );
-    
+
                 }
-            
+
             }
             while(i--);
-    
+
         }
 
         initMenu.call(this);
 
     }
-    else if(Lang.isArray(p_oMenu)) {
+    else if (p_oMenu instanceof Overlay) {
 
-        this.on("appendTo", function() {
+        oMenu = p_oMenu;
+        bInstance = true;
+
+        oMenu.cfg.setProperty("visible", false);
+        oMenu.cfg.setProperty("context", [oButtonElement, "tl", "bl"]);
+
+        initMenu.call(this);
+
+    }
+    else if (Lang.isArray(p_oMenu)) {
+
+        this.on("appendTo", function () {
 
             oMenu = new Menu(
                             Dom.generateId(), 
-                            { lazyload: true, itemdata: p_oMenu }
+                            { lazyload: bLazyLoad, itemdata: p_oMenu }
                         );
-    
-            initMenu.call(me);
-        
-        });
-       
-    }
-    else if(Lang.isString(p_oMenu)) {
-
-        Event.onContentReady(p_oMenu, function() {
-
-            oMenu = new Menu(this, { lazyload: true });
 
             initMenu.call(me);
-        
-        });
-    
-    }
-    else if(p_oMenu && p_oMenu.nodeName) {
 
-        oMenu = new Menu(p_oMenu, { lazyload: true });
+        });
+
+    }
+    else if (Lang.isString(p_oMenu)) {
+
+        oMenuElement = Dom.get(p_oMenu);
+
+        if (oMenuElement) {
+
+            if (Dom.hasClass(oMenuElement, Menu.prototype.CSS_CLASS_NAME) || 
+                oMenuElement.nodeName == "SELECT") {
     
-        initMenu.call(this);
+                oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
+    
+                initMenu.call(me);
+    
+            }
+            else {
+
+                oMenu = new Overlay(p_oMenu, {
+                                visible: false, 
+                                context: [oButtonElement, "tl", "bl"]
+                            });
+    
+                initMenu.call(me);
+    
+            }
+
+        }
+
+    }
+    else if (p_oMenu && p_oMenu.nodeName) {
+
+        if (Dom.hasClass(p_oMenu, Menu.prototype.CSS_CLASS_NAME) || 
+                p_oMenu.nodeName == "SELECT") {
+
+            oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
+        
+            initMenu.call(this);
+
+        }
+        else {
+
+            if (!p_oMenu.id) {
+            
+                Dom.generateId(p_oMenu);
+            
+            }
+
+            oMenu = new Overlay(p_oMenu, {
+                            visible: false, 
+                            context: [oButtonElement, "tl", "bl"]
+                        });
+
+            initMenu.call(me);
+        
+        }
     
     }
 
@@ -1227,14 +1370,14 @@ _setOnClick: function(p_oObject) {
 */
 _createButtonElement: function(p_sType) {
 
-    var sTagName = this.TAG_NAME,
-        oElement = document.createElement(sTagName);
+    var sNodeName = this.NODE_NAME,
+        oElement = document.createElement(sNodeName);
 
     oElement.innerHTML =  
     
-        "<" + sTagName + " class=\"first-child\">" + 
+        "<" + sNodeName + " class=\"first-child\">" + 
         (p_sType == "link" ? "<a></a>" : "<button type=\"button\"></button>") + 
-        "</" + sTagName + ">";
+        "</" + sNodeName + ">";
 
     return oElement;
 
@@ -1380,16 +1523,28 @@ _originalMaxHeight: -1,
 */
 _showMenu: function(p_oEvent) {
 
-    var oMenu = this._menu;
+    YAHOO.widget.MenuManager.hideVisible();
 
-    if(oMenu) {
+    if (m_oOverlayManager) {
 
-        YAHOO.widget.MenuManager.hideVisible();
+        m_oOverlayManager.hideAll();
+    
+    }
+
+
+    var oMenu = this._menu,
+        nViewportHeight = Dom.getViewportHeight(),
+        nMenuHeight,
+        nScrollTop,
+        nY;
+
+
+    if (oMenu instanceof Menu) {
 
         oMenu.cfg.applyConfig({
-                context:[this.get("id"), "tl", "bl"], 
-                clicktohide: false,
+                context: [this.get("id"), "tl", "bl"],
                 constraintoviewport: false,
+                clicktohide: false,
                 visible: true
             });
             
@@ -1400,20 +1555,18 @@ _showMenu: function(p_oEvent) {
             doesn't blur the menu after it gets focus.
         */
 
-        if(p_oEvent.type == "mousedown") {
+        if (p_oEvent.type == "mousedown") {
 
             Event.stopPropagation(p_oEvent);
 
         }
 
-        this._menu.focus(); 
+        this._menu.focus();
+
+        nMenuHeight = oMenu.element.offsetHeight;
 
 
-        var nViewportHeight = Dom.getViewportHeight(),
-            nMenuHeight = oMenu.element.offsetHeight;
-
-
-        if((oMenu.cfg.getProperty("y") + nMenuHeight) > nViewportHeight) {
+        if ((oMenu.cfg.getProperty("y") + nMenuHeight) > nViewportHeight) {
 
             this.logger.log("Current menu position will place a portion, or " +
                 "the entire menu outside the boundary of the viewport.  " + 
@@ -1421,27 +1574,23 @@ _showMenu: function(p_oEvent) {
 
             oMenu.align("bl", "tl");
 
-            var nY = oMenu.cfg.getProperty("y"),
+            nY = oMenu.cfg.getProperty("y");
 
-                nScrollTop = (
-                                document.documentElement.scrollTop || 
-                                document.body.scrollTop
-                            );
-            
+            nScrollTop = (document.documentElement.scrollTop || 
+                                document.body.scrollTop);
 
-            if(nScrollTop >= nY) {
 
-                if(this._originalMaxHeight == -1) {
+            if (nScrollTop >= nY) {
+
+                if (this._originalMaxHeight == -1) {
 
                     this._originalMaxHeight = 
                             oMenu.cfg.getProperty("maxheight");
 
                 }
 
-                oMenu.cfg.setProperty(
-                            "maxheight", 
-                            (nMenuHeight - ((nScrollTop - nY) + 20))
-                        );
+                oMenu.cfg.setProperty("maxheight", 
+                            (nMenuHeight - ((nScrollTop - nY) + 20)));
 
                 oMenu.align("bl", "tl");
 
@@ -1449,9 +1598,26 @@ _showMenu: function(p_oEvent) {
 
         }
 
-        oMenu.cfg.setProperty("constraintoviewport", true);
+    }
+    else if (oMenu instanceof Overlay) {
 
-    }            
+        oMenu.show();
+        oMenu.align("tl", "bl");
+
+        nMenuHeight = oMenu.element.offsetHeight;
+
+
+        if ((oMenu.cfg.getProperty("y") + nMenuHeight) > nViewportHeight) {
+
+            this.logger.log("Current menu position will place a portion, or " +
+                "the entire menu outside the boundary of the viewport.  " + 
+                "Repositioning the menu to stay inside the viewport.");
+
+            oMenu.align("bl", "tl");
+            
+        }
+
+    }
 
 },
 
@@ -1558,7 +1724,8 @@ _onDocumentMouseUp: function(p_oEvent) {
 
     if(sType == "menu" || sType == "split") {
 
-        this.removeStateCSSClasses((sType == "menu" ? "active" : "activeoption"));
+        this.removeStateCSSClasses(
+            (sType == "menu" ? "active" : "activeoption"));
 
         this._hideMenu();
 
@@ -2007,7 +2174,8 @@ _onAppendTo: function(p_oEvent) {
 */
 _onFormReset: function(p_oEvent) {
 
-    var sType = this.get("type");
+    var sType = this.get("type"),
+        oMenu = this._menu;
 
     if(sType == "checkbox" || sType == "radio") {
 
@@ -2015,7 +2183,7 @@ _onFormReset: function(p_oEvent) {
 
     }
 
-    if(this._menu) {
+    if(oMenu instanceof Menu) {
 
         this.resetValue("selectedMenuItem");
 
@@ -2085,14 +2253,33 @@ _onOption: function(p_oEvent) {
 
 
 /**
+* @method _onOverlayBeforeShow
+* @description "beforeshow" event handler for the 
+* <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a> instance 
+* serving as the button's menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+*/
+_onOverlayBeforeShow: function(p_sType) {
+
+    var oMenu = this._menu;
+
+    oMenu.render(this.get("element").parentNode);
+    
+    oMenu.beforeShowEvent.unsubscribe(this._onOverlayBeforeShow);
+
+},
+
+
+/**
 * @method _onMenuShow
 * @description "show" event handler for the button's menu.
 * @private
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
 */
-_onMenuShow: function(p_sType, p_aArgs) {
+_onMenuShow: function(p_sType) {
 
     Event.on(document, "mousedown", this._onDocumentMouseDown, null, this);
 
@@ -2124,19 +2311,19 @@ _onMenuShow: function(p_sType, p_aArgs) {
 * @private
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
 */
-_onMenuHide: function(p_sType, p_aArgs) {
+_onMenuHide: function(p_sType) {
     
-    if(this._originalMaxHeight != -1) {
+    var oMenu = this._menu,
+        sTitle,
+        sState;
+
+    if(oMenu instanceof Menu && this._originalMaxHeight != -1) {
     
         this._menu.cfg.setProperty("maxheight", this._originalMaxHeight);
 
     }
 
-
-    var sTitle,
-        sState;
     
     if(this.get("type") == "split") {
 
@@ -2197,11 +2384,19 @@ _onMenuKeyDown: function(p_sType, p_aArgs) {
 * @private
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
 */
-_onMenuRender: function(p_sType, p_aArgs) {
+_onMenuRender: function(p_sType) {
 
-    this.get("element").parentNode.appendChild(this._menu.element);
+    var oButtonElement = this.get("element"),
+        oButtonParent = oButtonElement.parentNode,
+        oMenuElement = this._menu.element;
+
+
+    if (oButtonParent != oButtonElement.parentNode) {
+
+        oButtonParent.appendChild(oMenuElement);
+    
+    }
 
 },
 
@@ -2380,14 +2575,14 @@ createHiddenFields: function () {
         oMenu = this._menu;
     
     
-        if (oMenu) {
+        if (oMenu instanceof Menu) {
 
             this.logger.log("Creating hidden field for menu.");
 
             oMenuField = oMenu.srcElement;
             oMenuItem = this.get("selectedMenuItem");
 
-            if (oMenuField && oMenuField.tagName.toUpperCase() == "SELECT") {
+            if (oMenuField && oMenuField.nodeName.toUpperCase() == "SELECT") {
 
                 oForm.appendChild(oMenuField);
                 oMenuField.selectedIndex = oMenuItem.index;
@@ -2579,11 +2774,11 @@ submitForm: function() {
 */
 init: function(p_oElement, p_oAttributes) {
 
-    var sTagName = p_oAttributes.type == "link" ? "A" : "BUTTON",
+    var sNodeName = p_oAttributes.type == "link" ? "A" : "BUTTON",
         oSrcElement = p_oAttributes.srcelement;
 
 
-    this._button = p_oElement.getElementsByTagName(sTagName)[0];
+    this._button = p_oElement.getElementsByTagName(sNodeName)[0];
 
 
     YAHOO.widget.Button.superclass.init.call(
@@ -2637,7 +2832,7 @@ init: function(p_oElement, p_oAttributes) {
     else if(
         !Dom.inDocument(oElement) && 
         oSrcElement && 
-        oSrcElement.tagName.toUpperCase() == "INPUT"
+        oSrcElement.nodeName.toUpperCase() == "INPUT"
     ) {
 
         var oParentNode = oSrcElement.parentNode;
@@ -2662,7 +2857,7 @@ init: function(p_oElement, p_oAttributes) {
     else if(
         this.get("type") != "link" && 
         Dom.inDocument(oElement) && 
-        oSrcElement.tagName.toUpperCase() == this.TAG_NAME
+        oSrcElement.nodeName.toUpperCase() == this.NODE_NAME
     ) {
 
         this._addListenersToForm();
@@ -2882,8 +3077,16 @@ initAttributes: function(p_oAttributes) {
     * <ul>
     * <li>Object specifying a <a href="YAHOO.widget.Menu.html">
     * YAHOO.widget.Menu</a> instance.</li>
+    * <li>Object specifying a <a href="YAHOO.widget.Overlay.html">
+    * YAHOO.widget.Overlay</a> instance.</li>
     * <li>String specifying the id attribute of the <code>&#60;div&#62;</code> 
-    * element used to create the menu.</li>
+    * element used to create the menu.  By default the menu will be created as 
+    * an instance of 
+    * <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>.  If the 
+    * <a href="YAHOO.widget.Menu.html#CSS_CLASS_NAME">default CSS class name 
+    * for YAHOO.widget.Menu</a> is applied to the <code>&#60;div&#62;</code> 
+    * element, it will be created as an instance of <a href="
+    * YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>.</li>
     * <li>String specifying the id attribute of the 
     * <code>&#60;select&#62;</code> element used to create the menu.</li>
     * <li>Object specifying the <code>&#60;div&#62;</code> element used to 
@@ -2909,6 +3112,35 @@ initAttributes: function(p_oAttributes) {
     });
 
 
+    /**
+    * @config lazyloadmenu
+    * @description Boolean indicating the value to set for the 
+    * <a href="YAHOO.widget.Menu.html#lazyLoad">"lazyload"</a> configuration 
+    * property of the button's menu.  Setting "lazyloadmenu" to <code>true
+    * </code> will defer rendering of the button's menu until the first time it 
+    * is made visible.  If "lazyloadmenu" is set to <code>false</code>, the 
+    * button's menu will be rendered immediately if the button is in the 
+    * document, or in response to the button's "appendTo" event if the button 
+    * is not yet in the document.  In either case, the menu is rendered into 
+    * the button's parent HTML element.  <em>This attribute does not apply if 
+    * a <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a> 
+    * or <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a> instance 
+    * is passed as the value of the button's "menu" configuration attribute.  
+    * <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a> or 
+    * <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a> instances 
+    * should be rendered before being set as the value for the "menu" 
+    * configuration attribute.</em>
+    * @default true
+    * @type Boolean
+    */
+    this.setAttributeConfig("lazyloadmenu", {
+
+        value: (oAttributes.lazyloadmenu === false ? false : true),
+        validator: Lang.isBoolean
+
+    });
+
+
 	/**
 	* @config selectedMenuItem
     * @description Reference to the item in the button's menu that is
@@ -2918,8 +3150,9 @@ initAttributes: function(p_oAttributes) {
 	*/
     this.setAttributeConfig("selectedMenuItem", {
 
-        value: 0
-    
+        value: 0,
+        validator: Lang.isNumber
+
     });
 
 
@@ -3003,7 +3236,8 @@ isActive: function() {
 /**
 * @method getMenu
 * @description Returns a reference to the button's menu.
-* @return {<a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>}
+* @return {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>|<a 
+* href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>}
 */
 getMenu: function() {
 
@@ -3027,7 +3261,8 @@ getForm: function() {
 
 /** 
 * @method getHiddenFields
-* @description Returns an <code>&#60;input&#62;</code> element or array of form elements used to represent the button when its parent form is submitted.
+* @description Returns an <code>&#60;input&#62;</code> element or array of 
+* form elements used to represent the button when its parent form is submitted.
 * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
 * one-html.html#ID-6043025">HTMLInputElement</a>|Array}
 */
@@ -3128,7 +3363,7 @@ YAHOO.widget.Button.onFormKeyPress = function(p_oEvent) {
 
     var oTarget = Event.getTarget(p_oEvent),
         nCharCode = Event.getCharCode(p_oEvent),
-        sTagName = oTarget.tagName && oTarget.tagName.toUpperCase(),
+        sNodeName = oTarget.nodeName && oTarget.nodeName.toUpperCase(),
         sType = oTarget.type,
 
         /*
@@ -3158,9 +3393,9 @@ YAHOO.widget.Button.onFormKeyPress = function(p_oEvent) {
         oFollowingSubmitButton; 
 
 
-    if (nCharCode == 13 && ((sTagName == "INPUT" && (sType == "text" || 
+    if (nCharCode == 13 && ((sNodeName == "INPUT" && (sType == "text" || 
         sType == "password" || sType == "checkbox" || sType == "radio" || 
-        sType == "file") ) || sTagName == "SELECT"))
+        sType == "file") ) || sNodeName == "SELECT"))
     {
 
 
@@ -3169,7 +3404,7 @@ YAHOO.widget.Button.onFormKeyPress = function(p_oEvent) {
             var sId,
                 oSrcElement;
     
-            switch (p_oElement.tagName.toUpperCase()) {
+            switch (p_oElement.nodeName.toUpperCase()) {
     
                 case "INPUT":
                 case "BUTTON":
