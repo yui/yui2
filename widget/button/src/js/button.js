@@ -73,44 +73,6 @@
 
     // Private methods
 
-
-    /**
-    * @method getFirstElement
-    * @description Returns an HTML element's first HTML element node.
-    * @private
-    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-    * level-one-html.html#ID-58190037">HTMLElement</a>} p_oElement Object 
-    * reference specifying the element to be evaluated.
-    * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-    * level-one-html.html#ID-58190037">HTMLElement</a>}
-    */
-    function getFirstElement(p_oElement) {
-    
-        var oFirstChild = p_oElement.firstChild,
-            oNextSibling;
-    
-        if (oFirstChild) {
-    
-            if (oFirstChild.nodeType == 1) {
-    
-                return oFirstChild;
-    
-            }
-            else {
-    
-                oNextSibling = oFirstChild.nextSibling;
-    
-                if (oNextSibling && oNextSibling.nodeType == 1) {
-                
-                    return oNextSibling;
-                
-                }
-    
-            }
-    
-        }
-    
-    }
     
     
     /**
@@ -255,6 +217,12 @@
     
             setAttributeFromDOMAttribute("type");
     
+            if (p_oAttributes.type == "button") {
+            
+                p_oAttributes.type = "push";
+            
+            }
+    
             if ( !("disabled" in p_oAttributes) ) {
     
                 p_oAttributes.disabled = p_oElement.disabled;
@@ -266,7 +234,7 @@
             setAttributeFromDOMAttribute("title");
     
         }
-        
+
     
         switch (sSrcElementNodeName) {
         
@@ -280,9 +248,6 @@
             break;
     
         case "INPUT":
-
-            setAttributeFromDOMAttribute("id");
-            p_oElement.removeAttribute("id");
 
             setFormElementProperties();
 
@@ -320,7 +285,8 @@
             break;
         
         }
-    
+
+        p_oElement.removeAttribute("id");
     
         setAttributeFromDOMAttribute("tabindex");
         setAttributeFromDOMAttribute("accesskey");
@@ -358,45 +324,46 @@
         var oAttributes = p_oConfig.attributes,
             oSrcElement = oAttributes.srcelement,
             sSrcElementNodeName = oSrcElement.nodeName.toUpperCase(),
-            oFirstChild,
-            oButton,
-            sButtonNodeName;
+            me = this;
     
     
         if (sSrcElementNodeName == this.NODE_NAME) {
     
             p_oConfig.element = oSrcElement;
             p_oConfig.id = oSrcElement.id;
-    
-            oFirstChild = getFirstElement(p_oConfig.element);
-    
-            Dom.addClass(oFirstChild, "first-child");
-    
-            if (oFirstChild) {
-    
-                oButton = getFirstElement(oFirstChild);
-    
-    
-                if (oButton) {
-    
-                    sButtonNodeName = oButton.nodeName.toUpperCase();
-    
-    
-                    if (sButtonNodeName == "A" || sButtonNodeName == "BUTTON") {
-    
-                        setAttributesFromSrcElement.call(this, oButton, 
-                                oAttributes);
-                    
-                    }
+
+            Dom.getElementsBy(function (p_oElement) {
+            
+                switch (p_oElement.nodeName.toUpperCase()) {
+                
+                case "BUTTON":
+                case "A":
+                case "INPUT":
+
+                    setAttributesFromSrcElement.call(me, p_oElement, 
+                        oAttributes);
+
+                    break;                        
                 
                 }
-    
-            }
+            
+            }, "*", oSrcElement);
         
         }
-        else if (sSrcElementNodeName == "INPUT") {
+        else {
     
-            setAttributesFromSrcElement.call(this, oSrcElement, oAttributes);
+            switch (sSrcElementNodeName) {
+
+            case "BUTTON":
+            case "A":
+            case "INPUT":
+
+                setAttributesFromSrcElement.call(this, oSrcElement, 
+                    oAttributes);
+
+                break;
+
+            }
         
         }
     
@@ -452,7 +419,7 @@
                     "using the set of configuration attributes.");
     
             fnSuperClass.call(this, 
-                (this._createButtonElement(p_oElement.type)),
+                (this.createButtonElement(p_oElement.type)),
                 p_oElement);
     
         }
@@ -466,9 +433,15 @@
                 oElement = Dom.get(p_oElement);
     
                 if (oElement) {
+
+                    if (!oConfig.attributes.id) {
+                    
+                        oConfig.attributes.id = p_oElement;
+                    
+                    }
     
-                    this.logger = new YAHOO.widget.LogWriter("Button " + 
-                                        (oConfig.attributes.id || p_oElement));
+                    this.logger = new YAHOO.widget.LogWriter(
+                                        "Button " + oConfig.attributes.id);
                 
                     this.logger.log("Building the button using an existing " + 
                             "HTML element as a source element.");
@@ -486,7 +459,7 @@
                                 "the button.");
                 
                         oConfig.element = 
-                            this._createButtonElement(oConfig.attributes.type);
+                            this.createButtonElement(oConfig.attributes.type);
                 
                     }
                 
@@ -536,7 +509,7 @@
                             "  Creating a new HTML element for the button.");
             
                     oConfig.element = 
-                        this._createButtonElement(oConfig.attributes.type);
+                        this.createButtonElement(oConfig.attributes.type);
             
                 }
             
@@ -1354,29 +1327,7 @@
         
         
         // Protected methods
-        
-        
-        /**
-        * @method _createButtonElement
-        * @description Creates the button's element.
-        * @protected
-        * @param {String} p_sType String indicating the type of element 
-        * to create.
-        * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-        * level-one-html.html#ID-58190037">HTMLElement</a>}
-        */
-        _createButtonElement: function (p_sType) {
-        
-            var sNodeName = this.NODE_NAME,
-                oElement = document.createElement(sNodeName);
-        
-            oElement.innerHTML =  "<" + sNodeName + " class=\"first-child\">" + 
-                (p_sType == "link" ? "<a></a>" : 
-                "<button type=\"button\"></button>") + "</" + sNodeName + ">";
-        
-            return oElement;
-        
-        },
+
         
         
         /**
@@ -1751,8 +1702,6 @@
         
             function onMouseUp() {
             
-                console.log(this.get("label"));
-                
                 this._hideMenu();
                 this.removeListener("mouseup", onMouseUp);
             
@@ -2495,6 +2444,28 @@
         
         
         /**
+        * @method createButtonElement
+        * @description Creates the button's HTML elements.
+        * @param {String} p_sType String indicating the type of element 
+        * to create.
+        * @return {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+        * level-one-html.html#ID-58190037">HTMLElement</a>}
+        */
+        createButtonElement: function (p_sType) {
+        
+            var sNodeName = this.NODE_NAME,
+                oElement = document.createElement(sNodeName);
+        
+            oElement.innerHTML =  "<" + sNodeName + " class=\"first-child\">" + 
+                (p_sType == "link" ? "<a></a>" : 
+                "<button type=\"button\"></button>") + "</" + sNodeName + ">";
+        
+            return oElement;
+        
+        },
+
+        
+        /**
         * @method addStateCSSClasses
         * @description Appends state-specific CSS classes to the button's root 
         * DOM element.
@@ -2801,12 +2772,30 @@
         init: function (p_oElement, p_oAttributes) {
         
             var sNodeName = p_oAttributes.type == "link" ? "A" : "BUTTON",
-                oSrcElement = p_oAttributes.srcelement;
+                oSrcElement = p_oAttributes.srcelement,
+                oButton = p_oElement.getElementsByTagName(sNodeName)[0],
+                oInput;
         
+
+            if (!oButton) {
+
+                oInput = p_oElement.getElementsByTagName("INPUT")[0];
+
+
+                if (oInput) {
+
+                    oButton = document.createElement("BUTTON");
+                    oButton.setAttribute("type", "button");
+
+                    oInput.parentNode.replaceChild(oButton, oInput);
+                
+                }
+
+            }
+
+            this._button = oButton;
         
-            this._button = p_oElement.getElementsByTagName(sNodeName)[0];
-        
-        
+
             YAHOO.widget.Button.superclass.init.call(this, p_oElement, 
                 p_oAttributes);
         
@@ -2853,24 +2842,33 @@
                 }
         
             }
-            else if (!Dom.inDocument(oElement) && oSrcElement && 
-                oSrcElement.nodeName.toUpperCase() == "INPUT") {
-        
-                oParentNode = oSrcElement.parentNode;
-        
-                if (oParentNode) {
-        
-                    this.fireEvent("beforeAppendTo", {
-                        type: "beforeAppendTo",
-                        target: oParentNode
-                    });
+            else if (!Dom.inDocument(oElement) && oSrcElement) {
+
+                switch (oSrcElement.nodeName.toUpperCase()) {
+                
+                case "INPUT":
+                case "BUTTON":
+                case "A":
+
+                    oParentNode = oSrcElement.parentNode;
             
-                    oParentNode.replaceChild(oElement, oSrcElement);
+                    if (oParentNode) {
             
-                    this.fireEvent("appendTo", {
-                        type: "appendTo",
-                        target: oParentNode
-                    });
+                        this.fireEvent("beforeAppendTo", {
+                            type: "beforeAppendTo",
+                            target: oParentNode
+                        });
+                
+                        oParentNode.replaceChild(oElement, oSrcElement);
+                
+                        this.fireEvent("appendTo", {
+                            type: "appendTo",
+                            target: oParentNode
+                        });
+                    
+                    }
+                
+                    break;
                 
                 }
         
