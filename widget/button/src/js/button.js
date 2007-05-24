@@ -1504,8 +1504,13 @@
                     Event.stopPropagation(p_oEvent);
         
                 }
+
+
+                if (this.get("focusmenu")) {
         
-                this._menu.focus();
+                    this._menu.focus();
+                
+                }
         
                 nMenuHeight = oMenu.element.offsetHeight;
         
@@ -3196,7 +3201,22 @@
                 method: this._setOnClick
             
             });
+
+
+            /**
+            * @config focusmenu
+            * @description Boolean indicating whether or not the button's menu 
+            * should be focused when it is made visible.
+            * @type Boolean
+            * @default true
+            */
+            this.setAttributeConfig("focusmenu", {
         
+                value: (oAttributes.focusmenu === false ? false : true),
+                validator: Lang.isBoolean
+        
+            });
+
         },
         
         
