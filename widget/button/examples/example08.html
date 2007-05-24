@@ -35,6 +35,18 @@
                 padding:.5em;
 
             }
+            
+            #splitbutton3menu,
+            #splitbutton5menu {
+            
+                position:absolute;
+                visibility:hidden;
+                border:solid 1px #000;
+                padding:.5em;
+                background-color:#ccc;
+            
+            }
+            
 <?php
     if($g_sBuildType == "dev") {
         require_once("button_toolbar.css");
@@ -86,11 +98,16 @@
                     // Create a Button using the YUI Button markup
 
                     var oSplitButton2 = new YAHOO.widget.Button("splitbutton2", { type: "split", menu: "splitbutton2select" });
+                    
+                    
+                    var oSplitButton3 = new YAHOO.widget.Button("splitbutton3", { type: "split", menu: "splitbutton3menu" });
+                    
 <?php
     if($g_sBuildType == "dev") {
 ?>
                     registerButton(oSplitButton1);
                     registerButton(oSplitButton2);
+                    registerButton(oSplitButton3);                    
 <?php
     }
 ?>
@@ -102,7 +119,7 @@
 
                 // Create a Button without using existing markup    
     
-                var aSplitButton3Menu = [
+                var aSplitButton4Menu = [
                 
                     { text: "one", value: 1 },
                     { text: "two", value: 2 },
@@ -110,14 +127,34 @@
                 
                 ];
     
-                var oSplitButton3 = new YAHOO.widget.Button({ type: "split",  label: "Split Button 3", name: "splitbutton3", menu: aSplitButton3Menu, container: "splitbuttonsfromjavascript" });
+                var oSplitButton4 = new YAHOO.widget.Button({ type: "split",  label: "Split Button 4", name: "splitbutton3", menu: aSplitButton4Menu, container: "splitbuttonsfromjavascript" });
 <?php
     if($g_sBuildType == "dev") {
 ?>
-                    registerButton(oSplitButton3);
+                    registerButton(oSplitButton4);
 <?php
     }
 ?>
+
+                YAHOO.util.Event.onContentReady("splitbuttonsfromjavascript", function () {
+                
+                    var oOverlay = new YAHOO.widget.Overlay("splitbutton5menu", { visible:false });
+                    
+                    oOverlay.setBody("Split Button 5 Menu");
+                    oOverlay.render("splitbuttonsfromjavascript");
+    
+                    var oSplitButton5 = new YAHOO.widget.Button({ type: "split",  label: "Split Button 5", menu: oOverlay, container: "splitbuttonsfromjavascript" });
+
+                    <?php
+                        if($g_sBuildType == "dev") {
+                    ?>
+                        registerButton(oSplitButton5);
+                    <?php
+                        }
+                    ?>
+                
+                });
+
 
                 function onExampleSubmit(p_oEvent) {
 
@@ -177,6 +214,11 @@ print_r($_POST);
                         <option value="1">Two</option>
                         <option value="2">Three</option>                
                     </select>
+
+                    <input type="button" id="splitbutton3" name="splitbutton3_button" value="Split Button 3">
+                    <div id="splitbutton3menu" class="yui-overlay">
+                        <div class="bd">Split Button 3 Menu</div>
+                    </div>
 
                 </fieldset>
 

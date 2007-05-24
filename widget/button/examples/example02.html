@@ -69,9 +69,9 @@
     
                     // Create Buttons from existing markup
             
-                    var oLinkButton1 = new YAHOO.widget.Button("linkbutton1");
-                    var oLinkButton2 = new YAHOO.widget.Button("linkbutton2");
-                    var oLinkButton3 = new YAHOO.widget.Button("linkbutton3");
+                    var oLinkButton1 = new YAHOO.widget.Button("linkbutton1", { type: "link" });
+                    var oLinkButton2 = new YAHOO.widget.Button("linkbutton2", { type: "link" });
+                    var oLinkButton3 = new YAHOO.widget.Button("linkbutton3", { type: "link" });
 <?php
     if($g_sBuildType == "dev") {
 ?>
@@ -116,9 +116,9 @@
             <div id="linkbuttonsfrommarkup">
                 <h2>From Markup</h2>
     
-                <span id="linkbutton1" class="yui-button yui-link-button"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+                <a id="linkbutton1" href="http://www.yahoo.com">Yahoo!</a>
                 <span id="linkbutton2" class="yui-button yui-link-button"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
-                <span id="linkbutton3" class="yui-button yui-link-button"><span class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></span></span>
+                <span id="linkbutton3" class="yui-button yui-link-button"><em class="first-child"><a href="http://www.yahoo.com">Yahoo!</a></em></span>
     
             </div>
             

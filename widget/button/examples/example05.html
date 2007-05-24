@@ -72,12 +72,16 @@ for($i=1; $i<32; $i++) {
 
                     // Create a Button using the YUI Button markup
 
-                    var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2", { type:"submit", value: "submitbutton2value" });
+                    var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2");
+                    
+                    var oSubmitButton3 = new YAHOO.widget.Button("submitbutton3", { type:"submit", value: "submitbutton3value" });
+                    
 <?php
     if($g_sBuildType == "dev") {
 ?>
                     registerButton(oSubmitButton1);
                     registerButton(oSubmitButton2);
+                    registerButton(oSubmitButton3);
 <?php
     }
 ?>
@@ -89,11 +93,11 @@ for($i=1; $i<32; $i++) {
 
                 // Create a Button without using existing markup
 
-                var oSubmitButton3 = new YAHOO.widget.Button({ type:"submit", label:"Submit Form", id:"submitbutton3", name:"submitbutton3", value: "submitbutton3value", container:"submitbuttonsfromjavascript" });
+                var oSubmitButton4 = new YAHOO.widget.Button({ type:"submit", label:"Submit Form", id:"submitbutton4", name:"submitbutton4", value: "submitbutton4value", container:"submitbuttonsfromjavascript" });
 <?php
     if($g_sBuildType == "dev") {
 ?>
-                    registerButton(oSubmitButton3);
+                    registerButton(oSubmitButton4);
 <?php
     }
 ?>
@@ -170,7 +174,9 @@ print_r($_POST);
 
                     <input id="submitbutton1" type="submit" name="submitfield1" value="Submit Form">
 
-                    <span id="submitbutton2" class="yui-button yui-submit-button"><span class="first-child"><button type="button" name="submitfield2">Submit Form</button></span></span>
+                    <span id="submitbutton2" class="yui-button yui-submit-button"><span class="first-child"><input type="submit" name="submitfield2" value="Submit Form"></span></span>
+
+                    <span id="submitbutton3" class="yui-button yui-submit-button"><span class="first-child"><button type="button" name="submitfield3">Submit Form</button></span></span>
 
                 </fieldset>
 

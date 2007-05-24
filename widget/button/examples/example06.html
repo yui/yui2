@@ -72,12 +72,16 @@ for($i=1; $i<32; $i++) {
 
                     // Create a Button using the YUI Button markup
 
-                    var oResetButton2 = new YAHOO.widget.Button("resetbutton2", { type:"reset" });
+                    var oResetButton2 = new YAHOO.widget.Button("resetbutton2");
+
+                    var oResetButton3 = new YAHOO.widget.Button("resetbutton3", { type:"reset" });                    
+
 <?php
     if($g_sBuildType == "dev") {
 ?>
                     registerButton(oResetButton1);
                     registerButton(oResetButton2);
+                    registerButton(oResetButton3);
 <?php
     }
 ?>
@@ -89,11 +93,11 @@ for($i=1; $i<32; $i++) {
 
                 // Create a Button without using existing markup
 
-                var oResetButton3 = new YAHOO.widget.Button({ type:"reset", label:"Reset Form", id:"resetfield3", container: "resetbuttonsfromjavascript" });
+                var oResetButton4 = new YAHOO.widget.Button({ type:"reset", label:"Reset Form", id:"resetfield4", container: "resetbuttonsfromjavascript" });
 <?php
     if($g_sBuildType == "dev") {
 ?>
-                    registerButton(oResetButton3);
+                    registerButton(oResetButton4);
 <?php
     }
 ?>
@@ -142,7 +146,9 @@ for($i=1; $i<32; $i++) {
 
                     <input id="resetbutton1" type="reset" name="resetfield1" value="Reset Form">
 
-                    <span id="resetbutton2" class="yui-button yui-reset-button"><span class="first-child"><button type="button" name="resetfield2">Reset Form</button></span></span>
+                    <span id="resetbutton2" class="yui-button yui-reset-button"><span class="first-child"><input type="reset" name="resetfield2" value="Reset Form"></span></span>
+                    
+                    <span id="resetbutton3" class="yui-button yui-reset-button"><span class="first-child"><button type="button" name="resetfield3">Reset Form</button></span></span>
 
                 </fieldset>
 

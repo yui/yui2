@@ -34,6 +34,18 @@
                 padding:.5em;
 
             }
+
+            #menubutton3menu,
+            #menubutton5menu {
+            
+                position:absolute;
+                visibility:hidden;
+                border:solid 1px #000;
+                padding:.5em;
+                background-color:#ccc;
+            
+            }
+            
 <?php
     if($g_sBuildType == "dev") {
         require_once("button_toolbar.css");
@@ -85,11 +97,15 @@
                     // Create a Button using the YUI Button markup
 
                     var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menu", menu: "menubutton2select" });
+
+                    var oMenuButton3 = new YAHOO.widget.Button("menubutton3", { type: "menu", menu: "menubutton3menu" });
+
 <?php
     if($g_sBuildType == "dev") {
 ?>
                     registerButton(oMenuButton1);
                     registerButton(oMenuButton2);
+                    registerButton(oMenuButton3);
 <?php
     }
 ?>
@@ -103,14 +119,14 @@
 
                 function onMenuItemClick(p_sType, p_aArgs, p_oItem) {
     
-                    oMenuButton3.set("label", p_oItem.cfg.getProperty("text"));
+                    oMenuButton4.set("label", p_oItem.cfg.getProperty("text"));
                 
                 }
 
 
                 // Create a Button without using existing markup
 
-                var aMenuButton3Menu = [
+                var aMenuButton4Menu = [
 
                     { text: "one", value: 1, onclick: { fn: onMenuItemClick } },
                     { text: "two", value: 2, onclick: { fn: onMenuItemClick } },
@@ -118,14 +134,35 @@
                 
                 ];
 
-                var oMenuButton3 = new YAHOO.widget.Button({ type: "menu", label: "one", name:"mymenubutton", menu: aMenuButton3Menu, container: "menubuttonsfromjavascript" });            
+                var oMenuButton4 = new YAHOO.widget.Button({ type: "menu", label: "one", name:"mymenubutton", menu: aMenuButton4Menu, container: "menubuttonsfromjavascript" });            
+
 <?php
     if($g_sBuildType == "dev") {
 ?>
-                    registerButton(oMenuButton3);
+                    registerButton(oMenuButton4);
 <?php
     }
 ?>
+
+                YAHOO.util.Event.onContentReady("menubuttonsfromjavascript", function () {
+                
+                    var oOverlay = new YAHOO.widget.Overlay("menubutton5menu", { visible:false });
+                    
+                    oOverlay.setBody("Menu Button 5 Menu");
+                    oOverlay.render("menubuttonsfromjavascript");
+  
+                    var oMenuButton5 = new YAHOO.widget.Button({ type: "menu",  label: "Menu Button 5", menu: oOverlay, container: "menubuttonsfromjavascript" });
+
+<?php
+    if($g_sBuildType == "dev") {
+?>
+                    registerButton(oMenuButton5);
+<?php
+    }
+?>
+                
+                });
+
 
                 function onExampleSubmit(p_oEvent) {
 
@@ -186,6 +223,11 @@ print_r($_POST);
                         <option value="1">Two</option>
                         <option value="2">Three</option>                
                     </select>
+
+                    <input type="button" id="menubutton3" name="menubutton3_button" value="Menu Button 3">
+                    <div id="menubutton3menu" class="yui-overlay">
+                        <div class="bd">Menu Button 3 Menu</div>
+                    </div>
 
                 </fieldset>
 
