@@ -1,11 +1,10 @@
 /*foundational css*/
-td {
+.yui-dt-table th, .yui-dt-table td {
     overflow:hidden;
 }
 
 th .yui-dt-header {
     position:relative;
-    
 }
 
 th .yui-dt-label {
@@ -24,16 +23,6 @@ th .yui-dt-resizer {
     cursor:col-resize;
 }
 
-/*.yui-dt-paginator .yui-dt-first,
-.yui-dt-paginator .yui-dt-previous,
-.yui-dt-paginator .yui-dt-next
-.yui-dt-paginator .yui-dt-last,
-.yui-dt-paginator .yui-dt-number {
-    cursor:hand;
-    cursor:pointer;
-    text-decoration:underline;
-}*/
-
 /* foundational scrolling css */
 .yui-dt-scrollable  {
     *overflow-y:auto; /* for ie */
@@ -47,4 +36,8 @@ th .yui-dt-resizer {
 .yui-dt-scrollbody {
     display:block; /* for safari and opera */
     overflow:auto; /* for gecko */
+}
+
+.yui-dt-editor {
+    position:absolute;
 }

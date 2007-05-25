@@ -10,13 +10,18 @@
 <link type="text/css" rel="stylesheet" href="../assets/dpSyntaxHighlighter.css">
 <style type="text/css">
 /* custom css*/
-#editing {margin:1em;}
+#editing {margin:1em;margin-bottom:3em;}
 #editing table {border-collapse:collapse;}
 #editing th, #editing td {border:1px solid #000;padding:.25em;}
 #editing th {background-color:#696969;color:#fff;}/*dark gray*/
 #editing tr.yui-dt-odd {background-color:#eee;} /*light gray*/
 #editing td.yui-dt-editable.yui-dt-highlighted {background-color:#BEDAFF;} /*light blue*/
 #editing pre {font-family:verdana,arial; font-size:100%;}
+#editing .col4 {width:5em;}
+
+.yui-dt-editor {background-color:#fff; border:1px solid #BEDAFF;}
+.yui-dt-editor .yui-dt-button {text-align:right;}
+.yui-dt-editor input[type="checkbox"] {margin-left:.5em;}
 </style>
 </head>
 <body>
@@ -117,30 +122,82 @@ YAHOO.example.InlineEditing = new function() {
     /****************************************************************************/
     /****************************************************************************/
     /****************************************************************************/
-    this.formatDescription = function(elCell, oRecord, oColumn, oData) {
+    // Custom formatter for "address" column to preserve line breaks
+    this.formatAddress = function(elCell, oRecord, oColumn, oData) {
         elCell.innerHTML = "<pre>" + oData + "</pre>";
+    };
+
+    // Custom editor for city column to save input on "enter"
+    this.editCity = function(oEditor, oSelf) {
+        var elCell = oEditor.cell;
+        var oRecord = oEditor.record;
+        var oColumn = oEditor.column;
+        var elContainer = oEditor.container;
+        elContainer.style.height = elCell.offsetHeight + "px"; //(parseInt(elCell.offsetHeight,10)) + "px";
+        var value = oRecord.getData(oColumn.key);
+
+        // Textbox
+        var elTextbox = elContainer.appendChild(document.createElement("input"));
+        elTextbox.type = "text";
+        elTextbox.style.width = elCell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
+        elTextbox.value = value;
+
+        // Set up a listener
+        YAHOO.util.Event.addListener(elTextbox, "keyup", function(v){
+            // Save on "enter"
+            if(v.keyCode === 13) {
+                oSelf.saveCellEditor();
+            }
+            // Update the tracker value
+            else {
+                oSelf._oEditor.value = elTextbox.value;
+            }
+        });
+
+        // Select the text
+        elTextbox.select();
     };
     
     var myColumnHeaders = [
-        {key:"SKU"},
-        {key:"Quantity",editor:"textbox"},
-        {key:"Item",editor:"textbox"},
-        {key:"Description",editor:"textarea",formatter:this.formatDescription}
+        {key:"address", formatter:this.formatAddress, editor:"textarea"},
+        {key:"city", label: "city (click enter to save)", editor:this.editCity},
+        {key:"state", editor:"dropdown", editorOptions:{dropdownOptions:["small","medium","large"]}},
+        {key:"quantity", label:"quantity (w/validation)", editor:"textbox", editorOptions:{validator:YAHOO.widget.DataTable.validateNumber}},
+        {key:"radio", editor:"radio", editorOptions:{dropdownOptions:["yes","no","maybe"]}},
+        {key:"checkboxes", editor:"checkbox", editorOptions:{checkboxOptions:["red","yellow","blue"],disableBtns:true}},
+        {key:"date", editor:"date"}
     ];
     this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.addresses);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     this.myDataSource.responseSchema = {
-        fields: ["SKU","Quantity","Item","Description"]
+        fields: ["address","city","state","quantity","radio","checkboxes","date"]
     };
 
     this.myDataTable = new YAHOO.widget.DataTable("editing", this.myColumnSet,
             this.myDataSource, {caption:"Example: Inline Editing"});
-    this.myDataTable.subscribe("cellClickEvent", this.myDataTable.onEventEditCell);
-    this.myDataTable.subscribe("editorBlurEvent", this.myDataTable.saveEditorInput);
+            
+    // Set up editing flow
     this.myDataTable.subscribe("cellMouseoverEvent", this.myDataTable.onEventHighlightCell);
     this.myDataTable.subscribe("cellMouseoutEvent", this.myDataTable.onEventUnhighlightCell);
+    this.myDataTable.subscribe("cellClickEvent", this.myDataTable.onEventShowCellEditor);
+    
+    // Hook into the abstract method to customize UI of "checkboxes" editor
+    this.myDataTable.doBeforeShowCellEditor = function(oEditor) {
+        if(oEditor.column.key == "checkboxes") {
+            oEditor.container.style.width = oEditor.cell.offsetWidth + "px";
+            oEditor.container.style.height = oEditor.cell.offsetHeight + "px";
+        }
+    };
+
+    // Hook into custom event to customize save-flow of "checkboxes" editor
+    this.myEditorBlurHandler = function(oArgs) {
+        if(oArgs.columnEditor.column.key == "checkboxes") {
+            this.saveCellEditor();
+        }
+    };
+    this.myDataTable.subscribe("columnEditorBlurEvent", this.myEditorBlurHandler);
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

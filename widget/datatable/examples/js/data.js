@@ -67,6 +67,12 @@ YAHOO.example.Data = {
         {SKU:"83-38285", Quantity:87, Item:"Hockey Puck", Description:"Glow-in-the-dark hockey puck."}
     ],
 
+    addresses: [
+        {name:"John Smith", address:"123 Some Street", city:"San Francisco", state:"CA", quantity:5, radio:"yes", checkboxes:["red"], date:"3/15/2007"},
+        {name:"Joan Jones", address:"321 Another Ave", city:"New York", state:"NY", quantity:3, radio:"no", checkboxes:["red","blue"], date:"2/14/2006"},
+        {name:"Bob Uncle", address:"999 Random Road", city:"Los Angeles", state:"CA", quantity:0, radio:"maybe", checkboxes:["green"], date:"1/23/2004"}
+    ],
+
     bookorders: [
         {id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing"},
         {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life"},

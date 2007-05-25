@@ -159,6 +159,17 @@ YAHOO.example.CellSelection = new function() {
     // Subscribe to event for cell selection
     this.cellRangeSelectDataTable.subscribe("cellClickEvent", this.cellRangeSelectDataTable.onEventSelectCell);
 };
+
+/*var printSelections = function() {
+    var table1Tds = YAHOO.example.CellSelection.cellSelectDataTable.getSelectedTdEls();
+    var table2Tds = YAHOO.example.CellSelection.cellBlockSelectDataTable.getSelectedTdEls();
+    var table3Tds = YAHOO.example.CellSelection.cellRangeSelectDataTable.getSelectedTdEls();
+    var table1Cells = YAHOO.example.CellSelection.cellSelectDataTable.getSelectedCells();
+    var table2Cells = YAHOO.example.CellSelection.cellBlockSelectDataTable.getSelectedCells();
+    var table3Cells = YAHOO.example.CellSelection.cellRangeSelectDataTable.getSelectedCells();
+}
+<a href="javascript:printSelections()">clickme</a>
+*/
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

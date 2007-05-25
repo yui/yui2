@@ -151,6 +151,15 @@ YAHOO.example.RowSelection = new function() {
     // Subscribe to event for row selection
     this.singleSelectDataTable.subscribe("rowDblclickEvent", this.singleSelectDataTable.onEventSelectRow);
 };
+
+/*var printSelections = function() {
+    var table1Trs = YAHOO.example.RowSelection.standardSelectDataTable.getSelectedTrEls();
+    var table2Trs = YAHOO.example.RowSelection.singleSelectDataTable.getSelectedTrEls();
+    var table1Rows = YAHOO.example.RowSelection.standardSelectDataTable.getSelectedRows();
+    var table2Rows = YAHOO.example.RowSelection.singleSelectDataTable.getSelectedRows();
+}
+<a href="javascript:printSelections()">clickme</a>
+*/
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

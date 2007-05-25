@@ -97,6 +97,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     if(oColumn.editor && (child.editor === undefined)) {
                         child.editor = oColumn.editor;
                     }
+                    if(oColumn.editorOptions && (child.editorOptions === undefined)) {
+                        child.editorOptions = oColumn.editorOptions;
+                    }
                     if(oColumn.formatter && (child.formatter === undefined)) {
                         child.formatter = oColumn.formatter;
                     }
@@ -530,6 +533,14 @@ YAHOO.widget.Column.prototype.parser = null;
 YAHOO.widget.Column.prototype.editor = null;
 
 /**
+ * Defines the editor options for Column in an object literal of key:value pairs.
+ *
+ * @property editorOptions
+ * @type Object
+ */
+YAHOO.widget.Column.prototype.editorOptions = null;
+
+/**
  * True if Column is resizeable, false otherwise.
  *
  * @property resizeable
@@ -750,19 +761,19 @@ YAHOO.widget.Column.parseSelect = function(sMarkup) {
 };
 
 /**
- * Outputs editor markup into the given TD based on given Record.
+ * Instantiates or retrieves ColumnEditor instance.
  *
- * @method getEditor
+ * @method getColumnEditor
  * @param elCell {HTMLElement} The cell to edit.
  * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
  * @return YAHOO.widget.ColumnEditor
  */
-YAHOO.widget.Column.prototype.getEditor = function(elCell, oRecord) {
+YAHOO.widget.Column.prototype.getColumnEditor = function(elCell, oRecord) {
 //Sync up the arg signature for ColumnEditor constructor and show()
     var oEditor = this.editor;
     if(YAHOO.lang.isString(oEditor)) {
-        oEditor = new YAHOO.widget.ColumnEditor(this.editor);
-        oEditor.show(elCell, oRecord, this);
+        oEditor = new YAHOO.widget.ColumnEditor(this);
+        oEditor.show(elCell, oRecord);
         this.editor = oEditor;
     }
     else if(oEditor instanceof YAHOO.widget.ColumnEditor) {
@@ -782,14 +793,22 @@ YAHOO.widget.Column.prototype.getEditor = function(elCell, oRecord) {
  *
  * @class ColumnEditor
  * @constructor
- * @param elCell {HTMLElement} The cell to edit.
- * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
- * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
- * @parem sType {String} Type identifier
+ * @parem sType {String} Type identifier.
+ * @param elParent {HTMLElement} Parent element to attach to.
  */
-YAHOO.widget.ColumnEditor = function(sType) {
-    this.type = sType;
+YAHOO.widget.ColumnEditor = function(oColumn) {
+    this._sName = "instance" + YAHOO.widget.ColumnEditor._nCount;
 
+    // Validate Column and type
+    if((oColumn instanceof YAHOO.widget.Column) && YAHOO.lang.isString(oColumn.type)) {
+        this.column = oColumn;
+        this.type = oColumn.editor;
+    }
+    else {
+        YAHOO.log("Could not create ColumnEditor of type " +
+                YAHOO.widget.Logger.dump(this.type), "error", this.toString());
+    }
+    
     //TODO: make sure ColumnEditors get destroyed if widget gets destroyed
     // Works better to attach ColumnEditor to document.body
     // rather than the DataTable container
@@ -800,30 +819,32 @@ YAHOO.widget.ColumnEditor = function(sType) {
     //}
     //this.tableContainer = elCell.parentNode;
 
-    //var elParent = document.createElement("div");
-    //elParent.style.position = "relative";
-    var elContainer = document.body.appendChild(document.createElement("div"));//this.tableContainer.appendChild(document.createElement("div"));
-    //document.createElement("div");
-    elContainer.style.position = "absolute";
-    elContainer.style.zIndex = 9000;
+    var elContainer =
+            document.body.appendChild(document.createElement("div")); // attach editor to body
+            //this.tableContainer.appendChild(document.createElement("div")); // attach editor to table container
+            //document.createElement("div"); // wait to attach editor to cell container
     elContainer.id = "yui-dt-editor" + YAHOO.widget.ColumnEditor._nCount;
-    elContainer.className = YAHOO.widget.DataTable.CLASS_EDITOR;
-    //elParent.appendChild(elContainer);
-    //this.container = elParent;
+    YAHOO.util.Dom.addClass(elContainer, YAHOO.widget.DataTable.CLASS_EDITOR);
+    YAHOO.util.Dom.addClass(elContainer, "yui-dt-"+this.type);
+    YAHOO.util.Dom.addClass(elContainer, oColumn.className);
     this.container = elContainer;
 
-    switch(this.type) {
+    /*switch(this.type) {
+        case "dropdown":
+            YAHOO.widget.DataTable.formatDropdown(this.container, oRecord, this.column);
+            break;
         case "textbox":
-            this.createTextboxEditor();
+            YAHOO.widget.DataTable.formatTextbox(this.container, oRecord, this.column);
             break;
         case "textarea":
-            this.createTextareaEditor();
+            YAHOO.widget.DataTable.formatTextarea(this.container, oRecord, this.column);
             break;
         default:
             break;
-    }
-
+    }*/
+    
     YAHOO.widget.ColumnEditor._nCount++;
+    YAHOO.log("ColumnEditor initialized", "info", this.toString());
 };
 
 
@@ -842,7 +863,16 @@ YAHOO.widget.ColumnEditor = function(sType) {
  * @static
  * @default 0
  */
-YAHOO.widget.ColumnEditor._nCount =0;
+YAHOO.widget.ColumnEditor._nCount = 0;
+
+/**
+ * Unique instance name.
+ *
+ * @property _sName
+ * @type String
+ * @private
+ */
+YAHOO.widget.ColumnEditor.prototype._sName = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -881,8 +911,6 @@ YAHOO.widget.ColumnEditor.prototype.column = null;
  */
 YAHOO.widget.ColumnEditor.prototype.type = null;
 
-
-
 /**
  * Reference to form element(s) of the ColumnEditor.
  *
@@ -898,72 +926,211 @@ YAHOO.widget.ColumnEditor.prototype.input = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Public accessor to the unique name of the ColumnSet instance.
+ *
+ * @method toString
+ * @return {String} Unique name of the ColumnSet instance.
+ */
+
+YAHOO.widget.ColumnEditor.prototype.toString = function() {
+    return "ColumnEditor " + this._sName;
+};
+
+/*DELETE
+ * Creates a textbox in the ColumnEditor container.
+ *
+ * @method createTextboxEditor
+ */
+/*YAHOO.widget.ColumnEditor.prototype.createTextboxEditor = function() {
+    var elTextbox = this.container.appendChild(document.createElement("input"));
+    // For FF bug 236791
+    elTextbox.setAttribute("autocomplete","off");
+    this.input = elTextbox;
+};*/
+
+/*DELETE
+ * Creates a textarea in the ColumnEditor container.
+ *
+ * @method createTextareaEditor
+ */
+/*YAHOO.widget.ColumnEditor.prototype.createTextareaEditor = function() {
+    var elTextarea = this.container.appendChild(document.createElement("textarea"));
+    this.input = elTextarea;
+};*/
+
+/**
  * Shows ColumnEditor.
  *
  * @method show
  * @param elCell {HTMLElement} The cell to edit.
- * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
- * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
  */
-YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord, oColumn) {
+YAHOO.widget.ColumnEditor.prototype.show = function(elCell, oRecord) {
     this.cell = elCell;
     this.record = oRecord;
-    this.column = oColumn;
+
+    // Position container
+    this.move(elCell);
+
+    /*// Populate form field(s) with values
     switch(this.type) {
+        case "dropdown":
+            this.updateDropdownEditor(elCell, oRecord);
+            break;
         case "textbox":
-            this.showTextboxEditor(elCell, oRecord, oColumn);
+            this.updateTextboxEditor(elCell, oRecord);
             break;
         case "textarea":
-            this.showTextareaEditor(elCell, oRecord, oColumn);
+            this.updateTextareaEditor(elCell, oRecord);
+            break;
+        default:
+            break;
+    }*/
+    
+    var elInput;
+    switch(this.type) {
+        case "dropdown":
+            YAHOO.widget.DataTable.formatDropdown(this.container, oRecord, this.column);
+            elInput = this.container.getElementsByTagName("select")[0];
+            elInput.focus();
+            break;
+        case "textbox":
+            YAHOO.widget.DataTable.formatTextbox(this.container, oRecord, this.column);
+            elInput = this.container.getElementsByTagName("input")[0];
+            elInput.focus();
+            elInput.select();
+            break;
+        case "textarea":
+            YAHOO.widget.DataTable.formatTextarea(this.container, oRecord, this.column);
+            velInput = this.container.getElementsByTagName("textarea")[0];
+            elInput.focus();
+            elInput.select();
             break;
         default:
             break;
     }
+
+    // Display container
+    this.container.style.display = "block";
 };
 
 /**
- * Positions container over given element, aligning upper-left corners.
+ * Shows dropdown.
  *
- * @method moveContainerTo
- * @param elCell {HTMLElement} The element.
+ * @method updateDropdownEditor
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
  */
-YAHOO.widget.ColumnEditor.prototype.moveContainerTo = function(el) {
+YAHOO.widget.ColumnEditor.prototype.updateDropdownEditor = function(elCell, oRecord) {
+    // Highlight input
+    var elInput = this.container.getElementsByTagName("select")[0];
+    elInput.focus();
+};
+
+/**
+ * Shows textbox.
+ *
+ * @method updateTextboxEditor
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
+ */
+YAHOO.widget.ColumnEditor.prototype.updateTextboxEditor = function(elCell, oRecord) {
+    // Update form field
+    //this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
+    //this.input.style.height = (parseInt(elCell.offsetHeight,10)) + "px";
+
+    //TODO: Need a hook to format data out of RecordSet and into form field
+    //var value = oRecord.getData(oColumn.key);
+    //this.input.value = ((value !== null) && (value !== undefined)) ?
+            //oRecord.getData(oColumn.key) : "";
+    //this.input.tabIndex = 0;
+
+    // Highlight input
+    var elInput = this.container.getElementsByTagName("input")[0];
+    elInput.focus();
+    elInput.select();
+};
+
+/**
+ * Shows textarea.
+ *
+ * @method updateTextareaEditor
+ * @param elCell {HTMLElement} The cell to edit.
+ * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
+ * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
+ */
+YAHOO.widget.ColumnEditor.prototype.updateTextareaEditor = function(elCell, oRecord) {
+    // Update form field
+    //this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
+    //this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)) + "px";
+    //this.input.tabIndex = 0;
+
+    //TODO: Need a hook to format data out of RecordSet and into form field
+    //var value = oRecord.getData(oColumn.key);
+    //this.input.value = ((value !== null) && (value !== undefined)) ?
+            //oRecord.getData(oColumn.key) : "";
+
+    // Highlight input
+    var elInput = this.container.getElementsByTagName("textarea")[0];
+    elInput.focus();
+    elInput.select();
+};
+
+/**
+ * Positions ColumnEditor over given element if given, else over last known element.
+ *
+ * @method move
+ * @param el {HTMLElement} (Optional) The element to move to.
+ */
+YAHOO.widget.ColumnEditor.prototype.move = function(el) {
     /*var previousCell = this.container.parentNode;
     if(previousCell) {
         this.container = previousCell.removeChild(this.container);
     }
-    var newSib = el.firstChild || null;
-    el.replaceChild(this.container, newSib);
+    var newCell = el.firstChild || el;
+    el.appendChild(this.container, newCell);
     //el.insertBefore(this.container, newSib);*/
-    
-    var x,y;
 
+    el = el || this.cell;
+    var x, y, offsetEl, scrollEl;
+
+    // Don't use getXY for now. Instead, manually calculate offsets and scrolls.
     // Don't use getXY for Opera
-    if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+    //if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
         x = el.offsetLeft;
         y = el.offsetTop;
-        while(el.offsetParent) {
-            x += el.offsetParent.offsetLeft;
-            y += el.offsetParent.offsetTop;
-            el = el.offsetParent;
+        offsetEl = el;
+        while(offsetEl.offsetParent) {
+            x += offsetEl.offsetParent.offsetLeft;
+            y += offsetEl.offsetParent.offsetTop;
+            offsetEl = offsetEl.offsetParent;
         }
-    }
-    else {
+   // }
+    /*else {
         x = parseInt(YAHOO.util.Dom.getX(el),10);//xy[0] + 1;
         y = parseInt(YAHOO.util.Dom.getY(el),10);//xy[1] + 1;
+    }*/
+
+    scrollEl = el;
+    while(scrollEl.tagName.toLowerCase() !== "body") {
+        x -= scrollEl.scrollLeft;
+        y -= scrollEl.scrollTop;
+        scrollEl = scrollEl.parentNode;
     }
+
     this.container.style.left = x + "px";
     this.container.style.top = y + "px";
 };
 
-
 /**
- * Returns ColumnEditor data value.
+ * Returns ColumnEditor raw input value.
  *
- * @method getValue
+ * @method getInputValue
  * @return Object
  */
-YAHOO.widget.ColumnEditor.prototype.getValue = function() {
+YAHOO.widget.ColumnEditor.prototype.getInputValue = function() {
     var value;
     switch(this.type) {
         case "textbox":
@@ -979,100 +1146,6 @@ YAHOO.widget.ColumnEditor.prototype.getValue = function() {
 };
 
 /**
- * Creates a textbox editor in the DOM.
- *
- * @method createTextboxEditor
- * @return {HTML} ???
- */
-YAHOO.widget.ColumnEditor.prototype.createTextboxEditor = function() {
-    var elTextbox = this.container.appendChild(document.createElement("input"));
-    // For FF bug 236791
-    elTextbox.setAttribute("autocomplete","off");
-    this.input = elTextbox;
-};
-
-/**
- * Creates a textarea editor in the DOM.
- *
- * @method createTextareaEditor
- * @return {HTML} ???
- */
-YAHOO.widget.ColumnEditor.prototype.createTextareaEditor = function() {
-    var elTextarea = this.container.appendChild(document.createElement("textarea"));
-    this.input = elTextarea;
-};
-
-/**
- * Shows textbox.
- *
- * @method showTextboxEditor
- * @param elCell {HTMLElement} The cell to edit.
- * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
- * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
- */
-YAHOO.widget.ColumnEditor.prototype.showTextboxEditor = function(elCell, oRecord, oColumn) {
-    // Position container
-    this.moveContainerTo(elCell);
-
-    // Update form field
-    this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
-    this.input.style.height = (parseInt(elCell.offsetHeight,10)) + "px";
-
-    //TODO: Need a hook to format data out of RecordSet and into form field
-    var value = oRecord.getData(oColumn.key);
-    this.input.value = ((value !== null) && (value !== undefined)) ?
-            oRecord.getData(oColumn.key) : "";
-    this.input.tabIndex = 0;
-
-    // Display container
-    this.container.style.display = "block";
-
-    // Highlight input
-    this.input.focus();
-    this.input.select();
-};
-
-/**
- * Shows textarea.
- *
- * @method showTextareaEditor
- * @param elCell {HTMLElement} The cell to edit.
- * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
- * @param oColumn {YAHOO.widget.Column} The DataTable Column of the cell.
- */
-YAHOO.widget.ColumnEditor.prototype.showTextareaEditor = function(elCell, oRecord, oColumn) {
-    // Position container
-    this.moveContainerTo(elCell);
-
-    // Update form field
-    this.input.style.width = (parseInt(elCell.offsetWidth,10)) + "px";
-    this.input.style.height = 4*(parseInt(elCell.offsetHeight,10)) + "px";
-    this.input.tabIndex = 0;
-
-    //TODO: Need a hook to format data out of RecordSet and into form field
-    var value = oRecord.getData(oColumn.key);
-    this.input.value = ((value !== null) && (value !== undefined)) ?
-            oRecord.getData(oColumn.key) : "";
-
-    // Display container
-    this.container.style.display = "block";
-
-    // Highlight input
-    this.input.focus();
-    this.input.select();
-};
-
-/**
- * Hides ColumnEditor
- *
- * @method hide
- */
-YAHOO.widget.ColumnEditor.prototype.hide = function() {
-    this.input.tabIndex = -1;
-    this.container.style.display = "none";
-};
-
-/**
  * Returns ColumnEditor value
  *
  * @method getTextboxEditorValue
@@ -1080,7 +1153,8 @@ YAHOO.widget.ColumnEditor.prototype.hide = function() {
  */
 YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
     //TODO: convert value for RecordSet
-    return this.input.value;
+    var elInput = this.container.getElementsByTagName("input")[0];
+    return elInput.value;
 };
 
 /**
@@ -1092,6 +1166,15 @@ YAHOO.widget.ColumnEditor.prototype.getTextboxEditorValue = function() {
 YAHOO.widget.ColumnEditor.prototype.getTextareaEditorValue = function() {
     //TODO: convert value for RecordSet
     return this.input.value;
+};
+
+/**
+ * Hides ColumnEditor
+ *
+ * @method hide
+ */
+YAHOO.widget.ColumnEditor.prototype.hide = function() {
+    this.container.style.display = "none";
 };
 
 /****************************************************************************/

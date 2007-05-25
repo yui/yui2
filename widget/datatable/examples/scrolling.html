@@ -19,13 +19,14 @@
     *height:auto; /* for ie */
 }
 .yui-dt-scrollable  thead {
-    background:#696969; /* for ie */
+    background:#696969; /*dark gray*/ /* ie needs a background color */
+    color:#fff;
 }
 
 /* SET WIDTHS FOR EACH TH TO HELP ALIGN COLUMNS */
 /* IF ALL COLS CAN BE SAME WIDTH USE THIS:
 .yui-dt-scrollable th, .yui-dt-scrollbody td {
-    width:20em; 
+    width:20em;
 }*/
 /* OTHERWISE SET EACH COL WIDTH EXPLICITLY:*/
 .yui-dt-scrollable .col1 {
@@ -36,11 +37,11 @@
 }
 
 /* custom css*/
-#scroll {margin:1em;margin-bottom:3em;}
+#scroll {margin:1em;}
 #scroll table {border-collapse:collapse;}
 #scroll th, #scroll td {border:1px solid #000;}
-#scroll th {background-color:#696969;color:#fff;}/*dark gray*/
 #scroll tr.yui-dt-odd {background-color:#eee;} /*light gray*/
+
 </style>
 </head>
 <body>

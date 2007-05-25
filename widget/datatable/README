@@ -2,8 +2,11 @@ DataTable Release Notes
 
 ***
 
-* Row selection and cell selection is not supported within a single DataTable
-instance.
+* Row selection and cell selection is not supported concurrently within a single
+DataTable instance.
+* Scrolling a DataTable with an active ColumnEditor will fire an "editorBlurEvent".
+Implementers should take care to explicitly hide the ColumnEditor, as its
+position will be out of sync with its associated Cell element.
 
 
 
