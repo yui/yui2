@@ -4762,10 +4762,6 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
                     YAHOO.widget.DataTable.formatCheckbox(elCell, oRecord, oColumn, oData);
                     //classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
                     break;
-                /*case "counter":
-                    YAHOO.widget.DataTable.formatCounter(elCell);
-                    classname = YAHOO.widget.DataTable.CLASS_COUNTER;
-                    break;*/
                 case "currency":
                     YAHOO.widget.DataTable.formatCurrency(elCell, oRecord, oColumn, oData);
                     //classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
@@ -4799,7 +4795,8 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
                     //classname = YAHOO.widget.DataTable.CLASS_TEXTBOX;
                     break;
                default:
-                    elCell.innerHTML = (oData) ? oData.toString() : "";
+                    elCell.innerHTML = ((oData !== undefined) && (oData !== null)) ?
+                            oData.toString() : "";
                     //elCell.innerHTML = (oData) ? "<a href=\"#\">"+oData.toString()+"</a>" : "";
                     //classname = YAHOO.widget.DataTable.CLASS_STRING;
                     break;
@@ -4839,19 +4836,6 @@ YAHOO.widget.DataTable.formatCheckbox = function(elCell, oRecord, oColumn, oData
     elCell.innerHTML = "<input type=\"checkbox\"" + bChecked +
             " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
 };
-
-/*WITHHOLD FROM API DOC
- * Formats cells for Columns of type "counter".
- *
- * @method formatCounter
- * @param elCell {HTMLElement} Table cell element.
- * @static
- */
-/*YAHOO.widget.DataTable.formatCounter = function(elCell) {
-    //TODO: This breaks with pagination
-    var nTrIndex = elCell.parentNode.sectionRowIndex;
-    elCell.innerHTML = nTrIndex;
-};*/
 
 /**
  * Formats Number data for Columns of type "currency".
@@ -5917,8 +5901,17 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
             }
 
             if(fnEditor) {
+                // Create DOM input elements
                 fnEditor(this._oEditor, this);
-                //this._oEditor.isActive = true;
+                
+                // Show Save/Cancel buttons
+                if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
+                    this.showCellEditorBtns(elContainer);
+                }
+
+                // Hook to customize the UI
+                this.doBeforeShowCellEditor(this._oEditor);
+
                 this.activeColumnEditor = this._oEditor;
                 return;
             }
@@ -6038,18 +6031,22 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
     var checkboxOptions = (oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.checkboxOptions)) ?
             oColumn.editorOptions.checkboxOptions : [];
     var aCheckboxes = [];
+    var aLabels = [];
     for(var j=0; j<checkboxOptions.length; j++) {
         aCheckboxes[j] = elContainer.appendChild(document.createElement("input"));
         aCheckboxes[j].type = "checkbox";
-        aCheckboxes[j].tabIndex = 0;
+        aCheckboxes[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-chkbox" + j;
         aCheckboxes[j].value = checkboxOptions[j].value || checkboxOptions[j]; //TODO: fixme
         for(var k=0; k<aCheckedValues.length; k++) {
             if(aCheckboxes[j].value === aCheckedValues[k]) {
                 aCheckboxes[j].checked = true;
             }
         }
+        aLabels[j] = elContainer.appendChild(document.createElement("label"));
+        aLabels[j].htmlFor = aCheckboxes[j].id;
+        aLabels[j].innerHTML += checkboxOptions[j].label || checkboxOptions[j]; //TODO: fixme
 
-        // Set up a listener on each check box to update the tracker value
+        // Set up a listener on each check box to track the input value
         YAHOO.util.Event.addListener(aCheckboxes[j], "click",function(){
             aCheckedValues = [];
             for(var m=0; m<aCheckboxes.length; m++) {
@@ -6064,14 +6061,40 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
     
     // Focus the first checkbox
     oSelf._focusEl(aCheckboxes[0]);
-    
-    // Show Save/Cancel buttons
-    if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
-        oSelf.showCellEditorBtns(elContainer);
+};
+
+/**
+ * Enables Editor of type "date".
+ *
+ * @method editDate
+ */
+YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
+    var elCell = oEditor.cell;
+    var oRecord = oEditor.record;
+    var oColumn = oEditor.column;
+    var elContainer = oEditor.container;
+    var value = oRecord.getData(oColumn.key);
+
+    // Calendar widget
+    if(YAHOO.widget.Calendar) {
+        var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
+        var calContainer = elContainer.appendChild(document.createElement("div"));
+        calContainer.id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-dateContainer";
+        var calendar =
+                new YAHOO.widget.Calendar("yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-date",
+                calContainer.id,
+                {selected:selectedValue, pagedate:value});
+        calendar.render();
+        calContainer.style.cssFloat = "none";
+
+        var myDateHandler = function(type, args, obj) {//debugger;
+            oSelf._oEditor.value = new Date(args[0][0][0], args[0][0][1]-1, args[0][0][2]);
+        };
+        calendar.selectEvent.subscribe(myDateHandler);
     }
-    
-    // Hook to customize
-    oSelf.doBeforeShowCellEditor(oEditor);
+    else {
+        //TODO;
+    }
 };
 
 /**
@@ -6080,16 +6103,16 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
  * @method editDropdown
  */
 YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
-/*   var elCell = oEditor.cell;
-   var oRecord = oEditor.record;
-   var oColumn = oEditor.column;
-   var elContainer = oEditor.container;
+    var elCell = oEditor.cell;
+    var oRecord = oEditor.record;
+    var oColumn = oEditor.column;
+    var elContainer = oEditor.container;
     var value = oRecord.getData(oColumn.key);
 
     // Textbox
     var elDropdown = elContainer.appendChild(document.createElement("select"));
     var dropdownOptions = (oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.dropdownOptions)) ?
-            oColumn.editorOptions.dropdownOptions : null;
+            oColumn.editorOptions.dropdownOptions : [];
     for(var j=0; j<dropdownOptions.length; j++) {
         var elOption = document.createElement("option");
         elOption.value = dropdownOptions[j].value || dropdownOptions[j]; //TODO: fixme
@@ -6097,20 +6120,18 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
         elOption = elDropdown.appendChild(elOption);
         if(value === elDropdown.options[j].value) {
             elDropdown.options[j].selected = true;
-            //oSelf._oEditor.value = elDropdown.options[j].value
         }
     }
+    
+    // Set up a listener on each check box to track the input value
     YAHOO.util.Event.addListener(elDropdown, "change",
-            function(){
-                oSelf._oEditor.value = elDropdown[elDropdown.selectedIndex].value;
-                oSelf.saveCellEditor();
-            });
-    YAHOO.util.Event.addListener(elDropdown, "blur",
-            function(){
-                oSelf._oEditor.value = elDropdown[elDropdown.selectedIndex].value;
-                oSelf.cancelCellEditor();
-            });
-    elDropdown.focus();*/
+        function(){
+            oSelf._oEditor.value = elDropdown[elDropdown.selectedIndex].value;
+            //TODO: fire customevent so implementers can save on change
+    });
+            
+    // Focus the dropdown
+    oSelf._focusEl(elDropdown);
 };
 
 /**
@@ -6119,48 +6140,40 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
  * @method editRadio
  */
 YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
-/*   var elCell = oEditor.cell;
-   var oRecord = oEditor.record;
-   var oColumn = oEditor.column;
-   var elContainer = oEditor.container;
+    var elCell = oEditor.cell;
+    var oRecord = oEditor.record;
+    var oColumn = oEditor.column;
+    var elContainer = oEditor.container;
+    var value = oRecord.getData(oColumn.key);
 
     // Radio
     if(oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.radioOptions)) {
         var radioOptions = oColumn.editorOptions.radioOptions;
         var elForm = elContainer.appendChild(document.createElement("form"));
-        elForm.name = oSelf._nIndex + oColumn.key;
-        var elRadio;
+        elForm.name = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-form";
+        var aLabels = [];
+        var aRadios = [];
         for(var j=0; j<radioOptions.length; j++) {
-            elRadio = elForm.appendChild(document.createElement("input"));
-            elRadio.type = "radio";
-            elRadio.name = oSelf._nIndex + oColumn.key;
-            elRadio.value = radioOptions[j].value || radioOptions[j]; //TODO: fixme
-            //elCheckbox.innerHTML = radioOptions[j].text || radioOptions[j]; //TODO: fixme
-        }
-
-        // Input values
-        var value = oRecord.getData(oColumn.key);
-        elForm..checked = (value) ? true : false;
-        //oSelf._oEditor.value = elCheckbox.checked;
-        YAHOO.util.Event.addListener(elCheckbox, "click",
+            aRadios[j] = elForm.appendChild(document.createElement("input"));
+            aRadios[j].type = "radio";
+            aRadios[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-radiobtn" + j;
+            aRadios[j].name = oSelf._nIndex + oColumn.key;
+            aRadios[j].value = radioOptions[j].value || radioOptions[j]; //TODO: fixme
+            if(value === aRadios[j].value) {
+                aRadios[j].checked = true;
+                oSelf._focusEl(aRadios[j]);
+            }
+            aLabels[j] = elForm.appendChild(document.createElement("label"));
+            aLabels[j].htmlFor = aRadios[j].id;
+            aLabels[j].innerHTML += radioOptions[j].label || radioOptions[j]; //TODO: fixme
+            
+            // Set up a listener on each radio btn to track the input value
+            YAHOO.util.Event.addListener(aRadios[j], "click",
                 function(){
-                    oSelf._oEditor.value = elCheckbox.checked;
-                });
-
-        // Buttons
-        var elBtnsDiv = elContainer.appendChild(document.createElement("div"));
-        YAHOO.util.Dom.addClass(elBtnsDiv, YAHOO.widget.DataTable.CLASS_BUTTON);
-
-        // Save button
-        var elSaveBtn = elBtnsDiv.appendChild(document.createElement("button"));
-        elSaveBtn.innerHTML = "Save";
-        YAHOO.util.Event.addListener(elSaveBtn, "click", oSelf.saveCellEditor, oSelf, true);
-
-        // Cancel button
-        var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
-        elCancelBtn.innerHTML = "Cancel";
-        YAHOO.util.Event.addListener(elCancelBtn, "click", oSelf.cancelCellEditor, oSelf, true);
-    }*/
+                    oSelf._oEditor.value = this.value;
+            });
+        }
+    }
 };
 
 /**
@@ -6181,21 +6194,13 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
     elTextarea.style.height = (4*elCell.offsetHeight) + "px"; //(parseInt(elCell.offsetHeight,10)) + "px";
     elTextarea.value = value;
     
-    // Set up a listener to update the tracker value
+    // Set up a listener on each check box to track the input value
     YAHOO.util.Event.addListener(elTextarea, "keyup", function(){
         oSelf._oEditor.value = elTextarea.value;
     });
     
     // Select the text
     elTextarea.select();
-
-    // Show Save/Cancel buttons
-    if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
-        oSelf.showCellEditorBtns(elContainer);
-    }
-
-    // Hook to customize
-    oSelf.doBeforeShowCellEditor(oEditor);
 };
 
 /**
@@ -6203,7 +6208,7 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
  *
  * @method editTextbox
  */
-YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {debugger;
+YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
    var elCell = oEditor.cell;
    var oRecord = oEditor.record;
    var oColumn = oEditor.column;
@@ -6217,19 +6222,11 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {debugger;
     elTextbox.style.height = elCell.offsetHeight + "px"; //(parseInt(elCell.offsetHeight,10)) + "px";
     elTextbox.value = value;
 
-    // Set up a listener to update the tracker value
+    // Set up a listener on each check box to track the input value
     YAHOO.util.Event.addListener(elTextbox, "keyup", function(){oSelf._oEditor.value = elTextbox.value;});
 
     // Select the text
     elTextbox.select();
-
-    // Show Save/Cancel buttons
-    if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
-        oSelf.showCellEditorBtns(elContainer);
-    }
-
-    // Hook to customize
-    oSelf.doBeforeShowCellEditor(oEditor);
 };
 
 /*

@@ -68,9 +68,9 @@ YAHOO.example.Data = {
     ],
 
     addresses: [
-        {name:"John Smith", address:"123 Some Street", city:"San Francisco", state:"CA", quantity:5, radio:"yes", checkboxes:["red"], date:"3/15/2007"},
-        {name:"Joan Jones", address:"321 Another Ave", city:"New York", state:"NY", quantity:3, radio:"no", checkboxes:["red","blue"], date:"2/14/2006"},
-        {name:"Bob Uncle", address:"999 Random Road", city:"Los Angeles", state:"CA", quantity:0, radio:"maybe", checkboxes:["green"], date:"1/23/2004"}
+        {name:"John Smith", address:"123 Some Street", city:"San Francisco", state:"CA", quantity:5, radio:"yes", checkboxes:["red"], date:new Date("4/19/2007")},
+        {name:"Joan Jones", address:"321 Another Ave", city:"New York", state:"NY", quantity:3, radio:"no", checkboxes:["red","blue"], date:new Date("2/15/2006")},
+        {name:"Bob Uncle", address:"999 Random Road", city:"Los Angeles", state:"CA", quantity:0, radio:"maybe", checkboxes:["green"], date:new Date("1/23/2004")}
     ],
 
     bookorders: [
@@ -78,6 +78,13 @@ YAHOO.example.Data = {
         {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life"},
         {id:"po-0297", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud"},
         {id:"po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice"}
+    ],
+    
+    stateAbbr: [
+        "AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI",
+        "ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS",
+        "MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR",
+        "PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
     ],
     
     areacodes: [
