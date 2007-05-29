@@ -91,14 +91,14 @@
 
                     // Create a Button using an existing <input> element as a data source
 
-                    var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menu", menu: "menubutton1select" });
+                    var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menu", menu: "menubutton1select", autofocusmenu: false });
 
 
                     // Create a Button using the YUI Button markup
 
-                    var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menu", menu: "menubutton2select" });
+                    var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menu", menu: "menubutton2select", autofocusmenu: false });
 
-                    var oMenuButton3 = new YAHOO.widget.Button("menubutton3", { type: "menu", menu: "menubutton3menu" });
+                    var oMenuButton3 = new YAHOO.widget.Button("menubutton3", { type: "menu", menu: "menubutton3menu", autofocusmenu: false });
 
 <?php
     if($g_sBuildType == "dev") {
@@ -120,7 +120,7 @@
                 function onMenuItemClick(p_sType, p_aArgs, p_oItem) {
     
                     oMenuButton4.set("label", p_oItem.cfg.getProperty("text"));
-                
+                                    
                 }
 
 
@@ -134,7 +134,7 @@
                 
                 ];
 
-                var oMenuButton4 = new YAHOO.widget.Button({ type: "menu", label: "one", name:"mymenubutton", menu: aMenuButton4Menu, container: "menubuttonsfromjavascript" });            
+                var oMenuButton4 = new YAHOO.widget.Button({ type: "menu", label: "one", name:"mymenubutton", menu: aMenuButton4Menu, container: "menubuttonsfromjavascript", autofocusmenu: false });            
 
 <?php
     if($g_sBuildType == "dev") {
@@ -151,7 +151,7 @@
                     oOverlay.setBody("Menu Button 5 Menu");
                     oOverlay.render("menubuttonsfromjavascript");
   
-                    var oMenuButton5 = new YAHOO.widget.Button({ type: "menu",  label: "Menu Button 5", menu: oOverlay, container: "menubuttonsfromjavascript" });
+                    var oMenuButton5 = new YAHOO.widget.Button({ type: "menu",  label: "Menu Button 5", menu: oOverlay, container: "menubuttonsfromjavascript", autofocusmenu: false });
 
 <?php
     if($g_sBuildType == "dev") {
