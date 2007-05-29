@@ -1,12 +1,10 @@
 .yui-button  {
 
-    display:-moz-inline-stack; /* Gecko */
+    display:-moz-inline-box; /* Gecko */
     display:inline-block; /* IE, Opera and Safari */
-
     border-width:1px 0;
     border-style:solid;
     border-color:#999;
-
     background:#ecece3 url(../img/background.png) left center;
     margin:auto .25em;
     
@@ -22,13 +20,11 @@
 
 .yui-button .first-child {
 
-    display:block; /* Gecko, Opera and Safari */
+    display:block;
     *display:inline-block; /* IE */
-
     border-width:0 1px;
     border-style:solid;
     border-color:#999;
-    
     margin:0 -1px;
     *position:relative;
     *left:-1px;
@@ -38,8 +34,7 @@
 .yui-button button,
 .yui-button a {
 
-    display:block; /* Opera and Safari */
-    display:-moz-inline-block; /* Gecko */
+    display:block;
     *display:inline-block; /* IE */
     padding:.25em .5em;
     border:1px solid #ccc;
@@ -48,7 +43,7 @@
 
 .yui-button button {
 
-    overflow:visible; /* Remove superfluous padding for IE */
+    *overflow:visible; /* Remove superfluous padding for IE */
     font-size:100%; /* Makes form controls resizable in IE */
     background-color:transparent;
     cursor:pointer;
