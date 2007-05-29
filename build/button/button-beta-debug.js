@@ -11,7 +11,7 @@
 * default radio-button and check-box controls.</p>
 * <p>The Button Control supports the following types:</p>
 * <dl>
-* <dt>button</dt>
+* <dt>push</dt>
 * <dd>Basic push button that can execute a user-specified command when 
 * pressed.</dd>
 * <dt>link</dt>
