@@ -244,8 +244,8 @@ YAHOO.tool.TestRunner = (function(){
                             } else if (YAHOO.lang.isObject(shouldError[tests[i]])){
                             
                                 //if it's an object, check the instance and message
-                                if (!(thrown instanceof shouldError[tests[i]].constructor) 
-                                        || thrown.message != shouldError[tests[i]].message){
+                                if (!(thrown instanceof shouldError[tests[i]].constructor) || 
+                                        thrown.message != shouldError[tests[i]].message){
                                     error = new YAHOO.util.UnexpectedError(thrown);
                                     failed = true;                                    
                                 }
@@ -1100,6 +1100,30 @@ YAHOO.util.ArrayAssert = {
             throw new YAHOO.util.AssertionError(message || "Value not found in array.");
         }
     },
+    
+    /**
+     * Asserts that the given value is contained in an array at the specified index.
+     * This uses the triple equals sign so no type cohersion will occur.
+     * @param {Object} needle The value to look for.
+     * @param {Array} haystack The array to search in.
+     * @param {int} index The index at which the value should exist.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method indexOf
+     * @static
+     */
+    indexOf : function (needle /*:Object*/, haystack /*:Array*/, index /*:int*/, message /*:String*/) /*:Void*/ {
+    
+        //try to find the value in the array
+        for (var i=0; i < haystack.length; i++){
+            if (haystack[i] === needle){
+                YAHOO.util.Assert.areEqual(index, i, "Value exists at index " + i + " but should be at index " + index + ".");
+                return;
+            }
+        }
+        
+        //if it makes it here, it wasn't found at all
+        YAHOO.util.Assert.fail("Value doesn't exist in array.");        
+    },
         
     /**
      * Asserts that the values in an array are equal, and in the same position,
@@ -1175,7 +1199,33 @@ YAHOO.util.ArrayAssert = {
             YAHOO.util.Assert.areSame(expected[i], actual[i], 
                 message || "Values in position " + i + " are not the same.");
         }
+    },
+    
+    /**
+     * Asserts that the given value is contained in an array at the specified index,
+     * starting from the back of the array.
+     * This uses the triple equals sign so no type cohersion will occur.
+     * @param {Object} needle The value to look for.
+     * @param {Array} haystack The array to search in.
+     * @param {int} index The index at which the value should exist.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method lastIndexOf
+     * @static
+     */
+    lastIndexOf : function (needle /*:Object*/, haystack /*:Array*/, index /*:int*/, message /*:String*/) /*:Void*/ {
+    
+        //try to find the value in the array
+        for (var i=haystack.length; i >= 0; i--){
+            if (haystack[i] === needle){
+                YAHOO.util.Assert.areEqual(index, i, "Value exists at index " + i + " but should be at index " + index + ".");
+                return;
+            }
+        }
+        
+        //if it makes it here, it wasn't found at all
+        YAHOO.util.Assert.fail("Value doesn't exist in array.");        
     }
+    
 };
 YAHOO.namespace("util");
 
@@ -1310,6 +1360,8 @@ YAHOO.util.UserAction = {
                     break;
                 case "textevent": //DOM Level 3
                     type = "keypress";
+                    break;
+                    // @TODO was the fallthrough intentional, if so throw error
                 default:
                     throw new Error("simulateKeyEvent(): Event type '" + type + "' not supported.");
             }
@@ -1413,7 +1465,7 @@ YAHOO.util.UserAction = {
         } else if (YAHOO.lang.isObject(document.createEventObject)){ //IE
         
             //create an IE event object
-            var event = document.createEventObject();
+            event = document.createEventObject();
             
             //assign available properties
             event.bubbles = bubbles;
@@ -1619,7 +1671,7 @@ YAHOO.util.UserAction = {
         } else if (YAHOO.lang.isObject(document.createEventObject)){ //IE
         
             //create an IE event object
-            var event = document.createEventObject();
+            event = document.createEventObject();
             
             //assign available properties
             event.bubbles = bubbles;

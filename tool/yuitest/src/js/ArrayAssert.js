@@ -161,7 +161,6 @@ YAHOO.util.ArrayAssert = {
         
         //if it makes it here, it wasn't found at all
         YAHOO.util.Assert.fail("Value doesn't exist in array.");        
-    },
-        
+    }
     
 };

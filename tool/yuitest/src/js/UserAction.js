@@ -73,6 +73,8 @@ YAHOO.util.UserAction = {
                     break;
                 case "textevent": //DOM Level 3
                     type = "keypress";
+                    break;
+                    // @TODO was the fallthrough intentional, if so throw error
                 default:
                     throw new Error("simulateKeyEvent(): Event type '" + type + "' not supported.");
             }
@@ -176,7 +178,7 @@ YAHOO.util.UserAction = {
         } else if (YAHOO.lang.isObject(document.createEventObject)){ //IE
         
             //create an IE event object
-            var event = document.createEventObject();
+            event = document.createEventObject();
             
             //assign available properties
             event.bubbles = bubbles;
@@ -382,7 +384,7 @@ YAHOO.util.UserAction = {
         } else if (YAHOO.lang.isObject(document.createEventObject)){ //IE
         
             //create an IE event object
-            var event = document.createEventObject();
+            event = document.createEventObject();
             
             //assign available properties
             event.bubbles = bubbles;
