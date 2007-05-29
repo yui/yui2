@@ -69,11 +69,12 @@
             
                 //basic equality assertion - expected value, actual value, optional error message
                 Assert.areEqual(7, this.data.length, "Array should have seven items.");
-                Assert.areEqual(6, this.data[6], "Value should be 6.");
                 
                 //array-specific assertions
                 ArrayAssert.contains(6, this.data, "Array should contain 7.");
                 ArrayAssert.isNotEmpty(this.data, "Array should not be empty.");
+                ArrayAssert.indexOf(6, this.data, 6, "The value in position 6 should be 6.");
+
                 
                 //these two assertions are the same because we're dealing with primitives
                 ArrayAssert.itemsAreEqual([0,1,2,3,4,5,6], this.data, "Arrays should be equal.");
@@ -166,8 +167,6 @@
             
                 //basic equality assertion - expected value, actual value, optional error message
                 Assert.areEqual(6, this.data.length, "Array should have 6 items.");
-                Assert.areEqual(99, this.data[1], "Value at index 1 should be 99.");   
-                Assert.areEqual(100, this.data[2], "Value at index 2 should be 100.");   
                 
                 //array shouldn't be empty
                 ArrayAssert.isNotEmpty(this.data, "Array should not be empty.");                
@@ -175,6 +174,8 @@
                 //the new items should be there
                 ArrayAssert.contains(99, this.data, "Array should contain 99.");
                 ArrayAssert.contains(100, this.data, "Array should contain 100.");
+                ArrayAssert.indexOf(99, this.data, 1, "Value at index 1 should be 99.");   
+                ArrayAssert.indexOf(100, this.data, 2, "Value at index 2 should be 100.");   
                 
                 //these two assertions are the same because we're dealing with primitives
                 ArrayAssert.itemsAreEqual([0,99,100,3,4,5], this.data, "Arrays should be equal.");
@@ -200,13 +201,13 @@
             
                 //basic equality assertion - expected value, actual value, optional error message
                 Assert.areEqual(7, this.data.length, "Array should have 7 items."); 
-                Assert.areEqual(-1, this.data[0], "First item should be -1."); 
                 
                 //array shouldn't be empty
-                ArrayAssert.isNotEmpty(this.data, "Array should not be empty.");      
+                ArrayAssert.isNotEmpty(this.data, "Array should not be empty."); 
 
                 //the new item should be there
                 ArrayAssert.contains(-1, this.data, "Array should contain -1.");
+                ArrayAssert.indexOf(-1, this.data, 0, "First item should be -1."); 
             
                 //these two assertions are the same because we're dealing with primitives
                 ArrayAssert.itemsAreEqual([-1,0,1,2,3,4,5], this.data, "Arrays should be equal.");
