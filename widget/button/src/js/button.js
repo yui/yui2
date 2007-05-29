@@ -42,6 +42,30 @@
 
 (function () {
 
+
+    /**
+    * The Button class creates a rich, graphical button.
+    * @param {String} p_oElement String specifying the id attribute of the 
+    * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
+    * <code>&#60;span&#62;</code> element to be used to create the button.
+    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+    * one-html.html#ID-6043025">HTMLInputElement</a>|<a href="
+    * http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#
+    * ID-33759296">HTMLElement</a>} p_oElement Object reference for the 
+    * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
+    * <code>&#60;span&#62;</code> element to be used to create the button.
+    * @param {Object} p_oElement Object literal specifying a set of   
+    * configuration attributes used to create the button.
+    * @param {Object} p_oAttributes Optional. Object literal specifying a set  
+    * of configuration attributes used to create the button.
+    * @namespace YAHOO.widget
+    * @class Button
+    * @constructor
+    * @extends YAHOO.util.Element
+    */
+
+
+
     // Shorthard for utilities
 
     var Dom = YAHOO.util.Dom,
@@ -372,28 +396,7 @@
 
 
     //  Constructor
-    
-    
-    /**
-    * The Button class creates a rich, graphical button.
-    * @param {String} p_oElement String specifying the id attribute of the 
-    * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
-    * <code>&#60;span&#62;</code> element to be used to create the button.
-    * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-    * one-html.html#ID-6043025">HTMLInputElement</a>|<a href="
-    * http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#
-    * ID-33759296">HTMLElement</a>} p_oElement Object reference for the 
-    * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
-    * <code>&#60;span&#62;</code> element to be used to create the button.
-    * @param {Object} p_oElement Object literal specifying a set of   
-    * configuration attributes used to create the button.
-    * @param {Object} p_oAttributes Optional. Object literal specifying a set  
-    * of configuration attributes used to create the button.
-    * @namespace YAHOO.widget
-    * @class Button
-    * @constructor
-    * @extends YAHOO.util.Element
-    */
+
     YAHOO.widget.Button = function (p_oElement, p_oAttributes) {
     
         var fnSuperClass = YAHOO.widget.Button.superclass.constructor,
