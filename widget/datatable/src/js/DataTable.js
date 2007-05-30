@@ -253,7 +253,7 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     this.createEvent("tableDblclickEvent");
     
     /**
-     * Fired when a scrollable DataTable has a scroll.
+     * Fired when a fixed scrolling DataTable has a scroll.
      *
      * @event tableScrollEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -883,7 +883,7 @@ YAHOO.widget.DataTable.CLASS_HEADER = "yui-dt-header";
 YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
 
 /**
- * Class name assigned to the scrolling TBODY element of a scrollable DataTable.
+ * Class name assigned to the scrolling TBODY element of a fixed scrolling DataTable.
  *
  * @property YAHOO.widget.DataTable.CLASS_SCROLLBODY
  * @type String
@@ -1581,7 +1581,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     this._elContainer.innerHTML = "";
 
     // Set up scrolling
-    if(this.scrollable) {
+    if(this.fixedScrolling || this.scrollable) {
         //TODO: conf height
         YAHOO.util.Dom.addClass(this._elContainer,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
     }
@@ -1622,7 +1622,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     this._elTbody = elTable.appendChild(document.createElement("tbody"));
     this._elTbody.tabIndex = 0;
     YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_BODY);
-    if(this.scrollable) {
+    if(this.fixedScrolling || this.scrollable) {
         YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_SCROLLBODY);
     }
 };
@@ -1748,6 +1748,8 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     if(oColumn.className) {
         YAHOO.util.Dom.addClass(elTheadCell,oColumn.className);
     }
+    YAHOO.util.Dom.addClass(elTheadCell, "yui-dt-"+oColumn.key);
+    
     // Apply CSS for sorted tables
     if(this.sortedBy && this.sortedBy.key) {
         if(this.sortedBy.key === oColumn.key) {
@@ -2250,8 +2252,9 @@ YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
     var elTag = elTarget.tagName.toLowerCase();
     
     if(oSelf.activeColumnEditor) {
-        oSelf.activeColumnEditor.move();
-        oSelf.fireEvent("columnEditorBlurEvent", {columnEditor:oSelf.activeColumnEditor});
+        //oSelf.activeColumnEditor.move();
+        //oSelf.fireEvent("columnEditorBlurEvent", {columnEditor:oSelf.activeColumnEditor});
+        oSelf.cancelCellEditor();
     }
     
     oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
@@ -3367,11 +3370,21 @@ YAHOO.widget.DataTable.prototype.summary = null;
 YAHOO.widget.DataTable.prototype.fixedWidth = false;
 
 /**
- * True if primary TBODY should scroll while THEAD remains fixed.
+ * True if primary TBODY should scroll while THEAD remains fixed. When enabling
+ * this feature, captions should not be used, and the following features are
+ * not recommended: inline editing, resizeable columns.
  *
- * @property scrollable
+ * @property fixedScrolling
  * @type Boolean
  * @default false
+ */
+YAHOO.widget.DataTable.prototype.fixedScrolling = false;
+
+/**
+ * Deprecated in favor of fixedScrolling.
+ *
+ * @property scrollable
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.scrollable = false;
 
@@ -4795,6 +4808,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
                     //classname = YAHOO.widget.DataTable.CLASS_TEXTBOX;
                     break;
                default:
+                    type = "html";
                     elCell.innerHTML = ((oData !== undefined) && (oData !== null)) ?
                             oData.toString() : "";
                     //elCell.innerHTML = (oData) ? "<a href=\"#\">"+oData.toString()+"</a>" : "";
@@ -4803,8 +4817,10 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
             }
         }
 
+        //TODO: fixme
         //if(oColumn.className) {
-            YAHOO.util.Dom.addClass(elCell, "yui-dt-"+type);
+            //YAHOO.util.Dom.addClass(elCell, "yui-dt-"+type);
+            YAHOO.util.Dom.addClass(elCell, "yui-dt-"+oColumn.key);
         //}
 
         if(oColumn.editor) {

@@ -6,7 +6,7 @@ header('Content-type: application/json');
 
 // Define defaults
 $results = -1; // default get all
-$start = 0; // default start at 0
+$startIndex = 0; // default start at 0
 $sort = null; // default don't sort
 $dir = 'asc'; // default sort dir is asc
 
@@ -16,8 +16,8 @@ if(strlen($_GET['results']) > 0) {
 }
 
 // Start at which record?
-if(strlen($_GET['start']) > 0) {
-    $start = $_GET['start'];
+if(strlen($_GET['startIndex']) > 0) {
+    $startIndex = $_GET['startIndex'];
 }
 
 // Sorted?
@@ -34,9 +34,9 @@ else {
 }
 
 // Return the data
-returnData($results, $start, $sort, $dir);
+returnData($results, $startIndex, $sort, $dir);
 
-function returnData($results, $start, $sort, $dir) {
+function returnData($results, $startIndex, $sort, $dir) {
     // All records
     $allRecords = initArray();
 
@@ -57,14 +57,14 @@ function returnData($results, $start, $sort, $dir) {
     }
 
     // Invalid start value
-    if(is_null($start) || !is_numeric($start) || ($start < 0)) {
+    if(is_null($startIndex) || !is_numeric($startIndex) || ($startIndex < 0)) {
         // Default is zero
-        $start = 0;
+        $startIndex = 0;
     }
     // Valid start value
     else {
         // Convert to number
-        $start += 0;
+        $startIndex += 0;
     }
 
     // Invalid results value
@@ -80,7 +80,7 @@ function returnData($results, $start, $sort, $dir) {
     }
 
     // Iterate through records and return from start index
-    for($i=$start; $i<($start+$results); $i++) {
+    for($i=$startIndex; $i<($startIndex+$results); $i++) {
         $data[] = $allRecords[$i];
     }
 
@@ -88,7 +88,7 @@ function returnData($results, $start, $sort, $dir) {
     $returnValue = array(
         'recordsReturned'=>$results,
         'totalRecords'=>count($sorted),
-        'startIndex'=>$start,
+        'startIndex'=>$startIndex,
         'sort'=>$sort,
         'dir'=>$dir,
         'records'=>$data
