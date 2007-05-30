@@ -484,6 +484,17 @@ YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
     this._sendQuery(sQuery);
 };
 
+/**
+ * Overridable method gives implementers access to the query before it gets sent.
+ *
+ * @method doBeforeSendQuery
+ * @param sQuery {String} Query string.
+ * @return {String} Query string.
+ */
+YAHOO.widget.AutoComplete.prototype.doBeforeSendQuery = function(sQuery) {
+    return sQuery;
+};
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public events
@@ -1125,6 +1136,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
 
     sQuery = encodeURIComponent(sQuery);
     this._nDelayID = -1;    // Reset timeout ID because request has been made
+    sQuery = this.doBeforeSendQuery(sQuery);
     this.dataRequestEvent.fire(this, sQuery);
     this.dataSource.getResults(this._populateList, sQuery, this);
 };
