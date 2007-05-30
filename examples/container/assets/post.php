@@ -1,4 +1,7 @@
 <?php
+
+header('Content-type: application/x-javascript');
+
 print "data = { ";
 
 $index = 0;
