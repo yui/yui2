@@ -4319,6 +4319,13 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
         if(elCell) {
             nColumnIndex = elCell.yuiColumnId;
         }
+        // Validate TH element
+        else {
+            elCell = this.getThEl(column);
+            if(elCell) {
+                nColumnIndex = elCell.yuiColumnId;
+            }
+        }
     }
     
     // By Record index

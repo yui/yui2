@@ -9,6 +9,7 @@ $results = -1; // default get all
 $startIndex = 0; // default start at 0
 $sort = null; // default don't sort
 $dir = 'asc'; // default sort dir is asc
+$sort_dir = SORT_ASC;
 
 // How many records to get?
 if(strlen($_GET['results']) > 0) {
@@ -27,16 +28,18 @@ if(strlen($_GET['sort']) > 0) {
 
 // Sort dir?
 if((strlen($_GET['dir']) > 0) && ($_GET['dir'] == 'desc')) {
-    $dir = SORT_DESC;
+    $dir = 'desc';
+    $sort_dir = SORT_DESC;
 }
 else {
-    $dir = SORT_ASC;
+    $dir = 'asc';
+    $sort_dir = SORT_ASC;
 }
 
 // Return the data
-returnData($results, $startIndex, $sort, $dir);
+returnData($results, $startIndex, $sort, $dir, $sort_dir);
 
-function returnData($results, $startIndex, $sort, $dir) {
+function returnData($results, $startIndex, $sort, $dir, $sort_dir) {
     // All records
     $allRecords = initArray();
 
@@ -52,7 +55,7 @@ function returnData($results, $startIndex, $sort, $dir) {
         if(count($sortByCol) > 0) {
             // Sort the original data
             // Add $allRecords as the last parameter, to sort by the common key
-            array_multisort($sortByCol, $dir, $allRecords);
+            array_multisort($sortByCol, $sort_dir, $allRecords);
         }
     }
 
@@ -80,14 +83,18 @@ function returnData($results, $startIndex, $sort, $dir) {
     }
 
     // Iterate through records and return from start index
-    for($i=$startIndex; $i<($startIndex+$results); $i++) {
+    $lastIndex = $startIndex+$results;
+    if($lastIndex > count($allRecords)) {
+        $lastIndex = count($allRecords);
+    }
+    for($i=$startIndex; $i<($lastIndex); $i++) {
         $data[] = $allRecords[$i];
     }
 
     // Create return value
     $returnValue = array(
-        'recordsReturned'=>$results,
-        'totalRecords'=>count($sorted),
+        'recordsReturned'=>count($data),
+        'totalRecords'=>count($allRecords),
         'startIndex'=>$startIndex,
         'sort'=>$sort,
         'dir'=>$dir,
