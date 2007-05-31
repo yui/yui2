@@ -166,7 +166,7 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     for(var j=0; j < aInitialCategories.length; j++) {
         var sCategory = aInitialCategories[j];
 
-        // Add source to the internal array of filters
+        // Add category to the internal array of filters
         this._categoryFilters.push(sCategory);
 
         // Add checkbox element if UI is enabled
@@ -1097,6 +1097,10 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
  */
 YAHOO.widget.LogReader.prototype._onCategoryCreate = function(sType, aArgs, oSelf) {
     var category = aArgs[0];
+    
+    // Add category to the internal array of filters
+    oSelf._categoryFilters.push(category);
+
     if(oSelf._elFt) {
         oSelf._createCategoryCheckbox(category);
     }
@@ -1113,6 +1117,10 @@ YAHOO.widget.LogReader.prototype._onCategoryCreate = function(sType, aArgs, oSel
  */
 YAHOO.widget.LogReader.prototype._onSourceCreate = function(sType, aArgs, oSelf) {
     var source = aArgs[0];
+    
+    // Add source to the internal array of filters
+    oSelf._sourceFilters.push(source);
+
     if(oSelf._elFt) {
         oSelf._createSourceCheckbox(source);
     }
