@@ -328,7 +328,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * associative arrays.
      * @method dump
      * @param o {Object} The object to dump
-     * @param d {int} How deep to recurse child objects, default 0
+     * @param d {int} How deep to recurse child objects, default 3
      * @return {String} the dump result
      */
     dump: function(o, d) {
@@ -338,7 +338,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             return o;
         }
 
-        d = (l.isNumber(d)) ? d : 0;
+        d = (l.isNumber(d)) ? d : 3;
 
         if (l.isArray(o)) {
             s.push("[");

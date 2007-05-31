@@ -23,7 +23,7 @@ v=o[key];if(f){v=f(key,v,meta);}
 if(l.isObject(v)){if(l.isFunction(v)){break;}else if(l.isArray(v)){v=l.dump(v,parseInt(meta,10));}else{if(v.toString===Object.prototype.toString){v=l.dump(v,parseInt(meta,10));}else{v=v.toString();}}}else if(!l.isString(v)&&!l.isNumber(v)){break;}
 s=s.substring(0,i)+v+s.substring(j+1);}
 return s;},dump:function(o,d){var l=YAHOO.lang,i,len,s=[],OBJ="{...}";if(!l.isObject(o)||l.isFunction(o)){return o;}
-d=(l.isNumber(d))?d:0;if(l.isArray(o)){s.push("[");for(i=0,len=o.length;i<len;i=i+1){if(l.isObject(o[i])){s.push((d>0)?l.dump(o[i],d-1):OBJ);}else{s.push(o[i]);}
+d=(l.isNumber(d))?d:3;if(l.isArray(o)){s.push("[");for(i=0,len=o.length;i<len;i=i+1){if(l.isObject(o[i])){s.push((d>0)?l.dump(o[i],d-1):OBJ);}else{s.push(o[i]);}
 s.push(", ");}
 if(s.length>1){s.pop();}
 s.push("]");}else{s.push("{");for(i in o){if(l.hasOwnProperty(o,i)){s.push(i+" => ");if(l.isObject(o[i])){s.push((d>0)?l.dump(o[i],d-1):OBJ);}else{s.push(o[i]);}
