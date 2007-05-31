@@ -169,7 +169,10 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
         var x = YAHOO.util.Event.getPageX(e);
         var y = YAHOO.util.Event.getPageY(e);
         this.autoOffset(x, y);
-        this.setDragElPos(x, y);
+
+        // This causes the autoscroll code to kick off, which means autoscroll can
+        // happen prior to the check for a valid drag handle.
+        // this.setDragElPos(x, y);
     },
 
     // overrides YAHOO.util.DragDrop
