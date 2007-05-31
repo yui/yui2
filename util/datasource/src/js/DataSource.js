@@ -757,7 +757,10 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     var xhr = (this.dataType == YAHOO.util.DataSource.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     var bError = false;
-    //TODO: break out into overridable methods
+
+    // Access to the raw response before it gets parsed
+    oRawResponse = this.doBeforeParseData(oRequest, oRawResponse);
+
     switch(this.responseType) {
         case YAHOO.util.DataSource.TYPE_JSARRAY:
             if(xhr && oRawResponse.responseText) {
@@ -784,7 +787,6 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
             oParsedResponse = this.parseTextData(oRequest, oRawResponse);
             break;
         default:
-            //TODO: pass off to custom function
             //var contentType = oRawResponse.getResponseHeader["Content-Type"];
             YAHOO.log("Could not parse data for request \"" + oRequest +
                     "\" due to unknown response type", "warn", this.toString());
@@ -814,6 +816,20 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
 };
 
 /**
+ * Overridable method gives implementers access to the original raw response
+ * before the data gets parsed. Implementers should take care not to return an
+ * unparsable or otherwise invalid raw response.
+ *
+ * @method doBeforeParseData
+ * @param oRequest {Object} Request object.
+ * @param oRawResponse {Object} The raw response from the live database.
+ * @return {Object} Raw response for parsing.
+ */
+YAHOO.util.DataSource.prototype.doBeforeParseData = function(oRequest, oRawResponse) {
+    return oRawResponse;
+};
+
+/**
  * Overridable method gives implementers access to the original raw response and
  * the parsed response (parsed against the given schema) before the data
  * is added to the cache (if applicable) and then sent back to callback function.
@@ -824,7 +840,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
  * @param oRequest {Object} Request object.
  * @param oRawResponse {Object} The raw response from the live database.
  * @param oParsedResponse {Object} The parsed response to return to calling object.
- * @return {Object} Parsed response object
+ * @return {Object} Parsed response object.
  */
 YAHOO.util.DataSource.prototype.doBeforeCallback = function(oRequest, oRawResponse, oParsedResponse) {
     return oParsedResponse;
