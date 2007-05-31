@@ -126,7 +126,7 @@ if (!YAHOO.util.Event) {
             /**
              * The number of times we should look for elements that are not
              * in the DOM at the time the event is requested after the document
-             * has been loaded.  The default is 200@amp;50 ms, so it will poll
+             * has been loaded.  The default is 4000@amp;10 ms, so it will poll
              * for 10 seconds or until all outstanding handlers are bound
              * (whichever comes first).
              * @property POLL_RETRYS
@@ -134,7 +134,7 @@ if (!YAHOO.util.Event) {
              * @static
              * @final
              */
-            POLL_RETRYS: 200,
+            POLL_RETRYS: 4000,
 
             /**
              * The poll interval in milliseconds
@@ -202,13 +202,7 @@ if (!YAHOO.util.Event) {
             ADJ_SCOPE: 4,
 
             /**
-             * Safari detection is necessary to work around the preventDefault
-             * bug that makes it so you can't cancel a href click from the 
-             * handler.  Since this function has been used outside of this
-             * utility, it was changed to detect all KHTML browser to be more
-             * friendly towards the non-Safari browsers that share the engine.
-             * Internally, the preventDefault bug detection now uses the
-             * webkit property.
+             * Safari detection
              * @property isSafari
              * @private
              * @static
@@ -217,17 +211,7 @@ if (!YAHOO.util.Event) {
             isSafari: YAHOO.env.ua.webkit,
             
             /**
-             * If WebKit is detected, we keep track of the version number of
-             * the engine.  The webkit property will contain a string with
-             * the webkit version number if webkit is detected, null
-             * otherwise.
-             * Safari 1.3.2 (312.6): 312.8.1 <-- currently the latest
-             *                       available on Mac OSX 10.3.
-             * Safari 2.0.2: 416 <-- hasOwnProperty introduced
-             * Safari 2.0.4: 418 <-- preventDefault fixed (I believe)
-             * Safari 2.0.4 (419.3): 418.9.1 <-- current release
-             *
-             * http://developer.apple.com/internet/safari/uamatrix.html
+             * webkit version
              * @property webkit
              * @type string
              * @private
@@ -237,10 +221,7 @@ if (!YAHOO.util.Event) {
             webkit: YAHOO.env.ua.webkit,
             
             /**
-             * IE detection needed to properly calculate pageX and pageY.  
-             * capabilities checking didn't seem to work because another 
-             * browser that does not provide the properties have the values 
-             * calculated in a different manner than IE.
+             * IE detection 
              * @property isIE
              * @private
              * @static
@@ -282,8 +263,9 @@ if (!YAHOO.util.Event) {
              * @param {function} p_fn what to execute when the element is found.
              * @param {object}   p_obj an optional object to be passed back as
              *                   a parameter to p_fn.
-             * @param {boolean}  p_override If set to true, p_fn will execute
-             *                   in the scope of p_obj
+             * @param {boolean|object}  p_override If set to true, p_fn will execute
+             *                   in the scope of p_obj, if set to an object it
+             *                   will execute in the scope of that object
              *
              * @static
              */
@@ -298,21 +280,46 @@ if (!YAHOO.util.Event) {
             },
 
             /**
-             * Executes the supplied callback when the DOM is first usable.
+             * Executes the supplied callback when the DOM is first usable.  This
+             * will execute immediately if called after the DOMReady event has
+             * fired.   @todo the DOMContentReady event does not fire when the
+             * script is dynamically injected into the page.  This means the
+             * DOMReady custom event will never fire in FireFox or Opera when the
+             * library is injected.  It _will_ fire in Safari, and the IE 
+             * implementation would allow for us to fire it if the defered script
+             * is not available.  We want this to behave the same in all browsers.
+             * Is there a way to identify when the script has been injected 
+             * instead of included inline?  Is there a way to know whether the 
+             * window onload event has fired without having had a listener attached 
+             * to it when it did so?
              *
              * @method onDOMReady
              *
              * @param {function} p_fn what to execute when the element is found.
              * @param {object}   p_obj an optional object to be passed back as
              *                   a parameter to p_fn.
-             * @param {boolean}  p_scope If set to true, p_fn will execute
+             * @param {boolean|object}  p_scope If set to true, p_fn will execute
              *                   in the scope of p_obj, if set to an object it
              *                   will execute in the scope of that object
              *
              * @static
              */
             onDOMReady: function(p_fn, p_obj, p_override) {
-                this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
+                if (DOMReady) {
+                    setTimeout(function() {
+                        var s = window;
+                        if (p_override) {
+                            if (p_override === true) {
+                                s = p_obj;
+                            } else {
+                                s = p_override;
+                            }
+                        }
+                        p_fn.call(s);
+                    }, 0);
+                } else {
+                    this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
+                }
             },
 
             /**
@@ -326,8 +333,9 @@ if (!YAHOO.util.Event) {
              * @param {function} p_fn what to execute when the element is ready.
              * @param {object}   p_obj an optional object to be passed back as
              *                   a parameter to p_fn.
-             * @param {boolean}  p_override If set to true, p_fn will execute
-             *                   in the scope of p_obj
+             * @param {boolean|object}  p_override If set to true, p_fn will execute
+             *                   in the scope of p_obj.  If an object, p_fn will
+             *                   exectute in the scope of that object
              *
              * @static
              */
@@ -353,8 +361,10 @@ if (!YAHOO.util.Event) {
              * @param {Function} fn        The method the event invokes
              * @param {Object}   obj    An arbitrary object that will be 
              *                             passed as a parameter to the handler
-             * @param {boolean}  override  If true, the obj passed in becomes
-             *                             the execution scope of the listener
+             * @param {boolean|object}  override  If true, the obj passed in becomes
+             *                             the execution scope of the listener. If an
+             *                             obejct, this object becomes the execution
+             *                             scope.
              * @return {boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
              *                        could not have the listener attached,
@@ -1376,27 +1386,35 @@ if (!YAHOO.util.Event) {
         // it is safe to do so.
         if (EU.isIE) {
 	
-            document.write(
-'<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"></script>');
-        
-            var el = document.getElementById("_yui_eu_dr");
-            el.onreadystatechange = function() {
-                if ("complete" == this.readyState) {
-                    this.parentNode.removeChild(this);
-                    YAHOO.util.Event._ready();
-                }
-            };
-
-            el=null;
-
             // Process onAvailable/onContentReady items when when the 
             // DOM is ready.
             YAHOO.util.Event.onDOMReady(
                     YAHOO.util.Event._tryPreloadAttach,
                     YAHOO.util.Event, true);
+
+            document.write(
+'<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"></script>');
+        
+            var el = document.getElementById("_yui_eu_dr");
+            if (el) {
+                el.onreadystatechange = function() {
+                    if ("complete" == this.readyState) {
+                        this.parentNode.removeChild(this);
+                        YAHOO.util.Event._ready();
+                    }
+                };
+            } else {
+                // The library was probably injected into the page
+                // rendering the onDOMReady functionality pointless.
+                // YAHOO.util.Event._ready();
+            }
+
+            el=null;
+
         
         // Safari: The document's readyState in Safari currently will
         // change to loaded/complete before images are loaded.
+        //} else if (EU.webkit) {
         } else if (EU.webkit) {
 
             EU._drwatch = setInterval(function(){
@@ -1411,6 +1429,8 @@ if (!YAHOO.util.Event) {
         // FireFox and Opera: These browsers provide a event for this
         // moment.
         } else {
+
+            // @todo will this fire when the library is injected?
 
             EU._simpleAdd(document, "DOMContentLoaded", EU._ready);
 
