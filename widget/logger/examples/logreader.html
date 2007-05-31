@@ -8,13 +8,12 @@
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
 <link type="text/css" rel="stylesheet" href="../assets/dpSyntaxHighlighter.css" />
 <style type="text/css">
-#styled .yui-log {font-family:verdana;}
+#styled {font-family:verdana;}
 #styled .info {background-color:blue;}
 #styled .warn {background-color:green;}
 #styled .error {background-color:red;}
 #styled .time {background-color:orange;}
 #styled .window {background-color:yellow;}
-
 </style>
 </head>
 
@@ -55,6 +54,41 @@
 &lt;script type="text/javascript"&gt;
 var myCompact = new YAHOO.widget.LogReader("compact", {verboseOutput:false});
 myCompact.setTitle("Compact Output");
+&lt;/script&gt;
+&lt;/body&gt;
+                </textarea>
+            </div>
+            <!-- Code sample ends -->
+        </div>
+    </div>
+
+    <!-- Example: Footer Disabled -->
+    <div class="example">
+        <div id="nofooter" class="container"></div>
+        <div class="content">
+            <h4>Example: Footer Disabled</h4>
+            <p><a href="#" class="logit">Log a simple message</a></p>
+
+            <p>By default, the footer displays checkboxes for easy filtration
+            of log messages by category and by source, as well as buttons to
+            pause/resume output and clear the console. In this example, the
+            footer is hidden from the UI, but filters can still be enabled or
+            disabled programmatically.</p>
+            
+            <p><a href="#" id="hideInfo">Hide "info" Category</a>
+            <a href="#" id="showInfo">Show "info" Category</a></p>
+
+            <!-- Sample code begins -->
+            <div class="code">
+                <h4>Sample Code</h4>
+
+                <textarea name="code" class="JScript" cols="60" rows="1">
+&lt;body&gt;
+&lt;div id="compact"&gt;&lt;/div&gt;
+
+&lt;script type="text/javascript"&gt;
+var myFooterDisabled = new YAHOO.widget.LogReader("nofooter", {footerEnabled:false});
+myFooterDisabled.setTitle("Footer Disabled");
 &lt;/script&gt;
 &lt;/body&gt;
                 </textarea>
@@ -283,14 +317,14 @@ myHidden.setTitle("Hidden LogReader");
         <!-- Code sample ends -->
     </div>
 
-    <!-- Example: Styled via CSS -->
+    <!-- Example: Styled via Custom CSS -->
     <div class="example">
         <div id="styled" class="container"></div>
         <div class="content">
-            <h4>Example: Styled via CSS</h4>
+            <h4>Example: Styled via Custom CSS</h4>
             <p><a href="#" class="logit">Log a simple message</a></p>
 
-            <p>The UI has been customized via CSS.</p>
+            <p>The UI has been customized via custom CSS.</p>
         </div>
 
 
@@ -301,6 +335,12 @@ myHidden.setTitle("Hidden LogReader");
             <textarea name="code" class="JScript" cols="60" rows="1">
 &lt;head&gt;
 &lt;style type="text/css"&gt;
+#styled {font-family:verdana;}
+#styled .info {background-color:blue;}
+#styled .warn {background-color:green;}
+#styled .error {background-color:red;}
+#styled .time {background-color:orange;}
+#styled .window {background-color:yellow;}
 &lt;/style&gt;
 &lt;/head&gt;
 
@@ -309,7 +349,7 @@ myHidden.setTitle("Hidden LogReader");
 
 &lt;script type="text/javascript"&gt;
 var myStyled = new YAHOO.widget.LogReader("styled");
-myStyled.setTitle("Styled via CSS");
+myStyled.setTitle("Styled via Custom CSS");
 &lt;/script&gt;
 &lt;/body&gt;
             </textarea>
@@ -330,6 +370,9 @@ myStyled.setTitle("Styled via CSS");
 <script type="text/javascript">
 var myCompact = new YAHOO.widget.LogReader("compact", {verboseOutput:false});
 myCompact.setTitle("Compact Output");
+
+var myFooterDisabled = new YAHOO.widget.LogReader("nofooter", {footerEnabled:false});
+myFooterDisabled.setTitle("Footer Disabled");
 
 var myOldestOnTop = new YAHOO.widget.LogReader("oldestOnTop", {newestOnTop:false});
 myOldestOnTop.setTitle("Oldest On Top");
@@ -368,7 +411,7 @@ myHidden.hide();
 myHidden.setTitle("Hidden LogReader");
 
 var myStyled = new YAHOO.widget.LogReader("styled");
-myStyled.setTitle("Styled via CSS");
+myStyled.setTitle("Styled via Custom CSS");
 
 // Click to log
 var clickToLog = function(e) {
@@ -379,6 +422,22 @@ var logitEls = YAHOO.util.Dom.getElementsByClassName("logit","a",YAHOO.util.Dom.
 for(var i=0; i<logitEls.length; i++) {
     YAHOO.util.Event.addListener(logitEls[i],"click",clickToLog);
 }
+
+// Click to hide "info" category
+var clickToHideInfo = function(e) {
+    YAHOO.util.Event.stopEvent(e);
+    myFooterDisabled.hideCategory("info");
+};
+var hideInfoEl = YAHOO.util.Dom.get("hideInfo");
+YAHOO.util.Event.addListener(hideInfoEl,"click",clickToHideInfo);
+
+// Click to show "info" category
+var clickToShowInfo = function(e) {
+    YAHOO.util.Event.stopEvent(e);
+    myFooterDisabled.showCategory("info");
+};
+var showInfoEl = YAHOO.util.Dom.get("showInfo");
+YAHOO.util.Event.addListener(showInfoEl,"click",clickToShowInfo);
 
 // Click to pause
 var clickToPause = function(e,LogReader) {

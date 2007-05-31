@@ -101,7 +101,7 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
                 this._elConsole.style.height = this.height;
             }
         }
-        // Don't create footer if disabled
+        // Don't create footer elements if footer is disabled
         if(!this._elFt && this.footerEnabled) {
             this._elFt = this._elContainer.appendChild(document.createElement("div"));
             this._elFt.className = "yui-log-ft";
@@ -161,20 +161,36 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
     
     // Initialize category filters
     this._categoryFilters = [];
-    var catsLen = YAHOO.widget.Logger.categories.length;
-    if(this._elCategoryFilters) {
-        for(var i=0; i < catsLen; i++) {
-            this._createCategoryCheckbox(YAHOO.widget.Logger.categories[i]);
+    var aInitialCategories = YAHOO.widget.Logger.categories;
+
+    for(var j=0; j < aInitialCategories.length; j++) {
+        var sCategory = aInitialCategories[j];
+
+        // Add source to the internal array of filters
+        this._categoryFilters.push(sCategory);
+
+        // Add checkbox element if UI is enabled
+        if(this._elCategoryFilters) {
+            this._createCategoryCheckbox(sCategory);
         }
     }
+
     // Initialize source filters
     this._sourceFilters = [];
-    var sourcesLen = YAHOO.widget.Logger.sources.length;
-    if(this._elSourceFilters) {
-        for(var j=0; j < sourcesLen; j++) {
-            this._createSourceCheckbox(YAHOO.widget.Logger.sources[j]);
+    var aInitialSources = YAHOO.widget.Logger.sources;
+
+    for(j=0; j < aInitialSources.length; j++) {
+        var sSource = aInitialSources[j];
+
+        // Add source to the internal array of filters
+        this._sourceFilters.push(sSource);
+        
+        // Add checkbox element if UI is enabled
+        if(this._elSourceFilters) {
+            this._createSourceCheckbox(sSource);
         }
     }
+
     YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
     YAHOO.widget.Logger.sourceCreateEvent.subscribe(this._onSourceCreate, this);
 
@@ -469,7 +485,10 @@ YAHOO.widget.LogReader.prototype.showCategory = function(sCategory) {
 
     this._categoryFilters.push(sCategory);
     this._filterLogs();
-    this.getCheckbox(sCategory).checked = true;
+    var elCheckbox = this.getCheckbox(sCategory);
+    if(elCheckbox) {
+        elCheckbox.checked = true;
+    }
 };
 
 /**
@@ -487,7 +506,10 @@ YAHOO.widget.LogReader.prototype.hideCategory = function(sCategory) {
         }
     }
     this._filterLogs();
-    this.getCheckbox(sCategory).checked = false;
+    var elCheckbox = this.getCheckbox(sCategory);
+    if(elCheckbox) {
+        elCheckbox.checked = false;
+    }
 };
 
 /**
@@ -525,7 +547,10 @@ YAHOO.widget.LogReader.prototype.showSource = function(sSource) {
     }
     filtersArray.push(sSource);
     this._filterLogs();
-    this.getCheckbox(sSource).checked = true;
+    var elCheckbox = this.getCheckbox(sSource);
+    if(elCheckbox) {
+        elCheckbox.checked = true;
+    }
 };
 
 /**
@@ -543,7 +568,10 @@ YAHOO.widget.LogReader.prototype.hideSource = function(sSource) {
         }
     }
     this._filterLogs();
-    this.getCheckbox(sSource).checked = false;
+    var elCheckbox = this.getCheckbox(sSource);
+    if(elCheckbox) {
+        elCheckbox.checked = false;
+    }
 };
 
 /**
@@ -886,8 +914,6 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(sCategory) {
 
     if(this._elFt) {
         var elParent = this._elCategoryFilters;
-        var filters = this._categoryFilters;
-
         var elFilter = elParent.appendChild(document.createElement("span"));
         elFilter.className = "yui-log-filtergrp";
         
@@ -901,8 +927,6 @@ YAHOO.widget.LogReader.prototype._createCategoryCheckbox = function(sCategory) {
         chkCategory = elFilter.appendChild(chkCategory);
         chkCategory.checked = true;
 
-        // Add this checked filter to the internal array of filters
-        filters.push(sCategory);
         // Subscribe to the click event
         YAHOO.util.Event.addListener(chkCategory,'click',oSelf._onCheckCategory,oSelf);
 
@@ -928,8 +952,6 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(sSource) {
 
     if(this._elFt) {
         var elParent = this._elSourceFilters;
-        var filters = this._sourceFilters;
-
         var elFilter = elParent.appendChild(document.createElement("span"));
         elFilter.className = "yui-log-filtergrp";
 
@@ -943,8 +965,6 @@ YAHOO.widget.LogReader.prototype._createSourceCheckbox = function(sSource) {
         chkSource = elFilter.appendChild(chkSource);
         chkSource.checked = true;
 
-        // Add this checked filter to the internal array of filters
-        filters.push(sSource);
         // Subscribe to the click event
         YAHOO.util.Event.addListener(chkSource,'click',oSelf._onCheckSource,oSelf);
 
