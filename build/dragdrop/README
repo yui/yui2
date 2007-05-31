@@ -1,5 +1,8 @@
 Drag and Drop Release Notes
 
+2.3.0
+  * The document mousemove listener no longer returns true
+
 2.2.2
   * No change
 

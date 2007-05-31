@@ -571,21 +571,18 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         handleMouseUp: function(e) {
+            if (this.dragCurrent) {
+                clearTimeout(this.clickTimeout);
 
-            if (! this.dragCurrent) {
-                return;
+                if (this.dragThreshMet) {
+                    this.fireEvents(e, true);
+                } else {
+                }
+
+                this.stopDrag(e);
+
+                this.stopEvent(e);
             }
-
-            clearTimeout(this.clickTimeout);
-
-            if (this.dragThreshMet) {
-                this.fireEvents(e, true);
-            } else {
-            }
-
-            this.stopDrag(e);
-
-            this.stopEvent(e);
         },
 
         /**
@@ -645,36 +642,33 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         handleMouseMove: function(e) {
-            if (! this.dragCurrent) {
-                return true;
-            }
+            if (this.dragCurrent) {
 
-            // var button = e.which || e.button;
+                // var button = e.which || e.button;
 
-            // check for IE mouseup outside of page boundary
-            if (YAHOO.util.Event.isIE && !e.button) {
-                this.stopEvent(e);
-                return this.handleMouseUp(e);
-            }
-
-            if (!this.dragThreshMet) {
-                var diffX = Math.abs(this.startX - YAHOO.util.Event.getPageX(e));
-                var diffY = Math.abs(this.startY - YAHOO.util.Event.getPageY(e));
-                if (diffX > this.clickPixelThresh || 
-                            diffY > this.clickPixelThresh) {
-                    this.startDrag(this.startX, this.startY);
+                // check for IE mouseup outside of page boundary
+                if (YAHOO.util.Event.isIE && !e.button) {
+                    this.stopEvent(e);
+                    return this.handleMouseUp(e);
                 }
+
+                if (!this.dragThreshMet) {
+                    var diffX = Math.abs(this.startX - YAHOO.util.Event.getPageX(e));
+                    var diffY = Math.abs(this.startY - YAHOO.util.Event.getPageY(e));
+                    if (diffX > this.clickPixelThresh || 
+                                diffY > this.clickPixelThresh) {
+                        this.startDrag(this.startX, this.startY);
+                    }
+                }
+
+                if (this.dragThreshMet) {
+                    this.dragCurrent.b4Drag(e);
+                    this.dragCurrent.onDrag(e);
+                    this.fireEvents(e, false);
+                }
+
+                this.stopEvent(e);
             }
-
-            if (this.dragThreshMet) {
-                this.dragCurrent.b4Drag(e);
-                this.dragCurrent.onDrag(e);
-                this.fireEvents(e, false);
-            }
-
-            this.stopEvent(e);
-
-            return true;
         },
 
         /**
@@ -1865,7 +1859,8 @@ YAHOO.util.DragDrop.prototype = {
      */
     init: function(id, sGroup, config) {
         this.initTarget(id, sGroup, config);
-        Event.on(this.id, "mousedown", this.handleMouseDown, this, true);
+        Event.on(this._domRef || this.id, "mousedown", 
+                        this.handleMouseDown, this, true);
         // Event.on(this.id, "selectstart", Event.preventDefault);
     },
 
@@ -1884,12 +1879,14 @@ YAHOO.util.DragDrop.prototype = {
 
         // create a local reference to the drag and drop manager
         this.DDM = YAHOO.util.DDM;
-        // initialize the groups array
+
+        // initialize the groups object
         this.groups = {};
 
         // assume that we have an element reference instead of an id if the
         // parameter is not a string
         if (typeof id !== "string") {
+            this._domRef = id;
             id = Dom.generateId(id);
         }
 
@@ -2434,7 +2431,6 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * resetConstraints must be called if you manually reposition a dd element.
      * @method resetConstraints
-     * @param {boolean} maintainOffset
      */
     resetConstraints: function() {
 
@@ -2940,7 +2936,10 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
         var x = YAHOO.util.Event.getPageX(e);
         var y = YAHOO.util.Event.getPageY(e);
         this.autoOffset(x, y);
-        this.setDragElPos(x, y);
+
+        // This causes the autoscroll code to kick off, which means autoscroll can
+        // happen prior to the check for a valid drag handle.
+        // this.setDragElPos(x, y);
     },
 
     // overrides YAHOO.util.DragDrop
