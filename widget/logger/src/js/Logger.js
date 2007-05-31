@@ -17,7 +17,7 @@
 /****************************************************************************/
 
 // Define once
-if(typeof YAHOO.widget.Logger == "undefined") {
+if(!YAHOO.widget.Logger) {
     /**
      * The singleton Logger class provides core log management functionality. Saves
      * logs written through the global YAHOO.log function or written by a LogWriter
