@@ -2,8 +2,10 @@
 YUI Library - Event - Release Notes
 
 2.3.0
-  * EventProvider fireEvent will now create the event implicitly if it
-    does not already exist.
+  * Fixed an IE error occuring when the library is injected into the page.
+  * The onDOMReady listener will be executed immediately if the
+    DOMReady event had already fired prior to the call.
+  * Unsubscribe during the event handler works properly.
   * EventProvider unsubscribeAll will unsubscribe all listeners from
     all hosted custom events if the type is not specified.
 
