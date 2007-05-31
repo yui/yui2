@@ -6,23 +6,37 @@ include('inc/inc-top.php');
 
 div.workarea { padding:10px; float:left }
 
+div.workarea li {
+    margin: 1px;
+    cursor: move; 
+    zoom:1;
+}
+
 ul.draglist { 
     position: relative;
     width: 200px; 
-    height:300px;
+    height:240px;
     background: #f7f7f7;
     border: 1px solid gray;
     list-style: none;
     margin:0;
     padding:0;
+    overflow:auto;
 }
 
-ul.draglist li {
-    margin: 1px;
-    cursor: move; 
+ul.draglist_scroll { 
+    position: relative;
+    width: 200px; 
+    height:140px;
+    background: #f7f7f7;
+    border: 1px solid gray;
+    list-style: none;
+    margin:0;
+    padding:0;
+    overflow:auto;
 }
 
-ul.draglist_alt { 
+ul.draglist_shrinkwrap { 
     position: relative;
     width: 200px; 
     list-style: none;
@@ -33,14 +47,8 @@ ul.draglist_alt {
        list targetable.  Alternatively, we could leave the padding 
        off by default, adding it when we detect that the list is empty.
     */
-    padding-bottom:20px;
+    padding-bottom:30px;
 }
-
-ul.draglist_alt li {
-    margin: 1px;
-    cursor: move; 
-}
-
 
 li.list1 {
     background-color: #D1E6EC;
@@ -72,14 +80,15 @@ var DDM = YAHOO.util.DragDropMgr;
 YAHOO.example.DDApp = {
     init: function() {
 
-        var rows=3,cols=2,i,j;
+        var rows=9,cols=2,i,j;
         for (i=1;i<cols+1;i=i+1) {
             new YAHOO.util.DDTarget("ul"+i);
         }
 
         for (i=1;i<cols+1;i=i+1) {
             for (j=1;j<rows+1;j=j+1) {
-                new YAHOO.example.DDList("li" + i + "_" + j);
+                var dd=new YAHOO.example.DDList("li" + i + "_" + j);
+                dd.addInvalidHandleType("input");
             }
         }
 
@@ -126,6 +135,10 @@ YAHOO.example.DDList = function(id, sGroup, config) {
 
 YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
 
+    scrub: function(s) {
+        return s.replace(/\s(id|name)=[^\s>]*/gi, "");
+    },
+
     startDrag: function(x, y) {
         this.logger.log(this.id + " startDrag");
 
@@ -134,7 +147,10 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
         var clickEl = this.getEl();
         Dom.setStyle(clickEl, "visibility", "hidden");
 
-        dragEl.innerHTML = clickEl.innerHTML;
+        var html= this.scrub(clickEl.innerHTML);
+        //var html= clickEl.innerHTML;
+        dragEl.innerHTML = html;
+        //alert(html);
 
         Dom.setStyle(dragEl, "color", Dom.getStyle(clickEl, "color"));
         Dom.setStyle(dragEl, "backgroundColor", Dom.getStyle(clickEl, "backgroundColor"));
@@ -174,21 +190,27 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
         // or it was dropped on the current location of the source element.
         if (DDM.interactionInfo.drop.length === 1) {
 
-            // The position of the cursor at the time of the drop (YAHOO.util.Point)
-            var pt = DDM.interactionInfo.point; 
+            var destDD = DDM.getDDById(id);
+            var destEl = destDD.getEl();
 
-            // The region occupied by the source element at the time of the drop
-            var region = DDM.interactionInfo.sourceRegion; 
+            // An extra check to verify that we are really dropping on the list,
+            // needed in order to support scrolling lists.
+            if (destEl.tagName.toLowerCase() != "li") {
 
-            // Check to see if we are over the source element's location.  We will
-            // append to the bottom of the list once we are sure it was a drop in
-            // the negative space (the area of the list without any list items)
-            if (!region.intersect(pt)) {
-                var destEl = Dom.get(id);
-                var destDD = DDM.getDDById(id);
-                destEl.appendChild(this.getEl());
-                destDD.isEmpty = false;
-                DDM.refreshCache();
+                // The position of the cursor at the time of the drop (YAHOO.util.Point)
+                var pt = DDM.interactionInfo.point; 
+
+                // The region occupied by the source element at the time of the drop
+                var region = DDM.interactionInfo.sourceRegion; 
+
+                // Check to see if we are over the source element's location.  We will
+                // append to the bottom of the list once we are sure it was a drop in
+                // the negative space (the area of the list without any list items)
+                if (!region.intersect(pt)) {
+                    destEl.appendChild(this.getEl());
+                    destDD.isEmpty = false;
+                    DDM.refreshCache();
+                }
             }
 
         }
@@ -219,13 +241,19 @@ YAHOO.extend(YAHOO.example.DDList, YAHOO.util.DDProxy, {
             var orig_p = srcEl.parentNode;
             var p = destEl.parentNode;
 
-            if (this.goingUp) {
-                p.insertBefore(srcEl, destEl); // insert above
-            } else {
-                p.insertBefore(srcEl, destEl.nextSibling); // insert below
-            }
+            var y = Event.getPageY(e);
+            var p_region = Dom.getRegion(p);
 
-            DDM.refreshCache();
+            // only process if we are operating within the visible section of the list
+            if (y > p_region.top && y < p_region.bottom) {
+                if (this.goingUp) {
+                    p.insertBefore(srcEl, destEl); // insert above
+                } else {
+                    p.insertBefore(srcEl, destEl.nextSibling); // insert below
+                }
+
+                DDM.refreshCache();
+            }
         }
     }
 });
@@ -245,7 +273,8 @@ Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
     <div class="newsItem">
       <span id="user_actions">
         <input type="button" id="showButton" value="Show Current Order" />
-        <input type="button" id="switchButton" value="Remove List Background" />
+        <input type="button" id="switchButton" value="Show Scrolling List" />
+        
       </span>
       <h3>Sortable List - POINT mode</h3>
         <p>
@@ -266,9 +295,15 @@ Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
       <div class="workarea">
         <h3>List 1</h3>
         <ul id="ul1" class="draglist">
-          <li class="list1" id="li1_1">list 1, item 1</li>
+          <li class="list1" id="li1_1"><input type="radio" id="lir1_1"></input>list 1, item 1</li>
           <li class="list1" id="li1_2">list 1, item 2</li>
           <li class="list1" id="li1_3">list 1, item 3</li>
+          <li class="list1" id="li1_4">list 1, item 4</li>
+          <li class="list1" id="li1_5">list 1, item 5</li>
+          <li class="list1" id="li1_6">list 1, item 6</li>
+          <li class="list1" id="li1_7">list 1, item 7</li>
+          <li class="list1" id="li1_8">list 1, item 8</li>
+          <li class="list1" id="li1_9">list 1, item 9</li>
         </ul>
       </div>
 
@@ -278,6 +313,12 @@ Event.onDOMReady(YAHOO.example.DDApp.init, YAHOO.example.DDApp, true);
           <li class="list2" id="li2_1">list 2, item 1</li>
           <li class="list2" id="li2_2">list 2, item 2</li>
           <li class="list2" id="li2_3">list 2, item 3</li>
+          <li class="list2" id="li2_4">list 2, item 4</li>
+          <li class="list2" id="li2_5">list 2, item 5</li>
+          <li class="list2" id="li2_6">list 2, item 6</li>
+          <li class="list2" id="li2_7">list 2, item 7</li>
+          <li class="list2" id="li2_8">list 2, item 8</li>
+          <li class="list2" id="li2_9">list 2, item 9</li>
         </ul>
       </div>
 

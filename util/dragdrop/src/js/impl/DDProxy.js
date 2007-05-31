@@ -96,7 +96,7 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
     },
 
     applyConfig: function() {
-        this.logger.log("DDProxy applyConfig");
+        //this.logger.log("DDProxy applyConfig");
         YAHOO.util.DDProxy.superclass.applyConfig.call(this);
 
         this.resizeFrame = (this.config.resizeFrame !== false);

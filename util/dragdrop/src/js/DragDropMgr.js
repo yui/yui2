@@ -575,23 +575,20 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         handleMouseUp: function(e) {
+            if (this.dragCurrent) {
+                clearTimeout(this.clickTimeout);
 
-            if (! this.dragCurrent) {
-                return;
+                if (this.dragThreshMet) {
+                    YAHOO.log("mouseup detected - completing drag", "info", "DragDropMgr");
+                    this.fireEvents(e, true);
+                } else {
+                    YAHOO.log("drag threshold not met", "info", "DragDropMgr");
+                }
+
+                this.stopDrag(e);
+
+                this.stopEvent(e);
             }
-
-            clearTimeout(this.clickTimeout);
-
-            if (this.dragThreshMet) {
-                YAHOO.log("mouseup detected - completing drag", "info", "DragDropMgr");
-                this.fireEvents(e, true);
-            } else {
-                YAHOO.log("drag threshold not met", "info", "DragDropMgr");
-            }
-
-            this.stopDrag(e);
-
-            this.stopEvent(e);
         },
 
         /**
@@ -655,41 +652,38 @@ YAHOO.util.DragDropMgr = function() {
          */
         handleMouseMove: function(e) {
             //YAHOO.log("handlemousemove");
-            if (! this.dragCurrent) {
+            if (this.dragCurrent) {
                 // YAHOO.log("no current drag obj");
-                return true;
-            }
 
-            // var button = e.which || e.button;
-            // YAHOO.log("which: " + e.which + ", button: "+ e.button);
+                // var button = e.which || e.button;
+                // YAHOO.log("which: " + e.which + ", button: "+ e.button);
 
-            // check for IE mouseup outside of page boundary
-            if (YAHOO.util.Event.isIE && !e.button) {
-                YAHOO.log("button failure", "info", "DragDropMgr");
-                this.stopEvent(e);
-                return this.handleMouseUp(e);
-            }
-
-            if (!this.dragThreshMet) {
-                var diffX = Math.abs(this.startX - YAHOO.util.Event.getPageX(e));
-                var diffY = Math.abs(this.startY - YAHOO.util.Event.getPageY(e));
-                // YAHOO.log("diffX: " + diffX + "diffY: " + diffY);
-                if (diffX > this.clickPixelThresh || 
-                            diffY > this.clickPixelThresh) {
-                    YAHOO.log("pixel threshold met", "info", "DragDropMgr");
-                    this.startDrag(this.startX, this.startY);
+                // check for IE mouseup outside of page boundary
+                if (YAHOO.util.Event.isIE && !e.button) {
+                    YAHOO.log("button failure", "info", "DragDropMgr");
+                    this.stopEvent(e);
+                    return this.handleMouseUp(e);
                 }
+
+                if (!this.dragThreshMet) {
+                    var diffX = Math.abs(this.startX - YAHOO.util.Event.getPageX(e));
+                    var diffY = Math.abs(this.startY - YAHOO.util.Event.getPageY(e));
+                    // YAHOO.log("diffX: " + diffX + "diffY: " + diffY);
+                    if (diffX > this.clickPixelThresh || 
+                                diffY > this.clickPixelThresh) {
+                        YAHOO.log("pixel threshold met", "info", "DragDropMgr");
+                        this.startDrag(this.startX, this.startY);
+                    }
+                }
+
+                if (this.dragThreshMet) {
+                    this.dragCurrent.b4Drag(e);
+                    this.dragCurrent.onDrag(e);
+                    this.fireEvents(e, false);
+                }
+
+                this.stopEvent(e);
             }
-
-            if (this.dragThreshMet) {
-                this.dragCurrent.b4Drag(e);
-                this.dragCurrent.onDrag(e);
-                this.fireEvents(e, false);
-            }
-
-            this.stopEvent(e);
-
-            return true;
         },
 
         /**

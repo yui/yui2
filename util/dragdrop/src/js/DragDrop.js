@@ -463,7 +463,7 @@ YAHOO.util.DragDrop.prototype = {
      * @method onAvailable
      */
     onAvailable: function () { 
-        this.logger.log("onAvailable (base)"); 
+        //this.logger.log("onAvailable (base)"); 
     },
 
     /**
@@ -500,7 +500,8 @@ YAHOO.util.DragDrop.prototype = {
      */
     init: function(id, sGroup, config) {
         this.initTarget(id, sGroup, config);
-        Event.on(this.id, "mousedown", this.handleMouseDown, this, true);
+        Event.on(this._domRef || this.id, "mousedown", 
+                        this.handleMouseDown, this, true);
         // Event.on(this.id, "selectstart", Event.preventDefault);
     },
 
@@ -519,13 +520,15 @@ YAHOO.util.DragDrop.prototype = {
 
         // create a local reference to the drag and drop manager
         this.DDM = YAHOO.util.DDM;
-        // initialize the groups array
+
+        // initialize the groups object
         this.groups = {};
 
         // assume that we have an element reference instead of an id if the
         // parameter is not a string
         if (typeof id !== "string") {
             YAHOO.log("id is not a string, assuming it is an HTMLElement");
+            this._domRef = id;
             id = Dom.generateId(id);
         }
 
@@ -582,7 +585,7 @@ YAHOO.util.DragDrop.prototype = {
      * @private
      */
     handleOnAvailable: function() {
-        this.logger.log("handleOnAvailable");
+        //this.logger.log("handleOnAvailable");
         this.available = true;
         this.resetConstraints();
         this.onAvailable();
@@ -1109,18 +1112,17 @@ this.logger.log("clickValidator returned false, drag not initiated");
     /**
      * resetConstraints must be called if you manually reposition a dd element.
      * @method resetConstraints
-     * @param {boolean} maintainOffset
      */
     resetConstraints: function() {
 
-        this.logger.log("resetConstraints");
+        //this.logger.log("resetConstraints");
 
         // Maintain offsets if necessary
         if (this.initPageX || this.initPageX === 0) {
-            this.logger.log("init pagexy: " + this.initPageX + ", " + 
-                               this.initPageY);
-            this.logger.log("last pagexy: " + this.lastPageX + ", " + 
-                               this.lastPageY);
+            //this.logger.log("init pagexy: " + this.initPageX + ", " + 
+                               //this.initPageY);
+            //this.logger.log("last pagexy: " + this.lastPageX + ", " + 
+                               //this.lastPageY);
             // figure out how much this thing has moved
             var dx = (this.maintainOffset) ? this.lastPageX - this.initPageX : 0;
             var dy = (this.maintainOffset) ? this.lastPageY - this.initPageY : 0;
