@@ -26,17 +26,19 @@
  * @class Logger
  * @static
  */
-YAHOO.widget.Logger = {
-    // Initialize properties
-    loggerEnabled: true,
-    _browserConsoleEnabled: false,
-    categories: ["info","warn","error","time","window"],
-    sources: ["global"],
-    _stack: [], // holds all log msgs
-    maxStackEntries: 2500,
-    _startTime: new Date().getTime(), // static start timestamp
-    _lastTime: null // timestamp of last logged message
-};
+if(typeof YAHOO.widget.Logger == "undefined") {
+    YAHOO.widget.Logger = {
+        // Initialize properties
+        loggerEnabled: true,
+        _browserConsoleEnabled: false,
+        categories: ["info","warn","error","time","window"],
+        sources: ["global"],
+        _stack: [], // holds all log msgs
+        maxStackEntries: 2500,
+        _startTime: new Date().getTime(), // static start timestamp
+        _lastTime: null // timestamp of last logged message
+    };
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //
