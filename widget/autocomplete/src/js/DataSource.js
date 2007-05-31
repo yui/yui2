@@ -714,11 +714,29 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
 
     switch (this.responseType) {
         case YAHOO.widget.DS_XHR.TYPE_JSON:
-            var jsonList;
-            // Divert KHTML clients from JSON lib
-            if(window.JSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
-                // Use the JSON utility if available
-                var jsonObjParsed = JSON.parse(oResponse);
+            var jsonList, jsonObjParsed;
+            // Check for JSON lib but divert KHTML clients
+            var isNotMac = (navigator.userAgent.toLowerCase().indexOf('khtml')== -1);
+            if(oResponse.parseJSON && isNotMac) {
+                // Use the new JSON utility if available
+                jsonObjParsed = oResponse.parseJSON();
+                if(!jsonObjParsed) {
+                    bError = true;
+                }
+                else {
+                    try {
+                        // eval is necessary here since aSchema[0] is of unknown depth
+                        jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    }
+                    catch(e) {
+                        bError = true;
+                        break;
+                   }
+                }
+            }
+            else if(window.JSON && isNotMac) {
+                // Use older JSON lib if available
+                jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
                     bError = true;
                     break;
