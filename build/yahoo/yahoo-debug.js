@@ -94,34 +94,6 @@ YAHOO.log = function(msg, cat, src) {
     }
 };
 
-
-/**
- * Initializes the global by creating the default namespaces and applying
- * any new configuration information that is detected.
- * @method init
- * @static
- */
-YAHOO.init = function() {
-    this.namespace("util", "widget", "example");
-    if (typeof YAHOO_config != "undefined") {
-        var l=YAHOO_config.listener,ls=YAHOO.env.listeners,unique=true,i;
-        if (l) {
-            // if YAHOO is loaded multiple times we need to check to see if
-            // this is a new config object.  If it is, add the new component
-            // load listener to the stack
-            for (i=0;i<ls.length;i=i+1) {
-                if (ls[i]==l) {
-                    unique=false;
-                    break;
-                }
-            }
-            if (unique) {
-                ls.push(l);
-            }
-        }
-    }
-};
-
 /**
  * Registers a module with the YAHOO object
  * @method register
@@ -311,6 +283,36 @@ YAHOO.env.ua = function() {
     
     return o;
 }();
+
+/*
+ * Initializes the global by creating the default namespaces and applying
+ * any new configuration information that is detected.  This is the setup
+ * for env.
+ * @method init
+ * @static
+ * @private
+ */
+(function() {
+    YAHOO.namespace("util", "widget", "example");
+    if (typeof YAHOO_config != "undefined") {
+        var l=YAHOO_config.listener,ls=YAHOO.env.listeners,unique=true,i;
+        if (l) {
+            // if YAHOO is loaded multiple times we need to check to see if
+            // this is a new config object.  If it is, add the new component
+            // load listener to the stack
+            for (i=0;i<ls.length;i=i+1) {
+                if (ls[i]==l) {
+                    unique=false;
+                    break;
+                }
+            }
+            if (unique) {
+                ls.push(l);
+            }
+        }
+    }
+})();
+
     
 /**
  * Provides the language utilites and extensions used by the library
@@ -329,10 +331,13 @@ YAHOO.lang = {
      * @return Boolean
      */
     isArray: function(o) { 
-        return YAHOO.lang.isObject(o) && 
-               YAHOO.lang.isNumber(o.length) && 
-               YAHOO.lang.isFunction(o.splice) && 
-               !YAHOO.lang.hasOwnProperty(o.length);
+
+        if (o) {
+           return YAHOO.lang.isNumber(o.length) && 
+                  YAHOO.lang.isFunction(o.splice) && 
+                  !YAHOO.lang.hasOwnProperty(o.length);
+        }
+        return false;
     },
 
     /**
@@ -501,7 +506,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * is passed as the third parameter, all properties will be applied and
      * _will_ overwrite properties in the receiver.
      *
-     * @method absorb
+     * @method augmentObject
      * @static
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
@@ -513,7 +518,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      *                             be applied and will overwrite an existing property in
      *                             the receiver
      */
-    absorb: function(r, s) {
+    augmentObject: function(r, s) {
         if (!s||!r) {
             throw new Error("Absorb failed, verify dependencies.");
         }
@@ -534,9 +539,9 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     },
  
     /**
-     * Same as YAHOO.lang.absorb, except it only applies prototype properties
-     * @see YAHOO.lang.absorb
-     * @method augment
+     * Same as YAHOO.lang.augmentObject, except it only applies prototype properties
+     * @see YAHOO.lang.augmentObject
+     * @method augmentProto
      * @static
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
@@ -548,7 +553,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      *                             be applied and will overwrite an existing property in
      *                             the receiver
      */
-    augment: function(r, s) {
+    augmentProto: function(r, s) {
         if (!s||!r) {
             throw new Error("Augment failed, verify dependencies.");
         }
@@ -557,18 +562,159 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         for (var i=2;i<arguments.length;i=i+1) {
             a.push(arguments[i]);
         }
-        YAHOO.lang.absorb.apply(this, a);
+        YAHOO.lang.augmentObject.apply(this, a);
+    },
+
+    /**
+     * Does variable substitution on a string. It scans through the string 
+     * looking for expressions enclosed in { } braces. If an expression 
+     * is found, it is used a key on the object.  If there is a space in
+     * the key, the first word is used for the key and the rest is provided
+     * to an optional function to be used to programatically determine the
+     * value (the extra information might be used for this decision). If 
+     * the value for the key in the object, or what is returned from the
+     * function has a string value, number value, or object value, it is 
+     * substituted for the bracket expression and it repeats.  If this
+     * value is an object, it uses the Object's toString() if this has
+     * been overridden, otherwise it does a shallow dump of the key/value
+     * pairs.
+     * @method substitute
+     * @param s {String} The string that will be modified.
+     * @param o {Object} An object containing the replacement values
+     * @param f {Function} An optional function that can be used to
+     *                     process each match.  It receives the key,
+     *                     value, and any extra metadata included with
+     *                     the key inside of the braces.
+     * @return {String} the substituted string
+     */
+    substitute: function (s, o, f) {
+        var i, j, k, key, v, meta, l=YAHOO.lang;
+        for (;;) {
+            i = s.lastIndexOf('{');
+            if (i < 0) {
+                break;
+            }
+            j = s.indexOf('}', i);
+            if (i + 1 >= j) {
+                break;
+            }
+
+            key=s.substring(i + 1, j);
+            meta=null;
+
+            k = key.indexOf(" ");
+            if (k > -1) {
+                meta = key.substring(k + 1);
+                key = key.substring(0, k);
+            }
+
+            v = o[key];
+            if (f) {
+                v = f(key, v, meta);
+            }
+
+            if (l.isObject(v)) {
+                if (l.isFunction(v)) {
+                    break;
+                } else if (l.isArray(v)) {
+                    v = l.dump(v, parseInt(meta, 10));
+                } else {
+                    if (v.toString === Object.prototype.toString) {
+                        v = l.dump(v, parseInt(meta, 10));
+                    } else {
+                        v = v.toString();
+                    }
+                }
+            } else if (!l.isString(v) && !l.isNumber(v)) {
+                break;
+            }
+
+            s = s.substring(0, i) + v + s.substring(j + 1);
+        }
+
+        return s;
+    },
+
+    /**
+     * Returns a simple string representation of the object or array.
+     * Other types of objects will be returned unprocessed.  Arrays
+     * are expected to be indexed.  Use object notation for
+     * associative arrays.
+     * @method dump
+     * @param o {Object} The object to dump
+     * @param d {int} How deep to recurse child objects, default 0
+     * @return {String} the dump result
+     */
+    dump: function(o, d) {
+        var l=YAHOO.lang,i,len,s=[],OBJ="{...}";
+
+        if (!l.isObject(o) || l.isFunction(o)) {
+            return o;
+        }
+
+        d = (l.isNumber(d)) ? d : 0;
+
+        if (l.isArray(o)) {
+            s.push("[");
+            for (i=0,len=o.length;i<len;i=i+1) {
+                if (l.isObject(o[i])) {
+                    s.push((d > 0) ? l.dump(o[i], d-1) : OBJ);
+                } else {
+                    s.push(o[i]);
+                }
+                s.push(", ");
+            }
+            if (s.length > 1) {
+                s.pop();
+            }
+            s.push("]");
+        } else {
+            s.push("{");
+            for (i in o) {
+                if (l.hasOwnProperty(o, i)) {
+                    s.push(i + " => ");
+                    if (l.isObject(o[i])) {
+                        s.push((d > 0) ? l.dump(o[i], d-1) : OBJ);
+                    } else {
+                        s.push(o[i]);
+                    }
+                    s.push(", ");
+                }
+            }
+            if (s.length > 1) {
+                s.pop();
+            }
+            s.push("}");
+        }
+
+        return s.join("");
     }
 
 };
-
-YAHOO.init();
 
 /*
  * An alias for <a href="YAHOO.lang.html">YAHOO.lang</a>
  * @class YAHOO.util.Lang
  */
 YAHOO.util.Lang = YAHOO.lang;
+ 
+/**
+ * Same as YAHOO.lang.augmentObject, except it only applies prototype properties.
+ * This is an alias for augmentProto.
+ * @see YAHOO.lang.augmentObject
+ * @method augment
+ * @static
+ * @param {Function} r  the object to receive the augmentation
+ * @param {Function} s  the object that supplies the properties to augment
+ * @param {String*|boolean}  arguments zero or more properties methods to augment the
+ *                             receiver with.  If none specified, everything
+ *                             in the supplier will be used unless it would
+ *                             overwrite an existing property in the receiver.  if true
+ *                             is specified as the third parameter, all properties will
+ *                             be applied and will overwrite an existing property in
+ *                             the receiver
+ */
+YAHOO.lang.augment = YAHOO.lang.augmentProto;
 
 /**
  * An alias for <a href="YAHOO.lang.html#augment">YAHOO.lang.augment</a>
@@ -582,7 +728,7 @@ YAHOO.util.Lang = YAHOO.lang;
  *                             in the supplier will be used unless it would
  *                             overwrite an existing property in the receiver
  */
-YAHOO.augment = YAHOO.lang.augment;
+YAHOO.augment = YAHOO.lang.augmentProto;
        
 /**
  * An alias for <a href="YAHOO.lang.html#extend">YAHOO.lang.extend</a>

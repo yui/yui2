@@ -2,7 +2,8 @@ YAHOO Global - Release Notes
 
 2.3.0
   * Added YAHOO.env.ua
-  * Added YAHOO.lang.absorb (tentative)
+  * Added YAHOO.lang.augmentObject.  Renamed augment to augmentProto and made augment
+    an alias to augmentProto
   * isObject/isArray return false rather than null when testing null
 
 2.2.2
