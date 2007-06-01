@@ -558,7 +558,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             throw new Error("Augment failed, verify dependencies.");
         }
         //var a=[].concat(arguments);
-        a=[r.prototype,s.prototype];
+        var a=[r.prototype,s.prototype];
         for (var i=2;i<arguments.length;i=i+1) {
             a.push(arguments[i]);
         }
@@ -579,7 +579,12 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     dump: function(o, d) {
         var l=YAHOO.lang,i,len,s=[],OBJ="{...}",FUN="f(){...}";
 
-        if (!l.isObject(o) || o instanceof Date) {
+        // Skip non-objects
+        // Skip dates because the std toString is what we want
+        // Skip HTMLElement-like objects because trying to dump an
+        // element will cause an unhandled exception in FF 2.x
+        if (!l.isObject(o) || o instanceof Date || 
+            ("nodeType" in o && "tagName" in o)) {
             return o;
         } else if  (l.isFunction(o)) {
             return FUN;
