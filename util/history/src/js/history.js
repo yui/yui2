@@ -292,8 +292,13 @@ YAHOO.util.History = ( function () {
                     hash = fqstate;
                 }
 
-                // Allow the state to be bookmarked without messing up the browser history...
-                top.location.replace( "#" + hash );
+                // Allow the state to be bookmarked by setting the top window's
+                // URL fragment identifier. Note that here, we are on IE, and
+                // IE does not touch the browser history when setting the hash
+                // (unlike all the other browsers). I used to write:
+                //     top.location.replace( "#" + hash );
+                // but this had a side effect when the page was not the top frame.
+                top.location.hash = hash;
 
                 _storeStates();
             }
