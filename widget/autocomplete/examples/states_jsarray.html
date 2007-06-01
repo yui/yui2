@@ -167,7 +167,7 @@
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/animation/animation.js"></script>
 <script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
@@ -175,7 +175,7 @@
 
 <!-- In-memory JS array begins-->
 <script type="text/javascript">
-var statesArray = [
+YAHOO.example.statesArray = [
     "Alabama",
     "Alaska",
     "Arizona",
@@ -227,7 +227,8 @@ var statesArray = [
     "Wisconsin",
     "Wyoming"
 ];
-var areacodesArray = [
+
+YAHOO.example.areacodesArray = [
     ["201", "New Jersey"],
     ["202", "Washington, DC"],
     ["203", "Connecticut"],
@@ -616,51 +617,42 @@ var areacodesArray = [
 
 
 <script type="text/javascript">
-YAHOO.example.ACJSArray = function() {
-    var mylogger;
-    var oACDS,oACDS2;
-    var oAutoComp,oAutoComp2;
-    return {
-        init: function() {
-            //Logger
-            mylogger = new YAHOO.widget.LogReader("logger");
+YAHOO.example.ACJSArray = new function() {
+    //Logger
+    this.mylogger = new YAHOO.widget.LogReader("logger");
 
-            // Instantiate first JS Array DataSource
-            oACDS = new YAHOO.widget.DS_JSArray(statesArray);
+    // Instantiate first JS Array DataSource
+    this.oACDS = new YAHOO.widget.DS_JSArray(YAHOO.example.statesArray);
 
-            // Instantiate first AutoComplete
-            oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
-            oAutoComp.queryDelay = 0;
-            oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
-            //oAutoComp.typeAhead = true;
-            oAutoComp.useShadow = true;
-            oAutoComp.minQueryLength = 0;
-            oAutoComp.textboxFocusEvent.subscribe(function(){oAutoComp.sendQuery("");});
-            
-            // Instantiate second JS Array DataSource
-            oACDS2 = new YAHOO.widget.DS_JSArray(areacodesArray);
+    // Instantiate first AutoComplete
+    this.oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS);
+    this.oAutoComp.queryDelay = 1;
+    this.oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
+    this.oAutoComp.typeAhead = true;
+    this.oAutoComp.useShadow = true;
+    this.oAutoComp.minQueryLength = 0;
+    this.oAutoComp.textboxFocusEvent.subscribe(function(){this.sendQuery("");});
+    
+    // Instantiate second JS Array DataSource
+    this.oACDS2 = new YAHOO.widget.DS_JSArray(YAHOO.example.areacodesArray);
 
-            // Instantiate second AutoComplete
-            oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
-            oAutoComp2.queryDelay = 0;
-            oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-            //oAutoComp2.typeAhead = true;
-            oAutoComp2.useShadow = true;
-            oAutoComp2.forceSelection = true;
-            oAutoComp2.formatResult = function(oResultItem, sQuery) {
-                var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
-                return (sMarkup);
-            };
-        },
-
-        validateForm: function() {
-            // Validate form inputs here
-            return false;
-        }
+    // Instantiate second AutoComplete
+    this.oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', this.oACDS2);
+    this.oAutoComp2.queryDelay = 0;
+    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+    this.oAutoComp2.typeAhead = true;
+    this.oAutoComp2.useShadow = true;
+    this.oAutoComp2.forceSelection = true;
+    this.oAutoComp2.formatResult = function(oResultItem, sQuery) {
+        var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
+        return (sMarkup);
     };
-}();
 
-YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACJSArray.init);
+    this.validateForm = function() {
+        // Validate form inputs here
+        return false;
+    };
+};
 </script>
 
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

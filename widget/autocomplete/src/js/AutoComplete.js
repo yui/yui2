@@ -1083,6 +1083,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     // Widget has been effectively turned off
     if(this.minQueryLength == -1) {
         this._toggleContainer(false);
+        YAHOO.log("Property minQueryLength is set to -1", "info", this.toString());
         return;
     }
     // Delimiter has been enabled
@@ -1131,6 +1132,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
             clearTimeout(this._nDelayID);
         }
         this._toggleContainer(false);
+        YAHOO.log("Query \"" + sQuery + "\" is too short", "info", this.toString());
         return;
     }
 
@@ -1138,6 +1140,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     this._nDelayID = -1;    // Reset timeout ID because request has been made
     sQuery = this.doBeforeSendQuery(sQuery);
     this.dataRequestEvent.fire(this, sQuery);
+    YAHOO.log("Sending query \"" + sQuery + "\"", "info", this.toString());
     this.dataSource.getResults(this._populateList, sQuery, this);
 };
 
@@ -1158,6 +1161,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         oSelf.dataErrorEvent.fire(oSelf, sQuery);
     }
     if(!oSelf._bFocused || !aResults) {
+        YAHOO.log("Could not populate list", "info", oSelf.toString());
         return;
     }
 
@@ -1205,6 +1209,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
             var oFirstItem = aItems[0];
             oSelf._toggleHighlight(oFirstItem,"to");
             oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
+            YAHOO.log("Arrowed to first item", "info", oSelf.toString());
             oSelf._typeAhead(oFirstItem,sQuery);
         }
         else {
@@ -1219,6 +1224,8 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         oSelf._toggleContainer(false);
     }
     oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
+    YAHOO.log("Container populated with list items", "info", oSelf.toString());
+    
 };
 
 /**
@@ -1243,6 +1250,7 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
 
     // Fire custom event
     this.selectionEnforceEvent.fire(this);
+    YAHOO.log("Selection enforced", "info", this.toString());
 };
 
 /**
@@ -1297,6 +1305,7 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
     this._selectText(oTextbox,nStart,nEnd);
     var sPrefill = oTextbox.value.substr(nStart,nEnd);
     this.typeAheadEvent.fire(this,sQuery,sPrefill);
+    YAHOO.log("Typeahead occured with prefill string \"" + sPrefill + "\"", "info", this.toString());
 };
 
 /**
@@ -1453,10 +1462,12 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
 
             if(bShow) {
                 oSelf.containerExpandEvent.fire(oSelf);
+                YAHOO.log("Container expanded", "info", oSelf.toString());
             }
             else {
                 oContainer._oContent.style.display = "none";
                 oSelf.containerCollapseEvent.fire(oSelf);
+                YAHOO.log("Container collapsed", "info", oSelf.toString());
             }
             oSelf._toggleContainerHelpers(bShow);
      	};
@@ -1472,10 +1483,12 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         if(bShow) {
             oContainer._oContent.style.display = "block";
             this.containerExpandEvent.fire(this);
+            YAHOO.log("Container expanded", "info", this.toString());
         }
         else {
             oContainer._oContent.style.display = "none";
             this.containerCollapseEvent.fire(this);
+            YAHOO.log("Container collapsed", "info", this.toString());
         }
         this._toggleContainerHelpers(bShow);
         this._bContainerOpen = bShow;
@@ -1583,6 +1596,7 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
     this._updateValue(oItem);
     this._cancelIntervalDetection(this);
     this.itemSelectEvent.fire(this, oItem, oItem._oResultData);
+    YAHOO.log("Item selected: " + YAHOO.lang.dump(oItem._oResultData), "info", this.toString());
     this._toggleContainer(false);
 };
 
@@ -1632,6 +1646,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
             // Unhighlight current item
             this._toggleHighlight(oCurItem, "from");
             this.itemArrowFromEvent.fire(this, oCurItem);
+            YAHOO.log("Item arrowed from", "info", this.toString());
         }
         if(nNewItemIndex == -1) {
            // Go back to query (remove type-ahead string)
@@ -1694,6 +1709,7 @@ YAHOO.widget.AutoComplete.prototype._moveSelection = function(nKeyCode) {
 
         this._toggleHighlight(oNewItem, "to");
         this.itemArrowToEvent.fire(this, oNewItem);
+        YAHOO.log("Item arrowed to", "info", this.toString());
         if(this.typeAhead) {
             this._updateValue(oNewItem);
         }
@@ -1723,6 +1739,7 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseover = function(v,oSelf) {
     }
 
     oSelf.itemMouseOverEvent.fire(oSelf, this);
+    YAHOO.log("Item moused over", "info", oSelf.toString());
 };
 
 /**
@@ -1742,6 +1759,7 @@ YAHOO.widget.AutoComplete.prototype._onItemMouseout = function(v,oSelf) {
     }
 
     oSelf.itemMouseOutEvent.fire(oSelf, this);
+    YAHOO.log("Item moused out", "info", oSelf.toString());
 };
 
 /**
@@ -1931,6 +1949,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     }
     else {
         oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
+        YAHOO.log("Textbox keyed", "info", oSelf.toString());
     }
 
     // Set timeout on the request
@@ -1963,6 +1982,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
     oSelf._bFocused = true;
     if(!oSelf._bItemSelected) {
         oSelf.textboxFocusEvent.fire(oSelf);
+        YAHOO.log("Textbox focused", "info", oSelf.toString());
     }
 };
 
@@ -1985,6 +2005,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
                 }
                 else {
                     oSelf.unmatchedItemSelectEvent.fire(oSelf, oSelf._sCurQuery);
+                    YAHOO.log("Unmatched item selected", "info", oSelf.toString());
                 }
             }
         }
@@ -1995,6 +2016,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         oSelf._cancelIntervalDetection(oSelf);
         oSelf._bFocused = false;
         oSelf.textboxBlurEvent.fire(oSelf);
+        YAHOO.log("Textbox blurred", "info", oSelf.toString());
     }
 };
 

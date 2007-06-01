@@ -119,7 +119,7 @@
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/animation/animation.js"></script>
 <script type="text/javascript" src="./js/json.js"></script>
@@ -128,48 +128,38 @@
 <!-- Library ends -->
 
 <script type="text/javascript">
-YAHOO.example.ACJson = function(){
-    var mylogger;
-    var oACDS;
-    var oAutoComp;
-    
-    return {
-        init: function() {
-            // Logger
-            mylogger = new YAHOO.widget.LogReader("logger");
+YAHOO.example.ACJson = new function(){
+    // Logger
+    this.mylogger = new YAHOO.widget.LogReader("logger");
 
-            // Instantiate an XHR DataSource and define schema as an array:
-            //     ["Multi-depth.object.notation.to.find.a.single.result.item",
-            //     "Query Key",
-            //     "Additional Param Name 1",
-            //     ...
-            //     "Additional Param Name n"]
-            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result","Title"]);
-            oACDS.queryMatchContains = true;
-            oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
+    // Instantiate an XHR DataSource and define schema as an array:
+    //     ["Multi-depth.object.notation.to.find.a.single.result.item",
+    //     "Query Key",
+    //     "Additional Param Name 1",
+    //     ...
+    //     "Additional Param Name n"]
+    this.oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_proxy.php", ["ResultSet.Result","Title"]);
+    this.oACDS.queryMatchContains = true;
+    this.oACDS.scriptQueryAppend = "output=json&results=100"; // Needed for YWS
 
-            // Instantiate AutoComplete
-            oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", oACDS);
-            oAutoComp.useShadow = true;
-            oAutoComp.formatResult = function(oResultItem, sQuery) {
-                return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
-            };
-            oAutoComp.doBeforeExpandContainer = function(oTextbox, oContainer, sQuery, aResults) {
-                var pos = YAHOO.util.Dom.getXY(oTextbox);
-                pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight;
-                YAHOO.util.Dom.setXY(oContainer,pos);
-                return true;
-            };
-        },
-
-        validateForm: function() {
-            // Validate form inputs here
-            return false;
-        }
+    // Instantiate AutoComplete
+    this.oAutoComp = new YAHOO.widget.AutoComplete("ysearchinput","ysearchcontainer", this.oACDS);
+    this.oAutoComp.useShadow = true;
+    this.oAutoComp.formatResult = function(oResultItem, sQuery) {
+        return oResultItem[1].Title + " (" + oResultItem[1].Url + ")";
     };
-}();
+    this.oAutoComp.doBeforeExpandContainer = function(oTextbox, oContainer, sQuery, aResults) {
+        var pos = YAHOO.util.Dom.getXY(oTextbox);
+        pos[1] += YAHOO.util.Dom.get(oTextbox).offsetHeight;
+        YAHOO.util.Dom.setXY(oContainer,pos);
+        return true;
+    };
 
-YAHOO.util.Event.addListener(this,"load",YAHOO.example.ACJson.init);
+    this.validateForm = function() {
+        // Validate form inputs here
+        return false;
+    };
+};
 </script>
 
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

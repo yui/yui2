@@ -138,7 +138,7 @@
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/animation/animation.js"></script>
 <script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
@@ -146,59 +146,49 @@
 <!-- Library ends -->
 
 <script type="text/javascript">
-YAHOO.example.ACFlickr = function() {
-    var mylogger;
-    var oACDS;
-    var oAutoComp;
-    
-    return {
-        init: function() {
-            //Logger
-            mylogger = new YAHOO.widget.LogReader("logger");
+YAHOO.example.ACFlickr = new function() {
+    //Logger
+    this.mylogger = new YAHOO.widget.LogReader("logger");
 
-            // Instantiate an XHR DataSource and define schema as an array:
-            //     ["ResultNodeName",
-            //     "QueryKeyAttributeOrNodeName",
-            //     "AdditionalParamAttributeOrNodeName1",
-            //     ...
-            //     "AdditionalParamAttributeOrNodeNameN"]
-            oACDS = new YAHOO.widget.DS_XHR("./php/flickr_proxy.php",
-                ["photo", "title", "id", "owner", "secret", "server"]);
-            oACDS.scriptQueryParam = "tags";
-            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
-            oACDS.maxCacheEntries = 0;
-            oACDS.scriptQueryAppend = "method=flickr.photos.search";
+    // Instantiate an XHR DataSource and define schema as an array:
+    //     ["ResultNodeName",
+    //     "QueryKeyAttributeOrNodeName",
+    //     "AdditionalParamAttributeOrNodeName1",
+    //     ...
+    //     "AdditionalParamAttributeOrNodeNameN"]
+    this.oACDS = new YAHOO.widget.DS_XHR("./php/flickr_proxy.php",
+        ["photo", "title", "id", "owner", "secret", "server"]);
+    this.oACDS.scriptQueryParam = "tags";
+    this.oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_XML;
+    this.oACDS.maxCacheEntries = 0;
+    this.oACDS.scriptQueryAppend = "method=flickr.photos.search";
 
-            // Instantiate AutoComplete
-            oAutoComp = new YAHOO.widget.AutoComplete('flickrinput','flickrcontainer', oACDS);
-            oAutoComp.autoHighlight = false;
-            oAutoComp.formatResult = function(oResultItem, sQuery) {
-                // This was defined by the schema array of the data source
-                var sTitle = oResultItem[0];
-                var sId = oResultItem[1];
-                var sOwner = oResultItem[2];
-                var sSecret = oResultItem[3];
-                var sServer = oResultItem[4];
-                var sUrl = "http://static.flickr.com/" +
-                    sServer +
-                    "/" +
-                    sId +
-                    "_" +
-                    sSecret +
-                    "_s.jpg";
-                var sMarkup = "<img src='" + sUrl + "' class='yui-ac-flickrImg'> " + sTitle;
-                return (sMarkup);
-            };
-        },
-
-        validateForm: function() {
-            // Validate form inputs here
-            return false;
-        }
+    // Instantiate AutoComplete
+    this.oAutoComp = new YAHOO.widget.AutoComplete('flickrinput','flickrcontainer', this.oACDS);
+    this.oAutoComp.autoHighlight = false;
+    this.oAutoComp.formatResult = function(oResultItem, sQuery) {
+        // This was defined by the schema array of the data source
+        var sTitle = oResultItem[0];
+        var sId = oResultItem[1];
+        var sOwner = oResultItem[2];
+        var sSecret = oResultItem[3];
+        var sServer = oResultItem[4];
+        var sUrl = "http://static.flickr.com/" +
+            sServer +
+            "/" +
+            sId +
+            "_" +
+            sSecret +
+            "_s.jpg";
+        var sMarkup = "<img src='" + sUrl + "' class='yui-ac-flickrImg'> " + sTitle;
+        return (sMarkup);
     };
-}();
 
-YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACFlickr.init);
+    this.validateForm = function() {
+        // Validate form inputs here
+        return false;
+    };
+};
 </script>
 
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

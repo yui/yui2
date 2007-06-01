@@ -133,6 +133,7 @@ YAHOO.widget.DataSource.prototype.getResults = function(oCallbackFn, sQuery, oPa
     // Not in cache, so get results from server
     if(aResults.length === 0) {
         this.queryEvent.fire(this, oParent, sQuery);
+        YAHOO.log("Query received \"" + sQuery, "info", this.toString());
         this.doQuery(oCallbackFn, sQuery, oParent);
     }
 };
@@ -164,6 +165,8 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
         this._aCacheHelper = [];
     }
     this.cacheFlushEvent.fire(this);
+    YAHOO.log("Cache flushed", "info", this.toString());
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -349,6 +352,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
     // If cache is enabled...
     if((this.maxCacheEntries > 0) && aCache && (nCacheLength > 0)) {
         this.cacheQueryEvent.fire(this, oParent, sQuery);
+        YAHOO.log("Querying cache: \"" + sQuery + "\"", "info", this.toString());
         // If case is unimportant, normalize query now instead of in loops
         if(!this.queryMatchCase) {
             var sOrigQuery = sQuery;
@@ -424,6 +428,8 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
         // If there was a match, send along the results.
         if(bMatchFound) {
             this.getCachedResultsEvent.fire(this, oParent, sOrigQuery, aResults);
+            YAHOO.log("Cached results found for query \"" + sQuery + "\": " +
+                    YAHOO.lang.dump(aResults), "info", this.toString());
             oCallbackFn(sOrigQuery, aResults, oParent);
         }
     }
@@ -631,7 +637,7 @@ YAHOO.widget.DS_XHR.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
         // Response ID does not match last made request ID.
         if(!oSelf._oConn || (oResp.tId != oSelf._oConn.tId)) {
             oSelf.dataErrorEvent.fire(oSelf, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATANULL);
-            YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", this.toString());
+            YAHOO.log(YAHOO.widget.DataSource.ERROR_DATANULL, "error", oSelf.toString());
             return;
         }
 //DEBUG
@@ -663,6 +669,8 @@ YAHOO.log('responseXML.xml: '+oResp.responseXML.xml,'warn');*/
         }
         else {
             oSelf.getResultsEvent.fire(oSelf, oParent, sQuery, aResults);
+            YAHOO.log("Results returned for query \"" + sQuery + "\": " +
+                    YAHOO.lang.dump(aResults), "info", oSelf.toString());
             oSelf._addCacheElem(resultObj);
         }
         oCallbackFn(sQuery, aResults, oParent);
@@ -986,6 +994,8 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     this._addCacheElem(resultObj);
     
     this.getResultsEvent.fire(this, oParent, sQuery, aResults);
+    YAHOO.log("Results returned for query \"" + sQuery +
+            "\": " + YAHOO.lang.dump(aResults), "info", this.toString());
     oCallbackFn(sQuery, aResults, oParent);
     return;
 };
@@ -1105,5 +1115,7 @@ YAHOO.widget.DS_JSArray.prototype.doQuery = function(oCallbackFn, sQuery, oParen
     }
     
     this.getResultsEvent.fire(this, oParent, sQuery, aResults);
+    YAHOO.log("Results returned for query \"" + sQuery +
+            "\": " + YAHOO.lang.dump(aResults), "info", this.toString());
     oCallbackFn(sQuery, aResults, oParent);
 };
