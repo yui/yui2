@@ -1064,8 +1064,9 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
             (nKeyCode >= 18 && nKeyCode <= 20) || // alt,pause/break,caps lock
             (nKeyCode == 27) || // esc
             (nKeyCode >= 33 && nKeyCode <= 35) || // page up,page down,end
-            (nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
-            (nKeyCode == 40) || // down
+            /*(nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
+            (nKeyCode == 40) || // down*/
+            (nKeyCode >= 36 && nKeyCode <= 40) || // home,left,up, right, down
             (nKeyCode >= 44 && nKeyCode <= 45)) { // print screen,insert
         return true;
     }
@@ -1204,6 +1205,10 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
             oItemj._oResultData = null;
         }
 
+        // Expand the container
+        var ok = oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
+        oSelf._toggleContainer(ok);
+        
         if(oSelf.autoHighlight) {
             // Go to the first item
             var oFirstItem = aItems[0];
@@ -1215,10 +1220,6 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         else {
             oSelf._oCurItem = null;
         }
-
-        // Expand the container
-        var ok = oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
-        oSelf._toggleContainer(ok);
     }
     else {
         oSelf._toggleContainer(false);
@@ -1258,17 +1259,18 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
  * query results.
  *
  * @method _textMatchesOption
- * @return {Boolean} True if user-input text matches a result, false otherwise.
+ * @return {HTMLElement} Matching list item element if user-input text matches
+ * a result, null otherwise.
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
-    var foundMatch = false;
+    var foundMatch = null;
 
     for(var i = this._nDisplayedItems-1; i >= 0 ; i--) {
         var oItem = this._aListItems[i];
         var sMatch = oItem._sResultKey.toLowerCase();
         if(sMatch == this._sCurQuery.toLowerCase()) {
-            foundMatch = true;
+            foundMatch = oItem;
             break;
         }
     }
@@ -1601,15 +1603,16 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
 };
 
 /**
- * For values updated by type-ahead, the right arrow key jumps to the end
- * of the textbox, otherwise the container is closed.
+ * If an item is highlighted in the container, the right arrow key jumps to the
+ * end of the textbox and selects the highlighted item, otherwise the container
+ * is closed.
  *
  * @method _jumpSelection
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._jumpSelection = function() {
-    if(!this.typeAhead) {
-        return;
+    if(this._oCurItem) {
+        this._selectItem(this._oCurItem);
     }
     else {
         this._toggleContainer(false);
@@ -1842,13 +1845,13 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 
     switch (nKeyCode) {
         case 9: // tab
-            if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                if(oSelf._bContainerOpen) {
-                    YAHOO.util.Event.stopEvent(v);
-                }
-            }
             // select an item or clear out
             if(oSelf._oCurItem) {
+                if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
+                    if(oSelf._bContainerOpen) {
+                        YAHOO.util.Event.stopEvent(v);
+                    }
+                }
                 oSelf._selectItem(oSelf._oCurItem);
             }
             else {
@@ -1856,12 +1859,12 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             }
             break;
         case 13: // enter
-            if(oSelf._nKeyCode != nKeyCode) {
-                if(oSelf._bContainerOpen) {
-                    YAHOO.util.Event.stopEvent(v);
-                }
-            }
             if(oSelf._oCurItem) {
+                if(oSelf._nKeyCode != nKeyCode) {
+                    if(oSelf._bContainerOpen) {
+                        YAHOO.util.Event.stopEvent(v);
+                    }
+                }
                 oSelf._selectItem(oSelf._oCurItem);
             }
             else {
@@ -1948,6 +1951,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
         return;
     }
     else {
+        oSelf._bItemSelected = false;
+        YAHOO.util.Dom.removeClass(oSelf._oCurItem,  oSelf.highlightClassName);
+        oSelf._oCurItem = null;
+
         oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
         YAHOO.log("Textbox keyed", "info", oSelf.toString());
     }
@@ -1999,7 +2006,8 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
     if(!oSelf._bOverContainer || (oSelf._nKeyCode == 9)) {
         // Current query needs to be validated
         if(!oSelf._bItemSelected) {
-            if(!oSelf._bContainerOpen || (oSelf._bContainerOpen && !oSelf._textMatchesOption())) {
+            var oMatch = oSelf._textMatchesOption();
+            if(!oSelf._bContainerOpen || (oSelf._bContainerOpen && (oMatch === null))) {
                 if(oSelf.forceSelection) {
                     oSelf._clearSelection();
                 }
@@ -2007,6 +2015,9 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
                     oSelf.unmatchedItemSelectEvent.fire(oSelf, oSelf._sCurQuery);
                     YAHOO.log("Unmatched item selected", "info", oSelf.toString());
                 }
+            }
+            else {
+                oSelf._selectItem(oMatch);
             }
         }
 

@@ -76,6 +76,10 @@
             <label for="useIFrame">Use IFrame</label>
         </div>
         <div>
+            <input id="autoHighlight" type="checkbox" checked>
+            <label for="autoHighlight">Automatically Highlight First Item</label>
+        </div>
+        <div>
             <input id="typeAhead" type="checkbox">
             <label for="typeAhead">Type Ahead</label>
         </div>
@@ -165,7 +169,6 @@ YAHOO.example.Dashboard = new function() {
 
         // AutoComplete
         this.myAutoComp = new YAHOO.widget.AutoComplete("dashboard_input","dashboard_container", this.myDataSource);
-        this.myAutoComp.delimChar = [";"];
 
         // IFrame workaround for IE
         var ua = navigator.userAgent.toLowerCase();
@@ -173,27 +176,28 @@ YAHOO.example.Dashboard = new function() {
             this.myAutoComp.useIFrame = true;
             YAHOO.util.Dom.get("useiframe").checked = true;
         }
-        
+
         // Dashboard DOM event handling (assign scope to the HTML Element)
         YAHOO.util.Event.addListener("animHoriz","click",this.handleCheckboxEvent,this);
         YAHOO.util.Event.addListener("animVert","click",this.handleCheckboxEvent,this);
         YAHOO.util.Event.addListener("useShadow","click",this.handleCheckboxEvent,this);
         YAHOO.util.Event.addListener("useIFrame","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("autoHighlight","click",this.handleCheckboxEvent,this);
         YAHOO.util.Event.addListener("typeAhead","click",this.handleCheckboxEvent,this);
         YAHOO.util.Event.addListener("forceSelection","click",this.handleCheckboxEvent,this);
         YAHOO.util.Event.addListener("allowBrowserAutocomplete","click",this.handleCheckboxEvent,this);
         YAHOO.util.Event.addListener("alwaysShowContainer","click",this.handleCheckboxEvent,this);
-        
+
         YAHOO.util.Event.addListener("animSpeed","click",this.handleNumberInputEvent,this);
         YAHOO.util.Event.addListener("maxResultsDisplayed","click",this.handleNumberInputEvent,this);
         YAHOO.util.Event.addListener("minQueryLength","click",this.handleNumberInputEvent,this);
         YAHOO.util.Event.addListener("queryDelay","click",this.handleNumberInputEvent,this);
-        
+
         YAHOO.util.Event.addListener("delimChar","click",this.handleDelimiterInputEvent,this);
-        
+
         YAHOO.util.Event.addListener("highlightClassName","click",this.handleTextInputEvent,this);
         YAHOO.util.Event.addListener("prehighlightClassName","click",this.handleTextInputEvent,this);
-        
+
         YAHOO.util.Event.addListener("setHeader","click",this.handleTextareaEvent,this);
         YAHOO.util.Event.addListener("setBody","click",this.handleTextareaEvent,this);
         YAHOO.util.Event.addListener("setFooter","click",this.handleTextareaEvent,this);
@@ -299,6 +303,7 @@ YAHOO.example.Dashboard = new function() {
         oSelf.myLogWriter.log("Called " + method + "() with " + value);
     };
 };
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.Dashboard.init,YAHOO.example.Dashboard,true);
 </script>
 </div>
 </body>
