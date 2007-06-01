@@ -1914,7 +1914,8 @@ YAHOO.widget.DataTable.prototype._initPaginator = function() {
 
     this._oPaginator = paginator;
     this._oPaginator.containers = containers;
-    YAHOO.log("Paginator initialized: " + YAHOO.widget.Logger.dump(this._oPaginator), "info", this.toString());
+    //TODO: fixme
+    YAHOO.log("Paginator initialized: " + YAHOO.lang.dump(this._oPaginator,2), "info", this.toString());
 };
 
 
@@ -4554,7 +4555,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
             return;
         }
     }
-    YAHOO.log("Could not add row with " + YAHOO.widget.Logger.dump(oData), "error", this.toString());
+    YAHOO.log("Could not add row with " + YAHOO.lang.dump(oData), "error", this.toString());
 };
 
 /**
@@ -4600,7 +4601,7 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
     }
     else {
         YAHOO.log("Could not update row " + row + " with the data : " +
-                YAHOO.widget.Logger.dump(oData), "error", this.toString());
+                YAHOO.lang.dump(oData), "error", this.toString());
         return;
 
     }
@@ -4895,7 +4896,7 @@ YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData
     }
     else {
         elCell.innerHTML = "";
-        YAHOO.log("Could not format currency " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatCurrency");
+        YAHOO.log("Could not format currency " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatCurrency");
     }
 };
 
@@ -4916,7 +4917,7 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
     }
     else {
         elCell.innerHTML = "";
-        YAHOO.log("Could not format date " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatDate");
+        YAHOO.log("Could not format date " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatDate");
     }
 };
 
@@ -4990,7 +4991,7 @@ YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
     }
     else {
         elCell.innerHTML = "";
-        YAHOO.log("Could not format email " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatEmail");
+        YAHOO.log("Could not format email " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatEmail");
     }
 };
 
@@ -5011,7 +5012,7 @@ YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
     }
     else {
         elCell.innerHTML = "";
-        YAHOO.log("Could not format link " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatLink");
+        YAHOO.log("Could not format link " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatLink");
     }
 };
 
@@ -5032,7 +5033,7 @@ YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) 
     }
     else {
         elCell.innerHTML = "";
-        YAHOO.log("Could not format Number " + YAHOO.widget.Logger.dump(oData), "warn", "YAHOO.widget.Column.formatNumber");
+        YAHOO.log("Could not format Number " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatNumber");
     }
 };
 
@@ -5300,8 +5301,9 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function() {
     this.formatPaginators();
 
     this.fireEvent("paginatorUpdateEvent", {paginator:this._oPaginator});
+    //TODO: fixme
     YAHOO.log("Paginator updated: " +
-            YAHOO.widget.Logger.dump(this._oPaginator), "info", this.toString());
+            YAHOO.lang.dump(this._oPaginator, 2), "info", this.toString());
 };
 
 
@@ -5998,7 +6000,7 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
             this.fireEvent("editorRevertEvent",
                     {editor:this._oEditor, oldData:oldData, newData:newData});
             YAHOO.log("Could not save editor input due to invalid data " +
-                    YAHOO.widget.Logger.dump(newData), "warn", this.toString());
+                    YAHOO.lang.dump(newData), "warn", this.toString());
             return;
         }
     }
@@ -6110,6 +6112,9 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
         calendar.render();
         calContainer.style.cssFloat = "none";
 
+        //var calFloatClearer = elContainer.appendChild(document.createElement("br"));
+        //calFloatClearer.style.clear = "both";
+        
         var myDateHandler = function(type, args, obj) {//debugger;
             oSelf._oEditor.value = new Date(args[0][0][0], args[0][0][1]-1, args[0][0][2]);
         };
@@ -6267,7 +6272,7 @@ YAHOO.widget.DataTable.validateNumber = function(oData) {
         return number;
     }
     else {
-        YAHOO.log("Could not validate data " + YAHOO.widget.Logger.dump(oData) + " to type Number", "warn", "YAHOO.widget.DataTable.validateNumber");
+        YAHOO.log("Could not validate data " + YAHOO.lang.dump(oData) + " to type Number", "warn", "YAHOO.widget.DataTable.validateNumber");
         return null;
     }
 };

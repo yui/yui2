@@ -806,7 +806,7 @@ YAHOO.widget.ColumnEditor = function(oColumn) {
     }
     else {
         YAHOO.log("Could not create ColumnEditor of type " +
-                YAHOO.widget.Logger.dump(this.type), "error", this.toString());
+                YAHOO.lang.dump(this.type), "error", this.toString());
     }
     
     //TODO: make sure ColumnEditors get destroyed if widget gets destroyed

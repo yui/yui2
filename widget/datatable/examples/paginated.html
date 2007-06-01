@@ -133,7 +133,8 @@ var myDataTable = new YAHOO.widget.DataTable("paginated", myColumnSet, myDataSou
     <!-- Code sample ends -->
 </div>
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<!--<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>-->
+<script type="text/javascript" src="http://feelbuild-mac.corp.yahoo.com/yahoo.dev/build/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
@@ -183,15 +184,12 @@ YAHOO.example.ClientPagination = new function() {
             paginatorOptions:{
                 rowsPerPage: 100,
                 dropdownOptions: [25,50,100,500]
-            }
+            },
+            initialRequest:"results=5"
     };
     this.myDataTable = new YAHOO.widget.DataTable("paginated", this.myColumnSet,
             this.myDataSource, oConfigs);
 };
-</script>
-<script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
-<script type="text/javascript">
-dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 </body>
 </html>

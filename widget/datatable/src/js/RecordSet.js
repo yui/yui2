@@ -315,12 +315,12 @@ YAHOO.widget.RecordSet.prototype.addRecord = function(oData, index) {
         var oRecord = this._addRecord(oData, index);
         this.fireEvent("recordAddEvent",{record:oRecord,data:oData});
         YAHOO.log("Added Record at index " + index +
-                " with data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+                " with data " + YAHOO.lang.dump(oData), "info", this.toString());
         return oRecord;
     }
     else {
         YAHOO.log("Could not add Record with data" +
-                YAHOO.widget.Logger.dump(oData), "info", this.toString());
+                YAHOO.lang.dump(oData), "info", this.toString());
         return null;
     }
 };
@@ -347,19 +347,19 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
        }
         this.fireEvent("recordsAddEvent",{records:newRecords,data:aData});
         YAHOO.log("Added " + newRecords.length + " Record(s) at index " + index +
-                " with data " + YAHOO.widget.Logger.dump(aData), "info", this.toString());
+                " with data " + YAHOO.lang.dump(aData), "info", this.toString());
        return newRecords;
     }
     else if(aData && (aData.constructor == Object)) {
         var oRecord = this._addRecord(aData);
         this.fireEvent("recordsAddEvent",{records:[oRecord],data:aData});
         YAHOO.log("Added 1 Record at index " + index +
-                " with data " + YAHOO.widget.Logger.dump(aData), "info", this.toString());
+                " with data " + YAHOO.lang.dump(aData), "info", this.toString());
         return oRecord;
     }
     else {
         YAHOO.log("Could not add Records with data " +
-                YAHOO.widget.Logger.dump(aData), "info", this.toString());
+                YAHOO.lang.dump(aData), "info", this.toString());
     }
 };
 
@@ -389,7 +389,7 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
         oRecord._oData = oData;
         this.fireEvent("recordUpdateEvent",{record:oRecord,newData:oData,oldData:oldData});
         YAHOO.log("Record at index " + this.getRecordIndex(oRecord) +
-                " updated with data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+                " updated with data " + YAHOO.lang.dump(oData), "info", this.toString());
         return oRecord;
     }
     else {
@@ -434,7 +434,7 @@ YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
         this.fireEvent("keyUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
         YAHOO.log("Key \"" + sKey +
                 "\" for Record at index " + this.getRecordIndex(oRecord) +
-                " updated to \"" + YAHOO.widget.Logger.dump(oData) + "\"", "info", this.toString());
+                " updated to \"" + YAHOO.lang.dump(oData) + "\"", "info", this.toString());
     }
     else {
         YAHOO.log("Could not update key " + sKey + " for Record " + record, "error", this.toString());
@@ -489,7 +489,7 @@ YAHOO.widget.RecordSet.prototype.deleteRecord = function(index) {
         this._deleteRecord(index);
         this.fireEvent("recordDeleteEvent",{data:oData,index:index});
         YAHOO.log("Record deleted at index " + index +
-                " and containing data " + YAHOO.widget.Logger.dump(oData), "info", this.toString());
+                " and containing data " + YAHOO.lang.dump(oData), "info", this.toString());
         return oData;
     }
     else {
@@ -526,7 +526,7 @@ YAHOO.widget.RecordSet.prototype.deleteRecords = function(index, range) {
 
         this.fireEvent("recordsDeleteEvent",{data:deletedData,index:index});
         YAHOO.log(range + "Record(s) deleted at index " + index +
-                " and containing data " + YAHOO.widget.Logger.dump(deletedData), "info", this.toString());
+                " and containing data " + YAHOO.lang.dump(deletedData), "info", this.toString());
 
     }
     else {

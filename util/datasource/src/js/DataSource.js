@@ -416,7 +416,7 @@ YAHOO.util.DataSource.convertToString = function(oData) {
         return string;
     }
     else {
-        YAHOO.log("Could not convert data " + YAHOO.widget.Logger.dump(oData) + " to type String", "warn", "YAHOO.util.DataSource.convertToString");
+        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type String", "warn", "YAHOO.util.DataSource.convertToString");
         return null;
     }
 };
@@ -439,7 +439,7 @@ YAHOO.util.DataSource.convertToNumber = function(oData) {
         return number;
     }
     else {
-        YAHOO.log("Could not convert data " + YAHOO.widget.Logger.dump(oData) + " to type Number", "warn", "YAHOO.util.DataSource.convertToNumber");
+        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type Number", "warn", "YAHOO.util.DataSource.convertToNumber");
         return null;
     }
 };
@@ -468,7 +468,7 @@ YAHOO.util.DataSource.convertToDate = function(oData) {
         return date;
     }
     else {
-        YAHOO.log("Could not convert data " + YAHOO.widget.Logger.dump(oData) + " to type Date", "warn", "YAHOO.util.DataSource.convertToDate");
+        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type Date", "warn", "YAHOO.util.DataSource.convertToDate");
         return null;
     }
 
@@ -528,8 +528,8 @@ YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback
             }
         }
     }
-    YAHOO.log("The cached response for \"" + YAHOO.widget.Logger.dump(oRequest) +
-            "\" is " + YAHOO.widget.Logger.dump(oResponse), "info", this.toString());
+    YAHOO.log("The cached response for \"" + YAHOO.lang.dump(oRequest) +
+            "\" is " + YAHOO.lang.dump(oResponse), "info", this.toString());
     return oResponse;
 };
 
@@ -876,12 +876,12 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
             oParsedResponse.results.unshift(oResult);
         }
         YAHOO.log("Parsed array data is " +
-                YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
+                YAHOO.lang.dump(oParsedResponse), "info", this.toString());
         return oParsedResponse;
     }
     else {
         YAHOO.log("Array data could not be parsed: " +
-                YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
+                YAHOO.lang.dump(oRawResponse), "error", this.toString());
         return null;
     }
 };
@@ -942,11 +942,11 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
             }
         }
         YAHOO.log("Parsed text data is " +
-                YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
+                YAHOO.lang.dump(oParsedResponse), "info", this.toString());
     }
     else {
         YAHOO.log("Text data could not be parsed: " +
-                YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
+                YAHOO.lang.dump(oRawResponse), "error", this.toString());
         oParsedResponse.error = true;
     }
     return oParsedResponse;
@@ -1010,12 +1010,12 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
         }
         if(bError) {
             YAHOO.log("JSON data could not be parsed: " +
-                    YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
+                    YAHOO.lang.dump(oRawResponse), "error", this.toString());
             oParsedResponse.error = true;
         }
         else {
             YAHOO.log("Parsed XML data is " +
-                    YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
+                    YAHOO.lang.dump(oParsedResponse), "info", this.toString());
         }
         return oParsedResponse;
 };
@@ -1109,7 +1109,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
 
         if(bError || !jsonList) {
             YAHOO.log("JSON data could not be parsed: " +
-                    YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
+                    YAHOO.lang.dump(oRawResponse), "error", this.toString());
             oParsedResponse.error = true;
         }
         if(jsonList && !YAHOO.lang.isArray(jsonList)) {
@@ -1144,11 +1144,11 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             oParsedResponse.results.unshift(oResult);
         }
         YAHOO.log("Parsed JSON data is " +
-                YAHOO.widget.Logger.dump(oParsedResponse), "info", this.toString());
+                YAHOO.lang.dump(oParsedResponse), "info", this.toString());
     }
     else {
         YAHOO.log("JSON data could not be parsed: " +
-                YAHOO.widget.Logger.dump(oRawResponse), "error", this.toString());
+                YAHOO.lang.dump(oRawResponse), "error", this.toString());
         oParsedResponse.error = true;
     }
     return oParsedResponse;
