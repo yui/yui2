@@ -192,6 +192,7 @@ YAHOO.util.History = ( function () {
         var moduleName;
         var moduleObj;
         var modules;
+        var state;
         var states;
         var tokens;
         var currentState;
@@ -202,7 +203,11 @@ YAHOO.util.History = ( function () {
                 if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
                     moduleObj = _modules[moduleName];
                     moduleObj.currentState = moduleObj.initialState;
-                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                    state = unescape( moduleObj.currentState );
+                    if ( typeof state.parseJSON === "function" ) {
+                        state = state.parseJSON();
+                    }
+                    moduleObj.onStateChange( state );
                 }
             }
             return;
@@ -225,7 +230,11 @@ YAHOO.util.History = ( function () {
                 currentState = modules[moduleName];
                 if ( !currentState || moduleObj.currentState !== currentState ) {
                     moduleObj.currentState = currentState || moduleObj.initialState;
-                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                    state = unescape( moduleObj.currentState );
+                    if ( typeof state.parseJSON === "function" ) {
+                        state = state.parseJSON();
+                    }
+                    moduleObj.onStateChange( state );
                 }
             }
         }
@@ -473,9 +482,16 @@ YAHOO.util.History = ( function () {
             var wrappedFn;
 
             if ( typeof module !== "string" || _trim( module ) === "" ||
-                 typeof initialState !== "string" ||
                  typeof onStateChange !== "function" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.register" );
+            }
+
+            if ( typeof initialState === "undefined" || initialState === null ) {
+                throw new Error( "Invalid initial state value" );
+            } else if ( typeof initialState.toJSONString === "function" ) {
+                initialState = initialState.toJSONString();
+            } else if ( typeof initialState !== "string" ) {
+                throw new Error( "A JSON encoder / decoder is required when using objects as module states" );
             }
 
             if ( _modules[module] ) {
@@ -590,7 +606,7 @@ YAHOO.util.History = ( function () {
             var currentState;
             var states;
 
-            if ( typeof module !== "string" || typeof state !== "string" ) {
+            if ( typeof module !== "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.navigate" );
             }
 
@@ -640,6 +656,13 @@ YAHOO.util.History = ( function () {
                     moduleObj = _modules[moduleName];
                     if ( YAHOO.lang.hasOwnProperty( states, moduleName ) ) {
                         currentState = states[moduleName];
+                        if ( typeof currentState === "undefined" || currentState === null ) {
+                            throw new Error( "Invalid state value" );
+                        } else if ( typeof currentState.toJSONString === "function" ) {
+                            currentState = currentState.toJSONString();
+                        } else if ( typeof currentState !== "string" ) {
+                            throw new Error( "A JSON encoder / decoder is required when using objects as module states" );
+                        }
                     } else {
                         currentState = moduleObj.currentState;
                     }
@@ -703,6 +726,7 @@ YAHOO.util.History = ( function () {
         getCurrentState: function ( module ) {
 
             var moduleObj;
+            var state;
 
             if ( typeof module !== "string" ) {
                 throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getCurrentState" );
@@ -717,7 +741,12 @@ YAHOO.util.History = ( function () {
                 throw new Error( "No such registered module: " + module );
             }
 
-            return unescape( moduleObj.currentState );
+            state = unescape( moduleObj.currentState );
+            if ( typeof state.parseJSON === "function" ) {
+                state = state.parseJSON();
+            }
+
+            return state;
         },
 
         /**
@@ -735,6 +764,7 @@ YAHOO.util.History = ( function () {
             var i;
             var len;
             var hash;
+            var state;
             var states;
             var tokens;
             var moduleName;
@@ -750,7 +780,11 @@ YAHOO.util.History = ( function () {
                 if ( tokens.length === 2 ) {
                     moduleName = tokens[0];
                     if ( moduleName === module ) {
-                        return unescape( tokens[1] );
+                        state = unescape( tokens[1] );
+                        if ( typeof state.parseJSON === "function" ) {
+                            state = state.parseJSON();
+                        }
+                        return state;
                     }
                 }
             }
