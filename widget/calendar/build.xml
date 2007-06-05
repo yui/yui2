@@ -15,6 +15,12 @@
     <target name="examples" description="Component Specific Over-ride">
         <echo>CALENDAR DOES NOT DO ANYTHING CURRENTLY</echo>
     </target>
+	
+    <target name="deploysrc">
+        <copy todir="${global.src.component}" preservelastmodified="true">
+            <fileset dir="${component.srcdir}/js" includes="${component.jsfiles.unique}" />
+        </copy>
+    </target>
 
 </project>
 
