@@ -5,12 +5,16 @@ YAHOO.namespace("tool");
 //-----------------------------------------------------------------------------
 
 /**
- * Logger sublass
+ * Displays test execution progress and results, providing filters based on
+ * different key events.
  * @namespace YAHOO.tool
  * @class TestLogger
+ * @constructor
+ * @param {HTMLElement} element (Optional) The element to create the logger in.
+ * @param {Object} config (Optional) Configuration options for the logger.
  */
 YAHOO.tool.TestLogger = function (element, config) {
-    arguments.callee.superclass.constructor.call(this, element, config);
+    YAHOO.tool.TestLogger.superclass.constructor.call(this, element, config);
     this.init();
 };
 
@@ -45,65 +49,101 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
      */
     init : function () {
     
-        //setup event handlers
-        YAHOO.tool.TestRunner.subscribe("pass", this.handlePass, this, true);
-        YAHOO.tool.TestRunner.subscribe("fail", this.handleFail, this, true);
-        YAHOO.tool.TestRunner.subscribe("ignore", this.handleIgnore, this, true);
-        YAHOO.tool.TestRunner.subscribe("testsuitebegin", this.handleTestSuiteBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("testsuitecomplete", this.handleTestSuiteComplete, this, true);
-        YAHOO.tool.TestRunner.subscribe("testcasebegin", this.handleTestCaseBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("testcasecomplete", this.handleTestCaseComplete, this, true);
+        //setup event _handlers
+        YAHOO.tool.TestRunner.subscribe("pass", this._handlePass, this, true);
+        YAHOO.tool.TestRunner.subscribe("fail", this._handleFail, this, true);
+        YAHOO.tool.TestRunner.subscribe("ignore", this._handleIgnore, this, true);
+        YAHOO.tool.TestRunner.subscribe("begin", this._handleBegin, this, true);
+        YAHOO.tool.TestRunner.subscribe("complete", this._handleComplete, this, true);
+        YAHOO.tool.TestRunner.subscribe("testsuitebegin", this._handleTestSuiteBegin, this, true);
+        YAHOO.tool.TestRunner.subscribe("testsuitecomplete", this._handleTestSuiteComplete, this, true);
+        YAHOO.tool.TestRunner.subscribe("testcasebegin", this._handleTestCaseBegin, this, true);
+        YAHOO.tool.TestRunner.subscribe("testcasecomplete", this._handleTestCaseComplete, this, true);
         
         //reset the logger
         YAHOO.widget.Logger.reset();
+    },
+    
+    
+    _calculateTotals : function (results /*:Object*/) /*:Object*/ {
+    
+        var totals /*:Object*/ = { passed: 0, failed: 0, total: 0 };
+        
+        if (YAHOO.lang.isNumber(results.passed)){
+            totals.passed += results.passed;
+            totals.failed += results.failed;
+            totals.total += results.total;          
+        } else {
+            for (var prop in results){
+                var subtotal /*:Object*/ = this._calculateTotals(results[prop]);
+                totals.passed += subtotal.passed;
+                totals.failed += subtotal.failed;
+                totals.total += subtotal.total;                
+            }
+        }
+        
+        return totals;
+    
     },
     
     //-------------------------------------------------------------------------
     // Event Handlers
     //-------------------------------------------------------------------------
 
+    _handleBegin : function (data /*:Object*/) {
+        YAHOO.log("Testing began at " + (new Date()).toString(), "info", "TestRunner");
+    },
+    
+    _handleComplete : function (data /*:Object*/) {
+        
+        //calculate totals
+        var results /*:Object*/ = this._calculateTotals(data.results);
+    
+        YAHOO.log("Testing completed at " + (new Date()).toString() + ".\nPassed:" + results.passed + " Failed:" + results.failed + " Total:" + results.total, "info", "TestRunner");
+    },
+
     /**
      * Handles an error event for the TestRunner object.
      * @param data Information about the event.
      */
-    handleFail : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": " + data.error.getMessage(), "fail");
+    _handleFail : function (data /*:Object*/) {
+        YAHOO.log(data.testName + ": " + data.error.getMessage(), "fail", "TestRunner");
     },
 
     /**
      * Handles an ignore event for the TestRunner object.
      * @param data Information about the event.
      */
-    handleIgnore : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": ignored", "ignore");
+    _handleIgnore : function (data /*:Object*/) {
+        YAHOO.log(data.testName + ": ignored", "ignore", "TestRunner");
     },
 
     /**
      * Handles an error event for the TestRunner object.
      * @param data Information about the event.
      */
-    handlePass : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": passed", "pass");
+    _handlePass : function (data /*:Object*/) {
+        YAHOO.log(data.testName + ": passed", "pass", "TestRunner");
     },
     
-    handleTestSuiteBegin : function (data /*:Object*/) {
+    _handleTestSuiteBegin : function (data /*:Object*/) {
         var testSuiteName /*:String*/ = data.testSuite.name || "Unnamed test suite";
-        YAHOO.log("Test suite \"" + testSuiteName + "\" started", "info");
+        YAHOO.log("Test suite \"" + testSuiteName + "\" started", "info", "TestRunner");
     },
     
-    handleTestSuiteComplete : function (data /*:Object*/) {
+    _handleTestSuiteComplete : function (data /*:Object*/) {
         var testSuiteName /*:String*/ = data.testSuite.name || "Unnamed test suite";
-        YAHOO.log("Test suite \"" + testSuiteName + "\" completed", "info");
+        YAHOO.log("Test suite \"" + testSuiteName + "\" completed", "info", "TestRunner");
     },
     
-    handleTestCaseBegin : function (data /*:Object*/) {
+    _handleTestCaseBegin : function (data /*:Object*/) {
         var testCaseName /*:String*/ = data.testCase.name || "Unnamed test case";
-        YAHOO.log("Test case \"" + testCaseName + "\" started", "info");
+        YAHOO.log("Test case \"" + testCaseName + "\" started", "info", "TestRunner");
     },
     
-    handleTestCaseComplete : function (data /*:Object*/) {
+    _handleTestCaseComplete : function (data /*:Object*/) {
         var testCaseName /*:String*/ = data.testCase.name || "Unnamed test case";
-        YAHOO.log("Test case \"" + testCaseName + "\" completed. Passed:" + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total, "info");
+        YAHOO.log("Test case \"" + testCaseName + "\" completed.\nPassed:" + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total, "info", "TestRunner");
     }
     
 });
@@ -122,9 +162,11 @@ YAHOO.namespace("tool");
 //-----------------------------------------------------------------------------
 
 /**
- * Runs a test suite.
+ * Runs test suites and test cases, providing events to allowing for the
+ * interpretation of test results.
+ * @namespace YAHOO.tool
  * @class TestRunner
- * @constructor
+ * @static
  */
 YAHOO.tool.TestRunner = (function(){
 
@@ -141,15 +183,63 @@ YAHOO.tool.TestRunner = (function(){
         this.items /*:Array*/ = [];
         
         //create events
+        
+        /**
+         * Fires when a test case is opened but before the first 
+         * test is executed.
+         * @event testcasebegin
+         */
         this.createEvent("testcasebegin", {scope: this});
+        
+        /**
+         * Fires when all tests in a test case have been executed.
+         * @event testcasecomplete
+         */        
         this.createEvent("testcasecomplete", {scope: this});
+        
+        /**
+         * Fires when a test suite is opened but before the first 
+         * test is executed.
+         * @event testsuitebegin
+         */
         this.createEvent("testsuitebegin", {scope: this});
+        
+        /**
+         * Fires when all test cases in a test suite have been
+         * completed.
+         * @event testsuitecomplete
+         */
         this.createEvent("testsuitecomplete", {scope: this});
+        
+        /**
+         * Fires when a test has passed.
+         * @event pass
+         */
         this.createEvent("pass", {scope: this});
+        
+        /**
+         * Fires when a test has failed.
+         * @event fail
+         */
         this.createEvent("fail", {scope: this});
+        
+        /**
+         * Fires when a test has been ignored.
+         * @event ignore
+         */
         this.createEvent("ignore", {scope: this});
+        
+        /**
+         * Fires when all test suites and test cases have been completed.
+         * @event complete
+         */        
         this.createEvent("complete", {scope: this});
         
+        /**
+         * Fires when the run() method is called.
+         * @event begin
+         */        
+        this.createEvent("begin", {scope: this});        
     }
     
     YAHOO.lang.extend(TestRunner, YAHOO.util.EventProvider, {
@@ -161,10 +251,13 @@ YAHOO.tool.TestRunner = (function(){
          
         /**
          * Runs a given test case.
-         * @private
          * @param {YAHOO.tool.TestCase} testCase The test case to run.
+         * @return {Object} Results of the execution with properties passed, failed, and total.
+         * @method _runTestCase
+         * @private
+         * @static
          */
-        runTestCase : function (testCase /*YAHOO.tool.TestCase*/) /*:Void*/{
+        _runTestCase : function (testCase /*YAHOO.tool.TestCase*/) /*:Void*/{
         
             //object to store results
             var results /*:Object*/ = {};
@@ -295,10 +388,13 @@ YAHOO.tool.TestRunner = (function(){
         
         /**
          * Runs all the tests in a test suite.
-         * @private
          * @param {YAHOO.tool.TestSuite} testSuite The test suite to run.
+         * @return {Object} Results of the execution with properties passed, failed, and total.
+         * @method _runTestSuite
+         * @private
+         * @static
          */
-        runTestSuite : function (testSuite /*:YAHOO.tool.TestSuite*/) {
+        _runTestSuite : function (testSuite /*:YAHOO.tool.TestSuite*/) {
         
             //object to store results
             var results /*:Object*/ = {};
@@ -309,9 +405,9 @@ YAHOO.tool.TestRunner = (function(){
             //iterate over the test suite items
             for (var i=0; i < testSuite.items.length; i++){
                 if (testSuite.items[i] instanceof YAHOO.tool.TestSuite) {
-                    results[testSuite.items[i].name] = this.runTestSuite(testSuite.items[i]);
+                    results[testSuite.items[i].name] = this._runTestSuite(testSuite.items[i]);
                 } else if (testSuite.items[i] instanceof YAHOO.tool.TestCase) {
-                    results[testSuite.items[i].name] = this.runTestCase(testSuite.items[i]);
+                    results[testSuite.items[i].name] = this._runTestCase(testSuite.items[i]);
                 }
             }
     
@@ -321,6 +417,26 @@ YAHOO.tool.TestRunner = (function(){
             //return the results
             return results;
         
+        },
+        
+        /**
+         * Runs a test case or test suite, returning the results.
+         * @param {YAHOO.tool.TestCase|YAHOO.tool.TestSuite} testObject The test case or test suite to run.
+         * @return {Object} Results of the execution with properties passed, failed, and total.
+         * @private
+         * @method _run
+         * @static
+         */
+        _run : function (testObject /*:YAHOO.tool.TestCase|YAHOO.tool.TestSuite*/) /*:Void*/ {
+            if (YAHOO.lang.isObject(testObject)){
+                if (testObject instanceof YAHOO.tool.TestSuite) {
+                    return this._runTestSuite(testObject);
+                } else if (testObject instanceof YAHOO.tool.TestCase) {
+                    return this._runTestCase(testObject);
+                } else {
+                    throw new TypeError("_run(): Expected either YAHOO.tool.TestCase or YAHOO.tool.TestSuite.");
+                }    
+            }        
         },
         
         //-------------------------------------------------------------------------
@@ -349,19 +465,18 @@ YAHOO.tool.TestRunner = (function(){
          */
         run : function (testObject /*:Object*/) /*:Void*/ { 
             var results = null;
+            
+            this.fireEvent("begin");
        
-            if (testObject instanceof YAHOO.tool.TestSuite) {
-                results = this.runTestSuite(testObject);
-            } else if (testObject instanceof YAHOO.tool.TestCase) {
-                results = this.runTestCase(testObject);
-            } else if (arguments.length===0){
+            //an object passed in overrides everything else
+            if (YAHOO.lang.isObject(testObject)){
+                results = this._run(testObject);  
+            } else {
                 results = {};
                 for (var i=0; i < this.items.length; i++){
-                    results[this.items[i].name] = this.run(this.items[i]);
-                }
-            } else {
-                throw new TypeError("Expected either YAHOO.util.TestCase or YAHOO.util.TestSuite.");
-            }      
+                    results[this.items[i].name] = this._run(this.items[i]);
+                }            
+            }
             
             this.fireEvent("complete", { results: results });
         }    
