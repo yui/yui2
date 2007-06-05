@@ -495,6 +495,54 @@ YAHOO.widget.AutoComplete.prototype.doBeforeSendQuery = function(sQuery) {
     return sQuery;
 };
 
+/**
+ * Nulls out the entire AutoComplete instance and related objects, removes attached
+ * event listeners, and clears out DOM elements inside the container. After
+ * calling this method, the instance reference should be expliclitly nulled by
+ * implementer, as in myDataTable = null. Use with caution!
+ *
+ * @method destroy
+ */
+YAHOO.widget.AutoComplete.prototype.destroy = function() {
+    var instanceName = this.toString();
+    var elInput = this._oTextbox;
+    var elContainer = this._oContainer;
+
+    // Unhook custom events
+    this.textboxFocusEvent.unsubscribe();
+    this.textboxKeyEvent.unsubscribe();
+    this.dataRequestEvent.unsubscribe();
+    this.dataReturnEvent.unsubscribe();
+    this.dataErrorEvent.unsubscribe();
+    this.containerExpandEvent.unsubscribe();
+    this.typeAheadEvent.unsubscribe();
+    this.itemMouseOverEvent.unsubscribe();
+    this.itemMouseOutEvent.unsubscribe();
+    this.itemArrowToEvent.unsubscribe();
+    this.itemArrowFromEvent.unsubscribe();
+    this.itemSelectEvent.unsubscribe();
+    this.unmatchedItemSelectEvent.unsubscribe();
+    this.selectionEnforceEvent.unsubscribe();
+    this.containerCollapseEvent.unsubscribe();
+    this.textboxBlurEvent.unsubscribe();
+
+    // Unhook DOM events
+    YAHOO.util.Event.purgeElement(elInput, true);
+    YAHOO.util.Event.purgeElement(elContainer, true);
+
+    // Remove DOM elements
+    elContainer.innerHTML = "";
+
+    // Null out objects
+    for(var key in this) {
+        if(this.hasOwnProperty(key)) {
+            this[key] = null;
+        }
+    }
+
+    YAHOO.log("AutoComplete instance destroyed: " + instanceName);
+};
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public events
