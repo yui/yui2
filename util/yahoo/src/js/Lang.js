@@ -1,5 +1,3 @@
-
-    
 /**
  * Provides the language utilites and extensions used by the library
  * @class YAHOO.lang
@@ -19,9 +17,9 @@ YAHOO.lang = {
     isArray: function(o) { 
 
         if (o) {
-           return YAHOO.lang.isNumber(o.length) && 
-                  YAHOO.lang.isFunction(o.splice) && 
-                  !YAHOO.lang.hasOwnProperty(o.length);
+           var l = YAHOO.lang;
+           return l.isNumber(o.length) && l.isFunction(o.splice) && 
+                  !l.hasOwnProperty(o.length);
         }
         return false;
     },
@@ -151,6 +149,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     /**
      * Utility to set up the prototype, constructor and superclass properties to
      * support an inheritance strategy that can chain constructors and methods.
+     * Static members will not be inherited.
      *
      * @method extend
      * @static
@@ -194,6 +193,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      *
      * @method augmentObject
      * @static
+     * @since 2.3.0
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
      * @param {String*|boolean}  arguments zero or more properties methods to augment the
@@ -258,12 +258,14 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * are expected to be indexed.  Use object notation for
      * associative arrays.
      * @method dump
+     * @since 2.3.0
      * @param o {Object} The object to dump
      * @param d {int} How deep to recurse child objects, default 3
      * @return {String} the dump result
      */
     dump: function(o, d) {
-        var l=YAHOO.lang,i,len,s=[],OBJ="{...}",FUN="f(){...}";
+        var l=YAHOO.lang,i,len,s=[],OBJ="{...}",FUN="f(){...}",
+            COMMA=', ', ARROW=' => ';
 
         // Skip non-objects
         // Skip dates because the std toString is what we want
@@ -276,8 +278,10 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             return FUN;
         }
 
+        // dig into child objects the depth specifed. Default 3
         d = (l.isNumber(d)) ? d : 3;
 
+        // arrays [1, 2, 3]
         if (l.isArray(o)) {
             s.push("[");
             for (i=0,len=o.length;i<len;i=i+1) {
@@ -286,23 +290,24 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                 } else {
                     s.push(o[i]);
                 }
-                s.push(", ");
+                s.push(COMMA);
             }
             if (s.length > 1) {
                 s.pop();
             }
             s.push("]");
+        // objects {k1 => v1, k2 => v2}
         } else {
             s.push("{");
             for (i in o) {
                 if (l.hasOwnProperty(o, i)) {
-                    s.push(i + " => ");
+                    s.push(i + ARROW);
                     if (l.isObject(o[i])) {
                         s.push((d > 0) ? l.dump(o[i], d-1) : OBJ);
                     } else {
                         s.push(o[i]);
                     }
-                    s.push(", ");
+                    s.push(COMMA);
                 }
             }
             if (s.length > 1) {
@@ -328,6 +333,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * been overridden, otherwise it does a shallow dump of the key/value
      * pairs.
      * @method substitute
+     * @since 2.3.0
      * @param s {String} The string that will be modified.
      * @param o {Object} An object containing the replacement values
      * @param f {Function} An optional function that can be used to
@@ -337,43 +343,50 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return {String} the substituted string
      */
     substitute: function (s, o, f) {
-        var i, j, k, key, v, meta, l=YAHOO.lang;
+        var i, j, k, key, v, meta, l=YAHOO.lang, 
+            DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}';
+
         for (;;) {
-            i = s.lastIndexOf('{');
+            i = s.lastIndexOf(LBRACE);
             if (i < 0) {
                 break;
             }
-            j = s.indexOf('}', i);
+            j = s.indexOf(RBRACE, i);
             if (i + 1 >= j) {
                 break;
             }
 
+            //Extract key and meta info 
             key = s.substring(i + 1, j);
             meta = null;
-
-            k = key.indexOf(" ");
+            k = key.indexOf(SPACE);
             if (k > -1) {
                 meta = key.substring(k + 1);
                 key = key.substring(0, k);
             }
 
+            // lookup the value
             v = o[key];
+
+            // if a substitution function was provided, execute it
             if (f) {
                 v = f(key, v, meta);
             }
 
             if (l.isObject(v)) {
-                //if (l.isFunction(v)) {
-                //    break;
-                //} else if (l.isArray(v)) {
                 if (l.isArray(v)) {
                     v = l.dump(v, parseInt(meta, 10));
                 } else {
                     meta = meta || "";
-                    var dump = meta.indexOf("dump");
+
+                    // look for the keyword 'dump', if found force object dump
+                    var dump = meta.indexOf(DUMP);
                     if (dump > -1) {
                         meta = meta.substring(4);
                     }
+
+                    // use the toString if it is not the Object toString and the
+                    // 'dump' meta info was not found
                     if (v.toString === Object.prototype.toString || dump > -1) {
                         v = l.dump(v, parseInt(meta, 10));
                     } else {
@@ -388,6 +401,55 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         }
 
         return s;
+    },
+
+
+    /**
+     * Returns a string without any leading or trailing whitespace.  If the input
+     * is not a string, the input will be returned untouched.
+     * @method trim
+     * @since 2.3.0
+     * @param s {string} the string to trim
+     * @return {string} the trimmed string
+     */
+	trim: function(s){
+        try {
+		    return s.replace(/^\s+|\s+$/g, "");
+        } catch(e) {
+            return s;
+        }
+	},
+
+    /**
+     * Returns a new object containing all of the properties of
+     * all the supplied objects.  The properties from later objects
+     * will overwrite those in earlier objects.
+     * @method merge
+     * @since 2.3.0
+     * @param arguments {Object*} the objects to merge
+     * @return the new merged object
+     */
+    merge: function() {
+        var o={}, a=arguments, i, j;
+        for (i=0; i<a.length; i=i+1) {
+            for (j in a[i]) {
+                o[j] = a[i][j];
+            }
+        }
+        return o;
+    },
+
+    /**
+     * A convenience method for detecting a legitimate non-null value.  Returns 
+     * false for null/undefined/NaN, true for other values, including 0/false/''
+     * @method hasValue
+     * @since 2.3.0
+     * @param o {any} the item to test
+     * @return {boolean} true if it is not null/undefined/NaN || false
+     */
+    hasValue: function(o) {
+        var l = YAHOO.lang;
+return (l.isObject(o) || l.isString(o) || l.isNumber(o) || l.isBoolean(o));
     }
 
 };
