@@ -51,6 +51,9 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     else if(YAHOO.lang.isFunction(oLiveData)) {
         this.dataType = YAHOO.util.DataSource.TYPE_JSFUNCTION;
     }
+    else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) {
+        this.dataType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
+    }
     else if(YAHOO.lang.isObject(oLiveData)) {
         this.dataType = YAHOO.util.DataSource.TYPE_JSON;
     }
@@ -242,6 +245,17 @@ YAHOO.util.DataSource.TYPE_XML = 4;
  * @default 5
  */
 YAHOO.util.DataSource.TYPE_TEXT = 5;
+
+/**
+ * Type is an HTML TABLE element.
+ *
+ * @property TYPE_HTMLTABLE
+ * @type Number
+ * @final
+ * @default 6
+ */
+YAHOO.util.DataSource.TYPE_HTMLTABLE = 6;
+
 /**
  * Error message for invalid data responses.
  *
@@ -471,7 +485,6 @@ YAHOO.util.DataSource.convertToDate = function(oData) {
         YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type Date", "warn", "YAHOO.util.DataSource.convertToDate");
         return null;
     }
-
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -643,6 +656,13 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             this.handleResponse(oRequest, oRawResponse, oCallback, oCaller);
             break;
             
+        // If the live data is an HTML TABLE element
+        // simply forward the table itself to the handler
+        case YAHOO.util.DataSource.TYPE_HTMLTABLE:
+            oRawResponse = this.liveData;
+            this.handleResponse(oRequest, oRawResponse, oCallback, oCaller);
+            break;
+
         // If the live data is over Connection Manager
         // set up the callback object and
         // pass the request in as a URL query and
@@ -773,6 +793,12 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
                 oRawResponse = oRawResponse.responseText;
             }
             oParsedResponse = this.parseJSONData(oRequest, oRawResponse);
+            break;
+        case YAHOO.util.DataSource.TYPE_HTMLTABLE:
+            if(xhr && oRawResponse.responseText) {
+                oRawResponse = oRawResponse.responseText;
+            }
+            oParsedResponse = this.parseHTMLTableData(oRequest, oRawResponse);
             break;
         case YAHOO.util.DataSource.TYPE_XML:
             if(xhr && oRawResponse.responseXML) {
@@ -1009,7 +1035,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
             }
         }
         if(bError) {
-            YAHOO.log("JSON data could not be parsed: " +
+            YAHOO.log("XML data could not be parsed: " +
                     YAHOO.lang.dump(oRawResponse), "error", this.toString());
             oParsedResponse.error = true;
         }
@@ -1152,4 +1178,57 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
         oParsedResponse.error = true;
     }
     return oParsedResponse;
+};
+
+/**
+ * Overridable method parses raw HTML TABLE element data into a response object.
+ *
+ * @method parseHTMLTableData
+ * @param oRequest {Object} Request object
+ * @param oRawResponse {Object} The raw response from the live database
+ * @return {Object} Parsed response object
+ */
+YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResponse) {
+        var bError = false;
+        var elTable = oRawResponse;
+        var fields = this.responseSchema.fields;
+        var oParsedResponse = {};
+        oParsedResponse.results = [];
+        
+        // Iterate through each TBODY
+        for(i=0; i<elTable.tBodies.length; i++) {
+            elTbody = elTable.tBodies[i];
+
+            // Iterate through each TR
+            for(var j=0; j<elTbody.rows.length; j++) {
+                var elRow = elTbody.rows[j];
+                var oResult = {};
+                
+                for(var k=fields.length-1; k>-1; k--) {
+                    var field = fields[k];
+                    var key = field.key || field;
+                    var data = elRow.cells[k].innerHTML;
+                    if(field.converter) {
+                        data = field.converter(data);
+                    }
+                    // Safety measure
+                    if(data === undefined) {
+                        data = null;
+                    }
+                    oResult[key] = data;
+                }
+                oParsedResponse.results.unshift(oResult);
+            }
+        }
+
+        if(bError) {
+            YAHOO.log("HTML TABLE data could not be parsed: " +
+                    YAHOO.lang.dump(oRawResponse), "error", this.toString());
+            oParsedResponse.error = true;
+        }
+        else {
+            YAHOO.log("Parsed HTML TABLE data is " +
+                    YAHOO.lang.dump(oParsedResponse), "info", this.toString());
+        }
+        return oParsedResponse;
 };
