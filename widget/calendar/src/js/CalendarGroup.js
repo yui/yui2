@@ -398,6 +398,37 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 	*/	
 	this.cfg.addProperty(defCfg.MDY_YEAR_POSITION.key,	{ value:defCfg.MDY_YEAR_POSITION.value, handler:this.delegateConfig, validator:this.cfg.checkNumber } );
 
+	/**
+	* The position of the month in the month year label string used as the Calendar header
+	* @config MY_LABEL_MONTH_POSITION
+	* @type Number
+	* @default 1
+	*/
+	this.cfg.addProperty(defCfg.MY_LABEL_MONTH_POSITION.key,	{ value:defCfg.MY_LABEL_MONTH_POSITION.value, handler:this.delegateConfig, validator:this.cfg.checkNumber } );
+
+	/**
+	* The position of the year in the month year label string used as the Calendar header
+	* @config MY_LABEL_YEAR_POSITION
+	* @type Number
+	* @default 2
+	*/
+	this.cfg.addProperty(defCfg.MY_LABEL_YEAR_POSITION.key,	{ value:defCfg.MY_LABEL_YEAR_POSITION.value, handler:this.delegateConfig, validator:this.cfg.checkNumber } );
+	
+	/**
+	* The suffix used after the month when rendering the Calendar header
+	* @config MY_LABEL_MONTH_SUFFIX
+	* @type String
+	* @default " "
+	*/
+	this.cfg.addProperty(defCfg.MY_LABEL_MONTH_SUFFIX.key,	{ value:defCfg.MY_LABEL_MONTH_SUFFIX.value, handler:this.delegateConfig } );
+	
+	/**
+	* The suffix used after the year when rendering the Calendar header
+	* @config MY_LABEL_YEAR_SUFFIX
+	* @type String
+	* @default ""
+	*/
+	this.cfg.addProperty(defCfg.MY_LABEL_YEAR_SUFFIX.key, { value:defCfg.MY_LABEL_YEAR_SUFFIX.value, handler:this.delegateConfig } );
 };
 
 /**
