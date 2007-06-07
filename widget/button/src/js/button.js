@@ -2417,7 +2417,7 @@
 
             var bSelected = p_aArgs[0];
 
-            if(bSelected) {
+            if (bSelected) {
             
                 this.set("selectedMenuItem", p_nItem);
 

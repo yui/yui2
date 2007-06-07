@@ -86,19 +86,19 @@
 ?>
 
                 // "contentready" event handler for the "menubuttonsfrommarkup" <fieldset>
-
-                function onMenuButtonsMarkupReady() {
-
+    
+                YAHOO.util.Event.onContentReady("menubuttonsfrommarkup", function () {
+    
                     // Create a Button using an existing <input> element as a data source
 
-                    var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menu", menu: "menubutton1select", autofocusmenu: false });
+                    var oMenuButton1 = new YAHOO.widget.Button("menubutton1", { type: "menu", menu: "menubutton1select" });
 
 
                     // Create a Button using the YUI Button markup
 
-                    var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menu", menu: "menubutton2select", autofocusmenu: false });
+                    var oMenuButton2 = new YAHOO.widget.Button("menubutton2", { type: "menu", menu: "menubutton2select" });
 
-                    var oMenuButton3 = new YAHOO.widget.Button("menubutton3", { type: "menu", menu: "menubutton3menu", autofocusmenu: false });
+                    var oMenuButton3 = new YAHOO.widget.Button("menubutton3", { type: "menu", menu: "menubutton3menu" });
 
 <?php
     if($g_sBuildType == "dev") {
@@ -109,11 +109,10 @@
 <?php
     }
 ?>
+                
+                });
 
-                }
-    
-                YAHOO.util.Event.onContentReady("menubuttonsfrommarkup", onMenuButtonsMarkupReady);
-    
+
 
                 // "click" event handler for each item in the Button's menu
 
@@ -134,7 +133,7 @@
                 
                 ];
 
-                var oMenuButton4 = new YAHOO.widget.Button({ type: "menu", label: "one", name:"mymenubutton", menu: aMenuButton4Menu, container: "menubuttonsfromjavascript", autofocusmenu: false });            
+                var oMenuButton4 = new YAHOO.widget.Button({ type: "menu", label: "one", name:"mymenubutton", menu: aMenuButton4Menu, container: "menubuttonsfromjavascript" });            
 
 <?php
     if($g_sBuildType == "dev") {
@@ -146,12 +145,14 @@
 
                 YAHOO.util.Event.onContentReady("menubuttonsfromjavascript", function () {
                 
-                    var oOverlay = new YAHOO.widget.Overlay("menubutton5menu", { visible:false });
+                    var oOverlay = new YAHOO.widget.Overlay("menubutton5menu", { visible: false });
                     
                     oOverlay.setBody("Menu Button 5 Menu");
-                    oOverlay.render("menubuttonsfromjavascript");
+                    oOverlay.render(this);
   
-                    var oMenuButton5 = new YAHOO.widget.Button({ type: "menu",  label: "Menu Button 5", menu: oOverlay, container: "menubuttonsfromjavascript", autofocusmenu: false });
+                    var oMenuButton5 = new YAHOO.widget.Button({ type: "menu",  label: "Menu Button 5", menu: oOverlay });
+                    
+                    oMenuButton5.appendTo(this);
 
 <?php
     if($g_sBuildType == "dev") {

@@ -135,8 +135,8 @@
 
                 // "contentready" event handler for the "radiobuttonsfrommarkup" <fieldset>    
     
-                function onRadioButtonMarkupReady() {
-    
+                YAHOO.util.Event.onContentReady("radiobuttonsfrommarkup", function () {
+
                     var oButtonGroup1 = new YAHOO.widget.ButtonGroup("buttongroup1");
                     oButtonGroup1.on("checkedButtonChange", onCheckedButtonChange);
     
@@ -149,11 +149,9 @@
                     aGroups[1] = oButtonGroup2;
 <?php
     }
-?>
-    
-                }
-    
-                YAHOO.util.Event.onContentReady("radiobuttonsfrommarkup", onRadioButtonMarkupReady);
+?>                
+                
+                });
     
     
                 // Create a ButtonGroup without using existing markup
