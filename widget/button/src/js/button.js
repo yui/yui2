@@ -2414,8 +2414,14 @@
         * item that subscribed to the event.
         */
         _onMenuItemSelected: function (p_sType, p_aArgs, p_nItem) {
+
+            var bSelected = p_aArgs[0];
+
+            if(bSelected) {
             
-            this.set("selectedMenuItem", p_nItem);
+                this.set("selectedMenuItem", p_nItem);
+
+            }
         
         },
         

@@ -86,9 +86,11 @@
     }
 ?>
 
+                }
+  
                 // "contentready" event handler for the "splitbuttonsfrommarkup" <fieldset>
-
-                function onSplitButtonsMarkupReady() {
+  
+                YAHOO.util.Event.onContentReady("splitbuttonsfrommarkup", function () {
 
                     // Create a Button using an existing <input> element as a data source
     
@@ -110,11 +112,9 @@
                     registerButton(oSplitButton3);                    
 <?php
     }
-?>
-
-                }
-    
-                YAHOO.util.Event.onContentReady("splitbuttonsfrommarkup", onSplitButtonsMarkupReady);
+?>                
+                
+                });
 
 
                 // Create a Button without using existing markup    
@@ -141,9 +141,11 @@
                     var oOverlay = new YAHOO.widget.Overlay("splitbutton5menu", { visible:false });
                     
                     oOverlay.setBody("Split Button 5 Menu");
-                    oOverlay.render("splitbuttonsfromjavascript");
+                    oOverlay.render(this);
     
-                    var oSplitButton5 = new YAHOO.widget.Button({ type: "split",  label: "Split Button 5", menu: oOverlay, container: "splitbuttonsfromjavascript" });
+                    var oSplitButton5 = new YAHOO.widget.Button({ type: "split",  label: "Split Button 5", menu: oOverlay });
+
+                    oSplitButton5.appendTo(this);
 
                     <?php
                         if($g_sBuildType == "dev") {
