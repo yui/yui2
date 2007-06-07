@@ -9,6 +9,9 @@ Added the following features:
 + Added a "lazyloadmenu" configuration attribute that controls the value of 
  the "lazyload" configuration property of a Button's menu.
 
++ Added "menuclassname" configuration attribute that defines a CSS class name
+  to be applied to the root HTML element of a button's menu.
+
 
 Fixed the following bugs:
 -------------------------
@@ -80,6 +83,21 @@ Changes:
 
 + Renamed "TAG_NAME" constant (YAHOO.widget.Button.prototype.TAG_NAME) to 
   "NODE_NAME" (YAHOO.widget.Button.prototype.NODE_NAME).
+
++ The "selectedMenuItem" configuration attribute now correctly gets/sets the 
+  index of the selected MenuItem instance of the button's menu, rather than a
+  MenuItem instance.
+
++ The "container" configuration attribute is now writeonce
+
++ The "menu" configuration attribute is now writeonce
+
++ The root element of each button's menu now will have two CSS classes 
+  appended to it:
+    - The CSS class name specified by the "menuclassname" configuration 
+      attribute (by default is "yui-button-menu")
+    - A type-specific class name (either "yui-split-button-menu" 
+      or "yui-menu-button-menu")
 
 + "menu" configuration attribute now supports creation or use of 
   YAHOO.widget.Overlay in addition to previously supported 
