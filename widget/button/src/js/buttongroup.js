@@ -371,8 +371,9 @@
             this.on("keydown", this._onKeyDown);
             this.on("appendTo", this._onAppendTo);
         
+
             var oContainer = this.get("container");
-        
+
             if (oContainer) {
         
                 if (Lang.isString(oContainer)) {
@@ -470,7 +471,8 @@
             */
             this.setAttributeConfig("container", {
         
-                value: oAttributes.container
+                value: oAttributes.container,
+                writeOnce: true
         
             });
         
@@ -515,6 +517,8 @@
         addButton: function (p_oButton) {
         
             var oButton,
+                oButtonElement,
+                oGroupElement,
                 nIndex,
                 sButtonName,
                 sGroupName;
@@ -531,7 +535,7 @@
                 p_oButton.type = "radio";
         
                 oButton = new Button(p_oButton);
-            
+
             }
             else {
         
@@ -570,6 +574,16 @@
         
                     this.set("checkedButton", oButton);
         
+                }
+
+                
+                oButtonElement = oButton.get("element");
+                oGroupElement = this.get("element");
+                
+                if (oButtonElement.parentNode != oGroupElement) {
+                
+                    oGroupElement.appendChild(oButtonElement);
+                
                 }
         
                 
