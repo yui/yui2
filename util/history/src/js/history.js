@@ -21,27 +21,6 @@
 YAHOO.util.History = ( function () {
 
     /**
-     * User agent string used for browser detection.
-     *
-     * @property _ua
-     * @type string
-     * @default null
-     * @private
-     */
-    var _ua = null;
-
-    /**
-     * String identifying which browser we are in.
-     * Different code is run depending on which browser you are using.
-     *
-     * @property _browser
-     * @type string
-     * @default "unknown"
-     * @private
-     */
-    var _browser = "unknown";
-
-    /**
      * Our hidden IFrame used to store the browsing history.
      *
      * @property _iframe
@@ -171,7 +150,7 @@ YAHOO.util.History = ( function () {
 
         _storageField.value = initialStates.join( "&" ) + "|" + currentStates.join( "&" );
 
-        if ( _browser === "safari" ) {
+        if ( YAHOO.env.ua.webkit ) {
             _storageField.value += "|" + _fqstates.join( "," );
         }
     }
@@ -379,7 +358,7 @@ YAHOO.util.History = ( function () {
 
         _storageFieldReady = true;
 
-        if ( _browser === "msie" ) {
+        if ( YAHOO.env.ua.ie ) {
 
             _iframe = document.getElementById( "yui_hist_iframe" );
             _checkIframeLoaded();
@@ -432,24 +411,6 @@ YAHOO.util.History = ( function () {
 
             YAHOO.util.History.onLoadEvent.fire();
         }
-    }
-
-    // Simple browser detection code
-    // After talking with Matt Sweeney, I moved back to using the
-    // user agent string instead of doing browser detection.
-    _ua = navigator.userAgent.toLowerCase();
-    if ( _ua.indexOf( "opera" ) !== -1 ) {
-        // Opera (check first in case of spoof)
-        _browser = "opera";
-    } else if ( _ua.indexOf( "msie" ) !== -1 ) {
-        // Microsoft Internet Explorer and derivatives...
-        _browser = "msie";
-    } else if ( _ua.indexOf( "safari" ) !== -1 ) {
-        // Safari (check before Gecko because it includes "like Gecko")
-        _browser = "safari";
-    } else if ( _ua.indexOf( "gecko" ) !== -1 ) {
-        // Gecko
-        _browser = "gecko";
     }
 
     return {
@@ -554,10 +515,6 @@ YAHOO.util.History = ( function () {
                 return;
             }
 
-            if ( _browser === "unknown" ) {
-                throw new Error( "Your web browser is not supported by the Browser History Manager" );
-            }
-
             if ( !iframeTarget ) {
                 iframeTarget = "blank.html";
             }
@@ -568,7 +525,7 @@ YAHOO.util.History = ( function () {
 
             document.write( '<input type="hidden" id="yui_hist_field">' );
 
-            if ( _browser === "msie" ) {
+            if ( YAHOO.env.ua.ie ) {
                 if ( location.protocol === "https:" ) {
                     // If we use https, we MUST point the IFrame to a valid
                     // document on the same server. If we don't, we will get
@@ -677,7 +634,7 @@ YAHOO.util.History = ( function () {
 
             fqstate = currentStates.join( "&" );
 
-            if ( _browser === "msie" ) {
+            if ( YAHOO.env.ua.ie ) {
 
                 html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
                 try {
@@ -700,7 +657,7 @@ YAHOO.util.History = ( function () {
                 // we'll consider this an acceptable bug, and hope that Apple
                 // comes out with their next version of Safari very soon.
                 top.location.hash = fqstate;
-                if ( _browser === "safari" ) {
+                if ( YAHOO.env.ua.webkit ) {
                     // The following two lines are only useful for Safari 1.x
                     // and 2.0. Recent nightly builds of WebKit do not require
                     // that, but unfortunately, it is not easy to differentiate
