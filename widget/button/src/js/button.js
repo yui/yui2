@@ -1013,7 +1013,7 @@
                 
                 }
                 else {
-        
+
                     this.removeStateCSSClasses("checked");
         
                     sTitle = (sType == "radio") ? 
@@ -1037,7 +1037,7 @@
         * "menu" attribute.
         */
         _setMenu: function (p_oMenu) {
-        
+
             var bLazyLoad = this.get("lazyloadmenu"),
                 oButtonElement = this.get("element"),
         
@@ -1090,7 +1090,11 @@
             function initMenu() {
         
                 if (oMenu) {
-        
+
+                    Dom.addClass(oMenu.element, this.get("menuclassname"));
+                    Dom.addClass(oMenu.element, 
+                            "yui-" + this.get("type") + "-button-menu");
+
                     oMenu.showEvent.subscribe(this._onMenuShow, null, this);
                     oMenu.hideEvent.subscribe(this._onMenuHide, null, this);
                     oMenu.renderEvent.subscribe(this._onMenuRender, null, this);
@@ -1133,7 +1137,7 @@
         
         
                     this._menu = oMenu;
-                    
+
         
                     if (!bInstance) {
         
@@ -1166,12 +1170,6 @@
                         }
                     
                     }
-        
-                }
-                else {
-        
-                    this._menu.destroy();
-                    this._menu = null;
         
                 }
         
@@ -1327,6 +1325,35 @@
         
         },
         
+        
+        /**
+        * @method _setSelectedMenuItem
+        * @description Sets the value of the button's 
+        * "selectedMenuItem" attribute.
+        * @protected
+        * @param {Number} p_nIndex Number representing the index of the item 
+        * in the button's menu that is currently selected.
+        */
+        _setSelectedMenuItem: function (p_nIndex) {
+
+            var oMenu = this._menu,
+                oMenuItem;
+
+
+            if (oMenu && oMenu instanceof Menu) {
+
+                oMenuItem = oMenu.getItem(p_nIndex);
+                
+
+                if (oMenuItem && !oMenuItem.cfg.getProperty("selected")) {
+                
+                    oMenuItem.cfg.setProperty("selected", true);
+                
+                }
+            
+            }
+
+        },
         
         
         // Protected methods
@@ -2363,12 +2390,14 @@
                 oMenuElement = this._menu.element;
         
         
-            if (oButtonParent != oButtonElement.parentNode) {
+            if (oButtonParent != oMenuElement.parentNode) {
         
                 oButtonParent.appendChild(oMenuElement);
             
             }
-        
+
+            this.set("selectedMenuItem", this.get("selectedMenuItem"));
+
         },
         
         
@@ -2381,13 +2410,12 @@
         * that was fired.
         * @param {Array} p_aArgs Array of arguments sent when the event 
         * was fired.
-        * @param {<a href="YAHOO.widget.MenuItem.html">
-        * YAHOO.widget.MenuItem</a>} p_oItem Object representing the menu 
+        * @param {Number} p_nItem Number representing the index of the menu
         * item that subscribed to the event.
         */
-        _onMenuItemSelected: function (p_sType, p_aArgs, p_oItem) {
+        _onMenuItemSelected: function (p_sType, p_aArgs, p_nItem) {
             
-            this.set("selectedMenuItem", p_oItem);
+            this.set("selectedMenuItem", p_nItem);
         
         },
         
@@ -2410,7 +2438,7 @@
         
             oItem.cfg.subscribeToConfigEvent("selected", 
                 this._onMenuItemSelected, 
-                oItem, 
+                oItem.index, 
                 this);
         
         },
@@ -2578,7 +2606,7 @@
                     this.logger.log("Creating hidden field for menu.");
         
                     oMenuField = oMenu.srcElement;
-                    oMenuItem = this.get("selectedMenuItem");
+                    oMenuItem = oMenu.getItem(this.get("selectedMenuItem"));
         
                     if (oMenuField && 
                         oMenuField.nodeName.toUpperCase() == "SELECT") {
@@ -2830,8 +2858,8 @@
             var oContainer = this.get("container"),
                 oElement = this.get("element"),
                 oParentNode;
-        
-        
+
+
             if (oContainer) {
         
                 if (Lang.isString(oContainer)) {
@@ -3073,7 +3101,8 @@
             */
             this.setAttributeConfig("container", {
         
-                value: oAttributes.container
+                value: oAttributes.container,
+                writeOnce: true
         
             });
         
@@ -3133,7 +3162,8 @@
             this.setAttributeConfig("menu", {
         
                 value: null,
-                method: this._setMenu
+                method: this._setMenu,
+                writeOnce: true
             
             });
         
@@ -3165,23 +3195,41 @@
             this.setAttributeConfig("lazyloadmenu", {
         
                 value: (oAttributes.lazyloadmenu === false ? false : true),
-                validator: Lang.isBoolean
+                validator: Lang.isBoolean,
+                writeOnce: true
         
             });
+
+
+            /**
+            * @config menuclassname
+            * @description String representing the CSS class name to be 
+            * applied to the root element of the button's menu.
+            * @type String
+            * @default "yui-button-menu"
+            */
+            this.setAttributeConfig("menuclassname", {
         
+                value: (oAttributes.menuclassname || "yui-button-menu"),
+                validator: Lang.isString,
+                method: this._setMenuClassName,
+                writeOnce: true
         
+            });        
+
+
             /**
             * @config selectedMenuItem
-            * @description Reference to the item in the button's menu that is
-            * currently selected.
-            * @type <a href="YAHOO.widget.MenuItem.html">
-            * YAHOO.widget.MenuItem</a>
+            * @description Number representing the index of the item in the 
+            * button's menu that is currently selected.
+            * @type Number
             * @default null
             */
             this.setAttributeConfig("selectedMenuItem", {
         
                 value: 0,
-                validator: Lang.isNumber
+                validator: Lang.isNumber,
+                method: this._setSelectedMenuItem
         
             });
         
