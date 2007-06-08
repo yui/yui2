@@ -1,4 +1,35 @@
 YAHOO.example.Data = {
+    apitester: [
+        {number:0, date:new Date(1999, 1, 1), string:"1"},
+        {number:1, date:new Date(1999, 10, 10), string:"12"},
+        {number:2, date:new Date(2000, 1, 1), string:"123"},
+        {number:3, date:new Date(2000, 10, 1), string:"10"},
+        {number:4, date:new Date(2001, 10, 12), string:"1"},
+        {number:5, date:new Date(2001, 1, 12), string:"123"},
+        {number:6, date:new Date(2001, 10, 1), string:"11"},
+        {number:7, date:new Date(2001, 10, 1), string:"16"},
+        {number:8, date:new Date(2001, 10, 1), string:"8"},
+        {number:9, date:new Date(2001, 10, 1), string:"6"},
+        {number:10, date:new Date(2001, 10, 1), string:"66"},
+        {number:11, date:new Date(2001, 10, 1), string:"111"},
+        {number:12, date:new Date(2001, 10, 1), string:"110"}
+    ],
+
+    formatting: {
+        items: [
+            {field1: "001", field2:new Date(2007, 1, 1), field3:111, field4:"23.4", field5:"bob", field6:"http://www.yahoo.com"},
+            {field1: undefined, field2:new Date(2006, 1, 1), field3:12.3, field4:"35.12", field5:"ann", field6:"http://www.yahoo.com"},
+            {field1: 001, field2:new Date(2007, 11, 1), field3:1, field4:34.12, field5:"charlie", field6:"http://www.yahoo.com"},
+            {field1: "aaab", field2:new Date(2007, 1, 11), field3:1112, field4:"03", field5:"diane", field6:"http://www.yahoo.com"},
+            {field1: "1", field2:new Date(1999, 1, 11), field3:124, field4:03, field5:"edgar", field6:"http://www.yahoo.com"},
+            {field1: new Date(1999, 1, 11), field2:"January 10, 2005", field3:"12", field4:"34", field5:"francine", field6:"http://www.yahoo.com"},
+            {field1: "11", field2:"January 1, 2005", field3:"19.1", field4:"234.5", field5:"george", field6:"http://www.yahoo.com"},
+            {field1: null, field2:"1/11/05", field3:"10.02", field4:"345.654", field5:"hannah", field6:"http://www.yahoo.com"},
+            {field1: 110, field2:"1/11/2005", field3:"109", field4:23.456, field5:"igor", field6:"http://www.yahoo.com"},
+            {field1: [1,2,3], field2:"November 1, 2005", field3:"11111", field4:23.0123, field5:"julie", field6:"http://www.yahoo.com"}
+        ]
+    },
+
     webstats: [
         ["home.html",20,400,44,657],
         ["blog.html",24,377,97,567],
@@ -28,19 +59,47 @@ YAHOO.example.Data = {
         {SKU:"39-48949", Quantity:55, Item:"Snowboard", Description:""},
         {SKU:"99-28128", Quantity:77, Item:"Cleats", Description:"Soccer cleats. Size: 10."},
         {SKU:"83-48281", Quantity:65, Item:"Volleyball", Description:""},
-        {SKU:"89-32811", Quantity:67, Item:"Sweatband", Description:"Blue sweatband. Size: Medium."},
+        {SKU:"89-32811", Quantity:12, Item:"Sweatband", Description:"Blue sweatband. Size: Medium."},
         {SKU:"28-22847", Quantity:43, Item:"Golf Set", Description:"Set of 9 golf clubs and bag."},
-        {SKU:"38-38281", Quantity:35, Item:"Basketball Shorts", Description:"Green basketball shorts. Size: Small."},
+        {SKU:"38-38281", Quantity:1, Item:"Basketball Shorts", Description:"Green basketball shorts. Size: Small."},
         {SKU:"82-38333", Quantity:288, Item:"Lip balm", Description:"Lip balm. Flavor: Cherry."},
         {SKU:"21-38485", Quantity:177, Item:"Ping Pong Ball", Description:""},
         {SKU:"83-38285", Quantity:87, Item:"Hockey Puck", Description:"Glow-in-the-dark hockey puck."}
     ],
 
+    addresses: [
+        {name:"John A. Smith", address:"1236 Some Street", city:"San Francisco", state:"CA", amount:5, active:"yes", colors:["red"], last_login:"4/19/2007"},
+        {name:"Joan B. Jones", address:"3271 Another Ave", city:"New York", state:"NY", amount:3, active:"no", colors:["red","blue"], last_login:"2/15/2006"},
+        {name:"Bob C. Uncle", address:"9996 Random Road", city:"Los Angeles", state:"CA", amount:0, active:"maybe", colors:["green"], last_login:"1/23/2004"},
+        {name:"John D. Smith", address:"1623 Some Street", city:"San Francisco", state:"CA", amount:5, active:"yes", colors:["red"], last_login:"4/19/2007"},
+        {name:"Joan E. Jones", address:"3217 Another Ave", city:"New York", state:"NY", amount:3, active:"no", colors:["red","blue"], last_login:"2/15/2006"},
+        {name:"Bob F. Uncle", address:"9899 Random Road", city:"Los Angeles", state:"CA", amount:0, active:"maybe", colors:["green"], last_login:"1/23/2004"},
+        {name:"John G. Smith", address:"1723 Some Street", city:"San Francisco", state:"CA", amount:5, active:"yes", colors:["red"], last_login:"4/19/2007"},
+        {name:"Joan H. Jones", address:"3241 Another Ave", city:"New York", state:"NY", amount:3, active:"no", colors:["red","blue"], last_login:"2/15/2006"},
+        {name:"Bob I. Uncle", address:"9909 Random Road", city:"Los Angeles", state:"CA", amount:0, active:"maybe", colors:["green"], last_login:"1/23/2004"},
+        {name:"John J. Smith", address:"1623 Some Street", city:"San Francisco", state:"CA", amount:5, active:"yes", colors:["red"], last_login:"4/19/2007"},
+        {name:"Joan K. Jones", address:"3721 Another Ave", city:"New York", state:"NY", amount:3, active:"no", colors:["red","blue"], last_login:"2/15/2006"},
+        {name:"Bob L. Uncle", address:"9989 Random Road", city:"Los Angeles", state:"CA", amount:0, active:"maybe", colors:["green"], last_login:"1/23/2004"},
+        {name:"John M. Smith", address:"1293 Some Street", city:"San Francisco", state:"CA", amount:5, active:"yes", colors:["red"], last_login:"4/19/2007"},
+        {name:"Joan N. Jones", address:"3621 Another Ave", city:"New York", state:"NY", amount:3, active:"no", colors:["red","blue"], last_login:"2/15/2006"},
+        {name:"Bob O. Uncle", address:"9959 Random Road", city:"Los Angeles", state:"CA", amount:0, active:"maybe", colors:["green"], last_login:"1/23/2004"},
+        {name:"John P. Smith", address:"6123 Some Street", city:"San Francisco", state:"CA", amount:5, active:"yes", colors:["red"], last_login:"4/19/2007"},
+        {name:"Joan Q. Jones", address:"3281 Another Ave", city:"New York", state:"NY", amount:3, active:"no", colors:["red","blue"], last_login:"2/15/2006"},
+        {name:"Bob R. Uncle", address:"9989 Random Road", city:"Los Angeles", state:"CA", amount:0, active:"maybe", colors:["green"], last_login:"1/23/2004"}
+    ],
+
     bookorders: [
         {id:"po-0167", date:new Date(1980, 2, 24), quantity:1, amount:4, title:"A Book About Nothing"},
-        {id:"po-0297", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life"},
-        {id:"po-0783", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud"},
+        {id:"po-0783", date:new Date("January 3, 1983"), quantity:null, amount:12.12345, title:"The Meaning of Life"},
+        {id:"po-0297", date:new Date(1978, 11, 12), quantity:12, amount:1.25, title:"This Book Was Meant to Be Read Aloud"},
         {id:"po-1482", date:new Date("March 11, 1985"), quantity:6, amount:3.5, title:"Read Me Twice"}
+    ],
+    
+    stateAbbrs: [
+        "AL","AK","AZ","AR","CA","CO","CT","DE","DC","FL","GA","HI",
+        "ID","IL","IN","IA","KS","KY","LA","ME","MD","MA","MI","MN","MS",
+        "MO","MT","NE","NV","NH","NJ","NM","NY","NC","ND","OH","OK","OR",
+        "PA","RI","SC","SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
     ],
     
     areacodes: [

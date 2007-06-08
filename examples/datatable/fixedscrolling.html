@@ -1,7 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - JSON Data Over XHR (YUI Library)</title>
+<title>Example: DataTable - Scrolling (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -9,28 +9,48 @@
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
 <link type="text/css" rel="stylesheet" href="../assets/dpSyntaxHighlighter.css">
 <style type="text/css">
-/* custom css*/
-#json {margin:1em;}
-#json table {border-collapse:collapse;}
-#json th, #json td {padding:.5em;border:1px solid #000;}
-#json th {background-color:#696969;color:#fff;}/*dark gray*/
-#json th a {color:#fff;} /* white */
-#json tr.yui-dt-odd {background-color:#eee;} /*light gray*/
+/* customized css for scrolling */
+.yui-dt-scrollable  {
+    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure columns add up to this total) */
+    height:30em; /* SET HEIGHT HERE for ie */
+}
+.yui-dt-scrollbody {
+    height:30em; /* SET HEIGHT HERE for non-ie */
+    *height:auto; /* for ie */
+}
+.yui-dt-scrollable  thead {
+    background:#696969; /*dark gray*/ /* ie needs a background color */
+    color:#fff;
+}
 
-/* sorting */
-#json th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
-#json th.yui-dt-asc, #json th.yui-dt-desc {background-color:#3F3F3F;} /*dark gray*/
-#json th.yui-dt-asc .yui-dt-label {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;} /*arrow up*/
-#json th.yui-dt-desc .yui-dt-label {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;} /*arrow down*/
+/* SET WIDTHS FOR EACH TH TO HELP ALIGN COLUMNS */
+/* IF ALL COLS CAN BE SAME WIDTH USE THIS:
+.yui-dt-scrollable th, .yui-dt-scrollbody td {
+    width:20em;
+}*/
+/* OTHERWISE SET EACH COL WIDTH EXPLICITLY:*/
+.yui-dt-areacode {
+    width:10em;
+}
+.yui-dt-state {
+    width:20em;
+}
+
+/* custom css*/
+#fixedscrolling {margin:1em;}
+#fixedscrolling table {border-collapse:collapse;}
+#fixedscrolling th, #scroll td {border:1px solid #000;}
+#fixedscrolling tr.yui-dt-odd {background-color:#eee;} /*light gray*/
+
 </style>
 </head>
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: JSON Data Over XHR</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Scrolling</h1>
 </div>
 <div id="bd">
-    <div id="json"></div>
-    
+    <div id="fixedscrolling"></div>
+
     <!-- Sample code begins -->
     <div id="code">
         <h3>Sample Code</h3>
@@ -41,6 +61,14 @@
         </textarea>
 
         <p>CSS:</p>
+        
+        <p>All of the CSS rules shown below build upon the foundational CSS that
+        is provided with DataTable. When a DataTable's <code>scrollable</code>
+        property is set to <code>true</code>, the classes <code>yui-dt-scrollable</code>
+        and <code>yui-dt-scrollbody</code> are applied to the appropriate
+        elements by the DataTable. These classes are defined in the foundational
+        CSS, and this example shows how to modify them to get specific
+        characteristics with respect to column width, table height, and so on.</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
         </textarea>
@@ -51,6 +79,9 @@
         </textarea>
 
         <p>JavaScript:</p>
+        
+        <p>To make a DataTable instance scrollable, set the <code>scrollable</code>
+        property to <code>true</code> at instantiation (as in line 13 below).</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
         </textarea>
@@ -62,39 +93,33 @@
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/element/element-beta.js"></script>
-<script type="text/javascript" src="../../build/connection/connection.js"></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
+<script type="text/javascript" src="./js/data.js"></script>
 <script type="text/javascript">
-YAHOO.example.XHR_JSON = new function() {
+YAHOO.example.Scrolling = new function() {
     this.myLogger = new YAHOO.widget.LogReader();
-    this.myLogger.collapse();
 
     /****************************************************************************/
     /****************************************************************************/
     /****************************************************************************/
-    this.formatUrl = function(elCell, oRecord, oColumn, sData) {
-        elCell.innerHTML = "<a href='" + oRecord.getData("ClickUrl") + "' target='_blank'>" + sData + "</a>";
-    };
 
     var myColumnHeaders = [
-        {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
-        {key:"Phone"},
-        {key:"City"},
-        {key:"Rating.AverageRating", text:"Rating", type:"number", sortable:true}
+        {key:"areacode"},
+        {key:"state"}
     ];
     this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
-    this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
-    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
+    this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     this.myDataSource.responseSchema = {
-        resultsList: "ResultSet.Result",
-        fields: ["Title","Phone","City",{key:"Rating.AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
+        fields: ["areacode","state"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("json", this.myColumnSet,
-            this.myDataSource, {initialRequest:"query=pizza&zip=94089&results=10&output=json"});
+    this.myDataTable = new YAHOO.widget.DataTable("fixedscrolling", this.myColumnSet,
+            this.myDataSource, {scrollable:true});
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
