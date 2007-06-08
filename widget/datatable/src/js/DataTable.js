@@ -2266,7 +2266,7 @@ YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {debugger;
+YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
