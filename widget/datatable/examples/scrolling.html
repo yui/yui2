@@ -10,8 +10,11 @@
 <link type="text/css" rel="stylesheet" href="../assets/dpSyntaxHighlighter.css">
 <style type="text/css">
 /* custom css*/
-#scroll {margin:1em; width:30em; height:20em; overflow:auto;}
-#scroll table {border-collapse:collapse; width:100%;}
+
+#scroll {margin:1em;
+        width:30em; height:20em; overflow:auto;} /* set width, height & auto overflow on outer container */
+#scroll table {border-collapse:collapse;
+        width:100%;} /* set width 100% on the table itself */
 #scroll th {border:1px solid #000; background-color:#696969; color:#fff;}
 #scroll th, #scroll td {border:1px solid #000;}
 #scroll tr.yui-dt-odd {background-color:#eee;} /*light gray*/
@@ -32,11 +35,6 @@
         <p>Data:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.example.Data.areacodes = [
-    {areacode: "201", state: "New Jersey"},
-    ...,
-    {areacode: "989", state: "Michigan"}
-];
         </textarea>
 
         <p>CSS:</p>
@@ -50,44 +48,11 @@ YAHOO.example.Data.areacodes = [
         characteristics with respect to column width, table height, and so on.</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-/* customized css for scrolling */
-.yui-dt-scrollable  {
-    width:30em; /* SET OVERALL WIDTH HERE for ie (make sure columns add up to this total) */
-    height:30em; /* SET HEIGHT HERE for ie */
-}
-.yui-dt-scrollbody {
-    height:30em; /* SET HEIGHT HERE for non-ie */
-    *height:auto; /* for ie */
-}
-.yui-dt-scrollable  thead {
-    background:#696969; /* for ie */
-}
-
-/* SET WIDTHS FOR EACH TH TO HELP ALIGN COLUMNS */
-/* IF ALL COLS CAN BE SAME WIDTH USE THIS:
-.yui-dt-scrollable th, .yui-dt-scrollbody td {
-    width:20em;
-}*/
-/* OTHERWISE SET EACH COL WIDTH EXPLICITLY:*/
-.yui-dt-scrollable .col1 {
-    width:10em; /* this column was assigned "col1" as "className" */
-}
-.yui-dt-scrollable .col2 {
-    width:20em; /* this column was assigned "col2" as "className" */
-}
-
-/* custom css*/
-#scroll {margin:1em;}
-#scroll table {border-collapse:collapse;}
-#scroll th, #scroll td {border:1px solid #000;}
-#scroll th {background-color:#696969;color:#fff;}/*dark gray*/
-#scroll .yui-dt-odd {background-color:#eee;} /*light gray*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-<div id="scroll"></div>
         </textarea>
 
         <p>JavaScript:</p>
@@ -96,27 +61,15 @@ YAHOO.example.Data.areacodes = [
         property to <code>true</code> at instantiation (as in line 13 below).</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-var myColumnHeaders = [
-    {key:"areacode",className:"col1"},
-    {key:"state",className:"col2"}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["areacode","state"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("scroll",myColumnSet,myDataSource);
         </textarea>
     </div>
     <!-- Code sample ends -->
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/element/element-beta.js"></script>
 <script type="text/javascript" src="../../build/dragdrop/dragdrop.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>

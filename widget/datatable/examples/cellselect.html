@@ -23,7 +23,7 @@
     <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Cell Selection</h1>
 </div>
 <div id="bd">
-    <div id="cell" class="selectionexample"></div>
+    <div id="singlecell" class="selectionexample"></div>
     <div id="cellblock" class="selectionexample"></div>
     <div id="cellrange" class="selectionexample"></div>
 
@@ -34,77 +34,30 @@
         <p>Data:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.example.Data.emails = {
-    account:"jenny@yahoo.com",
-    currStorage: 10,
-    maxStorage: 200,
-    messages: [
-        {XID: "9897",Date:new Date(1981, 2, 24),To:"Joe",From:"Jenny",Unread:false,Subject:"Check out my new pictures"},
-        {XID: "7899",Date:new Date(1980, 1, 11),To:"Jane",From:"Jenny",Unread:false,Subject:"Let's have lunch"},
-        {XID: "6789",Date:new Date(1978, 11, 12),To:"Ann",From:"Jenny",Unread:false,Subject:"Here's the info you requested"},
-        {XID: "4996",Date:new Date(1974, 1, 11),To:"Bob",From:"Jenny",Unread:true,Subject:"RE: Let's have lunch"},
-        {XID: "4544",Date:new Date(1974, 1, 10),To:"Charlie",From:"Jenny",Unread:false,Subject:"Birthday party Saturday"}
-    ]
-};
         </textarea>
 
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-/* custom css*/
-.selectionexample {margin:1em;}
-.selectionexample table {border-collapse:collapse;}
-.selectionexample th, #rowselect td {border:1px solid #000;padding:.25em;}
-.selectionexample th {background-color:#696969;color:#fff;}/*dark gray*/
-.selectionexample .yui-dt-odd {background-color:#eee;} /*light gray*/
-.selectionexample .yui-dt-selected {background-color:#97C0A5;} /*green*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-&lt;div id="standardselect" class="selectionexample"&gt;&lt;/div&gt;
-&lt;div id="singleselect" class="selectionexample">&gt;&lt;/div&gt;
         </textarea>
 
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-var myColumnHeaders = [
-    {key:"Date",type:"date"},
-    {key:"To"},
-    {key:"From"},
-    {key:"Subject"}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource.responseSchema = {
-    resultsList: ["messages"],
-    fields: ["Date","To","From","Subject","XID","Date","Attachment"]
-};
-
-// Default selection mode
-var defaultDataTable = new YAHOO.widget.DataTable("standardselect",myColumnSet,myDataSource,
-        {caption:"Example: Default Selection Mode"});
-defaultDataTable.subscribe("cellClickEvent",defaultDataTable.onEventSelectRow);
-
-// Single-row selection mode
-var singleRowDataTable = new YAHOO.widget.DataTable("singleselect",myColumnSet,myDataSource,
-        {caption:"Example: Single-row Selection Mode", rowSingleSelect:true});
-singleRowDataTable.subscribe("cellClickEvent",singleRowDataTable.onEventSelectRow);
-
-// Select the first row immediately
-singleRowDataTable.select(singleRowDataTable.getTrEl(0));
         </textarea>
     </div>
     <!-- Code sample ends -->
 </div>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/element/element-beta.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
@@ -132,14 +85,14 @@ YAHOO.example.CellSelection = new function() {
         fields: ["Date","To","From","Subject","XID","Date","Attachment"]
     };
 
-    this.cellSelectDataTable = new YAHOO.widget.DataTable("cell",
+    this.singleCellSelectDataTable = new YAHOO.widget.DataTable("singlecell",
             this.myColumnSet, this.myDataSource, {
                 caption:"Example: Single-Cell Selection Triggered by Mouseover",
-                selectionMode:"cell"
+                selectionMode:"singlecell"
             });
 
     // Subscribe to event for cell selection
-    this.cellSelectDataTable.subscribe("cellMouseoverEvent", this.cellSelectDataTable.onEventSelectCell);
+    this.singleCellSelectDataTable.on("cellMouseoverEvent", this.singleCellSelectDataTable.onEventSelectCell);
 
     this.cellBlockSelectDataTable = new YAHOO.widget.DataTable("cellblock",
             this.myColumnSet, this.myDataSource, {
@@ -148,7 +101,7 @@ YAHOO.example.CellSelection = new function() {
             });
             
     // Subscribe to event for cell selection
-    this.cellBlockSelectDataTable.subscribe("cellDblclickEvent", this.cellBlockSelectDataTable.onEventSelectCell);
+    this.cellBlockSelectDataTable.on("cellDblclickEvent", this.cellBlockSelectDataTable.onEventSelectCell);
 
     this.cellRangeSelectDataTable = new YAHOO.widget.DataTable("cellrange",
             this.myColumnSet, this.myDataSource, {
@@ -157,7 +110,7 @@ YAHOO.example.CellSelection = new function() {
             });
             
     // Subscribe to event for cell selection
-    this.cellRangeSelectDataTable.subscribe("cellClickEvent", this.cellRangeSelectDataTable.onEventSelectCell);
+    this.cellRangeSelectDataTable.on("cellClickEvent", this.cellRangeSelectDataTable.onEventSelectCell);
 };
 
 /*var printSelections = function() {

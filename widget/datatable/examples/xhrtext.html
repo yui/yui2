@@ -38,55 +38,21 @@
         <p>Data:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-Domino's Pizza|615 Caliente Dr|Sunnyvale|(408) 732-3030|4|http://local.yahoo.com/details?id=21335892&amp;stx=pizza&amp;csz=Sunnyvale+CA&amp;ed=17rS8q160Sy5Htog0TF1m1atNv01Iz7ySeGEMtCL4dJsf1ku0nhziD2qN5XcnHlJtDS4IydIbA--
-...
-Little Caesars Pizza|1039 Sunnyvale Saratoga Rd|Sunnyvale|(408) 245-0607|3|http://local.yahoo.com/details?id=21330174&amp;stx=pizza&amp;csz=Sunnyvale+CA&amp;ed=89myuK160Syd6uoWQ5fTb6uLid70P.ucvPaBKA92m7bc1aVSW5LGmRbGsSIqT8U5e2eA4Ki4nQHVAAhh5.SVNIAQ
         </textarea>
 
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-/* custom css*/
-#text {margin:1em;}
-#text table {border-collapse:collapse;}
-#text th, #text td {padding:.5em;border:1px solid #000;}
-#text th {background-color:#696969;color:#fff;}/*dark gray*/
-#text th a {color:white;}
-#text th a:hover {color:blue;}
-#text .yui-dt-odd {background-color:#eee;} /*light gray*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-<div id="text"></div>
         </textarea>
 
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.Url + "' target='_blank'>" + sData + "</a>";
-};
-
-var myColumnHeaders = [
-    {key:"Name", sortable:true, formatter:formatUrl},
-    {key:"Phone"},
-    {key:"City"},
-    {key:"Rating", type:"number", sortable:true}
-
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource("./php/text_proxy.txt");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
-myDataSource.responseSchema = {
-    recordDelim: "\n",
-    fieldDelim: "|",
-    fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertToNumber},"Url"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -95,6 +61,7 @@ var myDataTable = new YAHOO.widget.DataTable("text", myColumnSet, myDataSource);
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/element/element-beta.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>

@@ -1,15 +1,3 @@
-/**
- * The DataTable widget provides a progressively enhanced DHTML control for
- * displaying tabular data across A-grade browsers.
- *
- * @namespace YAHOO.widget
- * @module datatable
- * @requires yahoo, dom, event, datasource
- * @optional dragdrop
- * @title DataTable Widget
- * @beta
- */
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -18,6 +6,7 @@
  * The ColumnSet class defines and manages a DataTable's Columns,
  * including nested hierarchies and access to individual Column instances.
  *
+ * @namespace YAHOO.widget
  * @class ColumnSet
  * @uses YAHOO.util.EventProvider
  * @constructor
@@ -103,9 +92,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     if(oColumn.formatter && (child.formatter === undefined)) {
                         child.formatter = oColumn.formatter;
                     }
-                    if(oColumn.parser && (child.parser === undefined)) {
+                    /*TODO: delete if(oColumn.parser && (child.parser === undefined)) {
                         child.parser = oColumn.parser;
-                    }
+                    }*/
                     if(oColumn.resizeable && (child.resizeable === undefined)) {
                         child.resizeable = oColumn.resizeable;
                     }
@@ -187,9 +176,8 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                 }
             }
 
-            // Reset row counters for next row
+            // Reset counter for next row
             maxRowDepth = 1;
-            tmpRowDepth = 1;
         }
     };
     parseTreeForRowspan(tree);
@@ -306,17 +294,27 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
 };
 
 /**
- * Returns Column instance with given ID number.
+ * Returns Column instance with given ID number or key.
  *
  * @method getColumn
- * @param column {Number} ID number.
+ * @param column {Number | String} ID number or unique key.
  * @return {YAHOO.widget.Column} Column instance.
  */
 
 YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
-    for(var i=0; i<this.keys.length; i++) {
-        if(this.keys[i]._nId === column) {
-            return this.keys[i];
+    var allColumns = this.flat;
+    if(YAHOO.lang.isNumber(column)) {
+        for(var i=0; i<allColumns.length; i++) {
+            if(allColumns[i]._nId === column) {
+                return allColumns[i];
+            }
+        }
+    }
+    else if(YAHOO.lang.isString(column)) {
+        for(i=0; i<allColumns.length; i++) {
+            if(allColumns[i].key === column) {
+                return allColumns[i];
+            }
         }
     }
     return null;
@@ -329,7 +327,7 @@ YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
 /**
  * The Column class defines and manages attributes of DataTable Columns
  *
- *
+ * @namespace YAHOO.widget
  * @class Column
  * @constructor
  * @param oConfigs {Object} Object literal of configuration values.
@@ -515,14 +513,14 @@ YAHOO.widget.Column.prototype.className = null;
  */
 YAHOO.widget.Column.prototype.formatter = null;
 
-/**
+/*TODO: delete
  * Defines a custom parse function for Column, otherwise default is used,
  * according to Column type.
  *
  * @property parser
  * @type HTMLFunction
  */
-YAHOO.widget.Column.prototype.parser = null;
+//YAHOO.widget.Column.prototype.parser = null;
 
 /**
  * Defines the type of editor for Column, otherwise Column is not editable.
@@ -657,14 +655,14 @@ YAHOO.widget.Column.prototype.getRowspan = function() {
     return this._rowspan;
 };
 
-/**
+/*TODO: delete
  * Takes innerHTML from TD and parses out data for storage in RecordSet.
  *
  * @method parse
  * @param sMarkup {String} The TD's innerHTML value.
  * @return {Object} Data.
  */
-YAHOO.widget.Column.prototype.parse = function(sMarkup) {
+/*YAHOO.widget.Column.prototype.parse = function(sMarkup) {
     if(this.parser) {
         return this.parser(sMarkup);
     }
@@ -694,9 +692,9 @@ YAHOO.widget.Column.prototype.parse = function(sMarkup) {
         }
         return data;
     }
-};
+};*/
 
-/**
+/*TODO: delete
  * Default parse function for Columns of type "checkbox" takes markup and
  * extracts data. Can be overridden for custom parsing.
  *
@@ -704,11 +702,11 @@ YAHOO.widget.Column.prototype.parse = function(sMarkup) {
  * @param sMarkup
  * @return {bChecked} True if checkbox is checked.
  */
-YAHOO.widget.Column.parseCheckbox = function(sMarkup) {
+/*YAHOO.widget.Column.parseCheckbox = function(sMarkup) {
     return (sMarkup.indexOf("checked") < 0) ? false : true;
-};
+};*/
 
-/**
+/*TODO: delete
  * Default parse function for Columns of type "currency" takes markup and
  * extracts data. Can be overridden for custom parsing.
  *
@@ -716,11 +714,11 @@ YAHOO.widget.Column.parseCheckbox = function(sMarkup) {
  * @param sMarkup
  * @return {nAmount} Floating point amount.
  */
-YAHOO.widget.Column.parseCurrency = function(sMarkup) {
+/*YAHOO.widget.Column.parseCurrency = function(sMarkup) {
     return parseFloat(sMarkup.substring(1));
-};
+};*/
 
-/**
+/*TODO: delete
  * Default parse function for Columns of type "date" takes markup and extracts
  * data. Can be overridden for custom parsing.
  *
@@ -728,15 +726,15 @@ YAHOO.widget.Column.parseCurrency = function(sMarkup) {
  * @param sMarkup
  * @return {oDate} Date instance.
  */
-YAHOO.widget.Column.parseDate = function(sMarkup) {
+/*YAHOO.widget.Column.parseDate = function(sMarkup) {
     var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
     sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
     var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
     var yy = sMarkup.substring(sMarkup.indexOf("/")+1);
     return new Date(yy, mm, dd);
-};
+};*/
 
-/**
+/*TODO: delete
  * Default parse function for Columns of type "number" takes markup and extracts
  * data. Can be overridden for custom parsing.
  *
@@ -744,11 +742,11 @@ YAHOO.widget.Column.parseDate = function(sMarkup) {
  * @param sMarkup
  * @return {nNumber} Number.
  */
-YAHOO.widget.Column.parseNumber = function(sMarkup) {
+/*YAHOO.widget.Column.parseNumber = function(sMarkup) {
     return parseFloat(sMarkup);
-};
+};*/
 
-/**
+/*TODO: delete
  * Default parse function for Columns of type "select" takes markup and extracts
  * data. Can be overridden for custom parsing.
  *
@@ -756,9 +754,9 @@ YAHOO.widget.Column.parseNumber = function(sMarkup) {
  * @param sMarkup
  * @return {sValue} Value of selected option.
  */
-YAHOO.widget.Column.parseSelect = function(sMarkup) {
+/*YAHOO.widget.Column.parseSelect = function(sMarkup) {
     //return (sMarkup.indexOf("checked") < 0) ? false : true;
-};
+};*/
 
 /**
  * Instantiates or retrieves ColumnEditor instance.
@@ -791,6 +789,7 @@ YAHOO.widget.Column.prototype.getColumnEditor = function(elCell, oRecord) {
  * The ColumnEditor defines and manages inline editing functionality for a
  * DataTable Column.
  *
+ * @namespace YAHOO.widget
  * @class ColumnEditor
  * @constructor
  * @parem sType {String} Type identifier.
@@ -1184,6 +1183,7 @@ YAHOO.widget.ColumnEditor.prototype.hide = function() {
 /**
  * Sort static utility to support Column sorting.
  *
+ * @namespace YAHOO.util
  * @class Sort
  * @static
  */
@@ -1276,6 +1276,7 @@ YAHOO.util.Sort = {
 /**
  * ColumnResizer subclasses DragDrop to support resizeable Columns.
  *
+ * @namespace YAHOO.util
  * @class ColumnResizer
  * @extends YAHOO.util.DragDrop
  * @constructor

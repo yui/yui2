@@ -38,96 +38,21 @@
         <p>Data:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-{"ResultSet": {
-    "totalResultsAvailable":651,
-    "totalResultsReturned":10,
-    "firstResultPosition":1,
-    "ResultSetMapUrl":"http:\/\/local.yahoo.com\/mapview?stx=pizza&csz=Sunnyvale%2C+CA+94089&city=Sunnyvale&state=CA&radius=15&ed=9brhZa131DwigChqKlCo22kM1H_9WgoouCr87Ao-",
-    "Result":[
-        {"Title":"Pizza Depot",
-        "Address":"919 E Duane Ave",
-        "City":"Sunnyvale",
-        "State":"CA",
-        "Phone":"(408) 245-7760",
-        "Latitude":"37.388537",
-        "Longitude":"-122.003972",
-        "Rating":{"AverageRating":"3.5",
-            "TotalRatings":"5",
-            "TotalReviews":"5",
-            "LastReviewDate":"1161495667"},
-        "Distance":"0.93",
-        "Url":"http:\/\/local.yahoo.com\/details?id=21332021&stx=pizza&csz=Sunnyvale+CA&ed=6tiAL6160Sx1XVIEu1zIWPu6fD8rJDV4.offJLNUTb1Ri2Q.R5oLTYvDCz8YmzivI7Bz0gfrpw--",
-        "ClickUrl":"http:\/\/local.yahoo.com\/details?id=21332021&stx=pizza&csz=Sunnyvale+CA&ed=6tiAL6160Sx1XVIEu1zIWPu6fD8rJDV4.offJLNUTb1Ri2Q.R5oLTYvDCz8YmzivI7Bz0gfrpw--",
-        "MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Pizza+Depot&desc=4082457760&csz=Sunnyvale+CA&qty=9&cs=9&ed=6tiAL6160Sx1XVIEu1zIWPu6fD8rJDV4.offJLNUTb1Ri2Q.R5oLTYvDCz8YmzivI7Bz0gfrpw--&gid1=21332021",
-        "BusinessUrl":"",
-        "BusinessClickUrl":""},
-
-        ...,
-        
-        {"Title":"Round Table Pizza Sunnyvale",
-        "Address":"665 S Bernardo Ave",
-        "City":"Sunnyvale",
-        "State":"CA",
-        "Phone":"(408) 732-6670",
-        "Latitude":"37.372826",
-        "Longitude":"-122.05688",
-        "Rating":{"AverageRating":"4",
-            "TotalRatings":"1",
-            "TotalReviews":"1",
-            "LastReviewDate":"1151049628"},
-        "Distance":"3.05",
-        "Url":"http:\/\/local.yahoo.com\/details?id=21328190&stx=pizza&csz=Sunnyvale+CA&ed=vQA2RK160SyzAlzZzGZxE.nmteJA1FaPbV1aRr.yzoj3i7s.Rq2W7hxBCEe8zCtAYWLP3Coz2zSc",
-        "ClickUrl":"http:\/\/local.yahoo.com\/details?id=21328190&stx=pizza&csz=Sunnyvale+CA&ed=vQA2RK160SyzAlzZzGZxE.nmteJA1FaPbV1aRr.yzoj3i7s.Rq2W7hxBCEe8zCtAYWLP3Coz2zSc",
-        "MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Round+Table+Pizza+Sunnyvale&desc=4087326670&csz=Sunnyvale+CA&qty=9&cs=9&ed=vQA2RK160SyzAlzZzGZxE.nmteJA1FaPbV1aRr.yzoj3i7s.Rq2W7hxBCEe8zCtAYWLP3Coz2zSc&gid1=21328190",
-        "BusinessUrl":"http:\/\/www.roundtablepizza.com\/",
-        "BusinessClickUrl":"http:\/\/www.roundtablepizza.com\/"}
-        ]
-    }
-}
         </textarea>
 
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-/* custom css*/
-#json {margin:1em;}
-#json table {border-collapse:collapse;}
-#json th, #json td {padding:.5em;border:1px solid #000;}
-#json th {background-color:#696969;color:#fff;}/*dark gray*/
-#json th a {color:white;}
-#json th a:hover {color:blue;}
-#json .yui-dt-odd {background-color:#eee;} /*light gray*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-<div id="json"></div>
         </textarea>
 
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
-};
-
-var myColumnHeaders = [
-    {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
-    {key:"Phone"},
-    {key:"City"},
-    {key:"Rating.AverageRating", text:"Rating", type:"number", sortable:true}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
-myDataSource.responseSchema = {
-    resultsList: "ResultSet.Result",
-    fields: ["Title","Phone","City",{key:"Rating.AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("json", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10&output=json"});
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -136,6 +61,7 @@ var myDataTable = new YAHOO.widget.DataTable("json", myColumnSet, myDataSource,{
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/element/element-beta.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>

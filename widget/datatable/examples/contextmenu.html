@@ -39,112 +39,26 @@
         <p>Dependencies:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-&lt;!-- Required CSS --&gt;
-&lt;link type="text/css" rel="stylesheet" href="build/datatable/assets/datatable.css"&gt;
-
-&lt;!-- Dependencies --&gt;
-&lt;script type="text/javascript" src="build/yahoo-dom-event/yahoo-dom-event.js"&gt;&lt;/script&gt;
-
-&lt;!-- OPTIONAL: Connection (enables XHR) --&gt;
-&lt;script type="text/javascript" src="build/connection/connection-min.js"&gt;&lt;/script&gt;
-
-&lt;!-- OPTIONAL: Drag Drop (enables resizeable columns) --&gt;
-&lt;script type="text/javascript" src="build/dragdrop/dragdrop-min.js"&gt;&lt;/script&gt;
-
-&lt;!-- OPTIONAL: External JSON parser from http://www.json.org/ (enables JSON validation) --&gt;
-&lt;script type="text/javascript" src="http://www.json.org/json.js"&gt;&lt;/script&gt;
-
-&lt;!-- Need to also include files to enable ContextMenu --&gt;
-&lt;script type="text/javascript" src="build/container/container_core.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="build/menu/menu.js"&gt;&lt;/script&gt;
-
-&lt;!-- Source files --&gt;
-&lt;script type="text/javascript" src="build/datasource/datasource-beta.js"&gt;&lt;/script&gt;
-&lt;script type="text/javascript" src="build/datatable/datatable-beta.js"&gt;&lt;/script&gt;
         </textarea>
 
         <p>Data:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-YAHOO.example.Data.inventory = [
-    {SKU:"23-23874", Quantity:43, Item:"Helmet", Description:"Red baseball helmet. Size: Large."},
-    {SKU:"48-38835", Quantity:84, Item:"Football", Description:"Leather football."},
-    {SKU:"84-84848", Quantity:31, Item:"Goggles", Description:"Light blue swim goggles"},
-    {SKU:"84-84843", Quantity:56, Item:"Badminton Set", Description:"Set of 2 badminton rackets, net, and 3 birdies."},
-    {SKU:"84-39321", Quantity:128, Item:"Tennis Balls", Description:"Canister of 3 tennis balls."},
-    {SKU:"39-48949", Quantity:55, Item:"Snowboard", Description:""},
-    {SKU:"99-28128", Quantity:77, Item:"Cleats", Description:"Soccer cleats. Size: 10."},
-    {SKU:"83-48281", Quantity:65, Item:"Volleyball", Description:""},
-    {SKU:"89-32811", Quantity:67, Item:"Sweatband", Description:"Blue sweatband. Size: Medium."},
-    {SKU:"28-22847", Quantity:43, Item:"Golf Set", Description:"Set of 9 golf clubs and bag."},
-    {SKU:"38-38281", Quantity:35, Item:"Basketball Shorts", Description:"Green basketball shorts. Size: Small."},
-    {SKU:"82-38333", Quantity:288, Item:"Lip balm", Description:"Lip balm. Flavor: Cherry."},
-    {SKU:"21-38485", Quantity:177, Item:"Ping Pong Ball", Description:""},
-    {SKU:"83-38285", Quantity:87, Item:"Hockey Puck", Description:"Glow-in-the-dark hockey puck."}
-];
         </textarea>
 
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-/* custom css*/
-#contextmenu {margin:1em;}
-#contextmenu table {border-collapse:collapse;}
-#contextmenu th, #contextmenu td {border:1px solid #000;padding:.25em;}
-#contextmenu th {background-color:#696969;color:#fff;}/*dark gray*/
-#contextmenu .yui-dt-odd {background-color:#eee;} /*light gray*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-<div id="contextmenu" class="example"></div>
         </textarea>
 
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-var myColumnHeaders = [
-    {key:"SKU", sortable:true},
-    {key:"Quantity", sortable:true},
-    {key:"Item", sortable:true},
-    {key:"Description"}
-];
-
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-myDataSource.responseSchema = {
-    fields: ["SKU","Quantity","Item","Description"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnSet, myDataSource,{caption:"Example: Integration with ContextMenu"});
-
-var onContextMenuClick = function(p_sType, p_aArgs, p_oMenu) {
-    var task = p_aArgs[1];
-    if(task) {
-        // Extract which TR element triggered the context menu
-        var elRow = this.contextEventTarget;
-        elRow = myDataTable.getTrEl(elRow);
-
-        if(elRow) {
-            switch(task.index) {
-                case 0:     // Delete row upon confirmation
-                    if(confirm("Are you sure you want to delete SKU " +
-                            elRow.cells[0].innerHTML + " (" +
-                            elRow.cells[2].innerHTML + ")?")) {
-                        myDataTable.deleteRow(elRow);
-                    }
-            }
-        }
-    }
-};
-
-var myContextMenu = new YAHOO.widget.ContextMenu("mycontextmenu", { trigger: myDataTable.getTbodyEl() } );
-myContextMenu.addItem("Delete Item");
-myContextMenu.render(document.body);
-myContextMenu.clickEvent.subscribe(onContextMenuClick);
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -153,6 +67,7 @@ myContextMenu.clickEvent.subscribe(onContextMenuClick);
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/element/element-beta.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/container/container_core.js"></script>
 <script type="text/javascript" src="../../build/menu/menu.js"></script>

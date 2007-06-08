@@ -5,6 +5,7 @@
 /**
  * A RecordSet defines and manages a set of Records.
  *
+ * @namespace YAHOO.widget
  * @class RecordSet
  * @param data {Object || Object[]} An object literal or an array of data.
  * @constructor
@@ -554,6 +555,7 @@ YAHOO.widget.RecordSet.prototype.reset = function() {
 /**
  * The Record class defines a DataTable record.
  *
+ * @namespace YAHOO.widget
  * @class Record
  * @constructor
  * @param oConfigs {Object} (optional) Object literal of key/value pairs.
