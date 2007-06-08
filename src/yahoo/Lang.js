@@ -430,11 +430,14 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return the new merged object
      */
     merge: function() {
-        var o={}, a=arguments, i, j;
+        var o={}, a=arguments, i;
         for (i=0; i<a.length; i=i+1) {
-            for (j in a[i]) {
+            YAHOO.lang.augmentObject(o, a[i], true);
+            /*
+            for (var j in a[i]) {
                 o[j] = a[i][j];
             }
+            */
         }
         return o;
     },
@@ -443,12 +446,13 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * A convenience method for detecting a legitimate non-null value.
      * Returns false for null/undefined/NaN, true for other values, 
      * including 0/false/''
-     * @method hasValue
+     * @method isValue
      * @since 2.3.0
      * @param o {any} the item to test
      * @return {boolean} true if it is not null/undefined/NaN || false
      */
-    hasValue: function(o) {
+    isValue: function(o) {
+        // return (o || o === false || o === 0 || o === ''); // Infinity fails
         var l = YAHOO.lang;
 return (l.isObject(o) || l.isString(o) || l.isNumber(o) || l.isBoolean(o));
     }
