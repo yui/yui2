@@ -53,7 +53,7 @@ if (typeof YAHOO == "undefined") {
  *
  * @method namespace
  * @static
- * @param  {String*} arguments 1-n namespaces to create 
+ * @param  {String*} arguments 1-n namespaces to create
  * @return {Object}  A reference to the last namespace object created
  */
 YAHOO.namespace = function() {
@@ -147,7 +147,7 @@ YAHOO.env = YAHOO.env || {
      * @type Object[]
      */
     modules: [],
-    
+
     /**
      * List of functions that should be executed every time a YUI module
      * reports itself.
@@ -166,7 +166,7 @@ YAHOO.env = YAHOO.env || {
  *      <dt>versions:</dt>  <dd>All versions that were registered</dd>
  *      <dt>builds:</dt>    <dd>All builds that were registered.</dd>
  *      <dt>mainClass:</dt> <dd>An object that was was stamped with the
- *                 current version and build. If 
+ *                 current version and build. If
  *                 mainClass.VERSION != version or mainClass.BUILD != build,
  *                 multiple versions of pieces of the library have been
  *                 loaded, potentially causing issues.</dd>
@@ -185,10 +185,10 @@ YAHOO.env.getVersion = function(name) {
  * Do not fork for a browser if it can be avoided.  Use feature detection when
  * you can.  Use the user agent as a last resort.  YAHOO.env.ua stores a version
  * number for the browser engine, 0 otherwise.  This value may or may not map
- * to the version number of the browser using the engine.  The value is 
- * presented as a float so that it can easily be used for boolean evaluation 
- * as well as for looking for a particular range of versions.  Because of this, 
- * some of the granularity of the version info may be lost (e.g., Gecko 1.8.0.9 
+ * to the version number of the browser using the engine.  The value is
+ * presented as a float so that it can easily be used for boolean evaluation
+ * as well as for looking for a particular range of versions.  Because of this,
+ * some of the granularity of the version info may be lost (e.g., Gecko 1.8.0.9
  * reports 1.8).
  * @class YAHOO.env.ua
  * @static
@@ -211,7 +211,7 @@ YAHOO.env.ua = function() {
         opera:0,
 
         /**
-         * Gecko engine revision number.  Will evaluate to 1 if Gecko 
+         * Gecko engine revision number.  Will evaluate to 1 if Gecko
          * is detected but the revision could not be found. Other browsers
          * will be 0.  Example: 1.8
          * <pre>
@@ -226,10 +226,10 @@ YAHOO.env.ua = function() {
         gecko:0,
 
         /**
-         * AppleWebKit version.  KHTML browsers that are not WebKit browsers 
+         * AppleWebKit version.  KHTML browsers that are not WebKit browsers
          * will evaluate to 1, other browsers 0.  Example: 418.9.1
          * <pre>
-         * Safari 1.3.2 (312.6): 312.8.1 <-- Reports 312.8 -- currently the 
+         * Safari 1.3.2 (312.6): 312.8.1 <-- Reports 312.8 -- currently the
          *                                   latest available for Mac OSX 10.3.
          * Safari 2.0.2:         416     <-- hasOwnProperty introduced
          * Safari 2.0.4:         418     <-- preventDefault fixed
@@ -238,7 +238,7 @@ YAHOO.env.ua = function() {
          * Safari 2.0.4 (419.3): 419     <-- Current Safari release
          * Webkit 212 nightly:   522+    <-- Safari 3.0 (with native SVG) should
          *                                   be higher than this
-         *                                   
+         *
          * </pre>
          * http://developer.apple.com/internet/safari/uamatrix.html
          * @property webkit
@@ -280,7 +280,7 @@ YAHOO.env.ua = function() {
             }
         }
     }
-    
+
     return o;
 }();
 
@@ -317,13 +317,9 @@ YAHOO.env.ua = function() {
  * @class YAHOO.lang
  */
 YAHOO.lang = {
-    is: function(o) {
-        return (o !== null) && (typeof o !== "undefined") && (!isNaN(o));
-    },
-
     /**
      * Determines whether or not the provided object is an array.
-     * Testing typeof/instanceof/constructor of arrays across frame 
+     * Testing typeof/instanceof/constructor of arrays across frame
      * boundaries isn't possible in Safari unless you have a reference
      * to the other frame to test against its Array prototype.  To
      * handle this case, we test well-known array properties instead.
@@ -332,11 +328,11 @@ YAHOO.lang = {
      * @param {any} o The object being testing
      * @return Boolean
      */
-    isArray: function(o) { 
+    isArray: function(o) {
 
         if (o) {
            var l = YAHOO.lang;
-           return l.isNumber(o.length) && l.isFunction(o.splice) && 
+           return l.isNumber(o.length) && l.isFunction(o.splice) &&
                   !l.hasOwnProperty(o.length);
         }
         return false;
@@ -351,7 +347,7 @@ YAHOO.lang = {
     isBoolean: function(o) {
         return typeof o === 'boolean';
     },
-    
+
     /**
      * Determines whether or not the provided object is a function
      * @method isFunction
@@ -361,7 +357,7 @@ YAHOO.lang = {
     isFunction: function(o) {
         return typeof o === 'function';
     },
-        
+
     /**
      * Determines whether or not the provided object is null
      * @method isNull
@@ -371,7 +367,7 @@ YAHOO.lang = {
     isNull: function(o) {
         return o === null;
     },
-        
+
     /**
      * Determines whether or not the provided object is a legal number
      * @method isNumber
@@ -381,18 +377,18 @@ YAHOO.lang = {
     isNumber: function(o) {
         return typeof o === 'number' && isFinite(o);
     },
-      
+
     /**
      * Determines whether or not the provided object is of type object
      * or function
      * @method isObject
      * @param {any} o The object being testing
      * @return Boolean
-     */  
+     */
     isObject: function(o) {
 return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     },
-        
+
     /**
      * Determines whether or not the provided object is a string
      * @method isString
@@ -402,7 +398,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     isString: function(o) {
         return typeof o === 'string';
     },
-        
+
     /**
      * Determines whether or not the provided object is undefined
      * @method isUndefined
@@ -412,7 +408,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     isUndefined: function(o) {
         return typeof o === 'undefined';
     },
-    
+
     /**
      * Determines whether or not the property was added
      * to the object instance.  Returns false if the property is not present
@@ -437,15 +433,15 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         if (Object.prototype.hasOwnProperty) {
             return o.hasOwnProperty(prop);
         }
-        
-        return !YAHOO.lang.isUndefined(o[prop]) && 
+
+        return !YAHOO.lang.isUndefined(o[prop]) &&
                 o.constructor.prototype[prop] !== o[prop];
     },
- 
+
     /**
      * IE will not enumerate native functions in a derived object even if the
-     * function was overridden.  This is a workaround for specific functions 
-     * we care about on the Object prototype. 
+     * function was overridden.  This is a workaround for specific functions
+     * we care about on the Object prototype.
      * @property _IEEnumFix
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
@@ -463,7 +459,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             }
         }
     },
-       
+
     /**
      * Utility to set up the prototype, constructor and superclass properties to
      * support an inheritance strategy that can chain constructors and methods.
@@ -475,7 +471,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @param {Function} superc the object to inherit
      * @param {Object} overrides  additional properties/methods to add to the
      *                              subclass prototype.  These will override the
-     *                              matching items obtained from the superclass 
+     *                              matching items obtained from the superclass
      *                              if present.
      */
     extend: function(subc, superc, overrides) {
@@ -491,7 +487,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         if (superc.prototype.constructor == Object.prototype.constructor) {
             superc.prototype.constructor=superc;
         }
-    
+
         if (overrides) {
             for (var i in overrides) {
                 subc.prototype[i]=overrides[i];
@@ -500,7 +496,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             YAHOO.lang._IEEnumFix(subc.prototype, overrides);
         }
     },
-   
+
     /**
      * Applies all properties in the supplier to the receiver if the
      * receiver does not have these properties yet.  Optionally, one or more
@@ -532,16 +528,16 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                 r[a[i]] = s[a[i]];
             }
         } else { // take everything, overwriting only if the third parameter is true
-            for (p in s) { 
+            for (p in s) {
                 if (override || !r[p]) {
                     r[p] = s[p];
                 }
             }
-            
+
             YAHOO.lang._IEEnumFix(r, s);
         }
     },
- 
+
     /**
      * Same as YAHOO.lang.augmentObject, except it only applies prototype properties
      * @see YAHOO.lang.augmentObject
@@ -569,7 +565,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         YAHOO.lang.augmentObject.apply(this, a);
     },
 
-      
+
     /**
      * Returns a simple string representation of the object or array.
      * Other types of objects will be returned unprocessed.  Arrays
@@ -589,7 +585,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         // Skip dates because the std toString is what we want
         // Skip HTMLElement-like objects because trying to dump an
         // element will cause an unhandled exception in FF 2.x
-        if (!l.isObject(o) || o instanceof Date || 
+        if (!l.isObject(o) || o instanceof Date ||
             ("nodeType" in o && "tagName" in o)) {
             return o;
         } else if  (l.isFunction(o)) {
@@ -638,14 +634,14 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     },
 
     /**
-     * Does variable substitution on a string. It scans through the string 
-     * looking for expressions enclosed in { } braces. If an expression 
+     * Does variable substitution on a string. It scans through the string
+     * looking for expressions enclosed in { } braces. If an expression
      * is found, it is used a key on the object.  If there is a space in
      * the key, the first word is used for the key and the rest is provided
      * to an optional function to be used to programatically determine the
-     * value (the extra information might be used for this decision). If 
+     * value (the extra information might be used for this decision). If
      * the value for the key in the object, or what is returned from the
-     * function has a string value, number value, or object value, it is 
+     * function has a string value, number value, or object value, it is
      * substituted for the bracket expression and it repeats.  If this
      * value is an object, it uses the Object's toString() if this has
      * been overridden, otherwise it does a shallow dump of the key/value
@@ -661,7 +657,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return {String} the substituted string
      */
     substitute: function (s, o, f) {
-        var i, j, k, key, v, meta, l=YAHOO.lang, 
+        var i, j, k, key, v, meta, l=YAHOO.lang,
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}';
 
         for (;;) {
@@ -674,7 +670,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                 break;
             }
 
-            //Extract key and meta info 
+            //Extract key and meta info
             key = s.substring(i + 1, j);
             meta = null;
             k = key.indexOf(SPACE);
@@ -758,7 +754,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     },
 
     /**
-     * A convenience method for detecting a legitimate non-null value.  Returns 
+     * A convenience method for detecting a legitimate non-null value.  Returns
      * false for null/undefined/NaN, true for other values, including 0/false/''
      * @method hasValue
      * @since 2.3.0
@@ -777,7 +773,7 @@ return (l.isObject(o) || l.isString(o) || l.isNumber(o) || l.isBoolean(o));
  * @class YAHOO.util.Lang
  */
 YAHOO.util.Lang = YAHOO.lang;
- 
+
 /**
  * Same as YAHOO.lang.augmentObject, except it only applies prototype properties.
  * This is an alias for augmentProto.
@@ -809,7 +805,7 @@ YAHOO.lang.augment = YAHOO.lang.augmentProto;
  *                             overwrite an existing property in the receiver
  */
 YAHOO.augment = YAHOO.lang.augmentProto;
-       
+
 /**
  * An alias for <a href="YAHOO.lang.html#extend">YAHOO.lang.extend</a>
  * @method extend
@@ -818,7 +814,7 @@ YAHOO.augment = YAHOO.lang.augmentProto;
  * @param {Function} superc the object to inherit
  * @param {Object} overrides  additional properties/methods to add to the
  *                              subclass prototype.  These will override the
- *                              matching items obtained from the superclass 
+ *                              matching items obtained from the superclass
  *                              if present.
  */
 YAHOO.extend = YAHOO.lang.extend;
