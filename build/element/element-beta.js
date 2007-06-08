@@ -127,7 +127,7 @@ YAHOO.util.Attribute.prototype = {
         if (this.method) {
             this.method.call(owner, value);
         }
-        
+
         this.value = value;
         this._written = true;
         

@@ -1,5 +1,14 @@
 AutoComplete Release Notes
 
+*** version 2.3.0 ***
+
+* In low-latency implementations (e.g., when queryDelay is set to 0 against a local
+JavaScript DataSource), typeAhead functionality may experience a race condition
+when retrieving the value of the textbox. Implementers are advised to bump up
+the queryDelay value artificially in this case to avoid this problem.
+
+
+
 **** version 2.2.2 ***
 
 * No changes.

@@ -14,9 +14,15 @@
 #xml table {border-collapse:collapse;}
 #xml th, #xml td {padding:.5em;border:1px solid #000;}
 #xml th {background-color:#696969;color:#fff;}/*dark gray*/
-#xml th a {color:white;}
-#xml th a:hover {color:blue;}
-#xml .yui-dt-odd {background-color:#eee;} /*light gray*/
+#xml th a {color:#fff;} /* white */
+#xml tr.yui-dt-odd {background-color:#eee;} /*light gray*/
+
+/* sorting */
+#xml th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
+#xml th.yui-dt-asc, #xml th.yui-dt-desc {background-color:#3F3F3F;} /*dark gray*/
+#xml th.yui-dt-asc .yui-dt-label {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;} /*arrow up*/
+#xml th.yui-dt-desc .yui-dt-label {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;} /*arrow down*/
+
 </style>
 </head>
 <body>
@@ -33,109 +39,21 @@
         <p>Data:</p>
 
         <textarea name="code" class="XML" cols="60" rows="1">
-<?xml version="1.0"?>
-<ResultSet
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns="urn:yahoo:lcl"
-        xsi:schemaLocation="urn:yahoo:lcl http://api.local.yahoo.com/LocalSearchService/V2/LocalSearchResponse.xsd"
-        totalResultsAvailable="651"
-        totalResultsReturned="10"
-        firstResultPosition="1">
-
-    <ResultSetMapUrl>
-        http://local.yahoo.com/mapview?stx=pizza&amp;csz=Sunnyvale%2C+CA+94089&amp;city=Sunnyvale&amp;state=CA&amp;radius=15&amp;ed=9brhZa131DwigChqKlCo22kM1H_9WgoouCr87Ao-
-    </ResultSetMapUrl>
-
-    <Result>
-        <Title>Pizza Depot</Title>
-        <Address>919 E Duane Ave</Address>
-        <City>Sunnyvale</City>
-        <State>CA</State>
-        <Phone>(408) 245-7760</Phone>
-        <Latitude>37.388537</Latitude>
-        <Longitude>-122.003972</Longitude>
-        <Rating>
-            <AverageRating>3.5</AverageRating>
-            <TotalRatings>5</TotalRatings>
-            <TotalReviews>5</TotalReviews>
-            <LastReviewDate>1161495667</LastReviewDate>
-        </Rating>
-        <Distance>0.93</Distance>
-        <Url>http://local.yahoo.com/details?id=21332021&amp;stx=pizza&amp;csz=Sunnyvale+CA&amp;ed=6tiAL6160Sx1XVIEu1zIWPu6fD8rJDV4.offJLNUTb1Ri2Q.R5oLTYvDCz8YmzivI7Bz0gfrpw--</Url>
-        <ClickUrl>http://local.yahoo.com/details?id=21332021&amp;stx=pizza&amp;csz=Sunnyvale+CA&amp;ed=6tiAL6160Sx1XVIEu1zIWPu6fD8rJDV4.offJLNUTb1Ri2Q.R5oLTYvDCz8YmzivI7Bz0gfrpw--</ClickUrl>
-        <MapUrl>http://maps.yahoo.com/maps_result?name=Pizza+Depot&amp;desc=4082457760&amp;csz=Sunnyvale+CA&amp;qty=9&amp;cs=9&amp;ed=6tiAL6160Sx1XVIEu1zIWPu6fD8rJDV4.offJLNUTb1Ri2Q.R5oLTYvDCz8YmzivI7Bz0gfrpw--&amp;gid1=21332021</MapUrl>
-        <BusinessUrl></BusinessUrl>
-        <BusinessClickUrl></BusinessClickUrl>
-    </Result>
-    
-    ...
-
-    <Result>
-        <Title>Round Table Pizza Sunnyvale</Title>
-        <Address>665 S Bernardo Ave</Address>
-        <City>Sunnyvale</City>
-        <State>CA</State>
-        <Phone>(408) 732-6670</Phone>
-        <Latitude>37.372826</Latitude>
-        <Longitude>-122.05688</Longitude>
-        <Rating>
-            <AverageRating>4</AverageRating>
-            <TotalRatings>1</TotalRatings>
-            <TotalReviews>1</TotalReviews>
-            <LastReviewDate>1151049628</LastReviewDate>
-        </Rating>
-        <Distance>3.05</Distance>
-        <Url>http://local.yahoo.com/details?id=21328190&amp;stx=pizza&amp;csz=Sunnyvale+CA&amp;ed=vQA2RK160SyzAlzZzGZxE.nmteJA1FaPbV1aRr.yzoj3i7s.Rq2W7hxBCEe8zCtAYWLP3Coz2zSc</Url>
-        <ClickUrl>http://local.yahoo.com/details?id=21328190&amp;stx=pizza&amp;csz=Sunnyvale+CA&amp;ed=vQA2RK160SyzAlzZzGZxE.nmteJA1FaPbV1aRr.yzoj3i7s.Rq2W7hxBCEe8zCtAYWLP3Coz2zSc</ClickUrl>
-        <MapUrl>http://maps.yahoo.com/maps_result?name=Round+Table+Pizza+Sunnyvale&amp;desc=4087326670&amp;csz=Sunnyvale+CA&amp;qty=9&amp;cs=9&amp;ed=vQA2RK160SyzAlzZzGZxE.nmteJA1FaPbV1aRr.yzoj3i7s.Rq2W7hxBCEe8zCtAYWLP3Coz2zSc&amp;gid1=21328190</MapUrl>
-        <BusinessUrl>http://www.roundtablepizza.com/</BusinessUrl>
-        <BusinessClickUrl>http://www.roundtablepizza.com/</BusinessClickUrl>
-    </Result>
-</ResultSet>
         </textarea>
 
         <p>CSS:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-/* custom css*/
-#xml {margin:1em;}
-#xml table {border-collapse:collapse;}
-#xml th, #xml td {padding:.5em;border:1px solid #000;}
-#xml th {background-color:#696969;color:#fff;}/*dark gray*/
-#xml th a {color:white;}
-#xml th a:hover {color:blue;}
-#xml .yui-dt-odd {background-color:#eee;} /*light gray*/
         </textarea>
 
         <p>Markup:</p>
 
         <textarea name="code" class="HTML" cols="60" rows="1">
-<div id="xml"></div>
         </textarea>
 
         <p>JavaScript:</p>
 
         <textarea name="code" class="JScript" cols="60" rows="1">
-var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
-};
-
-var myColumnHeaders = [
-    {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
-    {key:"Phone"},
-    {key:"City"},
-    {key:"AverageRating", text:"Rating", type:"number", sortable:true}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
-myDataSource.responseSchema = {
-    resultNode: "Result",
-    fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
         </textarea>
     </div>
     <!-- Code sample ends -->
@@ -144,37 +62,41 @@ var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{i
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
 <script type="text/javascript" src="../../build/event/event.js"></script>
+<script type="text/javascript" src="../../build/element/element-beta.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../../build/datasource/datasource-beta-debug.js"></script>
 <script type="text/javascript" src="../../build/datatable/datatable-beta-debug.js"></script>
 <script type="text/javascript">
-var myLogger = new YAHOO.widget.LogReader();
-myLogger.collapse();
+YAHOO.example.XHR_XML = new function() {
+    this.myLogger = new YAHOO.widget.LogReader();
+    this.myLogger.collapse();
 
-/****************************************************************************/
-/****************************************************************************/
-/****************************************************************************/
-var formatUrl = function(elCell, oRecord, oColumn, sData) {
-    elCell.innerHTML = "<a href='" + oRecord.ClickUrl + "' target='_blank'>" + sData + "</a>";
+    /****************************************************************************/
+    /****************************************************************************/
+    /****************************************************************************/
+    this.formatUrl = function(elCell, oRecord, oColumn, sData) {
+        elCell.innerHTML = "<a href='" + oRecord.getData("ClickUrl") + "' target='_blank'>" + sData + "</a>";
+    };
+
+    var myColumnHeaders = [
+        {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
+        {key:"Phone"},
+        {key:"City"},
+        {key:"AverageRating", text:"Rating", type:"number", sortable:true}
+    ];
+    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
+
+    this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
+    this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
+    this.myDataSource.responseSchema = {
+        resultNode: "Result",
+        fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
+    };
+
+    this.myDataTable = new YAHOO.widget.DataTable("xml", this.myColumnSet,
+            this.myDataSource, {initialRequest:"query=pizza&zip=94089&results=10"});
 };
-
-var myColumnHeaders = [
-    {key:"Title", text:"Name", sortable:true, formatter:formatUrl},
-    {key:"Phone"},
-    {key:"City"},
-    {key:"AverageRating", text:"Rating", type:"number", sortable:true}
-];
-var myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
-var myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
-myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
-myDataSource.responseSchema = {
-    resultNode: "Result",
-    fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertNumber},"ClickUrl"]
-};
-
-var myDataTable = new YAHOO.widget.DataTable("xml", myColumnSet, myDataSource,{initialRequest:"query=pizza&zip=94089&results=10"});
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
 <script type="text/javascript">

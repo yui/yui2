@@ -188,7 +188,7 @@
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/animation/animation.js"></script>
 <script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
@@ -196,78 +196,68 @@
 <!-- Library ends -->
 
 <script type="text/javascript">
-YAHOO.example.ACFlatData = function(){
-    var mylogger;
-    var oACDS;
-    var oAutoComp0,oAutoComp1,oAutoComp2;
+YAHOO.example.ACFlatData = new function(){
+    //Logger
+    this.mylogger = new YAHOO.widget.LogReader("logger");
 
-    return {
-        init: function() {
-            //Logger
-            mylogger = new YAHOO.widget.LogReader("logger");
+    // Instantiate one XHR DataSource and define schema as an array:
+    //     ["Record Delimiter",
+    //     "Field Delimiter"]
+    this.oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
+    this.oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+    this.oACDS.maxCacheEntries = 60;
+    this.oACDS.queryMatchSubset = true;
 
-            // Instantiate one XHR DataSource and define schema as an array:
-            //     ["Record Delimiter",
-            //     "Field Delimiter"]
-            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
-            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
-            oACDS.maxCacheEntries = 60;
-            oACDS.queryMatchSubset = true;
-
-            // Instantiate first AutoComplete
-            var myInput = document.getElementById('ysearchinput0');
-            var myContainer = document.getElementById('ysearchcontainer0');
-            oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,oACDS);
-            oAutoComp0.delimChar = ";";
-            oAutoComp0.queryDelay = 1;
-            oAutoComp0.formatResult = function(oResultItem, sQuery) {
-                var sKey = oResultItem[0];
-                var nQuantity = oResultItem[1];
-                var sKeyQuery = sKey.substr(0, sQuery.length);
-                var sKeyRemainder = sKey.substr(sQuery.length);
-                var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
-                    nQuantity,
-                    "</div><span style='font-weight:bold'>",
-                    sKeyQuery,
-                    "</span>",
-                    sKeyRemainder,
-                    "</div>"];
-                return (aMarkup.join(""));
-            };
-
-            // Instantiate second AutoComplete
-            oAutoComp1 = new YAHOO.widget.AutoComplete('ysearchinput1','ysearchcontainer1', oACDS);
-            oAutoComp1.delimChar = ";";
-            oAutoComp1.formatResult = function(oResultItem, sQuery) {
-                var sKey = oResultItem[0];
-                var nQuantity = oResultItem[1];
-                var sKeyQuery = sKey.substr(0, sQuery.length);
-                var sKeyRemainder = sKey.substr(sQuery.length);
-                var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
-                    nQuantity,
-                    "</div><span style='color:red'>",
-                    sKeyQuery,
-                    "</span>",
-                    sKeyRemainder,
-                    "</div>"];
-                return (aMarkup.join(""));
-            };
-
-            // Instantiate third AutoComplete
-            oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', oACDS);
-            oAutoComp2.delimChar = ";";
-            oAutoComp2.queryDelay = 0;
-            oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
-        },
-            
-        validateForm: function() {
-            // Validate form inputs here
-            return false;
-        }
+    // Instantiate first AutoComplete
+    var myInput = document.getElementById('ysearchinput0');
+    var myContainer = document.getElementById('ysearchcontainer0');
+    this.oAutoComp0 = new YAHOO.widget.AutoComplete(myInput,myContainer,this.oACDS);
+    this.oAutoComp0.delimChar = ";";
+    this.oAutoComp0.queryDelay = 1;
+    this.oAutoComp0.formatResult = function(oResultItem, sQuery) {
+        var sKey = oResultItem[0];
+        var nQuantity = oResultItem[1];
+        var sKeyQuery = sKey.substr(0, sQuery.length);
+        var sKeyRemainder = sKey.substr(sQuery.length);
+        var aMarkup = ["<div id='ysearchresult'><div class='ysearchquery'>",
+            nQuantity,
+            "</div><span style='font-weight:bold'>",
+            sKeyQuery,
+            "</span>",
+            sKeyRemainder,
+            "</div>"];
+        return (aMarkup.join(""));
     };
-}();
 
-YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACFlatData.init);
+    // Instantiate second AutoComplete
+    this.oAutoComp1 = new YAHOO.widget.AutoComplete('ysearchinput1','ysearchcontainer1', this.oACDS);
+    this.oAutoComp1.delimChar = ";";
+    this.oAutoComp1.formatResult = function(oResultItem, sQuery) {
+        var sKey = oResultItem[0];
+        var nQuantity = oResultItem[1];
+        var sKeyQuery = sKey.substr(0, sQuery.length);
+        var sKeyRemainder = sKey.substr(sQuery.length);
+        var aMarkup = ["<div class='ysearchresult'><div class='ysearchquery'>",
+            nQuantity,
+            "</div><span style='color:red'>",
+            sKeyQuery,
+            "</span>",
+            sKeyRemainder,
+            "</div>"];
+        return (aMarkup.join(""));
+    };
+
+    // Instantiate third AutoComplete
+    this.oAutoComp2 = new YAHOO.widget.AutoComplete('ysearchinput2','ysearchcontainer2', this.oACDS);
+    this.oAutoComp2.delimChar = ";";
+    this.oAutoComp2.queryDelay = 0;
+    this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
+            
+    this.validateForm = function() {
+        // Validate form inputs here
+        return false;
+    };
+};
 </script>
 
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

@@ -478,6 +478,64 @@ YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
     this._sendQuery(sQuery);
 };
 
+/**
+ * Overridable method gives implementers access to the query before it gets sent.
+ *
+ * @method doBeforeSendQuery
+ * @param sQuery {String} Query string.
+ * @return {String} Query string.
+ */
+YAHOO.widget.AutoComplete.prototype.doBeforeSendQuery = function(sQuery) {
+    return sQuery;
+};
+
+/**
+ * Nulls out the entire AutoComplete instance and related objects, removes attached
+ * event listeners, and clears out DOM elements inside the container. After
+ * calling this method, the instance reference should be expliclitly nulled by
+ * implementer, as in myDataTable = null. Use with caution!
+ *
+ * @method destroy
+ */
+YAHOO.widget.AutoComplete.prototype.destroy = function() {
+    var instanceName = this.toString();
+    var elInput = this._oTextbox;
+    var elContainer = this._oContainer;
+
+    // Unhook custom events
+    this.textboxFocusEvent.unsubscribe();
+    this.textboxKeyEvent.unsubscribe();
+    this.dataRequestEvent.unsubscribe();
+    this.dataReturnEvent.unsubscribe();
+    this.dataErrorEvent.unsubscribe();
+    this.containerExpandEvent.unsubscribe();
+    this.typeAheadEvent.unsubscribe();
+    this.itemMouseOverEvent.unsubscribe();
+    this.itemMouseOutEvent.unsubscribe();
+    this.itemArrowToEvent.unsubscribe();
+    this.itemArrowFromEvent.unsubscribe();
+    this.itemSelectEvent.unsubscribe();
+    this.unmatchedItemSelectEvent.unsubscribe();
+    this.selectionEnforceEvent.unsubscribe();
+    this.containerCollapseEvent.unsubscribe();
+    this.textboxBlurEvent.unsubscribe();
+
+    // Unhook DOM events
+    YAHOO.util.Event.purgeElement(elInput, true);
+    YAHOO.util.Event.purgeElement(elContainer, true);
+
+    // Remove DOM elements
+    elContainer.innerHTML = "";
+
+    // Null out objects
+    for(var key in this) {
+        if(this.hasOwnProperty(key)) {
+            this[key] = null;
+        }
+    }
+
+};
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public events
@@ -845,34 +903,34 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     // Correct any invalid values
     var minQueryLength = this.minQueryLength;
     if(!YAHOO.lang.isNumber(minQueryLength) || (minQueryLength < 1)) {
-        minQueryLength = 1;
+        this.minQueryLength = 1;
     }
     var maxResultsDisplayed = this.maxResultsDisplayed;
     if(!YAHOO.lang.isNumber(maxResultsDisplayed) || (maxResultsDisplayed < 1)) {
-        maxResultsDisplayed = 10;
+        this.maxResultsDisplayed = 10;
     }
     var queryDelay = this.queryDelay;
     if(!YAHOO.lang.isNumber(queryDelay) || (queryDelay < 0)) {
-        queryDelay = 0.5;
+        this.queryDelay = 0.5;
     }
     var delimChar = this.delimChar;
     if(YAHOO.lang.isString(delimChar)) {
-        delimChar = [delimChar];
+        this.delimChar = [delimChar];
     }
     else if(!YAHOO.lang.isArray(delimChar)) {
-        delimChar = null;
+        this.delimChar = null;
     }
     var animSpeed = this.animSpeed;
     if((this.animHoriz || this.animVert) && YAHOO.util.Anim) {
         if(!YAHOO.lang.isNumber(animSpeed) || (animSpeed < 0)) {
-            animSpeed = 0.3;
+            this.animSpeed = 0.3;
         }
         if(!this._oAnim ) {
-            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, animSpeed);
+            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
             this._oAnim = oAnim;
         }
         else {
-            this._oAnim.duration = animSpeed;
+            this._oAnim.duration = this.animSpeed;
         }
     }
     if(this.forceSelection && delimChar) {
@@ -1045,8 +1103,9 @@ YAHOO.widget.AutoComplete.prototype._isIgnoreKey = function(nKeyCode) {
             (nKeyCode >= 18 && nKeyCode <= 20) || // alt,pause/break,caps lock
             (nKeyCode == 27) || // esc
             (nKeyCode >= 33 && nKeyCode <= 35) || // page up,page down,end
-            (nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
-            (nKeyCode == 40) || // down
+            /*(nKeyCode >= 36 && nKeyCode <= 38) || // home,left,up
+            (nKeyCode == 40) || // down*/
+            (nKeyCode >= 36 && nKeyCode <= 40) || // home,left,up, right, down
             (nKeyCode >= 44 && nKeyCode <= 45)) { // print screen,insert
         return true;
     }
@@ -1117,6 +1176,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
 
     sQuery = encodeURIComponent(sQuery);
     this._nDelayID = -1;    // Reset timeout ID because request has been made
+    sQuery = this.doBeforeSendQuery(sQuery);
     this.dataRequestEvent.fire(this, sQuery);
     this.dataSource.getResults(this._populateList, sQuery, this);
 };
@@ -1180,6 +1240,10 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
             oItemj._oResultData = null;
         }
 
+        // Expand the container
+        var ok = oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
+        oSelf._toggleContainer(ok);
+        
         if(oSelf.autoHighlight) {
             // Go to the first item
             var oFirstItem = aItems[0];
@@ -1190,15 +1254,12 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, o
         else {
             oSelf._oCurItem = null;
         }
-
-        // Expand the container
-        var ok = oSelf.doBeforeExpandContainer(oSelf._oTextbox, oSelf._oContainer, sQuery, aResults);
-        oSelf._toggleContainer(ok);
     }
     else {
         oSelf._toggleContainer(false);
     }
     oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
+    
 };
 
 /**
@@ -1230,17 +1291,18 @@ YAHOO.widget.AutoComplete.prototype._clearSelection = function() {
  * query results.
  *
  * @method _textMatchesOption
- * @return {Boolean} True if user-input text matches a result, false otherwise.
+ * @return {HTMLElement} Matching list item element if user-input text matches
+ * a result, null otherwise.
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
-    var foundMatch = false;
+    var foundMatch = null;
 
     for(var i = this._nDisplayedItems-1; i >= 0 ; i--) {
         var oItem = this._aListItems[i];
         var sMatch = oItem._sResultKey.toLowerCase();
         if(sMatch == this._sCurQuery.toLowerCase()) {
-            foundMatch = true;
+            foundMatch = oItem;
             break;
         }
     }
@@ -1567,15 +1629,16 @@ YAHOO.widget.AutoComplete.prototype._selectItem = function(oItem) {
 };
 
 /**
- * For values updated by type-ahead, the right arrow key jumps to the end
- * of the textbox, otherwise the container is closed.
+ * If an item is highlighted in the container, the right arrow key jumps to the
+ * end of the textbox and selects the highlighted item, otherwise the container
+ * is closed.
  *
  * @method _jumpSelection
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._jumpSelection = function() {
-    if(!this.typeAhead) {
-        return;
+    if(this._oCurItem) {
+        this._selectItem(this._oCurItem);
     }
     else {
         this._toggleContainer(false);
@@ -1804,13 +1867,13 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 
     switch (nKeyCode) {
         case 9: // tab
-            if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                if(oSelf._bContainerOpen) {
-                    YAHOO.util.Event.stopEvent(v);
-                }
-            }
             // select an item or clear out
             if(oSelf._oCurItem) {
+                if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
+                    if(oSelf._bContainerOpen) {
+                        YAHOO.util.Event.stopEvent(v);
+                    }
+                }
                 oSelf._selectItem(oSelf._oCurItem);
             }
             else {
@@ -1818,12 +1881,12 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             }
             break;
         case 13: // enter
-            if(oSelf._nKeyCode != nKeyCode) {
-                if(oSelf._bContainerOpen) {
-                    YAHOO.util.Event.stopEvent(v);
-                }
-            }
             if(oSelf._oCurItem) {
+                if(oSelf._nKeyCode != nKeyCode) {
+                    if(oSelf._bContainerOpen) {
+                        YAHOO.util.Event.stopEvent(v);
+                    }
+                }
                 oSelf._selectItem(oSelf._oCurItem);
             }
             else {
@@ -1910,6 +1973,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
         return;
     }
     else {
+        oSelf._bItemSelected = false;
+        YAHOO.util.Dom.removeClass(oSelf._oCurItem,  oSelf.highlightClassName);
+        oSelf._oCurItem = null;
+
         oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
     }
 
@@ -1959,13 +2026,17 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
     if(!oSelf._bOverContainer || (oSelf._nKeyCode == 9)) {
         // Current query needs to be validated
         if(!oSelf._bItemSelected) {
-            if(!oSelf._bContainerOpen || (oSelf._bContainerOpen && !oSelf._textMatchesOption())) {
+            var oMatch = oSelf._textMatchesOption();
+            if(!oSelf._bContainerOpen || (oSelf._bContainerOpen && (oMatch === null))) {
                 if(oSelf.forceSelection) {
                     oSelf._clearSelection();
                 }
                 else {
                     oSelf.unmatchedItemSelectEvent.fire(oSelf, oSelf._sCurQuery);
                 }
+            }
+            else {
+                oSelf._selectItem(oMatch);
             }
         }
 
@@ -2059,11 +2130,11 @@ YAHOO.widget.DataSource.ERROR_DATAPARSE = "Response data could not be parsed";
 YAHOO.widget.DataSource.prototype.maxCacheEntries = 15;
 
 /**
- * Use this to equate cache matching with the type of matching done by your live
- * data source. If caching is on and queryMatchContains is true, the cache
- * returns results that "contain" the query string. By default,
- * queryMatchContains is set to false, meaning the cache only returns results
- * that "start with" the query string.
+ * Use this to fine-tune the matching algorithm used against JS Array types of
+ * DataSource and DataSource caches. If queryMatchContains is true, then the JS
+ * Array or cache returns results that "contain" the query string. By default,
+ * queryMatchContains is set to false, so that only results that "start with"
+ * the query string are returned.
  *
  * @property queryMatchContains
  * @type Boolean
@@ -2087,9 +2158,9 @@ YAHOO.widget.DataSource.prototype.queryMatchContains = false;
 YAHOO.widget.DataSource.prototype.queryMatchSubset = false;
 
 /**
- * Enables query case-sensitivity matching. If caching is on and
- * queryMatchCase is true, queries will only return results for case-sensitive
- * matches.
+ * Enables case-sensitivity in the matching algorithm used against JS Array
+ * types of DataSources and DataSource caches. If queryMatchCase is true, only
+ * case-sensitive matches will return.
  *
  * @property queryMatchCase
  * @type Boolean
@@ -2161,6 +2232,7 @@ YAHOO.widget.DataSource.prototype.flushCache = function() {
         this._aCacheHelper = [];
     }
     this.cacheFlushEvent.fire(this);
+
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2701,11 +2773,29 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
 
     switch (this.responseType) {
         case YAHOO.widget.DS_XHR.TYPE_JSON:
-            var jsonList;
-            // Divert KHTML clients from JSON lib
-            if(window.JSON && (navigator.userAgent.toLowerCase().indexOf('khtml')== -1)) {
-                // Use the JSON utility if available
-                var jsonObjParsed = JSON.parse(oResponse);
+            var jsonList, jsonObjParsed;
+            // Check for JSON lib but divert KHTML clients
+            var isNotMac = (navigator.userAgent.toLowerCase().indexOf('khtml')== -1);
+            if(oResponse.parseJSON && isNotMac) {
+                // Use the new JSON utility if available
+                jsonObjParsed = oResponse.parseJSON();
+                if(!jsonObjParsed) {
+                    bError = true;
+                }
+                else {
+                    try {
+                        // eval is necessary here since aSchema[0] is of unknown depth
+                        jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    }
+                    catch(e) {
+                        bError = true;
+                        break;
+                   }
+                }
+            }
+            else if(window.JSON && isNotMac) {
+                // Use older JSON lib if available
+                jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
                     bError = true;
                     break;

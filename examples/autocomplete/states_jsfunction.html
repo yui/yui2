@@ -201,7 +201,7 @@
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <!-- Library ends -->
@@ -212,57 +212,47 @@
 
 
 <script type="text/javascript">
-YAHOO.example.ACJSFunction = function(){
-    var mylogger;
-    var oACDS;
-    var oAutoComp;
+YAHOO.example.ACJSFunction = new function(){
+    //Logger
+    this.mylogger = new YAHOO.widget.LogReader("logger");
 
-    return {
-        init: function() {
-            //Logger
-            mylogger = new YAHOO.widget.LogReader("logger");
+    // Instantiate JS Function DataSource
+    this.oACDS = new YAHOO.widget.DS_JSFunction(getStates);
+    this.oACDS.maxCacheEntries = 0;
 
-            // Instantiate JS Function DataSource
-            oACDS = new YAHOO.widget.DS_JSFunction(getStates);
-            oACDS.maxCacheEntries = 0;
+    // Instantiate AutoComplete
+    this.oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS);
+    this.oAutoComp.alwaysShowContainer = true;
+    this.oAutoComp.queryDelay = 0;
+    this.oAutoComp.minQueryLength = 0;
+    this.oAutoComp.maxResultsDisplayed = 50;
+    this.oAutoComp.formatResult = function(oResultItem, sQuery) {
+        var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
+        return (sMarkup);
+    };
 
-            // Instantiate AutoComplete
-            oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
-            oAutoComp.alwaysShowContainer = true;
-            oAutoComp.queryDelay = 0;
-            oAutoComp.minQueryLength = 0;
-            oAutoComp.maxResultsDisplayed = 50;
-            oAutoComp.formatResult = function(oResultItem, sQuery) {
-                var sMarkup = oResultItem[0] + " (" + oResultItem[1] + ")";
-                return (sMarkup);
-            };
 
-            // Subscribe to Custom Events
-            oAutoComp.dataReturnEvent.subscribe(YAHOO.example.ACJSFunction.myOnDataReturn);
-            
-            // Set initial content in the container
-            oAutoComp.sendQuery("");
-        },
+    // Custom UI if no results found
+    this.myOnDataReturn = function(sType, aArgs) {
+        var oAutoComp = aArgs[0];
+        var sQuery = aArgs[1];
+        var aResults = aArgs[2];
 
-        // Define Custom Event handlers
-        myOnDataReturn: function(sType, aArgs) {
-            var oAutoComp = aArgs[0];
-            var sQuery = aArgs[1];
-            var aResults = aArgs[2];
-
-            if(aResults.length == 0) {
-                oAutoComp.setBody("<div id=\"statescontainerdefault\">No matching results</div>");
-            }
-        },
-
-        validateForm: function() {
-            // Validate form inputs here
-            return false;
+        if(aResults.length == 0) {
+            oAutoComp.setBody("<div id=\"statescontainerdefault\">No matching results</div>");
         }
     };
-}();
+    this.oAutoComp.dataReturnEvent.subscribe(this.myOnDataReturn);
+        
+        // Set initial content in the container
+        this.oAutoComp.sendQuery("");
 
-YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACJSFunction.init);
+
+    this.validateForm = function() {
+        // Validate form inputs here
+        return false;
+    };
+};
 </script>
 
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

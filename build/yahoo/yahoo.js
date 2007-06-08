@@ -317,6 +317,10 @@ YAHOO.env.ua = function() {
  * @class YAHOO.lang
  */
 YAHOO.lang = {
+    is: function(o) {
+        return (o !== null) && (typeof o !== "undefined") && (!isNaN(o));
+    },
+
     /**
      * Determines whether or not the provided object is an array.
      * Testing typeof/instanceof/constructor of arrays across frame 

@@ -8,16 +8,16 @@
 <link type="text/css" rel="stylesheet" href="./css/examples.css">
 
 <style type="text/css">
-    #custommod {position:relative;padding:1em;}
-    #customautocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
-    #custominput {position:absolute;width:100%;height:1.4em;}
-    #customcontainer {position:absolute;top:1.7em;width:100%;}
-    #customcontainer .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
-    #customcontainer .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
-    #customcontainer ul {padding:5px 0;width:100%;}
-    #customcontainer li {padding:0 5px;cursor:default;white-space:nowrap;}
-    #customcontainer li.yui-ac-highlight {background:#ff0;}
-    #customcontainer li.yui-ac-prehighlight {background:#FFFFCC;}
+    #dashboard_module {position:relative;padding:1em;}
+    #dashboard_autocomplete {position:relative;margin:1em;width:40%;}/* set width of widget here*/
+    #dashboard_input {position:absolute;width:100%;height:1.4em;}
+    #dashboard_container {position:absolute;top:1.7em;width:100%;}
+    #dashboard_container .yui-ac-content {position:absolute;width:100%;border:1px solid #404040;background:#fff;overflow:hidden;z-index:9050;}
+    #dashboard_container .yui-ac-shadow {position:absolute;margin:.3em;width:100%;background:#a0a0a0;z-index:9049;}
+    #dashboard_container ul {padding:5px 0;width:100%;}
+    #dashboard_container li {padding:0 5px;cursor:default;white-space:nowrap;}
+    #dashboard_container li.yui-ac-highlight {background:#ff0;}
+    #dashboard_container li.yui-ac-prehighlight {background:#FFFFCC;}
 </style>
 </head>
 
@@ -31,27 +31,18 @@
     <div id="logger"></div>
     <!-- Logger ends -->
 
-    <!-- Code generator begins
-    <div id="coder">
-        <h3>Sample code</h3>
-        <textarea id="output"></textarea>
-    </div>
-     Code generator ends -->
-
     <!-- Content begins -->
-    <p>In this example, an AutoComplete instance is created that points to the
-    same DataSource as the <a href="./ysearch_flat.html">Flat-file Data</a>
-    example. However, by changing the values below, you can easily customize the
-    configuration properties of the implementation.
+    <p>Use the UI below to tweak the different configuration options available
+    in AutoComplete.
     </p>
 
     <!-- AutoComplete begins -->
-    <div id="custommod">
-        <form onsubmit="return YAHOO.example.ACCustomizable.validateForm();">
+    <div id="dashboard_module">
+        <form onsubmit="return YAHOO.example.Dashboard.validateForm();">
             <h2>Customize your own AutoComplete widget:</h2>
-            <div id="customautocomplete">
-                <input id="custominput" type="text" name="query">
-                <div id="customcontainer"></div>
+            <div id="dashboard_autocomplete">
+                <input id="dashboard_input" type="text" name="query">
+                <div id="dashboard_container"></div>
             </div>
         </form>
     </div>
@@ -64,86 +55,90 @@
         <select><option>Customize configurations for AutoComplete</option></select>
 
         <div>
-            <input id="animhoriz" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimHoriz(this);">
-            <label for="animhoriz">Animate Horizontally</label>
+            <input id="animHoriz" type="checkbox">
+            <label for="animHoriz">Animate Horizontally</label>
         </div>
         <div>
-            <input id="animvert" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAnimVert(this);" checked>
-            <label for="animvert">Animate Vertically</label>
+            <input id="animVert" type="checkbox" checked>
+            <label for="animVert">Animate Vertically</label>
         </div>
         <div>
-            <label for="animspeed">Animation Speed: </label>
-            <input id="animspeed" type="text" size="2" value="0.3">
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateAnimSpeed();">
+            <label for="animSpeedInput">Animation Speed: </label>
+            <input id="animSpeedInput" type="text" size="2" value="0.3">
+            <input id="animSpeed" type="button" value="Update">
         </div>
         <div>
-            <input id="useshadow" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleShadow(this);">
-            <label for="useshadow">Use Shadow</label>
+            <input id="useShadow" type="checkbox">
+            <label for="useShadow">Use Shadow</label>
         </div>
         <div>
-            <input id="useiframe" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleIFrame(this);">
-            <label for="useiframe">Use IFrame</label>
+            <input id="useIFrame" type="checkbox">
+            <label for="useIFrame">Use IFrame</label>
         </div>
         <div>
-            <input id="typeahead" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleTypeAhead(this);">
-            <label for="typeahead">Type Ahead</label>
+            <input id="autoHighlight" type="checkbox" checked>
+            <label for="autoHighlight">Automatically Highlight First Item</label>
         </div>
         <div>
-            <input id="forceselection" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleForceSelection(this);">
-            <label for="forceselection">Force a Selection</label>
+            <input id="typeAhead" type="checkbox">
+            <label for="typeAhead">Type Ahead</label>
         </div>
         <div>
-            <label for="maxresults">Maximum Results: </label>
-            <input id="maxresults" type="text" size="2" value="10">
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMaxResults();">
+            <input id="forceSelection" type="checkbox">
+            <label for="forceSelection">Force a Selection</label>
         </div>
         <div>
-            <label for="minquerylength">Minimum Query Length: </label>
-            <input id="minquerylength" type="text" size="2" value="1">
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateMinQueryLength();"
+            <label for="maxResultsDisplayedInput">Maximum Results: </label>
+            <input id="maxResultsDisplayedInput" type="text" size="2" value="10">
+            <input id="maxResultsDisplayed" type="button" value="Update">
         </div>
         <div>
-            <label for="querydelay">Query Delay: </label>
-            <input id="querydelay" type="text" size="2" value="0.5">
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateQueryDelay();">
+            <label for="minQueryLengthInput">Minimum Query Length: </label>
+            <input id="minQueryLengthInput" type="text" size="2" value="1">
+            <input id="minQueryLength" type="button" value="Update">
         </div>
         <div>
-            <label for="delimchar">Array of Delimiter Character(s)</label><br>
-            <input id="delimchar" type="text" size="30" value="">
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateDelimChar();">
+            <label for="queryDelayInput">Query Delay: </label>
+            <input id="queryDelayInput" type="text" size="2" value="0.5">
+            <input id="queryDelay" type="button" value="Update">
         </div>
         <div>
-            <label for="highlightclass">Highlight Classname</label><br>
-            <input id="highlightclass" type="text" size="30" value="yui-ac-highlight" maxlength="30">
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHighlight();">
+            <label for="delimCharInput">Delimiter Character(s) like ; or [";", ","]</label><br>
+            <input id="delimCharInput" type="text" size="30" value="">
+            <input id="delimChar" type="button" value="Update">
         </div>
         <div>
-            <label for="prehighlightclass">Pre-highlight Classname</label><br>
-            <input id="prehighlightclass" type="text" size="30" value="" maxlength="30">
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updatePrehighlight();">
+            <label for="highlightClassNameInput">Highlight Classname</label><br>
+            <input id="highlightClassNameInput" type="text" size="30" value="yui-ac-highlight" maxlength="30">
+            <input id="highlightClassName" type="button" value="Update">
         </div>
         <div>
-            <input id="allowbrowserautocomplete" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAllowBrowserAutocomplete(this);" checked>
-            <label for="allowbrowserautocomplete">Allow Browser Autocomplete</label>
+            <label for="prehighlightClassNameInput">Pre-highlight Classname</label><br>
+            <input id="prehighlightClassNameInput" type="text" size="30" value="" maxlength="30">
+            <input id="prehighlightClassName" type="button" value="Update">
         </div>
         <div>
-            <input id="alwaysshowcontainer" type="checkbox" onclick="YAHOO.example.ACCustomizable.toggleAlwaysShowContainer(this);">
-            <label for="alwaysshowcontainer">Always Show Container</label>
+            <input id="allowBrowserAutocomplete" type="checkbox" checked>
+            <label for="allowBrowserAutocomplete">Allow Browser Autocomplete</label>
         </div>
         <div>
-            <label for="header">Set Header</label>
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateHeader();"><br>
-            <textarea id="header" cols="25" rows="5"></textarea>
+            <input id="alwaysShowContainer" type="checkbox">
+            <label for="alwaysShowContainer">Always Show Container</label>
         </div>
         <div>
-            <label for="body">Set Body</label>
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateBody();"><br>
-            <textarea id="body" cols="25" rows="5"></textarea>
+            <label for="setHeaderInput">Set Header</label>
+            <input id="setHeader" type="button" value="Update"><br>
+            <textarea id="setHeaderInput" cols="25" rows="5"></textarea>
         </div>
         <div>
-            <label for="footer">Set Footer</label>
-            <input type="button" value="Update" onclick="YAHOO.example.ACCustomizable.updateFooter();"><br>
-            <textarea id="footer" cols="25" rows="5"></textarea>
+            <label for="setBodyInput">Set Body</label>
+            <input id="setBody" type="button" value="Update"><br>
+            <textarea id="setBodyInput" cols="25" rows="5"></textarea>
+        </div>
+        <div>
+            <label for="setFooterInput">Set Footer</label>
+            <input id="setFooter" type="button" value="Update"><br>
+            <textarea id="setFooterInput" cols="25" rows="5"></textarea>
         </div>
     </form>
     <!-- Panel ends -->
@@ -152,7 +147,7 @@
 <!-- Libary begins -->
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
-<script type="text/javascript" src="../../build/event/event-debug.js"></script>
+<script type="text/javascript" src="../../build/event/event.js"></script>
 <script type="text/javascript" src="../../build/connection/connection.js"></script>
 <script type="text/javascript" src="../../build/animation/animation.js"></script>
 <script type="text/javascript" src="../../build/autocomplete/autocomplete-debug.js"></script>
@@ -160,190 +155,155 @@
 <!-- Library ends -->
 
 <script type="text/javascript">
-YAHOO.example.ACCustomizable = function(){
-    var mylogreader, mylogwriter;
-    var oACDS;
-    var oAutoComp;
+YAHOO.example.Dashboard = new function() {
+    // Initialize widgets and the dashboard
+    this.init = function() {
+        //Logger
+        this.myLogReader = new YAHOO.widget.LogReader("logger");
+        this.myLogWriter = new YAHOO.widget.LogWriter("Example : AutoComplete Dashboard");
 
-    return {
-        init: function() {
-            //Logger
-            mylogreader = new YAHOO.widget.LogReader("logger");
-            mylogwriter = new YAHOO.widget.LogWriter("Custom configs");
+        // DataSource
+        this.myDataSource = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
+        // This is the one non-default value other than constructor params
+        this.myDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
 
-            // DataSource 1
-            oACDS = new YAHOO.widget.DS_XHR("./php/ysearch_flat.php", ["\n", "\t"]);
-            // This is the one non-default value other than constructor params
-            oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
+        // AutoComplete
+        this.myAutoComp = new YAHOO.widget.AutoComplete("dashboard_input","dashboard_container", this.myDataSource);
 
-            // AutoComplete 1
-            oAutoComp = new YAHOO.widget.AutoComplete('custominput','customcontainer', oACDS);
+        // IFrame workaround for IE
+        var ua = navigator.userAgent.toLowerCase();
+        if(ua.indexOf('msie') != -1 && ua.indexOf('opera') < 0) {
+            this.myAutoComp.useIFrame = true;
+            YAHOO.util.Dom.get("useiframe").checked = true;
+        }
 
-            var ua = navigator.userAgent.toLowerCase();
-            if(ua.indexOf('msie') != -1 && ua.indexOf('opera') < 0) {
-                oAutoComp.useIFrame = true;
-                YAHOO.util.Dom.get("useiframe").checked = true;
-            }
-        },
+        // Dashboard DOM event handling (assign scope to the HTML Element)
+        YAHOO.util.Event.addListener("animHoriz","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("animVert","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("useShadow","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("useIFrame","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("autoHighlight","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("typeAhead","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("forceSelection","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("allowBrowserAutocomplete","click",this.handleCheckboxEvent,this);
+        YAHOO.util.Event.addListener("alwaysShowContainer","click",this.handleCheckboxEvent,this);
 
-        toggleAnimHoriz: function(animHoriz) {
-            oAutoComp.animHoriz = animHoriz.checked;
-            mylogwriter.log("Updated animHoriz to " + oAutoComp.animHoriz + ".");
-        },
+        YAHOO.util.Event.addListener("animSpeed","click",this.handleNumberInputEvent,this);
+        YAHOO.util.Event.addListener("maxResultsDisplayed","click",this.handleNumberInputEvent,this);
+        YAHOO.util.Event.addListener("minQueryLength","click",this.handleNumberInputEvent,this);
+        YAHOO.util.Event.addListener("queryDelay","click",this.handleNumberInputEvent,this);
 
-        toggleAnimVert: function(animVert) {
-            oAutoComp.animVert = animVert.checked;
-            mylogwriter.log("Updated animVert to " + oAutoComp.animVert + ".");
-        },
+        YAHOO.util.Event.addListener("delimChar","click",this.handleDelimiterInputEvent,this);
 
-        updateAnimSpeed: function() {
-            var animSpeed = document.getElementById("animspeed").value;
-            if (isNaN(animSpeed) || (animSpeed < 1)) {
-                document.getElementById("animspeed").value = oAutoComp.animSpeed;
-                mylogwriter.log("Could not update animSpeed.", "warn");
-                return;
-            }
-            else {
-                oAutoComp.animSpeed = animSpeed;
-                mylogwriter.log("Updated animSpeed to " + oAutoComp.animSpeed + ".");
-            }
-        },
+        YAHOO.util.Event.addListener("highlightClassName","click",this.handleTextInputEvent,this);
+        YAHOO.util.Event.addListener("prehighlightClassName","click",this.handleTextInputEvent,this);
 
-        toggleShadow: function(useShadow) {
-            oAutoComp.useShadow = useShadow.checked;
-            mylogwriter.log("Updated useShadow to " + oAutoComp.useShadow + ".");
-        },
+        YAHOO.util.Event.addListener("setHeader","click",this.handleTextareaEvent,this);
+        YAHOO.util.Event.addListener("setBody","click",this.handleTextareaEvent,this);
+        YAHOO.util.Event.addListener("setFooter","click",this.handleTextareaEvent,this);
+    };
+    
+    // For valid inputs
+    this.updateValue = function(property, value) {
+        this.myAutoComp[property] = value;
+        this.logSuccess(property);
+    };
 
-        toggleIFrame: function(useIFrame) {
-            oAutoComp.useIFrame = useIFrame.checked;
-            mylogwriter.log("Updated useIFrame to " + oAutoComp.useIFrame + ".");
-        },
+    // For invalid inputs
+    this.revertInput = function(property) {
+        YAHOO.util.Dom.get(property+"Input").value = this.myAutoComp[property];
+        this.logFailure(property);
+    };
+    
+    // Log success message
+    this.logSuccess = function(property) {
+        this.myLogWriter.log("Updated " + property + " to " + this.myAutoComp[property] + ".");
+    };
 
-        toggleTypeAhead: function(typeAhead) {
-            oAutoComp.typeAhead = typeAhead.checked;
-            mylogwriter.log("Updated typeAhead to " + oAutoComp.typeAhead + ".");
-        },
+    // Log failure message
+    this.logFailure = function(property, error) {
+        this.myLogWriter.log("Could not update " + property + ".", "warn");
+    };
 
-        toggleForceSelection: function(forceSelection) {
-            oAutoComp.forceSelection = forceSelection.checked;
-            oAutoComp.forceSelection = forceSelection.checked;
-            mylogwriter.log("Updated forceSelection to " + oAutoComp.forceSelection + ".");
-        },
-
-        updateMaxResults: function() {
-            var maxResults = document.getElementById("maxresults").value;
-            if (isNaN(maxResults) || (maxResults < 1)) {
-                document.getElementById("maxresults").value = oAutoComp.maxResultsDisplayed;
-                mylogwriter.log("Could not update maxResultsDisplayed.", "warn");
-                return;
-            }
-            else {
-                oAutoComp.maxResultsDisplayed = maxResults;
-                mylogwriter.log("Updated maxResultsDisplayed to " + oAutoComp.maxResultsDisplayed + ".");
-            }
-        },
-
-        updateMinQueryLength: function() {
-            var minQueryLength = document.getElementById("minquerylength").value;
-            if (isNaN(minQueryLength)) {
-                document.getElementById("minquerylength").value = oAutoComp.minQueryLength;
-                mylogwriter.log("Could not update minQueryLength.", "warn");
-                return;
-            }
-            else {
-                oAutoComp.minQueryLength = minQueryLength;
-                mylogwriter.log("Updated minQueryLength to " + oAutoComp.minQueryLength + ".");
-            }
-        },
-
-        updateQueryDelay: function() {
-            var queryDelay = document.getElementById("querydelay").value;
-            if (isNaN(queryDelay) || (queryDelay < 0)) {
-                document.getElementById("querydelay").value = oAutoComp.queryDelay;
-                mylogwriter.log("Could not update queryDelay.", "warn");
-                return;
-            }
-            else {
-                    oAutoComp.queryDelay = queryDelay;
-                    mylogwriter.log("Updated query delay to " + oAutoComp.queryDelay + ".");
-            }
-        },
-
-        updateDelimChar: function() {
-            var sValue = document.getElementById("delimchar").value;
-            if((sValue.indexOf("[") == 0) && (sValue.indexOf("]") == sValue.length-1)) {
-                oAutoComp.delimChar = eval(sValue);
-            }
-            else if(sValue.length < 2){
-                oAutoComp.delimChar = sValue;
-            }
-            else {
-                document.getElementById("delimchar").value = oAutoComp.delimChar;
-                mylogwriter.log("Could not update delimChar.", "warn");
-                return;
-            }
-            mylogwriter.log("Updated delimChar to " + oAutoComp.delimChar + ".");
-        },
-
-        updateHighlight: function() {
-            oAutoComp.highlightClassName = document.getElementById("highlightclass").value;
-            mylogwriter.log("Updated highlightClassName to " + oAutoComp.highlightClassName + ".");
-        },
-
-        updatePrehighlight: function() {
-            oAutoComp.prehighlightClassName = document.getElementById("prehighlightclass").value;
-            mylogwriter.log("Updated prehighlightClassName to " + oAutoComp.prehighlightClassName + ".");
-        },
-
-        toggleAllowBrowserAutocomplete: function(allowBrowserAutocomplete) {
-            oAutoComp.allowBrowserAutocomplete = allowBrowserAutocomplete.checked;
-            mylogwriter.log("Updated allowBrowserAutocomplete to " + oAutoComp.allowBrowserAutocomplete + ".");
-        },
-
-        toggleAlwaysShowContainer: function(alwaysShowContainer) {
-            var container = YAHOO.util.Dom.getElementsByClassName("yui-ac-content","div","customcontainer")[0];
-            if(container) {
-                oAutoComp.alwaysShowContainer = alwaysShowContainer.checked;
-                if(oAutoComp.alwaysShowContainer) {
-                    oAutoComp.setBody("alwaysShowContainer enabled");
-                }
-                else {
-                    container.style.height = "0";
-                    oAutoComp.setBody();
-                }
-                mylogwriter.log("Updated alwaysShowContainer to " + oAutoComp.alwaysShowContainer + ".");
-            }
-            else {
-                mylogwriter.log("Could not update alwaysShowContainer.","warn");
-            }
-        },
-
-        updateHeader: function() {
-            var header = document.getElementById("header").value;
-            oAutoComp.setHeader(header);
-            mylogwriter.log("Header updated.");
-        },
+    // Stub for AutoComplete form validation
+    this.validateForm = function() {
+        // Validation code goes here
+        return true;
+    };
+    
+    // DOM event handler (scope assigned to the HTML Element)
+    this.handleCheckboxEvent = function(e, oSelf) {
+        var property = this.id;
+        oSelf.updateValue(property, this.checked);
+    };
+    
+    // DOM event handler (scope assigned to the HTML Element)
+    this.handleNumberInputEvent = function(e, oSelf) {
+        var property = this.id;
         
-        updateBody: function() {
-            var body = document.getElementById("body").value;
-            oAutoComp.setBody(body);
-            mylogwriter.log("Body updated.");
-        },
-
-        updateFooter: function() {
-            var footer = document.getElementById("footer").value;
-            oAutoComp.setFooter(footer);
-            mylogwriter.log("Footer updated.");
-        },
-
-        validateForm: function() {
-            // Validate form inputs here
-            return true;
+        // Validate input
+        var nValue = YAHOO.util.Dom.get(property+"Input").value*1;
+        if(YAHOO.lang.isNumber(nValue)) {
+            oSelf.updateValue(property, nValue);
+        }
+        else {
+            oSelf.revertInput(property);
         }
     };
-}();
+    
+    // DOM event handler (scope assigned to the HTML Element)
+    this.handleDelimiterInputEvent = function(e, oSelf) {
+        var property = this.id;
+        
+        // Validate input
+        var sValue = YAHOO.util.Dom.get(property+"Input").value;
+        if((sValue.indexOf("[") == 0) &&
+                (sValue.indexOf("]") == sValue.length-1) &&
+                (sValue.indexOf("<") < 0) &&
+                (sValue.indexOf(">") < 0)) {
+            // Ok to turn into an array
+            try {
+                sValue = eval(sValue);
+            }
+            catch(e) {
+                // Not ok
+                oSelf.revertInput(property);
+                return;
+            }
+        }
+        else if(sValue.length !== 1){
+            // Not ok
+            oSelf.revertInput(property);
+            return;
+        }
+        oSelf.updateValue(property, sValue);
+    };
+    
+    // DOM event handler (scope assigned to the HTML Element)
+    this.handleTextInputEvent = function(e, oSelf) {
+        var property = this.id;
+        oSelf.updateValue(property, YAHOO.util.Dom.get(property+"Input").value);
+    };
 
-YAHOO.util.Event.addListener(this,'load',YAHOO.example.ACCustomizable.init);
+    // DOM event handler (scope assigned to the HTML Element)
+    this.handleTextareaEvent = function(e, oSelf) {
+        var method = this.id;
+        var value = YAHOO.util.Dom.get(method+"Input").value;
+        switch(method) {
+            case "setHeader":
+                oSelf.myAutoComp.setHeader(value);
+                break
+            case "setBody":
+                oSelf.myAutoComp.setBody(value);
+                break;
+            case "setFooter":
+                oSelf.myAutoComp.setFooter(value);
+                break;
+        }
+        oSelf.myLogWriter.log("Called " + method + "() with " + value);
+    };
+};
+YAHOO.util.Event.addListener(this,'load',YAHOO.example.Dashboard.init,YAHOO.example.Dashboard,true);
 </script>
 </div>
 </body>
