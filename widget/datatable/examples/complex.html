@@ -118,13 +118,12 @@ YAHOO.example.IntegratedFeatureSet = new function() {
                 comp(a.getData("areacode"), b.getData("areacode"));
     };
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
         {key:"state",text:"States",width:"16em",className:"statestyle", sortable:true,
                 sortOptions:{ascFunction:this.sortStatesAsc,descFunction:this.sortStatesDesc}},
         {key:"notes",text:"Notes (editable)",className:"notesstyle",editor:"textbox"}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -144,7 +143,7 @@ YAHOO.example.IntegratedFeatureSet = new function() {
         rowSingleSelect:true
     }
 
-    this.myDataTable = new YAHOO.widget.DataTable("complex", this.myColumnSet, this.myDataSource, myConfigs);
+    this.myDataTable = new YAHOO.widget.DataTable("complex", myColumnDefs, this.myDataSource, myConfigs);
     this.myDataTable.on("rowClickEvent",this.myDataTable.onEventSelectRow);
     this.myDataTable.on("cellDblclickEvent",this.myDataTable.onEventEditCell);
 

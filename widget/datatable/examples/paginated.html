@@ -68,7 +68,7 @@ YAHOO.example.ClientPagination = new function() {
     /****************************************************************************/
     /****************************************************************************/
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"id",text:"ID"},
         {key:"name",text:"Name"},
         {key:"date",text:"Date"},
@@ -84,7 +84,6 @@ YAHOO.example.ClientPagination = new function() {
         {key:"zip",text:"Zip"},
         {key:"country",text:"Country"}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     // Show over 1000 records
     this.myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
@@ -105,7 +104,7 @@ YAHOO.example.ClientPagination = new function() {
             },
             initialRequest:"results=100"
     };
-    this.myDataTable = new YAHOO.widget.DataTable("paginated", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("paginated", myColumnDefs,
             this.myDataSource, oConfigs);
 };
 </script>

@@ -78,14 +78,13 @@ YAHOO.example.XHR_Text = new function() {
         elCell.innerHTML = "<a href='" + oRecord.getData("Url") + "' target='_blank'>" + sData + "</a>";
     };
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"Name", sortable:true, formatter:this.formatUrl},
         {key:"Phone"},
         {key:"City"},
         {key:"Rating", type:"number", sortable:true}
 
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource("./php/text_proxy.txt");
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_TEXT;
@@ -95,7 +94,7 @@ YAHOO.example.XHR_Text = new function() {
         fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertToNumber},"Url"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("text", this.myColumnSet, this.myDataSource);
+    this.myDataTable = new YAHOO.widget.DataTable("text", myColumnDefs, this.myDataSource);
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

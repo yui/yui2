@@ -111,7 +111,7 @@ YAHOO.example.InlineEditing = new function() {
         elTextbox.select();
     };
     
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"address", formatter:this.formatAddress, editor:"textarea"},
         {key:"city", label: "city (click enter to save)", editor:this.editCity},
         {key:"state", editor:"dropdown", editorOptions:{dropdownOptions:YAHOO.example.Data.stateAbbrs}},
@@ -120,7 +120,6 @@ YAHOO.example.InlineEditing = new function() {
         {key:"colors", editor:"checkbox", editorOptions:{checkboxOptions:["red","yellow","blue"],disableBtns:true}},
         {key:"last_login", formatter:YAHOO.widget.DataTable.formatDate, editor:"date"} //, editorOptions:{disableBtns:true}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.addresses);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -128,7 +127,7 @@ YAHOO.example.InlineEditing = new function() {
         fields: ["address","city","state","amount","active","colors",{key:"last_login",converter:YAHOO.util.DataSource.convertToDate}]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("editing", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("editing", myColumnDefs,
             this.myDataSource, {caption:"Example: Inline Editing"});
             
     // Set up editing flow

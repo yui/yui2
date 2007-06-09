@@ -81,14 +81,12 @@ YAHOO.example.ContextMenu = new function() {
     /****************************************************************************/
     /****************************************************************************/
     /****************************************************************************/
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"SKU", sortable:true},
         {key:"Quantity", sortable:true},
         {key:"Item", sortable:true},
         {key:"Description"}
     ];
-
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.inventory);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -96,7 +94,7 @@ YAHOO.example.ContextMenu = new function() {
         fields: ["SKU","Quantity","Item","Description"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("contextmenu", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("contextmenu", myColumnDefs,
             this.myDataSource,{caption:"Example: Integration with ContextMenu"});
 
     this.onContextMenuClick = function(p_sType, p_aArgs, p_myDataTable) {

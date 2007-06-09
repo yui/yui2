@@ -21,11 +21,11 @@
  * @uses YAHOO.util.EventProvider
  * @constructor
  * @param elContainer {HTMLElement} Container element for the TABLE.
- * @param oColumnSet {YAHOO.widget.ColumnSet} ColumnSet instance.
+ * @param aColumnDefs {Object[]} Array of object literal Column definitions.
  * @param oDataSource {YAHOO.util.DataSource} DataSource instance.
  * @param oConfigs {object} (optional) Object literal of configuration values.
  */
-YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
+YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
     // Internal vars
     var i, ok, elTable, elThead, elTbody;
 
@@ -52,14 +52,14 @@ YAHOO.widget.DataTable = function(elContainer,oColumnSet,oDataSource,oConfigs) {
     }
 
     // Validate ColumnSet
-    if(oColumnSet && (oColumnSet instanceof YAHOO.widget.ColumnSet)) {
-        this._oColumnSet = oColumnSet;
+    if(YAHOO.lang.isArray(aColumnDefs)) {
+        this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
     }
-    else {
+    if(!this._oColumnSet instanceof YAHOO.widget.ColumnSet) {
         YAHOO.log("Could not instantiate DataTable due to an invalid ColumnSet", "error", this.toString());
         return;
     }
-    
+
     // Validate Container element
     elContainer = YAHOO.util.Dom.get(elContainer);
     if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {

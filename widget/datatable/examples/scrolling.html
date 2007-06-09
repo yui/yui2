@@ -83,11 +83,10 @@ YAHOO.example.Scrolling = new function() {
     /****************************************************************************/
     /****************************************************************************/
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"areacode"},
         {key:"state"}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -95,7 +94,7 @@ YAHOO.example.Scrolling = new function() {
         fields: ["areacode","state"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("scroll", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("scroll", myColumnDefs,
             this.myDataSource);
 };
 </script>

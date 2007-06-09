@@ -37,13 +37,12 @@ YAHOO.example.EnhanceFromMarkup = new function() {
     this.init = function() {
         this.logger = new YAHOO.widget.LogReader();
 
-        var columnHeaders = [
+        var myColumnDefs = [
             {key:"due",text:"Due Date",type:"date",sortable:true},
             {key:"account",text:"Account Number", sortable:true},
             {key:"quantity",text:"Quantity",type:"number",sortable:true},
             {key:"amount",text:"Amount Due",type:"currency",sortable:true}
         ];
-        this.myColumnSet = new YAHOO.widget.ColumnSet(columnHeaders);
 
         this.myDataSource = new YAHOO.util.DataSource(YAHOO.util.Dom.get("accounts"));
         this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
@@ -56,7 +55,7 @@ YAHOO.example.EnhanceFromMarkup = new function() {
         };
 
         
-        this.myDataTable = new YAHOO.widget.DataTable("markup", this.myColumnSet, this.myDataSource,
+        this.myDataTable = new YAHOO.widget.DataTable("markup", myColumnDefs, this.myDataSource,
                 {caption:"Example: Progressively Enhanced Table from Markup",
                 sortedBy:{key:"due",dir:"desc"}});
     };

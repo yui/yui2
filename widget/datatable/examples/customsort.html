@@ -109,11 +109,10 @@ YAHOO.example.CustomSort = new function() {
         return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
     };
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"areacode",text:"Area Codes",sortable:true},
         {key:"state",text:"States",sortable:true,sortOptions:{ascFunction:YAHOO.example.sortStatesAsc,descFunction:YAHOO.example.sortStatesDesc}}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -121,7 +120,7 @@ YAHOO.example.CustomSort = new function() {
         fields: ["areacode","state"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("sort", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("sort", myColumnDefs,
             this.myDataSource, {caption:"Example: Custom Sorting", sortedBy:{key:"areacode", dir:"asc"}});
 };
 </script>

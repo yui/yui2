@@ -79,13 +79,12 @@ YAHOO.example.XHR_XML = new function() {
         elCell.innerHTML = "<a href='" + oRecord.getData("ClickUrl") + "' target='_blank'>" + sData + "</a>";
     };
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
         {key:"Phone"},
         {key:"City"},
         {key:"AverageRating", text:"Rating", type:"number", sortable:true}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
@@ -94,7 +93,7 @@ YAHOO.example.XHR_XML = new function() {
         fields: ["Title","Phone","City",{key:"AverageRating",converter:YAHOO.util.DataSource.convertToNumber},"ClickUrl"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("xml", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("xml", myColumnDefs,
             this.myDataSource, {initialRequest:"query=pizza&zip=94089&results=10"});
 };
 </script>

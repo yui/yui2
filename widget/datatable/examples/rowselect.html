@@ -69,13 +69,12 @@ YAHOO.example.RowSelection = new function() {
     /****************************************************************************/
     /****************************************************************************/
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"Date",type:"date"},
         {key:"To"},
         {key:"From"},
         {key:"Subject"}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
@@ -85,7 +84,7 @@ YAHOO.example.RowSelection = new function() {
     };
 
     this.standardSelectDataTable = new YAHOO.widget.DataTable("standard",
-            this.myColumnSet, this.myDataSource, {
+            myColumnDefs, this.myDataSource, {
                 caption:"Example: Standard Row Selection Triggered by Click with Support for Modifier Keys"
             });
             
@@ -96,7 +95,7 @@ YAHOO.example.RowSelection = new function() {
     this.standardSelectDataTable.selectRow(this.standardSelectDataTable.getTrEl(0));
 
     this.singleSelectDataTable = new YAHOO.widget.DataTable("single",
-            this.myColumnSet, this.myDataSource, {
+            myColumnDefs, this.myDataSource, {
                 caption:"Example: Single-Row Selection Triggered by Dblclick",
                 selectionMode:"single"
             });

@@ -92,15 +92,13 @@ YAHOO.example.Basic = new function() {
     /****************************************************************************/
     /****************************************************************************/
     /****************************************************************************/
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"id", sortable:true, resizeable:true},
         {key:"date", type:"date", sortable:true, resizeable:true},
         {key:"quantity", type:"number", sortable:true, resizeable:true},
         {key:"amount", type:"currency", sortable:true, resizeable:true},
         {key:"title", type:"html", sortable:true, resizeable:true}
     ];
-
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
@@ -109,7 +107,7 @@ YAHOO.example.Basic = new function() {
     };
 
     this.myDataTable = new YAHOO.widget.DataTable("basic",
-            this.myColumnSet, this.myDataSource, {caption:"Example: Basic Table"});
+            myColumnDefs, this.myDataSource, {caption:"Example: Basic Table"});
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

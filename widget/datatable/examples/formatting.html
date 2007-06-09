@@ -95,7 +95,7 @@ YAHOO.example.CustomFormatting = new function() {
         elCell.innerHTML = "<a href=\"mailto:" + user + "@mycompany.com\">" + user + "</a>";
     };
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {label:"flag", formatter:this.myCustomFormatter}, // use custom formatter
         {key:"field1", sortable:true},
         {key:"field2", sortable:true, type:"date"}, // use the built-in date formatter
@@ -104,7 +104,6 @@ YAHOO.example.CustomFormatting = new function() {
         {key:"field5", sortable:true, type:"email"}, // use the overridden email formatter
         {key:"field6", sortable:true, type:"link"} // use the built-in link formatter
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.formatting);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
@@ -121,7 +120,7 @@ YAHOO.example.CustomFormatting = new function() {
         ]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("formatting", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("formatting", myColumnDefs,
             this.myDataSource, {caption:"Example: Custom Formatting"});
 };
 </script>

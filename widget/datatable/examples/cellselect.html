@@ -70,13 +70,12 @@ YAHOO.example.CellSelection = new function() {
     /****************************************************************************/
     /****************************************************************************/
 
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"Date",type:"date"},
         {key:"To"},
         {key:"From"},
         {key:"Subject"}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.emails);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
@@ -86,7 +85,7 @@ YAHOO.example.CellSelection = new function() {
     };
 
     this.singleCellSelectDataTable = new YAHOO.widget.DataTable("singlecell",
-            this.myColumnSet, this.myDataSource, {
+            myColumnDefs, this.myDataSource, {
                 caption:"Example: Single-Cell Selection Triggered by Mouseover",
                 selectionMode:"singlecell"
             });
@@ -95,7 +94,7 @@ YAHOO.example.CellSelection = new function() {
     this.singleCellSelectDataTable.on("cellMouseoverEvent", this.singleCellSelectDataTable.onEventSelectCell);
 
     this.cellBlockSelectDataTable = new YAHOO.widget.DataTable("cellblock",
-            this.myColumnSet, this.myDataSource, {
+            myColumnDefs, this.myDataSource, {
                 caption:"Example: Cell-Block Selection Triggered by Dblclick with Modifier Keys",
                 selectionMode:"cellblock"
             });
@@ -104,7 +103,7 @@ YAHOO.example.CellSelection = new function() {
     this.cellBlockSelectDataTable.on("cellDblclickEvent", this.cellBlockSelectDataTable.onEventSelectCell);
 
     this.cellRangeSelectDataTable = new YAHOO.widget.DataTable("cellrange",
-            this.myColumnSet, this.myDataSource, {
+            myColumnDefs, this.myDataSource, {
                 caption:"Example: Cell-Range Selection Triggered by Click with Modifier Keys",
                 selectionMode:"cellrange"
             });

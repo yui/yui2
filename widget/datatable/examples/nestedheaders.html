@@ -73,7 +73,7 @@ YAHOO.example.NestedHeaders = new function() {
     /****************************************************************************/
     /****************************************************************************/
     /****************************************************************************/
-    var myColumnHeaders = [
+    var myColumnDefs = [
         {key:"page", label:"Page",sortable:true},
         {key:"statistics", label:"Statistics", type:"number", sortable:true, children:[
             {key:"visits", label:"Visits",
@@ -92,15 +92,13 @@ YAHOO.example.NestedHeaders = new function() {
         ]}
     ];
 
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
-
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.webstats);
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     this.myDataSource.responseSchema = {
         fields: ["page","visitsmonth","visitsytd","viewsmonth","viewsytd"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("nested", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("nested", myColumnDefs,
             this.myDataSource, {caption:"Example: Nested Headers"});
 };
 </script>

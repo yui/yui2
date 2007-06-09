@@ -161,8 +161,8 @@ YAHOO.example.ServerIntegration = new function() {
         return this.getState();
     };
 
-    // Instantiate ColumnSet
-    var myColumnHeaders = [
+    // Instantiate myColumnDefs
+    var myColumnDefs = [
         {key:"id",text:"ID"},
         {key:"name",text:"Name"},
         {key:"date",text:"Date"},
@@ -178,7 +178,6 @@ YAHOO.example.ServerIntegration = new function() {
         {key:"zip",text:"Zip"},
         {key:"country",text:"Country"}
     ];
-    this.myColumnSet = new YAHOO.widget.ColumnSet(myColumnHeaders);
 
     // Instantiate DataSource
     this.myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
@@ -194,7 +193,7 @@ YAHOO.example.ServerIntegration = new function() {
         caption:"Example: Server-side Sorting and Pagination",
         initialRequest: initialState
     };
-    this.myDataTable = new YAHOO.widget.DataTable("paginated", this.myColumnSet,
+    this.myDataTable = new YAHOO.widget.DataTable("paginated", myColumnDefs,
             this.myDataSource, oConfigs);
 
     // BHM integration
