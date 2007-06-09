@@ -34,6 +34,7 @@ YAHOO.widget.MenuBarItem = function(p_oObject, p_oConfig) {
 YAHOO.lang.extend(YAHOO.widget.MenuBarItem, YAHOO.widget.MenuItem, {
 
 
+
 /**
 * @method init
 * @description The MenuBarItem class's initialization method. This method is 
@@ -88,6 +89,7 @@ init: function(p_oObject, p_oConfig) {
 
 // Constants
 
+
 /**
 * @property CSS_CLASS_NAME
 * @description String representing the CSS class(es) to be applied to the 
@@ -97,6 +99,17 @@ init: function(p_oObject, p_oConfig) {
 * @type String
 */
 CSS_CLASS_NAME: "yuimenubaritem",
+
+
+/**
+* @property CSS_LABEL_CLASS_NAME
+* @description String representing the CSS class(es) to be applied to the 
+* menu bar item's <code>&#60;a&#62;</code> element.
+* @default "yuimenubaritemlabel"
+* @final
+* @type String
+*/
+CSS_LABEL_CLASS_NAME: "yuimenubaritemlabel",
 
 
 

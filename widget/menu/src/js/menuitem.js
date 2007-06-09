@@ -90,7 +90,8 @@ YAHOO.widget.MenuItem._DEFAULT_CONFIG = {
     }, 
 
     "HELP_TEXT": { 
-        key: "helptext" 
+        key: "helptext",
+        supercedes: ["text"]
     },
 
     "URL": { 
@@ -108,14 +109,16 @@ YAHOO.widget.MenuItem._DEFAULT_CONFIG = {
         key: "emphasis", 
         value: false, 
         validator: Lang.isBoolean, 
-        suppressEvent: true 
+        suppressEvent: true, 
+        supercedes: ["text"]
     }, 
 
     "STRONG_EMPHASIS": { 
         key: "strongemphasis", 
         value: false, 
         validator: Lang.isBoolean, 
-        suppressEvent: true 
+        suppressEvent: true,
+        supercedes: ["text"]
     },
 
     "CHECKED": { 
@@ -123,14 +126,15 @@ YAHOO.widget.MenuItem._DEFAULT_CONFIG = {
         value: false, 
         validator: Lang.isBoolean, 
         suppressEvent: true, 
-        supercedes:["disabled"]
+        supercedes: ["text"]
     }, 
 
     "DISABLED": { 
         key: "disabled", 
         value: false, 
         validator: Lang.isBoolean, 
-        suppressEvent: true
+        suppressEvent: true,
+        supercedes: ["text"]
     },
 
     "SELECTED": { 
@@ -141,7 +145,8 @@ YAHOO.widget.MenuItem._DEFAULT_CONFIG = {
     },
 
     "SUBMENU": { 
-        key: "submenu"
+        key: "submenu",
+        supercedes: ["text"]
     },
 
     "ONCLICK": { 
@@ -232,6 +237,17 @@ YAHOO.widget.MenuItem.prototype = {
 
 
     /**
+    * @property CSS_LABEL_CLASS_NAME
+    * @description String representing the CSS class(es) to be applied to the 
+    * menu item's <code>&#60;a&#62;</code> element.
+    * @default "yuimenuitemlabel"
+    * @final
+    * @type String
+    */
+    CSS_LABEL_CLASS_NAME: "yuimenuitemlabel",
+
+
+    /**
     * @property SUBMENU_TYPE
     * @description Object representing the type of menu to instantiate and 
     * add when parsing the child nodes of the menu item's source HTML element.
@@ -255,16 +271,6 @@ YAHOO.widget.MenuItem.prototype = {
     * one-html.html#ID-48250443">HTMLAnchorElement</a>
     */
     _oAnchor: null,
-    
-
-    /**
-    * @property _oText
-    * @description Object reference to the menu item's text node.
-    * @default null
-    * @private
-    * @type TextNode
-    */
-    _oText: null,
     
     
     /**
@@ -580,7 +586,7 @@ YAHOO.widget.MenuItem.prototype = {
 
             this._createRootNodeStructure();
 
-            oConfig.setProperty("text", p_oObject);
+            oConfig.queueProperty("text", p_oObject);
 
         }
         else if(this._checkDOMNode(p_oObject)) {
@@ -591,7 +597,7 @@ YAHOO.widget.MenuItem.prototype = {
 
                     this._createRootNodeStructure();
 
-                    oConfig.setProperty("text", p_oObject.text);
+                    oConfig.queueProperty("text", p_oObject.text);
 
                     this.srcElement = p_oObject;
 
@@ -601,7 +607,7 @@ YAHOO.widget.MenuItem.prototype = {
 
                     this._createRootNodeStructure();
 
-                    oConfig.setProperty("text", p_oObject.label);
+                    oConfig.queueProperty("text", p_oObject.label);
 
                     this.srcElement = p_oObject;
 
@@ -625,82 +631,13 @@ YAHOO.widget.MenuItem.prototype = {
 
                         sURL = oAnchor.getAttribute("href");
                         sTarget = oAnchor.getAttribute("target");
-
-                        if(oAnchor.innerText) {
-                
-                            sText = oAnchor.innerText;
-                
-                        }
-                        else {
-                
-                            var oRange = oAnchor.ownerDocument.createRange();
-                
-                            oRange.selectNodeContents(oAnchor);
-                
-                            sText = oRange.toString();             
-                
-                        }
+                        sText = oAnchor.innerHTML;
 
                     }
-                    else {
-
-                        var oText = p_oObject.firstChild;
-
-                        sText = oText.nodeValue;
-
-                        oAnchor = document.createElement("a");
-                        
-                        oAnchor.setAttribute("href", sURL);
-
-                        p_oObject.replaceChild(oAnchor, oText);
-                        
-                        oAnchor.appendChild(oText);
-
-                    }
-
 
                     this.srcElement = p_oObject;
                     this.element = p_oObject;
                     this._oAnchor = oAnchor;
-    
-
-                    // Check if emphasis has been applied to the MenuItem
-
-                    var oEmphasisNode = this._getFirstElement(oAnchor),
-                        bEmphasis = false,
-                        bStrongEmphasis = false;
-
-                    if(oEmphasisNode) {
-
-                        // Set a reference to the text node 
-
-                        this._oText = oEmphasisNode.firstChild;
-
-                        switch(oEmphasisNode.tagName.toUpperCase()) {
-
-                            case "EM":
-
-                                bEmphasis = true;
-
-                            break;
-
-                            case "STRONG":
-
-                                bStrongEmphasis = true;
-
-                            break;
-
-                        }
-
-                    }
-                    else {
-
-                        // Set a reference to the text node 
-
-                        this._oText = oAnchor.firstChild;
-
-                    }
-
 
                     /*
                         Set these properties silently to sync up the 
@@ -711,12 +648,6 @@ YAHOO.widget.MenuItem.prototype = {
                     oConfig.setProperty("text", sText, true);
                     oConfig.setProperty("url", sURL, true);
                     oConfig.setProperty("target", sTarget, true);
-                    oConfig.setProperty("emphasis", bEmphasis, true);
-                    oConfig.setProperty(
-                        "strongemphasis", 
-                        bStrongEmphasis, 
-                        true
-                    );
 
                     this._initSubTree();
 
@@ -743,6 +674,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 
             Dom.addClass(this.element, this.CSS_CLASS_NAME);
+            Dom.addClass(this._oAnchor, this.CSS_LABEL_CLASS_NAME);
 
 
             // Create custom events
@@ -855,7 +787,9 @@ YAHOO.widget.MenuItem.prototype = {
         if(!oTemplate) {
 
             oTemplate = document.createElement("li");
-            oTemplate.innerHTML = "<a href=\"#\">s</a>";
+            oTemplate.className = this.CSS_CLASS_NAME;
+            oTemplate.innerHTML = "<a href=\"#\" class=\"" + 
+                this.CSS_LABEL_CLASS_NAME + "\"></a>";
 
             YAHOO.widget.MenuItem._MenuItemTemplate = oTemplate;
 
@@ -863,7 +797,6 @@ YAHOO.widget.MenuItem.prototype = {
 
         this.element = oTemplate.cloneNode(true);
         this._oAnchor = this.element.firstChild;
-        this._oText = this._oAnchor.firstChild;
 
         this.element.appendChild(this._oAnchor);
 
@@ -966,12 +899,73 @@ YAHOO.widget.MenuItem.prototype = {
     */
     configText: function(p_sType, p_aArgs, p_oItem) {
 
-        var sText = p_aArgs[0];
+        var sText = p_aArgs[0],
+            oConfig = this.cfg,
+            oAnchor = this._oAnchor,
+            sHelpText = oConfig.getProperty("helptext"),
+            sHelpTextHTML = "",
+            sCheckHTML = "",
+            oSubmenu = oConfig.getProperty("submenu"),
+            sSubmenuIndicatorHTML = "",
+            sEmphasisStartTag = "",
+            sEmphasisEndTag = "";
 
 
-        if(this._oText) {
+        if (sText) {
 
-            this._oText.nodeValue = sText;
+
+            if (sHelpText) {
+                    
+                sHelpTextHTML = "<em class=\"helptext\">" + sHelpText + "</em>";
+            
+            }
+
+
+            if (oConfig.getProperty("checked")) {
+
+                sCheckHTML = "<em class=\"checkedindicator\">" + 
+                    this.CHECKED_TEXT + "</em>";
+            
+            }
+            
+            
+            if (oSubmenu) {
+
+                sSubmenuIndicatorHTML =  "<em class=\"submenuindicator\">" + 
+                    ((oSubmenu instanceof Menu && 
+                    oSubmenu.cfg.getProperty("visible")) ? 
+                    this.EXPANDED_SUBMENU_INDICATOR_TEXT : 
+                    this.COLLAPSED_SUBMENU_INDICATOR_TEXT) + "</em>";
+            
+            }
+            
+
+            if (oConfig.getProperty("emphasis")) {
+
+                sEmphasisStartTag = "<em>";
+                sEmphasisEndTag = "</em>";
+
+            }
+
+
+            if (oConfig.getProperty("strongemphasis")) {
+
+                sEmphasisStartTag = "<strong>";
+                sEmphasisEndTag = "</strong>";
+            
+            }
+
+
+            oAnchor.innerHTML = (sEmphasisStartTag + sText + 
+                sEmphasisEndTag + sHelpTextHTML + 
+                sCheckHTML + sSubmenuIndicatorHTML);
+
+
+            if (oSubmenu) {
+
+                this.submenuIndicator = oAnchor.lastChild;
+            
+            }
 
         }
 
@@ -982,6 +976,9 @@ YAHOO.widget.MenuItem.prototype = {
     * @method configHelpText
     * @description Event handler for when the "helptext" configuration property 
     * of the menu item changes.
+    * @deprecated Use "text" configuration property to add help text markup.  
+    * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
+    * class=\"helptext\"&#62;Ctrl + C&#60;/em&#60;");</code>
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -990,96 +987,21 @@ YAHOO.widget.MenuItem.prototype = {
     */    
     configHelpText: function(p_sType, p_aArgs, p_oItem) {
 
-        var me = this,
-            oHelpText = p_aArgs[0],
-            oEl = this.element,
-            oConfig = this.cfg,
-            aNodes = [oEl, this._oAnchor],
-            oSubmenuIndicator = this.submenuIndicator;
+        var sHelpText = p_aArgs[0],
+            oAnchor = this._oAnchor;
 
+        if (sHelpText) {
 
-        function initHelpText() {
-
-            Dom.addClass(aNodes, "hashelptext");
-
-            if(oConfig.getProperty("disabled")) {
-
-                oConfig.refireEvent("disabled");
-
-            }
-
-            if(oConfig.getProperty("selected")) {
-
-                oConfig.refireEvent("selected");
-
-            }                
+            Dom.addClass(oAnchor, "hashelptext");
 
         }
+        else {
 
-
-        function removeHelpText() {
-
-            Dom.removeClass(aNodes, "hashelptext");
-
-            oEl.removeChild(me._oHelpTextEM);
-            me._oHelpTextEM = null;
-
+            Dom.removeClass(oAnchor, "hashelptext");
+        
         }
 
-
-        if(this._checkDOMNode(oHelpText)) {
-
-            oHelpText.className = "helptext";
-
-            if(this._oHelpTextEM) {
-            
-                this._oHelpTextEM.parentNode.replaceChild(
-                    oHelpText, 
-                    this._oHelpTextEM
-                );
-
-            }
-            else {
-
-                this._oHelpTextEM = oHelpText;
-
-                oEl.insertBefore(this._oHelpTextEM, oSubmenuIndicator);
-
-            }
-
-            initHelpText();
-
-        }
-        else if(Lang.isString(oHelpText)) {
-
-            if(oHelpText.length === 0) {
-
-                removeHelpText();
-
-            }
-            else {
-
-                if(!this._oHelpTextEM) {
-
-                    this._oHelpTextEM = document.createElement("em");
-                    this._oHelpTextEM.className = "helptext";
-
-                    oEl.insertBefore(this._oHelpTextEM, oSubmenuIndicator);
-
-                }
-
-                this._oHelpTextEM.innerHTML = oHelpText;
-
-                initHelpText();
-
-            }
-
-        }
-        else if(!oHelpText && this._oHelpTextEM) {
-
-            removeHelpText();
-
-        }
+        this.cfg.refireEvent("text");
 
     },
 
@@ -1141,7 +1063,10 @@ YAHOO.widget.MenuItem.prototype = {
     /**
     * @method configEmphasis
     * @description Event handler for when the "emphasis" configuration property
-    * of the menu item changes.  
+    * of the menu item changes.
+    * @deprecated Use "text" configuration property to add emphasis.  
+    * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;em&#62;Some 
+    * Text&#60;/em&#60;");</code>
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -1151,10 +1076,7 @@ YAHOO.widget.MenuItem.prototype = {
     configEmphasis: function(p_sType, p_aArgs, p_oItem) {
 
         var bEmphasis = p_aArgs[0],
-            oAnchor = this._oAnchor,
-            oText = this._oText,
-            oConfig = this.cfg,
-            oEM;
+            oConfig = this.cfg;
 
 
         if(bEmphasis && oConfig.getProperty("strongemphasis")) {
@@ -1164,30 +1086,7 @@ YAHOO.widget.MenuItem.prototype = {
         }
 
 
-        if(oAnchor) {
-
-            if(bEmphasis) {
-
-                oEM = document.createElement("em");
-                oEM.appendChild(oText);
-
-                oAnchor.appendChild(oEM);
-
-            }
-            else {
-
-                oEM = this._getFirstElement(oAnchor, "EM");
-
-                if(oEM) {
-
-                    oAnchor.removeChild(oEM);
-                    oAnchor.appendChild(oText);
-
-                }
-
-            }
-
-        }
+        oConfig.refireEvent("text");
 
     },
 
@@ -1195,7 +1094,10 @@ YAHOO.widget.MenuItem.prototype = {
     /**
     * @method configStrongEmphasis
     * @description Event handler for when the "strongemphasis" configuration 
-    * property of the menu item changes. 
+    * property of the menu item changes.
+    * @deprecated Use "text" configuration property to add strong emphasis.  
+    * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;strong&#62; 
+    * Some Text&#60;/strong&#60;");</code>
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -1205,10 +1107,8 @@ YAHOO.widget.MenuItem.prototype = {
     configStrongEmphasis: function(p_sType, p_aArgs, p_oItem) {
 
         var bStrongEmphasis = p_aArgs[0],
-            oAnchor = this._oAnchor,
-            oText = this._oText,
-            oConfig = this.cfg,
-            oStrong;
+            oConfig = this.cfg;
+
 
         if(bStrongEmphasis && oConfig.getProperty("emphasis")) {
 
@@ -1216,30 +1116,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         }
 
-        if(oAnchor) {
-
-            if(bStrongEmphasis) {
-
-                oStrong = document.createElement("strong");
-                oStrong.appendChild(oText);
-
-                oAnchor.appendChild(oStrong);
-
-            }
-            else {
-
-                oStrong = this._getFirstElement(oAnchor, "STRONG");
-
-                if(oStrong) {
-
-                    oAnchor.removeChild(oStrong);
-                    oAnchor.appendChild(oText);
-
-                }
-
-            }
-
-        }
+        oConfig.refireEvent("text");
 
     },
 
@@ -1255,75 +1132,22 @@ YAHOO.widget.MenuItem.prototype = {
     * that fired the event.
     */    
     configChecked: function(p_sType, p_aArgs, p_oItem) {
-    
+
         var bChecked = p_aArgs[0],
-            oEl = this.element,
-            oConfig = this.cfg,
-            oEM;
+            oAnchor = this._oAnchor;
 
+        if (bChecked) {
 
-        if(bChecked) {
+            Dom.addClass(oAnchor, "checked");
 
-            var oTemplate = YAHOO.widget.MenuItem._CheckedIndicatorTemplate;
-
-            if(!oTemplate) {
-
-                oTemplate = document.createElement("em");
-                oTemplate.innerHTML = this.CHECKED_TEXT;
-                oTemplate.className = "checkedindicator";
-
-                YAHOO.widget.MenuItem._CheckedIndicatorTemplate = oTemplate;
-
-            }
-
-            oEM = oTemplate.cloneNode(true);
-
-            var oSubmenu = this.cfg.getProperty("submenu");
-
-            if(oSubmenu && oSubmenu.element) {
-
-                oEl.insertBefore(oEM, oSubmenu.element);
-
-            }
-            else {
-
-                oEl.appendChild(oEM);
-
-            }
-
-
-            Dom.addClass(oEl, "checked");
-
-            this._oCheckedIndicator = oEM;
-
-            if(oConfig.getProperty("disabled")) {
-
-                oConfig.refireEvent("disabled");
-
-            }
-
-            if(oConfig.getProperty("selected")) {
-
-                oConfig.refireEvent("selected");
-
-            }
-        
         }
         else {
 
-            oEM = this._oCheckedIndicator;
-
-            Dom.removeClass(oEl, "checked");
-
-            if(oEM) {
-
-                oEl.removeChild(oEM);
-
-            }
-
-            this._oCheckedIndicator = null;
+            Dom.removeClass(oAnchor, "checked");
         
         }
+
+        this.cfg.refireEvent("text");
 
     },
 
@@ -1343,44 +1167,7 @@ YAHOO.widget.MenuItem.prototype = {
 
         var bDisabled = p_aArgs[0],
             oConfig = this.cfg,
-            oAnchor = this._oAnchor,
-            aNodes = [this.element, oAnchor],
-            oHelpText = this._oHelpTextEM,
-            oCheckedIndicator = this._oCheckedIndicator,
-            oSubmenuIndicator = this.submenuIndicator,
-            i = 1;
-
-
-        if(oHelpText) {
-
-            i++;
-            aNodes[i] = oHelpText;
-
-        }
-
-
-        if(oCheckedIndicator) {
-            
-            oCheckedIndicator.innerHTML = bDisabled ? 
-                this.DISABLED_CHECKED_TEXT : 
-                this.CHECKED_TEXT;
-
-            i++;
-            aNodes[i] = oCheckedIndicator;
-            
-        }    
-
-
-        if(oSubmenuIndicator) {
-
-            oSubmenuIndicator.innerHTML = bDisabled ? 
-                this.DISABLED_SUBMENU_INDICATOR_TEXT : 
-                this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
-
-            i++;
-            aNodes[i] = oSubmenuIndicator;
-        
-        }
+            oAnchor = this._oAnchor;
 
 
         if(bDisabled) {
@@ -1393,14 +1180,14 @@ YAHOO.widget.MenuItem.prototype = {
 
             oAnchor.removeAttribute("href");
 
-            Dom.addClass(aNodes, "disabled");
+            Dom.addClass(oAnchor, "disabled");
 
         }
         else {
 
             oAnchor.setAttribute("href", oConfig.getProperty("url"));
 
-            Dom.removeClass(aNodes, "disabled");
+            Dom.removeClass(oAnchor, "disabled");
 
         }
 
@@ -1422,45 +1209,17 @@ YAHOO.widget.MenuItem.prototype = {
         if(!this.cfg.getProperty("disabled")) {
 
             var bSelected = p_aArgs[0],
-                oHelpText = this._oHelpTextEM,
-                oSubmenuIndicator = this.submenuIndicator,
-                oCheckedIndicator = this._oCheckedIndicator,
-                aNodes = [this.element, this._oAnchor],
-                i = 1;
-
-
-            if(oHelpText) {
-    
-                i++;
-                aNodes[i] = oHelpText;
-    
-            }
-            
-
-            if(oSubmenuIndicator) {
-
-                i++;
-                aNodes[i] = oSubmenuIndicator;
-
-            }
-
-
-            if(oCheckedIndicator) {
-
-                i++;
-                aNodes[i] = oCheckedIndicator;
-            
-            }
+                oAnchor = this._oAnchor;
 
 
             if(bSelected) {
     
-                Dom.addClass(aNodes, "selected");
+                Dom.addClass(oAnchor, "selected");
     
             }
             else {
     
-                Dom.removeClass(aNodes, "selected");
+                Dom.removeClass(oAnchor, "selected");
     
             }
 
@@ -1481,11 +1240,10 @@ YAHOO.widget.MenuItem.prototype = {
     */
     configSubmenu: function(p_sType, p_aArgs, p_oItem) {
 
-        var oEl = this.element,
+        var oAnchor = this._oAnchor,
             oSubmenu = p_aArgs[0],
             oSubmenuIndicator = this.submenuIndicator,
             oConfig = this.cfg,
-            aNodes = [this.element, this._oAnchor],
             bLazyLoad = this.parent && this.parent.lazyLoad,
             oMenu;
 
@@ -1515,7 +1273,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 
                 // Set the value of the property to the Menu instance
-                
+
                 this.cfg.setProperty("submenu", oMenu, true);
 
             }
@@ -1536,89 +1294,20 @@ YAHOO.widget.MenuItem.prototype = {
 
             if(oMenu) {
 
+                Dom.addClass(oAnchor, "hassubmenu");
+
                 this._oSubmenu = oMenu;
-
-
-                if(!oSubmenuIndicator) { 
-
-                    var oTemplate = 
-                            YAHOO.widget.MenuItem._oSubmenuIndicatorTemplate;
-
-                    if(!oTemplate) {
-                   
-                        oTemplate = document.createElement("em");
-                        oTemplate.innerHTML = 
-                            this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
-                        oTemplate.className = "submenuindicator";
-                        
-                        YAHOO.widget.MenuItem._oSubmenuIndicatorTemplate = 
-                            oTemplate;
-
-                    }
-
-
-                    oSubmenuIndicator = oTemplate.cloneNode(true);
-
-
-                    if(oMenu.element.parentNode == oEl) {
-
-                        if(this.browser == "opera") {
-
-                            oEl.appendChild(oSubmenuIndicator);
-                            
-                            oMenu.renderEvent.subscribe(function() {
-
-                                oSubmenuIndicator.parentNode.insertBefore(
-                                                            oSubmenuIndicator, 
-                                                            oMenu.element
-                                                        );
-                            
-                            });
-                
-                        }
-                        else {
-
-                            oEl.insertBefore(oSubmenuIndicator, oMenu.element);
-                        
-                        }
-                
-                    }
-                    else {
-
-                        oEl.appendChild(oSubmenuIndicator);
-                    
-                    }
-
-                    this.submenuIndicator = oSubmenuIndicator;
-
-                }
-
-
-                Dom.addClass(aNodes, "hassubmenu");
-
-
-                if(oConfig.getProperty("disabled")) {
-
-                    oConfig.refireEvent("disabled");
-
-                }
-
-                if(oConfig.getProperty("selected")) {
-
-                    oConfig.refireEvent("selected");
-
-                }                
             
             }
 
         }
         else {
 
-            Dom.removeClass(aNodes, "hassubmenu");
+            Dom.removeClass(oAnchor, "hassubmenu");
 
             if(oSubmenuIndicator) {
 
-                oEl.removeChild(oSubmenuIndicator);
+                oAnchor.removeChild(oSubmenuIndicator);
 
             }
 
@@ -1629,6 +1318,8 @@ YAHOO.widget.MenuItem.prototype = {
             }
 
         }
+        
+        oConfig.refireEvent("text");
 
     },
 

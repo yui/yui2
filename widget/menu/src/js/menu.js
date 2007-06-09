@@ -1431,6 +1431,8 @@ _getOffsetWidth: function() {
 
     var oClone = this.element.cloneNode(true);
 
+    Dom.removeClass(oClone, "visible");
+
     Dom.setStyle(oClone, "width", "");
 
     document.body.appendChild(oClone);
@@ -1452,9 +1454,11 @@ _getOffsetWidth: function() {
 */
 _setWidth: function() {
 
-    var sWidth;
+    var oElement = this.element,
+        bVisible = false,
+        sWidth;
 
-    if (this.element.parentNode.tagName.toUpperCase() == "BODY") {
+    if (oElement.parentNode.tagName.toUpperCase() == "BODY") {
 
         if (this.browser == "opera") {
 
@@ -1463,9 +1467,17 @@ _setWidth: function() {
         }
         else {
 
-            Dom.setStyle(this.element, "width", "auto");
+            if (Dom.hasClass(oElement, "visible")) {
+
+                bVisible = true;
+                
+                Dom.removeClass(oElement, "visible");
+
+            }
+
+            Dom.setStyle(oElement, "width", "auto");
             
-            sWidth = this.element.offsetWidth;
+            sWidth = oElement.offsetWidth;
         
         }
 
@@ -1477,6 +1489,13 @@ _setWidth: function() {
     }
 
     this.cfg.setProperty("width", (sWidth + "px"));
+    
+
+    if (bVisible) {
+    
+        Dom.addClass(oElement, "visible");
+    
+    }
 
 },
 
