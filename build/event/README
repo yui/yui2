@@ -2,10 +2,15 @@
 YUI Library - Event - Release Notes
 
 2.3.0
-  * Fixed an IE error occuring when the library is injected into the page.
+  * addListener now generates an error if the supplied callback is undefined.
+  * Reduced the likelihood that window onload listeners fire before
+    onAvailable listeners when the two happen near the same moment.
+  * Fixed an IE error that could occur when the library was injected into 
+    the page after window onload.
   * The onDOMReady listener will be executed immediately if the
     DOMReady event had already fired prior to the call.
-  * Unsubscribe during the event handler works properly.
+  * Unsubscribing custom events within a handler for the event now works 
+    properly.
   * EventProvider unsubscribeAll will unsubscribe all listeners from
     all hosted custom events if the type is not specified.
 

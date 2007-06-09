@@ -374,10 +374,9 @@ if (!YAHOO.util.Event) {
             addListener: function(el, sType, fn, obj, override) {
 
                 if (!fn || !fn.call) {
-                    // this.logger.debug("Error, function is not valid " + fn);
-                    //return false;
-                    throw new TypeError("failed to add " + sType + 
-                        "listener: callback undefined");
+// throw new TypeError(sType + " addListener call failed, callback undefined");
+YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event");
+                    return false;
                 }
 
                 // The el argument can be an array of elements or element ids.
