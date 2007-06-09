@@ -158,7 +158,6 @@
                         // Instantiate AutoComplete
                         oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
                         oAutoComp.alwaysShowContainer = true;
-                        oAutoComp.queryDelay = 0;
                         oAutoComp.minQueryLength = 0;
                         oAutoComp.maxResultsDisplayed = 50;
                         oAutoComp.formatResult = function(oResultItem, sQuery) {
@@ -223,7 +222,6 @@ YAHOO.example.ACJSFunction = new function(){
     // Instantiate AutoComplete
     this.oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS);
     this.oAutoComp.alwaysShowContainer = true;
-    this.oAutoComp.queryDelay = 0;
     this.oAutoComp.minQueryLength = 0;
     this.oAutoComp.maxResultsDisplayed = 50;
     this.oAutoComp.formatResult = function(oResultItem, sQuery) {

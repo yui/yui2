@@ -2,10 +2,11 @@ AutoComplete Release Notes
 
 *** version 2.3.0 ***
 
-* In low-latency implementations (e.g., when queryDelay is set to 0 against a local
+* The default queryDelay has been changed from 0.5 to 0.2. In low-latency
+implementations (e.g., when queryDelay is set to 0 against a local
 JavaScript DataSource), typeAhead functionality may experience a race condition
-when retrieving the value of the textbox. Implementers are advised to bump up
-the queryDelay value artificially in this case to avoid this problem.
+when retrieving the value of the textbox. To avoid this problem, implementers
+are advised not to set the queryDelay value too low.
 
 
 

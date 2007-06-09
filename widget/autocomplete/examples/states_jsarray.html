@@ -55,9 +55,7 @@
     different DS_JSArray DataSource instance. Driving each DataSource is a local
     JavaScript array of strings: <code>statesArray</code> and <code>areaCodesArray</code>.
     By pointing to arrays that are already loaded into memory the widget is
-    very fast to return data. Therefore, both AutoComplete instances are
-    configured to have a query delay of zero
-    seconds.</p>
+    very fast to return data.</p>
 
     <p>Enabling the
     <code>prehighlightClassName</code> feature provides supplemental visual
@@ -139,7 +137,6 @@
 
             // Instantiate first AutoComplete
             oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', oACDS);
-            oAutoComp.queryDelay = 0;
             oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
             oAutoComp.useShadow = true;
             oAutoComp.minQueryLength = 0;
@@ -150,7 +147,6 @@
 
             // Instantiate second AutoComplete
             oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', oACDS2);
-            oAutoComp2.queryDelay = 0;
             oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
             oAutoComp2.useShadow = true;
             oAutoComp2.forceSelection = true;
@@ -626,7 +622,6 @@ YAHOO.example.ACJSArray = new function() {
 
     // Instantiate first AutoComplete
     this.oAutoComp = new YAHOO.widget.AutoComplete('statesinput','statescontainer', this.oACDS);
-    this.oAutoComp.queryDelay = 0.1;
     this.oAutoComp.prehighlightClassName = "yui-ac-prehighlight";
     this.oAutoComp.typeAhead = true;
     this.oAutoComp.useShadow = true;
@@ -638,7 +633,6 @@ YAHOO.example.ACJSArray = new function() {
 
     // Instantiate second AutoComplete
     this.oAutoComp2 = new YAHOO.widget.AutoComplete('statesinput2','statescontainer2', this.oACDS2);
-    this.oAutoComp2.queryDelay = 0;
     this.oAutoComp2.prehighlightClassName = "yui-ac-prehighlight";
     this.oAutoComp2.typeAhead = true;
     this.oAutoComp2.useShadow = true;
