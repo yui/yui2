@@ -452,14 +452,14 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                 if(aContainerEls.length === 0) {
                     // One before TABLE
                     var pag0 = document.createElement("span");
-                    pag0.id = "yui-dt-pagcontainer0";
+                    pag0.id = this.id + "-paginator0";
                     pag0.className = YAHOO.widget.DataTable.CLASS_PAGINATOR;
                     pag0 = this._elContainer.insertBefore(pag0, this._elTable);
                     aContainerEls.push(pag0);
 
                     // One after TABLE
                     var pag1 = document.createElement("span");
-                    pag1.id = "yui-dt-pagcontainer1";
+                    pag1.id = this.id + "-paginator1";
                     pag1.className = YAHOO.widget.DataTable.CLASS_PAGINATOR;
                     pag1 = this._elContainer.insertBefore(pag1, this._elTable.nextSibling);
                     aContainerEls.push(pag1);
