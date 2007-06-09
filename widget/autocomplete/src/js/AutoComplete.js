@@ -936,8 +936,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
             this.animSpeed = 0.3;
         }
         if(!this._oAnim ) {
-            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
-            this._oAnim = oAnim;
+            this._oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
         }
         else {
             this._oAnim.duration = this.animSpeed;
