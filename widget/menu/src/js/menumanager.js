@@ -271,6 +271,7 @@
                         oMenu = m_oMenus[i];
         
                         if (oMenu.cfg.getProperty("clicktohide") && 
+                            !(oMenu instanceof YAHOO.widget.MenuBar) && 
                             oMenu.cfg.getProperty("position") == "dynamic") {
         
                             oMenu.hide();
@@ -567,7 +568,8 @@
         
             /**
             * @method hideVisible
-            * @description Hides all visible, dynamically positioned menus.
+            * @description Hides all visible, dynamically positioned menus 
+            * (excluding instances of YAHOO.widget.MenuBar).
             */
             hideVisible: function () {
         
@@ -579,7 +581,8 @@
         
                         oMenu = m_oVisibleMenus[i];
         
-                        if (oMenu.cfg.getProperty("position") == "dynamic") {
+                        if (!(oMenu instanceof YAHOO.widget.MenuBar) && 
+                            oMenu.cfg.getProperty("position") == "dynamic") {
         
                             oMenu.hide();
         

@@ -1599,9 +1599,10 @@ _execHideDelay: function() {
 
         }
 
-        if(oRoot == me && me.cfg.getProperty("position") == "dynamic") {
+        if(oRoot == me && !(me instanceof YAHOO.widget.MenuBar) && 
+            me.cfg.getProperty("position") == "dynamic") {
 
-            me.hide();            
+            me.hide();
         
         }
     
@@ -2135,7 +2136,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
     
                 oRoot = this.getRoot();
                 
-                if (oRoot.cfg.getProperty("position") == "static") {
+                if (oRoot instanceof YAHOO.widget.MenuBar || 
+                    oRoot.cfg.getProperty("position") == "static") {
     
                     oRoot.clearActiveItem();
     
@@ -2640,34 +2642,33 @@ _onInit: function(p_sType, p_aArgs, p_oMenu) {
     this.cfg.subscribeToConfigEvent("width", this._onWidthChange);
     this.cfg.subscribeToConfigEvent("visible", this._onVisibleChange);
 
-    if(
-        (
-            (this.parent && !this.lazyLoad) || 
-            (!this.parent && this.cfg.getProperty("position") == "static") ||
-            (
-                !this.parent && 
-                !this.lazyLoad && 
-                this.cfg.getProperty("position") == "dynamic"
-            ) 
-        ) && 
-        this.getItemGroups().length === 0
-    ) {
+    /*
+        Automatically initialize a menu's subtree if:
+
+        1) This menu is a root/top-level menu, because we need to check if there 
+           are submenus to lazy load
+
+        2) This menu is a submenu and lazyload is off
+    */
+
+    if ((!this.parent || (this.parent && !this.lazyLoad)) && 
+        this.getItemGroups().length === 0) {
  
-        if(this.srcElement) {
+        if (this.srcElement) {
 
             this._initSubTree();
         
         }
 
 
-        if(this.itemData) {
+        if (this.itemData) {
 
             this.addItems(this.itemData);
 
         }
     
     }
-    else if(this.lazyLoad) {
+    else if (this.lazyLoad) {
 
         this.cfg.fireQueue();
     
@@ -2868,7 +2869,8 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
     }
 
 
-    if(this.cfg.getProperty("position") == "dynamic") {
+    if(!(this instanceof YAHOO.widget.MenuBar) && 
+        this.cfg.getProperty("position") == "dynamic") {
 
         var nViewportHeight = Dom.getViewportHeight();
 
@@ -2953,10 +2955,9 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
         }
 
 
-        if(
-            !oParentMenu.cfg.getProperty("autosubmenudisplay") && 
-            oParentMenu.cfg.getProperty("position") == "static"
-        ) {
+        if (!oParentMenu.cfg.getProperty("autosubmenudisplay") && 
+            (oParentMenu instanceof YAHOO.widget.MenuBar || 
+            oParentMenu.cfg.getProperty("position") == "static")) {
 
             oParentMenu.cfg.setProperty("autosubmenudisplay", true);
 
