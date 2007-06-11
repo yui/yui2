@@ -461,10 +461,12 @@ YAHOO.widget.RecordSet.prototype.replaceRecords = function(data) {
  *
  * @method sortRecords
  * @param fnSort {Function} Reference to a sort function.
+ * @param desc {Boolean} True if sort direction is descending, false if sort
+ * direction is ascending.
  * @return {YAHOO.widget.Record[]} Sorted array of Records.
  */
-YAHOO.widget.RecordSet.prototype.sortRecords = function(fnSort) {
-    return this._records.sort(fnSort);
+YAHOO.widget.RecordSet.prototype.sortRecords = function(fnSort, desc) {
+    return this._records.sort(function(a, b) {return fnSort(a, b, desc);});
 };
 
 

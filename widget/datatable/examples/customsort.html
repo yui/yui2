@@ -75,7 +75,7 @@ YAHOO.example.CustomSort = new function() {
     /****************************************************************************/
 
     // Custom sort functionality to sort by areacode within states
-    this.sortStatesAsc = function(a, b) {
+    this.sortStates = function(a, b, desc) {
         if((a === null) || (typeof a == "undefined")) {
             if((b === null) || (typeof b == "undefined")) {
                 return 0;
@@ -87,26 +87,16 @@ YAHOO.example.CustomSort = new function() {
         else if((b === null) || (typeof b == "undefined")) {
             return -1;
         }
+        
         var comp = YAHOO.util.Sort.compareAsc;
-        var compState = comp(a.state, b.state);
-        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
-    };
-
-    this.sortStatesDesc = function(a, b) {
-        if((a === null) || (typeof a == "undefined")) {
-            if((b === null) || (typeof b == "undefined")) {
-                return 0;
-            }
-            else {
-                return -1;
-            }
+        if(desc) {
+            var compAsc = comp(a.state, b.state, true);
+            return (compAsc !== 0) ? compAsc : comp(a.areacode, b.areacode, true);
         }
-        else if((b === null) || (typeof b == "undefined")) {
-            return 1;
+        else {
+            var compDesc = comp(a.state, b.state, false);
+            return (compDesc !== 0) ? compDesc : comp(a.areacode, b.areacode, false);
         }
-        var comp = YAHOO.util.Sort.compareDesc;
-        var compState = comp(a.state, b.state);
-        return (compState !== 0) ? compState : comp(a.areacode, b.areacode);
     };
 
     var myColumnDefs = [

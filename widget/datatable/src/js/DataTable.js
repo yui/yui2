@@ -4142,56 +4142,30 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             }
         }
 
-        // Define the sort handler function based on the direction
-        var sortFnc = null;
-        if((sortDir == "desc") && oColumn.sortOptions && oColumn.sortOptions.descFunction) {
-            sortFnc = oColumn.sortOptions.descFunction;
-        }
-        else if((sortDir == "asc") && oColumn.sortOptions && oColumn.sortOptions.ascFunction) {
-            sortFnc = oColumn.sortOptions.ascFunction;
-        }
-
-        // Custom function was not provided so use the built-in sorter
-        // ONLY IF column key is defined
-        // TODO: nested/cumulative/hierarchical sorting
-        if(!sortFnc && oColumn.key) {
-            var sorted;
-            // Here "a" and "b" are 2 Records to sort by oColumn.key
-            sortFnc = function(a, b) {
-                if(sortDir == "desc") {
-                    sorted = YAHOO.util.Sort.compareDesc(a.getData(oColumn.key),b.getData(oColumn.key));
+        // Is there a custom sort handler function defined?
+        var sortFnc = (oColumn.sortOptions && YAHOO.lang.isFunction(oColumn.sortOptions.sortFunction)) ?
+                oColumn.sortOptions.sortFunction : function(a, b, desc) {
+                    var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
                     if(sorted === 0) {
-                        return YAHOO.util.Sort.compareDesc(a.getId(),b.getId());
+                        return YAHOO.util.Sort.compare(a.getId(),b.getId(), desc);
                     }
                     else {
                         return sorted;
                     }
-                }
-                else {
-                    sorted = YAHOO.util.Sort.compareAsc(a.getData(oColumn.key),b.getData(oColumn.key));
-                    if(sorted === 0) {
-                        return YAHOO.util.Sort.compareAsc(a.getId(),b.getId());
-                    }
-                    else {
-                        return sorted;
-                    }
-                }
-            };
-        }
+        };
 
-        if(sortFnc) {
-            // Do the actual sort
-            this._oRecordSet.sortRecords(sortFnc);
+        // Do the actual sort
+        var desc = (sortDir == "desc") ? true : false;
+        this._oRecordSet.sortRecords(sortFnc, desc);
 
-            // Update sortedBy tracker
-            this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
+        // Update sortedBy tracker
+        this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
 
-            // Update the UI
-            this.refreshView();
+        // Update the UI
+        this.refreshView();
 
-            this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
-            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
-        }
+        this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
+        YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
     }
     else {
         //TODO

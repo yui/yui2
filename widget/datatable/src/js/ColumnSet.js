@@ -1195,13 +1195,15 @@ YAHOO.util.Sort = {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Comparator function for sort in ascending order. String sorting is case insensitive.
+     * Comparator function for simple case-insensitive string sorting.
      *
-     * @method compareAsc
-     * @param a {object} First sort argument.
-     * @param b {object} Second sort argument.
+     * @method compare
+     * @param a {Object} First sort argument.
+     * @param b {Object} Second sort argument.
+     * @param desc {Boolean} True if sort direction is descending, false if
+     * sort direction is ascending.
      */
-    compareAsc: function(a, b) {
+    compare: function(a, b, desc) {
         if((a === null) || (typeof a == "undefined")) {
             if((b === null) || (typeof b == "undefined")) {
                 return 0;
@@ -1221,47 +1223,10 @@ YAHOO.util.Sort = {
             b = b.toLowerCase();
         }
         if(a < b) {
-            return -1;
+            return (desc) ? 1 : -1;
         }
         else if (a > b) {
-            return 1;
-        }
-        else {
-            return 0;
-        }
-    },
-
-    /**
-     * Comparator function for sort in descending order. String sorting is case insensitive.
-     *
-     * @method compareDesc
-     * @param a {object} First sort argument.
-     * @param b {object} Second sort argument.
-     */
-    compareDesc: function(a, b) {
-        if((a === null) || (typeof a == "undefined")) {
-            if((b === null) || (typeof b == "undefined")) {
-                return 0;
-            }
-            else {
-                return -1;
-            }
-        }
-        else if((b === null) || (typeof b == "undefined")) {
-            return 1;
-        }
-
-        if(a.constructor == String) {
-            a = a.toLowerCase();
-        }
-        if(b.constructor == String) {
-            b = b.toLowerCase();
-        }
-        if(a < b) {
-            return 1;
-        }
-        else if (a > b) {
-            return -1;
+            return (desc) ? -1 : 1;
         }
         else {
             return 0;
