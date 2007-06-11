@@ -674,18 +674,18 @@ init: function(p_oElement, p_oConfig) {
 
         // Subscribe to Custom Events
 
-        this.initEvent.subscribe(this._onInit, this, true);
-        this.beforeRenderEvent.subscribe(this._onBeforeRender, this, true);
+        this.initEvent.subscribe(this._onInit);
+        this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
-        this.beforeShowEvent.subscribe(this._onBeforeShow, this, true);
-        this.showEvent.subscribe(this._onShow, this, true);
-        this.beforeHideEvent.subscribe(this._onBeforeHide, this, true);
-        this.hideEvent.subscribe(this._onHide, this, true);
-        this.mouseOverEvent.subscribe(this._onMouseOver, this, true);
-        this.mouseOutEvent.subscribe(this._onMouseOut, this, true);
-        this.clickEvent.subscribe(this._onClick, this, true);
-        this.keyDownEvent.subscribe(this._onKeyDown, this, true);
-        this.keyPressEvent.subscribe(this._onKeyPress, this, true);
+        this.beforeShowEvent.subscribe(this._onBeforeShow);
+        this.showEvent.subscribe(this._onShow);
+        this.beforeHideEvent.subscribe(this._onBeforeHide);
+        this.hideEvent.subscribe(this._onHide);
+        this.mouseOverEvent.subscribe(this._onMouseOver);
+        this.mouseOutEvent.subscribe(this._onMouseOut);
+        this.clickEvent.subscribe(this._onClick);
+        this.keyDownEvent.subscribe(this._onKeyDown);
+        this.keyPressEvent.subscribe(this._onKeyPress);
 
         YAHOO.widget.Module.textResizeEvent.subscribe(
             this._onTextResize, 
@@ -1393,23 +1393,13 @@ _configureSubmenu: function(p_oItem) {
             so they they can be applied to the submenu.
         */
 
-        this.cfg.configChangedEvent.subscribe(
-                this._onParentMenuConfigChange, 
-                oSubmenu, 
-                true
-            );
+        this.cfg.configChangedEvent.subscribe(this._onParentMenuConfigChange, 
+                oSubmenu, true);
 
-        this.renderEvent.subscribe(
-                this._onParentMenuRender,
-                oSubmenu, 
-                true
-            );
+        this.renderEvent.subscribe(this._onParentMenuRender, oSubmenu, true);
 
-        oSubmenu.beforeShowEvent.subscribe(
-                this._onSubmenuBeforeShow, 
-                oSubmenu, 
-                true
-            );
+        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow, null, 
+            oSubmenu);
 
         oSubmenu.showEvent.subscribe(this._onSubmenuShow, null, p_oItem);
         oSubmenu.hideEvent.subscribe(this._onSubmenuHide, null, p_oItem);
@@ -1432,11 +1422,8 @@ _subscribeToItemEvents: function(p_oItem) {
 
     p_oItem.blurEvent.subscribe(this._onMenuItemBlur);
 
-    p_oItem.cfg.configChangedEvent.subscribe(
-        this._onMenuItemConfigChange,
-        p_oItem,
-        this
-    );
+    p_oItem.cfg.configChangedEvent.subscribe(this._onMenuItemConfigChange,
+        p_oItem, this);
 
 },
 
@@ -1799,10 +1786,8 @@ _enableScrollFooter: function() {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
+_onMouseOver: function(p_sType, p_aArgs) {
 
     if(this._bStopMouseEventHandlers) {
     
@@ -1937,10 +1922,8 @@ _onMouseOver: function(p_sType, p_aArgs, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onMouseOut: function(p_sType, p_aArgs, p_oMenu) {
+_onMouseOut: function(p_sType, p_aArgs) {
 
     if(this._bStopMouseEventHandlers) {
     
@@ -2084,10 +2067,8 @@ _onMouseMove: function(p_oEvent, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onClick: function(p_sType, p_aArgs, p_oMenu) {
+_onClick: function(p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
@@ -2184,10 +2165,8 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
+_onKeyDown: function(p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
@@ -2485,9 +2464,8 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenu) {
 * @param {String} p_sType The name of the event that was fired.
 * @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {YAHOO.widget.Menu} p_oMenu The Menu instance that fired the event.
 */
-_onKeyPress: function(p_sType, p_aArgs, p_oMenu) {
+_onKeyPress: function(p_sType, p_aArgs) {
     
     var oEvent = p_aArgs[0];
 
@@ -2654,10 +2632,8 @@ _onScrollTargetMouseOut: function(p_oEvent, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onInit: function(p_sType, p_aArgs, p_oMenu) {
+_onInit: function(p_sType, p_aArgs) {
 
     this.cfg.subscribeToConfigEvent("width", this._onWidthChange);
     this.cfg.subscribeToConfigEvent("visible", this._onVisibleChange);
@@ -2706,10 +2682,8 @@ _onInit: function(p_sType, p_aArgs, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onBeforeRender: function(p_sType, p_aArgs, p_oMenu) {
+_onBeforeRender: function(p_sType, p_aArgs) {
 
     var oConfig = this.cfg,
         oEl = this.element,
@@ -2801,10 +2775,8 @@ _onRender: function(p_sType, p_aArgs) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
+_onBeforeShow: function(p_sType, p_aArgs) {
 
     if(this.lazyLoad && this.getItemGroups().length === 0) {
 
@@ -2948,10 +2920,8 @@ _onBeforeShow: function(p_sType, p_aArgs, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that fired 
-* the event.
 */
-_onShow: function(p_sType, p_aArgs, p_oMenu) {
+_onShow: function(p_sType, p_aArgs) {
 
     var oParent = this.parent;
     
@@ -3041,10 +3011,8 @@ _onShow: function(p_sType, p_aArgs, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that fired 
-* the event.
 */
-_onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
+_onBeforeHide: function(p_sType, p_aArgs) {
 
     var oActiveItem = this.activeItem;
 
@@ -3080,10 +3048,8 @@ _onBeforeHide: function(p_sType, p_aArgs, p_oMenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that fired 
-* the event.
 */
-_onHide: function(p_sType, p_aArgs, p_oMenu) {
+_onHide: function(p_sType, p_aArgs) {
 
     if(this._nMaxHeight != -1) {
 
@@ -3213,10 +3179,8 @@ _onParentMenuRender: function(p_sType, p_aArgs, p_oSubmenu) {
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oSubmenu Object representing the submenu that 
-* subscribed to the event.
 */
-_onSubmenuBeforeShow: function(p_sType, p_aArgs, p_oSubmenu) {
+_onSubmenuBeforeShow: function(p_sType, p_aArgs) {
     
     var oParent = this.parent,
         aAlignment = oParent.parent.cfg.getProperty("submenualignment");
@@ -3640,9 +3604,9 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
 
         if(!this._bHideDelayEventHandlersAssigned) {
 
-            oMouseOutEvent.subscribe(this._execHideDelay, this);
-            oMouseOverEvent.subscribe(this._cancelHideDelay, this, true);
-            oKeyDownEvent.subscribe(this._cancelHideDelay, this, true);
+            oMouseOutEvent.subscribe(this._execHideDelay);
+            oMouseOverEvent.subscribe(this._cancelHideDelay);
+            oKeyDownEvent.subscribe(this._cancelHideDelay);
 
             this._bHideDelayEventHandlersAssigned = true;
         
@@ -3651,9 +3615,9 @@ configHideDelay: function(p_sType, p_aArgs, p_oMenu) {
     }
     else {
 
-        oMouseOutEvent.unsubscribe(this._execHideDelay, this);
-        oMouseOverEvent.unsubscribe(this._cancelHideDelay, this);
-        oKeyDownEvent.unsubscribe(this._cancelHideDelay, this);
+        oMouseOutEvent.unsubscribe(this._execHideDelay);
+        oMouseOverEvent.unsubscribe(this._cancelHideDelay);
+        oKeyDownEvent.unsubscribe(this._cancelHideDelay);
 
         this._bHideDelayEventHandlersAssigned = false;
 
@@ -4213,14 +4177,10 @@ clearContent: function() {
                 if(oSubmenu) {
 
                     this.cfg.configChangedEvent.unsubscribe(
-                                this._onParentMenuConfigChange, 
-                                oSubmenu
-                            );
+                        this._onParentMenuConfigChange, oSubmenu);
 
-                    this.renderEvent.unsubscribe(
-                                        this._onParentMenuRender, 
-                                        oSubmenu
-                                    );
+                    this.renderEvent.unsubscribe(this._onParentMenuRender, 
+                        oSubmenu);
 
                 }
                 
