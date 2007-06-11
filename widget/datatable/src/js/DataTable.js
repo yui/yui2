@@ -1361,7 +1361,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     this._elTable = this._elContainer.appendChild(document.createElement("table"));
     var elTable = this._elTable;
     elTable.tabIndex = -1;
-    elTable.id = "yui-dt-table"+this._nIndex;
+    elTable.id = this.id + "-table";
     elTable.className = YAHOO.widget.DataTable.CLASS_TABLE;
 
     // Create THEAD
@@ -4570,15 +4570,19 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
                     YAHOO.widget.DataTable.formatDropdown(elCell, oRecord, oColumn, oData);
                     //classname = YAHOO.widget.DataTable.CLASS_DROPDOWN;
                     break;
-                 case "textarea":
+                case "textarea":
                     YAHOO.widget.DataTable.formatTextarea(elCell, oRecord, oColumn, oData);
                     //classname = YAHOO.widget.DataTable.CLASS_TEXTAREA;
                     break;
-                 case "textbox":
+                case "textbox":
                     YAHOO.widget.DataTable.formatTextbox(elCell, oRecord, oColumn, oData);
                     //classname = YAHOO.widget.DataTable.CLASS_TEXTBOX;
                     break;
-               default:
+                case "text":
+                    YAHOO.widget.DataTable.formatText(elCell, oRecord, oColumn, oData);
+                    //classname = YAHOO.widget.DataTable.CLASS_STRING;
+                    break;
+                default:
                     type = "html";
                     elCell.innerHTML = ((oData !== undefined) && (oData !== null)) ?
                             oData.toString() : "";
@@ -4798,6 +4802,22 @@ YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) 
         elCell.innerHTML = "";
         YAHOO.log("Could not format Number " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatNumber");
     }
+};
+
+/**
+ * Formats cells for Columns of type "text".
+ *
+ * @method formatText
+ * @param elContainer {HTMLElement} Container element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object} (Optional) Data value for the cell.
+ * @static
+ */
+YAHOO.widget.DataTable.formatText = function(elContainer, oRecord, oColumn, oData) {
+    var value = oRecord.getData(oColumn.key) || ""; //TODO: fixme
+    //TODO: move to util function
+    elContainer.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
 };
 
 /**
