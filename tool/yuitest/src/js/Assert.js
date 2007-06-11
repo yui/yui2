@@ -228,7 +228,7 @@ YAHOO.util.Assert = {
      */
     isArray : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isArray(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be an array.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be an array.", actual);
         }    
     },
    
@@ -241,7 +241,7 @@ YAHOO.util.Assert = {
      */
     isBoolean : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isBoolean(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a Boolean.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a Boolean.", actual);
         }    
     },
    
@@ -254,7 +254,7 @@ YAHOO.util.Assert = {
      */
     isFunction : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isFunction(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a function.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a function.", actual);
         }    
     },
    
@@ -283,7 +283,7 @@ YAHOO.util.Assert = {
      */
     isNumber : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isNumber(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a number.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a number.", actual);
         }    
     },    
     
@@ -296,7 +296,7 @@ YAHOO.util.Assert = {
      */
     isObject : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isObject(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be an object.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be an object.", actual);
         }
     },
     
@@ -309,7 +309,7 @@ YAHOO.util.Assert = {
      */
     isString : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isString(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a string.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a string.", actual);
         }
     },
     

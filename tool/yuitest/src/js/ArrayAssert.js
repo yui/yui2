@@ -12,6 +12,7 @@
  */
  
 YAHOO.util.ArrayAssert = {
+
     /**
      * Asserts that a value is present in an array. This uses the triple equals 
      * sign so no type cohersion may occur.
@@ -34,10 +35,36 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (!found){
-            throw new YAHOO.util.AssertionError(message || "Value not found in array.");
+            YAHOO.util.Assert.fail(message || "Value not found in array.");
         }
     },
-    
+
+    /**
+     * Asserts that a value is not present in an array. This uses the triple equals 
+     * sign so no type cohersion may occur.
+     * @param {Object} needle The value that is expected in the array.
+     * @param {Array} haystack An array of values.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method doesNotContain
+     * @static
+     */
+    doesNotContain : function (needle /*:Object*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+        
+        var found /*:Boolean*/ = false;
+        
+        //begin checking values
+        for (var i=0; i < haystack.length && !found; i++){
+            if (haystack[i] === needle) {
+                found = true;
+            }
+        }
+        
+        if (found){
+            YAHOO.util.Assert.fail(message || "Value found in array.");
+        }
+    },
+        
     /**
      * Asserts that the given value is contained in an array at the specified index.
      * This uses the triple equals sign so no type cohersion will occur.
@@ -53,13 +80,13 @@ YAHOO.util.ArrayAssert = {
         //try to find the value in the array
         for (var i=0; i < haystack.length; i++){
             if (haystack[i] === needle){
-                YAHOO.util.Assert.areEqual(index, i, "Value exists at index " + i + " but should be at index " + index + ".");
+                YAHOO.util.Assert.areEqual(index, i, message || "Value exists at index " + i + " but should be at index " + index + ".");
                 return;
             }
         }
         
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail("Value doesn't exist in array.");        
+        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
     },
         
     /**
@@ -95,8 +122,7 @@ YAHOO.util.ArrayAssert = {
      */
     isEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length > 0){
-            throw new YAHOO.util.AssertionError(message || 
-                    "Array should be empty.");
+            YAHOO.util.Assert.fail(message || "Array should be empty.");
         }
     },    
     
@@ -109,8 +135,7 @@ YAHOO.util.ArrayAssert = {
      */
     isNotEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length === 0){
-            throw new YAHOO.util.AssertionError(message || 
-                    "Array should not be empty.");
+            YAHOO.util.Assert.fail(message || "Array should not be empty.");
         }
     },    
     
@@ -154,13 +179,13 @@ YAHOO.util.ArrayAssert = {
         //try to find the value in the array
         for (var i=haystack.length; i >= 0; i--){
             if (haystack[i] === needle){
-                YAHOO.util.Assert.areEqual(index, i, "Value exists at index " + i + " but should be at index " + index + ".");
+                YAHOO.util.Assert.areEqual(index, i, message || "Value exists at index " + i + " but should be at index " + index + ".");
                 return;
             }
         }
         
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail("Value doesn't exist in array.");        
+        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
     }
     
 };

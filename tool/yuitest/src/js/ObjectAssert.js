@@ -14,45 +14,59 @@ YAHOO.namespace("util");
  * @static
  */
 YAHOO.util.ObjectAssert = {
-
-    /**
-     * Asserts that an object has a property with the given name.
-     * @param {String} key The name of the property to test.
-     * @param {Object} object The object to search.
-     * @param {String} message (Optional) The message to display if the assertion fails.
-     * @method containsKey
-     * @static
-     */
-    containsKey : function (key /*:String*/, object /*:Array*/, 
-                           message /*:String*/) /*:Void*/ {
-        if (YAHOO.lang.isUndefined(object[key])){
-            throw new YAHOO.util.AssertionError(message || 
-                    "Property " + key + " not found in object.");
-        }
-    },
         
     /**
-     * Asserts that all keys in the object exist in another object.
-     * @param {Object} expected An object with the expected keys.
-     * @param {Object} actual An object with the actual keys.
+     * Asserts that all properties in the object exist in another object.
+     * @param {Object} expected An object with the expected properties.
+     * @param {Object} actual An object with the actual properties.
      * @param {String} message (Optional) The message to display if the assertion fails.
-     * @method keysAreEqual
+     * @method propertiesAreEqual
      * @static
      */
-    keysAreEqual : function (expected /*:Object*/, actual /*:Object*/, 
+    propertiesAreEqual : function (expected /*:Object*/, actual /*:Object*/, 
                            message /*:String*/) /*:Void*/ {
         
         //get all properties in the object
-        var keys /*:Array*/ = [];        
-        for (var key in expected){
-            keys.push(key);
+        var properties /*:Array*/ = [];        
+        for (var property in expected){
+            properties.push(property);
         }
         
-        //see if the keys are in the expected object
-        for (var i=0; i < keys.length; i++){
-            YAHOO.util.Assert.isNotUndefined(actual[keys[i]], message || 
-                    "Key '" + key + "' expected.");
+        //see if the properties are in the expected object
+        for (var i=0; i < properties.length; i++){
+            YAHOO.util.Assert.isNotUndefined(actual[properties[i]], message || 
+                    "Property'" + properties[i] + "' expected.");
         }
 
+    },
+    
+    /**
+     * Asserts that an object has a property with the given name.
+     * @param {String} propertyName The name of the property to test.
+     * @param {Object} object The object to search.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method hasProperty
+     * @static
+     */    
+    hasProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
+        if (YAHOO.lang.isUndefined(object[propertyName])){
+            YAHOO.util.Assert.fail(message || 
+                    "Property " + propertyName + " not found on object.");
+        }    
+    },
+    
+    /**
+     * Asserts that a property with the given name exists on an object instance (not on its prototype).
+     * @param {String} propertyName The name of the property to test.
+     * @param {Object} object The object to search.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method hasProperty
+     * @static
+     */    
+    hasOwnProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
+        if (!YAHOO.lang.hasOwnProperty(object, propertyName)){
+            YAHOO.util.Assert.fail(message || 
+                    "Property " + propertyName + " not found on object instance.");
+        }     
     }
 };

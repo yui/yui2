@@ -49,101 +49,106 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
      */
     init : function () {
     
+        //shortcut variables
+        var TestRunner /*:Object*/ = YAHOO.tool.TestRunner;
+    
         //setup event _handlers
-        YAHOO.tool.TestRunner.subscribe("pass", this._handlePass, this, true);
-        YAHOO.tool.TestRunner.subscribe("fail", this._handleFail, this, true);
-        YAHOO.tool.TestRunner.subscribe("ignore", this._handleIgnore, this, true);
-        YAHOO.tool.TestRunner.subscribe("begin", this._handleBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("complete", this._handleComplete, this, true);
-        YAHOO.tool.TestRunner.subscribe("testsuitebegin", this._handleTestSuiteBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("testsuitecomplete", this._handleTestSuiteComplete, this, true);
-        YAHOO.tool.TestRunner.subscribe("testcasebegin", this._handleTestCaseBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("testcasecomplete", this._handleTestCaseComplete, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_PASS_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_FAIL_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_IGNORE_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_SUITE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_SUITE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_CASE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_CASE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        
+        //hide useless sources
+        this.hideSource("global");
+        this.hideSource("LogReader");
+        
+        //hide useless message categories
+        this.hideCategory("warn");
+        this.hideCategory("window");
+        this.hideCategory("time");
         
         //reset the logger
-        YAHOO.widget.Logger.reset();
-    },
-    
-    
-    _calculateTotals : function (results /*:Object*/) /*:Object*/ {
-    
-        var totals /*:Object*/ = { passed: 0, failed: 0, total: 0 };
-        
-        if (YAHOO.lang.isNumber(results.passed)){
-            totals.passed += results.passed;
-            totals.failed += results.failed;
-            totals.total += results.total;          
-        } else {
-            for (var prop in results){
-                var subtotal /*:Object*/ = this._calculateTotals(results[prop]);
-                totals.passed += subtotal.passed;
-                totals.failed += subtotal.failed;
-                totals.total += subtotal.total;                
-            }
-        }
-        
-        return totals;
-    
+        this.clearConsole();
     },
     
     //-------------------------------------------------------------------------
     // Event Handlers
     //-------------------------------------------------------------------------
-
-    _handleBegin : function (data /*:Object*/) {
-        YAHOO.log("Testing began at " + (new Date()).toString(), "info", "TestRunner");
-    },
     
-    _handleComplete : function (data /*:Object*/) {
+    /**
+     * Handles all TestRunner events, outputting appropriate data into the console.
+     * @param {Object} data The event data object.
+     * @return {Void}
+     * @private
+     */
+    _handleTestRunnerEvent : function (data /*:Object*/) /*:Void*/ {
+    
+        //shortcut variables
+        var TestRunner /*:Object*/ = YAHOO.tool.TestRunner;
+    
+        //data variables
+        var message /*:String*/ = "";
+        var messageType /*:String*/ = "";
         
-        //calculate totals
-        var results /*:Object*/ = this._calculateTotals(data.results);
+        switch(data.type){
+            case TestRunner.BEGIN_EVENT:
+                message = "Testing began at " + (new Date()).toString() + ".";
+                messageType = "info";
+                break;
+                
+            case TestRunner.COMPLETE_EVENT:
+                message = "Testing completed at " + (new Date()).toString() + ".\nPassed:" 
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_FAIL_EVENT:
+                message = data.testName + ": " + data.error.getMessage();
+                messageType = "fail";
+                break;
+                
+            case TestRunner.TEST_IGNORE_EVENT:
+                message = data.testName + ": ignored.";
+                messageType = "ignore";
+                break;
+                
+            case TestRunner.TEST_PASS_EVENT:
+                message = data.testName + ": passed.";
+                messageType = "pass";
+                break;
+                
+            case TestRunner.TEST_SUITE_BEGIN_EVENT:
+                message = "Test suite \"" + data.testSuite.name + "\" started.";
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_SUITE_COMPLETE_EVENT:
+                message = "Test suite \"" + data.testSuite.name + "\" completed.\nPassed:" 
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_CASE_BEGIN_EVENT:
+                message = "Test suite \"" + data.testCase.name + "\" started.";
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_CASE_COMPLETE_EVENT:
+                message = "Test suite \"" + data.testCase.name + "\" completed.\nPassed:" 
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total
+                messageType = "info";
+                break;
+            default:
+                message = "Unexpected event " + data.type;
+                message = "info";
+        }
     
-        YAHOO.log("Testing completed at " + (new Date()).toString() + ".\nPassed:" + results.passed + " Failed:" + results.failed + " Total:" + results.total, "info", "TestRunner");
-    },
-
-    /**
-     * Handles an error event for the TestRunner object.
-     * @param data Information about the event.
-     */
-    _handleFail : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": " + data.error.getMessage(), "fail", "TestRunner");
-    },
-
-    /**
-     * Handles an ignore event for the TestRunner object.
-     * @param data Information about the event.
-     */
-    _handleIgnore : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": ignored", "ignore", "TestRunner");
-    },
-
-    /**
-     * Handles an error event for the TestRunner object.
-     * @param data Information about the event.
-     */
-    _handlePass : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": passed", "pass", "TestRunner");
-    },
-    
-    _handleTestSuiteBegin : function (data /*:Object*/) {
-        var testSuiteName /*:String*/ = data.testSuite.name || "Unnamed test suite";
-        YAHOO.log("Test suite \"" + testSuiteName + "\" started", "info", "TestRunner");
-    },
-    
-    _handleTestSuiteComplete : function (data /*:Object*/) {
-        var testSuiteName /*:String*/ = data.testSuite.name || "Unnamed test suite";
-        YAHOO.log("Test suite \"" + testSuiteName + "\" completed", "info", "TestRunner");
-    },
-    
-    _handleTestCaseBegin : function (data /*:Object*/) {
-        var testCaseName /*:String*/ = data.testCase.name || "Unnamed test case";
-        YAHOO.log("Test case \"" + testCaseName + "\" started", "info", "TestRunner");
-    },
-    
-    _handleTestCaseComplete : function (data /*:Object*/) {
-        var testCaseName /*:String*/ = data.testCase.name || "Unnamed test case";
-        YAHOO.log("Test case \"" + testCaseName + "\" completed.\nPassed:" + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total, "info", "TestRunner");
+        YAHOO.log(message, messageType, "TestRunner");    
     }
     
 });

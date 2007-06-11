@@ -24,7 +24,7 @@ YAHOO.tool.TestRunner = (function(){
     function TestRunner(){
     
         //inherit from EventProvider
-        this.constructor.superclass.constructor.apply(this,arguments);
+        TestRunner.superclass.constructor.apply(this,arguments);
         
         /**
          * The test objects to run.
@@ -34,67 +34,86 @@ YAHOO.tool.TestRunner = (function(){
         this.items /*:Array*/ = [];
         
         //create events
-        
+        var events /*:Array*/ = [
+            this.TEST_CASE_BEGIN_EVENT,
+            this.TEST_CASE_COMPLETE_EVENT,
+            this.TEST_SUITE_BEGIN_EVENT,
+            this.TEST_SUITE_COMPLETE_EVENT,
+            this.TEST_PASS_EVENT,
+            this.TEST_FAIL_EVENT,
+            this.TEST_IGNORE_EVENT,
+            this.COMPLETE_EVENT,
+            this.BEGIN_EVENT
+        ];
+        for (var i=0; i < events.length; i++){
+            this.createEvent(events[i], { scope: this });
+        }
+       
+   
+    }
+    
+    YAHOO.lang.extend(TestRunner, YAHOO.util.EventProvider, {
+    
+        //-------------------------------------------------------------------------
+        // Constants
+        //-------------------------------------------------------------------------
+         
         /**
          * Fires when a test case is opened but before the first 
          * test is executed.
          * @event testcasebegin
-         */
-        this.createEvent("testcasebegin", {scope: this});
+         */         
+        TEST_CASE_BEGIN_EVENT /*:String*/ : "testcasebegin",
         
         /**
          * Fires when all tests in a test case have been executed.
          * @event testcasecomplete
          */        
-        this.createEvent("testcasecomplete", {scope: this});
+        TEST_CASE_COMPLETE_EVENT /*:String*/ : "testcasecomplete",
         
         /**
          * Fires when a test suite is opened but before the first 
          * test is executed.
          * @event testsuitebegin
-         */
-        this.createEvent("testsuitebegin", {scope: this});
+         */        
+        TEST_SUITE_BEGIN_EVENT /*:String*/ : "testsuitebegin",
         
         /**
          * Fires when all test cases in a test suite have been
          * completed.
          * @event testsuitecomplete
-         */
-        this.createEvent("testsuitecomplete", {scope: this});
+         */        
+        TEST_SUITE_COMPLETE_EVENT /*:String*/ : "testsuitecomplete",
         
         /**
          * Fires when a test has passed.
          * @event pass
-         */
-        this.createEvent("pass", {scope: this});
+         */        
+        TEST_PASS_EVENT /*:String*/ : "pass",
         
         /**
          * Fires when a test has failed.
          * @event fail
-         */
-        this.createEvent("fail", {scope: this});
+         */        
+        TEST_FAIL_EVENT /*:String*/ : "fail",
         
         /**
          * Fires when a test has been ignored.
          * @event ignore
-         */
-        this.createEvent("ignore", {scope: this});
+         */        
+        TEST_IGNORE_EVENT /*:String*/ : "ignore",
         
         /**
          * Fires when all test suites and test cases have been completed.
          * @event complete
          */        
-        this.createEvent("complete", {scope: this});
+        COMPLETE_EVENT /*:String*/ : "complete",
         
         /**
          * Fires when the run() method is called.
          * @event begin
          */        
-        this.createEvent("begin", {scope: this});        
-    }
-    
-    YAHOO.lang.extend(TestRunner, YAHOO.util.EventProvider, {
-    
+        BEGIN_EVENT /*:String*/ : "begin",    
     
         //-------------------------------------------------------------------------
         // Private Methods
@@ -114,7 +133,7 @@ YAHOO.tool.TestRunner = (function(){
             var results /*:Object*/ = {};
         
             //test case begins
-            this.fireEvent("testcasebegin", { testCase: testCase });
+            this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testCase });
         
             //gather the test functions
             var tests /*:Array*/ = [];
@@ -139,7 +158,7 @@ YAHOO.tool.TestRunner = (function(){
             
                 //figure out if the test should be ignored or not
                 if (shouldIgnore[tests[i]]){
-                    this.fireEvent("ignore", { testCase: testCase, testName: tests[i] });
+                    this.fireEvent(this.TEST_IGNORE_EVENT, { testCase: testCase, testName: tests[i] });
                     continue;
                 }
             
@@ -203,9 +222,9 @@ YAHOO.tool.TestRunner = (function(){
                 
                     //fireEvent appropriate event
                     if (failed) {
-                        this.fireEvent("fail", { testCase: testCase, testName: tests[i], error: error });
+                        this.fireEvent(this.TEST_FAIL_EVENT, { testCase: testCase, testName: tests[i], error: error });
                     } else {
-                        this.fireEvent("pass", { testCase: testCase, testName: tests[i] });
+                        this.fireEvent(this.TEST_PASS_EVENT, { testCase: testCase, testName: tests[i] });
                     }            
                 }
                 
@@ -230,7 +249,7 @@ YAHOO.tool.TestRunner = (function(){
             results.passed = passCount;
             
             //test case is done
-            this.fireEvent("testcasecomplete", { testCase: testCase, results: results });
+            this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: testCase, results: results });
             
             //return results
             return results;
@@ -248,22 +267,34 @@ YAHOO.tool.TestRunner = (function(){
         _runTestSuite : function (testSuite /*:YAHOO.tool.TestSuite*/) {
         
             //object to store results
-            var results /*:Object*/ = {};
+            var results /*:Object*/ = {
+                passed: 0,
+                failed: 0,
+                total: 0
+            };
         
             //fireEvent event for beginning of test suite run
-            this.fireEvent("testsuitebegin", { testSuite: testSuite });
+            this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testSuite });
         
             //iterate over the test suite items
             for (var i=0; i < testSuite.items.length; i++){
+                var result = null;
                 if (testSuite.items[i] instanceof YAHOO.tool.TestSuite) {
-                    results[testSuite.items[i].name] = this._runTestSuite(testSuite.items[i]);
+                    result = this._runTestSuite(testSuite.items[i]);
                 } else if (testSuite.items[i] instanceof YAHOO.tool.TestCase) {
-                    results[testSuite.items[i].name] = this._runTestCase(testSuite.items[i]);
+                    result = this._runTestCase(testSuite.items[i]);
+                }
+                
+                if (result != null){
+                    results.total += result.total;
+                    results.passed += result.passed;
+                    results.failed += result.failed;
+                    results[testSuite.items[i].name] = result;
                 }
             }
     
             //fireEvent event for completion of test suite run
-            this.fireEvent("testsuitecomplete", { testSuite: testSuite, results: results });
+            this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: testSuite, results: results });
             
             //return the results
             return results;
@@ -288,6 +319,26 @@ YAHOO.tool.TestRunner = (function(){
                     throw new TypeError("_run(): Expected either YAHOO.tool.TestCase or YAHOO.tool.TestSuite.");
                 }    
             }        
+        },
+        
+        //-------------------------------------------------------------------------
+        // Protected Methods
+        //-------------------------------------------------------------------------   
+    
+        /*
+         * Fires events for the TestRunner. This overrides the default fireEvent()
+         * method from EventProvider to add the type property to the data that is
+         * passed through on each event call.
+         * @param {String} type The type of event to fire.
+         * @param {Object} data (Optional) Data for the event.
+         * @method fireEvent
+         * @static
+         * @protected
+         */
+        fireEvent : function (type /*:String*/, data /*:Object*/) /*:Void*/ {
+            data = data || {};
+            data.type = type;
+            TestRunner.superclass.fireEvent.call(this, type, data);
         },
         
         //-------------------------------------------------------------------------
@@ -317,19 +368,27 @@ YAHOO.tool.TestRunner = (function(){
         run : function (testObject /*:Object*/) /*:Void*/ { 
             var results = null;
             
-            this.fireEvent("begin");
+            this.fireEvent(this.BEGIN_EVENT);
        
             //an object passed in overrides everything else
             if (YAHOO.lang.isObject(testObject)){
                 results = this._run(testObject);  
             } else {
-                results = {};
+                results = {
+                    passed: 0,
+                    failed: 0,
+                    total: 0
+                };
                 for (var i=0; i < this.items.length; i++){
-                    results[this.items[i].name] = this._run(this.items[i]);
+                    var result = this._run(this.items[i]);
+                    results.passed += result.passed;
+                    results.failed += result.failed;
+                    results.total += result.total;
+                    results[this.items[i].name] = result;
                 }            
             }
             
-            this.fireEvent("complete", { results: results });
+            this.fireEvent(this.COMPLETE_EVENT, { results: results });
         }    
     });
     
