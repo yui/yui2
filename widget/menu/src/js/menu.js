@@ -2070,12 +2070,19 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
+        oTarget,
+        oItemCfg,
+        oSubmenu,
+        sURL,
+        bCurrentPageURL,
+        oRoot;
+
+
+    if (oItem && !oItem.cfg.getProperty("disabled")) {
+
         oTarget = Event.getTarget(oEvent);
-
-    if(oItem && !oItem.cfg.getProperty("disabled")) {
-
-        var oItemCfg = oItem.cfg,
-            oSubmenu = oItemCfg.getProperty("submenu");
+        oItemCfg = oItem.cfg;
+        oSubmenu = oItemCfg.getProperty("submenu");
 
 
         /*
@@ -2084,9 +2091,9 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
             on the submenu indicator image.
         */        
 
-        if(oTarget == oItem.submenuIndicator && oSubmenu) {
+        if (oTarget == oItem.submenuIndicator && oSubmenu) {
 
-            if(oSubmenu.cfg.getProperty("visible")) {
+            if (oSubmenu.cfg.getProperty("visible")) {
 
                 oSubmenu.hide();
                 
@@ -2097,31 +2104,25 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
 
                 this.clearActiveItem();
 
-                oItem.cfg.setProperty("selected", true);
+                oItemCfg.setProperty("selected", true);
 
                 oSubmenu.show();
                 
                 oSubmenu.setInitialFocus();
     
             }
+
+            Event.preventDefault(oEvent);
     
         }
         else {
 
-            var sURL = oItemCfg.getProperty("url"),
-                bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#"),
-                sTarget = oItemCfg.getProperty("target"),
-                bHasTarget = (sTarget && sTarget.length > 0);
+            sURL = oItemCfg.getProperty("url");
+            bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#");
 
-            /*
-                Prevent the browser from following links 
-                equal to "#"
-            */
+            //  Prevent the browser from following links equal to "#"
             
-            if(
-                oTarget.tagName.toUpperCase() == "A" && 
-                bCurrentPageURL && !bHasTarget
-            ) {
+            if (oTarget.tagName.toUpperCase() == "A" && bCurrentPageURL) {
 
                 Event.preventDefault(oEvent);
 
@@ -2129,37 +2130,17 @@ _onClick: function(p_sType, p_aArgs, p_oMenu) {
             
             }
 
-            if(
-                oTarget.tagName.toUpperCase() != "A" && 
-                !bCurrentPageURL && !bHasTarget
-            ) {
-                
-                /*
-                    Follow the URL of the item regardless of 
-                    whether or not the user clicked specifically
-                    on the anchor element.
-                */
+
+            if (!oSubmenu) {
     
-                document.location = sURL;
-        
-            }
-
-
-            /*
-                If the item doesn't navigate to a URL and it doesn't have
-                a submenu, then collapse the menu tree.
-            */
-
-            if(bCurrentPageURL && !oSubmenu) {
-    
-                var oRoot = this.getRoot();
+                oRoot = this.getRoot();
                 
-                if(oRoot.cfg.getProperty("position") == "static") {
+                if (oRoot.cfg.getProperty("position") == "static") {
     
                     oRoot.clearActiveItem();
     
                 }
-                else if(oRoot.cfg.getProperty("clicktohide")) {
+                else if (oRoot.cfg.getProperty("clicktohide")) {
 
                     oRoot.hide();
                 
