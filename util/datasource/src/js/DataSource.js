@@ -442,6 +442,16 @@ YAHOO.util.DataSource.prototype.connMgr = null;
 YAHOO.util.DataSource.prototype.connXhrMode = "allowAll";
 
  /**
+ * If data is accessed over XHR via Connection Manager, true if data should be
+ * sent via POST, otherwise data will be sent via GET.
+ *
+ * @property connMethodPost
+ * @type Boolean
+ * @default false
+ */
+YAHOO.util.DataSource.prototype.connMethodPost = false;
+
+ /**
  * If data is accessed over XHR via Connection Manager, the connection timeout
  * defines how many  milliseconds the XHR connection will wait for a server
  * response. Any non-zero value will enable the Connection utility's
@@ -828,13 +838,14 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             }
 
             // Request URL
-            var sUri = this.liveData+"?"+oRequest;
-            
             if(oConnMgr && oConnMgr.asyncRequest) {
                 // Send the request
                 if(this.connXhrMode != "queueRequests") {
-                    // Make the connection //TODO: support POST
-                    oConn = oConnMgr.asyncRequest("GET", sUri, _xhrCallback, null);
+                    var isPost = this.connMethodPost;
+                    var sMethod = (isPost) ? "POST" : "GET";
+                    var sUri = (isPost) ? this.liveData : this.liveData+"?"+oRequest;
+                    var sRequest = (isPost) ? oRequest : null;
+                    oConn = oConnMgr.asyncRequest(sMethod, sUri, _xhrCallback, sRequest);
 
                     // Update the queue
                     if(this.connXhrMode != "allowAll") {
