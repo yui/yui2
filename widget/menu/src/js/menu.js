@@ -725,162 +725,182 @@ init: function(p_oElement, p_oConfig) {
 */
 _initSubTree: function() {
 
-    var oNode;
-
-    if(this.srcElement.tagName.toUpperCase() == "DIV") {
-
-        /*
-            Populate the collection of item groups and item
-            group titles
-        */
-
-        oNode = this.body.firstChild;
-
-        var nGroup = 0,
-            sGroupTitleTagName = this.GROUP_TITLE_TAG_NAME.toUpperCase();
-
-        do {
-
-            if(oNode && oNode.tagName) {
-
-                switch(oNode.tagName.toUpperCase()) {
-
-                    case sGroupTitleTagName:
-                    
-                        this._aGroupTitleElements[nGroup] = oNode;
-
-                    break;
-
-                    case "UL":
-
-                        this._aListElements[nGroup] = oNode;
-                        this._aItemGroups[nGroup] = [];
-                        nGroup++;
-
-                    break;
-
-                }
-            
-            }
-
-        }
-        while((oNode = oNode.nextSibling));
+    var oSrcElement = this.srcElement,
+        sSrcElementTagName,
+        nGroup,
+        sGroupTitleTagName,
+        oNode,
+        aListElements,
+        nListElements,
+        i;
 
 
-        /*
-            Apply the "first-of-type" class to the first UL to mimic 
-            the "first-of-type" CSS3 psuedo class.
-        */
-
-        if(this._aListElements[0]) {
-
-            Dom.addClass(this._aListElements[0], "first-of-type");
-
-        }
-
-    }
-
-
-    oNode = null;
-
-    this.logger.log("Searching DOM for items to initialize.");
-
-    if(this.srcElement.tagName) {
-
-        var sSrcElementTagName = this.srcElement.tagName.toUpperCase();
-
-
-        switch(sSrcElementTagName) {
+    if (oSrcElement) {
     
-            case "DIV":
+        sSrcElementTagName = 
+            (oSrcElement.tagName && oSrcElement.tagName.toUpperCase());
+
+
+        if (sSrcElementTagName == "DIV") {
     
-                if(this._aListElements.length > 0) {
+            //  Populate the collection of item groups and item group titles
     
-                    this.logger.log("Found " + 
-                        this._aListElements.length + 
-                        " item groups to initialize.");
+            oNode = this.body.firstChild;
     
-                    var i = this._aListElements.length - 1;
+
+            if (oNode) {
     
-                    do {
-    
-                        oNode = this._aListElements[i].firstChild;
+                nGroup = 0;
+                sGroupTitleTagName = this.GROUP_TITLE_TAG_NAME.toUpperCase();
         
-                        this.logger.log("Scanning " + 
-                            this._aListElements[i].childNodes.length + 
-                            " child nodes for items to initialize.");
-    
-                        do {
-        
-                            if(
-                                oNode && 
-                                oNode.tagName && 
-                                oNode.tagName.toUpperCase() == "LI"
-                            ) {
-        
-                                this.logger.log("Initializing " + 
-                                    oNode.tagName + " node.");
-
-                                this.addItem(
-                                        new this.ITEM_TYPE(
-                                            oNode, 
-                                            { parent: this }
-                                        ), 
-                                        i
-                                    );
-    
-                            }
-                
-                        }
-                        while((oNode = oNode.nextSibling));
-                
-                    }
-                    while(i--);
-    
-                }
-    
-            break;
-    
-            case "SELECT":
-    
-                this.logger.log("Scanning " +  
-                    this.srcElement.childNodes.length + 
-                    " child nodes for items to initialize.");
-    
-                oNode = this.srcElement.firstChild;
-    
                 do {
-    
-                    if(oNode && oNode.tagName) {
-                    
-                        switch(oNode.tagName.toUpperCase()) {
         
-                            case "OPTGROUP":
-                            case "OPTION":
+
+                    if (oNode && oNode.tagName) {
         
-                                this.logger.log("Initializing " +  
-                                    oNode.tagName + " node.");
+                        switch (oNode.tagName.toUpperCase()) {
         
-                                this.addItem(
-                                        new this.ITEM_TYPE(
-                                                oNode, 
-                                                { parent: this }
-                                            )
-                                        );
+                            case sGroupTitleTagName:
+                            
+                                this._aGroupTitleElements[nGroup] = oNode;
+        
+                            break;
+        
+                            case "UL":
+        
+                                this._aListElements[nGroup] = oNode;
+                                this._aItemGroups[nGroup] = [];
+                                nGroup++;
         
                             break;
         
                         }
-
+                    
                     }
-    
+        
                 }
-                while((oNode = oNode.nextSibling));
-    
-            break;
+                while ((oNode = oNode.nextSibling));
+        
+        
+                /*
+                    Apply the "first-of-type" class to the first UL to mimic 
+                    the "first-of-type" CSS3 psuedo class.
+                */
+        
+                if (this._aListElements[0]) {
+        
+                    Dom.addClass(this._aListElements[0], "first-of-type");
+        
+                }
+            
+            }
     
         }
+    
+    
+        oNode = null;
+    
+        this.logger.log("Searching DOM for items to initialize.");
+    
 
+        if (sSrcElementTagName) {
+    
+            switch (sSrcElementTagName) {
+        
+                case "DIV":
+
+                    aListElements = this._aListElements;
+                    nListElements = aListElements.length;
+        
+                    if (nListElements > 0) {
+        
+                        this.logger.log("Found " + nListElements + 
+                            " item groups to initialize.");
+        
+                        i = nListElements - 1;
+        
+                        do {
+        
+                            oNode = aListElements[i].firstChild;
+            
+                            if (oNode) {
+
+                                this.logger.log("Scanning " + 
+                                    aListElements[i].childNodes.length + 
+                                    " child nodes for items to initialize.");
+            
+                                do {
+                
+                                    if (oNode && oNode.tagName && 
+                                        oNode.tagName.toUpperCase() == "LI") {
+                
+                                        this.logger.log("Initializing " + 
+                                            oNode.tagName + " node.");
+        
+                                        this.addItem(
+                                                new this.ITEM_TYPE(
+                                                    oNode, 
+                                                    { parent: this }
+                                                ), 
+                                                i
+                                            );
+            
+                                    }
+                        
+                                }
+                                while ((oNode = oNode.nextSibling));
+                            
+                            }
+                    
+                        }
+                        while (i--);
+        
+                    }
+        
+                break;
+        
+                case "SELECT":
+        
+                    this.logger.log("Scanning " +  
+                        oSrcElememt.childNodes.length + 
+                        " child nodes for items to initialize.");
+        
+                    oNode = oSrcElememt.firstChild;
+        
+                    do {
+        
+                        if (oNode && oNode.tagName) {
+                        
+                            switch (oNode.tagName.toUpperCase()) {
+            
+                                case "OPTGROUP":
+                                case "OPTION":
+            
+                                    this.logger.log("Initializing " +  
+                                        oNode.tagName + " node.");
+            
+                                    this.addItem(
+                                            new this.ITEM_TYPE(
+                                                    oNode, 
+                                                    { parent: this }
+                                                )
+                                            );
+            
+                                break;
+            
+                            }
+    
+                        }
+        
+                    }
+                    while ((oNode = oNode.nextSibling));
+        
+                break;
+        
+            }
+    
+        }    
+    
     }
 
 },
