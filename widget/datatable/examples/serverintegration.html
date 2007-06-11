@@ -180,7 +180,7 @@ YAHOO.example.ServerIntegration = new function() {
     ];
 
     // Instantiate DataSource
-    this.myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
+    this.myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php?");
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;
     this.myDataSource.responseSchema = {
         resultsList: "records",

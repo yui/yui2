@@ -86,7 +86,7 @@ YAHOO.example.XHR_XML = new function() {
         {key:"AverageRating", text:"Rating", type:"number", sortable:true}
     ];
 
-    this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php");
+    this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php?");
     this.myDataSource.connMethodPost = true;
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_XML;
     this.myDataSource.responseSchema = {

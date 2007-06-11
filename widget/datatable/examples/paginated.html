@@ -23,7 +23,7 @@
 </div>
 <div id="bd">
     <div id="paginated"></div>
-    
+
     <!-- Sample code begins -->
     <div id="code">
         <h3>Sample Code</h3>
@@ -86,7 +86,7 @@ YAHOO.example.ClientPagination = new function() {
     ];
 
     // Show over 1000 records
-    this.myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php");
+    this.myDataSource = new YAHOO.util.DataSource("./php/json_proxy.php?");
     // Show 5000 records -- FireBug must be disabled!
     //this.myDataSource = new YAHOO.util.DataSource("./php/json5000_proxy.php");
     this.myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON;

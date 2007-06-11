@@ -843,7 +843,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                 if(this.connXhrMode != "queueRequests") {
                     var isPost = this.connMethodPost;
                     var sMethod = (isPost) ? "POST" : "GET";
-                    var sUri = (isPost) ? this.liveData : this.liveData+"?"+oRequest;
+                    var sUri = (isPost) ? this.liveData : this.liveData+oRequest;
                     var sRequest = (isPost) ? oRequest : null;
                     oConn = oConnMgr.asyncRequest(sMethod, sUri, _xhrCallback, sRequest);
 
