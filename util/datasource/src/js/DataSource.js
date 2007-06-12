@@ -704,7 +704,6 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
     // How to make the connection depends on the type of data
     switch(this.dataType) {
-    
         // If the live data is a JavaScript Array
         // simply forward the entire array to the handler
         case YAHOO.util.DataSource.TYPE_JSARRAY:
@@ -894,7 +893,8 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
             break;
         default:
-            //TODO: any default?
+            YAHOO.log("Could not make connection to data for request \"" + oRequest +
+                    "\" due to unknown data type", "warn", this.toString());
             break;
     }
     return tId;
@@ -955,15 +955,15 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
         default:
             //var contentType = oRawResponse.getResponseHeader["Content-Type"];
             YAHOO.log("Could not parse data for request \"" + oRequest +
-                    "\" due to unknown response type", "warn", this.toString());
+                    "\" due to unknown response type", "error", this.toString());
             break;
     }
 
-    // Last chance to touch the raw response or the parsed response
-    oParsedResponse.tId = tId;
-    oParsedResponse = this.doBeforeCallback(oRequest, oRawResponse, oParsedResponse);
 
     if(oParsedResponse) {
+        // Last chance to touch the raw response or the parsed response
+        oParsedResponse.tId = tId;
+        oParsedResponse = this.doBeforeCallback(oRequest, oRawResponse, oParsedResponse);
         this.fireEvent("responseParseEvent", {request:oRequest,
                 response:oParsedResponse, callback:oCallback, caller:oCaller});
         // Cache the response
@@ -975,7 +975,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
         YAHOO.log(YAHOO.util.DataSource.ERROR_DATANULL, "error", this.toString());
         
         // Send response back to the caller with the error flag on
-        oParsedResponse.error = true;
+        oParsedResponse = {error:true};
     }
     
     // Send the response back to the caller
