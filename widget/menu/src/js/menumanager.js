@@ -611,7 +611,8 @@
             /**
             * @method getMenu
             * @description Returns a menu with the specified id.
-            * @param {String} p_sId String specifying the id of the menu to
+            * @param {String} p_sId String specifying the id of the 
+            * <code>&#60;div&#62;</code> element representing the menu to
             * be retrieved.
             * @return {YAHOO.widget.Menu}
             */
@@ -627,6 +628,89 @@
             
             },
     
+    
+            /**
+            * @method getMenuItem
+            * @description Returns a menu item with the specified id.
+            * @param {String} p_sId String specifying the id of the 
+            * <code>&#60;li&#62;</code> element representing the menu item to
+            * be retrieved.
+            * @return {YAHOO.widget.MenuItem}
+            */
+            getMenuItem: function (p_sId) {
+    
+                var oItem = m_oItems[p_sId];
+        
+                if (oItem) {
+                
+                    return oItem;
+                
+                }
+            
+            },
+
+
+            /**
+            * @method getMenuItemGroup
+            * @description Returns an array of menu item instances whose 
+            * corresponding <code>&#60;li&#62;</code> elements are child 
+            * nodes of the <code>&#60;ul&#62;</code> element with the 
+            * specified id.
+            * @param {String} p_sId String specifying the id of the 
+            * <code>&#60;ul&#62;</code> element representing the group of 
+            * menu items to be retrieved.
+            * @return {Array}
+            */
+            getMenuItemGroup: function (p_sId) {
+
+                var oUL = Dom.get(p_sId),
+                    aItems,
+                    oNode,
+                    oItem,
+                    sId;
+    
+
+                if (oUL && oUL.tagName && 
+                    oUL.tagName.toUpperCase() == "UL") {
+
+                    oNode = oUL.firstChild;
+
+                    if (oNode) {
+
+                        aItems = [];
+                        
+                        do {
+
+                            sId = oNode.id;
+
+                            if (sId) {
+                            
+                                oItem = this.getMenuItem(sId);
+                                
+                                if (oItem) {
+                                
+                                    aItems[aItems.length] = oItem;
+                                
+                                }
+                            
+                            }
+                        
+                        }
+                        while (oNode = oNode.nextSibling);
+
+
+                        if (aItems.length > 0) {
+
+                            return aItems;
+                        
+                        }
+
+                    }
+                
+                }
+            
+            },
+
     
             /**
             * @method getFocusedMenuItem
