@@ -5219,7 +5219,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
             this._focusEl(this._elTbody);
 
             this.fireEvent("rowSelectEvent", {record:oRecord, el:elRow});
-            YAHOO.log("Row selected " + row, "info", this.toString());
+            YAHOO.log("Row selected " + elRow, "info", this.toString());
 
             return;
         }
@@ -5269,7 +5269,7 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
                 YAHOO.util.Dom.removeClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
 
                 this.fireEvent("rowUnselectEvent", {record:oRecord, el:elRow});
-                YAHOO.log("Row unselected " + row, "info", this.toString());
+                YAHOO.log("Row unselected " + elRow, "info", this.toString());
 
                 return;
             }
@@ -5368,7 +5368,7 @@ YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
 
             this.fireEvent("cellSelectEvent", {record:oRecord,
                     key: this._oColumnSet.getColumn(nColumnId).key, el:elCell});
-            YAHOO.log("Cell selected " + cell, "info", this.toString());
+            YAHOO.log("Cell selected " + elCell, "info", this.toString());
 
             return;
         }
@@ -5409,7 +5409,7 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
 
                     this.fireEvent("cellUnselectEvent", {record:oRecord,
                             key:this._oColumnSet.getColumn(nColumnId).key, el:elCell});
-                    YAHOO.log("Cell unselected " + cell, "info", this.toString());
+                    YAHOO.log("Cell unselected " + elCell, "info", this.toString());
 
                     return;
                 }
@@ -5494,53 +5494,84 @@ YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
     return aSelectedCells;
 };
 
-
-
-
-
-
-
-
-
 /**
- * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to the given element(s).
+ * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to the given row.
  *
- * @method highlight
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
- * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
+ * @method highlightRow
+ * @param row {HTMLElement | String} DOM element reference or ID string.
  */
-YAHOO.widget.DataTable.prototype.highlight = function(els) {
-    if(els) {
-        if(!YAHOO.lang.isArray(els)) {
-            els = [els];
-        }
-        YAHOO.util.Dom.addClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
-        this.fireEvent("rowHighlightEvent",{el:null, record:null});
-        this.fireEvent("cellHighlightEvent",{el:null, record:null, key:null});
-        //TODO
-        //YAHOO.log();
+YAHOO.widget.DataTable.prototype.highlightRow = function(row) {
+    var elRow = this.getTrEl(row);
+
+    if(elRow) {
+        var oRecord = this.getRecord(elRow);
+        YAHOO.util.Dom.addClass(elRow,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        this.fireEvent("rowHighlightEvent", {record:oRecord, el:elRow});
+        YAHOO.log("Row highlighted " + elRow, "info", this.toString());
+        return;
     }
+    YAHOO.log("Could not highlight " + row, "warn", this.toString());
 };
 
 /**
- * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED from the given element(s).
+ * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED from the given row.
  *
- * @method unhighlight
- * @param els {HTMLElement | String | HTMLElement[] | String[]} HTML TR element
- * reference, TR String ID, array of HTML TR element, or array of TR element IDs.
+ * @method unhighlightRow
+ * @param row {HTMLElement | String} DOM element reference or ID string.
  */
-YAHOO.widget.DataTable.prototype.unhighlight = function(els) {
-    if(els) {
-        if(!YAHOO.lang.isArray(els)) {
-            els = [els];
-        }
-        YAHOO.util.Dom.removeClass(els,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
-        this.fireEvent("rowUnhighlightEvent",{el:null, record:null});
-        this.fireEvent("cellUnhighlightEvent",{el:null, record:null, key:null});
-        //TODO
-        //YAHOO.log();
+YAHOO.widget.DataTable.prototype.unhighlightRow = function(row) {
+    var elRow = this.getTrEl(row);
+
+    if(elRow) {
+        var oRecord = this.getRecord(elRow);
+        YAHOO.util.Dom.removeClass(elRow,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        this.fireEvent("rowUnhighlightEvent", {record:oRecord, el:elRow});
+        YAHOO.log("Row unhighlighted " + elRow, "info", this.toString());
+        return;
     }
+    YAHOO.log("Could not unhighlight " + row, "warn", this.toString());
 };
+
+/**
+ * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to the given cell.
+ *
+ * @method highlightCell
+ * @param cell {HTMLElement | String} DOM element reference or ID string.
+ */
+YAHOO.widget.DataTable.prototype.highlightCell = function(cell) {
+    var elCell = this.getTdEl(cell);
+
+    if(elCell) {
+        var oRecord = this.getRecord(elCell);
+        YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        this.fireEvent("cellHighlightEvent", {record:oRecord,
+                    key:this._oColumnSet.getColumn(elCell.yuiColumnId).key, el:elCell});
+        YAHOO.log("Cell highlighted " + elCell, "info", this.toString());
+        return;
+    }
+    YAHOO.log("Could not highlight " + cell, "warn", this.toString());
+};
+
+/**
+ * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED from the given cell.
+ *
+ * @method unhighlightCell
+ * @param cell {HTMLElement | String} DOM element reference or ID string.
+ */
+YAHOO.widget.DataTable.prototype.unhighlightCell = function(cell) {
+    var elCell = this.getTdEl(cell);
+
+    if(elCell) {
+        var oRecord = this.getRecord(elCell);
+        YAHOO.util.Dom.removeClass(elCell,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        this.fireEvent("cellUnhighlightEvent", {record:oRecord,
+                    key:this._oColumnSet.getColumn(elCell.yuiColumnId).key, el:elCell});
+        YAHOO.log("Cell unhighlighted " + elCell, "info", this.toString());
+        return;
+    }
+    YAHOO.log("Could not unhighlight " + cell, "warn", this.toString());
+};
+
 
 
 
@@ -6810,6 +6841,68 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     }
 };
 
+
+
+
+
+
+
+
+
+
+
+/**
+ * Overridable custom event handler to highlight row.
+ *
+ * @method onEventHighlightRow
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventHighlightRow = function(oArgs) {
+    var evt = oArgs.event;
+    var elTarget = oArgs.target;
+    this.highlightRow(elTarget);
+};
+
+/**
+ * Overridable custom event handler to unhighlight row.
+ *
+ * @method onEventUnhighlightRow
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventUnhighlightRow = function(oArgs) {
+    var evt = oArgs.event;
+    var elTarget = oArgs.target;
+    this.unhighlightRow(elTarget);
+};
+
+/**
+ * Overridable custom event handler to highlight cell.
+ *
+ * @method onEventHighlightCell
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
+    var evt = oArgs.event;
+    var elTarget = oArgs.target;
+    this.highlightCell(elTarget);
+};
+
+/**
+ * Overridable custom event handler to unhighlight cell.
+ *
+ * @method onEventUnhighlightCell
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
+    var evt = oArgs.event;
+    var elTarget = oArgs.target;
+    this.unhighlightCell(elTarget);
+};
+
 /**
  * Overridable custom event handler to format cell.
  *
@@ -6829,48 +6922,6 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
     }
     else {
         YAHOO.log("Could not format cell " + target, "warn", this.toString());
-    }
-};
-
-/**
- * Overridable custom event handler to highlight cell.
- *
- * @method onEventHighlightCell
- * @param oArgs.event {HTMLEvent} Event object.
- * @param oArgs.target {HTMLElement} Target element.
- */
-YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
-    var evt = oArgs.event;
-    var target = oArgs.target;
-    var elTag = target.tagName.toLowerCase();
-
-    var elCell = this.getTdEl(target);
-    if(elCell) {
-        this.highlight(elCell);
-    }
-    else {
-        YAHOO.log("Could not highlight cell " + target, "warn", this.toString());
-    }
-};
-
-/**
- * Overridable custom event handler to unhighlight cell.
- *
- * @method onEventUnhighlightCell
- * @param oArgs.event {HTMLEvent} Event object.
- * @param oArgs.target {HTMLElement} Target element.
- */
-YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
-    var evt = oArgs.event;
-    var target = oArgs.target;
-    var elTag = target.tagName.toLowerCase();
-
-    var elCell = this.getTdEl(target);
-    if(elCell) {
-        this.unhighlight(elCell);
-    }
-    else {
-        YAHOO.log("Could not unhighlight cell " + target, "warn", this.toString());
     }
 };
 
@@ -7398,19 +7449,21 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      */
     //this.createEvent("unselectAllRowsEvent");
 
-    /*TODO
+    /*
      * Fired when a row is highlighted.
      *
      * @event rowHighlightEvent
+     * @param oArgs.el {HTMLElement} The highlighted TR element.
+     * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
      */
-    //this.createEvent("rowHighlightEvent");
 
-    /*TODO
+    /*
      * Fired when a row is unhighlighted.
      *
      * @event rowUnhighlightEvent
+     * @param oArgs.el {HTMLElement} The highlighted TR element.
+     * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
      */
-    //this.createEvent("rowUnhighlightEvent");
 
     /**
      * Fired when a cell has a mouseover.
@@ -7477,26 +7530,30 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      */
     //this.createEvent("cellUnselectEvent");
 
+    /**
+     * Fired when a cell is highlighted.
+     *
+     * @event cellHighlightEvent
+     * @param oArgs.el {HTMLElement} The highlighted TD element.
+     * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
+     * @param oArgs.key {String} The key of the highlighted cell.
+     */
+
+    /**
+     * Fired when a cell is unhighlighted.
+     *
+     * @event cellUnhighlightEvent
+     * @param oArgs.el {HTMLElement} The unhighlighted TD element.
+     * @param oArgs.record {YAHOO.widget.Record} The unhighlighted Record.
+     * @param oArgs.key {String} The key of the unhighlighted cell.
+     */
+
     /*TODO: delete and use cellUnselectEvent?
      * Fired when all cell selections are cleared.
      *
      * @event unselectAllCellsEvent
      */
     //this.createEvent("unselectAllCellsEvent");
-
-    /*TODO
-     * Fired when a cell is highlighted.
-     *
-     * @event cellHighlightEvent
-     */
-    //this.createEvent("cellHighlightEvent");
-
-    /*TODO
-     * Fired when a cell is unhighlighted.
-     *
-     * @event cellUnhighlightEvent
-     */
-    //this.createEvent("cellUnhighlightEvent");
 
     /**
      * Fired when DataTable paginator is updated.
