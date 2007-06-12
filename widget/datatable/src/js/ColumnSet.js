@@ -98,6 +98,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     if(oColumn.resizeable && (child.resizeable === undefined)) {
                         child.resizeable = oColumn.resizeable;
                     }
+                    if(oColumn.sortable && (child.sortable === undefined)) {
+                        child.sortable = oColumn.sortable;
+                    }
                     if(oColumn.type && (child.type === undefined)) {
                         child.type = oColumn.type;
                     }
@@ -557,22 +560,20 @@ YAHOO.widget.Column.prototype.resizeable = false;
 YAHOO.widget.Column.prototype.sortable = false;
 
 /**
- * Custom sort handler to arrange Column in descending order.
+ * Default sort order for Column: "asc" or "desc".
  *
- * @property sortOptions.descFunction
- * @type Function
+ * @property sortOptions.defaultOrder
+ * @type String
  * @default null
  */
-YAHOO.widget.Column.prototype.descFunction = null;
-
 /**
- * Custom sort handler to arrange Column in ascending order.
+ * Custom sort handler.
  *
- * @property sortOptions.ascFunction
+ * @property sortOptions.sortFunction
  * @type Function
  * @default null
  */
-YAHOO.widget.Column.prototype.ascFunction = null;
+YAHOO.widget.Column.prototype.sortOptions = null;
 
 
 

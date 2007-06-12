@@ -6873,6 +6873,7 @@ YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
         YAHOO.log("Could not unhighlight cell " + target, "warn", this.toString());
     }
 };
+
 /**
  * Overridable custom event handler to edit cell.
  *
@@ -6892,6 +6893,17 @@ YAHOO.widget.DataTable.prototype.onEventShowCellEditor = function(oArgs) {
     else {
         YAHOO.log("Could not edit cell " + target, "warn", this.toString());
     }
+};
+
+/**
+ * Overridable custom event handler to save cell editor input.
+ *
+ * @method onEventSaveCellEditor
+ * @param oArgs.columnEditor {Object} ColumnEditor.
+ */
+YAHOO.widget.DataTable.prototype.onEventSaveCellEditor = function(oArgs) {
+    var editor = oArgs.columnEditor;
+    this.saveCellEditor();
 };
 
 /**
