@@ -4527,6 +4527,67 @@ hasFocus: function() {
 
 
 /**
+* @method addSubscriber
+* @description Adds a CustomEvent subscriber to the menu and all of its 
+* corresponding submenus.
+* @param {String} p_sEvent The name of the event to listen for.
+* @param {Object} p_fnListener The function to execute.
+* @param {Object} p_oObject An object to be passed along when the event fires.
+*/
+addSubscriber: function(p_sEvent, p_fnListener, p_oObject) {
+
+    function addCustomEventListener(p_oMenu) {
+
+        p_oMenu.addSubscriber(p_sEvent, p_fnListener, p_oObject, p_oMenu);
+
+    }
+
+
+    function onItemAdded(p_sType, p_aArgs) {
+
+        var oItem = p_aArgs[0],
+            oSubmenu = oItem.cfg.getProperty("submenu");
+
+        if(oSubmenu) {
+
+            addCustomEventListener(oSubmenu);
+
+        }
+    
+    }
+
+
+    this[p_sEvent].subscribe(p_fnListener, p_oObject, this);
+
+    this.itemAddedEvent.subscribe(onItemAdded);
+
+
+    var aSubmenus = this.getSubmenus(),
+        nSubmenus = aSubmenus.length,
+        oSubmenu;
+
+
+    if(nSubmenus > 0) {
+    
+        var i = nSubmenus - 1;
+        
+        do {
+
+            oSubmenu = aSubmenus[i];
+
+            addCustomEventListener(oSubmenu);
+            
+            oSubmenu.itemAddedEvent.subscribe(onItemAdded);
+
+        }
+        while(i--);
+    
+    }
+
+},
+
+
+/**
 * @description Initializes the class's configurable properties which can be
 * changed using the menu's Config object ("cfg").
 * @method initDefaultConfig
