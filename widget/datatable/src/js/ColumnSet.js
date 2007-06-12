@@ -78,7 +78,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
                 // Cascade certain properties to children if not defined on their own
                 var currentChildren = currentNode.children;
-                for(k=0; k<currentChildren.length; k++) {
+                for(var k=0; k<currentChildren.length; k++) {
                     var child = currentChildren[k];
                     if(oColumn.className && (child.className === undefined)) {
                         child.className = oColumn.className;
@@ -117,11 +117,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             }
             // This Column does not have any children
             else {
-                //if(oColumn.key) {
-                    oColumn._index = keys.length;
-                    keys.push(oColumn);
-                //}
+                oColumn._index = keys.length;
                 oColumn._colspan = 1;
+                keys.push(oColumn);
             }
 
             // Add the Column to the top-down tree
@@ -349,6 +347,9 @@ YAHOO.widget.Column = function(oConfigs) {
         }
     }
 
+    if(!YAHOO.lang.isValue(this.key)) {
+        this.key = "yui-dt-column"+this._nId;
+    }
     YAHOO.widget.Column._nCount++;
 };
 
@@ -389,7 +390,7 @@ YAHOO.widget.Column.prototype._sName = null;
 YAHOO.widget.Column.prototype._nId = null;
 
 /**
- * Reference to Column's index within its ColumnSet's key array, or null if not applicable.
+ * Reference to Column's index within its ColumnSet's keys array, or null if not applicable.
  *
  * @property _index
  * @type Number
@@ -534,7 +535,7 @@ YAHOO.widget.Column.prototype.formatter = null;
 YAHOO.widget.Column.prototype.editor = null;
 
 /**
- * Defines the editor options for Column in an object literal of key:value pairs.
+ * Defines the editor options for Column in an object literal of param:value pairs.
  *
  * @property editorOptions
  * @type Object
@@ -616,11 +617,11 @@ YAHOO.widget.Column.prototype.getId = function() {
 };
 
 /**
- * Public accessor returns Column's index within its ColumnSet's key array, or
+ * Public accessor returns Column's index within its ColumnSet's keys array, or
  * null if not applicable.
  *
  * @property getIndex
- * @return {Number} Column's index within its ColumnSet key array, if applicable.
+ * @return {Number} Column's index within its ColumnSet keys array, if applicable.
  */
 YAHOO.widget.Column.prototype.getIndex = function() {
     return this._index;

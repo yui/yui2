@@ -404,9 +404,9 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
                     // Complete the set
                     var oValidPaginator = this.get("paginator");
-                    for(var key in oNewPaginator) {
-                        if(oValidPaginator.hasOwnProperty(key)) {
-                            oValidPaginator[key] = oNewPaginator[key];
+                    for(var param in oNewPaginator) {
+                        if(oValidPaginator.hasOwnProperty(param)) {
+                            oValidPaginator[param] = oNewPaginator[param];
                         }
                     }
                     
@@ -1446,11 +1446,8 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
             if(foundDD) {
                 //TODO: fix fixed width tables
                 // Skip the last column for fixed-width tables
-                if(!this.fixedWidth ||
-                        (this.fixedWidth &&
-                        (oColumn.getIndex() != this._oColumnSet.keys.length-1)
-                        )
-                ) {
+                if(!this.fixedWidth || (this.fixedWidth &&
+                        (oColumn.getIndex() != this._oColumnSet.keys.length-1))) {
                     // TODO: better way to get elTheadContainer
                     var elThContainer = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",elTheadCellId)[0];
                     var elThResizer = elThContainer.appendChild(document.createElement("span"));
@@ -1510,7 +1507,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     }
     YAHOO.util.Dom.addClass(elTheadCell, "yui-dt-"+oColumn.key);
     
-    // Apply CSS for sorted tables
+    //TODO: Apply CSS for sorted tables
     //var sortedBy = this.get("sortedBy");
     //if(sortedBy) {
     //    if(sortedBy.key === oColumn.key) {
@@ -1533,7 +1530,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
-    var sLabel = oColumn.label || oColumn.key || "";
+    var sLabel = oColumn.label || oColumn.key;
     if(oColumn.sortable) {
         YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_SORTABLE);
         //TODO: Make sortLink customizeable
@@ -3169,7 +3166,7 @@ YAHOO.widget.DataTable.prototype._onDropdownChange = function(e, oSelf) {
 //YAHOO.widget.DataTable.prototype.paginator = false;
 
 /*TODO: delete
- * Object literal of initial paginator key:value properties.
+ * Object literal of initial paginator param:value properties.
  *
  * @property paginatorOptions
  * @type Object
@@ -3852,9 +3849,9 @@ YAHOO.widget.DataTable.prototype.destroy = function() {
     elContainer.innerHTML = "";
 
     // Null out objects
-    for(var key in this) {
-        if(this.hasOwnProperty(key)) {
-            this[key] = null;
+    for(var param in this) {
+        if(this.hasOwnProperty(param)) {
+            this[param] = null;
         }
     }
 
@@ -4330,8 +4327,8 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
         // Copy data from the Record for the event that gets fired later
         var oRecordData = oldRecord.getData();
         var oldData = {};
-        for(var key in oRecordData) {
-            oldData[key] = oRecordData[key];
+        for(var param in oRecordData) {
+            oldData[param] = oRecordData[param];
         }
 
         updatedRecord = this._oRecordSet.updateRecord(oldRecord, oData);
@@ -4395,8 +4392,8 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
             // Copy data from the Record for the event that gets fired later
             var oRecordData = oRecord.getData();
             var oData = {};
-            for(var key in oRecordData) {
-                oData[key] = oRecordData[key];
+            for(var param in oRecordData) {
+                oData[param] = oRecordData[param];
             }
 
             // Delete Record from RecordSet
@@ -4506,7 +4503,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
     }
     
     if(oRecord && oColumn) {
-        var oData = (oColumn.key) ? oRecord.getData(oColumn.key) : null;
+        var oData = oRecord.getData(oColumn.key);
         if(YAHOO.lang.isFunction(oColumn.formatter)) {
             oColumn.formatter(elCell, oRecord, oColumn, oData);
         }
@@ -4569,6 +4566,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         //TODO: fixme
         //if(oColumn.className) {
             //YAHOO.util.Dom.addClass(elCell, "yui-dt-"+type);
+            //TODO: delete?
             YAHOO.util.Dom.addClass(elCell, "yui-dt-"+oColumn.key);
         //}
 
@@ -4673,7 +4671,7 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
  * @static
  */
 YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTable) {
-    var selectedValue = oData || oRecord.getData(oColumn.key) || ""; //TODO: fixme
+    var selectedValue = oData || oRecord.getData(oColumn.key);//TODO: fixme
     var options = oColumn.dropdownOptions || null; //TODO: fixme
 
     var selectEl;
@@ -6103,23 +6101,21 @@ YAHOO.widget.DataTable.prototype.saveColumnEditor = function() {
         var newValue = this.activeColumnEditor.getInputValue();
         //TODO: need to convert string value into proper type for RecordSet
 
-        if(YAHOO.util.Lang.isString(oColumn.key)) {
-            // Update Record data
-            this._oRecordSet.updateKey(oRecord,oColumn.key,newValue);
+        // Update Record data
+        this._oRecordSet.updateKey(oRecord,oColumn.key,newValue);
 
-            //Update TD element
-            this.formatCell(elCell, oRecord, oColumn);
+        //Update TD element
+        this.formatCell(elCell, oRecord, oColumn);
 
-            // Hide ColumnEditor
-            this.hideColumnEditor();
+        // Hide ColumnEditor
+        this.hideColumnEditor();
 
-            // Return focus to TBODY
-            //this._focusEl(this._elTbody);
-            
-            this.fireEvent("columnEditorSaveEvent",
-                    {columnEditor:this.activeColumnEditor, oldData:oldValue, newData:newValue});
-            YAHOO.log("Saved ColumnEditor input", "info", this.toString());
-        }
+        //TODO: Return focus to TBODY
+        //this._focusEl(this._elTbody);
+        
+        this.fireEvent("columnEditorSaveEvent",
+                {columnEditor:this.activeColumnEditor, oldData:oldValue, newData:newValue});
+        YAHOO.log("Saved ColumnEditor input", "info", this.toString());
     }
 };
 
