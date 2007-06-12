@@ -2645,18 +2645,25 @@ _onInit: function(p_sType, p_aArgs) {
     this.cfg.subscribeToConfigEvent("width", this._onWidthChange);
     this.cfg.subscribeToConfigEvent("visible", this._onVisibleChange);
 
+    var bRootMenu = !this.parent,
+        bLazyLoad = this.lazyLoad;
+
+
     /*
         Automatically initialize a menu's subtree if:
 
-        1) This menu is a root/top-level menu, because we need to check if there 
-           are submenus to lazy load
+        1) This is the root menu and lazyload is off
+        
+        2) This is the root menu, lazyload is on, but the menu is 
+           already visible
 
-        2) This menu is a submenu and lazyload is off
+        3) This menu is a submenu and lazyload is off
     */
 
-    if ((!this.parent || (this.parent && !this.lazyLoad)) && 
-        this.getItemGroups().length === 0) {
- 
+    if (((bRootMenu && !bLazyLoad) || 
+        (bRootMenu && this.cfg.getProperty("visible")) || 
+        (!bRootMenu && !bLazyLoad)) && this.getItemGroups().length === 0) {
+
         if (this.srcElement) {
 
             this._initSubTree();
@@ -2671,7 +2678,7 @@ _onInit: function(p_sType, p_aArgs) {
         }
     
     }
-    else if (this.lazyLoad) {
+    else if (bLazyLoad) {
 
         this.cfg.fireQueue();
     
