@@ -4207,6 +4207,49 @@ getItem: function(p_nItemIndex, p_nGroupIndex) {
 
 
 /**
+* @method getSubmenus
+* @description Returns an array of all of the submenus that are immediate 
+* children of the menu.
+* @return {Array}
+*/
+getSubmenus: function() {
+
+    var aItems = this.getItems(),
+        nItems = aItems.length,
+        aSubmenus,
+        oSubmenu,
+        oItem;
+
+
+    if(nItems > 0) {
+        
+        aSubmenus = [];
+
+        for(var i=0; i<nItems; i++) {
+
+            oItem = aItems[i];
+            
+            if(oItem) {
+
+                oSubmenu = oItem.cfg.getProperty("submenu");
+                
+                if(oSubmenu) {
+
+                    aSubmenus[aSubmenus.length] = oSubmenu;
+
+                }
+            
+            }
+        
+        }
+    
+    }
+
+    return aSubmenus;
+
+},
+
+/**
 * @method clearContent
 * @description Removes all of the content from the menu, including the menu 
 * items, group titles, header and footer.
