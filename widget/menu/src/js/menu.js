@@ -180,6 +180,12 @@ YAHOO.widget.Menu._DEFAULT_CONFIG = {
         key: "classname", 
         value: null, 
         validator: Lang.isString
+    }, 
+
+    "DISABLED": { 
+        key: "disabled", 
+        value: false, 
+        validator: Lang.isBoolean
     }
 
 };
@@ -955,7 +961,8 @@ _getFirstEnabledItem: function() {
 */
 _addItemToGroup: function(p_nGroupIndex, p_oItem, p_nItemIndex) {
 
-    var oItem;
+    var oItem,
+        bDisabled = this.cfg.getProperty("disabled");
 
     if(p_oItem instanceof this.ITEM_TYPE) {
 
@@ -3793,6 +3800,64 @@ configClassName: function(p_sType, p_aArgs, p_oMenu) {
 },
 
 
+/**
+* @method _onItemAdded
+* @description "itemadded" event handler for a Menu instance.
+* @private
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+*/
+_onItemAdded: function (p_sType, p_aArgs) {
+
+    var oItem = p_aArgs[0];
+    
+    if (oItem) {
+
+        oItem.cfg.setProperty("disabled", true);
+    
+    }
+
+},
+
+
+/**
+* @method configDisabled
+* @description Event handler for when the "disabled" configuration property of 
+* a menu changes.
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event was fired.
+* @param {YAHOO.widget.Menu} p_oMenu The Menu instance fired the event.
+*/
+configDisabled: function(p_sType, p_aArgs, p_oMenu) {
+
+    var bDisabled = p_aArgs[0],
+        oParent = this.parent,
+        aItems = this.getItems(),
+        nItems = aItems.length,
+        i;
+
+
+    if (nItems > 0) {
+    
+        i = nItems - 1;
+
+        do {
+
+            aItems[i].cfg.setProperty("disabled", bDisabled);
+        
+        }
+        while (i--);
+    
+    }
+
+    Dom[(bDisabled ? "addClass" : "removeClass")](this.element, "disabled");
+
+    this.itemAddedEvent[(bDisabled ? "subscribe" : "unsubscribe")](
+        this._onItemAdded);
+
+},
+
 
 // Public methods
 
@@ -4650,6 +4715,26 @@ initDefaultConfig: function() {
             handler: this.configClassName,
             value: DEFAULT_CONFIG.CLASS_NAME.value, 
             validator: DEFAULT_CONFIG.CLASS_NAME.validator
+        }
+    );
+
+
+    /**
+    * @config disabled
+    * @description Boolean indicating if the menu should be disabled.  
+    * Disabling a menu disables each of its items.  (Disabled menu items are 
+    * dimmed and will not respond to user input or fire events.)  Disabled
+    * menus have a corresponding "disabled" CSS class applied to their root
+    * <code>&#60;div&#62;</code> element.
+    * @default false
+    * @type Boolean
+    */
+    oConfig.addProperty(
+        DEFAULT_CONFIG.DISABLED.key, 
+        { 
+            handler: this.configDisabled,
+            value: DEFAULT_CONFIG.DISABLED.value, 
+            validator: DEFAULT_CONFIG.DISABLED.validator
         }
     );
 
