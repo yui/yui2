@@ -290,7 +290,7 @@ YAHOO.util.DataSource.ERROR_DATANULL = "Null data";
 /**
  * Internal class variable to index multiple DataSource instances.
  *
- * @property _nIndex
+ * @property DataSource._nIndex
  * @type Number
  * @private
  * @static
@@ -300,7 +300,7 @@ YAHOO.util.DataSource._nIndex = 0;
 /**
  * Internal class variable to assign unique transaction IDs.
  *
- * @property _nTransactionId
+ * @property DataSource._nTransactionId
  * @type Number
  * @private
  * @static
@@ -472,7 +472,7 @@ YAHOO.util.DataSource.prototype.connTimeout = 0;
 /**
  * Converts data to type String.
  *
- * @method convertToString
+ * @method DataSource.convertToString
  * @method oData {String | Number | Boolean | Date | Array | Object} Data to convert.
  * The special values null and undefined will return null.
  * @return {Number} A string, or null.
@@ -500,7 +500,7 @@ YAHOO.util.DataSource.convertToString = function(oData) {
 /**
  * Converts data to type Number.
  *
- * @method convertToNumber
+ * @method DataSource.convertToNumber
  * @method oData {String | Number | Boolean | Null} Data to convert. Beware, null
  * returns as 0.
  * @return {Number} A number, or null if NaN.
@@ -519,11 +519,14 @@ YAHOO.util.DataSource.convertToNumber = function(oData) {
         return null;
     }
 };
+// Backward compatibility
+YAHOO.util.DataSource.convertNumber = YAHOO.util.DataSource.convertToNumber;
+
 
 /**
  * Converts data to type Date.
  *
- * @method convertToDate
+ * @method DataSource.convertToDate
  * @method oData {Date | String | Number} Data to convert.
  * @return {Date} A Date instance.
  * @static
@@ -548,6 +551,8 @@ YAHOO.util.DataSource.convertToDate = function(oData) {
         return null;
     }
 };
+// Backward compatibility
+YAHOO.util.DataSource.convertDate = YAHOO.util.DataSource.convertToDate;
 
 /////////////////////////////////////////////////////////////////////////////
 //

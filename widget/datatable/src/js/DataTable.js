@@ -55,6 +55,13 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     if(YAHOO.lang.isArray(aColumnDefs)) {
         this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
     }
+    // Backward compatibility
+    else if(aColumnDefs instanceof YAHOO.widget.ColumnSet) {
+        this._oColumnSet =  aColumnDefs;
+        YAHOO.log("DataTable constructor signature has been changed. " +
+        "Please pass an array of Column definitions instead of a ColumnSet instance.",
+        "warn", this.toString());
+    }
     if(!this._oColumnSet instanceof YAHOO.widget.ColumnSet) {
         YAHOO.log("Could not instantiate DataTable due to an invalid ColumnSet", "error", this.toString());
         return;
@@ -604,7 +611,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 /**
  * Class name assigned to TABLE element.
  *
- * @property YAHOO.widget.DataTable.CLASS_TABLE
+ * @property DataTable.CLASS_TABLE
  * @type String
  * @static
  * @final
@@ -615,7 +622,7 @@ YAHOO.widget.DataTable.CLASS_TABLE = "yui-dt-table";
 /**
  * Class name assigned to header container elements within each TH element.
  *
- * @property YAHOO.widget.DataTable.CLASS_HEADER
+ * @property DataTable.CLASS_HEADER
  * @type String
  * @static
  * @final
@@ -626,7 +633,7 @@ YAHOO.widget.DataTable.CLASS_HEADER = "yui-dt-header";
 /**
  * Class name assigned to the primary TBODY element.
  *
- * @property YAHOO.widget.DataTable.CLASS_BODY
+ * @property DataTable.CLASS_BODY
  * @type String
  * @static
  * @final
@@ -637,7 +644,7 @@ YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
 /**
  * Class name assigned to the scrolling TBODY element of a fixed scrolling DataTable.
  *
- * @property YAHOO.widget.DataTable.CLASS_SCROLLBODY
+ * @property DataTable.CLASS_SCROLLBODY
  * @type String
  * @static
  * @final
@@ -648,7 +655,7 @@ YAHOO.widget.DataTable.CLASS_SCROLLBODY = "yui-dt-scrollbody";
 /*TODO: DELETE
  * Class name assigned to cell container elements within each TD element.
  *
- * @property YAHOO.widget.DataTable.CLASS_CELL
+ * @property DataTable.CLASS_CELL
  * @type String
  * @static
  * @final
@@ -659,7 +666,7 @@ YAHOO.widget.DataTable.CLASS_SCROLLBODY = "yui-dt-scrollbody";
 /**
  * Class name assigned to display label elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_LABEL
+ * @property DataTable.CLASS_LABEL
  * @type String
  * @static
  * @final
@@ -670,7 +677,7 @@ YAHOO.widget.DataTable.CLASS_LABEL = "yui-dt-label";
 /**
  * Class name assigned to resizer handle elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_RESIZER
+ * @property DataTable.CLASS_RESIZER
  * @type String
  * @static
  * @final
@@ -681,7 +688,7 @@ YAHOO.widget.DataTable.CLASS_RESIZER = "yui-dt-resizer";
 /**
  * Class name assigned to paginator container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_PAGINATOR
+ * @property DataTable.CLASS_PAGINATOR
  * @type String
  * @static
  * @final
@@ -693,7 +700,7 @@ YAHOO.widget.DataTable.CLASS_PAGINATOR = "yui-dt-paginator";
 /**
  * Class name assigned to Editor container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_EDITOR
+ * @property DataTable.CLASS_EDITOR
  * @type String
  * @static
  * @final
@@ -704,7 +711,7 @@ YAHOO.widget.DataTable.CLASS_EDITOR = "yui-dt-editor";
 /**
  * Class name assigned to first elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_FIRST
+ * @property DataTable.CLASS_FIRST
  * @type String
  * @static
  * @final
@@ -715,7 +722,7 @@ YAHOO.widget.DataTable.CLASS_FIRST = "yui-dt-first";
 /**
  * Class name assigned to last elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_LAST
+ * @property DataTable.CLASS_LAST
  * @type String
  * @static
  * @final
@@ -726,7 +733,7 @@ YAHOO.widget.DataTable.CLASS_LAST = "yui-dt-last";
 /**
  * Class name assigned to even elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_EVEN
+ * @property DataTable.CLASS_EVEN
  * @type String
  * @static
  * @final
@@ -737,7 +744,7 @@ YAHOO.widget.DataTable.CLASS_EVEN = "yui-dt-even";
 /**
  * Class name assigned to odd elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_ODD
+ * @property DataTable.CLASS_ODD
  * @type String
  * @static
  * @final
@@ -748,7 +755,7 @@ YAHOO.widget.DataTable.CLASS_ODD = "yui-dt-odd";
 /**
  * Class name assigned to previous indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_PREVIOUS
+ * @property DataTable.CLASS_PREVIOUS
  * @type String
  * @static
  * @final
@@ -759,7 +766,7 @@ YAHOO.widget.DataTable.CLASS_PREVIOUS = "yui-dt-previous";
 /**
  * Class name assigned next indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_NEXT
+ * @property DataTable.CLASS_NEXT
  * @type String
  * @static
  * @final
@@ -770,7 +777,7 @@ YAHOO.widget.DataTable.CLASS_NEXT = "yui-dt-next";
 /**
  * Class name assigned to selected elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_SELECTED
+ * @property DataTable.CLASS_SELECTED
  * @type String
  * @static
  * @final
@@ -781,7 +788,7 @@ YAHOO.widget.DataTable.CLASS_SELECTED = "yui-dt-selected";
 /**
  * Class name assigned to highlighted elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_HIGHLIGHTED
+ * @property DataTable.CLASS_HIGHLIGHTED
  * @type String
  * @static
  * @final
@@ -792,7 +799,7 @@ YAHOO.widget.DataTable.CLASS_HIGHLIGHTED = "yui-dt-highlighted";
 /**
  * Class name assigned to disabled elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_DISABLED
+ * @property DataTable.CLASS_DISABLED
  * @type String
  * @static
  * @final
@@ -803,7 +810,7 @@ YAHOO.widget.DataTable.CLASS_DISABLED = "yui-dt-disabled";
 /**
  * Class name assigned to empty indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_EMPTY
+ * @property DataTable.CLASS_EMPTY
  * @type String
  * @static
  * @final
@@ -814,7 +821,7 @@ YAHOO.widget.DataTable.CLASS_EMPTY = "yui-dt-empty";
 /**
  * Class name assigned to loading indicatorx.
  *
- * @property YAHOO.widget.DataTable.CLASS_LOADING
+ * @property DataTable.CLASS_LOADING
  * @type String
  * @static
  * @final
@@ -825,7 +832,7 @@ YAHOO.widget.DataTable.CLASS_LOADING = "yui-dt-loading";
 /**
  * Class name assigned to error indicators.
  *
- * @property YAHOO.widget.DataTable.CLASS_ERROR
+ * @property DataTable.CLASS_ERROR
  * @type String
  * @static
  * @final
@@ -836,7 +843,7 @@ YAHOO.widget.DataTable.CLASS_ERROR = "yui-dt-error";
 /**
  * Class name assigned to editable elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_EDITABLE
+ * @property DataTable.CLASS_EDITABLE
  * @type String
  * @static
  * @final
@@ -847,7 +854,7 @@ YAHOO.widget.DataTable.CLASS_EDITABLE = "yui-dt-editable";
 /**
  * Class name assigned to scrollable elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_SCROLLABLE
+ * @property DataTable.CLASS_SCROLLABLE
  * @type String
  * @static
  * @final
@@ -858,7 +865,7 @@ YAHOO.widget.DataTable.CLASS_SCROLLABLE = "yui-dt-scrollable";
 /**
  * Class name assigned to sortable elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_SORTABLE
+ * @property DataTable.CLASS_SORTABLE
  * @type String
  * @static
  * @final
@@ -869,7 +876,7 @@ YAHOO.widget.DataTable.CLASS_SORTABLE = "yui-dt-sortable";
 /**
  * Class name assigned to ascending elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_ASC
+ * @property DataTable.CLASS_ASC
  * @type String
  * @static
  * @final
@@ -880,7 +887,7 @@ YAHOO.widget.DataTable.CLASS_ASC = "yui-dt-asc";
 /**
  * Class name assigned to descending elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_DESC
+ * @property DataTable.CLASS_DESC
  * @type String
  * @static
  * @final
@@ -891,7 +898,7 @@ YAHOO.widget.DataTable.CLASS_DESC = "yui-dt-desc";
 /**
  * Class name assigned to BUTTON container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_BUTTON
+ * @property DataTable.CLASS_BUTTON
  * @type String
  * @static
  * @final
@@ -902,7 +909,7 @@ YAHOO.widget.DataTable.CLASS_BUTTON = "yui-dt-button";
 /**
  * Class name assigned to SELECT container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_DROPDOWN
+ * @property DataTable.CLASS_DROPDOWN
  * @type String
  * @static
  * @final
@@ -913,7 +920,7 @@ YAHOO.widget.DataTable.CLASS_DROPDOWN = "yui-dt-dropdown";
 /**
  * Class name assigned to INPUT TYPE=CHECKBOX container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_CHECKBOX
+ * @property DataTable.CLASS_CHECKBOX
  * @type String
  * @static
  * @final
@@ -924,7 +931,7 @@ YAHOO.widget.DataTable.CLASS_CHECKBOX = "yui-dt-checkbox";
 /**
  * Class name assigned to string container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_STRING
+ * @property DataTable.CLASS_STRING
  * @type String
  * @static
  * @final
@@ -935,7 +942,7 @@ YAHOO.widget.DataTable.CLASS_STRING = "yui-dt-string";
 /**
  * Class name assigned to number container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_NUMBER
+ * @property DataTable.CLASS_NUMBER
  * @type String
  * @static
  * @final
@@ -947,7 +954,7 @@ YAHOO.widget.DataTable.CLASS_NUMBER = "yui-dt-number";
 /**
  * Class name assigned to currency container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_CURRENCY
+ * @property DataTable.CLASS_CURRENCY
  * @type String
  * @static
  * @final
@@ -958,7 +965,7 @@ YAHOO.widget.DataTable.CLASS_CURRENCY = "yui-dt-currency";
 /**
  * Class name assigned to date container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_DATE
+ * @property DataTable.CLASS_DATE
  * @type String
  * @static
  * @final
@@ -969,7 +976,7 @@ YAHOO.widget.DataTable.CLASS_DATE = "yui-dt-date";
 /**
  * Class name assigned to email container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_EMAIL
+ * @property DataTable.CLASS_EMAIL
  * @type String
  * @static
  * @final
@@ -980,7 +987,7 @@ YAHOO.widget.DataTable.CLASS_EMAIL = "yui-dt-email";
 /**
  * Class name assigned to link container elements.
  *
- * @property YAHOO.widget.DataTable.CLASS_LINK
+ * @property DataTable.CLASS_LINK
  * @type String
  * @static
  * @final
@@ -991,7 +998,7 @@ YAHOO.widget.DataTable.CLASS_LINK = "yui-dt-link";
 /**
  * Message to display if DataTable has no data.
  *
- * @property YAHOO.widget.DataTable.MSG_EMPTY
+ * @property DataTable.MSG_EMPTY
  * @type String
  * @static
  * @final
@@ -1002,7 +1009,7 @@ YAHOO.widget.DataTable.MSG_EMPTY = "No records found.";
 /**
  * Message to display while DataTable is loading data.
  *
- * @property YAHOO.widget.DataTable.MSG_LOADING
+ * @property DataTable.MSG_LOADING
  * @type String
  * @static
  * @final
@@ -1013,7 +1020,7 @@ YAHOO.widget.DataTable.MSG_LOADING = "Loading data...";
 /**
  * Message to display while DataTable has data error.
  *
- * @property YAHOO.widget.DataTable.MSG_ERROR
+ * @property DataTable.MSG_ERROR
  * @type String
  * @static
  * @final
@@ -1030,7 +1037,7 @@ YAHOO.widget.DataTable.MSG_ERROR = "Data error.";
 /**
  * Internal class variable for indexing multiple DataTable instances.
  *
- * @property _nCount
+ * @property DataTable._nCount
  * @type Number
  * @private
  * @static
@@ -4285,7 +4292,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
 /**
  * Formats cells for Columns of type "checkbox".
  *
- * @method formatCheckbox
+ * @method DataTable.formatCheckbox
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4305,7 +4312,7 @@ YAHOO.widget.DataTable.formatCheckbox = function(elCell, oRecord, oColumn, oData
 /**
  * Formats Number data for Columns of type "currency".
  *
- * @method formatCurrency
+ * @method DataTable.formatCurrency
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4344,7 +4351,7 @@ YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData
 /**
  * Formats cells for Columns of type "date".
  *
- * @method formatDate
+ * @method DataTable.formatDate
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4365,7 +4372,7 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
 /**
  * Formats cells for Columns of type "dropdown".
  *
- * @method formatDropdown
+ * @method DataTable.formatDropdown
  * @param el {HTMLElement} The element to format.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4422,7 +4429,7 @@ YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTabl
 /**
  * Formats cells for Columns of type "email".
  *
- * @method formatEmail
+ * @method DataTable.formatEmail
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4443,7 +4450,7 @@ YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
 /**
  * Formats cells for Columns of type "link".
  *
- * @method formatLink
+ * @method DataTable.formatLink
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4464,7 +4471,7 @@ YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
 /**
  * Formats cells for Columns of type "number".
  *
- * @method formatNumber
+ * @method DataTable.formatNumber
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4485,7 +4492,7 @@ YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) 
 /**
  * Formats cells for Columns of type "text".
  *
- * @method formatText
+ * @method DataTable.formatText
  * @param elContainer {HTMLElement} Container element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4501,7 +4508,7 @@ YAHOO.widget.DataTable.formatText = function(elContainer, oRecord, oColumn, oDat
 /**
  * Formats cells for Columns of type "textarea".
  *
- * @method formatTextarea
+ * @method DataTable.formatTextarea
  * @param elContainer {HTMLElement} Container element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -4517,7 +4524,7 @@ YAHOO.widget.DataTable.formatTextarea = function(elContainer, oRecord, oColumn, 
 /**
  * Formats cells for Columns of type "textbox".
  *
- * @method formatTextbox
+ * @method DataTable.formatTextbox
  * @param elContainer {HTMLElement} Container element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.

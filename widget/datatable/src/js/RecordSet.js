@@ -110,7 +110,7 @@ else {
 /**
  * Internal class variable to name multiple Recordset instances.
  *
- * @property _nCount
+ * @property RecordSet._nCount
  * @type Number
  * @private
  * @static
