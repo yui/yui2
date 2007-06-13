@@ -3925,6 +3925,32 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
 };
 
 /**
+ * Convenience method to add multiple rows.
+ *
+ * @method addRows
+ * @param aData {Object[]} Array of object literal data for the rows.
+ * @param index {Number} (optional) RecordSet position index at which to add data.
+ */
+YAHOO.widget.DataTable.prototype.addRows = function(aData, index) {
+    if(YAHOO.lang.isArray(aData)) {
+        var i;
+        if(YAHOO.lang.isNumber(index)) {
+            for(i=aData.length-1; i>-1; i--) {
+                this.addRow(aData[i], index);
+            }
+        }
+        else {
+            for(i=0; i<aData.length; i++) {
+                this.addRow(aData[i]);
+            }
+        }
+    }
+    else {
+        YAHOO.log("Could not add rows " + YAHOO.lang.dump(aData));
+    }
+};
+
+/**
  * For the given row, updates the associated Record with the given data. If the
  * row is in view, the corresponding DOM elements are also updated.
  *
@@ -4070,6 +4096,48 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
     }
 };
 
+/**
+ * Convenience method to delete multiple rows.
+ *
+ * @method deleteRows
+ * @param row {HTMLElement | String | Number} DOM element reference or ID string
+ * to DataTable page element or RecordSet index.
+ * @param count {Number} (optional) How many rows to delete. A negative value
+ * will delete towards the beginning.
+ */
+YAHOO.widget.DataTable.prototype.deleteRows = function(row, count) {
+    // Get the Record index...
+    var nRecordIndex = null;
+    // ...by Record index
+    if(YAHOO.lang.isNumber(row)) {
+        nRecordIndex = row;
+    }
+    // ...by element reference
+    else {
+        var elRow = YAHOO.util.Dom.get(row);
+        elRow = this.getTrEl(elRow);
+        if(elRow) {
+            nRecordIndex = this.getRecordIndex(elRow);
+        }
+    }
+    if(nRecordIndex !== null) {
+        if(count && YAHOO.lang.isNumber(count)) {
+            // Start with highest index and work down
+            var startIndex = (count > 0) ? nRecordIndex + count -1 : nRecordIndex;
+            var endIndex = (count > 0) ? nRecordIndex : nRecordIndex + count + 1;
+            for(var i=startIndex; i>endIndex-1; i--) {
+                this.deleteRow(i);
+            }
+        }
+        else {
+            this.deleteRow(nRecordIndex);
+        }
+    }
+    else {
+        YAHOO.log("Could not delete row " + row, "info", this.toString());
+    }
+};
+
 
 
 
@@ -4135,13 +4203,13 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
     }
     
     if(oRecord && oColumn) {
+        var type = oColumn.type || "html";
         var oData = oRecord.getData(oColumn.key);
         if(YAHOO.lang.isFunction(oColumn.formatter)) {
             oColumn.formatter(elCell, oRecord, oColumn, oData);
         }
         //TODO: else if(YAHOO.lang.isString(oColumn.formatter))
         else {
-            var type = oColumn.type;
             var markup = "";
             //var classname = "";
             switch(type) {
@@ -4186,7 +4254,6 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
                     //classname = YAHOO.widget.DataTable.CLASS_STRING;
                     break;
                 default:
-                    type = "html";
                     elCell.innerHTML = ((oData !== undefined) && (oData !== null)) ?
                             oData.toString() : "";
                     //elCell.innerHTML = (oData) ? "<a href=\"#\">"+oData.toString()+"</a>" : "";
@@ -6574,7 +6641,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
     
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(sRequest, oResponse, bError);
+    var ok = this.doBeforeLoadData(sRequest, oResponse);
     
     // Data ok to append
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
