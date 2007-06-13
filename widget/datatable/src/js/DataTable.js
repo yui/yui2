@@ -493,9 +493,12 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
                         // Create OPTION elements
                         for(var j=0; j<dropdownOptions.length; j++) {
+                            var dropdownOption = dropdownOptions[j];
                             var optionEl = document.createElement("option");
-                            optionEl.value = dropdownOptions[j].value || dropdownOptions[j]; //TODO: fixme
-                            optionEl.innerHTML = dropdownOptions[j].text || dropdownOptions[j]; //TODO: fixme
+                            optionEl.value = (YAHOO.lang.isValue(dropdownOption.value)) ?
+                                    dropdownOption.value : dropdownOption;
+                            optionEl.innerHTML = (YAHOO.lang.isValue(dropdownOption.text)) ?
+                                    dropdownOption.text : dropdownOption;
                             optionEl = selectEl.appendChild(optionEl);
                         }
 
@@ -1594,7 +1597,7 @@ One thing, though: it doesn't work in combination with
         }
     }
 
-    return elRow.id || null; //TODO: fixme
+    return elRow.id;
 };
 
 /**
@@ -1618,7 +1621,7 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     // Update Record ID
     elRow.yuiRecordId = oRecord.getId();
     
-    return elRow.id || null; //TODO: fixme
+    return elRow.id;
 };
 
 
@@ -2845,10 +2848,16 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
     var elTarget = YAHOO.util.Event.getTarget(e);
     var newValue = elTarget[elTarget.selectedIndex].value;
 
-    var newRowsPerPage = parseInt(newValue,10) || null; // TODO: fixme
-    var newStartRecordIndex = (oSelf.get("paginator").currentPage-1) * newRowsPerPage;
-    oSelf.set("paginator", {rowsPerPage:newRowsPerPage, startRecordIndex:newStartRecordIndex});
-    //oSelf.refreshView();
+    var newRowsPerPage = YAHOO.lang.isValue(parseInt(newValue,10)) ? parseInt(newValue,10) : null;
+    if(newRowsPerPage !== null) {
+        var newStartRecordIndex = (oSelf.get("paginator").currentPage-1) * newRowsPerPage;
+        oSelf.set("paginator", {rowsPerPage:newRowsPerPage, startRecordIndex:newStartRecordIndex});
+        //TODO: delete
+        //oSelf.refreshView();
+    }
+    else {
+        YAHOO.log("Could not paginate with " + newValue + " rows per page", "error", oSelf.toString());
+    }
 };
 
 /**
@@ -2861,6 +2870,7 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
  */
 YAHOO.widget.DataTable.prototype._onDropdownChange = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
+    //TODO: pass what args?
     //var value = elTarget[elTarget.selectedIndex].value;
     oSelf.fireEvent("dropdownChangeEvent", {event:e, target:elTarget});
 };
@@ -4378,8 +4388,9 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
  * @static
  */
 YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTable) {
-    var selectedValue = oData || oRecord.getData(oColumn.key);//TODO: fixme
-    var options = oColumn.dropdownOptions || null; //TODO: fixme
+    var selectedValue = (YAHOO.lang.isValue(oData)) ? oData : oRecord.getData(oColumn.key);
+    var options = (YAHOO.lang.isArray(oColumn.dropdownOptions)) ?
+            oColumn.dropdownOptions : null;
 
     var selectEl;
     var collection = el.getElementsByTagName("select");
@@ -4404,12 +4415,15 @@ YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTabl
         selectEl.innerHTML = "";
         
         // We have options to populate
-        if(YAHOO.lang.isArray(options)) {
+        if(options) {
             // Create OPTION elements
             for(var i=0; i<options.length; i++) {
+                var option = options[i];
                 var optionEl = document.createElement("option");
-                optionEl.value = options[i].value || options[i]; //TODO: fixme
-                optionEl.innerHTML = options[i].text || options[i]; //TODO: fixme
+                optionEl.value = (YAHOO.lang.isValue(option.value)) ?
+                        option.value : option;
+                optionEl.innerHTML = (YAHOO.lang.isValue(option.text)) ?
+                        option.text : option;
                 optionEl = selectEl.appendChild(optionEl);
             }
         }
@@ -4498,7 +4512,8 @@ YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) 
  * @static
  */
 YAHOO.widget.DataTable.formatText = function(elContainer, oRecord, oColumn, oData) {
-    var value = oRecord.getData(oColumn.key) || ""; //TODO: fixme
+    var value = (YAHOO.lang.isValue(oRecord.getData(oColumn.key))) ?
+            oRecord.getData(oColumn.key) : "";
     //TODO: move to util function
     elContainer.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
 };
@@ -4514,7 +4529,8 @@ YAHOO.widget.DataTable.formatText = function(elContainer, oRecord, oColumn, oDat
  * @static
  */
 YAHOO.widget.DataTable.formatTextarea = function(elContainer, oRecord, oColumn, oData) {
-    var value = oRecord.getData(oColumn.key) || ""; //TODO: fixme
+    var value = (YAHOO.lang.isValue(oRecord.getData(oColumn.key))) ?
+            oRecord.getData(oColumn.key) : "";
     var markup = "<textarea>" + value + "</textarea>";
     elContainer.innerHTML = markup;
 };
@@ -4530,7 +4546,8 @@ YAHOO.widget.DataTable.formatTextarea = function(elContainer, oRecord, oColumn, 
  * @static
  */
 YAHOO.widget.DataTable.formatTextbox = function(elContainer, oRecord, oColumn, oData) {
-    var value = oRecord.getData(oColumn.key) || ""; //TODO: fixme
+    var value = (YAHOO.lang.isValue(oRecord.getData(oColumn.key))) ?
+            oRecord.getData(oColumn.key) : "";
     var markup = "<input type=\"text\" value=\"" + value + "\">";
     elContainer.innerHTML = markup;
 };
@@ -5499,10 +5516,12 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
     var aCheckboxes = [];
     var aLabels = [];
     for(var j=0; j<checkboxOptions.length; j++) {
+        var checkboxOption = checkboxOptions[j];
         aCheckboxes[j] = elContainer.appendChild(document.createElement("input"));
         aCheckboxes[j].type = "checkbox";
         aCheckboxes[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-chkbox" + j;
-        aCheckboxes[j].value = checkboxOptions[j].value || checkboxOptions[j]; //TODO: fixme
+        aCheckboxes[j].value = (YAHOO.lang.isValue(checkboxOption.value)) ?
+                checkboxOption.value : checkboxOption;
         for(var k=0; k<aCheckedValues.length; k++) {
             if(aCheckboxes[j].value === aCheckedValues[k]) {
                 aCheckboxes[j].checked = true;
@@ -5510,7 +5529,8 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
         }
         aLabels[j] = elContainer.appendChild(document.createElement("label"));
         aLabels[j].htmlFor = aCheckboxes[j].id;
-        aLabels[j].innerHTML += checkboxOptions[j].label || checkboxOptions[j]; //TODO: fixme
+        aLabels[j].innerHTML += (YAHOO.lang.isValue(checkboxOption.label)) ?
+                checkboxOption.label : checkboxOption;
 
         // Set up a listener on each check box to track the input value
         YAHOO.util.Event.addListener(aCheckboxes[j], "click",function(){
@@ -5583,9 +5603,12 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
     var dropdownOptions = (oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.dropdownOptions)) ?
             oColumn.editorOptions.dropdownOptions : [];
     for(var j=0; j<dropdownOptions.length; j++) {
+        var dropdownOption = dropdownOptions[j];
         var elOption = document.createElement("option");
-        elOption.value = dropdownOptions[j].value || dropdownOptions[j]; //TODO: fixme
-        elOption.innerHTML = dropdownOptions[j].text || dropdownOptions[j]; //TODO: fixme
+        elOption.value = (YAHOO.lang.isValue(dropdownOption.value)) ?
+                dropdownOption.value : dropdownOption;
+        elOption.innerHTML = (YAHOO.lang.isValue(dropdownOption.text)) ?
+                dropdownOption.text : dropdownOption;
         elOption = elDropdown.appendChild(elOption);
         if(value === elDropdown.options[j].value) {
             elDropdown.options[j].selected = true;
@@ -5623,18 +5646,21 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
         var aLabels = [];
         var aRadios = [];
         for(var j=0; j<radioOptions.length; j++) {
+            var radioOption = radioOptions[j];
             aRadios[j] = elForm.appendChild(document.createElement("input"));
             aRadios[j].type = "radio";
             aRadios[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-radiobtn" + j;
             aRadios[j].name = oSelf._nIndex + oColumn.key;
-            aRadios[j].value = radioOptions[j].value || radioOptions[j]; //TODO: fixme
+            aRadios[j].value = (YAHOO.lang.isValue(radioOption.value)) ?
+                    radioOption.value : radioOption;
             if(value === aRadios[j].value) {
                 aRadios[j].checked = true;
                 oSelf._focusEl(aRadios[j]);
             }
             aLabels[j] = elForm.appendChild(document.createElement("label"));
             aLabels[j].htmlFor = aRadios[j].id;
-            aLabels[j].innerHTML += radioOptions[j].label || radioOptions[j]; //TODO: fixme
+            aLabels[j].innerHTML += (YAHOO.lang.isValue(radioOption.label)) ?
+                    radioOption.label : radioOption;
             
             // Set up a listener on each radio btn to track the input value
             YAHOO.util.Event.addListener(aRadios[j], "click",
