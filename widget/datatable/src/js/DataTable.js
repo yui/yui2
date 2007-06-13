@@ -79,8 +79,19 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Call Element's constructor
     YAHOO.widget.DataTable.superclass.constructor.call(this, elContainer, oConfigs);
 
+    // Initialize inline editing
+    this._initCellEditorEl();
+
+    // Set up sort
+    this.on("headerLabelClickEvent", this.onEventSortColumn);
+    //this.on("headerLabelClickEvent", this.onEventSortColumn);
+
     // Send out for data in an asynchronous request
     oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
+
+    YAHOO.widget.DataTable._nCount++;
+    this.fireEvent("initEvent");
+    YAHOO.log("DataTable initialized", "info", this.toString());
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -115,41 +126,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     YAHOO.util.Event.addListener(elContainer, "scroll", this._onScroll, this); // for IE
     YAHOO.util.Event.addListener(elTbody, "scroll", this._onScroll, this); // for everyone else
-
-
-
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Hook up events
-    //
-    /////////////////////////////////////////////////////////////////////////////
-
-    // Set up sort
-    this.on("headerLabelClickEvent", this.onEventSortColumn);
-    //this.on("headerLabelClickEvent", this.onEventSortColumn);
-    
-    // Set up inline editing
-    //TODO: do this in initializetable?
-    // Editor container element
-    var elEditor = document.createElement("div"); // attach editor to body
-    elEditor.id = "yui-dt-editor" + YAHOO.widget.DataTable._nCount;
-    elEditor.style.display = "none";
-    YAHOO.util.Dom.addClass(elEditor, YAHOO.widget.DataTable.CLASS_EDITOR);
-    elEditor = document.body.appendChild(elEditor);
-
-    var oEditor = {};
-    oEditor.container = elEditor;
-    //oEditor.isActive = false;
-    this._oEditor = oEditor;
-    //TODO: add property to prototype
-    //TODO: add object accessor getEditor
-    
-    this.on("columnEditorKeydownEvent", this.onColumnEditorKeydown);
-    //this.on("columnEditorKeydownEvent", this.onColumnEditorKeydown);
-
-    YAHOO.widget.DataTable._nCount++;
-    this.fireEvent("initEvent");
-    YAHOO.log("DataTable initialized", "info", this.toString());
 };
 
 if(YAHOO.util.Element) {
@@ -715,7 +691,7 @@ YAHOO.widget.DataTable.CLASS_PAGINATOR = "yui-dt-paginator";
 
 
 /**
- * Class name assigned to ColumnEditor container elements.
+ * Class name assigned to Editor container elements.
  *
  * @property YAHOO.widget.DataTable.CLASS_EDITOR
  * @type String
@@ -1275,8 +1251,6 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
 
 // INIT FUNCTIONS
 
-
-
 /**
  * Creates HTML markup for TABLE, THEAD and TBODY elements.
  *
@@ -1477,6 +1451,38 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     }
 };
 
+/**
+ * Creates HTML markup for Cell Editor.
+ *
+ * @method _initCellEditorEl
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
+    // Attach Cell Editor container element to body
+    var elCellEditor = document.createElement("div");
+    elCellEditor.id = this.id + "-celleditor";
+    elCellEditor.style.display = "none";
+    YAHOO.util.Dom.addClass(elCellEditor, YAHOO.widget.DataTable.CLASS_EDITOR);
+    elCellEditor = document.body.appendChild(elCellEditor);
+
+    // Internal tracker of Cell Editor values
+    var oCellEditor = {};
+    oCellEditor.container = elCellEditor;
+    oCellEditor.value = null;
+    oCellEditor.isActive = false;
+    this._oCellEditor = oCellEditor;
+
+    // Handle ESC key
+    this.on("editorKeydownEvent", function(oArgs) {
+        var e = oArgs.event;
+        var elTarget = YAHOO.util.Event.getTarget(e);
+
+        // ESC hides Cell Editor
+        if((e.keyCode == 27)) {
+            this.cancelCellEditor();
+        }
+    });
+};
 
 
 
@@ -1821,9 +1827,8 @@ YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
     
-    if(oSelf.activeColumnEditor) {
-        //oSelf.activeColumnEditor.move();
-        //oSelf.fireEvent("columnEditorBlurEvent", {columnEditor:oSelf.activeColumnEditor});
+    if(oSelf._oCellEditor.isActive) {
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
         oSelf.cancelCellEditor();
     }
     
@@ -1846,17 +1851,14 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
         oSelf._bFocused = false;
         oSelf.fireEvent("tableBlurEvent");
 
-        // Fires columnEditorBlurEvent when click is not within the TABLE.
+        // Fires editorBlurEvent when click is not within the TABLE.
         // For cases when click is within the TABLE, due to timing issues,
-        // the columnEditorBlurEvent needs to get fired by the lower-level DOM click
+        // the editorBlurEvent needs to get fired by the lower-level DOM click
         // handlers below rather than by the TABLE click handler directly.
-        if(oSelf.activeColumnEditor) {
-            // Only if the click was not within the ColumnEditor container
-            if(!YAHOO.util.Dom.isAncestor(oSelf.activeColumnEditor.container, elTarget)) {
-                oSelf.fireEvent("columnEditorBlurEvent", {columnEditor:oSelf.activeColumnEditor});
-            }
-            else {
-                //TODO: built-in save and cancel?
+        if(oSelf._oCellEditor.isActive) {
+            // Only if the click was not within the Cell Editor container
+            if(!YAHOO.util.Dom.isAncestor(oSelf._oCellEditor.container, elTarget)) {
+                oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
             }
         }
     }
@@ -1874,9 +1876,9 @@ YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf.activeColumnEditor &&
-            YAHOO.util.Dom.isAncestor(oSelf.activeColumnEditor.container, elTarget)) {
-        oSelf.fireEvent("columnEditorKeydownEvent", {event:e, columnEditor:oSelf.activeColumnEditor});
+    if(oSelf._oCellEditor.isActive &&
+            YAHOO.util.Dom.isAncestor(oSelf._oCellEditor.container, elTarget)) {
+        oSelf.fireEvent("editorKeydownEvent", {event:e});
     }
 };
 
@@ -2074,8 +2076,8 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf.activeColumnEditor) {
-        oSelf.fireEvent("columnEditorBlurEvent", {columnEditor:oSelf.activeColumnEditor});
+    if(oSelf._oCellEditor.isActive) {
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
     while(elTag != "thead") {
@@ -2130,8 +2132,8 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf.activeColumnEditor) {
-        oSelf.fireEvent("columnEditorBlurEvent", {columnEditor:oSelf.activeColumnEditor});
+    if(oSelf._oCellEditor.isActive) {
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
     while(elTag != "table") {
@@ -2788,8 +2790,8 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf.activeColumnEditor) {
-        oSelf.fireEvent("columnEditorBlurEvent", {columnEditor:oSelf.activeColumnEditor});
+    if(oSelf._oCellEditor.isActive) {
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
     while(elTag != "table") {
@@ -2952,6 +2954,15 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
     return this._oRecordSet;
 };
 
+/**
+ * Returns the DataTable instance's Cell Editor as an object literal.
+ *
+ * @method getCellEditor
+ * @return {Object} Cell Editor object literal values.
+ */
+YAHOO.widget.DataTable.prototype.getCellEditor = function() {
+    return this._oCellEditor;
+};
 
 
 
@@ -3449,7 +3460,9 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
  * @method destroy
  */
 YAHOO.widget.DataTable.prototype.destroy = function() {
-    //TODO: destroy any editors
+    // Destroy Cell Editor
+    YAHOO.util.Event.purgeElement(this._oCellEditor.container, true);
+    document.body.removeChild(this._oCellEditor.container);
     
     var instanceName = this.toString();
     var elContainer = this._elContainer;
@@ -5174,7 +5187,7 @@ YAHOO.widget.DataTable.prototype.unhighlightCell = function(cell) {
 // INLINE EDITING
 
 /*TODO: for TAB handling
- * Shows ColumnEditor for next cell after given cell.
+ * Shows Cell Editor for next cell.
  *
  * @method editNextCell
  * @param elCell {HTMLElement} Cell element from which to edit next cell.
@@ -5183,7 +5196,7 @@ YAHOO.widget.DataTable.prototype.unhighlightCell = function(cell) {
 //};
 
 /**
- * Shows Editor for given cell.
+ * Shows Cell Editor for given cell.
  *
  * @method showCellEditor
  * @param elCell {HTMLElement | String} Cell element to edit.
@@ -5201,23 +5214,22 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
             oColumn = this.getColumn(elCell);
         }
         if(oRecord && oColumn) {
-            this._oEditor.cell = elCell;
-            this._oEditor.record = oRecord;
-            this._oEditor.column = oColumn;
-            this._oEditor.validator = (oColumn.editorOptions &&
-                    YAHOO.lang.isFunction(oColumn.editorOptions.validator)) ?
-                    oColumn.editorOptions.validator : null;
-            this._oEditor.value = oRecord.getData(oColumn.key);
-            var elContainer = this._oEditor.container;
-
-            // Hide Editor
-            elContainer.style.display = "none";
+            var oCellEditor = this._oCellEditor;
+            var elContainer = oCellEditor.container;
             
             // Clear previous Editor
-            this.activeColumnEditor = null;
+            elContainer.style.display = "none";
             YAHOO.util.Event.purgeElement(elContainer, true);
             elContainer.innerHTML = "";
             
+            oCellEditor.cell = elCell;
+            oCellEditor.record = oRecord;
+            oCellEditor.column = oColumn;
+            oCellEditor.validator = (oColumn.editorOptions &&
+                    YAHOO.lang.isFunction(oColumn.editorOptions.validator)) ?
+                    oColumn.editorOptions.validator : null;
+            oCellEditor.value = oRecord.getData(oColumn.key);
+
             // Move to be aligned with cell
             var x, y, offsetEl, scrollEl;
 
@@ -5274,7 +5286,7 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
 
             if(fnEditor) {
                 // Create DOM input elements
-                fnEditor(this._oEditor, this);
+                fnEditor(this._oCellEditor, this);
                 
                 // Show Save/Cancel buttons
                 if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
@@ -5282,34 +5294,34 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                 }
 
                 // Hook to customize the UI
-                this.doBeforeShowCellEditor(this._oEditor);
+                this.doBeforeShowCellEditor(this._oCellEditor);
 
-                this.activeColumnEditor = this._oEditor;
+                oCellEditor.isActive = true;
                 
-                //TODO: pass args
-                this.fireEvent("editorShowEvent", {});
+                //TODO: verify which args to pass
+                this.fireEvent("editorShowEvent", {editor:oCellEditor});
                 YAHOO.log("Cell Editor shown for " + elCell, "info", this.toString());
                 return;
             }
         }
     }
-    YAHOO.log("Could not edit cell " + elCell, "warn", this.toString());
+    YAHOO.log("Could not show Cell Editor for " + elCell, "warn", this.toString());
 };
 
 /**
- * Overridable abstract method to customize Editor UI.
+ * Overridable abstract method to customize Cell Editor UI.
  *
  * @method doBeforeShowCellEditor
- * @param oEditor {Object} Editor values.
+ * @param oCellEditor {Object} Cell Editor object literal.
  */
-YAHOO.widget.DataTable.prototype.doBeforeShowCellEditor = function(oEditor) {
+YAHOO.widget.DataTable.prototype.doBeforeShowCellEditor = function(oCellEditor) {
 };
 
 /**
- * Adds Save/Cancel buttons to Editor.
+ * Adds Save/Cancel buttons to Cell Editor.
  *
  * @method showCellEditorBtns
- * @param elContainer {HTMLElement} Editor Container
+ * @param elContainer {HTMLElement} Cell Editor container.
  */
 YAHOO.widget.DataTable.prototype.showCellEditorBtns = function(elContainer) {
     // Buttons
@@ -5328,64 +5340,69 @@ YAHOO.widget.DataTable.prototype.showCellEditorBtns = function(elContainer) {
 };
 
 /**
- * Saves Editor input to Record.
+ * Saves Cell Editor input to Record.
  *
  * @method saveCellEditor
  */
 YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
     //TODO: Copy the editor's values to pass to the event
-    
-    // Validate input data
-    if(this._oEditor.validator) {
-        var newData = this._oEditor.value;
-        var oldData = this._oEditor.record.getData(this._oEditor.column.key);
-        this._oEditor.value = this._oEditor.validator(newData, oldData);
-        if(this._oEditor.value === null ) {
+    if(this._oCellEditor.isActive) {
+        // Validate input data
+        if(this._oCellEditor.validator) {
+            var newData = this._oCellEditor.value;
+            var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
+            this._oCellEditor.value = this._oCellEditor.validator(newData, oldData);
+            if(this._oCellEditor.value === null ) {
+                // Clear out the Editor
+                this._oCellEditor.container.style.display = "none";
+                this._oCellEditor.value = null;
+                this._oCellEditor.isActive = false;
 
-            // Clear out the Editor
-            this._oEditor.container.style.display = "none";
-            this._oEditor.value = null;
-            //this._oEditor.isActive = false;
-            this.activeColumnEditor = null;
-
-            this.fireEvent("editorRevertEvent",
-                    {editor:this._oEditor, oldData:oldData, newData:newData});
-            YAHOO.log("Could not save editor input due to invalid data " +
-                    YAHOO.lang.dump(newData), "warn", this.toString());
-            return;
+                this.fireEvent("editorRevertEvent",
+                        {editor:this._oCellEditor, oldData:oldData, newData:newData});
+                YAHOO.log("Could not save Cell Editor input due to invalid data " +
+                        YAHOO.lang.dump(newData), "warn", this.toString());
+                return;
+            }
         }
+
+        // Update the Record
+        this._oRecordSet.updateKey(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
+
+        // Update the UI
+        this.formatCell(this._oCellEditor.cell);
+
+        // Clear out the Cell Editor
+        this._oCellEditor.container.style.display = "none";
+        this._oCellEditor.value = null;
+        this._oCellEditor.isActive = false;
+
+        this.fireEvent("editorSaveEvent",
+                {editor:this._oCellEditor, oldData:oldData, newData:newData});
+        YAHOO.log("Cell Editor input saved", "info", this.toString());
     }
-    
-    // Update the Record
-    this._oRecordSet.updateKey(this._oEditor.record, this._oEditor.column.key, this._oEditor.value);
-    
-    // Update the UI
-    this.formatCell(this._oEditor.cell);
-    
-    // Clear out the Editor
-    this.activeEditor = null;
-    this._oEditor.container.style.display = "none";
-    this._oEditor.value = null;
-    //this._oEditor.isActive = false;
-    this.activeColumnEditor = null;
-    
-    this.fireEvent("editorSaveEvent",
-            {editor:this._oEditor, oldData:oldData, newData:newData});
-    YAHOO.log("Cell Editor input saved", "info", this.toString());
+    else {
+        YAHOO.log("Cell Editor not active to save input", "warn", this.toString());
+    }
 };
 
 /**
- * Cancels Editor.
+ * Cancels Cell Editor.
  *
  * @method cancelCellEditor
  */
 YAHOO.widget.DataTable.prototype.cancelCellEditor = function() {
-    // Clear out the Editor
-    this._oEditor.container.style.display = "none";
-    this._oEditor.value = null;
-    //this._oEditor.isActive = false;
-    this.fireEvent("editorRevertEvent", {editor:this._oEditor});
-    YAHOO.log("Editor input reverted", "info", this.toString());
+    if(this._oCellEditor.isActive) {
+        // Clear out the Editor
+        this._oCellEditor.container.style.display = "none";
+        this._oCellEditor.value = null;
+        this._oCellEditor.isActive = false;
+        this.fireEvent("editorCancelEvent", {editor:this._oCellEditor});
+        YAHOO.log("Cell Editor input canceled", "info", this.toString());
+    }
+    else {
+        YAHOO.log("Cell Editor not active to cancel input", "warn", this.toString());
+    }
 };
 
 /**
@@ -5393,6 +5410,7 @@ YAHOO.widget.DataTable.prototype.cancelCellEditor = function() {
  *
  * @method editCheckbox
  */
+//YAHOO.widget.DataTable.editCheckbox = function(elContainer, oRecord, oColumn, oEditor, oSelf) {
 YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
     var elCell = oEditor.cell;
     var oRecord = oEditor.record;
@@ -5430,7 +5448,7 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
                     aCheckedValues.push(aCheckboxes[m].value);
                 }
             }
-            oSelf._oEditor.value = aCheckedValues;
+            oSelf._oCellEditor.value = aCheckedValues;
         });
 
     }
@@ -5467,7 +5485,7 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
         //calFloatClearer.style.clear = "both";
         
         var myDateHandler = function(type, args, obj) {
-            oSelf._oEditor.value = new Date(args[0][0][0], args[0][0][1]-1, args[0][0][2]);
+            oSelf._oCellEditor.value = new Date(args[0][0][0], args[0][0][1]-1, args[0][0][2]);
         };
         calendar.selectEvent.subscribe(myDateHandler);
     }
@@ -5505,7 +5523,7 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
     // Set up a listener on each check box to track the input value
     YAHOO.util.Event.addListener(elDropdown, "change",
         function(){
-            oSelf._oEditor.value = elDropdown[elDropdown.selectedIndex].value;
+            oSelf._oCellEditor.value = elDropdown[elDropdown.selectedIndex].value;
             //TODO: fire customevent so implementers can save on change
     });
             
@@ -5549,7 +5567,7 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
             // Set up a listener on each radio btn to track the input value
             YAHOO.util.Event.addListener(aRadios[j], "click",
                 function(){
-                    oSelf._oEditor.value = this.value;
+                    oSelf._oCellEditor.value = this.value;
             });
         }
     }
@@ -5571,11 +5589,11 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
     var elTextarea = elContainer.appendChild(document.createElement("textarea"));
     elTextarea.style.width = elCell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
     elTextarea.style.height = (4*elCell.offsetHeight) + "px"; //(parseInt(elCell.offsetHeight,10)) + "px";
-    elTextarea.value = value;
+    elTextarea.value = YAHOO.lang.isValue(value) ? value : "";
     
     // Set up a listener on each check box to track the input value
     YAHOO.util.Event.addListener(elTextarea, "keyup", function(){
-        oSelf._oEditor.value = elTextarea.value;
+        oSelf._oCellEditor.value = elTextarea.value;
     });
     
     // Select the text
@@ -5599,10 +5617,10 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
     elTextbox.type = "text";
     elTextbox.style.width = elCell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
     elTextbox.style.height = elCell.offsetHeight + "px"; //(parseInt(elCell.offsetHeight,10)) + "px";
-    elTextbox.value = value;
+    elTextbox.value = YAHOO.lang.isValue(value) ? value : "";
 
-    // Set up a listener on each check box to track the input value
-    YAHOO.util.Event.addListener(elTextbox, "keyup", function(){oSelf._oEditor.value = elTextbox.value;});
+    // Set up a listener on each textbox to track the input value
+    YAHOO.util.Event.addListener(elTextbox, "keyup", function(){oSelf._oCellEditor.value = elTextbox.value;});
 
     // Select the text
     elTextbox.select();
@@ -5633,7 +5651,7 @@ YAHOO.widget.DataTable.validateNumber = function(oData) {
  *
  * @method hideColumnEditor
  */
-YAHOO.widget.DataTable.prototype.hideColumnEditor = function() {
+/*YAHOO.widget.DataTable.prototype.hideColumnEditor = function() {
     if(this.activeColumnEditor) {
         var oColumnEditor = this.activeColumnEditor;
         oColumnEditor.hide();
@@ -5646,14 +5664,14 @@ YAHOO.widget.DataTable.prototype.hideColumnEditor = function() {
         YAHOO.log("Editor hidden", "info", this.toString());
         return;
     }
-};
+};*/
 
 /*TODO: is this dupe?
  * Saves data input from active ColumnEditor.
  *
  * @method saveColumnEditorInput
  */
-YAHOO.widget.DataTable.prototype.saveColumnEditor = function() {
+/*YAHOO.widget.DataTable.prototype.saveColumnEditor = function() {
     if(this.activeColumnEditor) {
         var elCell = this.activeColumnEditor.cell;
         var oColumn = this.activeColumnEditor.column;
@@ -5678,7 +5696,7 @@ YAHOO.widget.DataTable.prototype.saveColumnEditor = function() {
                 {columnEditor:this.activeColumnEditor, oldData:oldValue, newData:newValue});
         YAHOO.log("Saved ColumnEditor input", "info", this.toString());
     }
-};
+};*/
 
 
 
@@ -5799,32 +5817,6 @@ YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse
 // Public Custom Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Handles "columnEditorKeydownEvent". Handles special keys on ColumnEditor,
- * such as ESC.
- *
- * @method onColumnEditorKeydown
- * @param oArgs.event {HTMLEvent} Event object.
- * @param oArgs.columnEditor {YAHOO.widget.ColumnEditor} Active ColumnEditor.
- */
-YAHOO.widget.DataTable.prototype.onColumnEditorKeydown = function(oArgs) {
-    var e = oArgs.event;
-    var oColumnEditor = oArgs.columnEditor;
-    var elTarget = YAHOO.util.Event.getTarget(e);
-
-    // Handle pecial keys to drive interaction with the active ColumnEditor
-    // ESC clears active ColumnEditor
-    if((e.keyCode == 27)) {
-        this.hideColumnEditor();
-    }
-    // ENTER saves active ColumnEditor input
-    /*if(e.keyCode == 13) {
-        // Only if we are not in a text area
-        YAHOO.util.Event.stopEvent(oArgs.event);
-        this.saveColumnEditorInput();
-    }*/
-};
 
 /**
  * Overridable custom event handler to sort Column.
@@ -6504,13 +6496,12 @@ YAHOO.widget.DataTable.prototype.onEventShowCellEditor = function(oArgs) {
 };
 
 /**
- * Overridable custom event handler to save cell editor input.
+ * Overridable custom event handler to save Cell Editor input.
  *
  * @method onEventSaveCellEditor
- * @param oArgs.columnEditor {Object} ColumnEditor.
+ * @param oArgs.editor {Object} Cell Editor object literal.
  */
 YAHOO.widget.DataTable.prototype.onEventSaveCellEditor = function(oArgs) {
-    var editor = oArgs.columnEditor;
     this.saveCellEditor();
 };
 
@@ -7083,14 +7074,14 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      * Fired when an Editor is activated.
      *
      * @event editorShowEvent
-     * @param oArgs.editor {Object} The Editor values.
+     * @param oArgs.editor {Object} The Editor object literal.
      */
 
     /**
      * Fired when an active Editor has a keydown.
      *
      * @event editorKeydownEvent
-     * @param oArgs.editor {Object} The Editor values.
+     * @param oArgs.editor {Object} The Editor object literal.
      * @param oArgs.event {HTMLEvent} The event object.
      */
 
@@ -7098,32 +7089,34 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      * Fired when Editor input is reverted.
      *
      * @event editorRevertEvent
-     * @param oArgs.editor {Object} The Editor values.
-     * @param oArgs.newData {Object} New data value.
-     * @param oArgs.oldData {Object} Old data value.
+     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.newData {Object} New data value. //TODO
+     * @param oArgs.oldData {Object} Old data value. //TODO
      */
 
     /**
      * Fired when Editor input is saved.
      *
      * @event editorSaveEvent
-     * @param oArgs.editor {Object} The Editor values.
+     * @param oArgs.editor {Object} The Editor object literal.
      * @param oArgs.newData {Object} New data value.
      * @param oArgs.oldData {Object} Old data value.
      */
 
     /**
-     * Fired when Editor is hidden.
+     * Fired when Editor input is canceled.
      *
-     * @event editorHideEvent
-     * @param oArgs.editor {Object} The Editor values.
+     * @event editorCancelEvent
+     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.newData {Object} New data value. //TODO
+     * @param oArgs.oldData {Object} Old data value. //TODO
      */
 
     /**
      * Fired when an active Editor has a blur.
      *
      * @event editorBlurEvent
-     * @param oArgs.editor {Object} The Editor values.
+     * @param oArgs.editor {Object} The Editor object literal.
      */
 
 
