@@ -2159,6 +2159,9 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
                 case "a":
                     oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
                     break;
+                case "button":
+                    oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                    break;
                 case "td":
                     oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
                     break;
@@ -4228,6 +4231,10 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
             var markup = "";
             //var classname = "";
             switch(type) {
+                case "button":
+                    YAHOO.widget.DataTable.formatButton(elCell, oRecord, oColumn, oData);
+                    //classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
+                    break;
                 case "checkbox":
                     YAHOO.widget.DataTable.formatCheckbox(elCell, oRecord, oColumn, oData);
                     //classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
@@ -4296,6 +4303,30 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
     }
 };
 
+
+/**
+ * Formats cells for Columns of type "button".
+ *
+ * @method DataTable.formatCheckbox
+ * @param elCell {HTMLElement} Table cell element.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object | Boolean} Data value for the cell. Can be a simple
+ * Boolean to indicate whether checkbox is checked or not. Can be object literal
+ * {checked:bBoolean, label:sLabel}. Other forms of oData require a custom
+ * formatter.
+ * @static
+ */
+YAHOO.widget.DataTable.formatButton= function(elCell, oRecord, oColumn, oData) {
+    var sValue = YAHOO.lang.isValue(oData) ? oData : "Click";
+    //if(YAHOO.widget.Button) {
+    
+    //}
+    //else {
+        elCell.innerHTML = "<button type=\"button\" class=\""+
+                YAHOO.widget.DataTable.CLASS_BUTTON + "\">" + sValue + "</button>";
+    //}
+};
 
 /**
  * Formats cells for Columns of type "checkbox".
@@ -7229,6 +7260,14 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      * @event linkClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The A element.
+     */
+
+    /**
+     * Fired when a BUTTON element is clicked.
+     *
+     * @event buttonClickEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The BUTTON element.
      */
 
     /**

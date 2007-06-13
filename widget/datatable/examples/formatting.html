@@ -18,6 +18,7 @@
 #formatting tr.yui-dt-odd {background-color:#eee;} /*light gray*/
 #formatting td.flag {padding:6px;}
 #formatting td.flag img {width:8px; height:8px;}
+#formatting .yui-dt-field1 {width:5em;}
 
 /* sorting */
 #formatting th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
@@ -97,6 +98,8 @@ YAHOO.example.CustomFormatting = new function() {
 
     var myColumnDefs = [
         {label:"flag", formatter:this.myCustomFormatter}, // use custom formatter
+        {label:"button", type:"button"},
+        {label:"check", type:"checkbox"},
         {key:"field1", sortable:true},
         {key:"field2", sortable:true, type:"date"}, // use the built-in date formatter
         {key:"field3", sortable:true},
@@ -122,6 +125,16 @@ YAHOO.example.CustomFormatting = new function() {
 
     this.myDataTable = new YAHOO.widget.DataTable("formatting", myColumnDefs,
             this.myDataSource, {caption:"Example: Custom Formatting"});
+            
+    this.myDataTable.on("buttonClickEvent", function(oArgs){
+        var oRecord = this.getRecord(oArgs.target);
+        alert(YAHOO.lang.dump(oRecord.getData()));
+    });
+    
+    this.myDataTable.on("checkboxClickEvent", function(oArgs){
+        var elCheckbox = oArgs.target;
+        alert("Checkbox was " + (elCheckbox.checked ? "" : "un") + "checked.");
+    });
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
