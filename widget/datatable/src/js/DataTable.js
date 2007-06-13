@@ -1559,17 +1559,15 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     elRow.id = this.id+"-bdrow"+(this._elTbody.rows.length-1);
     elRow.yuiRecordId = oRecord.getId();
 
-    // Create TBODY cells
+    // Create TD cells
     for(var j=0; j<oColumnSet.keys.length; j++) {
         var oColumn = oColumnSet.keys[j];
         var elCell = elRow.appendChild(document.createElement("td"));
         elCell.id = elRow.id+"-cell"+j;
         elCell.yuiColumnId = oColumn.getId();
         elCell.headers = oColumnSet.headers[j];
-
-        /*var elContainer = document.createElement("div");
-        elContainer.className = YAHOO.widget.DataTable.CLASS_CELL;
-        elCell.appendChild(elContainer);*/
+        // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
+        elCell.yuiCellIndex = j;
 
         // Update UI
         this.formatCell(elCell, oRecord, oColumn);
@@ -2210,7 +2208,7 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
         ////////////////////////////////////////////////////////////////////////
         if(bSHIFT && (sMode == "cellblock")) {
             trIndex = lastSelectedEl.parentNode.sectionRowIndex;
-            tdIndex = lastSelectedEl.cellIndex;
+            tdIndex = lastSelectedEl.yuiCellIndex;
 
             // Arrow DOWN
             if(nKey == 40) {
@@ -2226,8 +2224,8 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
                 }
                 
                 // Is the anchor cell left or right
-                startIndex = Math.min(anchorEl.cellIndex, tdIndex);
-                endIndex = Math.max(anchorEl.cellIndex, tdIndex);
+                startIndex = Math.min(anchorEl.yuiCellIndex, tdIndex);
+                endIndex = Math.max(anchorEl.yuiCellIndex, tdIndex);
                 
                 // Selecting away from anchor cell
                 if(anchorPos <= 0) {
@@ -2263,8 +2261,8 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
                 }
 
                 // Is the anchor cell left or right?
-                startIndex = Math.min(anchorEl.cellIndex, tdIndex);
-                endIndex = Math.max(anchorEl.cellIndex, tdIndex);
+                startIndex = Math.min(anchorEl.yuiCellIndex, tdIndex);
+                endIndex = Math.max(anchorEl.yuiCellIndex, tdIndex);
                 
                 // Selecting away from anchor cell
                 if(anchorPos >= 0) {
@@ -2289,10 +2287,10 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
             // Arrow right
             else if(nKey == 39) {
                 // Is the anchor cell left, right, or same column
-                if(anchorEl.cellIndex > tdIndex) {
+                if(anchorEl.yuiCellIndex > tdIndex) {
                     anchorPos = 1;
                 }
-                else if(anchorEl.cellIndex < tdIndex) {
+                else if(anchorEl.yuiCellIndex < tdIndex) {
                     anchorPos = -1;
                 }
                 else {
@@ -2326,10 +2324,10 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
             // Arrow left
             else if(nKey == 37) {
                 // Is the anchor cell left, right, or same column
-                if(anchorEl.cellIndex > tdIndex) {
+                if(anchorEl.yuiCellIndex > tdIndex) {
                     anchorPos = 1;
                 }
-                else if(anchorEl.cellIndex < tdIndex) {
+                else if(anchorEl.yuiCellIndex < tdIndex) {
                     anchorPos = -1;
                 }
                 else {
@@ -2368,7 +2366,7 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
         ////////////////////////////////////////////////////////////////////////
         else if(bSHIFT && (sMode == "cellrange")) {
             trIndex = lastSelectedEl.parentNode.sectionRowIndex;
-            tdIndex = lastSelectedEl.cellIndex;
+            tdIndex = lastSelectedEl.yuiCellIndex;
 
             // Is the anchor cell above, below, or same row
             if(anchorEl.parentNode.sectionRowIndex > trIndex) {
@@ -2476,7 +2474,7 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
                 // Anchor is on this row
                 else {
                     // Selecting away from anchor
-                    if(anchorEl.cellIndex <= tdIndex) {
+                    if(anchorEl.yuiCellIndex <= tdIndex) {
                         // Select the next cell to the right
                         if(tdIndex < allRows[trIndex].cells.length-1) {
                             newSelectedEl = allRows[trIndex].cells[tdIndex+1];
@@ -2527,7 +2525,7 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
                 // Anchor is on this row
                 else {
                     // Selecting away from anchor cell
-                    if(anchorEl.cellIndex >= tdIndex) {
+                    if(anchorEl.yuiCellIndex >= tdIndex) {
                         // Select the next cell to the left
                         if(tdIndex > 0) {
                             newSelectedEl = allRows[trIndex].cells[tdIndex-1];
@@ -2562,7 +2560,7 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
         ////////////////////////////////////////////////////////////////////////
         else if((sMode == "cellblock") || (sMode == "cellrange") || (sMode == "singlecell")) {
             trIndex = lastSelectedEl.parentNode.sectionRowIndex;
-            tdIndex = lastSelectedEl.cellIndex;
+            tdIndex = lastSelectedEl.yuiCellIndex;
             
             // Arrow down
             if(nKey == 40) {
@@ -6113,15 +6111,15 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
         var elTargetRow = this.getTrEl(elTargetCell);
         var allRows = this._elTbody.rows;
         var nTargetTrIndex = elTargetRow.sectionRowIndex;
-        var nTargetTdIndex = elTarget.cellIndex;
+        var nTargetTdIndex = elTarget.yuiCellIndex;
         var elAnchorCell = YAHOO.util.Dom.get(this._sSelectionAnchorId);
 
         // Both SHIFT and CTRL
         if((sMode != "singlecell") && bSHIFT && bCTRL) {
             // Validate anchor
-            if(elAnchorCell && YAHOO.lang.isNumber(elAnchorCell.cellIndex)) {
+            if(elAnchorCell && YAHOO.lang.isNumber(elAnchorCell.yuiCellIndex)) {
                 nAnchorTrIndex = elAnchorCell.parentNode.sectionRowIndex;
-                nAnchorTdIndex = elAnchorCell.cellIndex;
+                nAnchorTdIndex = elAnchorCell.yuiCellIndex;
                 
                 // Anchor is selected
                 if(this.isSelected(elAnchorCell)) {
@@ -6296,9 +6294,9 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
             this.unselectAllCells();
 
             // Validate anchor
-            if(elAnchorCell && YAHOO.lang.isNumber(elAnchorCell.cellIndex)) {
+            if(elAnchorCell && YAHOO.lang.isNumber(elAnchorCell.yuiCellIndex)) {
                 nAnchorTrIndex = elAnchorCell.parentNode.sectionRowIndex;
-                nAnchorTdIndex = elAnchorCell.cellIndex;
+                nAnchorTdIndex = elAnchorCell.yuiCellIndex;
                 
                 // All cells are on the same row
                 if(nAnchorTrIndex == nTargetTrIndex) {
