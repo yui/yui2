@@ -1251,13 +1251,14 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
  */
 YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     var i,oColumn, colId;
+    var oColumnSet = this._oColumnSet;
     
     // Create THEAD
     var elThead = document.createElement("thead");
     elThead.tabIndex = 0;
 
     // Iterate through each row of Column headers...
-    var colTree = this._oColumnSet.tree;
+    var colTree = oColumnSet.tree;
     for(i=0; i<colTree.length; i++) {
         var elTheadRow = elThead.appendChild(document.createElement("tr"));
         elTheadRow.id = this.id+"-hdrow"+i;
@@ -1284,13 +1285,13 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     this._elThead = this._elTable.appendChild(elThead);
 
     // Set first and last classes on THEAD cells using the values in ColumnSet headers array
-    var aFirstHeaders = this._oColumnSet.headers[0].split(" ");
-    var aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1].split(" ");
+    var aFirstHeaders = oColumnSet.headers[0].split(" ");
+    var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1].split(" ");
     for(i=0; i<aFirstHeaders.length; i++) {
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this.id+"-col"+aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
     }
     for(i=0; i<aLastHeaders.length; i++) {
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this.id+"-col"+aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
     }
     
     // Add Resizer only after DOM has been updated
