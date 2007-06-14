@@ -80,10 +80,10 @@ YAHOO.example.Basic = new function() {
     /****************************************************************************/
     var myColumnDefs = [
         {key:"id", sortable:true, resizeable:true},
-        {key:"date", type:"date", sortable:true, resizeable:true},
-        {key:"quantity", type:"number", sortable:true, resizeable:true},
-        {key:"amount", type:"currency", sortable:true, resizeable:true},
-        {key:"title", type:"html", sortable:true, resizeable:true}
+        {key:"date", formatter:YAHOO.widget.DataTable.formatDate, sortable:true, resizeable:true},
+        {key:"quantity", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true, resizeable:true},
+        {key:"amount", formatter:YAHOO.widget.DataTable.formatCurrency, sortable:true, resizeable:true},
+        {key:"title", sortable:true, resizeable:true}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.bookorders);

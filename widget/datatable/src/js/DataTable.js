@@ -1417,10 +1417,19 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     if(oColumn.width) {
         elTheadCell.style.width = oColumn.width;
     }
-    if(oColumn.className) {
-        YAHOO.util.Dom.addClass(elTheadCell,oColumn.className);
+
+    var aCustomClasses;
+    if(YAHOO.lang.isString(oColumn.className)) {
+        aCustomClasses = [oColumn.className];
     }
-    YAHOO.util.Dom.addClass(elTheadCell, "yui-dt-"+oColumn.key);
+    else if(YAHOO.lang.isArray(oColumn.className)) {
+        aCustomClasses = oColumn.className;
+    }
+    if(aCustomClasses) {
+        for(var i=0; i<aCustomClasses.length; i++) {
+            YAHOO.util.Dom.addClass(elTheadCell,aCustomClasses[i]);
+        }
+    }
     
     //TODO: Apply CSS for sorted tables
     //var sortedBy = this.get("sortedBy");
@@ -4238,82 +4247,87 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
     }
     
     if(oRecord && oColumn) {
-        var type = oColumn.type || "html";
+        //var type = oColumn.type || "html";
         var oData = oRecord.getData(oColumn.key);
-        if(YAHOO.lang.isFunction(oColumn.formatter)) {
-            oColumn.formatter(elCell, oRecord, oColumn, oData);
-        }
-        //TODO: else if(YAHOO.lang.isString(oColumn.formatter))
-        else {
-            var markup = "";
-            //var classname = "";
-            switch(type) {
+        //TODO: formatter string shortcuts
+
+        var fnFormatter;
+        if(YAHOO.lang.isString(oColumn.formatter)) {
+            switch(oColumn.formatter) {
                 case "button":
-                    YAHOO.widget.DataTable.formatButton(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
+                    fnFormatter = YAHOO.widget.DataTable.formatButton;
                     break;
                 case "checkbox":
-                    YAHOO.widget.DataTable.formatCheckbox(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_CHECKBOX;
+                    fnFormatter = YAHOO.widget.DataTable.formatCheckbox;
                     break;
                 case "currency":
-                    YAHOO.widget.DataTable.formatCurrency(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_CURRENCY;
+                    fnFormatter = YAHOO.widget.DataTable.formatCurrency;
                     break;
                 case "date":
-                    YAHOO.widget.DataTable.formatDate(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_DATE;
-                    break;
-                case "email":
-                    YAHOO.widget.DataTable.formatEmail(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_EMAIL;
-                    break;
-                case "link":
-                    YAHOO.widget.DataTable.formatLink(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_LINK;
-                    break;
-                case "number":
-                    YAHOO.widget.DataTable.formatNumber(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_NUMBER;
+                    fnFormatter = YAHOO.widget.DataTable.formatDate;
                     break;
                 case "dropdown":
-                    YAHOO.widget.DataTable.formatDropdown(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_DROPDOWN;
+                    fnFormatter = YAHOO.widget.DataTable.formatDropdown;
                     break;
-                case "textarea":
-                    YAHOO.widget.DataTable.formatTextarea(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_TEXTAREA;
+                case "email":
+                    fnFormatter = YAHOO.widget.DataTable.formatEmail;
                     break;
-                case "textbox":
-                    YAHOO.widget.DataTable.formatTextbox(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_TEXTBOX;
+                case "link":
+                    fnFormatter = YAHOO.widget.DataTable.formatLink;
+                    break;
+                case "number":
+                    fnFormatter = YAHOO.widget.DataTable.formatNumber;
+                    break;
+                case "radio":
+                    fnFormatter = YAHOO.widget.DataTable.formatRadio;
                     break;
                 case "text":
-                    YAHOO.widget.DataTable.formatText(elCell, oRecord, oColumn, oData);
-                    //classname = YAHOO.widget.DataTable.CLASS_STRING;
+                    fnFormatter = YAHOO.widget.DataTable.formatText;
+                    break;
+                case "textarea":
+                    fnFormatter = YAHOO.widget.DataTable.formatTextarea;
+                    break;
+                case "textbox":
+                    fnFormatter = YAHOO.widget.DataTable.formatTextbox;
                     break;
                 default:
-                    elCell.innerHTML = ((oData !== undefined) && (oData !== null)) ?
-                            oData.toString() : "";
-                    //elCell.innerHTML = (oData) ? "<a href=\"#\">"+oData.toString()+"</a>" : "";
-                    //classname = YAHOO.widget.DataTable.CLASS_STRING;
-                    break;
+                    YAHOO.log("Could not find formatter function " +
+                            oColumn.formatter, "warn", this.toString());
+                    fnFormatter = null;
+            }
+        }
+        else if(YAHOO.lang.isFunction(oColumn.formatter)) {
+            fnFormatter = oColumn.formatter;
+        }
+
+        // Apply special formatter
+        if(fnFormatter) {
+            fnFormatter(elCell, oRecord, oColumn, oData);
+        }
+        else {
+            elCell.innerHTML = (YAHOO.lang.isValue(oData)) ? oData.toString() : "";
+        }
+
+        // Add custom classNames
+        var aCustomClasses = null;
+        if(YAHOO.lang.isString(oColumn.className)) {
+            aCustomClasses = [oColumn.className];
+        }
+        else if(YAHOO.lang.isArray(oColumn.className)) {
+            aCustomClasses = oColumn.className;
+        }
+        if(aCustomClasses) {
+            for(var i=0; i<aCustomClasses.length; i++) {
+                YAHOO.util.Dom.addClass(elCell, aCustomClasses[i]);
             }
         }
 
-        //TODO: fixme
-        //if(oColumn.className) {
-            //YAHOO.util.Dom.addClass(elCell, "yui-dt-"+type);
-            //TODO: delete?
-            YAHOO.util.Dom.addClass(elCell, "yui-dt-"+oColumn.key);
-        //}
-
+        // Is editable?
         if(oColumn.editor) {
             YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
         }
         
         this.fireEvent("cellFormatEvent", {record:oRecord, key:oColumn.key, el:elCell});
-        YAHOO.log("Formatted " + elCell + " type " + type, "info", this.toString());
     }
     else {
         YAHOO.log("Could not format cell " + elCell, "error", this.toString());
@@ -4322,16 +4336,14 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
 
 
 /**
- * Formats cells for Columns of type "button".
+ * Formats a BUTTON element.
  *
- * @method DataTable.formatCheckbox
+ * @method DataTable.formatButton
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oData {Object | Boolean} Data value for the cell. Can be a simple
- * Boolean to indicate whether checkbox is checked or not. Can be object literal
- * {checked:bBoolean, label:sLabel}. Other forms of oData require a custom
- * formatter.
+ * @param oData {Object | Boolean} Data value for the cell. By default, the value
+ * is what gets written to the BUTTON.
  * @static
  */
 YAHOO.widget.DataTable.formatButton= function(elCell, oRecord, oColumn, oData) {
@@ -4346,7 +4358,7 @@ YAHOO.widget.DataTable.formatButton= function(elCell, oRecord, oColumn, oData) {
 };
 
 /**
- * Formats cells for Columns of type "checkbox".
+ * Formats a CHECKBOX element.
  *
  * @method DataTable.formatCheckbox
  * @param elCell {HTMLElement} Table cell element.
@@ -4366,7 +4378,7 @@ YAHOO.widget.DataTable.formatCheckbox = function(elCell, oRecord, oColumn, oData
 };
 
 /**
- * Formats Number data for Columns of type "currency".
+ * Formats currency. Default unit is USD.
  *
  * @method DataTable.formatCurrency
  * @param elCell {HTMLElement} Table cell element.
@@ -4405,7 +4417,7 @@ YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData
 };
 
 /**
- * Formats cells for Columns of type "date".
+ * Formats JavaScript Dates.
  *
  * @method DataTable.formatDate
  * @param elCell {HTMLElement} Table cell element.
@@ -4426,7 +4438,7 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
 };
 
 /**
- * Formats cells for Columns of type "dropdown".
+ * Formats SELECT elements.
  *
  * @method DataTable.formatDropdown
  * @param el {HTMLElement} The element to format.
@@ -4487,7 +4499,7 @@ YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTabl
 };
 
 /**
- * Formats cells for Columns of type "email".
+ * Formats emails.
  *
  * @method DataTable.formatEmail
  * @param elCell {HTMLElement} Table cell element.
@@ -4508,7 +4520,7 @@ YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
 };
 
 /**
- * Formats cells for Columns of type "link".
+ * Formats links.
  *
  * @method DataTable.formatLink
  * @param elCell {HTMLElement} Table cell element.
@@ -4529,7 +4541,7 @@ YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
 };
 
 /**
- * Formats cells for Columns of type "number".
+ * Formats numbers.
  *
  * @method DataTable.formatNumber
  * @param elCell {HTMLElement} Table cell element.
@@ -4550,7 +4562,7 @@ YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) 
 };
 
 /**
- * Formats cells for Columns of type "text".
+ * Formats text strings.
  *
  * @method DataTable.formatText
  * @param elContainer {HTMLElement} Container element.
@@ -4567,7 +4579,7 @@ YAHOO.widget.DataTable.formatText = function(elContainer, oRecord, oColumn, oDat
 };
 
 /**
- * Formats cells for Columns of type "textarea".
+ * Formats TEXTAREA elements.
  *
  * @method DataTable.formatTextarea
  * @param elContainer {HTMLElement} Container element.
@@ -4584,7 +4596,7 @@ YAHOO.widget.DataTable.formatTextarea = function(elContainer, oRecord, oColumn, 
 };
 
 /**
- * Formats cells for Columns of type "textbox".
+ * Formats INPUT TYPE=TEXT elements.
  *
  * @method DataTable.formatTextbox
  * @param elContainer {HTMLElement} Container element.
@@ -5543,7 +5555,7 @@ YAHOO.widget.DataTable.prototype.cancelCellEditor = function() {
 };
 
 /**
- * Enables Editor of type "checkbox".
+ * Enables CHECKBOX Editor.
  *
  * @method editCheckbox
  */
@@ -5598,7 +5610,7 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
 };
 
 /**
- * Enables Editor of type "date".
+ * Enables Date Editor.
  *
  * @method editDate
  */
@@ -5635,7 +5647,7 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
 };
 
 /**
- * Enables Editor of type "dropdown".
+ * Enables SELECT Editor.
  *
  * @method editDropdown
  */
@@ -5675,7 +5687,7 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
 };
 
 /**
- * Enables Editor of type "radio".
+ * Enables INPUT TYPE=RADIO Editor.
  *
  * @method editRadio
  */
@@ -5720,7 +5732,7 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
 };
 
 /**
- * Enables Editor of type "textarea".
+ * Enables TEXTAREA Editor.
  *
  * @method editTextarea
  */
@@ -5747,7 +5759,7 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
 };
 
 /**
- * Enables Editor of type "textbox".
+ * Enables INPUT TYPE=TEXT Editor.
  *
  * @method editTextbox
  */

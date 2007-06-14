@@ -82,7 +82,7 @@ YAHOO.example.XHR_Text = new function() {
         {key:"Name", sortable:true, formatter:this.formatUrl},
         {key:"Phone"},
         {key:"City"},
-        {key:"Rating", type:"number", sortable:true}
+        {key:"Rating", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true}
 
     ];
 

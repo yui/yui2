@@ -75,7 +75,7 @@ YAHOO.example.NestedHeaders = new function() {
     /****************************************************************************/
     var myColumnDefs = [
         {key:"page", label:"Page", sortable:true},
-        {label:"Statistics", type:"number", children:[
+        {label:"Statistics", formatter:YAHOO.widget.DataTable.formatNumber, children:[
             {label:"Visits",
                 children: [
                     {key:"visitsmonth", label:"This Month",sortable:true},

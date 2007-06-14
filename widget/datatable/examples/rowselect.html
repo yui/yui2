@@ -70,7 +70,7 @@ YAHOO.example.RowSelection = new function() {
     /****************************************************************************/
 
     var myColumnDefs = [
-        {key:"Date",type:"date"},
+        {key:"Date",formatter:YAHOO.widget.DataTable.formatDate},
         {key:"To"},
         {key:"From"},
         {key:"Subject"}

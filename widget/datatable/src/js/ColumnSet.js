@@ -101,9 +101,9 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     if(oColumn.sortable && (child.sortable === undefined)) {
                         child.sortable = oColumn.sortable;
                     }
-                    if(oColumn.type && (child.type === undefined)) {
+                    /*if(oColumn.type && (child.type === undefined)) {
                         child.type = oColumn.type;
-                    }
+                    }*/
                     if(oColumn.width && (child.width === undefined)) {
                         child.width = oColumn.width;
                     }
@@ -466,7 +466,7 @@ YAHOO.widget.Column.prototype.key = null;
  */
 YAHOO.widget.Column.prototype.label = null;
 
-/**
+/*TODO: delete
  * Data types: "string", "number", "date", "currency", "checkbox", "select",
  * "email", "link".
  *
@@ -474,7 +474,7 @@ YAHOO.widget.Column.prototype.label = null;
  * @type String
  * @default "string"
  */
-YAHOO.widget.Column.prototype.type = "string";
+//YAHOO.widget.Column.prototype.type = "string";
 
 /**
  * Column head cell ABBR for accessibility.
@@ -501,19 +501,18 @@ YAHOO.widget.Column.prototype.children = null;
 YAHOO.widget.Column.prototype.width = null;
 
 /**
- * Custom CSS class to be applied to every cell in the Column.
+ * Custom CSS class or array of classes to be applied to every cell in the Column.
  *
  * @property className
- * @type String
+ * @type String || String[]
  */
 YAHOO.widget.Column.prototype.className = null;
 
 /**
- * Defines a custom format function for Column, otherwise default is used,
- * according to Column type.
+ * Defines a format function.
  *
  * @property formatter
- * @type HTMLFunction
+ * @type String || HTMLFunction
  */
 YAHOO.widget.Column.prototype.formatter = null;
 
@@ -527,15 +526,15 @@ YAHOO.widget.Column.prototype.formatter = null;
 //YAHOO.widget.Column.prototype.parser = null;
 
 /**
- * Defines the type of editor for Column, otherwise Column is not editable.
+ * Defines an editor function, otherwise Column is not editable.
  *
  * @property editor
- * @type String
+ * @type String || HTMLFunction
  */
 YAHOO.widget.Column.prototype.editor = null;
 
 /**
- * Defines the editor options for Column in an object literal of param:value pairs.
+ * Defines editor options for Column in an object literal of param:value pairs.
  *
  * @property editorOptions
  * @type Object
@@ -760,7 +759,7 @@ YAHOO.widget.Column.prototype.getRowspan = function() {
     //return (sMarkup.indexOf("checked") < 0) ? false : true;
 };*/
 
-/**
+/*TODO: delete
  * Instantiates or retrieves ColumnEditor instance.
  *
  * @method getColumnEditor
@@ -768,7 +767,7 @@ YAHOO.widget.Column.prototype.getRowspan = function() {
  * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
  * @return YAHOO.widget.ColumnEditor
  */
-YAHOO.widget.Column.prototype.getColumnEditor = function(elCell, oRecord) {
+/*YAHOO.widget.Column.prototype.getColumnEditor = function(elCell, oRecord) {
 //Sync up the arg signature for ColumnEditor constructor and show()
     var oEditor = this.editor;
     if(YAHOO.lang.isString(oEditor)) {
@@ -780,7 +779,7 @@ YAHOO.widget.Column.prototype.getColumnEditor = function(elCell, oRecord) {
         oEditor.show(elCell, oRecord, this);
     }
     return oEditor;
-};
+};*/
 
 
 /****************************************************************************/

@@ -98,14 +98,14 @@ YAHOO.example.CustomFormatting = new function() {
 
     var myColumnDefs = [
         {label:"flag", formatter:this.myCustomFormatter}, // use custom formatter
-        {label:"button", type:"button"},
-        {label:"check", type:"checkbox"},
+        {label:"button", formatter:YAHOO.widget.DataTable.formatButton}, // use the built-in button formatter
+        {label:"check", formatter:YAHOO.widget.DataTable.formatCheckbox}, // use the built-in checkbox formatter
         {key:"field1", sortable:true},
-        {key:"field2", sortable:true, type:"date"}, // use the built-in date formatter
+        {key:"field2", sortable:true, formatter:YAHOO.widget.DataTable.formatDate}, // use the built-in date formatter
         {key:"field3", sortable:true},
-        {key:"field4", sortable:true, type:"currency"}, // use the built-in currency formatter
-        {key:"field5", sortable:true, type:"email"}, // use the overridden email formatter
-        {key:"field6", sortable:true, type:"link"} // use the built-in link formatter
+        {key:"field4", sortable:true, formatter:YAHOO.widget.DataTable.formatCurrency}, // use the built-in currency formatter
+        {key:"field5", sortable:true, formatter:YAHOO.widget.DataTable.formatEmail}, // use the overridden email formatter
+        {key:"field6", sortable:true, formatter:YAHOO.widget.DataTable.formatLink} // use the built-in link formatter
     ];
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.formatting);

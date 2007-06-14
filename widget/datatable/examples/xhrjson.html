@@ -83,7 +83,7 @@ YAHOO.example.XHR_JSON = new function() {
         {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
         {key:"Phone"},
         {key:"City"},
-        {key:"Rating.AverageRating", text:"Rating", type:"number", sortable:true}
+        {key:"Rating.AverageRating", text:"Rating", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php?");
@@ -95,6 +95,11 @@ YAHOO.example.XHR_JSON = new function() {
 
     this.myDataTable = new YAHOO.widget.DataTable("json", myColumnDefs,
             this.myDataSource, {initialRequest:"query=pizza&zip=94089&results=10&output=json"});
+            
+    this.myDataSource.sendRequest("query=italian&zip=94089&results=10&output=json",
+            this.myDataTable.onDataReturnAppendRows, this.myDataTable);
+    this.myDataSource.sendRequest("query=chinese&zip=94089&results=10&output=json",
+            this.myDataTable.onDataReturnInsertRows, this.myDataTable);
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

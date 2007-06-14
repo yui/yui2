@@ -83,7 +83,7 @@ YAHOO.example.XHR_XML = new function() {
         {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
         {key:"Phone"},
         {key:"City"},
-        {key:"AverageRating", text:"Rating", type:"number", sortable:true}
+        {key:"AverageRating", text:"Rating",formatter:YAHOO.widget.DataTable.formatNumber, sortable:true}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php?");
