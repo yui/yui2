@@ -1,7 +1,7 @@
 <!doctype html public "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 <head>
-<title>Example: DataTable - Integrated Feature Set (YUI Library)</title>
+<title>Example: DataTable - Complex Table (Integrated Feature Set) (YUI Library)</title>
 <link type="text/css" rel="stylesheet" href="../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../build/fonts/fonts.css">
 <link type="text/css" rel="stylesheet" href="../../build/logger/assets/logger.css">
@@ -20,8 +20,8 @@
 #complex tr.yui-dt-odd {background-color:#eee;} /*light gray*/
 #complex tr.yui-dt-selected {background-color:#97C0A5;} /*green*/
 #complex .yui-dt-paginator .yui-dt-selected {font-weight:bold;}
-.areacodestyle {text-align:center;}
-.statestyle, .notesstyle {padding-left:1em;}
+.yui-dt-col-areacode {text-align:center;}
+.myStrings {padding-left:1em;}
 
 /* sorting */
 #complex th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
@@ -32,7 +32,7 @@
 </head>
 <body>
 <div id="hd">
-    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Integrated Feature Set</h1>
+    <h1><img src="./img/logo.gif" class="logo" alt="Y!"/><a href="./">DataTable Widget</a> :: Complex Table (Integrated Feature Set)</h1>
 </div>
 <div id="bd">
     <div id="complex"></div>
@@ -101,10 +101,10 @@ YAHOO.example.IntegratedFeatureSet = new function() {
     };
 
     var myColumnDefs = [
-        {key:"areacode",text:"Area Codes",width:"8em",className:"areacodestyle",sortable:true},
-        {key:"state",text:"States",width:"16em",className:"statestyle", sortable:true,
+        {key:"areacode",text:"Area Codes",width:"8em",sortable:true},
+        {key:"state",text:"States",width:"16em",className:"myStrings", sortable:true,
                 sortOptions:{sortFunction:this.sortStates}},
-        {key:"notes",text:"Notes (editable)",className:"notesstyle",editor:"textbox"}
+        {key:"notes",text:"Notes (editable)",className:"myStrings",editor:"textbox"}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
@@ -114,7 +114,7 @@ YAHOO.example.IntegratedFeatureSet = new function() {
     };
 
     var myConfigs = {
-        caption:"Example: Integrated Feature Set",
+        caption:"Example: Complex Table (Integrated Feature Set)",
         sortedBy:{key:"areacode",dir:"asc"},
         paginator:true,
         paginatorOptions: {
