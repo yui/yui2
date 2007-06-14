@@ -6691,6 +6691,9 @@ YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
 };
+// Backward compatibility
+YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows =
+        YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable;
 
 /**
  * Callback function receives data from DataSource and appends to an existing
