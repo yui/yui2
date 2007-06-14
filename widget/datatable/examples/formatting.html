@@ -130,7 +130,7 @@ YAHOO.example.CustomFormatting = new function() {
         var oRecord = this.getRecord(oArgs.target);
         alert(YAHOO.lang.dump(oRecord.getData()));
     });
-    
+
     this.myDataTable.on("checkboxClickEvent", function(oArgs){
         var elCheckbox = oArgs.target;
         alert("Checkbox was " + (elCheckbox.checked ? "" : "un") + "checked.");

@@ -1902,7 +1902,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    while(elTag != "table") {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                  break;
@@ -1931,9 +1931,11 @@ YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
                 break;
         }
         elTarget = elTarget.parentNode;
-        elTag = elTarget.tagName.toLowerCase();
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
     }
-    oSelf.fireEvent("tableMouseoverEvent",{target:elTarget,event:e});
+    oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elTable),event:e});
 };
 
 /**
@@ -1948,7 +1950,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    while(elTag != "table") {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 break;
@@ -1977,9 +1979,11 @@ YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
                 break;
         }
         elTarget = elTarget.parentNode;
-        elTag = elTarget.tagName.toLowerCase();
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
     }
-    oSelf.fireEvent("tableMouseoutEvent",{target:elTarget,event:e});
+    oSelf.fireEvent("tableMouseoutEvent",{target:(elTarget || oSelf._elTable),event:e});
 };
 
 /**
@@ -1994,7 +1998,7 @@ YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    while(elTag != "table") {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 break;
@@ -2023,9 +2027,11 @@ YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
                 break;
         }
         elTarget = elTarget.parentNode;
-        elTag = elTarget.tagName.toLowerCase();
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
     }
-    oSelf.fireEvent("tableMousedownEvent",{target:elTarget,event:e});
+    oSelf.fireEvent("tableMousedownEvent",{target:(elTarget || oSelf._elTable),event:e});
 };
 
 /**
@@ -2040,7 +2046,7 @@ YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    while(elTag != "table") {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 break;
@@ -2067,9 +2073,11 @@ YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
                 break;
         }
         elTarget = elTarget.parentNode;
-        elTag = elTarget.tagName.toLowerCase();
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
     }
-    oSelf.fireEvent("tableDblclickEvent",{target:elTarget,event:e});
+    oSelf.fireEvent("tableDblclickEvent",{target:(elTarget || oSelf._elTable),event:e});
 };
 
 /**
@@ -2088,7 +2096,7 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
-    while(elTag != "thead") {
+    while(elTarget && (elTag != "thead")) {
             switch(elTag) {
                 case "body":
                     break;
@@ -2107,9 +2115,11 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
                     break;
             }
             elTarget = elTarget.parentNode;
-            elTag = elTarget.tagName.toLowerCase();
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
     }
-    oSelf.fireEvent("tableClickEvent",{target:elTarget,event:e});
+    oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
 };
 
 /**
@@ -2144,37 +2154,39 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
-    while(elTag != "table") {
-            switch(elTag) {
-                case "body":
-                    break;
-                case "input":
-                    if(elTarget.type.toLowerCase() == "checkbox") {
-                        oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
-                    }
-                    else if(elTarget.type.toLowerCase() == "radio") {
-                        oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
-                    }
-                    break;
-                case "a":
-                    oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
-                    break;
-                case "button":
-                    oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
-                    break;
-                case "td":
-                    oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
-                    break;
-                case "tr":
-                    oSelf.fireEvent("rowClickEvent",{target:elTarget,event:e});
-                    break;
-                default:
-                    break;
-            }
-            elTarget = elTarget.parentNode;
+    while(elTarget && (elTag != "table")) {
+        switch(elTag) {
+            case "body":
+                break;
+            case "input":
+                if(elTarget.type.toLowerCase() == "checkbox") {
+                    oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
+                }
+                else if(elTarget.type.toLowerCase() == "radio") {
+                    oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
+                }
+                break;
+            case "a":
+                oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
+                break;
+            case "button":
+                oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                break;
+            case "td":
+                oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
+                break;
+            case "tr":
+                oSelf.fireEvent("rowClickEvent",{target:elTarget,event:e});
+                break;
+            default:
+                break;
+        }
+        elTarget = elTarget.parentNode;
+        if(elTarget) {
             elTag = elTarget.tagName.toLowerCase();
+        }
     }
-    oSelf.fireEvent("tableClickEvent",{target:elTarget,event:e});
+    oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
 };
 
 /**
@@ -2805,7 +2817,7 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
-    while(elTag != "table") {
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
                 return;
@@ -2835,7 +2847,12 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
                 return;
         }
         elTarget = elTarget.parentNode;
-        elTag = elTarget.tagName.toLowerCase();
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
+        else {
+            return;
+        }
     }
 };
 
