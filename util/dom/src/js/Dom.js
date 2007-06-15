@@ -21,7 +21,7 @@
     // regex cache
     var patterns = {
         HYPHEN: /(-[a-z])/i, // to normalize get/setStyle
-        ROOT_TAG: /body|html/i // body for quirks mode, html for standards
+        ROOT_TAG: /^body|html$/i // body for quirks mode, html for standards
     };
 
     var toCamel = function(property) {
@@ -78,7 +78,6 @@
                         }
                     }
                     return val / 100;
-                    break;
                 case 'float': // fix reserved word
                     property = 'styleFloat'; // fall through
                 default: 
@@ -456,14 +455,17 @@
          */
         addClass: function(el, className) {
             var f = function(el) {
-                if (this.hasClass(el, className)) { return; } // already present
+                if (this.hasClass(el, className)) {
+                    return false; // already present
+                }
                 
                 YAHOO.log('addClass adding ' + className, 'info', 'Dom');
                 
-                el.className = [el.className, className].join(' ');
+                el.className = YAHOO.lang.trim([el.className, className].join(' '));
+                return true;
             };
             
-            Y.Dom.batch(el, f, Y.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
     
         /**
@@ -477,7 +479,7 @@
 
             var f = function(el) {
                 if (!this.hasClass(el, className)) {
-                    return; // not present
+                    return false; // not present
                 }                 
 
                 YAHOO.log('removeClass removing ' + className, 'info', 'Dom');
@@ -487,10 +489,12 @@
                 if ( this.hasClass(el, className) ) { // in case of multiple adjacent
                     this.removeClass(el, className);
                 }
-                
+
+                el.className = YAHOO.lang.trim(el.className); // remove any trailing spaces
+                return true;
             };
             
-            Y.Dom.batch(el, f, Y.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -502,7 +506,7 @@
          * @param {String} newClassName the class name that will be replacing the old class name
          */
         replaceClass: function(el, oldClassName, newClassName) {
-            if (oldClassName === newClassName) { // avoid infinite loop
+            if (!newClassName || oldClassName === newClassName) { // avoid infinite loop
                 return false;
             }
             
@@ -513,7 +517,7 @@
             
                 if ( !this.hasClass(el, oldClassName) ) {
                     this.addClass(el, newClassName); // just add it if nothing to replace
-                    return; // note return
+                    return true; // NOTE: return
                 }
             
                 el.className = el.className.replace(re, ' ' + newClassName + ' ');
@@ -521,9 +525,12 @@
                 if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
                     this.replaceClass(el, oldClassName, newClassName);
                 }
+
+                el.className = YAHOO.lang.trim(el.className); // remove any trailing spaces
+                return true;
             };
             
-            Y.Dom.batch(el, f, Y.Dom, true);
+            return Y.Dom.batch(el, f, Y.Dom, true);
         },
         
         /**
@@ -569,7 +576,7 @@
             if (!haystack || !needle) { return false; }
             
             var f = function(needle) {
-                if (haystack.contains && !isSafari) { // safari "contains" is broken
+                if (haystack.contains) {
                     YAHOO.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
                     return haystack.contains(needle);
                 }
@@ -577,24 +584,6 @@
                     YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(needle) & 16), 'info', 'Dom');
                     return !!(haystack.compareDocumentPosition(needle) & 16);
                 }
-                else { // loop up and test each parent
-                    var parent = needle.parentNode;
-                    
-                    while (parent) {
-                        if (parent == haystack) {
-                            YAHOO.log('isAncestor returning true', 'info', 'Dom');
-                            return true;
-                        }
-                        else if (!parent.tagName || parent.tagName.toUpperCase() == 'HTML') {
-                            YAHOO.log('isAncestor returning false', 'info', 'Dom');
-                            return false;
-                        }
-                        
-                        parent = parent.parentNode;
-                    }
-                    YAHOO.log('isAncestor returning false', 'info', 'Dom');
-                    return false;
-                }     
             };
             
             return Y.Dom.batch(needle, f, Y.Dom, true);      
@@ -654,36 +643,31 @@
         },
         
         /**
-         * Returns an array of elements that have had the supplied method applied.
+         * Returns an the method(s) return value(s).
          * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) ).
          * @method batch
          * @param {String | HTMLElement | Array} el (optional) An element or array of elements to apply the method to
          * @param {Function} method The method to apply to the element(s)
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
          * @param {Boolean} override (optional) Whether or not to override the scope of "method" with "o"
-         * @return {HTMLElement | Array} The element(s) with the method applied
+         * @return {Any | Array} The return value(s) from the supplied methods
          */
         batch: function(el, method, o, override) {
-            var id = el;
-            el = Y.Dom.get(el);
-            
+            el = (el && el.tagName) ? el : Y.Dom.get(el); // skip get() when possible
+
+            if (!el || !method) {
+                YAHOO.log('batch failed: invalid arguments, 'error', 'Dom');
+                return false;
+            } 
             var scope = (override) ? o : window;
             
-            if (!el || el.tagName || !el.length) { // is null or not a collection (tagName for SELECT and others that can be both an element and a collection)
-                if (!el) {
-                    YAHOO.log(id + ' not available', 'error', 'Dom');
-                    return false;
-                }
+            if (el.tagName) {
                 return method.call(scope, el, o);
             } 
             
             var collection = [];
             
             for (var i = 0, len = el.length; i < len; ++i) {
-                if (!el[i]) {
-                    id = el[i];
-                    YAHOO.log(id + ' not available', 'error', 'Dom');
-                }
                 collection[collection.length] = method.call(scope, el[i], o);
             }
             
@@ -765,7 +749,7 @@
             node = Y.Dom.get(node);
 
             if (!node) { // if no node, then no ancestor
-                logger.log('getAncestorBy failed, ' + node ' not found', 'error', 'Dom');
+                logger.log('getAncestorBy failed, ' + node + ' not found', 'error', 'Dom');
                 return null;
             }
            
@@ -806,7 +790,189 @@
             };
 
             return Y.Dom.getAncestorBy(method, node);
-        } 
+        },
 
+        testElement: function(node, method) {
+            return node.nodeType == 1 && ( !method || method(node) );
+        },
+
+        /**
+         * Returns the previous sibling that is an HTMLElement. 
+         * For performance reasons, IDs are not accepted and argument validation omitted.
+         * Returns the nearest HTMLElement sibling if no method provided.
+         * @method getPreviousSiblingBy
+         * @param {HTMLElement} node The HTMLElement to use as the starting point 
+         * @param {Function} method A boolean function used to test siblings
+         * that receives the sibling node being tested as its only argument
+         * @return {Object} HTMLElement or null if not found
+         */
+        getPreviousSiblingBy: function(node, method) {
+            while (node = node.previousSibling) { // NOTE: assignment
+                if ( Y.Dom.testElement(node, method) ) {
+                    return node;
+                }
+            }
+            return null;
+        }, 
+
+        /**
+         * Returns the previous sibling that is an HTMLElement 
+         * @method getPreviousSibling
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @return {Object} HTMLElement or null if not found
+         */
+        getPreviousSibling: function(node) {
+            node = Y.Dom.get(node);
+            if (!node) {
+                YAHOO.log('getPreviousSibling failed: invalid node argument', 'error', 'Dom');
+                return null;
+            }
+
+            return Y.Dom.getPreviousSiblingBy(node);
+        }, 
+
+        /**
+         * Returns the next HTMLElement sibling that passes the boolean method. 
+         * For performance reasons, IDs are not accepted and argument validation omitted.
+         * Returns the nearest HTMLElement sibling if no method provided.
+         * @method getNextSiblingBy
+         * @param {HTMLElement} node The HTMLElement to use as the starting point 
+         * @param {Function} method A boolean function used to test siblings
+         * that receives the sibling node being tested as its only argument
+         * @return {Object} HTMLElement or null if not found
+         */
+        getNextSiblingBy: function(node, method) {
+            while (node = node.nextSibling) { // NOTE: assignment
+                if ( Y.Dom.testElement(node, method) ) {
+                    return node;
+                }
+            }
+            return null;
+        }, 
+
+        /**
+         * Returns the next sibling that is an HTMLElement 
+         * @method getNextSibling
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @return {Object} HTMLElement or null if not found
+         */
+        getNextSibling: function(node) {
+            node = Y.Dom.get(node);
+            if (!node) {
+                YAHOO.log('getNextSibling failed: invalid node argument', 'error', 'Dom');
+                return null;
+            }
+
+            return Y.Dom.getNextSiblingBy(node);
+        }, 
+
+        /**
+         * Returns the first HTMLElement child that passes the test method. 
+         * @method getFirstChildBy
+         * @param {HTMLElement} node The HTMLElement to use as the starting point 
+         * @param {Function} method A boolean function used to test children
+         * that receives the node being tested as its only argument
+         * @return {Object} HTMLElement or null if not found
+         */
+        getFirstChildBy: function(node, method) {
+            var child = ( Y.Dom.testElement(node.firstChild, method) ) ? node.firstChild : null;
+            return child || Y.Dom.getNextSiblingBy(node.firstChild, method);
+        }, 
+
+        /**
+         * Returns the first HTMLElement child. 
+         * @method getFirstChild
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @return {Object} HTMLElement or null if not found
+         */
+        getFirstChild: function(node, method) {
+            node = Y.Dom.get(node);
+            if (!node) {
+                YAHOO.log('getFirstChild failed: invalid node argument', 'error', 'Dom');
+                return null;
+            }
+            return Y.Dom.getFirstChildBy(node);
+        }, 
+
+        /**
+         * Returns the last HTMLElement child that passes the test method. 
+         * @method getLastChildBy
+         * @param {HTMLElement} node The HTMLElement to use as the starting point 
+         * @param {Function} method A boolean function used to test children
+         * that receives the node being tested as its only argument
+         * @return {Object} HTMLElement or null if not found
+         */
+        getLastChildBy: function(node, method) {
+            if (!node) {
+                YAHOO.log('getLastChild failed: invalid node argument', 'error', 'Dom');
+                return null;
+            }
+            var child = ( Y.Dom.testElement(node.lastChild, method) ) ? node.lastChild : null;
+            return child || Y.Dom.getPreviousSiblingBy(node.lastChild, method);
+        }, 
+
+        /**
+         * Returns the last HTMLElement child. 
+         * @method getLastChild
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @return {Object} HTMLElement or null if not found
+         */
+        getLastChild: function(node) {
+            node = Y.Dom.get(node);
+            return Y.Dom.getLastChildBy(node);
+        }, 
+
+        /**
+         * Returns an array of HTMLElement childNodes that pass the test method. 
+         * @method getChildrenBy
+         * @param {HTMLElement} node The HTMLElement to start from
+         * @param {Function} method A boolean function used to test children
+         * that receives the node being tested as its only argument
+         * @return {Array} A static array of HTMLElements
+         */
+        getChildrenBy: function(node, method) {
+            var child = Y.Dom.getFirstChildBy(node, method);
+            var children = child ? [child] : [];
+
+            Y.Dom.getNextSiblingBy(child, function(node) {
+                if ( !method || method(node) ) {
+                    children[children.length] = node;
+                }
+                return false; // fail test to collect all children
+            });
+
+            return children;
+        },
+ 
+        /**
+         * Returns an array of HTMLElement childNodes. 
+         * @method getChildren
+         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
+         * @return {Array} A static array of HTMLElements
+         */
+        getChildren: function(node) {
+            node = Y.Dom.get(node);
+            if (!node) {
+                YAHOO.log('getChildren failed: invalid node argument', 'error', 'Dom');
+            }
+
+            return Y.Dom.getChildrenBy(node);
+        },
+ 
+         getAttribute: function(node, attr) {
+            node = Y.Dom.get(node);
+            if (!node) {
+                YAHOO.log('getAttribute failed: invalid node argument', 'error', 'Dom');
+            }
+
+            attr = attributeMap[attr.toLowerCase()] || atr;
+            // TODO: convert to camelCase?
+            return node[attr];
+        } 
     };
+
+var attributeMap = {
+    'for': 'htmlFor',
+    'class': 'className'
+};
 })();
