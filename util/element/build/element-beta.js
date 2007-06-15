@@ -468,7 +468,7 @@ YAHOO.util.Element.prototype = {
     /**
      * Wrapper for HTMLElement method.
      * @method appendChild
-     * @param {Boolean} deep Whether or not to do a deep clone
+     * @param {YAHOO.util.Element || HTMLElement} child The element to append. 
      */
     appendChild: function(child) {
         child = child.get ? child.get('element') : child;
@@ -568,7 +568,7 @@ YAHOO.util.Element.prototype = {
             this.createEvent(type, this);
         }
         
-        this.subscribe.apply(this, arguments); // notify via customEvent
+        YAHOO.util.EventProvider.prototype.subscribe.apply(this, arguments); // notify via customEvent
     },
     
     
@@ -582,6 +582,15 @@ YAHOO.util.Element.prototype = {
      */
     on: function() { this.addListener.apply(this, arguments); },
     
+    /**
+     * Alias for addListener
+     * @method subscribe
+     * @param {String} type The name of the event to listen for
+     * @param {Function} fn The function call when the event fires
+     * @param {Any} obj A variable to pass to the handler
+     * @param {Object} scope The object to use for the scope of the handler 
+     */
+    subscribe: function() { this.addListener.apply(this, arguments); },
     
     /**
      * Remove an event listener
