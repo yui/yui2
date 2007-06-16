@@ -126,8 +126,8 @@ YAHOO.example.IntegratedFeatureSet = new function() {
     }
 
     this.myDataTable = new YAHOO.widget.DataTable("complex", myColumnDefs, this.myDataSource, myConfigs);
-    this.myDataTable.on("rowClickEvent",this.myDataTable.onEventSelectRow);
-    this.myDataTable.on("cellDblclickEvent",this.myDataTable.onEventShowCellEditor);
+    this.myDataTable.subscribe("rowClickEvent",this.myDataTable.onEventSelectRow);
+    this.myDataTable.subscribe("cellDblclickEvent",this.myDataTable.onEventShowCellEditor);
 
     // When cell is edited, pulse the color of the row yellow
     this.onCellEdit = function(oArgs) {
@@ -146,11 +146,11 @@ YAHOO.example.IntegratedFeatureSet = new function() {
         var onComplete = function() {
             rowColorAnim = null;
         }
-        rowColorAnim.onComplete.on(onComplete);
+        rowColorAnim.onComplete.subscribe(onComplete);
         //rowColorAnim.animate();
     }
-    this.myDataTable.on("cellEditEvent", this.onCellEdit);
-    this.myDataTable.on("editorBlurEvent", this.myDataTable.onEventSaveCellEditor);
+    this.myDataTable.subscribe("cellEditEvent", this.onCellEdit);
+    this.myDataTable.subscribe("editorBlurEvent", this.myDataTable.onEventSaveCellEditor);
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

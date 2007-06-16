@@ -126,12 +126,12 @@ YAHOO.example.CustomFormatting = new function() {
     this.myDataTable = new YAHOO.widget.DataTable("formatting", myColumnDefs,
             this.myDataSource, {caption:"Example: Custom Formatting"});
             
-    this.myDataTable.on("buttonClickEvent", function(oArgs){
+    this.myDataTable.subscribe("buttonClickEvent", function(oArgs){
         var oRecord = this.getRecord(oArgs.target);
         alert(YAHOO.lang.dump(oRecord.getData()));
     });
 
-    this.myDataTable.on("checkboxClickEvent", function(oArgs){
+    this.myDataTable.subscribe("checkboxClickEvent", function(oArgs){
         var elCheckbox = oArgs.target;
         alert("Checkbox was " + (elCheckbox.checked ? "" : "un") + "checked.");
     });

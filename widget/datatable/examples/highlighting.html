@@ -89,18 +89,18 @@ YAHOO.example.RowSelection = new function() {
                 caption:"Example: Cell Highlighting"
             });
     // Subscribe to events for cell highligting
-    this.cellHighlightDataTable.on("cellMouseoverEvent", this.cellHighlightDataTable.onEventHighlightCell);
+    this.cellHighlightDataTable.subscribe("cellMouseoverEvent", this.cellHighlightDataTable.onEventHighlightCell);
     // Subscribe to events for cell highligting
-    this.cellHighlightDataTable.on("cellMouseoutEvent", this.cellHighlightDataTable.onEventUnhighlightCell);
+    this.cellHighlightDataTable.subscribe("cellMouseoutEvent", this.cellHighlightDataTable.onEventUnhighlightCell);
 
     this.rowHighlightDataTable = new YAHOO.widget.DataTable("row",
             myColumnDefs, this.myDataSource, {
                 caption:"Example: Row Highlighting"
             });
     // Subscribe to events for row highligting
-    this.rowHighlightDataTable.on("cellMouseoverEvent", this.rowHighlightDataTable.onEventHighlightRow);
+    this.rowHighlightDataTable.subscribe("cellMouseoverEvent", this.rowHighlightDataTable.onEventHighlightRow);
     // Subscribe to events for row highligting
-    this.rowHighlightDataTable.on("cellMouseoutEvent", this.rowHighlightDataTable.onEventUnhighlightRow);
+    this.rowHighlightDataTable.subscribe("cellMouseoutEvent", this.rowHighlightDataTable.onEventUnhighlightRow);
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

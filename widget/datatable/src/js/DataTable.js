@@ -90,8 +90,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     this._initCellEditorEl();
 
     // Set up sort
-    this.on("headerLabelClickEvent", this.onEventSortColumn);
-    //this.on("headerLabelClickEvent", this.onEventSortColumn);
+    this.subscribe("headerLabelClickEvent", this.onEventSortColumn);
+    //this.subscribe("headerLabelClickEvent", this.onEventSortColumn);
 
     // Send out for data in an asynchronous request
     oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
@@ -1388,7 +1388,7 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
     this._oCellEditor = oCellEditor;
 
     // Handle ESC key
-    this.on("editorKeydownEvent", function(oArgs) {
+    this.subscribe("editorKeydownEvent", function(oArgs) {
         var e = oArgs.event;
         var elTarget = YAHOO.util.Event.getTarget(e);
 

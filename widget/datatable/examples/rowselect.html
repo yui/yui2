@@ -89,7 +89,7 @@ YAHOO.example.RowSelection = new function() {
             });
             
     // Subscribe to event for row selection
-    this.standardSelectDataTable.on("rowClickEvent", this.standardSelectDataTable.onEventSelectRow);
+    this.standardSelectDataTable.subscribe("rowClickEvent", this.standardSelectDataTable.onEventSelectRow);
     
     // Programmatically select the first row immediately
     this.standardSelectDataTable.selectRow(this.standardSelectDataTable.getTrEl(0));
@@ -101,7 +101,7 @@ YAHOO.example.RowSelection = new function() {
             });
             
     // Subscribe to event for row selection
-    this.singleSelectDataTable.on("rowDblclickEvent", this.singleSelectDataTable.onEventSelectRow);
+    this.singleSelectDataTable.subscribe("rowDblclickEvent", this.singleSelectDataTable.onEventSelectRow);
 };
 
 /*var printSelections = function() {

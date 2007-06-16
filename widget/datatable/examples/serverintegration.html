@@ -271,7 +271,7 @@ YAHOO.example.ServerIntegration = new function() {
         var newState = oSelf.getState();
         YAHOO.util.History.navigate("mySvrPagDataTable", newState);
     };
-    this.myDataTable.on("headerLabelClickEvent", this.sortColumn, this);
+    this.myDataTable.subscribe("headerLabelClickEvent", this.sortColumn, this);
 
     // Custom pagination
     this.getPreviousPage = function(e) {

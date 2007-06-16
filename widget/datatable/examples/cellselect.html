@@ -91,7 +91,7 @@ YAHOO.example.CellSelection = new function() {
             });
 
     // Subscribe to event for cell selection
-    this.singleCellSelectDataTable.on("cellMouseoverEvent", this.singleCellSelectDataTable.onEventSelectCell);
+    this.singleCellSelectDataTable.subscribe("cellMouseoverEvent", this.singleCellSelectDataTable.onEventSelectCell);
 
     this.cellBlockSelectDataTable = new YAHOO.widget.DataTable("cellblock",
             myColumnDefs, this.myDataSource, {
@@ -100,7 +100,7 @@ YAHOO.example.CellSelection = new function() {
             });
             
     // Subscribe to event for cell selection
-    this.cellBlockSelectDataTable.on("cellDblclickEvent", this.cellBlockSelectDataTable.onEventSelectCell);
+    this.cellBlockSelectDataTable.subscribe("cellDblclickEvent", this.cellBlockSelectDataTable.onEventSelectCell);
 
     this.cellRangeSelectDataTable = new YAHOO.widget.DataTable("cellrange",
             myColumnDefs, this.myDataSource, {
@@ -109,7 +109,7 @@ YAHOO.example.CellSelection = new function() {
             });
             
     // Subscribe to event for cell selection
-    this.cellRangeSelectDataTable.on("cellClickEvent", this.cellRangeSelectDataTable.onEventSelectCell);
+    this.cellRangeSelectDataTable.subscribe("cellClickEvent", this.cellRangeSelectDataTable.onEventSelectCell);
 };
 
 /*var printSelections = function() {
