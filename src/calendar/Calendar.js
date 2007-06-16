@@ -410,7 +410,7 @@ YAHOO.widget.Calendar.prototype.configIframe = function(type, args, obj) {
 			if (useIframe) {
 				var pos = YAHOO.util.Dom.getStyle(this.oDomContainer, "position");
 
-				if (this.browser == "ie" && (pos == "absolute" || pos == "relative")) {
+				if (YAHOO.env.ua.ie > 0 && (pos == "absolute" || pos == "relative")) {
 					if (! YAHOO.util.Dom.inDocument(this.iframe)) {
 						this.iframe = document.createElement("iframe");
 						this.iframe.src = "javascript:false;";
@@ -2737,6 +2737,8 @@ YAHOO.widget.Calendar.prototype.show = function() {
 
 /**
 * Returns a string representing the current browser.
+* @deprecated As of 2.3.0, environment information is available in YAHOO.env.ua
+* @see YAHOO.env.ua
 * @property browser
 * @type String
 */

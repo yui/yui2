@@ -1159,7 +1159,7 @@ YAHOO.widget.Calendar.prototype.configIframe = function(type, args, obj) {
 			if (useIframe) {
 				var pos = YAHOO.util.Dom.getStyle(this.oDomContainer, "position");
 
-				if (this.browser == "ie" && (pos == "absolute" || pos == "relative")) {
+				if (YAHOO.env.ua.ie > 0 && (pos == "absolute" || pos == "relative")) {
 					if (! YAHOO.util.Dom.inDocument(this.iframe)) {
 						this.iframe = document.createElement("iframe");
 						this.iframe.src = "javascript:false;";
@@ -3486,6 +3486,8 @@ YAHOO.widget.Calendar.prototype.show = function() {
 
 /**
 * Returns a string representing the current browser.
+* @deprecated As of 2.3.0, environment information is available in YAHOO.env.ua
+* @see YAHOO.env.ua
 * @property browser
 * @type String
 */
@@ -3624,7 +3626,7 @@ YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 	this.cfg.fireQueue();
 
 	// OPERA HACK FOR MISWRAPPED FLOATS
-	if (this.browser == "opera"){
+	if (YAHOO.env.ua.opera > 0){
 		var fixWidth = function() {
 			var startW = this.oDomContainer.offsetWidth;
 			var w = 0;
@@ -4078,8 +4080,9 @@ YAHOO.widget.CalendarGroup.prototype.configPages = function(type, args, obj) {
 	// Define literals outside loop	
 	var sep = "_";
 	var groupCalClass = "groupcal";
-	var firstClass = "first";
-	var lastClass = "last";
+
+	var firstClass = "first-of-type";
+	var lastClass = "last-of-type";
 
 	for (var p=0;p<pageCount;++p) {
 		var calId = this.id + sep + p;
@@ -4093,10 +4096,10 @@ YAHOO.widget.CalendarGroup.prototype.configPages = function(type, args, obj) {
 		var caldate = cal.cfg.getProperty(cfgPageDate);
 		this._setMonthOnDate(caldate, caldate.getMonth() + p);
 		cal.cfg.setProperty(cfgPageDate, caldate);
-		
+
 		YAHOO.util.Dom.removeClass(cal.oDomContainer, this.Style.CSS_SINGLE);
 		YAHOO.util.Dom.addClass(cal.oDomContainer, groupCalClass);
-		
+
 		if (p===0) {
 			YAHOO.util.Dom.addClass(cal.oDomContainer, firstClass);
 		}
@@ -4104,7 +4107,7 @@ YAHOO.widget.CalendarGroup.prototype.configPages = function(type, args, obj) {
 		if (p==(pageCount-1)) {
 			YAHOO.util.Dom.addClass(cal.oDomContainer, lastClass);
 		}
-		
+
 		cal.parent = this;
 		cal.index = p; 
 
@@ -4565,8 +4568,8 @@ YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 * @param	{Number}	iMonth	The month index to set
 */
 YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
-	// BUG in Safari 1.3, 2.0 (WebKit build < 420), Date.setMonth does not work consistently if iMonth is not 0-11
-	if (this.browser == "safari" && (iMonth < 0 || iMonth > 11)) {
+	// Bug in Safari 1.3, 2.0 (WebKit build < 420), Date.setMonth does not work consistently if iMonth is not 0-11
+	if (YAHOO.env.ua.webkit < 420 && (iMonth < 0 || iMonth > 11)) {
 		var DM = YAHOO.widget.DateMath;
 		var newDate = DM.add(date, DM.MONTH, iMonth-date.getMonth());
 		date.setTime(newDate.getTime());
@@ -4614,7 +4617,7 @@ YAHOO.widget.CalendarGroup.CSS_2UPTITLE = "title";
 */
 YAHOO.widget.CalendarGroup.CSS_2UPCLOSE = "close-icon";
 
-YAHOO.augment(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buildDayLabel",
+YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buildDayLabel",
 																 "buildMonthLabel",
 																 "renderOutOfBoundsDate",
 																 "renderRowHeader",
