@@ -137,7 +137,7 @@ YAHOO.example.InlineEditing = new function() {
     
     // Hook into the abstract method to customize UI of "checkboxes" editor
     this.myDataTable.doBeforeShowCellEditor = function(oEditor) {
-        if(oEditor.column.key == "checkboxes") {
+        if(oEditor.column.key == "colors") {
             //oEditor.container.style.width = oEditor.cell.offsetWidth + "px";
             oEditor.container.style.height = oEditor.cell.offsetHeight + "px";
         }
@@ -145,11 +145,11 @@ YAHOO.example.InlineEditing = new function() {
 
     // Hook into custom event to customize save-flow of "checkboxes" editor
     this.myEditorBlurHandler = function(oArgs) {
-        if(oArgs.columnEditor.column.key == "checkboxes") {
+        if(oArgs.editor.column.key == "colors") {
             this.saveCellEditor();
         }
     };
-    this.myDataTable.on("columnEditorBlurEvent", this.myEditorBlurHandler);
+    this.myDataTable.on("editorBlurEvent", this.myEditorBlurHandler);
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>
