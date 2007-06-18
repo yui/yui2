@@ -77,17 +77,6 @@
     
         // Private member variables
     
-        // Browser detection
-    
-        m_oUserAgent = navigator.userAgent.toLowerCase(),
-        m_bOpera = (m_oUserAgent.indexOf('opera') > -1),
-        m_bSafari = (m_oUserAgent.indexOf('safari') > -1),
-        m_bGecko = 
-            (!m_bOpera && !m_bSafari && m_oUserAgent.indexOf('gecko') > -1),
-        m_bIE7 = (!m_bOpera && m_oUserAgent.indexOf('msie 7') > -1),
-        m_bIE = (!m_bOpera && m_oUserAgent.indexOf('msie') > -1),
-    
-    
         m_oButtons = {},    // Collection of all Button instances
         m_oOverlayManager = null,   // YAHOO.widget.OverlayManager instance
         m_oSubmitTrigger = null,    // The button that submitted the form 
@@ -122,7 +111,7 @@
     
         if (Lang.isString(p_sType) && Lang.isString(p_sName)) {
         
-            if (m_bIE) {
+            if (YAHOO.env.ua.ie) {
         
                 /*
                     For IE it is necessary to create the element with the 
@@ -2759,7 +2748,7 @@
                 }
         
         
-                if (m_bIE) {
+                if (YAHOO.env.ua.ie) {
         
                     bSubmitForm = oForm.fireEvent("onsubmit");
         
@@ -2781,7 +2770,7 @@
                     method as well.
                 */
               
-                if ((m_bIE || m_bSafari) && bSubmitForm) {
+                if ((YAHOO.env.ua.ie || YAHOO.env.ua.webkit) && bSubmitForm) {
         
                     oForm.submit();
                 
@@ -2846,12 +2835,6 @@
         
         
             this.addClass(this.CSS_CLASS_NAME);
-            
-            if (m_bIE && !m_bIE7) {
-        
-                this.addClass("ie6");
-        
-            }
             
             this.addClass("yui-" + this.get("type") + "-button");
         

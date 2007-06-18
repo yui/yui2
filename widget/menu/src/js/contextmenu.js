@@ -46,11 +46,7 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 YAHOO.widget.ContextMenu._EVENT_TYPES = {
 
     "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
-
-    "CONTEXT_MENU": (
-                        (YAHOO.widget.Module.prototype.browser == "opera" ? 
-                            "mousedown" : "contextmenu")
-                    ),
+    "CONTEXT_MENU": (YAHOO.env.ua.opera ? "mousedown" : "contextmenu"),
     "CLICK": "click"
 
 };
@@ -240,7 +236,7 @@ _removeEventHandlers: function() {
             this._onTriggerContextMenu
         );    
         
-        if(this.browser == "opera") {
+        if(YAHOO.env.ua.opera) {
         
             Event.removeListener(
                 oTrigger, 
@@ -460,7 +456,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             Opera to prevent default browser behaviors.
         */
 
-        if(this.browser == "opera") {
+        if(YAHOO.env.ua.opera) {
         
             Event.on(
                 oTrigger, 

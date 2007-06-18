@@ -1474,7 +1474,7 @@ _setWidth: function() {
 
     if (oElement.parentNode.tagName.toUpperCase() == "BODY") {
 
-        if (this.browser == "opera") {
+        if (YAHOO.env.ua.opera) {
 
             sWidth = this._getOffsetWidth();
         
@@ -2498,7 +2498,7 @@ _onKeyPress: function(p_sType, p_aArgs) {
 */
 _onTextResize: function(p_sType, p_aArgs, p_oMenu) {
 
-    if(this.browser == "gecko" && !this._handleResize) {
+    if(YAHOO.env.ua.gecko && !this._handleResize) {
 
         this._handleResize = true;
         return;
@@ -2778,6 +2778,12 @@ _onRender: function(p_sType, p_aArgs) {
         this._setWidth();
     
     }
+
+    var oDIV = document.createElement("div");
+    oDIV.className = "shadow";
+    oDIV.innerHTML = "<div>&#32;s</div>";
+    
+    this.element.appendChild(oDIV);
 
 },
 
@@ -3203,10 +3209,7 @@ _onSubmenuBeforeShow: function(p_sType, p_aArgs) {
 
     var nScrollTop = oParent.parent.body.scrollTop;
 
-    if(
-        (this.browser == "gecko" || this.browser == "safari") 
-        && nScrollTop > 0
-    ) {
+    if((YAHOO.env.ua.gecko || YAHOO.env.ua.webkit) && nScrollTop > 0) {
 
          this.cfg.setProperty("y", (this.cfg.getProperty("y") - nScrollTop));
     

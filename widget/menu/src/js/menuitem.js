@@ -424,6 +424,7 @@ YAHOO.widget.MenuItem.prototype = {
 
 	/**
     * @property browser
+    * @deprecated Use YAHOO.env.ua
 	* @description String representing the browser.
 	* @type String
 	*/
@@ -1806,10 +1807,7 @@ YAHOO.widget.MenuItem.prototype = {
 
             try {
 
-                if (
-                    (me.browser == "ie" || me.browser == "ie7") && 
-                    !document.hasFocus()
-                ) {
+                if (YAHOO.env.ua.ie && !document.hasFocus()) {
                 
                     return;
                 
