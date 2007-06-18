@@ -13,12 +13,12 @@
 <script type="text/javascript" src="../build/calendar/calendar-min.js"></script>
 
 <script type="text/javascript">
-	
+
 	// REFACTOR: Move to common infrastructure?
 	// REFACTOR: Change ArrayAssert.itemsAreSame to take comparator?
-	
+
 	YAHOO.util.DateAssert = {
-		
+
 		/**
 		 * Asserts if the expected and actual Dates passed in are the same, ignoring time differences. That is, 
 		 * it only compares fullyear, month and date fields for equality.
@@ -30,10 +30,10 @@
 		 */
 		areDatesSame : function(expected, actual, msg) {
 			if (this._areDatesSame(expected, actual) === false) {
-				throw new YAHOO.util.ComparisonFailure(msg || "Dates are not equal", expected, actual);					
+				throw new YAHOO.util.ComparisonFailure(msg || "Dates are not equal", expected, actual);
 			}
 		},
-		
+
 		/**
 		 * Asserts if the expected and actual Date Arrays are the same.
 		 * Ignores time differences between dates, similar to YAHOO.util.DateAssert.areDatesSame
@@ -49,16 +49,16 @@
 		 * 							  if false, arrays can be the same even if they are ordered differently
 		 * @param {String} msg The message to display if assertion fails
 		 * @throws YAHOO.util.ComparisonFailure
-		 */		
+		 */
 		areDateArraysSame : function(expected, actual, testOrder, msg) {
 			if (YAHOO.lang.isArray(expected) === false || YAHOO.lang.isArray(actual) === false) {
 				throw new YAHOO.util.ComparisonFailure(msg || "Date arrays are not both instances of Array", expected, actual);
 			}
-			
+
 			if (expected.length !== actual.length) {
 				throw new YAHOO.util.ComparisonFailure(msg || "Date arrays are not the same length", expected, actual);
 			}
-			
+
 			var areEq = true;
 			if (testOrder) {
 				// already established lengths are same, so pick either one
@@ -68,25 +68,25 @@
 					}
 				}
 			} else {
-				// All a1 in a2
+				// All array1 in array2
 				for (var j = 0; areEq && j < expected.length; j++) {
 					if (this._containsDate(actual, expected[j]) === false) {
 						areEq = false;
 					}
 				}
-				// All a2 in a1
+				// All array2 in array1
 				for (var k = 0;areEq && k < actual.length; k++) {
 					if (this._containsDate(expected, actual[k]) === false) {
 						areEq = false;
 					}
 				}
 			}
-			
+
 			if (areEq == false) {
-				throw new YAHOO.util.ComparisonFailure(msg || "Date arrays are not equal", expected, actual);				
+				throw new YAHOO.util.ComparisonFailure(msg || "Date arrays are not equal", expected, actual);
 			}
 		},
-		
+
 		/**
 		 * Asserts if an arrary of Dates contains a given Dates, using YAHOO.util.DateAssert.areDatesSame for equality
 		 * 
@@ -105,9 +105,9 @@
 		_areDatesSame : function(d1, d2) {
 			return (d1.getFullYear() == d2.getFullYear() 
 						&& d1.getMonth() == d2.getMonth() 
-							&& d1.getDate() == d2.getDate());					
+							&& d1.getDate() == d2.getDate());
 		},
-		
+
 		_containsDate : function(a, d) {
 			var found = false;
 			for (var i = 0; found == false && i < a.length; i++) {
@@ -170,9 +170,9 @@
 	CalendarTestCase.prototype.needsUI = true; // set to false, to speed up tests which don't need UI
 
 	CalendarTestCase.prototype.setUp = function() {
-        this.container = document.createElement("div");
+		this.container = document.createElement("div");
 		this.container.id = "testCalContainer";
-        document.body.appendChild(this.container);
+		document.body.appendChild(this.container);
 	};
 
 	CalendarTestCase.prototype.tearDown = function() {
@@ -183,7 +183,7 @@
 		
 	CalendarTestCase.prototype.createInstance = function(opts) {
 		var cal = (opts) ? new this.widgetclass("testCal", "testCalContainer", opts) 
-								: new this.widgetclass("testCal", "testCalContainer");	
+								: new this.widgetclass("testCal", "testCalContainer");
 		if (this.needsUI) cal.render();
 		return cal;
 	};
@@ -222,7 +222,7 @@
 
 			var cal = this.createInstance();
 
-			var testDtStr = "04/12/2007"; // month index is 0 based			
+			var testDtStr = "04/12/2007"; // month index is 0 based
 			var testDt = [new Date(2007, 3, 12)];
 
 			cal.select(testDtStr);
@@ -267,46 +267,46 @@
 			
 			cal = null;
 		},
-		
+
 		testPageNav: function() {
 			var cal = this.createInstance({pagedate:"11/2007"});
-			
+
 			cal.nextMonth();
-			
+
 			var pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 			DateAssert.areDatesSame(new Date(2007, 11, 01), pgDate, "nextMonth()[1] set incorrect page date");
-			
+
 			cal.nextYear();
 			
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 			DateAssert.areDatesSame(new Date(2008, 11, 01), pgDate, "nextYear() set incorrect page date");
-			
+
 			cal.nextMonth();
-			
+
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 			DateAssert.areDatesSame(new Date(2009, 0, 01), pgDate, "nextMonth()[2] did not rollover year");
-			
+
 			cal.previousMonth();
-			
+
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 			DateAssert.areDatesSame(new Date(2008, 11, 01), pgDate, "previousMonth()[1] did not rollover year");
-			
+
 			cal.previousMonth();
-			
+
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 			DateAssert.areDatesSame(new Date(2008, 10, 01), pgDate, "previousMonth()[2] set incorrect page date");
-			
+
 			cal.previousYear();
-			
+
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 			DateAssert.areDatesSame(new Date(2007, 10, 01), pgDate, "previousYear() set incorrect page date");
-			
+
 			cal = null;
 		}
 	};
@@ -318,7 +318,7 @@
 		testConstruction: function() {
 			this._testConstruction();
 		},
-		
+
 		testSelectCell: function() {
 			var cal = this.createInstance({pagedate:"4/2007", multi_select:true});
 			var grpCal = (this.widgetclass === YAHOO.widget.CalendarGroup);
@@ -326,34 +326,34 @@
 			// Ascending order, same as the output of getSelectedDates(). Test for mixed order?
 			var testDt = (grpCal) ? [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14), new Date(2007, 4, 10), new Date(2007, 4, 11), new Date(2007, 4, 12)]
 							: [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
-			
+
 			cal.selectCell(11);
 			cal.selectCell(12);
 			cal.selectCell(13);
 			cal.selectCell(35); // Should not be selected. OOM
-			
+
 			this._assertSelectedDates(cal, testDt);
-			
+
 			cal = null;
 		},
-		
+
 		testClickSelect: function() {
 			var cal = this.createInstance({pagedate:"5/2007", multi_select:true});
 			var grpCal = (this.widgetclass === YAHOO.widget.CalendarGroup);
-			
+
 			var testDt = [new Date(2007, 4, 13), new Date(2007, 4, 15), new Date(2007, 4, 22)];
-			
+
 			var page = Dom.getElementsByClassName("m5", "tbody", cal.oDomContainer);
 			var cellOne = Dom.getElementsByClassName("d22", "td", page[0]);
 			var cellTwo = Dom.getElementsByClassName("d15", "td", page[0]);
 			var cellThree = Dom.getElementsByClassName("d13", "td", page[0]);
-			
+
 			UserAction.click(cellOne[0]);
 			UserAction.click(cellTwo[0]);
 			UserAction.click(cellThree[0]);
 
 			this._assertSelectedDates(cal, testDt);
-			
+
 			if (YAHOO.util.Dom.hasClass(cellOne, cal.Style.CSS_CELL_SELECTED) === false) {
 				throw new YAHOO.util.AssertionError("CSS_SELECTED style not set on selected cell");
 			}
@@ -363,38 +363,58 @@
 			if (YAHOO.util.Dom.hasClass(cellThree, cal.Style.CSS_CELL_SELECTED) === false) {
 				throw new YAHOO.util.AssertionError("CSS_SELECTED style not set on selected cell");
 			}
-			
+
 			cal = null;
 		},
-		
+
 		testClickPageNav: function() {
 			var cal = this.createInstance({pagedate:"5/2007"});
 
 			var grpCal = (this.widgetclass === YAHOO.widget.CalendarGroup);
 			
 			var prevPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_LEFT, "a", cal.oDomContainer);
-
 			UserAction.mousedown(prevPage[0]);
 
 			DateAssert.areDatesSame(new Date(2007, 3, 1), this._getCfgProperty(cal, "pagedate"), "Click on previous page not correct");
 
 			var nextPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_RIGHT, "a", cal.oDomContainer);
-
 			UserAction.mousedown(nextPage[0]);
 
 			DateAssert.areDatesSame(new Date(2007, 4, 1), this._getCfgProperty(cal, "pagedate"), "Click on next page not correct");
 		}
 	};
-	
+
 	var cfgTemplate = {
-		needsUI : true,
-		
+		needsUI : false,
+
 		testConstruction: function() {
 			this._testConstruction();
 		},
-		
-		testSetConfigProps : function() {
-			// TODO	
+
+		testDateParsing : function() {
+			
+			// Case is mixed, to test config case-insensitivity
+
+			var opts  = {
+				DaTE_DELIMITER:"#",
+				DaTE_FIELD_DELIMITER:"-",
+				DaTE_RANGE_DELIMITER:"+",
+				My_MONTH_POSITION:2,
+				My_YEAR_POSITION:1,
+				MdY_MONTH_POSITION:2,
+				MdY_DAY_POSITION:3,
+				MdY_YEAR_POSITION:1,
+				SeLECTED : "1972-2-7#1972-2-14+1972-2-21#1972-2-25",
+				PAgeDate : "1972-2"
+			};
+
+			var cal = this.createInstance(opts);
+			
+			var testDt = [new Date(1972, 1, 7), new Date(1972, 1, 14), new Date(1972, 1, 15), new Date(1972, 1, 16), new Date(1972, 1, 17), new Date(1972, 1, 18), new Date(1972, 1, 19), new Date(1972, 1, 20), new Date(1972, 1, 21), new Date(1972, 1, 25)];
+			var testPgDt = new Date(1972, 1, 1);
+				
+			DateAssert.areDatesSame(testPgDt, this._getCfgProperty(cal, "pagedate"), "Page date not parsed/set correctly");
+			DateAssert.areDateArraysSame(testDt, cal.getSelectedDates(), "Page date not parsed/set correctly");
 		}
 	}
 
@@ -409,10 +429,10 @@
 
 	var calGrpApiTemplate = YAHOO.lang.merge(apiTemplate, {widgetclass:YAHOO.widget.CalendarGroup, name:"calendargrpapi"});
 	var calGrpApi = new CalendarTestCase(calGrpApiTemplate);
-	
+
 	var calGrpDomTemplate = YAHOO.lang.merge(domTemplate, {widgetclass:YAHOO.widget.CalendarGroup, name:"calendargrpdom"});
 	var calGrpDom = new CalendarTestCase(calGrpDomTemplate);
-	
+
 	var calGrpCfgTemplate = YAHOO.lang.merge(cfgTemplate, {widgetclass:YAHOO.widget.CalendarGroup, name:"calendargrpcfg"});
 	var calGrpCfg = new CalendarTestCase(calGrpCfgTemplate);
 
@@ -420,25 +440,25 @@
 
 		var yuisuite=new YAHOO.tool.TestSuite("yuisuite");
 		var calsuite=new YAHOO.tool.TestSuite("calendarsuite");
-		
+
 		calsuite.add(calApi);
 		calsuite.add(calDom);
 		calsuite.add(calCfg);
-		
+
 		calsuite.add(calGrpApi);
 		calsuite.add(calGrpDom);
 		calsuite.add(calGrpCfg);
-		
+
 		yuisuite.add(calsuite);
 
-        YAHOO.tool.TestRunner.add(yuisuite);
-		
+		YAHOO.tool.TestRunner.add(yuisuite);
+
 		YAHOO.tool.TestRunner.run();
 	}
 
 	YAHOO.util.Event.addListener(window, "load", function() {
-        var logger = new YAHOO.tool.TestLogger();
-		
+		var logger = new YAHOO.tool.TestLogger();
+
 		YAHOO.util.Event.addListener("btnRun", "click", runTests);	
 		YAHOO.util.Dom.get("btnRun").disabled = false;
 	});
