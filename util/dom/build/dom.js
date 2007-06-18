@@ -517,7 +517,7 @@
         },
         
         /**
-         * Generates a unique ID
+         * Returns an ID and applies it to the element "el", if provided.
          * @method generateId  
          * @param {String | HTMLElement | Array} el (optional) An optional element array of elements to add an ID to (no ID is added if one is already present).
          * @param {String} prefix (optional) an optional prefix to use (defaults to "yui-gen").
@@ -525,24 +525,23 @@
          */
         generateId: function(el, prefix) {
             prefix = prefix || 'yui-gen';
-            el = el || {};
-            
+
             var f = function(el) {
+                if (el && el.id) { // do not override existing ID
+                    return el.id;
+                } 
+
+                var id = prefix + id_counter++;
+
                 if (el) {
-                    el = Y.Dom.get(el);
-                } else {
-                    el = {}; // just generating ID in this case
+                    el.id = id;
                 }
                 
-                if (!el.id) {
-                    el.id = prefix + id_counter++; 
-                } // dont override existing
-                
-                
-                return el.id;
+                return id;
             };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+
+            // batch fails when no element, so just generate and return single ID
+            return Y.Dom.batch(el, f, Y.Dom, true) || f.apply(Y.Dom, arguments);
         },
         
         /**
