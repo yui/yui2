@@ -80,10 +80,10 @@ YAHOO.example.XHR_JSON = new function() {
     };
 
     var myColumnDefs = [
-        {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
+        {key:"Title", label:"Name", sortable:true, formatter:this.formatUrl},
         {key:"Phone"},
         {key:"City"},
-        {key:"Rating.AverageRating", text:"Rating", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true}
+        {key:"Rating.AverageRating", label:"Rating", formatter:YAHOO.widget.DataTable.formatNumber, sortable:true}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource("./php/ylocal_proxy.php?");
@@ -97,7 +97,7 @@ YAHOO.example.XHR_JSON = new function() {
             this.myDataSource, {caption:"Example: JSON Data Over XHR",
             initialRequest:"query=pizza&zip=94089&results=10&output=json"});
             
-    this.myDataSource.sendRequest("query=italian&zip=94089&results=10&output=json",
+    this.myDataSource.sendRequest("query=mexican&zip=94089&results=10&output=json",
             this.myDataTable.onDataReturnAppendRows, this.myDataTable);
     this.myDataSource.sendRequest("query=chinese&zip=94089&results=10&output=json",
             this.myDataTable.onDataReturnInsertRows, this.myDataTable);

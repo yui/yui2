@@ -92,20 +92,23 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     if(oColumn.formatter && (child.formatter === undefined)) {
                         child.formatter = oColumn.formatter;
                     }
-                    /*TODO: delete if(oColumn.parser && (child.parser === undefined)) {
-                        child.parser = oColumn.parser;
-                    }*/
                     if(oColumn.resizeable && (child.resizeable === undefined)) {
                         child.resizeable = oColumn.resizeable;
                     }
                     if(oColumn.sortable && (child.sortable === undefined)) {
                         child.sortable = oColumn.sortable;
                     }
-                    /*if(oColumn.type && (child.type === undefined)) {
-                        child.type = oColumn.type;
-                    }*/
                     if(oColumn.width && (child.width === undefined)) {
                         child.width = oColumn.width;
+                    }
+                    // Backward compatibility
+                    if(oColumn.type && (child.type === undefined)) {
+                        child.type = oColumn.type;
+                    }
+                    // Backward compatibility
+                    if(oColumn.parser) {
+                        YAHOO.log("The property parser is no longer supported",
+                        "warn", this.toString());
                     }
                 }
 
@@ -656,131 +659,49 @@ YAHOO.widget.Column.prototype.getRowspan = function() {
     return this._rowspan;
 };
 
-/*TODO: delete
- * Takes innerHTML from TD and parses out data for storage in RecordSet.
- *
- * @method parse
- * @param sMarkup {String} The TD's innerHTML value.
- * @return {Object} Data.
- */
-/*YAHOO.widget.Column.prototype.parse = function(sMarkup) {
-    if(this.parser) {
-        return this.parser(sMarkup);
-    }
-    else {
-        var data = null;
-        switch(this.type) {
-            case "checkbox":
-                data = YAHOO.widget.Column.parseCheckbox(sMarkup);
-                break;
-            case "currency":
-                data = YAHOO.widget.Column.parseCurrency(sMarkup);
-                break;
-            case "date":
-                data = YAHOO.widget.Column.parseDate(sMarkup);
-                break;
-            case "number":
-                data = YAHOO.widget.Column.parseNumber(sMarkup);
-                break;
-            case "select":
-                data = YAHOO.widget.Column.parseSelect(sMarkup);
-                break;
-           default:
-                if(sMarkup) {
-                    data = sMarkup;
-                }
-                break;
-        }
-        return data;
-    }
-};*/
-
-/*TODO: delete
- * Default parse function for Columns of type "checkbox" takes markup and
- * extracts data. Can be overridden for custom parsing.
- *
- * @method parseCheckbox
- * @param sMarkup
- * @return {bChecked} True if checkbox is checked.
- */
-/*YAHOO.widget.Column.parseCheckbox = function(sMarkup) {
-    return (sMarkup.indexOf("checked") < 0) ? false : true;
-};*/
-
-/*TODO: delete
- * Default parse function for Columns of type "currency" takes markup and
- * extracts data. Can be overridden for custom parsing.
- *
- * @method parseCurrency
- * @param sMarkup
- * @return {nAmount} Floating point amount.
- */
-/*YAHOO.widget.Column.parseCurrency = function(sMarkup) {
-    return parseFloat(sMarkup.substring(1));
-};*/
-
-/*TODO: delete
- * Default parse function for Columns of type "date" takes markup and extracts
- * data. Can be overridden for custom parsing.
- *
- * @method parseDate
- * @param sMarkup
- * @return {oDate} Date instance.
- */
-/*YAHOO.widget.Column.parseDate = function(sMarkup) {
-    var mm = sMarkup.substring(0,sMarkup.indexOf("/"));
-    sMarkup = sMarkup.substring(sMarkup.indexOf("/")+1);
-    var dd = sMarkup.substring(0,sMarkup.indexOf("/"));
-    var yy = sMarkup.substring(sMarkup.indexOf("/")+1);
-    return new Date(yy, mm, dd);
-};*/
-
-/*TODO: delete
- * Default parse function for Columns of type "number" takes markup and extracts
- * data. Can be overridden for custom parsing.
- *
- * @method parseNumber
- * @param sMarkup
- * @return {nNumber} Number.
- */
-/*YAHOO.widget.Column.parseNumber = function(sMarkup) {
-    return parseFloat(sMarkup);
-};*/
-
-/*TODO: delete
- * Default parse function for Columns of type "select" takes markup and extracts
- * data. Can be overridden for custom parsing.
- *
- * @method parseSelect
- * @param sMarkup
- * @return {sValue} Value of selected option.
- */
-/*YAHOO.widget.Column.parseSelect = function(sMarkup) {
-    //return (sMarkup.indexOf("checked") < 0) ? false : true;
-};*/
-
-/*TODO: delete
- * Instantiates or retrieves ColumnEditor instance.
- *
- * @method getColumnEditor
- * @param elCell {HTMLElement} The cell to edit.
- * @param oRecord {YAHOO.widget.Record} The DataTable Record of the cell.
- * @return YAHOO.widget.ColumnEditor
- */
-/*YAHOO.widget.Column.prototype.getColumnEditor = function(elCell, oRecord) {
-//Sync up the arg signature for ColumnEditor constructor and show()
-    var oEditor = this.editor;
-    if(YAHOO.lang.isString(oEditor)) {
-        oEditor = new YAHOO.widget.ColumnEditor(this);
-        oEditor.show(elCell, oRecord);
-        this.editor = oEditor;
-    }
-    else if(oEditor instanceof YAHOO.widget.ColumnEditor) {
-        oEditor.show(elCell, oRecord, this);
-    }
-    return oEditor;
-};*/
-
+// Backward compatibility
+YAHOO.widget.Column.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
+    YAHOO.log("The method YAHOO.widget.Column.formatCheckbox() has been" +
+    " deprecated in favor of YAHOO.widget.DataTable.formatCheckbox()", "warn",
+    "YAHOO.widget.Column.formatCheckbox");
+    YAHOO.widget.DataTable.formatCheckbox(elCell, oRecord, oColumn, oData);
+};
+YAHOO.widget.Column.formatCurrency = function(elCell, oRecord, oColumn, oData) {
+    YAHOO.log("The method YAHOO.widget.Column.formatCurrency() has been" +
+    " deprecated in favor of YAHOO.widget.DataTable.formatCurrency()", "warn",
+    "YAHOO.widget.Column.formatCurrency");
+    YAHOO.widget.DataTable.formatCurrency(elCell, oRecord, oColumn, oData);
+};
+YAHOO.widget.Column.formatDate = function(elCell, oRecord, oColumn, oData) {
+    YAHOO.log("The method YAHOO.widget.Column.formatDate() has been" +
+    " deprecated in favor of YAHOO.widget.DataTable.formatDate()", "warn",
+    "YAHOO.widget.Column.formatDate");
+    YAHOO.widget.DataTable.formatDate(elCell, oRecord, oColumn, oData);
+};
+YAHOO.widget.Column.formatEmail = function(elCell, oRecord, oColumn, oData) {
+    YAHOO.log("The method YAHOO.widget.Column.formatEmail() has been" +
+    " deprecated in favor of YAHOO.widget.DataTable.formatEmail()", "warn",
+    "YAHOO.widget.Column.formatEmail");
+    YAHOO.widget.DataTable.formatEmail(elCell, oRecord, oColumn, oData);
+};
+YAHOO.widget.Column.formatLink = function(elCell, oRecord, oColumn, oData) {
+    YAHOO.log("The method YAHOO.widget.Column.formatLink() has been" +
+    " deprecated in favor of YAHOO.widget.DataTable.formatLink()", "warn",
+    "YAHOO.widget.Column.formatLink");
+    YAHOO.widget.DataTable.formatLink(elCell, oRecord, oColumn, oData);
+};
+YAHOO.widget.Column.formatNumber = function(elCell, oRecord, oColumn, oData) {
+    YAHOO.log("The method YAHOO.widget.Column.formatNumber() has been" +
+    " deprecated in favor of YAHOO.widget.DataTable.formatNumber()", "warn",
+    "YAHOO.widget.Column.formatNumber");
+    YAHOO.widget.DataTable.formatNumber(elCell, oRecord, oColumn, oData);
+};
+YAHOO.widget.Column.formatSelect = function(elCell, oRecord, oColumn, oData) {
+    YAHOO.log("The method YAHOO.widget.Column.formatSelect() has been" +
+    " deprecated in favor of YAHOO.widget.DataTable.formatDropdown()", "warn",
+    "YAHOO.widget.Column.formatSelect");
+    YAHOO.widget.DataTable.formatDropdown(elCell, oRecord, oColumn, oData);
+};
 
 /****************************************************************************/
 /****************************************************************************/

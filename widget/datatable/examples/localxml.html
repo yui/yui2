@@ -80,10 +80,10 @@ YAHOO.example.Local_XML = new function() {
             var xmlDoc = o.responseXML;
             
             var myColumnDefs = [
-                {key:"Title", text:"Name", sortable:true, formatter:this.formatUrl},
+                {key:"Title", label:"Name", sortable:true, formatter:this.formatUrl},
                 {key:"Phone"},
                 {key:"City"},
-                {key:"AverageRating", text:"Rating",formatter:YAHOO.widget.DataTable.formatNumber, sortable:true}
+                {key:"AverageRating", label:"Rating",formatter:YAHOO.widget.DataTable.formatNumber, sortable:true}
             ];
 
             this.myDataSource = new YAHOO.util.DataSource(xmlDoc);

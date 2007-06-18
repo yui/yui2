@@ -94,8 +94,8 @@ YAHOO.example.CustomSort = new function() {
     };
 
     var myColumnDefs = [
-        {key:"areacode",text:"Area Codes",sortable:true},
-        {key:"state",text:"States",sortable:true,sortOptions:{sortFunction:this.sortStates,defaultOrder:"desc"}}
+        {key:"areacode",label:"Area Codes",sortable:true},
+        {key:"state",label:"States",sortable:true,sortOptions:{sortFunction:this.sortStates,defaultOrder:"desc"}}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);

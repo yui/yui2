@@ -101,10 +101,10 @@ YAHOO.example.IntegratedFeatureSet = new function() {
     };
 
     var myColumnDefs = [
-        {key:"areacode",text:"Area Codes",width:"8em",sortable:true},
-        {key:"state",text:"States",width:"16em",className:"myStrings", sortable:true,
+        {key:"areacode",label:"Area Codes",width:"8em",sortable:true},
+        {key:"state",label:"States",width:"16em",className:"myStrings", sortable:true,
                 sortOptions:{sortFunction:this.sortStates}},
-        {key:"notes",text:"Notes (editable)",className:"myStrings",editor:"textbox"}
+        {key:"notes",label:"Notes (editable)",className:"myStrings",editor:"textbox"}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);

@@ -35,19 +35,16 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     this._oRecordSet = new YAHOO.widget.RecordSet();
 
     // Validate configs
-    if(oConfigs && (oConfigs.constructor != Object)) {
-        oConfigs = null;
-        YAHOO.log("Invalid configs", "warn", this.toString());
-    }
-
-    // Validate DataSource
-    if(oDataSource) {
-        if(oDataSource instanceof YAHOO.util.DataSource) {
-            this._oDataSource = oDataSource;
+    if(oConfigs) {
+        if(oConfigs.constructor != Object) {
+            oConfigs = null;
+            YAHOO.log("Invalid configs", "warn", this.toString());
         }
-        else {
-            YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
-            return;
+        // Backward compatibility
+        else if(YAHOO.lang.isBoolean(oConfigs.paginator)) {
+            YAHOO.log("DataTable's paginator model has been revised" +
+            " -- please refer to the documentation for implementation" +
+            " details", "warn", this.toString());
         }
     }
 
@@ -58,12 +55,50 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Backward compatibility
     else if(aColumnDefs instanceof YAHOO.widget.ColumnSet) {
         this._oColumnSet =  aColumnDefs;
-        YAHOO.log("DataTable constructor signature has been changed. " +
-        "Please pass an array of Column definitions instead of a ColumnSet instance.",
+        YAHOO.log("DataTable's constructor now requires an array" +
+        " of object literal Column definitions instead of a ColumnSet instance",
         "warn", this.toString());
     }
     if(!this._oColumnSet instanceof YAHOO.widget.ColumnSet) {
         YAHOO.log("Could not instantiate DataTable due to an invalid ColumnSet", "error", this.toString());
+        return;
+    }
+
+    // Validate DataSource
+    if(oDataSource && (oDataSource instanceof YAHOO.util.DataSource)) {
+        this._oDataSource = oDataSource;
+    }
+    // Backward compatibility
+    else {
+        var tmpTable = null;
+        var tmpContainer = YAHOO.util.Dom.get(elContainer);
+        if(tmpContainer && tmpContainer.tagName && (tmpContainer.tagName.toLowerCase() == "div")) {
+            // Peek in container child nodes to see if TABLE already exists
+            if(tmpContainer.hasChildNodes()) {
+                var tmpChildren = tmpContainer.childNodes;
+                for(i=0; i<tmpChildren.length; i++) {
+                    if(tmpChildren[i].tagName && tmpChildren[i].tagName.toLowerCase() == "table") {
+                        tmpTable = tmpChildren[i];
+                        break;
+                    }
+                }
+                if(tmpTable) {
+                    var tmpFieldsArray = [];
+                    for(i=0; i<this._oColumnSet.keys.length; i++) {
+                        tmpFieldsArray.push({key:this._oColumnSet.keys[i].key});
+                    }
+
+                    this._oDataSource = new YAHOO.util.DataSource(tmpTable);
+                    this._oDataSource.responseType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
+                    this._oDataSource.responseSchema = {fields: tmpFieldsArray};
+                    YAHOO.log("Null DataSource for progressive enhancement from" +
+                    " markup has been deprecated", "warn", this.toString());
+                }
+            }
+        }
+    }
+    if(!this._oDataSource) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
         return;
     }
 
@@ -94,7 +129,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     //this.subscribe("headerLabelClickEvent", this.onEventSortColumn);
 
     // Send out for data in an asynchronous request
-    oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
+    this._oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
 
     YAHOO.widget.DataTable._nCount++;
     this.fireEvent("initEvent");
@@ -1350,6 +1385,12 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
+    // Backward compatibility
+    if(oColumn.text) {
+        YAHOO.log("The Column property text has been" +
+        " deprecated in favor of label", "warn", oColumn.toString());
+        oColumn.label = oColumn.text;
+    }
     var sLabel = oColumn.label || oColumn.key;
     if(oColumn.sortable) {
         YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_SORTABLE);
@@ -2976,6 +3017,12 @@ YAHOO.widget.DataTable.prototype.getTheadEl = function() {
 YAHOO.widget.DataTable.prototype.getTbodyEl = function() {
     return this._elTbody;
 };
+// Backward compatibility
+YAHOO.widget.DataTable.prototype.getBody = function() {
+    YAHOO.log("The method getBody() has been deprecated" +
+            " in favor of getTbodyEl()", "warn", this.toString());
+    return this.getTbodyEl();
+};
 
 /**
  * Returns DOM reference to the DataTable's secondary TBODY element that is
@@ -3048,6 +3095,12 @@ YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
     
     YAHOO.log("Could not get TR element for row " + row, "warn", this.toString());
     return null;
+};
+// Backward compatibility
+YAHOO.widget.DataTable.prototype.getRow = function(index) {
+    YAHOO.log("The method getRow() has been deprecated" +
+            " in favor of getTrEl()", "warn", this.toString());
+    return this.getTrEl(index);
 };
 
 /**
@@ -4139,6 +4192,13 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         var oData = oRecord.getData(oColumn.key);
         //TODO: formatter string shortcuts
 
+        // Backward compatibility
+        if(oColumn.type && !oColumn.formatter) {
+            YAHOO.log("The Column property type has been" +
+            " deprecated in favor of formatter", "warn", oColumn.toString());
+            oColumn.formatter = oColumn.type;
+        }
+        
         var fnFormatter;
         if(YAHOO.lang.isString(oColumn.formatter)) {
             switch(oColumn.formatter) {
@@ -4178,9 +4238,12 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
                 case "textbox":
                     fnFormatter = YAHOO.widget.DataTable.formatTextbox;
                     break;
+                case "html":
+                    // This is the default
+                    break;
                 default:
-                    YAHOO.log("Could not find formatter function " +
-                            oColumn.formatter, "warn", this.toString());
+                    YAHOO.log("Could not find formatter function \"" +
+                            oColumn.formatter + "\"", "warn", this.toString());
                     fnFormatter = null;
             }
         }
@@ -4238,6 +4301,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
  */
 YAHOO.widget.DataTable.formatButton= function(elCell, oRecord, oColumn, oData) {
     var sValue = YAHOO.lang.isValue(oData) ? oData : "Click";
+    //TODO: support YAHOO.widget.Button
     //if(YAHOO.widget.Button) {
     
     //}
@@ -4301,8 +4365,7 @@ YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData
         elCell.innerHTML = markup;
     }
     else {
-        elCell.innerHTML = "";
-        YAHOO.log("Could not format currency " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatCurrency");
+        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4313,7 +4376,7 @@ YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData
  * @param elCell {HTMLElement} Table cell element.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oData {Object} Data value for the cell, or null
+ * @param oData {Object} Data value for the cell, or null.
  * @static
  */
 YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
@@ -4322,8 +4385,7 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
         elCell.innerHTML = (oDate.getMonth()+1) + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
     }
     else {
-        elCell.innerHTML = "";
-        YAHOO.log("Could not format date " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatDate");
+        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4334,10 +4396,10 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
  * @param el {HTMLElement} The element to format.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
+ * @param oData {Object} Data value for the cell, or null.
  * @static
  */
-YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTable) {
+YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oData) {
     var selectedValue = (YAHOO.lang.isValue(oData)) ? oData : oRecord.getData(oColumn.key);
     var options = (YAHOO.lang.isArray(oColumn.dropdownOptions)) ?
             oColumn.dropdownOptions : null;
@@ -4383,8 +4445,7 @@ YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTabl
         }
     }
     else {
-        el.innerHTML = "";
-        YAHOO.log("Could not format dropdown " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatDropdown");
+        el.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4399,13 +4460,11 @@ YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oDataTabl
  * @static
  */
 YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
-    var sEmail = oData;
-    if(sEmail) {
-        elCell.innerHTML = "<a href=\"mailto:" + sEmail + "\">" + sEmail + "</a>";
+    if(YAHOO.lang.isString(oData)) {
+        elCell.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
     }
     else {
-        elCell.innerHTML = "";
-        YAHOO.log("Could not format email " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatEmail");
+        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4420,13 +4479,11 @@ YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
  * @static
  */
 YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
-    var sLink = oData;
-    if(sLink) {
-        elCell.innerHTML = "<a href=\"" + sLink + "\">" + sLink + "</a>";
+    if(YAHOO.lang.isString(oData)) {
+        elCell.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
     }
     else {
-        elCell.innerHTML = "";
-        YAHOO.log("Could not format link " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatLink");
+        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4441,13 +4498,11 @@ YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
  * @static
  */
 YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) {
-    var nNumber = oData;
-    if((nNumber !== undefined) && (nNumber !== null)) {
-        elCell.innerHTML = nNumber.toString();
+    if(YAHOO.lang.isNumber(oData)) {
+        elCell.innerHTML = oData;
     }
     else {
-        elCell.innerHTML = "";
-        YAHOO.log("Could not format Number " + YAHOO.lang.dump(oData), "warn", "YAHOO.widget.Column.formatNumber");
+        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4849,6 +4904,17 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         }
     }
     YAHOO.log("Could not select " + row, "warn", this.toString());
+};
+// Backward compatibility
+YAHOO.widget.DataTable.prototype.select = function(els) {
+    YAHOO.log("The method select() has been deprecated" +
+            " in favor of selectRow()", "warn", this.toString());
+    if(!YAHOO.lang.isArray(els)) {
+        els = [els];
+    }
+    for(var i=0; i<els.length; i++) {
+        this.selectRow(els[i]);
+    }
 };
 
 /**
@@ -6566,6 +6632,12 @@ YAHOO.widget.DataTable.prototype.onEventShowCellEditor = function(oArgs) {
         YAHOO.log("Could not edit cell " + target, "warn", this.toString());
     }
 };
+// Backward compatibility
+YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
+    YAHOO.log("The method onEventEditCell() has been deprecated" +
+        " in favor of onEventShowCellEditor()", "warn", this.toString());
+    this.onEventShowCellEditor(oArgs);
+};
 
 /**
  * Overridable custom event handler to save Cell Editor input.
@@ -6606,8 +6678,11 @@ YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest
     }
 };
 // Backward compatibility
-YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows =
-        YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable;
+YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
+    YAHOO.log("The method onDataReturnReplaceRows() has been deprecated" +
+            " in favor of onDataReturnInitializeTable()", "warn", this.toString());
+    this.onDataReturnInitializeTable(sRequest, oResponse);
+};
 
 /**
  * Callback function receives data from DataSource and appends to an existing
