@@ -1076,6 +1076,6 @@
         
     };
     
-    YAHOO.augment(Module, YAHOO.util.EventProvider);
+    YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());

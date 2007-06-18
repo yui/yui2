@@ -652,6 +652,6 @@
     
     };
     
-    YAHOO.augment(Config, YAHOO.util.EventProvider);
+    YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());

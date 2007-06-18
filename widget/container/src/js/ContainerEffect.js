@@ -385,6 +385,6 @@
     
     };
 
-    YAHOO.augment(ContainerEffect, YAHOO.util.EventProvider);
+    YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);
 
 })();
