@@ -94,7 +94,8 @@ YAHOO.example.XHR_Text = new function() {
         fields: ["Name","Address","City","Phone",{key:"Rating",converter:YAHOO.util.DataSource.convertToNumber},"Url"]
     };
 
-    this.myDataTable = new YAHOO.widget.DataTable("text", myColumnDefs, this.myDataSource);
+    this.myDataTable = new YAHOO.widget.DataTable("text", myColumnDefs,
+            this.myDataSource, {caption:"Example: Delimited Textual Data Over XHR"});
 };
 </script>
 <script type="text/javascript" src="../assets/dpSyntaxHighlighter.js"></script>

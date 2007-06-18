@@ -94,7 +94,8 @@ YAHOO.example.XHR_JSON = new function() {
     };
 
     this.myDataTable = new YAHOO.widget.DataTable("json", myColumnDefs,
-            this.myDataSource, {initialRequest:"query=pizza&zip=94089&results=10&output=json"});
+            this.myDataSource, {caption:"Example: JSON Data Over XHR",
+            initialRequest:"query=pizza&zip=94089&results=10&output=json"});
             
     this.myDataSource.sendRequest("query=italian&zip=94089&results=10&output=json",
             this.myDataTable.onDataReturnAppendRows, this.myDataTable);
