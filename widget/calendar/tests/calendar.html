@@ -14,8 +14,8 @@
 
 <script type="text/javascript">
 	
-	// TODO: Move to common infrastructure?
-	// TODO: Change ArrayAssert.itemsAreSame to take comparator?
+	// REFACTOR: Move to common infrastructure?
+	// REFACTOR: Change ArrayAssert.itemsAreSame to take comparator?
 	
 	YAHOO.util.DateAssert = {
 		
@@ -125,9 +125,24 @@
 <h1>Calendar Tests</h1>
 <p>The YUI Calendar Suite is split into 6 test cases. The three types of test case below are created for both Calendar and CalendarGroup:
 <ol>
-	<li><strong>API Tests:</strong> These tests are intended to test the API, without going through the DOM Element or Event layers</li>
-	<li><strong>DOM Tests:</strong> These tests are intended to test the DOM Element and Event layers</li>
-	<li><strong>CFG Tests:</strong> These tests are intended to test the set of Calendar configuration properties</li>
+	<li><strong>API Tests:</strong> These tests are intended to test the API, without going through the DOM Element or Event layers
+		<ul>
+			<li>TestCase: calendarapi</li>
+			<li>TestCase: calendargrpapi</li>
+		</ul>
+	</li>
+	<li><strong>DOM Tests:</strong> These tests are intended to test the DOM Element and Event layers
+		<ul>
+			<li>TestCase: calendardom</li>
+			<li>TestCase: calendargrpdom</li>
+		</ul>
+	</li>
+	<li><strong>CFG Tests:</strong> These tests are intended to test the set of Calendar configuration properties
+		<ul>
+			<li>TestCase: calendarcfg</li>
+			<li>TestCase: calendargrpcfg</li>
+		</ul>
+	</li>
 </ol>
 
 <p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
