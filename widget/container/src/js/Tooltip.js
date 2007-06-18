@@ -499,7 +499,7 @@
             var yOffset = 25,
                 me = this;
         
-            if (this.browser == "opera" && context.tagName && 
+            if (YAHOO.env.ua.opera && context.tagName && 
                 context.tagName.toUpperCase() == "A") {
 
                 yOffset += 12;

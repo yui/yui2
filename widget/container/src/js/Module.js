@@ -378,7 +378,8 @@
         }(),
         
         /**
-        * String representing the current user-agent browser
+        * String representing the user-agent of the browser
+        * @deprecated Use YAHOO.env.ua
         * @property browser
         * @type String
         */
@@ -606,7 +607,7 @@
         
             }
         
-            if (this.browser != "opera") {
+            if (!YAHOO.env.ua.opera) {
         
                 resizeMonitor = document.getElementById("_yuiResizeMonitor");
         
@@ -614,10 +615,10 @@
         
                     resizeMonitor = document.createElement("iframe");
         
-                    bIE = (this.browser.indexOf("ie") === 0);
+                    bIE = YAHOO.env.ua.ie;
         
                     if (this.isSecure && 
-                        Module.RESIZE_MONITOR_SECURE_URL && bIE) {
+                            Module.RESIZE_MONITOR_SECURE_URL && bIE) {
     
                         resizeMonitor.src = 
                             Module.RESIZE_MONITOR_SECURE_URL;

@@ -737,8 +737,8 @@
         */
         sizeUnderlay: function () {
 
-            if (this.underlay && this.browser != "gecko" && 
-                this.browser != "safari") {
+            if (this.underlay && !YAHOO.env.ua.gecko && 
+                !YAHOO.env.ua.webkit) {
 
                 this.underlay.style.width = 
                     this.innerElement.offsetWidth + "px";
@@ -802,7 +802,7 @@
                         bottomConstraint,
                         rightConstraint;
     
-                    if (me.browser == "ie") {
+                    if (YAHOO.env.ua.ie == 6) {
                         Dom.addClass(me.element,"drag");
                     }
         
@@ -850,7 +850,7 @@
                 this.dd.onDrag = function () {
                     me.syncPosition();
                     me.cfg.refireEvent("iframe");
-                    if (this.platform == "mac" && this.browser == "gecko") {
+                    if (this.platform == "mac" && YAHOO.env.ua.gecko) {
                         this.showMacGeckoScrollbars();
                     }
         
@@ -858,7 +858,7 @@
                 };
         
                 this.dd.endDrag = function () {
-                    if (me.browser == "ie") {
+                    if (YAHOO.env.ua.ie == 6) {
                         Dom.removeClass(me.element,"drag");
                     }
         

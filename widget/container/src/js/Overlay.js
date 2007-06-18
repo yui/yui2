@@ -114,7 +114,7 @@
         
             "IFRAME": { 
                 key: "iframe", 
-                value: (Module.prototype.browser == "ie" ? true : false), 
+                value: (YAHOO.env.ua.ie == 6 ? true : false), 
                 validator: Lang.isBoolean, 
                 supercedes: ["zIndex"] 
             }
@@ -203,8 +203,7 @@
     */
     Overlay.windowScrollHandler = function (e) {
     
-        if (Module.prototype.browser == "ie" || 
-            Module.prototype.browser == "ie7") {
+        if (YAHOO.env.ua.ie) {
     
             if (! window.scrollEnd) {
     
@@ -236,8 +235,7 @@
     */
     Overlay.windowResizeHandler = function (e) {
     
-        if (Module.prototype.browser == "ie" || 
-            Module.prototype.browser == "ie7") {
+        if (YAHOO.env.ua.ie) {
     
             if (! window.resizeEnd) {
                 window.resizeEnd = -1;
@@ -313,7 +311,7 @@
     
             }
             
-            if (this.platform == "mac" && this.browser == "gecko") {
+            if (this.platform == "mac" && YAHOO.env.ua.gecko) {
     
                 if (! Config.alreadySubscribed(this.showEvent,
                     this.showMacGeckoScrollbars, this)) {
@@ -596,8 +594,7 @@
                 currentVis = Dom.getStyle(this.element, "visibility"),
                 effect = this.cfg.getProperty("effect"),
                 effectInstances = [],
-                isMacGecko = 
-                    (this.platform == "mac" && this.browser == "gecko"),
+                isMacGecko = (this.platform == "mac" && YAHOO.env.ua.gecko),
                 alreadySubscribed = Config.alreadySubscribed,
                 eff, ei, e, i, j, k, h,
                 nEffects,
