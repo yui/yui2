@@ -42,8 +42,11 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
                 "error", this.toString());
         return;
     }
-    
-    if(YAHOO.lang.isArray(oLiveData)) {
+
+    if(oLiveData.nodeType && oLiveData.nodeType == 9) {
+        this.dataType = YAHOO.util.DataSource.TYPE_XML;
+    }
+    else if(YAHOO.lang.isArray(oLiveData)) {
         this.dataType = YAHOO.util.DataSource.TYPE_JSARRAY;
     }
     else if(YAHOO.lang.isString(oLiveData)) {
@@ -260,7 +263,7 @@ YAHOO.util.DataSource.TYPE_TEXT = 5;
 YAHOO.util.DataSource.TYPE_HTMLTABLE = 6;
 
 /**
- * Error message for invalid data responses.
+ * Error message for invalid dataresponses.
  *
  * @property ERROR_DATAINVALID
  * @type String
@@ -473,14 +476,14 @@ YAHOO.util.DataSource.prototype.connTimeout = 0;
  * Converts data to type String.
  *
  * @method DataSource.convertToString
- * @method oData {String | Number | Boolean | Date | Array | Object} Data to convert.
+ * @param oData {String | Number | Boolean | Date | Array | Object} Data to convert.
  * The special values null and undefined will return null.
  * @return {Number} A string, or null.
  * @static
  */
 YAHOO.util.DataSource.convertToString = function(oData) {
     // Special case null and undefined
-    if((oData === null) || (oData === undefined)) {
+    if(!YAHOO.lang.isValue(oData)) {
         return null;
     }
     
@@ -501,7 +504,7 @@ YAHOO.util.DataSource.convertToString = function(oData) {
  * Converts data to type Number.
  *
  * @method DataSource.convertToNumber
- * @method oData {String | Number | Boolean | Null} Data to convert. Beware, null
+ * @param oData {String | Number | Boolean | Null} Data to convert. Beware, null
  * returns as 0.
  * @return {Number} A number, or null if NaN.
  * @static
@@ -520,14 +523,18 @@ YAHOO.util.DataSource.convertToNumber = function(oData) {
     }
 };
 // Backward compatibility
-YAHOO.util.DataSource.convertNumber = YAHOO.util.DataSource.convertToNumber;
-
+YAHOO.util.DataSource.convertNumber = function(oData) {
+    YAHOO.log("The method YAHOO.util.DataSource.convertNumber() has been" +
+    " deprecated in favor of YAHOO.util.DataSource.convertToNumber()", "warn",
+    "YAHOO.util.DataSource.convertNumber");
+    return YAHOO.util.DataSource.convertToNumber(oData);
+};
 
 /**
  * Converts data to type Date.
  *
  * @method DataSource.convertToDate
- * @method oData {Date | String | Number} Data to convert.
+ * @param oData {Date | String | Number} Data to convert.
  * @return {Date} A Date instance.
  * @static
  */
@@ -552,7 +559,12 @@ YAHOO.util.DataSource.convertToDate = function(oData) {
     }
 };
 // Backward compatibility
-YAHOO.util.DataSource.convertDate = YAHOO.util.DataSource.convertToDate;
+YAHOO.util.DataSource.convertDate = function(oData) {
+    YAHOO.log("The method YAHOO.util.DataSource.convertDate() has been" +
+    " deprecated in favor of YAHOO.util.DataSource.convertToDate()", "warn",
+    "YAHOO.util.DataSource.convertDate");
+    return YAHOO.util.DataSource.convertToDate(oData);
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -709,14 +721,6 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
     // How to make the connection depends on the type of data
     switch(this.dataType) {
-        // If the live data is a JavaScript Array
-        // simply forward the entire array to the handler
-        case YAHOO.util.DataSource.TYPE_JSARRAY:
-        case YAHOO.util.DataSource.TYPE_JSON:
-            oRawResponse = this.liveData;
-            this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
-            break;
-            
         // If the live data is a JavaScript Function
         // pass the request in as a parameter and
         // forward the return value to the handler
@@ -724,14 +728,6 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             oRawResponse = this.liveData(oRequest);
             this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
             break;
-            
-        // If the live data is an HTML TABLE element
-        // simply forward the table itself to the handler
-        case YAHOO.util.DataSource.TYPE_HTMLTABLE:
-            oRawResponse = this.liveData;
-            this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
-            break;
-
         // If the live data is over Connection Manager
         // set up the callback object and
         // pass the request in as a URL query and
@@ -802,6 +798,14 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                         message:YAHOO.util.DataSource.ERROR_DATAINVALID});
                 YAHOO.log(YAHOO.util.DataSource.ERROR_DATAINVALID + ": " +
                         oResponse.statusText, "error", this.toString());
+
+                // Backward compatibility
+                if((this.liveData.lastIndexOf("?") !== this.liveData.length-1) &&
+                    (oRequest.indexOf("?") !== 0)){
+                        YAHOO.log("DataSources using XHR no longer supply a \"?\"" +
+                        " between the host and query parameters" +
+                        " -- please check that the request URL is correct", "warn", this.toString());
+                }
 
                 // Send failure response back to the caller with the error flag on
                 oCallback.call(oCaller, oRequest, oResponse, true);
@@ -897,9 +901,17 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             }
 
             break;
+        // Simply forward the entire data object to the handler
         default:
-            YAHOO.log("Could not make connection to data for request \"" + oRequest +
-                    "\" due to unknown data type", "warn", this.toString());
+            /* accounts for the following cases:
+            YAHOO.util.DataSource.TYPE_UNKNOWN:
+            YAHOO.util.DataSource.TYPE_JSARRAY:
+            YAHOO.util.DataSource.TYPE_JSON:
+            YAHOO.util.DataSource.TYPE_HTMLTABLE:
+            YAHOO.util.DataSource.TYPE_XML:
+            */
+            oRawResponse = this.liveData;
+            this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
             break;
     }
     return tId;
