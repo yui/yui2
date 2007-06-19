@@ -1046,8 +1046,8 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
             var oResult = {};
             for(var j=fields.length-1; j>-1; j--) {
                 var field = fields[j];
-                var key = field.key || field;
-                var data = oRawResponse[i][j] || oRawResponse[i][key];
+                var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
+                var data = (YAHOO.lang.isValue(oRawResponse[i][j])) ? oRawResponse[i][j] : oRawResponse[i][key];
                 if(field.converter) {
                     data = field.converter(data);
                 }
@@ -1112,7 +1112,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
                         data = data.substr(0,data.length-1);
                     }
                     var field = fields[j];
-                    var key = field.key || field;
+                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                     if(field.converter) {
                         data = field.converter(data);
                     }
@@ -1162,7 +1162,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
                 // Loop through each data field in each result using the schema
                 for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
                     var field = this.responseSchema.fields[m];
-                    var key = field.key || field;
+                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                     var data = null;
                     // Values may be held in an attribute...
                     var xmlAttr = result.attributes.getNamedItem(key);
@@ -1310,7 +1310,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             // ...and loop through each data field value of each response
             for(var j = fields.length-1; j >= 0 ; j--) {
                 var field = fields[j];
-                var key = field.key || field;
+                var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                 // ...and capture data into an array mapped according to the schema...
                 // eval is necessary here since schema can be of unknown depth
                 var data = eval("jsonResult." + key);
@@ -1364,7 +1364,7 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
                 
                 for(var k=fields.length-1; k>-1; k--) {
                     var field = fields[k];
-                    var key = field.key || field;
+                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                     var data = elRow.cells[k].innerHTML;
                     if(field.converter) {
                         data = field.converter(data);

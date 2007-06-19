@@ -34,7 +34,8 @@ YAHOO.example.Data = {
         ["home.html",20,400,44,657],
         ["blog.html",24,377,97,567],
         ["contact.html",32,548,42,543],
-        ["about.html",8,465,12,946]
+        ["about.html",8,465,12,946],
+        ["pagenotfound.html",0,0,0,0]
     ],
 
     emails: {
