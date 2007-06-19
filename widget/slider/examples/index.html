@@ -248,7 +248,7 @@ YAHOO.example.Sliders = function() {
 
         yslider.subscribe("change", function(offsetFromStart) {
                 if (this.moveComplete) {
-                    //alert("moveComplete");
+                    YAHOO.log("moveComplete", "warn");
                 }
                 Dom.get(valFld).value = offsetFromStart;
                 Dom.get(bg).title = "Vert Slider, value = " + offsetFromStart;

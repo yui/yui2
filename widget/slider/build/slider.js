@@ -105,6 +105,7 @@ YAHOO.widget.Slider.getSliderRegion =
  */
 YAHOO.widget.Slider.ANIM_AVAIL = true;
 
+
 YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
     /**
@@ -217,6 +218,36 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * @default 0.2
          */
         this.animationDuration = 0.2;
+
+        /**
+         * Constant for valueChangeSource, indicating that the user clicked or
+         * dragged the slider to change the value.
+         * @property SOURCE_UI_EVENT
+         * @final
+         * @default 1
+         */
+        this.SOURCE_UI_EVENT = 1;
+
+        /**
+         * Constant for valueChangeSource, indicating that the value was altered
+         * by a programmatic call to setValue/setRegionValue.
+         * @property SOURCE_SET_VALUE
+         * @final
+         * @default 2
+         */
+        this.SOURCE_SET_VALUE = 2;
+
+        /**
+         * When the slider value changes, this property is set to identify where
+         * the update came from.  This will be either 1, meaning the slider was
+         * clicked or dragged, or 2, meaning that it was set via a setValue() call.
+         * This can be used within event handlers to apply some of the logic only
+         * when dealing with one source or another.
+         * @property valueChangeSource
+         * @type int
+         * @since 2.3.0
+         */
+        this.valueChangeSource = 0;
     },
 
     /**
@@ -454,6 +485,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     focus: function() {
+        this.valueChangeSource = this.SOURCE_UI_EVENT;
 
         // Focus the background element if possible
         var el = this.getEl();
@@ -567,6 +599,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      */
     setValue: function(newOffset, skipAnim, force) {
 
+        this.valueChangeSource = this.SOURCE_SET_VALUE;
+
         if (!this.thumb.available) {
             this.deferredSetValue = arguments;
             return false;
@@ -613,6 +647,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @return {boolean} true if the move was performed, false if it failed
      */
     setRegionValue: function(newOffset, newOffset2, skipAnim, force) {
+
+        this.valueChangeSource = this.SOURCE_SET_VALUE;
 
         if (!this.thumb.available) {
             this.deferredSetRegionValue = arguments;
