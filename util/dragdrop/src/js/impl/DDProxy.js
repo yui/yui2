@@ -58,15 +58,14 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
      * @method createFrame
      */
     createFrame: function() {
-        var self = this;
-        var body = document.body;
+        var self=this, body=document.body;
 
         if (!body || !body.firstChild) {
             setTimeout( function() { self.createFrame(); }, 50 );
             return;
         }
 
-        var div = this.getDragEl();
+        var div=this.getDragEl(), Dom=YAHOO.util.Dom;
 
         if (!div) {
             div    = document.createElement("div");
@@ -78,6 +77,21 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
             s.cursor     = "move";
             s.border     = "2px solid #aaa";
             s.zIndex     = 999;
+            s.height     = "25px";
+            s.width      = "25px";
+
+            var _data = document.createElement('div');
+            Dom.setStyle(_data, 'height', '100%');
+            Dom.setStyle(_data, 'width', '100%');
+            /**
+            * If the proxy element has no background-color, then it is considered to the "transparent" by Internet Explorer.
+            * Since it is "transparent" then the events pass through it to the iframe below.
+            * So creating a "fake" div inside the proxy element and giving it a background-color, then setting it to an
+            * opacity of 0, it appears to not be there, however IE still thinks that it is so the events never pass through.
+            */
+            Dom.setStyle(_data, 'background-color', '#ccc');
+            Dom.setStyle(_data, 'opacity', '0');
+            div.appendChild(_data);
 
             // appendChild can blow up IE if invoked prior to the window load event
             // while rendering a table.  It is possible there are other scenarios 

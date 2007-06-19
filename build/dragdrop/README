@@ -1,7 +1,18 @@
 Drag and Drop Release Notes
 
 2.3.0
-  * The document mousemove listener no longer returns true
+  * YAHOO.util.DragDropMgr.stopDrag is now public, and can be used to cancel
+    a drag in progress.  An optional "silent" flag was added to skip the
+    onMouseUp and endDrag functions when needed (eliminating the need to
+    supply mouseup page coordinates to these functions).
+  * DDProxy: the position of the proxy is not set before the drag is confirmed,
+    preventing auto-scroll from distrupting the user experience.
+  * Modified the default proxy so that IE properly registers the proxy as
+    the event target during the drag.
+  * If a dd instance is created using a dom reference rather than an id, that
+    reference is stored and used throughout making it possible to control
+    instances outside the current window.
+  * The document mousemove listener no longer returns true.
 
 2.2.2
   * No change

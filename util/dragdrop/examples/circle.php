@@ -119,7 +119,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.DDApp.init);
 
   <br />
   
-  In addition, the circle snaps back to its inital position if not dropped 
+  In addition, the circle snaps back to its initial position if not dropped 
   on a target.  This is done by overriding the onInvalidDrop method.
 
   </p>

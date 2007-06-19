@@ -109,12 +109,12 @@ YAHOO.util.DragDropMgr = function() {
 
         /**
          * Internal flag that is set to true when drag and drop has been
-         * intialized
+         * initialized
          * @property initialized
          * @private
          * @static
          */
-        initalized: false,
+        initialized: false,
 
         /**
          * All drag and drop can be disabled.
@@ -123,7 +123,6 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         locked: false,
-
 
         /**
          * Provides additional information about the the current set of
@@ -555,9 +554,12 @@ YAHOO.util.DragDropMgr = function() {
          */
         startDrag: function(x, y) {
             clearTimeout(this.clickTimeout);
-            if (this.dragCurrent) {
-                this.dragCurrent.b4StartDrag(x, y);
-                this.dragCurrent.startDrag(x, y);
+            var dc = this.dragCurrent;
+            if (dc) {
+                dc.b4StartDrag(x, y);
+            }
+            if (dc) {
+                dc.startDrag(x, y);
             }
             this.dragThreshMet = true;
         },
@@ -603,17 +605,26 @@ YAHOO.util.DragDropMgr = function() {
         },
 
         /** 
-         * Internal function to clean up event handlers after the drag 
-         * operation is complete
+         * Ends the current drag, cleans up the state, and fires the endDrag
+         * and mouseUp events.  Called internally when a mouseup is detected
+         * during the drag.  Can be fired manually during the drag by passing
+         * either another event (such as the mousemove event received in onDrag)
+         * or a fake event with pageX and pageY defined (so that endDrag and
+         * onMouseUp have usable position data.).  Alternatively, pass true
+         * for the silent parameter so that the endDrag and onMouseUp events
+         * are skipped (so no event data is needed.)
+         *
          * @method stopDrag
-         * @param {Event} e the event
-         * @private
+         * @param {Event} e the mouseup event, another event (or a fake event) 
+         *                  with pageX and pageY defined, or nothing if the 
+         *                  silent parameter is true
+         * @param {boolean} silent skips the enddrag and mouseup events if true
          * @static
          */
-        stopDrag: function(e) {
+        stopDrag: function(e, silent) {
 
             // Fire the drag end event for the item that was dragged
-            if (this.dragCurrent) {
+            if (this.dragCurrent && !silent) {
                 if (this.dragThreshMet) {
                     this.dragCurrent.b4EndDrag(e);
                     this.dragCurrent.endDrag(e);
@@ -625,7 +636,6 @@ YAHOO.util.DragDropMgr = function() {
             this.dragCurrent = null;
             this.dragOvers = {};
         },
-
 
         /** 
          * Internal function to handle the mousemove event.  Will be invoked 
@@ -642,7 +652,9 @@ YAHOO.util.DragDropMgr = function() {
          * @static
          */
         handleMouseMove: function(e) {
-            if (this.dragCurrent) {
+            
+            var dc = this.dragCurrent;
+            if (dc) {
 
                 // var button = e.which || e.button;
 
@@ -662,9 +674,13 @@ YAHOO.util.DragDropMgr = function() {
                 }
 
                 if (this.dragThreshMet) {
-                    this.dragCurrent.b4Drag(e);
-                    this.dragCurrent.onDrag(e);
-                    this.fireEvents(e, false);
+                    dc.b4Drag(e);
+                    if (dc) {
+                        dc.onDrag(e);
+                    }
+                    if (dc) {
+                        this.fireEvents(e, false);
+                    }
                 }
 
                 this.stopEvent(e);
@@ -781,47 +797,75 @@ YAHOO.util.DragDropMgr = function() {
             if (this.mode) {
                 if (outEvts.length) {
                     dc.b4DragOut(e, outEvts);
-                    dc.onDragOut(e, outEvts);
+                    if (dc) {
+                        dc.onDragOut(e, outEvts);
+                    }
                 }
 
                 if (enterEvts.length) {
-                    dc.onDragEnter(e, enterEvts);
+                    if (dc) {
+                        dc.onDragEnter(e, enterEvts);
+                    }
                 }
 
                 if (overEvts.length) {
-                    dc.b4DragOver(e, overEvts);
-                    dc.onDragOver(e, overEvts);
+                    if (dc) {
+                        dc.b4DragOver(e, overEvts);
+                    }
+
+                    if (dc) {
+                        dc.onDragOver(e, overEvts);
+                    }
                 }
 
                 if (dropEvts.length) {
-                    dc.b4DragDrop(e, dropEvts);
-                    dc.onDragDrop(e, dropEvts);
+                    if (dc) {
+                        dc.b4DragDrop(e, dropEvts);
+                    }
+                    if (dc) {
+                        dc.onDragDrop(e, dropEvts);
+                    }
                 }
 
             } else {
                 // fire dragout events
                 var len = 0;
                 for (i=0, len=outEvts.length; i<len; ++i) {
-                    dc.b4DragOut(e, outEvts[i].id);
-                    dc.onDragOut(e, outEvts[i].id);
+                    if (dc) {
+                        dc.b4DragOut(e, outEvts[i].id);
+                    }
+                    if (dc) {
+                        dc.onDragOut(e, outEvts[i].id);
+                    }
                 }
                  
                 // fire enter events
                 for (i=0,len=enterEvts.length; i<len; ++i) {
                     // dc.b4DragEnter(e, oDD.id);
-                    dc.onDragEnter(e, enterEvts[i].id);
+
+                    if (dc) {
+                        dc.onDragEnter(e, enterEvts[i].id);
+                    }
                 }
          
                 // fire over events
                 for (i=0,len=overEvts.length; i<len; ++i) {
-                    dc.b4DragOver(e, overEvts[i].id);
-                    dc.onDragOver(e, overEvts[i].id);
+                    if (dc) {
+                        dc.b4DragOver(e, overEvts[i].id);
+                    }
+                    if (dc) {
+                        dc.onDragOver(e, overEvts[i].id);
+                    }
                 }
 
                 // fire drop events
                 for (i=0, len=dropEvts.length; i<len; ++i) {
-                    dc.b4DragDrop(e, dropEvts[i].id);
-                    dc.onDragDrop(e, dropEvts[i].id);
+                    if (dc) {
+                        dc.b4DragDrop(e, dropEvts[i].id);
+                    }
+                    if (dc) {
+                        dc.onDragDrop(e, dropEvts[i].id);
+                    }
                 }
 
             }
