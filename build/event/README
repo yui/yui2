@@ -2,7 +2,8 @@
 YUI Library - Event - Release Notes
 
 2.3.0
-  * addListener now generates an error if the supplied callback is undefined.
+  * addListener now produces a logger warning if the supplied callback is 
+    undefined.
   * Reduced the likelihood that window onload listeners fire before
     onAvailable listeners when the two happen near the same moment.
   * Fixed an IE error that could occur when the library was injected into 

@@ -127,7 +127,7 @@ if (!YAHOO.util.Event) {
              * The number of times we should look for elements that are not
              * in the DOM at the time the event is requested after the document
              * has been loaded.  The default is 4000@amp;10 ms, so it will poll
-             * for 10 seconds or until all outstanding handlers are bound
+             * for 40 seconds or until all outstanding handlers are bound
              * (whichever comes first).
              * @property POLL_RETRYS
              * @type int
@@ -363,7 +363,7 @@ if (!YAHOO.util.Event) {
              *                             passed as a parameter to the handler
              * @param {boolean|object}  override  If true, the obj passed in becomes
              *                             the execution scope of the listener. If an
-             *                             obejct, this object becomes the execution
+             *                             object, this object becomes the execution
              *                             scope.
              * @return {boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
@@ -374,7 +374,8 @@ if (!YAHOO.util.Event) {
             addListener: function(el, sType, fn, obj, override) {
 
                 if (!fn || !fn.call) {
-                    // this.logger.debug("Error, function is not valid " + fn);
+// throw new TypeError(sType + " addListener call failed, callback undefined");
+YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event");
                     return false;
                 }
 
@@ -390,7 +391,7 @@ if (!YAHOO.util.Event) {
                     }
                     return ok;
 
-                } else if (typeof el == "string") {
+                } else if (YAHOO.lang.isString(el)) {
                     var oEl = this.getEl(el);
                     // If the el argument is a string, we assume it is 
                     // actually the id of the element.  If the page is loaded
@@ -601,7 +602,6 @@ if (!YAHOO.util.Event) {
                     //return false;
                     return this.purgeElement(el, false, sType);
                 }
-
 
                 if ("unload" == sType) {
 
@@ -940,12 +940,18 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _isValidCollection: function(o) {
-                return ( o                    && // o is something
-                         o.length             && // o is indexed
-                         typeof o != "string" && // o is not a string
-                         !o.tagName           && // o is not an HTML element
-                         !o.alert             && // o is not a window
-                         typeof o[0] != "undefined" );
+                try {
+                    return ( o                    && // o is something
+                             o.length             && // o is indexed
+                             typeof o != "string" && // o is not a string
+                             !o.tagName           && // o is not an HTML element
+                             !o.alert             && // o is not a window
+                             typeof o[0] != "undefined" );
+                } catch(e) {
+                    YAHOO.log("_isValidCollection threw an error, assuming that " +
+                        " this is a cross frame problem and not a collection", warn);
+                    return false;
+                }
 
             },
 
@@ -996,8 +1002,14 @@ if (!YAHOO.util.Event) {
                     loadComplete = true;
                     var EU = YAHOO.util.Event;
 
-                    // just in case DOMReady did not go off for some reason
+                    // Just in case DOMReady did not go off for some reason
                     EU._ready();
+
+                    // Available elements may not have been detected before the
+                    // window load event fires. Try to find them now so that the
+                    // the user is more likely to get the onAvailable notifications
+                    // before the window load notification
+                    EU._tryPreloadAttach();
 
                     // Remove the listener to assist with the IE memory issue, but not
                     // for other browsers because FF 1.0x does not like it.

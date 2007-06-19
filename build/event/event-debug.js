@@ -755,7 +755,7 @@ if (!YAHOO.util.Event) {
              *                             passed as a parameter to the handler
              * @param {boolean|object}  override  If true, the obj passed in becomes
              *                             the execution scope of the listener. If an
-             *                             obejct, this object becomes the execution
+             *                             object, this object becomes the execution
              *                             scope.
              * @return {boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
@@ -994,7 +994,6 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     //return false;
                     return this.purgeElement(el, false, sType);
                 }
-
 
                 if ("unload" == sType) {
 
@@ -1333,12 +1332,18 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @private
              */
             _isValidCollection: function(o) {
-                return ( o                    && // o is something
-                         o.length             && // o is indexed
-                         typeof o != "string" && // o is not a string
-                         !o.tagName           && // o is not an HTML element
-                         !o.alert             && // o is not a window
-                         typeof o[0] != "undefined" );
+                try {
+                    return ( o                    && // o is something
+                             o.length             && // o is indexed
+                             typeof o != "string" && // o is not a string
+                             !o.tagName           && // o is not an HTML element
+                             !o.alert             && // o is not a window
+                             typeof o[0] != "undefined" );
+                } catch(e) {
+                    YAHOO.log("_isValidCollection threw an error, assuming that " +
+                        " this is a cross frame problem and not a collection", warn);
+                    return false;
+                }
 
             },
 
