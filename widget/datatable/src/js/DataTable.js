@@ -27,147 +27,63 @@
  */
 YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
     // Internal vars
-    var i, ok, elTable, elThead, elTbody;
-
     this._nIndex = YAHOO.widget.DataTable._nCount;
     this._sName = "instance" + this._nIndex;
     this.id = "yui-dt"+this._nIndex;
-    this._oRecordSet = new YAHOO.widget.RecordSet();
 
-    // Validate configs
-    if(oConfigs) {
-        if(oConfigs.constructor != Object) {
-            oConfigs = null;
-            YAHOO.log("Invalid configs", "warn", this.toString());
-        }
-        // Backward compatibility
-        else if(YAHOO.lang.isBoolean(oConfigs.paginator)) {
-            YAHOO.log("DataTable's paginator model has been revised" +
-            " -- please refer to the documentation for implementation" +
-            " details", "warn", this.toString());
-        }
-    }
-
-    // Validate ColumnSet
-    if(YAHOO.lang.isArray(aColumnDefs)) {
-        this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
-    }
-    // Backward compatibility
-    else if(aColumnDefs instanceof YAHOO.widget.ColumnSet) {
-        this._oColumnSet =  aColumnDefs;
-        YAHOO.log("DataTable's constructor now requires an array" +
-        " of object literal Column definitions instead of a ColumnSet instance",
-        "warn", this.toString());
-    }
-    if(!this._oColumnSet instanceof YAHOO.widget.ColumnSet) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid ColumnSet", "error", this.toString());
-        return;
-    }
-
-    // Validate DataSource
-    if(oDataSource && (oDataSource instanceof YAHOO.util.DataSource)) {
-        this._oDataSource = oDataSource;
-    }
-    // Backward compatibility
-    else {
-        var tmpTable = null;
-        var tmpContainer = YAHOO.util.Dom.get(elContainer);
-        if(tmpContainer && tmpContainer.tagName && (tmpContainer.tagName.toLowerCase() == "div")) {
-            // Peek in container child nodes to see if TABLE already exists
-            if(tmpContainer.hasChildNodes()) {
-                var tmpChildren = tmpContainer.childNodes;
-                for(i=0; i<tmpChildren.length; i++) {
-                    if(tmpChildren[i].tagName && tmpChildren[i].tagName.toLowerCase() == "table") {
-                        tmpTable = tmpChildren[i];
-                        break;
-                    }
-                }
-                if(tmpTable) {
-                    var tmpFieldsArray = [];
-                    for(i=0; i<this._oColumnSet.keys.length; i++) {
-                        tmpFieldsArray.push({key:this._oColumnSet.keys[i].key});
-                    }
-
-                    this._oDataSource = new YAHOO.util.DataSource(tmpTable);
-                    this._oDataSource.responseType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
-                    this._oDataSource.responseSchema = {fields: tmpFieldsArray};
-                    YAHOO.log("Null DataSource for progressive enhancement from" +
-                    " markup has been deprecated", "warn", this.toString());
-                }
-            }
-        }
-    }
-    if(!this._oDataSource) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
-        return;
-    }
-
-    // Validate Container element
-    elContainer = YAHOO.util.Dom.get(elContainer);
-    if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
-        this._elContainer = elContainer;
-    }
-    else {
+    // Initialize container element
+    this._initContainerEl(elContainer);
+    if(!this._elContainer) {
         YAHOO.log("Could not instantiate DataTable due to an invalid container element", "error", this.toString());
+        return;
+    }
+
+    // Initialize configs
+    this._initConfigs(oConfigs);
+
+    // Initialize ColumnSet
+    this._initColumnSet(aColumnDefs);
+    if(!this._oColumnSet) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid ColumnSet", "error", this.toString());
         return;
     }
 
     // Initialize DOM elements
     this._initTableEl();
-    elTable = this._elTable;
-    elThead = this._elThead;
-    elTbody = this._elTbody;
+    if(!this._elTable || !this._elThead || !this._elTbody) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        return;
+    }
 
-    // Call Element's constructor
-    YAHOO.widget.DataTable.superclass.constructor.call(this, elContainer, oConfigs);
+    // Call Element's constructor after DOM elements are created
+    // but before data is requested
+    YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
 
-    // Initialize inline editing
-    this._initCellEditorEl();
+    // Initialize DataSource
+    this._initDataSource(oDataSource);
+    if(!this._oDataSource) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
+        return;
+    }
 
-    // Set up sort
-    this.subscribe("headerLabelClickEvent", this.onEventSortColumn);
-    //this.subscribe("headerLabelClickEvent", this.onEventSortColumn);
+    // Initialize RecordSet
+    this._initRecordSet();
 
     // Send out for data in an asynchronous request
     this._oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
 
+    // Initialize inline Cell editing
+    this._initCellEditorEl();
+
+    // Initialize Column sort
+    this._initColumnSort();
+    
+    // Initialize DOM event listeners
+    this._initDomEvents();
+
     YAHOO.widget.DataTable._nCount++;
     this.fireEvent("initEvent");
     YAHOO.log("DataTable initialized", "info", this.toString());
-
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // DOM Events
-    //
-    /////////////////////////////////////////////////////////////////////////////
-
-    YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
-    YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
-
-    //YAHOO.util.Event.addListener(this._elContainer, "focus", this._onContainerFocus, this);
-    //YAHOO.util.Event.addListener(this._elContainer, "blur", this._onContainerBlur, this);
-
-    //YAHOO.util.Event.addListener(elTable, "focus", this._onTableFocus, this);
-    //YAHOO.util.Event.addListener(elTable, "blur", this._onTableBlur, this);
-
-    YAHOO.util.Event.addListener(elTable, "mouseover", this._onTableMouseover, this);
-    YAHOO.util.Event.addListener(elTable, "mouseout", this._onTableMouseout, this);
-    YAHOO.util.Event.addListener(elTable, "mousedown", this._onTableMousedown, this);
-    //YAHOO.util.Event.addListener(elTable, "mouseup", this._onTableMouseup, this);
-    //YAHOO.util.Event.addListener(elTable, "mousemove", this._onTableMousemove, this);
-
-    // Since we can't listen for click and dblclick on the same element...
-    YAHOO.util.Event.addListener(elTable, "dblclick", this._onTableDblclick, this);
-    YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
-    YAHOO.util.Event.addListener(elTbody, "click", this._onTbodyClick, this);
-
-    YAHOO.util.Event.addListener(elThead, "keydown", this._onTheadKeydown, this);
-    YAHOO.util.Event.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
-    YAHOO.util.Event.addListener(elTbody, "keyup", this._onTbodyKeyup, this);
-    YAHOO.util.Event.addListener(elTbody, "keypress", this._onTbodyKeypress, this);
-
-    YAHOO.util.Event.addListener(elContainer, "scroll", this._onScroll, this); // for IE
-    YAHOO.util.Event.addListener(elTbody, "scroll", this._onScroll, this); // for everyone else
 };
 
 if(YAHOO.util.Element) {
@@ -639,17 +555,6 @@ YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
  * @default "yui-dt-scrollbody"
  */
 YAHOO.widget.DataTable.CLASS_SCROLLBODY = "yui-dt-scrollbody";
-
-/*TODO: DELETE
- * Class name assigned to cell container elements within each TD element.
- *
- * @property DataTable.CLASS_CELL
- * @type String
- * @static
- * @final
- * @default "yui-dt-cell"
- */
-//YAHOO.widget.DataTable.CLASS_CELL = "yui-dt-cell";
 
 /**
  * Class name assigned to display label elements.
@@ -1190,6 +1095,114 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
 // INIT FUNCTIONS
 
 /**
+ * Initializes container element.
+ *
+ * @method _initContainerEl
+ * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initContainerEl = function(elContainer) {
+    this._elContainer = null;
+    elContainer = YAHOO.util.Dom.get(elContainer);
+    if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
+        this._elContainer = elContainer;
+    }
+};
+
+/**
+ * Initializes object literal of config values.
+ *
+ * @method _initConfigs
+ * @param oConfig {Object} Object literal of config values.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initConfigs = function(oConfigs) {
+    if(oConfigs) {
+        if(oConfigs.constructor != Object) {
+            oConfigs = null;
+            YAHOO.log("Invalid configs", "warn", this.toString());
+        }
+        // Backward compatibility
+        else if(YAHOO.lang.isBoolean(oConfigs.paginator)) {
+            YAHOO.log("DataTable's paginator model has been revised" +
+            " -- please refer to the documentation for implementation" +
+            " details", "warn", this.toString());
+        }
+        this._oConfigs = oConfigs;
+    }
+};
+
+/**
+ * Initializes ColumnSet.
+ *
+ * @method _initColumnSet
+ * @param aColumnDefs {Object[]} Array of object literal Column definitions.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initColumnSet = function(aColumnDefs) {
+    if(YAHOO.lang.isArray(aColumnDefs)) {
+        this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
+    }
+    // Backward compatibility
+    else if(aColumnDefs instanceof YAHOO.widget.ColumnSet) {
+        this._oColumnSet =  aColumnDefs;
+        YAHOO.log("DataTable's constructor now requires an array" +
+        " of object literal Column definitions instead of a ColumnSet instance",
+        "warn", this.toString());
+    }
+};
+
+/**
+ * Initializes DataSource.
+ *
+ * @method _initDataSource
+ * @param oDataSource {YAHOO.util.DataSource} DataSource instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initDataSource = function(oDataSource) {
+    if(oDataSource && (oDataSource instanceof YAHOO.util.DataSource)) {
+        this._oDataSource = oDataSource;
+    }
+    // Backward compatibility
+    else {
+        var tmpTable = null;
+        var tmpContainer = this._elContainer;
+        // Peek in container child nodes to see if TABLE already exists
+        if(tmpContainer.hasChildNodes()) {
+            var tmpChildren = tmpContainer.childNodes;
+            for(i=0; i<tmpChildren.length; i++) {
+                if(tmpChildren[i].tagName && tmpChildren[i].tagName.toLowerCase() == "table") {
+                    tmpTable = tmpChildren[i];
+                    break;
+                }
+            }
+            if(tmpTable) {
+                var tmpFieldsArray = [];
+                for(i=0; i<this._oColumnSet.keys.length; i++) {
+                    tmpFieldsArray.push({key:this._oColumnSet.keys[i].key});
+                }
+
+                this._oDataSource = new YAHOO.util.DataSource(tmpTable);
+                this._oDataSource.responseType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
+                this._oDataSource.responseSchema = {fields: tmpFieldsArray};
+                YAHOO.log("Null DataSource for progressive enhancement from" +
+                " markup has been deprecated", "warn", this.toString());
+            }
+        }
+    }
+};
+
+/**
+ * Initializes RecordSet.
+ *
+ * @method _initRecordSet
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initRecordSet = function() {
+    this._oRecordSet = new YAHOO.widget.RecordSet();
+};
+
+/**
  * Creates HTML markup for TABLE, THEAD and TBODY elements.
  *
  * @method _initTableEl
@@ -1439,6 +1452,58 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
         }
     });
 };
+
+/**
+ * Initializes Column sorting.
+ *
+ * @method _initColumnSort
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initColumnSort = function() {
+    this.subscribe("headerLabelClickEvent", this.onEventSortColumn);
+};
+
+/**
+ * Initializes DOM event listeners.
+ *
+ * @method _initDomEvents
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initDomEvents = function() {
+    var elTable = this._elTable;
+    var elThead = this._elThead;
+    var elTbody = this._elTbody;
+    var elContainer = this._elContainer;
+
+    YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
+    YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
+
+    //YAHOO.util.Event.addListener(this._elContainer, "focus", this._onContainerFocus, this);
+    //YAHOO.util.Event.addListener(this._elContainer, "blur", this._onContainerBlur, this);
+
+    //YAHOO.util.Event.addListener(elTable, "focus", this._onTableFocus, this);
+    //YAHOO.util.Event.addListener(elTable, "blur", this._onTableBlur, this);
+
+    YAHOO.util.Event.addListener(elTable, "mouseover", this._onTableMouseover, this);
+    YAHOO.util.Event.addListener(elTable, "mouseout", this._onTableMouseout, this);
+    YAHOO.util.Event.addListener(elTable, "mousedown", this._onTableMousedown, this);
+    //YAHOO.util.Event.addListener(elTable, "mouseup", this._onTableMouseup, this);
+    //YAHOO.util.Event.addListener(elTable, "mousemove", this._onTableMousemove, this);
+
+    // Since we can't listen for click and dblclick on the same element...
+    YAHOO.util.Event.addListener(elTable, "dblclick", this._onTableDblclick, this);
+    YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
+    YAHOO.util.Event.addListener(elTbody, "click", this._onTbodyClick, this);
+
+    YAHOO.util.Event.addListener(elThead, "keydown", this._onTheadKeydown, this);
+    YAHOO.util.Event.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
+    YAHOO.util.Event.addListener(elTbody, "keyup", this._onTbodyKeyup, this);
+    YAHOO.util.Event.addListener(elTbody, "keypress", this._onTbodyKeypress, this);
+
+    YAHOO.util.Event.addListener(elContainer, "scroll", this._onScroll, this); // for IE
+    YAHOO.util.Event.addListener(elTbody, "scroll", this._onScroll, this); // for everyone else
+};
+
 
 
 
@@ -4188,9 +4253,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
     }
     
     if(oRecord && oColumn) {
-        //var type = oColumn.type || "html";
         var oData = oRecord.getData(oColumn.key);
-        //TODO: formatter string shortcuts
 
         // Backward compatibility
         if(oColumn.type && !oColumn.formatter) {

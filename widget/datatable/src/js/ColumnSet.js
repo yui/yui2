@@ -469,16 +469,6 @@ YAHOO.widget.Column.prototype.key = null;
  */
 YAHOO.widget.Column.prototype.label = null;
 
-/*TODO: delete
- * Data types: "string", "number", "date", "currency", "checkbox", "select",
- * "email", "link".
- *
- * @property type
- * @type String
- * @default "string"
- */
-//YAHOO.widget.Column.prototype.type = "string";
-
 /**
  * Column head cell ABBR for accessibility.
  *
@@ -518,15 +508,6 @@ YAHOO.widget.Column.prototype.className = null;
  * @type String || HTMLFunction
  */
 YAHOO.widget.Column.prototype.formatter = null;
-
-/*TODO: delete
- * Defines a custom parse function for Column, otherwise default is used,
- * according to Column type.
- *
- * @property parser
- * @type HTMLFunction
- */
-//YAHOO.widget.Column.prototype.parser = null;
 
 /**
  * Defines an editor function, otherwise Column is not editable.
