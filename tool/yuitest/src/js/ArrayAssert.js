@@ -35,7 +35,61 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (!found){
+            YAHOO.util.Assert.fail(message || "Value (" + needle + ") not found in array.");
+        }
+    },
+
+    /**
+     * Asserts that a set of values are present in an array. This uses the triple equals 
+     * sign so no type cohersion may occur. For this assertion to pass, all values must
+     * be found.
+     * @param {Object[]} needles An array of values that are expected in the array.
+     * @param {Array} haystack An array of values to check.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method containsItems
+     * @static
+     */
+    containsItems : function (needles /*:Object[]*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+
+        //begin checking values
+        for (var i=0; i < needles.length; i++){
+            this.contains(needles[i], haystack, message);
+        }
+        
+        if (!found){
             YAHOO.util.Assert.fail(message || "Value not found in array.");
+        }
+    },
+
+    /**
+     * Asserts that a value matching some condition is present in an array. This uses
+     * a function to determine a match.
+     * @param {Function} matcher A function that returns true if the items matches or false if not.
+     * @param {Array} haystack An array of values.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method containsMatch
+     * @static
+     */
+    containsMatch : function (matcher /*:Function*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+        
+        //check for valid matcher
+        if (typeof matcher != "function"){
+            throw new TypeError("ArrayAssert.containsMatch(): First argument must be a function.");
+        }
+        
+        var found /*:Boolean*/ = false;
+        
+        //begin checking values
+        for (var i=0; i < haystack.length && !found; i++){
+            if (matcher(haystack[i])) {
+                found = true;
+            }
+        }
+        
+        if (!found){
+            YAHOO.util.Assert.fail(message || "No match found in array.");
         }
     },
 
@@ -56,6 +110,56 @@ YAHOO.util.ArrayAssert = {
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
             if (haystack[i] === needle) {
+                found = true;
+            }
+        }
+        
+        if (found){
+            YAHOO.util.Assert.fail(message || "Value found in array.");
+        }
+    },
+
+    /**
+     * Asserts that a set of values are not present in an array. This uses the triple equals 
+     * sign so no type cohersion may occur. For this assertion to pass, all values must
+     * not be found.
+     * @param {Object[]} needles An array of values that are not expected in the array.
+     * @param {Array} haystack An array of values to check.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method doesNotContainItems
+     * @static
+     */
+    doesNotContainItems : function (needles /*:Object[]*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+
+        for (var i=0; i < needles.length; i++){
+            this.doesNotContain(needles[i], haystack, message);
+        }
+
+    },
+        
+    /**
+     * Asserts that no values matching a condition are present in an array. This uses
+     * a function to determine a match.
+     * @param {Function} matcher A function that returns true if the items matches or false if not.
+     * @param {Array} haystack An array of values.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method doesNotContainMatch
+     * @static
+     */
+    doesNotContainMatch : function (matcher /*:Function*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+        
+        //check for valid matcher
+        if (typeof matcher != "function"){
+            throw new TypeError("ArrayAssert.doesNotContainMatch(): First argument must be a function.");
+        }
+
+        var found /*:Boolean*/ = false;
+        
+        //begin checking values
+        for (var i=0; i < haystack.length && !found; i++){
+            if (matcher(haystack[i])) {
                 found = true;
             }
         }
@@ -110,6 +214,39 @@ YAHOO.util.ArrayAssert = {
         for (var i=0; i < len; i++){
             YAHOO.util.Assert.areEqual(expected[i], actual[i], message || 
                     "Values in position " + i + " are not equal.");
+        }
+    },
+    
+    /**
+     * Asserts that the values in an array are equivalent, and in the same position,
+     * as values in another array. This uses a function to determine if the values
+     * are equivalent. Note that the array objects themselves
+     * need not be the same for this test to pass.
+     * @param {Array} expected An array of the expected values.
+     * @param {Array} actual Any array of the actual values.
+     * @param {Function} comparator A function that returns true if the values are equivalent
+     *      or false if not.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @return {Void}
+     * @method itemsAreEquivalent
+     * @static
+     */
+    itemsAreEquivalent : function (expected /*:Array*/, actual /*:Array*/, 
+                           comparator /*:Function*/, message /*:String*/) /*:Void*/ {
+        
+        //make sure the comparator is valid
+        if (typeof comparator != "function"){
+            throw new TypeError("ArrayAssert.itemsAreEquivalent(): Third argument must be a function.");
+        }
+        
+        //one may be longer than the other, so get the maximum length
+        var len /*:int*/ = Math.max(expected.length, actual.length);
+        
+        //begin checking values
+        for (var i=0; i < len; i++){
+            if (!comparator(expected[i], actual[i])){
+                throw new YAHOO.util.ComparisonFailure(message || "Values in position " + i + " are not equivalent.", expected[i], actual[i]);
+            }
         }
     },
     
