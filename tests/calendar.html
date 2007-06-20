@@ -20,23 +20,23 @@
 	YAHOO.util.DateAssert = {
 
 		/**
-		 * Asserts if the expected and actual Dates passed in are the same, ignoring time differences. That is, 
-		 * it only compares fullyear, month and date fields for equality.
+		 * Asserts if the expected and actual Dates passed in are the same, based on a comparison of fullyear, month and date fields.
+		 * Time fields are not compared.
 		 * 
 		 * @param {Date} expected The expected date 
 		 * @param {Date} actual The actual date
 		 * @param {String} msg The message to display if assertion fails
 		 * @throws YAHOO.util.ComparisonFailure
 		 */
-		areDatesSame : function(expected, actual, msg) {
-			if (this._areDatesSame(expected, actual) === false) {
+		datesAreSame : function(expected, actual, msg) {
+			if (this._datesAreSame(expected, actual) === false) {
 				throw new YAHOO.util.ComparisonFailure(msg || "Dates are not equal", expected, actual);
 			}
 		},
 
 		/**
 		 * Asserts if the expected and actual Date Arrays are the same.
-		 * Ignores time differences between dates, similar to YAHOO.util.DateAssert.areDatesSame
+		 * Ignores time differences between dates, similar to YAHOO.util.DateAssert.datesAreSame
 		 * 
 		 * The Arrays are the same only if they contain the same number of elements and all elements in
 		 * the expected array are in the actual array, and visa versa. 
@@ -50,7 +50,7 @@
 		 * @param {String} msg The message to display if assertion fails
 		 * @throws YAHOO.util.ComparisonFailure
 		 */
-		areDateArraysSame : function(expected, actual, testOrder, msg) {
+		dateArraysAreSame : function(expected, actual, testOrder, msg) {
 			if (YAHOO.lang.isArray(expected) === false || YAHOO.lang.isArray(actual) === false) {
 				throw new YAHOO.util.ComparisonFailure(msg || "Date arrays are not both instances of Array", expected, actual);
 			}
@@ -63,7 +63,7 @@
 			if (testOrder) {
 				// already established lengths are same, so pick either one
 				for (var i = 0; areEq && i < expected.length; i++) {
-					if (this._areDatesSame(expected[i], actual[i]) === false) {
+					if (this._datesAreSame(expected[i], actual[i]) === false) {
 						areEq = false;
 					}
 				}
@@ -82,13 +82,14 @@
 				}
 			}
 
-			if (areEq == false) {
+			if (areEq === false) {
 				throw new YAHOO.util.ComparisonFailure(msg || "Date arrays are not equal", expected, actual);
 			}
 		},
 
 		/**
-		 * Asserts if an arrary of Dates contains a given Dates, using YAHOO.util.DateAssert.areDatesSame for equality
+		 * Asserts if an arrary of Dates contains a given Dates based on a comparison of 
+		 * fullyear, month, and date fields. Time fields are not compared.
 		 * 
 		 * @param {Date[]} a Array of Date objects
 		 * @param {Object} d The Date to test for
@@ -96,22 +97,22 @@
 		 * @throws YAHOO.util.AssertionError
 		 */
 		containsDate : function(a, d, msg) {
-			if (this._containsDate(a, d) == false) {
+			if (this._containsDate(a, d) === false) {
 				throw new YAHOO.util.AssertionError(msg || "Date not found in array.")
 			}
 		},
 
 		// Checks without Assertion
-		_areDatesSame : function(d1, d2) {
-			return (d1.getFullYear() == d2.getFullYear() 
-						&& d1.getMonth() == d2.getMonth() 
-							&& d1.getDate() == d2.getDate());
+		_datesAreSame : function(d1, d2) {
+			return (d1.getFullYear() === d2.getFullYear() 
+						&& d1.getMonth() === d2.getMonth() 
+							&& d1.getDate() === d2.getDate());
 		},
 
 		_containsDate : function(a, d) {
 			var found = false;
-			for (var i = 0; found == false && i < a.length; i++) {
-				if (this._areDatesSame(a[i], d)) {
+			for (var i = 0; found === false && i < a.length; i++) {
+				if (this._datesAreSame(a[i], d)) {
 					found = true;
 				}
 			}
@@ -206,8 +207,8 @@
 		Assert.isArray(dt, "getSelectedDates() should always return an array");
 		ArrayAssert.isNotEmpty(dt, "getSelectedDates() shoud not be empty");
 
-		DateAssert.areDateArraysSame(expected, dt, false, "getSelectedDates() does not contain the correct dates");
-		DateAssert.areDateArraysSame(expected, dt, true, "getSelectedDates() not returned in the correct order");
+		DateAssert.dateArraysAreSame(expected, dt, false, "getSelectedDates() does not contain the correct dates");
+		DateAssert.dateArraysAreSame(expected, dt, true, "getSelectedDates() not returned in the correct order");
 	};
 
 	var apiTemplate = {
@@ -275,37 +276,37 @@
 
 			var pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
-			DateAssert.areDatesSame(new Date(2007, 11, 01), pgDate, "nextMonth()[1] set incorrect page date");
+			DateAssert.datesAreSame(new Date(2007, 11, 01), pgDate, "nextMonth()[1] set incorrect page date");
 
 			cal.nextYear();
 			
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
-			DateAssert.areDatesSame(new Date(2008, 11, 01), pgDate, "nextYear() set incorrect page date");
+			DateAssert.datesAreSame(new Date(2008, 11, 01), pgDate, "nextYear() set incorrect page date");
 
 			cal.nextMonth();
 
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
-			DateAssert.areDatesSame(new Date(2009, 0, 01), pgDate, "nextMonth()[2] did not rollover year");
+			DateAssert.datesAreSame(new Date(2009, 0, 01), pgDate, "nextMonth()[2] did not rollover year");
 
 			cal.previousMonth();
 
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
-			DateAssert.areDatesSame(new Date(2008, 11, 01), pgDate, "previousMonth()[1] did not rollover year");
+			DateAssert.datesAreSame(new Date(2008, 11, 01), pgDate, "previousMonth()[1] did not rollover year");
 
 			cal.previousMonth();
 
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
-			DateAssert.areDatesSame(new Date(2008, 10, 01), pgDate, "previousMonth()[2] set incorrect page date");
+			DateAssert.datesAreSame(new Date(2008, 10, 01), pgDate, "previousMonth()[2] set incorrect page date");
 
 			cal.previousYear();
 
 			pgDate = this._getCfgProperty(cal, "pagedate");
 			Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
-			DateAssert.areDatesSame(new Date(2007, 10, 01), pgDate, "previousYear() set incorrect page date");
+			DateAssert.datesAreSame(new Date(2007, 10, 01), pgDate, "previousYear() set incorrect page date");
 
 			cal = null;
 		}
@@ -375,12 +376,12 @@
 			var prevPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_LEFT, "a", cal.oDomContainer);
 			UserAction.mousedown(prevPage[0]);
 
-			DateAssert.areDatesSame(new Date(2007, 3, 1), this._getCfgProperty(cal, "pagedate"), "Click on previous page not correct");
+			DateAssert.datesAreSame(new Date(2007, 3, 1), this._getCfgProperty(cal, "pagedate"), "Click on previous page not correct");
 
 			var nextPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_RIGHT, "a", cal.oDomContainer);
 			UserAction.mousedown(nextPage[0]);
 
-			DateAssert.areDatesSame(new Date(2007, 4, 1), this._getCfgProperty(cal, "pagedate"), "Click on next page not correct");
+			DateAssert.datesAreSame(new Date(2007, 4, 1), this._getCfgProperty(cal, "pagedate"), "Click on next page not correct");
 		}
 	};
 
@@ -392,7 +393,7 @@
 		},
 
 		testDateParsing : function() {
-			
+
 			// Case is mixed, to test config case-insensitivity
 
 			var opts  = {
@@ -409,12 +410,12 @@
 			};
 
 			var cal = this.createInstance(opts);
-			
+
 			var testDt = [new Date(1972, 1, 7), new Date(1972, 1, 14), new Date(1972, 1, 15), new Date(1972, 1, 16), new Date(1972, 1, 17), new Date(1972, 1, 18), new Date(1972, 1, 19), new Date(1972, 1, 20), new Date(1972, 1, 21), new Date(1972, 1, 25)];
 			var testPgDt = new Date(1972, 1, 1);
 				
-			DateAssert.areDatesSame(testPgDt, this._getCfgProperty(cal, "pagedate"), "Page date not parsed/set correctly");
-			DateAssert.areDateArraysSame(testDt, cal.getSelectedDates(), "Page date not parsed/set correctly");
+			DateAssert.datesAreSame(testPgDt, this._getCfgProperty(cal, "pagedate"), "Page date not parsed/set correctly");
+			DateAssert.dateArraysAreSame(testDt, cal.getSelectedDates(), "Page date not parsed/set correctly");
 		}
 	}
 
