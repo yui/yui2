@@ -21,10 +21,9 @@
 #complex tr.yui-dt-selected {background-color:#97C0A5;} /*green*/
 #complex .yui-dt-paginator .yui-dt-selected {font-weight:bold;}
 .yui-dt-col-areacode {text-align:center;}
-.myStrings {padding-left:1em;}
 
 /* sorting */
-#complex th .yui-dt-label {margin-right:5px;padding-right:15px;color:#fff;} /*room for arrow*/
+#complex th .yui-dt-label {margin-right:5px;padding-right:15px;} /*room for arrow*/
 #complex th.yui-dt-asc, #complex th.yui-dt-desc {background-color:#3F3F3F;} /*dark gray*/
 #complex th.yui-dt-asc .yui-dt-label {background-image: url('img/arrow_up.gif'); background-repeat:no-repeat; background-position:right;} /*arrow up*/
 #complex th.yui-dt-desc .yui-dt-label {background-image: url('img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right;} /*arrow down*/
@@ -101,10 +100,10 @@ YAHOO.example.IntegratedFeatureSet = new function() {
     };
 
     var myColumnDefs = [
-        {key:"areacode",label:"Area Codes",width:"8em",sortable:true},
-        {key:"state",label:"States",width:"16em",className:"myStrings", sortable:true,
+        {key:"areacode",label:"Area Codes",width:"14em",sortable:true},
+        {key:"state",label:"States",width:"16em",sortable:true,
                 sortOptions:{sortFunction:this.sortStates}},
-        {key:"notes",label:"Notes (editable)",className:"myStrings",editor:"textbox"}
+        {key:"notes",label:"Notes (editable)",editor:"textbox"}
     ];
 
     this.myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
