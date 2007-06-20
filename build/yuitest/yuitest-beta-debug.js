@@ -49,101 +49,106 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
      */
     init : function () {
     
+        //shortcut variables
+        var TestRunner /*:Object*/ = YAHOO.tool.TestRunner;
+    
         //setup event _handlers
-        YAHOO.tool.TestRunner.subscribe("pass", this._handlePass, this, true);
-        YAHOO.tool.TestRunner.subscribe("fail", this._handleFail, this, true);
-        YAHOO.tool.TestRunner.subscribe("ignore", this._handleIgnore, this, true);
-        YAHOO.tool.TestRunner.subscribe("begin", this._handleBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("complete", this._handleComplete, this, true);
-        YAHOO.tool.TestRunner.subscribe("testsuitebegin", this._handleTestSuiteBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("testsuitecomplete", this._handleTestSuiteComplete, this, true);
-        YAHOO.tool.TestRunner.subscribe("testcasebegin", this._handleTestCaseBegin, this, true);
-        YAHOO.tool.TestRunner.subscribe("testcasecomplete", this._handleTestCaseComplete, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_PASS_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_FAIL_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_IGNORE_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_SUITE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_SUITE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_CASE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_CASE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        
+        //hide useless sources
+        this.hideSource("global");
+        this.hideSource("LogReader");
+        
+        //hide useless message categories
+        this.hideCategory("warn");
+        this.hideCategory("window");
+        this.hideCategory("time");
         
         //reset the logger
-        YAHOO.widget.Logger.reset();
-    },
-    
-    
-    _calculateTotals : function (results /*:Object*/) /*:Object*/ {
-    
-        var totals /*:Object*/ = { passed: 0, failed: 0, total: 0 };
-        
-        if (YAHOO.lang.isNumber(results.passed)){
-            totals.passed += results.passed;
-            totals.failed += results.failed;
-            totals.total += results.total;          
-        } else {
-            for (var prop in results){
-                var subtotal /*:Object*/ = this._calculateTotals(results[prop]);
-                totals.passed += subtotal.passed;
-                totals.failed += subtotal.failed;
-                totals.total += subtotal.total;                
-            }
-        }
-        
-        return totals;
-    
+        this.clearConsole();
     },
     
     //-------------------------------------------------------------------------
     // Event Handlers
     //-------------------------------------------------------------------------
-
-    _handleBegin : function (data /*:Object*/) {
-        YAHOO.log("Testing began at " + (new Date()).toString(), "info", "TestRunner");
-    },
     
-    _handleComplete : function (data /*:Object*/) {
+    /**
+     * Handles all TestRunner events, outputting appropriate data into the console.
+     * @param {Object} data The event data object.
+     * @return {Void}
+     * @private
+     */
+    _handleTestRunnerEvent : function (data /*:Object*/) /*:Void*/ {
+    
+        //shortcut variables
+        var TestRunner /*:Object*/ = YAHOO.tool.TestRunner;
+    
+        //data variables
+        var message /*:String*/ = "";
+        var messageType /*:String*/ = "";
         
-        //calculate totals
-        var results /*:Object*/ = this._calculateTotals(data.results);
+        switch(data.type){
+            case TestRunner.BEGIN_EVENT:
+                message = "Testing began at " + (new Date()).toString() + ".";
+                messageType = "info";
+                break;
+                
+            case TestRunner.COMPLETE_EVENT:
+                message = "Testing completed at " + (new Date()).toString() + ".\nPassed:" 
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_FAIL_EVENT:
+                message = data.testName + ": " + data.error.getMessage();
+                messageType = "fail";
+                break;
+                
+            case TestRunner.TEST_IGNORE_EVENT:
+                message = data.testName + ": ignored.";
+                messageType = "ignore";
+                break;
+                
+            case TestRunner.TEST_PASS_EVENT:
+                message = data.testName + ": passed.";
+                messageType = "pass";
+                break;
+                
+            case TestRunner.TEST_SUITE_BEGIN_EVENT:
+                message = "Test suite \"" + data.testSuite.name + "\" started.";
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_SUITE_COMPLETE_EVENT:
+                message = "Test suite \"" + data.testSuite.name + "\" completed.\nPassed:" 
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_CASE_BEGIN_EVENT:
+                message = "Test suite \"" + data.testCase.name + "\" started.";
+                messageType = "info";
+                break;
+                
+            case TestRunner.TEST_CASE_COMPLETE_EVENT:
+                message = "Test suite \"" + data.testCase.name + "\" completed.\nPassed:" 
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total
+                messageType = "info";
+                break;
+            default:
+                message = "Unexpected event " + data.type;
+                message = "info";
+        }
     
-        YAHOO.log("Testing completed at " + (new Date()).toString() + ".\nPassed:" + results.passed + " Failed:" + results.failed + " Total:" + results.total, "info", "TestRunner");
-    },
-
-    /**
-     * Handles an error event for the TestRunner object.
-     * @param data Information about the event.
-     */
-    _handleFail : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": " + data.error.getMessage(), "fail", "TestRunner");
-    },
-
-    /**
-     * Handles an ignore event for the TestRunner object.
-     * @param data Information about the event.
-     */
-    _handleIgnore : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": ignored", "ignore", "TestRunner");
-    },
-
-    /**
-     * Handles an error event for the TestRunner object.
-     * @param data Information about the event.
-     */
-    _handlePass : function (data /*:Object*/) {
-        YAHOO.log(data.testName + ": passed", "pass", "TestRunner");
-    },
-    
-    _handleTestSuiteBegin : function (data /*:Object*/) {
-        var testSuiteName /*:String*/ = data.testSuite.name || "Unnamed test suite";
-        YAHOO.log("Test suite \"" + testSuiteName + "\" started", "info", "TestRunner");
-    },
-    
-    _handleTestSuiteComplete : function (data /*:Object*/) {
-        var testSuiteName /*:String*/ = data.testSuite.name || "Unnamed test suite";
-        YAHOO.log("Test suite \"" + testSuiteName + "\" completed", "info", "TestRunner");
-    },
-    
-    _handleTestCaseBegin : function (data /*:Object*/) {
-        var testCaseName /*:String*/ = data.testCase.name || "Unnamed test case";
-        YAHOO.log("Test case \"" + testCaseName + "\" started", "info", "TestRunner");
-    },
-    
-    _handleTestCaseComplete : function (data /*:Object*/) {
-        var testCaseName /*:String*/ = data.testCase.name || "Unnamed test case";
-        YAHOO.log("Test case \"" + testCaseName + "\" completed.\nPassed:" + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total, "info", "TestRunner");
+        YAHOO.log(message, messageType, "TestRunner");    
     }
     
 });
@@ -173,7 +178,7 @@ YAHOO.tool.TestRunner = (function(){
     function TestRunner(){
     
         //inherit from EventProvider
-        this.constructor.superclass.constructor.apply(this,arguments);
+        TestRunner.superclass.constructor.apply(this,arguments);
         
         /**
          * The test objects to run.
@@ -183,67 +188,86 @@ YAHOO.tool.TestRunner = (function(){
         this.items /*:Array*/ = [];
         
         //create events
-        
+        var events /*:Array*/ = [
+            this.TEST_CASE_BEGIN_EVENT,
+            this.TEST_CASE_COMPLETE_EVENT,
+            this.TEST_SUITE_BEGIN_EVENT,
+            this.TEST_SUITE_COMPLETE_EVENT,
+            this.TEST_PASS_EVENT,
+            this.TEST_FAIL_EVENT,
+            this.TEST_IGNORE_EVENT,
+            this.COMPLETE_EVENT,
+            this.BEGIN_EVENT
+        ];
+        for (var i=0; i < events.length; i++){
+            this.createEvent(events[i], { scope: this });
+        }
+       
+   
+    }
+    
+    YAHOO.lang.extend(TestRunner, YAHOO.util.EventProvider, {
+    
+        //-------------------------------------------------------------------------
+        // Constants
+        //-------------------------------------------------------------------------
+         
         /**
          * Fires when a test case is opened but before the first 
          * test is executed.
          * @event testcasebegin
-         */
-        this.createEvent("testcasebegin", {scope: this});
+         */         
+        TEST_CASE_BEGIN_EVENT /*:String*/ : "testcasebegin",
         
         /**
          * Fires when all tests in a test case have been executed.
          * @event testcasecomplete
          */        
-        this.createEvent("testcasecomplete", {scope: this});
+        TEST_CASE_COMPLETE_EVENT /*:String*/ : "testcasecomplete",
         
         /**
          * Fires when a test suite is opened but before the first 
          * test is executed.
          * @event testsuitebegin
-         */
-        this.createEvent("testsuitebegin", {scope: this});
+         */        
+        TEST_SUITE_BEGIN_EVENT /*:String*/ : "testsuitebegin",
         
         /**
          * Fires when all test cases in a test suite have been
          * completed.
          * @event testsuitecomplete
-         */
-        this.createEvent("testsuitecomplete", {scope: this});
+         */        
+        TEST_SUITE_COMPLETE_EVENT /*:String*/ : "testsuitecomplete",
         
         /**
          * Fires when a test has passed.
          * @event pass
-         */
-        this.createEvent("pass", {scope: this});
+         */        
+        TEST_PASS_EVENT /*:String*/ : "pass",
         
         /**
          * Fires when a test has failed.
          * @event fail
-         */
-        this.createEvent("fail", {scope: this});
+         */        
+        TEST_FAIL_EVENT /*:String*/ : "fail",
         
         /**
          * Fires when a test has been ignored.
          * @event ignore
-         */
-        this.createEvent("ignore", {scope: this});
+         */        
+        TEST_IGNORE_EVENT /*:String*/ : "ignore",
         
         /**
          * Fires when all test suites and test cases have been completed.
          * @event complete
          */        
-        this.createEvent("complete", {scope: this});
+        COMPLETE_EVENT /*:String*/ : "complete",
         
         /**
          * Fires when the run() method is called.
          * @event begin
          */        
-        this.createEvent("begin", {scope: this});        
-    }
-    
-    YAHOO.lang.extend(TestRunner, YAHOO.util.EventProvider, {
-    
+        BEGIN_EVENT /*:String*/ : "begin",    
     
         //-------------------------------------------------------------------------
         // Private Methods
@@ -263,7 +287,7 @@ YAHOO.tool.TestRunner = (function(){
             var results /*:Object*/ = {};
         
             //test case begins
-            this.fireEvent("testcasebegin", { testCase: testCase });
+            this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testCase });
         
             //gather the test functions
             var tests /*:Array*/ = [];
@@ -288,7 +312,7 @@ YAHOO.tool.TestRunner = (function(){
             
                 //figure out if the test should be ignored or not
                 if (shouldIgnore[tests[i]]){
-                    this.fireEvent("ignore", { testCase: testCase, testName: tests[i] });
+                    this.fireEvent(this.TEST_IGNORE_EVENT, { testCase: testCase, testName: tests[i] });
                     continue;
                 }
             
@@ -352,9 +376,9 @@ YAHOO.tool.TestRunner = (function(){
                 
                     //fireEvent appropriate event
                     if (failed) {
-                        this.fireEvent("fail", { testCase: testCase, testName: tests[i], error: error });
+                        this.fireEvent(this.TEST_FAIL_EVENT, { testCase: testCase, testName: tests[i], error: error });
                     } else {
-                        this.fireEvent("pass", { testCase: testCase, testName: tests[i] });
+                        this.fireEvent(this.TEST_PASS_EVENT, { testCase: testCase, testName: tests[i] });
                     }            
                 }
                 
@@ -379,7 +403,7 @@ YAHOO.tool.TestRunner = (function(){
             results.passed = passCount;
             
             //test case is done
-            this.fireEvent("testcasecomplete", { testCase: testCase, results: results });
+            this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: testCase, results: results });
             
             //return results
             return results;
@@ -397,22 +421,34 @@ YAHOO.tool.TestRunner = (function(){
         _runTestSuite : function (testSuite /*:YAHOO.tool.TestSuite*/) {
         
             //object to store results
-            var results /*:Object*/ = {};
+            var results /*:Object*/ = {
+                passed: 0,
+                failed: 0,
+                total: 0
+            };
         
             //fireEvent event for beginning of test suite run
-            this.fireEvent("testsuitebegin", { testSuite: testSuite });
+            this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testSuite });
         
             //iterate over the test suite items
             for (var i=0; i < testSuite.items.length; i++){
+                var result = null;
                 if (testSuite.items[i] instanceof YAHOO.tool.TestSuite) {
-                    results[testSuite.items[i].name] = this._runTestSuite(testSuite.items[i]);
+                    result = this._runTestSuite(testSuite.items[i]);
                 } else if (testSuite.items[i] instanceof YAHOO.tool.TestCase) {
-                    results[testSuite.items[i].name] = this._runTestCase(testSuite.items[i]);
+                    result = this._runTestCase(testSuite.items[i]);
+                }
+                
+                if (result != null){
+                    results.total += result.total;
+                    results.passed += result.passed;
+                    results.failed += result.failed;
+                    results[testSuite.items[i].name] = result;
                 }
             }
     
             //fireEvent event for completion of test suite run
-            this.fireEvent("testsuitecomplete", { testSuite: testSuite, results: results });
+            this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: testSuite, results: results });
             
             //return the results
             return results;
@@ -437,6 +473,26 @@ YAHOO.tool.TestRunner = (function(){
                     throw new TypeError("_run(): Expected either YAHOO.tool.TestCase or YAHOO.tool.TestSuite.");
                 }    
             }        
+        },
+        
+        //-------------------------------------------------------------------------
+        // Protected Methods
+        //-------------------------------------------------------------------------   
+    
+        /*
+         * Fires events for the TestRunner. This overrides the default fireEvent()
+         * method from EventProvider to add the type property to the data that is
+         * passed through on each event call.
+         * @param {String} type The type of event to fire.
+         * @param {Object} data (Optional) Data for the event.
+         * @method fireEvent
+         * @static
+         * @protected
+         */
+        fireEvent : function (type /*:String*/, data /*:Object*/) /*:Void*/ {
+            data = data || {};
+            data.type = type;
+            TestRunner.superclass.fireEvent.call(this, type, data);
         },
         
         //-------------------------------------------------------------------------
@@ -466,19 +522,27 @@ YAHOO.tool.TestRunner = (function(){
         run : function (testObject /*:Object*/) /*:Void*/ { 
             var results = null;
             
-            this.fireEvent("begin");
+            this.fireEvent(this.BEGIN_EVENT);
        
             //an object passed in overrides everything else
             if (YAHOO.lang.isObject(testObject)){
                 results = this._run(testObject);  
             } else {
-                results = {};
+                results = {
+                    passed: 0,
+                    failed: 0,
+                    total: 0
+                };
                 for (var i=0; i < this.items.length; i++){
-                    results[this.items[i].name] = this._run(this.items[i]);
+                    var result = this._run(this.items[i]);
+                    results.passed += result.passed;
+                    results.failed += result.failed;
+                    results.total += result.total;
+                    results[this.items[i].name] = result;
                 }            
             }
             
-            this.fireEvent("complete", { results: results });
+            this.fireEvent(this.COMPLETE_EVENT, { results: results });
         }    
     });
     
@@ -813,7 +877,7 @@ YAHOO.util.Assert = {
      */
     isArray : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isArray(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be an array.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be an array.", actual);
         }    
     },
    
@@ -826,7 +890,7 @@ YAHOO.util.Assert = {
      */
     isBoolean : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isBoolean(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a Boolean.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a Boolean.", actual);
         }    
     },
    
@@ -839,7 +903,7 @@ YAHOO.util.Assert = {
      */
     isFunction : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isFunction(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a function.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a function.", actual);
         }    
     },
    
@@ -868,7 +932,7 @@ YAHOO.util.Assert = {
      */
     isNumber : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isNumber(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a number.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a number.", actual);
         }    
     },    
     
@@ -881,7 +945,7 @@ YAHOO.util.Assert = {
      */
     isObject : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isObject(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be an object.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be an object.", actual);
         }
     },
     
@@ -894,7 +958,7 @@ YAHOO.util.Assert = {
      */
     isString : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isString(actual)){
-            throw new YAHOO.util.UnexpectedValue("Value should be a string.", actual);
+            throw new YAHOO.util.UnexpectedValue(message || "Value should be a string.", actual);
         }
     },
     
@@ -1190,6 +1254,7 @@ YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
  */
  
 YAHOO.util.ArrayAssert = {
+
     /**
      * Asserts that a value is present in an array. This uses the triple equals 
      * sign so no type cohersion may occur.
@@ -1212,10 +1277,140 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (!found){
-            throw new YAHOO.util.AssertionError(message || "Value not found in array.");
+            YAHOO.util.Assert.fail(message || "Value (" + needle + ") not found in array.");
         }
     },
-    
+
+    /**
+     * Asserts that a set of values are present in an array. This uses the triple equals 
+     * sign so no type cohersion may occur. For this assertion to pass, all values must
+     * be found.
+     * @param {Object[]} needles An array of values that are expected in the array.
+     * @param {Array} haystack An array of values to check.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method containsItems
+     * @static
+     */
+    containsItems : function (needles /*:Object[]*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+
+        //begin checking values
+        for (var i=0; i < needles.length; i++){
+            this.contains(needles[i], haystack, message);
+        }
+        
+        if (!found){
+            YAHOO.util.Assert.fail(message || "Value not found in array.");
+        }
+    },
+
+    /**
+     * Asserts that a value matching some condition is present in an array. This uses
+     * a function to determine a match.
+     * @param {Function} matcher A function that returns true if the items matches or false if not.
+     * @param {Array} haystack An array of values.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method containsMatch
+     * @static
+     */
+    containsMatch : function (matcher /*:Function*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+        
+        //check for valid matcher
+        if (typeof matcher != "function"){
+            throw new TypeError("ArrayAssert.containsMatch(): First argument must be a function.");
+        }
+        
+        var found /*:Boolean*/ = false;
+        
+        //begin checking values
+        for (var i=0; i < haystack.length && !found; i++){
+            if (matcher(haystack[i])) {
+                found = true;
+            }
+        }
+        
+        if (!found){
+            YAHOO.util.Assert.fail(message || "No match found in array.");
+        }
+    },
+
+    /**
+     * Asserts that a value is not present in an array. This uses the triple equals 
+     * sign so no type cohersion may occur.
+     * @param {Object} needle The value that is expected in the array.
+     * @param {Array} haystack An array of values.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method doesNotContain
+     * @static
+     */
+    doesNotContain : function (needle /*:Object*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+        
+        var found /*:Boolean*/ = false;
+        
+        //begin checking values
+        for (var i=0; i < haystack.length && !found; i++){
+            if (haystack[i] === needle) {
+                found = true;
+            }
+        }
+        
+        if (found){
+            YAHOO.util.Assert.fail(message || "Value found in array.");
+        }
+    },
+
+    /**
+     * Asserts that a set of values are not present in an array. This uses the triple equals 
+     * sign so no type cohersion may occur. For this assertion to pass, all values must
+     * not be found.
+     * @param {Object[]} needles An array of values that are not expected in the array.
+     * @param {Array} haystack An array of values to check.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method doesNotContainItems
+     * @static
+     */
+    doesNotContainItems : function (needles /*:Object[]*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+
+        for (var i=0; i < needles.length; i++){
+            this.doesNotContain(needles[i], haystack, message);
+        }
+
+    },
+        
+    /**
+     * Asserts that no values matching a condition are present in an array. This uses
+     * a function to determine a match.
+     * @param {Function} matcher A function that returns true if the items matches or false if not.
+     * @param {Array} haystack An array of values.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method doesNotContainMatch
+     * @static
+     */
+    doesNotContainMatch : function (matcher /*:Function*/, haystack /*:Array*/, 
+                           message /*:String*/) /*:Void*/ {
+        
+        //check for valid matcher
+        if (typeof matcher != "function"){
+            throw new TypeError("ArrayAssert.doesNotContainMatch(): First argument must be a function.");
+        }
+
+        var found /*:Boolean*/ = false;
+        
+        //begin checking values
+        for (var i=0; i < haystack.length && !found; i++){
+            if (matcher(haystack[i])) {
+                found = true;
+            }
+        }
+        
+        if (found){
+            YAHOO.util.Assert.fail(message || "Value found in array.");
+        }
+    },
+        
     /**
      * Asserts that the given value is contained in an array at the specified index.
      * This uses the triple equals sign so no type cohersion will occur.
@@ -1231,13 +1426,13 @@ YAHOO.util.ArrayAssert = {
         //try to find the value in the array
         for (var i=0; i < haystack.length; i++){
             if (haystack[i] === needle){
-                YAHOO.util.Assert.areEqual(index, i, "Value exists at index " + i + " but should be at index " + index + ".");
+                YAHOO.util.Assert.areEqual(index, i, message || "Value exists at index " + i + " but should be at index " + index + ".");
                 return;
             }
         }
         
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail("Value doesn't exist in array.");        
+        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
     },
         
     /**
@@ -1265,6 +1460,39 @@ YAHOO.util.ArrayAssert = {
     },
     
     /**
+     * Asserts that the values in an array are equivalent, and in the same position,
+     * as values in another array. This uses a function to determine if the values
+     * are equivalent. Note that the array objects themselves
+     * need not be the same for this test to pass.
+     * @param {Array} expected An array of the expected values.
+     * @param {Array} actual Any array of the actual values.
+     * @param {Function} comparator A function that returns true if the values are equivalent
+     *      or false if not.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @return {Void}
+     * @method itemsAreEquivalent
+     * @static
+     */
+    itemsAreEquivalent : function (expected /*:Array*/, actual /*:Array*/, 
+                           comparator /*:Function*/, message /*:String*/) /*:Void*/ {
+        
+        //make sure the comparator is valid
+        if (typeof comparator != "function"){
+            throw new TypeError("ArrayAssert.itemsAreEquivalent(): Third argument must be a function.");
+        }
+        
+        //one may be longer than the other, so get the maximum length
+        var len /*:int*/ = Math.max(expected.length, actual.length);
+        
+        //begin checking values
+        for (var i=0; i < len; i++){
+            if (!comparator(expected[i], actual[i])){
+                throw new YAHOO.util.ComparisonFailure(message || "Values in position " + i + " are not equivalent.", expected[i], actual[i]);
+            }
+        }
+    },
+    
+    /**
      * Asserts that an array is empty.
      * @param {Array} actual The array to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
@@ -1273,8 +1501,7 @@ YAHOO.util.ArrayAssert = {
      */
     isEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length > 0){
-            throw new YAHOO.util.AssertionError(message || 
-                    "Array should be empty.");
+            YAHOO.util.Assert.fail(message || "Array should be empty.");
         }
     },    
     
@@ -1287,8 +1514,7 @@ YAHOO.util.ArrayAssert = {
      */
     isNotEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length === 0){
-            throw new YAHOO.util.AssertionError(message || 
-                    "Array should not be empty.");
+            YAHOO.util.Assert.fail(message || "Array should not be empty.");
         }
     },    
     
@@ -1332,13 +1558,13 @@ YAHOO.util.ArrayAssert = {
         //try to find the value in the array
         for (var i=haystack.length; i >= 0; i--){
             if (haystack[i] === needle){
-                YAHOO.util.Assert.areEqual(index, i, "Value exists at index " + i + " but should be at index " + index + ".");
+                YAHOO.util.Assert.areEqual(index, i, message || "Value exists at index " + i + " but should be at index " + index + ".");
                 return;
             }
         }
         
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail("Value doesn't exist in array.");        
+        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
     }
     
 };
@@ -1358,47 +1584,113 @@ YAHOO.namespace("util");
  * @static
  */
 YAHOO.util.ObjectAssert = {
-
-    /**
-     * Asserts that an object has a property with the given name.
-     * @param {String} key The name of the property to test.
-     * @param {Object} object The object to search.
-     * @param {String} message (Optional) The message to display if the assertion fails.
-     * @method containsKey
-     * @static
-     */
-    containsKey : function (key /*:String*/, object /*:Array*/, 
-                           message /*:String*/) /*:Void*/ {
-        if (YAHOO.lang.isUndefined(object[key])){
-            throw new YAHOO.util.AssertionError(message || 
-                    "Property " + key + " not found in object.");
-        }
-    },
         
     /**
-     * Asserts that all keys in the object exist in another object.
-     * @param {Object} expected An object with the expected keys.
-     * @param {Object} actual An object with the actual keys.
+     * Asserts that all properties in the object exist in another object.
+     * @param {Object} expected An object with the expected properties.
+     * @param {Object} actual An object with the actual properties.
      * @param {String} message (Optional) The message to display if the assertion fails.
-     * @method keysAreEqual
+     * @method propertiesAreEqual
      * @static
      */
-    keysAreEqual : function (expected /*:Object*/, actual /*:Object*/, 
+    propertiesAreEqual : function (expected /*:Object*/, actual /*:Object*/, 
                            message /*:String*/) /*:Void*/ {
         
         //get all properties in the object
-        var keys /*:Array*/ = [];        
-        for (var key in expected){
-            keys.push(key);
+        var properties /*:Array*/ = [];        
+        for (var property in expected){
+            properties.push(property);
         }
         
-        //see if the keys are in the expected object
-        for (var i=0; i < keys.length; i++){
-            YAHOO.util.Assert.isNotUndefined(actual[keys[i]], message || 
-                    "Key '" + key + "' expected.");
+        //see if the properties are in the expected object
+        for (var i=0; i < properties.length; i++){
+            YAHOO.util.Assert.isNotUndefined(actual[properties[i]], message || 
+                    "Property'" + properties[i] + "' expected.");
         }
 
+    },
+    
+    /**
+     * Asserts that an object has a property with the given name.
+     * @param {String} propertyName The name of the property to test.
+     * @param {Object} object The object to search.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method hasProperty
+     * @static
+     */    
+    hasProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
+        if (YAHOO.lang.isUndefined(object[propertyName])){
+            YAHOO.util.Assert.fail(message || 
+                    "Property " + propertyName + " not found on object.");
+        }    
+    },
+    
+    /**
+     * Asserts that a property with the given name exists on an object instance (not on its prototype).
+     * @param {String} propertyName The name of the property to test.
+     * @param {Object} object The object to search.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method hasProperty
+     * @static
+     */    
+    hasOwnProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
+        if (!YAHOO.lang.hasOwnProperty(object, propertyName)){
+            YAHOO.util.Assert.fail(message || 
+                    "Property " + propertyName + " not found on object instance.");
+        }     
     }
+};
+//-----------------------------------------------------------------------------
+// DateAssert object
+//-----------------------------------------------------------------------------
+
+/**
+ * The DateAssert object provides functions to test JavaScript Date objects
+ * for a variety of cases.
+ *
+ * @namespace YAHOO.util
+ * @class DateAssert
+ * @static
+ */
+ 
+YAHOO.util.DateAssert = {
+
+    /**
+     * Asserts that a date's month, day, and year are equal to another date's.
+     * @param {Date} expected The expected date.
+     * @param {Date} actual The actual date to test.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method areEqual
+     * @static
+     */
+    datesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){
+        if (expected instanceof Date && actual instanceof Date){
+            YAHOO.util.Assert.areEqual(expected.getFullYear(), actual.getFullYear(), message || "Years should be equal.");
+            YAHOO.util.Assert.areEqual(expected.getMonth(), actual.getMonth(), message || "Months should be equal.");
+            YAHOO.util.Assert.areEqual(expected.getDate(), actual.getDate(), message || "Day of month should be equal.");
+        } else {
+            throw new TypeError("DateAssert.datesAreEqual(): Expected and actual values must be Date objects.");
+        }
+    },
+
+    /**
+     * Asserts that a date's hour, minutes, and seconds are equal to another date's.
+     * @param {Date} expected The expected date.
+     * @param {Date} actual The actual date to test.
+     * @param {String} message (Optional) The message to display if the assertion fails.
+     * @method areEqual
+     * @static
+     */
+    timesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){
+        if (expected instanceof Date && actual instanceof Date){
+            YAHOO.util.Assert.areEqual(expected.getHours(), actual.getHours(), message || "Hours should be equal.");
+            YAHOO.util.Assert.areEqual(expected.getMinutes(), actual.getMinutes(), message || "Minutes should be equal.");
+            YAHOO.util.Assert.areEqual(expected.getSeconds(), actual.getSeconds(), message || "Seconds should be equal.");
+        } else {
+            throw new TypeError("DateAssert.timesAreEqual(): Expected and actual values must be Date objects.");
+        }
+    }
+    
 };
 YAHOO.namespace("util");
 
