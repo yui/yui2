@@ -99,8 +99,9 @@ YAHOO.example.CustomFormatting = new function() {
 
     var myColumnDefs = [
         {label:"flag", formatter:this.myCustomFormatter}, // use custom formatter
-        {label:"button", formatter:YAHOO.widget.DataTable.formatButton}, // use the built-in button formatter
+        {label:"radio", formatter:YAHOO.widget.DataTable.formatRadio}, // use the built-in radio formatter
         {label:"check", formatter:YAHOO.widget.DataTable.formatCheckbox}, // use the built-in checkbox formatter
+        {label:"button", formatter:YAHOO.widget.DataTable.formatButton}, // use the built-in button formatter
         {key:"field1", sortable:true},
         {key:"field2", sortable:true, formatter:YAHOO.widget.DataTable.formatDate}, // use the built-in date formatter
         {key:"field3", sortable:true},
@@ -127,14 +128,23 @@ YAHOO.example.CustomFormatting = new function() {
     this.myDataTable = new YAHOO.widget.DataTable("formatting", myColumnDefs,
             this.myDataSource, {caption:"Example: Custom Formatting"});
             
-    this.myDataTable.subscribe("buttonClickEvent", function(oArgs){
-        var oRecord = this.getRecord(oArgs.target);
-        alert(YAHOO.lang.dump(oRecord.getData()));
+    this.myDataTable.subscribe("radioClickEvent", function(oArgs){//debugger;
+        var elRadio = oArgs.target;
+        var elRecord = this.getRecord(elRadio);
+        var name = elRecord.getData("field5");
+        alert("The radio button for " + name + " was selected");
     });
 
     this.myDataTable.subscribe("checkboxClickEvent", function(oArgs){
         var elCheckbox = oArgs.target;
-        alert("Checkbox was " + (elCheckbox.checked ? "" : "un") + "checked.");
+        var elRecord = this.getRecord(elCheckbox);
+        var name = elRecord.getData("field5");
+        alert("Checkbox was " + (elCheckbox.checked ? "" : "un") + "checked for " + name);
+    });
+
+    this.myDataTable.subscribe("buttonClickEvent", function(oArgs){
+        var oRecord = this.getRecord(oArgs.target);
+        alert(YAHOO.lang.dump(oRecord.getData()));
     });
 };
 </script>

@@ -1304,7 +1304,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                 //TODO: fix fixed width tables
                 // Skip the last column for fixed-width tables
                 if(!this.fixedWidth || (this.fixedWidth &&
-                        (oColumn.getIndex() != this._oColumnSet.keys.length-1))) {
+                        (oColumn.getKeyIndex() != this._oColumnSet.keys.length-1))) {
                     // TODO: better way to get elTheadContainer
                     var elThContainer = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",elTheadCellId)[0];
                     var elThResizer = elThContainer.appendChild(document.createElement("span"));
@@ -4569,6 +4569,14 @@ YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) 
     }
 };
 
+YAHOO.widget.DataTable.formatRadio = function(elCell, oRecord, oColumn, oData) {
+    var bChecked = oData;
+    bChecked = (bChecked) ? " checked" : "";
+    elCell.innerHTML = "<input type=\"radio\"" + bChecked +
+            " name=\"" + oColumn.getId() + "-radio\"" +
+            " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
+};
+
 /**
  * Formats text strings.
  *
@@ -5622,7 +5630,7 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
         var checkboxOption = checkboxOptions[j];
         aCheckboxes[j] = elContainer.appendChild(document.createElement("input"));
         aCheckboxes[j].type = "checkbox";
-        aCheckboxes[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-chkbox" + j;
+        aCheckboxes[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-chkbox" + j;
         aCheckboxes[j].value = (YAHOO.lang.isValue(checkboxOption.value)) ?
                 checkboxOption.value : checkboxOption;
         for(var k=0; k<aCheckedValues.length; k++) {
@@ -5668,9 +5676,9 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     if(YAHOO.widget.Calendar) {
         var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
         var calContainer = elContainer.appendChild(document.createElement("div"));
-        calContainer.id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-dateContainer";
+        calContainer.id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-dateContainer";
         var calendar =
-                new YAHOO.widget.Calendar("yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-date",
+                new YAHOO.widget.Calendar("yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-date",
                 calContainer.id,
                 {selected:selectedValue, pagedate:value});
         calendar.render();
@@ -5745,14 +5753,14 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
     if(oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.radioOptions)) {
         var radioOptions = oColumn.editorOptions.radioOptions;
         var elForm = elContainer.appendChild(document.createElement("form"));
-        elForm.name = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-form";
+        elForm.name = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-form";
         var aLabels = [];
         var aRadios = [];
         for(var j=0; j<radioOptions.length; j++) {
             var radioOption = radioOptions[j];
             aRadios[j] = elForm.appendChild(document.createElement("input"));
             aRadios[j].type = "radio";
-            aRadios[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getIndex() + "-radiobtn" + j;
+            aRadios[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-radiobtn" + j;
             aRadios[j].name = oSelf._nIndex + oColumn.key;
             aRadios[j].value = (YAHOO.lang.isValue(radioOption.value)) ?
                     radioOption.value : radioOption;

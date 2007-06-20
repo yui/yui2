@@ -120,7 +120,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             }
             // This Column does not have any children
             else {
-                oColumn._index = keys.length;
+                oColumn._keyIndex = keys.length;
                 oColumn._colspan = 1;
                 keys.push(oColumn);
             }
@@ -387,7 +387,7 @@ YAHOO.widget.Column.prototype._sName = null;
  * ColumnSet.
  *
  * @property _nId
- * @type String
+ * @type Number
  * @private
  */
 YAHOO.widget.Column.prototype._nId = null;
@@ -395,11 +395,11 @@ YAHOO.widget.Column.prototype._nId = null;
 /**
  * Reference to Column's index within its ColumnSet's keys array, or null if not applicable.
  *
- * @property _index
+ * @property _nKeyIndex
  * @type Number
  * @private
  */
-YAHOO.widget.Column.prototype._index = null;
+YAHOO.widget.Column.prototype._nKeyIndex = null;
 
 /**
  * Number of table cells the Column spans.
@@ -590,24 +590,25 @@ YAHOO.widget.Column.prototype.toString = function() {
 };
 
 /**
- * Public accessor returns Column's ID string.
+ * Returns unique number assigned at instantiation, indicates original order
+ * within ColumnSet.
  *
  * @method getId
- * @return {String} Column's ID string.
+ * @return {Number} Column's unique ID number.
  */
 YAHOO.widget.Column.prototype.getId = function() {
     return this._nId;
 };
 
 /**
- * Public accessor returns Column's index within its ColumnSet's keys array, or
+ * Public accessor returns Column's key index within its ColumnSet's keys array, or
  * null if not applicable.
  *
- * @property getIndex
- * @return {Number} Column's index within its ColumnSet keys array, if applicable.
+ * @property getKeyIndex
+ * @return {Number} Column's key index within its ColumnSet keys array, if applicable.
  */
-YAHOO.widget.Column.prototype.getIndex = function() {
-    return this._index;
+YAHOO.widget.Column.prototype.getKeyIndex = function() {
+    return this._nKeyndex;
 };
 
 /**
