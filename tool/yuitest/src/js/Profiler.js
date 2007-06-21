@@ -25,60 +25,40 @@ YAHOO.tool.Profiler = {
     //-------------------------------------------------------------------------
     
     /**
-     * Called when a method begins executed. Marks the start time of the method
-     * so it can later calculate how long the function took to execute.
-     * @param {String} name The name of the function to mark as started.
-     * @return {Void}
-     * @private
-     * @static
-     */
-    _funcStart : function (name /*:String*/) /*:Void*/ {
-    
-        //create a data object and push onto the current stack
-        this._report[name].current.push({
-            start: (new Date()).valueOf()
-        });
-    
-    },
-    
-    /**
-     * Called when a method ends execution. Marks the end time of the method
-     * so it can calculate how long the function took to execute. Also updates
-     * min/max/avg calculations for the function.
+     * Called when a method ends execution. Marks the start and end time of the 
+     * method so it can calculate how long the function took to execute. Also 
+     * updates min/max/avg calculations for the function.
      * @param {String} name The name of the function to mark as stopped.
+     * @param {Date} start The Date object representing the time that the 
+     *        function started executing.
+     * @param {Date} stop The Date object representing the time that the 
+     *        function stopped executing.
      * @return {Void}
      * @private
      * @static
      */
-    _funcStop : function (name /*:String*/) /*:Void*/ {
-    
-        //get the time immediately - don't want to alter the results
-        var stop = (new Date()).valueOf();
-    
+    _saveData : function (name /*:String*/, start /*:Date*/, stop /*:Date*/){
+
+        var duration = stop.valueOf() - start.valueOf();
+        
         //get the function data
         var functionData /*:Object*/ = this._report[name];
     
-        //get the data
-        var data = functionData.current.pop();
-        data.stop = (new Date()).valueOf();
-        data.duration = data.stop-data.start;
-
-        if (data.duration < functionData.min){
-           functionData.min = data.duration;        
+        if (duration < functionData.min){
+           functionData.min = duration;        
         }
 
-        if (data.duration > functionData.max){
-           functionData.max = data.duration;        
+        if (duration > functionData.max){
+           functionData.max = duration;        
         }
         
         functionData.calls++;
 
         if (functionData.calls > 1) {
-            functionData.avg = ((functionData.avg*(functionData.calls-1))+data.duration)/functionData.calls;                                                                                        
+            functionData.avg = ((functionData.avg*(functionData.calls-1))+duration)/functionData.calls;                                                                                        
         } else {
-            functionData.avg = data.duration;
-        }                           
-                             
+            functionData.avg = duration;
+        }                             
     
     },
 
@@ -170,11 +150,11 @@ YAHOO.tool.Profiler = {
             //replace the function with the profiling one
             object[methodName] = function () {
                 
-                YAHOO.tool.Profiler._funcStart(funcName);
-                
+                var start = new Date();                
                 var retval = method.apply(this, arguments);
+                var stop = new Date();
                 
-                YAHOO.tool.Profiler._funcStop(funcName);
+                YAHOO.tool.Profiler._saveData(funcName, start, stop);
                 
                 return retval;
             
@@ -186,7 +166,6 @@ YAHOO.tool.Profiler = {
             //store function information
             this._report[funcName] = {
                 calls: 0,
-                current: new Array(),
                 max: 0,
                 min: Infinity,
                 avg: 0
