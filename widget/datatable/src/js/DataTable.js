@@ -77,7 +77,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     // Initialize Column sort
     this._initColumnSort();
-    
+
     // Initialize DOM event listeners
     this._initDomEvents();
 
@@ -6734,7 +6734,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest
 
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(sRequest, oResponse);
-    
+
     // Data ok to populate
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         this.initializeTable(oResponse.results);

@@ -877,9 +877,9 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
 
         //TODO: how else to cycle through all the Columns without having to use an index property?
         for(var i=0; i<oDataTable._oColumnSet.length; i++) {
-            if((i != elCell.index) &&  (i!=sibIndex)) {
-                YAHOO.util.Dom.get(oDataTable._oColumnSet.keys[i].id).style.width = oDataTable._oColumnSet.keys[i].width + "px";
-            }
+            //if((i != elCell.index) &&  (i!=sibIndex)) {
+            //    YAHOO.util.Dom.get(oDataTable._oColumnSet.keys[i].id).style.width = oDataTable._oColumnSet.keys[i].width + "px";
+            //}
         }
         sib.style.width = sibnewwidth;
         elCell.style.width = newWidth + "px";
