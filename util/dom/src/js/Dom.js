@@ -264,8 +264,8 @@
                 // account for any scrolled ancestors
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
-                   // work around opera inline scrollLeft/Top bug
-                   if (Y.Dom.getStyle(parentNode, 'display') != 'inline') { 
+                   // work around opera inline/table scrollLeft/Top bug
+                   if (Y.Dom.getStyle(parentNode, 'display').search(/^inline|table-row.*$/i)) { 
                         pos[0] -= parentNode.scrollLeft;
                         pos[1] -= parentNode.scrollTop;
                     }
