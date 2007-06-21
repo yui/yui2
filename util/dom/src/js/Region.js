@@ -161,8 +161,8 @@ YAHOO.util.Region.getRegion = function(el) {
  * @extends YAHOO.util.Region
  */
 YAHOO.util.Point = function(x, y) {
-   if (x instanceof Array) { // accept output from Dom.getXY
-      y = x[1];
+   if (YAHOO.lang.isArray(x)) { // accept input from Dom.getXY, Event.getXY, etc.
+      y = x[1]; // dont blow away x yet
       x = x[0];
    }
    
