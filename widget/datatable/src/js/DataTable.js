@@ -66,9 +66,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         return;
     }
 
-    // Initialize RecordSet
-    this._initRecordSet();
-
     // Send out for data in an asynchronous request
     this._oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
 
@@ -82,7 +79,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     this._initDomEvents();
 
     YAHOO.widget.DataTable._nCount++;
-    this.fireEvent("initEvent");
     YAHOO.log("DataTable initialized", "info", this.toString());
 };
 
@@ -1199,7 +1195,12 @@ YAHOO.widget.DataTable.prototype._initDataSource = function(oDataSource) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initRecordSet = function() {
-    this._oRecordSet = new YAHOO.widget.RecordSet();
+    if(this._oRecordSet) {
+        this._oRecordSet.reset();
+    }
+    else {
+        this._oRecordSet = new YAHOO.widget.RecordSet();
+    }
 };
 
 /**
@@ -3386,7 +3387,8 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
  * object literals containing data.
  */
 YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
-    this._oRecordSet.reset();
+    // Initialize RecordSet
+    this._initRecordSet();
 
     // Add data to RecordSet
     var records = this._oRecordSet.addRecords(oData);
@@ -3400,6 +3402,7 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
 
     // Refresh the view
     this.refreshView();
+    this.fireEvent("initEvent");
 };
 
 /**
