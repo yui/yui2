@@ -214,21 +214,11 @@
                 var parentNode = null;
                 var pos = [];
                 var box;
-                
+                var doc = el.ownerDocument; 
+
                 if (el.getBoundingClientRect) { // IE
                     box = el.getBoundingClientRect();
-                    var doc = document;
-                    if ( !this.inDocument(el) && parent.document != document) {// might be in a frame, need to get its scroll
-                        doc = parent.document;
-
-                        if ( !this.isAncestor(doc.documentElement, el) ) {
-                            YAHOO.log('getXY failed: element not available', 'error', 'Dom');
-                            return false;                      
-                        }
-
-                    }
-
-                    return [box.left + Y.Dom.getDocumentScrollLeft(doc), box.top + Y.Dom.getDocumentScrollTop(doc)];
+                    return [box.left + Y.Dom.getDocumentScrollLeft(el.ownerDocument), box.top + Y.Dom.getDocumentScrollTop(el.ownerDocument)];
                 }
                 else { // safari, opera, & gecko
                     pos = [el.offsetLeft, el.offsetTop];
@@ -250,8 +240,8 @@
                     }
 
                     if (isSafari && hasAbs) { //safari doubles in this case
-                        pos[0] -= document.body.offsetLeft;
-                        pos[1] -= document.body.offsetTop;
+                        pos[0] -= el.ownerDocument.body.offsetLeft;
+                        pos[1] -= el.ownerDocument.body.offsetTop;
                     } 
                 }
                 
@@ -269,11 +259,6 @@
                     parentNode = parentNode.parentNode; 
                 }
        
-                if (el.ownerDocument != document) { // account for scroll if in frame
-                    pos[0] -= Y.Dom.getDocumentScrollLeft(el.ownerDocument); 
-                    pos[1] -= Y.Dom.getDocumentScrollTop(el.ownerDocument); 
-                } 
-
                 YAHOO.log('getXY returning ' + pos, 'info', 'Dom');
                 
                 return pos;
