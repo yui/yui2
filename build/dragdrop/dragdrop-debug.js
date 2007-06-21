@@ -1612,7 +1612,7 @@ YAHOO.util.DragDrop.prototype = {
     unlock: function() { this.locked = false; },
 
     /**
-     * By default, all insances can be a drop target.  This can be disabled by
+     * By default, all instances can be a drop target.  This can be disabled by
      * setting isTarget to false.
      * @method isTarget
      * @type boolean
@@ -1763,6 +1763,30 @@ YAHOO.util.DragDrop.prototype = {
      * @default false
      */
     hasOuterHandles: false,
+
+    /**
+     * Property that is assigned to a drag and drop object when testing to
+     * see if it is being targeted by another dd object.  This property
+     * can be used in intersect mode to help determine the focus of
+     * the mouse interaction.  DDM.getBestMatch uses this property first to
+     * determine the closest match in INTERSECT mode when multiple targets
+     * are part of the same interaction.
+     * @property cursorIsOver
+     * @type boolean
+     */
+    cursorIsOver: false,
+
+    /**
+     * Property that is assigned to a drag and drop object when testing to
+     * see if it is being targeted by another dd object.  This is a region
+     * that represents the area the draggable element overlaps this target.
+     * DDM.getBestMatch uses this property to compare the size of the overlap
+     * to that of other targets in order to determine the closest match in
+     * INTERSECT mode when multiple targets are part of the same interaction.
+     * @property overlap 
+     * @type YAHOO.util.Region
+     */
+    overlap: null,
 
     /**
      * Code that executes immediately before the startDrag event
