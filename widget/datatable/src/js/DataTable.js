@@ -1136,6 +1136,7 @@ YAHOO.widget.DataTable.prototype._initConfigs = function(oConfigs) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initColumnSet = function(aColumnDefs) {
+    this._oColumnSet = null;
     if(YAHOO.lang.isArray(aColumnDefs)) {
         this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
     }
@@ -1156,6 +1157,7 @@ YAHOO.widget.DataTable.prototype._initColumnSet = function(aColumnDefs) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initDataSource = function(oDataSource) {
+    this._oDataSource = null;
     if(oDataSource && (oDataSource instanceof YAHOO.util.DataSource)) {
         this._oDataSource = oDataSource;
     }
