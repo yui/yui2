@@ -13,11 +13,10 @@
         reClassNameCache = {}; // cache regexes for className
     
     // brower detection
-    var ua = navigator.userAgent.toLowerCase(),
-        isOpera = (ua.indexOf('opera') > -1),
-        isSafari = (ua.indexOf('safari') > -1),
-        isGecko = (!isOpera && !isSafari && ua.indexOf('gecko') > -1),
-        isIE = (!isOpera && ua.indexOf('msie') > -1); 
+    var isOpera = YAHOO.env.ua.opera,
+        isSafari = YAHOO.env.ua.webkit, 
+        isGecko = YAHOO.env.ua.gecko,
+        isIE = YAHOO.env.ua.ie; 
     
     // regex cache
     var patterns = {
@@ -606,14 +605,15 @@
             if (!haystack || !needle) { return false; }
             
             var f = function(needle) {
-                if (haystack.contains) {
+                if (haystack.contains && needle.tagName) {
                     YAHOO.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
                     return haystack.contains(needle);
                 }
-                else if ( haystack.compareDocumentPosition ) {
+                else if ( haystack.compareDocumentPosition && needle.tagName ) {
                     YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(needle) & 16), 'info', 'Dom');
                     return !!(haystack.compareDocumentPosition(needle) & 16);
                 }
+                return false;
             };
             
             return Y.Dom.batch(needle, f, Y.Dom, true);      
@@ -626,7 +626,15 @@
          * @return {Boolean} Whether or not the element is present in the current document
          */
         inDocument: function(el) {
-            var f = function(el) {
+            var f = function(el) { // safari contains fails for body so crawl up
+                if (isSafari) {
+                    while (el = el.parentNode) { // note assignment
+                        if (el == document.documentElement) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
                 return this.isAncestor(document.documentElement, el);
             };
             
@@ -687,10 +695,10 @@
             } 
             var scope = (override) ? o : window;
             
-            if (el.tagName) {
+            if (!el.item && !el.slice) { // not a collection or array, just run the method
                 return method.call(scope, el, o);
             } 
-            
+
             var collection = [];
             
             for (var i = 0, len = el.length; i < len; ++i) {
