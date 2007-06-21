@@ -1376,18 +1376,6 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     
     YAHOO.util.Dom.addClass(elTheadCell, "yui-dt-col-"+oColumn.key);
     
-    //TODO: Apply CSS for sorted tables
-    //var sortedBy = this.get("sortedBy");
-    //if(sortedBy) {
-    //    if(sortedBy.key === oColumn.key) {
-    //        var newClass = (sortedBy.dir && (sortedBy.dir != "asc")) ?
-    //                YAHOO.widget.DataTable.CLASS_DESC :
-    //                YAHOO.widget.DataTable.CLASS_ASC;
-    //        YAHOO.util.Dom.addClass(elTheadCell,sortClass);
-    //        this.sortedBy._id = elTheadCell.id;
-    //    }
-    //}
-
     elTheadCell.innerHTML = "";
     elTheadCell.rowSpan = oColumn.getRowspan();
     elTheadCell.colSpan = oColumn.getColspan();
@@ -3413,10 +3401,10 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
  * @method refreshView
  */
 YAHOO.widget.DataTable.prototype.refreshView = function() {
-    var i, j, aRecords;
+    var i, j, k, aRecords;
     var oPaginator = this.updatePaginator();
 
-    // Paginator is enabled
+    // Paginator is enabled, show a subset of Records and update Paginator UI
     if(this.get("paginated")) {
         var rowsPerPage = oPaginator.rowsPerPage;
         var startRecordIndex = (oPaginator.currentPage - 1) * rowsPerPage;
@@ -3435,23 +3423,34 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
     if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
         this.hideTableMessage();
 
-        // Remove extra rows from the bottom so as to preserve ID order
-        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
-            elTbody.deleteRow(-1);
-        }
-
         // Keep track of selected rows
         var aSelectedRows = this.getSelectedRows();
 
         // Keep track of selected cells
         var aSelectedCells = this.getSelectedCells();
 
-        // Unselect TR elements in the UI
+        // Keep track of sorted Column
+        var isSortedBy = this.get("sortedBy");
+        var sortedColKeyIndex  = null;
+        var sortedDir = null;
+        if(isSortedBy) {
+            sortedColKeyIndex = (isSortedBy.column) ?
+                    isSortedBy.column.getKeyIndex() :
+                    this._oColumnSet.getColumn(isSortedBy.key).getKeyIndex();
+            sortedDir = isSortedBy.dir;
+        }
+
+        // Remove extra rows from the bottom so as to preserve ID order
+        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
+            elTbody.deleteRow(-1);
+        }
+
+        // Unselect all TR elements in the UI
         if(aSelectedRows.length > 0) {
             this._unselectAllTrEls();
         }
 
-        // Unselect TD elements in the UI
+        // Unselect all TD elements in the UI
         if(aSelectedCells.length > 0) {
             this._unselectAllTdEls();
         }
@@ -3466,25 +3465,38 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
             this._addTrEl(aRecords[i]);
         }
 
-        // Re-select any TR or TD elements as necessary
-        var allSelections = aSelectedRows.concat(aSelectedCells);
+        // Reinstate selected and sorted classes
         var allRows = elTbody.rows;
-        for(i=0; i<allSelections.length; i++) {
-            for(j=0; j<allRows.length; j++) {
-                var thisRow = allRows[j];
-                if(allSelections[i] === thisRow.yuiRecordId) {
+        // Loop over each row
+        for(j=0; j<allRows.length; j++) {
+            var thisRow = allRows[j];
+            // Is this row selected?
+            for(k=0; k<aSelectedRows.length; k++) {
+                if(aSelectedRows[k] === thisRow.yuiRecordId) {
                     YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
                 }
-                else if(allSelections[i].recordId === thisRow.yuiRecordId) {
-                    for(var k=0; k<thisRow.cells.length; k++) {
-                        if(thisRow.cells[k].yuiColumnId === allSelections[i].columnId) {
-                            YAHOO.util.Dom.addClass(thisRow.cells[k], YAHOO.widget.DataTable.CLASS_SELECTED);
-                        }
+            }
+            // Loop over each cell
+            for(k=0; k<thisRow.cells.length; k++) {
+                var thisCell = thisRow.cells[k];
+                // Is this cell selected?
+                for(l=0; l<aSelectedCells.length; l++) {
+                    if(aSelectedCells[l].columnId === thisCell.yuiColumnId) {
+                        YAHOO.util.Dom.addClass(thisCell, YAHOO.widget.DataTable.CLASS_SELECTED);
                     }
+                }
+                // Reset sort classes
+                YAHOO.util.Dom.removeClass(thisCell, YAHOO.widget.DataTable.CLASS_ASC);
+                YAHOO.util.Dom.removeClass(thisCell, YAHOO.widget.DataTable.CLASS_DESC);
+                if(k === sortedColKeyIndex) {
+                    var newClass = (sortedDir != "asc") ?
+                            YAHOO.widget.DataTable.CLASS_DESC :
+                            YAHOO.widget.DataTable.CLASS_ASC;
+                    YAHOO.util.Dom.addClass(thisCell, newClass);
                 }
             }
         }
-
+        
         // Set classes
         this._setFirstRow();
         this._setLastRow();

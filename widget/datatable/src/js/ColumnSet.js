@@ -120,7 +120,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             }
             // This Column does not have any children
             else {
-                oColumn._keyIndex = keys.length;
+                oColumn._nKeyIndex = keys.length;
                 oColumn._colspan = 1;
                 keys.push(oColumn);
             }
@@ -608,7 +608,7 @@ YAHOO.widget.Column.prototype.getId = function() {
  * @return {Number} Column's key index within its ColumnSet keys array, if applicable.
  */
 YAHOO.widget.Column.prototype.getKeyIndex = function() {
-    return this._nKeyndex;
+    return this._nKeyIndex;
 };
 
 /**
