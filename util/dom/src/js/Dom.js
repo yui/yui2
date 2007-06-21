@@ -393,7 +393,13 @@
          */
         getRegion: function(el) {
             var f = function(el) {
-                var region = new Y.Region.getRegion(el);
+                if ( (el.parentNode === null || el.offsetParent === null ||
+                        this.getStyle(el, 'display') == 'none') && el != document.body) {
+                    YAHOO.log('getRegion failed: element not available', 'error', 'Dom');
+                    return false;
+                }
+
+                var region = Y.Region.getRegion(el);
                 YAHOO.log('getRegion returning ' + region, 'info', 'Dom');
                 return region;
             };
