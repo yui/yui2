@@ -599,7 +599,9 @@
         */
         initResizeMonitor: function () {
         
-            var bIE, nLeft, nTop, doc, resizeMonitor;
+            var oDoc, 
+                oIFrame, 
+                sHTML;
         
             function fireTextResize() {
         
@@ -609,78 +611,99 @@
         
             if (!YAHOO.env.ua.opera) {
         
-                resizeMonitor = document.getElementById("_yuiResizeMonitor");
+                oIFrame = Dom.get("_yuiResizeMonitor");
         
-                if (! resizeMonitor) {
+                if (!oIFrame) {
         
-                    resizeMonitor = document.createElement("iframe");
+                    oIFrame = document.createElement("iframe");
         
-                    bIE = YAHOO.env.ua.ie;
-        
-                    if (this.isSecure && 
-                            Module.RESIZE_MONITOR_SECURE_URL && bIE) {
+                    if (this.isSecure && Module.RESIZE_MONITOR_SECURE_URL && 
+                        YAHOO.env.ua.ie) {
     
-                        resizeMonitor.src = 
-                            Module.RESIZE_MONITOR_SECURE_URL;
+                        oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
     
                     }
+
+
+                    /*
+                        Need to set "src" attribute of the iframe to 
+                        prevent the browser from reporting duplicate 
+                        cookies. (See SourceForge bug #1721755)
+                    */
         
-                    resizeMonitor.id = "_yuiResizeMonitor";
-                    resizeMonitor.style.visibility = "hidden";
+                    if (YAHOO.env.ua.gecko) {
+
+                        sHtml = "<html><head><script " +
+                                "type=\"text/javascript\">" + 
+                                "window.onresize=function(){window.parent." +
+                                "YAHOO.widget.Module.textResizeEvent." +
+                                "fire();};window.parent.YAHOO.widget.Module." +
+                                "textResizeEvent.fire();</script></head>" + 
+                                "<body></body></html>";
+
+                        oIFrame.src = "data:text/html;charset=utf-8," + 
+                            encodeURIComponent(sHtml);
+
+                    }
+
+                    oIFrame.id = "_yuiResizeMonitor";
+                    
+                    /*
+                        Need to set "position" property before inserting the 
+                        iframe into the document or Safari's status bar will 
+                        forever indicate the iframe is loading 
+                        (See SourceForge bug #1723064)
+                    */
+                    
+                    oIFrame.style.position = "absolute";
+                    oIFrame.style.visibility = "hidden";
         
-                    document.body.appendChild(resizeMonitor);
+                    document.body.appendChild(oIFrame);
         
-                    resizeMonitor.style.width = "10em";
-                    resizeMonitor.style.height = "10em";
-                    resizeMonitor.style.position = "absolute";
+                    oIFrame.style.width = "10em";
+                    oIFrame.style.height = "10em";
+                    oIFrame.style.top = (-1 * oIFrame.offsetHeight) + "px";
+                    oIFrame.style.left = (-1 * oIFrame.offsetWidth) + "px";
+                    oIFrame.style.borderWidth = "0";
+                    oIFrame.style.visibility = "visible";
         
-                    nLeft = -1 * resizeMonitor.offsetWidth;
-                    nTop = -1 * resizeMonitor.offsetHeight;
+                    if (YAHOO.env.ua.webkit) {
         
-                    resizeMonitor.style.top = nTop + "px";
-                    resizeMonitor.style.left = nLeft + "px";
-                    resizeMonitor.style.borderStyle = "none";
-                    resizeMonitor.style.borderWidth = "0";
-                    Dom.setStyle(resizeMonitor, "opacity", "0");
+                        oDoc = oIFrame.contentWindow.document;
         
-                    resizeMonitor.style.visibility = "visible";
-        
-                    if (!bIE) {
-        
-                        doc = resizeMonitor.contentWindow.document;
-        
-                        doc.open();
-                        doc.close();
+                        oDoc.open();
+                        oDoc.close();
         
                     }
+
                 }
         
-        
-        
-                if (resizeMonitor && resizeMonitor.contentWindow) {
-                    this.resizeMonitor = resizeMonitor;
-        
-                    Module.textResizeEvent.subscribe(
-                        this.onDomResize, this, true);
+                if (oIFrame && oIFrame.contentWindow) {
+
+                    Module.textResizeEvent.subscribe(this.onDomResize, 
+                        this, true);
         
                     if (!Module.textResizeInitialized) {
 
-                        if (!Event.on(this.resizeMonitor.contentWindow, 
-                            "resize", fireTextResize)) {
+                        if (!Event.on(oIFrame.contentWindow, "resize", 
+                            fireTextResize)) {
 
                             /*
                                  This will fail in IE if document.domain has 
                                  changed, so we must change the listener to 
-                                 use the resizeMonitor element instead
+                                 use the oIFrame element instead
                             */
 
-                            Event.on(this.resizeMonitor, "resize", 
-                                fireTextResize);
+                            Event.on(oIFrame, "resize", fireTextResize);
 
                         }
 
                         Module.textResizeInitialized = true;
+
                     }
+
+                    this.resizeMonitor = oIFrame;
+
                 }
         
             }
