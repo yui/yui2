@@ -2479,7 +2479,7 @@ _onKeyPress: function(p_sType, p_aArgs) {
 
     if(oEvent.keyCode == 40 || oEvent.keyCode == 38) {
 
-        YAHOO.util.Event.preventDefault(oEvent);
+        Event.preventDefault(oEvent);
 
     }
 
@@ -2770,20 +2770,12 @@ _onBeforeRender: function(p_sType, p_aArgs) {
 */
 _onRender: function(p_sType, p_aArgs) {
 
-    if (
-        this.cfg.getProperty("position") == "dynamic" && 
-        !this.cfg.getProperty("width")
-    ) {
+    if (this.cfg.getProperty("position") == "dynamic" && 
+        !this.cfg.getProperty("width")) {
 
         this._setWidth();
     
     }
-
-    var oDIV = document.createElement("div");
-    oDIV.className = "shadow";
-    oDIV.innerHTML = "<div>&#32;s</div>";
-    
-    this.element.appendChild(oDIV);
 
 },
 
@@ -2988,7 +2980,7 @@ _onShow: function(p_sType, p_aArgs) {
 
                     if(
                         oTarget != oParentMenu.element || 
-                        !YAHOO.util.Dom.isAncestor(oParentMenu.element, oTarget)
+                        !Dom.isAncestor(oParentMenu.element, oTarget)
                     ) {
 
                         oParentMenu.cfg.setProperty(
@@ -3357,43 +3349,56 @@ _onMenuItemConfigChange: function(p_sType, p_aArgs, p_oItem) {
 */
 enforceConstraints: function(type, args, obj) {
 
-    if(this.parent && !(this.parent.parent instanceof YAHOO.widget.MenuBar)) {
+    var oMenuItem = this.parent,
+        oElement,
+        oConfig,
+        pos,
+        x,
+        y,
+        offsetHeight,
+        offsetWidth,
+        viewPortWidth,
+        viewPortHeight,
+        scrollX,
+        scrollY,
+        nPadding,
+        topConstraint,
+        leftConstraint,
+        bottomConstraint,
+        rightConstraint,
+        aContext,
+        oContextElement;
+
+
+    if(oMenuItem && !(oMenuItem.parent instanceof YAHOO.widget.MenuBar)) {
+
+        oElement = this.element;
     
-        var oConfig = this.cfg,
-            pos = args[0],
-            
-            x = pos[0],
-            y = pos[1],
-            
-            offsetHeight = this.element.offsetHeight,
-            offsetWidth = this.element.offsetWidth,
-            
-            viewPortWidth = YAHOO.util.Dom.getViewportWidth(),
-            viewPortHeight = YAHOO.util.Dom.getViewportHeight(),
-            
-            scrollX = Math.max(
-                    document.documentElement.scrollLeft, 
-                    document.body.scrollLeft
-                ),
-            
-            scrollY = Math.max(
-                    document.documentElement.scrollTop, 
-                    document.body.scrollTop
-                ),
-            
-            nPadding = (
-                            this.parent && 
-                            this.parent.parent instanceof YAHOO.widget.MenuBar
-                        ) ? 0 : 10,
-            
-            topConstraint = scrollY + nPadding,
-            leftConstraint = scrollX + nPadding,
-            bottomConstraint = 
-                scrollY + viewPortHeight - offsetHeight - nPadding,
-            rightConstraint = scrollX + viewPortWidth - offsetWidth - nPadding,
-            
-            aContext = oConfig.getProperty("context"),
-            oContextElement = aContext ? aContext[0] : null;
+        oConfig = this.cfg;
+        pos = args[0];
+        
+        x = pos[0];
+        y = pos[1];
+        
+        offsetHeight = oElement.offsetHeight;
+        offsetWidth = oElement.offsetWidth;
+        
+        viewPortWidth = Dom.getViewportWidth();
+        viewPortHeight = Dom.getViewportHeight();
+        
+        scrollX = Dom.getDocumentScrollLeft();
+        scrollY = Dom.getDocumentScrollTop();
+        
+        nPadding = (oMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 0 : 10;
+        
+        topConstraint = scrollY + nPadding;
+        leftConstraint = scrollX + nPadding;
+        
+        bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding;
+        rightConstraint = scrollX + viewPortWidth - offsetWidth - nPadding;
+        
+        aContext = oConfig.getProperty("context");
+        oContextElement = aContext ? aContext[0] : null;
     
     
         if (x < 10) {
@@ -3402,10 +3407,8 @@ enforceConstraints: function(type, args, obj) {
     
         } else if ((x + offsetWidth) > viewPortWidth) {
     
-            if(
-                oContextElement &&
-                ((x - oContextElement.offsetWidth) > offsetWidth)
-            ) {
+            if(oContextElement &&
+                ((x - oContextElement.offsetWidth) > offsetWidth)) {
     
                 x = (x - (oContextElement.offsetWidth + offsetWidth));
     
@@ -3440,6 +3443,12 @@ enforceConstraints: function(type, args, obj) {
         oConfig.setProperty("x", x, true);
         oConfig.setProperty("y", y, true);
         oConfig.setProperty("xy", [x,y], true);
+    
+    }
+    else {
+    
+        YAHOO.widget.Menu.superclass.enforceConstraints.call(this, 
+            type, args, obj);
     
     }
 
@@ -3870,7 +3879,6 @@ configDisabled: function(p_sType, p_aArgs, p_oMenu) {
 
 
 // Public methods
-
 
 
 /**
