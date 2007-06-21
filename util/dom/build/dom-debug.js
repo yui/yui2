@@ -228,10 +228,7 @@
 
                     }
 
-                    var scrollTop = Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
-                    var scrollLeft = Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
-                    
-                    return [box.left + scrollLeft, box.top + scrollTop];
+                    return [box.left + Y.Dom.getDocumentScrollLeft(doc), box.top + Y.Dom.getDocumentScrollTop(doc)];
                 }
                 else { // safari, opera, & gecko
                     pos = [el.offsetLeft, el.offsetTop];
@@ -271,7 +268,12 @@
                     
                     parentNode = parentNode.parentNode; 
                 }
-        
+       
+                if (el.ownerDocument != document) { // account for scroll if in frame
+                    pos[0] -= Y.Dom.getDocumentScrollLeft(el.ownerDocument); 
+                    pos[1] -= Y.Dom.getDocumentScrollTop(el.ownerDocument); 
+                } 
+
                 YAHOO.log('getXY returning ' + pos, 'info', 'Dom');
                 
                 return pos;
@@ -690,12 +692,12 @@
             el = (el && el.tagName) ? el : Y.Dom.get(el); // skip get() when possible
 
             if (!el || !method) {
-                YAHOO.log('batch failed: invalid arguments, 'error', 'Dom');
+                YAHOO.log('batch failed: invalid arguments', 'error', 'Dom');
                 return false;
             } 
             var scope = (override) ? o : window;
             
-            if (!el.item && !el.slice) { // not a collection or array, just run the method
+            if (el.tagName || (!el.item && !el.slice)) { // not a collection or array, just run the method
                 return method.call(scope, el, o);
             } 
 
@@ -1002,7 +1004,17 @@
             attr = attributeMap[attr.toLowerCase()] || atr;
             // TODO: convert to camelCase?
             return node[attr];
-        } 
+        },
+
+        getDocumentScrollLeft: function(doc) {
+            doc = doc || document;
+            return Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
+        }, 
+
+        getDocumentScrollTop: function(doc) {
+            doc = doc || document;
+            return Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+        }
     };
 
 var attributeMap = {
