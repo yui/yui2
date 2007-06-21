@@ -264,8 +264,8 @@
                 // account for any scrolled ancestors
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
-                   // work around opera inline scrollLeft/Top bug
-                   if (Y.Dom.getStyle(parentNode, 'display') != 'inline') { 
+                   // work around opera inline/table scrollLeft/Top bug
+                   if (Y.Dom.getStyle(parentNode, 'display').search(/^inline|table-row.*$/i)) { 
                         pos[0] -= parentNode.scrollLeft;
                         pos[1] -= parentNode.scrollTop;
                     }
@@ -1165,8 +1165,8 @@ YAHOO.util.Region.getRegion = function(el) {
  * @extends YAHOO.util.Region
  */
 YAHOO.util.Point = function(x, y) {
-   if (x instanceof Array) { // accept output from Dom.getXY
-      y = x[1];
+   if (YAHOO.lang.isArray(x)) { // accept input from Dom.getXY, Event.getXY, etc.
+      y = x[1]; // dont blow away x yet
       x = x[0];
    }
    
