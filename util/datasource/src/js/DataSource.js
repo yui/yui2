@@ -918,7 +918,17 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 };
 
 /**
- * Handles raw data response from live data source.
+ * Handles raw data response from live data source. Sends a parsed response object
+ * to the callback function in this format:
+ *
+ * fnCallback(oRequest, oParsedResponse)
+ *
+ * where the oParsedResponse object literal with the following properties:
+ * <ul>
+ *     <li>tId {Number} Unique transaction ID</li>
+ *     <li>results {Array} Array of parsed data results</li>
+ *     <li>error {Boolean} True if there was an error</li>
+ * </ul>
  *
  * @method handleResponse
  * @param oRequest {Object} Request object
