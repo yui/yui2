@@ -210,23 +210,11 @@
                 var parentNode = null;
                 var pos = [];
                 var box;
-                
+                var doc = el.ownerDocument; 
+
                 if (el.getBoundingClientRect) { // IE
                     box = el.getBoundingClientRect();
-                    var doc = document;
-                    if ( !this.inDocument(el) && parent.document != document) {// might be in a frame, need to get its scroll
-                        doc = parent.document;
-
-                        if ( !this.isAncestor(doc.documentElement, el) ) {
-                            return false;                      
-                        }
-
-                    }
-
-                    var scrollTop = Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
-                    var scrollLeft = Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
-                    
-                    return [box.left + scrollLeft, box.top + scrollTop];
+                    return [box.left + Y.Dom.getDocumentScrollLeft(el.ownerDocument), box.top + Y.Dom.getDocumentScrollTop(el.ownerDocument)];
                 }
                 else { // safari, opera, & gecko
                     pos = [el.offsetLeft, el.offsetTop];
@@ -248,8 +236,8 @@
                     }
 
                     if (isSafari && hasAbs) { //safari doubles in this case
-                        pos[0] -= document.body.offsetLeft;
-                        pos[1] -= document.body.offsetTop;
+                        pos[0] -= el.ownerDocument.body.offsetLeft;
+                        pos[1] -= el.ownerDocument.body.offsetTop;
                     } 
                 }
                 
@@ -266,7 +254,7 @@
                     
                     parentNode = parentNode.parentNode; 
                 }
-        
+       
                 
                 return pos;
             };
@@ -675,7 +663,7 @@
             } 
             var scope = (override) ? o : window;
             
-            if (!el.item && !el.slice) { // not a collection or array, just run the method
+            if (el.tagName || (!el.item && !el.slice)) { // not a collection or array, just run the method
                 return method.call(scope, el, o);
             } 
 
@@ -969,7 +957,17 @@
             attr = attributeMap[attr.toLowerCase()] || atr;
             // TODO: convert to camelCase?
             return node[attr];
-        } 
+        },
+
+        getDocumentScrollLeft: function(doc) {
+            doc = doc || document;
+            return Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
+        }, 
+
+        getDocumentScrollTop: function(doc) {
+            doc = doc || document;
+            return Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+        }
     };
 
 var attributeMap = {
