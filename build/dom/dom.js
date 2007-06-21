@@ -13,11 +13,10 @@
         reClassNameCache = {}; // cache regexes for className
     
     // brower detection
-    var ua = navigator.userAgent.toLowerCase(),
-        isOpera = (ua.indexOf('opera') > -1),
-        isSafari = (ua.indexOf('safari') > -1),
-        isGecko = (!isOpera && !isSafari && ua.indexOf('gecko') > -1),
-        isIE = (!isOpera && ua.indexOf('msie') > -1); 
+    var isOpera = YAHOO.env.ua.opera,
+        isSafari = YAHOO.env.ua.webkit, 
+        isGecko = YAHOO.env.ua.gecko,
+        isIE = YAHOO.env.ua.ie; 
     
     // regex cache
     var patterns = {
@@ -259,8 +258,8 @@
                 // account for any scrolled ancestors
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
-                   // work around opera inline scrollLeft/Top bug
-                   if (Y.Dom.getStyle(parentNode, 'display') != 'inline') { 
+                   // work around opera inline/table scrollLeft/Top bug
+                   if (Y.Dom.getStyle(parentNode, 'display').search(/^inline|table-row.*$/i)) { 
                         pos[0] -= parentNode.scrollLeft;
                         pos[1] -= parentNode.scrollTop;
                     }
@@ -590,12 +589,13 @@
             if (!haystack || !needle) { return false; }
             
             var f = function(needle) {
-                if (haystack.contains) {
+                if (haystack.contains && needle.tagName) {
                     return haystack.contains(needle);
                 }
-                else if ( haystack.compareDocumentPosition ) {
+                else if ( haystack.compareDocumentPosition && needle.tagName ) {
                     return !!(haystack.compareDocumentPosition(needle) & 16);
                 }
+                return false;
             };
             
             return Y.Dom.batch(needle, f, Y.Dom, true);      
@@ -608,7 +608,15 @@
          * @return {Boolean} Whether or not the element is present in the current document
          */
         inDocument: function(el) {
-            var f = function(el) {
+            var f = function(el) { // safari contains fails for body so crawl up
+                if (isSafari) {
+                    while (el = el.parentNode) { // note assignment
+                        if (el == document.documentElement) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
                 return this.isAncestor(document.documentElement, el);
             };
             
@@ -667,10 +675,10 @@
             } 
             var scope = (override) ? o : window;
             
-            if (el.tagName) {
+            if (!el.item && !el.slice) { // not a collection or array, just run the method
                 return method.call(scope, el, o);
             } 
-            
+
             var collection = [];
             
             for (var i = 0, len = el.length; i < len; ++i) {
@@ -1131,8 +1139,8 @@ YAHOO.util.Region.getRegion = function(el) {
  * @extends YAHOO.util.Region
  */
 YAHOO.util.Point = function(x, y) {
-   if (x instanceof Array) { // accept output from Dom.getXY
-      y = x[1];
+   if (YAHOO.lang.isArray(x)) { // accept input from Dom.getXY, Event.getXY, etc.
+      y = x[1]; // dont blow away x yet
       x = x[0];
    }
    
