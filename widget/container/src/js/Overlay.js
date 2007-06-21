@@ -91,13 +91,13 @@
             "WIDTH": { 
                 key: "width", 
                 suppressEvent: true, 
-                supercedes: ["iframe"] 
+                supercedes: ["context", "fixedcenter", "iframe"] 
             }, 
         
             "HEIGHT": { 
                 key: "height", 
                 suppressEvent: true, 
-                supercedes: ["iframe"] 
+                supercedes: ["context", "fixedcenter", "iframe"] 
             }, 
         
             "ZINDEX": { 
@@ -116,7 +116,7 @@
                 key: "iframe", 
                 value: (YAHOO.env.ua.ie == 6 ? true : false), 
                 validator: Lang.isBoolean, 
-                supercedes: ["zIndex"] 
+                supercedes: ["zindex"] 
             }
         
         };
