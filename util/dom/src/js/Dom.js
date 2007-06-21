@@ -9,7 +9,8 @@
         getStyle,           // for load time browser branching
         setStyle,           // ditto
         id_counter = 0,     // for use with generateId
-        propertyCache = {}; // for faster hyphen converts
+        propertyCache = {}, // for faster hyphen converts
+        reClassNameCache = {}; // cache regexes for className
     
     // brower detection
     var ua = navigator.userAgent.toLowerCase(),
@@ -45,6 +46,15 @@
         //return property.replace(/-([a-z])/gi, function(m0, m1) {return m1.toUpperCase()}) // cant use function as 2nd arg yet due to safari bug
     };
     
+    var getClassRegEx = function(className) {
+        var re = reClassNameCache[className];
+        if (!re) {
+            re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
+            reClassNameCache[className] = re;
+        }
+        return re;
+    };
+
     // branching at load instead of runtime
     if (document.defaultView && document.defaultView.getComputedStyle) { // W3C DOM method
         getStyle = function(el, property) {
@@ -130,28 +140,24 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if ( YAHOO.lang.isString(el) ) { // ID 
-                YAHOO.log('get(' + el + ') returning ' + document.getElementById(el), 'info', 'Dom');
+            if (!el || el.tagName || el.item) { // null, HTMLElement, or HTMLCollection
+                return el;
+            }
+
+            if (YAHOO.lang.isString(el)) { // HTMLElement or null
                 return document.getElementById(el);
             }
             
-            if ( YAHOO.lang.isArray(el) ) { // Array of IDs and/or HTMLElements
+            if (el.splice) { // Array of HTMLElements/IDs
                 var c = [];
                 for (var i = 0, len = el.length; i < len; ++i) {
                     c[c.length] = Y.Dom.get(el[i]);
                 }
                 
-                YAHOO.log('get("' + el + '") returning ' + c, 'info', 'Dom');
                 return c;
             }
 
-            if (el) { // assuming HTMLElement or HTMLCollection, just pass back 
-                YAHOO.log('get("' + el + '") returning ' + el, 'info', 'Dom');
-                return el;
-            }
-
-            YAHOO.log('element ' + el + ' not found', 'error', 'Dom');
-            return null; // el is likely null or undefined 
+            return el; // some other object, just pass it back
         },
     
         /**
@@ -422,11 +428,30 @@
          * @param {String} className The class name to match against
          * @param {String} tag (optional) The tag name of the elements being collected
          * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @param {Function} apply (optional) A function to apply to each element when found 
          * @return {Array} An array of elements that have the given class name
          */
-        getElementsByClassName: function(className, tag, root) {
-            var method = function(el) { return Y.Dom.hasClass(el, className); };
-            return Y.Dom.getElementsBy(method, tag, root);
+        getElementsByClassName: function(className, tag, root, apply) {
+            tag = tag || '*';
+            root = (root) ? Y.Dom.get(root) : null || document; 
+            if (!root) {
+                return [];
+            }
+
+            var nodes = [],
+                elements = root.getElementsByTagName(tag),
+                re = getClassRegEx(className);
+
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                if ( re.test(elements[i].className) ) {
+                    nodes[nodes.length] = elements[i];
+                    if (apply) {
+                        apply.call(elements[i], elements[i]);
+                    }
+                }
+            }
+            
+            return nodes;
         },
 
         /**
@@ -437,8 +462,8 @@
          * @return {Boolean | Array} A boolean value or array of boolean values
          */
         hasClass: function(el, className) {
-            var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)');
-            
+            var re = getClassRegEx(className);
+
             var f = function(el) {
                 YAHOO.log('hasClass returning ' + re.test(el.className), 'info', 'Dom');
                 return re.test(el.className);
@@ -475,8 +500,8 @@
          * @param {String} className the class name to remove from the class attribute
          */
         removeClass: function(el, className) {
-            var re = new RegExp('(?:^|\\s+)' + className + '(?:\\s+|$)', 'g');
-
+            var re = getClassRegEx(className);
+            
             var f = function(el) {
                 if (!this.hasClass(el, className)) {
                     return false; // not present
@@ -510,7 +535,7 @@
                 return false;
             }
             
-            var re = new RegExp('(?:^|\\s+)' + oldClassName + '(?:\\s+|$)', 'g');
+            var re = getClassRegEx(oldClassName);
 
             var f = function(el) {
                 YAHOO.log('replaceClass replacing ' + oldClassName + ' with ' + newClassName, 'info', 'Dom');
@@ -607,33 +632,29 @@
          * For optimized performance, include a tag and/or root node when possible.
          * @method getElementsBy
          * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
-
          * @param {String} tag (optional) The tag name of the elements being collected
          * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+         * @param {Function} apply (optional) A function to apply to each element when found 
          * @return {Array} Array of HTMLElements
          */
-        getElementsBy: function(method, tag, root) {
+        getElementsBy: function(method, tag, root, apply) {
             tag = tag || '*';
-            
-            var nodes = [];
-            
-            if (root) {
-                root = Y.Dom.get(root);
-                if (!root) { // if no root node, then no children
-                    return nodes;
-                }
-            } else {
-                root = document;
+            root = (root) ? Y.Dom.get(root) : null || document; 
+
+            if (!root) {
+                return [];
             }
-            
-            var elements = root.getElementsByTagName(tag);
-            
-            if ( !elements.length && (tag == '*' && root.all) ) {
-                elements = root.all; // IE < 6
-            }
+
+            var nodes = [],
+                elements = root.getElementsByTagName(tag);
             
             for (var i = 0, len = elements.length; i < len; ++i) {
-                if ( method(elements[i]) ) { nodes[nodes.length] = elements[i]; }
+                if ( method(elements[i]) ) {
+                    nodes[nodes.length] = elements[i];
+                    if (apply) {
+                        apply(elements[i]);
+                    }
+                }
             }
 
             YAHOO.log('getElementsBy returning ' + nodes, 'info', 'Dom');
