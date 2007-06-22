@@ -270,27 +270,57 @@
         */
         doSubmit: function () {
     
-            var pm = this.cfg.getProperty("postmethod"),
-                method,
-                cObj;
-    
-            switch (pm) {
+            var oForm = this.form,
+                bUseFileUpload = false,
+                bUseSecureFileUpload = false,
+                sMethod;
+
+
+            switch (this.cfg.getProperty("postmethod")) {
     
             case "async":
-                method = this.form.getAttribute("method") || 'POST';
-                method = method.toUpperCase();
-                Connect.setForm(this.form);
-                cObj = Connect.asyncRequest(method, 
-                    this.form.getAttribute("action"), this.callback);
+
+                Dom.getElementsBy(function (p_oElement) {
+                
+                    if (p_oElement.type == "file") {
+                    
+                        bUseFileUpload = true;
+                    
+                    }
+                
+                }, "INPUT", oForm);
+
+
+                if (bUseFileUpload && YAHOO.env.ua.ie && this.isSecure) {
+
+                    bUseSecureFileUpload = true;
+                
+                }
+
+                sMethod = 
+                    (oForm.getAttribute("method") || "POST").toUpperCase();
+
+                Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
+
+                Connect.asyncRequest(sMethod, oForm.getAttribute("action"), 
+                    this.callback);
+
                 this.asyncSubmitEvent.fire();
+
                 break;
+
             case "form":
-                this.form.submit();
+
+                oForm.submit();
                 this.formSubmitEvent.fire();
+
                 break;
+
             case "none":
             case "manual":
+
                 this.manualSubmitEvent.fire();
+
                 break;
     
             }
