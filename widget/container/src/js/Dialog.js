@@ -264,8 +264,17 @@
         },
         
         /**
-        * Performs the submission of the Dialog form depending on the value of 
-        * "postmethod" property.
+        * Submits the Dialog's form depending on the value of the 
+        * "postmethod" configuration property.  <strong>Please note:
+        * </strong> As of version 2.3 this method will automatically handle 
+        * asyncronous file uploads should the Dialog instance's form contain 
+        * <code>&#60;input type="file"&#62;</code> elements.  If a Dialog 
+        * instance will be handling asyncronous file uploads, its 
+        * <code>callback</code> property will need to be setup with a 
+        * <code>upload</code> handler rather than the standard 
+        * <code>success</code> and, or <code>failure</code> handlers.  For more 
+        * information, see the <a href="http://developer.yahoo.com/yui/
+        * connection/#file">Connection Manager documenation on file uploads</a>.
         * @method doSubmit
         */
         doSubmit: function () {
@@ -273,6 +282,9 @@
             var oForm = this.form,
                 bUseFileUpload = false,
                 bUseSecureFileUpload = false,
+                aElements,
+                nElements,
+                i,
                 sMethod;
 
 
@@ -280,16 +292,26 @@
     
             case "async":
 
-                Dom.getElementsBy(function (p_oElement) {
+                aElements = oForm.elements;
+                nElements = aElements.length;
+
+                if (nElements > 0) {
                 
-                    if (p_oElement.type == "file") {
+                    i = nElements - 1;
+                
+                    do {
                     
-                        bUseFileUpload = true;
+                        if (aElements[i].type == "file") {
+                        
+                            bUseFileUpload = true;
+                            break;
+                        
+                        }
                     
                     }
+                    while(i--);
                 
-                }, "INPUT", oForm);
-
+                }
 
                 if (bUseFileUpload && YAHOO.env.ua.ie && this.isSecure) {
 
