@@ -10,6 +10,7 @@ Version 2.3
   * Changed code,pre to not use font-property shorthand syntax
   * Tweaked the sizing fix for monospace font size (pre,code...)
   * Added "kbd,samp,tt" as new selectors for monospaced font stuff
+  * Added line-height:99% to keep monospaced font the right height
 
 Version 2.2.0 - 2.2.2
 
