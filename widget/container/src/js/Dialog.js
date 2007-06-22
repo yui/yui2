@@ -30,6 +30,7 @@
         KeyListener = YAHOO.util.KeyListener,
         Connect = YAHOO.util.Connect,
         Dialog = YAHOO.widget.Dialog,
+        Lang = YAHOO.lang,
 
         /**
         * Constant representing the name of the Dialog's events
@@ -375,14 +376,19 @@
                 var f, el, nElements = form.elements.length;
     
                 for (f = 0; f < nElements; f++) {
+
                     el = form.elements[f];
-                    if (el.focus && ! el.disabled) {
-                        if (el.type && el.type != "hidden") {
-                            return el;
-                        }
+
+                    if (el.focus && !el.disabled && el.type != "hidden") {
+
+                        return el;
+
                     }
+
                 }
+
                 return null;
+                
             }();
         
             this.lastFormElement = function () {
@@ -390,14 +396,19 @@
                 var f, el, nElements = form.elements.length;
     
                 for (f = nElements - 1; f >= 0; f--) {
+
                     el = form.elements[f];
-                    if (el.focus && ! el.disabled) {
-                        if (el.type && el.type != "hidden") {
-                            return el;
-                        }
+
+                    if (el.focus && !el.disabled && el.type != "hidden") {
+
+                        return el;
+
                     }
+
                 }
+
                 return null;
+
             }();
         
             this.form = form;
@@ -549,115 +560,293 @@
         
         
         /**
-        * The default event handler used to focus the first field of the form 
-        * when the Dialog is shown.
+        * Sets focus to the first element in the Dialog's form or the first 
+        * button defined via the "buttons" configuration property. Called 
+        * when the Dialog is made visible.
         * @method focusFirst
         */
-        focusFirst: function (type,args,obj) {
+        focusFirst: function (type, args, obj) {
     
-            var e;
-    
+            var oElement = this.firstFormElement,
+                oEvent;
+
             if (args) {
-                e = args[1];
-                if (e) {
-                    Event.stopEvent(e);
+
+                oEvent = args[1];
+
+                if (oEvent) {
+
+                    Event.stopEvent(oEvent);
+
                 }
+
             }
         
-            if (this.firstFormElement) {
-                this.firstFormElement.focus();
+
+            if (oElement) {
+
+                /*
+                    Place the call to the "focus" method inside a try/catch
+                    block to prevent IE from throwing JavaScript errors if
+                    the element is disabled or hidden.
+                */
+
+                try {
+
+                    oElement.focus();
+
+                }
+                catch(oException) {
+
+                }
+
             } else {
+
                 this.focusDefaultButton();
+
             }
+
         },
         
         /**
-        * Sets the focus to the last button in the button or form element in 
-        * the Dialog
+        * Sets focus to the last element in the Dialog's form or the last 
+        * button defined via the "buttons" configuration property.
         * @method focusLast
         */
-        focusLast: function (type,args,obj) {
+        focusLast: function (type, args, obj) {
     
-            var e,
-                buttons = this.cfg.getProperty("buttons");
+            var aButtons = this.cfg.getProperty("buttons"),
+                oElement = this.lastFormElement,
+                oEvent;
     
             if (args) {
-                e = args[1];
-                if (e) {
-                    Event.stopEvent(e);
+
+                oEvent = args[1];
+
+                if (oEvent) {
+
+                    Event.stopEvent(oEvent);
+
                 }
+
             }
             
-            if (buttons && buttons instanceof Array) {
+            if (aButtons && Lang.isArray(aButtons)) {
+
                 this.focusLastButton();
+
             } else {
-                if (this.lastFormElement) {
-                    this.lastFormElement.focus();
+
+                if (oElement) {
+
+                    /*
+                        Place the call to the "focus" method inside a try/catch
+                        block to prevent IE from throwing JavaScript errors if
+                        the element is disabled or hidden.
+                    */
+    
+                    try {
+    
+                        oElement.focus();
+    
+                    }
+                    catch(oException) {
+    
+                    }
+
                 }
+
             }
+
         },
         
         /**
-        * Sets the focus to the button that is designated as the default. By 
-        * default, his handler is executed when the show event is fired.
+        * Sets the focus to the button that is designated as the default via 
+        * the "buttons" configuration property. By default, this method is 
+        * called when the Dialog is made visible.
         * @method focusDefaultButton
         */
         focusDefaultButton: function () {
-            if (this.defaultHtmlButton) {
-                this.defaultHtmlButton.focus();
+        
+            var oElement = this.defaultHtmlButton;
+        
+            if (oElement) {
+
+                /*
+                    Place the call to the "focus" method inside a try/catch
+                    block to prevent IE from throwing JavaScript errors if
+                    the element is disabled or hidden.
+                */
+
+                try {
+
+                    oElement.focus();
+                
+                }
+                catch(oException) {
+                
+                }
+
             }
         },
         
         /**
-        * Blurs all the html buttons
+        * Blurs all the buttons defined via the "buttons" 
+        * configuration property.
         * @method blurButtons
         */
         blurButtons: function () {
+            
+            var aButtons = this.cfg.getProperty("buttons"),
+                nButtons,
+                oButton,
+                oElement,
+                i;
+
+            if (aButtons && Lang.isArray(aButtons)) {
+            
+                nButtons = aButtons.length;
+                
+                if (nButtons > 0) {
+                
+                    i = (nButtons - 1);
+                    
+                    do {
+                    
+                        oButton = aButtons[i];
+                        
+                        if (oButton) {
+
+                            oElement = oButton.htmlButton;
+
+                            if (oElement) {
+
+                                /*
+                                    Place the call to the "blur" method inside  
+                                    a try/catch block to prevent IE from  
+                                    throwing JavaScript errors if the element 
+                                    is disabled or hidden.
+                                */
     
-            var buttons = this.cfg.getProperty("buttons"),
-                html;
-    
-            if (buttons && buttons instanceof Array) {
-                html = buttons[0].htmlButton;
-                if (html) {
-                    html.blur();
+                                try {
+            
+                                    oElement.blur();
+                                
+                                }
+                                catch(oException) {
+                                
+                                
+                                }
+                            
+                            }
+
+                        }
+                    
+                    }
+                    while(i--);
+                
                 }
+            
             }
+
         },
         
         /**
-        * Sets the focus to the first button in the button list
+        * Sets the focus to the first button created via the "buttons"
+        * configuration property.
         * @method focusFirstButton
         */
         focusFirstButton: function () {
     
-            var buttons = this.cfg.getProperty("buttons"),
-                html;
+            var aButtons = this.cfg.getProperty("buttons"),
+                oButton,
+                oElement;
+
+            if (aButtons && Lang.isArray(aButtons)) {
+
+                oButton = aButtons[0];
+
+                if (oButton) {
+
+                    oElement = oButton.htmlButton;
+                    
+                    if (oElement) {
+
+                        /*
+                            Place the call to the "focus" method inside a 
+                            try/catch block to prevent IE from throwing 
+                            JavaScript errors if the element is disabled 
+                            or hidden.
+                        */
     
-            if (buttons && buttons instanceof Array) {
-                html = buttons[0].htmlButton;
-                if (html) {
-                    html.focus();
+                        try {
+    
+                            oElement.focus();
+                        
+                        }
+                        catch(oException) {
+                        
+                        
+                        }
+                    
+                    }
+
                 }
+
             }
         },
         
         /**
-        * Sets the focus to the first button in the button list
+        * Sets the focus to the last button created via the "buttons" 
+        * configuration property.
         * @method focusLastButton
         */
         focusLastButton: function () {
     
-            var buttons = this.cfg.getProperty("buttons"),
-                html;
-    
-            buttons = this.cfg.getProperty("buttons");
-            if (buttons && buttons instanceof Array) {
-                html = buttons[buttons.length - 1].htmlButton;
-                if (html) {
-                    html.focus();
+            var aButtons = this.cfg.getProperty("buttons"),
+                nButtons,
+                oButton,
+                oElement;
+
+            if (aButtons && Lang.isArray(aButtons)) {
+
+                nButtons = aButtons.length;
+                
+                if (nButtons > 0) {
+
+                    oButton = aButtons[(nButtons - 1)];
+                    
+                    if (oButton) {
+                    
+                        oElement = oButton.htmlButton;
+
+                        if (oElement) {
+
+                            /*
+                                Place the call to the "focus" method inside a 
+                                try/catch block to prevent IE from throwing 
+                                JavaScript errors if the element is disabled
+                                or hidden.
+                            */
+        
+                            try {
+        
+                                oElement.focus();
+                            
+                            }
+                            catch(oException) {
+                            
+                            
+                            }
+                        
+                        }
+                    
+                    }
+                
                 }
+            
             }
+
         },
         
         /**
