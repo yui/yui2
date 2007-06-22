@@ -127,8 +127,7 @@
             */
             this.focus = function (overlay) {
         
-                var o = this.find(overlay),
-                    topZIndex;
+                var o = this.find(overlay);
         
                 if (o) {
         
@@ -140,27 +139,15 @@
         
                         }
         
+                        this.bringToTop(o);
+                        
                         activeOverlay = o;
         
                         Dom.addClass(activeOverlay.element, 
                             OverlayManager.CSS_FOCUSED);
-        
-                        this.overlays.sort(this.compareZIndexDesc);
-        
-                        topZIndex = 
-                            Dom.getStyle(this.overlays[0].element, "zIndex");
-        
-                        if (! isNaN(topZIndex) && this.overlays[0] != overlay) {
-        
-                            activeOverlay.cfg.setProperty("zIndex", 
-                                (parseInt(topZIndex, 10) + 2));
-        
-                        }
-        
-                        this.overlays.sort(this.compareZIndexDesc);
-        
+
                         o.focusEvent.fire();
-                    
+                        
                     }
         
                 }
@@ -370,7 +357,7 @@
         
                 zIndex = Dom.getStyle(overlay.element, "zIndex");
 
-                if (! isNaN(zIndex)) {
+                if (!isNaN(zIndex)) {
 
                     overlay.cfg.setProperty("zIndex", parseInt(zIndex, 10));
 
@@ -382,6 +369,8 @@
         
 
                 this.overlays.push(overlay);
+
+                this.bringToTop(overlay);
 
                 return true;
 
@@ -411,6 +400,49 @@
 
             }
 
+        },
+
+        /**
+        * Places the specified Overlay instance on top of all other 
+        * Overlay instances.
+        * @method bringToTop
+        * @param {YAHOO.widget.Overlay} p_oOverlay Object representing an 
+        * Overlay instance.
+        * @param {String} p_oOverlay String representing the id of an 
+        * Overlay instance.
+        */        
+        bringToTop: function (p_oOverlay) {
+
+            var oOverlay = this.find(p_oOverlay),
+                nTopZIndex,
+                oTopOverlay,
+                aOverlays;
+
+            if (oOverlay) {
+
+                aOverlays = this.overlays;
+
+                aOverlays.sort(this.compareZIndexDesc);
+                
+                oTopOverlay = aOverlays[0];
+                
+                if (oTopOverlay) {
+
+                    nTopZIndex = Dom.getStyle(oTopOverlay.element, "zIndex");
+    
+                    if (!isNaN(nTopZIndex) && oTopOverlay != oOverlay) {
+    
+                        oOverlay.cfg.setProperty("zIndex", 
+                            (parseInt(nTopZIndex, 10) + 2));
+    
+                    }
+    
+                    aOverlays.sort(this.compareZIndexDesc);
+                
+                }
+
+            }
+        
         },
         
         /**
