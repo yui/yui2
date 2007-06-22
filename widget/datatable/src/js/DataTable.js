@@ -47,6 +47,13 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         YAHOO.log("Could not instantiate DataTable due to an invalid ColumnSet", "error", this.toString());
         return;
     }
+    
+    // Initialize RecordSet
+    this._initRecordSet();
+    if(!this._oRecordSet) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid RecordSet", "error", this.toString());
+        return;
+    }
 
     // Initialize DOM elements
     this._initTableEl();
@@ -1553,7 +1560,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
 
     // It's an append if no index provided, or index is negative or too big
     var append = (!YAHOO.lang.isNumber(index) || (index < 0) ||
-            index > (this._elTbody.rows.length-2)) ? true : false;
+            (index >= (this._elTbody.rows.length))) ? true : false;
             
     var oColumnSet = this._oColumnSet;
     var oRecordSet = this._oRecordSet;
@@ -3377,8 +3384,8 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
  * object literals containing data.
  */
 YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
-    // Initialize RecordSet
-    this._initRecordSet();
+    // Clear the RecordSet
+    this._oRecordSet.reset();
 
     // Add data to RecordSet
     var records = this._oRecordSet.addRecords(oData);
@@ -3943,8 +3950,8 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
                     var newTrId = this._addTrEl(oRecord, nTrIndex);
                     if(newTrId) {
                         // Is this an insert or an append?
-                        var append = (YAHOO.lang.isNumber(nTrIndex) && (nTrIndex > -1)
-                                && (nTrIndex < this._elTbody.rows.length)) ? false : true;
+                        var append = (YAHOO.lang.isNumber(nTrIndex) &&
+                                (nTrIndex == this._elTbody.rows.length-1)) ? true : false;
 
                         // Stripe the one new row
                         if(append) {
