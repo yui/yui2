@@ -1,3 +1,9 @@
+/*
+Copyright (c) 2006, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.net/yui/license.txt
+*/
+
 /**
  * The animation module provides allows effects to be added to HTMLElements.
  * @module animation
@@ -26,9 +32,10 @@
  */
 
 YAHOO.util.Anim = function(el, attributes, duration, method) {
-    if (el) {
-        this.init(el, attributes, duration, method); 
+    if (!el) {
+        YAHOO.log('element required to create Anim instance', 'error', 'Anim');
     }
+    this.init(el, attributes, duration, method); 
 };
 
 YAHOO.util.Anim.prototype = {
@@ -149,10 +156,10 @@ YAHOO.util.Anim.prototype = {
             if (start.constructor == Array) {
                 end = [];
                 for (var i = 0, len = start.length; i < len; ++i) {
-                    end[i] = start[i] + attributes[attr]['by'][i];
+                    end[i] = start[i] + attributes[attr]['by'][i] * 1; // times 1 to cast "by" 
                 }
             } else {
-                end = start + attributes[attr]['by'];
+                end = start + attributes[attr]['by'] * 1;
             }
         }
         
@@ -160,7 +167,9 @@ YAHOO.util.Anim.prototype = {
         this.runtimeAttributes[attr].end = end;
 
         // set units if needed
-        this.runtimeAttributes[attr].unit = ( isset(attributes[attr].unit) ) ? attributes[attr]['unit'] : this.getDefaultUnit(attr);
+        this.runtimeAttributes[attr].unit = ( isset(attributes[attr].unit) ) ?
+                attributes[attr]['unit'] : this.getDefaultUnit(attr);
+        return true;
     },
 
     /**
@@ -258,6 +267,12 @@ YAHOO.util.Anim.prototype = {
          */
         this.totalFrames = YAHOO.util.AnimMgr.fps;
         
+        /**
+         * Changes the animated element
+         * @method getEl
+         * @return {HTMLElement}
+         */
+        this.setEl = function(element) { el = YAHOO.util.Dom.get(element); };
         
         /**
          * Returns a reference to the animated element.
@@ -305,6 +320,7 @@ YAHOO.util.Anim.prototype = {
             this.totalFrames = ( this.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * this.duration) : this.duration;
     
             YAHOO.util.AnimMgr.registerElement(this);
+            return true;
         };
           
         /**
@@ -500,14 +516,18 @@ YAHOO.util.AnimMgr = new function() {
     this.unRegister = function(tween, index) {
         tween._onComplete.fire();
         index = index || getIndex(tween);
-        if (index != -1) {
-            queue.splice(index, 1);
+        if (index == -1) {
+            return false;
         }
         
+        queue.splice(index, 1);
+
         tweenCount -= 1;
         if (tweenCount <= 0) {
             this.stop();
         }
+
+        return true;
     };
     
     /**
