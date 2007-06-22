@@ -86,6 +86,7 @@
         * configuration of the OverlayManager
         */
         init: function (userConfig) {
+
             /**
             * The OverlayManager's Config object used for monitoring 
             * configuration properties.
@@ -179,6 +180,12 @@
         
                 if (o) {
 
+                    if (activeOverlay == o) {
+                    
+                        activeOverlay = null;
+                    
+                    }
+
                     originalZ = Dom.getStyle(o.element, "zIndex");
 
                     o.cfg.setProperty("zIndex", -1000, true);
@@ -240,7 +247,9 @@
         
         
             this._onOverlayBlur = function (p_sType, p_aArgs) {
+
                 activeOverlay = null;
+
             };
         
         
