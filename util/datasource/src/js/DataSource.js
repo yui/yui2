@@ -66,7 +66,8 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     }
 
     this.liveData = oLiveData;
-    this._aQueue = [];
+    this._oQueue = {interval:null, conn:null, requests:[]};
+
 
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
@@ -331,11 +332,11 @@ YAHOO.util.DataSource.prototype._aCache = null;
 /**
  * Local queue of request connections, enabled if queue needs to be managed.
  *
- * @property _aQueue
- * @type Object[]
+ * @property _oQueue
+ * @type Object
  * @private
  */
-YAHOO.util.DataSource.prototype._aQueue = null;
+YAHOO.util.DataSource.prototype._oQueue = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -735,22 +736,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
         case YAHOO.util.DataSource.TYPE_XHR:
             var oSelf = this;
             var oConnMgr = this.connMgr || YAHOO.util.Connect;
-            var oConn = null;
-            var allQueues = this._aQueue;
-            // Look for existing queue
-            var oQueue = null;
-            for(var i=allQueues.length-1; i>-1; i--){
-                // Grab existing queue
-                if(allQueues[i].caller === oCaller) {
-                    oQueue = allQueues[i];
-                    break;
-                }
-            }
-            // Create new queue
-            if(!oQueue) {
-                oQueue = {caller:oCaller, conn:null, requests:[]};
-                allQueues.push(oQueue);
-            }
+            var oQueue = this._oQueue;
 
             /**
              * Define Connection Manager success handler
@@ -832,41 +818,37 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
             // Cancel stale requests
             if(this.connXhrMode == "cancelStaleRequests") {
-                if(oConnMgr.abort) {
                     // Look in queue for stale requests
                     if(oQueue.conn) {
-                        oConnMgr.abort(oQueue.conn);
-                        oQueue.conn = null;
-                        YAHOO.log("Canceled stale request", "warn", this.toString());
+                        if(oConnMgr.abort) {
+                            oConnMgr.abort(oQueue.conn);
+                            oQueue.conn = null;
+                            YAHOO.log("Canceled stale request", "warn", this.toString());
+                        }
+                        else {
+                            YAHOO.log("Could not find Connection Manager abort() function", "error", this.toString());
+                        }
                     }
-                }
-                else {
-                    YAHOO.log("Could not find Connection Manager abort() function", "error", this.toString());
-                }
             }
 
-            // Request URL
+            // Get ready to send the request URL
             if(oConnMgr && oConnMgr.asyncRequest) {
-                // Send the request
+                var sLiveData = this.liveData;
+                var isPost = this.connMethodPost;
+                var sMethod = (isPost) ? "POST" : "GET";
+                var sUri = (isPost) ? sLiveData : sLiveData+oRequest;
+                var sRequest = (isPost) ? oRequest : null;
+
+                // Send the request right away
                 if(this.connXhrMode != "queueRequests") {
-                    var isPost = this.connMethodPost;
-                    var sMethod = (isPost) ? "POST" : "GET";
-                    var sUri = (isPost) ? this.liveData : this.liveData+oRequest;
-                    var sRequest = (isPost) ? oRequest : null;
-                    oConn = oConnMgr.asyncRequest(sMethod, sUri, _xhrCallback, sRequest);
-
-                    // Update the queue
-                    if(this.connXhrMode != "allowAll") {
-                        oQueue.conn = oConn;
-
-                    }
+                    oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, _xhrCallback, sRequest);
                 }
                 // Queue up then send the request
                 else {
                     // Found a request already in progress
                     if(oQueue.conn) {
                         // Add request to queue
-                        oQueue.requests.push(sUri);
+                        oQueue.requests.push({request:oRequest, callback:_xhrCallback});
 
                         // Interval needs to be started
                         if(!oQueue.interval) {
@@ -878,11 +860,17 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                                 else {
                                     // Send next request
                                     if(oQueue.requests.length > 0) {
-                                        oQueue.conn = oConnMgr.asyncRequest("GET", sUri, _xhrCallback, null);
+                                        sUri = (isPost) ? sLiveData : sLiveData+oQueue.requests[0].request;
+                                        sRequest = (isPost) ? oQueue.requests[0].request : null;
+                                        oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, oQueue.requests[0].callback, sRequest);
+
+                                        // Remove request from queue
+                                        oQueue.requests.shift();
                                     }
                                     // No more requests
                                     else {
                                         clearInterval(oQueue.interval);
+                                        oQueue.interval = null;
                                     }
                                 }
                             }, 50);
@@ -890,7 +878,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                     }
                     // Nothing is in progress
                     else {
-                        oQueue.conn = oConnMgr.asyncRequest("GET", sUri, _xhrCallback, null);
+                        oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, _xhrCallback, sRequest);
                     }
                 }
             }
