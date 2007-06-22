@@ -550,9 +550,9 @@
         },
         
         /**
-        * Adds a special CSS class to the Overlay when Mac/Gecko is in use, to
-        * work around a Gecko bug where scrollbars cannot be hidden. 
-        * See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+        * Adds a CSS class ("hide-scrollbars") and removes a CSS class 
+        * ("show-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X 
+        * (https://bugzilla.mozilla.org/show_bug.cgi?id=187435)
         * @method hideMacGeckoScrollbars
         */
         hideMacGeckoScrollbars: function () {
@@ -563,9 +563,9 @@
         },
         
         /**
-        * Removes a special CSS class from the Overlay when Mac/Gecko is in use, 
-        * to work around a Gecko bug where scrollbars cannot be hidden. 
-        * See https://bugzilla.mozilla.org/show_bug.cgi?id=187435
+        * Adds a CSS class ("show-scrollbars") and removes a CSS class 
+        * ("hide-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X 
+        * (https://bugzilla.mozilla.org/show_bug.cgi?id=187435)
         * @method showMacGeckoScrollbars
         */
         showMacGeckoScrollbars: function () {
