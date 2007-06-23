@@ -158,8 +158,8 @@ To fix these bugs:
 	border:1px solid #FFF;
 	border-bottom:1px solid #000;
 	font-weight:bold;
-	overflow:hidden;
 	padding:4px;
+    white-space:nowrap;
 }
 
 .yui-panel .bd {

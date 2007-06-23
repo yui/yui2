@@ -142,37 +142,6 @@
                 this.cfg.applyConfig(userConfig, true);
             }
         
-            this.beforeRenderEvent.subscribe(function () {
-                var draggable = this.cfg.getProperty("draggable");
-                if (draggable) {
-                    if (!this.header) {
-                        this.setHeader("&#160;");
-                    }
-                }
-            }, this, true);
-        
-        
-            this.renderEvent.subscribe(function () {
-        
-                /*
-                    If no value for the "width" configuration property was 
-                    specified, set it to the offsetWidth. If the "width" is 
-                    not set, then in IE  you can only drag the panel when you 
-                    put the cursor on the header's text.
-                */
-        
-                var sWidth = this.cfg.getProperty("width");
-                
-                if (!sWidth) {
-        
-                    this.cfg.setProperty("width", 
-                        (this.element.offsetWidth + "px"));
-                
-                }
-            
-            });
-        
-        
             var me = this;
         
             function doBlur() {
@@ -300,8 +269,23 @@
             });
         
             /**
-            * True if the Panel should be draggable.  Default value is "true" 
-            * if the Drag and Drop utility is included, otherwise it is "false."
+            * Boolean specifying if the Panel should be draggable.  The default 
+            * value is "true" if the Drag and Drop utility is included, 
+            * otherwise it is "false." <strong>PLEASE NOTE:</strong> There is a 
+            * known issue in IE 6 (Strict Mode and Quirks Mode) and IE 7 
+            * (Quirks Mode) where Panels that either don't have a value set for 
+            * their "width" configuration property, or their "width" 
+            * configuration property is set to "auto" will only be draggable by
+            * placing the mouse on the text of the Panel's header element.
+            * To fix this bug, draggable Panels missing a value for their 
+            * "width" configuration property, or whose "width" configuration 
+            * property is set to "auto" will have it set to the value of 
+            * their root HTML element's offsetWidth before they are made 
+            * visible.  The calculated width is then removed when the Panel is   
+            * hidden. <em>This fix is only applied to draggable Panels in IE 6 
+            * (Strict Mode and Quirks Mode) and IE 7 (Quirks Mode)</em>. For 
+            * more information on this issue see:
+            * SourceForge bugs #1726972 and #1589210.
             * @config draggable
             * @type Boolean
             * @default true
@@ -392,7 +376,61 @@
                 }
             }
         },
+
+        _onBeforeRender: function () {
+
+            if (!this.header) {
+
+                this.setHeader("&#160;");
+
+            }
+
+        },
         
+        _onBeforeShow: function () {
+
+            var nIE = YAHOO.env.ua.ie,
+                oConfig,
+                sOriginalWidth,
+                sNewWidth;
+
+            if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+
+                oConfig = this.cfg;
+                sOriginalWidth = oConfig.getProperty("width");
+                
+                if (!sOriginalWidth || sOriginalWidth == "auto") {
+        
+                    sNewWidth = (this.element.offsetWidth + "px");
+        
+                    oConfig.setProperty("width", sNewWidth);
+                    
+                    this.subscribe("hide", this._onHide, 
+                        [(sOriginalWidth || ""), sNewWidth]);
+                
+                }
+            
+            }
+
+        },
+        
+        _onHide: function (p_sType, p_aArgs, p_oObject) {
+
+            var sOriginalWidth = p_oObject[0],
+                sNewWidth = p_oObject[1],
+                oConfig = this.cfg,
+                sCurrentWidth = oConfig.getProperty("width");
+
+            if (sCurrentWidth == sNewWidth) {
+                
+                oConfig.setProperty("width", sOriginalWidth);
+            
+            }
+
+            this.unsubscribe("hide", this._onHide, p_oObject);
+        
+        },
+
         /**
         * The default event handler fired when the "draggable" property 
         * is changed.
@@ -406,6 +444,7 @@
         configDraggable: function (type, args, obj) {
         
             var val = args[0];
+
             if (val) {
         
                 if (!DD) {
@@ -419,17 +458,35 @@
                 }
         
                 if (this.header) {
+
                     Dom.setStyle(this.header,"cursor","move");
+
                     this.registerDragDrop();
+
                 }
+
+                this.subscribe("beforeRender", this._onBeforeRender);
+                this.subscribe("beforeShow", this._onBeforeShow);
+
             } else {
+
                 if (this.dd) {
+
                     this.dd.unreg();
+
                 }
+
                 if (this.header) {
+
                     Dom.setStyle(this.header,"cursor","auto");
+
                 }
+
+                this.unsubscribe("beforeRender", this._onBeforeRender);
+                this.unsubscribe("beforeShow", this._onBeforeShow);
+
             }
+
         },
         
         /**
