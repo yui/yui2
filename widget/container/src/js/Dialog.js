@@ -83,6 +83,17 @@
     
     
     YAHOO.extend(Dialog, YAHOO.widget.Panel, { 
+
+        
+        /**
+        * @property form
+        * @description Object reference to the Dialog's 
+        * <code>&#60;form&#62;</code> element.
+        * @default null 
+        * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
+        * level-one-html.html#ID-40002357">HTMLFormElement</a>
+        */
+        form: null,
     
         /**
         * Initializes the class's configurable properties which can be changed 
