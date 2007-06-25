@@ -29,6 +29,10 @@
         Config = YAHOO.util.Config,
         Panel = YAHOO.widget.Panel,
 
+        m_oMaskTemplate,
+        m_oUnderlayTemplate,
+        m_oCloseIconTemplate,
+
         /**
         * Constant representing the name of the Panel's events
         * @property EVENT_TYPES
@@ -88,7 +92,7 @@
         
         };
 
-    
+
     /**
     * Constant representing the default CSS class used for a Panel
     * @property Panel.CSS_PANEL
@@ -108,6 +112,176 @@
     */
     Panel.CSS_PANEL_CONTAINER = "yui-panel-container";
 
+
+    // Private CustomEvent listeners
+
+    /* 
+        "beforeRender" event handler that creates an empty header for a Panel 
+        instance if its "draggable" configuration property is set to "true" 
+        and no header has been created.
+    */
+
+    function createHeader(p_sType, p_aArgs) {
+
+        if (!this.header) {
+
+            this.setHeader("&#160;");
+
+        }
+
+    }
+
+
+    /* 
+        "hide" event handler that sets a Panel instance's "width"
+        configuration property back to its original value before 
+        "setWidthToOffsetWidth" was called.
+    */
+    
+    function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
+
+        var sOriginalWidth = p_oObject[0],
+            sNewWidth = p_oObject[1],
+            oConfig = this.cfg,
+            sCurrentWidth = oConfig.getProperty("width");
+
+        if (sCurrentWidth == sNewWidth) {
+            
+            oConfig.setProperty("width", sOriginalWidth);
+        
+        }
+
+        this.unsubscribe("hide", this._onHide, p_oObject);
+    
+    }
+
+
+    /* 
+        "beforeShow" event handler that sets a Panel instance's "width"
+        configuration property to the value of its root HTML 
+        elements's offsetWidth
+    */
+
+    function setWidthToOffsetWidth(p_sType, p_aArgs) {
+
+        var nIE = YAHOO.env.ua.ie,
+            oConfig,
+            sOriginalWidth,
+            sNewWidth;
+
+        if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+
+            oConfig = this.cfg;
+            sOriginalWidth = oConfig.getProperty("width");
+            
+            if (!sOriginalWidth || sOriginalWidth == "auto") {
+    
+                sNewWidth = (this.element.offsetWidth + "px");
+    
+                oConfig.setProperty("width", sNewWidth);
+                
+                this.subscribe("hide", restoreOriginalWidth, 
+                    [(sOriginalWidth || ""), sNewWidth]);
+            
+            }
+        
+        }
+
+    }
+
+    /* 
+        "focus" event handler for a focuable element.  Used to automatically 
+        blur the element when it receives focus to ensure that a Panel 
+        instance's modality is not compromised.
+    */
+
+    function onElementFocus() {
+
+        this.blur();
+
+    }
+
+    /* 
+        "showMask" event handler that adds a "focus" event handler to all
+        focusable elements in the document to enforce a Panel instance's 
+        modality from being compromised.
+    */
+
+    function addFocusEventHandlers(p_sType, p_aArgs) {
+
+        var me = this;
+
+        function isFocusable(el) {
+
+            var sTagName = el.tagName.toUpperCase(),
+                bFocusable = false;
+            
+            switch (sTagName) {
+            
+            case "A":
+            case "BUTTON":
+            case "SELECT":
+            case "TEXTAREA":
+
+                if (!Dom.isAncestor(me.element, el)) {
+                    Event.on(el, "focus", onElementFocus, el, true);
+                    bFocusable = true;
+                }
+
+                break;
+
+            case "INPUT":
+
+                if (el.type != "hidden" && 
+                    !Dom.isAncestor(me.element, el)) {
+
+                    Event.on(el, "focus", onElementFocus, el, true);
+                    bFocusable = true;
+
+                }
+
+                break;
+            
+            }
+
+            return bFocusable;
+
+        }
+
+        this.focusableElements = Dom.getElementsBy(isFocusable);
+    
+    }
+
+    /* 
+        "hideMask" event handler that removes all "focus" event handlers added 
+        by the "addFocusEventHandlers" method.
+    */
+    
+    function removeFocusEventHandlers(p_sType, p_aArgs) {
+
+        var aElements = this.focusableElements,
+            nElements = aElements.length,
+            el2,
+            i;
+
+        for (i = 0; i < nElements; i++) {
+            el2 = aElements[i];
+            Event.removeListener(el2, "focus", onElementFocus);
+        }
+
+    }
+
+    /* 
+        "beforeShow" event handler used to refire a Panel instance's 
+        "underlay" event to ensure the underlay is properly configured 
+        each time it is made visible.
+    */
+    
+    function refireUndelay(p_sType, p_aArgs) {
+    
+        this.cfg.refireEvent("underlay");
+    
+    }
     
     YAHOO.extend(Panel, Overlay, {
     
@@ -139,78 +313,17 @@
             this.buildWrapper();
         
             if (userConfig) {
+
                 this.cfg.applyConfig(userConfig, true);
+
             }
         
-            var me = this;
-        
-            function doBlur() {
-        
-                this.blur();
-        
-            }
-        
-            this.showMaskEvent.subscribe(function () {
-        
-                function checkFocusable(el) {
-        
-                    var sTagName = el.tagName.toUpperCase(),
-                        bFocusable = false;
-                    
-                    switch (sTagName) {
-                    
-                    case "A":
-                    case "BUTTON":
-                    case "SELECT":
-                    case "TEXTAREA":
-    
-                        if (!Dom.isAncestor(me.element, el)) {
-                            Event.on(el, "focus", doBlur, el, true);
-                            bFocusable = true;
-                        }
-    
-                        break;
-    
-                    case "INPUT":
-    
-                        if (el.type != "hidden" && 
-                            !Dom.isAncestor(me.element, el)) {
-    
-                            Event.on(el, "focus", doBlur, el, true);
-                            bFocusable = true;
-    
-                        }
-    
-                        break;
-                    
-                    }
-        
-                    return bFocusable;
-        
-                }
-        
-                this.focusableElements = Dom.getElementsBy(checkFocusable);
-    
-            }, this, true);
-        
-            this.hideMaskEvent.subscribe(function () {
-    
-                var aElements = this.focusableElements,
-                    nElements = aElements.length,
-                    el2,
-                    i;
-    
-                for (i = 0; i < nElements; i++) {
-                    el2 = aElements[i];
-                    Event.removeListener(el2, "focus", doBlur);
-                }
-    
-            }, this, true);
-        
-            this.beforeShowEvent.subscribe(function () {
-                this.cfg.refireEvent("underlay");
-            }, this, true);
+            this.subscribe("showMask", addFocusEventHandlers);
+            this.subscribe("hideMask", removeFocusEventHandlers);
+            this.subscribe("beforeShow", refireUndelay);
+
             this.initEvent.fire(Panel);
+            
         },
         
         /**
@@ -354,82 +467,56 @@
         * this will usually equal the owner.
         */
         configClose: function (type, args, obj) {
-            var val = args[0];
+
+            var val = args[0],
+                oClose = this.close;
         
             function doHide(e, obj) {
+
                 obj.hide();
+
             }
         
             if (val) {
-                if (!this.close) {
-                    this.close = document.createElement("span");
-                    Dom.addClass(this.close, "container-close");
-                    this.close.innerHTML = "&#160;";
-                    this.innerElement.appendChild(this.close);
-                    Event.on(this.close, "click", doHide, this);
-                } else {
-                    this.close.style.display = "block";
-                }
-            } else {
-                if (this.close) {
-                    this.close.style.display = "none";
-                }
-            }
-        },
 
-        _onBeforeRender: function () {
+                if (!oClose) {
 
-            if (!this.header) {
+                    if (!m_oCloseIconTemplate) {
 
-                this.setHeader("&#160;");
+                        m_oCloseIconTemplate = document.createElement("span");
+                        m_oCloseIconTemplate.innerHTML = "&#160;";
+                        m_oCloseIconTemplate.className = "container-close";
 
-            }
+                    }
 
-        },
-        
-        _onBeforeShow: function () {
+                    oClose = m_oCloseIconTemplate.cloneNode(true);
 
-            var nIE = YAHOO.env.ua.ie,
-                oConfig,
-                sOriginalWidth,
-                sNewWidth;
+                    this.innerElement.appendChild(oClose);
 
-            if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
-
-                oConfig = this.cfg;
-                sOriginalWidth = oConfig.getProperty("width");
-                
-                if (!sOriginalWidth || sOriginalWidth == "auto") {
-        
-                    sNewWidth = (this.element.offsetWidth + "px");
-        
-                    oConfig.setProperty("width", sNewWidth);
+                    Event.on(oClose, "click", doHide, this);
                     
-                    this.subscribe("hide", this._onHide, 
-                        [(sOriginalWidth || ""), sNewWidth]);
-                
+                    this.close = oClose;
+                    
+
+                } else {
+
+                    oClose.style.display = "block";
+
                 }
-            
+
+            } else {
+
+                if (oClose) {
+
+                    oClose.style.display = "none";
+
+                }
+
             }
 
         },
-        
-        _onHide: function (p_sType, p_aArgs, p_oObject) {
 
-            var sOriginalWidth = p_oObject[0],
-                sNewWidth = p_oObject[1],
-                oConfig = this.cfg,
-                sCurrentWidth = oConfig.getProperty("width");
 
-            if (sCurrentWidth == sNewWidth) {
-                
-                oConfig.setProperty("width", sOriginalWidth);
-            
-            }
-
-            this.unsubscribe("hide", this._onHide, p_oObject);
-        
-        },
 
         /**
         * The default event handler fired when the "draggable" property 
@@ -459,14 +546,14 @@
         
                 if (this.header) {
 
-                    Dom.setStyle(this.header,"cursor","move");
+                    Dom.setStyle(this.header, "cursor", "move");
 
                     this.registerDragDrop();
 
                 }
 
-                this.subscribe("beforeRender", this._onBeforeRender);
-                this.subscribe("beforeShow", this._onBeforeShow);
+                this.subscribe("beforeRender", createHeader);
+                this.subscribe("beforeShow", setWidthToOffsetWidth);
 
             } else {
 
@@ -482,8 +569,8 @@
 
                 }
 
-                this.unsubscribe("beforeRender", this._onBeforeRender);
-                this.unsubscribe("beforeShow", this._onBeforeShow);
+                this.unsubscribe("beforeRender", createHeader);
+                this.unsubscribe("beforeShow", setWidthToOffsetWidth);
 
             }
 
@@ -501,31 +588,49 @@
         */
         configUnderlay: function (type, args, obj) {
     
-            var val = args[0];
+            var val = args[0],
+                oElement = this.element;
         
             switch (val.toLowerCase()) {
     
             case "shadow":
-                Dom.removeClass(this.element, "matte");
-                Dom.addClass(this.element, "shadow");
+
+                Dom.removeClass(oElement, "matte");
+                Dom.addClass(oElement, "shadow");
     
                 if (!this.underlay) { // create if not already in DOM
-                    this.underlay = document.createElement("div");
-                    this.underlay.className = "underlay";
-                    this.underlay.innerHTML = "&#160;";
-                    this.element.appendChild(this.underlay);
+
+                    if (!m_oUnderlayTemplate) {
+
+                        m_oUnderlayTemplate = document.createElement("div");
+                        m_oUnderlayTemplate.className = "underlay";
+                        m_oUnderlayTemplate.innerHTML = "&#160;";
+                    
+                    }
+
+                    this.underlay = m_oUnderlayTemplate.cloneNode(true);
+                    oElement.appendChild(this.underlay);
+
                 }
     
                 this.sizeUnderlay();
+
                 break;
+
             case "matte":
-                Dom.removeClass(this.element, "shadow");
-                Dom.addClass(this.element, "matte");
+
+                Dom.removeClass(oElement, "shadow");
+                Dom.addClass(oElement, "matte");
+
                 break;
+
             default:
-                Dom.removeClass(this.element, "shadow");
-                Dom.removeClass(this.element, "matte");
+
+                Dom.removeClass(oElement, "shadow");
+                Dom.removeClass(oElement, "matte");
+
                 break;
+
             }
     
         },
@@ -542,43 +647,49 @@
         * this will usually equal the owner.
         */
         configModal: function (type, args, obj) {
+
             var modal = args[0];
-        
+
             if (modal) {
-                this.buildMask();
-        
-                if (!Config.alreadySubscribed( this.beforeShowEvent, 
-                    this.showMask, this)) {
 
-                    this.beforeShowEvent.subscribe(this.showMask, this, true);
-                }
-                if (!Config.alreadySubscribed( this.hideEvent, 
-                    this.hideMask, this)) {
+                if (!this._hasModalityEventListeners) {
 
-                    this.hideEvent.subscribe(this.hideMask, this, true);
-                }
-                if (!Config.alreadySubscribed(Overlay.windowResizeEvent, 
-                    this.sizeMask, this)) {
+                    this.subscribe("beforeShow", this.buildMask);
+                    this.subscribe("beforeShow", this.bringToTop);
+                    this.subscribe("beforeShow", this.showMask);
+                    this.subscribe("hide", this.hideMask);
 
                     Overlay.windowResizeEvent.subscribe(this.sizeMask, 
                         this, true);
-                }
-                if (!Config.alreadySubscribed( this.destroyEvent, 
-                    this.removeMask, this)) {
 
-                    this.destroyEvent.subscribe(this.removeMask, this, true);
+                    this._hasModalityEventListeners = true;
+
                 }
-        
-                this.cfg.refireEvent("zIndex");
 
             } else {
 
-                this.beforeShowEvent.unsubscribe(this.showMask, this);
-                this.hideEvent.unsubscribe(this.hideMask, this);
-                Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
-                this.destroyEvent.unsubscribe(this.removeMask, this);
+                if (this._hasModalityEventListeners) {
+
+                    if (this.cfg.getProperty("visible")) {
+                    
+                        this.hideMask();
+                        this.removeMask();
+                    
+                    }
+
+                    this.unsubscribe("beforeShow", this.buildMask);
+                    this.unsubscribe("beforeShow", this.bringToTop);
+                    this.unsubscribe("beforeShow", this.showMask);
+                    this.unsubscribe("hide", this.hideMask);
+
+                    Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
+                    
+                    this._hasModalityEventListeners = false;
+                
+                }
 
             }
+
         },
         
         /**
@@ -736,22 +847,26 @@
         */
         configzIndex: function (type, args, obj) {
     
-            Panel.superclass.configzIndex.call(this, type, 
-                args, obj);
+            Panel.superclass.configzIndex.call(this, type, args, obj);
         
             var maskZ = 0,
                 currentZ = Dom.getStyle(this.element, "zIndex");
         
             if (this.mask) {
+
                 if (!currentZ || isNaN(currentZ)) {
                     currentZ = 0;
                 }
         
                 if (currentZ === 0) {
+
                     this.cfg.setProperty("zIndex", 1);
+
                 } else {
+
                     maskZ = currentZ - 1;
                     Dom.setStyle(this.mask, "zIndex", maskZ);
+
                 }
         
             }
@@ -936,26 +1051,27 @@
         */
         buildMask: function () {
     
-            var firstChild;
+            var oMask = this.mask;
     
-            function maskClick(e, obj) {
-                Event.stopEvent(e);
-            }
-    
-            if (!this.mask) {
-                this.mask = document.createElement("div");
-                this.mask.id = this.id + "_mask";
-                this.mask.className = "mask";
-                this.mask.innerHTML = "&#160;";
-        
-                firstChild = document.body.firstChild;
-                if (firstChild) {
-                    document.body.insertBefore(this.mask, 
-                        document.body.firstChild);
-                } else {
-                    document.body.appendChild(this.mask);
+            if (!oMask) {
+
+                if (!m_oMaskTemplate) {
+                
+                    m_oMaskTemplate = document.createElement("div");
+                    m_oMaskTemplate.className = "mask";
+                    m_oMaskTemplate.innerHTML = "&#160;";
+                
                 }
+
+                oMask = m_oMaskTemplate.cloneNode(true);
+                oMask.id = this.id + "_mask";
+
+                document.body.insertBefore(oMask, document.body.firstChild);
+                
+                this.mask = oMask;
+
             }
+
         },
         
         /**
@@ -989,11 +1105,98 @@
         * @method sizeMask
         */
         sizeMask: function () {
+
             if (this.mask) {
+
                 this.mask.style.height = Dom.getDocumentHeight() + "px";
                 this.mask.style.width = Dom.getDocumentWidth() + "px";
+
             }
+
         },
+
+        /**
+        * Places the Panel on top of all other instances of 
+        * YAHOO.widget.Overlay.  If the Panel's "modal" configuration property 
+        * is set to "true," this method is automatically call before it is
+        * made visible.
+        * @method bringToTop
+        */
+        bringToTop: function() {
+    
+            var aOverlays = [];
+    
+            function compareZIndexDesc(p_oOverlay1, p_oOverlay2) {
+        
+                var sZIndex1 = Dom.getStyle(p_oOverlay1, "zIndex"),
+        
+                    sZIndex2 = Dom.getStyle(p_oOverlay2, "zIndex"),
+        
+                    nZIndex1 = (!sZIndex1 || isNaN(sZIndex1)) ? 
+                        0 : parseInt(sZIndex1, 10),
+        
+                    nZIndex2 = (!sZIndex2 || isNaN(sZIndex2)) ? 
+                        0 : parseInt(sZIndex2, 10);
+        
+                if (nZIndex1 > nZIndex2) {
+        
+                    return -1;
+        
+                } else if (nZIndex1 < nZIndex2) {
+        
+                    return 1;
+        
+                } else {
+        
+                    return 0;
+        
+                }
+        
+            }
+        
+            function isOverlayElement(p_oElement) {
+        
+                var oOverlay = Dom.hasClass(p_oElement, Overlay.CSS_OVERLAY);
+            
+                if (oOverlay) {
+                
+                    if (Dom.hasClass(p_oElement, Panel.CSS_PANEL)) {
+        
+                        aOverlays[aOverlays.length] = p_oElement.parentNode;
+                    
+                    }
+                    else {
+        
+                        aOverlays[aOverlays.length] = p_oElement;
+        
+                    }
+                
+                }
+            
+            }
+            
+            Dom.getElementsBy(isOverlayElement, "DIV", document.body);
+    
+            aOverlays.sort(compareZIndexDesc);
+            
+            var oTopOverlay = aOverlays[0],
+                nTopZIndex;
+            
+            if (oTopOverlay) {
+    
+                nTopZIndex = Dom.getStyle(oTopOverlay, "zIndex");
+    
+                if (!isNaN(nTopZIndex) && oTopOverlay != this.element) {
+    
+                    this.cfg.setProperty("zindex", 
+                        (parseInt(nTopZIndex, 10) + 2));
+    
+                }
+            
+            }
+        
+        },
+
         
         /**
         * Renders the Panel by inserting the elements that are not already in 
@@ -1025,6 +1228,8 @@
         destroy: function () {
         
             Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
+            
+            this.removeMask();
         
             if (this.close) {
             
