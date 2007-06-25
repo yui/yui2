@@ -986,11 +986,8 @@
                         viewPortWidth = Dom.getViewportWidth();
                         viewPortHeight = Dom.getViewportHeight();
                         
-                        scrollX = window.scrollX || 
-                            document.documentElement.scrollLeft;
-
-                        scrollY = window.scrollY || 
-                            document.documentElement.scrollTop;
+                        scrollX = Dom.getDocumentScrollLeft();
+                        scrollY = Dom.getDocumentScrollTop();
                         
                         topConstraint = scrollY + 10;
                         leftConstraint = scrollX + 10;
@@ -1030,11 +1027,14 @@
                 };
         
                 this.dd.endDrag = function () {
+
                     if (YAHOO.env.ua.ie == 6) {
                         Dom.removeClass(me.element,"drag");
                     }
         
                     me.dragEvent.fire("endDrag", arguments);
+                    me.moveEvent.fire(me.cfg.getProperty("xy"));
+                    
                 };
         
                 this.dd.setHandleElId(this.header.id);
