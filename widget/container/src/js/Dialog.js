@@ -245,7 +245,7 @@
         
             /**
             * CustomEvent fired prior to submission
-            * @event beforeSumitEvent
+            * @event beforeSubmitEvent
             */ 
             this.beforeSubmitEvent = 
                 this.createEvent(EVENT_TYPES.BEFORE_SUBMIT);
