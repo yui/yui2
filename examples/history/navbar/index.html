@@ -47,7 +47,8 @@
 &lt;?php
 
 $section = "home";
-if ( isset( $_GET["section"] ) )
+$sections = array( "home", "overview", "products", "contactus" );
+if ( isset( $_GET["section"] ) && in_array( $_GET["section"], $sections ) )
     $section = $_GET["section"];
 include( "./inc/" . $section . ".php" );
 
