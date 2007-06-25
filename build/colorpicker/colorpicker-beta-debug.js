@@ -467,8 +467,7 @@ YAHOO.util.Color = function() {
         S: "S",
         V: "V",
         HEX: "#",
-        DEG: "°",
-        //DEG: "&#176;",
+        DEG: "u00B0",
         PERCENT: "%"
     };
 
