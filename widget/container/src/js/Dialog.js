@@ -322,15 +322,8 @@
         
             this.showEvent.subscribe(this.focusFirst, this, true);
             this.beforeHideEvent.subscribe(this.blurButtons, this, true);
-        
-            this.beforeRenderEvent.subscribe(function () {
-                var buttonCfg = this.cfg.getProperty("buttons");
-                if (buttonCfg && buttonCfg != "none") {
-                    if (! this.footer) {
-                        this.setFooter("");
-                    }
-                }
-            }, this, true);
+
+            this.subscribe("changeBody", this.registerForm);
         
             this.initEvent.fire(Dialog);
         },
@@ -431,92 +424,131 @@
     
             var form = this.element.getElementsByTagName("form")[0],
                 me = this,
-                formHTML,
                 firstElement,
                 lastElement;
-        
-            if (! form) {
-                formHTML = "<form name=\"frm_" + this.id + 
-                    "\" action=\"\"></form>";
-                this.body.innerHTML += formHTML;
-                form = this.element.getElementsByTagName("form")[0];
-            }
-        
-            this.firstFormElement = function () {
+
+
+            if (this.form) {
+
+                if (this.form == form && 
+                    Dom.isAncestor(this.element, this.form)) {
     
-                var f, el, nElements = form.elements.length;
+                    return;
     
-                for (f = 0; f < nElements; f++) {
-
-                    el = form.elements[f];
-
-                    if (el.focus && !el.disabled && el.type != "hidden") {
-
-                        return el;
-
-                    }
-
                 }
+                else {
 
-                return null;
+                    Event.purgeElement(this.form);
+                    
+                    this.form = null;                
                 
-            }();
-        
-            this.lastFormElement = function () {
-    
-                var f, el, nElements = form.elements.length;
-    
-                for (f = nElements - 1; f >= 0; f--) {
-
-                    el = form.elements[f];
-
-                    if (el.focus && !el.disabled && el.type != "hidden") {
-
-                        return el;
-
-                    }
-
                 }
-
-                return null;
-
-            }();
-        
-            this.form = form;
-        
-            if (this.cfg.getProperty("modal") && this.form) {
-        
-                firstElement = this.firstFormElement || this.firstButton;
-    
-                if (firstElement) {
-
-                    this.preventBackTab = new KeyListener(firstElement, 
-                        { shift: true, keys: 9 }, 
-                        { fn: me.focusLast, scope: me, correctScope: true } );
-
-                    this.showEvent.subscribe(this.preventBackTab.enable, 
-                        this.preventBackTab, true);
-
-                    this.hideEvent.subscribe(this.preventBackTab.disable, 
-                        this.preventBackTab, true);
-                }
-        
-                lastElement = this.lastButton || this.lastFormElement;
-
-                if (lastElement) {
-
-                    this.preventTabOut = new KeyListener(lastElement, 
-                        { shift: false, keys: 9 }, 
-                        { fn: me.focusFirst, scope: me, correctScope: true } );
-
-                    this.showEvent.subscribe(this.preventTabOut.enable, 
-                        this.preventTabOut, true);
-
-                    this.hideEvent.subscribe(this.preventTabOut.disable, 
-                        this.preventTabOut, true);
-
-                }
+            
             }
+        
+
+            if (!form) {
+
+                form = document.createElement("form");
+                form.name = "frm_" + this.id;
+
+                this.body.appendChild(form);
+
+            }
+
+
+            if (form) {
+
+                this.form = form;
+
+                Event.on(form, "submit", function (e) {
+
+                    Event.stopEvent(e);
+
+                    this.submit();
+                    this.form.blur();
+        
+                });
+
+
+                this.firstFormElement = function () {
+        
+                    var f, el, nElements = form.elements.length;
+        
+                    for (f = 0; f < nElements; f++) {
+    
+                        el = form.elements[f];
+    
+                        if (el.focus && !el.disabled && el.type != "hidden") {
+    
+                            return el;
+    
+                        }
+    
+                    }
+    
+                    return null;
+                    
+                }();
+            
+                this.lastFormElement = function () {
+        
+                    var f, el, nElements = form.elements.length;
+        
+                    for (f = nElements - 1; f >= 0; f--) {
+    
+                        el = form.elements[f];
+    
+                        if (el.focus && !el.disabled && el.type != "hidden") {
+    
+                            return el;
+    
+                        }
+    
+                    }
+    
+                    return null;
+    
+                }();
+            
+                if (this.cfg.getProperty("modal")) {
+            
+                    firstElement = this.firstFormElement || this.firstButton;
+        
+                    if (firstElement) {
+    
+                        this.preventBackTab = new KeyListener(firstElement, 
+                            { shift: true, keys: 9 }, 
+                            { fn: me.focusLast, scope: me, 
+                            correctScope: true });
+    
+                        this.showEvent.subscribe(this.preventBackTab.enable, 
+                            this.preventBackTab, true);
+    
+                        this.hideEvent.subscribe(this.preventBackTab.disable, 
+                            this.preventBackTab, true);
+                    }
+            
+                    lastElement = this.lastButton || this.lastFormElement;
+    
+                    if (lastElement) {
+    
+                        this.preventTabOut = new KeyListener(lastElement, 
+                            { shift: false, keys: 9 }, 
+                            { fn: me.focusFirst, scope: me, 
+                            correctScope: true });
+    
+                        this.showEvent.subscribe(this.preventTabOut.enable, 
+                            this.preventTabOut, true);
+    
+                        this.hideEvent.subscribe(this.preventTabOut.disable, 
+                            this.preventTabOut, true);
+    
+                    }
+                }
+            
+            }
+
         },
         
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
@@ -972,13 +1004,6 @@
             var postmethod = args[0];
         
             this.registerForm();
-    
-            Event.on(this.form, "submit", function (e) {
-                Event.stopEvent(e);
-                this.submit();
-                this.form.blur();
-    
-            }, this, true);
     
         },
         
