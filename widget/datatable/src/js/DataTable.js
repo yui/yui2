@@ -55,17 +55,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         return;
     }
 
-    // Initialize DOM elements
-    this._initTableEl();
-    if(!this._elTable || !this._elThead || !this._elTbody) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
-        return;
-    }
-
-    // Call Element's constructor after DOM elements are created
-    // but before data is requested
-    YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
-
     // Initialize DataSource
     this._initDataSource(oDataSource);
     if(!this._oDataSource) {
@@ -73,8 +62,25 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         return;
     }
 
-    // Send out for data in an asynchronous request
-    this._oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
+    // Progressive enhancement special case
+    if(this._oDataSource.dataType == YAHOO.util.DataSource.TYPE_HTMLTABLE) {
+        this._oDataSource.sendRequest(this.get("initialRequest"), this._onDataReturnEnhanceTable, this);
+    }
+    else {
+        // Initialize DOM elements
+        this._initTableEl();
+        if(!this._elTable || !this._elThead || !this._elTbody) {
+            YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+            return;
+        }
+
+        // Call Element's constructor after DOM elements are created
+        // but *before* table is populated with data
+        YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+
+        // Send out for data in an asynchronous request
+        this._oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
+    }
 
     // Initialize inline Cell editing
     this._initCellEditorEl();
@@ -6755,6 +6761,50 @@ YAHOO.widget.DataTable.prototype.onEventSaveCellEditor = function(oArgs) {
     this.saveCellEditor();
 };
 
+/**
+ * Callback function for creating a progressively enhanced DataTable first
+ * receives data from DataSource and populates the RecordSet, then initializes
+ * DOM elements.
+ *
+ * @method _onDataReturnEnhanceTable
+ * @param sRequest {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @param bError {Boolean} (optional) True if there was a data error.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onDataReturnEnhanceTable = function(sRequest, oResponse) {
+    // Pass data through abstract method for any transformations
+    var ok = this.doBeforeLoadData(sRequest, oResponse);
+
+    // Data ok to populate
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
+        // Update RecordSet
+        this._oRecordSet.addRecords(oResponse.results);
+
+        // Initialize DOM elements
+        this._initTableEl();
+        if(!this._elTable || !this._elThead || !this._elTbody) {
+            YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+            return;
+        }
+
+        // Call Element's constructor after DOM elements are created
+        // but *before* UI is updated with data
+        YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+
+        // Update the UI
+        this.refreshView();
+    }
+    // Error
+    else if(ok && oResponse.error) {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
+    }
+    // Empty
+    else if(ok){
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+    }
+};
+    
 /**
  * Callback function receives data from DataSource and populates an entire
  * DataTable with Records and TR elements, clearing previous Records, if any.

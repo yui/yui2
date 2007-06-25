@@ -1350,7 +1350,7 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
         var fields = this.responseSchema.fields;
         var oParsedResponse = {};
         oParsedResponse.results = [];
-        
+
         // Iterate through each TBODY
         for(var i=0; i<elTable.tBodies.length; i++) {
             var elTbody = elTable.tBodies[i];
