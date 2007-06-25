@@ -268,7 +268,7 @@
         S: "S",
         V: "V",
         HEX: "#",
-        DEG: "u00B0",
+        DEG: "\u00B0",
         PERCENT: "%"
     };
 
