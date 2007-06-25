@@ -5646,42 +5646,53 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
     }
 
     // Checkboxes
-    var checkboxOptions = (oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.checkboxOptions)) ?
-            oColumn.editorOptions.checkboxOptions : [];
-    var aCheckboxes = [];
-    var aLabels = [];
-    for(var j=0; j<checkboxOptions.length; j++) {
-        var checkboxOption = checkboxOptions[j];
-        aCheckboxes[j] = elContainer.appendChild(document.createElement("input"));
-        aCheckboxes[j].type = "checkbox";
-        aCheckboxes[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-chkbox" + j;
-        aCheckboxes[j].value = (YAHOO.lang.isValue(checkboxOption.value)) ?
-                checkboxOption.value : checkboxOption;
-        for(var k=0; k<aCheckedValues.length; k++) {
-            if(aCheckboxes[j].value === aCheckedValues[k]) {
-                aCheckboxes[j].checked = true;
-            }
+    if(oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.checkboxOptions)) {
+        var checkboxOptions = oColumn.editorOptions.checkboxOptions;
+        var checkboxValue, checkboxId, elLabel, j, k;
+        // First create the checkbox buttons in an IE-friendly way
+        for(j=0; j<checkboxOptions.length; j++) {
+            checkboxValue = YAHOO.lang.isValue(checkboxOptions[j].label) ?
+                    checkboxOptions[j].label : checkboxOptions[j];
+            checkboxId =  oSelf.id + "-editor-checkbox" + j;
+            elContainer.innerHTML += "<input type=\"checkbox\"" +
+                    " name=\"" + oSelf.id + "-editor-checkbox\"" +
+                    " value=\"" + checkboxValue + "\"" +
+                    " id=\"" +  checkboxId + "\">";
+            // Then create the labels in an IE-friendly way
+            elLabel = elContainer.appendChild(document.createElement("label"));
+            elLabel.htmlFor = checkboxId;
+            elLabel.innerHTML = checkboxValue;
         }
-        aLabels[j] = elContainer.appendChild(document.createElement("label"));
-        aLabels[j].htmlFor = aCheckboxes[j].id;
-        aLabels[j].innerHTML += (YAHOO.lang.isValue(checkboxOption.label)) ?
-                checkboxOption.label : checkboxOption;
-
-        // Set up a listener on each check box to track the input value
-        YAHOO.util.Event.addListener(aCheckboxes[j], "click",function(){
-            aCheckedValues = [];
-            for(var m=0; m<aCheckboxes.length; m++) {
-                if(aCheckboxes[m].checked) {
-                    aCheckedValues.push(aCheckboxes[m].value);
+        var aCheckboxEls = [];
+        var checkboxEl;
+        // Loop through checkboxes to check them
+        for(j=0; j<checkboxOptions.length; j++) {
+            checkboxEl = YAHOO.util.Dom.get(oSelf.id + "-editor-checkbox" + j);
+            aCheckboxEls.push(checkboxEl);
+            for(k=0; k<aCheckedValues.length; k++) {
+                if(checkboxEl.value === aCheckedValues[k]) {
+                    checkboxEl.checked = true;
                 }
             }
-            oSelf._oCellEditor.value = aCheckedValues;
-        });
-
+            // Focus the first checkbox
+            if(j===0) {
+                oSelf._focusEl(checkboxEl);
+            }
+        }
+        // Loop through checkboxes to assign click handlers
+        for(j=0; j<checkboxOptions.length; j++) {
+            checkboxEl = YAHOO.util.Dom.get(oSelf.id + "-editor-checkbox" + j);
+            YAHOO.util.Event.addListener(checkboxEl, "click", function(){
+                var aNewValues = [];
+                for(var m=0; m<aCheckboxEls.length; m++) {
+                    if(aCheckboxEls[m].checked) {
+                        aNewValues.push(aCheckboxEls[m].value);
+                    }
+                }
+                oSelf._oCellEditor.value = aNewValues;
+            });
+        }
     }
-    
-    // Focus the first checkbox
-    oSelf._focusEl(aCheckboxes[0]);
 };
 
 /**
@@ -5773,32 +5784,32 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
     var elContainer = oEditor.container;
     var value = oRecord.getData(oColumn.key);
 
-    // Radio
+    // Radios
     if(oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.radioOptions)) {
         var radioOptions = oColumn.editorOptions.radioOptions;
-        var elForm = elContainer.appendChild(document.createElement("form"));
-        elForm.name = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-form";
-        var aLabels = [];
-        var aRadios = [];
-        for(var j=0; j<radioOptions.length; j++) {
-            var radioOption = radioOptions[j];
-            aRadios[j] = elForm.appendChild(document.createElement("input"));
-            aRadios[j].type = "radio";
-            aRadios[j].id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-radiobtn" + j;
-            aRadios[j].name = oSelf._nIndex + oColumn.key;
-            aRadios[j].value = (YAHOO.lang.isValue(radioOption.value)) ?
-                    radioOption.value : radioOption;
-            if(value === aRadios[j].value) {
-                aRadios[j].checked = true;
-                oSelf._focusEl(aRadios[j]);
+        var radioValue, radioId, elLabel, j;
+        // First create the radio buttons in an IE-friendly way
+        for(j=0; j<radioOptions.length; j++) {
+            radioValue = YAHOO.lang.isValue(radioOptions[j].label) ?
+                    radioOptions[j].label : radioOptions[j];
+            radioId =  oSelf.id + "-editor-radio" + j;
+            elContainer.innerHTML += "<input type=\"radio\"" +
+                    " name=\"" + oSelf.id + "-editor-radio\"" +
+                    " value=\"" + radioValue + "\"" +
+                    " id=\"" +  radioId + "\">";
+            // Then create the labels in an IE-friendly way
+            elLabel = elContainer.appendChild(document.createElement("label"));
+            elLabel.htmlFor = radioId;
+            elLabel.innerHTML = radioValue;
+        }
+        // Then check one, and assign click handlers
+        for(j=0; j<radioOptions.length; j++) {
+            var radioEl = YAHOO.util.Dom.get(oSelf.id + "-editor-radio" + j);
+            if(value === radioEl.value) {
+                radioEl.checked = true;
+                oSelf._focusEl(radioEl);
             }
-            aLabels[j] = elForm.appendChild(document.createElement("label"));
-            aLabels[j].htmlFor = aRadios[j].id;
-            aLabels[j].innerHTML += (YAHOO.lang.isValue(radioOption.label)) ?
-                    radioOption.label : radioOption;
-            
-            // Set up a listener on each radio btn to track the input value
-            YAHOO.util.Event.addListener(aRadios[j], "click",
+            YAHOO.util.Event.addListener(radioEl, "click",
                 function(){
                     oSelf._oCellEditor.value = this.value;
             });
