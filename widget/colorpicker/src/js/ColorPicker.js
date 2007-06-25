@@ -545,11 +545,12 @@
     };
 
     /**
-     * Handle keydown on one of the rgb and hsv fields.
+     * Handle keypress on one of the rgb or hsv fields.
      * @method _rgbFieldKeypress
      * @param e {Event} the keypress event
      * @param el {HTMLElement} the field
      * @param prop {string} the key to the linked property
+     * @private
      */
     var _rgbFieldKeypress = function(e, el, prop) {
         var command = _getCommand(e);
@@ -584,6 +585,7 @@
      * @param e {Event} the keypress event
      * @param el {HTMLElement} the field
      * @param prop {string} the key to the linked property
+     * @private
      */
     var _hexFieldKeypress = function(e, el, prop) {
         var command = _getCommand(e);
