@@ -1216,19 +1216,25 @@
         */
         destroy: function () {
         
-            var oForm = this.form;
-        
             removeButtonEventHandlers.call(this);
+
+            var aForms = this.element.getElementsByTagName("form"),
+                oForm;
             
-        
-            if (oForm) {
-               
-                Event.purgeElement(oForm);
-        
-                this.body.removeChild(oForm);
-                
-                this.form = null;
-        
+            if (aForms.length > 0) {
+
+                oForm = aForms[0];
+
+                if (oForm) {
+                   
+                    Event.purgeElement(oForm);
+            
+                    this.body.removeChild(oForm);
+                    
+                    this.form = null;
+            
+                }
+            
             }
         
             Dialog.superclass.destroy.call(this);  
