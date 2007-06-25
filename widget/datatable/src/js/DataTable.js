@@ -3416,7 +3416,7 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
  * @method refreshView
  */
 YAHOO.widget.DataTable.prototype.refreshView = function() {
-    var i, j, k, aRecords;
+    var i, j, k, l, aRecords;
     var oPaginator = this.updatePaginator();
 
     // Paginator is enabled, show a subset of Records and update Paginator UI
