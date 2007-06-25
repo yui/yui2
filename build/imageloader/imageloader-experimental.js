@@ -14,7 +14,7 @@ if (typeof(YAHOO.util.ImageLoader) == 'undefined') {
 
 /**
  * A group for images. A group can have one time limit and a series of triggers. Thus the images belonging to this group must share these constraints.
- * @class YAHOO.util.ImageLoader.group
+ * @class ImageLoader.group
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
  * @constructor
@@ -254,7 +254,7 @@ YAHOO.util.ImageLoader.group.prototype._fetchByClass = function() {
 
 /**
  * Base class for image objects to be registered with the groups
- * @class YAHOO.util.ImageLoader.imgObj
+ * @class ImageLoader.imgObj
  * @constructor
  * @param {String}	domId	HTML dom id of the image element
  * @param {String}	url	URL for the image
@@ -348,7 +348,7 @@ YAHOO.util.ImageLoader.imgObj.prototype._applyUrl = function(el) {
 
 /**
  * Background image object. A background image is one whose url is specified by 'background-image' in the element's style
- * @class YAHOO.util.ImageLoader.bgImgObj
+ * @class ImageLoader.bgImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
  * @param {String}	domId	HTML dom id of the image element
@@ -373,7 +373,7 @@ YAHOO.util.ImageLoader.bgImgObj.prototype._applyUrl = function(el) {
 
 /**
  * Source image object. A source image is one whose url is specified by a url parameter in the dom element
- * @class srcImgObj
+ * @class ImageLoader.srcImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
  * @param {String}	domId	HTML dom id of the image element
@@ -402,7 +402,7 @@ YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
 
 /**
  * PNG background image object. A PNG background image is one whose url is specified through AlphaImageLoader, or by 'background-image' in the element's style
- * @class YAHOO.util.ImageLoader.pngBgImgObj
+ * @class ImageLoader.pngBgImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
  * @param {String}	domId	HTML dom id of the image element
