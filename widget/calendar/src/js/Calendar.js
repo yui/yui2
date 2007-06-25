@@ -2052,9 +2052,10 @@ YAHOO.widget.Calendar.prototype.clear = function() {
 * does not call the render method explicitly. Once selection has completed, render must be 
 * called for the changes to be reflected visually.
 *
-* Dates which are OOB (out of bounds) will not be selected. The array of selected dates 
-* passed to the selectEvent will not contain OOB dates. If all dates are OOB, a selectEvent 
-* will not be fired. 
+* Any dates which are OOB (out of bounds, not selectable) will not be selected and the array of 
+* selected dates passed to the selectEvent will not contain OOB dates.
+* 
+* If all dates are OOB, the no state change will occur; beforeSelect and select events will not be fired.
 *
 * @method select
 * @param	{String/Date/Date[]}	date	The date string of dates to select in the current calendar. Valid formats are
@@ -2065,33 +2066,40 @@ YAHOO.widget.Calendar.prototype.clear = function() {
 */
 YAHOO.widget.Calendar.prototype.select = function(date) {
 	this.logger.log("Select: " + date, "info");
-	this.beforeSelectEvent.fire();
-	
-	var cfgSelected = YAHOO.widget.Calendar._DEFAULT_CONFIG.SELECTED.key;
 
-	var selected = this.cfg.getProperty(cfgSelected);
 	var aToBeSelected = this._toFieldArray(date);
 	this.logger.log("Selection field array: " + aToBeSelected, "info");
 
-	var selectedDates = [];
-	for (var a=0;a<aToBeSelected.length;++a) {
-		var toSelect = aToBeSelected[a]; // For each date item in the list of dates we're trying to select
-		var toSelectDate = this._toDate(toSelect);
-		if (!this.isDateOOB(toSelectDate)) {
-			selectedDates.push(toSelect);
+	// Filtered array of valid dates
+	var validDates = [];
+	var selected = [];
+	var cfgSelected = YAHOO.widget.Calendar._DEFAULT_CONFIG.SELECTED.key;
+	
+	for (var a=0; a < aToBeSelected.length; ++a) {
+		var toSelect = aToBeSelected[a];
+
+		if (!this.isDateOOB(this._toDate(toSelect))) {
+			
+			if (validDates.length == 0) {
+				this.beforeSelectEvent.fire();
+				selected = this.cfg.getProperty(cfgSelected);
+			}
+
+			validDates.push(toSelect);
+			
 			if (this._indexOfSelectedFieldArray(toSelect) == -1) { 
-				selected[selected.length]=toSelect;
+				selected[selected.length] = toSelect;
 			}
 		}
 	}
-	
-	if (selectedDates.length > 0) { 
+
+	if (validDates.length > 0) {
 		if (this.parent) {
 			this.parent.cfg.setProperty(cfgSelected, selected);
 		} else {
 			this.cfg.setProperty(cfgSelected, selected);
 		}
-		this.selectEvent.fire(selectedDates);
+		this.selectEvent.fire(validDates);
 	}
 
 	return this.getSelectedDates();
@@ -2103,17 +2111,13 @@ YAHOO.widget.Calendar.prototype.select = function(date) {
 * a full render. The selected style is applied to the cell directly.
 *
 * If the cell is not marked with the CSS_CELL_SELECTABLE class (as is the case by default for out of month 
-* or out of bounds cells), it will not be selected and a selectEvent will not be fired.
+* or out of bounds cells), it will not be selected; beforeSelect and select events will not be fired.
 * 
 * @method selectCell
 * @param	{Number}	cellIndex	The index of the cell to select in the current calendar. 
 * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
 */
 YAHOO.widget.Calendar.prototype.selectCell = function(cellIndex) {
-	this.beforeSelectEvent.fire();
-
-	var cfgSelected = YAHOO.widget.Calendar._DEFAULT_CONFIG.SELECTED.key;
-	var selected = this.cfg.getProperty(cfgSelected);
 
 	var cell = this.cells[cellIndex];
 	var cellDate = this.cellDates[cellIndex];
@@ -2121,6 +2125,12 @@ YAHOO.widget.Calendar.prototype.selectCell = function(cellIndex) {
 	this.logger.log("Select: " + dCellDate, "info");
 
 	if (YAHOO.util.Dom.hasClass(cell, this.Style.CSS_CELL_SELECTABLE)) {
+
+		this.beforeSelectEvent.fire();
+
+		var cfgSelected = YAHOO.widget.Calendar._DEFAULT_CONFIG.SELECTED.key;
+		var selected = this.cfg.getProperty(cfgSelected);
+
 		var selectDate = cellDate.concat();
 
 		if (this._indexOfSelectedFieldArray(selectDate) == -1) {
@@ -2175,7 +2185,7 @@ YAHOO.widget.Calendar.prototype.deselect = function(date) {
 	}
 
 	this.deselectEvent.fire(aToBeSelected);
-	
+
 	return this.getSelectedDates();
 };
 
@@ -2188,36 +2198,37 @@ YAHOO.widget.Calendar.prototype.deselect = function(date) {
 * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
 */
 YAHOO.widget.Calendar.prototype.deselectCell = function(i) {
-	this.beforeDeselectEvent.fire();
-	
-	var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
-	
-	var selected = this.cfg.getProperty(defCfg.SELECTED.key);
-
 	var cell = this.cells[i];
 	var cellDate = this.cellDates[i];
 	var cellDateIndex = this._indexOfSelectedFieldArray(cellDate);
 
-	var dCellDate = this._toDate(cellDate);
+	if (YAHOO.util.Dom.hasClass(cell, this.Style.CSS_CELL_SELECTABLE)) {
 
-	var selectDate = cellDate.concat();
+		this.beforeDeselectEvent.fire();
 
-	if (cellDateIndex > -1) {
-		if (this.cfg.getProperty(defCfg.PAGEDATE.key).getMonth() == dCellDate.getMonth() &&
-			this.cfg.getProperty(defCfg.PAGEDATE.key).getFullYear() == dCellDate.getFullYear()) {
-			YAHOO.util.Dom.removeClass(cell, this.Style.CSS_CELL_SELECTED);
+		var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
+		var selected = this.cfg.getProperty(defCfg.SELECTED.key);
+
+		var dCellDate = this._toDate(cellDate);
+		var selectDate = cellDate.concat();
+
+		if (cellDateIndex > -1) {
+			if (this.cfg.getProperty(defCfg.PAGEDATE.key).getMonth() == dCellDate.getMonth() &&
+				this.cfg.getProperty(defCfg.PAGEDATE.key).getFullYear() == dCellDate.getFullYear()) {
+				YAHOO.util.Dom.removeClass(cell, this.Style.CSS_CELL_SELECTED);
+			}
+			selected.splice(cellDateIndex, 1);
 		}
 
-		selected.splice(cellDateIndex, 1);
+		if (this.parent) {
+			this.parent.cfg.setProperty(defCfg.SELECTED.key, selected);
+		} else {
+			this.cfg.setProperty(defCfg.SELECTED.key, selected);
+		}
+
+		this.deselectEvent.fire(selectDate);
 	}
 
-	if (this.parent) {
-		this.parent.cfg.setProperty(defCfg.SELECTED.key, selected);
-	} else {
-		this.cfg.setProperty(defCfg.SELECTED.key, selected);
-	}
-	
-	this.deselectEvent.fire(selectDate);
 	return this.getSelectedDates();
 };
 
@@ -2362,6 +2373,7 @@ YAHOO.widget.Calendar.prototype.isDateOOM = function(date) {
 */
 YAHOO.widget.Calendar.prototype.isDateOOB = function(date) {
 	var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
+	
 	var minDate = this.cfg.getProperty(defCfg.MINDATE.key);
 	var maxDate = this.cfg.getProperty(defCfg.MAXDATE.key);
 	var dm = YAHOO.widget.DateMath;
