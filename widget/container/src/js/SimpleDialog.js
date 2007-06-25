@@ -23,7 +23,8 @@
     
     };
 
-    var SimpleDialog = YAHOO.widget.SimpleDialog,
+    var Dom = YAHOO.util.Dom,
+        SimpleDialog = YAHOO.widget.SimpleDialog,
     
         /**
         * Constant representing the SimpleDialog's configuration properties
@@ -103,6 +104,8 @@
     */
     SimpleDialog.ICON_TIP   = "tipicon";
     
+    SimpleDialog.ICON_CSS_CLASSNAME = "yui-icon";
+    
     /**
     * Constant representing the default CSS class used for a SimpleDialog
     * @property SimpleDialog.CSS_SIMPLEDIALOG
@@ -179,8 +182,7 @@
         
             this.beforeInitEvent.fire(SimpleDialog);
         
-            YAHOO.util.Dom.addClass(this.element, 
-                SimpleDialog.CSS_SIMPLEDIALOG);
+            Dom.addClass(this.element, SimpleDialog.CSS_SIMPLEDIALOG);
         
             this.cfg.queueProperty("postmethod", "manual");
         
@@ -225,26 +227,51 @@
         */
         configIcon: function (type,args,obj) {
         
-            var icon = args[0],
-                iconHTML;
+            var sIcon = args[0],
+                oBody = this.body,
+                sCSSClass = SimpleDialog.ICON_CSS_CLASSNAME,
+                oIcon,
+                oIconParent;
         
-            if (icon && icon != "none") {
+            if (sIcon && sIcon != "none") {
 
-                iconHTML = "";
+                oIcon = Dom.getElementsByClassName(sCSSClass, "*" , oBody);
 
-                if (icon.indexOf(".") == -1) {
+                if (oIcon) {
 
-                    iconHTML = "<span class=\"yui-icon " + icon + 
-                        "\" >&#160;</span>";
-
-                } else {
-
-                    iconHTML = "<img src=\"" + this.imageRoot + icon + 
-                        "\" class=\"yui-icon\" />";
+                    oIconParent = oIcon.parentNode;
+                    
+                    if (oIconParent) {
+                    
+                        oIconParent.removeChild(oIcon);
+                        
+                        oIcon = null;
+                    
+                    }
 
                 }
 
-                this.body.innerHTML = iconHTML + this.body.innerHTML;
+
+                if (sIcon.indexOf(".") == -1) {
+
+                    oIcon = document.createElement("span");
+                    oIcon.className = (sCSSClass + " " + sIcon);
+                    oIcon.innerHTML = "&#160;";
+
+                } else {
+
+                    oIcon = document.createElement("img");
+                    oIcon.src = (this.imageRoot + sIcon);
+                    oIcon.className = sCSSClass;
+
+                }
+                
+
+                if (oIcon) {
+                
+                    oBody.appendChild(oIcon);
+                
+                }
 
             }
 
