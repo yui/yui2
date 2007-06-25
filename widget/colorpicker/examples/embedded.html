@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<title>Yahoo! UI Library - Color Picker</title>
+<!--
+<link rel="stylesheet" type="text/css" href="../../build/colorpicker/assets/colorpicker.css" ></link>
+-->
+<link rel="stylesheet" type="text/css" href="../../build/logger/assets/logger.css" ></link>
+<link rel="stylesheet" type="text/css" href="../src/assets/colorpicker.css" ></link>
+
+<style type="text/css">
+body { margin: 0; padding: 10px;} 
+#yui-picker-panel { position: relative; padding: 6px; background-color: #eeeeee; width: 360px; height: 240px; }
+/*
+#yui-picker-panel { position: absolute; background-color: #eeeeee; top: 200px; left: 20px; width: 360px; height: 240px; }
+#yui-picker-header { background-color: #bbbbbb; height: 10px; cursor: move; }
+*/
+</style>
+
+<!-- Nav and logger start -->
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js" ></script>
+<script type="text/javascript" src="../../build/event/event.js" ></script>
+<script type="text/javascript" src="../../build/dom/dom.js" ></script>
+<script type="text/javascript" src="../../build/element/element-beta-debug.js" ></script>
+<script type="text/javascript" src="../../build/dragdrop/dragdrop.js" ></script>
+<script type="text/javascript" src="../../build/animation/animation.js" ></script>
+<script type="text/javascript" src="../../build/logger/logger.js" ></script>
+<script type="text/javascript" src="../../build/slider/slider.js" ></script>
+
+<!--
+<script type="text/javascript" src="../../build/colorpicker/colorpicker-debug.js" ></script>
+-->
+<script type="text/javascript" src="../src/js/Color.js" ></script>
+<script type="text/javascript" src="../src/js/ColorPicker.js" ></script>
+
+        </head>
+<body> 
+<div id="pageTitle"><h3>Color Picker</h3></div> 
+
+<div id="yui-picker-panel">
+
+<div class="yui-picker" id="yui-picker">
+    <div class="yui-picker-bg" id="yui-picker-bg" tabindex="-1" hidefocus="true">
+      <div class="yui-picker-thumb" id="yui-picker-thumb"><img src="../src/assets/picker_thumb.png" /></div> 
+    </div>
+
+     <div class="yui-picker-hue-bg" id="yui-picker-hue-bg" tabindex="-1" hidefocus="true">
+      <div class="yui-picker-hue-thumb" id="yui-picker-hue-thumb"><img src="../src/assets/hue_thumb.png" /></div> 
+    </div> 
+
+    <div id="yui-picker-controls" class="yui-picker-controls">
+        <form name="yui-picker-form">
+        <ul id="yui-picker-rgb-controls" class="yui-picker-rgb-controls">
+        <li>
+        R <input autocomplete="off" name="yui-picker-r" id="yui-picker-r" type="text" value="0" size="3" maxlength="3" />
+        </li><li>
+        G <input autocomplete="off" name="yui-picker-g" id="yui-picker-g" type="text" value="0" size="3" maxlength="3" />
+        </li><li>
+        B <input autocomplete="off" name="yui-picker-b" id="yui-picker-b" type="text" value="0" size="3" maxlength="3" />
+        </li>        </ul>
+        <ul class="yui-picker-hsv-controls" id="yui-picker-hsv-controls">
+        <li>
+        H <input autocomplete="off" name="yui-picker-h" id="yui-picker-h" type="text" value="0" size="3" maxlength="3" />
+        </li><li>
+        S <input autocomplete="off" name="yui-picker-s" id="yui-picker-s" type="text" value="0" size="3" maxlength="3" />
+        </li><li>
+        V <input autocomplete="off" name="yui-picker-v" id="yui-picker-v" type="text" value="0" size="3" maxlength="3" />
+        </li>        
+        </ul>
+        <ul>
+        <li ="yui-picker-hex-controls" id="yui-picker-hex-controls">
+        # <input autocomplete="off" name="yui-picker-hex" id="yui-picker-hex" type="text" value="0" size="6" maxlength="6" />
+        </li>
+        </ul>
+        </form>
+    </div>
+
+    <div class="yui-picker-swatch" id="yui-picker-swatch">&nbsp;</div>
+    <div class="yui-picker-websafe-swatch" id="yui-picker-websafe-swatch">&nbsp;</div>
+</div>
+
+
+
+</div>
+
+<script type="text/javascript">
+
+(function() {
+
+    // YAHOO.widget.Logger.enableBrowserConsole;
+
+    var Event = YAHOO.util.Event,
+        lr = new YAHOO.widget.LogReader(")"),
+        picker;
+
+    Event.onDOMReady(function() {
+            picker = new YAHOO.widget.ColorPicker("yui-picker-panel");
+        });
+
+    Event.on("yui-picker-h", "blur", function(e) {
+            picker.set("hue", parseInt(this.value, 10));
+        });
+
+    Event.on("yui-picker-s", "blur", function(e) {
+            picker.set("saturation", parseInt(this.value, 10));
+        });
+
+    Event.on("yui-picker-v", "blur", function(e) {
+            picker.set("value", parseInt(this.value, 10));
+        });
+
+    Event.on("yui-picker-r", "blur", function(e) {
+            picker.set("red", parseInt(this.value, 10));
+        });
+
+    Event.on("yui-picker-g", "blur", function(e) {
+            picker.set("green", parseInt(this.value, 10));
+        });
+
+    Event.on("yui-picker-b", "blur", function(e) {
+            picker.set("blue", parseInt(this.value, 10));
+        });
+
+    Event.on("yui-picker-hex", "blur", function(e) {
+            picker.set("hex", this.value);
+        });
+})();
+
+</script>
+
+</body>
+</html>
