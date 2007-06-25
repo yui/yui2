@@ -80,6 +80,41 @@
     * @type String
     */
     Dialog.CSS_DIALOG = "yui-dialog";
+
+
+    function removeButtonEventHandlers() {
+
+        var oFooter = this.footer,
+            aButtons,
+            nButtons,
+            i;
+        
+        if (oFooter) {
+    
+            aButtons = oFooter.getElementsByTagName("button");
+
+            if (aButtons) {
+
+                nButtons = aButtons.length;
+                
+                if (nButtons > 0) {
+
+                    i = nButtons - 1;
+                    
+                    do {
+                    
+                        Event.purgeElement(aButtons[i], false, "click");
+                    
+                    }
+                    while (i--);                
+                
+                }
+
+            }
+    
+        }
+
+    }
     
     
     YAHOO.extend(Dialog, YAHOO.widget.Panel, { 
@@ -161,9 +196,34 @@
             });
             
             /**
-            * Object literal(s) defining the buttons for the Dialog's footer.
+            * Array of object literals, each containing a set of properties 
+            * defining a button to be appended into the Dialog's footer.
+            * Each button object in the buttons array can have three properties:
+            * <dt>text:</dt>
+            * <dd>The text that will display on the face of the button.  <em>
+            * Please note:</em> As of version 2.3, the text can include 
+            * HTML.</dd>
+            * <dt>handler:</dt>
+            * <dd>Can be either:
+            *     <ol>
+            *         <li>A reference to a function that should fire when the 
+            * button is clicked.  (In this case scope of this function is 
+            * always its Dialog instance.)</li>
+            *         <li>An object literal representing the code to be 
+            * executed when the button is clicked.  Format:<br> <code> {<br>  
+            * <strong>fn:</strong> Function,   &#47;&#47; The handler to call 
+            * when  the event fires.<br> <strong>obj:</strong> Object, 
+            * &#47;&#47; An  object to pass back to the handler.<br> <strong>
+            * scope:</strong>  Object &#47;&#47; The object to use for the 
+            * scope of the handler. <br> } </code> <br><em>Please note: this 
+            * functionality was added in version 2.3.</em></li>
+            *     </ol>
+            * </dd>
+            * <dt>isDefault:</dt>
+            * <dd>An optional boolean value that specifies that a button 
+            * should be highlighted and focused by default.</dd>
             * @config buttons
-            * @type Object[]
+            * @type {Array|String}
             * @default "none"
             */
             this.cfg.addProperty(DEFAULT_CONFIG.BUTTONS.key, {
@@ -509,64 +569,101 @@
         */
         configButtons: function (type, args, obj) {
     
-            var buttons = args[0],
-                b,
-                button,
-                htmlButton,
-                nButtons;
-    
-            if (buttons != "none") {
-                this.buttonSpan = null;
-                this.buttonSpan = document.createElement("span");
-                this.buttonSpan.className = "button-group";
+            var aButtons = args[0],
+                oInnerElement = this.innerElement,
+                oButton,
+                oButtonEl,
+                nButtons,
+                oSpan,
+                oFooter,
+                i;
+                
+            if (Lang.isArray(aButtons)) {
 
-                nButtons = buttons.length;
+                oSpan = document.createElement("span");
+                oSpan.className = "button-group";
+
+                nButtons = aButtons.length;
         
-                for (b = 0; b < nButtons; b++) {
-                    button = buttons[b];
+                for (i = 0; i < nButtons; i++) {
+
+                    oButton = aButtons[i];
         
-                    htmlButton = document.createElement("button");
-                    htmlButton.setAttribute("type", "button");
+                    oButtonEl = document.createElement("button");
+                    oButtonEl.setAttribute("type", "button");
         
-                    if (button.isDefault) {
-                        htmlButton.className = "default";
-                        this.defaultHtmlButton = htmlButton;
+                    if (oButton.isDefault) {
+                        oButtonEl.className = "default";
+                        this.defaultHtmlButton = oButtonEl;
+                    }
+
+                    oButtonEl.innerHTML = oButton.text;
+
+                    if (Lang.isFunction(oButton.handler)) {
+
+                        Event.on(oButtonEl, "click", oButton.handler, 
+                            this, true);
+        
+                    }
+                    else if (Lang.isObject(oButton.handler) && 
+                        Lang.isFunction(oButton.handler.fn)) {
+
+                        Event.on(oButtonEl, "click", oButton.handler.fn, 
+                            ((!YAHOO.lang.isUndefined(oButton.handler.obj)) ? 
+                            oButton.handler.obj : this), 
+                            (oButton.handler.scope || this));
+
                     }
         
-                    htmlButton.appendChild(
-                        document.createTextNode(button.text));
-
-                    Event.on(htmlButton, "click", button.handler, this, true);
+                    oSpan.appendChild(oButtonEl);
+                    oButton.htmlButton = oButtonEl;
         
-                    this.buttonSpan.appendChild(htmlButton);
-                    button.htmlButton = htmlButton;
-        
-                    if (b === 0) {
-                        this.firstButton = button.htmlButton;
+                    if (i === 0) {
+                        this.firstButton = oButtonEl;
                     }
         
-                    if (b == (nButtons - 1)) {
-                        this.lastButton = button.htmlButton;
+                    if (i == (nButtons - 1)) {
+                        this.lastButton = oButtonEl;
                     }
         
                 }
         
-                this.setFooter(this.buttonSpan);
+                this.setFooter(oSpan);
+
+                oFooter = this.footer;
+                
+                if (Dom.inDocument(this.element) && 
+                    !Dom.isAncestor(oInnerElement, oFooter)) {
+    
+                    oInnerElement.appendChild(oFooter);
+                
+                }
         
                 this.cfg.refireEvent("iframe");
                 this.cfg.refireEvent("underlay");
+
+                this.buttonSpan = oSpan;
+
             } else { // Do cleanup
-                if (this.buttonSpan) {
-                    if (this.buttonSpan.parentNode) {
-                        this.buttonSpan.parentNode.removeChild(this.buttonSpan);
-                    }
-        
+
+                oSpan = this.buttonSpan;
+                oFooter = this.footer;
+
+                if (oSpan && oFooter) {
+
+                    removeButtonEventHandlers.call(this);
+
+                    oFooter.removeChild(oSpan);
+
                     this.buttonSpan = null;
                     this.firstButton = null;
                     this.lastButton = null;
                     this.defaultHtmlButton = null;
+
                 }
+
             }
+
         },
         
         
@@ -1119,29 +1216,9 @@
         */
         destroy: function () {
         
-            var oForm = this.form,
-                oFooter = this.footer,
-                aButtons,
-                i;
+            var oForm = this.form;
         
-            if (oFooter) {
-        
-                aButtons = oFooter.getElementsByTagName("button");
-        
-                if (aButtons && aButtons.length > 0) {
-        
-                    i = aButtons.length - 1;
-                    
-                    do {
-                    
-                        Event.purgeElement(aButtons[i], false, "click");
-                    
-                    }
-                    while (i--);
-                
-                }
-        
-            }
+            removeButtonEventHandlers.call(this);
             
         
             if (oForm) {
