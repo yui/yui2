@@ -49,19 +49,10 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
      */
     init : function () {
     
-        //shortcut variables
-        var TestRunner /*:Object*/ = YAHOO.tool.TestRunner;
-    
-        //setup event _handlers
-        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_PASS_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_FAIL_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_IGNORE_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_SUITE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_SUITE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_CASE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
-        YAHOO.tool.TestRunner.subscribe(TestRunner.TEST_CASE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        //attach to any available TestRunner
+        if (YAHOO.tool.TestRunner){
+            this.setTestRunner(YAHOO.tool.TestRunner);
+        }
         
         //hide useless sources
         this.hideSource("global");
@@ -74,6 +65,45 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
         
         //reset the logger
         this.clearConsole();
+    },
+    
+    /**
+     * Clears the reference to the TestRunner from previous operations. This 
+     * unsubscribes all events and removes the object reference.
+     * @return {Void}
+     * @static
+     */
+    clearTestRunner : function () /*:Void*/ {
+        if (this._runner){
+            this._runner.unsubscribeAll();
+            this._runner = null;
+        }
+    },
+    
+    /**
+     * Sets the source test runner that the logger should monitor.
+     * @param {YAHOO.tool.TestRunner} testRunner The TestRunner to observe.
+     * @return {Void}
+     * @static
+     */
+    setTestRunner : function (testRunner /*:YAHOO.tool.TestRunner*/) /*:Void*/ {
+    
+        if (this._runner){
+            this.clearTestRunner();
+        }
+        
+        this._runner = testRunner;
+        
+        //setup event _handlers
+        testRunner.subscribe(testRunner.TEST_PASS_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.TEST_FAIL_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.TEST_IGNORE_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.TEST_SUITE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.TEST_SUITE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.TEST_CASE_BEGIN_EVENT, this._handleTestRunnerEvent, this, true);
+        testRunner.subscribe(testRunner.TEST_CASE_COMPLETE_EVENT, this._handleTestRunnerEvent, this, true);    
     },
     
     //-------------------------------------------------------------------------
@@ -134,12 +164,12 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 break;
                 
             case TestRunner.TEST_CASE_BEGIN_EVENT:
-                message = "Test suite \"" + data.testCase.name + "\" started.";
+                message = "Test case \"" + data.testCase.name + "\" started.";
                 messageType = "info";
                 break;
                 
             case TestRunner.TEST_CASE_COMPLETE_EVENT:
-                message = "Test suite \"" + data.testCase.name + "\" completed.\nPassed:" 
+                message = "Test case \"" + data.testCase.name + "\" completed.\nPassed:" 
                     + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total
                 messageType = "info";
                 break;
