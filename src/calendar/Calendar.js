@@ -1285,10 +1285,10 @@ YAHOO.widget.Calendar.prototype.buildMonthLabel = function() {
 	var monthLabel  = this.Locale.LOCALE_MONTHS[pageDate.getMonth()] + this.Locale.MY_LABEL_MONTH_SUFFIX;
 	var yearLabel = pageDate.getFullYear() + this.Locale.MY_LABEL_YEAR_SUFFIX;
 
-	if (this.Locale.MY_LABEL_MONTH_POSITION == 1) {
-		return monthLabel + yearLabel;
-	} else {
+	if (this.Locale.MY_LABEL_MONTH_POSITION == 2 || this.Locale.MY_LABEL_YEAR_POSITION == 1) {
 		return yearLabel + monthLabel;
+	} else {
+		return monthLabel + yearLabel;
 	}
 };
 
@@ -2080,7 +2080,7 @@ YAHOO.widget.Calendar.prototype.select = function(date) {
 
 		if (!this.isDateOOB(this._toDate(toSelect))) {
 			
-			if (validDates.length == 0) {
+			if (validDates.length === 0) {
 				this.beforeSelectEvent.fire();
 				selected = this.cfg.getProperty(cfgSelected);
 			}
@@ -2092,6 +2092,8 @@ YAHOO.widget.Calendar.prototype.select = function(date) {
 			}
 		}
 	}
+	
+	if (validDates.length === 0) { this.logger.log("All provided dates were OOB. beforeSelect and select events not fired", "info"); }
 
 	if (validDates.length > 0) {
 		if (this.parent) {
@@ -2111,7 +2113,7 @@ YAHOO.widget.Calendar.prototype.select = function(date) {
 * a full render. The selected style is applied to the cell directly.
 *
 * If the cell is not marked with the CSS_CELL_SELECTABLE class (as is the case by default for out of month 
-* or out of bounds cells), it will not be selected; beforeSelect and select events will not be fired.
+* or out of bounds cells), it will not be selected and in such a case beforeSelect and select events will not be fired.
 * 
 * @method selectCell
 * @param	{Number}	cellIndex	The index of the cell to select in the current calendar. 
@@ -2123,8 +2125,11 @@ YAHOO.widget.Calendar.prototype.selectCell = function(cellIndex) {
 	var cellDate = this.cellDates[cellIndex];
 	var dCellDate = this._toDate(cellDate);
 	this.logger.log("Select: " + dCellDate, "info");
+	
+	var selectable = YAHOO.util.Dom.hasClass(cell, this.Style.CSS_CELL_SELECTABLE);
+	if (!selectable) {this.logger.log("The cell at cellIndex:" + cellIndex + " is not a selectable cell. beforeSelect, select events not fired", "info"); }
 
-	if (YAHOO.util.Dom.hasClass(cell, this.Style.CSS_CELL_SELECTABLE)) {
+	if (selectable) {
 
 		this.beforeSelectEvent.fire();
 
@@ -2154,6 +2159,12 @@ YAHOO.widget.Calendar.prototype.selectCell = function(cellIndex) {
 * Deselects a date or a collection of dates on the current calendar. This method, by default,
 * does not call the render method explicitly. Once deselection has completed, render must be 
 * called for the changes to be reflected visually.
+* 
+* The method will not attempt to deselect any dates which are OOB (out of bounds, and hence not selectable) 
+* and the array of deselected dates passed to the deselectEvent will not contain any OOB dates.
+* 
+* If all dates are OOB, beforeDeselect and deselect events will not be fired.
+* 
 * @method deselect
 * @param	{String/Date/Date[]}	date	The date string of dates to deselect in the current calendar. Valid formats are
 *								individual date(s) (12/24/2005,12/26/2005) or date range(s) (12/24/2005-1/1/2006).
@@ -2162,29 +2173,44 @@ YAHOO.widget.Calendar.prototype.selectCell = function(cellIndex) {
 * @return	{Date[]}			Array of JavaScript Date objects representing all individual dates that are currently selected.
 */
 YAHOO.widget.Calendar.prototype.deselect = function(date) {
-	this.beforeDeselectEvent.fire();
+	this.logger.log("Deselect: " + date, "info");
+
+	var aToBeDeselected = this._toFieldArray(date);
+	this.logger.log("Deselection field array: " + aToBeDeselected, "info");
+
+	var validDates = [];
+	var selected = [];
 	var cfgSelected = YAHOO.widget.Calendar._DEFAULT_CONFIG.SELECTED.key;
 
-	var selected = this.cfg.getProperty(cfgSelected);
+	for (var a=0; a < aToBeDeselected.length; ++a) {
+		var toDeselect = aToBeDeselected[a];
 
-	var aToBeSelected = this._toFieldArray(date);
+		if (!this.isDateOOB(this._toDate(toDeselect))) {
 
-	for (var a=0;a<aToBeSelected.length;++a) {
-		var toSelect = aToBeSelected[a]; // For each date item in the list of dates we're trying to select
-		var index = this._indexOfSelectedFieldArray(toSelect);
-	
-		if (index != -1) {	
-			selected.splice(index,1);
+			if (validDates.length === 0) {
+				this.beforeDeselectEvent.fire();
+				selected = this.cfg.getProperty(cfgSelected);
+			}
+
+			validDates.push(toDeselect);
+
+			var index = this._indexOfSelectedFieldArray(toDeselect);
+			if (index != -1) {	
+				selected.splice(index,1);
+			}
 		}
 	}
 
-	if (this.parent) {
-		this.parent.cfg.setProperty(cfgSelected, selected);
-	} else {
-		this.cfg.setProperty(cfgSelected, selected);
-	}
+	if (validDates.length === 0) { this.logger.log("All provided dates were OOB. beforeDeselect and deselect events not fired");}
 
-	this.deselectEvent.fire(aToBeSelected);
+	if (validDates.length > 0) {
+		if (this.parent) {
+			this.parent.cfg.setProperty(cfgSelected, selected);
+		} else {
+			this.cfg.setProperty(cfgSelected, selected);
+		}
+		this.deselectEvent.fire(validDates);
+	}
 
 	return this.getSelectedDates();
 };
@@ -2193,16 +2219,24 @@ YAHOO.widget.Calendar.prototype.deselect = function(date) {
 * Deselects a date on the current calendar by referencing the index of the cell that should be deselected.
 * This method is used to easily deselect a single cell (usually with a mouse click) without having to do
 * a full render. The selected style is removed from the cell directly.
+* 
+* If the cell is not marked with the CSS_CELL_SELECTABLE class (as is the case by default for out of month 
+* or out of bounds cells), the method will not attempt to deselect it and in such a case, beforeDeselect and 
+* deselect events will not be fired.
+* 
 * @method deselectCell
 * @param	{Number}	cellIndex	The index of the cell to deselect in the current calendar. 
 * @return	{Date[]}	Array of JavaScript Date objects representing all individual dates that are currently selected.
 */
-YAHOO.widget.Calendar.prototype.deselectCell = function(i) {
-	var cell = this.cells[i];
-	var cellDate = this.cellDates[i];
+YAHOO.widget.Calendar.prototype.deselectCell = function(cellIndex) {
+	var cell = this.cells[cellIndex];
+	var cellDate = this.cellDates[cellIndex];
 	var cellDateIndex = this._indexOfSelectedFieldArray(cellDate);
+	
+	var selectable = YAHOO.util.Dom.hasClass(cell, this.Style.CSS_CELL_SELECTABLE);
+	if (!selectable) { this.logger.log("The cell at cellIndex:" + cellIndex + " is not a selectable/deselectable cell", "info"); }
 
-	if (YAHOO.util.Dom.hasClass(cell, this.Style.CSS_CELL_SELECTABLE)) {
+	if (selectable) {
 
 		this.beforeDeselectEvent.fire();
 
