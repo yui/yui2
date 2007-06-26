@@ -272,6 +272,11 @@
         PERCENT: "%"
     };
 
+    proto.IMAGE = {
+        PICKER_THUMB: "../../build/colorpicker/assets/picker_thumb.png",
+        HUE_THUMB: "../../build/colorpicker/assets/hue_thumb.png"
+    };
+
     /*
      * Constants for the control's custom event names.  subscribe
      * to the rgbChange event instead.
@@ -321,6 +326,7 @@
         IDS: "ids",
         ELEMENTS: "elements",
         TEXT: "text",
+        IMAGES: "images",
         ANIMATE: "animate"
     };
 
@@ -655,6 +661,7 @@
         var el, child, img, fld, i, 
             ids = this.get(this.OPT.IDS),
             text = this.get(this.OPT.TEXT),
+            images = this.get(this.OPT.IMAGES),
             Elem = function(type, o) {
                 var n = document.createElement(type);
                 if (o) {
@@ -692,7 +699,7 @@
         });
 
         img = new Elem("img", {
-            src: "../src/assets/picker_thumb.png"
+            src: images.PICKER_THUMB
         });
 
         child.appendChild(img);
@@ -713,7 +720,7 @@
         });
 
         img = new Elem("img", {
-            src: "../src/assets/hue_thumb.png"
+            src: images.HUE_THUMB
         });
 
         child.appendChild(img);
@@ -1186,6 +1193,17 @@
                 writeonce: true
             });
 
+        /**
+         * The img src default list
+         * is this.IMAGES
+         * @config images
+         * @type {key: image}
+         * @writeonce
+         */
+        this.setAttributeConfig(this.OPT.IMAGES, {
+                value: attr.images || this.IMAGE,
+                writeonce: true
+            });
         /**
          * The element refs used by this control.  Set at initialization
          * @config elements
