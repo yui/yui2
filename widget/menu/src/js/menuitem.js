@@ -680,19 +680,41 @@ YAHOO.widget.MenuItem.prototype = {
 
             // Create custom events
 
-            var EVENT_TYPES = YAHOO.widget.MenuItem._EVENT_TYPES;
+            var EVENT_TYPES = YAHOO.widget.MenuItem._EVENT_TYPES,
+                SIGNATURE = CustomEvent.LIST;
 
-            this.mouseOverEvent = new CustomEvent(EVENT_TYPES.MOUSE_OVER, this);
-            this.mouseOutEvent = new CustomEvent(EVENT_TYPES.MOUSE_OUT, this);
-            this.mouseDownEvent = new CustomEvent(EVENT_TYPES.MOUSE_DOWN, this);
-            this.mouseUpEvent = new CustomEvent(EVENT_TYPES.MOUSE_UP, this);
-            this.clickEvent = new CustomEvent(EVENT_TYPES.CLICK, this);
-            this.keyPressEvent = new CustomEvent(EVENT_TYPES.KEY_PRESS, this);
-            this.keyDownEvent = new CustomEvent(EVENT_TYPES.KEY_DOWN, this);
-            this.keyUpEvent = new CustomEvent(EVENT_TYPES.KEY_UP, this);
-            this.focusEvent = new CustomEvent(EVENT_TYPES.FOCUS, this);
-            this.blurEvent = new CustomEvent(EVENT_TYPES.BLUR, this);
-            this.destroyEvent = new CustomEvent(EVENT_TYPES.DESTROY, this);
+            this.mouseOverEvent = this.createEvent(EVENT_TYPES.MOUSE_OVER);
+            this.mouseOverEvent.signature = SIGNATURE;
+
+            this.mouseOutEvent = this.createEvent(EVENT_TYPES.MOUSE_OUT);
+            this.mouseOutEvent.signature = SIGNATURE;
+
+            this.mouseDownEvent = this.createEvent(EVENT_TYPES.MOUSE_DOWN);
+            this.mouseDownEvent.signature = SIGNATURE;
+
+            this.mouseUpEvent = this.createEvent(EVENT_TYPES.MOUSE_UP);
+            this.mouseUpEvent.signature = SIGNATURE;
+
+            this.clickEvent = this.createEvent(EVENT_TYPES.CLICK);
+            this.clickEvent.signature = SIGNATURE;
+
+            this.keyPressEvent = this.createEvent(EVENT_TYPES.KEY_PRESS);
+            this.keyPressEvent.signature = SIGNATURE;
+
+            this.keyDownEvent = this.createEvent(EVENT_TYPES.KEY_DOWN);
+            this.keyDownEvent.signature = SIGNATURE;
+
+            this.keyUpEvent = this.createEvent(EVENT_TYPES.KEY_UP);
+            this.keyUpEvent.signature = SIGNATURE;
+
+            this.focusEvent = this.createEvent(EVENT_TYPES.FOCUS);
+            this.focusEvent.signature = SIGNATURE;
+
+            this.blurEvent = this.createEvent(EVENT_TYPES.BLUR);
+            this.blurEvent.signature = SIGNATURE;
+
+            this.destroyEvent = this.createEvent(EVENT_TYPES.DESTROY);
+            this.destroyEvent.signature = SIGNATURE;
 
             if(p_oConfig) {
     
@@ -1612,7 +1634,7 @@ YAHOO.widget.MenuItem.prototype = {
         /**
         * @config onclick
         * @description Object literal representing the code to be executed when 
-        * the button is clicked.  Format:<br> <code> {<br> 
+        * the item is clicked.  Format:<br> <code> {<br> 
         * <strong>fn:</strong> Function,   &#47;&#47; The handler to call when 
         * the event fires.<br> <strong>obj:</strong> Object, &#47;&#47; An 
         * object to  pass back to the handler.<br> <strong>scope:</strong> 
@@ -1964,5 +1986,7 @@ YAHOO.widget.MenuItem.prototype = {
     }
 
 };
+
+Lang.augmentProto(YAHOO.widget.MenuItem, YAHOO.util.EventProvider);
 
 })();

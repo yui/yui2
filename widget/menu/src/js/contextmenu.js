@@ -188,12 +188,8 @@ initEvents: function() {
 
     // Create custom events
 
-    this.triggerContextMenuEvent = 
-
-            new YAHOO.util.CustomEvent(
-                    YAHOO.widget.ContextMenu._EVENT_TYPES.TRIGGER_CONTEXT_MENU, 
-                    this
-                );
+    this.triggerContextMenuEvent = this.createEvent(YAHOO.widget.ContextMenu._EVENT_TYPES.TRIGGER_CONTEXT_MENU);
+    this.triggerContextMenuEvent.signature = CustomEvent.LIST;
 
 },
 

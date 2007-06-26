@@ -3891,20 +3891,44 @@ initEvents: function() {
 
     // Create custom events
 
-    var EVENT_TYPES = YAHOO.widget.Menu._EVENT_TYPES;
+    var EVENT_TYPES = YAHOO.widget.Menu._EVENT_TYPES,
+        SIGNATURE = CustomEvent.LIST;
 
-    this.mouseOverEvent = new CustomEvent(EVENT_TYPES.MOUSE_OVER, this);
-    this.mouseOutEvent = new CustomEvent(EVENT_TYPES.MOUSE_OUT, this);
-    this.mouseDownEvent = new CustomEvent(EVENT_TYPES.MOUSE_DOWN, this);
-    this.mouseUpEvent = new CustomEvent(EVENT_TYPES.MOUSE_UP, this);
-    this.clickEvent = new CustomEvent(EVENT_TYPES.CLICK, this);
-    this.keyPressEvent = new CustomEvent(EVENT_TYPES.KEY_PRESS, this);
-    this.keyDownEvent = new CustomEvent(EVENT_TYPES.KEY_DOWN, this);
-    this.keyUpEvent = new CustomEvent(EVENT_TYPES.KEY_UP, this);
-    this.focusEvent = new CustomEvent(EVENT_TYPES.FOCUS, this);
-    this.blurEvent = new CustomEvent(EVENT_TYPES.BLUR, this);
-    this.itemAddedEvent = new CustomEvent(EVENT_TYPES.ITEM_ADDED, this);
-    this.itemRemovedEvent = new CustomEvent(EVENT_TYPES.ITEM_REMOVED, this);
+    this.mouseOverEvent = this.createEvent(EVENT_TYPES.MOUSE_OVER);
+    this.mouseOverEvent.signature = SIGNATURE;
+
+    this.mouseOutEvent = this.createEvent(EVENT_TYPES.MOUSE_OUT);
+    this.mouseOutEvent.signature = SIGNATURE;
+    
+    this.mouseDownEvent = this.createEvent(EVENT_TYPES.MOUSE_DOWN);
+    this.mouseDownEvent.signature = SIGNATURE;
+
+    this.mouseUpEvent = this.createEvent(EVENT_TYPES.MOUSE_UP);
+    this.mouseUpEvent.signature = SIGNATURE;
+    
+    this.clickEvent = this.createEvent(EVENT_TYPES.CLICK);
+    this.clickEvent.signature = SIGNATURE;
+    
+    this.keyPressEvent = this.createEvent(EVENT_TYPES.KEY_PRESS);
+    this.keyPressEvent.signature = SIGNATURE;
+    
+    this.keyDownEvent = this.createEvent(EVENT_TYPES.KEY_DOWN);
+    this.keyDownEvent.signature = SIGNATURE;
+    
+    this.keyUpEvent = this.createEvent(EVENT_TYPES.KEY_UP);
+    this.keyUpEvent.signature = SIGNATURE;
+    
+    this.focusEvent = this.createEvent(EVENT_TYPES.FOCUS);
+    this.focusEvent.signature = SIGNATURE;
+    
+    this.blurEvent = this.createEvent(EVENT_TYPES.BLUR);
+    this.blurEvent.signature = SIGNATURE;
+    
+    this.itemAddedEvent = this.createEvent(EVENT_TYPES.ITEM_ADDED);
+    this.itemAddedEvent.signature = SIGNATURE;
+    
+    this.itemRemovedEvent = this.createEvent(EVENT_TYPES.ITEM_REMOVED);
+    this.itemRemovedEvent.signature = SIGNATURE;
 
 },
 
@@ -4538,60 +4562,59 @@ hasFocus: function() {
 
 
 /**
-* @method addSubscriber
-* @description Adds a CustomEvent subscriber to the menu and all of its 
-* corresponding submenus.
-* @param {String} p_sEvent The name of the event to listen for.
-* @param {Object} p_fnListener The function to execute.
-* @param {Object} p_oObject An object to be passed along when the event fires.
+* Adds the specified CustomEvent subscriber to the menu and each of 
+* its submenus.
+* @method subscribe
+* @param p_type     {string}   the type, or name of the event
+* @param p_fn       {function} the function to exectute when the event fires
+* @param p_obj      {Object}   An object to be passed along when the event 
+*                              fires
+* @param p_override {boolean}  If true, the obj passed in becomes the 
+*                              execution scope of the listener
 */
-addSubscriber: function(p_sEvent, p_fnListener, p_oObject) {
+subscribe: function() {
 
-    function addCustomEventListener(p_oMenu) {
-
-        p_oMenu.addSubscriber(p_sEvent, p_fnListener, p_oObject, p_oMenu);
-
-    }
-
-
-    function onItemAdded(p_sType, p_aArgs) {
+    function onItemAdded(p_sType, p_aArgs, p_oObject) {
 
         var oItem = p_aArgs[0],
             oSubmenu = oItem.cfg.getProperty("submenu");
 
         if(oSubmenu) {
 
-            addCustomEventListener(oSubmenu);
+            oSubmenu.subscribe.apply(oSubmenu, p_oObject);
 
         }
     
     }
 
 
-    this[p_sEvent].subscribe(p_fnListener, p_oObject, this);
-
-    this.itemAddedEvent.subscribe(onItemAdded);
+    YAHOO.widget.Menu.superclass.subscribe.apply(this, arguments);
+    YAHOO.widget.Menu.superclass.subscribe.call(this, "itemAdded", onItemAdded, arguments);
 
 
     var aSubmenus = this.getSubmenus(),
+        nSubmenus,
+        oSubmenu;
+
+    if (aSubmenus) {
+
         nSubmenus = aSubmenus.length,
         oSubmenu;
 
-
-    if(nSubmenus > 0) {
-    
-        var i = nSubmenus - 1;
+        if(nSubmenus > 0) {
         
-        do {
-
-            oSubmenu = aSubmenus[i];
-
-            addCustomEventListener(oSubmenu);
+            var i = nSubmenus - 1;
             
-            oSubmenu.itemAddedEvent.subscribe(onItemAdded);
-
+            do {
+    
+                oSubmenu = aSubmenus[i];
+                
+                oSubmenu.subscribe.apply(oSubmenu, arguments);
+    
+            }
+            while(i--);
+        
         }
-        while(i--);
     
     }
 
