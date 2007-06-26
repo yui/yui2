@@ -1389,13 +1389,8 @@
                 offsetWidth = this.element.offsetWidth,
                 viewPortWidth = Dom.getViewportWidth(),
                 viewPortHeight = Dom.getViewportHeight(),
-    
-                scrollX = document.documentElement.scrollLeft || 
-                    document.body.scrollLeft,
-    
-                scrollY = document.documentElement.scrollTop || 
-                    document.body.scrollTop,
-    
+                scrollX = Dom.getDocumentScrollLeft(),
+                scrollY = Dom.getDocumentScrollTop(),
                 topConstraint = scrollY + 10,
                 leftConstraint = scrollX + 10,
                 bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
@@ -1487,6 +1482,88 @@
                 me.cfg.refireEvent("context");
             }, 0);
     
+        },
+
+        /**
+        * Places the Overlay on top of all other instances of 
+        * YAHOO.widget.Overlay.
+        * @method bringToTop
+        */
+        bringToTop: function() {
+    
+            var aOverlays = [],
+                oElement = this.element;
+    
+            function compareZIndexDesc(p_oOverlay1, p_oOverlay2) {
+        
+                var sZIndex1 = Dom.getStyle(p_oOverlay1, "zIndex"),
+        
+                    sZIndex2 = Dom.getStyle(p_oOverlay2, "zIndex"),
+        
+                    nZIndex1 = (!sZIndex1 || isNaN(sZIndex1)) ? 
+                        0 : parseInt(sZIndex1, 10),
+        
+                    nZIndex2 = (!sZIndex2 || isNaN(sZIndex2)) ? 
+                        0 : parseInt(sZIndex2, 10);
+        
+                if (nZIndex1 > nZIndex2) {
+        
+                    return -1;
+        
+                } else if (nZIndex1 < nZIndex2) {
+        
+                    return 1;
+        
+                } else {
+        
+                    return 0;
+        
+                }
+        
+            }
+        
+            function isOverlayElement(p_oElement) {
+        
+                var oOverlay = Dom.hasClass(p_oElement, Overlay.CSS_OVERLAY),
+                    Panel = YAHOO.widget.Panel;
+            
+                if (oOverlay && !Dom.isAncestor(oElement, oOverlay)) {
+                
+                    if (Panel && Dom.hasClass(p_oElement, Panel.CSS_PANEL)) {
+        
+                        aOverlays[aOverlays.length] = p_oElement.parentNode;
+                    
+                    }
+                    else {
+        
+                        aOverlays[aOverlays.length] = p_oElement;
+        
+                    }
+                
+                }
+            
+            }
+            
+            Dom.getElementsBy(isOverlayElement, "DIV", document.body);
+    
+            aOverlays.sort(compareZIndexDesc);
+            
+            var oTopOverlay = aOverlays[0],
+                nTopZIndex;
+            
+            if (oTopOverlay) {
+    
+                nTopZIndex = Dom.getStyle(oTopOverlay, "zIndex");
+    
+                if (!isNaN(nTopZIndex) && oTopOverlay != oElement) {
+    
+                    this.cfg.setProperty("zindex", 
+                        (parseInt(nTopZIndex, 10) + 2));
+    
+                }
+            
+            }
+        
         },
         
         /**
