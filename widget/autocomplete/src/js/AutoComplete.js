@@ -980,6 +980,8 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initContainer = function() {
+    this._oContainer.className = "yui-ac-container";
+    
     if(!this._oContainer._oContent) {
         // The oContent div helps size the iframe and shadow properly
         var oContent = document.createElement("div");
