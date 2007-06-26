@@ -80,6 +80,75 @@
     * @type String
     */
     Tooltip.CSS_TOOLTIP = "yui-tt";
+
+
+    /* 
+        "hide" event handler that sets a Tooltip instance's "width"
+        configuration property back to its original value before 
+        "setWidthToOffsetWidth" was called.
+    */
+    
+    function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
+
+        var sOriginalWidth = p_oObject[0],
+            sNewWidth = p_oObject[1],
+            oConfig = this.cfg,
+            sCurrentWidth = oConfig.getProperty("width");
+
+        if (sCurrentWidth == sNewWidth) {
+            
+            oConfig.setProperty("width", sOriginalWidth);
+        
+        }
+
+        this.unsubscribe("hide", this._onHide, p_oObject);
+    
+    }
+
+    /* 
+        "beforeShow" event handler that sets a Tooltip instance's "width"
+        configuration property to the value of its root HTML 
+        elements's offsetWidth
+    */
+
+    function setWidthToOffsetWidth(p_sType, p_aArgs) {
+
+        var oBody = document.body,
+            oConfig = this.cfg,
+            sOriginalWidth = oConfig.getProperty("width"),
+            sNewWidth,
+            oClone;
+
+        
+        if ((!sOriginalWidth || sOriginalWidth == "auto") && 
+            (oConfig.getProperty("container") != oBody || 
+            oConfig.getProperty("x") >= Dom.getViewportWidth() || 
+            oConfig.getProperty("y") >= Dom.getViewportHeight())) {
+
+            oClone = this.element.cloneNode(true);
+            oClone.style.visibility = "hidden";
+            oClone.style.top = "0px";
+            oClone.style.left = "0px";
+            
+            oBody.appendChild(oClone);
+
+            sNewWidth = (oClone.offsetWidth + "px");
+            
+            oBody.removeChild(oClone);
+            
+            oClone = null;
+
+            oConfig.setProperty("width", sNewWidth);
+            
+            oConfig.refireEvent("xy");
+            
+            this.subscribe("hide", restoreOriginalWidth, 
+                [(sOriginalWidth || ""), sNewWidth]);
+        
+        }
+
+    }
+
     
     YAHOO.extend(Tooltip, YAHOO.widget.Overlay, { 
     
@@ -101,7 +170,7 @@
                 this.init(el, userConfig);
             }
     
-            this.logger = Tooltip.logger;
+            this.logger = new YAHOO.widget.LogWriter(this.toString());
         
             if (document.readyState && document.readyState != "complete") {
     
@@ -124,6 +193,9 @@
         
                 this.setBody("");
                 this.render(this.cfg.getProperty("container"));
+
+                this.subscribe("beforeShow", setWidthToOffsetWidth);
+                
         
                 this.initEvent.fire(Tooltip);
                 
@@ -202,7 +274,7 @@
                 handler: this.configText,
                 suppressEvent: DEFAULT_CONFIG.TEXT.suppressEvent
             });
-        
+
             /**
             * Specifies the container element that the Tooltip's markup 
             * should be rendered into.
@@ -222,6 +294,24 @@
             * @type HTMLElement[]/String[]
             * @default null
             */ 
+
+            /**
+            * String representing the width of the Tooltip.  <em>Please note:
+            * </em> As of version 2.3 if either no value or a value of "auto" 
+            * is specified, and the Toolip's "container" configuration property
+            * is set to something other than <code>document.body</code> or 
+            * its "context" element resides outside the immediately visible 
+            * portion of the document, the width of the Tooltip will be 
+            * calculated based on the offsetWidth of its root HTML and set just 
+            * before it is made visible.  The original value will be 
+            * restored when the Tooltip is hidden. This ensures the Tooltip is 
+            * rendered at a usable width.  For more information see 
+            * SourceForge bug #1685496 and SourceForge 
+            * bug #1735423.
+            * @config width
+            * @type String
+            * @default null
+            */
         
         },
         
@@ -443,7 +533,7 @@
             */
             obj.showProcId = obj.doShow(e, context);
             obj.logger.log("Setting show tooltip timeout: " + 
-                this.showProcId, "time");
+                obj.showProcId, "time");
 
         },
         
