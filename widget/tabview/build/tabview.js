@@ -117,7 +117,12 @@
 
         var activate = function(e) {
             YAHOO.util.Event.preventDefault(e);
-            self.set('activeTab', this);
+            var silent = false;
+
+            if (this == self.get('activeTab')) {
+                silent = true; // dont fire activeTabChange if already active
+            }
+            self.set('activeTab', this, silent);
         };
         
         tab.addListener( tab.get('activationEvent'), activate);
@@ -253,6 +258,10 @@
         }
         
         var el = this.get('element');
+
+        if (!YAHOO.util.Dom.hasClass(el, this.CLASSNAME)) {
+            YAHOO.util.Dom.addClass(el, this.CLASSNAME);        
+        }
         
         /**
          * The Tabs belonging to the TabView instance.
@@ -357,6 +366,12 @@
             _initTabs.call(this);
         }
         
+        // Due to delegation we add all DOM_EVENTS to the TabView container
+        // but IE will leak when unsupported events are added, so remove these
+        this.DOM_EVENTS.submit = false;
+        this.DOM_EVENTS.focus = false;
+        this.DOM_EVENTS.blur = false;
+
         for (var type in this.DOM_EVENTS) {
             if ( YAHOO.lang.hasOwnProperty(this.DOM_EVENTS, type) ) {
                 this.addListener.call(this, type, this.DOMEventHandler);
@@ -366,9 +381,8 @@
     
     /**
      * Creates Tab instances from a collection of HTMLElements.
-     * @method createTabs
+     * @method initTabs
      * @private
-     * @param {Array|HTMLCollection} elements The elements to use for Tabs.
      * @return void
      */
     var _initTabs = function() {
@@ -392,6 +406,7 @@
             
             if (tab.hasClass(tab.ACTIVE_CLASSNAME) ) {
                 this._configs.activeTab.value = tab; // dont invoke method
+                this._configs.activeIndex.value = this.getTabIndex(tab);
             }
         }
     };
@@ -801,7 +816,8 @@
          * @default '#'
          */
         this.setAttributeConfig('href', {
-            value: attr.href || '#',
+            value: attr.href ||
+                    this.getElementsByTagName('a')[0].getAttribute('href', 2) || '#',
             method: function(value) {
                 this.getElementsByTagName('a')[0].href = value;
             },
