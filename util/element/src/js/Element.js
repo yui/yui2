@@ -375,6 +375,7 @@ var _initElement = function(el, attr) {
     this._queue = this._queue || [];
     this._events = this._events || {};
     this._configs = this._configs || {};
+    this._configOrder = []; 
     attr = attr || {};
     attr.element = attr.element || el || null;
 

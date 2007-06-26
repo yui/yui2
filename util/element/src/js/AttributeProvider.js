@@ -90,9 +90,17 @@
          * @param {Boolean} silent Whether or not to suppress change events
          */
         setAttributes: function(map, silent){
-            for (var key in map) {
-                if ( Lang.hasOwnProperty(map, key) ) {
-                    this.set(key, map[key], silent);
+            if (this._configOrder) { // from Element, to ensure proper order
+                for (var i = 0, len = this._configOrder.length; i < len; ++i) {
+                    if (map[this._configOrder[i]]) {
+                        this.set(this._configOrder[i], map[this._configOrder[i]], silent);
+                    }
+                }
+            } else {
+                for (var key in map) {
+                    if ( Lang.hasOwnProperty(map, key) ) {
+                        this.set(key, map[key], silent);
+                    }
                 }
             }
         },
@@ -183,6 +191,9 @@
             if (!configs[key]) {
                 map.name = key;
                 configs[key] = new YAHOO.util.Attribute(map, this);
+                if (this._configOrder) {
+                    this._configOrder.push(key);
+                }
             } else {
                 configs[key].configure(map, init);
             }
