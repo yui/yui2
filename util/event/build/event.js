@@ -496,13 +496,17 @@ if (!YAHOO.util.Event) {
         var counter = 0;
         
         /**
-         * addListener/removeListener can throw errors in unexpected scenarios.
-         * These errors are suppressed, the method returns false, and this property
-         * is set
-         * @property lastError
-         * @type Error
+         * Normalized keycodes for webkit/safari
+         * @property webkitKeymap
+         * @type {int: int}
+         * @private
          */
-        var lastError = null;
+        var webkitKeymap = {
+            63232: 38, // up
+            63233: 40, // down
+            63234: 37, // left
+            63235: 39  // right
+        };
 
         return {
 
@@ -583,6 +587,15 @@ if (!YAHOO.util.Event) {
              * @final
              */
             ADJ_SCOPE: 4,
+
+            /**
+             * addListener/removeListener can throw errors in unexpected scenarios.
+             * These errors are suppressed, the method returns false, and this property
+             * is set
+             * @property lastError
+             * @type Error
+             */
+            lastError: null,
 
             /**
              * Safari detection
@@ -1258,7 +1271,13 @@ if (!YAHOO.util.Event) {
              * @static
              */
             getCharCode: function(ev) {
-                return ev.charCode || ev.keyCode || 0;
+                var code = ev.keyCode || ev.charCode || 0;
+
+                // webkit normalization
+                if (YAHOO.env.ua.webkit && (code in webkitKeymap)) {
+                    code = webkitKeymap[code];
+                }
+                return code;
             },
 
             /**
@@ -2067,6 +2086,15 @@ YAHOO.util.EventProvider.prototype = {
 * @param {Object}      handler  An object literal representing the handler. 
 * @param {String}      event    Optional. The event (keydown or keyup) to 
 *                               listen for. Defaults automatically to keydown.
+*
+* @knownissue the "keypress" event is completely broken in Safari 2.x and below.
+*             the workaround is use "keydown" for key listening.  However, if
+*             it is desired to prevent the default behavior of the keystroke,
+*             that can only be done on the keypress event.  This makes key
+*             handling quite ugly.
+* @knownissue keydown is also broken in Safari 2.x and below for the ESC key.
+*             There currently is no workaround other than choosing another
+*             key to listen for.
 */
 YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     if (!attachTo) {

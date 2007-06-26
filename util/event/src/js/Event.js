@@ -113,13 +113,17 @@ if (!YAHOO.util.Event) {
         var counter = 0;
         
         /**
-         * addListener/removeListener can throw errors in unexpected scenarios.
-         * These errors are suppressed, the method returns false, and this property
-         * is set
-         * @property lastError
-         * @type Error
+         * Normalized keycodes for webkit/safari
+         * @property webkitKeymap
+         * @type {int: int}
+         * @private
          */
-        var lastError = null;
+        var webkitKeymap = {
+            63232: 38, // up
+            63233: 40, // down
+            63234: 37, // left
+            63235: 39  // right
+        };
 
         return {
 
@@ -200,6 +204,15 @@ if (!YAHOO.util.Event) {
              * @final
              */
             ADJ_SCOPE: 4,
+
+            /**
+             * addListener/removeListener can throw errors in unexpected scenarios.
+             * These errors are suppressed, the method returns false, and this property
+             * is set
+             * @property lastError
+             * @type Error
+             */
+            lastError: null,
 
             /**
              * Safari detection
@@ -882,7 +895,13 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @static
              */
             getCharCode: function(ev) {
-                return ev.charCode || ev.keyCode || 0;
+                var code = ev.keyCode || ev.charCode || 0;
+
+                // webkit normalization
+                if (YAHOO.env.ua.webkit && (code in webkitKeymap)) {
+                    code = webkitKeymap[code];
+                }
+                return code;
             },
 
             /**

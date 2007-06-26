@@ -14,6 +14,7 @@ YUI Library - Event - Release Notes
     properly.
   * EventProvider unsubscribeAll will unsubscribe all listeners from
     all hosted custom events if the type is not specified.
+  * Event.getKeyCode now checks keyCode before charCode for Safari     normalization.  Safari arrow key codes are normalized as well.
 
 2.2.2
   * No change

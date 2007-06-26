@@ -18,6 +18,15 @@
 * @param {Object}      handler  An object literal representing the handler. 
 * @param {String}      event    Optional. The event (keydown or keyup) to 
 *                               listen for. Defaults automatically to keydown.
+*
+* @knownissue the "keypress" event is completely broken in Safari 2.x and below.
+*             the workaround is use "keydown" for key listening.  However, if
+*             it is desired to prevent the default behavior of the keystroke,
+*             that can only be done on the keypress event.  This makes key
+*             handling quite ugly.
+* @knownissue keydown is also broken in Safari 2.x and below for the ESC key.
+*             There currently is no workaround other than choosing another
+*             key to listen for.
 */
 YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
     if (!attachTo) {
