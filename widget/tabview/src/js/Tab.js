@@ -293,7 +293,8 @@
          * @default '#'
          */
         this.setAttributeConfig('href', {
-            value: attr.href || '#',
+            value: attr.href ||
+                    this.getElementsByTagName('a')[0].getAttribute('href', 2) || '#',
             method: function(value) {
                 this.getElementsByTagName('a')[0].href = value;
             },
