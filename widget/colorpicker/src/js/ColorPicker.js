@@ -1,5 +1,7 @@
 (function() {
 
+    var pickercount = 0;
+
     /**
      * The colorpicker module provides a widget for selecting colors
      * @module colorpicker
@@ -19,6 +21,7 @@
      * initial attributes.  Ignored if first arg is attributes object.
      */
     YAHOO.widget.ColorPicker = function(el, attr) {
+        pickercount = pickercount + 1;
         this.logger = new YAHOO.widget.LogWriter("ColorPicker");
         attr = attr || {};
         if (arguments.length === 1 && !YAHOO.lang.isString(el) && !el.nodeName) {
@@ -1175,6 +1178,18 @@
                 value: attr.websafe || [255,255,255]
             });
 
+
+        ids = attr.ids || lang.merge({}, this.ID);
+
+        if (!attr.ids && pickercount > 1) {
+            for (var i in ids) {
+                if (lang.hasOwnProperty(ids, i)) {
+                    ids[i] = ids[i] + pickercount;
+                }
+            }
+        }
+
+
         /**
          * A list of element ids and/or element references used by the 
          * control.  The default is the this.ID list, and can be customized
@@ -1184,7 +1199,7 @@
          * @writeonce
          */
         this.setAttributeConfig(this.OPT.IDS, {
-                value: attr.ids || this.ID,
+                value: ids,
                 writeonce: true
             });
 
