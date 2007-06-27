@@ -56,6 +56,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
                     "instance" + YAHOO.widget.AutoComplete._nIndex;
                 this._oTextbox = elInput;
             }
+            this._oTextbox.className = "yui-ac-input";
         }
         else {
             YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error", this.toString());
