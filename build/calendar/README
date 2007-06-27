@@ -2,11 +2,12 @@ Calendar Release Notes
 
 *** version 2.3.0 ***
 
-	- Added checks to select and selectCell methods to ensure the Calendar/Calendar group was not set to an invalid state by programmatically selecting unselectable dates or cells.
+	- Added checks to select, selectCell, deselect and deselectCell methods to ensure the Calendar/Calendar group was not set to an invalid state by programmatically selecting unselectable dates or cells.
 	- Added new locale configuration properties for the Month/Year label used in the Calendar header (MY_LABEL_MONTH_POSITION, MY_LABEL_YEAR_POSITION, MY_LABEL_YEAR_SUFFIX, MY_LABEL_MONTH_SUFFIX). Japan is an example locale, where customization of the Month/Year label is required.
 	- Changed "first", "last" class names to "first-of-type", "last-of-type", to avoid collision with YUI Grids' use of the "first" class name.
 	- Added public isDateOOB method, to check if a given date is outside of the minimum/maximum configuration dates of the Calendar.
 	- Deprecated YAHOO.widget.Calendar.browser, refactored to use YAHOO.env.ua instead.
+	- Removed overflow:hidden from default Calendar/CalendarGroup container for non-IE6 browsers to fix clipping issue with IE7 when CalendarGroup was inside a box with a specific width. overflow:hidden is still required for IE6 with an iframe shim.
 
 *** version 2.2.2 ***
 

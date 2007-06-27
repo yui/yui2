@@ -98,7 +98,7 @@ YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 	this.cfg.fireQueue();
 
 	// OPERA HACK FOR MISWRAPPED FLOATS
-	if (YAHOO.env.ua.opera > 0){
+	if (YAHOO.env.ua.opera){
 		var fixWidth = function() {
 			var startW = this.oDomContainer.offsetWidth;
 			var w = 0;
@@ -162,9 +162,12 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 
 	/**
 	* Whether or not an iframe shim should be placed under the Calendar to prevent select boxes from bleeding through in Internet Explorer 6 and below.
+	* This property is enabled by default for IE6 and below. It is disabled by default for other browsers for performance reasons, but can be 
+	* enabled if required.
+	* 
 	* @config iframe
 	* @type Boolean
-	* @default true
+	* @default true for IE6 and below, false for all other browsers
 	*/
 	this.cfg.addProperty(defCfg.IFRAME.key, { value:defCfg.IFRAME.value, handler:this.configIframe, validator:this.cfg.checkBoolean } );
 
@@ -1041,7 +1044,7 @@ YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 */
 YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
 	// Bug in Safari 1.3, 2.0 (WebKit build < 420), Date.setMonth does not work consistently if iMonth is not 0-11
-	if (YAHOO.env.ua.webkit < 420 && (iMonth < 0 || iMonth > 11)) {
+	if (YAHOO.env.ua.webkit && YAHOO.env.ua.webkit < 420 && (iMonth < 0 || iMonth > 11)) {
 		var DM = YAHOO.widget.DateMath;
 		var newDate = DM.add(date, DM.MONTH, iMonth-date.getMonth());
 		date.setTime(newDate.getTime());
@@ -1049,7 +1052,6 @@ YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
 		date.setMonth(iMonth);
 	}
 };
-
 
 /**
 * CSS class representing the container for the calendar

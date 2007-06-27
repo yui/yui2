@@ -1082,7 +1082,7 @@ YAHOO.widget.Calendar._DEFAULT_CONFIG = {
 	SELECTED : {key:"selected", value:null},
 	TITLE : {key:"title", value:""},
 	CLOSE : {key:"close", value:false},
-	IFRAME : {key:"iframe", value:true},
+	IFRAME : {key:"iframe", value:(YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) ? true : false},
 	MINDATE : {key:"mindate", value:null},
 	MAXDATE : {key:"maxdate", value:null},
 	MULTI_SELECT : {key:"multi_select", value:false},
@@ -1314,7 +1314,7 @@ YAHOO.widget.Calendar.prototype.init = function(id, containerId, config) {
 
 	YAHOO.util.Dom.addClass(this.oDomContainer, this.Style.CSS_CONTAINER);	
 	YAHOO.util.Dom.addClass(this.oDomContainer, this.Style.CSS_SINGLE);
-
+	
 	this.cellDates = [];
 	this.cells = [];
 	this.renderStack = [];
@@ -1330,7 +1330,9 @@ YAHOO.widget.Calendar.prototype.init = function(id, containerId, config) {
 };
 
 /**
-* Renders the built-in IFRAME shim for the IE6 and below
+* Default Config listener for the iframe property. If the iframe config property is set to true, 
+* renders the built-in IFRAME shim if the container is relatively or absolutely positioned.
+* 
 * @method configIframe
 */
 YAHOO.widget.Calendar.prototype.configIframe = function(type, args, obj) {
@@ -1340,12 +1342,19 @@ YAHOO.widget.Calendar.prototype.configIframe = function(type, args, obj) {
 		if (YAHOO.util.Dom.inDocument(this.oDomContainer)) {
 			if (useIframe) {
 				var pos = YAHOO.util.Dom.getStyle(this.oDomContainer, "position");
-
-				if (YAHOO.env.ua.ie > 0 && (pos == "absolute" || pos == "relative")) {
-					if (! YAHOO.util.Dom.inDocument(this.iframe)) {
+				
+				if (pos == "absolute" || pos == "relative") {
+					
+					if (!YAHOO.util.Dom.inDocument(this.iframe)) {
 						this.iframe = document.createElement("iframe");
 						this.iframe.src = "javascript:false;";
+
 						YAHOO.util.Dom.setStyle(this.iframe, "opacity", "0");
+
+						if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
+							YAHOO.util.Dom.addClass(this.iframe, "fixedsize");
+						}
+
 						this.oDomContainer.insertBefore(this.iframe, this.oDomContainer.firstChild);
 					}
 				}
@@ -1662,9 +1671,12 @@ YAHOO.widget.Calendar.prototype.setupConfig = function() {
 
 	/**
 	* Whether or not an iframe shim should be placed under the Calendar to prevent select boxes from bleeding through in Internet Explorer 6 and below.
+	* This property is enabled by default for IE6 and below. It is disabled by default for other browsers for performance reasons, but can be 
+	* enabled if required.
+	* 
 	* @config iframe
 	* @type Boolean
-	* @default true
+	* @default true for IE6 and below, false for all other browsers
 	*/
 	this.cfg.addProperty(defCfg.IFRAME.key, { value:defCfg.IFRAME.value, handler:this.configIframe, validator:this.cfg.checkBoolean } );
 
@@ -3854,7 +3866,7 @@ YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 	this.cfg.fireQueue();
 
 	// OPERA HACK FOR MISWRAPPED FLOATS
-	if (YAHOO.env.ua.opera > 0){
+	if (YAHOO.env.ua.opera){
 		var fixWidth = function() {
 			var startW = this.oDomContainer.offsetWidth;
 			var w = 0;
@@ -3918,9 +3930,12 @@ YAHOO.widget.CalendarGroup.prototype.setupConfig = function() {
 
 	/**
 	* Whether or not an iframe shim should be placed under the Calendar to prevent select boxes from bleeding through in Internet Explorer 6 and below.
+	* This property is enabled by default for IE6 and below. It is disabled by default for other browsers for performance reasons, but can be 
+	* enabled if required.
+	* 
 	* @config iframe
 	* @type Boolean
-	* @default true
+	* @default true for IE6 and below, false for all other browsers
 	*/
 	this.cfg.addProperty(defCfg.IFRAME.key, { value:defCfg.IFRAME.value, handler:this.configIframe, validator:this.cfg.checkBoolean } );
 
@@ -4797,7 +4812,7 @@ YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 */
 YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
 	// Bug in Safari 1.3, 2.0 (WebKit build < 420), Date.setMonth does not work consistently if iMonth is not 0-11
-	if (YAHOO.env.ua.webkit < 420 && (iMonth < 0 || iMonth > 11)) {
+	if (YAHOO.env.ua.webkit && YAHOO.env.ua.webkit < 420 && (iMonth < 0 || iMonth > 11)) {
 		var DM = YAHOO.widget.DateMath;
 		var newDate = DM.add(date, DM.MONTH, iMonth-date.getMonth());
 		date.setTime(newDate.getTime());
@@ -4805,7 +4820,6 @@ YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
 		date.setMonth(iMonth);
 	}
 };
-
 
 /**
 * CSS class representing the container for the calendar
