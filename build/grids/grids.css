@@ -110,12 +110,14 @@ body{text-align:center;}
 .yui-g .yui-gc div.first,
 .yui-g .yui-ge div.first {float:left;}
 
-.yui-gb .yui-gd .yui-u {_width:64%;} 
-.yui-gb .yui-gd div.first {_width:29.5%;}
+.yui-gb .yui-gd .yui-u {*width:66%;_width:61.2%;} 
+.yui-gb .yui-gd div.first {*width:31%;_width:29.5%;}
 
 .yui-gb .yui-gc .yui-u,
-.yui-g .yui-gc .yui-u {_float:right;_width:29.9%;}
-.yui-gb .yui-gc div.first {*width:64.5%;*float:left;*margin-left:0;}
+.yui-g .yui-gc .yui-u {_float:right;width:32%;_width:29.9%;}
+.yui-gb .yui-gc div.first {width:66%;*width:64.5%;*float:left;*margin-left:0;}
+.yui-gb .yui-ge .yui-u, 
+.yui-gb .yui-gf .yui-u {margin:0;}
 
 	/*Float units (and sub grids) to the right */
 	.yui-g .yui-u,
@@ -148,7 +150,8 @@ body{text-align:center;}
 .yui-gc .yui-g .yui-u,
 .yui-gd .yui-g .yui-u,
 .yui-ge .yui-g .yui-u,
-.yui-gf .yui-g .yui-u {width:48.1%;_width:46.9%;_margin-right:1px;_margin-left:1%;} /* for #23-#24 for IE6 */
+.yui-gf .yui-g .yui-u {width:48.1%;*margin-left:0;}
+.yui-g .yui-g div.first {*margin:0;}
 .yui-gb .yui-g div.first {*margin-right:1px;}
 
 .yui-gb .yui-gb .yui-u {_margin-left:.7%;} /* for #23-32 for IE6*/
@@ -179,7 +182,8 @@ body{text-align:center;}
 .yui-gd .yui-g, /* for 056, 057 */
 .yui-gd .yui-u {width:66%;}
 
-.yui-gd div.first{width:32%;}
+.yui-gd div.first,
+.yui-gb .yui-gd div.first {width:32%;}
 .yui-g .yui-gd div.first {_width:29.9%;}
 
 .yui-ge .yui-u,
