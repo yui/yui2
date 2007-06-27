@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>yui.js</title>
+
+<script type="text/javascript">
+
+    function log(msg) {
+
+        if (typeof console !== "undefined" && console.debug) {
+            console.debug(msg);
+        } else {
+            //alert(msg);
+            var d=document, b=d.body, n=d.createElement("div");
+            if (b) {
+                n.appendChild(d.createTextNode(msg));
+                b.appendChild(n);
+            }
+        }
+    }
+
+    YAHOO_config = {
+        listener: function(minfo) {
+            log("page load listener: " + minfo.name);
+        }
+    };
+
+</script>
+
+<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../../build/yuiloader/yuiloader-beta.js"></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+
+YAHOO.example.tabviewinit = function( ){
+    var tabView = new YAHOO.widget.TabView( { id: 'demo' } );
+    
+    tabView.addTab( new YAHOO.widget.Tab({
+        label: 'lorem',
+        content: '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat.</p>',
+        active: true
+    }));
+    
+    tabView.addTab( new YAHOO.widget.Tab({
+        label: 'ipsum',
+        content: '<ul><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li></ul>'
+    }));
+    
+    tabView.addTab( new YAHOO.widget.Tab({
+        label: 'dolor',
+        content: '<form action="#"><fieldset><legend>Lorem Ipsum</legend><label for="foo"> <input id="foo" name="foo"></label><input type="submit" value="submit"></fieldset></form>'
+    }));
+    
+    YAHOO.util.Event.onContentReady('doc', function() {
+        tabView.appendTo(this); 
+    });
+};
+    var loader;
+
+    loader = new YAHOO.util.YUILoader();
+    loader.require("tabview", "treeview");
+    loader.loadOptional = true;
+    loader.domain = '';
+    loader.version = '../..';
+
+
+    loader.insert(function() {
+                YAHOO.util.Event.onAvailable("treediv", function() {
+                        var tree = new YAHOO.widget.TreeView("treediv");
+                        var n = new YAHOO.widget.TextNode("node 1", tree.getRoot());
+                        new YAHOO.widget.TextNode("node 2", n);
+                        new YAHOO.widget.TextNode("node 3", n);
+                        tree.draw();
+                    });
+
+                YAHOO.example.tabviewinit();
+            }, {
+                filter: 'raw'
+            });
+
+    log(loader.sorted);
+
+
+</script>
+<h1>header</h1>
+<p>YAHOO is already on the page.  We will instantiate a YUILoader instance to load
+additional components.  Note that because YAHOO is already on the page, we are not
+able to take advantage of the automatic rollup capability (we load dom and event 
+individually instead of yahoo-dom-event).</p>
+<div id="treediv"></div>
+<div id="doc"></div>
+</body>
+</html>

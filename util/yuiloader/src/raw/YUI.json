@@ -1,0 +1,265 @@
+{
+    'version': '2.3.0',
+    'domain': 'yui.yahooapis.com',
+    'base': 'build',
+    'moduleInfo': {
+
+        'animation': {
+            'type': 'js',
+            'path': 'animation/animation-min.js',
+            'requires': ['dom', 'event']
+        },
+
+        'autocomplete': {
+            'type': 'js',
+            'path': 'autocomplete/autocomplete-min.js',
+            'requires': ['dom', 'event'],
+            'optional': ['connection', 'animation']
+        },
+
+        'button': {
+            'type': 'js',
+            'path': 'button/button-beta-min.js',
+            'requires': ['element', 'buttoncss'],
+            'optional': ['menu']
+        },
+
+        'buttoncss': {
+            'type': 'css',
+            'path': 'button/assets/button.css',
+            'optional': ['menucss']
+        },
+
+        'calendar': {
+            'type': 'js',
+            'path': 'calendar/calendar-min.js',
+            'requires': ['event', 'dom', 'calendarcss']
+        },
+
+        'calendarcss': {
+            'type': 'css',
+            'path': 'calendar/assets/calendar.css'
+        },
+
+        'colorpicker': {
+            'type': 'js',
+            'path': 'colorpicker/colorpicker-beta-min.js',
+            'requires': ['slider', 'element', 'colorpickercss'],
+            'optional': ['animation']
+        },
+
+        'colorpickercss': {
+            'type': 'css',
+            'path': 'colorpicker/assets/colorpicker.css'
+        },
+
+        'connection': {
+            'type': 'js',
+            'path': 'connection/connection-min.js',
+            'requires': ['event']
+        },
+
+        'container': {
+            'type': 'js',
+            'path': 'container/container-min.js',
+            'requires': ['dom', 'event', 'containercss'],
+            'optional': ['dragdrop', 'animation'],
+            'supersedes': ['containercore']
+        },
+
+        'containercore': {
+            'type': 'js',
+            'path': 'container/container_core-min.js',
+            'requires': ['dom', 'event']
+        },
+
+        'containercss': {
+            'type': 'css',
+            'path': 'container/assets/container.css'
+        },
+
+        'datatable': {
+            'type': 'js',
+            'path': 'datatable/datatable-beta-min.js',
+            'requires': ['element', 'datasource', 'datatablecss'],
+            'optional': ['connection', 'dragdrop']
+        },
+
+        'datatablecss': {
+            'type': 'css',
+            'path': 'datatable/assets/datatable.css'
+        },
+
+        'dom': {
+            'type': 'js',
+            'path': 'dom/dom-min.js',
+            'requires': ['yahoo']
+        },
+
+        'dragdrop': {
+            'type': 'js',
+            'path': 'dragdrop/dragdrop-min.js',
+            'requires': ['dom', 'event']
+        },
+
+        'datasource': {
+            'type': 'js',
+            'path': 'datasource/datasource-beta-min.js',
+            'requires': ['event'],
+            'optional': ['connection']
+        },
+
+        'editor': {
+            'type': 'js',
+            'path': 'editor/editor-beta-min.js',
+            'requires': ['menu', 'container', 'element', 'button', 'editorcss'],
+            'optional': ['animation', 'dragdrop']
+        },
+
+        'editorcss': {
+            'type': 'css',
+            'path': 'editor/assets/editor.css'
+        },
+
+        'element': {
+            'type': 'js',
+            'path': 'element/element-beta-min.js',
+            'requires': ['dom', 'event']
+        },
+
+        'event': {
+            'type': 'js',
+            'path': 'event/event-min.js',
+            'requires': ['yahoo']
+        },
+
+        'fonts': {
+            'type': 'css',
+            'path': 'fonts/fonts-min.css'
+        },
+
+        'grids': {
+            'type': 'css',
+            'path': 'grids/grids-min.css',
+            'requires': ['fonts'],
+            'optional': ['reset']
+        },
+
+        'history': {
+            'type': 'js',
+            'path': 'history/history-beta-min.js',
+            'requires': ['event']
+        },
+
+        'imageloader': {
+            'type': 'js',
+            'path': 'imageloader/imageloader-experimental-min.js',
+            'requires': ['event', 'dom']
+        },
+
+        'logger': {
+            'type': 'js',
+            'path': 'logger/logger-min.js',
+            'requires': ['event', 'dom', 'loggercss'],
+            'optional': ['reset']
+        },
+
+        'loggercss': {
+            'type': 'css',
+            'path': 'logger/assets/logger.css'
+        },
+
+        'menu': {
+            'type': 'js',
+            'path': 'menu/menu-min.js',
+            'requires': ['containercore', 'menucss']
+        },
+
+        'menucss': {
+            'type': 'css',
+            'path': 'menu/assets/menu.css',
+            'requires': ['reset', 'fonts']
+        },
+
+        'reset': {
+            'type': 'css',
+            'path': 'reset/reset-min.css'
+        },
+
+        'reset-fonts-grids': {
+            'type': 'css',
+            'path': 'reset-fonts-grids/reset-fonts-grids.css',
+            'supersedes': ['reset', 'fonts', 'grids']
+        },
+
+        'slider': {
+            'type': 'js',
+            'path': 'slider/slider-min.js',
+            'requires': ['dragdrop'],
+            'optional': ['animation']
+        },
+
+        'tabview': {
+            'type': 'js',
+            'path': 'tabview/tabview-min.js',
+            'requires': ['element', 'tabviewcss'],
+            'optional': ['connection', 'tabviewskincss']
+        },
+
+        'tabviewcss': {
+            'type': 'css',
+            'path': 'tabview/assets/tabview.css'
+        },
+
+        'tabviewskincss': {
+            'type': 'css',
+            'path': 'tabview/assets/border_tabs.css'
+        },
+
+        'treeview': {
+            'type': 'js',
+            'path': 'treeview/treeview-min.js',
+            'requires': ['event', 'treeviewcss']
+        },
+
+        'treeviewcss': {
+            'type': 'css',
+            'path': 'treeview/assets/tree.css'
+        },
+
+        'utilities': {
+            'type': 'js',
+            'path': 'utilities/utilities.js',
+            'supersedes': ['yahoo', 'event', 'dragdrop', 'animation', 'dom', 'connection', 'element', 'yahoo-dom-event'],
+            'rollup': 8
+        },
+
+        'yahoo': {
+            'type': 'js',
+            'path': 'yahoo/yahoo-min.js'
+        },
+
+        'yahoo-dom-event': {
+            'type': 'js',
+            'path': 'yahoo-dom-event/yahoo-dom-event.js',
+            'supersedes': ['yahoo', 'event', 'dom'],
+            'rollup': 3
+        },
+
+        'yuiloader': {
+            'type': 'js',
+            'path': 'yuiloader/yuiloader-beta-min.js'
+        },
+
+        'yuitest': {
+            'type': 'js',
+            'path': 'yuitest/yuitest-beta-min.js',
+            'requires': ['logger', 'yuitest-css']
+        },
+
+        'yuitestcss': {
+            'type': 'css',
+            'path': 'yuitest/assets/yuitest.css'
+        }
+    }
+}
