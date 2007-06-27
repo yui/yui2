@@ -269,6 +269,16 @@ YAHOO.util.Connect =
 	failureEvent: new YAHOO.util.CustomEvent('failure'),
 
   /**
+   * @description Custom event that fires when handleTransactionResponse() determines a
+   * response in the HTTP 4xx/5xx range.
+   * @property failureEvent
+   * @private
+   * @static
+   * @type CustomEvent
+   */
+	uploadEvent: new YAHOO.util.CustomEvent('upload'),
+
+  /**
    * @description Custom event that fires when a transaction is successfully aborted.
    * @property abortEvent
    * @private
@@ -412,6 +422,7 @@ YAHOO.util.Connect =
 			else{
 				o = {};
 				o.tId = tId;
+				o.isUpload = true;
 			}
 
 			if(o){
@@ -460,7 +471,7 @@ YAHOO.util.Connect =
 				// encoded string that is concatenated to the uri to
 				// create a querystring.
 				if(method.toUpperCase() == 'GET'){
-					if(this._sFormData.length != 0){
+					if(this._sFormData.length !== 0){
 						// If the URI already contains a querystring, append an ampersand
 						// and then concatenate _sFormData to the URI.
 						uri += ((uri.indexOf('?') == -1)?'?':'&') + this._sFormData;
@@ -936,7 +947,6 @@ YAHOO.util.Connect =
 								else{
 									this._sFormData += encodeURIComponent(oName) + '=' + encodeURIComponent(oElement.options[j].hasAttribute('value')?oElement.options[j].value:oElement.options[j].text) + '&';
 								}
-
 							}
 						}
 						break;
@@ -1108,11 +1118,11 @@ YAHOO.util.Connect =
 		this._formNode.submit();
 
 		// Fire global custom event -- startEvent
-		this.startEvent.fire(o.tId);
+		this.startEvent.fire(o);
 
 		if(o.startEvent){
 			// Fire transaction custom event -- startEvent
-			o.startEvent.fire(o.tId);
+			o.startEvent.fire(o);
 		}
 
 		// Start polling if a callback is present and the timeout
@@ -1121,7 +1131,7 @@ YAHOO.util.Connect =
 			this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true); }, callback.timeout);
 		}
 
-
+		// Remove HTML elements created by appendPostData
 		if(oElements && oElements.length > 0){
 			for(var i=0; i < oElements.length; i++){
 				this._formNode.removeChild(oElements[i]);
@@ -1134,12 +1144,19 @@ YAHOO.util.Connect =
 		// Create the upload callback handler that fires when the iframe
 		// receives the load event.  Subsequently, the event handler is detached
 		// and the iframe removed from the document.
-
 		var uploadCallback = function()
 		{
 			if(callback && callback.timeout){
 				window.clearTimeout(oConn._timeOut[o.tId]);
 				delete oConn._timeOut[o.tId];
+			}
+
+			// Fire global custom event -- completeEvent
+			oConn.completeEvent.fire(o);
+
+			if(o.completeEvent){
+				// Fire transaction custom event -- completeEvent
+				o.completeEvent.fire(o);
 			}
 
 			var obj = {};
@@ -1155,14 +1172,6 @@ YAHOO.util.Connect =
 			}
 			catch(e){}
 
-			// Fire global custom event -- completeEvent
-			oConn.completeEvent.fire(obj);
-
-			if(o.completeEvent){
-				// Fire transaction custom event -- completeEvent
-				o.completeEvent.fire(obj);
-			}
-
 			if(callback && callback.upload){
 				if(!callback.scope){
 					callback.upload(obj);
@@ -1170,6 +1179,14 @@ YAHOO.util.Connect =
 				else{
 					callback.upload.apply(callback.scope, [obj]);
 				}
+			}
+
+			// Fire global custom event -- completeEvent
+			oConn.uploadEvent.fire(obj);
+
+			if(o.uploadEvent){
+				// Fire transaction custom event -- completeEvent
+				o.uploadEvent.fire(obj);
 			}
 
 			if(YAHOO.util.Event){
@@ -1184,6 +1201,7 @@ YAHOO.util.Connect =
 			setTimeout(
 				function(){
 					document.body.removeChild(io);
+					oConn.releaseObject(o);
 				}, 100);
 		};
 
@@ -1230,7 +1248,7 @@ YAHOO.util.Connect =
 				abortStatus = true;
 			}
 		}
-		else if(typeof o.tId == 'number'){
+		else if(o.isUpload === true){
 			var frameId = 'yuiIO' + o.tId;
 			var io = document.getElementById(frameId);
 
@@ -1259,14 +1277,6 @@ YAHOO.util.Connect =
 				o.abortEvent.fire(o);
 			}
 
-			// Fire global custom event -- completeEvent
-			this.completeEvent.fire(o);
-
-			if(o.completeEvent){
-				// Fire transaction custom event -- completeEvent
-				o.completeEvent.fire(o);
-			}
-
 			this.handleTransactionResponse(o, callback, true);
 		}
 		else{
@@ -1288,11 +1298,14 @@ YAHOO.util.Connect =
 	{
 		// if the XHR object assigned to the transaction has not been dereferenced,
 		// then check its readyState status.  Otherwise, return false.
-		if(o.conn){
+		if(o && o.conn){
 			return o.conn.readyState !== 4 && o.conn.readyState !== 0;
 		}
+		else if(o && o.isUpload === true){
+			var frameId = 'yuiIO' + o.tId;
+			return document.getElementById(frameId)?true:false;
+		}
 		else{
-			//The XHR object has been destroyed.
 			return false;
 		}
 	},
