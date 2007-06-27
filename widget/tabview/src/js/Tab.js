@@ -87,6 +87,8 @@
      * @type object
      */
     proto.loadHandler = null;
+
+    proto._loading = false;
     
     /**
      * Provides a readable name for the tab.
@@ -314,8 +316,8 @@
                     this.get('contentEl').style.display = 'block';
                     
                     if ( this.get('dataSrc') ) {
-                     // load dynamic content unless already loaded and caching
-                        if ( !this.get('dataLoaded') || !this.get('cacheData') ) {
+                     // load dynamic content unless already loading or loaded and caching
+                        if ( !this._loading && !(this.get('dataLoaded') && this.get('cacheData')) ) {
                             _dataConnect.call(this);
                         }
                     }
@@ -384,7 +386,7 @@
         }
 
         Dom.addClass(this.get('contentEl').parentNode, this.LOADING_CLASSNAME);
-        
+        this._loading = true; 
         this.dataConnection = YAHOO.util.Connect.asyncRequest(
             this.get('loadMethod'),
             this.get('dataSrc'), 
@@ -395,12 +397,14 @@
                     this.dataConnection = null;
                     Dom.removeClass(this.get('contentEl').parentNode,
                             this.LOADING_CLASSNAME);
+                    this._loading = false;
                 },
                 failure: function(o) {
                     this.loadHandler.failure.call(this, o);
                     this.dataConnection = null;
                     Dom.removeClass(this.get('contentEl').parentNode,
                             this.LOADING_CLASSNAME);
+                    this._loading = false;
                 },
                 scope: this,
                 timeout: this.get('dataTimeout')
