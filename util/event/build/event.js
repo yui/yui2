@@ -1406,9 +1406,9 @@ if (!YAHOO.util.Event) {
 
                     // Remove the listener to assist with the IE memory issue, but not
                     // for other browsers because FF 1.0x does not like it.
-                    if (this.isIE) {
-                        EU._simpleRemove(window, "load", EU._load);
-                    }
+                    //if (this.isIE) {
+                        //EU._simpleRemove(window, "load", EU._load);
+                    //}
                 }
             },
 
@@ -1445,7 +1445,6 @@ if (!YAHOO.util.Event) {
                 if (this.locked) {
                     return false;
                 }
-
 
                 if (this.isIE && !DOMReady) {
                     return false;
@@ -1797,7 +1796,7 @@ if (!YAHOO.util.Event) {
                     YAHOO.util.Event, true);
 
             document.write(
-'<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"></script>');
+'<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"><' + '/script>');
         
             var el = document.getElementById("_yui_eu_dr");
             if (el) {
