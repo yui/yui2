@@ -1,0 +1,55 @@
+.yui-calcontainer {
+	position:relative;
+	float:left;
+	overflow:hidden;
+}
+
+.yui-calcontainer iframe {
+	position:absolute;
+	border:none;
+	margin:0;padding:0;
+	left:-1px;
+	top:-1px;
+	z-index:0;
+	width:50em;
+	height:50em;
+}
+
+.yui-calcontainer.multi .groupcal {
+	z-index:1;
+	float:left;
+	position:relative;
+}
+
+.yui-calcontainer .title {
+	position:relative;
+	z-index:1;
+}
+
+.yui-calcontainer .close-icon {
+	position:absolute;
+	z-index:1;
+}
+
+.yui-calendar {
+	position:relative;
+}
+
+.yui-calendar .calnavleft {
+	position:absolute;
+	z-index:1;
+}
+
+.yui-calendar .calnavright {
+	position:absolute;
+	z-index:1;
+}
+
+.yui-calendar .calheader {
+	position:relative;
+	width:100%;
+}
+
+/* Specific changes for calendar running under fonts/reset */
+.yui-calendar .calbody a:hover {background:inherit;}
+p#clear {clear:left; padding-top:10px;}
