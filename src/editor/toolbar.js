@@ -4,7 +4,6 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
 /**
- * @module toolbar
  * @description <p>Toolbar description goes here</p>
  * @class Toolbar
  * @namespace YAHOO.widget
@@ -112,13 +111,13 @@ var Dom = YAHOO.util.Dom,
         /** 
         * @property dd
         * @description The DragDrop instance associated with the Toolbar
-        * @type {Object}
+        * @type Object
         */
         dd: null,
         /** 
         * @property _colorData
         * @description Object reference containing colors hex and text values.
-        * @type {Object}
+        * @type Object
         */
         _colorData: {
 /* {{{ _colorData */
@@ -271,83 +270,89 @@ var Dom = YAHOO.util.Dom,
         /** 
         * @property _colorPicker
         * @description The HTML Element containing the colorPicker
-        * @type {HTMLElement}
+        * @type HTMLElement
         */
         _colorPicker: null,
         /** 
-        * @property STRING_SPIN_LABEL
+        * @property STR_COLLAPSE
+        * @description String for Toolbar Collapse Button
+        * @type String
+        */
+        STR_COLLAPSE: 'Collapse Toolbar',
+        /** 
+        * @property STR_SPIN_LABEL
         * @description String for spinbutton dynamic label. Note the {VALUE} will be replaced with YAHOO.lang.substitute
-        * @type {String}
+        * @type String
         */
-        STRING_SPIN_LABEL: 'Spin Button with value {VALUE}. Use Control Shift Up Arrow and Control Shift Down arrow keys to increase or decrease the value.',
+        STR_SPIN_LABEL: 'Spin Button with value {VALUE}. Use Control Shift Up Arrow and Control Shift Down arrow keys to increase or decrease the value.',
         /** 
-        * @property STRING_SPIN_UP
+        * @property STR_SPIN_UP
         * @description String for spinbutton up
-        * @type {String}
+        * @type String
         */
-        STRING_SPIN_UP: 'Click to increase the value of this input',
+        STR_SPIN_UP: 'Click to increase the value of this input',
         /** 
-        * @property STRING_SPIN_DOWN
+        * @property STR_SPIN_DOWN
         * @description String for spinbutton down
-        * @type {String}
+        * @type String
         */
-        STRING_SPIN_DOWN: 'Click to decrease the value of this input',
+        STR_SPIN_DOWN: 'Click to decrease the value of this input',
         /** 
         * @property _titlebar
         * @description Object reference to the titlebar
-        * @type {HTMLElement}
+        * @type HTMLElement
         */
         _titlebar: null,
         /** 
         * @property _disabled
         * @description Object to track button status when enabling/disabling the toolbar
-        * @type {Object}
+        * @type Object
         */
         _disabled: null,
         /** 
         * @property browser
         * @description Standard browser detection
-        * @type {Object}
+        * @type Object
         */
         browser: YAHOO.env.ua,
         /**
         * @protected
         * @property _buttonList
         * @description Internal property list of current buttons in the toolbar
-        * @type {Array}
+        * @type Array
         */
         _buttonList: null,
         /**
         * @protected
         * @property _buttonGroupList
         * @description Internal property list of current button groups in the toolbar
-        * @type {Array}
+        * @type Array
         */
         _buttonGroupList: null,
         /**
         * @protected
         * @property _sep
         * @description Internal reference to the seperator HTML Element for cloning
-        * @type {HTMLElement}
+        * @type HTMLElement
         */
         _sep: null,
         /**
         * @protected
         * @property _sepCount
         * @description Internal refernce for counting seperators, so we can give them a useful class name for styling
-        * @type {Number}
+        * @type Number
         */
         _sepCount: null,
         /**
         * @protected
         * @property draghandle
-        * @type {HTMLElement}
+        * @type HTMLElement
         */
         _dragHandle: null,
         /**
         * @protected
         * @property _toolbarConfigs
-        * @type {Object}
+        * @type Object
         */
         _toolbarConfigs: {
             renderer: true
@@ -356,35 +361,35 @@ var Dom = YAHOO.util.Dom,
         * @protected
         * @property CLASS_CONTAINER
         * @description Default CSS class to apply to the toolbar container element
-        * @type {String}
+        * @type String
         */
         CLASS_CONTAINER: 'yui-toolbar-container',
         /**
         * @protected
         * @property CLASS_DRAGHANDLE
         * @description Default CSS class to apply to the toolbar's drag handle element
-        * @type {String}
+        * @type String
         */
         CLASS_DRAGHANDLE: 'yui-toolbar-draghandle',
         /**
         * @protected
         * @property CLASS_SEPARATOR
         * @description Default CSS class to apply to all seperators in the toolbar
-        * @type {String}
+        * @type String
         */
         CLASS_SEPARATOR: 'yui-toolbar-separator',
         /**
         * @protected
         * @property CLASS_DISABLED
         * @description Default CSS class to apply when the toolbar is disabled
-        * @type {String}
+        * @type String
         */
         CLASS_DISABLED: 'yui-toolbar-disabled',
         /**
         * @protected
         * @property CLASS_PREFIX
         * @description Default prefix for dynamically created class names
-        * @type {String}
+        * @type String
         */
         CLASS_PREFIX: 'yui-toolbar',
         /** 
@@ -513,6 +518,16 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
+            * @config collapse
+            * @description Boolean indicating if the the titlebar should have a collapse button.
+            * The collapse button will not remove the toolbar, it will minimize it to the titlebar
+            * @default false
+            * @type Boolean
+            */
+            this.setAttributeConfig('collapse', {
+                value: false
+            });
+            /**
             * @config titlebar
             * @description Boolean indicating if the toolbar should have a titlebar. If
             * passed a string, it will use that as the titlebar text
@@ -537,6 +552,8 @@ var Dom = YAHOO.util.Dom,
                         if (this.get('collapse')) {
                             var collapse = document.createElement('SPAN');
                             collapse.innerHTML = 'X';
+                            collapse.title = this.STR_COLLAPSE;
+
                             Dom.addClass(collapse, 'collapse');
                             this._titlebar.appendChild(collapse);
                             Event.addListener(collapse, 'click', function() {
@@ -569,19 +586,6 @@ var Dom = YAHOO.util.Dom,
                 }
             });
 
-            /**
-            * @config collapse
-            * @description Boolean indicating if the the titlebar should have a collapse button.
-            * The collapse button will not remove the toolbar, it will minimize it to the titlebar
-            * @default false
-            * @type Boolean
-            */
-            this.setAttributeConfig('collapse', {
-                value: false,
-                validator: function() {
-                    return (!this.get('titlebar'));
-                }
-            });
 
             /**
             * @config draggable
@@ -612,7 +616,7 @@ var Dom = YAHOO.util.Dom,
                             /**
                             * @property dd
                             * @description The DragDrop instance associated with the Toolbar
-                            * @type {Object}
+                            * @type Object
                             */
                             this.dd = new YAHOO.util.DD(this.get('id'));
                             this.dd.setHandleElId(this._dragHandle.id);
@@ -1062,17 +1066,17 @@ var Dom = YAHOO.util.Dom,
             
             //Setup the up and down arrows
             _b1.className = 'up';
-            _b1.title = this.STRING_SPIN_UP;
-            _b1.innerHTML = this.STRING_SPIN_UP;
+            _b1.title = this.STR_SPIN_UP;
+            _b1.innerHTML = this.STR_SPIN_UP;
             _b2.className = 'down';
-            _b2.title = this.STRING_SPIN_DOWN;
-            _b2.innerHTML = this.STRING_SPIN_DOWN;
+            _b2.title = this.STR_SPIN_DOWN;
+            _b2.innerHTML = this.STR_SPIN_DOWN;
 
             //Append them to the container
             _par.appendChild(_b1);
             _par.appendChild(_b2);
             
-            var label = YAHOO.lang.substitute(this.STRING_SPIN_LABEL, { VALUE: _button.get('label') });
+            var label = YAHOO.lang.substitute(this.STR_SPIN_LABEL, { VALUE: _button.get('label') });
             _button.set('title', label);
 
             var cleanVal = function(value) {
@@ -1083,7 +1087,7 @@ var Dom = YAHOO.util.Dom,
 
             var br = this.browser;
             var tbar = false;
-            var strLabel = this.STRING_SPIN_LABEL;
+            var strLabel = this.STR_SPIN_LABEL;
             if (this._titlebar && this._titlebar.firstChild) {
                 tbar = this._titlebar.firstChild;
             }

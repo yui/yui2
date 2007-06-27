@@ -30,27 +30,14 @@
 }
 
 .yui-toolbar-container .yui-toolbar-titlebar {
-    background-color: #999;
     position: relative;
 }
 
 .yui-toolbar-container .yui-toolbar-titlebar h2 {
     font-weight: bold;
-    color: white;
+    color: #000;
     margin: 0;
-    padding-left: .1em;
-}
-.yui-toolbar-container .yui-toolbar-titlebar span.collapse {
-    cursor: pointer;
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    display: block;
-    overflow: hidden;
-    height: 12px;
-    width: 12px;
-    text-indent: 9999px;
-    background-image: url( close.gif );
+    padding: .2em;
 }
 .yui-toolbar-container.yui-toolbar-grouped span.yui-toolbar-draghandle {
     height: 40px;
@@ -103,6 +90,7 @@
     float: left;
     margin: 0 .15em;
     position: relative;
+    filter: none; /* UNDO Button filter..*/
 }
 
 .yui-toolbar-container .yui-button span.yui-toolbar-icon {
@@ -112,7 +100,7 @@
     height: 18px;
     width: 18px;
     overflow: hidden;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
     background-repeat: no-repeat;
     background-position: 30px 30px;
 }
@@ -121,15 +109,12 @@
     margin: 0;
     border: 0;
     display: block;
-    text-indent: 50px;
+    text-indent: 50px !important; /* IE Fix */
     height: 19px;
     width: 200px;
+    overflow:hidden;
 }
 
-.yui-toolbar-container .yui-button.selected {
-    background-color:#98D5FC;
-    border-color:#406FAC;
-}
 .yui-toolbar-container .yui-button-disabled {
     opacity: .5;
     filter: alpha(opacity=50);
@@ -162,17 +147,12 @@
     cursor: default;
 }
 
-.yui-toolbar-container .yui-button-hover {
-    background-color: #98D5FC;
-    border-color: #406FAC;
-}
 
 .yui-toolbar-container .yui-button.ie6.hover {
-    /* Not sure why I have to do this */
     background-color: #98D5FC !important;
 }
 
-/* Select Box Emulation */
+/* Select Button Emulation */
 .yui-toolbar-container .yui-toolbar-select {
     height: 20px;
     width: auto;
@@ -196,14 +176,17 @@
     height: 19px;
     width: 100%;
     text-align: left;
-    text-indent: 0;
     cursor: pointer;
     opacity: 1;
     filter: none;
 }
-.yui-toolbar-container .yui-toolbar-select.yui-button .first-child a {
-    text-indent: 3px;
+.yui-toolbar-container .yui-toolbar-select .first-child {
+    width: 100% !important; /* For IE */
+}
+.yui-toolbar-container .yui-toolbar-select .first-child a {
+    text-indent: 3px !important;
     padding-top: 2px;
+    width: 100% !important; /* For IE */
 }
 
 .yui-toolbar-container .yui-toolbar-select.yui-button-disabled a {
@@ -249,14 +232,14 @@
 
 .yui-toolbar-container .yui-toolbar-spinbutton {
     position: relative;
-    width: 40px;
+    width: 35px;
 }
 
 
-.yui-toolbar-container .yui-toolbar-spinbutton.yui-button .first-child {
-    width: 40px;
+.yui-toolbar-container .yui-toolbar-spinbutton .first-child {
+    width: 35px;
 }
-.yui-toolbar-container .yui-toolbar-spinbutton.yui-button .first-child a {
+.yui-toolbar-container .yui-toolbar-spinbutton .first-child a {
     border: none;
     background-color: transparent;
     background-image: none;
@@ -265,7 +248,7 @@
     height: 20px;
     padding: 2px;
     text-align: left;
-    text-indent: 2px;
+    text-indent: 2px !important;
     z-index: 0;
     opacity: 1;
     filter: none;
@@ -284,7 +267,7 @@
 .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
     top: -1px;
     right: 0;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
     background-position: -72px -32px;
     overflow: hidden;
     height: 8px;
@@ -293,7 +276,7 @@
 .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
     bottom: -1px;
     right: 0;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
     background-position: -54px -35px;
     overflow: hidden;
     height: 8px;
@@ -316,8 +299,7 @@
     width: 133px;
     zoom: 1;
     display: none;
-    background-color: #F6F7EE;
-    border: 1px solid #999;
+    border: 1px solid #6D6D6D;
     z-index: 100;
 }
 
@@ -344,12 +326,13 @@
     padding: 3px;
     overflow: hidden;
     float: left;
+    width: 100%;
     zoom: 1;
 }
 .yui-toolbar-colors span:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
 
 .yui-toolbar-colors span em {
-    height: 30px;
+    height: 35px;
     width: 30px;
     float: left;
     display: block;
@@ -363,6 +346,8 @@
     padding-left: 3px;
     display: block;
     font-size: 85%;
+    float: left;
+    width: 65%;
 }
 
 .yui-toolbar-container {
@@ -370,7 +355,7 @@
 }
 
 .yui-editor-container .yui-editor-editable-container {
-    border: 1px solid #999999;
+    border: 1px solid #6D6D6D;
     border-top: none;
     position: relative;
     z-index: 0;
@@ -401,49 +386,73 @@
 }
 
 .yui-editor-panel {
-    /*overflow: hidden;*/
 }
 .yui-editor-panel .hd {
-    padding: .25em 0 .25em .25em;
-    font-weight: bold;
     text-align: left;
     position: relative;
+}
+.yui-editor-panel .hd h3 {
+    font-weight: bold;
+    padding: 0.25em 0pt 0.25em 0.25em;
 }
 
 .yui-editor-panel .hd span.knob {
     position: absolute;
     height: 10px;
-    width: 18px;
+    width: 28px;
     top: -10px;
     left: 25px;
     text-indent: 9999px;
     overflow: hidden;
-    background-image: url( knob_up.png );
+    background-image: url( knob.png );
     background-repeat: no-repeat;
 }
 
-.yui-editor-panel .hd span.close {
-    display: block;
-    position: absolute;
-    height: 10px;
-    width: 10px;
-    border: 1px solid #999;
-    color: #999;
-    font-size: 9px;
-    top: 2px;
-    right: 5px;
-    cursor: pointer;
-}
 
 .yui-editor-panel .bd {
-    /*height: 100%;*/
+    /*padding: .35em;*/
+    width: 100%;
+    zoom: 1;
 }
+.yui-editor-panel .bd div.yui-editor-body-cont {
+    padding: .25em .1em;
+    zoom: 1;
+}
+
+.yui-editor-panel .bd div.yui-editor-body-cont:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
 
 .yui-editor-panel .ft {
     text-align: right;
     width: 99%;
     float: left;
     clear: both;
+}
+
+.yui-editor-panel .ft span.tip {
+    display: block;
+    position: relative;
+    font-size:85%;
+    padding-left:23px;
+    text-align:left;
+    margin: .5em;
+    zoom: 1;
+}
+
+.yui-editor-panel .ft span.tip span.icon {
+    background-image: url( sprite.gif );
+    background-position: -84px -32px;
+    display: block;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 20px;
+}
+.yui-editor-panel .ft span.tip span.icon-info {
+    background-position:-84px -32px;
+}
+.yui-editor-panel .ft span.tip span.icon-warn {
+    background-position:-106px -32px;
 }
 
 .yui-editor-panel label {
@@ -492,6 +501,20 @@
     padding-top: 5px;
 }
 
+.yui-editor-panel .yui-toolbar-group-padding {
+    width: 100px;
+}
+
+.yui-editor-panel .yui-toolbar-group-border {
+    width: 175px;
+    *width: 190px;
+}
+
+.yui-editor-panel .yui-toolbar-group-textflow {
+    width: 150px;
+    *width: 180px;
+}
+
 .yui-editor-panel .height-width {
     float: left;
     width: 68%;
@@ -528,69 +551,85 @@
 
 
 
-.yui-editor-panel .yui-toolbar-bordertype span button span.yui-toolbar-bordertype-solid {
+.yui-editor-panel .yui-toolbar-bordertype span a span.yui-toolbar-bordertype-solid {
     border-bottom: 1px solid black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
-.yui-editor-panel .yui-toolbar-bordertype span button span.yui-toolbar-bordertype-dotted {
+.yui-editor-panel .yui-toolbar-bordertype span a span.yui-toolbar-bordertype-dotted {
     border-bottom: 1px dotted black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
-.yui-editor-panel .yui-toolbar-bordertype span button span.yui-toolbar-bordertype-dashed {
+.yui-editor-panel .yui-toolbar-bordertype span a span.yui-toolbar-bordertype-dashed {
     border-bottom: 1px dashed black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
-.yui-editor-panel .yui-toolbar-bordersize span button span.yui-toolbar-bordersize-1 {
+.yui-editor-panel .yui-toolbar-bordersize span a span.yui-toolbar-bordersize-1 {
     border-bottom: 1px solid black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
-.yui-editor-panel .yui-toolbar-bordersize span button span.yui-toolbar-bordersize-2 {
+.yui-editor-panel .yui-toolbar-bordersize span a span.yui-toolbar-bordersize-2 {
     border-bottom: 2px solid black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
-.yui-editor-panel .yui-toolbar-bordersize span button span.yui-toolbar-bordersize-3 {
+.yui-editor-panel .yui-toolbar-bordersize span a span.yui-toolbar-bordersize-3 {
     border-bottom: 3px solid black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
-.yui-editor-panel .yui-toolbar-bordersize span button span.yui-toolbar-bordersize-4 {
+.yui-editor-panel .yui-toolbar-bordersize span a span.yui-toolbar-bordersize-4 {
     border-bottom: 4px solid black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
-.yui-editor-panel .yui-toolbar-bordersize span button span.yui-toolbar-bordersize-5 {
+.yui-editor-panel .yui-toolbar-bordersize span a span.yui-toolbar-bordersize-5 {
     border-bottom: 5px solid black;
     text-indent: 777px;
     overflow: hidden;
     display: block;
     width: 22px;
-    height: 1px;
+    height: 8px;
+    position: absolute;
+    left: 2px;
 }
 
 .yui-toolbar-bordersize-menu div.yuimenu li.yuimenuitem.yui-toolbar-bordersize-0 a {
@@ -601,48 +640,56 @@ div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-1 
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-2 a {
     border-bottom: 2px solid black;
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-3 a {
     border-bottom: 3px solid black;
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-4 a {
     border-bottom: 4px solid black;
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-5 a {
     border-bottom: 5px solid black;
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-solid a {
     border-bottom: 1px solid black;
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-dashed a {
     border-bottom: 1px dashed black;
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-dotted a {
     border-bottom: 1px dotted black;
     text-indent: 777px;
     overflow: hidden;
     width: 30px;
+    display: block;
 }
 
 h2.yui-editor-skipheader {
@@ -750,24 +797,25 @@ h2.yui-editor-skipheader {
     background-position: -252px 0;
     left: 0;
 }
+/* TODO
 .yui-toolbar-insertorderedlist-menu .yui-toolbar-insertorderedlist-1 a {
     background-position: -252px 0;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
 }
 .yui-toolbar-insertorderedlist-menu .yui-toolbar-insertorderedlist-A a {
     background-position: -270px 0;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
 }
 .yui-toolbar-insertorderedlist-menu .yui-toolbar-insertorderedlist-a a {
     background-position: -288px 0;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
 }
 .yui-toolbar-insertorderedlist-menu .yui-toolbar-insertorderedlist-I a {
     background-position: -306px 0;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
 }
 .yui-toolbar-insertorderedlist-menu .yui-toolbar-insertorderedlist-i a {
     background-position: -324px 0;
-    background-image: url( sprite.png );
+    background-image: url( sprite.gif );
 }
-
+*/

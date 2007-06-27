@@ -1,0 +1,77 @@
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar {
+    background: url(skin1-sprite.png) repeat-x 0 -200px;
+}
+
+.yui-skin-sam .yui-toolbar-container {
+    background-color: #EFEFEF;
+}
+
+.yui-skin-sam .yui-editor-container .dompath {
+    background-color: #EFEFEF;
+}
+
+.yui-skin-sam .yui-toolbar-container .collapse {
+    background: url(skin1-sprite.png) no-repeat 0 -400px;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar span.collapse {
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    display: block;
+    overflow: hidden;
+    height: 15px;
+    width: 15px;
+    text-indent: 9999px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-button {
+    background:url(skin1-sprite.png) repeat-x 0 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-button-hover {
+    background:url(skin1-sprite.png) repeat-x 0 -1300px;
+    border-color: #999;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-button.selected {
+    background:url(skin1-sprite.png) no-repeat 0 -1700px;
+    border-color: #999;
+}
+
+
+.yui-skin-sam .yui-toolbar-container .yui-button.selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {
+    background-image: url(sprite_active.gif);
+}
+
+.yui-skin-sam .yui-editor-panel {
+    background-color: #EFEFEF;
+}
+
+.yui-skin-sam .yui-editor-panel .hd {
+    background: url(skin1-sprite.png) repeat-x 0 -200px;
+}
+
+.yui-skin-sam .yui-editor-panel .hd span.close {
+    background:url(skin1-sprite.png) no-repeat 0 -300px;
+    cursor:pointer;
+    display:block;
+    height:16px;
+    overflow:hidden;
+    position:absolute;
+    right:5px;
+    text-indent:500px;
+    top:2px;
+    width:26px;
+}
+
+.yui-skin-sam .yui-button-menu {
+    background-color: #EFEFEF;
+}
+
+.yui-skin-sam div.yuimenu li.selected {
+    background-color: #A3C9FF;
+}
+.yui-skin-sam div.yuimenu li.selected a.selected {
+    color: #000;
+}
