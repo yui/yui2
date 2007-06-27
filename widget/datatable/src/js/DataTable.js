@@ -4355,7 +4355,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
 
         // Apply special formatter
         if(fnFormatter) {
-            fnFormatter(elCell, oRecord, oColumn, oData);
+            fnFormatter.call(this, elCell, oRecord, oColumn, oData);
         }
         else {
             elCell.innerHTML = (YAHOO.lang.isValue(oData)) ? oData.toString() : "";
@@ -4394,21 +4394,21 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
  * Formats a BUTTON element.
  *
  * @method DataTable.formatButton
- * @param elCell {HTMLElement} Table cell element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object | Boolean} Data value for the cell. By default, the value
  * is what gets written to the BUTTON.
  * @static
  */
-YAHOO.widget.DataTable.formatButton= function(elCell, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatButton= function(el, oRecord, oColumn, oData) {
     var sValue = YAHOO.lang.isValue(oData) ? oData : "Click";
     //TODO: support YAHOO.widget.Button
     //if(YAHOO.widget.Button) {
     
     //}
     //else {
-        elCell.innerHTML = "<button type=\"button\" class=\""+
+        el.innerHTML = "<button type=\"button\" class=\""+
                 YAHOO.widget.DataTable.CLASS_BUTTON + "\">" + sValue + "</button>";
     //}
 };
@@ -4417,7 +4417,7 @@ YAHOO.widget.DataTable.formatButton= function(elCell, oRecord, oColumn, oData) {
  * Formats a CHECKBOX element.
  *
  * @method DataTable.formatCheckbox
- * @param elCell {HTMLElement} Table cell element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object | Boolean} Data value for the cell. Can be a simple
@@ -4426,10 +4426,10 @@ YAHOO.widget.DataTable.formatButton= function(elCell, oRecord, oColumn, oData) {
  * formatter.
  * @static
  */
-YAHOO.widget.DataTable.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatCheckbox = function(el, oRecord, oColumn, oData) {
     var bChecked = oData;
     bChecked = (bChecked) ? " checked" : "";
-    elCell.innerHTML = "<input type=\"checkbox\"" + bChecked +
+    el.innerHTML = "<input type=\"checkbox\"" + bChecked +
             " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
 };
 
@@ -4437,13 +4437,13 @@ YAHOO.widget.DataTable.formatCheckbox = function(elCell, oRecord, oColumn, oData
  * Formats currency. Default unit is USD.
  *
  * @method DataTable.formatCurrency
- * @param elCell {HTMLElement} Table cell element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Number} Data value for the cell.
  * @static
  */
-YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatCurrency = function(el, oRecord, oColumn, oData) {
     if(YAHOO.lang.isNumber(oData)) {
         var nAmount = oData;
         var markup;
@@ -4464,10 +4464,10 @@ YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData
                 markup += "0";
             }
         }
-        elCell.innerHTML = markup;
+        el.innerHTML = markup;
     }
     else {
-        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
+        el.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4475,19 +4475,19 @@ YAHOO.widget.DataTable.formatCurrency = function(elCell, oRecord, oColumn, oData
  * Formats JavaScript Dates.
  *
  * @method DataTable.formatDate
- * @param elCell {HTMLElement} Table cell element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null.
  * @static
  */
-YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatDate = function(el, oRecord, oColumn, oData) {
     var oDate = oData;
     if(oDate instanceof Date) {
-        elCell.innerHTML = (oDate.getMonth()+1) + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
+        el.innerHTML = (oDate.getMonth()+1) + "/" + oDate.getDate()  + "/" + oDate.getFullYear();
     }
     else {
-        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
+        el.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4495,7 +4495,7 @@ YAHOO.widget.DataTable.formatDate = function(elCell, oRecord, oColumn, oData) {
  * Formats SELECT elements.
  *
  * @method DataTable.formatDropdown
- * @param el {HTMLElement} The element to format.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} Data value for the cell, or null.
@@ -4555,18 +4555,18 @@ YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oData) {
  * Formats emails.
  *
  * @method DataTable.formatEmail
- * @param elCell {HTMLElement} Table cell element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oData {Object} Data value for the cell, or null
+ * @param oData {Object} Data value for the cell, or null.
  * @static
  */
-YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatEmail = function(el, oRecord, oColumn, oData) {
     if(YAHOO.lang.isString(oData)) {
-        elCell.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
+        el.innerHTML = "<a href=\"mailto:" + oData + "\">" + oData + "</a>";
     }
     else {
-        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
+        el.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4574,18 +4574,18 @@ YAHOO.widget.DataTable.formatEmail = function(elCell, oRecord, oColumn, oData) {
  * Formats links.
  *
  * @method DataTable.formatLink
- * @param elCell {HTMLElement} Table cell element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oData {Object} Data value for the cell, or null
+ * @param oData {Object} Data value for the cell, or null.
  * @static
  */
-YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatLink = function(el, oRecord, oColumn, oData) {
     if(YAHOO.lang.isString(oData)) {
-        elCell.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
+        el.innerHTML = "<a href=\"" + oData + "\">" + oData + "</a>";
     }
     else {
-        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
+        el.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
@@ -4593,25 +4593,35 @@ YAHOO.widget.DataTable.formatLink = function(elCell, oRecord, oColumn, oData) {
  * Formats numbers.
  *
  * @method DataTable.formatNumber
- * @param elCell {HTMLElement} Table cell element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param oData {Object} Data value for the cell, or null
+ * @param oData {Object} Data value for the cell, or null.
  * @static
  */
-YAHOO.widget.DataTable.formatNumber = function(elCell, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatNumber = function(el, oRecord, oColumn, oData) {
     if(YAHOO.lang.isNumber(oData)) {
-        elCell.innerHTML = oData;
+        el.innerHTML = oData;
     }
     else {
-        elCell.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
+        el.innerHTML = YAHOO.lang.isValue(oData) ? oData : "";
     }
 };
 
-YAHOO.widget.DataTable.formatRadio = function(elCell, oRecord, oColumn, oData) {
+/**
+ * Formats INPUT TYPE=RADIO elements.
+ *
+ * @method DataTable.formatRadio
+ * @param el {HTMLElement} The element to format with markup.
+ * @param oRecord {YAHOO.widget.Record} Record instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oData {Object} (Optional) Data value for the cell.
+ * @static
+ */
+YAHOO.widget.DataTable.formatRadio = function(el, oRecord, oColumn, oData) {
     var bChecked = oData;
     bChecked = (bChecked) ? " checked" : "";
-    elCell.innerHTML = "<input type=\"radio\"" + bChecked +
+    el.innerHTML = "<input type=\"radio\"" + bChecked +
             " name=\"" + oColumn.getId() + "-radio\"" +
             " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
 };
@@ -4620,51 +4630,51 @@ YAHOO.widget.DataTable.formatRadio = function(elCell, oRecord, oColumn, oData) {
  * Formats text strings.
  *
  * @method DataTable.formatText
- * @param elContainer {HTMLElement} Container element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} (Optional) Data value for the cell.
  * @static
  */
-YAHOO.widget.DataTable.formatText = function(elContainer, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatText = function(el, oRecord, oColumn, oData) {
     var value = (YAHOO.lang.isValue(oRecord.getData(oColumn.key))) ?
             oRecord.getData(oColumn.key) : "";
     //TODO: move to util function
-    elContainer.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
+    el.innerHTML = value.toString().replace(/&/g, "&#38;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
 };
 
 /**
  * Formats TEXTAREA elements.
  *
  * @method DataTable.formatTextarea
- * @param elContainer {HTMLElement} Container element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} (Optional) Data value for the cell.
  * @static
  */
-YAHOO.widget.DataTable.formatTextarea = function(elContainer, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatTextarea = function(el, oRecord, oColumn, oData) {
     var value = (YAHOO.lang.isValue(oRecord.getData(oColumn.key))) ?
             oRecord.getData(oColumn.key) : "";
     var markup = "<textarea>" + value + "</textarea>";
-    elContainer.innerHTML = markup;
+    el.innerHTML = markup;
 };
 
 /**
  * Formats INPUT TYPE=TEXT elements.
  *
  * @method DataTable.formatTextbox
- * @param elContainer {HTMLElement} Container element.
+ * @param el {HTMLElement} The element to format with markup.
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oData {Object} (Optional) Data value for the cell.
  * @static
  */
-YAHOO.widget.DataTable.formatTextbox = function(elContainer, oRecord, oColumn, oData) {
+YAHOO.widget.DataTable.formatTextbox = function(el, oRecord, oColumn, oData) {
     var value = (YAHOO.lang.isValue(oRecord.getData(oColumn.key))) ?
             oRecord.getData(oColumn.key) : "";
     var markup = "<input type=\"text\" value=\"" + value + "\">";
-    elContainer.innerHTML = markup;
+    el.innerHTML = markup;
 };
 
 
@@ -5597,7 +5607,7 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
         if(this._oCellEditor.validator) {
             var newData = this._oCellEditor.value;
             var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
-            this._oCellEditor.value = this._oCellEditor.validator(newData, oldData);
+            this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData);
             if(this._oCellEditor.value === null ) {
                 this.resetCellEditor();
                 this.fireEvent("editorRevertEvent",
@@ -5893,10 +5903,13 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
 };
 
 /*
- * Validates Editor input value for type Number. If input value does not
- * validate, the old value is returned.
+ * Validates Editor input value to type Number, doing type conversion as
+ * necessary. A valid Number value is return, else the previous value is returned
+ * if input value does not validate.
+ * 
  *
  * @method validateNumber
+ * @static
 */
 YAHOO.widget.DataTable.validateNumber = function(oData) {
     //Convert to number
@@ -5907,7 +5920,7 @@ YAHOO.widget.DataTable.validateNumber = function(oData) {
         return number;
     }
     else {
-        YAHOO.log("Could not validate data " + YAHOO.lang.dump(oData) + " to type Number", "warn", "YAHOO.widget.DataTable.validateNumber");
+        YAHOO.log("Could not validate data " + YAHOO.lang.dump(oData) + " to type Number", "warn", this.toString());
         return null;
     }
 };

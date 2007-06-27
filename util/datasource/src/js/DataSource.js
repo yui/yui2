@@ -36,7 +36,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
             }
         }
     }
-
+    
     if(!oLiveData) {
         YAHOO.log("Could not instantiate DataSource due to invalid live database",
                 "error", this.toString());
@@ -400,7 +400,7 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
  * <dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
  * <dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
  * <dt>fields</dt> <dd>Array of field names (aka keys), or array of object literals
- * such as: {key:"fieldname",converter:YAHOO.util.DataSource.convertDate}</dd>
+ * such as: {key:"fieldname",parser:YAHOO.util.DataSource.parseDate}</dd>
  * </dl>
  *
  * @property responseSchema
@@ -476,13 +476,13 @@ YAHOO.util.DataSource.prototype.connTimeout = 0;
 /**
  * Converts data to type String.
  *
- * @method DataSource.convertToString
- * @param oData {String | Number | Boolean | Date | Array | Object} Data to convert.
+ * @method DataSource.parseString
+ * @param oData {String | Number | Boolean | Date | Array | Object} Data to parse.
  * The special values null and undefined will return null.
  * @return {Number} A string, or null.
  * @static
  */
-YAHOO.util.DataSource.convertToString = function(oData) {
+YAHOO.util.DataSource.parseString = function(oData) {
     // Special case null and undefined
     if(!YAHOO.lang.isValue(oData)) {
         return null;
@@ -496,7 +496,7 @@ YAHOO.util.DataSource.convertToString = function(oData) {
         return string;
     }
     else {
-        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type String", "warn", "YAHOO.util.DataSource.convertToString");
+        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type String", "warn", this.toString());
         return null;
     }
 };
@@ -504,13 +504,13 @@ YAHOO.util.DataSource.convertToString = function(oData) {
 /**
  * Converts data to type Number.
  *
- * @method DataSource.convertToNumber
+ * @method DataSource.parseNumber
  * @param oData {String | Number | Boolean | Null} Data to convert. Beware, null
  * returns as 0.
  * @return {Number} A number, or null if NaN.
  * @static
  */
-YAHOO.util.DataSource.convertToNumber = function(oData) {
+YAHOO.util.DataSource.parseNumber = function(oData) {
     //Convert to number
     var number = oData * 1;
     
@@ -519,27 +519,27 @@ YAHOO.util.DataSource.convertToNumber = function(oData) {
         return number;
     }
     else {
-        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type Number", "warn", "YAHOO.util.DataSource.convertToNumber");
+        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type Number", "warn", this.toString());
         return null;
     }
 };
 // Backward compatibility
 YAHOO.util.DataSource.convertNumber = function(oData) {
     YAHOO.log("The method YAHOO.util.DataSource.convertNumber() has been" +
-    " deprecated in favor of YAHOO.util.DataSource.convertToNumber()", "warn",
-    "YAHOO.util.DataSource.convertNumber");
-    return YAHOO.util.DataSource.convertToNumber(oData);
+    " deprecated in favor of YAHOO.util.DataSource.parseNumber()", "warn",
+    this.toString());
+    return YAHOO.util.DataSource.parseNumber(oData);
 };
 
 /**
  * Converts data to type Date.
  *
- * @method DataSource.convertToDate
+ * @method DataSource.parseDate
  * @param oData {Date | String | Number} Data to convert.
  * @return {Date} A Date instance.
  * @static
  */
-YAHOO.util.DataSource.convertToDate = function(oData) {
+YAHOO.util.DataSource.parseDate = function(oData) {
     var date = null;
     
     //Convert to date
@@ -555,16 +555,16 @@ YAHOO.util.DataSource.convertToDate = function(oData) {
         return date;
     }
     else {
-        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type Date", "warn", "YAHOO.util.DataSource.convertToDate");
+        YAHOO.log("Could not convert data " + YAHOO.lang.dump(oData) + " to type Date", "warn", this.toString());
         return null;
     }
 };
 // Backward compatibility
 YAHOO.util.DataSource.convertDate = function(oData) {
     YAHOO.log("The method YAHOO.util.DataSource.convertDate() has been" +
-    " deprecated in favor of YAHOO.util.DataSource.convertToDate()", "warn",
-    "YAHOO.util.DataSource.convertDate");
-    return YAHOO.util.DataSource.convertToDate(oData);
+    " deprecated in favor of YAHOO.util.DataSource.parseDate()", "warn",
+    this.toString());
+    return YAHOO.util.DataSource.parseDate(oData);
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1046,8 +1046,14 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
                 var field = fields[j];
                 var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                 var data = (YAHOO.lang.isValue(oRawResponse[i][j])) ? oRawResponse[i][j] : oRawResponse[i][key];
-                if(field.converter) {
-                    data = field.converter(data);
+                // Backward compatibility
+                if(!field.parser && field.converter) {
+                    field.parser = field.converter;
+                    YAHOO.log("The field property converter has been deprecated" +
+                            " in favor of parser", "warn", this.toString());
+                }
+                if(field.parser) {
+                    data = field.parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
@@ -1111,8 +1117,14 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
                     }
                     var field = fields[j];
                     var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
-                    if(field.converter) {
-                        data = field.converter(data);
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                        YAHOO.log("The field property converter has been deprecated" +
+                                " in favor of parser", "warn", this.toString());
+                    }
+                    if(field.parser) {
+                        data = field.parser.call(this, data);
                     }
                     // Safety measure
                     if(data === undefined) {
@@ -1177,8 +1189,14 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
                                data = "";
                         }
                     }
-                    if(field.converter) {
-                        data = field.converter(data);
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                        YAHOO.log("The field property converter has been deprecated" +
+                                " in favor of parser", "warn", this.toString());
+                    }
+                    if(field.parser) {
+                        data = field.parser.call(this, data);
                     }
                     // Safety measure
                     if(data === undefined) {
@@ -1313,8 +1331,15 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                 // eval is necessary here since schema can be of unknown depth
                 var data = eval("jsonResult." + key);
                 //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
-                if(field.converter) {
-                    data = field.converter(data);
+                
+                // Backward compatibility
+                if(!field.parser && field.converter) {
+                    field.parser = field.converter;
+                    YAHOO.log("The field property converter has been deprecated" +
+                            " in favor of parser", "warn", this.toString());
+                }
+                if(field.parser) {
+                    data = field.parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
@@ -1364,8 +1389,15 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
                     var field = fields[k];
                     var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                     var data = elRow.cells[k].innerHTML;
-                    if(field.converter) {
-                        data = field.converter(data);
+
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                        YAHOO.log("The field property converter has been deprecated" +
+                                " in favor of parser", "warn", this.toString());
+                    }
+                    if(field.parser) {
+                        data = field.parser.call(this, data);
                     }
                     // Safety measure
                     if(data === undefined) {
