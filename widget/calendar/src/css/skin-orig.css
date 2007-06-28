@@ -35,7 +35,7 @@
 
 /* CLOSE BUTTON */
 .yui-skin-orig .yui-calcontainer .calclose {
-	background: url("calx.gif") no-repeat;
+	background: url(../../assets/skins/orig/calx.gif) no-repeat;
 	width:17px;
 	height:13px;
 	cursor:pointer;
@@ -80,7 +80,7 @@
 	width:9px;
 	height:12px;   
 	left:2px;
-	background: url("callt.gif") no-repeat;
+	background: url(../../assets/skins/orig/callt.gif) no-repeat;
 }
 
 /* NAVBAR RIGHT ARROW */
@@ -91,7 +91,7 @@
 	width:9px;
 	height:12px;
 	right:2px;
-	background: url("calrt.gif") no-repeat;
+	background: url(../../assets/skins/orig/calrt.gif) no-repeat;
 }
 
 /* WEEK NUMBERS (ROW HEADERS/FOOTERS) */

@@ -3,20 +3,21 @@
  *
  * Skin colors used:
  *
- * - Selected Cells (hover-light) : b3d4ff
- * - Cell Hover (hover-dark) : 426fd9
- * - Date Links : 0664ca
- * - Control Border : 6d6d6d
+ * - Control Border : 808080
  * - Control Chrome : f2f2f2
- * - Disabled BG/Border Color : cbcbcb
- * - Disabled Text Color : a4a4a4
+ * - Cell Borders : cccccc
  * - Normal Cell BG : ffffff
+ * - Date Links : 0066cc
+ * - Selected Cells BG : b3d4ff
+ * - Cell Hover BG : 426fd9
+ * - Disabled BG : cccccc
+ * - Disabled Text Color : a6a6a6
  **/
 
 /* CALENDAR BOUNDING BOX */
 .yui-skin-sam .yui-calcontainer {
 	background-color:#f2f2f2;
-	border:1px solid #6d6d6d;
+	border:1px solid #808080;
 	padding:10px;
 }
 
@@ -36,7 +37,7 @@
 /* TITLE BAR */
 .yui-skin-sam .yui-calcontainer .title {
 	background:url(../../assets/skins/sam/sprite.png) repeat-x 0 0;
-	border-bottom:1px solid #cbcbcb;
+	border-bottom:1px solid #cccccc;
 	font:100% sans-serif;
 	color:#000;
 	font-weight:bold;
@@ -64,13 +65,6 @@
 	top:.4em;
 	right:.4em;
 	cursor:pointer;
-}
-
-/* LEGACY CLOSE BUTTON IMG (deprecated) */
-.yui-skin-sam .yui-calcontainer .close-icon {
-	border:none;
-	right:3px;
-	top:3px;
 }
 
 /* CALENDAR TABLE */
@@ -144,7 +138,7 @@
 
 /* WEEK NUMBERS (ROW HEADERS/FOOTERS) */
 .yui-skin-sam .yui-calendar .calrowhead, .yui-skin-sam .yui-calendar .calrowfoot {
-	color:#a4a4a4;
+	color:#a6a6a6;
 	font-size:85%;
 	font-style:normal;
 	font-weight:normal;
@@ -162,7 +156,7 @@
 
 /* NORMAL CELLS */
 .yui-skin-sam .yui-calendar td.calcell {
-	border:1px solid #cbcbcb;
+	border:1px solid #cccccc;
 	background:#fff;
 	padding:1px;
 	height:1.6em;
@@ -171,7 +165,7 @@
 
 /* LINK INSIDE NORMAL CELLS */
 .yui-skin-sam .yui-calendar td.calcell a {
-	color:#0664ca;
+	color:#0066cc;
 	display:block;
 	height:100%;
 	line-height:1.6em; /* set line height equal to cell height to center vertically */
@@ -190,8 +184,8 @@
 
 /* OOM DATES */
 .yui-skin-sam .yui-calendar td.calcell.oom {
-	background-color:#cbcbcb;
-	color:#a4a4a4;
+	background-color:#cccccc;
+	color:#a6a6a6;
 	cursor:default;
 }
 
@@ -208,7 +202,6 @@
 
 /* HOVER DATE */
 .yui-skin-sam .yui-calendar td.calcell.calcellhover {
-	border:1px solid #cbcbcb;
 	background-color:#426fd9;
 	color:#fff;
 	cursor:pointer;
@@ -226,7 +219,7 @@
 
 /* CUSTOM RENDERERS */
 .yui-skin-sam .yui-calendar td.calcell.restricted { text-decoration:line-through; }
-.yui-skin-sam .yui-calendar td.calcell.highlight1 { background-color:#CCFF99; }
-.yui-skin-sam .yui-calendar td.calcell.highlight2 { background-color:#99CCFF; }
-.yui-skin-sam .yui-calendar td.calcell.highlight3 { background-color:#FFCCCC; }
-.yui-skin-sam .yui-calendar td.calcell.highlight4 { background-color:#CCFF99; }
+.yui-skin-sam .yui-calendar td.calcell.highlight1 { background-color:#ccff99; }
+.yui-skin-sam .yui-calendar td.calcell.highlight2 { background-color:#99ccff; }
+.yui-skin-sam .yui-calendar td.calcell.highlight3 { background-color:#ffcccc; }
+.yui-skin-sam .yui-calendar td.calcell.highlight4 { background-color:#ccff99; }
