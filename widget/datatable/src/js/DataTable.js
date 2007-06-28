@@ -4926,6 +4926,24 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
 // SELECTION/HIGHLIGHTING
 
 /**
+ * ID string of last highlighted cell element
+ *
+ * @property _sLastHighlightedCellId
+ * @type String
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._sLastHighlightedCellId = null;
+
+/**
+ * ID string of last highlighted row element
+ *
+ * @property _sLastHighlightedRowId
+ * @type String
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._sLastHighlightedRowId = null;
+
+/**
  * Array of selections: {recordId:nRecordId, cellIndex:nCellIndex}
  *
  * @property _aSelections
@@ -5312,8 +5330,13 @@ YAHOO.widget.DataTable.prototype.highlightRow = function(row) {
     var elRow = this.getTrEl(row);
 
     if(elRow) {
+        // Make sure previous row is unhighlighted
+        if(this._sLastHighlightedRowId) {
+            YAHOO.util.Dom.removeClass(this._sLastHighlightedRowId,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        }
         var oRecord = this.getRecord(elRow);
         YAHOO.util.Dom.addClass(elRow,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        this._sLastHighlightedRowId = elRow.id;
         this.fireEvent("rowHighlightEvent", {record:oRecord, el:elRow});
         YAHOO.log("Highlighted " + elRow, "info", this.toString());
         return;
@@ -5350,8 +5373,14 @@ YAHOO.widget.DataTable.prototype.highlightCell = function(cell) {
     var elCell = this.getTdEl(cell);
 
     if(elCell) {
+        // Make sure previous cell is unhighlighted
+        if(this._sLastHighlightedCellId) {
+            YAHOO.util.Dom.removeClass(this._sLastHighlightedCellId,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        }
+        
         var oRecord = this.getRecord(elCell);
         YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
+        this._sLastHighlightedCellId = elCell.id;
         this.fireEvent("cellHighlightEvent", {record:oRecord,
                     key:this._oColumnSet.getColumn(elCell.yuiColumnId).key, el:elCell});
         YAHOO.log("Highlighted " + elCell, "info", this.toString());
@@ -5522,7 +5551,7 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                 
             elContainer.style.left = x + "px";
             elContainer.style.top = y + "px";
-    
+
             // Show Editor
             elContainer.style.display = "";
             
