@@ -8,6 +8,7 @@ Version 2.3
   * Added: body {color:#000;background:#FFF;}
   * Added: sup,sub {line-height:-1px;vertical-align: text-top;}sub{vertical-align:text-bottom;}
   * Added: input, textarea, select{font-family:inherit;font-size:inherit;font-weight:inherit;} (doesn't fix textareas in Opera/Win+Mac, IE6/7
+  * Added: padding:0;margin:0; for the legend element which wasn't fully reset before (has 2px lateral padding on some browsers)
   
   
 Version 2.2.0 - 2.2.2
