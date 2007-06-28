@@ -36,12 +36,15 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
             }
         }
     }
-
+    
     if(!oLiveData) {
         return;
     }
-    
-    if(YAHOO.lang.isArray(oLiveData)) {
+
+    if(oLiveData.nodeType && oLiveData.nodeType == 9) {
+        this.dataType = YAHOO.util.DataSource.TYPE_XML;
+    }
+    else if(YAHOO.lang.isArray(oLiveData)) {
         this.dataType = YAHOO.util.DataSource.TYPE_JSARRAY;
     }
     else if(YAHOO.lang.isString(oLiveData)) {
@@ -61,7 +64,8 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     }
 
     this.liveData = oLiveData;
-    this._aQueue = [];
+    this._oQueue = {interval:null, conn:null, requests:[]};
+
 
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
@@ -256,7 +260,7 @@ YAHOO.util.DataSource.TYPE_TEXT = 5;
 YAHOO.util.DataSource.TYPE_HTMLTABLE = 6;
 
 /**
- * Error message for invalid data responses.
+ * Error message for invalid dataresponses.
  *
  * @property ERROR_DATAINVALID
  * @type String
@@ -286,7 +290,7 @@ YAHOO.util.DataSource.ERROR_DATANULL = "Null data";
 /**
  * Internal class variable to index multiple DataSource instances.
  *
- * @property _nIndex
+ * @property DataSource._nIndex
  * @type Number
  * @private
  * @static
@@ -296,7 +300,7 @@ YAHOO.util.DataSource._nIndex = 0;
 /**
  * Internal class variable to assign unique transaction IDs.
  *
- * @property _nTransactionId
+ * @property DataSource._nTransactionId
  * @type Number
  * @private
  * @static
@@ -324,11 +328,11 @@ YAHOO.util.DataSource.prototype._aCache = null;
 /**
  * Local queue of request connections, enabled if queue needs to be managed.
  *
- * @property _aQueue
- * @type Object[]
+ * @property _oQueue
+ * @type Object
  * @private
  */
-YAHOO.util.DataSource.prototype._aQueue = null;
+YAHOO.util.DataSource.prototype._oQueue = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -392,7 +396,7 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
  * <dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
  * <dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
  * <dt>fields</dt> <dd>Array of field names (aka keys), or array of object literals
- * such as: {key:"fieldname",converter:YAHOO.util.DataSource.convertDate}</dd>
+ * such as: {key:"fieldname",parser:YAHOO.util.DataSource.parseDate}</dd>
  * </dl>
  *
  * @property responseSchema
@@ -438,6 +442,16 @@ YAHOO.util.DataSource.prototype.connMgr = null;
 YAHOO.util.DataSource.prototype.connXhrMode = "allowAll";
 
  /**
+ * If data is accessed over XHR via Connection Manager, true if data should be
+ * sent via POST, otherwise data will be sent via GET.
+ *
+ * @property connMethodPost
+ * @type Boolean
+ * @default false
+ */
+YAHOO.util.DataSource.prototype.connMethodPost = false;
+
+ /**
  * If data is accessed over XHR via Connection Manager, the connection timeout
  * defines how many  milliseconds the XHR connection will wait for a server
  * response. Any non-zero value will enable the Connection utility's
@@ -458,15 +472,15 @@ YAHOO.util.DataSource.prototype.connTimeout = 0;
 /**
  * Converts data to type String.
  *
- * @method convertToString
- * @method oData {String | Number | Boolean | Date | Array | Object} Data to convert.
+ * @method DataSource.parseString
+ * @param oData {String | Number | Boolean | Date | Array | Object} Data to parse.
  * The special values null and undefined will return null.
  * @return {Number} A string, or null.
  * @static
  */
-YAHOO.util.DataSource.convertToString = function(oData) {
+YAHOO.util.DataSource.parseString = function(oData) {
     // Special case null and undefined
-    if((oData === null) || (oData === undefined)) {
+    if(!YAHOO.lang.isValue(oData)) {
         return null;
     }
     
@@ -485,13 +499,13 @@ YAHOO.util.DataSource.convertToString = function(oData) {
 /**
  * Converts data to type Number.
  *
- * @method convertToNumber
- * @method oData {String | Number | Boolean | Null} Data to convert. Beware, null
+ * @method DataSource.parseNumber
+ * @param oData {String | Number | Boolean | Null} Data to convert. Beware, null
  * returns as 0.
  * @return {Number} A number, or null if NaN.
  * @static
  */
-YAHOO.util.DataSource.convertToNumber = function(oData) {
+YAHOO.util.DataSource.parseNumber = function(oData) {
     //Convert to number
     var number = oData * 1;
     
@@ -503,16 +517,20 @@ YAHOO.util.DataSource.convertToNumber = function(oData) {
         return null;
     }
 };
+// Backward compatibility
+YAHOO.util.DataSource.convertNumber = function(oData) {
+    return YAHOO.util.DataSource.parseNumber(oData);
+};
 
 /**
  * Converts data to type Date.
  *
- * @method convertToDate
- * @method oData {Date | String | Number} Data to convert.
+ * @method DataSource.parseDate
+ * @param oData {Date | String | Number} Data to convert.
  * @return {Date} A Date instance.
  * @static
  */
-YAHOO.util.DataSource.convertToDate = function(oData) {
+YAHOO.util.DataSource.parseDate = function(oData) {
     var date = null;
     
     //Convert to date
@@ -530,6 +548,10 @@ YAHOO.util.DataSource.convertToDate = function(oData) {
     else {
         return null;
     }
+};
+// Backward compatibility
+YAHOO.util.DataSource.convertDate = function(oData) {
+    return YAHOO.util.DataSource.parseDate(oData);
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -682,15 +704,6 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
     // How to make the connection depends on the type of data
     switch(this.dataType) {
-    
-        // If the live data is a JavaScript Array
-        // simply forward the entire array to the handler
-        case YAHOO.util.DataSource.TYPE_JSARRAY:
-        case YAHOO.util.DataSource.TYPE_JSON:
-            oRawResponse = this.liveData;
-            this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
-            break;
-            
         // If the live data is a JavaScript Function
         // pass the request in as a parameter and
         // forward the return value to the handler
@@ -698,14 +711,6 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             oRawResponse = this.liveData(oRequest);
             this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
             break;
-            
-        // If the live data is an HTML TABLE element
-        // simply forward the table itself to the handler
-        case YAHOO.util.DataSource.TYPE_HTMLTABLE:
-            oRawResponse = this.liveData;
-            this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
-            break;
-
         // If the live data is over Connection Manager
         // set up the callback object and
         // pass the request in as a URL query and
@@ -713,22 +718,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
         case YAHOO.util.DataSource.TYPE_XHR:
             var oSelf = this;
             var oConnMgr = this.connMgr || YAHOO.util.Connect;
-            var oConn = null;
-            var allQueues = this._aQueue;
-            // Look for existing queue
-            var oQueue = null;
-            for(var i=allQueues.length-1; i>-1; i--){
-                // Grab existing queue
-                if(allQueues[i].caller === oCaller) {
-                    oQueue = allQueues[i];
-                    break;
-                }
-            }
-            // Create new queue
-            if(!oQueue) {
-                oQueue = {caller:oCaller, conn:null, requests:[]};
-                allQueues.push(oQueue);
-            }
+            var oQueue = this._oQueue;
 
             /**
              * Define Connection Manager success handler
@@ -773,6 +763,11 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                         callback:oCallback, caller:oCaller,
                         message:YAHOO.util.DataSource.ERROR_DATAINVALID});
 
+                // Backward compatibility
+                if((this.liveData.lastIndexOf("?") !== this.liveData.length-1) &&
+                    (oRequest.indexOf("?") !== 0)){
+                }
+
                 // Send failure response back to the caller with the error flag on
                 oCallback.call(oCaller, oRequest, oResponse, true);
                 return null;
@@ -798,38 +793,35 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
             // Cancel stale requests
             if(this.connXhrMode == "cancelStaleRequests") {
-                if(oConnMgr.abort) {
                     // Look in queue for stale requests
                     if(oQueue.conn) {
-                        oConnMgr.abort(oQueue.conn);
-                        oQueue.conn = null;
+                        if(oConnMgr.abort) {
+                            oConnMgr.abort(oQueue.conn);
+                            oQueue.conn = null;
+                        }
+                        else {
+                        }
                     }
-                }
-                else {
-                }
             }
 
-            // Request URL
-            var sUri = this.liveData+"?"+oRequest;
-            
+            // Get ready to send the request URL
             if(oConnMgr && oConnMgr.asyncRequest) {
-                // Send the request
+                var sLiveData = this.liveData;
+                var isPost = this.connMethodPost;
+                var sMethod = (isPost) ? "POST" : "GET";
+                var sUri = (isPost) ? sLiveData : sLiveData+oRequest;
+                var sRequest = (isPost) ? oRequest : null;
+
+                // Send the request right away
                 if(this.connXhrMode != "queueRequests") {
-                    // Make the connection //TODO: support POST
-                    oConn = oConnMgr.asyncRequest("GET", sUri, _xhrCallback, null);
-
-                    // Update the queue
-                    if(this.connXhrMode != "allowAll") {
-                        oQueue.conn = oConn;
-
-                    }
+                    oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, _xhrCallback, sRequest);
                 }
                 // Queue up then send the request
                 else {
                     // Found a request already in progress
                     if(oQueue.conn) {
                         // Add request to queue
-                        oQueue.requests.push(sUri);
+                        oQueue.requests.push({request:oRequest, callback:_xhrCallback});
 
                         // Interval needs to be started
                         if(!oQueue.interval) {
@@ -841,11 +833,17 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                                 else {
                                     // Send next request
                                     if(oQueue.requests.length > 0) {
-                                        oQueue.conn = oConnMgr.asyncRequest("GET", sUri, _xhrCallback, null);
+                                        sUri = (isPost) ? sLiveData : sLiveData+oQueue.requests[0].request;
+                                        sRequest = (isPost) ? oQueue.requests[0].request : null;
+                                        oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, oQueue.requests[0].callback, sRequest);
+
+                                        // Remove request from queue
+                                        oQueue.requests.shift();
                                     }
                                     // No more requests
                                     else {
                                         clearInterval(oQueue.interval);
+                                        oQueue.interval = null;
                                     }
                                 }
                             }, 50);
@@ -853,7 +851,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                     }
                     // Nothing is in progress
                     else {
-                        oQueue.conn = oConnMgr.asyncRequest("GET", sUri, _xhrCallback, null);
+                        oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, _xhrCallback, sRequest);
                     }
                 }
             }
@@ -863,15 +861,34 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             }
 
             break;
+        // Simply forward the entire data object to the handler
         default:
-            //TODO: any default?
+            /* accounts for the following cases:
+            YAHOO.util.DataSource.TYPE_UNKNOWN:
+            YAHOO.util.DataSource.TYPE_JSARRAY:
+            YAHOO.util.DataSource.TYPE_JSON:
+            YAHOO.util.DataSource.TYPE_HTMLTABLE:
+            YAHOO.util.DataSource.TYPE_XML:
+            */
+            oRawResponse = this.liveData;
+            this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
             break;
     }
     return tId;
 };
 
 /**
- * Handles raw data response from live data source.
+ * Handles raw data response from live data source. Sends a parsed response object
+ * to the callback function in this format:
+ *
+ * fnCallback(oRequest, oParsedResponse)
+ *
+ * where the oParsedResponse object literal with the following properties:
+ * <ul>
+ *     <li>tId {Number} Unique transaction ID</li>
+ *     <li>results {Array} Array of parsed data results</li>
+ *     <li>error {Boolean} True if there was an error</li>
+ * </ul>
  *
  * @method handleResponse
  * @param oRequest {Object} Request object
@@ -926,11 +943,11 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
             break;
     }
 
-    // Last chance to touch the raw response or the parsed response
-    oParsedResponse.tId = tId;
-    oParsedResponse = this.doBeforeCallback(oRequest, oRawResponse, oParsedResponse);
 
     if(oParsedResponse) {
+        // Last chance to touch the raw response or the parsed response
+        oParsedResponse.tId = tId;
+        oParsedResponse = this.doBeforeCallback(oRequest, oRawResponse, oParsedResponse);
         this.fireEvent("responseParseEvent", {request:oRequest,
                 response:oParsedResponse, callback:oCallback, caller:oCaller});
         // Cache the response
@@ -941,7 +958,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
                 caller:oCaller, message:YAHOO.util.DataSource.ERROR_DATANULL});
         
         // Send response back to the caller with the error flag on
-        oParsedResponse.error = true;
+        oParsedResponse = {error:true};
     }
     
     // Send the response back to the caller
@@ -995,10 +1012,14 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oRawResponse
             var oResult = {};
             for(var j=fields.length-1; j>-1; j--) {
                 var field = fields[j];
-                var key = field.key || field;
-                var data = oRawResponse[i][j] || oRawResponse[i][key];
-                if(field.converter) {
-                    data = field.converter(data);
+                var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
+                var data = (YAHOO.lang.isValue(oRawResponse[i][j])) ? oRawResponse[i][j] : oRawResponse[i][key];
+                // Backward compatibility
+                if(!field.parser && field.converter) {
+                    field.parser = field.converter;
+                }
+                if(field.parser) {
+                    data = field.parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
@@ -1057,9 +1078,13 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
                         data = data.substr(0,data.length-1);
                     }
                     var field = fields[j];
-                    var key = field.key || field;
-                    if(field.converter) {
-                        data = field.converter(data);
+                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                    }
+                    if(field.parser) {
+                        data = field.parser.call(this, data);
                     }
                     // Safety measure
                     if(data === undefined) {
@@ -1103,7 +1128,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
                 // Loop through each data field in each result using the schema
                 for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
                     var field = this.responseSchema.fields[m];
-                    var key = field.key || field;
+                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                     var data = null;
                     // Values may be held in an attribute...
                     var xmlAttr = result.attributes.getNamedItem(key);
@@ -1120,8 +1145,12 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) 
                                data = "";
                         }
                     }
-                    if(field.converter) {
-                        data = field.converter(data);
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                    }
+                    if(field.parser) {
+                        data = field.parser.call(this, data);
                     }
                     // Safety measure
                     if(data === undefined) {
@@ -1245,12 +1274,17 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             // ...and loop through each data field value of each response
             for(var j = fields.length-1; j >= 0 ; j--) {
                 var field = fields[j];
-                var key = field.key || field;
+                var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                 // ...and capture data into an array mapped according to the schema...
                 // eval is necessary here since schema can be of unknown depth
                 var data = eval("jsonResult." + key);
-                if(field.converter) {
-                    data = field.converter(data);
+                
+                // Backward compatibility
+                if(!field.parser && field.converter) {
+                    field.parser = field.converter;
+                }
+                if(field.parser) {
+                    data = field.parser.call(this, data);
                 }
                 // Safety measure
                 if(data === undefined) {
@@ -1282,10 +1316,10 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
         var fields = this.responseSchema.fields;
         var oParsedResponse = {};
         oParsedResponse.results = [];
-        
+
         // Iterate through each TBODY
-        for(i=0; i<elTable.tBodies.length; i++) {
-            elTbody = elTable.tBodies[i];
+        for(var i=0; i<elTable.tBodies.length; i++) {
+            var elTbody = elTable.tBodies[i];
 
             // Iterate through each TR
             for(var j=0; j<elTbody.rows.length; j++) {
@@ -1294,10 +1328,15 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
                 
                 for(var k=fields.length-1; k>-1; k--) {
                     var field = fields[k];
-                    var key = field.key || field;
+                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                     var data = elRow.cells[k].innerHTML;
-                    if(field.converter) {
-                        data = field.converter(data);
+
+                    // Backward compatibility
+                    if(!field.parser && field.converter) {
+                        field.parser = field.converter;
+                    }
+                    if(field.parser) {
+                        data = field.parser.call(this, data);
                     }
                     // Safety measure
                     if(data === undefined) {

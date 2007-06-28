@@ -55,6 +55,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
                     "instance" + YAHOO.widget.AutoComplete._nIndex;
                 this._oTextbox = elInput;
             }
+            this._oTextbox.className = "yui-ac-input";
         }
         else {
             return;
@@ -176,12 +177,15 @@ YAHOO.widget.AutoComplete.prototype.maxResultsDisplayed = 10;
  * Number of seconds to delay before submitting a query request.  If a query
  * request is received before a previous one has completed its delay, the
  * previous request is cancelled and the new request is set to the delay.
+ * Implementers should take care when setting this value very low (i.e., less
+ * than 0.2) with low latency DataSources and the typeAhead feature enabled, as
+ * fast typers may see unexpected behavior.
  *
  * @property queryDelay
  * @type Number
- * @default 0.5
+ * @default 0.2
  */
-YAHOO.widget.AutoComplete.prototype.queryDelay = 0.5;
+YAHOO.widget.AutoComplete.prototype.queryDelay = 0.2;
 
 /**
  * Class name of a highlighted item within results container.
@@ -911,7 +915,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     }
     var queryDelay = this.queryDelay;
     if(!YAHOO.lang.isNumber(queryDelay) || (queryDelay < 0)) {
-        this.queryDelay = 0.5;
+        this.queryDelay = 0.2;
     }
     var delimChar = this.delimChar;
     if(YAHOO.lang.isString(delimChar)) {
@@ -926,8 +930,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
             this.animSpeed = 0.3;
         }
         if(!this._oAnim ) {
-            oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
-            this._oAnim = oAnim;
+            this._oAnim = new YAHOO.util.Anim(this._oContainer._oContent, {}, this.animSpeed);
         }
         else {
             this._oAnim.duration = this.animSpeed;
@@ -970,6 +973,8 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initContainer = function() {
+    this._oContainer.className = "yui-ac-container";
+    
     if(!this._oContainer._oContent) {
         // The oContent div helps size the iframe and shadow properly
         var oContent = document.createElement("div");
