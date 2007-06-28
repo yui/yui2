@@ -1,6 +1,6 @@
 YUI Library - Reset - Release Notes
 
-Version 2.3
+Version 2.3.0
 
   * Removed: ul,ol {list-style:none;}
   * Added: li {list-style:none;} because it's less impactful (easier to rebuild) and shorter
