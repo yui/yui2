@@ -110,10 +110,14 @@ YAHOO.util.Attribute.prototype = {
         };
         
         if (this.readOnly || ( this.writeOnce && this._written) ) {
+            YAHOO.log( 'setValue ' + name + ', ' +  value +
+                    ' failed: read only', 'error', 'Attribute');
             return false; // write not allowed
         }
         
         if (this.validator && !this.validator.call(owner, value) ) {
+            YAHOO.log( 'setValue ' + name + ', ' + value +
+                    ' validation failed', 'error', 'Attribute');
             return false; // invalid value
         }
 
@@ -121,7 +125,7 @@ YAHOO.util.Attribute.prototype = {
             beforeRetVal = owner.fireBeforeChangeEvent(event);
             if (beforeRetVal === false) {
                 YAHOO.log('setValue ' + name + 
-                        'cancelled by beforeChange event', 'info', 'Attribute');
+                        ' cancelled by beforeChange event', 'info', 'Attribute');
                 return false;
             }
         }
