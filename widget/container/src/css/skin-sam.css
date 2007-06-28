@@ -1,18 +1,31 @@
-.yui-overlay {
+.yui-skin-sam .mask {
 
-	position: absolute;
+    z-index: 0;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .25;
+    filter: alpha(opacity=25);
+    background-color: #000;
 
 }
 
-.yui-panel-container {
+.yui-skin-sam .yui-panel-container.matte {
 
-	position: absolute;
+	padding: 3px;
+	background-color: #fff;
 
 }
 
-.yui-panel-container.shadow .underlay {
+.yui-skin-sam .yui-panel-container.matte .underlay {
 
-	visibility: inherit;
+	display:none;
+
+}
+
+.yui-skin-sam .yui-panel-container.shadow .underlay {
+
 	position: absolute;
     top: 2px;
     right: -4px;
@@ -24,7 +37,7 @@
 
 }
 
-.yui-panel {
+.yui-skin-sam .yui-panel {
 
 	position: relative;
 	left: 0;
@@ -36,9 +49,9 @@
 
 }
 
-.yui-panel .hd, 
-.yui-panel .bd, 
-.yui-panel .ft {
+.yui-skin-sam .yui-panel .hd, 
+.yui-skin-sam .yui-panel .bd, 
+.yui-skin-sam .yui-panel .ft {
 
     border-style: solid;
     border-width: 0 1px;
@@ -47,20 +60,20 @@
   
 }
 
-.yui-panel .hd {
+.yui-skin-sam .yui-panel .hd {
 
     border-bottom: solid 1px #ccc;
 
 }
 
-.yui-panel .bd,
-.yui-panel .ft {
+.yui-skin-sam .yui-panel .bd,
+.yui-skin-sam .yui-panel .ft {
 
     background-color: #F2F2F2;
 
 }
 
-.yui-panel .hd {
+.yui-skin-sam .yui-panel .hd {
 
     padding: 0 10px;
     font-size: 93%;  /* 12px */
@@ -72,20 +85,26 @@
     
 }
 
-.yui-panel .bd {
+.yui-skin-sam .yui-panel .bd {
 
     padding: 10px;
 
 }
 
-.yui-panel .ft {
+.yui-skin-sam .yui-panel .ft {
 
     padding: 0 10px 10px 10px;
     text-align: right;
 
 }
 
-.container-close {
+.yui-skin-sam .yui-panel-container.focused {
+
+    /* To do - default focused style for this skin? */
+
+}
+
+.yui-skin-sam .container-close {
 
     position: absolute;
     top: 5px;
@@ -96,19 +115,56 @@
 
 }
 
-input.text,
-textarea,
-select {
+.yui-skin-sam .yui-simple-dialog .bd .yui-icon {
 
-    background-color: #fff;
-    border: solid 1px #7D98B8;
+    background: url(sprite.png) no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	margin-right: 10px;
+	float: left;
 
 }
 
-.yui-tt .bd {
+.yui-skin-sam .yui-simple-dialog .bd span.blckicon {
+
+    background-position: 0 -1100px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.alrticon {
+
+    background-position: 0 -1050px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.hlpicon {
+
+    background-position: 0 -1150px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.infoicon {
+
+    background-position: 0 -1200px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.warnicon {
+
+    background-position: 0 -1900px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.tipicon {
+
+    background-position: 0 -1250px;
+
+}
+
+.yui-skin-sam .yui-tt .bd {
 
     color: #000;
-    line-height: 1.465;
+    line-height: 1.465; /* 19px */
     padding: 0 5px;
     border-color: #D4C237 #A6982B #A6982B #A6982B;
     border-width: 1px;

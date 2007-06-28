@@ -94,12 +94,8 @@ To fix these bugs:
 }
 
 .yui-panel-container {
-	position:absolute;
-	background-color:transparent;
-	z-index:6;
 	visibility:hidden;
 	overflow:visible;
-	width:auto;
 }
 
 .yui-panel-container.show-scrollbars>div {
