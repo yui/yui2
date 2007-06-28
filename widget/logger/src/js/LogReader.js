@@ -12,9 +12,13 @@
  * @param oConfigs {Object} (optional) Object literal of configuration params.
  */
 YAHOO.widget.LogReader = function(elContainer, oConfigs) {
-    var oSelf = this;
     this._sName = YAHOO.widget.LogReader._index;
     YAHOO.widget.LogReader._index++;
+    
+    // Internal vars
+    this._buffer = []; // output buffer
+    this._filterCheckboxes = {}; // pointers to checkboxes
+    this._lastTime = YAHOO.widget.Logger.getStartTime(); // timestamp of last log message to console
 
     // Parse config vars here
     if (oConfigs && (oConfigs.constructor == Object)) {
@@ -23,173 +27,25 @@ YAHOO.widget.LogReader = function(elContainer, oConfigs) {
         }
     }
 
-    // Validate container
-    elContainer = YAHOO.util.Dom.get(elContainer);
-    // Attach to existing container...
-    if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
-        this._elContainer = elContainer;
-        YAHOO.util.Dom.addClass(this._elContainer,"yui-log");
+    this._initContainerEl(elContainer);
+    if(!this._elContainer) {
+        YAHOO.log("Could not instantiate LogReader due to an invalid container element " +
+                elContainer, "error", this.toString());
+        return;
     }
-    // ...or create container from scratch
-    else {
-        this._elContainer = document.body.appendChild(document.createElement("div"));
-        //this._elContainer.id = "yui-log" + this._sName;
-        YAHOO.util.Dom.addClass(this._elContainer,"yui-log");
-        YAHOO.util.Dom.addClass(this._elContainer,"yui-log-container");
-
-        //YAHOO.widget.LogReader._elDefaultContainer = this._elContainer;
-
-        // If implementer has provided container values, trust and set those
-        var containerStyle = this._elContainer.style;
-        if(this.width) {
-            containerStyle.width = this.width;
-        }
-        if(this.right) {
-            containerStyle.right = this.right;
-        }
-        if(this.top) {
-            containerStyle.top = this.top;
-        }
-         if(this.left) {
-            containerStyle.left = this.left;
-            containerStyle.right = "auto";
-        }
-        if(this.bottom) {
-            containerStyle.bottom = this.bottom;
-            containerStyle.top = "auto";
-        }
-       if(this.fontSize) {
-            containerStyle.fontSize = this.fontSize;
-        }
-        // For Opera
-        if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
-            document.body.style += '';
-        }
-    }
-
-    if(this._elContainer) {
-        // Create header
-        if(!this._elHd) {
-            this._elHd = this._elContainer.appendChild(document.createElement("div"));
-            this._elHd.id = "yui-log-hd" + this._sName;
-            this._elHd.className = "yui-log-hd";
-
-            this._elCollapse = this._elHd.appendChild(document.createElement("div"));
-            this._elCollapse.className = "yui-log-btns";
-
-            this._btnCollapse = document.createElement("input");
-            this._btnCollapse.type = "button";
-            this._btnCollapse.style.fontSize =
-                YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
-            this._btnCollapse.className = "yui-log-button";
-            this._btnCollapse.value = "Collapse";
-            this._btnCollapse = this._elCollapse.appendChild(this._btnCollapse);
-            YAHOO.util.Event.addListener(
-                oSelf._btnCollapse,'click',oSelf._onClickCollapseBtn,oSelf);
-
-            this._title = this._elHd.appendChild(document.createElement("h4"));
-            this._title.innerHTML = "Logger Console";
-        }
-        // Ceate console
-        if(!this._elConsole) {
-            this._elConsole =
-                this._elContainer.appendChild(document.createElement("div"));
-            this._elConsole.className = "yui-log-bd";
-
-            // If implementer has provided console, trust and set those
-            if(this.height) {
-                this._elConsole.style.height = this.height;
-            }
-        }
-        // Don't create footer elements if footer is disabled
-        if(!this._elFt && this.footerEnabled) {
-            this._elFt = this._elContainer.appendChild(document.createElement("div"));
-            this._elFt.className = "yui-log-ft";
-
-            this._elBtns = this._elFt.appendChild(document.createElement("div"));
-            this._elBtns.className = "yui-log-btns";
-
-            this._btnPause = document.createElement("input");
-            this._btnPause.type = "button";
-            this._btnPause.style.fontSize =
-                YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
-            this._btnPause.className = "yui-log-button";
-            this._btnPause.value = "Pause";
-            this._btnPause = this._elBtns.appendChild(this._btnPause);
-            YAHOO.util.Event.addListener(
-                oSelf._btnPause,'click',oSelf._onClickPauseBtn,oSelf);
-
-            this._btnClear = document.createElement("input");
-            this._btnClear.type = "button";
-            this._btnClear.style.fontSize =
-                YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
-            this._btnClear.className = "yui-log-button";
-            this._btnClear.value = "Clear";
-            this._btnClear = this._elBtns.appendChild(this._btnClear);
-            YAHOO.util.Event.addListener(
-                oSelf._btnClear,'click',oSelf._onClickClearBtn,oSelf);
-
-            this._elCategoryFilters = this._elFt.appendChild(document.createElement("div"));
-            this._elCategoryFilters.className = "yui-log-categoryfilters";
-            this._elSourceFilters = this._elFt.appendChild(document.createElement("div"));
-            this._elSourceFilters.className = "yui-log-sourcefilters";
-        }
-    }
-
-    // If Drag and Drop utility is available...
-    // ...and draggable is true...
-    // ...then make the header draggable
-    if(YAHOO.util.DD && this.draggable) {
-        var ylog_dd = new YAHOO.util.DD(this._elContainer);
-        ylog_dd.setHandleElId(this._elHd.id);
-        this._elHd.style.cursor = "move";
-    }
-
-    // Initialize internal vars
-    if(!this._buffer) {
-        this._buffer = []; // output buffer
-    }
-    // Timestamp of last log message to console
-    this._lastTime = YAHOO.widget.Logger.getStartTime(); 
     
+    this._initHeaderEl();
+    this._initConsoleEl();
+    this._initFooterEl();
+
+    this._initDragDrop();
+
+    this._initCategories();
+    this._initSources();
+
     // Subscribe to Logger custom events
     YAHOO.widget.Logger.newLogEvent.subscribe(this._onNewLog, this);
     YAHOO.widget.Logger.logResetEvent.subscribe(this._onReset, this);
-
-    // Initialize filters
-    this._filterCheckboxes = {};
-    
-    // Initialize category filters
-    this._categoryFilters = [];
-    var aInitialCategories = YAHOO.widget.Logger.categories;
-
-    for(var j=0; j < aInitialCategories.length; j++) {
-        var sCategory = aInitialCategories[j];
-
-        // Add category to the internal array of filters
-        this._categoryFilters.push(sCategory);
-
-        // Add checkbox element if UI is enabled
-        if(this._elCategoryFilters) {
-            this._createCategoryCheckbox(sCategory);
-        }
-    }
-
-    // Initialize source filters
-    this._sourceFilters = [];
-    var aInitialSources = YAHOO.widget.Logger.sources;
-
-    for(j=0; j < aInitialSources.length; j++) {
-        var sSource = aInitialSources[j];
-
-        // Add source to the internal array of filters
-        this._sourceFilters.push(sSource);
-        
-        // Add checkbox element if UI is enabled
-        if(this._elSourceFilters) {
-            this._createSourceCheckbox(sSource);
-        }
-    }
 
     YAHOO.widget.Logger.categoryCreateEvent.subscribe(this._onCategoryCreate, this);
     YAHOO.widget.Logger.sourceCreateEvent.subscribe(this._onSourceCreate, this);
@@ -901,6 +757,244 @@ YAHOO.widget.LogReader.prototype._btnClear = null;
 // Private methods
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Initializes the primary container element.
+ *
+ * @method _initContainerEl
+ * @param elContainer {HTMLElement} Container element by reference or string ID.
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._initContainerEl = function(elContainer) {
+    // Validate container
+    elContainer = YAHOO.util.Dom.get(elContainer);
+    // Attach to existing container...
+    if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
+        this._elContainer = elContainer;
+        YAHOO.util.Dom.addClass(this._elContainer,"yui-log");
+    }
+    // ...or create container from scratch
+    else {
+        this._elContainer = document.body.appendChild(document.createElement("div"));
+        //this._elContainer.id = "yui-log" + this._sName;
+        YAHOO.util.Dom.addClass(this._elContainer,"yui-log");
+        YAHOO.util.Dom.addClass(this._elContainer,"yui-log-container");
+
+        //YAHOO.widget.LogReader._elDefaultContainer = this._elContainer;
+
+        // If implementer has provided container values, trust and set those
+        var containerStyle = this._elContainer.style;
+        if(this.width) {
+            containerStyle.width = this.width;
+        }
+        if(this.right) {
+            containerStyle.right = this.right;
+        }
+        if(this.top) {
+            containerStyle.top = this.top;
+        }
+         if(this.left) {
+            containerStyle.left = this.left;
+            containerStyle.right = "auto";
+        }
+        if(this.bottom) {
+            containerStyle.bottom = this.bottom;
+            containerStyle.top = "auto";
+        }
+       if(this.fontSize) {
+            containerStyle.fontSize = this.fontSize;
+        }
+        // For Opera
+        if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+            document.body.style += '';
+        }
+    }
+};
+
+/**
+ * Initializes the header element.
+ *
+ * @method _initHeaderEl
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._initHeaderEl = function() {
+    var oSelf = this;
+
+    // Destroy header
+    if(this._elHd) {
+        // Unhook DOM events
+        YAHOO.util.Event.purgeElement(this._elHd, true);
+
+        // Remove DOM elements
+        this._elHd.innerHTML = "";
+    }
+    
+    // Create header
+    this._elHd = this._elContainer.appendChild(document.createElement("div"));
+    this._elHd.id = "yui-log-hd" + this._sName;
+    this._elHd.className = "yui-log-hd";
+
+    this._elCollapse = this._elHd.appendChild(document.createElement("div"));
+    this._elCollapse.className = "yui-log-btns";
+
+    this._btnCollapse = document.createElement("input");
+    this._btnCollapse.type = "button";
+    this._btnCollapse.style.fontSize =
+        YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
+    this._btnCollapse.className = "yui-log-button";
+    this._btnCollapse.value = "Collapse";
+    this._btnCollapse = this._elCollapse.appendChild(this._btnCollapse);
+    YAHOO.util.Event.addListener(
+        oSelf._btnCollapse,'click',oSelf._onClickCollapseBtn,oSelf);
+
+    this._title = this._elHd.appendChild(document.createElement("h4"));
+    this._title.innerHTML = "Logger Console";
+};
+
+/**
+ * Initializes the console element.
+ *
+ * @method _initConsoleEl
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._initConsoleEl = function() {
+    // Destroy console
+    if(this._elConsole) {
+        // Unhook DOM events
+        YAHOO.util.Event.purgeElement(this._elConsole, true);
+
+        // Remove DOM elements
+        this._elConsole.innerHTML = "";
+    }
+
+    // Ceate console
+    this._elConsole = this._elContainer.appendChild(document.createElement("div"));
+    this._elConsole.className = "yui-log-bd";
+
+    // If implementer has provided console, trust and set those
+    if(this.height) {
+        this._elConsole.style.height = this.height;
+    }
+};
+
+/**
+ * Initializes the footer element.
+ *
+ * @method _initFooterEl
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._initFooterEl = function() {
+    var oSelf = this;
+
+    // Don't create footer elements if footer is disabled
+    if(this.footerEnabled) {
+        // Destroy console
+        if(this._elFt) {
+            // Unhook DOM events
+            YAHOO.util.Event.purgeElement(this._elFt, true);
+
+            // Remove DOM elements
+            this._elFt.innerHTML = "";
+        }
+
+        this._elFt = this._elContainer.appendChild(document.createElement("div"));
+        this._elFt.className = "yui-log-ft";
+
+        this._elBtns = this._elFt.appendChild(document.createElement("div"));
+        this._elBtns.className = "yui-log-btns";
+
+        this._btnPause = document.createElement("input");
+        this._btnPause.type = "button";
+        this._btnPause.style.fontSize =
+            YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
+        this._btnPause.className = "yui-log-button";
+        this._btnPause.value = "Pause";
+        this._btnPause = this._elBtns.appendChild(this._btnPause);
+        YAHOO.util.Event.addListener(
+            oSelf._btnPause,'click',oSelf._onClickPauseBtn,oSelf);
+
+        this._btnClear = document.createElement("input");
+        this._btnClear.type = "button";
+        this._btnClear.style.fontSize =
+            YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
+        this._btnClear.className = "yui-log-button";
+        this._btnClear.value = "Clear";
+        this._btnClear = this._elBtns.appendChild(this._btnClear);
+        YAHOO.util.Event.addListener(
+            oSelf._btnClear,'click',oSelf._onClickClearBtn,oSelf);
+
+        this._elCategoryFilters = this._elFt.appendChild(document.createElement("div"));
+        this._elCategoryFilters.className = "yui-log-categoryfilters";
+        this._elSourceFilters = this._elFt.appendChild(document.createElement("div"));
+        this._elSourceFilters.className = "yui-log-sourcefilters";
+    }
+};
+
+/**
+ * Initializes Drag and Drop on the header element.
+ *
+ * @method _initDragDrop
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._initDragDrop = function() {
+    // If Drag and Drop utility is available...
+    // ...and draggable is true...
+    // ...then make the header draggable
+    if(YAHOO.util.DD && this.draggable && this._elHd) {
+        var ylog_dd = new YAHOO.util.DD(this._elContainer);
+        ylog_dd.setHandleElId(this._elHd.id);
+        //TODO: use class name
+        this._elHd.style.cursor = "move";
+    }
+};
+
+/**
+ * Initializes category filters.
+ *
+ * @method _initCategories
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._initCategories = function() {
+    // Initialize category filters
+    this._categoryFilters = [];
+    var aInitialCategories = YAHOO.widget.Logger.categories;
+
+    for(var j=0; j < aInitialCategories.length; j++) {
+        var sCategory = aInitialCategories[j];
+
+        // Add category to the internal array of filters
+        this._categoryFilters.push(sCategory);
+
+        // Add checkbox element if UI is enabled
+        if(this._elCategoryFilters) {
+            this._createCategoryCheckbox(sCategory);
+        }
+    }
+};
+
+/**
+ * Initializes source filters.
+ *
+ * @method _initSources
+ * @private
+ */
+YAHOO.widget.LogReader.prototype._initSources = function() {
+    // Initialize source filters
+    this._sourceFilters = [];
+    var aInitialSources = YAHOO.widget.Logger.sources;
+
+    for(j=0; j < aInitialSources.length; j++) {
+        var sSource = aInitialSources[j];
+
+        // Add source to the internal array of filters
+        this._sourceFilters.push(sSource);
+
+        // Add checkbox element if UI is enabled
+        if(this._elSourceFilters) {
+            this._createSourceCheckbox(sSource);
+        }
+    }}
+;
 
 /**
  * Creates the UI for a category filter in the LogReader footer element.
