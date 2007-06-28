@@ -77,6 +77,11 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         // Call Element's constructor after DOM elements are created
         // but *before* table is populated with data
         YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+        
+        //HACK: Set the Paginator values here via updatePaginator
+        if(this._oConfigs.paginator) {
+            this.updatePaginator(this._oConfigs.paginator);
+        }
 
         // Send out for data in an asynchronous request
         this._oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
@@ -126,29 +131,6 @@ else {
 YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     oConfigs = oConfigs || {};
     YAHOO.widget.DataTable.superclass.initAttributes.call(this, oConfigs);
-
-    /**
-    * @config caption
-    * @description Value for the CAPTION element.
-    * @type String
-    */
-    this.setAttributeConfig("caption", {
-        value: null,
-        validator: YAHOO.lang.isString,
-        method: function(sCaption) {
-            // Create CAPTION element
-            if(!this._elCaption) {
-                if(!this._elTable.firstChild) {
-                    this._elCaption = this._elTable.appendChild(document.createElement("caption"));
-                }
-                else {
-                    this._elCaption = this._elTable.insertBefore(document.createElement("caption"), this._elTable.firstChild);
-                }
-            }
-            // Set CAPTION value
-            this._elCaption.innerHTML = sCaption;
-        }
-    });
 
     /**
     * @config summary
@@ -267,8 +249,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
             rowsThisPage:0, // how many rows this page
             pageLinks:0,    // show all links
             pageLinksStart:1, // first link is page 1
-            //TODO: hack until attribute order can by guaranteed by Element
-            dropdownOptions:[25, 50, 100, 500], // [] no dropdown
+            dropdownOptions: null, //no dropdown
             containers:[], // Paginator container element references
             dropdowns: [], //dropdown element references,
             links: [] // links elements
@@ -373,35 +354,26 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                    }
                 }
 
-                // Dropdown enabled
-                if(oPaginator.dropdownOptions) {
-                    // Show these options in the dropdown
-                    var dropdownOptions = oPaginator.dropdownOptions;
+                // Show these options in the dropdown
+                var dropdownOptions = oPaginator.dropdownOptions || [];
 
-                    for(i=0; i<aContainerEls.length; i++) {
-                        // Create one SELECT element per Paginator container
-                        var selectEl = document.createElement("select");
-                        YAHOO.util.Dom.addClass(selectEl, YAHOO.widget.DataTable.CLASS_DROPDOWN);
-                        selectEl = aContainerEls[i].appendChild(selectEl);
-                        selectEl.id = "yui-dt-pagselect"+i;
+                for(i=0; i<aContainerEls.length; i++) {
+                    // Create one SELECT element per Paginator container
+                    var selectEl = document.createElement("select");
+                    YAHOO.util.Dom.addClass(selectEl, YAHOO.widget.DataTable.CLASS_DROPDOWN);
+                    selectEl = aContainerEls[i].appendChild(selectEl);
+                    selectEl.id = "yui-dt-pagselect"+i;
 
-                        // Create OPTION elements
-                        for(var j=0; j<dropdownOptions.length; j++) {
-                            var dropdownOption = dropdownOptions[j];
-                            var optionEl = document.createElement("option");
-                            optionEl.value = (YAHOO.lang.isValue(dropdownOption.value)) ?
-                                    dropdownOption.value : dropdownOption;
-                            optionEl.innerHTML = (YAHOO.lang.isValue(dropdownOption.text)) ?
-                                    dropdownOption.text : dropdownOption;
-                            optionEl = selectEl.appendChild(optionEl);
-                        }
+                    // Add event listener
+                    //TODO: anon fnc
+                    YAHOO.util.Event.addListener(selectEl,"change",this._onPaginatorDropdownChange,this);
 
-                        // Add event listener
-                        //TODO: anon fnc
-                        YAHOO.util.Event.addListener(selectEl,"change",this._onPaginatorDropdownChange,this);
+                    // Add DOM reference directly to tracker
+                   this._configs.paginator.value.dropdowns.push(selectEl);
 
-                        // Add DOM reference directly to tracker
-                       this._configs.paginator.value.dropdowns.push(selectEl);
+                    // Hide dropdown
+                    if(!oPaginator.dropdownOptions) {
+                        selectEl.style.display = "none";
                     }
                 }
 
@@ -432,6 +404,29 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                 //TODO: fire paginatorDisabledEvent & add to api doc
                 YAHOO.log("Paginator disabled", "info", this.toString());
             }
+        }
+    });
+
+    /**
+    * @config caption
+    * @description Value for the CAPTION element.
+    * @type String
+    */
+    this.setAttributeConfig("caption", {
+        value: null,
+        validator: YAHOO.lang.isString,
+        method: function(sCaption) {
+            // Create CAPTION element
+            if(!this._elCaption) {
+                if(!this._elTable.firstChild) {
+                    this._elCaption = this._elTable.appendChild(document.createElement("caption"));
+                }
+                else {
+                    this._elCaption = this._elTable.insertBefore(document.createElement("caption"), this._elTable.firstChild);
+                }
+            }
+            // Set CAPTION value
+            this._elCaption.innerHTML = sCaption;
         }
     });
 
@@ -1192,10 +1187,14 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
 
     // Create TBODY for messages
     var elMsgTbody = document.createElement("tbody");
-    this._elMsgRow = elMsgTbody.appendChild(document.createElement("tr"));
-    var elMsgRow = this._elMsgRow;
+    var elMsgRow = elMsgTbody.appendChild(document.createElement("tr"));
+    YAHOO.util.Dom.addClass(elMsgRow,YAHOO.widget.DataTable.CLASS_FIRST);
+    YAHOO.util.Dom.addClass(elMsgRow,YAHOO.widget.DataTable.CLASS_LAST);
+    this._elMsgRow = elMsgRow;
     var elMsgCell = elMsgRow.appendChild(document.createElement("td"));
     elMsgCell.colSpan = this._oColumnSet.keys.length;
+    YAHOO.util.Dom.addClass(elMsgCell,YAHOO.widget.DataTable.CLASS_FIRST);
+    YAHOO.util.Dom.addClass(elMsgCell,YAHOO.widget.DataTable.CLASS_LAST);
     this._elMsgTd = elMsgCell;
     this._elMsgTbody = elTable.appendChild(elMsgTbody);
     this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
@@ -4784,10 +4783,13 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     }
 
     // Dropdown is enabled
-    if(pag.dropdownOptions) {
-        dropdownEnabled = true;
-        for(i=0; i<pag.dropdowns.length; i++) {
-            this.formatPaginatorDropdown(pag.dropdowns[i]);
+    for(i=0; i<pag.dropdowns.length; i++) {
+         if(pag.dropdownOptions) {
+            dropdownEnabled = true;
+            this.formatPaginatorDropdown(pag.dropdowns[i], pag.dropdownOptions);
+        }
+        else {
+            pag.dropdowns[i].style.display = "none";
         }
     }
 
@@ -4804,9 +4806,26 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
  *
  * @method formatPaginatorDropdown
  * @param elDropdown {HTMLElement} The SELECT element.
+ * @param dropdownOptions {Object[]} OPTION values for display in the SELECT element.
  */
-YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown) {
-    if(elDropdown && (elDropdown.ownerDocument == document) && elDropdown.options) {
+YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown, dropdownOptions) {
+    if(elDropdown && (elDropdown.ownerDocument == document)) {
+        // Clear OPTION elements
+        while (elDropdown.firstChild) {
+            elDropdown.removeChild(elDropdown.firstChild);
+        }
+
+        // Create OPTION elements
+        for(var j=0; j<dropdownOptions.length; j++) {
+            var dropdownOption = dropdownOptions[j];
+            var optionEl = document.createElement("option");
+            optionEl.value = (YAHOO.lang.isValue(dropdownOption.value)) ?
+                    dropdownOption.value : dropdownOption;
+            optionEl.innerHTML = (YAHOO.lang.isValue(dropdownOption.text)) ?
+                    dropdownOption.text : dropdownOption;
+            optionEl = elDropdown.appendChild(optionEl);
+        }
+
         var options = elDropdown.options;
         // Update dropdown's "selected" value
         if(options.length) {
@@ -4815,8 +4834,11 @@ YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown) 
                     options[i].selected = true;
                 }
             }
-            return;
         }
+
+        // Show the dropdown
+        elDropdown.style.display = "";
+        return;
     }
     YAHOO.log("Could not update Paginator dropdown " + elDropdown, "error", this.toString());
 };
@@ -6786,6 +6808,11 @@ YAHOO.widget.DataTable.prototype._onDataReturnEnhanceTable = function(sRequest, 
         // Call Element's constructor after DOM elements are created
         // but *before* UI is updated with data
         YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+
+        //HACK: Set the Paginator values
+        if(this._oConfigs.paginator) {
+            this.updatePaginator(this._oConfigs.paginator);
+        }
 
         // Update the UI
         this.refreshView();
