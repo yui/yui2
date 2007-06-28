@@ -1433,18 +1433,10 @@ YAHOO.widget.DataTable.prototype._initDomEvents = function() {
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
     YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
 
-    //YAHOO.util.Event.addListener(this._elContainer, "focus", this._onContainerFocus, this);
-    //YAHOO.util.Event.addListener(this._elContainer, "blur", this._onContainerBlur, this);
-
     YAHOO.util.Event.addListener(elTable, "focus", this._onTableFocus, this);
-    //YAHOO.util.Event.addListener(elTable, "blur", this._onTableBlur, this);
-
     YAHOO.util.Event.addListener(elTable, "mouseover", this._onTableMouseover, this);
     YAHOO.util.Event.addListener(elTable, "mouseout", this._onTableMouseout, this);
     YAHOO.util.Event.addListener(elTable, "mousedown", this._onTableMousedown, this);
-    //YAHOO.util.Event.addListener(elTable, "mouseup", this._onTableMouseup, this);
-    //YAHOO.util.Event.addListener(elTable, "mousemove", this._onTableMousemove, this);
-    
     YAHOO.util.Event.addListener(elTable, "keydown", this._onTableKeydown, this);
     YAHOO.util.Event.addListener(elTable, "keypress", this._onTableKeypress, this);
 
@@ -1452,9 +1444,6 @@ YAHOO.widget.DataTable.prototype._initDomEvents = function() {
     YAHOO.util.Event.addListener(elTable, "dblclick", this._onTableDblclick, this);
     YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
     YAHOO.util.Event.addListener(elTbody, "click", this._onTbodyClick, this);
-
-    //YAHOO.util.Event.addListener(elThead, "keydown", this._onTheadKeydown, this);
-    //YAHOO.util.Event.addListener(elTbody, "keyup", this._onTbodyKeyup, this);
 
     YAHOO.util.Event.addListener(elContainer, "scroll", this._onScroll, this); // for IE
     YAHOO.util.Event.addListener(elTbody, "scroll", this._onScroll, this); // for everyone else
@@ -3609,6 +3598,14 @@ YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
     }
 };
 
+/**
+ * Brings focus to DataTable instance.
+ *
+ * @method focus
+ */
+YAHOO.widget.DataTable.prototype.focus = function() {
+    this._focusEl(this._elTable);
+};
 
 
 
@@ -5033,7 +5030,6 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         
             // Update UI
             YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_SELECTED);
-            this._focusEl(this._elTable);
 
             this.fireEvent("rowSelectEvent", {record:oRecord, el:elRow});
             YAHOO.log("Selected " + elRow, "info", this.toString());
@@ -5193,7 +5189,6 @@ YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
 
             // Update the UI
             YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
-            this._focusEl(this._elTable);
 
             this.fireEvent("cellSelectEvent", {record:oRecord,
                     key: this._oColumnSet.getColumn(nColumnId).key, el:elCell});
@@ -5484,13 +5479,18 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
         }
         if(oRecord && oColumn) {
             var oCellEditor = this._oCellEditor;
-            var elContainer = oCellEditor.container;
-
+            
             // Clear previous Editor
             if(oCellEditor.isActive) {
                 this.cancelCellEditor();
             }
+
+            // Editor not defined
+            if(!oColumn.editor) {
+                return;
+            }
             
+            // Update Editor values
             oCellEditor.cell = elCell;
             oCellEditor.record = oRecord;
             oCellEditor.column = oColumn;
@@ -5499,56 +5499,10 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                     oColumn.editorOptions.validator : null;
             oCellEditor.value = oRecord.getData(oColumn.key);
 
- /*
-            // Move to be aligned with cell
-            var x, y, offsetEl, scrollEl;
-
-            x = elCell.offsetLeft;
-            y = elCell.offsetTop;
-            offsetEl = elCell;
-            while(offsetEl.offsetParent) {
-                x += offsetEl.offsetParent.offsetLeft;
-                y += offsetEl.offsetParent.offsetTop;
-                offsetEl = offsetEl.offsetParent;
-            }
-            scrollEl = elCell;
-            while(scrollEl.tagName.toLowerCase() !== "body") {
-                if(scrollEl.scrollLeft && scrollEl.scrollTop) {
-                    x -= scrollEl.scrollLeft;
-                    y -= scrollEl.scrollTop;
-                }
-                scrollEl = scrollEl.parentNode;
-            }
-
-            elContainer.style.left = x + "px";
-            elContainer.style.top = y + "px";
-*/
-
-/*
-            var x,y;
-            var el = elCell;
-
-            // Don't use getXY for Opera
-            if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
-                x = el.offsetLeft;
-                y = el.offsetTop;
-                while(el.offsetParent) {
-                    x += el.offsetParent.offsetLeft;
-                    y += el.offsetParent.offsetTop;
-                    el = el.offsetParent;
-                }
-            }
-            else {
-                x = parseInt(YAHOO.util.Dom.getX(el),10);//xy[0] + 1;
-                y = parseInt(YAHOO.util.Dom.getY(el),10);//xy[1] + 1;
-            }
-            elContainer.style.left = x + "px";
-            elContainer.style.top = y + "px";
-*/
-
+            // Move Editor
+            var elContainer = oCellEditor.container;
             var x = parseInt(YAHOO.util.Dom.getX(elCell),10);
             var y = parseInt(YAHOO.util.Dom.getY(elCell),10);
-                
             elContainer.style.left = x + "px";
             elContainer.style.top = y + "px";
 
