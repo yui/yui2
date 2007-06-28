@@ -1,5 +1,11 @@
 TreeView - Release Notes
 
+2.3.0
+  * The image preload feature was restored.
+  * Added the new skin
+  * Tree images are now a sprite, so the preload only needs to grab one style instead
+    of all of them.
+
 2.2.2
   * No change
 

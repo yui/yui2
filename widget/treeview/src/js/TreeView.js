@@ -277,14 +277,15 @@ YAHOO.widget.TreeView.prototype = {
         // Set up the root node
         this.root = new YAHOO.widget.RootNode(this);
 
-        this.logger = new YAHOO.widget.LogWriter(this.toString());
+        var LW = YAHOO.widget.LogWriter;
+
+        this.logger = (LW) ? new LW(this.toString()) : YAHOO;
 
         this.logger.log("tree init: " + this.id);
 
-        //YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
-        YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
+        // YAHOO.util.Event.onContentReady(this.id, this.handleAvailable, this, true);
+        // YAHOO.util.Event.on(this.id, "click", this.handleClick, this, true);
     },
-
 
     //handleAvailable: function() {
         //var Event = YAHOO.util.Event;
@@ -672,9 +673,11 @@ YAHOO.widget.TreeView.removeHandler = function (el, sType, fn) {
  * images to preload, default is ygtv
  * @static
  */
-YAHOO.widget.TreeView.preload = function(prefix) {
+YAHOO.widget.TreeView.preload = function(e, prefix) {
     prefix = prefix || "ygtv";
-    var styles = ["tn","tm","tmh","tp","tph","ln","lm","lmh","lp","lph","loading"];
+
+    //var styles = ["tn","tm","tmh","tp","tph","ln","lm","lmh","lp","lph","loading"];
+    var styles = ["tp"];
 
     var sb = [];
     

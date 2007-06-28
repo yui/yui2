@@ -255,7 +255,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         sb[sb.length] = ' class="' + this.getCheckStyle() + '"';
         sb[sb.length] = ' onclick="javascript:' + this.getCheckLink() + '">';
         //sb[sb.length] = '&#160;</td>';
-        sb[sb.length] = '<div class="ygtvspacer"></div></td>';
+        sb[sb.length] = '<div class="ygtvcheckspacer"></div></td>';
         
 
         sb[sb.length] = '<td>';
