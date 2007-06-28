@@ -807,8 +807,8 @@
         * "label" attribute.
         */
         _setLabel: function (p_sLabel) {
-        
-            this._button.innerHTML = p_sLabel;                
+
+            this._button.innerHTML = p_sLabel;             
         
         },
         
@@ -2898,7 +2898,8 @@
                 }
         
             }
-            else if (this.get("type") != "link" && Dom.inDocument(oElement) && 
+            else if (this.get("type") != "link" && 
+                Dom.inDocument(oElement) && oSrcElement && 
                 oSrcElement.nodeName.toUpperCase() == this.NODE_NAME) {
         
                 this._addListenersToForm();
