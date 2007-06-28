@@ -297,12 +297,12 @@ YAHOO.util.Connect =
    */
 	_customEvents:
 	{
-		onStart:'startEvent',
-		onComplete:'completeEvent',
-		onSuccess:'successEvent',
-		onFailure:'failureEvent',
-		onUpload:'uploadEvent',
-		onAbort:'abortEvent'
+		onStart:['startEvent', 'start'],
+		onComplete:['completeEvent', 'complete'],
+		onSuccess:['successEvent', 'success'],
+		onFailure:['failureEvent', 'failure'],
+		onUpload:['uploadEvent', 'upload'],
+		onAbort:['abortEvent', 'abort']
 	},
 
   /**
@@ -549,14 +549,14 @@ YAHOO.util.Connect =
 		// Enumerate through callback.customevents members and bind/subscribe
 		// events that match in the _customEvents table.
 		for(var prop in callback.customevents){
-			if(this._customEvents[prop]){
+			if(this._customEvents[prop][0]){
 				// Create the custom event
-				o[this._customEvents[prop]] = new YAHOO.util.CustomEvent(this._customEvents[prop], (callback.scope)?callback.scope:null);
-				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop]] + ' created.', 'info', 'Connection');
+				o[this._customEvents[prop][0]] = new YAHOO.util.CustomEvent(this._customEvents[prop][1], (callback.scope)?callback.scope:null);
+				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop][1]] + ' created.', 'info', 'Connection');
 
 				// Subscribe the custom event
-				o[this._customEvents[prop]].subscribe(callback.customevents[prop]);
-				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop]] + ' subscribed.', 'info', 'Connection');
+				o[this._customEvents[prop][0]].subscribe(callback.customevents[prop]);
+				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop][1]] + ' subscribed.', 'info', 'Connection');
 			}
 		}
 	},
@@ -1241,7 +1241,6 @@ YAHOO.util.Connect =
 		else{
 			io.addEventListener('load', uploadCallback, false);
 		}
-
 	},
 
   /**
