@@ -3853,8 +3853,6 @@ _onItemAdded: function (p_sType, p_aArgs) {
 */
 configDisabled: function(p_sType, p_aArgs, p_oMenu) {
 
-    return;
-
     var bDisabled = p_aArgs[0],
         oParent = this.parent,
         aItems = this.getItems(),
