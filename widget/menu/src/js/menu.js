@@ -30,7 +30,9 @@
 var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     CustomEvent = YAHOO.util.CustomEvent,
-    Lang = YAHOO.lang;
+    Lang = YAHOO.lang,
+    
+    m_oShadowTemplate;
 
 
 YAHOO.widget.Menu = function(p_oElement, p_oConfig) {
@@ -683,6 +685,7 @@ init: function(p_oElement, p_oConfig) {
         this.initEvent.subscribe(this._onInit);
         this.beforeRenderEvent.subscribe(this._onBeforeRender);
         this.renderEvent.subscribe(this._onRender);
+        this.renderEvent.subscribe(this.onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
         this.showEvent.subscribe(this._onShow);
         this.beforeHideEvent.subscribe(this._onBeforeHide);
@@ -3850,6 +3853,8 @@ _onItemAdded: function (p_sType, p_aArgs) {
 */
 configDisabled: function(p_sType, p_aArgs, p_oMenu) {
 
+    return;
+
     var bDisabled = p_aArgs[0],
         oParent = this.parent,
         aItems = this.getItems(),
@@ -3874,6 +3879,109 @@ configDisabled: function(p_sType, p_aArgs, p_oMenu) {
 
     this.itemAddedEvent[(bDisabled ? "subscribe" : "unsubscribe")](
         this._onItemAdded);
+
+},
+
+
+/**
+* @method onRender
+* @description "render" event handler for the menu.
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+onRender: function (p_sType, p_aArgs) {
+
+    if (this.cfg.getProperty("position") == "dynamic") {
+
+        function sizeShadow() {
+
+            var oElement = this.element,
+                oShadow = this._shadow;
+        
+            if (oShadow) {
+        
+                oShadow.style.width = (oElement.offsetWidth + 6) + "px";
+                oShadow.style.height = (oElement.offsetHeight + 1) + "px"; 
+        
+            }
+        
+        }
+
+
+        function createShadow() {
+
+            var oShadow = this._shadow,
+                oElement,
+                Module,
+                nIE,
+                me;
+
+            if (!oShadow) {
+
+                oElement = this.element;
+                Module = YAHOO.widget.Module;
+                nIE = YAHOO.env.ua.ie;
+                me = this;
+
+                if (!m_oShadowTemplate) {
+    
+                    m_oShadowTemplate = document.createElement("div");
+                    m_oShadowTemplate.className = "yui-menu-shadow";
+                
+                }
+    
+                oShadow = m_oShadowTemplate.cloneNode(false);
+    
+                oElement.appendChild(oShadow);
+                
+                this._shadow = oShadow;
+    
+                if (nIE == 6 || 
+                    (nIE == 7 && document.compatMode == "BackCompat")) {
+            
+                    window.setTimeout(function () { 
+    
+                        sizeShadow.call(me); 
+    
+                    }, 0);
+
+                    Module.textResizeEvent.subscribe(sizeShadow, me, true);
+                    
+                    this.destroyEvent.subscribe(function () {
+                    
+                        Module.textResizeEvent.unsubscribe(sizeShadow, me);
+                    
+                    });
+            
+                }
+            
+            }
+
+        }
+
+
+        function onBeforeShow() {
+        
+            createShadow.call(this);
+
+            this.beforeShowEvent.unsubscribe(onBeforeShow);
+        
+        }
+
+
+        if (this.cfg.getProperty("visible")) {
+
+            createShadow.call(this);
+        
+        }
+        else {
+
+            this.beforeShowEvent.subscribe(onBeforeShow);
+        
+        }
+    
+    }
 
 },
 
