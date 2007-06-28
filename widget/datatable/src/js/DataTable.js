@@ -5470,6 +5470,7 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                     oColumn.editorOptions.validator : null;
             oCellEditor.value = oRecord.getData(oColumn.key);
 
+ /*
             // Move to be aligned with cell
             var x, y, offsetEl, scrollEl;
 
@@ -5483,14 +5484,45 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
             }
             scrollEl = elCell;
             while(scrollEl.tagName.toLowerCase() !== "body") {
-                x -= scrollEl.scrollLeft;
-                y -= scrollEl.scrollTop;
+                if(scrollEl.scrollLeft && scrollEl.scrollTop) {
+                    x -= scrollEl.scrollLeft;
+                    y -= scrollEl.scrollTop;
+                }
                 scrollEl = scrollEl.parentNode;
             }
 
             elContainer.style.left = x + "px";
             elContainer.style.top = y + "px";
+*/
 
+/*
+            var x,y;
+            var el = elCell;
+
+            // Don't use getXY for Opera
+            if(navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+                x = el.offsetLeft;
+                y = el.offsetTop;
+                while(el.offsetParent) {
+                    x += el.offsetParent.offsetLeft;
+                    y += el.offsetParent.offsetTop;
+                    el = el.offsetParent;
+                }
+            }
+            else {
+                x = parseInt(YAHOO.util.Dom.getX(el),10);//xy[0] + 1;
+                y = parseInt(YAHOO.util.Dom.getY(el),10);//xy[1] + 1;
+            }
+            elContainer.style.left = x + "px";
+            elContainer.style.top = y + "px";
+*/
+
+            var x = parseInt(YAHOO.util.Dom.getX(elCell),10);
+            var y = parseInt(YAHOO.util.Dom.getY(elCell),10);
+                
+            elContainer.style.left = x + "px";
+            elContainer.style.top = y + "px";
+    
             // Show Editor
             elContainer.style.display = "";
             
@@ -5869,6 +5901,7 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
     });
     
     // Select the text
+    elTextarea.focus();
     elTextarea.select();
 };
 
@@ -5899,6 +5932,7 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
     });
 
     // Select the text
+    elTextbox.focus();
     elTextbox.select();
 };
 
