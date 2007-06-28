@@ -110,10 +110,14 @@ YAHOO.util.Attribute.prototype = {
         };
         
         if (this.readOnly || ( this.writeOnce && this._written) ) {
+            YAHOO.log( 'setValue ' + name + ', ' +  value +
+                    'failed: read only', 'error', 'Attribute');
             return false; // write not allowed
         }
         
         if (this.validator && !this.validator.call(owner, value) ) {
+            YAHOO.log( 'setValue ' + name + ', ' + value +
+                    'validation failed', 'error', 'Attribute');
             return false; // invalid value
         }
 
