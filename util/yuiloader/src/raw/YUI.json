@@ -78,11 +78,18 @@
             'path': 'container/assets/container.css'
         },
 
+        'datasource': {
+            'type': 'js',
+            'path': 'datasource/datasource-beta-min.js',
+            'requires': ['event'],
+            'optional': ['connection']
+        },
+
         'datatable': {
             'type': 'js',
             'path': 'datatable/datatable-beta-min.js',
             'requires': ['element', 'datasource', 'datatablecss'],
-            'optional': ['connection', 'dragdrop']
+            'optional': ['calendar', 'dragdrop']
         },
 
         'datatablecss': {
@@ -102,12 +109,6 @@
             'requires': ['dom', 'event']
         },
 
-        'datasource': {
-            'type': 'js',
-            'path': 'datasource/datasource-beta-min.js',
-            'requires': ['event'],
-            'optional': ['connection']
-        },
 
         'editor': {
             'type': 'js',
@@ -161,7 +162,7 @@
             'type': 'js',
             'path': 'logger/logger-min.js',
             'requires': ['event', 'dom', 'loggercss'],
-            'optional': ['reset']
+            'optional': ['dragdrop']
         },
 
         'loggercss': {
