@@ -36,19 +36,19 @@
 
                var aItems = [
                 
-                    { text: "Communication", submenu: { id: "communication", itemdata: [ 
+                    { text: "Communication", url: "http://communication.yahoo.com", submenu: { id: "communication", itemdata: [ 
                     
                         { text: "360", url: "http://360.yahoo.com" },
                         { text: "Alerts", url: "http://alerts.yahoo.com" },
                         { text: "Avatars", url: "http://avatars.yahoo.com" },
                         { text: "Groups", url: "http://groups.yahoo.com " },
                         { text: "Internet Access", url: "http://promo.yahoo.com/broadband" },
-                        { text: "PIM", submenu: { id: "pim", itemdata: [
+                        { text: "PIM", url: "#pim", submenu: { id: "pim", itemdata: [
 
-                                { text: "Yahoo! Mail", url:"http://mail.yahoo.com" },
-                                { text: "Yahoo! Address Book", url:"http://addressbook.yahoo.com" },
-                                { text: "Yahoo! Calendar",  url:"http://calendar.yahoo.com" },
-                                { text: "Yahoo! Notepad", url:"http://notepad.yahoo.com" }
+                                { text: "Yahoo! Mail", url: "http://mail.yahoo.com" },
+                                { text: "Yahoo! Address Book", url: "http://addressbook.yahoo.com" },
+                                { text: "Yahoo! Calendar",  url: "http://calendar.yahoo.com" },
+                                { text: "Yahoo! Notepad", url: "http://notepad.yahoo.com" }
 
                             ] }
                         
@@ -60,7 +60,7 @@
                     
                     ] } },
 
-                    { text: "Shopping", submenu: { id: "shopping", itemdata: [
+                    { text: "Shopping", url: "http://shopping.yahoo.com", submenu: { id: "shopping", itemdata: [
 
                         { text: "Auctions", url: "http://auctions.shopping.yahoo.com" },
                         { text: "Autos", url: "http://autos.yahoo.com" },
@@ -74,7 +74,7 @@
                     
                     ] } },
 
-                    { text: "Entertainment", submenu: { id: "entertainment", itemdata: [
+                    { text: "Entertainment", url: "http://entertainment.yahoo.com", submenu: { id: "entertainment", itemdata: [
                     
                         { text: "Fantasy Sports", url: "http://fantasysports.yahoo.com" },
                         { text: "Games", url: "http://games.yahoo.com" },
@@ -87,7 +87,7 @@
                     
                     ] } },
 
-                    { text: "Information", submenu: { id: "information", itemdata: [
+                    { text: "Information", url: "#information", submenu: { id: "information", itemdata: [
                     
                         { text: "Downloads", url: "http://downloads.yahoo.com" },
                         { text: "Finance", url: "http://finance.yahoo.com" },
@@ -128,7 +128,7 @@
         </script>
 
     </head>
-    <body>
+    <body class="yui-skin-sam">
 
         <h1><?php writeTitle(); ?> <em>[<a href="index.html">Examples Home</a>]</em></h1>
         <p>This example demonstrates how to create a multi-tiered menu using nothing but JavaScript.  The Menu API also supports building a menu like this <a href="example07.html">using existing markup</a>.</p>

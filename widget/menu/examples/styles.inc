@@ -45,5 +45,5 @@ else {
 
         <!-- CSS for Menu -->
 
-        <link rel="stylesheet" type="text/css" href="<?php echo $sMenuCSSPath; ?>/menu.css">
- 
+        <link rel="stylesheet" type="text/css" href="<?php echo $sMenuCSSPath; ?>/menu-core.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sMenuCSSPath; ?>/skin-sam.css"> 

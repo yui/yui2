@@ -1,0 +1,118 @@
+.yui-overlay {
+
+	position: absolute;
+
+}
+
+.yui-panel-container {
+
+	position: absolute;
+
+}
+
+.yui-panel-container.shadow .underlay {
+
+	visibility: inherit;
+	position: absolute;
+    top: 2px;
+    right: -4px;
+    left: -4px;
+    bottom: -3px;
+    background-color: #000;
+    opacity: .12;
+    filter: alpha(opacity=12);  /* For IE */
+
+}
+
+.yui-panel {
+
+	position: relative;
+	left: 0;
+	top: 0;
+    border-style: solid;
+    border-width: 1px 0;
+    border-color: #808080;
+	z-index: 1;
+
+}
+
+.yui-panel .hd, 
+.yui-panel .bd, 
+.yui-panel .ft {
+
+    border-style: solid;
+    border-width: 0 1px;
+    border-color: #808080;
+    margin: 0 -1px;
+  
+}
+
+.yui-panel .hd {
+
+    border-bottom: solid 1px #ccc;
+
+}
+
+.yui-panel .bd,
+.yui-panel .ft {
+
+    background-color: #F2F2F2;
+
+}
+
+.yui-panel .hd {
+
+    padding: 0 10px;
+    font-size: 93%;  /* 12px */
+    line-height: 2;  /* ~24px */
+    *line-height: 1.9; /* For IE */
+    font-weight: bold;
+    color: #000;
+    background: url(sprite.png) repeat-x 0 -200px;
+    
+}
+
+.yui-panel .bd {
+
+    padding: 10px;
+
+}
+
+.yui-panel .ft {
+
+    padding: 0 10px 10px 10px;
+    text-align: right;
+
+}
+
+.container-close {
+
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    width: 25px;
+    height: 15px;
+    background:url(sprite.png) no-repeat 0 -300px;
+
+}
+
+input.text,
+textarea,
+select {
+
+    background-color: #fff;
+    border: solid 1px #7D98B8;
+
+}
+
+.yui-tt .bd {
+
+    color: #000;
+    line-height: 1.465;
+    padding: 0 5px;
+    border-color: #D4C237 #A6982B #A6982B #A6982B;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #FFEE69;
+
+}

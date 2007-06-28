@@ -1,0 +1,21 @@
+/* Menu & MenuBar styles */
+
+.yuimenu .yuimenu,
+.yuimenubar .yuimenu {
+
+    position: absolute;
+    visibility: hidden;
+
+}
+
+.yuimenubar ul, 
+.yuimenu ul,
+.yuimenubar li, 
+.yuimenu li,
+.yuimenu h6,
+.yuimenubar h6 { 
+
+    margin: 0;
+    padding: 0;
+
+}
