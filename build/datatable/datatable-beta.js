@@ -74,7 +74,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
         
         //HACK: Set the Paginator values here via updatePaginator
-        if(this._oConfigs.paginator) {
+        if(this._oConfigs && this._oConfigs.paginator) {
             this.updatePaginator(this._oConfigs.paginator);
         }
 

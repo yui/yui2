@@ -79,7 +79,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
         
         //HACK: Set the Paginator values here via updatePaginator
-        if(this._oConfigs.paginator) {
+        if(this._oConfigs && this._oConfigs.paginator) {
             this.updatePaginator(this._oConfigs.paginator);
         }
 
@@ -441,8 +441,10 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     this.setAttributeConfig("scrollable", {
         value: false,
         validator: function(oParam) {
-            //TODO: validate against caption, inline editing, resizeable
-            return YAHOO.lang.isBoolean(oParam);
+            //TODO: validate agnst resizeable
+            return (YAHOO.lang.isBoolean(oParam) &&
+                    // Not compatible with caption
+                    !YAHOO.lang.isString(this.get("caption")));
         },
         method: function(oParam) {
             if(oParam) {

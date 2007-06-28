@@ -5,7 +5,7 @@ this._initRecordSet();if(!this._oRecordSet){return;}
 this._initDataSource(oDataSource);if(!this._oDataSource){return;}
 if(this._oDataSource.dataType==YAHOO.util.DataSource.TYPE_HTMLTABLE){this._oDataSource.sendRequest(this.get("initialRequest"),this._onDataReturnEnhanceTable,this);}
 else{this._initTableEl();if(!this._elTable||!this._elThead||!this._elTbody){return;}
-YAHOO.widget.DataTable.superclass.constructor.call(this,this._elContainer,this._oConfigs);if(this._oConfigs.paginator){this.updatePaginator(this._oConfigs.paginator);}
+YAHOO.widget.DataTable.superclass.constructor.call(this,this._elContainer,this._oConfigs);if(this._oConfigs&&this._oConfigs.paginator){this.updatePaginator(this._oConfigs.paginator);}
 this._oDataSource.sendRequest(this.get("initialRequest"),this.onDataReturnInitializeTable,this);}
 this._initCellEditorEl();this._initColumnSort();this._initDomEvents();YAHOO.widget.DataTable._nCount++;};if(YAHOO.util.Element){YAHOO.lang.extend(YAHOO.widget.DataTable,YAHOO.util.Element);}
 else{}
