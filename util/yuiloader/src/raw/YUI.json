@@ -224,7 +224,7 @@
 
         'treeviewcss': {
             'type': 'css',
-            'path': 'treeview/assets/tree.css'
+            'path': 'treeview/assets/treeview.css'
         },
 
         'utilities': {

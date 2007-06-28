@@ -5,7 +5,7 @@
  * and yahoo-dom-event.js), and will automatically use these when
  * appropriate in order to minimize the number of http connections
  * required to load all of the dependencies.
- * @module yui
+ * @module yuiloader
  * @namespace YAHOO.util
  */
 
@@ -284,7 +284,7 @@
 
         'treeviewcss': {
             'type': 'css',
-            'path': 'treeview/assets/tree.css'
+            'path': 'treeview/assets/treeview.css'
         },
 
         'utilities': {
