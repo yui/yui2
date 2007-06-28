@@ -4,7 +4,7 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
 /**
- * @description <p>Toolbar description goes here</p>
+ * @description <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
  * @class Toolbar
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event
@@ -22,8 +22,6 @@ var Dom = YAHOO.util.Dom,
     /**
      * Provides a rich toolbar widget based on the button and menu widgets
      * @constructor
-     * @class Toolbar
-     * @extends YAHOO.util.Element
      * @param {String/HTMLElement} el The element to turn into a toolbar.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
@@ -812,6 +810,10 @@ var Dom = YAHOO.util.Dom,
             var a = document.createElement('a');
             a.innerHTML = tmp._button.innerHTML;
             a.href = '#';
+            Event.on(a, 'click', function(ev) {
+                Event.stopEvent(ev);
+            });
+
             tmp._button.parentNode.replaceChild(a, tmp._button);
             tmp._button = a;
             if (oButton.type == 'select') {
@@ -1491,7 +1493,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 /**
  * @module editor
- * @description <p>Editor goes here</p>
+ * @description <p>Provides a rich text editor widget based on the button and toolbar</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar, container, menu, button
  * @optional dragdrop, animation
@@ -1537,7 +1539,6 @@ var Dom = YAHOO.util.Dom,
         if (!oConfig.attributes.toolbar_cont) {
             oConfig.attributes.toolbar_cont = document.createElement('DIV');
             oConfig.attributes.toolbar_cont.id = oConfig.attributes.textarea.id + '_toolbar';
-            //oConfig.element.appendChild(oConfig.attributes.toolbar_cont);
             div.appendChild(oConfig.attributes.toolbar_cont);
         }
         
@@ -1545,7 +1546,6 @@ var Dom = YAHOO.util.Dom,
             oConfig.attributes.iframe = _createIframe(oConfig.attributes.textarea.id);
             var editorWrapper = document.createElement('DIV');
             editorWrapper.appendChild(oConfig.attributes.iframe.get('element'));
-            //oConfig.element.appendChild(editorWrapper);
             div.appendChild(editorWrapper);
         }
 
@@ -2103,12 +2103,12 @@ var Dom = YAHOO.util.Dom,
                 }
                 //Check to see if we get el.nodeName and nodeType
                 if (el.nodeName && (el.nodeType == 1)) {
-					domPath[domPath.length] = el;
-				}
-                
-				if (el.nodeName.toUpperCase() == "BODY") {
-					break;
-				}
+                    domPath[domPath.length] = el;
+                }
+
+                if (el.nodeName.toUpperCase() == "BODY") {
+				    break;
+                }
 
 				el = el.parentNode;
 			}
@@ -3034,10 +3034,7 @@ var Dom = YAHOO.util.Dom,
                                         { text: 'Arial Black' },
                                         { text: 'Comic Sans MS' },
                                         { text: 'Courier New' },
-                                        { text: 'Impact' },
-                                        { text: 'Lucida Sans' },
-                                        { text: 'Monaco' },
-                                        { text: 'Palatino' },
+                                        { text: 'Lucida Console' },
                                         { text: 'Tahoma' },
                                         { text: 'Times New Roman' },
                                         { text: 'Trebuchet MS' },
@@ -3686,23 +3683,27 @@ var Dom = YAHOO.util.Dom,
                 var body = document.createElement('div');
                 body.innerHTML = str;
 
+                var unlinkCont = document.createElement('div');
+                unlinkCont.className = 'removeLink';
                 var unlink = document.createElement('a');
                 unlink.href = '#';
-                unlink.className = 'removeLink';
                 unlink.innerHTML = 'Remove link from text';
                 Event.on(unlink, 'click', function(ev) {
                     Event.stopEvent(ev);
                     this.execCommand('unlink');
                     this.closeWindow();
                 }, this, true);
-                body.appendChild(unlink);
+                unlinkCont.appendChild(unlink);
+                body.appendChild(unlinkCont);
 
                 win.setHeader(this.STR_LINK_PROP_TITLE);
                 win.setBody(body);
 
                 Event.onAvailable('createlink_url', function() {
                     window.setTimeout(function() {
-                        YAHOO.util.Dom.get('createlink_url').focus();
+                        try {
+                            YAHOO.util.Dom.get('createlink_url').focus();
+                        } catch (e) {}
                     }, 50);
                     Event.on('createlink_url', 'blur', function() {
                         var url = Dom.get('createlink_url');
@@ -3744,7 +3745,11 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
                 el.setAttribute('href', urlValue);
-                el.setAttribute('target', ((target.checked) ? target.value : ''));
+                if (target.checked) {
+                    el.setAttribute('target', target.value);
+                } else {
+                    el.setAttribute('target', '');
+                }
                 el.setAttribute('title', ((title.value) ? title.value : ''));
 
             } else {
@@ -3898,7 +3903,8 @@ var Dom = YAHOO.util.Dom,
                     exec = false;
                     break;
                 case 'unlink':
-                    var el = this._getSelectedElement();
+                    //var el = this._getSelectedElement();
+                    var el = this.currentElement;
                     el.removeAttribute('title');
                     el.removeAttribute('tag');
                     el.removeAttribute('target');
@@ -4544,7 +4550,7 @@ var Dom = YAHOO.util.Dom,
             var xDiff = (newXY[0] - orgXY[0]);
             var yDiff = (newXY[1] - orgXY[1]);
             
-            //Convert zegative numbers to positive so we can get the difference in distance
+            //Convert negative numbers to positive so we can get the difference in distance
             xDiff = ((xDiff < 0) ? (xDiff * -1) : xDiff);
             yDiff = ((yDiff < 0) ? (yDiff * -1) : yDiff);
 
@@ -4656,99 +4662,6 @@ var Dom = YAHOO.util.Dom,
         }
     });
 
-
-    /**
-     * @description Singleton object used to track the open window objects and panels across the various open editors
-     * @class EditorInfo
-     * @static
-    */
-    YAHOO.widget.EditorInfo = {
-        /**
-        * @private
-        * @property window
-        * @description A reference to the currently open window object in any editor on the page.
-        * @type Object YAHOO.widget.EditorWindow
-        */
-        window: {},
-        /**
-        * @private
-        * @property window
-        * @description A reference to the currently open panel in any editor on the page.
-        * @type Object YAHOO.widget.Overlay
-        */
-        panel: null
-    }
-
-    /**
-     * @description Class to hold Window information between uses. We use the same panel to show the windows, so using this will allow you to configure a window before it is shown.
-     * This is what you pass to Editor.openWindow();. These parameters will not take effect until the openWindow() is called in the editor.
-     * @class EditorWindow
-     * @param {String} name The name of the window.
-     * @param {Object} attrs Attributes for the window.
-     * Current attributes used are : height and width
-    */
-    YAHOO.widget.EditorWindow = function(name, attrs) {
-        this.name = name.replace(' ', '_');
-        this.attrs = attrs;
-    }
-
-    YAHOO.widget.EditorWindow.prototype = {
-        /**
-        * @private
-        * @property _cache
-        * @description Holds a cache of the DOM for the window so we only have to build it once..
-        */
-        _cache: null,
-        /**
-        * @private
-        * @property header
-        * @description Holder for the header of the window, used in Editor.openWindow
-        */
-        header: null,
-        /**
-        * @private
-        * @property body
-        * @description Holder for the body of the window, used in Editor.openWindow
-        */
-        body: null,
-        /**
-        * @private
-        * @property footer
-        * @description Holder for the footer of the window, used in Editor.openWindow
-        */
-        footer: null,
-        /**
-        * @method setHeader
-        * @description Sets the header for the window.
-        */
-        setHeader: function(str) {
-            this.header = str;
-        },
-        /**
-        * @method setBody
-        * @description Sets the body for the window.
-        */
-        setBody: function(str) {
-            this.body = str;
-        },
-        /**
-        * @method setFooter
-        * @description Sets the footer for the window.
-        */
-        setFooter: function(str) {
-            this.footer = str;
-        },
-        /**
-        * @method toString
-        * @description Returns a string representing the EditorWindow.
-        * @return {String}
-        */
-        toString: function() {
-            return 'Editor Window (' + this.name + ')';
-        }
-    };
-
-
 /**
 * @event toolbarLoaded
 * @description Event is fired during the render process directly after the Toolbar is loaded. Allowing you to attach events to the toolbar.
@@ -4839,6 +4752,112 @@ var Dom = YAHOO.util.Dom,
 * @description Dynamic event fired when an EditorWindow is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event.
 * @type YAHOO.util.CustomEvent
 */
+
+
+    /**
+     * @description Singleton object used to track the open window objects and panels across the various open editors
+     * @class EditorInfo
+     * @static
+    */
+    YAHOO.widget.EditorInfo = {
+        /**
+        * @private
+        * @property window
+        * @description A reference to the currently open window object in any editor on the page.
+        * @type Object YAHOO.widget.EditorWindow
+        */
+        window: {},
+        /**
+        * @private
+        * @property panel
+        * @description A reference to the currently open panel in any editor on the page.
+        * @type Object YAHOO.widget.Overlay
+        */
+        panel: null
+    }
+
+    /**
+     * @description Class to hold Window information between uses. We use the same panel to show the windows, so using this will allow you to configure a window before it is shown.
+     * This is what you pass to Editor.openWindow();. These parameters will not take effect until the openWindow() is called in the editor.
+     * @class EditorWindow
+     * @param {String} name The name of the window.
+     * @param {Object} attrs Attributes for the window. Current attributes used are : height and width
+    */
+    YAHOO.widget.EditorWindow = function(name, attrs) {
+        /**
+        * @private
+        * @property name
+        * @description A unique name for the window
+        */
+        this.name = name.replace(' ', '_');
+        /**
+        * @private
+        * @property attrs
+        * @description The window attributes
+        */
+        this.attrs = attrs;
+    }
+
+    YAHOO.widget.EditorWindow.prototype = {
+        /**
+        * @private
+        * @property _cache
+        * @description Holds a cache of the DOM for the window so we only have to build it once..
+        */
+        _cache: null,
+        /**
+        * @private
+        * @property header
+        * @description Holder for the header of the window, used in Editor.openWindow
+        */
+        header: null,
+        /**
+        * @private
+        * @property body
+        * @description Holder for the body of the window, used in Editor.openWindow
+        */
+        body: null,
+        /**
+        * @private
+        * @property footer
+        * @description Holder for the footer of the window, used in Editor.openWindow
+        */
+        footer: null,
+        /**
+        * @method setHeader
+        * @description Sets the header for the window.
+        * @param {String/HTMLElement} str The string or DOM reference to be used as the windows header.
+        */
+        setHeader: function(str) {
+            this.header = str;
+        },
+        /**
+        * @method setBody
+        * @description Sets the body for the window.
+        * @param {String/HTMLElement} str The string or DOM reference to be used as the windows body.
+        */
+        setBody: function(str) {
+            this.body = str;
+        },
+        /**
+        * @method setFooter
+        * @description Sets the footer for the window.
+        * @param {String/HTMLElement} str The string or DOM reference to be used as the windows footer.
+        */
+        setFooter: function(str) {
+            this.footer = str;
+        },
+        /**
+        * @method toString
+        * @description Returns a string representing the EditorWindow.
+        * @return {String}
+        */
+        toString: function() {
+            return 'Editor Window (' + this.name + ')';
+        }
+    };
+
+
     
 })();
 YAHOO.register("editor", YAHOO.widget.Editor, {version: "@VERSION@", build: "@BUILD@"});

@@ -4,7 +4,7 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 */
 /**
- * @description <p>Toolbar description goes here</p>
+ * @description <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
  * @class Toolbar
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event
@@ -22,8 +22,6 @@ var Dom = YAHOO.util.Dom,
     /**
      * Provides a rich toolbar widget based on the button and menu widgets
      * @constructor
-     * @class Toolbar
-     * @extends YAHOO.util.Element
      * @param {String/HTMLElement} el The element to turn into a toolbar.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
@@ -812,6 +810,10 @@ var Dom = YAHOO.util.Dom,
             var a = document.createElement('a');
             a.innerHTML = tmp._button.innerHTML;
             a.href = '#';
+            Event.on(a, 'click', function(ev) {
+                Event.stopEvent(ev);
+            });
+
             tmp._button.parentNode.replaceChild(a, tmp._button);
             tmp._button = a;
             if (oButton.type == 'select') {

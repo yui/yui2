@@ -216,9 +216,7 @@
 
 
 .yui-toolbar-fontname-impact { font-family: Impact; }
-.yui-toolbar-fontname-lucida-sans { font-family: Lucida Sans; }
-.yui-toolbar-fontname-monaco { font-family: Monaco; }
-.yui-toolbar-fontname-palatino { font-family: Palatino; }
+.yui-toolbar-fontname-lucida-console { font-family: Lucida Console; }
 .yui-toolbar-fontname-tahoma { font-family: Tahoma; }
 .yui-toolbar-fontname-trebuchet-ms { font-family: Trebuchet MS; }
 
@@ -404,7 +402,7 @@
     left: 25px;
     text-indent: 9999px;
     overflow: hidden;
-    background-image: url( knob.png );
+    background-image: url( knob.gif );
     background-repeat: no-repeat;
 }
 
@@ -413,6 +411,7 @@
     /*padding: .35em;*/
     width: 100%;
     zoom: 1;
+    position: relative;
 }
 .yui-editor-panel .bd div.yui-editor-body-cont {
     padding: .25em .1em;
@@ -460,6 +459,9 @@
     float: left;
     padding: .2em;
     overflow: auto; /* This fixes the caret issue in Firefox */
+    width: 100%;
+    zoom: 1;
+    text-align: left;
 }
 
 .yui-editor-panel label strong {
@@ -467,15 +469,16 @@
     width: 6em;
 }
 
-
-.yui-editor-panel a.removeLink {
-    float: right;
+.yui-editor-panel .removeLink {
     margin-right: .5em;
+    width: 100%;
+    text-align: right;
 }
 
 
 .yui-editor-panel label input {
     margin-left: .25em;
+    float: left;
 }
 .yui-editor-panel label input.warning {
     background-color: yellow;
