@@ -980,30 +980,70 @@
             return Y.Dom.getChildrenBy(node);
         },
  
-         getAttribute: function(node, attr) {
-            node = Y.Dom.get(node);
-            if (!node) {
-                YAHOO.log('getAttribute failed: invalid node argument', 'error', 'Dom');
-            }
-
-            attr = attributeMap[attr.toLowerCase()] || atr;
-            // TODO: convert to camelCase?
-            return node[attr];
-        },
-
+        /**
+         * Returns the left scroll value of the document 
+         * @method getDocumentScrollLeft
+         * @param {HTMLDocument} document (optional) The document to get the scroll value of
+         * @return {Int}  The amount that the document is scrolled to the left
+         */
         getDocumentScrollLeft: function(doc) {
             doc = doc || document;
             return Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
         }, 
 
+        /**
+         * Returns the top scroll value of the document 
+         * @method getDocumentScrollTop
+         * @param {HTMLDocument} document (optional) The document to get the scroll value of
+         * @return {Int}  The amount that the document is scrolled to the top
+         */
         getDocumentScrollTop: function(doc) {
             doc = doc || document;
             return Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+        },
+
+        /**
+         * Inserts the new node as the previous sibling of the reference node 
+         * @method insertBefore
+         * @param {String | HTMLElement} newNode The node to be inserted
+         * @param {String | HTMLElement} referenceNode The node to insert the new node before 
+         * @return {Boolean} Whether or not the insert was successful 
+         */
+        insertBefore: function(newNode, referenceNode) {
+            newNode = Y.Dom.get(newNode); 
+            referenceNode = Y.Dom.get(referenceNode); 
+            
+            if (!newNode || !referenceNode || !referenceNode.parentNode) {
+                YAHOO.log('insertAfter failed: missing or invalid arg(s)', 'error', 'Dom');
+                return false;
+            }       
+
+            referenceNode.parentNode.insertBefore(newNode, referenceNode); 
+            return true; 
+        },
+
+        /**
+         * Inserts the new node as the next sibling of the reference node 
+         * @method insertAfter
+         * @param {String | HTMLElement} newNode The node to be inserted
+         * @param {String | HTMLElement} referenceNode The node to insert the new node after 
+         * @return {Boolean} Whether or not the insert was successful 
+         */
+        insertAfter: function(newNode, referenceNode) {
+            newNode = Y.Dom.get(newNode); 
+            referenceNode = Y.Dom.get(referenceNode); 
+            
+            if (!newNode || !referenceNode || !referenceNode.parentNode) {
+                YAHOO.log('insertAfter failed: missing or invalid arg(s)', 'error', 'Dom');
+                return false;
+            }       
+
+            if (referenceNode.nextSibling) {
+                referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling); 
+            } else {
+                referenceNode.parentNode.appendChild(newNode);
+            }
+            return true; 
         }
     };
-
-var attributeMap = {
-    'for': 'htmlFor',
-    'class': 'className'
-};
 })();
