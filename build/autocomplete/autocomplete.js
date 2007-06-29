@@ -55,7 +55,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
                     "instance" + YAHOO.widget.AutoComplete._nIndex;
                 this._oTextbox = elInput;
             }
-            this._oTextbox.className = "yui-ac-input";
+            YAHOO.util.Dom.addClass(this._oTextbox, "yui-ac-input");
         }
         else {
             return;
@@ -70,6 +70,22 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
                 this._oContainer = elContainer;
             }
             if(this._oContainer.style.display == "none") {
+            }
+            
+            // For skinning
+            var elParent = this._oContainer.parentNode;
+            var elTag = elParent.tagName.toLowerCase();
+            while(elParent && (elParent != "document")) {
+                if(elTag == "div") {
+                    YAHOO.util.Dom.addClass(elParent, "yui-ac");
+                    break;
+                }
+                else {
+                    elParent = elParent.parentNode;
+                    elTag = elParent.tagName.toLowerCase();
+                }
+            }
+            if(elTag != "div") {
             }
         }
         else {
@@ -973,7 +989,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initContainer = function() {
-    this._oContainer.className = "yui-ac-container";
+    YAHOO.util.Dom.addClass(this._oContainer, "yui-ac-container");
     
     if(!this._oContainer._oContent) {
         // The oContent div helps size the iframe and shadow properly

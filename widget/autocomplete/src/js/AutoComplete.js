@@ -56,7 +56,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
                     "instance" + YAHOO.widget.AutoComplete._nIndex;
                 this._oTextbox = elInput;
             }
-            this._oTextbox.className = "yui-ac-input";
+            YAHOO.util.Dom.addClass(this._oTextbox, "yui-ac-input");
         }
         else {
             YAHOO.log("Could not instantiate AutoComplete due to an invalid input element", "error", this.toString());
@@ -73,6 +73,23 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
             }
             if(this._oContainer.style.display == "none") {
                 YAHOO.log("The container may not display properly if display is set to \"none\" in CSS", "warn", this.toString());
+            }
+            
+            // For skinning
+            var elParent = this._oContainer.parentNode;
+            var elTag = elParent.tagName.toLowerCase();
+            while(elParent && (elParent != "document")) {
+                if(elTag == "div") {
+                    YAHOO.util.Dom.addClass(elParent, "yui-ac");
+                    break;
+                }
+                else {
+                    elParent = elParent.parentNode;
+                    elTag = elParent.tagName.toLowerCase();
+                }
+            }
+            if(elTag != "div") {
+                YAHOO.log("Could not find an appropriate parent container for skinning", "warn", this.toString());
             }
         }
         else {
@@ -981,7 +998,7 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._initContainer = function() {
-    this._oContainer.className = "yui-ac-container";
+    YAHOO.util.Dom.addClass(this._oContainer, "yui-ac-container");
     
     if(!this._oContainer._oContent) {
         // The oContent div helps size the iframe and shadow properly
