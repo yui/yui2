@@ -91,6 +91,7 @@ var Dom = YAHOO.util.Dom,
         var items = this.getItems();
         for (var i = 0; i < items.length; i++) {
             Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-').toLowerCase() : items[i]._oText.nodeValue.replace(/ /g, '-').toLowerCase()));
+            Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-') : items[i]._oText.nodeValue.replace(/ /g, '-')));
         }
         this._setWidth();
     };
@@ -796,9 +797,9 @@ var Dom = YAHOO.util.Dom,
             Event.on(a, 'click', function(ev) {
                 Event.stopEvent(ev);
             });
-
             tmp._button.parentNode.replaceChild(a, tmp._button);
             tmp._button = a;
+
             if (oButton.type == 'select') {
                 tmp.addClass(this.CLASS_PREFIX + '-select');
             }
@@ -2840,11 +2841,11 @@ var Dom = YAHOO.util.Dom,
             /**
             * @config blankimage
             * @description The CSS used to show/hide hidden elements on the page
-            * @default 'assets/blankimage.jpg'
+            * @default 'assets/blankimage.png'
             * @type String
             */            
             this.setAttributeConfig('blankimage', {
-                value: attr.blankimage || 'assets/blankimage.jpg'
+                value: attr.blankimage || 'assets/blankimage.png'
             });
             /**
             * @config hiddencss
@@ -3418,7 +3419,11 @@ var Dom = YAHOO.util.Dom,
                 var hw = document.createElement('div');
                 hw.className = 'yui-toolbar-group yui-toolbar-group-padding height-width';
                 hw.innerHTML = '<h3>' + this.STR_IMAGE_SIZE + ':</h3>';
-                hw.innerHTML += '<span><input type="text" size="3" value="'+width+'" id="insertimage_width"> x <input type="text" size="3" value="'+height+'" id="insertimage_height"></span><span class="info">' + this.STR_IMAGE_ORIG_SIZE + '<br>'+ owidth +' x ' + oheight + '</span>';
+                var orgSize = '';
+                if ((height != oheight) || (width != owidth)) {
+                    orgSize = '<span class="info">' + this.STR_IMAGE_ORIG_SIZE + '<br>'+ owidth +' x ' + oheight + '</span>';
+                }
+                hw.innerHTML += '<span><input type="text" size="3" value="'+width+'" id="insertimage_width"> x <input type="text" size="3" value="'+height+'" id="insertimage_height"></span>' + orgSize;
                 cont.insertBefore(hw, cont.firstChild);
 
                 Event.onAvailable('insertimage_width', function() {

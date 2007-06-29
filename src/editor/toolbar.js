@@ -101,6 +101,7 @@ var Dom = YAHOO.util.Dom,
         var items = this.getItems();
         for (var i = 0; i < items.length; i++) {
             Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-').toLowerCase() : items[i]._oText.nodeValue.replace(/ /g, '-').toLowerCase()));
+            Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-') : items[i]._oText.nodeValue.replace(/ /g, '-')));
         }
         this._setWidth();
     };
@@ -813,9 +814,9 @@ var Dom = YAHOO.util.Dom,
             Event.on(a, 'click', function(ev) {
                 Event.stopEvent(ev);
             });
-
             tmp._button.parentNode.replaceChild(a, tmp._button);
             tmp._button = a;
+
             if (oButton.type == 'select') {
                 tmp.addClass(this.CLASS_PREFIX + '-select');
             }
