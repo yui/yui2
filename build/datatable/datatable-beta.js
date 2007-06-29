@@ -5445,8 +5445,21 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
 
             // Move Editor
             var elContainer = oCellEditor.container;
-            var x = parseInt(YAHOO.util.Dom.getX(elCell),10);
-            var y = parseInt(YAHOO.util.Dom.getY(elCell),10);
+            var x = YAHOO.util.Dom.getX(elCell);
+            var y = YAHOO.util.Dom.getY(elCell);
+
+            // SF doesn't get xy for cells in scrolling table
+            // when tbody display is set to block
+            if(isNaN(x) || isNaN(y)) {
+                x = elCell.offsetLeft + // cell pos relative to table
+                        YAHOO.util.Dom.getX(this._elTable) - // plus table pos relative to document
+                        this._elTbody.scrollLeft; // minus tbody scroll
+                y = elCell.offsetTop + // cell pos relative to table
+                        YAHOO.util.Dom.getY(this._elTable) - // plus table pos relative to document
+                        this._elTbody.scrollTop + // minus tbody scroll
+                        this._elThead.offsetHeight; // account for fixed headers
+            }
+            
             elContainer.style.left = x + "px";
             elContainer.style.top = y + "px";
 
