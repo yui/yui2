@@ -1,9 +1,20 @@
+/**
+ * CORE
+ *
+ * This is the set of CSS rules required by Calendar to drive core functionality and structure.
+ * Changes to these rules may result in the Calendar not functioning or rendering correctly.
+ *
+ * They should not be modified for skinning.
+ **/
+ 
+/* CALENDAR BOUNDING BOX */
 .yui-calcontainer {
 	position:relative;
 	float:left;
 	_overflow:hidden; /* IE6 only, to clip iframe shim */
 }
 
+/* IFRAME SHIM */
 .yui-calcontainer iframe {
 	position:absolute;
 	border:none;
@@ -15,7 +26,7 @@
 	top:0px;
 }
 
-/* IE6 only */
+/* IFRAME SHIM IE6 only */
 .yui-calcontainer iframe.fixedsize {
 	width:50em;
 	height:50em;
@@ -23,36 +34,43 @@
 	left:-1px;
 }
 
+/* BOUNDING BOX FOR EACH CALENDAR GROUP PAGE */
 .yui-calcontainer.multi .groupcal {
 	z-index:1;
 	float:left;
 	position:relative;
 }
 
+/* TITLE BAR */
 .yui-calcontainer .title {
 	position:relative;
 	z-index:1;
 }
 
+/* CLOSE ICON CONTAINER */
 .yui-calcontainer .close-icon {
 	position:absolute;
 	z-index:1;
 }
 
+/* CALENDAR TABLE */
 .yui-calendar {
 	position:relative;
 }
 
+/* NAVBAR LEFT ARROW CONTAINER */
 .yui-calendar .calnavleft {
 	position:absolute;
 	z-index:1;
 }
 
+/* NAVBAR RIGHT ARROW CONTAINER */
 .yui-calendar .calnavright {
 	position:absolute;
 	z-index:1;
 }
 
+/* NAVBAR TEXT CONTAINER */
 .yui-calendar .calheader {
 	position:relative;
 	width:100%;
