@@ -1,5 +1,4 @@
 /* for all templates and grids */
-
 body{text-align:center;}
 #ft{clear:both;}
 /**/
@@ -82,7 +81,6 @@ body{text-align:center;}
 #yui-main .yui-b {float:none;width:auto;}
 /* GRIDS (not TEMPLATES) */
 
-/*Was below the standard 48/49% widths*/
 .yui-gb .yui-g,/*new for nesting normal grids in special grids*/
 .yui-gb .yui-gb,/*new for nesting normal grids in special grids*/
 .yui-gb .yui-u, 
@@ -95,14 +93,11 @@ body{text-align:center;}
 .yui-gc .yui-g,
 .yui-gd .yui-u{float:left;margin-left:2%;width:32%;}
 
-.yui-gb .yui-u{*margin-left:2.0%;}
 .yui-gb .yui-gb .yui-u,
 .yui-gb .yui-gc .yui-u {_margin-left:1.2%;*margin-left:1.7%;}
-
-
 .yui-g .yui-gb .yui-u {_margin-left:.8%;} /* for #8-10 for IE6 */
-.yui-gb .yui-u {margin-left:2%;width:32%;}
-.yui-gb div.first {margin-left:0;*margin-right:1px;}
+.yui-gb .yui-u {margin-left:2%;width:32%;float:right;*width:31.8%;}
+.yui-gb div.first {margin-left:0;*margin-right:1px;float:left;}
 .yui-gb .yui-gb div.first {*margin-right:0;width:31.7%;} /* for #29 for IE7*/
 .yui-gb .yui-gc div.first, /* for #41 for IE7 */
 .yui-gb .yui-gd div.first  /* for #40 for IE7 */
@@ -145,7 +140,6 @@ body{text-align:center;}
 	.yui-ge div.first, 
 	.yui-gf div.first{float:left;}
 
-
 .yui-g .yui-g .yui-u,
 .yui-gb .yui-g .yui-u,
 .yui-gc .yui-g .yui-u,
@@ -162,7 +156,6 @@ body{text-align:center;}
 .yui-gc .yui-g .yui-u,
 .yui-gd .yui-g .yui-u {_width:48.1%;*width:48.1%;*margin-left:0;}
 
-
 .yui-g .yui-u,
 .yui-g .yui-g,
 .yui-g .yui-gb,
@@ -171,13 +164,11 @@ body{text-align:center;}
 .yui-g .yui-ge,
 .yui-g .yui-gf {width:49.1%;}
 
-
 .yui-g .yui-gb div.first,
        .yui-gb div.first, 
        .yui-gc div.first, 
        .yui-gd div.first {margin-left:0;}
-
-
+	   
 .yui-g .yui-gc div.first, 
 .yui-gc div.first, 
 .yui-gd .yui-g, /* for 056, 057 */
