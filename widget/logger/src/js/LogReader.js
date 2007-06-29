@@ -983,7 +983,7 @@ YAHOO.widget.LogReader.prototype._initSources = function() {
     this._sourceFilters = [];
     var aInitialSources = YAHOO.widget.Logger.sources;
 
-    for(j=0; j < aInitialSources.length; j++) {
+    for(var j=0; j < aInitialSources.length; j++) {
         var sSource = aInitialSources[j];
 
         // Add source to the internal array of filters
