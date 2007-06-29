@@ -271,7 +271,7 @@
          * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
          * @method getX
          * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
-         * @return {String | Array} The X position of the element(s)
+         * @return {Number | Array} The X position of the element(s)
          */
         getX: function(el) {
             var f = function(el) {
@@ -285,7 +285,7 @@
          * Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
          * @method getY
          * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
-         * @return {String | Array} The Y position of the element(s)
+         * @return {Number | Array} The Y position of the element(s)
          */
         getY: function(el) {
             var f = function(el) {
@@ -980,32 +980,70 @@
             return Y.Dom.getChildrenBy(node);
         },
  
-         getAttribute: function(node, attr) {
-            node = Y.Dom.get(node);
-            if (!node) {
-                YAHOO.log('getAttribute failed: invalid node argument', 'error', 'Dom');
-            }
-
-            attr = attributeMap[attr.toLowerCase()] || atr;
-            // TODO: convert to camelCase?
-            return node[attr];
-        },
-
+        /**
+         * Returns the left scroll value of the document 
+         * @method getDocumentScrollLeft
+         * @param {HTMLDocument} document (optional) The document to get the scroll value of
+         * @return {Int}  The amount that the document is scrolled to the left
+         */
         getDocumentScrollLeft: function(doc) {
             doc = doc || document;
             return Math.max(doc.documentElement.scrollLeft, doc.body.scrollLeft);
         }, 
 
+        /**
+         * Returns the top scroll value of the document 
+         * @method getDocumentScrollTop
+         * @param {HTMLDocument} document (optional) The document to get the scroll value of
+         * @return {Int}  The amount that the document is scrolled to the top
+         */
         getDocumentScrollTop: function(doc) {
             doc = doc || document;
             return Math.max(doc.documentElement.scrollTop, doc.body.scrollTop);
+        },
+
+        /**
+         * Inserts the new node as the previous sibling of the reference node 
+         * @method insertBefore
+         * @param {String | HTMLElement} newNode The node to be inserted
+         * @param {String | HTMLElement} referenceNode The node to insert the new node before 
+         * @return {HTMLElement} The node that was inserted (or null if insert fails) 
+         */
+        insertBefore: function(newNode, referenceNode) {
+            newNode = Y.Dom.get(newNode); 
+            referenceNode = Y.Dom.get(referenceNode); 
+            
+            if (!newNode || !referenceNode || !referenceNode.parentNode) {
+                YAHOO.log('insertAfter failed: missing or invalid arg(s)', 'error', 'Dom');
+                return null;
+            }       
+
+            return referenceNode.parentNode.insertBefore(newNode, referenceNode); 
+        },
+
+        /**
+         * Inserts the new node as the next sibling of the reference node 
+         * @method insertAfter
+         * @param {String | HTMLElement} newNode The node to be inserted
+         * @param {String | HTMLElement} referenceNode The node to insert the new node after 
+         * @return {HTMLElement} The node that was inserted (or null if insert fails) 
+         */
+        insertAfter: function(newNode, referenceNode) {
+            newNode = Y.Dom.get(newNode); 
+            referenceNode = Y.Dom.get(referenceNode); 
+            
+            if (!newNode || !referenceNode || !referenceNode.parentNode) {
+                YAHOO.log('insertAfter failed: missing or invalid arg(s)', 'error', 'Dom');
+                return null;
+            }       
+
+            if (referenceNode.nextSibling) {
+                return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling); 
+            } else {
+                return referenceNode.parentNode.appendChild(newNode);
+            }
         }
     };
-
-var attributeMap = {
-    'for': 'htmlFor',
-    'class': 'className'
-};
 })();
 /**
  * A region is a representation of an object on a grid.  It is defined
