@@ -278,17 +278,9 @@ YAHOO.util.Attribute.prototype = {
          * @param {Boolean} silent Whether or not to suppress change events
          */
         setAttributes: function(map, silent){
-            if (this._configOrder) { // from Element, to ensure proper order
-                for (var i = 0, len = this._configOrder.length; i < len; ++i) {
-                    if (map[this._configOrder[i]]) {
-                        this.set(this._configOrder[i], map[this._configOrder[i]], silent);
-                    }
-                }
-            } else {
-                for (var key in map) {
-                    if ( Lang.hasOwnProperty(map, key) ) {
-                        this.set(key, map[key], silent);
-                    }
+            for (var key in map) {
+                if ( Lang.hasOwnProperty(map, key) ) {
+                    this.set(key, map[key], silent);
                 }
             }
         },
@@ -379,9 +371,6 @@ YAHOO.util.Attribute.prototype = {
             if (!configs[key]) {
                 map.name = key;
                 configs[key] = new YAHOO.util.Attribute(map, this);
-                if (this._configOrder) {
-                    this._configOrder.push(key);
-                }
             } else {
                 configs[key].configure(map, init);
             }
@@ -753,6 +742,23 @@ YAHOO.util.Element.prototype = {
         return AttributeProvider.prototype.get.call(this, key);
     },
 
+    setAttributes: function(map, silent){
+        var el = this.get('element');
+        for (var key in map) {
+            // need to configure if setting unconfigured HTMLElement attribute 
+            if ( !this._configs[key] && !YAHOO.lang.isUndefined(el[key]) ) {
+                this.setAttributeConfig(key);
+            }
+        }
+
+        // set based on configOrder
+        for (var i = 0, len = this._configOrder.length; i < len; ++i) {
+            if (map[this._configOrder[i]]) {
+                this.set(this._configOrder[i], map[this._configOrder[i]], silent);
+            }
+        }
+    },
+
     set: function(key, value, silent) {
         var el = this.get('element');
         if (!el) {
@@ -780,6 +786,7 @@ YAHOO.util.Element.prototype = {
         } else {
             AttributeProvider.prototype.setAttributeConfig.apply(this, arguments);
         }
+        this._configOrder.push(key);
     },
     
     getAttributeKeys: function() {
