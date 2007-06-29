@@ -266,7 +266,7 @@
          * Gets the current X position of an element based on page coordinates.  The element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
          * @method getX
          * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
-         * @return {String | Array} The X position of the element(s)
+         * @return {Number | Array} The X position of the element(s)
          */
         getX: function(el) {
             var f = function(el) {
@@ -280,7 +280,7 @@
          * Gets the current Y position of an element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
          * @method getY
          * @param {String | HTMLElement | Array} el Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
-         * @return {String | Array} The Y position of the element(s)
+         * @return {Number | Array} The Y position of the element(s)
          */
         getY: function(el) {
             var f = function(el) {
@@ -976,18 +976,17 @@
          * @method insertBefore
          * @param {String | HTMLElement} newNode The node to be inserted
          * @param {String | HTMLElement} referenceNode The node to insert the new node before 
-         * @return {Boolean} Whether or not the insert was successful 
+         * @return {HTMLElement} The node that was inserted (or null if insert fails) 
          */
         insertBefore: function(newNode, referenceNode) {
             newNode = Y.Dom.get(newNode); 
             referenceNode = Y.Dom.get(referenceNode); 
             
             if (!newNode || !referenceNode || !referenceNode.parentNode) {
-                return false;
+                return null;
             }       
 
-            referenceNode.parentNode.insertBefore(newNode, referenceNode); 
-            return true; 
+            return referenceNode.parentNode.insertBefore(newNode, referenceNode); 
         },
 
         /**
@@ -995,22 +994,21 @@
          * @method insertAfter
          * @param {String | HTMLElement} newNode The node to be inserted
          * @param {String | HTMLElement} referenceNode The node to insert the new node after 
-         * @return {Boolean} Whether or not the insert was successful 
+         * @return {HTMLElement} The node that was inserted (or null if insert fails) 
          */
         insertAfter: function(newNode, referenceNode) {
             newNode = Y.Dom.get(newNode); 
             referenceNode = Y.Dom.get(referenceNode); 
             
             if (!newNode || !referenceNode || !referenceNode.parentNode) {
-                return false;
+                return null;
             }       
 
             if (referenceNode.nextSibling) {
-                referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling); 
+                return referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling); 
             } else {
-                referenceNode.parentNode.appendChild(newNode);
+                return referenceNode.parentNode.appendChild(newNode);
             }
-            return true; 
         }
     };
 })();
