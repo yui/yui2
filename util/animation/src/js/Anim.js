@@ -233,7 +233,7 @@ YAHOO.util.Anim.prototype = {
          * @property duration
          * @type Number
          */
-        this.duration = duration || 1;
+        this.duration = !YAHOO.lang.isUndefined(duration) ? duration : 1;
         
         /**
          * The method that will provide values to the attribute(s) during the animation. 
@@ -320,6 +320,9 @@ YAHOO.util.Anim.prototype = {
             
             this.totalFrames = ( this.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * this.duration) : this.duration;
     
+            if (this.duration === 0 && this.useSeconds) { // jump to last frame if zero second duration 
+                this.totalFrames = 1; 
+            }
             YAHOO.util.AnimMgr.registerElement(this);
             return true;
         };
