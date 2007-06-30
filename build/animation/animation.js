@@ -45,7 +45,7 @@ YAHOO.util.Anim.prototype = {
      */
     toString: function() {
         var el = this.getEl();
-        var id = el.id || el.tagName;
+        var id = el.id || el.tagName || el;
         return ("Anim " + id);
     },
     
@@ -232,7 +232,7 @@ YAHOO.util.Anim.prototype = {
          * @property duration
          * @type Number
          */
-        this.duration = duration || 1;
+        this.duration = !YAHOO.lang.isUndefined(duration) ? duration : 1;
         
         /**
          * The method that will provide values to the attribute(s) during the animation. 
@@ -268,10 +268,11 @@ YAHOO.util.Anim.prototype = {
         
         /**
          * Changes the animated element
-         * @method getEl
-         * @return {HTMLElement}
+         * @method setEl
          */
-        this.setEl = function(element) { el = YAHOO.util.Dom.get(element); };
+        this.setEl = function(element) {
+            el = YAHOO.util.Dom.get(element);
+        };
         
         /**
          * Returns a reference to the animated element.
@@ -315,6 +316,9 @@ YAHOO.util.Anim.prototype = {
             
             this.totalFrames = ( this.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * this.duration) : this.duration;
     
+            if (this.duration === 0 && this.useSeconds) {
+                this.totalFrames = 1; // jump to last frame if no duration
+            }
             YAHOO.util.AnimMgr.registerElement(this);
             return true;
         };
