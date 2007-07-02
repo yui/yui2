@@ -1546,8 +1546,7 @@
         
                     nY = oMenu.cfg.getProperty("y");
         
-                    nScrollTop = (document.documentElement.scrollTop || 
-                                        document.body.scrollTop);
+                    nScrollTop = Dom.getDocumentScrollTop();
         
         
                     if (nScrollTop >= nY) {

@@ -65,13 +65,13 @@
 
 .yui-skin-sam .yui-menu-button button {
 
-    background-image: url(../img/menuarrow.gif);
+    background-image: url(../img/menu-button-arrow.png);
 
 }
 
 .yui-skin-sam .yui-split-button button {
 
-    background-image: url(../img/splitarrow.gif);
+    background-image: url(../img/split-button-arrow.png);
 
 }
 
@@ -98,6 +98,13 @@
 
 }
 
+.yui-skin-sam .yui-split-button-focus button {
+
+    background-image: url(../img/split-button-arrow-focus.png);
+
+}
+
+
 
 /* Hover state */
 
@@ -121,6 +128,11 @@
 
 }
 
+.yui-skin-sam .yui-split-button-hover button {
+
+    background-image: url(../img/split-button-arrow-active.png);
+
+}
 
 
 /* Active state */
@@ -145,13 +157,11 @@
 
 }
 
-.yui-skin-sam .yui-split-button-activeoption button {
+.yui-skin-sam .yui-split-button-active button {
 
-    background-color: transparent;
-    background-image: url(../img/splitarrow_active.gif);
-    
+    background-image: url(../img/split-button-arrow-active.png);
+
 }
-
 
 
 /* Checked state */
@@ -179,7 +189,6 @@
 }
 
 
-
 /* Disabled state */
 
 .yui-skin-sam .yui-button-disabled {
@@ -201,4 +210,16 @@
     color: #A6A6A6;
     cursor: default;
 
+}
+
+.yui-skin-sam .yui-menu-button-disabled button {
+
+    background-image: url(../img/menu-button-arrow-disabled.png);
+    
+}
+
+.yui-skin-sam .yui-split-button-disabled button {
+
+    background-image: url(../img/split-button-arrow-disabled.png);
+    
 }
