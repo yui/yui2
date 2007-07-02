@@ -509,6 +509,8 @@ if (!YAHOO.util.Event) {
          * @property webkitKeymap
          * @type {int: int}
          * @private
+         * @static
+         * @final
          */
         var webkitKeymap = {
             63232: 38, // up
@@ -602,6 +604,7 @@ if (!YAHOO.util.Event) {
              * These errors are suppressed, the method returns false, and this property
              * is set
              * @property lastError
+             * @static
              * @type Error
              */
             lastError: null,
@@ -637,6 +640,7 @@ if (!YAHOO.util.Event) {
             /**
              * poll handle
              * @property _interval
+             * @static
              * @private
              */
             _interval: null,
@@ -760,17 +764,18 @@ if (!YAHOO.util.Event) {
              *
              * @method addListener
              *
-             * @param {Object}   el        The html element to assign the 
-             *                             event to
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to assign the 
+             *  listener to.
              * @param {String}   sType     The type of event to append
              * @param {Function} fn        The method the event invokes
              * @param {Object}   obj    An arbitrary object that will be 
              *                             passed as a parameter to the handler
-             * @param {boolean|object}  override  If true, the obj passed in becomes
+             * @param {Boolean|object}  override  If true, the obj passed in becomes
              *                             the execution scope of the listener. If an
              *                             object, this object becomes the execution
              *                             scope.
-             * @return {boolean} True if the action was successful or defered,
+             * @return {Boolean} True if the action was successful or defered,
              *                        false if one or more of the elements 
              *                        could not have the listener attached,
              *                        or if the operation throws an exception.
@@ -973,18 +978,19 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
             },
                     
             /**
-             * Removes an event handler
+             * Removes an event listener
              *
              * @method removeListener
              *
-             * @param {Object} el the html element or the id of the element to 
-             * assign the event to.
+             * @param {String|HTMLElement|Array|NodeList} el An id, an element 
+             *  reference, or a collection of ids and/or elements to remove
+             *  the listener from.
              * @param {String} sType the type of event to remove.
              * @param {Function} fn the method the event invokes.  If fn is
-             * undefined, then all event handlers for the type of event are 
-             * removed.
+             *  undefined, then all event handlers for the type of event are 
+             *  removed.
              * @return {boolean} true if the unbind was successful, false 
-             * otherwise.
+             *  otherwise.
              * @static
              */
             removeListener: function(el, sType, fn) {
@@ -1084,7 +1090,9 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
             },
 
             /**
-             * Returns the event's target element
+             * Returns the event's target element.  Safari sometimes provides
+             * a text node, and this is automatically resolved to the text
+             * node's parent so that it behaves like other browsers.
              * @method getTarget
              * @param {Event} ev the event
              * @param {boolean} resolveTextNode when set to true the target's
@@ -1109,8 +1117,6 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @static
              */
             resolveTextNode: function(node) {
-                // if (node && node.nodeName && 
-                        // "#TEXT" == node.nodeName.toUpperCase()) {
                 if (node && 3 == node.nodeType) {
                     return node.parentNode;
                 } else {
@@ -1371,7 +1377,8 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @property elCache
              * DOM element cache
              * @static
-             * @deprecated Elements are not cached any longer
+             * @deprecated Elements are not cached due to issues that arise when
+             * elements are removed and re-added
              */
             elCache: {},
 
@@ -1729,6 +1736,8 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * compatibility
              * @method regCE
              * @private
+             * @static
+             * @deprecated still here for backwards compatibility
              */
             regCE: function() {
                 // does nothing
