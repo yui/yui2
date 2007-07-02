@@ -401,6 +401,36 @@
     
     
         /**
+        * @method onItemDestroy
+        * @description "destroy" event handler for a MenuItem instance.
+        * @private
+        * @param {String} p_sType String representing the name of the event  
+        * that was fired.
+        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * was fired.
+        */
+        function onItemDestroy(p_sType, p_aArgs) {
+    
+            var sId = this.id;
+    
+            if (sId && m_oItems[sId]) {
+    
+                if (m_oFocusedMenuItem == this) {
+    
+                    m_oFocusedMenuItem = null;
+    
+                }
+    
+                delete m_oItems[sId];
+    
+                m_oLogger.log(this + " successfully unregistered.");
+    
+            }
+    
+        }
+    
+    
+        /**
         * @method onItemAdded
         * @description "itemadded" event handler for a Menu instance.
         * @private
@@ -430,36 +460,6 @@
     
             }
         
-        }
-    
-    
-        /**
-        * @method onItemDestroy
-        * @description "destroy" event handler for a MenuItem instance.
-        * @private
-        * @param {String} p_sType String representing the name of the event  
-        * that was fired.
-        * @param {Array} p_aArgs Array of arguments sent when the event 
-        * was fired.
-        */
-        function onItemDestroy(p_sType, p_aArgs) {
-    
-            var sId = this.id;
-    
-            if (sId && m_oItems[sId]) {
-    
-                if (m_oFocusedMenuItem == this) {
-    
-                    m_oFocusedMenuItem = null;
-    
-                }
-    
-                delete m_oItems[sId];
-    
-                m_oLogger.log(this + " successfully unregistered.");
-    
-            }
-    
         }
     
     
@@ -696,7 +696,7 @@
                             }
                         
                         }
-                        while (oNode = oNode.nextSibling);
+                        while ((oNode = oNode.nextSibling));
 
 
                         if (aItems.length > 0) {

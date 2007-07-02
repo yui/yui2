@@ -1,4 +1,4 @@
-
+(function () {
 
 
 /**
@@ -27,48 +27,47 @@
 */
 YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
-    YAHOO.widget.ContextMenu.superclass.constructor.call(
-            this, 
-            p_oElement,
-            p_oConfig
-        );
+    YAHOO.widget.ContextMenu.superclass.constructor.call(this, 
+            p_oElement, p_oConfig);
 
 };
 
+var Event = YAHOO.util.Event,
+    ContextMenu = YAHOO.widget.ContextMenu,
 
 /**
 * Constant representing the name of the ContextMenu's events
-* @property YAHOO.widget.ContextMenu._EVENT_TYPES
+* @property EVENT_TYPES
 * @private
 * @final
 * @type Object
 */
-YAHOO.widget.ContextMenu._EVENT_TYPES = {
+    EVENT_TYPES = {
 
-    "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
-    "CONTEXT_MENU": (YAHOO.env.ua.opera ? "mousedown" : "contextmenu"),
-    "CLICK": "click"
+        "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
+        "CONTEXT_MENU": (YAHOO.env.ua.opera ? "mousedown" : "contextmenu"),
+        "CLICK": "click"
 
-};
+    },
+    
+    
+    /**
+    * Constant representing the ContextMenu's configuration properties
+    * @property DEFAULT_CONFIG
+    * @private
+    * @final
+    * @type Object
+    */
+    DEFAULT_CONFIG = {
+    
+        "TRIGGER": { 
+            key: "trigger" 
+        }
+    
+    };
 
 
-/**
-* Constant representing the ContextMenu's configuration properties
-* @property YAHOO.widget.ContextMenu._DEFAULT_CONFIG
-* @private
-* @final
-* @type Object
-*/
-YAHOO.widget.ContextMenu._DEFAULT_CONFIG = {
-
-    "TRIGGER": { 
-        key: "trigger" 
-    }
-
-};
-
-
-YAHOO.lang.extend(YAHOO.widget.ContextMenu, YAHOO.widget.Menu, {
+YAHOO.lang.extend(ContextMenu, YAHOO.widget.Menu, {
 
 
 
@@ -160,10 +159,10 @@ init: function(p_oElement, p_oConfig) {
 
     // Call the init of the superclass (YAHOO.widget.Menu)
 
-    YAHOO.widget.ContextMenu.superclass.init.call(this, p_oElement);
+    ContextMenu.superclass.init.call(this, p_oElement);
 
 
-    this.beforeInitEvent.fire(YAHOO.widget.ContextMenu);
+    this.beforeInitEvent.fire(ContextMenu);
 
 
     if(p_oConfig) {
@@ -173,7 +172,7 @@ init: function(p_oElement, p_oConfig) {
     }
     
     
-    this.initEvent.fire(YAHOO.widget.ContextMenu);
+    this.initEvent.fire(ContextMenu);
     
 },
 
@@ -184,12 +183,14 @@ init: function(p_oElement, p_oConfig) {
 */
 initEvents: function() {
 
-	YAHOO.widget.ContextMenu.superclass.initEvents.call(this);
+	ContextMenu.superclass.initEvents.call(this);
 
     // Create custom events
 
-    this.triggerContextMenuEvent = this.createEvent(YAHOO.widget.ContextMenu._EVENT_TYPES.TRIGGER_CONTEXT_MENU);
-    this.triggerContextMenuEvent.signature = CustomEvent.LIST;
+    this.triggerContextMenuEvent = 
+        this.createEvent(EVENT_TYPES.TRIGGER_CONTEXT_MENU);
+
+    this.triggerContextMenuEvent.signature = YAHOO.util.CustomEvent.LIST;
 
 },
 
@@ -218,27 +219,20 @@ cancel: function() {
 */
 _removeEventHandlers: function() {
 
-    var Event = YAHOO.util.Event,
-        oTrigger = this._oTrigger;
+    var oTrigger = this._oTrigger;
 
 
     // Remove the event handlers from the trigger(s)
 
     if (oTrigger) {
 
-        Event.removeListener(
-            oTrigger, 
-            YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
-            this._onTriggerContextMenu
-        );    
+        Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, 
+            this._onTriggerContextMenu);    
         
         if(YAHOO.env.ua.opera) {
         
-            Event.removeListener(
-                oTrigger, 
-                YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
-                this._onTriggerClick
-            );
+            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, 
+                this._onTriggerClick);
     
         }
 
@@ -265,7 +259,7 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 
     if(p_oEvent.ctrlKey) {
     
-        YAHOO.util.Event.stopEvent(p_oEvent);
+        Event.stopEvent(p_oEvent);
 
     }
     
@@ -283,8 +277,6 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 * menu that is handling the event.
 */
 _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
-
-    var Event = YAHOO.util.Event;
 
     if(p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
 
@@ -359,7 +351,7 @@ toString: function() {
 */
 initDefaultConfig: function() {
 
-    YAHOO.widget.ContextMenu.superclass.initDefaultConfig.call(this);
+    ContextMenu.superclass.initDefaultConfig.call(this);
 
     /**
     * @config trigger
@@ -371,10 +363,8 @@ initDefaultConfig: function() {
     * @type String|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
-    this.cfg.addProperty(
-        YAHOO.widget.ContextMenu._DEFAULT_CONFIG.TRIGGER.key, 
-        { handler: this.configTrigger }
-    );
+    this.cfg.addProperty(DEFAULT_CONFIG.TRIGGER.key, 
+        { handler: this.configTrigger });
 
 },
 
@@ -393,7 +383,7 @@ destroy: function() {
 
     // Continue with the superclass implementation of this method
 
-    YAHOO.widget.ContextMenu.superclass.destroy.call(this);
+    ContextMenu.superclass.destroy.call(this);
 
 },
 
@@ -414,8 +404,7 @@ destroy: function() {
 */
 configTrigger: function(p_sType, p_aArgs, p_oMenu) {
     
-    var Event = YAHOO.util.Event,
-        oTrigger = p_aArgs[0];
+    var oTrigger = p_aArgs[0];
 
     if(oTrigger) {
 
@@ -438,13 +427,8 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             support the "contextmenu" event
         */ 
   
-        Event.on(
-            oTrigger, 
-            YAHOO.widget.ContextMenu._EVENT_TYPES.CONTEXT_MENU, 
-            this._onTriggerContextMenu,
-            this,
-            true
-        );
+        Event.on(oTrigger, EVENT_TYPES.CONTEXT_MENU, 
+            this._onTriggerContextMenu, this, true);
 
 
         /*
@@ -454,13 +438,8 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
 
         if(YAHOO.env.ua.opera) {
         
-            Event.on(
-                oTrigger, 
-                YAHOO.widget.ContextMenu._EVENT_TYPES.CLICK, 
-                this._onTriggerClick,
-                this,
-                true
-            );
+            Event.on(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick, 
+                this, true);
 
         }
 
@@ -474,3 +453,5 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
 }
 
 }); // END YAHOO.lang.extend
+
+}());

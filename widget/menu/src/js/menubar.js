@@ -1,4 +1,4 @@
-
+(function () {
 
 
 /**
@@ -26,47 +26,67 @@
 */
 YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 
-    YAHOO.widget.MenuBar.superclass.constructor.call(
-            this, 
-            p_oElement,
-            p_oConfig
-        );
+    YAHOO.widget.MenuBar.superclass.constructor.call(this, 
+        p_oElement, p_oConfig);
 
 };
 
 
 /**
-* Constant representing the MenuBar's configuration properties
-* @property YAHOO.widget.MenuBar._DEFAULT_CONFIG
+* @method checkPosition
+* @description Checks to make sure that the value of the "position" property 
+* is one of the supported strings. Returns true if the position is supported.
 * @private
-* @final
-* @type Object
+* @param {Object} p_sPosition String specifying the position of the menu.
+* @return {Boolean}
 */
-YAHOO.widget.MenuBar._DEFAULT_CONFIG = {
+function checkPosition(p_sPosition) {
 
-    "POSITION": { 
-        key: "position", 
-        value: "static", 
-        validator: YAHOO.widget.Menu._checkPosition, 
-        supercedes: ["visible"] 
-    }, 
+    if (typeof p_sPosition == "string") {
 
-    "SUBMENU_ALIGNMENT": { 
-        key: "submenualignment", 
-        value: ["tl","bl"] 
-    },
+        return ("dynamic,static".indexOf((p_sPosition.toLowerCase())) != -1);
 
-    "AUTO_SUBMENU_DISPLAY": { 
-        key: "autosubmenudisplay", 
-        value: false, 
-        validator: YAHOO.lang.isBoolean 
     }
 
-};
+}
+
+
+var Event = YAHOO.util.Event,
+    Dom = YAHOO.util.Dom,
+    MenuBar = YAHOO.widget.MenuBar,
+
+    /**
+    * Constant representing the MenuBar's configuration properties
+    * @property DEFAULT_CONFIG
+    * @private
+    * @final
+    * @type Object
+    */
+    DEFAULT_CONFIG = {
+    
+        "POSITION": { 
+            key: "position", 
+            value: "static", 
+            validator: checkPosition, 
+            supercedes: ["visible"] 
+        }, 
+    
+        "SUBMENU_ALIGNMENT": { 
+            key: "submenualignment", 
+            value: ["tl","bl"] 
+        },
+    
+        "AUTO_SUBMENU_DISPLAY": { 
+            key: "autosubmenudisplay", 
+            value: false, 
+            validator: YAHOO.lang.isBoolean 
+        }
+    
+    };
 
 
 
-YAHOO.lang.extend(YAHOO.widget.MenuBar, YAHOO.widget.Menu, {
+YAHOO.lang.extend(MenuBar, YAHOO.widget.Menu, {
 
 /**
 * @method init
@@ -100,10 +120,10 @@ init: function(p_oElement, p_oConfig) {
 
     // Call the init of the superclass (YAHOO.widget.Menu)
 
-    YAHOO.widget.MenuBar.superclass.init.call(this, p_oElement);
+    MenuBar.superclass.init.call(this, p_oElement);
 
 
-    this.beforeInitEvent.fire(YAHOO.widget.MenuBar);
+    this.beforeInitEvent.fire(MenuBar);
 
 
     if(p_oConfig) {
@@ -112,7 +132,7 @@ init: function(p_oElement, p_oConfig) {
 
     }
 
-    this.initEvent.fire(YAHOO.widget.MenuBar);
+    this.initEvent.fire(MenuBar);
 
 },
 
@@ -148,34 +168,33 @@ CSS_CLASS_NAME: "yuimenubar",
 */
 _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 
-    var Event = YAHOO.util.Event,
-        oEvent = p_aArgs[0],
+    var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
-        oSubmenu;
+        oSubmenu,
+        oItemCfg,
+        oNextItem;
 
 
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-        var oItemCfg = oItem.cfg;
+        oItemCfg = oItem.cfg;
 
         switch(oEvent.keyCode) {
     
             case 37:    // Left arrow
             case 39:    // Right arrow
     
-                if(
-                    oItem == this.activeItem && 
-                    !oItemCfg.getProperty("selected")
-                ) {
+                if(oItem == this.activeItem && 
+                    !oItemCfg.getProperty("selected")) {
     
                     oItemCfg.setProperty("selected", true);
     
                 }
                 else {
     
-                    var oNextItem = (oEvent.keyCode == 37) ? 
-                            oItem.getPreviousEnabledSibling() : 
-                            oItem.getNextEnabledSibling();
+                    oNextItem = (oEvent.keyCode == 37) ? 
+                        oItem.getPreviousEnabledSibling() : 
+                        oItem.getNextEnabledSibling();
             
                     if(oNextItem) {
     
@@ -280,26 +299,22 @@ _onKeyDown: function(p_sType, p_aArgs, p_oMenuBar) {
 */
 _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
-    YAHOO.widget.MenuBar.superclass._onClick.call(
-        this, 
-        p_sType, 
-        p_aArgs, 
-        p_oMenuBar
-    );
+    MenuBar.superclass._onClick.call(this, p_sType, p_aArgs, p_oMenuBar);
 
-
-    var oItem = p_aArgs[1];
+    var oItem = p_aArgs[1],
+        oEvent,
+        oTarget,
+        oActiveItem,
+        oConfig,
+        oSubmenu;
     
+
     if(oItem && !oItem.cfg.getProperty("disabled")) {
 
-         var Event = YAHOO.util.Event,
-             Dom = YAHOO.util.Dom,
-    
-             oEvent = p_aArgs[0],
-             oTarget = Event.getTarget(oEvent),
-    
-             oActiveItem = this.activeItem,
-             oConfig = this.cfg;
+        oEvent = p_aArgs[0];
+        oTarget = Event.getTarget(oEvent);
+        oActiveItem = this.activeItem;
+        oConfig = this.cfg;
 
 
         // Hide any other submenus that might be visible
@@ -316,7 +331,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
 
         // Show the submenu for the item
     
-        var oSubmenu = oItem.cfg.getProperty("submenu");
+        oSubmenu = oItem.cfg.getProperty("submenu");
 
 
         if(oSubmenu && oTarget != oItem.submenuIndicator) {
@@ -371,10 +386,9 @@ toString: function() {
 */
 initDefaultConfig: function() {
 
-    YAHOO.widget.MenuBar.superclass.initDefaultConfig.call(this);
+    MenuBar.superclass.initDefaultConfig.call(this);
 
-    var oConfig = this.cfg,
-        DEFAULT_CONFIG = YAHOO.widget.MenuBar._DEFAULT_CONFIG;
+    var oConfig = this.cfg;
 
 	// Add configuration properties
 
@@ -450,3 +464,5 @@ initDefaultConfig: function() {
 }
  
 }); // END YAHOO.lang.extend
+
+}());

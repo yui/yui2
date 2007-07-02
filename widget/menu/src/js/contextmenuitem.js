@@ -24,11 +24,8 @@
 */
 YAHOO.widget.ContextMenuItem = function(p_oObject, p_oConfig) {
 
-    YAHOO.widget.ContextMenuItem.superclass.constructor.call(
-        this, 
-        p_oObject, 
-        p_oConfig
-    );
+    YAHOO.widget.ContextMenuItem.superclass.constructor.call(this, 
+        p_oObject, p_oConfig);
 
 };
 
