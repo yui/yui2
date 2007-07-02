@@ -28,7 +28,7 @@
 		</replaceregexp>
         <copy file="${component.srcdir}/css/skins/sam/menu-skin.css" tofile="${component.srcdir}/css/temp/menu-skin.css" />
 		<replaceregexp 
-			file="${component.srcdir}/css/temp/menu.css"
+			file="${component.srcdir}/css/temp/menu-skin.css"
 			byline="true"
 			match="(\.\./\.\./\.\./img/)"
 			replace=""

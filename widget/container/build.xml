@@ -25,7 +25,7 @@
     <target name="customassets" description="Custom work for Container CSS, before it gets copied over to global build dir" >
         <copy file="${component.srcdir}/css/skins/sam/container-skin.css" tofile="${component.srcdir}/css/temp/container-skin.css" />
 		<replaceregexp 
-			file="${component.srcdir}/css/temp/container.css"
+			file="${component.srcdir}/css/temp/container-skin.css"
 			byline="true"
 			match="(\.\./\.\./\.\./img/)"
 			replace=""
