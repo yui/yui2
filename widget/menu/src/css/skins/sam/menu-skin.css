@@ -3,7 +3,7 @@
 .yui-skin-sam .yuimenubar {
 
     border: solid 1px #808080;
-    background: url(sprite.png) repeat-x 0 0;
+    background: url(../../../img/sprite.png) repeat-x 0 0;
 
 }
 
@@ -65,7 +65,7 @@
 
 .yui-skin-sam .yuimenubaritem a.selected {
 
-    background: url(sprite.png) repeat-x 0 -1700px;
+    background: url(../../../img/sprite.png) repeat-x 0 -1700px;
     border-color: #7D98B8;
 
 }
@@ -135,7 +135,7 @@
     
     display: block;
     overflow: hidden;
-    background-image: url(sprite.png);
+    background-image: url(../../../img/sprite.png);
     background-repeat: no-repeat;
 
 }
@@ -199,7 +199,7 @@
     position: relative;
     height: 16px;
     border: solid 1px #808080;
-    background:#fff url(sprite.png) repeat-x 0 0;
+    background:#fff url(../../../img/sprite.png) repeat-x 0 0;
 
 }
 
