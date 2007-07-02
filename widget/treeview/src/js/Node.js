@@ -284,6 +284,14 @@ YAHOO.widget.Node.prototype = {
         this.children[this.children.length] = childNode;
         childNode.applyParent(this);
 
+        // part of the IE display issue workaround. If child nodes
+        // are added after the initial render, and the node was
+        // instantiated with expanded = true, we need to show the
+        // children div now that the node has a child.
+        if (this.childrenRendered && this.expanded) {
+            this.getChildrenEl().style.display = "";
+        }
+
         return childNode;
     },
 
@@ -818,10 +826,15 @@ YAHOO.widget.Node.prototype = {
      */
     getChildrenHtml: function() {
 
+
         var sb = [];
         sb[sb.length] = '<div class="ygtvchildren"';
         sb[sb.length] = ' id="' + this.getChildrenElId() + '"';
-        if (!this.expanded) {
+
+        // This is a workaround for an IE rendering issue, the child div has layout
+        // in IE, creating extra space if a leaf node is created with the expanded
+        // property set to true.
+        if (!this.expanded || !this.hasChildren()) {
             sb[sb.length] = ' style="display:none;"';
         }
         sb[sb.length] = '>';
