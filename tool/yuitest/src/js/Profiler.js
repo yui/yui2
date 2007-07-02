@@ -139,7 +139,7 @@ YAHOO.tool.Profiler = {
      * @return {Void}
      * @static
      */
-    profileMethod : function (objectName /*:String*/, object /*:Object*/, methodName /*:String*/) /*:Void*/ {
+    registerMethod : function (objectName /*:String*/, object /*:Object*/, methodName /*:String*/) /*:Void*/ {
         
         var funcName /*:String*/ = objectName + "." + methodName;
         var method = object[methodName];
@@ -147,11 +147,14 @@ YAHOO.tool.Profiler = {
         //make sure it's not already being profiled
         if (!object[methodName].__yui_profiled){
             
+            //create a new slot for the original method
+            object["__yui_unprofiled_" + methodName] = method;
+            
             //replace the function with the profiling one
             object[methodName] = function () {
                 
                 var start = new Date();                
-                var retval = method.apply(this, arguments);
+                var retval = this["__yui_unprofiled_" + methodName].apply(this, arguments);
                 var stop = new Date();
                 
                 YAHOO.tool.Profiler._saveData(funcName, start, stop);
@@ -176,7 +179,7 @@ YAHOO.tool.Profiler = {
     
     /**
      * Sets up an object for profiling. It takes the object and looks for functions.
-     * When a function is found, profileMethod() is called on it. If set to recrusive
+     * When a function is found, registerMethod() is called on it. If set to recrusive
      * mode, it will also setup objects found inside of this object for profiling, 
      * using the same methodology.
      * @param {String} name The name of the object to profile (shows up in report).
@@ -185,13 +188,13 @@ YAHOO.tool.Profiler = {
      * @return {Void}
      * @static
      */
-    profileObject : function (name /*:String*/, object /*:Object*/, recurse /*:Boolean*/) /*:Void*/{
+    registerObject : function (name /*:String*/, object /*:Object*/, recurse /*:Boolean*/) /*:Void*/{
     
         for (var prop in object) {
             if (typeof object[prop] == "function"){
-                this.profileMethod(name, object, prop);
+                this.registerMethod(name, object, prop);
             } else if (typeof object[prop] == "object" && recurse){
-                this.profileObject(name + "." + prop, object[prop], recurse);
+                this.registerObject(name + "." + prop, object[prop], recurse);
             }
         }
     
@@ -206,13 +209,13 @@ YAHOO.tool.Profiler = {
      * @return {Void}
      * @static
      */
-    profileObjectType : function (objectName /*:String*/, object /*:Object*/, constructorName /*:String*/) /*:Void*/ {
+    registerObjectType : function (objectName /*:String*/, object /*:Object*/, constructorName /*:String*/) /*:Void*/ {
 
         //get the prototype - it will be overwritten in the next step
         var prototype /*:Object*/ = object[constructorName].prototype;
                 
         //profile the constructor
-        this.profileMethod(objectName, object, constructorName);
+        this.registerMethod(objectName, object, constructorName);
         
         //restore the prototype
         object[constructorName].prototype = prototype;
@@ -220,9 +223,85 @@ YAHOO.tool.Profiler = {
         //profile the methods on the prototype
         for (var prop in prototype){
             if (typeof prototype[prop] == "function"){
-                this.profileMethod(objectName + "." + constructorName + ".prototype", prototype, prop);
+                this.registerMethod(objectName + "." + constructorName + ".prototype", prototype, prop);
             }
         }    
-    }    
+    },
+
+    /**
+     * Unregisters an object method for profiling by restoring the original method to its original name.
+     * @param {String} objectName The name of the object that owns the method to unregister.
+     * @param {Object} object The object that owns the method.
+     * @param {String} methodName The name of the method to unregister.
+     * @return {Void}
+     * @static
+     */
+    unregisterMethod : function (objectName /*:String*/, object /*:Object*/, methodName /*:String*/) /*:Void*/ {
+        
+        var funcName /*:String*/ = objectName + "." + methodName;
+        var method = object[methodName];
+        
+        //make sure it's not already being profiled
+        if (object[methodName].__yui_profiled){
+            
+            //restore original
+            object[methodName] = object["__yui_unprofiled_" + methodName];
+            delete object["__yui_unprofiled_" + methodName];
+            
+        }
+    
+    },
+    
+    /**
+     * Unregisters an object for profiling. It takes the object and looks for functions.
+     * When a function is found, unregisterMethod() is called on it. If set to recrusive
+     * mode, it will also unregister objects found inside of this object, 
+     * using the same methodology.
+     * @param {String} name The name of the object to unregister.
+     * @param {Object} object The object to profile.
+     * @param {Boolean} recurse (Optional) Determines if subobject methods should also be
+     *      unregistered.
+     * @return {Void}
+     * @static
+     */
+    unregisterObject : function (name /*:String*/, object /*:Object*/, recurse /*:Boolean*/) /*:Void*/{
+    
+        for (var prop in object) {
+            if (typeof object[prop] == "function"){
+                this.unregisterMethod(name, object, prop);
+            } else if (typeof object[prop] == "object" && recurse){
+                this.unregisterObject(name + "." + prop, object[prop], recurse);
+            }
+        }
+    
+    },
+    
+    /**
+     * Unregisters an object type for profiling. This unregisters
+     * the constructor as well as all of the methods on its prototype.
+     * @param {String} objectName The name of the object that owns the constructor to unregister.
+     * @param {Object} object The object that owns the constructor.
+     * @param {String} constructorName The name of the constructor to unregister.
+     * @return {Void}
+     * @static
+     */
+    unregisterObjectType : function (objectName /*:String*/, object /*:Object*/, constructorName /*:String*/) /*:Void*/ {
+
+        //get the prototype - it will be overwritten in the next step
+        var prototype /*:Object*/ = object[constructorName].prototype;
+                
+        //profile the constructor
+        this.unregisterMethod(objectName, object, constructorName);
+        
+        //restore the prototype
+        object[constructorName].prototype = prototype;
+        
+        //profile the methods on the prototype
+        for (var prop in prototype){
+            if (typeof prototype[prop] == "function"){
+                this.unregisterMethod(objectName + "." + constructorName + ".prototype", prototype, prop);
+            }
+        }    
+    }        
 
 };
