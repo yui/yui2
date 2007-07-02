@@ -8,6 +8,28 @@
     
 }
 
+/*
+
+The following style rule (".yuimenu.show-scrollbars") overrides the 
+".show-scrollbars" rule defined in container.css which sets the 
+"overflow" property of a YAHOO.widget.Overlay instance's root HTML element to 
+"auto" when it is visible.  Without this override, a Menu would have scrollbars
+when one of its submenus is visible.
+
+*/
+
+.yuimenu.show-scrollbars {
+
+	overflow: visible; 
+
+}
+
+.yui-menu-shadow {
+
+    display: none;
+
+}
+
 .yuimenu .yuimenu,
 .yuimenubar .yuimenu {
 
