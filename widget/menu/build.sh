@@ -6,6 +6,8 @@ ant
 
 ant deploy
 
+mv ~/dev/yahoo/presentation/2.x/build/menu/assets/menu-skin.css ~/dev/yahoo/presentation/2.x/build/menu/assets/skins/sam/menu-skin.css 
+
 # Create example files
 
 php -d 'open_basedir=' examples/index.html prod  > ../../examples/menu/index.html

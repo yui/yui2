@@ -26,6 +26,14 @@
 			replace=""
 			flags="g">
 		</replaceregexp>
+        <copy file="${component.srcdir}/css/skins/sam/menu-skin.css" tofile="${component.srcdir}/css/temp/menu-skin.css" />
+		<replaceregexp 
+			file="${component.srcdir}/css/temp/menu.css"
+			byline="true"
+			match="(\.\./\.\./\.\./img/)"
+			replace=""
+			flags="g">
+		</replaceregexp>
 	</target>
 
     <target name="deploy" depends="YuiTaskLib.deploy">
@@ -33,4 +41,3 @@
     </target>
 
 </project>
-
