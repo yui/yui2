@@ -22,5 +22,20 @@
         <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
     </target>
 
+    <target name="customassets" description="Custom work for Container CSS, before it gets copied over to global build dir" >
+        <copy file="${component.srcdir}/css/skins/sam/container-skin.css" tofile="${component.srcdir}/css/temp/container-skin.css" />
+		<replaceregexp 
+			file="${component.srcdir}/css/temp/container.css"
+			byline="true"
+			match="(\.\./\.\./\.\./img/)"
+			replace=""
+			flags="g">
+		</replaceregexp>
+	</target>
+
+    <target name="deploy" depends="YuiTaskLib.deploy">
+        <delete dir="${component.srcdir}/css/temp/" />
+    </target>
+
 </project>
 

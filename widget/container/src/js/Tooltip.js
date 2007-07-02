@@ -25,6 +25,8 @@
         Event = YAHOO.util.Event,
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
+    
+        m_oShadowTemplate;
         
         /**
         * Constant representing the Tooltip's configuration properties
@@ -192,10 +194,11 @@
                 this.cfg.queueProperty("constraintoviewport",true);
         
                 this.setBody("");
-                this.render(this.cfg.getProperty("container"));
 
                 this.subscribe("beforeShow", setWidthToOffsetWidth);
-                
+                this.subscribe("render", this.onRender);
+
+                this.render(this.cfg.getProperty("container"));
         
                 this.initEvent.fire(Tooltip);
                 
@@ -670,6 +673,111 @@
                 this.logger.log("OVERLAP", "warn");
                 this.cfg.setProperty("y", (pageY - height - 5));
             }
+        },
+
+
+        /**
+        * @method onRender
+        * @description "render" event handler for the Tooltip.
+        * @param {String} p_sType String representing the name of the event  
+        * that was fired.
+        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * was fired.
+        */
+        onRender: function (p_sType, p_aArgs) {
+    
+            function sizeShadow() {
+    
+                var oElement = this.element,
+                    oShadow = this._shadow;
+            
+                if (oShadow) {
+            
+                    oShadow.style.width = (oElement.offsetWidth + 6) + "px";
+                    oShadow.style.height = (oElement.offsetHeight + 1) + "px"; 
+            
+                }
+            
+            }
+    
+    
+            function createShadow() {
+    
+                var oShadow = this._shadow,
+                    oElement,
+                    Module,
+                    nIE,
+                    me;
+    
+                if (!oShadow) {
+    
+                    oElement = this.element;
+                    Module = YAHOO.widget.Module;
+                    nIE = YAHOO.env.ua.ie;
+                    me = this;
+    
+                    if (!m_oShadowTemplate) {
+        
+                        m_oShadowTemplate = document.createElement("div");
+                        m_oShadowTemplate.className = "yui-tt-shadow";
+                    
+                    }
+        
+                    oShadow = m_oShadowTemplate.cloneNode(false);
+        
+                    oElement.appendChild(oShadow);
+                    
+                    this._shadow = oShadow;
+    
+    
+        
+                    if (nIE == 6 || 
+                        (nIE == 7 && document.compatMode == "BackCompat")) {
+                
+                        window.setTimeout(function () { 
+        
+                            sizeShadow.call(me); 
+        
+                        }, 0);
+    
+                        this.cfg.subscribeToConfigEvent("width", sizeShadow);
+                        this.cfg.subscribeToConfigEvent("height", sizeShadow);
+    
+                        Module.textResizeEvent.subscribe(sizeShadow, me, true);
+                        
+                        this.destroyEvent.subscribe(function () {
+                        
+                            Module.textResizeEvent.unsubscribe(sizeShadow, me);
+                        
+                        });
+                
+                    }
+                
+                }
+    
+            }
+    
+    
+            function onBeforeShow() {
+            
+                createShadow.call(this);
+    
+                this.beforeShowEvent.unsubscribe(onBeforeShow);
+            
+            }
+    
+    
+            if (this.cfg.getProperty("visible")) {
+    
+                createShadow.call(this);
+            
+            }
+            else {
+    
+                this.beforeShowEvent.subscribe(onBeforeShow);
+            
+            }
+        
         },
         
         /**

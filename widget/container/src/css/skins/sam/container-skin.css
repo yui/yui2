@@ -1,0 +1,246 @@
+/* Panel modality mask styles */
+
+.yui-skin-sam .mask {
+
+    background-color: #000;
+    opacity: .25;
+    filter: alpha(opacity=25);  /* Set opacity in IE */
+
+}
+
+
+/* Panel styles */
+
+.yui-skin-sam .yui-panel {
+
+	position: relative;
+	left: 0;
+	top: 0;
+    border-style: solid;
+    border-width: 1px 0;
+    border-color: #808080;
+	z-index: 1;
+
+}
+
+.yui-skin-sam .yui-panel .hd, 
+.yui-skin-sam .yui-panel .bd, 
+.yui-skin-sam .yui-panel .ft {
+    
+    /*
+        Use of "zoom: 1" is to trigger "haslayout" for IE to get 
+        margins working.
+    */
+    
+    zoom: 1;
+
+    /*
+        Use of "_position: relative" is necessary to get negative margins 
+        working in IE 6 (Standards and Quirks Mode) and IE 7 Quirks Mode.
+    */
+
+    _position: relative; 
+
+    border-style: solid;
+    border-width: 0 1px;
+    border-color: #808080;
+    margin: 0 -1px;
+  
+}
+
+.yui-skin-sam .yui-panel .hd {
+
+    border-bottom: solid 1px #ccc;
+
+}
+
+.yui-skin-sam .yui-panel .bd,
+.yui-skin-sam .yui-panel .ft {
+
+    background-color: #F2F2F2;
+
+}
+
+.yui-skin-sam .yui-panel .hd {
+
+    padding: 0 10px;
+    font-size: 93%;  /* 12px */
+    line-height: 2;  /* ~24px */
+    *line-height: 1.9; /* For IE */
+    font-weight: bold;
+    color: #000;
+    background: url(../../../img/sprite.png) repeat-x 0 -200px;
+    
+}
+
+.yui-skin-sam .yui-panel .bd {
+
+    padding: 10px;
+
+}
+
+.yui-skin-sam .yui-panel .ft {
+
+    padding: 0 10px 10px 10px;
+    text-align: right;
+
+}
+
+.yui-skin-sam .yui-panel-container.focused {
+
+    /* To do - default focused style for this skin? */
+
+}
+
+.yui-skin-sam .container-close {
+
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    width: 25px;
+    height: 15px;
+    background: url(../../../img/sprite.png) no-repeat 0 -300px;
+
+}
+
+
+/* Panel underlay styles */
+
+.yui-skin-sam .yui-panel-container .underlay {
+
+    right: -1px;
+    left: -1px;
+
+}
+
+.yui-skin-sam .yui-panel-container.matte {
+
+	padding: 3px 4px;
+	background-color: #fff;
+
+}
+
+.yui-skin-sam .yui-panel-container.shadow .underlay {
+
+	position: absolute;
+    top: 2px;
+    right: -4px;
+    left: -4px;
+    bottom: -3px;
+    background-color: #000;
+    opacity: .12;
+    filter: alpha(opacity=12);  /* Set opacity in IE */
+
+    /*
+   
+    Please note: For the shadow to work in IE 6 (Standards and Quirks Mode) 
+    and IE 7 Quirks Mode the underlay element's height and width are set to the 
+    offsetHeight and offsetWidth of the Panel's root element.
+
+    */
+
+    *padding: 0 8px 1px 0;
+
+}
+
+
+
+
+/* Focus state */
+
+.yui-skin-sam .yui-dialog .ft .default {
+
+    border-color: #304369;
+    background-position: 0 -1400px;
+
+}
+
+.yui-skin-sam .yui-dialog .ft .default .first-child {
+
+    border-color: #304369;
+
+}
+
+.yui-skin-sam .yui-dialog .ft .default button {
+
+    color: #fff;
+
+}
+
+
+
+
+/* SimpleDialog icon styles */
+
+.yui-skin-sam .yui-simple-dialog .bd .yui-icon {
+
+    background: url(../../../img/sprite.png) no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	margin-right: 10px;
+	float: left;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.blckicon {
+
+    background-position: 0 -1100px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.alrticon {
+
+    background-position: 0 -1050px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.hlpicon {
+
+    background-position: 0 -1150px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.infoicon {
+
+    background-position: 0 -1200px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.warnicon {
+
+    background-position: 0 -1900px;
+
+}
+
+.yui-skin-sam .yui-simple-dialog .bd span.tipicon {
+
+    background-position: 0 -1250px;
+
+}
+
+
+/* Tooltip styles */
+
+.yui-skin-sam .yui-tt .bd {
+
+    color: #000;
+    line-height: 1.465; /* 19px */
+    padding: 0 5px;
+    border-color: #D4C237 #A6982B #A6982B #A6982B;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #FFEE69;
+
+}
+
+.yui-skin-sam .yui-tt-shadow {
+
+    top: 2px;
+    right: -3px;
+    left: -3px;
+    bottom: -3px;
+    background-color: #000;
+    opacity: .12;
+    filter: alpha(opacity=12);  /* For IE */
+
+}

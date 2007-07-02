@@ -1,6 +1,6 @@
-.yui-overlay {
+.yui-overlay,
+.yui-panel-container {
 	position:absolute;
-	display:block;
 }
 
 .yui-tt {
@@ -56,7 +56,8 @@ that manifest in Gecko-based browsers on Mac OS X:
 
 To fix these bugs:
 
-1) An Overlay instance's "overflow" property is toggled between
+1) The "overflow" property of an Overlay instance's root element (or underlay 
+    elment in the case of Panel and its subclasses) is toggled between
    "auto" and "hidden" through the application and removal of the 
    "hide-scrollbars" and "show-scrollbars" classes (see below) as its 
    "visibility" configuration property is toggled between "true" and "false."
@@ -77,72 +78,83 @@ To fix these bugs:
 
 .hide-scrollbars,
 .hide-scrollbars * {
-	overflow:hidden;
+
+	overflow: hidden;
+
 }
 
 .hide-scrollbars select {
-	display:none;
+
+	display: none;
+
 }
 
 .show-scrollbars {
-    overflow:auto;
+
+    overflow: auto;
+
 }
 
-.show-scrollbars textarea, 
-.show-scrollbars select {
-	overflow:visible;
+.yui-panel-container.show-scrollbars {
+
+    overflow: visible;
+
 }
 
-.yui-panel-container {
-	position:absolute;
-	background-color:transparent;
-	z-index:6;
-	visibility:hidden;
-	overflow:visible;
-	width:auto;
+.yui-panel-container.hide-scrollbars .underlay {
+
+    overflow: hidden;
+
 }
 
-.yui-panel-container.show-scrollbars>div {
-    overflow:auto;
+.yui-panel-container.show-scrollbars .underlay {
+
+    overflow: auto;
+
 }
 
 .yui-panel-container.focused {
+
 }
 
+
+/* Panel underlay styles */
+
+.yui-panel-container .underlay {
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+}
 
 .yui-panel-container.matte {
-	padding:3px;
-	background-color:#FFF;
-}
 
-.yui-panel-container.matte .underlay {
-	display:none;
-}
+	padding: 3px;
+	background-color: #fff;
 
-.yui-panel-container.shadow {
-	padding:0px;
-	background-color:transparent;
 }
 
 .yui-panel-container.shadow .underlay {
-	visibility:inherit;
-	position:absolute;
-	background-color:#000;
-	top:3px;left:3px;
-	z-index:0;
-	width:100%;
-	height:100%;
-    -moz-opacity: 0.12;
-    opacity:.12;
-    filter:alpha(opacity=12);
-	zoom:1;
+
+    top: 3px;
+    bottom: -3px;
+    right: -3px;
+    left: 3px;
+    background-color: #000;
+    opacity: .12;
+    filter: alpha(opacity=12);  /* For IE */
+
 }
 
 .yui-panel {
 	visibility:hidden;
 	border-collapse:separate;
 	position:relative;
-	left:0px;top:0px;
+	left:0;
+	top:0;
 	font:1em Arial;
 	background-color:#FFF;
 	border:1px solid #000;

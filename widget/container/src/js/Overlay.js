@@ -1429,11 +1429,8 @@
         */
         center: function () {
     
-            var scrollX = document.documentElement.scrollLeft || 
-                    document.body.scrollLeft,
-    
-                scrollY = document.documentElement.scrollTop || 
-                    document.body.scrollTop,
+            var scrollX = Dom.getDocumentScrollLeft(),
+                scrollY = Dom.getDocumentScrollTop(),
     
                 viewPortWidth = Dom.getClientWidth(),
                 viewPortHeight = Dom.getClientHeight(),

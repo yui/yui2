@@ -271,17 +271,6 @@
 
     }
 
-    /* 
-        "beforeShow" event handler used to refire a Panel instance's 
-        "underlay" event to ensure the underlay is properly configured 
-        each time it is made visible.
-    */
-    
-    function refireUndelay(p_sType, p_aArgs) {
-    
-        this.cfg.refireEvent("underlay");
-    
-    }
     
     YAHOO.extend(Panel, Overlay, {
     
@@ -320,7 +309,6 @@
         
             this.subscribe("showMask", addFocusEventHandlers);
             this.subscribe("hideMask", removeFocusEventHandlers);
-            this.subscribe("beforeShow", refireUndelay);
 
             this.initEvent.fire(Panel);
             
@@ -588,17 +576,15 @@
         */
         configUnderlay: function (type, args, obj) {
     
-            var val = args[0],
+            var sUnderlay = args[0].toLowerCase(),
+                oUnderlay = this.underlay;
                 oElement = this.element;
-        
-            switch (val.toLowerCase()) {
-    
-            case "shadow":
 
-                Dom.removeClass(oElement, "matte");
-                Dom.addClass(oElement, "shadow");
-    
-                if (!this.underlay) { // create if not already in DOM
+            function createUnderlay() {
+
+                var nIE;
+
+                if (!oUnderlay) { // create if not already in DOM
 
                     if (!m_oUnderlayTemplate) {
 
@@ -608,12 +594,44 @@
                     
                     }
 
-                    this.underlay = m_oUnderlayTemplate.cloneNode(true);
-                    oElement.appendChild(this.underlay);
+                    oUnderlay = m_oUnderlayTemplate.cloneNode(true);
+                    oElement.appendChild(oUnderlay);
+
+                    nIE = YAHOO.env.ua.ie;
+
+                    if (nIE == 6 || 
+                        (nIE == 7 && document.compatMode == "BackCompat")) {
+
+                        this.cfg.subscribeToConfigEvent("width", sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("height", sizeUnderlay);
+
+                        YAHOO.widget.Module.textResizeEvent.subscribe(
+                            sizeUnderlay, this, true);
+                    
+                    }
+
+                    
+                    this.underlay = oUnderlay;
 
                 }
+            
+            }
+
+            function onBeforeShow() {
+            
+                createUnderlay.call(this);
     
-                this.sizeUnderlay();
+                this.beforeShowEvent.unsubscribe(onBeforeShow);
+            
+            }
+        
+
+            switch (sUnderlay) {
+    
+            case "shadow":
+
+                Dom.removeClass(oElement, "matte");
+                Dom.addClass(oElement, "shadow");
 
                 break;
 
@@ -630,6 +648,24 @@
                 Dom.removeClass(oElement, "matte");
 
                 break;
+
+            }
+
+
+            if (sUnderlay == "shadow" || 
+                ((this.platform == "mac" && YAHOO.env.ua.gecko) && 
+                !oUnderlay)) {
+                
+                if (this.cfg.getProperty("visible")) {
+                
+                    createUnderlay.call(this);                    
+                
+                }
+                else {
+
+                    this.beforeShowEvent.subscribe(onBeforeShow);                
+                
+                }
 
             }
     
@@ -811,7 +847,6 @@
                 el = this.innerElement;
     
             Dom.setStyle(el, "height", height);
-            this.cfg.refireEvent("underlay");
             this.cfg.refireEvent("iframe");
     
         },
@@ -831,7 +866,6 @@
                 el = this.innerElement;
     
             Dom.setStyle(el, "width", width);
-            this.cfg.refireEvent("underlay");
             this.cfg.refireEvent("iframe");
     
         },
@@ -909,32 +943,20 @@
         */
         sizeUnderlay: function () {
 
-            if (this.underlay && !YAHOO.env.ua.gecko && 
-                !YAHOO.env.ua.webkit) {
+            var oUnderlay = this.underlay,
+                oElement;
 
-                this.underlay.style.width = 
-                    this.innerElement.offsetWidth + "px";
+            if (oUnderlay) {
 
-                this.underlay.style.height = 
-                    this.innerElement.offsetHeight + "px";
+                oElement = this.innerElement;
+
+                oUnderlay.style.width = oElement.offsetWidth + "px";
+                oUnderlay.style.height = oElement.offsetHeight + "px";
 
             }
 
         },
-        
-        /**
-        * Event handler fired when the resize monitor element is resized.
-        * @method onDomResize
-        * @param {DOMEvent} e The resize DOM event
-        * @param {Object} obj The scope object
-        */
-        onDomResize: function (e, obj) {
-            Panel.superclass.onDomResize.call(this, e, obj);
-            var me = this;
-            setTimeout(function () {
-                me.sizeUnderlay();
-            }, 0);
-        },
+
         
         /**
         * Registers the Panel's header for drag & drop capability.

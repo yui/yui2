@@ -29,6 +29,7 @@
         Dom = YAHOO.util.Dom,
         KeyListener = YAHOO.util.KeyListener,
         Connect = YAHOO.util.Connect,
+        Button = YAHOO.widget.Button,
         Dialog = YAHOO.widget.Dialog,
         Lang = YAHOO.lang,
 
@@ -84,34 +85,40 @@
 
     function removeButtonEventHandlers() {
 
-        var oFooter = this.footer,
-            aButtons,
+        var aButtons = this._aButtons,
             nButtons,
+            oButton,
             i;
-        
-        if (oFooter) {
-    
-            aButtons = oFooter.getElementsByTagName("button");
 
-            if (aButtons) {
+        if (Lang.isArray(aButtons)) {
 
-                nButtons = aButtons.length;
-                
-                if (nButtons > 0) {
+            nButtons = aButtons.length;
 
-                    i = nButtons - 1;
+            if (nButtons > 0) {
+
+                i = nButtons - 1;
+
+                do {
+
+                    oButton = aButtons[i];
                     
-                    do {
-                    
-                        Event.purgeElement(aButtons[i], false, "click");
-                    
+                    if (oButton instanceof Button) {
+                        
+                        oButton.destroy();
+                        
                     }
-                    while (i--);                
-                
-                }
+                    else if (oButton.tagName.toUpperCase() == "BUTTON") {
 
+                        Event.purgeElement(oButton);
+                        Event.purgeElement(oButton, false);
+
+                    }
+
+                }
+                while (i--);
+            
             }
-    
+        
         }
 
     }
@@ -605,49 +612,97 @@
                 oInnerElement = this.innerElement,
                 oButton,
                 oButtonEl,
+                oYUIButton,
                 nButtons,
                 oSpan,
                 oFooter,
                 i;
-                
+
+            removeButtonEventHandlers.call(this);
+            
+            this._aButtons = null;
+
             if (Lang.isArray(aButtons)) {
 
                 oSpan = document.createElement("span");
                 oSpan.className = "button-group";
 
                 nButtons = aButtons.length;
+
+                this._aButtons = [];
         
                 for (i = 0; i < nButtons; i++) {
 
                     oButton = aButtons[i];
+
+                    if (Button) {
+
+                        oYUIButton = new Button({ label: oButton.text, 
+                                            container: oSpan });
+
+                        oButtonEl = oYUIButton.get("element");
+
+                        if (oButton.isDefault) {
+
+                            oYUIButton.addClass("default");
+
+                            this.defaultHtmlButton = oButtonEl;
+
+                        }
+    
+                        if (Lang.isFunction(oButton.handler)) {
+    
+                            oYUIButton.set("onclick", { fn: oButton.handler, 
+                                obj: this, scope: this });
+            
+                        }
+                        else if (Lang.isObject(oButton.handler) && 
+                            Lang.isFunction(oButton.handler.fn)) {
+
+                            oYUIButton.set("onclick", { fn: oButton.handler.fn, 
+                                obj: ((!Lang.isUndefined(oButton.handler.obj)) ? 
+                                oButton.handler.obj : this), 
+                                scope: (oButton.handler.scope || this) });
+    
+                        }
+
+                        this._aButtons[this._aButtons.length] = oYUIButton;
+
+                    }
+                    else {
         
-                    oButtonEl = document.createElement("button");
-                    oButtonEl.setAttribute("type", "button");
-        
-                    if (oButton.isDefault) {
-                        oButtonEl.className = "default";
-                        this.defaultHtmlButton = oButtonEl;
+                        oButtonEl = document.createElement("button");
+                        oButtonEl.setAttribute("type", "button");
+            
+                        if (oButton.isDefault) {
+                            oButtonEl.className = "default";
+                            this.defaultHtmlButton = oButtonEl;
+                        }
+    
+                        oButtonEl.innerHTML = oButton.text;
+    
+                        if (Lang.isFunction(oButton.handler)) {
+    
+                            Event.on(oButtonEl, "click", oButton.handler, 
+                                this, true);
+            
+                        }
+                        else if (Lang.isObject(oButton.handler) && 
+                            Lang.isFunction(oButton.handler.fn)) {
+    
+                            Event.on(oButtonEl, "click", oButton.handler.fn, 
+                                ((!Lang.isUndefined(oButton.handler.obj)) ? 
+                                oButton.handler.obj : this), 
+                                (oButton.handler.scope || this));
+    
+                        }
+            
+                        oSpan.appendChild(oButtonEl);
+                        
+                        this._aButtons[this._aButtons.length] = oButtonEl;
+                        
                     }
 
-                    oButtonEl.innerHTML = oButton.text;
-
-                    if (Lang.isFunction(oButton.handler)) {
-
-                        Event.on(oButtonEl, "click", oButton.handler, 
-                            this, true);
-        
-                    }
-                    else if (Lang.isObject(oButton.handler) && 
-                        Lang.isFunction(oButton.handler.fn)) {
-
-                        Event.on(oButtonEl, "click", oButton.handler.fn, 
-                            ((!YAHOO.lang.isUndefined(oButton.handler.obj)) ? 
-                            oButton.handler.obj : this), 
-                            (oButton.handler.scope || this));
-
-                    }
-        
-                    oSpan.appendChild(oButtonEl);
                     oButton.htmlButton = oButtonEl;
         
                     if (i === 0) {
@@ -683,8 +738,6 @@
 
                 if (oSpan && oFooter) {
 
-                    removeButtonEventHandlers.call(this);
-
                     oFooter.removeChild(oSpan);
 
                     this.buttonSpan = null;
@@ -697,7 +750,30 @@
             }
 
         },
+
+
+        /**
+        * @method getButtons
+        * @description Returns an array containing each of the Dialog's 
+        * buttons, by default an array of HTML <code>&#60;BUTTON&#60;</code> 
+        * elements.  If the Dialog's buttons were created using the 
+        * YAHOO.widget.Button class (via the inclusion of the optional Button 
+        * dependancy on the page), an array of YAHOO.widget.Button instances 
+        * is returned.
+        * @return {Array}
+        */
+        getButtons: function () {
         
+            var aButtons = this._aButtons;
+            
+            if (aButtons) {
+            
+                return aButtons;
+            
+            }
+        
+        },
+
         
         /**
         * Sets focus to the first element in the Dialog's form or the first 
@@ -1242,6 +1318,8 @@
         destroy: function () {
         
             removeButtonEventHandlers.call(this);
+            
+            this._aButtons = null;
 
             var aForms = this.element.getElementsByTagName("form"),
                 oForm;

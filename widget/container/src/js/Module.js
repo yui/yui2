@@ -49,6 +49,11 @@
         Event = YAHOO.util.Event,
         CustomEvent = YAHOO.util.CustomEvent,
         Module = YAHOO.widget.Module,
+        
+        m_oModuleTemplate,
+        m_oHeaderTemplate,
+        m_oBodyTemplate,
+        m_oFooterTemplate,
 
         /**
         * Constant representing the name of the Module's events
@@ -176,7 +181,69 @@
     * @event Module.textResizeEvent
     */
     Module.textResizeEvent = new CustomEvent("textResize");
+
+
+    function createModuleTemplate() {
+
+        if (!m_oModuleTemplate) {
+
+            m_oModuleTemplate = document.createElement("div");
+            
+            m_oModuleTemplate.innerHTML = ("<div class=\"" + 
+                Module.CSS_HEADER + "\"></div>" + "<div class=\"" + 
+                Module.CSS_BODY + "\"></div><div class=\"" + 
+                Module.CSS_FOOTER + "\"></div>");
+
+            m_oHeaderTemplate = m_oModuleTemplate.firstChild;
+            m_oBodyTemplate = m_oHeaderTemplate.nextSibling;
+            m_oFooterTemplate = m_oBodyTemplate.nextSibling;
+
+        }
+
+        return m_oModuleTemplate;
+
+    }
+
+
+    function createHeader() {
+
+        if (!m_oHeaderTemplate) {
+        
+            createModuleTemplate();
+        
+        }
+        
+        return (m_oHeaderTemplate.cloneNode(false));
+
+    }
     
+
+    function createBody() {
+
+        if (!m_oBodyTemplate) {
+        
+            createModuleTemplate();
+        
+        }
+        
+        return (m_oBodyTemplate.cloneNode(false));
+    
+    }
+    
+
+    function createFooter() {
+
+        if (!m_oFooterTemplate) {
+        
+            createModuleTemplate();
+        
+        }
+        
+        return (m_oFooterTemplate.cloneNode(false));
+
+    }
+    
+
     Module.prototype = {
     
         /**
@@ -520,13 +587,19 @@
             }
         
             if (typeof el == "string") {
+
                 elId = el;
         
                 el = document.getElementById(el);
+
                 if (! el) {
-                    el = document.createElement("div");
+
+                    el = (createModuleTemplate()).cloneNode(false);
+
                     el.id = elId;
+
                 }
+
             }
         
             this.element = el;
@@ -633,7 +706,7 @@
         
                     if (YAHOO.env.ua.gecko) {
 
-                        sHtml = "<html><head><script " +
+                        sHTML = "<html><head><script " +
                                 "type=\"text/javascript\">" + 
                                 "window.onresize=function(){window.parent." +
                                 "YAHOO.widget.Module.textResizeEvent." +
@@ -642,7 +715,7 @@
                                 "<body></body></html>";
 
                         oIFrame.src = "data:text/html;charset=utf-8," + 
-                            encodeURIComponent(sHtml);
+                            encodeURIComponent(sHTML);
 
                     }
 
@@ -737,20 +810,23 @@
         * the header
         */
         setHeader: function (headerContent) {
-            if (! this.header) {
-                this.header = document.createElement("div");
-                this.header.className = Module.CSS_HEADER;
-            }
+
+            var oHeader = this.header || (this.header = createHeader());
         
             if (typeof headerContent == "string") {
-                this.header.innerHTML = headerContent;
+
+                oHeader.innerHTML = headerContent;
+
             } else {
-                this.header.innerHTML = "";
-                this.header.appendChild(headerContent);
+
+                oHeader.innerHTML = "";
+                oHeader.appendChild(headerContent);
+
             }
         
             this.changeHeaderEvent.fire(headerContent);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -760,14 +836,14 @@
         * @param {HTMLElement} element The element to append to the header
         */
         appendToHeader: function (element) {
-            if (! this.header) {
-                this.header = document.createElement("div");
-                this.header.className = Module.CSS_HEADER;
-            }
+
+            var oHeader = this.header || (this.header = createHeader());
         
-            this.header.appendChild(element);
+            oHeader.appendChild(element);
+
             this.changeHeaderEvent.fire(element);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -779,21 +855,23 @@
         * @param {HTMLElement} bodyContent The HTMLElement to append to the body
         */
         setBody: function (bodyContent) {
-            if (! this.body) {
-                this.body = document.createElement("div");
-                this.body.className = Module.CSS_BODY;
-            }
+
+            var oBody = this.body || (this.body = createBody());
         
-            if (typeof bodyContent == "string")
-            {
-                this.body.innerHTML = bodyContent;
+            if (typeof bodyContent == "string") {
+
+                oBody.innerHTML = bodyContent;
+
             } else {
-                this.body.innerHTML = "";
-                this.body.appendChild(bodyContent);
+
+                oBody.innerHTML = "";
+                oBody.appendChild(bodyContent);
+
             }
         
             this.changeBodyEvent.fire(bodyContent);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -803,14 +881,14 @@
         * @param {HTMLElement} element The element to append to the body
         */
         appendToBody: function (element) {
-            if (! this.body) {
-                this.body = document.createElement("div");
-                this.body.className = Module.CSS_BODY;
-            }
+
+            var oBody = this.body || (this.body = createBody());
         
-            this.body.appendChild(element);
+            oBody.appendChild(element);
+
             this.changeBodyEvent.fire(element);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -824,20 +902,23 @@
         * the footer
         */
         setFooter: function (footerContent) {
-            if (! this.footer) {
-                this.footer = document.createElement("div");
-                this.footer.className = Module.CSS_FOOTER;
-            }
+
+            var oFooter = this.footer || (this.footer = createFooter());
         
             if (typeof footerContent == "string") {
-                this.footer.innerHTML = footerContent;
+
+                oFooter.innerHTML = footerContent;
+
             } else {
-                this.footer.innerHTML = "";
-                this.footer.appendChild(footerContent);
+
+                oFooter.innerHTML = "";
+                oFooter.appendChild(footerContent);
+
             }
         
             this.changeFooterEvent.fire(footerContent);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -847,14 +928,14 @@
         * @param {HTMLElement} element The element to append to the footer
         */
         appendToFooter: function (element) {
-            if (! this.footer) {
-                this.footer = document.createElement("div");
-                this.footer.className = Module.CSS_FOOTER;
-            }
+
+            var oFooter = this.footer || (this.footer = createFooter());
         
-            this.footer.appendChild(element);
+            oFooter.appendChild(element);
+
             this.changeFooterEvent.fire(element);
             this.changeContentEvent.fire();
+
         },
         
         /**
