@@ -27,13 +27,11 @@
             log("page load listener: " + minfo.name);
         }, 
         load: {
+            //require: ['tabview', 'treeview'],
             require: ['tabview', 'treeview'],
             loadOptional: true,
             filter: 'DEBUG',
-            //domain: '127.0.0.1',
-            //allowRollup: false,
-            domain: '',
-            version: '../..',
+            base: '../../build/',
 
             onLoadComplete: function(loader) {
                 log("onLoadComplete");

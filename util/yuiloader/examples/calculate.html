@@ -35,7 +35,7 @@
 
 <script type="text/javascript">
 
-    var loader;
+    var loader, lang=YAHOO.lang;
 
     loader = new YAHOO.util.YUILoader();
     loader.require(["dragdrop"]);
@@ -57,8 +57,11 @@
     loader.loaded = {"yahoo": true, "dom": true};
     loader.loadOptional = true;
     loader.require(["slider", "connection", "element"]);
+    loader.require("treeview", "skin-sam");
     loader.calculate();
     log(loader.sorted);
+
+    log(lang.dump(loader.moduleInfo));
 
 </script>
 <h1>header</h1>

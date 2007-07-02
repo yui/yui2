@@ -5,6 +5,7 @@
  * and yahoo-dom-event.js), and will automatically use these when
  * appropriate in order to minimize the number of http connections
  * required to load all of the dependencies.
+ * 
  * @module yuiloader
  * @namespace YAHOO.util
  */
@@ -17,14 +18,16 @@
  
     /*
 
-    // can the user specify a minimum version?
+       Add skin logic
+       Add verify callback to addModule
+       Add module-specific filter
 
-    // what is the behavior if it is already on the page, wrong version?
+    what is the behavior if it is already on the page, wrong version?
 
-    // does event need to overwrite itself if the version is lower than what is
-    // being loaded?
+    does event need to overwrite itself if the version is lower than what is
+    being loaded?
 
-    // any other singletons that do not overwrite themselves?
+    any other singletons that do not overwrite themselves?
 
     YAHOO_config = {
         load: {
@@ -39,14 +42,12 @@
 
     */
    
-    // define YAHOO_config if it doesn't exist.  Only relevant if YAHOO is not
+    // Define YAHOO_config if it doesn't exist.  Only relevant if YAHOO is not
     // already on the page
     if (typeof YAHOO_config === "undefined") {
         YAHOO_config = {};
     }
 
-    var TYPE='type', PATH='path', REQUIRES='requires', OPTIONAL='optional', 
-        SUPERSEDES='supersedes', ROLLUP='rollup';
 
     // YUI is locally scoped, only pieces of it will be referenced in YAHOO
     // after YAHOO has been loaded.
@@ -143,25 +144,6 @@
             }
         },
 
-        // Add a new module to the component metadata.  The javascript
-        // component must also use YAHOO.register to notify the
-        // loader when it has been loaded.
-        addModule: function(o) {
-            if (!o || !o.name || !o.type || !o.path) {
-                return false;
-            }
-
-            YUI.info.moduleInfo[o.name] = {
-                TYPE:       o.type,
-                PATH:       o.path,
-                REQUIRES:   o.requires,
-                OPTIONAL:   o.optional,
-                SUPERSEDES: o.supersedes,
-                ROLLUP:     o.rollup
-            };
-
-            return true;
-        },
 
         // loader instances
         loaders: [],
@@ -266,40 +248,12 @@
         o = o || {};
 
         /**
-         * The domain that will be used to create the full
-         * path to each script/css file.
-         * @property domain
-         * @type string
-         * @default yui.yahooapis.com
-         */
-        this.domain = ("domain" in o) ? o.domain : YUI.info.domain;
-
-        /**
          * The base directory.
          * @property base
          * @type string
          * @default build
          */
         this.base = ("base" in o) ? o.base : YUI.info.base;
-
-        /**
-         * The version of the library to load.  While the
-         * supplied metadata is specific to a given version
-         * of the library, it isn't completely out of the
-         * question to change this in order to load an
-         * older version.
-         * @property version
-         * @type string
-         */
-        this.version = ("version" in o) ? o.version : YUI.info.version;
-
-        /**
-         * Use SSL or not.  Not supported on yahooapis
-         * @property secure
-         * @type boolean
-         * @default false
-         */
-        this.secure = o.secure || false;
 
         /**
          * Should we allow rollups
@@ -390,6 +344,46 @@
          */
         this._loadingRollup = null;
 
+        /**
+         * Provides the information used to skin the skinnable components.
+         * The following skin definition would result in 'skin1' and 'skin2'
+         * being loaded for calendar (if calendar was requested), and
+         * 'sam' for all other skinnable components:
+         *
+         *   <code>
+         *   skin: {
+         *
+         *      // The default skin, which is automatically applied if not
+         *      // overriden by a component-specific skin definition.
+         *      // Change this in to apply a different skin globally
+         *      defaultSkin: 'sam', 
+         *
+         *      // This is combined with the loader base property to get
+         *      // the default root directory for a skin. ex:
+         *      // http://yui.yahooapis.com/2.3.0/build/assets/skins/sam/
+         *      base: 'assets/skins/',
+         *
+         *      // The name of the rollup css file for the skin
+         *      path: 'skin.css',
+         *
+         *      // The number of skinnable components requested that are
+         *      // required before using the rollup file rather than the
+         *      // individual component css files
+         *      rollup: 2,
+         *
+         *      // Any component-specific overrides can be specified here,
+         *      // making it possible to load different skins for different
+         *      // components.  It is possible to load more than one skin
+         *      // for a given component as well.
+         *      overrides: {
+         *          calendar: ['skin1', 'skin2']
+         *      }
+         *   }
+         *   </code>
+         *   @property skin
+         */
+        this.skin = o.skin || YUI.ObjectUtil.clone(YUI.info.skin); 
+
 
         if (o.require) {
             this.require(o.require);
@@ -404,13 +398,49 @@
 
         FILTERS: {
             RAW: { 
-                'searchExpression': "-min\\.js", 
-                'replaceString': ".js"
+                'searchExp': "-min\\.js", 
+                'replaceStr': ".js"
             },
             DEBUG: { 
-                'searchExpression': "-min\\.js", 
-                'replaceString': "-debug.js"
+                'searchExp': "-min\\.js", 
+                'replaceStr': "-debug.js"
             }
+        },
+
+        SKIN_PREFIX: "skin-",
+
+        /** Add a new module to the component metadata.  The javascript 
+         * component must also use YAHOO.register to notify the loader 
+         * when it has been loaded, or a verifier function must be
+         * provided
+         * <code>
+         * {
+         *     name:       required, the component name 
+         *     type:       required, the component type (js or css) 
+         *     path:       required, the path to the script from "base" 
+         *     requires:   the modules required by this component 
+         *     optional:   the optional modules for this component 
+         *     supersedes: the modules this component replaces 
+         *     rollup:     the number of superseded modules required for automatic rollup 
+         *     verifier:   a function that is executed to determine when the module is fully loaded 
+         *     fullpath:   If fullpath is specified, this is used instead of the configured base + path 
+         *     skinnable:  flag to determine if skin assets should automatically be pulled in
+         * }
+         * </code>
+         * @method addModule
+         * @param o An object containing the module data
+         * @return {boolean} true if the module was added, false if 
+         * the object passed in did not provide all required attributes
+         */
+        addModule: function(o) {
+
+            if (!o || !o.name || !o.type || (!o.path && !o.fullpath)) {
+                return false;
+            }
+
+            this.moduleInfo[o.name] = o;
+
+            return true;
         },
 
         /**
@@ -420,62 +450,49 @@
          */
         require: function(what) {
             var a = (typeof what === "string") ? arguments : what;
+            for (var i=0; i<a.length; i=i+1) {
+                this.required[a[i]] = true;
+                var s = this.parseSkin(a[i]);
+                if (s) {
+                    this._addSkin(s.skin, s.module);
+                }
+            }
             YUI.ObjectUtil.appendArray(this.required, a);
         },
 
-        /**
-         * Calculates the dependency tree, the result is will be
-         * stored in the sorted property
-         * @method calculate
-         * @param o optional options object
-         */
-        calculate: function(o) {
-            if (this.dirty) {
-
-                this._setup(o);
-                this._explode();
-                if (this.allowRollup) {
-                    this._rollup();
-                }
-                this._reduce();
-                this._sort();
-
-                this.dirty = false;
-            }
-        },
 
         /**
-         * Investigates the current YUI configuration on the page.  By default,
-         * modules already detected will not be loaded again unless a force
-         * option is encountered.  Called by calculate()
-         * @method _setup
-         * @param o optional options object
+         * Adds the skin def to the module info
+         * @method _addSkin
          * @private
          */
-        _setup: function(o) {
+        _addSkin: function(skin, mod) {
 
-            o = o || {};
-            this.loaded = YUI.ObjectUtil.clone(this.inserted); 
-            
-            if (!this.sandbox && typeof YAHOO !== "undefined" && YAHOO.env) {
-                this.loaded = YUI.ObjectUtil.merge(this.loaded, YAHOO.env.modules);
+            // Add a module definition for the skin rollup css
+            var name = this.formatSkin(skin);
+            if (!this.moduleInfo[name]) {
+                this.addModule({
+                    'name': name,
+                    'type': 'css',
+                    'path': this.skin.base + skin + "/" + this.skin.path,
+                    //'supersedes': '*',
+                    'rollup': this.skin.rollup
+                });
             }
 
-            // add the ignore list to the list of loaded packages
-            if (o.ignore) {
-                YUI.ObjectUtil.appendArray(this.loaded, o.ignore);
-            }
-
-            // remove modules on the force list from the loaded list
-            if (o.force) {
-                for (var i=0; i<o.force.length; i=i+1) {
-                    if (o.force[i] in this.loaded) {
-                        delete this.loaded[o.force[i]];
-                    }
+            // Add a module definition for the module-specific skin css
+            if (mod) {
+                name = this.formatSkin(skin, mod);
+                if (!this.moduleInfo[skin]) {
+                    this.addModule({
+                        'name': name,
+                        'type': 'css',
+                        'path': this.skin.base + skin + "/" + mod + ".css"
+                    });
                 }
             }
         },
-        
+
         /**
          * Returns an object containing properties for all modules required
          * in order to load the requested module
@@ -526,7 +543,7 @@
 
             var o = {};
             o[name] = true;
-            s = mod && mod[SUPERSEDES];
+            s = mod && mod.supersedes;
 
             YUI.ObjectUtil.appendArray(o, s);
 
@@ -534,6 +551,61 @@
 
             return o;
         },
+
+        /**
+         * Calculates the dependency tree, the result is will be
+         * stored in the sorted property
+         * @method calculate
+         * @param o optional options object
+         */
+        calculate: function(o) {
+            if (this.dirty) {
+
+                this._setup(o);
+                this._explode();
+                this._skin();
+                if (this.allowRollup) {
+                    this._rollup();
+                }
+                this._reduce();
+                this._sort();
+
+                this.dirty = false;
+            }
+        },
+
+        /**
+         * Investigates the current YUI configuration on the page.  By default,
+         * modules already detected will not be loaded again unless a force
+         * option is encountered.  Called by calculate()
+         * @method _setup
+         * @param o optional options object
+         * @private
+         */
+        _setup: function(o) {
+
+            o = o || {};
+            this.loaded = YUI.ObjectUtil.clone(this.inserted); 
+            
+            if (!this.sandbox && typeof YAHOO !== "undefined" && YAHOO.env) {
+                this.loaded = YUI.ObjectUtil.merge(this.loaded, YAHOO.env.modules);
+            }
+
+            // add the ignore list to the list of loaded packages
+            if (o.ignore) {
+                YUI.ObjectUtil.appendArray(this.loaded, o.ignore);
+            }
+
+            // remove modules on the force list from the loaded list
+            if (o.force) {
+                for (var i=0; i<o.force.length; i=i+1) {
+                    if (o.force[i] in this.loaded) {
+                        delete this.loaded[o.force[i]];
+                    }
+                }
+            }
+        },
+        
 
         /**
          * Inspects the required modules list looking for additional 
@@ -558,7 +630,69 @@
                 }
             }
         },
+
+        /**
+         * Sets up the requirements for the skin assets if any of the
+         * requested modules are skinnable
+         * @method _skin
+         * @private
+         */
+        _skin: function() {
+
+            var r=this.required, i, mod;
+
+            for (i in r) {
+                mod = this.moduleInfo[i];
+                if (mod && mod.skinnable) {
+                    var o=this.skin.override, j;
+                    if (o && o[i]) {
+                        for (j=0; j<o[i].length; j=j+1) {
+                            this.require(this.formatSkin(o[i][j], i));
+                        }
+                    } else {
+                        this.require(this.formatSkin(this.skin.defaultSkin, i));
+                    }
+                }
+            }
+        },
+
+        /**
+         * Returns the skin module name for the specified skin name.  If a
+         * module name is supplied, the returned skin module name is 
+         * specific to the module passed in.
+         * @method formatSkin
+         * @param skin {string} the name of the skin
+         * @param mod {string} optional: the name of a module to skin
+         * @return {string} the full skin module name
+         */
+        formatSkin: function(skin, mod) {
+            var s = this.SKIN_PREFIX + skin;
+            if (mod) {
+                s = s + "-" + mod;
+            }
+
+            return s;
+        },
         
+        /**
+         * Reverses <code>formatSkin</code>, providing the skin name and
+         * module name if the string matches the pattern for skins.
+         * @method parseSkin
+         * @param mod {string} the module name to parse
+         * @return {skin: string, module: string} the parsed skin name 
+         * and module name, or null if the supplied string does not match
+         * the skin pattern
+         */
+        parseSkin: function(mod) {
+            
+            if (mod.indexOf(this.SKIN_PREFIX) === 0) {
+                var a = mod.split("-");
+                return {skin: a[1], module: a[2]};
+            } 
+
+            return null;
+        },
+
         /**
          * Look for rollup packages to determine if all of the modules a
          * rollup supersedes are required.  If so, include the rollup to
@@ -574,7 +708,8 @@
             if (this.dirty || !this.rollups) {
                 for (i in this.moduleInfo) {
                     m = this.moduleInfo[i];
-                    if (m && m[ROLLUP] && m[SUPERSEDES]) {
+                    //if (m && m.rollup && m.supersedes) {
+                    if (m && m.rollup) {
                         rollups[i] = m;
                     }
                 }
@@ -590,20 +725,53 @@
                 for (i in rollups) { 
 
                     // there can be only one
-                    if (!(i in r) && !(i in this.loaded)) {
-                        m =this.moduleInfo[i]; s = m[SUPERSEDES]; roll=true;
+                    if (!r[i] && !this.loaded[i]) {
+                        m =this.moduleInfo[i]; s = m.supersedes; roll=true;
 
-                        // require all modules to trigger a rollup (using the 
-                        // threshold value has not proved worthwhile)
-                        for (j=0;j<s.length;j=j+1) {
+                        if (!m.rollup) {
+                            continue;
+                        }
 
-                            // only look in the required modules list for
-                            // this evaluation so we don't create a
-                            // situation where we load a rollup containing a
-                            // module that has been loaded.
-                            if (!(s[j] in r) || (s[j] in this.loaded)) {
-                                roll=false;
-                                break;
+
+                        var skin = this.parseSkin(i), c = 0;
+                        if (skin) {
+
+                            for (j in r) {
+                                if (i !== j && this.parseSkin(j)) {
+                                    c++;
+                                    roll = (c >= m.rollup);
+                                    if (roll) {
+                                        break;
+                                    }
+                                }
+                            }
+
+
+                        } else {
+                            // require all modules to trigger a rollup (using the 
+                            // threshold value has not proved worthwhile)
+                            for (j=0;j<s.length;j=j+1) {
+
+                                // only look in the required modules list for
+                                // this evaluation so we don't create a
+                                // situation where we load a rollup containing a
+                                // module that has been loaded.
+                                // if (!(s[j] in r) || (s[j] in this.loaded)) {
+                                /*
+                                if (!r[s[j]] || this.loaded[s[j]]) {
+                                    roll=false;
+                                    break;
+                                }
+                                */
+                                
+                                if (r[s[j]] && !this.loaded[s[j]]) {
+                                    c++;
+                                    roll = (c >= m.rollup);
+                                    if (roll) {
+                                        break;
+                                    }
+                                }
+
                             }
                         }
 
@@ -611,7 +779,7 @@
                             // add the rollup
                             r[i] = true;
                             rolled = true;
-                            
+
                             // expand the rollup's dependencies
                             this.getRequires(m);
                         }
@@ -642,14 +810,33 @@
 
                 // remove anything this module supersedes
                 } else {
-                    m = this.moduleInfo[i];
-                    s = m && m[SUPERSEDES];
-                    if (s) {
-                        for (j=0;j<s.length;j=j+1) {
-                            if (s[j] in r) {
-                                delete r[s[j]];
+
+                    skinDef = this.parseSkin(i);
+
+                    if (skinDef) {
+                        //console.log("skin found in reduce: " + skinDef.skin + ", " + skinDef.module);
+                        // the skin rollup will not have a module name
+                        if (!skinDef.module) {
+                            var skin_pre = this.SKIN_PREFIX + skinDef.skin;
+                            //console.log("skin_pre: " + skin_pre);
+                            for (j in r) {
+                                if (j !== i && j.indexOf(skin_pre) > -1) {
+                                    //console.log ("removing component skin: " + j);
+                                    delete r[j];
+                                }
                             }
                         }
+                    } else {
+
+                         m = this.moduleInfo[i];
+                         s = m && m.supersedes;
+                         if (s) {
+                             for (j=0;j<s.length;j=j+1) {
+                                 if (s[j] in r) {
+                                     delete r[s[j]];
+                                 }
+                             }
+                         }
                     }
                 }
             }
@@ -671,13 +858,13 @@
                     return false;
                 }
 
-                var ii, mm=info[aa], rr=mm.expanded;
+                var ii, mm=info[aa], rr=mm && mm.expanded;
 
                 if (rr && YUI.ArrayUtil.indexOf(rr, bb) > -1) {
                     return true;
                 }
 
-                var ss=info[bb][SUPERSEDES];
+                var ss=info[bb] && info[bb].supersedes;
                 if (ss) {
                     for (ii=0; ii<ss.length; ii=i+1) {
                         if (requires(aa, ss[ii])) {
@@ -831,18 +1018,13 @@
                 return;
             }
 
+            // if the module that was just loaded isn't what we were expecting,
+            // continue to wait
             if (mname && mname !== this.loading) {
-                // another module was loaded, possibly by another process
-
-                //if (this._loadingRollup) {
-                    // mark the rollup loaded and continue
-                    //this.inserted[this._loadingRollup] = true;
-                //}
-
                 return;
             }
             
-            var s=this.sorted, len=s.length, i, m;
+            var s=this.sorted, len=s.length, i, m, url;
 
             for (i=0; i<len; i=i+1) {
 
@@ -861,7 +1043,7 @@
                     return;
                 }
 
-                // console.log("inserting " + s[i]);
+                // log("inserting " + s[i]);
 
                 m = this.moduleInfo[s[i]];
 
@@ -876,7 +1058,10 @@
                     // unlike the script files, there is no notification
                     // mechanism in place for the css files.
                     if (m.type === "css") {
-                        this.insertCss(this._url(m.path));
+
+                        url = m.fullpath || this._url(m.path);
+                        
+                        this.insertCss(url);
                         this.inserted[s[i]] = true;
 
                     // Scripts must be loaded in order, so we wait for the
@@ -888,12 +1073,24 @@
                         // than the rollup itself.  Keep track of this so
                         // that we can mark this as inserted as soon as we
                         // detect one of modules it supersedes is loaded.
-                        var sup = m[SUPERSEDES];
+                        var sup = m.supersedes;
                         if (sup && sup.length > 0) {
                             this._loadingRollup = s[i];
                         }
 
-                        this.insertScript(this._url(m.path));
+                        url = m.fullpath || this._url(m.path);
+                        this.insertScript(url);
+
+                        // if a verifier was included for this module, execute
+                        // it, passing the name of the module, and a callback
+                        // that must be exectued when the verifier is done.
+                        if (m.verifier) {
+                            var self = this, name=s[i];
+                            m.verifier(name, function() {
+                                    self.loadNext(name);
+                                });
+                        }
+
                         return;
                     }
                 }
@@ -902,8 +1099,9 @@
             // we are finished
             this.loading = null;
 
+            this._pushEvents();
+
             if (this.onLoadComplete) {
-                this._pushEvents();
                 this.onLoadComplete(this);
             }
 
@@ -930,23 +1128,13 @@
          */
         _url: function(path) {
             
-            var d = this.domain, u;
-            u = (d) ? ((this.secure) ? "https://" : "http://") + this.domain + "/" : "";
-
-            if (this.version) {
-                u = u + this.version + "/";
-            }
-
-            if (this.base) {
-                u = u + this.base + "/";
-            }
-
+            var u = this.base || "", f=this.filter;
             u = u + path;
 
-            if (this.filter) {
-                // console.log("filter: " + this.filter + ", " + this.filter.searchExpression + 
-                            // ", " + this.filter.replaceString);
-                u = u.replace(new RegExp(this.filter.searchExpression), this.filter.replaceString);
+            if (f) {
+                // console.log("filter: " + f + ", " + f.searchExp + 
+                // ", " + f.replaceStr);
+                u = u.replace(new RegExp(f.searchExp), f.replaceStr);
             }
 
             // console.log(u);

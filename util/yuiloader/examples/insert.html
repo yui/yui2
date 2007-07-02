@@ -62,9 +62,9 @@ YAHOO.example.tabviewinit = function( ){
 
     loader = new YAHOO.util.YUILoader();
     loader.require("tabview", "treeview");
+    // loader.require("tabview", "treeview", "calendar");
     loader.loadOptional = true;
-    loader.domain = '';
-    loader.version = '../..';
+    loader.base = '../../build/';
 
 
     loader.insert(function() {
