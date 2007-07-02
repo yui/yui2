@@ -706,6 +706,11 @@
         Event = YAHOO.util.Event,
         CustomEvent = YAHOO.util.CustomEvent,
         Module = YAHOO.widget.Module,
+        
+        m_oModuleTemplate,
+        m_oHeaderTemplate,
+        m_oBodyTemplate,
+        m_oFooterTemplate,
 
         /**
         * Constant representing the name of the Module's events
@@ -833,7 +838,69 @@
     * @event Module.textResizeEvent
     */
     Module.textResizeEvent = new CustomEvent("textResize");
+
+
+    function createModuleTemplate() {
+
+        if (!m_oModuleTemplate) {
+
+            m_oModuleTemplate = document.createElement("div");
+            
+            m_oModuleTemplate.innerHTML = ("<div class=\"" + 
+                Module.CSS_HEADER + "\"></div>" + "<div class=\"" + 
+                Module.CSS_BODY + "\"></div><div class=\"" + 
+                Module.CSS_FOOTER + "\"></div>");
+
+            m_oHeaderTemplate = m_oModuleTemplate.firstChild;
+            m_oBodyTemplate = m_oHeaderTemplate.nextSibling;
+            m_oFooterTemplate = m_oBodyTemplate.nextSibling;
+
+        }
+
+        return m_oModuleTemplate;
+
+    }
+
+
+    function createHeader() {
+
+        if (!m_oHeaderTemplate) {
+        
+            createModuleTemplate();
+        
+        }
+        
+        return (m_oHeaderTemplate.cloneNode(false));
+
+    }
     
+
+    function createBody() {
+
+        if (!m_oBodyTemplate) {
+        
+            createModuleTemplate();
+        
+        }
+        
+        return (m_oBodyTemplate.cloneNode(false));
+    
+    }
+    
+
+    function createFooter() {
+
+        if (!m_oFooterTemplate) {
+        
+            createModuleTemplate();
+        
+        }
+        
+        return (m_oFooterTemplate.cloneNode(false));
+
+    }
+    
+
     Module.prototype = {
     
         /**
@@ -1177,13 +1244,19 @@
             }
         
             if (typeof el == "string") {
+
                 elId = el;
         
                 el = document.getElementById(el);
+
                 if (! el) {
-                    el = document.createElement("div");
+
+                    el = (createModuleTemplate()).cloneNode(false);
+
                     el.id = elId;
+
                 }
+
             }
         
             this.element = el;
@@ -1290,7 +1363,7 @@
         
                     if (YAHOO.env.ua.gecko) {
 
-                        sHtml = "<html><head><script " +
+                        sHTML = "<html><head><script " +
                                 "type=\"text/javascript\">" + 
                                 "window.onresize=function(){window.parent." +
                                 "YAHOO.widget.Module.textResizeEvent." +
@@ -1299,7 +1372,7 @@
                                 "<body></body></html>";
 
                         oIFrame.src = "data:text/html;charset=utf-8," + 
-                            encodeURIComponent(sHtml);
+                            encodeURIComponent(sHTML);
 
                     }
 
@@ -1394,20 +1467,23 @@
         * the header
         */
         setHeader: function (headerContent) {
-            if (! this.header) {
-                this.header = document.createElement("div");
-                this.header.className = Module.CSS_HEADER;
-            }
+
+            var oHeader = this.header || (this.header = createHeader());
         
             if (typeof headerContent == "string") {
-                this.header.innerHTML = headerContent;
+
+                oHeader.innerHTML = headerContent;
+
             } else {
-                this.header.innerHTML = "";
-                this.header.appendChild(headerContent);
+
+                oHeader.innerHTML = "";
+                oHeader.appendChild(headerContent);
+
             }
         
             this.changeHeaderEvent.fire(headerContent);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -1417,14 +1493,14 @@
         * @param {HTMLElement} element The element to append to the header
         */
         appendToHeader: function (element) {
-            if (! this.header) {
-                this.header = document.createElement("div");
-                this.header.className = Module.CSS_HEADER;
-            }
+
+            var oHeader = this.header || (this.header = createHeader());
         
-            this.header.appendChild(element);
+            oHeader.appendChild(element);
+
             this.changeHeaderEvent.fire(element);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -1436,21 +1512,23 @@
         * @param {HTMLElement} bodyContent The HTMLElement to append to the body
         */
         setBody: function (bodyContent) {
-            if (! this.body) {
-                this.body = document.createElement("div");
-                this.body.className = Module.CSS_BODY;
-            }
+
+            var oBody = this.body || (this.body = createBody());
         
-            if (typeof bodyContent == "string")
-            {
-                this.body.innerHTML = bodyContent;
+            if (typeof bodyContent == "string") {
+
+                oBody.innerHTML = bodyContent;
+
             } else {
-                this.body.innerHTML = "";
-                this.body.appendChild(bodyContent);
+
+                oBody.innerHTML = "";
+                oBody.appendChild(bodyContent);
+
             }
         
             this.changeBodyEvent.fire(bodyContent);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -1460,14 +1538,14 @@
         * @param {HTMLElement} element The element to append to the body
         */
         appendToBody: function (element) {
-            if (! this.body) {
-                this.body = document.createElement("div");
-                this.body.className = Module.CSS_BODY;
-            }
+
+            var oBody = this.body || (this.body = createBody());
         
-            this.body.appendChild(element);
+            oBody.appendChild(element);
+
             this.changeBodyEvent.fire(element);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -1481,20 +1559,23 @@
         * the footer
         */
         setFooter: function (footerContent) {
-            if (! this.footer) {
-                this.footer = document.createElement("div");
-                this.footer.className = Module.CSS_FOOTER;
-            }
+
+            var oFooter = this.footer || (this.footer = createFooter());
         
             if (typeof footerContent == "string") {
-                this.footer.innerHTML = footerContent;
+
+                oFooter.innerHTML = footerContent;
+
             } else {
-                this.footer.innerHTML = "";
-                this.footer.appendChild(footerContent);
+
+                oFooter.innerHTML = "";
+                oFooter.appendChild(footerContent);
+
             }
         
             this.changeFooterEvent.fire(footerContent);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -1504,14 +1585,14 @@
         * @param {HTMLElement} element The element to append to the footer
         */
         appendToFooter: function (element) {
-            if (! this.footer) {
-                this.footer = document.createElement("div");
-                this.footer.className = Module.CSS_FOOTER;
-            }
+
+            var oFooter = this.footer || (this.footer = createFooter());
         
-            this.footer.appendChild(element);
+            oFooter.appendChild(element);
+
             this.changeFooterEvent.fire(element);
             this.changeContentEvent.fire();
+
         },
         
         /**
@@ -3190,11 +3271,8 @@
         */
         center: function () {
     
-            var scrollX = document.documentElement.scrollLeft || 
-                    document.body.scrollLeft,
-    
-                scrollY = document.documentElement.scrollTop || 
-                    document.body.scrollTop,
+            var scrollX = Dom.getDocumentScrollLeft(),
+                scrollY = Dom.getDocumentScrollTop(),
     
                 viewPortWidth = Dom.getClientWidth(),
                 viewPortHeight = Dom.getClientHeight(),
@@ -3974,6 +4052,8 @@
         Event = YAHOO.util.Event,
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
+    
+        m_oShadowTemplate;
         
         /**
         * Constant representing the Tooltip's configuration properties
@@ -4141,10 +4221,11 @@
                 this.cfg.queueProperty("constraintoviewport",true);
         
                 this.setBody("");
-                this.render(this.cfg.getProperty("container"));
 
                 this.subscribe("beforeShow", setWidthToOffsetWidth);
-                
+                this.subscribe("render", this.onRender);
+
+                this.render(this.cfg.getProperty("container"));
         
                 this.initEvent.fire(Tooltip);
                 
@@ -4620,6 +4701,111 @@
                 this.cfg.setProperty("y", (pageY - height - 5));
             }
         },
+
+
+        /**
+        * @method onRender
+        * @description "render" event handler for the Tooltip.
+        * @param {String} p_sType String representing the name of the event  
+        * that was fired.
+        * @param {Array} p_aArgs Array of arguments sent when the event 
+        * was fired.
+        */
+        onRender: function (p_sType, p_aArgs) {
+    
+            function sizeShadow() {
+    
+                var oElement = this.element,
+                    oShadow = this._shadow;
+            
+                if (oShadow) {
+            
+                    oShadow.style.width = (oElement.offsetWidth + 6) + "px";
+                    oShadow.style.height = (oElement.offsetHeight + 1) + "px"; 
+            
+                }
+            
+            }
+    
+    
+            function createShadow() {
+    
+                var oShadow = this._shadow,
+                    oElement,
+                    Module,
+                    nIE,
+                    me;
+    
+                if (!oShadow) {
+    
+                    oElement = this.element;
+                    Module = YAHOO.widget.Module;
+                    nIE = YAHOO.env.ua.ie;
+                    me = this;
+    
+                    if (!m_oShadowTemplate) {
+        
+                        m_oShadowTemplate = document.createElement("div");
+                        m_oShadowTemplate.className = "yui-tt-shadow";
+                    
+                    }
+        
+                    oShadow = m_oShadowTemplate.cloneNode(false);
+        
+                    oElement.appendChild(oShadow);
+                    
+                    this._shadow = oShadow;
+    
+    
+        
+                    if (nIE == 6 || 
+                        (nIE == 7 && document.compatMode == "BackCompat")) {
+                
+                        window.setTimeout(function () { 
+        
+                            sizeShadow.call(me); 
+        
+                        }, 0);
+    
+                        this.cfg.subscribeToConfigEvent("width", sizeShadow);
+                        this.cfg.subscribeToConfigEvent("height", sizeShadow);
+    
+                        Module.textResizeEvent.subscribe(sizeShadow, me, true);
+                        
+                        this.destroyEvent.subscribe(function () {
+                        
+                            Module.textResizeEvent.unsubscribe(sizeShadow, me);
+                        
+                        });
+                
+                    }
+                
+                }
+    
+            }
+    
+    
+            function onBeforeShow() {
+            
+                createShadow.call(this);
+    
+                this.beforeShowEvent.unsubscribe(onBeforeShow);
+            
+            }
+    
+    
+            if (this.cfg.getProperty("visible")) {
+    
+                createShadow.call(this);
+            
+            }
+            else {
+    
+                this.beforeShowEvent.subscribe(onBeforeShow);
+            
+            }
+        
+        },
         
         /**
         * Removes the Tooltip element from the DOM and sets all child 
@@ -4920,17 +5106,6 @@
 
     }
 
-    /* 
-        "beforeShow" event handler used to refire a Panel instance's 
-        "underlay" event to ensure the underlay is properly configured 
-        each time it is made visible.
-    */
-    
-    function refireUndelay(p_sType, p_aArgs) {
-    
-        this.cfg.refireEvent("underlay");
-    
-    }
     
     YAHOO.extend(Panel, Overlay, {
     
@@ -4969,7 +5144,6 @@
         
             this.subscribe("showMask", addFocusEventHandlers);
             this.subscribe("hideMask", removeFocusEventHandlers);
-            this.subscribe("beforeShow", refireUndelay);
 
             this.initEvent.fire(Panel);
             
@@ -5237,17 +5411,15 @@
         */
         configUnderlay: function (type, args, obj) {
     
-            var val = args[0],
+            var sUnderlay = args[0].toLowerCase(),
+                oUnderlay = this.underlay;
                 oElement = this.element;
-        
-            switch (val.toLowerCase()) {
-    
-            case "shadow":
 
-                Dom.removeClass(oElement, "matte");
-                Dom.addClass(oElement, "shadow");
-    
-                if (!this.underlay) { // create if not already in DOM
+            function createUnderlay() {
+
+                var nIE;
+
+                if (!oUnderlay) { // create if not already in DOM
 
                     if (!m_oUnderlayTemplate) {
 
@@ -5257,12 +5429,44 @@
                     
                     }
 
-                    this.underlay = m_oUnderlayTemplate.cloneNode(true);
-                    oElement.appendChild(this.underlay);
+                    oUnderlay = m_oUnderlayTemplate.cloneNode(true);
+                    oElement.appendChild(oUnderlay);
+
+                    nIE = YAHOO.env.ua.ie;
+
+                    if (nIE == 6 || 
+                        (nIE == 7 && document.compatMode == "BackCompat")) {
+
+                        this.cfg.subscribeToConfigEvent("width", sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("height", sizeUnderlay);
+
+                        YAHOO.widget.Module.textResizeEvent.subscribe(
+                            sizeUnderlay, this, true);
+                    
+                    }
+
+                    
+                    this.underlay = oUnderlay;
 
                 }
+            
+            }
+
+            function onBeforeShow() {
+            
+                createUnderlay.call(this);
     
-                this.sizeUnderlay();
+                this.beforeShowEvent.unsubscribe(onBeforeShow);
+            
+            }
+        
+
+            switch (sUnderlay) {
+    
+            case "shadow":
+
+                Dom.removeClass(oElement, "matte");
+                Dom.addClass(oElement, "shadow");
 
                 break;
 
@@ -5279,6 +5483,24 @@
                 Dom.removeClass(oElement, "matte");
 
                 break;
+
+            }
+
+
+            if (sUnderlay == "shadow" || 
+                ((this.platform == "mac" && YAHOO.env.ua.gecko) && 
+                !oUnderlay)) {
+                
+                if (this.cfg.getProperty("visible")) {
+                
+                    createUnderlay.call(this);                    
+                
+                }
+                else {
+
+                    this.beforeShowEvent.subscribe(onBeforeShow);                
+                
+                }
 
             }
     
@@ -5460,7 +5682,6 @@
                 el = this.innerElement;
     
             Dom.setStyle(el, "height", height);
-            this.cfg.refireEvent("underlay");
             this.cfg.refireEvent("iframe");
     
         },
@@ -5480,7 +5701,6 @@
                 el = this.innerElement;
     
             Dom.setStyle(el, "width", width);
-            this.cfg.refireEvent("underlay");
             this.cfg.refireEvent("iframe");
     
         },
@@ -5558,32 +5778,20 @@
         */
         sizeUnderlay: function () {
 
-            if (this.underlay && !YAHOO.env.ua.gecko && 
-                !YAHOO.env.ua.webkit) {
+            var oUnderlay = this.underlay,
+                oElement;
 
-                this.underlay.style.width = 
-                    this.innerElement.offsetWidth + "px";
+            if (oUnderlay) {
 
-                this.underlay.style.height = 
-                    this.innerElement.offsetHeight + "px";
+                oElement = this.innerElement;
+
+                oUnderlay.style.width = oElement.offsetWidth + "px";
+                oUnderlay.style.height = oElement.offsetHeight + "px";
 
             }
 
         },
-        
-        /**
-        * Event handler fired when the resize monitor element is resized.
-        * @method onDomResize
-        * @param {DOMEvent} e The resize DOM event
-        * @param {Object} obj The scope object
-        */
-        onDomResize: function (e, obj) {
-            Panel.superclass.onDomResize.call(this, e, obj);
-            var me = this;
-            setTimeout(function () {
-                me.sizeUnderlay();
-            }, 0);
-        },
+
         
         /**
         * Registers the Panel's header for drag & drop capability.
@@ -5851,6 +6059,7 @@
         Dom = YAHOO.util.Dom,
         KeyListener = YAHOO.util.KeyListener,
         Connect = YAHOO.util.Connect,
+        Button = YAHOO.widget.Button,
         Dialog = YAHOO.widget.Dialog,
         Lang = YAHOO.lang,
 
@@ -5906,34 +6115,40 @@
 
     function removeButtonEventHandlers() {
 
-        var oFooter = this.footer,
-            aButtons,
+        var aButtons = this._aButtons,
             nButtons,
+            oButton,
             i;
-        
-        if (oFooter) {
-    
-            aButtons = oFooter.getElementsByTagName("button");
 
-            if (aButtons) {
+        if (Lang.isArray(aButtons)) {
 
-                nButtons = aButtons.length;
-                
-                if (nButtons > 0) {
+            nButtons = aButtons.length;
 
-                    i = nButtons - 1;
+            if (nButtons > 0) {
+
+                i = nButtons - 1;
+
+                do {
+
+                    oButton = aButtons[i];
                     
-                    do {
-                    
-                        Event.purgeElement(aButtons[i], false, "click");
-                    
+                    if (oButton instanceof Button) {
+                        
+                        oButton.destroy();
+                        
                     }
-                    while (i--);                
-                
-                }
+                    else if (oButton.tagName.toUpperCase() == "BUTTON") {
 
+                        Event.purgeElement(oButton);
+                        Event.purgeElement(oButton, false);
+
+                    }
+
+                }
+                while (i--);
+            
             }
-    
+        
         }
 
     }
@@ -6427,49 +6642,97 @@
                 oInnerElement = this.innerElement,
                 oButton,
                 oButtonEl,
+                oYUIButton,
                 nButtons,
                 oSpan,
                 oFooter,
                 i;
-                
+
+            removeButtonEventHandlers.call(this);
+            
+            this._aButtons = null;
+
             if (Lang.isArray(aButtons)) {
 
                 oSpan = document.createElement("span");
                 oSpan.className = "button-group";
 
                 nButtons = aButtons.length;
+
+                this._aButtons = [];
         
                 for (i = 0; i < nButtons; i++) {
 
                     oButton = aButtons[i];
+
+                    if (Button) {
+
+                        oYUIButton = new Button({ label: oButton.text, 
+                                            container: oSpan });
+
+                        oButtonEl = oYUIButton.get("element");
+
+                        if (oButton.isDefault) {
+
+                            oYUIButton.addClass("default");
+
+                            this.defaultHtmlButton = oButtonEl;
+
+                        }
+    
+                        if (Lang.isFunction(oButton.handler)) {
+    
+                            oYUIButton.set("onclick", { fn: oButton.handler, 
+                                obj: this, scope: this });
+            
+                        }
+                        else if (Lang.isObject(oButton.handler) && 
+                            Lang.isFunction(oButton.handler.fn)) {
+
+                            oYUIButton.set("onclick", { fn: oButton.handler.fn, 
+                                obj: ((!Lang.isUndefined(oButton.handler.obj)) ? 
+                                oButton.handler.obj : this), 
+                                scope: (oButton.handler.scope || this) });
+    
+                        }
+
+                        this._aButtons[this._aButtons.length] = oYUIButton;
+
+                    }
+                    else {
         
-                    oButtonEl = document.createElement("button");
-                    oButtonEl.setAttribute("type", "button");
-        
-                    if (oButton.isDefault) {
-                        oButtonEl.className = "default";
-                        this.defaultHtmlButton = oButtonEl;
+                        oButtonEl = document.createElement("button");
+                        oButtonEl.setAttribute("type", "button");
+            
+                        if (oButton.isDefault) {
+                            oButtonEl.className = "default";
+                            this.defaultHtmlButton = oButtonEl;
+                        }
+    
+                        oButtonEl.innerHTML = oButton.text;
+    
+                        if (Lang.isFunction(oButton.handler)) {
+    
+                            Event.on(oButtonEl, "click", oButton.handler, 
+                                this, true);
+            
+                        }
+                        else if (Lang.isObject(oButton.handler) && 
+                            Lang.isFunction(oButton.handler.fn)) {
+    
+                            Event.on(oButtonEl, "click", oButton.handler.fn, 
+                                ((!Lang.isUndefined(oButton.handler.obj)) ? 
+                                oButton.handler.obj : this), 
+                                (oButton.handler.scope || this));
+    
+                        }
+            
+                        oSpan.appendChild(oButtonEl);
+                        
+                        this._aButtons[this._aButtons.length] = oButtonEl;
+                        
                     }
 
-                    oButtonEl.innerHTML = oButton.text;
-
-                    if (Lang.isFunction(oButton.handler)) {
-
-                        Event.on(oButtonEl, "click", oButton.handler, 
-                            this, true);
-        
-                    }
-                    else if (Lang.isObject(oButton.handler) && 
-                        Lang.isFunction(oButton.handler.fn)) {
-
-                        Event.on(oButtonEl, "click", oButton.handler.fn, 
-                            ((!YAHOO.lang.isUndefined(oButton.handler.obj)) ? 
-                            oButton.handler.obj : this), 
-                            (oButton.handler.scope || this));
-
-                    }
-        
-                    oSpan.appendChild(oButtonEl);
                     oButton.htmlButton = oButtonEl;
         
                     if (i === 0) {
@@ -6505,8 +6768,6 @@
 
                 if (oSpan && oFooter) {
 
-                    removeButtonEventHandlers.call(this);
-
                     oFooter.removeChild(oSpan);
 
                     this.buttonSpan = null;
@@ -6519,7 +6780,30 @@
             }
 
         },
+
+
+        /**
+        * @method getButtons
+        * @description Returns an array containing each of the Dialog's 
+        * buttons, by default an array of HTML <code>&#60;BUTTON&#60;</code> 
+        * elements.  If the Dialog's buttons were created using the 
+        * YAHOO.widget.Button class (via the inclusion of the optional Button 
+        * dependancy on the page), an array of YAHOO.widget.Button instances 
+        * is returned.
+        * @return {Array}
+        */
+        getButtons: function () {
         
+            var aButtons = this._aButtons;
+            
+            if (aButtons) {
+            
+                return aButtons;
+            
+            }
+        
+        },
+
         
         /**
         * Sets focus to the first element in the Dialog's form or the first 
@@ -7064,6 +7348,8 @@
         destroy: function () {
         
             removeButtonEventHandlers.call(this);
+            
+            this._aButtons = null;
 
             var aForms = this.element.getElementsByTagName("form"),
                 oForm;
