@@ -33,6 +33,14 @@
 			replace="../../build/button/assets/"
 			flags="g">
 		</replaceregexp>
+		<copy file="${component.srcdir}/css/skins/sam/button-skin.css" tofile="${component.srcdir}/css/temp/button-skin.css" />
+		<replaceregexp 
+			file="${component.srcdir}/css/temp/button-skin.css"
+			byline="true"
+			match="(\.\./\.\./\.\./img/)"
+			replace=""
+			flags="g">
+		</replaceregexp>
 	</target>
 
     <target name="deploy" depends="YuiTaskLib.deploy">

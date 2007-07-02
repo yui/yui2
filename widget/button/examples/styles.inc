@@ -29,5 +29,6 @@ else if($g_sBuildType == "prod") {
         }
 ?> 
         <!-- CSS for Button -->
-        <link rel="stylesheet" type="text/css" href="<?php echo $sButtonCSSPath; ?>/button.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sButtonCSSPath; ?>/button-core.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo $sButtonCSSPath; ?>/skins/sam/button-skin.css">
  

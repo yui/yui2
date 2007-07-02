@@ -6,6 +6,15 @@ ant
 
 ant deploy
 
+mv ~/dev/yahoo/presentation/2.x/build/button/assets/button-skin.css ~/dev/yahoo/presentation/2.x/build/button/assets/skins/sam/button-skin.css 
+mv ~/dev/yahoo/presentation/2.x/build/button/assets/menu-button-arrow-disabled.png ~/dev/yahoo/presentation/2.x/build/button/assets/skins/sam/menu-button-arrow-disabled.png
+mv ~/dev/yahoo/presentation/2.x/build/button/assets/menu-button-arrow.png ~/dev/yahoo/presentation/2.x/build/button/assets/skins/sam/menu-button-arrow.png
+mv ~/dev/yahoo/presentation/2.x/build/button/assets/split-button-arrow-active.png ~/dev/yahoo/presentation/2.x/build/button/assets/skins/sam/split-button-arrow-active.png
+mv ~/dev/yahoo/presentation/2.x/build/button/assets/split-button-arrow-disabled.png ~/dev/yahoo/presentation/2.x/build/button/assets/skins/sam/split-button-arrow-disabled.png
+mv ~/dev/yahoo/presentation/2.x/build/button/assets/split-button-arrow-focus.png ~/dev/yahoo/presentation/2.x/build/button/assets/skins/sam/split-button-arrow-focus.png
+mv ~/dev/yahoo/presentation/2.x/build/button/assets/split-button-arrow.png ~/dev/yahoo/presentation/2.x/build/button/assets/skins/sam/split-button-arrow.png
+
+
 # Create example files
 
 php -d 'open_basedir=' examples/index.html prod > ../../examples/button/index.html
