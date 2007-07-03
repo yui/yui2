@@ -7,6 +7,7 @@
  * @namespace YAHOO.util
  * @module connection
  * @requires yahoo
+ * @requires event
  */
 
 /**
