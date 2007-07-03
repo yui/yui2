@@ -168,41 +168,30 @@
         */
         init: function (el, userConfig) {
     
-            function deferredInit() {
-                this.init(el, userConfig);
-            }
-    
             this.logger = new YAHOO.widget.LogWriter(this.toString());
-        
-            if (document.readyState && document.readyState != "complete") {
     
-                Event.on(window, "load", deferredInit, this, true);
+            Tooltip.superclass.init.call(this, el);
     
-            } else {
+            this.beforeInitEvent.fire(Tooltip);
     
-                Tooltip.superclass.init.call(this, el);
-        
-                this.beforeInitEvent.fire(Tooltip);
-        
-                Dom.addClass(this.element, Tooltip.CSS_TOOLTIP);
-        
-                if (userConfig) {
-                    this.cfg.applyConfig(userConfig, true);
-                }
-        
-                this.cfg.queueProperty("visible",false);
-                this.cfg.queueProperty("constraintoviewport",true);
-        
-                this.setBody("");
-
-                this.subscribe("beforeShow", setWidthToOffsetWidth);
-                this.subscribe("render", this.onRender);
-
-                this.render(this.cfg.getProperty("container"));
-        
-                this.initEvent.fire(Tooltip);
-                
+            Dom.addClass(this.element, Tooltip.CSS_TOOLTIP);
+    
+            if (userConfig) {
+                this.cfg.applyConfig(userConfig, true);
             }
+    
+            this.cfg.queueProperty("visible",false);
+            this.cfg.queueProperty("constraintoviewport",true);
+    
+            this.setBody("");
+
+            this.subscribe("beforeShow", setWidthToOffsetWidth);
+            this.subscribe("render", this.onRender);
+
+            this.render(this.cfg.getProperty("container"));
+    
+            this.initEvent.fire(Tooltip);
+
         },
         
         /**
