@@ -332,7 +332,7 @@ if (!YAHOO.util.Event) {
                                 s = p_override;
                             }
                         }
-                        p_fn.call(s);
+                        p_fn.call(s, p_obj);
                     }, 0);
                 } else {
                     this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
