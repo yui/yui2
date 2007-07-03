@@ -4183,40 +4183,29 @@
         */
         init: function (el, userConfig) {
     
-            function deferredInit() {
-                this.init(el, userConfig);
+    
+            Tooltip.superclass.init.call(this, el);
+    
+            this.beforeInitEvent.fire(Tooltip);
+    
+            Dom.addClass(this.element, Tooltip.CSS_TOOLTIP);
+    
+            if (userConfig) {
+                this.cfg.applyConfig(userConfig, true);
             }
     
-        
-            if (document.readyState && document.readyState != "complete") {
+            this.cfg.queueProperty("visible",false);
+            this.cfg.queueProperty("constraintoviewport",true);
     
-                Event.on(window, "load", deferredInit, this, true);
-    
-            } else {
-    
-                Tooltip.superclass.init.call(this, el);
-        
-                this.beforeInitEvent.fire(Tooltip);
-        
-                Dom.addClass(this.element, Tooltip.CSS_TOOLTIP);
-        
-                if (userConfig) {
-                    this.cfg.applyConfig(userConfig, true);
-                }
-        
-                this.cfg.queueProperty("visible",false);
-                this.cfg.queueProperty("constraintoviewport",true);
-        
-                this.setBody("");
+            this.setBody("");
 
-                this.subscribe("beforeShow", setWidthToOffsetWidth);
-                this.subscribe("render", this.onRender);
+            this.subscribe("beforeShow", setWidthToOffsetWidth);
+            this.subscribe("render", this.onRender);
 
-                this.render(this.cfg.getProperty("container"));
-        
-                this.initEvent.fire(Tooltip);
-                
-            }
+            this.render(this.cfg.getProperty("container"));
+    
+            this.initEvent.fire(Tooltip);
+
         },
         
         /**
