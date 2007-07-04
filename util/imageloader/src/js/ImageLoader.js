@@ -24,11 +24,10 @@ if (typeof(YAHOO.util.ImageLoader) == 'undefined') {
  */
 YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	/**
-	 * Name for the group. Only used in debug printouts
+	 * Name for the group. Only used to identify the group in logging statements
 	 * @property name
 	 * @type String
 	 */
-	// TODO  only using the name for the console prints
 	this.name = 'unnamed';
 	
 	/**
@@ -123,7 +122,6 @@ YAHOO.util.ImageLoader.group.prototype.addTrigger = function(trigEl, trigAct) {
  */
 YAHOO.util.ImageLoader.group.prototype._onloadTasks = function() {
 	if (this.timeoutLen && typeof(this.timeoutLen) == 'number' && this.timeoutLen > 0) {
-//		if (typeof(console) != 'undefined') { console.log('[' + this.name + '] - initiating timeout for ' + this.timeoutLen); }
 		this._timeout = setTimeout(this._getFetchTimeout(), this.timeoutLen * 1000);
 	}
 
@@ -184,7 +182,8 @@ YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url)
  * @method fetch
  */
 YAHOO.util.ImageLoader.group.prototype.fetch = function() {
-//	if (typeof(console) != 'undefined') { console.log('[' + this.name + '] - fetching images'); }
+	YAHOO.log('Fetching images in group: "' + this.name + '".', 'info', 'imageloader');
+
 	clearTimeout(this._timeout);
 	// remove all listeners
 	for (var i=0; i < this._triggers.length; i++) {
@@ -208,6 +207,7 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
  * @private
  */
 YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
+	YAHOO.log('Checking for images above the fold in group: "' + this.name + '"', 'info', 'imageloader');
 	var scrollTop = (document.compatMode != 'CSS1Compat') ? document.body.scrollTop : document.documentElement.scrollTop;
 	var viewHeight = YAHOO.util.Dom.getViewportHeight();
 	var hLimit = scrollTop + viewHeight;
@@ -218,6 +218,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 		if (YAHOO.lang.hasOwnProperty(this._imgObjs, id)) {
 			var elPos = YAHOO.util.Dom.getXY(this._imgObjs[id].domId);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
+				YAHOO.log('Image with id "' + this._imgObjs[id].domId + '" is above the fold. Fetching image.', 'info', 'imageloader');
 				this._imgObjs[id].fetch();
 			}
 		}
@@ -228,6 +229,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 		for (var i=0; i < this._classImageEls.length; i++) {
 			var elPos = YAHOO.util.Dom.getXY(this._classImageEls[i]);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
+				YAHOO.log('Image with id "' + this._classImageEls[i].id + '" is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)', 'info', 'imageloader');
 				YAHOO.util.Dom.removeClass(this._classImageEls[i], this.className);
 			}
 		}
@@ -244,6 +246,7 @@ YAHOO.util.ImageLoader.group.prototype._fetchByClass = function() {
 		return;
 	}
 
+	YAHOO.log('Fetching all images with class "' + this.className + '" in group "' + this.name + '".', 'info', 'imageloader');
 	// this._classImageEls may have been set in _foldCheck
 	if (this._classImageEls === null) {
 		this._classImageEls = YAHOO.util.Dom.getElementsByClassName(this.className);
@@ -321,7 +324,7 @@ YAHOO.util.ImageLoader.imgObj.prototype.fetch = function() {
 	if (! el) {
 		return;
 	}
-//	if (typeof(console) != 'undefined') { console.log('fetching: ' + this.domId); }
+	YAHOO.log('Fetching image with id "' + this.domId + '".', 'info', 'imageloader');
 	this._applyUrl(el);
 
 	if (this.setVisible) {
@@ -416,14 +419,13 @@ YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.img
 
 /**
  * Inserts the image url into the dom so that the image is displayed
- * If the browser is determined to be IE6, sets the AlphaImageLoader src; otherwise sets style.backgroundImage
+ * If the browser is determined to be IE6 (or older), sets the AlphaImageLoader src; otherwise sets style.backgroundImage
  * @method _applyUrl
  * @param {Object}	el	HTML dom element
  * @private
  */
 YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
-	var ua = window.navigator.userAgent;
-	if (ua.indexOf('MSIE 6') > -1) {
+	if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
 		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="scale")';
 	}
 	else {
