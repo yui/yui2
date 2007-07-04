@@ -3877,6 +3877,10 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         // Update sortedBy tracker
         this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
+        
+        // Reset to first page
+        //TODO: Keep selection in view
+        this.updatePaginator({currentPage:1});
 
         // Update the UI
         this.refreshView();
@@ -4859,42 +4863,69 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
     if(elContainer && (elContainer.ownerDocument == document) &&
             YAHOO.lang.isNumber(nCurrentPage) && YAHOO.lang.isNumber(nPageLinksStart) &&
             YAHOO.lang.isNumber(nTotalPages)) {
-        // Markup for page links
-        var isFirstPage = (nCurrentPage == 1) ? true : false;
-        var isLastPage = (nCurrentPage == nTotalPages) ? true : false;
-        var firstPageLink = (isFirstPage) ?
+        // Set up markup for first/last/previous/next
+        var bIsFirstPage = (nCurrentPage == 1) ? true : false;
+        var bIsLastPage = (nCurrentPage == nTotalPages) ? true : false;
+        var sFirstLinkMarkup = (bIsFirstPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
                 " " + YAHOO.widget.DataTable.CLASS_FIRST + "\">&lt;&lt;</span> " :
                 " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRST + "\">&lt;&lt;</a> ";
-        var prevPageLink = (isFirstPage) ?
+        var sPrevLinkMarkup = (bIsFirstPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
                 " " + YAHOO.widget.DataTable.CLASS_PREVIOUS + "\">&lt;</span> " :
                 " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVIOUS + "\">&lt;</a> " ;
-        var nextPageLink = (isLastPage) ?
+        var sNextLinkMarkup = (bIsLastPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
                 " " + YAHOO.widget.DataTable.CLASS_NEXT + "\">&gt;</span> " :
                 " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXT + "\">&gt;</a> " ;
-        var lastPageLink = (isLastPage) ?
+        var sLastLinkMarkup = (bIsLastPage) ?
                 " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
                 " " + YAHOO.widget.DataTable.CLASS_LAST +  "\">&gt;&gt;</span> " :
                 " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LAST + "\">&gt;&gt;</a> ";
-        var markup = firstPageLink + prevPageLink;
-        var maxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
-            nPageLinksStart+nPageLinksLength-1 : nTotalPages;
-        // Special case for pageLinksLength 0 => show all links
-        if(nPageLinksLength === 0) {
-            maxLinks = nTotalPages;
-        }
-        for(var i=nPageLinksStart; i<=maxLinks; i++) {
-             if(i != nCurrentPage) {
-                markup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGE + "\">" + i + "</a> ";
+
+        // Start with first and previous
+        var sMarkup = sFirstLinkMarkup + sPrevLinkMarkup;
+        
+        // Ok to show all links
+        var nMaxLinks = nTotalPages;
+        var nFirstLink = 0;
+        var nLastLink = nTotalPages;
+
+        if(nPageLinksLength > 0) {
+        // Calculate how many links to show
+            nMaxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
+                    nPageLinksStart+nPageLinksLength-1 : nTotalPages;
+
+            // Try to keep the current page in the middle
+            nFirstLink = (nCurrentPage - Math.floor(nMaxLinks/2) > 0) ? nCurrentPage - Math.floor(nMaxLinks/2) : 1;
+            nLastLink = (nCurrentPage + Math.floor(nMaxLinks/2) <= nTotalPages) ? nCurrentPage + Math.floor(nMaxLinks/2) : nTotalPages;
+
+            // Keep the last link in range
+            if(nFirstLink === 1) {
+                nLastLink = nMaxLinks;
+            }
+            // Keep the first link in range
+            else if(nLastLink === nTotalPages) {
+                nFirstLink = nTotalPages - nMaxLinks + 1;
+            }
+
+            // An even number of links can get funky
+            if(nLastLink - nFirstLink === nMaxLinks) {
+                nLastLink--;
+            }
+      }
+        
+        // Generate markup for each page
+        for(var i=nFirstLink; i<=nLastLink; i++) {
+            if(i != nCurrentPage) {
+                sMarkup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGE + "\">" + i + "</a> ";
             }
             else {
-                markup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_SELECTED + "\">" + i + "</span>";
+                sMarkup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_SELECTED + "\">" + i + "</span>";
             }
         }
-        markup += nextPageLink + lastPageLink;
-        elContainer.innerHTML = markup;
+        sMarkup += sNextLinkMarkup + sLastLinkMarkup;
+        elContainer.innerHTML = sMarkup;
         return;
     }
     YAHOO.log("Could not format Paginator links", "error", this.toString());
