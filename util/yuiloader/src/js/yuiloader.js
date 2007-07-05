@@ -13,35 +13,12 @@
 /**
  * YUILoader provides dynamic loading for YUI.
  * @class YAHOO.util.YUILoader
+ * @todo
+ *      sandboxing
+ *      version management, automatic sandboxing
  */
 (function() {
  
-    /*
-
-       Add skin logic
-       Add verify callback to addModule
-       Add module-specific filter
-
-    what is the behavior if it is already on the page, wrong version?
-
-    does event need to overwrite itself if the version is lower than what is
-    being loaded?
-
-    any other singletons that do not overwrite themselves?
-
-    YAHOO_config = {
-        load: {
-            require: ['yahoo', 'dom', 'event'], 
-            sandbox: true, // not supported yet
-            css: true, // not supported yet
-            onCompleteCallback: function(yahooref) {
-                // YAHOO123 = yahooref;
-            }
-        }
-    };
-
-    */
-   
     // Define YAHOO_config if it doesn't exist.  Only relevant if YAHOO is not
     // already on the page
     if (typeof YAHOO_config === "undefined") {
@@ -282,8 +259,7 @@
 }
  , 
 
-        // Simple utils since we can't count on YAHOO.lang being
-        // available.
+        // Simple utils since we can't count on YAHOO.lang being available.
         ObjectUtil: {
             appendArray: function(o, a) {
                 if (a) {
@@ -333,9 +309,6 @@
                 */
             },
 
-            /*
-             * Uses the identity operator
-             */
             indexOf: function(a, val) {
                 for (var i=0; i<a.length; i=i+1) {
                     if (a[i] === val) {
@@ -381,9 +354,6 @@
             yahooref.env.YUIInfo=YUI.info;
             yahooref.util.YUILoader=YUI.YUILoader;
 
-            //if (YUI.onLoadComplete) {
-                //YUI.onLoadComplete(yahooref);
-            //}
         },
 
         /*
@@ -557,15 +527,6 @@
 
 
         /**
-         * Set to the rollup name while we are loading a rollup.
-         * This is used to translate YAHOO notifications for the
-         * individual superseded modules
-         * @property _loadingRollup
-         * @private
-         */
-        this._loadingRollup = null;
-
-        /**
          * Provides the information used to skin the skinnable components.
          * The following skin definition would result in 'skin1' and 'skin2'
          * being loaded for calendar (if calendar was requested), and
@@ -590,7 +551,7 @@
          *      // The number of skinnable components requested that are
          *      // required before using the rollup file rather than the
          *      // individual component css files
-         *      rollup: 2,
+         *      rollup: 3,
          *
          *      // Any component-specific overrides can be specified here,
          *      // making it possible to load different skins for different
@@ -610,8 +571,6 @@
             this.require(o.require);
         }
 
-        //this.onLoadComplete = o.onLoadComplete || null;
-        
         YUI.loaders.push(this);
     };
 
@@ -704,7 +663,7 @@
             // Add a module definition for the module-specific skin css
             if (mod) {
                 name = this.formatSkin(skin, mod);
-                if (!this.moduleInfo[skin]) {
+                if (!this.moduleInfo[name]) {
                     this.addModule({
                         'name': name,
                         'type': 'css',
@@ -738,15 +697,6 @@
                     YUI.ArrayUtil.appendArray(d, this.getRequires(info[o[i]]));
                 }
             }
-
-            /* this is not necessary if we require that rollups have all
-             * of their dependencies specified.
-            if (s) {
-                for (i=0; i<s.length; i=i+1) {
-                    YUI.ArrayUtil.appendArray(d, this.getRequires(info[s[i]]));
-                }
-            }
-            */
 
             mod.expanded = YUI.ArrayUtil.uniq(d);
 
@@ -969,30 +919,24 @@
 
 
                         } else {
+
                             // require all modules to trigger a rollup (using the 
                             // threshold value has not proved worthwhile)
                             for (j=0;j<s.length;j=j+1) {
 
-                                // only look in the required modules list for
-                                // this evaluation so we don't create a
-                                // situation where we load a rollup containing a
-                                // module that has been loaded.
-                                // if (!(s[j] in r) || (s[j] in this.loaded)) {
-                                /*
-                                if (!r[s[j]] || this.loaded[s[j]]) {
-                                    roll=false;
+                                // if the superseded module is loaded, we can't load the rollup
+                                if (this.loaded[s[j]]) {
+                                    roll = false;
                                     break;
-                                }
-                                */
-                                
-                                if (r[s[j]] && !this.loaded[s[j]]) {
+                                // increment the counter if this module is required.  if we are
+                                // beyond the rollup threshold, we will use the rollup module
+                                } else if (r[s[j]]) {
                                     c++;
                                     roll = (c >= m.rollup);
                                     if (roll) {
                                         break;
                                     }
                                 }
-
                             }
                         }
 
@@ -1202,7 +1146,6 @@
             // start the load
             this.loadNext();
 
-            this.count = 0;
         },
 
         /**
@@ -1216,10 +1159,6 @@
          * one)
          */
         loadNext: function(mname) {
-
-            if (this.count++ > 100) {
-                return;
-            }
 
             // console.log("loadNext executing, just loaded " + mname);
 
@@ -1286,18 +1225,9 @@
                         this.inserted[s[i]] = true;
 
                     // Scripts must be loaded in order, so we wait for the
-                    // notification from YAHOO to process the next script
+                    // notification from YAHOO or a verifier function to 
+                    // process the next script
                     } else {
-
-                        // When we load script rollups, we will be notified
-                        // about the individual pieces of the rollup rather
-                        // than the rollup itself.  Keep track of this so
-                        // that we can mark this as inserted as soon as we
-                        // detect one of modules it supersedes is loaded.
-                        var sup = m.supersedes;
-                        if (sup && sup.length > 0) {
-                            this._loadingRollup = s[i];
-                        }
 
                         url = m.fullpath || this._url(m.path);
                         this.insertScript(url);
