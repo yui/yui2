@@ -667,7 +667,8 @@
                     this.addModule({
                         'name': name,
                         'type': 'css',
-                        'path': this.skin.base + skin + "/" + mod + ".css"
+                        //'path': this.skin.base + skin + "/" + mod + ".css"
+                        'path': mod + '/' + this.skin.base + skin + "/" + mod + ".css"
                     });
                 }
             }
