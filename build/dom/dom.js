@@ -124,6 +124,10 @@
         };
     }
     
+    var testElement = function(node, method) {
+        return node.nodeType == 1 && ( !method || method(node) );
+    };
+
     /**
      * Provides helper methods for DOM elements.
      * @namespace YAHOO.util
@@ -576,12 +580,17 @@
             haystack = Y.Dom.get(haystack);
             if (!haystack || !needle) { return false; }
             
-            var f = function(needle) {
-                if (haystack.contains && needle.tagName) {
-                    return haystack.contains(needle);
+            var f = function(node) {
+                if (haystack.contains && node.tagName && !isSafari) { // safari contains is broken
+                    return haystack.contains(node);
                 }
-                else if ( haystack.compareDocumentPosition && needle.tagName ) {
-                    return !!(haystack.compareDocumentPosition(needle) & 16);
+                else if ( haystack.compareDocumentPosition && node.tagName ) {
+                    return !!(haystack.compareDocumentPosition(node) & 16);
+                } else if (node.tagName) {
+                    // fallback to crawling up (safari)
+                    return !!this.getAncestorBy(node, function(el) {
+                        return el == haystack; 
+                    }); 
                 }
                 return false;
             };
@@ -737,22 +746,15 @@
 
        /**
          * Returns the nearest ancestor that passes the test applied by supplied boolean method.
+         * For performance reasons, IDs are not accepted and argument validation omitted.
          * @method getAncestorBy
+         * @param {HTMLElement} node The HTMLElement to use as the starting point 
          * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
-
-         * @param {String | HTMLElement} node The HTMLElement or an ID to use as the starting point 
          * @return {Object} HTMLElement or null if not found
          */
-        getAncestorBy: function(method, node) {
-            node = Y.Dom.get(node);
-
-            if (!node) { // if no node, then no ancestor
-                return null;
-            }
-           
-            while (node.parentNode) {
-                node = node.parentNode; 
-                if ( method(node) ) {
+        getAncestorBy: function(node, method) {
+            while (node = node.parentNode) { // NOTE: assignment
+                if ( testElement(node, method) ) {
                     return node;
                 }
             } 
@@ -768,8 +770,12 @@
          * @return {Object} HTMLElement
          */
         getAncestorByClassName: function(node, className) {
+            node = Y.Dom.get(node);
+            if (!node) {
+                return null;
+            }
             var method = function(el) { return Y.Dom.hasClass(el, className); };
-            return Y.Dom.getAncestorBy(method, node);
+            return Y.Dom.getAncestorBy(node, method);
         },
 
         /**
@@ -780,15 +786,15 @@
          * @return {Object} HTMLElement
          */
         getAncestorByTagName: function(node, tagName) {
+            node = Y.Dom.get(node);
+            if (!node) {
+                return null;
+            }
             var method = function(el) {
                  return el.tagName && el.tagName.toUpperCase() == tagName.toUpperCase();
             };
 
-            return Y.Dom.getAncestorBy(method, node);
-        },
-
-        testElement: function(node, method) {
-            return node.nodeType == 1 && ( !method || method(node) );
+            return Y.Dom.getAncestorBy(node, method);
         },
 
         /**
@@ -803,7 +809,7 @@
          */
         getPreviousSiblingBy: function(node, method) {
             while (node = node.previousSibling) { // NOTE: assignment
-                if ( Y.Dom.testElement(node, method) ) {
+                if ( testElement(node, method) ) {
                     return node;
                 }
             }
@@ -837,7 +843,7 @@
          */
         getNextSiblingBy: function(node, method) {
             while (node = node.nextSibling) { // NOTE: assignment
-                if ( Y.Dom.testElement(node, method) ) {
+                if ( testElement(node, method) ) {
                     return node;
                 }
             }
@@ -868,7 +874,7 @@
          * @return {Object} HTMLElement or null if not found
          */
         getFirstChildBy: function(node, method) {
-            var child = ( Y.Dom.testElement(node.firstChild, method) ) ? node.firstChild : null;
+            var child = ( testElement(node.firstChild, method) ) ? node.firstChild : null;
             return child || Y.Dom.getNextSiblingBy(node.firstChild, method);
         }, 
 
@@ -898,7 +904,7 @@
             if (!node) {
                 return null;
             }
-            var child = ( Y.Dom.testElement(node.lastChild, method) ) ? node.lastChild : null;
+            var child = ( testElement(node.lastChild, method) ) ? node.lastChild : null;
             return child || Y.Dom.getPreviousSiblingBy(node.lastChild, method);
         }, 
 
