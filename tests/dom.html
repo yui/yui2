@@ -8,11 +8,27 @@
 
 <script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../build/event/event.js"></script>
-<script type="text/javascript" src="../build/dom/dom.js"></script>
+<script type="text/javascript" src="../build/dom/dom.js"></script> 
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
 
 <style>
+
+h1, h2, h3, h4, h5, h6, p, ul, ol, li {
+    Xmargin:0;
+    Xpadding:0;
+}
+
+#doc {
+    border:5px solid #000;
+    margin:10px;
+    padding:10px;
+}
+
+#hd {
+    background:#ccc;
+}
+
 #foo {
     float:left; /* required for getStyle test */
 }
@@ -41,7 +57,7 @@
                     [ document.getElementById('hd'), document.getElementById('bd') ],
                     Y.Dom.get(['hd', document.getElementById('bd')]), 'wrong node returned');
 
-                YAHOO.util.Assert.areEqual(null, Y.Dom.get('dox'), 'non-existant ID');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.get('dox'), 'non-existent ID');
             },            
 
             test_getStyle: function() {
@@ -72,14 +88,14 @@
             },            
 
             test_addClass: function() {
-                Y.Dom.addClass('main', 'foo');
+                Y.Dom.addClass('ft', 'foo');
 
                 YAHOO.util.Assert.areEqual(
                     'foo',
-                    document.getElementById('main').className, 
+                    document.getElementById('ft').className, 
                     'addClass failed to add');
 
-                YAHOO.util.Assert.isFalse(Y.Dom.addClass('main', 'foo'),
+                YAHOO.util.Assert.isFalse(Y.Dom.addClass('ft', 'foo'),
                         'addClass should return false if element already hasClass');
             },            
 
@@ -114,41 +130,70 @@
 
             },            
 
+            test_getElementsByClassName: function() {
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsByClassName('mod').length, 'getByClassName failed for .mod'); 
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsByClassName('mod', 'div').length, 'getByClassName failed for div.mod'); 
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsByClassName('mod', 'div', 'bd').length,  'getByClassName failed for #bd div.mod'); 
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsByClassName('mod', '', 'bd').length,'getByClassName failed for #bd .mod' ); 
+                YAHOO.util.Assert.areEqual(0, Y.Dom.getElementsByClassName('mod', 'div', 'hd').length, 'getByClassName failed for #hd .mod'); 
+                YAHOO.util.Assert.areEqual(0, Y.Dom.getElementsByClassName('moo').length, 'getByClassName failed for .moo'); 
+                YAHOO.util.Assert.areEqual(0, Y.Dom.getElementsByClassName('mod', 'div', 'fake-id').length, 'getByClassName failed for #fake-id div.mod'); 
+            },
+
+            test_getElementsBy: function() {
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}).length, 'getBy failed for .mod'); 
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div').length, 'getBy failed for div.mod'); 
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'bd').length, 'getBy failed for #bd div.mod'); 
+                YAHOO.util.Assert.areEqual(2, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, '', 'bd').length, 'getBy failed for #bd .mod'); 
+                YAHOO.util.Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'hd').length, 'getBy failed for #hd div.mod'); 
+                YAHOO.util.Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'moo'}).length, 'getBy failed for .moo'); 
+                YAHOO.util.Assert.areEqual(0, Y.Dom.getElementsBy(function(el) { return el.className == 'mod'}, 'div', 'fake-id').length, 'getBy failed for #fake-id div.mod'); 
+            },
+
             test_generateId: function() {
                 var header = document.getElementsByTagName('h1')[0];
                 Y.Dom.generateId(header);
                 YAHOO.util.Assert.areEqual('yui-gen0', header.id,
                         'generateId failed');
-
-                header.id = '';
-                Y.Dom.generateId(header, 'foo');
-                YAHOO.util.Assert.areEqual('foo1', header.id,
-                        'generateId custom prefix not used');
-
-                var main = Y.Dom.get('main');
-                Y.Dom.generateId('main');
-                YAHOO.util.Assert.areEqual('main', document.getElementById('main').id,
-                        'generateId must not wipe out existing IDs');
-
-                YAHOO.util.Assert.areEqual('yui-gen2', Y.Dom.generateId(),
-                        'generateId must return an ID when no element(s) provided');
-
-                YAHOO.util.ArrayAssert.itemsAreEqual(['yui-gen3', 'yui-gen4'],
-                        Y.Dom.generateId(document.getElementsByTagName('h3')),
-                        'generateId failed for multiple elements');
-
-                YAHOO.util.ArrayAssert.itemsAreEqual(['main', 'yui-gen5'],
-                        Y.Dom.generateId(['main', null]),
-                        'generateId failed for multiple elements');
             },            
 
             test_isAncestor: function() {
-                YAHOO.util.Assert.isTrue(Y.Dom.isAncestor('bd', 'main'),
-                        'isAncestor failed for true case');
+                YAHOO.util.Assert.isFalse(Y.Dom.isAncestor(Y.Dom.get('main'), Y.Dom.get('bd')),
+                        'isAncestor failed for false case');
 
                 YAHOO.util.Assert.isFalse(Y.Dom.isAncestor('main', 'bd'),
                         'isAncestor failed for false case');
+
+                YAHOO.util.Assert.isTrue(Y.Dom.isAncestor('bd', 'main'),
+                        'isAncestor failed for true case');
+
+                YAHOO.util.Assert.isFalse(
+                        Y.Dom.isAncestor(document.body.appendChild(document.createElement('div')), 'bd'),
+                        'isAncestor failed for false case');
             },            
+
+            test_getRegion: function() {
+                YAHOO.util.Assert.isObject(Y.Dom.getRegion('bd'),
+                        'getRegion failed for element in document');
+
+                YAHOO.util.Assert.isFalse(Y.Dom.getRegion('xbd'),
+                        'getRegion failed for id not in document');
+
+                YAHOO.util.Assert.isFalse(Y.Dom.getRegion(document.createElement('div')),
+                        'getRegion failed for element not in document');
+            },            
+
+            test_point: function() {
+                var point = new Y.Point(100, 200);
+                var testX = point.left === point.right && point.x === point[0] && point[0] === point.left && point.left === 100;
+                var testY = point.top === point.bottom && point.y === point[1]  && point[1] == point.top && point.top === 200;
+                YAHOO.util.Assert.isTrue(testX && testY, 'test point with x, y constructor');
+
+                point = new Y.Point([100, 200]);
+                var testX = point.left === point.right && point.x === point[0] && point[0] === point.left && point.left === 100;
+                var testY = point.top === point.bottom && point.y === point[1]  && point[1] == point.top && point.top === 200;
+                YAHOO.util.Assert.isTrue(testX && testY, 'test point with [x, y] constructor');
+            },
 
             test_inDocument: function() {
                 YAHOO.util.Assert.isTrue(Y.Dom.inDocument('main'),
@@ -163,6 +208,9 @@
 
                 YAHOO.util.Assert.isFalse(Y.Dom.inDocument('fake-id'),
                         'inDocument failed for false ID case');
+
+                YAHOO.util.Assert.isFalse(Y.Dom.inDocument({}),
+                        'inDocument failed for null');
             },            
 
             test_batch: function() {
@@ -192,6 +240,38 @@
 
                 YAHOO.util.Assert.isFalse(Y.Dom.batch(null), 'batch failed: node(s) required');
                 YAHOO.util.Assert.isFalse(Y.Dom.batch([]), 'batch failed: method is required');
+            },            
+
+            test_getAncestorByClassName: function() {
+                var el = Y.Dom.getAncestorByClassName(document.getElementById('foo'), 'main');
+                YAHOO.util.Assert.areEqual(document.getElementById('main'),
+                        el, 'wrong node returned');
+
+                el = Y.Dom.getAncestorByClassName(document.getElementById('foo'), 'fake-class');
+                YAHOO.util.Assert.areEqual(null,
+                        el, 'wrong node returned');
+            },            
+
+            test_getAncestorByTagName: function() {
+                var el = Y.Dom.getAncestorByTagName('foo', 'div');
+                YAHOO.util.Assert.areEqual(document.getElementById('main'),
+                        el, 'wrong node returned');
+
+                el = Y.Dom.getAncestorByTagName(document.getElementById('foo'), 'span');
+                YAHOO.util.Assert.areEqual(null,
+                        el, 'wrong node returned');
+            },            
+
+            test_getAncestorBy: function() {
+                var el = Y.Dom.getAncestorBy(document.getElementById('foo'), function(el) {
+                    return el.id === 'bd';        
+                });
+                YAHOO.util.Assert.areEqual(document.getElementById('bd'),
+                        el, 'wrong node returned');
+
+                el = Y.Dom.getAncestorBy(document.getElementById('foo'), function() { return false; });
+                YAHOO.util.Assert.areEqual(null,
+                        el, 'wrong node returned');
             },            
 
             test_getPreviousSiblingBy: function() {
@@ -266,11 +346,22 @@
                     'wrong node returned'
                 );
             },            
-            test_getAttribute: function() {
+            test_insertBefore: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Dom.insertBefore(el, 'bd');
                 YAHOO.util.Assert.areEqual(
-                    'search-p',
-                    Y.Dom.getAttribute(Y.Dom.get('search').getElementsByTagName('label')[0], 'for'),
-                    'wrong node returned'
+                    document.getElementById('bd').previousSibling,
+                    el,
+                    'insertBefore failed'
+                );
+            },
+            test_insertAfter: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Dom.insertAfter(el, 'bd');
+                YAHOO.util.Assert.areEqual(
+                    document.getElementById('bd').nextSibling,
+                    el,
+                    'insertAfter failed'
                 );
             }
 
@@ -290,7 +381,7 @@
             <h1>Page Header</h1>
         </div>
         <div id="bd">
-            <div id="main">
+            <div id="main" class="main">
                 <h2>Section Header</h2>
                 <em class="lorem ipsum ipsum" id="lorem-ipsum">lorem ipsum</em>
                 <div class="mod" id="foo">
