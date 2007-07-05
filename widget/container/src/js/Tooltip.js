@@ -151,6 +151,24 @@
 
     }
 
+
+    // "onDOMReady" that renders the ToolTip
+
+    function onDOMReady(p_sType, p_aArgs, p_oObject) {
+    
+        this.render(p_oObject);
+    
+    }
+
+
+    //  "init" event handler that automatically renders the Tooltip
+
+    function onInit() {
+
+        Event.onDOMReady(onDOMReady, this.cfg.getProperty("container"), this);
+
+    }
+
     
     YAHOO.extend(Tooltip, YAHOO.widget.Overlay, { 
     
@@ -177,18 +195,18 @@
             Dom.addClass(this.element, Tooltip.CSS_TOOLTIP);
     
             if (userConfig) {
+
                 this.cfg.applyConfig(userConfig, true);
+
             }
     
-            this.cfg.queueProperty("visible",false);
-            this.cfg.queueProperty("constraintoviewport",true);
+            this.cfg.queueProperty("visible", false);
+            this.cfg.queueProperty("constraintoviewport", true);
     
             this.setBody("");
 
             this.subscribe("beforeShow", setWidthToOffsetWidth);
-            this.subscribe("render", this.onRender);
-
-            this.render(this.cfg.getProperty("container"));
+            this.subscribe("init", onInit);
     
             this.initEvent.fire(Tooltip);
 
