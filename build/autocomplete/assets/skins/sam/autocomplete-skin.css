@@ -1,5 +1,5 @@
-.yui-skin-sam {position:relative;font-family:arial;font-size:100%;}
-.yui-skin-sam .yui-ac-input {position:absolute;width:100%;height:1.2em;}
+.yui-skin-sam .yui-ac {position:relative;font-family:arial;font-size:100%;}
+.yui-skin-sam .yui-ac-input {position:absolute;width:100%;}
 .yui-skin-sam .yui-ac-container {position:absolute;top:1.6em;width:100%;}
 .yui-skin-sam .yui-ac-content {
     position:absolute;width:100%;border:1px solid #808080;background:#fff;overflow:hidden;z-index:9050;
