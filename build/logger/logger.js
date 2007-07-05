@@ -664,8 +664,10 @@ YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
     var sourceAndDetail = (sourceDetail) ?
         source + " " + sourceDetail : source;
         
+    
     // Escape HTML entities in the log message itself for output to console
-    var msg = this.html2Text(oLogMsg.msg);
+    //var msg = this.html2Text(oLogMsg.msg); //TODO: delete
+    var msg = this.html2Text(YAHOO.lang.dump(oLogMsg.msg));
 
     // Verbose output includes extra line breaks
     var output =  (this.verboseOutput) ?
