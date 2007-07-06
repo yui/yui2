@@ -596,25 +596,26 @@
 
                     oUnderlay = m_oUnderlayTemplate.cloneNode(true);
                     oElement.appendChild(oUnderlay);
+                    
+                    this.underlay = oUnderlay;
 
                     nIE = YAHOO.env.ua.ie;
 
                     if (nIE == 6 || 
                         (nIE == 7 && document.compatMode == "BackCompat")) {
 
-                        this.cfg.subscribeToConfigEvent("width", sizeUnderlay);
-                        this.cfg.subscribeToConfigEvent("height", sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("width", this.sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("height", this.sizeUnderlay);
 
                         YAHOO.widget.Module.textResizeEvent.subscribe(
-                            sizeUnderlay, this, true);
+                            this.sizeUnderlay, this, true);
+
+                        this.sizeUnderlay();
                     
                     }
 
-                    
-                    this.underlay = oUnderlay;
-
                 }
-            
+
             }
 
             function onBeforeShow() {
