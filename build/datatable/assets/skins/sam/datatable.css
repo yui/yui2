@@ -42,28 +42,29 @@ th .yui-dt-resizer {
     position:absolute;
 }
 
-/* basic */
-.yui-skin-sam {margin:1em;font-family:arial;font-size:100%;}
-.yui-skin-sam caption {padding-bottom:1em;}
-.yui-skin-sam table {border-collapse:collapse;font-family:inherit;font-size:inherit;}
-.yui-skin-sam th {
+/* basic skin styles */
+.yui-skin-sam .yui-dt-table {margin:1em;font-family:arial;font-family:inherit;font-size:inherit;border-collapse:collapse;}
+.yui-skin-sam .yui-dt-table caption {padding-bottom:1em;}
+.yui-skin-sam .yui-dt-table th {
     background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
 }
-.yui-skin-sam th, .yui-skin-sam th a {
+.yui-skin-sam .yui-dt-table th,
+.yui-skin-sam .yui-dt-table th a {
     text-decoration:none;color:#000; /* header text */
     vertical-align:bottom;
 }
-.yui-skin-sam th, .yui-skin-sam td {
+.yui-skin-sam .yui-dt-table th,
+.yui-skin-sam .yui-dt-table td {
     padding:4px 10px 4px 10px; /* cell padding */
     border-right:1px solid #CBCBCB; /* inner column border */
 }
 .yui-skin-sam .yui-dt-list td {
     border-right:none; /* disable inner column border in list mode */
 }
-.yui-skin-sam thead {
+.yui-skin-sam .yui-dt-table thead {
     border:1px solid #989898; /* outer border */
 } 
-.yui-skin-sam tbody {
+.yui-skin-sam .yui-dt-table tbody {
     border-left:1px solid #7F7F7F;border-right:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F; /* outer border */
 }
 
@@ -86,7 +87,8 @@ th .yui-dt-resizer {
 .yui-skin-sam th.yui-dt-sortable .yui-dt-label {
     margin-right:15px; /* room for arrow */
 }
-.yui-skin-sam th.yui-dt-asc, .yui-skin-sam th.yui-dt-desc {
+.yui-skin-sam th.yui-dt-asc,
+.yui-skin-sam th.yui-dt-desc {
     background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 -100px; /* sorted header gradient */
 }
 .yui-skin-sam th.yui-dt-asc .yui-dt-header {
@@ -138,14 +140,18 @@ th .yui-dt-resizer {
 /* striping */
 .yui-skin-sam tr.yui-dt-even {background-color:#FFF;} /* white */
 .yui-skin-sam tr.yui-dt-odd {background-color:#EDF5FF;} /* light blue */
-.yui-skin-sam tr.yui-dt-even td.yui-dt-asc, .yui-skin-sam tr.yui-dt-even td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
-.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc, .yui-skin-sam tr.yui-dt-odd td.yui-dt-desc {background-color:#DBEAFF;} /* dark blue sorted */
+.yui-skin-sam tr.yui-dt-even td.yui-dt-asc,
+.yui-skin-sam tr.yui-dt-even td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
+.yui-skin-sam tr.yui-dt-odd td.yui-dt-asc,
+.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc {background-color:#DBEAFF;} /* dark blue sorted */
 
 /* disable striping in list mode */
 .yui-skin-sam .yui-dt-list tr.yui-dt-even {background-color:#FFF;} /* white */
 .yui-skin-sam .yui-dt-list tr.yui-dt-odd {background-color:#FFF;} /* white */
-.yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-asc, .yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
-.yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-asc, .yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
+.yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-asc,
+.yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
+.yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-asc,
+.yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
 
 /* selection */
 .yui-skin-sam tr.yui-dt-selected td,
@@ -180,7 +186,7 @@ th .yui-dt-resizer {
 .yui-skin-sam tr.yui-dt-even td.yui-dt-highlighted,
 .yui-skin-sam tr.yui-dt-odd td.yui-dt-highlighted {
     cursor:pointer;
-    background-color:red; /* TBD hover */
+    background-color:#B2D2FF; /* med blue hover */
 }
 
 /* enable highlighting in list mode */
@@ -190,7 +196,7 @@ th .yui-dt-resizer {
 .yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-highlighted,
 .yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-highlighted {
     cursor:pointer;
-    background-color:red; /* TBD hover */
+    background-color:#B2D2FF; /* med blue  hover */
 }
 
 /* pagination */
