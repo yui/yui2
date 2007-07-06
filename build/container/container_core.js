@@ -660,7 +660,8 @@
     * Dialog, and SimpleDialog.
     * @module container
     * @title Container
-    * @requires yahoo,dom,event,dragdrop,animation
+    * @requires yahoo, dom, event 
+    * @optional dragdrop, animation, button
     */
     
     /**
@@ -2947,9 +2948,7 @@
     
                         }
             
-                        Dom.setStyle(this.iframe, 
-                            "position", "absolute");
-    
+                        Dom.setStyle(this.iframe, "position", "absolute");
                         Dom.setStyle(this.iframe, "border", "none");
                         Dom.setStyle(this.iframe, "margin", "0");
                         Dom.setStyle(this.iframe, "padding", "0");
@@ -2979,11 +2978,8 @@
                     width = this.element.clientWidth;
                     height = this.element.clientHeight;
                     
-                    Dom.setStyle(this.iframe, "width", 
-                        ((width + 2) + "px"));
-    
-                    Dom.setStyle(this.iframe, "height", 
-                        ((height + 2) + "px"));
+                    Dom.setStyle(this.iframe, "width", ((width + 2) + "px"));
+                    Dom.setStyle(this.iframe, "height", ((height + 2) + "px"));
             
                     if (iframeDisplay == "none") {
     

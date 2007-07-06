@@ -666,7 +666,8 @@
     * Dialog, and SimpleDialog.
     * @module container
     * @title Container
-    * @requires yahoo,dom,event,dragdrop,animation
+    * @requires yahoo, dom, event 
+    * @optional dragdrop, animation, button
     */
     
     /**
@@ -2959,9 +2960,7 @@
     
                         }
             
-                        Dom.setStyle(this.iframe, 
-                            "position", "absolute");
-    
+                        Dom.setStyle(this.iframe, "position", "absolute");
                         Dom.setStyle(this.iframe, "border", "none");
                         Dom.setStyle(this.iframe, "margin", "0");
                         Dom.setStyle(this.iframe, "padding", "0");
@@ -2991,11 +2990,8 @@
                     width = this.element.clientWidth;
                     height = this.element.clientHeight;
                     
-                    Dom.setStyle(this.iframe, "width", 
-                        ((width + 2) + "px"));
-    
-                    Dom.setStyle(this.iframe, "height", 
-                        ((height + 2) + "px"));
+                    Dom.setStyle(this.iframe, "width", ((width + 2) + "px"));
+                    Dom.setStyle(this.iframe, "height", ((height + 2) + "px"));
             
                     if (iframeDisplay == "none") {
     
@@ -5438,25 +5434,26 @@
 
                     oUnderlay = m_oUnderlayTemplate.cloneNode(true);
                     oElement.appendChild(oUnderlay);
+                    
+                    this.underlay = oUnderlay;
 
                     nIE = YAHOO.env.ua.ie;
 
                     if (nIE == 6 || 
                         (nIE == 7 && document.compatMode == "BackCompat")) {
 
-                        this.cfg.subscribeToConfigEvent("width", sizeUnderlay);
-                        this.cfg.subscribeToConfigEvent("height", sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("width", this.sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("height", this.sizeUnderlay);
 
                         YAHOO.widget.Module.textResizeEvent.subscribe(
-                            sizeUnderlay, this, true);
+                            this.sizeUnderlay, this, true);
+
+                        this.sizeUnderlay();
                     
                     }
 
-                    
-                    this.underlay = oUnderlay;
-
                 }
-            
+
             }
 
             function onBeforeShow() {
