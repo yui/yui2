@@ -4909,16 +4909,8 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
                 nFirstLink = nTotalPages - nMaxLinks + 1;
             }
 
-            // An even number of links gets funky
+            // An even number of links can get funky
             if(nLastLink - nFirstLink === nMaxLinks) {
-                // Adjust the last link
-                //if(nLastLink ) {
-                    //nLastLink -= nLastLink;
-                //}
-                // Adjust the first link
-                //else {
-                    //nFirstLink += nFirstLink;
-                //}
                 nLastLink--;
             }
       }
