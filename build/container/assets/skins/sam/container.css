@@ -137,13 +137,6 @@ To fix these bugs:
 
 }
 
-.yui-panel-container.hide-scrollbars .underlay,
-.yui-tt.hide-scrollbars .yui-tt-shadow {
-
-    overflow: hidden;
-
-}
-
 .yui-panel-container.show-scrollbars .underlay,
 .yui-tt.show-scrollbars .yui-tt-shadow {
 
@@ -165,7 +158,8 @@ To fix these bugs:
 
     position: absolute;
 
-}/* Panel modality mask styles */
+}
+/* Panel modality mask styles */
 
 .yui-skin-sam .mask {
 
@@ -236,7 +230,7 @@ To fix these bugs:
     *line-height: 1.9; /* For IE */
     font-weight: bold;
     color: #000;
-    background: url(sprite.png) repeat-x 0 -200px;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
     
 }
 
@@ -266,7 +260,7 @@ To fix these bugs:
     right: 6px;
     width: 25px;
     height: 15px;
-    background: url(sprite.png) no-repeat 0 -300px;
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -300px;
 
 }
 
@@ -341,7 +335,7 @@ To fix these bugs:
 
 .yui-skin-sam .yui-simple-dialog .bd .yui-icon {
 
-    background: url(sprite.png) no-repeat 0 0;
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 0;
 	width: 16px;
 	height: 16px;
 	margin-right: 10px;

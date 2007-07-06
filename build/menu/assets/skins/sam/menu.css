@@ -108,12 +108,13 @@ when one of its submenus is visible.
 
     overflow: auto;
 
-}/* menubar style rules */
+}
+/* menubar style rules */
 
 .yui-skin-sam .yuimenubar {
 
     border: solid 1px #808080;
-    background: url(sprite.png) repeat-x 0 0;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 
 }
 
@@ -175,7 +176,7 @@ when one of its submenus is visible.
 
 .yui-skin-sam .yuimenubaritem a.selected {
 
-    background: url(sprite.png) repeat-x 0 -1700px;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1700px;
     border-color: #7D98B8;
 
 }
@@ -245,7 +246,7 @@ when one of its submenus is visible.
     
     display: block;
     overflow: hidden;
-    background-image: url(sprite.png);
+    background-image: url(../../../../assets/skins/sam/sprite.png);
     background-repeat: no-repeat;
 
 }
@@ -309,7 +310,7 @@ when one of its submenus is visible.
     position: relative;
     height: 16px;
     border: solid 1px #808080;
-    background:#fff url(sprite.png) repeat-x 0 0;
+    background:#fff url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 
 }
 
