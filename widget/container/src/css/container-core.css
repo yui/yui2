@@ -137,13 +137,6 @@ To fix these bugs:
 
 }
 
-.yui-panel-container.hide-scrollbars .underlay,
-.yui-tt.hide-scrollbars .yui-tt-shadow {
-
-    overflow: hidden;
-
-}
-
 .yui-panel-container.show-scrollbars .underlay,
 .yui-tt.show-scrollbars .yui-tt-shadow {
 
