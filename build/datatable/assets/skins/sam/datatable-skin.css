@@ -46,10 +46,12 @@
     background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 -100px; /* sorted header gradient */
 }
 .yui-skin-sam th.yui-dt-asc .yui-dt-header {
-    background-image: url('../img/arrow_up.gif'); background-repeat:no-repeat; background-position:right; /*sorted header icon */
+    background:url(../../../../../build/datatable/assets/skins/sam/dt-arrow-up.png) no-repeat right; /* sorted header gradient */
+    /*background-image: url('../img/arrow_up.gif'); background-repeat:no-repeat; background-position:right; sorted header icon */
 }
 .yui-skin-sam th.yui-dt-desc .yui-dt-header {
-    background-image: url('../img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right; /*sorted header icon */
+    background:url(../../../../../build/datatable/assets/skins/sam/dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
+    /*background-image: url('../img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right; /*sorted header icon */
 } 
 
 /* editing */
