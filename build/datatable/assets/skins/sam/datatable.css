@@ -62,7 +62,7 @@ th .yui-dt-resizer {
 }
 .yui-skin-sam thead {
     border:1px solid #989898; /* outer border */
-}
+} 
 .yui-skin-sam tbody {
     border-left:1px solid #7F7F7F;border-right:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F; /* outer border */
 }
@@ -94,7 +94,7 @@ th .yui-dt-resizer {
 }
 .yui-skin-sam th.yui-dt-desc .yui-dt-header {
     background-image: url('../img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right; /*sorted header icon */
-}
+} 
 
 /* editing */
 .yui-dt-editable {
@@ -213,3 +213,4 @@ th .yui-dt-resizer {
     padding:2px 6px;
     text-decoration:none;
 }
+
