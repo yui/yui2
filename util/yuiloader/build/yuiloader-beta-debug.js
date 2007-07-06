@@ -59,7 +59,8 @@
             'type': 'js',
             'path': 'autocomplete/autocomplete-min.js',
             'requires': ['dom', 'event'],
-            'optional': ['connection', 'animation']
+            'optional': ['connection', 'animation'],
+            'skinnable': true
         },
 
         'button': {
