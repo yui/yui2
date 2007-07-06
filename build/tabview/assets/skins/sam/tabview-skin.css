@@ -9,7 +9,7 @@
 }
 
 .yui-sam-skin .yui-navset .yui-nav a {
-    background:#dadbdb url(../../assets/skins/sam/sprite.png) repeat-x; /* tab background */
+    background:#dadbdb url(../../../../assets/skins/sam/sprite.png) repeat-x; /* tab background */
     border:solid #a3a3a3;
     border-width:0 1px;
     color:#000;
@@ -28,7 +28,7 @@
 .yui-sam-skin .yui-navset .yui-nav .selected a,
 .yui-sam-skin .yui-navset .yui-nav a:focus,
 .yui-sam-skin .yui-navset .yui-nav a:hover {
-    background:#214197 url(../../assets/skins/sam/sprite.png) repeat-x left -1400px; /* selected tab background */
+    background:#214197 url(../../../../assets/skins/sam/sprite.png) repeat-x left -1400px; /* selected tab background */
     color:#fff;
 }
 
