@@ -4230,6 +4230,7 @@
 
             this.subscribe("beforeShow", setWidthToOffsetWidth);
             this.subscribe("init", onInit);
+            this.subscribe("render", this.onRender);
     
             this.initEvent.fire(Tooltip);
 
