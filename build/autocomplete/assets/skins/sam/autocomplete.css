@@ -1,3 +1,5 @@
+/* This file intentionally left blank */
+
 .yui-skin-sam .yui-ac {position:relative;font-family:arial;font-size:100%;}
 .yui-skin-sam .yui-ac-input {position:absolute;width:100%;}
 .yui-skin-sam .yui-ac-container {position:absolute;top:1.6em;width:100%;}
@@ -11,3 +13,4 @@
 .yui-skin-sam .yui-ac-content li {margin:0;padding:2px 5px;cursor:default;white-space:nowrap;}
 .yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
 .yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
+
