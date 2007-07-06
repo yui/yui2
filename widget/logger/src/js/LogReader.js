@@ -841,8 +841,8 @@ YAHOO.widget.LogReader.prototype._initHeaderEl = function() {
 
     this._btnCollapse = document.createElement("input");
     this._btnCollapse.type = "button";
-    this._btnCollapse.style.fontSize =
-        YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
+    //this._btnCollapse.style.fontSize =
+    //    YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
     this._btnCollapse.className = "yui-log-button";
     this._btnCollapse.value = "Collapse";
     this._btnCollapse = this._elCollapse.appendChild(this._btnCollapse);
@@ -907,8 +907,8 @@ YAHOO.widget.LogReader.prototype._initFooterEl = function() {
 
         this._btnPause = document.createElement("input");
         this._btnPause.type = "button";
-        this._btnPause.style.fontSize =
-            YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
+        //this._btnPause.style.fontSize =
+        //    YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
         this._btnPause.className = "yui-log-button";
         this._btnPause.value = "Pause";
         this._btnPause = this._elBtns.appendChild(this._btnPause);
@@ -917,8 +917,8 @@ YAHOO.widget.LogReader.prototype._initFooterEl = function() {
 
         this._btnClear = document.createElement("input");
         this._btnClear.type = "button";
-        this._btnClear.style.fontSize =
-            YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
+        //this._btnClear.style.fontSize =
+        //    YAHOO.util.Dom.getStyle(this._elContainer,"fontSize");
         this._btnClear.className = "yui-log-button";
         this._btnClear.value = "Clear";
         this._btnClear = this._elBtns.appendChild(this._btnClear);
