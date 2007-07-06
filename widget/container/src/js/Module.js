@@ -9,7 +9,8 @@
     * Dialog, and SimpleDialog.
     * @module container
     * @title Container
-    * @requires yahoo,dom,event,dragdrop,animation
+    * @requires yahoo, dom, event 
+    * @optional dragdrop, animation, button
     */
     
     /**
