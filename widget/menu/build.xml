@@ -18,26 +18,33 @@
     </target>
 
     <target name="customassets" description="Custom work for Menu CSS, before it gets copied over to global build dir" >
-        <copy file="${component.srcdir}/css/menu.css" tofile="${component.srcdir}/css/temp/menu.css" />
+
+        <copy file="${component.srcdir}/css/menu.css" tofile="${component.srcdir}/temp/menu.css" />
 		<replaceregexp 
-			file="${component.srcdir}/css/temp/menu.css"
+			file="${component.srcdir}/temp/menu.css"
 			byline="true"
 			match="(\.\./img/)"
 			replace=""
 			flags="g">
 		</replaceregexp>
-        <copy file="${component.srcdir}/css/skins/sam/menu-skin.css" tofile="${component.srcdir}/css/temp/menu-skin.css" />
+
+        <copy file="${component.srcdir}/css/skins/sam/menu-skin.css" tofile="${component.srcdir}/temp/skins/sam/menu-skin.css" />
 		<replaceregexp 
-			file="${component.srcdir}/css/temp/menu-skin.css"
+			file="${component.srcdir}/temp/skins/sam/menu-skin.css"
 			byline="true"
 			match="(\.\./\.\./\.\./img/)"
-			replace=""
+			replace="\.\./\.\./\.\./\.\./assets/skins/sam/"
 			flags="g">
 		</replaceregexp>
+
+        <copy file="${component.srcdir}/css/menu-core.css" tofile="${component.srcdir}/temp/menu-core.css" />
+
 	</target>
 
+<!-- 
     <target name="deploy" depends="YuiTaskLib.deploy">
-        <delete dir="${component.srcdir}/css/temp/" />
+        <delete dir="${component.srcdir}/temp/" />
     </target>
+ -->
 
 </project>
