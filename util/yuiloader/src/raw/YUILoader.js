@@ -147,6 +147,8 @@
                 YUI.loaders[i].loadNext(mname);
             }
 
+            //console.log(YAHOO.lang.dump(minfo));
+
         },
 
         /*
@@ -155,11 +157,11 @@
         init: function() {
 
             var c = YAHOO_config, o = c.load, 
-                y_loaded = (typeof YAHOO !== "undefined");
+                y_loaded = (typeof YAHOO !== "undefined" && YAHOO.env);
 
 
             // add our listener to the existing YAHOO.env.listeners stack
-            if (y_loaded && YAHOO.env) {
+            if (y_loaded) {
 
                 YAHOO.env.listeners.push(YUI.onModuleLoaded);
 
@@ -1080,6 +1082,8 @@
          * @param win {Window} optional window to target
          */
         insertScript: function(url, win) {
+
+            //console.log("inserting script " + url);
             var w = win || window, d=w.document, n=d.createElement("script"),
                 h = d.getElementsByTagName("head")[0];
 
@@ -1095,6 +1099,7 @@
          * @param win {Window} optional window to target
          */
         insertCss: function(url, win) {
+            // console.log("inserting css " + url);
             var w = win || window, d=w.document, n=d.createElement("link"),
                 h = d.getElementsByTagName("head")[0];
 

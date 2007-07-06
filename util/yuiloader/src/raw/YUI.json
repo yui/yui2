@@ -57,7 +57,7 @@
             'type': 'js',
             'path': 'container/container-min.js',
             'requires': ['dom', 'event'],
-            'optional': ['dragdrop', 'animation'],
+            'optional': ['dragdrop', 'animation', 'button'],
             'supersedes': ['containercore'],
             'skinnable': true
         },
