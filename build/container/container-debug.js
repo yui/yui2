@@ -5421,7 +5421,8 @@
 
             function createUnderlay() {
 
-                var nIE;
+                var oUnderlay = this.underlay,
+                    nIE;
 
                 if (!oUnderlay) { // create if not already in DOM
 
@@ -5429,12 +5430,11 @@
 
                         m_oUnderlayTemplate = document.createElement("div");
                         m_oUnderlayTemplate.className = "underlay";
-                        m_oUnderlayTemplate.innerHTML = "&#160;";
                     
                     }
 
-                    oUnderlay = m_oUnderlayTemplate.cloneNode(true);
-                    oElement.appendChild(oUnderlay);
+                    oUnderlay = m_oUnderlayTemplate.cloneNode(false);
+                    this.element.appendChild(oUnderlay);
                     
                     this.underlay = oUnderlay;
 
