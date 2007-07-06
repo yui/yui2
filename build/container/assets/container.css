@@ -101,12 +101,6 @@ To fix these bugs:
 
 }
 
-.yui-panel-container.hide-scrollbars .underlay {
-
-    overflow: hidden;
-
-}
-
 .yui-panel-container.show-scrollbars .underlay {
 
     overflow: auto;
