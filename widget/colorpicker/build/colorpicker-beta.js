@@ -450,11 +450,11 @@ YAHOO.util.Color = function() {
     /**
      * Constants for any script-generated messages.  The values here
      * are the default messages.  They can be updated by providing
-     * the complete list to the constructor for the "text" attribute.
-     * @property TEXT
+     * the complete list to the constructor for the "txt" attribute.
+     * @property TXT
      * @final
      */
-    proto.TEXT = {
+    proto.TXT = {
         ILLEGAL_HEX: "Illegal hex value entered",
         SHOW_CONTROLS: "Show color details",
         HIDE_CONTROLS: "Hide color details",
@@ -531,7 +531,7 @@ YAHOO.util.Color = function() {
         CONTAINER: "container",
         IDS: "ids",
         ELEMENTS: "elements",
-        TEXT: "text",
+        TXT: "txt",
         IMAGES: "images",
         ANIMATE: "animate"
     };
@@ -609,10 +609,10 @@ YAHOO.util.Color = function() {
             websafe = this.get(this.OPT.WEBSAFE),
             el = this.getElement(this.ID.SWATCH),
             color = rgb.join(","),
-            text = this.get(this.OPT.TEXT);
+            txt = this.get(this.OPT.TXT);
 
         Dom.setStyle(el, "background-color", "rgb(" + color  + ")");
-        el.title = lang.substitute(text.CURRENT_COLOR, {
+        el.title = lang.substitute(txt.CURRENT_COLOR, {
                 "rgb": "#" + this.get(this.OPT.HEX)
             });
 
@@ -621,7 +621,7 @@ YAHOO.util.Color = function() {
         color = websafe.join(",");
 
         Dom.setStyle(el, "background-color", "rgb(" + color + ")");
-        el.title = lang.substitute(text.CLOSEST_WEBSAFE, {
+        el.title = lang.substitute(txt.CLOSEST_WEBSAFE, {
                 "rgb": "#" + Color.rgb2hex(websafe)
             });
 
@@ -710,7 +710,7 @@ YAHOO.util.Color = function() {
 
 
     /**
-     * Key map to well-known commands for text field input
+     * Key map to well-known commands for txt field input
      * @method _getCommand
      * @param e {Event} the keypress or keydown event
      * @return {int} a command code
@@ -862,7 +862,7 @@ YAHOO.util.Color = function() {
     _createElements = function() {
         var el, child, img, fld, i, 
             ids = this.get(this.OPT.IDS),
-            text = this.get(this.OPT.TEXT),
+            txt = this.get(this.OPT.TXT),
             images = this.get(this.OPT.IMAGES),
             Elem = function(type, o) {
                 var n = document.createElement(type);
@@ -873,7 +873,7 @@ YAHOO.util.Color = function() {
             },
             RGBElem = function(type, obj) {
                 var o = lang.merge({
-                        type: "text",
+                        type: "txt",
                         autocomplete: "off",
                         value: "0",
                         size: 3,
@@ -968,7 +968,7 @@ YAHOO.util.Color = function() {
                 });
 
                 child = new Elem("li");
-                child.appendChild(document.createTextNode(text.R + " "));
+                child.appendChild(document.createTextNode(txt.R + " "));
 
                 fld = new RGBElem("input", {
                     id: ids[this.ID.R],
@@ -979,7 +979,7 @@ YAHOO.util.Color = function() {
                 el.appendChild(child);
 
                 child = new Elem("li");
-                child.appendChild(document.createTextNode(text.G + " "));
+                child.appendChild(document.createTextNode(txt.G + " "));
 
                 fld = new RGBElem("input", {
                     id: ids[this.ID.G],
@@ -990,7 +990,7 @@ YAHOO.util.Color = function() {
                 el.appendChild(child);
 
                 child = new Elem("li");
-                child.appendChild(document.createTextNode(text.B + " "));
+                child.appendChild(document.createTextNode(txt.B + " "));
 
                 fld = new RGBElem("input", {
                     id: ids[this.ID.B],
@@ -1009,7 +1009,7 @@ YAHOO.util.Color = function() {
                 });
 
                 child = new Elem("li");
-                child.appendChild(document.createTextNode(text.H + " "));
+                child.appendChild(document.createTextNode(txt.H + " "));
 
                 fld = new RGBElem("input", {
                     id: ids[this.ID.H],
@@ -1017,12 +1017,12 @@ YAHOO.util.Color = function() {
                 });
 
                 child.appendChild(fld);
-                child.appendChild(document.createTextNode(" " + text.DEG));
+                child.appendChild(document.createTextNode(" " + txt.DEG));
 
                 el.appendChild(child);
 
                 child = new Elem("li");
-                child.appendChild(document.createTextNode(text.S + " "));
+                child.appendChild(document.createTextNode(txt.S + " "));
 
                 fld = new RGBElem("input", {
                     id: ids[this.ID.S],
@@ -1030,12 +1030,12 @@ YAHOO.util.Color = function() {
                 });
 
                 child.appendChild(fld);
-                child.appendChild(document.createTextNode(" " + text.PERCENT));
+                child.appendChild(document.createTextNode(" " + txt.PERCENT));
 
                 el.appendChild(child);
 
                 child = new Elem("li");
-                child.appendChild(document.createTextNode(text.V + " "));
+                child.appendChild(document.createTextNode(txt.V + " "));
 
                 fld = new RGBElem("input", {
                     id: ids[this.ID.V],
@@ -1043,7 +1043,7 @@ YAHOO.util.Color = function() {
                 });
 
                 child.appendChild(fld);
-                child.appendChild(document.createTextNode(" " + text.PERCENT));
+                child.appendChild(document.createTextNode(" " + txt.PERCENT));
 
                 el.appendChild(child);
                 p.appendChild(el);
@@ -1077,7 +1077,7 @@ YAHOO.util.Color = function() {
                     id: ids[this.ID.HEX_CONTROLS],
                     className: "yui-picker-hex-controls"
                 });
-                el.appendChild(document.createTextNode(text.HEX + " "));
+                el.appendChild(document.createTextNode(txt.HEX + " "));
 
                 child = new RGBElem("input", {
                     id: ids[this.ID.HEX],
@@ -1391,14 +1391,14 @@ YAHOO.util.Color = function() {
             });
 
         /**
-         * A list of text strings for internationalization.  Default
-         * is this.TEXT
-         * @config text
-         * @type {key: text}
+         * A list of txt strings for internationalization.  Default
+         * is this.TXT
+         * @config txt
+         * @type {key: txt}
          * @writeonce
          */
-        this.setAttributeConfig(this.OPT.TEXT, {
-                value: attr.text || this.TEXT,
+        this.setAttributeConfig(this.OPT.TXT, {
+                value: attr.txt || this.TXT,
                 writeonce: true
             });
 
@@ -1452,8 +1452,8 @@ YAHOO.util.Color = function() {
                     _hideShowEl.call(this, el, on);
 
                     this.getElement(this.ID.CONTROLS_LABEL).innerHTML = 
-                        (on) ? this.get(this.OPT.TEXT).HIDE_CONTROLS :
-                               this.get(this.OPT.TEXT).SHOW_CONTROLS;
+                        (on) ? this.get(this.OPT.TXT).HIDE_CONTROLS :
+                               this.get(this.OPT.TXT).SHOW_CONTROLS;
 
                 }
             });
