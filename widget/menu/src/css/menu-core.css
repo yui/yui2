@@ -9,6 +9,13 @@
 }
 
 .yuimenubar ul, 
+.yuimenu ul {
+
+    list-style-type: none;    
+
+}
+
+.yuimenubar ul, 
 .yuimenu ul,
 .yuimenubar li, 
 .yuimenu li,
@@ -17,6 +24,13 @@
 
     margin: 0;
     padding: 0;
+
+}
+
+.yuimenuitemlabel,
+.yuimenubaritemlabel {
+
+    white-space: nowrap;
 
 }
 

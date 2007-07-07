@@ -168,6 +168,7 @@ when one of its submenus is visible.
 .yuimenuitemlabel,
 .yuimenubaritemlabel {
 
+    white-space: nowrap;
     font-size:85%;
     display:block;
     color:#000;
