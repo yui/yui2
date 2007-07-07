@@ -63,14 +63,14 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	this._triggers = [];
 
 	/**
-	 * Flag to check if image is above the fold. If foldConditional is true, the group will check the image location at page load. If any part of the image is within the client viewport, the image is displayed immediately
+	 * Flag to check if images are above the fold. If foldConditional is true, the group will check each of its image locations at page load. If any part of the image is within the client viewport, the image is displayed immediately
 	 * @property foldConditional
 	 * @type Boolean
 	 */
 	this.foldConditional = false;
 
 	/**
-	 * Class name that will identify images belonging to the group and will be removed to fetch images
+	 * Class name that will identify images belonging to the group. This class name will be removed from each element in order to fetch images
 	 * This class should have, in its CSS style definition, "background:none !important;"
 	 * @property className
 	 * @type String
@@ -78,8 +78,8 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	this.className = null;
 
 	/**
-	 * HTML elements that have classname associated with this group
-	 * Elements are stored in the _foldCheck function and reused in the fetch function. Gives a slight performance improvement when className and foldConditional are both used
+	 * HTML elements having the class name that is associated with this group
+	 * Elements are stored during the _foldCheck function and reused later during the fetch function. Gives a slight performance improvement when className and foldConditional are both used
 	 * @property _classImageEls
 	 * @type Array
 	 */
@@ -93,7 +93,7 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 };
 
 /**
- * Add a trigger to the group. Call this with the same style as YAHOO.util.Event.addListener
+ * Adds a trigger to the group. Call this with the same style as YAHOO.util.Event.addListener
  * @method addTrigger
  * @param {Object} trigEl  The HTML element to assign the trigger event to
  * @param {String} trigAct The type of event to assign to trigEl
@@ -103,8 +103,8 @@ YAHOO.util.ImageLoader.group.prototype.addTrigger = function(trigEl, trigAct) {
 		return;
 	}
 	/* Need to wrap the fetch function. Event Util can't distinguish prototyped functions of different instantiations
-	 *   Leads to this scenario: groupA and groupZ both have window-scroll triggers. groupZ also has a 2-sec timeout.
-	 *   groupZ's timeout fires, we remove the triggers. The removeListener call finds the first window-scroll event with Y.u.IL.p.fetch, which is groupA's. 
+	 *   Leads to this scenario: groupA and groupZ both have window-scroll triggers. groupZ also has a 2-sec timeout (groupA has no timeout).
+	 *   groupZ's timeout fires; we remove the triggers. The removeListener call finds the first window-scroll event with Y.u.IL.p.fetch, which is groupA's. 
 	 *   groupA's trigger is removed and never fires, leaving images unfetched
 	 */
 	var wrappedFetch = function() {
@@ -182,6 +182,7 @@ YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url)
  * @method fetch
  */
 YAHOO.util.ImageLoader.group.prototype.fetch = function() {
+	YAHOO.log('Fetching images in group: "' + this.name + '".', 'info', 'imageloader');
 
 	clearTimeout(this._timeout);
 	// remove all listeners
@@ -206,6 +207,7 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
  * @private
  */
 YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
+	YAHOO.log('Checking for images above the fold in group: "' + this.name + '"', 'info', 'imageloader');
 	var scrollTop = (document.compatMode != 'CSS1Compat') ? document.body.scrollTop : document.documentElement.scrollTop;
 	var viewHeight = YAHOO.util.Dom.getViewportHeight();
 	var hLimit = scrollTop + viewHeight;
@@ -216,6 +218,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 		if (YAHOO.lang.hasOwnProperty(this._imgObjs, id)) {
 			var elPos = YAHOO.util.Dom.getXY(this._imgObjs[id].domId);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
+				YAHOO.log('Image with id "' + this._imgObjs[id].domId + '" is above the fold. Fetching image.', 'info', 'imageloader');
 				this._imgObjs[id].fetch();
 			}
 		}
@@ -226,6 +229,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 		for (var i=0; i < this._classImageEls.length; i++) {
 			var elPos = YAHOO.util.Dom.getXY(this._classImageEls[i]);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
+				YAHOO.log('Image with id "' + this._classImageEls[i].id + '" is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)', 'info', 'imageloader');
 				YAHOO.util.Dom.removeClass(this._classImageEls[i], this.className);
 			}
 		}
@@ -242,7 +246,8 @@ YAHOO.util.ImageLoader.group.prototype._fetchByClass = function() {
 		return;
 	}
 
-	// this._classImageEls may have been set in _foldCheck
+	YAHOO.log('Fetching all images with class "' + this.className + '" in group "' + this.name + '".', 'info', 'imageloader');
+	// this._classImageEls may have been set during _foldCheck
 	if (this._classImageEls === null) {
 		this._classImageEls = YAHOO.util.Dom.getElementsByClassName(this.className);
 	}
@@ -319,6 +324,7 @@ YAHOO.util.ImageLoader.imgObj.prototype.fetch = function() {
 	if (! el) {
 		return;
 	}
+	YAHOO.log('Fetching image with id "' + this.domId + '".', 'info', 'imageloader');
 	this._applyUrl(el);
 
 	if (this.setVisible) {
@@ -369,7 +375,7 @@ YAHOO.util.ImageLoader.bgImgObj.prototype._applyUrl = function(el) {
 };
 
 /**
- * Source image object. A source image is one whose url is specified by a url parameter in the dom element
+ * Source image object. A source image is one whose url is specified by a src attribute in the dom element
  * @class srcImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
@@ -398,7 +404,7 @@ YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
 };
 
 /**
- * PNG background image object. A PNG background image is one whose url is specified through AlphaImageLoader, or by 'background-image' in the element's style
+ * PNG background image object. A PNG background image is one whose url is specified through AlphaImageLoader or by 'background-image' in the element's style
  * @class YAHOO.util.ImageLoader.pngBgImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
