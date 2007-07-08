@@ -33,7 +33,8 @@ return false;};for(var i in this.required){s.push(i);}
 var p=0;for(;;){var l=s.length,a,b,j,k,moved=false;for(j=p;j<l;j=j+1){a=s[j];for(k=j+1;k<l;k=k+1){if(requires(a,s[k])){b=s.splice(k,1);s.splice(j,0,b[0]);moved=true;break;}}
 if(moved){break;}else{p=p+1;}}
 if(!moved){break;}}
-this.sorted=s;},insert:function(callback,o,type){o=o||{};this.onLoadComplete=callback||this.onLoadComplete;var f=o&&o.filter||null;if(typeof f==="string"){f=f.toUpperCase();if(f==="DEBUG"){this.require("logger");}}
+this.sorted=s;},insert:function(callback,o,type){if(!type){var self=this;this.insert(function(){self.insert(callback,o,"js");},o,"css");return;}
+o=o||{};this.onLoadComplete=callback||this.onLoadComplete;var f=o&&o.filter||null;if(typeof f==="string"){f=f.toUpperCase();if(f==="DEBUG"){this.require("logger");}}
 this.filter=this.FILTERS[f]||f;this.insertOptions=o;this.calculate(o);this.loading=true;this.loadType=type;this.loadNext();},loadNext:function(mname){if(mname){this.inserted[mname]=true;}
 if(!this.loading){return;}
 if(mname&&mname!==this.loading){return;}

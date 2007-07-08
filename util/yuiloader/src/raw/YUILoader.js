@@ -893,6 +893,15 @@
          */
         insert: function(callback, o, type) {
 
+            if (!type) {
+                //this._internalCallback = function
+                var self = this;
+                this.insert(function() {
+                            self.insert(callback, o, "js");
+                        }, o, "css");
+                return;
+            }
+
             o = o || {};
 
             // store the callback for when we are done
