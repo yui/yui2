@@ -6465,17 +6465,24 @@ MenuItem.prototype = {
     */
     _createRootNodeStructure: function () {
 
+        var oElement,
+            oAnchor;
+
         if(!m_oMenuItemTemplate) {
 
             m_oMenuItemTemplate = document.createElement("li");
-            m_oMenuItemTemplate.className = this.CSS_CLASS_NAME;
-            m_oMenuItemTemplate.innerHTML = "<a href=\"#\" class=\"" + 
-                this.CSS_LABEL_CLASS_NAME + "\"></a>";
+            m_oMenuItemTemplate.innerHTML = "<a href=\"#\"></a>";
 
         }
 
-        this.element = m_oMenuItemTemplate.cloneNode(true);
-        this._oAnchor = this.element.firstChild;
+        oElement = m_oMenuItemTemplate.cloneNode(true);
+        oElement.className = this.CSS_CLASS_NAME;
+
+        oAnchor = oElement.firstChild;
+        oAnchor.className = this.CSS_LABEL_CLASS_NAME;
+        
+        this.element = oElement;
+        this._oAnchor = oAnchor;
 
     },
 
