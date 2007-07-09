@@ -18,7 +18,7 @@ if (typeof(YAHOO.util.ImageLoader) == 'undefined') {
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
  * @constructor
- * @param {String}	trigEl	The HTML element to assign the trigger event to. Can be null for no trigger
+ * @param {String|HTMLElement}	trigEl	The HTML element id or reference to assign the trigger event to. Can be null for no trigger
  * @param {String}	trigAct The type of event to assign to trigEl. Can be null for no trigger
  * @param {Number}	timeout	Timeout (time limit) length, in seconds. Can be undefined, or <= 0, for no time limit
  */
@@ -54,8 +54,8 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	this._timeout = null;
 	
 	/**
-	 * Collection of triggers for this group
-	 * Keeps track of each trigger's element, event, and event-listener-callback 'fetch' function
+	 * Collection of triggers for this group.
+	 * Keeps track of each trigger's element, event, and event-listener-callback "fetch" function
 	 * @property _triggers
 	 * @private
 	 * @type Array
@@ -70,7 +70,7 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	this.foldConditional = false;
 
 	/**
-	 * Class name that will identify images belonging to the group. This class name will be removed from each element in order to fetch images
+	 * Class name that will identify images belonging to the group. This class name will be removed from each element in order to fetch images.
 	 * This class should have, in its CSS style definition, "background:none !important;"
 	 * @property className
 	 * @type String
@@ -81,6 +81,7 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	 * HTML elements having the class name that is associated with this group
 	 * Elements are stored during the _foldCheck function and reused later during the fetch function. Gives a slight performance improvement when className and foldConditional are both used
 	 * @property _classImageEls
+	 * @private
 	 * @type Array
 	 */
 	this._classImageEls = null;
@@ -95,7 +96,7 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 /**
  * Adds a trigger to the group. Call this with the same style as YAHOO.util.Event.addListener
  * @method addTrigger
- * @param {Object} trigEl  The HTML element to assign the trigger event to
+ * @param {String|HTMLElement} trigEl  The HTML element id or reference to assign the trigger event to
  * @param {String} trigAct The type of event to assign to trigEl
  */
 YAHOO.util.ImageLoader.group.prototype.addTrigger = function(trigEl, trigAct) {
@@ -144,7 +145,7 @@ YAHOO.util.ImageLoader.group.prototype._getFetchTimeout = function() {
 /**
  * Registers a background image with the group
  * @method registerBgImage
- * @param {String}	domId	HTML dom id of the image element
+ * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
  * @return {Object}	bgImgObj that was registered, for modifying any attributes in the object
  */
@@ -155,7 +156,7 @@ YAHOO.util.ImageLoader.group.prototype.registerBgImage = function(domId, url) {
 /**
  * Registers a src image with the group
  * @method registerSrcImage
- * @param {String}	domId	HTML dom id of the image element
+ * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
  * @param {Int}	width	pixel width of the image - defaults to image's natural size
  * @param {Int}	height	pixel height of the image - defaults to image's natural size
@@ -168,7 +169,7 @@ YAHOO.util.ImageLoader.group.prototype.registerSrcImage = function(domId, url, w
 /**
  * Registers an alpha-channel-type png background image with the group
  * @method registerPngBgImage
- * @param {String}	domId	HTML dom id of the image element
+ * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
  * @return {Object}	pngBgImgObj that was registered, for modifying any attributes in the object
  */
@@ -237,7 +238,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 };
 
 /**
- * Finds all elements in the Dom with the class name specified in the group. Removes the class from the element in order to let the CSS definitions trigger the image fetching
+ * Finds all elements in the Dom with the class name specified in the group. Removes the class from the element in order to let the style definitions trigger the image fetching
  * @method _fetchByClass
  * @private
  */
@@ -259,12 +260,12 @@ YAHOO.util.ImageLoader.group.prototype._fetchByClass = function() {
  * Base class for image objects to be registered with the groups
  * @class YAHOO.util.ImageLoader.imgObj
  * @constructor
- * @param {String}	domId	HTML dom id of the image element
+ * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
  */
 YAHOO.util.ImageLoader.imgObj = function(domId, url) {
 	/**
-	 * HTML dom id of the image element
+	 * HTML DOM id of the image element
 	 * @property domId
 	 * @type String
 	 */
@@ -278,8 +279,8 @@ YAHOO.util.ImageLoader.imgObj = function(domId, url) {
 	this.url = url;
 
 	/**
-	 * Pixel width of the image. Will be set as an attribute after the image is fetched.
-	 * Detaults to the natural width of the image
+	 * Pixel width of the image. Will be set as a "width" attribute after the image is fetched.
+	 * Detaults to the natural width of the image.
 	 * Only appropriate with src images
 	 * @property width
 	 * @type Int
@@ -287,8 +288,8 @@ YAHOO.util.ImageLoader.imgObj = function(domId, url) {
 	this.width = null;
 
 	/**
-	 * Pixel height of the image. Will be set as an attribute after the image is fetched.
-	 * Detaults to the natural height of the image
+	 * Pixel height of the image. Will be set as a "height" attribute after the image is fetched.
+	 * Detaults to the natural height of the image.
 	 * Only appropriate with src images
 	 * @property height
 	 * @type Int
@@ -296,15 +297,15 @@ YAHOO.util.ImageLoader.imgObj = function(domId, url) {
 	this.height = null;
 
 	/**
-	 * Whether the style.visibility should be set to 'visible' after the image is fetched.
-	 * Used when setting src images as visibility:hidden before they show up on the page
+	 * Whether the style.visibility should be set to "visible" after the image is fetched.
+	 * Used when setting src images as visibility:hidden prior to image fetching
 	 * @property setVisible
 	 * @type Boolean
 	 */
 	this.setVisible = false;
 
 	/**
-	 * Whether the image has already been fetched. In the case of a foldCondional group, need to keep track when the trigger is fired
+	 * Whether the image has already been fetched. In the case of a foldCondional group, keeps track for when the trigger is fired so images aren't fetched twice
 	 * @property _fetched
 	 * @type Boolean
 	 * @private
@@ -313,7 +314,7 @@ YAHOO.util.ImageLoader.imgObj = function(domId, url) {
 };
 
 /**
- * Displays the image; puts the url into the dom
+ * Displays the image; puts the URL into the DOM
  * @method fetch
  */
 YAHOO.util.ImageLoader.imgObj.prototype.fetch = function() {
@@ -340,21 +341,21 @@ YAHOO.util.ImageLoader.imgObj.prototype.fetch = function() {
 };
 
 /**
- * Inserts the image url into the dom so that the image is displayed
+ * Inserts the image URL into the DOM so that the image is displayed.
  * Must be overridden by child class
  * @method _applyUrl
- * @param {Object}	el	HTML dom element
+ * @param {Object}	el	HTML DOM element
  * @private
  */
 YAHOO.util.ImageLoader.imgObj.prototype._applyUrl = function(el) {
 };
 
 /**
- * Background image object. A background image is one whose url is specified by 'background-image' in the element's style
+ * Background image object. A background image is one whose URL is specified by "background-image" in the element's style
  * @class YAHOO.util.ImageLoader.bgImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
- * @param {String}	domId	HTML dom id of the image element
+ * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
  */
 YAHOO.util.ImageLoader.bgImgObj = function(domId, url) {
@@ -364,10 +365,10 @@ YAHOO.util.ImageLoader.bgImgObj = function(domId, url) {
 YAHOO.lang.extend(YAHOO.util.ImageLoader.bgImgObj, YAHOO.util.ImageLoader.imgObj);
 
 /**
- * Inserts the image url into the dom so that the image is displayed
+ * Inserts the image URL into the DOM so that the image is displayed.
  * Sets style.backgroundImage
  * @method _applyUrl
- * @param {Object}	el	HTML dom element
+ * @param {Object}	el	HTML DOM element
  * @private
  */
 YAHOO.util.ImageLoader.bgImgObj.prototype._applyUrl = function(el) {
@@ -375,11 +376,11 @@ YAHOO.util.ImageLoader.bgImgObj.prototype._applyUrl = function(el) {
 };
 
 /**
- * Source image object. A source image is one whose url is specified by a src attribute in the dom element
- * @class srcImgObj
+ * Source image object. A source image is one whose URL is specified by a src attribute in the DOM element
+ * @class YAHOO.util.ImageLoader.srcImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
- * @param {String}	domId	HTML dom id of the image element
+ * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
  * @param {Int}	width	pixel width of the image - defaults to image's natural size
  * @param {Int}	height	pixel height of the image - defaults to image's natural size
@@ -393,10 +394,10 @@ YAHOO.util.ImageLoader.srcImgObj = function(domId, url, width, height) {
 YAHOO.lang.extend(YAHOO.util.ImageLoader.srcImgObj, YAHOO.util.ImageLoader.imgObj);
 
 /**
- * Inserts the image url into the dom so that the image is displayed
+ * Inserts the image URL into the DOM so that the image is displayed.
  * Sets src
  * @method _applyUrl
- * @param {Object}	el	HTML dom element
+ * @param {Object}	el	HTML DOM element
  * @private
  */
 YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
@@ -404,11 +405,11 @@ YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
 };
 
 /**
- * PNG background image object. A PNG background image is one whose url is specified through AlphaImageLoader or by 'background-image' in the element's style
+ * PNG background image object. A PNG background image is one whose URL is specified through AlphaImageLoader or by "background-image" in the element's style
  * @class YAHOO.util.ImageLoader.pngBgImgObj
  * @constructor
  * @extends YAHOO.util.ImageLoader.imgObj
- * @param {String}	domId	HTML dom id of the image element
+ * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
  */
 YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url) {
@@ -418,10 +419,10 @@ YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url) {
 YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.imgObj);
 
 /**
- * Inserts the image url into the dom so that the image is displayed
+ * Inserts the image URL into the DOM so that the image is displayed.
  * If the browser is determined to be IE6 (or older), sets the AlphaImageLoader src; otherwise sets style.backgroundImage
  * @method _applyUrl
- * @param {Object}	el	HTML dom element
+ * @param {Object}	el	HTML DOM element
  * @private
  */
 YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
