@@ -29,48 +29,43 @@
         load: {
             require: ['yahoo'],
             loadOptional: true,
-            filter: 'DEBUG',
+            filter: 'RAW',
             base: '../../build/',
 
             onLoadComplete: function(loader) {
                 
                 if (!initLoadComplete) {
 
-                YAHOO.example.tabviewinit = function( ){
+                    YAHOO.example.tabviewinit = function( ){
 
-                    log("tabview init");
-                    var tabView = new YAHOO.widget.TabView( { id: 'demo' } );
+                        log("tabview init");
+                        var tabView = new YAHOO.widget.TabView( { id: 'demo' } );
+                        
+                        tabView.addTab( new YAHOO.widget.Tab({
+                            label: 'lorem',
+                            content: '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat.</p>',
+                            active: true
+                        }));
+                        
+                        tabView.addTab( new YAHOO.widget.Tab({
+                            label: 'ipsum',
+                            content: '<ul><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li></ul>'
+                        }));
+                        
+                        tabView.addTab( new YAHOO.widget.Tab({
+                            label: 'dolor',
+                            content: '<form action="#"><fieldset><legend>Lorem Ipsum</legend><label for="foo"> <input id="foo" name="foo"></label><input type="submit" value="submit"></fieldset></form>'
+                        }));
+                        
+                        YAHOO.util.Event.onContentReady('doc', function() {
+                            log("onContentReady");
+                            tabView.appendTo(this); 
+                        });
+                    };
                     
-                    tabView.addTab( new YAHOO.widget.Tab({
-                        label: 'lorem',
-                        content: '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat.</p>',
-                        active: true
-                    }));
-                    
-                    tabView.addTab( new YAHOO.widget.Tab({
-                        label: 'ipsum',
-                        content: '<ul><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li><li><a href="#">Lorem ipsum dolor sit amet.</a></li></ul>'
-                    }));
-                    
-                    tabView.addTab( new YAHOO.widget.Tab({
-                        label: 'dolor',
-                        content: '<form action="#"><fieldset><legend>Lorem Ipsum</legend><label for="foo"> <input id="foo" name="foo"></label><input type="submit" value="submit"></fieldset></form>'
-                    }));
-                    
-                    YAHOO.util.Event.onContentReady('doc', function() {
-                        log("onContentReady");
-                        tabView.appendTo(this); 
-                    });
-                };
-                    
-
                     // var loader = new YAHOO.util.YUILoader();
 
-                    loader.addModule({
-                        name: "json",
-                        type: "js",
-                        fullpath: "http://www.json.org/json.js",
-                        verifier: function checkJSON(name, loaderCallback) {
+                    function checkJSON(name, loaderCallback) {
                                 if (Object.prototype.toJSONString) {
                                     loaderCallback();
                                 } else {
@@ -78,12 +73,17 @@
                                             checkJSON(name, loaderCallback);
                                         }, 3);
                                 }
-                            }
+                            };
+
+                    loader.addModule({
+                        name: "json",
+                        type: "js",
+                        fullpath: "http://www.json.org/json.js",
+                        verifier: checkJSON
                         });
 
-                    loader.require("tabview", "treeview", "json");
-                    loader.loadOptional = true;
-                    loader.base = '../../build/';
+                    loader.require("tabview", "treeview", "json", "datatable");
+                    /*
                     loader.onLoadComplete = function() {
                                 log("insert callback");
                                 YAHOO.util.Event.onAvailable("treediv", function() {
@@ -102,8 +102,26 @@
                                     });
                                                 
                             };
+                            */
 
-                    loader.insert(null, { filter: 'raw' });
+                    loader.insert(function() {
+                                log("insert callback");
+                                YAHOO.util.Event.onAvailable("treediv", function() {
+                                        log("onAvailable (treeview init)");
+                                        var tree = new YAHOO.widget.TreeView("treediv");
+                                        var n = new YAHOO.widget.TextNode("node 1", tree.getRoot());
+                                        new YAHOO.widget.TextNode("node 2", n);
+                                        new YAHOO.widget.TextNode("node 3", n);
+                                        tree.draw();
+                                    });
+
+                                YAHOO.example.tabviewinit();
+
+                                YAHOO.util.Event.on(window, "load", function(e) {
+                                    log("onload");
+                                });
+                                                
+                            });
 
                     log(loader.sorted);
 

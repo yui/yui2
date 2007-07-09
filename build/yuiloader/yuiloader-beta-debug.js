@@ -444,12 +444,12 @@
         o = o || {};
 
         /**
-         * If a callback is passed to insert(), it overrides the
-         * global onLoadComplete callback for the insert operation.
-         * @property _insertCallback
+         * Internal callback to handle multiple internal insert() of css
+         * prior to js
+         * @property _internalCallback
          * @private
          */
-        this._insertCallback = null;
+        this._internalCallback = null;
 
         /**
          * Callback that will be executed when the loader is finished
@@ -1137,9 +1137,9 @@
          */
         insert: function(callback, o, type) {
 
-            if (!this.onLoadComplete) {
-                this.onLoadComplete = callback;
-            }
+            //if (!this.onLoadComplete) {
+                //this.onLoadComplete = callback;
+            //}
 
             if (!type) {
                 var self = this;
@@ -1152,10 +1152,8 @@
 
             o = o || {};
 
-            this._insertCallback = callback;
-
             // store the callback for when we are done
-            // this.onLoadComplete = callback || this.onLoadComplete;
+            this.onLoadComplete = callback || this.onLoadComplete;
 
             // store the optional filter
             var f = o && o.filter || null;
@@ -1296,14 +1294,12 @@
             // insert can accept a callback when called directly.  This overrides
             // the global onLoadComplete callback for the duration of the insert
 
+            var f;
+
             if (this._internalCallback) {
-                this._internalCallback(this);
+                f = this._internalCallback;
                 this._internalCallback = null;
-
-            } else if (this._insertCallback) {
-                this._insertCallback(this);
-                this._insertCallback = null;
-
+                f(this);
             } else if (this.onLoadComplete) {
                 this.onLoadComplete(this);
             }
