@@ -1,5 +1,5 @@
 /* basic skin styles */
-.yui-skin-sam .yui-dt-table {margin:1em;font-family:arial;font-family:inherit;font-size:inherit;border-collapse:collapse;}
+.yui-skin-sam .yui-dt-table {margin:1em;font-family:arial;font-size:inherit;border-collapse:collapse;}
 .yui-skin-sam .yui-dt-table caption {padding-bottom:1em;}
 .yui-skin-sam .yui-dt-table th {
     background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
