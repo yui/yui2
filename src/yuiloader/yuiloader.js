@@ -413,14 +413,7 @@
                 o = o || {};
 
                 var loader = new YUI.YUILoader(o);
-
-                // If no load was requested, we must load YAHOO
-                // so we have a place to put the loader
-                if (!y_loaded) {
-                    loader.require("yahoo");
-                }
-
-                loader.insert(function() {
+                loader.onLoadComplete = function() {
 
                         if (o.onLoadComplete) {
 
@@ -430,7 +423,15 @@
 
                         YUI.finishInit();
                         
-                    }, o);
+                    };
+
+                // If no load was requested, we must load YAHOO
+                // so we have a place to put the loader
+                if (!y_loaded) {
+                    loader.require("yahoo");
+                }
+
+                loader.insert(null, o);
             } else {
                 YUI.finishInit();
             }
@@ -440,6 +441,22 @@
 
     YUI.YUILoader = function(o) {
         o = o || {};
+
+        /**
+         * If a callback is passed to insert(), it overrides the
+         * global onLoadComplete callback for the insert operation.
+         * @property _insertCallback
+         * @private
+         */
+        this._insertCallback = null;
+
+        /**
+         * Callback that will be executed when the loader is finished
+         * with an insert
+         * @method onLoadComplte
+         * @type function
+         */
+        this.onLoadComplete = null;
 
         /**
          * The base directory.
@@ -877,7 +894,7 @@
          * @private
          */
         _rollup: function() {
-            var i, j, m, s, rollups={}, r=this.required;
+            var i, j, m, s, rollups={}, r=this.required, roll;
 
             // find and cache rollup modules
             if (this.dirty || !this.rollups) {
@@ -980,7 +997,7 @@
                 // remove anything this module supersedes
                 } else {
 
-                    skinDef = this.parseSkin(i);
+                    var skinDef = this.parseSkin(i);
 
                     if (skinDef) {
                         //console.log("skin found in reduce: " + skinDef.skin + ", " + skinDef.module);
@@ -1115,6 +1132,10 @@
          */
         insert: function(callback, o, type) {
 
+            if (!this.onLoadComplete) {
+                this.onLoadComplete = callback;
+            }
+
             if (!type) {
                 //this._internalCallback = function
                 var self = this;
@@ -1126,8 +1147,10 @@
 
             o = o || {};
 
+            this._insertCallback = callback;
+
             // store the callback for when we are done
-            this.onLoadComplete = callback || this.onLoadComplete;
+            // this.onLoadComplete = callback || this.onLoadComplete;
 
             // store the optional filter
             var f = o && o.filter || null;
@@ -1265,7 +1288,13 @@
 
             this._pushEvents();
 
-            if (this.onLoadComplete) {
+            // insert can accept a callback when called directly.  This overrides
+            // the global onLoadComplete callback for the duration of the insert
+            if (this._insertCallback) {
+                this._insertCallback(this);
+                this._insertCallback = null;
+
+            } else if (this.onLoadComplete) {
                 this.onLoadComplete(this);
             }
 
