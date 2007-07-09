@@ -247,9 +247,9 @@ To fix these bugs:
 
 }
 
-.yui-skin-sam .yui-panel-container.focused {
+.yui-skin-sam .yui-panel-container.focused .yui-panel .hd {
 
-    /* To do - default focused style for this skin? */
+    background-position: 0 -100px;
 
 }
 
