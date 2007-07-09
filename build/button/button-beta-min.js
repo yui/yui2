@@ -54,7 +54,7 @@ while(i--);}},_isSplitButtonOptionKey:function(p_oEvent){return(p_oEvent.ctrlKey
 {bHasKeyPressListener=true;break;}}
 while(i--);}}
 if(!bHasKeyPressListener){Event.on(oForm,"keypress",YAHOO.widget.Button.onFormKeyPress);}}}},_originalMaxHeight:-1,_showMenu:function(p_oEvent){YAHOO.widget.MenuManager.hideVisible();if(m_oOverlayManager){m_oOverlayManager.hideAll();}
-var oMenu=this._menu,nViewportHeight=Dom.getViewportHeight(),nMenuHeight,nScrollTop,nY;if(oMenu&&(oMenu instanceof Menu)){oMenu.cfg.applyConfig({context:[this.get("id"),"tl","bl"],constraintoviewport:false,clicktohide:false,visible:true});oMenu.cfg.fireQueue();if(p_oEvent.type=="mousedown"){Event.stopPropagation(p_oEvent);}
+var oMenu=this._menu,nViewportHeight=Dom.getViewportHeight(),nMenuHeight,nScrollTop,nY;if(oMenu&&(oMenu instanceof Menu)){oMenu.cfg.applyConfig({context:[this.get("id"),"tl","bl"],constraintoviewport:false,clicktohide:false,visible:true});oMenu.cfg.fireQueue();oMenu.align("tl","bl");if(p_oEvent.type=="mousedown"){Event.stopPropagation(p_oEvent);}
 if(this.get("focusmenu")){this._menu.focus();}
 nMenuHeight=oMenu.element.offsetHeight;if((oMenu.cfg.getProperty("y")+nMenuHeight)>nViewportHeight){oMenu.align("bl","tl");nY=oMenu.cfg.getProperty("y");nScrollTop=Dom.getDocumentScrollTop();if(nScrollTop>=nY){if(this._originalMaxHeight==-1){this._originalMaxHeight=oMenu.cfg.getProperty("maxheight");}
 oMenu.cfg.setProperty("maxheight",(nMenuHeight-((nScrollTop-nY)+20)));oMenu.align("bl","tl");}}}

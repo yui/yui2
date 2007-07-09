@@ -1483,6 +1483,8 @@
                     visible: true });
                     
                 oMenu.cfg.fireQueue();
+            
+                oMenu.align("tl", "bl");
         
                 /*
                     Stop the propagation of the event so that the MenuManager 
