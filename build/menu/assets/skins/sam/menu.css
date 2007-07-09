@@ -123,7 +123,7 @@ when one of its submenus is visible.
     overflow: auto;
 
 }
-/* menubar style rules */
+/* MenuBar style rules */
 
 .yui-skin-sam .yuimenubar {
 
@@ -132,11 +132,10 @@ when one of its submenus is visible.
 
 }
 
-.yui-skin-sam .yuimenubaritem {
-
-    float: left;
-
-}
+/* 
+    The following two style rules cause a MenuBar's UL to clear its 
+    floating LIs.
+*/
 
 .yui-skin-sam .yuimenubar ul {
 
@@ -155,12 +154,27 @@ when one of its submenus is visible.
 
 }
 
+
+/* MenuBarItem style rules */
+
+.yui-skin-sam .yuimenubaritem {
+
+    float: left;
+
+}
+
+.yui-skin-sam .yuimenubarnav .yuimenubaritem {
+
+    border-right: solid 1px #ccc;
+
+}
+
 .yui-skin-sam .yuimenubaritemlabel {
 
     font-size: 93%;  /* 12px */
     line-height: 2;  /* ~24px */
     *line-height: 1.9; /* For IE */
-    float: left;    /* For IE to get an inline block element with layout */
+    float: left;
     padding: 0 10px;
     color: #000;
     text-decoration: none;
@@ -169,24 +183,48 @@ when one of its submenus is visible.
     border-style: solid;
     border-color: #808080;
     border-width: 1px 0;
-    *position: relative; /* IE: so the negative top and bottom margins work */
+    position: relative;
     margin: -1px 0;
+
+}
+
+.yui-skin-sam .yuimenubarnav .yuimenubaritemlabel {
+
+    padding-right: 20px;
 
 }
 
 .yui-skin-sam .yuimenubaritemlabel .submenuindicator {
     
-    position: absolute;
-    width: 1px; /* Keep a height and width for screen readers */
+    /*
+        Set height and width to 1px so screen readers announce the content of 
+        the element.
+    */
+
+    width: 1px;
     height: 1px;
-    overflow: hidden;
+    top: 0;
+    left: 0;
+
+}
+
+.yui-skin-sam .yuimenubarnav .yuimenubaritemlabel .submenuindicator {
+    
+    top: 50%;
+    right: 8px;
+    left: auto; /* Override "left" property set by previous style rule */
+    margin-top: -3px;
+    height: 4px;
+    width: 7px;
+    text-indent: 8px;
+    background-position: -16px -856px;
 
 }
 
 
-/* menubaritem states */
+/* MenuBarItem states */
 
-/* selected */
+/* Selected MenuBarItem */
 
 .yui-skin-sam .yuimenubaritem a.selected {
 
@@ -195,7 +233,32 @@ when one of its submenus is visible.
 
 }
 
-/* disabled */
+.yui-skin-sam .yuimenubarnav .yuimenubaritem a.selected {
+
+    border-left-width: 1px;
+    margin-left: -1px;
+
+}
+
+.yui-skin-sam .yuimenubar a.selected .submenuindicator {
+
+    background: transparent;
+
+}
+
+.yui-skin-sam .yuimenubarnav a.selected .submenuindicator {
+
+    /*
+        Reset the value of the "background" property since it is set to 
+        "transparent" by the previous rule.
+    */
+
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x -16px -856px;
+
+}
+
+
+/* Disabled  MenuBarItem */
 
 .yui-skin-sam .yuimenubaritem a.disabled {
 
@@ -204,8 +267,14 @@ when one of its submenus is visible.
 
 }
 
+.yui-skin-sam .yuimenubarnav .yuimenubaritem a.disabled .submenuindicator {
 
-/* menu style rules */
+    background-position: -16px -881px;
+
+}
+
+
+/* Menu style rules */
 
 .yui-skin-sam .yuimenu .bd {
 
@@ -233,64 +302,6 @@ when one of its submenus is visible.
 
 }
 
-.yui-skin-sam .yuimenuitemlabel {
-
-    font-size: 93%;  /* 12px */
-    line-height: 1.5;  /* 18px */
-    *line-height: 1.45; /* For IE */
-    padding: 0 20px;
-    display: block;
-    color: #000;
-    text-decoration: none;
-    outline: none;
-    position: relative;
-    cursor: default;
-
-}
-
-.yui-skin-sam .yuimenuitemlabel .helptext {
-
-    font-style: normal;
-    margin: 0 0 0 40px;
-    
-}
-
-.yui-skin-sam .yuimenuitemlabel .submenuindicator,
-.yui-skin-sam .yuimenuitemlabel .checkedindicator {
-    
-    display: block;
-    overflow: hidden;
-    background-image: url(../../../../assets/skins/sam/sprite.png);
-    background-repeat: no-repeat;
-
-}
-
-.yui-skin-sam .yuimenuitemlabel .submenuindicator {
-
-    position: absolute;
-    top: 50%;
-    right: 8px;
-    margin-top: -3px;
-    height: 7px;
-    width: 4px;
-    text-indent: 8px;
-    background-position: 0 -906px;
-
-}
-
-.yui-skin-sam .yuimenuitemlabel .checkedindicator {
-
-    position: absolute;
-    top: 50%;
-    left: 8px;
-    margin-top: -3px;
-    height: 7px;
-    width: 7px;
-    text-indent: 8px;
-    background-position: 0 -1006px;
-
-}
-
 
 /* Group titles */
 
@@ -311,7 +322,7 @@ when one of its submenus is visible.
 .yui-skin-sam .yuimenu ul.hastitle,
 .yui-skin-sam .yuimenu h6.first-of-type {
 
-    border-width:0;
+    border-width: 0;
 
 }
 
@@ -324,7 +335,7 @@ when one of its submenus is visible.
     position: relative;
     height: 16px;
     border: solid 1px #808080;
-    background:#fff url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
+    background: #fff url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 
 }
 
@@ -359,10 +370,68 @@ when one of its submenus is visible.
 }
 
 
-/* States */
+/* MenuItem style rules */
+
+.yui-skin-sam .yuimenuitemlabel {
+
+    font-size: 93%;  /* 12px */
+    line-height: 1.5;  /* 18px */
+    *line-height: 1.45; /* For IE */
+    padding: 0 20px;
+    display: block;
+    color: #000;
+    text-decoration: none;
+    outline: none;
+    position: relative;
+    cursor: default;
+
+}
+
+.yui-skin-sam .yuimenuitemlabel .helptext {
+
+    font-style: normal;
+    margin: 0 0 0 40px;
+    
+}
+
+.yui-skin-sam .yuimenuitemlabel .submenuindicator,
+.yui-skin-sam .yuimenuitemlabel .checkedindicator,
+.yui-skin-sam .yuimenubaritemlabel .submenuindicator {
+    
+    position: absolute;
+    overflow: hidden;
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat;
+
+}
+
+.yui-skin-sam .yuimenuitemlabel .submenuindicator {
+
+    top: 50%;
+    right: 8px;
+    margin-top: -3px;
+    height: 7px;
+    width: 4px;
+    text-indent: 5px;
+    background-position: 0 -906px;
+
+}
+
+.yui-skin-sam .yuimenuitemlabel .checkedindicator {
+
+    top: 50%;
+    left: 8px;
+    margin-top: -3px;
+    height: 7px;
+    width: 7px;
+    text-indent: 8px;
+    background-position: 0 -1006px;
+
+}
 
 
-/* Visible */
+/* Menu states */
+
+/* Visible Menu */
 
 .yui-skin-sam .visible .yui-menu-shadow {
 
@@ -400,7 +469,10 @@ when one of its submenus is visible.
 
 }
 
-/* Selected */
+
+/* MenuItem states */
+
+/* Selected MenuItem */
 
 .yui-skin-sam .yuimenuitem a.selected {
 
@@ -413,7 +485,33 @@ when one of its submenus is visible.
 
 }
 
-/* Disabled */
+/*
+    Redefine the background for MenuItem instances that are children of
+    a Menubar since the 
+    ".yui-skin-sam .yuimenubar a.selected .submenuindicator" rule sets the 
+    "background" property to "transparent"
+*/
+
+.yui-skin-sam .yuimenubar .yuimenuitem a.selected .submenuindicator {
+
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -906px;
+
+}
+
+/*
+    Remove borders and margin added by the style rule 
+    ".yui-skin-sam .yuimenubarnav .yuimenubaritem a.selected"
+*/
+
+.yui-skin-sam .yuimenubarnav .yuimenuitem a.selected {
+
+    border-width: 0;
+    margin: 0;
+
+}
+
+
+/* Disabled MenuItem */
 
 .yui-skin-sam .yuimenuitem a.disabled {
 
