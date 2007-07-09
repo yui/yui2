@@ -5,7 +5,7 @@
 .yui-skin-sam .yui-toolbar-container:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
 
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar {
-    background: url(skin1-sprite.png) repeat-x 0 -200px;
+    background: url(sprite.png) repeat-x 0 -200px;
 }
 
 .yui-skin-sam .yui-toolbar-container {
@@ -17,7 +17,7 @@
 }
 
 .yui-skin-sam .yui-toolbar-container .collapse {
-    background: url(skin1-sprite.png) no-repeat 0 -400px;
+    background: url(sprite.png) no-repeat 0 -400px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar span.collapse {
     cursor: pointer;
@@ -32,15 +32,15 @@
 }
 
 .yui-skin-sam .yui-toolbar-container .yui-button {
-    background:url(skin1-sprite.png) repeat-x 0 0;
+    background:url(sprite.png) repeat-x 0 0;
 }
 .yui-skin-sam .yui-toolbar-container .yui-button-hover {
-    background:url(skin1-sprite.png) repeat-x 0 -1300px;
+    background:url(sprite.png) repeat-x 0 -1300px;
     border-color: #808080;
 }
 
-.yui-skin-sam .yui-toolbar-container .yui-button.selected {
-    background:url(skin1-sprite.png) no-repeat 0 -1700px;
+.yui-skin-sam .yui-toolbar-container .yui-button-selected {
+    background:url(sprite.png) no-repeat 0 -1700px;
     border-color: #808080;
 }
 
@@ -52,13 +52,13 @@
     height: 18px;
     width: 18px;
     overflow: hidden;
-    background-image: url( sprite.gif );
+    background-image: url( editor-sprite.gif );
     background-repeat: no-repeat;
     background-position: 30px 30px;
 }
 
-.yui-skin-sam .yui-toolbar-container .yui-button.selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {
-    background-image: url(sprite_active.gif);
+.yui-skin-sam .yui-toolbar-container .yui-button-selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {
+    background-image: url(editor-sprite-active.gif);
 }
 
 .yui-skin-sam .yui-editor-panel {
@@ -67,11 +67,11 @@
 }
 
 .yui-skin-sam .yui-editor-panel .hd {
-    background: url(skin1-sprite.png) repeat-x 0 -200px;
+    background: url(sprite.png) repeat-x 0 -200px;
 }
 
 .yui-skin-sam .yui-editor-panel .hd span.close {
-    background:url(skin1-sprite.png) no-repeat 0 -300px;
+    background:url(sprite.png) no-repeat 0 -300px;
     cursor:pointer;
     display:block;
     height:16px;
@@ -193,7 +193,7 @@
 }
 
 .yui-skin-sam .yui-toolbar-insertorderedlist-menu li {
-    background-image: url( sprite.gif );
+    background-image: url( editor-sprite.gif );
     background-repeat: no-repeat;
 }
 .yui-skin-sam .yui-toolbar-insertorderedlist-menu li.yui-toolbar-insertorderedlist-1 {
@@ -220,7 +220,7 @@
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
     top: -1px;
     right: 0;
-    background-image: url( sprite.gif );
+    background-image: url( editor-sprite.gif );
     background-position: 0 -1220px;
     overflow: hidden;
     height: 8px;
@@ -229,7 +229,7 @@
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
     bottom: -1px;
     right: 0;
-    background-image: url( sprite.gif );
+    background-image: url( editor-sprite.gif );
     background-position: 0 -1188px;
     overflow: hidden;
     height: 8px;
@@ -237,7 +237,7 @@
 }
 
 .yui-skin-sam .yui-editor-panel .ft span.tip span.icon {
-    background-image: url( sprite.gif );
+    background-image: url( editor-sprite.gif );
     background-position: 0 -1260px;
     display: block;
     height: 20px;
@@ -254,7 +254,7 @@
 }
 
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-select span.yui-toolbar-icon {
-    background-image: url( sprite.gif );
+    background-image: url( editor-sprite.gif );
     background-position: 0px -1144px;
     overflow: hidden;
     right: -2px;
@@ -275,7 +275,7 @@
     left: 25px;
     text-indent: 9999px;
     overflow: hidden;
-    background-image: url( knob.gif );
+    background-image: url( editor-knob.gif );
     background-repeat: no-repeat;
 }
 .yui-skin-sam .yui-editor-panel .yui-toolbar-container {

@@ -1348,7 +1348,8 @@ var Dom = YAHOO.util.Dom,
                     var button = this.getButtonByIndex(button);
                 }
                 if (button instanceof YAHOO.widget.Button) {
-                    button.addClass('selected');
+                    button.addClass('yui-button-selected');
+                    button.addClass('yui-button-' + button.get('value') + '-selected');
                     if (value) {
                         var _items = button.getMenu().getItems();
                         for (var m = 0; m < _items.length; m++) {
@@ -1379,15 +1380,9 @@ var Dom = YAHOO.util.Dom,
                 var button = this.getButtonByIndex(button);
             }
             if (button instanceof YAHOO.widget.Button) {
-                if (button.hasClass('selected')) {
-                    button.removeClass('selected');
-                }
-                if (button.hasClass('active')) {
-                    button.removeClass('active');
-                }
-                if (button.hasClass('hover')) {
-                    button.removeClass('hover');
-                }
+                button.removeClass('yui-button-selected');
+                button.removeClass('yui-button-' + button.get('value') + '-selected');
+                button.removeClass('yui-button-hover');
             } else {
                 return false;
             }
@@ -3770,6 +3765,10 @@ var Dom = YAHOO.util.Dom,
         * @description Causes the toolbar and the editor to render and replace the textarea.
         */
         render: function() {
+            if (!this.get('textarea')) {
+                this._queue[this._queue.length] = ['render', arguments];
+                return false;
+            }
             var self = this;
             var tbarConf = this.get('toolbar');
             //Set the toolbar to disabled until content is loaded
