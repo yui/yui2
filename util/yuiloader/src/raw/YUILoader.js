@@ -193,13 +193,14 @@
                 var loader = new YUI.YUILoader(o);
                 loader.onLoadComplete = function() {
 
+                        YUI.finishInit();
+
                         if (o.onLoadComplete) {
 
                             loader._pushEvents();
                             o.onLoadComplete(loader);
                         }
 
-                        YUI.finishInit();
                         
                     };
 
@@ -417,6 +418,7 @@
             }
 
             this.moduleInfo[o.name] = o;
+            this.dirty = true;
 
             return true;
         },
@@ -428,6 +430,9 @@
          */
         require: function(what) {
             var a = (typeof what === "string") ? arguments : what;
+
+            this.dirty = true;
+
             for (var i=0; i<a.length; i=i+1) {
                 this.required[a[i]] = true;
                 var s = this.parseSkin(a[i]);
@@ -915,11 +920,11 @@
             }
 
             if (!type) {
-                //this._internalCallback = function
                 var self = this;
-                this.insert(function() {
+                this._internalCallback = function() {
                             self.insert(callback, o, "js");
-                        }, o, "css");
+                        };
+                this.insert(null, o, "css");
                 return;
             }
 
@@ -1068,7 +1073,12 @@
 
             // insert can accept a callback when called directly.  This overrides
             // the global onLoadComplete callback for the duration of the insert
-            if (this._insertCallback) {
+
+            if (this._internalCallback) {
+                this._internalCallback(this);
+                this._internalCallback = null;
+
+            } else if (this._insertCallback) {
                 this._insertCallback(this);
                 this._insertCallback = null;
 
