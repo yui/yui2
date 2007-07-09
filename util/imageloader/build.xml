@@ -40,13 +40,13 @@
                 <argument value="yahoo/presentation/2.x/build/${component}"/>
             </commandline>
         </cvs>
-        <echo message="commit: examples dir" />
+        <echo message="commit: component source dir" />
         <cvs cvsroot="${cvs.root}" cvsrsh="${cvs.rsh}" dest="${env.HOME}/dev">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="${cvs.msg}"/>
-                <argument value="yahoo/presentation/2.x/examples/${component}"/>
+                <argument value="yahoo/presentation/2.x/src/${component}"/>
             </commandline>
         </cvs>
 
