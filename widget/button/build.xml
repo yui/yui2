@@ -22,14 +22,14 @@
 		<replaceregexp 
 			file="${component.srcdir}/temp/button.css"
 			byline="true"
-			match="(\.\./img/)"
+			match="\.\./img/"
 			replace=""
 			flags="g">
 		</replaceregexp>
 		<replaceregexp 
 			file="${component.srcdir}/temp/button.css"
 			byline="true"
-			match="(\.\./src/img/)"
+			match="\.\./src/img/"
 			replace="../../build/button/assets/"
 			flags="g">
 		</replaceregexp>
@@ -38,8 +38,15 @@
 		<replaceregexp 
 			file="${component.srcdir}/temp/skins/sam/button-skin.css"
 			byline="true"
-			match="(\.\./\.\./\.\./img/)"
-			replace="\.\./\.\./\.\./\.\./assets/skins/sam/"
+			match="\.\./\.\./\.\./img/"
+			replace=""
+			flags="g">
+		</replaceregexp>
+		<replaceregexp 
+			file="${component.srcdir}/temp/skins/sam/button-skin.css"
+			byline="true"
+			match="sprite.png"
+			replace="../../../../assets/skins/sam/sprite.png"
 			flags="g">
 		</replaceregexp>
 
@@ -54,11 +61,9 @@
 
 	</target>
 
-<!-- 
     <target name="deploy" depends="YuiTaskLib.deploy">
         <delete dir="${component.srcdir}/temp/" />
     </target>
- -->
 
 </project>
 
