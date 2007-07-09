@@ -17,8 +17,12 @@
         <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
     </target>
 
-    <target name="customassets" description="Custom work for Button CSS, before it gets copied over to global build dir" >
+    <target name="init" description="Setup temp area for Button CSS" depends="YuiTaskLib.init">
+
+        <mkdir dir="${component.srcdir}/temp/" />
+
         <copy file="${component.srcdir}/css/button.css" tofile="${component.srcdir}/temp/button.css" />
+
 		<replaceregexp 
 			file="${component.srcdir}/temp/button.css"
 			byline="true"
