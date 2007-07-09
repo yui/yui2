@@ -659,6 +659,11 @@ var Dom = YAHOO.util.Dom,
         * @param {Object} oGroup Object literal reference to the Groups Config (contains an array of button configs)
         */
         addButtonGroup: function(oGroup) {
+            if (!this.get('element')) {
+                this._queue[this._queue.length] = ['addButtonGroup', arguments];
+                return false;
+            }
+            
             if (!this.hasClass(this.CLASS_PREFIX + '-grouped')) {
                 this.addClass(this.CLASS_PREFIX + '-grouped');
             }
@@ -922,6 +927,10 @@ var Dom = YAHOO.util.Dom,
         * @param {HTMLElement} after Optional HTML element to insert this button after in the DOM.
         */
         addSeparator: function(cont, after) {
+            if (!this.get('element')) {
+                this._queue[this._queue.length] = ['addSeparator', arguments];
+                return false;
+            }
             var sepCont = ((cont) ? cont : this.get('cont'));
             if (!this.get('element')) {
                 this._queue[this._queue.length] = ['addSeparator', arguments];
@@ -975,7 +984,10 @@ var Dom = YAHOO.util.Dom,
             var picker = document.createElement('div');
             picker.className = 'yui-toolbar-colors';
             picker.id = id + '_colors';
-            document.body.appendChild(picker);
+            picker.style.display = 'none';
+            Event.on(window, 'load', function() {
+                document.body.appendChild(picker);
+            }, this, true);
 
             this._colorPicker = picker;
 

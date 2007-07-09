@@ -614,7 +614,7 @@ h2.yui-editor-skipheader {
 .yui-skin-sam .yui-toolbar-container:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
 
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar {
-    background: url(sprite.png) repeat-x 0 -200px;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
 }
 
 .yui-skin-sam .yui-toolbar-container {
@@ -626,7 +626,7 @@ h2.yui-editor-skipheader {
 }
 
 .yui-skin-sam .yui-toolbar-container .collapse {
-    background: url(sprite.png) no-repeat 0 -400px;
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -400px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar span.collapse {
     cursor: pointer;
@@ -641,15 +641,15 @@ h2.yui-editor-skipheader {
 }
 
 .yui-skin-sam .yui-toolbar-container .yui-button {
-    background:url(sprite.png) repeat-x 0 0;
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 }
 .yui-skin-sam .yui-toolbar-container .yui-button-hover {
-    background:url(sprite.png) repeat-x 0 -1300px;
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1300px;
     border-color: #808080;
 }
 
 .yui-skin-sam .yui-toolbar-container .yui-button-selected {
-    background:url(sprite.png) no-repeat 0 -1700px;
+    background:url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -1700px;
     border-color: #808080;
 }
 
@@ -676,11 +676,11 @@ h2.yui-editor-skipheader {
 }
 
 .yui-skin-sam .yui-editor-panel .hd {
-    background: url(sprite.png) repeat-x 0 -200px;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
 }
 
 .yui-skin-sam .yui-editor-panel .hd span.close {
-    background:url(sprite.png) no-repeat 0 -300px;
+    background:url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -300px;
     cursor:pointer;
     display:block;
     height:16px;

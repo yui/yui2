@@ -42,11 +42,16 @@ var Dom = YAHOO.util.Dom,
             oConfig.attributes.textarea = Dom.get(el);
         }
         
-        oConfig.element = document.createElement('DIV');
-        oConfig.element.id = oConfig.attributes.textarea.id + '_container';
+        var element_cont = document.createElement('DIV');
+        oConfig.attributes.element_cont = new YAHOO.util.Element(element_cont, {
+            id: oConfig.attributes.textarea.id + '_container'
+        });
+        oConfig.attributes.element_cont.setStyle('display', 'none');
+
+        oConfig.element = oConfig.attributes.textarea;
+
         var div = document.createElement('div');
-        oConfig.element.appendChild(div);
-        Dom.setStyle(oConfig.element, 'display', 'none');
+        oConfig.attributes.element_cont.appendChild(div);
         
         if (!oConfig.attributes.toolbar_cont) {
             oConfig.attributes.toolbar_cont = document.createElement('DIV');
@@ -60,6 +65,11 @@ var Dom = YAHOO.util.Dom,
             editorWrapper.appendChild(oConfig.attributes.iframe.get('element'));
             div.appendChild(editorWrapper);
         }
+
+        Event.onDOMReady(function() {
+            this.DOMReady = true;
+            this.fireQueue();
+        }, this, true);
 
         YAHOO.widget.Editor.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
     }
@@ -105,6 +115,13 @@ var Dom = YAHOO.util.Dom,
     }
 
     YAHOO.extend(YAHOO.widget.Editor, YAHOO.util.Element, {
+        /**
+        * @property DOMReady
+        * @private
+        * @description Flag to determine if DOM is ready or not
+        * @type Boolean
+        */
+        DOMReady: null,
         /**
         * @property _selection
         * @private
@@ -260,11 +277,24 @@ var Dom = YAHOO.util.Dom,
         * @return {Object}
         */
         _getDoc: function() {
-            if (this.get('iframe') && this.get('iframe').get('element') && this.get('iframe').get('element').contentWindow && this.get('iframe').get('element').contentWindow.document) {
-                return this.get('iframe').get('element').contentWindow.document;
-            } else {
-                return false;
+            //if (this.get && this.get('iframe') && this.get('iframe').get && this.get('iframe').get('element') && this.get('iframe').get('element').contentWindow && this.get('iframe').get('element').contentWindow.document) {
+            var value = false;
+            if (this.get) {
+                if (this.get('iframe')) {
+                    if (this.get('iframe').get) {
+                        if (this.get('iframe').get('element')) {
+                            try {
+                                if (this.get('iframe').get('element').contentWindow) {
+                                    if (this.get('iframe').get('element').contentWindow.document) {
+                                        value = this.get('iframe').get('element').contentWindow.document;
+                                    }
+                                }
+                            } catch (e) {}
+                        }
+                    }
+                }
             }
+            return value;
         },
         /**
         * @private
@@ -532,9 +562,13 @@ var Dom = YAHOO.util.Dom,
             if (this.browser.ie) {
                 var doc = this._getDoc();
                 var range = this._getRange();
-                var elm = range.item ? range.item(0) : range.parentElement();
-                if (elm.ownerDocument != doc) {
-                    //Sometimes Internet Explorer jumps out of the iFrame here.. Put it back in..
+                if (range) {
+                    var elm = range.item ? range.item(0) : range.parentElement();
+                    if (elm.ownerDocument != doc) {
+                        //Sometimes Internet Explorer jumps out of the iFrame here.. Put it back in..
+                        elm = doc;
+                    }
+                } else {
                     elm = doc;
                 }
             } else {
@@ -1100,6 +1134,7 @@ var Dom = YAHOO.util.Dom,
         * @description Gets the menu from a button instance, if the menu is not rendered it will render it. It will then search the menu for the specified value, unchecking all other items and checking the specified on.
         */
         _updateMenuChecked: function(button, value, tbar) {
+            /*
             if (!tbar) {
                 tbar = this.toolbar;
             }
@@ -1115,6 +1150,7 @@ var Dom = YAHOO.util.Dom,
                     _menuItems[i].cfg.setProperty('checked', true);
                 }
             }
+            */
         },
         /**
         * @private
@@ -1151,7 +1187,7 @@ var Dom = YAHOO.util.Dom,
                 this.afterElement.className = 'yui-editor-skipheader';
                 this.afterElement.tabIndex = '-1';
                 this.afterElement.innerHTML = this.STR_LEAVE_EDITOR;
-                this.get('element').firstChild.appendChild(this.afterElement);
+                this.get('element_cont').get('firstChild').appendChild(this.afterElement);
             }
         },
         /**
@@ -1341,7 +1377,7 @@ var Dom = YAHOO.util.Dom,
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.widget.Editor.superclass.init.call(this, p_oElement, p_oAttributes);
-            this.addClass(this.CLASS_CONTAINER);
+            this.get('element_cont').addClass(this.CLASS_CONTAINER);
             Dom.addClass(this.get('iframe').get('parentNode'), this.CLASS_EDITABLE_CONT);
             this.get('iframe').addClass(this.CLASS_EDITABLE);
         },
@@ -1354,7 +1390,6 @@ var Dom = YAHOO.util.Dom,
         */
         initAttributes: function(attr) {
             YAHOO.widget.Editor.superclass.initAttributes.call(this, attr);
-            var el = this.get('element');
             var self = this;
 
             /**
@@ -1516,6 +1551,16 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
+            * @config element_cont
+            * @description Internal config for the editors container
+            * @default false
+            * @type Boolean
+            */
+            this.setAttributeConfig('element_cont', {
+                value: null,
+                writeOnce: true
+            });
+            /**
             * @config toolbar_cont
             * @description Internal config for the toolbars container
             * @default false
@@ -1600,7 +1645,6 @@ var Dom = YAHOO.util.Dom,
                             ]
                         },
                         { type: 'separator' },
-
                         { group: 'indentlist', label: 'Indenting and Lists',
                             buttons: [
                                 { type: 'push', label: 'Indent', value: 'indent' },
@@ -1686,7 +1730,7 @@ var Dom = YAHOO.util.Dom,
                         this.dompath = document.createElement('DIV');
                         this.dompath.id = this.get('id') + '_dompath';
                         Dom.addClass(this.dompath, 'dompath');
-                        this.get('element').firstChild.appendChild(this.dompath);
+                        this.get('element_cont').get('firstChild').appendChild(this.dompath);
                         if (this.get('iframe')) {
                             this._writeDomPath();
                         }
@@ -1858,7 +1902,7 @@ var Dom = YAHOO.util.Dom,
                     if (el.getAttribute('src')) {
                         src = el.getAttribute('src', 2);
                         if (src.indexOf(this.get('blankimage')) != -1) {
-                            src = this.STR_IMAGE_HERE;
+                            //src = this.STR_IMAGE_HERE;
                         }
                     }
                     if (el.getAttribute('alt', 2)) {
@@ -2281,7 +2325,7 @@ var Dom = YAHOO.util.Dom,
         * @description Causes the toolbar and the editor to render and replace the textarea.
         */
         render: function() {
-            if (!this.get('textarea')) {
+            if (!this.DOMReady) {
                 this._queue[this._queue.length] = ['render', arguments];
                 return false;
             }
@@ -2289,11 +2333,11 @@ var Dom = YAHOO.util.Dom,
             var tbarConf = this.get('toolbar');
             //Set the toolbar to disabled until content is loaded
             tbarConf.disabled = true;
-
             //Create Toolbar instance
             this.toolbar = new Toolbar(this.get('toolbar_cont'), tbarConf);
             YAHOO.log('fireEvent::toolbarLoaded', 'info', 'Editor');
             this.fireEvent('toolbarLoaded', { type: 'toolbarLoaded', target: this.toolbar });
+
             
             this.toolbar.on('toolbarCollapsed', function() {
                 if (this.currentWindow) {
@@ -2334,7 +2378,8 @@ var Dom = YAHOO.util.Dom,
 
 
             //Replace Textarea with editable area
-            this.get('textarea').parentNode.replaceChild(this.get('element'), this.get('textarea'));
+            
+            this.get('parentNode').replaceChild(this.get('element_cont').get('element'), this.get('element'));
 
 
             if (!this.beforeElement) {
@@ -2342,27 +2387,28 @@ var Dom = YAHOO.util.Dom,
                 this.beforeElement.className = 'yui-editor-skipheader';
                 this.beforeElement.tabIndex = '-1';
                 this.beforeElement.innerHTML = this.STR_BEFORE_EDITOR;
-                this.get('element').firstChild.insertBefore(this.beforeElement, this.toolbar.get('nextSibling'));
+                this.get('element_cont').get('firstChild').insertBefore(this.beforeElement, this.toolbar.get('nextSibling'));
             }
-
-            this.appendChild(this.get('textarea'));
+            
             Dom.setStyle(this.get('textarea'), 'display', 'none');
+            this.get('element_cont').appendChild(this.get('element'));
+            this.get('element_cont').setStyle('display', 'block');
+
 
             //Set height and width of editor container
-            this.setStyle('width', this.get('width'));
+            this.get('element_cont').setStyle('width', this.get('width'));
             Dom.setStyle(this.get('iframe').get('parentNode'), 'height', this.get('height'));
 
             this.get('iframe').setStyle('width', '100%'); //WIDTH
             //this.get('iframe').setStyle('_width', '99%'); //WIDTH
             this.get('iframe').setStyle('height', '100%');
 
-            //Set display to show it
-            this.setStyle('display', 'block');
 
             var self = this;
             window.setTimeout(function() {
                 self._setInitialContent.call(self);
             }, 10);
+            
             this.fireEvent('afterRender', { type: 'afterRender', target: this });
         },
         /**
@@ -2923,9 +2969,11 @@ var Dom = YAHOO.util.Dom,
             this.get('panel').setBody('---');
             this.get('panel').setHeader(' ');
             this.get('panel').setFooter(' ');
-            this.get('panel').render(document.body);
-            //this.get('panel').cfg.setProperty('xy', Dom.getXY(this.get('iframe').get('parentNode')));
-            Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+            Event.on(window, 'load', function() {
+                this.get('panel').render(document.body);
+                Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+            }, this, true);
+
             this.get('panel').showEvent.subscribe(function() {
                 YAHOO.util.Dom.setStyle(this.element, 'display', 'block');
             });
@@ -3164,8 +3212,8 @@ var Dom = YAHOO.util.Dom,
             this.toolbar.destroy();
             Dom.setStyle(this.get('textarea'), 'display', 'block');
             var textArea = this.get('textarea');
-            this.get('element').parentNode.replaceChild(textArea, this.get('element'));
-            this.get('element').innerHTML = '';
+            this.get('element_cont').get('parentNode').replaceChild(textArea, this.get('element_cont').get('element'));
+            this.get('element_cont').get('element').innerHTML = '';
             //Brutal Object Destroy
             for (var i in this) {
                 this[i] = null;
@@ -3178,7 +3226,7 @@ var Dom = YAHOO.util.Dom,
         * @return {String}
         */
         toString: function() {
-            return 'Editor (#' + this.get('element').id + ')' + ((this.get('disabled') ? ' Disabled' : ''));
+            return 'Editor (#' + this.get('element_cont').get('id') + ')' + ((this.get('disabled') ? ' Disabled' : ''));
         }
     });
 
