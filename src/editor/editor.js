@@ -2281,6 +2281,10 @@ var Dom = YAHOO.util.Dom,
         * @description Causes the toolbar and the editor to render and replace the textarea.
         */
         render: function() {
+            if (!this.get('textarea')) {
+                this._queue[this._queue.length] = ['render', arguments];
+                return false;
+            }
             var self = this;
             var tbarConf = this.get('toolbar');
             //Set the toolbar to disabled until content is loaded
