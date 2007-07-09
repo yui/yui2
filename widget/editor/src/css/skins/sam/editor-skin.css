@@ -1,0 +1,292 @@
+.yui-skin-sam .yui-toolbar-container {
+    border: 1px solid #808080;
+    zoom: 1;
+}
+.yui-skin-sam .yui-toolbar-container:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar {
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
+}
+
+.yui-skin-sam .yui-toolbar-container {
+    background-color: #F2F2F2;
+}
+
+.yui-skin-sam .yui-editor-container .dompath {
+    background-color: #F2F2F2;
+}
+
+.yui-skin-sam .yui-toolbar-container .collapse {
+    background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -400px;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar span.collapse {
+    cursor: pointer;
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    display: block;
+    overflow: hidden;
+    height: 15px;
+    width: 15px;
+    text-indent: 9999px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-button {
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-button-hover {
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1300px;
+    border-color: #808080;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-button-selected {
+    background:url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -1700px;
+    border-color: #808080;
+}
+
+
+.yui-skin-sam .yui-toolbar-container .yui-button span.yui-toolbar-icon {
+    display: block;
+    position: absolute;
+    top: 1px;
+    height: 18px;
+    width: 18px;
+    overflow: hidden;
+    background-image: url( editor-sprite.gif );
+    background-repeat: no-repeat;
+    background-position: 30px 30px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-button-selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {
+    background-image: url(editor-sprite-active.gif);
+}
+
+.yui-skin-sam .yui-editor-panel {
+    background-color: #F2F2F2;
+    border: 1px solid #808080;
+}
+
+.yui-skin-sam .yui-editor-panel .hd {
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
+}
+
+.yui-skin-sam .yui-editor-panel .hd span.close {
+    background:url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -300px;
+    cursor:pointer;
+    display:block;
+    height:16px;
+    overflow:hidden;
+    position:absolute;
+    right:5px;
+    text-indent:500px;
+    top:2px;
+    width:26px;
+}
+
+.yui-skin-sam .yui-button-menu {
+    background-color: #F2F2F2;
+}
+
+.yui-skin-sam div.yuimenu li.selected {
+    background-color: #B3D4FF;
+}
+.yui-skin-sam div.yuimenu li.selected a.selected {
+    color: #000;
+}
+/* Buttons */
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-bold span.yui-toolbar-icon {
+    background-position: 0 0;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-italic span.yui-toolbar-icon {
+    background-position: 0 -36px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-underline span.yui-toolbar-icon {
+    background-position: 0 -72px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-subscript span.yui-toolbar-icon {
+    background-position: 0 -180px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-superscript span.yui-toolbar-icon {
+    background-position: 0 -144px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-forecolor span.yui-toolbar-icon {
+    background-position: 0 -216px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-backcolor span.yui-toolbar-icon {
+    background-position: 0 -288px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyleft span.yui-toolbar-icon {
+    background-position: 0 -324px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifycenter span.yui-toolbar-icon {
+    background-position: 0 -360px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyright span.yui-toolbar-icon {
+    background-position: 0 -396px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyfull span.yui-toolbar-icon {
+    background-position: 0 -432px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-indent span.yui-toolbar-icon {
+    background-position: 0 -720px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-outdent span.yui-toolbar-icon {
+    background-position: 0 -684px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-createlink span.yui-toolbar-icon {
+    background-position: 0 -792px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-insertimage span.yui-toolbar-icon {
+    background-position: 0 -756px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-left span.yui-toolbar-icon {
+    background-position: 0 -972px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-right span.yui-toolbar-icon {
+    background-position: 0 -936px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-inline span.yui-toolbar-icon {
+    background-position: 0 -900px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-block span.yui-toolbar-icon {
+    background-position: 0 -864px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-bordercolor span.yui-toolbar-icon {
+    background-position: 0 -252px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-removeformat span.yui-toolbar-icon {
+    background-position: 0 -1080px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-hiddenelements span.yui-toolbar-icon {
+    background-position: 0 -1044px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-insertunorderedlist span.yui-toolbar-icon {
+    background-position: 0 -468px;
+    left: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-insertorderedlist span.yui-toolbar-icon {
+    background-position: 0 -504px;
+    left: 0;
+}
+
+.yui-skin-sam .yui-toolbar-insertorderedlist-menu li {
+    background-image: url( editor-sprite.gif );
+    background-repeat: no-repeat;
+}
+.yui-skin-sam .yui-toolbar-insertorderedlist-menu li.yui-toolbar-insertorderedlist-1 {
+    background-position: 20px -504px;
+    padding: 5px 45px;
+}
+.yui-skin-sam .yui-toolbar-insertorderedlist-menu li.yui-toolbar-insertorderedlist-a {
+    background-position: 20px -576px;
+    padding: 5px 45px;
+}
+.yui-skin-sam .yui-toolbar-insertorderedlist-menu li.yui-toolbar-insertorderedlist-A {
+    background-position: 20px -540px;
+    padding: 5px 45px;
+}
+.yui-skin-sam .yui-toolbar-insertorderedlist-menu li.yui-toolbar-insertorderedlist-i {
+    background-position: 20px -648px;
+    padding: 5px 45px;
+}
+.yui-skin-sam .yui-toolbar-insertorderedlist-menu li.yui-toolbar-insertorderedlist-I {
+    background-position: 20px -612px;
+    padding: 5px 45px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
+    top: -1px;
+    right: 0;
+    background-image: url( editor-sprite.gif );
+    background-position: 0 -1220px;
+    overflow: hidden;
+    height: 8px;
+    width: 8px;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
+    bottom: -1px;
+    right: 0;
+    background-image: url( editor-sprite.gif );
+    background-position: 0 -1188px;
+    overflow: hidden;
+    height: 8px;
+    width: 8px;
+}
+
+.yui-skin-sam .yui-editor-panel .ft span.tip span.icon {
+    background-image: url( editor-sprite.gif );
+    background-position: 0 -1260px;
+    display: block;
+    height: 20px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 20px;
+}
+.yui-skin-sam .yui-editor-panel .ft span.tip span.icon-info {
+    background-position: 2px -1260px;
+}
+.yui-skin-sam .yui-editor-panel .ft span.tip span.icon-warn {
+    background-position: 2px -1296px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select span.yui-toolbar-icon {
+    background-image: url( editor-sprite.gif );
+    background-position: 0px -1144px;
+    overflow: hidden;
+    right: -2px;
+    top: 0px;
+    height: 20px;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select.hover {
+    border-color:#406FAC;
+    background-color: transparent;
+}
+
+.yui-skin-sam .yui-editor-panel .hd span.knob {
+    position: absolute;
+    height: 10px;
+    width: 28px;
+    top: -10px;
+    left: 25px;
+    text-indent: 9999px;
+    overflow: hidden;
+    background-image: url( editor-knob.gif );
+    background-repeat: no-repeat;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-container {
+    float: left;
+    width: 98%;
+    background-image: none;
+    border: none;
+}
+
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group h3 {
+    color: #000;
+    float: left;
+    padding-top: 5px;
+}
