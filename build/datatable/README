@@ -1,12 +1,114 @@
 DataTable Release Notes
 
-***
+*** version 2.3.0 ***
 
-* Row selection and cell selection is not supported concurrently within a single
-DataTable instance.
-* Scrolling a DataTable with an active ColumnEditor will fire an "editorBlurEvent".
-Implementers should take care to explicitly hide the ColumnEditor, as its
-position will be out of sync with its associated Cell element.
+* Applied new skinning model.
+
+* The MVC model has been stabilized and many APIs have been renamed or changed
+quite a bit from the previous version. Implementers should now only use
+DataTable APIs and not use any Record or RecordSet APIs to add/delete/update
+rows, Records, and DOM elements. RecordSet synchronization will be managed for
+you under the hood. For example, myDataTable.addRow() now accepts an object
+literal of data and will create a Record and update the DOM. Calling
+myDataTable.deleteRow() will delete the appropriate Record and update the DOM.
+Please refer to the API reference for full details on property and method names and
+argument signatures. When possible, Logger messages will provide deprecation warnings,
+so implementers upgrading from the previous version are encouraged to use the debug
+build of DataTable.
+
+* The DataTable constructor signature has changed in 2 major ways:
+1) Do not pass in a ColumnSet instance. Instead, pass in an array of Column
+definitions directly, and a ColumnSet instance will be created for you under the hood.
+2) In the progressive enhancement case, first instantiate a DataSource pointing
+to your HTML TABLE element, and then pass in that DataSource instance to your
+DataTable constructor. Please refer to the progressive enhancement example
+for implementation details.
+
+* DataTable now extends Element, which has become a required dependency. Implementers
+should now use the myDataTable.set("propertyName", newValue) syntax instead of direct
+dot notation of any properties.
+
+* The underlying pagination architecture and API have been revised. Specifically,
+the property paginator has been deprecated in favor of paginated and
+paginatorOptions has been deprecated in favor of paginator. Please see the
+pagination examples for implementation details. Please refer to the API reference
+for full details on property and method names and argument signatures.
+
+* The underlying editing architecture and API have been revised. Specifically, the
+ColumnEditor class is no longer used, the method editCell() has been deprecated
+in favor of showCellEditor(), and the Custom Event "cellEditEvent" is now
+"editorSaveEvent". Please see the inline editing example for
+implementation details. Please refer to the API reference for full details on
+property and method names and argument signatures.
+
+* The underlying sort architecture, including YAHOO.util.Sort, has been modified
+to accept a single sort function rather than separate functions for ascending
+and descending sorts.
+
+* Scrolling a DataTable with an active Cell Editor will cancel the edit to
+to prevent the Cell Editor's position from getting out of sync with its
+associated TD element.
+
+* The following static methods are executed in the scope of the DataTable
+instance: DataTable.validateNumber(), DataTable.formatButton(),
+DataTable.formatCheckbox(), DataTable.formatCurrency(), DataTable.formatDate(),
+DataTable.formatDropdown(), DataTable.formatEmail(), DataTable.formatLink(),
+DataTable.formatNumber(), DataTable.formatRadio(), DataTable.formatText(),
+DataTable.formatTextarea(), DataTable.formatTextbox().
+
+* The following DataTable APIs have changed:
+- The following static constants have been removed: CLASS_CURRENCY, CLASS_CURRENTPAGE,
+CLASS_DATE, CLASS_EMAIL, CLASS_FIRSTLINK, CLASS_FIRSTPAGE, CLASS_HEADCONTAINER,
+CLASS_HEADRESIZER, CLASS_HEADTEXT, CLASS_HIGHLIGHT, CLASS_LASTLINK, CLASS_LASTPAGE,
+CLASS_LINK, CLASS_NEXTLINK, CLASS_NEXTPAGE, CLASS_NUMBER, CLASS_PAGELINK,
+CLASS_PAGELINKS, CLASS_PAGESELECT, CLASS_PREVLINK, CLASS_PREVPAGE, CLASS_SORTEDBYASC,
+CLASS_SORTEDBYDESC, CLASS_STRING.
+- The following static constants have been added: CLASS_ASC, CLASS_BUTTON,
+CLASS_DEFAULT, CLASS_DESC, CLASS_DISABLED, CLASS_DROPDOWN, CLASS_HEADER,
+CLASS_HIGHLIGHTED, CLASS_LABEL, CLASS_NEXT, CLASS_PAGE, CLASS_PREVIOUS,
+CLASS_RESIZER
+- The property contextMenu is no longer supported.
+- The property dataSource has been deprecated in favor of the accessor method
+getDataSource().
+- The property fixedWidth is not fully supported.
+- The property sortedBy now defines key instead of colKey.
+- The property rowSingleSelect has been deprecated in favor of selectionMode.
+
+* The following Record APIs have changed:
+- Record data values are no longer accessible with oRecord[key] or oRecord.key.
+Implementers should now use oRecord.getData(key).
+- The property yuiRecordId has been deprecated in favor of the accessor method
+getId().
+
+* The following RecordSet APIs have changed:
+- The method getRecordBy() is not implemented.
+- The method insert() has been deprecated in favor of addRecord() and addRecords().
+- The method replace() has been renamed replaceRecords().
+- The method sort() has been deprecated in favor of sortRecords().
+
+* The following Column APIs have changed:
+- Column type has been deprecated in favor of formatter. In your Column
+definitions, please change type:"date" to formatter:"date", type:"currency" to
+formatter:"currency", etc.
+- The property parser is no longer used. Implementers should use the static
+DataSource methods DataSource.parseDate(), DataSource.parseNumber(), and
+DataSource.parseString() for type conversion functionality.
+- The methods getColSpan() and getRowSpan() have been renamed to getColspan()
+and getRowspan().
+- The return value for the method getId() has been changed.
+- The following methods are no longer implemented: parse(), parseCheckbox(),
+parseDate(), parseNumber(), parseSelect(). Implementers should now use a
+DataSource with a data type of HTML TABLE element.
+- The showEditor() method is no longer implemented. Implementers should now use
+the DataTable method showCellEditor().
+- All static formatter functions have been moved from the Column class to the
+DataTable class.
+
+
+
+
+
+
 
 
 

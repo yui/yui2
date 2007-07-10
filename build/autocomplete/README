@@ -2,10 +2,29 @@ AutoComplete Release Notes
 
 *** version 2.3.0 ***
 
-* In low-latency implementations (e.g., when queryDelay is set to 0 against a local
+* Applied new skinning model.
+
+* The default queryDelay value has been changed to 0.2. In low-latency
+implementations (e.g., when queryDelay is set to 0 against a local
 JavaScript DataSource), typeAhead functionality may experience a race condition
-when retrieving the value of the textbox. Implementers are advised to bump up
-the queryDelay value artificially in this case to avoid this problem.
+when retrieving the value of the textbox. To avoid this problem, implementers
+are advised not to set the queryDelay value too low.
+
+* Fixed runtime property value validation.
+
+* Implemented new method doBeforeSendQuery().
+
+* Implemented new method destroy().
+
+* Added support for latest JSON lib http://www.json.org/json.js.
+
+* Fixed forceSelection issues with matched selections and multiple selections.
+
+* No longer create var oAnim in global scope.
+
+* The properties alwaysShowContainer and useShadow should not be enabled together.
+
+
 
 
 

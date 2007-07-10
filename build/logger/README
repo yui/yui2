@@ -1,6 +1,14 @@
 Logger Release Notes
 
-**** version 2.2.2 ***
+**** version 2.3.0 ****
+
+* Applied new skinning model.
+* Logger singleton no longer clobbers itself.
+* Fixed issues when setting LogReader property footerEnabled to false.
+
+
+
+**** version 2.2.2 ****
 
 * No changes.
 
