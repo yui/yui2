@@ -32,8 +32,9 @@
     border: none;
     font-size: 93%;  /* 12px */
     line-height: 2;  /* ~24px */
-    *line-height: 1.9; /* For IE */
-    height:2em;
+    *line-height: 1.7; /* For IE */
+    min-height: 2em; /* For Gecko */
+    *min-height: auto; /* For IE */
     color: #000; 
 
 }
