@@ -37,7 +37,7 @@ YAHOO.widget.RecordSet = function(data) {
     /**
      * Fired when multiple Records are added to the RecordSet at once.
      *
-     * @event recordAddEvent
+     * @event recordsAddEvent
      * @param oArgs.records {YAHOO.widget.Record[]} An array of Record instances.
      * @param oArgs.data {Object[]} Data added.
      */
@@ -279,29 +279,6 @@ YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
 
 };
 
-/*TODO: Removed from API doc
- * Returns the Record(s) with the given value at the given key.
- *
- * @method getRecordBy
- * @param sKey {String} Name of the key to search.
- * @param oValue {Object} to match against.
- * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} Record or array of
- * Records with the given value at the given key, or null.
- */
-/*YAHOO.widget.RecordSet.prototype.getRecordBy = function(sKey, oValue) {
-     TODO: redo to match new algorithm
-    var record = null;
-    var length = this._records.length;
-    for(var i=length-1; i>0; i--) {
-        record = this._records[i];
-        if(record && (record.extid == extId)) {
-            return record;
-        }
-    }
-    return null;
-
-};*/
-
 /**
  * Adds one Record to the RecordSet at the given index. If index is null,
  * then adds the Record to the end of the RecordSet.
@@ -371,7 +348,7 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
  * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
  * RecordSet position index.
  * @param oData {Object) Object literal of new data.
- * @param {YAHOO.widget.Record} Updated Record, or null.
+ * @return {YAHOO.widget.Record} Updated Record, or null.
  */
 YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     var oRecord = null;

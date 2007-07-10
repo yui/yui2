@@ -139,7 +139,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
     * @config selectionMode
-    * @description Specifies row or cell selection mode. Accepts the following strings
+    * @description Specifies row or cell selection mode. Accepts the following strings:
     *    <dl>
     *      <dt>"standard"</dt>
     *      <dd>Standard row selection with support for modifier keys to enable
@@ -182,11 +182,14 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
     * @config sortedBy
-    * @description Object literal holds sort metadata for UI:
-    *     <ul>
-    *         <li>sortedBy.key</li>
-    *         <li>sortedBy.dir</li>
-    *      </ul>
+    * @description Object literal provides metadata for initial sort values if
+    * data will arrive pre-sorted:
+    * <dl>
+    *     <dt>sortedBy.key</dt>
+    *     <dd>Key of sorted Column</dd>
+    *     <dt>sortedBy.dir</dt>
+    *     <dd>Initial sort direction, either "asc" or "desc"</dd>
+    * </dl>
     * @type Object
     */
     this.setAttributeConfig("sortedBy", {
@@ -219,16 +222,16 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     /**
     * @config paginator
     * @description Object literal of pagination values.
-    * @default {
-    *   containers:[], // UI container elements
-    *   rowsPerPage:500, // 500 rows
-    *   currentPage:1,  // page one
-    *   pageLinks:0,    // show all links
-    *   pageLinksStart:1, // first link is page 1
-    *   dropdownOptions:null, // no dropdown
-    *   links: [], // links elements
-    *   dropdowns: [] //dropdown elements
-    * }
+    * @default <br>
+    *   { containers:[], // UI container elements <br>
+    *   rowsPerPage:500, // 500 rows <br>
+    *   currentPage:1,  // page one <br>
+    *   pageLinks:0,    // show all links <br>
+    *   pageLinksStart:1, // first link is page 1 <br>
+    *   dropdownOptions:null, // no dropdown <br>
+    *   links: [], // links elements <br>
+    *   dropdowns: [] } //dropdown elements
+    * 
     * @type Object
     */
     this.setAttributeConfig("paginator", {
@@ -286,7 +289,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     /**
     * @config paginated
     * @description True if built-in client-side pagination is enabled
-    * @default
+    * @default false
     * @type Boolean
     */
     this.setAttributeConfig("paginated", {
@@ -912,7 +915,7 @@ YAHOO.widget.DataTable.prototype._elMsgTbody = null;
 /**
  * DOM reference to the secondary TBODY element's single TR element used to display DataTable messages.
  *
- * @property _elMsgTbody
+ * @property _elMsgTbodyRow
  * @type HTMLElement
  * @private
  */
@@ -921,7 +924,7 @@ YAHOO.widget.DataTable.prototype._elMsgTbodyRow = null;
 /**
  * DOM reference to the secondary TBODY element's single TD element used to display DataTable messages.
  *
- * @property _elMsgTbody
+ * @property _elMsgTbodyCell
  * @type HTMLElement
  * @private
  */
@@ -1330,10 +1333,6 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
-    // Backward compatibility
-    if(oColumn.text) {
-        oColumn.label = oColumn.text;
-    }
     var sLabel = oColumn.label || oColumn.key;
     if(oColumn.sortable) {
         YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
@@ -4240,11 +4239,6 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
     if(oRecord && oColumn) {
         var oData = oRecord.getData(oColumn.key);
 
-        // Backward compatibility
-        if(oColumn.type && !oColumn.formatter) {
-            oColumn.formatter = oColumn.type;
-        }
-        
         var fnFormatter;
         if(YAHOO.lang.isString(oColumn.formatter)) {
             switch(oColumn.formatter) {
@@ -7548,8 +7542,16 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     if(oColumn.type && (child.type === undefined)) {
                         child.type = oColumn.type;
                     }
-                    // Backward compatibility
+                    if(oColumn.type && !oColumn.formatter) {
+                        oColumn.formatter = oColumn.type;
+                    }
+                    if(oColumn.text && !YAHOO.lang.isValue(oColumn.label)) {
+                        oColumn.label = oColumn.text;
+                    }
                     if(oColumn.parser) {
+                    }
+                    if(oColumn.sortOptions && (oColumn.sortOptions.ascFunction) ||
+                            (oColumn.sortOptions.descFunction)) {
                     }
                 }
 
@@ -8044,7 +8046,7 @@ YAHOO.widget.Column.prototype.getId = function() {
  * Public accessor returns Column's key index within its ColumnSet's keys array, or
  * null if not applicable.
  *
- * @property getKeyIndex
+ * @method getKeyIndex
  * @return {Number} Column's key index within its ColumnSet keys array, if applicable.
  */
 YAHOO.widget.Column.prototype.getKeyIndex = function() {
@@ -8054,7 +8056,7 @@ YAHOO.widget.Column.prototype.getKeyIndex = function() {
 /**
  * Public accessor returns Column's parent instance if any, or null otherwise.
  *
- * @property getParent
+ * @method getParent
  * @return {YAHOO.widget.Column} Column's parent instance.
  */
 YAHOO.widget.Column.prototype.getParent = function() {
@@ -8064,17 +8066,21 @@ YAHOO.widget.Column.prototype.getParent = function() {
 /**
  * Public accessor returns Column's calculated COLSPAN value.
  *
- * @property getColspan
+ * @method getColspan
  * @return {Number} Column's COLSPAN value.
  */
 YAHOO.widget.Column.prototype.getColspan = function() {
     return this._colspan;
 };
+// Backward compatibility
+YAHOO.widget.Column.prototype.getColSpan = function() {
+    return this.getColspan();
+};
 
 /**
  * Public accessor returns Column's calculated ROWSPAN value.
  *
- * @property getRowspan
+ * @method getRowspan
  * @return {Number} Column's ROWSPAN value.
  */
 YAHOO.widget.Column.prototype.getRowspan = function() {
@@ -8082,6 +8088,11 @@ YAHOO.widget.Column.prototype.getRowspan = function() {
 };
 
 // Backward compatibility
+YAHOO.widget.Column.prototype.getIndex = function() {
+    return this.getKeyIndex();
+};
+YAHOO.widget.Column.prototype.format = function() {
+};
 YAHOO.widget.Column.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
     YAHOO.widget.DataTable.formatCheckbox(elCell, oRecord, oColumn, oData);
 };
@@ -8341,7 +8352,7 @@ YAHOO.widget.RecordSet = function(data) {
     /**
      * Fired when multiple Records are added to the RecordSet at once.
      *
-     * @event recordAddEvent
+     * @event recordsAddEvent
      * @param oArgs.records {YAHOO.widget.Record[]} An array of Record instances.
      * @param oArgs.data {Object[]} Data added.
      */
@@ -8581,29 +8592,6 @@ YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
 
 };
 
-/*TODO: Removed from API doc
- * Returns the Record(s) with the given value at the given key.
- *
- * @method getRecordBy
- * @param sKey {String} Name of the key to search.
- * @param oValue {Object} to match against.
- * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} Record or array of
- * Records with the given value at the given key, or null.
- */
-/*YAHOO.widget.RecordSet.prototype.getRecordBy = function(sKey, oValue) {
-     TODO: redo to match new algorithm
-    var record = null;
-    var length = this._records.length;
-    for(var i=length-1; i>0; i--) {
-        record = this._records[i];
-        if(record && (record.extid == extId)) {
-            return record;
-        }
-    }
-    return null;
-
-};*/
-
 /**
  * Adds one Record to the RecordSet at the given index. If index is null,
  * then adds the Record to the end of the RecordSet.
@@ -8663,7 +8651,7 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
  * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
  * RecordSet position index.
  * @param oData {Object) Object literal of new data.
- * @param {YAHOO.widget.Record} Updated Record, or null.
+ * @return {YAHOO.widget.Record} Updated Record, or null.
  */
 YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     var oRecord = null;

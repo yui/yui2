@@ -147,7 +147,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
     * @config selectionMode
-    * @description Specifies row or cell selection mode. Accepts the following strings
+    * @description Specifies row or cell selection mode. Accepts the following strings:
     *    <dl>
     *      <dt>"standard"</dt>
     *      <dd>Standard row selection with support for modifier keys to enable
@@ -190,11 +190,14 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
     * @config sortedBy
-    * @description Object literal holds sort metadata for UI:
-    *     <ul>
-    *         <li>sortedBy.key</li>
-    *         <li>sortedBy.dir</li>
-    *      </ul>
+    * @description Object literal provides metadata for initial sort values if
+    * data will arrive pre-sorted:
+    * <dl>
+    *     <dt>sortedBy.key</dt>
+    *     <dd>Key of sorted Column</dd>
+    *     <dt>sortedBy.dir</dt>
+    *     <dd>Initial sort direction, either "asc" or "desc"</dd>
+    * </dl>
     * @type Object
     */
     this.setAttributeConfig("sortedBy", {
@@ -227,16 +230,16 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     /**
     * @config paginator
     * @description Object literal of pagination values.
-    * @default {
-    *   containers:[], // UI container elements
-    *   rowsPerPage:500, // 500 rows
-    *   currentPage:1,  // page one
-    *   pageLinks:0,    // show all links
-    *   pageLinksStart:1, // first link is page 1
-    *   dropdownOptions:null, // no dropdown
-    *   links: [], // links elements
-    *   dropdowns: [] //dropdown elements
-    * }
+    * @default <br>
+    *   { containers:[], // UI container elements <br>
+    *   rowsPerPage:500, // 500 rows <br>
+    *   currentPage:1,  // page one <br>
+    *   pageLinks:0,    // show all links <br>
+    *   pageLinksStart:1, // first link is page 1 <br>
+    *   dropdownOptions:null, // no dropdown <br>
+    *   links: [], // links elements <br>
+    *   dropdowns: [] } //dropdown elements
+    * 
     * @type Object
     */
     this.setAttributeConfig("paginator", {
@@ -294,7 +297,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     /**
     * @config paginated
     * @description True if built-in client-side pagination is enabled
-    * @default
+    * @default false
     * @type Boolean
     */
     this.setAttributeConfig("paginated", {
@@ -922,7 +925,7 @@ YAHOO.widget.DataTable.prototype._elMsgTbody = null;
 /**
  * DOM reference to the secondary TBODY element's single TR element used to display DataTable messages.
  *
- * @property _elMsgTbody
+ * @property _elMsgTbodyRow
  * @type HTMLElement
  * @private
  */
@@ -931,7 +934,7 @@ YAHOO.widget.DataTable.prototype._elMsgTbodyRow = null;
 /**
  * DOM reference to the secondary TBODY element's single TD element used to display DataTable messages.
  *
- * @property _elMsgTbody
+ * @property _elMsgTbodyCell
  * @type HTMLElement
  * @private
  */
@@ -1351,12 +1354,6 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
-    // Backward compatibility
-    if(oColumn.text) {
-        YAHOO.log("The Column property text has been" +
-        " deprecated in favor of label", "warn", oColumn.toString());
-        oColumn.label = oColumn.text;
-    }
     var sLabel = oColumn.label || oColumn.key;
     if(oColumn.sortable) {
         YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
@@ -4296,13 +4293,6 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
     if(oRecord && oColumn) {
         var oData = oRecord.getData(oColumn.key);
 
-        // Backward compatibility
-        if(oColumn.type && !oColumn.formatter) {
-            YAHOO.log("The Column property type has been" +
-            " deprecated in favor of formatter", "warn", oColumn.toString());
-            oColumn.formatter = oColumn.type;
-        }
-        
         var fnFormatter;
         if(YAHOO.lang.isString(oColumn.formatter)) {
             switch(oColumn.formatter) {

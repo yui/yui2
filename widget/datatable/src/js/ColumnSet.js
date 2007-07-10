@@ -105,10 +105,25 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     if(oColumn.type && (child.type === undefined)) {
                         child.type = oColumn.type;
                     }
-                    // Backward compatibility
+                    if(oColumn.type && !oColumn.formatter) {
+                        YAHOO.log("The property type has been" +
+                        " deprecated in favor of formatter", "warn", oColumn.toString());
+                        oColumn.formatter = oColumn.type;
+                    }
+                    if(oColumn.text && !YAHOO.lang.isValue(oColumn.label)) {
+                        YAHOO.log("The property text has been" +
+                        " deprecated in favor of label", "warn", oColumn.toString());
+                        oColumn.label = oColumn.text;
+                    }
                     if(oColumn.parser) {
                         YAHOO.log("The property parser is no longer supported",
                         "warn", this.toString());
+                    }
+                    if(oColumn.sortOptions && (oColumn.sortOptions.ascFunction) ||
+                            (oColumn.sortOptions.descFunction)) {
+                        YAHOO.log("The properties sortOptions.ascFunction and " +
+                        " sortOptions.descFunction have been deprecated in favor " +
+                        " of sortOptions.sortFunction", "warn", this.toString());
                     }
                 }
 
@@ -604,7 +619,7 @@ YAHOO.widget.Column.prototype.getId = function() {
  * Public accessor returns Column's key index within its ColumnSet's keys array, or
  * null if not applicable.
  *
- * @property getKeyIndex
+ * @method getKeyIndex
  * @return {Number} Column's key index within its ColumnSet keys array, if applicable.
  */
 YAHOO.widget.Column.prototype.getKeyIndex = function() {
@@ -614,7 +629,7 @@ YAHOO.widget.Column.prototype.getKeyIndex = function() {
 /**
  * Public accessor returns Column's parent instance if any, or null otherwise.
  *
- * @property getParent
+ * @method getParent
  * @return {YAHOO.widget.Column} Column's parent instance.
  */
 YAHOO.widget.Column.prototype.getParent = function() {
@@ -624,17 +639,23 @@ YAHOO.widget.Column.prototype.getParent = function() {
 /**
  * Public accessor returns Column's calculated COLSPAN value.
  *
- * @property getColspan
+ * @method getColspan
  * @return {Number} Column's COLSPAN value.
  */
 YAHOO.widget.Column.prototype.getColspan = function() {
     return this._colspan;
 };
+// Backward compatibility
+YAHOO.widget.Column.prototype.getColSpan = function() {
+    YAHOO.log("The method getColSpan() has been" +
+    " deprecated in favor of getColspan()", "warn", this.toString());
+    return this.getColspan();
+};
 
 /**
  * Public accessor returns Column's calculated ROWSPAN value.
  *
- * @property getRowspan
+ * @method getRowspan
  * @return {Number} Column's ROWSPAN value.
  */
 YAHOO.widget.Column.prototype.getRowspan = function() {
@@ -642,6 +663,16 @@ YAHOO.widget.Column.prototype.getRowspan = function() {
 };
 
 // Backward compatibility
+YAHOO.widget.Column.prototype.getIndex = function() {
+    YAHOO.log("The method getIndex() has been" +
+    " deprecated in favor of getKeyIndex()", "warn",
+    this.toString());
+    return this.getKeyIndex();
+};
+YAHOO.widget.Column.prototype.format = function() {
+    YAHOO.log("The method format() has been deprecated in favor of the " +
+    "DataTable method formatCell()", "error", this.toString());
+};
 YAHOO.widget.Column.formatCheckbox = function(elCell, oRecord, oColumn, oData) {
     YAHOO.log("The method YAHOO.widget.Column.formatCheckbox() has been" +
     " deprecated in favor of YAHOO.widget.DataTable.formatCheckbox()", "warn",
