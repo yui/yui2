@@ -1,5 +1,11 @@
 Animation Release Notes
 
+*** version 2.3.0 ***
+
+* duration of zero now executes 1 frame animation
+* added setEl() method to enable reuse
+* fixed stop() for multiple animations
+
 *** version 2.2.2 **
 
 * no change

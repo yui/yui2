@@ -1,5 +1,12 @@
 Dom Release Notes
 
+*** version 2.3.0 ***
+* added getAncestorBy methods
+* added getChildren methods
+* added getSibling methods
+* trimming added for class mgmt methods
+* fixed getXY inside table for Opera 
+
 *** version 2.2.2 ***
 
 * fixed getXY scroll regression
