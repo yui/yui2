@@ -8,6 +8,7 @@ Calendar Release Notes
 	- Added public isDateOOB method, to check if a given date is outside of the minimum/maximum configuration dates of the Calendar.
 	- Deprecated YAHOO.widget.Calendar.browser, refactored to use YAHOO.env.ua instead.
 	- Removed overflow:hidden from default Calendar/CalendarGroup container for non-IE6 browsers to fix clipping issue with IE7 when CalendarGroup was inside a box with a specific width. overflow:hidden is still required for IE6 with an iframe shim.
+	- Added Opera container width calculation fix to CalendarGroup.show method, to fix incorrect wrapping when using a CalendarGroup which is initially rendered hidden (display:none). Previously this fix was only applied on render.
 
 *** version 2.2.2 ***
 

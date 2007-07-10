@@ -99,18 +99,7 @@ YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 
 	// OPERA HACK FOR MISWRAPPED FLOATS
 	if (YAHOO.env.ua.opera){
-		var fixWidth = function() {
-			var startW = this.oDomContainer.offsetWidth;
-			var w = 0;
-			for (var p=0;p<this.pages.length;++p) {
-				var cal = this.pages[p];
-				w += cal.oDomContainer.offsetWidth;
-			}
-			if (w > 0) {
-				this.oDomContainer.style.width = w + "px";
-			}
-		};
-		this.renderEvent.subscribe(fixWidth,this,true);
+		this.renderEvent.subscribe(this._fixWidth, this, true);
 	}
 	this.logger.log("Initialized " + this.pages.length + "-page CalendarGroup", "info");
 };
@@ -1035,6 +1024,17 @@ YAHOO.widget.CalendarGroup.prototype.subtractYears = function(count) {
 };
 
 /**
+* Shows the CalendarGroup's outer container.
+* @method show
+*/
+YAHOO.widget.CalendarGroup.prototype.show = function() {
+	this.oDomContainer.style.display = "block";
+	if (YAHOO.env.ua.opera) {
+		this._fixWidth();
+	}
+};
+
+/**
 * Sets the month on a Date object, taking into account year rollover if the month is less than 0 or greater than 11.
 * The Date object passed in is modified. It should be cloned before passing it into this method if the original value needs to be maintained
 * @method	_setMonthOnDate
@@ -1052,6 +1052,24 @@ YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
 		date.setMonth(iMonth);
 	}
 };
+
+/**
+ * Fixes the width of the CalendarGroup container element, to account for miswrapped floats
+ * @method _fixWidth
+ * @private
+ */
+YAHOO.widget.CalendarGroup.prototype._fixWidth = function() {
+	var startW = this.oDomContainer.offsetWidth;
+	var w = 0;
+	for (var p=0;p<this.pages.length;++p) {
+		var cal = this.pages[p];
+		w += cal.oDomContainer.offsetWidth;
+	}
+	if (w > 0) {
+		this.oDomContainer.style.width = w + "px";
+	}
+};
+
 
 /**
 * CSS class representing the container for the calendar
@@ -1111,7 +1129,6 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "configClose",
 																 "configIframe",
 																 "hide",
-																 "show",
 																 "browser");
 
 /**
