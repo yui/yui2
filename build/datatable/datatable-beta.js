@@ -4825,7 +4825,7 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
         
         // Ok to show all links
         var nMaxLinks = nTotalPages;
-        var nFirstLink = 0;
+        var nFirstLink = 1;
         var nLastLink = nTotalPages;
 
         if(nPageLinksLength > 0) {
