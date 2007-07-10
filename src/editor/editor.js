@@ -512,8 +512,9 @@ var Dom = YAHOO.util.Dom,
         _setInitialContent: function() {
             YAHOO.log('Body of editor populated with contents of the text area', 'info', 'Editor');
             var title = this.STR_TITLE;
+            var html = YAHOO.lang.substitute(this.get('html'), { CONTENT: this.get('textarea').value, TITLE: title, CSS: this.get('css') });
             this._getDoc().open();
-            this._getDoc().write(YAHOO.lang.substitute(this.get('html'), { CONTENT: this.get('textarea').value, TITLE: title, CSS: this.get('css') }));
+            this._getDoc().write(html);
             this._getDoc().close();
             
             this._checkLoaded();   
@@ -559,8 +560,8 @@ var Dom = YAHOO.util.Dom,
         * @returns {HTMLElement} The currently selected element.
         */
         _getSelectedElement: function() {
+            var doc = this._getDoc();
             if (this.browser.ie) {
-                var doc = this._getDoc();
                 var range = this._getRange();
                 if (range) {
                     var elm = range.item ? range.item(0) : range.parentElement();
@@ -571,6 +572,7 @@ var Dom = YAHOO.util.Dom,
                 } else {
                     elm = doc;
                 }
+                return elm;
             } else {
                 var sel = this._getSelection(),
                     range = this._getRange(),
@@ -592,24 +594,22 @@ var Dom = YAHOO.util.Dom,
                         elm = null;
                     }
                 
-                }
-                
-                
-                if (!elm) {
-                    elm = range.commonAncestorContainer;
+                    if (!elm) {
+                        elm = range.commonAncestorContainer;
+                        if (!range.collapsed) {
+                            if (range.startContainer == range.endContainer) {
+                                if (range.startOffset - range.endOffset < 2) {
+                                    if (range.startContainer.hasChildNodes()) {
+                                        elm = range.startContainer.childNodes[range.startOffset];
+                                    }
+                                }
+                            }
+                        }
+                    }
                     //Safari Fix
                     if (!elm) {
                         if (this.currentEvent) {
                             elm = Event.getTarget(this.currentEvent);
-                        }
-                    }
-                    if (!range.collapsed) {
-                        if (range.startContainer == range.endContainer) {
-                            if (range.startOffset - range.endOffset < 2) {
-                                if (range.startContainer.hasChildNodes()) {
-                                    elm = range.startContainer.childNodes[range.startOffset];
-                                }
-                            }
                         }
                     }
                 }
@@ -625,10 +625,14 @@ var Dom = YAHOO.util.Dom,
                 elm = this.currentElement;
             }
 
-            if (this.browser.opera) {
+            if (this.browser.opera || this.browser.webkit) {
                 if (this.currentEvent) {
                     elm = Event.getTarget(this.currentEvent);
                 }
+            }
+
+            if (!elm) {
+                elm = doc;
             }
             
             return elm;
@@ -1134,7 +1138,6 @@ var Dom = YAHOO.util.Dom,
         * @description Gets the menu from a button instance, if the menu is not rendered it will render it. It will then search the menu for the specified value, unchecking all other items and checking the specified on.
         */
         _updateMenuChecked: function(button, value, tbar) {
-            /*
             if (!tbar) {
                 tbar = this.toolbar;
             }
@@ -1150,7 +1153,6 @@ var Dom = YAHOO.util.Dom,
                     _menuItems[i].cfg.setProperty('checked', true);
                 }
             }
-            */
         },
         /**
         * @private
@@ -1440,7 +1442,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('hiddencss', {
-                value: attr.hiddencss || 'div, p, span { border: 1px dotted #ccc; } .yui-non { border: none; }',
+                value: attr.hiddencss || 'div, p, span, img { border: 1px dotted #ccc; } .yui-non { border: none; } img { padding: 2px; }',
                 writeOnce: true
             });
             /**
@@ -1871,10 +1873,12 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
+            
             if (elm && elm.tagName && (elm.tagName.toLowerCase() != 'body')) {
                 this.toolbar.enableButton(fn_button);
                 this.toolbar.enableButton(fs_button);
             }
+            
         },
         /**
         * @private
@@ -1898,7 +1902,6 @@ var Dom = YAHOO.util.Dom,
                     el = this._getSelectedElement();
                 }
                 if (el) {
-                    //el.scrollIntoView(true);
                     if (el.getAttribute('src')) {
                         src = el.getAttribute('src', 2);
                         if (src.indexOf(this.get('blankimage')) != -1) {
@@ -2214,9 +2217,6 @@ var Dom = YAHOO.util.Dom,
                     target = '',
                     localFile = false;
                 if (el) {
-                    if (!this.browser.ie) {
-                        el.scrollIntoView(true); //TODO IE Freaks on this.. It scrollscrolls iframe and the parent document
-                    }
                     if (el.getAttribute('href') != null) {
                         url = el.getAttribute('href');
                         if ((url != '') && ((url.indexOf('file:/') != -1) || (url.indexOf(':\\') != -1))) {
@@ -2506,15 +2506,7 @@ var Dom = YAHOO.util.Dom,
                         this.currentElement = el;
                         exec = false;
                     } else {
-                        if (!this._getDoc().queryCommandEnabled(action)) {
-                            this.createCurrentElement('img');
-                            var _img = this._getDoc().createElement('img');
-                            _img.setAttribute('src', value);
-                            Dom.addClass(_img, 'yui-img');
-                            this.currentElement.parentNode.replaceChild(_img, this.currentElement);
-                            this.currentElement = _img;
-                            exec = false;
-                        } else {
+                        if (this._getDoc().queryCommandEnabled(action)) {
                             this._getDoc().execCommand('insertimage', false, value);
                             var imgs = this._getDoc().getElementsByTagName('img');
                             for (var i = 0; i < imgs.length; i++) {
@@ -2523,6 +2515,14 @@ var Dom = YAHOO.util.Dom,
                                     this.currentElement = imgs[i];
                                 }
                             }
+                            exec = false;
+                        } else {
+                            this.createCurrentElement('img');
+                            var _img = this._getDoc().createElement('img');
+                            _img.setAttribute('src', value);
+                            Dom.addClass(_img, 'yui-img');
+                            this.currentElement.parentNode.replaceChild(_img, this.currentElement);
+                            this.currentElement = _img;
                             exec = false;
                         }
                     }
@@ -2542,6 +2542,14 @@ var Dom = YAHOO.util.Dom,
                         _span.innerHTML = value;
                         this.currentElement.parentNode.replaceChild(_span, this.currentElement);
                         exec = false;
+                    } else if (this.browser.ie) {
+                        var _range = this._getRange();
+                        if (_range.item) {
+                            _range.item(0).outerHTML = value;
+                        } else {
+                            _range.pasteHTML(value);
+                        }
+                        exec = false;                    
                     }
                     break;
                 case 'removeformat':
@@ -2764,13 +2772,12 @@ var Dom = YAHOO.util.Dom,
                 return el;
             };
 
-            //if (sel == '') {
             if (!this._hasSelection()) {
                 if (this._getDoc().queryCommandEnabled('insertimage')) {
                     this._getDoc().execCommand('insertimage', false, 'yui-tmp-img');
                     var imgs = this._getDoc().getElementsByTagName('img');
                     for (var i = 0; i < imgs.length; i++) {
-                        if (imgs[i].getAttribute('src') == 'yui-tmp-img') {
+                        if (imgs[i].getAttribute('src', 2) == 'yui-tmp-img') {
                             el = _elCreate();
                             imgs[i].parentNode.replaceChild(el, imgs[i]);
                             this.currentElement = el;
@@ -2969,11 +2976,15 @@ var Dom = YAHOO.util.Dom,
             this.get('panel').setBody('---');
             this.get('panel').setHeader(' ');
             this.get('panel').setFooter(' ');
-            Event.on(window, 'load', function() {
+            if (this.DOMReady) {
                 this.get('panel').render(document.body);
                 Dom.addClass(this.get('panel').element, 'yui-editor-panel');
-            }, this, true);
-
+            } else {
+                Event.onDOMReady(function() {
+                    this.get('panel').render(document.body);
+                    Dom.addClass(this.get('panel').element, 'yui-editor-panel');
+                }, this, true);
+            }
             this.get('panel').showEvent.subscribe(function() {
                 YAHOO.util.Dom.setStyle(this.element, 'display', 'block');
             });
@@ -3039,8 +3050,10 @@ var Dom = YAHOO.util.Dom,
             panel.cfg.setProperty('width', win.attrs.width);
             panel.setHeader(' '); //Clear the current header
             panel.appendToHeader(_header);
-            panel.appendToHeader(_close);
-            panel.appendToHeader(_knob);
+            _header.appendChild(_close);
+            _header.appendChild(_knob);
+            //panel.appendToHeader(_close);
+            //panel.appendToHeader(_knob);
             panel.setBody(' '); //Clear the current body
             panel.setFooter(' '); //Clear the current footer
             if (win.footer != null) {
@@ -3074,7 +3087,8 @@ var Dom = YAHOO.util.Dom,
                 xy = Dom.getXY(this.currentElement),
                 elXY = Dom.getXY(this.get('iframe').get('element')),
                 panel = this.get('panel'),
-                newXY = [(xy[0] + elXY[0] - 20), (xy[1] + elXY[1] + 10)],
+                //newXY = [(xy[0] + elXY[0] - 20), (xy[1] + elXY[1] + 10)],
+                newXY = [(xy[0] + elXY[0]), (xy[1] + elXY[1])],
                 wWidth = (parseInt(win.attrs.width) / 2),
                 align = 'center',
                 orgXY = panel.cfg.getProperty('xy'),
@@ -3123,28 +3137,26 @@ var Dom = YAHOO.util.Dom,
             yDiff = ((yDiff < 0) ? (yDiff * -1) : yDiff);
 
             if (((xDiff > 10) || (yDiff > 10)) || force) { //Only move the window if it's supposed to move more than 10px or force was passed (new window)
-                var _knobLeft = null;
+                var _knobLeft = 0,
+                    elW = 0;
 
-                if (align == 'center') {
-                    _knobLeft = (parseInt(win.attrs.width) / 2);
-                } else if (align == 'right') {
-                    _knobLeft = (xy[0] - newXY[0]);
-                    if (this.currentElement.width) {
-                        _knobLeft = _knobLeft + (parseInt(this.currentElement.width) / 2);
-                    }
-                } else {
-                    var leftOffset = (xy[0] - newXY[0]);
-                    if (leftOffset < newXY[0]) {
-                        leftOffset = newXY[0];
-                    }
-                    if (this.currentElement.width) {
-                        _knobLeft = leftOffset + (parseInt(this.currentElement.width) / 2);
-                    } else {
-                        _knobLeft = leftOffset;
-                    }
+                if (this.currentElement.width) {
+                    elW = (parseInt(this.currentElement.width) / 2);
                 }
+
+                var leftOffset = xy[0] + elXY[0] + elW;
+                _knobLeft = leftOffset - newXY[0];
+                //Check to see if the knob will go off either side & reposition it
+                if (_knobLeft > (parseInt(win.attrs.width) - 40)) {
+                    _knobLeft = parseInt(win.attrs.width) - 40;
+                } else if (_knobLeft < 40) {
+                    _knobLeft = 40;
+                }
+
                 if (force) {
-                    _knob.style.left = _knobLeft + 'px';
+                    if (_knob) {
+                        _knob.style.left = _knobLeft + 'px';
+                    }
                     if (this.get('animate')) {
                         Dom.setStyle(panel.element, 'opacity', '0');
                         var anim = new YAHOO.util.Anim(panel.element, {

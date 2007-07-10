@@ -83,7 +83,7 @@
     overflow: hidden;
     display: block;
     float: left;
-    margin: 0 .15em;
+    margin: 0 1px;
     position: relative;
     filter: none; /* UNDO Button filter..*/
 }
@@ -156,7 +156,6 @@
 }
 .yui-toolbar-container .yui-toolbar-select .first-child a {
     text-indent: 3px !important;
-    padding-top: 2px;
     width: 100% !important; /* For IE */
 }
 
@@ -215,7 +214,6 @@
     background-repeat: no-repeat;
     width: 28px;
     height: 20px;
-    padding: 2px;
     text-align: left;
     text-indent: 2px !important;
     z-index: 0;
@@ -452,12 +450,6 @@
 .yui-editor-panel .yui-toolbar-container div.yuimenu li.yuimenuitem a {
     float: none;
 }
-
-.yui-toolbar-bordersize-menu {
-    border: 3px solid purple;
-}
-
-
 
 .yui-editor-panel .yui-toolbar-bordertype span a span.yui-toolbar-bordertype-solid {
     border-bottom: 1px solid black;
