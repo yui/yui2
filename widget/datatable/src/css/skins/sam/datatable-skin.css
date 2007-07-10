@@ -1,5 +1,5 @@
 /* basic skin styles */
-.yui-skin-sam .yui-dt-table {margin:1em;font-family:arial;font-size:inherit;border-collapse:collapse;}
+.yui-skin-sam .yui-dt-table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;border:1px solid #7F7F7F;}
 .yui-skin-sam .yui-dt-table caption {padding-bottom:1em;}
 .yui-skin-sam .yui-dt-table th {
     background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
@@ -14,12 +14,16 @@
     padding:4px 10px 4px 10px; /* cell padding */
     border-right:1px solid #CBCBCB; /* inner column border */
 }
+.yui-skin-sam .yui-dt-table th.yui-dt-last,
+.yui-skin-sam .yui-dt-table td.yui-dt-last {
+    border-right:1px solid #7F7F7F; /* outer border */
+}
 .yui-skin-sam .yui-dt-list td {
     border-right:none; /* disable inner column border in list mode */
 }
 .yui-skin-sam .yui-dt-table thead {
     border:1px solid #989898; /* outer border */
-} 
+}
 .yui-skin-sam .yui-dt-table tbody {
     border-left:1px solid #7F7F7F;border-right:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F; /* outer border */
 }
@@ -109,6 +113,26 @@
 .yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-asc,
 .yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
 
+/* highlighting */
+.yui-skin-sam tr.yui-dt-highlighted,
+.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-sam tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-sam tr.yui-dt-odd td.yui-dt-highlighted {
+    cursor:pointer;
+    background-color:#B2D2FF; /* med blue hover */
+}
+
+/* enable highlighting in list mode */
+.yui-skin-sam .yui-dt-list tr.yui-dt-highlighted,
+.yui-skin-sam .yui-dt-list tr.yui-dt-highlighted td.yui-dt-asc,
+.yui-skin-sam .yui-dt-list tr.yui-dt-highlighted td.yui-dt-desc,
+.yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-highlighted,
+.yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-highlighted {
+    cursor:pointer;
+    background-color:#B2D2FF; /* med blue  hover */
+}
+
 /* selection */
 .yui-skin-sam tr.yui-dt-selected td,
 .yui-skin-sam tr.yui-dt-selected td.yui-dt-asc,
@@ -133,26 +157,6 @@
 .yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-selected {
     background-color:#446CD7; /* bright blue selected cell */
     color:#FFF;
-}
-
-/* highlighting */
-.yui-skin-sam tr.yui-dt-highlighted,
-.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-asc,
-.yui-skin-sam tr.yui-dt-highlighted td.yui-dt-desc,
-.yui-skin-sam tr.yui-dt-even td.yui-dt-highlighted,
-.yui-skin-sam tr.yui-dt-odd td.yui-dt-highlighted {
-    cursor:pointer;
-    background-color:#B2D2FF; /* med blue hover */
-}
-
-/* enable highlighting in list mode */
-.yui-skin-sam .yui-dt-list tr.yui-dt-highlighted,
-.yui-skin-sam .yui-dt-list tr.yui-dt-highlighted td.yui-dt-asc,
-.yui-skin-sam .yui-dt-list tr.yui-dt-highlighted td.yui-dt-desc,
-.yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-highlighted,
-.yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-highlighted {
-    cursor:pointer;
-    background-color:#B2D2FF; /* med blue  hover */
 }
 
 /* pagination */
