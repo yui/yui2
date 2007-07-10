@@ -58,7 +58,9 @@
             'type': 'js',
             'path': 'container/container-min.js',
             'requires': ['dom', 'event'],
-            'optional': ['dragdrop', 'animation', 'button'],
+            // button is optional, but creates a circular dep
+            //'optional': ['dragdrop', 'animation', 'button'],
+            'optional': ['dragdrop', 'animation'],
             'supersedes': ['containercore'],
             'skinnable': true
         },

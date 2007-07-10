@@ -19,8 +19,6 @@
         }
     }
 
-    var initLoadComplete = false;
-
     YAHOO_config = {
         listener: function(minfo) {
             log("page load listener: " + minfo.name);
@@ -34,13 +32,12 @@
 
             onLoadComplete: function(loader) {
                 
-                if (!initLoadComplete) {
-
                     YAHOO.example.tabviewinit = function( ){
 
                         log("tabview init");
                         var tabView = new YAHOO.widget.TabView( { id: 'demo' } );
                         
+
                         tabView.addTab( new YAHOO.widget.Tab({
                             label: 'lorem',
                             content: '<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat.</p>',
@@ -63,8 +60,6 @@
                         });
                     };
                     
-                    // var loader = new YAHOO.util.YUILoader();
-
                     function checkJSON(name, loaderCallback) {
                                 if (Object.prototype.toJSONString) {
                                     loaderCallback();
@@ -83,7 +78,7 @@
                         });
 
                     loader.require("tabview", "treeview", "json", "datatable");
-                    /*
+
                     loader.onLoadComplete = function() {
                                 log("insert callback");
                                 YAHOO.util.Event.onAvailable("treediv", function() {
@@ -102,7 +97,8 @@
                                     });
                                                 
                             };
-                            */
+                    loader.insert();
+                            /*
 
                     loader.insert(function() {
                                 log("insert callback");
@@ -122,12 +118,9 @@
                                 });
                                                 
                             });
+                    */
 
                     log(loader.sorted);
-
-                }
-
-                initLoadComplete = true;
 
 
             }

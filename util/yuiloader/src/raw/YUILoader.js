@@ -14,7 +14,6 @@
  * YUILoader provides dynamic loading for YUI.
  * @class YAHOO.util.YUILoader
  * @todo
- *      sandboxing
  *      version management, automatic sandboxing
  */
 (function() {
@@ -222,8 +221,8 @@
         o = o || {};
 
         /**
-         * Internal callback to handle multiple internal insert() of css
-         * prior to js
+         * Internal callback to handle multiple internal insert() calls
+         * so that css is inserted prior to js
          * @property _internalCallback
          * @private
          */
@@ -232,7 +231,7 @@
         /**
          * Callback that will be executed when the loader is finished
          * with an insert
-         * @method onLoadComplte
+         * @method onLoadComplete
          * @type function
          */
         this.onLoadComplete = null;
@@ -252,6 +251,13 @@
          * @default false
          */
         this.allowRollup = ("allowRollup" in o) ? this.allowRollup : true;
+
+        /**
+         * Filter to apply to result url
+         * @property filter
+         * @type string|object
+         */
+        this.filter = o.filter;
 
         /**
          * Create a sandbox rather than inserting into lib into.
@@ -922,6 +928,7 @@
             if (!type) {
                 var self = this;
                 this._internalCallback = function() {
+                            self._internalCallback = null;
                             self.insert(callback, o, "js");
                         };
                 this.insert(null, o, "css");
@@ -946,7 +953,7 @@
                 }
             }
 
-            this.filter = this.FILTERS[f] || f;
+            this.filter = this.FILTERS[f] || f || this.FILTERS[this.filter] || this.filter;
 
             // store the options... not currently in use
             this.insertOptions = o;
@@ -1067,18 +1074,14 @@
             // we are finished
             this.loading = null;
 
-            this._pushEvents();
 
-            // insert can accept a callback when called directly.  This overrides
-            // the global onLoadComplete callback for the duration of the insert
-
-            var f;
-
+            // internal callback for loading css first
             if (this._internalCallback) {
-                f = this._internalCallback;
+                var f = this._internalCallback;
                 this._internalCallback = null;
                 f(this);
             } else if (this.onLoadComplete) {
+                this._pushEvents();
                 this.onLoadComplete(this);
             }
 
