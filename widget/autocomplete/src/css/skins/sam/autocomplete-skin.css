@@ -7,7 +7,7 @@
 .yui-skin-sam .yui-ac-shadow {
     position:absolute;margin:.3em;width:100%;background:#000;-moz-opacity: 0.10;opacity:.10;filter:alpha(opacity=10);z-index:9049;
 }
-.yui-skin-sam ul{margin:0;padding:0;width:100%;}
+.yui-skin-sam .yui-ac-content ul{margin:0;padding:0;width:100%;}
 .yui-skin-sam .yui-ac-content li {margin:0;padding:2px 5px;cursor:default;white-space:nowrap;}
 .yui-skin-sam .yui-ac-content li.yui-ac-prehighlight{background:#B3D4FF;}
 .yui-skin-sam .yui-ac-content li.yui-ac-highlight{background:#426FD9;color:#FFF;}
