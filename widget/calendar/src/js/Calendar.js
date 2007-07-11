@@ -349,7 +349,7 @@ YAHOO.widget.Calendar.prototype = {
 * @param {Object}	config		The configuration object containing the Calendar's arguments
 */
 YAHOO.widget.Calendar.prototype.init = function(id, containerId, config) {
-	this.logger = new YAHOO.widget.LogWriter("Calendar_Core " + id);
+	this.logger = new YAHOO.widget.LogWriter("Calendar " + id);
 	this.initEvents();
 	this.today = new Date();
 	YAHOO.widget.DateMath.clearTime(this.today);
