@@ -39,5 +39,5 @@ th .yui-dt-resizer {
 }
 
 .yui-dt-editor {
-    position:absolute;
+    position:absolute;z-index:9000;
 }
