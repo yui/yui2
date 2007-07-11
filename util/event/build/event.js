@@ -1398,6 +1398,7 @@ if (!YAHOO.util.Event) {
              * @private
              */
             _load: function(e) {
+
                 if (!loadComplete) {
                     loadComplete = true;
                     var EU = YAHOO.util.Event;
@@ -1453,8 +1454,11 @@ if (!YAHOO.util.Event) {
                     return false;
                 }
 
-                if (this.isIE && !DOMReady) {
-                    return false;
+                if (this.isIE) {
+                    if (!DOMReady || "complete" !== document.readyState) {
+                        this.startInterval();
+                        return false;
+                    }
                 }
 
                 this.locked = true;
@@ -1806,18 +1810,19 @@ if (!YAHOO.util.Event) {
 
             document.write(
 '<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"><' + '/script>');
+
         
             var el = document.getElementById("_yui_eu_dr");
             if (el) {
                 el.onreadystatechange = function() {
-                    if ("complete" == this.readyState) {
+                    if ("complete" === this.readyState) {
                         this.parentNode.removeChild(this);
                         YAHOO.util.Event._ready();
                     }
                 };
             } else {
                 // The library was probably injected into the page
-                // rendering the onDOMReady functionality pointless.
+                // rendering onDOMReady almost pointless.
                 // YAHOO.util.Event._ready();
             }
 
@@ -1849,10 +1854,12 @@ if (!YAHOO.util.Event) {
         }
         /////////////////////////////////////////////////////////////
 
+
         EU._simpleAdd(window, "load", EU._load);
         EU._simpleAdd(window, "unload", EU._unload);
         EU._tryPreloadAttach();
     })();
+
 }
 /**
  * EventProvider is designed to be used with YAHOO.augment to wrap 
