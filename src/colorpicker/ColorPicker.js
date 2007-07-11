@@ -681,7 +681,7 @@
             },
             RGBElem = function(type, obj) {
                 var o = lang.merge({
-                        type: "txt",
+                        //type: "txt",
                         autocomplete: "off",
                         value: "0",
                         size: 3,
