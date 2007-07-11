@@ -171,10 +171,12 @@ when one of its submenus is visible.
 
 .yui-skin-sam .yuimenubaritemlabel {
 
+    display: block;
+    _display: inline-block; /* For IE 6 strict and quirks, IE 7 quirks mode */
     font-size: 93%;  /* 12px */
     line-height: 2;  /* ~24px */
     *line-height: 1.9; /* For IE */
-    float: left;
+    *height: 1.9em; /* For IE */
     padding: 0 10px;
     color: #000;
     text-decoration: none;
@@ -237,6 +239,7 @@ when one of its submenus is visible.
 
     border-left-width: 1px;
     margin-left: -1px;
+    _left: -1px;    /* For IE 6 strict and quirks, IE 7 quirks mode */
 
 }
 
@@ -507,6 +510,7 @@ when one of its submenus is visible.
 
     border-width: 0;
     margin: 0;
+    _left: 0;    /* For IE 6 strict and quirks, IE 7 quirks mode */
 
 }
 
