@@ -930,7 +930,7 @@ YAHOO.widget.AutoComplete.prototype._sLastTextboxValue = null;
 YAHOO.widget.AutoComplete.prototype._initProps = function() {
     // Correct any invalid values
     var minQueryLength = this.minQueryLength;
-    if(!YAHOO.lang.isNumber(minQueryLength) || (minQueryLength < 1)) {
+    if(!YAHOO.lang.isNumber(minQueryLength)) {
         this.minQueryLength = 1;
     }
     var maxResultsDisplayed = this.maxResultsDisplayed;
@@ -1198,7 +1198,7 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     }
 
     // Don't search queries that are too short
-    if(sQuery && (sQuery.length < this.minQueryLength) || (!sQuery && this.minQueryLength > 0)) {
+    if((sQuery && (sQuery.length < this.minQueryLength)) || (!sQuery && this.minQueryLength > 0)) {
         if(this._nDelayID != -1) {
             clearTimeout(this._nDelayID);
         }
