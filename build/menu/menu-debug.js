@@ -4623,6 +4623,18 @@ onRender: function (p_sType, p_aArgs) {
     
     }
 
+    function addShadowVisibleClass() {
+    
+        Dom.addClass(this._shadow, "yui-menu-shadow-visible");
+    
+    }
+    
+    function removeShadowVisibleClass() {
+
+        Dom.removeClass(this._shadow, "yui-menu-shadow-visible");
+    
+    }
+
 
     function createShadow() {
 
@@ -4649,6 +4661,19 @@ onRender: function (p_sType, p_aArgs) {
             oElement.appendChild(oShadow);
             
             this._shadow = oShadow;
+
+            addShadowVisibleClass.call(this);
+
+            this.beforeShowEvent.subscribe(addShadowVisibleClass);
+            this.beforeHideEvent.subscribe(removeShadowVisibleClass);
+
+            this.destroyEvent.subscribe(function () {
+            
+                this.beforeShowEvent.unsubscribe(addShadowVisibleClass);
+                this.beforeHideEvent.unsubscribe(removeShadowVisibleClass);
+            
+            });
+
 
             if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
         

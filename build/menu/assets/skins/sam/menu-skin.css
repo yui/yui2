@@ -310,7 +310,7 @@
 
 /* Visible Menu */
 
-.yui-skin-sam .visible .yui-menu-shadow {
+.yui-skin-sam .yui-menu-shadow-visible {
 
     top: 2px;
     right: -3px;
