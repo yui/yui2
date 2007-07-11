@@ -444,6 +444,7 @@ when one of its submenus is visible.
     background-color: #000;
     opacity: .12;
     *filter: alpha(opacity=12);  /* For IE */
+    visibility: visible;
 
 }
 
