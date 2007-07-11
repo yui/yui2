@@ -847,6 +847,11 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
+            //This will stop Safari from selecting the entire document if you select all the text in the editor
+            if (this.browser.webkit) {
+                this.nodeChange();
+                Event.stopEvent(ev);
+            }            
             this.fireEvent('editorMouseUp', { type: 'editorMouseUp', target: this, ev: ev });
         },
         /**
@@ -1895,7 +1900,7 @@ var Dom = YAHOO.util.Dom,
                     width = 75,
                     padding = 0,
                     win = new YAHOO.widget.EditorWindow('insertimage', {
-                        width: '385px'
+                        width: '380px'
                     });
 
                 if (!el) {
@@ -2961,11 +2966,13 @@ var Dom = YAHOO.util.Dom,
         */
         _renderPanel: function() {
             if (!YAHOO.widget.EditorInfo.panel) {
-                var panel = new YAHOO.widget.Overlay(this.EDITOR_PANEL_ID, {
+                var panel = new YAHOO.widget.Panel(this.EDITOR_PANEL_ID, {
                     width: '300px',
                     iframe: true,
                     visible: false,
-                    underlay: 'none'
+                    underlay: 'none',
+                    draggable: false,
+                    close: false
                 });
                 YAHOO.widget.EditorInfo.panel = panel;
             } else {
@@ -3166,6 +3173,11 @@ var Dom = YAHOO.util.Dom,
                             }
                         }, .1, YAHOO.util.Easing.easeOut);
                         panel.cfg.setProperty('xy', newXY);
+                        anim.onComplete.subscribe(function() {
+                            if (this.browser.ie) {
+                                panel.element.style.filter = 'none';
+                            }
+                        }, this, true);
                         anim.animate();
                     } else {
                         panel.cfg.setProperty('xy', newXY);

@@ -1053,11 +1053,13 @@ var Dom = YAHOO.util.Dom,
                 //Move the DOM reference of the color picker to the Overlay that we are about to show.
                 this._resetColorPicker();
                 var _p = this._colorPicker;
-                if (_p.parentNode != _oButton.menu.body) {
-                    _oButton.menu.setBody('');
-                    _p.parentNode.removeChild(_p);
-                    _oButton.menu.appendToBody(_p);
+                if (_p.parentNode) {
+                    //if (_p.parentNode != _oButton.menu.body) {
+                        _p.parentNode.removeChild(_p);
+                    //}
                 }
+                _oButton.menu.setBody('');
+                _oButton.menu.appendToBody(_p);
                 this._colorPicker.style.display = 'block';
             }, this, true);
             return _oButton;

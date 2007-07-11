@@ -250,6 +250,7 @@
     display: none;
     border: 1px solid #6D6D6D;
     z-index: 100;
+    overflow: hidden;
 }
 
 .yui-toolbar-colors:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
@@ -267,6 +268,11 @@
 }
 .yui-toolbar-colors a:hover {
     border: 1px solid black;
+}
+
+.yui-color-button-menu {
+    overflow: hidden;
+    background-color: transparent;
 }
 
 .yui-toolbar-colors span {
@@ -375,7 +381,7 @@
 .yui-editor-panel label {
     clear: both;
     float: left;
-    padding: .2em;
+    padding: 0;
     overflow: auto; /* This fixes the caret issue in Firefox */
     width: 100%;
     zoom: 1;
@@ -625,7 +631,7 @@ h2.yui-editor-skipheader {
     background-color: #F2F2F2;
 }
 
-.yui-skin-sam .yui-editor-container .visible .yui-menu-shadow {
+.yui-skin-sam .yui-editor-container .visible .yui-menu-shadow, .yui-skin-sam .yui-editor-panel .visible .yui-menu-shadow {
     display: none;
 }
 
@@ -822,6 +828,11 @@ h2.yui-editor-skipheader {
     padding: 5px 45px;
 }
 
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton span.yui-toolbar-icon {
+    display: none;
+}
+
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
     top: -1px;
     right: 0;
@@ -857,28 +868,49 @@ h2.yui-editor-skipheader {
     background-color: transparent;
 }
 
+.yui-skin-sam .yui-editor-panel .yui-color-button-menu .bd {
+    background-color: transparent;
+    border: none;
+    width: 135px;
+}
+
+.yui-skin-sam .yui-editor-panel .yui-color-button-menu .yui-toolbar-colors {
+    background-color: #f2f2f2;
+    border: 1px solid #808080;
+}
+
+.yui-skin-sam .yui-editor-panel .yui-panel {
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
 .yui-skin-sam .yui-editor-panel {
-    overflow: hidden;
 }
 
 .yui-skin-sam .yui-editor-panel .hd {
     margin: 13px 0 0;
+    padding: 0;
+    border: none;
 }
 .yui-skin-sam .yui-editor-panel .hd h3 {
     color: #000;
     border: 1px solid #808080;
     background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
-    width: 98%;
+    width: 99%;
     position: relative;
     margin: 0;
+    padding: 0;
     font-size: 93%;
+    text-indent: 5px;
 }
 .yui-skin-sam .yui-editor-panel .bd {
     background-color: #F2F2F2;
     border-left: 1px solid #808080;
     border-right: 1px solid #808080;
-    overflow: hidden;
     width: 99%;
+    margin: 0;
+    padding: 0;
 }
 .yui-skin-sam .yui-editor-panel ul {
     list-style-type: none;
@@ -904,6 +936,9 @@ h2.yui-editor-skipheader {
     background-color: #F2F2F2;
     border: 1px solid #808080;
     border-top: none;
+    padding: 0;
+    margin: 0;
+    z-index: -1;
 }
 
 .yui-skin-sam .yui-editor-panel .hd span.close {

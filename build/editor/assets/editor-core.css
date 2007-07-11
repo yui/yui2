@@ -250,6 +250,7 @@
     display: none;
     border: 1px solid #6D6D6D;
     z-index: 100;
+    overflow: hidden;
 }
 
 .yui-toolbar-colors:after { display: block; clear: both; visibility: hidden; content: '.'; height: 0;}
@@ -267,6 +268,11 @@
 }
 .yui-toolbar-colors a:hover {
     border: 1px solid black;
+}
+
+.yui-color-button-menu {
+    overflow: hidden;
+    background-color: transparent;
 }
 
 .yui-toolbar-colors span {
@@ -375,7 +381,7 @@
 .yui-editor-panel label {
     clear: both;
     float: left;
-    padding: .2em;
+    padding: 0;
     overflow: auto; /* This fixes the caret issue in Firefox */
     width: 100%;
     zoom: 1;

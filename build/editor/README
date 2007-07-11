@@ -1,3 +1,10 @@
 **** version 2.3.0 ***
 
 * Beta release.
+
+* The examples description code is out of sync with the actual code used to provide the example
+* The only server side resource required to run the editor, is the blankimage file.
+    This can be set using:
+    var myEditor = new YAHOO.widget.Editor('test', {
+        blankimage: 'MY_IMAGE_PATH'
+    });
