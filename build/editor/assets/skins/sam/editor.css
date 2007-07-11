@@ -30,6 +30,7 @@
 
 .yui-toolbar-container .yui-toolbar-titlebar h2 {
     font-weight: bold;
+    border: none;
     color: #000;
     margin: 0;
     padding: .2em;
@@ -601,6 +602,8 @@ div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-do
 h2.yui-editor-skipheader {
     height: 0;
     margin: 0;
+    padding: 0;
+    border: none;
     width: 0;
     overflow: hidden;
 }
@@ -903,6 +906,7 @@ h2.yui-editor-skipheader {
     padding: 0;
     font-size: 93%;
     text-indent: 5px;
+    height: 20px;
 }
 .yui-skin-sam .yui-editor-panel .bd {
     background-color: #F2F2F2;

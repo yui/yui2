@@ -1696,7 +1696,7 @@ var Dom = YAHOO.util.Dom,
         * @description The Toolbar items that should be disabled if there is no selection present in the editor.
         * @type Array
         */
-        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading' ],
+        _disabled: [ 'createlink', 'forecolor', 'backcolor', 'fontname', 'fontsize', 'superscript', 'subscript', 'removeformat', 'heading', 'indent', 'outdent' ],
         /**
         * @private
         * @property _alwaysDisabled
@@ -1926,6 +1926,14 @@ var Dom = YAHOO.util.Dom,
                 this._getDoc().body.style.margin = '0';
             }
             this._setDesignMode('on');
+            
+            if (this.browser.webkit) {
+                var head = this._getDoc().getElementsByTagName('head').item(0);
+                var styles = head.getElementsByTagName('style');
+                styles[1].disabled = true;
+                this._showingHiddenElements = styles[1];
+            }
+
             this.toolbar.on('buttonClick', this._handleToolbarClick, this, true);
             //Setup Listeners on iFrame
             Event.addListener(this._getDoc(), 'mouseup', this._handleMouseUp, this, true);
@@ -1980,7 +1988,14 @@ var Dom = YAHOO.util.Dom,
         */
         _setInitialContent: function() {
             var title = this.STR_TITLE;
-            var html = YAHOO.lang.substitute(this.get('html'), { CONTENT: this.get('textarea').value, TITLE: title, CSS: this.get('css') });
+            var html = this.get('html');
+            html = html.replace('{TITLE}', title);
+            html = html.replace('{CONTENT}', this.get('textarea').value);
+            html = html.replace('{CSS}', this.get('css'));
+            if (this.browser.ie || this.browser.webkit) {
+                html = html.replace('{HIDDEN_CSS}', this.get('hiddencss'));
+            }
+
             this._getDoc().open();
             this._getDoc().write(html);
             this._getDoc().close();
@@ -2129,6 +2144,11 @@ var Dom = YAHOO.util.Dom,
 
 				el = el.parentNode;
 			}
+            if (domPath.length == 0) {
+                if (this._getDoc() && this._getDoc().body) {
+                    domPath[0] = this._getDoc().body;
+                }
+            }
             return domPath.reverse();
         },
         /**
@@ -2242,6 +2262,7 @@ var Dom = YAHOO.util.Dom,
         * @description Toggle on/off the hidden.css file.
         */
         _showHidden: function() {
+            var head = this._getDoc().getElementsByTagName('head').item(0);
             if (this._showingHiddenElements) {
                 if (this._showingHiddenElements.disabled) {
                     this._showingHiddenElements.disabled = false;
@@ -2251,11 +2272,15 @@ var Dom = YAHOO.util.Dom,
                     this.toolbar.deselectButton(this.toolbar.getButtonByValue('hiddenelements'));
                 }
             } else {
-                var head = this._getDoc().getElementsByTagName('head').item(0);
-                var link = this._getDoc().createElement('style');
-                link.innerHTML = this.get('hiddencss');
-                head.appendChild(link);
-                this._showingHiddenElements = link;
+                if (this.browser.ie) {
+                    var styles = head.getElementsByTagName('style');
+                    styles[1].disabled = false;
+                    this._showingHiddenElements = styles[1];
+                } else {
+                    var styles = head.getElementsByTagName('style');
+                    styles[1].innerHTML = this.get('hiddencss');
+                    this._showingHiddenElements = styles[1];
+                }
                 this.toolbar.selectButton(this.toolbar.getButtonByValue('hiddenelements'));
             }
         },
@@ -2923,7 +2948,7 @@ var Dom = YAHOO.util.Dom,
             * @description The default HTML to be written to the iframe document before the contents are loaded
             * @default This HTML requires a few things if you are to override:
                 <ul>
-                    <li>{TITLE}, {CSS} and {CONTENT} need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.</li>
+                    <li>{TITLE}, {CSS}, {HIDDEN_CSS} and {CONTENT} need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.</li>
                     <li>onload="document.body._rteLoaded = true;" : the onload statement must be there or the editor will not finish loading.</li>
                 </ul>
                 <!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd">
@@ -2934,6 +2959,9 @@ var Dom = YAHOO.util.Dom,
                         <style>
                         {CSS}
                         </style>
+                        <style disabled="true">
+                        {HIDDEN_CSS}
+                        </style>
                     </head>
                 <body onload="document.body._rteLoaded = true;">
                 {CONTENT}
@@ -2942,7 +2970,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('html', {
-                value: attr.html || '<!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd"><html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><style>{CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
+                value: attr.html || '<!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd"><html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><style>{CSS}</style><style disabled="true">{HIDDEN_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
                 writeOnce: true
             });
 
@@ -3098,7 +3126,6 @@ var Dom = YAHOO.util.Dom,
                             { type: 'select', label: 'Normal', value: 'heading', disabled: true,
                                 menu: [
                                     { text: 'Normal', value: 'none', checked: true },
-                                    //{ text: 'Blockquote', value: 'blockquote' },
                                     { text: 'Header 1', value: 'h1' },
                                     { text: 'Header 2', value: 'h2' },
                                     { text: 'Header 3', value: 'h3' },
@@ -3112,8 +3139,8 @@ var Dom = YAHOO.util.Dom,
                         { type: 'separator' },
                         { group: 'indentlist', label: 'Indenting and Lists',
                             buttons: [
-                                { type: 'push', label: 'Indent', value: 'indent' },
-                                { type: 'push', label: 'Outdent', value: 'outdent' },
+                                { type: 'push', label: 'Indent', value: 'indent', disabled: true },
+                                { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
                                 { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
                                 { type: 'menu', label: 'Create an Ordered List', value: 'insertorderedlist',
                                     menu: [
@@ -3877,9 +3904,8 @@ var Dom = YAHOO.util.Dom,
                 return false;
             }
             this._setMarkupType(action);
-
-            if (!value) {
-                //value = this._getSelection();
+            if (this.browser.ie) {
+                this._getWindow().focus();
             }
             var exec = true;
             var _sel = this._getSelection();
