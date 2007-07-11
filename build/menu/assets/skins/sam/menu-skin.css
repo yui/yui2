@@ -14,11 +14,11 @@
 
 .yui-skin-sam .yuimenubar ul {
 
-    zoom: 1;
+    *zoom: 1;   /* For IE */
 
 }
 
-.yui-skin-sam .yuimenubar ul:after {
+.yui-skin-sam .yuimenubar>.bd>ul:after {
 
     content: ".";
     display: block;
@@ -47,11 +47,10 @@
 .yui-skin-sam .yuimenubaritemlabel {
 
     display: block;
-    _display: inline-block; /* For IE 6 strict and quirks, IE 7 quirks mode */
+    *display: inline-block; /* For IE */
     font-size: 93%;  /* 12px */
     line-height: 2;  /* ~24px */
     *line-height: 1.9; /* For IE */
-    *height: 1.9em; /* For IE */
     padding: 0 10px;
     color: #000;
     text-decoration: none;
@@ -114,7 +113,7 @@
 
     border-left-width: 1px;
     margin-left: -1px;
-    _left: -1px;    /* For IE 6 strict and quirks, IE 7 quirks mode */
+    *left: -1px;    /* For IE */
 
 }
 
@@ -319,21 +318,16 @@
     bottom: -3px;
     background-color: #000;
     opacity: .12;
-    filter: alpha(opacity=12);  /* For IE */
+    *filter: alpha(opacity=12);  /* For IE */
 
 }
 
 .yui-skin-sam .visible .bd,
 .yui-skin-sam .visible ul,
-.yui-skin-sam .visible .yuimenuitem {
-
-    _zoom: 1;    /* For IE 6 strict and quirks, IE 7 quirks mode */
-
-}
-
+.yui-skin-sam .visible .yuimenuitem, 
 .yui-skin-sam .visible .yuimenuitemlabel {
 
-    *height: 1.45em; /* For IE */
+    *zoom: 1;   /* For IE */
 
 }
 
@@ -385,7 +379,7 @@
 
     border-width: 0;
     margin: 0;
-    _left: 0;    /* For IE 6 strict and quirks, IE 7 quirks mode */
+    *left: 0;   /* For IE */
 
 }
 
