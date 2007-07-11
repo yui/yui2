@@ -7655,8 +7655,8 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                         YAHOO.log("The property parser is no longer supported",
                         "warn", this.toString());
                     }
-                    if(oColumn.sortOptions && (oColumn.sortOptions.ascFunction) ||
-                            (oColumn.sortOptions.descFunction)) {
+                    if(oColumn.sortOptions && ((oColumn.sortOptions.ascFunction) ||
+                            (oColumn.sortOptions.descFunction))) {
                         YAHOO.log("The properties sortOptions.ascFunction and " +
                         " sortOptions.descFunction have been deprecated in favor " +
                         " of sortOptions.sortFunction", "warn", this.toString());

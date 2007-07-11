@@ -421,7 +421,7 @@ if(oColumn.type&&(child.type===undefined)){child.type=oColumn.type;}
 if(oColumn.type&&!oColumn.formatter){oColumn.formatter=oColumn.type;}
 if(oColumn.text&&!YAHOO.lang.isValue(oColumn.label)){oColumn.label=oColumn.text;}
 if(oColumn.parser){}
-if(oColumn.sortOptions&&(oColumn.sortOptions.ascFunction)||(oColumn.sortOptions.descFunction)){}}
+if(oColumn.sortOptions&&((oColumn.sortOptions.ascFunction)||(oColumn.sortOptions.descFunction))){}}
 if(!tree[nodeDepth+1]){tree[nodeDepth+1]=[];}
 parseColumns(currentChildren,oColumn);}
 else{oColumn._nKeyIndex=keys.length;oColumn._colspan=1;keys.push(oColumn);}

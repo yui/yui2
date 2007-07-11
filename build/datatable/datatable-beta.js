@@ -7550,8 +7550,8 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     }
                     if(oColumn.parser) {
                     }
-                    if(oColumn.sortOptions && (oColumn.sortOptions.ascFunction) ||
-                            (oColumn.sortOptions.descFunction)) {
+                    if(oColumn.sortOptions && ((oColumn.sortOptions.ascFunction) ||
+                            (oColumn.sortOptions.descFunction))) {
                     }
                 }
 
