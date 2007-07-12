@@ -715,7 +715,7 @@ if (!YAHOO.util.Event) {
                                 s = p_override;
                             }
                         }
-                        p_fn.call(s, p_obj);
+                        p_fn.call(s, "DOMReady", [], p_obj);
                     }, 0);
                 } else {
                     this.DOMReadyEvent.subscribe(p_fn, p_obj, p_override);
@@ -1455,7 +1455,11 @@ if (!YAHOO.util.Event) {
                 }
 
                 if (this.isIE) {
-                    if (!DOMReady || "complete" !== document.readyState) {
+                    // Hold off if DOMReady has not fired and check current
+                    // readyState to protect against the IE operation aborted
+                    // issue.
+                    //if (!DOMReady || "complete" !== document.readyState) {
+                    if (!DOMReady) {
                         this.startInterval();
                         return false;
                     }
@@ -1801,18 +1805,41 @@ if (!YAHOO.util.Event) {
         // the DOM prior to when the document's readyState suggests
         // it is safe to do so.
         if (EU.isIE) {
-	
+
             // Process onAvailable/onContentReady items when when the 
             // DOM is ready.
             YAHOO.util.Event.onDOMReady(
                     YAHOO.util.Event._tryPreloadAttach,
                     YAHOO.util.Event, true);
 
-            document.write(
-'<scr' + 'ipt id="_yui_eu_dr" defer="true" src="//:"><' + '/script>');
 
-        
-            var el = document.getElementById("_yui_eu_dr");
+            var el, d=document, b=d.body;
+
+            // If the library is being injected after window.onload, it
+            // is not safe to document.write the script tag.  Detecting
+            // this state doesn't appear possible, so we expect a flag
+            // in YAHOO_config to be set if the library is being injected.
+            if (("undefined" !== typeof YAHOO_config) && YAHOO_config.injecting) {
+
+
+                //var dr = d.readyState;
+                //if ("complete" === dr || "interactive" === dr) {
+                    //YAHOO.util.Event._ready();
+                    //YAHOO.util.Event._tryPreloadAttach();
+                //} else {
+
+                    el = document.createElement("script");
+                    var p=d.getElementsByTagName("head")[0] || b;
+                    p.insertBefore(el, p.firstChild);
+
+                //}
+
+            } else {
+document.write('<scr'+'ipt id="_yui_eu_dr" defer="true" src="//:"><'+'/script>');
+                el=document.getElementById("_yui_eu_dr");
+            }
+            
+
             if (el) {
                 el.onreadystatechange = function() {
                     if ("complete" === this.readyState) {
@@ -1821,8 +1848,8 @@ if (!YAHOO.util.Event) {
                     }
                 };
             } else {
-                // The library was probably injected into the page
-                // rendering onDOMReady almost pointless.
+                // The library was likely injected into the page
+                // rendering onDOMReady unreliable
                 // YAHOO.util.Event._ready();
             }
 
