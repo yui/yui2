@@ -6638,9 +6638,6 @@ MenuItem.prototype = {
     * @method configHelpText
     * @description Event handler for when the "helptext" configuration property 
     * of the menu item changes.
-    * @deprecated Use "text" configuration property to add help text markup.  
-    * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
-    * class=\"helptext\"&#62;Ctrl + C&#60;/em&#60;");</code>
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -6726,9 +6723,6 @@ MenuItem.prototype = {
     * @method configEmphasis
     * @description Event handler for when the "emphasis" configuration property
     * of the menu item changes.
-    * @deprecated Use "text" configuration property to add emphasis.  
-    * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;em&#62;Some 
-    * Text&#60;/em&#60;");</code>
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -6757,9 +6751,6 @@ MenuItem.prototype = {
     * @method configStrongEmphasis
     * @description Event handler for when the "strongemphasis" configuration 
     * property of the menu item changes.
-    * @deprecated Use "text" configuration property to add strong emphasis.  
-    * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;strong&#62; 
-    * Some Text&#60;/strong&#60;");</code>
     * @param {String} p_sType String representing the name of the event that 
     * was fired.
     * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -7094,6 +7085,9 @@ MenuItem.prototype = {
         * @config helptext
         * @description String specifying additional instructional text to 
         * accompany the text for the nenu item.
+        * @deprecated Use "text" configuration property to add help text markup.  
+        * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
+        * class=\"helptext\"&#62;Ctrl + C&#60;/em&#60;");</code>
         * @default null
         * @type String|<a href="http://www.w3.org/TR/
         * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
@@ -7146,8 +7140,10 @@ MenuItem.prototype = {
         /**
         * @config emphasis
         * @description Boolean indicating if the text of the menu item will be 
-        * rendered with emphasis.  When building a menu from existing HTML the 
-        * value of this property will be interpreted from the menu's markup.
+        * rendered with emphasis.
+        * @deprecated Use "text" configuration property to add emphasis.  
+        * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;em&#62;Some 
+        * Text&#60;/em&#60;");</code>
         * @default false
         * @type Boolean
         */
@@ -7165,8 +7161,10 @@ MenuItem.prototype = {
         /**
         * @config strongemphasis
         * @description Boolean indicating if the text of the menu item will be 
-        * rendered with strong emphasis.  When building a menu from existing 
-        * HTML the value of this property will be interpreted from the
+        * rendered with strong emphasis.
+        * @deprecated Use "text" configuration property to add strong emphasis.  
+        * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;strong&#62; 
+        * Some Text&#60;/strong&#60;");</code>
         * menu's markup.
         * @default false
         * @type Boolean
