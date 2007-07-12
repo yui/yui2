@@ -409,7 +409,7 @@ var Dom = YAHOO.util.Dom,
             * @config buttons
             * @description Object specifying the buttons to include in the toolbar
             * Example:
-            * <code>
+            * <code><pre>
             * {
             *   { id: 'b3', type: 'button', label: 'Underline', value: 'underline' },
             *   { type: 'separator' },
@@ -421,7 +421,7 @@ var Dom = YAHOO.util.Dom,
             *       ]
             *   }
             * }
-            * </code>
+            * </pre></code>
             * @type Object
             */
             
@@ -1026,7 +1026,7 @@ var Dom = YAHOO.util.Dom,
         * @method _makeColorButton
         * @private
         * @description Called to turn a "color" button into a menu button with an Overlay for the menu.
-        * @param {Object} _oButton YAHOO.widget.Button reference
+        * @param {Object} _oButton <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
         */
         _makeColorButton: function(_oButton) {
             if (!this._colorPicker) {   
@@ -1057,7 +1057,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _makeSpinButton
         * @description Create a button similar to an OS Spin button.. It has an up/down arrow combo to scroll through a range of int values.
-        * @param {Object} _button YAHOO.widget.Button reference
+        * @param {Object} _button <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
         * @param {Object} oButton Object literal containing the buttons initial config
         */
         _makeSpinButton: function(_button, oButton) {
@@ -1242,7 +1242,7 @@ var Dom = YAHOO.util.Dom,
         * @method getButtonByValue
         * @description Gets a button instance or a menuitem instance from the toolbar by it's value.
         * @param {String} value The button value to query for.
-        * @return {YAHOO.widget.Button or YAHOO.widget.MenuItem}
+        * @return {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> or <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>}
         */
         getButtonByValue: function(value) {
             var _buttons = this.get('buttons');
@@ -1453,21 +1453,18 @@ var Dom = YAHOO.util.Dom,
     });
 /**
 * @event buttonClick
-* @description Fires when any botton receives a click event. Passes back a single 
-* object representing the buttons config object. See <a href="
-* YAHOO.util.Element.html#addListener">Element.addListener</a> for more 
-* information on listening for this event.
+* @description Fires when any botton receives a click event. Passes back a single object representing the buttons config object. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event valueClick
 * @description This is a special dynamic event that is created and dispatched based on the value property
-* of the button config.
+* of the button config. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * Example:
-* <code>
+* <code><pre>
 * buttons : [
 *   { type: 'button', value: 'test', value: 'testButton' }
-* ]
+* ]</pre>
 * </code>
 * With the valueClick event you could subscribe to this buttons click event with this:
 * tbar.in('testButtonClick', function() { alert('test button clicked'); })
@@ -1475,12 +1472,12 @@ var Dom = YAHOO.util.Dom,
 */
 /**
 * @event toolbarExpanded
-* @description Fires when the toolbar is expanded via the collapse button.
+* @description Fires when the toolbar is expanded via the collapse button. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event toolbarCollapsed
-* @description Fires when the toolbar is collapsed via the collapse button.
+* @description Fires when the toolbar is collapsed via the collapse button. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 })();

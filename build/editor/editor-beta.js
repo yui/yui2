@@ -403,7 +403,7 @@ var Dom = YAHOO.util.Dom,
             * @config buttons
             * @description Object specifying the buttons to include in the toolbar
             * Example:
-            * <code>
+            * <code><pre>
             * {
             *   { id: 'b3', type: 'button', label: 'Underline', value: 'underline' },
             *   { type: 'separator' },
@@ -415,7 +415,7 @@ var Dom = YAHOO.util.Dom,
             *       ]
             *   }
             * }
-            * </code>
+            * </pre></code>
             * @type Object
             */
             
@@ -1013,7 +1013,7 @@ var Dom = YAHOO.util.Dom,
         * @method _makeColorButton
         * @private
         * @description Called to turn a "color" button into a menu button with an Overlay for the menu.
-        * @param {Object} _oButton YAHOO.widget.Button reference
+        * @param {Object} _oButton <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
         */
         _makeColorButton: function(_oButton) {
             if (!this._colorPicker) {   
@@ -1044,7 +1044,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _makeSpinButton
         * @description Create a button similar to an OS Spin button.. It has an up/down arrow combo to scroll through a range of int values.
-        * @param {Object} _button YAHOO.widget.Button reference
+        * @param {Object} _button <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
         * @param {Object} oButton Object literal containing the buttons initial config
         */
         _makeSpinButton: function(_button, oButton) {
@@ -1226,7 +1226,7 @@ var Dom = YAHOO.util.Dom,
         * @method getButtonByValue
         * @description Gets a button instance or a menuitem instance from the toolbar by it's value.
         * @param {String} value The button value to query for.
-        * @return {YAHOO.widget.Button or YAHOO.widget.MenuItem}
+        * @return {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> or <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>}
         */
         getButtonByValue: function(value) {
             var _buttons = this.get('buttons');
@@ -1437,21 +1437,18 @@ var Dom = YAHOO.util.Dom,
     });
 /**
 * @event buttonClick
-* @description Fires when any botton receives a click event. Passes back a single 
-* object representing the buttons config object. See <a href="
-* YAHOO.util.Element.html#addListener">Element.addListener</a> for more 
-* information on listening for this event.
+* @description Fires when any botton receives a click event. Passes back a single object representing the buttons config object. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event valueClick
 * @description This is a special dynamic event that is created and dispatched based on the value property
-* of the button config.
+* of the button config. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * Example:
-* <code>
+* <code><pre>
 * buttons : [
 *   { type: 'button', value: 'test', value: 'testButton' }
-* ]
+* ]</pre>
 * </code>
 * With the valueClick event you could subscribe to this buttons click event with this:
 * tbar.in('testButtonClick', function() { alert('test button clicked'); })
@@ -1459,12 +1456,12 @@ var Dom = YAHOO.util.Dom,
 */
 /**
 * @event toolbarExpanded
-* @description Fires when the toolbar is expanded via the collapse button.
+* @description Fires when the toolbar is expanded via the collapse button. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event toolbarCollapsed
-* @description Fires when the toolbar is collapsed via the collapse button.
+* @description Fires when the toolbar is collapsed via the collapse button. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 })();
@@ -1475,7 +1472,7 @@ http://developer.yahoo.net/yui/license.txt
 */
 /**
  * @module editor
- * @description <p>Provides a rich text editor widget based on the button and toolbar</p>
+ * @description <p>The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar, container, menu, button
  * @optional dragdrop, animation
@@ -1491,11 +1488,11 @@ var Dom = YAHOO.util.Dom,
 
 
     /**
-     * Provides a rich text editor widget based on the button and toolbar
+     * The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.
      * @constructor
      * @class Editor
      * @extends YAHOO.util.Element
-     * @param {String/HTMLElement} el The element to turn into an editor.
+     * @param {String/HTMLElement} el The textarea element to turn into an editor.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
     
@@ -1671,8 +1668,8 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @property toolbar
-        * @description Local property containing the YAHOO.widget.toolbar instance
-        * @type YAHOO.widget.Toolbar
+        * @description Local property containing the <a href="YAHOO.widget.Toolbar.html">YAHOO.widget.Toolbar</a> instance
+        * @type <a href="YAHOO.widget.Toolbar.html">YAHOO.widget.Toolbar</a>
         */
         toolbar: null,
         /**
@@ -2599,7 +2596,7 @@ var Dom = YAHOO.util.Dom,
         * @method _updateMenuChecked
         * @param {Object} button The command identifier of the button you want to check
         * @param {String} value The value of the menu item you want to check
-        * @param {YAHOO.widget.Toolbar} The Toolbar instance the button belongs to (defaults to this.toolbar) 
+        * @param {<a href="YAHOO.widget.Toolbar.html">YAHOO.widget.Toolbar</a>} The Toolbar instance the button belongs to (defaults to this.toolbar) 
         * @description Gets the menu from a button instance, if the menu is not rendered it will render it. It will then search the menu for the specified value, unchecking all other items and checking the specified on.
         */
         _updateMenuChecked: function(button, value, tbar) {
@@ -2907,8 +2904,17 @@ var Dom = YAHOO.util.Dom,
             });
             /**
             * @config hiddencss
-            * @description The CSS used to show/hide hidden elements on the page
-            * @default 'div, p, span { border: 1px dotted #ccc; } .yui-non { border: none; }'
+            * @description The CSS used to show/hide hidden elements on the page, these rules must be prefixed with the class provided in <code>this.CLASS_HIDDEN</code>
+            * @default <code><pre>
+            .hidden div, .hidden p, .hidden span, .hidden img {
+                border: 1px dotted #ccc;
+            }
+            .hidden .yui-non {
+                border: none;
+            }
+            .hidden img {
+                padding: 2px;
+            }</pre></code>
             * @type String
             */            
             this.setAttributeConfig('hiddencss', {
@@ -2918,7 +2924,21 @@ var Dom = YAHOO.util.Dom,
             /**
             * @config css
             * @description The Base CSS used to format the content of the editor
-            * @default 'body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } span.yui-tag-a { color: blue; text-decoration: underline; } span.yui-tag-blockquote { margin: 1em; display: block; } span.yui-tag-indent { margin-left: 1em; display: block; } .warning-localfile { border-bottom: 1px dashed red !important; }'
+            * @default <code><pre>body {
+                padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;
+            }
+            span.yui-tag-a {
+                color: blue; text-decoration: underline;
+            }
+            span.yui-tag-blockquote {
+                margin: 1em; display: block;
+            }
+            span.yui-tag-indent {
+                margin-left: 1em; display: block;
+            }
+            .warning-localfile {
+                border-bottom: 1px dashed red !important;
+            }</pre></code>
             * @type String
             */            
             this.setAttributeConfig('css', {
@@ -2929,30 +2949,32 @@ var Dom = YAHOO.util.Dom,
             * @config html
             * @description The default HTML to be written to the iframe document before the contents are loaded
             * @default This HTML requires a few things if you are to override:
-                <ul>
-                    <li>{TITLE}, {CSS}, {HIDDEN_CSS} and {CONTENT} need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.</li>
-                    <li>onload="document.body._rteLoaded = true;" : the onload statement must be there or the editor will not finish loading.</li>
-                </ul>
-                <!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd">
-                <html>
-                    <head>
-                        <title>{TITLE}</title>
-                        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                        <style>
+                <p><code>{TITLE}, {CSS}, {HIDDEN_CSS}</code> and <code>{CONTENT}</code> need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.<p>
+                <p><code>onload="document.body._rteLoaded = true;"</code> : the onload statement must be there or the editor will not finish loading.</p>
+                <code>
+                <pre>
+                &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;
+                &lt;html&gt;
+                    &lt;head&gt;
+                        &lt;title&gt;{TITLE}&lt;/title&gt;
+                        &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;
+                        &lt;style&gt;
                         {CSS}
-                        </style>
-                        <style disabled="true">
+                        &lt;/style&gt;
+                        &lt;style&gt;
                         {HIDDEN_CSS}
-                        </style>
-                    </head>
-                <body onload="document.body._rteLoaded = true;">
+                        &lt;/style&gt;
+                    &lt;/head&gt;
+                &lt;body onload="document.body._rteLoaded = true;"&gt;
                 {CONTENT}
-                </body>
-                </html>
+                &lt;/body&gt;
+                &lt;/html&gt;
+                </pre>
+                </code>
             * @type String
             */            
             this.setAttributeConfig('html', {
-                value: attr.html || '<!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd"><html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><style>{CSS}</style><style disabled="true">{HIDDEN_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
+                value: attr.html || '<!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd"><html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><style>{CSS}</style><style>{HIDDEN_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
                 writeOnce: true
             });
 
@@ -3048,7 +3070,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @config toolbar
             * @description The default toolbar config.
-            * @default 
+            * @default This config is too large to display here, view the code to see it: <a href="editor.js.html"></a>
             * @type Object
             */            
             this.setAttributeConfig('toolbar', {
@@ -3176,7 +3198,7 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true,
                 validator: function(value) {
                     var ret = true;
-                    if (!YAHOO.widget.Overlay) {
+                    if (!YAHOO.widget.Panel) {
                         ret = false;
                     }
                     return ret;
@@ -4182,9 +4204,9 @@ var Dom = YAHOO.util.Dom,
         * @method createCurrentElement
         * @param {String} tagName (optional defaults to a) The tagname of the element that you wish to create
         * @param {Object} tagStyle (optional) Object literal containing styles to apply to the new element.
-        * @description This is a work around for the various browser issues with execCommand. This method will run execCommand('fontname', false, 'yui-tmp') on the given selection.
-        * It will then search the document for a span with the font-family set to yui-tmp and replace that with another span that has other information in it, then assign the new span to
-        * this.currentElement, so we now have an element reference to the element that was just modified. At this point we can use standard DOM manipulation to change it as we see fit.
+        * @description This is a work around for the various browser issues with execCommand. This method will run <code>execCommand('fontname', false, 'yui-tmp')</code> on the given selection.
+        * It will then search the document for a span with the font-family set to <strong>yui-tmp</strong> and replace that with another span that has other information in it, then assign the new span to
+        * <code>this.currentElement</code>, so we now have an element reference to the element that was just modified. At this point we can use standard DOM manipulation to change it as we see fit.
         */
         createCurrentElement: function(tagName, tagStyle) {
             var tagName = ((tagName) ? tagName : 'a'),
@@ -4403,7 +4425,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _renderPanel
         * @description Renders the panel used for Editor Windows to the document so we can start using it..
-        * @returns {YAHOO.widget.Overlay}
+        * @returns {<a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>}
         */
         _renderPanel: function() {
             if (!YAHOO.widget.EditorInfo.panel) {
@@ -4440,7 +4462,7 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @method openWindow
-        * @param {YAHOO.widget.EditorWindow} win A YAHOO.widget.EditorWindow instance
+        * @param {<a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a>} win A <a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a> instance
         * @description Opens a new "window/panel"
         */
         openWindow: function(win) {
@@ -4701,97 +4723,96 @@ var Dom = YAHOO.util.Dom,
 
 /**
 * @event toolbarLoaded
-* @description Event is fired during the render process directly after the Toolbar is loaded. Allowing you to attach events to the toolbar.
+* @description Event is fired during the render process directly after the Toolbar is loaded. Allowing you to attach events to the toolbar. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event afterRender
-* @description Event is fired after the render process finishes.
+* @description Event is fired after the render process finishes. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorContentLoaded
-* @description Event is fired after the editor iframe's document fully loads and fires it's onload event. From here you can start injecting your own things into the document.
+* @description Event is fired after the editor iframe's document fully loads and fires it's onload event. From here you can start injecting your own things into the document. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorMouseUp
-* @description Passed through HTML Event.
+* @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorMouseDown
-* @description Passed through HTML Event.
+* @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorDoubleClick
-* @description Passed through HTML Event.
+* @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorKeyUp
-* @description Passed through HTML Event.
+* @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorKeyPress
-* @description Passed through HTML Event.
+* @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorKeyDown
-* @description Passed through HTML Event.
+* @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event beforeNodeChange
-* @description Event fires at the beginning of the nodeChange process.
+* @description Event fires at the beginning of the nodeChange process. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event afterNodeChange
-* @description Event fires at the end of the nodeChange process.
+* @description Event fires at the end of the nodeChange process. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event beforeExecCommand
-* @description Event fires at the beginning of the execCommand process.
+* @description Event fires at the beginning of the execCommand process. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event afterExecCommand
-* @description Event fires at the end of the execCommand process.
+* @description Event fires at the end of the execCommand process. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event beforeOpenWindow
-* @description Event fires before an Editor Window is opened.
+* @description Event fires before an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event afterOpenWindow
-* @description Event fires after an Editor Window is opened.
+* @description Event fires after an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event closeWindow
-* @description Event fires after an Editor Window is closed.
+* @description Event fires after an Editor Window is closed. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event windowCMDOpen
-* @description Dynamic event fired when an EditorWindow is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event.
+* @description Dynamic event fired when an EditorWindow is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event windowCMDClose
-* @description Dynamic event fired when an EditorWindow is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event.
+* @description Dynamic event fired when an EditorWindow is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 
-
-    /**
+/**
      * @description Singleton object used to track the open window objects and panels across the various open editors
      * @class EditorInfo
      * @static
@@ -4801,14 +4822,14 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @property window
         * @description A reference to the currently open window object in any editor on the page.
-        * @type Object YAHOO.widget.EditorWindow
+        * @type Object <a href="YAHOO.widget.EditorWindow.html">YAHOO.widget.EditorWindow</a>
         */
         window: {},
         /**
         * @private
         * @property panel
         * @description A reference to the currently open panel in any editor on the page.
-        * @type Object YAHOO.widget.Overlay
+        * @type Object <a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a>
         */
         panel: null
     }
