@@ -8,10 +8,11 @@
  */
 
 /**
- * YAHOO_config is not included part of the library.  Instead it is an object
- * that can be defined by the implementer immediately before including the
- * YUI library.  The properties included in this object will be used to
- * configure global properties needed as soon as the library begins to load.
+ * YAHOO_config is not included as part of the library.  Instead it is an 
+ * object that can be defined by the implementer immediately before 
+ * including the YUI library.  The properties included in this object
+ * will be used to configure global properties needed as soon as the 
+ * library begins to load.
  * @class YAHOO_config
  * @static
  */
@@ -22,8 +23,30 @@
  * information for the module. See <a href="YAHOO.env.html#getVersion">
  * YAHOO.env.getVersion</a> for the description of the version data structure.
  * @property listener
+ * @type Function
  * @static
+ * @default undefined
  */
+
+/**
+ * Set to true if the library will be dynamically loaded after window.onload.
+ * Defaults to false 
+ * @property injecting
+ * @type boolean
+ * @static
+ * @default undefined
+ */
+
+/**
+ * Instructs the yuiloader component to dynamically load yui components and
+ * their dependencies.  See the yuiloader documentation for more information
+ * about dynamic loading
+ * @property load
+ * @static
+ * @default undefined
+ * @see yuiloader
+ */
+
 if (typeof YAHOO == "undefined") {
     /**
      * The YAHOO global namespace object.  If YAHOO is already defined, the
