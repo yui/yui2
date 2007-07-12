@@ -304,6 +304,7 @@
     border-right: 1px solid #808080;
     width: 99%;
     margin: 0;
+    *margin-left: -1px;
     padding: 0;
 }
 .yui-skin-sam .yui-editor-panel ul {
