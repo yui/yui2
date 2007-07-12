@@ -24,7 +24,6 @@
         YAHOO_config = {};
     }
 
-
     // YUI is locally scoped, only pieces of it will be referenced in YAHOO
     // after YAHOO has been loaded.
     var YUI = {
@@ -218,6 +217,10 @@
     };
 
     YUI.YUILoader = function(o) {
+
+        // Inform the library that it is being injected
+        YAHOO_config.injecting = true;
+
         o = o || {};
 
         /**
@@ -827,7 +830,7 @@
             var s=[], info=this.moduleInfo, loaded=this.loaded;
 
             // returns true if b is not loaded, and is required
-            // by a directly or by means of modules it supersedes.
+            // directly or by means of modules it supersedes.
             var requires = function(aa, bb) {
                 if (loaded[bb]) {
                     return false;
@@ -889,7 +892,7 @@
                         }
                     }
 
-                    // jump out of loop if we moved
+                    // jump out of loop if we moved something
                     if (moved) {
                         break;
                     // this item is sorted, move our pointer and keep going
@@ -898,7 +901,7 @@
                     }
                 }
 
-                // when we make it here and moved is still false, we are 
+                // when we make it here and moved is false, we are 
                 // finished sorting
                 if (!moved) {
                     break;
@@ -910,9 +913,9 @@
         },
 
         /**
-         * Fetches and inserts the requested modules.  <code>type</code> 
-         * can be "js" or "css".  Both script and css are inserted if
-         * type is not provided.
+         * inserts the requested modules and their dependencies.  
+         * <code>type</code> can be "js" or "css".  Both script and 
+         * css are inserted if type is not provided.
          * @method insert
          * @param callback {Function} a function to execute when the load
          * is complete.
