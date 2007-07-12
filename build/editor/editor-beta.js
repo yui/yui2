@@ -2310,9 +2310,11 @@ var Dom = YAHOO.util.Dom,
                 }
             }
             //This will stop Safari from selecting the entire document if you select all the text in the editor
-            if (this.browser.webkit) {
+            if (this.browser.webkit || this.browser.opera) {
                 this.nodeChange();
-                Event.stopEvent(ev);
+                if (this.browser.webkit) {
+                    Event.stopEvent(ev);
+                }
             }            
             this.fireEvent('editorMouseUp', { type: 'editorMouseUp', target: this, ev: ev });
         },
