@@ -30,7 +30,6 @@ var Dom = YAHOO.util.Dom,
         YAHOO.log(arguments.length + ' arguments passed to constructor', 'info', 'Toolbar');
         
         if (Lang.isObject(arguments[0]) && !Dom.get(el).nodeType) {
-            YAHOO.log('First Argument passed is an Object', 'info', 'Toolbar');
             var attrs = el;
         }
         var local_attrs = (attrs || {});
@@ -42,10 +41,8 @@ var Dom = YAHOO.util.Dom,
         
         
         if (Lang.isString(el) && Dom.get(el)) {
-            YAHOO.log('Found DOM element for toolbar container (' + Dom.get(el).id + ')', 'warn', 'Toolbar');
             oConfig.element = Dom.get(el);
         } else if (Lang.isObject(el) && Dom.get(el) && Dom.get(el).nodeType) {  
-            YAHOO.log('Found DOM element for toolbar container (' + Dom.get(el).id + ')', 'warn', 'Toolbar');
             oConfig.element = Dom.get(el);
         }
         
@@ -58,16 +55,13 @@ var Dom = YAHOO.util.Dom,
             if (local_attrs.container && Dom.get(local_attrs.container)) {
                 YAHOO.log('Container found in config appending to it (' + Dom.get(local_attrs.container).id + ')', 'info', 'Toolbar');
                 Dom.get(local_attrs.container).appendChild(oConfig.element);
-            } else {
-                YAHOO.log('No container found in config appending to body', 'warn', 'Toolbar');
-                document.body.appendChild(oConfig.element);
             }
         }
         
 
         if (!oConfig.element.id) {
-            YAHOO.log('No element ID defined for toolbar container, creating..', 'warn', 'Toolbar');
             oConfig.element.id = ((Lang.isString(el)) ? el : Dom.generateId());
+            YAHOO.log('No element ID defined for toolbar container, creating..', 'warn', 'Toolbar');
         }
         YAHOO.log('Initing toolbar with id: ' + oConfig.element.id, 'info', 'Toolbar');
         
@@ -601,7 +595,6 @@ var Dom = YAHOO.util.Dom,
                     if (draggable && !this.get('titlebar')) {
                         YAHOO.log('Dragging enabled', 'info', 'Toolbar');
                         if (!this._dragHandle) {
-                            YAHOO.log('Drag handle does not exist, creating..', 'info', 'Toolbar');
                             this._dragHandle = document.createElement('SPAN');
                             this._dragHandle.innerHTML = '|';
                             this._dragHandle.setAttribute('title', 'Click to drag the toolbar');
@@ -737,7 +730,6 @@ var Dom = YAHOO.util.Dom,
             }
 
             if ((oButton.type == 'menu') || (oButton.type == 'split') || (oButton.type == 'select')) {
-                YAHOO.log('Button type is (' + oButton.type + '), doing extra config work.', 'info', 'Toolbar');
                 if (Lang.isArray(oButton.menu)) {
                     for (var i in oButton.menu) {
                         var funcObject = {
@@ -791,7 +783,6 @@ var Dom = YAHOO.util.Dom,
                 tmp.set('disabled', true);
             }
             if (!oButton.id) {
-                YAHOO.log('Button does not have an id in the config.. adding..', 'info', 'Toolbar');
                 oButton.id = tmp.get('id');
             }
             YAHOO.log('Button created (' + oButton.type + ')', 'info', 'Toolbar');
@@ -901,7 +892,6 @@ var Dom = YAHOO.util.Dom,
             }
             if (this.browser.webkit) {
                 //This will keep the document from gaining focus and the editor from loosing it..
-                YAHOO.log('Safari Hack for menu', 'info', 'Toolbar');
                 //Forcefully remove the focus calls in button!
                 tmp.hasFocus = function() {
                     return true;
@@ -939,7 +929,6 @@ var Dom = YAHOO.util.Dom,
             if (this._sepCount == null) {
                 this._sepCount = 0;
             }
-            YAHOO.log('Creating Separator', 'info', 'Toolbar');
             if (!this._sep) {
                 YAHOO.log('Separator does not yet exist, creating', 'info', 'Toolbar');
                 this._sep = document.createElement('SPAN');
@@ -1197,7 +1186,6 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (doEvent) {
-                YAHOO.log('_buttonClick', 'info', 'Toolbar');
                 if (info.value) {
                     YAHOO.log('fireEvent::' + info.value + 'Click', 'info', 'Toolbar');
                     this.fireEvent(info.value + 'Click', { type: info.value + 'Click', target: this.get('element'), button: info });

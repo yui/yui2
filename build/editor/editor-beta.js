@@ -51,8 +51,6 @@ var Dom = YAHOO.util.Dom,
             
             if (local_attrs.container && Dom.get(local_attrs.container)) {
                 Dom.get(local_attrs.container).appendChild(oConfig.element);
-            } else {
-                document.body.appendChild(oConfig.element);
             }
         }
         
@@ -1927,13 +1925,6 @@ var Dom = YAHOO.util.Dom,
             }
             this._setDesignMode('on');
             
-            if (this.browser.webkit) {
-                var head = this._getDoc().getElementsByTagName('head').item(0);
-                var styles = head.getElementsByTagName('style');
-                styles[1].disabled = true;
-                this._showingHiddenElements = styles[1];
-            }
-
             this.toolbar.on('buttonClick', this._handleToolbarClick, this, true);
             //Setup Listeners on iFrame
             Event.addListener(this._getDoc(), 'mouseup', this._handleMouseUp, this, true);
@@ -1992,9 +1983,7 @@ var Dom = YAHOO.util.Dom,
             html = html.replace('{TITLE}', title);
             html = html.replace('{CONTENT}', this.get('textarea').value);
             html = html.replace('{CSS}', this.get('css'));
-            if (this.browser.ie || this.browser.webkit) {
-                html = html.replace('{HIDDEN_CSS}', this.get('hiddencss'));
-            }
+            html = html.replace('{HIDDEN_CSS}', this.get('hiddencss'));
 
             this._getDoc().open();
             this._getDoc().write(html);
@@ -2262,25 +2251,13 @@ var Dom = YAHOO.util.Dom,
         * @description Toggle on/off the hidden.css file.
         */
         _showHidden: function() {
-            var head = this._getDoc().getElementsByTagName('head').item(0);
             if (this._showingHiddenElements) {
-                if (this._showingHiddenElements.disabled) {
-                    this._showingHiddenElements.disabled = false;
-                    this.toolbar.selectButton(this.toolbar.getButtonByValue('hiddenelements'));
-                } else {
-                    this._showingHiddenElements.disabled = true;
-                    this.toolbar.deselectButton(this.toolbar.getButtonByValue('hiddenelements'));
-                }
+                this._showingHiddenElements = false;
+                this.toolbar.deselectButton(this.toolbar.getButtonByValue('hiddenelements'));
+                Dom.removeClass(this._getDoc().body, this.CLASS_HIDDEN);
             } else {
-                if (this.browser.ie) {
-                    var styles = head.getElementsByTagName('style');
-                    styles[1].disabled = false;
-                    this._showingHiddenElements = styles[1];
-                } else {
-                    var styles = head.getElementsByTagName('style');
-                    styles[1].innerHTML = this.get('hiddencss');
-                    this._showingHiddenElements = styles[1];
-                }
+                this._showingHiddenElements = true;
+                Dom.addClass(this._getDoc().body, this.CLASS_HIDDEN);
                 this.toolbar.selectButton(this.toolbar.getButtonByValue('hiddenelements'));
             }
         },
@@ -2501,7 +2478,6 @@ var Dom = YAHOO.util.Dom,
         nodeChange: function() {
             this._fixNodes();
 
-            //Node changes occur too often to log..
             this.fireEvent('beforeNodeChange', { type: 'beforeNodeChange', target: this });
             if (this.get('dompath')) {
                 this._writeDomPath();
@@ -2615,7 +2591,6 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
-
 
             this.fireEvent('afterNodeChange', { type: 'afterNodeChange', target: this });
         },
@@ -2822,6 +2797,13 @@ var Dom = YAHOO.util.Dom,
         STOP_NODE_CHANGE: false,
         /**
         * @protected
+        * @property CLASS_HIDDEN
+        * @description CSS class applied to the body when the hiddenelements button is pressed.
+        * @type String
+        */
+        CLASS_HIDDEN: 'hidden',
+        /**
+        * @protected
         * @property CLASS_LOCAL_FILE
         * @description CSS class applied to an element when it's found to have a local url.
         * @type String
@@ -2930,7 +2912,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('hiddencss', {
-                value: attr.hiddencss || 'div, p, span, img { border: 1px dotted #ccc; } .yui-non { border: none; } img { padding: 2px; }',
+                value: attr.hiddencss || '.hidden div,.hidden p,.hidden span,.hidden img { border: 1px dotted #ccc; } .hidden .yui-non { border: none; } .hidden img { padding: 2px; }',
                 writeOnce: true
             });
             /**
@@ -4164,7 +4146,6 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'fontname':
                     var selEl = this._getSelectedElement();
-                    //if (selEl && selEl.tagName && (this._getSelection() == '')) {
                     if (selEl && selEl.tagName && !this._hasSelection()) {
                         Dom.setStyle(selEl, 'font-family', value);
                         exec = false;
@@ -4172,7 +4153,6 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'fontsize':
                     var selEl = this._getSelectedElement();
-                    //if (selEl && selEl.tagName && (this._getSelection() == '')) {
                     if (selEl && selEl.tagName && !this._hasSelection()) {
                         YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
                     } else {
@@ -4711,7 +4691,11 @@ var Dom = YAHOO.util.Dom,
         * @return {String}
         */
         toString: function() {
-            return 'Editor (#' + this.get('element_cont').get('id') + ')' + ((this.get('disabled') ? ' Disabled' : ''));
+            var str = 'Editor';
+            if (this.get && this.get('element_cont')) {
+                str = 'Editor (#' + this.get('element_cont').get('id') + ')' + ((this.get('disabled') ? ' Disabled' : ''));
+            }
+            return str;
         }
     });
 

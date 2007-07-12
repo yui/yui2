@@ -38,7 +38,6 @@ var Dom = YAHOO.util.Dom,
         }
 
         if (Lang.isString(el)) {
-            YAHOO.log('Found DOM element for editor (' + el + ')', 'warn', 'Editor');
             oConfig.attributes.textarea = Dom.get(el);
         }
         
@@ -458,13 +457,6 @@ var Dom = YAHOO.util.Dom,
             }
             this._setDesignMode('on');
             
-            if (this.browser.webkit) {
-                var head = this._getDoc().getElementsByTagName('head').item(0);
-                var styles = head.getElementsByTagName('style');
-                styles[1].disabled = true;
-                this._showingHiddenElements = styles[1];
-            }
-
             this.toolbar.on('buttonClick', this._handleToolbarClick, this, true);
             //Setup Listeners on iFrame
             Event.addListener(this._getDoc(), 'mouseup', this._handleMouseUp, this, true);
@@ -524,9 +516,7 @@ var Dom = YAHOO.util.Dom,
             html = html.replace('{TITLE}', title);
             html = html.replace('{CONTENT}', this.get('textarea').value);
             html = html.replace('{CSS}', this.get('css'));
-            if (this.browser.ie || this.browser.webkit) {
-                html = html.replace('{HIDDEN_CSS}', this.get('hiddencss'));
-            }
+            html = html.replace('{HIDDEN_CSS}', this.get('hiddencss'));
 
             this._getDoc().open();
             this._getDoc().write(html);
@@ -565,7 +555,6 @@ var Dom = YAHOO.util.Dom,
             try {
                 this._getDoc().execCommand('useCSS', false, !stat);
             } catch (ex) {
-               YAHOO.log('useCSS failed: ' + ex, 'info', 'Editor');
             }
         },
         /**
@@ -796,27 +785,15 @@ var Dom = YAHOO.util.Dom,
         * @description Toggle on/off the hidden.css file.
         */
         _showHidden: function() {
-            var head = this._getDoc().getElementsByTagName('head').item(0);
             if (this._showingHiddenElements) {
-                if (this._showingHiddenElements.disabled) {
-                    YAHOO.log('Enabling hidden CSS File', 'info', 'Editor');
-                    this._showingHiddenElements.disabled = false;
-                    this.toolbar.selectButton(this.toolbar.getButtonByValue('hiddenelements'));
-                } else {
-                    YAHOO.log('Disabling hidden CSS File', 'info', 'Editor');
-                    this._showingHiddenElements.disabled = true;
-                    this.toolbar.deselectButton(this.toolbar.getButtonByValue('hiddenelements'));
-                }
+                YAHOO.log('Enabling hidden CSS File', 'info', 'Editor');
+                this._showingHiddenElements = false;
+                this.toolbar.deselectButton(this.toolbar.getButtonByValue('hiddenelements'));
+                Dom.removeClass(this._getDoc().body, this.CLASS_HIDDEN);
             } else {
-                if (this.browser.ie) {
-                    var styles = head.getElementsByTagName('style');
-                    styles[1].disabled = false;
-                    this._showingHiddenElements = styles[1];
-                } else {
-                    var styles = head.getElementsByTagName('style');
-                    styles[1].innerHTML = this.get('hiddencss');
-                    this._showingHiddenElements = styles[1];
-                }
+                YAHOO.log('Disabling hidden CSS File', 'info', 'Editor');
+                this._showingHiddenElements = true;
+                Dom.addClass(this._getDoc().body, this.CLASS_HIDDEN);
                 this.toolbar.selectButton(this.toolbar.getButtonByValue('hiddenelements'));
             }
         },
@@ -1037,8 +1014,6 @@ var Dom = YAHOO.util.Dom,
         nodeChange: function() {
             this._fixNodes();
 
-            //Node changes occur too often to log..
-            //YAHOO.log('fireEvent::beforeNodeChange', 'info', 'Editor');
             this.fireEvent('beforeNodeChange', { type: 'beforeNodeChange', target: this });
             if (this.get('dompath')) {
                 this._writeDomPath();
@@ -1046,7 +1021,6 @@ var Dom = YAHOO.util.Dom,
             //Check to see if we are disabled before continuing
             if (!this.get('disabled')) {
                 if (this.STOP_NODE_CHANGE) {
-                    //YAHOO.log('Node change processing stopped via STOP_NODE_CHANGE var', 'warn', 'Editor');
                     //Reset this var for next action
                     this.STOP_NODE_CHANGE = false;
                     return false;
@@ -1154,8 +1128,6 @@ var Dom = YAHOO.util.Dom,
                 }
             }
 
-
-            //YAHOO.log('fireEvent::afterNodeChange', 'info', 'Editor');
             this.fireEvent('afterNodeChange', { type: 'afterNodeChange', target: this });
         },
         /**
@@ -1363,6 +1335,13 @@ var Dom = YAHOO.util.Dom,
         STOP_NODE_CHANGE: false,
         /**
         * @protected
+        * @property CLASS_HIDDEN
+        * @description CSS class applied to the body when the hiddenelements button is pressed.
+        * @type String
+        */
+        CLASS_HIDDEN: 'hidden',
+        /**
+        * @protected
         * @property CLASS_LOCAL_FILE
         * @description CSS class applied to an element when it's found to have a local url.
         * @type String
@@ -1471,7 +1450,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('hiddencss', {
-                value: attr.hiddencss || 'div, p, span, img { border: 1px dotted #ccc; } .yui-non { border: none; } img { padding: 2px; }',
+                value: attr.hiddencss || '.hidden div,.hidden p,.hidden span,.hidden img { border: 1px dotted #ccc; } .hidden .yui-non { border: none; } .hidden img { padding: 2px; }',
                 writeOnce: true
             });
             /**
@@ -1805,10 +1784,8 @@ var Dom = YAHOO.util.Dom,
         * @param {Object} o Object returned from Toolbar's buttonClick Event
         */
         _handleFontSize: function(o) {
-            YAHOO.log('(Button: ' + o.button.value + ')', 'info', 'fontsizeClick');
             var button = this.toolbar.getButtonById(o.button.id);
             var value = button.get('label') + 'px';
-            YAHOO.log('fontsizeClick::execCommand::(fontsize), (' + value + ')', 'info', 'Editor');
             this.execCommand('fontsize', value);
             this.STOP_EXEC_COMMAND = true;
         },
@@ -1822,7 +1799,6 @@ var Dom = YAHOO.util.Dom,
             var cmd = o.button;
             var value = '#' + o.color;
             if ((cmd == 'forecolor') || (cmd == 'backcolor')) {
-                YAHOO.log('colorPickerClicked::execCommand::(' + cmd + '), (' + value + ')', 'info', 'Editor');
                 this.execCommand(cmd, value);
             }
         },
@@ -1841,7 +1817,6 @@ var Dom = YAHOO.util.Dom,
                 }
             }
             var value = this._getSelection();
-            YAHOO.log('alignClick::execCommand::(' + cmd + '), (' + value + ')', 'info', 'Editor');
 
             this.execCommand(cmd, value);
             this.STOP_EXEC_COMMAND = true;
@@ -2170,7 +2145,6 @@ var Dom = YAHOO.util.Dom,
                 win.setHeader(this.STR_IMAGE_PROP_TITLE);
                 win.setBody(body);
                 if ((this.browser.webkit && !this.browser.webkit3) || this.browser.opera) {
-                    YAHOO.log('Safari 2/Opera 9 warning', 'warn', 'Editor');
                     var str = this.STR_IMAGE_COPY;
                     win.setFooter(str);
                 }
@@ -2196,7 +2170,6 @@ var Dom = YAHOO.util.Dom,
                                 Dom.removeClass(url, 'warning');
                                 this.get('panel').setFooter(' ');
                                 if ((this.browser.webkit && !this.browser.webkit3) || this.browser.opera) {
-                                    YAHOO.log('Safari 2/Opera 9 warning', 'warn', 'Editor');
                                     var str = this.STR_IMAGE_COPY;
                                     this.get('panel').setFooter(str);
                                 }
@@ -2627,7 +2600,6 @@ var Dom = YAHOO.util.Dom,
                     if (this.browser.webkit) {
                         this.createCurrentElement('blockquote');
                         if (Dom.hasClass(this.currentElement.parentNode, 'yui-tag-blockquote')) {
-                            YAHOO.log('We have a blockquote inside a blockquote, remove formatting', 'info', 'Editor');
                             var span = this._getDoc().createElement('span');
                             span.innerHTML = this.currentElement.innerHTML;
                             Dom.addClass(span, 'yui-non');
@@ -2637,7 +2609,6 @@ var Dom = YAHOO.util.Dom,
                     } else {
                         var tar = Event.getTarget(this.currentEvent);
                         if (tar && tar.tagName && (tar.tagName.toLowerCase() == 'blockquote')) {
-                            YAHOO.log('We have a blockquote inside a blockquote, remove formatting', 'info', 'Editor');
                             var span = this._getDoc().createElement('span');
                             span.innerHTML = tar.innerHTML;
                             Dom.addClass(span, 'yui-non');
@@ -2651,9 +2622,7 @@ var Dom = YAHOO.util.Dom,
                     this.createCurrentElement(action.toLowerCase());
                     if (this.currentElement.parentNode) {
                         if (action.toLowerCase() == 'outdent') {
-                            YAHOO.log('We have an outdent, check to see if we are in an indent', 'info', 'Editor');
                             if (Dom.hasClass(this.currentElement.parentNode, 'yui-tag-indent')) {
-                                YAHOO.log('We have an indent, remove formatting', 'info', 'Editor');
                                 var span = this._getDoc().createElement('span');
                                 span.innerHTML = this.currentElement.innerHTML;
                                 Dom.addClass(span, 'yui-non');
@@ -2687,7 +2656,6 @@ var Dom = YAHOO.util.Dom,
                             }
                             list.innerHTML = str;
                         } else {
-                            YAHOO.log('Fun Dom write for Safari', 'info', 'Editor');
                             this.createCurrentElement(action.toLowerCase());
                             var el = this.currentElement;
                             var list = this._getDoc().createElement(tag);
@@ -2724,7 +2692,6 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'fontname':
                     var selEl = this._getSelectedElement();
-                    //if (selEl && selEl.tagName && (this._getSelection() == '')) {
                     if (selEl && selEl.tagName && !this._hasSelection()) {
                         Dom.setStyle(selEl, 'font-family', value);
                         exec = false;
@@ -2732,7 +2699,6 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'fontsize':
                     var selEl = this._getSelectedElement();
-                    //if (selEl && selEl.tagName && (this._getSelection() == '')) {
                     if (selEl && selEl.tagName && !this._hasSelection()) {
                         YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
                     } else {
@@ -3275,7 +3241,11 @@ var Dom = YAHOO.util.Dom,
         * @return {String}
         */
         toString: function() {
-            return 'Editor (#' + this.get('element_cont').get('id') + ')' + ((this.get('disabled') ? ' Disabled' : ''));
+            var str = 'Editor';
+            if (this.get && this.get('element_cont')) {
+                str = 'Editor (#' + this.get('element_cont').get('id') + ')' + ((this.get('disabled') ? ' Disabled' : ''));
+            }
+            return str;
         }
     });
 
