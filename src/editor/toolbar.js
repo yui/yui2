@@ -872,6 +872,14 @@ var Dom = YAHOO.util.Dom,
                         return false;
                     });
                 }
+            } else {
+                //Stop the mousedown event so we can trap the selection in the editor!
+                tmp.on('mousedown', function(ev) {
+                    YAHOO.util.Event.stopEvent(ev);
+                });
+                tmp.on('click', function(ev) {
+                    YAHOO.util.Event.stopEvent(ev);
+                });
             }
             if (this.browser.ie) {
                 //Add a couple of new events for IE
@@ -1099,6 +1107,7 @@ var Dom = YAHOO.util.Dom,
             }
             
             var _intUp = function(ev) {
+                YAHOO.util.Event.stopEvent(ev);
                 if (!_button.get('disabled') && (ev.keyCode != 9)) {
                     var value = parseInt(_button.get('label'));
                     value++;
@@ -1110,14 +1119,12 @@ var Dom = YAHOO.util.Dom,
                         //tbar.focus(); //We do this for accessibility, on the re-focus of the element, a screen reader will re-read the title that was just changed
                         //_button.focus();
                     }
-                    self._buttonClick(null, oButton);
-                    //if (self.browser.webkit) {
-                        YAHOO.util.Event.stopEvent(ev);
-                    //}
+                    self._buttonClick(ev, oButton);
                 }
             };
 
             var _intDown = function(ev) {
+                YAHOO.util.Event.stopEvent(ev);
                 if (!_button.get('disabled') && (ev.keyCode != 9)) {
                     var value = parseInt(_button.get('label'));
                     value--;
@@ -1131,9 +1138,6 @@ var Dom = YAHOO.util.Dom,
                         //_button.focus();
                     }
                     self._buttonClick(ev, oButton);
-                    //if (self.browser.webkit) {
-                        YAHOO.util.Event.stopEvent(ev);
-                    //}
                 }
             };
 
@@ -1154,17 +1158,14 @@ var Dom = YAHOO.util.Dom,
 
             //Listen for the click on the up button and act on it
             //Listen for the click on the down button and act on it
-            //if (br.webkit) {
-                Event.on(_b1, 'mousedown',function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                }, this, true);
-                Event.on(_b2, 'mousedown', function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                }, this, true);
-            //} else {
-                Event.on(_b1, 'click', _intUp, this, true);
-                Event.on(_b2, 'click', _intDown, this, true);
-            //}
+            Event.on(_b1, 'mousedown',function(ev) {
+                Event.stopEvent(ev);
+            }, this, true);
+            Event.on(_b2, 'mousedown', function(ev) {
+                Event.stopEvent(ev);
+            }, this, true);
+            Event.on(_b1, 'click', _intUp, this, true);
+            Event.on(_b2, 'click', _intDown, this, true);
         },
         /**
         * @protected

@@ -872,6 +872,14 @@ var Dom = YAHOO.util.Dom,
                         return false;
                     });
                 }
+            } else {
+                //Stop the mousedown event so we can trap the selection in the editor!
+                tmp.on('mousedown', function(ev) {
+                    YAHOO.util.Event.stopEvent(ev);
+                });
+                tmp.on('click', function(ev) {
+                    YAHOO.util.Event.stopEvent(ev);
+                });
             }
             if (this.browser.ie) {
                 //Add a couple of new events for IE
@@ -1099,6 +1107,7 @@ var Dom = YAHOO.util.Dom,
             }
             
             var _intUp = function(ev) {
+                YAHOO.util.Event.stopEvent(ev);
                 if (!_button.get('disabled') && (ev.keyCode != 9)) {
                     var value = parseInt(_button.get('label'));
                     value++;
@@ -1110,14 +1119,12 @@ var Dom = YAHOO.util.Dom,
                         //tbar.focus(); //We do this for accessibility, on the re-focus of the element, a screen reader will re-read the title that was just changed
                         //_button.focus();
                     }
-                    self._buttonClick(null, oButton);
-                    //if (self.browser.webkit) {
-                        YAHOO.util.Event.stopEvent(ev);
-                    //}
+                    self._buttonClick(ev, oButton);
                 }
             };
 
             var _intDown = function(ev) {
+                YAHOO.util.Event.stopEvent(ev);
                 if (!_button.get('disabled') && (ev.keyCode != 9)) {
                     var value = parseInt(_button.get('label'));
                     value--;
@@ -1131,9 +1138,6 @@ var Dom = YAHOO.util.Dom,
                         //_button.focus();
                     }
                     self._buttonClick(ev, oButton);
-                    //if (self.browser.webkit) {
-                        YAHOO.util.Event.stopEvent(ev);
-                    //}
                 }
             };
 
@@ -1154,17 +1158,14 @@ var Dom = YAHOO.util.Dom,
 
             //Listen for the click on the up button and act on it
             //Listen for the click on the down button and act on it
-            //if (br.webkit) {
-                Event.on(_b1, 'mousedown',function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                }, this, true);
-                Event.on(_b2, 'mousedown', function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                }, this, true);
-            //} else {
-                Event.on(_b1, 'click', _intUp, this, true);
-                Event.on(_b2, 'click', _intDown, this, true);
-            //}
+            Event.on(_b1, 'mousedown',function(ev) {
+                Event.stopEvent(ev);
+            }, this, true);
+            Event.on(_b2, 'mousedown', function(ev) {
+                Event.stopEvent(ev);
+            }, this, true);
+            Event.on(_b1, 'click', _intUp, this, true);
+            Event.on(_b2, 'click', _intDown, this, true);
         },
         /**
         * @protected
@@ -2049,17 +2050,13 @@ var Dom = YAHOO.util.Dom,
         _getSelectedElement: function() {
             var doc = this._getDoc();
             if (this.browser.ie) {
-                var range = this._getRange();
+                var range = this._getRange(), elm = null;
                 if (range) {
-                    var elm = range.item ? range.item(0) : range.parentElement();
-                    if (elm.ownerDocument != doc) {
-                        //Sometimes Internet Explorer jumps out of the iFrame here.. Put it back in..
-                        elm = doc;
+                    elm = range.item ? range.item(0) : range.parentElement();
+                    if (elm == doc.body) {
+                        elm = null;
                     }
-                } else {
-                    elm = doc;
                 }
-                return elm;
             } else {
                 var sel = this._getSelection(),
                     range = this._getRange(),
@@ -2096,7 +2093,7 @@ var Dom = YAHOO.util.Dom,
                     //Safari Fix
                     if (!elm) {
                         if (this.currentEvent) {
-                            elm = Event.getTarget(this.currentEvent);
+                            //elm = Event.getTarget(this.currentEvent);
                         }
                     }
                 }
@@ -2113,13 +2110,13 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (this.browser.opera || this.browser.webkit) {
-                if (this.currentEvent) {
+                if (this.currentEvent && !elm) {
                     elm = Event.getTarget(this.currentEvent);
                 }
             }
 
-            if (!elm) {
-                elm = doc;
+            if (!elm || !elm.tagName) {
+                elm = doc.body;
             }
             
             return elm;
@@ -4209,8 +4206,16 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'fontsize':
                     var selEl = this._getSelectedElement();
-                    if (selEl && selEl.tagName && !this._hasSelection()) {
-                        YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
+                    if (selEl && selEl.tagName && this._hasSelection() && !this.browser.ie) {
+                        if (this._getSelection() == selEl.innerHTML) {
+                            Dom.setStyle(selEl, 'fontSize', value);
+                        }
+                    } else if (selEl && selEl.tagName && this._hasSelection() && this.browser.ie) {
+                        if (this._getRange().text == selEl.innerHTML) {
+                            Dom.setStyle(selEl, 'fontSize', value);
+                        }
+                    } else if (selEl && selEl.tagName && !this._hasSelection()) {
+                        Dom.setStyle(selEl, 'fontSize', value);
                     } else {
                         this.createCurrentElement('span', {'fontSize': value });
                     }
@@ -4311,6 +4316,7 @@ var Dom = YAHOO.util.Dom,
                         tar.parentNode.appendChild(el);
                     }
                     this.currentElement = el;
+                    this.currentEvent = null;
                     if (this.browser.webkit) {
                         //Force Safari to focus the new element
                         this._getSelection().setBaseAndExtent(el, 0, el, 0);
@@ -4341,10 +4347,14 @@ var Dom = YAHOO.util.Dom,
                         if (_tmp[i].parentNode) {
                             _tmp[i].parentNode.replaceChild(el, _tmp[i]);
                             this.currentElement = el;
+                            this.currentEvent = null;
                             if (this.browser.webkit) {
                                 //Force Safari to focus the new element
                                 this._getSelection().setBaseAndExtent(el, 0, el, 0);
                                 this._getSelection().collapse(true);   
+                            }
+                            if (this.browser.ie && tagStyle && tagStyle.fontSize) {
+                                this._getSelection().empty();
                             }
                         }
                     }

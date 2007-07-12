@@ -566,17 +566,13 @@ var Dom = YAHOO.util.Dom,
         _getSelectedElement: function() {
             var doc = this._getDoc();
             if (this.browser.ie) {
-                var range = this._getRange();
+                var range = this._getRange(), elm = null;
                 if (range) {
-                    var elm = range.item ? range.item(0) : range.parentElement();
-                    if (elm.ownerDocument != doc) {
-                        //Sometimes Internet Explorer jumps out of the iFrame here.. Put it back in..
-                        elm = doc;
+                    elm = range.item ? range.item(0) : range.parentElement();
+                    if (elm == doc.body) {
+                        elm = null;
                     }
-                } else {
-                    elm = doc;
                 }
-                return elm;
             } else {
                 var sel = this._getSelection(),
                     range = this._getRange(),
@@ -613,7 +609,7 @@ var Dom = YAHOO.util.Dom,
                     //Safari Fix
                     if (!elm) {
                         if (this.currentEvent) {
-                            elm = Event.getTarget(this.currentEvent);
+                            //elm = Event.getTarget(this.currentEvent);
                         }
                     }
                 }
@@ -630,13 +626,13 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (this.browser.opera || this.browser.webkit) {
-                if (this.currentEvent) {
+                if (this.currentEvent && !elm) {
                     elm = Event.getTarget(this.currentEvent);
                 }
             }
 
-            if (!elm) {
-                elm = doc;
+            if (!elm || !elm.tagName) {
+                elm = doc.body;
             }
             
             return elm;
@@ -2726,8 +2722,16 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'fontsize':
                     var selEl = this._getSelectedElement();
-                    if (selEl && selEl.tagName && !this._hasSelection()) {
-                        YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
+                    if (selEl && selEl.tagName && this._hasSelection() && !this.browser.ie) {
+                        if (this._getSelection() == selEl.innerHTML) {
+                            Dom.setStyle(selEl, 'fontSize', value);
+                        }
+                    } else if (selEl && selEl.tagName && this._hasSelection() && this.browser.ie) {
+                        if (this._getRange().text == selEl.innerHTML) {
+                            Dom.setStyle(selEl, 'fontSize', value);
+                        }
+                    } else if (selEl && selEl.tagName && !this._hasSelection()) {
+                        Dom.setStyle(selEl, 'fontSize', value);
                     } else {
                         this.createCurrentElement('span', {'fontSize': value });
                     }
@@ -2828,6 +2832,7 @@ var Dom = YAHOO.util.Dom,
                         tar.parentNode.appendChild(el);
                     }
                     this.currentElement = el;
+                    this.currentEvent = null;
                     if (this.browser.webkit) {
                         //Force Safari to focus the new element
                         this._getSelection().setBaseAndExtent(el, 0, el, 0);
@@ -2858,10 +2863,14 @@ var Dom = YAHOO.util.Dom,
                         if (_tmp[i].parentNode) {
                             _tmp[i].parentNode.replaceChild(el, _tmp[i]);
                             this.currentElement = el;
+                            this.currentEvent = null;
                             if (this.browser.webkit) {
                                 //Force Safari to focus the new element
                                 this._getSelection().setBaseAndExtent(el, 0, el, 0);
                                 this._getSelection().collapse(true);   
+                            }
+                            if (this.browser.ie && tagStyle && tagStyle.fontSize) {
+                                this._getSelection().empty();
                             }
                         }
                     }

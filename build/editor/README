@@ -35,6 +35,13 @@
             Safari will also give unexpected results if text from another Safari window in selected, then dragged
             into the editable area.
 
+        4. Image resize is unavailable, due to limitations in the browser
+
+    * Opera
+
+        1. Placing the cursor in the editor, then Shift Clicking to highlight will not work. The limitation appear to be in Opera.
+
+        2. Image resize is unavailable, due to limitations in the browser
 
 **** version 2.3.0 Peview Release Notes ***
 
