@@ -1,5 +1,183 @@
 Container Release Notes
 
+*** version 2.3 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Improved creation of the <iframe> element used to monitor changes to the 
+  browser's font size so that:
+  
+    - Safari's status bar no longer displays a "Loading..." message after the 
+      page has loaded.
+  
+    - Firefox no longer reports duplicate cookie information.
+    
+    - The browser scrollbars no longer flash on and off in Firefox.
+
++ It is now possible to set the "button" configuration property of a 
+  YAHOO.widget.Dialog instance after it has be rendered.
+
++ Form elements appended to a YAHOO.widget.Dialog instance via the "setBody"
+  method are now automatically registered using the "registerForm" method.
+
++ The "focusFirst" method of YAHOO.widget.Dialog will no longer result in a 
+  JavaScript error in IE if the first element in the Dialog instance's form
+  is a radio button.
+
++ YAHOO.widget.Panel instances whose "draggable" property is set to "true" and
+  "width" property is set to "auto" are now able to be dragged in IE 6 (Quirks
+  and Strict Mode) and IE 7 Quirks Mode.
+
++ Updated focus methods of YAHOO.widget.Dialog to prevent JavaScript errors 
+  that result from trying to set focus to elements that hidden or disabled.
+
++ Pressing the enter key will no longer result in a YAHOO.widget.Dialog 
+  instance's "validate" method being called twice.
+
++ Pressing the enter key while focused on a form field inside a Dialog will no
+  longer trigger the "click" event handler defined by the Dialog's default 
+  button in IE and Firefox.
+
++ Pressing the enter key when focused on a form field inside a 
+  YAHOO.widget.Dialog instance with no buttons created via its "buttons" 
+  configuration property will no longer result in a JavaScript error.
+
++ Aqua scrollbars will no longer bleed through Container widgets in Firefox
+  for Mac OS X.
+
++ The "width" and "height" configuration properties of YAHOO.widget.Overlay
+  now supersede the "fixedcenter" and "context" configuration properties to 
+  ensure correct positioning of Overlay instances using the "fixedcenter" 
+  and "context" configuration properties.
+
++ Calling the "destroy" method on a YAHOO.widget.Overlay instance no longer 
+  results in a JavaScript error on the subsequent focus of another 
+  Overlay instance.
+
++ YAHOO.widget.Tooltip instances without a value specified for the "width" 
+  configuration property will be rendered at a width equal to the offsetWidth
+  of their root <DIV/> element to prevent their width from being clipped or 
+  constrained by their parent HTML element.
+
+
+Changes:
+--------
+
++ Rendering of YAHOO.widget.Tooltip instances is now deferred using the 
+  "onDOMReady" event handler of YAHOO.util.Event rather than waiting until 
+  the "load" event of the Tooltip's parent window fires.
+
++ Deprecated "browser" property of YAHOO.widget.Module in favor 
+  of YAHOO.env.ua.
+
++ The "moveEvent" of a YAHOO.widget.Panel instance now also fires with the 
+  "endDrag" event of the its YAHOO.util.DD instance.
+
++ Updated modal functionality of YAHOO.widget.Panel:
+    
+    - The creation of a Panel instance's modality mask is now deferred until it
+      is initially made visible.
+
+    - Showing a modal Panel instance will now result in the Panel and its 
+      associated modality mask element having a higher z-index than all other
+      YAHOO.widget.Overlay instances and Overlay subclasses.
+
++ Updated the "underlay" configuration property of YAHOO.widget.Panel:
+
+    - The creation of the "underlay" element is deferred until the Panel
+      instance is initially made visible.
+
+    - The underlay elment is always created for Gecko-based browsers on Mac
+      OS X as it is used as a shim to prevent Aqua scrollbars from poking 
+      through a Panel instance.
+
++ Updated the "buttons" configuration property of YAHOO.widget.Dialog:
+
+    - YAHOO.widget.Button is now an optional dependancy, and if included, each
+      button in a Dialog will be an instance of Button.
+
+    - The "text" property of each button now accepts HTML
+    
+    - The "handler" property of each button can now be set to:
+    
+        + A reference to a function that should fire when the button is 
+          clicked.  (In this case scope of this function is always its 
+          Dialog instance.)
+
+        + An object literal representing the code to be executed when the 
+          button is clicked.  The format is:  
+          {
+            fn: Function (The handler to call when the event fires.),
+            obj: Object (An object to pass back to the handler.),
+            scope: Object (The object to use for the scope of the handler.)
+          }   
+
+
+Added the following features:
+-----------------------------
+
++ Added ability for YAHOO.widget.Tooltip instances to have shadow:
+
+    - The shadow for a Tooltip is implemented by appending a new element as the 
+      last child of its root <DIV/> element:
+
+        <DIV class="yui-tt">
+            <DIV class="bd"> ... </DIV>
+            <DIV class="yui-tt-shadow"/>
+        </DIV>
+
+    - The code that creates the shadow element resides inside the Tooltip's 
+      public "onRender" prototype method.  To disable the creation of a 
+      Tooltip's shadow override the prototype of the "onRender" method:
+      
+      YAHOO.widget.Tooltip.prototype.onRender = null;
+      
+    - The actual creation of the shadow element is deferred until the Tooltip 
+      is made visible for the first time.
+
+    - A Tooltip's shadow element can be styled via two CSS classes:
+
+        + "yui-tt-shadow"  - Applied to the shadow element when it is created.
+        + "yui-tt-shadow-visible" - Applied to the shadow element when the  
+          Tooltip is visible; it is removed the Tooltip is hidden.
+
+    - The shadow element is only styled with the new "Sam" skin.
+
++ Prototype of all classes (Module, Overlay, Panel, Dialog, SimpleDialog,  
+  Tooltip, Config, and ContainerEffect) are augmented 
+  with YAHOO.util.EventProvider, facilitating subscribing to an instance's 
+  Custom Events by name via a "subscribe" method that is a direct member of 
+  the class.  For example:
+  
+    var oOverlay = new YAHOO.widget.Overlay("myoverlay");
+    
+    oOverlay.subscribe("show", onShow);
+
++ Added "bringToTop" method to YAHOO.widget.Overlay that places the Overlay on 
+  top of all other Overlay instances.
+
++ Added a new "bringToTop" method to YAHOO.widget.OverlayManager that places 
+  the specified Overlay instance on top of all other Overlay instances.  This 
+  method is called on each Overlay instance that is registered with an 
+  OverlayManager instance.
+
++ Dialog instances are now able to upload files should the Dialog instance's 
+  form contain <input type="file"/> elements.  PLEASE NOTE: If a Dialog 
+  instance will be handling asyncronous file uploads, its "callback" property 
+  will need to be setup with an "upload" handler rather than the standard 
+  "success" and, or "failure" handlers.  For more information, see the 
+  Connection Manager documenation on file uploads:
+  http://developer.yahoo.com/yui/connection/#file
+
++ Added a new "getButtons" method to YAHOO.widget.Dialog that returns an array 
+  containing each of the Dialog's buttons; by default an array of HTML <BUTTON>
+  elements.  If the Dialog's buttons were created using the 
+  YAHOO.widget.Button class (via the inclusion of the optional Button
+  dependancy on the page), an array of YAHOO.widget.Button instances 
+  is returned.
+
+
 *** version 2.2.2 ***
 
 + Clicking the close button of a Panel (or any instance of a Panel subclass) 
