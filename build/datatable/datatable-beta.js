@@ -1333,7 +1333,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
-    var sLabel = oColumn.label || oColumn.key;
+    var sLabel = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : oColumn.key;
     if(oColumn.sortable) {
         YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
         //TODO: Make sortLink customizeable
