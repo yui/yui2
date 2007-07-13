@@ -4173,18 +4173,24 @@ var Dom = YAHOO.util.Dom,
                     }
                     break;
                 case 'fontsize':
-                    var selEl = this._getSelectedElement();
+                    var selEl = this._getSelectedElement(), createEl = false;
+
                     if (selEl && selEl.tagName && this._hasSelection() && !this.browser.ie) {
                         if (this._getSelection() == selEl.innerHTML) {
                             Dom.setStyle(selEl, 'fontSize', value);
+                        } else {
+                            createEl = true;
                         }
                     } else if (selEl && selEl.tagName && this._hasSelection() && this.browser.ie) {
                         if (this._getRange().text == selEl.innerHTML) {
                             Dom.setStyle(selEl, 'fontSize', value);
+                        } else {
+                            createEl = true;
                         }
                     } else if (selEl && selEl.tagName && !this._hasSelection()) {
                         Dom.setStyle(selEl, 'fontSize', value);
-                    } else {
+                    }
+                    if (createEl) {
                         this.createCurrentElement('span', {'fontSize': value });
                     }
                     exec = false;

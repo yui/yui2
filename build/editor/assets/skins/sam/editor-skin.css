@@ -227,20 +227,20 @@
 }
 
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
-    top: -1px;
+    top: 0;
     right: 0;
     background-image: url( editor-sprite.gif );
-    background-position: 0 -1220px;
+    background-position: 0 -1221px;
     overflow: hidden;
     height: 8px;
     width: 8px;
     min-height: 0;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
-    bottom: -1px;
+    bottom: 0;
     right: 0;
     background-image: url( editor-sprite.gif );
-    background-position: 0 -1188px;
+    background-position: 0 -1187px;
     overflow: hidden;
     height: 8px;
     width: 8px;
