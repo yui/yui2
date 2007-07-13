@@ -2549,8 +2549,7 @@
     
                         this.beforeShowEvent.fire();
     
-                        Dom.setStyle(this.element, 
-                            "visibility", "visible");
+                        Dom.setStyle(this.element, "visibility", "visible");
     
                         this.cfg.refireEvent("iframe");
                         this.showEvent.fire();
@@ -2599,8 +2598,7 @@
     
                     } else if (currentVis === "") {
     
-                        Dom.setStyle(
-                            this.element, "visibility", "hidden");
+                        Dom.setStyle(this.element, "visibility", "hidden");
     
                     }
     
@@ -2610,8 +2608,7 @@
     
                         this.beforeHideEvent.fire();
     
-                        Dom.setStyle(this.element, 
-                            "visibility", "hidden");
+                        Dom.setStyle(this.element, "visibility", "hidden");
     
                         this.cfg.refireEvent("iframe");
                         this.hideEvent.fire();
