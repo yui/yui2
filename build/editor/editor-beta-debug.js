@@ -2601,7 +2601,7 @@ var Dom = YAHOO.util.Dom,
                                 break;
                         }
                         //Handle Ordered List Drop Down - it will reset if olType is null
-                        this._updateMenuChecked('insertorderedlist', olType);
+                        //this._updateMenuChecked('insertorderedlist', olType);
                     }
                     //After for loop
 
@@ -3191,6 +3191,8 @@ var Dom = YAHOO.util.Dom,
                                 { type: 'push', label: 'Indent', value: 'indent', disabled: true },
                                 { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
                                 { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
+                                { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
+                                /*
                                 { type: 'menu', label: 'Create an Ordered List', value: 'insertorderedlist',
                                     menu: [
                                         { text: '1,2,3,4', value: '1', checked: true },
@@ -3200,6 +3202,7 @@ var Dom = YAHOO.util.Dom,
                                         { text: 'i,ii,iii,iv', value: 'i' }
                                     ]
                                 }
+                                */
                             ]
                         },
                         { type: 'separator' },
@@ -4171,7 +4174,8 @@ var Dom = YAHOO.util.Dom,
                     * list items. This is fixed in WebKit (Safari 3)
                     */
                     var tag = ((action.toLowerCase() == 'insertorderedlist') ? 'ol' : 'ul');
-                    if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) || this.browser.opera) {
+                    //if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) || this.browser.opera) {
+                    if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action))) {
                         var selEl = this._getSelectedElement();
                         if ((selEl.tagName.toLowerCase() == 'li') && (selEl.parentNode.tagName.toLowerCase() == tag)) {
                             YAHOO.log('We already have a list, undo it', 'info', 'Editor');
@@ -4186,7 +4190,8 @@ var Dom = YAHOO.util.Dom,
                             list.innerHTML = str;
 
                         } else {
-                            this.createCurrentElement(action.toLowerCase());
+                            YAHOO.log('Create list item', 'info', 'Editor');
+                            this.createCurrentElement(tag.toLowerCase());
                             var el = this.currentElement;
                             var list = this._getDoc().createElement(tag);
                             if (tag == 'ol') {
@@ -4199,20 +4204,63 @@ var Dom = YAHOO.util.Dom,
                         el.parentNode.replaceChild(list, el);
                         exec = false;
                     } else {
-                        exec = false;
                         var el = this._getSelectedElement();
-                        if ((el.tagName.toLowerCase() == 'li') && (tag == 'ol')) { //we are in a list..
-                            el = el.parentNode;
-                        } else {
-                            this._getDoc().execCommand(action, '', value);
-                            if (this.browser.opera) {
+                        if ((el.tagName.toLowerCase() == 'li') && (el.parentNode.tagName.toLowerCase() == tag) || (this.browser.ie && this._getRange().parentElement && this._getRange().parentElement.tagName && (this._getRange().parentElement.tagName.toLowerCase() == 'li'))) { //we are in a list..
+                            YAHOO.log('We already have a list, undo it', 'info', 'Editor');
+                            if (this.browser.ie) {
+                                YAHOO.log('Undo IE', 'info', 'Editor');
+                                exec = false;
+                                var str = '';
+                                var lis = el.parentNode.getElementsByTagName('li');
+                                for (var i = 0; i < lis.length; i++) {
+                                    str += lis[i].innerHTML + '<br>';
+                                }
+                                var newEl = this._getDoc().createElement('span');
+                                newEl.innerHTML = str;
+                                el.parentNode.parentNode.replaceChild(newEl, el.parentNode);
+                            } else {
+                                this.nodeChange();
+                                this._getDoc().execCommand(action, '', el.parentNode);
                                 this.nodeChange();
                             }
+                        }
+                        if (this.browser.opera) {
+                            var self = this;
+                            window.setTimeout(function() {
+                                var lis = self._getDoc().getElementsByTagName('li');
+                                for (var i = 0; i < lis.length; i++) {
+                                    if (lis[i].innerHTML.toLowerCase() == '<br>') {
+                                        lis[i].parentNode.parentNode.removeChild(lis[i].parentNode);
+                                    }
+                                }
+                            },30);
+                        }
+                        if (this.browser.ie && exec) {
+                            var html = '';
+                            if (this._getRange().html) {
+                                html = '<li>' + this._getRange().html+ '</li>';
+                            } else {
+                                html = '<li>' + this._getRange().text + '</li>';
+                            }
+
+                            this._getRange().pasteHTML('<' + tag + '>' + html + '</' + tag + '>');
+                            exec = false;
+                        }
+                        /*
+                        exec = false;
+                        var el = this._getSelectedElement();
+                        //if ((el.tagName.toLowerCase() == 'li') && (tag == 'ol')) { //we are in a list..
+                        if (el.tagName.toLowerCase() == 'li') { //we are in a list..
+                            el = el.parentNode;
+                            this._getDoc().execCommand(action, '', value);
+                        } else {
+                            this._getDoc().execCommand(action, '', value);
                             var el = this._getSelectedElement();
                             if (el.tagName.toLowerCase() == 'li') {
                                 el = el.parentNode;
                             }
                         }
+                        /*
                         if (tag == 'ol') {
                             if (el.type == value) {
                                 //Undo the list
@@ -4221,6 +4269,7 @@ var Dom = YAHOO.util.Dom,
                                 el.type = value;
                             }
                         }
+                        */
                     }
                     break;
                 case 'fontname':
@@ -4241,6 +4290,8 @@ var Dom = YAHOO.util.Dom,
                         }
                     } else if (selEl && selEl.tagName && this._hasSelection() && this.browser.ie) {
                         if (this._getRange().text == selEl.innerHTML) {
+                            Dom.setStyle(selEl, 'fontSize', value);
+                        } else if (this._getRange().html == selEl.innerHTML) {
                             Dom.setStyle(selEl, 'fontSize', value);
                         } else {
                             createEl = true;
