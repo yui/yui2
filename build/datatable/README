@@ -34,6 +34,10 @@ paginatorOptions has been deprecated in favor of paginator. Please see the
 pagination examples for implementation details. Please refer to the API reference
 for full details on property and method names and argument signatures.
 
+* There is a known pagination bug where changing the rows-per-page dropdown while
+on a page number that is out of bounds of the new range, the current page value
+fails to get reset to an appropriate default value.
+
 * The underlying editing architecture and API have been revised. Specifically, the
 ColumnEditor class is no longer used, the method editCell() has been deprecated
 in favor of showCellEditor(), and the Custom Event "cellEditEvent" is now

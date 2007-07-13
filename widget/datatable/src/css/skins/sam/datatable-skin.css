@@ -1,12 +1,12 @@
 /* basic skin styles */
 .yui-skin-sam .yui-dt-table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;border:1px solid #7F7F7F;}
-.yui-skin-sam .yui-dt-table caption {padding-bottom:1em;}
+.yui-skin-sam .yui-dt-table caption {padding-bottom:1em;text-align:left;}
 .yui-skin-sam .yui-dt-table th {
     background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
 }
 .yui-skin-sam .yui-dt-table th,
 .yui-skin-sam .yui-dt-table th a {
-    text-decoration:none;color:#000; /* header text */
+    font-weight:normal;text-decoration:none;color:#000; /* header text */
     vertical-align:bottom;
 }
 .yui-skin-sam .yui-dt-table th,
@@ -16,6 +16,7 @@
 }
 .yui-skin-sam .yui-dt-table td {
     white-space:nowrap;
+    text-align:left;
 }
 .yui-skin-sam .yui-dt-table th.yui-dt-last,
 .yui-skin-sam .yui-dt-table td.yui-dt-last {
