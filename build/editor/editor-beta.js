@@ -4219,10 +4219,7 @@ var Dom = YAHOO.util.Dom,
             }
             if (exec) {
                 try {
-                    if (this._getDoc().queryCommandEnabled(action)) {
-                        this._getDoc().execCommand(action, false, value);
-                    } else {
-                    }
+                    this._getDoc().execCommand(action, false, value);
                 } catch(e) {
                 }
             } else {

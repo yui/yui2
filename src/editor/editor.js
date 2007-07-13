@@ -2760,11 +2760,7 @@ var Dom = YAHOO.util.Dom,
             if (exec) {
                 YAHOO.log('execCommand::(' + action + '), (' + value + ')', 'info', 'Editor');
                 try {
-                    if (this._getDoc().queryCommandEnabled(action)) {
-                        this._getDoc().execCommand(action, false, value);
-                    } else {
-                        YAHOO.log('queryCommandEnabled Failed', 'error', 'Editor');
-                    }
+                    this._getDoc().execCommand(action, false, value);
                 } catch(e) {
                     YAHOO.log('execCommand Failed', 'error', 'Editor');
                 }
