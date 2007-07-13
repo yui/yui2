@@ -243,7 +243,6 @@ To fix these bugs:
 .yui-skin-sam .yui-panel .ft {
 
     padding: 0 10px 10px 10px;
-    text-align: right;
 
 }
 
@@ -305,9 +304,18 @@ To fix these bugs:
 }
 
 
+/* Dialog button group styles */
+
+.yui-skin-sam .yui-dialog .ft .button-group {
+
+    display: block;
+    text-align: right;
+
+}
 
 
-/* Focus state */
+
+/* Dialog default button styles */
 
 .yui-skin-sam .yui-dialog .ft .default {
 
@@ -327,8 +335,6 @@ To fix these bugs:
     color: #fff;
 
 }
-
-
 
 
 /* SimpleDialog icon styles */
