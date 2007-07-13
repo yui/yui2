@@ -22,7 +22,10 @@
         <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
     </target>
 
-    <target name="customassets" description="Custom work for Container CSS, before it gets copied over to global build dir" >
+    <target name="init" description="Setup temp area for Button CSS" depends="YuiTaskLib.init">
+    
+        <mkdir dir="${component.srcdir}/temp/" />
+    
         <copy file="${component.srcdir}/css/container-core.css" tofile="${component.srcdir}/temp/container-core.css" />
         <copy file="${component.srcdir}/css/skins/sam/container-skin.css" tofile="${component.srcdir}/temp/skins/sam/container-skin.css" />
 		<replaceregexp 
@@ -34,11 +37,9 @@
 		</replaceregexp>
 	</target>
 
-<!-- 
     <target name="deploy" depends="YuiTaskLib.deploy">
         <delete dir="${component.srcdir}/temp/" />
     </target>
- -->
 
 </project>
 
