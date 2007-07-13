@@ -813,7 +813,9 @@ var Dom = YAHOO.util.Dom,
             if (this.currentWindow) {
                 this.closeWindow();
             }
-            this.nodeChange();
+            if (!this.browser.webkit) {
+                this.nodeChange();
+            }
         },
         /**
         * @private
@@ -864,10 +866,11 @@ var Dom = YAHOO.util.Dom,
             var sel = Event.getTarget(ev);
             if (sel && sel.tagName && (sel.tagName.toLowerCase() == 'img')) {
                 if (this.browser.webkit) {
+                    this.nodeChange();
                     Event.stopEvent(ev);
                 }
             }
-            this.nodeChange();
+            //this.nodeChange();
             this.fireEvent('editorMouseDown', { type: 'editorMouseDown', target: this, ev: ev });
         },
         /**
@@ -1100,11 +1103,11 @@ var Dom = YAHOO.util.Dom,
                                 this.toolbar.enableButton(button);
                                 break;
                         }
-                        //Handle Ordered List Drop Down
-                        if (olType) {
-                            this._updateMenuChecked('insertorderedlist', olType);
-                        }
+                        //Handle Ordered List Drop Down - it will reset if olType is null
+                        this._updateMenuChecked('insertorderedlist', olType);
                     }
+                    //After for loop
+
                     //Reset Font Family and Size to the inital configs
                     var fn_button = this.toolbar.getButtonByValue('fontname');
                     if (fn_button) {
@@ -2665,7 +2668,7 @@ var Dom = YAHOO.util.Dom,
                     * list items. This is fixed in WebKit (Safari 3)
                     */
                     var tag = ((action.toLowerCase() == 'insertorderedlist') ? 'ol' : 'ul');
-                    if (this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) {
+                    if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) || this.browser.opera) {
                         var selEl = this._getSelectedElement();
                         if ((selEl.tagName.toLowerCase() == 'li') && (selEl.parentNode.tagName.toLowerCase() == tag)) {
                             YAHOO.log('We already have a list, undo it', 'info', 'Editor');
@@ -2678,6 +2681,7 @@ var Dom = YAHOO.util.Dom,
                                 str += lis[i].innerHTML + '<br>';
                             }
                             list.innerHTML = str;
+
                         } else {
                             this.createCurrentElement(action.toLowerCase());
                             var el = this.currentElement;
@@ -2698,12 +2702,16 @@ var Dom = YAHOO.util.Dom,
                             el = el.parentNode;
                         } else {
                             this._getDoc().execCommand(action, '', value);
+                            if (this.browser.opera) {
+                                this.nodeChange();
+                            }
                             var el = this._getSelectedElement();
                             if (el.tagName.toLowerCase() == 'li') {
                                 el = el.parentNode;
                             }
                         }
                         if (tag == 'ol') {
+                            //alert(el.type + ' :: ' + value);
                             if (el.type == value) {
                                 //Undo the list
                                 this._getDoc().execCommand(action, '', value);

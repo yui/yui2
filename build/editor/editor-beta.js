@@ -729,7 +729,9 @@ var Dom = YAHOO.util.Dom,
                                     oButton.menucmd = oButton.value;
                                 }
                                 oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                                this._buttonClick('click', oButton);
+                                //This line made Opera fire the click event and the mousedown,
+                                //  so events for menus where firing twice.
+                                //this._buttonClick('click', oButton);
                             },
                             scope: this
                         }
@@ -847,6 +849,9 @@ var Dom = YAHOO.util.Dom,
                     tmp.on('mousedown', function(ev) {
                         YAHOO.util.Event.stopEvent(ev);
                     });
+                    tmp.on('click', function(ev) {
+                        YAHOO.util.Event.stopEvent(ev);
+                    });
                     var self = this;
                     //Hijack the mousedown event in the menu and make it fire a button click..
                     tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
@@ -860,6 +865,9 @@ var Dom = YAHOO.util.Dom,
                         self._buttonClick.call(self, args[1], oButton);
                         tmp._hideMenu();
                         return false;
+                    });
+                    tmp.getMenu().clickEvent.subscribe(function(ev, args) {
+                        YAHOO.util.Event.stopEvent(args[0]);
                     });
                 }
             } else {
@@ -2275,7 +2283,9 @@ var Dom = YAHOO.util.Dom,
             if (this.currentWindow) {
                 this.closeWindow();
             }
-            this.nodeChange();
+            if (!this.browser.webkit) {
+                this.nodeChange();
+            }
         },
         /**
         * @private
@@ -2326,10 +2336,11 @@ var Dom = YAHOO.util.Dom,
             var sel = Event.getTarget(ev);
             if (sel && sel.tagName && (sel.tagName.toLowerCase() == 'img')) {
                 if (this.browser.webkit) {
+                    this.nodeChange();
                     Event.stopEvent(ev);
                 }
             }
-            this.nodeChange();
+            //this.nodeChange();
             this.fireEvent('editorMouseDown', { type: 'editorMouseDown', target: this, ev: ev });
         },
         /**
@@ -2562,11 +2573,11 @@ var Dom = YAHOO.util.Dom,
                                 this.toolbar.enableButton(button);
                                 break;
                         }
-                        //Handle Ordered List Drop Down
-                        if (olType) {
-                            this._updateMenuChecked('insertorderedlist', olType);
-                        }
+                        //Handle Ordered List Drop Down - it will reset if olType is null
+                        this._updateMenuChecked('insertorderedlist', olType);
                     }
+                    //After for loop
+
                     //Reset Font Family and Size to the inital configs
                     var fn_button = this.toolbar.getButtonByValue('fontname');
                     if (fn_button) {
@@ -4118,7 +4129,7 @@ var Dom = YAHOO.util.Dom,
                     * list items. This is fixed in WebKit (Safari 3)
                     */
                     var tag = ((action.toLowerCase() == 'insertorderedlist') ? 'ol' : 'ul');
-                    if (this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) {
+                    if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) || this.browser.opera) {
                         var selEl = this._getSelectedElement();
                         if ((selEl.tagName.toLowerCase() == 'li') && (selEl.parentNode.tagName.toLowerCase() == tag)) {
                             var el = selEl.parentNode;
@@ -4130,6 +4141,7 @@ var Dom = YAHOO.util.Dom,
                                 str += lis[i].innerHTML + '<br>';
                             }
                             list.innerHTML = str;
+
                         } else {
                             this.createCurrentElement(action.toLowerCase());
                             var el = this.currentElement;
@@ -4150,12 +4162,16 @@ var Dom = YAHOO.util.Dom,
                             el = el.parentNode;
                         } else {
                             this._getDoc().execCommand(action, '', value);
+                            if (this.browser.opera) {
+                                this.nodeChange();
+                            }
                             var el = this._getSelectedElement();
                             if (el.tagName.toLowerCase() == 'li') {
                                 el = el.parentNode;
                             }
                         }
                         if (tag == 'ol') {
+                            //alert(el.type + ' :: ' + value);
                             if (el.type == value) {
                                 //Undo the list
                                 this._getDoc().execCommand(action, '', value);
