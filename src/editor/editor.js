@@ -800,6 +800,9 @@ var Dom = YAHOO.util.Dom,
         * @description Sets the current event property
         */
         _setCurrentEvent: function(ev) {
+            if (ev && ev.type) {
+                YAHOO.log('Event: ' + ev.type, 'info', 'Editor');
+            }
             this.currentEvent = ev;
         },
         /**
@@ -848,11 +851,11 @@ var Dom = YAHOO.util.Dom,
             }
             //This will stop Safari from selecting the entire document if you select all the text in the editor
             if (this.browser.webkit || this.browser.opera) {
-                this.nodeChange();
                 if (this.browser.webkit) {
                     Event.stopEvent(ev);
                 }
             }            
+            this.nodeChange();
             this.fireEvent('editorMouseUp', { type: 'editorMouseUp', target: this, ev: ev });
         },
         /**
@@ -2487,7 +2490,7 @@ var Dom = YAHOO.util.Dom,
                         }
                         exec = false;
                     } else {
-                        if (this.browser.ie || this.browser.webkit) {
+                        if (this.browser.ie || this.browser.webkit || this.browser.opera) {
                             this.createCurrentElement(value);
                             exec = false;
                         }
