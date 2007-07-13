@@ -2771,6 +2771,12 @@ var Dom = YAHOO.util.Dom,
         */
         STR_LINK_PROP_TITLE: 'Link Options',
         /**
+        * @property STR_LINK_PROP_REMOVE
+        * @description The label string for the Remove link from text link inside the property editor.
+        * @type String
+        */
+        STR_LINK_PROP_REMOVE: 'Remove link from text',
+        /**
         * @property STR_LINK_URL
         * @description The label string for the Link URL.
         * @type String
@@ -3704,7 +3710,6 @@ var Dom = YAHOO.util.Dom,
             this.on('afterExecCommand', function() {
 
                 var win = new YAHOO.widget.EditorWindow('createlink', {
-                    height: '120px',
                     width: '300px'
                 });
                 
@@ -3743,7 +3748,8 @@ var Dom = YAHOO.util.Dom,
                 unlinkCont.className = 'removeLink';
                 var unlink = document.createElement('a');
                 unlink.href = '#';
-                unlink.innerHTML = 'Remove link from text';
+                unlink.innerHTML = this.STR_LINK_PROP_REMOVE;
+                unlink.title = this.STR_LINK_PROP_REMOVE;
                 Event.on(unlink, 'click', function(ev) {
                     Event.stopEvent(ev);
                     this.execCommand('unlink');
@@ -4655,7 +4661,9 @@ var Dom = YAHOO.util.Dom,
                 } else if (_knobLeft < 40) {
                     _knobLeft = 40;
                 }
-
+                if (isNaN(_knobLeft)) {
+                    _knobLeft = 40;
+                }
                 if (force) {
                     if (_knob) {
                         _knob.style.left = _knobLeft + 'px';
