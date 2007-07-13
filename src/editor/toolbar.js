@@ -738,7 +738,9 @@ var Dom = YAHOO.util.Dom,
                                     oButton.menucmd = oButton.value;
                                 }
                                 oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                                this._buttonClick('click', oButton);
+                                //This line made Opera fire the click event and the mousedown,
+                                //  so events for menus where firing twice.
+                                //this._buttonClick('click', oButton);
                             },
                             scope: this
                         }
@@ -857,9 +859,13 @@ var Dom = YAHOO.util.Dom,
                     tmp.on('mousedown', function(ev) {
                         YAHOO.util.Event.stopEvent(ev);
                     });
+                    tmp.on('click', function(ev) {
+                        YAHOO.util.Event.stopEvent(ev);
+                    });
                     var self = this;
                     //Hijack the mousedown event in the menu and make it fire a button click..
                     tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
+                        YAHOO.log('mouseDownEvent', 'warn', 'Toolbar');
                         var oMenu = args[1];
                         YAHOO.util.Event.stopEvent(args[0]);
                         tmp._onMenuClick(args[0], tmp);
@@ -870,6 +876,10 @@ var Dom = YAHOO.util.Dom,
                         self._buttonClick.call(self, args[1], oButton);
                         tmp._hideMenu();
                         return false;
+                    });
+                    tmp.getMenu().clickEvent.subscribe(function(ev, args) {
+                        YAHOO.log('clickEvent', 'warn', 'Toolbar');
+                        YAHOO.util.Event.stopEvent(args[0]);
                     });
                 }
             } else {

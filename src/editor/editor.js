@@ -2711,7 +2711,6 @@ var Dom = YAHOO.util.Dom,
                             }
                         }
                         if (tag == 'ol') {
-                            //alert(el.type + ' :: ' + value);
                             if (el.type == value) {
                                 //Undo the list
                                 this._getDoc().execCommand(action, '', value);
