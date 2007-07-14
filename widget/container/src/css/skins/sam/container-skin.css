@@ -81,14 +81,13 @@
 
 .yui-skin-sam .yui-panel .ft {
 
-    padding: 0 10px 10px 10px;
-    text-align: right;
+    border-top: solid 1px #808080;
+    padding: 5px 10px;
+    font-size: 77%;
 
 }
 
-.yui-skin-sam .yui-panel-container.focused {
-
-    /* To do - default focused style for this skin? */
+.yui-skin-sam .yui-panel-container.focused .yui-panel .hd {
 
 }
 
@@ -115,7 +114,7 @@
 
 .yui-skin-sam .yui-panel-container.matte {
 
-	padding: 3px 4px;
+	padding: 9px 10px;
 	background-color: #fff;
 
 }
@@ -144,9 +143,25 @@
 }
 
 
+/* Dialog styles */
+
+.yui-skin-sam .yui-dialog .ft {
+
+    border-top: none;
+    padding: 0 10px 10px 10px;
+    font-size: 100%;
+
+}
+
+.yui-skin-sam .yui-dialog .ft .button-group {
+
+    display: block;
+    text-align: right;
+
+}
 
 
-/* Focus state */
+/* Dialog default button styles */
 
 .yui-skin-sam .yui-dialog .ft .default {
 
@@ -166,8 +181,6 @@
     color: #fff;
 
 }
-
-
 
 
 /* SimpleDialog icon styles */

@@ -81,13 +81,13 @@
 
 .yui-skin-sam .yui-panel .ft {
 
-    padding: 0 10px 10px 10px;
+    border-top: solid 1px #808080;
+    padding: 5px 10px;
+    font-size: 77%;
 
 }
 
 .yui-skin-sam .yui-panel-container.focused .yui-panel .hd {
-
-    background-position: 0 -100px;
 
 }
 
@@ -114,7 +114,7 @@
 
 .yui-skin-sam .yui-panel-container.matte {
 
-	padding: 3px 4px;
+	padding: 9px 10px;
 	background-color: #fff;
 
 }
@@ -143,7 +143,15 @@
 }
 
 
-/* Dialog button group styles */
+/* Dialog styles */
+
+.yui-skin-sam .yui-dialog .ft {
+
+    border-top: none;
+    padding: 0 10px 10px 10px;
+    font-size: 100%;
+
+}
 
 .yui-skin-sam .yui-dialog .ft .button-group {
 
@@ -151,7 +159,6 @@
     text-align: right;
 
 }
-
 
 
 /* Dialog default button styles */
