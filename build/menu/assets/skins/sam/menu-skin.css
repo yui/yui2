@@ -212,7 +212,7 @@
     position: relative;
     height: 16px;
     border: solid 1px #808080;
-    background: #fff url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
+    background: #fff url(../../../../assets/skins/sam/sprite.png) no-repeat 0 0;
 
 }
 
