@@ -397,9 +397,12 @@ To fix these bugs:
 
 .yui-skin-sam .yui-tt .bd {
 
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
     color: #000;
-    line-height: 1.465; /* 19px */
-    padding: 0 5px;
+    padding: 2px 5px;
     border-color: #D4C237 #A6982B #A6982B #A6982B;
     border-width: 1px;
     border-style: solid;
@@ -414,7 +417,12 @@ To fix these bugs:
     left: -3px;
     bottom: -3px;
     background-color: #000;
+
+}
+
+.yui-skin-sam .yui-tt-shadow-visible {
+
     opacity: .12;
-    filter: alpha(opacity=12);  /* For IE */
+    *filter: alpha(opacity=12);  /* For IE */    
 
 }
