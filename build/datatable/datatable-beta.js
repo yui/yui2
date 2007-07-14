@@ -2985,7 +2985,35 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
 };
 
 /**
- * Returns the DataTable instance's Cell Editor as an object literal.
+ * Returns the DataTable instance's Cell Editor as an object literal with the
+ * following properties:
+ * <dl>
+ * <dt>cell</dt>
+ * <dd>Cell element being edited</dd>
+ *
+ * <dt>column</dt>
+ * <dd>Associated Column instance</dd>
+ *
+ * <dt>container</dt>
+ * <dd>Reference to editor's container DIV element</dd>
+ *
+ * <dt>isActive</dt>
+ * <dd>True if cell is currently being edited</dd>
+ *
+ * <dt>record</dt>
+ * <dd>Associated Record instance</dd>
+ *
+ * <dt>validator</dt>
+ * <dd>Associated validator function</dd>
+ *
+ * <dt>value</dt>
+ * <dd>Current input value</dd>
+ * </dl>
+ *
+ *
+ *
+ *
+ *
  *
  * @method getCellEditor
  * @return {Object} Cell Editor object literal values.
