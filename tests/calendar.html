@@ -16,7 +16,6 @@
 		.fail, .ignore, .pass {
 			margin-left:10px;
 		}
-		
 		ol.testlist li {
 			margin: 10px 0 10px 0;
 			list-style:none;
@@ -25,7 +24,6 @@
 			color:#0000cc;
 			font-family:monospace;
 		}
-		
 	</style>
 
 	<script type="text/javascript">
@@ -40,7 +38,7 @@
 			testLogger;
 
 		/**
-		 * Temporary DateAssert, added when there was no YAHOO.util.DateAssert - need to changed code to use YAHOO.util.DateAssert
+		 * Temporary DateAssert, added when there was no YAHOO.util.DateAssert - need to change code to use YAHOO.util.DateAssert
 		 */		
 		var DateAssert = {
 
@@ -133,7 +131,7 @@
 							&& d1.getMonth() === d2.getMonth() 
 								&& d1.getDate() === d2.getDate());
 			},
-	
+
 			_containsDate : function(a, d) {
 				var found = false;
 				for (var i = 0; found === false && i < a.length; i++) {
@@ -257,7 +255,7 @@
 				cal = null;
 			},
 			
-			testSelectWithinRange: function() {
+			testSelectInsideRange: function() {
 				var cal = this.createInstance({multi_select:true, mindate:"4/10/2007", maxdate:"4/20/2007"});
 
 				var testDt = [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
@@ -268,7 +266,7 @@
 				cal = null;
 			},
 
-			testSelectOutsideRange: function() {
+			testSelectOverlappingRange: function() {
 				var cal = this.createInstance({multi_select:true, mindate:"4/10/2007", maxdate:"4/20/2007"});
 
 				var testDt = [new Date(2006, 0, 1), new Date(2007, 3, 9), new Date(2007, 3, 10), new Date(2007, 3, 19), new Date(2007, 3, 20), new Date(2007, 3, 21), new Date(2008, 0, 1)];
@@ -276,6 +274,17 @@
 
 				cal.select(testDt);
 				this.assertSelectedDates(cal, expectedDt);
+
+				cal = null;
+			},
+			
+			testSelectOutsideRange: function() {
+				var cal = this.createInstance({multi_select:true, mindate:"4/10/2007", maxdate:"4/20/2007"});
+
+				var testDt = [new Date(2007, 3, 1), new Date(2007, 3, 2), new Date(2007, 3, 3), new Date(2007, 3, 28), new Date(2007, 3, 29)];
+				cal.select(testDt);
+
+				this.assertSelectedDates(cal, []);
 
 				cal = null;
 			},
@@ -363,9 +372,9 @@
 				UserAction.click(cellOne[0]);
 				UserAction.click(cellTwo[0]);
 				UserAction.click(cellThree[0]);
-	
+
 				this.assertSelectedDates(cal, testDt);
-	
+
 				if (YAHOO.util.Dom.hasClass(cellOne, cal.Style.CSS_CELL_SELECTED) === false) {
 					throw new YAHOO.util.AssertionError("CSS_SELECTED style not set on selected cell");
 				}
@@ -379,7 +388,7 @@
 				cal = null;
 			},
 
-			testSelectWithinRange: function() {
+			testSelectInsideRange: function() {
 				var expectedDt, cal;
 				
 				var grpCal = (this.widgetclass === YAHOO.widget.CalendarGroup);
@@ -400,7 +409,7 @@
 				cal = null;
 			},
 
-			testSelectOutsideRange: function() {
+			testSelectOverlappingRange: function() {
 				var expectedDt, cal;
 
 				var grpCal = (this.widgetclass === YAHOO.widget.CalendarGroup);
@@ -413,13 +422,37 @@
 					expectedDt = [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
 				}
 
-				cal.selectCell(1);  // 4/1, 4/29
+				cal.selectCell(1);  // 4/2, 4/30
 				cal.selectCell(11); // 4/12, 5/10
 				cal.selectCell(12); // 4/13, 5/11
 				cal.selectCell(13); // 4/14, 5/12
 				cal.selectCell(30); // 5/1, 5/29
 				cal.selectCell(38); // 5/9, 6/6
  
+				this.assertSelectedDates(cal, expectedDt);
+
+				cal = null;
+			},
+			
+			testSelectOutsideRange: function() {
+				var expectedDt, cal;
+
+				var grpCal = (this.widgetclass === YAHOO.widget.CalendarGroup);
+
+				if (grpCal) {
+					cal = this.createInstance({pagedate:"4/2007", multi_select:true, mindate:"4/10/2007", maxdate:"5/20/2007"});
+					expectedDt = [];
+				} else {
+					cal = this.createInstance({pagedate:"4/2007", multi_select:true, mindate:"4/10/2007", maxdate:"4/20/2007"});
+					expectedDt = [];
+				}
+
+				cal.selectCell(0);  // 4/1, 4/29
+				cal.selectCell(1);  // 4/2, 4/30
+				cal.selectCell(30); // 5/1, 5/29
+				cal.selectCell(35); // 5/6, 6/3
+				cal.selectCell(38); // 5/9, 6/6
+
 				this.assertSelectedDates(cal, expectedDt);
 
 				cal = null;
@@ -495,6 +528,7 @@
 		}
 
 		function runTests(){
+
 			var calsuite=new YAHOO.tool.TestSuite("calendarsuite");
 
 			var selections = getTestSelections();
@@ -512,8 +546,9 @@
 		function getTestSelections() {
 			var sel = [];
 			var all = [];
-			var checkboxes = Dom.getElementsByClassName("testSel", "input", "f");
 			
+			// Opera doesn't return elements if we provide the form "f" as the root
+			var checkboxes = Dom.getElementsByClassName("testSel", "input");
 			for (var i = 0; i < checkboxes.length; i++) {
 				if (checkboxes[i].checked) {
 					sel.push(checkboxes[i].name.toUpperCase());
@@ -543,26 +578,26 @@
 	<h1>Calendar Tests</h1>
 	<p>The YUI Calendar Suite is split into 6 test cases. The three types of test case below are created for both Calendar and CalendarGroup:
 	<form name="f" id="f">
-	<ol class="testlist">
-		<li><strong>API Tests:</strong> These tests are intended to test the API, without going through the DOM Element or Event layers
-			<ul>
-				<li><input type="checkbox" name="CALENDAR_API" class="testSel" /> Calendar API <span class="testname">(CALENDAR_API)</span></li>
-				<li><input type="checkbox" name="CALENDARGROUP_API" class="testSel" /> CalendarGroup API <span class="testname">(CALENDARGROUP_API)</span></li>
-			</ul>
-		</li>
-		<li><strong>DOM Tests:</strong> These tests are intended to test the DOM Element and Event layers
-			<ul>
-				<li><input type="checkbox" name="CALENDAR_DOM" class="testSel" /> Calendar DOM <span class="testname">(CALENDAR_DOM)</span></li>
-				<li><input type="checkbox" name="CALENDARGROUP_DOM" class="testSel" /> CalendarGroup DOM <span class="testname">(CALENDARGROUP_DOM)</span></li>
-			</ul>
-		</li>
-		<li><strong>CFG Tests:</strong> These tests are intended to test the set of Calendar configuration properties
-			<ul>
-				<li><input type="checkbox" name="CALENDAR_CFG" class="testSel" /> Calendar Config <span class="testname">(CALENDAR_CFG)</span></li>
-				<li><input type="checkbox" name="CALENDARGROUP_CFG" class="testSel" /> CalendarGroup Config <span class="testname">(CALENDARGROUP_CFG)</span></li>
-			</ul>
-		</li>
-	</ol>
+		<ol class="testlist">
+			<li><strong>API Tests:</strong> These tests are intended to test the API, without going through the DOM Element or Event layers
+				<ul>
+					<li><input type="checkbox" name="CALENDAR_API" class="testSel" /> Calendar API <span class="testname">(CALENDAR_API)</span></li>
+					<li><input type="checkbox" name="CALENDARGROUP_API" class="testSel" /> CalendarGroup API <span class="testname">(CALENDARGROUP_API)</span></li>
+				</ul>
+			</li>
+			<li><strong>DOM Tests:</strong> These tests are intended to test the DOM Element and Event layers
+				<ul>
+					<li><input type="checkbox" name="CALENDAR_DOM" class="testSel" /> Calendar DOM <span class="testname">(CALENDAR_DOM)</span></li>
+					<li><input type="checkbox" name="CALENDARGROUP_DOM" class="testSel" /> CalendarGroup DOM <span class="testname">(CALENDARGROUP_DOM)</span></li>
+				</ul>
+			</li>
+			<li><strong>CFG Tests:</strong> These tests are intended to test the set of Calendar configuration properties
+				<ul>
+					<li><input type="checkbox" name="CALENDAR_CFG" class="testSel" /> Calendar Config <span class="testname">(CALENDAR_CFG)</span></li>
+					<li><input type="checkbox" name="CALENDARGROUP_CFG" class="testSel" /> CalendarGroup Config <span class="testname">(CALENDARGROUP_CFG)</span></li>
+				</ul>
+			</li>
+		</ol>
 	</form>
 
 	<p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
