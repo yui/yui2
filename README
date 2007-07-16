@@ -22,9 +22,9 @@ FAQ on the definition of beta and experimental at:
 http://developer.yahoo.com/yui/articles/faq/#beta
 
 In addition to new components, you'll find updates and bug fixes throughout the
-library.  Documentation for new components is included in a special "Preview
-Documentation" directory.  Please see the draft README file for each component in the 
-build directory for specific updates since version 2.2.2.
+library.  Documentation for new components is included in a special "Release
+Candidate Documentation" directory.  Please see the draft README file for each 
+component in the build directory for specific updates since version 2.2.2.
 
 *** version 2.2.2 ***
 
