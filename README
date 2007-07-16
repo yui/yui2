@@ -1,5 +1,31 @@
 YUI Library Release Notes
 
+*** version 2.3.0 Preview Release 1 ***
+
+NOTE: This distribution contains a preview release of the YUI library made
+available for testing purposes.  It is not recommended that this code be
+used in production environments.  You should replace this version with
+the 2.3.0 release as soon as it is available.
+
+This release introduces six new components into YUI:
+
+   * Base CSS
+   * Color Picker Control
+   * ImageLoader Utility
+   * Rich Text Editor
+   * YUI Loader Utility
+   * YUI Test Utility
+   
+These new components are introduced as "beta", with the exception of ImageLoader
+Utility which is released as an experimental component.  Please see the YUI 
+FAQ on the definition of beta and experimental at:
+http://developer.yahoo.com/yui/articles/faq/#beta
+
+In addition to new components, you'll find updates and bug fixes throughout the
+library.  Documentation for new components is included in a special "Preview
+Documentation" directory.  Please see the draft README file for each component in the 
+build directory for specific updates since version 2.2.2.
+
 *** version 2.2.2 ***
 
 This update contains general fixes to the YUI library.  Please see the
