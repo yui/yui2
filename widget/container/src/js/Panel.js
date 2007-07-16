@@ -604,8 +604,11 @@
                     if (nIE == 6 || 
                         (nIE == 7 && document.compatMode == "BackCompat")) {
 
-                        this.cfg.subscribeToConfigEvent("width", this.sizeUnderlay);
-                        this.cfg.subscribeToConfigEvent("height", this.sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("width", 
+                            this.sizeUnderlay);
+
+                        this.cfg.subscribeToConfigEvent("height", 
+                            this.sizeUnderlay);
 
                         YAHOO.widget.Module.textResizeEvent.subscribe(
                             this.sizeUnderlay, this, true);
