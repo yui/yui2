@@ -269,7 +269,7 @@
 
                 if (oIcon) {
                 
-                    oBody.appendChild(oIcon);
+                    oBody.insertBefore(oIcon, oBody.firstChild);
                 
                 }
 
