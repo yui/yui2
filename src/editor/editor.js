@@ -906,10 +906,12 @@ var Dom = YAHOO.util.Dom,
         _handleKeyUp: function(ev) {
             this._setCurrentEvent(ev);
             switch (ev.keyCode) {
-                case 37://Up & Down keys
-                case 38:
-                case 39:
-                case 40:
+                case 37: //Left Arrow
+                case 38: //Up Arrow
+                case 39: //Right Arrow
+                case 40: //Down Arrow
+                case 46: //Forward Delete
+                case 8: //Delete
                     this.nodeChange();
                     break;
             }
