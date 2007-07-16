@@ -26,7 +26,6 @@
 }
 
 .yui-skin-sam .yui-navset .yui-nav .selected a,
-.yui-skin-sam .yui-navset .yui-nav a:focus,
 .yui-skin-sam .yui-navset .yui-nav a:hover {
     background:#214197 url(../../../../assets/skins/sam/sprite.png) repeat-x left -1400px; /* selected tab background */
     color:#fff;
@@ -38,9 +37,7 @@
 
 .yui-skin-sam .yui-navset .yui-nav .selected a,
 .yui-skin-sam .yui-navset .yui-nav a:hover,
-.yui-skin-sam .yui-navset .yui-nav a:focus, 
 .yui-skin-sam .yui-navset .yui-nav a:hover em,
-.yui-skin-sam .yui-navset .yui-nav a:focus em,
 .yui-skin-sam .yui-navset .yui-nav .selected a em {
     border-color:#243356; /* selected tab border color */
 }
