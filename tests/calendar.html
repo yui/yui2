@@ -16,6 +16,7 @@
 		.fail, .ignore, .pass {
 			margin-left:10px;
 		}
+		
 		ol.testlist li {
 			margin: 10px 0 10px 0;
 			list-style:none;
@@ -293,41 +294,41 @@
 				var cal = this.createInstance({pagedate:"11/2007"});
 	
 				cal.nextMonth();
-	
+
 				var pgDate = this.getCfgProperty(cal, "pagedate");
 				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 				DateAssert.datesAreSame(new Date(2007, 11, 01), pgDate, "nextMonth()[1] set incorrect page date");
-	
+
 				cal.nextYear();
-				
+
 				pgDate = this.getCfgProperty(cal, "pagedate");
 				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 				DateAssert.datesAreSame(new Date(2008, 11, 01), pgDate, "nextYear() set incorrect page date");
-	
+
 				cal.nextMonth();
-	
+
 				pgDate = this.getCfgProperty(cal, "pagedate");
 				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 				DateAssert.datesAreSame(new Date(2009, 0, 01), pgDate, "nextMonth()[2] did not rollover year");
-	
+
 				cal.previousMonth();
-	
+
 				pgDate = this.getCfgProperty(cal, "pagedate");
 				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 				DateAssert.datesAreSame(new Date(2008, 11, 01), pgDate, "previousMonth()[1] did not rollover year");
-	
+
 				cal.previousMonth();
-	
+
 				pgDate = this.getCfgProperty(cal, "pagedate");
 				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 				DateAssert.datesAreSame(new Date(2008, 10, 01), pgDate, "previousMonth()[2] set incorrect page date");
-	
+
 				cal.previousYear();
-	
+
 				pgDate = this.getCfgProperty(cal, "pagedate");
 				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
 				DateAssert.datesAreSame(new Date(2007, 10, 01), pgDate, "previousYear() set incorrect page date");
-	
+
 				cal = null;
 			}
 		};
@@ -547,8 +548,7 @@
 			var sel = [];
 			var all = [];
 			
-			// Opera doesn't return elements if we provide the form "f" as the root
-			var checkboxes = Dom.getElementsByClassName("testSel", "input");
+			var checkboxes = Dom.getElementsByClassName("testSel", "input", "f");
 			for (var i = 0; i < checkboxes.length; i++) {
 				if (checkboxes[i].checked) {
 					sel.push(checkboxes[i].name.toUpperCase());
@@ -565,9 +565,7 @@
 	
 		YAHOO.util.Event.addListener(window, "load", function() {
 			testLogger = new YAHOO.tool.TestLogger();
-	
 			YAHOO.util.Event.addListener("btnRun", "click", runTests);	
-			YAHOO.util.Dom.get("btnRun").disabled = false;
 		});
 	})();
 	</script>
@@ -576,7 +574,8 @@
 <body>
 
 	<h1>Calendar Tests</h1>
-	<p>The YUI Calendar Suite is split into 6 test cases. The three types of test case below are created for both Calendar and CalendarGroup:
+	<p>The YUI Calendar Suite is split into 6 test cases. The three types of test case below are created for both Calendar and CalendarGroup:</p>
+	
 	<form name="f" id="f">
 		<ol class="testlist">
 			<li><strong>API Tests:</strong> These tests are intended to test the API, without going through the DOM Element or Event layers
@@ -599,8 +598,8 @@
 			</li>
 		</ol>
 	</form>
-
-	<p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
+	
+	<p><input type="button" value="Run Tests" id="btnRun" /></p>
 
 </body>
 </html>
