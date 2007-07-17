@@ -26,7 +26,7 @@
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
     
-        m_oShadowTemplate;
+        m_oShadowTemplate,
         
         /**
         * Constant representing the Tooltip's configuration properties
@@ -707,6 +707,20 @@
                 }
             
             }
+
+
+            function addShadowVisibleClass() {
+            
+                Dom.addClass(this._shadow, "yui-tt-shadow-visible");
+            
+            }
+            
+
+            function removeShadowVisibleClass() {
+        
+                Dom.removeClass(this._shadow, "yui-tt-shadow-visible");
+            
+            }
     
     
             function createShadow() {
@@ -737,8 +751,20 @@
                     
                     this._shadow = oShadow;
     
-    
+                    addShadowVisibleClass.call(this);
         
+                    this.subscribe("beforeShow", addShadowVisibleClass);
+                    this.subscribe("beforeHide", removeShadowVisibleClass);
+        
+                    this.subscribe("destroy", function () {
+                    
+                        this.unsubscribe("beforeShow",addShadowVisibleClass);
+                        this.unsubscribe("beforeHide", 
+                                            removeShadowVisibleClass);
+                    
+                    });
+
+
                     if (nIE == 6 || 
                         (nIE == 7 && document.compatMode == "BackCompat")) {
                 
@@ -751,11 +777,13 @@
                         this.cfg.subscribeToConfigEvent("width", sizeShadow);
                         this.cfg.subscribeToConfigEvent("height", sizeShadow);
     
-                        Module.textResizeEvent.subscribe(sizeShadow, me, true);
+                        Module.textResizeEvent.subscribe(sizeShadow, 
+                                                            this, true);
                         
-                        this.destroyEvent.subscribe(function () {
+                        this.subscribe("destroy", function () {
                         
-                            Module.textResizeEvent.unsubscribe(sizeShadow, me);
+                            Module.textResizeEvent.unsubscribe(sizeShadow, 
+                                                                    this);
                         
                         });
                 
@@ -770,7 +798,7 @@
             
                 createShadow.call(this);
     
-                this.beforeShowEvent.unsubscribe(onBeforeShow);
+                this.unsubscribe("beforeShow", onBeforeShow);
             
             }
     
@@ -782,7 +810,7 @@
             }
             else {
     
-                this.beforeShowEvent.subscribe(onBeforeShow);
+                this.subscribe("beforeShow", onBeforeShow);
             
             }
         
