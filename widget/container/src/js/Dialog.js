@@ -29,7 +29,6 @@
         Dom = YAHOO.util.Dom,
         KeyListener = YAHOO.util.KeyListener,
         Connect = YAHOO.util.Connect,
-        Button = YAHOO.widget.Button,
         Dialog = YAHOO.widget.Dialog,
         Lang = YAHOO.lang,
 
@@ -102,7 +101,7 @@
 
                     oButton = aButtons[i];
                     
-                    if (oButton instanceof Button) {
+                    if (oButton instanceof YAHOO.widget.Button) {
                         
                         oButton.destroy();
                         
@@ -608,7 +607,8 @@
         */
         configButtons: function (type, args, obj) {
     
-            var aButtons = args[0],
+            var Button = YAHOO.widget.Button,
+                aButtons = args[0],
                 oInnerElement = this.innerElement,
                 oButton,
                 oButtonEl,
