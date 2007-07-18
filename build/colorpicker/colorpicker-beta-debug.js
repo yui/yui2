@@ -1166,7 +1166,9 @@ YAHOO.util.Color = function() {
                    o.SHOW_RGB_CONTROLS,
                    o.SHOW_HSV_CONTROLS,
                    o.SHOW_HEX_CONTROLS,
-                   o.SHOW_HEX_SUMMARY];
+                   o.SHOW_HEX_SUMMARY,
+                   o.SHOW_WEBSAFE
+                   ];
 
         for (i=0; i<els.length; i=i+1) {
             this.set(els[i], this.get(els[i]));
@@ -1517,6 +1519,19 @@ YAHOO.util.Color = function() {
             });
 
         /**
+         * Hide/show the websafe swatch
+         * @config showwebsafe
+         * @type boolean
+         * @default true
+         */
+        this.setAttributeConfig(this.OPT.SHOW_WEBSAFE, {
+                value: (attr.showwebsafe) || true,
+                method: function(on) {
+                    _hideShowEl.call(this, this.ID.WEBSAFE_SWATCH, on);
+                }
+            });
+
+        /**
          * Hide/show the hex summary
          * @config showhexsummary
          * @type boolean
@@ -1533,7 +1548,6 @@ YAHOO.util.Color = function() {
                     }
                 }
             });
-
         this.setAttributeConfig(this.OPT.ANIMATE, {
                 value: (attr.animate) || true,
                 method: function(on) {

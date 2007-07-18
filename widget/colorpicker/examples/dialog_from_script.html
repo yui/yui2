@@ -7,7 +7,7 @@
 <link type="text/css" rel="stylesheet" href="../../../build/reset/reset.css">
 <link type="text/css" rel="stylesheet" href="../../../build/container/assets/container.css">
 <link type="text/css" rel="stylesheet" href="../../../build/logger/assets/logger.css">
-<link rel="stylesheet" type="text/css" href="../src/assets/colorpicker.css" ></link>
+<link rel="stylesheet" type="text/css" href="../../../build/colorpicker/assets/skins/sam/colorpicker.css" ></link>
 
 <script type="text/javascript" src="../../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../../build/dom/dom.js"></script>
@@ -121,6 +121,10 @@
                         var p = ex.picker;
                         p.set(p.OPT.SHOW_HEX_SUMMARY, !p.get(p.OPT.SHOW_HEX_SUMMARY));
                     }, ex.dialog, true);
+            Event.on("btnwebsafe", "click", function(e) {
+                        var p = ex.picker;
+                        p.set(p.OPT.SHOW_WEBSAFE, !p.get(p.OPT.SHOW_WEBSAFE));
+                    }, ex.dialog, true);
         }
 
         //Event.onDOMReady(init);
@@ -138,6 +142,7 @@
           <button id="btnhex">Show/hide HEX field</button>
           <button id="btnrgb">Show/hide RGB field</button>
           <button id="btnhexsummary">Show/hide HEX summary info</button>
+          <button id="btnwebsafe">Show/hide Websafe Swatch</button>
         </div>
         <div id="yui-picker-panel" class="yui-picker-panel">
           <div class="hd">Please choose a color</div>
