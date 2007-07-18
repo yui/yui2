@@ -430,12 +430,14 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true,
                 method: function(data) {
                     for (var i in data) {
-                        if (data[i].type == 'separator') {
-                            this.addSeparator();
-                        } else if (data[i].group != undefined) {
-                            this.addButtonGroup(data[i]);
-                        } else {
-                            this.addButton(data[i]);
+                        if (Lang.hasOwnProperty(data, i)) {
+                            if (data[i].type == 'separator') {
+                                this.addSeparator();
+                            } else if (data[i].group != undefined) {
+                                this.addButtonGroup(data[i]);
+                            } else {
+                                this.addButton(data[i]);
+                            }
                         }
                     }
                 }
@@ -732,26 +734,30 @@ var Dom = YAHOO.util.Dom,
             if ((oButton.type == 'menu') || (oButton.type == 'split') || (oButton.type == 'select')) {
                 if (Lang.isArray(oButton.menu)) {
                     for (var i in oButton.menu) {
-                        var funcObject = {
-                            fn: function(ev, x, oMenu) {
-                                if (!oButton.menucmd) {
-                                    oButton.menucmd = oButton.value;
-                                }
-                                oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                                //This line made Opera fire the click event and the mousedown,
-                                //  so events for menus where firing twice.
-                                //this._buttonClick('click', oButton);
-                            },
-                            scope: this
+                        if (Lang.hasOwnProperty(oButton.menu, i)) {
+                            var funcObject = {
+                                fn: function(ev, x, oMenu) {
+                                    if (!oButton.menucmd) {
+                                        oButton.menucmd = oButton.value;
+                                    }
+                                    oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
+                                    //This line made Opera fire the click event and the mousedown,
+                                    //  so events for menus where firing twice.
+                                    //this._buttonClick('click', oButton);
+                                },
+                                scope: this
+                            }
+                            oButton.menu[i].onclick = funcObject;
                         }
-                        oButton.menu[i].onclick = funcObject;
                     }
                 }
             }
             var _oButton = {};
             for (var i in oButton) {
-                if (!this._toolbarConfigs[i]) {
-                    _oButton[i] = oButton[i];
+                if (Lang.hasOwnProperty(oButton, i)) {
+                    if (!this._toolbarConfigs[i]) {
+                        _oButton[i] = oButton[i];
+                    }
                 }
             }
             if (oButton.type == 'select') {
@@ -1000,7 +1006,9 @@ var Dom = YAHOO.util.Dom,
 
             var html = '';
             for (var i in this._colorData) {
-                html += '<a style="background-color: #' + i + '" href="#">' + i + '</a>';
+                if (Lang.hasOwnProperty(this._colorData, i)) {
+                    html += '<a style="background-color: #' + i + '" href="#">' + i + '</a>';
+                }
             }
             html += '<span><em>X</em><strong></strong></span>';
             picker.innerHTML = html;
@@ -1449,7 +1457,9 @@ var Dom = YAHOO.util.Dom,
             this.get('element').className = '';
             //Brutal Object Destroy
             for (var i in this) {
-                this[i] = null;
+                if (Lang.hasOwnProperty(this, i)) {
+                    this[i] = null;
+                }
             }
             return true;
         },

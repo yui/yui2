@@ -764,7 +764,7 @@ h2.yui-editor-skipheader {
     left: 0;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-insertimage span.yui-toolbar-icon {
-    background-position: 0 -756px;
+    background-position: 1px -756px;
     left: 0;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-left span.yui-toolbar-icon {
@@ -884,6 +884,7 @@ h2.yui-editor-skipheader {
     padding: 0;
     margin: 0;
     border: none;
+    background-color: transparent;
 }
 
 .yui-skin-sam .yui-editor-panel {

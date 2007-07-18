@@ -105,7 +105,9 @@ var Dom = YAHOO.util.Dom,
             src: 'javascript:false'
         }
         for (var i in config) {
-            ifrmDom.setAttribute(i, config[i]);
+            if (Lang.hasOwnProperty(config, i)) {
+                ifrmDom.setAttribute(i, config[i]);
+            }
         }
 
         var ifrm = new YAHOO.util.Element(ifrmDom);
@@ -198,7 +200,9 @@ var Dom = YAHOO.util.Dom,
             link: true,
             html: true,
             body: true,
-            script: true
+            script: true,
+            style: true,
+            textarea: true
         },
         /**
         * @property toolbar
@@ -725,10 +729,12 @@ var Dom = YAHOO.util.Dom,
         */
         _fixNodes: function() {
             for (var i in this.invalidHTML) {
-                var tags = this._getDoc().body.getElementsByTagName(i);
-                for (var h = 0; h < tags.length; h++) {
-                    if (tags[h].parentNode) {
-                        tags[h].parentNode.removeChild(tags[h]);
+                if (Lang.hasOwnProperty(this.invalidHTML, i)) {
+                    var tags = this._getDoc().body.getElementsByTagName(i);
+                    for (var h = 0; h < tags.length; h++) {
+                        if (tags[h].parentNode) {
+                            tags[h].parentNode.removeChild(tags[h]);
+                        }
                     }
                 }
             }
@@ -2863,7 +2869,9 @@ var Dom = YAHOO.util.Dom,
                         el.tabIndex = 1;
 
                         for (var i in tagStyle) {
-                            el.style[i] = tagStyle[i];
+                            if (Lang.hasOwnProperty(tagStyle, i)) {
+                                el.style[i] = tagStyle[i];
+                            }
                         }
                         break;
                 }
@@ -3340,7 +3348,9 @@ var Dom = YAHOO.util.Dom,
             this.get('element_cont').get('element').innerHTML = '';
             //Brutal Object Destroy
             for (var i in this) {
-                this[i] = null;
+                if (Lang.hasOwnProperty(this, i)) {
+                    this[i] = null;
+                }
             }
             return true;
         },        

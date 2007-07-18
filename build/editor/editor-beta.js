@@ -424,12 +424,14 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true,
                 method: function(data) {
                     for (var i in data) {
-                        if (data[i].type == 'separator') {
-                            this.addSeparator();
-                        } else if (data[i].group != undefined) {
-                            this.addButtonGroup(data[i]);
-                        } else {
-                            this.addButton(data[i]);
+                        if (Lang.hasOwnProperty(data, i)) {
+                            if (data[i].type == 'separator') {
+                                this.addSeparator();
+                            } else if (data[i].group != undefined) {
+                                this.addButtonGroup(data[i]);
+                            } else {
+                                this.addButton(data[i]);
+                            }
                         }
                     }
                 }
@@ -723,26 +725,30 @@ var Dom = YAHOO.util.Dom,
             if ((oButton.type == 'menu') || (oButton.type == 'split') || (oButton.type == 'select')) {
                 if (Lang.isArray(oButton.menu)) {
                     for (var i in oButton.menu) {
-                        var funcObject = {
-                            fn: function(ev, x, oMenu) {
-                                if (!oButton.menucmd) {
-                                    oButton.menucmd = oButton.value;
-                                }
-                                oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                                //This line made Opera fire the click event and the mousedown,
-                                //  so events for menus where firing twice.
-                                //this._buttonClick('click', oButton);
-                            },
-                            scope: this
+                        if (Lang.hasOwnProperty(oButton.menu, i)) {
+                            var funcObject = {
+                                fn: function(ev, x, oMenu) {
+                                    if (!oButton.menucmd) {
+                                        oButton.menucmd = oButton.value;
+                                    }
+                                    oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
+                                    //This line made Opera fire the click event and the mousedown,
+                                    //  so events for menus where firing twice.
+                                    //this._buttonClick('click', oButton);
+                                },
+                                scope: this
+                            }
+                            oButton.menu[i].onclick = funcObject;
                         }
-                        oButton.menu[i].onclick = funcObject;
                     }
                 }
             }
             var _oButton = {};
             for (var i in oButton) {
-                if (!this._toolbarConfigs[i]) {
-                    _oButton[i] = oButton[i];
+                if (Lang.hasOwnProperty(oButton, i)) {
+                    if (!this._toolbarConfigs[i]) {
+                        _oButton[i] = oButton[i];
+                    }
                 }
             }
             if (oButton.type == 'select') {
@@ -985,7 +991,9 @@ var Dom = YAHOO.util.Dom,
 
             var html = '';
             for (var i in this._colorData) {
-                html += '<a style="background-color: #' + i + '" href="#">' + i + '</a>';
+                if (Lang.hasOwnProperty(this._colorData, i)) {
+                    html += '<a style="background-color: #' + i + '" href="#">' + i + '</a>';
+                }
             }
             html += '<span><em>X</em><strong></strong></span>';
             picker.innerHTML = html;
@@ -1431,7 +1439,9 @@ var Dom = YAHOO.util.Dom,
             this.get('element').className = '';
             //Brutal Object Destroy
             for (var i in this) {
-                this[i] = null;
+                if (Lang.hasOwnProperty(this, i)) {
+                    this[i] = null;
+                }
             }
             return true;
         },
@@ -1580,7 +1590,9 @@ var Dom = YAHOO.util.Dom,
             src: 'javascript:false'
         }
         for (var i in config) {
-            ifrmDom.setAttribute(i, config[i]);
+            if (Lang.hasOwnProperty(config, i)) {
+                ifrmDom.setAttribute(i, config[i]);
+            }
         }
 
         var ifrm = new YAHOO.util.Element(ifrmDom);
@@ -1673,7 +1685,9 @@ var Dom = YAHOO.util.Dom,
             link: true,
             html: true,
             body: true,
-            script: true
+            script: true,
+            style: true,
+            textarea: true
         },
         /**
         * @property toolbar
@@ -2198,10 +2212,12 @@ var Dom = YAHOO.util.Dom,
         */
         _fixNodes: function() {
             for (var i in this.invalidHTML) {
-                var tags = this._getDoc().body.getElementsByTagName(i);
-                for (var h = 0; h < tags.length; h++) {
-                    if (tags[h].parentNode) {
-                        tags[h].parentNode.removeChild(tags[h]);
+                if (Lang.hasOwnProperty(this.invalidHTML, i)) {
+                    var tags = this._getDoc().body.getElementsByTagName(i);
+                    for (var h = 0; h < tags.length; h++) {
+                        if (tags[h].parentNode) {
+                            tags[h].parentNode.removeChild(tags[h]);
+                        }
                     }
                 }
             }
@@ -4316,7 +4332,9 @@ var Dom = YAHOO.util.Dom,
                         el.tabIndex = 1;
 
                         for (var i in tagStyle) {
-                            el.style[i] = tagStyle[i];
+                            if (Lang.hasOwnProperty(tagStyle, i)) {
+                                el.style[i] = tagStyle[i];
+                            }
                         }
                         break;
                 }
@@ -4793,7 +4811,9 @@ var Dom = YAHOO.util.Dom,
             this.get('element_cont').get('element').innerHTML = '';
             //Brutal Object Destroy
             for (var i in this) {
-                this[i] = null;
+                if (Lang.hasOwnProperty(this, i)) {
+                    this[i] = null;
+                }
             }
             return true;
         },        
