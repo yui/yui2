@@ -185,24 +185,25 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
    
     /**
      * Applies all properties in the supplier to the receiver if the
-     * receiver does not have these properties yet.  Optionally, one or more
-     * methods/properties can be specified (as additional parameters).  This
-     * option will overwrite the property if receiver has it already.  If true
-     * is passed as the third parameter, all properties will be applied and
-     * _will_ overwrite properties in the receiver.
+     * receiver does not have these properties yet.  Optionally, one or 
+     * more methods/properties can be specified (as additional 
+     * parameters).  This option will overwrite the property if receiver 
+     * has it already.  If true is passed as the third parameter, all 
+     * properties will be applied and _will_ overwrite properties in 
+     * the receiver.
      *
      * @method augmentObject
      * @static
      * @since 2.3.0
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
-     * @param {String*|boolean}  arguments zero or more properties methods to augment the
-     *                             receiver with.  If none specified, everything
-     *                             in the supplier will be used unless it would
-     *                             overwrite an existing property in the receiver. If true
-     *                             is specified as the third parameter, all properties will
-     *                             be applied and will overwrite an existing property in
-     *                             the receiver
+     * @param {String*|boolean}  arguments zero or more properties methods 
+     *        to augment the receiver with.  If none specified, everything
+     *        in the supplier will be used unless it would
+     *        overwrite an existing property in the receiver. If true
+     *        is specified as the third parameter, all properties will
+     *        be applied and will overwrite an existing property in
+     *        the receiver
      */
     augmentObject: function(r, s) {
         if (!s||!r) {
@@ -231,13 +232,12 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @static
      * @param {Function} r  the object to receive the augmentation
      * @param {Function} s  the object that supplies the properties to augment
-     * @param {String*|boolean}  arguments zero or more properties methods to augment the
-     *                             receiver with.  If none specified, everything
-     *                             in the supplier will be used unless it would
-     *                             overwrite an existing property in the receiver.  if true
-     *                             is specified as the third parameter, all properties will
-     *                             be applied and will overwrite an existing property in
-     *                             the receiver
+     * @param {String*|boolean}  arguments zero or more properties methods 
+     *        to augment the receiver with.  If none specified, everything 
+     *        in the supplier will be used unless it would overwrite an existing 
+     *        property in the receiver.  if true is specified as the third 
+     *        parameter, all properties will be applied and will overwrite an 
+     *        existing property in the receiver
      */
     augmentProto: function(r, s) {
         if (!s||!r) {
@@ -269,8 +269,8 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
 
         // Skip non-objects
         // Skip dates because the std toString is what we want
-        // Skip HTMLElement-like objects because trying to dump an
-        // element will cause an unhandled exception in FF 2.x
+        // Skip HTMLElement-like objects because trying to dump 
+        // an element will cause an unhandled exception in FF 2.x
         if (!l.isObject(o) || o instanceof Date || 
             ("nodeType" in o && "tagName" in o)) {
             return o;
@@ -343,8 +343,9 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return {String} the substituted string
      */
     substitute: function (s, o, f) {
-        var i, j, k, key, v, meta, l=YAHOO.lang, 
+        var i, j, k, key, v, meta, l=YAHOO.lang, saved=[], token, 
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}';
+
 
         for (;;) {
             i = s.lastIndexOf(LBRACE);
@@ -357,7 +358,8 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             }
 
             //Extract key and meta info 
-            key = s.substring(i + 1, j);
+            token = s.substring(i + 1, j);
+            key = token;
             meta = null;
             k = key.indexOf(SPACE);
             if (k > -1) {
@@ -379,46 +381,61 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                 } else {
                     meta = meta || "";
 
-                    // look for the keyword 'dump', if found force object dump
+                    // look for the keyword 'dump', if found force obj dump
                     var dump = meta.indexOf(DUMP);
                     if (dump > -1) {
                         meta = meta.substring(4);
                     }
 
-                    // use the toString if it is not the Object toString and the
-                    // 'dump' meta info was not found
-                    if (v.toString === Object.prototype.toString || dump > -1) {
+                    // use the toString if it is not the Object toString 
+                    // and the 'dump' meta info was not found
+                    if (v.toString===Object.prototype.toString||dump>-1) {
                         v = l.dump(v, parseInt(meta, 10));
                     } else {
                         v = v.toString();
                     }
                 }
             } else if (!l.isString(v) && !l.isNumber(v)) {
-                break;
+                // This {block} has no replace string. Save it for later.
+                v = "~-" + saved.length + "-~";
+                saved[saved.length] = token;
+
+                // break;
             }
 
             s = s.substring(0, i) + v + s.substring(j + 1);
+
+
         }
+
+        console.log("before: " + s);
+
+        // restore saved {block}s
+        for (i=saved.length-1; i>=0; i=i-1) {
+            s = s.replace(new RegExp("~-" + i + "-~"), "{"  + saved[i] + "}", "g");
+        }
+
+        console.log("after: " + s);
 
         return s;
     },
 
 
     /**
-     * Returns a string without any leading or trailing whitespace.  If the input
-     * is not a string, the input will be returned untouched.
+     * Returns a string without any leading or trailing whitespace.  If 
+     * the input is not a string, the input will be returned untouched.
      * @method trim
      * @since 2.3.0
      * @param s {string} the string to trim
      * @return {string} the trimmed string
      */
-	trim: function(s){
+    trim: function(s){
         try {
-		    return s.replace(/^\s+|\s+$/g, "");
+            return s.replace(/^\s+|\s+$/g, "");
         } catch(e) {
             return s;
         }
-	},
+    },
 
     /**
      * Returns a new object containing all of the properties of
@@ -430,24 +447,29 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return the new merged object
      */
     merge: function() {
-        var o={}, a=arguments, i, j;
+        var o={}, a=arguments, i;
         for (i=0; i<a.length; i=i+1) {
-            for (j in a[i]) {
+            YAHOO.lang.augmentObject(o, a[i], true);
+            /*
+            for (var j in a[i]) {
                 o[j] = a[i][j];
             }
+            */
         }
         return o;
     },
 
     /**
-     * A convenience method for detecting a legitimate non-null value.  Returns 
-     * false for null/undefined/NaN, true for other values, including 0/false/''
-     * @method hasValue
+     * A convenience method for detecting a legitimate non-null value.
+     * Returns false for null/undefined/NaN, true for other values, 
+     * including 0/false/''
+     * @method isValue
      * @since 2.3.0
      * @param o {any} the item to test
      * @return {boolean} true if it is not null/undefined/NaN || false
      */
-    hasValue: function(o) {
+    isValue: function(o) {
+        // return (o || o === false || o === 0 || o === ''); // Infinity fails
         var l = YAHOO.lang;
 return (l.isObject(o) || l.isString(o) || l.isNumber(o) || l.isBoolean(o));
     }
@@ -461,20 +483,20 @@ return (l.isObject(o) || l.isString(o) || l.isNumber(o) || l.isBoolean(o));
 YAHOO.util.Lang = YAHOO.lang;
  
 /**
- * Same as YAHOO.lang.augmentObject, except it only applies prototype properties.
- * This is an alias for augmentProto.
+ * Same as YAHOO.lang.augmentObject, except it only applies prototype 
+ * properties.  This is an alias for augmentProto.
  * @see YAHOO.lang.augmentObject
  * @method augment
  * @static
  * @param {Function} r  the object to receive the augmentation
  * @param {Function} s  the object that supplies the properties to augment
- * @param {String*|boolean}  arguments zero or more properties methods to augment the
- *                             receiver with.  If none specified, everything
- *                             in the supplier will be used unless it would
- *                             overwrite an existing property in the receiver.  if true
- *                             is specified as the third parameter, all properties will
- *                             be applied and will overwrite an existing property in
- *                             the receiver
+ * @param {String*|boolean}  arguments zero or more properties methods to 
+ *        augment the receiver with.  If none specified, everything
+ *        in the supplier will be used unless it would
+ *        overwrite an existing property in the receiver.  if true
+ *        is specified as the third parameter, all properties will
+ *        be applied and will overwrite an existing property in
+ *        the receiver
  */
 YAHOO.lang.augment = YAHOO.lang.augmentProto;
 
@@ -485,10 +507,10 @@ YAHOO.lang.augment = YAHOO.lang.augmentProto;
  * @static
  * @param {Function} r  the object to receive the augmentation
  * @param {Function} s  the object that supplies the properties to augment
- * @param {String*}  arguments zero or more properties methods to augment the
- *                             receiver with.  If none specified, everything
- *                             in the supplier will be used unless it would
- *                             overwrite an existing property in the receiver
+ * @param {String*}  arguments zero or more properties methods to 
+ *        augment the receiver with.  If none specified, everything
+ *        in the supplier will be used unless it would
+ *        overwrite an existing property in the receiver
  */
 YAHOO.augment = YAHOO.lang.augmentProto;
        
@@ -499,9 +521,8 @@ YAHOO.augment = YAHOO.lang.augmentProto;
  * @param {Function} subc   the object to modify
  * @param {Function} superc the object to inherit
  * @param {Object} overrides  additional properties/methods to add to the
- *                              subclass prototype.  These will override the
- *                              matching items obtained from the superclass 
- *                              if present.
+ *        subclass prototype.  These will override the
+ *        matching items obtained from the superclass if present.
  */
 YAHOO.extend = YAHOO.lang.extend;
 

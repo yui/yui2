@@ -680,8 +680,9 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return {String} the substituted string
      */
     substitute: function (s, o, f) {
-        var i, j, k, key, v, meta, l=YAHOO.lang, 
+        var i, j, k, key, v, meta, l=YAHOO.lang, saved=[], token, 
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}';
+
 
         for (;;) {
             i = s.lastIndexOf(LBRACE);
@@ -694,7 +695,8 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             }
 
             //Extract key and meta info 
-            key = s.substring(i + 1, j);
+            token = s.substring(i + 1, j);
+            key = token;
             meta = null;
             k = key.indexOf(SPACE);
             if (k > -1) {
@@ -731,11 +733,26 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                     }
                 }
             } else if (!l.isString(v) && !l.isNumber(v)) {
-                break;
+                // This {block} has no replace string. Save it for later.
+                v = "~-" + saved.length + "-~";
+                saved[saved.length] = token;
+
+                // break;
             }
 
             s = s.substring(0, i) + v + s.substring(j + 1);
+
+
         }
+
+        console.log("before: " + s);
+
+        // restore saved {block}s
+        for (i=saved.length-1; i>=0; i=i-1) {
+            s = s.replace(new RegExp("~-" + i + "-~"), "{"  + saved[i] + "}", "g");
+        }
+
+        console.log("after: " + s);
 
         return s;
     },
