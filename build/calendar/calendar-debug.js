@@ -4727,7 +4727,7 @@ YAHOO.widget.CalendarGroup.prototype.addMonthRenderer = function(month, fnRender
 * Adds a weekday to the render stack. The function reference passed to this method will be executed
 * when a date cell matches the weekday passed to this method.
 * @method addWeekdayRenderer
-* @param	{Number}	weekday		The weekday (0-6) to associate with this renderer
+* @param	{Number}	weekday		The weekday (1-7) to associate with this renderer. 1=Sunday, 2=Monday etc.
 * @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
 */
 YAHOO.widget.CalendarGroup.prototype.addWeekdayRenderer = function(weekday, fnRender) {
