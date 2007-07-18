@@ -325,6 +325,9 @@ var Dom = YAHOO.util.Dom,
                     */
                     this._getSelection().setBaseAndExtent(this._getDoc().body, 0, this._getDoc().body, 1);
                     this._getSelection().collapse(false);   
+                } else {
+                    this._getSelection().setBaseAndExtent(this._getDoc().body, 1, this._getDoc().body, 1);
+                    this._getSelection().collapse(false);   
                 }
                 this._getWindow().focus();
                 //Check for.webkit3
@@ -2524,9 +2527,9 @@ var Dom = YAHOO.util.Dom,
                     el.removeAttribute('tag');
                     el.removeAttribute('target');
                     el.removeAttribute('href');
-                    Dom.addClass(el, 'yui-non');
-                    Dom.removeClass(el, 'yui-tag-a');
-                    Dom.removeClass(el, 'yui-tag');
+                    YAHOO.util.Dom.addClass(el, 'yui-non');
+                    YAHOO.util.Dom.removeClass(el, 'yui-tag-a');
+                    YAHOO.util.Dom.removeClass(el, 'yui-tag');
                     exec = false;
                     break;
                 case 'createlink':
@@ -2559,8 +2562,8 @@ var Dom = YAHOO.util.Dom,
                             this._getDoc().execCommand('insertimage', false, value);
                             var imgs = this._getDoc().getElementsByTagName('img');
                             for (var i = 0; i < imgs.length; i++) {
-                                if (!Dom.hasClass(imgs[i], 'yui-img')) {
-                                    Dom.addClass(imgs[i], 'yui-img');
+                                if (!YAHOO.util.Dom.hasClass(imgs[i], 'yui-img')) {
+                                    YAHOO.util.Dom.addClass(imgs[i], 'yui-img');
                                     this.currentElement = imgs[i];
                                 }
                             }
@@ -2569,7 +2572,7 @@ var Dom = YAHOO.util.Dom,
                             this.createCurrentElement('img');
                             var _img = this._getDoc().createElement('img');
                             _img.setAttribute('src', value);
-                            Dom.addClass(_img, 'yui-img');
+                            YAHOO.util.Dom.addClass(_img, 'yui-img');
                             this.currentElement.parentNode.replaceChild(_img, this.currentElement);
                             this.currentElement = _img;
                             exec = false;
@@ -2611,7 +2614,7 @@ var Dom = YAHOO.util.Dom,
                     */
                     if (this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) {
                         this.createCurrentElement('span');
-                        Dom.addClass(this.currentElement, 'yui-non');
+                        YAHOO.util.Dom.addClass(this.currentElement, 'yui-non');
                         var re= /<\S[^><]*>/g;
                         var str = this.currentElement.innerHTML.replace(re, '');
                         var _txt = this._getDoc().createTextNode(str);
@@ -2630,7 +2633,7 @@ var Dom = YAHOO.util.Dom,
                             YAHOO.log('we are a child of tag (' + tag + '), reverse process', 'info', 'EditorSafari');
                             var span = this._getDoc().createElement('span');
                             span.innerHTML = this.currentElement.innerHTML;
-                            Dom.addClass(span, 'yui-non');
+                            YAHOO.util.Dom.addClass(span, 'yui-non');
                             this.currentElement.parentNode.parentNode.replaceChild(span, this.currentElement.parentNode);
 
                         } else {
@@ -2645,10 +2648,10 @@ var Dom = YAHOO.util.Dom,
                     value = 'blockquote';
                     if (this.browser.webkit) {
                         this.createCurrentElement('blockquote');
-                        if (Dom.hasClass(this.currentElement.parentNode, 'yui-tag-blockquote')) {
+                        if (YAHOO.util.Dom.hasClass(this.currentElement.parentNode, 'yui-tag-blockquote')) {
                             var span = this._getDoc().createElement('span');
                             span.innerHTML = this.currentElement.innerHTML;
-                            Dom.addClass(span, 'yui-non');
+                            YAHOO.util.Dom.addClass(span, 'yui-non');
                             this.currentElement.parentNode.parentNode.replaceChild(span, this.currentElement.parentNode);
                         }
                         exec = false;
@@ -2657,7 +2660,7 @@ var Dom = YAHOO.util.Dom,
                         if (tar && tar.tagName && (tar.tagName.toLowerCase() == 'blockquote')) {
                             var span = this._getDoc().createElement('span');
                             span.innerHTML = tar.innerHTML;
-                            Dom.addClass(span, 'yui-non');
+                            YAHOO.util.Dom.addClass(span, 'yui-non');
                             tar.parentNode.replaceChild(span, tar);
                             exec = false;
                         }
@@ -2668,10 +2671,10 @@ var Dom = YAHOO.util.Dom,
                     this.createCurrentElement(action.toLowerCase());
                     if (this.currentElement.parentNode) {
                         if (action.toLowerCase() == 'outdent') {
-                            if (Dom.hasClass(this.currentElement.parentNode, 'yui-tag-indent')) {
+                            if (YAHOO.util.Dom.hasClass(this.currentElement.parentNode, 'yui-tag-indent')) {
                                 var span = this._getDoc().createElement('span');
                                 span.innerHTML = this.currentElement.innerHTML;
-                                Dom.addClass(span, 'yui-non');
+                                YAHOO.util.Dom.addClass(span, 'yui-non');
                                 this.currentElement.parentNode.parentNode.replaceChild(span, this.currentElement.parentNode);
                             }
                         }
@@ -2695,7 +2698,7 @@ var Dom = YAHOO.util.Dom,
                             YAHOO.log('We already have a list, undo it', 'info', 'Editor');
                             var el = selEl.parentNode;
                             var list = this._getDoc().createElement('span');
-                            Dom.addClass(list, 'yui-non');
+                            YAHOO.util.Dom.addClass(list, 'yui-non');
                             var str = '';
                             var lis = el.getElementsByTagName('li');
                             for (var i = 0; i < lis.length; i++) {
@@ -2789,7 +2792,7 @@ var Dom = YAHOO.util.Dom,
                 case 'fontname':
                     var selEl = this._getSelectedElement();
                     if (selEl && selEl.tagName && !this._hasSelection()) {
-                        Dom.setStyle(selEl, 'font-family', value);
+                        YAHOO.util.Dom.setStyle(selEl, 'font-family', value);
                         exec = false;
                     }
                     break;
@@ -2798,20 +2801,20 @@ var Dom = YAHOO.util.Dom,
 
                     if (selEl && selEl.tagName && this._hasSelection() && !this.browser.ie) {
                         if (this._getSelection() == selEl.innerHTML) {
-                            Dom.setStyle(selEl, 'fontSize', value);
+                            YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
                         } else {
                             createEl = true;
                         }
                     } else if (selEl && selEl.tagName && this._hasSelection() && this.browser.ie) {
                         if (this._getRange().text == selEl.innerHTML) {
-                            Dom.setStyle(selEl, 'fontSize', value);
+                            YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
                         } else if (this._getRange().html == selEl.innerHTML) {
-                            Dom.setStyle(selEl, 'fontSize', value);
+                            YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
                         } else {
                             createEl = true;
                         }
                     } else if (selEl && selEl.tagName && !this._hasSelection()) {
-                        Dom.setStyle(selEl, 'fontSize', value);
+                        YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
                     }
                     if (createEl) {
                         this.createCurrentElement('span', {'fontSize': value });
@@ -2869,7 +2872,7 @@ var Dom = YAHOO.util.Dom,
                         el.tabIndex = 1;
 
                         for (var i in tagStyle) {
-                            if (Lang.hasOwnProperty(tagStyle, i)) {
+                            if (YAHOO.util.Lang.hasOwnProperty(tagStyle, i)) {
                                 el.style[i] = tagStyle[i];
                             }
                         }
@@ -2892,7 +2895,10 @@ var Dom = YAHOO.util.Dom,
                     }
                 } else {
                     if (this.currentEvent) {
-                        tar = Event.getTarget(this.currentEvent);
+                        tar = YAHOO.util.Event.getTarget(this.currentEvent);
+                    } else {
+                        //For Safari..
+                        tar = this._getDoc().body;                        
                     }
                 }
                 if (tar) {
@@ -2936,7 +2942,7 @@ var Dom = YAHOO.util.Dom,
                     _tmp[_tmp.length] = _tmp3[e];
                 }
                 for (var i = 0; i < _tmp.length; i++) {
-                    if ((Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
+                    if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
                         var el = _elCreate();
                         el.innerHTML = _tmp[i].innerHTML;
                         if (_tmp[i].parentNode) {
