@@ -745,14 +745,10 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
 
         }
 
-        console.log("before: " + s);
-
         // restore saved {block}s
         for (i=saved.length-1; i>=0; i=i-1) {
             s = s.replace(new RegExp("~-" + i + "-~"), "{"  + saved[i] + "}", "g");
         }
-
-        console.log("after: " + s);
 
         return s;
     },
