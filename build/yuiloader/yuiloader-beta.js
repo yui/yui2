@@ -475,9 +475,9 @@
          * Should we allow rollups
          * @property allowRollup
          * @type boolean
-         * @default false
+         * @default true
          */
-        this.allowRollup = ("allowRollup" in o) ? this.allowRollup : true;
+        this.allowRollup = ("allowRollup" in o) ? o.allowRollup : true;
 
         /**
          * Filter to apply to result url
@@ -625,20 +625,18 @@
          * component must also use YAHOO.register to notify the loader 
          * when it has been loaded, or a verifier function must be
          * provided
-         * <code>
-         * {
-         *     name:       required, the component name 
-         *     type:       required, the component type (js or css) 
-         *     path:       required, the path to the script from "base" 
-         *     requires:   the modules required by this component 
-         *     optional:   the optional modules for this component 
-         *     supersedes: the modules this component replaces 
-         *     rollup:     the number of superseded modules required for automatic rollup 
-         *     verifier:   a function that is executed to determine when the module is fully loaded 
-         *     fullpath:   If fullpath is specified, this is used instead of the configured base + path 
-         *     skinnable:  flag to determine if skin assets should automatically be pulled in
-         * }
-         * </code>
+         * <dl>
+         *     <dt>name:</dt>       <dd>required, the component name</dd>
+         *     <dt>type:</dt>       <dd>required, the component type (js or css)</dd>
+         *     <dt>path:</dt>       <dd>required, the path to the script from "base"</dd>
+         *     <dt>requires:</dt>   <dd>the modules required by this component</dd>
+         *     <dt>optional:</dt>   <dd>the optional modules for this component</dd>
+         *     <dt>supersedes:</dt> <dd>the modules this component replaces</dd>
+         *     <dt>rollup:</dt>     <dd>the number of superseded modules required for automatic rollup</dd>
+         *     <dt>verifier:</dt>   <dd>a function that is executed to determine when the module is fully loaded</dd>
+         *     <dt>fullpath:</dt>   <dd>If fullpath is specified, this is used instead of the configured base + path</dd>
+         *     <dt>skinnable:</dt>  <dd>flag to determine if skin assets should automatically be pulled in</dd>
+         * </dl>
          * @method addModule
          * @param o An object containing the module data
          * @return {boolean} true if the module was added, false if 
@@ -761,8 +759,8 @@
         },
 
         /**
-         * Calculates the dependency tree, the result is will be
-         * stored in the sorted property
+         * Calculates the dependency tree, the result is stored in the sorted 
+         * property
          * @method calculate
          * @param o optional options object
          */
@@ -818,7 +816,7 @@
         /**
          * Inspects the required modules list looking for additional 
          * dependencies.  Expands the required list to include all 
-         * required modules.  Called from calculate()
+         * required modules.  Called by calculate()
          * @method _explode
          * @private
          */
