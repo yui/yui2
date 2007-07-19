@@ -2400,6 +2400,7 @@ var Dom = YAHOO.util.Dom,
                 case 40: //Down Arrow
                 case 46: //Forward Delete
                 case 8: //Delete
+                case 65: //The letter a (for ctrl + a and cmd + a)
                     this.nodeChange();
                     break;
             }
@@ -2939,7 +2940,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('blankimage', {
-                value: attr.blankimage || 'assets/blankimage.png'
+                value: attr.blankimage || this._getBlankImage()
             });
             /**
             * @config hiddencss
@@ -3305,6 +3306,23 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @private
+        * @method _getBlankImage
+        * @description Retrieves the full url of the image to use as the blank image.
+        * @returns {String} The URL to the blank image
+        */
+        _getBlankImage: function() {
+            var div = document.createElement('div');
+            div.style.position = 'absolute';
+            div.style.top = '-9999px';
+            div.style.left = '-9999px';
+            div.className = this.CLASS_PREFIX + '-blankimage';
+            document.body.appendChild(div);
+            var img = YAHOO.util.Dom.getStyle(div, 'background-image');
+            img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
+            return img;
+        },
+        /**
+        * @private
         * @method _handleFontSize
         * @description Handles the font size button in the toolbar.
         * @param {Object} o Object returned from Toolbar's buttonClick Event
@@ -3437,7 +3455,7 @@ var Dom = YAHOO.util.Dom,
                     if (el.getAttribute('src')) {
                         src = el.getAttribute('src', 2);
                         if (src.indexOf(this.get('blankimage')) != -1) {
-                            //src = this.STR_IMAGE_HERE;
+                            src = this.STR_IMAGE_HERE;
                         }
                     }
                     if (el.getAttribute('alt', 2)) {
@@ -3718,7 +3736,7 @@ var Dom = YAHOO.util.Dom,
             var url = Dom.get('insertimage_url');
             var title = Dom.get('insertimage_title');
             var el = this.currentElement;
-            if (url && url.value) {
+            if (url && url.value && (url.value != this.STR_IMAGE_HERE)) {
                 el.setAttribute('src', url.value);
                 el.setAttribute('title', title.value);
                 el.setAttribute('alt', title.value);

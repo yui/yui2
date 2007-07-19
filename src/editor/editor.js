@@ -921,6 +921,7 @@ var Dom = YAHOO.util.Dom,
                 case 40: //Down Arrow
                 case 46: //Forward Delete
                 case 8: //Delete
+                case 65: //The letter a (for ctrl + a and cmd + a)
                     this.nodeChange();
                     break;
             }
@@ -1977,7 +1978,7 @@ var Dom = YAHOO.util.Dom,
                     if (el.getAttribute('src')) {
                         src = el.getAttribute('src', 2);
                         if (src.indexOf(this.get('blankimage')) != -1) {
-                            //src = this.STR_IMAGE_HERE;
+                            src = this.STR_IMAGE_HERE;
                         }
                     }
                     if (el.getAttribute('alt', 2)) {
@@ -2259,7 +2260,7 @@ var Dom = YAHOO.util.Dom,
             var url = Dom.get('insertimage_url');
             var title = Dom.get('insertimage_title');
             var el = this.currentElement;
-            if (url && url.value) {
+            if (url && url.value && (url.value != this.STR_IMAGE_HERE)) {
                 el.setAttribute('src', url.value);
                 el.setAttribute('title', title.value);
                 el.setAttribute('alt', title.value);
