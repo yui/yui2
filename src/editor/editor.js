@@ -1462,7 +1462,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('blankimage', {
-                value: attr.blankimage || 'assets/blankimage.png'
+                value: attr.blankimage || this._getBlankImage()
             });
             /**
             * @config hiddencss
@@ -1825,6 +1825,23 @@ var Dom = YAHOO.util.Dom,
             this.on('afterRender', function() {
                 this._renderPanel();
             });
+        },
+        /**
+        * @private
+        * @method _getBlankImage
+        * @description Retrieves the full url of the image to use as the blank image.
+        * @returns {String} The URL to the blank image
+        */
+        _getBlankImage: function() {
+            var div = document.createElement('div');
+            div.style.position = 'absolute';
+            div.style.top = '-9999px';
+            div.style.left = '-9999px';
+            div.className = this.CLASS_PREFIX + '-blankimage';
+            document.body.appendChild(div);
+            var img = YAHOO.util.Dom.getStyle(div, 'background-image');
+            img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
+            return img;
         },
         /**
         * @private
