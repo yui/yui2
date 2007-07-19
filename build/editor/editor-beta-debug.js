@@ -2426,6 +2426,10 @@ var Dom = YAHOO.util.Dom,
                 case 46: //Forward Delete
                 case 8: //Delete
                 case 65: //The letter a (for ctrl + a and cmd + a)
+                case 27: //Escape key if window is open
+                    if ((ev.keyCode == 27) && this.currentWindow) {
+                        this.closeWindow();
+                    }
                     this.nodeChange();
                     break;
             }
@@ -2743,6 +2747,12 @@ var Dom = YAHOO.util.Dom,
         * @type String
         */
         STR_CLOSE_WINDOW: 'Close Window',
+        /**
+        * @property STR_CLOSE_WINDOW_NOTE
+        * @description A note appearing in the Editor Window to tell the user that the Escape key will close the window
+        * @type String
+        */
+        STR_CLOSE_WINDOW_NOTE: 'To close this window use the Escape key',
         /**
         * @property STR_TITLE
         * @description The Title of the HTML document that is created in the iFrame
@@ -4637,6 +4647,7 @@ var Dom = YAHOO.util.Dom,
         * @description Opens a new "window/panel"
         */
         openWindow: function(win) {
+            Event.addListener(document, 'keypress', this._closeWindow, this, true);
             if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
                 YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
             }
@@ -4655,6 +4666,11 @@ var Dom = YAHOO.util.Dom,
 
             body = document.createElement('div');
             body.className = this.CLASS_PREFIX + '-body-cont';
+
+            var _note = document.createElement('h3');
+            _note.className = 'yui-editor-skipheader';
+            _note.innerHTML = this.STR_CLOSE_WINDOW_NOTE;
+            body.appendChild(_note);
             form = document.createElement('form');
             form.setAttribute('method', 'GET');
             var windowName = win.name;
@@ -4678,8 +4694,8 @@ var Dom = YAHOO.util.Dom,
             _close.title = this.STR_CLOSE_WINDOW;
             _close.className = 'close';
             Event.addListener(_close, 'click', function() {
-                self.closeWindow();
-            });
+                this.closeWindow();
+            }, this, true);
             var _knob = document.createElement('span');
             _knob.innerHTML = '^';
             _knob.className = 'knob';
@@ -4708,9 +4724,9 @@ var Dom = YAHOO.util.Dom,
             }, this, true);
             panel.hideEvent.subscribe(function() {
                 panel.hideEvent.unsubscribeAll();            
-                self.currentWindow = null;
+                this.currentWindow = null;
                 var evName = 'window' + windowName + 'Close';
-                self.fireEvent(evName, { type: evName, target: this });
+                this.fireEvent(evName, { type: evName, target: this });
 
             }, this, true);
             this.currentWindow = win;
@@ -4724,6 +4740,9 @@ var Dom = YAHOO.util.Dom,
         * @description Realign the window with the currentElement and reposition the knob above the panel.
         */
         moveWindow: function(force) {
+            if (!this.currentWindow) {
+                return false;
+            }
             var win = this.currentWindow,
                 xy = Dom.getXY(this.currentElement),
                 elXY = Dom.getXY(this.get('iframe').get('element')),
@@ -4851,6 +4870,19 @@ var Dom = YAHOO.util.Dom,
             }
         },
         /**
+        * @private
+        * @method _closeWindow
+        * @description Close the currently open EditorWindow with the Escape key.
+        * @param {Event} ev The keypress Event that we are trapping
+        */
+        _closeWindow: function(ev) {
+            if (ev.keyCode == 27) {
+                if (this.currentWindow) {
+                    this.closeWindow();
+                }
+            }
+        },
+        /**
         * @method closeWindow
         * @description Close the currently open EditorWindow.
         */
@@ -4861,6 +4893,8 @@ var Dom = YAHOO.util.Dom,
             this.get('panel').hide();
             this.get('panel').cfg.setProperty('xy', [-900,-900]);
             this.unsubscribeAll('afterExecCommand');
+            this._focusWindow();
+            Event.removeListener(document, 'keypress', this._closeWindow);
         },
         /**
         * @method destroy

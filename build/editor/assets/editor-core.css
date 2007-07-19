@@ -597,7 +597,7 @@ div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-do
     display: block;
 }
 
-h2.yui-editor-skipheader {
+h2.yui-editor-skipheader, h3.yui-editor-skipheader {
     height: 0;
     margin: 0;
     padding: 0;
