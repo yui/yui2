@@ -2,17 +2,6 @@
 
 * Beta release.
 
-* The only server side resource required to run the editor, is the blankimage file.
-    The blankimage file is the temporary image loaded into the editor when you click the
-    "Insert Image" button in the toolbar.
-
-    This can be set using:
-
-    var myEditor = new YAHOO.widget.Editor('test', {
-        blankimage: 'MY_IMAGE_PATH'
-    });
-
-
 * Known Issues
     * All
         1. Removed the menu for Create Ordered Lists, it now defaults to creating a simple OL with no type.
@@ -54,5 +43,15 @@
 
 
 **** version 2.3.0 Peview Release Notes ***
+
+* The only server side resource required to run the editor, is the blankimage file.
+    The blankimage file is the temporary image loaded into the editor when you click the
+    "Insert Image" button in the toolbar.
+
+    This can be set using:
+
+    var myEditor = new YAHOO.widget.Editor('test', {
+        blankimage: 'MY_IMAGE_PATH'
+    });
 
 * There is a performance issue with Safari on a G4 computer. We will be working to get this resolved before the initial beta release.
