@@ -1474,11 +1474,13 @@ var Dom = YAHOO.util.Dom,
     });
 /**
 * @event buttonClick
+* @param {Object} o The object passed to this handler is the button config used to create the button.
 * @description Fires when any botton receives a click event. Passes back a single object representing the buttons config object. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event valueClick
+* @param {Object} o The object passed to this handler is the button config used to create the button.
 * @description This is a special dynamic event that is created and dispatched based on the value property
 * of the button config. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * Example:

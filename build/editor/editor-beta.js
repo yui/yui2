@@ -1456,11 +1456,13 @@ var Dom = YAHOO.util.Dom,
     });
 /**
 * @event buttonClick
+* @param {Object} o The object passed to this handler is the button config used to create the button.
 * @description Fires when any botton receives a click event. Passes back a single object representing the buttons config object. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event valueClick
+* @param {Object} o The object passed to this handler is the button config used to create the button.
 * @description This is a special dynamic event that is created and dispatched based on the value property
 * of the button config. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * Example:
@@ -1891,7 +1893,7 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the different range objects across the A-Grade list.
         * @returns {Object} Range Object
         */
-        _getRange: function() {
+        _getRange: function(sel) {
             var sel = this._getSelection();
 
             if (sel == null) {
@@ -1899,7 +1901,14 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (this.browser.webkit && !sel.getRangeAt) {
-                return this._getWindow().getSelection();
+                var _range = this._getDoc().createRange();
+                try {
+                    _range.setStart(sel.anchorNode, sel.anchorOffset);
+                    _range.setEnd(sel.focusNode, sel.focusOffset);
+                } catch (e) {
+                    _range = this._getWindow().getSelection()+'';
+                }
+                return _range;
             }
 
             if (this.browser.ie || this.browser.opera) {
@@ -4339,6 +4348,105 @@ var Dom = YAHOO.util.Dom,
         * <code>this.currentElement</code>, so we now have an element reference to the element that was just modified. At this point we can use standard DOM manipulation to change it as we see fit.
         */
         createCurrentElement: function(tagName, tagStyle) {
+            var el = this._getDoc().createElement('span');
+            el.style.border = '1px solid red';
+            var _sel = this._getSelection();
+            var _range = this._getRange();
+
+            if (this.browser.gecko) {
+                _range.surroundContents(el);
+            } else if (this.browser.webkit) {
+                var aNode = _sel.anchorNode;
+                var fNode = _sel.focusNode;
+
+                if (aNode.nodeType == 3) {
+                    //if (aNode.parentNode != this._getDoc().body) {
+                        aNode = aNode.parentNode;
+                    //}
+                }
+                if (fNode.nodeType == 3) {
+                    fNode = fNode.parentNode;
+                }
+                if (fNode.parentNode.tagName.toLowerCase() == 'font') {
+                    fNode = fNode.parentNode;
+                }
+                
+                var str = '';
+                for (var i in aNode) {
+                    if (Lang.hasOwnProperty(aNode, i)) {
+                        str += i + ': ' + aNode[i] + '\n';
+                    }
+                }
+                alert(str);
+                var str = '';
+                for (var i in fNode) {
+                    if (Lang.hasOwnProperty(fNode, i)) {
+                        str += i + ': ' + fNode[i] + '\n';
+                    }
+                }
+                alert(str);
+                var prev = fNode.previousSibling;
+
+                var curEl = fNode.nextSibling;
+                fNode.parentNode.removeChild(fNode);
+                el.appendChild(fNode);
+
+                while (curEl) {
+                    if (curEl != aNode) {
+                    //if (!Dom.isAncestor(el, aNode)) {
+                        var nextEl = curEl.nextSibling;
+                        curEl.parentNode.removeChild(curEl);
+                        el.appendChild(curEl);
+                        curEl = nextEl;
+                        nextEl = null;
+                    } else {
+                        curEl = false;
+                    }
+                }
+                this._getDoc().body.appendChild(el);
+                for (var i in fNode) {
+                    if (Lang.hasOwnProperty(fNode, i)) {
+                        str += i + ': ' + fNode[i] + '\n';
+                    }
+                }
+                //alert(str);
+                prev.parentNode.insertBefore(el, prev.nextSibling);
+                //_range.insertNode(el);
+
+                /*
+                _range.setStart(aNode, _sel.anchorOffset);
+                _range.setEnd(fNode, _sel.focusOffset);
+                var docFrag = _range.cloneContents() || this._getDoc().createDocumentFragment();
+                alert(docFrag);
+                //_range.setStart(_sel.anchorNode, _sel.anchorOffset);
+                //_range.setEnd(_sel.focusNode, _sel.focusOffset);
+                /*
+                var b = this._getDoc().createElement('body');
+			    b.appendChild(_range.cloneContents());
+                alert(b.innerHTML);
+                /*
+                _sel = this._getWindow().getSelection();
+                _range = this._getDoc().createRange();
+                _range.setStart(_sel.anchorNode, _sel.anchorOffset);
+                _range.setEnd(_sel.focusNode, _sel.focusOffset);
+                var docFrag = _range.cloneContents() || this._getDoc().createDocumentFragment();
+                alert(docFrag);
+                //el.appendChild(_range.createContextualFragment());
+                //_range.deleteContents();
+                //_range.insertNode(el);
+                /*
+                try {
+                    alert('detach: ' + _range.detach());
+                } catch (e) {
+                    alert(e);
+                }
+                */
+
+                //alert(_range.selectNodeContents());
+            }
+            this.currentElement = el;
+        },
+        _createCurrentElement: function(tagName, tagStyle) {
             var tagName = ((tagName) ? tagName : 'a'),
                 sel = this._getSelection(),
                 tar = null,
@@ -4906,31 +5014,37 @@ var Dom = YAHOO.util.Dom,
 */
 /**
 * @event editorMouseUp
+* @param {Event} ev The DOM Event that occured
 * @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorMouseDown
+* @param {Event} ev The DOM Event that occured
 * @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorDoubleClick
+* @param {Event} ev The DOM Event that occured
 * @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorKeyUp
+* @param {Event} ev The DOM Event that occured
 * @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorKeyPress
+* @param {Event} ev The DOM Event that occured
 * @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event editorKeyDown
+* @param {Event} ev The DOM Event that occured
 * @description Passed through HTML Event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
@@ -4956,27 +5070,36 @@ var Dom = YAHOO.util.Dom,
 */
 /**
 * @event beforeOpenWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
 * @description Event fires before an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event afterOpenWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
 * @description Event fires after an Editor Window is opened. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event closeWindow
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
 * @description Event fires after an Editor Window is closed. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event windowCMDOpen
-* @description Dynamic event fired when an EditorWindow is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is opened.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkOpen event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 /**
 * @event windowCMDClose
-* @description Dynamic event fired when an EditorWindow is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @param {<a href="YAHOO.widget.EditorWindow.html">EditorWindow</a>} win The EditorWindow object
+* @param {Overlay} panel The Overlay object that is used to create the window.
+* @description Dynamic event fired when an <a href="YAHOO.widget.EditorWindow.html">EditorWindow</a> is closed.. The dynamic event is based on the name of the window. Example Window: createlink, opening this window would fire the windowcreatelinkClose event. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
 * @type YAHOO.util.CustomEvent
 */
 
