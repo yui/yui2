@@ -676,17 +676,21 @@ YAHOO.widget.TreeView.removeHandler = function (el, sType, fn) {
 YAHOO.widget.TreeView.preload = function(e, prefix) {
     prefix = prefix || "ygtv";
 
+    YAHOO.log("Preloading images: " + prefix, "info", "TreeView");
+
     var styles = ["tn","tm","tmh","tp","tph","ln","lm","lmh","lp","lph","loading"];
     // var styles = ["tp"];
 
     var sb = [];
     
-    for (var i = 0; i < styles.length; ++i) { 
+    // save the first one for the outer container
+    for (var i=1; i < styles.length; i=i+1) { 
         sb[sb.length] = '<span class="' + prefix + styles[i] + '">&#160;</span>';
     }
 
     var f = document.createElement("div");
     var s = f.style;
+    s.className = prefix + styles[0];
     s.position = "absolute";
     s.height = "1px";
     s.width = "1px";

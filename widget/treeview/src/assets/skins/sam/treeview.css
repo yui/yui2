@@ -68,7 +68,7 @@
 /* Loading icon */
 .ygtvloading { 
 	width:18px; height:22px; 
-	background: url(loading.gif) 0 0 no-repeat; 
+	background: url(treeview-loading.gif) 0 0 no-repeat; 
 }
 
 /* the style for the empty cells that are used for rendering the depth 
