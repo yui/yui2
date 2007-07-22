@@ -27,10 +27,10 @@ file; it includes the following components:
 * Drag & Drop
 * Element
 
-For implementations that use a significant subset of these files, it may prove
+For implementations that use four or more  of these files, it may prove
 more efficient to include utilities.js as opposed to including separate files
 for each component.
 
-Note: If you are require only the Yahoo Global Object, Event Utility and Dom
-collection, consider using the special yahoo-event-dom.js aggregate instead.
+Note: If you require only the Yahoo Global Object, Event Utility and Dom
+collection, consider using the special yahoo-dom-event.js aggregate instead.
 
