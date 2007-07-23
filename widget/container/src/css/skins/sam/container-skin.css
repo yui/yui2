@@ -11,6 +11,12 @@
 
 /* Panel styles */
 
+.yui-skin-sam .yui-panel-container {
+
+    padding:0 1px;
+
+}
+
 .yui-skin-sam .yui-panel {
 
 	position: relative;
@@ -123,22 +129,22 @@
 
 	position: absolute;
     top: 2px;
-    right: -4px;
-    left: -4px;
+    right: -3px;
     bottom: -3px;
+    left: -3px;
     background-color: #000;
     opacity: .12;
     filter: alpha(opacity=12);  /* Set opacity in IE */
 
     /*
    
-    Please note: For the shadow to work in IE 6 (Standards and Quirks Mode) 
-    and IE 7 Quirks Mode the underlay element's height and width are set to the 
-    offsetHeight and offsetWidth of the Panel's root element.
+        Please note: For the shadow to work in IE 6 (Standards and Quirks Mode) 
+        and IE 7 Quirks Mode the underlay element's height and width are set to the 
+        offsetHeight and offsetWidth of the Panel's root element.
 
     */
 
-    *padding: 0 8px 1px 0;
+    _padding: 0 8px 1px 0;
 
 }
 
@@ -236,13 +242,22 @@
 
 .yui-skin-sam .yui-tt .bd {
 
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 1;
     color: #000;
-    line-height: 1.465; /* 19px */
-    padding: 0 5px;
+    padding: 2px 5px;
     border-color: #D4C237 #A6982B #A6982B #A6982B;
     border-width: 1px;
     border-style: solid;
     background-color: #FFEE69;
+
+}
+
+.yui-skin-sam .yui-tt.show-scrollbars .bd {
+
+    overflow: auto;
 
 }
 
@@ -253,7 +268,12 @@
     left: -3px;
     bottom: -3px;
     background-color: #000;
+
+}
+
+.yui-skin-sam .yui-tt-shadow-visible {
+
     opacity: .12;
-    filter: alpha(opacity=12);  /* For IE */
+    *filter: alpha(opacity=12);  /* For IE */    
 
 }
