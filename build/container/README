@@ -92,6 +92,21 @@ Changes:
       OS X as it is used as a shim to prevent Aqua scrollbars from poking 
       through a Panel instance.
 
+    - The underlay elment is resized when a change to a Panel  
+      instance's content is made at runtime via the "setHeader," 
+      "appendToHeader," "setBody," "appendToBody," "setFooter," or 
+      "appendToFooter" methods.
+
++ Updated the "iframe" configuration property of YAHOO.widget.Overlay:
+
+    - The creation of the <iframe> shim element is deferred until the Overlay
+      instance is initially made visible.
+
+    - The <iframe> shim element is resized when a change to an Overlay 
+      instance's content is made at runtime via the "setHeader," 
+      "appendToHeader," "setBody," "appendToBody," "setFooter," or 
+      "appendToFooter" methods.
+
 + Updated the "buttons" configuration property of YAHOO.widget.Dialog:
 
     - YAHOO.widget.Button is now an optional dependancy, and if included, each
@@ -131,7 +146,7 @@ Added the following features:
       public "onRender" prototype method.  To disable the creation of a 
       Tooltip's shadow override the prototype of the "onRender" method:
       
-      YAHOO.widget.Tooltip.prototype.onRender = null;
+      YAHOO.widget.Tooltip.prototype.onRender = function () {};
       
     - The actual creation of the shadow element is deferred until the Tooltip 
       is made visible for the first time.
@@ -177,6 +192,18 @@ Added the following features:
   dependancy on the page), an array of YAHOO.widget.Button instances 
   is returned.
 
++ Added a "destroy" method to YAHOO.util.Config that sets all properties to 
+  null, unsubscribes all listeners from each property's change event and all 
+  listeners from the configChangedEvent.  The "destroy" method of 
+  YAHOO.widget.Module now automatically calls the "destroy" method of its
+  configuation object.
+
++ Added a "IFRAME_OFFSET" constant to YAHOO.widget.Overlay that controls how 
+  much the <iframe> shim should be offset from each side of an 
+  Overlay instance.
+
++ Added a new "syncIframe" method to YAHOO.widget.Overlay that syncronizes the 
+  size and position of the <iframe> shim to that of the Overlay.
 
 *** version 2.2.2 ***
 
