@@ -10,7 +10,7 @@ return val/100;case'float':property='styleFloat';default:var value=el.currentSty
 if(isIE){setStyle=function(el,property,val){switch(property){case'opacity':if(YAHOO.lang.isString(el.style.filter)){el.style.filter='alpha(opacity='+val*100+')';if(!el.currentStyle||!el.currentStyle.hasLayout){el.style.zoom=1;}}
 break;case'float':property='styleFloat';default:el.style[property]=val;}};}else{setStyle=function(el,property,val){if(property=='float'){property='cssFloat';}
 el.style[property]=val;};}
-var testElement=function(node,method){return node.nodeType==1&&(!method||method(node));};YAHOO.util.Dom={get:function(el){if(!el||el.tagName||el.item){return el;}
+var testElement=function(node,method){return node&&node.nodeType==1&&(!method||method(node));};YAHOO.util.Dom={get:function(el){if(!el||el.tagName||el.item){return el;}
 if(YAHOO.lang.isString(el)){return document.getElementById(el);}
 if(el.splice){var c=[];for(var i=0,len=el.length;i<len;++i){c[c.length]=Y.Dom.get(el[i]);}
 return c;}
@@ -40,8 +40,8 @@ el.className=el.className.replace(re,' '+newClassName+' ');if(this.hasClass(el,o
 el.className=YAHOO.lang.trim(el.className);return true;};return Y.Dom.batch(el,f,Y.Dom,true);},generateId:function(el,prefix){prefix=prefix||'yui-gen';var f=function(el){if(el&&el.id){return el.id;}
 var id=prefix+id_counter++;if(el){el.id=id;}
 return id;};return Y.Dom.batch(el,f,Y.Dom,true)||f.apply(Y.Dom,arguments);},isAncestor:function(haystack,needle){haystack=Y.Dom.get(haystack);if(!haystack||!needle){return false;}
-var f=function(node){if(haystack.contains&&node.tagName&&!isSafari){return haystack.contains(node);}
-else if(haystack.compareDocumentPosition&&node.tagName){return!!(haystack.compareDocumentPosition(node)&16);}else if(node.tagName){return!!this.getAncestorBy(node,function(el){return el==haystack;});}
+var f=function(node){if(haystack.contains&&node.nodeType&&!isSafari){return haystack.contains(node);}
+else if(haystack.compareDocumentPosition&&node.nodeType){return!!(haystack.compareDocumentPosition(node)&16);}else if(node.nodeType){return!!this.getAncestorBy(node,function(el){return el==haystack;});}
 return false;};return Y.Dom.batch(needle,f,Y.Dom,true);},inDocument:function(el){var f=function(el){if(isSafari){while(el=el.parentNode){if(el==document.documentElement){return true;}}
 return false;}
 return this.isAncestor(document.documentElement,el);};return Y.Dom.batch(el,f,Y.Dom,true);},getElementsBy:function(method,tag,root,apply){tag=tag||'*';root=(root)?Y.Dom.get(root):null||document;if(!root){return[];}
@@ -54,9 +54,9 @@ return height;},getViewportWidth:function(){var width=self.innerWidth;var mode=d
 return width;},getAncestorBy:function(node,method){while(node=node.parentNode){if(testElement(node,method)){return node;}}
 return null;},getAncestorByClassName:function(node,className){node=Y.Dom.get(node);if(!node){return null;}
 var method=function(el){return Y.Dom.hasClass(el,className);};return Y.Dom.getAncestorBy(node,method);},getAncestorByTagName:function(node,tagName){node=Y.Dom.get(node);if(!node){return null;}
-var method=function(el){return el.tagName&&el.tagName.toUpperCase()==tagName.toUpperCase();};return Y.Dom.getAncestorBy(node,method);},getPreviousSiblingBy:function(node,method){while(node=node.previousSibling){if(testElement(node,method)){return node;}}
+var method=function(el){return el.tagName&&el.tagName.toUpperCase()==tagName.toUpperCase();};return Y.Dom.getAncestorBy(node,method);},getPreviousSiblingBy:function(node,method){while(node){node=node.previousSibling;if(testElement(node,method)){return node;}}
 return null;},getPreviousSibling:function(node){node=Y.Dom.get(node);if(!node){return null;}
-return Y.Dom.getPreviousSiblingBy(node);},getNextSiblingBy:function(node,method){while(node=node.nextSibling){if(testElement(node,method)){return node;}}
+return Y.Dom.getPreviousSiblingBy(node);},getNextSiblingBy:function(node,method){while(node){node=node.nextSibling;if(testElement(node,method)){return node;}}
 return null;},getNextSibling:function(node){node=Y.Dom.get(node);if(!node){return null;}
 return Y.Dom.getNextSiblingBy(node);},getFirstChildBy:function(node,method){var child=(testElement(node.firstChild,method))?node.firstChild:null;return child||Y.Dom.getNextSiblingBy(node.firstChild,method);},getFirstChild:function(node,method){node=Y.Dom.get(node);if(!node){return null;}
 return Y.Dom.getFirstChildBy(node);},getLastChildBy:function(node,method){if(!node){return null;}
