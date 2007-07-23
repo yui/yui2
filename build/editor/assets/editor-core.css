@@ -94,7 +94,7 @@
     border: 0;
     display: block;
     text-indent: 50px !important; /* IE Fix */
-    height: 19px;
+    /*height: 19px;*/
     width: 200px;
     overflow:hidden;
 }

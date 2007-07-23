@@ -268,7 +268,16 @@
 
 .yui-skin-sam .yui-toolbar-container .yui-button .first-child, .yui-skin-sam .yui-toolbar-container .yui-button .first-child a {
     width: 500px;
+    position: absolute;
+    top: -1px;
 }
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select .first-child, .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child {
+    position: static;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select .first-child a, .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child a {
+    height: 19px;
+}
+
 
 /* Spin Buttons */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton span.yui-toolbar-icon {
