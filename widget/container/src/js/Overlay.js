@@ -31,6 +31,8 @@
         Dom = YAHOO.util.Dom,
         Config = YAHOO.util.Config,
         Overlay = YAHOO.widget.Overlay,
+        
+        m_oIFrameTemplate,
 
         /**
         * Constant representing the name of the Overlay's events
@@ -124,17 +126,28 @@
 
     /**
     * The URL that will be placed in the iframe
-    * @property Overlay.IFRAME_SRC
+    * @property YAHOO.widget.Overlay.IFRAME_SRC
     * @static
     * @final
     * @type String
     */
     Overlay.IFRAME_SRC = "javascript:false;";
+
+    /**
+    * Number representing how much the iframe shim should be offset from each 
+    * side of an Overlay instance.
+    * @property YAHOO.widget.Overlay.IFRAME_SRC
+    * @default 3
+    * @static
+    * @final
+    * @type Number
+    */
+    Overlay.IFRAME_OFFSET = 3;
     
     /**
     * Constant representing the top left corner of an element, used for 
     * configuring the context element alignment
-    * @property Overlay.TOP_LEFT
+    * @property YAHOO.widget.Overlay.TOP_LEFT
     * @static
     * @final
     * @type String
@@ -144,7 +157,7 @@
     /**
     * Constant representing the top right corner of an element, used for 
     * configuring the context element alignment
-    * @property Overlay.TOP_RIGHT
+    * @property YAHOO.widget.Overlay.TOP_RIGHT
     * @static
     * @final
     * @type String
@@ -154,7 +167,7 @@
     /**
     * Constant representing the top bottom left corner of an element, used for 
     * configuring the context element alignment
-    * @property Overlay.BOTTOM_LEFT
+    * @property YAHOO.widget.Overlay.BOTTOM_LEFT
     * @static
     * @final
     * @type String
@@ -164,7 +177,7 @@
     /**
     * Constant representing the bottom right corner of an element, used for 
     * configuring the context element alignment
-    * @property Overlay.BOTTOM_RIGHT
+    * @property YAHOO.widget.Overlay.BOTTOM_RIGHT
     * @static
     * @final
     * @type String
@@ -173,7 +186,7 @@
     
     /**
     * Constant representing the default CSS class used for an Overlay
-    * @property Overlay.CSS_OVERLAY
+    * @property YAHOO.widget.Overlay.CSS_OVERLAY
     * @static
     * @final
     * @type String
@@ -184,20 +197,20 @@
     /**
     * A singleton CustomEvent used for reacting to the DOM event for 
     * window scroll
-    * @event Overlay.windowScrollEvent
+    * @event YAHOO.widget.Overlay.windowScrollEvent
     */
     Overlay.windowScrollEvent = new CustomEvent("windowScroll");
     
     /**
     * A singleton CustomEvent used for reacting to the DOM event for
     * window resize
-    * @event Overlay.windowResizeEvent
+    * @event YAHOO.widget.Overlay.windowResizeEvent
     */
     Overlay.windowResizeEvent = new CustomEvent("windowResize");
     
     /**
     * The DOM event handler used to fire the CustomEvent for window scroll
-    * @method Overlay.windowScrollHandler
+    * @method YAHOO.widget.Overlay.windowScrollHandler
     * @static
     * @param {DOMEvent} e The DOM scroll event
     */
@@ -229,7 +242,7 @@
     
     /**
     * The DOM event handler used to fire the CustomEvent for window resize
-    * @method Overlay.windowResizeHandler
+    * @method YAHOO.widget.Overlay.windowResizeHandler
     * @static
     * @param {DOMEvent} e The DOM resize event
     */
@@ -260,7 +273,7 @@
     /**
     * A boolean that indicated whether the window resize and scroll events have 
     * already been subscribed to.
-    * @property Overlay._initialized
+    * @property YAHOO.widget.Overlay._initialized
     * @private
     * @type Boolean
     */
@@ -268,11 +281,8 @@
     
     if (Overlay._initialized === null) {
     
-        Event.on(window, "scroll", 
-            Overlay.windowScrollHandler);
-    
-        Event.on(window, "resize", 
-            Overlay.windowResizeHandler);
+        Event.on(window, "scroll", Overlay.windowScrollHandler);
+        Event.on(window, "resize", Overlay.windowResizeHandler);
     
         Overlay._initialized = true;
     
@@ -519,11 +529,14 @@
             });
             
             /**
-            * True if the Overlay should have an IFRAME shim (for correcting  
-            * the select z-index bug in IE6 and below).
             * @config iframe
+            * @description Boolean indicating whether or not the Overlay should 
+            * have an IFRAME shim; used to prevent <SELECT> elements from 
+            * poking through an Overlay instance in IE6.  When set to "true", 
+            * the iframe shim is created when the Overlay instance is intially
+            * made visible.
             * @type Boolean
-            * @default true for IE6 and below, false for all others
+            * @default true for IE6 and below, false for all other browsers.
             */
             this.cfg.addProperty(DEFAULT_CONFIG.IFRAME.key, {
             
@@ -766,8 +779,7 @@
                         this.beforeHideEvent.fire();
     
                         Dom.setStyle(this.element, "visibility", "hidden");
-    
-                        this.cfg.refireEvent("iframe");
+
                         this.hideEvent.fire();
     
                     }
@@ -1021,7 +1033,7 @@
         },
         
         /**
-        * Shows the iframe shim, if it has been enabled
+        * Shows the iframe shim, if it has been enabled.
         * @method showIframe
         */
         showIframe: function () {
@@ -1035,7 +1047,7 @@
         },
         
         /**
-        * Hides the iframe shim, if it has been enabled
+        * Hides the iframe shim, if it has been enabled.
         * @method hideIframe
         */
         hideIframe: function () {
@@ -1047,6 +1059,50 @@
             }
     
         },
+
+        /**
+        * Syncronizes the size and position of iframe shim to that of its 
+        * corresponding Overlay instance.
+        * @method syncIframe
+        */
+        syncIframe: function () {
+
+            var oIFrame = this.iframe,
+                oElement = this.element,
+                nOffset = Overlay.IFRAME_OFFSET,
+                nDimensionOffset = (nOffset * 2),
+                aXY;
+
+
+            if (oIFrame) {
+
+                // Size <iframe>
+
+                oIFrame.style.width = 
+                    (oElement.offsetWidth + nDimensionOffset + "px");
+
+                oIFrame.style.height = 
+                    (oElement.offsetHeight + nDimensionOffset + "px");
+
+
+                // Position <iframe>
+
+                aXY = this.cfg.getProperty("xy");
+
+                if (!Lang.isArray(aXY) || (isNaN(aXY[0]) || isNaN(aXY[1]))) {
+
+                    this.syncPosition();
+
+                    aXY = this.cfg.getProperty("xy");
+
+                }
+
+                Dom.setXY(oIFrame, [(aXY[0] - nOffset), (aXY[1] - nOffset)]);
+
+            }
+        
+        },
+
         
         /**
         * The default event handler fired when the "iframe" property is changed.
@@ -1058,114 +1114,158 @@
         * this will usually equal the owner.
         */
         configIframe: function (type, args, obj) {
-        
-            var val = args[0],
-                alreadySubscribed = Config.alreadySubscribed,
-                x, y, parent, iframeDisplay, width, height;
-            
-            if (val) { // IFRAME shim is enabled
-            
-                if (!alreadySubscribed(this.showEvent, this.showIframe, this)) {
+
+            var bIFrame = args[0];
+
+            function createIFrame() {
+
+                var oIFrame = this.iframe,
+                    oElement = this.element,
+                    oParent,
+                    aXY;
+
+
+                if (!oIFrame) {
+
+                    if (!m_oIFrameTemplate) {
     
-                    this.showEvent.subscribe(this.showIframe, this, true);
-    
-                }
-    
-                if (!alreadySubscribed(this.hideEvent, this.hideIframe, this)) {
-    
-                    this.hideEvent.subscribe(this.hideIframe, this, true);
-    
-                }
-            
-                x = this.cfg.getProperty("x");
-                y = this.cfg.getProperty("y");
-            
-                if (! x || ! y) {
-    
-                    this.syncPosition();
-                    x = this.cfg.getProperty("x");
-                    y = this.cfg.getProperty("y");
-    
-                }
-            
-                YAHOO.log(("iframe positioning to: " + [x, y]), "iframe");
-            
-                if (! isNaN(x) && ! isNaN(y)) {
-    
-                    if (! this.iframe) {
-    
-                        this.iframe = document.createElement("iframe");
-    
+                        m_oIFrameTemplate = document.createElement("iframe");
+
                         if (this.isSecure) {
         
-                            this.iframe.src = Overlay.IFRAME_SRC;
+                            m_oIFrameTemplate.src = Overlay.IFRAME_SRC;
         
                         }
-    
-                        parent = this.element.parentNode;
-    
-                        if (parent) {
-    
-                            parent.appendChild(this.iframe);
-    
-                        } else {
-    
-                            document.body.appendChild(this.iframe);
-    
+
+                        /*
+                            Set the opacity of the <iframe> to 0 so that it 
+                            doesn't modify the opacity of any transparent 
+                            elements that may be on top of it (like a shadow).
+                        */
+        
+                        if (YAHOO.env.ua.ie) {
+        
+                            m_oIFrameTemplate.style.filter = "alpha(opacity=0)";
+        
+                            /*
+                                 Need to set the "frameBorder" property to 0 
+                                 supress the default <iframe> border in IE.  
+                                 Setting the CSS "border" property alone 
+                                 doesn't supress it.
+                            */
+        
+                            m_oIFrameTemplate.frameBorder = 0;
+        
                         }
-            
-                        Dom.setStyle(this.iframe, "position", "absolute");
-                        Dom.setStyle(this.iframe, "border", "none");
-                        Dom.setStyle(this.iframe, "margin", "0");
-                        Dom.setStyle(this.iframe, "padding", "0");
-                        Dom.setStyle(this.iframe, "opacity", "0");
-    
-                        if (this.cfg.getProperty("visible")) {
-    
-                            this.showIframe();
-                        
-                        } else {
-            
-                            this.hideIframe();
+                        else {
+        
+                            m_oIFrameTemplate.style.opacity = "0";
                         
                         }
-                    }
-            
-                    iframeDisplay = Dom.getStyle(this.iframe, "display");
-            
-                    if (iframeDisplay == "none") {
+
+                        m_oIFrameTemplate.style.position = "absolute";
+                        m_oIFrameTemplate.style.border = "none";
+                        m_oIFrameTemplate.style.margin = "0";
+                        m_oIFrameTemplate.style.padding = "0";
+                        m_oIFrameTemplate.style.display = "none";
     
-                        this.iframe.style.display = "block";
-    
                     }
-            
-                    Dom.setXY(this.iframe, [x, y]);
-            
-                    width = this.element.clientWidth;
-                    height = this.element.clientHeight;
+
+                    oIFrame = m_oIFrameTemplate.cloneNode(false);
+
+                    oParent = oElement.parentNode;
+
+                    if (oParent) {
+
+                        oParent.appendChild(oIFrame);
+
+                    } else {
+
+                        document.body.appendChild(oIFrame);
+
+                    }
                     
-                    Dom.setStyle(this.iframe, "width", ((width + 2) + "px"));
-                    Dom.setStyle(this.iframe, "height", ((height + 2) + "px"));
+                    this.iframe = oIFrame;
+
+                }
+
+
+                /*
+                     Show the <iframe> before positioning it since the "setXY" 
+                     method of DOM requires the element be in the document 
+                     and visible.
+                */
+
+                this.showIframe();
+
+
+                /*
+                     Syncronize the size and position of the <iframe> to that 
+                     of the Overlay.
+                */
+                
+                this.syncIframe();
+
+
+                // Add event listeners to update the <iframe> when necessary
+
+                if (!this._hasIframeEventListeners) {
+
+                    this.showEvent.subscribe(this.showIframe);
+                    this.hideEvent.subscribe(this.hideIframe);
+                    this.changeContentEvent.subscribe(this.syncIframe);
+
+                    this._hasIframeEventListeners = true;
+                    
+                }
+                
+            }
+
+
+            function onBeforeShow() {
             
-                    if (iframeDisplay == "none") {
-    
-                        this.iframe.style.display = "none";
-    
+                createIFrame.call(this);
+        
+                this.beforeShowEvent.unsubscribe(onBeforeShow);
+                
+                this._iframeDeferred = false;
+            
+            }
+            
+
+            if (bIFrame) { // <iframe> shim is enabled
+                
+                if (this.cfg.getProperty("visible")) {
+
+                    createIFrame.call(this);
+                
+                }
+                else {
+
+                    if (!this._iframeDeferred) {
+
+                        this.beforeShowEvent.subscribe(onBeforeShow);
+
+                        this._iframeDeferred = true;
+                    
                     }
-    
+                
                 }
     
-            } else {
+            } else {    // <iframe> shim is disabled
     
-                if (this.iframe) {
-    
-                    this.iframe.style.display = "none";
-    
+                this.hideIframe();
+
+                if (this._hasIframeEventListeners) {
+
+                    this.showEvent.unsubscribe(this.showIframe);
+                    this.hideEvent.unsubscribe(this.hideIframe);
+                    this.changeContentEvent.unsubscribe(this.syncIframe);
+
+                    this._hasIframeEventListeners = false;
+
                 }
-    
-                this.showEvent.unsubscribe(this.showIframe, this);
-                this.hideEvent.unsubscribe(this.hideIframe, this);
-    
+                
             }
     
         },
