@@ -605,6 +605,41 @@
                 }
             }
             return output;
+        },
+
+        /**
+        * Sets all properties to null, unsubscribes all listeners from each 
+        * property's change event and all listeners from the configChangedEvent.
+        * @method destroy
+        */
+        destroy: function () {
+
+            var oConfig = this.config,
+                sProperty,
+                oProperty;
+
+
+            for (sProperty in oConfig) {
+            
+                if (Lang.hasOwnProperty(oConfig, sProperty)) {
+
+                    oProperty = oConfig[sProperty];
+
+                    oProperty.event.unsubscribeAll();
+                    oProperty.event = null;
+
+                }
+            
+            }
+            
+            this.configChangedEvent.unsubscribeAll();
+            
+            this.configChangedEvent = null;
+            this.owner = null;
+            this.config = null;
+            this.initialConfig = null;
+            this.eventQueue = null;
+        
         }
 
     };
