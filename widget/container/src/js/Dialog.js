@@ -458,7 +458,7 @@
                 form = document.createElement("form");
                 form.name = "frm_" + this.id;
 
-                this.body.appendChild(form);
+                this.appendToBody(form);
 
             }
 
@@ -725,9 +725,6 @@
                     oInnerElement.appendChild(oFooter);
                 
                 }
-        
-                this.cfg.refireEvent("iframe");
-                this.cfg.refireEvent("underlay");
 
                 this.buttonSpan = oSpan;
 
@@ -748,6 +745,9 @@
                 }
 
             }
+
+            this.cfg.refireEvent("iframe");
+            this.cfg.refireEvent("underlay");
 
         },
 
