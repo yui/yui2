@@ -870,7 +870,7 @@ var Dom = YAHOO.util.Dom,
             key: "position", 
             value: "dynamic", 
             validator: checkPosition, 
-            supercedes: ["visible"] 
+            supercedes: ["visible", "iframe"]
         }, 
     
         "SUBMENU_ALIGNMENT": { 
@@ -916,7 +916,8 @@ var Dom = YAHOO.util.Dom,
         "MAX_HEIGHT": { 
             key: "maxheight", 
             value: 0, 
-            validator: Lang.isNumber
+            validator: Lang.isNumber,
+            supercedes: ["iframe"]
         }, 
     
         "CLASS_NAME": { 
@@ -1793,6 +1794,7 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
         
 
                 this.itemAddedEvent.fire(oGroupItem);
+                this.changeContentEvent.fire();
 
                 return oGroupItem;
     
@@ -1839,6 +1841,7 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
         
 
                 this.itemAddedEvent.fire(oGroupItem);
+                this.changeContentEvent.fire();
 
                 return oGroupItem;
     
@@ -1919,7 +1922,8 @@ _removeItemFromGroupByIndex: function (p_nGroupIndex, p_nItemIndex) {
             }
     
 
-            this.itemRemovedEvent.fire(oItem);    
+            this.itemRemovedEvent.fire(oItem);
+            this.changeContentEvent.fire();
 
 
             // Return a reference to the item that was removed
@@ -2763,7 +2767,6 @@ _onClick: function (p_sType, p_aArgs) {
         oItemCfg,
         oSubmenu,
         sURL,
-        bCurrentPageURL,
         oRoot;
 
 
@@ -2807,11 +2810,10 @@ _onClick: function (p_sType, p_aArgs) {
         else {
 
             sURL = oItemCfg.getProperty("url");
-            bCurrentPageURL = (sURL.substr((sURL.length-1),1) == "#");
 
             //  Prevent the browser from following links equal to "#"
             
-            if (oTarget.tagName.toUpperCase() == "A" && bCurrentPageURL) {
+            if ((sURL.substr((sURL.length-1),1) == "#")) {
 
                 Event.preventDefault(oEvent);
 
@@ -3350,7 +3352,8 @@ _onInit: function (p_sType, p_aArgs) {
 
 
     if (((bRootMenu && !bLazyLoad) || 
-        (bRootMenu && (this.cfg.getProperty("visible") || this.cfg.getProperty("position") == "static")) || 
+        (bRootMenu && (this.cfg.getProperty("visible") || 
+        this.cfg.getProperty("position") == "static")) || 
         (!bRootMenu && !bLazyLoad)) && this.getItemGroups().length === 0) {
 
         if (this.srcElement) {
@@ -4034,7 +4037,7 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
 */
 enforceConstraints: function (type, args, obj) {
 
-    var oMenuItem = this.parent,
+    var oParentMenuItem = this.parent,
         oElement,
         oConfig,
         pos,
@@ -4055,7 +4058,8 @@ enforceConstraints: function (type, args, obj) {
         oContextElement;
 
 
-    if (oMenuItem && !(oMenuItem.parent instanceof YAHOO.widget.MenuBar)) {
+    if (oParentMenuItem && 
+        !(oParentMenuItem.parent instanceof YAHOO.widget.MenuBar)) {
 
         oElement = this.element;
     
@@ -4074,7 +4078,8 @@ enforceConstraints: function (type, args, obj) {
         scrollX = Dom.getDocumentScrollLeft();
         scrollY = Dom.getDocumentScrollTop();
         
-        nPadding = (oMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 0 : 10;
+        nPadding = 
+            (oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 0 : 10;
         
         topConstraint = scrollY + nPadding;
         leftConstraint = scrollX + nPadding;
@@ -4130,7 +4135,8 @@ enforceConstraints: function (type, args, obj) {
         oConfig.setProperty("xy", [x,y], true);
     
     }
-    else {
+    else if (this == this.getRoot() && 
+        this.cfg.getProperty("position") == "dynamic") {
     
         Menu.superclass.enforceConstraints.call(this, type, args, obj);
     
@@ -4200,9 +4206,12 @@ configVisible: function (p_sType, p_aArgs, p_oMenu) {
 */
 configPosition: function (p_sType, p_aArgs, p_oMenu) {
 
-    var sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute",
+    var oElement = this.element,
+        sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute",
+        sCurrentPosition = Dom.getStyle(oElement, "position"),
         oCfg = this.cfg,
         nZIndex;
+
 
     Dom.setStyle(this.element, "position", sCSSPosition);
 
@@ -4225,6 +4234,12 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
 
     }
     else {
+
+        if (sCurrentPosition != "absolute") {
+
+            oCfg.setProperty("iframe", (YAHOO.env.ua.ie == 6 ? true : false));
+
+        }
 
         /*
             Even though the "visible" property is queued to 
@@ -4463,6 +4478,8 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     
     }
 
+    this.cfg.refireEvent("iframe");
+
 },
 
 
@@ -4571,13 +4588,14 @@ onRender: function (p_sType, p_aArgs) {
             oShadow = this._shadow;
     
         if (oShadow) {
-    
+
             oShadow.style.width = (oElement.offsetWidth + 6) + "px";
-            oShadow.style.height = (oElement.offsetHeight + 1) + "px"; 
-    
+            oShadow.style.height = (oElement.offsetHeight + 1) + "px";
+            
         }
     
     }
+
 
     function addShadowVisibleClass() {
     
@@ -4585,9 +4603,23 @@ onRender: function (p_sType, p_aArgs) {
     
     }
     
+
     function removeShadowVisibleClass() {
 
         Dom.removeClass(this._shadow, "yui-menu-shadow-visible");
+    
+    }
+
+
+    function callSizeShadow() {
+
+        var me = this;
+    
+        window.setTimeout(function () { 
+
+            sizeShadow.call(me); 
+
+        }, 0);
     
     }
 
@@ -4623,24 +4655,15 @@ onRender: function (p_sType, p_aArgs) {
             this.beforeShowEvent.subscribe(addShadowVisibleClass);
             this.beforeHideEvent.subscribe(removeShadowVisibleClass);
 
-            this.destroyEvent.subscribe(function () {
-            
-                this.beforeShowEvent.unsubscribe(addShadowVisibleClass);
-                this.beforeHideEvent.unsubscribe(removeShadowVisibleClass);
-            
-            });
-
-
             if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
         
-                window.setTimeout(function () { 
+                callSizeShadow.call(this);
+                
+                this.syncIframe();
 
-                    sizeShadow.call(me); 
-
-                }, 0);
-
-                this.cfg.subscribeToConfigEvent("width", sizeShadow);
-                this.cfg.subscribeToConfigEvent("height", sizeShadow);
+                this.cfg.subscribeToConfigEvent("width", callSizeShadow);
+                this.cfg.subscribeToConfigEvent("height", callSizeShadow);
+                this.changeContentEvent.subscribe(callSizeShadow);
 
                 Module.textResizeEvent.subscribe(sizeShadow, me, true);
                 
@@ -4664,6 +4687,7 @@ onRender: function (p_sType, p_aArgs) {
         this.beforeShowEvent.unsubscribe(onBeforeShow);
     
     }
+
 
     if (this.cfg.getProperty("position") == "dynamic") {
 
@@ -4841,6 +4865,8 @@ setItemGroupTitle: function (p_sGroupTitle, p_nGroupIndex) {
                 "first-of-type");
 
         }
+
+        this.changeContentEvent.fire();
 
     }
 
@@ -5188,45 +5214,12 @@ clearContent: function () {
 */
 destroy: function () {
 
-    // Remove all DOM event listeners
-
-    Event.purgeElement(this.element);
-
-
-    // Remove Custom Event listeners
-
-    this.mouseOverEvent.unsubscribeAll();
-    this.mouseOutEvent.unsubscribeAll();
-    this.mouseDownEvent.unsubscribeAll();
-    this.mouseUpEvent.unsubscribeAll();
-    this.clickEvent.unsubscribeAll();
-    this.keyPressEvent.unsubscribeAll();
-    this.keyDownEvent.unsubscribeAll();
-    this.keyUpEvent.unsubscribeAll();
-    this.focusEvent.unsubscribeAll();
-    this.blurEvent.unsubscribeAll();
-    this.itemAddedEvent.unsubscribeAll();
-
-    this.cfg.unsubscribeFromConfigEvent("width", this._onWidthChange);
-    this.cfg.unsubscribeFromConfigEvent("visible", this._onVisibleChange);
-
-    if (this._hasSetWidthHandlers) {
-
-        this.itemAddedEvent.unsubscribe(this._setWidth);
-        this.itemRemovedEvent.unsubscribe(this._setWidth);
-
-        this._hasSetWidthHandlers = false;
-
-    }
-
     Module.textResizeEvent.unsubscribe(this._onTextResize, this);
 
 
     // Remove all items
 
     this.clearContent();
-
-    this.itemRemovedEvent.unsubscribeAll();
 
     this._aItemGroups = null;
     this._aListElements = null;

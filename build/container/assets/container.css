@@ -15,6 +15,12 @@
 	width:auto;
 }
 
+.yui-tt-shadow {
+
+    display: none;
+
+}
+
 * html body.masked select {
 	visibility:hidden;
 }
