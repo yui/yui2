@@ -573,10 +573,7 @@
         var inc = (e.shiftKey) ? 10 : 1;
         switch (command) {
             case 6: // return, update the value
-                var val = parseInt(el.value, 10);
-                if (val !== this.get(prop)) {
-                    this.set(prop, val);
-                }
+                _useFieldValue.apply(this, arguments);
                 break;
                         
             case 3: // up arrow, increment
@@ -606,10 +603,27 @@
     var _hexFieldKeypress = function(e, el, prop) {
         var command = _getCommand(e);
         if (command === 6) { // return, update the value
-            var val = el.value;
-            if (val !== this.get(prop)) {
-                this.set(prop, val);
-            }
+            _useFieldValue.apply(this, arguments);
+        }
+    };
+
+    /**
+     * Use the value of the text field to update the control
+     * @method _hexFieldKeypress
+     * @param e {Event} an event
+     * @param el {HTMLElement} the field
+     * @param prop {string} the key to the linked property
+     * @private
+     */
+    var _useFieldValue = function(e, el, prop) {
+        var val = el.value;
+
+        if (prop !== this.OPT.HEX) {
+            val = parseInt(val, 10);
+        }
+
+        if (val !== this.get(prop)) {
+            this.set(prop, val);
         }
     };
 
@@ -1010,14 +1024,19 @@
             }, this);
 
         Event.on(this.getElement(this.ID.HEX), "keypress", _hexOnly, this);
+        Event.on(this.getElement(this.ID.HEX), "blur", function(e, me) {
+                _useFieldValue.call(me, e, this, this.OPT.HEX);
+            }, this);
     };
 
     _attachRGBHSV = function(id, config) {
         Event.on(this.getElement(id), "keydown", function(e, me) {
                 _rgbFieldKeypress.call(me, e, this, config);
             }, this);
-
         Event.on(this.getElement(id), "keypress", _numbersOnly, this);
+        Event.on(this.getElement(id), "blur", function(e, me) {
+                _useFieldValue.call(me, e, this, config);
+            }, this);
     };
 
 
