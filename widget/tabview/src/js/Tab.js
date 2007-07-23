@@ -53,7 +53,7 @@
      * The class name applied to active tabs.
      * @property ACTIVE_CLASSNAME
      * @type String
-     * @default "on"
+     * @default "selected"
      */
     proto.ACTIVE_CLASSNAME = 'selected';
     
