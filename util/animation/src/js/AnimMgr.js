@@ -70,14 +70,18 @@ YAHOO.util.AnimMgr = new function() {
     this.unRegister = function(tween, index) {
         tween._onComplete.fire();
         index = index || getIndex(tween);
-        if (index != -1) {
-            queue.splice(index, 1);
+        if (index == -1) {
+            return false;
         }
         
+        queue.splice(index, 1);
+
         tweenCount -= 1;
         if (tweenCount <= 0) {
             this.stop();
         }
+
+        return true;
     };
     
     /**
