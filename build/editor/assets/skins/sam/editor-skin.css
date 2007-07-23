@@ -12,16 +12,28 @@
     color: #000000;
     font-weight: bold;
     margin: 0;
-    padding: 0.2em;
+    padding: 0.3em 1em;
     font-size: 100%;
 }
 
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-group h3 {
-    margin: 0;
+    color: #999999;
+    font-size: 75%;
+    margin-top: 1em;
+    padding-bottom: 0.5em;
+    padding-left: 0.25em;
+}
+
+.yui-toolbar-container span.yui-toolbar-separator {
+    border: none;
 }
 
 .yui-skin-sam .yui-toolbar-container {
     background-color: #F2F2F2;
+}
+
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-subcont {
+    padding: 0 1em 0.35em;
 }
 
 .yui-skin-sam .yui-editor-container .visible .yui-menu-shadow, .yui-skin-sam .yui-editor-panel .visible .yui-menu-shadow {
@@ -57,8 +69,19 @@
     text-indent: 9999px;
 }
 
+.yui-toolbar-container .yui-toolbar-select .first-child a {
+    padding-top: 0;
+}
+
 .yui-skin-sam .yui-toolbar-container .yui-button {
-    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
+    border: 1px solid #999999;
+    cursor: pointer;
+    height: 18px;
+    margin: 0;
+    overflow: hidden;
+    padding: 2px 5px;
+    position: relative;
 }
 .yui-skin-sam .yui-toolbar-container .yui-button-hover {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1300px;
@@ -74,7 +97,7 @@
 .yui-skin-sam .yui-toolbar-container .yui-button span.yui-toolbar-icon {
     display: block;
     position: absolute;
-    top: 1px;
+    top: 2px;
     height: 18px;
     width: 18px;
     overflow: hidden;
@@ -88,7 +111,7 @@
 }
 
 .yui-skin-sam .yui-button-menu {
-    background-color: #F2F2F2;
+    background-color: #ffffff;
 }
 
 .yui-skin-sam div.yuimenu li.selected {
@@ -101,99 +124,99 @@
 
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-bold span.yui-toolbar-icon {
     background-position: 0 0;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-italic span.yui-toolbar-icon {
     background-position: 0 -36px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-underline span.yui-toolbar-icon {
     background-position: 0 -72px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-subscript span.yui-toolbar-icon {
     background-position: 0 -180px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-superscript span.yui-toolbar-icon {
     background-position: 0 -144px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-forecolor span.yui-toolbar-icon {
     background-position: 0 -216px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-backcolor span.yui-toolbar-icon {
     background-position: 0 -288px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyleft span.yui-toolbar-icon {
     background-position: 0 -324px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-justifycenter span.yui-toolbar-icon {
     background-position: 0 -360px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyright span.yui-toolbar-icon {
     background-position: 0 -396px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyfull span.yui-toolbar-icon {
     background-position: 0 -432px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-indent span.yui-toolbar-icon {
     background-position: 0 -720px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-outdent span.yui-toolbar-icon {
     background-position: 0 -684px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-createlink span.yui-toolbar-icon {
     background-position: 0 -792px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-insertimage span.yui-toolbar-icon {
     background-position: 1px -756px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-left span.yui-toolbar-icon {
     background-position: 0 -972px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-right span.yui-toolbar-icon {
     background-position: 0 -936px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-inline span.yui-toolbar-icon {
     background-position: 0 -900px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-block span.yui-toolbar-icon {
     background-position: 0 -864px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-bordercolor span.yui-toolbar-icon {
     background-position: 0 -252px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-removeformat span.yui-toolbar-icon {
     background-position: 0 -1080px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-hiddenelements span.yui-toolbar-icon {
     background-position: 0 -1044px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-insertunorderedlist span.yui-toolbar-icon {
     background-position: 0 -468px;
-    left: 0;
+    left: 5px;
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-insertorderedlist span.yui-toolbar-icon {
     background-position: 0 -504px;
-    left: 0;
+    left: 5px;
 }
 
 .yui-skin-sam .yui-toolbar-insertorderedlist-menu li {
@@ -221,7 +244,33 @@
     padding: 5px 45px;
 }
 
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-fontname,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-bold,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-italic,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-subscript,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-forecolor,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-removeformat,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyleft,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifycenter,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyright,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-indent,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-outdent,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-insertunorderedlist,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-createlink,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-left,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-inline,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-block,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-bordersize,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-bordertype
+{
+    border-right: none;
+}
 
+.yui-skin-sam .yui-toolbar-container .yui-button .first-child, .yui-skin-sam .yui-toolbar-container .yui-button .first-child a {
+    width: 500px;
+}
+
+/* Spin Buttons */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton span.yui-toolbar-icon {
     display: none;
 }
@@ -267,8 +316,7 @@
     width: 135px;
 }
 
-.yui-skin-sam .yui-editor-panel .yui-color-button-menu .yui-toolbar-colors {
-    background-color: #f2f2f2;
+.yui-skin-sam .yui-color-button-menu .yui-toolbar-colors {
     border: 1px solid #808080;
 }
 
@@ -277,9 +325,17 @@
     margin: 0;
     border: none;
     background-color: transparent;
+    overflow: visible;
 }
 
 .yui-skin-sam .yui-editor-panel {
+}
+
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group-border {
+    width: 190px;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group-textflow {
+    width: 175px;
 }
 
 .yui-skin-sam .yui-editor-panel .hd {
@@ -307,6 +363,7 @@
     margin: 0;
     *margin-left: -1px;
     padding: 0;
+    overflow: visible;
 }
 .yui-skin-sam .yui-editor-panel ul {
     list-style-type: none;
@@ -383,6 +440,10 @@
     width: 100%;
     background-image: none;
     border: none;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-container .bd {
+    background-color: #ffffff;
+    border-bottom: 1px solid #808080;
 }
 
 .yui-skin-sam .yui-editor-panel .yui-toolbar-group h3 {

@@ -249,7 +249,6 @@
     width: 133px;
     zoom: 1;
     display: none;
-    border: 1px solid #6D6D6D;
     z-index: 100;
     overflow: hidden;
 }
@@ -537,64 +536,56 @@
     left: 2px;
 }
 
-.yui-toolbar-bordersize-menu div.yuimenu li.yuimenuitem.yui-toolbar-bordersize-0 a {
-    padding-left: 0;
-}
-div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-1 a {
-    border-bottom: 1px solid black;
-    text-indent: 777px;
-    overflow: hidden;
+.yui-toolbar-container .yui-toolbar-bordersize-menu {
     width: 30px;
-    display: block;
 }
-div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-2 a {
+.yui-toolbar-bordersize-menu .yuimenuitemlabel, .yui-toolbar-bordertype-menu .yuimenuitemlabel {
+    display: block;
+    width: 50px;
+    color: #ffffff;
+    position: relative;
+    margin-left: 20px;
+    padding: 0;
+}
+.yui-toolbar-bordersize-menu .yuimenuitemlabel .checkedindicator, .yui-toolbar-bordertype-menu .yuimenuitemlabel .checkedindicator {
+    position: absolute;
+    left: -14px;
+}
+.yui-toolbar-bordersize-menu .yuimenuitem a.selected, .yui-toolbar-bordertype-menu .yuimenuitem a.selected {
+    color: #B3D4FF;
+}
+
+div.yuimenu.yui-toolbar-bordersize-menu li.yui-toolbar-bordersize-0 a {
+    color: #000;
+}
+div.yuimenu.yui-toolbar-bordersize-menu li.yui-toolbar-bordersize-0 a.selected {
+    color: #fff;
+}
+div.yuimenu.yui-toolbar-bordersize-menu li.yui-toolbar-bordersize-1 a {
+    border-bottom: 1px solid black;
+}
+div.yuimenu.yui-toolbar-bordersize-menu li.yui-toolbar-bordersize-2 a {
     border-bottom: 2px solid black;
-    text-indent: 777px;
-    overflow: hidden;
-    width: 30px;
-    display: block;
 }
-div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-3 a {
+div.yuimenu.yui-toolbar-bordersize-menu li.yui-toolbar-bordersize-3 a {
     border-bottom: 3px solid black;
-    text-indent: 777px;
-    overflow: hidden;
-    width: 30px;
-    display: block;
 }
-div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-4 a {
+div.yuimenu.yui-toolbar-bordersize-menu li.yui-toolbar-bordersize-4 a {
     border-bottom: 4px solid black;
-    text-indent: 777px;
-    overflow: hidden;
-    width: 30px;
-    display: block;
 }
-div.yuimenu.yui-toolbar-bordersize-menu li.yuimenuitem.yui-toolbar-bordersize-5 a {
+div.yuimenu.yui-toolbar-bordersize-menu li.yui-toolbar-bordersize-5 a {
     border-bottom: 5px solid black;
-    text-indent: 777px;
-    overflow: hidden;
-    width: 30px;
-    display: block;
 }
-div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-solid a {
+
+
+div.yuimenu.yui-toolbar-bordertype-menu li.yui-toolbar-bordertype-solid a {
     border-bottom: 1px solid black;
-    text-indent: 777px;
-    overflow: hidden;
-    width: 30px;
-    display: block;
 }
-div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-dashed a {
+div.yuimenu.yui-toolbar-bordertype-menu li.yui-toolbar-bordertype-dashed a {
     border-bottom: 1px dashed black;
-    text-indent: 777px;
-    overflow: hidden;
-    width: 30px;
-    display: block;
 }
-div.yuimenu.yui-toolbar-bordertype-menu li.yuimenuitem.yui-toolbar-bordertype-dotted a {
+div.yuimenu.yui-toolbar-bordertype-menu li.yui-toolbar-bordertype-dotted a {
     border-bottom: 1px dotted black;
-    text-indent: 777px;
-    overflow: hidden;
-    width: 30px;
-    display: block;
 }
 
 h2.yui-editor-skipheader, h3.yui-editor-skipheader {

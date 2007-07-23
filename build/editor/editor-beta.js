@@ -108,150 +108,150 @@ var Dom = YAHOO.util.Dom,
         */
         _colorData: {
 /* {{{ _colorData */
-    '111111': 'Obsidian',
-    '2D2D2D': 'Dark Gray',
-    '434343': 'Shale',
-    '5B5B5B': 'Flint',
-    '737373': 'Gray',
-    '8B8B8B': 'Concrete',
-    'A2A2A2': 'Gray',
-    'B9B9B9': 'Titanium',
-    '000000': 'Black',
-    'D0D0D0': 'Light Gray',
-    'E6E6E6': 'Silver',
-    'FFFFFF': 'White',
-    'BFBF00': 'Pumpkin',
-    'FFFF00': 'Yellow',
-    'FFFF40': 'Banana',
-    'FFFF80': 'Pale Yellow',
-    'FFFFBF': 'Butter',
-    '525330': 'Raw Siena',
-    '898A49': 'Mildew',
-    'AEA945': 'Olive',
-    '7F7F00': 'Paprika',
-    'C3BE71': 'Earth',
-    'E0DCAA': 'Khaki',
-    'FCFAE1': 'Cream',
-    '60BF00': 'Cactus',
-    '80FF00': 'Chartreuse',
-    'A0FF40': 'Green',
-    'C0FF80': 'Pale Lime',
-    'DFFFBF': 'Light Mint',
-    '3B5738': 'Green',
-    '668F5A': 'Lime Gray',
-    '7F9757': 'Yellow',
-    '407F00': 'Clover',
-    '8A9B55': 'Pistachio',
-    'B7C296': 'Light Jade',
-    'E6EBD5': 'Breakwater',
-    '00BF00': 'Spring Frost',
-    '00FF80': 'Pastel Green',
-    '40FFA0': 'Light Emerald',
-    '80FFC0': 'Sea Foam',
-    'BFFFDF': 'Sea Mist',
-    '033D21': 'Dark Forrest',
-    '438059': 'Moss',
-    '7FA37C': 'Medium Green',
-    '007F40': 'Pine',
-    '8DAE94': 'Yellow Gray Green',
-    'ACC6B5': 'Aqua Lung',
-    'DDEBE2': 'Sea Vapor',
-    '00BFBF': 'Fog',
-    '00FFFF': 'Cyan',
-    '40FFFF': 'Turquoise Blue',
-    '80FFFF': 'Light Aqua',
-    'BFFFFF': 'Pale Cyan',
-    '033D3D': 'Dark Teal',
-    '347D7E': 'Gray Turquoise',
-    '609A9F': 'Green Blue',
-    '007F7F': 'Seaweed',
-    '96BDC4': 'Green Gray',
-    'B5D1D7': 'Soapstone',
-    'E2F1F4': 'Light Turquoise',
-    '0060BF': 'Summer Sky',
-    '0080FF': 'Sky Blue',
-    '40A0FF': 'Electric Blue',
-    '80C0FF': 'Light Azure',
-    'BFDFFF': 'Ice Blue',
-    '1B2C48': 'Navy',
-    '385376': 'Biscay',
-    '57708F': 'Dusty Blue',
-    '00407F': 'Sea Blue',
-    '7792AC': 'Sky Blue Gray',
-    'A8BED1': 'Morning Sky',
-    'DEEBF6': 'Vapor',
-    '0000BF': 'Deep Blue',
-    '0000FF': 'Blue',
-    '4040FF': 'Cerulean Blue',
-    '8080FF': 'Evening Blue',
-    'BFBFFF': 'Light Blue',
-    '212143': 'Deep Indigo',
-    '373E68': 'Sea Blue',
-    '444F75': 'Night Blue',
-    '00007F': 'Indigo Blue',
-    '585E82': 'Dockside',
-    '8687A4': 'Blue Gray',
-    'D2D1E1': 'Light Blue Gray',
-    '6000BF': 'Neon Violet',
-    '8000FF': 'Blue Violet',
-    'A040FF': 'Violet Purple',
-    'C080FF': 'Violet Dusk',
-    'DFBFFF': 'Pale Lavender',
-    '302449': 'Cool Shale',
-    '54466F': 'Dark Indigo',
-    '655A7F': 'Dark Violet',
-    '40007F': 'Violet',
-    '726284': 'Smoky Violet',
-    '9E8FA9': 'Slate Gray',
-    'DCD1DF': 'Violet White',
-    'BF00BF': 'Royal Violet',
-    'FF00FF': 'Fuchsia',
-    'FF40FF': 'Magenta',
-    'FF80FF': 'Orchid',
-    'FFBFFF': 'Pale Magenta',
-    '4A234A': 'Dark Purple',
-    '794A72': 'Medium Purple',
-    '936386': 'Cool Granite',
-    '7F007F': 'Purple',
-    '9D7292': 'Purple Moon',
-    'C0A0B6': 'Pale Purple',
-    'ECDAE5': 'Pink Cloud',
-    'BF005F': 'Hot Pink',
-    'FF007F': 'Deep Pink',
-    'FF409F': 'Grape',
-    'FF80BF': 'Electric Pink',
-    'FFBFDF': 'Pink',
-    '451528': 'Purple Red',
-    '823857': 'Purple Dino',
-    'A94A76': 'Purple Gray',
-    '7F003F': 'Rose',
-    'BC6F95': 'Antique Mauve',
-    'D8A5BB': 'Cool Marble',
-    'F7DDE9': 'Pink Granite',
-    'C00000': 'Apple',
-    'FF0000': 'Fire Truck',
-    'FF4040': 'Pale Red',
-    'FF8080': 'Salmon',
-    'FFC0C0': 'Warm Pink',
-    '441415': 'Sepia',
-    '82393C': 'Rust',
-    'AA4D4E': 'Brick',
-    '800000': 'Brick Red',
-    'BC6E6E': 'Mauve',
-    'D8A3A4': 'Shrimp Pink',
-    'F8DDDD': 'Shell Pink',
-    'BF5F00': 'Dark Orange',
-    'FF7F00': 'Orange',
-    'FF9F40': 'Grapefruit',
-    'FFBF80': 'Canteloupe',
-    'FFDFBF': 'Wax',
-    '482C1B': 'Dark Brick',
-    '855A40': 'Dirt',
-    'B27C51': 'Tan',
-    '7F3F00': 'Nutmeg',
-    'C49B71': 'Mustard',
-    'E1C4A8': 'Pale Tan',
-    'FDEEE0': 'Marble'
+    '#111111': 'Obsidian',
+    '#2D2D2D': 'Dark Gray',
+    '#434343': 'Shale',
+    '#5B5B5B': 'Flint',
+    '#737373': 'Gray',
+    '#8B8B8B': 'Concrete',
+    '#A2A2A2': 'Gray',
+    '#B9B9B9': 'Titanium',
+    '#000000': 'Black',
+    '#D0D0D0': 'Light Gray',
+    '#E6E6E6': 'Silver',
+    '#FFFFFF': 'White',
+    '#BFBF00': 'Pumpkin',
+    '#FFFF00': 'Yellow',
+    '#FFFF40': 'Banana',
+    '#FFFF80': 'Pale Yellow',
+    '#FFFFBF': 'Butter',
+    '#525330': 'Raw Siena',
+    '#898A49': 'Mildew',
+    '#AEA945': 'Olive',
+    '#7F7F00': 'Paprika',
+    '#C3BE71': 'Earth',
+    '#E0DCAA': 'Khaki',
+    '#FCFAE1': 'Cream',
+    '#60BF00': 'Cactus',
+    '#80FF00': 'Chartreuse',
+    '#A0FF40': 'Green',
+    '#C0FF80': 'Pale Lime',
+    '#DFFFBF': 'Light Mint',
+    '#3B5738': 'Green',
+    '#668F5A': 'Lime Gray',
+    '#7F9757': 'Yellow',
+    '#407F00': 'Clover',
+    '#8A9B55': 'Pistachio',
+    '#B7C296': 'Light Jade',
+    '#E6EBD5': 'Breakwater',
+    '#00BF00': 'Spring Frost',
+    '#00FF80': 'Pastel Green',
+    '#40FFA0': 'Light Emerald',
+    '#80FFC0': 'Sea Foam',
+    '#BFFFDF': 'Sea Mist',
+    '#033D21': 'Dark Forrest',
+    '#438059': 'Moss',
+    '#7FA37C': 'Medium Green',
+    '#007F40': 'Pine',
+    '#8DAE94': 'Yellow Gray Green',
+    '#ACC6B5': 'Aqua Lung',
+    '#DDEBE2': 'Sea Vapor',
+    '#00BFBF': 'Fog',
+    '#00FFFF': 'Cyan',
+    '#40FFFF': 'Turquoise Blue',
+    '#80FFFF': 'Light Aqua',
+    '#BFFFFF': 'Pale Cyan',
+    '#033D3D': 'Dark Teal',
+    '#347D7E': 'Gray Turquoise',
+    '#609A9F': 'Green Blue',
+    '#007F7F': 'Seaweed',
+    '#96BDC4': 'Green Gray',
+    '#B5D1D7': 'Soapstone',
+    '#E2F1F4': 'Light Turquoise',
+    '#0060BF': 'Summer Sky',
+    '#0080FF': 'Sky Blue',
+    '#40A0FF': 'Electric Blue',
+    '#80C0FF': 'Light Azure',
+    '#BFDFFF': 'Ice Blue',
+    '#1B2C48': 'Navy',
+    '#385376': 'Biscay',
+    '#57708F': 'Dusty Blue',
+    '#00407F': 'Sea Blue',
+    '#7792AC': 'Sky Blue Gray',
+    '#A8BED1': 'Morning Sky',
+    '#DEEBF6': 'Vapor',
+    '#0000BF': 'Deep Blue',
+    '#0000FF': 'Blue',
+    '#4040FF': 'Cerulean Blue',
+    '#8080FF': 'Evening Blue',
+    '#BFBFFF': 'Light Blue',
+    '#212143': 'Deep Indigo',
+    '#373E68': 'Sea Blue',
+    '#444F75': 'Night Blue',
+    '#00007F': 'Indigo Blue',
+    '#585E82': 'Dockside',
+    '#8687A4': 'Blue Gray',
+    '#D2D1E1': 'Light Blue Gray',
+    '#6000BF': 'Neon Violet',
+    '#8000FF': 'Blue Violet',
+    '#A040FF': 'Violet Purple',
+    '#C080FF': 'Violet Dusk',
+    '#DFBFFF': 'Pale Lavender',
+    '#302449': 'Cool Shale',
+    '#54466F': 'Dark Indigo',
+    '#655A7F': 'Dark Violet',
+    '#40007F': 'Violet',
+    '#726284': 'Smoky Violet',
+    '#9E8FA9': 'Slate Gray',
+    '#DCD1DF': 'Violet White',
+    '#BF00BF': 'Royal Violet',
+    '#FF00FF': 'Fuchsia',
+    '#FF40FF': 'Magenta',
+    '#FF80FF': 'Orchid',
+    '#FFBFFF': 'Pale Magenta',
+    '#4A234A': 'Dark Purple',
+    '#794A72': 'Medium Purple',
+    '#936386': 'Cool Granite',
+    '#7F007F': 'Purple',
+    '#9D7292': 'Purple Moon',
+    '#C0A0B6': 'Pale Purple',
+    '#ECDAE5': 'Pink Cloud',
+    '#BF005F': 'Hot Pink',
+    '#FF007F': 'Deep Pink',
+    '#FF409F': 'Grape',
+    '#FF80BF': 'Electric Pink',
+    '#FFBFDF': 'Pink',
+    '#451528': 'Purple Red',
+    '#823857': 'Purple Dino',
+    '#A94A76': 'Purple Gray',
+    '#7F003F': 'Rose',
+    '#BC6F95': 'Antique Mauve',
+    '#D8A5BB': 'Cool Marble',
+    '#F7DDE9': 'Pink Granite',
+    '#C00000': 'Apple',
+    '#FF0000': 'Fire Truck',
+    '#FF4040': 'Pale Red',
+    '#FF8080': 'Salmon',
+    '#FFC0C0': 'Warm Pink',
+    '#441415': 'Sepia',
+    '#82393C': 'Rust',
+    '#AA4D4E': 'Brick',
+    '#800000': 'Brick Red',
+    '#BC6E6E': 'Mauve',
+    '#D8A3A4': 'Shrimp Pink',
+    '#F8DDDD': 'Shell Pink',
+    '#BF5F00': 'Dark Orange',
+    '#FF7F00': 'Orange',
+    '#FF9F40': 'Grapefruit',
+    '#FFBF80': 'Canteloupe',
+    '#FFDFBF': 'Wax',
+    '#482C1B': 'Dark Brick',
+    '#855A40': 'Dirt',
+    '#B27C51': 'Tan',
+    '#7F3F00': 'Nutmeg',
+    '#C49B71': 'Mustard',
+    '#E1C4A8': 'Pale Tan',
+    '#FDEEE0': 'Marble'
 /* }}} */
         },
         /** 
@@ -992,7 +992,7 @@ var Dom = YAHOO.util.Dom,
             var html = '';
             for (var i in this._colorData) {
                 if (Lang.hasOwnProperty(this._colorData, i)) {
-                    html += '<a style="background-color: #' + i + '" href="#">' + i + '</a>';
+                    html += '<a style="background-color: ' + i + '" href="#">' + i.replace('#', '') + '</a>';
                 }
             }
             html += '<span><em>X</em><strong></strong></span>';
@@ -1004,7 +1004,7 @@ var Dom = YAHOO.util.Dom,
                 var tar = Event.getTarget(ev);
                 if (tar.tagName.toLowerCase() == 'a') {
                     em.style.backgroundColor = tar.style.backgroundColor;
-                    strong.innerHTML = this._colorData[tar.innerHTML] + '<br>' + tar.innerHTML;
+                    strong.innerHTML = this._colorData['#' + tar.innerHTML] + '<br>' + tar.innerHTML;
                 }
             }, this, true);
             Event.on(picker, 'focus', function(ev) {
@@ -1017,7 +1017,7 @@ var Dom = YAHOO.util.Dom,
                 Event.stopEvent(ev);
                 var tar = Event.getTarget(ev);
                 if (tar.tagName.toLowerCase() == 'a') {
-                    this.fireEvent('colorPickerClicked', { type: 'colorPickerClicked', target: this, button: this._colorPicker._button, color: tar.innerHTML, colorName: this._colorData[tar.innerHTML] } );
+                    this.fireEvent('colorPickerClicked', { type: 'colorPickerClicked', target: this, button: this._colorPicker._button, color: tar.innerHTML, colorName: this._colorData['#' + tar.innerHTML] } );
                     this.getButtonByValue(this._colorPicker._button).getMenu().hide();
                 }
             }, this, true);
@@ -1651,11 +1651,17 @@ var Dom = YAHOO.util.Dom,
         */
         operaEvent: null,
         /**
-        * @property currentElement
-        * @description A reference to the current working element in the editor
+        * @property currentFont
+        * @description A reference to the last font selected from the Toolbar
         * @type HTMLElement
         */
-        currentElement: null,
+        currentFont: null,
+        /**
+        * @property currentElement
+        * @description A reference to the current working element in the editor
+        * @type Array
+        */
+        currentElement: [],
         /**
         * @property dompath
         * @description A reference to the dompath container for writing the current working dom path to.
@@ -1985,17 +1991,19 @@ var Dom = YAHOO.util.Dom,
             if (this._contentTimer) {
                 window.clearTimeout(this._contentTimer);
             }
-            if (this._contentTimerCounter > 50) {
+            if (this._contentTimerCounter > 250) {
                 alert('ERROR: Body Did Not load');
                 return false;
             }
-            if (this._getDoc() && this._getDoc().body && (this._getDoc().body._rteLoaded === true)) {
+            if (this._getDoc() && this._getDoc().body && (this._getDoc().body._rteLoaded == true)) {
                 //The onload event has fired, clean up after ourselves and fire the _initEditor method
+                /*
                 if (!this.browser.ie) {
                     //IE Doesn't like this..
                     delete this._getDoc().body._rteLoaded;
                     this._getDoc().body.removeAttribute('onload');
                 }
+                */
                 this._initEditor();
             } else {
                 var self = this;
@@ -2113,15 +2121,15 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
-            if (!elm && (this.currentElement || this.currentEvent)) {
+            if (!elm && (this.currentElement[0] || this.currentEvent)) {
                 if (this.currentEvent && (this.currentEvent.keyCode == undefined) && Event.getTarget(this.currentEvent)) {
                     elm = Event.getTarget(this.currentEvent);
                 } else if (this.currentEvent && (this.currentEvent.keyCode != undefined) && Event.getTarget(this.currentEvent)) {
                 } else {
-                    elm = this.currentElement;
+                    elm = this.currentElement[0];
                 }
-            } else if ((elm == this._getDoc().body) && this.currentElement && !this._hasSelection()) {
-                elm = this.currentElement;
+            } else if ((elm == this._getDoc().body) && this.currentElement[0] && !this._hasSelection()) {
+                elm = this.currentElement[0];
             }
 
             if (this.browser.opera || this.browser.webkit) {
@@ -2383,11 +2391,11 @@ var Dom = YAHOO.util.Dom,
             this._setCurrentEvent(ev);
             var sel = Event.getTarget(ev);
             if (sel && sel.tagName && (sel.tagName.toLowerCase() == 'img')) {
-                this.currentElement = sel;
+                this.currentElement[0] = sel;
                 this.toolbar.fireEvent('insertimageClick', { type: 'insertimageClick', target: this.toolbar });
                 this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
             } else if (sel && sel.getAttribute && sel.getAttribute('tag') && (sel.getAttribute('tag').toLowerCase() == 'a')) {
-                this.currentElement = sel;
+                this.currentElement[0] = sel;
                 this.toolbar.fireEvent('createlinkClick', { type: 'createlinkClick', target: this.toolbar });
                 this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
             }
@@ -3456,7 +3464,7 @@ var Dom = YAHOO.util.Dom,
         */
         _handleInsertImageClick: function() {
             this.on('afterExecCommand', function() {
-                var el = this.currentElement,
+                var el = this.currentElement[0],
                     title = '',
                     src = '',
                     align = '',
@@ -3464,7 +3472,7 @@ var Dom = YAHOO.util.Dom,
                     width = 75,
                     padding = 0,
                     win = new YAHOO.widget.EditorWindow('insertimage', {
-                        width: '380px'
+                        width: '405px'
                     });
 
                 if (!el) {
@@ -3737,7 +3745,7 @@ var Dom = YAHOO.util.Dom,
                                 }
                                 
                                 if (url && url.value) {
-                                    this.currentElement.setAttribute('src', url.value);
+                                    this.currentElement[0].setAttribute('src', url.value);
                                     this.moveWindow();
                                 }
                             }
@@ -3754,7 +3762,7 @@ var Dom = YAHOO.util.Dom,
         _handleInsertImageWindowClose: function() {
             var url = Dom.get('insertimage_url');
             var title = Dom.get('insertimage_title');
-            var el = this.currentElement;
+            var el = this.currentElement[0];
             if (url && url.value && (url.value != this.STR_IMAGE_HERE)) {
                 el.setAttribute('src', url.value);
                 el.setAttribute('title', title.value);
@@ -3776,7 +3784,7 @@ var Dom = YAHOO.util.Dom,
                     width: '300px'
                 });
                 
-                var el = this.currentElement,
+                var el = this.currentElement[0],
                     url = '',
                     title = '',
                     target = '',
@@ -3856,7 +3864,7 @@ var Dom = YAHOO.util.Dom,
             var url = Dom.get('createlink_url');
             var target = Dom.get('createlink_target');
             var title = Dom.get('createlink_title');
-            var el = this.currentElement;
+            var el = this.currentElement[0];
             if (url && url.value) {
                 var urlValue = url.value;
                 if ((urlValue.indexOf(':/'+'/') == -1) && (urlValue.substring(0,1) != '/') && (urlValue.substring(0, 6).toLowerCase() != 'mailto')) {
@@ -4032,7 +4040,7 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'unlink':
                     //var el = this._getSelectedElement();
-                    var el = this.currentElement;
+                    var el = this.currentElement[0];
                     el.removeAttribute('title');
                     el.removeAttribute('tag');
                     el.removeAttribute('target');
@@ -4047,7 +4055,7 @@ var Dom = YAHOO.util.Dom,
                     if (!el || (el.getAttribute('tag') != 'a')) {
                         this.createCurrentElement('a');
                     } else {
-                        this.currentElement = el;
+                        this.currentElement[0] = el;
                     }
                     exec = false;
                     break;
@@ -4065,7 +4073,7 @@ var Dom = YAHOO.util.Dom,
                     var el = this._getSelectedElement();
 
                     if (el.tagName && (el.tagName.toLowerCase() == 'img')) {
-                        this.currentElement = el;
+                        this.currentElement[0] = el;
                         exec = false;
                     } else {
                         if (this._getDoc().queryCommandEnabled(action)) {
@@ -4074,7 +4082,7 @@ var Dom = YAHOO.util.Dom,
                             for (var i = 0; i < imgs.length; i++) {
                                 if (!YAHOO.util.Dom.hasClass(imgs[i], 'yui-img')) {
                                     YAHOO.util.Dom.addClass(imgs[i], 'yui-img');
-                                    this.currentElement = imgs[i];
+                                    this.currentElement[0] = imgs[i];
                                 }
                             }
                             exec = false;
@@ -4083,8 +4091,8 @@ var Dom = YAHOO.util.Dom,
                             var _img = this._getDoc().createElement('img');
                             _img.setAttribute('src', value);
                             YAHOO.util.Dom.addClass(_img, 'yui-img');
-                            this.currentElement.parentNode.replaceChild(_img, this.currentElement);
-                            this.currentElement = _img;
+                            this.currentElement[0].parentNode.replaceChild(_img, this.currentElement[0]);
+                            this.currentElement[0] = _img;
                             exec = false;
                         }
                     }
@@ -4101,7 +4109,7 @@ var Dom = YAHOO.util.Dom,
                         this.createCurrentElement('img');
                         var _span = this._getDoc().createElement('span');
                         _span.innerHTML = value;
-                        this.currentElement.parentNode.replaceChild(_span, this.currentElement);
+                        this.currentElement[0].parentNode.replaceChild(_span, this.currentElement[0]);
                         exec = false;
                     } else if (this.browser.ie) {
                         var _range = this._getRange();
@@ -4123,11 +4131,11 @@ var Dom = YAHOO.util.Dom,
                     */
                     if (this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) {
                         this.createCurrentElement('span');
-                        YAHOO.util.Dom.addClass(this.currentElement, 'yui-non');
+                        YAHOO.util.Dom.addClass(this.currentElement[0], 'yui-non');
                         var re= /<\S[^><]*>/g;
-                        var str = this.currentElement.innerHTML.replace(re, '');
+                        var str = this.currentElement[0].innerHTML.replace(re, '');
                         var _txt = this._getDoc().createTextNode(str);
-                        this.currentElement.parentNode.parentNode.replaceChild(_txt, this.currentElement.parentNode);
+                        this.currentElement[0].parentNode.parentNode.replaceChild(_txt, this.currentElement[0].parentNode);
                         
                         exec = false;
                     }
@@ -4137,16 +4145,16 @@ var Dom = YAHOO.util.Dom,
                     if (this.browser.webkit) {
                         var tag = action.toLowerCase().substring(0, 3);
                         this.createCurrentElement(tag);
-                        if (this.currentElement.parentNode.tagName.toLowerCase() == tag) {
+                        if (this.currentElement[0].parentNode.tagName.toLowerCase() == tag) {
                             var span = this._getDoc().createElement('span');
-                            span.innerHTML = this.currentElement.innerHTML;
+                            span.innerHTML = this.currentElement[0].innerHTML;
                             YAHOO.util.Dom.addClass(span, 'yui-non');
-                            this.currentElement.parentNode.parentNode.replaceChild(span, this.currentElement.parentNode);
+                            this.currentElement[0].parentNode.parentNode.replaceChild(span, this.currentElement[0].parentNode);
 
                         } else {
                             var _sub = this._getDoc().createElement(tag);
-                            _sub.innerHTML = this.currentElement.innerHTML;
-                            this.currentElement.parentNode.replaceChild(_sub, this.currentElement);
+                            _sub.innerHTML = this.currentElement[0].innerHTML;
+                            this.currentElement[0].parentNode.replaceChild(_sub, this.currentElement[0]);
                         }
                         exec = false;
                     }
@@ -4155,11 +4163,11 @@ var Dom = YAHOO.util.Dom,
                     value = 'blockquote';
                     if (this.browser.webkit) {
                         this.createCurrentElement('blockquote');
-                        if (YAHOO.util.Dom.hasClass(this.currentElement.parentNode, 'yui-tag-blockquote')) {
+                        if (YAHOO.util.Dom.hasClass(this.currentElement[0].parentNode, 'yui-tag-blockquote')) {
                             var span = this._getDoc().createElement('span');
-                            span.innerHTML = this.currentElement.innerHTML;
+                            span.innerHTML = this.currentElement[0].innerHTML;
                             YAHOO.util.Dom.addClass(span, 'yui-non');
-                            this.currentElement.parentNode.parentNode.replaceChild(span, this.currentElement.parentNode);
+                            this.currentElement[0].parentNode.parentNode.replaceChild(span, this.currentElement[0].parentNode);
                         }
                         exec = false;
                     } else {
@@ -4176,13 +4184,13 @@ var Dom = YAHOO.util.Dom,
                 case 'indent':
                 case 'outdent':
                     this.createCurrentElement(action.toLowerCase());
-                    if (this.currentElement.parentNode) {
+                    if (this.currentElement[0].parentNode) {
                         if (action.toLowerCase() == 'outdent') {
-                            if (YAHOO.util.Dom.hasClass(this.currentElement.parentNode, 'yui-tag-indent')) {
+                            if (YAHOO.util.Dom.hasClass(this.currentElement[0].parentNode, 'yui-tag-indent')) {
                                 var span = this._getDoc().createElement('span');
-                                span.innerHTML = this.currentElement.innerHTML;
+                                span.innerHTML = this.currentElement[0].innerHTML;
                                 YAHOO.util.Dom.addClass(span, 'yui-non');
-                                this.currentElement.parentNode.parentNode.replaceChild(span, this.currentElement.parentNode);
+                                this.currentElement[0].parentNode.parentNode.replaceChild(span, this.currentElement[0].parentNode);
                             }
                         }
                     }
@@ -4214,7 +4222,7 @@ var Dom = YAHOO.util.Dom,
 
                         } else {
                             this.createCurrentElement(tag.toLowerCase());
-                            var el = this.currentElement;
+                            var el = this.currentElement[0];
                             var list = this._getDoc().createElement(tag);
                             if (tag == 'ol') {
                                 list.type = value;
@@ -4266,60 +4274,20 @@ var Dom = YAHOO.util.Dom,
                             this._getRange().pasteHTML('<' + tag + '>' + html + '</' + tag + '>');
                             exec = false;
                         }
-                        /*
-                        exec = false;
-                        var el = this._getSelectedElement();
-                        //if ((el.tagName.toLowerCase() == 'li') && (tag == 'ol')) { //we are in a list..
-                        if (el.tagName.toLowerCase() == 'li') { //we are in a list..
-                            el = el.parentNode;
-                            this._getDoc().execCommand(action, '', value);
-                        } else {
-                            this._getDoc().execCommand(action, '', value);
-                            var el = this._getSelectedElement();
-                            if (el.tagName.toLowerCase() == 'li') {
-                                el = el.parentNode;
-                            }
-                        }
-                        /*
-                        if (tag == 'ol') {
-                            if (el.type == value) {
-                                //Undo the list
-                                this._getDoc().execCommand(action, '', value);
-                            } else {
-                                el.type = value;
-                            }
-                        }
-                        */
                     }
                     break;
                 case 'fontname':
                     var selEl = this._getSelectedElement();
+                    this.currentFont = value;
                     if (selEl && selEl.tagName && !this._hasSelection()) {
                         YAHOO.util.Dom.setStyle(selEl, 'font-family', value);
                         exec = false;
                     }
                     break;
                 case 'fontsize':
-                    var selEl = this._getSelectedElement(), createEl = false;
-
-                    if (selEl && selEl.tagName && this._hasSelection() && !this.browser.ie) {
-                        if (this._getSelection() == selEl.innerHTML) {
-                            YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
-                        } else {
-                            createEl = true;
-                        }
-                    } else if (selEl && selEl.tagName && this._hasSelection() && this.browser.ie) {
-                        if (this._getRange().text == selEl.innerHTML) {
-                            YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
-                        } else if (this._getRange().html == selEl.innerHTML) {
-                            YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
-                        } else {
-                            createEl = true;
-                        }
-                    } else if (selEl && selEl.tagName && !this._hasSelection()) {
-                        YAHOO.util.Dom.setStyle(selEl, 'fontSize', value);
-                    }
-                    if (createEl) {
+                    if ((this.currentElement.length > 0) && (!this._hasSelection())) {
+                        YAHOO.util.Dom.setStyle(this.currentElement, 'fontSize', value);
+                    } else {
                         this.createCurrentElement('span', {'fontSize': value });
                     }
                     exec = false;
@@ -4351,8 +4319,17 @@ var Dom = YAHOO.util.Dom,
             var tagName = ((tagName) ? tagName : 'a'),
                 sel = this._getSelection(),
                 tar = null,
-                el = null,
+                el = [],
                 _doc = this._getDoc();
+            
+            if (this.currentFont) {
+                if (!tagStyle) {
+                    tagStyle = {};
+                }
+                tagStyle.fontFamily = this.currentFont;
+                this.currentFont = null;
+            }
+            this.currentElement = [];
 
             var _elCreate = function() {
                 switch (tagName) {
@@ -4389,8 +4366,8 @@ var Dom = YAHOO.util.Dom,
                         if (imgs[i].getAttribute('src', 2) == 'yui-tmp-img') {
                             el = _elCreate();
                             imgs[i].parentNode.replaceChild(el, imgs[i]);
-                            this.currentElement = el;
-                            return true;
+                            this.currentElement[this.currentElement.length] = el;
+                            //this.currentElement = el;
                         }
                     }
                 } else {
@@ -4416,7 +4393,8 @@ var Dom = YAHOO.util.Dom,
                     } else {
                         tar.parentNode.appendChild(el);
                     }
-                    this.currentElement = el;
+                    //this.currentElement = el;
+                    this.currentElement[this.currentElement.length] = el;
                     this.currentEvent = null;
                     if (this.browser.webkit) {
                         //Force Safari to focus the new element
@@ -4429,9 +4407,12 @@ var Dom = YAHOO.util.Dom,
                 this._setEditorStyle(true);
                 this._getDoc().execCommand('fontname', false, 'yui-tmp');
                 var _tmp = [];
+                /* TODO: This needs to be cleaned up.. */
                 var _tmp1 = this._getDoc().getElementsByTagName('font');
                 var _tmp2 = this._getDoc().getElementsByTagName(this._getSelectedElement().tagName);
                 var _tmp3 = this._getDoc().getElementsByTagName('span');
+                var _tmp4 = this._getDoc().getElementsByTagName('i');
+                var _tmp5 = this._getDoc().getElementsByTagName('b');
                 for (var e = 0; e < _tmp1.length; e++) {
                     _tmp[_tmp.length] = _tmp1[e];
                 }
@@ -4441,13 +4422,20 @@ var Dom = YAHOO.util.Dom,
                 for (var e = 0; e < _tmp3.length; e++) {
                     _tmp[_tmp.length] = _tmp3[e];
                 }
+                for (var e = 0; e < _tmp4.length; e++) {
+                    _tmp[_tmp.length] = _tmp4[e];
+                }
+                for (var e = 0; e < _tmp5.length; e++) {
+                    _tmp[_tmp.length] = _tmp5[e];
+                }
                 for (var i = 0; i < _tmp.length; i++) {
                     if ((YAHOO.util.Dom.getStyle(_tmp[i], 'font-family') == 'yui-tmp') || (_tmp[i].face && (_tmp[i].face == 'yui-tmp'))) {
                         var el = _elCreate();
                         el.innerHTML = _tmp[i].innerHTML;
                         if (_tmp[i].parentNode) {
                             _tmp[i].parentNode.replaceChild(el, _tmp[i]);
-                            this.currentElement = el;
+                            //this.currentElement = el;
+                            this.currentElement[this.currentElement.length] = el;
                             this.currentEvent = null;
                             if (this.browser.webkit) {
                                 //Force Safari to focus the new element
@@ -4456,6 +4444,19 @@ var Dom = YAHOO.util.Dom,
                             }
                             if (this.browser.ie && tagStyle && tagStyle.fontSize) {
                                 this._getSelection().empty();
+                            }
+                            if (this.browser.gecko) {
+                                this._getSelection().collapseToStart();
+                            }
+                        }
+                    }
+                }
+                var len = this.currentElement.length;
+                for (var i = 0; i < len; i++) {
+                    if ((i + 1) != len) { //Skip the last one in the list
+                        if (this.currentElement[i] && this.currentElement[i].nextSibling) {
+                            if (this.currentElement[i].tagName && (this.currentElement[i].tagName.toLowerCase() != 'br')) {
+                                this.currentElement[this.currentElement.length] = this.currentElement[i].nextSibling;
                             }
                         }
                     }
@@ -4519,6 +4520,8 @@ var Dom = YAHOO.util.Dom,
 
 		    html = html.replace(/<font/gi, '<font');
 		    html = html.replace(/<\/font>/gi, '</font>');
+		    html = html.replace(/<span/gi, '<span');
+		    html = html.replace(/<\/span>/gi, '</span>');
 		    html = html.replace(/<u/gi, '<u');
 		    html = html.replace(/\/u>/gi, '/u>');
 
@@ -4539,9 +4542,11 @@ var Dom = YAHOO.util.Dom,
 
             //yui-tag-a yui-tag yui-non yui-img
 		    html = html.replace(/yui-tag-a/gi, '');
+		    html = html.replace(/yui-tag-span/gi, '');
 		    html = html.replace(/yui-tag/gi, '');
 		    html = html.replace(/yui-non/gi, '');
 		    html = html.replace(/yui-img/gi, '');
+		    html = html.replace(/ tag="span"/gi, '');
 		    html = html.replace(/ class=""/gi, '');
 		    html = html.replace(/ class=" "/gi, '');
 		    html = html.replace(/ class="  "/gi, '');
@@ -4623,7 +4628,7 @@ var Dom = YAHOO.util.Dom,
             YAHOO.widget.EditorInfo.window.scope = this;
 
             var self = this,
-                xy = Dom.getXY(this.currentElement),
+                xy = Dom.getXY(this.currentElement[0]),
                 elXY = Dom.getXY(this.get('iframe').get('element')),
                 panel = this.get('panel'),
                 newXY = [(xy[0] + elXY[0] - 20), (xy[1] + elXY[1] + 10)],
@@ -4712,7 +4717,7 @@ var Dom = YAHOO.util.Dom,
                 return false;
             }
             var win = this.currentWindow,
-                xy = Dom.getXY(this.currentElement),
+                xy = Dom.getXY(this.currentElement[0]),
                 elXY = Dom.getXY(this.get('iframe').get('element')),
                 panel = this.get('panel'),
                 //newXY = [(xy[0] + elXY[0] - 20), (xy[1] + elXY[1] + 10)],
@@ -4729,20 +4734,20 @@ var Dom = YAHOO.util.Dom,
             
 
 
-            if (this.currentElement.tagName && (this.currentElement.tagName.toLowerCase() == 'img')) {
-                if (this.currentElement.src.indexOf(this.get('blankimage')) != -1) {
+            if (this.currentElement[0].tagName && (this.currentElement[0].tagName.toLowerCase() == 'img')) {
+                if (this.currentElement[0].src.indexOf(this.get('blankimage')) != -1) {
                     newXY[0] = (newXY[0] + (75 / 2)); //Placeholder size
                     newXY[1] = (newXY[1] + 75); //Placeholder sizea
                 } else {
-                    var w = parseInt(this.currentElement.width);
-                    var h = parseInt(this.currentElement.height);
+                    var w = parseInt(this.currentElement[0].width);
+                    var h = parseInt(this.currentElement[0].height);
                     newXY[0] = (newXY[0] + (w / 2));
                     newXY[1] = (newXY[1] + h);
                 }
                 newXY[1] = newXY[1] + 15;
             } else {
-                if (Dom.getStyle(this.currentElement, 'fontSize').indexOf('px') != -1) {
-                    newXY[1] = newXY[1] + parseInt(Dom.getStyle(this.currentElement, 'fontSize')) + 5;
+                if (Dom.getStyle(this.currentElement[0], 'fontSize').indexOf('px') != -1) {
+                    newXY[1] = newXY[1] + parseInt(Dom.getStyle(this.currentElement[0], 'fontSize')) + 5;
                 } else {
                     newXY[1] = newXY[1] + 20;
                 }
@@ -4768,8 +4773,8 @@ var Dom = YAHOO.util.Dom,
                 var _knobLeft = 0,
                     elW = 0;
 
-                if (this.currentElement.width) {
-                    elW = (parseInt(this.currentElement.width) / 2);
+                if (this.currentElement[0].width) {
+                    elW = (parseInt(this.currentElement[0].width) / 2);
                 }
 
                 var leftOffset = xy[0] + elXY[0] + elW;
