@@ -755,15 +755,6 @@
         
                     this.subscribe("beforeShow", addShadowVisibleClass);
                     this.subscribe("beforeHide", removeShadowVisibleClass);
-        
-                    this.subscribe("destroy", function () {
-                    
-                        this.unsubscribe("beforeShow",addShadowVisibleClass);
-                        this.unsubscribe("beforeHide", 
-                                            removeShadowVisibleClass);
-                    
-                    });
-
 
                     if (nIE == 6 || 
                         (nIE == 7 && document.compatMode == "BackCompat")) {
@@ -776,6 +767,7 @@
     
                         this.cfg.subscribeToConfigEvent("width", sizeShadow);
                         this.cfg.subscribeToConfigEvent("height", sizeShadow);
+                        this.subscribe("changeContent", sizeShadow);
     
                         Module.textResizeEvent.subscribe(sizeShadow, 
                                                             this, true);
