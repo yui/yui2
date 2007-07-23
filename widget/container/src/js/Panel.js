@@ -563,7 +563,8 @@
             }
 
         },
-        
+      
+
         /**
         * The default event handler fired when the "underlay" property 
         * is changed.
@@ -576,14 +577,16 @@
         */
         configUnderlay: function (type, args, obj) {
     
-            var sUnderlay = args[0].toLowerCase(),
-                oUnderlay = this.underlay;
+            var UA = YAHOO.env.ua,
+                bMacGecko = (this.platform == "mac" && UA.gecko),
+                sUnderlay = args[0].toLowerCase(),
+                oUnderlay = this.underlay,
                 oElement = this.element;
+
 
             function createUnderlay() {
 
-                var oUnderlay = this.underlay,
-                    nIE;
+                var nIE;
 
                 if (!oUnderlay) { // create if not already in DOM
 
@@ -599,10 +602,12 @@
                     
                     this.underlay = oUnderlay;
 
-                    nIE = YAHOO.env.ua.ie;
+                    nIE = UA.ie;
 
                     if (nIE == 6 || 
                         (nIE == 7 && document.compatMode == "BackCompat")) {
+                            
+                        this.sizeUnderlay();
 
                         this.cfg.subscribeToConfigEvent("width", 
                             this.sizeUnderlay);
@@ -610,10 +615,10 @@
                         this.cfg.subscribeToConfigEvent("height", 
                             this.sizeUnderlay);
 
+                        this.changeContentEvent.subscribe(this.sizeUnderlay);
+
                         YAHOO.widget.Module.textResizeEvent.subscribe(
                             this.sizeUnderlay, this, true);
-
-                        this.sizeUnderlay();
                     
                     }
 
@@ -621,9 +626,44 @@
 
             }
 
+            
+            function destroyUnderlay() {
+
+                if (this._underlayDeferred) {
+
+                    this.beforeShowEvent.unsubscribe(onBeforeShow);
+                
+                    this._underlayDeferred = false;
+
+                }
+            
+                if (oUnderlay) {
+            
+                    this.cfg.unsubscribeFromConfigEvent("width", 
+                        this.sizeUnderlay);
+    
+                    this.cfg.unsubscribeFromConfigEvent("height", 
+                        this.sizeUnderlay);
+    
+                    this.changeContentEvent.unsubscribe(this.sizeUnderlay);
+    
+                    YAHOO.widget.Module.textResizeEvent.unsubscribe(
+                        this.sizeUnderlay, this, true);
+    
+                    this.element.removeChild(oUnderlay);
+                    
+                    this.underlay = null;
+
+                }
+                    
+            }
+            
+
             function onBeforeShow() {
             
                 createUnderlay.call(this);
+    
+                this._underlayDeferred = false;
     
                 this.beforeShowEvent.unsubscribe(onBeforeShow);
             
@@ -641,6 +681,12 @@
 
             case "matte":
 
+                if (!bMacGecko) {
+
+                    destroyUnderlay.call(this);
+
+                }
+            
                 Dom.removeClass(oElement, "shadow");
                 Dom.addClass(oElement, "matte");
 
@@ -648,6 +694,12 @@
 
             default:
 
+                if (!bMacGecko) {
+
+                    destroyUnderlay.call(this);
+
+                }
+            
                 Dom.removeClass(oElement, "shadow");
                 Dom.removeClass(oElement, "matte");
 
@@ -656,18 +708,22 @@
             }
 
 
-            if (sUnderlay == "shadow" || 
-                ((this.platform == "mac" && YAHOO.env.ua.gecko) && 
-                !oUnderlay)) {
+            if ((sUnderlay == "shadow") || (bMacGecko && !oUnderlay)) {
                 
                 if (this.cfg.getProperty("visible")) {
                 
-                    createUnderlay.call(this);                    
+                    createUnderlay.call(this);
                 
                 }
                 else {
 
-                    this.beforeShowEvent.subscribe(onBeforeShow);                
+                    if (!this._underlayDeferred) {
+
+                        this.beforeShowEvent.subscribe(onBeforeShow);
+                    
+                        this._underlayDeferred = true;
+
+                    }
                 
                 }
 
