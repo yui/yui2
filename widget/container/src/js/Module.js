@@ -290,7 +290,10 @@
         id: null,
         
         /**
-        * The String representing the image root
+        * A string representing the root path for all images created by
+        * a Module instance.
+        * @deprecated It is recommend that any images for a Module be applied
+        * via CSS using the "background-image" property.
         * @property imageRoot
         * @type String
         */
@@ -1075,6 +1078,7 @@
                 Event.purgeElement(this.element, true);
                 parent = this.element.parentNode;
             }
+
             if (parent) {
                 parent.removeChild(this.element);
             }
@@ -1083,17 +1087,20 @@
             this.header = null;
             this.body = null;
             this.footer = null;
+
+            Module.textResizeEvent.unsubscribe(this.onDomResize, this);
+
+            this.cfg.destroy();
+            this.cfg = null;
+
+            this.destroyEvent.fire();
         
             for (e in this) {
                 if (e instanceof CustomEvent) {
                     e.unsubscribeAll();
                 }
             }
-        
-            Module.textResizeEvent.unsubscribe(
-                this.onDomResize, this);
-        
-            this.destroyEvent.fire();
+
         },
         
         /**
