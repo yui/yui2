@@ -6692,7 +6692,7 @@
                 form = document.createElement("form");
                 form.name = "frm_" + this.id;
 
-                this.appendToBody(form);
+                this.body.appendChild(form);
 
             }
 
