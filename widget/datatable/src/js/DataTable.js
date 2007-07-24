@@ -107,13 +107,6 @@ else {
     YAHOO.log("Missing dependency: YAHOO.util.Element","error",this.toString());
 }
 
-if(YAHOO.util.EventProvider) {
-    //YAHOO.lang.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
-}
-else {
-    YAHOO.log("Missing dependency: YAHOO.util.EventProvider","error",this.toString());
-}
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Superclass methods
@@ -4768,6 +4761,9 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     oValidPaginator.totalRecords = this._oRecordSet.getLength();
     oValidPaginator.rowsThisPage = Math.min(oValidPaginator.rowsPerPage, oValidPaginator.totalRecords);
     oValidPaginator.totalPages = Math.ceil(oValidPaginator.totalRecords / oValidPaginator.rowsThisPage);
+    if(isNaN(oValidPaginator.totalPages)) {
+        oValidPaginator.totalPages = 0;
+    }
 
     this.set("paginator", oValidPaginator);
     return this.get("paginator");

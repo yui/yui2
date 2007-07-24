@@ -1322,7 +1322,7 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
             var elTbody = elTable.tBodies[i];
 
             // Iterate through each TR
-            for(var j=0; j<elTbody.rows.length; j++) {
+            for(var j=elTbody.rows.length-1; j>-1; j--) {
                 var elRow = elTbody.rows[j];
                 var oResult = {};
                 

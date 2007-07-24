@@ -4711,6 +4711,9 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     oValidPaginator.totalRecords = this._oRecordSet.getLength();
     oValidPaginator.rowsThisPage = Math.min(oValidPaginator.rowsPerPage, oValidPaginator.totalRecords);
     oValidPaginator.totalPages = Math.ceil(oValidPaginator.totalRecords / oValidPaginator.rowsThisPage);
+    if(isNaN(oValidPaginator.totalPages)) {
+        oValidPaginator.totalPages = 0;
+    }
 
     this.set("paginator", oValidPaginator);
     return this.get("paginator");
@@ -8358,6 +8361,7 @@ YAHOO.widget.RecordSet = function(data) {
     this._sName = "RecordSet instance" + YAHOO.widget.RecordSet._nCount;
     YAHOO.widget.RecordSet._nCount++;
     this._records = [];
+    this._length = 0;
     
     if(data) {
         if(YAHOO.lang.isArray(data)) {

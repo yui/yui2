@@ -2,7 +2,7 @@
 .yui-skin-sam .yui-dt-table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;border:1px solid #7F7F7F;}
 .yui-skin-sam .yui-dt-table caption {padding-bottom:1em;text-align:left;}
 .yui-skin-sam .yui-dt-table th {
-    background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
 }
 .yui-skin-sam .yui-dt-table th,
 .yui-skin-sam .yui-dt-table th a {
@@ -53,14 +53,14 @@
 }
 .yui-skin-sam th.yui-dt-asc,
 .yui-skin-sam th.yui-dt-desc {
-    background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 -100px; /* sorted header gradient */
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -100px; /* sorted header gradient */
 }
 .yui-skin-sam th.yui-dt-asc .yui-dt-header {
-    background:url(../../../../../build/datatable/assets/skins/sam/dt-arrow-up.png) no-repeat right; /* sorted header gradient */
+    background:url(dt-arrow-up.png) no-repeat right; /* sorted header gradient */
     /*background-image: url('../img/arrow_up.gif'); background-repeat:no-repeat; background-position:right; sorted header icon */
 }
 .yui-skin-sam th.yui-dt-desc .yui-dt-header {
-    background:url(../../../../../build/datatable/assets/skins/sam/dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
+    background:url(dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
     /*background-image: url('../img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right; /*sorted header icon */
 } 
 
@@ -81,23 +81,23 @@
     padding-top:6px;text-align:right;
 }
 .yui-dt-editor .yui-dt-button button {
-    background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 0;
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
     border:1px solid #999;
     width:4em;height:1.8em;
     margin-left:6px;
 }
 .yui-dt-editor .yui-dt-button button.yui-dt-default {
-    background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 -1400px;
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1400px;
     background-color: #5584E0;
     border:1px solid #304369;
     color:#FFF
 }
 .yui-dt-editor .yui-dt-button button:hover {
-    background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 -1300px;
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1300px;
     color:#000;
 }
 .yui-dt-editor .yui-dt-button button:active {
-    background:url(../../../../../build/assets/skins/sam/sprite.png) repeat-x 0 -1700px;
+    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1700px;
     color:#000;
 }
 

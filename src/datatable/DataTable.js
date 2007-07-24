@@ -4768,6 +4768,9 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     oValidPaginator.totalRecords = this._oRecordSet.getLength();
     oValidPaginator.rowsThisPage = Math.min(oValidPaginator.rowsPerPage, oValidPaginator.totalRecords);
     oValidPaginator.totalPages = Math.ceil(oValidPaginator.totalRecords / oValidPaginator.rowsThisPage);
+    if(isNaN(oValidPaginator.totalPages)) {
+        oValidPaginator.totalPages = 0;
+    }
 
     this.set("paginator", oValidPaginator);
     return this.get("paginator");

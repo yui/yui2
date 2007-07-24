@@ -43,6 +43,8 @@ for full details on property and method names and argument signatures.
 on a page number that is out of bounds of the new range, the current page value
 fails to get reset to an appropriate default value.
 
+* There is a known pagination bug where custom containers are ignored.
+
 * The underlying editing architecture and API have been revised. Specifically, the
 ColumnEditor class is no longer used, the method editCell() has been deprecated
 in favor of showCellEditor(), and the Custom Event "cellEditEvent" is now

@@ -15,6 +15,7 @@ YAHOO.widget.RecordSet = function(data) {
     this._sName = "RecordSet instance" + YAHOO.widget.RecordSet._nCount;
     YAHOO.widget.RecordSet._nCount++;
     this._records = [];
+    this._length = 0;
     
     if(data) {
         if(YAHOO.lang.isArray(data)) {

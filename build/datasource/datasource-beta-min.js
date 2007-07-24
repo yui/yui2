@@ -86,7 +86,7 @@ if(data===undefined){data=null;}
 oResult[key]=data;}
 oParsedResponse.results.unshift(oResult);}}
 else{oParsedResponse.error=true;}
-return oParsedResponse;};YAHOO.util.DataSource.prototype.parseHTMLTableData=function(oRequest,oRawResponse){var bError=false;var elTable=oRawResponse;var fields=this.responseSchema.fields;var oParsedResponse={};oParsedResponse.results=[];for(var i=0;i<elTable.tBodies.length;i++){var elTbody=elTable.tBodies[i];for(var j=0;j<elTbody.rows.length;j++){var elRow=elTbody.rows[j];var oResult={};for(var k=fields.length-1;k>-1;k--){var field=fields[k];var key=(YAHOO.lang.isValue(field.key))?field.key:field;var data=elRow.cells[k].innerHTML;if(!field.parser&&field.converter){field.parser=field.converter;}
+return oParsedResponse;};YAHOO.util.DataSource.prototype.parseHTMLTableData=function(oRequest,oRawResponse){var bError=false;var elTable=oRawResponse;var fields=this.responseSchema.fields;var oParsedResponse={};oParsedResponse.results=[];for(var i=0;i<elTable.tBodies.length;i++){var elTbody=elTable.tBodies[i];for(var j=elTbody.rows.length-1;j>-1;j--){var elRow=elTbody.rows[j];var oResult={};for(var k=fields.length-1;k>-1;k--){var field=fields[k];var key=(YAHOO.lang.isValue(field.key))?field.key:field;var data=elRow.cells[k].innerHTML;if(!field.parser&&field.converter){field.parser=field.converter;}
 if(field.parser){data=field.parser.call(this,data);}
 if(data===undefined){data=null;}
 oResult[key]=data;}
