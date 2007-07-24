@@ -2,6 +2,11 @@ DataTable Release Notes
 
 *** version 2.3.0 ***
 
+* DataSource requests over XHR no longer automatically insert a "?" in the URIs
+between the host and the query. Implementers should explicitly include the
+question mark if it is required by your server. Please refer to the XHR
+examples for implementation details.
+
 * Applied new skinning model.
 
 * The MVC model has been stabilized and many APIs have been renamed or changed

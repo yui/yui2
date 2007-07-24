@@ -4,7 +4,7 @@ DataSource Release Notes
 
 * DataSource requests over XHR no longer automatically insert a "?" in the URIs
 between the host and the query. Implementers should explicitly include the
-question mark if it is required by your server. Please refer to the XHR
+question mark if it is required by your server. Please refer to the DataTable XHR
 examples for implementation details.
 
 * DataSource provides the following static type conversion methods:
