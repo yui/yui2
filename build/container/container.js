@@ -2911,10 +2911,21 @@
         * @method showIframe
         */
         showIframe: function () {
+
+            var oIFrame = this.iframe,
+                oParentNode;
+
+            if (oIFrame) {
     
-            if (this.iframe) {
-    
-                this.iframe.style.display = "block";
+                oParentNode = this.element.parentNode;
+
+                if (oParentNode != oIFrame.parentNode) {
+
+                    oParentNode.appendChild(oIFrame);
+                
+                }
+
+                oIFrame.style.display = "block";
     
             }
     
