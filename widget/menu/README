@@ -1,3 +1,188 @@
+*** version 2.3 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Pressing the Esc key when an item in a MenuBar has focus will now result
+  in the item blurring in IE.
+
++ Clicking a YAHOO.widget.MenuItem instance with a "url" configuration property 
+  set will now result in the hiding of its parent YAHOO.widget.Menu instance.
+
++ Creating an empty YAHOO.widget.Menu instance from existing markup will no 
+  longer result in a JavaScript error.
+  
++ The "constraintoviewport" configuration property now correctly keeps a 
+  YAHOO.widget.Menu instance inside the boundaries of the browser viewport.
+
++ Tuned scrolling behavior so that when the user has scrolled to the bottom of 
+  a YAHOO.widget.Menu instance and starts pressing the up arrow key, the 
+  contents begin scrolling only when the next item to be selected is out of 
+  view of the scrollable area.
+
++ Modified "removeMenu" method of YAHOO.widget.MenuManager so that it removes
+  the specified YAHOO.widget.Menu instance from the collection of visible menus.
+ 
++ Calling the "destroy" method of a visible YAHOO.widget.Menu instance now
+  purges it from the YAHOO.widget.Manager's collection of visible Menus.
+ 
++ YAHOO.widget.Menu instances now blur before hiding.
+
++ The debug version of YAHOO.widget.Menu now correctly logs as "Menu" rather 
+  than "Overlay" in IE.
+  
++ Setting a YAHOO.widget.MenuItem instance's "checked" configuration property 
+  to "true" two or more times followed by "false" will no longer result in some 
+  of the DOM elements used to render the checkmark icon will no longer remain 
+  in the item's DOM.
+
++ It is now possible to click anywhere on a YAHOO.widget.MenuItem instance 
+  and have it navigate to the URL specified by its "url" configuration property 
+  - even if the MenuItem has a value specified for its "target"
+  configuation property.
+
++ The "toString" method of YAHOO.widget.MenuItem now returns the instance's id.
+
++ Setting the YAHOO.widget.MenuItem.prototype.COLLAPSED_SUBMENU_INDICATOR_TEXT 
+  constant to empty string no longer results in JavaScript error.
+
++ YAHOO.widget.MenuBar instances behave the same regardless of the value
+  of their "position" configuration property.
+
++ It is now possible to ctr or shift-click on YAHOO.widget.MenuItem instances 
+  without the browser automatically redirecting to the URL specified by the 
+  MenuItem's "url" configuration property.
+
+
+Added the following features:
+-----------------------------
+
++ Prototype of all classes (Menu, ContextMenu, MenuBar, MenuItem, 
+  ContextMenuItem, MenuBarItem) are augmented with YAHOO.util.EventProvider.
+
++ Added the following methods to YAHOO.widget.MenuManager:
+
+    - "getMenuItem"
+    - "getMenuItemGroup"
+
++ Added the following methods to YAHOO.widget.Menu:
+
+    - "subscribe" 
+    - "getSubmenus"
+    - "onRender"
+
++ Added a "disabled" configuration property to YAHOO.widget.Menu.
+
++ Added the constant "CSS_LABEL_CLASS_NAME" to YAHOO.widget.MenuItem that 
+  represents the name of the CSS class applied to the <A/> node that is the 
+  first child of its root <LI/> node.
+
++ Added the constant "CSS_LABEL_CLASS_NAME" to YAHOO.widget.MenuBarItem that 
+  represents the name of the CSS class applied to the <A/> node that is the 
+  first child of its root <LI/> node.
+
++ Added ability for YAHOO.widget.Menu instances to have shadow:
+
+    - The shadow for a Menu is implemented by appending a new element as the 
+      last child of its root <DIV/> element:
+
+        <DIV class="yuimenu">
+            <DIV class="bd">
+                <UL>
+                    <LI class="yuimenuitem"/>
+                    <LI class="yuimenuitem"/>
+                    <LI class="yuimenuitem"/>
+                </UL>
+            </DIV>
+            <DIV class="yui-menu-shadow"/>
+        </DIV>
+
+    - The code that creates the shadow element resides inside the Menu's 
+      public "onRender" prototype method.  To disable the creation of a Menu's 
+      shadow override the prototype of the "onRender" method:
+      
+      YAHOO.widget.Menu.prototype.onRender = function () { };
+      
+    - The actual creation of the shadow element is deferred until the Menu is 
+      made visible for the first time.
+      
+    - The shadow element is only created for Menu instances whose
+      "position" configuration property is set to "dynamic."
+
+    - A Menu's shadow element can be styled via two CSS classes:
+
+        + "yui-menu-shadow"  - Applied to the shadow element when it is created.
+        + "yui-menu-shadow-visible" - Applied to the shadow element when the 
+        Menu is visible; it is removed when hidden.
+
+    - The shadow element is only styled with the new "Sam" skin.
+
+
+Changes:
+--------
+
++ Deprecated "browser" property of YAHOO.widget.MenuItem in favor 
+  of the YAHOO.env.ua.
+
++ Modified the DOM structure for a YAHOO.widget.MenuItem instance so that its
+  root <LI/> node only has only two direct descendants: 
+  
+    - The <A/> node for its text label
+    - The <DIV/> node for its submenu
+  
+  The submenu indicator node (<EM class="submenuindicator" />), checked 
+  indicator node (<EM class="checkedindicator" />), and help text node
+  (<EM class="helptext" />) that were previously direct descendants of a
+  YAHOO.widget.MenuItem instance's root <LI/> are now direct descendants of 
+  its <A/> node:
+
+    <LI class="yuimenuitem || yuimenubaritem">
+
+        <A class="yuimenuitemlabel || yuimenubaritemlabel">
+
+            Text Label
+
+            <EM class="helptext"> Help Text </EM>   (Optional)
+            <EM class="checkedindicator"> ... </EM> (Optional)
+            <EM class="submenuindicator"> ... </EM> (Optional)
+
+        </A>
+
+        <DIV class="yuimenu"> ... </DIV> (Optional submenu node)
+
+    </LI>
+
++ As a result of the DOM structure changes for YAHOO.widget.MenuItem, the
+  following CSS class are now only applied to a YAHOO.widget.MenuItem 
+  instance's <A/> node:
+
+    - "selected"
+    - "disabled"
+    - "checked"
+    - "hashelptext"
+    - "hassubmenu"
+
++ The "text" configuration property of YAHOO.widget.MenuItem now accepts a 
+  string of HTML (previously only accepted plain text).
+
++ The "emphasis" and "strongemphasis" configuration properties of 
+  YAHOO.widget.MenuItem are no longer interpreted when building from 
+  existing markup.
+
++ All YAHOO.widget.MenuItem instances built from markup must have an <A> node 
+  as the first child of its root <LI> node.
+
++ When building YAHOO.widget.MenuItem instances from existing markup, the value 
+  of the "text" property is set to the innerHTML of the menu item's <A> node.
+
++ Deprecated the following YAHOO.widget.MenuItem configuration properties:
+
+    - "strongemphasis"
+    - "emphasis"
+    - "helptext"
+
+
+
 *** version 2.2.2 ***
 
 Fixed the following bugs:
