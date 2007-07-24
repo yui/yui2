@@ -127,7 +127,7 @@
     }
     
     var testElement = function(node, method) {
-        return node.nodeType == 1 && ( !method || method(node) );
+        return node && node.nodeType == 1 && ( !method || method(node) );
     };
 
     /**
@@ -596,14 +596,14 @@
             if (!haystack || !needle) { return false; }
             
             var f = function(node) {
-                if (haystack.contains && node.tagName && !isSafari) { // safari contains is broken
+                if (haystack.contains && node.nodeType && !isSafari) { // safari contains is broken
                     YAHOO.log('isAncestor returning ' + haystack.contains(node), 'info', 'Dom');
                     return haystack.contains(node);
                 }
-                else if ( haystack.compareDocumentPosition && node.tagName ) {
+                else if ( haystack.compareDocumentPosition && node.nodeType ) {
                     YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(node) & 16), 'info', 'Dom');
                     return !!(haystack.compareDocumentPosition(node) & 16);
-                } else if (node.tagName) {
+                } else if (node.nodeType) {
                     // fallback to crawling up (safari)
                     return !!this.getAncestorBy(node, function(el) {
                         return el == haystack; 
@@ -836,7 +836,8 @@
          * @return {Object} HTMLElement or null if not found
          */
         getPreviousSiblingBy: function(node, method) {
-            while (node = node.previousSibling) { // NOTE: assignment
+            while (node) {
+                node = node.previousSibling;
                 if ( testElement(node, method) ) {
                     return node;
                 }
@@ -871,7 +872,8 @@
          * @return {Object} HTMLElement or null if not found
          */
         getNextSiblingBy: function(node, method) {
-            while (node = node.nextSibling) { // NOTE: assignment
+            while (node) {
+                node = node.nextSibling;
                 if ( testElement(node, method) ) {
                     return node;
                 }
