@@ -25,6 +25,8 @@
 			testLogger;
 
 		var dmTemplate = {
+			
+			name: "datemathtestcase",
 
 			testAdd : function() {
 				var dt = new Date(2007, 3, 12);
@@ -43,7 +45,23 @@
 				resDt = DateMath.add(dt, DateMath.WEEK, 2);
 				DateAssert.datesAreEqual(new Date(2007, 3, 26), resDt, "Incorrect results adding to WEEK field");
 
-				// TODO: Add rollover tests, -ve tests
+				// Rollover Tests
+				dt = new Date(2007, 3, 29);
+				resDt = DateMath.add(dt, DateMath.DAY, 5);
+				DateAssert.datesAreEqual(new Date(2007, 4, 4), resDt, "Incorrect results adding to DAYS field with rollover to valid date");
+
+				dt = new Date(2007, 0, 31);
+				resDt = DateMath.add(dt, DateMath.MONTH, 1);
+				// Feb 31st = March 3rd
+				DateAssert.datesAreEqual(new Date(2007, 2, 3), resDt, "Incorrect results adding rollover to MONTHS field with rollover to invalid date");
+
+				dt = new Date(2006, 10, 3);
+				resDt = DateMath.add(dt, DateMath.MONTH, 3);
+				DateAssert.datesAreEqual(new Date(2007, 1, 3), resDt, "Incorrect results adding rollover to MONTHS field with rollover year boundary");
+
+				dt = new Date(2006, 11, 31);
+				resDt = DateMath.add(dt, DateMath.MONTH, 2);
+				DateAssert.datesAreEqual(new Date(2007, 2, 3), resDt, "Incorrect results adding rollover to MONTHS field with rollover year boundary to invalid date");
 			},
 			
 			testSubtract : function() {
@@ -63,9 +81,26 @@
 				resDt = DateMath.subtract(dt, DateMath.WEEK, 1);
 				DateAssert.datesAreEqual(new Date(2007, 3, 5), resDt, "Incorrect results subtracting from WEEK field");
 
-				// TODO: Add rollover tests, -ve tests
+				// Rollover Tests
+				dt = new Date(2007, 3, 3);
+				resDt = DateMath.subtract(dt, DateMath.DAY, 5);
+				DateAssert.datesAreEqual(new Date(2007, 2, 29), resDt, "Incorrect results subtracting to DAYS field with rollover to valid date");
+
+				dt = new Date(2007, 2, 31);
+				resDt = DateMath.subtract(dt, DateMath.MONTH, 1);
+				// Feb 31st = March 3rd
+				DateAssert.datesAreEqual(new Date(2007, 2, 3), resDt, "Incorrect results subtracting rollover to MONTHS field with rollover to invalid date");
+
+				dt = new Date(2007, 2, 3);
+				resDt = DateMath.subtract(dt, DateMath.MONTH, 3);
+				DateAssert.datesAreEqual(new Date(2006, 11, 3), resDt, "Incorrect results subtracting rollover to MONTHS field with rollover year boundary");
+
+				dt = new Date(2007, 0, 31);
+				resDt = DateMath.subtract(dt, DateMath.MONTH, 2);
+				// Nov 31st = Dec 1st
+				DateAssert.datesAreEqual(new Date(2006, 11, 1), resDt, "Incorrect results subtracting rollover to MONTHS field with rollover year boundary to invalid date");
 			},
-			
+
 			testAfter : function() {
 				var dt = new Date(2007, 3, 12);
 
@@ -163,7 +198,7 @@
 			},
 
 			testGetWeekNumber : function() {
-				// TODO - Need to understand week number algorithm to test properly
+				// TODO - Need to understand week number algorithm to test properly. For now just boundary tests
 				var dt = new Date(2007, 0, 1);
 				Assert.areEqual(1, DateMath.getWeekNumber(dt, 2007));
 				
