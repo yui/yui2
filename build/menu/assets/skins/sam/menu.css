@@ -449,8 +449,12 @@ when one of its submenus is visible.
 }
 
 .yui-skin-sam .visible .bd,
-.yui-skin-sam .visible ul,
-.yui-skin-sam .visible .yuimenuitem, 
+.yui-skin-sam .visible .yuimenuitem {
+
+    _zoom: 1;   /* For IE 7 Quirks Mode and IE 6 Standards and Quirks Mode */
+
+}
+
 .yui-skin-sam .visible .yuimenuitemlabel {
 
     *zoom: 1;   /* For IE */
