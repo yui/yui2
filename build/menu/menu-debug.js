@@ -4655,30 +4655,15 @@ onRender: function (p_sType, p_aArgs) {
     }
 
 
-    function callSizeShadow() {
-
-        var me = this;
-    
-        window.setTimeout(function () { 
-
-            sizeShadow.call(me); 
-
-        }, 0);
-    
-    }
-
-
     function createShadow() {
 
         var oShadow = this._shadow,
             oElement,
-            nIE,
             me;
 
         if (!oShadow) {
 
             oElement = this.element;
-            nIE = YAHOO.env.ua.ie;
             me = this;
 
             if (!m_oShadowTemplate) {
@@ -4699,15 +4684,25 @@ onRender: function (p_sType, p_aArgs) {
             this.beforeShowEvent.subscribe(addShadowVisibleClass);
             this.beforeHideEvent.subscribe(removeShadowVisibleClass);
 
-            if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+            if (YAHOO.env.ua.ie) {
         
-                callSizeShadow.call(this);
-                
-                this.syncIframe();
+                /*
+                     Need to call sizeShadow & syncIframe via setTimeout for 
+                     IE 7 Quirks Mode and IE 6 Standards Mode and Quirks Mode 
+                     or the shadow and iframe shim will not be sized and 
+                     positioned properly.
+                */
+        
+                window.setTimeout(function () { 
+        
+                    sizeShadow.call(me); 
+                    me.syncIframe();
+        
+                }, 0);
 
-                this.cfg.subscribeToConfigEvent("width", callSizeShadow);
-                this.cfg.subscribeToConfigEvent("height", callSizeShadow);
-                this.changeContentEvent.subscribe(callSizeShadow);
+                this.cfg.subscribeToConfigEvent("width", sizeShadow);
+                this.cfg.subscribeToConfigEvent("height", sizeShadow);
+                this.changeContentEvent.subscribe(sizeShadow);
 
                 Module.textResizeEvent.subscribe(sizeShadow, me, true);
                 
