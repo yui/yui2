@@ -4028,7 +4028,7 @@ var Dom = YAHOO.util.Dom,
                         exec = false;
                     } else {
                         if (this.browser.ie || this.browser.webkit || this.browser.opera) {
-                            this.createCurrentElement(value);
+                            this._createCurrentElement(value);
                             exec = false;
                         }
                     }
@@ -4058,7 +4058,7 @@ var Dom = YAHOO.util.Dom,
                 case 'createlink':
                     var el = this._getSelectedElement();
                     if (!el || (el.getAttribute('tag') != 'a')) {
-                        this.createCurrentElement('a');
+                        this._createCurrentElement('a');
                     } else {
                         this.currentElement[0] = el;
                     }
@@ -4092,7 +4092,7 @@ var Dom = YAHOO.util.Dom,
                             }
                             exec = false;
                         } else {
-                            this.createCurrentElement('img');
+                            this._createCurrentElement('img');
                             var _img = this._getDoc().createElement('img');
                             _img.setAttribute('src', value);
                             YAHOO.util.Dom.addClass(_img, 'yui-img');
@@ -4111,7 +4111,7 @@ var Dom = YAHOO.util.Dom,
                     * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
                     */
                     if (this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) {
-                        this.createCurrentElement('img');
+                        this._createCurrentElement('img');
                         var _span = this._getDoc().createElement('span');
                         _span.innerHTML = value;
                         this.currentElement[0].parentNode.replaceChild(_span, this.currentElement[0]);
@@ -4135,7 +4135,7 @@ var Dom = YAHOO.util.Dom,
                     * So here we are making the best possible guess and acting on it.
                     */
                     if (this.browser.webkit && !this._getDoc().queryCommandEnabled(action)) {
-                        this.createCurrentElement('span');
+                        this._createCurrentElement('span');
                         YAHOO.util.Dom.addClass(this.currentElement[0], 'yui-non');
                         var re= /<\S[^><]*>/g;
                         var str = this.currentElement[0].innerHTML.replace(re, '');
@@ -4149,7 +4149,7 @@ var Dom = YAHOO.util.Dom,
                 case 'subscript':
                     if (this.browser.webkit) {
                         var tag = action.toLowerCase().substring(0, 3);
-                        this.createCurrentElement(tag);
+                        this._createCurrentElement(tag);
                         if (this.currentElement[0].parentNode.tagName.toLowerCase() == tag) {
                             var span = this._getDoc().createElement('span');
                             span.innerHTML = this.currentElement[0].innerHTML;
@@ -4167,7 +4167,7 @@ var Dom = YAHOO.util.Dom,
                 case 'formatblock':
                     value = 'blockquote';
                     if (this.browser.webkit) {
-                        this.createCurrentElement('blockquote');
+                        this._createCurrentElement('blockquote');
                         if (YAHOO.util.Dom.hasClass(this.currentElement[0].parentNode, 'yui-tag-blockquote')) {
                             var span = this._getDoc().createElement('span');
                             span.innerHTML = this.currentElement[0].innerHTML;
@@ -4188,7 +4188,7 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 'indent':
                 case 'outdent':
-                    this.createCurrentElement(action.toLowerCase());
+                    this._createCurrentElement(action.toLowerCase());
                     if (this.currentElement[0].parentNode) {
                         if (action.toLowerCase() == 'outdent') {
                             if (YAHOO.util.Dom.hasClass(this.currentElement[0].parentNode, 'yui-tag-indent')) {
@@ -4226,7 +4226,7 @@ var Dom = YAHOO.util.Dom,
                             list.innerHTML = str;
 
                         } else {
-                            this.createCurrentElement(tag.toLowerCase());
+                            this._createCurrentElement(tag.toLowerCase());
                             var el = this.currentElement[0];
                             var list = this._getDoc().createElement(tag);
                             if (tag == 'ol') {
@@ -4293,7 +4293,7 @@ var Dom = YAHOO.util.Dom,
                     if ((this.currentElement.length > 0) && (!this._hasSelection())) {
                         YAHOO.util.Dom.setStyle(this.currentElement, 'fontSize', value);
                     } else {
-                        this.createCurrentElement('span', {'fontSize': value });
+                        this._createCurrentElement('span', {'fontSize': value });
                     }
                     exec = false;
                     break;
@@ -4313,14 +4313,15 @@ var Dom = YAHOO.util.Dom,
             
         },
         /**
-        * @method createCurrentElement
+        * @private
+        * @method _createCurrentElement
         * @param {String} tagName (optional defaults to a) The tagname of the element that you wish to create
         * @param {Object} tagStyle (optional) Object literal containing styles to apply to the new element.
         * @description This is a work around for the various browser issues with execCommand. This method will run <code>execCommand('fontname', false, 'yui-tmp')</code> on the given selection.
         * It will then search the document for a span with the font-family set to <strong>yui-tmp</strong> and replace that with another span that has other information in it, then assign the new span to
         * <code>this.currentElement</code>, so we now have an element reference to the element that was just modified. At this point we can use standard DOM manipulation to change it as we see fit.
         */
-        createCurrentElement: function(tagName, tagStyle) {
+        _createCurrentElement: function(tagName, tagStyle) {
             var tagName = ((tagName) ? tagName : 'a'),
                 sel = this._getSelection(),
                 tar = null,
