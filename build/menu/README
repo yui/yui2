@@ -101,7 +101,7 @@ Added the following features:
       public "onRender" prototype method.  To disable the creation of a Menu's 
       shadow override the prototype of the "onRender" method:
       
-      YAHOO.widget.Menu.prototype.onRender = null;
+      YAHOO.widget.Menu.prototype.onRender = function () { };
       
     - The actual creation of the shadow element is deferred until the Menu is 
       made visible for the first time.
