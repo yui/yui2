@@ -1859,6 +1859,10 @@ var Dom = YAHOO.util.Dom,
         * @returns {String} The URL to the blank image
         */
         _getBlankImage: function() {
+            if (!this.DOMReady) {
+                this._queue[this._queue.length] = ['_getBlankImage', arguments];
+                return '';
+            }      
             var div = document.createElement('div');
             div.style.position = 'absolute';
             div.style.top = '-9999px';
@@ -1867,6 +1871,7 @@ var Dom = YAHOO.util.Dom,
             document.body.appendChild(div);
             var img = YAHOO.util.Dom.getStyle(div, 'background-image');
             img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
+            this.set('blankimage', img);            
             return img;
         },
         /**
@@ -1993,7 +1998,7 @@ var Dom = YAHOO.util.Dom,
                     width = 75,
                     padding = 0,
                     win = new YAHOO.widget.EditorWindow('insertimage', {
-                        width: '405px'
+                        width: '415px'
                     });
 
                 if (!el) {

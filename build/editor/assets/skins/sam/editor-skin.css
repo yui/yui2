@@ -276,6 +276,7 @@
 }
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-select .first-child a, .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child a {
     height: 19px;
+    left: 0;
 }
 
 
@@ -342,9 +343,10 @@
 
 .yui-skin-sam .yui-editor-panel .yui-toolbar-group-border {
     width: 190px;
+    *width: 195px;
 }
 .yui-skin-sam .yui-editor-panel .yui-toolbar-group-textflow {
-    width: 175px;
+    width: 185px;
 }
 
 .yui-skin-sam .yui-editor-panel .hd {
