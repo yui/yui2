@@ -3732,7 +3732,11 @@ _onBeforeHide: function (p_sType, p_aArgs) {
 
     }
 
-    this.blur();
+    if (this.getRoot() == this) {
+
+        this.blur();
+    
+    }
 
 },
 
