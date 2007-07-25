@@ -1,12 +1,10 @@
 <html>
 <head>
-	<title>YUI Calendar Tests</title>
+	<title>YUI DateMath Tests</title>
 	<link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css" />
 	<link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css" />
 
-	<script type="text/javascript" src="../build/yahoo/yahoo-min.js"></script>
-	<script type="text/javascript" src="../build/dom/dom-min.js"></script>
-	<script type="text/javascript" src="../build/event/event-min.js"></script>
+	<script type="text/javascript" src="../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="../build/logger/logger-min.js"></script>
 	<script type="text/javascript" src="../build/yuitest/yuitest-beta-min.js"></script>
 	<script type="text/javascript" src="../build/calendar/calendar-min.js"></script>
@@ -21,8 +19,9 @@
 			ArrayAssert=YAHOO.util.ArrayAssert,
 			UserAction=YAHOO.util.UserAction, 
 			DateAssert=YAHOO.util.DateAssert,
-			DateMath=YAHOO.widget.DateMath,
-			testLogger;
+			DateMath=YAHOO.widget.DateMath;
+			
+		var logger;
 
 		var dmTemplate = {
 			
@@ -224,7 +223,7 @@
 			var testSuite=new YAHOO.tool.TestSuite("datemathsuite");
 			testSuite.add(dmTestCase);
 
-			testLogger.clearConsole();
+			logger.clearConsole();
 
 			YAHOO.tool.TestRunner.clear();
 			YAHOO.tool.TestRunner.add(testSuite);
@@ -232,7 +231,7 @@
 		}
 
 		YAHOO.util.Event.addListener(window, "load", function() {
-			testLogger = new YAHOO.tool.TestLogger();
+			logger = new YAHOO.tool.TestLogger();
 			YAHOO.util.Event.addListener("btnRun", "click", runTests);
 		});
 	})();
