@@ -34,9 +34,16 @@
 }
 
 .yui-skin-sam .yui-navset .yui-nav .selected a,
-.yui-skin-sam .yui-navset .yui-nav a:hover {
+.yui-skin-sam .yui-navset .yui-nav .selected a:hover,
+.yui-skin-sam .yui-navset .yui-nav .selected a:focus {
     background:#214197 url(../../../../assets/skins/sam/sprite.png) repeat-x left -1400px; /* selected tab background */
     color:#fff;
+}
+
+.yui-skin-sam .yui-navset .yui-nav a:hover,
+.yui-skin-sam .yui-navset .yui-nav a:focus {
+    background:#B3D4FF url(../../../../assets/skins/sam/sprite.png) repeat-x left -1300px; /* selected tab background */
+    outline:0;
 }
 
 .yui-skin-sam .yui-navset .yui-nav .selected a em {
@@ -44,8 +51,6 @@
 }
 
 .yui-skin-sam .yui-navset .yui-nav .selected a,
-.yui-skin-sam .yui-navset .yui-nav a:hover,
-.yui-skin-sam .yui-navset .yui-nav a:hover em,
 .yui-skin-sam .yui-navset .yui-nav .selected a em {
     border-color:#243356; /* selected tab border color */
 }
