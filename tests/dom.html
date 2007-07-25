@@ -243,6 +243,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getAncestorByClassName: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getAncestorByClassName(el, 'foo'),
+                        'wrong node returned');
                 var el = Y.Dom.getAncestorByClassName(document.getElementById('foo'), 'main');
                 YAHOO.util.Assert.areEqual(document.getElementById('main'),
                         el, 'wrong node returned');
@@ -253,6 +256,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getAncestorByTagName: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getAncestorByTagName(el, 'foo'),
+                        'wrong node returned');
                 var el = Y.Dom.getAncestorByTagName('foo', 'div');
                 YAHOO.util.Assert.areEqual(document.getElementById('main'),
                         el, 'wrong node returned');
@@ -263,6 +269,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getAncestorBy: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getAncestorBy(el),
+                        'wrong node returned');
                 var el = Y.Dom.getAncestorBy(document.getElementById('foo'), function(el) {
                     return el.id === 'bd';        
                 });
@@ -275,6 +284,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getPreviousSiblingBy: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getPreviousSiblingBy(el),
+                        'wrong node returned');
                 var el = Y.Dom.getPreviousSiblingBy(document.getElementById('foo'),
                     function(node) { return node.tagName == 'H2'; }
                 );
@@ -282,11 +294,17 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
                         el, 'wrong node returned');
             },            
             test_getPreviousSibling: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getPreviousSibling(el),
+                        'wrong node returned');
                 YAHOO.util.Assert.areEqual(Y.Dom.getPreviousSibling('bd'),
                         Y.Dom.get('hd'), 'wrong node returned');
             },            
 
             test_getNextSiblingBy: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getNextSiblingBy(el),
+                        'wrong node returned');
                 var el = Y.Dom.getNextSiblingBy(document.getElementById('foo'),
                     function(node) { return node.className == 'mod'; }
                 );
@@ -295,11 +313,17 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getNextSibling: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getNextSibling(el),
+                        'wrong node returned');
                 YAHOO.util.Assert.areEqual(Y.Dom.getNextSibling('bd'),
                         Y.Dom.get('ft'), 'wrong node returned');
             },
 
             test_getFirstChildBy: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getFirstChildBy(el),
+                        'wrong node returned');
                 var el = Y.Dom.getFirstChildBy(document.getElementById('doc'),
                     function(node) { return node.id == 'bd'; }
                 );
@@ -308,12 +332,17 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getFirstChild: function() {
-                YAHOO.log(Y.Dom.getFirstChild(document.getElementById('doc')).id);
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getFirstChild(el),
+                        'wrong node returned');
                 YAHOO.util.Assert.areEqual(document.getElementById('hd'),
                         Y.Dom.getFirstChild(document.getElementById('doc')), 'wrong node returned');
             },            
 
             test_getLastChildBy: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getLastChildBy(el),
+                        'wrong node returned');
                 var el = Y.Dom.getLastChildBy(document.getElementById('doc'),
                     function(node) { return node.id == 'bd'; }
                 );
@@ -322,6 +351,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getLastChild: function() {
+                var el = document.createElement('div');
+                YAHOO.util.Assert.areEqual(null, Y.Dom.getLastChild(el),
+                        'wrong node returned');
                 YAHOO.util.Assert.areEqual(
                     document.getElementById('ft'),
                     Y.Dom.getLastChild(document.getElementById('doc')),
@@ -329,6 +361,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
                 );
             },            
             test_getChildrenBy: function() {
+                var el = document.createElement('div');
+                YAHOO.util.ArrayAssert.itemsAreEqual([], Y.Dom.getChildrenBy(el),
+                        'wrong node returned');
                 var el = Y.Dom.getChildrenBy(document.getElementById('main'),
                     function(node) { return node.className == 'mod'; }
                 );
@@ -340,6 +375,9 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
             },            
 
             test_getChildren: function() {
+                var el = document.createElement('div');
+                YAHOO.util.ArrayAssert.itemsAreEqual([], Y.Dom.getChildrenBy(el),
+                        'wrong node returned');
                 YAHOO.util.ArrayAssert.itemsAreEqual(
                     [ Y.Dom.get('hd'), Y.Dom.get('bd'), Y.Dom.get('ft') ],
                     Y.Dom.getChildren('doc'),
