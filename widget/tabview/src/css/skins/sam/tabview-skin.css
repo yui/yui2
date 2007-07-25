@@ -1,3 +1,11 @@
+/* .yui-navset defaults to .yui-navset-top */
+.yui-skin-sam .yui-navset .yui-nav {
+    border:solid #243356; /* tab list border */
+    border-width:0 0 1px;
+    position:relative;
+    zoom:1;
+}
+
 .yui-skin-sam .yui-navset .yui-nav li {
     margin-right:0.16em; /* space between tabs */
     padding-top:1px; /* gecko: make room for overflow */
@@ -17,10 +25,10 @@
 }
 
 .yui-skin-sam .yui-navset .yui-nav a em {
-    border-top:solid 1px #a3a3a3;
-    border-bottom:0;
+    border:solid #a3a3a3;
+    border-width:1px 0 0;
     cursor:hand;
-    padding:0.2em .75em;
+    padding:0.25em .75em;
     top:-1px; /* for 1px rounded corners */
     position:relative;
 }
@@ -32,7 +40,7 @@
 }
 
 .yui-skin-sam .yui-navset .yui-nav .selected a em {
-    padding:0.3em 0.75em; /* raise selected tab */
+    padding:0.35em 0.75em; /* raise selected tab */
 }
 
 .yui-skin-sam .yui-navset .yui-nav .selected a,
@@ -42,15 +50,10 @@
     border-color:#243356; /* selected tab border color */
 }
 
-.yui-skin-sam .yui-navset .yui-nav {
-    border-bottom:1px solid #243356; /* tab list bottom border */
-    position:relative;
-    zoom:1;
-}
-
 .yui-skin-sam .yui-navset .yui-content {
     background:#edf5ff; /* content background color */
-    border-top:5px solid #214095; /* color between tab list and content */
+    border:solid #214095; /* color between tab list and content */
+    border-width:5px 0 0; /* color between tab list and content */
 }
 
 .yui-skin-sam .yui-navset .yui-content div {
@@ -63,3 +66,110 @@
     border:0; 
     padding:0;
 }
+
+/* left and right orientations */
+.yui-skin-sam .yui-navset-left .yui-nav,
+.yui-skin-sam .yui-navset-right .yui-nav {
+    border-width:0 1px 0 0;
+    position:absolute; /* from tabview-core; have to reiterate for skin-sam due to pos:rel on skin-sam yui-nav */
+}
+
+.yui-skin-sam .yui-navset-right .yui-nav {
+    border-width:0 0 0 1px;
+}
+
+.yui-skin-sam .yui-navset-left .yui-nav li,
+.yui-skin-sam .yui-navset-right .yui-nav li {
+    margin:0 0 0.16em; /* space between tabs */
+    padding:0 0 0 1px; /* gecko: make room for overflow */
+}
+
+.yui-skin-sam .yui-navset-right .yui-nav li {
+    padding:0 1px 0 0; /* gecko: make room for overflow */
+}
+
+.yui-skin-sam .yui-navset-left .yui-nav .selected { 
+    margin:0 -1px 0.16em 0;
+}
+
+.yui-skin-sam .yui-navset-right .yui-nav .selected { 
+    margin:0 0 0.16em -1px;
+}
+
+.yui-skin-sam .yui-navset-left .yui-nav a,
+.yui-skin-sam .yui-navset-right .yui-nav a {
+    border-width:1px 0;
+}
+
+.yui-skin-sam .yui-navset-left .yui-nav a em,
+.yui-skin-sam .yui-navset-right .yui-nav a em {
+    border-width:0 0 0 1px;
+    padding:0.2em .75em;
+    top:auto;
+    left:-1px; /* for 1px rounded corners */
+}
+
+.yui-skin-sam .yui-navset-right .yui-nav a em {
+    border-width:0 1px 0 0;
+    left:auto;
+    right:-1px; /* for 1px rounded corners */
+}
+
+.yui-skin-sam .yui-navset-left .yui-nav a,
+.yui-skin-sam .yui-navset-left .yui-nav .selected a,
+.yui-skin-sam .yui-navset-left .yui-nav a:hover,
+.yui-skin-sam .yui-navset-right .yui-nav a,
+.yui-skin-sam .yui-navset-right .yui-nav .selected a,
+.yui-skin-sam .yui-navset-right .yui-nav a:hover,
+.yui-skin-sam .yui-navset-bottom .yui-nav a,
+.yui-skin-sam .yui-navset-bottom .yui-nav .selected a,
+.yui-skin-sam .yui-navset-bottom .yui-nav a:hover {
+    background-image:none; /* no left-right or bottom-top gradient */
+}
+
+.yui-skin-sam .yui-navset-left .yui-content {
+    border-width:0 0 0 5px; /* color between tab list and content */
+}
+
+.yui-skin-sam .yui-navset-right .yui-content {
+    border-width:0 5px 0 0; /* color between tab list and content */
+}
+
+.yui-skin-sam .yui-navset-left .yui-content div {
+    border:1px solid #808080; /* content border */
+    border-left-color:#243356; /* different right border color */
+}
+
+/* bottom orientation */
+.yui-skin-sam .yui-navset-bottom .yui-nav {
+    border-width:1px 0 0; /* tab list top border */ 
+}
+
+.yui-skin-sam .yui-navset-bottom .yui-nav .selected { 
+    margin-bottom:0;
+    margin-top:-1px; /* for overlap */
+}
+
+.yui-skin-sam .yui-navset-bottom .yui-nav li { 
+    padding:0 0 1px 0; /* gecko: make room for overflow */
+    vertical-align:text-top;
+}
+
+.yui-skin-sam .yui-navset-bottom .yui-nav li a { 
+}
+
+.yui-skin-sam .yui-navset-bottom .yui-nav a em {
+    border-width:0 0 1px;
+    top:auto;
+    bottom:-1px; /* for 1px rounded corners */
+}
+
+.yui-skin-sam .yui-navset-bottom .yui-content {
+    border-width:0 0 5px; /* color between tab list and content */
+}
+
+.yui-skin-sam .yui-navset-bottom .yui-content div {
+    border:1px solid #808080; /* content border */
+    border-top-color:#243356; /* different right border color */
+}
+
