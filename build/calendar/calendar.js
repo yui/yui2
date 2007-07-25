@@ -878,7 +878,6 @@ YAHOO.widget.DateMath = {
 	* @param {Date}	date	The JavaScript date for which to find the week number
 	* @param {Number} calendarYear	OPTIONAL - The calendar year to use for determining the week number. Default is
 	*											the calendar year of parameter "date".
-	* @param {Number} weekStartsOn	OPTIONAL - The integer (0-6) representing which day a week begins on. Default is 0 (for Sunday).
 	* @return {Number}	The week number of the given date.
 	*/
 	getWeekNumber : function(date, calendarYear) {
@@ -959,7 +958,7 @@ YAHOO.widget.DateMath = {
 };
 
 /**
-* The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month ("one-up") or two-month ("two-up") interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
+* The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month  or multi-month interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
 * @module    calendar
 * @title     Calendar
 * @namespace YAHOO.widget
@@ -976,7 +975,6 @@ YAHOO.widget.DateMath = {
 *	<xmp>
 *		<div id="cal1Container"></div>
 *	</xmp>
-* Note that the table can be replaced with any kind of element.
 * </p>
 * @namespace YAHOO.widget
 * @class Calendar
