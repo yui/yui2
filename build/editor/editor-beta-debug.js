@@ -325,14 +325,14 @@ var Dom = YAHOO.util.Dom,
         /**
         * @protected
         * @property _sep
-        * @description Internal reference to the seperator HTML Element for cloning
+        * @description Internal reference to the separator HTML Element for cloning
         * @type HTMLElement
         */
         _sep: null,
         /**
         * @protected
         * @property _sepCount
-        * @description Internal refernce for counting seperators, so we can give them a useful class name for styling
+        * @description Internal refernce for counting separators, so we can give them a useful class name for styling
         * @type Number
         */
         _sepCount: null,
@@ -367,7 +367,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @protected
         * @property CLASS_SEPARATOR
-        * @description Default CSS class to apply to all seperators in the toolbar
+        * @description Default CSS class to apply to all separators in the toolbar
         * @type String
         */
         CLASS_SEPARATOR: 'yui-toolbar-separator',
@@ -935,7 +935,7 @@ var Dom = YAHOO.util.Dom,
             return oButton;
         },
         /**
-        * @method addSeperator
+        * @method addSeparator
         * @description Add a new button separator to the toolbar.
         * @param {HTMLElement} cont Optional HTML element to insert this button into.
         * @param {HTMLElement} after Optional HTML element to insert this button after in the DOM.
