@@ -160,8 +160,8 @@ Added the following features:
     - The shadow element is only styled with the new "Sam" skin.
 
 + Prototype of all classes (Module, Overlay, Panel, Dialog, SimpleDialog,  
-  Tooltip, Config, and ContainerEffect) are augmented 
-  with YAHOO.util.EventProvider, facilitating subscribing to an instance's 
+  Tooltip, Config, and ContainerEffect) are augmented with 
+  YAHOO.util.EventProvider, facilitating subscribing to an instance's 
   Custom Events by name via a "subscribe" method that is a direct member of 
   the class.  For example:
   
@@ -169,8 +169,8 @@ Added the following features:
     
     oOverlay.subscribe("show", onShow);
 
-+ Added "bringToTop" method to YAHOO.widget.Overlay that places the Overlay on 
-  top of all other Overlay instances.
++ Added a new "bringToTop" method to YAHOO.widget.Overlay that places the 
+  Overlay on top of all other Overlay instances.
 
 + Added a new "bringToTop" method to YAHOO.widget.OverlayManager that places 
   the specified Overlay instance on top of all other Overlay instances.  This 
