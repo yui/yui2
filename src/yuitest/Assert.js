@@ -188,7 +188,6 @@ YAHOO.util.Assert = {
     /**
      * Asserts that a value is null. This uses the triple equals sign
      * so no type cohersion may occur.
-     * @param {Object} expected The expected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isNull
