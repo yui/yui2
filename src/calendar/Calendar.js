@@ -1,5 +1,5 @@
 /**
-* The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month ("one-up") or two-month ("two-up") interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
+* The Calendar component is a UI control that enables users to choose one or more dates from a graphical calendar presented in a one-month  or multi-month interface. Calendars are generated entirely via script and can be navigated without any page refreshes.
 * @module    calendar
 * @title     Calendar
 * @namespace YAHOO.widget
@@ -16,7 +16,6 @@
 *	<xmp>
 *		<div id="cal1Container"></div>
 *	</xmp>
-* Note that the table can be replaced with any kind of element.
 * </p>
 * @namespace YAHOO.widget
 * @class Calendar

@@ -191,7 +191,6 @@ YAHOO.widget.DateMath = {
 	* @param {Date}	date	The JavaScript date for which to find the week number
 	* @param {Number} calendarYear	OPTIONAL - The calendar year to use for determining the week number. Default is
 	*											the calendar year of parameter "date".
-	* @param {Number} weekStartsOn	OPTIONAL - The integer (0-6) representing which day a week begins on. Default is 0 (for Sunday).
 	* @return {Number}	The week number of the given date.
 	*/
 	getWeekNumber : function(date, calendarYear) {
