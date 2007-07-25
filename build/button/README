@@ -7,7 +7,7 @@ Added the following features:
   Button instance's menu will automatically be focused when made visible. 
 
 + Added a "lazyloadmenu" configuration attribute that controls the value of 
- the "lazyload" configuration property of a Button's menu.
+  the "lazyload" configuration property of a Button's menu.
 
 + Added "menuclassname" configuration attribute that defines a CSS class name
   to be applied to the root HTML element of a button's menu.
@@ -45,16 +45,15 @@ Fixed the following bugs:
   the enter key while focused inside another form control.  
 
 + Fixed typo in the source file for the ButtonGroup class that was causing the 
-  private variable "m_oButtons" to be declared as a global.  [Fixes 
-  SourceForge bug #1710304]
+  private variable "m_oButtons" to be declared as a global.
 
 + Switched to use of the CSS display type "-moz-inline-box" from 
   "-moz-inline-stack" for Gecko-based browsers so that the entire area of a 
   Button instance is clickable when it is rendered inside another inline 
-  element.  [Fixes SourceForge bug #1698656]
+  element.
 
 + Added "yui-button" and "yui-[button type]-button" prefix to CSS classes to 
-  sandbox Button styles.  [Fixes SourceForge bug #1693780]
+  sandbox Button styles.
 
 
 Changes:
@@ -81,8 +80,10 @@ Changes:
 + Renamed static method "YAHOO.widget.Button.onFormKeyDown" 
   to "YAHOO.widget.Button.onFormKeyPress."
 
-+ Renamed "TAG_NAME" constant (YAHOO.widget.Button.prototype.TAG_NAME) to 
-  "NODE_NAME" (YAHOO.widget.Button.prototype.NODE_NAME).
++ Renamed "TAG_NAME" constant (YAHOO.widget.Button.prototype.TAG_NAME and 
+  YAHOO.widget.ButtonGroup.prototype.TAG_NAME) to 
+  "NODE_NAME" (YAHOO.widget.Button.prototype.NODE_NAME and 
+  YAHOO.widget.ButtonGroup.prototype.NODE_NAME).
 
 + The "selectedMenuItem" configuration attribute now correctly gets/sets the 
   index of the selected MenuItem instance of the button's menu, rather than a
