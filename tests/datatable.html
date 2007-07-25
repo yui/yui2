@@ -1,0 +1,157 @@
+<html>
+<head>
+<title>YUI DataTable Tests</title>
+<link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css" />
+<link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css" />
+<link type="text/css" rel="stylesheet" href="../build/datatable/assets/datatable.css" />
+
+<script type="text/javascript" src="../build/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="../build/dom/dom-min.js"></script>
+<script type="text/javascript" src="../build/event/event-min.js"></script>
+<script type="text/javascript" src="../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
+<script type="text/javascript" src="../build/element/element-beta-min.js"></script>
+<script type="text/javascript" src="../build/datasource/datasource-beta-min.js"></script>
+<script type="text/javascript" src="../build/datatable/datatable-beta-min.js"></script>
+
+</head>
+<body>
+<h1>DataTable Tests</h1>
+<p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
+
+<script type="text/javascript">
+
+(function() {
+
+	var	Dom=YAHOO.util.Dom,
+		Assert=YAHOO.util.Assert,
+		ObjectAssert=YAHOO.util.ObjectAssert,
+		ArrayAssert=YAHOO.util.ArrayAssert,
+		DateAssert=YAHOO.util.DateAssert,
+		UserAction=YAHOO.util.UserAction,
+		TestCase = YAHOO.tool.TestCase,
+		TestLogger = YAHOO.tool.TestLogger,
+		TestRunner = YAHOO.tool.TestRunner,
+		TestSuite = YAHOO.tool.TestSuite,
+
+		DataSource = YAHOO.util.DataSource,
+        DataTable = YAHOO.widget.DataTable;
+		
+	function DataTableTestCase(template) {
+		DataTableTestCase.superclass.constructor.call(this, template);
+		this.count = -1;
+		this.container = null;
+		this.columns = null;
+		this.datasource = null;
+	};
+	YAHOO.lang.extend(DataTableTestCase, TestCase);
+
+	DataTableTestCase.prototype.setUp = function() {
+		this.container = document.createElement("div");
+		this.container.id = "testDTContainer";
+		document.body.appendChild(this.container);
+		
+		this.columns = [{key:"a"},{key:"b"},{key:"c"}];
+
+        this.datasource = new YAHOO.util.DataSource([{a:"0a",b:"0b",c:"0c"},{a:"1a",b:"1b",c:"1c"},{a:"2a",b:"2b",c:"2c"},{a:"3a",b:"3b",c:"3c"}]);
+        this.datasource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+        this.datasource.responseSchema = {
+            fields:["a","b","c"]
+        }
+	};
+
+	DataTableTestCase.prototype.tearDown = function() {
+		if (this.container != null) {
+            YAHOO.util.Event.purgeElement(this.container, true);
+			document.body.removeChild(this.container);
+		}
+
+        this.columns = null;
+        this.datasource = null;
+	};
+		
+	DataTableTestCase.prototype.createInstance = function(oConfig) {
+		var dt = new DataTable(this.container, this.columns, this.datasource, oConfig);
+		this.count++;
+		return dt;
+	};
+	
+	var datatableTemplate = {
+		testConstruction: function() {
+    		var dt = this.createInstance();
+    		Assert.isObject(dt, "Failed to create basic instance");
+    		Assert.isInstanceOf(DataTable, dt, "Failed to create basic instance");
+    		dt = null;
+		},
+
+		testGetTableEl: function() {
+			var dt = this.createInstance();
+			var elTable = dt.getTableEl();
+			Assert.areSame("table", elTable.tagName.toLowerCase(), "Expected a TABLE element");
+			Assert.areSame("yui-dt"+this.count+"-table", elTable.id, "Failed to generate correct ID");
+			dt = null;
+		},
+
+		testGetMsgTbodyEl: function() {
+			var dt = this.createInstance();
+			var elTable = dt.getTableEl();
+			var elTbody = dt.getMsgTbodyEl();
+			Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
+			//TODO: generate ID for tbody?
+			//Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
+			Assert.areSame(elTable.tBodies[0], elTbody, "Expected to get first TBODY element of the TABLE");
+			dt = null;
+		},
+
+		testGetTbodyEl: function() {
+			var dt = this.createInstance();
+			var elTable = dt.getTableEl();
+			var elTbody = dt.getTbodyEl();
+			Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
+			//TODO: generate ID for tbody?
+			//Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
+			Assert.areSame(elTable.tBodies[1], elTbody, "Expected to get second TBODY element of the TABLE");
+			dt = null;
+		},
+
+		testGetFirstTrEl: function() {
+			var dt = this.createInstance();
+			var elTr = dt.getFirstTrEl();
+			Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
+			Assert.areSame("yui-dt"+this.count+"-bdrow0", elTr.id, "Failed to generate correct ID");
+			dt = null;
+		},
+		
+		testGetLastTrEl: function() {
+			var dt = this.createInstance();
+			var elTbody = dt.getTbodyEl();
+			var elTr = dt.getLastTrEl();
+			Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
+			var i = elTbody.rows.length-1;
+			Assert.areSame(elTbody.rows[i], elTr, "Failed to get last TR element");
+            Assert.areSame("yui-dt"+this.count+"-bdrow"+i, elTr.id, "Failed to generate correct ID");
+			dt = null;
+		}
+	};
+	var datatableTest = new DataTableTestCase(datatableTemplate);
+	datatableTest.name = "DataTable Test Case";
+
+	function runTests(){
+		var datatablesuite = new TestSuite("DataTable Test Suite");
+		datatablesuite.add(datatableTest);
+
+		TestRunner.add(datatablesuite);
+		TestRunner.run();
+	}
+
+	YAHOO.util.Event.addListener(window, "load", function() {
+		var logger = new TestLogger();
+
+		YAHOO.util.Event.addListener("btnRun", "click", runTests);	
+		YAHOO.util.Dom.get("btnRun").disabled = false;
+	});
+})();
+
+</script>
+</body>
+</html>
