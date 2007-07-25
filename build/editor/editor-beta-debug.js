@@ -3313,7 +3313,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @config dompath
             * @description Toggle the display of the current Dom path below the editor
-            * @default true
+            * @default false
             * @type Boolean
             */            
             this.setAttributeConfig('dompath', {
