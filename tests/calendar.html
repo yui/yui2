@@ -735,6 +735,60 @@
 							break;
 					}
 				}
+			},
+
+			testBasicEvents : function() {
+
+				var e = YAHOO.widget.Calendar._EVENT_TYPES;
+				var actualEvts = [];
+				var expectedEvts;
+
+				if (this.isGroupCalTest) {
+					expectedEvts = [ e.BEFORE_SELECT, e.SELECT, 
+									 e.BEFORE_SELECT, e.SELECT, 
+									 e.BEFORE_DESELECT, e.DESELECT, 
+									 e.BEFORE_DESELECT, e.DESELECT,
+									 e.BEFORE_RENDER, e.RENDER, e.CHANGE_PAGE, 
+									 e.BEFORE_RENDER, e.RENDER, e.CHANGE_PAGE, 
+									 e.BEFORE_RENDER, e.RENDER, e.CLEAR, 
+									 e.BEFORE_RENDER, e.RENDER, e.CLEAR, 
+									 e.BEFORE_RENDER, e.RENDER, e.RESET, 
+									 e.BEFORE_RENDER, e.RENDER, e.RESET,
+									 e.BEFORE_RENDER, e.RENDER, 
+									 e.BEFORE_RENDER, e.RENDER ];
+				} else {
+					expectedEvts = [ e.BEFORE_SELECT, e.SELECT,
+									 e.BEFORE_DESELECT, e.DESELECT,
+									 e.BEFORE_RENDER, e.RENDER, e.CHANGE_PAGE,
+									 e.BEFORE_RENDER, e.RENDER, e.CLEAR,
+									 e.BEFORE_RENDER, e.RENDER, e.RESET,
+									 e.BEFORE_RENDER, e.RENDER ];
+				}
+
+				function monitor(type, args, obj) {
+					actualEvts.push(type);
+				}
+
+				var cal = this.createInstance({pagedate:"4/2007", multi_select:true});
+
+				cal.selectEvent.subscribe(monitor);
+				cal.beforeSelectEvent.subscribe(monitor);
+				cal.deselectEvent.subscribe(monitor);
+				cal.beforeDeselectEvent.subscribe(monitor);
+				cal.renderEvent.subscribe(monitor);
+				cal.beforeRenderEvent.subscribe(monitor);
+				cal.changePageEvent.subscribe(monitor);
+				cal.resetEvent.subscribe(monitor);
+				cal.clearEvent.subscribe(monitor);
+
+				cal.select("4/1/2007");   	// beforeSelect, select
+				cal.deselect("4/1/2007"); 	// beforeDeselect, deselect
+				cal.nextMonth(); 			// beforeRender, render, changePage (monitor is registered after default listener which calls cal.render())
+				cal.clear();				// beforeRender, render, clear (monitor is registered after default listener which calls cal.render())
+				cal.reset();				// beforeRender, render, reset (monitor is registered after default listener which calls cal.render())
+				cal.render();				// beforeRender, render
+
+				ArrayAssert.itemsAreEqual(expectedEvts, actualEvts, "Unexpected event order");
 			}
 		};
 
