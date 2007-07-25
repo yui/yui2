@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="../build/logger/logger-min.js"></script>
 	<script type="text/javascript" src="../build/yuitest/yuitest-beta-min.js"></script>
-	<script type="text/javascript" src="../build/calendar/calendar-min.js"></script>
+	<script type="text/javascript" src="../build/calendar/calendar-min.js"></script>	
 
 	<style type="text/css">
 		ol.testlist li {
@@ -37,16 +37,6 @@
 			UserAction = YAHOO.util.UserAction;
 
 		var	logger;
-
-		/**
-		 * Date Comparator
-		 */
-		var dateCmp = function(d1, d2) {
-			return ( d1 && d2 
-					   	&& d1.getFullYear() === d2.getFullYear() 
-						&& d1.getMonth() === d2.getMonth() 
-						&& d1.getDate() === d2.getDate() );
-		}
 
 		/**
 		 * Base Calendar Test Case Class
@@ -96,6 +86,13 @@
 				return (this.isGroupCalTest) ? cal.pages[0].cfg.getProperty(propertyName) : cal.cfg.getProperty(propertyName);
 			},
 
+			dateComparator : function(d1, d2) {
+				return ( d1 && d2 
+						   	&& d1.getFullYear() === d2.getFullYear() 
+							&& d1.getMonth() === d2.getMonth() 
+							&& d1.getDate() === d2.getDate() );
+			},
+
 			assertSelectedDates : function(cal, expected) {
 				var dates = cal.getSelectedDates();
 
@@ -103,10 +100,10 @@
 				if (expected.length > 0) {
 					ArrayAssert.isNotEmpty(dates, "getSelectedDates() shoud not be empty");	
 				}
-				ArrayAssert.itemsAreEquivalent(expected, dates, dateCmp, "getSelectedDates() does not contain the correct dates");
-				ArrayAssert.itemsAreEquivalent(expected, dates, dateCmp, "getSelectedDates() not returned in the correct order");
+				ArrayAssert.itemsAreEquivalent(expected, dates, this.dateComparator, "getSelectedDates() does not contain the correct dates");
+				ArrayAssert.itemsAreEquivalent(expected, dates, this.dateComparator, "getSelectedDates() not returned in the correct order");
 			},
-
+			
 			_testConstruction : function() {
 				// Calling this method "testConstruction" and using it directly causes it to be 
 				// executed last. Hence providing the impl and wrapping it in the actual templates
@@ -373,7 +370,7 @@
 
 			testBasicRender: function() {
 
-				// Is this really a unit test?? Isn't this better handled by a manual blackbox test?
+				// Is this really a unit test?? Nice-to-have but isn't this better handled by a manual blackbox test?
 
 				var cal = this.createInstance({pagedate:"4/2007"});
 
@@ -735,6 +732,8 @@
 							break;
 					}
 				}
+				
+				cal = null;				
 			},
 
 			testBasicEvents : function() {
@@ -784,11 +783,13 @@
 				cal.select("4/1/2007");   	// beforeSelect, select
 				cal.deselect("4/1/2007"); 	// beforeDeselect, deselect
 				cal.nextMonth(); 			// beforeRender, render, changePage (monitor is registered after default listener which calls cal.render())
-				cal.clear();				// beforeRender, render, clear (monitor is registered after default listener which calls cal.render())
-				cal.reset();				// beforeRender, render, reset (monitor is registered after default listener which calls cal.render())
+				cal.clear();				// beforeRender, render, clear 		(monitor is registered after default listener which calls cal.render())
+				cal.reset();				// beforeRender, render, reset 		(monitor is registered after default listener which calls cal.render())
 				cal.render();				// beforeRender, render
 
 				ArrayAssert.itemsAreEqual(expectedEvts, actualEvts, "Unexpected event order");
+				
+				cal = null;				
 			}
 		};
 
@@ -797,13 +798,13 @@
 		 */
 		var cfgTemplate = {
 
-			needsUI : false,
+			needsUI : true,
 
 			testConstruction: function() {
 				this._testConstruction();
 			},
 
-			testDateParsing : function() {
+			testDateParsingProps : function() {
 
 				// Case is mixed, to test config case-insensitivity
 
@@ -826,7 +827,117 @@
 				var testPgDt = new Date(1972, 1, 1);
 
 				DateAssert.datesAreEqual(testPgDt, this.getCfgProperty(cal, "pagedate"), "Page date not parsed/set correctly");
-				ArrayAssert.itemsAreEquivalent(testDt, cal.getSelectedDates(), dateCmp, "Page date not parsed/set correctly");
+				ArrayAssert.itemsAreEquivalent(testDt, cal.getSelectedDates(), this.dateComparator, "Page date not parsed/set correctly");
+				
+				cal = null;
+			},
+
+			testPopupProps : function() {
+
+				var title = "TestGeneratedTitle";
+
+				var opts = {
+					iFrAme:true,
+					cloSe:true,
+					tiTle:title
+				}
+
+				var cal = this.createInstance(opts);
+				var root = cal.oDomContainer;
+
+				var titleBox = Dom.getElementsByClassName("title", "div", root);
+
+				Assert.areEqual(1, (Dom.getElementsByClassName(cal.Style.CSS_CLOSE, "span", root)).length, "Close SPAN should be rendered");
+				Assert.areEqual(1, (root.getElementsByTagName("iframe")).length, "Iframe should be rendered");
+				Assert.areEqual(1, titleBox.length, "Title DIV should be rendered");
+				Assert.isTrue(titleBox[0].innerHTML.indexOf(title) != -1, "Title DIV does not have correct title string");
+
+				cal.cfg.setProperty("iFrAme", false);
+				cal.cfg.setProperty("CloSe", false);
+				cal.cfg.setProperty("tItlE", "");
+				cal.render();
+
+				Assert.areEqual(0, (Dom.getElementsByClassName(cal.Style.CSS_CLOSE, "span", root)).length, "Close SPAN should not be rendered");
+				Assert.areEqual(0, (Dom.getElementsByClassName("title", "div", root)).length, "Title DIV should not be rendered");
+				Assert.areEqual(0, (root.getElementsByTagName("iframe")).length, "Iframe should not be rendered");
+				
+				cal = null;
+			},
+
+			testVisualSwitchProps : function() {
+
+				var opts = {
+					Hide_blAnk_wEeks: true,
+					shoW_weekDays: false,
+					show_Week_Footer: true,
+					Show_wEEK_Header: true,
+					pageDate: "4/2007"
+				}
+
+				var cal = this.createInstance(opts);
+				var root = cal.oDomContainer;
+				var baseCount = (this.isGroupCalTest) ? 2 : 1;
+
+				Assert.areEqual(0, (Dom.getElementsByClassName(cal.Style.CSS_WEEKDAY_ROW, "tr", root)).length, "Weekday row should not be rendered");
+				Assert.areEqual(5*baseCount, (Dom.getElementsByClassName(cal.Style.CSS_ROW_HEADER, "th", root)).length, "Week headers should be rendered");
+				Assert.areEqual(5*baseCount, (Dom.getElementsByClassName(cal.Style.CSS_ROW_FOOTER, "th", root)).length, "Week footers should be rendered");
+
+				var tbodies = Dom.getElementsByClassName(cal.Style.CSS_BODY, "tbody", root);
+				Assert.areEqual(baseCount, tbodies.length, "Found incorrect number of CSS_BODY elements");
+
+				for (var i = 0; i < tbodies.length; i++) {
+					// April/May tbodies both have 5 rows, if blank weeks are disabled
+					Assert.areEqual(5, tbodies[i].getElementsByTagName("tr").length, "Blank weeks should not be rendered");
+				}
+
+				cal.cfg.setProperty("hide_blAnk_weeks", false);
+				cal.cfg.setProperty("show_Weekdays", true);
+				cal.cfg.setProperty("show_Week_footer", false);
+				cal.cfg.setProperty("show_Week_HEADER", false);
+				cal.render();
+				
+				Assert.areEqual(baseCount, (Dom.getElementsByClassName(cal.Style.CSS_WEEKDAY_ROW, "tr", root)).length, "Weekday rows should be rendered");
+				Assert.areEqual(0, (Dom.getElementsByClassName(cal.Style.CSS_ROW_HEADER, "th", root)).length, "Week headers should not be rendered");
+				Assert.areEqual(0, (Dom.getElementsByClassName(cal.Style.CSS_ROW_FOOTER, "th", root)).length, "Week footers should not be rendered");
+
+				tbodies = Dom.getElementsByClassName(cal.Style.CSS_BODY, "tbody", root);
+				Assert.areEqual(baseCount, tbodies.length, "Found incorrect number of CSS_BODY elements");
+
+				for (var i = 0; i < tbodies.length; i++) {
+					// April/May tbodies both have 6 rows, if blank weeks are enabled
+					Assert.areEqual(6, tbodies[i].getElementsByTagName("tr").length, "Blank weeks should be rendered");
+				}
+
+				cal = null;
+			},
+
+			testMinMaxProps : function(){
+
+				var opts = {
+					multi_selecT: true,
+					minDate: "4/10/2007",
+					maxDatE: "4/20/2007"
+				}
+
+				var selStr = "4/9/2007, 4/14/2007, 4/15/2007, 4/21/2007"
+
+				var cal = this.createInstance(opts);
+
+				cal.select(selStr);
+				cal.render();
+				this.assertSelectedDates(cal, [new Date(2007, 3, 14), new Date(2007, 3, 15)]);
+
+				cal.clear();
+
+				cal.cfg.setProperty("minDate", "");
+				cal.cfg.setProperty("mAxDate", "");
+				cal.render();
+
+				cal.select(selStr);
+				cal.render();
+				this.assertSelectedDates(cal, [new Date(2007, 3, 9), new Date(2007, 3, 14), new Date(2007, 3, 15), new Date(2007, 3, 21)]);
+
+				cal = null;
 			}
 		};
 
