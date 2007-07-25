@@ -100,12 +100,6 @@ if(YAHOO.util.Element) {
 else {
 }
 
-if(YAHOO.util.EventProvider) {
-    //YAHOO.lang.augment(YAHOO.widget.DataTable, YAHOO.util.EventProvider);
-}
-else {
-}
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Superclass methods
@@ -1869,7 +1863,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
 
     if(oSelf._oCellEditor.isActive &&
             YAHOO.util.Dom.isAncestor(oSelf._oCellEditor.container, elTarget)) {
-        oSelf.fireEvent("editorKeydownEvent", {event:e});
+        oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
     }
 };
 
@@ -3987,7 +3981,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
             }
 
             // TODO: what args to pass?
-            this.fireEvent("rowAddEvent", {newData:oData, trElId:newTrId});
+            this.fireEvent("rowAddEvent", {record:oRecord});
 
             // For log message
             nTrIndex = (YAHOO.lang.isValue(nTrIndex))? nTrIndex : "n/a";
@@ -4073,8 +4067,7 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
         this._updateTrEl(elRow, updatedRecord);
     }
 
-    //TODO: Event passes TR ID old data, new data.
-    this.fireEvent("rowUpdateEvent", {newData:oData, oldData:oldData, trElId:elRow.id});
+    this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
 };
 
 /**
@@ -5271,9 +5264,8 @@ YAHOO.widget.DataTable.prototype.unselectAllCells= function() {
     // Update UI
     this._unselectAllTdEls();
     
-    //TODO: send an array of [{el:el,record:record}]
-    //TODO: or convert this to an unselectRows method
-    //TODO: that takes an array of rows or unselects all if none given
+    //TODO: send data
+    //TODO: or fire individual cellUnselectEvent
     this.fireEvent("unselectAllCellsEvent");
 };
 
@@ -7212,21 +7204,19 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      * Fired when a row is added.
      *
      * @event rowAddEvent
-     * @param oArgs.newData {Object} Object literal of the added data.
-     * @param oArgs.trElId {String} The ID of the added TR element, if in view.
+     * @param oArgs.record {YAHOO.widget.Record} The added Record.
      */
 
     /**
      * Fired when a row is updated.
      *
      * @event rowUpdateEvent
-     * @param oArgs.newData {Object} Object literal of the new data.
+     * @param oArgs.record {YAHOO.widget.Record} The updated Record.
      * @param oArgs.oldData {Object} Object literal of the old data.
-     * @param oArgs.trElId {String} The ID of the updated TR element, if in view.
      */
 
     /**
-     * Fired when one or more TR elements are deleted.
+     * Fired when a row is deleted.
      *
      * @event rowDeleteEvent
      * @param oArgs.oldData {Object} Object literal of the deleted data.
@@ -7357,13 +7347,13 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      * @param oArgs.key {String} The key of the unhighlighted cell.
      */
 
-    /*TODO: delete and use cellUnselectEvent?
+    /*TODO: hide from doc and use cellUnselectEvent
      * Fired when all cell selections are cleared.
      *
      * @event unselectAllCellsEvent
      */
 
-    /**
+    /*TODO: implement
      * Fired when DataTable paginator is updated.
      *
      * @event paginatorUpdateEvent
@@ -7390,8 +7380,8 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      *
      * @event editorRevertEvent
      * @param oArgs.editor {Object} The Editor object literal.
-     * @param oArgs.newData {Object} New data value. //TODO
-     * @param oArgs.oldData {Object} Old data value. //TODO
+     * @param oArgs.newData {Object} New data value.
+     * @param oArgs.oldData {Object} Old data value.
      */
 
     /**
@@ -7408,8 +7398,6 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      *
      * @event editorCancelEvent
      * @param oArgs.editor {Object} The Editor object literal.
-     * @param oArgs.newData {Object} New data value. //TODO
-     * @param oArgs.oldData {Object} Old data value. //TODO
      */
 
     /**
@@ -7840,6 +7828,7 @@ YAHOO.widget.Column = function(oConfigs) {
  *
  * @property Column._nCount
  * @type Number
+ * @private
  * @static
  * @default 0
  */

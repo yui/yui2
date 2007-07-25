@@ -382,6 +382,7 @@ YAHOO.widget.Column = function(oConfigs) {
  *
  * @property Column._nCount
  * @type Number
+ * @private
  * @static
  * @default 0
  */

@@ -169,10 +169,10 @@ CONTROL and/or SHIFT keys to multi-select).
 * Refactored pagination code to be easier to implement, configure, and extend.
 * Accept an error boolean from DataSource in case of data error and show error
 message.
-* The CustomEvent rowDeleteEvent now sends argument rowIndexes as an Array of
-row index values.
-* Added selectRow(), rowSelectEvent, unselectRow(), rowUnselectEvent, and
-rowUpdateEvent.
+* The CustomEvent rowDeleteEvent is now only fired once per deleted row and
+its argument signature has been modified.
+* Added selectRow(), rowSelectEvent, unselectRow(), rowUnselectEvent, rowAddEvent,
+and rowUpdateEvent.
 * Added constants CLASS_TABLE, CLASS_EDITOR, CLASS_FIRST, and CLASS_LAST.
 * Added ColumnEditor class moveContainerTo().
 * Add IDs and class hooks to TABLE element and ColumnEditor's container DIV.
