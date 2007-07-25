@@ -11,7 +11,7 @@
 	<script type="text/javascript" src="../build/logger/logger-min.js"></script>
 	<script type="text/javascript" src="../build/yuitest/yuitest-beta-min.js"></script>
 	<script type="text/javascript" src="../build/calendar/calendar-min.js"></script>	
-
+	
 	<style type="text/css">
 		ol.testlist li {
 			margin: 10px 0 10px 0;
@@ -840,7 +840,7 @@
 					iFrAme:true,
 					cloSe:true,
 					tiTle:title
-				}
+				};
 
 				var cal = this.createInstance(opts);
 				var root = cal.oDomContainer;
@@ -872,7 +872,7 @@
 					show_Week_Footer: true,
 					Show_wEEK_Header: true,
 					pageDate: "4/2007"
-				}
+				};
 
 				var cal = this.createInstance(opts);
 				var root = cal.oDomContainer;
@@ -914,12 +914,11 @@
 			testMinMaxProps : function(){
 
 				var opts = {
-					multi_selecT: true,
 					minDate: "4/10/2007",
 					maxDatE: "4/20/2007"
-				}
+				};
 
-				var selStr = "4/9/2007, 4/14/2007, 4/15/2007, 4/21/2007"
+				var selStr = "4/9/2007, 4/14/2007, 4/15/2007, 4/21/2007";
 
 				var cal = this.createInstance(opts);
 
@@ -936,6 +935,47 @@
 				cal.select(selStr);
 				cal.render();
 				this.assertSelectedDates(cal, [new Date(2007, 3, 9), new Date(2007, 3, 14), new Date(2007, 3, 15), new Date(2007, 3, 21)]);
+
+				cal = null;
+			}, 
+			
+			testMultiSelectProp : function() {
+
+				// NOTE: As currently designed/implemented, MULTI_SELECT is a UI specific switch. 
+				// It is not used to constrain selection via any API state change methods.
+
+				var testDt = [new Date(2007, 4, 13), new Date(2007, 4, 15), new Date(2007, 4, 22)];
+
+				function clickOnCells(c) {
+					var page = Dom.getElementsByClassName("m5", "tbody", c.oDomContainer);
+
+					var cellOne = Dom.getElementsByClassName("d13", "td", page[0]);
+					var cellTwo = Dom.getElementsByClassName("d15", "td", page[0]);
+					var cellThree = Dom.getElementsByClassName("d22", "td", page[0]);
+	
+					UserAction.click(cellOne[0]);
+					UserAction.click(cellTwo[0]);
+					UserAction.click(cellThree[0]);
+				}
+
+				var opts = {
+					pagedate: "5/2007",
+					multI_sElect: true
+				};
+
+				var cal = this.createInstance(opts);
+
+				clickOnCells(cal);
+				this.assertSelectedDates(cal, testDt);
+
+				cal.clear();
+
+				cal.cfg.setProperty("pagedate", "5/2007");
+				cal.cfg.setProperty("multi_selecT", false);
+				cal.render();
+				
+				clickOnCells(cal);
+				this.assertSelectedDates(cal, [new Date(2007, 4, 22)]);
 
 				cal = null;
 			}
