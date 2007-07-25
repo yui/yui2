@@ -34,7 +34,6 @@
 			ArrayAssert = YAHOO.util.ArrayAssert,
 			DateAssert = YAHOO.util.DateAssert,
 			ObjectAssert = YAHOO.util.ObjectAssert,
-			TestCase = YAHOO.tool.TestCase,
 			UserAction = YAHOO.util.UserAction;
 
 		var	logger;
@@ -59,7 +58,7 @@
 			this.isGroupCalTest = (this.widgetclass === YAHOO.widget.CalendarGroup);
 		};
 
-		YAHOO.lang.extend(YAHOO.tests.CalendarTestCase, TestCase, {
+		YAHOO.lang.extend(YAHOO.tests.CalendarTestCase, YAHOO.tool.TestCase, {
 
 			widgetclass : YAHOO.widget.Calendar,
 			needsUI : true,
@@ -179,7 +178,7 @@
 				
 				cal = null;
 			},
-			
+
 			testSelectInsideRange: function() {
 				var cal = this.createInstance({multi_select:true, mindate:"4/10/2007", maxdate:"4/20/2007"});
 
@@ -210,6 +209,109 @@
 				cal.select(testDt);
 
 				this.assertSelectedDates(cal, []);
+
+				cal = null;
+			},
+
+			testModifyMonths : function() {
+
+				var cal = this.createInstance({pagedate:"11/2007"});
+				cal.setMonth(0);
+
+				var pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2007, 0, 1), pgDate, "setMonth to JAN failed");
+
+				cal.setMonth(6);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2007, 6, 1), pgDate, "setMonth to JUL failed");
+
+				cal.setMonth(11);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2007, 11, 1), pgDate, "setMonth to DEC failed");
+
+				cal.subtractMonths(5);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2007, 6, 1), pgDate, "subtractMonths(5) failed");
+
+				cal.subtractMonths(10);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2006, 8, 1), pgDate, "subtractMonths(10) with rollover failed");
+
+				cal.addMonths(2);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2006, 10, 1), pgDate, "addMonths(2) failed");
+
+				cal.addMonths(4);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2007, 2, 1), pgDate, "addMonths(4) failed");
+
+				cal = null;
+			},
+
+			testModifyYears : function() {
+
+				var cal = this.createInstance({pagedate:"11/2007"});
+				cal.setYear(2000);
+
+				var pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2000, 10, 1), pgDate, "setYear to 2000 failed");
+
+				cal.setYear(2020);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2020, 10, 1), pgDate, "setYear to 2020 failed");
+				
+				cal.subtractYears(5);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2015, 10, 1), pgDate, "subtractYears(5) failed");
+
+				cal.subtractYears(6);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2009, 10, 1), pgDate, "subtractYears(6) failed");
+
+				cal.addYears(2);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2011, 10, 1), pgDate, "addYears(2) failed");
+
+				cal.addYears(4);
+
+				pgDate = this.getCfgProperty(cal, "pagedate");
+
+				Assert.isInstanceOf(Date, pgDate, "Page date should be instanceof Date");
+				DateAssert.datesAreEqual(new Date(2015, 10, 1), pgDate, "addYears(4) failed");
 
 				cal = null;
 			},
@@ -255,6 +357,7 @@
 
 				cal = null;
 			}
+
 		};
 
 		/**
@@ -268,24 +371,60 @@
 				this._testConstruction();
 			},
 
-			testSelectCell: function() {
-				var cal = this.createInstance({pagedate:"4/2007", multi_select:true});
+			testBasicRender: function() {
 
-				var testDt = (this.isGroupCalTest) ? [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14), new Date(2007, 4, 10), new Date(2007, 4, 11), new Date(2007, 4, 12)]
-								: [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
+				// Is this really a unit test?? Isn't this better handled by a manual blackbox test?
 
-				cal.selectCell(11);
-				cal.selectCell(12);
-				cal.selectCell(13);
+				var cal = this.createInstance({pagedate:"4/2007"});
 
-				this.assertSelectedDates(cal, testDt);
+				var baseCount = (this.isGroupCalTest) ? 2 : 1;
+				var s = cal.Style;
+				var root = cal.oDomContainer;
+				var getByClass = Dom.getElementsByClassName;
+
+				Assert.areSame(this.container, root, "Container reference not set correctly");
+
+				Assert.areEqual(baseCount, getByClass(s.CSS_CALENDAR, "table", root).length, "CSS_CALENDAR error");
+				Assert.areEqual(baseCount, getByClass(s.CSS_BODY, "tbody", root).length, "CSS_BODY error");
+				Assert.areEqual(baseCount, getByClass(s.CSS_HEADER_TEXT, "th", root).length, "CSS_HEADER_TEXT error");
+				Assert.areEqual(baseCount, getByClass(s.CSS_HEADER, "div", root).length, "CSS_HEADER error");
+				Assert.areEqual(baseCount, getByClass(s.CSS_WEEKDAY_ROW, "tr", root).length, "CSS_WEEKDAY_ROW error");
+
+				// -1, +1 for 30/31 days in April/May.
+				Assert.areEqual((baseCount * 31) - 1, getByClass(s.CSS_CELL_SELECTABLE, "td", root).length, "CSS_CELL_SELECTABLE error");
+				Assert.areEqual(baseCount * 42, getByClass(s.CSS_CELL, "td", root).length, "CSS_CELL error");
+				Assert.areEqual((baseCount * 11) + 1, getByClass(s.CSS_CELL_OOM, "td", root).length, "CSS_CELL_OOM error");
+
+				Assert.areEqual(1, getByClass(s.CSS_NAV_LEFT, "a", root).length, "CSS_NAV_LEFT error");
+				Assert.areEqual(1, getByClass(s.CSS_NAV_RIGHT, "a", root).length, "CSS_NAV_RIGHT error");
+
+				if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
+					Assert.areEqual(1, (root.getElementsByTagName("iframe")).length, "Iframe not rendered by default for IE6");
+				} else {
+					Assert.areEqual(0, (root.getElementsByTagName("iframe")).length, "Iframe rendered by default for non IE6");
+				}
+
+				if (this.isGroupCalTest) {
+					Assert.areEqual(2, getByClass(s.CSS_CONTAINER, "div", root).length, "CSS_CONTAINER error");
+					Assert.areEqual(1, getByClass("m4", "tbody", root).length, "m4 error");
+					Assert.areEqual(1, getByClass("m5", "tbody", root).length, "m5 error");
+
+					var headers = getByClass(s.CSS_HEADER, "div", root);
+					Assert.isTrue(headers[0].innerHTML.indexOf("April 2007") != -1, "Month label rendering error");
+					Assert.isTrue(headers[1].innerHTML.indexOf("May 2007") != -1, "Month label rendering error");
+				} else {
+					Assert.areEqual(1, getByClass("m4", "tbody", root).length, "m4 error");
+
+					var headers = getByClass(s.CSS_HEADER, "div", root);
+					Assert.isTrue(headers[0].innerHTML.indexOf("April 2007") != -1, "Month label rendering error");
+				}
 
 				cal = null;
 			},
 
 			testClickSelect: function() {
 				var cal = this.createInstance({pagedate:"5/2007", multi_select:true});
-	
+
 				var testDt = [new Date(2007, 4, 13), new Date(2007, 4, 15), new Date(2007, 4, 22)];
 
 				var page = Dom.getElementsByClassName("m5", "tbody", cal.oDomContainer);
@@ -293,7 +432,7 @@
 				var cellOne = Dom.getElementsByClassName("d22", "td", page[0]);
 				var cellTwo = Dom.getElementsByClassName("d15", "td", page[0]);
 				var cellThree = Dom.getElementsByClassName("d13", "td", page[0]);
-	
+
 				UserAction.click(cellOne[0]);
 				UserAction.click(cellTwo[0]);
 				UserAction.click(cellThree[0]);
@@ -313,27 +452,36 @@
 				cal = null;
 			},
 
-			testSelectInsideRange: function() {
-				var expectedDt, cal;
+			testSelectCell: function() {
+				var cal = this.createInstance({pagedate:"4/2007", multi_select:true});
 
+				var testDt = (this.isGroupCalTest) ? [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14), new Date(2007, 4, 10), new Date(2007, 4, 11), new Date(2007, 4, 12)]
+								: [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
+
+				cal.selectCell(11);
+				cal.selectCell(12);
+				cal.selectCell(13);
+
+				// Assert stat 
+				this.assertSelectedDates(cal, testDt);
+
+				// Assert Rendering
 				if (this.isGroupCalTest) {
-					cal = this.createInstance({pagedate:"4/2007", multi_select:true, mindate:"4/10/2007", maxdate:"5/20/2007"});
-					expectedDt = [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14), new Date(2007, 4, 10), new Date(2007, 4, 11), new Date(2007, 4, 12)];
+					for (var i = 0; i < 2; i++) {
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[11], cal.Style.CSS_CELL_SELECTED), "Cells[11] should have selected style");
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[12], cal.Style.CSS_CELL_SELECTED), "Cells[12] should have selected style");
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[13], cal.Style.CSS_CELL_SELECTED), "Cells[13] should have selected style");
+					}
 				} else {
-					cal = this.createInstance({pagedate:"4/2007", multi_select:true, mindate:"4/10/2007", maxdate:"4/20/2007"});
-					expectedDt = [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
+					Assert.isTrue(Dom.hasClass(cal.cells[11], cal.Style.CSS_CELL_SELECTED), "Cells[11] should have selected style");
+					Assert.isTrue(Dom.hasClass(cal.cells[12], cal.Style.CSS_CELL_SELECTED), "Cells[12] should have selected style");
+					Assert.isTrue(Dom.hasClass(cal.cells[13], cal.Style.CSS_CELL_SELECTED), "Cells[13] should have selected style");
 				}
-
-				cal.selectCell(11); // 4/12, 5/10
-				cal.selectCell(12); // 4/13, 5/11
-				cal.selectCell(13); // 4/14, 5/12
- 
-				this.assertSelectedDates(cal, expectedDt);
 
 				cal = null;
 			},
 
-			testSelectOverlappingRange: function() {
+			testSelectCellInsideRange: function() {
 				var expectedDt, cal;
 
 				if (this.isGroupCalTest) {
@@ -344,19 +492,78 @@
 					expectedDt = [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
 				}
 
-				cal.selectCell(1);  // 4/2,  4/30
 				cal.selectCell(11); // 4/12, 5/10
 				cal.selectCell(12); // 4/13, 5/11
 				cal.selectCell(13); // 4/14, 5/12
+
+				// Assert State
+				this.assertSelectedDates(cal, expectedDt);
+
+				// Assert Rendering
+				if (this.isGroupCalTest) {
+					for (var i = 0; i < 2; i++) {
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[11], cal.Style.CSS_CELL_SELECTED), "Cells[11] should have selected style");
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[12], cal.Style.CSS_CELL_SELECTED), "Cells[12] should have selected style");
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[13], cal.Style.CSS_CELL_SELECTED), "Cells[13] should have selected style");
+					}
+				} else {
+					Assert.isTrue(Dom.hasClass(cal.cells[11], cal.Style.CSS_CELL_SELECTED), "Cells[11] should have selected style");
+					Assert.isTrue(Dom.hasClass(cal.cells[12], cal.Style.CSS_CELL_SELECTED), "Cells[12] should have selected style");
+					Assert.isTrue(Dom.hasClass(cal.cells[13], cal.Style.CSS_CELL_SELECTED), "Cells[13] should have selected style");
+				}
+
+				cal = null;
+			},
+
+			testSelectCellOverlappingRange: function() {
+				var expectedDt, cal;
+
+				if (this.isGroupCalTest) {
+					cal = this.createInstance({pagedate:"4/2007", multi_select:true, mindate:"4/10/2007", maxdate:"5/20/2007"});
+					expectedDt = [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14), new Date(2007, 4, 10), new Date(2007, 4, 11), new Date(2007, 4, 12)];
+				} else {
+					cal = this.createInstance({pagedate:"4/2007", multi_select:true, mindate:"4/10/2007", maxdate:"4/20/2007"});
+					expectedDt = [new Date(2007, 3, 12), new Date(2007, 3, 13), new Date(2007, 3, 14)];
+				}
+
+				// Valid
+				cal.selectCell(11); // 4/12, 5/10
+				cal.selectCell(12); // 4/13, 5/11
+				cal.selectCell(13); // 4/14, 5/12
+
+				// Invalid - either OOM or OOB
+				cal.selectCell(1);  // 4/2,  4/30
 				cal.selectCell(30); // 5/1,  5/29
 				cal.selectCell(38); // 5/9,  6/6
- 
+
+				// Assert State
 				this.assertSelectedDates(cal, expectedDt);
+				
+				// Assert Rendering
+				if (this.isGroupCalTest) {
+					for (var i = 0; i < 2; i++) {
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[11], cal.Style.CSS_CELL_SELECTED), "Cells[11] should have selected style");
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[12], cal.Style.CSS_CELL_SELECTED), "Cells[12] should have selected style");
+						Assert.isTrue(Dom.hasClass(cal.pages[i].cells[13], cal.Style.CSS_CELL_SELECTED), "Cells[13] should have selected style");
+
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[1], cal.Style.CSS_CELL_SELECTED), "Cells[1] should not have selected style");
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[30], cal.Style.CSS_CELL_SELECTED), "Cells[30] should not have selected style");
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[38], cal.Style.CSS_CELL_SELECTED), "Cells[38] should not have selected style");					
+					}
+				} else {
+					Assert.isTrue(Dom.hasClass(cal.cells[11], cal.Style.CSS_CELL_SELECTED), "Cells[11] should have selected style");
+					Assert.isTrue(Dom.hasClass(cal.cells[12], cal.Style.CSS_CELL_SELECTED), "Cells[12] should have selected style");
+					Assert.isTrue(Dom.hasClass(cal.cells[13], cal.Style.CSS_CELL_SELECTED), "Cells[13] should have selected style");
+					
+					Assert.isFalse(Dom.hasClass(cal.cells[1], cal.Style.CSS_CELL_SELECTED), "Cells[1] should not have selected style");
+					Assert.isFalse(Dom.hasClass(cal.cells[30], cal.Style.CSS_CELL_SELECTED), "Cells[30] should not have selected style");
+					Assert.isFalse(Dom.hasClass(cal.cells[38], cal.Style.CSS_CELL_SELECTED), "Cells[38] should not have selected style");					
+				}
 
 				cal = null;
 			},
-			
-			testSelectOutsideRange: function() {
+
+			testSelectCellOutsideRange: function() {
 				var expectedDt, cal;
 
 				if (this.isGroupCalTest) {
@@ -373,24 +580,42 @@
 				cal.selectCell(35); // 5/6, 6/3
 				cal.selectCell(38); // 5/9, 6/6
 
+				// Assert State
 				this.assertSelectedDates(cal, expectedDt);
+				
+				// Assert Rendering
+				if (this.isGroupCalTest) {
+					for (var i = 0; i < 2; i++) {
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[0], cal.Style.CSS_CELL_SELECTED), "Cells[0] should not have selected style");
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[1], cal.Style.CSS_CELL_SELECTED), "Cells[1] should not have selected style");
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[30], cal.Style.CSS_CELL_SELECTED), "Cells[30] should not have selected style");
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[35], cal.Style.CSS_CELL_SELECTED), "Cells[35] should not have selected style");
+						Assert.isFalse(Dom.hasClass(cal.pages[i].cells[38], cal.Style.CSS_CELL_SELECTED), "Cells[38] should not have selected style");
+					}
+				} else {
+					Assert.isFalse(Dom.hasClass(cal.cells[0], cal.Style.CSS_CELL_SELECTED), "Cells[0] should not have selected style");
+					Assert.isFalse(Dom.hasClass(cal.cells[1], cal.Style.CSS_CELL_SELECTED), "Cells[1] should not have selected style");
+					Assert.isFalse(Dom.hasClass(cal.cells[30], cal.Style.CSS_CELL_SELECTED), "Cells[30] should not have selected style");
+					Assert.isFalse(Dom.hasClass(cal.cells[35], cal.Style.CSS_CELL_SELECTED), "Cells[35] should not have selected style");
+					Assert.isFalse(Dom.hasClass(cal.cells[38], cal.Style.CSS_CELL_SELECTED), "Cells[38] should not have selected style");
+				}
 
 				cal = null;
 			},
-	
+
 			testClickPageNav: function() {
 				var cal = this.createInstance({pagedate:"5/2007"});
-	
+
 				var prevPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_LEFT, "a", cal.oDomContainer);
 				UserAction.mousedown(prevPage[0]);
-	
+
 				DateAssert.datesAreEqual(new Date(2007, 3, 1), this.getCfgProperty(cal, "pagedate"), "Click on previous page not correct");
-	
+
 				var nextPage = Dom.getElementsByClassName(cal.Style.CSS_NAV_RIGHT, "a", cal.oDomContainer);
 				UserAction.mousedown(nextPage[0]);
-	
+
 				DateAssert.datesAreEqual(new Date(2007, 4, 1), this.getCfgProperty(cal, "pagedate"), "Click on next page not correct");
-				
+
 				cal = null;
 			},
 
@@ -494,14 +719,14 @@
 					cal.render();
 
 					var customDays = Dom.getElementsByClassName(testClass, "td", Dom.getElementsByClassName("m"+i, "tbody", this.container)[0]);
-					
+
 					switch(i) {
 						case 1:
 							Assert.areEqual(31, customDays.length, "Renderer applied to incorrectly for Jan");
-							break;						
+							break;
 						case 4:
-							Assert.areEqual(30, customDays.length, "Renderer applied to incorrectly for Jan");
-							break;						
+							Assert.areEqual(30, customDays.length, "Renderer applied to incorrectly for Apr");
+							break;
 						case 12:
 							Assert.areEqual(31, customDays.length, "Renderer applied to incorrectly for Dec");
 							break;
@@ -608,7 +833,6 @@
 		});
 	})();
 	</script>
-
 </head>
 <body>
 	<h1>Calendar Tests</h1>
@@ -636,8 +860,7 @@
 			</li>
 		</ol>
 	</form>
-	
-	<p><input type="button" value="Run Tests" id="btnRun" /> <em>(runs all if none selected)</em></p>
 
+	<p><input type="button" value="Run Tests" id="btnRun" /> <em>(runs all if none selected)</em></p>
 </body>
 </html>
