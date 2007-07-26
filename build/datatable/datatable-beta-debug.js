@@ -3815,7 +3815,7 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
  * For the given identifier, returns the associated Column instance.
  *
  * @method getColumn
- * @param row {HTMLElement | String | Number} ColumnSet.keys position index, DOM
+ * @param column {HTMLElement | String | Number} ColumnSet.keys position index, DOM
  * reference or ID string to an element within the DataTable page.
  * @return {YAHOO.widget.Column} Column instance.
  */
@@ -3838,7 +3838,7 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
         }
     }
     
-    // By Record index
+    // By Column index
     if(YAHOO.lang.isNumber(nColumnIndex)) {
         return this._oColumnSet.getColumn(nColumnIndex);
     }
@@ -7954,8 +7954,8 @@ YAHOO.widget.Column.prototype._sName = null;
 
 
 /**
- * Unique number assigned at instantiation, indicates original order within
- * ColumnSet.
+ * Unique number assigned at instantiation, indicates global order across all
+ * ColumnSets.
  *
  * @property _nId
  * @type Number

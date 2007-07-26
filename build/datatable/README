@@ -115,6 +115,17 @@ the DataTable method showCellEditor().
 - All static formatter functions have been moved from the Column class to the
 DataTable class.
 
+* The DataTable method getColumn() has a known issue where instead of accepting
+a Column's key index value, the method accepts a Column's ID value. Until this
+issue is fixed, implementers can use the following workaround:
+
+// Instead of this:
+// var oColumn = myDataTable.getColumn(0);
+
+// Use this:
+var oColumn = myDataTable.getColumn(myDataTable.getFirstTrEl().cells[0].yuiColumnId);
+
+
 
 
 
