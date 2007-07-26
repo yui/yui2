@@ -101,9 +101,8 @@
 					ArrayAssert.isNotEmpty(dates, "getSelectedDates() shoud not be empty");	
 				}
 				ArrayAssert.itemsAreEquivalent(expected, dates, this.dateComparator, "getSelectedDates() does not contain the correct dates");
-				ArrayAssert.itemsAreEquivalent(expected, dates, this.dateComparator, "getSelectedDates() not returned in the correct order");
 			},
-			
+
 			_testConstruction : function() {
 				// Calling this method "testConstruction" and using it directly causes it to be 
 				// executed last. Hence providing the impl and wrapping it in the actual templates
@@ -131,7 +130,7 @@
 
 				var cal = this.createInstance();
 
-				var testDtStr = "04/12/2007"; // month index is 0 based
+				var testDtStr = "04/12/2007";
 				var testDt = [new Date(2007, 3, 12)];
 
 				cal.select(testDtStr);
@@ -143,7 +142,6 @@
 			testSelectStringArray: function() {
 				var cal = this.createInstance({multi_select:true});
 
-				// Ascending order, same as the output of getSelectedDates()
 				var testDtStr = "04/12/2007, 05/02/2008, 02/16/2006-02/18/2006";
 				var testDt = [new Date(2006, 1, 16), new Date(2006, 1, 17), 
 									new Date(2006, 1, 18), new Date(2007, 3, 12),new Date(2008, 4, 2)];
