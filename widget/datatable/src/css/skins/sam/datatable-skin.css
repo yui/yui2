@@ -102,20 +102,20 @@
 }
 
 /* striping */
-.yui-skin-sam tr.yui-dt-even {background-color:#FFF;} /* white */
-.yui-skin-sam tr.yui-dt-odd {background-color:#EDF5FF;} /* light blue */
+.yui-skin-sam tr.yui-dt-even { background-color:#FFF; } /* white */
+.yui-skin-sam tr.yui-dt-odd { background-color:#EDF5FF; } /* light blue */
 .yui-skin-sam tr.yui-dt-even td.yui-dt-asc,
-.yui-skin-sam tr.yui-dt-even td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
+.yui-skin-sam tr.yui-dt-even td.yui-dt-desc { background-color:#EDF5FF; } /* light blue sorted */
 .yui-skin-sam tr.yui-dt-odd td.yui-dt-asc,
-.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc {background-color:#DBEAFF;} /* dark blue sorted */
+.yui-skin-sam tr.yui-dt-odd td.yui-dt-desc { background-color:#DBEAFF; } /* dark blue sorted */
 
 /* disable striping in list mode */
-.yui-skin-sam .yui-dt-list tr.yui-dt-even {background-color:#FFF;} /* white */
-.yui-skin-sam .yui-dt-list tr.yui-dt-odd {background-color:#FFF;} /* white */
+.yui-skin-sam .yui-dt-list tr.yui-dt-even { background-color:#FFF; } /* white */
+.yui-skin-sam .yui-dt-list tr.yui-dt-odd { background-color:#FFF; } /* white */
 .yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-asc,
-.yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
+.yui-skin-sam .yui-dt-list tr.yui-dt-even td.yui-dt-desc { background-color:#EDF5FF; } /* light blue sorted */
 .yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-asc,
-.yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-desc {background-color:#EDF5FF;} /* light blue sorted */
+.yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-desc { background-color:#EDF5FF; } /* light blue sorted */
 
 /* highlighting */
 .yui-skin-sam tr.yui-dt-highlighted,
