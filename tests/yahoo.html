@@ -29,7 +29,7 @@ var YAHOO_config = {
 
 </head>
 <body>
-<iframe name="xframe" id="xframe" src="xframe.html"></iframe>
+<iframe name="xframe" id="xframe" src="assets/xframe.html"></iframe>
 <h1>YAHOO test page</h1>
 <p>This page contains tests being run by yuitest, the results of which<br />
 are output in the logger to the right. <br />View the source to see how it's done.</p>
@@ -63,7 +63,7 @@ are output in the logger to the right. <br />View the source to see how it's don
         },
 
         test_config: function() {
-            ArrayAssert.itemsAreEqual(g_modules, ["yahoo", "dom", "event", "logger"]);
+            ArrayAssert.itemsAreEqual(["yahoo", "dom", "event", "logger", "yuitest"], g_modules);
         },
 
         test_create_namespace: function () {
@@ -189,14 +189,14 @@ are output in the logger to the right. <br />View the source to see how it's don
             Assert.areEqual(YAHOO.lang.trim({}), "[object Object]");
         },
 
-        test_hasValue: function() {
-            Assert.isFalse(YAHOO.lang.hasValue(null), "null should be false");
-            Assert.isFalse(YAHOO.lang.hasValue(undefined), "undefined should be false");
-            Assert.isFalse(YAHOO.lang.hasValue(parseInt("adsf", 10)), "NaN should be false");
-            Assert.isFalse(YAHOO.lang.hasValue(1/0), "undefined numbers and infinity should be false");
-            Assert.isTrue(YAHOO.lang.hasValue(new Date()), "date should be true");
-            Assert.isTrue(YAHOO.lang.hasValue(""), "Empty string should be true");
-            Assert.isTrue(YAHOO.lang.hasValue(false), "false should be true");
+        test_isValue: function() {
+            Assert.isFalse(YAHOO.lang.isValue(null), "null should be false");
+            Assert.isFalse(YAHOO.lang.isValue(undefined), "undefined should be false");
+            Assert.isFalse(YAHOO.lang.isValue(parseInt("adsf", 10)), "NaN should be false");
+            Assert.isFalse(YAHOO.lang.isValue(1/0), "undefined numbers and infinity should be false");
+            Assert.isTrue(YAHOO.lang.isValue(new Date()), "date should be true");
+            Assert.isTrue(YAHOO.lang.isValue(""), "Empty string should be true");
+            Assert.isTrue(YAHOO.lang.isValue(false), "false should be true");
         },
 
         test_merge: function() {
@@ -206,7 +206,7 @@ are output in the logger to the right. <br />View the source to see how it's don
                 o4 = { one: "one", two: "twofromthree", three: "three" }, 
                 o123 = YAHOO.lang.merge(o1, o2, o3);
 
-            ObjectAssert.keysAreEqual(o123, o4);
+            ObjectAssert.propertiesAreEqual(o123, o4);
             Assert.areEqual(o123.two, o4.two);
         },
 
