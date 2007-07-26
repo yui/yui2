@@ -5621,10 +5621,11 @@ YAHOO.widget.DataTable.prototype.resetCellEditor = function() {
 YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
     //TODO: Copy the editor's values to pass to the event
     if(this._oCellEditor.isActive) {
+        var newData = this._oCellEditor.value;
+        var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
+
         // Validate input data
         if(this._oCellEditor.validator) {
-            var newData = this._oCellEditor.value;
-            var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
             this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData);
             if(this._oCellEditor.value === null ) {
                 this.resetCellEditor();
