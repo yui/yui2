@@ -300,10 +300,12 @@
         }
 
         p_oElement.removeAttribute("id");
-    
-        setAttributeFromDOMAttribute("tabindex");
-        setAttributeFromDOMAttribute("accesskey");
-    
+
+        if ( !("tabindex" in p_oAttributes) ) {
+
+            p_oAttributes.tabindex = p_oElement.tabIndex;
+
+        }
     
         if ( !("label" in p_oAttributes) ) {
     
@@ -926,21 +928,7 @@
             }
         
         },
-        
-        
-        /**
-        * @method _setAccessKey
-        * @description Sets the value of the button's "accesskey" attribute.
-        * @protected
-        * @param {String} p_sAccessKey String indicating the value for 
-        * the button's "accesskey" attribute.
-        */
-        _setAccessKey: function (p_sAccessKey) {
-        
-            this._button.accessKey = p_sAccessKey;
-        
-        },
-        
+
         
         /**
         * @method _setHref
