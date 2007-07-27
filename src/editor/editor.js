@@ -656,6 +656,10 @@ var Dom = YAHOO.util.Dom,
             if (!elm || !elm.tagName) {
                 elm = doc.body;
             }
+            if (elm && elm.tagName && elm.tagName.toLowerCase() == 'html') {
+                //Safari sometimes gives us the HTML node back..
+                elm = doc.body;
+            }
             
             return elm;
         },
@@ -1997,6 +2001,7 @@ var Dom = YAHOO.util.Dom,
                     height = 75,
                     width = 75,
                     padding = 0,
+                    blankimage = false,
                     win = new YAHOO.widget.EditorWindow('insertimage', {
                         width: '415px'
                     });
@@ -2009,6 +2014,7 @@ var Dom = YAHOO.util.Dom,
                         src = el.getAttribute('src', 2);
                         if (src.indexOf(this.get('blankimage')) != -1) {
                             src = this.STR_IMAGE_HERE;
+                            blankimage = true;
                         }
                     }
                     if (el.getAttribute('alt', 2)) {
@@ -2134,15 +2140,19 @@ var Dom = YAHOO.util.Dom,
                 Event.onAvailable('insertimage_width', function() {
                     Event.on('insertimage_width', 'blur', function() {
                         var value = parseInt(Dom.get('insertimage_width').value);
-                        el.style.width = value + 'px';
-                        this.moveWindow();
+                        if (value > 5) {
+                            el.style.width = value + 'px';
+                            this.moveWindow();
+                        }
                     }, this, true);
                 }, this, true);
                 Event.onAvailable('insertimage_height', function() {
                     Event.on('insertimage_height', 'blur', function() {
                         var value = parseInt(Dom.get('insertimage_height').value);
-                        el.style.height = value + 'px';
-                        this.moveWindow();
+                        if (value > 5) {
+                            el.style.height = value + 'px';
+                            this.moveWindow();
+                        }
                     }, this, true);
                 }, this, true);
 
@@ -2252,6 +2262,9 @@ var Dom = YAHOO.util.Dom,
                 Event.onAvailable('insertimage_url', function() {
                     window.setTimeout(function() {
                         YAHOO.util.Dom.get('insertimage_url').focus();
+                        if (blankimage) {
+                            YAHOO.util.Dom.get('insertimage_url').select();
+                        }
                     }, 50);
                     
                     if (this.get('localFileWarning')) {
@@ -2273,7 +2286,21 @@ var Dom = YAHOO.util.Dom,
                                 
                                 if (url && url.value) {
                                     this.currentElement[0].setAttribute('src', url.value);
-                                    this.moveWindow();
+                                    var img = new Image();
+                                    var self = this;
+                                    window.setTimeout(function() {
+                                        YAHOO.util.Dom.get('insertimage_height').value = img.height;
+                                        YAHOO.util.Dom.get('insertimage_width').value = img.width;
+                                        if (!self.currentElement[0]._height) {
+                                            self.currentElement[0]._height = img.height;
+                                        }
+                                        if (!self.currentElement[0]._width) {
+                                            self.currentElement[0]._width = img.width;
+                                        }
+                                        self.moveWindow();
+                                    }, 200);
+
+                                    img.src = url.value;
                                 }
                             }
                         }, this, true);
@@ -2602,7 +2629,7 @@ var Dom = YAHOO.util.Dom,
                     
                     var el = this._getSelectedElement();
 
-                    if (el.tagName && (el.tagName.toLowerCase() == 'img')) {
+                    if (el && el.tagName && (el.tagName.toLowerCase() == 'img')) {
                         this.currentElement[0] = el;
                         exec = false;
                     } else {
@@ -3303,8 +3330,13 @@ var Dom = YAHOO.util.Dom,
                 align = 'right';
             }
             
-            var xDiff = (newXY[0] - orgXY[0]);
-            var yDiff = (newXY[1] - orgXY[1]);
+            try {
+                var xDiff = (newXY[0] - orgXY[0]);
+                var yDiff = (newXY[1] - orgXY[1]);
+            } catch (e) {
+                var xDiff = 0;
+                var yDiff = 0;
+            }
             
             //Convert negative numbers to positive so we can get the difference in distance
             xDiff = ((xDiff < 0) ? (xDiff * -1) : xDiff);
