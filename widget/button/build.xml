@@ -59,6 +59,7 @@
 		<copy file="${component.srcdir}/img/menu-button-arrow-disabled.png" tofile="${component.srcdir}/temp/skins/sam/menu-button-arrow-disabled.png" />
 		<copy file="${component.srcdir}/img/menu-button-arrow.png" tofile="${component.srcdir}/temp/skins/sam/menu-button-arrow.png" />
 		<copy file="${component.srcdir}/img/split-button-arrow-active.png" tofile="${component.srcdir}/temp/skins/sam/split-button-arrow-active.png" />
+		<copy file="${component.srcdir}/img/split-button-arrow-hover.png" tofile="${component.srcdir}/temp/skins/sam/split-button-arrow-hover.png" />
 		<copy file="${component.srcdir}/img/split-button-arrow-disabled.png" tofile="${component.srcdir}/temp/skins/sam/split-button-arrow-disabled.png" />
 		<copy file="${component.srcdir}/img/split-button-arrow-focus.png" tofile="${component.srcdir}/temp/skins/sam/split-button-arrow-focus.png" />
 		<copy file="${component.srcdir}/img/split-button-arrow.png" tofile="${component.srcdir}/temp/skins/sam/split-button-arrow.png" />
