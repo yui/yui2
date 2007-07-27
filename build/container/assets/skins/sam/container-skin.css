@@ -4,16 +4,24 @@
 
     background-color: #000;
     opacity: .25;
-    filter: alpha(opacity=25);  /* Set opacity in IE */
+    *filter: alpha(opacity=25);  /* Set opacity in IE */
 
 }
 
 
 /* Panel styles */
 
+.yui-skin-sam .yui-panel-container {
+
+    padding: 0 1px;
+    *padding: 2px 3px;
+
+}
+
 .yui-skin-sam .yui-panel {
 
 	position: relative;
+	*zoom: 1;
 	left: 0;
 	top: 0;
     border-style: solid;
@@ -26,20 +34,20 @@
 .yui-skin-sam .yui-panel .hd, 
 .yui-skin-sam .yui-panel .bd, 
 .yui-skin-sam .yui-panel .ft {
-    
+
     /*
         Use of "zoom: 1" is to trigger "haslayout" for IE to get 
-        margins working.
+        negative margins working.
     */
     
-    zoom: 1;
+    *zoom: 1;
 
     /*
-        Use of "_position: relative" is necessary to get negative margins 
-        working in IE 6 (Standards and Quirks Mode) and IE 7 Quirks Mode.
+        Use of "position: relative" is necessary to get negative margins 
+        working in IE.
     */
 
-    _position: relative; 
+    *position: relative; 
 
     border-style: solid;
     border-width: 0 1px;
@@ -119,26 +127,41 @@
 
 }
 
+.yui-skin-sam .yui-panel-container.shadow {
+
+    /* IE 7 Quirks Mode and IE 6 Standards Mode and Quirks mode */
+    _padding: 2px 5px 0 3px; 
+
+}
+
 .yui-skin-sam .yui-panel-container.shadow .underlay {
 
 	position: absolute;
+
     top: 2px;
-    right: -4px;
-    left: -4px;
+    right: -3px;
     bottom: -3px;
+    left: -3px;
+
+    /* IE 7 Standards Mode */
+
+    *top: 3px;
+    *left: -1px;
+    *right: -1px;
+    *bottom: -1px;
+
+    /* IE 7 Quirks Mode and IE 6 Standards Mode and Quirks mode */
+
+    _top: 0;
+    _right: 0;
+    _bottom: 0;
+    _left: 0;
+    _margin-top: 3px;
+    _margin-left: -1px;
+
     background-color: #000;
     opacity: .12;
-    filter: alpha(opacity=12);  /* Set opacity in IE */
-
-    /*
-   
-    Please note: For the shadow to work in IE 6 (Standards and Quirks Mode) 
-    and IE 7 Quirks Mode the underlay element's height and width are set to the 
-    offsetHeight and offsetWidth of the Panel's root element.
-
-    */
-
-    *padding: 0 8px 1px 0;
+    *filter: alpha(opacity=12);  /* Set opacity in IE */
 
 }
 
@@ -246,6 +269,12 @@
     border-width: 1px;
     border-style: solid;
     background-color: #FFEE69;
+
+}
+
+.yui-skin-sam .yui-tt.show-scrollbars .bd {
+
+    overflow: auto;
 
 }
 
