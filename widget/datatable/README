@@ -52,6 +52,11 @@ in favor of showCellEditor(), and the Custom Event "cellEditEvent" is now
 implementation details. Please refer to the API reference for full details on
 property and method names and argument signatures.
 
+* There is a known issue where the built-in date editor throws a JavaScript
+exception when encountering a null or non-Date value. Implementers using the built-in
+date editor should validate for type Date and avoid null values in these data
+fields.
+
 * The underlying sort architecture, including YAHOO.util.Sort, has been modified
 to accept a single sort function rather than separate functions for ascending
 and descending sorts.

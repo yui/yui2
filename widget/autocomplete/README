@@ -24,6 +24,9 @@ are advised not to set the queryDelay value too low.
 
 * The properties alwaysShowContainer and useShadow should not be enabled together.
 
+* There is a known issue in Firefox where the native browser autocomplete
+attribute cannot be disabled programmatically on input boxes that are in use.
+
 
 
 
