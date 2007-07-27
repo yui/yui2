@@ -23,133 +23,251 @@
 
 (function() {
 
-	var	Dom=YAHOO.util.Dom,
-		Assert=YAHOO.util.Assert,
-		ObjectAssert=YAHOO.util.ObjectAssert,
-		ArrayAssert=YAHOO.util.ArrayAssert,
-		DateAssert=YAHOO.util.DateAssert,
-		UserAction=YAHOO.util.UserAction,
-		TestCase = YAHOO.tool.TestCase,
-		TestLogger = YAHOO.tool.TestLogger,
-		TestRunner = YAHOO.tool.TestRunner,
-		TestSuite = YAHOO.tool.TestSuite,
+    var    Dom=YAHOO.util.Dom,
+        Assert=YAHOO.util.Assert,
+        ObjectAssert=YAHOO.util.ObjectAssert,
+        ArrayAssert=YAHOO.util.ArrayAssert,
+        DateAssert=YAHOO.util.DateAssert,
+        UserAction=YAHOO.util.UserAction,
+        TestCase = YAHOO.tool.TestCase,
+        TestLogger = YAHOO.tool.TestLogger,
+        TestRunner = YAHOO.tool.TestRunner,
+        TestSuite = YAHOO.tool.TestSuite,
 
-		DataSource = YAHOO.util.DataSource,
-        DataTable = YAHOO.widget.DataTable;
-		
-	function DataTableTestCase(template) {
-		DataTableTestCase.superclass.constructor.call(this, template);
-		this.count = -1;
-		this.container = null;
-		this.columns = null;
-		this.datasource = null;
-	};
-	YAHOO.lang.extend(DataTableTestCase, TestCase);
+        DataSource = YAHOO.util.DataSource,
+        DataTable = YAHOO.widget.DataTable,
+        ColumnSet = YAHOO.widget.ColumnSet,
+        RecordSet = YAHOO.widget.RecordSet;
 
-	DataTableTestCase.prototype.setUp = function() {
-		this.container = document.createElement("div");
-		this.container.id = "testDTContainer";
-		document.body.appendChild(this.container);
-		
-		this.columns = [{key:"a"},{key:"b"},{key:"c"}];
+    function DataTableTestCase(template) {
+        DataTableTestCase.superclass.constructor.call(this, template);
+        this.count = -1;
+    };
+    YAHOO.lang.extend(DataTableTestCase, TestCase);
 
-        this.datasource = new YAHOO.util.DataSource([{a:"0a",b:"0b",c:"0c"},{a:"1a",b:"1b",c:"1c"},{a:"2a",b:"2b",c:"2c"},{a:"3a",b:"3b",c:"3c"}]);
-        this.datasource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
-        this.datasource.responseSchema = {
-            fields:["a","b","c"]
-        }
-	};
+    DataTableTestCase.prototype.setUp = function() {
+        this.container = document.createElement("div");
+        this.container.id = "testDTContainer";
+        document.body.appendChild(this.container);
+        
+        this.datasource = new YAHOO.util.DataSource(this.data, this.dsConfig);
+    };
 
-	DataTableTestCase.prototype.tearDown = function() {
-		if (this.container != null) {
+    DataTableTestCase.prototype.tearDown = function() {
+        if (this.container != null) {
             YAHOO.util.Event.purgeElement(this.container, true);
-			document.body.removeChild(this.container);
-		}
-
-        this.columns = null;
+            document.body.removeChild(this.container);
+        }
+        
         this.datasource = null;
-	};
-		
-	DataTableTestCase.prototype.createInstance = function(oConfig) {
-		var dt = new DataTable(this.container, this.columns, this.datasource, oConfig);
-		this.count++;
-		return dt;
-	};
-	
-	var datatableTemplate = {
-		testConstruction: function() {
-    		var dt = this.createInstance();
-    		Assert.isObject(dt, "Failed to create basic instance");
-    		Assert.isInstanceOf(DataTable, dt, "Failed to create basic instance");
-    		dt = null;
-		},
+    };
 
-		testGetTableEl: function() {
-			var dt = this.createInstance();
-			var elTable = dt.getTableEl();
-			Assert.areSame("table", elTable.tagName.toLowerCase(), "Expected a TABLE element");
-			Assert.areSame("yui-dt"+this.count+"-table", elTable.id, "Failed to generate correct ID");
-			dt = null;
-		},
+    DataTableTestCase.prototype.createInstance = function(oConfig) {
+        var dt = new DataTable(this.container, this.columns, this.datasource, oConfig);
+        this.count++;
+        return dt;
+    };
 
-		testGetMsgTbodyEl: function() {
-			var dt = this.createInstance();
-			var elTable = dt.getTableEl();
-			var elTbody = dt.getMsgTbodyEl();
-			Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
-			//TODO: generate ID for tbody?
-			//Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
-			Assert.areSame(elTable.tBodies[0], elTbody, "Expected to get first TBODY element of the TABLE");
-			dt = null;
-		},
+    var dtBaseTemplate = {
+        name: "DataTable Base Test Case",
+        
+        data: [
+            {a:"0a",b:"0b",c:"0c"},
+            {a:"1a",b:"1b",c:"1c"},
+            {a:"2a",b:"2b",c:"2c"},
+            {a:"3a",b:"3b",c:"3c"}
+        ],
+            
+        dsConfig: {
+            responseType:YAHOO.util.DataSource.TYPE_JSARRAY,
+            responseSchema:{fields:["a","b","c"]}
+        },
 
-		testGetTbodyEl: function() {
-			var dt = this.createInstance();
-			var elTable = dt.getTableEl();
-			var elTbody = dt.getTbodyEl();
-			Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
-			//TODO: generate ID for tbody?
-			//Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
-			Assert.areSame(elTable.tBodies[1], elTbody, "Expected to get second TBODY element of the TABLE");
-			dt = null;
-		},
+        columns: [{key:"a"},{key:"b"},{key:"c"}],
 
-		testGetFirstTrEl: function() {
-			var dt = this.createInstance();
-			var elTr = dt.getFirstTrEl();
-			Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
-			Assert.areSame("yui-dt"+this.count+"-bdrow0", elTr.id, "Failed to generate correct ID");
-			dt = null;
-		},
-		
-		testGetLastTrEl: function() {
-			var dt = this.createInstance();
-			var elTbody = dt.getTbodyEl();
-			var elTr = dt.getLastTrEl();
-			Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
-			var i = elTbody.rows.length-1;
-			Assert.areSame(elTbody.rows[i], elTr, "Failed to get last TR element");
+        testConstruction: function() {
+            var dt = this.createInstance();
+            Assert.isObject(dt, "Failed to create DataTable instance");
+            Assert.isInstanceOf(DataTable, dt, "Failed to create DataTable instance");
+            Assert.isInstanceOf(ColumnSet, dt.getColumnSet(), "Failed to create ColumnSet instance");
+            Assert.isInstanceOf(RecordSet, dt.getRecordSet(), "Failed to create RecordSet instance");
+            Assert.areSame(this.data.length, dt.getRecordSet().getLength(), "Unexpected RecordSet length");
+            dt = null;
+        }
+    };
+    
+    var dtDomAccessorsTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable DOM Accessors Test Case",
+
+        testGetTableEl: function() {
+            var dt = this.createInstance();
+            var elTable = dt.getTableEl();
+            Assert.areSame("table", elTable.tagName.toLowerCase(), "Expected a TABLE element");
+            Assert.areSame("yui-dt"+this.count+"-table", elTable.id, "Failed to generate correct ID");
+            dt = null;
+        },
+
+        testGetMsgTbodyEl: function() {
+            var dt = this.createInstance();
+            var elTable = dt.getTableEl();
+            var elTbody = dt.getMsgTbodyEl();
+            Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
+            //TODO: generate ID for tbody?
+            //Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
+            Assert.areSame(elTable.tBodies[0], elTbody, "Expected to get first TBODY element of the TABLE");
+            dt = null;
+        },
+
+        testGetTbodyEl: function() {
+            var dt = this.createInstance();
+            var elTable = dt.getTableEl();
+            var elTbody = dt.getTbodyEl();
+            Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
+            //TODO: generate ID for tbody?
+            //Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
+            Assert.areSame(elTable.tBodies[1], elTbody, "Expected to get second TBODY element of the TABLE");
+            dt = null;
+        },
+
+        testGetFirstTrEl: function() {
+            var dt = this.createInstance();
+            var elTr = dt.getFirstTrEl();
+            Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
+            Assert.areSame("yui-dt"+this.count+"-bdrow0", elTr.id, "Failed to generate correct ID");
+            dt = null;
+        },
+
+        testGetLastTrEl: function() {
+            var dt = this.createInstance();
+            var elTbody = dt.getTbodyEl();
+            var elTr = dt.getLastTrEl();
+            Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
+            var i = elTbody.rows.length-1;
+            Assert.areSame(elTbody.rows[i], elTr, "Failed to get last TR element");
             Assert.areSame("yui-dt"+this.count+"-bdrow"+i, elTr.id, "Failed to generate correct ID");
-			dt = null;
-		}
-	};
-	var datatableTest = new DataTableTestCase(datatableTemplate);
-	datatableTest.name = "DataTable Test Case";
+            dt = null;
+        }
+    });
+    var dtDomAccessorsTest = new DataTableTestCase(dtDomAccessorsTemplate);
 
-	function runTests(){
-		var datatablesuite = new TestSuite("DataTable Test Suite");
-		datatablesuite.add(datatableTest);
+    var dtRowMutationTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable Row Mutation Test Case",
 
-		TestRunner.add(datatablesuite);
-		TestRunner.run();
-	}
+        testAddRow: function() {
+            var dt = this.createInstance();
+            var elFirstTr = dt.getFirstTrEl();
+            Assert.areSame(0, elFirstTr.yuiRecordId, "Unexpected Record ID");
 
-	YAHOO.util.Event.addListener(window, "load", function() {
-		var logger = new TestLogger();
+            dt.addRow({a:"4a",b:"4b",c:"4c"}, 0);
+            elFirstTr = dt.getFirstTrEl();
+            Assert.areSame(4, elFirstTr.yuiRecordId, "Unexpected Record ID for inserted row");
+        }
+    });
+    var dtRowMutationTest = new DataTableTestCase(dtRowMutationTemplate);
 
-		YAHOO.util.Event.addListener("btnRun", "click", runTests);	
-		YAHOO.util.Dom.get("btnRun").disabled = false;
-	});
+    var dtSortingTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable Sorting Test Case",
+        
+        data: [
+            {a:0,b:"zero"},
+            {a:1,b:"one"},
+            {a:2,b:"two"},
+            {a:3,b:"three"}
+        ],
+            
+        dsConfig: {
+            responseType:YAHOO.util.DataSource.TYPE_JSARRAY,
+            responseSchema:{fields:["a","b"]}
+        },
+
+        columns: [
+            {key:"a",label:"numbers",sortable:true},
+            {key:"b",label:"strings",sortable:true}
+        ],
+
+        testSortNumber: function() {
+            var dt = this.createInstance();
+            // Workaround for bug 1389418
+            // var oColumn = dt.getColumn(0);
+            var oColumn = dt.getColumn(dt.getFirstTrEl().cells[0].yuiColumnId);
+            dt.sortColumn(oColumn);
+            var elFirstTr = dt.getFirstTrEl();
+            Assert.areSame(0, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+
+            var elLastTr = dt.getLastTrEl();
+            Assert.areSame(3, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+
+            dt.sortColumn(oColumn);
+            elFirstTr = dt.getFirstTrEl();
+            Assert.areSame(3, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST DESC");
+
+            elLastTr = dt.getLastTrEl();
+            Assert.areSame(0, elLastTr.yuiRecordId, "Unexpected Record ID LAST DESC");
+        },
+
+        testSortString: function() {
+            var dt = this.createInstance();
+            // Workaround for bug 1389418
+            // var oColumn = dt.getColumn(1);
+            var oColumn = dt.getColumn(dt.getFirstTrEl().cells[1].yuiColumnId);
+            dt.sortColumn(oColumn);
+
+            var elFirstTr = dt.getFirstTrEl();
+            Assert.areSame(1, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+
+            var elLastTr = dt.getLastTrEl();
+            Assert.areSame(0, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+        },
+
+        testInsertThenSort: function() {
+            var dt = this.createInstance();
+            // Workaround for bug 1389418
+            // var oColumn = dt.getColumn(1);
+            var oColumn = dt.getColumn(dt.getFirstTrEl().cells[1].yuiColumnId);
+
+            dt.addRow({a:4,b:"four"}, 0)
+            dt.sortColumn(oColumn);
+            
+            var elFirstTr = dt.getFirstTrEl();
+            Assert.areSame(4, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+
+            var elLastTr = dt.getLastTrEl();
+            Assert.areSame(0, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+        },
+        
+        testSortThenAppend: function() {
+            var dt = this.createInstance();
+            // Workaround for bug 1389418
+            // var oColumn = dt.getColumn(1);
+            var oColumn = dt.getColumn(dt.getFirstTrEl().cells[1].yuiColumnId);
+            dt.sortColumn(oColumn);
+            dt.addRow({a:4,b:"four"});
+
+            var elFirstTr = dt.getFirstTrEl();
+            Assert.areSame(1, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+
+            var elLastTr = dt.getLastTrEl();
+            Assert.areSame(4, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+        }
+    });
+    var dtSortingTest = new DataTableTestCase(dtSortingTemplate);
+
+    function runTests(){
+        var datatablesuite = new TestSuite("DataTable Test Suite");
+        datatablesuite.add(dtDomAccessorsTest);
+        datatablesuite.add(dtRowMutationTest);
+        datatablesuite.add(dtSortingTest);
+
+        TestRunner.add(datatablesuite);
+        TestRunner.run();
+    }
+
+    YAHOO.util.Event.addListener(window, "load", function() {
+        var logger = new TestLogger();
+
+        YAHOO.util.Event.addListener("btnRun", "click", runTests);
+        YAHOO.util.Dom.get("btnRun").disabled = false;
+    });
 })();
 
 </script>

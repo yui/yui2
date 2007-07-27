@@ -18,111 +18,111 @@
 
 (function() {
 
-	var	Dom=YAHOO.util.Dom,
-		Assert=YAHOO.util.Assert,
-		ObjectAssert=YAHOO.util.ObjectAssert,
-		ArrayAssert=YAHOO.util.ArrayAssert,
-		DateAssert=YAHOO.util.DateAssert,
-		UserAction=YAHOO.util.UserAction,
-		TestCase = YAHOO.tool.TestCase,
-		TestLogger = YAHOO.tool.TestLogger,
-		TestRunner = YAHOO.tool.TestRunner,
-		TestSuite = YAHOO.tool.TestSuite,
-		
-		Logger = YAHOO.widget.Logger,
-		LogReader = YAHOO.widget.LogReader,
-		LogWriter = YAHOO.widget.LogWriter;
-		
+    var    Dom=YAHOO.util.Dom,
+        Assert=YAHOO.util.Assert,
+        ObjectAssert=YAHOO.util.ObjectAssert,
+        ArrayAssert=YAHOO.util.ArrayAssert,
+        DateAssert=YAHOO.util.DateAssert,
+        UserAction=YAHOO.util.UserAction,
+        TestCase = YAHOO.tool.TestCase,
+        TestLogger = YAHOO.tool.TestLogger,
+        TestRunner = YAHOO.tool.TestRunner,
+        TestSuite = YAHOO.tool.TestSuite,
+        
+        Logger = YAHOO.widget.Logger,
+        LogReader = YAHOO.widget.LogReader,
+        LogWriter = YAHOO.widget.LogWriter;
+        
     function LoggerTestCase(template) {
-		LoggerTestCase.superclass.constructor.call(this, template);
-	};
-	YAHOO.lang.extend(LoggerTestCase, TestCase);
+        LoggerTestCase.superclass.constructor.call(this, template);
+    };
+    YAHOO.lang.extend(LoggerTestCase, TestCase);
 
-	var loggerTemplate = {
-		testCreateNewCategory: function() {
+    var loggerTemplate = {
+        testCreateNewCategory: function() {
             Logger._createNewCategory("testcategory");
             Assert.areSame(Logger.categories[Logger.categories.length-1], "testcategory", "Could not find new category");
-		}
-	};
+        }
+    };
     var loggerTest = new LoggerTestCase(loggerTemplate);
     loggerTest.name = "Logger Test Case";
 
-	function LogReaderTestCase(template) {
-		LogReaderTestCase.superclass.constructor.call(this, template);
-		this.container = null;
-	};
-	YAHOO.lang.extend(LogReaderTestCase, TestCase);
+    function LogReaderTestCase(template) {
+        LogReaderTestCase.superclass.constructor.call(this, template);
+        this.container = null;
+    };
+    YAHOO.lang.extend(LogReaderTestCase, TestCase);
 
-	LogReaderTestCase.prototype.setUp = function() {
-		this.container = document.createElement("div");
-		this.container.id = "testLogReaderContainer";
-		document.body.appendChild(this.container);
-	};
+    LogReaderTestCase.prototype.setUp = function() {
+        this.container = document.createElement("div");
+        this.container.id = "testLogReaderContainer";
+        document.body.appendChild(this.container);
+    };
 
-	LogReaderTestCase.prototype.tearDown = function() {
-		if (this.container != null) {
+    LogReaderTestCase.prototype.tearDown = function() {
+        if (this.container != null) {
             YAHOO.util.Event.purgeElement(this.container, true);
-			document.body.removeChild(this.container);
-		}
-	};
-		
-	LogReaderTestCase.prototype.createInstance = function(oConfig) {
-		var lr = new LogReader(this.container, oConfig);
-		return lr;
-	};
-	
-	var logreaderTemplate = {
-		testConstruction: function() {
-    		var lr = this.createInstance();
-    		Assert.isObject(lr, "Failed to create basic instance");
-    		Assert.isInstanceOf(LogReader, lr, "Failed to create basic instance");
-    		lr = null;
-		}
-	};
+            document.body.removeChild(this.container);
+        }
+    };
+        
+    LogReaderTestCase.prototype.createInstance = function(oConfig) {
+        var lr = new LogReader(this.container, oConfig);
+        return lr;
+    };
+    
+    var logreaderTemplate = {
+        testConstruction: function() {
+            var lr = this.createInstance();
+            Assert.isObject(lr, "Failed to create basic instance");
+            Assert.isInstanceOf(LogReader, lr, "Failed to create basic instance");
+            lr = null;
+        }
+    };
     var logreaderTest = new LogReaderTestCase(logreaderTemplate);
     logreaderTest.name = "LogReader Test Case";
     
-	function LogWriterTestCase(template) {
-		LogWriterTestCase.superclass.constructor.call(this, template);
-	};
-	YAHOO.lang.extend(LogWriterTestCase, TestCase);
+    function LogWriterTestCase(template) {
+        LogWriterTestCase.superclass.constructor.call(this, template);
+    };
+    YAHOO.lang.extend(LogWriterTestCase, TestCase);
 
-	LogWriterTestCase.prototype.setUp = function() {
-	};
+    LogWriterTestCase.prototype.setUp = function() {
+    };
 
-	LogWriterTestCase.prototype.tearDown = function() {
-	};
+    LogWriterTestCase.prototype.tearDown = function() {
+    };
 
-	LogWriterTestCase.prototype.createInstance = function(oConfig) {
-		var lw = new LogWriter("testlogwriter", oConfig);
-		return lw;
-	};
+    LogWriterTestCase.prototype.createInstance = function(oConfig) {
+        var lw = new LogWriter("testlogwriter", oConfig);
+        return lw;
+    };
 
-	var logwriterTemplate = {
-		testConstruction: function() {
-    		var lw = this.createInstance();
-    		Assert.isObject(lw, "Failed to create basic instance");
-    		Assert.isInstanceOf(LogWriter, lw, "Failed to create basic instance");
-    		lr = null;
-		}
-	};
+    var logwriterTemplate = {
+        testConstruction: function() {
+            var lw = this.createInstance();
+            Assert.isObject(lw, "Failed to create basic instance");
+            Assert.isInstanceOf(LogWriter, lw, "Failed to create basic instance");
+            lr = null;
+        }
+    };
     var logwriterTest = new LogWriterTestCase(logwriterTemplate);
     logwriterTest.name = "LogWriter Test Case";
 
-	function runTests(){
-		var loggersuite = new TestSuite("Logger Test Suite");
-		loggersuite.add(loggerTest);
-		loggersuite.add(logreaderTest);
-		loggersuite.add(logwriterTest);
-		TestRunner.add(loggersuite);
-		TestRunner.run();
-	}
+    function runTests(){
+        var loggersuite = new TestSuite("Logger Test Suite");
+        loggersuite.add(loggerTest);
+        loggersuite.add(logreaderTest);
+        loggersuite.add(logwriterTest);
+        TestRunner.add(loggersuite);
+        TestRunner.run();
+    }
 
-	YAHOO.util.Event.addListener(window, "load", function() {
-		var logger = new TestLogger();
-		YAHOO.util.Event.addListener("btnRun", "click", runTests);	
-		YAHOO.util.Dom.get("btnRun").disabled = false;
-	});
+    YAHOO.util.Event.addListener(window, "load", function() {
+        var logger = new TestLogger();
+        YAHOO.util.Event.addListener("btnRun", "click", runTests);    
+        YAHOO.util.Dom.get("btnRun").disabled = false;
+    });
 })();
 
 </script>

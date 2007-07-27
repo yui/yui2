@@ -19,61 +19,61 @@
 
 (function() {
 
-	var	Dom=YAHOO.util.Dom,
-		Assert=YAHOO.util.Assert,
-		ObjectAssert=YAHOO.util.ObjectAssert,
-		ArrayAssert=YAHOO.util.ArrayAssert,
-		DateAssert=YAHOO.util.DateAssert,
-		UserAction=YAHOO.util.UserAction,
-		TestCase = YAHOO.tool.TestCase,
-		TestLogger = YAHOO.tool.TestLogger,
-		TestRunner = YAHOO.tool.TestRunner,
-		TestSuite = YAHOO.tool.TestSuite,
+    var    Dom=YAHOO.util.Dom,
+        Assert=YAHOO.util.Assert,
+        ObjectAssert=YAHOO.util.ObjectAssert,
+        ArrayAssert=YAHOO.util.ArrayAssert,
+        DateAssert=YAHOO.util.DateAssert,
+        UserAction=YAHOO.util.UserAction,
+        TestCase = YAHOO.tool.TestCase,
+        TestLogger = YAHOO.tool.TestLogger,
+        TestRunner = YAHOO.tool.TestRunner,
+        TestSuite = YAHOO.tool.TestSuite,
 
-		DataSource = YAHOO.util.DataSource;
+        DataSource = YAHOO.util.DataSource;
 
-	function DataSourceTestCase(template) {
-		DataSourceTestCase.superclass.constructor.call(this, template);
-		this.data = ["a","b","c"];
-	};
-	YAHOO.lang.extend(DataSourceTestCase, TestCase);
+    function DataSourceTestCase(template) {
+        DataSourceTestCase.superclass.constructor.call(this, template);
+        this.data = ["a","b","c"];
+    };
+    YAHOO.lang.extend(DataSourceTestCase, TestCase);
 
-	DataSourceTestCase.prototype.setUp = function() {
-	};
+    DataSourceTestCase.prototype.setUp = function() {
+    };
 
-	DataSourceTestCase.prototype.tearDown = function() {
-	};
+    DataSourceTestCase.prototype.tearDown = function() {
+    };
 
-	DataSourceTestCase.prototype.createInstance = function(oConfigs) {
+    DataSourceTestCase.prototype.createInstance = function(oConfigs) {
         return new DataSource(this.data, oConfigs);
-	};
+    };
 
-	var datasourceTemplate = {
+    var datasourceTemplate = {
         name: "DataSource Test",
         
-		testConstruction: function() {
-    		var ds = this.createInstance();
-    		Assert.isObject(ds, "Failed to create instance");
-    		Assert.isInstanceOf(DataSource, ds, "Failed to create instance");
-    		ds = null;
-		}
-	};
-	var datasourceTest = new DataSourceTestCase(datasourceTemplate);
+        testConstruction: function() {
+            var ds = this.createInstance();
+            Assert.isObject(ds, "Failed to create instance");
+            Assert.isInstanceOf(DataSource, ds, "Failed to create instance");
+            ds = null;
+        }
+    };
+    var datasourceTest = new DataSourceTestCase(datasourceTemplate);
 
-	var dsComplexArrayTemplate = YAHOO.lang.merge(datasourceTemplate, {
+    var dsComplexArrayTemplate = YAHOO.lang.merge(datasourceTemplate, {
         name:"Complex Array Test",
         data:[{a:"1a",b:"1b",c:"1c"}, {a:"2a",b:"2b",c:"2c"}, {a:"3a",b:"3b",c:"3c"}]
     });
-	var dsComplexArrayTest = new DataSourceTestCase(dsComplexArrayTemplate);
+    var dsComplexArrayTest = new DataSourceTestCase(dsComplexArrayTemplate);
 
-	var dsStaticMethodsTemplate = {
+    var dsStaticMethodsTemplate = {
         name:"Static Methods Test",
         data:["a","b","c"],
         
         testParseNumbers: function() {
             var number;
-    		var ds = this.createInstance();
-    		var myNumber = 1;
+            var ds = this.createInstance();
+            var myNumber = 1;
 
             number = YAHOO.util.DataSource.parseNumber("1");
             Assert.areSame(number, myNumber, "Incorrect number from String.");
@@ -81,13 +81,13 @@
             number = YAHOO.util.DataSource.parseNumber(1);
             Assert.areSame(number, myNumber, "Incorrect number from Number.");
 
-    		ds = null;
+            ds = null;
         },
         
         testParseDates: function() {
             var date;
-    		var ds = this.createInstance();
-    		var myDate = new Date(2001,0,14); // January 14, 2001
+            var ds = this.createInstance();
+            var myDate = new Date(2001,0,14); // January 14, 2001
 
             date = YAHOO.util.DataSource.parseDate("1/14/2001");
             DateAssert.datesAreEqual(date, myDate, "Incorrect date from String.");
@@ -98,27 +98,27 @@
             date = YAHOO.util.DataSource.parseDate(979459200000);
             DateAssert.datesAreEqual(date, myDate, "Incorrect date from Number.");
             
-    		ds = null;
+            ds = null;
         }
     };
-	var dsStaticMethodsTest = new DataSourceTestCase(dsStaticMethodsTemplate);
+    var dsStaticMethodsTest = new DataSourceTestCase(dsStaticMethodsTemplate);
 
-	function runTests(){
+    function runTests(){
         var datasourcesuite = new TestSuite("DataSource Test Suite");
         datasourcesuite.add(datasourceTest);
         datasourcesuite.add(dsComplexArrayTest);
         datasourcesuite.add(dsStaticMethodsTest);
 
         TestRunner.add(datasourcesuite);
-		TestRunner.run();
-	}
+        TestRunner.run();
+    }
 
-	YAHOO.util.Event.addListener(window, "load", function() {
-		var logger = new TestLogger();
+    YAHOO.util.Event.addListener(window, "load", function() {
+        var logger = new TestLogger();
 
-		YAHOO.util.Event.addListener("btnRun", "click", runTests);
-		YAHOO.util.Dom.get("btnRun").disabled = false;
-	});
+        YAHOO.util.Event.addListener("btnRun", "click", runTests);
+        YAHOO.util.Dom.get("btnRun").disabled = false;
+    });
 })();
 </script>
 </body>
