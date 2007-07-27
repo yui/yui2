@@ -275,12 +275,14 @@ else if(typeof secureURI=='string'){io.src=secureUri;}}
 else{io=document.createElement('iframe');io.id=frameId;io.name=frameId;}
 io.style.position='absolute';io.style.top='-1000px';io.style.left='-1000px';document.body.appendChild(io);},appendPostData:function(postData)
 {var formElements=[];var postMessage=postData.split('&');for(var i=0;i<postMessage.length;i++){var delimitPos=postMessage[i].indexOf('=');if(delimitPos!=-1){formElements[i]=document.createElement('input');formElements[i].type='hidden';formElements[i].name=postMessage[i].substring(0,delimitPos);formElements[i].value=postMessage[i].substring(delimitPos+1);this._formNode.appendChild(formElements[i]);}}
-return formElements;},uploadFile:function(o,callback,uri,postData){var frameId='yuiIO'+o.tId;var uploadEncoding='multipart/form-data';var io=document.getElementById(frameId);var oConn=this;this._formNode.setAttribute('action',uri);this._formNode.setAttribute('method','POST');this._formNode.setAttribute('target',frameId);if(this._formNode.encoding){this._formNode.setAttribute('encoding',uploadEncoding);}
+return formElements;},uploadFile:function(o,callback,uri,postData){var frameId='yuiIO'+o.tId;var uploadEncoding='multipart/form-data';var io=document.getElementById(frameId);var oConn=this;var rawFormAttributes={action:this._formNode.getAttribute('action'),method:this._formNode.getAttribute('method'),target:this._formNode.getAttribute('target')};this._formNode.setAttribute('action',uri);this._formNode.setAttribute('method','POST');this._formNode.setAttribute('target',frameId);if(this._formNode.encoding){this._formNode.setAttribute('encoding',uploadEncoding);}
 else{this._formNode.setAttribute('enctype',uploadEncoding);}
 if(postData){var oElements=this.appendPostData(postData);}
 this._formNode.submit();this.startEvent.fire(o);if(o.startEvent){o.startEvent.fire(o);}
 if(callback&&callback.timeout){this._timeOut[o.tId]=window.setTimeout(function(){oConn.abort(o,callback,true);},callback.timeout);}
 if(oElements&&oElements.length>0){for(var i=0;i<oElements.length;i++){this._formNode.removeChild(oElements[i]);}}
+for(var prop in rawFormAttributes){if(YAHOO.lang.hasOwnProperty(rawFormAttributes,prop)){if(rawFormAttributes[prop]){this._formNode.setAttribute(prop,rawFormAttributes[prop]);}
+else{this._formNode.removeAttribute(prop);}}}
 this.resetFormState();var uploadCallback=function()
 {if(callback&&callback.timeout){window.clearTimeout(oConn._timeOut[o.tId]);delete oConn._timeOut[o.tId];}
 oConn.completeEvent.fire(o);if(o.completeEvent){o.completeEvent.fire(o);}
