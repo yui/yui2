@@ -95,7 +95,7 @@
 
     /**
     * Constant representing the default CSS class used for a Panel
-    * @property Panel.CSS_PANEL
+    * @property YAHOO.widget.Panel.CSS_PANEL
     * @static
     * @final
     * @type String
@@ -105,7 +105,7 @@
     /**
     * Constant representing the default CSS class used for a Panel's 
     * wrapping container
-    * @property Panel.CSS_PANEL_CONTAINER
+    * @property YAHOO.widget.Panel.CSS_PANEL_CONTAINER
     * @static
     * @final
     * @type String
@@ -400,7 +400,12 @@
         
             /**
             * Sets the type of underlay to display for the Panel. Valid values 
-            * are "shadow", "matte", and "none".
+            * are "shadow," "matte," and "none".  <strong>PLEASE NOTE:</strong> 
+            * The creation of the underlay element is deferred until the Panel 
+            * is initially made visible.  For Gecko-based browsers on Mac
+            * OS X the underlay elment is always created as it is used as a 
+            * shim to prevent Aqua scrollbars below a Panel instance from poking 
+            * through it (See SourceForge bug #836476).
             * @config underlay
             * @type String
             * @default shadow
@@ -1008,7 +1013,7 @@
 
             if (oUnderlay) {
 
-                oElement = this.innerElement;
+                oElement = this.element;
 
                 oUnderlay.style.width = oElement.offsetWidth + "px";
                 oUnderlay.style.height = oElement.offsetHeight + "px";
