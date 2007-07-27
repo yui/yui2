@@ -399,8 +399,8 @@ YAHOO.widget.Column.prototype._sName = null;
 
 
 /**
- * Unique number assigned at instantiation, indicates global order across all
- * ColumnSets.
+ * Unique number assigned at instantiation, indicates original order within
+ * ColumnSet.
  *
  * @property _nId
  * @type Number

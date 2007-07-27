@@ -119,11 +119,11 @@ DataTable class.
 a Column's key index value, the method accepts a Column's ID value. Until this
 issue is fixed, implementers can use the following workaround:
 
-// Instead of this:
-// var oColumn = myDataTable.getColumn(0);
+    // Instead of this:
+    // var oColumn = myDataTable.getColumn(0);
 
-// Use this:
-var oColumn = myDataTable.getColumn(myDataTable.getFirstTrEl().cells[0].yuiColumnId);
+    // Use this:
+    var oColumn = myDataTable.getColumn(myDataTable.getFirstTrEl().cells[0].yuiColumnId);
 
 
 
