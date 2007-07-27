@@ -995,22 +995,35 @@
 			"CALENDARGROUP_DOM"	: new YAHOO.tests.CalendarTestCase(calGrpDomTemplate),
 			"CALENDARGROUP_CFG"	: new YAHOO.tests.CalendarTestCase(calGrpCfgTemplate)
 		}
+		
+		var suites = [
+			["CALENDAR_API", "CALENDARGROUP_API", "CALENDAR_DOM", "CALENDARGROUP_DOM", "CALENDAR_CFG", "CALENDARGROUP_CFG"],
+			["CALENDARGROUP_API", "CALENDARGROUP_DOM", "CALENDARGROUP_CFG"],
+			["CALENDAR_API", "CALENDARGROUP_API", "CALENDAR_CFG", "CALENDARGROUP_CFG"],
+			["CALENDAR_API", "CALENDAR_DOM", "CALENDAR_CFG"],
+			["CALENDAR_API", "CALENDARGROUP_API"],
+		];
 
+		var DEFAULT_SUITE = suites[2];
         var suite;
 
 		function configureTests() {
 			suite=new YAHOO.tool.TestSuite("calendarsuite");
 
 			var selections = getTestSelections();
+			if (selections.length === 0) {
+				selections = DEFAULT_SUITE;
+			}
+
 			for (var i = 0; i < selections.length; i++) {
 				suite.add(tests[selections[i]]);
 			}
+
 			YAHOO.tool.TestRunner.clear();
 			YAHOO.tool.TestRunner.add(suite);
 		}
 
 		function runTests() {
-
             configureTests();
 
 			logger.clearConsole();
@@ -1019,21 +1032,13 @@
 
 		function getTestSelections() {
 			var sel = [];
-			var all = [];
-
 			var checkboxes = Dom.getElementsByClassName("testSel", "input", "f");
 			for (var i = 0; i < checkboxes.length; i++) {
 				if (checkboxes[i].checked) {
 					sel.push(checkboxes[i].name.toUpperCase());
 				}
-				all.push(checkboxes[i].name.toUpperCase());
 			}
-
-			if (sel.length > 0) {
-				return sel;
-			} else {
-				return all;
-			}
+			return sel;
 		}
 
 		YAHOO.util.Event.addListener(window, "load", function() {
@@ -1075,6 +1080,6 @@
 		</ol>
 	</form>
 
-	<p><input type="button" value="Run Tests" id="btnRun" /> <em>(runs all if none selected)</em></p>
+	<p><input type="button" value="Run Tests" id="btnRun" /> <em>(runs default suite [API, CFG] if none selected)</em></p>
 </body>
 </html>
