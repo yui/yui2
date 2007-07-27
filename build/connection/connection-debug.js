@@ -1119,6 +1119,14 @@ YAHOO.util.Connect =
 		var io = document.getElementById(frameId);
 		var oConn = this;
 
+		// Track original HTML form attribute values.
+		var rawFormAttributes =
+		{
+			action:this._formNode.getAttribute('action'),
+			method:this._formNode.getAttribute('method'),
+			target:this._formNode.getAttribute('target')
+		};
+
 		// Initialize the HTML form properties in case they are
 		// not defined in the HTML form.
 		this._formNode.setAttribute('action', uri);
@@ -1159,6 +1167,19 @@ YAHOO.util.Connect =
 		if(oElements && oElements.length > 0){
 			for(var i=0; i < oElements.length; i++){
 				this._formNode.removeChild(oElements[i]);
+			}
+		}
+
+		// Restore HTML form attributes to their original
+		// values prior to file upload.
+		for(var prop in rawFormAttributes){
+			if(YAHOO.lang.hasOwnProperty(rawFormAttributes, prop)){
+				if(rawFormAttributes[prop]){
+					this._formNode.setAttribute(prop, rawFormAttributes[prop]);
+				}
+				else{
+					this._formNode.removeAttribute(prop);
+				}
 			}
 		}
 
