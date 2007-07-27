@@ -78,9 +78,9 @@
     * an overlay in and out.
     * @method FADE
     * @static
-    * @param {Overlay} overlay The Overlay object to animate
+    * @param {YAHOO.widget.Overlay} overlay The Overlay object to animate
     * @param {Number} dur The duration of the animation
-    * @return {ContainerEffect} The configured ContainerEffect object
+    * @return {YAHOO.widget.ContainerEffect} The configured ContainerEffect object
     */
     ContainerEffect.FADE = function (overlay, dur) {
     
@@ -167,9 +167,9 @@
     * overlay in and out.
     * @method SLIDE
     * @static
-    * @param {Overlay} overlay The Overlay object to animate
+    * @param {YAHOO.widget.Overlay} overlay The Overlay object to animate
     * @param {Number} dur The duration of the animation
-    * @return {ContainerEffect} The configured ContainerEffect object
+    * @return {YAHOO.widget.ContainerEffect} The configured ContainerEffect object
     */
     ContainerEffect.SLIDE = function (overlay, dur) {
     

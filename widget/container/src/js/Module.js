@@ -113,7 +113,7 @@
     
     /**
     * Constant representing the prefix path to use for non-secure images
-    * @property Module.IMG_ROOT
+    * @property YAHOO.widget.Module.IMG_ROOT
     * @static
     * @final
     * @type String
@@ -122,7 +122,7 @@
     
     /**
     * Constant representing the prefix path to use for securely served images
-    * @property Module.IMG_ROOT_SSL
+    * @property YAHOO.widget.Module.IMG_ROOT_SSL
     * @static
     * @final
     * @type String
@@ -131,7 +131,7 @@
     
     /**
     * Constant for the default CSS class name that represents a Module
-    * @property Module.CSS_MODULE
+    * @property YAHOO.widget.Module.CSS_MODULE
     * @static
     * @final
     * @type String
@@ -140,7 +140,7 @@
     
     /**
     * Constant representing the module header
-    * @property Module.CSS_HEADER
+    * @property YAHOO.widget.Module.CSS_HEADER
     * @static
     * @final
     * @type String
@@ -149,7 +149,7 @@
     
     /**
     * Constant representing the module body
-    * @property Module.CSS_BODY
+    * @property YAHOO.widget.Module.CSS_BODY
     * @static
     * @final
     * @type String
@@ -158,7 +158,7 @@
     
     /**
     * Constant representing the module footer
-    * @property Module.CSS_FOOTER
+    * @property YAHOO.widget.Module.CSS_FOOTER
     * @static
     * @final
     * @type String
@@ -168,7 +168,7 @@
     /**
     * Constant representing the url for the "src" attribute of the iframe 
     * used to monitor changes to the browser's base font size
-    * @property Module.RESIZE_MONITOR_SECURE_URL
+    * @property YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL
     * @static
     * @final
     * @type String
@@ -179,7 +179,7 @@
     * Singleton CustomEvent fired when the font size is changed in the browser.
     * Opera's "zoom" functionality currently does not support text 
     * size detection.
-    * @event Module.textResizeEvent
+    * @event YAHOO.widget.Module.textResizeEvent
     */
     Module.textResizeEvent = new CustomEvent("textResize");
 
@@ -582,7 +582,7 @@
             * The Module's Config object used for monitoring 
             * configuration properties.
             * @property cfg
-            * @type Config
+            * @type YAHOO.util.Config
             */
             this.cfg = new Config(this);
         

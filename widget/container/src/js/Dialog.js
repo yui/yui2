@@ -74,7 +74,7 @@
 
     /**
     * Constant representing the default CSS class used for a Dialog
-    * @property Dialog.CSS_DIALOG
+    * @property YAHOO.widget.Dialog.CSS_DIALOG
     * @static
     * @final
     * @type String
