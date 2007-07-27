@@ -285,7 +285,7 @@ YAHOO.tool.TestRunner = (function(){
                     result = this._runTestCase(testSuite.items[i]);
                 }
                 
-                if (result != null){
+                if (result !== null){
                     results.total += result.total;
                     results.passed += result.passed;
                     results.failed += result.failed;

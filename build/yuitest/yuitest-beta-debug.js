@@ -159,7 +159,7 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 
             case TestRunner.TEST_SUITE_COMPLETE_EVENT:
                 message = "Test suite \"" + data.testSuite.name + "\" completed.\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
                 
@@ -170,7 +170,7 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 
             case TestRunner.TEST_CASE_COMPLETE_EVENT:
                 message = "Test case \"" + data.testCase.name + "\" completed.\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total
+                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
             default:
@@ -469,7 +469,7 @@ YAHOO.tool.TestRunner = (function(){
                     result = this._runTestCase(testSuite.items[i]);
                 }
                 
-                if (result != null){
+                if (result !== null){
                     results.total += result.total;
                     results.passed += result.passed;
                     results.failed += result.failed;
@@ -2342,6 +2342,11 @@ YAHOO.namespace("tool");
  */
 YAHOO.tool.TestManager = {
 
+    TEST_PAGE_BEGIN_EVENT /*:String*/ : "testpagebegin",
+    TEST_PAGE_COMPLETE_EVENT /*:String*/ : "testpagecomplete",
+    TEST_MANAGER_BEGIN_EVENT /*:String*/ : "testmanagerbegin",
+    TEST_MANAGER_COMPLETE_EVENT /*:String*/ : "testmanagercomplete",
+
     //-------------------------------------------------------------------------
     // Private Properties
     //-------------------------------------------------------------------------
@@ -2390,16 +2395,16 @@ YAHOO.tool.TestManager = {
      * @property _pages
      * @static
      */
-    _pages /*:String[]*/ : new Array(),
+    _pages /*:String[]*/ : [],
     
     /**
-     * Results for each test page.
+     * Aggregated results
      * @type Object
      * @private
      * @property _results
      * @static
      */
-    _results /*:Object*/ : new Object(),
+    _results: null,
     
     //-------------------------------------------------------------------------
     // Private Methods
@@ -2414,12 +2419,17 @@ YAHOO.tool.TestManager = {
      * @static
      */
     _handleTestRunnerComplete : function (data /*:Object*/) /*:Void*/ {
+
+        this.fireEvent(this.TEST_PAGE_COMPLETE_EVENT, {
+                page: this._curPage,
+                results: data.results
+            });
     
         //save results
-        this._results[this.curPage] = data.results;
+        //this._results[this.curPage] = data.results;
         
         //process 'em
-        this._processResults(this.curPage, data.results);
+        this._processResults(this._curPage, data.results);
         
         this._logger.clearTestRunner();
     
@@ -2440,6 +2450,27 @@ YAHOO.tool.TestManager = {
      */
     _processResults : function (page /*:String*/, results /*:Object*/) /*:Void*/ {
 
+        var r = this._results;
+
+        r.page_results[page] = results;
+
+        if (results.passed) {
+            r.pages_passed++;
+            r.tests_passed += results.passed;
+        }
+
+        if (results.failed) {
+            r.pages_failed++;
+            r.tests_failed += results.failed;
+            r.failed.push(page);
+        } else {
+            r.passed.push(page);
+        }
+
+        if (!this._pages.length) {
+            this.fireEvent(this.TEST_MANAGER_COMPLETE_EVENT, this._results);
+        }
+
     },
     
     /**
@@ -2452,6 +2483,8 @@ YAHOO.tool.TestManager = {
     
         //set the current page
         this._curPage = this._pages.shift();
+
+        this.fireEvent(this.TEST_PAGE_BEGIN_EVENT, this._curPage);
         
         //load the frame - destroy history in case there are other iframes that
         //need testing
@@ -2474,13 +2507,16 @@ YAHOO.tool.TestManager = {
             parent.YAHOO.tool.TestManager.load();
         } else {
             
-            //assign event handling
-            var TestRunner = this._frame.YAHOO.tool.TestRunner;
-            this._logger.setTestRunner(TestRunner);
-            TestRunner.subscribe(TestRunner.COMPLETE_EVENT, this._handleTestRunnerComplete, this, true);
-            
-            //run it
-            TestRunner.run();
+            if (this._frame) {
+                //assign event handling
+                var TestRunner = this._frame.YAHOO.tool.TestRunner;
+
+                this._logger.setTestRunner(TestRunner);
+                TestRunner.subscribe(TestRunner.COMPLETE_EVENT, this._handleTestRunnerComplete, this, true);
+                
+                //run it
+                TestRunner.run();
+            }
         }
     },
     
@@ -2500,21 +2536,51 @@ YAHOO.tool.TestManager = {
      * @static
      */
     start : function () /*:Void*/ {
-    
-        //create iframe if not already available
-        if (!this._frame){
-            var frame /*:HTMLElement*/ = document.createElement("iframe");
-            frame.style.visibility = "hidden";
-            frame.style.position = "absolute";
-            document.body.appendChild(frame);
-            this._frame = frame.contentWindow || frame.contentDocument.ownerWindow;
+
+        if (!this._initialized) {
+
+            this.createEvent(this.TEST_PAGE_BEGIN_EVENT);
+            this.createEvent(this.TEST_PAGE_COMPLETE_EVENT);
+            this.createEvent(this.TEST_MANAGER_BEGIN_EVENT);
+            this.createEvent(this.TEST_MANAGER_COMPLETE_EVENT);
+
+            //create iframe if not already available
+            if (!this._frame){
+                var frame /*:HTMLElement*/ = document.createElement("iframe");
+                frame.style.visibility = "hidden";
+                frame.style.position = "absolute";
+                document.body.appendChild(frame);
+                this._frame = frame.contentWindow || frame.contentDocument.ownerWindow;
+            }
+            
+            //create test logger if not already available
+            if (!this._logger){
+                this._logger = new YAHOO.tool.TestLogger();
+            }
+
+            this._initialized = true;
         }
-        
-        //create test logger if not already available
-        if (!this._logger){
-            this._logger = new YAHOO.tool.TestLogger();
-        }
-        
+
+
+        // reset the results cache
+        this._results = {
+            // number of pages that pass
+            pages_passed: 0,
+            // number of pages that fail
+            pages_failed: 0,
+            // total number of tests passed
+            tests_passed: 0,
+            // total number of tests failed
+            tests_failed: 0,
+            // array of pages that passed
+            passed: [],
+            // array of pages that failed
+            failed: [],
+            // map of full results for each page
+            page_results: {}
+        };
+
+        this.fireEvent(this.TEST_MANAGER_BEGIN_EVENT, null);
         this._run();
     
     },
@@ -2530,5 +2596,6 @@ YAHOO.tool.TestManager = {
 
 };
 
+YAHOO.lang.augmentObject(YAHOO.tool.TestManager, YAHOO.util.EventProvider.prototype);
 
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});
