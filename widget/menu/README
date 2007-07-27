@@ -115,7 +115,8 @@ Added the following features:
         + "yui-menu-shadow-visible" - Applied to the shadow element when the 
         Menu is visible; it is removed when hidden.
 
-    - The shadow element is only styled with the new "Sam" skin.
+    - The shadow element is only styled when using the new "Sam" skin, for
+      the previous default skin its "display" property is set to "none."
 
 
 Changes:
@@ -181,6 +182,106 @@ Changes:
     - "emphasis"
     - "helptext"
 
+
+Known Issues
+------------
+
++ ContextMenu works differently in Opera
+  --------------------------------------
+  Opera doesn't support the "contextmenu" DOM event used to trigger the display
+  of YAHOO.widget.ContextMenu instances.  As a result, clicking the right mouse 
+  button in Opera will not result in the display of a ContextMenu instance 
+  as it would in IE, Gecko, and Safari.  To work around this shortcoming, users 
+  will need to do the following to trigger the display of 
+  YAHOO.widget.ContextMenu instances in Opera:
+
+    - Opera for Windows: Hold down the control key while clicking with the 
+      left mouse button.
+
+    - Opera for Mac OS X: Hold down the command/Apple key while clicking with  
+      the left mouse button.
+
++ ContextMenu instances cannot be invoked by clicking on Java Applets
+  -------------------------------------------------------------------
+  When a Java Applet is specified as the "trigger" element for a ContextMenu 
+  instance it will not display when the Applet is clicked.  This is not a 
+  bug in the ContextMenu class, but rather a result of DOM events not bubbling 
+  up from inside Java Applets.  For more information on this issue see:
+  http://tech.groups.yahoo.com/group/ydn-javascript/message/12128
+
++ Flash Movies appear on top of Menu instances
+  --------------------------------------------
+  Flash movies can appear on top of Menu instances in IE and Gecko-based
+  browsers.  To fix this problem, set the "wmode" of the Flash movie to either
+  "transparent" or "opaque" as indicated below: 
+
+  Via the <object> tag:
+
+    <object>
+        <param name="wmode" value="opaque">
+    </object>
+
+    <object>
+        <param name="wmode" value="transparent"> 
+    </object>
+
+  Via the <embed> tag:
+    
+    <embed wmode="transparent"> ... </embed>
+    <embed wmode="opaque"> ... </embed>
+
+    ** For more information see 
+       http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_15523
+
++ Menu instances not rendered at correct z-index in IE
+  -------------------------------------------------------
+  In IE, when a Menu instance is rendered inside a relatively positioned 
+  element the z-index of the Menu instance is now relative to its 
+  relatively positioned parent element.  This is not a bug in the 
+  Menu class, but rather a bug in IE where relatively positioned elements 
+  establish a new stacking context for their child nodes.  To avoid this 
+  bug is recommend that all Menu instances that need to be able to float
+  above any other element in the document be made direct descendants of the 
+  <body> element.
+  
+  ** For more information see 
+   http://therealcrisp.xs4all.nl/meuk/IE-zindexbug.html
+
++ Elements with scrollbars poke through Menu instances floating above them
+  ------------------------------------------------------------------------
+  There is a bug in Gecko-based browsers for Mac OS X where an element's 
+  scrollbars will poke through absolutely positioned elements floating above
+  them.  To fix this problem the "overflow" property of a Menu instance's 
+  shadow element is toggled between "hidden" and "auto" (through the application 
+  and removal of the "hide-scrollbars" and "show-scrollbars" CSS classes) as its 
+  "visibility" configuration property is toggled between "false" and "true."
+  Therefore, the shadow element acts like a shim, blocking scrollbars from
+  poking through the Menu.
+
+  PLEASE NOTE:  
+
+  1) The "hide-scrollbars" and "show-scrollbars" CSS classes classes are 
+     applied only for Gecko on Mac OS X and are added/removed to/from the 
+     Menu's root HTML element (DIV) via the "hideMacGeckoScrollbars" and 
+     "showMacGeckoScrollbars" methods of YAHOO.widget.Overlay.  
+  
+  2) This fix is only applied when using the "Sam" skin; the CSS for the 
+     original Menu skin does not contain any rules for rendering the 
+     shadow element.  
+  
+  3) Once the fix is applied the bug will reappear if the window loses focus.  
+     This can be fixed via Javascript by hiding and showing the Menu instance 
+     when the window receives focus:
+
+        YAHOO.util.Event.on(window, "focus", function () {
+        
+            oMyMenu.hide();
+            oMyMenu.show();
+        
+        });
+
+    ** For more information see 
+       https://bugzilla.mozilla.org/show_bug.cgi?id=187435
 
 
 *** version 2.2.2 ***
