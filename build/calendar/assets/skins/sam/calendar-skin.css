@@ -160,7 +160,9 @@
 	background:#fff;
 	padding:1px;
 	height:1.6em;
+	line-height:1.6em; /* set line height equal to cell height to center vertically */
 	text-align:center;
+	white-space:nowrap;
 }
 
 /* LINK INSIDE NORMAL CELLS */
@@ -168,9 +170,7 @@
 	color:#0066cc;
 	display:block;
 	height:100%;
-	line-height:1.6em; /* set line height equal to cell height to center vertically */
 	text-decoration:none;
-	white-space:nowrap;
 }
 
 /* TODAY'S DATE */
