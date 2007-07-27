@@ -220,6 +220,12 @@
 
 		function runTests(){
 
+			YAHOO.tool.TestRunner.run();
+		}
+
+		YAHOO.util.Event.addListener(window, "load", function() {
+			logger = new YAHOO.tool.TestLogger();
+
 			var testSuite=new YAHOO.tool.TestSuite("datemathsuite");
 			testSuite.add(dmTestCase);
 
@@ -227,12 +233,12 @@
 
 			YAHOO.tool.TestRunner.clear();
 			YAHOO.tool.TestRunner.add(testSuite);
-			YAHOO.tool.TestRunner.run();
-		}
 
-		YAHOO.util.Event.addListener(window, "load", function() {
-			logger = new YAHOO.tool.TestLogger();
 			YAHOO.util.Event.addListener("btnRun", "click", runTests);
+
+            if (parent && parent !== window) {
+                YAHOO.tool.TestManager.load();
+            }
 		});
 	})();
 	</script>
