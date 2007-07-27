@@ -11,12 +11,26 @@
 <script type="text/javascript" src="../build/logger/logger.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
 
+<style>
+    #out {
+    }
+</style>
+
 </head>
 <body class="yui-skin-sam">
 <h1>YUI Library Master Test Page</h1>
 <script type="text/javascript">
 
 (function() {
+
+    function log(msg) {
+        var d=document, b=d.getElementById("out"), n=d.createElement("div");
+        if (b) {
+            n.appendChild(d.createTextNode(msg));
+            b.appendChild(n);
+        }
+    }
+
 
     var TM = YAHOO.tool.TestManager;
 
@@ -45,7 +59,13 @@
         ]);
 
         TM.subscribe(TM.TEST_MANAGER_COMPLETE_EVENT, function(o) {
-            alert(YAHOO.lang.dump(o));
+            log("# of pages passed: " + o.pages_passed);
+            log("# of pages failed: " + o.pages_failed + ": " + o.failed.join(", "));
+            log("# of tests passed: " + o.tests_passed);
+            log("# of tests failed: " + o.tests_failed);
+
+            // log("Passed: " + o.passed.join(", "));
+            // log("Failed: " + o.failed.join(", "));
         });
 
         TM.start();
@@ -54,5 +74,9 @@
 })();
 
 </script>
+
+<div id="out"></div>
+
+
 </body>
 </html>
