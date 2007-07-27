@@ -300,10 +300,12 @@
         }
 
         p_oElement.removeAttribute("id");
-    
-        setAttributeFromDOMAttribute("tabindex");
-        setAttributeFromDOMAttribute("accesskey");
-    
+
+        if ( !("tabindex" in p_oAttributes) ) {
+
+            p_oAttributes.tabindex = p_oElement.tabIndex;
+
+        }
     
         if ( !("label" in p_oAttributes) ) {
     
@@ -926,21 +928,7 @@
             }
         
         },
-        
-        
-        /**
-        * @method _setAccessKey
-        * @description Sets the value of the button's "accesskey" attribute.
-        * @protected
-        * @param {String} p_sAccessKey String indicating the value for 
-        * the button's "accesskey" attribute.
-        */
-        _setAccessKey: function (p_sAccessKey) {
-        
-            this._button.accessKey = p_sAccessKey;
-        
-        },
-        
+
         
         /**
         * @method _setHref
@@ -2847,10 +2835,23 @@
         
             var oContainer = this.get("container"),
                 oElement = this.get("element"),
+                bElInDoc = Dom.inDocument(oElement),
                 oParentNode;
 
 
             if (oContainer) {
+        
+                if (oSrcElement && oSrcElement != oElement) {
+                
+                    oParentNode = oSrcElement.parentNode;
+
+                    if (oParentNode) {
+                    
+                        oParentNode.removeChild(oSrcElement);
+                    
+                    }
+
+                }
         
                 if (Lang.isString(oContainer)) {
         
@@ -2868,40 +2869,29 @@
                 }
         
             }
-            else if (!Dom.inDocument(oElement) && oSrcElement) {
+            else if (!bElInDoc && oSrcElement && oSrcElement != oElement) {
 
-                switch (oSrcElement.nodeName.toUpperCase()) {
-                
-                case "INPUT":
-                case "BUTTON":
-                case "A":
-
-                    oParentNode = oSrcElement.parentNode;
+                oParentNode = oSrcElement.parentNode;
+        
+                if (oParentNode) {
+        
+                    this.fireEvent("beforeAppendTo", {
+                        type: "beforeAppendTo",
+                        target: oParentNode
+                    });
             
-                    if (oParentNode) {
+                    oParentNode.replaceChild(oElement, oSrcElement);
             
-                        this.fireEvent("beforeAppendTo", {
-                            type: "beforeAppendTo",
-                            target: oParentNode
-                        });
-                
-                        oParentNode.replaceChild(oElement, oSrcElement);
-                
-                        this.fireEvent("appendTo", {
-                            type: "appendTo",
-                            target: oParentNode
-                        });
-                    
-                    }
-                
-                    break;
+                    this.fireEvent("appendTo", {
+                        type: "appendTo",
+                        target: oParentNode
+                    });
                 
                 }
         
             }
-            else if (this.get("type") != "link" && 
-                Dom.inDocument(oElement) && oSrcElement && 
-                oSrcElement.nodeName.toUpperCase() == this.NODE_NAME) {
+            else if (this.get("type") != "link" && bElInDoc && oSrcElement && 
+                oSrcElement == oElement) {
         
                 this._addListenersToForm();
         
