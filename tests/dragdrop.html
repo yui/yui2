@@ -239,7 +239,11 @@
 
         dd2 = new YAHOO.util.DD("dd2div");
         
-        runTests();
+        if (parent && parent !== window) {
+            YAHOO.tool.TestManager.load();
+        } else {
+            YAHOO.tool.TestRunner.run();
+        }
     });
     
 })();
