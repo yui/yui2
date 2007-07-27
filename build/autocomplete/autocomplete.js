@@ -482,9 +482,13 @@ YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery)
  * and DOM elements.
  *
  * @method doBeforeExpandContainer
+ * @param oTextbox {HTMLElement} The text input box.
+ * @param oContainer {HTMLElement} The container element.
+ * @param sQuery {String} The query string.
+ * @param aResults {Object[]}  An array of query results.
  * @return {Boolean} Return true to continue expanding container, false to cancel the expand.
  */
-YAHOO.widget.AutoComplete.prototype.doBeforeExpandContainer = function(oResultItem, sQuery) {
+YAHOO.widget.AutoComplete.prototype.doBeforeExpandContainer = function(oTextbox, oContainer, sQuery, aResults) {
     return true;
 };
 
