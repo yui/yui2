@@ -405,7 +405,13 @@ h1, h2, h3, h4, h5, h6, p, ul, ol, li {
 
         })); 
         tool.TestRunner.add(suite);
-        tool.TestRunner.run();
+
+        if (parent && parent !== window) {
+            tool.TestManager.load();
+        } else {
+            tool.TestRunner.run();
+        }
+
     }); 
 })();
 </script>

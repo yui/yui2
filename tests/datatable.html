@@ -253,20 +253,24 @@
     var dtSortingTest = new DataTableTestCase(dtSortingTemplate);
 
     function runTests(){
+        TestRunner.run();
+    }
+
+    YAHOO.util.Event.addListener(window, "load", function() {
+        var logger = new TestLogger();
         var datatablesuite = new TestSuite("DataTable Test Suite");
         datatablesuite.add(dtDomAccessorsTest);
         datatablesuite.add(dtRowMutationTest);
         datatablesuite.add(dtSortingTest);
 
         TestRunner.add(datatablesuite);
-        TestRunner.run();
-    }
-
-    YAHOO.util.Event.addListener(window, "load", function() {
-        var logger = new TestLogger();
 
         YAHOO.util.Event.addListener("btnRun", "click", runTests);
         YAHOO.util.Dom.get("btnRun").disabled = false;
+
+        if (parent && parent !== window) {
+            YAHOO.tool.TestManager.load();
+        }
     });
 })();
 

@@ -14,7 +14,6 @@
 </head>
 <body class="yui-skin-sam">
 <h1>YUI Library Master Test Page</h1>
-<p><input type="button" value="Run Tests" id="btnRun" /></p>
 <script type="text/javascript">
 
 (function() {
@@ -22,7 +21,6 @@
     var TM = YAHOO.tool.TestManager;
 
     YAHOO.util.Event.onDOMReady(function (){
-        //var logger = new YAHOO.tool.TestLogger();
         
         YAHOO.tool.TestManager.setPages([
             "animation.html", 
@@ -46,7 +44,10 @@
             "yuitest.html"
         ]);
 
-        YAHOO.util.Event.addListener("btnRun", "click", TM.start, TM, true);
+        TM.subscribe(TM.TEST_MANAGER_COMPLETE_EVENT, function(o) {
+            alert(YAHOO.lang.dump(o));
+        });
+
         TM.start();
     });
     
