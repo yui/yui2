@@ -996,18 +996,24 @@
 			"CALENDARGROUP_CFG"	: new YAHOO.tests.CalendarTestCase(calGrpCfgTemplate)
 		}
 
-		function runTests() {
-			var suite=new YAHOO.tool.TestSuite("calendarsuite");
+        var suite;
+
+		function configureTests() {
+			suite=new YAHOO.tool.TestSuite("calendarsuite");
 
 			var selections = getTestSelections();
 			for (var i = 0; i < selections.length; i++) {
 				suite.add(tests[selections[i]]);
 			}
-
-			logger.clearConsole();
-
 			YAHOO.tool.TestRunner.clear();
 			YAHOO.tool.TestRunner.add(suite);
+		}
+
+		function runTests() {
+
+            configureTests();
+
+			logger.clearConsole();
 			YAHOO.tool.TestRunner.run();
 		}
 
@@ -1033,6 +1039,11 @@
 		YAHOO.util.Event.addListener(window, "load", function() {
 			logger = new YAHOO.tool.TestLogger();
 			YAHOO.util.Event.addListener("btnRun", "click", runTests);
+
+            if (parent && parent !== window) {
+                configureTests();
+                YAHOO.tool.TestManager.load();
+            }
 		});
 	})();
 	</script>
