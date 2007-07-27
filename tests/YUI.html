@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>YUI Library Master Test Page</title>
+<link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css" />     
+<link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css" />     
+
+<script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../build/dom/dom.js"></script>
+<script type="text/javascript" src="../build/event/event.js"></script>
+<script type="text/javascript" src="../build/logger/logger.js"></script>
+<script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
+
+</head>
+<body>
+<h1>YUI Library Master Test Page</h1>
+<p><input type="button" value="Run Tests" id="btnRun" /></p>
+<script type="text/javascript">
+
+(function() {
+
+    var TM = YAHOO.tool.TestManager;
+
+    YAHOO.util.Event.onDOMReady(function (){
+        //var logger = new YAHOO.tool.TestLogger();
+        
+        YAHOO.tool.TestManager.setPages([
+            "yahoo.html",
+            "animation.html", 
+            "config.html"
+        ]);
+
+        YAHOO.util.Event.addListener("btnRun", "click", TM.start, TM, true);
+        TM.start();
+    });
+    
+})();
+
+</script>
+</body>
+</html>

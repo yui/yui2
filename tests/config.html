@@ -213,7 +213,8 @@
 
 		var configTestCase = new YAHOO.tool.TestCase(configTemplate);
 
-		function runTests(){
+        function runTests() {
+
 			var logger = new YAHOO.tool.TestLogger();
 			var testSuite=new YAHOO.tool.TestSuite("configsuite");
 			testSuite.add(configTestCase);
@@ -222,10 +223,16 @@
 
 			YAHOO.tool.TestRunner.clear();
 			YAHOO.tool.TestRunner.add(testSuite);
-			YAHOO.tool.TestRunner.run();
-		}
+
+            if (parent && parent !== window) {
+                YAHOO.tool.TestManager.load();
+            } else {
+                YAHOO.tool.TestRunner.run();
+            }
+        }
 
 		YAHOO.util.Event.addListener(window, "load", runTests);
+
 	})();
     </script>
 </body>

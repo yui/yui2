@@ -396,7 +396,11 @@ are output in the logger to the right. <br />View the source to see how it's don
         //add event handler
         YAHOO.util.Event.addListener("btnRun", "click", runTests);
 
-        runTests();
+        if (parent && parent !== window) {
+            YAHOO.tool.TestManager.load();
+        } else {
+            YAHOO.tool.TestRunner.run();
+        }
     });
     
 })();
