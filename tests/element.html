@@ -83,7 +83,12 @@
             },            
         })); 
         tool.TestRunner.add(suite);
-        tool.TestRunner.run();
+
+        if (parent && parent !== window) {
+            tool.TestManager.load();
+        } else {
+            tool.TestRunner.run();
+        }
     }); 
 })();
 </script>

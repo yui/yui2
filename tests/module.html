@@ -423,8 +423,12 @@
                 });
 
                 YAHOO.tool.TestRunner.add(oTestCase);
-                YAHOO.tool.TestRunner.run();
-            
+
+                if (parent && parent !== window) {
+                    YAHOO.tool.TestManager.load();
+                } else {
+                    YAHOO.tool.TestRunner.run();
+                }
             
             });
 

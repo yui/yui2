@@ -113,7 +113,11 @@ var YAHOO_config = {
         //add event handler
         YAHOO.util.Event.addListener("btnRun", "click", runTests);
 
-        runTests();
+        if (parent && parent !== window) {
+            YAHOO.tool.TestManager.load();
+        } else {
+            YAHOO.tool.TestRunner.run();
+        }
     });
     
 })();

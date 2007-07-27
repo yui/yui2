@@ -686,7 +686,12 @@ YAHOO.test.YUITest_test = (function(){
     
     //add event handler
     YAHOO.util.Event.addListener("btnRun", "click", YAHOO.tool.TestRunner.run);
-    YAHOO.tool.TestRunner.run();
+
+    if (parent && parent !== window) {
+        YAHOO.tool.TestManager.load();
+    } else {
+        YAHOO.tool.TestRunner.run();
+    }
 })();
 
 

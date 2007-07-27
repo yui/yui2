@@ -65,7 +65,11 @@
                 }));
                  
                 YAHOO.tool.TestRunner.add(suite);
-                YAHOO.tool.TestRunner.run();
+                if (parent && parent !== window) {
+                    YAHOO.tool.TestManager.load();
+                } else {
+                    YAHOO.tool.TestRunner.run();
+                }
             }
         }
     };

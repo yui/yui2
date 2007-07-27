@@ -110,11 +110,6 @@
     logwriterTest.name = "LogWriter Test Case";
 
     function runTests(){
-        var loggersuite = new TestSuite("Logger Test Suite");
-        loggersuite.add(loggerTest);
-        loggersuite.add(logreaderTest);
-        loggersuite.add(logwriterTest);
-        TestRunner.add(loggersuite);
         TestRunner.run();
     }
 
@@ -122,6 +117,19 @@
         var logger = new TestLogger();
         YAHOO.util.Event.addListener("btnRun", "click", runTests);    
         YAHOO.util.Dom.get("btnRun").disabled = false;
+
+        var loggersuite = new TestSuite("Logger Test Suite");
+        loggersuite.add(loggerTest);
+        loggersuite.add(logreaderTest);
+        loggersuite.add(logwriterTest);
+        TestRunner.add(loggersuite);
+
+        if (parent && parent !== window) {
+            YAHOO.tool.TestManager.load();
+        } else {
+            YAHOO.tool.TestRunner.run();
+        }
+        
     });
 })();
 
