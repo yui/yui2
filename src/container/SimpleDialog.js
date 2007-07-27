@@ -52,7 +52,7 @@
 
     /**
     * Constant for the standard network icon for a blocking action
-    * @property SimpleDialog.ICON_BLOCK
+    * @property YAHOO.widget.SimpleDialog.ICON_BLOCK
     * @static
     * @final
     * @type String
@@ -61,7 +61,7 @@
     
     /**
     * Constant for the standard network icon for alarm
-    * @property SimpleDialog.ICON_ALARM
+    * @property YAHOO.widget.SimpleDialog.ICON_ALARM
     * @static
     * @final
     * @type String
@@ -70,7 +70,7 @@
     
     /**
     * Constant for the standard network icon for help
-    * @property SimpleDialog.ICON_HELP
+    * @property YAHOO.widget.SimpleDialog.ICON_HELP
     * @static
     * @final
     * @type String
@@ -79,7 +79,7 @@
     
     /**
     * Constant for the standard network icon for info
-    * @property SimpleDialog.ICON_INFO
+    * @property YAHOO.widget.SimpleDialog.ICON_INFO
     * @static
     * @final
     * @type String
@@ -88,7 +88,7 @@
     
     /**
     * Constant for the standard network icon for warn
-    * @property SimpleDialog.ICON_WARN
+    * @property YAHOO.widget.SimpleDialog.ICON_WARN
     * @static
     * @final
     * @type String
@@ -97,18 +97,26 @@
     
     /**
     * Constant for the standard network icon for a tip
-    * @property SimpleDialog.ICON_TIP
+    * @property YAHOO.widget.SimpleDialog.ICON_TIP
     * @static
     * @final
     * @type String
     */
     SimpleDialog.ICON_TIP   = "tipicon";
-    
+
+    /**
+    * Constant representing the name of the CSS class applied to the element 
+    * created by the "icon" configuration property.
+    * @property YAHOO.widget.SimpleDialog.ICON_CSS_CLASSNAME
+    * @static
+    * @final
+    * @type String
+    */
     SimpleDialog.ICON_CSS_CLASSNAME = "yui-icon";
     
     /**
     * Constant representing the default CSS class used for a SimpleDialog
-    * @property SimpleDialog.CSS_SIMPLEDIALOG
+    * @property YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG
     * @static
     * @final
     * @type String

@@ -76,7 +76,7 @@
     
     /**
     * Constant representing the Tooltip CSS class
-    * @property Tooltip.CSS_TOOLTIP
+    * @property YAHOO.widget.Tooltip.CSS_TOOLTIP
     * @static
     * @final
     * @type String

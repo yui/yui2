@@ -805,7 +805,7 @@
     
     /**
     * Constant representing the prefix path to use for non-secure images
-    * @property Module.IMG_ROOT
+    * @property YAHOO.widget.Module.IMG_ROOT
     * @static
     * @final
     * @type String
@@ -814,7 +814,7 @@
     
     /**
     * Constant representing the prefix path to use for securely served images
-    * @property Module.IMG_ROOT_SSL
+    * @property YAHOO.widget.Module.IMG_ROOT_SSL
     * @static
     * @final
     * @type String
@@ -823,7 +823,7 @@
     
     /**
     * Constant for the default CSS class name that represents a Module
-    * @property Module.CSS_MODULE
+    * @property YAHOO.widget.Module.CSS_MODULE
     * @static
     * @final
     * @type String
@@ -832,7 +832,7 @@
     
     /**
     * Constant representing the module header
-    * @property Module.CSS_HEADER
+    * @property YAHOO.widget.Module.CSS_HEADER
     * @static
     * @final
     * @type String
@@ -841,7 +841,7 @@
     
     /**
     * Constant representing the module body
-    * @property Module.CSS_BODY
+    * @property YAHOO.widget.Module.CSS_BODY
     * @static
     * @final
     * @type String
@@ -850,7 +850,7 @@
     
     /**
     * Constant representing the module footer
-    * @property Module.CSS_FOOTER
+    * @property YAHOO.widget.Module.CSS_FOOTER
     * @static
     * @final
     * @type String
@@ -860,7 +860,7 @@
     /**
     * Constant representing the url for the "src" attribute of the iframe 
     * used to monitor changes to the browser's base font size
-    * @property Module.RESIZE_MONITOR_SECURE_URL
+    * @property YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL
     * @static
     * @final
     * @type String
@@ -871,7 +871,7 @@
     * Singleton CustomEvent fired when the font size is changed in the browser.
     * Opera's "zoom" functionality currently does not support text 
     * size detection.
-    * @event Module.textResizeEvent
+    * @event YAHOO.widget.Module.textResizeEvent
     */
     Module.textResizeEvent = new CustomEvent("textResize");
 
@@ -1274,7 +1274,7 @@
             * The Module's Config object used for monitoring 
             * configuration properties.
             * @property cfg
-            * @type Config
+            * @type YAHOO.util.Config
             */
             this.cfg = new Config(this);
         
@@ -4249,7 +4249,7 @@
     
     /**
     * Constant representing the Tooltip CSS class
-    * @property Tooltip.CSS_TOOLTIP
+    * @property YAHOO.widget.Tooltip.CSS_TOOLTIP
     * @static
     * @final
     * @type String
@@ -5104,7 +5104,7 @@
 
     /**
     * Constant representing the default CSS class used for a Panel
-    * @property Panel.CSS_PANEL
+    * @property YAHOO.widget.Panel.CSS_PANEL
     * @static
     * @final
     * @type String
@@ -5114,7 +5114,7 @@
     /**
     * Constant representing the default CSS class used for a Panel's 
     * wrapping container
-    * @property Panel.CSS_PANEL_CONTAINER
+    * @property YAHOO.widget.Panel.CSS_PANEL_CONTAINER
     * @static
     * @final
     * @type String
@@ -5409,7 +5409,12 @@
         
             /**
             * Sets the type of underlay to display for the Panel. Valid values 
-            * are "shadow", "matte", and "none".
+            * are "shadow," "matte," and "none".  <strong>PLEASE NOTE:</strong> 
+            * The creation of the underlay element is deferred until the Panel 
+            * is initially made visible.  For Gecko-based browsers on Mac
+            * OS X the underlay elment is always created as it is used as a 
+            * shim to prevent Aqua scrollbars below a Panel instance from poking 
+            * through it (See SourceForge bug #836476).
             * @config underlay
             * @type String
             * @default shadow
@@ -6017,7 +6022,7 @@
 
             if (oUnderlay) {
 
-                oElement = this.innerElement;
+                oElement = this.element;
 
                 oUnderlay.style.width = oElement.offsetWidth + "px";
                 oUnderlay.style.height = oElement.offsetHeight + "px";
@@ -6338,7 +6343,7 @@
 
     /**
     * Constant representing the default CSS class used for a Dialog
-    * @property Dialog.CSS_DIALOG
+    * @property YAHOO.widget.Dialog.CSS_DIALOG
     * @static
     * @final
     * @type String
@@ -7674,7 +7679,7 @@
 
     /**
     * Constant for the standard network icon for a blocking action
-    * @property SimpleDialog.ICON_BLOCK
+    * @property YAHOO.widget.SimpleDialog.ICON_BLOCK
     * @static
     * @final
     * @type String
@@ -7683,7 +7688,7 @@
     
     /**
     * Constant for the standard network icon for alarm
-    * @property SimpleDialog.ICON_ALARM
+    * @property YAHOO.widget.SimpleDialog.ICON_ALARM
     * @static
     * @final
     * @type String
@@ -7692,7 +7697,7 @@
     
     /**
     * Constant for the standard network icon for help
-    * @property SimpleDialog.ICON_HELP
+    * @property YAHOO.widget.SimpleDialog.ICON_HELP
     * @static
     * @final
     * @type String
@@ -7701,7 +7706,7 @@
     
     /**
     * Constant for the standard network icon for info
-    * @property SimpleDialog.ICON_INFO
+    * @property YAHOO.widget.SimpleDialog.ICON_INFO
     * @static
     * @final
     * @type String
@@ -7710,7 +7715,7 @@
     
     /**
     * Constant for the standard network icon for warn
-    * @property SimpleDialog.ICON_WARN
+    * @property YAHOO.widget.SimpleDialog.ICON_WARN
     * @static
     * @final
     * @type String
@@ -7719,18 +7724,26 @@
     
     /**
     * Constant for the standard network icon for a tip
-    * @property SimpleDialog.ICON_TIP
+    * @property YAHOO.widget.SimpleDialog.ICON_TIP
     * @static
     * @final
     * @type String
     */
     SimpleDialog.ICON_TIP   = "tipicon";
-    
+
+    /**
+    * Constant representing the name of the CSS class applied to the element 
+    * created by the "icon" configuration property.
+    * @property YAHOO.widget.SimpleDialog.ICON_CSS_CLASSNAME
+    * @static
+    * @final
+    * @type String
+    */
     SimpleDialog.ICON_CSS_CLASSNAME = "yui-icon";
     
     /**
     * Constant representing the default CSS class used for a SimpleDialog
-    * @property SimpleDialog.CSS_SIMPLEDIALOG
+    * @property YAHOO.widget.SimpleDialog.CSS_SIMPLEDIALOG
     * @static
     * @final
     * @type String
@@ -8010,9 +8023,9 @@
     * an overlay in and out.
     * @method FADE
     * @static
-    * @param {Overlay} overlay The Overlay object to animate
+    * @param {YAHOO.widget.Overlay} overlay The Overlay object to animate
     * @param {Number} dur The duration of the animation
-    * @return {ContainerEffect} The configured ContainerEffect object
+    * @return {YAHOO.widget.ContainerEffect} The configured ContainerEffect object
     */
     ContainerEffect.FADE = function (overlay, dur) {
     
@@ -8099,9 +8112,9 @@
     * overlay in and out.
     * @method SLIDE
     * @static
-    * @param {Overlay} overlay The Overlay object to animate
+    * @param {YAHOO.widget.Overlay} overlay The Overlay object to animate
     * @param {Number} dur The duration of the animation
-    * @return {ContainerEffect} The configured ContainerEffect object
+    * @return {YAHOO.widget.ContainerEffect} The configured ContainerEffect object
     */
     ContainerEffect.SLIDE = function (overlay, dur) {
     
