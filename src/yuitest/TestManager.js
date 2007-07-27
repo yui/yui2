@@ -12,9 +12,36 @@ YAHOO.namespace("tool");
  */
 YAHOO.tool.TestManager = {
 
+    /**
+     * Constant for the testpagebegin custom event
+     * @property TEST_PAGE_BEGIN_EVENT
+     * @static
+     * @final
+     */
     TEST_PAGE_BEGIN_EVENT /*:String*/ : "testpagebegin",
+
+    /**
+     * Constant for the testpagecomplete custom event
+     * @property TEST_PAGE_COMPLETE_EVENT
+     * @static
+     * @final
+     */
     TEST_PAGE_COMPLETE_EVENT /*:String*/ : "testpagecomplete",
+
+    /**
+     * Constant for the testmanagerbegin custom event
+     * @property TEST_MANAGER_BEGIN_EVENT
+     * @static
+     * @final
+     */
     TEST_MANAGER_BEGIN_EVENT /*:String*/ : "testmanagerbegin",
+
+    /**
+     * Constant for the testmanagercomplete custom event
+     * @property TEST_MANAGER_COMPLETE_EVENT
+     * @static
+     * @final
+     */
     TEST_MANAGER_COMPLETE_EVENT /*:String*/ : "testmanagercomplete",
 
     //-------------------------------------------------------------------------
@@ -209,9 +236,40 @@ YAHOO.tool.TestManager = {
 
         if (!this._initialized) {
 
+            /**
+             * Fires when loading a test page
+             * @event testpagebegin
+             * @param curPage {string} the page being loaded
+             * @static
+             */
             this.createEvent(this.TEST_PAGE_BEGIN_EVENT);
+
+            /**
+             * Fires when a test page is complete
+             * @event testpagecomplete
+             * @param obj {page: string, results: object} the name of the
+             * page that was loaded, and the test suite results
+             * @static
+             */
             this.createEvent(this.TEST_PAGE_COMPLETE_EVENT);
+
+            /**
+             * Fires when the test manager starts running all test pages
+             * @event testmanagerbegin
+             * @static
+             */
             this.createEvent(this.TEST_MANAGER_BEGIN_EVENT);
+
+            /**
+             * Fires when the test manager finishes running all test pages.  External
+             * test runners should subscribe to this event in order to get the
+             * aggregated test results.
+             * @event testmanagercomplete
+             * @param obj { pages_passed: int, pages_failed: int, tests_passed: int
+             *              tests_failed: int, passed: string[], failed: string[],
+             *              page_results: {} }
+             * @static
+             */
             this.createEvent(this.TEST_MANAGER_COMPLETE_EVENT);
 
             //create iframe if not already available
