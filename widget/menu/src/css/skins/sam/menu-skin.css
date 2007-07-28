@@ -12,6 +12,7 @@
     floating LIs.
 */
 
+.yui-skin-sam .yuimenubar .bd,
 .yui-skin-sam .yuimenubar ul {
 
     *zoom: 1;   /* For IE */
