@@ -852,6 +852,15 @@ YAHOO.widget.DataTable._nCount = 0;
 YAHOO.widget.DataTable.prototype._nIndex = null;
 
 /**
+ * Counter for IDs assigned to TR elements.
+ *
+ * @property _nTrCount
+ * @type Number
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._nTrCount = 0;
+
+/**
  * Unique name assigned to instance.
  *
  * @property _sName
@@ -1519,7 +1528,8 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     var elRow = (append) ? this._elTbody.appendChild(document.createElement("tr")) :
         this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]);
 
-    elRow.id = this.id+"-bdrow"+(this._elTbody.rows.length-1);
+    elRow.id = this.id+"-bdrow"+this._nTrCount;
+    this._nTrCount++;
     elRow.yuiRecordId = oRecord.getId();
 
     // Create TD cells
@@ -1859,7 +1869,7 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
         // For cases when click is within the TABLE, due to timing issues,
         // the editorBlurEvent needs to get fired by the lower-level DOM click
         // handlers below rather than by the TABLE click handler directly.
-        if(oSelf._oCellEditor.isActive) {
+        if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
             // Only if the click was not within the Cell Editor container
             if(!YAHOO.util.Dom.isAncestor(oSelf._oCellEditor.container, elTarget) &&
                     (oSelf._oCellEditor.container.id !== elTarget.id)) {
@@ -1881,7 +1891,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf._oCellEditor.isActive &&
+    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive &&
             YAHOO.util.Dom.isAncestor(oSelf._oCellEditor.container, elTarget)) {
         oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
     }
@@ -2715,7 +2725,7 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf._oCellEditor.isActive) {
+    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
@@ -2757,7 +2767,7 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf._oCellEditor.isActive) {
+    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
@@ -2824,7 +2834,7 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(oSelf._oCellEditor.isActive) {
+    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
