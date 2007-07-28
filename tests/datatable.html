@@ -1,9 +1,9 @@
 <html>
 <head>
 <title>YUI DataTable Tests</title>
-<link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css" />
+<link type="text/css" rel="stylesheet" href="../build/logger/assets/skins/sam/logger.css" />
 <link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css" />
-<link type="text/css" rel="stylesheet" href="../build/datatable/assets/datatable.css" />
+<link type="text/css" rel="stylesheet" href="../build/datatable/assets/skins/sam/datatable.css" />
 
 <script type="text/javascript" src="../build/yahoo/yahoo-min.js"></script>
 <script type="text/javascript" src="../build/dom/dom-min.js"></script>
@@ -15,7 +15,7 @@
 <script type="text/javascript" src="../build/datatable/datatable-beta-min.js"></script>
 
 </head>
-<body>
+<body class="yui-skin-sam">
 <h1>DataTable Tests</h1>
 <p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
 
@@ -23,7 +23,9 @@
 
 (function() {
 
-    var    Dom=YAHOO.util.Dom,
+    var gCount = -1;
+
+    var Dom=YAHOO.util.Dom,
         Assert=YAHOO.util.Assert,
         ObjectAssert=YAHOO.util.ObjectAssert,
         ArrayAssert=YAHOO.util.ArrayAssert,
@@ -39,9 +41,24 @@
         ColumnSet = YAHOO.widget.ColumnSet,
         RecordSet = YAHOO.widget.RecordSet;
 
+    var TableAssert = {
+        areSameRow: function(exp, act, msg) {
+            Assert.areSame("tr", act.tagName.toLowerCase(), "Expected a TR element: " + msg);
+            Assert.areSame(exp.id, act.id, "Unexpected DOM ID: " + msg);
+            Assert.areSame(exp.sectionRowIndex, act.sectionRowIndex, "Unexpected sectionRowIndex: " + msg);
+            Assert.areSame(exp.yuiRecordId, act.yuiRecordId, "Unexpected Record ID: " + msg);
+        },
+        
+        areSameCell: function(exp, act, msg) {
+            Assert.areSame("td", act.tagName.toLowerCase(), "Expected a TD element: " + msg);
+            Assert.areSame(exp.id, act.id, "Unexpected DOM ID: " + msg);
+            Assert.areSame(exp.yuiCellIndex, act.yuiCellIndex, "Unexpected yuiCellIndex: " + msg);
+            Assert.areSame(exp.yuiColumnId, act.yuiColumnId, "Unexpected Column ID: " + msg);
+        }
+    };
+
     function DataTableTestCase(template) {
         DataTableTestCase.superclass.constructor.call(this, template);
-        this.count = -1;
     };
     YAHOO.lang.extend(DataTableTestCase, TestCase);
 
@@ -54,18 +71,22 @@
     };
 
     DataTableTestCase.prototype.tearDown = function() {
+        this.datatable.destroy();
+        this.datatable = null;
+        
         if (this.container != null) {
             YAHOO.util.Event.purgeElement(this.container, true);
             document.body.removeChild(this.container);
         }
         
         this.datasource = null;
+        
     };
 
     DataTableTestCase.prototype.createInstance = function(oConfig) {
-        var dt = new DataTable(this.container, this.columns, this.datasource, oConfig);
-        this.count++;
-        return dt;
+        this.datatable = new DataTable(this.container, this.columns, this.datasource, oConfig);
+        gCount++;
+        return this.datatable;
     };
 
     var dtBaseTemplate = {
@@ -87,11 +108,13 @@
 
         testConstruction: function() {
             var dt = this.createInstance();
+            
             Assert.isObject(dt, "Failed to create DataTable instance");
             Assert.isInstanceOf(DataTable, dt, "Failed to create DataTable instance");
             Assert.isInstanceOf(ColumnSet, dt.getColumnSet(), "Failed to create ColumnSet instance");
             Assert.isInstanceOf(RecordSet, dt.getRecordSet(), "Failed to create RecordSet instance");
             Assert.areSame(this.data.length, dt.getRecordSet().getLength(), "Unexpected RecordSet length");
+            
             dt = null;
         }
     };
@@ -102,8 +125,9 @@
         testGetTableEl: function() {
             var dt = this.createInstance();
             var elTable = dt.getTableEl();
+            
             Assert.areSame("table", elTable.tagName.toLowerCase(), "Expected a TABLE element");
-            Assert.areSame("yui-dt"+this.count+"-table", elTable.id, "Failed to generate correct ID");
+            Assert.areSame("yui-dt"+gCount+"-table", elTable.id, "Failed to generate correct TABLE DOM ID");
             dt = null;
         },
 
@@ -111,9 +135,10 @@
             var dt = this.createInstance();
             var elTable = dt.getTableEl();
             var elTbody = dt.getMsgTbodyEl();
+            
             Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
             //TODO: generate ID for tbody?
-            //Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
+            //Assert.areSame("yui-dt"+gCount+"-tbody", elTbody.id, "Failed to generate correct TBODY DOM ID");
             Assert.areSame(elTable.tBodies[0], elTbody, "Expected to get first TBODY element of the TABLE");
             dt = null;
         },
@@ -122,29 +147,35 @@
             var dt = this.createInstance();
             var elTable = dt.getTableEl();
             var elTbody = dt.getTbodyEl();
+            
             Assert.areSame("tbody", elTbody.tagName.toLowerCase(), "Expected a TBODY element");
             //TODO: generate ID for tbody?
-            //Assert.areSame("yui-dt"+this.count+"-tbody", elTbody.id, "Failed to generate correct ID");
+            //Assert.areSame("yui-dt"+gCount+"-tbody", elTbody.id, "Failed to generate correct TBODY DOM ID");
             Assert.areSame(elTable.tBodies[1], elTbody, "Expected to get second TBODY element of the TABLE");
             dt = null;
         },
 
         testGetFirstTrEl: function() {
             var dt = this.createInstance();
-            var elTr = dt.getFirstTrEl();
-            Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
-            Assert.areSame("yui-dt"+this.count+"-bdrow0", elTr.id, "Failed to generate correct ID");
+            var elRow = dt.getFirstTrEl();
+            
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow0",
+                sectionRowIndex:0,
+                yuiRecordId:0},
+                elRow, "Failed to get first row");
             dt = null;
         },
 
         testGetLastTrEl: function() {
             var dt = this.createInstance();
-            var elTbody = dt.getTbodyEl();
-            var elTr = dt.getLastTrEl();
-            Assert.areSame("tr", elTr.tagName.toLowerCase(), "Expected a TR element");
-            var i = elTbody.rows.length-1;
-            Assert.areSame(elTbody.rows[i], elTr, "Failed to get last TR element");
-            Assert.areSame("yui-dt"+this.count+"-bdrow"+i, elTr.id, "Failed to generate correct ID");
+            var elRow = dt.getLastTrEl();
+            
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+3,
+                sectionRowIndex:3,
+                yuiRecordId:3},
+                elRow, "Failed to get last row");
             dt = null;
         }
     });
@@ -153,14 +184,61 @@
     var dtRowMutationTemplate = YAHOO.lang.merge(dtBaseTemplate, {
         name: "DataTable Row Mutation Test Case",
 
-        testAddRow: function() {
+        testInsertRow: function() {
             var dt = this.createInstance();
-            var elFirstTr = dt.getFirstTrEl();
-            Assert.areSame(0, elFirstTr.yuiRecordId, "Unexpected Record ID");
-
             dt.addRow({a:"4a",b:"4b",c:"4c"}, 0);
-            elFirstTr = dt.getFirstTrEl();
-            Assert.areSame(4, elFirstTr.yuiRecordId, "Unexpected Record ID for inserted row");
+            
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+4,
+                sectionRowIndex:0,
+                yuiRecordId:4},
+                elRow, "Failed to get inserted row");
+        },
+        
+        testAppendRow: function() {
+            var dt = this.createInstance();
+            dt.addRow({a:"4a",b:"4b",c:"4c"});
+            
+            var elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+4,
+                sectionRowIndex:4,
+                yuiRecordId:4},
+                elRow, "Failed to get appended row");
+        },
+
+        testDeleteFirstRow: function() {
+            var dt = this.createInstance();
+            dt.deleteRow(dt.getFirstTrEl());
+            
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+1,
+                sectionRowIndex:0,
+                yuiRecordId:1},
+                elRow, "Failed to get new first row");
+        },
+
+        testDeleteAppendThenInsert: function() {
+            var dt = this.createInstance();
+            dt.deleteRow(dt.getFirstTrEl());
+            dt.addRow({a:"4a",b:"4b",c:"4c"});
+            dt.addRow({a:"5a",b:"5b",c:"5c"},0);
+
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+5,
+                sectionRowIndex:0,
+                yuiRecordId:5},
+                elRow, "Failed to get first row");
+
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+4,
+                sectionRowIndex:4,
+                yuiRecordId:4},
+                elRow, "Failed to get last row");
         }
     });
     var dtRowMutationTest = new DataTableTestCase(dtRowMutationTemplate);
@@ -191,18 +269,35 @@
             // var oColumn = dt.getColumn(0);
             var oColumn = dt.getColumn(dt.getFirstTrEl().cells[0].yuiColumnId);
             dt.sortColumn(oColumn);
-            var elFirstTr = dt.getFirstTrEl();
-            Assert.areSame(0, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+            
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+0,
+                sectionRowIndex:0,
+                yuiRecordId:0},
+                elRow, "Failed to get first row ascending numbers");
 
-            var elLastTr = dt.getLastTrEl();
-            Assert.areSame(3, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+3,
+                sectionRowIndex:3,
+                yuiRecordId:3},
+                elRow, "Failed to get last row ascending numbers");
 
             dt.sortColumn(oColumn);
-            elFirstTr = dt.getFirstTrEl();
-            Assert.areSame(3, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST DESC");
+            elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+0,
+                sectionRowIndex:0,
+                yuiRecordId:3},
+                elRow, "Failed to get first row descending numbers");
 
-            elLastTr = dt.getLastTrEl();
-            Assert.areSame(0, elLastTr.yuiRecordId, "Unexpected Record ID LAST DESC");
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+3,
+                sectionRowIndex:3,
+                yuiRecordId:0},
+                elRow, "Failed to get last row descending numbers");
         },
 
         testSortString: function() {
@@ -212,11 +307,35 @@
             var oColumn = dt.getColumn(dt.getFirstTrEl().cells[1].yuiColumnId);
             dt.sortColumn(oColumn);
 
-            var elFirstTr = dt.getFirstTrEl();
-            Assert.areSame(1, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+0,
+                sectionRowIndex:0,
+                yuiRecordId:1},
+                elRow, "Failed to get first row ascending strings");
 
-            var elLastTr = dt.getLastTrEl();
-            Assert.areSame(0, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+3,
+                sectionRowIndex:3,
+                yuiRecordId:0},
+                elRow, "Failed to get last row ascending strings");
+
+            dt.sortColumn(oColumn);
+            
+            elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+0,
+                sectionRowIndex:0,
+                yuiRecordId:0},
+                elRow, "Failed to get first row descending strings");
+
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+3,
+                sectionRowIndex:3,
+                yuiRecordId:1},
+                elRow, "Failed to get last row descending strings");
         },
 
         testInsertThenSort: function() {
@@ -228,11 +347,21 @@
             dt.addRow({a:4,b:"four"}, 0)
             dt.sortColumn(oColumn);
             
-            var elFirstTr = dt.getFirstTrEl();
-            Assert.areSame(4, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+4,
+                sectionRowIndex:0,
+                yuiRecordId:4},
+                elRow, "Failed to get first row ascending strings");
 
-            var elLastTr = dt.getLastTrEl();
-            Assert.areSame(0, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+3,
+                sectionRowIndex:4,
+                yuiRecordId:0},
+                elRow, "Failed to get last row ascending strings");
+                
+            //TODO: test descending
         },
         
         testSortThenAppend: function() {
@@ -243,14 +372,139 @@
             dt.sortColumn(oColumn);
             dt.addRow({a:4,b:"four"});
 
-            var elFirstTr = dt.getFirstTrEl();
-            Assert.areSame(1, elFirstTr.yuiRecordId, "Unexpected Record ID FIRST ASC");
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+0,
+                sectionRowIndex:0,
+                yuiRecordId:1},
+                elRow, "Failed to get first row ascending strings");
 
-            var elLastTr = dt.getLastTrEl();
-            Assert.areSame(4, elLastTr.yuiRecordId, "Unexpected Record ID LAST ASC");
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+4,
+                sectionRowIndex:4,
+                yuiRecordId:4},
+                elRow, "Failed to get last row ascending strings");
+        },
+        
+        testDeleteAppendInsertThenSort: function() {
+            var dt = this.createInstance();
+
+            dt.deleteRow(dt.getFirstTrEl());
+            dt.addRow({a:4,b:"four"});
+            dt.addRow({a:5,b:"five"},0);
+            var oColumn = dt.getColumn(dt.getFirstTrEl().cells[1].yuiColumnId);
+            dt.sortColumn(oColumn);
+
+            var elRow = dt.getFirstTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+5,
+                sectionRowIndex:0,
+                yuiRecordId:5},
+                elRow, "Failed to get first row ascending strings");
+
+            elRow = dt.getLastTrEl();
+            TableAssert.areSameRow(
+                {id:"yui-dt"+gCount+"-bdrow"+4,
+                sectionRowIndex:4,
+                yuiRecordId:2},
+                elRow, "Failed to get last row ascending strings");
+
         }
     });
     var dtSortingTest = new DataTableTestCase(dtSortingTemplate);
+    
+    var dtRowSelectionTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable Row Selection Test Case",
+
+        testSelectUnselectByEl: function() {
+            var dt = this.createInstance();
+            var elRow = dt.getFirstTrEl();
+            dt.selectRow(elRow);
+
+            Assert.areSame(true, YAHOO.util.Dom.hasClass(elRow, "yui-dt-selected"), "Failed to apply CSS");
+            ArrayAssert.contains(elRow.yuiRecordId, dt.getSelectedRows(), "Failed to select first row");
+            
+            dt.unselectRow(elRow);
+
+            Assert.areSame(false, YAHOO.util.Dom.hasClass(elRow, "yui-dt-selected"), "Failed to remove CSS");
+            ArrayAssert.doesNotContain(elRow, dt.getSelectedRows(), "Failed to unselect first row");
+
+        },
+        
+        testSelectThenInsert: function() {
+            var dt = this.createInstance();
+            var elRow = dt.getFirstTrEl();
+            dt.selectRow(elRow);
+            dt.addRow({a:"4a",b:"4b",c:"4c"}, 0);
+            
+            elRow = dt.getTbodyEl().rows[1];
+
+            Assert.areSame(true, YAHOO.util.Dom.hasClass(elRow, "yui-dt-selected"), "Failed to apply CSS");
+            ArrayAssert.contains(elRow.yuiRecordId, dt.getSelectedRows(), "Second row should be selected");
+
+            elRow = dt.getTbodyEl().rows[0];
+
+            Assert.areSame(false, YAHOO.util.Dom.hasClass(elRow, "yui-dt-selected"), "Failed to apply CSS");
+            ArrayAssert.doesNotContain(elRow.yuiRecordId, dt.getSelectedRows(), "First row should not be selected");
+
+        }
+    });
+    var dtRowSelectionTest = new DataTableTestCase(dtRowSelectionTemplate);
+
+    var dtPaginationTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable Pagination Test Case",
+        
+        data: [
+            {a:0},{a:1},{a:2},{a:3},{a:4},
+            {a:5},{a:6},{a:7},{a:8},{a:9},
+            {a:10},{a:11},{a:12},{a:13},{a:14},
+            {a:15},{a:16},{a:17},{a:18},{a:19},
+            {a:20},{a:21}
+        ],
+
+        dsConfig: {
+            responseType:YAHOO.util.DataSource.TYPE_JSARRAY,
+            responseSchema:{fields:["a"]}
+        },
+
+        columns: [{key:"a"}],
+
+        testPagination: function() {
+            var oConfig = {
+                paginated:true,
+                paginator: {rowsPerPage:5}
+            }
+            var dt = this.createInstance(oConfig);
+            Assert.areSame(5, dt.get("paginator").totalPages, "Expected 5 pages");
+        },
+
+        testDeleteRowsCurrentPage: function() {
+            var oConfig = {
+                paginated:true,
+                paginator: {rowsPerPage:5}
+            }
+            var dt = this.createInstance(oConfig);
+            dt.deleteRows(0,2);
+            // Workaround bug 1391828
+            dt.refreshView();
+            Assert.areSame(4, dt.get("paginator").totalPages, "Expected 4 pages");
+        },
+        
+         testDeleteRowsDifferentPage: function() {
+            var oConfig = {
+                paginated:true,
+                paginator: {rowsPerPage:5}
+            }
+            var dt = this.createInstance(oConfig);
+            dt.showPage(5);
+            dt.deleteRows(0,2);
+            // Workaround bug 1391828
+            dt.refreshView();
+            Assert.areSame(4, dt.get("paginator").totalPages, "Expected 4 pages");
+        }
+    });
+    var dtPaginationTest = new DataTableTestCase(dtPaginationTemplate);
 
     function runTests(){
         TestRunner.run();
@@ -262,7 +516,9 @@
         datatablesuite.add(dtDomAccessorsTest);
         datatablesuite.add(dtRowMutationTest);
         datatablesuite.add(dtSortingTest);
-
+        datatablesuite.add(dtRowSelectionTest);
+        datatablesuite.add(dtPaginationTest);
+        
         TestRunner.add(datatablesuite);
 
         YAHOO.util.Event.addListener("btnRun", "click", runTests);
