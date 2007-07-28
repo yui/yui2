@@ -46,14 +46,18 @@
     /**
     * The Button class creates a rich, graphical button.
     * @param {String} p_oElement String specifying the id attribute of the 
-    * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
-    * <code>&#60;span&#62;</code> element to be used to create the button.
+    * <code>&#60;input&#62;</code>, <code>&#60;button&#62;</code>,
+    * <code>&#60;a&#62;</code>, or <code>&#60;span&#62;</code> element to 
+    * be used to create the button.
     * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
-    * one-html.html#ID-6043025">HTMLInputElement</a>|<a href="
+    * one-html.html#ID-6043025">HTMLInputElement</a>|<a href="http://www.w3.org
+    * /TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-34812697">
+    * HTMLButtonElement</a>|<a href="
     * http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#
     * ID-33759296">HTMLElement</a>} p_oElement Object reference for the 
-    * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
-    * <code>&#60;span&#62;</code> element to be used to create the button.
+    * <code>&#60;input&#62;</code>, <code>&#60;button&#62;</code>, 
+    * <code>&#60;a&#62;</code>, or <code>&#60;span&#62;</code> element to be 
+    * used to create the button.
     * @param {Object} p_oElement Object literal specifying a set of   
     * configuration attributes used to create the button.
     * @param {Object} p_oAttributes Optional. Object literal specifying a set  
@@ -2737,14 +2741,18 @@
         * @method init
         * @description The Button class's initialization method.
         * @param {String} p_oElement String specifying the id attribute of the 
-        * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
-        * <code>&#60;span&#62;</code> element to be used to create the button.
+        * <code>&#60;input&#62;</code>, <code>&#60;button&#62;</code>,
+        * <code>&#60;a&#62;</code>, or <code>&#60;span&#62;</code> element to 
+        * be used to create the button.
         * @param {<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-        * level-one-html.html#ID-6043025">HTMLInputElement</a>|<a href="
-        * http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#
-        * ID-33759296">HTMLElement</a>} p_oElement Object reference for the 
-        * <code>&#60;input&#62;</code>, <code>&#60;a&#62;</code> or 
-        * <code>&#60;span&#62;</code> element to be used to create the button.
+        * level-one-html.html#ID-6043025">HTMLInputElement</a>|<a href="http://
+        * www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html
+        * #ID-34812697">HTMLButtonElement</a>|<a href="http://www.w3.org/TR
+        * /2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-33759296">
+        * HTMLElement</a>} p_oElement Object reference for the 
+        * <code>&#60;input&#62;</code>, <code>&#60;button&#62;</code>, 
+        * <code>&#60;a&#62;</code>, or <code>&#60;span&#62;</code> element to be 
+        * used to create the button.
         * @param {Object} p_oElement Object literal specifying a set of 
         * configuration attributes used to create the button.
         * @param {Object} p_oAttributes Optional. Object literal specifying a 
@@ -3065,7 +3073,6 @@
             });
         
         
-        
             /**
             * @config menu
             * @description Object specifying the menu for the button.  
@@ -3095,9 +3102,10 @@
             * <li>Array of strings representing the text labels for each menu 
             * item in the menu.</li>
             * </ul>
-            * @type <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>|
-            * <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-            * level-one-html.html#ID-58190037">HTMLElement</a>|String|Array
+            * @type <a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a>|<a 
+            * href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>|<a 
+            * href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-
+            * one-html.html#ID-58190037">HTMLElement</a>|String|Array
             * @default null
             */
             this.setAttributeConfig("menu", {
