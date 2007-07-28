@@ -2346,6 +2346,7 @@ YAHOO.tool.TestManager = {
      * Constant for the testpagebegin custom event
      * @property TEST_PAGE_BEGIN_EVENT
      * @static
+     * @type string
      * @final
      */
     TEST_PAGE_BEGIN_EVENT /*:String*/ : "testpagebegin",
@@ -2354,6 +2355,7 @@ YAHOO.tool.TestManager = {
      * Constant for the testpagecomplete custom event
      * @property TEST_PAGE_COMPLETE_EVENT
      * @static
+     * @type string
      * @final
      */
     TEST_PAGE_COMPLETE_EVENT /*:String*/ : "testpagecomplete",
@@ -2362,6 +2364,7 @@ YAHOO.tool.TestManager = {
      * Constant for the testmanagerbegin custom event
      * @property TEST_MANAGER_BEGIN_EVENT
      * @static
+     * @type string
      * @final
      */
     TEST_MANAGER_BEGIN_EVENT /*:String*/ : "testmanagerbegin",
@@ -2370,6 +2373,7 @@ YAHOO.tool.TestManager = {
      * Constant for the testmanagercomplete custom event
      * @property TEST_MANAGER_COMPLETE_EVENT
      * @static
+     * @type string
      * @final
      */
     TEST_MANAGER_COMPLETE_EVENT /*:String*/ : "testmanagercomplete",
