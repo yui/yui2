@@ -1025,7 +1025,7 @@
 
         Event.on(this.getElement(this.ID.HEX), "keypress", _hexOnly, this);
         Event.on(this.getElement(this.ID.HEX), "blur", function(e, me) {
-                _useFieldValue.call(me, e, this, this.OPT.HEX);
+                _useFieldValue.call(me, e, this, me.OPT.HEX);
             }, this);
     };
 
