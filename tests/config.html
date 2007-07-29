@@ -7,7 +7,8 @@
 	<script type="text/javascript" src="../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="../build/logger/logger-min.js"></script>
 	<script type="text/javascript" src="../build/yuitest/yuitest-beta-min.js"></script>
-	<script type="text/javascript" src="../build/container/container_core-min.js"></script>
+<!-- 	<script type="text/javascript" src="../build/container/container_core-min.js"></script> -->
+	<script type="text/javascript" src="http://competitor.corp.yahoo.com/presentation/2.x/widget/container/src/js/Config.js"></script>
 </head>
 <body>
     <script type="text/javascript">
@@ -155,7 +156,8 @@
 					bONE:true, 
 					btwo:true, 
 					bTHREE:true
-				});
+				}, true);
+
 
 				o.cfg.setProperty("sonE", "str11");
 				o.cfg.setProperty("sTWO", "str22");
@@ -166,14 +168,16 @@
 				o.cfg.setProperty("BTwO", false);
 				o.cfg.setProperty("BthreE", false);																												
 
-				o.cfg.resetProperty("soNe");
-				o.cfg.resetProperty("stWo");
+
+                o.cfg.resetProperty("soNe");
+                o.cfg.resetProperty("stWo");
 				o.cfg.resetProperty("stHree");
 				o.cfg.resetProperty("nOnE");
 				o.cfg.resetProperty("nTwO");
 				o.cfg.resetProperty("bONE");
 				o.cfg.resetProperty("bTWO");
 				o.cfg.resetProperty("BTHREE");
+
 		
 				// Should values be reset to defaults and not applyConfig values
 				Assert.areEqual("str1111", o.cfg.getProperty("sONE"));
