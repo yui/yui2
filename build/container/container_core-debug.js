@@ -246,10 +246,10 @@
                     !Lang.isUndefined(this.initialConfig[key])) {
     
                     this.setProperty(key, this.initialConfig[key]);
+
+                    return true;
     
                 }
-    
-                return true;
     
             } else {
     
@@ -459,14 +459,38 @@
         */
         applyConfig: function (userConfig, init) {
         
-            var prop;
-        
+            var sKey,
+                oValue,
+                oConfig;
+
             if (init) {
-                this.initialConfig = userConfig;
+
+                oConfig = {};
+
+                for (sKey in userConfig) {
+                
+                    if (Lang.hasOwnProperty(userConfig, sKey)) {
+
+                        oConfig[sKey.toLowerCase()] = userConfig[sKey];
+
+                    }
+                
+                }
+
+                this.initialConfig = oConfig;
+
             }
-            for (prop in userConfig) {
-                this.queueProperty(prop, userConfig[prop]);
+
+            for (sKey in userConfig) {
+            
+                if (Lang.hasOwnProperty(userConfig, sKey)) {
+            
+                    this.queueProperty(sKey, userConfig[sKey]);
+                
+                }
+
             }
+
         },
         
         /**
