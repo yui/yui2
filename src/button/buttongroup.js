@@ -67,7 +67,7 @@
     
             if (oElement) {
             
-                if (oElement.nodeName.toUpperCase() == this.TAG_NAME) {
+                if (oElement.nodeName.toUpperCase() == this.NODE_NAME) {
     
                     this.logger = 
                         new YAHOO.widget.LogWriter("ButtonGroup " + p_oElement);
@@ -83,7 +83,7 @@
     
             sNodeName = p_oElement.nodeName;
     
-            if (sNodeName && sNodeName == this.TAG_NAME) {
+            if (sNodeName && sNodeName == this.NODE_NAME) {
         
                 if (!p_oElement.id) {
         
@@ -128,14 +128,14 @@
         
         
         /**
-        * @property TAG_NAME
+        * @property NODE_NAME
         * @description The name of the tag to be used for the button 
         * group's element. 
         * @default "DIV"
         * @final
         * @type String
         */
-        TAG_NAME: "DIV",
+        NODE_NAME: "DIV",
         
         
         /**
@@ -162,7 +162,7 @@
         */
         _createGroupElement: function () {
         
-            var oElement = document.createElement(this.TAG_NAME);
+            var oElement = document.createElement(this.NODE_NAME);
         
             return oElement;
         
