@@ -34,16 +34,20 @@ should now use the myDataTable.set("propertyName", newValue) syntax instead of d
 dot notation of any properties.
 
 * The underlying pagination architecture and API have been revised. Specifically,
-the property paginator has been deprecated in favor of paginated and
-paginatorOptions has been deprecated in favor of paginator. Please see the
-pagination examples for implementation details. Please refer to the API reference
-for full details on property and method names and argument signatures.
+the property paginator has been deprecated in favor of paginated,
+paginatorOptions has been deprecated in favor of paginator, and related events
+and method names have been changed. Please see the pagination examples for
+implementation details. Please refer to the API reference for full details on
+new property and method names and argument signatures.
 
 * There is a known pagination bug where changing the rows-per-page dropdown while
 on a page number that is out of bounds of the new range, the current page value
 fails to get reset to an appropriate default value.
 
 * There is a known pagination bug where custom containers are ignored.
+
+* There is a known bug where row and cell selections are not tracked correctly in
+paginated DataTables.
 
 * The underlying editing architecture and API have been revised. Specifically, the
 ColumnEditor class is no longer used, the method editCell() has been deprecated
