@@ -8234,7 +8234,7 @@ toString: function() {
 * @param {Object} p_oConfig Optional. Object literal specifying the 
 * configuration for the menu bar. See configuration class documentation for
 * more details.
-* @class Menubar
+* @class MenuBar
 * @constructor
 * @extends YAHOO.widget.Menu
 * @namespace YAHOO.widget
