@@ -238,8 +238,8 @@
         dd1.onMouseUp = onMouseUp;
 
         dd2 = new YAHOO.util.DD("dd2div");
-        
-        if (parent && parent !== window) {
+
+        if (parent && parent != window) {
             YAHOO.tool.TestManager.load();
         } else {
             YAHOO.tool.TestRunner.run();

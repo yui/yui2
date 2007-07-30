@@ -1045,7 +1045,7 @@
 			logger = new YAHOO.tool.TestLogger();
 			YAHOO.util.Event.addListener("btnRun", "click", runTests);
 
-            if (parent && parent !== window) {
+            if (parent && parent != window) {
                 configureTests();
                 YAHOO.tool.TestManager.load();
             }

@@ -263,7 +263,7 @@ YAHOO.tool.TestRunner.add(imageLoaderTestSuite);
 
 YAHOO.util.Event.onDOMReady(function() {
 	var logger = new YAHOO.tool.TestLogger();
-    if (parent && parent !== window) {
+    if (parent && parent != window) {
         YAHOO.tool.TestManager.load();
     } else {
         YAHOO.tool.TestRunner.run();

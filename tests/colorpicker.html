@@ -10,7 +10,7 @@
 <script type="text/javascript" src="../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script type="text/javascript" src="../build/element/element-beta-min.js"></script> 
 <script type="text/javascript" src="../build/dragdrop/dragdrop-min.js"></script> 
-<script type="text/javascript" src="../build/slider/slider-min.js"></script> 
+<script type="text/javascript" src="../build/slider/slider.js"></script> 
 <script type="text/javascript" src="../build/colorpicker/colorpicker-beta.js"></script> 
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
@@ -99,13 +99,37 @@
                         r: 51, g: 51, b: 51, h: 0, s: 0, v: 20,
                         hex: "333333", rgb: [51, 51, 51], websafe: [51, 51, 51]
                     });
-            },            
+            },
+
+            _test_pickerClick: function() {
+
+
+                UserAction.mousedown("yui-picker-bg", {
+                        clientX: 50,
+                        clientY: 50
+                    });
+
+                UserAction.mousemove("yui-picker-bg", {
+                        clientX: 55,
+                        clientY: 55
+                    });
+                
+                UserAction.mouseup("yui-picker-bg", {
+                        clientX: 60,
+                        clientY: 60
+                    });
+
+                _verifyState({
+                        r: 51, g: 51, b: 51, h: 0, s: 0, v: 20,
+                        hex: "333333", rgb: [51, 51, 51], websafe: [51, 51, 51]
+                    });
+            }
 
         })); 
 
         tool.TestRunner.add(suite);
 
-        if (parent && parent !== window) {
+        if (parent && parent != window) {
             tool.TestManager.load();
         } else {
             tool.TestRunner.run();

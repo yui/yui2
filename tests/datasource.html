@@ -120,7 +120,7 @@
         YAHOO.util.Event.addListener("btnRun", "click", runTests);
         YAHOO.util.Dom.get("btnRun").disabled = false;
 
-        if (parent && parent !== window) {
+        if (parent && parent != window) {
             YAHOO.tool.TestManager.load();
         }
     });
