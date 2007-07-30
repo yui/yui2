@@ -1,7 +1,7 @@
 Element Release Notes
 
 *** version 2.3.0 ***
-* setAttributes now sets in order configs were adde
+* setAttributes now sets in order configs were added
 * added subscribe alias for on/addListener
 
 ** version 2.2.2 ***
