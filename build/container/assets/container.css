@@ -1,6 +1,18 @@
 .yui-overlay,
 .yui-panel-container {
 	position:absolute;
+	z-index: 1;
+}
+
+.masked .yui-panel-container {
+
+    /*
+        Default to a z-index 1 higher than default if the Panel is modal
+        to make sure the panel is above its modality mask.
+    */
+
+   z-index: 2;
+
 }
 
 .yui-tt {
@@ -47,7 +59,12 @@
 }
 
 .mask {
-    z-index:0;
+    /*
+        Default to a z-index of 1 less than the default defined 
+        by ".masked .yui-panel-container"
+    */
+
+    z-index: 1; 
     display:none;
     position:absolute;
     top:0;

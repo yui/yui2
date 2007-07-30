@@ -5156,7 +5156,7 @@
         
         }
 
-        this.unsubscribe("hide", this._onHide, p_oObject);
+        this.unsubscribe("hide", restoreOriginalWidth, p_oObject);
     
     }
 
