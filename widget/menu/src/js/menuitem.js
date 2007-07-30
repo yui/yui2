@@ -1384,7 +1384,7 @@ MenuItem.prototype = {
         /**
         * @config helptext
         * @description String specifying additional instructional text to 
-        * accompany the text for the nenu item.
+        * accompany the text for the menu item.
         * @deprecated Use "text" configuration property to add help text markup.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
         * class=\"helptext\"&#62;Ctrl + C&#60;/em&#60;");</code>
@@ -1465,7 +1465,6 @@ MenuItem.prototype = {
         * @deprecated Use "text" configuration property to add strong emphasis.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;strong&#62; 
         * Some Text&#60;/strong&#60;");</code>
-        * menu's markup.
         * @default false
         * @type Boolean
         */
