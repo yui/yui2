@@ -24,7 +24,7 @@ file; it includes the following components:
 * Dom
 * Connection Manager
 * Animation
-* Drag & Drop
+* Drag &amp; Drop
 * Element
 
 For implementations that use four or more  of these files, it may prove
