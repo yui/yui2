@@ -1,7 +1,14 @@
 YUI Library - History - Release Notes
 
-2.2.2
-  * No change
+2.3.0
+
+  * The Browser History Manager now works on IE if used inside an IFrame
+    (See SourceForge Bug #1729569)
+  * Added multiNavigate method, which allows changing the state of several
+    modules at once, without introducing intermediate history entries
+    (See SourceForge Bug #1713236)
+  * Do not raise an exception when re-registering a module
+    (See SourceForge Bug #1708840)
 
 2.2.1
 
