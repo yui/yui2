@@ -151,7 +151,7 @@
         
         }
 
-        this.unsubscribe("hide", this._onHide, p_oObject);
+        this.unsubscribe("hide", restoreOriginalWidth, p_oObject);
     
     }
 
@@ -631,6 +631,17 @@
 
             }
 
+
+            function onBeforeShow() {
+            
+                createUnderlay.call(this);
+    
+                this._underlayDeferred = false;
+    
+                this.beforeShowEvent.unsubscribe(onBeforeShow);
+            
+            }
+
             
             function destroyUnderlay() {
 
@@ -661,17 +672,6 @@
 
                 }
                     
-            }
-            
-
-            function onBeforeShow() {
-            
-                createUnderlay.call(this);
-    
-                this._underlayDeferred = false;
-    
-                this.beforeShowEvent.unsubscribe(onBeforeShow);
-            
             }
         
 
