@@ -11,8 +11,8 @@ setAttributeFromDOMAttribute("name");setAttributeFromDOMAttribute("value");setAt
 switch(sSrcElementNodeName){case"A":p_oAttributes.type="link";setAttributeFromDOMAttribute("href");setAttributeFromDOMAttribute("target");break;case"INPUT":setFormElementProperties();if(!("checked"in p_oAttributes)){p_oAttributes.checked=p_oElement.checked;}
 break;case"BUTTON":setFormElementProperties();oRootNode=p_oElement.parentNode.parentNode;if(Dom.hasClass(oRootNode,this.CSS_CLASS_NAME+"-checked")){p_oAttributes.checked=true;}
 if(Dom.hasClass(oRootNode,this.CSS_CLASS_NAME+"-disabled")){p_oAttributes.disabled=true;}
-p_oElement.removeAttribute("name");p_oElement.removeAttribute("value");p_oElement.setAttribute("type","button");break;}
-p_oElement.removeAttribute("id");if(!("tabindex"in p_oAttributes)){p_oAttributes.tabindex=p_oElement.tabIndex;}
+p_oElement.removeAttribute("value");p_oElement.setAttribute("type","button");break;}
+p_oElement.removeAttribute("id");p_oElement.removeAttribute("name");if(!("tabindex"in p_oAttributes)){p_oAttributes.tabindex=p_oElement.tabIndex;}
 if(!("label"in p_oAttributes)){sText=sSrcElementNodeName=="INPUT"?p_oElement.value:p_oElement.innerHTML;if(sText&&sText.length>0){p_oAttributes.label=sText;}}}
 function initConfig(p_oConfig){var oAttributes=p_oConfig.attributes,oSrcElement=oAttributes.srcelement,sSrcElementNodeName=oSrcElement.nodeName.toUpperCase(),me=this;if(sSrcElementNodeName==this.NODE_NAME){p_oConfig.element=oSrcElement;p_oConfig.id=oSrcElement.id;Dom.getElementsBy(function(p_oElement){switch(p_oElement.nodeName.toUpperCase()){case"BUTTON":case"A":case"INPUT":setAttributesFromSrcElement.call(me,p_oElement,oAttributes);break;}},"*",oSrcElement);}
 else{switch(sSrcElementNodeName){case"BUTTON":case"A":case"INPUT":setAttributesFromSrcElement.call(this,oSrcElement,oAttributes);break;}}}
