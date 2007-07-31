@@ -3264,7 +3264,7 @@ var Dom = YAHOO.util.Dom,
                 });
             }, this, true);
             panel.hideEvent.subscribe(function() {
-                panel.hideEvent.unsubscribeAll();            
+                ///panel.hideEvent.unsubscribeAll();            
                 this.currentWindow = null;
                 var evName = 'window' + windowName + 'Close';
                 this.fireEvent(evName, { type: evName, target: this });
@@ -3438,6 +3438,7 @@ var Dom = YAHOO.util.Dom,
             this.currentWindow = null;
             this.get('panel').hide();
             this.get('panel').cfg.setProperty('xy', [-900,-900]);
+            this.get('panel').syncIframe(); //Needed to move the iframe with the hidden panel
             this.unsubscribeAll('afterExecCommand');
             this._focusWindow();
             Event.removeListener(document, 'keypress', this._closeWindow);

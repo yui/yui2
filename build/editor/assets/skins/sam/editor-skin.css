@@ -15,6 +15,7 @@
     margin: 0;
     padding: 0.3em 1em;
     font-size: 100%;
+    text-align: left;
 }
 
 /* Give the toolbars groups titles some color and padding */
@@ -22,8 +23,9 @@
     color: #808080;
     font-size: 75%;
     margin: 1em 0 0.25em;
-    padding-bottom: 0.5em;
+    padding-bottom: 0;
     padding-left: 0.25em;
+    text-align: left;
 }
 
 /* Hide all of the sepatators borders */
@@ -70,6 +72,7 @@
     border:1px solid #808080;
     border-top: none;
     color: #999;
+    text-align: left;
 }
 
 /* Set the image for the collapse button on the toolbar */
@@ -99,11 +102,12 @@
     background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
     border: 1px solid #808080;
     cursor: pointer;
-    height: 18px;
+    height: 22px;
     margin: 0;
     overflow: hidden;
-    padding: 2px 5px;
+    /*padding: 2px 5px;*/
     position: relative;
+    display: block;
 }
 /* Handle the hover state of the buttons */
 .yui-skin-sam .yui-toolbar-container .yui-button-hover {
@@ -134,6 +138,10 @@
 /* Swap out the image to an active image */
 .yui-skin-sam .yui-toolbar-container .yui-button-selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {
     background-image: url(editor-sprite-active.gif);
+}
+
+.yui-skin-sam .visible .yuimenuitemlabel {
+    text-align:left;
 }
 
 /* Set the background color of all menu containers */
@@ -296,6 +304,7 @@
 .yui-skin-sam .yui-toolbar-container .yui-button .first-child, .yui-skin-sam .yui-toolbar-container .yui-button .first-child a {
     width: 500px;
     position: absolute;
+    _position: static;
     top: -1px;
 }
 /* Reset the position of the first child so the iframe in IE will not move above the menu */
