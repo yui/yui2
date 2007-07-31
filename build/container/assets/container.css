@@ -1,5 +1,6 @@
 .yui-overlay,
 .yui-panel-container {
+    visibility:hidden;
 	position:absolute;
 	z-index: 1;
 }
