@@ -201,6 +201,12 @@ Known Issues
     - Opera for Mac OS X: Hold down the command/Apple key while clicking with  
       the left mouse button.
 
++ Focus highlight sticks in Opera 
+  -------------------------------
+  In Opera focus is designated via the application of a background color 
+  to an element's text node.  When a Menu instance has focus in Opera, the 
+  focus highlight can remain on a MenuItem instance even after it has blurred.
+
 + ContextMenu instances cannot be invoked by clicking on Java Applets
   -------------------------------------------------------------------
   When a Java Applet is specified as the "trigger" element for a ContextMenu 
