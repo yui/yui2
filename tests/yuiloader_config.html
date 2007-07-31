@@ -16,11 +16,13 @@
         } else if (typeof console !== "undefined" && console.debug) {
             console.debug(msg);
         } else {
+            /*
             var d=document, b=d.body, n=d.createElement("div");
             if (b) {
                 n.appendChild(d.createTextNode(msg));
                 b.appendChild(n);
             }
+            */
         }
     }
 
@@ -39,8 +41,6 @@
             onLoadComplete: function(loader) {
 
                 //YAHOO.widget.Logger.enableBrowserConsole();
-                logger = new YAHOO.tool.TestLogger();
-                log("onLoadComplete");
 
                 suite=new YAHOO.tool.TestSuite("yuisuite");
 
@@ -64,11 +64,15 @@
                  
                 YAHOO.tool.TestRunner.add(suite);
 
-                if (parent && parent != window) {
-                    YAHOO.tool.TestManager.load();
-                } else {
-                    YAHOO.tool.TestRunner.run();
-                }
+                YAHOO.util.Event.onAvailable("yahoo-com", function() {
+                    logger = new YAHOO.tool.TestLogger();
+                    log("onLoadComplete");
+                    if (parent && parent != window) {
+                        YAHOO.tool.TestManager.load();
+                    } else {
+                        YAHOO.tool.TestRunner.run();
+                    }
+                });
 
             }
         }
