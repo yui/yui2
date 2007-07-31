@@ -294,7 +294,6 @@
             
             }
 
-            p_oElement.removeAttribute("name");
             p_oElement.removeAttribute("value");
 
             p_oElement.setAttribute("type", "button");
@@ -304,7 +303,8 @@
         }
 
         p_oElement.removeAttribute("id");
-
+        p_oElement.removeAttribute("name");
+        
         if ( !("tabindex" in p_oAttributes) ) {
 
             p_oAttributes.tabindex = p_oElement.tabIndex;
