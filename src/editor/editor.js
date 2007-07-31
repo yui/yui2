@@ -1993,6 +1993,7 @@ var Dom = YAHOO.util.Dom,
         * @description Opens the Image Properties Window when the insert Image button is clicked or an Image is Double Clicked.
         */
         _handleInsertImageClick: function() {
+            //this.toolbar.disableButton(this.toolbar.getButtonByValue('insertimage'));
             this.on('afterExecCommand', function() {
                 var el = this.currentElement[0],
                     title = '',
@@ -2284,7 +2285,7 @@ var Dom = YAHOO.util.Dom,
                                     this.get('panel').setFooter(str);
                                 }
                                 
-                                if (url && url.value) {
+                                if (url && url.value && (url.value != this.STR_IMAGE_HERE)) {
                                     this.currentElement[0].setAttribute('src', url.value);
                                     var img = new Image();
                                     var self = this;
@@ -2321,6 +2322,7 @@ var Dom = YAHOO.util.Dom,
                 el.setAttribute('src', url.value);
                 el.setAttribute('title', title.value);
                 el.setAttribute('alt', title.value);
+                //this.toolbar.enableButton(this.toolbar.getButtonByValue('insertimage'));
             } else {
                 //No url/src given, remove the node from the document
                 el.parentNode.removeChild(el);
@@ -3188,6 +3190,7 @@ var Dom = YAHOO.util.Dom,
         * @description Opens a new "window/panel"
         */
         openWindow: function(win) {
+            this.toolbar.set('disabled', true); //Disable the toolbar when an editor window is open..
             Event.addListener(document, 'keypress', this._closeWindow, this, true);
             if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
                 YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
@@ -3250,8 +3253,6 @@ var Dom = YAHOO.util.Dom,
             panel.appendToHeader(_header);
             _header.appendChild(_close);
             _header.appendChild(_knob);
-            //panel.appendToHeader(_close);
-            //panel.appendToHeader(_knob);
             panel.setBody(' '); //Clear the current body
             panel.setFooter(' '); //Clear the current footer
             if (win.footer != null) {
@@ -3264,7 +3265,6 @@ var Dom = YAHOO.util.Dom,
                 });
             }, this, true);
             panel.hideEvent.subscribe(function() {
-                ///panel.hideEvent.unsubscribeAll();            
                 this.currentWindow = null;
                 var evName = 'window' + windowName + 'Close';
                 this.fireEvent(evName, { type: evName, target: this });
@@ -3440,6 +3440,7 @@ var Dom = YAHOO.util.Dom,
             this.get('panel').cfg.setProperty('xy', [-900,-900]);
             this.get('panel').syncIframe(); //Needed to move the iframe with the hidden panel
             this.unsubscribeAll('afterExecCommand');
+            this.toolbar.set('disabled', false); //enable the toolbar now that the window is closed
             this._focusWindow();
             Event.removeListener(document, 'keypress', this._closeWindow);
         },
