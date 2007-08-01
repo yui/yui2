@@ -814,7 +814,35 @@
         */
         _setLabel: function (p_sLabel) {
 
-            this._button.innerHTML = p_sLabel;             
+            this._button.innerHTML = p_sLabel;
+            
+            /*
+                Remove and add the default class name from the root element
+                for Gecko to ensure that the button shrinkwraps to the label.
+                Without this the button will not be rendered at the correct 
+                width when the label changes.  The most likely cause for this 
+                bug is button's use of the Gecko-specific CSS display type of 
+                "-moz-inline-box" to simulate "inline-block" supported by IE, 
+                Safari and Opera.
+            */
+            
+            var sClass,
+                me;
+            
+            if (YAHOO.env.ua.gecko && Dom.inDocument(this.get("element"))) {
+            
+                me = this;
+                sClass = this.CSS_CLASS_NAME;                
+
+                this.removeClass(sClass);
+                
+                window.setTimeout(function () {
+                
+                    me.addClass(sClass);
+                
+                }, 0);
+            
+            }
         
         },
         
