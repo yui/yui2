@@ -1167,6 +1167,11 @@ MenuItem.prototype = {
             bSelected = p_aArgs[0];
             oAnchor = this._oAnchor;
 
+            if (YAHOO.env.ua.opera) {
+
+                oAnchor.blur();
+            
+            }
 
             if(bSelected) {
     
@@ -1178,6 +1183,85 @@ MenuItem.prototype = {
                 Dom.removeClass(oAnchor, "selected");
     
             }
+
+            if (this.hasFocus() && YAHOO.env.ua.opera) {
+            
+                oAnchor.focus();
+            
+            }
+
+        }
+
+    },
+
+
+    /**
+    * @method _onSubmenuShow
+    * @description "show" event handler for a submenu.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    _onSubmenuShow: function (p_sType, p_aArgs) {
+
+        var oTextNode = this.submenuIndicator.firstChild;
+        
+        if (oTextNode) {
+
+            oTextNode.nodeValue = this.EXPANDED_SUBMENU_INDICATOR_TEXT;
+
+        }
+
+    },
+
+
+    /**
+    * @method _onSubmenuBeforeHide
+    * @description "beforehide" Custom Event handler for a submenu.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    _onSubmenuBeforeHide: function (p_sType, p_aArgs) {
+
+        var oItem = this.parent,
+            oMenu;
+
+        function onHide() {
+
+            oItem._oAnchor.blur();
+            oMenu.beforeHideEvent.unsubscribe(onHide);
+        
+        }
+    
+        if (oItem.hasFocus()) {
+
+            oMenu = oItem.parent;
+
+            oMenu.beforeHideEvent.subscribe(onHide);
+        
+        }
+    
+    },
+    
+
+    /**
+    * @method _onSubmenuHide
+    * @description "hide" Custom Event handler for a submenu.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    _onSubmenuHide: function (p_sType, p_aArgs) {
+
+        var oTextNode = this.submenuIndicator.firstChild;
+        
+        if (oTextNode) {
+
+            oTextNode.nodeValue = this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
         }
 
@@ -1250,6 +1334,15 @@ MenuItem.prototype = {
                 Dom.addClass(oAnchor, "hassubmenu");
 
                 this._oSubmenu = oMenu;
+                
+                oMenu.showEvent.subscribe(this._onSubmenuShow, null, this);
+                oMenu.hideEvent.subscribe(this._onSubmenuHide, null, this);
+            
+                if (YAHOO.env.ua.opera) {
+                
+                    oMenu.beforeHideEvent.subscribe(this._onSubmenuBeforeHide);               
+                
+                }
             
             }
 
