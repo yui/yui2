@@ -185,7 +185,8 @@ var Dom = YAHOO.util.Dom,
         "DISABLED": { 
             key: "disabled", 
             value: false, 
-            validator: Lang.isBoolean
+            validator: Lang.isBoolean,
+            suppressEvent: true
         }
     
     };
@@ -389,15 +390,6 @@ _bStopMouseEventHandlers: false,
 */
 _sClassName: null,
 
-
-/**
-* @property _bDisabled
-* @description The current value of the "disabled" configuration attribute.
-* @default false
-* @private
-* @type Boolean
-*/
-_bDisabled: false,
 
 
 // Public properties
@@ -1396,11 +1388,7 @@ _configureSubmenu: function (p_oItem) {
 
         this.renderEvent.subscribe(this._onParentMenuRender, oSubmenu, true);
 
-        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow, null, 
-            oSubmenu);
-
-        oSubmenu.showEvent.subscribe(this._onSubmenuShow, null, p_oItem);
-        oSubmenu.hideEvent.subscribe(this._onSubmenuHide, null, p_oItem);
+        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow);
 
     }
 
@@ -2051,6 +2039,7 @@ _onClick: function (p_sType, p_aArgs) {
         oItemCfg,
         oSubmenu,
         sURL,
+        nURL,
         oRoot;
 
 
@@ -2095,9 +2084,14 @@ _onClick: function (p_sType, p_aArgs) {
 
             sURL = oItemCfg.getProperty("url");
 
-            //  Prevent the browser from following links equal to "#"
+            if (YAHOO.env.ua.ie) {
+
+                sURL = 
+                    sURL.substring(document.location.href.length, sURL.length);
             
-            if ((sURL.substr((sURL.length-1),1) == "#")) {
+            }
+            
+            if ((sURL.substr(0,1) == "#")) {
 
                 Event.preventDefault(oEvent);
 
@@ -3184,34 +3178,7 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
 },
 
 
-/**
-* @method _onSubmenuShow
-* @description "show" event handler for a submenu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onSubmenuShow: function (p_sType, p_aArgs) {
-    
-    this.submenuIndicator.innerHTML = this.EXPANDED_SUBMENU_INDICATOR_TEXT;
 
-},
-
-
-/**
-* @method _onSubmenuHide
-* @description "hide" Custom Event handler for a submenu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onSubmenuHide: function (p_sType, p_aArgs) {
-    
-    this.submenuIndicator.innerHTML = this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
-
-},
 
 
 /**
@@ -3457,6 +3424,8 @@ configVisible: function (p_sType, p_aArgs, p_oMenu) {
 
         bVisible = p_aArgs[0];
         sDisplay = Dom.getStyle(this.element, "display");
+
+        Dom.setStyle(this.element, "visibility", "visible");
 
         if (bVisible) {
 
@@ -3827,15 +3796,14 @@ _onItemAdded: function (p_sType, p_aArgs) {
 configDisabled: function (p_sType, p_aArgs, p_oMenu) {
 
     var bDisabled = p_aArgs[0],
-        aItems,
+        aItems = this.getItems(),
         nItems,
         i;
 
-    if (this._bDisabled != bDisabled) {
+    if (Lang.isArray(aItems)) {
 
-        aItems = this.getItems();
         nItems = aItems.length;
-
+    
         if (nItems > 0) {
         
             i = nItems - 1;
@@ -3848,14 +3816,23 @@ configDisabled: function (p_sType, p_aArgs, p_oMenu) {
             while (i--);
         
         }
-    
-        Dom[(bDisabled ? "addClass" : "removeClass")](this.element, "disabled");    
 
-        this.itemAddedEvent[(bDisabled ? "subscribe" : "unsubscribe")](
-            this._onItemAdded);
-    
-        this._bDisabled = bDisabled;
-    
+
+        if (bDisabled) {
+
+            Dom.addClass(this.element, "disabled");
+
+            this.itemAddedEvent.subscribe(this._onItemAdded);
+
+        }
+        else {
+
+            Dom.removeClass(this.element, "disabled");
+
+            this.itemAddedEvent.unsubscribe(this._onItemAdded);
+
+        }
+        
     }
 
 },
@@ -4318,10 +4295,17 @@ removeItem: function (p_oObject, p_nGroupIndex) {
 getItems: function () {
 
     var aGroups = this._aItemGroups,
+        nGroups,
+        aItems = [];
+
+    if (Lang.isArray(aGroups)) {
+
         nGroups = aGroups.length;
 
-    return ((nGroups == 1) ? aGroups[0] : 
-                (Array.prototype.concat.apply([], aGroups)));
+        return ((nGroups == 1) ? aGroups[0] : 
+                    (Array.prototype.concat.apply(aItems, aGroups)));
+
+    }
 
 },
 
@@ -4970,7 +4954,8 @@ initDefaultConfig: function () {
         { 
             handler: this.configDisabled,
             value: DEFAULT_CONFIG.DISABLED.value, 
-            validator: DEFAULT_CONFIG.DISABLED.validator
+            validator: DEFAULT_CONFIG.DISABLED.validator,
+            suppressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
         }
     );
 
