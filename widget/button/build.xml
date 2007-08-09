@@ -21,23 +21,6 @@
 
         <mkdir dir="${component.srcdir}/temp/" />
 
-        <copy file="${component.srcdir}/css/button.css" tofile="${component.srcdir}/temp/button.css" />
-
-		<replaceregexp 
-			file="${component.srcdir}/temp/button.css"
-			byline="true"
-			match="\.\./img/"
-			replace=""
-			flags="g">
-		</replaceregexp>
-		<replaceregexp 
-			file="${component.srcdir}/temp/button.css"
-			byline="true"
-			match="\.\./src/img/"
-			replace="../../build/button/assets/"
-			flags="g">
-		</replaceregexp>
-
 		<copy file="${component.srcdir}/css/skins/sam/button-skin.css" tofile="${component.srcdir}/temp/skins/sam/button-skin.css" />
 		<replaceregexp 
 			file="${component.srcdir}/temp/skins/sam/button-skin.css"
