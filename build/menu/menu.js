@@ -265,7 +265,7 @@
                 
                 for (var i in m_oMenus) {
         
-                    if (YAHOO.lang.hasOwnProperty(m_oMenus,i)) {
+                    if (YAHOO.lang.hasOwnProperty(m_oMenus, i)) {
         
                         oMenu = m_oMenus[i];
         
@@ -404,21 +404,30 @@
         */
         function onItemDestroy(p_sType, p_aArgs) {
     
-            var sId = this.id;
+            removeItem(this);
+    
+        }
+
+    
+        function removeItem(p_oMenuItem) {
+
+            var sId = p_oMenuItem.id;
     
             if (sId && m_oItems[sId]) {
     
-                if (m_oFocusedMenuItem == this) {
+                if (m_oFocusedMenuItem == p_oMenuItem) {
     
                     m_oFocusedMenuItem = null;
     
                 }
     
                 delete m_oItems[sId];
+                
+                p_oMenuItem.destroyEvent.unsubscribe(onItemDestroy);
     
     
             }
-    
+
         }
     
     
@@ -469,11 +478,8 @@
     
                 var oDoc;
     
-                if (
-                    p_oMenu instanceof YAHOO.widget.Menu && 
-                    p_oMenu.id && 
-                    !m_oMenus[p_oMenu.id]
-                ) {
+                if (p_oMenu instanceof YAHOO.widget.Menu && p_oMenu.id && 
+                    !m_oMenus[p_oMenu.id]) {
         
                     m_oMenus[p_oMenu.id] = p_oMenu;
                 
@@ -497,14 +503,11 @@
             
                     }
             
-                    p_oMenu.destroyEvent.subscribe(
-                                            onMenuDestroy, 
-                                            p_oMenu, 
-                                            this);
-    
-                    p_oMenu.cfg.subscribeToConfigEvent(
-                        "visible", 
+                    p_oMenu.cfg.subscribeToConfigEvent("visible", 
                         onMenuVisibleConfigChange);
+
+                    p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, 
+                                            this);
             
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
@@ -524,25 +527,69 @@
             */
             removeMenu: function (p_oMenu) {
     
-                var sId;
+                var sId,
+                    aItems,
+                    i;
         
                 if (p_oMenu) {
     
                     sId = p_oMenu.id;
         
                     if (m_oMenus[sId] == p_oMenu) {
-            
+
+                        // Unregister each menu item
+
+                        aItems = p_oMenu.getItems();
+
+                        if (aItems && aItems.length > 0) {
+
+                            i = aItems.length - 1;
+
+                            do {
+
+                                removeItem(aItems[i]);
+
+                            }
+                            while (i--);
+
+                        }
+
+
+                        // Unregister the menu
+
                         delete m_oMenus[sId];
             
         
-        
+
+                        /*
+                             Unregister the menu from the collection of 
+                             visible menus
+                        */
+
                         if (m_oVisibleMenus[sId] == p_oMenu) {
             
                             delete m_oVisibleMenus[sId];
                             
-                                
+       
                         }
-            
+
+
+                        // Unsubscribe event listeners
+
+                        if (p_oMenu.cfg) {
+
+                            p_oMenu.cfg.unsubscribeFromConfigEvent("visible", 
+                                onMenuVisibleConfigChange);
+                            
+                        }
+
+                        p_oMenu.destroyEvent.unsubscribe(onMenuDestroy, 
+                            p_oMenu);
+                
+                        p_oMenu.itemAddedEvent.unsubscribe(onItemAdded);
+                        p_oMenu.focusEvent.unsubscribe(onMenuFocus);
+                        p_oMenu.blurEvent.unsubscribe(onMenuBlur);
+
                     }
                 
                 }
@@ -561,7 +608,7 @@
         
                 for (var i in m_oVisibleMenus) {
         
-                    if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus,i)) {
+                    if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus, i)) {
         
                         oMenu = m_oVisibleMenus[i];
         
@@ -929,7 +976,8 @@ var Dom = YAHOO.util.Dom,
         "DISABLED": { 
             key: "disabled", 
             value: false, 
-            validator: Lang.isBoolean
+            validator: Lang.isBoolean,
+            suppressEvent: true
         }
     
     };
@@ -1133,15 +1181,6 @@ _bStopMouseEventHandlers: false,
 */
 _sClassName: null,
 
-
-/**
-* @property _bDisabled
-* @description The current value of the "disabled" configuration attribute.
-* @default false
-* @private
-* @type Boolean
-*/
-_bDisabled: false,
 
 
 // Public properties
@@ -2112,11 +2151,7 @@ _configureSubmenu: function (p_oItem) {
 
         this.renderEvent.subscribe(this._onParentMenuRender, oSubmenu, true);
 
-        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow, null, 
-            oSubmenu);
-
-        oSubmenu.showEvent.subscribe(this._onSubmenuShow, null, p_oItem);
-        oSubmenu.hideEvent.subscribe(this._onSubmenuHide, null, p_oItem);
+        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow);
 
     }
 
@@ -2767,6 +2802,7 @@ _onClick: function (p_sType, p_aArgs) {
         oItemCfg,
         oSubmenu,
         sURL,
+        nURL,
         oRoot;
 
 
@@ -2811,9 +2847,14 @@ _onClick: function (p_sType, p_aArgs) {
 
             sURL = oItemCfg.getProperty("url");
 
-            //  Prevent the browser from following links equal to "#"
+            if (YAHOO.env.ua.ie) {
+
+                sURL = 
+                    sURL.substring(document.location.href.length, sURL.length);
             
-            if ((sURL.substr((sURL.length-1),1) == "#")) {
+            }
+            
+            if ((sURL.substr(0,1) == "#")) {
 
                 Event.preventDefault(oEvent);
 
@@ -3900,34 +3941,7 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
 },
 
 
-/**
-* @method _onSubmenuShow
-* @description "show" event handler for a submenu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onSubmenuShow: function (p_sType, p_aArgs) {
-    
-    this.submenuIndicator.innerHTML = this.EXPANDED_SUBMENU_INDICATOR_TEXT;
 
-},
-
-
-/**
-* @method _onSubmenuHide
-* @description "hide" Custom Event handler for a submenu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onSubmenuHide: function (p_sType, p_aArgs) {
-    
-    this.submenuIndicator.innerHTML = this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
-
-},
 
 
 /**
@@ -4173,6 +4187,8 @@ configVisible: function (p_sType, p_aArgs, p_oMenu) {
 
         bVisible = p_aArgs[0];
         sDisplay = Dom.getStyle(this.element, "display");
+
+        Dom.setStyle(this.element, "visibility", "visible");
 
         if (bVisible) {
 
@@ -4543,15 +4559,14 @@ _onItemAdded: function (p_sType, p_aArgs) {
 configDisabled: function (p_sType, p_aArgs, p_oMenu) {
 
     var bDisabled = p_aArgs[0],
-        aItems,
+        aItems = this.getItems(),
         nItems,
         i;
 
-    if (this._bDisabled != bDisabled) {
+    if (Lang.isArray(aItems)) {
 
-        aItems = this.getItems();
         nItems = aItems.length;
-
+    
         if (nItems > 0) {
         
             i = nItems - 1;
@@ -4564,14 +4579,23 @@ configDisabled: function (p_sType, p_aArgs, p_oMenu) {
             while (i--);
         
         }
-    
-        Dom[(bDisabled ? "addClass" : "removeClass")](this.element, "disabled");    
 
-        this.itemAddedEvent[(bDisabled ? "subscribe" : "unsubscribe")](
-            this._onItemAdded);
-    
-        this._bDisabled = bDisabled;
-    
+
+        if (bDisabled) {
+
+            Dom.addClass(this.element, "disabled");
+
+            this.itemAddedEvent.subscribe(this._onItemAdded);
+
+        }
+        else {
+
+            Dom.removeClass(this.element, "disabled");
+
+            this.itemAddedEvent.unsubscribe(this._onItemAdded);
+
+        }
+        
     }
 
 },
@@ -5030,10 +5054,17 @@ removeItem: function (p_oObject, p_nGroupIndex) {
 getItems: function () {
 
     var aGroups = this._aItemGroups,
+        nGroups,
+        aItems = [];
+
+    if (Lang.isArray(aGroups)) {
+
         nGroups = aGroups.length;
 
-    return ((nGroups == 1) ? aGroups[0] : 
-                (Array.prototype.concat.apply([], aGroups)));
+        return ((nGroups == 1) ? aGroups[0] : 
+                    (Array.prototype.concat.apply(aItems, aGroups)));
+
+    }
 
 },
 
@@ -5681,7 +5712,8 @@ initDefaultConfig: function () {
         { 
             handler: this.configDisabled,
             value: DEFAULT_CONFIG.DISABLED.value, 
-            validator: DEFAULT_CONFIG.DISABLED.validator
+            validator: DEFAULT_CONFIG.DISABLED.validator,
+            suppressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
         }
     );
 
@@ -6859,6 +6891,11 @@ MenuItem.prototype = {
             bSelected = p_aArgs[0];
             oAnchor = this._oAnchor;
 
+            if (YAHOO.env.ua.opera) {
+
+                oAnchor.blur();
+            
+            }
 
             if(bSelected) {
     
@@ -6870,6 +6907,85 @@ MenuItem.prototype = {
                 Dom.removeClass(oAnchor, "selected");
     
             }
+
+            if (this.hasFocus() && YAHOO.env.ua.opera) {
+            
+                oAnchor.focus();
+            
+            }
+
+        }
+
+    },
+
+
+    /**
+    * @method _onSubmenuShow
+    * @description "show" event handler for a submenu.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    _onSubmenuShow: function (p_sType, p_aArgs) {
+
+        var oTextNode = this.submenuIndicator.firstChild;
+        
+        if (oTextNode) {
+
+            oTextNode.nodeValue = this.EXPANDED_SUBMENU_INDICATOR_TEXT;
+
+        }
+
+    },
+
+
+    /**
+    * @method _onSubmenuBeforeHide
+    * @description "beforehide" Custom Event handler for a submenu.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    _onSubmenuBeforeHide: function (p_sType, p_aArgs) {
+
+        var oItem = this.parent,
+            oMenu;
+
+        function onHide() {
+
+            oItem._oAnchor.blur();
+            oMenu.beforeHideEvent.unsubscribe(onHide);
+        
+        }
+    
+        if (oItem.hasFocus()) {
+
+            oMenu = oItem.parent;
+
+            oMenu.beforeHideEvent.subscribe(onHide);
+        
+        }
+    
+    },
+    
+
+    /**
+    * @method _onSubmenuHide
+    * @description "hide" Custom Event handler for a submenu.
+    * @private
+    * @param {String} p_sType String representing the name of the event that 
+    * was fired.
+    * @param {Array} p_aArgs Array of arguments sent when the event was fired.
+    */
+    _onSubmenuHide: function (p_sType, p_aArgs) {
+
+        var oTextNode = this.submenuIndicator.firstChild;
+        
+        if (oTextNode) {
+
+            oTextNode.nodeValue = this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
         }
 
@@ -6942,6 +7058,15 @@ MenuItem.prototype = {
                 Dom.addClass(oAnchor, "hassubmenu");
 
                 this._oSubmenu = oMenu;
+                
+                oMenu.showEvent.subscribe(this._onSubmenuShow, null, this);
+                oMenu.hideEvent.subscribe(this._onSubmenuHide, null, this);
+            
+                if (YAHOO.env.ua.opera) {
+                
+                    oMenu.beforeHideEvent.subscribe(this._onSubmenuBeforeHide);               
+                
+                }
             
             }
 

@@ -95,7 +95,6 @@ when one of its submenus is visible.
 
 .yuimenubar ul {
 
-    list-style-type:none;
     margin:0;
     padding:0;
 
@@ -103,7 +102,6 @@ when one of its submenus is visible.
 
 .yuimenu ul {
 
-    list-style-type:none;
     border:solid 1px #c4c4be;
     border-width:1px 0 0 0;
     margin:0;
@@ -116,6 +114,13 @@ when one of its submenus is visible.
 .yuimenu h6.first-of-type {
 
     border-width:0;
+
+}
+
+.yuimenubar li, 
+.yuimenu li {
+
+    list-style-type: none;    
 
 }
 

@@ -814,7 +814,35 @@
         */
         _setLabel: function (p_sLabel) {
 
-            this._button.innerHTML = p_sLabel;             
+            this._button.innerHTML = p_sLabel;
+            
+            /*
+                Remove and add the default class name from the root element
+                for Gecko to ensure that the button shrinkwraps to the label.
+                Without this the button will not be rendered at the correct 
+                width when the label changes.  The most likely cause for this 
+                bug is button's use of the Gecko-specific CSS display type of 
+                "-moz-inline-box" to simulate "inline-block" supported by IE, 
+                Safari and Opera.
+            */
+            
+            var sClass,
+                me;
+            
+            if (YAHOO.env.ua.gecko && Dom.inDocument(this.get("element"))) {
+            
+                me = this;
+                sClass = this.CSS_CLASS_NAME;                
+
+                this.removeClass(sClass);
+                
+                window.setTimeout(function () {
+                
+                    me.addClass(sClass);
+                
+                }, 0);
+            
+            }
         
         },
         
@@ -1021,6 +1049,7 @@
 
             var bLazyLoad = this.get("lazyloadmenu"),
                 oButtonElement = this.get("element"),
+                sMenuCSSClassName = Menu.prototype.CSS_CLASS_NAME,
         
                 /*
                     Boolean indicating if the value of p_oMenu is an instance 
@@ -1219,8 +1248,7 @@
         
                 if (oMenuElement) {
         
-                    if (Dom.hasClass(oMenuElement, 
-                        Menu.prototype.CSS_CLASS_NAME) || 
+                    if (Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
                         oMenuElement.nodeName == "SELECT") {
             
                         oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
@@ -1242,7 +1270,7 @@
             }
             else if (p_oMenu && p_oMenu.nodeName) {
         
-                if (Dom.hasClass(p_oMenu, Menu.prototype.CSS_CLASS_NAME) || 
+                if (Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
                         p_oMenu.nodeName == "SELECT") {
         
                     oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
@@ -1404,11 +1432,12 @@
         _addListenersToForm: function () {
         
             var oForm = this.getForm(),
+                onFormKeyPress = YAHOO.widget.Button.onFormKeyPress,
+                bHasKeyPressListener,
                 oSrcElement,
                 aListeners,
                 nListeners,
-                i,
-                bHasKeyPressListener;
+                i;
         
         
             if (oForm) {
@@ -1436,9 +1465,7 @@
                             
                             do {
                
-                                if (aListeners[i].fn == 
-                                    YAHOO.widget.Button.onFormKeyPress) 
-                                {
+                                if (aListeners[i].fn == onFormKeyPress) {
                 
                                     bHasKeyPressListener = true;
                                     break;
@@ -1454,9 +1481,8 @@
             
             
                     if (!bHasKeyPressListener) {
-        
-                        Event.on(oForm, "keypress", 
-                            YAHOO.widget.Button.onFormKeyPress);
+               
+                        Event.on(oForm, "keypress", onFormKeyPress);
             
                     }
         
@@ -1894,7 +1920,7 @@
             if (this.get("type") != "menu") {
         
                 this.removeStateCSSClasses("active");
-        
+
             }    
         
             if (this._activationKeyPressed) {
@@ -3371,7 +3397,8 @@
         
             var oElement = this.get("element"),
                 oParentNode = oElement.parentNode,
-                oMenu = this._menu;
+                oMenu = this._menu,
+                aButtons;
         
             if (oMenu) {
         
@@ -3381,7 +3408,7 @@
         
             }
         
-            this.logger.log("Removing DOM event handlers.");
+            this.logger.log("Removing DOM event listeners.");
         
             Event.purgeElement(oElement);
             Event.purgeElement(this._button);
@@ -3399,14 +3426,27 @@
                 Event.removeListener(oForm, "submit", this.createHiddenFields);
         
             }
-        
+
+            this.logger.log("Removing CustomEvent listeners.");
+
+            this.unsubscribeAll();
         
             oParentNode.removeChild(oElement);
         
             this.logger.log("Removing from document.");
         
             delete m_oButtons[this.get("id")];
-        
+
+            aButtons = Dom.getElementsByClassName(this.CSS_CLASS_NAME, 
+                                this.NODE_NAME, oForm); 
+
+            if (Lang.isArray(aButtons) && aButtons.length === 0) {
+
+                Event.removeListener(oForm, "keypress", 
+                        YAHOO.widget.Button.onFormKeyPress);
+
+            }
+
             this.logger.log("Destroyed.");
         
         },
