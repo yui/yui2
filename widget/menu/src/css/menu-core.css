@@ -8,8 +8,8 @@
 
 }
 
-.yuimenubar ul, 
-.yuimenu ul {
+.yuimenubar li, 
+.yuimenu li {
 
     list-style-type: none;    
 
