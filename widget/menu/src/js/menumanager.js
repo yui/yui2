@@ -266,7 +266,7 @@
                 
                 for (var i in m_oMenus) {
         
-                    if (YAHOO.lang.hasOwnProperty(m_oMenus,i)) {
+                    if (YAHOO.lang.hasOwnProperty(m_oMenus, i)) {
         
                         oMenu = m_oMenus[i];
         
@@ -411,22 +411,31 @@
         */
         function onItemDestroy(p_sType, p_aArgs) {
     
-            var sId = this.id;
+            removeItem(this);
+    
+        }
+
+    
+        function removeItem(p_oMenuItem) {
+
+            var sId = p_oMenuItem.id;
     
             if (sId && m_oItems[sId]) {
     
-                if (m_oFocusedMenuItem == this) {
+                if (m_oFocusedMenuItem == p_oMenuItem) {
     
                     m_oFocusedMenuItem = null;
     
                 }
     
                 delete m_oItems[sId];
+                
+                p_oMenuItem.destroyEvent.unsubscribe(onItemDestroy);
     
-                m_oLogger.log(this + " successfully unregistered.");
+                m_oLogger.log(p_oMenuItem + " successfully unregistered.");
     
             }
-    
+
         }
     
     
@@ -478,11 +487,8 @@
     
                 var oDoc;
     
-                if (
-                    p_oMenu instanceof YAHOO.widget.Menu && 
-                    p_oMenu.id && 
-                    !m_oMenus[p_oMenu.id]
-                ) {
+                if (p_oMenu instanceof YAHOO.widget.Menu && p_oMenu.id && 
+                    !m_oMenus[p_oMenu.id]) {
         
                     m_oMenus[p_oMenu.id] = p_oMenu;
                 
@@ -507,14 +513,11 @@
             
                     }
             
-                    p_oMenu.destroyEvent.subscribe(
-                                            onMenuDestroy, 
-                                            p_oMenu, 
-                                            this);
-    
-                    p_oMenu.cfg.subscribeToConfigEvent(
-                        "visible", 
+                    p_oMenu.cfg.subscribeToConfigEvent("visible", 
                         onMenuVisibleConfigChange);
+
+                    p_oMenu.destroyEvent.subscribe(onMenuDestroy, p_oMenu, 
+                                            this);
             
                     p_oMenu.itemAddedEvent.subscribe(onItemAdded);
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
@@ -535,30 +538,72 @@
             */
             removeMenu: function (p_oMenu) {
     
-                var sId;
+                var sId,
+                    aItems,
+                    i;
         
                 if (p_oMenu) {
     
                     sId = p_oMenu.id;
         
                     if (m_oMenus[sId] == p_oMenu) {
-            
+
+                        // Unregister each menu item
+
+                        aItems = p_oMenu.getItems();
+
+                        if (aItems && aItems.length > 0) {
+
+                            i = aItems.length - 1;
+
+                            do {
+
+                                removeItem(aItems[i]);
+
+                            }
+                            while (i--);
+
+                        }
+
+
+                        // Unregister the menu
+
                         delete m_oMenus[sId];
             
                         m_oLogger.log(p_oMenu + " successfully unregistered.");
         
-        
+
+                        /*
+                             Unregister the menu from the collection of 
+                             visible menus
+                        */
+
                         if (m_oVisibleMenus[sId] == p_oMenu) {
             
                             delete m_oVisibleMenus[sId];
                             
-                            m_oLogger.log( 
-                                        p_oMenu + 
-                                        " unregistered from the" + 
+                            m_oLogger.log(p_oMenu + " unregistered from the" + 
                                         " collection of visible menus.");
-                                
+       
                         }
-            
+
+
+                        // Unsubscribe event listeners
+
+                        if (p_oMenu.cfg) {
+
+                            p_oMenu.cfg.unsubscribeFromConfigEvent("visible", 
+                                onMenuVisibleConfigChange);
+                            
+                        }
+
+                        p_oMenu.destroyEvent.unsubscribe(onMenuDestroy, 
+                            p_oMenu);
+                
+                        p_oMenu.itemAddedEvent.unsubscribe(onItemAdded);
+                        p_oMenu.focusEvent.unsubscribe(onMenuFocus);
+                        p_oMenu.blurEvent.unsubscribe(onMenuBlur);
+
                     }
                 
                 }
@@ -577,7 +622,7 @@
         
                 for (var i in m_oVisibleMenus) {
         
-                    if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus,i)) {
+                    if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus, i)) {
         
                         oMenu = m_oVisibleMenus[i];
         
