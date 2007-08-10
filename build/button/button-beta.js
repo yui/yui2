@@ -2582,34 +2582,38 @@
         
                     oMenuField = oMenu.srcElement;
                     oMenuItem = oMenu.getItem(this.get("selectedMenuItem"));
-        
-                    if (oMenuField && 
-                        oMenuField.nodeName.toUpperCase() == "SELECT") {
-        
-                        oForm.appendChild(oMenuField);
-                        oMenuField.selectedIndex = oMenuItem.index;
-        
-                    }
-                    else {
-        
-                        oValue = (oMenuItem.value === null || 
-                                    oMenuItem.value === "") ? 
-                                    oMenuItem.cfg.getProperty("text") : 
-                                    oMenuItem.value;
-        
-                        sName = this.get("name");
-        
-                        if (oValue && sName) {
-        
-                            oMenuField = createInputElement("hidden", 
-                                                (sName + "_options"),
-                                                oValue);
-        
+
+                    if (oMenuItem) {
+
+                        if (oMenuField && 
+                            oMenuField.nodeName.toUpperCase() == "SELECT") {
+            
                             oForm.appendChild(oMenuField);
-        
+                            oMenuField.selectedIndex = oMenuItem.index;
+            
                         }
-        
-                    }  
+                        else {
+            
+                            oValue = (oMenuItem.value === null || 
+                                        oMenuItem.value === "") ? 
+                                        oMenuItem.cfg.getProperty("text") : 
+                                        oMenuItem.value;
+            
+                            sName = this.get("name");
+            
+                            if (oValue && sName) {
+            
+                                oMenuField = createInputElement("hidden", 
+                                                    (sName + "_options"),
+                                                    oValue);
+            
+                                oForm.appendChild(oMenuField);
+            
+                            }
+            
+                        }  
+                    
+                    }
         
                 }
             
@@ -3361,6 +3365,12 @@
         
             if (oMenu) {
         
+
+                if (m_oOverlayManager.find(oMenu)) {
+
+                    m_oOverlayManager.remove(oMenu);
+
+                }
         
                 oMenu.destroy();
         
