@@ -2,7 +2,7 @@
 
 Fixed the following bugs:
 -------------------------
-+ Purged old 2.2.2 stylesheet
++ Purged the old 2.2.2 Button stylesheet and related image assets.
 
 + Fixed an issue in Gecko where changing a Button instance's "label" attribute
   after the Button had been created would not result in the Button redrawing at
@@ -13,6 +13,9 @@ Fixed the following bugs:
   Button instances of type "submit" was not removed from the form once all of 
   its child Button instances are destroyed.
 
++ Submitting a form by clicking on a MenuItem of a SplitButton's or MenuButton's
+  Menu will no longer result in a JavaScript error.
+  
 
 *** Version 2.3 ***
 
