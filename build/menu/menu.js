@@ -2846,13 +2846,6 @@ _onClick: function (p_sType, p_aArgs) {
         else {
 
             sURL = oItemCfg.getProperty("url");
-
-            if (YAHOO.env.ua.ie) {
-
-                sURL = 
-                    sURL.substring(document.location.href.length, sURL.length);
-            
-            }
             
             if ((sURL.substr(0,1) == "#")) {
 
@@ -6359,6 +6352,14 @@ MenuItem.prototype = {
                     if(oAnchor) {
 
                         sURL = oAnchor.getAttribute("href");
+
+                        if (YAHOO.env.ua.ie) {
+            
+                            sURL = sURL.substring(
+                                document.location.href.length, sURL.length);
+            
+                        }
+
                         sTarget = oAnchor.getAttribute("target");
                         sText = oAnchor.innerHTML;
 
