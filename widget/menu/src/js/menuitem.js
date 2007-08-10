@@ -635,6 +635,14 @@ MenuItem.prototype = {
                     if(oAnchor) {
 
                         sURL = oAnchor.getAttribute("href");
+
+                        if (YAHOO.env.ua.ie) {
+            
+                            sURL = sURL.substring(
+                                document.location.href.length, sURL.length);
+            
+                        }
+
                         sTarget = oAnchor.getAttribute("target");
                         sText = oAnchor.innerHTML;
 
