@@ -118,14 +118,14 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
 
     getOffsetFromParent: function(parentPos) {
 
-        var el = this.getEl();
+        var el = this.getEl(), newOffset;
 
         if (!this.deltaOffset) {
 
             var myPos = YAHOO.util.Dom.getXY(el);
             var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
-            var newOffset = [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
+            newOffset = [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
 
             var l = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
             var t = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );

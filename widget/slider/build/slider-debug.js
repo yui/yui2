@@ -249,6 +249,8 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          * @since 2.3.0
          */
         this.valueChangeSource = 0;
+
+        this._silent = false;
     },
 
     /**
@@ -270,9 +272,9 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         t.cacheBetweenDrags = true;
 
         // add handler for the handle onchange event
-        t.onChange = function() { 
-            self.handleThumbChange(); 
-        };
+        //t.onChange = function() { 
+            //self.handleThumbChange(); 
+        //};
 
         if (t._isHoriz && t.xTicks && t.xTicks.length) {
             this.tickPause = Math.round(360 / t.xTicks.length);
@@ -283,10 +285,21 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         this.logger.log("tickPause: " + this.tickPause);
 
         // delegate thumb methods
-        t.onMouseDown = function () { return self.focus(); };
-        t.onMouseUp = function() { self.thumbMouseUp(); };
-        t.onDrag = function() { self.fireEvents(true); };
-        t.onAvailable = function() { return self.setStartSliderState(); };
+        t.onAvailable = function() { 
+                return self.setStartSliderState(); 
+            };
+        t.onMouseDown = function () { 
+                return self.focus(); 
+            };
+        t.startDrag = function() { 
+                self._slideStart(); 
+            };
+        t.onDrag = function() { 
+                self.fireEvents(true); 
+            };
+        t.onMouseUp = function() { 
+                self.thumbMouseUp(); 
+            };
 
     },
 
@@ -406,14 +419,14 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 this.setRegionValue.apply(this, this.deferredSetRegionValue, true);
                 this.deferredSetRegionValue = null;
             } else {
-                this.setRegionValue(0, 0, true, true);
+                this.setRegionValue(0, 0, true, true, true);
             }
         } else {
             if (this.deferredSetValue) {
                 this.setValue.apply(this, this.deferredSetValue, true);
                 this.deferredSetValue = null;
             } else {
-                this.setValue(0, true, true);
+                this.setValue(0, true, true, true);
             }
         }
     },
@@ -463,16 +476,23 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
     },
 
     /**
-     * Handles mouseup event on the slider background
+     * Handles mouseup event on the thumb
      * @method thumbMouseUp
      * @private
      */
     thumbMouseUp: function() {
-        this.logger.log("bg mouseup");
+        this.logger.log("thumb mouseup");
         if (!this.isLocked() && !this.moveComplete) {
             this.endMove();
         }
 
+    },
+
+    onMouseUp: function() {
+        this.logger.log("bg mouseup");
+        if (!this.isLocked() && !this.moveComplete) {
+            this.endMove();
+        }
     },
 
     /**
@@ -513,7 +533,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         if (this.isLocked()) {
             return false;
         } else {
-            this.onSlideStart();
+            this._slideStart();
             return true;
         }
     },
@@ -586,14 +606,21 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @private
      */
     handleThumbChange: function () { 
+        /*
         var t = this.thumb;
         if (t._isRegion) {
-            t.onChange(t.getXValue(), t.getYValue());
-            this.fireEvent("change", { x: t.getXValue(), y: t.getYValue() } );
+
+            if (!this._silent) {
+                t.onChange(t.getXValue(), t.getYValue());
+                this.fireEvent("change", { x: t.getXValue(), y: t.getYValue() } );
+            }
         } else {
-            t.onChange(t.getValue());
-            this.fireEvent("change", t.getValue());
+            if (!this._silent) {
+                t.onChange(t.getValue());
+                this.fireEvent("change", t.getValue());
+            }
         }
+        */
 
     },
 
@@ -605,11 +632,13 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @param {boolean} skipAnim set to true to disable the animation
      * for this move action (but not others).
      * @param {boolean} force ignore the locked setting and set value anyway
+     * @param {boolean} silent when true, do not fire events
      * @return {boolean} true if the move was performed, false if it failed
      */
-    setValue: function(newOffset, skipAnim, force) {
+    setValue: function(newOffset, skipAnim, force, silent) {
         this.logger.log("setValue " + newOffset);
 
+        this._silent = silent;
         this.valueChangeSource = this.SOURCE_SET_VALUE;
 
         if (!this.thumb.available) {
@@ -634,12 +663,12 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         if (t._isRegion) {
             return false;
         } else if (t._isHoriz) {
-            this.onSlideStart();
+            this._slideStart();
             // this.fireEvent("slideStart");
             newX = t.initPageX + newOffset + this.thumbCenterPoint.x;
             this.moveThumb(newX, t.initPageY, skipAnim);
         } else {
-            this.onSlideStart();
+            this._slideStart();
             // this.fireEvent("slideStart");
             newY = t.initPageY + newOffset + this.thumbCenterPoint.y;
             this.moveThumb(t.initPageX, newY, skipAnim);
@@ -658,9 +687,12 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @param {boolean} skipAnim set to true to disable the animation
      * for this move action (but not others).
      * @param {boolean} force ignore the locked setting and set value anyway
+     * @param {boolean} silent when true, do not fire events
      * @return {boolean} true if the move was performed, false if it failed
      */
-    setRegionValue: function(newOffset, newOffset2, skipAnim, force) {
+    setRegionValue: function(newOffset, newOffset2, skipAnim, force, silent) {
+
+        this._silent = silent;
 
         this.valueChangeSource = this.SOURCE_SET_VALUE;
 
@@ -681,8 +713,9 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         var t = this.thumb;
+        this.verifyOffset(true);
         if (t._isRegion) {
-            this.onSlideStart();
+            this._slideStart();
             var newX = t.initPageX + newOffset + this.thumbCenterPoint.x;
             var newY = t.initPageY + newOffset2 + this.thumbCenterPoint.y;
             this.moveThumb(newX, newY, skipAnim);
@@ -725,9 +758,11 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
      * @param {int} x the X coordinate of the click
      * @param {int} y the Y coordinate of the click
      * @param {boolean} skipAnim don't animate if the move happend onDrag
+     * @param {boolean} midMove set to true if this is not terminating
+     * the slider movement
      * @private
      */
-    moveThumb: function(x, y, skipAnim) {
+    moveThumb: function(x, y, skipAnim, midMove) {
 
         // this.logger.log("move thumb", "warn");
 
@@ -748,8 +783,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         var _p = t.getTargetCoord(x, y);
         var p = [_p.x, _p.y];
 
-
-        this.fireEvent("slideStart");
+        this._slideStart();
 
         if (this.animate && YAHOO.widget.Slider.ANIM_AVAIL && t._graduated && !skipAnim) {
             this.logger.log("graduated");
@@ -772,12 +806,40 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                     this.animationDuration, 
                     YAHOO.util.Easing.easeOut );
 
-            oAnim.onComplete.subscribe( function() { self.endMove(); } );
+            oAnim.onComplete.subscribe( function() { 
+                    
+                    self.endMove(); 
+                } );
             oAnim.animate();
         } else {
             t.setDragElPos(x, y);
             // this.fireEvents();
-            this.endMove();
+            if (!midMove) {
+                this.endMove();
+            }
+        }
+    },
+
+    _slideStart: function() {
+        if (!this._sliding) {
+            if (!this._silent) {
+                this.onSlideStart();
+                this.fireEvent("slideStart");
+            }
+            this._sliding = true;
+        }
+    },
+
+    _slideEnd: function() {
+
+        if (this._sliding && this.moveComplete) {
+            if (!this._silent) {
+                this.onSlideEnd();
+                this.fireEvent("slideEnd");
+            }
+            this._sliding = false;
+            this._silent = false;
+            this.moveComplete = false;
         }
     },
 
@@ -943,7 +1005,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         if (! this.isLocked()) {
             var x = YAHOO.util.Event.getPageX(e);
             var y = YAHOO.util.Event.getPageY(e);
-            this.moveThumb(x, y, true);
+            this.moveThumb(x, y, true, true);
         }
     },
 
@@ -988,8 +1050,10 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
                 if (newX != this.previousX || newY != this.previousY) {
                     // this.logger.log("Firing onchange");
-                    this.onChange(newX, newY);
-                    this.fireEvent("change", { x: newX, y: newY });
+                    if (!this._silent) {
+                        this.onChange(newX, newY);
+                        this.fireEvent("change", { x: newX, y: newY });
+                    }
                 }
 
                 this.previousX = newX;
@@ -999,17 +1063,15 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
                 var newVal = t.getValue();
                 if (newVal != this.previousVal) {
                     this.logger.log("Firing onchange: " + newVal);
-                    this.onChange( newVal );
-                    this.fireEvent("change", newVal);
+                    if (!this._silent) {
+                        this.onChange( newVal );
+                        this.fireEvent("change", newVal);
+                    }
                 }
                 this.previousVal = newVal;
             }
 
-            if (this.moveComplete) {
-                this.onSlideEnd();
-                this.fireEvent("slideEnd");
-                this.moveComplete = false;
-            }
+            this._slideEnd();
 
         }
     },
@@ -1147,14 +1209,14 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
 
     getOffsetFromParent: function(parentPos) {
 
-        var el = this.getEl();
+        var el = this.getEl(), newOffset;
 
         if (!this.deltaOffset) {
 
             var myPos = YAHOO.util.Dom.getXY(el);
             var ppos  = parentPos || YAHOO.util.Dom.getXY(this.parentElId);
 
-            var newOffset = [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
+            newOffset = [ (myPos[0] - ppos[0]), (myPos[1] - ppos[1]) ];
 
             var l = parseInt( YAHOO.util.Dom.getStyle(el, "left"), 10 );
             var t = parseInt( YAHOO.util.Dom.getStyle(el, "top" ), 10 );
