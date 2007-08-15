@@ -708,6 +708,7 @@
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());
+
 (function () {
 
     /**
@@ -1897,6 +1898,7 @@
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());
+
 (function () {
 
     /**
@@ -1908,7 +1910,7 @@
     * properly rendered above SELECT elements.
     * @namespace YAHOO.widget
     * @class Overlay
-    * @extends Module
+    * @extends YAHOO.widget.Module
     * @param {String} el The element ID representing the Overlay <em>OR</em>
     * @param {HTMLElement} el The element representing the Overlay
     * @param {Object} userConfig The configuration object literal containing 
@@ -3602,6 +3604,7 @@
     });
     
 }());
+
 (function () {
     
     /**
@@ -3799,7 +3802,7 @@
         
                     o.cfg.setProperty("zIndex", originalZ, true);
                     o.cfg.setProperty("manager", null);
-        
+
                     o.focusEvent.unsubscribeAll();
                     o.blurEvent.unsubscribeAll();
         
@@ -4184,6 +4187,7 @@
     };
 
 }());
+
 (function () {
 
     /**
@@ -5003,6 +5007,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -5010,7 +5015,7 @@
     * with a draggable header and an optional close icon at the top right.
     * @namespace YAHOO.widget
     * @class Panel
-    * @extends Overlay
+    * @extends YAHOO.widget.Overlay
     * @constructor
     * @param {String} el The element ID representing the Panel <em>OR</em>
     * @param {HTMLElement} el The element representing the Panel
@@ -6261,6 +6266,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -6588,12 +6594,12 @@
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
-        
+
             this.showEvent.subscribe(this.focusFirst, this, true);
             this.beforeHideEvent.subscribe(this.blurButtons, this, true);
 
             this.subscribe("changeBody", this.registerForm);
-        
+
             this.initEvent.fire(Dialog);
         },
         
@@ -7619,6 +7625,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -7937,6 +7944,7 @@
     });
 
 }());
+
 (function () {
 
     /**
@@ -8327,4 +8335,5 @@
     YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);
 
 })();
+
 YAHOO.register("container", YAHOO.widget.Module, {version: "@VERSION@", build: "@BUILD@"});

@@ -9,7 +9,7 @@
     * properly rendered above SELECT elements.
     * @namespace YAHOO.widget
     * @class Overlay
-    * @extends Module
+    * @extends YAHOO.widget.Module
     * @param {String} el The element ID representing the Overlay <em>OR</em>
     * @param {HTMLElement} el The element representing the Overlay
     * @param {Object} userConfig The configuration object literal containing 

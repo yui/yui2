@@ -708,6 +708,7 @@
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());
+
 (function () {
 
     /**
@@ -1897,6 +1898,7 @@
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());
+
 (function () {
 
     /**
@@ -1908,7 +1910,7 @@
     * properly rendered above SELECT elements.
     * @namespace YAHOO.widget
     * @class Overlay
-    * @extends Module
+    * @extends YAHOO.widget.Module
     * @param {String} el The element ID representing the Overlay <em>OR</em>
     * @param {HTMLElement} el The element representing the Overlay
     * @param {Object} userConfig The configuration object literal containing 
@@ -3602,6 +3604,7 @@
     });
     
 }());
+
 (function () {
     
     /**
@@ -3799,7 +3802,7 @@
         
                     o.cfg.setProperty("zIndex", originalZ, true);
                     o.cfg.setProperty("manager", null);
-        
+
                     o.focusEvent.unsubscribeAll();
                     o.blurEvent.unsubscribeAll();
         
@@ -4184,6 +4187,7 @@
     };
 
 }());
+
 (function () {
 
     /**
@@ -4574,4 +4578,5 @@
     YAHOO.lang.augmentProto(ContainerEffect, YAHOO.util.EventProvider);
 
 })();
+
 YAHOO.register("container_core", YAHOO.widget.Module, {version: "@VERSION@", build: "@BUILD@"});

@@ -5,7 +5,7 @@
     * with a draggable header and an optional close icon at the top right.
     * @namespace YAHOO.widget
     * @class Panel
-    * @extends Overlay
+    * @extends YAHOO.widget.Overlay
     * @constructor
     * @param {String} el The element ID representing the Panel <em>OR</em>
     * @param {HTMLElement} el The element representing the Panel
