@@ -28,6 +28,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     var nodeDepth = -1;
 
     // Internal recursive function to defined Column instances
+    var oSelf = this;
     var parseColumns = function(nodeList, parent) {
         // One level down
         nodeDepth++;
@@ -44,6 +45,13 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
             // Instantiate a new Column for each node
             var oColumn = new YAHOO.widget.Column(currentNode);
+            if(!YAHOO.lang.isValue(oColumn.key)) {
+                oColumn.key = "yui-dt-columnset" + YAHOO.widget.ColumnSet._nCount + "-col" + oSelf._nColumnCount;
+            }
+            oColumn._sId = oSelf._nColumnCount + "";
+            oColumn._sName = "Column instance" + oSelf._nColumnCount;
+            oSelf._nColumnCount++;
+
 
             // Add the new Column to the flat list
             flat.push(oColumn);
@@ -123,7 +131,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                             (oColumn.sortOptions.descFunction))) {
                         YAHOO.log("The properties sortOptions.ascFunction and " +
                         " sortOptions.descFunction have been deprecated in favor " +
-                        " of sortOptions.sortFunction", "warn", this.toString());
+                        " of sortOptions.sortFunction", "warn", oColumn.toString());
                     }
                 }
 
@@ -207,7 +215,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
     // Store header relationships in an array for HEADERS attribute
     var recurseAncestorsForHeaders = function(i, oColumn) {
-        headers[i].push(oColumn._nId);
+        headers[i].push(oColumn._sId);
         if(oColumn.parent) {
             recurseAncestorsForHeaders(i, oColumn.parent);
         }
@@ -216,7 +224,6 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         headers[i] = [];
         recurseAncestorsForHeaders(i, keys[i]);
         headers[i] = headers[i].reverse();
-        headers[i] = headers[i].join(" ");
     }
 
     // Save to the ColumnSet instance
@@ -253,6 +260,15 @@ YAHOO.widget.ColumnSet._nCount = 0;
  * @private
  */
 YAHOO.widget.ColumnSet.prototype._sName = null;
+
+/**
+ * Internal variable to give unique indexes to Column instances.
+ *
+ * @property _nColumnCount
+ * @type Number
+ * @private
+ */
+YAHOO.widget.ColumnSet.prototype._nColumnCount = 0;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -313,24 +329,20 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
 };
 
 /**
- * Returns Column instance with given ID number or key.
+ * Returns Column instance with given key or ColumnSet key index.
  *
  * @method getColumn
- * @param column {Number | String} ID number or unique key.
+ * @param column {String | Number} Column key or ColumnSet key index.
  * @return {YAHOO.widget.Column} Column instance.
  */
 
 YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
-    var allColumns = this.flat;
-    if(YAHOO.lang.isNumber(column)) {
-        for(var i=0; i<allColumns.length; i++) {
-            if(allColumns[i]._nId === column) {
-                return allColumns[i];
-            }
-        }
+    if(YAHOO.lang.isNumber(column) && this.keys[column]) {
+        return this.keys[column];
     }
     else if(YAHOO.lang.isString(column)) {
-        for(i=0; i<allColumns.length; i++) {
+        var allColumns = this.flat;
+        for(var i=0; i<allColumns.length; i++) {
             if(allColumns[i].key === column) {
                 return allColumns[i];
             }
@@ -352,10 +364,6 @@ YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
  * @param oConfigs {Object} Object literal of configuration values.
  */
 YAHOO.widget.Column = function(oConfigs) {
-    // Internal variables
-    this._nId = YAHOO.widget.Column._nCount;
-    this._sName = "Column instance" + this._nId;
-
     // Object literal defines Column attributes
     if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
@@ -364,11 +372,6 @@ YAHOO.widget.Column = function(oConfigs) {
             }
         }
     }
-
-    if(!YAHOO.lang.isValue(this.key)) {
-        this.key = "yui-dt-column"+this._nId;
-    }
-    YAHOO.widget.Column._nCount++;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -376,17 +379,6 @@ YAHOO.widget.Column = function(oConfigs) {
 // Private member variables
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal instance counter.
- *
- * @property Column._nCount
- * @type Number
- * @private
- * @static
- * @default 0
- */
-YAHOO.widget.Column._nCount = 0;
 
 /**
  * Unique instance name.
@@ -399,17 +391,16 @@ YAHOO.widget.Column.prototype._sName = null;
 
 
 /**
- * Unique number assigned at instantiation, indicates original order within
- * ColumnSet.
+ * Unique String identifier assigned at instantiation.
  *
- * @property _nId
- * @type Number
+ * @property _sId
+ * @type String
  * @private
  */
-YAHOO.widget.Column.prototype._nId = null;
+YAHOO.widget.Column.prototype._sId = null;
 
 /**
- * Reference to Column's index within its ColumnSet's keys array, or null if not applicable.
+ * Reference to Column's current position index within its ColumnSet's keys array, if applicable.
  *
  * @property _nKeyIndex
  * @type Number
@@ -606,22 +597,30 @@ YAHOO.widget.Column.prototype.toString = function() {
 };
 
 /**
- * Returns unique number assigned at instantiation, indicates original order
- * within ColumnSet.
+ * Returns unique ID string.
  *
  * @method getId
- * @return {Number} Column's unique ID number.
+ * @return {String} Unique ID string.
  */
 YAHOO.widget.Column.prototype.getId = function() {
-    return this._nId;
+    return this._sId;
 };
 
 /**
- * Public accessor returns Column's key index within its ColumnSet's keys array, or
- * null if not applicable.
+ * Returns unique Column key.
+ *
+ * @method getKey
+ * @return {String} Column key.
+ */
+YAHOO.widget.Column.prototype.getKey = function() {
+    return this.key;
+};
+
+/**
+ * Public accessor returns Column's current position index within its ColumnSet's keys array, if applicable.
  *
  * @method getKeyIndex
- * @return {Number} Column's key index within its ColumnSet keys array, if applicable.
+ * @return {Number} Position index, or null.
  */
 YAHOO.widget.Column.prototype.getKeyIndex = function() {
     return this._nKeyIndex;

@@ -130,7 +130,7 @@ YAHOO.widget.RecordSet.prototype._sName = null;
 /**
  * Internal variable to give unique indexes to Record instances.
  *
- * @property _nCount
+ * @property _nRecordCount
  * @type Number
  * @private
  */
@@ -163,7 +163,7 @@ YAHOO.widget.RecordSet.prototype._length = null;
  */
 YAHOO.widget.RecordSet.prototype._addRecord = function(oData, index) {
     var oRecord = new YAHOO.widget.Record(oData);
-    oRecord._nId = this._nRecordCount;
+    oRecord._sId = this._nRecordCount + "";
     this._nRecordCount++;
     
     if(YAHOO.lang.isNumber(index) && (index > -1)) {
@@ -221,23 +221,27 @@ YAHOO.widget.RecordSet.prototype.getLength = function() {
 };
 
 /**
- * Returns Record at given position index.
+ * Returns Record by ID or RecordSet position index.
  *
  * @method getRecord
- * @param index {Number} Record's Recordset position index.
+ * @param record {YAHOO.widget.Record | Number | String} Record instance,
+ * RecordSet position index, or Record ID.
  * @return {YAHOO.widget.Record} Record object.
  */
-YAHOO.widget.RecordSet.prototype.getRecord = function(index) {
-    if(YAHOO.lang.isNumber(index)) {
-        return this._records[index];
+YAHOO.widget.RecordSet.prototype.getRecord = function(record) {
+    if(record instanceof YAHOO.widget.Record) {
+        return record;
     }
-    /*else if(YAHOO.lang.isString(identifier)) {
+    else if(YAHOO.lang.isNumber(record)) {
+        return this._records[record];
+    }
+    else if(YAHOO.lang.isString(record)) {
         for(var i=0; i<this._records.length; i++) {
-            if(this._records[i].yuiRecordId == identifier) {
+            if(this._records[i]._sId === record) {
                 return this._records[i];
             }
         }
-    }*/
+    }
     return null;
 
 };
@@ -263,7 +267,7 @@ YAHOO.widget.RecordSet.prototype.getRecords = function(index, range) {
 };
 
 /**
- * Returns position index for the given Record.
+ * Returns current position index for the given Record.
  *
  * @method getRecordIndex
  * @param oRecord {YAHOO.widget.Record} Record instance.
@@ -346,18 +350,18 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
  * Updates given Record with given data.
  *
  * @method updateRecord
- * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
- * RecordSet position index.
+ * @param record {YAHOO.widget.Record | Number | String} A Record instance,
+ * a RecordSet position index, or a Record ID.
  * @param oData {Object) Object literal of new data.
  * @return {YAHOO.widget.Record} Updated Record, or null.
  */
 YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     var oRecord = null;
-    if(YAHOO.lang.isNumber(record)) {
-        oRecord = this._records[record];
-    }
-    else if(record instanceof YAHOO.widget.Record) {
+    if(record instanceof YAHOO.widget.Record) {
         oRecord = record;
+    }
+    else {
+        oRecord = this.getRecord(record);
     }
     if(oRecord && oData && (oData.constructor == Object)) {
         // Copy data from the Record for the event that gets fired later
@@ -381,20 +385,14 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
  * Updates given Record at given key with given data.
  *
  * @method updateKey
- * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
- * RecordSet position index.
+ * @param record {YAHOO.widget.Record | Number | String} A Record instance,
+ * a RecordSet position index, or a Record ID.
  * @param sKey {String} Key name.
  * @param oData {Object) New data.
  */
 YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
-    var oRecord;
-    
-    if(YAHOO.lang.isNumber(record)) {
-        oRecord = this._records[record];
-    }
-    if(record instanceof YAHOO.widget.Record) {
-        oRecord = record;
-
+    var oRecord = this.getRecord(record);
+    if(oRecord) {
         var oldData = null;
         var keyValue = oRecord._oData[sKey];
         // Copy data from the Record for the event that gets fired later
@@ -435,7 +433,8 @@ YAHOO.widget.RecordSet.prototype.replaceRecords = function(data) {
 };
 
 /**
- * Sorts all Records by given function.
+ * Sorts all Records by given function. Records keep their unique IDs but will
+ * have new RecordSet position indexes.
  *
  * @method sortRecords
  * @param fnSort {Function} Reference to a sort function.
@@ -555,14 +554,14 @@ YAHOO.widget.Record = function(oLiteral) {
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * Unique number assigned at instantiation, indicates original order within
- * RecordSet.
+ * Immutable unique ID assigned at instantiation. Remains constant while a
+ * Record's position index can change from sorting.
  *
- * @property _nId
- * @type Number
+ * @property _sId
+ * @type String
  * @private
  */
-YAHOO.widget.Record.prototype._nId = null;
+YAHOO.widget.Record.prototype._sId = null;
 
 /**
  * Holds data for the Record in an object literal.
@@ -586,14 +585,13 @@ YAHOO.widget.Record.prototype._oData = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns unique number assigned at instantiation, indicates original order
- * within RecordSet.
+ * Returns unique ID assigned at instantiation.
  *
  * @method getId
- * @return Number
+ * @return String
  */
 YAHOO.widget.Record.prototype.getId = function() {
-    return this._nId;
+    return this._sId;
 };
 
 /**

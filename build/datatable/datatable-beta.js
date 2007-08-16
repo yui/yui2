@@ -292,6 +292,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
         method: function(oParam) {
             var oPaginator = this.get("paginator");
             var aContainerEls = oPaginator.containers;
+            var i;
             
             // Paginator is enabled
             if(oParam) {
@@ -317,7 +318,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                 }
                 else {
                     // Show each container
-                    for(var i=0; i<aContainerEls.length; i++) {
+                    for(i=0; i<aContainerEls.length; i++) {
                         aContainerEls[i].style.display = "";
                     }
                 }
@@ -1114,6 +1115,7 @@ YAHOO.widget.DataTable.prototype._initDataSource = function(oDataSource) {
     else {
         var tmpTable = null;
         var tmpContainer = this._elContainer;
+        var i;
         // Peek in container child nodes to see if TABLE already exists
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
@@ -1217,9 +1219,8 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
         // ...and create THEAD cells
         for(var j=0; j<colTree[i].length; j++) {
             oColumn = colTree[i][j];
-            colId = oColumn.getId();
             elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-            elTheadCell.id = this.id + "-col" + colId;
+            elTheadCell.id = this.id+"-col" + oColumn.getId();
             this._initThEl(elTheadCell,oColumn,i,j);
         }
 
@@ -1235,8 +1236,8 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     this._elThead = this._elTable.appendChild(elThead);
 
     // Set FIRST/LAST on THEAD cells using the values in ColumnSet headers array
-    var aFirstHeaders = oColumnSet.headers[0].split(" ");
-    var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1].split(" ");
+    var aFirstHeaders = oColumnSet.headers[0];
+    var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
     for(i=0; i<aFirstHeaders.length; i++) {
         YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this.id+"-col"+aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
     }
@@ -1249,8 +1250,8 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
     var needDD = false;
     for(i=0; i<this._oColumnSet.keys.length; i++) {
         oColumn = this._oColumnSet.keys[i];
-        colId = oColumn.getId();
-        var elTheadCellId = YAHOO.util.Dom.get(this.id + "-col" + colId);
+        var colKey = oColumn.getKey();
+        var elTheadCellId = YAHOO.util.Dom.get(this.id + "-col" + oColumn.getId());
         if(oColumn.resizeable) {
             if(foundDD) {
                 //TODO: fix fixed width tables
@@ -1260,7 +1261,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                     // TODO: better way to get elTheadContainer
                     var elThContainer = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_HEADER,"div",elTheadCellId)[0];
                     var elThResizer = elThContainer.appendChild(document.createElement("span"));
-                    elThResizer.id = this.id + "-resizer" + colId;
+                    elThResizer.id = this.id + "-resizer-" + colKey;
                     YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
                     oColumn.ddResizer = new YAHOO.util.ColumnResizer(
                             this, oColumn, elTheadCellId, elThResizer.id, elThResizer.id);
@@ -1301,8 +1302,9 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
+    var colKey = oColumn.getKey();
     var colId = oColumn.getId();
-    elTheadCell.yuiColumnId = colId;
+    elTheadCell.yuiColumnKey = colKey;
     if(oColumn.abbr) {
         elTheadCell.abbr = oColumn.abbr;
     }
@@ -1323,7 +1325,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
         }
     }
     
-    YAHOO.util.Dom.addClass(elTheadCell, "yui-dt-col-"+oColumn.key);
+    YAHOO.util.Dom.addClass(elTheadCell, "yui-dt-col-"+colKey);
     
     elTheadCell.innerHTML = "";
     elTheadCell.rowSpan = oColumn.getRowspan();
@@ -1336,7 +1338,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
-    var sLabel = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : oColumn.key;
+    var sLabel = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : colKey;
     if(oColumn.sortable) {
         YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
         //TODO: Make sortLink customizeable
@@ -1344,7 +1346,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
         //TODO: Separate label from an accessibility link that says
         // "Click to sort ascending" and push it offscreen
         var sLabelLinkId = this.id + "-labellink" + colId;
-        var sortLink = "?key=" + oColumn.key;
+        var sortLink = "?key=" + colKey;
         elTheadLabel.innerHTML = "<a id=\"" + sLabelLinkId + "\" href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
         if(!this._sFirstLabelLinkId) {
             this._sFirstLabelLinkId = sLabelLinkId;
@@ -1517,8 +1519,12 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         var oColumn = oColumnSet.keys[j];
         var elCell = elRow.appendChild(document.createElement("td"));
         elCell.id = elRow.id+"-cell"+j;
-        elCell.yuiColumnId = oColumn.getId();
-        elCell.headers = oColumnSet.headers[j];
+        elCell.yuiColumnKey = oColumn.getKey();
+
+        for(var k=0; k<oColumnSet.headers[j].length; k++) {
+            elCell.headers += this.id + "-col" + oColumnSet.headers[j][k] + " ";
+        }
+        
         // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
         elCell.yuiCellIndex = j;
 
@@ -3204,7 +3210,7 @@ YAHOO.widget.DataTable.prototype.getLastTrEl = function() {
 };
 
 /**
- * Returns DOM reference to the given TD element.
+ * Returns DOM reference to a TD element.
  *
  * @method getTdEl
  * @param cell {HTMLElement | String} DOM element reference or string ID.
@@ -3236,11 +3242,11 @@ YAHOO.widget.DataTable.prototype.getTdEl = function(cell) {
 };
 
 /**
- * Returns DOM reference to the TH element at given DataTable page coordinates, or null.
+ * Returns DOM reference to a TH element.
  *
  * @method getThEl
- * @param header {HTMLElement | String | YAHOO.widget.Column} DOM element
- * reference or string ID, or Column instance.
+ * @param header {YAHOO.widget.Column | HTMLElement | String} Column instance,
+ * DOM element reference, or string ID.
  * @return {HTMLElement} Reference to TH element.
  */
 YAHOO.widget.DataTable.prototype.getThEl = function(header) {
@@ -3324,7 +3330,7 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
     // By element reference or ID string
     else {
         // Validate TR element
-        elRow = this.getTrEl(row);
+        var elRow = this.getTrEl(row);
         if(elRow && (elRow.ownerDocument == document) &&
                 (elRow.parentNode == this._elTbody)) {
             return elRow.sectionRowIndex;
@@ -3497,7 +3503,7 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
                         // Set SELECTED
                         for(l=0; l<aSelectedCells.length; l++) {
                             if((aSelectedCells[l].recordId === thisRow.yuiRecordId) &&
-                                    (aSelectedCells[l].columnId === thisCell.yuiColumnId)) {
+                                    (aSelectedCells[l].columnKey === thisCell.yuiColumnKey)) {
                                 YAHOO.util.Dom.addClass(thisCell, YAHOO.widget.DataTable.CLASS_SELECTED);
                                 if(k === thisRow.cells.length-1) {
                                     this._sLastSelectedId = thisCell.id;
@@ -3716,27 +3722,44 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
  * For the given identifier, returns the associated Record instance.
  *
  * @method getRecord
- * @param row {HTMLElement | String | Number} RecordSet position index, DOM
- * reference or ID string to an element within the DataTable page.
+ * @param row {HTMLElement | Number | String} DOM reference to a TR element (or
+ * child of a TR element), RecordSet position index, or Record ID.
  * @return {YAHOO.widget.Record} Record instance.
  */
 YAHOO.widget.DataTable.prototype.getRecord = function(row) {
-    var nRecordIndex = row;
+    var oRecord = this._oRecordSet.getRecord(row);
     
-    // By element reference or ID string
-    if(!YAHOO.lang.isNumber(nRecordIndex)) {
+    if(!oRecord) {
         // Validate TR element
         var elRow = this.getTrEl(row);
         if(elRow) {
-            nRecordIndex = this.getRecordIndex(row);
+            oRecord = this._oRecordSet.getRecord(elRow.yuiRecordId);
+        }
+    }
+    
+    if(oRecord instanceof YAHOO.widget.Record) {
+        return oRecord;
+    }
+    else {
+        return null;
+    }
+
+    /*var nRecordID = row;
+    
+    // By element reference or ID string
+    if(!YAHOO.lang.isNumber(nRecordID)) {
+        // Validate TR element
+        var elRow = this.getTrEl(row);
+        if(elRow) {
+            nRecordID = elRow.yuiRecordId;
         }
     }
     // By Record index
-    if(YAHOO.lang.isNumber(nRecordIndex)) {
-        return this._oRecordSet.getRecord(nRecordIndex);
+    if(YAHOO.lang.isNumber(nRecordID)) {
+        return this._oRecordSet.getRecord(nRecordID);
     }
     
-    return null;
+    return null;*/
 };
 
 
@@ -3790,36 +3813,31 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
  * For the given identifier, returns the associated Column instance.
  *
  * @method getColumn
- * @param column {HTMLElement | String | Number} ColumnSet.keys position index, DOM
- * reference or ID string to an element within the DataTable page.
+ * @param column {HTMLElement | String | Number} DOM reference to a TH/TD element
+ * (or child of a TH/TD element), a Column key, or a ColumnSet key index.
  * @return {YAHOO.widget.Column} Column instance.
  */
  YAHOO.widget.DataTable.prototype.getColumn = function(column) {
-    var nColumnIndex = column;
-
-    // By element reference or ID string
-    if(!YAHOO.lang.isNumber(nColumnIndex)) {
+    var oColumn = this._oColumnSet.getColumn(column);
+    
+    if(!oColumn) {
         // Validate TD element
         var elCell = this.getTdEl(column);
         if(elCell) {
-            nColumnIndex = elCell.yuiColumnId;
+            oColumn = this._oColumnSet.getColumn(elCell.yuiColumnKey);
         }
         // Validate TH element
         else {
             elCell = this.getThEl(column);
             if(elCell) {
-                nColumnIndex = elCell.yuiColumnId;
+                oColumn = this._oColumnSet.getColumn(elCell.yuiColumnKey);
             }
         }
     }
-    
-    // By Column index
-    if(YAHOO.lang.isNumber(nColumnIndex)) {
-        return this._oColumnSet.getColumn(nColumnIndex);
+    if(!oColumn) {
     }
-
-    return null;
- };
+    return oColumn;
+};
 
 /**
  * Sorts given Column.
@@ -3832,56 +3850,52 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         return;
     }
     if(!oColumn instanceof YAHOO.widget.Column) {
-        //TODO: accept the TH or TH.key
-        //TODO: Get the column based on TH.yuiColumnId
         return;
     }
-    if(oColumn.sortable) {
-        // What is the default sort direction?
-        var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
+    if(!oColumn.sortable) {
+        YAHOO.util.Dom.addClass(this.getThEl(oColumn), YAHOO.widget.DataTable.CLASS_SORTABLE);
+    }
+    // What is the default sort direction?
+    var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
-        // Already sorted?
-        var oSortedBy = this.get("sortedBy");
-        if(oSortedBy && (oSortedBy.key === oColumn.key)) {
-            if(oSortedBy.dir) {
-                sortDir = (oSortedBy.dir == "asc") ? "desc" : "asc";
-            }
-            else {
-                sortDir = (sortDir == "asc") ? "desc" : "asc";
-            }
+    // Already sorted?
+    var oSortedBy = this.get("sortedBy");
+    if(oSortedBy && (oSortedBy.key === oColumn.key)) {
+        if(oSortedBy.dir) {
+            sortDir = (oSortedBy.dir == "asc") ? "desc" : "asc";
         }
-
-        // Is there a custom sort handler function defined?
-        var sortFnc = (oColumn.sortOptions && YAHOO.lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                oColumn.sortOptions.sortFunction : function(a, b, desc) {
-                    var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
-                    if(sorted === 0) {
-                        return YAHOO.util.Sort.compare(a.getId(),b.getId(), desc);
-                    }
-                    else {
-                        return sorted;
-                    }
-        };
-
-        // Do the actual sort
-        var desc = (sortDir == "desc") ? true : false;
-        this._oRecordSet.sortRecords(sortFnc, desc);
-
-        // Update sortedBy tracker
-        this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
-        
-        // Reset to first page
-        //TODO: Keep selection in view
-        this.updatePaginator({currentPage:1});
-
-        // Update the UI
-        this.refreshView();
-
-        this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
+        else {
+            sortDir = (sortDir == "asc") ? "desc" : "asc";
+        }
     }
-    else {
-        //TODO
-    }
+
+    // Is there a custom sort handler function defined?
+    var sortFnc = (oColumn.sortOptions && YAHOO.lang.isFunction(oColumn.sortOptions.sortFunction)) ?
+            oColumn.sortOptions.sortFunction : function(a, b, desc) {
+                var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
+                if(sorted === 0) {
+                    return YAHOO.util.Sort.compare(a.getId(),b.getId(), desc);
+                }
+                else {
+                    return sorted;
+                }
+    };
+
+    // Do the actual sort
+    var desc = (sortDir == "desc") ? true : false;
+    this._oRecordSet.sortRecords(sortFnc, desc);
+
+    // Update sortedBy tracker
+    this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
+    
+    // Reset to first page
+    //TODO: Keep selection in view
+    this.updatePaginator({currentPage:1});
+
+    // Update the UI
+    this.refreshView();
+
+    this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
 };
 
 
@@ -4038,7 +4052,7 @@ YAHOO.widget.DataTable.prototype.addRows = function(aData, index) {
  * @param oData {Object} Object literal of data for the row.
  */
 YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
-    var oldRecord, updatedRecord, elRow;
+    var oldRecord, oldData, updatedRecord, elRow;
 
     // Get the Record directly
     if((row instanceof YAHOO.widget.Record) || (YAHOO.lang.isNumber(row))) {
@@ -4060,7 +4074,7 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
     if(oldRecord) {
         // Copy data from the Record for the event that gets fired later
         var oRecordData = oldRecord.getData();
-        var oldData = {};
+        oldData = {};
         for(var param in oRecordData) {
             oldData[param] = oRecordData[param];
         }
@@ -4106,13 +4120,13 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
     if(nRecordIndex !== null) {
         var oRecord = this._oRecordSet.getRecord(nRecordIndex);
         if(oRecord) {
-            var nRecordId = oRecord.getId();
+            var sRecordId = oRecord.getId();
             
             // Remove from selection tracker if there
             var tracker = this._aSelections || [];
-            for(var j=0; j<tracker.length; j++) {
-                if((YAHOO.lang.isNumber(tracker[j]) && (tracker[j] === nRecordId)) ||
-                        ((tracker[j].constructor == Object) && (tracker[j].recordId === nRecordId))) {
+            for(var j=tracker.length-1; j>-1; j--) {
+                if((YAHOO.lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                        ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
                     tracker.splice(j,1);
                 }
             }
@@ -4264,7 +4278,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         oRecord = this.getRecord(elCell);
     }
     if(!(oColumn instanceof YAHOO.widget.Column)) {
-        oColumn = this._oColumnSet.getColumn(elCell.yuiColumnId);
+        oColumn = this._oColumnSet.getColumn(elCell.yuiColumnKey);
     }
     
     if(oRecord && oColumn) {
@@ -4483,8 +4497,7 @@ YAHOO.widget.DataTable.formatDropdown = function(el, oRecord, oColumn, oData) {
         selectEl = el.appendChild(selectEl);
 
         // Add event listener
-        //TODO: static method doesn't have access to the datatable instance...
-        YAHOO.util.Event.addListener(selectEl,"change",oDataTable._onDropdownChange,oDataTable);
+        YAHOO.util.Event.addListener(selectEl,"change",this._onDropdownChange,this);
     }
 
     selectEl = collection[0];
@@ -4588,7 +4601,7 @@ YAHOO.widget.DataTable.formatRadio = function(el, oRecord, oColumn, oData) {
     var bChecked = oData;
     bChecked = (bChecked) ? " checked" : "";
     el.innerHTML = "<input type=\"radio\"" + bChecked +
-            " name=\"" + oColumn.getId() + "-radio\"" +
+            " name=\"" + oColumn.getKey() + "-radio\"" +
             " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
 };
 
@@ -4744,13 +4757,14 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
  */
  YAHOO.widget.DataTable.prototype.formatPaginators = function() {
     var pag = this.get("paginator");
+    var i;
 
     // For Opera workaround
     var dropdownEnabled = false;
 
     // Links are enabled
     if(pag.pageLinks > -1) {
-        for(var i=0; i<pag.links.length; i++) {
+        for(i=0; i<pag.links.length; i++) {
             this.formatPaginatorLinks(pag.links[i], pag.currentPage, pag.pageLinksStart, pag.pageLinks, pag.totalPages);
         }
     }
@@ -4964,7 +4978,7 @@ YAHOO.widget.DataTable.prototype._sLastHighlightedCellId = null;
 YAHOO.widget.DataTable.prototype._sLastHighlightedRowId = null;
 
 /**
- * Array of selections: {recordId:nRecordId, cellIndex:nCellIndex}
+ * Array of selections: {recordId:sRecordId, cellIndex:nCellIndex}
  *
  * @property _aSelections
  * @type Object[]
@@ -5026,23 +5040,24 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         if(oRecord) {
             // Get Record ID
             var tracker = this._aSelections || [];
-            var nRecordId = oRecord.getId();
-            // Remove if already there
-
+            var sRecordId = oRecord.getId();
+            
+            // Remove if already there:
             // Use Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(nRecordId) >  -1)) {
-                tracker.splice(tracker.indexOf(nRecordId),1);
+            if(tracker.indexOf && (tracker.indexOf(sRecordId) >  -1)) {
+                tracker.splice(tracker.indexOf(sRecordId),1);
             }
             // ...or do it the old-fashioned way
             else {
-                for(var j=0; j<tracker.length; j++) {
-                   if(tracker[j] === nRecordId){
+                for(var j=tracker.length-1; j>-1; j--) {
+                   if(tracker[j] === sRecordId){
                         tracker.splice(j,1);
+                        break;
                     }
                 }
             }
             // Add to the end
-            tracker.push(nRecordId);
+            tracker.push(sRecordId);
 
             // Update trackers
             this._sLastSelectedId = elRow.id;
@@ -5084,22 +5099,23 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
         if(oRecord) {
             // Get Record ID
             var tracker = this._aSelections || [];
-            var nRecordId = oRecord.getId();
+            var sRecordId = oRecord.getId();
 
             // Remove if there
             var bFound = false;
             
             // Use Array.indexOf if available...
-            if(tracker.indexOf && (tracker.indexOf(nRecordId) >  -1)) {
-                tracker.splice(tracker.indexOf(nRecordId),1);
+            if(tracker.indexOf && (tracker.indexOf(sRecordId) >  -1)) {
+                tracker.splice(tracker.indexOf(sRecordId),1);
                 bFound = true;
             }
             // ...or do it the old-fashioned way
             else {
-                for(var j=0; j<tracker.length; j++) {
-                   if(tracker[j] === nRecordId){
+                for(var j=tracker.length-1; j>-1; j--) {
+                   if(tracker[j] === sRecordId){
                         tracker.splice(j,1);
                         bFound = true;
+                        break;
                     }
                 }
             }
@@ -5125,10 +5141,10 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
  * @method unselectAllRows
  */
 YAHOO.widget.DataTable.prototype.unselectAllRows = function() {
-    // Remove from tracker
+    // Remove all rows from tracker
     var tracker = this._aSelections || [];
-    for(var j=0; j<tracker.length; j++) {
-       if(YAHOO.lang.isNumber(tracker[j])){
+    for(var j=tracker.length-1; j>-1; j--) {
+       if(YAHOO.lang.isString(tracker[j])){
             tracker.splice(j,1);
         }
     }
@@ -5179,22 +5195,23 @@ YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
     
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var nColumnId = elCell.yuiColumnId;
+        var sColumnKey = elCell.yuiColumnKey;
 
-        if(oRecord && YAHOO.lang.isNumber(nColumnId)) {
+        if(oRecord && sColumnKey) {
             // Get Record ID
             var tracker = this._aSelections || [];
-            var nRecordId = oRecord.getId();
+            var sRecordId = oRecord.getId();
 
             // Remove if there
-            for(var j=0; j<tracker.length; j++) {
-               if((tracker[j].recordId === nRecordId) && (tracker[j].columnId === nColumnId)){
+            for(var j=tracker.length-1; j>-1; j--) {
+               if((tracker[j].recordId === sRecordId) && (tracker[j].columnKey === sColumnKey)){
                     tracker.splice(j,1);
+                    break;
                 }
             }
 
             // Add to the end
-            tracker.push({recordId:nRecordId, columnId:nColumnId});
+            tracker.push({recordId:sRecordId, columnKey:sColumnKey});
 
             // Update trackers
             this._aSelections = tracker;
@@ -5206,8 +5223,7 @@ YAHOO.widget.DataTable.prototype.selectCell = function(cell) {
             // Update the UI
             YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
 
-            this.fireEvent("cellSelectEvent", {record:oRecord,
-                    key: this._oColumnSet.getColumn(nColumnId).key, el:elCell});
+            this.fireEvent("cellSelectEvent", {record:oRecord, key: sColumnKey, el:elCell});
             return;
         }
     }
@@ -5225,16 +5241,16 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var nColumnId = elCell.yuiColumnId;
+        var sColumnKey = elCell.yuiColumnKey;
 
-        if(oRecord && YAHOO.lang.isNumber(nColumnId)) {
+        if(oRecord && sColumnKey) {
             // Get Record ID
             var tracker = this._aSelections || [];
             var id = oRecord.getId();
 
             // Is it selected?
-            for(var j=0; j<tracker.length; j++) {
-                if((tracker[j].recordId === id) && (tracker[j].columnId === nColumnId)){
+            for(var j=tracker.length-1; j>-1; j--) {
+                if((tracker[j].recordId === id) && (tracker[j].columnKey === sColumnKey)){
                     // Remove from tracker
                     tracker.splice(j,1);
                     
@@ -5244,9 +5260,7 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
                     // Update the UI
                     YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_SELECTED);
 
-                    this.fireEvent("cellUnselectEvent", {record:oRecord,
-                            key:this._oColumnSet.getColumn(nColumnId).key, el:elCell});
-
+                    this.fireEvent("cellUnselectEvent", {record:oRecord, key:sColumnKey, el:elCell});
                     return;
                 }
             }
@@ -5260,9 +5274,9 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
  * @method unselectAllCells
  */
 YAHOO.widget.DataTable.prototype.unselectAllCells= function() {
-    // Remove from tracker
+    // Remove all cells from tracker
     var tracker = this._aSelections || [];
-    for(var j=0; j<tracker.length; j++) {
+    for(var j=tracker.length-1; j>-1; j--) {
        if(tracker[j].constructor == Object){
             tracker.splice(j,1);
         }
@@ -5294,13 +5308,13 @@ YAHOO.widget.DataTable.prototype.isSelected = function(el) {
  * Returns selected rows as an array of Record IDs.
  *
  * @method getSelectedRows
- * @return {HTMLElement[]} Array of selected rows by Record ID.
+ * @return {String[]} Array of selected rows by Record ID.
  */
 YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
     var aSelectedRows = [];
     var tracker = this._aSelections || [];
     for(var j=0; j<tracker.length; j++) {
-       if(YAHOO.lang.isNumber(tracker[j])){
+       if(YAHOO.lang.isString(tracker[j])){
             aSelectedRows.push(tracker[j]);
         }
     }
@@ -5309,17 +5323,17 @@ YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
 
 /**
  * Returns selected cells as an array of object literals:
- *     {recordId:nRecordID, columnId:nColumnId}.
+ *     {recordId:sRecordId, columnKey:sColumnKey}.
  *
  * @method getSelectedCells
- * @return {HTMLElement[]} Array of selected cells by Record and Column IDs.
+ * @return {Object[]} Array of selected cells by Record ID and Column ID.
  */
 YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
     var aSelectedCells = [];
     var tracker = this._aSelections || [];
     for(var j=0; j<tracker.length; j++) {
        if(tracker[j] && (tracker[j].constructor == Object)){
-            aSelectedCells.push({recordId:tracker[j].recordId, columnId:tracker[j].columnId});
+            aSelectedCells.push({recordId:tracker[j].recordId, columnKey:tracker[j].columnKey});
         }
     }
     return aSelectedCells;
@@ -5382,8 +5396,7 @@ YAHOO.widget.DataTable.prototype.highlightCell = function(cell) {
         var oRecord = this.getRecord(elCell);
         YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
         this._sLastHighlightedCellId = elCell.id;
-        this.fireEvent("cellHighlightEvent", {record:oRecord,
-                    key:this._oColumnSet.getColumn(elCell.yuiColumnId).key, el:elCell});
+        this.fireEvent("cellHighlightEvent", {record:oRecord, key:elCell.yuiColumnKey, el:elCell});
         return;
     }
 };
@@ -5400,8 +5413,7 @@ YAHOO.widget.DataTable.prototype.unhighlightCell = function(cell) {
     if(elCell) {
         var oRecord = this.getRecord(elCell);
         YAHOO.util.Dom.removeClass(elCell,YAHOO.widget.DataTable.CLASS_HIGHLIGHTED);
-        this.fireEvent("cellUnhighlightEvent", {record:oRecord,
-                    key:this._oColumnSet.getColumn(elCell.yuiColumnId).key, el:elCell});
+        this.fireEvent("cellUnhighlightEvent", {record:oRecord, key:elCell.yuiColumnKey, el:elCell});
         return;
     }
 };
@@ -5759,9 +5771,9 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     if(YAHOO.widget.Calendar) {
         var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
         var calContainer = elContainer.appendChild(document.createElement("div"));
-        calContainer.id = "yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-dateContainer";
+        calContainer.id = oSelf.id + "-col" + oColumn.getId() + "-dateContainer";
         var calendar =
-                new YAHOO.widget.Calendar("yui-dt-" + oSelf._nIndex + "-col" + oColumn.getKeyIndex() + "-date",
+                new YAHOO.widget.Calendar(oSelf.id + "-col" + oColumn.getId() + "-date",
                 calContainer.id,
                 {selected:selectedValue, pagedate:value});
         calendar.render();
@@ -6084,8 +6096,13 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
     YAHOO.util.Event.stopEvent(evt);
     
     var el = this.getThEl(target) || this.getTdEl(target);
-    if(el && YAHOO.lang.isNumber(el.yuiColumnId)) {
-        this.sortColumn(this._oColumnSet.getColumn(el.yuiColumnId));
+    if(el && el.yuiColumnKey) {
+        var oColumn = this.getColumn(el.yuiColumnKey);
+        if(oColumn.sortable) {
+            this.sortColumn(oColumn);
+        }
+        else {
+        }
     }
     else {
     }
@@ -6714,8 +6731,8 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
     var elTag = target.tagName.toLowerCase();
 
     var elCell = this.getTdEl(target);
-    if(elCell && YAHOO.lang.isNumber(elCell.yuiColumnId)) {
-        var oColumn = this._oColumnSet.getColumn(elCell.yuiColumnId);
+    if(elCell && elCell.yuiColumnKey) {
+        var oColumn = this.getColumn(elCell.yuiColumnKey);
         this.formatCell(elCell, this.getRecord(elCell), oColumn);
     }
     else {
@@ -7495,6 +7512,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     var nodeDepth = -1;
 
     // Internal recursive function to defined Column instances
+    var oSelf = this;
     var parseColumns = function(nodeList, parent) {
         // One level down
         nodeDepth++;
@@ -7511,6 +7529,13 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
             // Instantiate a new Column for each node
             var oColumn = new YAHOO.widget.Column(currentNode);
+            if(!YAHOO.lang.isValue(oColumn.key)) {
+                oColumn.key = "yui-dt-columnset" + YAHOO.widget.ColumnSet._nCount + "-col" + oSelf._nColumnCount;
+            }
+            oColumn._sId = oSelf._nColumnCount + "";
+            oColumn._sName = "Column instance" + oSelf._nColumnCount;
+            oSelf._nColumnCount++;
+
 
             // Add the new Column to the flat list
             flat.push(oColumn);
@@ -7665,7 +7690,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
     // Store header relationships in an array for HEADERS attribute
     var recurseAncestorsForHeaders = function(i, oColumn) {
-        headers[i].push(oColumn._nId);
+        headers[i].push(oColumn._sId);
         if(oColumn.parent) {
             recurseAncestorsForHeaders(i, oColumn.parent);
         }
@@ -7674,7 +7699,6 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
         headers[i] = [];
         recurseAncestorsForHeaders(i, keys[i]);
         headers[i] = headers[i].reverse();
-        headers[i] = headers[i].join(" ");
     }
 
     // Save to the ColumnSet instance
@@ -7710,6 +7734,15 @@ YAHOO.widget.ColumnSet._nCount = 0;
  * @private
  */
 YAHOO.widget.ColumnSet.prototype._sName = null;
+
+/**
+ * Internal variable to give unique indexes to Column instances.
+ *
+ * @property _nColumnCount
+ * @type Number
+ * @private
+ */
+YAHOO.widget.ColumnSet.prototype._nColumnCount = 0;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -7770,24 +7803,20 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
 };
 
 /**
- * Returns Column instance with given ID number or key.
+ * Returns Column instance with given key or ColumnSet key index.
  *
  * @method getColumn
- * @param column {Number | String} ID number or unique key.
+ * @param column {String | Number} Column key or ColumnSet key index.
  * @return {YAHOO.widget.Column} Column instance.
  */
 
 YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
-    var allColumns = this.flat;
-    if(YAHOO.lang.isNumber(column)) {
-        for(var i=0; i<allColumns.length; i++) {
-            if(allColumns[i]._nId === column) {
-                return allColumns[i];
-            }
-        }
+    if(YAHOO.lang.isNumber(column) && this.keys[column]) {
+        return this.keys[column];
     }
     else if(YAHOO.lang.isString(column)) {
-        for(i=0; i<allColumns.length; i++) {
+        var allColumns = this.flat;
+        for(var i=0; i<allColumns.length; i++) {
             if(allColumns[i].key === column) {
                 return allColumns[i];
             }
@@ -7809,10 +7838,6 @@ YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
  * @param oConfigs {Object} Object literal of configuration values.
  */
 YAHOO.widget.Column = function(oConfigs) {
-    // Internal variables
-    this._nId = YAHOO.widget.Column._nCount;
-    this._sName = "Column instance" + this._nId;
-
     // Object literal defines Column attributes
     if(oConfigs && (oConfigs.constructor == Object)) {
         for(var sConfig in oConfigs) {
@@ -7821,11 +7846,6 @@ YAHOO.widget.Column = function(oConfigs) {
             }
         }
     }
-
-    if(!YAHOO.lang.isValue(this.key)) {
-        this.key = "yui-dt-column"+this._nId;
-    }
-    YAHOO.widget.Column._nCount++;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -7833,17 +7853,6 @@ YAHOO.widget.Column = function(oConfigs) {
 // Private member variables
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal instance counter.
- *
- * @property Column._nCount
- * @type Number
- * @private
- * @static
- * @default 0
- */
-YAHOO.widget.Column._nCount = 0;
 
 /**
  * Unique instance name.
@@ -7856,17 +7865,16 @@ YAHOO.widget.Column.prototype._sName = null;
 
 
 /**
- * Unique number assigned at instantiation, indicates original order within
- * ColumnSet.
+ * Unique String identifier assigned at instantiation.
  *
- * @property _nId
- * @type Number
+ * @property _sId
+ * @type String
  * @private
  */
-YAHOO.widget.Column.prototype._nId = null;
+YAHOO.widget.Column.prototype._sId = null;
 
 /**
- * Reference to Column's index within its ColumnSet's keys array, or null if not applicable.
+ * Reference to Column's current position index within its ColumnSet's keys array, if applicable.
  *
  * @property _nKeyIndex
  * @type Number
@@ -8063,22 +8071,30 @@ YAHOO.widget.Column.prototype.toString = function() {
 };
 
 /**
- * Returns unique number assigned at instantiation, indicates original order
- * within ColumnSet.
+ * Returns unique ID string.
  *
  * @method getId
- * @return {Number} Column's unique ID number.
+ * @return {String} Unique ID string.
  */
 YAHOO.widget.Column.prototype.getId = function() {
-    return this._nId;
+    return this._sId;
 };
 
 /**
- * Public accessor returns Column's key index within its ColumnSet's keys array, or
- * null if not applicable.
+ * Returns unique Column key.
+ *
+ * @method getKey
+ * @return {String} Column key.
+ */
+YAHOO.widget.Column.prototype.getKey = function() {
+    return this.key;
+};
+
+/**
+ * Public accessor returns Column's current position index within its ColumnSet's keys array, if applicable.
  *
  * @method getKeyIndex
- * @return {Number} Column's key index within its ColumnSet keys array, if applicable.
+ * @return {Number} Position index, or null.
  */
 YAHOO.widget.Column.prototype.getKeyIndex = function() {
     return this._nKeyIndex;
@@ -8474,7 +8490,7 @@ YAHOO.widget.RecordSet.prototype._sName = null;
 /**
  * Internal variable to give unique indexes to Record instances.
  *
- * @property _nCount
+ * @property _nRecordCount
  * @type Number
  * @private
  */
@@ -8507,7 +8523,7 @@ YAHOO.widget.RecordSet.prototype._length = null;
  */
 YAHOO.widget.RecordSet.prototype._addRecord = function(oData, index) {
     var oRecord = new YAHOO.widget.Record(oData);
-    oRecord._nId = this._nRecordCount;
+    oRecord._sId = this._nRecordCount + "";
     this._nRecordCount++;
     
     if(YAHOO.lang.isNumber(index) && (index > -1)) {
@@ -8565,23 +8581,27 @@ YAHOO.widget.RecordSet.prototype.getLength = function() {
 };
 
 /**
- * Returns Record at given position index.
+ * Returns Record by ID or RecordSet position index.
  *
  * @method getRecord
- * @param index {Number} Record's Recordset position index.
+ * @param record {YAHOO.widget.Record | Number | String} Record instance,
+ * RecordSet position index, or Record ID.
  * @return {YAHOO.widget.Record} Record object.
  */
-YAHOO.widget.RecordSet.prototype.getRecord = function(index) {
-    if(YAHOO.lang.isNumber(index)) {
-        return this._records[index];
+YAHOO.widget.RecordSet.prototype.getRecord = function(record) {
+    if(record instanceof YAHOO.widget.Record) {
+        return record;
     }
-    /*else if(YAHOO.lang.isString(identifier)) {
+    else if(YAHOO.lang.isNumber(record)) {
+        return this._records[record];
+    }
+    else if(YAHOO.lang.isString(record)) {
         for(var i=0; i<this._records.length; i++) {
-            if(this._records[i].yuiRecordId == identifier) {
+            if(this._records[i]._sId === record) {
                 return this._records[i];
             }
         }
-    }*/
+    }
     return null;
 
 };
@@ -8607,7 +8627,7 @@ YAHOO.widget.RecordSet.prototype.getRecords = function(index, range) {
 };
 
 /**
- * Returns position index for the given Record.
+ * Returns current position index for the given Record.
  *
  * @method getRecordIndex
  * @param oRecord {YAHOO.widget.Record} Record instance.
@@ -8680,18 +8700,18 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
  * Updates given Record with given data.
  *
  * @method updateRecord
- * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
- * RecordSet position index.
+ * @param record {YAHOO.widget.Record | Number | String} A Record instance,
+ * a RecordSet position index, or a Record ID.
  * @param oData {Object) Object literal of new data.
  * @return {YAHOO.widget.Record} Updated Record, or null.
  */
 YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
     var oRecord = null;
-    if(YAHOO.lang.isNumber(record)) {
-        oRecord = this._records[record];
-    }
-    else if(record instanceof YAHOO.widget.Record) {
+    if(record instanceof YAHOO.widget.Record) {
         oRecord = record;
+    }
+    else {
+        oRecord = this.getRecord(record);
     }
     if(oRecord && oData && (oData.constructor == Object)) {
         // Copy data from the Record for the event that gets fired later
@@ -8712,20 +8732,14 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
  * Updates given Record at given key with given data.
  *
  * @method updateKey
- * @param record {YAHOO.widget.Record | Number} A Record instance, or Record's
- * RecordSet position index.
+ * @param record {YAHOO.widget.Record | Number | String} A Record instance,
+ * a RecordSet position index, or a Record ID.
  * @param sKey {String} Key name.
  * @param oData {Object) New data.
  */
 YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
-    var oRecord;
-    
-    if(YAHOO.lang.isNumber(record)) {
-        oRecord = this._records[record];
-    }
-    if(record instanceof YAHOO.widget.Record) {
-        oRecord = record;
-
+    var oRecord = this.getRecord(record);
+    if(oRecord) {
         var oldData = null;
         var keyValue = oRecord._oData[sKey];
         // Copy data from the Record for the event that gets fired later
@@ -8762,7 +8776,8 @@ YAHOO.widget.RecordSet.prototype.replaceRecords = function(data) {
 };
 
 /**
- * Sorts all Records by given function.
+ * Sorts all Records by given function. Records keep their unique IDs but will
+ * have new RecordSet position indexes.
  *
  * @method sortRecords
  * @param fnSort {Function} Reference to a sort function.
@@ -8875,14 +8890,14 @@ YAHOO.widget.Record = function(oLiteral) {
 //
 /////////////////////////////////////////////////////////////////////////////
 /**
- * Unique number assigned at instantiation, indicates original order within
- * RecordSet.
+ * Immutable unique ID assigned at instantiation. Remains constant while a
+ * Record's position index can change from sorting.
  *
- * @property _nId
- * @type Number
+ * @property _sId
+ * @type String
  * @private
  */
-YAHOO.widget.Record.prototype._nId = null;
+YAHOO.widget.Record.prototype._sId = null;
 
 /**
  * Holds data for the Record in an object literal.
@@ -8906,14 +8921,13 @@ YAHOO.widget.Record.prototype._oData = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Returns unique number assigned at instantiation, indicates original order
- * within RecordSet.
+ * Returns unique ID assigned at instantiation.
  *
  * @method getId
- * @return Number
+ * @return String
  */
 YAHOO.widget.Record.prototype.getId = function() {
-    return this._nId;
+    return this._sId;
 };
 
 /**
