@@ -2432,7 +2432,7 @@
             /**
             * @config iframe
             * @description Boolean indicating whether or not the Overlay should 
-            * have an IFRAME shim; used to prevent <SELECT> elements from 
+            * have an IFRAME shim; used to prevent SELECT elements from 
             * poking through an Overlay instance in IE6.  When set to "true", 
             * the iframe shim is created when the Overlay instance is intially
             * made visible.
@@ -3802,7 +3802,7 @@
         
                     o.cfg.setProperty("zIndex", originalZ, true);
                     o.cfg.setProperty("manager", null);
-
+        
                     o.focusEvent.unsubscribeAll();
                     o.blurEvent.unsubscribeAll();
         
