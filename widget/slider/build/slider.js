@@ -30,6 +30,10 @@
  * @param {String}      sType  The type of slider (horiz, vert, region)
  */
 YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
+
+    YAHOO.widget.Slider.ANIM_AVAIL = 
+        (!YAHOO.lang.isUndefined(YAHOO.util.Anim));
+
     if (sElementId) {
         this.init(sElementId, sGroup, true);
         this.initSlider(sType);
@@ -98,13 +102,12 @@ YAHOO.widget.Slider.getSliderRegion =
 };
 
 /**
- * By default, animation is available if the animation library is detected.
+ * By default, animation is available if the animation utility is detected.
  * @property YAHOO.widget.Slider.ANIM_AVAIL
  * @static
  * @type boolean
  */
-YAHOO.widget.Slider.ANIM_AVAIL = true;
-
+YAHOO.widget.Slider.ANIM_AVAIL = false;
 
 YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
@@ -249,7 +252,22 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          */
         this.valueChangeSource = 0;
 
+        /**
+         * Indicates whether or not events will be supressed for the current
+         * slide operation
+         * @property _silent
+         * @type boolean
+         * @private
+         */
         this._silent = false;
+
+        /**
+         * Saved offset used to protect against NaN problems when slider is
+         * set to display:none
+         * @property lastOffset
+         * @type [int, int]
+         */
+        this.lastOffset = [0,0];
     },
 
     /**
@@ -643,6 +661,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         var t = this.thumb;
+        t.lastOffset = [newOffset, newOffset];
         var newX, newY;
         this.verifyOffset(true);
         if (t._isRegion) {
@@ -695,6 +714,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         var t = this.thumb;
+        t.lastOffset = [newOffset, newOffset2];
         this.verifyOffset(true);
         if (t._isRegion) {
             this._slideStart();
@@ -720,11 +740,14 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         var newPos = YAHOO.util.Dom.getXY(this.getEl());
         //var newPos = [this.initPageX, this.initPageY];
 
+        if (newPos) {
 
-        if (newPos[0] != this.baselinePos[0] || newPos[1] != this.baselinePos[1]) {
-            this.thumb.resetConstraints();
-            this.baselinePos = newPos;
-            return false;
+
+            if (newPos[0] != this.baselinePos[0] || newPos[1] != this.baselinePos[1]) {
+                this.thumb.resetConstraints();
+                this.baselinePos = newPos;
+                return false;
+            }
         }
 
         return true;
@@ -1255,9 +1278,7 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * slider has moved from the start position.
      */
     getValue: function () {
-        if (!this.available) { return 0; }
-        var val = (this._isHoriz) ? this.getXValue() : this.getYValue();
-        return val;
+        return (this._isHoriz) ? this.getXValue() : this.getYValue();
     },
 
     /**
@@ -1268,9 +1289,16 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * slider has moved horizontally from the start position.
      */
     getXValue: function () {
-        if (!this.available) { return 0; }
+        if (!this.available) { 
+            return 0; 
+        }
         var newOffset = this.getOffsetFromParent();
-        return (newOffset[0] - this.startOffset[0]);
+        if (YAHOO.lang.isNumber(newOffset[0])) {
+            this.lastOffset = newOffset;
+            return (newOffset[0] - this.startOffset[0]);
+        } else {
+            return (this.lastOffset[0] - this.startOffset[0]);
+        }
     },
 
     /**
@@ -1281,9 +1309,16 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * slider has moved vertically from the start position.
      */
     getYValue: function () {
-        if (!this.available) { return 0; }
+        if (!this.available) { 
+            return 0; 
+        }
         var newOffset = this.getOffsetFromParent();
-        return (newOffset[1] - this.startOffset[1]);
+        if (YAHOO.lang.isNumber(newOffset[1])) {
+            this.lastOffset = newOffset;
+            return (newOffset[1] - this.startOffset[1]);
+        } else {
+            return (this.lastOffset[1] - this.startOffset[1]);
+        }
     },
 
     /**
@@ -1305,9 +1340,5 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
     }
 
 });
-
-if ("undefined" == typeof YAHOO.util.Anim) {
-    YAHOO.widget.Slider.ANIM_AVAIL = false;
-}
 
 YAHOO.register("slider", YAHOO.widget.Slider, {version: "@VERSION@", build: "@BUILD@"});

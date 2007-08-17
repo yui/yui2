@@ -30,6 +30,10 @@
  * @param {String}      sType  The type of slider (horiz, vert, region)
  */
 YAHOO.widget.Slider = function(sElementId, sGroup, oThumb, sType) {
+
+    YAHOO.widget.Slider.ANIM_AVAIL = 
+        (!YAHOO.lang.isUndefined(YAHOO.util.Anim));
+
     if (sElementId) {
         this.init(sElementId, sGroup, true);
         this.initSlider(sType);
@@ -98,13 +102,12 @@ YAHOO.widget.Slider.getSliderRegion =
 };
 
 /**
- * By default, animation is available if the animation library is detected.
+ * By default, animation is available if the animation utility is detected.
  * @property YAHOO.widget.Slider.ANIM_AVAIL
  * @static
  * @type boolean
  */
-YAHOO.widget.Slider.ANIM_AVAIL = true;
-
+YAHOO.widget.Slider.ANIM_AVAIL = false;
 
 YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
@@ -250,7 +253,22 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
          */
         this.valueChangeSource = 0;
 
+        /**
+         * Indicates whether or not events will be supressed for the current
+         * slide operation
+         * @property _silent
+         * @type boolean
+         * @private
+         */
         this._silent = false;
+
+        /**
+         * Saved offset used to protect against NaN problems when slider is
+         * set to display:none
+         * @property lastOffset
+         * @type [int, int]
+         */
+        this.lastOffset = [0,0];
     },
 
     /**
@@ -658,6 +676,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         var t = this.thumb;
+        t.lastOffset = [newOffset, newOffset];
         var newX, newY;
         this.verifyOffset(true);
         if (t._isRegion) {
@@ -713,6 +732,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         }
 
         var t = this.thumb;
+        t.lastOffset = [newOffset, newOffset2];
         this.verifyOffset(true);
         if (t._isRegion) {
             this._slideStart();
@@ -738,13 +758,16 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
         var newPos = YAHOO.util.Dom.getXY(this.getEl());
         //var newPos = [this.initPageX, this.initPageY];
 
-        this.logger.log("newPos: " + newPos, "warn");
+        if (newPos) {
 
-        if (newPos[0] != this.baselinePos[0] || newPos[1] != this.baselinePos[1]) {
-            this.logger.log("background moved, resetting constraints");
-            this.thumb.resetConstraints();
-            this.baselinePos = newPos;
-            return false;
+            this.logger.log("newPos: " + newPos);
+
+            if (newPos[0] != this.baselinePos[0] || newPos[1] != this.baselinePos[1]) {
+                this.logger.log("background moved, resetting constraints");
+                this.thumb.resetConstraints();
+                this.baselinePos = newPos;
+                return false;
+            }
         }
 
         return true;

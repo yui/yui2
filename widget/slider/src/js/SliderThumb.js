@@ -201,10 +201,8 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * slider has moved from the start position.
      */
     getValue: function () {
-        if (!this.available) { return 0; }
-        var val = (this._isHoriz) ? this.getXValue() : this.getYValue();
+        return (this._isHoriz) ? this.getXValue() : this.getYValue();
         //this.logger.log("getVal: " + val);
-        return val;
     },
 
     /**
@@ -215,9 +213,18 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * slider has moved horizontally from the start position.
      */
     getXValue: function () {
-        if (!this.available) { return 0; }
+        if (!this.available) { 
+            return 0; 
+        }
         var newOffset = this.getOffsetFromParent();
-        return (newOffset[0] - this.startOffset[0]);
+        if (YAHOO.lang.isNumber(newOffset[0])) {
+            this.lastOffset = newOffset;
+            return (newOffset[0] - this.startOffset[0]);
+        } else {
+            this.logger.log("can't get offset, using old value: " + 
+                this.lastOffset[0]);
+            return (this.lastOffset[0] - this.startOffset[0]);
+        }
     },
 
     /**
@@ -228,9 +235,18 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
      * slider has moved vertically from the start position.
      */
     getYValue: function () {
-        if (!this.available) { return 0; }
+        if (!this.available) { 
+            return 0; 
+        }
         var newOffset = this.getOffsetFromParent();
-        return (newOffset[1] - this.startOffset[1]);
+        if (YAHOO.lang.isNumber(newOffset[1])) {
+            this.lastOffset = newOffset;
+            return (newOffset[1] - this.startOffset[1]);
+        } else {
+            this.logger.log("can't get offset, using old value: " + 
+                this.lastOffset[1]);
+            return (this.lastOffset[1] - this.startOffset[1]);
+        }
     },
 
     /**
@@ -252,8 +268,4 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
     }
 
 });
-
-if ("undefined" == typeof YAHOO.util.Anim) {
-    YAHOO.widget.Slider.ANIM_AVAIL = false;
-}
 
