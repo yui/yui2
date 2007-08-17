@@ -575,19 +575,26 @@ YAHOO.widget.Node.prototype = {
      * toggle style, and collapses its siblings if multiExpand is not set.
      * @method expand
      */
-    expand: function() {
+    expand: function(lazySource) {
         // Only expand if currently collapsed.
         if (this.expanded) { return; }
 
-        // fire the expand event handler
-        var ret = this.tree.onExpand(this);
+        var ret = true;
 
-        if (false === ret) {
-            this.logger.log("Expand was stopped by the abstract onExpand");
-            return;
+        // When returning from the lazy load handler, expand is called again
+        // in order to render the new children.  The "expand" event already
+        // fired before fething the new data, so we need to skip it now.
+        if (!lazySource) {
+            // fire the expand event handler
+            ret = this.tree.onExpand(this);
+
+            if (false === ret) {
+                this.logger.log("Expand was stopped by the abstract onExpand");
+                return;
+            }
+            
+            ret = this.tree.fireEvent("expand", this);
         }
-        
-        ret = this.tree.fireEvent("expand", this);
 
         if (false === ret) {
             this.logger.log("Expand was stopped by the custom event handler");
@@ -930,7 +937,7 @@ YAHOO.widget.Node.prototype = {
         this.getChildrenEl().innerHTML = this.completeRender();
         this.dynamicLoadComplete = true;
         this.isLoading = false;
-        this.expand();
+        this.expand(true);
         this.tree.locked = false;
     },
 

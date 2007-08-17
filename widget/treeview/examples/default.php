@@ -5,7 +5,7 @@
 
 <title>Yahoo! UI Library - Tree Control</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css" />
-<link rel="stylesheet" type="text/css" href="../src/assets/skin-orig.css" />
+<link rel="stylesheet" type="text/css" href="../src/assets/treeview.css" />
 
 </head>
   
@@ -61,7 +61,7 @@ var tree;
         tree = new YAHOO.widget.TreeView("treeDiv1");
 
         for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
-            var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
+            var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), true);
             // tmpNode.collapse();
             // tmpNode.expand();
             // buildRandomTextBranch(tmpNode);
@@ -92,7 +92,7 @@ var tree;
         if (node.depth < 10) {
             YAHOO.log("buildRandomTextBranch: " + node.index);
             for ( var i = 0; i < 10; i++ ) {
-                new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
+                new YAHOO.widget.TextNode(node.label + "-" + i, node, true);
             }
         }
     }
@@ -101,7 +101,7 @@ var tree;
         if (node.depth < 10) {
             YAHOO.log("buildRandomTextBranch: " + node.index);
             for ( var i = 0; i < Math.floor(Math.random() * 4) ; i++ ) {
-                var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
+                var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, true);
                 buildRandomTextBranch(tmpNode);
             }
         }

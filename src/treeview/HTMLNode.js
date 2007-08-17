@@ -49,20 +49,33 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     /**
      * Sets up the node label
      * @property initContent
-     * @param {object} An html string or object containing an html property
-     * @param {boolean} hasIcon determines if the node will be rendered with an
+     * @param oData {object} An html string or object containing an html property
+     * @param hasIcon {boolean} determines if the node will be rendered with an
      * icon or not
      */
     initContent: function(oData, hasIcon) { 
-        if (typeof oData == "string") {
-            oData = { html: oData };
-        }
-
-        this.html = oData.html;
+        this.setHtml(oData);
         this.contentElId = "ygtvcontentel" + this.index;
         this.hasIcon = hasIcon;
 
         this.logger = new YAHOO.widget.LogWriter(this.toString());
+    },
+
+    /**
+     * Synchronizes the node.data, node.html, and the node's content
+     * @property setHtml
+     * @param o {object} An html string or object containing an html property
+     */
+    setHtml: function(o) {
+
+        this.data = o;
+        this.html = (typeof o === "string") ? o : o.html;
+
+        var el = this.getContentEl();
+        if (el) {
+            el.innerHTML = this.html;
+        }
+
     },
 
     /**

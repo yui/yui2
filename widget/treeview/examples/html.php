@@ -47,7 +47,7 @@
 
 <script type="text/javascript">
 
-var tree;
+var tree, htmlNode;
 
 function treeInit() {
     buildRandomTextNodeTree();
@@ -65,6 +65,9 @@ function buildRandomTextNodeTree() {
     }
 
     tree.draw();
+
+    htmlNode.setHtml("new html");
+
 }
 
 var callback = null;
@@ -100,7 +103,7 @@ function buildRandomHTMLBranch(node) {
                 'Info ' + id + '</div>';
 
     // new YAHOO.widget.HTMLNode(html, node, false, true);
-    new YAHOO.widget.HTMLNode(html, node, false, false);
+    htmlNode = new YAHOO.widget.HTMLNode(html, node, false, false);
 }
 
 YAHOO.util.Event.addListener(window, "load", treeInit);

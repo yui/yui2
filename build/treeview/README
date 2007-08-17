@@ -1,15 +1,27 @@
 TreeView - Release Notes
 
+2.3.1
+
+  * The "expand" event no longer fires twice for dynamically loaded nodes.
+
+  * added setHtml() to HTMLNode, which will synchronize the html and data
+    properties, as well as the content of the node if it has been rendered.
+
 2.3.0
+
   * The image preload feature was restored.
+
   * Added the new skin
+
   * Leaf nodes created with expanded=true have the child div hidden initially
     to work around an IE rendering issue.
 
 2.2.2
+
   * No change
 
 2.2.1
+
   * Fixed the default value in the documentation for the nowrap property in Node
     (the default value is false).
 

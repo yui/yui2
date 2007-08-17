@@ -1269,18 +1269,25 @@ YAHOO.widget.Node.prototype = {
      * toggle style, and collapses its siblings if multiExpand is not set.
      * @method expand
      */
-    expand: function() {
+    expand: function(lazySource) {
         // Only expand if currently collapsed.
         if (this.expanded) { return; }
 
-        // fire the expand event handler
-        var ret = this.tree.onExpand(this);
+        var ret = true;
 
-        if (false === ret) {
-            return;
+        // When returning from the lazy load handler, expand is called again
+        // in order to render the new children.  The "expand" event already
+        // fired before fething the new data, so we need to skip it now.
+        if (!lazySource) {
+            // fire the expand event handler
+            ret = this.tree.onExpand(this);
+
+            if (false === ret) {
+                return;
+            }
+            
+            ret = this.tree.fireEvent("expand", this);
         }
-        
-        ret = this.tree.fireEvent("expand", this);
 
         if (false === ret) {
             return;
@@ -1610,7 +1617,7 @@ YAHOO.widget.Node.prototype = {
         this.getChildrenEl().innerHTML = this.completeRender();
         this.dynamicLoadComplete = true;
         this.isLoading = false;
-        this.expand();
+        this.expand(true);
         this.tree.locked = false;
     },
 
@@ -1983,18 +1990,31 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
     /**
      * Sets up the node label
      * @property initContent
-     * @param {object} An html string or object containing an html property
-     * @param {boolean} hasIcon determines if the node will be rendered with an
+     * @param oData {object} An html string or object containing an html property
+     * @param hasIcon {boolean} determines if the node will be rendered with an
      * icon or not
      */
     initContent: function(oData, hasIcon) { 
-        if (typeof oData == "string") {
-            oData = { html: oData };
-        }
-
-        this.html = oData.html;
+        this.setHtml(oData);
         this.contentElId = "ygtvcontentel" + this.index;
         this.hasIcon = hasIcon;
+
+    },
+
+    /**
+     * Synchronizes the node.data, node.html, and the node's content
+     * @property setHtml
+     * @param o {object} An html string or object containing an html property
+     */
+    setHtml: function(o) {
+
+        this.data = o;
+        this.html = (typeof o === "string") ? o : o.html;
+
+        var el = this.getContentEl();
+        if (el) {
+            el.innerHTML = this.html;
+        }
 
     },
 

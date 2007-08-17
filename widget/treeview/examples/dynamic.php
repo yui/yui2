@@ -72,6 +72,10 @@ YAHOO.example.treeExample = function() {
         function buildTree() {
 		   //create a new tree:
 		   tree = new YAHOO.widget.TreeView("treeContainer");
+
+           tree.subscribe("expand", function() {
+              alert("expand", "warn");
+           });
 		   
 		   //turn dynamic loading on for entire tree:
 		   tree.setDynamicLoad(loadNodeData, currentIconMode);
