@@ -496,7 +496,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 // wrap the function so we can return the obj object when
                 // the event fires;
                 var wrappedFn = function(e) {
-                        return fn.call(scope, YAHOO.util.Event.getEvent(e), 
+                        return fn.call(scope, YAHOO.util.Event.getEvent(e, el), 
                                 obj);
                     };
 
@@ -678,7 +678,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 // try and take advantage of it, which is not possible.
                 var index = arguments[3];
   
-                if ("undefined" == typeof index) {
+                if ("undefined" === typeof index) {
                     index = this._getCacheIndex(el, sType, fn);
                 }
 
@@ -905,10 +905,11 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * this function at all.
              * @method getEvent
              * @param {Event} e the event parameter from the handler
+             * @param {HTMLElement} boundEl the element the listener is attached to
              * @return {Event} the event 
              * @static
              */
-            getEvent: function(e) {
+            getEvent: function(e, boundEl) {
                 var ev = e || window.event;
 
                 if (!ev) {
@@ -920,6 +921,30 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                         }
                         c = c.caller;
                     }
+                }
+
+                // IE events that target non-browser objects (e.g., VML
+                // canvas) will sometimes throw errors when you try to
+                // inspect the properties of the event target.  We try to
+                // detect this condition, and provide a dummy target (the bound
+                // element) to eliminate spurious errors.  
+                if (ev && this.isIE) {
+
+                    try {
+
+                        var el = ev.srcElement;
+                        if (el) {
+                            var type = el.type;
+                        }
+
+                    } catch(ex) {
+
+                        YAHOO.log("Inspecting the target caused an error, " +
+                            "setting the target to the bound element.", "warn");
+                         
+                        ev.target = boundEl;
+                    }
+
                 }
 
                 return ev;
@@ -1302,7 +1327,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                                 scope = l[EU.ADJ_SCOPE];
                             }
                         }
-                        l[EU.FN].call(scope, EU.getEvent(e), l[EU.UNLOAD_OBJ] );
+                        l[EU.FN].call(scope, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
                         unloadListeners[i] = null;
                         l=null;
                         scope=null;
@@ -1480,21 +1505,11 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
             // is not safe to document.write the script tag.  Detecting
             // this state doesn't appear possible, so we expect a flag
             // in YAHOO_config to be set if the library is being injected.
-            if ((!YAHOO.lang.isUndefined(YAHOO_config)) && YAHOO_config.injecting) {
+            if (("undefined" !== typeof YAHOO_config) && YAHOO_config.injecting) {
 
-                //YAHOO.log("-head-");
-
-                //var dr = d.readyState;
-                //if ("complete" === dr || "interactive" === dr) {
-                    //YAHOO.util.Event._ready();
-                    //YAHOO.util.Event._tryPreloadAttach();
-                //} else {
-
-                    el = document.createElement("script");
-                    var p=d.getElementsByTagName("head")[0] || b;
-                    p.insertBefore(el, p.firstChild);
-
-                //}
+                el = document.createElement("script");
+                var p=d.getElementsByTagName("head")[0] || b;
+                p.insertBefore(el, p.firstChild);
 
             } else {
                 //YAHOO.log("-dw-");
