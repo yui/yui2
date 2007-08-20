@@ -189,13 +189,14 @@ if (!YAHOO.util.Event) {
 
             /**
              * Object passed in by the user that will be returned as a 
-             * parameter to the callback, int constant
+             * parameter to the callback, int constant.  Specific to
+             * unload listeners
              * @property OBJ
              * @type int
              * @static
              * @final
              */
-            OBJ: 3,
+            UNLOAD_OBJ: 3,
 
             /**
              * Adjusted scope, either the element we are registering the event
@@ -206,6 +207,24 @@ if (!YAHOO.util.Event) {
              * @final
              */
             ADJ_SCOPE: 4,
+
+            /**
+             * The original obj passed into addListener
+             * @property OBJ
+             * @type int
+             * @static
+             * @final
+             */
+            OBJ: 5,
+
+            /**
+             * The original scope parameter passed into addListener
+             * @property OVERRIDE
+             * @type int
+             * @static
+             * @final
+             */
+            OVERRIDE: 6,
 
             /**
              * addListener/removeListener can throw errors in unexpected scenarios.
@@ -481,7 +500,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                                 obj);
                     };
 
-                var li = [el, sType, fn, wrappedFn, scope];
+                var li = [el, sType, fn, wrappedFn, scope, obj, override];
                 var index = listeners.length;
                 // cache the listener so we can try to automatically unload
                 listeners[index] = li;
@@ -615,7 +634,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @static
              */
             removeListener: function(el, sType, fn) {
-                var i, len;
+                var i, len, li;
 
                 // The el argument can be a string
                 if (typeof el == "string") {
@@ -638,7 +657,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 if ("unload" == sType) {
 
                     for (i=0, len=unloadListeners.length; i<len; i++) {
-                        var li = unloadListeners[i];
+                        li = unloadListeners[i];
                         if (li && 
                             li[0] == el && 
                             li[1] == sType && 
@@ -979,15 +998,14 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              */
             _isValidCollection: function(o) {
                 try {
-                    return ( o                    && // o is something
-                             o.length             && // o is indexed
-                             typeof o != "string" && // o is not a string
-                             !o.tagName           && // o is not an HTML element
-                             !o.alert             && // o is not a window
-                             typeof o[0] != "undefined" );
+                    return ( typeof o !== "string" && // o is not a string
+                             o.length              && // o is indexed
+                             !o.tagName            && // o is not an HTML element
+                             !o.alert              && // o is not a window
+                             typeof o[0] !== "undefined" );
                 } catch(e) {
-                    YAHOO.log("_isValidCollection threw an error, assuming that " +
-                        " this is a cross frame problem and not a collection", warn);
+                    YAHOO.log("_isValidCollection error, assuming that " +
+                " this is a cross frame problem and not a collection", "warn");
                     return false;
                 }
 
@@ -1012,7 +1030,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @deprecated Elements are not cached any longer
              */
             getEl: function(id) {
-                return document.getElementById(id);
+                return (typeof id === "string") ? document.getElementById(id) : id;
             },
 
             /**
@@ -1196,9 +1214,9 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @static
              */
             purgeElement: function(el, recurse, sType) {
-                var elListeners = this.getListeners(el, sType);
+                var elListeners = this.getListeners(el, sType), i, len;
                 if (elListeners) {
-                    for (var i=0,len=elListeners.length; i<len ; ++i) {
+                    for (i=0,len=elListeners.length; i<len ; ++i) {
                         var l = elListeners[i];
                         // can't use the index on the changing collection
                         this.removeListener(el, l.type, l.fn, l.index);
@@ -1224,7 +1242,8 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * &nbsp;&nbsp;type:   (string)   the type of event
              * &nbsp;&nbsp;fn:     (function) the callback supplied to addListener
              * &nbsp;&nbsp;obj:    (object)   the custom object supplied to addListener
-             * &nbsp;&nbsp;adjust: (boolean)  whether or not to adjust the default scope
+             * &nbsp;&nbsp;adjust: (boolean|object)  whether or not to adjust the default scope
+             * &nbsp;&nbsp;scope: (boolean)  the derived scope based on the adjust parameter
              * &nbsp;&nbsp;index:  (int)      its position in the Event util listener cache
              * @static
              */           
@@ -1238,7 +1257,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     searchLists = [listeners];
                 }
 
-                for (var j=0;j<searchLists.length; ++j) {
+                for (var j=0;j<searchLists.length; j=j+1) {
                     var searchList = searchLists[j];
                     if (searchList && searchList.length > 0) {
                         for (var i=0,len=searchList.length; i<len ; ++i) {
@@ -1249,7 +1268,8 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                                     type:   l[this.TYPE],
                                     fn:     l[this.FN],
                                     obj:    l[this.OBJ],
-                                    adjust: l[this.ADJ_SCOPE],
+                                    adjust: l[this.OVERRIDE],
+                                    scope:  l[this.ADJ_SCOPE],
                                     index:  i
                                 });
                             }
@@ -1277,12 +1297,12 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                         var scope = window;
                         if (l[EU.ADJ_SCOPE]) {
                             if (l[EU.ADJ_SCOPE] === true) {
-                                scope = l[EU.OBJ];
+                                scope = l[EU.UNLOAD_OBJ];
                             } else {
                                 scope = l[EU.ADJ_SCOPE];
                             }
                         }
-                        l[EU.FN].call(scope, EU.getEvent(e), l[EU.OBJ] );
+                        l[EU.FN].call(scope, EU.getEvent(e), l[EU.UNLOAD_OBJ] );
                         unloadListeners[i] = null;
                         l=null;
                         scope=null;
@@ -1460,7 +1480,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
             // is not safe to document.write the script tag.  Detecting
             // this state doesn't appear possible, so we expect a flag
             // in YAHOO_config to be set if the library is being injected.
-            if (("undefined" !== typeof YAHOO_config) && YAHOO_config.injecting) {
+            if ((!YAHOO.lang.isUndefined(YAHOO_config)) && YAHOO_config.injecting) {
 
                 //YAHOO.log("-head-");
 

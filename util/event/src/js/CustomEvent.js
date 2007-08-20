@@ -104,6 +104,16 @@ YAHOO.util.CustomEvent = function(type, oScope, silent, signature) {
                 new YAHOO.util.CustomEvent(onsubscribeType, this, true);
 
     } 
+
+
+    /**
+     * In order to make it possible to execute the rest of the subscriber
+     * stack when one thows an exception, the subscribers exceptions are
+     * caught.  The most recent exception is stored in this property
+     * @property lastError
+     * @type Error
+     */
+    this.lastError = null;
 };
 
 /**
@@ -236,9 +246,22 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
                     if (args.length > 0) {
                         param = args[0];
                     }
-                    ret = s.fn.call(scope, param, s.obj);
+
+                    try {
+                        ret = s.fn.call(scope, param, s.obj);
+                    } catch(e) {
+                        this.lastError = e;
+                        YAHOO.log(this + " subscriber exception: " + e,
+                                  "error", "Event");
+                    }
                 } else {
-                    ret = s.fn.call(scope, this.type, args, s.obj);
+                    try {
+                        ret = s.fn.call(scope, this.type, args, s.obj);
+                    } catch(e) {
+                        this.lastError = e;
+                        YAHOO.log(this + " subscriber exception: " + e,
+                                  "error", "Event");
+                    }
                 }
                 if (false === ret) {
                     if (!this.silent) {
@@ -254,8 +277,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         if (rebuild) {
             var newlist=[],subs=this.subscribers;
-            for (i=0,len=subs.length; i<len; ++i) {
-                s = subs[i];
+            for (i=0,len=subs.length; i<len; i=i+1) {
                 newlist.push(subs[i]);
             }
 

@@ -80,8 +80,8 @@ YAHOO.util.EventProvider.prototype = {
                 return ce.unsubscribe(p_fn, p_obj);
             }
         } else {
+            var ret = true;
             for (var i in evts) {
-                var ret = true;
                 if (YAHOO.lang.hasOwnProperty(evts, i)) {
                     ret = ret && evts[i].unsubscribe(p_fn, p_obj);
                 }

@@ -1,6 +1,16 @@
 
 YUI Library - Event - Release Notes
 
+2.3.1
+  * CustomEvent fire() now catches exceptions thrown by the subscribers so
+    that the rest of the subscribers execute.  The exception is logged and
+    stored in the "lastError" property.
+  * Performance tweak: _isValidCollection fails strings first.
+  * onAvailable/onContentReady will work if an element ref rather than an
+    id is provided.
+  * getListeners: fixed the values for the obj and adjust properties.
+    Added scope property
+
 2.3.0
   * addListener now produces a logger warning if the supplied callback is 
     undefined.
