@@ -655,24 +655,24 @@
         },
         
         /**
-         * Returns an the method(s) return value(s).
+         * Runs the supplied method against each item in the Collection/Array.
          * The method is called with the element(s) as the first arg, and the optional param as the second ( method(el, o) ).
          * @method batch
          * @param {String | HTMLElement | Array} el (optional) An element or array of elements to apply the method to
          * @param {Function} method The method to apply to the element(s)
          * @param {Any} o (optional) An optional arg that is passed to the supplied method
          * @param {Boolean} override (optional) Whether or not to override the scope of "method" with "o"
-         * @return {Any | Array} The return value(s) from the supplied methods
+         * @return {Any | Array} The return value(s) from the supplied method
          */
         batch: function(el, method, o, override) {
-            el = (el && el.tagName) ? el : Y.Dom.get(el); // skip get() when possible
+            el = (el && (el.tagName || el.item)) ? el : Y.Dom.get(el); // skip get() when possible
 
             if (!el || !method) {
                 return false;
             } 
             var scope = (override) ? o : window;
             
-            if (el.tagName || (!el.item && !el.slice)) { // not a collection or array, just run the method
+            if (el.tagName || el.length === undefined) { // element or not array-like 
                 return method.call(scope, el, o);
             } 
 
