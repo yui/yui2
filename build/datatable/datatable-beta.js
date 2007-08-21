@@ -753,7 +753,7 @@ YAHOO.widget.DataTable.CLASS_ASC = "yui-dt-asc";
 YAHOO.widget.DataTable.CLASS_DESC = "yui-dt-desc";
 
 /**
- * Class name assigned to BUTTON container elements.
+ * Class name assigned to BUTTON elements and/or container elements.
  *
  * @property DataTable.CLASS_BUTTON
  * @type String
@@ -764,7 +764,18 @@ YAHOO.widget.DataTable.CLASS_DESC = "yui-dt-desc";
 YAHOO.widget.DataTable.CLASS_BUTTON = "yui-dt-button";
 
 /**
- * Class name assigned to SELECT container elements.
+ * Class name assigned to INPUT TYPE=CHECKBOX elements and/or container elements.
+ *
+ * @property DataTable.CLASS_CHECKBOX
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-checkbox"
+ */
+YAHOO.widget.DataTable.CLASS_CHECKBOX = "yui-dt-checkbox";
+
+/**
+ * Class name assigned to SELECT elements and/or container elements.
  *
  * @property DataTable.CLASS_DROPDOWN
  * @type String
@@ -775,15 +786,15 @@ YAHOO.widget.DataTable.CLASS_BUTTON = "yui-dt-button";
 YAHOO.widget.DataTable.CLASS_DROPDOWN = "yui-dt-dropdown";
 
 /**
- * Class name assigned to INPUT TYPE=CHECKBOX container elements.
+ * Class name assigned to INPUT TYPE=RADIO elements and/or container elements.
  *
- * @property DataTable.CLASS_CHECKBOX
+ * @property DataTable.CLASS_RADIO
  * @type String
  * @static
  * @final
- * @default "yui-dt-checkbox"
+ * @default "yui-dt-radio"
  */
-YAHOO.widget.DataTable.CLASS_CHECKBOX = "yui-dt-checkbox";
+YAHOO.widget.DataTable.CLASS_RADIO = "yui-dt-radio";
 
 /**
  * Message to display if DataTable has no data.
@@ -2867,13 +2878,16 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
                 else if(elTarget.type.toLowerCase() == "radio") {
                     oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
                 }
-                break;
+                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+                return;
             case "a":
                 oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
-                break;
+                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+                return;
             case "button":
                 oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
-                break;
+                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+                return;
             case "td":
                 oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
                 break;
@@ -3667,7 +3681,7 @@ YAHOO.widget.DataTable.prototype.destroy = function() {
 
     // Null out objects
     for(var param in this) {
-        if(this.hasOwnProperty(param)) {
+        if(YAHOO.lang.hasOwnProperty(this, param)) {
             this[param] = null;
         }
     }
@@ -4719,7 +4733,7 @@ YAHOO.widget.DataTable.formatRadio = function(el, oRecord, oColumn, oData) {
     bChecked = (bChecked) ? " checked" : "";
     el.innerHTML = "<input type=\"radio\"" + bChecked +
             " name=\"" + oColumn.getKey() + "-radio\"" +
-            " class=\"" + YAHOO.widget.DataTable.CLASS_CHECKBOX + "\">";
+            " class=\"" + YAHOO.widget.DataTable.CLASS_RADIO+ "\">";
 };
 
 /**
@@ -4836,7 +4850,7 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     // Complete the set
     var oValidPaginator = this.get("paginator");
     for(var param in oNewValues) {
-        if(oValidPaginator.hasOwnProperty(param)) {
+        if(YAHOO.lang.hasOwnProperty(oValidPaginator, param)) {
             oValidPaginator[param] = oNewValues[param];
         }
     }
@@ -6023,8 +6037,8 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
         
         calendar.selectEvent.subscribe(function(type, args, obj) {
             oSelf._oCellEditor.value = new Date(args[0][0][0], args[0][0][1]-1, args[0][0][2]);
+            oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
         });
-        oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
     }
     else {
         //TODO;
@@ -6364,7 +6378,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
     var elTarget = oArgs.target;
 
     var bSHIFT = evt.shiftKey;
-    var bCTRL = evt.ctrlKey;
+    var bCTRL = evt.ctrlKey || ((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && evt.metaKey);
     var i;
     //var nAnchorPos;
 
@@ -6550,7 +6564,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     var elTarget = oArgs.target;
 
     var bSHIFT = evt.shiftKey;
-    var bCTRL = evt.ctrlKey;
+    var bCTRL = evt.ctrlKey  || ((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && evt.metaKey);
     var i, j, currentRow, startIndex, endIndex;
     
     var elTargetCell = this.getTdEl(elTarget);

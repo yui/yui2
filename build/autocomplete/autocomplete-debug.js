@@ -560,7 +560,7 @@ YAHOO.widget.AutoComplete.prototype.destroy = function() {
 
     // Null out objects
     for(var key in this) {
-        if(this.hasOwnProperty(key)) {
+        if(YAHOO.lang.hasOwnProperty(this, key)) {
             this[key] = null;
         }
     }
@@ -2472,6 +2472,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
     var aCache = this._aCache;
     var nCacheLength = (aCache) ? aCache.length : 0;
     var bMatchContains = this.queryMatchContains;
+    var sOrigQuery;
     
     // If cache is enabled...
     if((this.maxCacheEntries > 0) && aCache && (nCacheLength > 0)) {
@@ -2479,7 +2480,7 @@ YAHOO.widget.DataSource.prototype._doQueryCache = function(oCallbackFn, sQuery, 
         YAHOO.log("Querying cache: \"" + sQuery + "\"", "info", this.toString());
         // If case is unimportant, normalize query now instead of in loops
         if(!this.queryMatchCase) {
-            var sOrigQuery = sQuery;
+            sOrigQuery = sQuery;
             sQuery = sQuery.toLowerCase();
         }
 

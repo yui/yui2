@@ -560,7 +560,7 @@ YAHOO.widget.AutoComplete.prototype.destroy = function() {
 
     // Null out objects
     for(var key in this) {
-        if(this.hasOwnProperty(key)) {
+        if(YAHOO.lang.hasOwnProperty(this, key)) {
             this[key] = null;
         }
     }
