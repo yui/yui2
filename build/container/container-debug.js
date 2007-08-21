@@ -747,18 +747,12 @@
     * documentation for more details.
     */
     YAHOO.widget.Module = function (el, userConfig) {
-    
         if (el) {
-    
             this.init(el, userConfig);
-    
         } else {
-    
             YAHOO.log("No element or element ID specified" + 
                 " for Module instantiation", "error");
-    
         }
-    
     };
 
 
@@ -900,11 +894,9 @@
     */
     Module.textResizeEvent = new CustomEvent("textResize");
 
-
     function createModuleTemplate() {
 
         if (!m_oModuleTemplate) {
-
             m_oModuleTemplate = document.createElement("div");
             
             m_oModuleTemplate.innerHTML = ("<div class=\"" + 
@@ -915,52 +907,31 @@
             m_oHeaderTemplate = m_oModuleTemplate.firstChild;
             m_oBodyTemplate = m_oHeaderTemplate.nextSibling;
             m_oFooterTemplate = m_oBodyTemplate.nextSibling;
-
         }
 
         return m_oModuleTemplate;
-
     }
-
 
     function createHeader() {
-
         if (!m_oHeaderTemplate) {
-        
             createModuleTemplate();
-        
         }
-        
         return (m_oHeaderTemplate.cloneNode(false));
-
     }
-    
 
     function createBody() {
-
         if (!m_oBodyTemplate) {
-        
             createModuleTemplate();
-        
         }
-        
         return (m_oBodyTemplate.cloneNode(false));
-    
     }
-    
 
     function createFooter() {
-
         if (!m_oFooterTemplate) {
-        
             createModuleTemplate();
-        
         }
-        
         return (m_oFooterTemplate.cloneNode(false));
-
     }
-    
 
     Module.prototype = {
     
@@ -977,35 +948,35 @@
         * @type HTMLElement
         */
         element: null,
-        
+
         /**
         * The header element, denoted with CSS class "hd"
         * @property header
         * @type HTMLElement
         */
         header: null,
-        
+
         /**
         * The body element, denoted with CSS class "bd"
         * @property body
         * @type HTMLElement
         */
         body: null,
-        
+
         /**
         * The footer element, denoted with CSS class "ft"
         * @property footer
         * @type HTMLElement
         */
         footer: null,
-        
+
         /**
         * The id of the element
         * @property id
         * @type String
         */
         id: null,
-        
+
         /**
         * A string representing the root path for all images created by
         * a Module instance.
@@ -1015,16 +986,16 @@
         * @type String
         */
         imageRoot: Module.IMG_ROOT,
-    
+
         /**
         * Initializes the custom events for Module which are fired 
         * automatically at appropriate times by the Module class.
         * @method initEvents
         */
         initEvents: function () {
-        
+
             var SIGNATURE = CustomEvent.LIST;
-        
+
             /**
             * CustomEvent fired prior to class initalization.
             * @event beforeInitEvent
@@ -1054,8 +1025,7 @@
             * CustomEvent fired before the Module is rendered
             * @event beforeRenderEvent
             */
-            this.beforeRenderEvent = 
-                this.createEvent(EVENT_TYPES.BEFORE_RENDER);
+            this.beforeRenderEvent = this.createEvent(EVENT_TYPES.BEFORE_RENDER);
             this.beforeRenderEvent.signature = SIGNATURE;
         
             /**
@@ -1072,8 +1042,7 @@
             * @param {String/HTMLElement} content String/element representing 
             * the new header content
             */
-            this.changeHeaderEvent = 
-                this.createEvent(EVENT_TYPES.CHANGE_HEADER);
+            this.changeHeaderEvent = this.createEvent(EVENT_TYPES.CHANGE_HEADER);
             this.changeHeaderEvent.signature = SIGNATURE;
             
             /**
@@ -1092,46 +1061,44 @@
             * @param {String/HTMLElement} content String/element representing 
             * the new footer content
             */
-            this.changeFooterEvent = 
-                this.createEvent(EVENT_TYPES.CHANGE_FOOTER);
+            this.changeFooterEvent = this.createEvent(EVENT_TYPES.CHANGE_FOOTER);
             this.changeFooterEvent.signature = SIGNATURE;
         
             /**
             * CustomEvent fired when the content of the Module is modified
             * @event changeContentEvent
             */
-            this.changeContentEvent = 
-                this.createEvent(EVENT_TYPES.CHANGE_CONTENT);
+            this.changeContentEvent = this.createEvent(EVENT_TYPES.CHANGE_CONTENT);
             this.changeContentEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired when the Module is destroyed
             * @event destroyEvent
             */
             this.destroyEvent = this.createEvent(EVENT_TYPES.DESTORY);
             this.destroyEvent.signature = SIGNATURE;
-            
+
             /**
             * CustomEvent fired before the Module is shown
             * @event beforeShowEvent
             */
             this.beforeShowEvent = this.createEvent(EVENT_TYPES.BEFORE_SHOW);
             this.beforeShowEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after the Module is shown
             * @event showEvent
             */
             this.showEvent = this.createEvent(EVENT_TYPES.SHOW);
             this.showEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired before the Module is hidden
             * @event beforeHideEvent
             */
             this.beforeHideEvent = this.createEvent(EVENT_TYPES.BEFORE_HIDE);
             this.beforeHideEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after the Module is hidden
             * @event hideEvent
@@ -1139,30 +1106,22 @@
             this.hideEvent = this.createEvent(EVENT_TYPES.HIDE);
             this.hideEvent.signature = SIGNATURE;
         }, 
-        
+
         /**
         * String representing the current user-agent platform
         * @property platform
         * @type String
         */
         platform: function () {
-        
             var ua = navigator.userAgent.toLowerCase();
-        
+
             if (ua.indexOf("windows") != -1 || ua.indexOf("win32") != -1) {
-        
                 return "windows";
-        
             } else if (ua.indexOf("macintosh") != -1) {
-        
                 return "mac";
-        
             } else {
-        
                 return false;
-        
             }
-        
         }(),
         
         /**
@@ -1172,40 +1131,24 @@
         * @type String
         */
         browser: function () {
-        
             var ua = navigator.userAgent.toLowerCase();
-            
             /*
                  Check Opera first in case of spoof and check Safari before
                  Gecko since Safari's user agent string includes "like Gecko"
             */
-
             if (ua.indexOf('opera') != -1) { 
-            
                 return 'opera';
-            
             } else if (ua.indexOf('msie 7') != -1) {
-            
                 return 'ie7';
-            
             } else if (ua.indexOf('msie') != -1) {
-            
                 return 'ie';
-            
             } else if (ua.indexOf('safari') != -1) { 
-            
                 return 'safari';
-            
             } else if (ua.indexOf('gecko') != -1) {
-            
                 return 'gecko';
-            
             } else {
-            
                 return false;
-            
             }
-        
         }(),
         
         /**
@@ -1215,17 +1158,11 @@
         * @type Boolean
         */
         isSecure: function () {
-        
             if (window.location.href.toLowerCase().indexOf("https") === 0) {
-        
                 return true;
-        
             } else {
-        
                 return false;
-        
             }
-        
         }(),
         
         /**
@@ -1233,9 +1170,7 @@
         * automatically at appropriate times by the Module class.
         */
         initDefaultConfig: function () {
-    
             // Add properties //
-        
             /**
             * Specifies whether the Module is visible on the page.
             * @config visible
@@ -1247,7 +1182,7 @@
                 value: DEFAULT_CONFIG.VISIBLE.value, 
                 validator: DEFAULT_CONFIG.VISIBLE.validator
             });
-            
+
             /**
             * Object or array of objects representing the ContainerEffect 
             * classes that are active for animating the container.
@@ -1259,7 +1194,7 @@
                 suppressEvent: DEFAULT_CONFIG.EFFECT.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.EFFECT.supercedes
             });
-            
+
             /**
             * Specifies whether to create a special proxy iframe to monitor 
             * for user font resizing in the document
@@ -1271,9 +1206,8 @@
                 handler: this.configMonitorResize,
                 value: DEFAULT_CONFIG.MONITOR_RESIZE.value
             });
-            
         },
-        
+
         /**
         * The Module class's initialization method, which is executed for
         * Module and all of its subclasses. This method is automatically 
@@ -1288,13 +1222,12 @@
         * See configuration documentation for more details.
         */
         init: function (el, userConfig) {
-        
+
             var elId, i, child;
-        
+
             this.initEvents();
-        
             this.beforeInitEvent.fire(Module);
-        
+
             /**
             * The Module's Config object used for monitoring 
             * configuration properties.
@@ -1302,90 +1235,65 @@
             * @type YAHOO.util.Config
             */
             this.cfg = new Config(this);
-        
+
             if (this.isSecure) {
                 this.imageRoot = Module.IMG_ROOT_SSL;
             }
-        
+
             if (typeof el == "string") {
-
                 elId = el;
-        
                 el = document.getElementById(el);
-
                 if (! el) {
-
                     el = (createModuleTemplate()).cloneNode(false);
-
                     el.id = elId;
-
                 }
-
             }
-        
+
             this.element = el;
-        
+
             if (el.id) {
                 this.id = el.id;
             }
-        
+
             child = this.element.firstChild;
-            
+
             if (child) {
-
+                var fndHd = false, fndBd = false, fndFt = false;
                 do {
-
-                    switch (child.className) {
-    
-                    case Module.CSS_HEADER:
-    
+                    if (!fndHd && Dom.hasClass(child, Module.CSS_HEADER)) {
                         this.header = child;
-    
-                        break;
-    
-                    case Module.CSS_BODY:
-    
+                        fndHd = true;
+                    } else if (!fndBd && Dom.hasClass(child, Module.CSS_BODY)) {
                         this.body = child;
-    
-                        break;
-    
-                    case Module.CSS_FOOTER:
-    
+                        fndBd = true;
+                    } else if (!fndFt && Dom.hasClass(child, Module.CSS_FOOTER)){
                         this.footer = child;
-    
-                        break;
-    
+                        fndFt = true;
                     }
-                    
                 } while ((child = child.nextSibling));
-            
             }
 
-        
             this.initDefaultConfig();
-        
+
             Dom.addClass(this.element, Module.CSS_MODULE);
-        
+
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
-        
+
             /*
                 Subscribe to the fireQueue() method of Config so that any 
                 queued configuration changes are excecuted upon render of 
                 the Module
             */ 
-            
-            if (!Config.alreadySubscribed(this.renderEvent, 
-                this.cfg.fireQueue, this.cfg)) {
 
+            if (!Config.alreadySubscribed(this.renderEvent, this.cfg.fireQueue, this.cfg)) {
                 this.renderEvent.subscribe(this.cfg.fireQueue, this.cfg, true);
-
             }
-        
+
             this.initEvent.fire(Module);
         },
-        
+
         /**
         * Initialized an empty IFRAME that is placed out of the visible area 
         * that can be used to detect text resize.
@@ -1877,21 +1785,13 @@
         * @method configMonitorResize
         */
         configMonitorResize: function (type, args, obj) {
-
             var monitor = args[0];
-
             if (monitor) {
-
                 this.initResizeMonitor();
-
             } else {
-
-                Module.textResizeEvent.unsubscribe(
-                    this.onDomResize, this, true);
-
+                Module.textResizeEvent.unsubscribe(this.onDomResize, this, true);
                 this.resizeMonitor = null;
             }
-
         },
         
         /**
