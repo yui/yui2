@@ -211,7 +211,10 @@ are output in the logger to the right. <br />View the source to see how it's don
         },
 
         test_dump: function() {
-            // tested via substitute
+            Assert.areEqual("0", YAHOO.lang.dump(0));
+            Assert.areEqual("null", YAHOO.lang.dump(null));
+            Assert.areEqual("false", YAHOO.lang.dump(false));
+            // Other types tested in substitute
         },
 
         test_substitute: function() {
