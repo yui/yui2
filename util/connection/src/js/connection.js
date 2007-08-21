@@ -7,6 +7,7 @@
  * @namespace YAHOO.util
  * @module connection
  * @requires yahoo
+ * @requires event
  */
 
 /**
@@ -269,6 +270,16 @@ YAHOO.util.Connect =
 	failureEvent: new YAHOO.util.CustomEvent('failure'),
 
   /**
+   * @description Custom event that fires when handleTransactionResponse() determines a
+   * response in the HTTP 4xx/5xx range.
+   * @property failureEvent
+   * @private
+   * @static
+   * @type CustomEvent
+   */
+	uploadEvent: new YAHOO.util.CustomEvent('upload'),
+
+  /**
    * @description Custom event that fires when a transaction is successfully aborted.
    * @property abortEvent
    * @private
@@ -287,12 +298,12 @@ YAHOO.util.Connect =
    */
 	_customEvents:
 	{
-		onStart:'startEvent',
-		onComplete:'completeEvent',
-		onSuccess:'successEvent',
-		onFailure:'failureEvent',
-		onUpload:'uploadEvent',
-		onAbort:'abortEvent'
+		onStart:['startEvent', 'start'],
+		onComplete:['completeEvent', 'complete'],
+		onSuccess:['successEvent', 'success'],
+		onFailure:['failureEvent', 'failure'],
+		onUpload:['uploadEvent', 'upload'],
+		onAbort:['abortEvent', 'abort']
 	},
 
   /**
@@ -468,7 +479,7 @@ YAHOO.util.Connect =
 				// encoded string that is concatenated to the uri to
 				// create a querystring.
 				if(method.toUpperCase() == 'GET'){
-					if(this._sFormData.length != 0){
+					if(this._sFormData.length !== 0){
 						// If the URI already contains a querystring, append an ampersand
 						// and then concatenate _sFormData to the URI.
 						uri += ((uri.indexOf('?') == -1)?'?':'&') + this._sFormData;
@@ -539,14 +550,14 @@ YAHOO.util.Connect =
 		// Enumerate through callback.customevents members and bind/subscribe
 		// events that match in the _customEvents table.
 		for(var prop in callback.customevents){
-			if(this._customEvents[prop]){
+			if(this._customEvents[prop][0]){
 				// Create the custom event
-				o[this._customEvents[prop]] = new YAHOO.util.CustomEvent(this._customEvents[prop], (callback.scope)?callback.scope:null);
-				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop]] + ' created.', 'info', 'Connection');
+				o[this._customEvents[prop][0]] = new YAHOO.util.CustomEvent(this._customEvents[prop][1], (callback.scope)?callback.scope:null);
+				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop][1]] + ' created.', 'info', 'Connection');
 
 				// Subscribe the custom event
-				o[this._customEvents[prop]].subscribe(callback.customevents[prop]);
-				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop]] + ' subscribed.', 'info', 'Connection');
+				o[this._customEvents[prop][0]].subscribe(callback.customevents[prop]);
+				YAHOO.log('Transaction-specific Custom Event ' + o[this._customEvents[prop][1]] + ' subscribed.', 'info', 'Connection');
 			}
 		}
 	},
@@ -1108,6 +1119,14 @@ YAHOO.util.Connect =
 		var io = document.getElementById(frameId);
 		var oConn = this;
 
+		// Track original HTML form attribute values.
+		var rawFormAttributes =
+		{
+			action:this._formNode.getAttribute('action'),
+			method:this._formNode.getAttribute('method'),
+			target:this._formNode.getAttribute('target')
+		};
+
 		// Initialize the HTML form properties in case they are
 		// not defined in the HTML form.
 		this._formNode.setAttribute('action', uri);
@@ -1144,10 +1163,23 @@ YAHOO.util.Connect =
 			this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true); }, callback.timeout);
 		}
 
-
+		// Remove HTML elements created by appendPostData
 		if(oElements && oElements.length > 0){
 			for(var i=0; i < oElements.length; i++){
 				this._formNode.removeChild(oElements[i]);
+			}
+		}
+
+		// Restore HTML form attributes to their original
+		// values prior to file upload.
+		for(var prop in rawFormAttributes){
+			if(YAHOO.lang.hasOwnProperty(rawFormAttributes, prop)){
+				if(rawFormAttributes[prop]){
+					this._formNode.setAttribute(prop, rawFormAttributes[prop]);
+				}
+				else{
+					this._formNode.removeAttribute(prop);
+				}
 			}
 		}
 
@@ -1157,12 +1189,19 @@ YAHOO.util.Connect =
 		// Create the upload callback handler that fires when the iframe
 		// receives the load event.  Subsequently, the event handler is detached
 		// and the iframe removed from the document.
-
 		var uploadCallback = function()
 		{
 			if(callback && callback.timeout){
 				window.clearTimeout(oConn._timeOut[o.tId]);
 				delete oConn._timeOut[o.tId];
+			}
+
+			// Fire global custom event -- completeEvent
+			oConn.completeEvent.fire(o);
+
+			if(o.completeEvent){
+				// Fire transaction custom event -- completeEvent
+				o.completeEvent.fire(o);
 			}
 
 			var obj = {};
@@ -1178,14 +1217,6 @@ YAHOO.util.Connect =
 			}
 			catch(e){}
 
-			// Fire global custom event -- completeEvent
-			oConn.completeEvent.fire(obj);
-
-			if(o.completeEvent){
-				// Fire transaction custom event -- completeEvent
-				o.completeEvent.fire(obj);
-			}
-
 			if(callback && callback.upload){
 				if(!callback.scope){
 					callback.upload(obj);
@@ -1195,6 +1226,14 @@ YAHOO.util.Connect =
 					callback.upload.apply(callback.scope, [obj]);
 					YAHOO.log('Upload callback with scope.', 'info', 'Connection');
 				}
+			}
+
+			// Fire global custom event -- completeEvent
+			oConn.uploadEvent.fire(obj);
+
+			if(o.uploadEvent){
+				// Fire transaction custom event -- completeEvent
+				o.uploadEvent.fire(obj);
 			}
 
 			if(YAHOO.util.Event){
@@ -1209,6 +1248,7 @@ YAHOO.util.Connect =
 			setTimeout(
 				function(){
 					document.body.removeChild(io);
+					oConn.releaseObject(o);
 					YAHOO.log('File upload iframe destroyed. Id is:' + frameId, 'info', 'Connection');
 				}, 100);
 		};
@@ -1223,7 +1263,6 @@ YAHOO.util.Connect =
 		else{
 			io.addEventListener('load', uploadCallback, false);
 		}
-
 	},
 
   /**
@@ -1286,14 +1325,6 @@ YAHOO.util.Connect =
 				o.abortEvent.fire(o);
 			}
 
-			// Fire global custom event -- completeEvent
-			this.completeEvent.fire(o);
-
-			if(o.completeEvent){
-				// Fire transaction custom event -- completeEvent
-				o.completeEvent.fire(o);
-			}
-
 			this.handleTransactionResponse(o, callback, true);
 			YAHOO.log('Transaction ' + o.tId + ' aborted.', 'info', 'Connection');
 		}
@@ -1317,10 +1348,10 @@ YAHOO.util.Connect =
 	{
 		// if the XHR object assigned to the transaction has not been dereferenced,
 		// then check its readyState status.  Otherwise, return false.
-		if(o.conn){
+		if(o && o.conn){
 			return o.conn.readyState !== 4 && o.conn.readyState !== 0;
 		}
-		else if(o.isUpload === true){
+		else if(o && o.isUpload === true){
 			var frameId = 'yuiIO' + o.tId;
 			return document.getElementById(frameId)?true:false;
 		}
