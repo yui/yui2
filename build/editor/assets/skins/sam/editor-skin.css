@@ -1,11 +1,16 @@
+.yui-skin-sam .yui-editor-container {
+    border: 1px solid #808080;
+}
+.yui-skin-sam .yui-editor-container div.first-child {
+}
 /* Color the border of the container */
 .yui-skin-sam .yui-toolbar-container {
-    border: 1px solid #808080;
     zoom: 1;
 }
 /* Load the background image on the Toolbars titlebar */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar {
     background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -200px;
+    position: relative;
 }
 
 /* Give the titlebar some color and padding */
@@ -22,7 +27,7 @@
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-group h3 {
     color: #808080;
     font-size: 75%;
-    margin: 1em 0 0.25em;
+    margin: 1em 0 0;
     padding-bottom: 0;
     padding-left: 0.25em;
     text-align: left;
@@ -31,6 +36,9 @@
 /* Hide all of the sepatators borders */
 .yui-toolbar-container span.yui-toolbar-separator {
     border: none;
+    text-indent: 33px;
+    overflow: hidden;
+    margin: .25em;
 }
 
 /* Background color of the toolbar */
@@ -41,6 +49,10 @@
 /* Add some padding to the toolbars sub container */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-subcont {
     padding: 0 1em 0.35em;
+    border-bottom:1px solid #808080;
+}
+.yui-skin-sam .yui-toolbar-container-collapsed .yui-toolbar-titlebar {
+    border-bottom:1px solid #808080;
 }
 
 /* Remove the shadows from the menus in the toolbar - Menu.css override */
@@ -56,23 +68,22 @@
 }
 /* Remove padding/margin from list items */
 .yui-skin-sam .yui-editor-container ul li {
+    list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-/* Place a border around the right/left/bottom of the Editors container (Toolbar provides the top border..) */
-.yui-skin-sam .yui-editor-container .yui-editor-editable-container {
-    border: 1px solid #808080;
-    border-top: none;
+.yui-skin-sam .yui-toolbar-group ul li {
+    float: left;
 }
 
 /* Set the color and the border of the dompath container at the bottom of the editor */
 .yui-skin-sam .yui-editor-container .dompath {
     background-color: #F2F2F2;
-    border:1px solid #808080;
-    border-top: none;
+    border-top:1px solid #808080;
     color: #999;
     text-align: left;
+    padding: 0.25em;
 }
 
 /* Set the image for the collapse button on the toolbar */
@@ -83,7 +94,7 @@
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-titlebar span.collapse {
     cursor: pointer;
     position: absolute;
-    top: 2px;
+    top: 4px;
     right: 2px;
     display: block;
     overflow: hidden;
@@ -92,23 +103,33 @@
     text-indent: 9999px;
 }
 
-/* Remove some padding on the top of the select lists */
-.yui-toolbar-container .yui-toolbar-select .first-child a {
-    padding-top: 0;
-}
-
 /* Set the default styles for the buttons */
 .yui-skin-sam .yui-toolbar-container .yui-button {
     background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
-    border: 1px solid #808080;
-    cursor: pointer;
-    height: 22px;
-    margin: 0;
-    overflow: hidden;
-    /*padding: 2px 5px;*/
     position: relative;
     display: block;
+    height: 22px;
+    width: 30px;
+    margin: 0;    
 }
+.yui-skin-sam .yui-toolbar-container .yui-button a {
+    padding-left: 35px;
+    height: 20px;
+}
+.yui-skin-sam .yui-toolbar-container .yui-button .first-child {
+    *left: 0px;
+}
+
+/* Font Family Drop Down */
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-fontname {
+    width: 135px;
+}
+
+/* Header Drop Down */
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-heading {
+    width: 92px;
+}
+
 /* Handle the hover state of the buttons */
 .yui-skin-sam .yui-toolbar-container .yui-button-hover {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1300px;
@@ -117,12 +138,23 @@
 
 /* Handle the selected state of the buttons */
 .yui-skin-sam .yui-toolbar-container .yui-button-selected {
-    background:url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -1700px;
+    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1700px;
     border-color: #808080;
 }
 
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-nogrouplabels h3 {
+    display: none;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-nogrouplabels .yui-toolbar-group {
+	margin-top: .75em;
+}
 
-/* Handle the icon placeholder for the buttons */
+
+/* Handle the icon placeholder for the buttons
+    This is very important - position of this must be absolute.
+    If it is not positioned absolute, IE will place it over the a in the Toolbar
+    Doing this will cause the editor to loose focus and loose the selection.
+*/
 .yui-skin-sam .yui-toolbar-container .yui-button span.yui-toolbar-icon {
     display: block;
     position: absolute;
@@ -130,9 +162,7 @@
     height: 18px;
     width: 18px;
     overflow: hidden;
-    background-image: url( editor-sprite.gif );
-    background-repeat: no-repeat;
-    background-position: 30px 30px;
+    background: url(editor-sprite.gif) no-repeat 30px 30px;
 }
 
 /* Swap out the image to an active image */
@@ -140,13 +170,19 @@
     background-image: url(editor-sprite-active.gif);
 }
 
-.yui-skin-sam .visible .yuimenuitemlabel {
-    text-align:left;
+.yui-skin-sam .yui-toolbar-container .visible .yuimenuitem {
+    float: none;
+}
+.yui-skin-sam .yui-toolbar-container .visible .yuimenuitemlabel {
+    cursor: pointer;
+    color: #000;
 }
 
 /* Set the background color of all menu containers */
-.yui-skin-sam .yui-button-menu {
-    background-color: #ffffff;
+.yui-skin-sam .yui-toolbar-container .yui-button-menu {
+    background-color: #fff;
+}
+.yui-skin-sam .yui-toolbar-container .yuimenu .bd {
 }
 
 /* Set the background of all menu items that are selected */
@@ -158,6 +194,9 @@
     color: #000;
 }
 
+.yui-skin-sam .yui-toolbar-container .yui-button span.yui-toolbar-icon {
+    position: absolute;
+}
 /* Setting the background position of the sprite */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-bold span.yui-toolbar-icon {
     background-position: 0 0;
@@ -278,45 +317,14 @@
     background-position: 0 -504px;
     left: 5px;
 }
-/* Remove the right border on these icons so they appear to be in a "group" together */
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-fontname,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-bold,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-italic,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-subscript,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-forecolor,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-removeformat,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyleft,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifycenter,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-justifyright,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-indent,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-outdent,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-insertunorderedlist,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-createlink,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-left,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-inline,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-block,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-bordersize,
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-bordertype
-{
-    border-right: none;
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child {
+    width: 35px;
 }
-/* Set the width of the href to be very large so we can style it and hide the text */
-.yui-skin-sam .yui-toolbar-container .yui-button .first-child, .yui-skin-sam .yui-toolbar-container .yui-button .first-child a {
-    width: 500px;
-    position: absolute;
-    _position: static;
-    top: -1px;
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child a {
+    padding-left: 2px;
+    text-align: left;    
 }
-/* Reset the position of the first child so the iframe in IE will not move above the menu */
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-select .first-child, .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child {
-    position: static;
-}
-/* Set the height of the first-child element so we get the buttons area back */
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-select .first-child a, .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child a {
-    height: 19px;
-    left: 0;
-}
-
 
 /* Spin Buttons - Remove the icon holder, they don't need it */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton span.yui-toolbar-icon {
@@ -324,31 +332,32 @@
 }
 
 /* Spin Buttons - The up arrow */
-.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
-    top: 0;
-    right: 0;
-    background-image: url( editor-sprite.gif );
-    background-position: 0 -1221px;
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up,
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
+    right: 2px;
+    background: url(editor-sprite.gif) no-repeat 0 -1222px;
     overflow: hidden;
-    height: 8px;
-    width: 8px;
+    height: 6px;
+    width: 7px;
     min-height: 0;
+    padding: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
+    top: 2px;
+    background-position: 0 -1222px;
 }
 /* Spin Buttons - The down arrow */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
-    bottom: 0;
-    right: 0;
-    background-image: url( editor-sprite.gif );
+    bottom: 2px;
     background-position: 0 -1187px;
-    overflow: hidden;
-    height: 8px;
-    width: 8px;
-    min-height: 0;
+}
+.yui-skin-sam .yui-toolbar-container .yui-toolbar-select .first-child a {
+    padding-left: 5px;
+    text-align: left;    
 }
 /* Set the icon of the select menu for the drop down arrow */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-select span.yui-toolbar-icon {
-    background-image: url( editor-sprite.gif );
-    background-position: 0px -1144px;
+    background: url( editor-sprite.gif ) no-repeat 0 -1144px;
     overflow: hidden;
     right: -2px;
     top: 0px;
@@ -365,13 +374,10 @@
 .yui-skin-sam .yui-color-button-menu .yui-toolbar-colors {
     border: 1px solid #808080;
 }
-/* Color the input yellow if it has the warning class applied */
-.yui-editor-panel label input.warning {
-    background-color: #FFEE69;
-}
+
 
 /* Property Editor Panel styles */
-.yui-skin-sam .yui-editor-panel .yui-panel {
+.yui-skin-sam .yui-editor-panel {
     padding: 0;
     margin: 0;
     border: none;
@@ -379,19 +385,9 @@
     overflow: visible;
 }
 
-/* Image Properties - Border container size */
-.yui-skin-sam .yui-editor-panel .yui-toolbar-group-border {
-    width: 190px;
-    *width: 195px;
-}
-/* Image Properties - Text flow container size */
-.yui-skin-sam .yui-editor-panel .yui-toolbar-group-textflow {
-    width: 185px;
-}
-
 /* Margins on the header of the Property Editor */
 .yui-skin-sam .yui-editor-panel .hd {
-    margin: 13px 0 0;
+    margin: 10px 0 0;
     padding: 0;
     border: none;
 }
@@ -406,7 +402,7 @@
     width: 99%;
     position: relative;
     margin: 0;
-    padding: 0;
+    padding: 3px 0 0 0;
     font-size: 93%;
     text-indent: 5px;
     height: 20px;
@@ -418,7 +414,6 @@
     border-right: 1px solid #808080;
     width: 99%;
     margin: 0;
-    *margin-left: -1px;
     padding: 0;
     overflow: visible;
 }
@@ -434,11 +429,86 @@
     margin: 0;
     padding: 0;
 }
+.yui-skin-sam .yui-editor-panel .yuimenu {
+    *width: 90px !important;
+}
+.yui-skin-sam .yui-editor-panel .yuimenu ul li {
+    float: none;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-container .yui-toolbar-subcont {
+    padding: 0;
+    border: none;
+    margin-top: 0.35em;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-bordersize, .yui-skin-sam .yui-editor-panel .yui-toolbar-bordertype {
+    width: 50px;
+}
 
 /* Form styling */
+.yui-skin-sam .yui-editor-panel label {
+    display: block;
+    float: none;
+    padding: 4px 0;
+    margin-bottom: 7px;
+}
 .yui-skin-sam .yui-editor-panel label strong {
     font-weight: normal;
     font-size: 93%;
+    text-align: right;
+    padding-top: 2px;
+}
+
+.yui-skin-sam .yui-editor-panel label input {
+    width: 75%;
+}
+.yui-skin-sam .yui-editor-panel #createlink_target,
+.yui-skin-sam .yui-editor-panel #insertimage_target {
+    width: auto;
+    margin-right: 5px;
+}
+
+.yui-skin-sam .yui-editor-panel .removeLink {
+    width: 98%;
+}
+/* Color the input yellow if it has the warning class applied */
+.yui-skin-sam .yui-editor-panel label input.warning {
+    background-color: #FFEE69;
+}
+
+/* Style the titles of the toolbar groups */
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group h3 {
+    color: #000;
+    float: left;
+    font-weight: normal;
+    font-size: 93%;
+    margin: 5px 0 0 0;
+    padding: 0 3px 0 0;
+    text-align: right;
+}
+
+.yui-skin-sam .yui-editor-panel .height-width h3 {
+    margin: 3px 0 0 10px;
+}
+
+.yui-skin-sam .yui-editor-panel .height-width {
+    margin: 3px 0 0 35px;
+    *margin-left: 14px;
+    width: 42%;
+    *width: 44%;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group-border {
+    width: 190px;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group-padding {
+    width: 203px;
+}
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group-padding h3 {
+    margin-left: 25px;
+    *margin-left: 12px;
+}
+/* Image Properties - Text flow container size */
+.yui-skin-sam .yui-editor-panel .yui-toolbar-group-textflow {
+    width: 182px;
 }
 
 /* Remove the background image set in Panel.css */
@@ -452,8 +522,7 @@
     border: 1px solid #808080;
     border-top: none;
     padding: 0;
-    margin: 0;
-    z-index: -1;
+    margin: 0 0 2px 0;
 }
 
 /* Style the close button in the Property Editor */
@@ -470,15 +539,25 @@
     width:26px;
 }
 
+.yui-skin-sam .yui-editor-panel .ft span.tip {
+    background-color: #EDF5FF;
+    border-top: 1px solid #808080;
+}
+.yui-skin-sam .yui-editor-panel .ft span.tip strong {
+    display: block;
+    float: left;
+    margin: 0 2px 8px 0;
+}
+
+
 /* Setup the icon for a tip */
 .yui-skin-sam .yui-editor-panel .ft span.tip span.icon {
-    background-image: url( editor-sprite.gif );
-    background-position: 0 -1260px;
+    background: url( editor-sprite.gif ) no-repeat 0 -1260px;
     display: block;
     height: 20px;
-    left: 0;
+    left: 2px;
     position: absolute;
-    top: 0;
+    top: 8px;
     width: 20px;
 }
 /* Setup the background image for an info icon */
@@ -499,8 +578,7 @@
     left: 25px;
     text-indent: 9999px;
     overflow: hidden;
-    background-image: url( editor-knob.gif );
-    background-repeat: no-repeat;
+    background: url( editor-knob.gif ) no-repeat 0 0;
 }
 /* Reset some styles from the editor toolbar, when a toolbar is inside the Property Editor */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-container {
@@ -512,14 +590,6 @@
 /* Reset styles for menu buttons inside the Property Editor */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-container .bd {
     background-color: #ffffff;
-    border-bottom: 1px solid #808080;
-}
-
-/* Style the titles of the toolbar groups */
-.yui-skin-sam .yui-editor-panel .yui-toolbar-group h3 {
-    color: #000;
-    float: left;
-    padding-top: 5px;
 }
 
 /* This image is the one used to place the blankimage placeholder into the editor when you click on Insert an Image */

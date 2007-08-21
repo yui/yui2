@@ -1,3 +1,33 @@
+**** version 2.3.1 ***
+
+* Performance enhancements and bug fixes.
+
+    *All
+        1. [1406169] - Fixed Toolbar performance issues
+        2. [1406176] - You can now set the height and width of the editor after it has been rendered       
+        3. [1413456] - Group Labels can now be turned off after the editor has been rendered
+        4. [1413750] - Editor now supports delayed render (script block above the textarea markup)
+        5. [1416349] - cleanHTML now supports markup config options better (added xhtml option)
+        6. [1422334] - Added a link field to the image property editor
+        7. [1425540] - [SF 1775187] Fixed adding a link to an LI
+        8. [1406370] - [SF 1767246 ] Using Back button causes breaking behavior. Fixed.
+
+    *Safari
+        1. [1390926] - Fixed Safari handleSubmit issue
+        2. [1433563] - Editor becomes unstable when rendered inside an element set to display: none (added show() method)
+
+    *Opera
+        1. [1396921] - Fixed clicking the Toolbar while typing loses insertion point
+        2. [1406700] - [SF 1767251] Background color can not be overridden in Opera.. Fixed.
+
+    *Gecko
+        1. [1411911] - [SF 1769657] RTE looks strange on Firefox when base.css - Fixed style collisions
+        2. [1433563] - Editor becomes unstable when rendered inside an element set to display: none (added show() method)
+
+    *Internet Explorer
+        1. [1396921] - Fixed clicking the Toolbar while typing loses insertion point
+
+
 **** version 2.3.0 ***
 
 * Beta release.
