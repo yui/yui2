@@ -275,9 +275,11 @@ YAHOO.widget.RecordSet.prototype.getRecords = function(index, range) {
  */
 
 YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
-    for(var i=this._records.length-1; i>-1; i--) {
-        if(oRecord.getId() === this._records[i].getId()) {
-            return i;
+    if(oRecord) {
+        for(var i=this._records.length-1; i>-1; i--) {
+            if(oRecord.getId() === this._records[i].getId()) {
+                return i;
+            }
         }
     }
     return null;

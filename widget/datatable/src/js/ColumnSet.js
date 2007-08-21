@@ -45,13 +45,14 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 
             // Instantiate a new Column for each node
             var oColumn = new YAHOO.widget.Column(currentNode);
+            oColumn._sId = YAHOO.widget.Column._nCount + "";
+            oColumn._sName = "Column instance" + YAHOO.widget.Column._nCount;
+            // Assign a key if not found
             if(!YAHOO.lang.isValue(oColumn.key)) {
-                oColumn.key = "yui-dt-columnset" + YAHOO.widget.ColumnSet._nCount + "-col" + oSelf._nColumnCount;
+                oColumn.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
             }
-            oColumn._sId = oSelf._nColumnCount + "";
-            oColumn._sName = "Column instance" + oSelf._nColumnCount;
-            oSelf._nColumnCount++;
-
+            // Increment counter
+            YAHOO.widget.Column._nCount++;
 
             // Add the new Column to the flat list
             flat.push(oColumn);
@@ -243,10 +244,10 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Internal class variable to index multiple data table instances.
+ * Internal class variable to index multiple ColumnSet instances.
  *
  * @property ColumnSet._nCount
- * @type number
+ * @type Number
  * @private
  * @static
  */
@@ -260,15 +261,6 @@ YAHOO.widget.ColumnSet._nCount = 0;
  * @private
  */
 YAHOO.widget.ColumnSet.prototype._sName = null;
-
-/**
- * Internal variable to give unique indexes to Column instances.
- *
- * @property _nColumnCount
- * @type Number
- * @private
- */
-YAHOO.widget.ColumnSet.prototype._nColumnCount = 0;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -329,6 +321,26 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
 };
 
 /**
+ * Returns Column instance with given ID.
+ *
+ * @method getColumnById
+ * @param column {String} Column ID.
+ * @return {YAHOO.widget.Column} Column instance.
+ */
+
+YAHOO.widget.ColumnSet.prototype.getColumnById = function(column) {
+    if(YAHOO.lang.isString(column)) {
+        var allColumns = this.flat;
+        for(var i=allColumns.length-1; i>-1; i--) {
+            if(allColumns[i]._sId === column) {
+                return allColumns[i];
+            }
+        }
+    }
+    return null;
+};
+
+/**
  * Returns Column instance with given key or ColumnSet key index.
  *
  * @method getColumn
@@ -342,10 +354,17 @@ YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
     }
     else if(YAHOO.lang.isString(column)) {
         var allColumns = this.flat;
+        var aColumns = [];
         for(var i=0; i<allColumns.length; i++) {
             if(allColumns[i].key === column) {
-                return allColumns[i];
+                aColumns.push(allColumns[i]);
             }
+        }
+        if(aColumns.length === 1) {
+            return aColumns[0];
+        }
+        else if(aColumns.length > 1) {
+            return aColumns;
         }
     }
     return null;
@@ -381,6 +400,16 @@ YAHOO.widget.Column = function(oConfigs) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Internal class variable to index multiple Column instances.
+ *
+ * @property Column._nCount
+ * @type Number
+ * @private
+ * @static
+ */
+YAHOO.widget.Column._nCount = 0;
+
+/**
  * Unique instance name.
  *
  * @property _sName
@@ -388,7 +417,6 @@ YAHOO.widget.Column = function(oConfigs) {
  * @private
  */
 YAHOO.widget.Column.prototype._sName = null;
-
 
 /**
  * Unique String identifier assigned at instantiation.
