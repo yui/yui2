@@ -487,8 +487,9 @@ YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
     // not the absolute previous item in the stack
 
     var time = oLogMsg.time;
+    var localTime;
     if (time.toLocaleTimeString) {
-        var localTime  = time.toLocaleTimeString();
+        localTime  = time.toLocaleTimeString();
     }
     else {
         localTime = time.toString();
