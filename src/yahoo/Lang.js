@@ -136,7 +136,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      */
     _IEEnumFix: function(r, s) {
         if (YAHOO.env.ua.ie) {
-            var add=["toString", "valueOf"];
+            var add=["toString", "valueOf"], i;
             for (i=0;i<add.length;i=i+1) {
                 var fname=add[i],f=s[fname];
                 if (YAHOO.lang.isFunction(f) && f!=Object.prototype[fname]) {
@@ -271,8 +271,10 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         // Skip dates because the std toString is what we want
         // Skip HTMLElement-like objects because trying to dump 
         // an element will cause an unhandled exception in FF 2.x
-        if (!l.isObject(o) || o instanceof Date || 
-            ("nodeType" in o && "tagName" in o)) {
+        if (!l.isObject(o)) {
+            //return Object.toString.apply(o);
+            return o + "";
+        } else if (o instanceof Date || ("nodeType" in o && "tagName" in o)) {
             return o;
         } else if  (l.isFunction(o)) {
             return FUN;
