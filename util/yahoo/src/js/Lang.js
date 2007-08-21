@@ -267,12 +267,11 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         var l=YAHOO.lang,i,len,s=[],OBJ="{...}",FUN="f(){...}",
             COMMA=', ', ARROW=' => ';
 
-        // Skip non-objects
+        // Cast non-objects to string
         // Skip dates because the std toString is what we want
         // Skip HTMLElement-like objects because trying to dump 
         // an element will cause an unhandled exception in FF 2.x
         if (!l.isObject(o)) {
-            //return Object.toString.apply(o);
             return o + "";
         } else if (o instanceof Date || ("nodeType" in o && "tagName" in o)) {
             return o;
