@@ -583,41 +583,31 @@
         * @method initResizeMonitor
         */
         initResizeMonitor: function () {
-        
+
             var oDoc, 
                 oIFrame, 
                 sHTML;
-        
-            function fireTextResize() {
-        
-                Module.textResizeEvent.fire();
-        
-            }
-        
-            if (!YAHOO.env.ua.opera) {
-        
-                oIFrame = Dom.get("_yuiResizeMonitor");
-        
-                if (!oIFrame) {
-        
-                    oIFrame = document.createElement("iframe");
-        
-                    if (this.isSecure && Module.RESIZE_MONITOR_SECURE_URL && 
-                        YAHOO.env.ua.ie) {
-    
-                        oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
-    
-                    }
 
+            function fireTextResize() {
+                Module.textResizeEvent.fire();
+            }
+
+            if (!YAHOO.env.ua.opera) {
+                oIFrame = Dom.get("_yuiResizeMonitor");
+
+                if (!oIFrame) {
+                    oIFrame = document.createElement("iframe");
+
+                    if (this.isSecure && Module.RESIZE_MONITOR_SECURE_URL && YAHOO.env.ua.ie) {
+                        oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
+                    }
 
                     /*
                         Need to set "src" attribute of the iframe to 
                         prevent the browser from reporting duplicate 
                         cookies. (See SourceForge bug #1721755)
                     */
-        
                     if (YAHOO.env.ua.gecko) {
-
                         sHTML = "<html><head><script " +
                                 "type=\"text/javascript\">" + 
                                 "window.onresize=function(){window.parent." +
@@ -628,73 +618,58 @@
 
                         oIFrame.src = "data:text/html;charset=utf-8," + 
                             encodeURIComponent(sHTML);
-
                     }
 
                     oIFrame.id = "_yuiResizeMonitor";
-                    
                     /*
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 
                         forever indicate the iframe is loading 
                         (See SourceForge bug #1723064)
                     */
-                    
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
-        
-                    document.body.appendChild(oIFrame);
-        
+
+                    var fc = document.body.firstChild;
+                    if (fc) {
+                        document.body.insertBefore(oIFrame, fc);
+                    } else {
+                        document.body.appendChild(oIFrame);
+                    }
+
                     oIFrame.style.width = "10em";
                     oIFrame.style.height = "10em";
                     oIFrame.style.top = (-1 * oIFrame.offsetHeight) + "px";
                     oIFrame.style.left = (-1 * oIFrame.offsetWidth) + "px";
                     oIFrame.style.borderWidth = "0";
                     oIFrame.style.visibility = "visible";
-        
+
                     if (YAHOO.env.ua.webkit) {
-        
                         oDoc = oIFrame.contentWindow.document;
-        
                         oDoc.open();
                         oDoc.close();
-        
                     }
-
                 }
-        
+
                 if (oIFrame && oIFrame.contentWindow) {
+                    Module.textResizeEvent.subscribe(this.onDomResize, this, true);
 
-                    Module.textResizeEvent.subscribe(this.onDomResize, 
-                        this, true);
-        
                     if (!Module.textResizeInitialized) {
-
-                        if (!Event.on(oIFrame.contentWindow, "resize", 
-                            fireTextResize)) {
-
+                        if (!Event.on(oIFrame.contentWindow, "resize", fireTextResize)) {
                             /*
                                  This will fail in IE if document.domain has 
                                  changed, so we must change the listener to 
                                  use the oIFrame element instead
                             */
-
                             Event.on(oIFrame, "resize", fireTextResize);
-
                         }
-
                         Module.textResizeInitialized = true;
-
                     }
-
                     this.resizeMonitor = oIFrame;
-
                 }
-        
             }
-        
         },
-        
+
         /**
         * Event handler fired when the resize monitor element is resized.
         * @method onDomResize
@@ -890,98 +865,54 @@
             }
         
             if (appendToNode) {
-
                 appendTo(appendToNode);
-
             } else { 
-
-                /*
-                     No node was passed in. If the element is not already in 
-                     the Dom, this fails
-                */
-
+                // No node was passed in. If the element is not already in the Dom, this fails
                 if (! Dom.inDocument(this.element)) {
-
-                    YAHOO.log("Render failed. Must specify appendTo node if " + 
-                        " Module isn't already in the DOM.", "error");
-
+                    YAHOO.log("Render failed. Must specify appendTo node if " + " Module isn't already in the DOM.", "error");
                     return false;
-
                 }
-
             }
-        
+
             // Need to get everything into the DOM if it isn't already
-        
             if (this.header && ! Dom.inDocument(this.header)) {
-
-                /*
-                    There is a header, but it's not in the DOM yet... 
-                    need to add it
-                */
-
+                // There is a header, but it's not in the DOM yet. Need to add it.
                 firstChild = moduleElement.firstChild;
-
-                if (firstChild) { // Insert before first child if exists
-
+                if (firstChild) {
                     moduleElement.insertBefore(this.header, firstChild);
-
-                } else { // Append to empty body because there are no children
-
+                } else {
                     moduleElement.appendChild(this.header);
-
                 }
-
             }
-        
+
             if (this.body && ! Dom.inDocument(this.body)) {
-
-                /*
-                     There is a body, but it's not in the DOM yet... 
-                     need to add it
-                */
-
-
-                // Insert before footer if exists in DOM
-
-                if (this.footer && Dom.isAncestor(
-                    this.moduleElement, this.footer)) { 
-
+                // There is a body, but it's not in the DOM yet. Need to add it.		
+                if (this.footer && Dom.isAncestor(this.moduleElement, this.footer)) {
                     moduleElement.insertBefore(this.body, this.footer);
-
-                } else { // Append to element because there is no footer
-
+                } else {
                     moduleElement.appendChild(this.body);
-
                 }
-
             }
-        
+
             if (this.footer && ! Dom.inDocument(this.footer)) {
-
-                /*
-                     There is a footer, but it's not in the DOM yet... 
-                     need to add it
-                */
-
+                // There is a footer, but it's not in the DOM yet. Need to add it.
                 moduleElement.appendChild(this.footer);
-
             }
-        
+
             this.renderEvent.fire();
             return true;
         },
-        
+
         /**
         * Removes the Module element from the DOM and sets all child elements 
         * to null.
         * @method destroy
         */
         destroy: function () {
-        
+
             var parent,
                 e;
-        
+
             if (this.element) {
                 Event.purgeElement(this.element, true);
                 parent = this.element.parentNode;

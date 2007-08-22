@@ -13,11 +13,8 @@
     * configuration of the OverlayManager
     */
     YAHOO.widget.OverlayManager = function (userConfig) {
-    
         this.init(userConfig);
-    
     };
-
 
     var Overlay = YAHOO.widget.Overlay,
         Event = YAHOO.util.Event,
@@ -25,7 +22,6 @@
         Config = YAHOO.util.Config,
         CustomEvent = YAHOO.util.CustomEvent,
         OverlayManager = YAHOO.widget.OverlayManager;
-
     
     /**
     * The CSS class representing a focused Overlay
@@ -74,9 +70,9 @@
             * @default "mousedown"
             */
             this.cfg.addProperty("focusevent", { value: "mousedown" } );
-        
+
         },
-        
+
         /**
         * Initializes the OverlayManager
         * @method init
@@ -94,14 +90,14 @@
             * @type Config
             */
             this.cfg = new Config(this);
-        
+
             this.initDefaultConfig();
-        
+
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
             this.cfg.fireQueue();
-        
+
             /**
             * The currently activated Overlay
             * @property activeOverlay
@@ -109,7 +105,7 @@
             * @type YAHOO.widget.Overlay
             */
             var activeOverlay = null;
-        
+
             /**
             * Returns the currently focused Overlay
             * @method getActive
@@ -118,7 +114,7 @@
             this.getActive = function () {
                 return activeOverlay;
             };
-        
+
             /**
             * Focuses the specified Overlay
             * @method focus
@@ -126,32 +122,22 @@
             * @param {String} overlay The id of the Overlay to focus
             */
             this.focus = function (overlay) {
-        
                 var o = this.find(overlay);
-        
                 if (o) {
-        
                     if (activeOverlay != o) {
-        
                         if (activeOverlay) {
-        
                             activeOverlay.blur();
-        
                         }
-        
                         this.bringToTop(o);
-                        
+
                         activeOverlay = o;
-        
+
                         Dom.addClass(activeOverlay.element, 
                             OverlayManager.CSS_FOCUSED);
 
                         o.focusEvent.fire();
-                        
                     }
-        
                 }
-        
             };
         
             /**
@@ -161,53 +147,47 @@
             * @param {String} overlay The id of the Overlay to remove
             */
             this.remove = function (overlay) {
-    
-                var o = this.find(overlay),
-                    originalZ;
-        
+                var o = this.find(overlay), 
+                        originalZ;
                 if (o) {
-
                     if (activeOverlay == o) {
-                    
                         activeOverlay = null;
-                    
                     }
 
-                    originalZ = Dom.getStyle(o.element, "zIndex");
+                    var bDestroyed = (o.element === null && o.cfg === null) ? true : false;
 
-                    o.cfg.setProperty("zIndex", -1000, true);
+                    if (!bDestroyed) {
+                        // Set it's zindex so that it's sorted to the end.
+                        originalZ = Dom.getStyle(o.element, "zIndex");
+                        o.cfg.setProperty("zIndex", -1000, true);
+                    }
 
                     this.overlays.sort(this.compareZIndexDesc);
+                    this.overlays = this.overlays.slice(0, (this.overlays.length - 1));
 
-                    this.overlays = 
-                        this.overlays.slice(0, (this.overlays.length - 1));
-        
                     o.hideEvent.unsubscribe(o.blur);
                     o.destroyEvent.unsubscribe(this._onOverlayDestroy, o);
-        
-                    if (o.element) {
-        
+
+                    if (!bDestroyed) {
                         Event.removeListener(o.element, 
-                            this.cfg.getProperty("focusevent"), 
-                            this._onOverlayElementFocus);
-        
+                                    this.cfg.getProperty("focusevent"), 
+                                    this._onOverlayElementFocus);
+
+                        o.cfg.setProperty("zIndex", originalZ, true);
+                        o.cfg.setProperty("manager", null);
                     }
-        
-                    o.cfg.setProperty("zIndex", originalZ, true);
-                    o.cfg.setProperty("manager", null);
-        
+
                     o.focusEvent.unsubscribeAll();
                     o.blurEvent.unsubscribeAll();
-        
+
                     o.focusEvent = null;
                     o.blurEvent = null;
-        
+
                     o.focus = null;
                     o.blur = null;
                 }
-
             };
-        
+
             /**
             * Removes focus from all registered Overlays in the manager
             * @method blurAll
@@ -218,27 +198,18 @@
                     i;
 
                 if (nOverlays > 0) {
-
                     i = nOverlays - 1;
-                    
-                    do {
 
+                    do {
                         this.overlays[i].blur();                    
-                    
                     }
                     while(i--);
-                
                 }
-    
             };
-        
         
             this._onOverlayBlur = function (p_sType, p_aArgs) {
-
                 activeOverlay = null;
-
             };
-        
         
             var overlays = this.cfg.getProperty("overlays");
         
@@ -266,20 +237,12 @@
         
             var oTarget = Event.getTarget(p_oEvent),
                 oClose = this.close;
-        
             
-            if (oClose && (oTarget == oClose || 
-                    Dom.isAncestor(oClose, oTarget))) {
-            
+            if (oClose && (oTarget == oClose || Dom.isAncestor(oClose, oTarget))) {
                 this.blur();
-            
-            }
-            else {
-            
+            } else {
                 this.focus();
-            
             }
-        
         },
         
         
@@ -295,9 +258,7 @@
         * fired the event.
         */
         _onOverlayDestroy: function (p_sType, p_aArgs, p_oOverlay) {
-        
             this.remove(p_oOverlay);
-        
         },
         
         /**
@@ -321,10 +282,10 @@
             if (overlay instanceof Overlay) {
 
                 overlay.cfg.addProperty("manager", { value: this } );
-        
+
                 overlay.focusEvent = overlay.createEvent("focus");
                 overlay.focusEvent.signature = CustomEvent.LIST;
-        
+
                 overlay.blurEvent = overlay.createEvent("blur");
                 overlay.blurEvent.signature = CustomEvent.LIST;
         
@@ -333,43 +294,29 @@
                 };
         
                 overlay.blur = function () {
-    
                     if (mgr.getActive() == this) {
-
-                        Dom.removeClass(this.element, 
-                            OverlayManager.CSS_FOCUSED);
-
+                        Dom.removeClass(this.element, OverlayManager.CSS_FOCUSED);
                         this.blurEvent.fire();
-
                     }
-
                 };
         
                 overlay.blurEvent.subscribe(mgr._onOverlayBlur);
-        
                 overlay.hideEvent.subscribe(overlay.blur);
                 
-                overlay.destroyEvent.subscribe(this._onOverlayDestroy, 
-                    overlay, this);
+                overlay.destroyEvent.subscribe(this._onOverlayDestroy, overlay, this);
         
                 Event.on(overlay.element, this.cfg.getProperty("focusevent"), 
-                    this._onOverlayElementFocus, null, overlay);
+                            this._onOverlayElementFocus, null, overlay);
         
                 zIndex = Dom.getStyle(overlay.element, "zIndex");
 
                 if (!isNaN(zIndex)) {
-
                     overlay.cfg.setProperty("zIndex", parseInt(zIndex, 10));
-
                 } else {
-
                     overlay.cfg.setProperty("zIndex", 0);
-
                 }
-        
 
                 this.overlays.push(overlay);
-
                 this.bringToTop(overlay);
 
                 return true;
@@ -380,26 +327,17 @@
                 nOverlays = overlay.length;
 
                 for (i = 0; i < nOverlays; i++) {
-
                     if (this.register(overlay[i])) {
-
                         regcount++;
-
                     }
                 }
 
                 if (regcount > 0) {
-
                     return true;
-
                 }
-
             } else {
-
                 return false;
-
             }
-
         },
 
         /**
@@ -421,9 +359,8 @@
             if (oOverlay) {
 
                 aOverlays = this.overlays;
-
                 aOverlays.sort(this.compareZIndexDesc);
-                
+
                 oTopOverlay = aOverlays[0];
                 
                 if (oTopOverlay) {
@@ -436,13 +373,9 @@
                             (parseInt(nTopZIndex, 10) + 2));
     
                     }
-    
                     aOverlays.sort(this.compareZIndexDesc);
-                
                 }
-
             }
-        
         },
         
         /**
@@ -460,41 +393,26 @@
                 i;
 
             if (nOverlays > 0) {
-
                 i = nOverlays - 1;
 
                 if (overlay instanceof Overlay) {
-
                     do {
-
                         if (aOverlays[i] == overlay) {
-
                             return aOverlays[i];
-
                         }
-                    
                     }
                     while(i--);
 
                 } else if (typeof overlay == "string") {
-
                     do {
-
                         if (aOverlays[i].id == overlay) {
-
                             return aOverlays[i];
-
                         }
-
                     }
                     while(i--);
-
                 }
-
                 return null;
-            
             }
-
         },
         
         /**
@@ -505,11 +423,17 @@
         * fall in the stacking order.
         */
         compareZIndexDesc: function (o1, o2) {
-    
-            var zIndex1 = o1.cfg.getProperty("zIndex"),
-                zIndex2 = o2.cfg.getProperty("zIndex");
-        
-            if (zIndex1 > zIndex2) {
+
+            var zIndex1 = (o1.cfg) ? o1.cfg.getProperty("zIndex") : null, // Sort invalid (destroyed)
+                zIndex2 = (o2.cfg) ? o2.cfg.getProperty("zIndex") : null; // objects at bottom.
+
+            if (zIndex1 === null && zIndex2 === null) {
+                return 0;
+            } else if (zIndex1 === null){
+                return 1;
+            } else if (zIndex2 === null) {
+                return -1;
+            } else if (zIndex1 > zIndex2) {
                 return -1;
             } else if (zIndex1 < zIndex2) {
                 return 1;
@@ -529,18 +453,12 @@
                 i;
 
             if (nOverlays > 0) {
-            
                 i = nOverlays - 1;
-                
                 do {
-
                     aOverlays[i].show();
-                
                 }
                 while(i--);
-            
             }
-    
         },
         
         /**
@@ -554,18 +472,12 @@
                 i;
 
             if (nOverlays > 0) {
-            
                 i = nOverlays - 1;
-                
                 do {
-
                     aOverlays[i].hide();
-                
                 }
                 while(i--);
-            
             }
-    
         },
         
         /**
@@ -576,7 +488,6 @@
         toString: function () {
             return "OverlayManager";
         }
-    
     };
 
 }());

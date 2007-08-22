@@ -1292,41 +1292,31 @@
         * @method initResizeMonitor
         */
         initResizeMonitor: function () {
-        
+
             var oDoc, 
                 oIFrame, 
                 sHTML;
-        
-            function fireTextResize() {
-        
-                Module.textResizeEvent.fire();
-        
-            }
-        
-            if (!YAHOO.env.ua.opera) {
-        
-                oIFrame = Dom.get("_yuiResizeMonitor");
-        
-                if (!oIFrame) {
-        
-                    oIFrame = document.createElement("iframe");
-        
-                    if (this.isSecure && Module.RESIZE_MONITOR_SECURE_URL && 
-                        YAHOO.env.ua.ie) {
-    
-                        oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
-    
-                    }
 
+            function fireTextResize() {
+                Module.textResizeEvent.fire();
+            }
+
+            if (!YAHOO.env.ua.opera) {
+                oIFrame = Dom.get("_yuiResizeMonitor");
+
+                if (!oIFrame) {
+                    oIFrame = document.createElement("iframe");
+
+                    if (this.isSecure && Module.RESIZE_MONITOR_SECURE_URL && YAHOO.env.ua.ie) {
+                        oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
+                    }
 
                     /*
                         Need to set "src" attribute of the iframe to 
                         prevent the browser from reporting duplicate 
                         cookies. (See SourceForge bug #1721755)
                     */
-        
                     if (YAHOO.env.ua.gecko) {
-
                         sHTML = "<html><head><script " +
                                 "type=\"text/javascript\">" + 
                                 "window.onresize=function(){window.parent." +
@@ -1337,73 +1327,58 @@
 
                         oIFrame.src = "data:text/html;charset=utf-8," + 
                             encodeURIComponent(sHTML);
-
                     }
 
                     oIFrame.id = "_yuiResizeMonitor";
-                    
                     /*
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 
                         forever indicate the iframe is loading 
                         (See SourceForge bug #1723064)
                     */
-                    
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
-        
-                    document.body.appendChild(oIFrame);
-        
+
+                    var fc = document.body.firstChild;
+                    if (fc) {
+                        document.body.insertBefore(oIFrame, fc);
+                    } else {
+                        document.body.appendChild(oIFrame);
+                    }
+
                     oIFrame.style.width = "10em";
                     oIFrame.style.height = "10em";
                     oIFrame.style.top = (-1 * oIFrame.offsetHeight) + "px";
                     oIFrame.style.left = (-1 * oIFrame.offsetWidth) + "px";
                     oIFrame.style.borderWidth = "0";
                     oIFrame.style.visibility = "visible";
-        
+
                     if (YAHOO.env.ua.webkit) {
-        
                         oDoc = oIFrame.contentWindow.document;
-        
                         oDoc.open();
                         oDoc.close();
-        
                     }
-
                 }
-        
+
                 if (oIFrame && oIFrame.contentWindow) {
+                    Module.textResizeEvent.subscribe(this.onDomResize, this, true);
 
-                    Module.textResizeEvent.subscribe(this.onDomResize, 
-                        this, true);
-        
                     if (!Module.textResizeInitialized) {
-
-                        if (!Event.on(oIFrame.contentWindow, "resize", 
-                            fireTextResize)) {
-
+                        if (!Event.on(oIFrame.contentWindow, "resize", fireTextResize)) {
                             /*
                                  This will fail in IE if document.domain has 
                                  changed, so we must change the listener to 
                                  use the oIFrame element instead
                             */
-
                             Event.on(oIFrame, "resize", fireTextResize);
-
                         }
-
                         Module.textResizeInitialized = true;
-
                     }
-
                     this.resizeMonitor = oIFrame;
-
                 }
-        
             }
-        
         },
-        
+
         /**
         * Event handler fired when the resize monitor element is resized.
         * @method onDomResize
@@ -1599,96 +1574,53 @@
             }
         
             if (appendToNode) {
-
                 appendTo(appendToNode);
-
             } else { 
-
-                /*
-                     No node was passed in. If the element is not already in 
-                     the Dom, this fails
-                */
-
+                // No node was passed in. If the element is not already in the Dom, this fails
                 if (! Dom.inDocument(this.element)) {
-
-
                     return false;
-
                 }
-
             }
-        
+
             // Need to get everything into the DOM if it isn't already
-        
             if (this.header && ! Dom.inDocument(this.header)) {
-
-                /*
-                    There is a header, but it's not in the DOM yet... 
-                    need to add it
-                */
-
+                // There is a header, but it's not in the DOM yet. Need to add it.
                 firstChild = moduleElement.firstChild;
-
-                if (firstChild) { // Insert before first child if exists
-
+                if (firstChild) {
                     moduleElement.insertBefore(this.header, firstChild);
-
-                } else { // Append to empty body because there are no children
-
+                } else {
                     moduleElement.appendChild(this.header);
-
                 }
-
             }
-        
+
             if (this.body && ! Dom.inDocument(this.body)) {
-
-                /*
-                     There is a body, but it's not in the DOM yet... 
-                     need to add it
-                */
-
-
-                // Insert before footer if exists in DOM
-
-                if (this.footer && Dom.isAncestor(
-                    this.moduleElement, this.footer)) { 
-
+                // There is a body, but it's not in the DOM yet. Need to add it.		
+                if (this.footer && Dom.isAncestor(this.moduleElement, this.footer)) {
                     moduleElement.insertBefore(this.body, this.footer);
-
-                } else { // Append to element because there is no footer
-
+                } else {
                     moduleElement.appendChild(this.body);
-
                 }
-
             }
-        
+
             if (this.footer && ! Dom.inDocument(this.footer)) {
-
-                /*
-                     There is a footer, but it's not in the DOM yet... 
-                     need to add it
-                */
-
+                // There is a footer, but it's not in the DOM yet. Need to add it.
                 moduleElement.appendChild(this.footer);
-
             }
-        
+
             this.renderEvent.fire();
             return true;
         },
-        
+
         /**
         * Removes the Module element from the DOM and sets all child elements 
         * to null.
         * @method destroy
         */
         destroy: function () {
-        
+
             var parent,
                 e;
-        
+
             if (this.element) {
                 Event.purgeElement(this.element, true);
                 parent = this.element.parentNode;
@@ -1819,11 +1751,8 @@
     * @constructor
     */
     YAHOO.widget.Overlay = function (el, userConfig) {
-    
         YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
-    
     };
-
 
     var Lang = YAHOO.lang,
         CustomEvent = YAHOO.util.CustomEvent,
@@ -2955,23 +2884,17 @@
                         */
         
                         if (YAHOO.env.ua.ie) {
-        
                             m_oIFrameTemplate.style.filter = "alpha(opacity=0)";
-        
                             /*
                                  Need to set the "frameBorder" property to 0 
                                  supress the default <iframe> border in IE.  
                                  Setting the CSS "border" property alone 
                                  doesn't supress it.
                             */
-        
                             m_oIFrameTemplate.frameBorder = 0;
-        
                         }
                         else {
-        
                             m_oIFrameTemplate.style.opacity = "0";
-                        
                         }
 
                         m_oIFrameTemplate.style.position = "absolute";
@@ -2979,27 +2902,18 @@
                         m_oIFrameTemplate.style.margin = "0";
                         m_oIFrameTemplate.style.padding = "0";
                         m_oIFrameTemplate.style.display = "none";
-    
                     }
 
                     oIFrame = m_oIFrameTemplate.cloneNode(false);
-
                     oParent = oElement.parentNode;
 
                     if (oParent) {
-
                         oParent.appendChild(oIFrame);
-
                     } else {
-
                         document.body.appendChild(oIFrame);
-
                     }
-                    
                     this.iframe = oIFrame;
-
                 }
-
 
                 /*
                      Show the <iframe> before positioning it since the "setXY" 
@@ -3472,7 +3386,7 @@
         * @method destroy
         */
         destroy: function () {
-    
+
             if (this.iframe) {
     
                 this.iframe.parentNode.removeChild(this.iframe);
@@ -3520,11 +3434,8 @@
     * configuration of the OverlayManager
     */
     YAHOO.widget.OverlayManager = function (userConfig) {
-    
         this.init(userConfig);
-    
     };
-
 
     var Overlay = YAHOO.widget.Overlay,
         Event = YAHOO.util.Event,
@@ -3532,7 +3443,6 @@
         Config = YAHOO.util.Config,
         CustomEvent = YAHOO.util.CustomEvent,
         OverlayManager = YAHOO.widget.OverlayManager;
-
     
     /**
     * The CSS class representing a focused Overlay
@@ -3581,9 +3491,9 @@
             * @default "mousedown"
             */
             this.cfg.addProperty("focusevent", { value: "mousedown" } );
-        
+
         },
-        
+
         /**
         * Initializes the OverlayManager
         * @method init
@@ -3601,14 +3511,14 @@
             * @type Config
             */
             this.cfg = new Config(this);
-        
+
             this.initDefaultConfig();
-        
+
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
             this.cfg.fireQueue();
-        
+
             /**
             * The currently activated Overlay
             * @property activeOverlay
@@ -3616,7 +3526,7 @@
             * @type YAHOO.widget.Overlay
             */
             var activeOverlay = null;
-        
+
             /**
             * Returns the currently focused Overlay
             * @method getActive
@@ -3625,7 +3535,7 @@
             this.getActive = function () {
                 return activeOverlay;
             };
-        
+
             /**
             * Focuses the specified Overlay
             * @method focus
@@ -3633,32 +3543,22 @@
             * @param {String} overlay The id of the Overlay to focus
             */
             this.focus = function (overlay) {
-        
                 var o = this.find(overlay);
-        
                 if (o) {
-        
                     if (activeOverlay != o) {
-        
                         if (activeOverlay) {
-        
                             activeOverlay.blur();
-        
                         }
-        
                         this.bringToTop(o);
-                        
+
                         activeOverlay = o;
-        
+
                         Dom.addClass(activeOverlay.element, 
                             OverlayManager.CSS_FOCUSED);
 
                         o.focusEvent.fire();
-                        
                     }
-        
                 }
-        
             };
         
             /**
@@ -3668,53 +3568,47 @@
             * @param {String} overlay The id of the Overlay to remove
             */
             this.remove = function (overlay) {
-    
-                var o = this.find(overlay),
-                    originalZ;
-        
+                var o = this.find(overlay), 
+                        originalZ;
                 if (o) {
-
                     if (activeOverlay == o) {
-                    
                         activeOverlay = null;
-                    
                     }
 
-                    originalZ = Dom.getStyle(o.element, "zIndex");
+                    var bDestroyed = (o.element === null && o.cfg === null) ? true : false;
 
-                    o.cfg.setProperty("zIndex", -1000, true);
+                    if (!bDestroyed) {
+                        // Set it's zindex so that it's sorted to the end.
+                        originalZ = Dom.getStyle(o.element, "zIndex");
+                        o.cfg.setProperty("zIndex", -1000, true);
+                    }
 
                     this.overlays.sort(this.compareZIndexDesc);
+                    this.overlays = this.overlays.slice(0, (this.overlays.length - 1));
 
-                    this.overlays = 
-                        this.overlays.slice(0, (this.overlays.length - 1));
-        
                     o.hideEvent.unsubscribe(o.blur);
                     o.destroyEvent.unsubscribe(this._onOverlayDestroy, o);
-        
-                    if (o.element) {
-        
+
+                    if (!bDestroyed) {
                         Event.removeListener(o.element, 
-                            this.cfg.getProperty("focusevent"), 
-                            this._onOverlayElementFocus);
-        
+                                    this.cfg.getProperty("focusevent"), 
+                                    this._onOverlayElementFocus);
+
+                        o.cfg.setProperty("zIndex", originalZ, true);
+                        o.cfg.setProperty("manager", null);
                     }
-        
-                    o.cfg.setProperty("zIndex", originalZ, true);
-                    o.cfg.setProperty("manager", null);
-        
+
                     o.focusEvent.unsubscribeAll();
                     o.blurEvent.unsubscribeAll();
-        
+
                     o.focusEvent = null;
                     o.blurEvent = null;
-        
+
                     o.focus = null;
                     o.blur = null;
                 }
-
             };
-        
+
             /**
             * Removes focus from all registered Overlays in the manager
             * @method blurAll
@@ -3725,27 +3619,18 @@
                     i;
 
                 if (nOverlays > 0) {
-
                     i = nOverlays - 1;
-                    
-                    do {
 
+                    do {
                         this.overlays[i].blur();                    
-                    
                     }
                     while(i--);
-                
                 }
-    
             };
-        
         
             this._onOverlayBlur = function (p_sType, p_aArgs) {
-
                 activeOverlay = null;
-
             };
-        
         
             var overlays = this.cfg.getProperty("overlays");
         
@@ -3773,20 +3658,12 @@
         
             var oTarget = Event.getTarget(p_oEvent),
                 oClose = this.close;
-        
             
-            if (oClose && (oTarget == oClose || 
-                    Dom.isAncestor(oClose, oTarget))) {
-            
+            if (oClose && (oTarget == oClose || Dom.isAncestor(oClose, oTarget))) {
                 this.blur();
-            
-            }
-            else {
-            
+            } else {
                 this.focus();
-            
             }
-        
         },
         
         
@@ -3802,9 +3679,7 @@
         * fired the event.
         */
         _onOverlayDestroy: function (p_sType, p_aArgs, p_oOverlay) {
-        
             this.remove(p_oOverlay);
-        
         },
         
         /**
@@ -3828,10 +3703,10 @@
             if (overlay instanceof Overlay) {
 
                 overlay.cfg.addProperty("manager", { value: this } );
-        
+
                 overlay.focusEvent = overlay.createEvent("focus");
                 overlay.focusEvent.signature = CustomEvent.LIST;
-        
+
                 overlay.blurEvent = overlay.createEvent("blur");
                 overlay.blurEvent.signature = CustomEvent.LIST;
         
@@ -3840,43 +3715,29 @@
                 };
         
                 overlay.blur = function () {
-    
                     if (mgr.getActive() == this) {
-
-                        Dom.removeClass(this.element, 
-                            OverlayManager.CSS_FOCUSED);
-
+                        Dom.removeClass(this.element, OverlayManager.CSS_FOCUSED);
                         this.blurEvent.fire();
-
                     }
-
                 };
         
                 overlay.blurEvent.subscribe(mgr._onOverlayBlur);
-        
                 overlay.hideEvent.subscribe(overlay.blur);
                 
-                overlay.destroyEvent.subscribe(this._onOverlayDestroy, 
-                    overlay, this);
+                overlay.destroyEvent.subscribe(this._onOverlayDestroy, overlay, this);
         
                 Event.on(overlay.element, this.cfg.getProperty("focusevent"), 
-                    this._onOverlayElementFocus, null, overlay);
+                            this._onOverlayElementFocus, null, overlay);
         
                 zIndex = Dom.getStyle(overlay.element, "zIndex");
 
                 if (!isNaN(zIndex)) {
-
                     overlay.cfg.setProperty("zIndex", parseInt(zIndex, 10));
-
                 } else {
-
                     overlay.cfg.setProperty("zIndex", 0);
-
                 }
-        
 
                 this.overlays.push(overlay);
-
                 this.bringToTop(overlay);
 
                 return true;
@@ -3887,26 +3748,17 @@
                 nOverlays = overlay.length;
 
                 for (i = 0; i < nOverlays; i++) {
-
                     if (this.register(overlay[i])) {
-
                         regcount++;
-
                     }
                 }
 
                 if (regcount > 0) {
-
                     return true;
-
                 }
-
             } else {
-
                 return false;
-
             }
-
         },
 
         /**
@@ -3928,9 +3780,8 @@
             if (oOverlay) {
 
                 aOverlays = this.overlays;
-
                 aOverlays.sort(this.compareZIndexDesc);
-                
+
                 oTopOverlay = aOverlays[0];
                 
                 if (oTopOverlay) {
@@ -3943,13 +3794,9 @@
                             (parseInt(nTopZIndex, 10) + 2));
     
                     }
-    
                     aOverlays.sort(this.compareZIndexDesc);
-                
                 }
-
             }
-        
         },
         
         /**
@@ -3967,41 +3814,26 @@
                 i;
 
             if (nOverlays > 0) {
-
                 i = nOverlays - 1;
 
                 if (overlay instanceof Overlay) {
-
                     do {
-
                         if (aOverlays[i] == overlay) {
-
                             return aOverlays[i];
-
                         }
-                    
                     }
                     while(i--);
 
                 } else if (typeof overlay == "string") {
-
                     do {
-
                         if (aOverlays[i].id == overlay) {
-
                             return aOverlays[i];
-
                         }
-
                     }
                     while(i--);
-
                 }
-
                 return null;
-            
             }
-
         },
         
         /**
@@ -4012,11 +3844,17 @@
         * fall in the stacking order.
         */
         compareZIndexDesc: function (o1, o2) {
-    
-            var zIndex1 = o1.cfg.getProperty("zIndex"),
-                zIndex2 = o2.cfg.getProperty("zIndex");
-        
-            if (zIndex1 > zIndex2) {
+
+            var zIndex1 = (o1.cfg) ? o1.cfg.getProperty("zIndex") : null, // Sort invalid (destroyed)
+                zIndex2 = (o2.cfg) ? o2.cfg.getProperty("zIndex") : null; // objects at bottom.
+
+            if (zIndex1 === null && zIndex2 === null) {
+                return 0;
+            } else if (zIndex1 === null){
+                return 1;
+            } else if (zIndex2 === null) {
+                return -1;
+            } else if (zIndex1 > zIndex2) {
                 return -1;
             } else if (zIndex1 < zIndex2) {
                 return 1;
@@ -4036,18 +3874,12 @@
                 i;
 
             if (nOverlays > 0) {
-            
                 i = nOverlays - 1;
-                
                 do {
-
                     aOverlays[i].show();
-                
                 }
                 while(i--);
-            
             }
-    
         },
         
         /**
@@ -4061,18 +3893,12 @@
                 i;
 
             if (nOverlays > 0) {
-            
                 i = nOverlays - 1;
-                
                 do {
-
                     aOverlays[i].hide();
-                
                 }
                 while(i--);
-            
             }
-    
         },
         
         /**
@@ -4083,7 +3909,6 @@
         toString: function () {
             return "OverlayManager";
         }
-    
     };
 
 }());
@@ -6237,9 +6062,7 @@
                 key: "buttons", 
                 value: "none" 
             }
-        
         };    
-
 
     /**
     * Constant representing the default CSS class used for a Dialog
@@ -6250,7 +6073,6 @@
     */
     Dialog.CSS_DIALOG = "yui-dialog";
 
-
     function removeButtonEventHandlers() {
 
         var aButtons = this._aButtons,
@@ -6259,38 +6081,25 @@
             i;
 
         if (Lang.isArray(aButtons)) {
-
             nButtons = aButtons.length;
 
             if (nButtons > 0) {
-
                 i = nButtons - 1;
-
                 do {
-
                     oButton = aButtons[i];
-                    
-                    if (oButton instanceof YAHOO.widget.Button) {
-                        
+
+                    if (YAHOO.widget.Button && oButton instanceof YAHOO.widget.Button) {
                         oButton.destroy();
-                        
                     }
                     else if (oButton.tagName.toUpperCase() == "BUTTON") {
-
                         Event.purgeElement(oButton);
                         Event.purgeElement(oButton, false);
-
                     }
-
                 }
                 while (i--);
-            
             }
-        
         }
-
     }
-    
     
     YAHOO.extend(Dialog, YAHOO.widget.Panel, { 
 
@@ -7498,15 +7307,12 @@
                 oForm = aForms[0];
 
                 if (oForm) {
-                   
                     Event.purgeElement(oForm);
-            
-                    this.body.removeChild(oForm);
-                    
+                    if (oForm.parentNode) {
+                        oForm.parentNode.removeChild(oForm);
+                    }
                     this.form = null;
-            
                 }
-            
             }
         
             Dialog.superclass.destroy.call(this);  

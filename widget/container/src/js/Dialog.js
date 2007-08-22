@@ -68,9 +68,7 @@
                 key: "buttons", 
                 value: "none" 
             }
-        
         };    
-
 
     /**
     * Constant representing the default CSS class used for a Dialog
@@ -81,7 +79,6 @@
     */
     Dialog.CSS_DIALOG = "yui-dialog";
 
-
     function removeButtonEventHandlers() {
 
         var aButtons = this._aButtons,
@@ -90,38 +87,25 @@
             i;
 
         if (Lang.isArray(aButtons)) {
-
             nButtons = aButtons.length;
 
             if (nButtons > 0) {
-
                 i = nButtons - 1;
-
                 do {
-
                     oButton = aButtons[i];
-                    
-                    if (oButton instanceof YAHOO.widget.Button) {
-                        
+
+                    if (YAHOO.widget.Button && oButton instanceof YAHOO.widget.Button) {
                         oButton.destroy();
-                        
                     }
                     else if (oButton.tagName.toUpperCase() == "BUTTON") {
-
                         Event.purgeElement(oButton);
                         Event.purgeElement(oButton, false);
-
                     }
-
                 }
                 while (i--);
-            
             }
-        
         }
-
     }
-    
     
     YAHOO.extend(Dialog, YAHOO.widget.Panel, { 
 
@@ -1329,15 +1313,12 @@
                 oForm = aForms[0];
 
                 if (oForm) {
-                   
                     Event.purgeElement(oForm);
-            
-                    this.body.removeChild(oForm);
-                    
+                    if (oForm.parentNode) {
+                        oForm.parentNode.removeChild(oForm);
+                    }
                     this.form = null;
-            
                 }
-            
             }
         
             Dialog.superclass.destroy.call(this);  

@@ -18,11 +18,8 @@
     * @constructor
     */
     YAHOO.widget.Overlay = function (el, userConfig) {
-    
         YAHOO.widget.Overlay.superclass.constructor.call(this, el, userConfig);
-    
     };
-
 
     var Lang = YAHOO.lang,
         CustomEvent = YAHOO.util.CustomEvent,
@@ -1155,23 +1152,17 @@
                         */
         
                         if (YAHOO.env.ua.ie) {
-        
                             m_oIFrameTemplate.style.filter = "alpha(opacity=0)";
-        
                             /*
                                  Need to set the "frameBorder" property to 0 
                                  supress the default <iframe> border in IE.  
                                  Setting the CSS "border" property alone 
                                  doesn't supress it.
                             */
-        
                             m_oIFrameTemplate.frameBorder = 0;
-        
                         }
                         else {
-        
                             m_oIFrameTemplate.style.opacity = "0";
-                        
                         }
 
                         m_oIFrameTemplate.style.position = "absolute";
@@ -1179,27 +1170,18 @@
                         m_oIFrameTemplate.style.margin = "0";
                         m_oIFrameTemplate.style.padding = "0";
                         m_oIFrameTemplate.style.display = "none";
-    
                     }
 
                     oIFrame = m_oIFrameTemplate.cloneNode(false);
-
                     oParent = oElement.parentNode;
 
                     if (oParent) {
-
                         oParent.appendChild(oIFrame);
-
                     } else {
-
                         document.body.appendChild(oIFrame);
-
                     }
-                    
                     this.iframe = oIFrame;
-
                 }
-
 
                 /*
                      Show the <iframe> before positioning it since the "setXY" 
@@ -1672,7 +1654,7 @@
         * @method destroy
         */
         destroy: function () {
-    
+
             if (this.iframe) {
     
                 this.iframe.parentNode.removeChild(this.iframe);
