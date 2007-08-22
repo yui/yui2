@@ -460,7 +460,7 @@ h2.yui-editor-skipheader, h3.yui-editor-skipheader {
 
 /* Smash the inhertited Menu style */
 .yui-color-button-menu {
-    overflow: hidden;
+    overflow: visible;
     background-color: transparent;
 }
 

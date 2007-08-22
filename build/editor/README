@@ -11,6 +11,7 @@
         6. [1422334] - Added a link field to the image property editor
         7. [1425540] - [SF 1775187] Fixed adding a link to an LI
         8. [1406370] - [SF 1767246 ] Using Back button causes breaking behavior. Fixed.
+        9. [1435809] - Base href config fails when on a page with a port number. Fixed.
 
     *Safari
         1. [1390926] - Fixed Safari handleSubmit issue

@@ -1711,7 +1711,14 @@ var Dom = YAHOO.util.Dom,
         * @description The base location of the editable page (this page) so that relative paths for image work.
         * @type String
         */
-        _baseHREF: location.protocol + '/'+'/' + location.hostname + location.pathname,
+        _baseHREF: function() {
+            var href = document.location.href;
+            if (href.indexOf('?') !== -1) { //Remove the query string
+                href = href.substring(0, href.indexOf('?'));
+            }
+            href = href.substring(0, href.lastIndexOf('/')) + '/';
+            return href;
+        }(),
         /**
         * @property _lastImage
         * @private
@@ -2601,7 +2608,8 @@ var Dom = YAHOO.util.Dom,
                 this.closeWindow();
             }
             if (this.browser.webkit) {
-                if (this._isElement(Event.getTarget(ev), 'a')) {
+                var tar =Event.getTarget(ev);
+                if (this._isElement(tar, 'a') || this._isElement(tar.parentNode, 'a')) {
                     Event.stopEvent(ev);
                     this.nodeChange();
                 }
@@ -2662,11 +2670,11 @@ var Dom = YAHOO.util.Dom,
             }
             if (this._isElement(sel, 'img') || this._isElement(sel, 'a')) {
                 if (this.browser.webkit) {
+                    Event.stopEvent(ev);
                     if (this._isElement(sel, 'img')) {
                         Dom.addClass(sel, 'selected');
                         this._lastImage = sel;
                     }
-                    Event.stopEvent(ev);
                 }
                 this.nodeChange();
             }
@@ -2783,10 +2791,12 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 76: //L
                     if (this._hasSelection()) {
-                        this.execCommand('createlink', '');
-                        this.toolbar.fireEvent('createlinkClick', { type: 'createlinkClick', target: this.toolbar });
-                        this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
-                        doExec = false;
+                        if (ev.shiftKey && ev.ctrlKey) {
+                            this.execCommand('createlink', '');
+                            this.toolbar.fireEvent('createlinkClick', { type: 'createlinkClick', target: this.toolbar });
+                            this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
+                            doExec = false;
+                        }
                     }
                     break;
                 case 66: //B
