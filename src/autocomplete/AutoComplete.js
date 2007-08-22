@@ -78,18 +78,11 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
             // For skinning
             var elParent = this._oContainer.parentNode;
             var elTag = elParent.tagName.toLowerCase();
-            while(elParent && (elParent != "document")) {
-                if(elTag == "div") {
-                    YAHOO.util.Dom.addClass(elParent, "yui-ac");
-                    break;
-                }
-                else {
-                    elParent = elParent.parentNode;
-                    elTag = elParent.tagName.toLowerCase();
-                }
+            if(elTag == "div") {
+                YAHOO.util.Dom.addClass(elParent, "yui-ac");
             }
-            if(elTag != "div") {
-                YAHOO.log("Could not find an appropriate parent container for skinning", "warn", this.toString());
+            else {
+                YAHOO.log("Could not find the wrapper element for skinning", "warn", this.toString());
             }
         }
         else {
@@ -689,12 +682,9 @@ YAHOO.widget.AutoComplete.prototype.itemSelectEvent = null;
 
 /**
  * Fired when a user selection does not match any of the displayed result items.
- * Note that this event may not behave as expected when delimiter characters
- * have been defined. 
  *
  * @event unmatchedItemSelectEvent
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
- * @param sQuery {String} The user-typed query string.
  */
 YAHOO.widget.AutoComplete.prototype.unmatchedItemSelectEvent = null;
 
@@ -946,7 +936,7 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
         this.queryDelay = 0.2;
     }
     var delimChar = this.delimChar;
-    if(YAHOO.lang.isString(delimChar)) {
+    if(YAHOO.lang.isString(delimChar) && (delimChar.length > 0)) {
         this.delimChar = [delimChar];
     }
     else if(!YAHOO.lang.isArray(delimChar)) {
@@ -2078,20 +2068,27 @@ YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
 YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
     // Don't treat as a blur if it was a selection via mouse click
     if(!oSelf._bOverContainer || (oSelf._nKeyCode == 9)) {
-        // Current query needs to be validated
+        // Current query needs to be validated as a selection
         if(!oSelf._bItemSelected) {
             var oMatch = oSelf._textMatchesOption();
+            // Container is closed or current query doesn't match any result
             if(!oSelf._bContainerOpen || (oSelf._bContainerOpen && (oMatch === null))) {
+                // Force selection is enabled so clear the current query
                 if(oSelf.forceSelection) {
                     oSelf._clearSelection();
                 }
+                // Treat current query as a valid selection
                 else {
-                    oSelf.unmatchedItemSelectEvent.fire(oSelf, oSelf._sCurQuery);
+                    oSelf.unmatchedItemSelectEvent.fire(oSelf);
                     YAHOO.log("Unmatched item selected", "info", oSelf.toString());
                 }
             }
+            // Container is open and current query matches a result
             else {
-                oSelf._selectItem(oMatch);
+                // Force a selection when textbox is blurred with a match
+                if(oSelf.forceSelection) {
+                    oSelf._selectItem(oMatch);
+                }
             }
         }
 

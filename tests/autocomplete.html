@@ -10,7 +10,7 @@
 <script type="text/javascript" src="../build/event/event-min.js"></script>
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
-<script type="text/javascript" src="../build/autocomplete/autocomplete-min.js"></script>
+<script type="text/javascript" src="../build/autocomplete/autocomplete.js"></script>
 
 </head>
 <body>
@@ -20,8 +20,8 @@
 <script type="text/javascript">
 
 (function() {
-
-    var    Dom=YAHOO.util.Dom,
+    
+    var Dom=YAHOO.util.Dom,
         Assert=YAHOO.util.Assert,
         ObjectAssert=YAHOO.util.ObjectAssert,
         ArrayAssert=YAHOO.util.ArrayAssert,
@@ -39,48 +39,60 @@
         
     function AutoCompleteTestCase(template) {
         AutoCompleteTestCase.superclass.constructor.call(this, template);
-        this.input = null;
-        this.container = null;
-        this.datasource = null;
     };
     YAHOO.lang.extend(AutoCompleteTestCase, TestCase);
 
     AutoCompleteTestCase.prototype.setUp = function() {
-        this.wrapper = document.createElement("div");
-        this.wrapper.id = "testACWrapper";
-        document.body.appendChild(this.wrapper);
-        
-        this.input = document.createElement("input");
-        this.input.id = "testACInput";
-        this.wrapper.appendChild(this.input);
+        this.count = 0;
+        this.wrappers = [];
+        this.inputs = [];
+        this.containers = [];
+        this.instances = [];
 
-        this.container = document.createElement("div");
-        this.container.id = "testACContainer";
-        this.wrapper.appendChild(this.container);
-        
         this.datasource = new DS_JSArray(["aaa","abc","axyz"]);
     };
 
-    AutoCompleteTestCase.prototype.tearDown = function() {
-       if (this.wrapper != null) {
-            YAHOO.util.Event.purgeElement(this.wrapper, true);
-            document.body.removeChild(this.wrapper);
+     AutoCompleteTestCase.prototype.tearDown = function() {
+        if (this.wrappers != null && (this.wrappers.length > 0)) {
+            for(var i=0; i<this.wrappers.length; i++) {
+                YAHOO.util.Event.purgeElement(this.wrappers[i], true);
+                document.body.removeChild(this.wrappers[i]);
+            }
         }
 
         this.datasource = null;
+        this.containers = null;
+        this.inputs = null;
+        this.wrappers = null;
+        this.instances = null;
     };
         
     AutoCompleteTestCase.prototype.createInstance = function(oConfig) {
-        var ac = new AutoComplete(this.input, this.container, this.datasource, oConfig);
-        return ac;
+        var nCount = this.count;
+        this.count++;
+        this.wrappers[nCount] = document.createElement("div");
+        this.wrappers[nCount].id = "acWrapper"+nCount;
+        document.body.appendChild(this.wrappers[nCount]);
+
+        this.inputs[nCount] = document.createElement("input");
+        this.inputs[nCount].id = "acInput"+nCount;
+        this.wrappers[nCount].appendChild(this.inputs[nCount]);
+
+        this.containers[nCount] = document.createElement("div");
+        this.containers[nCount].id = "acContainer"+nCount;
+        this.wrappers[nCount].appendChild(this.containers[nCount]);
+
+        this.instances[nCount] = new AutoComplete(this.inputs[nCount], this.containers[nCount], this.datasource, oConfig);
+        return this.instances[nCount];
     };
     
-    var acTemplate = {
+    var acApiTemplate = {
+        name: "AutoComplete API Test Case",
+        
         testConstruction: function() {
             var ac = this.createInstance();
             Assert.isObject(ac, "Failed to create basic instance");
             Assert.isInstanceOf(AutoComplete, ac, "Failed to create basic instance");
-            ac = null;
         },
 
         testDestroy: function() {
@@ -133,27 +145,22 @@
             ac = null;
         }
     };
-    var acTest = new AutoCompleteTestCase(acTemplate);
-    acTest.name = "AutoComplete Test Case";
-
-    function runTests(){
-
-        TestRunner.run();
-    }
+    var acApiTest = new AutoCompleteTestCase(acApiTemplate);
 
     YAHOO.util.Event.addListener(window, "load", function() {
         var logger = new TestLogger();
+        
         var acsuite = new TestSuite("AutoComplete Test Suite");
-        acsuite.add(acTest);
+        acsuite.add(acApiTest);
+
         TestRunner.add(acsuite);
 
-        YAHOO.util.Event.addListener("btnRun", "click", runTests);    
+        YAHOO.util.Event.addListener("btnRun", "click", function(){TestRunner.run();});
         YAHOO.util.Dom.get("btnRun").disabled = false;
 
         if (parent && parent != window) {
             YAHOO.tool.TestManager.load();
         }
-
     });
 })();
 

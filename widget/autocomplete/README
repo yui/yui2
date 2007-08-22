@@ -2,7 +2,14 @@ AutoComplete Release Notes
 
 *** version 2.3.0 ***
 
-* Applied new skinning model.
+* Applied new skinning model. Please note that in order to enable skinning,
+AutoComplete now expects a wrapper DIV element around the INPUT element and the
+container DIV element, in this fashion:
+
+<div id="myAutoComplete">
+    <input type="text" id="myInput">
+    <div id="myContainer"></div>
+</div>
 
 * The default queryDelay value has been changed to 0.2. In low-latency
 implementations (e.g., when queryDelay is set to 0 against a local
