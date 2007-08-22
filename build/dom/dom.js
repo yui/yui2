@@ -149,7 +149,7 @@
                 return document.getElementById(el);
             }
             
-            if (el.length) { // array-like 
+            if (el.length !== undefined) { // array-like 
                 var c = [];
                 for (var i = 0, len = el.length; i < len; ++i) {
                     c[c.length] = Y.Dom.get(el[i]);
