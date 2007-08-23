@@ -44,20 +44,18 @@ YAHOO.tool.Profiler = {
         //get the function data
         var functionData /*:Object*/ = this._report[name];
     
-        if (duration < functionData.min){
-           functionData.min = duration;        
-        }
-
-        if (duration > functionData.max){
-           functionData.max = duration;        
-        }
-        
+        //increment the calls
         functionData.calls++;
 
+        //if it's already been called at least once, do more complex calculations
         if (functionData.calls > 1) {
-            functionData.avg = ((functionData.avg*(functionData.calls-1))+duration)/functionData.calls;                                                                                        
+            functionData.avg = ((functionData.avg*(functionData.calls-1))+duration)/functionData.calls;
+            functionData.min = Math.min(functionData.min, duration);
+            functionData.max = Math.max(functionData.max, duration);
         } else {
             functionData.avg = duration;
+            functionData.min = duration;
+            functionData.max = duration;
         }                             
     
     },
@@ -121,8 +119,21 @@ YAHOO.tool.Profiler = {
      * @return {Object} An object containing all profile data.
      * @static
      */
-    getReport : function () /*:Object*/ {
-        return this._report;
+    getReport : function (filter /*:Function*/) /*:Object*/ {
+    
+        if (YAHOO.lang.isFunction(filter)) {
+            var report = {};
+            
+            for (var name in this._report){
+                if (filter(this._report[name])){
+                    report[name] = this._report[name];    
+                }
+            }
+            
+            return report;
+        } else {
+            return this._report;
+        }
     },
 
     //-------------------------------------------------------------------------
@@ -152,14 +163,14 @@ YAHOO.tool.Profiler = {
             
             //replace the function with the profiling one
             object[methodName] = function () {
-                
-                var start = new Date();                
-                var retval = this["__yui_unprofiled_" + methodName].apply(this, arguments);
+
+                var start = new Date();     
+                var retval = method.apply(this, arguments);
                 var stop = new Date();
                 
                 YAHOO.tool.Profiler._saveData(funcName, start, stop);
                 
-                return retval;
+                return retval;                
             
             };
 
@@ -170,7 +181,7 @@ YAHOO.tool.Profiler = {
             this._report[funcName] = {
                 calls: 0,
                 max: 0,
-                min: Infinity,
+                min: 0,
                 avg: 0
             };
         }
@@ -191,7 +202,7 @@ YAHOO.tool.Profiler = {
     registerObject : function (name /*:String*/, object /*:Object*/, recurse /*:Boolean*/) /*:Void*/{
     
         for (var prop in object) {
-            if (typeof object[prop] == "function"){
+            if (typeof object[prop] == "function" && prop.indexOf("__yui_unprofiled_") == -1){
                 this.registerMethod(name, object, prop);
             } else if (typeof object[prop] == "object" && recurse){
                 this.registerObject(name + "." + prop, object[prop], recurse);
@@ -304,4 +315,4 @@ YAHOO.tool.Profiler = {
         }    
     }        
 
-};
+}
