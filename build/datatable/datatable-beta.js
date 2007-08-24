@@ -3262,7 +3262,13 @@ YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
     // By Record
     if(row instanceof YAHOO.widget.Record) {
         var nTrIndex = this.getTrIndex(row);
-        return allRows[nTrIndex];
+            if(nTrIndex !== null) {
+                return allRows[nTrIndex];
+            }
+            // Not a valid Record
+            else {
+                return null;
+            }
     }
     // By page row index
     else if(YAHOO.lang.isNumber(row) && (row > -1) && (row < allRows.length)) {
@@ -3422,31 +3428,41 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
     // By Record
     if(row instanceof YAHOO.widget.Record) {
         nRecordIndex = this._oRecordSet.getRecordIndex(row);
+        if(nRecordIndex === null) {
+            // Not a valid Record
+            return null;
+        }
     }
     // Calculate page row index from Record index
     else if(YAHOO.lang.isNumber(row)) {
         nRecordIndex = row;
     }
     if(YAHOO.lang.isNumber(nRecordIndex)) {
-        // DataTable is paginated
-        if(this.get("paginated")) {
-            // Get the first and last Record on current page
-            var startRecordIndex = this.get("paginator").startRecordIndex;
-            var endRecordIndex = startRecordIndex + this.get("paginator").rowsPerPage - 1;
-            // This Record is on current page
-            if((nRecordIndex >= startRecordIndex) && (nRecordIndex <= endRecordIndex)) {
-                return nRecordIndex - startRecordIndex;
+        // Validate the number
+        if((nRecordIndex > -1) && (nRecordIndex < this._oRecordSet.getLength())) {
+            // DataTable is paginated
+            if(this.get("paginated")) {
+                // Get the first and last Record on current page
+                var startRecordIndex = this.get("paginator").startRecordIndex;
+                var endRecordIndex = startRecordIndex + this.get("paginator").rowsPerPage - 1;
+                // This Record is on current page
+                if((nRecordIndex >= startRecordIndex) && (nRecordIndex <= endRecordIndex)) {
+                    return nRecordIndex - startRecordIndex;
+                }
+                // This Record is not on current page
+                else {
+                    return null;
+                }
             }
-            // This Record is not on current page
+            // Not paginated, just return the Record index
             else {
-                return null;
+                return nRecordIndex;
             }
         }
-        // Not paginated, just return the Record index
+        // RecordSet index is out of range
         else {
-            return nRecordIndex;
+            return null;
         }
-
     }
     // By element reference or ID string
     else {
@@ -3857,28 +3873,11 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
     }
     
     if(oRecord instanceof YAHOO.widget.Record) {
-        return oRecord;
+        return this._oRecordSet.getRecord(oRecord);
     }
     else {
         return null;
     }
-
-    /*var nRecordID = row;
-    
-    // By element reference or ID string
-    if(!YAHOO.lang.isNumber(nRecordID)) {
-        // Validate TR element
-        var elRow = this.getTrEl(row);
-        if(elRow) {
-            nRecordID = elRow.yuiRecordId;
-        }
-    }
-    // By Record index
-    if(YAHOO.lang.isNumber(nRecordID)) {
-        return this._oRecordSet.getRecord(nRecordID);
-    }
-    
-    return null;*/
 };
 
 
@@ -4268,11 +4267,13 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
                 oData[param] = oRecordData[param];
             }
 
+            // Grab the TR index before deleting the Record
+            var nTrIndex = this.getTrIndex(nRecordIndex);
+
             // Delete Record from RecordSet
             this._oRecordSet.deleteRecord(nRecordIndex);
 
             // If row is on current page, delete the TR element
-            var nTrIndex = this.getTrIndex(nRecordIndex);
             if(YAHOO.lang.isNumber(nTrIndex)) {
                 var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex) ?
                         true : false;
@@ -5180,7 +5181,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
     var oRecord, elRow;
     
     if(row instanceof YAHOO.widget.Record) {
-        oRecord = row;
+        oRecord = this._oRecordSet.getRecord(row);
         elRow = this.getTrEl(oRecord);
     }
     else if(YAHOO.lang.isNumber(row)) {
@@ -5250,7 +5251,7 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
 
     var oRecord;
     if(row instanceof YAHOO.widget.Record) {
-        oRecord = row;
+        oRecord = this._oRecordSet.getRecord(row);
     }
     else if(YAHOO.lang.isNumber(row)) {
         oRecord = this.getRecord(row);
@@ -8801,15 +8802,6 @@ YAHOO.widget.RecordSet._nCount = 0;
 YAHOO.widget.RecordSet.prototype._sName = null;
 
 /**
- * Internal variable to give unique indexes to Record instances.
- *
- * @property _nRecordCount
- * @type Number
- * @private
- */
-YAHOO.widget.RecordSet.prototype._nRecordCount = 0;
-
-/**
  * Internal counter of how many Records are in the RecordSet.
  *
  * @property _length
@@ -8836,8 +8828,6 @@ YAHOO.widget.RecordSet.prototype._length = null;
  */
 YAHOO.widget.RecordSet.prototype._addRecord = function(oData, index) {
     var oRecord = new YAHOO.widget.Record(oData);
-    oRecord._sId = this._nRecordCount + "";
-    this._nRecordCount++;
     
     if(YAHOO.lang.isNumber(index) && (index > -1)) {
         this._records.splice(index,0,oRecord);
@@ -8902,24 +8892,32 @@ YAHOO.widget.RecordSet.prototype.getLength = function() {
  * @return {YAHOO.widget.Record} Record object.
  */
 YAHOO.widget.RecordSet.prototype.getRecord = function(record) {
+    var i;
     if(record instanceof YAHOO.widget.Record) {
-        return record;
+        for(i=0; i<this._records.length; i++) {
+            if(this._records[i]._sId === record._sId) {
+                return record;
+            }
+        }
     }
     else if(YAHOO.lang.isNumber(record)) {
-        return this._records[record];
+        if((record > -1) && (record < this.getLength())) {
+            return this._records[record];
+        }
     }
     else if(YAHOO.lang.isString(record)) {
-        for(var i=0; i<this._records.length; i++) {
+        for(i=0; i<this._records.length; i++) {
             if(this._records[i]._sId === record) {
                 return this._records[i];
             }
         }
     }
+    // Not a valid Record for this RecordSet
     return null;
 
 };
 
-/*
+/**
  * Returns an array of Records from the RecordSet.
  *
  * @method getRecords
@@ -9021,13 +9019,7 @@ YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
  * @return {YAHOO.widget.Record} Updated Record, or null.
  */
 YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
-    var oRecord = null;
-    if(record instanceof YAHOO.widget.Record) {
-        oRecord = record;
-    }
-    else {
-        oRecord = this.getRecord(record);
-    }
+    var oRecord = this.getRecord(record);
     if(oRecord && oData && (oData.constructor == Object)) {
         // Copy data from the Record for the event that gets fired later
         var oldData = {};
@@ -9191,6 +9183,8 @@ YAHOO.widget.RecordSet.prototype.reset = function() {
  * @param oConfigs {Object} (optional) Object literal of key/value pairs.
  */
 YAHOO.widget.Record = function(oLiteral) {
+    this._sId = YAHOO.widget.Record._nCount + "";
+    YAHOO.widget.Record._nCount++;
     this._oData = {};
     if(oLiteral && (oLiteral.constructor == Object)) {
         for(var sKey in oLiteral) {
@@ -9204,6 +9198,16 @@ YAHOO.widget.Record = function(oLiteral) {
 // Private member variables
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal class variable to give unique IDs to Record instances.
+ *
+ * @property Record._nCount
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Record._nCount = 0;
+
 /**
  * Immutable unique ID assigned at instantiation. Remains constant while a
  * Record's position index can change from sorting.
