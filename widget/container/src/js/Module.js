@@ -38,13 +38,12 @@
         }
     };
 
-
     var Dom = YAHOO.util.Dom,
         Config = YAHOO.util.Config,
         Event = YAHOO.util.Event,
         CustomEvent = YAHOO.util.CustomEvent,
         Module = YAHOO.widget.Module,
-        
+
         m_oModuleTemplate,
         m_oHeaderTemplate,
         m_oBodyTemplate,
@@ -96,14 +95,17 @@
                 suppressEvent: true, 
                 supercedes: ["visible"] 
             },
-        
+
             "MONITOR_RESIZE": { 
                 key: "monitorresize", 
                 value: true  
-            }
-        
-        };
+            },
 
+            "APPEND_TO_DOCUMENT_BODY": { 
+                key: "appendtodocumentbody", 
+                value: false
+            }
+        };
     
     /**
     * Constant representing the prefix path to use for non-secure images
@@ -217,7 +219,7 @@
     }
 
     Module.prototype = {
-    
+
         /**
         * The class's constructor function
         * @property contructor
@@ -287,7 +289,7 @@
             */
             this.beforeInitEvent = this.createEvent(EVENT_TYPES.BEFORE_INIT);
             this.beforeInitEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after class initalization.
             * @event initEvent
@@ -296,14 +298,14 @@
             */  
             this.initEvent = this.createEvent(EVENT_TYPES.INIT);
             this.initEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired when the Module is appended to the DOM
             * @event appendEvent
             */
             this.appendEvent = this.createEvent(EVENT_TYPES.APPEND);
             this.appendEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired before the Module is rendered
             * @event beforeRenderEvent
@@ -489,6 +491,24 @@
                 handler: this.configMonitorResize,
                 value: DEFAULT_CONFIG.MONITOR_RESIZE.value
             });
+
+            /**
+            * Specifies if the module should be rendered as the first child 
+            * of document.body or appended as the last child when render is called
+            * with document.body as the "appendToNode".
+            * <p>
+            * Appending to the body while the DOM is still being constructed can 
+            * lead to Operation Aborted errors in IE hence this flag is set to 
+            * false by default.
+            * </p>
+            * 
+            * @config appendtodocumentbody
+            * @type Boolean
+            * @default false
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.APPEND_TO_DOCUMENT_BODY.key, {
+                value: DEFAULT_CONFIG.APPEND_TO_DOCUMENT_BODY.value
+            });
         },
 
         /**
@@ -543,15 +563,18 @@
             if (child) {
                 var fndHd = false, fndBd = false, fndFt = false;
                 do {
-                    if (!fndHd && Dom.hasClass(child, Module.CSS_HEADER)) {
-                        this.header = child;
-                        fndHd = true;
-                    } else if (!fndBd && Dom.hasClass(child, Module.CSS_BODY)) {
-                        this.body = child;
-                        fndBd = true;
-                    } else if (!fndFt && Dom.hasClass(child, Module.CSS_FOOTER)){
-                        this.footer = child;
-                        fndFt = true;
+                    // We're looking for elements
+                    if (1 == child.nodeType) {
+                        if (!fndHd && Dom.hasClass(child, Module.CSS_HEADER)) {
+                            this.header = child;
+                            fndHd = true;
+                        } else if (!fndBd && Dom.hasClass(child, Module.CSS_BODY)) {
+                            this.body = child;
+                            fndBd = true;
+                        } else if (!fndFt && Dom.hasClass(child, Module.CSS_FOOTER)){
+                            this.footer = child;
+                            fndFt = true;
+                        }
                     }
                 } while ((child = child.nextSibling));
             }
@@ -829,10 +852,20 @@
         * Renders the Module by inserting the elements that are not already 
         * in the main Module into their correct places. Optionally appends 
         * the Module to the specified node prior to the render's execution. 
-        * NOTE: For Modules without existing markup, the appendToNode argument 
+        * <p>
+        * For Modules without existing markup, the appendToNode argument 
         * is REQUIRED. If this argument is ommitted and the current element is 
         * not present in the document, the function will return false, 
         * indicating that the render was a failure.
+        * </p>
+        * <p>
+        * NOTE: As of 2.3.1, if the appendToNode is the document's body element
+        * then the module is rendered as the first child of the body element, 
+        * and not appended to it, to avoid Operation Aborted errors in IE when 
+        * rendering the module before window's load event is fired. You can 
+        * use the appendtodocumentbody configuration property to change this 
+        * to append to document.body if required.
+        * </p>
         * @method render
         * @param {String} appendToNode The element id to which the Module 
         * should be appended to prior to rendering <em>OR</em>
@@ -843,27 +876,27 @@
         * @return {Boolean} Success or failure of the render
         */
         render: function (appendToNode, moduleElement) {
-        
+
             var me = this,
                 firstChild;
-        
-            function appendTo(element) {
-                if (typeof element == "string") {
-                    element = document.getElementById(element);
+
+            function appendTo(parentNode) {
+                if (typeof parentNode == "string") {
+                    parentNode = document.getElementById(parentNode);
                 }
-        
-                if (element) {
-                    element.appendChild(me.element);
+
+                if (parentNode) {
+                    me._addToParent(parentNode, me.element);
                     me.appendEvent.fire();
                 }
             }
-        
+
             this.beforeRenderEvent.fire();
-        
+
             if (! moduleElement) {
                 moduleElement = this.element;
             }
-        
+
             if (appendToNode) {
                 appendTo(appendToNode);
             } else { 
@@ -963,7 +996,6 @@
         },
         
         // BUILT-IN EVENT HANDLERS FOR MODULE //
-        
         /**
         * Default event handler for changing the visibility property of a 
         * Module. By default, this is achieved by switching the "display" style 
@@ -1007,7 +1039,32 @@
                 this.resizeMonitor = null;
             }
         },
-        
+
+        /**
+         * This method is a private helper, used when constructing the DOM structure for the module 
+         * to account for situations which may cause Operation Aborted errors in IE. It should not 
+         * be used for general DOM construction.
+         * <p>
+         * If the parentNode is not document.body, the element is appended as the last element.
+         * </p>
+         * <p>
+         * If the parentNode is document.body the element is added as the first child to help
+         * prevent Operation Aborted errors in IE.
+         * </p>
+         *
+         * @param {parentNode} The HTML element to which the element will be added
+         * @param {element} The HTML element to be added to parentNode's children
+         * @method _addToParent
+         * @protected
+         */
+        _addToParent: function(parentNode, element) {
+            if (!this.cfg.getProperty("appendtodocumentbody") && parentNode === document.body && parentNode.firstChild) {
+                parentNode.insertBefore(element, parentNode.firstChild);
+            } else {
+                parentNode.appendChild(element);
+            }
+        },
+
         /**
         * Returns a String representation of the Object.
         * @method toString
@@ -1016,9 +1073,8 @@
         toString: function () {
             return "Module " + this.id;
         }
-        
     };
-    
+
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());

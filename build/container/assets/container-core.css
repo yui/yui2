@@ -3,7 +3,7 @@
 
     visibility: hidden;
 	position: absolute;
-	z-index: 1;
+	z-index: 2;
 
 }
 
@@ -20,7 +20,7 @@ yui-panel-container form {
         to make sure the panel is above its modality mask.
     */
 
-   z-index: 2;
+   z-index: 3;
 
 }
 
@@ -31,7 +31,7 @@ yui-panel-container form {
         by ".masked .yui-panel-container"
     */
 
-    z-index: 1; 
+    z-index: 2; 
     display: none;
     position: absolute;
     top: 0;

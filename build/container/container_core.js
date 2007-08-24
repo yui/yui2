@@ -747,13 +747,12 @@
         }
     };
 
-
     var Dom = YAHOO.util.Dom,
         Config = YAHOO.util.Config,
         Event = YAHOO.util.Event,
         CustomEvent = YAHOO.util.CustomEvent,
         Module = YAHOO.widget.Module,
-        
+
         m_oModuleTemplate,
         m_oHeaderTemplate,
         m_oBodyTemplate,
@@ -805,14 +804,17 @@
                 suppressEvent: true, 
                 supercedes: ["visible"] 
             },
-        
+
             "MONITOR_RESIZE": { 
                 key: "monitorresize", 
                 value: true  
-            }
-        
-        };
+            },
 
+            "APPEND_TO_DOCUMENT_BODY": { 
+                key: "appendtodocumentbody", 
+                value: false
+            }
+        };
     
     /**
     * Constant representing the prefix path to use for non-secure images
@@ -926,7 +928,7 @@
     }
 
     Module.prototype = {
-    
+
         /**
         * The class's constructor function
         * @property contructor
@@ -996,7 +998,7 @@
             */
             this.beforeInitEvent = this.createEvent(EVENT_TYPES.BEFORE_INIT);
             this.beforeInitEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired after class initalization.
             * @event initEvent
@@ -1005,14 +1007,14 @@
             */  
             this.initEvent = this.createEvent(EVENT_TYPES.INIT);
             this.initEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired when the Module is appended to the DOM
             * @event appendEvent
             */
             this.appendEvent = this.createEvent(EVENT_TYPES.APPEND);
             this.appendEvent.signature = SIGNATURE;
-        
+
             /**
             * CustomEvent fired before the Module is rendered
             * @event beforeRenderEvent
@@ -1198,6 +1200,24 @@
                 handler: this.configMonitorResize,
                 value: DEFAULT_CONFIG.MONITOR_RESIZE.value
             });
+
+            /**
+            * Specifies if the module should be rendered as the first child 
+            * of document.body or appended as the last child when render is called
+            * with document.body as the "appendToNode".
+            * <p>
+            * Appending to the body while the DOM is still being constructed can 
+            * lead to Operation Aborted errors in IE hence this flag is set to 
+            * false by default.
+            * </p>
+            * 
+            * @config appendtodocumentbody
+            * @type Boolean
+            * @default false
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.APPEND_TO_DOCUMENT_BODY.key, {
+                value: DEFAULT_CONFIG.APPEND_TO_DOCUMENT_BODY.value
+            });
         },
 
         /**
@@ -1252,15 +1272,18 @@
             if (child) {
                 var fndHd = false, fndBd = false, fndFt = false;
                 do {
-                    if (!fndHd && Dom.hasClass(child, Module.CSS_HEADER)) {
-                        this.header = child;
-                        fndHd = true;
-                    } else if (!fndBd && Dom.hasClass(child, Module.CSS_BODY)) {
-                        this.body = child;
-                        fndBd = true;
-                    } else if (!fndFt && Dom.hasClass(child, Module.CSS_FOOTER)){
-                        this.footer = child;
-                        fndFt = true;
+                    // We're looking for elements
+                    if (1 == child.nodeType) {
+                        if (!fndHd && Dom.hasClass(child, Module.CSS_HEADER)) {
+                            this.header = child;
+                            fndHd = true;
+                        } else if (!fndBd && Dom.hasClass(child, Module.CSS_BODY)) {
+                            this.body = child;
+                            fndBd = true;
+                        } else if (!fndFt && Dom.hasClass(child, Module.CSS_FOOTER)){
+                            this.footer = child;
+                            fndFt = true;
+                        }
                     }
                 } while ((child = child.nextSibling));
             }
@@ -1538,10 +1561,20 @@
         * Renders the Module by inserting the elements that are not already 
         * in the main Module into their correct places. Optionally appends 
         * the Module to the specified node prior to the render's execution. 
-        * NOTE: For Modules without existing markup, the appendToNode argument 
+        * <p>
+        * For Modules without existing markup, the appendToNode argument 
         * is REQUIRED. If this argument is ommitted and the current element is 
         * not present in the document, the function will return false, 
         * indicating that the render was a failure.
+        * </p>
+        * <p>
+        * NOTE: As of 2.3.1, if the appendToNode is the document's body element
+        * then the module is rendered as the first child of the body element, 
+        * and not appended to it, to avoid Operation Aborted errors in IE when 
+        * rendering the module before window's load event is fired. You can 
+        * use the appendtodocumentbody configuration property to change this 
+        * to append to document.body if required.
+        * </p>
         * @method render
         * @param {String} appendToNode The element id to which the Module 
         * should be appended to prior to rendering <em>OR</em>
@@ -1552,27 +1585,27 @@
         * @return {Boolean} Success or failure of the render
         */
         render: function (appendToNode, moduleElement) {
-        
+
             var me = this,
                 firstChild;
-        
-            function appendTo(element) {
-                if (typeof element == "string") {
-                    element = document.getElementById(element);
+
+            function appendTo(parentNode) {
+                if (typeof parentNode == "string") {
+                    parentNode = document.getElementById(parentNode);
                 }
-        
-                if (element) {
-                    element.appendChild(me.element);
+
+                if (parentNode) {
+                    me._addToParent(parentNode, me.element);
                     me.appendEvent.fire();
                 }
             }
-        
+
             this.beforeRenderEvent.fire();
-        
+
             if (! moduleElement) {
                 moduleElement = this.element;
             }
-        
+
             if (appendToNode) {
                 appendTo(appendToNode);
             } else { 
@@ -1671,7 +1704,6 @@
         },
         
         // BUILT-IN EVENT HANDLERS FOR MODULE //
-        
         /**
         * Default event handler for changing the visibility property of a 
         * Module. By default, this is achieved by switching the "display" style 
@@ -1715,7 +1747,32 @@
                 this.resizeMonitor = null;
             }
         },
-        
+
+        /**
+         * This method is a private helper, used when constructing the DOM structure for the module 
+         * to account for situations which may cause Operation Aborted errors in IE. It should not 
+         * be used for general DOM construction.
+         * <p>
+         * If the parentNode is not document.body, the element is appended as the last element.
+         * </p>
+         * <p>
+         * If the parentNode is document.body the element is added as the first child to help
+         * prevent Operation Aborted errors in IE.
+         * </p>
+         *
+         * @param {parentNode} The HTML element to which the element will be added
+         * @param {element} The HTML element to be added to parentNode's children
+         * @method _addToParent
+         * @protected
+         */
+        _addToParent: function(parentNode, element) {
+            if (!this.cfg.getProperty("appendtodocumentbody") && parentNode === document.body && parentNode.firstChild) {
+                parentNode.insertBefore(element, parentNode.firstChild);
+            } else {
+                parentNode.appendChild(element);
+            }
+        },
+
         /**
         * Returns a String representation of the Object.
         * @method toString
@@ -1724,9 +1781,8 @@
         toString: function () {
             return "Module " + this.id;
         }
-        
     };
-    
+
     YAHOO.lang.augmentProto(Module, YAHOO.util.EventProvider);
 
 }());
@@ -1850,7 +1906,6 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["zindex"] 
             }
-        
         };
 
 
@@ -1947,29 +2002,22 @@
     Overlay.windowScrollHandler = function (e) {
     
         if (YAHOO.env.ua.ie) {
-    
+
             if (! window.scrollEnd) {
-    
                 window.scrollEnd = -1;
-    
             }
     
             clearTimeout(window.scrollEnd);
     
             window.scrollEnd = setTimeout(function () { 
-            
                 Overlay.windowScrollEvent.fire(); 
-    
             }, 1);
     
         } else {
-    
             Overlay.windowScrollEvent.fire();
-    
         }
-    
     };
-    
+
     /**
     * The DOM event handler used to fire the CustomEvent for window resize
     * @method YAHOO.widget.Overlay.windowResizeHandler
@@ -1977,27 +2025,20 @@
     * @param {DOMEvent} e The DOM resize event
     */
     Overlay.windowResizeHandler = function (e) {
-    
+
         if (YAHOO.env.ua.ie) {
-    
             if (! window.resizeEnd) {
                 window.resizeEnd = -1;
             }
-    
+
             clearTimeout(window.resizeEnd);
-    
+
             window.resizeEnd = setTimeout(function () {
-    
                 Overlay.windowResizeEvent.fire(); 
-    
             }, 100);
-    
         } else {
-    
             Overlay.windowResizeEvent.fire();
-    
         }
-    
     };
     
     /**
@@ -2010,14 +2051,12 @@
     Overlay._initialized = null;
     
     if (Overlay._initialized === null) {
-    
         Event.on(window, "scroll", Overlay.windowScrollHandler);
         Event.on(window, "resize", Overlay.windowResizeHandler);
     
         Overlay._initialized = true;
-    
     }
-    
+
     YAHOO.extend(Overlay, Module, {
     
         /**
@@ -2046,33 +2085,29 @@
             Dom.addClass(this.element, Overlay.CSS_OVERLAY);
             
             if (userConfig) {
-    
                 this.cfg.applyConfig(userConfig, true);
-    
             }
-            
+
             if (this.platform == "mac" && YAHOO.env.ua.gecko) {
-    
+
                 if (! Config.alreadySubscribed(this.showEvent,
                     this.showMacGeckoScrollbars, this)) {
-    
+
                     this.showEvent.subscribe(this.showMacGeckoScrollbars, 
                         this, true);
-    
+
                 }
-    
+
                 if (! Config.alreadySubscribed(this.hideEvent, 
                     this.hideMacGeckoScrollbars, this)) {
-    
+
                     this.hideEvent.subscribe(this.hideMacGeckoScrollbars, 
                         this, true);
-    
+
                 }
-    
             }
-            
+
             this.initEvent.fire(Overlay);
-        
         },
         
         /**
@@ -2132,7 +2167,6 @@
                 supercedes: DEFAULT_CONFIG.X.supercedes
     
             });
-        
     
             /**
             * The absolute y-coordinate position of the Overlay
@@ -2148,7 +2182,6 @@
                 supercedes: DEFAULT_CONFIG.Y.supercedes
     
             });
-        
     
             /**
             * An array with the absolute x and y positions of the Overlay
@@ -2163,7 +2196,6 @@
                 supercedes: DEFAULT_CONFIG.XY.supercedes
             
             });
-        
     
             /**
             * The array of context arguments for context-sensitive positioning.  
@@ -2182,7 +2214,6 @@
                 supercedes: DEFAULT_CONFIG.CONTEXT.supercedes
             
             });
-        
     
             /**
             * True if the Overlay should be anchored to the center of 
@@ -2199,7 +2230,6 @@
                 supercedes: DEFAULT_CONFIG.FIXED_CENTER.supercedes
             
             });
-        
     
             /**
             * CSS width of the Overlay.
@@ -2274,11 +2304,10 @@
                 value: DEFAULT_CONFIG.IFRAME.value, 
                 validator: DEFAULT_CONFIG.IFRAME.validator, 
                 supercedes: DEFAULT_CONFIG.IFRAME.supercedes
-            
+
             });
-        
         },
-        
+
         /**
         * Moves the Overlay to the specified position. This function is  
         * identical to calling this.cfg.setProperty("xy", [x,y]);
@@ -2291,7 +2320,7 @@
             this.cfg.setProperty("xy", [x, y]);
     
         },
-        
+
         /**
         * Adds a CSS class ("hide-scrollbars") and removes a CSS class 
         * ("show-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X 
@@ -2304,7 +2333,7 @@
             Dom.addClass(this.element, "hide-scrollbars");
     
         },
-        
+
         /**
         * Adds a CSS class ("show-scrollbars") and removes a CSS class 
         * ("hide-scrollbars") to the Overlay to fix a bug in Gecko on Mac OS X 
@@ -2317,9 +2346,8 @@
             Dom.addClass(this.element, "show-scrollbars");
     
         },
-        
+
         // BEGIN BUILT-IN PROPERTY EVENT HANDLERS //
-        
         /**
         * The default event handler fired when the "visible" property is 
         * changed.  This method is responsible for firing showEvent
@@ -2332,7 +2360,7 @@
         * this will usually equal the owner.
         */
         configVisible: function (type, args, obj) {
-    
+
             var visible = args[0],
                 currentVis = Dom.getStyle(this.element, "visibility"),
                 effect = this.cfg.getProperty("effect"),
@@ -2343,84 +2371,54 @@
                 nEffects,
                 nEffectInstances;
     
-    
             if (currentVis == "inherit") {
-    
                 e = this.element.parentNode;
     
                 while (e.nodeType != 9 && e.nodeType != 11) {
-    
                     currentVis = Dom.getStyle(e, "visibility");
     
                     if (currentVis != "inherit") { 
-    
                         break; 
-    
                     }
     
                     e = e.parentNode;
-    
                 }
     
                 if (currentVis == "inherit") {
-    
                     currentVis = "visible";
-                
                 }
-    
             }
-        
     
             if (effect) {
-    
                 if (effect instanceof Array) {
-
                     nEffects = effect.length;
     
                     for (i = 0; i < nEffects; i++) {
-    
                         eff = effect[i];
-    
                         effectInstances[effectInstances.length] = 
                             eff.effect(this, eff.duration);
     
                     }
-    
                 } else {
-    
                     effectInstances[effectInstances.length] = 
                         effect.effect(this, effect.duration);
-    
                 }
-    
             }
     
         
             if (visible) { // Show
-    
                 if (isMacGecko) {
-    
                     this.showMacGeckoScrollbars();
-    
                 }
-                
     
                 if (effect) { // Animate in
-    
-    
                     if (visible) { // Animate in if not showing
-    
-    
                         if (currentVis != "visible" || currentVis === "") {
-    
                             this.beforeShowEvent.fire();
-
                             nEffectInstances = effectInstances.length;
     
                             for (j = 0; j < nEffectInstances; j++) {
-    
                                 ei = effectInstances[j];
-    
                                 if (j === 0 && !alreadySubscribed(
                                         ei.animateInCompleteEvent, 
                                         this.showEvent.fire, this.showEvent)) {
@@ -2432,50 +2430,33 @@
     
                                     ei.animateInCompleteEvent.subscribe(
                                      this.showEvent.fire, this.showEvent, true);
-    
                                 }
-    
                                 ei.animateIn();
-    
                             }
-    
                         }
-    
                     }
-    
                 } else { // Show
-    
                     if (currentVis != "visible" || currentVis === "") {
-    
                         this.beforeShowEvent.fire();
     
                         Dom.setStyle(this.element, "visibility", "visible");
     
                         this.cfg.refireEvent("iframe");
                         this.showEvent.fire();
-    
                     }
-        
                 }
-        
             } else { // Hide
     
                 if (isMacGecko) {
-    
                     this.hideMacGeckoScrollbars();
-    
                 }
                     
                 if (effect) { // Animate out if showing
-    
                     if (currentVis == "visible") {
-    
                         this.beforeHideEvent.fire();
 
                         nEffectInstances = effectInstances.length;
-    
                         for (k = 0; k < nEffectInstances; k++) {
-    
                             h = effectInstances[k];
     
                             if (k === 0 && !alreadySubscribed(
@@ -2491,50 +2472,35 @@
                                     this.hideEvent.fire, this.hideEvent, true);
     
                             }
-    
                             h.animateOut();
-    
                         }
     
                     } else if (currentVis === "") {
-    
                         Dom.setStyle(this.element, "visibility", "hidden");
-    
                     }
     
                 } else { // Simple hide
     
                     if (currentVis == "visible" || currentVis === "") {
-    
                         this.beforeHideEvent.fire();
-    
                         Dom.setStyle(this.element, "visibility", "hidden");
-
                         this.hideEvent.fire();
-    
                     }
-    
                 }
-    
             }
-    
         },
-        
+
         /**
         * Center event handler used for centering on scroll/resize, but only if 
         * the Overlay is visible
         * @method doCenterOnDOMEvent
         */
         doCenterOnDOMEvent: function () {
-    
             if (this.cfg.getProperty("visible")) {
-    
                 this.center();
-    
             }
-    
         },
-        
+
         /**
         * The default event handler fired when the "fixedcenter" property 
         * is changed.
@@ -2553,41 +2519,26 @@
                 windowScrollEvent = Overlay.windowScrollEvent;
             
             if (val) {
-    
                 this.center();
-            
-                if (!alreadySubscribed(this.beforeShowEvent, 
-                    this.center, this)) {
-    
+
+                if (!alreadySubscribed(this.beforeShowEvent, this.center, this)) {
                     this.beforeShowEvent.subscribe(this.center);
-    
                 }
             
-                if (!alreadySubscribed(windowResizeEvent, 
-                    this.doCenterOnDOMEvent, this)) {
-    
-                    windowResizeEvent.subscribe(this.doCenterOnDOMEvent, 
-                        this, true);
-    
+                if (!alreadySubscribed(windowResizeEvent, this.doCenterOnDOMEvent, this)) {
+                    windowResizeEvent.subscribe(this.doCenterOnDOMEvent, this, true);
                 }
             
-                if (!alreadySubscribed(windowScrollEvent, 
-                    this.doCenterOnDOMEvent, this)) {
-        
-                    windowScrollEvent.subscribe(this.doCenterOnDOMEvent, 
-                        this, true);
-    
+                if (!alreadySubscribed(windowScrollEvent, this.doCenterOnDOMEvent, this)) {
+                    windowScrollEvent.subscribe(this.doCenterOnDOMEvent, this, true);
                 }
     
             } else {
-    
                 this.beforeShowEvent.unsubscribe(this.center);
     
                 windowResizeEvent.unsubscribe(this.doCenterOnDOMEvent, this);
                 windowScrollEvent.unsubscribe(this.doCenterOnDOMEvent, this);
-    
             }
-    
         },
         
         /**
@@ -2606,7 +2557,6 @@
     
             Dom.setStyle(el, "height", height);
             this.cfg.refireEvent("iframe");
-    
         },
         
         /**
@@ -2625,7 +2575,6 @@
     
             Dom.setStyle(el, "width", width);
             this.cfg.refireEvent("iframe");
-    
         },
         
         /**
@@ -2638,38 +2587,28 @@
         * this will usually equal the owner.
         */
         configzIndex: function (type, args, obj) {
-    
+
             var zIndex = args[0],
                 el = this.element;
-        
+
             if (! zIndex) {
-    
                 zIndex = Dom.getStyle(el, "zIndex");
-        
                 if (! zIndex || isNaN(zIndex)) {
-    
                     zIndex = 0;
-    
                 }
-    
             }
-            
+
             if (this.iframe) {
-    
                 if (zIndex <= 0) {
-    
                     zIndex = 1;
-    
                 }
-    
                 Dom.setStyle(this.iframe, "zIndex", (zIndex - 1));
             }
-            
+
             Dom.setStyle(el, "zIndex", zIndex);
             this.cfg.setProperty("zIndex", zIndex, true);
-    
         },
-        
+
         /**
         * The default event handler fired when the "xy" property is changed.
         * @method configXY
@@ -2680,25 +2619,24 @@
         * this will usually equal the owner.
         */
         configXY: function (type, args, obj) {
-    
+
             var pos = args[0],
                 x = pos[0],
                 y = pos[1];
-            
+
             this.cfg.setProperty("x", x);
             this.cfg.setProperty("y", y);
-            
+
             this.beforeMoveEvent.fire([x, y]);
-            
+
             x = this.cfg.getProperty("x");
             y = this.cfg.getProperty("y");
-            
-            
+
+
             this.cfg.refireEvent("iframe");
             this.moveEvent.fire([x, y]);
-    
         },
-        
+
         /**
         * The default event handler fired when the "x" property is changed.
         * @method configX
@@ -2709,13 +2647,13 @@
         * this will usually equal the owner.
         */
         configX: function (type, args, obj) {
-    
+
             var x = args[0],
                 y = this.cfg.getProperty("y");
-            
+
             this.cfg.setProperty("x", x, true);
             this.cfg.setProperty("y", y, true);
-            
+
             this.beforeMoveEvent.fire([x, y]);
             
             x = this.cfg.getProperty("x");
@@ -2727,7 +2665,6 @@
            
             this.cfg.refireEvent("iframe");
             this.moveEvent.fire([x, y]);
-    
         },
         
         /**
@@ -2740,25 +2677,24 @@
         * this will usually equal the owner.
         */
         configY: function (type, args, obj) {
-    
+
             var x = this.cfg.getProperty("x"),
                 y = args[0];
-        
+
             this.cfg.setProperty("x", x, true);
             this.cfg.setProperty("y", y, true);
-            
+
             this.beforeMoveEvent.fire([x, y]);
-            
+
             x = this.cfg.getProperty("x");
             y = this.cfg.getProperty("y");
-            
+
             Dom.setY(this.element, y, true);
-            
+
             this.cfg.setProperty("xy", [x, y], true);
-            
+
             this.cfg.refireEvent("iframe");
             this.moveEvent.fire([x, y]);
-    
         },
         
         /**
@@ -2771,33 +2707,23 @@
                 oParentNode;
 
             if (oIFrame) {
-    
                 oParentNode = this.element.parentNode;
 
                 if (oParentNode != oIFrame.parentNode) {
-
-                    oParentNode.appendChild(oIFrame);
-                
+                    this._addToParent(oParentNode, oIFrame);
                 }
-
                 oIFrame.style.display = "block";
-    
             }
-    
         },
-        
+
         /**
         * Hides the iframe shim, if it has been enabled.
         * @method hideIframe
         */
         hideIframe: function () {
-    
             if (this.iframe) {
-    
                 this.iframe.style.display = "none";
-    
             }
-    
         },
 
         /**
@@ -2813,37 +2739,22 @@
                 nDimensionOffset = (nOffset * 2),
                 aXY;
 
-
             if (oIFrame) {
-
                 // Size <iframe>
-
-                oIFrame.style.width = 
-                    (oElement.offsetWidth + nDimensionOffset + "px");
-
-                oIFrame.style.height = 
-                    (oElement.offsetHeight + nDimensionOffset + "px");
-
+                oIFrame.style.width = (oElement.offsetWidth + nDimensionOffset + "px");
+                oIFrame.style.height = (oElement.offsetHeight + nDimensionOffset + "px");
 
                 // Position <iframe>
-
                 aXY = this.cfg.getProperty("xy");
 
                 if (!Lang.isArray(aXY) || (isNaN(aXY[0]) || isNaN(aXY[1]))) {
-
                     this.syncPosition();
-
                     aXY = this.cfg.getProperty("xy");
-
                 }
-
                 Dom.setXY(oIFrame, [(aXY[0] - nOffset), (aXY[1] - nOffset)]);
-
             }
-        
         },
 
-        
         /**
         * The default event handler fired when the "iframe" property is changed.
         * @method configIframe
@@ -2864,17 +2775,12 @@
                     oParent,
                     aXY;
 
-
                 if (!oIFrame) {
-
                     if (!m_oIFrameTemplate) {
-    
                         m_oIFrameTemplate = document.createElement("iframe");
 
                         if (this.isSecure) {
-        
                             m_oIFrameTemplate.src = Overlay.IFRAME_SRC;
-        
                         }
 
                         /*
@@ -2882,7 +2788,7 @@
                             doesn't modify the opacity of any transparent 
                             elements that may be on top of it (like a shadow).
                         */
-        
+
                         if (YAHOO.env.ua.ie) {
                             m_oIFrameTemplate.style.filter = "alpha(opacity=0)";
                             /*
@@ -2907,11 +2813,9 @@
                     oIFrame = m_oIFrameTemplate.cloneNode(false);
                     oParent = oElement.parentNode;
 
-                    if (oParent) {
-                        oParent.appendChild(oIFrame);
-                    } else {
-                        document.body.appendChild(oIFrame);
-                    }
+                    var parentNode = oParent || document.body;
+
+                    this._addToParent(parentNode, oIFrame);
                     this.iframe = oIFrame;
                 }
 
@@ -2920,79 +2824,52 @@
                      method of DOM requires the element be in the document 
                      and visible.
                 */
-
                 this.showIframe();
-
 
                 /*
                      Syncronize the size and position of the <iframe> to that 
                      of the Overlay.
                 */
-                
                 this.syncIframe();
 
-
                 // Add event listeners to update the <iframe> when necessary
-
                 if (!this._hasIframeEventListeners) {
-
                     this.showEvent.subscribe(this.showIframe);
                     this.hideEvent.subscribe(this.hideIframe);
                     this.changeContentEvent.subscribe(this.syncIframe);
 
                     this._hasIframeEventListeners = true;
-                    
                 }
-                
             }
-
 
             function onBeforeShow() {
-            
                 createIFrame.call(this);
-        
                 this.beforeShowEvent.unsubscribe(onBeforeShow);
-                
                 this._iframeDeferred = false;
-            
             }
-            
 
             if (bIFrame) { // <iframe> shim is enabled
-                
+
                 if (this.cfg.getProperty("visible")) {
-
                     createIFrame.call(this);
-                
-                }
-                else {
-
+                } else {
                     if (!this._iframeDeferred) {
-
                         this.beforeShowEvent.subscribe(onBeforeShow);
-
                         this._iframeDeferred = true;
-                    
                     }
-                
                 }
     
             } else {    // <iframe> shim is disabled
-    
                 this.hideIframe();
 
                 if (this._hasIframeEventListeners) {
-
                     this.showEvent.unsubscribe(this.showIframe);
                     this.hideEvent.unsubscribe(this.hideIframe);
                     this.changeContentEvent.unsubscribe(this.syncIframe);
 
                     this._hasIframeEventListeners = false;
-
                 }
-                
             }
-    
         },
         
         
@@ -3012,7 +2889,6 @@
             var val = args[0];
     
             if (val) {
-    
                 if (! Config.alreadySubscribed(this.beforeMoveEvent, 
                     this.enforceConstraints, this)) {
     
@@ -3020,11 +2896,8 @@
                         this, true);
     
                 }
-    
             } else {
-    
                 this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
-    
             }
     
         },
@@ -3102,32 +2975,22 @@
                 switch (elementAlign) {
     
                 case Overlay.TOP_LEFT:
-    
                     me.moveTo(h, v);
-    
                     break;
     
                 case Overlay.TOP_RIGHT:
-    
                     me.moveTo((h - element.offsetWidth), v);
-    
                     break;
     
                 case Overlay.BOTTOM_LEFT:
-    
                     me.moveTo(h, (v - element.offsetHeight));
-    
                     break;
     
                 case Overlay.BOTTOM_RIGHT:
-    
                     me.moveTo((h - element.offsetWidth), 
                         (v - element.offsetHeight));
-    
                     break;
-    
                 }
-    
             }
     
     
@@ -3410,13 +3273,10 @@
         * @return {String} The string representation of the Overlay.
         */
         toString: function () {
-    
             return "Overlay " + this.id;
-    
         }
-    
+
     });
-    
 }());
 
 (function () {

@@ -14,11 +14,8 @@
     * documentation for more details.
     */
     YAHOO.widget.Panel = function (el, userConfig) {
-    
         YAHOO.widget.Panel.superclass.constructor.call(this, el, userConfig);
-    
     };
-
 
     var Lang = YAHOO.lang,
         DD = YAHOO.util.DD,
@@ -47,7 +44,7 @@
             "DRAG": "drag"
         
         },
-        
+
         /**
         * Constant representing the Panel's configuration properties
         * @property DEFAULT_CONFIG
@@ -124,9 +121,7 @@
     function createHeader(p_sType, p_aArgs) {
 
         if (!this.header) {
-
             this.setHeader("&#160;");
-
         }
 
     }
@@ -528,21 +523,14 @@
             if (val) {
         
                 if (!DD) {
-            
                     YAHOO.log("DD dependency not met.", "error");
-        
                     this.cfg.setProperty("draggable", false);
-            
                     return;
-                
                 }
         
                 if (this.header) {
-
                     Dom.setStyle(this.header, "cursor", "move");
-
                     this.registerDragDrop();
-
                 }
 
                 this.subscribe("beforeRender", createHeader);
@@ -551,15 +539,11 @@
             } else {
 
                 if (this.dd) {
-
                     this.dd.unreg();
-
                 }
 
                 if (this.header) {
-
                     Dom.setStyle(this.header,"cursor","auto");
-
                 }
 
                 this.unsubscribe("beforeRender", createHeader);
