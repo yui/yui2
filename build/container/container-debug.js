@@ -1826,7 +1826,7 @@
         Dom = YAHOO.util.Dom,
         Config = YAHOO.util.Config,
         Overlay = YAHOO.widget.Overlay,
-        
+
         m_oIFrameTemplate,
 
         /**
@@ -1842,7 +1842,7 @@
             "MOVE": "move"
         
         },
-        
+
         /**
         * Constant representing the Overlay's configuration properties
         * @property DEFAULT_CONFIG
@@ -1871,44 +1871,44 @@
                 suppressEvent: true, 
                 supercedes: ["iframe"] 
             },
-        
+
             "CONTEXT": { 
                 key: "context", 
                 suppressEvent: true, 
                 supercedes: ["iframe"] 
             },
-        
+
             "FIXED_CENTER": { 
                 key: "fixedcenter", 
                 value: false, 
                 validator: Lang.isBoolean, 
                 supercedes: ["iframe", "visible"] 
             },
-        
+
             "WIDTH": { 
                 key: "width", 
                 suppressEvent: true, 
                 supercedes: ["context", "fixedcenter", "iframe"] 
             }, 
-        
+
             "HEIGHT": { 
                 key: "height", 
                 suppressEvent: true, 
                 supercedes: ["context", "fixedcenter", "iframe"] 
             }, 
-        
+
             "ZINDEX": { 
                 key: "zindex", 
                 value: null 
             }, 
-        
+
             "CONSTRAIN_TO_VIEWPORT": { 
                 key: "constraintoviewport", 
                 value: false, 
                 validator: Lang.isBoolean, 
                 supercedes: ["iframe", "x", "y", "xy"] 
             }, 
-        
+
             "IFRAME": { 
                 key: "iframe", 
                 value: (YAHOO.env.ua.ie == 6 ? true : false), 
@@ -1916,7 +1916,6 @@
                 supercedes: ["zindex"] 
             }
         };
-
 
     /**
     * The URL that will be placed in the iframe
@@ -2607,15 +2606,18 @@
                 }
             }
 
-            if (this.iframe) {
+            if (this.iframe || this.cfg.getProperty("iframe") === true) {
                 if (zIndex <= 0) {
                     zIndex = 1;
                 }
-                Dom.setStyle(this.iframe, "zIndex", (zIndex - 1));
             }
 
             Dom.setStyle(el, "zIndex", zIndex);
             this.cfg.setProperty("zIndex", zIndex, true);
+
+            if (this.iframe) {
+                this.stackIframe();
+            }
         },
 
         /**
@@ -2766,6 +2768,28 @@
         },
 
         /**
+         * Sets the zindex of the iframe shim, if it exists, based on the zindex of
+         * the Overlay element. The zindex of the iframe is set to be one less 
+         * than the Overlay element's zindex.
+         * 
+         * <p>NOTE: This method will not bump up the zindex of the Overlay element
+         * to ensure that the iframe shim has a non-negative zindex.
+         * If you require the iframe zindex to be 0 or higher, the zindex of 
+         * the Overlay element should be set to a value greater than 0, before 
+         * this method is called.
+         * </p>
+         * @method stackIframe
+         */
+        stackIframe: function() {
+            if (this.iframe) {
+                var overlayZ = Dom.getStyle(this.element, "zIndex");
+                if (!YAHOO.lang.isUndefined(overlayZ) && !isNaN(overlayZ)) {
+                    Dom.setStyle(this.iframe, "zIndex", (overlayZ - 1));
+                }
+            }
+        },
+
+        /**
         * The default event handler fired when the "iframe" property is changed.
         * @method configIframe
         * @param {String} type The CustomEvent type (usually the property name)
@@ -2841,6 +2865,7 @@
                      of the Overlay.
                 */
                 this.syncIframe();
+                this.stackIframe();
 
                 // Add event listeners to update the <iframe> when necessary
                 if (!this._hasIframeEventListeners) {
@@ -2868,7 +2893,7 @@
                         this._iframeDeferred = true;
                     }
                 }
-    
+
             } else {    // <iframe> shim is disabled
                 this.hideIframe();
 
@@ -2881,8 +2906,7 @@
                 }
             }
         },
-        
-        
+
         /**
         * The default event handler fired when the "constraintoviewport" 
         * property is changed.
@@ -4682,35 +4706,33 @@
                 validator: Lang.isBoolean, 
                 supercedes: ["visible"] 
             },
-            
+
             "DRAGGABLE": { 
                 key: "draggable", 
                 value: (DD ? true : false), 
                 validator: Lang.isBoolean, 
                 supercedes: ["visible"]  
             },
-            
+
             "UNDERLAY": { 
                 key: "underlay", 
                 value: "shadow", 
                 supercedes: ["visible"] 
             },
-            
+
             "MODAL": { 
                 key: "modal", 
                 value: false, 
                 validator: Lang.isBoolean, 
-                supercedes: ["visible"] 
+                supercedes: ["visible", "zindex"]
             },
-            
+
             "KEY_LISTENERS": { 
                 key: "keylisteners", 
                 suppressEvent: true, 
                 supercedes: ["visible"] 
             }
-        
         };
-
 
     /**
     * Constant representing the default CSS class used for a Panel
@@ -4741,13 +4763,10 @@
     */
 
     function createHeader(p_sType, p_aArgs) {
-
         if (!this.header) {
             this.setHeader("&#160;");
         }
-
     }
-
 
     /* 
         "hide" event handler that sets a Panel instance's "width"
@@ -5082,51 +5101,34 @@
                 oClose = this.close;
         
             function doHide(e, obj) {
-
                 obj.hide();
-
             }
         
             if (val) {
-
                 if (!oClose) {
-
                     if (!m_oCloseIconTemplate) {
-
                         m_oCloseIconTemplate = document.createElement("span");
                         m_oCloseIconTemplate.innerHTML = "&#160;";
                         m_oCloseIconTemplate.className = "container-close";
-
                     }
 
                     oClose = m_oCloseIconTemplate.cloneNode(true);
-
                     this.innerElement.appendChild(oClose);
-
                     Event.on(oClose, "click", doHide, this);
                     
                     this.close = oClose;
-                    
 
                 } else {
-
                     oClose.style.display = "block";
-
                 }
 
             } else {
-
                 if (oClose) {
-
                     oClose.style.display = "none";
-
                 }
-
             }
 
         },
-
-
 
         /**
         * The default event handler fired when the "draggable" property 
@@ -5139,17 +5141,15 @@
         * this will usually equal the owner.
         */
         configDraggable: function (type, args, obj) {
-        
             var val = args[0];
 
             if (val) {
-        
                 if (!DD) {
                     YAHOO.log("DD dependency not met.", "error");
                     this.cfg.setProperty("draggable", false);
                     return;
                 }
-        
+
                 if (this.header) {
                     Dom.setStyle(this.header, "cursor", "move");
                     this.registerDragDrop();
@@ -5170,12 +5170,9 @@
 
                 this.unsubscribe("beforeRender", createHeader);
                 this.unsubscribe("beforeShow", setWidthToOffsetWidth);
-
             }
-
         },
       
-
         /**
         * The default event handler fired when the "underlay" property 
         * is changed.
@@ -5194,7 +5191,6 @@
                 oUnderlay = this.underlay,
                 oElement = this.element;
 
-
             function createUnderlay() {
 
                 var nIE;
@@ -5202,10 +5198,8 @@
                 if (!oUnderlay) { // create if not already in DOM
 
                     if (!m_oUnderlayTemplate) {
-
                         m_oUnderlayTemplate = document.createElement("div");
                         m_oUnderlayTemplate.className = "underlay";
-                    
                     }
 
                     oUnderlay = m_oUnderlayTemplate.cloneNode(false);
@@ -5237,47 +5231,35 @@
 
             }
 
-
             function onBeforeShow() {
-            
                 createUnderlay.call(this);
-    
                 this._underlayDeferred = false;
-    
                 this.beforeShowEvent.unsubscribe(onBeforeShow);
-            
             }
-
             
             function destroyUnderlay() {
-
                 if (this._underlayDeferred) {
-
                     this.beforeShowEvent.unsubscribe(onBeforeShow);
-                
                     this._underlayDeferred = false;
-
                 }
-            
+
                 if (oUnderlay) {
-            
+
                     this.cfg.unsubscribeFromConfigEvent("width", 
                         this.sizeUnderlay);
-    
+
                     this.cfg.unsubscribeFromConfigEvent("height", 
                         this.sizeUnderlay);
-    
+
                     this.changeContentEvent.unsubscribe(this.sizeUnderlay);
-    
+
                     YAHOO.widget.Module.textResizeEvent.unsubscribe(
                         this.sizeUnderlay, this, true);
-    
-                    this.element.removeChild(oUnderlay);
-                    
-                    this.underlay = null;
 
+                    this.element.removeChild(oUnderlay);
+
+                    this.underlay = null;
                 }
-                    
             }
         
 
@@ -5293,16 +5275,13 @@
             case "matte":
 
                 if (!bMacGecko) {
-
                     destroyUnderlay.call(this);
-
                 }
-            
+
                 Dom.removeClass(oElement, "shadow");
                 Dom.addClass(oElement, "matte");
 
                 break;
-
             default:
 
                 if (!bMacGecko) {
@@ -5315,29 +5294,20 @@
                 Dom.removeClass(oElement, "matte");
 
                 break;
-
             }
 
 
             if ((sUnderlay == "shadow") || (bMacGecko && !oUnderlay)) {
                 
                 if (this.cfg.getProperty("visible")) {
-                
                     createUnderlay.call(this);
-                
                 }
                 else {
-
                     if (!this._underlayDeferred) {
-
                         this.beforeShowEvent.subscribe(onBeforeShow);
-                    
                         this._underlayDeferred = true;
-
                     }
-                
                 }
-
             }
     
         },
@@ -5356,9 +5326,7 @@
         configModal: function (type, args, obj) {
 
             var modal = args[0];
-
             if (modal) {
-
                 if (!this._hasModalityEventListeners) {
 
                     this.subscribe("beforeShow", this.buildMask);
@@ -5370,18 +5338,13 @@
                         this, true);
 
                     this._hasModalityEventListeners = true;
-
                 }
-
             } else {
-
                 if (this._hasModalityEventListeners) {
 
                     if (this.cfg.getProperty("visible")) {
-                    
                         this.hideMask();
                         this.removeMask();
-                    
                     }
 
                     this.unsubscribe("beforeShow", this.buildMask);
@@ -5392,11 +5355,8 @@
                     Overlay.windowResizeEvent.unsubscribe(this.sizeMask, this);
                     
                     this._hasModalityEventListeners = false;
-                
                 }
-
             }
-
         },
         
         /**
@@ -5409,25 +5369,19 @@
                 oParentNode;
         
             if (oMask) {
-            
                 /*
                     Hide the mask before destroying it to ensure that DOM
                     event handlers on focusable elements get removed.
                 */
-        
                 this.hideMask();
-            
+                
                 oParentNode = oMask.parentNode;
-        
                 if (oParentNode) {
-        
                     oParentNode.removeChild(oMask);
-        
                 }
-        
+
                 this.mask = null;
             }
-            
         },
         
         /**
@@ -5551,35 +5505,25 @@
         * this will usually equal the owner.
         */
         configzIndex: function (type, args, obj) {
-    
             Panel.superclass.configzIndex.call(this, type, args, obj);
-        
-            var maskZ = 0,
-                currentZ = Dom.getStyle(this.element, "zIndex");
-        
-            if (this.mask) {
 
-                if (!currentZ || isNaN(currentZ)) {
-                    currentZ = 0;
+            if (this.mask || this.cfg.getProperty("modal") === true) {
+                var panelZ = Dom.getStyle(this.element, "zIndex");
+                if (!panelZ || isNaN(panelZ)) {
+                    panelZ = 0;
                 }
-        
-                if (currentZ === 0) {
 
+                if (panelZ === 0) {
+                    // Recursive call to configzindex (which should be stopped
+                    // from going further because panelZ should no longer === 0)
                     this.cfg.setProperty("zIndex", 1);
-
                 } else {
-
-                    maskZ = currentZ - 1;
-                    Dom.setStyle(this.mask, "zIndex", maskZ);
-
+                    this.stackMask();
                 }
-        
             }
         },
-        
+
         // END BUILT-IN PROPERTY EVENT HANDLERS //
-        
-        
         /**
         * Builds the wrapping container around the Panel that is used for 
         * positioning the shadow and matte underlays. The container element is 
@@ -5743,30 +5687,25 @@
         * @method buildMask
         */
         buildMask: function () {
-    
             var oMask = this.mask;
-    
             if (!oMask) {
-
                 if (!m_oMaskTemplate) {
-                
                     m_oMaskTemplate = document.createElement("div");
                     m_oMaskTemplate.className = "mask";
                     m_oMaskTemplate.innerHTML = "&#160;";
-                
                 }
-
                 oMask = m_oMaskTemplate.cloneNode(true);
                 oMask.id = this.id + "_mask";
 
                 document.body.insertBefore(oMask, document.body.firstChild);
-                
+
                 this.mask = oMask;
 
+                // Stack mask based on the element zindex
+                this.stackMask();
             }
-
         },
-        
+
         /**
         * Hides the modality mask.
         * @method hideMask
@@ -5778,7 +5717,7 @@
                 Dom.removeClass(document.body, "masked");
             }
         },
-        
+
         /**
         * Shows the modality mask.
         * @method showMask
@@ -5791,24 +5730,40 @@
                 this.showMaskEvent.fire();
             }
         },
-        
+
         /**
         * Sets the size of the modality mask to cover the entire scrollable 
         * area of the document
         * @method sizeMask
         */
         sizeMask: function () {
-
             if (this.mask) {
-
                 this.mask.style.height = Dom.getDocumentHeight() + "px";
                 this.mask.style.width = Dom.getDocumentWidth() + "px";
-
             }
-
         },
 
-        
+        /**
+         * Sets the zindex of the mask, if it exists, based on the zindex of 
+         * the Panel element. The zindex of the mask is set to be one less 
+         * than the Panel element's zindex.
+         * 
+         * <p>NOTE: This method will not bump up the zindex of the Panel
+         * to ensure that the mask has a non-negative zindex. If you require the
+         * mask zindex to be 0 or higher, the zindex of the Panel 
+         * should be set to a value higher than 0, before this method is called.
+         * </p>
+         * @method stackMask
+         */
+        stackMask: function() {
+            if (this.mask) {
+                var panelZ = Dom.getStyle(this.element, "zIndex");
+                if (!YAHOO.lang.isUndefined(panelZ) && !isNaN(panelZ)) {
+                    Dom.setStyle(this.mask, "zIndex", panelZ - 1);
+                }
+            }
+        },
+
         /**
         * Renders the Panel by inserting the elements that are not already in 
         * the main Panel into their correct places. Optionally appends the 

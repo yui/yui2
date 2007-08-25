@@ -28,7 +28,7 @@
         Dom = YAHOO.util.Dom,
         Config = YAHOO.util.Config,
         Overlay = YAHOO.widget.Overlay,
-        
+
         m_oIFrameTemplate,
 
         /**
@@ -44,7 +44,7 @@
             "MOVE": "move"
         
         },
-        
+
         /**
         * Constant representing the Overlay's configuration properties
         * @property DEFAULT_CONFIG
@@ -73,44 +73,44 @@
                 suppressEvent: true, 
                 supercedes: ["iframe"] 
             },
-        
+
             "CONTEXT": { 
                 key: "context", 
                 suppressEvent: true, 
                 supercedes: ["iframe"] 
             },
-        
+
             "FIXED_CENTER": { 
                 key: "fixedcenter", 
                 value: false, 
                 validator: Lang.isBoolean, 
                 supercedes: ["iframe", "visible"] 
             },
-        
+
             "WIDTH": { 
                 key: "width", 
                 suppressEvent: true, 
                 supercedes: ["context", "fixedcenter", "iframe"] 
             }, 
-        
+
             "HEIGHT": { 
                 key: "height", 
                 suppressEvent: true, 
                 supercedes: ["context", "fixedcenter", "iframe"] 
             }, 
-        
+
             "ZINDEX": { 
                 key: "zindex", 
                 value: null 
             }, 
-        
+
             "CONSTRAIN_TO_VIEWPORT": { 
                 key: "constraintoviewport", 
                 value: false, 
                 validator: Lang.isBoolean, 
                 supercedes: ["iframe", "x", "y", "xy"] 
             }, 
-        
+
             "IFRAME": { 
                 key: "iframe", 
                 value: (YAHOO.env.ua.ie == 6 ? true : false), 
@@ -118,7 +118,6 @@
                 supercedes: ["zindex"] 
             }
         };
-
 
     /**
     * The URL that will be placed in the iframe
@@ -809,15 +808,18 @@
                 }
             }
 
-            if (this.iframe) {
+            if (this.iframe || this.cfg.getProperty("iframe") === true) {
                 if (zIndex <= 0) {
                     zIndex = 1;
                 }
-                Dom.setStyle(this.iframe, "zIndex", (zIndex - 1));
             }
 
             Dom.setStyle(el, "zIndex", zIndex);
             this.cfg.setProperty("zIndex", zIndex, true);
+
+            if (this.iframe) {
+                this.stackIframe();
+            }
         },
 
         /**
@@ -968,6 +970,28 @@
         },
 
         /**
+         * Sets the zindex of the iframe shim, if it exists, based on the zindex of
+         * the Overlay element. The zindex of the iframe is set to be one less 
+         * than the Overlay element's zindex.
+         * 
+         * <p>NOTE: This method will not bump up the zindex of the Overlay element
+         * to ensure that the iframe shim has a non-negative zindex.
+         * If you require the iframe zindex to be 0 or higher, the zindex of 
+         * the Overlay element should be set to a value greater than 0, before 
+         * this method is called.
+         * </p>
+         * @method stackIframe
+         */
+        stackIframe: function() {
+            if (this.iframe) {
+                var overlayZ = Dom.getStyle(this.element, "zIndex");
+                if (!YAHOO.lang.isUndefined(overlayZ) && !isNaN(overlayZ)) {
+                    Dom.setStyle(this.iframe, "zIndex", (overlayZ - 1));
+                }
+            }
+        },
+
+        /**
         * The default event handler fired when the "iframe" property is changed.
         * @method configIframe
         * @param {String} type The CustomEvent type (usually the property name)
@@ -1043,6 +1067,7 @@
                      of the Overlay.
                 */
                 this.syncIframe();
+                this.stackIframe();
 
                 // Add event listeners to update the <iframe> when necessary
                 if (!this._hasIframeEventListeners) {
@@ -1070,7 +1095,7 @@
                         this._iframeDeferred = true;
                     }
                 }
-    
+
             } else {    // <iframe> shim is disabled
                 this.hideIframe();
 
@@ -1083,8 +1108,7 @@
                 }
             }
         },
-        
-        
+
         /**
         * The default event handler fired when the "constraintoviewport" 
         * property is changed.
