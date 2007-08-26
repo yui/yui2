@@ -792,13 +792,13 @@
         * @type Object
         */
         DEFAULT_CONFIG = {
-        
+
             "VISIBLE": { 
                 key: "visible", 
                 value: true, 
                 validator: YAHOO.lang.isBoolean 
             },
-        
+
             "EFFECT": { 
                 key: "effect", 
                 suppressEvent: true, 
@@ -4755,15 +4755,11 @@
             sCurrentWidth = oConfig.getProperty("width");
 
         if (sCurrentWidth == sNewWidth) {
-            
             oConfig.setProperty("width", sOriginalWidth);
-        
         }
 
         this.unsubscribe("hide", restoreOriginalWidth, p_oObject);
-    
     }
-
 
     /* 
         "beforeShow" event handler that sets a Panel instance's "width"
@@ -4793,9 +4789,7 @@
                     [(sOriginalWidth || ""), sNewWidth]);
             
             }
-        
         }
-
     }
 
     /* 
@@ -4805,9 +4799,7 @@
     */
 
     function onElementFocus() {
-
         this.blur();
-
     }
 
     /* 
@@ -4880,7 +4872,6 @@
 
     }
 
-    
     YAHOO.extend(Panel, Overlay, {
     
         /**
@@ -4911,16 +4902,21 @@
             this.buildWrapper();
         
             if (userConfig) {
-
                 this.cfg.applyConfig(userConfig, true);
-
             }
         
             this.subscribe("showMask", addFocusEventHandlers);
             this.subscribe("hideMask", removeFocusEventHandlers);
 
+            // We also set up a beforeRender handler
+            // in configDraggable, but we need to check here, 
+            // since configDraggable won't get called until
+            // after the first render
+            if (this.cfg.getProperty("draggable")) {
+                this.subscribe("beforeRender", createHeader);
+            }
+
             this.initEvent.fire(Panel);
-            
         },
         
         /**
@@ -5127,7 +5123,9 @@
                     this.registerDragDrop();
                 }
 
-                this.subscribe("beforeRender", createHeader);
+                if (!Config.alreadySubscribed(this.beforeRenderEvent, createHeader, null)) {
+                    this.subscribe("beforeRender", createHeader);
+                }
                 this.subscribe("beforeShow", setWidthToOffsetWidth);
 
             } else {
