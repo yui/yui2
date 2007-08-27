@@ -243,10 +243,10 @@
                     !Lang.isUndefined(this.initialConfig[key])) {
     
                     this.setProperty(key, this.initialConfig[key]);
+
+                    return true;
     
                 }
-    
-                return true;
     
             } else {
     
@@ -453,14 +453,38 @@
         */
         applyConfig: function (userConfig, init) {
         
-            var prop;
-        
+            var sKey,
+                oValue,
+                oConfig;
+
             if (init) {
-                this.initialConfig = userConfig;
+
+                oConfig = {};
+
+                for (sKey in userConfig) {
+                
+                    if (Lang.hasOwnProperty(userConfig, sKey)) {
+
+                        oConfig[sKey.toLowerCase()] = userConfig[sKey];
+
+                    }
+                
+                }
+
+                this.initialConfig = oConfig;
+
             }
-            for (prop in userConfig) {
-                this.queueProperty(prop, userConfig[prop]);
+
+            for (sKey in userConfig) {
+            
+                if (Lang.hasOwnProperty(userConfig, sKey)) {
+            
+                    this.queueProperty(sKey, userConfig[sKey]);
+                
+                }
+
             }
+
         },
         
         /**
@@ -1297,8 +1321,6 @@ YAHOO.widget.Calendar.prototype = {
 	domEventMap : null
 };
 
-
-
 /**
 * Initializes the Calendar widget.
 * @method init
@@ -1394,32 +1416,22 @@ YAHOO.widget.Calendar.prototype.configIframe = function(type, args, obj) {
 		}
 	}
 };
-
 /**
 * Default handler for the "title" property
 * @method configTitle
 */
 YAHOO.widget.Calendar.prototype.configTitle = function(type, args, obj) {
-	var title = args[0];
-	var close = this.cfg.getProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.CLOSE.key);
-	
-	var titleDiv;
+	var title = args[0], tDiv;
 
-	if (title && title !== "") {
-		titleDiv = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.CalendarGroup.CSS_2UPTITLE, "div", this.oDomContainer)[0] || document.createElement("div");
-		titleDiv.className = YAHOO.widget.CalendarGroup.CSS_2UPTITLE;
-		titleDiv.innerHTML = title;
-		this.oDomContainer.insertBefore(titleDiv, this.oDomContainer.firstChild);
-		YAHOO.util.Dom.addClass(this.oDomContainer, "withtitle");
+	// "" disables title bar
+	if (title) {
+		this.createTitleBar(title);
 	} else {
-		titleDiv = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.CalendarGroup.CSS_2UPTITLE, "div", this.oDomContainer)[0] || null;
-
-		if (titleDiv) {
-			YAHOO.util.Event.purgeElement(titleDiv);
-			this.oDomContainer.removeChild(titleDiv);
-		}
-		if (! close) {
-			YAHOO.util.Dom.removeClass(this.oDomContainer, "withtitle");
+		var close = this.cfg.getProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.CLOSE.key);
+		if (!close) {
+			this.removeTitleBar();
+		} else {
+			this.createTitleBar("&#160;");
 		}
 	}
 };
@@ -1429,38 +1441,18 @@ YAHOO.widget.Calendar.prototype.configTitle = function(type, args, obj) {
 * @method configClose
 */
 YAHOO.widget.Calendar.prototype.configClose = function(type, args, obj) {
-	var close = args[0];
-	var title = this.cfg.getProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.TITLE.key);
-	
-	var DEPR_CLOSE_PATH = "us/my/bn/x_d.gif";
+	var close = args[0],
+		title = this.cfg.getProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.TITLE.key);
 
-	var linkClose;
-
-	if (close === true) {
-		linkClose = YAHOO.util.Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0] || document.createElement("a");
-		linkClose.href = "#";
-		linkClose.className = "link-close";
-		YAHOO.util.Event.addListener(linkClose, "click", function(e, cal) {cal.hide(); YAHOO.util.Event.preventDefault(e); }, this);
-		
-		if (YAHOO.widget.Calendar.IMG_ROOT !== null) {
-			var imgClose = document.createElement("img");
-			imgClose.src = YAHOO.widget.Calendar.IMG_ROOT + DEPR_CLOSE_PATH;
-			imgClose.className = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE;
-			linkClose.appendChild(imgClose);
-		} else {
-			linkClose.innerHTML = '<span class="' + YAHOO.widget.CalendarGroup.CSS_2UPCLOSE + ' ' + this.Style.CSS_CLOSE + '"></span>';
+	if (close) {
+		if (!title) {
+			this.createTitleBar("&#160;");
 		}
-		
-		this.oDomContainer.appendChild(linkClose);
-		YAHOO.util.Dom.addClass(this.oDomContainer, "withtitle");
+		this.createCloseButton();
 	} else {
-		linkClose = YAHOO.util.Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0] || null;
-		if (linkClose) {
-			YAHOO.util.Event.purgeElement(linkClose);
-			this.oDomContainer.removeChild(linkClose);
-		}
-		if (! title || title === "") {
-			YAHOO.util.Dom.removeClass(this.oDomContainer, "withtitle");
+		this.removeCloseButton();
+		if (!title) {
+			this.removeTitleBar();
 		}
 	}
 };
@@ -2267,6 +2259,89 @@ YAHOO.widget.Calendar.prototype.buildMonthLabel = function() {
 */
 YAHOO.widget.Calendar.prototype.buildDayLabel = function(workingDate) {
 	return workingDate.getDate();
+};
+
+/**
+ * Creates the title bar element and adds it to Calendar container DIV
+ * 
+ * @method createTitleBar
+ * @param {String} strTitle The title to display in the title bar
+ * @return The title bar element
+ */
+YAHOO.widget.Calendar.prototype.createTitleBar = function(strTitle) {
+	var tDiv = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.CalendarGroup.CSS_2UPTITLE, "div", this.oDomContainer)[0] || document.createElement("div");
+	tDiv.className = YAHOO.widget.CalendarGroup.CSS_2UPTITLE;
+	tDiv.innerHTML = strTitle;
+	this.oDomContainer.insertBefore(tDiv, this.oDomContainer.firstChild);
+
+	YAHOO.util.Dom.addClass(this.oDomContainer, "withtitle");
+
+	return tDiv;
+};
+
+/**
+ * Removes the title bar element from the DOM
+ * 
+ * @method removeTitleBar
+ */
+YAHOO.widget.Calendar.prototype.removeTitleBar = function() {
+	var tDiv = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.CalendarGroup.CSS_2UPTITLE, "div", this.oDomContainer)[0] || null;
+	if (tDiv) {
+		YAHOO.util.Event.purgeElement(tDiv);
+		this.oDomContainer.removeChild(tDiv);
+	}
+	YAHOO.util.Dom.removeClass(this.oDomContainer, "withtitle");
+};
+
+/**
+ * Creates the close button HTML element and adds it to Calendar container DIV
+ * 
+ * @method createCloseButton
+ * @return The close HTML element created
+ */
+YAHOO.widget.Calendar.prototype.createCloseButton = function() {
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event,
+		cssClose = YAHOO.widget.CalendarGroup.CSS_2UPCLOSE,
+		DEPR_CLOSE_PATH = "us/my/bn/x_d.gif";
+
+	var lnk = Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0];
+
+	if (!lnk) {
+		lnk = document.createElement("a");  
+		Event.addListener(lnk, "click", function(e, cal) {
+			cal.hide(); 
+			Event.preventDefault(e);
+		}, this);        
+	}
+
+	lnk.href = "#";
+	lnk.className = "link-close";
+
+	if (YAHOO.widget.Calendar.IMG_ROOT !== null) {
+		var img = Dom.getElementsByClassName(cssClose, "img", lnk)[0] || document.createElement("img");
+		img.src = YAHOO.widget.Calendar.IMG_ROOT + DEPR_CLOSE_PATH;
+		img.className = cssClose;
+		lnk.appendChild(img);
+	} else {
+		lnk.innerHTML = '<span class="' + cssClose + ' ' + this.Style.CSS_CLOSE + '"></span>';
+	}
+	this.oDomContainer.appendChild(lnk);
+
+	return lnk;
+};
+
+/**
+ * Removes the close button HTML element from the DOM
+ * 
+ * @method removeCloseButton
+ */
+YAHOO.widget.Calendar.prototype.removeCloseButton = function() {
+	var btn = YAHOO.util.Dom.getElementsByClassName("link-close", "a", this.oDomContainer)[0] || null;
+	if (btn) {
+		YAHOO.util.Event.purgeElement(btn);
+		this.oDomContainer.removeChild(btn);
+	}
 };
 
 /**
@@ -4901,6 +4976,10 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "configTitle",
 																 "configClose",
 																 "configIframe",
+																 "createTitleBar",
+																 "createCloseButton",
+																 "removeTitleBar",
+																 "removeCloseButton",
 																 "hide",
 																 "browser");
 

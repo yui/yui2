@@ -1128,6 +1128,10 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "configTitle",
 																 "configClose",
 																 "configIframe",
+																 "createTitleBar",
+																 "createCloseButton",
+																 "removeTitleBar",
+																 "removeCloseButton",
 																 "hide",
 																 "browser");
 
