@@ -228,10 +228,14 @@ YAHOO.util.Connect =
 				document,
 				'click',
 				function(e){
-					var obj = YAHOO.util.Event.getTarget(e);
-					if(obj.type.toLowerCase() == 'submit'){
-						YAHOO.util.Connect._submitElementValue = encodeURIComponent(obj.name) + "=" + encodeURIComponent(obj.value);
+					try
+					{
+						var obj = YAHOO.util.Event.getTarget(e);
+						if(obj.type.toLowerCase() == 'submit'){
+							YAHOO.util.Connect._submitElementValue = encodeURIComponent(obj.name) + "=" + encodeURIComponent(obj.value);
+						}
 					}
+					catch(e){}
 				});
 			return true;
 	    }
@@ -408,7 +412,7 @@ YAHOO.util.Connect =
 			for(var i=0; i<this._msxml_progid.length; ++i){
 				try
 				{
-					// Instantiates XMLHttpRequest for IE and assign to http.
+					// Instantiates XMLHttpRequest for IE and assign to http
 					http = new ActiveXObject(this._msxml_progid[i]);
 					//  Object literal with conn and tId properties
 					obj = { conn:http, tId:transactionId };
@@ -1246,15 +1250,8 @@ YAHOO.util.Connect =
 				o.uploadEvent.fire(obj);
 			}
 
-			if(YAHOO.util.Event){
-				YAHOO.util.Event.removeListener(io, "load", uploadCallback);
-			}
-			else if(window.detachEvent){
-				io.detachEvent('onload', uploadCallback);
-			}
-			else{
-				io.removeEventListener('load', uploadCallback, false);
-			}
+			YAHOO.util.Event.removeListener(io, "load", uploadCallback);
+
 			setTimeout(
 				function(){
 					document.body.removeChild(io);
@@ -1264,15 +1261,7 @@ YAHOO.util.Connect =
 		};
 
 		// Bind the onload handler to the iframe to detect the file upload response.
-		if(YAHOO.util.Event){
-			YAHOO.util.Event.addListener(io, "load", uploadCallback);
-		}
-		else if(window.attachEvent){
-			io.attachEvent('onload', uploadCallback);
-		}
-		else{
-			io.addEventListener('load', uploadCallback, false);
-		}
+		YAHOO.util.Event.addListener(io, "load", uploadCallback);
 	},
 
   /**
@@ -1310,6 +1299,8 @@ YAHOO.util.Connect =
 			var io = document.getElementById(frameId);
 
 			if(io){
+				// Remove the event listener from the iframe.
+				YAHOO.util.Event.removeListener(io, "load", uploadCallback);
 				// Destroy the iframe facilitating the transaction.
 				document.body.removeChild(io);
 				YAHOO.log('File upload iframe destroyed. Id is:' + frameId, 'info', 'Connection');
@@ -1337,9 +1328,6 @@ YAHOO.util.Connect =
 
 			this.handleTransactionResponse(o, callback, true);
 			YAHOO.log('Transaction ' + o.tId + ' aborted.', 'info', 'Connection');
-		}
-		else{
-			YAHOO.log('Transaction ' + o.tId + ' abort call failed.  Connection object no longer exists.', 'warn', 'Connection');
 		}
 
 		return abortStatus;
