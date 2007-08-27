@@ -27,6 +27,7 @@
 </style>
 
 <script type="text/javascript">
+var editor = null;
 (function() {
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
@@ -34,7 +35,6 @@
         Suite = new Tool.TestSuite('yuisuite'),
         Assert = YAHOO.util.Assert;
 
-        editor = null;
 
 
     Event.onDOMReady(function() {
@@ -54,7 +54,7 @@
                     Assert.areEqual(Dom.get('editor_toolbar'), editor.toolbar.get('element'), 'Could not find Editors Toolbar');
                     Assert.isInstanceOf(YAHOO.widget.Toolbar, editor.toolbar, 'Could not find Toolbars Instance');
                     Assert.areEqual(Dom.getStyle('editor', 'display'), editor.getStyle('display'), 'Textarea is visible..');
-                    Assert.isInstanceOf(YAHOO.widget.Panel, editor.get('panel'), 'Could not find Panels Instance');
+                    Assert.isInstanceOf(YAHOO.widget.Overlay, editor.get('panel'), 'Could not find Overlay Instance');
 
                 },
                 test_content: function() {
@@ -70,13 +70,12 @@
                 },
                 test_regex: function() {
                     editor.setEditorHTML(Dom.get('testRegEx').innerHTML);
-
                     var e_data = editor.cleanHTML();
                     var real_data = Dom.get('testRegEx2').innerHTML;
                     Assert.areEqual(real_data, e_data, 'Regex save routine failed');
                 },
                 test_blank_image: function() {
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
+                    editor.toolbar.resetAllButtons();
                     var picURL = editor.get('blankimage');
                     editor._focusWindow();
                     editor.toolbar.getButtonByValue('insertimage').fireEvent('mousedown', { ev: 'mousedown' });
@@ -86,7 +85,7 @@
                     Assert.isInstanceOf(YAHOO.widget.EditorWindow, editor.currentWindow, 'Editor Window Failed to Open');
                     editor.closeWindow();
                     Assert.areEqual(null, editor.currentWindow, 'Editor Window Failed to Close');
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
+                    editor.toolbar.resetAllButtons();
                     Assert.areEqual(null, pic.parentNode, 'Image is still inside the editor');
 
                 },
@@ -108,33 +107,22 @@
                 test_close_window: function() {
                     editor.closeWindow();
                     Assert.areEqual(null, editor.currentWindow, 'Editor Window Failed to Close');
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
-                },
-                test_bold: function() {
-                    editor.setEditorHTML('test');
-                    var e_data = editor.getEditorHTML();
-                    Assert.areEqual('test', e_data, 'Editor data is different than what was injected');
-                    editor.execCommand('selectall', '');
-                    editor.toolbar.getButtonByValue('bold').fireEvent('mousedown', { ev: 'mousedown' });
-                    Assert.areEqual(true, editor.toolbar.getButtonByValue('bold').hasClass('yui-button-selected'), 'Bold button is not selected');
-                    editor.toolbar.getButtonByValue('bold').fireEvent('mousedown', { ev: 'mousedown' });
-                    Assert.areEqual(false, editor.toolbar.getButtonByValue('bold').hasClass('yui-button-selected'), 'Bold button is selected');
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
+                    editor.toolbar.resetAllButtons();
                 },
                 test_selected_element: function() {
                     editor.setEditorHTML('<em id="test">This is a test element</em>');
                     YAHOO.util.UserAction.click(editor._getDoc().getElementById('test'));
                     Assert.areEqual(editor._getDoc().getElementById('test'), editor._getSelectedElement(), 'Selected Element is not em#test');
                     Assert.areEqual(true, editor.toolbar.getButtonByValue('italic').hasClass('yui-button-selected'), 'Italic button is not selected');
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
+                    editor.toolbar.resetAllButtons();
                 },
                 test_dom_path: function() {
                     editor.setEditorHTML('<p>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</p><p>This is a test. This is a test. <em style="font-family: Comic Sans MS">This is a test. <strong id="test">This is a test.</strong> This is a test.</em> This is a test. This is a test. This is a test.</p><p>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</p>');
                     YAHOO.util.UserAction.click(editor._getDoc().getElementById('test'));
-                    Assert.areEqual('body &lt; p &lt; em &lt; strong#tes...', editor.dompath.innerHTML, 'Dom path is not correct..');
+                    Assert.areEqual('<span title="body">body</span> &lt; <span title="p">p</span> &lt; <span title="em">em</span> &lt; <span title="strong#test">strong#tes...</span>', editor.dompath.innerHTML, 'Dom path is not correct..');
                     Assert.areEqual(true, editor.toolbar.getButtonByValue('bold').hasClass('yui-button-selected'), 'Bold button is not selected');
                     Assert.areEqual(true, editor.toolbar.getButtonByValue('italic').hasClass('yui-button-selected'), 'Italic button is not selected');
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
+                    editor.toolbar.resetAllButtons();
                 },
                 test_hidden_elements: function() {
                     editor.toolbar.getButtonByValue('hiddenelements').fireEvent('mousedown', { ev: 'mousedown' });
@@ -191,7 +179,7 @@
                     Assert.areEqual(true, event, 'KeyPress Event failed to Fired');
                 },
                 test_createlink: function() {
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
+                    editor.toolbar.resetAllButtons();
                     editor.setEditorHTML('test');
                     var e_data = editor.getEditorHTML();
                     Assert.areEqual('test', e_data, 'Editor data is different than what was injected');
@@ -204,18 +192,18 @@
                     editor.closeWindow();
                     Assert.areEqual(null, editor.currentWindow, 'Editor Window Failed to Close');
 
-                    var link = editor._getDoc().getElementsByTagName('span')[0];
+                    var link = editor._getDoc().getElementsByTagName('a')[0];
                     var linkURL = link.getAttribute('href', 2);
 
                     Assert.areEqual('http:/'+'/www.yahoo.com', linkURL, 'Link url does not match what was set');
-                    YAHOO.util.UserAction.dblclick(editor._getDoc().body); //Reset toolbar for next test
+                    editor.toolbar.resetAllButtons();
                 },
                 test_content_after: function() {
                     var t_data = Dom.get('editor').value;
                     editor.setEditorHTML(t_data);
                     var e_data = editor.getEditorHTML();
                     Assert.areEqual(t_data, e_data, 'Editor data is different than text area');
-                },
+                }
 
             })); 
             Tool.TestRunner.add(Suite);
@@ -238,7 +226,7 @@
 <textarea id="editor" style="height: 300px; width: 522px">This is a test.</textarea>
 
 <div id="testRegEx">This is a test. <b>This</b> is a test. This is a <i>test</i>. This is a <u>test</u>. This is a test. This is a test. This is a test. <span style="font-size: 16px; font-family: Comic Sans MS;" tabindex="1" tag="span" class="yui-tag-span yui-tag">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </span>This is a test. This is a test. This is a test. This is a test. This is a test.<br><br>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. <span style="font-size: 18px; font-family: Trebuchet MS; color: rgb(160, 64, 255);" tabindex="1" tag="span" class="yui-tag-span yui-tag">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</span> This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </div>
-<div id="testRegEx2">This is a test. <strong>This</strong> is a test. This is a <em>test</em>. This is a <u>test</u>. This is a test. This is a test. This is a test. <span style="font-size: 16px; font-family: Comic Sans MS;" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </span>This is a test. This is a test. This is a test. This is a test. This is a test.<br><br>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. <span style="font-size: 18px; font-family: Trebuchet MS; color: rgb(160, 64, 255);" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</span> This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </div>
+<div id="testRegEx2">This is a test. <strong>This</strong> is a test. This is a <em>test</em>. This is a <span style="text-decoration: underline;">test</span>. This is a test. This is a test. This is a test. <span style="font-size: 16px; font-family: Comic Sans MS;" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </span>This is a test. This is a test. This is a test. This is a test. This is a test.<br><br>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. <span style="font-size: 18px; font-family: Trebuchet MS; color: rgb(160, 64, 255);" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</span> This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</div>
 </div>
 </body>
 </html>
