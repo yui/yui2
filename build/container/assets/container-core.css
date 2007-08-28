@@ -1,53 +1,32 @@
 .yui-overlay,
 .yui-panel-container {
-
     visibility: hidden;
-	position: absolute;
-	z-index: 2;
-
+    position: absolute;
+    z-index: 2;
 }
 
-yui-panel-container form {
-
-	margin: 0;
-
-}
-
-.masked .yui-panel-container {
-
-    /*
-        Default to a z-index 1 higher than default if the Panel is modal
-        to make sure the panel is above its modality mask.
-    */
-
-   z-index: 3;
-
+.yui-panel-container form {
+    margin: 0;
 }
 
 .mask {
-
-    /*
-        Default to a z-index of 1 less than the default defined 
-        by ".masked .yui-panel-container"
-    */
-
-    z-index: 2; 
+    z-index: 1;
     display: none;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-
     /*
         Application of "overflow:auto" prevents Mac scrollbars from bleeding
         through the modality mask in Gecko.
     */
-
     overflow: auto;
-
 }
 
+.yui-panel-container select {
+    _visibility: inherit;
+}
 
 /* 
     PLEASE NOTE:
@@ -56,10 +35,13 @@ yui-panel-container form {
        the modality mask in IE 6. 
 
     2) ".drag select" is used to hide <SELECT> elements when dragging a 
-       Panel in IE 6. 
+       Panel in IE 6.  This is necessary to prevent some redraw problems with 
+       the <SELECT> elements when a Panel instance is dragged.
     
-    3) "hide-select select" is appended to an Overlay instance's root HTML 
-       element when it is being annimated by YAHOO.widget.ContainerEffect 
+    3) ".hide-select select" is appended to an Overlay instance's root HTML 
+       element when it is being annimated by YAHOO.widget.ContainerEffect.  
+       This is necessary because <SELECT> elements don't inherit their parent
+       element's opacity in IE 6.
 
 */
 
@@ -67,13 +49,7 @@ yui-panel-container form {
 .drag select, 
 .hide-select select {
 
-	_visibility: hidden;   
-
-}
-
-.yui-panel-container select {
-
-	_visibility: inherit;
+    _visibility: hidden;   
 
 }
 
@@ -123,13 +99,13 @@ PLEASE NOTE:
 .hide-scrollbars,
 .hide-scrollbars * {
 
-	overflow: hidden;
+    overflow: hidden;
 
 }
 
 .hide-scrollbars select {
 
-	display: none;
+    display: none;
 
 }
 

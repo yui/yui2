@@ -1,57 +1,31 @@
 .yui-overlay,
 .yui-panel-container {
-
     visibility: hidden;
-	position: absolute;
-	z-index: 1;
-
+    position: absolute;
+    z-index: 2;
 }
 
-yui-panel-container form {
-
-	margin: 0;
-
-}
-
-.masked .yui-panel-container {
-
-    /*
-        Default to a z-index 1 higher than default if the Panel is modal
-        to make sure the panel is above its modality mask.
-    */
-
-   z-index: 2;
-
+.yui-panel-container form {
+    margin: 0;
 }
 
 .mask {
-
-    /*
-        Default to a z-index of 1 less than the default defined 
-        by ".masked .yui-panel-container"
-    */
-
-    z-index: 1; 
+    z-index: 1;
     display: none;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-
     /*
         Application of "overflow:auto" prevents Mac scrollbars from bleeding
         through the modality mask in Gecko.
     */
-
     overflow: auto;
-
 }
 
 .yui-panel-container select {
-
-	_visibility: inherit;
-
+    _visibility: inherit;
 }
 
 /* 
@@ -75,7 +49,7 @@ yui-panel-container form {
 .drag select, 
 .hide-select select {
 
-	_visibility: hidden;   
+    _visibility: hidden;   
 
 }
 
@@ -125,13 +99,13 @@ PLEASE NOTE:
 .hide-scrollbars,
 .hide-scrollbars * {
 
-	overflow: hidden;
+    overflow: hidden;
 
 }
 
 .hide-scrollbars select {
 
-	display: none;
+    display: none;
 
 }
 
