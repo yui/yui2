@@ -1969,13 +1969,19 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
         if(isMac) {
             switch (nKeyCode) {
             case 9: // tab
-                if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                    YAHOO.util.Event.stopEvent(v);
+                if(oSelf._oCurItem) {
+                    if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
+                        YAHOO.util.Event.stopEvent(v);
+                    }
                 }
                 break;
             case 13: // enter
-                if(oSelf._nKeyCode != nKeyCode) {
-                    YAHOO.util.Event.stopEvent(v);
+                if(oSelf._oCurItem) {
+                    if(oSelf._nKeyCode != nKeyCode) {
+                        if(oSelf._bContainerOpen) {
+                            YAHOO.util.Event.stopEvent(v);
+                        }
+                    }
                 }
                 break;
             case 38: // up
