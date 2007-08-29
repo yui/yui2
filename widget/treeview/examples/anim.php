@@ -27,6 +27,7 @@
 	  <div id="expandcontractdiv">
 		<a href="javascript:tree.expandAll()">Expand all</a>
 		<a href="javascript:tree.collapseAll()">Collapse all</a>
+		<a href="javascript:tree.removeChildren(nodes[0])">remove</a>
 	  </div>
 	  <div id="treeDiv1"></div>
 
@@ -86,7 +87,9 @@
 
 		for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
 			var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
+            nodes.push(tmpNode);
 			buildRandomTextBranch(tmpNode);
+
 		}
 
 		tree.draw();
@@ -99,6 +102,7 @@
 			YAHOO.log("buildRandomTextBranch: " + node.index);
 			for ( var i = 0; i < Math.floor(Math.random() * 6) ; i++ ) {
 				var tmpNode = new YAHOO.widget.TextNode(node.label + "-" + i, node, false);
+                nodes.push(tmpNode);
 				buildRandomTextBranch(tmpNode);
 			}
 		}

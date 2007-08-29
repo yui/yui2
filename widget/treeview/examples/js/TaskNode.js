@@ -56,7 +56,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
             this.check();
         // otherwise the parent needs to be updated only if its checkstate 
         // needs to change from fully selected to partially selected
-        } else if (this.parent && 2 == this.parent.checkState) {
+        } else if (this.parent && 2 === this.parent.checkState) {
              this.updateParent();
         }
 
@@ -125,7 +125,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
             this.uncheck();
         }
 
-        this.onCheckClick();
+        this.onCheckClick(this);
         this.tree.fireEvent("checkClick", this);
     },
 
@@ -150,15 +150,20 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         var somethingChecked = false;
         var somethingNotChecked = false;
 
-        for (var i=0;i< p.children.length;++i) {
-            if (p.children[i].checked) {
-                somethingChecked = true;
-                // checkState will be 1 if the child node has unchecked children
-                if (p.children[i].checkState == 1) {
+        for (var i=0, l=p.children.length;i<l;i=i+1) {
+
+            var n = p.children[i];
+
+            if ("checked" in n) {
+                if (n.checked) {
+                    somethingChecked = true;
+                    // checkState will be 1 if the child node has unchecked children
+                    if (n.checkState === 1) {
+                        somethingNotChecked = true;
+                    }
+                } else {
                     somethingNotChecked = true;
                 }
-            } else {
-                somethingNotChecked = true;
             }
         }
 
@@ -198,8 +203,11 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
     check: function() { 
         this.logger.log("check");
         this.setCheckState(2);
-        for (var i=0; i<this.children.length; ++i) {
-            this.children[i].check();
+        for (var i=0, l=this.children.length; i<l; i=i+1) {
+            var c = this.children[i];
+            if (c.check) {
+                c.check();
+            }
         }
         this.updateCheckHtml();
         this.updateParent();
@@ -210,8 +218,11 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
      */
     uncheck: function() { 
         this.setCheckState(0);
-        for (var i=0; i<this.children.length; ++i) {
-            this.children[i].uncheck();
+        for (var i=0, l=this.children.length; i<l; i=i+1) {
+            var c = this.children[i];
+            if (c.uncheck) {
+                c.uncheck();
+            }
         }
         this.updateCheckHtml();
         this.updateParent();
@@ -255,7 +266,7 @@ YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
         sb[sb.length] = ' class="' + this.getCheckStyle() + '"';
         sb[sb.length] = ' onclick="javascript:' + this.getCheckLink() + '">';
         //sb[sb.length] = '&#160;</td>';
-        sb[sb.length] = '<div class="ygtvcheckspacer"></div></td>';
+        sb[sb.length] = '<div class="ygtvspacer"></div></td>';
         
 
         sb[sb.length] = '<td>';

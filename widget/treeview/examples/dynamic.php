@@ -89,6 +89,11 @@ YAHOO.example.treeExample = function() {
 		   var tmpNode3 = new YAHOO.widget.TextNode("Third Node", root, false);
 		   var tmpNode4 = new YAHOO.widget.TextNode("Fourth Node", root, false);
 		   var tmpNode5 = new YAHOO.widget.TextNode("Fifth Node", root, false);
+
+		   var tmpNode6 = new YAHOO.widget.TextNode("Sixth Node", root, false);
+           tmpNode6.setDynamicLoad(function(node, loadCompleteCallback) {
+                  loadCompleteCallback();
+               }, 1);
 		   
 		   //render tree with these five nodes; all descendants of these nodes
 		   //will be generated as needed by the dynamic loader.

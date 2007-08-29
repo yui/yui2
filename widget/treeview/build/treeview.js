@@ -448,6 +448,18 @@ YAHOO.widget.TreeView.prototype = {
     },
 
     /**
+     * wait until the animation is complete before deleting 
+     * to avoid javascript errors
+     * @method _removeChildren_animComplete
+     * @param o the custom event payload
+     * @private
+     */
+    _removeChildren_animComplete: function(o) {
+        this.unsubscribe(this._removeChildren_animComplete);
+        this.removeChildren(o.node);
+    },
+
+    /**
      * Deletes this nodes child collection, recursively.  Also collapses
      * the node, and resets the dynamic load flag.  The primary use for
      * this method is to purge a node and allow it to fetch its data
@@ -456,17 +468,28 @@ YAHOO.widget.TreeView.prototype = {
      * @param {Node} node the node to purge
      */
     removeChildren: function(node) { 
+
+        if (node.expanded) {
+            // wait until the animation is complete before deleting to
+            // avoid javascript errors
+            if (this._collapseAnim) {
+                this.subscribe("animComplete", 
+                        this._removeChildren_animComplete, this, true);
+                node.collapse();
+                return;
+            }
+
+            node.collapse();
+        }
+
         while (node.children.length) {
             this._deleteNode(node.children[0]);
         }
 
         node.childrenRendered = false;
         node.dynamicLoadComplete = false;
-        if (node.expanded) {
-            node.collapse();
-        } else {
-            node.updateIcon();
-        }
+
+        node.updateIcon();
     },
 
     /**
