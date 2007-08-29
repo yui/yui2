@@ -196,7 +196,7 @@
         */
         function setAttributeFromDOMAttribute(p_sAttribute) {
     
-            if ( !(p_sAttribute in p_oAttributes) ) {
+            if (!(p_sAttribute in p_oAttributes)) {
     
                 /*
                     Need to use "getAttributeNode" instead of "getAttribute" 
@@ -240,7 +240,7 @@
             
             }
     
-            if ( !("disabled" in p_oAttributes) ) {
+            if (!("disabled" in p_oAttributes)) {
     
                 p_oAttributes.disabled = p_oElement.disabled;
     
@@ -268,7 +268,7 @@
 
             setFormElementProperties();
 
-            if ( !("checked" in p_oAttributes) ) {
+            if (!("checked" in p_oAttributes)) {
     
                 p_oAttributes.checked = p_oElement.checked;
     
@@ -305,13 +305,13 @@
         p_oElement.removeAttribute("id");
         p_oElement.removeAttribute("name");
         
-        if ( !("tabindex" in p_oAttributes) ) {
+        if (!("tabindex" in p_oAttributes)) {
 
             p_oAttributes.tabindex = p_oElement.tabIndex;
 
         }
     
-        if ( !("label" in p_oAttributes) ) {
+        if (!("label" in p_oAttributes)) {
     
             // Set the "label" property
         
@@ -1249,7 +1249,7 @@
                 if (oMenuElement) {
         
                     if (Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
-                        oMenuElement.nodeName == "SELECT") {
+                        oMenuElement.nodeName.toUpperCase() == "SELECT") {
             
                         oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
             
@@ -1271,7 +1271,7 @@
             else if (p_oMenu && p_oMenu.nodeName) {
         
                 if (Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
-                        p_oMenu.nodeName == "SELECT") {
+                        p_oMenu.nodeName.toUpperCase() == "SELECT") {
         
                     oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
                 
@@ -2829,7 +2829,7 @@
         */
         init: function (p_oElement, p_oAttributes) {
         
-            var sNodeName = p_oAttributes.type == "link" ? "A" : "BUTTON",
+            var sNodeName = p_oAttributes.type == "link" ? "a" : "button",
                 oSrcElement = p_oAttributes.srcelement,
                 oButton = p_oElement.getElementsByTagName(sNodeName)[0],
                 oInput;
@@ -2837,12 +2837,12 @@
 
             if (!oButton) {
 
-                oInput = p_oElement.getElementsByTagName("INPUT")[0];
+                oInput = p_oElement.getElementsByTagName("input")[0];
 
 
                 if (oInput) {
 
-                    oButton = document.createElement("BUTTON");
+                    oButton = document.createElement("button");
                     oButton.setAttribute("type", "button");
 
                     oInput.parentNode.replaceChild(oButton, oInput);
@@ -3602,7 +3602,7 @@
     
         if (nCharCode == 13 && ((sNodeName == "INPUT" && (sType == "text" || 
             sType == "password" || sType == "checkbox" || sType == "radio" || 
-            sType == "file") ) || sNodeName == "SELECT"))
+            sType == "file")) || sNodeName == "SELECT"))
         {
     
             Dom.getElementsBy(isSubmitButton, "*", this);

@@ -81,7 +81,7 @@
         }
         else {
     
-            sNodeName = p_oElement.nodeName;
+            sNodeName = p_oElement.nodeName.toUpperCase();
     
             if (sNodeName && sNodeName == this.NODE_NAME) {
         
