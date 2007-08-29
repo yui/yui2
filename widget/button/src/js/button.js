@@ -947,6 +947,10 @@
                     this._button.setAttribute("disabled", "disabled");
         
                     this.addStateCSSClasses("disabled");
+
+                    this.removeStateCSSClasses("hover");
+                    this.removeStateCSSClasses("active");
+                    this.removeStateCSSClasses("focus");
         
                 }
                 else {
