@@ -2010,12 +2010,18 @@ var Dom = YAHOO.util.Dom,
                     * This workaround at least set's the toolbar into the proper state.
                     */
                     this._getSelection().setBaseAndExtent(this._getDoc().body.firstChild, 0, this._getDoc().body.firstChild, 1);
-                    if (!this.browser.webkit3) {
+                    if (this.browser.webkit3) {
+                        this._getSelection().collapseToStart();
+                    } else {
                         this._getSelection().collapse(false);
                     }
-                } else if (!this.browser.webkit3) {
+                } else {
                     this._getSelection().setBaseAndExtent(this._getDoc().body, 1, this._getDoc().body, 1);
-                    this._getSelection().collapse(false);   
+                    if (this.browser.webkit3) {
+                        this._getSelection().collapseToStart();
+                    } else {
+                        this._getSelection().collapse(false);
+                    }
                 }
                 this._getWindow().focus();
             } else {
@@ -5100,7 +5106,11 @@ var Dom = YAHOO.util.Dom,
                     if (this.browser.webkit) {
                         //Force Safari to focus the new element
                         this._getSelection().setBaseAndExtent(el, 0, el, 0);
-                        this._getSelection().collapse(true);   
+                        if (this.browser.webkit3) {
+                            this._getSelection().collapseToStart();
+                        } else {
+                            this._getSelection().collapse(true);
+                        }
                     }
                 }
             } else {
@@ -5158,7 +5168,11 @@ var Dom = YAHOO.util.Dom,
                                 if (this.browser.webkit) {
                                     //Force Safari to focus the new element
                                     this._getSelection().setBaseAndExtent(el, 0, el, 0);
-                                    this._getSelection().collapse(true);
+                                    if (this.browser.webkit3) {
+                                        this._getSelection().collapseToStart();
+                                    } else {
+                                        this._getSelection().collapse(true);
+                                    }
                                 }
                                 if (this.browser.ie && tagStyle && tagStyle.fontSize) {
                                     this._getSelection().empty();
