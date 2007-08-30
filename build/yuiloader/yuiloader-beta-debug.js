@@ -137,7 +137,7 @@
         'editor': {
             'type': 'js',
             'path': 'editor/editor-beta-min.js',
-            'requires': ['menu', 'container', 'element', 'button'],
+            'requires': ['menu', 'element', 'button'],
             'optional': ['animation', 'dragdrop'],
             'skinnable': true
         },
