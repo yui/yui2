@@ -1,6 +1,15 @@
 **** version 2.3.1 ***
 
-* Performance enhancements and bug fixes.
+* Dependency on the full Container family was removed, you can now use only the container-core package.
+* The CSS patch that was issued for the 2.3.0 release of the Editor should be removed when installing 2.3.1.
+* Safari performace issue: If you are experiencing extreme performance issues with Safari
+    (keys taking a long time to respond, enter key not working, CPU spiking).
+    Please check to see if you have AcidSearch from pozytron.com installed.
+    It has been determined that the latest release if AcidSearch is interfering
+    with the Rich Text Editor. Currently the only solution is to un-install
+    the plugin. The maker of AcidSearch has been notified of the issue and should respond soon.
+* Several performance enhancements and bug fixes.
+
 
     *All
         1. [1406169] - Fixed Toolbar performance issues
