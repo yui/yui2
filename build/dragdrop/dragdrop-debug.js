@@ -433,7 +433,7 @@ YAHOO.util.DragDropMgr = function() {
         getRelated: function(p_oDD, bTargetsOnly) {
             var oDDs = [];
             for (var i in p_oDD.groups) {
-                for (j in this.ids[i]) {
+                for (var j in this.ids[i]) {
                     var dd = this.ids[i][j];
                     if (! this.isTypeOfDD(dd)) {
                         continue;
@@ -720,22 +720,21 @@ YAHOO.util.DragDropMgr = function() {
                 return;
             }
 
-            var x = YAHOO.util.Event.getPageX(e);
-            var y = YAHOO.util.Event.getPageY(e);
-            var pt = new YAHOO.util.Point(x,y);
-            var pos = dc.getTargetCoord(pt.x, pt.y);
-            var el = dc.getDragEl();
-            curRegion = new YAHOO.util.Region( pos.y, 
+            var x = YAHOO.util.Event.getPageX(e),
+                y = YAHOO.util.Event.getPageY(e),
+                pt = new YAHOO.util.Point(x,y),
+                pos = dc.getTargetCoord(pt.x, pt.y),
+                el = dc.getDragEl(),
+                curRegion = new YAHOO.util.Region( pos.y, 
                                                pos.x + el.offsetWidth,
                                                pos.y + el.offsetHeight, 
-                                               pos.x );
-            // cache the previous dragOver array
-            var oldOvers = [];
-
-            var outEvts   = [];
-            var overEvts  = [];
-            var dropEvts  = [];
-            var enterEvts = [];
+                                               pos.x ),
+            
+                oldOvers = [], // cache the previous dragOver array
+                outEvts   = [],
+                overEvts  = [],
+                dropEvts  = [],
+                enterEvts = [];
 
 
             // Check to see if the object(s) we were hovering over is no longer 
@@ -1145,11 +1144,11 @@ YAHOO.log("Could not get the loc for " + oDD.id, "warn", "DragDropMgr");
 
             this._execOnAll("unreg", []);
 
-            for (i in this.elementCache) {
-                delete this.elementCache[i];
-            }
+            //for (var i in this.elementCache) {
+                //delete this.elementCache[i];
+            //}
+            //this.elementCache = {};
 
-            this.elementCache = {};
             this.ids = {};
         },
 
@@ -1158,6 +1157,7 @@ YAHOO.log("Could not get the loc for " + oDD.id, "warn", "DragDropMgr");
          * @property elementCache
          * @private
          * @static
+         * @deprecated elements are not cached now
          */
         elementCache: {},
         

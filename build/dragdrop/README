@@ -1,5 +1,8 @@
 Drag and Drop Release Notes
 
+2.3.1
+  * No change
+
 2.3.0
   * YAHOO.util.DragDropMgr.stopDrag is now public, and can be used to cancel
     a drag in progress.  An optional "silent" flag was added to skip the
