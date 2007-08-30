@@ -4238,7 +4238,7 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
     else {
         elRow = this.getTrEl(row);
         if(elRow) {
-            oldRecord = this._oRecordSet.getRecord(this.getRecordIndex(elRow));
+            oldRecord = this.getRecord(elRow);
         }
     }
 
@@ -4281,78 +4281,76 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
  */
 YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
     // Get the Record index...
-    var nRecordIndex = null;
+    var oRecord = null;
     // ...by Record index
     if(YAHOO.lang.isNumber(row)) {
-        nRecordIndex = row;
+        oRecord = this._oRecordSet.getRecord(row);
     }
     // ...by element reference
     else {
         var elRow = YAHOO.util.Dom.get(row);
         elRow = this.getTrEl(elRow);
         if(elRow) {
-            nRecordIndex = this.getRecordIndex(elRow);
+            oRecord = this.getRecord(elRow);
         }
     }
-    if(nRecordIndex !== null) {
-        var oRecord = this._oRecordSet.getRecord(nRecordIndex);
-        if(oRecord) {
-            var sRecordId = oRecord.getId();
-            
-            // Remove from selection tracker if there
-            var tracker = this._aSelections || [];
-            for(var j=tracker.length-1; j>-1; j--) {
-                if((YAHOO.lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
-                        ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
-                    tracker.splice(j,1);
-                }
+    if(oRecord) {
+        var sRecordId = oRecord.getId();
+        
+        // Remove from selection tracker if there
+        var tracker = this._aSelections || [];
+        for(var j=tracker.length-1; j>-1; j--) {
+            if((YAHOO.lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                    ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
+                tracker.splice(j,1);
             }
-
-            // Copy data from the Record for the event that gets fired later
-            var oRecordData = oRecord.getData();
-            var oData = {};
-            for(var param in oRecordData) {
-                oData[param] = oRecordData[param];
-            }
-
-            // Grab the TR index before deleting the Record
-            var nTrIndex = this.getTrIndex(nRecordIndex);
-
-            // Delete Record from RecordSet
-            this._oRecordSet.deleteRecord(nRecordIndex);
-
-            // If row is on current page, delete the TR element
-            if(YAHOO.lang.isNumber(nTrIndex)) {
-                var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex) ?
-                        true : false;
-                this._deleteTrEl(nTrIndex);
-
-                // Empty body
-                if(this._elTbody.rows.length === 0) {
-                    this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
-                }
-                // Update UI
-                else {
-                    // Set FIRST/LAST
-                    if(nTrIndex === 0) {
-                        this._setFirstRow();
-                    }
-                    if(isLast) {
-                        this._setLastRow();
-                    }
-                    // Set EVEN/ODD
-                    if(nTrIndex != this._elTbody.rows.length) {
-                        this._setRowStripes(nTrIndex);
-                    }
-                }
-            }
-
-            this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                    oldData:oData, trElIndex:nTrIndex});
-            YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
-                    ", Record index = " + nRecordIndex +
-                    ", page row index = " + nTrIndex, "info", this.toString());
         }
+
+        // Copy data from the Record for the event that gets fired later
+        var nRecordIndex = this.getRecordIndex(oRecord);
+        var oRecordData = oRecord.getData();
+        var oData = {};
+        for(var param in oRecordData) {
+            oData[param] = oRecordData[param];
+        }
+
+        // Grab the TR index before deleting the Record
+        var nTrIndex = this.getTrIndex(oRecord);
+
+        // Delete Record from RecordSet
+        this._oRecordSet.deleteRecord(nRecordIndex);
+
+        // If row is on current page, delete the TR element
+        if(YAHOO.lang.isNumber(nTrIndex)) {
+            var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex) ?
+                    true : false;
+            this._deleteTrEl(nTrIndex);
+
+            // Empty body
+            if(this._elTbody.rows.length === 0) {
+                this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+            }
+            // Update UI
+            else {
+                // Set FIRST/LAST
+                if(nTrIndex === 0) {
+                    this._setFirstRow();
+                }
+                if(isLast) {
+                    this._setLastRow();
+                }
+                // Set EVEN/ODD
+                if(nTrIndex != this._elTbody.rows.length) {
+                    this._setRowStripes(nTrIndex);
+                }
+            }
+        }
+
+        this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
+                oldData:oData, trElIndex:nTrIndex});
+        YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
+                ", Record index = " + nRecordIndex +
+                ", page row index = " + nTrIndex, "info", this.toString());
     }
     else {
         YAHOO.log("Could not delete row: " + row, "warn", this.toString());
