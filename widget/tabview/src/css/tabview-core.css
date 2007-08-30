@@ -60,7 +60,7 @@
     display:block;
 }
 
-.yui-navset .yui-nav a { Xposition:relative; } /* IE: to allow overlap */
+.yui-navset .yui-nav a { position:relative; } /* IE: to allow overlap */
 
 .yui-navset .yui-nav li a,
 .yui-navset-top .yui-nav li a,
