@@ -2158,10 +2158,10 @@
         _onAppendTo: function (p_oEvent) {
         
             /*
-                It is necessary to call "getForm" using "setTimeout" to make 
-                sure that the button's "form" property returns a node 
-                reference.  Sometimes, if you try to get the reference 
-                immediately after appending the field, it is null.
+                It is necessary to call "_addListenersToForm" using 
+                "setTimeout" to make sure that the button's "form" property 
+                returns a node reference.  Sometimes, if you try to get the 
+                reference immediately after appending the field, it is null.
             */
         
             var me = this;
@@ -3648,7 +3648,7 @@
     
     
     /**
-    * @method addHiddenFieldsToForm
+    * @method YAHOO.widget.Button.addHiddenFieldsToForm
     * @description Searches the specified form and adds hidden fields for  
     * instances of YAHOO.widget.Button that are of type "radio," "checkbox," 
     * "menu," and "split."
