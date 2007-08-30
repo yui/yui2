@@ -220,7 +220,7 @@ li.first-of-type .yuimenubaritemlabel {
     overflow:hidden;
     vertical-align:middle;
     text-indent:9px;
-    background-image:url(http://yui.yahooapis.com/2.2.2/build/menu/assets/map.gif);
+    background-image:url(../img/map.gif);
     background-repeat:no-repeat;
 
 }
