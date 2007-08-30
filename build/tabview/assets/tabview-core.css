@@ -14,6 +14,7 @@
 .yui-navset .yui-navset-right .yui-nav,
 .yui-navset-left .yui-nav,
 .yui-navset-right .yui-nav { width:6em; }
+
 .yui-navset-top .yui-nav,
 .yui-navset-bottom .yui-nav {
     width:auto;
@@ -57,10 +58,6 @@
 .yui-navset-left .yui-nav li,
 .yui-navset-right .yui-nav li {
     display:block;
-}
-
-.yui-navset .yui-nav a {
-    Xoutline:0; /* gecko: keep from shifting */
 }
 
 .yui-navset .yui-nav a { position:relative; } /* IE: to allow overlap */
