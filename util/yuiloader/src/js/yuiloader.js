@@ -36,7 +36,7 @@
          */
         info: {
 
-    'base': 'http://yui.yahooapis.com/2.3.0/build/',
+    'base': 'http://yui.yahooapis.com/2.3.1/build/',
 
     'skin': {
         'defaultSkin': 'sam',
