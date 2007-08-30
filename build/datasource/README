@@ -17,6 +17,13 @@ These are executed in the scope of the DataSource instance.
     "cancelStaleRequests"
     "ignoreStaleResponses"
 
+* Added property connMethodPost to support POST requests.
+
+* The parsed response object passed to the callback function now has the
+following properties:
+    tId {Number} Unique transaction ID
+    results {Array} Array of parsed data results
+    error {Boolean} True if there was an error
 
 
 
