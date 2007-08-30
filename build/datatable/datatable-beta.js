@@ -180,9 +180,9 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     * data will arrive pre-sorted:
     * <dl>
     *     <dt>sortedBy.key</dt>
-    *     <dd>Key of sorted Column</dd>
+    *     <dd>{String} Key of sorted Column</dd>
     *     <dt>sortedBy.dir</dt>
-    *     <dd>Initial sort direction, either "asc" or "desc"</dd>
+    *     <dd>{String} Initial sort direction, either "asc" or "desc"</dd>
     * </dl>
     * @type Object
     */
@@ -3112,22 +3112,37 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
  * following properties:
  * <dl>
  * <dt>cell</dt>
- * <dd>Cell element being edited</dd>
+ * <dd>{HTMLElement} Cell element being edited.</dd>
  *
  * <dt>column</dt>
- * <dd>Associated Column instance</dd>
+ * <dd>{YAHOO.widget.Column} Associated Column instance.</dd>
  *
  * <dt>container</dt>
- * <dd>Reference to editor's container DIV element</dd>
+ * <dd>{HTMLElement} Reference to editor's container DIV element.</dd>
  *
  * <dt>isActive</dt>
- * <dd>True if cell is currently being edited</dd>
+ * <dd>{Boolean} True if cell is currently being edited.</dd>
  *
  * <dt>record</dt>
- * <dd>Associated Record instance</dd>
+ * <dd>{YAHOO.widget.Record} Associated Record instance.</dd>
  *
  * <dt>validator</dt>
- * <dd>Associated validator function</dd>
+ * <dd>{HTMLFunction} Associated validator function called before new data is stored. Called
+ * within the scope of the DataTable instance, the function receieves the
+ * following arguments:
+ *
+ * <dl>
+ *  <dt>oNewData</dt>
+ *  <dd>{Object} New data to validate.</dd>
+ *
+ *  <dt>oOldData</dt>
+ *  <dd>{Object} Original data in case of reversion.</dd>
+ *
+ *  <dt>oCellEditor</dt>
+ *  <dd>{Object} Object literal representation of Editor values.</dd>
+ * </dl>
+ *
+ *  </dd>
  *
  * <dt>value</dt>
  * <dd>Current input value</dd>
@@ -5900,7 +5915,7 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
 
         // Validate input data
         if(this._oCellEditor.validator) {
-            this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData);
+            this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData, this._oCellEditor);
             if(this._oCellEditor.value === null ) {
                 this.resetCellEditor();
                 this.fireEvent("editorRevertEvent",
@@ -5944,6 +5959,9 @@ YAHOO.widget.DataTable.prototype.cancelCellEditor = function() {
  * Enables CHECKBOX Editor.
  *
  * @method editCheckbox
+ * @param oEditor {Object} Object literal representation of Editor values.
+ * @param oSelf {YAHOO.widget.DataTable} Reference back to DataTable instance.
+ * @static
  */
 //YAHOO.widget.DataTable.editCheckbox = function(elContainer, oRecord, oColumn, oEditor, oSelf) {
 YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
@@ -6011,6 +6029,9 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
  * Enables Date Editor.
  *
  * @method editDate
+ * @param oEditor {Object} Object literal representation of Editor values.
+ * @param oSelf {YAHOO.widget.DataTable} Reference back to DataTable instance.
+ * @static
  */
 YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     var elCell = oEditor.cell;
@@ -6048,6 +6069,9 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
  * Enables SELECT Editor.
  *
  * @method editDropdown
+ * @param oEditor {Object} Object literal representation of Editor values.
+ * @param oSelf {YAHOO.widget.DataTable} Reference back to DataTable instance.
+ * @static
  */
 YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
     var elCell = oEditor.cell;
@@ -6088,6 +6112,9 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
  * Enables INPUT TYPE=RADIO Editor.
  *
  * @method editRadio
+ * @param oEditor {Object} Object literal representation of Editor values.
+ * @param oSelf {YAHOO.widget.DataTable} Reference back to DataTable instance.
+ * @static
  */
 YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
     var elCell = oEditor.cell;
@@ -6134,6 +6161,9 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
  * Enables TEXTAREA Editor.
  *
  * @method editTextarea
+ * @param oEditor {Object} Object literal representation of Editor values.
+ * @param oSelf {YAHOO.widget.DataTable} Reference back to DataTable instance.
+ * @static
  */
 YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
    var elCell = oEditor.cell;
@@ -6164,6 +6194,9 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
  * Enables INPUT TYPE=TEXT Editor.
  *
  * @method editTextbox
+ * @param oEditor {Object} Object literal representation of Editor values.
+ * @param oSelf {YAHOO.widget.DataTable} Reference back to DataTable instance.
+ * @static
  */
 YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
    var elCell = oEditor.cell;
@@ -6198,6 +6231,7 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
  * 
  *
  * @method validateNumber
+ * @param oData {Object} Data to validate.
  * @static
 */
 YAHOO.widget.DataTable.validateNumber = function(oData) {
