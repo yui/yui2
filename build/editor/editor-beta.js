@@ -3252,6 +3252,7 @@ var Dom = YAHOO.util.Dom,
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.widget.Editor.superclass.init.call(this, p_oElement, p_oAttributes);
+            YAHOO.widget.EditorInfo._instances[this.get('id')] = this;
 
             this.on('contentReady', function() {
                 this.DOMReady = true;
@@ -5471,9 +5472,6 @@ var Dom = YAHOO.util.Dom,
             _knob.className = 'knob';
             win._knob = _knob;
 
-
-            YAHOO.widget.EditorInfo._cache[win.name] = body;
-
             var _header = document.createElement('h3');
             _header.innerHTML = win.header;
 
@@ -5831,7 +5829,13 @@ var Dom = YAHOO.util.Dom,
      * @static
     */
     YAHOO.widget.EditorInfo = {
-        _cache: {},
+        /**
+        * @private
+        * @property _instances
+        * @description A reference to all editors on the page.
+        * @type Object
+        */
+        _instances: {},
         /**
         * @private
         * @property window
@@ -5845,7 +5849,35 @@ var Dom = YAHOO.util.Dom,
         * @description A reference to the currently open panel in any editor on the page.
         * @type Object <a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>
         */
-        panel: null
+        panel: null,
+        /**
+        * @method getEditorById
+        * @description Returns a reference to the Editor object associated with the given textarea
+        * @param {String/HTMLElement} id The id or reference of the textarea to return the Editor instance of
+        * @returns Object <a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a>
+        */
+        getEditorById: function(id) {
+            if (!YAHOO.lang.isString(id)) {
+                //Not a string, assume a node Reference
+                id = id.id;
+            }
+            if (this._instances[id]) {
+                return this._instances[id];
+            }
+            return false;
+        },
+        /**
+        * @method toString
+        * @description Returns a string representing the EditorInfo.
+        * @return {String}
+        */
+        toString: function() {
+            var len = 0;
+            for (var i in this._instances) {
+                len++;
+            }
+            return 'Editor Info (' + len + ' registered intance' + ((len > 1) ? 's' : '') + ')';
+        }
     };
 
     /**
