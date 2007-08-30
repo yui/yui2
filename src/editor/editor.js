@@ -1041,6 +1041,14 @@ var Dom = YAHOO.util.Dom,
         _handleMouseDown: function(ev) {
             this._setCurrentEvent(ev);
             var sel = Event.getTarget(ev);
+            if (this.browser.webkit && this._hasSelection()) {
+                var _sel = this._getSelection();
+                if (!this.browser.webkit3) {
+                    _sel.collapse(true);
+                } else {
+                    _sel.collapseToStart();
+                }
+            }
             if (this.browser.webkit && this._lastImage) {
                 Dom.removeClass(this._lastImage, 'selected');
                 this._lastImage = null;
@@ -1174,6 +1182,13 @@ var Dom = YAHOO.util.Dom,
                             this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
                             doExec = false;
                         }
+                    }
+                    break;
+                case 65:
+                    if (ev.metaKey && this.browser.webkit) {
+                        Event.stopEvent(ev);
+                        //Override Safari's select all and select the contents of the editor not the iframe as Safari would by default.
+                        this._getSelection().setBaseAndExtent(this._getDoc().body, 1, this._getDoc().body, this._getDoc().body.innerHTML.length);
                     }
                     break;
                 case 66: //B
@@ -1793,7 +1808,11 @@ var Dom = YAHOO.util.Dom,
             /**
             * @config css
             * @description The Base CSS used to format the content of the editor
-            * @default <code><pre>body {
+            * @default <code><pre>html {
+                height: 95%;
+            }
+            body {
+                height: 100%;
                 padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;
             }
             a {
@@ -1818,7 +1837,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('css', {
-                value: attr.css || 'body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: pointer; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
+                value: attr.css || 'html { height: 95%; } body { height: 100%; padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: pointer; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
                 writeOnce: true
             });
             /**
@@ -3286,6 +3305,7 @@ var Dom = YAHOO.util.Dom,
                     if ((this.browser.webkit && !this._getDoc().queryCommandEnabled(action))) {
                         var list = null;
                         selEl = this._getSelectedElement();
+                        var li = 0;
                         if (this._isElement(selEl, 'li') && this._isElement(selEl.parentNode, tag)) {
                             YAHOO.log('We already have a list, undo it', 'info', 'Editor');
                             el = selEl.parentNode;
@@ -3293,24 +3313,26 @@ var Dom = YAHOO.util.Dom,
                             YAHOO.util.Dom.addClass(list, 'yui-non');
                             str = '';
                             var lis = el.getElementsByTagName('li');
-                            for (var li = 0; li < lis.length; li++) {
-                                str += lis[li].innerHTML + '<br>';
+                            for (li = 0; li < lis.length; li++) {
+                                str += '<div>' + lis[li].innerHTML + '</div>';
                             }
                             list.innerHTML = str;
-
+                            this.currentElement[0] = el;
                         } else {
                             YAHOO.log('Create list item', 'info', 'Editor');
                             this._createCurrentElement(tag.toLowerCase());
-                            el = this.currentElement[0];
                             list = this._getDoc().createElement(tag);
-                            if (tag == 'ol') {
-                                list.type = value;
+                            var els = this.currentElement;
+                            for (li = 0; li < this.currentElement.length; li++) {
+                                var newli = this._getDoc().createElement('li');
+                                newli.innerHTML = this.currentElement[li].innerHTML + '&nbsp;';
+                                list.appendChild(newli);
+                                if (li > 0) {
+                                    this.currentElement[li].parentNode.removeChild(this.currentElement[li]);
+                                }
                             }
-                            var newli = this._getDoc().createElement('li');
-                            newli.innerHTML = el.innerHTML + '&nbsp;';
-                            list.appendChild(newli);
                         }
-                        el.parentNode.replaceChild(list, el);
+                        this.currentElement[0].parentNode.replaceChild(list, this.currentElement[0]);
                         exec = false;
                     } else {
                         el = this._getSelectedElement();
@@ -3616,6 +3638,7 @@ var Dom = YAHOO.util.Dom,
         show: function() {
             if (this.browser.gecko) {
                 this._setDesignMode('on');
+                this._focusWindow();
             }
             if (this.browser.webkit) {
                 var self = this;
@@ -3707,6 +3730,12 @@ var Dom = YAHOO.util.Dom,
                 //<DIV><SPAN class="Apple-style-span" style="line-height: normal;">Test THis</SPAN></DIV>
                 html = html.replace(/Apple-style-span/gi, '');
                 html = html.replace(/style="line-height: normal;"/gi, '');
+                //Remove bogus LI's
+                html = html.replace(/<li><\/li>/gi, '');
+                html = html.replace(/<li> <\/li>/gi, '');
+                //Remove bogus DIV's
+                html = html.replace(/<div><\/div>/gi, '');
+                html = html.replace(/<div> <\/div>/gi, '');
             }
 
 		    html = html.replace(/yui-tag-span/gi, '');

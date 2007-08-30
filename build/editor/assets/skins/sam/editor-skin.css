@@ -1,7 +1,6 @@
+/* Place the border around the editor */
 .yui-skin-sam .yui-editor-container {
     border: 1px solid #808080;
-}
-.yui-skin-sam .yui-editor-container div.first-child {
 }
 /* Color the border of the container */
 .yui-skin-sam .yui-toolbar-container {
@@ -51,6 +50,7 @@
     padding: 0 1em 0.35em;
     border-bottom:1px solid #808080;
 }
+/* When the collapsed class is added, add a border to the bottom of the titlebar (since the toolbar itself is display none) */
 .yui-skin-sam .yui-toolbar-container-collapsed .yui-toolbar-titlebar {
     border-bottom:1px solid #808080;
 }
@@ -72,7 +72,7 @@
     margin: 0;
     padding: 0;
 }
-
+/* Float the LI's that wrap the buttons */
 .yui-skin-sam .yui-toolbar-group ul li {
     float: left;
 }
@@ -112,10 +112,12 @@
     width: 30px;
     margin: 0;    
 }
+/* Set the height of the buttons and pad them on the left for the icon */
 .yui-skin-sam .yui-toolbar-container .yui-button a {
     padding-left: 35px;
     height: 20px;
 }
+/* IE needs a little help positioning the first child */
 .yui-skin-sam .yui-toolbar-container .yui-button .first-child {
     *left: 0px;
 }
@@ -141,10 +143,11 @@
     background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1700px;
     border-color: #808080;
 }
-
+/* When the nogrouplabels class is applied, set the h3's to display none */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-nogrouplabels h3 {
     display: none;
 }
+/* When not showing the h3 group labels, add some margin to make up for them*/
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-nogrouplabels .yui-toolbar-group {
 	margin-top: .75em;
 }
@@ -169,10 +172,11 @@
 .yui-skin-sam .yui-toolbar-container .yui-button-selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {
     background-image: url(editor-sprite-active.gif);
 }
-
+/* Remove the float from menuitems (they are LI's and we float them above)*/
 .yui-skin-sam .yui-toolbar-container .visible .yuimenuitem {
     float: none;
 }
+/* Change the defaults to make them look more like the editor */
 .yui-skin-sam .yui-toolbar-container .visible .yuimenuitemlabel {
     cursor: pointer;
     color: #000;
@@ -182,9 +186,6 @@
 .yui-skin-sam .yui-toolbar-container .yui-button-menu {
     background-color: #fff;
 }
-.yui-skin-sam .yui-toolbar-container .yuimenu .bd {
-}
-
 /* Set the background of all menu items that are selected */
 .yui-skin-sam div.yuimenu li.selected {
     background-color: #B3D4FF;
@@ -193,7 +194,7 @@
 .yui-skin-sam div.yuimenu li.selected a.selected {
     color: #000;
 }
-
+/* Position the icon absolute*/
 .yui-skin-sam .yui-toolbar-container .yui-button span.yui-toolbar-icon {
     position: absolute;
 }
@@ -317,10 +318,12 @@
     background-position: 0 -504px;
     left: 5px;
 }
+/* Set the width of the spin buttons */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton,
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child {
     width: 35px;
 }
+/* Pad the first child */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton .first-child a {
     padding-left: 2px;
     text-align: left;    
@@ -331,7 +334,7 @@
     display: none;
 }
 
-/* Spin Buttons - The up arrow */
+/* Spin Buttons - Prep the arrows */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up,
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
     right: 2px;
@@ -342,6 +345,7 @@
     min-height: 0;
     padding: 0;
 }
+/* Spin Buttons - The up arrow */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up {
     top: 2px;
     background-position: 0 -1222px;
@@ -351,6 +355,7 @@
     bottom: 2px;
     background-position: 0 -1187px;
 }
+/* Pad and align the Select Menus */
 .yui-skin-sam .yui-toolbar-container .yui-toolbar-select .first-child a {
     padding-left: 5px;
     text-align: left;    
@@ -429,17 +434,21 @@
     margin: 0;
     padding: 0;
 }
+/* IE is havig trouble with our menu sizes here */
 .yui-skin-sam .yui-editor-panel .yuimenu {
     *width: 90px !important;
 }
+/* Remove the floats that we applied earlier */
 .yui-skin-sam .yui-editor-panel .yuimenu ul li {
     float: none;
 }
+/* Remove the border from the toolbar's container and add some margin to it */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-container .yui-toolbar-subcont {
     padding: 0;
     border: none;
     margin-top: 0.35em;
 }
+/* Set the width of the bordersize and bordertype menu buttons */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-bordersize, .yui-skin-sam .yui-editor-panel .yui-toolbar-bordertype {
     width: 50px;
 }
@@ -451,6 +460,7 @@
     padding: 4px 0;
     margin-bottom: 7px;
 }
+/* Form styling */
 .yui-skin-sam .yui-editor-panel label strong {
     font-weight: normal;
     font-size: 93%;
@@ -458,15 +468,18 @@
     padding-top: 2px;
 }
 
+/* Form styling */
 .yui-skin-sam .yui-editor-panel label input {
     width: 75%;
 }
+/* Form styling */
 .yui-skin-sam .yui-editor-panel #createlink_target,
 .yui-skin-sam .yui-editor-panel #insertimage_target {
     width: auto;
     margin-right: 5px;
 }
 
+/* Form styling */
 .yui-skin-sam .yui-editor-panel .removeLink {
     width: 98%;
 }
@@ -485,23 +498,26 @@
     padding: 0 3px 0 0;
     text-align: right;
 }
-
+/* Style the header for the Height and Width boxes */
 .yui-skin-sam .yui-editor-panel .height-width h3 {
     margin: 3px 0 0 10px;
 }
-
+/* Style the height and width container */
 .yui-skin-sam .yui-editor-panel .height-width {
     margin: 3px 0 0 35px;
     *margin-left: 14px;
     width: 42%;
     *width: 44%;
 }
+/* Give the border group a width */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-group-border {
     width: 190px;
 }
+/* Give the padding group a width */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-group-padding {
     width: 203px;
 }
+/* Fix some margins for the H3's */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-group-padding h3 {
     margin-left: 25px;
     *margin-left: 12px;
@@ -538,11 +554,12 @@
     top:2px;
     width:26px;
 }
-
+/* Style the tip in the footer */
 .yui-skin-sam .yui-editor-panel .ft span.tip {
     background-color: #EDF5FF;
     border-top: 1px solid #808080;
 }
+/* Style the tip in the footer */
 .yui-skin-sam .yui-editor-panel .ft span.tip strong {
     display: block;
     float: left;

@@ -1,3 +1,4 @@
+/* Set the cusrsor to busy when we are doing something */
 .yui-busy {
     cursor: wait !important;
 }
@@ -7,6 +8,7 @@
     padding: .25em 0;
     zoom: 1;
 }
+/* When collapsed set the toolbars container to display none */
 .yui-toolbar-container-collapsed .yui-toolbar-subcont {
     display: none;
 }
@@ -87,7 +89,7 @@
     padding: 0;
     list-style-type: none;
 }
-
+/* Hide the group labels when the .yui-toolbar-nogrouplabels class is applied */
 .yui-toolbar-container .yui-toolbar-nogrouplabels h3 {
     display: none;
 }
@@ -257,10 +259,10 @@
     text-align: left;
     zoom: 1;
 }
+/* This fixes the caret issue in Firefox */
 .yui-editor-panel .gecko label {
-    overflow: auto; /* This fixes the caret issue in Firefox */
+    overflow: auto; 
 }
-
 /* more form fields */
 .yui-editor-panel label strong {
     float: left;
@@ -331,6 +333,7 @@
     *top: -5px;
     width: 24px;
 }
+/* Border Type solid */
 .yui-editor-panel .yui-toolbar-bordertype span a span.yui-toolbar-bordertype-solid {
     border-bottom: 1px solid black;
 }
