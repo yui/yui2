@@ -37,7 +37,7 @@
             base: '../build/',
             onLoadComplete: function(loader) {
 
-                //YAHOO.widget.Logger.enableBrowserConsole();
+                YAHOO.widget.Logger.enableBrowserConsole();
                 logger = new YAHOO.tool.TestLogger();
                 log("onLoadComplete");
 
@@ -65,11 +65,7 @@
                 }));
                  
                 YAHOO.tool.TestRunner.add(suite);
-                if (parent && parent != window) {
-                    YAHOO.tool.TestManager.load();
-                } else {
-                    YAHOO.tool.TestRunner.run();
-                }
+                YAHOO.tool.TestRunner.run();
             }
         }
     };

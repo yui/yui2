@@ -749,7 +749,8 @@
 
             var o = {};
             o[name] = true;
-            s = mod && mod.supersedes;
+
+            var s = mod && mod.supersedes;
 
             YUI.ObjectUtil.appendArray(o, s);
 
@@ -850,7 +851,7 @@
             for (i in r) {
                 mod = this.moduleInfo[i];
                 if (mod && mod.skinnable) {
-                    var o=this.skin.override, j;
+                    var o=this.skin.overrides, j;
                     if (o && o[i]) {
                         for (j=0; j<o[i].length; j=j+1) {
                             this.require(this.formatSkin(o[i][j], i));
@@ -1066,7 +1067,7 @@
 
                 var ss=info[bb] && info[bb].supersedes;
                 if (ss) {
-                    for (ii=0; ii<ss.length; ii=i+1) {
+                    for (ii=0; ii<ss.length; ii=ii+1) {
                         if (requires(aa, ss[ii])) {
                             return true;
                         }

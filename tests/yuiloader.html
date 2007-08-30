@@ -9,7 +9,7 @@
 var g_modules=[];
 
 var YAHOO_config = {
-    listener: function(info) {
+    listener: function g_mycallback(info) {
         g_modules.push(info.name);
     }
 };
@@ -99,11 +99,7 @@ var YAHOO_config = {
 
     }));
      
-    function runTests(){
-        YAHOO.tool.TestRunner.run();
-    }
-
-    YAHOO.util.Event.on(window, "load", function (){
+    (function (){
         //create the logger
         var logger = new YAHOO.tool.TestLogger();
         
@@ -111,14 +107,10 @@ var YAHOO_config = {
         YAHOO.tool.TestRunner.add(suite);
         
         //add event handler
-        YAHOO.util.Event.addListener("btnRun", "click", runTests);
+        YAHOO.util.Event.addListener("btnRun", "click", YAHOO.tool.TestRunner.run);
 
-        if (parent && parent != window) {
-            YAHOO.tool.TestManager.load();
-        } else {
-            YAHOO.tool.TestRunner.run();
-        }
-    });
+        runTests();
+    })();
     
 })();
 
