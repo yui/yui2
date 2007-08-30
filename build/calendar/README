@@ -1,5 +1,9 @@
 Calendar Release Notes
 
+*** version 2.3.1 ***
+
+	- Changed Calendar/CalendarGroup to render an empty title bar element when "close" is set to true, but "title" has not been set, to allow Sam Skin to render a title bar correctly.
+
 *** version 2.3.0 ***
 
 	- Added checks to select, selectCell, deselect and deselectCell methods to ensure the Calendar/Calendar group was not set to an invalid state by programmatically selecting unselectable dates or cells.

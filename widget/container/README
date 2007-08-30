@@ -1,6 +1,163 @@
 Container Release Notes
 
-*** version 2.3 ***
+*** version 2.3.1 ***
+
+Fixed the following bugs:
+-------------------------
+
++ To help reduce the occurrence of "Operation Aborted" errors in IE, 
+  containers which are rendered to the document's BODY element (e.g. 
+  myOverlay.render(document.body)) are now inserted before the first
+  child of the BODY element. This applies to both the container 
+  element as well as the iframe shim if enabled.
+
+  Prior to 2.3.1, these two elements were appended as the last 
+  children of the BODY element.
+
+  When rendering to any other element on the page, the behavior is 
+  unchanged and both the container and shim are appended as the last 
+  children of the element.
+
+  Upgrade Impact For Containers Rendered To Document.Body
+  -------------------------------------------------------
+  If you have an xy coordinate and non-zero z-index specified for 
+  your container there should be no negative impact.
+  
+  If you haven't specified an xy position, the fix could result
+  in a shift in your container position, depending on other elements
+  on the page.
+
+  If you haven't specified a z-index and are relying on DOM order to 
+  stack the container, you may see a change in stacking order of 
+  the container or iframe shim.
+
+  Both these changes can be resolved by setting a specific z-index
+  and position based on the layout of other elements on your page.
+
+  The change to stacking order is discussed in detail below in 
+  relation to other z-index fixes made for 2.3.1.
+
++ z-index is now applied correctly for Panels and their corresponding
+  Iframe Shims and Modal Masks. This fix applies to both the default 
+  z-index based on the CSS for the Panel and specific z-indices set 
+  using the "zindex" configuration parameter.
+
+  Default z-index values are:
+  
+     Panel: 2
+     Iframe Shim: 1
+     Modal Mask: 1
+  
+  The Iframe Shim and Modal Mask z-index will always be set to one less
+  than the Panel z-index.
+
+  PLEASE NOTE:
+  
+  As a result of the fix to reduce "Operation Aborted" errors,
+  setting a z-index of 1 on a Panel rendered to document.body will 
+  result in it's Iframe Shim and Modal Mask (which will have a z-index
+  of 0) being rendered behind other positioned elements in the document.
+
+  This is because the Iframe Shim, Modal Mask and Panel are inserted as
+  the first children of the BODY element and hence any positioned 
+  elements with a z-index of 0 or auto which occur after them in the 
+  document will be stacked on top of them as per W3C spec.
+
+  If you need to keep the Panel above positioned elements on your page, 
+  the Panel needs to be set to a z-index of 2 or more.
+
+  In general it's advisable to manage the z-index of positioned elements 
+  on your page deliberately by setting a z-index, to avoid having their 
+  order in the document define their stacking order.
+  
+  For detailed stacking order information see:
+  - http://www.w3.org/TR/CSS21/visuren.html#layers
+  - http://developer.mozilla.org/en/docs/Understanding_CSS_z-index:The_st
+    acking_context
+
++ Module now correctly recognizes standard module header, body and footer 
+  DIVs when they have extra CSS classes applied in addition to the 
+  required hd, bd, and ft classes. e.g. <div class="bd news"></div>.
+
++ An empty header (set to $#160;) is created for draggable Panels which
+  don't have a header specified, to provide a drag handle. This fixes a
+  regression introduced in 2.3.0 so that 2.2.2 behavior is restored.
+  
++ Dialog.destroy has been fixed to account for Dialog form elements which 
+  may not be direct children of the standard module body ("bd") element.
+
++ SimpleDialog.destory now completes successfully if the optional 
+  button-beta.js dependancy is not included on the page.
+  
++ Destroying Overlays registered with the OverlayManager no longer results in a 
+  JavaScript error. The Overlay is destroyed and removed from the 
+  OverlayManager correctly.
+  
++ Submitting a Dialog form using a "submit" button (firing the form's submit 
+  event) no longer throws a JavaScript error. 
+  
+Known Issues
+------------
+
++ IE: Borders for tables with border-collapse:collapse remain visible
+  -------------------------------------------------------------------
+  If an Overlay, or any of it's subclasses, contains a table with its
+  border-collapse CSS property set to "collapse" instead of the default 
+  value of "separate", the borders of the table will remain visible, when 
+  the Overlay is configured to be hidden initially. The table contents 
+  will be hidden correctly.
+  
+  This is due to an IE bug, reproducible by the basic test case below:
+  
+     <style type="text/css">
+        .box  {visibility:hidden;}
+        td    {border:1px solid red;}
+        table {border-collapse:collapse;}
+     </style>
+
+     <div class="box">
+        <table>
+           <tr>
+        	   <td>1</td>
+        	   <td>2</td>
+           </tr>
+        </table>
+     </div>
+
+  Setting the DIV elements "style.visibility" JS property fixes the 
+  problem with the simple test case. NOTE: Setting the style in markup 
+  using the DIV's style attribute does not.
+
+  Extending this to Container, the simplest workaround if you're not 
+  using effects, is to use Overlay's hide() method to setup visibility. 
+  This will set the Overlay's element "style.visibility" property. e.g.
+
+      // Start visible, then hide.
+      var ovr = YAHOO.widget.Overlay("ovr");
+      ovr.render();
+      ovr.hide();
+      
+  You can also apply this workaround if you want to use effects by 
+  setting the effect up after you hide. e.g.
+  
+      // Start visible, but don't apply effects, 
+      // to avoid initial animation.
+      var ovr = YAHOO.widget.Overlay("ovr");
+      ovr.render();
+      ovr.hide();
+      ovr.cfg.setProperty("effect", {effect:.....});
+
+  If initial flicker is a problem with the above, you can set the 
+  visibility directly on the Overlay element after rendering e.g.
+
+      var ovr = YAHOO.widget.Overlay("ovr", {visible:false});
+      ovr.render();
+      YAHOO.util.Dom.setStyle(ovr.element, "visibility", "hidden");
+
+  but if possible one of the previous methods should be used since 
+  they use the public API as opposed to manipulating the DOM directly.
+
+*** version 2.3.0 ***
 
 Fixed the following bugs:
 -------------------------
