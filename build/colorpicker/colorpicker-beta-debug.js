@@ -199,13 +199,29 @@ YAHOO.util.Color = function() {
 
 (function() {
 
-    var pickercount = 0;
+    var _pickercount = 0;
 
     /**
      * The colorpicker module provides a widget for selecting colors
      * @module colorpicker
      * @requires yahoo, dom, event, element, slider
      */
+
+
+    /**
+     * Creates the host element if it doesn't exist
+     * @method _createHostElement
+     * @private
+     */
+    var _createHostElement = function() {
+        var el = document.createElement('div');
+
+        if (this.CSS.BASE) {
+            el.className = this.CSS.BASE;
+        }
+        
+        return el;
+    };
 
     /**
      * A widget to select colors
@@ -220,7 +236,7 @@ YAHOO.util.Color = function() {
      * initial attributes.  Ignored if first arg is attributes object.
      */
     YAHOO.widget.ColorPicker = function(el, attr) {
-        pickercount = pickercount + 1;
+        _pickercount = _pickercount + 1;
         this.logger = new YAHOO.widget.LogWriter("ColorPicker");
         attr = attr || {};
         if (arguments.length === 1 && !YAHOO.lang.isString(el) && !el.nodeName) {
@@ -540,6 +556,60 @@ YAHOO.util.Color = function() {
     };
 
     /**
+     * Moves the hue slider into the position dictated by the current state
+     * of the control
+     * @method _updateHueSlider
+     * @private
+     */
+    var _updateHueSlider = function() {
+        var size = this.get(this.OPT.PICKER_SIZE),
+            h = this.get(this.OPT.HUE);
+
+        h = size - Math.round(h / 360 * size);
+        
+        // 0 is at the top and bottom of the hue slider.  Always go to
+        // the top so we don't end up sending the thumb to the bottom
+        // when the value didn't actually change (e.g., a conversion
+        // produced 360 instead of 0 and the value was already 0).
+        if (h === size) {
+            h = 0;
+        }
+        this.logger.log("Hue slider is being set to " + h);
+
+        this.hueSlider.setValue(h);
+    };
+
+    /**
+     * Moves the picker slider into the position dictated by the current state
+     * of the control
+     * @method _updatePickerSlider
+     * @private
+     */
+    var _updatePickerSlider = function() {
+        var size = this.get(this.OPT.PICKER_SIZE),
+            s = this.get(this.OPT.SATURATION),
+            v = this.get(this.OPT.VALUE);
+
+        s = Math.round(s * size / 100);
+        v = Math.round(size - (v * size / 100));
+
+        this.logger.log("Setting picker slider to " + [s, v]);
+
+        this.pickerSlider.setRegionValue(s, v);
+    };
+
+    /**
+     * Moves the sliders into the position dictated by the current state
+     * of the control
+     * @method _updateSliders
+     * @private
+     */
+    var _updateSliders = function() {
+        _updateHueSlider.call(this);
+        _updatePickerSlider.call(this);
+    };
+
+    /**
      * Sets the control to the specified rgb value and
      * moves the sliders to the proper positions
      * @method setValue
@@ -640,9 +710,9 @@ YAHOO.util.Color = function() {
         var h=_getH.call(this), s=_getS.call(this), v=_getV.call(this);
         YAHOO.log("hsv " + [h, s, v]);
 
-        rgb = Color.hsv2rgb(h, s, v);
-        var websafe = Color.websafe(rgb);
-        var hex = Color.rgb2hex(rgb[0], rgb[1], rgb[2]);
+        var rgb = Color.hsv2rgb(h, s, v);
+        //var websafe = Color.websafe(rgb);
+        //var hex = Color.rgb2hex(rgb[0], rgb[1], rgb[2]);
 
         this.set(this.OPT.RGB, rgb);
     };
@@ -760,6 +830,26 @@ YAHOO.util.Color = function() {
     };
 
     /**
+     * Use the value of the text field to update the control
+     * @method _hexFieldKeypress
+     * @param e {Event} an event
+     * @param el {HTMLElement} the field
+     * @param prop {string} the key to the linked property
+     * @private
+     */
+    var _useFieldValue = function(e, el, prop) {
+        var val = el.value;
+
+        if (prop !== this.OPT.HEX) {
+            val = parseInt(val, 10);
+        }
+
+        if (val !== this.get(prop)) {
+            this.set(prop, val);
+        }
+    };
+
+    /**
      * Handle keypress on one of the rgb or hsv fields.
      * @method _rgbFieldKeypress
      * @param e {Event} the keypress event
@@ -806,38 +896,6 @@ YAHOO.util.Color = function() {
         }
     };
 
-    /**
-     * Use the value of the text field to update the control
-     * @method _hexFieldKeypress
-     * @param e {Event} an event
-     * @param el {HTMLElement} the field
-     * @param prop {string} the key to the linked property
-     * @private
-     */
-    var _useFieldValue = function(e, el, prop) {
-        var val = el.value;
-
-        if (prop !== this.OPT.HEX) {
-            val = parseInt(val, 10);
-        }
-
-        if (val !== this.get(prop)) {
-            this.set(prop, val);
-        }
-    };
-
-    /** 
-     * Allows numbers and special chars only.  Used for the
-     * rgb and hsv fields keypress handler.
-     * @method _numbersOnly
-     * @param e {Event} the event
-     * @private
-     * @return {boolean} false if we are canceling the event
-     */
-    var _numbersOnly = function(e) {
-        return _hexOnly(e, true);
-    };
-
     /** 
      * Allows numbers and special chars, and by default allows a-f.  
      * Used for the hex field keypress handler.
@@ -867,6 +925,18 @@ YAHOO.util.Color = function() {
         }
     };
 
+    /** 
+     * Allows numbers and special chars only.  Used for the
+     * rgb and hsv fields keypress handler.
+     * @method _numbersOnly
+     * @param e {Event} the event
+     * @private
+     * @return {boolean} false if we are canceling the event
+     */
+    var _numbersOnly = function(e) {
+        return _hexOnly(e, true);
+    };
+
     /**
      * Returns the element reference that is saved.  The id can be either
      * the element id, or the key for this id in the "id" config attribute.
@@ -879,7 +949,7 @@ YAHOO.util.Color = function() {
         return this.get(this.OPT.ELEMENTS)[this.get(this.OPT.IDS)[id]]; 
     };
 
-    _createElements = function() {
+    var _createElements = function() {
         this.logger.log("Building markup");
         var el, child, img, fld, i, 
             ids = this.get(this.OPT.IDS),
@@ -1130,6 +1200,16 @@ YAHOO.util.Color = function() {
 
     };
 
+    var _attachRGBHSV = function(id, config) {
+        Event.on(this.getElement(id), "keydown", function(e, me) {
+                _rgbFieldKeypress.call(me, e, this, config);
+            }, this);
+        Event.on(this.getElement(id), "keypress", _numbersOnly, this);
+        Event.on(this.getElement(id), "blur", function(e, me) {
+                _useFieldValue.call(me, e, this, config);
+            }, this);
+    };
+
     /**
      * Sets the initial state of the sliders
      * @method initPicker
@@ -1228,15 +1308,85 @@ YAHOO.util.Color = function() {
             }, this);
     };
 
-    _attachRGBHSV = function(id, config) {
-        Event.on(this.getElement(id), "keydown", function(e, me) {
-                _rgbFieldKeypress.call(me, e, this, config);
-            }, this);
-        Event.on(this.getElement(id), "keypress", _numbersOnly, this);
-        Event.on(this.getElement(id), "blur", function(e, me) {
-                _useFieldValue.call(me, e, this, config);
-            }, this);
+
+
+    /**
+     * Updates the rgb attribute with the current state of the r,g,b
+     * fields.  This is invoked from change listeners on these
+     * attributes to facilitate updating these values from the
+     * individual form fields
+     * @method _updateRGB
+     * @private
+     */
+    var _updateRGB = function() {
+        var rgb = [this.get(this.OPT.RED), 
+                   this.get(this.OPT.GREEN),
+                   this.get(this.OPT.BLUE)];
+
+        this.logger.log("RGB value set to " + rgb);
+        this.set(this.OPT.RGB, rgb);
+
+        _updateSliders.call(this);
     };
+
+    /**
+     * Updates the RGB values from the current state of the HSV
+     * values.  Executed when the one of the HSV form fields are
+     * updated
+     * _updateRGBFromHSV
+     * @private
+     */
+    var _updateRGBFromHSV = function() {
+        var hsv = [this.get(this.OPT.HUE), 
+                   this.get(this.OPT.SATURATION)/100,
+                   this.get(this.OPT.VALUE)/100];
+
+        var rgb = Color.hsv2rgb(hsv);
+
+        this.logger.log("HSV converted to RGB " + hsv + " : " + rgb);
+        this.set(this.OPT.RGB, rgb);
+
+        _updateSliders.call(this);
+    };
+
+    /**
+     * Parses the hex string to normalize shorthand values, converts
+     * the hex value to rgb and updates the rgb attribute (which
+     * updates the state for all of the other values)
+     * method _updateHex
+     * @private
+     */
+    var _updateHex = function() {
+       
+        var hex = this.get(this.OPT.HEX), l=hex.length;
+
+        // support #369 -> #336699 shorthand
+        if (l === 3) {
+            var c = hex.split(""), i;
+            for (i=0; i<l; i=i+1) {
+                c[i] = c[i] + c[i];
+            }
+
+            hex = c.join("");
+        }
+
+        if (hex.length !== 6) {
+            this.logger.log(this.get(this.TXT.ILLEGAL_HEX), "error");
+            return false;
+        }
+
+        var rgb = Color.hex2rgb(hex);
+
+        this.logger.log(sub("Hex value set to {hex} ({rgb})", {
+                hex: hex, rgb: rgb
+            }));
+
+        this.setValue(rgb);
+
+        //_updateSliders.call(this);
+
+    };
+
 
 
     /**
@@ -1399,12 +1549,12 @@ YAHOO.util.Color = function() {
             });
 
 
-        ids = attr.ids || lang.merge({}, this.ID);
+        var ids = attr.ids || lang.merge({}, this.ID);
 
-        if (!attr.ids && pickercount > 1) {
+        if (!attr.ids && _pickercount > 1) {
             for (var i in ids) {
                 if (lang.hasOwnProperty(ids, i)) {
-                    ids[i] = ids[i] + pickercount;
+                    ids[i] = ids[i] + _pickercount;
                 }
             }
         }
@@ -1463,7 +1613,7 @@ YAHOO.util.Color = function() {
          * @param id {string|HTMLElement} the element key, id, or ref
          * @param on {boolean} hide or show.  If true, show
          * @private */
-        _hideShowEl = function(id, on) {
+        var _hideShowEl = function(id, on) {
             var el = (lang.isString(id) ? this.getElement(id) : id);
             //Dom.setStyle(id, "visibility", (on) ? "" : "hidden");
             Dom.setStyle(el, "display", (on) ? "" : "none");
@@ -1588,151 +1738,7 @@ YAHOO.util.Color = function() {
         this.initPicker();
     };
 
-    /**
-     * Updates the rgb attribute with the current state of the r,g,b
-     * fields.  This is invoked from change listeners on these
-     * attributes to facilitate updating these values from the
-     * individual form fields
-     * @method _updateRGB
-     * @private
-     */
-    var _updateRGB = function() {
-        var rgb = [this.get(this.OPT.RED), 
-                   this.get(this.OPT.GREEN),
-                   this.get(this.OPT.BLUE)];
 
-        this.logger.log("RGB value set to " + rgb);
-        this.set(this.OPT.RGB, rgb);
-
-        _updateSliders.call(this);
-    };
-
-    /**
-     * Updates the RGB values from the current state of the HSV
-     * values.  Executed when the one of the HSV form fields are
-     * updated
-     * _updateRGBFromHSV
-     * @private
-     */
-    var _updateRGBFromHSV = function() {
-        var hsv = [this.get(this.OPT.HUE), 
-                   this.get(this.OPT.SATURATION)/100,
-                   this.get(this.OPT.VALUE)/100];
-
-        var rgb = Color.hsv2rgb(hsv);
-
-        this.logger.log("HSV converted to RGB " + hsv + " : " + rgb);
-        this.set(this.OPT.RGB, rgb);
-
-        _updateSliders.call(this);
-    };
-
-    /**
-     * Parses the hex string to normalize shorthand values, converts
-     * the hex value to rgb and updates the rgb attribute (which
-     * updates the state for all of the other values)
-     * method _updateHex
-     * @private
-     */
-    var _updateHex = function() {
-       
-        var hex = this.get(this.OPT.HEX), l=hex.length;
-
-        // support #369 -> #336699 shorthand
-        if (l === 3) {
-            var c = hex.split(""), i;
-            for (i=0; i<l; i=i+1) {
-                c[i] = c[i] + c[i];
-            }
-
-            hex = c.join("");
-        }
-
-        if (hex.length !== 6) {
-            this.logger.log(this.get(this.TXT.ILLEGAL_HEX), "error");
-            return false;
-        }
-
-        var rgb = Color.hex2rgb(hex);
-
-        this.logger.log(sub("Hex value set to {hex} ({rgb})", {
-                hex: hex, rgb: rgb
-            }));
-
-        this.setValue(rgb);
-
-        //_updateSliders.call(this);
-
-    };
-
-    /**
-     * Moves the sliders into the position dictated by the current state
-     * of the control
-     * @method _updateSliders
-     * @private
-     */
-    var _updateSliders = function() {
-        _updateHueSlider.call(this);
-        _updatePickerSlider.call(this);
-    };
-
-    /**
-     * Moves the hue slider into the position dictated by the current state
-     * of the control
-     * @method _updateHueSlider
-     * @private
-     */
-    var _updateHueSlider = function() {
-        var size = this.get(this.OPT.PICKER_SIZE),
-            h = this.get(this.OPT.HUE);
-
-        h = size - Math.round(h / 360 * size);
-        
-        // 0 is at the top and bottom of the hue slider.  Always go to
-        // the top so we don't end up sending the thumb to the bottom
-        // when the value didn't actually change (e.g., a conversion
-        // produced 360 instead of 0 and the value was already 0).
-        if (h === size) {
-            h = 0;
-        }
-        this.logger.log("Hue slider is being set to " + h);
-
-        this.hueSlider.setValue(h);
-    };
-
-    /**
-     * Moves the picker slider into the position dictated by the current state
-     * of the control
-     * @method _updatePickerSlider
-     * @private
-     */
-    var _updatePickerSlider = function() {
-        var size = this.get(this.OPT.PICKER_SIZE),
-            s = this.get(this.OPT.SATURATION),
-            v = this.get(this.OPT.VALUE);
-
-        s = Math.round(s * size / 100);
-        v = Math.round(size - (v * size / 100));
-
-        this.logger.log("Setting picker slider to " + [s, v]);
-
-        this.pickerSlider.setRegionValue(s, v);
-    };
-
-    /**
-     * Creates the host element if it doesn't exist
-     * @method _createHostElement
-     * @private
-     */
-    var _createHostElement = function() {
-        var el = document.createElement('div');
-
-        if (this.CSS.BASE) {
-            el.className = this.CSS.BASE;
-        }
-        
-        return el;
-    };
 
 
 })();
