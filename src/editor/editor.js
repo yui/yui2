@@ -3930,6 +3930,7 @@ var Dom = YAHOO.util.Dom,
             }
             panel.appendToBody(body); //Append the new DOM node to it
             var fireShowEvent = function() {
+                panel.bringToTop();
                 Event.on(panel.element, 'click', function(ev) {
                     Event.stopPropagation(ev);
                 });
