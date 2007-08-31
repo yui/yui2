@@ -4919,6 +4919,7 @@ YAHOO.widget.DataTable.formatTextbox = function(el, oRecord, oColumn, oData) {
 YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     // Complete the set
     var oValidPaginator = this.get("paginator");
+    var nOrigCurrentPage = oValidPaginator.currentPage;
     for(var param in oNewValues) {
         if(YAHOO.lang.hasOwnProperty(oValidPaginator, param)) {
             oValidPaginator[param] = oNewValues[param];
@@ -4939,8 +4940,11 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
             oValidPaginator.currentPage = oValidPaginator.totalPages;
         }
     }
-    oValidPaginator.startRecordIndex = (oValidPaginator.currentPage-1)*oValidPaginator.rowsPerPage;
-    
+
+    if(oValidPaginator.currentPage !== nOrigCurrentPage) {
+        oValidPaginator.startRecordIndex = (oValidPaginator.currentPage-1)*oValidPaginator.rowsPerPage;
+    }
+
 
     this.set("paginator", oValidPaginator);
     return this.get("paginator");
@@ -7369,7 +7373,8 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      */
 
     /**
-     * Fired when data is returned from DataSource.
+     * Fired when data is returned from DataSource but before it is consumed by
+     * DataTable.
      *
      * @event dataReturnEvent
      * @param oArgs.request {String} Original request.
