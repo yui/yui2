@@ -19,7 +19,7 @@
 
 (function() {
 
-    var    Dom=YAHOO.util.Dom,
+    var Dom=YAHOO.util.Dom,
         Assert=YAHOO.util.Assert,
         ObjectAssert=YAHOO.util.ObjectAssert,
         ArrayAssert=YAHOO.util.ArrayAssert,
@@ -103,10 +103,6 @@
     };
     var dsStaticMethodsTest = new DataSourceTestCase(dsStaticMethodsTemplate);
 
-    function runTests(){
-        TestRunner.run();
-    }
-
     YAHOO.util.Event.addListener(window, "load", function() {
         var logger = new TestLogger();
 
@@ -117,7 +113,7 @@
 
         TestRunner.add(datasourcesuite);
 
-        YAHOO.util.Event.addListener("btnRun", "click", runTests);
+        YAHOO.util.Event.addListener("btnRun", "click", function(){TestRunner.run();});
         YAHOO.util.Dom.get("btnRun").disabled = false;
 
         if (parent && parent != window) {
