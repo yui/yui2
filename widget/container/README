@@ -38,29 +38,29 @@ Fixed the following bugs:
   relation to other z-index fixes made for 2.3.1.
 
 + Z-index is now applied correctly for Overlay/Panel elements, their 
-  corresponding Iframe Shims, and Modal Masks (for Panels).
+  corresponding iframe shims, and modal masks (for Panels).
   This fix applies to both the default z-index based on the CSS 
   for the Overlay/Panel and specific z-indices set using the 
   "zindex" configuration parameter.
 
   Default z-index values are:
 
-     Overlay/Panel Element: 2
-     Iframe Shim: 1
-     Modal Mask: 1
+     Overlay/Panel element: 2
+     Iframe shim: 1
+     Mask: 1
   
-  The Iframe Shim and Modal Mask z-index will always be set to one less
+  The iframe shim and modal mask z-index will always be set to one less
   than the Overlay/Panel z-index.
 
   PLEASE NOTE:
   
   As a result of the fix to reduce "Operation Aborted" errors,
   setting a z-index of 1 on an Overlay/Panel rendered to document.body 
-  will result in it's Iframe Shim and Modal Mask (which will have a 
+  will result in its iframe shim and modal mask (which will have a 
   z-index of 0) being rendered behind other positioned elements in the 
   document.
 
-  This is because the Iframe Shim, Modal Mask and Overlay/Panel are 
+  This is because the Overlay/Panel, iframe shim and mask are 
   inserted as the first children of the BODY element and hence any 
   positioned elements with a z-index of 0 or auto which occur after 
   them in the document will be stacked on top of them as per W3C spec.
@@ -103,7 +103,7 @@ Known Issues
 
 + IE: Borders for tables with border-collapse:collapse remain visible
   -------------------------------------------------------------------
-  If an Overlay, or any of it's subclasses, contains a table with its
+  If an Overlay, or any of its subclasses, contains a table with its
   border-collapse CSS property set to "collapse" instead of the default 
   value of "separate", the borders of the table will remain visible, when 
   the Overlay is configured to be hidden initially. The table contents 
