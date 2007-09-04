@@ -183,6 +183,7 @@ YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url)
  * @method fetch
  */
 YAHOO.util.ImageLoader.group.prototype.fetch = function() {
+	YAHOO.log('Fetching images in group: "' + this.name + '".', 'info', 'imageloader');
 
 	clearTimeout(this._timeout);
 	// remove all listeners
@@ -207,6 +208,7 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
  * @private
  */
 YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
+	YAHOO.log('Checking for images above the fold in group: "' + this.name + '"', 'info', 'imageloader');
 	var scrollTop = (document.compatMode != 'CSS1Compat') ? document.body.scrollTop : document.documentElement.scrollTop;
 	var viewHeight = YAHOO.util.Dom.getViewportHeight();
 	var hLimit = scrollTop + viewHeight;
@@ -217,6 +219,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 		if (YAHOO.lang.hasOwnProperty(this._imgObjs, id)) {
 			var elPos = YAHOO.util.Dom.getXY(this._imgObjs[id].domId);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
+				YAHOO.log('Image with id "' + this._imgObjs[id].domId + '" is above the fold. Fetching image.', 'info', 'imageloader');
 				this._imgObjs[id].fetch();
 			}
 		}
@@ -227,6 +230,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 		for (var i=0; i < this._classImageEls.length; i++) {
 			var elPos = YAHOO.util.Dom.getXY(this._classImageEls[i]);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
+				YAHOO.log('Image with id "' + this._classImageEls[i].id + '" is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)', 'info', 'imageloader');
 				YAHOO.util.Dom.removeClass(this._classImageEls[i], this.className);
 			}
 		}
@@ -243,6 +247,7 @@ YAHOO.util.ImageLoader.group.prototype._fetchByClass = function() {
 		return;
 	}
 
+	YAHOO.log('Fetching all images with class "' + this.className + '" in group "' + this.name + '".', 'info', 'imageloader');
 	// this._classImageEls may have been set during _foldCheck
 	if (this._classImageEls === null) {
 		this._classImageEls = YAHOO.util.Dom.getElementsByClassName(this.className);
@@ -320,6 +325,7 @@ YAHOO.util.ImageLoader.imgObj.prototype.fetch = function() {
 	if (! el) {
 		return;
 	}
+	YAHOO.log('Fetching image with id "' + this.domId + '".', 'info', 'imageloader');
 	this._applyUrl(el);
 
 	if (this.setVisible) {
