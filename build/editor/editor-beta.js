@@ -2586,6 +2586,9 @@ var Dom = YAHOO.util.Dom,
             if (this.currentWindow) {
                 this.closeWindow();
             }
+            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
+                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
+            }
             if (this.browser.webkit) {
                 var tar =Event.getTarget(ev);
                 if (this._isElement(tar, 'a') || this._isElement(tar.parentNode, 'a')) {
@@ -2744,6 +2747,9 @@ var Dom = YAHOO.util.Dom,
             this._setCurrentEvent(ev);
             if (this.currentWindow) {
                 this.closeWindow();
+            }
+            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
+                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
             }
             var doExec = false,
                 action = null,
@@ -5223,7 +5229,7 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @method show
-        * @description This method needs to be called if the Editor was hidden. It is used to reset the editor after being in a container that was set to display none.
+        * @description This method needs to be called if the Editor was hidden (like in a TabView or Panel). It is used to reset the editor after being in a container that was set to display none.
         */
         show: function() {
             if (this.browser.gecko) {
@@ -5236,6 +5242,29 @@ var Dom = YAHOO.util.Dom,
                     self._setInitialContent.call(self);
                 }, 10);
             }
+            //Adding this will close all other Editor window's when showing this one.
+            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
+                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
+            }
+        },
+        /**
+        * @method hide
+        * @description This method needs to be called if the Editor is to be hidden (like in a TabView or Panel). It should be called to clear timeouts and close open editor windows.
+        */
+        hide: function() {
+            //Adding this will close all other Editor window's.
+            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
+                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
+            }
+            if (this._fixNodesTimer) {
+                clearTimeout(this._fixNodesTimer);
+                this._fixNodesTimer = null;
+            }
+            if (this._nodeChangeTimer) {
+                clearTimeout(this._nodeChangeTimer);
+                this._nodeChangeTimer = null;
+            }
+            this._lastNodeChange = 0;
         },
         /**
         * @method cleanHTML
