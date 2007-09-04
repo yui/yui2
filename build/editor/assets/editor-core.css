@@ -95,7 +95,10 @@
 }
 
 /* Setup the default style of a button in the toolbar */
-.yui-toolbar-container .yui-button {
+.yui-toolbar-container .yui-push-button,
+.yui-toolbar-container .yui-color-button,
+.yui-toolbar-container .yui-menu-button {
+/*.yui-toolbar-container .yui-button {*/
     position: relative;
     cursor: pointer;
 }
