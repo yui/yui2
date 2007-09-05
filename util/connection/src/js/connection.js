@@ -697,7 +697,7 @@ YAHOO.util.Connect =
 				case 12031:
 				case 12152: // Connection closed by server.
 				case 13030: // See above comments for variable status.
-					responseObject = this.createExceptionObject(o.tId, callback.argument, (isAbort?isAbort:false));
+					responseObject = this.createExceptionObject(o.tId, (callback && callback.argument)?callback.argument:undefined, (isAbort?isAbort:false));
 					if(callback){
 						if(callback.failure){
 							if(!callback.scope){
