@@ -2162,7 +2162,7 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
            
             // Validate anchor row
             oAnchorRecord = oSelf._oAnchorRecord;
-            if(oAnchorRecord) {
+            if(!oAnchorRecord) {
                 oAnchorRecord = oSelf._oAnchorRecord = oTriggerRecord;
             }
             
