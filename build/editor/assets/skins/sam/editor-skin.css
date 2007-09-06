@@ -129,6 +129,12 @@
     color: #000000;
     overflow: hidden;
 }
+.yui-skin-sam .yui-toolbar-container .yui-push-button-disabled a,
+.yui-skin-sam .yui-toolbar-container .yui-color-button-disabled a,
+.yui-skin-sam .yui-toolbar-container .yui-menu-button-disabled a {
+    color: #A6A6A6;
+    cursor: default;
+}
 /* IE needs a little help positioning the first child */
 .yui-skin-sam .yui-toolbar-container .yui-button .first-child {
     *left: 0px;
