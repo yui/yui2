@@ -2169,6 +2169,7 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
                     return;
             }
             else {
+                oTriggerRecord = oSelf.getRecord(oTriggerRecord);
                 nTriggerRecordIndex = oSelf.getRecordIndex(oTriggerRecord);
                 elTriggerRow = oSelf.getTrEl(oTriggerRecord);
                 nTriggerTrIndex = oSelf.getTrIndex(elTriggerRow);
@@ -2336,7 +2337,7 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
                 return;
             }
             else {
-                oTriggerRecord = oTriggerCell.record;
+                oTriggerRecord = oSelf.getRecord(oTriggerCell.recordId);
                 nTriggerRecordIndex = oSelf.getRecordIndex(oTriggerRecord);
                 elTriggerRow = oSelf.getTrEl(oTriggerRecord);
                 nTriggerTrIndex = oSelf.getTrIndex(elTriggerRow);
@@ -2346,7 +2347,7 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
                     return;
                 }
                 else {
-                    oTriggerColumn = oTriggerCell.column;
+                    oTriggerColumn = oSelf.getColumnById(oTriggerCell.columnId);
                     nTriggerColKeyIndex = oTriggerColumn.getKeyIndex();
                 }
             }
@@ -2394,23 +2395,34 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
                         anchorPos = 0;
                     }
 
-                    // Is the anchor cell left or right of trigger cell
-                    startIndex = Math.min(nAnchorColKeyIndex, nTriggerColKeyIndex);
-                    endIndex = Math.max(nAnchorColKeyIndex, nTriggerColKeyIndex);
-
                     // Selecting away from anchor cell
                     if(anchorPos <= 0) {
                         // Select the horiz block on the next row...
                         // ...making sure there is room below the trigger row
                         if(nTriggerTrIndex < allRows.length-1) {
-                            for(i=startIndex; i<=endIndex; i++) {
-                                elNext = allRows[nTriggerTrIndex+1].cells[i];
-                                oSelf.selectCell(elNext);
+                            // Select in order from anchor to trigger...
+                            startIndex = nAnchorColKeyIndex;
+                            endIndex = nTriggerColKeyIndex;
+                            // ...going left
+                            if(startIndex > endIndex) {
+                                for(i=startIndex; i>=endIndex; i--) {
+                                    elNext = allRows[nTriggerTrIndex+1].cells[i];
+                                    oSelf.selectCell(elNext);
+                                }
+                            }
+                            // ... going right
+                            else {
+                                for(i=startIndex; i<=endIndex; i++) {
+                                    elNext = allRows[nTriggerTrIndex+1].cells[i];
+                                    oSelf.selectCell(elNext);
+                                }
                             }
                         }
                     }
                     // Unselecting towards anchor cell
                     else {
+                        startIndex = Math.min(nAnchorColKeyIndex, nTriggerColKeyIndex);
+                        endIndex = Math.max(nAnchorColKeyIndex, nTriggerColKeyIndex);
                         // Unselect the horiz block on this row towards the next row
                         for(i=startIndex; i<=endIndex; i++) {
                             oSelf.unselectCell(allRows[nTriggerTrIndex].cells[i]);
@@ -2429,24 +2441,36 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
                     else {
                         anchorPos = 0;
                     }
-
-                    // Is the anchor cell left or right?
-                    startIndex = Math.min(nAnchorColKeyIndex, nTriggerColKeyIndex);
-                    endIndex = Math.max(nAnchorColKeyIndex, nTriggerColKeyIndex);
-
+                    
                     // Selecting away from anchor cell
                     if(anchorPos >= 0) {
                         // Select the horiz block on the previous row...
                         // ...making sure there is room
                         if(nTriggerTrIndex > 0) {
-                            for(i=startIndex; i<=endIndex; i++) {
-                                elNext = allRows[nTriggerTrIndex-1].cells[i];
-                                oSelf.selectCell(elNext);
+                            // Select in order from anchor to trigger...
+                            startIndex = nAnchorColKeyIndex;
+                            endIndex = nTriggerColKeyIndex;
+                            // ...going left
+                            if(startIndex > endIndex) {
+                                for(i=startIndex; i>=endIndex; i--) {
+                                    elNext = allRows[nTriggerTrIndex-1].cells[i];
+                                    oSelf.selectCell(elNext);
+                                }
                             }
+                            // ... going right
+                            else {
+                                for(i=startIndex; i<=endIndex; i++) {
+                                    elNext = allRows[nTriggerTrIndex-1].cells[i];
+                                    oSelf.selectCell(elNext);
+                                }
+                            }
+
                         }
                     }
                     // Unselecting towards anchor cell
                     else {
+                        startIndex = Math.min(nAnchorColKeyIndex, nTriggerColKeyIndex);
+                        endIndex = Math.max(nAnchorColKeyIndex, nTriggerColKeyIndex);
                         // Unselect the horiz block on this row towards the previous row
                         for(i=startIndex; i<=endIndex; i++) {
                             oSelf.unselectCell(allRows[nTriggerTrIndex].cells[i]);
@@ -2471,11 +2495,22 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
                         // Select the next vert block to the right...
                         // ...making sure there is room
                         if(nTriggerColKeyIndex < allRows[nTriggerTrIndex].cells.length-1) {
-                            startIndex = Math.min(nAnchorTrIndex, nTriggerTrIndex);
-                            endIndex = Math.max(nAnchorTrIndex, nTriggerTrIndex);
-                            for(i=startIndex; i<=endIndex; i++) {
-                                elNext = allRows[i].cells[nTriggerColKeyIndex+1];
-                                oSelf.selectCell(elNext);
+                            // Select in order from anchor to trigger...
+                            startIndex = nAnchorTrIndex;
+                            endIndex = nTriggerTrIndex;
+                            // ...going up
+                            if(startIndex > endIndex) {
+                                for(i=startIndex; i>=endIndex; i--) {
+                                    elNext = allRows[i].cells[nTriggerColKeyIndex+1];
+                                    oSelf.selectCell(elNext);
+                                }
+                            }
+                            // ... going down
+                            else {
+                                for(i=startIndex; i<=endIndex; i++) {
+                                    elNext = allRows[i].cells[nTriggerColKeyIndex+1];
+                                    oSelf.selectCell(elNext);
+                                }
                             }
                         }
                     }
@@ -2506,11 +2541,22 @@ YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
                     if(anchorPos >= 0) {
                         //Select the previous vert block to the left
                         if(nTriggerColKeyIndex > 0) {
-                            startIndex = Math.min(nAnchorRecordIndex, nTriggerTrIndex);
-                            endIndex = Math.max(nAnchorRecordIndex, nTriggerTrIndex);
-                            for(i=startIndex; i<=endIndex; i++) {
-                                elNext = allRows[i].cells[nTriggerColKeyIndex-1];
-                                oSelf.selectCell(elNext);
+                            // Select in order from anchor to trigger...
+                            startIndex = nAnchorTrIndex;
+                            endIndex = nTriggerTrIndex;
+                            // ...going up
+                            if(startIndex > endIndex) {
+                                for(i=startIndex; i>=endIndex; i--) {
+                                    elNext = allRows[i].cells[nTriggerColKeyIndex-1];
+                                    oSelf.selectCell(elNext);
+                                }
+                            }
+                            // ... going down
+                            else {
+                                for(i=startIndex; i<=endIndex; i++) {
+                                    elNext = allRows[i].cells[nTriggerColKeyIndex-1];
+                                    oSelf.selectCell(elNext);
+                                }
                             }
                         }
                     }
@@ -3659,18 +3705,17 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
         }
 
         // Reinstate selected and sorted classes
-        var allRows = elTbody.rows;
         if(bReselect) {
             // Loop over each row
-            for(j=0; j<allRows.length; j++) {
-                var thisRow = allRows[j];
+            for(j=0; j<elRows.length; j++) {
+                var thisRow = elRows[j];
                 var sMode = this.get("selectionMode");
                 if ((sMode == "standard") || (sMode == "single")) {
                     // Set SELECTED
                     for(k=0; k<aSelectedRows.length; k++) {
                         if(aSelectedRows[k] === thisRow.yuiRecordId) {
                             YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
-                            if(j === allRows.length-1) {
+                            if(j === elRows.length-1) {
                                 this._oAnchorRecord = this.getRecord(thisRow.yuiRecordId);
                             }
                         }
@@ -5630,7 +5675,7 @@ YAHOO.widget.DataTable.prototype.getSelectedRows = function() {
 
 /**
  * Returns selected cells as an array of object literals:
- *     {record:oRecord, column:oColumn}.
+ *     {recordId:sRecordId, columnId:sColumnId}.
  *
  * @method getSelectedCells
  * @return {Object[]} Array of selected cells by Record ID and Column ID.
@@ -5640,24 +5685,24 @@ YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
     var tracker = this._aSelections || [];
     for(var j=0; j<tracker.length; j++) {
        if(tracker[j] && (tracker[j].constructor == Object)){
-            aSelectedCells.push({record:this.getRecord(tracker[j].recordId), column:this.getColumnById(tracker[j].columnId)});
+            aSelectedCells.push(tracker[j]);
         }
     }
     return aSelectedCells;
 };
 
 /**
- * Returns last selected Record instance.
+ * Returns last selected Record ID.
  *
  * @method getLastSelectedRecord
- * @return {YAHOO.widget.Record} Record instance of last selected row.
+ * @return {String} Record ID of last selected row.
  */
 YAHOO.widget.DataTable.prototype.getLastSelectedRecord = function() {
     var tracker = this._aSelections;
     if(tracker.length > 0) {
         for(var i=tracker.length-1; i>-1; i--) {
            if(YAHOO.lang.isString(tracker[i])){
-                return this.getRecord(tracker[i]);
+                return tracker[i];
             }
         }
     }
@@ -5665,7 +5710,7 @@ YAHOO.widget.DataTable.prototype.getLastSelectedRecord = function() {
 
 /**
  * Returns last selected cell as an object literal:
- *     {record:oRecord, column:oColumn}.
+ *     {recordId:sRecordId, columnId:sColumnId}.
  *
  * @method getLastSelectedCell
  * @return {Object} Object literal representation of a cell.
@@ -5675,7 +5720,7 @@ YAHOO.widget.DataTable.prototype.getLastSelectedCell = function() {
     if(tracker.length > 0) {
         for(var i=tracker.length-1; i>-1; i--) {
            if(tracker[i].recordId && tracker[i].columnId){
-                return {record:this.getRecord(tracker[i].recordId), column:this.getColumnById(tracker[i].columnId)};
+                return tracker[i];
             }
         }
     }
