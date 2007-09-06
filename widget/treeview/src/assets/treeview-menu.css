@@ -21,14 +21,14 @@
 .ygtvtp {
 	width:1em; height:20px; 
 	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -395px no-repeat; 
+	background: url(sprite-menu.gif) -8px -315px no-repeat; 
 }
 
 /* first or middle sibling, expandable, hover */
 .ygtvtph {
 	width:1em; height:20px; 
 	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -475px no-repeat; 
+	background: url(sprite-menu.gif) -8px -395px no-repeat; 
 }
 
 /* last sibling, no children */
@@ -54,13 +54,13 @@
 .ygtvlp { 
 	width:1em; height:20px; 
 	cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -395px no-repeat; 
+	background: url(sprite-menu.gif) -8px -315px no-repeat; 
 }
 
 /* Last sibling, expandable, hover */
 .ygtvlph { 
 	width:1em; height:20px; cursor:pointer ;
-	background: url(sprite-menu.gif) -8px -475px no-repeat; 
+	background: url(sprite-menu.gif) -8px -395px no-repeat; 
 }
 
 /* Loading icon */
