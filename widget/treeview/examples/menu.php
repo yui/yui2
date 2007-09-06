@@ -12,7 +12,11 @@
   
 <body onload="treeInit()">
 
+<!--
 <link rel="stylesheet" type="text/css" href="css/menu/tree.css">
+-->
+<link rel="stylesheet" type="text/css" href="../src/assets/skins/sam/treeview-skin.css">
+<link rel="stylesheet" type="text/css" href="../src/assets/treeview-menu.css">
 
 <div id="pageTitle">
 	<h3>Tree Control</h3>

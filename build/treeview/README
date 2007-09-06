@@ -4,7 +4,7 @@ TreeView - Release Notes
 
   * The "expand" event no longer fires twice for dynamically loaded nodes.
 
-  * added setHtml() to HTMLNode, which will synchronize the html and data
+  * Added setHtml() to HTMLNode, which will synchronize the html and data
     properties, as well as the content of the node if it has been rendered.
 
 2.3.0
