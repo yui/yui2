@@ -8713,43 +8713,47 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
  * @param e {string} The drag event
  */
 YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
-    var newPos = YAHOO.util.Dom.getX(this.getDragEl());
-    var offsetX = newPos - this.startPos;
-    var newWidth = this.startWidth + offsetX;
+    try {
+        var newPos = YAHOO.util.Dom.getX(this.getDragEl());
+        var offsetX = newPos - this.startPos;
+        var newWidth = this.startWidth + offsetX;
 
-    if(newWidth < this.minWidth) {
-        newWidth = this.minWidth;
-    }
-
-    // Resize the Column
-    var oDataTable = this.datatable;
-    var elCell = this.cell;
-
-
-    // Resize the other Columns
-    if(oDataTable.fixedWidth) {
-        // Moving right or left?
-        var sib = elCell.nextSibling;
-        //var sibIndex = elCell.index + 1;
-        var sibnewwidth = sib.offsetWidth - offsetX;
-        if(sibnewwidth < this.sibMinWidth) {
-            sibnewwidth = this.sibMinWidth;
+        if(newWidth < this.minWidth) {
+            newWidth = this.minWidth;
         }
 
-        //TODO: how else to cycle through all the Columns without having to use an index property?
-        for(var i=0; i<oDataTable._oColumnSet.length; i++) {
-            //if((i != elCell.index) &&  (i!=sibIndex)) {
-            //    YAHOO.util.Dom.get(oDataTable._oColumnSet.keys[i].id).style.width = oDataTable._oColumnSet.keys[i].width + "px";
-            //}
-        }
-        sib.style.width = sibnewwidth;
-        elCell.style.width = newWidth + "px";
-        //oDataTable._oColumnSet.flat[sibIndex].width = sibnewwidth;
-        //oDataTable._oColumnSet.flat[elCell.index].width = newWidth;
+        // Resize the Column
+        var oDataTable = this.datatable;
+        var elCell = this.cell;
 
+
+        // Resize the other Columns
+        if(oDataTable.fixedWidth) {
+            // Moving right or left?
+            var sib = elCell.nextSibling;
+            //var sibIndex = elCell.index + 1;
+            var sibnewwidth = sib.offsetWidth - offsetX;
+            if(sibnewwidth < this.sibMinWidth) {
+                sibnewwidth = this.sibMinWidth;
+            }
+
+            //TODO: how else to cycle through all the Columns without having to use an index property?
+            for(var i=0; i<oDataTable._oColumnSet.length; i++) {
+                //if((i != elCell.index) &&  (i!=sibIndex)) {
+                //    YAHOO.util.Dom.get(oDataTable._oColumnSet.keys[i].id).style.width = oDataTable._oColumnSet.keys[i].width + "px";
+                //}
+            }
+            sib.style.width = sibnewwidth;
+            elCell.style.width = newWidth + "px";
+            //oDataTable._oColumnSet.flat[sibIndex].width = sibnewwidth;
+            //oDataTable._oColumnSet.flat[elCell.index].width = newWidth;
+
+        }
+        else {
+            elCell.style.width = newWidth + "px";
+        }
     }
-    else {
-        elCell.style.width = newWidth + "px";
+    catch(e) {
     }
 };
 
