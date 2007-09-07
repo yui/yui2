@@ -95,9 +95,9 @@ Fixed the following bugs:
   JavaScript error. The Overlay is destroyed and removed from the 
   OverlayManager correctly.
   
-+ Submitting a Dialog form using a "submit" button (firing the form's submit 
-  event) no longer throws a JavaScript error. 
-  
++ Submitting a Dialog form directly (e.g. using a "submit" button, hitting
+  enter on a single text field form) no longer throws a JavaScript error.
+
 Known Issues
 ------------
 
