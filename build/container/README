@@ -33,6 +33,10 @@ Fixed the following bugs:
 
   Both these changes can be resolved by setting a specific z-index
   and position based on the layout of other elements on your page.
+  
+  If you do need to revert to 2.3.0 behavior, a configuration property
+  "appendtodocumentbody" has been added to Module, which can be set to
+  true.
 
   The change to stacking order is discussed in detail below in 
   relation to other z-index fixes made for 2.3.1.

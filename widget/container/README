@@ -33,6 +33,10 @@ Fixed the following bugs:
 
   Both these changes can be resolved by setting a specific z-index
   and position based on the layout of other elements on your page.
+  
+  If you do need to revert to 2.3.0 behavior, a configuration property
+  "appendtodocumentbody" has been added to Module, which can be set to
+  true.
 
   The change to stacking order is discussed in detail below in 
   relation to other z-index fixes made for 2.3.1.
@@ -95,9 +99,9 @@ Fixed the following bugs:
   JavaScript error. The Overlay is destroyed and removed from the 
   OverlayManager correctly.
   
-+ Submitting a Dialog form using a "submit" button (firing the form's submit 
-  event) no longer throws a JavaScript error. 
-  
++ Submitting a Dialog form directly (e.g. using a "submit" button, hitting
+  enter on a single text field form) no longer throws a JavaScript error.
+
 Known Issues
 ------------
 
