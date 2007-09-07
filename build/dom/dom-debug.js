@@ -473,6 +473,7 @@
          * @method addClass         
          * @param {String | HTMLElement | Array} el The element or collection to add the class to
          * @param {String} className the class name to add to the class attribute
+         * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         addClass: function(el, className) {
             var f = function(el) {
@@ -494,6 +495,7 @@
          * @method removeClass         
          * @param {String | HTMLElement | Array} el The element or collection to remove the class from
          * @param {String} className the class name to remove from the class attribute
+         * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         removeClass: function(el, className) {
             var re = getClassRegEx(className);
@@ -525,6 +527,7 @@
          * @param {String | HTMLElement | Array} el The element or collection to remove the class from
          * @param {String} oldClassName the class name to be replaced
          * @param {String} newClassName the class name that will be replacing the old class name
+         * @return {Boolean | Array} A pass/fail boolean or array of booleans
          */
         replaceClass: function(el, oldClassName, newClassName) {
             if (!newClassName || oldClassName === newClassName) { // avoid infinite loop
