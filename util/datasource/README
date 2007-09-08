@@ -1,5 +1,11 @@
 DataSource Release Notes
 
+**** version 2.3.1 ***
+
+* No changes.
+
+
+
 **** version 2.3.0 ****
 
 * DataSource requests over XHR no longer automatically insert a "?" in the URIs

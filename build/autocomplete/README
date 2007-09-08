@@ -1,5 +1,17 @@
 AutoComplete Release Notes
 
+*** version 2.3.1 ***
+
+* AutoComplete no longer throw a JavaScript error due to an invalid or
+non-existent parent container. While a wrapper DIV element is still expected in
+order to enable skinning (see 2.3.0 release note), a lack of such will not
+cause an error.
+
+* When suggestion container is collapsed, Mac users no longer need to type
+Enter twice to submit input.
+
+
+
 *** version 2.3.0 ***
 
 * Applied new skinning model. Please note that in order to enable skinning,
