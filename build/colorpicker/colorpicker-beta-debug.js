@@ -1402,7 +1402,7 @@ YAHOO.util.Color = function() {
         
         /**
          * The size of the picker. Trying to change this is not recommended.
-         * @config pickersize
+         * @attribute pickersize
          * @default 180
          * @type int
          */
@@ -1412,7 +1412,7 @@ YAHOO.util.Color = function() {
 
         /**
          * The current hue value 0-360
-         * @config hue
+         * @attribute hue
          * @type int
          */
         this.setAttributeConfig(this.OPT.HUE, {
@@ -1422,7 +1422,7 @@ YAHOO.util.Color = function() {
 
         /**
          * The current saturation value 0-100
-         * @config saturation
+         * @attribute saturation
          * @type int
          */
         this.setAttributeConfig(this.OPT.SATURATION, {
@@ -1432,7 +1432,7 @@ YAHOO.util.Color = function() {
 
         /**
          * The current value/brightness value 0-100
-         * @config value
+         * @attribute value
          * @type int
          */
         this.setAttributeConfig(this.OPT.VALUE, {
@@ -1442,7 +1442,7 @@ YAHOO.util.Color = function() {
 
         /**
          * The current red value 0-255
-         * @config red
+         * @attribute red
          * @type int
          */
         this.setAttributeConfig(this.OPT.RED, {
@@ -1452,7 +1452,7 @@ YAHOO.util.Color = function() {
 
         /**
          * The current green value 0-255
-         * @config green 
+         * @attribute green 
          * @type int
          */
         this.setAttributeConfig(this.OPT.GREEN, {
@@ -1462,7 +1462,7 @@ YAHOO.util.Color = function() {
 
         /**
          * The current blue value 0-255
-         * @config blue
+         * @attribute blue
          * @type int
          */
         this.setAttributeConfig(this.OPT.BLUE, {
@@ -1472,7 +1472,7 @@ YAHOO.util.Color = function() {
 
         /**
          * The current hex value #000000-#FFFFFF, without the #
-         * @config hex
+         * @attribute hex
          * @type string
          */
         this.setAttributeConfig(this.OPT.HEX, {
@@ -1484,7 +1484,7 @@ YAHOO.util.Color = function() {
          * The current rgb value.  Updates the state of all of the
          * other value fields.  Read-only: use setValue to set the
          * controls rgb value.
-         * @config hex
+         * @attribute hex
          * @type [int, int, int]
          * @readonly
          */
@@ -1519,7 +1519,7 @@ YAHOO.util.Color = function() {
          * If the color picker will live inside of a container object,
          * set, provide a reference to it so the control can use the
          * container's events.
-         * @config container
+         * @attribute container
          * @type YAHOO.widget.Panel
          */
         this.setAttributeConfig(this.OPT.CONTAINER, {
@@ -1541,7 +1541,7 @@ YAHOO.util.Color = function() {
                 });
         /**
          * The closest current websafe value
-         * @config websafe
+         * @attribute websafe
          * @type int
          */
         this.setAttributeConfig(this.OPT.WEBSAFE, {
@@ -1564,7 +1564,7 @@ YAHOO.util.Color = function() {
          * A list of element ids and/or element references used by the 
          * control.  The default is the this.ID list, and can be customized
          * by passing a list in the contructor
-         * @config ids
+         * @attribute ids
          * @type {referenceid: realid}
          * @writeonce
          */
@@ -1576,7 +1576,7 @@ YAHOO.util.Color = function() {
         /**
          * A list of txt strings for internationalization.  Default
          * is this.TXT
-         * @config txt
+         * @attribute txt
          * @type {key: txt}
          * @writeonce
          */
@@ -1588,7 +1588,7 @@ YAHOO.util.Color = function() {
         /**
          * The img src default list
          * is this.IMAGES
-         * @config images
+         * @attribute images
          * @type {key: image}
          * @writeonce
          */
@@ -1598,7 +1598,7 @@ YAHOO.util.Color = function() {
             });
         /**
          * The element refs used by this control.  Set at initialization
-         * @config elements
+         * @attribute elements
          * @type {id: HTMLElement}
          * @readonly
          */
@@ -1621,7 +1621,7 @@ YAHOO.util.Color = function() {
 
         /**
          * Hide/show the entire set of controls
-         * @config showcontrols
+         * @attribute showcontrols
          * @type boolean
          * @default true
          */
@@ -1643,7 +1643,7 @@ YAHOO.util.Color = function() {
 
         /**
          * Hide/show the rgb controls
-         * @config showrgbcontrols
+         * @attribute showrgbcontrols
          * @type boolean
          * @default true
          */
@@ -1657,7 +1657,7 @@ YAHOO.util.Color = function() {
 
         /**
          * Hide/show the hsv controls
-         * @config showhsvcontrols
+         * @attribute showhsvcontrols
          * @type boolean
          * @default false
          */
@@ -1676,7 +1676,7 @@ YAHOO.util.Color = function() {
 
         /**
          * Hide/show the hex controls
-         * @config showhexcontrols
+         * @attribute showhexcontrols
          * @type boolean
          * @default true
          */
@@ -1689,7 +1689,7 @@ YAHOO.util.Color = function() {
 
         /**
          * Hide/show the websafe swatch
-         * @config showwebsafe
+         * @attribute showwebsafe
          * @type boolean
          * @default true
          */
@@ -1702,7 +1702,7 @@ YAHOO.util.Color = function() {
 
         /**
          * Hide/show the hex summary
-         * @config showhexsummary
+         * @attribute showhexsummary
          * @type boolean
          * @default true
          */

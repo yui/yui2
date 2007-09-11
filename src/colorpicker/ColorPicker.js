@@ -1203,7 +1203,7 @@
         
         /**
          * The size of the picker. Trying to change this is not recommended.
-         * @config pickersize
+         * @attribute pickersize
          * @default 180
          * @type int
          */
@@ -1213,7 +1213,7 @@
 
         /**
          * The current hue value 0-360
-         * @config hue
+         * @attribute hue
          * @type int
          */
         this.setAttributeConfig(this.OPT.HUE, {
@@ -1223,7 +1223,7 @@
 
         /**
          * The current saturation value 0-100
-         * @config saturation
+         * @attribute saturation
          * @type int
          */
         this.setAttributeConfig(this.OPT.SATURATION, {
@@ -1233,7 +1233,7 @@
 
         /**
          * The current value/brightness value 0-100
-         * @config value
+         * @attribute value
          * @type int
          */
         this.setAttributeConfig(this.OPT.VALUE, {
@@ -1243,7 +1243,7 @@
 
         /**
          * The current red value 0-255
-         * @config red
+         * @attribute red
          * @type int
          */
         this.setAttributeConfig(this.OPT.RED, {
@@ -1253,7 +1253,7 @@
 
         /**
          * The current green value 0-255
-         * @config green 
+         * @attribute green 
          * @type int
          */
         this.setAttributeConfig(this.OPT.GREEN, {
@@ -1263,7 +1263,7 @@
 
         /**
          * The current blue value 0-255
-         * @config blue
+         * @attribute blue
          * @type int
          */
         this.setAttributeConfig(this.OPT.BLUE, {
@@ -1273,7 +1273,7 @@
 
         /**
          * The current hex value #000000-#FFFFFF, without the #
-         * @config hex
+         * @attribute hex
          * @type string
          */
         this.setAttributeConfig(this.OPT.HEX, {
@@ -1285,7 +1285,7 @@
          * The current rgb value.  Updates the state of all of the
          * other value fields.  Read-only: use setValue to set the
          * controls rgb value.
-         * @config hex
+         * @attribute hex
          * @type [int, int, int]
          * @readonly
          */
@@ -1320,7 +1320,7 @@
          * If the color picker will live inside of a container object,
          * set, provide a reference to it so the control can use the
          * container's events.
-         * @config container
+         * @attribute container
          * @type YAHOO.widget.Panel
          */
         this.setAttributeConfig(this.OPT.CONTAINER, {
@@ -1342,7 +1342,7 @@
                 });
         /**
          * The closest current websafe value
-         * @config websafe
+         * @attribute websafe
          * @type int
          */
         this.setAttributeConfig(this.OPT.WEBSAFE, {
@@ -1365,7 +1365,7 @@
          * A list of element ids and/or element references used by the 
          * control.  The default is the this.ID list, and can be customized
          * by passing a list in the contructor
-         * @config ids
+         * @attribute ids
          * @type {referenceid: realid}
          * @writeonce
          */
@@ -1377,7 +1377,7 @@
         /**
          * A list of txt strings for internationalization.  Default
          * is this.TXT
-         * @config txt
+         * @attribute txt
          * @type {key: txt}
          * @writeonce
          */
@@ -1389,7 +1389,7 @@
         /**
          * The img src default list
          * is this.IMAGES
-         * @config images
+         * @attribute images
          * @type {key: image}
          * @writeonce
          */
@@ -1399,7 +1399,7 @@
             });
         /**
          * The element refs used by this control.  Set at initialization
-         * @config elements
+         * @attribute elements
          * @type {id: HTMLElement}
          * @readonly
          */
@@ -1422,7 +1422,7 @@
 
         /**
          * Hide/show the entire set of controls
-         * @config showcontrols
+         * @attribute showcontrols
          * @type boolean
          * @default true
          */
@@ -1444,7 +1444,7 @@
 
         /**
          * Hide/show the rgb controls
-         * @config showrgbcontrols
+         * @attribute showrgbcontrols
          * @type boolean
          * @default true
          */
@@ -1458,7 +1458,7 @@
 
         /**
          * Hide/show the hsv controls
-         * @config showhsvcontrols
+         * @attribute showhsvcontrols
          * @type boolean
          * @default false
          */
@@ -1477,7 +1477,7 @@
 
         /**
          * Hide/show the hex controls
-         * @config showhexcontrols
+         * @attribute showhexcontrols
          * @type boolean
          * @default true
          */
@@ -1490,7 +1490,7 @@
 
         /**
          * Hide/show the websafe swatch
-         * @config showwebsafe
+         * @attribute showwebsafe
          * @type boolean
          * @default true
          */
@@ -1503,7 +1503,7 @@
 
         /**
          * Hide/show the hex summary
-         * @config showhexsummary
+         * @attribute showhexsummary
          * @type boolean
          * @default true
          */
