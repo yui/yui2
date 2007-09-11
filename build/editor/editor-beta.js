@@ -90,7 +90,6 @@ var Dom = YAHOO.util.Dom,
             Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-').toLowerCase() : items[i]._oText.nodeValue.replace(/ /g, '-').toLowerCase()));
             Dom.addClass(items[i].element, 'yui-toolbar-' + o.get('value') + '-' + ((items[i].value) ? items[i].value.replace(/ /g, '-') : items[i]._oText.nodeValue.replace(/ /g, '-')));
         }
-        this._setWidth();
     }
 
     YAHOO.extend(YAHOO.widget.Toolbar, YAHOO.util.Element, {
@@ -415,7 +414,7 @@ var Dom = YAHOO.util.Dom,
             *   }
             * }
             * </pre></code>
-            * @type Object
+            * @type Array
             */
             
             this.setAttributeConfig('buttons', {
@@ -491,9 +490,8 @@ var Dom = YAHOO.util.Dom,
 
             /**
             * @config cont
-            * @description Boolean indicating if the toolbar should show the group label's text string.
-            * @default true
-            * @type Boolean
+            * @description The container for the toolbar.
+            * @type HTMLElement
             */
             this.setAttributeConfig('cont', {
                 value: attr.cont,
@@ -567,7 +565,12 @@ var Dom = YAHOO.util.Dom,
                 value: false,
                 method: function(collapse) {
                     var collapseEl = null;
+                    var el = Dom.getElementsByClassName('collapse', 'span', this._titlebar);
                     if (collapse) {
+                        if (el.length > 0) {
+                            //There is already a collapse button
+                            return true;
+                        }
                         collapseEl = document.createElement('SPAN');
                         collapseEl.innerHTML = 'X';
                         collapseEl.title = this.STR_COLLAPSE;
@@ -576,25 +579,19 @@ var Dom = YAHOO.util.Dom,
                         this._titlebar.appendChild(collapseEl);
                         Event.addListener(collapseEl, 'click', function() {
                             if (Dom.hasClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed')) {
-                                Dom.removeClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
-                                Dom.removeClass(collapseEl, 'collapsed');
-                                this.fireEvent('toolbarExpanded', { type: 'toolbarExpanded', target: this });
+                                this.collapse(false); //Expand Toolbar
                             } else {
-                                Dom.addClass(collapseEl, 'collapsed');
-                                Dom.addClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
-                                this.fireEvent('toolbarCollapsed', { type: 'toolbarCollapsed', target: this });
+                                this.collapse(); //Collapse Toolbar
                             }
                         }, this, true);
                     } else {
                         collapseEl = Dom.getElementsByClassName('collapse', 'span', this._titlebar);
-                        if (collapseEl) {
-                            collapseEl[0].parentNode.removeChild(collapseEl[0]);
-                            //We are closed, reopen the titlebar..
+                        if (collapseEl[0]) {
                             if (Dom.hasClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed')) {
-                                Dom.removeClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
-                                Dom.removeClass(collapseEl, 'collapsed');
-                                this.fireEvent('toolbarExpanded', { type: 'toolbarExpanded', target: this });
+                                //We are closed, reopen the titlebar..
+                                this.collapse(false); //Expand Toolbar
                             }
+                            collapseEl[0].parentNode.removeChild(collapseEl[0]);
                         }
                     }
                 }
@@ -1382,7 +1379,9 @@ var Dom = YAHOO.util.Dom,
                 button = this.getButtonByValue(id);
             }
             if (button instanceof YAHOO.widget.Button) {
-                button.set('disabled', false);
+                if (button.get('disabled')) {
+                    button.set('disabled', false);
+                }
             } else {
                 return false;
             }
@@ -1521,23 +1520,27 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method destroyButton
         * @description Destroy a button in the toolbar.
-        * @param {String/Number} button Destroy a button by it's id or index.
+        * @param {String/Number} id Destroy a button by it's id or index.
         * @return {Boolean}
         */
-        destroyButton: function(button) {
-            if (Lang.isString(button)) {
-                button = this.getButtonById(button);
+        destroyButton: function(id) {
+            var button = id;
+            if (Lang.isString(id)) {
+                button = this.getButtonById(id);
             }
-            if (Lang.isNumber(button)) {
-                button = this.getButtonByIndex(button);
+            if (Lang.isNumber(id)) {
+                button = this.getButtonByIndex(id);
+            }
+            if (!(button instanceof YAHOO.widget.Button)) {
+                button = this.getButtonByValue(id);
             }
             if (button instanceof YAHOO.widget.Button) {
-                var id = button.get('id');
+                var thisID = button.get('id');
                 button.destroy();
 
                 var len = this._buttonList.length;
                 for (var i = 0; i < len; i++) {
-                    if (this._buttonList[i].get('id') == id) {
+                    if (this._buttonList[i].get('id') == thisID) {
                         this._buttonList[i] = null;
                     }
                 }
@@ -1561,6 +1564,27 @@ var Dom = YAHOO.util.Dom,
                 }
             }
             return true;
+        },
+        /**
+        * @method collapse
+        * @description Programatically collapse the toolbar.
+        * @param {Boolean} collapse True to collapse, false to expand.
+        */
+        collapse: function(collapse) {
+            var el = Dom.getElementsByClassName('collapse', 'span', this._titlebar);
+            if (collapse === false) {
+                Dom.removeClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
+                if (el[0]) {
+                    Dom.removeClass(el[0], 'collapsed');
+                }
+                this.fireEvent('toolbarExpanded', { type: 'toolbarExpanded', target: this });
+            } else {
+                if (el[0]) {
+                    Dom.addClass(el[0], 'collapsed');
+                }
+                Dom.addClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed');
+                this.fireEvent('toolbarCollapsed', { type: 'toolbarCollapsed', target: this });
+            }
         },
         /**
         * @method toString
@@ -2876,12 +2900,23 @@ var Dom = YAHOO.util.Dom,
                     return false;
                 } else {
                     var sel = this._getSelection(),
-                        range = this._getRange();
+                        range = this._getRange(),
+                        el = this._getSelectedElement(),
+                        fn_button = this.toolbar.getButtonByValue('fontname'),
+                        fs_button = this.toolbar.getButtonByValue('fontsize');
 
                     //Handle updating the toolbar with active buttons
                     var _ex = {};
                     if (this._lastButton) {
                         _ex[this._lastButton.id] = true;
+                    }
+                    if (!this._isElement(el, 'body')) {
+                        if (fn_button) {
+                            _ex[fn_button.get('id')] = true;
+                        }
+                        if (fs_button) {
+                            _ex[fs_button.get('id')] = true;
+                        }
                     }
                     this.toolbar.resetAllButtons(_ex);
 
@@ -2893,8 +2928,14 @@ var Dom = YAHOO.util.Dom,
                                 //Skip
                             } else {
                                 if (!this._hasSelection()) {
-                                    //No Selection - disable
-                                    this.toolbar.disableButton(_button);
+                                    switch (this._disabled[d]) {
+                                        case 'fontname':
+                                        case 'fontsize':
+                                            break;
+                                        default:
+                                            //No Selection - disable
+                                            this.toolbar.disableButton(_button);
+                                    }
                                 } else {
                                     if (!this._alwaysDisabled[this._disabled[d]]) {
                                         this.toolbar.enableButton(_button);
@@ -2955,14 +2996,12 @@ var Dom = YAHOO.util.Dom,
                     //After for loop
 
                     //Reset Font Family and Size to the inital configs
-                    var fn_button = this.toolbar.getButtonByValue('fontname');
                     if (fn_button) {
                         var family = fn_button._configs.label._initialConfig.value;
                         fn_button.set('label', '<span class="yui-toolbar-fontname-' + _cleanClassName(family) + '">' + family + '</span>');
                         this._updateMenuChecked('fontname', family);
                     }
 
-                    var fs_button = this.toolbar.getButtonByValue('fontsize');
                     if (fs_button) {
                         fs_button.set('label', fs_button._configs.label._initialConfig.value);
                     }

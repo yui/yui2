@@ -1280,12 +1280,23 @@ var Dom = YAHOO.util.Dom,
                     return false;
                 } else {
                     var sel = this._getSelection(),
-                        range = this._getRange();
+                        range = this._getRange(),
+                        el = this._getSelectedElement(),
+                        fn_button = this.toolbar.getButtonByValue('fontname'),
+                        fs_button = this.toolbar.getButtonByValue('fontsize');
 
                     //Handle updating the toolbar with active buttons
                     var _ex = {};
                     if (this._lastButton) {
                         _ex[this._lastButton.id] = true;
+                    }
+                    if (!this._isElement(el, 'body')) {
+                        if (fn_button) {
+                            _ex[fn_button.get('id')] = true;
+                        }
+                        if (fs_button) {
+                            _ex[fs_button.get('id')] = true;
+                        }
                     }
                     this.toolbar.resetAllButtons(_ex);
 
@@ -1297,8 +1308,14 @@ var Dom = YAHOO.util.Dom,
                                 //Skip
                             } else {
                                 if (!this._hasSelection()) {
-                                    //No Selection - disable
-                                    this.toolbar.disableButton(_button);
+                                    switch (this._disabled[d]) {
+                                        case 'fontname':
+                                        case 'fontsize':
+                                            break;
+                                        default:
+                                            //No Selection - disable
+                                            this.toolbar.disableButton(_button);
+                                    }
                                 } else {
                                     if (!this._alwaysDisabled[this._disabled[d]]) {
                                         this.toolbar.enableButton(_button);
@@ -1359,14 +1376,12 @@ var Dom = YAHOO.util.Dom,
                     //After for loop
 
                     //Reset Font Family and Size to the inital configs
-                    var fn_button = this.toolbar.getButtonByValue('fontname');
                     if (fn_button) {
                         var family = fn_button._configs.label._initialConfig.value;
                         fn_button.set('label', '<span class="yui-toolbar-fontname-' + _cleanClassName(family) + '">' + family + '</span>');
                         this._updateMenuChecked('fontname', family);
                     }
 
-                    var fs_button = this.toolbar.getButtonByValue('fontsize');
                     if (fs_button) {
                         fs_button.set('label', fs_button._configs.label._initialConfig.value);
                     }

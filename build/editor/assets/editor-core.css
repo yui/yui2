@@ -159,7 +159,7 @@
 }
 
 /* Setup the position and style for the up and down arrows */
-.yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.up, .yui-toolbar-container .yui-toolbar-spinbutton.yui-button a.down {
+.yui-toolbar-container .yui-toolbar-spinbutton a.up, .yui-toolbar-container .yui-toolbar-spinbutton a.down {
     position: absolute;
     display: block
     right: 0;
