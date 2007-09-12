@@ -404,7 +404,7 @@ var Dom = YAHOO.util.Dom,
 
 
             /**
-            * @config buttons
+            * @attribute buttons
             * @description Object specifying the buttons to include in the toolbar
             * Example:
             * <code><pre>
@@ -442,7 +442,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @config disabled
+            * @attribute disabled
             * @description Boolean indicating if the toolbar should be disabled. It will also disable the draggable attribute if it is on.
             * @default false
             * @type Boolean
@@ -495,7 +495,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @config cont
+            * @attribute cont
             * @description The container for the toolbar.
             * @type HTMLElement
             */
@@ -506,7 +506,7 @@ var Dom = YAHOO.util.Dom,
 
 
             /**
-            * @config grouplabels
+            * @attribute grouplabels
             * @description Boolean indicating if the toolbar should show the group label's text string.
             * @default true
             * @type Boolean
@@ -522,7 +522,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config titlebar
+            * @attribute titlebar
             * @description Boolean indicating if the toolbar should have a titlebar. If
             * passed a string, it will use that as the titlebar text
             * @default false
@@ -561,7 +561,7 @@ var Dom = YAHOO.util.Dom,
 
 
             /**
-            * @config collapse
+            * @attribute collapse
             * @description Boolean indicating if the the titlebar should have a collapse button.
             * The collapse button will not remove the toolbar, it will minimize it to the titlebar
             * @default false
@@ -604,7 +604,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @config draggable
+            * @attribute draggable
             * @description Boolean indicating if the toolbar should be draggable.  
             * @default false
             * @type Boolean

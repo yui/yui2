@@ -398,7 +398,7 @@ var Dom = YAHOO.util.Dom,
 
 
             /**
-            * @config buttons
+            * @attribute buttons
             * @description Object specifying the buttons to include in the toolbar
             * Example:
             * <code><pre>
@@ -436,7 +436,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @config disabled
+            * @attribute disabled
             * @description Boolean indicating if the toolbar should be disabled. It will also disable the draggable attribute if it is on.
             * @default false
             * @type Boolean
@@ -489,7 +489,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @config cont
+            * @attribute cont
             * @description The container for the toolbar.
             * @type HTMLElement
             */
@@ -500,7 +500,7 @@ var Dom = YAHOO.util.Dom,
 
 
             /**
-            * @config grouplabels
+            * @attribute grouplabels
             * @description Boolean indicating if the toolbar should show the group label's text string.
             * @default true
             * @type Boolean
@@ -516,7 +516,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config titlebar
+            * @attribute titlebar
             * @description Boolean indicating if the toolbar should have a titlebar. If
             * passed a string, it will use that as the titlebar text
             * @default false
@@ -555,7 +555,7 @@ var Dom = YAHOO.util.Dom,
 
 
             /**
-            * @config collapse
+            * @attribute collapse
             * @description Boolean indicating if the the titlebar should have a collapse button.
             * The collapse button will not remove the toolbar, it will minimize it to the titlebar
             * @default false
@@ -598,7 +598,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @config draggable
+            * @attribute draggable
             * @description Boolean indicating if the toolbar should be draggable.  
             * @default false
             * @type Boolean
@@ -3323,7 +3323,7 @@ var Dom = YAHOO.util.Dom,
 
             /**
             * @private
-            * @config iframe
+            * @attribute iframe
             * @description Internal config for holding the iframe element.
             * @default null
             * @type HTMLElement
@@ -3334,7 +3334,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @private
             * @depreciated
-            * @config textarea
+            * @attribute textarea
             * @description Internal config for holding the textarea element (replaced with element).
             * @default null
             * @type HTMLElement
@@ -3344,7 +3344,7 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true
             });
             /**
-            * @config nodeChangeThreshold
+            * @attribute nodeChangeThreshold
             * @description The number of seconds that need to be in between nodeChange processing
             * @default 3
             * @type Number
@@ -3354,7 +3354,7 @@ var Dom = YAHOO.util.Dom,
                 validator: YAHOO.lang.isNumber
             });
             /**
-            * @config element_cont
+            * @attribute element_cont
             * @description Internal config for the editors container
             * @default false
             * @type HTMLElement
@@ -3364,7 +3364,7 @@ var Dom = YAHOO.util.Dom,
             });
             /**
             * @private
-            * @config editor_wrapper
+            * @attribute editor_wrapper
             * @description The outter wrapper for the entire editor.
             * @default null
             * @type HTMLElement
@@ -3374,7 +3374,7 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true
             });
             /**
-            * @config height
+            * @attribute height
             * @description The height of the editor iframe container, not including the toolbar..
             * @default Best guessed size of the textarea, for best results use CSS to style the height of the textarea or pass it in as an argument
             * @type String
@@ -3398,7 +3398,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config width
+            * @attribute width
             * @description The width of the editor container.
             * @default Best guessed size of the textarea, for best results use CSS to style the width of the textarea or pass it in as an argument
             * @type String
@@ -3423,7 +3423,7 @@ var Dom = YAHOO.util.Dom,
             });
                         
             /**
-            * @config blankimage
+            * @attribute blankimage
             * @description The CSS used to show/hide hidden elements on the page
             * @default 'assets/blankimage.png'
             * @type String
@@ -3432,7 +3432,7 @@ var Dom = YAHOO.util.Dom,
                 value: attr.blankimage || this._getBlankImage()
             });
             /**
-            * @config hiddencss
+            * @attribute hiddencss
             * @description The CSS used to show/hide hidden elements on the page, these rules must be prefixed with the class provided in <code>this.CLASS_HIDDEN</code>
             * @default <code><pre>
             .hidden font, .hidden strong, .hidden b, .hidden em, .hidden i, .hidden u, .hidden div, .hidden p, .hidden span, .hidden img, .hidden ul, .hidden ol, .hidden li, .hidden table {
@@ -3451,7 +3451,7 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true
             });
             /**
-            * @config css
+            * @attribute css
             * @description The Base CSS used to format the content of the editor
             * @default <code><pre>html {
                 height: 95%;
@@ -3486,7 +3486,7 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true
             });
             /**
-            * @config html
+            * @attribute html
             * @description The default HTML to be written to the iframe document before the contents are loaded
             * @default This HTML requires a few things if you are to override:
                 <p><code>{TITLE}, {CSS}, {HIDDEN_CSS}</code> and <code>{CONTENT}</code> need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.<p>
@@ -3519,7 +3519,7 @@ var Dom = YAHOO.util.Dom,
             });
 
             /**
-            * @config handleSubmit
+            * @attribute handleSubmit
             * @description Config handles if the editor will attach itself to the textareas parent form's submit handler.
             If it is set to true, the editor will attempt to attach a submit listener to the textareas parent form.
             Then it will trigger the editors save handler and place the new content back into the text area before the form is submitted.
@@ -3547,7 +3547,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config disabled
+            * @attribute disabled
             * @description This will toggle the editor's disabled state. When the editor is disabled, designMode is turned off and a mask is placed over the iframe so no interaction can take place.
             All Toolbar buttons are also disabled so they cannot be used.
             * @default false
@@ -3583,7 +3583,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config toolbar_cont
+            * @attribute toolbar_cont
             * @description Internal config for the toolbars container
             * @default false
             * @type Boolean
@@ -3593,7 +3593,7 @@ var Dom = YAHOO.util.Dom,
                 writeOnce: true
             });
             /**
-            * @config toolbar
+            * @attribute toolbar
             * @description The default toolbar config.
             * @default This config is too large to display here, view the code to see it: <a href="editor.js.html"></a>
             * @type Object
@@ -3689,7 +3689,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config animate
+            * @attribute animate
             * @description Should the editor animate window movements
             * @default false unless Animation is found, then true
             * @type Boolean
@@ -3705,7 +3705,7 @@ var Dom = YAHOO.util.Dom,
                 }               
             });
             /**
-            * @config panel
+            * @attribute panel
             * @description A reference to the panel we are using for windows.
             * @default false
             * @type Boolean
@@ -3722,7 +3722,7 @@ var Dom = YAHOO.util.Dom,
                 }               
             });
             /**
-            * @config localFileWarning
+            * @attribute localFileWarning
             * @description Should we throw the warning if we detect a file that is local to their machine?
             * @default true
             * @type Boolean
@@ -3731,7 +3731,7 @@ var Dom = YAHOO.util.Dom,
                 value: attr.locaFileWarning || true
             });
             /**
-            * @config focusAtStart
+            * @attribute focusAtStart
             * @description Should we focus the window when the content is ready?
             * @default false
             * @type Boolean
@@ -3749,7 +3749,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config dompath
+            * @attribute dompath
             * @description Toggle the display of the current Dom path below the editor
             * @default false
             * @type Boolean
@@ -3773,7 +3773,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config markup
+            * @attribute markup
             * @description Should we try to adjust the markup for the following types: semantic, css, default or xhtml
             * @default "semantic"
             * @type String
@@ -3792,7 +3792,7 @@ var Dom = YAHOO.util.Dom,
                 }
             });
             /**
-            * @config removeLineBreaks
+            * @attribute removeLineBreaks
             * @description Should we remove linebreaks and extra spaces on cleanup
             * @default false
             * @type Boolean
@@ -5285,6 +5285,9 @@ var Dom = YAHOO.util.Dom,
             if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
                 YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
             }
+            //Put the iframe back in place
+            this.get('iframe').setStyle('position', 'static');
+            this.get('iframe').setStyle('left', '');
         },
         /**
         * @method hide
@@ -5304,6 +5307,9 @@ var Dom = YAHOO.util.Dom,
                 this._nodeChangeTimer = null;
             }
             this._lastNodeChange = 0;
+            //Move the iframe off of the screen, so that in containers with visiblity hidden, IE will not cover other elements.
+            this.get('iframe').setStyle('position', 'absolute');
+            this.get('iframe').setStyle('left', '-9999px');
         },
         /**
         * @method cleanHTML
