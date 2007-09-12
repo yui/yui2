@@ -126,7 +126,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     YAHOO.widget.DataTable.superclass.initAttributes.call(this, oConfigs);
 
     /**
-    * @config summary
+    * @attribute summary
     * @description Value for the SUMMARY attribute.
     * @type String
     */
@@ -139,7 +139,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @config selectionMode
+    * @attribute selectionMode
     * @description Specifies row or cell selection mode. Accepts the following strings:
     *    <dl>
     *      <dt>"standard"</dt>
@@ -172,7 +172,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @config initialRequest
+    * @attribute initialRequest
     * @description Defines the initial request that gets sent to the DataSource.
     * @type String
     */
@@ -182,7 +182,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @config sortedBy
+    * @attribute sortedBy
     * @description Object literal provides metadata for initial sort values if
     * data will arrive pre-sorted:
     * <dl>
@@ -221,7 +221,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @config paginator
+    * @attribute paginator
     * @description Object literal of pagination values.
     * @default <br>
     *   { containers:[], // UI container elements <br>
@@ -288,7 +288,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @config paginated
+    * @attribute paginated
     * @description True if built-in client-side pagination is enabled
     * @default false
     * @type Boolean
@@ -405,7 +405,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @config caption
+    * @attribute caption
     * @description Value for the CAPTION element.
     * @type String
     */
@@ -428,7 +428,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @config scrollable
+    * @attribute scrollable
     * @description True if primary TBODY should scroll while THEAD remains fixed.
     * When enabling this feature, captions cannot be used, and the following
     * features are not recommended: inline editing, resizeable columns.
