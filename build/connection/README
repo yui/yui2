@@ -1,5 +1,27 @@
 Connection Manager Release Notes
 
+*** version 2.3.1 ***
+
+* setDefaultPostHeader() can now be overloaded with a boolean, string, or
+number.  By default, POST transactions send the following Content-Type header:
+'application/x-www-form-urlencoded; charset=UTF-8'.
+
+A custom Content-Type header can now be set by passing its value to
+setDefaultPostHeader().
+
+* HTML form submissions now send a Content-Type header of "application/x-www-
+form-urlencoded", omitting the charset=UTF-8 value.
+
+* setDefaultXhrHeader() can now be overloaded with a boolean, string, or number.
+By default, all transactions send a custom header of "X-Requested-
+With:XMLHttpRequest".
+
+This default header value can be overridden by passing the desired value as an
+argument to setDefaultPostHeader().
+
+* The file upload iframe's event listener is now explicitly removed before the
+iframe is destroyed.
+
 *** version 2.3.0 ***
 
 * Custom Events are introduced in Connection Manager.  These events -- for a
@@ -23,7 +45,7 @@ For transactions involving file upload with an HTML form, the events are:
 * abort() and isCallInProgress() are now functional for file upload
 transactions.
 
-* NOTE: The XHR implementation in Safari 2.0.4 has been confirmed to leak
+* NOTE: The native XHR implementation in Safari 2.0.4 has been confirmed to leak
 memory.
 
 * UPDATE: The XHR implementation in Safari 3.0 beta(and WebKit builds) now
@@ -213,6 +235,8 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
+
 
 
 
