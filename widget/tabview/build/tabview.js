@@ -265,7 +265,7 @@
         
         /**
          * The Tabs belonging to the TabView instance.
-         * @config tabs
+         * @attribute tabs
          * @type Array
          */
         this.setAttributeConfig('tabs', {
@@ -295,7 +295,7 @@
         
         /**
          * How the Tabs should be oriented relative to the TabView.
-         * @config orientation
+         * @attribute orientation
          * @type String
          * @default "top"
          */
@@ -319,7 +319,7 @@
         
         /**
          * The index of the tab currently active.
-         * @config activeIndex
+         * @attribute activeIndex
          * @type Int
          */
         this.setAttributeConfig('activeIndex', {
@@ -334,7 +334,7 @@
         
         /**
          * The tab currently active.
-         * @config activeTab
+         * @attribute activeTab
          * @type YAHOO.widget.Tab
          */
         this.setAttributeConfig('activeTab', {
@@ -457,70 +457,6 @@
         
         return nodes;
     };
-
-/**
- * Fires before the activeTab is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p>If handler returns false, the change will be cancelled, and the value will not
- * be set.</p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> beforeActiveTabChange<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * prevValue</code> the currently active tab<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * newValue</code> the tab to be made active</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('beforeActiveTabChange', handler);</code></p>
- * @event beforeActiveTabChange
- */
-    
-/**
- * Fires after the activeTab is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> activeTabChange<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * prevValue</code> the formerly active tab<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * newValue</code> the new active tab</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('activeTabChange', handler);</code></p>
- * @event activeTabChange
- */
- 
-/**
- * Fires before the orientation is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p>If handler returns false, the change will be cancelled, and the value will not
- * be set.</p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> beforeOrientationChange<br>
- * <code>&lt;String&gt;
- * prevValue</code> the current orientation<br>
- * <code>&lt;String&gt;
- * newValue</code> the new orientation to be applied</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('beforeOrientationChange', handler);</code></p>
- * @event beforeOrientationChange
- */
-    
-/**
- * Fires after the orientation is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> orientationChange<br>
- * <code>&lt;String&gt;
- * prevValue</code> the former orientation<br>
- * <code>&lt;String&gt;
- * newValue</code> the new orientation</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('orientationChange', handler);</code></p>
- * @event orientationChange
- */
 })();
 
 (function() {
@@ -576,7 +512,7 @@
      * The class name applied to active tabs.
      * @property ACTIVE_CLASSNAME
      * @type String
-     * @default "on"
+     * @default "selected"
      */
     proto.ACTIVE_CLASSNAME = 'selected';
     
@@ -637,7 +573,7 @@
         
         /**
          * The event that triggers the tab's activation.
-         * @config activationEvent
+         * @attribute activationEvent
          * @type String
          */
         this.setAttributeConfig('activationEvent', {
@@ -646,7 +582,7 @@
 
         /**
          * The element that contains the tab's label.
-         * @config labelEl
+         * @attribute labelEl
          * @type HTMLElement
          */
         this.setAttributeConfig('labelEl', {
@@ -670,7 +606,7 @@
 
         /**
          * The tab's label text (or innerHTML).
-         * @config label
+         * @attribute label
          * @type String
          */
         this.setAttributeConfig('label', {
@@ -687,7 +623,7 @@
         
         /**
          * The HTMLElement that contains the tab's content.
-         * @config contentEl
+         * @attribute contentEl
          * @type HTMLElement
          */
         this.setAttributeConfig('contentEl', {
@@ -706,7 +642,7 @@
         
         /**
          * The tab's content.
-         * @config content
+         * @attribute content
          * @type String
          */
         this.setAttributeConfig('content', {
@@ -720,7 +656,7 @@
         
         /**
          * The tab's data source, used for loading content dynamically.
-         * @config dataSrc
+         * @attribute dataSrc
          * @type String
          */
         this.setAttributeConfig('dataSrc', {
@@ -729,7 +665,7 @@
         
         /**
          * Whether or not content should be reloaded for every view.
-         * @config cacheData
+         * @attribute cacheData
          * @type Boolean
          * @default false
          */
@@ -740,7 +676,7 @@
         
         /**
          * The method to use for the data request.
-         * @config loadMethod
+         * @attribute loadMethod
          * @type String
          * @default "GET"
          */
@@ -751,7 +687,7 @@
 
         /**
          * Whether or not any data has been loaded from the server.
-         * @config dataLoaded
+         * @attribute dataLoaded
          * @type Boolean
          */        
         this.setAttributeConfig('dataLoaded', {
@@ -762,7 +698,7 @@
         
         /**
          * Number if milliseconds before aborting and calling failure handler.
-         * @config dataTimeout
+         * @attribute dataTimeout
          * @type Number
          * @default null
          */
@@ -775,7 +711,7 @@
          * Whether or not the tab is currently active.
          * If a dataSrc is set for the tab, the content will be loaded from
          * the given source.
-         * @config active
+         * @attribute active
          * @type Boolean
          */
         this.setAttributeConfig('active', {
@@ -796,7 +732,7 @@
         
         /**
          * Whether or not the tab is disabled.
-         * @config disabled
+         * @attribute disabled
          * @type Boolean
          */
         this.setAttributeConfig('disabled', {
@@ -813,7 +749,7 @@
         
         /**
          * The href of the tab's anchor element.
-         * @config href
+         * @attribute href
          * @type String
          * @default '#'
          */
@@ -828,7 +764,7 @@
         
         /**
          * The Whether or not the tab's content is visible.
-         * @config contentVisible
+         * @attribute contentVisible
          * @type Boolean
          * @default false
          */
@@ -934,102 +870,6 @@
     };
     
     YAHOO.widget.Tab = Tab;
-    
-    /**
-     * Fires before the active state is changed.
-     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
-     * <p>If handler returns false, the change will be cancelled, and the value will not
-     * be set.</p>
-     * <p><strong>Event fields:</strong><br>
-     * <code>&lt;String&gt; type</code> beforeActiveChange<br>
-     * <code>&lt;Boolean&gt;
-     * prevValue</code> the current value<br>
-     * <code>&lt;Boolean&gt;
-     * newValue</code> the new value</p>
-     * <p><strong>Usage:</strong><br>
-     * <code>var handler = function(e) {var previous = e.prevValue};<br>
-     * myTabs.addListener('beforeActiveChange', handler);</code></p>
-     * @event beforeActiveChange
-     */
-        
-    /**
-     * Fires after the active state is changed.
-     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
-     * <p><strong>Event fields:</strong><br>
-     * <code>&lt;String&gt; type</code> activeChange<br>
-     * <code>&lt;Boolean&gt;
-     * prevValue</code> the previous value<br>
-     * <code>&lt;Boolean&gt;
-     * newValue</code> the updated value</p>
-     * <p><strong>Usage:</strong><br>
-     * <code>var handler = function(e) {var previous = e.prevValue};<br>
-     * myTabs.addListener('activeChange', handler);</code></p>
-     * @event activeChange
-     */
-     
-    /**
-     * Fires before the tab label is changed.
-     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
-     * <p>If handler returns false, the change will be cancelled, and the value will not
-     * be set.</p>
-     * <p><strong>Event fields:</strong><br>
-     * <code>&lt;String&gt; type</code> beforeLabelChange<br>
-     * <code>&lt;String&gt;
-     * prevValue</code> the current value<br>
-     * <code>&lt;String&gt;
-     * newValue</code> the new value</p>
-     * <p><strong>Usage:</strong><br>
-     * <code>var handler = function(e) {var previous = e.prevValue};<br>
-     * myTabs.addListener('beforeLabelChange', handler);</code></p>
-     * @event beforeLabelChange
-     */
-        
-    /**
-     * Fires after the tab label is changed.
-     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
-     * <p><strong>Event fields:</strong><br>
-     * <code>&lt;String&gt; type</code> labelChange<br>
-     * <code>&lt;String&gt;
-     * prevValue</code> the previous value<br>
-     * <code>&lt;String&gt;
-     * newValue</code> the updated value</p>
-     * <p><strong>Usage:</strong><br>
-     * <code>var handler = function(e) {var previous = e.prevValue};<br>
-     * myTabs.addListener('labelChange', handler);</code></p>
-     * @event labelChange
-     */
-     
-    /**
-     * Fires before the tab content is changed.
-     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
-     * <p>If handler returns false, the change will be cancelled, and the value will not
-     * be set.</p>
-     * <p><strong>Event fields:</strong><br>
-     * <code>&lt;String&gt; type</code> beforeContentChange<br>
-     * <code>&lt;String&gt;
-     * prevValue</code> the current value<br>
-     * <code>&lt;String&gt;
-     * newValue</code> the new value</p>
-     * <p><strong>Usage:</strong><br>
-     * <code>var handler = function(e) {var previous = e.prevValue};<br>
-     * myTabs.addListener('beforeContentChange', handler);</code></p>
-     * @event beforeContentChange
-     */
-        
-    /**
-     * Fires after the tab content is changed.
-     * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
-     * <p><strong>Event fields:</strong><br>
-     * <code>&lt;String&gt; type</code> contentChange<br>
-     * <code>&lt;String&gt;
-     * prevValue</code> the previous value<br>
-     * <code>&lt;Boolean&gt;
-     * newValue</code> the updated value</p>
-     * <p><strong>Usage:</strong><br>
-     * <code>var handler = function(e) {var previous = e.prevValue};<br>
-     * myTabs.addListener('contentChange', handler);</code></p>
-     * @event contentChange
-     */
 })();
 
 YAHOO.register("tabview", YAHOO.widget.TabView, {version: "@VERSION@", build: "@BUILD@"});
