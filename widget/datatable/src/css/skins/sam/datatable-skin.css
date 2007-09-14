@@ -15,7 +15,6 @@
     border-right:1px solid #CBCBCB; /* inner column border */
 }
 .yui-skin-sam .yui-dt-table td {
-    white-space:nowrap;
     text-align:left;
 }
 .yui-skin-sam .yui-dt-table th.yui-dt-last,

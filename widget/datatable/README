@@ -2,6 +2,17 @@ DataTable Release Notes
 
 *** version 2.3.1 ***
 
+* For better support of resizeable Columns, the following core CSS changes have been
+made:
+
+- applied "table-layout:fixed" to TABLE elements
+- removed "overflow:hidden" from TH and TD elements
+- removed "white-space:nowrap" from TD elements
+
+As a result, implementers may notice a change in the widths of their rendered
+DataTables, which should be resolved by setting widths explicitly via CSS or
+your Column definitions.
+
 * Selection model issues have been addressed by clearing up ambiguous ID and
 index usage. Record instances are now assigned globally unique and immutable ID
 strings (no longer numbers). Record indexes are numbers that are mutable in order
