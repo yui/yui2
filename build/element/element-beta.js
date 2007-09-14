@@ -205,7 +205,7 @@ YAHOO.util.Attribute.prototype = {
      * @uses YAHOO.util.EventProvider
      */
     YAHOO.util.AttributeProvider = function() {};
-    
+
     YAHOO.util.AttributeProvider.prototype = {
         
         /**
@@ -222,8 +222,8 @@ YAHOO.util.Attribute.prototype = {
          * @param {String} key The attribute whose value will be returned.
          */
         get: function(key){
-            var configs = this._configs || {};
-            var config = configs[key];
+            this._configs = this._configs || {};
+            var config = this._configs[key];
             
             if (!config) {
                 return undefined;
@@ -241,8 +241,8 @@ YAHOO.util.Attribute.prototype = {
          * @return {Boolean} Whether or not the value was set.
          */
         set: function(key, value, silent){
-            var configs = this._configs || {};
-            var config = configs[key];
+            this._configs = this._configs || {};
+            var config = this._configs[key];
             
             if (!config) {
                 return false;
@@ -257,12 +257,12 @@ YAHOO.util.Attribute.prototype = {
          * @return {Array} An array of attribute names.
          */
         getAttributeKeys: function(){
-            var configs = this._configs;
+            this._configs = this._configs;
             var keys = [];
             var config;
-            for (var key in configs) {
-                config = configs[key];
-                if ( Lang.hasOwnProperty(configs, key) && 
+            for (var key in this._configs) {
+                config = this._configs[key];
+                if ( Lang.hasOwnProperty(this._configs, key) && 
                         !Lang.isUndefined(config) ) {
                     keys[keys.length] = key;
                 }
@@ -293,9 +293,9 @@ YAHOO.util.Attribute.prototype = {
          * @return {Boolean} Whether or not the value was set
          */
         resetValue: function(key, silent){
-            var configs = this._configs || {};
-            if (configs[key]) {
-                this.set(key, configs[key]._initialConfig.value, silent);
+            this._configs = this._configs || {};
+            if (this._configs[key]) {
+                this.set(key, this._configs[key]._initialConfig.value, silent);
                 return true;
             }
             return false;
@@ -308,17 +308,17 @@ YAHOO.util.Attribute.prototype = {
          * @param {Boolean} silent Whether or not to suppress change events
          */
         refresh: function(key, silent){
-            var configs = this._configs;
+            this._configs = this._configs;
             
             key = ( ( Lang.isString(key) ) ? [key] : key ) || 
                     this.getAttributeKeys();
             
             for (var i = 0, len = key.length; i < len; ++i) { 
                 if ( // only set if there is a value and not null
-                    configs[key[i]] && 
-                    ! Lang.isUndefined(configs[key[i]].value) &&
-                    ! Lang.isNull(configs[key[i]].value) ) {
-                    configs[key[i]].refresh(silent);
+                    this._configs[key[i]] && 
+                    ! Lang.isUndefined(this._configs[key[i]].value) &&
+                    ! Lang.isNull(this._configs[key[i]].value) ) {
+                    this._configs[key[i]].refresh(silent);
                 }
             }
         },
@@ -345,8 +345,8 @@ YAHOO.util.Attribute.prototype = {
          * attribute's properties.
          */
         getAttributeConfig: function(key) {
-            var configs = this._configs || {};
-            var config = configs[key] || {};
+            this._configs = this._configs || {};
+            var config = this._configs[key] || {};
             var map = {}; // returning a copy to prevent overrides
             
             for (key in config) {
@@ -366,13 +366,13 @@ YAHOO.util.Attribute.prototype = {
          * @param {Boolean} init Whether or not this should become the intial config.
          */
         setAttributeConfig: function(key, map, init) {
-            var configs = this._configs || {};
+            this._configs = this._configs || {};
             map = map || {};
-            if (!configs[key]) {
+            if (!this._configs[key]) {
                 map.name = key;
-                configs[key] = new YAHOO.util.Attribute(map, this);
+                this._configs[key] = this.createAttribute(map);
             } else {
-                configs[key].configure(map, init);
+                this._configs[key].configure(map, init);
             }
         },
         
@@ -395,10 +395,30 @@ YAHOO.util.Attribute.prototype = {
          * @private
          */
         resetAttributeConfig: function(key){
-            var configs = this._configs || {};
-            configs[key].resetConfig();
+            this._configs = this._configs || {};
+            this._configs[key].resetConfig();
         },
         
+        // wrapper for EventProvider.subscribe
+        // to create events on the fly
+        subscribe: function(type, callback) {
+            this._events = this._events || {};
+
+            if ( !(type in this._events) ) {
+                this._events[type] = this.createEvent(type);
+            }
+
+            YAHOO.util.EventProvider.prototype.subscribe.apply(this, arguments);
+        },
+
+        on: function() {
+            this.subscribe.apply(this, arguments);
+        },
+
+        addListener: function() {
+            this.subscribe.apply(this, arguments);
+        },
+
         /**
          * Fires the attribute's beforeChange event. 
          * @method fireBeforeChangeEvent
@@ -421,6 +441,10 @@ YAHOO.util.Attribute.prototype = {
         fireChangeEvent: function(e) {
             e.type += 'Change';
             return this.fireEvent(e.type, e);
+        },
+
+        createAttribute: function(map) {
+            return new YAHOO.util.Attribute(map, this);
         }
     };
     
@@ -868,7 +892,7 @@ var _initElement = function(el, attr) {
 var _initHTMLElement = function(attr) {
     /**
      * The HTMLElement the Element instance refers to.
-     * @config element
+     * @attribute element
      * @type HTMLElement
      */
     this.setAttributeConfig('element', {
