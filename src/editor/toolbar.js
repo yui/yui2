@@ -710,6 +710,7 @@ var Dom = YAHOO.util.Dom,
 
             for (var i = 0; i < oGroup.buttons.length; i++) {
                 var li = document.createElement('li');
+                li.className = this.CLASS_PREFIX + '-groupitem';
                 ul.appendChild(li);
                 if ((oGroup.buttons[i].type !== undefined) && oGroup.buttons[i].type == 'separator') {
                     this.addSeparator(li);

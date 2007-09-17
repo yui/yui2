@@ -3066,30 +3066,49 @@ var Dom = YAHOO.util.Dom,
                     if (this.browser.ie) {
                         action = 'formatblock';
                     }
+                    var h = 0;
                     if (value == 'none') {
                         if ((_sel && _sel.tagName && (_sel.tagName.toLowerCase().substring(0,1) == 'h')) || (_sel && _sel.parentNode && _sel.parentNode.tagName && (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h'))) {
                             if (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h') {
-                                _sel = _sel.parentNode;
+                                if (!this._isElement(_sel.parentNode, 'html')) {
+                                    _sel = _sel.parentNode;
+                                }
                             }
-                            el = this._swapEl(_selEl, 'span', function(el) {
-                                el.className = 'yui-non';
-                            });
-                            this._selectNode(el);
-                            this.currentElement[0] = el;
+                            if (this._isElement(_sel, 'body')) {
+                                YAHOO.log('Could not find header element', 'error', 'Editor');
+                                return false;
+                            }
+                            for (h = 0; h < this.currentElement.length; h++) {
+                                if (this._isElement(this.currentElement[h], 'h1') || this._isElement(this.currentElement[h], 'h2') || this._isElement(this.currentElement[h], 'h3') || this._isElement(this.currentElement[h], 'h4') || this._isElement(this.currentElement[h], 'h5') || this._isElement(this.currentElement[h], 'h6')) {
+                                    el = this._swapEl(this.currentElement[h], 'span', function(el) {
+                                        el.className = 'yui-non';
+                                        el.innerHTML = el.innerHTML.replace(new RegExp('<span class="yui-non">(.*?)<\/span>', 'gi'), '$1');
+                                    });
+                                    this.currentElement[h] = el;
+                                }
+                                if (this.currentElement[h].nextSibling && !this._isElement(this.currentElement[h].nextSibling, 'br')) {
+                                    var _br = this._getDoc().createElement('br');
+                                    this.currentElement[h].parentNode.insertBefore(_br, this.currentElement[h].nextSibling);
+                                }
+                            }
                         }
                         exec = false;
                     } else {
-                        if (this.browser.ie || this.browser.webkit || this.browser.opera) {
-                            if (this._isElement(_selEl, 'h1') || this._isElement(_selEl, 'h2') || this._isElement(_selEl, 'h3') || this._isElement(_selEl, 'h4') || this._isElement(_selEl, 'h5') || this._isElement(_selEl, 'h6')) {
-                                el = this._swapEl(_selEl, value);
-                                this._selectNode(el);
-                                this.currentElement[0] = el;
-                            } else {
-                                this._createCurrentElement(value);
-                                this._selectNode(this.currentElement[0]);
+                        if (this._isElement(_selEl, 'h1') || this._isElement(_selEl, 'h2') || this._isElement(_selEl, 'h3') || this._isElement(_selEl, 'h4') || this._isElement(_selEl, 'h5') || this._isElement(_selEl, 'h6')) {
+                            el = this._swapEl(_selEl, value);
+                            this._selectNode(el);
+                            this.currentElement[0] = el;
+                        } else {
+                            this._createCurrentElement(value);
+                            this._selectNode(this.currentElement[0]);
+                            //If the next sibling is a br, remove it
+                            for (h = 0; h < this.currentElement.length; h++) {
+                                if (this.currentElement[h].nextSibling && this._isElement(this.currentElement[h].nextSibling, 'br')) {
+                                    this.currentElement[h].nextSibling.parentNode.removeChild(this.currentElement[h].nextSibling);
+                                }
                             }
-                            exec = false;
                         }
+                        exec = false;
                     }
                     break;
                 case 'backcolor':

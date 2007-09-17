@@ -73,7 +73,7 @@
     padding: 0;
 }
 /* Float the LI's that wrap the buttons */
-.yui-skin-sam .yui-toolbar-group ul li {
+.yui-skin-sam .yui-toolbar-group ul li.yui-toolbar-groupitem {
     float: left;
 }
 
@@ -213,14 +213,11 @@
 .yui-skin-sam .yui-toolbar-container .yui-button-selected span.yui-toolbar-icon, .yui-skin-sam .yui-toolbar-container .yui-button-hover span.yui-toolbar-icon {
     background-image: url(editor-sprite-active.gif);
 }
-/* Remove the float from menuitems (they are LI's and we float them above)*/
-.yui-skin-sam .yui-toolbar-container .visible .yuimenuitem {
-    float: none;
-}
 /* Change the defaults to make them look more like the editor */
 .yui-skin-sam .yui-toolbar-container .visible .yuimenuitemlabel {
     cursor: pointer;
     color: #000;
+    *position: relative;
 }
 
 /* Set the background color of all menu containers */
@@ -473,11 +470,7 @@
 }
 /* IE is havig trouble with our menu sizes here */
 .yui-skin-sam .yui-editor-panel .yuimenu {
-    *width: 90px !important;
-}
-/* Remove the floats that we applied earlier */
-.yui-skin-sam .yui-editor-panel .yuimenu ul li {
-    float: none;
+    /**width: 90px !important;*/
 }
 /* Remove the border from the toolbar's container and add some margin to it */
 .yui-skin-sam .yui-editor-panel .yui-toolbar-container .yui-toolbar-subcont {
