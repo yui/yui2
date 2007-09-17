@@ -107,6 +107,7 @@
     width: 25px;
     height: 15px;
     background: url(../../../../assets/skins/sam/sprite.png) no-repeat 0 -300px;
+    cursor:pointer;
 
 }
 
