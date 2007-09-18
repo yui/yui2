@@ -731,6 +731,7 @@ var Dom = YAHOO.util.Dom,
         addButtonToGroup: function(oButton, group, after) {
             var groupCont = this._buttonGroupList[group];
             var li = document.createElement('li');
+            li.className = this.CLASS_PREFIX + '-groupitem';
             oButton.container = li;
             this.addButton(oButton, after);
             groupCont.appendChild(li);
