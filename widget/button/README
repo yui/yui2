@@ -2,7 +2,8 @@
 
 Fixed the following bugs:
 -------------------------
-+ Purged the old 2.2.2 Button stylesheet and related image assets.
++ Purged the old 2.2.2 Button stylesheet and related image assets that was 
+  mistakenly included in the 2.3.0 build.
 
 + Fixed an issue in Gecko where changing a Button instance's "label" attribute
   after the Button had been created would not result in the Button redrawing at
@@ -16,6 +17,11 @@ Fixed the following bugs:
 + Submitting a form by clicking on a MenuItem of a SplitButton's or MenuButton's
   Menu will no longer result in a JavaScript error.
   
++ Modified how element tag names are compared to support XHTML applications.
+
++ Added code to remove the CSS class names representing the "hover," "focus," 
+  and "active" states when a Button instance is disabled.
+
 
 *** Version 2.3 ***
 

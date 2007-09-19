@@ -1119,7 +1119,7 @@
                         oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, 
                             this, true);
 
-                        oMenu.clickEvent.subscribe(this._onMenuClick, 
+                        oMenu.subscribe("click", this._onMenuClick, 
                             this, true);
 
                         oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, 
@@ -2472,7 +2472,7 @@
         * was fired.
         */
         _onMenuClick: function (p_sType, p_aArgs) {
-        
+
             var oItem = p_aArgs[1],
                 oSrcElement;
         
@@ -2960,7 +2960,7 @@
         
         
             /**
-            * @config type
+            * @attribute type
             * @description String specifying the button's type.  Possible 
             * values are: "push," "link," "submit," "reset," "checkbox," 
             * "radio," "menu," and "split."
@@ -2978,7 +2978,7 @@
         
         
             /**
-            * @config label
+            * @attribute label
             * @description String specifying the button's text label 
             * or innerHTML.
             * @default null
@@ -2994,7 +2994,7 @@
         
         
             /**
-            * @config value
+            * @attribute value
             * @description Object specifying the value for the button.
             * @default null
             * @type Object
@@ -3007,7 +3007,7 @@
         
         
             /**
-            * @config name
+            * @attribute name
             * @description String specifying the name for the button.
             * @default null
             * @type String
@@ -3021,7 +3021,7 @@
         
         
             /**
-            * @config tabindex
+            * @attribute tabindex
             * @description Number specifying the tabindex for the button.
             * @default null
             * @type Number
@@ -3036,7 +3036,7 @@
         
         
             /**
-            * @config title
+            * @attribute title
             * @description String specifying the title for the button.
             * @default null
             * @type String
@@ -3051,7 +3051,7 @@
         
         
             /**
-            * @config disabled
+            * @attribute disabled
             * @description Boolean indicating if the button should be disabled.  
             * (Disabled buttons are dimmed and will not respond to user input 
             * or fire events.  Does not apply to button's of type "link.")
@@ -3068,7 +3068,7 @@
         
         
             /**
-            * @config href
+            * @attribute href
             * @description String specifying the href for the button.  Applies
             * only to buttons of type "link."
             * @type String
@@ -3083,7 +3083,7 @@
         
         
             /**
-            * @config target
+            * @attribute target
             * @description String specifying the target for the button.  
             * Applies only to buttons of type "link."
             * @type String
@@ -3098,7 +3098,7 @@
         
         
             /**
-            * @config checked
+            * @attribute checked
             * @description Boolean indicating if the button is checked. 
             * Applies only to buttons of type "radio" and "checkbox."
             * @default false
@@ -3114,7 +3114,7 @@
         
         
             /**
-            * @config container
+            * @attribute container
             * @description HTML element reference or string specifying the id 
             * attribute of the HTML element that the button's markup should be 
             * rendered into.
@@ -3131,7 +3131,7 @@
         
         
             /**
-            * @config srcelement
+            * @attribute srcelement
             * @description Object reference to the HTML element (either 
             * <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code>) 
             * used to create the button.
@@ -3148,7 +3148,7 @@
         
         
             /**
-            * @config menu
+            * @attribute menu
             * @description Object specifying the menu for the button.  
             * The value can be one of the following:
             * <ul>
@@ -3192,7 +3192,7 @@
         
         
             /**
-            * @config lazyloadmenu
+            * @attribute lazyloadmenu
             * @description Boolean indicating the value to set for the 
             * <a href="YAHOO.widget.Menu.html#lazyLoad">"lazyload"</a>
             * configuration property of the button's menu.  Setting 
@@ -3225,7 +3225,7 @@
 
 
             /**
-            * @config menuclassname
+            * @attribute menuclassname
             * @description String representing the CSS class name to be 
             * applied to the root element of the button's menu.
             * @type String
@@ -3242,7 +3242,7 @@
 
 
             /**
-            * @config selectedMenuItem
+            * @attribute selectedMenuItem
             * @description Number representing the index of the item in the 
             * button's menu that is currently selected.
             * @type Number
@@ -3258,7 +3258,7 @@
         
         
             /**
-            * @config onclick
+            * @attribute onclick
             * @description Object literal representing the code to be executed  
             * when the button is clicked.  Format:<br> <code> {<br> 
             * <strong>fn:</strong> Function,   &#47;&#47; The handler to call 
@@ -3278,7 +3278,7 @@
 
 
             /**
-            * @config focusmenu
+            * @attribute focusmenu
             * @description Boolean indicating whether or not the button's menu 
             * should be focused when it is made visible.
             * @type Boolean
@@ -3444,8 +3444,12 @@
             this.logger.log("Removing CustomEvent listeners.");
 
             this.unsubscribeAll();
-        
-            oParentNode.removeChild(oElement);
+
+            if (oParentNode) {
+
+                oParentNode.removeChild(oElement);
+            
+            }
         
             this.logger.log("Removing from document.");
         
