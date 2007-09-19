@@ -72,6 +72,7 @@ var Dom = YAHOO.util.Dom,
     MenuManager = YAHOO.widget.MenuManager,
     CustomEvent = YAHOO.util.CustomEvent,
     Lang = YAHOO.lang,
+    UA = YAHOO.env.ua,
     
     m_oShadowTemplate,
 
@@ -693,8 +694,6 @@ init: function (p_oElement, p_oConfig) {
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
-
-        Module.textResizeEvent.subscribe(this._onTextResize, this, true);
 
 
         if (p_oConfig) {
@@ -1422,19 +1421,27 @@ _subscribeToItemEvents: function (p_oItem) {
 */
 _getOffsetWidth: function () {
 
-    var oClone = this.element.cloneNode(true);
+    var oClone = this.element.cloneNode(true),
+        oRoot = this.getRoot(),
+        oParentNode = oRoot.element.parentNode,
+        sWidth;
 
     Dom.removeClass(oClone, "visible");
 
     Dom.setStyle(oClone, "width", "");
 
-    document.body.appendChild(oClone);
 
-    var sWidth = oClone.offsetWidth;
+    if (oParentNode) {
 
-    document.body.removeChild(oClone);
+        oParentNode.appendChild(oClone);
+    
+        sWidth = oClone.offsetWidth;
+    
+        oParentNode.removeChild(oClone);
+    
+        return sWidth;
 
-    return sWidth;
+    }
 
 },
 
@@ -1448,7 +1455,7 @@ _getOffsetWidth: function () {
 _setWidth: function () {
 
     var oElement = this.element,
-        bVisible = false,
+        bVisible = Dom.removeClass(oElement, "visible"),
         sWidth;
 
     if (oElement.parentNode.tagName.toUpperCase() == "BODY") {
@@ -1459,14 +1466,6 @@ _setWidth: function () {
         
         }
         else {
-
-            if (Dom.hasClass(oElement, "visible")) {
-
-                bVisible = true;
-                
-                Dom.removeClass(oElement, "visible");
-
-            }
 
             Dom.setStyle(oElement, "width", "auto");
             
@@ -2730,6 +2729,8 @@ _onBeforeRender: function (p_sType, p_aArgs) {
 */
 _onRender: function (p_sType, p_aArgs) {
 
+    Module.textResizeEvent.subscribe(this._onTextResize, this, true);
+
     if (this.cfg.getProperty("position") == "dynamic" && 
         !this.cfg.getProperty("width")) {
 
@@ -3162,7 +3163,7 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
 
     var nScrollTop = oParent.parent.body.scrollTop;
 
-    if ((YAHOO.env.ua.gecko || YAHOO.env.ua.webkit) && nScrollTop > 0) {
+    if ((UA.gecko || UA.webkit) && nScrollTop > 0) {
 
          this.cfg.setProperty("y", (this.cfg.getProperty("y") - nScrollTop));
     
@@ -3218,8 +3219,8 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
 
     var sPropertyName = p_aArgs[0][0],
         oPropertyValue = p_aArgs[0][1],
-        sWidth,
         oSubmenu;
+
 
     switch(sPropertyName) {
 
@@ -3255,10 +3256,8 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
             */
 
             if (this.element.style.width) {
-    
-                sWidth = this._getOffsetWidth() + "px";
 
-                Dom.setStyle(this.element, "width", sWidth);
+                this.cfg.setProperty("width", (this._getOffsetWidth() + "px"));
 
             }
 
@@ -3487,7 +3486,7 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
 
         if (sCurrentPosition != "absolute") {
 
-            oCfg.setProperty("iframe", (YAHOO.env.ua.ie == 6 ? true : false));
+            oCfg.setProperty("iframe", (UA.ie == 6 ? true : false));
 
         }
 
@@ -3671,8 +3670,7 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     }
 
     Dom.setStyle(oBody, "height", "auto");
-    Dom.setStyle(oBody, "overflow", "visible");    
-
+    Dom.removeClass(oBody, "yui-menu-body-scrolled");
 
     if ((nMaxHeight > 0) && (oBody.offsetHeight > nMaxHeight)) {
 
@@ -3703,17 +3701,15 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
         
         }
 
+        Dom.addClass(oBody, "yui-menu-body-scrolled");
+
         nHeight = (nMaxHeight - (this.footer.offsetHeight + 
                     this.header.offsetHeight));
 
         Dom.setStyle(oBody, "height", (nHeight + "px"));
-        Dom.setStyle(oBody, "overflow", "hidden");
 
     }
     else if (oHeader && oFooter) {
-
-        Dom.setStyle(oBody, "height", "auto");
-        Dom.setStyle(oBody, "overflow", "visible");
 
         Event.removeListener(oHeader, "mouseover", fnMouseOver);
         Event.removeListener(oHeader, "mouseout", fnMouseOut);
@@ -3898,7 +3894,7 @@ onRender: function (p_sType, p_aArgs) {
             this.beforeShowEvent.subscribe(addShadowVisibleClass);
             this.beforeHideEvent.subscribe(removeShadowVisibleClass);
 
-            if (YAHOO.env.ua.ie) {
+            if (UA.ie) {
         
                 /*
                      Need to call sizeShadow & syncIframe via setTimeout for 
@@ -3916,6 +3912,7 @@ onRender: function (p_sType, p_aArgs) {
 
                 this.cfg.subscribeToConfigEvent("width", sizeShadow);
                 this.cfg.subscribeToConfigEvent("height", sizeShadow);
+                this.cfg.subscribeToConfigEvent("maxheight", sizeShadow);
                 this.changeContentEvent.subscribe(sizeShadow);
 
                 Module.textResizeEvent.subscribe(sizeShadow, me, true);
@@ -4461,11 +4458,12 @@ clearContent: function () {
 
     }
 
+    this.activeItem = null;
 
     this._aItemGroups = [];
     this._aListElements = [];
     this._aGroupTitleElements = [];
-    
+
     this.cfg.setProperty("width", null);
 
 },
@@ -4479,7 +4477,6 @@ clearContent: function () {
 destroy: function () {
 
     Module.textResizeEvent.unsubscribe(this._onTextResize, this);
-
 
     // Remove all items
 

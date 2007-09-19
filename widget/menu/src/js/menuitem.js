@@ -606,6 +606,8 @@ MenuItem.prototype = {
                     this._createRootNodeStructure();
 
                     oConfig.queueProperty("text", p_oObject.text);
+                    
+                    this.value = p_oObject.value;
 
                     this.srcElement = p_oObject;
 
@@ -993,7 +995,15 @@ MenuItem.prototype = {
 
         }
 
-        this._oAnchor.setAttribute("href", sURL);
+        var oAnchor = this._oAnchor;
+
+        if (YAHOO.env.ua.opera) {
+
+            oAnchor.removeAttribute("href");
+        
+        }
+
+        oAnchor.setAttribute("href", sURL);
 
     },
 
@@ -1899,7 +1909,14 @@ MenuItem.prototype = {
         if(!this.cfg.getProperty("disabled") && oParent && 
             oParent.cfg.getProperty("visible")) {
 
-            this._oAnchor.blur();
+            try {
+
+                this._oAnchor.blur();
+            
+            }
+            catch (e) {
+            
+            }
 
             this.blurEvent.fire();
 
