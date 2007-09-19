@@ -156,12 +156,8 @@
 
 .yui-skin-sam .yuimenu .bd {
 
-    position: relative;
-    top: 0;
-    left: 0;
     border: solid 1px #808080;
     background-color: #fff;
-    z-index: 1;
     
 }
 
@@ -207,10 +203,16 @@
 
 /* Top and bottom scroll controls */
 
+.yui-skin-sam .yuimenu .yui-menu-body-scrolled {
+
+    border-color: #ccc #808080;
+    overflow: hidden;
+
+}
+
 .yui-skin-sam .yuimenu .topscrollbar,
 .yui-skin-sam .yuimenu .bottomscrollbar {
 
-    position: relative;
     height: 16px;
     border: solid 1px #808080;
     background: #fff url(../../../img/sprite.png) no-repeat 0 0;
@@ -219,9 +221,7 @@
 
 .yui-skin-sam .yuimenu .topscrollbar {
 
-    z-index: 2;
-    border-bottom-color: #ccc;
-    margin-bottom: -1px;
+    border-bottom-width: 0;
     background-position: center -950px;
 
 }
@@ -234,9 +234,7 @@
 
 .yui-skin-sam .yuimenu .bottomscrollbar {
 
-    z-index: 3;
-    border-top-color: #ccc;
-    margin-top: -1px;
+    border-top-width: 0;
     background-position: center -850px;
 
 }
@@ -261,6 +259,16 @@
     text-decoration: none;
     outline: none;
     position: relative;
+
+    /* 
+        Need to set the "position" property to "static" for IE otherwise the
+        MenuItem instances will not respect the value of the "overflow" 
+        property that is applied to its body element (see the above 
+        ".yui-skin-sam .yuimenu .yui-menu-body-scrolled" rule) when it 
+        is scrolled.
+    */
+
+    *position: static;
     cursor: default;
 
 }
@@ -268,7 +276,9 @@
 .yui-skin-sam .yuimenuitemlabel .helptext {
 
     font-style: normal;
-    margin: 0 0 0 40px;
+    display: block;
+    margin: -1.5em 0 0 10em;
+    *margin-top: -1.45em;  /* For IE*/
     
 }
 
@@ -279,6 +289,20 @@
     position: absolute;
     overflow: hidden;
     background: url(../../../img/sprite.png) no-repeat;
+
+}
+
+/*
+    Set special values for the "position" and "display" properties for IE since
+    it is necessary to position the submenu and checked indicator nodes 
+    differently since their parent element isn't relatively positioned.
+*/
+
+.yui-skin-sam .yuimenuitemlabel .submenuindicator,
+.yui-skin-sam .yuimenuitemlabel .checkedindicator {
+
+    *position: static;
+    *display: inline-block;
 
 }
 
@@ -311,6 +335,32 @@
 
 /* Visible Menu */
 
+/*
+    The following three rules are used to position the submenu and checked
+    indicator nodes for IE since their parent element isn't 
+    relatively positioned.
+*/
+
+.yui-skin-sam .visible .yuimenuitemlabel .submenuindicator {
+
+    *float: right;
+    *margin: -1em 8px 0 8px;
+
+}
+
+.yui-skin-sam .visible .yuimenuitem .hassubmenu {
+
+    *padding-right: 0;
+
+}
+
+.yui-skin-sam .visible .yuimenuitemlabel .checkedindicator {
+
+    *float: left;
+    *margin: -1em 0 0 -12px;
+
+}
+
 .yui-skin-sam .yui-menu-shadow-visible {
 
     top: 2px;
@@ -334,16 +384,6 @@
 .yui-skin-sam .visible .yuimenuitemlabel {
 
     *zoom: 1;   /* For IE */
-
-}
-
-.yui-skin-sam .visible .yuimenuitemlabel .helptext {
-
-    float: right;
-    width: 100%;
-    text-align: right;
-    margin: -1.5em 0 0 0;
-    *margin: -1.45em 0 0 0;  /* For IE*/
 
 }
 

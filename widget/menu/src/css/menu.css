@@ -124,6 +124,12 @@ when one of its submenus is visible.
 
 }
 
+.yuimenu .yui-menu-body-scrolled {
+
+    overflow: hidden;
+
+}
+
 .yuimenu .topscrollbar,
 .yuimenu .bottomscrollbar {
 

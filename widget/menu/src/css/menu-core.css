@@ -47,6 +47,7 @@
 .yui-menu-shadow {
 
     position: absolute;
+    z-index: -1;
 
 }
 
