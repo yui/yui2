@@ -1,0 +1,76 @@
+/**
+ * A type of axis whose units are measured in numeric values.
+ *
+ * @namespace YAHOO.widget
+ * @class NumericAxis
+ * @constructor
+ */
+YAHOO.widget.NumericAxis = function()
+{
+	YAHOO.widget.NumericAxis.superclass.constructor.call(this);
+};
+
+YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
+{
+	type: "numeric",
+	
+	/**
+	 * The minimum value drawn by the axis. If not set explicitly, the axis minimum
+	 * will be calculated automatically.
+	 *
+	 * @property minimum
+	 * @type Number
+	 */
+	minimum: NaN,
+	
+	/**
+	 * The maximum value drawn by the axis. If not set explicitly, the axis maximum
+	 * will be calculated automatically.
+	 *
+	 * @property maximum
+	 * @type Number
+	 */
+	maximum: NaN,
+	
+	/**
+	 * The spacing between major intervals on this axis.
+	 *
+	 * @property majorUnit
+	 * @type Number
+	 */
+	majorUnit: NaN,
+
+	/**
+	 * The spacing between minor intervals on this axis.
+	 *
+	 * @property minorUnit
+	 * @type Number
+	 */
+	minorUnit: NaN,
+
+	/**
+	 * If true, and the bounds are calculated automatically, either the minimum or
+	 * maximum will be set to zero.
+	 *
+	 * @property alwaysShowZero
+	 * @type Boolean
+	 */
+	alwaysShowZero: true,
+
+	/**
+	 * The scaling algorithm to use on this axis. May be "linear" or "logarithmic".
+	 *
+	 * @property scale
+	 * @type String
+	 */
+	scale: "linear",
+
+	/**
+	 * A string reference to the globally-accessible function that may be called to
+	 * determine each of the label values for this axis.
+	 *
+	 * @property labelFunction
+	 * @type String
+	 */
+	labelFunction: null
+});

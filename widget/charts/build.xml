@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="YuiBuild" default="local">
+
+    <description>Component Build File</description>
+
+    <dirname property="buildfile.dir" file="${ant.file}" />
+    <property environment="env" />
+    <property name="srcdir" value="${env.YUI_SRC_DIR}" />
+    <property name="builddir" value="${env.YUI_BUILD_DIR}" />
+    
+    <property file="${buildfile.dir}/build.properties" />
+
+    <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
+    <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
+
+    <target name="customlocal" description="Charts Override to Build SWF">
+    
+        <!-- build the Charts.swf -->
+        <!-- TODO: Make MXMLC a property -->
+        <exec executable="C:/Program Files/Adobe/Flex Builder 3/sdks/2.0.1/bin/mxmlc.exe" failonerror="true">
+            <arg line="-library-path+='${component.srcdir}/swc/charts.swc'"/>
+            <arg line="-source-path+='C:\Documents and Settings\jtynjala\My Documents\Development\yahoo\presentation\flash\ActionScript 3'"/>
+            <arg line="-output '${component.srcdir}/swf/Charts.swf'"/>
+            <arg line="'${component.srcdir}/as/Charts.as'"/>
+        </exec>
+        
+        <!-- copy the SWF to the build directory -->
+        <copy todir="${component.builddir}">
+            <fileset dir="${component.srcdir}/swf" includes="*.swf" />
+        </copy>
+    </target>
+    
+    <target name="examples" description="Component Specific Over-ride">
+        <echo>DOES NOT DO ANYTHING CURRENTLY</echo>
+    </target>
+
+</project>
+
