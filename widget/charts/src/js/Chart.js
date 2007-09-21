@@ -1,6 +1,6 @@
 YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 {
-	YAHOO.widget.Chart.superclass.constructor.call(this, this.SWFURL, containerId, attributes);
+	YAHOO.widget.Chart.superclass.constructor.call(this, YAHOO.widget.Chart.SWFURL, containerId, attributes);
 	
 	this._type = type;
 	this._dataSource = dataSource;
@@ -13,7 +13,6 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 
 YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashComponent,
 {
-	SWFURL: "Charts.swf",
 	_type: null,
 	
 	_initAttributes: function(attributes)
@@ -175,3 +174,5 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashComponent,
 		this._swf.setDataTipFunction(value);
 	}
 });
+
+YAHOO.widget.Chart.SWFURL = "Charts.swf";
