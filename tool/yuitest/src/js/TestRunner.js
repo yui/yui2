@@ -276,6 +276,9 @@ YAHOO.tool.TestRunner = (function(){
             //fireEvent event for beginning of test suite run
             this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testSuite });
         
+            //run the test suite's setup
+            testSuite.setUp();
+        
             //iterate over the test suite items
             for (var i=0; i < testSuite.items.length; i++){
                 var result = null;
@@ -292,6 +295,9 @@ YAHOO.tool.TestRunner = (function(){
                     results[testSuite.items[i].name] = result;
                 }
             }
+            
+            //run the test suite's tear down
+            testSuite.tearDown();
     
             //fireEvent event for completion of test suite run
             this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: testSuite, results: results });
