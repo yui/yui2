@@ -1,4 +1,4 @@
-YAHOO.widget.FlashComponent = function(swfURL, containerID, attributes)
+YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 {
 	// set up the initial events and attributes stuff
 	this._queue = this._queue || [];
@@ -26,7 +26,7 @@ YAHOO.widget.FlashComponent = function(swfURL, containerID, attributes)
 	this.createEvent("contentReady");
 };
 
-YAHOO.extend(YAHOO.widget.FlashComponent, YAHOO.util.AttributeProvider,
+YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 {
 	_swfURL: null,
 	_swf: null, //a reference to the embedded SWF file
@@ -35,7 +35,7 @@ YAHOO.extend(YAHOO.widget.FlashComponent, YAHOO.util.AttributeProvider,
 
 	toString: function()
 	{
-		return "FlashComponent " + this._id;
+		return "FlashAdapter " + this._id;
 	},
 
 	//allow an event handler to be specified
@@ -48,7 +48,7 @@ YAHOO.extend(YAHOO.widget.FlashComponent, YAHOO.util.AttributeProvider,
 		swfObj.addVariable("elementID", swfID);
 
 		// set the name of the function to call when the swf has an event
-		swfObj.addVariable("eventHandler", "YAHOO.widget.FlashComponent.eventHandler");
+		swfObj.addVariable("eventHandler", "YAHOO.widget.FlashAdapter.eventHandler");
 
 		var container = YAHOO.util.Dom.get(containerID);
 		var result = swfObj.write(container);
@@ -56,7 +56,7 @@ YAHOO.extend(YAHOO.widget.FlashComponent, YAHOO.util.AttributeProvider,
 		{
 			this._swf = YAHOO.util.Dom.get(swfID);
 			//if successful, let's add an owner property to the SWF reference
-			//this will allow the event handler to communicate with a YAHOO.widget.FlashComponent
+			//this will allow the event handler to communicate with a YAHOO.widget.FlashAdapter
 			this._swf.owner = this;
 		}
 		else YAHOO.log("Unable to load SWF " + swfURL);
@@ -109,13 +109,13 @@ YAHOO.extend(YAHOO.widget.FlashComponent, YAHOO.util.AttributeProvider,
 	}
 });
 
-YAHOO.widget.FlashComponent.eventHandler = function(elementID, event)
+YAHOO.widget.FlashAdapter.eventHandler = function(elementID, event)
 {
 	var loadedSWF = YAHOO.util.Dom.get(elementID);
 	if(!loadedSWF.owner)
 	{
 		//fix for ie: if owner doesn't exist yet, try again in a moment
-		setTimeout(function() { YAHOO.widget.FlashComponent.eventHandler( elementID, event ); }, 0);
+		setTimeout(function() { YAHOO.widget.FlashAdapter.eventHandler( elementID, event ); }, 0);
 	}
 	else loadedSWF.owner._eventHandler(event);
 };

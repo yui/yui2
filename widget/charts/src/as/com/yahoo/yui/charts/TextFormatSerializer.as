@@ -1,5 +1,6 @@
 package com.yahoo.yui.charts
 {
+	import flash.external.ExternalInterface;
 	import flash.text.Font;
 	import flash.text.TextFormat;
 	
@@ -21,7 +22,7 @@ package com.yahoo.yui.charts
 		public static function readTextFormat(input:Object):TextFormat
 		{
 			var format:TextFormat = new TextFormat();
-			format.font = input.name;
+			format.font = parseFontName(input.name);
 			format.bold = input.bold;
 			format.italic = input.italic;
 			format.underline = input.underline;
@@ -48,7 +49,16 @@ package com.yahoo.yui.charts
 			{
 				var name:String = String(names[i]);
 				fontNameToFind = name.toLowerCase();
-				if(availableFonts.filter(fontNameFilter).length > 0)
+				ExternalInterface.call("YAHOO.log", fontNameToFind);
+				if(fontNameToFind == "sans-serif")
+				{
+					return "_sans";
+				}
+				else if(fontNameToFind == "serif")
+				{
+					return "_serif"
+				}
+				else if(availableFonts.filter(fontNameFilter).length > 0)
 				{
 					return name;
 				}
@@ -59,14 +69,7 @@ package com.yahoo.yui.charts
 		
 		private static function fontNameFilter(item:Font, index:int, array:Array):Boolean
 		{
-			if(fontNameToFind == "sans-serif")
-			{
-				return item.fontName.toLowerCase() == "_sans";
-			}
-			if(fontNameToFind == "serif")
-			{
-				return item.fontName.toLowerCase() == "_serif"
-			}
+			
 			return item.fontName.toLowerCase() == fontNameToFind;
 		}
 	}

@@ -11,7 +11,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	this.createEvent("itemDoubleClick");
 };
 
-YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashComponent,
+YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 {
 	_type: null,
 
