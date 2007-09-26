@@ -3,10 +3,10 @@ package com.yahoo.yui
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.events.Event;
-	import flash.external.ExternalInterface;
 	import flash.display.DisplayObject;
 	import flash.errors.IOError;
+	import flash.events.Event;
+	import flash.external.ExternalInterface;
 
 	public class YUIAdapter extends Sprite
 	{
@@ -79,9 +79,10 @@ package com.yahoo.yui
 			this.javaScriptEventHandler = this.loaderInfo.parameters["eventHandler"];
 		}
 		
-		protected function log(message:String, category:String = null):void
+		protected function log(message:Object, category:String = null):void
 		{
-			this.dispatchEventToJavaScript({type: "log", message: message, category: category});
+			if(message == null) message = "";
+			this.dispatchEventToJavaScript({type: "log", message: message.toString(), category: category});
 		}
 		
 		/**

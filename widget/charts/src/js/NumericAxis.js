@@ -47,6 +47,16 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @type Number
 	 */
 	minorUnit: NaN,
+	
+	/**
+	 * If true, the labels, ticks, gridlines, and other objects will snap to
+	 * the nearest major or minor unit. If false, their position will be based
+	 * on the minimum value.
+	 *
+	 * @property snapToUnits
+	 * @type Boolean
+	 */
+	snapToUnits: true,
 
 	/**
 	 * If true, and the bounds are calculated automatically, either the minimum or

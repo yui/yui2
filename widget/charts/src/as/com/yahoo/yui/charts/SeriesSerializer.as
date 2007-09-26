@@ -1,10 +1,9 @@
 package com.yahoo.yui.charts
 {
-	import com.yahoo.astra.fl.charts.ISeries;
-	import com.yahoo.astra.fl.charts.series.*;
 	import flash.utils.Dictionary;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.getDefinitionByName;
+	import com.yahoo.astra.fl.charts.series.*;
 	
 	public class SeriesSerializer
 	{

@@ -32,28 +32,6 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 			method: this._setVerticalField
 		});
 
-		this.getAttributeConfig("horizontalAxisTitle",
-		{
-			method: this._getHorizontalAxisTitle
-		});
-
-		this.setAttributeConfig("horizontalAxisTitle",
-		{
-			validator: YAHOO.lang.isString,
-			method: this._setHorizontalAxisTitle
-		});
-
-		this.getAttributeConfig("verticalAxisTitle",
-		{
-			method: this._getVerticalAxisTitle
-		});
-
-		this.setAttributeConfig("verticalAxisTitle",
-		{
-			validator: YAHOO.lang.isString,
-			method: this._setVerticalAxisTitle
-		});
-
 		this.setAttributeConfig("horizontalAxis",
 		{
 			method: this._setHorizontalAxis
@@ -84,27 +62,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	{
 		this._swf.setVerticalField(value);
 	},
-
-	_getHorizontalAxisTitle: function()
-	{
-		return this._swf.getHorizontalAxisTitle();
-	},
-
-	_setHorizontalAxisTitle: function(value)
-	{
-		this._swf.setHorizontalAxisTitle(value);
-	},
-
-	_getVerticalAxisTitle: function()
-	{
-		return this._swf.getVerticalAxisTitle();
-	},
-
-	_setVerticalAxisTitle: function(value)
-	{
-		this._swf.setVerticalAxisTitle(value);
-	},
-
+	
 	_setHorizontalAxis: function(value)
 	{
 		this._swf.setHorizontalAxis(value);

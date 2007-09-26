@@ -14,6 +14,11 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashComponent,
 {
 	_type: null,
+
+	toString: function()
+	{
+		return "Chart " + this._id;
+	},
 	
 	_initAttributes: function(attributes)
 	{
@@ -69,6 +74,12 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashComponent,
 	_loadHandler: function()
 	{
 		this._swf.setType(this._type);
+		
+		//set initial styles
+		if(this._attributes.style)
+		{
+			this._swf.setStyles(this._attributes.style);		
+		}
 		
 		YAHOO.widget.Chart.superclass._loadHandler.call(this);
 		

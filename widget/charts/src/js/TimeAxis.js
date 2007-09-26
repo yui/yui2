@@ -65,6 +65,16 @@ YAHOO.lang.extend(YAHOO.widget.TimeAxis, YAHOO.widget.Axis,
 	minorTimeUnit: null,
 
 	/**
+	 * If true, the labels, ticks, gridlines, and other objects will snap to
+	 * the nearest major or minor unit. If false, their position will be based
+	 * on the minimum value.
+	 *
+	 * @property snapToUnits
+	 * @type Boolean
+	 */
+	snapToUnits: true,
+
+	/**
 	 * A string reference to the globally-accessible function that may be called to
 	 * determine each of the label values for this axis.
 	 *
