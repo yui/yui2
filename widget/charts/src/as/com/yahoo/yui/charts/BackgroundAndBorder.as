@@ -38,6 +38,22 @@ package com.yahoo.yui.charts
 			}
 		}
 		
+		private var _fillAlpha:Number = 1;
+		
+		public function get fillAlpha():Number
+		{
+			return this._fillAlpha;
+		}
+		
+		public function set fillAlpha(value:Number):void
+		{
+			if(this._fillAlpha != value)
+			{
+				this._fillAlpha = value;
+				this.invalidate(GRAPHICS_INVALID);
+			}
+		}
+		
 		private var _borderColor:uint = 0x000000;
 		
 		public function get borderColor():uint
@@ -103,7 +119,7 @@ package com.yahoo.yui.charts
 					this.graphics.lineStyle(0, 0, 0);
 				}
 				else this.graphics.lineStyle(this._borderWeight, this._borderColor, 1, true, "normal", CapsStyle.SQUARE, JointStyle.MITER);
-				this.graphics.beginFill(this.fillColor, 1);
+				this.graphics.beginFill(this._fillColor, this._fillAlpha);
 				this.graphics.drawRect(this._borderWeight / 2, this._borderWeight / 2, this.width - this._borderWeight, this.height - this._borderWeight);
 				this.graphics.endFill();
 			}

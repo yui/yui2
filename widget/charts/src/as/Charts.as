@@ -102,6 +102,8 @@ package
 			this.chart.addEventListener(ChartEvent.ITEM_DOUBLE_CLICK, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_ROLL_OUT, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_ROLL_OVER, chartItemEventHandler, false, 0, true);
+			
+			this.log("Type set to \"" + value + "\"");
 		}
 		
 		public function setDataProvider(value:Array):void
@@ -357,7 +359,7 @@ package
 					this.background.borderColor = this.parseColor(border.color);
 				}
 				
-				if(border.size)
+				if(border.size != null)
 				{
 					this.background.borderWeight = border.size;
 					contentPadding += border.size;
@@ -376,6 +378,11 @@ package
 				if(background.image)
 				{
 					this.background.image = background.image;
+				}
+				
+				if(background.alpha != null)
+				{
+					this.background.fillAlpha = background.alpha;
 				}
 			}
 			
@@ -481,6 +488,7 @@ package
 			var seriesIndex:int = (this.chart.dataProvider as Array).indexOf(event.series);
 			var itemEvent:Object = {type: event.type, seriesIndex: seriesIndex, index: event.index};
 			this.dispatchEventToJavaScript(itemEvent);
+			//this.log("item event: " + event.type);
 		}
 		
 		protected function setDataTypeStyles(styles:Object):void
@@ -501,7 +509,7 @@ package
 					{
 						backgroundClass.prototype.borderColor = this.parseColor(border.color)
 					}
-					if(border.size)
+					if(border.size != null)
 					{
 						backgroundClass.prototype.borderWeight = border.size;
 						contentPadding += border.size;
@@ -517,6 +525,10 @@ package
 					if(background.image)
 					{
 						backgroundClass.prototype.image = background.image;
+					}
+					if(background.alpha != null)
+					{
+						backgroundClass.prototype.fillAlpha = background.alpha;
 					}
 				}
 				this.chart.setStyle("dataTipBackgroundSkin", backgroundClass);
@@ -541,7 +553,7 @@ package
 					this.chart.setStyle(axisName + "AxisColor", this.parseColor(axis.color));
 				}
 				
-				if(axis.size)
+				if(axis.size != null)
 				{
 					this.chart.setStyle(axisName + "AxisWeight", axis.size);
 				}
@@ -579,11 +591,11 @@ package
 					{
 						this.chart.setStyle(axisName + "AxisTickColor", this.parseColor(majorTicks.color));
 					}
-					if(majorTicks.size)
+					if(majorTicks.size != null)
 					{
 						this.chart.setStyle(axisName + "AxisTickWeight", majorTicks.weight);
 					}
-					if(majorTicks.length)
+					if(majorTicks.length != null)
 					{
 						this.chart.setStyle(axisName + "AxisTickLength", majorTicks.length);
 					}
@@ -600,11 +612,11 @@ package
 					{
 						this.chart.setStyle(axisName + "AxisMinorTickColor", this.parseColor(minorTicks.color));
 					}
-					if(minorTicks.size)
+					if(minorTicks.size != null)
 					{
 						this.chart.setStyle(axisName + "AxisMinorTickWeight", minorTicks.weight);
 					}
-					if(minorTicks.length)
+					if(minorTicks.length != null)
 					{
 						this.chart.setStyle(axisName + "AxisMinorTickLength", minorTicks.length);
 					}
@@ -626,20 +638,22 @@ package
 		 */
 		private function createBorderBackground():Function
 		{
-			var borderClass:Function = function():BackgroundAndBorder
+			var borderBackgroundClass:Function = function():BackgroundAndBorder
 			{
-				var border:BackgroundAndBorder = new BackgroundAndBorder();
-				border.fillColor = this.fillColor;
-				border.borderColor = this.borderColor;
-				border.borderWeight = this.borderWeight;
-				border.image = this.image;
-				return border;
+				var borderBG:BackgroundAndBorder = new BackgroundAndBorder();
+				borderBG.fillColor = this.fillColor;
+				borderBG.fillAlpha = this.fillAlpha;
+				borderBG.borderColor = this.borderColor;
+				borderBG.borderWeight = this.borderWeight;
+				borderBG.image = this.image;
+				return borderBG;
 			}
-			borderClass.prototype.fillColor = 0xffffff;
-			borderClass.prototype.borderColor = 0x000000;
-			borderClass.prototype.borderWeight = 1;
-			borderClass.prototype.image = null;
-			return borderClass;
+			borderBackgroundClass.prototype.fillColor = 0xffffff;
+			borderBackgroundClass.prototype.fillAlpha = 1;
+			borderBackgroundClass.prototype.borderColor = 0x000000;
+			borderBackgroundClass.prototype.borderWeight = 1;
+			borderBackgroundClass.prototype.image = null;
+			return borderBackgroundClass;
 		}
 		
 		private function parseColor(value:Object):uint

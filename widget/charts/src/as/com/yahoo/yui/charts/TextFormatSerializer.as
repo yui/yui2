@@ -1,6 +1,5 @@
 package com.yahoo.yui.charts
 {
-	import flash.external.ExternalInterface;
 	import flash.text.Font;
 	import flash.text.TextFormat;
 	
@@ -49,7 +48,6 @@ package com.yahoo.yui.charts
 			{
 				var name:String = String(names[i]);
 				fontNameToFind = name.toLowerCase();
-				ExternalInterface.call("YAHOO.log", fontNameToFind);
 				if(fontNameToFind == "sans-serif")
 				{
 					return "_sans";
