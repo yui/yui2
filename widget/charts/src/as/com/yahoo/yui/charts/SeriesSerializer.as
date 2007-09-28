@@ -12,8 +12,8 @@ package com.yahoo.yui.charts
 	//  Class Properties
 	//--------------------------------------
 	
-		private static var shortNameToSeriesType:Object = {bar: BarSeries, column: ColumnSeries, line: LineSeries, pie: PieSeries};
-		private static var seriesTypeToShortName:Dictionary = new Dictionary();
+		private static var shortNameToSeriesTypeHash:Object = {bar: BarSeries, column: ColumnSeries, line: LineSeries, pie: PieSeries};
+		private static var seriesTypeToShortNameHash:Dictionary = new Dictionary();
 	
 	//--------------------------------------
 	//  Class Methods
@@ -21,18 +21,28 @@ package com.yahoo.yui.charts
 		
 		private static function initializeSeriesTypes():void
 		{
-			seriesTypeToShortName[BarSeries] = "bar";
-			seriesTypeToShortName[ColumnSeries] = "column";
-			seriesTypeToShortName[LineSeries] = "line";
-			seriesTypeToShortName[PieSeries] = "pie";
+			seriesTypeToShortNameHash[BarSeries] = "bar";
+			seriesTypeToShortNameHash[ColumnSeries] = "column";
+			seriesTypeToShortNameHash[LineSeries] = "line";
+			seriesTypeToShortNameHash[PieSeries] = "pie";
 		}
 		initializeSeriesTypes();
+		
+		public static function shortNameToSeriesType(name:String):Class
+		{
+			return shortNameToSeriesTypeHash[name];
+		}
+		
+		public static function seriesTypeToShortName(type:Class):String
+		{
+			return seriesTypeToShortNameHash[type];
+		}
 		
 		public static function writeSeries(input:ISeries):Object
 		{
 			if(!input) return null;
 			
-			var type:String = seriesTypeToShortName[getDefinitionByName(getQualifiedClassName(input))];
+			var type:String = seriesTypeToShortNameHash[getDefinitionByName(getQualifiedClassName(input))];
 			var series:Object = {type: type, data: input.dataProvider, displayName: input.displayName};
 			if(input is CartesianSeries)
 			{
@@ -47,12 +57,15 @@ package com.yahoo.yui.charts
 			return series;
 		}
 		
-		public static function readSeries(input:Object):ISeries
+		public static function readSeries(input:Object, series:ISeries = null):ISeries
 		{
 			if(!input || !input.type) return null;
 			
-			var SeriesType:Class = shortNameToSeriesType[input.type];
-			var series:ISeries = new SeriesType()
+			if(!series)
+			{
+				var SeriesType:Class = shortNameToSeriesTypeHash[input.type];
+				series = new SeriesType()
+			}
 			series.dataProvider = input.dataProvider;
 			series.displayName = input.displayName;
 			if(series is CartesianSeries)

@@ -112,7 +112,18 @@ package
 			var seriesCount:int = value.length;
 			for(var i:int = 0; i < seriesCount; i++)
 			{
-				dataProvider[i] = SeriesSerializer.readSeries(value[i]);
+				var dataFromJavaScript:Object = value[i];
+				var currentData:ISeries = this.chart.dataProvider[i] as ISeries;
+				var currentSeriesType:Class = SeriesSerializer.shortNameToSeriesType(dataFromJavaScript.type);
+				this.log(currentData + " " + dataFromJavaScript.type);
+				if(currentData is currentSeriesType)
+				{
+					dataProvider[i] = SeriesSerializer.readSeries(dataFromJavaScript, currentData);
+				}
+				else
+				{
+					dataProvider[i] = SeriesSerializer.readSeries(dataFromJavaScript);
+				}
 			}
 			
 			this.chart.dataProvider = dataProvider;

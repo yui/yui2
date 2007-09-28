@@ -23,10 +23,15 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_initAttributes: function(attributes)
 	{
 		YAHOO.widget.Chart.superclass._initAttributes.call(this, attributes);
-		
-		this.setAttributeConfig("initialRequest",
+
+		this.getAttributeConfig("request",
 		{
-			value: attributes.initialRequest
+			method: this._getRequest
+		});
+		
+		this.setAttributeConfig("request",
+		{
+			method: this._setRequest
 		});
 		
 		this.getAttributeConfig("dataSource",
@@ -89,6 +94,14 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		}
 	},
 
+	_refreshData: function()
+	{
+		if(this._dataSource != null)
+		{
+			this._dataSource.sendRequest(this._request, this._loadDataHandler, this);
+		}
+	},
+
 	_loadDataHandler: function(request, response, error)
 	{
 		if(error)
@@ -137,6 +150,19 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		}
 	},
 
+	_request: null,
+	
+	_getRequest: function()
+	{
+		return this._request;
+	},
+	
+	_setRequest: function(value)
+	{
+		this._request = value;
+		this._refreshData();
+	},
+
 	_dataSource: null,
 	
 	_getDataSource: function()
@@ -147,7 +173,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setDataSource: function(value)
 	{	
 		this._dataSource = value;
-		this._dataSource.sendRequest(this.get("initialRequest"), this._loadDataHandler, this);
+		this._refreshData();
 	},
 	
 	_seriesDefs: null,
