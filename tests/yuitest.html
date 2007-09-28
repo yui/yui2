@@ -481,6 +481,73 @@ YAHOO.test.YUITest_test = (function(){
         = new YAHOO.tool.TestSuite("YuiTest Tests");
         
     //-------------------------------------------------------------------------
+    // Asynchronous Tests
+    //-------------------------------------------------------------------------
+    
+    suite.add(new YAHOO.tool.TestCase({
+    
+        name: "Asynchronous Tests",
+        
+        _should : {
+            fail : {
+                testWaitSimpleFail : true,
+                testWaitComplexFail : true
+            }
+        
+        },
+        
+        setUp : function(){
+            this.value = 5;
+        },
+        
+        tearDown : function(){
+            delete this.value;
+        },
+        
+        testWaitSimplePass : function (){
+        
+            this.wait(function(){
+                Assert.areEqual(5, this.value, "Value should be 5.");
+            }, 500);
+        
+        },
+        
+        testWaitSimpleFail : function (){
+        
+            this.wait(function(){
+                Assert.areEqual(6, this.value, "Value should be 5.");
+            }, 500);
+        
+        },
+        
+        testWaitComplexPass : function (){
+        
+            setTimeout(function(){            
+                YAHOO.tool.TestRunner.resume(function(){
+                    Assert.areEqual(5, this.value, "Value should be 6.");
+                });            
+            }, 500);
+        
+            this.wait();
+            
+        },
+        
+        testWaitComplexFail : function (){
+        
+            setTimeout(function(){            
+                YAHOO.tool.TestRunner.resume(function(){
+                    Assert.areEqual(6, this.value, "Value should be 6.");
+                });            
+            }, 500);
+
+            this.wait();
+           
+        }        
+        
+    
+    }));
+    
+    //-------------------------------------------------------------------------
     // Assert Tests
     //-------------------------------------------------------------------------
 
@@ -488,10 +555,6 @@ YAHOO.test.YUITest_test = (function(){
     var assertSuite /*:YAHOO.tool.TestSuite*/ 
         = new YAHOO.tool.TestSuite("Assert Tests");
     suite.add(assertSuite);
-    
-    //-------------------------------------------------------------------------
-    // Assert Tests
-    //-------------------------------------------------------------------------
     
     assertSuite.add(new YAHOO.tool.TestCase({
     
