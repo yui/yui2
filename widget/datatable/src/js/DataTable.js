@@ -4081,8 +4081,10 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultOrder) ? oColumn.sortOptions.defaultOrder : "asc";
 
         // Already sorted?
+        var bSorted = false;
         var oSortedBy = this.get("sortedBy");
         if(oSortedBy && (oSortedBy.key === oColumn.key)) {
+            bSorted = true;
             if(oSortedBy.dir) {
                 sortDir = (oSortedBy.dir == "asc") ? "desc" : "asc";
             }
@@ -4091,21 +4093,29 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             }
         }
 
-        // Is there a custom sort handler function defined?
-        var sortFnc = (oColumn.sortOptions && YAHOO.lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                oColumn.sortOptions.sortFunction : function(a, b, desc) {
-                    var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
-                    if(sorted === 0) {
-                        return YAHOO.util.Sort.compare(a.getId(),b.getId(), desc);
-                    }
-                    else {
-                        return sorted;
-                    }
-        };
-
         // Do the actual sort
-        var desc = (sortDir == "desc") ? true : false;
-        this._oRecordSet.sortRecords(sortFnc, desc);
+        if(!bSorted) {
+            // Is there a custom sort handler function defined?
+            var sortFnc = (oColumn.sortOptions && YAHOO.lang.isFunction(oColumn.sortOptions.sortFunction)) ?
+                    // Custom sort function
+                    oColumn.sortOptions.sortFunction :
+
+                    // Default sort function
+                    function(a, b, desc) {
+                        var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
+                        if(sorted === 0) {
+                            return YAHOO.util.Sort.compare(a.getId(),b.getId(), desc);
+                        }
+                        else {
+                            return sorted;
+                        }
+            };
+
+            this._oRecordSet.sortRecords(sortFnc, ((sortDir == "desc") ? true : false));
+        }
+        else {
+            this._oRecordSet.reverseRecords();
+        }
 
         // Update sortedBy tracker
         this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
@@ -6361,7 +6371,7 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
     elTextbox.select();
 };
 
-/*
+/**
  * Validates Editor input value to type Number, doing type conversion as
  * necessary. A valid Number value is return, else the previous value is returned
  * if input value does not validate.

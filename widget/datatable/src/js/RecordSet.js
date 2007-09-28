@@ -16,7 +16,7 @@ YAHOO.widget.RecordSet = function(data) {
     YAHOO.widget.RecordSet._nCount++;
     this._records = [];
     this._length = 0;
-    
+
     if(data) {
         if(YAHOO.lang.isArray(data)) {
             this.addRecords(data);
@@ -439,6 +439,15 @@ YAHOO.widget.RecordSet.prototype.sortRecords = function(fnSort, desc) {
     return this._records.sort(function(a, b) {return fnSort(a, b, desc);});
 };
 
+/**
+ * Reverses all Records, so ["one", "two", "three"] becomes ["three", "two", "one"].
+ *
+ * @method reverseRecords
+ * @return {YAHOO.widget.Record[]} Reverse-sorted array of Records.
+ */
+YAHOO.widget.RecordSet.prototype.reverseRecords = function() {
+    return this._records.reverse();
+};
 
 /**
  * Removes the Record at the given position index from the RecordSet. If a range
