@@ -21,17 +21,45 @@ YAHOO.namespace("tool");
  */
 YAHOO.tool.TestRunner = (function(){
 
+    function TestNode(testObject){
+        this.testObject = testObject;
+        this.firstChild = null;
+        this.lastChild = null;
+        this.parent = null;    
+        this.next = null;
+        this.results = new Object();
+        this.results.passed = 0;
+        this.results.failed = 0;
+        this.results.total = 0;        
+    }
+    
+    TestNode.prototype = {
+        appendChild : function (testObject){
+            var node = new TestNode(testObject);
+            if (this.firstChild === null){
+                this.firstChild = this.lastChild = node;
+            } else {
+                this.lastChild.next = node;
+                this.lastChild = node;
+            }
+            node.parent = this;
+            return node;
+        }       
+    };
+
     function TestRunner(){
     
         //inherit from EventProvider
         TestRunner.superclass.constructor.apply(this,arguments);
         
-        /**
-         * The test objects to run.
-         * @type Array
-         * @private
-         */
-        this.items /*:Array*/ = [];
+        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("MasterSuite");
+
+        
+
+        
+        this._cur = null;
+        this._root = null;
+
         
         //create events
         var events /*:Array*/ = [
@@ -114,197 +142,136 @@ YAHOO.tool.TestRunner = (function(){
          * @event begin
          */        
         BEGIN_EVENT /*:String*/ : "begin",    
+        
+        //-------------------------------------------------------------------------
+        // Test Tree-Related Methods
+        //-------------------------------------------------------------------------
+
+        /**
+         * Adds a test case to the test tree as a child of the specified node.
+         * @param {TestNode} parentNode The node to add the test case to as a child.
+         * @param {YAHOO.tool.TestCase} testCase The test case to add.
+         * @return {Void}
+         * @static
+         * @private
+         * @method _addTestCaseToTestTree
+         */
+       _addTestCaseToTestTree : function (parentNode /*:TestNode*/, testCase /*:YAHOO.tool.TestCase*/) /*:Void*/{
+            
+            //add the test suite
+            var node = parentNode.appendChild(testCase);
+            
+            //iterate over the items in the test case
+            for (var prop in testCase){
+                if (prop.indexOf("test") == 0 && YAHOO.lang.isFunction(testCase[prop])){
+                    node.appendChild(prop);
+                }
+            }
+         
+        },
+        
+        /**
+         * Adds a test suite to the test tree as a child of the specified node.
+         * @param {TestNode} parentNode The node to add the test suite to as a child.
+         * @param {YAHOO.tool.TestSuite} testSuite The test suite to add.
+         * @return {Void}
+         * @static
+         * @private
+         * @method _addTestSuiteToTestTree
+         */
+        _addTestSuiteToTestTree : function (parentNode /*:TestNode*/, testSuite /*:YAHOO.tool.TestSuite*/) /*:Void*/ {
+            
+            //add the test suite
+            var node = parentNode.appendChild(testSuite);
+            
+            //iterate over the items in the master suite
+            for (var i=0; i < testSuite.items.length; i++){
+                if (testSuite.items[i] instanceof YAHOO.tool.TestSuite) {
+                    this._addTestSuiteToTestTree(node, testSuite.items[i]);
+                } else if (testSuite.items[i] instanceof YAHOO.tool.TestCase) {
+                    this._addTestCaseToTestTree(node, testSuite.items[i]);
+                }                   
+            }            
+        },
+        
+        /**
+         * Builds the test tree based on items in the master suite. The tree is a hierarchical
+         * representation of the test suites, test cases, and test functions. The resulting tree
+         * is stored in _root and the pointer _cur is set to the root initially.
+         * @return {Void}
+         * @static
+         * @private
+         * @method _buildTestTree
+         */
+        _buildTestTree : function () /*:Void*/ {
+        
+            this._root = new TestNode(this.masterSuite);
+            this._cur = this._root;
+            
+            //iterate over the items in the master suite
+            for (var i=0; i < this.masterSuite.items.length; i++){
+                if (this.masterSuite.items[i] instanceof YAHOO.tool.TestSuite) {
+                    this._addTestSuiteToTestTree(this._root, this.masterSuite.items[i]);
+                } else if (this.masterSuite.items[i] instanceof YAHOO.tool.TestCase) {
+                    this._addTestCaseToTestTree(this._root, this.masterSuite.items[i]);
+                }                   
+            }            
+        
+        }, 
     
         //-------------------------------------------------------------------------
         // Private Methods
         //-------------------------------------------------------------------------
-         
-        /**
-         * Runs a given test case.
-         * @param {YAHOO.tool.TestCase} testCase The test case to run.
-         * @return {Object} Results of the execution with properties passed, failed, and total.
-         * @method _runTestCase
-         * @private
-         * @static
-         */
-        _runTestCase : function (testCase /*YAHOO.tool.TestCase*/) /*:Void*/{
+        _handleTestObjectComplete : function (node /*:TestNode*/) /*:Void*/ {
+            if (YAHOO.lang.isObject(node.testObject)){
+                node.parent.results.passed += node.results.passed;
+                node.parent.results.failed += node.results.failed;
+                node.parent.results.total += node.results.total;                
+                node.parent.results[node.testObject.name] = node.results;
+            
+                if (node.testObject instanceof YAHOO.tool.TestSuite){
+                    node.testObject.tearDown();
+                    this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: node.testObject, results: node.results});
+                } else if (node.testObject instanceof YAHOO.tool.TestCase){
+                    this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: node.testObject, results: node.results});
+                }      
+            } 
+        },        
         
-            //object to store results
-            var results /*:Object*/ = {};
         
-            //test case begins
-            this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testCase });
-        
-            //gather the test functions
-            var tests /*:Array*/ = [];
-            for (var prop in testCase){
-                if (prop.indexOf("test") === 0 && typeof testCase[prop] == "function") {
-                    tests.push(prop);
-                }
-            }
-            
-            //get the "should" test cases
-            var shouldFail /*:Object*/ = testCase._should.fail || {};
-            var shouldError /*:Object*/ = testCase._should.error || {};
-            var shouldIgnore /*:Object*/ = testCase._should.ignore || {};
-            
-            //test counts
-            var failCount /*:int*/ = 0;
-            var passCount /*:int*/ = 0;
-            var runCount /*:int*/ = 0;
-            
-            //run each test
-            for (var i=0; i < tests.length; i++){
-            
-                //figure out if the test should be ignored or not
-                if (shouldIgnore[tests[i]]){
-                    this.fireEvent(this.TEST_IGNORE_EVENT, { testCase: testCase, testName: tests[i] });
-                    continue;
-                }
-            
-                //variable to hold whether or not the test failed
-                var failed /*:Boolean*/ = false;
-                var error /*:Error*/ = null;
-            
-                //run the setup
-                testCase.setUp();
-                
-                //try the test
-                try {
-                
-                    //run the test
-                    testCase[tests[i]]();
-                    
-                    //if it should fail, and it got here, then it's a fail because it didn't
-                    if (shouldFail[tests[i]]){
-                        error = new YAHOO.util.ShouldFail();
-                        failed = true;
-                    } else if (shouldError[tests[i]]){
-                        error = new YAHOO.util.ShouldError();
-                        failed = true;
-                    }
-                               
-                } catch (thrown /*:Error*/){
-                    if (thrown instanceof YAHOO.util.AssertionError) {
-                        if (!shouldFail[tests[i]]){
-                            error = thrown;
-                            failed = true;
-                        }
-                    } else {
-                        //first check to see if it should error
-                        if (!shouldError[tests[i]]) {                        
-                            error = new YAHOO.util.UnexpectedError(thrown);
-                            failed = true;
-                        } else {
-                            //check to see what type of data we have
-                            if (YAHOO.lang.isString(shouldError[tests[i]])){
-                                
-                                //if it's a string, check the error message
-                                if (thrown.message != shouldError[tests[i]]){
-                                    error = new YAHOO.util.UnexpectedError(thrown);
-                                    failed = true;                                    
-                                }
-                            } else if (YAHOO.lang.isObject(shouldError[tests[i]])){
-                            
-                                //if it's an object, check the instance and message
-                                if (!(thrown instanceof shouldError[tests[i]].constructor) || 
-                                        thrown.message != shouldError[tests[i]].message){
-                                    error = new YAHOO.util.UnexpectedError(thrown);
-                                    failed = true;                                    
-                                }
-                            
-                            }
-                        
-                        }
-                    }
-                    
-                } finally {
-                
-                    //fireEvent appropriate event
-                    if (failed) {
-                        this.fireEvent(this.TEST_FAIL_EVENT, { testCase: testCase, testName: tests[i], error: error });
-                    } else {
-                        this.fireEvent(this.TEST_PASS_EVENT, { testCase: testCase, testName: tests[i] });
-                    }            
-                }
-                
-                //run the tear down
-                testCase.tearDown();
-                
-                //update results
-                results[tests[i]] = { 
-                    result: failed ? "fail" : "pass",
-                    message : error ? error.getMessage() : "Test passed"
-                };
-                
-                //update counts
-                runCount++;
-                failCount += (failed ? 1 : 0);
-                passCount += (failed ? 0 : 1);
-            }
-            
-            //add test counts to results
-            results.total = runCount;
-            results.failed = failCount;
-            results.passed = passCount;
-            
-            //test case is done
-            this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: testCase, results: results });
-            
-            //return results
-            return results;
-        
-        },
+        //-------------------------------------------------------------------------
+        // Navigation Methods
+        //-------------------------------------------------------------------------
         
         /**
-         * Runs all the tests in a test suite.
-         * @param {YAHOO.tool.TestSuite} testSuite The test suite to run.
-         * @return {Object} Results of the execution with properties passed, failed, and total.
-         * @method _runTestSuite
+         * Retrieves the next node in the test tree.
+         * @return {TestNode} The next node in the test tree or null if the end is reached.
          * @private
          * @static
+         * @method _next
          */
-        _runTestSuite : function (testSuite /*:YAHOO.tool.TestSuite*/) {
+        _next : function () /*:TestNode*/ {
         
-            //object to store results
-            var results /*:Object*/ = {
-                passed: 0,
-                failed: 0,
-                total: 0
-            };
-        
-            //fireEvent event for beginning of test suite run
-            this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testSuite });
-        
-            //run the test suite's setup
-            testSuite.setUp();
-        
-            //iterate over the test suite items
-            for (var i=0; i < testSuite.items.length; i++){
-                var result = null;
-                if (testSuite.items[i] instanceof YAHOO.tool.TestSuite) {
-                    result = this._runTestSuite(testSuite.items[i]);
-                } else if (testSuite.items[i] instanceof YAHOO.tool.TestCase) {
-                    result = this._runTestCase(testSuite.items[i]);
+            if (this._cur.firstChild) {
+                this._cur = this._cur.firstChild;
+            } else if (this._cur.next) {
+                this._cur = this._cur.next;            
+            } else {
+                while (this._cur && !this._cur.next && this._cur !== this._root){
+                    this._handleTestObjectComplete(this._cur);
+                    this._cur = this._cur.parent;
                 }
                 
-                if (result !== null){
-                    results.total += result.total;
-                    results.passed += result.passed;
-                    results.failed += result.failed;
-                    results[testSuite.items[i].name] = result;
+                if (this._cur == this._root){
+                    this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
+                    this._cur = null;
+                } else {
+                    this._handleTestObjectComplete(this._cur);               
+                    this._cur = this._cur.next;                
                 }
             }
-            
-            //run the test suite's tear down
-            testSuite.tearDown();
-    
-            //fireEvent event for completion of test suite run
-            this.fireEvent(this.TEST_SUITE_COMPLETE_EVENT, { testSuite: testSuite, results: results });
-            
-            //return the results
-            return results;
         
+            return this._cur;
         },
         
         /**
@@ -315,17 +282,173 @@ YAHOO.tool.TestRunner = (function(){
          * @method _run
          * @static
          */
-        _run : function (testObject /*:YAHOO.tool.TestCase|YAHOO.tool.TestSuite*/) /*:Void*/ {
-            if (YAHOO.lang.isObject(testObject)){
-                if (testObject instanceof YAHOO.tool.TestSuite) {
-                    return this._runTestSuite(testObject);
-                } else if (testObject instanceof YAHOO.tool.TestCase) {
-                    return this._runTestCase(testObject);
+        _run : function () /*:Void*/ {
+        
+            //flag to indicate if the TestRunner should wait before continuing
+            var shouldWait /*:Boolean*/ = false;
+            
+            //get the next test node
+            var node = this._next();
+            
+            if (node !== null) {
+                var testObject = node.testObject;
+                
+                //figure out what to do
+                if (YAHOO.lang.isObject(testObject)){
+                    if (testObject instanceof YAHOO.tool.TestSuite){
+                        this.fireEvent(this.TEST_SUITE_BEGIN_EVENT, { testSuite: testObject });
+                        testObject.setUp();
+                    } else if (testObject instanceof YAHOO.tool.TestCase){
+                        this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testObject });
+                    }
+                    
+                    setTimeout(function(){
+                        YAHOO.tool.TestRunner._run();
+                    }, 0);                    
                 } else {
-                    throw new TypeError("_run(): Expected either YAHOO.tool.TestCase or YAHOO.tool.TestSuite.");
-                }    
-            }        
+                    this._runTest(node);
+                }
+
+            }
         },
+        
+        _resumeTest : function (segment /*:Function*/) /*:Void*/ {
+        
+            //get relevant information
+            var node /*:TestNode*/ = this._cur;
+            var testName /*:String*/ = node.testObject;
+            var testCase /*:YAHOO.tool.TestCase*/ = node.parent.testObject;
+            
+            //get the "should" test cases
+            var shouldFail /*:Object*/ = (testCase._should.fail || {})[testName];
+            var shouldError /*:Object*/ = (testCase._should.error || {})[testName];
+            
+            //variable to hold whether or not the test failed
+            var failed /*:Boolean*/ = false;
+            var error /*:Error*/ = null;
+                
+            //try the test
+            try {
+            
+                //run the test
+                segment.apply(testCase);
+                
+                //if it should fail, and it got here, then it's a fail because it didn't
+                if (shouldFail){
+                    error = new YAHOO.util.ShouldFail();
+                    failed = true;
+                } else if (shouldError){
+                    error = new YAHOO.util.ShouldError();
+                    failed = true;
+                }
+                           
+            } catch (thrown /*:Error*/){
+                if (thrown instanceof YAHOO.util.AssertionError) {
+                    if (!shouldFail){
+                        error = thrown;
+                        failed = true;
+                    }
+                } else if (thrown instanceof YAHOO.tool.TestCase.Wait){
+                
+                    if (YAHOO.lang.isFunction(thrown.segment)){
+                        if (YAHOO.lang.isNumber(thrown.delay)){
+                            setTimeout(function(){
+                                YAHOO.tool.TestRunner._resumeTest(thrown.segment);
+                            }, thrown.delay);
+                        }
+                    }
+                    
+                    return;
+                
+                } else {
+                    //first check to see if it should error
+                    if (!shouldError) {                        
+                        error = new YAHOO.util.UnexpectedError(thrown);
+                        failed = true;
+                    } else {
+                        //check to see what type of data we have
+                        if (YAHOO.lang.isString(shouldError)){
+                            
+                            //if it's a string, check the error message
+                            if (thrown.message != shouldError){
+                                error = new YAHOO.util.UnexpectedError(thrown);
+                                failed = true;                                    
+                            }
+                        } else if (YAHOO.lang.isObject(shouldError)){
+                        
+                            //if it's an object, check the instance and message
+                            if (!(thrown instanceof shouldError.constructor) || 
+                                    thrown.message != shouldError.message){
+                                error = new YAHOO.util.UnexpectedError(thrown);
+                                failed = true;                                    
+                            }
+                        
+                        }
+                    
+                    }
+                }
+                
+            }
+            
+            //fireEvent appropriate event
+            if (failed) {
+                this.fireEvent(this.TEST_FAIL_EVENT, { testCase: testCase, testName: testName, error: error });
+            } else {
+                this.fireEvent(this.TEST_PASS_EVENT, { testCase: testCase, testName: testName });
+            }
+            
+            //run the tear down
+            testCase.tearDown();
+            
+            //update results
+            node.parent.results[testName] = { 
+                result: failed ? "fail" : "pass",
+                message : error ? error.getMessage() : "Test passed"
+            };
+            
+            if (failed){
+                node.parent.results.failed++;
+            } else {
+                node.parent.results.passed++;
+            }
+            node.parent.results.total++;    
+
+            setTimeout(function(){
+                YAHOO.tool.TestRunner._run();
+            }, 0);
+        
+        },
+                
+        /**
+         * Runs a single test based on the data provided in the node.
+         * @param {TestNode} node The TestNode representing the test to run.
+         * @return {Void}
+         * @static
+         * @private
+         * @name _runTest
+         */
+        _runTest : function (node /*:TestNode*/) /*:Void*/ {
+        
+            //get relevant information
+            var testName /*:String*/ = node.testObject;
+            var testCase /*:YAHOO.tool.TestCase*/ = node.parent.testObject;
+            var test /*:Function*/ = testCase[testName];
+            
+            //get the "should" test cases
+            var shouldIgnore /*:Object*/ = (testCase._should.ignore || {})[testName];
+            
+            //figure out if the test should be ignored or not
+            if (shouldIgnore){
+                this.fireEvent(this.TEST_IGNORE_EVENT, { testCase: testCase, testName: testName });
+            }
+            
+            //run the setup
+            testCase.setUp();
+            
+            //now call the body of the test
+            this._resumeTest(test);                
+
+        },        
         
         //-------------------------------------------------------------------------
         // Protected Methods
@@ -354,47 +477,55 @@ YAHOO.tool.TestRunner = (function(){
         /**
          * Adds a test suite or test case to the list of test objects to run.
          * @param testObject Either a TestCase or a TestSuite that should be run.
+         * @return {Void}
+         * @method add
+         * @static
          */
         add : function (testObject /*:Object*/) /*:Void*/ {
-            this.items.push(testObject);
+            this.masterSuite.add(testObject);
         },
         
         /**
          * Removes all test objects from the runner.
+         * @return {Void}
+         * @method clear
+         * @static
          */
         clear : function () /*:Void*/ {
-            while(this.items.length){
-                this.items.pop();
-            }
+            this.masterSuite.items = new Array();
+        },
+        
+        /**
+         * Resumes the TestRunner after wait() was called.
+         * @param {Function} segment The function to run as the rest
+         *      of the haulted test.
+         * @return {Void}
+         * @method resume
+         * @static
+         */
+        resume : function (segment /*:Function*/) /*:Void*/ {
+            this._resumeTest(segment || function(){});
         },
     
         /**
          * Runs the test suite.
+         * @return {Void}
+         * @method run
+         * @static
          */
-        run : function (testObject /*:Object*/) /*:Void*/ { 
-            var results = null;
+        run : function (testObject /*:Object*/) /*:Void*/ {
             
-            this.fireEvent(this.BEGIN_EVENT);
+            //pointer to runner to avoid scope issues 
+            var runner = YAHOO.tool.TestRunner;
+
+            //build the test tree
+            runner._buildTestTree();
+            
+            //fire the begin event
+            runner.fireEvent(runner.BEGIN_EVENT);
        
-            //an object passed in overrides everything else
-            if (YAHOO.lang.isObject(testObject)){
-                results = this._run(testObject);  
-            } else {
-                results = {
-                    passed: 0,
-                    failed: 0,
-                    total: 0
-                };
-                for (var i=0; i < this.items.length; i++){
-                    var result = this._run(this.items[i]);
-                    results.passed += result.passed;
-                    results.failed += result.failed;
-                    results.total += result.total;
-                    results[this.items[i].name] = result;
-                }            
-            }
-            
-            this.fireEvent(this.COMPLETE_EVENT, { results: results });
+            //begin the testing
+            runner._run();
         }    
     });
     
