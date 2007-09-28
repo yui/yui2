@@ -1396,12 +1396,18 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
  * @private
  */
 YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
-    // Attach Cell Editor container element to body
+    // Attach Cell Editor container element to as first child of body
     var elCellEditor = document.createElement("div");
     elCellEditor.id = this.id + "-celleditor";
     elCellEditor.style.display = "none";
     YAHOO.util.Dom.addClass(elCellEditor, YAHOO.widget.DataTable.CLASS_EDITOR);
-    elCellEditor = document.body.appendChild(elCellEditor);
+    var elFirstChild = YAHOO.util.Dom.getFirstChild(document.body);
+    if(elFirstChild) {
+        elCellEditor = YAHOO.util.Dom.insertBefore(elCellEditor, elFirstChild);
+    }
+    else {
+        elCellEditor = document.body.appendChild(elCellEditor);
+    }
 
     // Internal tracker of Cell Editor values
     var oCellEditor = {};
