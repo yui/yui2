@@ -132,8 +132,8 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 break;
                 
             case TestRunner.COMPLETE_EVENT:
-                message = "Testing completed at " + (new Date()).toString() + ".\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                message = "Testing completed at " + (new Date()).toString() + ".\nPassed:" + 
+                    data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
                 
@@ -158,8 +158,8 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 break;
                 
             case TestRunner.TEST_SUITE_COMPLETE_EVENT:
-                message = "Test suite \"" + data.testSuite.name + "\" completed.\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                message = "Test suite \"" + data.testSuite.name + "\" completed.\nPassed:" + 
+                    data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
                 
@@ -169,8 +169,8 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 break;
                 
             case TestRunner.TEST_CASE_COMPLETE_EVENT:
-                message = "Test case \"" + data.testCase.name + "\" completed.\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                message = "Test case \"" + data.testCase.name + "\" completed.\nPassed:" + 
+                    data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
             default:
@@ -182,6 +182,7 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
     }
     
 });
+
 YAHOO.namespace("tool");
 
 /**
@@ -211,7 +212,7 @@ YAHOO.tool.TestRunner = (function(){
         this.lastChild = null;
         this.parent = null;    
         this.next = null;
-        this.results = new Object();
+        this.results = {};
         this.results.passed = 0;
         this.results.failed = 0;
         this.results.total = 0;        
@@ -347,7 +348,7 @@ YAHOO.tool.TestRunner = (function(){
             
             //iterate over the items in the test case
             for (var prop in testCase){
-                if (prop.indexOf("test") == 0 && YAHOO.lang.isFunction(testCase[prop])){
+                if (prop.indexOf("test") === 0 && YAHOO.lang.isFunction(testCase[prop])){
                     node.appendChild(prop);
                 }
             }
@@ -676,7 +677,7 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         clear : function () /*:Void*/ {
-            this.masterSuite.items = new Array();
+            this.masterSuite.items = [];
         },
         
         /**
@@ -716,6 +717,7 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
+
 YAHOO.namespace("tool");
 
 
@@ -795,6 +797,7 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
+
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -898,6 +901,7 @@ YAHOO.tool.TestCase.Wait = function (segment /*:Function*/, delay /*:int*/) {
     this.delay /*:int*/ = (YAHOO.lang.isNumber(delay) ? delay : 0);
 
 };
+
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1490,6 +1494,7 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
+
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1818,6 +1823,7 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
+
 YAHOO.namespace("util");
 
 
@@ -1890,6 +1896,7 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
+
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1942,6 +1949,7 @@ YAHOO.util.DateAssert = {
     }
     
 };
+
 YAHOO.namespace("util");
 
 /**
@@ -2054,17 +2062,17 @@ YAHOO.util.UserAction = {
         if (!YAHOO.lang.isNumber(charCode)){
             charCode = 0; 
         }
-        
+
+        //try to create a mouse event
+        var customEvent /*:MouseEvent*/ = null;
+            
         //check for DOM-compliant browsers first
         if (YAHOO.lang.isFunction(document.createEvent)){
         
-            //try to create a mouse event
-            var event /*:MouseEvent*/ = null;
-            
             try {
                 
                 //try to create key event
-                event = document.createEvent("KeyEvents");
+                customEvent = document.createEvent("KeyEvents");
                 
                 /*
                  * Interesting problem: Firefox implemented a non-standard
@@ -2075,7 +2083,7 @@ YAHOO.util.UserAction = {
                  * now, assume it's Firefox if the above line doesn't error.
                  */
                 //TODO: Decipher between Firefox's implementation and a correct one.
-                event.initKeyEvent(type, bubbles, cancelable, view, ctrlKey,
+                customEvent.initKeyEvent(type, bubbles, cancelable, view, ctrlKey,
                     altKey, shiftKey, metaKey, keyCode, charCode);       
                 
             } catch (ex /*:Error*/){
@@ -2092,56 +2100,56 @@ YAHOO.util.UserAction = {
                 try {
 
                     //try to create generic event - will fail in Safari 2.x
-                    event = document.createEvent("Events");
+                    customEvent = document.createEvent("Events");
 
                 } catch (uierror /*:Error*/){
 
                     //the above failed, so create a UIEvent for Safari 2.x
-                    event = document.createEvent("UIEvents");
+                    customEvent = document.createEvent("UIEvents");
 
                 } finally {
 
-                    event.initEvent(type, bubbles, cancelable);
+                    customEvent.initEvent(type, bubbles, cancelable);
     
                     //initialize
-                    event.view = view;
-                    event.altKey = altKey;
-                    event.ctrlKey = ctrlKey;
-                    event.shiftKey = shiftKey;
-                    event.metaKey = metaKey;
-                    event.keyCode = keyCode;
-                    event.charCode = charCode;
+                    customEvent.view = view;
+                    customEvent.altKey = altKey;
+                    customEvent.ctrlKey = ctrlKey;
+                    customEvent.shiftKey = shiftKey;
+                    customEvent.metaKey = metaKey;
+                    customEvent.keyCode = keyCode;
+                    customEvent.charCode = charCode;
           
                 }          
              
             }
             
             //fire the event
-            target.dispatchEvent(event);
+            target.dispatchEvent(customEvent);
 
         } else if (YAHOO.lang.isObject(document.createEventObject)){ //IE
         
             //create an IE event object
-            event = document.createEventObject();
+            customEvent = document.createEventObject();
             
             //assign available properties
-            event.bubbles = bubbles;
-            event.cancelable = cancelable;
-            event.view = view;
-            event.ctrlKey = ctrlKey;
-            event.altKey = altKey;
-            event.shiftKey = shiftKey;
-            event.metaKey = metaKey;
+            customEvent.bubbles = bubbles;
+            customEvent.cancelable = cancelable;
+            customEvent.view = view;
+            customEvent.ctrlKey = ctrlKey;
+            customEvent.altKey = altKey;
+            customEvent.shiftKey = shiftKey;
+            customEvent.metaKey = metaKey;
             
             /*
              * IE doesn't support charCode explicitly. CharCode should
              * take precedence over any keyCode value for accurate
              * representation.
              */
-            event.keyCode = (charCode > 0) ? charCode : keyCode;
+            customEvent.keyCode = (charCode > 0) ? charCode : keyCode;
             
             //fire the event
-            target.fireEvent("on" + type, event);  
+            target.fireEvent("on" + type, customEvent);  
                     
         } else {
             throw new Error("simulateKeyEvent(): No event simulation framework present.");
@@ -2273,36 +2281,36 @@ YAHOO.util.UserAction = {
         if (!YAHOO.lang.isNumber(button)){
             button = 0; 
         }
-        
+
+        //try to create a mouse event
+        var customEvent /*:MouseEvent*/ = document.createEvent("MouseEvents");
+            
         //check for DOM-compliant browsers first
         if (YAHOO.lang.isFunction(document.createEvent)){
         
-            //try to create a mouse event
-            var event /*:MouseEvent*/ = document.createEvent("MouseEvents");
-            
             //Safari 2.x (WebKit 418) still doesn't implement initMouseEvent()
-            if (event.initMouseEvent){
-                event.initMouseEvent(type, bubbles, cancelable, view, detail,
+            if (customEvent.initMouseEvent){
+                customEvent.initMouseEvent(type, bubbles, cancelable, view, detail,
                                      screenX, screenY, clientX, clientY, 
                                      ctrlKey, altKey, shiftKey, metaKey, 
                                      button, relatedTarget);
             } else { //Safari
             
                 //the closest thing available in Safari 2.x is UIEvents
-                event = document.createEvent("UIEvents");
-                event.initEvent(type, bubbles, cancelable);
-                event.view = view;
-                event.detail = detail;
-                event.screenX = screenX;
-                event.screenY = screenY;
-                event.clientX = clientX;
-                event.clientY = clientY;
-                event.ctrlKey = ctrlKey;
-                event.altKey = altKey;
-                event.metaKey = metaKey;
-                event.shiftKey = shiftKey;
-                event.button = button;
-                event.relatedTarget = relatedTarget;
+                customEvent = document.createEvent("UIEvents");
+                customEvent.initEvent(type, bubbles, cancelable);
+                customEvent.view = view;
+                customEvent.detail = detail;
+                customEvent.screenX = screenX;
+                customEvent.screenY = screenY;
+                customEvent.clientX = clientX;
+                customEvent.clientY = clientY;
+                customEvent.ctrlKey = ctrlKey;
+                customEvent.altKey = altKey;
+                customEvent.metaKey = metaKey;
+                customEvent.shiftKey = shiftKey;
+                customEvent.button = button;
+                customEvent.relatedTarget = relatedTarget;
             }
             
             /*
@@ -2314,60 +2322,60 @@ YAHOO.util.UserAction = {
              * for mouseout event and fromElement property for mouseover
              * event.
              */
-            if (relatedTarget && !event.relatedTarget){
+            if (relatedTarget && !customEvent.relatedTarget){
                 if (type == "mouseout"){
-                    event.toElement = relatedTarget;
+                    customEvent.toElement = relatedTarget;
                 } else if (type == "mouseover"){
-                    event.fromElement = relatedTarget;
+                    customEvent.fromElement = relatedTarget;
                 }
             }
             
             //fire the event
-            target.dispatchEvent(event);
+            target.dispatchEvent(customEvent);
 
         } else if (YAHOO.lang.isObject(document.createEventObject)){ //IE
         
             //create an IE event object
-            event = document.createEventObject();
+            customEvent = document.createEventObject();
             
             //assign available properties
-            event.bubbles = bubbles;
-            event.cancelable = cancelable;
-            event.view = view;
-            event.detail = detail;
-            event.screenX = screenX;
-            event.screenY = screenY;
-            event.clientX = clientX;
-            event.clientY = clientY;
-            event.ctrlKey = ctrlKey;
-            event.altKey = altKey;
-            event.metaKey = metaKey;
-            event.shiftKey = shiftKey;
+            customEvent.bubbles = bubbles;
+            customEvent.cancelable = cancelable;
+            customEvent.view = view;
+            customEvent.detail = detail;
+            customEvent.screenX = screenX;
+            customEvent.screenY = screenY;
+            customEvent.clientX = clientX;
+            customEvent.clientY = clientY;
+            customEvent.ctrlKey = ctrlKey;
+            customEvent.altKey = altKey;
+            customEvent.metaKey = metaKey;
+            customEvent.shiftKey = shiftKey;
 
             //fix button property for IE's wacky implementation
             switch(button){
                 case 0:
-                    event.button = 1;
+                    customEvent.button = 1;
                     break;
                 case 1:
-                    event.button = 4;
+                    customEvent.button = 4;
                     break;
                 case 2:
                     //leave as is
                     break;
                 default:
-                    event.button = 0;                    
+                    customEvent.button = 0;                    
             }    
 
             /*
              * Have to use relatedTarget because IE won't allow assignment
              * to toElement or fromElement on generic events. This keeps
-             * YAHOO.util.Event.getRelatedTarget() functional.
+             * YAHOO.util.customEvent.getRelatedTarget() functional.
              */
-            event.relatedTarget = relatedTarget;
+            customEvent.relatedTarget = relatedTarget;
             
             //fire the event
-            target.fireEvent("on" + type, event);
+            target.fireEvent("on" + type, customEvent);
                     
         } else {
             throw new Error("simulateMouseEvent(): No event simulation framework present.");
@@ -2549,6 +2557,7 @@ YAHOO.util.UserAction = {
     
 
 };
+
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -2881,6 +2890,7 @@ YAHOO.tool.TestManager = {
 
 YAHOO.lang.augmentObject(YAHOO.tool.TestManager, YAHOO.util.EventProvider.prototype);
 
+
 YAHOO.namespace("tool");
 
 /**
@@ -2901,7 +2911,7 @@ YAHOO.tool.Profiler = {
      * @private
      * @static
      */
-    _report : new Object(),
+    _report : {},
     
     //-------------------------------------------------------------------------
     // Private Methods
@@ -3198,5 +3208,6 @@ YAHOO.tool.Profiler = {
         }    
     }        
 
-}
+};
+
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

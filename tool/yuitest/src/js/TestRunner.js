@@ -27,7 +27,7 @@ YAHOO.tool.TestRunner = (function(){
         this.lastChild = null;
         this.parent = null;    
         this.next = null;
-        this.results = new Object();
+        this.results = {};
         this.results.passed = 0;
         this.results.failed = 0;
         this.results.total = 0;        
@@ -163,7 +163,7 @@ YAHOO.tool.TestRunner = (function(){
             
             //iterate over the items in the test case
             for (var prop in testCase){
-                if (prop.indexOf("test") == 0 && YAHOO.lang.isFunction(testCase[prop])){
+                if (prop.indexOf("test") === 0 && YAHOO.lang.isFunction(testCase[prop])){
                     node.appendChild(prop);
                 }
             }
@@ -492,7 +492,7 @@ YAHOO.tool.TestRunner = (function(){
          * @static
          */
         clear : function () /*:Void*/ {
-            this.masterSuite.items = new Array();
+            this.masterSuite.items = [];
         },
         
         /**

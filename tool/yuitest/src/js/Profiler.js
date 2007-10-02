@@ -18,7 +18,7 @@ YAHOO.tool.Profiler = {
      * @private
      * @static
      */
-    _report : new Object(),
+    _report : {},
     
     //-------------------------------------------------------------------------
     // Private Methods
@@ -315,4 +315,4 @@ YAHOO.tool.Profiler = {
         }    
     }        
 
-}
+};

@@ -132,8 +132,8 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 break;
                 
             case TestRunner.COMPLETE_EVENT:
-                message = "Testing completed at " + (new Date()).toString() + ".\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                message = "Testing completed at " + (new Date()).toString() + ".\nPassed:" + 
+                    data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
                 
@@ -158,8 +158,8 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 break;
                 
             case TestRunner.TEST_SUITE_COMPLETE_EVENT:
-                message = "Test suite \"" + data.testSuite.name + "\" completed.\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                message = "Test suite \"" + data.testSuite.name + "\" completed.\nPassed:" + 
+                    data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
                 
@@ -169,8 +169,8 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
                 break;
                 
             case TestRunner.TEST_CASE_COMPLETE_EVENT:
-                message = "Test case \"" + data.testCase.name + "\" completed.\nPassed:" 
-                    + data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
+                message = "Test case \"" + data.testCase.name + "\" completed.\nPassed:" + 
+                    data.results.passed + " Failed:" + data.results.failed + " Total:" + data.results.total;
                 messageType = "info";
                 break;
             default:
