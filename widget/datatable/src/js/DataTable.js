@@ -3745,7 +3745,7 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
                 }
             }
         }
-        
+
         // Set FIRST/LAST, EVEN/ODD
         this._setFirstRow();
         this._setLastRow();
@@ -4123,6 +4123,14 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this._oRecordSet.reverseRecords();
         }
 
+        // IE workaround for bug 1243089:
+        // Reset any scrolltop...
+        var nOrigScrollTop = null;
+        if(this._elContainer.scrollTop > 0) {
+            nOrigScrollTop = this._elContainer.scrollTop;
+            this._elContainer.scrollTop = 0;
+        }
+
         // Update sortedBy tracker
         this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
 
@@ -4132,6 +4140,12 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         // Update the UI
         this.refreshView();
+        
+        // IE workaround for bug 1243089:
+        // ...reinstate scrolltop
+        if(nOrigScrollTop !== null) {
+            this._elContainer.scrollTop = nOrigScrollTop;
+        }
 
         this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
         YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
@@ -4205,6 +4219,14 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
 
             // Row is on current page
             if(YAHOO.lang.isNumber(nTrIndex)) {
+                // IE workaround for bug 1225393:
+                // Reset any scrolltop...
+                var nOrigScrollTop = null;
+                if(this._elContainer.scrollTop > 0) {
+                    nOrigScrollTop = this._elContainer.scrollTop;
+                    this._elContainer.scrollTop = 0;
+                }
+
                 // Paginated so just refresh the view to keep pagination state
                 if(this.get("paginated")) {
                     this.refreshView();
@@ -4240,6 +4262,12 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
                             this._setFirstRow();
                         }
                     }
+                }
+                
+                // IE workaround for bug 1225393:
+                // ...reinstate scrolltop
+                if(nOrigScrollTop !== null) {
+                    this._elContainer.scrollTop = nOrigScrollTop;
                 }
             }
             // Record is not on current page so just update pagination UI
@@ -4338,7 +4366,21 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
     
     // Update the TR only if row is on current page
     if(elRow) {
+        // IE workaround for bug 1225393:
+        // Reset any scrolltop...
+        var nOrigScrollTop = null;
+        if(this._elContainer.scrollTop > 0) {
+            nOrigScrollTop = this._elContainer.scrollTop;
+            this._elContainer.scrollTop = 0;
+        }
+
         this._updateTrEl(elRow, updatedRecord);
+        
+        // IE workaround for bug 1225393:
+        // ...reinstate scrolltop
+        if(nOrigScrollTop !== null) {
+            this._elContainer.scrollTop = nOrigScrollTop;
+        }
     }
 
     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -4398,6 +4440,14 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
 
         // If row is on current page, delete the TR element
         if(YAHOO.lang.isNumber(nTrIndex)) {
+            // IE workaround for bug 1225393:
+            // Reset any scrolltop...
+            var nOrigScrollTop = null;
+            if(this._elContainer.scrollTop > 0) {
+                nOrigScrollTop = this._elContainer.scrollTop;
+                this._elContainer.scrollTop = 0;
+            }
+
             var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex) ?
                     true : false;
             this._deleteTrEl(nTrIndex);
@@ -4419,6 +4469,12 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
                 if(nTrIndex != this._elTbody.rows.length) {
                     this._setRowStripes(nTrIndex);
                 }
+            }
+            
+            // IE workaround for bug 1225393:
+            // ...reinstate scrolltop
+            if(nOrigScrollTop !== null) {
+                this._elContainer.scrollTop = nOrigScrollTop;
             }
         }
 
@@ -4594,7 +4650,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         else if(YAHOO.lang.isFunction(oColumn.formatter)) {
             fnFormatter = oColumn.formatter;
         }
-
+        
         // Apply special formatter
         if(fnFormatter) {
             fnFormatter.call(this, elCell, oRecord, oColumn, oData);
@@ -4602,7 +4658,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         else {
             elCell.innerHTML = (YAHOO.lang.isValue(oData)) ? oData.toString() : "";
         }
-
+        
         // Add custom classNames
         var aCustomClasses = null;
         if(YAHOO.lang.isString(oColumn.className)) {
@@ -4611,6 +4667,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         else if(YAHOO.lang.isArray(oColumn.className)) {
             aCustomClasses = oColumn.className;
         }
+        
         if(aCustomClasses) {
             for(var i=0; i<aCustomClasses.length; i++) {
                 YAHOO.util.Dom.addClass(elCell, aCustomClasses[i]);
