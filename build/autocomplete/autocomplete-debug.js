@@ -1923,16 +1923,19 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             }
             break;
         case 13: // enter
-            if(oSelf._oCurItem) {
-                if(oSelf._nKeyCode != nKeyCode) {
-                    if(oSelf._bContainerOpen) {
-                        YAHOO.util.Event.stopEvent(v);
+            var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
+            if(!isMac) {
+                if(oSelf._oCurItem) {
+                    if(oSelf._nKeyCode != nKeyCode) {
+                        if(oSelf._bContainerOpen) {
+                            YAHOO.util.Event.stopEvent(v);
+                        }
                     }
+                    oSelf._selectItem(oSelf._oCurItem);
                 }
-                oSelf._selectItem(oSelf._oCurItem);
-            }
-            else {
-                oSelf._toggleContainer(false);
+                else {
+                    oSelf._toggleContainer(false);
+                }
             }
             break;
         case 27: // esc
@@ -1982,6 +1985,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
                             YAHOO.util.Event.stopEvent(v);
                         }
                     }
+                    oSelf._selectItem(oSelf._oCurItem);
+                }
+                else {
+                    oSelf._toggleContainer(false);
                 }
                 break;
             case 38: // up
