@@ -1851,6 +1851,10 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
             this.labelStyle = oData.style;
         }
 
+        if (oData.title) {
+            this.title = oData.title;
+        }
+
         this.labelElId = "ygtvlabelel" + this.index;
     },
 
@@ -1915,6 +1919,9 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
         sb[sb.length] = ' >';
         sb[sb.length] = '<a';
         sb[sb.length] = ' id="' + this.labelElId + '"';
+        if (this.title) {
+            sb[sb.length] = ' title="' + this.title + '"';
+        }
         sb[sb.length] = ' class="' + this.labelStyle + '"';
         sb[sb.length] = ' href="' + this.href + '"';
         sb[sb.length] = ' target="' + this.target + '"';
