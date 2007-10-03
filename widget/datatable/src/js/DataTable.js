@@ -6133,8 +6133,22 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
         // Update the Record
         this._oRecordSet.updateKey(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
 
+        // IE workaround for bug 1512323:
+        // Reset any scrolltop...
+        var nOrigScrollTop = null;
+        if(this._elContainer.scrollTop > 0) {
+            nOrigScrollTop = this._elContainer.scrollTop;
+            this._elContainer.scrollTop = 0;
+        }
+
         // Update the UI
         this.formatCell(this._oCellEditor.cell);
+
+        // IE workaround for bug 1512323:
+        // ...reinstate scrolltop
+        if(nOrigScrollTop !== null) {
+            this._elContainer.scrollTop = nOrigScrollTop;
+        }
 
         // Clear out the Cell Editor
         this.resetCellEditor();
