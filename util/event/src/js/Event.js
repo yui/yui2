@@ -273,6 +273,13 @@ if (!YAHOO.util.Event) {
             _interval: null,
 
             /**
+             * document readystate poll handle
+             * @property _dri
+             * @static
+             * @private
+             */
+
+            /**
              * @method startInterval
              * @static
              * @private
@@ -1417,6 +1424,22 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 // does nothing
             },
 
+/*
+            testIEReady: function (){
+                var n = document.createElement('p'), ready = false;
+                try {
+                    // throws an error until the doc is ready
+                    n.doScroll('left'); 
+                    ready = true;
+                } catch(er){ 
+                    // document is not ready
+                }
+
+                n = null;
+                return ready;
+            },
+*/
+
             /**
              * Adds a DOM event directly without the caching, cleanup, scope adj, etc
              *
@@ -1497,6 +1520,8 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     YAHOO.util.Event._tryPreloadAttach,
                     YAHOO.util.Event, true);
 
+            /*
+
             //YAHOO.log("-" + document.readyState + "-");
 
             var el, d=document, b=d.body;
@@ -1534,17 +1559,49 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
 
             el=null;
 
+            */
+
+/*
+            (function (){
+                var n = document.createElement('p');  
+                try {
+                    // throws an error if doc is not ready
+                    n.doScroll('left');
+                    n = null;
+                    YAHOO.util.Event._ready();
+                } catch (e){
+                    n = null;
+setTimeout(arguments.callee, YAHOO.util.Event.POLL_INTERVAL);
+                }
+            })();
+*/
+
+            EU._dri = setInterval(function() {
+                var n = document.createElement('p');  
+                try {
+                    // throws an error if doc is not ready
+                    n.doScroll('left');
+                    clearInterval(EU._dri);
+                    EU._dri = null;
+                    EU._ready();
+                } catch (e) { 
+
+                } finally {
+                    n = null;
+                }
+            }, EU.POLL_INTERVAL); 
+
         
         // Safari: The document's readyState in Safari currently will
         // change to loaded/complete before images are loaded.
         //} else if (EU.webkit) {
         } else if (EU.webkit) {
 
-            EU._drwatch = setInterval(function(){
+            EU._dri = setInterval(function() {
                 var rs=document.readyState;
                 if ("loaded" == rs || "complete" == rs) {
-                    clearInterval(EU._drwatch);
-                    EU._drwatch = null;
+                    clearInterval(EU._dri);
+                    EU._dri = null;
                     EU._ready();
                 }
             }, EU.POLL_INTERVAL); 
