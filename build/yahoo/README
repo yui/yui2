@@ -1,5 +1,8 @@
 YAHOO Global - Release Notes
 
+2.4.0
+  * Removed the hasOwnProperty check in isArray to make it perform a bit better.
+
 2.3.1
   * YAHOO.lang.dump casts primitives to strings
 

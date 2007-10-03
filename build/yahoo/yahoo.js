@@ -355,8 +355,7 @@ YAHOO.lang = {
 
         if (o) {
            var l = YAHOO.lang;
-           return l.isNumber(o.length) && l.isFunction(o.splice) && 
-                  !l.hasOwnProperty(o.length);
+           return l.isNumber(o.length) && l.isFunction(o.splice);
         }
         return false;
     },
