@@ -1554,7 +1554,6 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 			for (var d=0;d<7;d++){ // Render actual days
 
 				cellRenderers = [];
-				renderer = null;
 
 				this.clearElement(cell);
 				cell.className = this.Style.CSS_CELL;
@@ -1578,6 +1577,8 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 					YAHOO.util.Dom.addClass(cell, dayPrefix + workingDate.getDate());
 				
 					for (var s=0;s<this.renderStack.length;++s) {
+
+        				renderer = null;
 
 						var rArray = this.renderStack[s];
 						var type = rArray[0];
