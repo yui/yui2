@@ -1391,15 +1391,38 @@
         */
         center: function () {
     
-            var scrollX = Dom.getDocumentScrollLeft(),
-                scrollY = Dom.getDocumentScrollTop(),
-    
-                viewPortWidth = Dom.getClientWidth(),
-                viewPortHeight = Dom.getClientHeight(),
+            var nViewportOffset = Overlay.VIEWPORT_OFFSET,
                 elementWidth = this.element.offsetWidth,
                 elementHeight = this.element.offsetHeight,
-                x = (viewPortWidth / 2) - (elementWidth / 2) + scrollX,
-                y = (viewPortHeight / 2) - (elementHeight / 2) + scrollY;
+                viewPortWidth = Dom.getClientWidth(),
+                viewPortHeight = Dom.getClientHeight(),         
+                x,
+                y;    
+
+
+            if (elementWidth < viewPortWidth) {
+
+                x = (viewPortWidth / 2) - (elementWidth / 2) + Dom.getDocumentScrollLeft();
+
+            }
+            else {
+
+                x = nViewportOffset;
+
+            }
+
+
+            if (elementHeight < viewPortHeight) {
+
+                y = (viewPortHeight / 2) - (elementHeight / 2) + Dom.getDocumentScrollTop();    
+            
+            }
+            else {
+
+                y = nViewportOffset;
+
+            }
+
             
             this.cfg.setProperty("xy", [parseInt(x, 10), parseInt(y, 10)]);
             
