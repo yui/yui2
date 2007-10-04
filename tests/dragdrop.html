@@ -18,7 +18,7 @@
 <script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../build/dom/dom.js"></script>
 <script type="text/javascript" src="../build/event/event.js"></script>
-<script type="text/javascript" src="../build/dragdrop/dragdrop.js"></script>
+<script type="text/javascript" src="../build/dragdrop/dragdrop-debug.js"></script>
 <script type="text/javascript" src="../build/logger/logger.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
 
@@ -125,12 +125,37 @@
             }
             YAHOO.util.DDM.handleMouseUp({ pageX: 120, pageY: 210 });
 
-            Assert.areEqual(dragEnter, 1, "startDrag should have fired once");
+            Assert.areEqual(startDrag, 1, "startDrag should have fired once");
             Assert.areEqual(drag, 40, "drag should have fired 40 times");
             Assert.areEqual(dragOver, 5, "dragOver should have fired 5 times");
             Assert.areEqual(dragOut, 1, "dragOut should have fired once");
             Assert.areEqual(invalidDrop, 1, "invalidDrop should have fired once");
             Assert.areEqual(dragDrop, 0, "dragDrop should have fired once");
+        },
+
+        test_dragOnly: function() {
+            reset();
+            dd1.dragOnly = true;
+            dd1.handleMouseDown({ 
+                pageX: 120, 
+                pageY: 230,
+                target: dd1.getEl()
+                });
+
+            for (var i=1;i<21;i=i+1) {
+                YAHOO.util.DDM.handleMouseMove({ pageX: 124+(10*i), pageY: 220 });
+            }
+            for (var i=20;i>0;i=i-1) {
+                YAHOO.util.DDM.handleMouseMove({ pageX: 124+(10*i), pageY: 220 });
+            }
+            YAHOO.util.DDM.handleMouseUp({ pageX: 120, pageY: 210 });
+
+            Assert.areEqual(1, startDrag, "startDrag should have fired once");
+            Assert.areEqual(40, drag, "drag should have fired 40 times");
+            Assert.areEqual(0, dragOver, "dragOver should have fired 0 times");
+            Assert.areEqual(0, dragOut, "dragOut should have fired 0 times");
+            Assert.areEqual(0, invalidDrop, "invalidDrop should have fired 0 times");
+            Assert.areEqual(0, dragDrop, "dragDrop should have fired 0 times");
         },
 
          test_bodyScroll: function() {
@@ -150,7 +175,7 @@
             }
             YAHOO.util.DDM.handleMouseUp({ pageX: 120, pageY: 210 });
 
-            Assert.areEqual(dragEnter, 1, "startDrag should have fired once");
+            Assert.areEqual(startDrag, 1, "startDrag should have fired once");
             Assert.areEqual(drag, 40, "drag should have fired 40 times");
             Assert.areEqual(dragOver, 5, "dragOver should have fired 5 times");
             Assert.areEqual(dragOut, 1, "dragOut should have fired once");
@@ -175,7 +200,7 @@
             }
             YAHOO.util.DDM.handleMouseUp({ pageX: 120, pageY: 110 });
 
-            Assert.areEqual(dragEnter, 1, "startDrag should have fired once");
+            Assert.areEqual(startDrag, 1, "startDrag should have fired once");
             Assert.areEqual(drag, 40, "drag should have fired 40 times");
             Assert.areEqual(dragOver, 5, "dragOver should have fired 5 times");
             Assert.areEqual(dragOut, 1, "dragOut should have fired once");
@@ -184,7 +209,7 @@
         },
 
         test_to_fail: function (){
-            Assert.isNull("not null");;
+            Assert.isNull("not null");
         }
         
     }));
@@ -198,6 +223,7 @@
         Dom.get("ddcontainer").scrollTop=0;
         startDrag=0, mouseDown=0, endDrag=0, dragEnter=0, dragOver=0, dragOut=0,
         drag=0, dragDrop=0, invalidDrop=0, mouseUp=0;
+        dd1.dragOnly = false;
     }
 
     var dd1, dd2, startDrag, mouseDown, endDrag, dragEnter, dragOver, dragOut,
@@ -214,7 +240,6 @@
     function endDrag(e) { endDrag++; }
     function onMouseUp(e) { mouseUp++; }
 
-    // YAHOO.util.Event.onDomReady(function (){ // need to wait for the frame to load
     YAHOO.util.Event.on(window, "load", function (){
         //create the logger
         var logger = new YAHOO.tool.TestLogger();
