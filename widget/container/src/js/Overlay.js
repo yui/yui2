@@ -138,6 +138,17 @@
     * @type Number
     */
     Overlay.IFRAME_OFFSET = 3;
+
+    /**
+    * Number representing the minimum distance an Overlay instance should be 
+    * positioned relative to the boundaries of the browser's viewport.
+    * @property YAHOO.widget.Overlay.VIEWPORT_OFFSET
+    * @default 10
+    * @static
+    * @final
+    * @type Number
+    */    
+    Overlay.VIEWPORT_OFFSET = 10;
     
     /**
     * Constant representing the top left corner of an element, used for 
@@ -982,7 +993,7 @@
          * </p>
          * @method stackIframe
          */
-        stackIframe: function() {
+        stackIframe: function () {
             if (this.iframe) {
                 var overlayZ = Dom.getStyle(this.element, "zIndex");
                 if (!YAHOO.lang.isUndefined(overlayZ) && !isNaN(overlayZ)) {
@@ -1008,7 +1019,8 @@
 
                 var oIFrame = this.iframe,
                     oElement = this.element,
-                    oParent;
+                    oParent,
+                    aXY;
 
                 if (!oIFrame) {
                     if (!m_oIFrameTemplate) {
@@ -1298,39 +1310,74 @@
         enforceConstraints: function (type, args, obj) {
     
             var pos = args[0],
-                x = pos[0],
-                y = pos[1],
+                nViewportOffset = Overlay.VIEWPORT_OFFSET,
                 offsetHeight = this.element.offsetHeight,
                 offsetWidth = this.element.offsetWidth,
                 viewPortWidth = Dom.getViewportWidth(),
                 viewPortHeight = Dom.getViewportHeight(),
-                scrollX = Dom.getDocumentScrollLeft(),
-                scrollY = Dom.getDocumentScrollTop(),
-                topConstraint = scrollY + 10,
-                leftConstraint = scrollX + 10,
-                bottomConstraint = scrollY + viewPortHeight - offsetHeight - 10,
-                rightConstraint = scrollX + viewPortWidth - offsetWidth - 10;
+                x,
+                y,
+                scrollX,
+                scrollY,
+                topConstraint,
+                leftConstraint,
+                bottomConstraint,
+                rightConstraint;
         
+
+            if (offsetWidth < viewPortWidth) {
+
+                x = pos[0];
+                scrollX = Dom.getDocumentScrollLeft();
+                leftConstraint = scrollX + nViewportOffset;
+                rightConstraint = 
+                    scrollX + viewPortWidth - offsetWidth - nViewportOffset;
     
-            if (x < leftConstraint) {
-    
-                x = leftConstraint;
-    
-            } else if (x > rightConstraint) {
-    
-                x = rightConstraint;
-    
+
+                if (x < leftConstraint) {
+        
+                    x = leftConstraint;
+        
+                } else if (x > rightConstraint) {
+        
+                    x = rightConstraint;
+        
+                }
+            
+            }
+            else {
+            
+                x = nViewportOffset;
+            
             }
             
-            if (y < topConstraint) {
-    
-                y = topConstraint;
-    
-            } else if (y > bottomConstraint) {
-    
-                y = bottomConstraint;
-    
+
+            if (offsetHeight < viewPortHeight) {
+
+                y = pos[1];
+                scrollY = Dom.getDocumentScrollTop();
+                topConstraint = scrollY + nViewportOffset;
+                bottomConstraint = 
+                    scrollY + viewPortHeight - offsetHeight - nViewportOffset;
+
+
+                if (y < topConstraint) {
+        
+                    y = topConstraint;
+        
+                } else if (y > bottomConstraint) {
+        
+                    y = bottomConstraint;
+        
+                }
+            
             }
+            else {
+
+                y = nViewportOffset;
+            
+            }
+
             
             this.cfg.setProperty("x", x, true);
             this.cfg.setProperty("y", y, true);
@@ -1401,7 +1448,7 @@
         * YAHOO.widget.Overlay.
         * @method bringToTop
         */
-        bringToTop: function() {
+        bringToTop: function () {
     
             var aOverlays = [],
                 oElement = this.element;
