@@ -1021,11 +1021,7 @@
         * this will usually equal the owner.
         */
         configPostMethod: function (type, args, obj) {
-    
-            var postmethod = args[0];
-        
             this.registerForm();
-    
         },
         
         // END BUILT-IN PROPERTY EVENT HANDLERS //

@@ -24,10 +24,6 @@
     overflow: auto;
 }
 
-.yui-panel-container select {
-    _visibility: inherit;
-}
-
 /* 
     PLEASE NOTE:
 
@@ -45,14 +41,15 @@
 
 */
 
-.masked select, 
-.drag select, 
+.masked select,
+.drag select,
 .hide-select select {
-
-    _visibility: hidden;   
-
+    _visibility: hidden;
 }
 
+.yui-panel-container select {
+    _visibility: inherit;
+}
 
 /*
 
@@ -127,6 +124,10 @@ PLEASE NOTE:
 
     overflow: auto;
 
+}
+
+.yui-effect-fade .underlay {
+    display:none;
 }
 
 

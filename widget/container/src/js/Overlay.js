@@ -1008,8 +1008,7 @@
 
                 var oIFrame = this.iframe,
                     oElement = this.element,
-                    oParent,
-                    aXY;
+                    oParent;
 
                 if (!oIFrame) {
                     if (!m_oIFrameTemplate) {

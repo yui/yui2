@@ -526,7 +526,7 @@
         */
         init: function (el, userConfig) {
 
-            var elId, i, child;
+            var elId, child;
 
             this.initEvents();
             this.beforeInitEvent.fire(Module);
@@ -632,14 +632,14 @@
                     */
                     if (YAHOO.env.ua.gecko) {
                         sHTML = "<html><head><script " +
-                                "type=\"text/javascript\">" + 
+                                "type=\"text/javascript\">" +
                                 "window.onresize=function(){window.parent." +
                                 "YAHOO.widget.Module.textResizeEvent." +
                                 "fire();};window.parent.YAHOO.widget.Module." +
-                                "textResizeEvent.fire();</script></head>" + 
+                                "textResizeEvent.fire();</script></head>" +
                                 "<body></body></html>";
 
-                        oIFrame.src = "data:text/html;charset=utf-8," + 
+                        oIFrame.src = "data:text/html;charset=utf-8," +
                             encodeURIComponent(sHTML);
                     }
 

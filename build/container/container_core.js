@@ -454,37 +454,23 @@
         applyConfig: function (userConfig, init) {
         
             var sKey,
-                oValue,
                 oConfig;
 
             if (init) {
-
                 oConfig = {};
-
                 for (sKey in userConfig) {
-                
                     if (Lang.hasOwnProperty(userConfig, sKey)) {
-
                         oConfig[sKey.toLowerCase()] = userConfig[sKey];
-
                     }
-                
                 }
-
                 this.initialConfig = oConfig;
-
             }
 
             for (sKey in userConfig) {
-            
                 if (Lang.hasOwnProperty(userConfig, sKey)) {
-            
                     this.queueProperty(sKey, userConfig[sKey]);
-                
                 }
-
             }
-
         },
         
         /**
@@ -1235,7 +1221,7 @@
         */
         init: function (el, userConfig) {
 
-            var elId, i, child;
+            var elId, child;
 
             this.initEvents();
             this.beforeInitEvent.fire(Module);
@@ -1341,14 +1327,14 @@
                     */
                     if (YAHOO.env.ua.gecko) {
                         sHTML = "<html><head><script " +
-                                "type=\"text/javascript\">" + 
+                                "type=\"text/javascript\">" +
                                 "window.onresize=function(){window.parent." +
                                 "YAHOO.widget.Module.textResizeEvent." +
                                 "fire();};window.parent.YAHOO.widget.Module." +
-                                "textResizeEvent.fire();</script></head>" + 
+                                "textResizeEvent.fire();</script></head>" +
                                 "<body></body></html>";
 
-                        oIFrame.src = "data:text/html;charset=utf-8," + 
+                        oIFrame.src = "data:text/html;charset=utf-8," +
                             encodeURIComponent(sHTML);
                     }
 
@@ -2796,8 +2782,7 @@
 
                 var oIFrame = this.iframe,
                     oElement = this.element,
-                    oParent,
-                    aXY;
+                    oParent;
 
                 if (!oIFrame) {
                     if (!m_oIFrameTemplate) {
@@ -3882,67 +3867,69 @@
     * @return {YAHOO.widget.ContainerEffect} The configured ContainerEffect object
     */
     ContainerEffect.FADE = function (overlay, dur) {
-    
-        var fade = new ContainerEffect(overlay, 
-        
-            { attributes: { opacity: { from: 0, to: 1 } }, 
-                duration: dur, 
-                method: Easing.easeIn }, 
-            
-            { attributes: { opacity: { to: 0 } },
-                duration: dur, 
-                method: Easing.easeOut }, 
-            
-            overlay.element);
-        
-    
+
+        var fin = {
+            attributes: {opacity:{from:0, to:1}},
+            duration: dur,
+            method: Easing.easeIn
+        };
+
+        var fout = {
+            attributes: {opacity:{to:0}},
+            duration: dur,
+            method: Easing.easeOut
+        };
+
+        var fade = new ContainerEffect(overlay, fin, fout, overlay.element);
+
+        fade.handleUnderlayStart = function() {
+            var underlay = this.overlay.underlay;
+            if (underlay && YAHOO.env.ua.ie) {
+                var hasFilters = (underlay.filters && underlay.filters.length > 0);
+                if(hasFilters) {
+                    Dom.addClass(overlay.element, "yui-effect-fade");
+                }
+            }
+        };
+
+        fade.handleUnderlayComplete = function() {
+            var underlay = this.overlay.underlay;
+            if (underlay && YAHOO.env.ua.ie) {
+                Dom.removeClass(overlay.element, "yui-effect-fade");
+            }
+        };
+
         fade.handleStartAnimateIn = function (type,args,obj) {
             Dom.addClass(obj.overlay.element, "hide-select");
-        
-            if (! obj.overlay.underlay) {
+
+            if (!obj.overlay.underlay) {
                 obj.overlay.cfg.refireEvent("underlay");
             }
-        
-            if (obj.overlay.underlay) {
-    
-                obj.initialUnderlayOpacity = 
-                    Dom.getStyle(obj.overlay.underlay, "opacity");
-    
-                obj.overlay.underlay.style.filter = null;
-    
-            }
-        
+
+            obj.handleUnderlayStart();
+
             Dom.setStyle(obj.overlay.element, "visibility", "visible");
             Dom.setStyle(obj.overlay.element, "opacity", 0);
         };
-        
-    
+
         fade.handleCompleteAnimateIn = function (type,args,obj) {
             Dom.removeClass(obj.overlay.element, "hide-select");
-        
+
             if (obj.overlay.element.style.filter) {
                 obj.overlay.element.style.filter = null;
             }
-        
-            if (obj.overlay.underlay) {
-                Dom.setStyle(obj.overlay.underlay, "opacity", 
-                    obj.initialUnderlayOpacity);
-            }
-        
+
+            obj.handleUnderlayComplete();
+
             obj.overlay.cfg.refireEvent("iframe");
             obj.animateInCompleteEvent.fire();
         };
-        
-    
+
         fade.handleStartAnimateOut = function (type, args, obj) {
             Dom.addClass(obj.overlay.element, "hide-select");
-        
-            if (obj.overlay.underlay) {
-                obj.overlay.underlay.style.filter = null;
-            }
+            obj.handleUnderlayStart();
         };
-        
-    
+
         fade.handleCompleteAnimateOut =  function (type, args, obj) {
             Dom.removeClass(obj.overlay.element, "hide-select");
             if (obj.overlay.element.style.filter) {
@@ -3950,12 +3937,13 @@
             }
             Dom.setStyle(obj.overlay.element, "visibility", "hidden");
             Dom.setStyle(obj.overlay.element, "opacity", 1);
-        
+
+            obj.handleUnderlayComplete();
+
             obj.overlay.cfg.refireEvent("iframe");
-        
             obj.animateOutCompleteEvent.fire();
         };
-        
+
         fade.init();
         return fade;
     };
@@ -4027,11 +4015,9 @@
     
             var vw = Dom.getViewportWidth(),
                 pos = Dom.getXY(obj.overlay.element),
-                yso = pos[1],
-                currentTo = obj.animOut.attributes.points.to;
+                yso = pos[1];
     
             obj.animOut.attributes.points.to = [(vw + 25), yso];
-    
         };
         
         slide.handleTweenAnimateOut = function (type, args, obj) {

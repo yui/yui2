@@ -460,37 +460,23 @@
         applyConfig: function (userConfig, init) {
         
             var sKey,
-                oValue,
                 oConfig;
 
             if (init) {
-
                 oConfig = {};
-
                 for (sKey in userConfig) {
-                
                     if (Lang.hasOwnProperty(userConfig, sKey)) {
-
                         oConfig[sKey.toLowerCase()] = userConfig[sKey];
-
                     }
-                
                 }
-
                 this.initialConfig = oConfig;
-
             }
 
             for (sKey in userConfig) {
-            
                 if (Lang.hasOwnProperty(userConfig, sKey)) {
-            
                     this.queueProperty(sKey, userConfig[sKey]);
-                
                 }
-
             }
-
         },
         
         /**

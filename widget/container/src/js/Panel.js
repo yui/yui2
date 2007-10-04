@@ -117,7 +117,7 @@
     */
 
     function createHeader(p_sType, p_aArgs) {
-        if (!this.header) {
+        if (!this.header && this.cfg.getProperty("draggable")) {
             this.setHeader("&#160;");
         }
     }
@@ -281,21 +281,14 @@
             Dom.addClass(this.element, Panel.CSS_PANEL);
         
             this.buildWrapper();
-        
+
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
         
             this.subscribe("showMask", addFocusEventHandlers);
             this.subscribe("hideMask", removeFocusEventHandlers);
-
-            // We also set up a beforeRender handler
-            // in configDraggable, but we need to check here, 
-            // since configDraggable won't get called until
-            // after the first render
-            if (this.cfg.getProperty("draggable")) {
-                this.subscribe("beforeRender", createHeader);
-            }
+            this.subscribe("beforeRender", createHeader);
 
             this.initEvent.fire(Panel);
         },
@@ -505,9 +498,6 @@
                     this.registerDragDrop();
                 }
 
-                if (!Config.alreadySubscribed(this.beforeRenderEvent, createHeader, null)) {
-                    this.subscribe("beforeRender", createHeader);
-                }
                 this.subscribe("beforeShow", setWidthToOffsetWidth);
 
             } else {
@@ -520,7 +510,6 @@
                     Dom.setStyle(this.header,"cursor","auto");
                 }
 
-                this.unsubscribe("beforeRender", createHeader);
                 this.unsubscribe("beforeShow", setWidthToOffsetWidth);
             }
         },

@@ -167,6 +167,10 @@ PLEASE NOTE:
 
 }
 
+.yui-effect-fade .underlay {
+    display:none;
+}
+
 .yui-panel {
     visibility:hidden;
     border-collapse:separate;
