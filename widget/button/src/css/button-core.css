@@ -1,19 +1,19 @@
-.yui-skin-sam .yui-button  {
+.yui-button  {
 
     display: -moz-inline-box; /* Gecko */
     display: inline-block; /* IE, Opera and Safari */
     
 }
 
-.yui-skin-sam .yui-button .first-child {
+.yui-button .first-child {
 
     display: block;
     *display: inline-block; /* IE */
 
 }
 
-.yui-skin-sam .yui-button button,
-.yui-skin-sam .yui-button a {
+.yui-button button,
+.yui-button a {
 
     display: block;
     *display: inline-block; /* IE */
@@ -21,7 +21,7 @@
 
 }
 
-.yui-skin-sam .yui-button button {
+.yui-button button {
 
     background-color: transparent;
     *overflow: visible; /* Remove superfluous padding for IE */
@@ -29,7 +29,7 @@
 
 }
 
-.yui-skin-sam .yui-button a {
+.yui-button a {
 
     text-decoration: none;
 
