@@ -733,7 +733,7 @@ YAHOO.util.DragDropMgr = function() {
             // If the user did the mouse up outside of the window, we could 
             // get here even though we have ended the drag.
             // If the config option dragOnly is true, bail out and don't fire the events
-            if (!dc || dc.isLocked() || dc.config.dragOnly) {
+            if (!dc || dc.isLocked() || dc.dragOnly) {
                 return;
             }
 
