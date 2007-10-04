@@ -1673,7 +1673,14 @@
                 this.addStateCSSClasses("activeoption");
             
             }
+
+
+            if (this._activationButtonPressed || this._bOptionPressed) {
         
+                Event.removeListener(document, "mouseup", this._onDocumentMouseUp);
+        
+            }
+
         },
         
         
@@ -1716,14 +1723,24 @@
             this._activationButtonPressed = false;
             this._bOptionPressed = false;
         
-            var sType = this.get("type");
+            var sType = this.get("type"),
+                oTarget,
+                oMenuElement;
         
             if (sType == "menu" || sType == "split") {
+
+                oTarget = Event.getTarget(p_oEvent);
+                oMenuElement = this._menu.element;
         
-                this.removeStateCSSClasses(
-                    (sType == "menu" ? "active" : "activeoption"));
-        
-                this._hideMenu();
+                if (oTarget != oMenuElement && 
+                    !Dom.isAncestor(oMenuElement, oTarget)) {
+
+                    this.removeStateCSSClasses((sType == "menu" ? 
+                        "active" : "activeoption"));
+            
+                    this._hideMenu();
+
+                }
         
             }
         
@@ -2211,10 +2228,11 @@
         * passed back by the event utility (YAHOO.util.Event).
         */
         _onDocumentMouseDown: function (p_oEvent) {
-        
+
             var oTarget = Event.getTarget(p_oEvent),
                 oButtonElement = this.get("element"),
                 oMenuElement = this._menu.element;
+           
         
             if (oTarget != oButtonElement && 
                 !Dom.isAncestor(oButtonElement, oTarget) && 
