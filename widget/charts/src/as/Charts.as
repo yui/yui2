@@ -97,7 +97,6 @@ package
 			this.addChild(chart);
 			
 			this.component = chart;
-			
 			this.chart.addEventListener(ChartEvent.ITEM_CLICK, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_DOUBLE_CLICK, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_ROLL_OUT, chartItemEventHandler, false, 0, true);
@@ -110,23 +109,74 @@ package
 		{
 			var dataProvider:Array = [];
 			var seriesCount:int = value.length;
+			
+			//will be filled based on the defaults or the series style definition, if present.
+			var seriesColors:Array = [];
+			var seriesMarkerSizes:Array = [];
+			var seriesMarkerSkins:Array = [];
+			
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var dataFromJavaScript:Object = value[i];
 				var currentData:ISeries = this.chart.dataProvider[i] as ISeries;
-				var currentSeriesType:Class = SeriesSerializer.shortNameToSeriesType(dataFromJavaScript.type);
-				this.log(currentData + " " + dataFromJavaScript.type);
-				if(currentData is currentSeriesType)
+				var seriesType:Class = SeriesSerializer.shortNameToSeriesType(dataFromJavaScript.type);
+				var series:ISeries;
+				if(currentData is seriesType)
 				{
-					dataProvider[i] = SeriesSerializer.readSeries(dataFromJavaScript, currentData);
+					//reuse the series if possible because we want animation
+					series = SeriesSerializer.readSeries(dataFromJavaScript, currentData);
 				}
 				else
 				{
-					dataProvider[i] = SeriesSerializer.readSeries(dataFromJavaScript);
+					series = SeriesSerializer.readSeries(dataFromJavaScript);
 				}
+				dataProvider[i] = series;
+			
+				//defaults
+				var defaultColors:Array = [0x729fcf, 0xfcaf3e, 0x73d216, 0xfce94f, 0xad7fa8, 0x3465a4];
+				var defaultSize:Number = 10;
+				if(series is ColumnSeries || series is BarSeries)
+				{
+					defaultSize = 20;
+				}
+				
+				var defaultSkin:Class = RectangleSkin;
+				if(series is LineSeries)
+				{
+					defaultSkin = CircleSkin;
+				}
+				
+				//initialize styles with defaults
+				var size:Number = defaultSize;
+				var color:uint = defaultColors[i % defaultColors.length];
+				var skin:Object = defaultSkin;
+				var style:Object = dataFromJavaScript.style;
+				if(style)
+				{
+					if(style.image)
+					{
+						skin = LoaderUtil.createAutoLoader(skin.image, new LoaderContext(true));
+					}
+					if(style.size != null)
+					{
+						size = style.size;
+					}
+					if(style.color != null)
+					{
+						color = style.color;
+					}
+				}
+				
+				seriesColors[i] = color;
+				seriesMarkerSizes[i] = size;
+				seriesMarkerSkins[i] = skin;
 			}
 			
+			//set data provider and new styles
 			this.chart.dataProvider = dataProvider;
+			this.chart.setStyle("seriesColors", seriesColors);
+			this.chart.setStyle("seriesMarkerSizes", seriesMarkerSizes);
+			this.chart.setStyle("seriesMarkerSkins", seriesMarkerSkins);
 		}
 		
 		/**
