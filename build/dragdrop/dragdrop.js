@@ -2028,8 +2028,7 @@ YAHOO.util.DragDrop.prototype = {
         this.isTarget          = (this.config.isTarget !== false);
         this.maintainOffset    = (this.config.maintainOffset);
         this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
-        this.dragOnly = (this.config.dragOnly !== false);
-
+        this.dragOnly = ((this.config.dragOnly === true) ? true : false);
     },
 
     /**
