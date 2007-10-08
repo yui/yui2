@@ -168,7 +168,7 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * By default, all instances can be a drop target.  This can be disabled by
      * setting isTarget to false.
-     * @method isTarget
+     * @property isTarget
      * @type boolean
      */
     isTarget: true,
@@ -176,13 +176,13 @@ YAHOO.util.DragDrop.prototype = {
     /**
      * The padding configured for this drag and drop object for calculating
      * the drop zone intersection with this object.
-     * @method padding
+     * @property padding
      * @type int[]
      */
     padding: null,
     /**
      * If this flag is true, do not fire drop events. The element is a drag only element (for movement not dropping)
-     * @method dragOnly
+     * @property dragOnly
      * @type Boolean
      */
     dragOnly: false,
