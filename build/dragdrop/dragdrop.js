@@ -339,6 +339,16 @@ YAHOO.util.DragDropMgr = function() {
         startY: 0,
 
         /**
+         * Flag to determine if the drag event was fired from the click timeout and
+         * not the mouse move threshold.
+         * @property fromTimeout
+         * @type boolean
+         * @private
+         * @static
+         */
+        fromTimeout: false,
+
+        /**
          * Each DragDrop instance must be registered with the DragDropMgr.  
          * This is executed in DragDrop.init()
          * @method regDragDrop
@@ -539,7 +549,8 @@ YAHOO.util.DragDropMgr = function() {
             this.clickTimeout = setTimeout( 
                     function() { 
                         var DDM = YAHOO.util.DDM;
-                        DDM.startDrag(DDM.startX, DDM.startY); 
+                        DDM.startDrag(DDM.startX, DDM.startY);
+                        DDM.fromTimeout = true;
                     }, 
                     this.clickTimeThresh );
         },
@@ -577,6 +588,10 @@ YAHOO.util.DragDropMgr = function() {
                 clearTimeout(this.clickTimeout);
 
                 if (this.dragThreshMet) {
+                    if (this.fromTimeout) {
+                        this.handleMouseMove(e);
+                    }
+                    this.fromTimeout = false;
                     this.fireEvents(e, true);
                 } else {
                 }
@@ -686,7 +701,7 @@ YAHOO.util.DragDropMgr = function() {
                 this.stopEvent(e);
             }
         },
-
+        
         /**
          * Iterates over all of the DragDrop elements to find ones we are 
          * hovering over or dropping on
@@ -701,7 +716,8 @@ YAHOO.util.DragDropMgr = function() {
 
             // If the user did the mouse up outside of the window, we could 
             // get here even though we have ended the drag.
-            if (!dc || dc.isLocked()) {
+            // If the config option dragOnly is true, bail out and don't fire the events
+            if (!dc || dc.isLocked() || dc.dragOnly) {
                 return;
             }
 
@@ -719,7 +735,9 @@ YAHOO.util.DragDropMgr = function() {
                 outEvts   = [],
                 overEvts  = [],
                 dropEvts  = [],
-                enterEvts = [];
+                enterEvts = [],
+                inGroupsObj  = {},
+                inGroups  = [];
 
 
             // Check to see if the object(s) we were hovering over is no longer 
@@ -731,7 +749,6 @@ YAHOO.util.DragDropMgr = function() {
                 if (! this.isTypeOfDD(ddo)) {
                     continue;
                 }
-
                 if (! this.isOverTarget(pt, ddo, this.mode, curRegion)) {
                     outEvts.push( ddo );
                 }
@@ -754,6 +771,7 @@ YAHOO.util.DragDropMgr = function() {
 
                     if (oDD.isTarget && !oDD.isLocked() && oDD != dc) {
                         if (this.isOverTarget(pt, oDD, this.mode, curRegion)) {
+                            inGroupsObj[sGroup] = true;
                             // look for drop interactions
                             if (isDrop) {
                                 dropEvts.push( oDD );
@@ -786,6 +804,11 @@ YAHOO.util.DragDropMgr = function() {
                 validDrop: isDrop
             };
 
+            
+            for (var inG in inGroupsObj) {
+                inGroups.push(inG);
+            }
+
             // notify about a drop that did not find a target
             if (isDrop && !dropEvts.length) {
                 this.interactionInfo.validDrop = false;
@@ -803,26 +826,26 @@ YAHOO.util.DragDropMgr = function() {
 
                 if (enterEvts.length) {
                     if (dc) {
-                        dc.onDragEnter(e, enterEvts);
+                        dc.onDragEnter(e, enterEvts, inGroups);
                     }
                 }
 
                 if (overEvts.length) {
                     if (dc) {
-                        dc.b4DragOver(e, overEvts);
+                        dc.b4DragOver(e, overEvts, inGroups);
                     }
 
                     if (dc) {
-                        dc.onDragOver(e, overEvts);
+                        dc.onDragOver(e, overEvts, inGroups);
                     }
                 }
 
                 if (dropEvts.length) {
                     if (dc) {
-                        dc.b4DragDrop(e, dropEvts);
+                        dc.b4DragDrop(e, dropEvts, inGroups);
                     }
                     if (dc) {
-                        dc.onDragDrop(e, dropEvts);
+                        dc.onDragDrop(e, dropEvts, inGroups);
                     }
                 }
 
@@ -831,10 +854,10 @@ YAHOO.util.DragDropMgr = function() {
                 var len = 0;
                 for (i=0, len=outEvts.length; i<len; ++i) {
                     if (dc) {
-                        dc.b4DragOut(e, outEvts[i].id);
+                        dc.b4DragOut(e, outEvts[i].id, inGroups[0]);
                     }
                     if (dc) {
-                        dc.onDragOut(e, outEvts[i].id);
+                        dc.onDragOut(e, outEvts[i].id, inGroups[0]);
                     }
                 }
                  
@@ -843,27 +866,27 @@ YAHOO.util.DragDropMgr = function() {
                     // dc.b4DragEnter(e, oDD.id);
 
                     if (dc) {
-                        dc.onDragEnter(e, enterEvts[i].id);
+                        dc.onDragEnter(e, enterEvts[i].id, inGroups[0]);
                     }
                 }
          
                 // fire over events
                 for (i=0,len=overEvts.length; i<len; ++i) {
                     if (dc) {
-                        dc.b4DragOver(e, overEvts[i].id);
+                        dc.b4DragOver(e, overEvts[i].id, inGroups[0]);
                     }
                     if (dc) {
-                        dc.onDragOver(e, overEvts[i].id);
+                        dc.onDragOver(e, overEvts[i].id, inGroups[0]);
                     }
                 }
 
                 // fire drop events
                 for (i=0, len=dropEvts.length; i<len; ++i) {
                     if (dc) {
-                        dc.b4DragDrop(e, dropEvts[i].id);
+                        dc.b4DragDrop(e, dropEvts[i].id, inGroups[0]);
                     }
                     if (dc) {
-                        dc.onDragDrop(e, dropEvts[i].id);
+                        dc.onDragDrop(e, dropEvts[i].id, inGroups[0]);
                     }
                 }
 
@@ -1584,6 +1607,12 @@ YAHOO.util.DragDrop.prototype = {
      * @type int[]
      */
     padding: null,
+    /**
+     * If this flag is true, do not fire drop events. The element is a drag only element (for movement not dropping)
+     * @method dragOnly
+     * @type Boolean
+     */
+    dragOnly: false,
 
     /**
      * Cached reference to the linked element
@@ -1999,6 +2028,7 @@ YAHOO.util.DragDrop.prototype = {
         this.isTarget          = (this.config.isTarget !== false);
         this.maintainOffset    = (this.config.maintainOffset);
         this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
+        this.dragOnly = (this.config.dragOnly !== false);
 
     },
 
@@ -2197,8 +2227,12 @@ YAHOO.util.DragDrop.prototype = {
 
 
         // firing the mousedown events prior to calculating positions
-        this.b4MouseDown(e);
-        this.onMouseDown(e);
+        var b4Return = this.b4MouseDown(e);
+        var mDownReturn = this.onMouseDown(e);
+
+        if ((b4Return === false) || (mDownReturn === false)) {
+            return;
+        }
 
         this.DDM.refreshCache(this.groups);
         // var self = this;
@@ -2232,6 +2266,13 @@ YAHOO.util.DragDrop.prototype = {
         }
     },
 
+    /**
+     * @method clickValidator
+     * @description Method validates that the clicked element
+     * was indeed the handle or a valid child of the handle
+     * @param {Event} e 
+     * @private
+     */
     clickValidator: function(e) {
         var target = Event.getTarget(e);
         return ( this.isValidHandleChild(target) &&
@@ -2672,10 +2713,16 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
         } else {
             YAHOO.util.Dom.setStyle(el, "left", (oCoord.x + this.deltaSetXY[0]) + "px");
             YAHOO.util.Dom.setStyle(el, "top",  (oCoord.y + this.deltaSetXY[1]) + "px");
+            //el.style.left = (oCoord.x + this.deltaSetXY[0]) + "px";
+            //el.style.top = (oCoord.y + this.deltaSetXY[1]) + "px";
         }
         
         this.cachePosition(oCoord.x, oCoord.y);
-        this.autoScroll(oCoord.x, oCoord.y, el.offsetHeight, el.offsetWidth);
+        //DAV
+        var self = this;
+        setTimeout(function() {
+            self.autoScroll.call(self, oCoord.x, oCoord.y, el.offsetHeight, el.offsetWidth);
+        }, 0);
     },
 
     /**

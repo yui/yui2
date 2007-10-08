@@ -180,6 +180,12 @@ YAHOO.util.DragDrop.prototype = {
      * @type int[]
      */
     padding: null,
+    /**
+     * If this flag is true, do not fire drop events. The element is a drag only element (for movement not dropping)
+     * @method dragOnly
+     * @type Boolean
+     */
+    dragOnly: false,
 
     /**
      * Cached reference to the linked element
@@ -600,6 +606,7 @@ YAHOO.util.DragDrop.prototype = {
         this.isTarget          = (this.config.isTarget !== false);
         this.maintainOffset    = (this.config.maintainOffset);
         this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
+        this.dragOnly = (this.config.dragOnly !== false);
 
     },
 
@@ -812,8 +819,13 @@ YAHOO.util.DragDrop.prototype = {
         this.logger.log("firing onMouseDown events");
 
         // firing the mousedown events prior to calculating positions
-        this.b4MouseDown(e);
-        this.onMouseDown(e);
+        var b4Return = this.b4MouseDown(e);
+        var mDownReturn = this.onMouseDown(e);
+
+        if ((b4Return === false) || (mDownReturn === false)) {
+            this.logger.log('b4MouseDown or onMouseDown returned false, exiting drag');
+            return;
+        }
 
         this.DDM.refreshCache(this.groups);
         // var self = this;
@@ -850,6 +862,13 @@ this.logger.log("clickValidator returned false, drag not initiated");
         }
     },
 
+    /**
+     * @method clickValidator
+     * @description Method validates that the clicked element
+     * was indeed the handle or a valid child of the handle
+     * @param {Event} e 
+     * @private
+     */
     clickValidator: function(e) {
         var target = Event.getTarget(e);
         return ( this.isValidHandleChild(target) &&
