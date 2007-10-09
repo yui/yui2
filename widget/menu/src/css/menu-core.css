@@ -1,5 +1,12 @@
 /* Menu & MenuBar styles */
 
+.yuimenubar {
+
+    visibility: visible;
+    position: static;
+
+}
+
 .yuimenu .yuimenu,
 .yuimenubar .yuimenu {
 
