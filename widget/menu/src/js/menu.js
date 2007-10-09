@@ -361,17 +361,6 @@ _nCurrentMouseX: 0,
 
 
 /**
-* @property _nMaxHeight
-* @description The original value of the "maxheight" configuration property 
-* as set by the user.
-* @default -1
-* @private
-* @type Number
-*/
-_nMaxHeight: -1,
-
-
-/**
 * @property _bStopMouseEventHandlers
 * @description Stops "mouseover," "mouseout," and "mousemove" event handlers 
 * from executing.
@@ -688,7 +677,6 @@ init: function (p_oElement, p_oConfig) {
         this.beforeShowEvent.subscribe(this._onBeforeShow);
         this.showEvent.subscribe(this._onShow);
         this.beforeHideEvent.subscribe(this._onBeforeHide);
-        this.hideEvent.subscribe(this._onHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
         this.mouseOutEvent.subscribe(this._onMouseOut);
         this.clickEvent.subscribe(this._onClick);
@@ -2741,6 +2729,9 @@ _onRender: function (p_sType, p_aArgs) {
 },
 
 
+
+
+
 /**
 * @method _onBeforeShow
 * @description "beforeshow" event handler for the menu.
@@ -2755,7 +2746,6 @@ _onBeforeShow: function (p_sType, p_aArgs) {
         n,
         nViewportHeight,
         oRegion,
-        nMaxHeight,
         oBody,
         oSrcElement;
 
@@ -2842,38 +2832,49 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     }
 
 
+    var nMaxHeight = this.cfg.getProperty("maxheight");
+
+    function clearMaxHeight() {
+    
+        this.cfg.setProperty("maxheight", 0);
+    
+        this.hideEvent.unsubscribe(clearMaxHeight);
+    
+    }
+
+
     if (!(this instanceof YAHOO.widget.MenuBar) && 
         this.cfg.getProperty("position") == "dynamic") {
 
-        nViewportHeight = Dom.getViewportHeight();
 
+        if (nMaxHeight === 0) {
 
-        if (this.parent && this.parent.parent instanceof YAHOO.widget.MenuBar) {
-           
-            oRegion = YAHOO.util.Region.getRegion(this.parent.element);
-            
-            nViewportHeight = (nViewportHeight - oRegion.bottom);
-
-        }
-
-
-        if (this.element.offsetHeight >= nViewportHeight) {
+            nViewportHeight = Dom.getViewportHeight();
     
-            nMaxHeight = this.cfg.getProperty("maxheight");
-
-            /*
-                Cache the original value for the "maxheight" configuration  
-                property so that we can set it back when the menu is hidden.
-            */
     
-            this._nMaxHeight = nMaxHeight;
+            if (this.parent && 
+                this.parent.parent instanceof YAHOO.widget.MenuBar) {
+               
+                oRegion = YAHOO.util.Region.getRegion(this.parent.element);
+                
+                nViewportHeight = (nViewportHeight - oRegion.bottom);
+    
+            }
+    
+    
+            if (this.element.offsetHeight >= nViewportHeight) {
+    
+                this.cfg.setProperty("maxheight", 
+                    (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2)));
 
-            this.cfg.setProperty("maxheight", (nViewportHeight - 20));
+                this.hideEvent.subscribe(clearMaxHeight);
+
+            }
         
         }
     
     
-        if (this.cfg.getProperty("maxheight") > 0) {
+        if (nMaxHeight > 0) {
     
             oBody = this.body;
     
@@ -2889,7 +2890,6 @@ _onBeforeShow: function (p_sType, p_aArgs) {
         }
 
     }
-
 
 },
 
@@ -3008,27 +3008,6 @@ _onBeforeHide: function (p_sType, p_aArgs) {
 
         this.blur();
     
-    }
-
-},
-
-
-/**
-* @method _onHide
-* @description "hide" event handler for the menu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onHide: function (p_sType, p_aArgs) {
-
-    if (this._nMaxHeight != -1) {
-
-        this.cfg.setProperty("maxheight", this._nMaxHeight);
-
-        this._nMaxHeight = -1;
-
     }
 
 },
@@ -3157,22 +3136,35 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
     var oParent = this.parent,
         aAlignment = oParent.parent.cfg.getProperty("submenualignment");
 
-    this.cfg.setProperty("context", 
-        [oParent.element, aAlignment[0], aAlignment[1]]);
+
+    if (!this.cfg.getProperty("context")) {
+    
+        this.cfg.setProperty("context", 
+            [oParent.element, aAlignment[0], aAlignment[1]]);
+
+    }
+    else {
+
+        this.align();
+    
+    }
 
 
-    var nScrollTop = oParent.parent.body.scrollTop;
+    var nScrollTop = oParent.parent.body.scrollTop,
+        nY;
+
 
     if ((UA.gecko || UA.webkit) && nScrollTop > 0) {
 
-         this.cfg.setProperty("y", (this.cfg.getProperty("y") - nScrollTop));
+        nY = (this.cfg.getProperty("y") - nScrollTop);
+
+        Dom.setY(this.element, nY);
+        
+        this.cfg.setProperty("y", nY, true);
     
     }
 
 },
-
-
-
 
 
 /**
@@ -3285,69 +3277,55 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
 enforceConstraints: function (type, args, obj) {
 
     var oParentMenuItem = this.parent,
-        oElement,
-        oConfig,
-        pos,
-        x,
-        y,
-        offsetHeight,
-        offsetWidth,
-        viewPortWidth,
-        viewPortHeight,
-        scrollX,
-        scrollY,
-        nPadding,
+        nViewportOffset = Overlay.VIEWPORT_OFFSET,
+        oElement = this.element,
+        oConfig = this.cfg,
+        pos = args[0],
+        offsetHeight = oElement.offsetHeight,
+        offsetWidth = oElement.offsetWidth,
+        viewPortWidth = Dom.getViewportWidth(),
+        viewPortHeight = Dom.getViewportHeight(),
+        nPadding = (oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 
+            0 : nViewportOffset,
+        aContext = oConfig.getProperty("context"),
+        oContextElement = aContext ? aContext[0] : null,
         topConstraint,
         leftConstraint,
         bottomConstraint,
         rightConstraint,
-        aContext,
-        oContextElement;
-
-
-    if (oParentMenuItem && 
-        !(oParentMenuItem.parent instanceof YAHOO.widget.MenuBar)) {
-
-        oElement = this.element;
+        scrollX,
+        scrollY,
+        x,
+        y;
     
-        oConfig = this.cfg;
-        pos = args[0];
-        
+
+    if (offsetWidth < viewPortWidth) {
+
         x = pos[0];
-        y = pos[1];
-        
-        offsetHeight = oElement.offsetHeight;
-        offsetWidth = oElement.offsetWidth;
-        
-        viewPortWidth = Dom.getViewportWidth();
-        viewPortHeight = Dom.getViewportHeight();
-        
         scrollX = Dom.getDocumentScrollLeft();
-        scrollY = Dom.getDocumentScrollTop();
-        
-        nPadding = 
-            (oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 0 : 10;
-        
-        topConstraint = scrollY + nPadding;
         leftConstraint = scrollX + nPadding;
-        
-        bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding;
         rightConstraint = scrollX + viewPortWidth - offsetWidth - nPadding;
-        
-        aContext = oConfig.getProperty("context");
-        oContextElement = aContext ? aContext[0] : null;
-    
-    
-        if (x < 10) {
+
+        if (x < nViewportOffset) {
     
             x = leftConstraint;
     
         } else if ((x + offsetWidth) > viewPortWidth) {
     
-            if (oContextElement &&
+            if(oContextElement &&
                 ((x - oContextElement.offsetWidth) > offsetWidth)) {
     
-                x = (x - (oContextElement.offsetWidth + offsetWidth));
+                if (oParentMenuItem && 
+                    oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) {
+    
+                    x = (x - (offsetWidth - oContextElement.offsetWidth));
+    
+                }
+                else {
+    
+                    x = (x - (oContextElement.offsetWidth + offsetWidth));
+    
+                }
     
             }
             else {
@@ -3358,7 +3336,18 @@ enforceConstraints: function (type, args, obj) {
     
         }
     
-        if (y < 10) {
+    }
+
+
+    if (offsetHeight < viewPortHeight) {
+
+        y = pos[1];
+        scrollY = Dom.getDocumentScrollTop();
+        topConstraint = scrollY + nPadding;
+        bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding;
+
+
+        if (y < nViewportOffset) {
     
             y = topConstraint;
     
@@ -3376,18 +3365,13 @@ enforceConstraints: function (type, args, obj) {
             }
     
         }
-    
-        oConfig.setProperty("x", x, true);
-        oConfig.setProperty("y", y, true);
-        oConfig.setProperty("xy", [x,y], true);
-    
+
     }
-    else if (this == this.getRoot() && 
-        this.cfg.getProperty("position") == "dynamic") {
-    
-        Menu.superclass.enforceConstraints.call(this, type, args, obj);
-    
-    }
+
+
+    oConfig.setProperty("x", x, true);
+    oConfig.setProperty("y", y, true);
+    oConfig.setProperty("xy", [x,y], true);
 
 },
 
@@ -3851,6 +3835,13 @@ onRender: function (p_sType, p_aArgs) {
     }
 
 
+    function replaceShadow() {
+
+        this.element.appendChild(this._shadow);
+
+    }
+
+
     function addShadowVisibleClass() {
     
         Dom.addClass(this._shadow, "yui-menu-shadow-visible");
@@ -3924,7 +3915,9 @@ onRender: function (p_sType, p_aArgs) {
                 });
         
             }
-        
+
+            this.cfg.subscribeToConfigEvent("maxheight", replaceShadow);
+
         }
 
     }
