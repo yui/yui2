@@ -3716,6 +3716,25 @@
     
     };
     
+
+    /**
+    * @method YAHOO.widget.Button.getButton
+    * @description Returns a button with the specified id.
+    * @param {String} p_sId String specifying the id of the root node of the 
+    * HTML element representing the button to be retrieved.
+    * @return {YAHOO.widget.Button}
+    */
+    YAHOO.widget.Button.getButton = function (p_sId) {
+
+        var oButton = m_oButtons[p_sId];
+
+        if (oButton) {
+        
+            return oButton;
+        
+        }
+
+    };
     
     
     // Events
