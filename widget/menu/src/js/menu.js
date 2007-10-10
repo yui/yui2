@@ -2090,7 +2090,7 @@ _onClick: function (p_sType, p_aArgs) {
                     oRoot.clearActiveItem();
     
                 }
-                else if (oRoot.cfg.getProperty("clicktohide")) {
+                else {
 
                     oRoot.hide();
                 
@@ -4377,6 +4377,7 @@ getSubmenus: function () {
     return aSubmenus;
 
 },
+
 
 /**
 * @method clearContent
