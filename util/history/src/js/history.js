@@ -672,13 +672,18 @@ YAHOO.util.History = (function () {
          */
         getBookmarkedState: function (module) {
 
-            var i, len, hash, states, tokens, moduleName;
+            var i, len, idx, hash, states, tokens, moduleName;
 
             if (typeof module !== "string") {
                 throw new Error("Missing or invalid argument");
             }
 
-            hash = top.location.hash.substr(1);
+            // Use location.href instead of location.hash which is already
+            // URL-decoded, which creates problems if the state value
+            // contained special characters...
+            idx = top.location.href.indexOf("#");
+            hash = idx >= 0 ? top.location.href.substr(idx + 1) : top.location.href;
+
             states = hash.split("&");
             for (i = 0, len = states.length; i < len; i++) {
                 tokens = states[i].split("=");
