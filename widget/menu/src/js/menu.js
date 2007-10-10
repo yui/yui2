@@ -188,6 +188,12 @@ var Dom = YAHOO.util.Dom,
             value: false, 
             validator: Lang.isBoolean,
             suppressEvent: true
+        },
+
+        "SCROLL_INCREMENT": { 
+            key: "scrollincrement", 
+            value: 1, 
+            validator: Lang.isNumber
         }
     
     };
@@ -2482,6 +2488,7 @@ _onScrollTargetMouseOver: function (p_oEvent, p_oMenu) {
     var oTarget = Event.getTarget(p_oEvent),
         oBody = this.body,
         me = this,
+        nScrollIncrement = this.cfg.getProperty("scrollincrement"),
         nScrollTarget,
         fnScrollFunction;
 
@@ -2493,7 +2500,7 @@ _onScrollTargetMouseOver: function (p_oEvent, p_oMenu) {
 
         if (nScrollTop < nScrollTarget) {
 
-            oBody.scrollTop = (nScrollTop + 1);
+            oBody.scrollTop = (nScrollTop + nScrollIncrement);
 
             me._enableScrollHeader();
 
@@ -2518,7 +2525,7 @@ _onScrollTargetMouseOver: function (p_oEvent, p_oMenu) {
 
         if (nScrollTop > 0) {
 
-            oBody.scrollTop = (nScrollTop - 1);
+            oBody.scrollTop = (nScrollTop - nScrollIncrement);
 
             me._enableScrollFooter();
 
@@ -3038,6 +3045,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case "clicktohide":
         case "effect":
         case "classname":
+        case "scrollincrement":
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -3080,7 +3088,9 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
             submenuhidedelay: oParentMenu.cfg.getProperty("submenuhidedelay"),
 
-            classname: oParentMenu.cfg.getProperty("classname")
+            classname: oParentMenu.cfg.getProperty("classname"),
+            
+            scrollincrement: oParentMenu.cfg.getProperty("scrollincrement")
 
         },
         
@@ -4942,6 +4952,25 @@ initDefaultConfig: function () {
             suppressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
         }
     );
+
+
+    /**
+    * @config scrollincrement
+    * @description Number used to control the scroll speed of a menu.  Used to 
+    * increment the "scrollTop" property of the menu's body by when a menu's 
+    * content is scrolling.
+    * @default 1
+    * @type Number
+    */
+    oConfig.addProperty(
+        DEFAULT_CONFIG.SCROLL_INCREMENT.key, 
+        { 
+            value: DEFAULT_CONFIG.SCROLL_INCREMENT.value, 
+            validator: DEFAULT_CONFIG.SCROLL_INCREMENT.validator,
+            suppressEvent: DEFAULT_CONFIG.SCROLL_INCREMENT.suppressEvent
+        }
+    );
+
 
 }
 
