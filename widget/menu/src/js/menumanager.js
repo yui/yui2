@@ -638,11 +638,24 @@
                 }        
     
             },
-    
+
+
+            /**
+            * @method getVisible
+            * @description Returns a collection of all visible menus registered
+            * with the menu manger.
+            * @return {Array}
+            */
+            getVisible: function () {
+            
+                return m_oVisibleMenus;
+            
+            },
+
     
             /**
             * @method getMenus
-            * @description Returns an array of all menus registered with the 
+            * @description Returns a collection of all menus registered with the 
             * menu manger.
             * @return {Array}
             */
