@@ -694,11 +694,11 @@
         * @property RADIO_CHECKED_TITLE
         * @description String representing the title applied to buttons of 
         * type "radio" when checked.
-        * @default "Checked.  Click to uncheck."
+        * @default "Checked.  Click another button to uncheck"
         * @final
         * @type String
         */
-        RADIO_CHECKED_TITLE: "Checked.  Click to uncheck.",
+        RADIO_CHECKED_TITLE: "Checked.  Click another button to uncheck",
         
         
         /**
