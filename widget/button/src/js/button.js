@@ -1053,7 +1053,7 @@
 
             var bLazyLoad = this.get("lazyloadmenu"),
                 oButtonElement = this.get("element"),
-                sMenuCSSClassName = Menu.prototype.CSS_CLASS_NAME,
+                sMenuCSSClassName,
         
                 /*
                     Boolean indicating if the value of p_oMenu is an instance 
@@ -1080,14 +1080,11 @@
                 return false;
             
             }
-        
-        
-            if (!Menu) {
-        
-                this.logger.log("YAHOO.widget.Menu dependency not met.", 
-                    "error");
-        
-                return false;
+
+
+            if (Menu) {
+            
+                sMenuCSSClassName = Menu.prototype.CSS_CLASS_NAME;
             
             }
         
@@ -1114,7 +1111,7 @@
                     oMenu.renderEvent.subscribe(this._onMenuRender, null, this);
         
         
-                    if (oMenu instanceof Menu) {
+                    if (Menu && oMenu instanceof Menu) {
         
                         oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, 
                             this, true);
@@ -1136,7 +1133,7 @@
                         }
         
                     }
-                    else if (oMenu instanceof Overlay) {
+                    else if (Overlay && oMenu instanceof Overlay) {
         
                         if (!m_oOverlayManager) {
         
@@ -1155,7 +1152,7 @@
         
                     if (!bInstance) {
         
-                        if (bLazyLoad && !(oMenu instanceof Menu)) {
+                        if (bLazyLoad && Menu && !(oMenu instanceof Menu)) {
         
                             /*
                                 Mimic Menu's "lazyload" functionality by adding  
@@ -1190,7 +1187,7 @@
             }
         
         
-            if (p_oMenu && (p_oMenu instanceof Menu)) {
+            if (p_oMenu && Menu && (p_oMenu instanceof Menu)) {
         
                 oMenu = p_oMenu;
                 aItems = oMenu.getItems();
@@ -1223,7 +1220,7 @@
                 initMenu.call(this);
         
             }
-            else if (p_oMenu && (p_oMenu instanceof Overlay)) {
+            else if (Overlay && p_oMenu && (p_oMenu instanceof Overlay)) {
         
                 oMenu = p_oMenu;
                 bInstance = true;
@@ -1234,7 +1231,7 @@
                 initMenu.call(this);
         
             }
-            else if (Lang.isArray(p_oMenu)) {
+            else if (Menu && Lang.isArray(p_oMenu)) {
         
                 this.on("appendTo", function () {
         
@@ -1252,7 +1249,7 @@
         
                 if (oMenuElement) {
         
-                    if (Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
+                    if (Menu && Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
                         oMenuElement.nodeName.toUpperCase() == "SELECT") {
             
                         oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
@@ -1260,7 +1257,7 @@
                         initMenu.call(this);
             
                     }
-                    else {
+                    else if (Overlay) {
         
                         oMenu = new Overlay(p_oMenu, { visible: false, 
                             context: [oButtonElement, "tl", "bl"] });
@@ -1274,7 +1271,7 @@
             }
             else if (p_oMenu && p_oMenu.nodeName) {
         
-                if (Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
+                if (Menu && Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
                         p_oMenu.nodeName.toUpperCase() == "SELECT") {
         
                     oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
@@ -1282,7 +1279,7 @@
                     initMenu.call(this);
         
                 }
-                else {
+                else if (Overlay) {
         
                     if (!p_oMenu.id) {
                     
@@ -1353,7 +1350,7 @@
                 oMenuItem;
 
 
-            if (oMenu && oMenu instanceof Menu) {
+            if (Menu && oMenu && oMenu instanceof Menu) {
 
                 oMenuItem = oMenu.getItem(p_nIndex);
                 
@@ -1509,8 +1506,13 @@
         * the display of the menu.
         */
         _showMenu: function (p_oEvent) {
-        
-            YAHOO.widget.MenuManager.hideVisible();
+
+            if (YAHOO.widget.MenuManager) {
+
+                YAHOO.widget.MenuManager.hideVisible();
+            
+            }
+
         
             if (m_oOverlayManager) {
         
@@ -1526,7 +1528,7 @@
                 nY;
         
         
-            if (oMenu && (oMenu instanceof Menu)) {
+            if (Menu && oMenu && (oMenu instanceof Menu)) {
         
                 oMenu.cfg.applyConfig({ context: [this.get("id"), "tl", "bl"],
                     constraintoviewport: false,
@@ -1592,7 +1594,7 @@
                 }
         
             }
-            else if (oMenu && (oMenu instanceof Overlay)) {
+            else if (Overlay && oMenu && (oMenu instanceof Overlay)) {
         
                 oMenu.show();
                 oMenu.align("tl", "bl");
@@ -2211,7 +2213,7 @@
             }
         
         
-            if (oMenu && (oMenu instanceof Menu)) {
+            if (Menu && oMenu && (oMenu instanceof Menu)) {
         
                 this.resetValue("selectedMenuItem");
         
@@ -2343,7 +2345,7 @@
                 sTitle,
                 sState;
         
-            if (oMenu && (oMenu instanceof Menu) && 
+            if (Menu && oMenu && (oMenu instanceof Menu) && 
                 this._originalMaxHeight != -1) {
             
                 this._menu.cfg.setProperty("maxheight", 
@@ -2635,7 +2637,7 @@
                 oMenu = this._menu;
             
             
-                if (oMenu && (oMenu instanceof Menu)) {
+                if (Menu && oMenu && (oMenu instanceof Menu)) {
         
                     this.logger.log("Creating hidden field for menu.");
         
