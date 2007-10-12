@@ -2440,16 +2440,16 @@
         * that was fired.
         * @param {Array} p_aArgs Array of arguments sent when the event 
         * was fired.
-        * @param {Number} p_nItem Number representing the index of the menu
-        * item that subscribed to the event.
+        * @param {MenuItem} p_oItem Object representing the menu item that
+        * subscribed to the event.
         */
-        _onMenuItemSelected: function (p_sType, p_aArgs, p_nItem) {
+        _onMenuItemSelected: function (p_sType, p_aArgs, p_oItem) {
 
             var bSelected = p_aArgs[0];
 
             if (bSelected) {
             
-                this.set("selectedMenuItem", p_nItem);
+                this.set("selectedMenuItem", p_oItem);
 
             }
         
@@ -2473,9 +2473,7 @@
             var oItem = p_aArgs[0];
         
             oItem.cfg.subscribeToConfigEvent("selected", 
-                this._onMenuItemSelected, 
-                oItem.index, 
-                this);
+                this._onMenuItemSelected, oItem, this);
         
         },
         
@@ -2642,7 +2640,7 @@
                     this.logger.log("Creating hidden field for menu.");
         
                     oMenuField = oMenu.srcElement;
-                    oMenuItem = oMenu.getItem(this.get("selectedMenuItem"));
+                    oMenuItem = this.get("selectedMenuItem");
 
                     if (oMenuItem) {
 
@@ -3261,15 +3259,14 @@
 
             /**
             * @attribute selectedMenuItem
-            * @description Number representing the index of the item in the 
-            * button's menu that is currently selected.
+            * @description Object representing the item in the button's menu 
+            * that is currently selected.
             * @type Number
             * @default null
             */
             this.setAttributeConfig("selectedMenuItem", {
         
-                value: 0,
-                validator: Lang.isNumber,
+                value: null,
                 method: this._setSelectedMenuItem
         
             });
@@ -3430,7 +3427,7 @@
         
                 this.logger.log("Destroying menu.");
 
-                if (m_oOverlayManager.find(oMenu)) {
+                if (m_oOverlayManager && m_oOverlayManager.find(oMenu)) {
 
                     m_oOverlayManager.remove(oMenu);
 
