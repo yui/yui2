@@ -2871,8 +2871,9 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     
             if (this.element.offsetHeight >= nViewportHeight) {
     
-                this.cfg.setProperty("maxheight", 
-                    (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2)));
+                nMaxHeight = (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2));
+
+                this.cfg.setProperty("maxheight", nMaxHeight);
 
                 this.hideEvent.subscribe(clearMaxHeight);
 
