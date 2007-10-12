@@ -93,6 +93,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize Column sort
     this._initColumnSort();
 
+this._syncColWidths();
+
     // Initialize DOM event listeners
     this._initDomEvents();
 
@@ -447,10 +449,16 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
             if(oParam) {
                 //TODO: conf height
                 YAHOO.util.Dom.addClass(this._elContainer,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
+                if(YAHOO.env.ua.ie) {
+                    YAHOO.util.Dom.setStyle(this._elContainer, "width", this._elTable.offsetWidth);
+                }
                 YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_SCROLLBODY);
             }
             else {
                 YAHOO.util.Dom.removeClass(this._elContainer,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
+                if(YAHOO.env.ua.ie) {
+                    YAHOO.util.Dom.setStyle(this._elContainer, "width", "auto");
+                }
                 YAHOO.util.Dom.removeClass(this._elTbody,YAHOO.widget.DataTable.CLASS_SCROLLBODY);
 
             }
@@ -1250,6 +1258,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
             oColumn = colTree[i][j];
             elTheadCell = elTheadRow.appendChild(document.createElement("th"));
             elTheadCell.id = this.id+"-col" + oColumn.getId();
+            elTheadCell.yuiCellIndex = j;
             this._initThEl(elTheadCell,oColumn,i,j);
         }
 
@@ -1283,6 +1292,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
         var elTheadCellId = YAHOO.util.Dom.get(this.id + "-col" + oColumn.getId());
         if(oColumn.resizeable) {
             if(foundDD) {
+                YAHOO.util.Dom.addClass(elTheadCellId, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                 //TODO: fix fixed width tables
                 // Skip the last column for fixed-width tables
                 if(!this.fixedWidth || (this.fixedWidth &&

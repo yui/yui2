@@ -1,6 +1,6 @@
 /*foundational css*/
 table.yui-dt-table {
-    table-layout:fixed;
+    xtable-layout:fixed;
 }
 
 th .yui-dt-header {
@@ -11,12 +11,14 @@ th .yui-dt-label {
     position:relative;
 }
 
-th .yui-dt-resizer {
+th.yui-dt-resizeable {
+    xdisplay:inline-block;
+}
+
+.yui-dt-resizer {
     position:absolute;
-    margin-right:-6px;
     right:0;
     bottom:0;
-    width:6px;
     height:100%;
     cursor:w-resize;
     cursor:col-resize;

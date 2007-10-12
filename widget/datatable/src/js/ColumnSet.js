@@ -825,7 +825,7 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, sGr
         this.datatable = oDataTable;
         this.column = oColumn;
         this.cell = elThead;
-        this.init(sHandleId, sGroup, oConfig);
+        this.init(sHandleId, sHandleId);
         //this.initFrame();
         this.setYConstraint(0,0);
     }
@@ -852,25 +852,9 @@ if(YAHOO.util.DD) {
  */
 YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
     this.startWidth = this.cell.offsetWidth;
-    this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
-
-    if(this.datatable.fixedWidth) {
-        var cellLabel = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",this.cell)[0];
-        this.minWidth = cellLabel.offsetWidth + 6;
-        var sib = this.cell.nextSibling;
-        var sibCellLabel = YAHOO.util.Dom.getElementsByClassName(YAHOO.widget.DataTable.CLASS_LABEL,"span",sib)[0];
-        this.sibMinWidth = sibCellLabel.offsetWidth + 6;
-//!!
-        var left = ((this.startWidth - this.minWidth) < 0) ? 0 : (this.startWidth - this.minWidth);
-        var right = ((sib.offsetWidth - this.sibMinWidth) < 0) ? 0 : (sib.offsetWidth - this.sibMinWidth);
-        this.setXConstraint(left, right);
-        YAHOO.log("cellstartwidth:" + this.startWidth,"time");
-        YAHOO.log("cellminwidth:" + this.minWidth,"time");
-        YAHOO.log("sibstartwidth:" + sib.offsetWidth,"time");
-        YAHOO.log("sibminwidth:" + this.sibMinWidth,"time");
-        YAHOO.log("l:" + left + " AND r:" + right,"time");
-    }
-
+    //this.startWidth = parseInt(this._getComputedStyleSize(this.cell, "width"), 10);//this.cell.offsetWidth;
+    //this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
+    this.startX = YAHOO.util.Event.getXY(e)[0];
 };
 
 /**
@@ -880,21 +864,19 @@ YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
  * @param e {string} The mouseup event
  */
 YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
-    //TODO: replace the resizer where it belongs:
-    var resizeStyle = YAHOO.util.Dom.get(this.handleElId).style;
-    resizeStyle.left = "auto";
-    resizeStyle.right = 0;
-    resizeStyle.marginRight = "-6px";
-    resizeStyle.width = "6px";
-    //.yui-dt-headresizer {position:absolute;margin-right:-6px;right:0;bottom:0;width:6px;height:100%;cursor:w-resize;cursor:col-resize;}
+    this.datatable._syncColWidths();
+    
+    // Reset resizer
+    var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
+    resizerStyle.left = "auto";
+    resizerStyle.right = 0;
+    resizerStyle.top = "auto";
+    resizerStyle.bottom = 0;
 
+    if(YAHOO.env.ua.opera) {
+        //this.cell.style.width = this.cell.firstChild.offsetWidth + "px";
+    }
 
-    //var cells = this.datatable._elTable.tHead.rows[this.datatable._elTable.tHead.rows.length-1].cells;
-    //for(var i=0; i<cells.length; i++) {
-        //cells[i].style.width = "5px";
-    //}
-
-    //TODO: set new ColumnSet width values
     this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.cell});
 };
 
@@ -906,27 +888,35 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
  */
 YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
     try {
-        var newPos = YAHOO.util.Dom.getX(this.getDragEl());
+        //var newPos = YAHOO.util.Dom.getX(this.getDragEl());
         //YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
-        var offsetX = newPos - this.startPos;
+        //var offsetX = newPos - this.startPos;
         //YAHOO.log("offset:"+offsetX,"warn");
         //YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");
-        var newWidth = this.startWidth + offsetX;
+        //var newWidth = this.startWidth + offsetX;
         //YAHOO.log("newwidth:"+newWidth,"warn");
 
-        if(newWidth < this.minWidth) {
-            newWidth = this.minWidth;
+        var newX = YAHOO.util.Event.getXY(e)[0];
+        var offsetX = newX - this.startX;
+        var newWidth = this.startWidth + offsetX;
+        if(newWidth < 10) {
+            newWidth = 10;
         }
+
+
+        //if(newWidth < this.minWidth) {
+        //    newWidth = this.minWidth;
+        //}
 
         // Resize the Column
         var oDataTable = this.datatable;
         var elCell = this.cell;
 
         //YAHOO.log("newwidth" + newWidth,"warn");
-        //YAHOO.log(newWidth + " AND "+ elColumn.offsetWidth + " AND " + elColumn.id,"warn");
+        //YAHOO.log(newWidth + " AND "+ elCell.offsetWidth + " AND " + elCell.id,"warn");
 
         // Resize the other Columns
-        if(oDataTable.fixedWidth) {
+        /*if(oDataTable.fixedWidth) {
             // Moving right or left?
             var sib = elCell.nextSibling;
             //var sibIndex = elCell.index + 1;
@@ -948,10 +938,150 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
 
         }
         else {
+                if(YAHOO.env.ua.ie) {
+                    YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elContainer.offsetWidth + offsetX);
+                }
             elCell.style.width = newWidth + "px";
-        }
+
+        }*/
+
+            if(YAHOO.env.ua.ie) {
+                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", "auto");
+                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "hidden");
+            }
+
+            if(YAHOO.env.ua.opera && (newWidth > elCell.firstChild.firstChild.offsetWidth)) {
+                elCell.firstChild.style.width = newWidth + "px";
+            }
+            else {
+                elCell.style.width = newWidth + "px";
+                //TODO: validate rows length
+                
+                if(!YAHOO.env.ua.ie) {
+                    oDataTable.getTbodyEl().rows[0].cells[elCell.yuiCellIndex].style.width = elCell.offsetWidth + "px";
+                }
+            }
+
+            if(YAHOO.env.ua.ie) {
+                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elTable.offsetWidth);
+                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "auto");
+            }
+
     }
     catch(e) {
+    }
+};
+
+    /* Calculates computed style height or width for a given element.
+     * IE lacks a getComputedStyle method, and Opera's doesn't account for box model (returns offsetWidth).
+     * @method getComputedStyle
+     * @param {HTMLElement} el The element
+     * @param {String} prop The style size property to compute
+     * @return {String} The pixel height/width of the element (e.g. "20px")
+     */
+
+YAHOO.util.ColumnResizer.prototype._getComputedStyleSize = function() { //  for load-time branching
+        var isOpera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
+
+        if (document.documentElement.currentStyle) { // IE and Opera
+            return function(el, prop) {
+                var current = el.currentStyle[prop],
+                    capped = prop.charAt(0).toUpperCase() + prop.substr(1), // e.g. "Width"
+                    offset = 'offset' + capped,                             // e.g. "offsetWidth"
+                    pixel = 'pixel' + capped,                               // e.g. "pixelWidth"
+                    value = el[offset];
+
+                if (current == 'auto' || isOpera) { // set it to current height, subtract the diff and revert to auto
+                    el.style[prop] = value + 'px'; // to test for box model compounding
+
+                    if (el[offset] > value) { // the difference is padding + border
+                        value -= el[offset] - value;
+                    }
+                    el.style[prop] = (isOpera) ? value : 'auto'; // revert
+
+                } else if (current.indexOf('px') > -1) {
+                   return current; // no extra work needed
+                } else { // use pixelHeight/Width to convert units to px
+                    if (!el.style[pixel] && !el.style[prop]) {
+                        el.style[prop] = current; // set inline style to get pixelHeight/Width (no style.pixelWidth if no style.width)
+                    }
+                    value = el.style[pixel];
+                }
+                return value + 'px';
+            };
+
+        }
+        else if (document.defaultView && document.defaultView.getComputedStyle) { // Gecko and WebKit
+            return function(el, prop) {
+                return document.defaultView.getComputedStyle(el, '')[prop];
+            };
+        } else { // included for completeness, not required for A-grade support
+            return function(el, prop) {
+                var capped = prop.charAt(0).toUpperCase() + prop.substr(1), // e.g. "Width"
+                offset = 'offset' + capped;                                 // e.g. "offsetWidth"
+                return el[offset + capped] + 'px';
+            };
+        }
+    }();
+
+YAHOO.widget.DataTable.prototype._syncColWidths = function() {
+    var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
+
+    // First pass make all body cells equal to head cells
+    //for(i=this._oColumnSet.keys.length-1; i>-1; i--) {
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
+        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+        elBodyCell = this.getTbodyEl().rows[0].cells[i];
+        elHeadCellWidth = elHeadCell.offsetWidth;
+        elBodyCellWidth = elBodyCell.offsetWidth;
+
+        if(elBodyCellWidth < elHeadCellWidth) {
+            nWidth = elHeadCellWidth;
+            elBodyCell.style.width = nWidth + "px";
+
+            // Sync up offsets
+            if(elHeadCellWidth > elBodyCellWidth) {
+                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                    elBodyCell.style.width = nWidth + "px";
+                }
+            }
+            else if(elBodyCellWidth > elHeadCellWidth) {
+                elHeadCell.style.width = nWidth + "px";
+                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                    elHeadCell.style.width = nWidth + "px";
+                }
+            }
+        }
+    }
+    // Second pass make any too-narrow head cells equal to body cells
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
+        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+        elBodyCell = this.getTbodyEl().rows[0].cells[i];
+        elHeadCellWidth = elHeadCell.offsetWidth;
+        elBodyCellWidth = elBodyCell.offsetWidth;
+
+        if(elBodyCellWidth > elHeadCellWidth) {
+            elHeadCell.style.width = elBodyCellWidth + "px";
+
+            // Sync up offsets
+            if(elHeadCellWidth > elBodyCellWidth) {
+                nWidth = elHeadCellWidth;
+                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                    elBodyCell.style.width = nWidth + "px";
+                }
+            }
+            else if(elBodyCellWidth > elHeadCellWidth) {
+                nWidth = elBodyCellWidth;
+                elHeadCell.style.width = nWidth + "px";
+                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                    elHeadCell.style.width = nWidth + "px";
+                }
+            }
+        }
     }
 };
 
