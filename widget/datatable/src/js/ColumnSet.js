@@ -824,7 +824,7 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, sGr
     if(oDataTable && oColumn && elThead && sHandleId) {
         this.datatable = oDataTable;
         this.column = oColumn;
-        this.cell = elThead;
+        this.headCell = elThead;
         this.init(sHandleId, sHandleId);
         //this.initFrame();
         this.setYConstraint(0,0);
@@ -851,10 +851,10 @@ if(YAHOO.util.DD) {
  * @param e {string} The mousedown event
  */
 YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
-    this.startWidth = this.cell.offsetWidth;
-    //this.startWidth = parseInt(this._getComputedStyleSize(this.cell, "width"), 10);//this.cell.offsetWidth;
-    //this.startPos = YAHOO.util.Dom.getX(this.getDragEl());
+    this.startWidth = this.headCell.offsetWidth;
     this.startX = YAHOO.util.Event.getXY(e)[0];
+    //TODO: validate body cell
+    this.bodyCell = this.datatable.getTbodyEl().rows[0].cells[this.headCell.yuiCellIndex];
 };
 
 /**
@@ -865,7 +865,7 @@ YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
  */
 YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
     this.datatable._syncColWidths();
-    
+
     // Reset resizer
     var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
     resizerStyle.left = "auto";
@@ -877,7 +877,8 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
         //this.cell.style.width = this.cell.firstChild.offsetWidth + "px";
     }
 
-    this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.cell});
+    this.bodyCell = null;
+    this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
 };
 
 /**
@@ -888,14 +889,6 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
  */
 YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
     try {
-        //var newPos = YAHOO.util.Dom.getX(this.getDragEl());
-        //YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);
-        //var offsetX = newPos - this.startPos;
-        //YAHOO.log("offset:"+offsetX,"warn");
-        //YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");
-        //var newWidth = this.startWidth + offsetX;
-        //YAHOO.log("newwidth:"+newWidth,"warn");
-
         var newX = YAHOO.util.Event.getXY(e)[0];
         var offsetX = newX - this.startX;
         var newWidth = this.startWidth + offsetX;
@@ -910,62 +903,42 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
 
         // Resize the Column
         var oDataTable = this.datatable;
-        var elCell = this.cell;
+        var elCell = this.headCell;
 
-        //YAHOO.log("newwidth" + newWidth,"warn");
-        //YAHOO.log(newWidth + " AND "+ elCell.offsetWidth + " AND " + elCell.id,"warn");
+        if(YAHOO.env.ua.ie && (this.datatable.get("scrollable")===true)) {
+            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", "auto");
+            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "hidden");
+        }
 
-        // Resize the other Columns
-        /*if(oDataTable.fixedWidth) {
-            // Moving right or left?
-            var sib = elCell.nextSibling;
-            //var sibIndex = elCell.index + 1;
-            var sibnewwidth = sib.offsetWidth - offsetX;
-            if(sibnewwidth < this.sibMinWidth) {
-                sibnewwidth = this.sibMinWidth;
-            }
-
-            //TODO: how else to cycle through all the Columns without having to use an index property?
-            for(var i=0; i<oDataTable._oColumnSet.length; i++) {
-                //if((i != elCell.index) &&  (i!=sibIndex)) {
-                //    YAHOO.util.Dom.get(oDataTable._oColumnSet.keys[i].id).style.width = oDataTable._oColumnSet.keys[i].width + "px";
-                //}
-            }
-            sib.style.width = sibnewwidth;
-            elCell.style.width = newWidth + "px";
-            //oDataTable._oColumnSet.flat[sibIndex].width = sibnewwidth;
-            //oDataTable._oColumnSet.flat[elCell.index].width = newWidth;
-
+        if(YAHOO.env.ua.opera && (newWidth > elCell.firstChild.firstChild.offsetWidth)) {
+            elCell.firstChild.style.width = newWidth + "px";
         }
         else {
-                if(YAHOO.env.ua.ie) {
-                    YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elContainer.offsetWidth + offsetX);
-                }
             elCell.style.width = newWidth + "px";
+            //TODO: validate rows length
 
-        }*/
-
-            if(YAHOO.env.ua.ie) {
-                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", "auto");
-                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "hidden");
-            }
-
-            if(YAHOO.env.ua.opera && (newWidth > elCell.firstChild.firstChild.offsetWidth)) {
-                elCell.firstChild.style.width = newWidth + "px";
-            }
-            else {
-                elCell.style.width = newWidth + "px";
-                //TODO: validate rows length
-                
-                if(!YAHOO.env.ua.ie) {
-                    oDataTable.getTbodyEl().rows[0].cells[elCell.yuiCellIndex].style.width = elCell.offsetWidth + "px";
+            if(!YAHOO.env.ua.ie) {
+                this.bodyCell.style.width = elCell.offsetWidth + "px";
+                if(this.bodyCell.offsetWidth != elCell.offsetWidth) {
+                    this.bodyCell.style.width = (elCell.offsetWidth - (this.bodyCell.offsetWidth - elCell.offsetWidth)) + "px";
                 }
+                
             }
+        }
 
-            if(YAHOO.env.ua.ie) {
-                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elTable.offsetWidth);
-                YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "auto");
-            }
+        if(YAHOO.env.ua.ie && (this.datatable.get("scrollable")===true)) {
+            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elTable.offsetWidth);
+            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "auto");
+        }
+
+        if(!YAHOO.util.Dom.hasClass(elCell, YAHOO.widget.DataTable.CLASS_LAST)) {
+            // Reset resizer
+            var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
+            resizerStyle.left = "auto";
+            resizerStyle.right = 0;
+            resizerStyle.top = "auto";
+            resizerStyle.bottom = 0;
+        }
 
     }
     catch(e) {
@@ -1025,6 +998,68 @@ YAHOO.util.ColumnResizer.prototype._getComputedStyleSize = function() { //  for 
     }();
 
 YAHOO.widget.DataTable.prototype._syncColWidths = function() {
+    /*var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
+
+    // First pass make all body cells equal to head cells
+    //for(i=this._oColumnSet.keys.length-1; i>-1; i--) {
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
+        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+        elBodyCell = this.getTbodyEl().rows[0].cells[i];
+        elHeadCellWidth = elHeadCell.offsetWidth;
+        elBodyCellWidth = elBodyCell.offsetWidth;
+
+        if(elBodyCellWidth < elHeadCellWidth) {
+            nWidth = elHeadCellWidth;
+            elBodyCell.style.width = nWidth + "px";
+
+            // Sync up offsets
+            if(elHeadCellWidth > elBodyCellWidth) {
+                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                    elBodyCell.style.width = nWidth + "px";
+                }
+            }
+            else if(elBodyCellWidth > elHeadCellWidth) {
+                elHeadCell.style.width = nWidth + "px";
+                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                    elHeadCell.style.width = nWidth + "px";
+                }
+            }
+        }
+    }
+    // Second pass make any too-narrow head cells equal to body cells
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
+        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+        elBodyCell = this.getTbodyEl().rows[0].cells[i];
+        elHeadCellWidth = elHeadCell.offsetWidth;
+        elBodyCellWidth = elBodyCell.offsetWidth;
+
+        if(elBodyCellWidth > elHeadCellWidth) {
+            elHeadCell.style.width = elBodyCellWidth + "px";
+
+            // Sync up offsets
+            if(elHeadCellWidth > elBodyCellWidth) {
+                nWidth = elHeadCellWidth;
+                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                    elBodyCell.style.width = nWidth + "px";
+                }
+            }
+            else if(elBodyCellWidth > elHeadCellWidth) {
+                nWidth = elBodyCellWidth;
+                elHeadCell.style.width = nWidth + "px";
+                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                    elHeadCell.style.width = nWidth + "px";
+                }
+            }
+        }
+    }*/
+
+
+
+
     var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
 
     // First pass make all body cells equal to head cells
@@ -1083,6 +1118,8 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function() {
             }
         }
     }
+
+
 };
 
 

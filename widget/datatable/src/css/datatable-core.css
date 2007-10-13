@@ -11,17 +11,28 @@ th .yui-dt-label {
     position:relative;
 }
 
-th.yui-dt-resizeable {
-    xdisplay:inline-block;
-}
 
 .yui-dt-resizer {
     position:absolute;
     right:0;
     bottom:0;
     height:100%;
-    cursor:w-resize;
+    cursor:e-resize;
     cursor:col-resize;
+    z-index:9999;
+}
+
+/* foundational resizing css */
+/* TODO: remove redundancies with scrolling css */
+.yui-dt-table thead {
+    display:block; /* for safari and opera */
+}
+.yui-dt-table thead tr {
+    position:relative;  /* for ie */
+}
+.yui-dt-body {
+    display:block; /* for safari and opera */
+    overflow:auto; /* for gecko */
 }
 
 /* foundational scrolling css */

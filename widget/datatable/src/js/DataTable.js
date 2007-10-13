@@ -1047,7 +1047,6 @@ YAHOO.widget.DataTable.prototype._sLastTrId = null;
 
 
 
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private methods
@@ -6612,6 +6611,7 @@ YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse
  */
 YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
 //TODO: support nested header column sorting
+    
     var evt = oArgs.event;
     var target = oArgs.target;
     YAHOO.util.Event.stopEvent(evt);
