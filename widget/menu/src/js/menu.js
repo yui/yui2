@@ -169,6 +169,20 @@ var Dom = YAHOO.util.Dom,
         "CONTAINER": { 
             key: "container"
         }, 
+
+        "SCROLL_INCREMENT": { 
+            key: "scrollincrement", 
+            value: 1, 
+            validator: Lang.isNumber,
+            supercedes: ["maxheight"]
+        },
+
+        "MIN_HEIGHT": { 
+            key: "minheight", 
+            value: 90, 
+            validator: Lang.isNumber,
+            supercedes: ["maxheight"]
+        },    
     
         "MAX_HEIGHT": { 
             key: "maxheight", 
@@ -188,12 +202,6 @@ var Dom = YAHOO.util.Dom,
             value: false, 
             validator: Lang.isBoolean,
             suppressEvent: true
-        },
-
-        "SCROLL_INCREMENT": { 
-            key: "scrollincrement", 
-            value: 1, 
-            validator: Lang.isNumber
         }
     
     };
@@ -240,6 +248,17 @@ ITEM_TYPE: null,
 */
 GROUP_TITLE_TAG_NAME: "h6",
 
+
+/**
+* @property OFF_SCREEN_POSITION
+* @description Array representing the default x and y position that a menu 
+* should have when it is positioned outside the viewport by the 
+* "poistionOffScreen" method.
+* @default [-10000, -10000]
+* @final
+* @type Array
+*/
+OFF_SCREEN_POSITION: [-10000, -10000],
 
 
 // Private properties
@@ -681,6 +700,7 @@ init: function (p_oElement, p_oConfig) {
         this.renderEvent.subscribe(this._onRender);
         this.renderEvent.subscribe(this.onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
+        this.hideEvent.subscribe(this.positionOffScreen);
         this.showEvent.subscribe(this._onShow);
         this.beforeHideEvent.subscribe(this._onBeforeHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
@@ -2726,10 +2746,19 @@ _onRender: function (p_sType, p_aArgs) {
 
     Module.textResizeEvent.subscribe(this._onTextResize, this, true);
 
-    if (this.cfg.getProperty("position") == "dynamic" && 
-        !this.cfg.getProperty("width")) {
+    if (this.cfg.getProperty("position") == "dynamic") { 
 
-        this._setWidth();
+        if (!this.cfg.getProperty("visible")) {
+
+            this.positionOffScreen();
+
+        }
+
+        if (!this.cfg.getProperty("width")) {
+
+            this._setWidth();
+            
+        }
     
     }
 
@@ -2830,7 +2859,6 @@ _onBeforeShow: function (p_sType, p_aArgs) {
             else {
 
                 this.render(this.cfg.getProperty("container"));
-                this.cfg.refireEvent("xy");
 
             }                
 
@@ -2839,7 +2867,17 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     }
 
 
-    var nMaxHeight = this.cfg.getProperty("maxheight");
+    var nMaxHeight = this.cfg.getProperty("maxheight"),
+        nMinScrollHeight = this.cfg.getProperty("minheight"),
+        bDynamicPos = this.cfg.getProperty("position") == "dynamic";
+
+
+    if (!this.parent && bDynamicPos) {
+
+        this.cfg.refireEvent("xy");
+   
+    }
+
 
     function clearMaxHeight() {
     
@@ -2850,8 +2888,7 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     }
 
 
-    if (!(this instanceof YAHOO.widget.MenuBar) && 
-        this.cfg.getProperty("position") == "dynamic") {
+    if (!(this instanceof YAHOO.widget.MenuBar) && bDynamicPos) {
 
 
         if (nMaxHeight === 0) {
@@ -2873,28 +2910,18 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     
                 nMaxHeight = (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2));
 
+                if (nMaxHeight < nMinScrollHeight) {
+
+                    nMaxHeight = nMinScrollHeight;
+                
+                }
+
                 this.cfg.setProperty("maxheight", nMaxHeight);
 
                 this.hideEvent.subscribe(clearMaxHeight);
 
             }
         
-        }
-    
-    
-        if (nMaxHeight > 0) {
-    
-            oBody = this.body;
-    
-            if (oBody.scrollTop > 0) {
-    
-                oBody.scrollTop = 0;
-    
-            }
-
-            this._disableScrollHeader();
-            this._enableScrollFooter();
-    
         }
 
     }
@@ -3047,6 +3074,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case "effect":
         case "classname":
         case "scrollincrement":
+        case "minheight":
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -3078,7 +3106,7 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
                 oParentMenu.cfg.getProperty("constraintoviewport"),
 
             xy: [0,0],
-                
+
             clicktohide: oParentMenu.cfg.getProperty("clicktohide"),
                 
             effect: oParentMenu.cfg.getProperty("effect"),
@@ -3091,7 +3119,9 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
             classname: oParentMenu.cfg.getProperty("classname"),
             
-            scrollincrement: oParentMenu.cfg.getProperty("scrollincrement")
+            scrollincrement: oParentMenu.cfg.getProperty("scrollincrement"),
+            
+            minheight: oParentMenu.cfg.getProperty("minheight")
 
         },
         
@@ -3296,7 +3326,8 @@ enforceConstraints: function (type, args, obj) {
         offsetWidth = oElement.offsetWidth,
         viewPortWidth = Dom.getViewportWidth(),
         viewPortHeight = Dom.getViewportHeight(),
-        nPadding = (oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 
+        nPadding = (oParentMenuItem && 
+            oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 
             0 : nViewportOffset,
         aContext = oConfig.getProperty("context"),
         oContextElement = aContext ? aContext[0] : null,
@@ -3358,6 +3389,7 @@ enforceConstraints: function (type, args, obj) {
         bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding;
 
 
+
         if (y < nViewportOffset) {
     
             y = topConstraint;
@@ -3372,6 +3404,8 @@ enforceConstraints: function (type, args, obj) {
             else {
     
                 y = bottomConstraint;
+                
+
     
             }
     
@@ -3588,7 +3622,7 @@ configHideDelay: function (p_sType, p_aArgs, p_oMenu) {
 /**
 * @method configContainer
 * @description Event handler for when the "container" configuration property 
-of the menu changes.
+* of the menu changes.
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -3642,11 +3676,13 @@ _setMaxHeight: function (p_sType, p_aArgs, p_nMaxHeight) {
 configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
 
     var nMaxHeight = p_aArgs[0],
+        oElement = this.element,
         oBody = this.body,
         oHeader = this.header,
         oFooter = this.footer,
         fnMouseOver = this._onScrollTargetMouseOver,
         fnMouseOut = this._onScrollTargetMouseOut,
+        nMinHeight = this.cfg.getProperty("minheight"),
         nHeight;
 
 
@@ -3664,56 +3700,66 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     
     }
 
-    Dom.setStyle(oBody, "height", "auto");
+
+    Dom.setStyle(oBody, "height", "");
     Dom.removeClass(oBody, "yui-menu-body-scrolled");
 
-    if ((nMaxHeight > 0) && (oBody.offsetHeight > nMaxHeight)) {
 
-        if (!this.cfg.getProperty("width")) {
+    if (!this.cfg.getProperty("width")) {
 
-            this._setWidth();
+        this._setWidth();
 
-        }
+    }
 
-        if (!oHeader && !oFooter) {
 
-            this.setHeader("&#32;");
-            this.setFooter("&#32;");
+    if (!oHeader && !oFooter) {
 
-            oHeader = this.header;
-            oFooter = this.footer;
+        this.setHeader("&#32;");
+        this.setFooter("&#32;");
 
-            Dom.addClass(oHeader, "topscrollbar");
-            Dom.addClass(oFooter, "bottomscrollbar");
-            
-            this.element.insertBefore(oHeader, oBody);
-            this.element.appendChild(oFooter);
+        oHeader = this.header;
+        oFooter = this.footer;
 
-            Event.on(oHeader, "mouseover", fnMouseOver, this, true);
-            Event.on(oHeader, "mouseout", fnMouseOut, this, true);
-            Event.on(oFooter, "mouseover", fnMouseOver, this, true);
-            Event.on(oFooter, "mouseout", fnMouseOut, this, true);
+        Dom.addClass(oHeader, "topscrollbar");
+        Dom.addClass(oFooter, "bottomscrollbar");
         
-        }
+        oElement.insertBefore(oHeader, oBody);
+        oElement.appendChild(oFooter);
+    
+    }
+
+
+    nHeight = (nMaxHeight - (oHeader.offsetHeight + oHeader.offsetHeight));
+
+
+    if ((nMaxHeight >= nMinHeight) && nHeight > 0 && 
+        (oBody.offsetHeight > nMaxHeight)) {
 
         Dom.addClass(oBody, "yui-menu-body-scrolled");
-
-        nHeight = (nMaxHeight - (this.footer.offsetHeight + 
-                    this.header.offsetHeight));
-
         Dom.setStyle(oBody, "height", (nHeight + "px"));
+
+        Event.on(oHeader, "mouseover", fnMouseOver, this, true);
+        Event.on(oHeader, "mouseout", fnMouseOut, this, true);
+        Event.on(oFooter, "mouseover", fnMouseOver, this, true);
+        Event.on(oFooter, "mouseout", fnMouseOut, this, true);
+
+        this._disableScrollHeader();
+        this._enableScrollFooter();
 
     }
     else if (oHeader && oFooter) {
+
+        this._enableScrollHeader();
+        this._enableScrollFooter();
 
         Event.removeListener(oHeader, "mouseover", fnMouseOver);
         Event.removeListener(oHeader, "mouseout", fnMouseOut);
         Event.removeListener(oFooter, "mouseover", fnMouseOver);
         Event.removeListener(oFooter, "mouseout", fnMouseOut);
 
-        this.element.removeChild(oHeader);
-        this.element.removeChild(oFooter);
-    
+        oElement.removeChild(oHeader);
+        oElement.removeChild(oFooter);
+
         this.header = null;
         this.footer = null;
     
@@ -4011,6 +4057,19 @@ initEvents: function () {
     
     this.itemRemovedEvent = this.createEvent(EVENT_TYPES.ITEM_REMOVED);
     this.itemRemovedEvent.signature = SIGNATURE;
+
+},
+
+
+/**
+* @method positionOffScreen
+* @description Positions the menu outside of the boundaries of the browser's 
+* viewport.  Called automatically when a menu is hidden to ensure that 
+* it doesn't force the browser to render uncessary scrollbars.
+*/
+positionOffScreen: function () {
+
+    Dom.setXY(this.element, this.OFF_SCREEN_POSITION);
 
 },
 
@@ -4899,6 +4958,42 @@ initDefaultConfig: function () {
 
 
     /**
+    * @config scrollincrement
+    * @description Number used to control the scroll speed of a menu.  Used to 
+    * increment the "scrollTop" property of the menu's body by when a menu's 
+    * content is scrolling.
+    * @default 1
+    * @type Number
+    */
+    oConfig.addProperty(
+        DEFAULT_CONFIG.SCROLL_INCREMENT.key, 
+        { 
+            value: DEFAULT_CONFIG.SCROLL_INCREMENT.value, 
+            validator: DEFAULT_CONFIG.SCROLL_INCREMENT.validator,
+            suppressEvent: DEFAULT_CONFIG.SCROLL_INCREMENT.suppressEvent,
+            supercedes: DEFAULT_CONFIG.SCROLL_INCREMENT.supercedes
+        }
+    );
+
+
+    /**
+    * @config minheight
+    * @description Number 
+    * @default 1
+    * @type Number
+    */
+    oConfig.addProperty(
+        DEFAULT_CONFIG.MIN_HEIGHT.key, 
+        { 
+            value: DEFAULT_CONFIG.MIN_HEIGHT.value, 
+            validator: DEFAULT_CONFIG.MIN_HEIGHT.validator,
+            suppressEvent: DEFAULT_CONFIG.MIN_HEIGHT.suppressEvent,
+            supercedes: DEFAULT_CONFIG.MIN_HEIGHT.supercedes
+        }
+    );
+
+
+    /**
     * @config maxheight
     * @description Defines the maximum height (in pixels) for a menu before the
     * contents of the body are scrolled.
@@ -4953,25 +5048,6 @@ initDefaultConfig: function () {
             suppressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
         }
     );
-
-
-    /**
-    * @config scrollincrement
-    * @description Number used to control the scroll speed of a menu.  Used to 
-    * increment the "scrollTop" property of the menu's body by when a menu's 
-    * content is scrolling.
-    * @default 1
-    * @type Number
-    */
-    oConfig.addProperty(
-        DEFAULT_CONFIG.SCROLL_INCREMENT.key, 
-        { 
-            value: DEFAULT_CONFIG.SCROLL_INCREMENT.value, 
-            validator: DEFAULT_CONFIG.SCROLL_INCREMENT.validator,
-            suppressEvent: DEFAULT_CONFIG.SCROLL_INCREMENT.suppressEvent
-        }
-    );
-
 
 }
 
