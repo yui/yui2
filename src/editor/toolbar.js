@@ -1,14 +1,9 @@
-/*
-Copyright (c) 2007, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-*/
 /**
  * @description <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
  * @class Toolbar
  * @namespace YAHOO.widget
- * @requires yahoo, dom, element, event
- * @optional container, menu, button, dragdrop
+ * @requires yahoo, dom, element, event, toolbarbutton
+ * @optional container_core, dragdrop
  * @beta
  */
 (function() {
@@ -99,6 +94,12 @@ var Dom = YAHOO.util.Dom,
     }
 
     YAHOO.extend(YAHOO.widget.Toolbar, YAHOO.util.Element, {
+        /** 
+        * @property buttonType
+        * @description The default button to use
+        * @type Object
+        */
+        buttonType: YAHOO.widget.ToolbarButton,
         /** 
         * @property dd
         * @description The DragDrop instance associated with the Toolbar
@@ -295,12 +296,6 @@ var Dom = YAHOO.util.Dom,
         */
         _titlebar: null,
         /** 
-        * @property _disabled
-        * @description Object to track button status when enabling/disabling the toolbar
-        * @type Object
-        */
-        _disabled: null,
-        /** 
         * @property browser
         * @description Standard browser detection
         * @type Object
@@ -402,6 +397,36 @@ var Dom = YAHOO.util.Dom,
             var el = this.get('element');
             this.addClass(this.CLASS_CONTAINER);
 
+            /**
+            * @attribute buttonType
+            * @description The buttonType to use (advanced or basic)
+            * @type String
+            */
+            this.setAttributeConfig('buttonType', {
+                value: attr.buttonType || 'basic',
+                writeOnce: true,
+                validator: function(type) {
+                    switch (type) {
+                        case 'advanced':
+                        case 'basic':
+                            return true;
+                    }
+                    return false
+                },
+                method: function(type) {
+                    if (type == 'advanced') {
+                        if (YAHOO.widget.Button) {
+                            YAHOO.log('Can not find YAHOO.widget.Button', 'error', 'Toolbar');
+                            this.buttonType = YAHOO.widget.ToolbarButtonAdvanced;
+                        } else {
+                            this.buttonType = YAHOO.widget.ToolbarButton;
+                        }
+                    } else {
+                        this.buttonType = YAHOO.widget.ToolbarButton;
+                    }
+                }
+            });
+
 
             /**
             * @attribute buttons
@@ -453,49 +478,23 @@ var Dom = YAHOO.util.Dom,
                     if (this.get('disabled') === disabled) {
                         return false;
                     }
-                    if (!Lang.isObject(this._disabled)) {
-                        this._disabled = {};
-                    }
                     if (disabled) {
                         this.addClass(this.CLASS_DISABLED);
                         this.set('draggable', false);
+                        this.disableAllButtons();
                     } else {
                         this.removeClass(this.CLASS_DISABLED);
                         if (this._configs.draggable._initialConfig.value) {
                             //Draggable by default, set it back
                             this.set('draggable', true);
                         }
-                    }
-                    var len = this._buttonList.length;
-                    for (var i = 0; i < len; i++) {
-                        if (disabled) {
-                            //If it's already disabled, flag it
-                            if (this._buttonList[i].get('disabled')) {
-                                this._disabled[i] = true;
-                            } else {
-                                this._disabled[i] = null;
-                            }
-                            this.disableButton(this._buttonList[i].get('id'));
-                        } else {
-                            //Check to see if it was disabled by default and skip it
-                            var _button = this._buttonList[i];
-                            var _check = _button._configs.disabled._initialConfig.value;
-                            if (this._disabled[i] === true) {
-                                _check = true;
-                            }
-                            if (!_check) {
-                                this.enableButton(_button.get('id'));
-                            }
-                        }
-                    }
-                    if (!disabled) {
-                        this._disabled = {};
+                        this.resetAllButtons();
                     }
                 }
             });
 
             /**
-            * @attribute cont
+            * @config cont
             * @description The container for the toolbar.
             * @type HTMLElement
             */
@@ -751,8 +750,6 @@ var Dom = YAHOO.util.Dom,
             if (!this._buttonList) {
                 this._buttonList = [];
             }
-            //Add to .get('buttons') manually
-            this._configs.buttons.value[this._configs.buttons.value.length] = oButton;
             YAHOO.log('Adding button of type: ' + oButton.type, 'info', 'Toolbar');
             if (!oButton.container) {
                 oButton.container = this.get('cont');
@@ -779,7 +776,7 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
-            var _oButton = {};
+            var _oButton = {}, skip = false;
             for (var o in oButton) {
                 if (Lang.hasOwnProperty(oButton, o)) {
                     if (!this._toolbarConfigs[o]) {
@@ -794,10 +791,14 @@ var Dom = YAHOO.util.Dom,
                 _oButton.type = 'push';
             }
             if (_oButton.type == 'color') {
-                _oButton = this._makeColorButton(_oButton);
+                if (YAHOO.widget.Overlay) {
+                    _oButton = this._makeColorButton(_oButton);
+                } else {
+                    skip = true;
+                }
             }
             if (_oButton.menu) {
-                if (oButton.menu instanceof YAHOO.widget.Overlay) {
+                if ((YAHOO.widget.Overlay) && (oButton.menu instanceof YAHOO.widget.Overlay)) {
                     oButton.menu.showEvent.subscribe(function() {
                         this._button = _oButton;
                     });
@@ -812,84 +813,154 @@ var Dom = YAHOO.util.Dom,
                     }
                 }
             }
-            var tmp = new YAHOO.widget.Button(_oButton);
-            if (this.get('disabled')) {
-                //Toolbar is disabled, disable the new button too!
-                tmp.set('disabled', true);
-            }
-            if (!oButton.id) {
-                oButton.id = tmp.get('id');
-            }
-            YAHOO.log('Button created (' + oButton.type + ')', 'info', 'Toolbar');
-            
-            if (after) {
-                var el = tmp.get('element');
-                var nextSib = null;
-                if (after.get) {
-                    nextSib = after.get('element').nextSibling;
-                } else if (after.nextSibling) {
-                    nextSib = after.nextSibling;
-                }
-                if (nextSib) {
-                    nextSib.parentNode.insertBefore(el, nextSib);
-                }
-            }
-            tmp.addClass(this.CLASS_PREFIX + '-' + tmp.get('value'));
-            var icon = document.createElement('span');
-            icon.className = this.CLASS_PREFIX + '-icon';
-            tmp.get('element').insertBefore(icon, tmp.get('firstChild'));
-            //Replace the Button HTML Element with an a href
-            var a = document.createElement('a');
-            a.innerHTML = tmp._button.innerHTML;
-            a.href = '#';
-            Event.on(a, 'click', function(ev) {
-                Event.stopEvent(ev);
-            });
-            tmp._button.parentNode.replaceChild(a, tmp._button);
-            tmp._button = a;
+            if (skip) {
+                oButton = false;
+            } else {
+                //Add to .get('buttons') manually
+                this._configs.buttons.value[this._configs.buttons.value.length] = oButton;
 
-            if (oButton.type == 'select') {
-                tmp.addClass(this.CLASS_PREFIX + '-select');
-            }
-            if (oButton.type == 'spin') {
-                if (!Lang.isArray(oButton.range)) {
-                    oButton.range = [ 10, 100 ];
-                }
-                this._makeSpinButton(tmp, oButton);
-            }
-
-            tmp.get('element').setAttribute('title', tmp.get('label'));
-
-            if (oButton.type != 'spin') {
-                if (_oButton.menu instanceof YAHOO.widget.Overlay) {
-                    var showPicker = function(ev) {
-                        var exec = true;
-                        if (ev.keyCode && (ev.keyCode == 9)) {
-                            exec = false;
+                var tmp = new this.buttonType(_oButton);
+                if (!tmp.buttonType) {
+                    tmp.buttonType = 'rich';
+                    tmp.checkValue = function(value) {
+                        var _menuItems = this.getMenu().getItems();
+                        if (_menuItems.length === 0) {
+                            this.getMenu()._onBeforeShow();
+                            _menuItems = this.getMenu().getItems();
                         }
-                        if (exec) {
-                            this._colorPicker._button = oButton.value;
-                            var menuEL = tmp.getMenu().element;
-                            if (menuEL.style.visibility == 'hidden') {
-                                tmp.getMenu().show();
-                            } else {
-                                tmp.getMenu().hide();
+                        for (var i = 0; i < _menuItems.length; i++) {
+                            _menuItems[i].cfg.setProperty('checked', false);
+                            if (_menuItems[i].value == value) {
+                                _menuItems[i].cfg.setProperty('checked', true);
                             }
-                        }
-                        YAHOO.util.Event.stopEvent(ev);
+                        }      
                     };
-                    tmp.on('mousedown', showPicker, oButton, this);
-                    tmp.on('keydown', showPicker, oButton, this);
-                    
-                } else if ((oButton.type != 'menu') && (oButton.type != 'select')) {
-                    tmp.on('keypress', this._buttonClick, oButton, this);
-                    tmp.on('mousedown', function(ev) {
-                        YAHOO.util.Event.stopEvent(ev);
-                        this._buttonClick(ev, oButton);
-                    }, oButton, this);
-                    tmp.on('click', function(ev) {
-                        YAHOO.util.Event.stopEvent(ev);
+                }
+                
+                if (this.get('disabled')) {
+                    //Toolbar is disabled, disable the new button too!
+                    tmp.set('disabled', true);
+                }
+                if (!oButton.id) {
+                    oButton.id = tmp.get('id');
+                }
+                YAHOO.log('Button created (' + oButton.type + ')', 'info', 'Toolbar');
+                
+                if (after) {
+                    var el = tmp.get('element');
+                    var nextSib = null;
+                    if (after.get) {
+                        nextSib = after.get('element').nextSibling;
+                    } else if (after.nextSibling) {
+                        nextSib = after.nextSibling;
+                    }
+                    if (nextSib) {
+                        nextSib.parentNode.insertBefore(el, nextSib);
+                    }
+                }
+                tmp.addClass(this.CLASS_PREFIX + '-' + tmp.get('value'));
+
+                var icon = document.createElement('span');
+                icon.className = this.CLASS_PREFIX + '-icon';
+                tmp.get('element').insertBefore(icon, tmp.get('firstChild'));
+                if (tmp._button.tagName.toLowerCase() == 'button') {
+                    //Replace the Button HTML Element with an a href if it exists
+                    var a = document.createElement('a');
+                    a.innerHTML = tmp._button.innerHTML;
+                    a.href = '#';
+                    Event.on(a, 'click', function(ev) {
+                        Event.stopEvent(ev);
                     });
+                    tmp._button.parentNode.replaceChild(a, tmp._button);
+                    tmp._button = a;
+                }
+
+                if (oButton.type == 'select') {
+                    if (tmp._button.tagName.toLowerCase() == 'select') {
+                        icon.parentNode.removeChild(icon);
+                        var iel = tmp._button;
+                        var parEl = tmp.get('element');
+                        parEl.parentNode.replaceChild(iel, parEl);
+                    } else {
+                        //Don't put a class on it if it's a real select element
+                        tmp.addClass(this.CLASS_PREFIX + '-select');
+                    }
+                }
+                if (oButton.type == 'spin') {
+                    if (!Lang.isArray(oButton.range)) {
+                        oButton.range = [ 10, 100 ];
+                    }
+                    this._makeSpinButton(tmp, oButton);
+                }
+                tmp.get('element').setAttribute('title', tmp.get('label'));
+                if (oButton.type != 'spin') {
+                    if ((YAHOO.widget.Overlay) && (_oButton.menu instanceof YAHOO.widget.Overlay)) {
+                        var showPicker = function(ev) {
+                            var exec = true;
+                            if (ev.keyCode && (ev.keyCode == 9)) {
+                                exec = false;
+                            }
+                            if (exec) {
+                                this._colorPicker._button = oButton.value;
+                                var menuEL = tmp.getMenu().element;
+                                if (Dom.getStyle(menuEL, 'visibility') == 'hidden') {
+                                    tmp.getMenu().show();
+                                } else {
+                                    tmp.getMenu().hide();
+                                }
+                            }
+                            YAHOO.util.Event.stopEvent(ev);
+                        };
+                        tmp.on('mousedown', showPicker, oButton, this);
+                        tmp.on('keydown', showPicker, oButton, this);
+                        
+                    } else if ((oButton.type != 'menu') && (oButton.type != 'select')) {
+                        tmp.on('keypress', this._buttonClick, oButton, this);
+                        tmp.on('mousedown', function(ev) {
+                            YAHOO.util.Event.stopEvent(ev);
+                            this._buttonClick(ev, oButton);
+                        }, oButton, this);
+                        tmp.on('click', function(ev) {
+                            YAHOO.util.Event.stopEvent(ev);
+                        });
+                    } else {
+                        //Stop the mousedown event so we can trap the selection in the editor!
+                        tmp.on('mousedown', function(ev) {
+                            YAHOO.util.Event.stopEvent(ev);
+                        });
+                        tmp.on('click', function(ev) {
+                            YAHOO.util.Event.stopEvent(ev);
+                        });
+                        tmp.on('change', function(ev) {
+                            if (!oButton.menucmd) {
+                                oButton.menucmd = oButton.value;
+                            }
+                            oButton.value = ev.value;
+                            this._buttonClick(ev, oButton);
+                        }, this, true);
+                        var self = this;
+                        //Hijack the mousedown event in the menu and make it fire a button click..
+                        if (tmp.getMenu().mouseDownEvent) {
+                            tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
+                                YAHOO.log('mouseDownEvent', 'warn', 'Toolbar');
+                                var oMenu = args[1];
+                                YAHOO.util.Event.stopEvent(args[0]);
+                                tmp._onMenuClick(args[0], tmp);
+                                if (!oButton.menucmd) {
+                                    oButton.menucmd = oButton.value;
+                                }
+                                oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
+                                self._buttonClick.call(self, args[1], oButton);
+                                tmp._hideMenu();
+                                return false;
+                            });
+                            tmp.getMenu().clickEvent.subscribe(function(ev, args) {
+                                YAHOO.log('clickEvent', 'warn', 'Toolbar');
+                                YAHOO.util.Event.stopEvent(args[0]);
+                            });
+                        }
+                        
+                    }
                 } else {
                     //Stop the mousedown event so we can trap the selection in the editor!
                     tmp.on('mousedown', function(ev) {
@@ -898,67 +969,42 @@ var Dom = YAHOO.util.Dom,
                     tmp.on('click', function(ev) {
                         YAHOO.util.Event.stopEvent(ev);
                     });
-                    var self = this;
-                    //Hijack the mousedown event in the menu and make it fire a button click..
-                    tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
-                        YAHOO.log('mouseDownEvent', 'warn', 'Toolbar');
-                        var oMenu = args[1];
-                        YAHOO.util.Event.stopEvent(args[0]);
-                        tmp._onMenuClick(args[0], tmp);
-                        if (!oButton.menucmd) {
-                            oButton.menucmd = oButton.value;
-                        }
-                        oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                        self._buttonClick.call(self, args[1], oButton);
-                        tmp._hideMenu();
-                        return false;
-                    });
-                    tmp.getMenu().clickEvent.subscribe(function(ev, args) {
-                        YAHOO.log('clickEvent', 'warn', 'Toolbar');
-                        YAHOO.util.Event.stopEvent(args[0]);
-                    });
                 }
-            } else {
-                //Stop the mousedown event so we can trap the selection in the editor!
-                tmp.on('mousedown', function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                });
-                tmp.on('click', function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                });
-            }
-            if (this.browser.ie) {
-                //Add a couple of new events for IE
-                tmp.DOM_EVENTS.focusin = true;
-                tmp.DOM_EVENTS.focusout = true;
-                
-                //Stop them so we don't loose focus in the Editor
-                tmp.on('focusin', function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                }, oButton, this);
-                
-                tmp.on('focusout', function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                }, oButton, this);
-                tmp.on('click', function(ev) {
-                    YAHOO.util.Event.stopEvent(ev);
-                }, oButton, this);
-            }
-            if (this.browser.webkit) {
-                //This will keep the document from gaining focus and the editor from loosing it..
-                //Forcefully remove the focus calls in button!
-                tmp.hasFocus = function() {
-                    return true;
-                };
-            }
-            this._buttonList[this._buttonList.length] = tmp;
-            if ((oButton.type == 'menu') || (oButton.type == 'split') || (oButton.type == 'select')) {
-                if (Lang.isArray(oButton.menu)) {
-                    YAHOO.log('Button type is (' + oButton.type + '), doing extra renderer work.', 'info', 'Toolbar');
-                    var menu = tmp.getMenu();
-                    menu.renderEvent.subscribe(_addMenuClasses, tmp);
-                    if (oButton.renderer) {
-                        menu.renderEvent.subscribe(oButton.renderer, tmp);
+                if (this.browser.ie) {
+                    //Add a couple of new events for IE
+                    tmp.DOM_EVENTS.focusin = true;
+                    tmp.DOM_EVENTS.focusout = true;
+                    
+                    //Stop them so we don't loose focus in the Editor
+                    tmp.on('focusin', function(ev) {
+                        YAHOO.util.Event.stopEvent(ev);
+                    }, oButton, this);
+                    
+                    tmp.on('focusout', function(ev) {
+                        YAHOO.util.Event.stopEvent(ev);
+                    }, oButton, this);
+                    tmp.on('click', function(ev) {
+                        YAHOO.util.Event.stopEvent(ev);
+                    }, oButton, this);
+                }
+                if (this.browser.webkit) {
+                    //This will keep the document from gaining focus and the editor from loosing it..
+                    //Forcefully remove the focus calls in button!
+                    tmp.hasFocus = function() {
+                        return true;
+                    };
+                }
+                this._buttonList[this._buttonList.length] = tmp;
+                if ((oButton.type == 'menu') || (oButton.type == 'split') || (oButton.type == 'select')) {
+                    if (Lang.isArray(oButton.menu)) {
+                        YAHOO.log('Button type is (' + oButton.type + '), doing extra renderer work.', 'info', 'Toolbar');
+                        var menu = tmp.getMenu();
+                        if (menu.renderEvent) {
+                            menu.renderEvent.subscribe(_addMenuClasses, tmp);
+                            if (oButton.renderer) {
+                                menu.renderEvent.subscribe(oButton.renderer, tmp);
+                            }
+                        }
                     }
                 }
             }
@@ -1082,16 +1128,18 @@ var Dom = YAHOO.util.Dom,
         * @method _makeColorButton
         * @private
         * @description Called to turn a "color" button into a menu button with an Overlay for the menu.
-        * @param {Object} _oButton <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
+        * @param {Object} _oButton <a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a> reference
         */
         _makeColorButton: function(_oButton) {
             if (!this._colorPicker) {   
                 this._createColorPicker(this.get('id'));
             }
             _oButton.type = 'color';
-            _oButton.menu = new YAHOO.widget.Overlay(this.get('id') + '_' + _oButton.value + '_menu', { visbile: false, position: 'absolute' });
+            _oButton.menu = new YAHOO.widget.Overlay(this.get('id') + '_' + _oButton.value + '_menu', { visible: false, position: 'absolute', iframe: true });
             _oButton.menu.setBody('');
             _oButton.menu.render(this.get('cont'));
+            Dom.addClass(_oButton.menu.element, 'yui-button-menu');
+            Dom.addClass(_oButton.menu.element, 'yui-color-button-menu');
             _oButton.menu.beforeShowEvent.subscribe(function() {
                 _oButton.menu.cfg.setProperty('zindex', 5); //Re Adjust the overlays zIndex.. not sure why.
                 _oButton.menu.cfg.setProperty('context', [this.getButtonById(_oButton.id).get('element'), 'tl', 'bl']); //Re Adjust the overlay.. not sure why.
@@ -1099,9 +1147,7 @@ var Dom = YAHOO.util.Dom,
                 this._resetColorPicker();
                 var _p = this._colorPicker;
                 if (_p.parentNode) {
-                    //if (_p.parentNode != _oButton.menu.body) {
-                        _p.parentNode.removeChild(_p);
-                    //}
+                    _p.parentNode.removeChild(_p);
                 }
                 _oButton.menu.setBody('');
                 _oButton.menu.appendToBody(_p);
@@ -1113,7 +1159,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _makeSpinButton
         * @description Create a button similar to an OS Spin button.. It has an up/down arrow combo to scroll through a range of int values.
-        * @param {Object} _button <a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> reference
+        * @param {Object} _button <a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a> reference
         * @param {Object} oButton Object literal containing the buttons initial config
         */
         _makeSpinButton: function(_button, oButton) {
@@ -1259,20 +1305,22 @@ var Dom = YAHOO.util.Dom,
 
                 if (info.type == 'select') {
                     var button = this.getButtonById(info.id);
-                    var txt = info.value;
-                    for (var i = 0; i < info.menu.length; i++) {
-                        if (info.menu[i].value == info.value) {
-                            txt = info.menu[i].text;
-                            break;
+                    if (button.buttonType == 'rich') {
+                        var txt = info.value;
+                        for (var i = 0; i < info.menu.length; i++) {
+                            if (info.menu[i].value == info.value) {
+                                txt = info.menu[i].text;
+                                break;
+                            }
                         }
-                    }
-                    button.set('label', '<span class="yui-toolbar-' + info.menucmd + '-' + (info.value).replace(/ /g, '-').toLowerCase() + '">' + txt + '</span>');
-                    var _items = button.getMenu().getItems();
-                    for (var m = 0; m < _items.length; m++) {
-                        if (_items[m].value.toLowerCase() == info.value.toLowerCase()) {
-                            _items[m].cfg.setProperty('checked', true);
-                        } else {
-                            _items[m].cfg.setProperty('checked', false);
+                        button.set('label', '<span class="yui-toolbar-' + info.menucmd + '-' + (info.value).replace(/ /g, '-').toLowerCase() + '">' + txt + '</span>');
+                        var _items = button.getMenu().getItems();
+                        for (var m = 0; m < _items.length; m++) {
+                            if (_items[m].value.toLowerCase() == info.value.toLowerCase()) {
+                                _items[m].cfg.setProperty('checked', true);
+                            } else {
+                                _items[m].cfg.setProperty('checked', false);
+                            }
                         }
                     }
                 }
@@ -1285,7 +1333,7 @@ var Dom = YAHOO.util.Dom,
         * @method getButtonById
         * @description Gets a button instance from the toolbar by is Dom id.
         * @param {String} id The Dom id to query for.
-        * @return {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>}
+        * @return {<a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a>}
         */
         getButtonById: function(id) {
             var len = this._buttonList.length;
@@ -1300,7 +1348,7 @@ var Dom = YAHOO.util.Dom,
         * @method getButtonByValue
         * @description Gets a button instance or a menuitem instance from the toolbar by it's value.
         * @param {String} value The button value to query for.
-        * @return {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a> or <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>}
+        * @return {<a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a> or <a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a>}
         */
         getButtonByValue: function(value) {
             var _buttons = this.get('buttons');
@@ -1338,7 +1386,7 @@ var Dom = YAHOO.util.Dom,
         * @method getButtonByIndex
         * @description Gets a button instance from the toolbar by is index in _buttonList.
         * @param {Number} index The index of the button in _buttonList.
-        * @return {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>}
+        * @return {<a href="YAHOO.widget.ToolbarButton.html">YAHOO.widget.ToolbarButton</a>}
         */
         getButtonByIndex: function(index) {
             if (this._buttonList[index]) {
@@ -1369,10 +1417,10 @@ var Dom = YAHOO.util.Dom,
             if (Lang.isNumber(id)) {
                 button = this.getButtonByIndex(id);
             }
-            if (!(button instanceof YAHOO.widget.Button)) {
+            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
                 button = this.getButtonByValue(id);
             }
-            if (button instanceof YAHOO.widget.Button) {
+            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
                 button.set('disabled', true);
             } else {
                 return false;
@@ -1395,10 +1443,10 @@ var Dom = YAHOO.util.Dom,
             if (Lang.isNumber(id)) {
                 button = this.getButtonByIndex(id);
             }
-            if (!(button instanceof YAHOO.widget.Button)) {
+            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
                 button = this.getButtonByValue(id);
             }
-            if (button instanceof YAHOO.widget.Button) {
+            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
                 if (button.get('disabled')) {
                     button.set('disabled', false);
                 }
@@ -1421,20 +1469,22 @@ var Dom = YAHOO.util.Dom,
                 if (Lang.isNumber(id)) {
                     button = this.getButtonByIndex(id);
                 }
-                if (!(button instanceof YAHOO.widget.Button)) {
+                if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
                     button = this.getButtonByValue(id);
                 }
-                if (button instanceof YAHOO.widget.Button) {
+                if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
                     button.addClass('yui-button-selected');
                     button.addClass('yui-button-' + button.get('value') + '-selected');
                     if (value) {
-                        var _items = button.getMenu().getItems();
-                        for (var m = 0; m < _items.length; m++) {
-                            if (_items[m].value == value) {
-                                _items[m].cfg.setProperty('checked', true);
-                                button.set('label', '<span class="yui-toolbar-' + button.get('value') + '-' + (value).replace(/ /g, '-').toLowerCase() + '">' + _items[m]._oText.nodeValue + '</span>');
-                            } else {
-                                _items[m].cfg.setProperty('checked', false);
+                        if (button.buttonType == 'rich') {
+                            var _items = button.getMenu().getItems();
+                            for (var m = 0; m < _items.length; m++) {
+                                if (_items[m].value == value) {
+                                    _items[m].cfg.setProperty('checked', true);
+                                    button.set('label', '<span class="yui-toolbar-' + button.get('value') + '-' + (value).replace(/ /g, '-').toLowerCase() + '">' + _items[m]._oText.nodeValue + '</span>');
+                                } else {
+                                    _items[m].cfg.setProperty('checked', false);
+                                }
                             }
                         }
                     }
@@ -1457,10 +1507,10 @@ var Dom = YAHOO.util.Dom,
             if (Lang.isNumber(id)) {
                 button = this.getButtonByIndex(id);
             }
-            if (!(button instanceof YAHOO.widget.Button)) {
+            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
                 button = this.getButtonByValue(id);
             }
-            if (button instanceof YAHOO.widget.Button) {
+            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
                 button.removeClass('yui-button-selected');
                 button.removeClass('yui-button-' + button.get('value') + '-selected');
                 button.removeClass('yui-button-hover');
@@ -1551,10 +1601,10 @@ var Dom = YAHOO.util.Dom,
             if (Lang.isNumber(id)) {
                 button = this.getButtonByIndex(id);
             }
-            if (!(button instanceof YAHOO.widget.Button)) {
+            if ((!(button instanceof YAHOO.widget.ToolbarButton)) && (!(button instanceof YAHOO.widget.ToolbarButtonAdvanced))) {
                 button = this.getButtonByValue(id);
             }
-            if (button instanceof YAHOO.widget.Button) {
+            if ((button instanceof YAHOO.widget.ToolbarButton) || (button instanceof YAHOO.widget.ToolbarButtonAdvanced)) {
                 var thisID = button.get('id');
                 button.destroy();
 
