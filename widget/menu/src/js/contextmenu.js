@@ -181,12 +181,6 @@ triggerContextMenuEvent: null,
 */
 init: function (p_oElement, p_oConfig) {
 
-    if(!this.ITEM_TYPE) {
-
-        this.ITEM_TYPE = YAHOO.widget.ContextMenuItem;
-
-    }
-
 
     // Call the init of the superclass (YAHOO.widget.Menu)
 
