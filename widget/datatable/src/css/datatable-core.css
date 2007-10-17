@@ -1,8 +1,4 @@
 /*foundational css*/
-table.yui-dt-table {
-    xtable-layout:fixed;
-}
-
 th .yui-dt-header {
     position:relative;
 }
@@ -11,7 +7,6 @@ th .yui-dt-label {
     position:relative;
 }
 
-
 .yui-dt-resizer {
     position:absolute;
     right:0;
@@ -19,7 +14,8 @@ th .yui-dt-label {
     height:100%;
     cursor:e-resize;
     cursor:col-resize;
-    z-index:9999;
+    z-index:9000;
+    zoom:1; /* needed to block events in ie */
 }
 
 /* foundational resizing css */

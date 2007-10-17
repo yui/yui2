@@ -1,5 +1,6 @@
 /* basic skin styles */
 .yui-skin-sam .yui-dt-table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;border:1px solid #7F7F7F;}
+.yui-skin-sam .yui-dt-table thead {border-spacing:0;} /* for safari bug */
 .yui-skin-sam .yui-dt-table caption {padding-bottom:1em;text-align:left;}
 .yui-skin-sam .yui-dt-table th {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
@@ -10,11 +11,11 @@
     vertical-align:bottom;
 }
 .yui-skin-sam .yui-dt-table th {
-    border-right:1px solid #CBCBCB; /* inner column border */
     margin:0;padding:0;
 }
 .yui-skin-sam .yui-dt-header {
     padding:4px 10px 4px 10px; /* cell padding */
+    border-right:1px solid #CBCBCB;/*  inner column border */
 }
 .yui-skin-sam .yui-dt-table td {
     padding:4px 10px 4px 10px; /* cell padding */
@@ -33,21 +34,7 @@
 }
 .yui-skin-sam .yui-dt-resizer {
     width:6px;
-    background:url(../../../../assets/skins/sam/dt-transparent.gif) repeat; /* needed to block events */
 }
-.yui-skin-sam .yui-dt-header {
-    xborder:1px solid green;
-    background-color:green;
-}
-.yui-skin-sam .yui-dt-label {
-    xborder:1px solid blue;
-    background-color:blue;
-}
-.yui-skin-sam .yui-dt-resizer {
-    xborder:1px solid red;
-    background-color:red;
-}
-
 .yui-skin-sam .yui-dt-table tbody {
     border-left:1px solid #7F7F7F;border-right:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F; /* outer border */
 }
@@ -82,7 +69,7 @@
 .yui-skin-sam th.yui-dt-desc .yui-dt-header {
     background:url(dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
     /*background-image: url('../img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right; /*sorted header icon */
-} 
+}
 
 /* editing */
 .yui-dt-editable {

@@ -93,7 +93,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize Column sort
     this._initColumnSort();
 
-this._syncColWidths();
+    // Synchronize Column widths
+    this._syncColWidths();
 
     // Initialize DOM event listeners
     this._initDomEvents();
@@ -1068,6 +1069,82 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
     setTimeout(function() { el.focus(); },0);
 };
 
+YAHOO.widget.DataTable.prototype._syncColWidths = function() {
+    // Don't bother if table body has no rows
+    if(this.getTbodyEl() && (this.getTbodyEl().rows.length > 0) ) {
+        if(YAHOO.env.ua.ie && (this.get("scrollable")===true)) {
+            YAHOO.util.Dom.setStyle(this._elContainer, "width", "auto");
+            YAHOO.util.Dom.setStyle(this._elContainer, "overflow", "hidden");
+        }
+
+        var nKeysLength = this._oColumnSet.keys.length;
+        var elLastHeaderRow = this.getTheadEl().rows[this.getTheadEl().rows.length-1];
+        var elFirstBodyRow = this.getTbodyEl().rows[0];
+        var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
+
+        // First pass make too-narrow body cells equal to head cells
+        for(i=0; i<nKeysLength; i++) {
+            elHeadCell = elLastHeaderRow.cells[i];
+            elBodyCell = elFirstBodyRow.cells[i];
+            elHeadCellWidth = elHeadCell.offsetWidth;
+            elBodyCellWidth = elBodyCell.offsetWidth;
+
+            if(elBodyCellWidth < elHeadCellWidth) {
+                nWidth = elHeadCellWidth;
+                elBodyCell.style.width = nWidth + "px";
+
+                // Sync up offsets
+                if(elHeadCellWidth > elBodyCellWidth) {
+                    if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                        nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                        elBodyCell.style.width = nWidth + "px";
+                    }
+                }
+                else if(elBodyCellWidth > elHeadCellWidth) {
+                    elHeadCell.style.width = nWidth + "px";
+                    if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                        nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                        elHeadCell.style.width = nWidth + "px";
+                    }
+                }
+            }
+        }
+
+        // Second pass make any too-narrow head cells equal to body cells
+        for(i=0; i<nKeysLength; i++) {
+            elHeadCell = elLastHeaderRow.cells[i];
+            elBodyCell = elFirstBodyRow.cells[i];
+            elHeadCellWidth = elHeadCell.offsetWidth;
+            elBodyCellWidth = elBodyCell.offsetWidth;
+
+            if(elBodyCellWidth > elHeadCellWidth) {
+                elHeadCell.style.width = elBodyCellWidth + "px";
+
+                // Sync up offsets
+                if(elHeadCellWidth > elBodyCellWidth) {
+                    nWidth = elHeadCellWidth;
+                    if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                        nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                        elBodyCell.style.width = nWidth + "px";
+                    }
+                }
+                else if(elBodyCellWidth > elHeadCellWidth) {
+                    nWidth = elBodyCellWidth;
+                    elHeadCell.style.width = nWidth + "px";
+                    if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                        nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                        elHeadCell.style.width = nWidth + "px";
+                    }
+                }
+            }
+        }
+
+        if(YAHOO.env.ua.ie && (this.get("scrollable")===true)) {
+            YAHOO.util.Dom.setStyle(this._elContainer, "width", this._elTable.offsetWidth);
+            YAHOO.util.Dom.setStyle(this._elContainer, "overflow", "auto");
+        }
+    }
+};
 
 
 
@@ -1291,6 +1368,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
         var elTheadCellId = YAHOO.util.Dom.get(this.id + "-col" + oColumn.getId());
         if(oColumn.resizeable) {
             if(foundDD) {
+                YAHOO.util.Dom.addClass(this._elTable, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                 YAHOO.util.Dom.addClass(elTheadCellId, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                 //TODO: fix fixed width tables
                 // Skip the last column for fixed-width tables
@@ -1301,8 +1379,9 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
                     var elThResizer = elThContainer.appendChild(document.createElement("span"));
                     elThResizer.id = this.id + "-resizer-" + colKey;
                     YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
+                    this._initColumnResizerProxyEl();
                     oColumn.ddResizer = new YAHOO.util.ColumnResizer(
-                            this, oColumn, elTheadCellId, elThResizer.id, elThResizer.id);
+                            this, oColumn, elTheadCellId, elThResizer.id, this._elColumnResizerProxy);
                     var cancelClick = function(e) {
                         YAHOO.util.Event.stopPropagation(e);
                     };
@@ -1405,7 +1484,9 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
  * @private
  */
 YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
-    // Attach Cell Editor container element to as first child of body
+    // TODO: destroy previous instances
+    
+    // Attach Cell Editor container element as first child of body
     var elCellEditor = document.createElement("div");
     elCellEditor.id = this.id + "-celleditor";
     elCellEditor.style.display = "none";
@@ -1435,6 +1516,35 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
             this.cancelCellEditor();
         }
     });
+};
+
+/**
+ * Creates HTML markup for shared Column resizer proxy.
+ *
+ * @method _initColumnResizerProxyEl
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
+    // TODO: destroy previous instances
+    if(!this._elColumnResizerProxy) {
+    
+        // Attach Column resizer element as first child of body
+        var elColumnResizerProxy = document.createElement("div");
+        elColumnResizerProxy.id = this.id + "-columnresizerproxy";
+        elColumnResizerProxy.style.position = "absolute";
+        elColumnResizerProxy.style.visibility = "hidden";
+        YAHOO.util.Dom.addClass(elColumnResizerProxy, YAHOO.widget.DataTable.CLASS_RESIZER);
+        var elFirstChild = YAHOO.util.Dom.getFirstChild(document.body);
+        if(elFirstChild) {
+            elColumnResizerProxy = YAHOO.util.Dom.insertBefore(elColumnResizerProxy, elFirstChild);
+        }
+        else {
+            elColumnResizerProxy = document.body.appendChild(elColumnResizerProxy);
+        }
+
+        // Internal tracker of Cell Editor values
+        this._elColumnResizerProxy = elColumnResizerProxy;
+    }
 };
 
 /**

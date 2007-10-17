@@ -472,16 +472,6 @@ YAHOO.widget.Column.prototype._parent = null;
  */
 YAHOO.widget.Column.prototype._width = null;
 
-/**
- * Minimum width the Column can support (in pixels). Value is populated only if table
- * is fixedWidth, null otherwise.
- *
- * @property _minWidth
- * @type Number
- * @private
- */
-YAHOO.widget.Column.prototype._minWidth = null;
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public member variables
@@ -820,14 +810,15 @@ YAHOO.util.Sort = {
  * @param sGroup {String} Group name of related DragDrop items.
  * @param oConfig {Object} (Optional) Object literal of config values.
  */
-YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, sGroup, oConfig) {
+YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, elProxy, oConfig) {
     if(oDataTable && oColumn && elThead && sHandleId) {
         this.datatable = oDataTable;
         this.column = oColumn;
         this.headCell = elThead;
-        this.init(sHandleId, sHandleId);
-        //this.initFrame();
-        this.setYConstraint(0,0);
+        this.headLabel = elThead.firstChild.firstChild;
+        this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
+        this.initFrame(); // Needed for proxy
+        this.nOrigScrollTop = null; // Needed for IE fixed scrolling workaround 1118318
     }
     else {
         YAHOO.log("Column resizer could not be created due to invalid colElId","warn");
@@ -835,7 +826,8 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, sGr
 };
 
 if(YAHOO.util.DD) {
-    YAHOO.extend(YAHOO.util.ColumnResizer, YAHOO.util.DD);
+    YAHOO.util.DragDropMgr.clickTimeThresh = 1;
+    YAHOO.extend(YAHOO.util.ColumnResizer, YAHOO.util.DDProxy);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -845,40 +837,51 @@ if(YAHOO.util.DD) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Handles mousedown events on the Column resizer.
- *
- * @method onMouseDown
- * @param e {string} The mousedown event
- */
-YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
-    this.startWidth = this.headCell.offsetWidth;
-    this.startX = YAHOO.util.Event.getXY(e)[0];
-    //TODO: validate body cell
-    this.bodyCell = this.datatable.getTbodyEl().rows[0].cells[this.headCell.yuiCellIndex];
-};
-
-/**
  * Handles mouseup events on the Column resizer.
  *
  * @method onMouseUp
  * @param e {string} The mouseup event
  */
 YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
-    this.datatable._syncColWidths();
-
     // Reset resizer
     var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
     resizerStyle.left = "auto";
     resizerStyle.right = 0;
     resizerStyle.top = "auto";
     resizerStyle.bottom = 0;
-
-    if(YAHOO.env.ua.opera) {
-        //this.cell.style.width = this.cell.firstChild.offsetWidth + "px";
-    }
+    
+    this.datatable._syncColWidths();
 
     this.bodyCell = null;
+
+    // IE workaround for bug 1118318:
+    // ...reinstate scrolltop
+    if(this.nOrigScrollTop !== null) {
+        //this.datatable._elContainer.scrollTop = this.nOrigScrollTop; // This doesn't work for some reason...
+    }
     this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
+};
+
+/**
+ * Handles mousedown events on the Column resizer.
+ *
+ * @method onMouseDown
+ * @param e {string} The mousedown event
+ */
+YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
+    // IE workaround for bug 1118318:
+    // Reset any scrolltop...
+    this.nOrigScrollTop = null;
+    if(this.datatable._elContainer.scrollTop > 0) {
+        this.nOrigScrollTop = this.datatable._elContainer.scrollTop;
+        this.datatable._elContainer.scrollTop = 0;
+    }
+
+    this.startWidth = this.headCell.offsetWidth;
+    this.startX = YAHOO.util.Event.getXY(e)[0];
+    if(this.datatable.getTbodyEl() && (this.datatable.getTbodyEl().rows.length > 0)) {
+        this.bodyCell = this.datatable.getTbodyEl().rows[0].cells[this.headCell.yuiCellIndex];
+    }
 };
 
 /**
@@ -892,37 +895,26 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
         var newX = YAHOO.util.Event.getXY(e)[0];
         var offsetX = newX - this.startX;
         var newWidth = this.startWidth + offsetX;
-        if(newWidth < 10) {
-            newWidth = 10;
+        if(newWidth < this.headLabel.offsetWidth) {
+            newWidth = this.headLabel.offsetWidth;
         }
-
-
-        //if(newWidth < this.minWidth) {
-        //    newWidth = this.minWidth;
-        //}
 
         // Resize the Column
         var oDataTable = this.datatable;
-        var elCell = this.headCell;
+        var elHeadCell = this.headCell;
 
         if(YAHOO.env.ua.ie && (this.datatable.get("scrollable")===true)) {
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", "auto");
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "hidden");
         }
 
-        if(YAHOO.env.ua.opera && (newWidth > elCell.firstChild.firstChild.offsetWidth)) {
-            elCell.firstChild.style.width = newWidth + "px";
-        }
-        else {
-            elCell.style.width = newWidth + "px";
-            //TODO: validate rows length
-
-            if(!YAHOO.env.ua.ie) {
-                this.bodyCell.style.width = elCell.offsetWidth + "px";
-                if(this.bodyCell.offsetWidth != elCell.offsetWidth) {
-                    this.bodyCell.style.width = (elCell.offsetWidth - (this.bodyCell.offsetWidth - elCell.offsetWidth)) + "px";
-                }
-                
+        elHeadCell.style.width = newWidth + "px";
+        
+        // Real-time sync-up body cell to head cell for non-IEs
+        if(!YAHOO.env.ua.ie && this.bodyCell) {
+            this.bodyCell.style.width = elHeadCell.offsetWidth + "px";
+            if(this.bodyCell.offsetWidth != elHeadCell.offsetWidth) {
+                this.bodyCell.style.width = (elHeadCell.offsetWidth - (this.bodyCell.offsetWidth - elHeadCell.offsetWidth)) + "px";
             }
         }
 
@@ -930,197 +922,12 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elTable.offsetWidth);
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "auto");
         }
-
-        if(!YAHOO.util.Dom.hasClass(elCell, YAHOO.widget.DataTable.CLASS_LAST)) {
-            // Reset resizer
-            var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
-            resizerStyle.left = "auto";
-            resizerStyle.right = 0;
-            resizerStyle.top = "auto";
-            resizerStyle.bottom = 0;
-        }
-
+        
     }
     catch(e) {
     }
 };
 
-    /* Calculates computed style height or width for a given element.
-     * IE lacks a getComputedStyle method, and Opera's doesn't account for box model (returns offsetWidth).
-     * @method getComputedStyle
-     * @param {HTMLElement} el The element
-     * @param {String} prop The style size property to compute
-     * @return {String} The pixel height/width of the element (e.g. "20px")
-     */
-
-YAHOO.util.ColumnResizer.prototype._getComputedStyleSize = function() { //  for load-time branching
-        var isOpera = navigator.userAgent.toLowerCase().indexOf('opera') > -1;
-
-        if (document.documentElement.currentStyle) { // IE and Opera
-            return function(el, prop) {
-                var current = el.currentStyle[prop],
-                    capped = prop.charAt(0).toUpperCase() + prop.substr(1), // e.g. "Width"
-                    offset = 'offset' + capped,                             // e.g. "offsetWidth"
-                    pixel = 'pixel' + capped,                               // e.g. "pixelWidth"
-                    value = el[offset];
-
-                if (current == 'auto' || isOpera) { // set it to current height, subtract the diff and revert to auto
-                    el.style[prop] = value + 'px'; // to test for box model compounding
-
-                    if (el[offset] > value) { // the difference is padding + border
-                        value -= el[offset] - value;
-                    }
-                    el.style[prop] = (isOpera) ? value : 'auto'; // revert
-
-                } else if (current.indexOf('px') > -1) {
-                   return current; // no extra work needed
-                } else { // use pixelHeight/Width to convert units to px
-                    if (!el.style[pixel] && !el.style[prop]) {
-                        el.style[prop] = current; // set inline style to get pixelHeight/Width (no style.pixelWidth if no style.width)
-                    }
-                    value = el.style[pixel];
-                }
-                return value + 'px';
-            };
-
-        }
-        else if (document.defaultView && document.defaultView.getComputedStyle) { // Gecko and WebKit
-            return function(el, prop) {
-                return document.defaultView.getComputedStyle(el, '')[prop];
-            };
-        } else { // included for completeness, not required for A-grade support
-            return function(el, prop) {
-                var capped = prop.charAt(0).toUpperCase() + prop.substr(1), // e.g. "Width"
-                offset = 'offset' + capped;                                 // e.g. "offsetWidth"
-                return el[offset + capped] + 'px';
-            };
-        }
-    }();
-
-YAHOO.widget.DataTable.prototype._syncColWidths = function() {
-    /*var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
-
-    // First pass make all body cells equal to head cells
-    //for(i=this._oColumnSet.keys.length-1; i>-1; i--) {
-    for(i=0; i<this._oColumnSet.keys.length; i++) {
-        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
-        elBodyCell = this.getTbodyEl().rows[0].cells[i];
-        elHeadCellWidth = elHeadCell.offsetWidth;
-        elBodyCellWidth = elBodyCell.offsetWidth;
-
-        if(elBodyCellWidth < elHeadCellWidth) {
-            nWidth = elHeadCellWidth;
-            elBodyCell.style.width = nWidth + "px";
-
-            // Sync up offsets
-            if(elHeadCellWidth > elBodyCellWidth) {
-                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
-                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
-                    elBodyCell.style.width = nWidth + "px";
-                }
-            }
-            else if(elBodyCellWidth > elHeadCellWidth) {
-                elHeadCell.style.width = nWidth + "px";
-                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
-                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
-                    elHeadCell.style.width = nWidth + "px";
-                }
-            }
-        }
-    }
-    // Second pass make any too-narrow head cells equal to body cells
-    for(i=0; i<this._oColumnSet.keys.length; i++) {
-        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
-        elBodyCell = this.getTbodyEl().rows[0].cells[i];
-        elHeadCellWidth = elHeadCell.offsetWidth;
-        elBodyCellWidth = elBodyCell.offsetWidth;
-
-        if(elBodyCellWidth > elHeadCellWidth) {
-            elHeadCell.style.width = elBodyCellWidth + "px";
-
-            // Sync up offsets
-            if(elHeadCellWidth > elBodyCellWidth) {
-                nWidth = elHeadCellWidth;
-                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
-                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
-                    elBodyCell.style.width = nWidth + "px";
-                }
-            }
-            else if(elBodyCellWidth > elHeadCellWidth) {
-                nWidth = elBodyCellWidth;
-                elHeadCell.style.width = nWidth + "px";
-                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
-                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
-                    elHeadCell.style.width = nWidth + "px";
-                }
-            }
-        }
-    }*/
-
-
-
-
-    var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
-
-    // First pass make all body cells equal to head cells
-    //for(i=this._oColumnSet.keys.length-1; i>-1; i--) {
-    for(i=0; i<this._oColumnSet.keys.length; i++) {
-        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
-        elBodyCell = this.getTbodyEl().rows[0].cells[i];
-        elHeadCellWidth = elHeadCell.offsetWidth;
-        elBodyCellWidth = elBodyCell.offsetWidth;
-
-        if(elBodyCellWidth < elHeadCellWidth) {
-            nWidth = elHeadCellWidth;
-            elBodyCell.style.width = nWidth + "px";
-
-            // Sync up offsets
-            if(elHeadCellWidth > elBodyCellWidth) {
-                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
-                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
-                    elBodyCell.style.width = nWidth + "px";
-                }
-            }
-            else if(elBodyCellWidth > elHeadCellWidth) {
-                elHeadCell.style.width = nWidth + "px";
-                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
-                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
-                    elHeadCell.style.width = nWidth + "px";
-                }
-            }
-        }
-    }
-    // Second pass make any too-narrow head cells equal to body cells
-    for(i=0; i<this._oColumnSet.keys.length; i++) {
-        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
-        elBodyCell = this.getTbodyEl().rows[0].cells[i];
-        elHeadCellWidth = elHeadCell.offsetWidth;
-        elBodyCellWidth = elBodyCell.offsetWidth;
-
-        if(elBodyCellWidth > elHeadCellWidth) {
-            elHeadCell.style.width = elBodyCellWidth + "px";
-
-            // Sync up offsets
-            if(elHeadCellWidth > elBodyCellWidth) {
-                nWidth = elHeadCellWidth;
-                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
-                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
-                    elBodyCell.style.width = nWidth + "px";
-                }
-            }
-            else if(elBodyCellWidth > elHeadCellWidth) {
-                nWidth = elBodyCellWidth;
-                elHeadCell.style.width = nWidth + "px";
-                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
-                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
-                    elHeadCell.style.width = nWidth + "px";
-                }
-            }
-        }
-    }
-
-
-};
 
 
 
