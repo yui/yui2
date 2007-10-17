@@ -1,10 +1,14 @@
 package
 {
+	import com.yahoo.astra.animation.Proteus;
+	import com.yahoo.astra.fl.charts.legend.Legend;
+	import com.yahoo.astra.utils.InstanceFactory;
+	import fl.containers.UILoader;
 	import flash.display.Sprite;
 	import flash.display.DisplayObject;
 	import flash.events.ErrorEvent;
+	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
-	import flash.system.LoaderContext;
 	import flash.text.TextFormat;
 	import flash.utils.getQualifiedClassName;
 	import fl.managers.StyleManager;
@@ -13,7 +17,6 @@ package
 	import com.yahoo.astra.fl.charts.skins.*;
 	import com.yahoo.astra.fl.charts.events.ChartEvent;
 	import com.yahoo.astra.utils.JavaScriptUtil;
-	import com.yahoo.astra.utils.LoaderUtil;
 	import com.yahoo.yui.YUIAdapter;
 	import com.yahoo.yui.LoggerCategory;
 	import com.yahoo.yui.charts.*;
@@ -49,10 +52,25 @@ package
 		 */
 		protected var chart:Chart;
 		
+		protected var legend:Legend;
+		
+		protected var _legendPosition:String = "left";
+		
+		public function get legendPosition():String
+		{
+			return this._legendPosition;
+		}
+		
+		public function set legendPosition(value:String):void
+		{
+			this.legendPosition = value;
+			this.refreshComponentSize();
+		}
+		
 		/**
 		 * @private (protected)
 		 */
-		protected var background:BackgroundAndBorder;
+		protected var backgroundAndBorder:BackgroundAndBorder;
 		
 		/**
 		 * @private
@@ -88,33 +106,31 @@ package
 				this.chart.removeEventListener(ChartEvent.ITEM_DOUBLE_CLICK, chartItemEventHandler);
 				this.chart.removeEventListener(ChartEvent.ITEM_ROLL_OUT, chartItemEventHandler);
 				this.chart.removeEventListener(ChartEvent.ITEM_ROLL_OVER, chartItemEventHandler);
+				this.chart.removeEventListener(MouseEvent.MOUSE_DOWN, chartItemExtraEventHandler);
 			}
 			
 			var ChartType:Class = ChartSerializer.getType(value);
 			var chart:Chart = new ChartType();
+			chart.setStyle("contentPadding", 10 + this.backgroundAndBorder.borderWeight);
 			chart.setStyle("backgroundSkin", Sprite);
 			chart.setStyle("dataTipBackgroundSkin", ChartDataTipBackground);
-			this.addChild(chart);
+			this.addChildAt(chart, 1);
 			
 			this.component = chart;
 			this.chart.addEventListener(ChartEvent.ITEM_CLICK, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_DOUBLE_CLICK, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_ROLL_OUT, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_ROLL_OVER, chartItemEventHandler, false, 0, true);
+			this.chart.addEventListener(MouseEvent.MOUSE_DOWN, chartItemExtraEventHandler, false, 0, true);
 			
 			this.log("Type set to \"" + value + "\"");
 		}
 		
-		public function setDataProvider(value:Array):void
+		public function setDataProvider(value:Array, styleChanged:Boolean = false):void
 		{
 			var dataProvider:Array = [];
 			var seriesCount:int = value.length;
-			
-			//will be filled based on the defaults or the series style definition, if present.
-			var seriesColors:Array = [];
-			var seriesMarkerSizes:Array = [];
-			var seriesMarkerSkins:Array = [];
-			
+			var seriesStyles:Array = [];
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var dataFromJavaScript:Object = value[i];
@@ -132,51 +148,32 @@ package
 				}
 				dataProvider[i] = series;
 			
-				//defaults
-				var defaultColors:Array = [0x729fcf, 0xfcaf3e, 0x73d216, 0xfce94f, 0xad7fa8, 0x3465a4];
-				var defaultSize:Number = 10;
-				if(series is ColumnSeries || series is BarSeries)
+				//this is where we parse the individual series styles, and we convert them
+				//to the format the chart actually expects.
+				//we fill in with defaults for styles that have not been specified
+				if(dataFromJavaScript.style)
 				{
-					defaultSize = 20;
+					seriesStyles.push(dataFromJavaScript.style);
 				}
-				
-				var defaultSkin:Class = RectangleSkin;
-				if(series is LineSeries)
-				{
-					defaultSkin = CircleSkin;
-				}
-				
-				//initialize styles with defaults
-				var size:Number = defaultSize;
-				var color:uint = defaultColors[i % defaultColors.length];
-				var skin:Object = defaultSkin;
-				var style:Object = dataFromJavaScript.style;
-				if(style)
-				{
-					if(style.image)
-					{
-						skin = LoaderUtil.createAutoLoader(skin.image, new LoaderContext(true));
-					}
-					if(style.size != null)
-					{
-						size = style.size;
-					}
-					if(style.color != null)
-					{
-						color = style.color;
-					}
-				}
-				
-				seriesColors[i] = color;
-				seriesMarkerSizes[i] = size;
-				seriesMarkerSkins[i] = skin;
+				else seriesStyles.push(null);
 			}
+			
+			this.log("Displaying " + seriesCount + " series.");
 			
 			//set data provider and new styles
 			this.chart.dataProvider = dataProvider;
-			this.chart.setStyle("seriesColors", seriesColors);
-			this.chart.setStyle("seriesMarkerSizes", seriesMarkerSizes);
-			this.chart.setStyle("seriesMarkerSkins", seriesMarkerSkins);
+			this.chart.drawNow();
+				
+			if(styleChanged)
+			{
+				this.setSeriesStyles(seriesStyles);
+			}
+			
+			if(this.legend && this.legend.visible)
+			{
+				this.legend.dataProvider = this.chart.dataProvider as Array;
+				this.refreshComponentSize();
+			}
 		}
 		
 		/**
@@ -210,6 +207,76 @@ package
 			{
 				var shortName:String = ChartSerializer.getShortName(getQualifiedClassName(this.chart));
 				this.log("Unable to set categoryNames on a chart of type " + shortName);
+			}
+		}
+		
+		/**
+		 * Returns the field used in complex objects to access data to be
+		 * displayed on the PieChart.
+		 */
+		public function getDataField():String
+		{
+			var pieChart:PieChart = this.chart as PieChart;
+			if(pieChart)
+			{
+				return pieChart.dataField;
+			}
+			
+			var shortName:String = ChartSerializer.getShortName(getQualifiedClassName(this.chart));
+			this.log("Unable to find dataField on a chart of type " + shortName);
+			return null;
+		}
+		
+		/**
+		 * Sets the field used in complex objects to access data to be displayed
+		 * on the PieChart.
+		 */
+		public function setDataField(value:String):void
+		{
+			var pieChart:PieChart = this.chart as PieChart;
+			if(pieChart)
+			{
+				pieChart.dataField = value;
+			}
+			else
+			{
+				var shortName:String = ChartSerializer.getShortName(getQualifiedClassName(this.chart));
+				this.log("Unable to set dataField on a chart of type " + shortName);
+			}
+		}
+		
+		/**
+		 * Returns the field used in complex objects to access categories to be
+		 * displayed on the PieChart.
+		 */
+		public function getCategoryField():String
+		{
+			var pieChart:PieChart = this.chart as PieChart;
+			if(pieChart)
+			{
+				return pieChart.categoryField;
+			}
+			
+			var shortName:String = ChartSerializer.getShortName(getQualifiedClassName(this.chart));
+			this.log("Unable to find categoryField on a chart of type " + shortName);
+			return null;
+		}
+		
+		/**
+		 * Sets the field used in complex objects to access categories to be displayed
+		 * on the PieChart.
+		 */
+		public function setCategoryField(value:String):void
+		{
+			var pieChart:PieChart = this.chart as PieChart;
+			if(pieChart)
+			{
+				pieChart.categoryField = value;
+			}
+			else
+			{
+				var shortName:String = ChartSerializer.getShortName(getQualifiedClassName(this.chart));
+				this.log("Unable to set categoryField on a chart of type " + shortName);
 			}
 		}
 		
@@ -406,72 +473,165 @@ package
 		 */
 		public function setStyles(styles:Object):void
 		{
-			var contentPadding:Number = 10;
-			if(styles.padding)
+			for(var styleName:String in styles)
 			{
-				contentPadding = styles.padding;
+				this.setStyle(styleName, styles[styleName]);
 			}
-			
-			if(styles.border)
+		}
+		
+		public function setStyle(name:String, value:Object):void
+		{
+			switch(name)
 			{
-				var border:Object = styles.border;
-				if(border.color != null)
+				case "padding":
+					var contentPadding:Number = Number(value);
+					contentPadding += this.backgroundAndBorder.borderWeight;
+					this.chart.setStyle("contentPadding", contentPadding);
+					break;
+				case "animationEnabled":
+					this.chart.setStyle("animationEnabled", value);
+					break;
+				case "border":
+					if(value.color != null)
+					{
+						this.backgroundAndBorder.borderColor = this.parseColor(value.color);
+					}
+					
+					if(value.size != null)
+					{
+						contentPadding = this.chart.getStyle("contentPadding") as Number;
+						contentPadding -= this.backgroundAndBorder.borderWeight;
+						this.backgroundAndBorder.borderWeight = value.size;
+						contentPadding += this.backgroundAndBorder.borderWeight;
+						this.chart.setStyle("contentPadding", contentPadding);
+					}
+					break;
+				case "background":
+					if(value.color != null)
+					{
+						this.backgroundAndBorder.fillColor = this.parseColor(value.color);
+					}
+					
+					if(value.image)
+					{
+						this.backgroundAndBorder.image = value.image;
+					}
+					
+					if(value.alpha != null)
+					{
+						this.backgroundAndBorder.fillAlpha = value.alpha;
+					}
+					if(value.mode)
+					{
+						this.backgroundAndBorder.imageMode = value.mode;
+					}
+					break;
+				case "font":
+					var textFormat:TextFormat = TextFormatSerializer.readTextFormat(value);
+					this.chart.setStyle("textFormat", textFormat);
+					break;
+				case "dataTip":
+					this.setDataTipStyles(value);
+					break;
+				case "xAxis":
+					this.setAxisStyles(value, "horizontal");
+					break;
+				case "yAxis":
+					this.setAxisStyles(value, "vertical");
+					break;
+				case "legend":
+					this.setLegendStyles(value);
+					break;
+			}
+		}
+		
+		public function setSeriesStyles(styles:Array):void
+		{
+			//will be filled based on the defaults or the series style definition, if present.
+			var seriesColors:Array = [];
+			var seriesMarkerSizes:Array = [];
+			var seriesMarkerSkins:Array = [];
+			var seriesCount:int = styles.length;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var series:ISeries = ISeries(this.chart.dataProvider[i]);
+				var style:Object = styles[i];
+				
+				//defaults
+				var defaultColors:Array = [0x729fcf, 0xfcaf3e, 0x73d216, 0xfce94f, 0xad7fa8, 0x3465a4];
+				if(series is PieSeries)
 				{
-					this.background.borderColor = this.parseColor(border.color);
+					defaultColors = [defaultColors.concat()];
 				}
 				
-				if(border.size != null)
+				var defaultSize:Number = 10;
+				if(series is ColumnSeries || series is BarSeries)
 				{
-					this.background.borderWeight = border.size;
-					contentPadding += border.size;
-				}
-			}
-			this.chart.setStyle("contentPadding", contentPadding);
-			
-			if(styles.background)
-			{
-				var background:Object = styles.background;
-				if(background.color != null)
-				{
-					this.background.fillColor = this.parseColor(background.color);
+					defaultSize = 20;
 				}
 				
-				if(background.image)
+				var defaultSkin:Object = RectangleSkin;
+				if(series is LineSeries)
 				{
-					this.background.image = background.image;
+					defaultSkin = CircleSkin;
+				}
+				else if(series is PieSeries)
+				{
+					defaultSkin = [defaultSkin];
+				}
+			
+				//initialize styles with defaults
+				var size:Number = defaultSize;
+				var color:Object = defaultColors[i % defaultColors.length];
+				var skin:Object = defaultSkin;
+				if(style)
+				{
+					if(style.images)
+					{
+						var images:Array = style.images as Array;
+						var imageCount:int = images.length;
+						for(var j:int = 0; j < imageCount; j++)
+						{
+							images[j] = this.createMarkerSkin(String(images[j]), series);
+						}
+						skin = images;
+					}
+					else if(style.image)
+					{
+						skin = this.createMarkerSkin(style.image, series);
+					}
+					
+					if(style.colors)
+					{
+						var colors:Array = style.colors;
+						var colorCount:int = colors.length;
+						for(j = 0; j < colorCount; j++)
+						{
+							colors[j] = this.parseColor(colors[j]);
+						}
+						color = colors;
+					}
+					else if(style.color != null)
+					{
+						color = this.parseColor(style.color);
+					}
+					
+					if(style.size != null)
+					{
+						size = Number(style.size);
+					}
 				}
 				
-				if(background.alpha != null)
-				{
-					this.background.fillAlpha = background.alpha;
-				}
+				seriesColors[i] = color;
+				seriesMarkerSizes[i] = size;
+				seriesMarkerSkins[i] = skin;
 			}
 			
-			if(styles.font)
-			{
-				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
-				this.chart.setStyle("textFormat", textFormat);
-			}
-			
-			if(styles.dataTip)
-			{
-				this.setDataTypeStyles(styles.dataTip);
-			}
-			
-			if(styles.xAxis)
-			{
-				this.setAxisStyles(styles.xAxis, "horizontal");
-			}
-			
-			if(styles.yAxis)
-			{
-				this.setAxisStyles(styles.yAxis, "vertical");
-			}
-			
-			if(styles.animationEnabled != null)
-			{
-				this.chart.setStyle("animationEnabled", styles.animationEnabled);
-			}
+			this.chart.setStyle("seriesColors", seriesColors);
+			this.chart.setStyle("seriesMarkerSizes", seriesMarkerSizes);
+			this.chart.setStyle("seriesMarkerSkins", seriesMarkerSkins);
+
+			this.chart.drawNow();
 		}
 		
 	//--------------------------------------
@@ -488,25 +648,40 @@ package
 			super.initializeComponent();
 			
 			ExternalInterface.addCallback("setType", setType);
+			ExternalInterface.addCallback("setStyle", setStyle);
 			ExternalInterface.addCallback("setStyles", setStyles);
+			ExternalInterface.addCallback("setSeriesStyles", setSeriesStyles);
 			ExternalInterface.addCallback("setDataProvider", setDataProvider);
 			ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
 			ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
 			ExternalInterface.addCallback("setDataTipFunction", setDataTipFunction);
+			ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
+			ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
+			
+			//CartesianChart
 			ExternalInterface.addCallback("getHorizontalField", getHorizontalField);
 			ExternalInterface.addCallback("setHorizontalField", setHorizontalField);
 			ExternalInterface.addCallback("getVerticalField", getVerticalField);
 			ExternalInterface.addCallback("setVerticalField", setVerticalField);
-			ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
-			ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
 			ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
 			ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
+			
+			//PieChart
+			ExternalInterface.addCallback("getDataField", getDataField);
+			ExternalInterface.addCallback("setDataField", setDataField);
+			ExternalInterface.addCallback("getCategoryField", getCategoryField);
+			ExternalInterface.addCallback("setCategoryField", setCategoryField);
 
-			this.background = new BackgroundAndBorder();
-			this.background.width = this.stage.stageWidth;
-			this.background.height = this.stage.stageHeight;
-			this.background.addEventListener(ErrorEvent.ERROR, backgroundErrorHandler);
-			this.addChild(this.background);
+			this.backgroundAndBorder = new BackgroundAndBorder();
+			this.backgroundAndBorder.width = this.stage.stageWidth;
+			this.backgroundAndBorder.height = this.stage.stageHeight;
+			this.backgroundAndBorder.addEventListener(ErrorEvent.ERROR, backgroundErrorHandler);
+			this.addChild(this.backgroundAndBorder);
+			
+			this.legend = new Legend();
+			//this.legend.visible = false;
+			this.legend.setStyle("orientation", "vertical");
+			this.addChild(this.legend);
 		}
 		
 		/**
@@ -517,11 +692,49 @@ package
 		{
 			super.refreshComponentSize();
 			
-			if(this.background)
+			if(this.backgroundAndBorder)
 			{
-				this.background.width = this.stage.stageWidth;
-				this.background.height = this.stage.stageHeight;
-				this.background.drawNow();
+				this.backgroundAndBorder.width = this.stage.stageWidth;
+				this.backgroundAndBorder.height = this.stage.stageHeight;
+				this.backgroundAndBorder.drawNow();
+			}
+			
+			if(this.chart && this.legend && this.legend.visible)
+			{
+				this.legend.drawNow();
+				var padding:Number = this.chart.getStyle("contentPadding") as Number;
+				if(this.legendPosition == "left" || this.legendPosition == "right")
+				{
+					this.chart.y = 0;
+					if(this.legendPosition == "left")
+					{
+						this.legend.x = padding;
+						this.chart.x = this.legend.width;
+					}
+					else //right
+					{
+						this.legend.x = this.stage.stageWidth - this.legend.width - padding;
+						this.chart.x = 0;
+					}
+					this.legend.y = (this.stage.stageHeight - this.legend.height) / 2;
+					this.chart.width -= this.legend.width;
+				}
+				else
+				{
+					this.chart.x = 0;
+					if(this.legendPosition == "top")
+					{
+						this.legend.y = padding;
+						this.chart.y = this.legend.height;
+					}
+					else //bottom
+					{
+						this.chart.y = 0;
+						this.legend.y = this.stage.stageHeight - this.legend.height - padding;
+					}
+					this.legend.x = (this.stage.stageWidth - this.legend.width) / 2;
+					this.chart.height -= this.legend.height;
+				}
 			}
 			
 			if(this.chart)
@@ -547,12 +760,58 @@ package
 		protected function chartItemEventHandler(event:ChartEvent):void
 		{
 			var seriesIndex:int = (this.chart.dataProvider as Array).indexOf(event.series);
-			var itemEvent:Object = {type: event.type, seriesIndex: seriesIndex, index: event.index};
+			var itemEvent:Object = {type: event.type, seriesIndex: seriesIndex, index: event.index, item: event.item};
 			this.dispatchEventToJavaScript(itemEvent);
-			//this.log("item event: " + event.type);
 		}
 		
-		protected function setDataTypeStyles(styles:Object):void
+		private var _lastMouseItem:ISeriesItemRenderer;
+		
+		protected function chartItemExtraEventHandler(event:MouseEvent):void
+		{
+			var dragEventType:String = "itemDragUpdate";
+			var renderer:ISeriesItemRenderer = this._lastMouseItem;
+			this._lastMouseItem = null;
+			if(event.type == MouseEvent.MOUSE_DOWN)
+			{
+				//crawl up until we get to the chart or an item renderer
+				var displayObject:DisplayObject = event.target as DisplayObject;
+				while(!(displayObject is ISeriesItemRenderer) && !(displayObject is Chart))
+				{
+					displayObject = displayObject.parent;
+				}
+				
+				if(displayObject is ISeriesItemRenderer)
+				{
+					renderer = ISeriesItemRenderer(displayObject);
+				
+					this.stage.addEventListener(MouseEvent.MOUSE_MOVE, chartItemExtraEventHandler);
+					this.stage.addEventListener(MouseEvent.MOUSE_UP, chartItemExtraEventHandler);
+				}
+				else
+				{
+					renderer = null;
+				}
+				dragEventType = "itemDragStart";
+			}
+			else if(event.type == MouseEvent.MOUSE_UP)
+			{
+				dragEventType = "itemDragEnd";
+				this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, chartItemExtraEventHandler);
+				this.stage.removeEventListener(MouseEvent.MOUSE_UP, chartItemExtraEventHandler);
+			}
+			
+			//if we've found an item renderer, dispatch the event
+			if(renderer is ISeriesItemRenderer)
+			{
+				var seriesIndex:int = (this.chart.dataProvider as Array).indexOf(renderer.series);
+				var itemIndex:int = renderer.series.dataProvider.indexOf(renderer.data)
+				var itemEvent:Object = {type: dragEventType, seriesIndex: seriesIndex, index: itemIndex, item: renderer.data, x: this.mouseX, y: this.mouseY};
+				this.dispatchEventToJavaScript(itemEvent);
+				this._lastMouseItem = renderer;
+			}
+		}
+		
+		protected function setDataTipStyles(styles:Object):void
 		{
 			var contentPadding:Number = 6;
 			if(styles.padding)
@@ -562,17 +821,17 @@ package
 			
 			if(styles.border || styles.background)
 			{
-				var backgroundClass:Function = this.createBorderBackground();
+				var backgroundFactory:InstanceFactory = this.createBorderBackgroundFactory();
 				var border:Object = styles.border;
 				if(border)
 				{
 					if(border.color != null)
 					{
-						backgroundClass.prototype.borderColor = this.parseColor(border.color)
+						backgroundFactory.properties.borderColor = this.parseColor(border.color)
 					}
 					if(border.size != null)
 					{
-						backgroundClass.prototype.borderWeight = border.size;
+						backgroundFactory.properties.borderWeight = border.size;
 						contentPadding += border.size;
 					}
 				}
@@ -581,18 +840,22 @@ package
 				{
 					if(background.color != null)
 					{
-						backgroundClass.prototype.fillColor = this.parseColor(background.color);
+						backgroundFactory.properties.fillColor = this.parseColor(background.color);
 					}
 					if(background.image)
 					{
-						backgroundClass.prototype.image = background.image;
+						backgroundFactory.properties.image = background.image;
 					}
 					if(background.alpha != null)
 					{
-						backgroundClass.prototype.fillAlpha = background.alpha;
+						backgroundFactory.properties.fillAlpha = background.alpha;
+					}
+					if(background.mode)
+					{
+						backgroundFactory.properties.imageMode = background.mode;
 					}
 				}
-				this.chart.setStyle("dataTipBackgroundSkin", backgroundClass);
+				this.chart.setStyle("dataTipBackgroundSkin", backgroundFactory);
 			}
 			
 			this.chart.setStyle("dataTipContentPadding", contentPadding);
@@ -606,86 +869,116 @@ package
 		
 		protected function setAxisStyles(styles:Object, axisName:String):void
 		{
-			if(styles.axis)
+			if(styles.color != null)
 			{
-				var axis:Object = styles.axis;
-				if(axis.color != null)
-				{
-					this.chart.setStyle(axisName + "AxisColor", this.parseColor(axis.color));
-				}
+				this.chart.setStyle(axisName + "AxisColor", this.parseColor(styles.color));
+			}
+			
+			if(styles.size != null)
+			{
+				this.chart.setStyle(axisName + "AxisWeight", styles.size);
+			}
 				
-				if(axis.size != null)
+			if(styles.majorGridLines)
+			{
+				var majorGridLines:Object = styles.majorGridLines;
+				if(majorGridLines.color != null)
 				{
-					this.chart.setStyle(axisName + "AxisWeight", axis.size);
+					this.chart.setStyle(axisName + "AxisGridLineColor", this.parseColor(majorGridLines.color));
 				}
-				
-				if(axis.majorGridLines)
+				if(majorGridLines.size != null)
 				{
-					var majorGridLines:Object = axis.majorGridLines;
-					if(majorGridLines.color != null)
-					{
-						this.chart.setStyle(axisName + "AxisGridLineColor", this.parseColor(majorGridLines.color));
-					}
-					if(majorGridLines.size)
-					{
-						this.chart.setStyle(axisName + "AxisGridLineWeight", majorGridLines.weight);
-					}
+					this.chart.setStyle(axisName + "AxisGridLineWeight", majorGridLines.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisGridLines", majorGridLines.size > 0);
 				}
-				
-				if(axis.minorGridLines)
+			}
+			
+			if(styles.minorGridLines)
+			{
+				var minorGridLines:Object = styles.minorGridLines;
+				if(minorGridLines.color != null)
 				{
-					var minorGridLines:Object = axis.minorGridLines;
-					if(minorGridLines.color != null)
-					{
-						this.chart.setStyle(axisName + "AxisMinorGridLineColor", this.parseColor(minorGridLines.color));
-					}
-					if(minorGridLines.size)
-					{
-						this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.weight);
-					}
+					this.chart.setStyle(axisName + "AxisMinorGridLineColor", this.parseColor(minorGridLines.color));
 				}
-				
-				if(axis.majorTicks)
+				if(minorGridLines.size != null)
 				{
-					var majorTicks:Object = axis.majorTicks;
-					if(majorTicks.color != null)
-					{
-						this.chart.setStyle(axisName + "AxisTickColor", this.parseColor(majorTicks.color));
-					}
-					if(majorTicks.size != null)
-					{
-						this.chart.setStyle(axisName + "AxisTickWeight", majorTicks.weight);
-					}
-					if(majorTicks.length != null)
-					{
-						this.chart.setStyle(axisName + "AxisTickLength", majorTicks.length);
-					}
-					if(majorTicks.position)
-					{
-						this.chart.setStyle(axisName + "AxisTickPosition", majorTicks.position);
-					}
+					this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines", minorGridLines.size > 0);
+					this.log("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines" + " " + minorGridLines.size + " " + (minorGridLines.size > 0));
 				}
-				
-				if(axis.minorTicks)
+			}
+			
+			if(styles.majorTicks)
+			{
+				var majorTicks:Object = styles.majorTicks;
+				if(majorTicks.color != null)
 				{
-					var minorTicks:Object = axis.minorTicks;
-					if(minorTicks.color != null)
-					{
-						this.chart.setStyle(axisName + "AxisMinorTickColor", this.parseColor(minorTicks.color));
-					}
-					if(minorTicks.size != null)
-					{
-						this.chart.setStyle(axisName + "AxisMinorTickWeight", minorTicks.weight);
-					}
-					if(minorTicks.length != null)
-					{
-						this.chart.setStyle(axisName + "AxisMinorTickLength", minorTicks.length);
-					}
-					if(minorTicks.position)
-					{
-						this.chart.setStyle(axisName + "AxisMinorTickPosition", minorTicks.position);
-					}
+					this.chart.setStyle(axisName + "AxisTickColor", this.parseColor(majorTicks.color));
 				}
+				if(majorTicks.size != null)
+				{
+					this.chart.setStyle(axisName + "AxisTickWeight", majorTicks.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisTicks", majorTicks.size > 0);
+				}
+				if(majorTicks.length != null)
+				{
+					this.chart.setStyle(axisName + "AxisTickLength", majorTicks.length);
+				}
+				if(majorTicks.position)
+				{
+					this.chart.setStyle(axisName + "AxisTickPosition", majorTicks.position);
+				}
+			}
+			
+			if(styles.minorTicks)
+			{
+				var minorTicks:Object = styles.minorTicks;
+				if(minorTicks.color != null)
+				{
+					this.chart.setStyle(axisName + "AxisMinorTickColor", this.parseColor(minorTicks.color));
+				}
+				if(minorTicks.size != null)
+				{
+					this.chart.setStyle(axisName + "AxisMinorTickWeight", minorTicks.size);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorTicks", minorTicks.size > 0);
+				}
+				if(minorTicks.length != null)
+				{
+					this.chart.setStyle(axisName + "AxisMinorTickLength", minorTicks.length);
+				}
+				if(minorTicks.position)
+				{
+					this.chart.setStyle(axisName + "AxisMinorTickPosition", minorTicks.position);
+				}
+			}
+		}
+		
+		protected function setLegendStyles(styles:Object):void
+		{
+			if(styles.font)
+			{
+				var textFormat:TextFormat = TextFormatSerializer.readTextFormat(styles.font);
+				this.legend.setStyle("textFormat", textFormat);
+			}
+			
+			if(styles.spacing)
+			{
+				this.legend.setStyle("itemSpacing", styles.spacing);
+			}
+			
+			if(styles.position)
+			{
+				switch(styles.position)
+				{
+					case "left":
+					case "right":
+						this.legend.setStyle("orientation", "vertical");
+						break;
+					default: //top, bottom
+						this.legend.setStyle("orientation", "horizontal");
+				}
+				this.log("position: " + styles.position);
+				this.legendPosition = styles.position;
 			}
 		}
 		
@@ -697,24 +990,36 @@ package
 		 * @private
 		 * Creates a pseudo-class to instantiate a BackgroundAndBorder object.
 		 */
-		private function createBorderBackground():Function
+		private function createBorderBackgroundFactory():InstanceFactory
 		{
-			var borderBackgroundClass:Function = function():BackgroundAndBorder
+			var factory:InstanceFactory = new InstanceFactory(BackgroundAndBorder);
+			factory.properties =
 			{
-				var borderBG:BackgroundAndBorder = new BackgroundAndBorder();
-				borderBG.fillColor = this.fillColor;
-				borderBG.fillAlpha = this.fillAlpha;
-				borderBG.borderColor = this.borderColor;
-				borderBG.borderWeight = this.borderWeight;
-				borderBG.image = this.image;
-				return borderBG;
+				fillColor: 0xffffff,
+				fillAlpha: 1,
+				borderColor: 0x000000,
+				borderWeight: 1,
+				image: null,
+				imageMode: BackgroundImageMode.REPEAT
+			};
+			return factory;
+		}
+		
+		private function createMarkerSkin(imagePath:String, series:ISeries):InstanceFactory
+		{
+			//a simple UILoader would be enough, but we want tiling
+			var skin:InstanceFactory = this.createBorderBackgroundFactory();
+			//turn off the border
+			skin.properties.borderWeight = 0;
+			//turn off the fill
+			skin.properties.fillAlpha = 0;
+			skin.properties.image = imagePath;
+			if(series is LineSeries)
+			{
+				//make points fit to size and maintain their aspect ratio
+				skin.properties.imageMode = BackgroundImageMode.STRETCH_AND_MAINTAIN_ASPECT_RATIO;
 			}
-			borderBackgroundClass.prototype.fillColor = 0xffffff;
-			borderBackgroundClass.prototype.fillAlpha = 1;
-			borderBackgroundClass.prototype.borderColor = 0x000000;
-			borderBackgroundClass.prototype.borderWeight = 1;
-			borderBackgroundClass.prototype.image = null;
-			return borderBackgroundClass;
+			return skin;
 		}
 		
 		private function parseColor(value:Object):uint

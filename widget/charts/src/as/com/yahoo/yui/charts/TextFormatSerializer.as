@@ -21,12 +21,23 @@ package com.yahoo.yui.charts
 		public static function readTextFormat(input:Object):TextFormat
 		{
 			var format:TextFormat = new TextFormat();
-			format.font = parseFontName(input.name);
+			if(input.name)
+			{
+				format.font = parseFontName(input.name);
+			}
+			else format.font = "Verdana";
 			format.bold = input.bold;
 			format.italic = input.italic;
 			format.underline = input.underline;
-			format.size = input.size;
-			format.color = input.color;
+			if(input.size != null)
+			{
+				format.size = input.size;
+			}
+			if(input.color != null)
+			{
+				format.color = input.color;
+			}
+			else format.color = 0x000000;
 			
 			return format;
 		}

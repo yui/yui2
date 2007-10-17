@@ -47,8 +47,8 @@ package com.yahoo.yui.charts
 			if(input is CartesianSeries)
 			{
 				var cartesianSeries:CartesianSeries = CartesianSeries(input);
-				series.verticalField = cartesianSeries.verticalField;
-				series.horizontalField = cartesianSeries.horizontalField;
+				series.yField = cartesianSeries.verticalField;
+				series.xField = cartesianSeries.horizontalField;
 			}
 			else if(input is PieSeries)
 			{
@@ -71,8 +71,8 @@ package com.yahoo.yui.charts
 			if(series is CartesianSeries)
 			{
 				var cartesianSeries:CartesianSeries = CartesianSeries(series);
-				cartesianSeries.verticalField = input.verticalField;
-				cartesianSeries.horizontalField = input.horizontalField;
+				cartesianSeries.verticalField = input.yField;
+				cartesianSeries.horizontalField = input.xField;
 			}
 			else if(series is PieSeries)
 			{

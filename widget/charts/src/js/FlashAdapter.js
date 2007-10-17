@@ -80,7 +80,6 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		}
 		
 		//be sure to return after your case or the event will automatically fire!
-		delete event.type;
 		this.fireEvent(type, event);
 	},
 

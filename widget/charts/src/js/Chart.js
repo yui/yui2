@@ -9,6 +9,9 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	this.createEvent("itemRollOut");
 	this.createEvent("itemClick");
 	this.createEvent("itemDoubleClick");
+	this.createEvent("itemDragStart");
+	this.createEvent("itemDragUpdate");
+	this.createEvent("itemDragEnd");
 };
 
 YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
@@ -18,6 +21,21 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	toString: function()
 	{
 		return "Chart " + this._id;
+	},
+	
+	setStyle: function(name, value)
+	{
+		this._swf.setStyle(name, value);
+	},
+	
+	setStyles: function(styles)
+	{
+		this._swf.setStyles(styles);
+	},
+	
+	setSeriesStyles: function(styles)
+	{
+		this._swf.setSeriesStyles(styles);
 	},
 	
 	_initAttributes: function(attributes)
@@ -83,7 +101,8 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		//set initial styles
 		if(this._attributes.style)
 		{
-			this._swf.setStyles(this._attributes.style);		
+			var style = this._attributes.style;
+			this._swf.setStyles(style);		
 		}
 		
 		YAHOO.widget.Chart.superclass._loadHandler.call(this);
@@ -110,6 +129,8 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		}
 		else
 		{
+			var styleChanged = false;
+			
 			//make a copy of the series definitions so that we aren't
 			//editing them directly.
 			var dataProvider = [];	
@@ -124,6 +145,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 					for(var prop in currentSeries)
 					{
 						clonedSeries[prop] = currentSeries[prop];
+						if(prop == "style" && currentSeries[prop] != null)
+						{
+							styleChanged = true;
+							currentSeries.style = null;
+						}
 					}
 					dataProvider.push(clonedSeries);
 				}
@@ -146,7 +172,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 				var series = {type: this._type, dataProvider: response.results};
 				dataProvider.push(series);
 			}
-			this._swf.setDataProvider(dataProvider);
+			this._swf.setDataProvider(dataProvider, styleChanged);
 		}
 	},
 
@@ -212,4 +238,4 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	}
 });
 
-YAHOO.widget.Chart.SWFURL = "Charts.swf";
+YAHOO.widget.Chart.SWFURL = "charts.swf";

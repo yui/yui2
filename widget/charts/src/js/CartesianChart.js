@@ -10,65 +10,65 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	{	
 		YAHOO.widget.CartesianChart.superclass._initAttributes.call(this, attributes);
 
-		this.getAttributeConfig("horizontalField",
+		this.getAttributeConfig("xField",
 		{
-			method: this._getHorizontalField
+			method: this._getXField
 		});
 
-		this.setAttributeConfig("horizontalField",
+		this.setAttributeConfig("xField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setHorizontalField
+			method: this._setXField
 		});
 
-		this.getAttributeConfig("verticalField",
+		this.getAttributeConfig("yField",
 		{
-			method: this._getVerticalField
+			method: this._getYField
 		});
 
-		this.setAttributeConfig("verticalField",
+		this.setAttributeConfig("yField",
 		{
 			validator: YAHOO.lang.isString,
-			method: this._setVerticalField
+			method: this._setYField
 		});
 
-		this.setAttributeConfig("horizontalAxis",
+		this.setAttributeConfig("xAxis",
 		{
-			method: this._setHorizontalAxis
+			method: this._setXAxis
 		});
 
-		this.setAttributeConfig("verticalAxis",
+		this.setAttributeConfig("yAxis",
 		{
-			method: this._setVerticalAxis
+			method: this._setYAxis
 		});
 	},
 
-	_getHorizontalField: function()
+	_getXField: function()
 	{
 		return this._swf.getHorizontalField();
 	},
 
-	_setHorizontalField: function(value)
+	_setXField: function(value)
 	{
 		this._swf.setHorizontalField(value);
 	},
 
-	_getVerticalField: function()
+	_getYField: function()
 	{
 		return this._swf.getVerticalField();
 	},
 
-	_setVerticalField: function(value)
+	_setYField: function(value)
 	{
 		this._swf.setVerticalField(value);
 	},
 	
-	_setHorizontalAxis: function(value)
+	_setXAxis: function(value)
 	{
 		this._swf.setHorizontalAxis(value);
 	},
 
-	_setVerticalAxis: function(value)
+	_setYAxis: function(value)
 	{
 		this._swf.setVerticalAxis(value);
 	}

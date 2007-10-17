@@ -13,8 +13,8 @@ YAHOO.widget.CartesianSeries = function()
 
 YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 {
-	horizontalField: null,
-	verticalField: null
+	xField: null,
+	yField: null
 });
 
 
@@ -59,5 +59,6 @@ YAHOO.widget.PieSeries = function()
 YAHOO.lang.extend(YAHOO.widget.PieSeries, YAHOO.widget.Series,
 {
 	type: "pie",
-	dataField: null
+	dataField: null,
+	categoryField: null
 });

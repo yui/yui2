@@ -18,10 +18,3 @@ YAHOO.widget.BarChart = function(containerId, dataSource, attributes)
 };
 
 YAHOO.lang.extend(YAHOO.widget.BarChart, YAHOO.widget.CartesianChart);
-
-YAHOO.widget.PieChart = function(containerId, dataSource, attributes)
-{
-	YAHOO.widget.PieChart.superclass.constructor.call(this, "pie", containerId, dataSource, attributes);
-};
-
-YAHOO.lang.extend(YAHOO.widget.PieChart, YAHOO.widget.Chart);

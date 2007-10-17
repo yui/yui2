@@ -104,6 +104,7 @@ package com.yahoo.yui
 		protected function stageResizeHandler(event:Event):void
 		{
 			this.refreshComponentSize();
+			this.log("resize (width: " + this.stage.stageWidth + ", height: " + this.stage.stageHeight + ")", LoggerCategory.INFO);
 		}
 		
 		protected function refreshComponentSize():void
@@ -112,7 +113,6 @@ package com.yahoo.yui
 			{
 				this.component.width = this.stage.stageWidth;
 				this.component.height = this.stage.stageHeight;
-				this.log("resize (width: " + this.stage.stageWidth + ", height: " + this.stage.stageHeight + ")", LoggerCategory.INFO);
 			}
 		}
 	}
