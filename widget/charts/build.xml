@@ -19,7 +19,7 @@
         <!-- TODO: Make MXMLC a property -->
         <exec executable="C:/Program Files/Adobe/Flex Builder 3/sdks/2.0.1/bin/mxmlc.exe" failonerror="true">
             <arg line="-library-path+='${component.srcdir}/swc/charts.swc'"/>
-            <arg line="-source-path+='C:\Documents and Settings\jtynjala\My Documents\Development\yahoo\presentation\flash\ActionScript 3'"/>
+            <arg line="-source-path+='..\..\..\flash\ActionScript 3'"/>
             <arg line="-source-path+='C:\Program Files\Adobe\Adobe Flash CS3\en\Configuration\Component Source\ActionScript 3.0\User Interface'"/>
             <arg line="-output '${component.srcdir}/swf/charts.swf'"/>
             <arg line="'${component.srcdir}/as/Charts.as'"/>
