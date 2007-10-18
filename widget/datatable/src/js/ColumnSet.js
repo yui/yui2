@@ -551,7 +551,8 @@ YAHOO.widget.Column.prototype.editor = null;
 YAHOO.widget.Column.prototype.editorOptions = null;
 
 /**
- * True if Column is resizeable, false otherwise.
+ * True if Column is resizeable, false otherwise. The Drag & Drop Utility is
+ * required to enable this feature.
  *
  * @property resizeable
  * @type Boolean
