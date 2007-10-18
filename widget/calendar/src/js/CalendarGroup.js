@@ -52,18 +52,18 @@ YAHOO.widget.CalendarGroup.prototype.init = function(id, containerId, config) {
 	this.id = id;
 
 	/**
-	* The unique id associated with the CalendarGroup container
-	* @property containerId
-	* @type String
-	*/
-	this.containerId = containerId;
-
-	/**
 	* The outer containing element for the CalendarGroup
 	* @property oDomContainer
 	* @type HTMLElement
 	*/
-	this.oDomContainer = document.getElementById(containerId);
+	this.oDomContainer = YAHOO.util.Dom.get(containerId);
+
+	/**
+	* The unique id associated with the CalendarGroup container
+	* @property containerId
+	* @type String
+	*/
+	this.containerId = this.oDomContainer.id;
 
 	YAHOO.util.Dom.addClass(this.oDomContainer, YAHOO.widget.CalendarGroup.CSS_CONTAINER);
 	YAHOO.util.Dom.addClass(this.oDomContainer, YAHOO.widget.CalendarGroup.CSS_MULTI_UP);
@@ -527,6 +527,29 @@ YAHOO.widget.CalendarGroup.prototype.initEvents = function() {
 	this.clearEvent = new YAHOO.util.CustomEvent(defEvents.CLEAR);
 	this.clearEvent.subscribe = sub; this.clearEvent.unsubscribe = unsub;
 
+	/**
+	* Fired just before the Calendar is to be shown
+	* @event beforeShowEvent
+	*/
+	this.beforeShowEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW);
+
+	/**
+	* Fired after the Calendar is shown
+	* @event showEvent
+	*/
+	this.showEvent = new YAHOO.util.CustomEvent(defEvents.SHOW);
+
+	/**
+	* Fired just before the Calendar is to be hidden
+	* @event beforeHideEvent
+	*/
+	this.beforeHideEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE);
+
+	/**
+	* Fired after the Calendar is hidden
+	* @event hideEvent
+	*/
+	this.hideEvent = new YAHOO.util.CustomEvent(defEvents.HIDE);
 };
 
 /**
@@ -1059,7 +1082,6 @@ YAHOO.widget.CalendarGroup.prototype._setMonthOnDate = function(date, iMonth) {
  * @private
  */
 YAHOO.widget.CalendarGroup.prototype._fixWidth = function() {
-	var startW = this.oDomContainer.offsetWidth;
 	var w = 0;
 	for (var p=0;p<this.pages.length;++p) {
 		var cal = this.pages[p];
@@ -1133,6 +1155,7 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "removeTitleBar",
 																 "removeCloseButton",
 																 "hide",
+																 "show",
 																 "browser");
 
 /**

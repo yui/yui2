@@ -202,7 +202,11 @@ YAHOO.widget.Calendar._EVENT_TYPES = {
 	BEFORE_RENDER : "beforeRender",
 	RENDER : "render",
 	RESET : "reset",
-	CLEAR : "clear"
+	CLEAR : "clear",
+	BEFORE_HIDE : "beforeHide",
+	HIDE : "hide",
+	BEFORE_SHOW : "beforeShow",
+	SHOW : "show"
 };
 
 /**
@@ -342,18 +346,20 @@ YAHOO.widget.Calendar.prototype = {
 * Initializes the Calendar widget.
 * @method init
 * @param {String}	id			The id of the table element that will represent the calendar widget
-* @param {String}	containerId	The id of the container div element that will wrap the calendar table
+* @param {String | HTMLElement}	containerId	The id of the container div element that will wrap the calendar table, or a reference to the DIV element
 * @param {Object}	config		The configuration object containing the Calendar's arguments
 */
 YAHOO.widget.Calendar.prototype.init = function(id, containerId, config) {
+	
 	this.logger = new YAHOO.widget.LogWriter("Calendar " + id);
 	this.initEvents();
 	this.today = new Date();
 	YAHOO.widget.DateMath.clearTime(this.today);
 
 	this.id = id;
-	this.oDomContainer = document.getElementById(containerId);
-	if (! this.oDomContainer) { this.logger.log("No valid container present.", "error"); }
+	this.oDomContainer = YAHOO.util.Dom.get(containerId);
+
+	if (!this.oDomContainer) { this.logger.log("No valid container present.", "error"); }
 
 	/**
 	* The Config object used to hold the configuration variables for the Calendar
@@ -440,7 +446,7 @@ YAHOO.widget.Calendar.prototype.configIframe = function(type, args, obj) {
 * @method configTitle
 */
 YAHOO.widget.Calendar.prototype.configTitle = function(type, args, obj) {
-	var title = args[0], tDiv;
+	var title = args[0];
 
 	// "" disables title bar
 	if (title) {
@@ -540,6 +546,30 @@ YAHOO.widget.Calendar.prototype.initEvents = function() {
 	*/
 	this.clearEvent = new YAHOO.util.CustomEvent(defEvents.CLEAR);
 
+	/**
+	* Fired just before the Calendar is to be shown
+	* @event beforeShowEvent
+	*/
+	this.beforeShowEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW);
+
+	/**
+	* Fired after the Calendar is shown
+	* @event showEvent
+	*/
+	this.showEvent = new YAHOO.util.CustomEvent(defEvents.SHOW);
+
+	/**
+	* Fired just before the Calendar is to be hidden
+	* @event beforeHideEvent
+	*/
+	this.beforeHideEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE);
+
+	/**
+	* Fired after the Calendar is hidden
+	* @event hideEvent
+	*/
+	this.hideEvent = new YAHOO.util.CustomEvent(defEvents.HIDE);
+
 	this.beforeSelectEvent.subscribe(this.onBeforeSelect, this, true);
 	this.selectEvent.subscribe(this.onSelect, this, true);
 	this.beforeDeselectEvent.subscribe(this.onBeforeDeselect, this, true);
@@ -548,6 +578,24 @@ YAHOO.widget.Calendar.prototype.initEvents = function() {
 	this.renderEvent.subscribe(this.onRender, this, true);
 	this.resetEvent.subscribe(this.onReset, this, true);
 	this.clearEvent.subscribe(this.onClear, this, true);
+};
+
+/**
+* The default event function listening for mousedown events on the Calendar container
+* @method doMouseDown
+* @param {DOMEvent} e	The event
+* @param {Calendar} cal	A reference to the calendar
+*/
+YAHOO.widget.Calendar.prototype.doMouseDown = function(e, cal) {
+	
+	var target = YAHOO.util.Event.getTarget(e);
+	var c = cal.parent || cal;
+
+	if (target.className == cal.Style.CSS_NAV_LEFT) {
+		c.previousMonth();
+	} else if (target.className == cal.Style.CSS_NAV_RIGHT) {
+		c.nextMonth();
+	}
 };
 
 /**
@@ -572,6 +620,7 @@ YAHOO.widget.Calendar.prototype.doSelectCell = function(e, cal) {
 
 		target = target.parentNode;
 		tagName = target.tagName.toLowerCase(); 
+		// TODO: No need to go all the way up to html.
 		if (tagName == "html") {
 			return;
 		}
@@ -1405,8 +1454,6 @@ YAHOO.widget.Calendar.prototype.renderHeader = function(html) {
 		renderRight = true;
 	}
 
-	var cal = this.parent || this;
-	
 	if (renderLeft) {
 		var leftArrow = this.cfg.getProperty(defCfg.NAV_ARROW_LEFT.key);
 		// Check for deprecated customization - If someone set IMG_ROOT, but didn't set NAV_ARROW_LEFT, then set NAV_ARROW_LEFT to the old deprecated value
@@ -1533,8 +1580,6 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 	var cell = document.createElement("td");
 	tempDiv.appendChild(cell);
 
-	var jan1 = new Date(useDate.getFullYear(),0,1);
-
 	var cal = this.parent || this;
 
 	for (var r=0;r<6;r++) {
@@ -1578,7 +1623,7 @@ YAHOO.widget.Calendar.prototype.renderBody = function(workingDate, html) {
 				
 					for (var s=0;s<this.renderStack.length;++s) {
 
-        				renderer = null;
+						renderer = null;
 
 						var rArray = this.renderStack[s];
 						var type = rArray[0];
@@ -1767,24 +1812,20 @@ YAHOO.widget.Calendar.prototype.render = function() {
 * @method applyListeners
 */
 YAHOO.widget.Calendar.prototype.applyListeners = function() {
-	
+
 	var root = this.oDomContainer;
-	var cal = this.parent || this;
-	
+
 	var anchor = "a";
-	var mousedown = "mousedown";
 
 	var linkLeft = YAHOO.util.Dom.getElementsByClassName(this.Style.CSS_NAV_LEFT, anchor, root);
 	var linkRight = YAHOO.util.Dom.getElementsByClassName(this.Style.CSS_NAV_RIGHT, anchor, root);
 
 	if (linkLeft && linkLeft.length > 0) {
 		this.linkLeft = linkLeft[0];
-		YAHOO.util.Event.addListener(this.linkLeft, mousedown, cal.previousMonth, cal, true);
 	}
 
 	if (linkRight && linkRight.length > 0) {
 		this.linkRight = linkRight[0];
-		YAHOO.util.Event.addListener(this.linkRight, mousedown, cal.nextMonth, cal, true);
 	}
 
 	if (this.domEventMap) {
@@ -1813,6 +1854,7 @@ YAHOO.widget.Calendar.prototype.applyListeners = function() {
 	YAHOO.util.Event.addListener(this.oDomContainer, "click", this.doSelectCell, this);
 	YAHOO.util.Event.addListener(this.oDomContainer, "mouseover", this.doCellMouseOver, this);
 	YAHOO.util.Event.addListener(this.oDomContainer, "mouseout", this.doCellMouseOut, this);
+	YAHOO.util.Event.addListener(this.oDomContainer, "mousedown", this.doMouseDown, this);
 };
 
 /**
@@ -2665,7 +2707,6 @@ YAHOO.widget.Calendar.prototype._parseDates = function(sDates) {
 * @type Array[](Number[])
 */
 YAHOO.widget.Calendar.prototype._parseRange = function(startDate, endDate) {
-	var dStart   = new Date(startDate[0],startDate[1]-1,startDate[2]);
 	var dCurrent = YAHOO.widget.DateMath.add(new Date(startDate[0],startDate[1]-1,startDate[2]),YAHOO.widget.DateMath.DAY,1);
 	var dEnd     = new Date(endDate[0],  endDate[1]-1,  endDate[2]);
 
@@ -2833,7 +2874,10 @@ YAHOO.widget.Calendar.prototype.getSelectedDates = function() {
 * @method hide
 */
 YAHOO.widget.Calendar.prototype.hide = function() {
-	this.oDomContainer.style.display = "none";
+	if (this.beforeHideEvent.fire()) {
+		this.oDomContainer.style.display = "none";
+		this.hideEvent.fire();
+	}
 };
 
 /**
@@ -2841,7 +2885,10 @@ YAHOO.widget.Calendar.prototype.hide = function() {
 * @method show
 */
 YAHOO.widget.Calendar.prototype.show = function() {
-	this.oDomContainer.style.display = "block";
+	if (this.beforeShowEvent.fire()) {
+		this.oDomContainer.style.display = "block";
+		this.showEvent.fire();
+	}
 };
 
 /**
