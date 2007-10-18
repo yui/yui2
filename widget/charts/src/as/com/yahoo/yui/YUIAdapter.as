@@ -111,6 +111,7 @@ package com.yahoo.yui
 		{
 			if(this.component)
 			{
+				this.component.x = this.component.y = 0;
 				this.component.width = this.stage.stageWidth;
 				this.component.height = this.stage.stageHeight;
 			}
