@@ -1,3 +1,11 @@
+/**
+ * Wraps Flash embedding functionality and allows communication with SWF through
+ * attributes.
+ *
+ * @namespace YAHOO.widget
+ * @class FlashAdapter
+ * @uses YAHOO.util.AttributeProvider
+ */
 YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 {
 	// set up the initial events and attributes stuff
@@ -21,24 +29,63 @@ YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 	//embed the SWF file in the page
 	this._embedSWF(this._swfURL, containerID, attributes.id, attributes.version, attributes.backgroundColor, attributes.expressInstall);
 	
-	//the contentReady event will tell developers that they may begin
-	//manipulating this widget.
+	/**
+	 * Fires when the SWF is initialized and communication is possible.
+	 * @event contentReady
+	 */
 	this.createEvent("contentReady");
 };
 
 YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 {
+	/**
+	 * The URL of the SWF file.
+	 * @property _swfURL
+	 * @type String
+	 * @private
+	 */
 	_swfURL: null,
-	_swf: null, //a reference to the embedded SWF file
+
+	/**
+	 * A reference to the embedded SWF file.
+	 * @property _swf
+	 * @private
+	 */
+	_swf: null,
+
+	/**
+	 * The id of this instance.
+	 * @property _id
+	 * @type String
+	 * @private
+	 */
 	_id: null,
+	
+	/**
+	 * The initializing attributes are stored here until the SWF is ready.
+	 * @property _attributes
+	 * @type Object
+	 * @private
+	 */
 	_attributes: null, //the intializing attributes
 
+	/**
+	 * Public accessor to the unique name of the FlashAdapter instance.
+	 *
+	 * @method toString
+	 * @return {String} Unique name of the FlashAdapter instance.
+	 */
 	toString: function()
 	{
 		return "FlashAdapter " + this._id;
 	},
 
-	//allow an event handler to be specified
+	/**
+	 * Embeds the SWF in the page and associates it with this instance.
+	 *
+	 * @method _embedSWF
+	 * @private
+	 */
 	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall)
 	{
 		//standard SWFObject embed
@@ -62,6 +109,12 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		else YAHOO.log("Unable to load SWF " + swfURL);
 	},
 
+	/**
+	 * Handles or re-dispatches events received from the SWF.
+	 *
+	 * @method _eventHandler
+	 * @private
+	 */
 	_eventHandler: function(event)
 	{
 		var type = event.type;
@@ -83,6 +136,12 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		this.fireEvent(type, event);
 	},
 
+	/**
+	 * Called when the SWF has been initialized.
+	 *
+	 * @method _loadHandler
+	 * @private
+	 */
 	_loadHandler: function()
 	{
 		this._initAttributes(this._attributes);
@@ -92,22 +151,47 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		this.fireEvent("contentReady");
 	},
 	
+	/**
+	 * Initializes the attributes.
+	 *
+	 * @method _initAttributes
+	 * @private
+	 */
 	_initAttributes: function(attributes)
 	{
 		//should be overridden if other attributes need to be set up
 		
+		/**
+		 * @attribute swfURL
+		 * @description Absolute or relative URL to the SWF displayed by the FlashAdapter.
+		 * @type String
+		 */
 		this.getAttributeConfig("swfURL",
 		{
 			method: this._getSWFURL
 		});
 	},
 	
+	/**
+	 * Getter for swfURL attribute.
+	 *
+	 * @method _getSWFURL
+	 * @private
+	 */
 	_getSWFURL: function()
 	{
 		return this._swfURL;
 	}
 });
 
+/**
+ * Receives event messages from SWF and passes them to the correct instance
+ * of FlashAdapter.
+ *
+ * @method YAHOO.widget.FlashAdapter.eventHandler
+ * @static
+ * @private
+ */
 YAHOO.widget.FlashAdapter.eventHandler = function(elementID, event)
 {
 	var loadedSWF = YAHOO.util.Dom.get(elementID);
