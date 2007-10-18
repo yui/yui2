@@ -80,6 +80,9 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
         this._aCache = [];
         YAHOO.log("Cache initialized", "info", this.toString());
     }
+    
+    // Initialize interval tracker
+    this._aIntervals = [];
 
     this._sName = "DataSource instance" + YAHOO.util.DataSource._nIndex;
     YAHOO.util.DataSource._nIndex++;
@@ -337,6 +340,15 @@ YAHOO.util.DataSource.prototype._aCache = null;
  * @private
  */
 YAHOO.util.DataSource.prototype._oQueue = null;
+
+/**
+ * Array of polling interval IDs that have been enabled, needed to clear all intervals.
+ *
+ * @property _aIntervals
+ * @type Array
+ * @private
+ */
+YAHOO.util.DataSource.prototype._aIntervals = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -678,6 +690,63 @@ YAHOO.util.DataSource.prototype.flushCache = function() {
         this._aCache = [];
         this.fireEvent("cacheFlushEvent");
         YAHOO.log("Flushed the cache", "info", this.toString());
+    }
+};
+
+/**
+ * Sets up a polling mechanism to send requests at set intervals and forward
+ * responses to given callback.
+ *
+ * @method setInterval
+ * @param nMsec {Number} Length of interval in milliseconds.
+ * @param oRequest {Object} Request object.
+ * @param oCallback {Function} Handler function to receive the response.
+ * @param oCaller {Object} The Calling object that is making the request.
+ * @return {Number} Interval ID.
+ */
+YAHOO.util.DataSource.prototype.setInterval = function(nMsec, oRequest, oCallback, oCaller) {
+    //TODO: management and cleanup of interval IDs
+    try {
+        YAHOO.log("Enabling polling to live data for \"" + oRequest + "\" at interval " + nMsec, "info", this.toString());
+        var oSelf = this;
+        var nId = setInterval(function() {
+            oSelf.makeConnection(oRequest, oCallback, oCaller);
+        }, nMsec);
+        this._aIntervals.push(nId);
+        return nId;
+    }
+    catch(e) {
+        YAHOO.log("Could not enable polling to live data for \"" + oRequest + "\" at interval " + nMsec, "info", this.toString());
+    }
+};
+
+/**
+ * Disables polling mechanism associated with the given interval ID.
+ *
+ * @method clearInterval
+ * @param nId {Number} Interval ID.
+ */
+YAHOO.util.DataSource.prototype.clearInterval = function(nId) {
+    // Remove from tracker if there
+    var tracker = this._aIntervals || [];
+    for(var i=tracker.length-1; i>-1; i--) {
+        if(tracker[i] === nId) {
+            tracker.splice(i,1);
+            clearInterval(nId);
+        }
+    }
+};
+
+/**
+ * Disables all known polling intervals.
+ *
+ * @method clearAllIntervals
+ */
+YAHOO.util.DataSource.prototype.clearAllIntervals = function(nId) {
+    var tracker = this._aIntervals || [];
+    for(var i=tracker.length-1; i>-1; i--) {
+        tracker.splice(i,1);
+        clearInterval(nId);
     }
 };
 
@@ -1157,9 +1226,15 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
         var bError = false;
         var oParsedResponse = {};
-        var xmlList = (this.responseSchema.resultNode) ?
+        var xmlList = null;
+        // In case oRawResponse is something funky
+        try {
+            xmlList = (this.responseSchema.resultNode) ?
                 oRawResponse.getElementsByTagName(this.responseSchema.resultNode) :
                 null;
+        }
+        catch(e) {
+        }
         if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
             bError = true;
         }
