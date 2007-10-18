@@ -443,16 +443,59 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return the new merged object
      */
     merge: function() {
-        var o={}, a=arguments, i;
-        for (i=0; i<a.length; i=i+1) {
+        var o={}, a=arguments;
+        for (var i=0, l=a.length; i<l; i=i+1) {
             YAHOO.lang.augmentObject(o, a[i], true);
-            /*
-            for (var j in a[i]) {
-                o[j] = a[i][j];
-            }
-            */
         }
         return o;
+    },
+
+    /**
+     * Executes the supplied function in the scope of the supplied 
+     * object 'when' milliseconds later.  Executes the function a 
+     * single time unless periodic is set to true.
+     * @method later
+     * @since 2.4.0
+     * @param when {int} the number of milliseconds to wait until the fn 
+     * is executed
+     * @param o the scope object
+     * @param fn {Function|String} the function to execute or the name of 
+     * the method in the 'o' object to execute
+     * @param data data that is provided to the function
+     * @param periodic {boolean} if true, executes continuously at supplied 
+     * interval until canceled
+     * @return a timer object. Call the cancel() method on this object to 
+     * stop the timer.
+     */
+    later: function(when, o, fn, data, periodic) {
+        when = when || 0; 
+        o = o || {};
+        var m = fn, f, r;
+
+        if (YAHOO.lang.isString(fn)) {
+            m = o[fn];
+        }
+
+        if (!m) {
+            throw new TypeError("method undefined");
+        }
+
+        f = function() {
+            m.call(o, data);
+        };
+
+        r = (periodic) ? setInterval(f, when) : setTimeout(f, when);
+
+        return {
+            interval: periodic,
+            cancel: function() {
+                if (this.interval) {
+                    clearInterval(r);
+                } else {
+                    clearTimeout(r);
+                }
+            }
+        };
     },
 
     /**
