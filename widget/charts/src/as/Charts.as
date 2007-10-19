@@ -1,8 +1,5 @@
 package
 {
-	import com.yahoo.astra.animation.Proteus;
-	import com.yahoo.astra.fl.charts.legend.Legend;
-	import com.yahoo.astra.utils.InstanceFactory;
 	import fl.containers.UILoader;
 	import flash.display.Sprite;
 	import flash.display.DisplayObject;
@@ -16,6 +13,8 @@ package
 	import com.yahoo.astra.fl.charts.series.*;
 	import com.yahoo.astra.fl.charts.skins.*;
 	import com.yahoo.astra.fl.charts.events.ChartEvent;
+	import com.yahoo.astra.fl.charts.legend.Legend;
+	import com.yahoo.astra.utils.InstanceFactory;
 	import com.yahoo.astra.utils.JavaScriptUtil;
 	import com.yahoo.yui.YUIAdapter;
 	import com.yahoo.yui.LoggerCategory;
@@ -489,7 +488,7 @@ package
 			{
 				case "padding":
 					var contentPadding:Number = Number(value);
-					contentPadding += this.backgroundAndBorder.borderWeight;
+					//contentPadding += this.backgroundAndBorder.borderWeight;
 					this.chart.setStyle("contentPadding", contentPadding);
 					break;
 				case "animationEnabled":
@@ -503,11 +502,7 @@ package
 					
 					if(value.size != null)
 					{
-						//contentPadding = this.chart.getStyle("contentPadding") as Number;
-						//contentPadding -= this.backgroundAndBorder.borderWeight;
 						this.backgroundAndBorder.borderWeight = value.size;
-						//contentPadding += this.backgroundAndBorder.borderWeight;
-						//this.chart.setStyle("contentPadding", contentPadding);
 						this.refreshComponentSize();
 					}
 					break;
@@ -550,6 +545,8 @@ package
 						this.setLegendStyles(value);
 					}
 					break;
+				default:
+					this.log("Unknown style: " + name);
 			}
 		}
 		
@@ -594,39 +591,40 @@ package
 				var skin:Object = defaultSkin;
 				if(style)
 				{
-					if(style.images)
+					for(var styleName:String in style)
 					{
-						var images:Array = style.images as Array;
-						var imageCount:int = images.length;
-						for(var j:int = 0; j < imageCount; j++)
+						switch(styleName)
 						{
-							images[j] = this.createMarkerSkin(String(images[j]), series);
+							case "images":
+								var images:Array = style.images as Array;
+								var imageCount:int = images.length;
+								for(var j:int = 0; j < imageCount; j++)
+								{
+									images[j] = this.createMarkerSkin(String(images[j]), series);
+								}
+								skin = images;
+								break;
+							case "image":
+								skin = this.createMarkerSkin(style.image, series);
+								break;
+							case "colors":
+								var colors:Array = style.colors;
+								var colorCount:int = colors.length;
+								for(j = 0; j < colorCount; j++)
+								{
+									colors[j] = this.parseColor(colors[j]);
+								}
+								color = colors;
+								break;
+							case "color":
+								color = this.parseColor(style.color);
+								break;
+							case "size":
+								size = Number(style.size);
+								break;
+							default:
+								this.log("Unknown series style: " + styleName);
 						}
-						skin = images;
-					}
-					else if(style.image)
-					{
-						skin = this.createMarkerSkin(style.image, series);
-					}
-					
-					if(style.colors)
-					{
-						var colors:Array = style.colors;
-						var colorCount:int = colors.length;
-						for(j = 0; j < colorCount; j++)
-						{
-							colors[j] = this.parseColor(colors[j]);
-						}
-						color = colors;
-					}
-					else if(style.color != null)
-					{
-						color = this.parseColor(style.color);
-					}
-					
-					if(style.size != null)
-					{
-						size = Number(style.size);
 					}
 				}
 				
