@@ -82,6 +82,7 @@ var Dom = YAHOO.util.Dom,
         }
         
         oConfig.element = document.createElement('span');
+        oConfig.element.setAttribute('unselectable', 'on');
         oConfig.element.className = 'yui-button yui-' + oConfig.attributes.type + '-button';
         oConfig.element.innerHTML = '<span class="first-child"><a href="#">LABEL</a></span>';
         oConfig.attributes.id = Dom.generateId();

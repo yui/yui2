@@ -76,6 +76,12 @@ var Dom = YAHOO.util.Dom,
         */
         editorDirty: false,
         /**
+        * @property _defaultCSS
+        * @description The default CSS used in the config for 'css'. This way you can add to the config like this: { css: YAHOO.widget.SimpleEditor.prototype._defaultCSS + 'ADD MYY CSS HERE' }
+        * @type String
+        */
+        _defaultCSS: 'html { height: 95%; } body { height: 100%; padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: pointer; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
+        /**
         * @property _defaultToolbar
         * @private
         * @description Default toolbar config.
@@ -277,7 +283,7 @@ var Dom = YAHOO.util.Dom,
         afterElement: null,
         /**
         * @property invalidHTML
-        * @description Contains a list of HTML elements that are invalid inside the editor. They will be removed when they are found.
+        * @description Contains a list of HTML elements that are invalid inside the editor. They will be removed when they are found. If you set the value of a key to "{ keepContents: true }", then the element will be replaced with a yui-non span to be filtered out when cleanHTML is called. The only tag that is ignored here is the span tag as it will force the Editor into a loop and freeze the browser. However.. all of these tags will be removed in the cleanHTML routine.
         * @type Object
         */
         invalidHTML: {
@@ -385,7 +391,9 @@ var Dom = YAHOO.util.Dom,
             }
             var isrc = 'javascript:;';
             if (this.browser.ie) {
-                isrc = 'about:blank';
+                if (window.location.href.toLowerCase().indexOf("https") !== 0) {
+                    isrc = 'about:blank';
+                }
             }
             ifrmDom.setAttribute('src', isrc);
             var ifrm = new YAHOO.util.Element(ifrmDom);
@@ -623,7 +631,7 @@ var Dom = YAHOO.util.Dom,
         * @returns {String} The state that it was set to.
         */
         _toggleDesignMode: function() {
-            var _dMode = this._getDoc().designMode,
+            var _dMode = this._getDoc().designMode.toLowerCase(),
                 _state = 'on';
             if (_dMode == 'on') {
                 _state = 'off';
@@ -800,7 +808,8 @@ var Dom = YAHOO.util.Dom,
                 if (!sel || !range) {
                     return null;
                 }
-                if (!this._hasSelection() && !this.browser.webkit) {
+                //if (!this._hasSelection() && !this.browser.webkit) {
+                if (!this._hasSelection()) {
                     if (sel.anchorNode && (sel.anchorNode.nodeType == 3)) {
                         if (sel.anchorNode.parentNode) { //next check parentNode
                             elm = sel.anchorNode.parentNode;
@@ -846,7 +855,6 @@ var Dom = YAHOO.util.Dom,
             } else if (this.currentElement && this.currentElement[0]) {
                 elm = this.currentElement[0];
             }
-
             if (this.browser.opera || this.browser.webkit) {
                 if (this.currentEvent && !elm) {
                     elm = YAHOO.util.Event.getTarget(this.currentEvent);
@@ -876,10 +884,13 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _getDomPath
         * @description This method will attempt to build the DOM path from the currently selected element.
+        * @param HTMLElement el The element to start with, if not provided _getSelectedElement is used
         * @returns {Array} An array of node references that will create the DOM Path.
         */
-        _getDomPath: function() {
-			var el = this._getSelectedElement();
+        _getDomPath: function(el) {
+            if (!el) {
+			    el = this._getSelectedElement();
+            }
 			var domPath = [];
             while (el !== null) {
                 if (el.ownerDocument != this._getDoc()) {
@@ -982,17 +993,25 @@ var Dom = YAHOO.util.Dom,
 
             for (var v in this.invalidHTML) {
                 if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
-                    var tags = doc.body.getElementsByTagName(v);
-                    if (tags.length) {
-                        for (var i = 0; i < tags.length; i++) {
-                            els.push(tags[i]);
+                    if (v.toLowerCase() != 'span') {
+                        var tags = doc.body.getElementsByTagName(v);
+                        if (tags.length) {
+                            for (var i = 0; i < tags.length; i++) {
+                                els.push(tags[i]);
+                            }
                         }
                     }
                 }
             }
             for (var h = 0; h < els.length; h++) {
                 if (els[h].parentNode) {
-                    els[h].parentNode.removeChild(els[h]);
+                    if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
+                        var el = this._swapEl(els[h], 'span', function(el) {
+                            el.className = 'yui-non';
+                        });
+                    } else {
+                        els[h].parentNode.removeChild(els[h]);
+                    }
                 }
             }
             var imgs = this._getDoc().getElementsByTagName('img');
@@ -1018,6 +1037,46 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @private
+        * @method _isNonEditable
+        * @param Event ev The Dom event being checked
+        * @description Method is called at the beginning of all event handlers to check if this element or a parent element has the class yui-noedit (this.CLASS_NOEDIT) applied.
+        * If it does, then this method will stop the event and return true. The event handlers will then return false and stop the nodeChange from occuring. This method will also
+        * disable and enable the Editor's toolbar based on the noedit state.
+        * @returns Boolean
+        */
+        _isNonEditable: function(ev) {
+            if (this.get('allowNoEdit')) {
+                var el = Event.getTarget(ev);
+                if (this._isElement(el, 'html')) {
+                    el = null;
+                }
+                var path = this._getDomPath(el);
+                for (var i = (path.length - 1); i > -1; i--) {
+                    if (Dom.hasClass(path[i], this.CLASS_NOEDIT)) {
+                        //if (this.toolbar.get('disabled') === false) {
+                        //    this.toolbar.set('disabled', true);
+                        //}
+                        try {
+                             this._getDoc().execCommand('enableObjectResizing', false, 'false');
+                        } catch (e) {}
+                        this.nodeChange();
+                        Event.stopEvent(ev);
+                        YAHOO.log('CLASS_NOEDIT found in DOM Path, stopping event', 'info', 'SimpleEditor');
+                        return true;
+                    }
+                }
+                //if (this.toolbar.get('disabled') === true) {
+                    //Should only happen once..
+                    //this.toolbar.set('disabled', false);
+                    try {
+                         this._getDoc().execCommand('enableObjectResizing', false, 'true');
+                    } catch (e) {}
+                //}
+            }
+            return false;
+        },
+        /**
+        * @private
         * @method _setCurrentEvent
         * @param {Event} ev The event to cache
         * @description Sets the current event property
@@ -1032,6 +1091,9 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all click events inside the iFrame document.
         */
         _handleClick: function(ev) {
+            if (this._isNonEditable(ev)) {
+                return false;
+            }
             this._setCurrentEvent(ev);
             if (this.currentWindow) {
                 this.closeWindow();
@@ -1056,6 +1118,9 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all mouseup events inside the iFrame document.
         */
         _handleMouseUp: function(ev) {
+            if (this._isNonEditable(ev)) {
+                return false;
+            }
             this._setCurrentEvent(ev);
             var self = this;
             if (this.browser.opera) {
@@ -1094,6 +1159,9 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all mousedown events inside the iFrame document.
         */
         _handleMouseDown: function(ev) {
+            if (this._isNonEditable(ev)) {
+                return false;
+            }
             this._setCurrentEvent(ev);
             var sel = Event.getTarget(ev);
             if (this.browser.webkit && this._hasSelection()) {
@@ -1127,6 +1195,9 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all doubleclick events inside the iFrame document.
         */
         _handleDoubleClick: function(ev) {
+            if (this._isNonEditable(ev)) {
+                return false;
+            }
             this._setCurrentEvent(ev);
             var sel = Event.getTarget(ev);
             if (this._isElement(sel, 'img')) {
@@ -1149,6 +1220,9 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all keyup events inside the iFrame document.
         */
         _handleKeyUp: function(ev) {
+            if (this._isNonEditable(ev)) {
+                return false;
+            }
             this._setCurrentEvent(ev);
             switch (ev.keyCode) {
                 case 37: //Left Arrow
@@ -1186,7 +1260,82 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all keypress events inside the iFrame document.
         */
         _handleKeyPress: function(ev) {
+            if (this.get('allowNoEdit')) {
+                if (ev && ev.keyCode && ((ev.keyCode == 46) || ev.keyCode == 63272)) {
+                    //Forward delete key
+                    YAHOO.log('allowNoEdit is set, forward delete key has been disabled', 'warn', 'SimpleEditor');
+                    Event.stopEvent(ev);
+                }
+            }
+            if (this._isNonEditable(ev)) {
+                return false;
+            }
             this._setCurrentEvent(ev);
+            if (this.browser.webkit) {
+                var testLi = null;
+                if (ev.keyCode && (ev.keyCode == 8)) {
+                    //Delete
+                    if (this._isElement(this._getSelectedElement(), 'br')) {
+                        var el = this._getSelectedElement();
+                        el.parentNode.removeChild(el);
+                    }
+                }
+                if (ev.keyCode && (ev.keyCode == 13)) {
+                    if (this._isElement(this._getSelectedElement(), 'li')) {
+                        var tar = this._getSelectedElement();
+                        var li = this._getDoc().createElement('li');
+                        //li.innerHTML = '&nbsp;&nbsp;';
+                        li.innerHTML = '<span>&nbsp;</span>&nbsp;';
+                        if (tar.nextSibling) {
+                            tar.parentNode.insertBefore(li, tar.nextSibling);
+                        } else {
+                            tar.parentNode.appendChild(li);
+                        }
+                        this.currentElement[0] = li;
+                        this._selectNode(li.firstChild);
+                        Event.stopEvent(ev);
+                    }
+                }
+                //Shift Tab
+                if (ev.keyCode && (ev.keyCode == 25)) {
+                    testLi = this._getSelectedElement();
+                    if (this._isElement(testLi.parentNode, 'li')) {
+                        /* TODO Shift + Tab in Safari..
+                        YAHOO.log('We have a SHIFT tab in an LI, reverse it..', 'info', 'SimpleEditor');
+                        var par = testLi.parentNode;
+                        YAHOO.log(par.parentNode);
+                        YAHOO.log(par.parentNode.parentNode);
+                        if (this._isElement(par.parentNode.parentNode, 'ul') || this._isElement(par.parentNode.parentNode, 'ol')) {
+                            YAHOO.log('We have a double parent, move up a level', 'info', 'SimpleEditor');
+                            par.removeChild(testLi);
+                            par.parentNode.parentNode.insertBefore(testLi, par.nextSibling);
+                        }
+                        Event.stopEvent(ev);
+                        */
+                    }
+                }
+                //Tab Key
+                if (ev.keyCode && (ev.keyCode == 9)) {
+                    this._getDoc().execCommand('inserttext', false, '\t');
+                    testLi = this._getSelectedElement();
+                    if (this._isElement(testLi.parentNode, 'li')) {
+                        YAHOO.log('We have a tab in an LI', 'info', 'SimpleEditor');
+                        var par = testLi.parentNode;
+                        var newUl = this._getDoc().createElement(par.parentNode.tagName.toLowerCase());
+                        var newLi = this._getDoc().createElement('li');
+                        //newLi.innerHTML = '&nbsp;<span>&nbsp;</span>&nbsp;';
+                        newLi.innerHTML = '<span>&nbsp;</span>&nbsp;';
+                        newUl.appendChild(newLi);
+
+                        par.innerHTML = '&nbsp;&nbsp;&nbsp;';
+                        //par.appendChild(newUl);
+                        par.parentNode.replaceChild(newUl, par);
+                        this._getSelection().setBaseAndExtent(newLi.firstChild, 1, newLi.firstChild, 1);
+                    }
+                    Event.stopEvent(ev);
+                    this.nodeChange();
+                }
+            }
             this.fireEvent('editorKeyPress', { type: 'editorKeyPress', target: this, ev: ev });
         },
         /**
@@ -1196,6 +1345,9 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all keydown events inside the iFrame document.
         */
         _handleKeyDown: function(ev) {
+            if (this._isNonEditable(ev)) {
+                return false;
+            }
             this._setCurrentEvent(ev);
             if (this.currentWindow) {
                 this.closeWindow();
@@ -1225,15 +1377,6 @@ var Dom = YAHOO.util.Dom,
                         exec = false;
                     }
                     break;
-                case 219: //Left
-                    action = 'justifyleft';
-                    break;
-                case 220: //Center
-                    action = 'justifycenter';
-                    break;
-                case 221: //Right
-                    action = 'justifyright';
-                    break;
                 case 76: //L
                     if (this._hasSelection()) {
                         if (ev.shiftKey && ev.ctrlKey) {
@@ -1259,12 +1402,6 @@ var Dom = YAHOO.util.Dom,
                     break;
                 case 85: //U
                     action = 'underline';
-                    break;
-                case 9: //Tab Key
-                    if (this.browser.safari) {
-                        this._getDoc().execCommand('inserttext', false, '\t');
-                        Event.stopEvent(ev);
-                    }
                     break;
                 case 13:
                     if (this.browser.ie) {
@@ -1575,7 +1712,7 @@ var Dom = YAHOO.util.Dom,
         * @description The accessibility string for the element before the iFrame
         * @type String
         */
-        STR_BEFORE_EDITOR: 'This text field can contain stylized text and graphics. To cycle through all formatting options, use the keyboard shortcut Control + Shift + T to place focus on the toolbar and navigate between option heading names. <h4>Common formatting keyboard shortcuts:</h4><ul><li>Control Shift B sets text to bold</li> <li>Control Shift I sets text to italic</li> <li>Control Shift U underlines text</li> <li>Control Shift [ aligns text left</li> <li>Control Shift | centers text</li> <li>Control Shift ] aligns text right</li> <li>Control Shift L adds an HTML link</li> <li>To exit this text editor use the keyboard shortcut Control + Shift + ESC.</li></ul>',
+        STR_BEFORE_EDITOR: 'This text field can contain stylized text and graphics. To cycle through all formatting options, use the keyboard shortcut Control + Shift + T to place focus on the toolbar and navigate between option heading names. <h4>Common formatting keyboard shortcuts:</h4><ul><li>Control Shift B sets text to bold</li> <li>Control Shift I sets text to italic</li> <li>Control Shift U underlines text</li> <li>Control Shift L adds an HTML link</li> <li>To exit this text editor use the keyboard shortcut Control + Shift + ESC.</li></ul>',
         /**
         * @property STR_TITLE
         * @description The Title of the HTML document that is created in the iFrame
@@ -1615,6 +1752,13 @@ var Dom = YAHOO.util.Dom,
         * @type String
         */
         CLASS_HIDDEN: 'hidden',
+        /**
+        * @protected
+        * @property CLASS_NOEDIT
+        * @description CSS class applied to elements that are not editable.
+        * @type String
+        */
+        CLASS_NOEDIT: 'yui-noedit',
         /**
         * @protected
         * @property CLASS_CONTAINER
@@ -1714,6 +1858,17 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('nodeChangeThreshold', {
                 value: attr.nodeChangeThreshold || 3,
                 validator: YAHOO.lang.isNumber
+            });
+            /**
+            * @config allowNoEdit
+            * @description Should the editor check for non-edit fields. It should be noted that this technique is not perfect. If the user does the right things, they will still be able to make changes.
+            * Such as highlighting an element below and above the content and hitting a toolbar button or a shortcut key.
+            * @default false
+            * @type Boolean
+            */            
+            this.setAttributeConfig('allowNoEdit', {
+                value: attr.allowNoEdit || false,
+                validator: YAHOO.lang.Boolean
             });
             /**
             * @config element_cont
@@ -1844,7 +1999,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('css', {
-                value: attr.css || 'html { height: 95%; } body { height: 100%; padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: pointer; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
+                value: attr.css || this._defaultCSS,
                 writeOnce: true
             });
             /**
@@ -1943,6 +2098,10 @@ var Dom = YAHOO.util.Dom,
                 value: attr.toolbar || this._defaultToolbar,
                 writeOnce: true,
                 method: function(toolbar) {
+                    if (!toolbar.buttonType) {
+                        toolbar.buttonType = this._defaultToolbar.buttonType;
+                    }
+                    this._defaultToolbar = toolbar;
                 }
             });
             /**
@@ -1977,15 +2136,6 @@ var Dom = YAHOO.util.Dom,
                     }
                     return ret;
                 }               
-            });
-            /**
-            * @attribute localFileWarning
-            * @description Should we throw the warning if we detect a file that is local to their machine?
-            * @default true
-            * @type Boolean
-            */            
-            this.setAttributeConfig('localFileWarning', {
-                value: attr.locaFileWarning || true
             });
             /**
             * @attribute focusAtStart
@@ -2366,8 +2516,6 @@ var Dom = YAHOO.util.Dom,
             }, 10);
 
             this.get('editor_wrapper').appendChild(this.get('iframe').get('element'));
-            Dom.addClass(this.get('iframe').get('parentNode'), this.CLASS_EDITABLE_CONT);
-            this.get('iframe').addClass(this.CLASS_EDITABLE);
 
             if (this.get('disabled')) {
                 this._disableEditor(true);
@@ -2448,11 +2596,21 @@ var Dom = YAHOO.util.Dom,
             this.get('element_cont').setStyle('display', 'block');
 
 
+            Dom.addClass(this.get('iframe').get('parentNode'), this.CLASS_EDITABLE_CONT);
+            this.get('iframe').addClass(this.CLASS_EDITABLE);
+
             //Set height and width of editor container
             this.get('element_cont').setStyle('width', this.get('width'));
             Dom.setStyle(this.get('iframe').get('parentNode'), 'height', this.get('height'));
 
-
+            if (this.browser.ie4) {
+                this.get('iframe').setStyle('zoom', '1');
+                var iframe = this.get('iframe').get('element');
+                setTimeout(function() {
+                    iframe.style.height = '101%';
+                    iframe.style.zoom = '1';
+                }, 100);
+            }
             this.get('iframe').setStyle('width', '100%'); //WIDTH
             //this.get('iframe').setStyle('_width', '99%'); //WIDTH
             this.get('iframe').setStyle('height', '100%');
@@ -2509,52 +2667,6 @@ var Dom = YAHOO.util.Dom,
         },
     /* {{{  Command Overrides */
 
-        /**
-        * @method cmd_heading
-        * @param value Value passed from the execCommand method
-        * @description This is an execCommand override method. It is called from execCommand when the execCommand('heading') is used.
-        */
-        cmd_heading: function(value) {
-            var exec = true,
-                el = null,
-                action = 'heading',
-                _sel = this._getSelection(),
-                _selEl = this._getSelectedElement();
-
-            if (_selEl) {
-                _sel = _selEl;
-            }
-            
-            if (this.browser.ie) {
-                action = 'formatblock';
-            }
-            if (value == 'none') {
-                if ((_sel && _sel.tagName && (_sel.tagName.toLowerCase().substring(0,1) == 'h')) || (_sel && _sel.parentNode && _sel.parentNode.tagName && (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h'))) {
-                    if (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h') {
-                        _sel = _sel.parentNode;
-                    }
-                    el = this._swapEl(_selEl, 'span', function(el) {
-                        el.className = 'yui-non';
-                    });
-                    this._selectNode(el);
-                    this.currentElement[0] = el;
-                }
-                exec = false;
-            } else {
-                if (this.browser.ie || this.browser.webkit || this.browser.opera) {
-                    if (this._isElement(_selEl, 'h1') || this._isElement(_selEl, 'h2') || this._isElement(_selEl, 'h3') || this._isElement(_selEl, 'h4') || this._isElement(_selEl, 'h5') || this._isElement(_selEl, 'h6')) {
-                        el = this._swapEl(_selEl, value);
-                        this._selectNode(el);
-                        this.currentElement[0] = el;
-                    } else {
-                        this._createCurrentElement(value);
-                        this._selectNode(this.currentElement[0]);
-                    }
-                    exec = false;
-                }
-            }
-            return [exec, action];
-        },
         /**
         * @method cmd_backcolor
         * @param value Value passed from the execCommand method
@@ -2723,137 +2835,6 @@ var Dom = YAHOO.util.Dom,
                 exec = false;                    
             }
             return [exec];
-        },
-        /**
-        * @method cmd_removeformat
-        * @param value Value passed from the execCommand method
-        * @description This is an execCommand override method. It is called from execCommand when the execCommand('removeformat') is used.
-        */
-        cmd_removeformat: function(value) {
-            var exec = true;
-            /**
-            * @knownissue Remove Format issue
-            * @browser Safari 2.x
-            * @description There is an issue here with Safari, that it may not always remove the format of the item that is selected.
-            * Due to the way that Safari 2.x handles ranges, it is very difficult to determine what the selection holds.
-            * So here we are making the best possible guess and acting on it.
-            */
-            if (this.browser.webkit && !this._getDoc().queryCommandEnabled('removeformat')) {
-                this._createCurrentElement('span');
-                YAHOO.util.Dom.addClass(this.currentElement[0], 'yui-non');
-                var re= /<\S[^><]*>/g;
-                var str = this.currentElement[0].innerHTML.replace(re, '');
-                var _txt = this._getDoc().createTextNode(str);
-                this.currentElement[0].parentNode.parentNode.replaceChild(_txt, this.currentElement[0].parentNode);
-                
-                exec = false;
-            }
-            return [exec];
-        },
-        /**
-        * @method cmd_script
-        * @param action action passed from the execCommand method
-        * @param value Value passed from the execCommand method
-        * @description This is a combined execCommand override method. It is called from the cmd_superscript and cmd_subscript methods.
-        */
-        cmd_script: function(action, value) {
-            var exec = true, tag = action.toLowerCase().substring(0, 3),
-                _span = null, _selEl = this._getSelectedElement();
-
-            if (this.browser.webkit) {
-                YAHOO.log('Safari dom fun again (' + action + ')..', 'info', 'EditorSafari');
-                if (this._isElement(_selEl, tag)) {
-                    YAHOO.log('we are a child of tag (' + tag + '), reverse process', 'info', 'EditorSafari');
-                    _span = this._swapEl(this.currentElement[0], 'span', function(el) {
-                        el.className = 'yui-non';
-                    });
-                    this._selectNode(_span);
-                } else {
-                    this._createCurrentElement(tag);
-                    var _sub = this._swapEl(this.currentElement[0], tag);
-                    this._selectNode(_sub);
-                    this.currentElement[0] = _sub;
-                }
-                exec = false;
-            }
-            return exec;
-        },
-        /**
-        * @method cmd_superscript
-        * @param value Value passed from the execCommand method
-        * @description This is an execCommand override method. It is called from execCommand when the execCommand('superscript') is used.
-        */
-        cmd_superscript: function(value) {
-            return [this.cmd_script('superscript', value)];
-        },
-        /**
-        * @method cmd_subscript
-        * @param value Value passed from the execCommand method
-        * @description This is an execCommand override method. It is called from execCommand when the execCommand('subscript') is used.
-        */
-        cmd_subscript: function(value) {
-            return [this.cmd_script('subscript', value)];
-        },
-        /**
-        * @method cmd_indent
-        * @param value Value passed from the execCommand method
-        * @description This is an execCommand override method. It is called from execCommand when the execCommand('indent') is used.
-        */
-        cmd_indent: function(value) {
-            var exec = true, selEl = this._getSelectedElement(), _bq = null;
-
-            if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
-                if (this._isElement(selEl, 'blockquote')) {
-                    _bq = this._getDoc().createElement('blockquote');
-                    _bq.innerHTML = selEl.innerHTML;
-                    selEl.innerHTML = '';
-                    selEl.appendChild(_bq);
-                    this._selectNode(_bq);
-                } else {
-                    this._createCurrentElement('blockquote');
-                    for (var i = 0; i < this.currentElement.length; i++) {
-                        _bq = this._getDoc().createElement('blockquote');
-                        _bq.innerHTML = this.currentElement[i].innerHTML;
-                        this.currentElement[i].parentNode.replaceChild(_bq, this.currentElement[i]);
-                        this.currentElement[i] = _bq;
-                    }
-                    this._selectNode(this.currentElement[0]);
-                }
-                exec = false;
-            } else {
-                value = 'blockquote';
-            }
-            return [exec, 'indent', value];
-        },
-        /**
-        * @method cmd_outdent
-        * @param value Value passed from the execCommand method
-        * @description This is an execCommand override method. It is called from execCommand when the execCommand('outdent') is used.
-        */
-        cmd_outdent: function(value) {
-            var exec = true, selEl = this._getSelectedElement(), _bq = null, _span = null;
-            if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
-                selEl = this._getSelectedElement();
-                if (this._isElement(selEl, 'blockquote')) {
-                    var par = selEl.parentNode;
-                    if (this._isElement(selEl.parentNode, 'blockquote')) {
-                        par.innerHTML = selEl.innerHTML;
-                        this._selectNode(par);
-                    } else {
-                        _span = this._getDoc().createElement('span');
-                        _span.innerHTML = selEl.innerHTML;
-                        YAHOO.util.Dom.addClass(_span, 'yui-non');
-                        par.replaceChild(_span, selEl);
-                        this._selectNode(_span);
-                    }
-                } else {
-                    YAHOO.log('Can not outdent, we are not inside a blockquote', 'warn', 'SimpleEditor');
-                }
-                exec = false;
-            } else {
-                value = 'blockquote';
-            }
-            return [exec, 'indent', value];
         },
         /**
         * @method cmd_list
@@ -3398,6 +3379,18 @@ var Dom = YAHOO.util.Dom,
                 html = html.replace(/\n/g, '').replace(/\r/g, '');
                 html = html.replace(/  /gi, ' '); //Replace all double spaces and replace with a single
             }
+
+
+            for (var v in this.invalidHTML) {
+                if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
+                    if (Lang.isObject(v) && v.keepContents) {
+                        html = html.replace(new RegExp('<' + v + '([^>]*)>(.*?)<\/' + v + '>', 'gi'), '$1');
+                    } else {
+                        html = html.replace(new RegExp('<' + v + '([^>]*)>(.*?)<\/' + v + '>', 'gi'), '');
+                    }
+                }
+            }
+
             return html;
         },
         /**

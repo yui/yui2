@@ -411,14 +411,14 @@ var Dom = YAHOO.util.Dom,
                         case 'basic':
                             return true;
                     }
-                    return false
+                    return false;
                 },
                 method: function(type) {
                     if (type == 'advanced') {
                         if (YAHOO.widget.Button) {
-                            YAHOO.log('Can not find YAHOO.widget.Button', 'error', 'Toolbar');
                             this.buttonType = YAHOO.widget.ToolbarButtonAdvanced;
                         } else {
+                            YAHOO.log('Can not find YAHOO.widget.Button', 'error', 'Toolbar');
                             this.buttonType = YAHOO.widget.ToolbarButton;
                         }
                     } else {
@@ -864,6 +864,7 @@ var Dom = YAHOO.util.Dom,
                 icon.className = this.CLASS_PREFIX + '-icon';
                 tmp.get('element').insertBefore(icon, tmp.get('firstChild'));
                 if (tmp._button.tagName.toLowerCase() == 'button') {
+                    tmp.get('element').setAttribute('unselectable', 'on');
                     //Replace the Button HTML Element with an a href if it exists
                     var a = document.createElement('a');
                     a.innerHTML = tmp._button.innerHTML;

@@ -52,6 +52,12 @@ var Dom = YAHOO.util.Dom,
 
     YAHOO.extend(YAHOO.widget.Editor, YAHOO.widget.SimpleEditor, {
         /**
+        * @property STR_BEFORE_EDITOR
+        * @description The accessibility string for the element before the iFrame
+        * @type String
+        */
+        STR_BEFORE_EDITOR: 'This text field can contain stylized text and graphics. To cycle through all formatting options, use the keyboard shortcut Control + Shift + T to place focus on the toolbar and navigate between option heading names. <h4>Common formatting keyboard shortcuts:</h4><ul><li>Control Shift B sets text to bold</li> <li>Control Shift I sets text to italic</li> <li>Control Shift U underlines text</li> <li>Control Shift [ aligns text left</li> <li>Control Shift | centers text</li> <li>Control Shift ] aligns text right</li> <li>Control Shift L adds an HTML link</li> <li>To exit this text editor use the keyboard shortcut Control + Shift + ESC.</li></ul>',    
+        /**
         * @property STR_CLOSE_WINDOW
         * @description The Title of the close button in the Editor Window
         * @type String
@@ -171,6 +177,17 @@ var Dom = YAHOO.util.Dom,
         */
         initAttributes: function(attr) {
             YAHOO.widget.Editor.superclass.initAttributes.call(this, attr);
+
+            /**
+            * @attribute localFileWarning
+            * @description Should we throw the warning if we detect a file that is local to their machine?
+            * @default true
+            * @type Boolean
+            */            
+            this.setAttributeConfig('localFileWarning', {
+                value: attr.locaFileWarning || true
+            });
+           
         },
         /**
         * @private
@@ -315,6 +332,38 @@ var Dom = YAHOO.util.Dom,
                 }
             ]
         },
+        /**
+        * @private
+        * @method _handleKeyDown
+        * @param {Event} ev The event we are working on.
+        * @description Override method that handles some new keydown events inside the iFrame document.
+        */
+        _handleKeyDown: function(ev) {
+            YAHOO.widget.Editor.superclass._handleKeyDown.call(this, ev);
+            var doExec = false,
+                action = null,
+                exec = false;
+
+            if (ev.shiftKey && ev.ctrlKey) {
+                doExec = true;
+            }
+            switch (ev.keyCode) {
+                case 219: //Left
+                    action = 'justifyleft';
+                    break;
+                case 220: //Center
+                    action = 'justifycenter';
+                    break;
+                case 221: //Right
+                    action = 'justifyright';
+                    break;
+            }
+            if (doExec && action) {
+                this.execCommand(action, null);
+                Event.stopEvent(ev);
+                this.nodeChange();
+            }
+        },        
         _handleCreateLinkClick: function() {
             var el = this._getSelectedElement();
             if (this._isElement(el, 'img')) {
@@ -527,6 +576,7 @@ var Dom = YAHOO.util.Dom,
 
                 var tbar = new YAHOO.widget.Toolbar(tbarCont, {
                     /* {{{ */ 
+                    buttonType: this._defaultToolbar.buttonType,
                     buttons: [
                         { group: 'textflow', label: this.STR_IMAGE_TEXTFLOW + ':',
                             buttons: [
@@ -938,7 +988,7 @@ var Dom = YAHOO.util.Dom,
                     break;
                 }
             }
-            Dom.addClass(body, ((YAHOO.widget.Button) ? 'good-button' : 'no-button'));
+            Dom.addClass(body, ((YAHOO.widget.Button && (this._defaultToolbar.buttonType == 'advanced')) ? 'good-button' : 'no-button'));
 
             var _note = document.createElement('h3');
             _note.className = 'yui-editor-skipheader';
@@ -1183,6 +1233,186 @@ var Dom = YAHOO.util.Dom,
             this._focusWindow();
             Event.removeListener(document, 'keypress', this._closeWindow);
         },
+    /* {{{  Command Overrides - These commands are only over written when we are using the advanced version */
+        /**
+        * @method cmd_heading
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('heading') is used.
+        */
+        cmd_heading: function(value) {
+            var exec = true,
+                el = null,
+                action = 'heading',
+                _sel = this._getSelection(),
+                _selEl = this._getSelectedElement();
+
+            if (_selEl) {
+                _sel = _selEl;
+            }
+            
+            if (this.browser.ie) {
+                action = 'formatblock';
+            }
+            if (value == 'none') {
+                if ((_sel && _sel.tagName && (_sel.tagName.toLowerCase().substring(0,1) == 'h')) || (_sel && _sel.parentNode && _sel.parentNode.tagName && (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h'))) {
+                    if (_sel.parentNode.tagName.toLowerCase().substring(0,1) == 'h') {
+                        _sel = _sel.parentNode;
+                    }
+                    if (this._isElement(_sel, 'html')) {
+                        return [false];
+                    }
+                    el = this._swapEl(_selEl, 'span', function(el) {
+                        el.className = 'yui-non';
+                    });
+                    this._selectNode(el);
+                    this.currentElement[0] = el;
+                }
+                exec = false;
+            } else {
+                if (this._isElement(_selEl, 'h1') || this._isElement(_selEl, 'h2') || this._isElement(_selEl, 'h3') || this._isElement(_selEl, 'h4') || this._isElement(_selEl, 'h5') || this._isElement(_selEl, 'h6')) {
+                    el = this._swapEl(_selEl, value);
+                    this._selectNode(el);
+                    this.currentElement[0] = el;
+                } else {
+                    this._createCurrentElement(value);
+                    this._selectNode(this.currentElement[0]);
+                }
+                exec = false;
+            }
+            return [exec, action];
+        },
+        /**
+        * @method cmd_removeformat
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('removeformat') is used.
+        */
+        cmd_removeformat: function(value) {
+            var exec = true;
+            /**
+            * @knownissue Remove Format issue
+            * @browser Safari 2.x
+            * @description There is an issue here with Safari, that it may not always remove the format of the item that is selected.
+            * Due to the way that Safari 2.x handles ranges, it is very difficult to determine what the selection holds.
+            * So here we are making the best possible guess and acting on it.
+            */
+            if (this.browser.webkit && !this._getDoc().queryCommandEnabled('removeformat')) {
+                this._createCurrentElement('span');
+                YAHOO.util.Dom.addClass(this.currentElement[0], 'yui-non');
+                var re= /<\S[^><]*>/g;
+                var str = this.currentElement[0].innerHTML.replace(re, '');
+                var _txt = this._getDoc().createTextNode(str);
+                this.currentElement[0].parentNode.parentNode.replaceChild(_txt, this.currentElement[0].parentNode);
+                
+                exec = false;
+            }
+            return [exec];
+        },
+        /**
+        * @method cmd_script
+        * @param action action passed from the execCommand method
+        * @param value Value passed from the execCommand method
+        * @description This is a combined execCommand override method. It is called from the cmd_superscript and cmd_subscript methods.
+        */
+        cmd_script: function(action, value) {
+            var exec = true, tag = action.toLowerCase().substring(0, 3),
+                _span = null, _selEl = this._getSelectedElement();
+
+            if (this.browser.webkit) {
+                YAHOO.log('Safari dom fun again (' + action + ')..', 'info', 'EditorSafari');
+                if (this._isElement(_selEl, tag)) {
+                    YAHOO.log('we are a child of tag (' + tag + '), reverse process', 'info', 'EditorSafari');
+                    _span = this._swapEl(this.currentElement[0], 'span', function(el) {
+                        el.className = 'yui-non';
+                    });
+                    this._selectNode(_span);
+                } else {
+                    this._createCurrentElement(tag);
+                    var _sub = this._swapEl(this.currentElement[0], tag);
+                    this._selectNode(_sub);
+                    this.currentElement[0] = _sub;
+                }
+                exec = false;
+            }
+            return exec;
+        },
+        /**
+        * @method cmd_superscript
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('superscript') is used.
+        */
+        cmd_superscript: function(value) {
+            return [this.cmd_script('superscript', value)];
+        },
+        /**
+        * @method cmd_subscript
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('subscript') is used.
+        */
+        cmd_subscript: function(value) {
+            return [this.cmd_script('subscript', value)];
+        },
+        /**
+        * @method cmd_indent
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('indent') is used.
+        */
+        cmd_indent: function(value) {
+            var exec = true, selEl = this._getSelectedElement(), _bq = null;
+
+            if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
+                if (this._isElement(selEl, 'blockquote')) {
+                    _bq = this._getDoc().createElement('blockquote');
+                    _bq.innerHTML = selEl.innerHTML;
+                    selEl.innerHTML = '';
+                    selEl.appendChild(_bq);
+                    this._selectNode(_bq);
+                } else {
+                    this._createCurrentElement('blockquote');
+                    for (var i = 0; i < this.currentElement.length; i++) {
+                        _bq = this._getDoc().createElement('blockquote');
+                        _bq.innerHTML = this.currentElement[i].innerHTML;
+                        this.currentElement[i].parentNode.replaceChild(_bq, this.currentElement[i]);
+                        this.currentElement[i] = _bq;
+                    }
+                    this._selectNode(this.currentElement[0]);
+                }
+                exec = false;
+            } else {
+                value = 'blockquote';
+            }
+            return [exec, 'indent', value];
+        },
+        /**
+        * @method cmd_outdent
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('outdent') is used.
+        */
+        cmd_outdent: function(value) {
+            var exec = true, selEl = this._getSelectedElement(), _bq = null, _span = null;
+            if (this.browser.webkit || this.browser.ie || this.browser.gecko) {
+                selEl = this._getSelectedElement();
+                if (this._isElement(selEl, 'blockquote')) {
+                    var par = selEl.parentNode;
+                    if (this._isElement(selEl.parentNode, 'blockquote')) {
+                        par.innerHTML = selEl.innerHTML;
+                        this._selectNode(par);
+                    } else {
+                        _span = this._getDoc().createElement('span');
+                        _span.innerHTML = selEl.innerHTML;
+                        YAHOO.util.Dom.addClass(_span, 'yui-non');
+                        par.replaceChild(_span, selEl);
+                        this._selectNode(_span);
+                    }
+                } else {
+                    YAHOO.log('Can not outdent, we are not inside a blockquote', 'warn', 'SimpleEditor');
+                }
+                exec = false;
+            } else {
+                value = 'blockquote';
+            }
+            return [exec, 'indent', value];
+        },
+    /* }}}*/        
         /**
         * @method toString
         * @description Returns a string representing the editor.

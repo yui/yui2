@@ -187,6 +187,7 @@
 .yui-editor-container .yui-editor-editable-container {
     position: relative;
     z-index: 0;
+    width: 100%;
 }
 /* The disbled state of the Editor */
 .yui-editor-container .yui-editor-masked {
