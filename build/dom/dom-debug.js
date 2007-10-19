@@ -596,27 +596,27 @@
          */
         isAncestor: function(haystack, needle) {
             haystack = Y.Dom.get(haystack);
-            if (!haystack || !needle) { return false; }
+            needle = Y.Dom.get(needle);
             
-            var f = function(node) {
-                if (haystack.contains && node.nodeType && !isSafari) { // safari contains is broken
-                    YAHOO.log('isAncestor returning ' + haystack.contains(node), 'info', 'Dom');
-                    return haystack.contains(node);
-                }
-                else if ( haystack.compareDocumentPosition && node.nodeType ) {
-                    YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(node) & 16), 'info', 'Dom');
-                    return !!(haystack.compareDocumentPosition(node) & 16);
-                } else if (node.nodeType) {
-                    // fallback to crawling up (safari)
-                    return !!this.getAncestorBy(node, function(el) {
-                        return el == haystack; 
-                    }); 
-                }
-                YAHOO.log('isAncestor failed; most likely needle is not an HTMLElement', 'error', 'Dom');
+            if (!haystack || !needle) {
                 return false;
-            };
-            
-            return Y.Dom.batch(needle, f, Y.Dom, true);      
+            }
+
+            if (haystack.contains && needle.nodeType && !isSafari) { // safari contains is broken
+                YAHOO.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
+                return haystack.contains(needle);
+            }
+            else if ( haystack.compareDocumentPosition && needle.nodeType ) {
+                YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(needle) & 16), 'info', 'Dom');
+                return !!(haystack.compareDocumentPosition(needle) & 16);
+            } else if (needle.nodeType) {
+                // fallback to crawling up (safari)
+                return !!this.getAncestorBy(needle, function(el) {
+                    return el == haystack; 
+                }); 
+            }
+            YAHOO.log('isAncestor failed; most likely needle is not an HTMLElement', 'error', 'Dom');
+            return false;
         },
         
         /**
@@ -626,19 +626,7 @@
          * @return {Boolean} Whether or not the element is present in the current document
          */
         inDocument: function(el) {
-            var f = function(el) { // safari contains fails for body so crawl up
-                if (isSafari) {
-                    while (el = el.parentNode) { // note assignment
-                        if (el == document.documentElement) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                return this.isAncestor(document.documentElement, el);
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            return this.isAncestor(document.documentElement, el);
         },
         
         /**
@@ -1055,6 +1043,20 @@
             } else {
                 return referenceNode.parentNode.appendChild(newNode);
             }
+        },
+
+        /**
+         * Creates a Region based on the viewport relative to the document. 
+         * @method getClientRegion
+         * @return {Region} A Region object representing the viewport which accounts for document scroll
+         */
+        getClientRegion: function() {
+            var t = Y.Dom.getDocumentScrollTop(),
+                l = Y.Dom.getDocumentScrollLeft(),
+                r = Y.Dom.getViewportWidth() + l,
+                b = Y.Dom.getViewportHeight() + t;
+
+            return new Y.Region(t, r, b, l);
         }
     };
 })();
