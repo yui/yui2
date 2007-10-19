@@ -93,9 +93,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize Column sort
     this._initColumnSort();
 
-    // Synchronize Column widths
-    this._syncColWidths();
-
     // Initialize DOM event listeners
     this._initDomEvents();
 
@@ -7483,6 +7480,8 @@ YAHOO.widget.DataTable.prototype._onDataReturnEnhanceTable = function(sRequest, 
     else if(ok){
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
+    
+    this._syncColWidths();
 };
     
 /**
@@ -7505,13 +7504,15 @@ YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest
         this.initializeTable(oResponse.results);
     }
     // Error
-    else if(ok && oResponse.error) {
+    else if(ok && oResponse && oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
     // Empty
     else if(ok){
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
+    
+    this._syncColWidths();
 };
 // Backward compatibility
 YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
@@ -7544,6 +7545,8 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
     else if(ok && oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
+    
+    this._syncColWidths();
 };
 
 /**
@@ -7570,6 +7573,8 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
     else if(ok && oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
+    
+    this._syncColWidths();
 };
 
 
