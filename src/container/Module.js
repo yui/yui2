@@ -612,6 +612,7 @@
                 sHTML;
 
             function fireTextResize() {
+                YAHOO.log("Module got iframe contentWindow resize event", "info");
                 Module.textResizeEvent.fire();
             }
 
@@ -626,18 +627,17 @@
                     }
 
                     /*
-                        Need to set "src" attribute of the iframe to 
-                        prevent the browser from reporting duplicate 
-                        cookies. (See SourceForge bug #1721755)
-                    */
+                        Need to set the iframe document for Gecko
+                        to fire resize events on the iframe contentWindow.
+                     */
                     if (YAHOO.env.ua.gecko) {
-                        sHTML = "<html><head><script " +
-                                "type=\"text/javascript\">" +
-                                "window.onresize=function(){window.parent." +
-                                "YAHOO.widget.Module.textResizeEvent." +
-                                "fire();};window.parent.YAHOO.widget.Module." +
-                                "textResizeEvent.fire();</script></head>" +
-                                "<body></body></html>";
+                         sHTML = ["<html><head><script ",
+                                  "type=\"text/javascript\">",
+                                  "window.onresize=function(){window.parent.",
+                                  "YAHOO.widget.Module.textResizeEvent.",
+                                  "fire();}", 
+                                  "<\/script></head>",
+                                  "<body></body></html>"].join('');
 
                         oIFrame.src = "data:text/html;charset=utf-8," +
                             encodeURIComponent(sHTML);
@@ -667,6 +667,10 @@
                     oIFrame.style.borderWidth = "0";
                     oIFrame.style.visibility = "visible";
 
+                    /*
+                       Don't open/close the document for Gecko like we used to, since it
+                       leads to duplicate cookies. (See SourceForge bug #1721755)
+                    */
                     if (YAHOO.env.ua.webkit) {
                         oDoc = oIFrame.contentWindow.document;
                         oDoc.open();
@@ -678,13 +682,16 @@
                     Module.textResizeEvent.subscribe(this.onDomResize, this, true);
 
                     if (!Module.textResizeInitialized) {
-                        if (!Event.on(oIFrame.contentWindow, "resize", fireTextResize)) {
-                            /*
-                                 This will fail in IE if document.domain has 
-                                 changed, so we must change the listener to 
-                                 use the oIFrame element instead
-                            */
-                            Event.on(oIFrame, "resize", fireTextResize);
+                         // We already handle gecko using the iframe's document content
+                        if (!YAHOO.env.ua.gecko) {
+                            if (!Event.on(oIFrame.contentWindow, "resize", fireTextResize)) {
+                                /*
+                                     This will fail in IE if document.domain has 
+                                     changed, so we must change the listener to 
+                                     use the oIFrame element instead
+                                */
+                                Event.on(oIFrame, "resize", fireTextResize);
+                            }
                         }
                         Module.textResizeInitialized = true;
                     }
@@ -706,7 +713,7 @@
         
             this.resizeMonitor.style.top = nTop + "px";
             this.resizeMonitor.style.left =  nLeft + "px";
-        
+
         },
         
         /**
@@ -1041,7 +1048,7 @@
         },
 
         /**
-         * This method is a private helper, used when constructing the DOM structure for the module 
+         * This method is a protected helper, used when constructing the DOM structure for the module 
          * to account for situations which may cause Operation Aborted errors in IE. It should not 
          * be used for general DOM construction.
          * <p>

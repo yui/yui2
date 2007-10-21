@@ -201,7 +201,7 @@
                     i = nOverlays - 1;
 
                     do {
-                        this.overlays[i].blur();                    
+                        this.overlays[i].blur();
                     }
                     while(i--);
                 }
@@ -362,22 +362,33 @@
                 aOverlays.sort(this.compareZIndexDesc);
 
                 oTopOverlay = aOverlays[0];
-                
-                if (oTopOverlay) {
 
+                if (oTopOverlay) {
                     nTopZIndex = Dom.getStyle(oTopOverlay.element, "zIndex");
-    
-                    if (!isNaN(nTopZIndex) && oTopOverlay != oOverlay) {
-    
-                        oOverlay.cfg.setProperty("zIndex", 
-                            (parseInt(nTopZIndex, 10) + 2));
-    
+
+                    if (!isNaN(nTopZIndex)) {
+
+                        var bRequiresBump = false;
+
+                        if (oTopOverlay !== oOverlay) {
+                            bRequiresBump = true;
+                        } else if (aOverlays.length > 1) {
+                            var nNextZIndex = Dom.getStyle(aOverlays[1].element, "zIndex");
+                            // Don't rely on DOM order to stack if 2 overlays are at the same zindex.
+                            if (!isNaN(nNextZIndex) && (nTopZIndex == nNextZIndex)) {
+                                bRequiresBump = true;
+                            }
+                        }
+
+                        if (bRequiresBump) {
+                            oOverlay.cfg.setProperty("zindex", (parseInt(nTopZIndex, 10) + 2));
+                        }
                     }
                     aOverlays.sort(this.compareZIndexDesc);
                 }
             }
         },
-        
+
         /**
         * Attempts to locate an Overlay by instance or ID.
         * @method find
@@ -387,7 +398,7 @@
         * cannot be located.
         */
         find: function (overlay) {
-        
+
             var aOverlays = this.overlays,
                 nOverlays = aOverlays.length,
                 i;
@@ -460,7 +471,7 @@
                 while(i--);
             }
         },
-        
+
         /**
         * Hides all Overlays in the manager.
         * @method hideAll
@@ -479,7 +490,7 @@
                 while(i--);
             }
         },
-        
+
         /**
         * Returns a string representation of the object.
         * @method toString

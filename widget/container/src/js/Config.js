@@ -12,26 +12,20 @@
     * @param {Object} owner The owner Object to which this Config Object belongs
     */
     YAHOO.util.Config = function (owner) {
-    
+
         if (owner) {
-    
             this.init(owner);
-    
         }
-    
-        if (!owner) { 
-        
-            YAHOO.log("No owner specified for Config object", "error"); 
-    
-        }
-    
+
+        if (!owner) {  YAHOO.log("No owner specified for Config object", "error"); }
+
     };
 
 
     var Lang = YAHOO.lang,
-        CustomEvent = YAHOO.util.CustomEvent,        
+        CustomEvent = YAHOO.util.CustomEvent,
         Config = YAHOO.util.Config;
-    
+
 
     /**
      * Constant representing the CustomEvent type for the config changed event.
@@ -352,7 +346,7 @@
                         if (queueItem) {
                             queueItemKey = queueItem[0];
                             queueItemValue = queueItem[1];
-                            
+
                             if (queueItemKey == key) {
     
                                 /*
@@ -380,30 +374,30 @@
                 }
         
                 if (property.supercedes) {
-        
+
                     sLen = property.supercedes.length;
-        
+
                     for (s = 0; s < sLen; s++) {
-        
+
                         supercedesCheck = property.supercedes[s];
                         qLen = this.eventQueue.length;
-        
+
                         for (q = 0; q < qLen; q++) {
                             queueItemCheck = this.eventQueue[q];
-        
+
                             if (queueItemCheck) {
                                 queueItemCheckKey = queueItemCheck[0];
                                 queueItemCheckValue = queueItemCheck[1];
-                                
+
                                 if (queueItemCheckKey == 
                                     supercedesCheck.toLowerCase() ) {
-    
+
                                     this.eventQueue.push([queueItemCheckKey, 
                                         queueItemCheckValue]);
-    
+
                                     this.eventQueue[q] = null;
                                     break;
-    
+
                                 }
                             }
                         }
@@ -411,7 +405,7 @@
                 }
 
                 YAHOO.log("Config event queue: " + this.outputEventQueue(), "info");
-        
+
                 return true;
             } else {
                 return false;
@@ -543,19 +537,12 @@
             var property = this.config[key.toLowerCase()];
     
             if (property && property.event) {
-    
                 if (!Config.alreadySubscribed(property.event, handler, obj)) {
-    
                     property.event.subscribe(handler, obj, override);
-    
                 }
-    
                 return true;
-    
             } else {
-    
                 return false;
-    
             }
     
         },
@@ -675,28 +662,20 @@
             i;
 
         if (nSubscribers > 0) {
-
             i = nSubscribers - 1;
-        
             do {
-
                 subsc = evt.subscribers[i];
-
                 if (subsc && subsc.obj == obj && subsc.fn == fn) {
-        
                     return true;
-        
-                }    
-            
+                }
             }
             while (i--);
-        
         }
-    
+
         return false;
-    
+
     };
-    
+
     YAHOO.lang.augmentProto(Config, YAHOO.util.EventProvider);
 
 }());

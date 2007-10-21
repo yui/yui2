@@ -53,7 +53,7 @@
         * @type Object
         */
         DEFAULT_CONFIG = {
-        
+
             "CLOSE": { 
                 key: "close", 
                 value: true, 
@@ -66,6 +66,13 @@
                 value: (DD ? true : false), 
                 validator: Lang.isBoolean, 
                 supercedes: ["visible"]  
+            },
+
+            "DRAG_ONLY" : {
+                key: "dragonly",
+                value: false,
+                validator: Lang.isBoolean,
+                supercedes: ["draggable"]
             },
 
             "UNDERLAY": { 
@@ -81,10 +88,10 @@
                 supercedes: ["visible", "zindex"]
             },
 
-            "KEY_LISTENERS": { 
-                key: "keylisteners", 
-                suppressEvent: true, 
-                supercedes: ["visible"] 
+            "KEY_LISTENERS": {
+                key: "keylisteners",
+                suppressEvent: true,
+                supercedes: ["visible"]
             }
         };
 
@@ -106,7 +113,6 @@
     * @type String
     */
     Panel.CSS_PANEL_CONTAINER = "yui-panel-container";
-
 
     // Private CustomEvent listeners
 
@@ -254,7 +260,7 @@
     }
 
     YAHOO.extend(Panel, Overlay, {
-    
+
         /**
         * The Overlay initialization method, which is executed for Overlay and 
         * all of its subclasses. This method is automatically called by the 
@@ -275,17 +281,17 @@
             */
 
             Panel.superclass.init.call(this, el/*, userConfig*/);  
-        
+
             this.beforeInitEvent.fire(Panel);
-        
+
             Dom.addClass(this.element, Panel.CSS_PANEL);
-        
+
             this.buildWrapper();
 
             if (userConfig) {
                 this.cfg.applyConfig(userConfig, true);
             }
-        
+
             this.subscribe("showMask", addFocusEventHandlers);
             this.subscribe("hideMask", removeFocusEventHandlers);
             this.subscribe("beforeRender", createHeader);
@@ -376,7 +382,34 @@
                 validator: DEFAULT_CONFIG.DRAGGABLE.validator, 
                 supercedes: DEFAULT_CONFIG.DRAGGABLE.supercedes 
             });
-        
+
+            /**
+            * Boolean specifying if the draggable Panel should be drag only, not interacting with drop 
+            * targets on the page.
+            * <p>
+            * When set to true, draggable Panels will not check to see if they are over drop targets,
+            * or fire the DragDrop events required to support drop target interaction (onDragEnter, 
+            * onDragOver, onDragOut, onDragDrop etc.).
+            * If the Panel is not designed to be dropped on any target elements on the page, then this 
+            * flag can be set to true to improve performance.
+            * </p>
+            * <p>
+            * When set to false, all drop target related events will be fired.
+            * </p>
+            * <p>
+            * The property is set to false by default to maintain backwards compatibility but should be 
+            * set to true if drop target interaction is not required for the Panel, to improve performance.</p>
+            * 
+            * @config dragonly
+            * @type Boolean
+            * @default false
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.DRAG_ONLY.key, { 
+                value: DEFAULT_CONFIG.DRAG_ONLY.value, 
+                validator: DEFAULT_CONFIG.DRAG_ONLY.validator, 
+                supercedes: DEFAULT_CONFIG.DRAG_ONLY.supercedes 
+            });
+
             /**
             * Sets the type of underlay to display for the Panel. Valid values 
             * are "shadow," "matte," and "none".  <strong>PLEASE NOTE:</strong> 
@@ -873,26 +906,26 @@
         * @method buildWrapper
         */
         buildWrapper: function () {
-    
+
             var elementParent = this.element.parentNode,
                 originalElement = this.element,
                 wrapper = document.createElement("div");
-    
+
             wrapper.className = Panel.CSS_PANEL_CONTAINER;
             wrapper.id = originalElement.id + "_c";
-        
+
             if (elementParent) {
                 elementParent.insertBefore(wrapper, originalElement);
             }
-        
+
             wrapper.appendChild(originalElement);
-        
+
             this.element = wrapper;
             this.innerElement = originalElement;
-        
+
             Dom.setStyle(this.innerElement, "visibility", "inherit");
         },
-        
+
         /**
         * Adjusts the size of the shadow based on the size of the element.
         * @method sizeUnderlay
@@ -919,102 +952,96 @@
         * @method registerDragDrop
         */
         registerDragDrop: function () {
-    
+
             var me = this;
-    
+
             if (this.header) {
-        
+
                 if (!DD) {
-        
                     YAHOO.log("DD dependency not met.", "error");
-        
                     return;
-                
                 }
-        
-                this.dd = new DD(this.element.id, this.id);
-        
+
+                var bDragOnly = (this.cfg.getProperty("dragonly") === true);
+                this.dd = new DD(this.element.id, this.id, {dragOnly: bDragOnly});
+
                 if (!this.header.id) {
                     this.header.id = this.id + "_h";
                 }
-        
-    
+
                 this.dd.startDrag = function () {
-        
+
                     var offsetHeight,
                         offsetWidth,
                         viewPortWidth,
                         viewPortHeight,
                         scrollX,
-                        scrollY,
-                        topConstraint,
-                        leftConstraint,
-                        bottomConstraint,
-                        rightConstraint;
-    
+                        scrollY;
+
                     if (YAHOO.env.ua.ie == 6) {
                         Dom.addClass(me.element,"drag");
                     }
-        
+
                     if (me.cfg.getProperty("constraintoviewport")) {
-    
+
+                        var nViewportOffset = Overlay.VIEWPORT_OFFSET;
+
                         offsetHeight = me.element.offsetHeight;
                         offsetWidth = me.element.offsetWidth;
-                        
+
                         viewPortWidth = Dom.getViewportWidth();
                         viewPortHeight = Dom.getViewportHeight();
-                        
+
                         scrollX = Dom.getDocumentScrollLeft();
                         scrollY = Dom.getDocumentScrollTop();
-                        
-                        topConstraint = scrollY + 10;
-                        leftConstraint = scrollX + 10;
 
-                        bottomConstraint = 
-                            scrollY + viewPortHeight - offsetHeight - 10;
+                        if (offsetHeight + nViewportOffset < viewPortHeight) {
+                            this.minY = scrollY + nViewportOffset;
+                            this.maxY = scrollY + viewPortHeight - offsetHeight - nViewportOffset;
+                        } else {
+                            this.minY = scrollY + nViewportOffset;
+                            this.maxY = scrollY + nViewportOffset;
+                        }
 
-                        rightConstraint = 
-                            scrollX + viewPortWidth - offsetWidth - 10;
-        
-                        this.minX = leftConstraint;
-                        this.maxX = rightConstraint;
+                        if (offsetWidth + nViewportOffset < viewPortWidth) {
+                            this.minX = scrollX + nViewportOffset;
+                            this.maxX = scrollX + viewPortWidth - offsetWidth - nViewportOffset;
+                        } else {
+                            this.minX = scrollX + nViewportOffset;
+                            this.maxX = scrollX + nViewportOffset;
+                        }
+
                         this.constrainX = true;
-        
-                        this.minY = topConstraint;
-                        this.maxY = bottomConstraint;
                         this.constrainY = true;
-    
                     } else {
-    
                         this.constrainX = false;
                         this.constrainY = false;
-    
                     }
-        
+
                     me.dragEvent.fire("startDrag", arguments);
                 };
-        
+
                 this.dd.onDrag = function () {
                     me.syncPosition();
                     me.cfg.refireEvent("iframe");
                     if (this.platform == "mac" && YAHOO.env.ua.gecko) {
                         this.showMacGeckoScrollbars();
                     }
-        
+
                     me.dragEvent.fire("onDrag", arguments);
                 };
-        
+
                 this.dd.endDrag = function () {
 
                     if (YAHOO.env.ua.ie == 6) {
                         Dom.removeClass(me.element,"drag");
                     }
-        
+
                     me.dragEvent.fire("endDrag", arguments);
                     me.moveEvent.fire(me.cfg.getProperty("xy"));
-                    
+
                 };
-        
+
                 this.dd.setHandleElId(this.header.id);
                 this.dd.addInvalidHandleType("INPUT");
                 this.dd.addInvalidHandleType("SELECT");
