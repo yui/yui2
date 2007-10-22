@@ -373,6 +373,13 @@ var Dom = YAHOO.util.Dom,
                 this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
                 return false;
             }
+            if (this.get('limitCommands')) {
+                if (!this.toolbar.getButtonByValue('createlink')) {
+                    YAHOO.log('Toolbar Button for (createlink) was not found, skipping exec.', 'info', 'SimpleEditor');
+                    return false;
+                }
+            }
+            
             this.on('afterExecCommand', function() {
 
                 var win = new YAHOO.widget.EditorWindow('createlink', {
@@ -495,6 +502,12 @@ var Dom = YAHOO.util.Dom,
         * @description Opens the Image Properties Window when the insert Image button is clicked or an Image is Double Clicked.
         */
         _handleInsertImageClick: function() {
+            if (this.get('limitCommands')) {
+                if (!this.toolbar.getButtonByValue('insertimage')) {
+                    YAHOO.log('Toolbar Button for (insertimage) was not found, skipping exec.', 'info', 'SimpleEditor');
+                    return false;
+                }
+            }
             this._setBusy();
             this.on('afterExecCommand', function() {
                 var el = this.currentElement[0],

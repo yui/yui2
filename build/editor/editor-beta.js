@@ -2401,6 +2401,22 @@ var Dom = YAHOO.util.Dom,
             return false;
         },
         /**
+        * @private _hasParent
+        * @description Checks to see if an Element reference or one of it's parents is a valid one and has a certain tag type
+        * @param {HTMLElement} el The element to check
+        * @param {String} tag The tag that the element needs to be
+        * @returns HTMLElement
+        */
+        _hasParent: function(el, tag) {
+            while (el.parentNode) {
+                if (this._isElement(el, tag)) {
+                    return el;
+                }
+                el = el.parentNode;
+            }
+            return false;
+        },
+        /**
         * @private
         * @method _getDoc
         * @description Get the Document of the IFRAME
@@ -3245,66 +3261,75 @@ var Dom = YAHOO.util.Dom,
             }
             this._setCurrentEvent(ev);
             if (this.browser.webkit) {
-                var testLi = null;
                 if (ev.keyCode && (ev.keyCode == 8)) {
-                    //Delete
+                    //Delete Key
                     if (this._isElement(this._getSelectedElement(), 'br')) {
                         var el = this._getSelectedElement();
                         el.parentNode.removeChild(el);
                     }
                 }
-                if (ev.keyCode && (ev.keyCode == 13)) {
-                    if (this._isElement(this._getSelectedElement(), 'li')) {
-                        var tar = this._getSelectedElement();
-                        var li = this._getDoc().createElement('li');
-                        //li.innerHTML = '&nbsp;&nbsp;';
-                        li.innerHTML = '<span>&nbsp;</span>&nbsp;';
-                        if (tar.nextSibling) {
-                            tar.parentNode.insertBefore(li, tar.nextSibling);
-                        } else {
-                            tar.parentNode.appendChild(li);
-                        }
-                        this.currentElement[0] = li;
-                        this._selectNode(li.firstChild);
-                        Event.stopEvent(ev);
-                    }
-                }
-                //Shift Tab
-                if (ev.keyCode && (ev.keyCode == 25)) {
-                    testLi = this._getSelectedElement();
-                    if (this._isElement(testLi.parentNode, 'li')) {
-                        /* TODO Shift + Tab in Safari..
-                        var par = testLi.parentNode;
-                        if (this._isElement(par.parentNode.parentNode, 'ul') || this._isElement(par.parentNode.parentNode, 'ol')) {
-                            par.removeChild(testLi);
-                            par.parentNode.parentNode.insertBefore(testLi, par.nextSibling);
-                        }
-                        Event.stopEvent(ev);
-                        */
-                    }
-                }
-                //Tab Key
-                if (ev.keyCode && (ev.keyCode == 9)) {
-                    this._getDoc().execCommand('inserttext', false, '\t');
-                    testLi = this._getSelectedElement();
-                    if (this._isElement(testLi.parentNode, 'li')) {
-                        var par = testLi.parentNode;
-                        var newUl = this._getDoc().createElement(par.parentNode.tagName.toLowerCase());
-                        var newLi = this._getDoc().createElement('li');
-                        //newLi.innerHTML = '&nbsp;<span>&nbsp;</span>&nbsp;';
-                        newLi.innerHTML = '<span>&nbsp;</span>&nbsp;';
-                        newUl.appendChild(newLi);
-
-                        par.innerHTML = '&nbsp;&nbsp;&nbsp;';
-                        //par.appendChild(newUl);
-                        par.parentNode.replaceChild(newUl, par);
-                        this._getSelection().setBaseAndExtent(newLi.firstChild, 1, newLi.firstChild, 1);
-                    }
-                    Event.stopEvent(ev);
-                    this.nodeChange();
-                }
+                this._safariListFix(ev);
             }
             this.fireEvent('editorKeyPress', { type: 'editorKeyPress', target: this, ev: ev });
+        },
+        /**
+        * @private
+        * @method _safariListFix
+        * @param {Event} ev The event we are working on.
+        * @description Handles the Enter key, Tab Key and Shift + Tab keys in Safari for List Items.
+        */
+        _safariListFix: function(ev) {
+            var testLi = null, par = null;
+            //Enter Key
+            if (ev.keyCode && (ev.keyCode == 13)) {
+                if (this._isElement(this._getSelectedElement(), 'li')) {
+                    var tar = this._getSelectedElement();
+                    var li = this._getDoc().createElement('li');
+                    li.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
+                    if (tar.nextSibling) {
+                        tar.parentNode.insertBefore(li, tar.nextSibling);
+                    } else {
+                        tar.parentNode.appendChild(li);
+                    }
+                    this.currentElement[0] = li;
+                    this._selectNode(li.firstChild);
+                    Event.stopEvent(ev);
+                }
+            }
+            //Shift + Tab Key
+            if (ev.keyCode && ((!this.browser.webkit3 && (ev.keyCode == 25)) || (this.browser.webkit3 && ((ev.keyCode == 9) && ev.shiftKey)))) {
+                testLi = this._getSelectedElement();
+                if (this._hasParent(testLi, 'li')) {
+                    testLi = this._hasParent(testLi, 'li');
+                    if (this._hasParent(testLi, 'ul') || this._hasParent(testLi, 'ol')) {
+                        par = this._hasParent(testLi, 'ul');
+                        if (!par) {
+                            par = this._hasParent(testLi, 'ol');
+                        }
+                        par.removeChild(testLi);
+                        par.parentNode.insertBefore(testLi, par.nextSibling);
+                    }
+                    Event.stopEvent(ev);
+                }
+            }
+            //Tab Key
+            if (ev.keyCode && ((ev.keyCode == 9) && (!ev.shiftKey))) {
+                this._getDoc().execCommand('inserttext', false, '\t');
+                testLi = this._getSelectedElement();
+                if (this._isElement(testLi.parentNode, 'li')) {
+                    par = testLi.parentNode;
+                    var newUl = this._getDoc().createElement(par.parentNode.tagName.toLowerCase());
+                    var newLi = this._getDoc().createElement('li');
+                    newLi.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
+                    newUl.appendChild(newLi);
+
+                    par.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
+                    par.parentNode.replaceChild(newUl, par);
+                    this._getSelection().setBaseAndExtent(newLi.firstChild, 1, newLi.firstChild, 1);
+                }
+                Event.stopEvent(ev);
+                this.nodeChange();
+            }
         },
         /**
         * @private
@@ -3348,10 +3373,18 @@ var Dom = YAHOO.util.Dom,
                 case 76: //L
                     if (this._hasSelection()) {
                         if (ev.shiftKey && ev.ctrlKey) {
-                            this.execCommand('createlink', '');
-                            this.toolbar.fireEvent('createlinkClick', { type: 'createlinkClick', target: this.toolbar });
-                            this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
-                            doExec = false;
+                            var makeLink = true;
+                            if (this.get('limitCommands')) {
+                                if (!this.toolbar.getButtonByValue('createlink')) {
+                                    makeLink = false;
+                                }
+                            }
+                            if (makeLink) {
+                                this.execCommand('createlink', '');
+                                this.toolbar.fireEvent('createlinkClick', { type: 'createlinkClick', target: this.toolbar });
+                                this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
+                                doExec = false;
+                            }
                         }
                     }
                     break;
@@ -3833,6 +3866,16 @@ var Dom = YAHOO.util.Dom,
             */            
             this.setAttributeConfig('allowNoEdit', {
                 value: attr.allowNoEdit || false,
+                validator: YAHOO.lang.Boolean
+            });
+            /**
+            * @config limitCommands
+            * @description Should the Editor limit the allowed execCommands to the ones available in the toolbar. If true, then execCommand and keyboard shortcuts will fail if they are not defined in the toolbar.
+            * @default false
+            * @type Boolean
+            */            
+            this.setAttributeConfig('limitCommands', {
+                value: attr.limitCommands || false,
                 validator: YAHOO.lang.Boolean
             });
             /**
@@ -4335,7 +4378,8 @@ var Dom = YAHOO.util.Dom,
                 this.toolbar.disableButton('indent');
                 this.toolbar.enableButton('outdent');
             }
-            if (this._isElement(elm, 'ol') || this._isElement(elm, 'ul') || this._isElement(elm, 'li')) {
+            //if (this._isElement(elm, 'ol') || this._isElement(elm, 'ul') || this._isElement(elm, 'li')) {
+            if (this._hasParent(elm, 'ol') || this._hasParent(elm, 'ul')) {
                 this.toolbar.disableButton('indent');
             }
             this._lastButton = null;
@@ -4358,6 +4402,12 @@ var Dom = YAHOO.util.Dom,
         * @description Opens the Image Properties Window when the insert Image button is clicked or an Image is Double Clicked.
         */
         _handleInsertImageClick: function() {
+            if (this.get('limitCommands')) {
+                if (!this.toolbar.getButtonByValue('insertimage')) {
+                    return false;
+                }
+            }
+        
             this.toolbar.set('disabled', true); //Disable the toolbar when the prompt is showing
             this.on('afterExecCommand', function() {
                 var el = this.currentElement[0],
@@ -4410,6 +4460,12 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the opening of the Link Properties Window when the Create Link button is clicked or an href is doubleclicked.
         */
         _handleCreateLinkClick: function() {
+            if (this.get('limitCommands')) {
+                if (!this.toolbar.getButtonByValue('createlink')) {
+                    return false;
+                }
+            }
+        
             this.toolbar.set('disabled', true); //Disable the toolbar when the prompt is showing
             this.on('afterExecCommand', function() {
                 var el = this.currentElement[0],
@@ -4597,10 +4653,16 @@ var Dom = YAHOO.util.Dom,
                 this._getWindow().focus();
             }
             var exec = true;
+            
+            if (this.get('limitCommands')) {
+                if (!this.toolbar.getButtonByValue(action)) {
+                    exec = false;
+                }
+            }
 
             this.editorDirty = true;
             
-            if (typeof this['cmd_' + action.toLowerCase()] == 'function') {
+            if ((typeof this['cmd_' + action.toLowerCase()] == 'function') && exec) {
                 var retValue = this['cmd_' + action.toLowerCase()](value);
                 exec = retValue[0];
                 if (retValue[1]) {
@@ -5931,6 +5993,12 @@ var Dom = YAHOO.util.Dom,
                 this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
                 return false;
             }
+            if (this.get('limitCommands')) {
+                if (!this.toolbar.getButtonByValue('createlink')) {
+                    return false;
+                }
+            }
+            
             this.on('afterExecCommand', function() {
 
                 var win = new YAHOO.widget.EditorWindow('createlink', {
@@ -6051,6 +6119,11 @@ var Dom = YAHOO.util.Dom,
         * @description Opens the Image Properties Window when the insert Image button is clicked or an Image is Double Clicked.
         */
         _handleInsertImageClick: function() {
+            if (this.get('limitCommands')) {
+                if (!this.toolbar.getButtonByValue('insertimage')) {
+                    return false;
+                }
+            }
             this._setBusy();
             this.on('afterExecCommand', function() {
                 var el = this.currentElement[0],
