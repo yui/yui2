@@ -19,7 +19,7 @@ function fn(data) {
         YAHOO.log("fn cancel");
         timer.cancel();
     } else {
-        YAHOO.log("fn executed with " + data);
+        YAHOO.log("fn executed with " + YAHOO.lang.dump(arguments));
     }
 }
 
@@ -33,7 +33,7 @@ Obj.prototype.doit = function(stuff) {
         YAHOO.log("Obj.doit " + this.a + " canceled");
         this.timer.cancel();
     } else {
-        YAHOO.log("Obj.doit " + this.a + ", stuff: " + stuff + ", count: " + this.count);
+        YAHOO.log("Obj.doit " + this.a + ", stuff: " + YAHOO.lang.dump(arguments) + ", count: " + this.count);
     }
 };
 
@@ -44,10 +44,10 @@ YAHOO.lang.later(0, null, fn, "test timeout 2");
 //timer = YAHOO.lang.later(1000, window, fn, "lo", true);
 
 var o = new Obj("test interval 1");
-o.timer = YAHOO.lang.later(100, o, "doit", "lo", true);
+o.timer = YAHOO.lang.later(100, o, "doit", "arg1", true);
 
 var o = new Obj("test interval 2");
-o.timer = YAHOO.lang.later(100, o, o.doit, "lo", true);
+o.timer = YAHOO.lang.later(100, o, o.doit, ["arg1", "arg2"], true);
 
 </script>
 </body>

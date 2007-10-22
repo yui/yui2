@@ -798,7 +798,9 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @param o the scope object
      * @param fn {Function|String} the function to execute or the name of 
      * the method in the 'o' object to execute
-     * @param data data that is provided to the function
+     * @param data data that is provided to the function.  This accepts
+     * either a single item or an array.  If an array is provided, the
+     * function is executed with one parameter for each array item.
      * @param periodic {boolean} if true, executes continuously at supplied 
      * interval until canceled
      * @return a timer object. Call the cancel() method on this object to 
@@ -807,7 +809,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     later: function(when, o, fn, data, periodic) {
         when = when || 0; 
         o = o || {};
-        var m = fn, f, r;
+        var m=fn, d=data, f, r;
 
         if (YAHOO.lang.isString(fn)) {
             m = o[fn];
@@ -817,8 +819,12 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             throw new TypeError("method undefined");
         }
 
+        if (!YAHOO.lang.isArray(d)) {
+            d = [data];
+        }
+
         f = function() {
-            m.call(o, data);
+            m.apply(o, d);
         };
 
         r = (periodic) ? setInterval(f, when) : setTimeout(f, when);
