@@ -5696,7 +5696,7 @@ var Dom = YAHOO.util.Dom,
      * The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.
      * @constructor
      * @class Editor
-     * @extends YAHOO.widget.Editor
+     * @extends YAHOO.widget.SimpleEditor
      * @param {String/HTMLElement} el The textarea element to turn into an editor.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
@@ -5719,7 +5719,8 @@ var Dom = YAHOO.util.Dom,
     };
 
     /**
-    * @private _cleanClassName
+    * @private
+    * @method _cleanClassName
     * @description Makes a useable classname from dynamic data, by dropping it to lowercase and replacing spaces with -'s.
     * @param {String} str The classname to clean up
     * @returns {String}
