@@ -9,7 +9,7 @@
 <script type="text/javascript" src="../build/event/event-min.js"></script>
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
-<script type="text/javascript" src="../build/datasource/datasource-beta-min.js"></script>
+<script type="text/javascript" src="../build/datasource/datasource-beta.js"></script>
 </head>
 <body>
 <h1>DataSource Tests</h1>
@@ -32,6 +32,13 @@
 
         DataSource = YAHOO.util.DataSource;
 
+    /**
+     *
+     *
+     * Base DataSource test case.
+     *
+     *
+     */
     function DataSourceTestCase(template) {
         DataSourceTestCase.superclass.constructor.call(this, template);
         this.data = ["a","b","c"];
@@ -48,6 +55,13 @@
         return new DataSource(this.data, oConfigs);
     };
 
+    /**
+     *
+     *
+     * Base DataSource test template. Sets up values for a DataSource instance.
+     *
+     *
+     */
     var datasourceTemplate = {
         name: "DataSource Test",
         
@@ -60,12 +74,27 @@
     };
     var datasourceTest = new DataSourceTestCase(datasourceTemplate);
 
+    /**
+     *
+     *
+     * Tests array of JS objects.
+     *
+     *
+     */
+
     var dsComplexArrayTemplate = YAHOO.lang.merge(datasourceTemplate, {
         name:"Complex Array Test",
         data:[{a:"1a",b:"1b",c:"1c"}, {a:"2a",b:"2b",c:"2c"}, {a:"3a",b:"3b",c:"3c"}]
     });
     var dsComplexArrayTest = new DataSourceTestCase(dsComplexArrayTemplate);
 
+    /**
+     *
+     *
+     * Tests static methods.
+     *
+     *
+     */
     var dsStaticMethodsTemplate = {
         name:"Static Methods Test",
         data:["a","b","c"],
@@ -103,6 +132,103 @@
     };
     var dsStaticMethodsTest = new DataSourceTestCase(dsStaticMethodsTemplate);
 
+    /**
+     *
+     *
+     * Base test case for YAHOO.util.DataType APIs.
+     *
+     *
+     */
+    function DataUtilTestCase(template) {
+        DataUtilTestCase.superclass.constructor.call(this, template);
+    };
+    YAHOO.lang.extend(DataUtilTestCase, TestCase);
+
+    DataUtilTestCase.prototype.setUp = function() {
+    };
+
+    DataUtilTestCase.prototype.tearDown = function() {
+    };
+
+    /**
+     *
+     *
+     * Tests YAHOO.util.Number APIs.
+     *
+     *
+     */
+    var dataNumberTemplate = {
+        name:"Data Util Number Test",
+
+        testFormat: function() {
+            output = YAHOO.util.Number.format("1");
+            Assert.areSame("1", output, "Incorrect output from String.");
+
+            output = YAHOO.util.Number.format(1);
+            Assert.areSame("1", output, "Incorrect output from Number.");
+            
+            output = YAHOO.util.Number.format(0);
+            Assert.areSame("0", output, "Incorrect output from zero.");
+
+            output = YAHOO.util.Number.format(-1);
+            Assert.areSame("-1", output, "Incorrect output from negative Number.");
+
+            output = YAHOO.util.Number.format(123, {prefix:"$"});
+            Assert.areSame("$123", output, "Incorrect prefix");
+
+            output = YAHOO.util.Number.format(123, {suffix:" items"});
+            Assert.areSame("123 items", output, "Incorrect suffix");
+
+            output = YAHOO.util.Number.format(123.123, {decimalPlaces:5});
+            Assert.areSame("123.12300", output, "Incorrect decimal rounding: expected 5 places");
+
+            output = YAHOO.util.Number.format(123, {decimalPlaces:5});
+            Assert.areSame("123.00000", output, "Incorrect decimal padding: expected 5 places");
+
+            output = YAHOO.util.Number.format(123.123, {decimalPlaces:4});
+            Assert.areSame("123.1230", output, "Incorrect decimal rounding: expected 4 places");
+
+            output = YAHOO.util.Number.format(123.123, {decimalPlaces:3});
+            Assert.areSame("123.123", output, "Incorrect decimal rounding: expected 3 places");
+
+            output = YAHOO.util.Number.format(123.127, {decimalPlaces:2});
+            Assert.areSame("123.13", output, "Incorrect decimal rounding: expected rounded to 2 places");
+
+            output = YAHOO.util.Number.format(123.123, {decimalPlaces:2});
+            Assert.areSame("123.12", output, "Incorrect decimal rounding: expected 2 places");
+
+            output = YAHOO.util.Number.format(123.123, {decimalPlaces:1});
+            Assert.areSame("123.1", output, "Incorrect decimal rounding: expected 1 place");
+
+            output = YAHOO.util.Number.format(123.123, {decimalPlaces:0});
+            Assert.areSame("123", output, "Incorrect decimal rounding: expected 0 places");
+
+            output = YAHOO.util.Number.format(123.123, {decimalPlaces:-1});
+            Assert.areSame("120", output, "Incorrect decimal rounding: expected -1 places");
+
+            output = YAHOO.util.Number.format("123123123", {thousandsSeparator:","});
+            Assert.areSame("123,123,123", output, "Incorrect thousands separation");
+
+            output = YAHOO.util.Number.format("123123123.176",{
+                    prefix: "&#165;",
+                    decimalPlaces:2,
+                    thousandsSeparator:".",
+                    decimalSeparator:","
+                });
+            Assert.areSame("&#165;123.123.123,18", output, "Incorrect Yen formatting");
+
+
+        }
+    };
+    var dataNumberTest = new DataUtilTestCase(dataNumberTemplate);
+
+    /**
+     *
+     *
+     * Runs tests.
+     *
+     *
+     */
     YAHOO.util.Event.addListener(window, "load", function() {
         var logger = new TestLogger();
 
@@ -110,6 +236,7 @@
         datasourcesuite.add(datasourceTest);
         datasourcesuite.add(dsComplexArrayTest);
         datasourcesuite.add(dsStaticMethodsTest);
+        datasourcesuite.add(dataNumberTest);
 
         TestRunner.add(datasourcesuite);
 
