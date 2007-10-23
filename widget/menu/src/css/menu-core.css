@@ -37,6 +37,7 @@
 .yuimenuitemlabel,
 .yuimenubaritemlabel {
 
+    text-align: left;
     white-space: nowrap;
 
 }
