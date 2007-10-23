@@ -135,22 +135,21 @@
             oBody.appendChild(oClone);
 
             sNewWidth = (oClone.offsetWidth + "px");
-            
+
             oBody.removeChild(oClone);
-            
+
             oClone = null;
 
             oConfig.setProperty("width", sNewWidth);
-            
+
             oConfig.refireEvent("xy");
-            
+
             this.subscribe("hide", restoreOriginalWidth, 
                 [(sOriginalWidth || ""), sNewWidth]);
         
         }
 
     }
-
 
     // "onDOMReady" that renders the ToolTip
 
@@ -185,21 +184,19 @@
         * See configuration documentation for more details.
         */
         init: function (el, userConfig) {
-    
+
             this.logger = new YAHOO.widget.LogWriter(this.toString());
-    
+
             Tooltip.superclass.init.call(this, el);
-    
+
             this.beforeInitEvent.fire(Tooltip);
-    
+
             Dom.addClass(this.element, Tooltip.CSS_TOOLTIP);
-    
+
             if (userConfig) {
-
                 this.cfg.applyConfig(userConfig, true);
-
             }
-    
+
             this.cfg.queueProperty("visible", false);
             this.cfg.queueProperty("constraintoviewport", true);
     
@@ -276,7 +273,7 @@
             });
         
             /**
-            * Specifies the Tooltip's text.
+            * Specifies the Tooltip's text. 
             * @config text
             * @type String
             * @default null
@@ -383,15 +380,10 @@
         
             
             if (aElements) {
-        
                 nElements = aElements.length;
-                
                 if (nElements > 0) {
-                
                     i = nElements - 1;
-                    
                     do {
-        
                         oElement = aElements[i];
         
                         Event.removeListener(oElement, "mouseover", 
@@ -402,14 +394,10 @@
 
                         Event.removeListener(oElement, "mouseout", 
                             this.onContextMouseOut);
-                    
                     }
                     while (i--);
-                
                 }
-        
             }
-        
         },
         
         /**
@@ -529,14 +517,14 @@
                 obj.hideProcId = null;
 
             }
-        
+
             Event.on(context, "mousemove", obj.onContextMouseMove, obj);
-        
+
             if (context.title) {
                 obj._tempTitle = context.title;
                 context.title = "";
             }
-        
+
             /**
             * The unique process ID associated with the thread responsible 
             * for showing the Tooltip.
@@ -596,35 +584,37 @@
         * with doShow
         */
         doShow: function (e, context) {
-        
+
             var yOffset = 25,
                 me = this;
-        
+
             if (YAHOO.env.ua.opera && context.tagName && 
                 context.tagName.toUpperCase() == "A") {
 
                 yOffset += 12;
 
             }
-        
+
             return setTimeout(function () {
-        
-                if (me._tempTitle) {
+
+                var txt = me.cfg.getProperty("text");
+                // title does not over-ride text
+                if (me._tempTitle && (txt === "" || YAHOO.lang.isUndefined(txt) || YAHOO.lang.isNull(txt))) {
                     me.setBody(me._tempTitle);
                 } else {
                     me.cfg.refireEvent("text");
                 }
-        
+
                 me.logger.log("Show tooltip", "time");
                 me.moveTo(me.pageX, me.pageY + yOffset);
 
                 if (me.cfg.getProperty("preventoverlap")) {
                     me.preventOverlap(me.pageX, me.pageY);
                 }
-        
+
                 Event.removeListener(context, "mousemove", 
                     me.onContextMouseMove);
-        
+
                 me.show();
                 me.hideProcId = me.doHide();
 

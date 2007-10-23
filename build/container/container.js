@@ -3932,22 +3932,21 @@
             oBody.appendChild(oClone);
 
             sNewWidth = (oClone.offsetWidth + "px");
-            
+
             oBody.removeChild(oClone);
-            
+
             oClone = null;
 
             oConfig.setProperty("width", sNewWidth);
-            
+
             oConfig.refireEvent("xy");
-            
+
             this.subscribe("hide", restoreOriginalWidth, 
                 [(sOriginalWidth || ""), sNewWidth]);
         
         }
 
     }
-
 
     // "onDOMReady" that renders the ToolTip
 
@@ -3982,20 +3981,18 @@
         * See configuration documentation for more details.
         */
         init: function (el, userConfig) {
-    
-    
+
+
             Tooltip.superclass.init.call(this, el);
-    
+
             this.beforeInitEvent.fire(Tooltip);
-    
+
             Dom.addClass(this.element, Tooltip.CSS_TOOLTIP);
-    
+
             if (userConfig) {
-
                 this.cfg.applyConfig(userConfig, true);
-
             }
-    
+
             this.cfg.queueProperty("visible", false);
             this.cfg.queueProperty("constraintoviewport", true);
     
@@ -4072,7 +4069,7 @@
             });
         
             /**
-            * Specifies the Tooltip's text.
+            * Specifies the Tooltip's text. 
             * @config text
             * @type String
             * @default null
@@ -4179,15 +4176,10 @@
         
             
             if (aElements) {
-        
                 nElements = aElements.length;
-                
                 if (nElements > 0) {
-                
                     i = nElements - 1;
-                    
                     do {
-        
                         oElement = aElements[i];
         
                         Event.removeListener(oElement, "mouseover", 
@@ -4198,14 +4190,10 @@
 
                         Event.removeListener(oElement, "mouseout", 
                             this.onContextMouseOut);
-                    
                     }
                     while (i--);
-                
                 }
-        
             }
-        
         },
         
         /**
@@ -4323,14 +4311,14 @@
                 obj.hideProcId = null;
 
             }
-        
+
             Event.on(context, "mousemove", obj.onContextMouseMove, obj);
-        
+
             if (context.title) {
                 obj._tempTitle = context.title;
                 context.title = "";
             }
-        
+
             /**
             * The unique process ID associated with the thread responsible 
             * for showing the Tooltip.
@@ -4384,34 +4372,36 @@
         * with doShow
         */
         doShow: function (e, context) {
-        
+
             var yOffset = 25,
                 me = this;
-        
+
             if (YAHOO.env.ua.opera && context.tagName && 
                 context.tagName.toUpperCase() == "A") {
 
                 yOffset += 12;
 
             }
-        
+
             return setTimeout(function () {
-        
-                if (me._tempTitle) {
+
+                var txt = me.cfg.getProperty("text");
+                // title does not over-ride text
+                if (me._tempTitle && (txt === "" || YAHOO.lang.isUndefined(txt) || YAHOO.lang.isNull(txt))) {
                     me.setBody(me._tempTitle);
                 } else {
                     me.cfg.refireEvent("text");
                 }
-        
+
                 me.moveTo(me.pageX, me.pageY + yOffset);
 
                 if (me.cfg.getProperty("preventoverlap")) {
                     me.preventOverlap(me.pageX, me.pageY);
                 }
-        
+
                 Event.removeListener(context, "mousemove", 
                     me.onContextMouseMove);
-        
+
                 me.show();
                 me.hideProcId = me.doHide();
 
@@ -5180,6 +5170,19 @@
                 sUnderlay = args[0].toLowerCase(),
                 oUnderlay = this.underlay,
                 oElement = this.element;
+                
+            function fixWebkitUnderlay() {
+                // Webkit 419.3 (Safari 2.x) does not update
+                // it's Render Tree for the Container when content changes. 
+                // We need to force it to update using this contentChange 
+                // listener
+
+                // Webkit 523.6 doesn't have this problem and doesn't 
+                // need the fix
+                var u = this.underlay;
+                Dom.removeClass(u, "underlay");
+                window.setTimeout(function(){Dom.addClass(u, "underlay");}, 0);
+            }
 
             function createUnderlay() {
 
@@ -5194,29 +5197,25 @@
 
                     oUnderlay = m_oUnderlayTemplate.cloneNode(false);
                     this.element.appendChild(oUnderlay);
-                    
+
                     this.underlay = oUnderlay;
 
                     nIE = UA.ie;
 
-                    if (nIE == 6 || 
-                        (nIE == 7 && document.compatMode == "BackCompat")) {
-                            
+                    if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
+
                         this.sizeUnderlay();
 
-                        this.cfg.subscribeToConfigEvent("width", 
-                            this.sizeUnderlay);
-
-                        this.cfg.subscribeToConfigEvent("height", 
-                            this.sizeUnderlay);
-
+                        this.cfg.subscribeToConfigEvent("width", this.sizeUnderlay);
+                        this.cfg.subscribeToConfigEvent("height",this.sizeUnderlay);
                         this.changeContentEvent.subscribe(this.sizeUnderlay);
 
-                        YAHOO.widget.Module.textResizeEvent.subscribe(
-                            this.sizeUnderlay, this, true);
-                    
+                        YAHOO.widget.Module.textResizeEvent.subscribe(this.sizeUnderlay, this, true);
                     }
 
+                    if (UA.webkit && UA.webkit < 420) {
+                        this.changeContentEvent.subscribe(fixWebkitUnderlay);
+                    }
                 }
 
             }
@@ -5226,7 +5225,7 @@
                 this._underlayDeferred = false;
                 this.beforeShowEvent.unsubscribe(onBeforeShow);
             }
-            
+
             function destroyUnderlay() {
                 if (this._underlayDeferred) {
                     this.beforeShowEvent.unsubscribe(onBeforeShow);
@@ -5234,17 +5233,11 @@
                 }
 
                 if (oUnderlay) {
-
-                    this.cfg.unsubscribeFromConfigEvent("width", 
-                        this.sizeUnderlay);
-
-                    this.cfg.unsubscribeFromConfigEvent("height", 
-                        this.sizeUnderlay);
-
+                    this.cfg.unsubscribeFromConfigEvent("width", this.sizeUnderlay);
+                    this.cfg.unsubscribeFromConfigEvent("height",this.sizeUnderlay);
                     this.changeContentEvent.unsubscribe(this.sizeUnderlay);
-
-                    YAHOO.widget.Module.textResizeEvent.unsubscribe(
-                        this.sizeUnderlay, this, true);
+                    this.changeContentEvent.unsubscribe(fixWebkitUnderlay);
+                    YAHOO.widget.Module.textResizeEvent.unsubscribe(this.sizeUnderlay, this, true);
 
                     this.element.removeChild(oUnderlay);
 
@@ -5255,37 +5248,33 @@
 
             switch (sUnderlay) {
     
-            case "shadow":
-
-                Dom.removeClass(oElement, "matte");
-                Dom.addClass(oElement, "shadow");
-
-                break;
-
-            case "matte":
-
-                if (!bMacGecko) {
-                    destroyUnderlay.call(this);
-                }
-
-                Dom.removeClass(oElement, "shadow");
-                Dom.addClass(oElement, "matte");
-
-                break;
-            default:
-
-                if (!bMacGecko) {
-
-                    destroyUnderlay.call(this);
-
-                }
-            
-                Dom.removeClass(oElement, "shadow");
-                Dom.removeClass(oElement, "matte");
-
-                break;
+                case "shadow":
+    
+                    Dom.removeClass(oElement, "matte");
+                    Dom.addClass(oElement, "shadow");
+    
+                    break;
+    
+                case "matte":
+    
+                    if (!bMacGecko) {
+                        destroyUnderlay.call(this);
+                    }
+    
+                    Dom.removeClass(oElement, "shadow");
+                    Dom.addClass(oElement, "matte");
+    
+                    break;
+                default:
+    
+                    if (!bMacGecko) {
+                        destroyUnderlay.call(this);
+                    }
+                    Dom.removeClass(oElement, "shadow");
+                    Dom.removeClass(oElement, "matte");
+    
+                    break;
             }
-
 
             if ((sUnderlay == "shadow") || (bMacGecko && !oUnderlay)) {
                 
