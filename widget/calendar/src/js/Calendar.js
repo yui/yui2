@@ -581,24 +581,6 @@ YAHOO.widget.Calendar.prototype.initEvents = function() {
 };
 
 /**
-* The default event function listening for mousedown events on the Calendar container
-* @method doMouseDown
-* @param {DOMEvent} e	The event
-* @param {Calendar} cal	A reference to the calendar
-*/
-YAHOO.widget.Calendar.prototype.doMouseDown = function(e, cal) {
-	
-	var target = YAHOO.util.Event.getTarget(e);
-	var c = cal.parent || cal;
-
-	if (target.className == cal.Style.CSS_NAV_LEFT) {
-		c.previousMonth();
-	} else if (target.className == cal.Style.CSS_NAV_RIGHT) {
-		c.nextMonth();
-	}
-};
-
-/**
 * The default event function that is attached to a date link within a calendar cell
 * when the calendar is rendered.
 * @method doSelectCell
@@ -1812,20 +1794,22 @@ YAHOO.widget.Calendar.prototype.render = function() {
 * @method applyListeners
 */
 YAHOO.widget.Calendar.prototype.applyListeners = function() {
-
 	var root = this.oDomContainer;
-
+	var cal = this.parent || this;
 	var anchor = "a";
+	var mousedown = "mousedown";
 
 	var linkLeft = YAHOO.util.Dom.getElementsByClassName(this.Style.CSS_NAV_LEFT, anchor, root);
 	var linkRight = YAHOO.util.Dom.getElementsByClassName(this.Style.CSS_NAV_RIGHT, anchor, root);
 
 	if (linkLeft && linkLeft.length > 0) {
 		this.linkLeft = linkLeft[0];
+		YAHOO.util.Event.addListener(this.linkLeft, mousedown, cal.previousMonth, cal, true);
 	}
 
 	if (linkRight && linkRight.length > 0) {
 		this.linkRight = linkRight[0];
+		YAHOO.util.Event.addListener(this.linkRight, mousedown, cal.nextMonth, cal, true);
 	}
 
 	if (this.domEventMap) {
@@ -1854,7 +1838,6 @@ YAHOO.widget.Calendar.prototype.applyListeners = function() {
 	YAHOO.util.Event.addListener(this.oDomContainer, "click", this.doSelectCell, this);
 	YAHOO.util.Event.addListener(this.oDomContainer, "mouseover", this.doCellMouseOver, this);
 	YAHOO.util.Event.addListener(this.oDomContainer, "mouseout", this.doCellMouseOut, this);
-	YAHOO.util.Event.addListener(this.oDomContainer, "mousedown", this.doMouseDown, this);
 };
 
 /**
