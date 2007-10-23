@@ -333,6 +333,10 @@ YAHOO.util.Anim.prototype = {
          * @param {Boolean} finish (optional) If true, animation will jump to final frame.
          */ 
         this.stop = function(finish) {
+            if (!this.isAnimated()) { // nothing to stop
+                return false;
+            }
+
             if (finish) {
                  this.currentFrame = this.totalFrames;
                  this._onTween.fire();
