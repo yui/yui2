@@ -6,7 +6,6 @@ var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
     /**
-     * @module toolbarbutton_advanced
      * @description <p>Creates a rich custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p>
      * @class ToolbarButtonAdvanced
      * @namespace YAHOO.widget
@@ -50,11 +49,11 @@ var Dom = YAHOO.util.Dom,
 
 
     /**
-     * @module toolbarbutton
      * @description <p>Creates a basic custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p>
      * @class ToolbarButton
      * @namespace YAHOO.widget
      * @requires yahoo, dom, element, event
+     * @Extends YAHOO.util.Element
      * @beta
      * 
      * Provides a toolbar button based on the button and menu widgets, <select> elements are used in place of menu's.

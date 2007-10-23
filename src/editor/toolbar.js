@@ -394,7 +394,6 @@ var Dom = YAHOO.util.Dom,
         */
         initAttributes: function(attr) {
             YAHOO.widget.Toolbar.superclass.initAttributes.call(this, attr);
-            var el = this.get('element');
             this.addClass(this.CLASS_CONTAINER);
 
             /**
@@ -612,8 +611,6 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('draggable', {
                 value: (attr.draggable || false),
                 method: function(draggable) {
-                    var el = this.get('element');
-
                     if (draggable && !this.get('titlebar')) {
                         YAHOO.log('Dragging enabled', 'info', 'Toolbar');
                         if (!this._dragHandle) {

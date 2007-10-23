@@ -6,7 +6,6 @@ var Dom = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
     /**
-     * @module toolbarbutton_advanced
      * @description <p>Creates a rich custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p>
      * @class ToolbarButtonAdvanced
      * @namespace YAHOO.widget
@@ -50,11 +49,11 @@ var Dom = YAHOO.util.Dom,
 
 
     /**
-     * @module toolbarbutton
      * @description <p>Creates a basic custom Toolbar Button. Primarily used with the Rich Text Editor's Toolbar</p>
      * @class ToolbarButton
      * @namespace YAHOO.widget
      * @requires yahoo, dom, element, event
+     * @Extends YAHOO.util.Element
      * @beta
      * 
      * Provides a toolbar button based on the button and menu widgets, <select> elements are used in place of menu's.
@@ -692,7 +691,6 @@ var Dom = YAHOO.util.Dom,
         */
         initAttributes: function(attr) {
             YAHOO.widget.Toolbar.superclass.initAttributes.call(this, attr);
-            var el = this.get('element');
             this.addClass(this.CLASS_CONTAINER);
 
             /**
@@ -909,8 +907,6 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('draggable', {
                 value: (attr.draggable || false),
                 method: function(draggable) {
-                    var el = this.get('element');
-
                     if (draggable && !this.get('titlebar')) {
                         if (!this._dragHandle) {
                             this._dragHandle = document.createElement('SPAN');
@@ -1984,7 +1980,6 @@ var Dom = YAHOO.util.Dom,
 */
 })();
 /**
- * @module simpleeditor
  * @description <p>The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar
@@ -2042,7 +2037,8 @@ var Dom = YAHOO.util.Dom,
     };
 
     /**
-    * @private _cleanClassName
+    * @private
+    * @method _cleanClassName
     * @description Makes a useable classname from dynamic data, by dropping it to lowercase and replacing spaces with -'s.
     * @param {String} str The classname to clean up
     * @returns {String}
@@ -2567,10 +2563,11 @@ var Dom = YAHOO.util.Dom,
 
             if (this.browser.ie) {
                 try { //IE freaks out here sometimes..
-                    range = this.getDoc().body.createTextRange();
+                    range = this._getDoc().body.createTextRange();
                     range.moveToElementText(node);
                     range.select();
-                } catch (e) {}
+                } catch (e) {
+                }
             } else if (this.browser.webkit) {
 				sel.setBaseAndExtent(node, 0, node, node.innerText.length);
             } else {
@@ -2714,10 +2711,11 @@ var Dom = YAHOO.util.Dom,
         _setInitialContent: function() {
             var html = Lang.substitute(this.get('html'), {
                 TITLE: this.STR_TITLE,
-                CONTENT: this.get('element').value,
+                CONTENT: this._cleanIncomingHTML(this.get('element').value),
                 CSS: this.get('css'),
                 HIDDEN_CSS: this.get('hiddencss')
             }),
+            
             check = true;
             if (this.browser.ie || this.browser.webkit || this.browser.opera || (navigator.userAgent.indexOf('Firefox/1.5') != -1)) {
                 //Firefox 1.5 doesn't like setting designMode on an document created with a data url
@@ -2999,7 +2997,7 @@ var Dom = YAHOO.util.Dom,
             for (var h = 0; h < els.length; h++) {
                 if (els[h].parentNode) {
                     if (Lang.isObject(this.invalidHTML[els[h].tagName.toLowerCase()]) && this.invalidHTML[els[h].tagName.toLowerCase()].keepContents) {
-                        var el = this._swapEl(els[h], 'span', function(el) {
+                        this._swapEl(els[h], 'span', function(el) {
                             el.className = 'yui-non';
                         });
                     } else {
@@ -3268,36 +3266,38 @@ var Dom = YAHOO.util.Dom,
                         el.parentNode.removeChild(el);
                     }
                 }
-                this._safariListFix(ev);
+                this._listFix(ev);
             }
             this.fireEvent('editorKeyPress', { type: 'editorKeyPress', target: this, ev: ev });
         },
         /**
         * @private
-        * @method _safariListFix
+        * @method _listFix
         * @param {Event} ev The event we are working on.
-        * @description Handles the Enter key, Tab Key and Shift + Tab keys in Safari for List Items.
+        * @description Handles the Enter key, Tab Key and Shift + Tab keys for List Items.
         */
-        _safariListFix: function(ev) {
-            var testLi = null, par = null;
+        _listFix: function(ev) {
+            var testLi = null, par = null, preContent = false, range = null;
             //Enter Key
-            if (ev.keyCode && (ev.keyCode == 13)) {
-                if (this._isElement(this._getSelectedElement(), 'li')) {
-                    var tar = this._getSelectedElement();
-                    var li = this._getDoc().createElement('li');
-                    li.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
-                    if (tar.nextSibling) {
-                        tar.parentNode.insertBefore(li, tar.nextSibling);
-                    } else {
-                        tar.parentNode.appendChild(li);
+            if (this.browser.webkit) {
+                if (ev.keyCode && (ev.keyCode == 13)) {
+                    if (this._isElement(this._getSelectedElement(), 'li')) {
+                        var tar = this._getSelectedElement();
+                        var li = this._getDoc().createElement('li');
+                        li.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
+                        if (tar.nextSibling) {
+                            tar.parentNode.insertBefore(li, tar.nextSibling);
+                        } else {
+                            tar.parentNode.appendChild(li);
+                        }
+                        this.currentElement[0] = li;
+                        this._selectNode(li.firstChild);
+                        Event.stopEvent(ev);
                     }
-                    this.currentElement[0] = li;
-                    this._selectNode(li.firstChild);
-                    Event.stopEvent(ev);
                 }
             }
             //Shift + Tab Key
-            if (ev.keyCode && ((!this.browser.webkit3 && (ev.keyCode == 25)) || (this.browser.webkit3 && ((ev.keyCode == 9) && ev.shiftKey)))) {
+            if (ev.keyCode && ((!this.browser.webkit3 && (ev.keyCode == 25)) || ((this.browser.webkit3 || !this.browser.webkit) && ((ev.keyCode == 9) && ev.shiftKey)))) {
                 testLi = this._getSelectedElement();
                 if (this._hasParent(testLi, 'li')) {
                     testLi = this._hasParent(testLi, 'li');
@@ -3306,26 +3306,66 @@ var Dom = YAHOO.util.Dom,
                         if (!par) {
                             par = this._hasParent(testLi, 'ol');
                         }
-                        par.removeChild(testLi);
-                        par.parentNode.insertBefore(testLi, par.nextSibling);
+                        if (this._isElement(par.previousSibling, 'li')) {
+                            par.removeChild(testLi);
+                            par.parentNode.insertBefore(testLi, par.nextSibling);
+                            if (this.browser.ie) {
+                                range = this._getDoc().body.createTextRange();
+                                range.moveToElementText(testLi);
+                                range.collapse(false);
+                                range.select();
+                            }
+                            Event.stopEvent(ev);
+                        }
                     }
-                    Event.stopEvent(ev);
                 }
             }
             //Tab Key
             if (ev.keyCode && ((ev.keyCode == 9) && (!ev.shiftKey))) {
-                this._getDoc().execCommand('inserttext', false, '\t');
+                var preLi = this._getSelectedElement();
+                if (this._hasParent(preLi, 'li')) {
+                    preContent = this._hasParent(preLi, 'li').innerHTML;
+                }
+                if (this.browser.webkit) {
+                    this._getDoc().execCommand('inserttext', false, '\t');
+                }
                 testLi = this._getSelectedElement();
-                if (this._isElement(testLi.parentNode, 'li')) {
-                    par = testLi.parentNode;
+                if (this._hasParent(testLi, 'li')) {
+                    par = this._hasParent(testLi, 'li');
                     var newUl = this._getDoc().createElement(par.parentNode.tagName.toLowerCase());
-                    var newLi = this._getDoc().createElement('li');
-                    newLi.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
-                    newUl.appendChild(newLi);
+                    if (this.browser.webkit) {
+                        var span = Dom.getElementsByClassName('Apple-tab-span', 'span', par);
+                        //Remove the span element that Safari puts in
+                        if (span[0]) {
+                            par.removeChild(span[0]);
+                            par.innerHTML = Lang.trim(par.innerHTML);
+                            //Put the HTML from the LI into this new LI
+                            if (preContent) {
+                                par.innerHTML = '<span class="yui-non">' + preContent + '</span>&nbsp;';
+                            } else {
+                                par.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
+                            }
+                        }
+                    } else {
+                        if (preContent) {
+                            par.innerHTML = preContent + '&nbsp;';
+                        } else {
+                            par.innerHTML = '&nbsp;';
+                        }
+                    }
 
-                    par.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
                     par.parentNode.replaceChild(newUl, par);
-                    this._getSelection().setBaseAndExtent(newLi.firstChild, 1, newLi.firstChild, 1);
+                    newUl.appendChild(par);
+                    if (this.browser.webkit) {
+                        this._getSelection().setBaseAndExtent(par.firstChild, 1, par.firstChild, par.firstChild.innerText.length);
+                    } else if (this.browser.ie) {
+                        range = this._getDoc().body.createTextRange();
+                        range.moveToElementText(par);
+                        range.collapse(false);
+                        range.select();
+                    } else {
+                        this._selectNode(par);
+                    }
                 }
                 Event.stopEvent(ev);
                 this.nodeChange();
@@ -3418,6 +3458,10 @@ var Dom = YAHOO.util.Dom,
                             Event.stopEvent(ev);
                         }
                     }
+            }
+            //if (!this.browser.gecko && !this.browser.webkit) {
+            if (this.browser.ie) {
+                this._listFix(ev);
             }
             if (doExec && action) {
                 this.execCommand(action, null);
@@ -3519,7 +3563,7 @@ var Dom = YAHOO.util.Dom,
                         }
                     }
                     var path = this._getDomPath();
-                    var olType = null, tag = null, cmd = null;
+                    var tag = null, cmd = null;
                     for (var i = 0; i < path.length; i++) {
                         tag = path[i].tagName.toLowerCase();
                         if (path[i].getAttribute('tag')) {
@@ -4265,7 +4309,6 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @private
-        * @method _handleColorPicker
         * @description Handles the colorpicker buttons in the toolbar.
         * @param {Object} o Object returned from Toolbar's buttonClick Event
         */
@@ -4283,7 +4326,6 @@ var Dom = YAHOO.util.Dom,
         * @param {Object} o Object returned from Toolbar's buttonClick Event
         */
         _handleAlign: function(o) {
-            var button = this.toolbar.getButtonById(o.button.id);
             var cmd = null;
             for (var i = 0; i < o.button.menu.length; i++) {
                 if (o.button.menu[i].value == o.button.value) {
@@ -4469,8 +4511,7 @@ var Dom = YAHOO.util.Dom,
             this.toolbar.set('disabled', true); //Disable the toolbar when the prompt is showing
             this.on('afterExecCommand', function() {
                 var el = this.currentElement[0],
-                    url = '',
-                    localFile = false;
+                    url = '';
 
                 if (el) {
                     if (el.getAttribute('href') !== null) {
@@ -4751,7 +4792,7 @@ var Dom = YAHOO.util.Dom,
         * @description This is an execCommand override method. It is called from execCommand when the execCommand('unlink') is used.
         */
         cmd_unlink: function(value) {
-            var el = this._swapEl(this.currentElement[0], 'span', function(el) {
+            this._swapEl(this.currentElement[0], 'span', function(el) {
                 el.className = 'yui-non';
             });
             return [false];
@@ -4888,7 +4929,6 @@ var Dom = YAHOO.util.Dom,
                 } else {
                     this._createCurrentElement(tag.toLowerCase());
                     list = this._getDoc().createElement(tag);
-                    var els = this.currentElement;
                     for (li = 0; li < this.currentElement.length; li++) {
                         var newli = this._getDoc().createElement('li');
                         newli.innerHTML = this.currentElement[li].innerHTML + '&nbsp;';
@@ -5020,8 +5060,7 @@ var Dom = YAHOO.util.Dom,
         */
         _createCurrentElement: function(tagName, tagStyle) {
             tagName = ((tagName) ? tagName : 'a');
-            var sel = this._getSelection(),
-                tar = null,
+            var tar = null,
                 el = [],
                 _doc = this._getDoc();
             
@@ -5206,6 +5245,7 @@ var Dom = YAHOO.util.Dom,
         * @description Loads HTML into the editors body
         */
         setEditorHTML: function(html) {
+            html = this._cleanIncomingHTML(html);
             this._getDoc().body.innerHTML = html;
             this.nodeChange();
         },
@@ -5262,6 +5302,19 @@ var Dom = YAHOO.util.Dom,
             this.get('iframe').setStyle('left', '-9999px');
         },
         /**
+        * @method _cleanIncomingHTML
+        * @param {String} html The unfiltered HTML
+        * @description Process the HTML with a few regexes to clean it up and stabilize the input
+        * @returns {String} The filtered HTML
+        */
+        _cleanIncomingHTML: function(html) {
+            html = html.replace(/<strong([^>]*)>/gi, '<b$1>');
+            html = html.replace(/<\/strong>/gi, '</b>');   
+            html = html.replace(/<em([^>]*)>/gi, '<i$1>');
+            html = html.replace(/<\/em>/gi, '</i>');   
+            return html;
+        },
+        /**
         * @method cleanHTML
         * @param {String} html The unfiltered HTML
         * @description Process the HTML with a few regexes to clean it up and stabilize the output
@@ -5275,19 +5328,14 @@ var Dom = YAHOO.util.Dom,
             }
             var markup = this.get('markup');
             //Make some backups...
-            if (this.browser.webkit) {
-		        html = html.replace(/<br class="khtml-block-placeholder">/gi, '<YUI_BR>');
-		        html = html.replace(/<br class="webkit-block-placeholder">/gi, '<YUI_BR>');
-            }
-		    html = html.replace(/<br>/gi, '<YUI_BR>');
-		    html = html.replace(/<br\/>/gi, '<YUI_BR>');
-		    html = html.replace(/<br \/>/gi, '<YUI_BR>');
-		    html = html.replace(/<div><YUI_BR><\/div>/gi, '<YUI_BR>');
-		    html = html.replace(/<p>(&nbsp;|&#160;)<\/p>/g, '<YUI_BR>');            
-		    html = html.replace(/<p><br>&nbsp;<\/p>/gi, '<YUI_BR>');
-		    html = html.replace(/<p>&nbsp;<\/p>/gi, '<YUI_BR>');
+            html = this.pre_filter_linebreaks(html, markup);
+
 		    html = html.replace(/<img([^>]*)\/>/gi, '<YUI_IMG$1>');
 		    html = html.replace(/<img([^>]*)>/gi, '<YUI_IMG$1>');
+
+		    html = html.replace(/<input([^>]*)\/>/gi, '<YUI_INPUT$1>');
+		    html = html.replace(/<input([^>]*)>/gi, '<YUI_INPUT$1>');
+
 		    html = html.replace(/<ul([^>]*)>/gi, '<YUI_UL$1>');
 		    html = html.replace(/<\/ul>/gi, '<\/YUI_UL>');
 		    html = html.replace(/<blockquote([^>]*)>/gi, '<YUI_BQ$1>');
@@ -5330,27 +5378,107 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<li/gi, '<li');
 		    html = html.replace(/\/li>/gi, '/li>');
 
-            //Fix stuff we don't want
-	        html = html.replace(/<\/?(body|head|html)[^>]*>/gi, '');
-            //Fix last BR
-	        html = html.replace(/<YUI_BR>$/, '');
-            //Fix last BR in P
-	        html = html.replace(/<YUI_BR><\/p>/g, '</p>');
-            //Fix last BR in LI
-		    html = html.replace(/<YUI_BR><\/li>/gi, '</li>');
+            html = this.filter_safari(html);
 
-            //Safari only regexes
+            html = this.filter_internals(html);
+
+            html = this.filter_all_rgb(html);
+
+            //Replace our backups with the real thing
+            html = this.post_filter_linebreaks(html, markup);
+            if (markup == 'xhtml') {
+		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1/>');
+		        html = html.replace(/<YUI_INPUT([^>]*)>/g, '<input $1/>');
+            } else {
+		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1>');
+		        html = html.replace(/<YUI_INPUT([^>]*)>/g, '<input $1>');
+            }
+		    html = html.replace(/<YUI_UL([^>]*)>/g, '<ul$1>');
+		    html = html.replace(/<\/YUI_UL>/g, '<\/ul>');
+
+            html = this.filter_invalid_lists(html);
+
+		    html = html.replace(/<YUI_BQ([^>]*)>/g, '<blockquote$1>');
+		    html = html.replace(/<\/YUI_BQ>/g, '<\/blockquote>');
+
+            //Trim the output, removing whitespace from the beginning and end
+            html = YAHOO.lang.trim(html);
+
+            if (this.get('removeLineBreaks')) {
+                html = html.replace(/\n/g, '').replace(/\r/g, '');
+                html = html.replace(/  /gi, ' '); //Replace all double spaces and replace with a single
+            }
+
+
+            for (var v in this.invalidHTML) {
+                if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
+                    if (Lang.isObject(v) && v.keepContents) {
+                        html = html.replace(new RegExp('<' + v + '([^>]*)>(.*?)<\/' + v + '>', 'gi'), '$1');
+                    } else {
+                        html = html.replace(new RegExp('<' + v + '([^>]*)>(.*?)<\/' + v + '>', 'gi'), '');
+                    }
+                }
+            }
+
+            this.fireEvent('saveHTML', { type: 'saveHTML', target: this, html: html });
+
+            return html;
+        },
+        /**
+        * @method filter_invalid_lists
+        * @param String html The HTML string to filter
+        * @description Filters invalid ol and ul list markup, converts this: <li></li><ol>..</ol> to this: <li></li><li><ol>..</ol></li>
+        * @returns String
+        */
+        filter_invalid_lists: function(html) {
+            html = html.replace(/<\/li>\n/gi, '</li>');
+
+            html = html.replace(/<\/li><ol>/gi, '</li><li><ol>');
+            html = html.replace(/<\/ol>/gi, '</ol></li>');
+            html = html.replace(/<\/ol><\/li>\n/gi, "</ol>\n");
+
+            html = html.replace(/<\/li><ul>/gi, '</li><li><ul>');
+            html = html.replace(/<\/ul>/gi, '</ul></li>');
+            html = html.replace(/<\/ul><\/li>\n/gi, "</ul>\n");
+
+            html = html.replace(/<\/li>/gi, "</li>\n");
+            html = html.replace(/<\/ol>/gi, "</ol>\n");
+            html = html.replace(/<ol>/gi, "<ol>\n");
+            html = html.replace(/<ul>/gi, "<ul>\n");
+            return html;
+        },
+        /**
+        * @method filter_safari
+        * @param String html The HTML string to filter
+        * @description Filters strings specific to Safari
+        * @returns String
+        */
+        filter_safari: function(html) {
             if (this.browser.webkit) {
-                //<DIV><SPAN class="Apple-style-span" style="line-height: normal;">Test THis</SPAN></DIV>
                 html = html.replace(/Apple-style-span/gi, '');
                 html = html.replace(/style="line-height: normal;"/gi, '');
                 //Remove bogus LI's
                 html = html.replace(/<li><\/li>/gi, '');
                 html = html.replace(/<li> <\/li>/gi, '');
+                html = html.replace(/<li>  <\/li>/gi, '');
                 //Remove bogus DIV's
                 html = html.replace(/<div><\/div>/gi, '');
                 html = html.replace(/<div> <\/div>/gi, '');
             }
+            return html;
+        },
+        /**
+        * @method filter_internals
+        * @param String html The HTML string to filter
+        * @description Filters internal RTE strings and bogus attrs we don't want
+        * @returns String
+        */
+        filter_internals: function(html) {
+		    html = html.replace(/\r/g, '');
+            //Fix stuff we don't want
+	        html = html.replace(/<\/?(body|head|html)[^>]*>/gi, '');
+            //Fix last BR in LI
+		    html = html.replace(/<YUI_BR><\/li>/gi, '</li>');
 
 		    html = html.replace(/yui-tag-span/gi, '');
 		    html = html.replace(/yui-tag/gi, '');
@@ -5374,38 +5502,99 @@ var Dom = YAHOO.util.Dom,
 		        html = html.replace(/_width="([^>])"/gi, '');
             }
             
-            //Replace our backups with the real thing
-            if (markup == 'xhtml') {
-		        html = html.replace(/<YUI_BR>/g, '<br/>');
-		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1/>');
-            } else {
-		        html = html.replace(/<YUI_BR>/g, '<br>');
-		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1>');
-            }
-		    html = html.replace(/<YUI_UL([^>]*)>/g, '<ul$1>');
-		    html = html.replace(/<\/YUI_UL>/g, '<\/ul>');
-		    html = html.replace(/<YUI_BQ([^>]*)>/g, '<blockquote$1>');
-		    html = html.replace(/<\/YUI_BQ>/g, '<\/blockquote>');
-
-            //Trim the output, removing whitespace from the beginning and end
-            html = html.replace(/^\s+/g, '').replace(/\s+$/g, '');
-
-            if (this.get('removeLineBreaks')) {
-                html = html.replace(/\n/g, '').replace(/\r/g, '');
-                html = html.replace(/  /gi, ' '); //Replace all double spaces and replace with a single
-            }
-
-
-            for (var v in this.invalidHTML) {
-                if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
-                    if (Lang.isObject(v) && v.keepContents) {
-                        html = html.replace(new RegExp('<' + v + '([^>]*)>(.*?)<\/' + v + '>', 'gi'), '$1');
-                    } else {
-                        html = html.replace(new RegExp('<' + v + '([^>]*)>(.*?)<\/' + v + '>', 'gi'), '');
-                    }
+            return html;
+        },
+        /**
+        * @method filter_all_rgb
+        * @param String str The HTML string to filter
+        * @description Converts all RGB color strings found in passed string to a hex color, example: style="color: rgb(0, 255, 0)" converts to style="color: #00ff00"
+        * @returns String
+        */
+        filter_all_rgb: function(str) {
+            var exp = new RegExp("rgb\\s*?\\(\\s*?([0-9]+).*?,\\s*?([0-9]+).*?,\\s*?([0-9]+).*?\\)", "gi");
+            var arr = str.match(exp);
+            if (Lang.isArray(arr)) {
+                for (var i = 0; i < arr.length; i++) {
+                    var color = this.filter_rgb(arr[i]);
+                    str = str.replace(arr[i].toString(), color);
                 }
             }
+            
+            return str;
+        },
+        /**
+        * @method filter_rgb
+        * @param String css The CSS string containing rgb(#,#,#);
+        * @description Converts an RGB color string to a hex color, example: rgb(0, 255, 0) converts to #00ff00
+        * @returns String
+        */
+        filter_rgb: function(css) {
+            if (css.toLowerCase().indexOf('rgb') != -1) {
+                var exp = new RegExp("(.*?)rgb\\s*?\\(\\s*?([0-9]+).*?,\\s*?([0-9]+).*?,\\s*?([0-9]+).*?\\)(.*?)", "gi");
+                var rgb = css.replace(exp, "$1,$2,$3,$4,$5").split(',');
+            
+                if (rgb.length == 5) {
+                    var r = parseInt(rgb[1], 10).toString(16);
+                    var g = parseInt(rgb[2], 10).toString(16);
+                    var b = parseInt(rgb[3], 10).toString(16);
 
+                    r = r.length == 1 ? '0' + r : r;
+                    g = g.length == 1 ? '0' + g : g;
+                    b = b.length == 1 ? '0' + b : b;
+
+                    css = "#" + r + g + b;
+                }
+            }
+            return css;
+        },
+        /**
+        * @method pre_filter_linebreaks
+        * @param String html The HTML to filter
+        * @param String markup The markup type to filter to
+        * @description HTML Pre Filter
+        * @returns String
+        */
+        pre_filter_linebreaks: function(html, markup) {
+            if (this.browser.webkit) {
+		        html = html.replace(/<br class="khtml-block-placeholder">/gi, '<YUI_BR>');
+		        html = html.replace(/<br class="webkit-block-placeholder">/gi, '<YUI_BR>');
+            }
+		    html = html.replace(/<br>/gi, '<YUI_BR>');
+		    html = html.replace(/<br\/>/gi, '<YUI_BR>');
+		    html = html.replace(/<br \/>/gi, '<YUI_BR>');
+		    html = html.replace(/<div><YUI_BR><\/div>/gi, '<YUI_BR>');
+		    html = html.replace(/<p>(&nbsp;|&#160;)<\/p>/g, '<YUI_BR>');            
+		    html = html.replace(/<p><br>&nbsp;<\/p>/gi, '<YUI_BR>');
+		    html = html.replace(/<p>&nbsp;<\/p>/gi, '<YUI_BR>');
+            //Fix last BR
+	        html = html.replace(/<YUI_BR>$/, '');
+            //Fix last BR in P
+	        html = html.replace(/<YUI_BR><\/p>/g, '</p>');
+            return html;
+        },
+        /**
+        * @method post_filter_linebreaks
+        * @param String html The HTML to filter
+        * @param String markup The markup type to filter to
+        * @description HTML Pre Filter
+        * @returns String
+        */
+        post_filter_linebreaks: function(html, markup) {
+            if (markup == 'xhtml') {
+		        html = html.replace(/<YUI_BR>/g, '<br/>');
+            } else {
+		        html = html.replace(/<YUI_BR>/g, '<br>');
+            }
+            return html;
+        },
+        /**
+        * @method filter_
+        * @param String html The HTML to filter
+        * @param String markup The markup type to filter to
+        * @description HTML Filter
+        * @returns String
+        */
+        filter_: function(html, markup) {
             return html;
         },
         /**
@@ -5490,6 +5679,11 @@ var Dom = YAHOO.util.Dom,
 /**
 * @event toolbarLoaded
 * @description Event is fired during the render process directly after the Toolbar is loaded. Allowing you to attach events to the toolbar. See <a href="YAHOO.util.Element.html#addListener">Element.addListener</a> for more information on listening for this event.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event saveHTML
+* @description Event is fired after the saveHTML method is called.
 * @type YAHOO.util.CustomEvent
 */
 /**
