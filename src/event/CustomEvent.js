@@ -220,8 +220,6 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             args.push(arguments[i]);
         }
 
-        var argslength = args.length;
-
         if (!this.silent) {
             YAHOO.log( "Firing "       + this  + ", " + 
                        "args: "        + args  + ", " +

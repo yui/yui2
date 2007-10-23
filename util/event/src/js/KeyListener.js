@@ -108,7 +108,6 @@ YAHOO.util.KeyListener = function(attachTo, keyData, handler, event) {
             e.ctrlKey  == keyData.ctrl) { // if we pass this, all modifiers match
             
             var dataItem;
-            var keyPressed;
 
             if (keyData.keys instanceof Array) {
                 for (var i=0;i<keyData.keys.length;i++) {
@@ -193,3 +192,35 @@ YAHOO.util.KeyListener.KEYDOWN = "keydown";
 * @type String
 */
 YAHOO.util.KeyListener.KEYUP = "keyup";
+
+/**
+ * keycode constants for a subset of the special keys
+ * @property KEY
+ * @static
+ * @final
+ */
+YAHOO.util.KeyListener.KEY = {
+    ALT          : 18,
+    BACK_SPACE   : 8,
+    CAPS_LOCK    : 20,
+    CONTROL      : 17,
+    DELETE       : 46,
+    DOWN         : 40,
+    END          : 35,
+    ENTER        : 13,
+    ESCAPE       : 27,
+    HOME         : 36,
+    LEFT         : 37,
+    META         : 224,
+    NUM_LOCK     : 144,
+    PAGE_DOWN    : 34,
+    PAGE_UP      : 33, 
+    PAUSE        : 19,
+    PRINTSCREEN  : 44,
+    RIGHT        : 39,
+    SCROLL_LOCK  : 145,
+    SHIFT        : 16,
+    SPACE        : 32,
+    TAB          : 9,
+    UP           : 38
+};
