@@ -320,8 +320,8 @@ YAHOO.util.Anim.prototype = {
             
             this.totalFrames = ( this.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * this.duration) : this.duration;
     
-            if (this.duration === 0 && this.useSeconds) {
-                this.totalFrames = 1; // jump to last frame if no duration
+            if (this.duration === 0 && this.useSeconds) { // jump to last frame if zero second duration 
+                this.totalFrames = 1; 
             }
             YAHOO.util.AnimMgr.registerElement(this);
             return true;
@@ -333,6 +333,10 @@ YAHOO.util.Anim.prototype = {
          * @param {Boolean} finish (optional) If true, animation will jump to final frame.
          */ 
         this.stop = function(finish) {
+            if (!this.isAnimated()) { // nothing to stop
+                return false;
+            }
+
             if (finish) {
                  this.currentFrame = this.totalFrames;
                  this._onTween.fire();
@@ -518,12 +522,12 @@ YAHOO.util.AnimMgr = new function() {
      * @private
      */
     this.unRegister = function(tween, index) {
-        tween._onComplete.fire();
         index = index || getIndex(tween);
-        if (index == -1) {
+        if (!tween.isAnimated() || index == -1) {
             return false;
         }
         
+        tween._onComplete.fire();
         queue.splice(index, 1);
 
         tweenCount -= 1;
@@ -556,9 +560,7 @@ YAHOO.util.AnimMgr = new function() {
             clearInterval(thread);
             
             for (var i = 0, len = queue.length; i < len; ++i) {
-                if ( queue[0].isAnimated() ) {
-                    this.unRegister(queue[0], 0);  
-                }
+                this.unRegister(queue[0], 0);  
             }
 
             queue = [];
