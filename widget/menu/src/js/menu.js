@@ -964,7 +964,6 @@ _getFirstEnabledItem: function () {
 _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
 
     var oItem,
-        bDisabled = this.cfg.getProperty("disabled"),
         nGroupIndex,
         aGroup,
         oGroupItem,
@@ -1507,39 +1506,6 @@ _setWidth: function () {
 
 
 /**
-* @method _onWidthChange
-* @description Change event handler for the the menu's "width" configuration
-* property.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onWidthChange: function (p_sType, p_aArgs) {
-
-    var sWidth = p_aArgs[0];
-    
-    if (sWidth && !this._hasSetWidthHandlers) {
-
-        this.itemAddedEvent.subscribe(this._setWidth);
-        this.itemRemovedEvent.subscribe(this._setWidth);
-
-        this._hasSetWidthHandlers = true;
-
-    }
-    else if (this._hasSetWidthHandlers) {
-
-        this.itemAddedEvent.unsubscribe(this._setWidth);
-        this.itemRemovedEvent.unsubscribe(this._setWidth);
-
-        this._hasSetWidthHandlers = false;
-
-    }
-
-},
-
-
-/**
 * @method _onVisibleChange
 * @description Change event handler for the the menu's "visible" configuration
 * property.
@@ -2048,83 +2014,45 @@ _onClick: function (p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
-        oTarget,
         oItemCfg,
         oSubmenu,
         sURL,
-        nURL,
         oRoot;
 
 
     if (oItem && !oItem.cfg.getProperty("disabled")) {
 
-        oTarget = Event.getTarget(oEvent);
         oItemCfg = oItem.cfg;
         oSubmenu = oItemCfg.getProperty("submenu");
+        sURL = oItemCfg.getProperty("url");
+        
+
+        if ((sURL.substr(0,1) == "#")) {
+
+            Event.preventDefault(oEvent);
+
+            oItem.focus();
+        
+        }
 
 
-        /*
-            ACCESSIBILITY FEATURE FOR SCREEN READERS: 
-            Expand/collapse the submenu when the user clicks 
-            on the submenu indicator image.
-        */        
+        if (!oSubmenu) {
 
-        if (oTarget == oItem.submenuIndicator && oSubmenu) {
+            oRoot = this.getRoot();
+            
+            if (oRoot instanceof YAHOO.widget.MenuBar || 
+                oRoot.cfg.getProperty("position") == "static") {
 
-            if (oSubmenu.cfg.getProperty("visible")) {
+                oRoot.clearActiveItem();
 
-                oSubmenu.hide();
-                
-                oSubmenu.parent.focus();
-    
             }
             else {
 
-                this.clearActiveItem();
-
-                oItemCfg.setProperty("selected", true);
-
-                oSubmenu.show();
-                
-                oSubmenu.setInitialFocus();
-    
+                oRoot.hide();
+            
             }
 
-            Event.preventDefault(oEvent);
-    
         }
-        else {
-
-            sURL = oItemCfg.getProperty("url");
-            
-            if ((sURL.substr(0,1) == "#")) {
-
-                Event.preventDefault(oEvent);
-
-                oItem.focus();
-            
-            }
-
-
-            if (!oSubmenu) {
-    
-                oRoot = this.getRoot();
-                
-                if (oRoot instanceof YAHOO.widget.MenuBar || 
-                    oRoot.cfg.getProperty("position") == "static") {
-    
-                    oRoot.clearActiveItem();
-    
-                }
-                else {
-
-                    oRoot.hide();
-                
-                }
-    
-            }
-
-        }                    
     
     }
 
@@ -2460,37 +2388,6 @@ _onKeyPress: function (p_sType, p_aArgs) {
 
 
 /**
-* @method _onTextResize
-* @description "textresize" event handler for the menu.
-* @protected
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
-*/
-_onTextResize: function (p_sType, p_aArgs, p_oMenu) {
-
-    if (YAHOO.env.ua.gecko && !this._handleResize) {
-
-        this._handleResize = true;
-        return;
-    
-    }
-
-
-    var oConfig = this.cfg;
-
-    if (oConfig.getProperty("position") == "dynamic") {
-
-        oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
-
-    }
-
-},
-
-
-/**
 * @method _onScrollTargetMouseOver
 * @description "mouseover" event handler for the menu's "header" and "footer" 
 * elements.  Used to scroll the body of the menu up and down when the 
@@ -2616,7 +2513,6 @@ _onScrollTargetMouseOut: function (p_oEvent, p_oMenu) {
 */
 _onInit: function (p_sType, p_aArgs) {
 
-    this.cfg.subscribeToConfigEvent("width", this._onWidthChange);
     this.cfg.subscribeToConfigEvent("visible", this._onVisibleChange);
 
     var bRootMenu = !this.parent,
@@ -2676,8 +2572,7 @@ _onInit: function (p_sType, p_aArgs) {
 */
 _onBeforeRender: function (p_sType, p_aArgs) {
 
-    var oConfig = this.cfg,
-        oEl = this.element,
+    var oEl = this.element,
         nListElements = this._aListElements.length,
         bFirstList = true,
         i = 0,
@@ -2744,20 +2639,12 @@ _onBeforeRender: function (p_sType, p_aArgs) {
 */
 _onRender: function (p_sType, p_aArgs) {
 
-    Module.textResizeEvent.subscribe(this._onTextResize, this, true);
-
     if (this.cfg.getProperty("position") == "dynamic") { 
 
         if (!this.cfg.getProperty("visible")) {
 
             this.positionOffScreen();
 
-        }
-
-        if (!this.cfg.getProperty("width")) {
-
-            this._setWidth();
-            
         }
     
     }
@@ -2782,7 +2669,6 @@ _onBeforeShow: function (p_sType, p_aArgs) {
         n,
         nViewportHeight,
         oRegion,
-        oBody,
         oSrcElement;
 
 
@@ -3279,23 +3165,6 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
 
         break;
 
-        case "text":
-        case "helptext":
-
-            /*
-                A change to an item's "text" or "helptext"
-                configuration properties requires the width of the parent
-                menu to be recalculated.
-            */
-
-            if (this.element.style.width) {
-
-                this.cfg.setProperty("width", (this._getOffsetWidth() + "px"));
-
-            }
-
-        break;
-
     }
 
 },
@@ -3705,7 +3574,7 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     Dom.removeClass(oBody, "yui-menu-body-scrolled");
 
 
-    if (!this.cfg.getProperty("width")) {
+    if (YAHOO.env.gecko && !this.cfg.getProperty("width")) {
 
         this._setWidth();
 
@@ -4539,8 +4408,6 @@ clearContent: function () {
 * (and accompanying child nodes) from the document.
 */
 destroy: function () {
-
-    Module.textResizeEvent.unsubscribe(this._onTextResize, this);
 
     // Remove all items
 

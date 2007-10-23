@@ -52,7 +52,6 @@ function checkPosition(p_sPosition) {
 
 
 var Event = YAHOO.util.Event,
-    Dom = YAHOO.util.Dom,
     MenuBar = YAHOO.widget.MenuBar,
 
     /**
@@ -334,7 +333,7 @@ _onClick: function(p_sType, p_aArgs, p_oMenuBar) {
         oSubmenu = oItem.cfg.getProperty("submenu");
 
 
-        if(oSubmenu && oTarget != oItem.submenuIndicator) {
+        if(oSubmenu) {
         
             if(oSubmenu.cfg.getProperty("visible")) {
             
