@@ -77,6 +77,9 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     if(maxCacheEntries > 0 && !this._aCache) {
         this._aCache = [];
     }
+    
+    // Initialize interval tracker
+    this._aIntervals = [];
 
     this._sName = "DataSource instance" + YAHOO.util.DataSource._nIndex;
     YAHOO.util.DataSource._nIndex++;
@@ -333,6 +336,15 @@ YAHOO.util.DataSource.prototype._aCache = null;
  * @private
  */
 YAHOO.util.DataSource.prototype._oQueue = null;
+
+/**
+ * Array of polling interval IDs that have been enabled, needed to clear all intervals.
+ *
+ * @property _aIntervals
+ * @type Array
+ * @private
+ */
+YAHOO.util.DataSource.prototype._aIntervals = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -661,6 +673,61 @@ YAHOO.util.DataSource.prototype.flushCache = function() {
     if(this._aCache) {
         this._aCache = [];
         this.fireEvent("cacheFlushEvent");
+    }
+};
+
+/**
+ * Sets up a polling mechanism to send requests at set intervals and forward
+ * responses to given callback.
+ *
+ * @method setInterval
+ * @param nMsec {Number} Length of interval in milliseconds.
+ * @param oRequest {Object} Request object.
+ * @param oCallback {Function} Handler function to receive the response.
+ * @param oCaller {Object} The Calling object that is making the request.
+ * @return {Number} Interval ID.
+ */
+YAHOO.util.DataSource.prototype.setInterval = function(nMsec, oRequest, oCallback, oCaller) {
+    //TODO: management and cleanup of interval IDs
+    try {
+        var oSelf = this;
+        var nId = setInterval(function() {
+            oSelf.makeConnection(oRequest, oCallback, oCaller);
+        }, nMsec);
+        this._aIntervals.push(nId);
+        return nId;
+    }
+    catch(e) {
+    }
+};
+
+/**
+ * Disables polling mechanism associated with the given interval ID.
+ *
+ * @method clearInterval
+ * @param nId {Number} Interval ID.
+ */
+YAHOO.util.DataSource.prototype.clearInterval = function(nId) {
+    // Remove from tracker if there
+    var tracker = this._aIntervals || [];
+    for(var i=tracker.length-1; i>-1; i--) {
+        if(tracker[i] === nId) {
+            tracker.splice(i,1);
+            clearInterval(nId);
+        }
+    }
+};
+
+/**
+ * Disables all known polling intervals.
+ *
+ * @method clearAllIntervals
+ */
+YAHOO.util.DataSource.prototype.clearAllIntervals = function(nId) {
+    var tracker = this._aIntervals || [];
+    for(var i=tracker.length-1; i>-1; i--) {
+        tracker.splice(i,1);
+        clearInterval(nId);
     }
 };
 
@@ -1065,34 +1132,42 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
             // Cycle through each record, except the first which contains header info
             for(var i = recordsarray.length-1; i>-1; i--) {
                 var oResult = {};
+                var bError = false;
                 for(var j=fields.length-1; j>-1; j--) {
-                    // Split along field delimter to get each data value
-                    var fielddataarray = recordsarray[i].split(fieldDelim);
+                    try {
+                        // Split along field delimiter to get each data value
+                        var fielddataarray = recordsarray[i].split(fieldDelim);
 
-                    // Remove quotation marks from edges, if applicable
-                    var data = fielddataarray[j];
-                    if(data.charAt(0) == "\"") {
-                        data = data.substr(1);
+                        // Remove quotation marks from edges, if applicable
+                        var data = fielddataarray[j];
+                        if(data.charAt(0) == "\"") {
+                            data = data.substr(1);
+                        }
+                        if(data.charAt(data.length-1) == "\"") {
+                            data = data.substr(0,data.length-1);
+                        }
+                        var field = fields[j];
+                        var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
+                        // Backward compatibility
+                        if(!field.parser && field.converter) {
+                            field.parser = field.converter;
+                        }
+                        if(field.parser) {
+                            data = field.parser.call(this, data);
+                        }
+                        // Safety measure
+                        if(data === undefined) {
+                            data = null;
+                        }
+                        oResult[key] = data;
                     }
-                    if(data.charAt(data.length-1) == "\"") {
-                        data = data.substr(0,data.length-1);
+                    catch(e) {
+                        bError = true;
                     }
-                    var field = fields[j];
-                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
-                    // Backward compatibility
-                    if(!field.parser && field.converter) {
-                        field.parser = field.converter;
-                    }
-                    if(field.parser) {
-                        data = field.parser.call(this, data);
-                    }
-                    // Safety measure
-                    if(data === undefined) {
-                        data = null;
-                    }
-                    oResult[key] = data;
                 }
-                oParsedResponse.results.unshift(oResult);
+                if(!bError) {
+                    oParsedResponse.results.unshift(oResult);
+                }
             }
         }
     }
@@ -1113,9 +1188,15 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oRawResponse)
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oRawResponse) {
         var bError = false;
         var oParsedResponse = {};
-        var xmlList = (this.responseSchema.resultNode) ?
+        var xmlList = null;
+        // In case oRawResponse is something funky
+        try {
+            xmlList = (this.responseSchema.resultNode) ?
                 oRawResponse.getElementsByTagName(this.responseSchema.resultNode) :
                 null;
+        }
+        catch(e) {
+        }
         if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
             bError = true;
         }
@@ -1355,5 +1436,118 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
         }
         return oParsedResponse;
 };
+
+/**
+ * The Number utility provides helper functions to deal with data of type Number.
+ *
+ * @namespace YAHOO.util
+ * @module number
+ * @requires datasource
+ * @title Number Utility
+ * @beta
+ */
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * The static Number class provides helper functions to deal with data of type
+ * Number.
+ *
+ * @class Number
+ * @static
+ */
+ YAHOO.util.Number = {
+ 
+     /**
+     * Takes a native JavaScript Number and formats to string for display to user.
+     *
+     * @method format
+     * @param nData {Number} Number.
+     * @param oConfig {Object} (Optional) Optional configuration values:
+     *  <dl>
+     *   <dt>prefix {String}</dd>
+     *   <dd>String prepended before each number, like a currency designator "$"</dd>
+     *   <dt>decimalPlaces {Number}</dd>
+     *   <dd>Number of decimal places to round.</dd>
+     *   <dt>decimalSeparator {String}</dd>
+     *   <dd>Decimal separator</dd>
+     *   <dt>thousandsSeparator {String}</dd>
+     *   <dd>Thousands separator</dd>
+     *   <dt>suffix {String}</dd>
+     *   <dd>String appended after each number, like " items" (note the space)</dd>
+     *  </dl>
+     * @return {String} Formatted number for display.
+     */
+    format: function(nData, oConfig) {
+        oConfig = oConfig || {};
+        
+        if(!YAHOO.lang.isNumber(nData)) {
+            nData *= 1;
+        }
+
+        if(YAHOO.lang.isNumber(nData)) {
+            var sOutput = nData + "";
+            var sDecimalSeparator = (oConfig.decimalSeparator) ? oConfig.decimalSeparator : ".";
+            var nDotIndex;
+
+            // Manage decimals
+            if(YAHOO.lang.isNumber(oConfig.decimalPlaces)) {
+                // Round to the correct decimal place
+                var nDecimalPlaces = oConfig.decimalPlaces;
+                var nDecimal = Math.pow(10, nDecimalPlaces);
+                sOutput = Math.round(nData*nDecimal)/nDecimal + "";
+                nDotIndex = sOutput.lastIndexOf(".");
+
+                if(nDecimalPlaces > 0) {
+                    // Add the decimal separator
+                    if(nDotIndex < 0) {
+                        sOutput += sDecimalSeparator;
+                        nDotIndex = sOutput.length-1;
+                    }
+                    // Replace the "."
+                    else if(sDecimalSeparator !== "."){
+                        sOutput = sOutput.replace(".",sDecimalSeparator);
+                    }
+                    // Add missing zeros
+                    while((sOutput.length - 1 - nDotIndex) < nDecimalPlaces) {
+                        sOutput += "0";
+                    }
+                }
+            }
+            
+            // Add the thousands separator
+            if(oConfig.thousandsSeparator) {
+                var sThousandsSeparator = oConfig.thousandsSeparator;
+                nDotIndex = sOutput.lastIndexOf(sDecimalSeparator);
+                nDotIndex = (nDotIndex > -1) ? nDotIndex : sOutput.length;
+                var sNewOutput = sOutput.substring(nDotIndex);
+                var nCount = -1;
+                for (var i=nDotIndex; i>0; i--) {
+                    nCount++;
+                    if ((nCount%3 === 0) && (i !== nDotIndex)) {
+                        sNewOutput = sThousandsSeparator + sNewOutput;
+                    }
+                    sNewOutput = sOutput.charAt(i-1) + sNewOutput;
+                }
+                sOutput = sNewOutput;
+            }
+
+            // Prepend prefix
+            sOutput = (oConfig.prefix) ? oConfig.prefix + sOutput : sOutput;
+
+            // Append suffix
+            sOutput = (oConfig.suffix) ? sOutput + oConfig.suffix : sOutput;
+
+            return sOutput;
+        }
+        // Still not a Number, just return unaltered
+        else {
+            return nData;
+        }
+    }
+ };
+
 
 YAHOO.register("datasource", YAHOO.util.DataSource, {version: "@VERSION@", build: "@BUILD@"});
