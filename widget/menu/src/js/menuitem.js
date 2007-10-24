@@ -1307,11 +1307,6 @@ MenuItem.prototype = {
         }
 
 
-        if () {
-        
-        }
-
-
         if (oItem.hasFocus()) {
 
             oMenu = oItem.parent;
