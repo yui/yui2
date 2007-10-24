@@ -20,14 +20,5 @@ YAHOO.lang.extend(YAHOO.widget.CategoryAxis, YAHOO.widget.Axis,
 	 * @property categoryNames
 	 * @type Array
 	 */
-	categoryNames: null,
-	
-	/**
-	 * A string reference to the globally-accessible function that may be called to
-	 * determine each of the label values for this axis.
-	 *
-	 * @property labelFunction
-	 * @type String
-	 */
-	labelFunction: null
+	categoryNames: null
 });

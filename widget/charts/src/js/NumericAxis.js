@@ -73,14 +73,5 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @property scale
 	 * @type String
 	 */
-	scale: "linear",
-
-	/**
-	 * A string reference to the globally-accessible function that may be called to
-	 * determine each of the label values for this axis.
-	 *
-	 * @property labelFunction
-	 * @type String
-	 */
-	labelFunction: null
+	scale: "linear"
 });

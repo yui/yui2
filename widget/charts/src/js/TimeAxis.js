@@ -72,14 +72,5 @@ YAHOO.lang.extend(YAHOO.widget.TimeAxis, YAHOO.widget.Axis,
 	 * @property snapToUnits
 	 * @type Boolean
 	 */
-	snapToUnits: true,
-
-	/**
-	 * A string reference to the globally-accessible function that may be called to
-	 * determine each of the label values for this axis.
-	 *
-	 * @property labelFunction
-	 * @type String
-	 */
-	labelFunction: null
+	snapToUnits: true
 });

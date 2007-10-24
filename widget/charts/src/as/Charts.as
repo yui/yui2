@@ -703,13 +703,6 @@ package
 				this.backgroundAndBorder.width = this.stage.stageWidth;
 				this.backgroundAndBorder.height = this.stage.stageHeight;
 				this.backgroundAndBorder.drawNow();
-				
-				/*if(this.chart)
-				{
-					this.chart.x = this.chart.y = this.backgroundAndBorder.borderWeight;
-					this.chart.width -= 2 * this.backgroundAndBorder.borderWeight;
-					this.chart.height -= 2 * this.backgroundAndBorder.borderWeight;
-				}*/
 			}
 			
 			if(this.chart)

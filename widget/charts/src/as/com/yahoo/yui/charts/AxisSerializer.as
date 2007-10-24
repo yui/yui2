@@ -59,6 +59,8 @@ package com.yahoo.yui.charts
 			axis.title = input.title;
 			axis.orientation = input.orientation;
 			axis.reverse = input.reverse;
+			axis.hideOverlappingLabels = input.hideOverlappingLabels;
+			axis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
 			
 			if(axis is NumericAxis)
 			{
@@ -67,9 +69,9 @@ package com.yahoo.yui.charts
 				numericAxis.maximum = input.maximum;
 				numericAxis.majorUnit = input.majorUnit;
 				numericAxis.minorUnit = input.minorUnit;
+				numericAxis.snapToUnits = input.snapToUnits;
 				numericAxis.alwaysShowZero = input.alwaysShowZero;
 				numericAxis.scale = input.scale;
-				numericAxis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
 			}
 			else if(axis is TimeAxis)
 			{
@@ -80,13 +82,12 @@ package com.yahoo.yui.charts
 				timeAxis.majorTimeUnit = input.majorTimeUnit;
 				timeAxis.minorUnit = input.minorUnit;
 				timeAxis.minorTimeUnit = input.minorTimeUnit;
-				numericAxis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
+				timeAxis.snapToUnits = input.snapToUnits;
 			}
 			else if(axis is CategoryAxis)
 			{
 				var categoryAxis:CategoryAxis = CategoryAxis(axis);
 				categoryAxis.categoryNames = input.categoryNames;
-				numericAxis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
 			}
 			return axis;
 		}

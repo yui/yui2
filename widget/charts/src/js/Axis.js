@@ -33,5 +33,22 @@ YAHOO.widget.Axis.prototype =
 	 * @property reverse
 	 * @type Boolean
 	 */
-	reverse: false
+	reverse: false,
+	
+	/**
+	 * A string reference to the globally-accessible function that may be called to
+	 * determine each of the label values for this axis.
+	 *
+	 * @property labelFunction
+	 * @type String
+	 */
+	labelFunction: null,
+	
+	/**
+	 * If true, labels that overlap previously drawn labels on the axis will be hidden.
+	 *
+	 * @property hideOverlappingLabels
+	 * @type Boolean
+	 */
+	hideOverlappingLabels: true
 };
