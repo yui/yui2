@@ -487,7 +487,7 @@ package
 			switch(name)
 			{
 				case "padding":
-					var contentPadding:Number = Number(value);
+					var contentPadding:Number = this.backgroundAndBorder.borderWeight + Number(value);
 					this.chart.setStyle("contentPadding", contentPadding);
 					break;
 				case "animationEnabled":
@@ -502,6 +502,9 @@ package
 					if(value.size != null)
 					{
 						this.backgroundAndBorder.borderWeight = value.size;
+						contentPadding = this.chart.getStyle("contentPadding") as Number;
+						contentPadding += value.size;
+						this.chart.setStyle("contentPadding", contentPadding);
 						this.refreshComponentSize();
 					}
 					break;
@@ -701,12 +704,12 @@ package
 				this.backgroundAndBorder.height = this.stage.stageHeight;
 				this.backgroundAndBorder.drawNow();
 				
-				if(this.chart)
+				/*if(this.chart)
 				{
 					this.chart.x = this.chart.y = this.backgroundAndBorder.borderWeight;
 					this.chart.width -= 2 * this.backgroundAndBorder.borderWeight;
 					this.chart.height -= 2 * this.backgroundAndBorder.borderWeight;
-				}
+				}*/
 			}
 			
 			if(this.chart)
@@ -720,19 +723,11 @@ package
 						if(this.legendDisplay == "left")
 						{
 							this.legend.x = padding;
-							if(this.backgroundAndBorder)
-							{
-								this.legend.x += this.backgroundAndBorder.borderWeight;
-							}
-							this.chart.x += this.legend.width + padding;
+							this.chart.x += this.legend.width + padding - this.backgroundAndBorder.borderWeight;
 						}
 						else //right
 						{
 							this.legend.x = this.stage.stageWidth - this.legend.width - padding;
-							if(this.backgroundAndBorder)
-							{
-								this.legend.x -= this.backgroundAndBorder.borderWeight;
-							}
 						}
 						this.legend.y = (this.stage.stageHeight - this.legend.height) / 2;
 						this.chart.width -= (this.legend.width + padding);
@@ -742,19 +737,11 @@ package
 						if(this.legendDisplay == "top")
 						{
 							this.legend.y = padding;
-							if(this.backgroundAndBorder)
-							{
-								this.legend.y += this.backgroundAndBorder.borderWeight;
-							}
-							this.chart.y += this.legend.height + padding;
+							this.chart.y += this.legend.height + padding - this.backgroundAndBorder.borderWeight;
 						}
 						else //bottom
 						{
 							this.legend.y = this.stage.stageHeight - this.legend.height - padding;
-							if(this.backgroundAndBorder)
-							{
-								this.legend.y -= this.backgroundAndBorder.borderWeight;
-							}
 						}
 						this.legend.x = (this.stage.stageWidth - this.legend.width) / 2;
 						this.chart.height -= (this.legend.height + padding);
@@ -854,7 +841,7 @@ package
 					if(border.size != null)
 					{
 						backgroundFactory.properties.borderWeight = border.size;
-						//contentPadding += border.size;
+						contentPadding += border.size;
 					}
 				}
 				var background:Object = styles.background;
