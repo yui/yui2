@@ -1,5 +1,7 @@
 /**
  * Provides methods to parse JSON strings and convert objects to JSON strings.
+ * @module json
+ * @requires yahoo
  * @class YAHOO.lang.JSON
  */
 YAHOO.namespace('lang');
@@ -86,7 +88,7 @@ YAHOO.lang.JSON = function () {
 
             a = [];
             // Only recurse if we're above depth config
-            if (d > 1) {
+            if (d > 0) {
                 for (i = 0, len = o.length; i < len; ++i) {
                     a[i] = _stringify(o[i],w,d-1);
                 }
@@ -112,7 +114,7 @@ YAHOO.lang.JSON = function () {
 
             a = [];
             // Only recurse if we're above depth config
-            if (d > 1) {
+            if (d > 0) {
 
                 // If whitelist provided, take only those keys
                 if (w) {
@@ -218,19 +220,20 @@ YAHOO.lang.JSON = function () {
         },
 
         /**
-         * Converts an arbitrary value to a string representation.
+         * Converts an arbitrary value to a JSON string representation.
          * Cyclical object or array references are replaced with null.
+         * If a whitelist is provided, only matching object keys will be included.
          * If a depth limit is provided, objects and arrays at that depth will
          * be stringified as empty.
          * @param o {MIXED} any arbitrary object to convert to JSON string
          * @param w {Array} (optional) whitelist of acceptable object keys to include
-         * @param d {number} (optional) depth limit to recurse objects/arrays (minimum 1)
+         * @param d {number} (optional) depth limit to recurse objects/arrays (practical minimum 1)
          * @return {string} JSON string representation of the input
          */
         stringify : function (o,w,d) {
 
             // Default depth to Number.POSITIVE_INFINITY
-            d = d >= 1 ? d : 1/0;
+            d = d >= 0 ? d : 1/0;
 
             // flush the processing stack
             pstack = [];
