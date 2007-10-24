@@ -196,7 +196,7 @@
         */
         function setAttributeFromDOMAttribute(p_sAttribute) {
     
-            if ( !(p_sAttribute in p_oAttributes) ) {
+            if (!(p_sAttribute in p_oAttributes)) {
     
                 /*
                     Need to use "getAttributeNode" instead of "getAttribute" 
@@ -240,7 +240,7 @@
             
             }
     
-            if ( !("disabled" in p_oAttributes) ) {
+            if (!("disabled" in p_oAttributes)) {
     
                 p_oAttributes.disabled = p_oElement.disabled;
     
@@ -268,7 +268,7 @@
 
             setFormElementProperties();
 
-            if ( !("checked" in p_oAttributes) ) {
+            if (!("checked" in p_oAttributes)) {
     
                 p_oAttributes.checked = p_oElement.checked;
     
@@ -305,13 +305,13 @@
         p_oElement.removeAttribute("id");
         p_oElement.removeAttribute("name");
         
-        if ( !("tabindex" in p_oAttributes) ) {
+        if (!("tabindex" in p_oAttributes)) {
 
             p_oAttributes.tabindex = p_oElement.tabIndex;
 
         }
     
-        if ( !("label" in p_oAttributes) ) {
+        if (!("label" in p_oAttributes)) {
     
             // Set the "label" property
         
@@ -694,11 +694,11 @@
         * @property RADIO_CHECKED_TITLE
         * @description String representing the title applied to buttons of 
         * type "radio" when checked.
-        * @default "Checked.  Click to uncheck."
+        * @default "Checked.  Click another button to uncheck"
         * @final
         * @type String
         */
-        RADIO_CHECKED_TITLE: "Checked.  Click to uncheck.",
+        RADIO_CHECKED_TITLE: "Checked.  Click another button to uncheck",
         
         
         /**
@@ -947,6 +947,10 @@
                     this._button.setAttribute("disabled", "disabled");
         
                     this.addStateCSSClasses("disabled");
+
+                    this.removeStateCSSClasses("hover");
+                    this.removeStateCSSClasses("active");
+                    this.removeStateCSSClasses("focus");
         
                 }
                 else {
@@ -1049,7 +1053,7 @@
 
             var bLazyLoad = this.get("lazyloadmenu"),
                 oButtonElement = this.get("element"),
-                sMenuCSSClassName = Menu.prototype.CSS_CLASS_NAME,
+                sMenuCSSClassName,
         
                 /*
                     Boolean indicating if the value of p_oMenu is an instance 
@@ -1076,14 +1080,11 @@
                 return false;
             
             }
-        
-        
-            if (!Menu) {
-        
-                this.logger.log("YAHOO.widget.Menu dependency not met.", 
-                    "error");
-        
-                return false;
+
+
+            if (Menu) {
+            
+                sMenuCSSClassName = Menu.prototype.CSS_CLASS_NAME;
             
             }
         
@@ -1110,12 +1111,12 @@
                     oMenu.renderEvent.subscribe(this._onMenuRender, null, this);
         
         
-                    if (oMenu instanceof Menu) {
+                    if (Menu && oMenu instanceof Menu) {
         
                         oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, 
                             this, true);
 
-                        oMenu.clickEvent.subscribe(this._onMenuClick, 
+                        oMenu.subscribe("click", this._onMenuClick, 
                             this, true);
 
                         oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, 
@@ -1132,7 +1133,7 @@
                         }
         
                     }
-                    else if (oMenu instanceof Overlay) {
+                    else if (Overlay && oMenu instanceof Overlay) {
         
                         if (!m_oOverlayManager) {
         
@@ -1151,7 +1152,7 @@
         
                     if (!bInstance) {
         
-                        if (bLazyLoad && !(oMenu instanceof Menu)) {
+                        if (bLazyLoad && Menu && !(oMenu instanceof Menu)) {
         
                             /*
                                 Mimic Menu's "lazyload" functionality by adding  
@@ -1186,7 +1187,7 @@
             }
         
         
-            if (p_oMenu && (p_oMenu instanceof Menu)) {
+            if (p_oMenu && Menu && (p_oMenu instanceof Menu)) {
         
                 oMenu = p_oMenu;
                 aItems = oMenu.getItems();
@@ -1219,7 +1220,7 @@
                 initMenu.call(this);
         
             }
-            else if (p_oMenu && (p_oMenu instanceof Overlay)) {
+            else if (Overlay && p_oMenu && (p_oMenu instanceof Overlay)) {
         
                 oMenu = p_oMenu;
                 bInstance = true;
@@ -1230,7 +1231,7 @@
                 initMenu.call(this);
         
             }
-            else if (Lang.isArray(p_oMenu)) {
+            else if (Menu && Lang.isArray(p_oMenu)) {
         
                 this.on("appendTo", function () {
         
@@ -1248,15 +1249,15 @@
         
                 if (oMenuElement) {
         
-                    if (Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
-                        oMenuElement.nodeName == "SELECT") {
+                    if (Menu && Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
+                        oMenuElement.nodeName.toUpperCase() == "SELECT") {
             
                         oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
             
                         initMenu.call(this);
             
                     }
-                    else {
+                    else if (Overlay) {
         
                         oMenu = new Overlay(p_oMenu, { visible: false, 
                             context: [oButtonElement, "tl", "bl"] });
@@ -1270,15 +1271,15 @@
             }
             else if (p_oMenu && p_oMenu.nodeName) {
         
-                if (Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
-                        p_oMenu.nodeName == "SELECT") {
+                if (Menu && Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
+                        p_oMenu.nodeName.toUpperCase() == "SELECT") {
         
                     oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
                 
                     initMenu.call(this);
         
                 }
-                else {
+                else if (Overlay) {
         
                     if (!p_oMenu.id) {
                     
@@ -1349,7 +1350,7 @@
                 oMenuItem;
 
 
-            if (oMenu && oMenu instanceof Menu) {
+            if (Menu && oMenu && oMenu instanceof Menu) {
 
                 oMenuItem = oMenu.getItem(p_nIndex);
                 
@@ -1493,8 +1494,6 @@
         },
         
         
-        _originalMaxHeight: -1,
-        
         
         /**
         * @method _showMenu
@@ -1505,33 +1504,148 @@
         * the display of the menu.
         */
         _showMenu: function (p_oEvent) {
-        
-            YAHOO.widget.MenuManager.hideVisible();
+
+            if (YAHOO.widget.MenuManager) {
+
+                YAHOO.widget.MenuManager.hideVisible();
+            
+            }
+
         
             if (m_oOverlayManager) {
         
                 m_oOverlayManager.hideAll();
             
             }
+
+
+            var nViewportOffset = Overlay.VIEWPORT_OFFSET,   
         
-        
-            var oMenu = this._menu,
-                nViewportHeight = Dom.getViewportHeight(),
+                oMenu = this._menu,
+                oButton = this,
+                oButtonEL = oButton.get("element"),
+                bMenuFlipped = false,
+                nButtonY = Dom.getY(oButtonEL),
+                nScrollTop = Dom.getDocumentScrollTop(),
+                nMenuMinHeight,
                 nMenuHeight,
-                nScrollTop,
-                nY;
+                oMenuShadow;
+    
+    
+            if (nScrollTop) {
+        
+                nButtonY = nButtonY - nScrollTop;
+        
+            }
         
         
-            if (oMenu && (oMenu instanceof Menu)) {
+            var nTopRegion = nButtonY,
+                nBottomRegion = (Dom.getViewportHeight() - 
+                    (nButtonY + oButtonEL.offsetHeight));
         
-                oMenu.cfg.applyConfig({ context: [this.get("id"), "tl", "bl"],
-                    constraintoviewport: false,
+
+            /*
+                 Uses the Button's position to calculate the availble height 
+                 above and below it to display its corresponding Menu.
+            */
+        
+            function getMenuDisplayRegionHeight() {
+        
+                if (bMenuFlipped) {
+        
+                    return (nTopRegion - nViewportOffset);
+        
+                }
+                else {
+        
+                    return (nBottomRegion - nViewportOffset);
+        
+                }
+        
+            }
+
+    
+    
+            /*
+                Sets the Menu's "maxheight" configuration property and trys to 
+                place the Menu in the best possible position (either above or 
+                below its corresponding Button).
+            */
+        
+            function sizeAndPositionMenu() {
+        
+                var nDisplayRegionHeight = getMenuDisplayRegionHeight();
+        
+        
+                if (nMenuHeight > nDisplayRegionHeight) {
+        
+                    nMenuMinHeight = oMenu.cfg.getProperty("minheight");
+        
+        
+                    if (nDisplayRegionHeight > nMenuMinHeight) {
+        
+                        oMenu.cfg.setProperty("maxheight", 
+                                    nDisplayRegionHeight);
+            
+        
+                        if (bMenuFlipped) {
+                        
+                            oMenu.align("bl", "tl");
+                        
+                        }
+            
+                    }
+            
+        
+                    if (nDisplayRegionHeight < nMenuMinHeight) {
+                   
+                        if (bMenuFlipped) {
+            
+                            /*
+                                 All possible positions and values for the 
+                                 "maxheight" configuration property have been 
+                                 tried, but none were successful, so fall back 
+                                 to the original size and position.
+                            */
+        
+                            oMenu.cfg.setProperty("context", 
+                                [oButtonEL, "tl", "bl"], true);
+
+                            oMenu.align("tl", "bl");
+                            
+                        }
+                        else {
+            
+                            oMenu.cfg.setProperty("context", 
+                                [oButtonEL, "bl", "tl"], true);
+
+                            oMenu.align("bl", "tl");
+            
+                            bMenuFlipped = true;
+            
+                            return sizeAndPositionMenu();
+            
+                        }
+                    
+                    }
+                
+                }
+        
+            }
+
+
+            if (Menu && oMenu && (oMenu instanceof Menu)) {
+        
+                oMenu.cfg.applyConfig({ context: [oButtonEL, "tl", "bl"],
                     clicktohide: false,
                     visible: true });
                     
                 oMenu.cfg.fireQueue();
+                
+                oMenu.cfg.setProperty("maxheight", 0);
             
                 oMenu.align("tl", "bl");
+        
         
                 /*
                     Stop the propagation of the event so that the MenuManager 
@@ -1543,69 +1657,45 @@
                     Event.stopPropagation(p_oEvent);
         
                 }
-
-
+        
+                
+                nMenuHeight = oMenu.element.offsetHeight;
+                
+                oMenuShadow = oMenu.element.lastChild; 
+        
+                sizeAndPositionMenu();
+        
                 if (this.get("focusmenu")) {
         
                     this._menu.focus();
                 
                 }
-        
-                nMenuHeight = oMenu.element.offsetHeight;
-        
-        
-                if ((oMenu.cfg.getProperty("y") + nMenuHeight) > 
-                    nViewportHeight) {
-        
-                    this.logger.log("Current menu position will place a " + 
-                        "portion, or the entire menu outside the boundary of " +
-                        "the viewport.  Repositioning the menu to stay " +
-                        "inside the viewport.");
-        
-                    oMenu.align("bl", "tl");
-        
-                    nY = oMenu.cfg.getProperty("y");
-        
-                    nScrollTop = Dom.getDocumentScrollTop();
-        
-        
-                    if (nScrollTop >= nY) {
-        
-                        if (this._originalMaxHeight == -1) {
-        
-                            this._originalMaxHeight = 
-                                    oMenu.cfg.getProperty("maxheight");
-        
-                        }
-        
-                        oMenu.cfg.setProperty("maxheight", 
-                                    (nMenuHeight - ((nScrollTop - nY) + 20)));
-        
-                        oMenu.align("bl", "tl");
-        
-                    }
-        
-                }
-        
+
             }
-            else if (oMenu && (oMenu instanceof Overlay)) {
+            else if (Overlay && oMenu && (oMenu instanceof Overlay)) {
         
                 oMenu.show();
                 oMenu.align("tl", "bl");
+                
+                var nDisplayRegionHeight = getMenuDisplayRegionHeight();
 
                 nMenuHeight = oMenu.element.offsetHeight;
-        
-        
-                if ((oMenu.cfg.getProperty("y") + nMenuHeight) > 
-                    nViewportHeight) {
-        
-                    this.logger.log("Current menu position will place a " +
-                        "portion, or the entire menu outside the boundary of " + 
-                        "the viewport.  Repositioning the menu to stay inside" + 
-                        " the viewport.");
-        
+
+
+                if (nDisplayRegionHeight < nMenuHeight) {
+
                     oMenu.align("bl", "tl");
+
+                    bMenuFlipped = true;
+
+                    nDisplayRegionHeight = getMenuDisplayRegionHeight();
+
+                    if (nDisplayRegionHeight < nMenuHeight) {
+
+                        oMenu.align("tl", "bl");
                     
+                    }
+
                 }
         
             }
@@ -1669,7 +1759,14 @@
                 this.addStateCSSClasses("activeoption");
             
             }
+
+
+            if (this._activationButtonPressed || this._bOptionPressed) {
         
+                Event.removeListener(document, "mouseup", this._onDocumentMouseUp);
+        
+            }
+
         },
         
         
@@ -1712,14 +1809,24 @@
             this._activationButtonPressed = false;
             this._bOptionPressed = false;
         
-            var sType = this.get("type");
+            var sType = this.get("type"),
+                oTarget,
+                oMenuElement;
         
             if (sType == "menu" || sType == "split") {
+
+                oTarget = Event.getTarget(p_oEvent);
+                oMenuElement = this._menu.element;
         
-                this.removeStateCSSClasses(
-                    (sType == "menu" ? "active" : "activeoption"));
-        
-                this._hideMenu();
+                if (oTarget != oMenuElement && 
+                    !Dom.isAncestor(oMenuElement, oTarget)) {
+
+                    this.removeStateCSSClasses((sType == "menu" ? 
+                        "active" : "activeoption"));
+            
+                    this._hideMenu();
+
+                }
         
             }
         
@@ -2154,10 +2261,10 @@
         _onAppendTo: function (p_oEvent) {
         
             /*
-                It is necessary to call "getForm" using "setTimeout" to make 
-                sure that the button's "form" property returns a node 
-                reference.  Sometimes, if you try to get the reference 
-                immediately after appending the field, it is null.
+                It is necessary to call "_addListenersToForm" using 
+                "setTimeout" to make sure that the button's "form" property 
+                returns a node reference.  Sometimes, if you try to get the 
+                reference immediately after appending the field, it is null.
             */
         
             var me = this;
@@ -2190,7 +2297,7 @@
             }
         
         
-            if (oMenu && (oMenu instanceof Menu)) {
+            if (Menu && oMenu && (oMenu instanceof Menu)) {
         
                 this.resetValue("selectedMenuItem");
         
@@ -2207,10 +2314,11 @@
         * passed back by the event utility (YAHOO.util.Event).
         */
         _onDocumentMouseDown: function (p_oEvent) {
-        
+
             var oTarget = Event.getTarget(p_oEvent),
                 oButtonElement = this.get("element"),
                 oMenuElement = this._menu.element;
+           
         
             if (oTarget != oButtonElement && 
                 !Dom.isAncestor(oButtonElement, oTarget) && 
@@ -2321,14 +2429,6 @@
                 sTitle,
                 sState;
         
-            if (oMenu && (oMenu instanceof Menu) && 
-                this._originalMaxHeight != -1) {
-            
-                this._menu.cfg.setProperty("maxheight", 
-                    this._originalMaxHeight);
-        
-            }
-        
             
             if (this.get("type") == "split") {
         
@@ -2418,16 +2518,16 @@
         * that was fired.
         * @param {Array} p_aArgs Array of arguments sent when the event 
         * was fired.
-        * @param {Number} p_nItem Number representing the index of the menu
-        * item that subscribed to the event.
+        * @param {MenuItem} p_oItem Object representing the menu item that
+        * subscribed to the event.
         */
-        _onMenuItemSelected: function (p_sType, p_aArgs, p_nItem) {
+        _onMenuItemSelected: function (p_sType, p_aArgs, p_oItem) {
 
             var bSelected = p_aArgs[0];
 
             if (bSelected) {
             
-                this.set("selectedMenuItem", p_nItem);
+                this.set("selectedMenuItem", p_oItem);
 
             }
         
@@ -2451,9 +2551,7 @@
             var oItem = p_aArgs[0];
         
             oItem.cfg.subscribeToConfigEvent("selected", 
-                this._onMenuItemSelected, 
-                oItem.index, 
-                this);
+                this._onMenuItemSelected, oItem, this);
         
         },
         
@@ -2468,7 +2566,7 @@
         * was fired.
         */
         _onMenuClick: function (p_sType, p_aArgs) {
-        
+
             var oItem = p_aArgs[1],
                 oSrcElement;
         
@@ -2615,12 +2713,12 @@
                 oMenu = this._menu;
             
             
-                if (oMenu && (oMenu instanceof Menu)) {
+                if (Menu && oMenu && (oMenu instanceof Menu)) {
         
                     this.logger.log("Creating hidden field for menu.");
         
                     oMenuField = oMenu.srcElement;
-                    oMenuItem = oMenu.getItem(this.get("selectedMenuItem"));
+                    oMenuItem = this.get("selectedMenuItem");
 
                     if (oMenuItem) {
 
@@ -2829,7 +2927,7 @@
         */
         init: function (p_oElement, p_oAttributes) {
         
-            var sNodeName = p_oAttributes.type == "link" ? "A" : "BUTTON",
+            var sNodeName = p_oAttributes.type == "link" ? "a" : "button",
                 oSrcElement = p_oAttributes.srcelement,
                 oButton = p_oElement.getElementsByTagName(sNodeName)[0],
                 oInput;
@@ -2837,12 +2935,12 @@
 
             if (!oButton) {
 
-                oInput = p_oElement.getElementsByTagName("INPUT")[0];
+                oInput = p_oElement.getElementsByTagName("input")[0];
 
 
                 if (oInput) {
 
-                    oButton = document.createElement("BUTTON");
+                    oButton = document.createElement("button");
                     oButton.setAttribute("type", "button");
 
                     oInput.parentNode.replaceChild(oButton, oInput);
@@ -2956,7 +3054,7 @@
         
         
             /**
-            * @config type
+            * @attribute type
             * @description String specifying the button's type.  Possible 
             * values are: "push," "link," "submit," "reset," "checkbox," 
             * "radio," "menu," and "split."
@@ -2974,7 +3072,7 @@
         
         
             /**
-            * @config label
+            * @attribute label
             * @description String specifying the button's text label 
             * or innerHTML.
             * @default null
@@ -2990,7 +3088,7 @@
         
         
             /**
-            * @config value
+            * @attribute value
             * @description Object specifying the value for the button.
             * @default null
             * @type Object
@@ -3003,7 +3101,7 @@
         
         
             /**
-            * @config name
+            * @attribute name
             * @description String specifying the name for the button.
             * @default null
             * @type String
@@ -3017,7 +3115,7 @@
         
         
             /**
-            * @config tabindex
+            * @attribute tabindex
             * @description Number specifying the tabindex for the button.
             * @default null
             * @type Number
@@ -3032,7 +3130,7 @@
         
         
             /**
-            * @config title
+            * @attribute title
             * @description String specifying the title for the button.
             * @default null
             * @type String
@@ -3047,7 +3145,7 @@
         
         
             /**
-            * @config disabled
+            * @attribute disabled
             * @description Boolean indicating if the button should be disabled.  
             * (Disabled buttons are dimmed and will not respond to user input 
             * or fire events.  Does not apply to button's of type "link.")
@@ -3064,7 +3162,7 @@
         
         
             /**
-            * @config href
+            * @attribute href
             * @description String specifying the href for the button.  Applies
             * only to buttons of type "link."
             * @type String
@@ -3079,7 +3177,7 @@
         
         
             /**
-            * @config target
+            * @attribute target
             * @description String specifying the target for the button.  
             * Applies only to buttons of type "link."
             * @type String
@@ -3094,7 +3192,7 @@
         
         
             /**
-            * @config checked
+            * @attribute checked
             * @description Boolean indicating if the button is checked. 
             * Applies only to buttons of type "radio" and "checkbox."
             * @default false
@@ -3110,7 +3208,7 @@
         
         
             /**
-            * @config container
+            * @attribute container
             * @description HTML element reference or string specifying the id 
             * attribute of the HTML element that the button's markup should be 
             * rendered into.
@@ -3127,7 +3225,7 @@
         
         
             /**
-            * @config srcelement
+            * @attribute srcelement
             * @description Object reference to the HTML element (either 
             * <code>&#60;input&#62;</code> or <code>&#60;span&#62;</code>) 
             * used to create the button.
@@ -3144,7 +3242,7 @@
         
         
             /**
-            * @config menu
+            * @attribute menu
             * @description Object specifying the menu for the button.  
             * The value can be one of the following:
             * <ul>
@@ -3188,7 +3286,7 @@
         
         
             /**
-            * @config lazyloadmenu
+            * @attribute lazyloadmenu
             * @description Boolean indicating the value to set for the 
             * <a href="YAHOO.widget.Menu.html#lazyLoad">"lazyload"</a>
             * configuration property of the button's menu.  Setting 
@@ -3221,7 +3319,7 @@
 
 
             /**
-            * @config menuclassname
+            * @attribute menuclassname
             * @description String representing the CSS class name to be 
             * applied to the root element of the button's menu.
             * @type String
@@ -3238,23 +3336,22 @@
 
 
             /**
-            * @config selectedMenuItem
-            * @description Number representing the index of the item in the 
-            * button's menu that is currently selected.
+            * @attribute selectedMenuItem
+            * @description Object representing the item in the button's menu 
+            * that is currently selected.
             * @type Number
             * @default null
             */
             this.setAttributeConfig("selectedMenuItem", {
         
-                value: 0,
-                validator: Lang.isNumber,
+                value: null,
                 method: this._setSelectedMenuItem
         
             });
         
         
             /**
-            * @config onclick
+            * @attribute onclick
             * @description Object literal representing the code to be executed  
             * when the button is clicked.  Format:<br> <code> {<br> 
             * <strong>fn:</strong> Function,   &#47;&#47; The handler to call 
@@ -3274,7 +3371,7 @@
 
 
             /**
-            * @config focusmenu
+            * @attribute focusmenu
             * @description Boolean indicating whether or not the button's menu 
             * should be focused when it is made visible.
             * @type Boolean
@@ -3408,7 +3505,7 @@
         
                 this.logger.log("Destroying menu.");
 
-                if (m_oOverlayManager.find(oMenu)) {
+                if (m_oOverlayManager && m_oOverlayManager.find(oMenu)) {
 
                     m_oOverlayManager.remove(oMenu);
 
@@ -3440,8 +3537,12 @@
             this.logger.log("Removing CustomEvent listeners.");
 
             this.unsubscribeAll();
-        
-            oParentNode.removeChild(oElement);
+
+            if (oParentNode) {
+
+                oParentNode.removeChild(oElement);
+            
+            }
         
             this.logger.log("Removing from document.");
         
@@ -3602,7 +3703,7 @@
     
         if (nCharCode == 13 && ((sNodeName == "INPUT" && (sType == "text" || 
             sType == "password" || sType == "checkbox" || sType == "radio" || 
-            sType == "file") ) || sNodeName == "SELECT"))
+            sType == "file")) || sNodeName == "SELECT"))
         {
     
             Dom.getElementsBy(isSubmitButton, "*", this);
@@ -3644,7 +3745,7 @@
     
     
     /**
-    * @method addHiddenFieldsToForm
+    * @method YAHOO.widget.Button.addHiddenFieldsToForm
     * @description Searches the specified form and adds hidden fields for  
     * instances of YAHOO.widget.Button that are of type "radio," "checkbox," 
     * "menu," and "split."
@@ -3690,6 +3791,25 @@
     
     };
     
+
+    /**
+    * @method YAHOO.widget.Button.getButton
+    * @description Returns a button with the specified id.
+    * @param {String} p_sId String specifying the id of the root node of the 
+    * HTML element representing the button to be retrieved.
+    * @return {YAHOO.widget.Button}
+    */
+    YAHOO.widget.Button.getButton = function (p_sId) {
+
+        var oButton = m_oButtons[p_sId];
+
+        if (oButton) {
+        
+            return oButton;
+        
+        }
+
+    };
     
     
     // Events
@@ -3811,7 +3931,7 @@
         }
         else {
     
-            sNodeName = p_oElement.nodeName;
+            sNodeName = p_oElement.nodeName.toUpperCase();
     
             if (sNodeName && sNodeName == this.NODE_NAME) {
         
@@ -4145,7 +4265,7 @@
         
         
             /**
-            * @config name
+            * @attribute name
             * @description String specifying the name for the button group.  
             * This name will be applied to each button in the button group.
             * @default null
@@ -4160,7 +4280,7 @@
         
         
             /**
-            * @config disabled
+            * @attribute disabled
             * @description Boolean indicating if the button group should be 
             * disabled.  Disabling the button group will disable each button 
             * in the button group.  Disabled buttons are dimmed and will not 
@@ -4178,7 +4298,7 @@
         
         
             /**
-            * @config value
+            * @attribute value
             * @description Object specifying the value for the button group.
             * @default null
             * @type Object
@@ -4191,7 +4311,7 @@
         
         
             /**
-            * @config container
+            * @attribute container
             * @description HTML element reference or string specifying the id 
             * attribute of the HTML element that the button group's markup
             * should be rendered into.
@@ -4208,7 +4328,7 @@
         
         
             /**
-            * @config checkedButton
+            * @attribute checkedButton
             * @description Reference for the button in the button group that 
             * is checked.
             * @type {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>}

@@ -1,5 +1,12 @@
 /* Menu & MenuBar styles */
 
+.yuimenubar {
+
+    visibility: visible;
+    position: static;
+
+}
+
 .yuimenu .yuimenu,
 .yuimenubar .yuimenu {
 
@@ -30,6 +37,7 @@
 .yuimenuitemlabel,
 .yuimenubaritemlabel {
 
+    text-align: left;
     white-space: nowrap;
 
 }
@@ -47,6 +55,7 @@
 .yui-menu-shadow {
 
     position: absolute;
+    z-index: -1;
 
 }
 
@@ -117,19 +126,22 @@ when one of its submenus is visible.
 
 */
 
-.yuimenu.show-scrollbars {
+.yuimenu.show-scrollbars,
+.yuimenubar.show-scrollbars {
 
 	overflow: visible; 
 
 }
 
-.yuimenu.hide-scrollbars .yui-menu-shadow {
+.yuimenu.hide-scrollbars .yui-menu-shadow,
+.yuimenubar.hide-scrollbars .yui-menu-shadow {
 
     overflow: hidden;
 
 }
 
-.yuimenu.show-scrollbars .yui-menu-shadow {
+.yuimenu.show-scrollbars .yui-menu-shadow,
+.yuimenubar.show-scrollbars .yui-menu-shadow {
 
     overflow: auto;
 

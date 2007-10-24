@@ -124,6 +124,12 @@ when one of its submenus is visible.
 
 }
 
+.yuimenu .yui-menu-body-scrolled {
+
+    overflow: hidden;
+
+}
+
 .yuimenu .topscrollbar,
 .yuimenu .bottomscrollbar {
 
@@ -220,7 +226,7 @@ li.first-of-type .yuimenubaritemlabel {
     overflow:hidden;
     vertical-align:middle;
     text-indent:9px;
-    background-image:url(http://yui.yahooapis.com/2.2.2/build/menu/assets/map.gif);
+    background-image:url(map.gif);
     background-repeat:no-repeat;
 
 }
