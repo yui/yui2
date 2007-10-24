@@ -231,7 +231,7 @@ YAHOO.util.Connect =
 					try
 					{
 						var obj = YAHOO.util.Event.getTarget(e);
-						if(obj.type.toLowerCase() == 'submit'){
+						if(obj.type && obj.type.toLowerCase() == 'submit'){
 							YAHOO.util.Connect._submitElementValue = encodeURIComponent(obj.name) + "=" + encodeURIComponent(obj.value);
 						}
 					}
@@ -509,6 +509,10 @@ YAHOO.util.Connect =
 				}
 			}
 
+			if(method.toUpperCase() == 'GET' && (callback && callback.cache === false)){
+				uri += ((uri.indexOf('?') == -1)?'?':'&') + "rnd=" + new Date().valueOf().toString();
+			}
+
 			o.conn.open(method, uri, true);
 
 			// Each transaction will automatically include a custom header of
@@ -531,12 +535,19 @@ YAHOO.util.Connect =
 			this.handleReadyState(o, callback);
 			o.conn.send(postData || null);
 
+
+			// Reset the HTML form data and state properties as
+			// soon as the data are submitted.
+			if(this._isFormSubmit === true){
+				this.resetFormState();
+			}
+
 			// Fire global custom event -- startEvent
-			this.startEvent.fire(o);
+			this.startEvent.fire(o, (callback.argument)?callback.argument:null);
 
 			if(o.startEvent){
 				// Fire transaction custom event -- startEvent
-				o.startEvent.fire(o);
+				o.startEvent.fire(o, (callback.argument)?callback.argument:null);
 			}
 
 			return o;
@@ -605,11 +616,11 @@ YAHOO.util.Connect =
 					}
 
 					// Fire global custom event -- completeEvent
-					oConn.completeEvent.fire(o);
+					oConn.completeEvent.fire(o, (callback.argument)?callback.argument:null);
 
 					if(o.completeEvent){
 						// Fire transaction custom event -- completeEvent
-						o.completeEvent.fire(o);
+						o.completeEvent.fire(o, (callback.argument)?callback.argument:null);
 					}
 
 					oConn.handleTransactionResponse(o, callback);
@@ -897,6 +908,7 @@ YAHOO.util.Connect =
    */
 	setForm:function(formId, isUpload, secureUri)
 	{
+		// reset the HTML form data and state properties
 		this.resetFormState();
 
 		var oForm;
@@ -940,9 +952,9 @@ YAHOO.util.Connect =
 		// label-value pairs.
 		for (var i=0; i<oForm.elements.length; i++){
 			oElement = oForm.elements[i];
-			oDisabled = oForm.elements[i].disabled;
-			oName = oForm.elements[i].name;
-			oValue = oForm.elements[i].value;
+			oDisabled = oElement.disabled;
+			oName = oElement.name;
+			oValue = oElement.value;
 
 			// Do not submit fields that are disabled or
 			// do not have a name attribute value.
@@ -1141,11 +1153,11 @@ YAHOO.util.Connect =
 		this._formNode.submit();
 
 		// Fire global custom event -- startEvent
-		this.startEvent.fire(o);
+		this.startEvent.fire(o, (callback.argument)?callback.argument:null);
 
 		if(o.startEvent){
 			// Fire transaction custom event -- startEvent
-			o.startEvent.fire(o);
+			o.startEvent.fire(o, (callback.argument)?callback.argument:null);
 		}
 
 		// Start polling if a callback is present and the timeout
@@ -1188,11 +1200,11 @@ YAHOO.util.Connect =
 			}
 
 			// Fire global custom event -- completeEvent
-			oConn.completeEvent.fire(o);
+			oConn.completeEvent.fire(o, (callback.argument)?callback.argument:null);
 
 			if(o.completeEvent){
 				// Fire transaction custom event -- completeEvent
-				o.completeEvent.fire(o);
+				o.completeEvent.fire(o, (callback.argument)?callback.argument:null);
 			}
 
 			var obj = {};
@@ -1292,11 +1304,11 @@ YAHOO.util.Connect =
 
 		if(abortStatus === true){
 			// Fire global custom event -- abortEvent
-			this.abortEvent.fire(o);
+			this.abortEvent.fire(o, (callback.argument)?callback.argument:null);
 
 			if(o.abortEvent){
 				// Fire transaction custom event -- abortEvent
-				o.abortEvent.fire(o);
+				o.abortEvent.fire(o, (callback.argument)?callback.argument:null);
 			}
 
 			this.handleTransactionResponse(o, callback, true);
@@ -1339,12 +1351,12 @@ YAHOO.util.Connect =
    */
 	releaseObject:function(o)
 	{
-		//dereference the XHR instance.
-		if(o.conn){
+		if(o && o.conn){
+			//dereference the XHR instance.
 			o.conn = null;
+			//dereference the connection object.
+			o = null;
 		}
-		//dereference the connection object.
-		o = null;
 	}
 };
 
