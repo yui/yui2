@@ -1011,6 +1011,26 @@
             }, this);
     };
 
+
+    /**
+     * Updates the rgb attribute with the current state of the r,g,b
+     * fields.  This is invoked from change listeners on these
+     * attributes to facilitate updating these values from the
+     * individual form fields
+     * @method _updateRGB
+     * @private
+     */
+    var _updateRGB = function() {
+        var rgb = [this.get(this.OPT.RED), 
+                   this.get(this.OPT.GREEN),
+                   this.get(this.OPT.BLUE)];
+
+        this.logger.log("RGB value set to " + rgb);
+        this.set(this.OPT.RGB, rgb);
+
+        _updateSliders.call(this);
+    };
+
     /**
      * Sets the initial state of the sliders
      * @method initPicker
@@ -1080,6 +1100,9 @@
                                                    this.getElement(this.ID.PICKER_THUMB), 0, s, 0, s);
         this.pickerSlider.subscribe("change", _onPickerSliderChange, this, true);
 
+        // Set the animate state
+        this.set(o.ANIMATE,this.get(o.ANIMATE));
+
         //_onHueSliderChange.call(this, 0);
 
         Event.on(this.getElement(this.ID.WEBSAFE_SWATCH), "click", function(e) {
@@ -1107,28 +1130,10 @@
         Event.on(this.getElement(this.ID.HEX), "blur", function(e, me) {
                 _useFieldValue.call(me, e, this, me.OPT.HEX);
             }, this);
+
+        _updateRGB.call(this);
     };
 
-
-
-    /**
-     * Updates the rgb attribute with the current state of the r,g,b
-     * fields.  This is invoked from change listeners on these
-     * attributes to facilitate updating these values from the
-     * individual form fields
-     * @method _updateRGB
-     * @private
-     */
-    var _updateRGB = function() {
-        var rgb = [this.get(this.OPT.RED), 
-                   this.get(this.OPT.GREEN),
-                   this.get(this.OPT.BLUE)];
-
-        this.logger.log("RGB value set to " + rgb);
-        this.set(this.OPT.RGB, rgb);
-
-        _updateSliders.call(this);
-    };
 
     /**
      * Updates the RGB values from the current state of the HSV
@@ -1237,7 +1242,7 @@
          * @type int
          */
         this.setAttributeConfig(this.OPT.VALUE, {
-                value: attr.value || 100,
+                value: lang.isNumber(attr.value) ? attr.value : 100,
                 validator: lang.isNumber
             });
 
@@ -1247,7 +1252,7 @@
          * @type int
          */
         this.setAttributeConfig(this.OPT.RED, {
-                value: attr.red || 255,
+                value: lang.isNumber(attr.red) ? attr.red : 255,
                 validator: lang.isNumber
             });
 
@@ -1257,7 +1262,7 @@
          * @type int
          */
         this.setAttributeConfig(this.OPT.GREEN, {
-                value: attr.red || 255,
+                value: lang.isNumber(attr.green) ? attr.green : 255,
                 validator: lang.isNumber
             });
 
@@ -1267,7 +1272,7 @@
          * @type int
          */
         this.setAttributeConfig(this.OPT.BLUE, {
-                value: attr.blue || 255,
+                value: lang.isNumber(attr.blue) ? attr.blue : 255,
                 validator: lang.isNumber
             });
 
@@ -1427,7 +1432,7 @@
          * @default true
          */
         this.setAttributeConfig(this.OPT.SHOW_CONTROLS, {
-                value: (attr.showcontrols) || true,
+                value: lang.isBoolean(attr.showcontrols) ? attr.showcontrols : true,
                 method: function(on) {
 
                     var el = Dom.getElementsByClassName("bd", "div", 
@@ -1449,7 +1454,7 @@
          * @default true
          */
         this.setAttributeConfig(this.OPT.SHOW_RGB_CONTROLS, {
-                value: (attr.showrgbcontrols) || true,
+                value: lang.isBoolean(attr.showrgbcontrols) ? attr.showrgbcontrols : true,
                 method: function(on) {
                     //Dom.setStyle(this.getElement(this.ID.RBG_CONTROLS), "visibility", (on) ? "" : "hidden");
                     _hideShowEl.call(this, this.ID.RGB_CONTROLS, on);
@@ -1463,7 +1468,8 @@
          * @default false
          */
         this.setAttributeConfig(this.OPT.SHOW_HSV_CONTROLS, {
-                value: (attr.showhsvcontrols) || false,
+                value: lang.isBoolean(attr.showhsvcontrols) ?
+                                      attr.showhsvcontrols : false,
                 method: function(on) {
                     //Dom.setStyle(this.getElement(this.ID.HSV_CONTROLS), "visibility", (on) ? "" : "hidden");
                     _hideShowEl.call(this, this.ID.HSV_CONTROLS, on);
@@ -1482,7 +1488,8 @@
          * @default true
          */
         this.setAttributeConfig(this.OPT.SHOW_HEX_CONTROLS, {
-                value: (attr.showhexcontrols) || false,
+                value: lang.isBoolean(attr.showhexcontrols) ?
+                                      attr.showhexcontrols : false,
                 method: function(on) {
                     _hideShowEl.call(this, this.ID.HEX_CONTROLS, on);
                 }
@@ -1495,7 +1502,7 @@
          * @default true
          */
         this.setAttributeConfig(this.OPT.SHOW_WEBSAFE, {
-                value: (attr.showwebsafe) || true,
+                value: lang.isBoolean(attr.showwebsafe) ? attr.showwebsafe : true,
                 method: function(on) {
                     _hideShowEl.call(this, this.ID.WEBSAFE_SWATCH, on);
                 }
@@ -1508,7 +1515,7 @@
          * @default true
          */
         this.setAttributeConfig(this.OPT.SHOW_HEX_SUMMARY, {
-                value: (attr.showhexsummary) || true,
+                value: lang.isBoolean(attr.showhexsummary) ? attr.showhexsummary : true,
                 method: function(on) {
                     _hideShowEl.call(this, this.ID.HEX_SUMMARY, on);
 
@@ -1519,7 +1526,7 @@
                 }
             });
         this.setAttributeConfig(this.OPT.ANIMATE, {
-                value: (attr.animate) || true,
+                value: lang.isBoolean(attr.animate) ? attr.animate : true,
                 method: function(on) {
                     this.pickerSlider.animate = on;
                     this.hueSlider.animate = on;
@@ -1538,8 +1545,5 @@
 
         this.initPicker();
     };
-
-
-
 
 })();

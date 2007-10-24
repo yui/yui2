@@ -1,5 +1,8 @@
 ColorPicker - Release Notes
 
+2.4.0
+   * Configuration options (showcontrols, showrgbcontrols, showwebsafe, showhexsummary, animate, red, green, blue) passed in the constructor are now honored. 
+
 2.3.1
    * No change (bug fixes were inherited from slider)
 
