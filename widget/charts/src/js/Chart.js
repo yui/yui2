@@ -28,26 +28,30 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	this._dataSource = dataSource;
 	
 	/**
-	 * Fires when the user moves the mouse over an item renderer in the chart.
+	 * Fires when the user moves the mouse over the bounds of an item renderer in the chart.
 	 *
-	 * @event itemRollOver
+	 * @event itemMouseOver
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
 	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.
+	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
+	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemRollOver");
+	this.createEvent("itemMouseOver");
 	
 	/**
-	 * Fires when the user moves the mouse off an item renderer in the chart.
+	 * Fires when the user moves the mouse out of the bounds of an item renderer in the chart.
 	 *
-	 * @event itemRollOut
+	 * @event itemMouseOut
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
 	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.
+	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
+	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemRollOut");
+	this.createEvent("itemMouseOut");
 	
 	/**
 	 * Fires when the user clicks an item renderer in the chart with the mouse.
@@ -57,6 +61,8 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
 	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.
+	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
+	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
 	this.createEvent("itemClick");
 	
@@ -68,6 +74,8 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
 	 * @param event.seriesIndex {Number} The position within the series definition that the series appears.
+	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
+	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
 	this.createEvent("itemDoubleClick");
 	
@@ -87,7 +95,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	/**
 	 * Fires when the user moves the mouse during a drag action.
 	 *
-	 * @event itemDragUpdate
+	 * @event itemDrag
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -95,7 +103,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemDragUpdate");
+	this.createEvent("itemDrag");
 
 	/**
 	 * Fires when the user releases the mouse during a drag action.
@@ -509,6 +517,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
  * @private
  * @static
  * @final
- * @default "charts.swf"
+ * @default "assets/charts.swf"
  */
-YAHOO.widget.Chart.SWFURL = "charts.swf";
+YAHOO.widget.Chart.SWFURL = "assets/charts.swf";

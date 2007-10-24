@@ -110,7 +110,7 @@ package
 			
 			var ChartType:Class = ChartSerializer.getType(value);
 			var chart:Chart = new ChartType();
-			chart.setStyle("contentPadding", 10 + this.backgroundAndBorder.borderWeight);
+			chart.setStyle("contentPadding", 10);
 			chart.setStyle("backgroundSkin", Sprite);
 			chart.setStyle("dataTipBackgroundSkin", ChartDataTipBackground);
 			this.addChildAt(chart, 1);
@@ -488,7 +488,6 @@ package
 			{
 				case "padding":
 					var contentPadding:Number = Number(value);
-					//contentPadding += this.backgroundAndBorder.borderWeight;
 					this.chart.setStyle("contentPadding", contentPadding);
 					break;
 				case "animationEnabled":
@@ -781,8 +780,9 @@ package
 		 */
 		protected function chartItemEventHandler(event:ChartEvent):void
 		{
+			var type:String = event.type.replace("Roll", "Mouse");
 			var seriesIndex:int = (this.chart.dataProvider as Array).indexOf(event.series);
-			var itemEvent:Object = {type: event.type, seriesIndex: seriesIndex, index: event.index, item: event.item};
+			var itemEvent:Object = {type: type, seriesIndex: seriesIndex, index: event.index, item: event.item, x: this.mouseX, y: this.mouseY};
 			this.dispatchEventToJavaScript(itemEvent);
 		}
 		
@@ -790,7 +790,7 @@ package
 		
 		protected function chartItemExtraEventHandler(event:MouseEvent):void
 		{
-			var dragEventType:String = "itemDragUpdate";
+			var dragEventType:String = "itemDrag";
 			var renderer:ISeriesItemRenderer = this._lastMouseItem;
 			this._lastMouseItem = null;
 			if(event.type == MouseEvent.MOUSE_DOWN)
@@ -854,7 +854,7 @@ package
 					if(border.size != null)
 					{
 						backgroundFactory.properties.borderWeight = border.size;
-						contentPadding += border.size;
+						//contentPadding += border.size;
 					}
 				}
 				var background:Object = styles.background;

@@ -26,7 +26,7 @@
         </exec>
         
         <!-- copy the SWF to the build directory -->
-        <copy todir="${component.builddir}">
+        <copy todir="${component.builddir}/assets">
             <fileset dir="${component.srcdir}/swf" includes="*.swf" />
         </copy>
     </target>
