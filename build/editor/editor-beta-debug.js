@@ -5514,7 +5514,7 @@ var Dom = YAHOO.util.Dom,
                 }
             }
 
-            this.fireEvent('saveHTML', { type: 'saveHTML', target: this, html: html });
+            this.fireEvent('cleanHTML', { type: 'cleanHTML', target: this, html: html });
 
             return html;
         },
@@ -5764,8 +5764,8 @@ var Dom = YAHOO.util.Dom,
 * @type YAHOO.util.CustomEvent
 */
 /**
-* @event saveHTML
-* @description Event is fired after the saveHTML method is called.
+* @event cleanHTML
+* @description Event is fired after the cleanHTML method is called.
 * @type YAHOO.util.CustomEvent
 */
 /**
