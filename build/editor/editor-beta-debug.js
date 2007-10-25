@@ -2117,7 +2117,11 @@ var Dom = YAHOO.util.Dom,
                     buttons: [
                         { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
                         { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
-                        { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' }
+                        { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
+                        { type: 'separator' },
+                        { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                        { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
+                        
                     ]
                 },
                 { type: 'separator' },
@@ -2325,7 +2329,7 @@ var Dom = YAHOO.util.Dom,
         * @description The Toolbar items that should be disabled if there is no selection present in the editor.
         * @type Array
         */
-        _disabled: [ 'createlink', 'fontname', 'fontsize' ],
+        _disabled: [ 'createlink', 'fontname', 'fontsize', 'forecolor', 'backcolor' ],
         /**
         * @private
         * @property _alwaysDisabled
@@ -2426,11 +2430,19 @@ var Dom = YAHOO.util.Dom,
         * @returns HTMLElement
         */
         _hasParent: function(el, tag) {
+            if (!el || !el.parentNode) {
+                return false;
+            }
+            
             while (el.parentNode) {
                 if (this._isElement(el, tag)) {
                     return el;
                 }
-                el = el.parentNode;
+                if (el.parentNode) {
+                    el = el.parentNode;
+                } else {
+                    return false;
+                }
             }
             return false;
         },
@@ -2593,6 +2605,12 @@ var Dom = YAHOO.util.Dom,
                 }
             } else if (this.browser.webkit) {
 				sel.setBaseAndExtent(node, 0, node, node.innerText.length);
+            } else if (this.browser.opera) {
+                sel = this._getWindow().getSelection();
+                range = this._getDoc().createRange();
+                range.selectNode(node);
+                sel.removeAllRanges();
+                sel.addRange(range);
             } else {
                 range = this._getDoc().createRange();
                 range.selectNodeContents(node);
@@ -3408,8 +3426,11 @@ var Dom = YAHOO.util.Dom,
                     } else {
                         this._selectNode(par);
                     }
+                    Event.stopEvent(ev);
                 }
-                Event.stopEvent(ev);
+                if (this.browser.webkit) {
+                    Event.stopEvent(ev);
+                }
                 this.nodeChange();
             }
         },
@@ -3956,7 +3977,7 @@ var Dom = YAHOO.util.Dom,
             */            
             this.setAttributeConfig('allowNoEdit', {
                 value: attr.allowNoEdit || false,
-                validator: YAHOO.lang.Boolean
+                validator: YAHOO.lang.isBoolean
             });
             /**
             * @config limitCommands
@@ -3966,7 +3987,7 @@ var Dom = YAHOO.util.Dom,
             */            
             this.setAttributeConfig('limitCommands', {
                 value: attr.limitCommands || false,
-                validator: YAHOO.lang.Boolean
+                validator: YAHOO.lang.isBoolean
             });
             /**
             * @config element_cont
@@ -5086,9 +5107,12 @@ var Dom = YAHOO.util.Dom,
             if ((this.currentElement.length > 0) && (!this._hasSelection())) {
                 YAHOO.util.Dom.setStyle(this.currentElement, 'fontSize', value);
             } else if (!this._isElement(this._getSelectedElement(), 'body')) {
-                YAHOO.util.Dom.setStyle(this._getSelectedElement(), 'fontSize', value);
+                var el = this._getSelectedElement();
+                YAHOO.util.Dom.setStyle(el, 'fontSize', value);
+                this._selectNode(el);
             } else {
                 this._createCurrentElement('span', {'fontSize': value });
+                this._selectNode(this.currentElement[0]);
             }
             return [false];
         },
@@ -5438,7 +5462,6 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/\/ol>/gi, '/ol>');
 		    html = html.replace(/<li/gi, '<li');
 		    html = html.replace(/\/li>/gi, '/li>');
-
             html = this.filter_safari(html);
 
             html = this.filter_internals(html);
@@ -5447,6 +5470,7 @@ var Dom = YAHOO.util.Dom,
 
             //Replace our backups with the real thing
             html = this.post_filter_linebreaks(html, markup);
+
             if (markup == 'xhtml') {
 		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1/>');
 		        html = html.replace(/<YUI_INPUT([^>]*)>/g, '<input $1/>');
@@ -5468,6 +5492,15 @@ var Dom = YAHOO.util.Dom,
             if (this.get('removeLineBreaks')) {
                 html = html.replace(/\n/g, '').replace(/\r/g, '');
                 html = html.replace(/  /gi, ' '); //Replace all double spaces and replace with a single
+            }
+            
+            //First empty span
+            if (html.substring(0, 6).toLowerCase() == '<span>')  {
+                html = html.substring(6);
+            }
+            //Last empty span
+            if (html.substring(html.length - 7, html.length).toLowerCase() == '</span>')  {
+                html = html.substring(0, html.length - 7);
             }
 
 
@@ -5552,9 +5585,6 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/ class="  "/gi, '');
 		    html = html.replace(/ target=""/gi, '');
 		    html = html.replace(/ title=""/gi, '');
-            for (var i = 0; i < 5; i++) {
-                html = html.replace(new RegExp('<span>(.*?)<\/span>', 'gi'), '$1');
-            }
 
             if (this.browser.ie) {
 		        html = html.replace(/ class= /gi, '');
@@ -5621,6 +5651,7 @@ var Dom = YAHOO.util.Dom,
 		        html = html.replace(/<br class="webkit-block-placeholder">/gi, '<YUI_BR>');
             }
 		    html = html.replace(/<br>/gi, '<YUI_BR>');
+		    html = html.replace(/<br (.*?)>/gi, '<YUI_BR>');
 		    html = html.replace(/<br\/>/gi, '<YUI_BR>');
 		    html = html.replace(/<br \/>/gi, '<YUI_BR>');
 		    html = html.replace(/<div><YUI_BR><\/div>/gi, '<YUI_BR>');
@@ -5646,16 +5677,6 @@ var Dom = YAHOO.util.Dom,
             } else {
 		        html = html.replace(/<YUI_BR>/g, '<br>');
             }
-            return html;
-        },
-        /**
-        * @method filter_
-        * @param String html The HTML to filter
-        * @param String markup The markup type to filter to
-        * @description HTML Filter
-        * @returns String
-        */
-        filter_: function(html, markup) {
             return html;
         },
         /**

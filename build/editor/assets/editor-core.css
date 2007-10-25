@@ -1,4 +1,4 @@
-/* Set the cusrsor to busy when we are doing something */
+/* Set the cursor to busy when we are doing something */
 .yui-busy {
     cursor: wait !important;
 }
