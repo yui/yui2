@@ -2,7 +2,7 @@
 YUI Library - Event - Release Notes
 
 2.4.0
-  * getListeners/purgeElement accepts an element or element id
+  * getListeners/purgeElement accepts either an element reference or an element id
   * onAvailable/onContentReady accepts a single id or an array of ids
   * No longer removing listeners during the unload event for non-IE browsers
   * IE unload strategy for cross page memory leaks changed from removing each listener
@@ -10,7 +10,7 @@ YUI Library - Event - Release Notes
   * the DOMReady property is now public
   * Changed IE onDOMReady approach from the defered script node hack to the doScroll('left') hack
   * In KeyListener, added keycode constants for some of the special keys.
-  * Rolled the change added for hacking around IE errors from bubbled 
+  * Rolled back the change added for hacking around IE errors from bubbled 
     events that originally targeted an ActiveX control.
 
 2.3.1
