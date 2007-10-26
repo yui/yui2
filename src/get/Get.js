@@ -5,11 +5,6 @@
  * @requires yahoo
  */
 
-// cleanup
-// automatic cleanup after x number of requests?
-// automatic removal after onload detected?
-// provide an option
-
 /**
  * Inserts one or more script or link nodes into the document 
  * @namespace YAHOO.util
@@ -200,12 +195,12 @@ YAHOO.util.Get = function() {
                         _finish(id);
                     }, q.win);
 
-            // If a scriptProperty is provided, we can poll for it
-            } else if (q.opts.scriptProperty) {
-                YAHOO.log("Polling for " + q.opts.scriptProperty);
+            // If a scriptproperty is provided, we can poll for it
+            } else if (q.opts.scriptproperty) {
+                YAHOO.log("Polling for " + q.opts.scriptproperty);
                 q.timer = lang.later(YAHOO.util.Get.POLL_FREQ, q, function(o) {
                     if (!this._cache) {
-                        this._cache = this.opts.scriptProperty.split(".");
+                        this._cache = this.opts.scriptproperty.split(".");
                     }
                     var a=this._cache, l=a.length, w=this.win, i;
                     for (i=0; i<l; i=i+1) {
@@ -223,7 +218,7 @@ YAHOO.util.Get = function() {
 
                 }, null, true);
 
-            // If a verifier or scriptProperty is not provided, use whatever means
+            // If a verifier or scriptproperty is not provided, use whatever means
             // available to determine when the node is loaded.  When
             // loading script, this does not guarantee that the
             // script in the node is ready to be used.  This is why
@@ -373,7 +368,7 @@ YAHOO.util.Get = function() {
                 }
             };
 
-        } else if (ua.webkit && ua.webkit < 420) {
+        } else if (ua.webkit) {
 
             // Currently, Safari 2.0.x does not support either the onload or
             // onreadystatechange events on script/link nodes.  It also 
@@ -477,7 +472,7 @@ YAHOO.util.Get = function() {
          * <dd>An array containing references to the nodes that were
          * inserted</dd>
          * <dt>reference</dt>
-         * <dd>If the request contained a scriptProperty, this will
+         * <dd>If the request contained a scriptproperty, this will
          * contain the reference to the object that was found.</dd>
          * <dt>purge</dt>
          * <dd>A function that, when executed, will remove the nodes
@@ -489,14 +484,14 @@ YAHOO.util.Get = function() {
          * <dd>the execution context for the callback</dd>
          * <dt>win</dt>
          * <dd>a window other than the one the utility occupies</dd>
-         * <dt>scriptProperty</dt>
+         * <dt>scriptproperty</dt>
          * <dd>
          * the name of a method/property that will be used to
          * determine when the script is loaded
          * </dd>
          * <dt>verifier</dt>
          * <dd>
-         * a function that can be used instead of scriptProperty to implement a
+         * a function that can be used instead of scriptproperty to implement a
          * custom function that will be used to determine when the script is
          * loaded
          * </dd>
@@ -511,6 +506,26 @@ YAHOO.util.Get = function() {
          * loaded.
          * </dd>
          * </dl>
+         * <pre>
+         *      // assumes yahoo, dom, and event are already on the page
+         *      YAHOO.util.Get.script(
+         *      ["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
+         *       "http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], {
+         *            callback: function(o) {
+         *                YAHOO.log(o.data); // foo
+         *                new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
+         *                this.log("won't cause error because YAHOO is the scope");
+         *                this.log(o.nodes.length === 2) // true
+         *                // o.purge(); // optionally remove the script nodes immediately
+         *            },
+         *            data: "foo",
+         *            // verifier: checkDragDrop, // I could write my own verifier, but using the scriptproperty is easier
+         *            scriptproperty: "YAHOO.util.DDProxy",
+         *            scope: YAHOO,
+         *            // win: otherframe // target another window/frame
+         *            autocleanup: true // allow the utility to choose when to remove the nodes
+         *      });
+         * </pre>
          */
         script: function(url, opts) { return _queue("script", url, opts); },
 
@@ -551,6 +566,14 @@ YAHOO.util.Get = function() {
          * loaded.
          * </dd>
          * </dl>
+         * <pre>
+         *      YAHOO.util.Get.css("http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css");
+         * </pre>
+         * <pre>
+         *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css",
+         *                          "http://yui.yahooapis.com/2.3.1/build/logger/assets/skins/sam/logger.css"]);
+         * </pre>
+         * 
          */
         css: function(url, opts) {
             return _queue("css", url, opts); 
