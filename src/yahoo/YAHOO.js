@@ -47,6 +47,14 @@
  * @see yuiloader
  */
 
+/**
+ * Forces the use of the supplied locale where applicable in the library
+ * @property locale
+ * @type string
+ * @static
+ * @default undefined
+ */
+
 if (typeof YAHOO == "undefined") {
     /**
      * The YAHOO global namespace object.  If YAHOO is already defined, the

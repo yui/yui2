@@ -47,6 +47,14 @@
  * @see yuiloader
  */
 
+/**
+ * Forces the use of the supplied locale where applicable in the library
+ * @property locale
+ * @type string
+ * @static
+ * @default undefined
+ */
+
 if (typeof YAHOO == "undefined") {
     /**
      * The YAHOO global namespace object.  If YAHOO is already defined, the
@@ -798,9 +806,11 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @param o the scope object
      * @param fn {Function|String} the function to execute or the name of 
      * the method in the 'o' object to execute
-     * @param data data that is provided to the function.  This accepts
+     * @param data [Array] data that is provided to the function.  This accepts
      * either a single item or an array.  If an array is provided, the
-     * function is executed with one parameter for each array item.
+     * function is executed with one parameter for each array item.  If
+     * you need to pass a single array parameter, it needs to be wrapped in
+     * an array [myarray]
      * @param periodic {boolean} if true, executes continuously at supplied 
      * interval until canceled
      * @return a timer object. Call the cancel() method on this object to 
