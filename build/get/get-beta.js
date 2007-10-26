@@ -6,7 +6,7 @@
  */
 
 /**
- * Inserts one or more script or link nodes into the document 
+ * Fetches and inserts one or more script or link nodes into the document 
  * @namespace YAHOO.util
  * @class YAHOO.util.Get
  */
@@ -445,7 +445,7 @@ YAHOO.util.Get = function() {
          * @method script
          * @static
          * @param url {string|string[]} the url or urls to the script(s)
-         * @param opts Options: 
+         * @param opts {object} Options: 
          * <dl>
          * <dt>callback</dt>
          * <dd>
@@ -496,23 +496,23 @@ YAHOO.util.Get = function() {
          * </dd>
          * </dl>
          * <pre>
-         *      // assumes yahoo, dom, and event are already on the page
-         *      YAHOO.util.Get.script(
-         *      ["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
-         *       "http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], {
-         *            callback: function(o) {
-         *                new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
-         *                this.log("won't cause error because YAHOO is the scope");
-         *                this.log(o.nodes.length === 2) // true
-         *                // o.purge(); // optionally remove the script nodes immediately
-         *            },
-         *            data: "foo",
-         *            // verifier: checkDragDrop, // I could write my own verifier, but using the scriptproperty is easier
-         *            scriptproperty: "YAHOO.util.DDProxy",
-         *            scope: YAHOO,
-         *            // win: otherframe // target another window/frame
-         *            autocleanup: true // allow the utility to choose when to remove the nodes
-         *      });
+         * // assumes yahoo, dom, and event are already on the page
+         * &nbsp;&nbsp;YAHOO.util.Get.script(
+         * &nbsp;&nbsp;["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
+         * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;callback: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log("won't cause error because YAHOO is the scope");
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log(o.nodes.length === 2) // true
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// o.purge(); // optionally remove the script nodes immediately
+         * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
+         * &nbsp;&nbsp;&nbsp;&nbsp;data: "foo",
+         * &nbsp;&nbsp;&nbsp;&nbsp;// verifier: checkDragDrop, // I could write my own verifier, but using the scriptproperty is easier
+         * &nbsp;&nbsp;&nbsp;&nbsp;scriptproperty: "YAHOO.util.DDProxy",
+         * &nbsp;&nbsp;&nbsp;&nbsp;scope: YAHOO,
+         * &nbsp;&nbsp;&nbsp;&nbsp;// win: otherframe // target another window/frame
+         * &nbsp;&nbsp;&nbsp;&nbsp;autocleanup: true // allow the utility to choose when to remove the nodes
+         * &nbsp;&nbsp;&#125;);
          * </pre>
          */
         script: function(url, opts) { return _queue("script", url, opts); },
