@@ -484,7 +484,7 @@ YAHOO.util.Get = function() {
          * custom function that will be used to determine when the script is
          * loaded
          * </dd>
-         * <dt>autocleanup</dt>
+         * <dt>autopurge</dt>
          * <dd>
          * setting to true will let the utilities cleanup routine purge 
          * the script once loaded
@@ -511,7 +511,7 @@ YAHOO.util.Get = function() {
          * &nbsp;&nbsp;&nbsp;&nbsp;scriptproperty: "YAHOO.util.DDProxy",
          * &nbsp;&nbsp;&nbsp;&nbsp;scope: YAHOO,
          * &nbsp;&nbsp;&nbsp;&nbsp;// win: otherframe // target another window/frame
-         * &nbsp;&nbsp;&nbsp;&nbsp;autocleanup: true // allow the utility to choose when to remove the nodes
+         * &nbsp;&nbsp;&nbsp;&nbsp;autopurge: true // allow the utility to choose when to remove the nodes
          * &nbsp;&nbsp;&#125;);
          * </pre>
          */
