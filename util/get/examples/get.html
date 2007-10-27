@@ -116,8 +116,8 @@ YAHOO.util.Event.on(window, "load", function() {
             "../../build/connection/connection.js"
             //"../../build/menu/menu.js",
         ], {
-            callback: function(o) {
-//                YAHOO.log("callback: " + YAHOO.lang.dump(o));
+            onsuccess: function(o) {
+//                YAHOO.log("onsuccess: " + YAHOO.lang.dump(o));
                 var el = document.getElementById("dd");
                 if (o.sandbox) {
                     var MYYAHOO = o.sandbox;
@@ -130,6 +130,12 @@ YAHOO.util.Event.on(window, "load", function() {
 
                 o.purge();
             },
+            onfail: function(o) {
+
+                YAHOO.log("transaction failed");
+
+            },
+            failafter: 1000,
             data: "foo",
             //verifier: checkDragDrop,
             scriptproperty: "YAHOO.util.DDProxy",
