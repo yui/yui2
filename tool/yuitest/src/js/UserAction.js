@@ -331,10 +331,12 @@ YAHOO.util.UserAction = {
         }
 
         //try to create a mouse event
-        var customEvent /*:MouseEvent*/ = document.createEvent("MouseEvents");
+        var customEvent /*:MouseEvent*/ = null;
             
         //check for DOM-compliant browsers first
         if (YAHOO.lang.isFunction(document.createEvent)){
+        
+            customEvent = document.createEvent("MouseEvents");
         
             //Safari 2.x (WebKit 418) still doesn't implement initMouseEvent()
             if (customEvent.initMouseEvent){

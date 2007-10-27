@@ -77,6 +77,7 @@ YAHOO.tool.TestSuite.prototype = {
     }
     
 };
+
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -261,6 +262,7 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
     }
     
 });
+
 YAHOO.namespace("tool");
 
 /**
@@ -284,20 +286,73 @@ YAHOO.namespace("tool");
  */
 YAHOO.tool.TestRunner = (function(){
 
-    function TestNode(testObject){
+    /**
+     * A node in the test tree structure. May represent a TestSuite, TestCase, or
+     * test function.
+     * @param {Variant} testObject A TestSuite, TestCase, or the name of a test function.
+     * @class TestNode
+     * @constructor
+     * @private
+     */
+    function TestNode(testObject /*:Variant*/){
+    
+        /**
+         * The TestSuite, TestCase, or test function represented by this node.
+         * @type Variant
+         * @property testObject
+         */
         this.testObject = testObject;
-        this.firstChild = null;
+        
+        /**
+         * Pointer to this node's first child.
+         * @type TestNode
+         * @property firstChild
+         */        
+        this.firstChild /*:TestNode*/ = null;
+        
+        /**
+         * Pointer to this node's last child.
+         * @type TestNode
+         * @property lastChild
+         */        
         this.lastChild = null;
-        this.parent = null;    
+        
+        /**
+         * Pointer to this node's parent.
+         * @type TestNode
+         * @property parent
+         */        
+        this.parent = null; 
+   
+        /**
+         * Pointer to this node's next sibling.
+         * @type TestNode
+         * @property next
+         */        
         this.next = null;
-        this.results = {};
-        this.results.passed = 0;
-        this.results.failed = 0;
-        this.results.total = 0;        
+        
+        /**
+         * Test results for this test object.
+         * @type object
+         * @property results
+         */                
+        this.results /*:Object*/ = {
+            passed : 0,
+            failed : 0,
+            total : 0
+        };
+       
     }
     
     TestNode.prototype = {
-        appendChild : function (testObject){
+    
+        /**
+         * Appends a new test object (TestSuite, TestCase, or test function name) as a child
+         * of this node.
+         * @param {Variant} testObject A TestSuite, TestCase, or the name of a test function.
+         * @return {Void}
+         */
+        appendChild : function (testObject /*:Variant*/) /*:Void*/{
             var node = new TestNode(testObject);
             if (this.firstChild === null){
                 this.firstChild = this.lastChild = node;
@@ -315,14 +370,29 @@ YAHOO.tool.TestRunner = (function(){
         //inherit from EventProvider
         TestRunner.superclass.constructor.apply(this,arguments);
         
-        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("MasterSuite");
+        /**
+         * Suite on which to attach all TestSuites and TestCases to be run.
+         * @type YAHOO.tool.TestSuite
+         * @property masterSuite
+         * @private
+         */
+        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("MasterSuite");        
 
-        
-
-        
+        /**
+         * Pointer to the current node in the test tree.
+         * @type TestNode
+         * @private
+         * @property _cur
+         */
         this._cur = null;
+        
+        /**
+         * Pointer to the root node in the test tree.
+         * @type TestNode
+         * @private
+         * @property _root
+         */
         this._root = null;
-
         
         //create events
         var events /*:Array*/ = [
@@ -338,8 +408,7 @@ YAHOO.tool.TestRunner = (function(){
         ];
         for (var i=0; i < events.length; i++){
             this.createEvent(events[i], { scope: this });
-        }
-       
+        }       
    
     }
     
@@ -565,9 +634,14 @@ YAHOO.tool.TestRunner = (function(){
                         this.fireEvent(this.TEST_CASE_BEGIN_EVENT, { testCase: testObject });
                     }
                     
-                    setTimeout(function(){
-                        YAHOO.tool.TestRunner._run();
-                    }, 0);                    
+                    //some environments don't support setTimeout
+                    if (typeof setTimeout != "undefined"){                    
+                        setTimeout(function(){
+                            YAHOO.tool.TestRunner._run();
+                        }, 0);              
+                    } else {
+                        this._run();
+                    }
                 } else {
                     this._runTest(node);
                 }
@@ -615,9 +689,15 @@ YAHOO.tool.TestRunner = (function(){
                 
                     if (YAHOO.lang.isFunction(thrown.segment)){
                         if (YAHOO.lang.isNumber(thrown.delay)){
-                            setTimeout(function(){
-                                YAHOO.tool.TestRunner._resumeTest(thrown.segment);
-                            }, thrown.delay);
+                        
+                            //some environments don't support setTimeout
+                            if (typeof setTimeout != "undefined"){
+                                setTimeout(function(){
+                                    YAHOO.tool.TestRunner._resumeTest(thrown.segment);
+                                }, thrown.delay);
+                            } else {
+                                throw new Error("Asynchronous tests not supported in this environment.");
+                            }
                         }
                     }
                     
@@ -676,9 +756,14 @@ YAHOO.tool.TestRunner = (function(){
             }
             node.parent.results.total++;    
 
-            setTimeout(function(){
-                YAHOO.tool.TestRunner._run();
-            }, 0);
+            //set timeout not supported in all environments
+            if (typeof setTimeout != "undefined"){
+                setTimeout(function(){
+                    YAHOO.tool.TestRunner._run();
+                }, 0);
+            } else {
+                this._run();
+            }
         
         },
                 
@@ -795,6 +880,7 @@ YAHOO.tool.TestRunner = (function(){
     return new TestRunner();
     
 })();
+
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -898,6 +984,7 @@ YAHOO.tool.TestCase.Wait = function (segment /*:Function*/, delay /*:int*/) {
     this.delay /*:int*/ = (YAHOO.lang.isNumber(delay) ? delay : 0);
 
 };
+
 YAHOO.namespace("util");
 
 //-----------------------------------------------------------------------------
@@ -1490,6 +1577,7 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
 
 //inherit methods
 YAHOO.lang.extend(YAHOO.util.UnexpectedError, YAHOO.util.AssertionError);
+
 //-----------------------------------------------------------------------------
 // ArrayAssert object
 //-----------------------------------------------------------------------------
@@ -1818,6 +1906,7 @@ YAHOO.util.ArrayAssert = {
     }
     
 };
+
 YAHOO.namespace("util");
 
 
@@ -1890,6 +1979,7 @@ YAHOO.util.ObjectAssert = {
         }     
     }
 };
+
 //-----------------------------------------------------------------------------
 // DateAssert object
 //-----------------------------------------------------------------------------
@@ -1942,6 +2032,7 @@ YAHOO.util.DateAssert = {
     }
     
 };
+
 YAHOO.namespace("util");
 
 /**
@@ -2275,10 +2366,12 @@ YAHOO.util.UserAction = {
         }
 
         //try to create a mouse event
-        var customEvent /*:MouseEvent*/ = document.createEvent("MouseEvents");
+        var customEvent /*:MouseEvent*/ = null;
             
         //check for DOM-compliant browsers first
         if (YAHOO.lang.isFunction(document.createEvent)){
+        
+            customEvent = document.createEvent("MouseEvents");
         
             //Safari 2.x (WebKit 418) still doesn't implement initMouseEvent()
             if (customEvent.initMouseEvent){
@@ -2549,6 +2642,7 @@ YAHOO.util.UserAction = {
     
 
 };
+
 YAHOO.namespace("tool");
 
 //-----------------------------------------------------------------------------
@@ -2881,6 +2975,7 @@ YAHOO.tool.TestManager = {
 
 YAHOO.lang.augmentObject(YAHOO.tool.TestManager, YAHOO.util.EventProvider.prototype);
 
+
 YAHOO.namespace("tool");
 
 /**
@@ -3199,4 +3294,5 @@ YAHOO.tool.Profiler = {
     }        
 
 };
+
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});
