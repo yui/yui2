@@ -125,6 +125,31 @@ YAHOO.util.Get = function() {
     // };
 
     /**
+     * The request failed, execute fail handler with whatever
+     * was accomplished
+     * @method _fail
+     * @param id {string} the id of the request
+     * @private
+     */
+    var _fail = function(id) {
+        var q = queues[id], o;
+
+        // execute fail callback
+        if (q.onfail) {
+            o = {
+                win: q.win,
+                data: q.data,
+                nodes: q.nodes,
+                purge: _purge
+            };
+
+            var sc=q.scope || q.win;
+
+            q.onfail.call(sc, o);
+        }
+    };
+
+    /**
      * The request is complete, so executing the requester's callback
      * @method _finish
      * @param id {string} the id of the request
@@ -134,7 +159,7 @@ YAHOO.util.Get = function() {
         var q = queues[id], o;
 
         // execute callback
-        if (q.callback) {
+        if (q.onsuccess) {
             o = {
                 win: q.win,
                 data: q.data,
@@ -156,9 +181,9 @@ YAHOO.util.Get = function() {
             var sc=q.scope || q.win;
 
             if (q.type === "script" && !q.verifier && ua.webkit && ua.webkit < 420) {
-                lang.later(this.SAFARI_SCRIPT_DELAY, sc, q.callback, o);
+                lang.later(this.SAFARI_SCRIPT_DELAY, sc, q.onsuccess, o);
             } else {
-                q.callback.call(sc, o);
+                q.onsuccess.call(sc, o);
             }
         }
 
@@ -198,7 +223,10 @@ YAHOO.util.Get = function() {
             // If a scriptproperty is provided, we can poll for it
             } else if (q.opts.scriptproperty) {
                 YAHOO.log("Polling for " + q.opts.scriptproperty);
-                q.timer = lang.later(YAHOO.util.Get.POLL_FREQ, q, function(o) {
+                var freq = YAHOO.util.Get.POLL_FREQ;
+                q.maxattempts = q.failafter/freq;
+                q.attempts = 0;
+                q.timer = lang.later(freq, q, function(o) {
                     if (!this._cache) {
                         this._cache = this.opts.scriptproperty.split(".");
                     }
@@ -206,7 +234,16 @@ YAHOO.util.Get = function() {
                     for (i=0; i<l; i=i+1) {
                         w = w[a[i]];
                         if (!w) {
-                            YAHOO.log(a[i] + " failed");
+
+                            // if we have exausted our attempts, give up
+                            this.attempts++;
+                            if (this.attempts++ > this.maxattempts) {
+                                YAHOO.log("Over retry limit, giving up");
+                                q.timer.cancel();
+                                _fail(id);
+                            } else {
+                                YAHOO.log(a[i] + " failed, retrying");
+                            }
                             return;
                         }
                     }
@@ -311,7 +348,9 @@ YAHOO.util.Get = function() {
         queues[id] = {
             type: type,
             url: url,
-            callback: opts.callback,
+            onsuccess: opts.onsuccess,
+            onfail: opts.onfail,
+            failafter: opts.failafter || YAHOO.util.Get.FAIL_AFTER,
             data: opts.data,
             opts: opts,
             win: win,
@@ -428,7 +467,6 @@ YAHOO.util.Get = function() {
          */
         SAFARI_SCRIPT_DELAY: 0,
 
-
         /**
          * The default poll freqency in ms, when needed
          * @property POLL_FREQ
@@ -447,6 +485,15 @@ YAHOO.util.Get = function() {
          */
         PURGE_THRESH: 20,
 
+        /**
+         * The defaul length of time in milliseconds to wait when polling 
+         * for a script reference before failing
+         * @property FAIL_AFTER
+         * @type int
+         * @default 1000
+         */
+        FAIL_AFTER: 1000,
+
         //IFRAME_SRC: "../../build/get/assets/blank.html",
 
         /**
@@ -458,7 +505,7 @@ YAHOO.util.Get = function() {
          * @param url {string|string[]} the url or urls to the script(s)
          * @param opts {object} Options: 
          * <dl>
-         * <dt>callback</dt>
+         * <dt>onsuccess</dt>
          * <dd>
          * callback to execute when the script(s) are finished loading
          * The callback receives an object back with the following
@@ -480,8 +527,27 @@ YAHOO.util.Get = function() {
          * <dt>
          * </dl>
          * </dd>
+         * <dt>onfail</dt>
+         * <dd>
+         * callback to execute when the script load operation fails
+         * The callback receives an object back with the following
+         * data:
+         * <dl>
+         * <dt>win</dt>
+         * <dd>the window the script(s) were inserted into</dd>
+         * <dt>data</dt>
+         * <dd>the data object passed in when the request was made</dd>
+         * <dt>nodes</dt>
+         * <dd>An array containing references to the nodes that were
+         * inserted successfully</dd>
+         * <dt>purge</dt>
+         * <dd>A function that, when executed, will remove any nodes
+         * that were inserted</dd>
+         * <dt>
+         * </dl>
+         * </dd>
          * <dt>scope</dt>
-         * <dd>the execution context for the callback</dd>
+         * <dd>the execution context for the callbacks</dd>
          * <dt>win</dt>
          * <dd>a window other than the one the utility occupies</dd>
          * <dt>scriptproperty</dt>
@@ -505,19 +571,28 @@ YAHOO.util.Get = function() {
          * data that is supplied to the callback when the script(s) are
          * loaded.
          * </dd>
+         * <dt>failafter</dt>
+         * <dd>
+         * the amount of time in milliseconds to wait for a script reference to
+         * become available.  Overrides the default value of 1000
+         * </dd>
          * </dl>
          * <pre>
          * // assumes yahoo, dom, and event are already on the page
          * &nbsp;&nbsp;YAHOO.util.Get.script(
          * &nbsp;&nbsp;["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
          * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], &#123;
-         * &nbsp;&nbsp;&nbsp;&nbsp;callback: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;onsuccess: function(o) &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log(o.data); // foo
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log("won't cause error because YAHOO is the scope");
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log(o.nodes.length === 2) // true
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// o.purge(); // optionally remove the script nodes immediately
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
+         * &nbsp;&nbsp;&nbsp;&nbsp;onfail: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log("transaction failed");
+         * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
+         * &nbsp;&nbsp;&nbsp;&nbsp;failafter: 500, // fail if YAHOO.util.DDProxy is not found in 500ms. Overrides the default of 1000
          * &nbsp;&nbsp;&nbsp;&nbsp;data: "foo",
          * &nbsp;&nbsp;&nbsp;&nbsp;// verifier: checkDragDrop, // I could write my own verifier, but using the scriptproperty is easier
          * &nbsp;&nbsp;&nbsp;&nbsp;scriptproperty: "YAHOO.util.DDProxy",
@@ -538,7 +613,7 @@ YAHOO.util.Get = function() {
          * @param url {string} the url or urls to the css file(s)
          * @param opts Options: 
          * <dl>
-         * <dt>callback</dt>
+         * <dt>onsuccess</dt>
          * <dd>
          * callback to execute when the css file(s) are finished loading
          * The callback receives an object back with the following
@@ -557,12 +632,12 @@ YAHOO.util.Get = function() {
          * </dl>
          * </dd>
          * <dt>scope</dt>
-         * <dd>the execution context for the callback</dd>
+         * <dd>the execution context for the callbacks</dd>
          * <dt>win</dt>
          * <dd>a window other than the one the utility occupies</dd>
          * <dt>data</dt>
          * <dd>
-         * data that is supplied to the callback when the script(s) are
+         * data that is supplied to the callbacks when the nodes(s) are
          * loaded.
          * </dd>
          * </dl>
