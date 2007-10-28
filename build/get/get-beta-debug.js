@@ -72,7 +72,7 @@ YAHOO.util.Get = function() {
         var w = win || window, d=w.document, n=d.createElement(type);
 
         for (var i in attr) {
-            if (YAHOO.lang.hasOwnProperty(attr, i)) {
+            if (attr[i] && YAHOO.lang.hasOwnProperty(attr, i)) {
                 n.setAttribute(i, attr[i]);
             }
         }
@@ -110,8 +110,6 @@ YAHOO.util.Get = function() {
                 "id": "yui__dyn_" + (nidx++),
                 "type": "text/javascript",
                 "src": url
-                // cache busting doesn't help safari
-                //"src": url + ((url.indexOf("?") > -1) ? "&" : "?") + "yui=" + ridx++
             }, win);
     };
 
@@ -124,30 +122,30 @@ YAHOO.util.Get = function() {
     //         }, win);
     // };
 
-    /**
+    /*
      * The request failed, execute fail handler with whatever
-     * was accomplished
+     * was accomplished.  There isn't a failure case atm
      * @method _fail
      * @param id {string} the id of the request
      * @private
      */
-    var _fail = function(id) {
-        var q = queues[id], o;
+    // var _fail = function(id) {
+    //     var q = queues[id], o;
 
-        // execute fail callback
-        if (q.onfail) {
-            o = {
-                win: q.win,
-                data: q.data,
-                nodes: q.nodes,
-                purge: _purge
-            };
+    //     // execute fail callback
+    //     if (q.onfail) {
+    //         o = {
+    //             win: q.win,
+    //             data: q.data,
+    //             nodes: q.nodes,
+    //             purge: _purge
+    //         };
 
-            var sc=q.scope || q.win;
+    //         var sc=q.scope || q.win;
 
-            q.onfail.call(sc, o);
-        }
-    };
+    //         q.onfail.call(sc, o);
+    //     }
+    // };
 
     /**
      * The request is complete, so executing the requester's callback
@@ -180,11 +178,7 @@ YAHOO.util.Get = function() {
 
             var sc=q.scope || q.win;
 
-            if (q.type === "script" && !q.verifier && ua.webkit && ua.webkit < 420) {
-                lang.later(this.SAFARI_SCRIPT_DELAY, sc, q.onsuccess, o);
-            } else {
-                q.onsuccess.call(sc, o);
-            }
+            q.onsuccess.call(sc, o);
         }
 
         // delete queues[id];
@@ -211,56 +205,13 @@ YAHOO.util.Get = function() {
 
         if (q.url.length === 0) {
 
-            // If a verifier function was provided, this is used to
-            // determine when the loaded material is ready (and when 
-            // to execute the callback).
-            if (q.opts.verifier) {
-                YAHOO.log("Executing verifier");
-                q.opts.verifier(function() {
-                        _finish(id);
-                    }, q.win);
-
-            // If a scriptproperty is provided, we can poll for it
-            } else if (q.opts.scriptproperty) {
-                YAHOO.log("Polling for " + q.opts.scriptproperty);
-                var freq = YAHOO.util.Get.POLL_FREQ;
-                q.maxattempts = q.failafter/freq;
-                q.attempts = 0;
-                q.timer = lang.later(freq, q, function(o) {
-                    if (!this._cache) {
-                        this._cache = this.opts.scriptproperty.split(".");
-                    }
-                    var a=this._cache, l=a.length, w=this.win, i;
-                    for (i=0; i<l; i=i+1) {
-                        w = w[a[i]];
-                        if (!w) {
-
-                            // if we have exausted our attempts, give up
-                            this.attempts++;
-                            if (this.attempts++ > this.maxattempts) {
-                                YAHOO.log("Over retry limit, giving up");
-                                q.timer.cancel();
-                                _fail(id);
-                            } else {
-                                YAHOO.log(a[i] + " failed, retrying");
-                            }
-                            return;
-                        }
-                    }
-                    
-                    YAHOO.log("Poll complete");
-                    q.reference=w;
-                    q.timer.cancel();
-                    _finish(id);
-
-                }, null, true);
-
-            // If a verifier or scriptproperty is not provided, use whatever means
-            // available to determine when the node is loaded.  When
-            // loading script, this does not guarantee that the
-            // script in the node is ready to be used.  This is why
-            // a verifier function is needed if the plan is to act
-            // on the script immediately.
+            // Safari workaround - add an extra script node.  When
+            // this one is done we know the script in the previous
+            // one is ready.
+            if (q.type === "script" && ua.webkit && !q.finalpass) {
+                q.finalpass = true;
+                var extra = _scriptNode(null, q.win);
+                _track(q.type, extra, id, "safari_extra", q.win, 1);
             } else {
                 _finish(id);
             }
@@ -350,7 +301,6 @@ YAHOO.util.Get = function() {
             url: url,
             onsuccess: opts.onsuccess,
             onfail: opts.onfail,
-            failafter: opts.failafter || YAHOO.util.Get.FAIL_AFTER,
             data: opts.data,
             opts: opts,
             win: win,
@@ -408,29 +358,10 @@ YAHOO.util.Get = function() {
             };
 
         } else if (ua.webkit) {
-
-            // Currently, Safari 2.0.x does not support either the onload or
-            // onreadystatechange events on script/link nodes.  It also 
-            // doesn't have a readyState property on the node.  The workaround
-            // is to check the readyState of the document it is being inserted
-            // into.  While this works, some of the time the document becomes
-            // ready before the script has been evaluated.  This doesn't appear
-            // to be a problem for loading sequential scripts, but it is a
-            // problem when all scripts are finished and we are ready to notify
-            // the consumer that we are done.  
-            //if (type === "script" && qlength === 1) {
-            //    var d=win.document, b=d.getElementsByTagName("body")[0];
-            //    var fr = (type === "iframe") ? n : _iframe(url, win);
-            //    fr.onload = function() {
-            //        YAHOO.log(id + " onload via iframe " + url);
-            //        f(id, url);
-            //    };
-            //    
-            //    if (type !== "iframe") {
-            //        b.appendChild(fr);
-            //    }
-            //} else {
-
+            // poll the document readyState.  When the readyState is complete
+            // or loaded, it is safe to insert the next item.  Script contents
+            // may not be ready yet, so we still need another workaround for
+            // the last script
             timers[id] = setInterval(function(){
                 var rs=win.document.readyState;
                 if ("loaded" === rs || "complete" === rs) {
@@ -454,20 +385,6 @@ YAHOO.util.Get = function() {
     return {
 
         /**
-         * The mechanism for detecting script node load in Safari isn't
-         * isn't perfect in Safari 2.x.  Implementing a delay after the
-         * last script loads is one way to hack around the issue if you
-         * do not want to provide a verifier function or a method for the
-         * utility to find.  To be effective, this delay must be at
-         * least 30 ms.
-         * @property SAFARI_SCRIPT_DELAY
-         * @type int
-         * @static
-         * @default 0
-         */
-        SAFARI_SCRIPT_DELAY: 0,
-
-        /**
          * The default poll freqency in ms, when needed
          * @property POLL_FREQ
          * @static
@@ -484,15 +401,6 @@ YAHOO.util.Get = function() {
          * @default 20
          */
         PURGE_THRESH: 20,
-
-        /**
-         * The defaul length of time in milliseconds to wait when polling 
-         * for a script reference before failing
-         * @property FAIL_AFTER
-         * @type int
-         * @default 1000
-         */
-        FAIL_AFTER: 1000,
 
         //IFRAME_SRC: "../../build/get/assets/blank.html",
 
@@ -550,17 +458,6 @@ YAHOO.util.Get = function() {
          * <dd>the execution context for the callbacks</dd>
          * <dt>win</dt>
          * <dd>a window other than the one the utility occupies</dd>
-         * <dt>scriptproperty</dt>
-         * <dd>
-         * the name of a method/property that will be used to
-         * determine when the script is loaded
-         * </dd>
-         * <dt>verifier</dt>
-         * <dd>
-         * a function that can be used instead of scriptproperty to implement a
-         * custom function that will be used to determine when the script is
-         * loaded
-         * </dd>
          * <dt>autopurge</dt>
          * <dd>
          * setting to true will let the utilities cleanup routine purge 
@@ -570,11 +467,6 @@ YAHOO.util.Get = function() {
          * <dd>
          * data that is supplied to the callback when the script(s) are
          * loaded.
-         * </dd>
-         * <dt>failafter</dt>
-         * <dd>
-         * the amount of time in milliseconds to wait for a script reference to
-         * become available.  Overrides the default value of 1000
          * </dd>
          * </dl>
          * <pre>
@@ -592,10 +484,7 @@ YAHOO.util.Get = function() {
          * &nbsp;&nbsp;&nbsp;&nbsp;onfail: function(o) &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;YAHOO.log("transaction failed");
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
-         * &nbsp;&nbsp;&nbsp;&nbsp;failafter: 500, // fail if YAHOO.util.DDProxy is not found in 500ms. Overrides the default of 1000
          * &nbsp;&nbsp;&nbsp;&nbsp;data: "foo",
-         * &nbsp;&nbsp;&nbsp;&nbsp;// verifier: checkDragDrop, // I could write my own verifier, but using the scriptproperty is easier
-         * &nbsp;&nbsp;&nbsp;&nbsp;scriptproperty: "YAHOO.util.DDProxy",
          * &nbsp;&nbsp;&nbsp;&nbsp;scope: YAHOO,
          * &nbsp;&nbsp;&nbsp;&nbsp;// win: otherframe // target another window/frame
          * &nbsp;&nbsp;&nbsp;&nbsp;autopurge: true // allow the utility to choose when to remove the nodes
