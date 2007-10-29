@@ -1,6 +1,6 @@
 {
 
-    'base': 'http://yui.yahooapis.com/2.3.1/build/',
+    'base': 'http://yui.yahooapis.com/2.4.0/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -23,6 +23,11 @@
             'requires': ['dom', 'event'],
             'optional': ['connection', 'animation'],
             'skinnable': true
+        },
+
+        'base': {
+            'type': 'css',
+            'path': 'base/base-min.css'
         },
 
         'button': {
@@ -123,6 +128,12 @@
             'path': 'fonts/fonts-min.css'
         },
 
+        'get': {
+            'type': 'js',
+            'path': 'get/get-beta-min.js',
+            'requires': ['yahoo']
+        },
+
         'grids': {
             'type': 'css',
             'path': 'grids/grids-min.css',
@@ -140,6 +151,12 @@
             'type': 'js',
             'path': 'imageloader/imageloader-experimental-min.js',
             'requires': ['event', 'dom']
+        },
+
+        'json': {
+            'type': 'js',
+            'path': 'json/json-beta-min.js',
+            'requires': ['yahoo']
         },
 
         'logger': {
@@ -166,6 +183,12 @@
             'type': 'css',
             'path': 'reset-fonts-grids/reset-fonts-grids.css',
             'supersedes': ['reset', 'fonts', 'grids']
+        },
+
+        'reset-fonts': {
+            'type': 'css',
+            'path': 'reset-fonts/reset-fonts.css',
+            'supersedes': ['reset', 'fonts']
         },
 
         'slider': {

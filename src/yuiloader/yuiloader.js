@@ -28,6 +28,16 @@
     // after YAHOO has been loaded.
     var YUI = {
 
+        ua: function() {
+            var a=navigator.userAgent, o={};
+            if ((/KHTML/).test(a)) {
+                o.webkit=1;
+            } else if ((/MSIE/).test(a)) {
+                o.ie=1;
+            }
+            return o;
+        }(),
+
         /*
          * The library metadata for the current release  The is the default
          * value for YAHOO.util.YUILoader.moduleInfo
@@ -36,7 +46,7 @@
          */
         info: {
 
-    'base': 'http://yui.yahooapis.com/2.3.1/build/',
+    'base': 'http://yui.yahooapis.com/2.4.0/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -59,6 +69,11 @@
             'requires': ['dom', 'event'],
             'optional': ['connection', 'animation'],
             'skinnable': true
+        },
+
+        'base': {
+            'type': 'css',
+            'path': 'base/base-min.css'
         },
 
         'button': {
@@ -159,6 +174,12 @@
             'path': 'fonts/fonts-min.css'
         },
 
+        'get': {
+            'type': 'js',
+            'path': 'get/get-beta-min.js',
+            'requires': ['yahoo']
+        },
+
         'grids': {
             'type': 'css',
             'path': 'grids/grids-min.css',
@@ -176,6 +197,12 @@
             'type': 'js',
             'path': 'imageloader/imageloader-experimental-min.js',
             'requires': ['event', 'dom']
+        },
+
+        'json': {
+            'type': 'js',
+            'path': 'json/json-beta-min.js',
+            'requires': ['yahoo']
         },
 
         'logger': {
@@ -202,6 +229,12 @@
             'type': 'css',
             'path': 'reset-fonts-grids/reset-fonts-grids.css',
             'supersedes': ['reset', 'fonts', 'grids']
+        },
+
+        'reset-fonts': {
+            'type': 'css',
+            'path': 'reset-fonts/reset-fonts.css',
+            'supersedes': ['reset', 'fonts']
         },
 
         'slider': {
@@ -363,10 +396,11 @@
          */
         onModuleLoaded: function(minfo) {
 
-            var mname = minfo.name, m;
+            var mname = minfo.name;
 
             for (var i=0; i<YUI.loaders.length; i=i+1) {
                 YUI.loaders[i].loadNext(mname);
+                break;
             }
 
             //console.log(YAHOO.lang.dump(minfo));
@@ -720,7 +754,7 @@
             }
 
             mod.requires=mod.requires || [];
-            var i, d=[], r=mod.requires, o=mod.optional, s=mod.supersedes, info=this.moduleInfo;
+            var i, d=[], r=mod.requires, o=mod.optional, info=this.moduleInfo;
             for (i=0; i<r.length; i=i+1) {
                 d.push(r[i]);
                 YUI.ArrayUtil.appendArray(d, this.getRequires(info[r[i]]));
@@ -1271,7 +1305,7 @@
 
                         url = m.fullpath || this._url(m.path);
                         
-                        this.insertCss(url);
+                        this.insertCss(url, s[i]);
                         this.inserted[s[i]] = true;
 
                     // Scripts must be loaded in order, so we wait for the
@@ -1280,7 +1314,7 @@
                     } else {
 
                         url = m.fullpath || this._url(m.path);
-                        this.insertScript(url);
+                        this.insertScript(url, s[i]);
 
                         // if a verifier was included for this module, execute
                         // it, passing the name of the module, and a callback
@@ -1348,20 +1382,56 @@
             return u;
         },
 
+/*
+        _detectLoad: function(n) {
+            //if (YUI.ua.ie) {
+            if (false) {
+
+                n.onreadystatechange = function() {
+                    if ("complete" === this.readyState) {
+                        log(n.id + " onload");
+                    }
+                };
+
+            //} else if (YUI.ua.webkit) {
+            } else if (YUI.ua.ie || YUI.ua.webkit) {
+
+                YUI._poll = YUI._poll || {};
+                YUI._poll[n.id] = setInterval(function(){
+                    var rs=document.readyState;
+                    if ("loaded" === rs || "complete" === rs) {
+                        clearInterval(YUI._poll[n.id]);
+                        YUI._poll[n.id] = null;
+                        log(n.id + " onload");
+                    }
+                }, 1000); 
+
+            } else {
+                n.onload = function() {
+                    log(n.id + " onload");
+                };
+            }
+        },
+        */
+
         /**
          * Inserts a script node
          * @method insertScript
          * @param url {string} the full url for the script
          * @param win {Window} optional window to target
          */
-        insertScript: function(url, win) {
+        insertScript: function(url, id, win) {
 
             //console.log("inserting script " + url);
             var w = win || window, d=w.document, n=d.createElement("script"),
                 h = d.getElementsByTagName("head")[0];
 
-            n.src = url;
-            n.type = "text/javascript";
+            n.setAttribute("id", "yui_dyn_" + id);
+            n.setAttribute("type", "text/javascript");
+            n.setAttribute("src", url);
+
+            //this._detectLoad(n);
+
             h.appendChild(n);
         },
 
@@ -1371,14 +1441,18 @@
          * @param url {string} the full url for the script
          * @param win {Window} optional window to target
          */
-        insertCss: function(url, win) {
+        insertCss: function(url, id, win) {
             // console.log("inserting css " + url);
             var w = win || window, d=w.document, n=d.createElement("link"),
                 h = d.getElementsByTagName("head")[0];
 
-            n.href = url;
-            n.type = "text/css";
-            n.rel = "stylesheet";
+            n.setAttribute("id", "yui_dyn_" + id);
+            n.setAttribute("href", url);
+            n.setAttribute("type", "text/css");
+            n.setAttribute("rel", "stylesheet");
+
+            //this._detectLoad(n);
+
             h.appendChild(n);
         },
        

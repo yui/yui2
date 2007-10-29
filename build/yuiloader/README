@@ -1,5 +1,8 @@
 yuiloader - Release Notes
 
+2.4.0
+   * Added 'base', 'reset-fonts', 'get', and 'json'
+
 2.3.1
    * The "skin.overrides" property is now applied correctly.  Previously
      it was looking for "skin.override".
