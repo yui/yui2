@@ -112,7 +112,12 @@ package
 			var chart:Chart = new ChartType();
 			chart.setStyle("contentPadding", 10);
 			chart.setStyle("backgroundSkin", Sprite);
-			chart.setStyle("dataTipBackgroundSkin", ChartDataTipBackground);
+			var backgroundFactory:InstanceFactory = this.createBorderBackgroundFactory();
+			backgroundFactory.properties.fillColor = 0xffffff;
+			backgroundFactory.properties.fillAlpha = 0.8;
+			backgroundFactory.properties.borderWeight = 1;
+			backgroundFactory.properties.borderColor = 0x000000;
+			chart.setStyle("dataTipBackgroundSkin", backgroundFactory);
 			this.addChildAt(chart, 1);
 			
 			this.component = chart;

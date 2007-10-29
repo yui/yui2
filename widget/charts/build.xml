@@ -12,16 +12,26 @@
 
     <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
     <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
+    
+    <property name="flashroot" value="C:/Program Files/Adobe/Adobe Flash CS3"/>
+    <property name="flexroot" value="C:/Program Files/Adobe/Flex Builder 3/sdks/2.0.1/"/>
 
     <target name="customlocal" description="Charts Override to Build SWF">
     
         <!-- build the charts.swf -->
         <!-- TODO: Make MXMLC a property -->
-        <exec executable="C:/Program Files/Adobe/Flex Builder 3/sdks/2.0.1/bin/mxmlc.exe" failonerror="true">
-            <arg line="-library-path+='${component.srcdir}/swc/charts.swc'"/>
-            <arg line="-source-path+='..\..\..\flash\ActionScript 3'"/>
-            <arg line="-source-path+='C:\Program Files\Adobe\Adobe Flash CS3\en\Configuration\Component Source\ActionScript 3.0\User Interface'"/>
+        <exec executable="${flexroot}/bin/mxmlc.exe" failonerror="true">
+            <!-- Flash Platform -->
+            <arg line="-source-path+='../../../flash/ActionScript 3'"/>
+            
+            <!-- Core Flash CS3 Classes -->
+            <arg line="-source-path+='${flashroot}/en/Configuration/ActionScript 3.0/Classes'"/>
+            <arg line="-source-path+='${flashroot}/en/Configuration/Component Source/ActionScript 3.0/User Interface'"/>
+            
+            <!-- Output SWF -->
             <arg line="-output '${component.srcdir}/swf/charts.swf'"/>
+            
+            <!-- Document Class -->
             <arg line="'${component.srcdir}/as/Charts.as'"/>
         </exec>
         
