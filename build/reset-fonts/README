@@ -1,14 +1,13 @@
-YUI Library - Reset+Fonts+Base (RFB) - Release Notes
+YUI Library - Reset+Fonts (RF) - Release Notes
 
 *** NOTE ***
 
 This document is not updated with each release.  Changes to
-the reset-fonts-base.css source are noted in the README
+the reset-fonts.css source are noted in the README
 file for each component that comprises this aggregate:
 
 reset/README
 fonts/README
-base/README
 
 ************
 
@@ -17,4 +16,4 @@ Version 2.4.0
   * Initial release.
 
   * This file is a convenience file containing an in-order 
-    concatonation of Reset, Fonts, and Base.
+    concatonation of Reset and Fonts.
