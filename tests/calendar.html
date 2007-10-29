@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="../build/yahoo-dom-event/yahoo-dom-event.js"></script>
 	<script type="text/javascript" src="../build/logger/logger-min.js"></script>
 	<script type="text/javascript" src="../build/yuitest/yuitest-beta-min.js"></script>
-	<script type="text/javascript" src="../build/calendar/calendar-min.js"></script>	
+	<script type="text/javascript" src="../build/calendar/calendar-min.js"></script>
 
 	<style type="text/css">
 		ol.testlist li {
@@ -37,6 +37,10 @@
 			UserAction = YAHOO.util.UserAction;
 
 		var	logger;
+		
+		var ID = "testCal";
+		var CID = "testCalContainer";
+		var TRIM = /\s*?$/;
 
 		/**
 		 * Base Calendar Test Case Class
@@ -47,7 +51,7 @@
 			this.container = null;
 			this.isGroupCalTest = (this.widgetclass === YAHOO.widget.CalendarGroup);
 		};
-
+		
 		YAHOO.lang.extend(YAHOO.tests.CalendarTestCase, YAHOO.tool.TestCase, {
 
 			widgetclass : YAHOO.widget.Calendar,
@@ -55,7 +59,7 @@
 
 			setUp : function() {
 				this.container = document.createElement("div");
-				this.container.id = "testCalContainer";
+				this.container.id = CID;
 
 				document.body.appendChild(this.container);
 			},
@@ -70,13 +74,13 @@
 				var cal;
 
 				if (opts) {
-					cal = new this.widgetclass("testCal", "testCalContainer", opts);
+					cal = new this.widgetclass(ID, CID, opts);
 				} else {
-					cal = new this.widgetclass("testCal", "testCalContainer");
+					cal = new this.widgetclass(ID, CID);
 				}
 
 				if (this.needsUI) {
-					cal.render();	
+					cal.render();
 				}
 
 				return cal;
@@ -88,7 +92,7 @@
 
 			dateComparator : function(d1, d2) {
 				return ( d1 && d2 
-						   	&& d1.getFullYear() === d2.getFullYear() 
+							&& d1.getFullYear() === d2.getFullYear() 
 							&& d1.getMonth() === d2.getMonth() 
 							&& d1.getDate() === d2.getDate() );
 			},
@@ -101,6 +105,38 @@
 					ArrayAssert.isNotEmpty(dates, "getSelectedDates() shoud not be empty");	
 				}
 				ArrayAssert.itemsAreEquivalent(expected, dates, this.dateComparator, "getSelectedDates() does not contain the correct dates");
+			},
+
+			assertConstruction : function(cal) {
+				Assert.isObject(cal, "Failed to create basic instance");
+				Assert.isInstanceOf(this.widgetclass, cal, "Failed to create basic instance");
+			},
+			
+			assertDomReferences : function(cal, id, containerId) {
+				Assert.isObject(cal.oDomContainer, "oDomContainer not set");
+				Assert.areEqual(cal.containerId, containerId, "containerId not set");
+				Assert.areEqual(cal.id, id, "id not set");
+				if (this.isGroupCalTest) {
+					Assert.isObject(Dom.get(id+"_0"), "ID not assigned to TABLE");
+					Assert.isObject(Dom.get(id+"_1"), "ID not assigned to TABLE");
+				} else {
+					Assert.isObject(Dom.get(id), "ID not assigned to TABLE");
+				}
+			},
+
+			assertTitle : function(cal, title){
+				var titleBox = Dom.getElementsByClassName("title", "div", cal.oDomContainer);
+				Assert.areEqual(1, titleBox.length, "Title DIV should be rendered");
+				Assert.isTrue(titleBox[0].innerHTML.indexOf(title) != -1, "Title DIV does not have correct title string");
+			},
+			
+			assertCalendarPage : function(cal, date) {
+				Assert.isObject(cal, "Calendar page not found " + date);
+				Assert.isInstanceOf(YAHOO.widget.Calendar, cal, "Calendar page not instance of Calendar " + date)
+
+				var pgDate = new Date(date.getFullYear(), date.getMonth(), 1);
+
+				DateAssert.datesAreEqual(pgDate, cal.cfg.getProperty("pagedate"), "Got invalid Calendar for " + date)
 			},
 
 			_testConstruction : function() {
@@ -351,6 +387,37 @@
 				DateAssert.datesAreEqual(new Date(2007, 10, 01), pgDate, "previousYear() set incorrect page date");
 
 				cal = null;
+			},
+
+			testToDate : function() {
+				var cal = this.createInstance();
+				cal.selectEvent.subscribe(function() {
+					DateAssert.datesAreEqual(new Date(2007, 10, 01), cal.toDate(args[0]));
+					DateAssert.datesAreEqual(new Date(2007, 10, 27), cal.toDate(args[1]));
+				});
+				cal.select("10/01/2007", "10/27/2007");
+				cal = null;
+			},
+
+			testGetCalPage : function() {
+				if (this.isGroupCalTest) {
+					var cal = this.createInstance({pages:4, pagedate:"10/2007"});
+
+					var oct = cal.getCalendarPage(new Date(2007, 9, 01));
+					var nov = cal.getCalendarPage(new Date(2007, 10, 13));
+					var dec = cal.getCalendarPage(new Date(2007, 11, 31));
+					var jan = cal.getCalendarPage(new Date(2008, 0, 28));
+
+					this.assertCalendarPage(oct, new Date(2007, 9, 01));
+					this.assertCalendarPage(nov, new Date(2007, 10, 13));
+					this.assertCalendarPage(dec, new Date(2007, 11, 31));
+					this.assertCalendarPage(jan, new Date(2008, 0, 28));
+
+					var feb = cal.getCalendarPage(new Date(2007, 1, 1));
+					Assert.isNull(feb, "getCalendarPage returned invalid page for Feb")
+
+					cal = null;
+				}
 			}
 
 		};
@@ -366,10 +433,100 @@
 				this._testConstruction();
 			},
 
+			testConstructionA: function() {
+				var cal = new this.widgetclass(CID);
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, CID + "_t", CID);
+				cal = null;
+			},
+			testConstructionB: function() {
+				var cal = new this.widgetclass(ID, CID);
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, ID, CID);
+
+				cal = null;
+			},
+			testConstructionC: function() {
+				var cal = new this.widgetclass(ID, CID, {title:"Test"});
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, ID, CID);
+				this.assertTitle(cal, "Test");
+
+				cal = null;
+			},
+			testConstructionD: function() {
+				var cal = new this.widgetclass(ID, YAHOO.util.Dom.get(CID), {title:"Test"});
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, ID, CID);
+				this.assertTitle(cal, "Test");
+
+				cal = null;
+			},
+			testConstructionE: function() {
+				var cal = new this.widgetclass(CID);
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, CID + "_t", CID);
+
+				cal = null;
+			},
+			testConstructionF: function() {
+				var cal = new this.widgetclass(YAHOO.util.Dom.get(CID));
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, CID + "_t", CID);
+
+				cal = null;
+			},
+			testConstructionG: function() {
+				var cal = new this.widgetclass(CID, {title:"Test"});
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, CID + "_t", CID);
+				this.assertTitle(cal, "Test");
+
+				cal = null;
+			},
+			testConstructionH: function() {
+				var cal = new this.widgetclass(YAHOO.util.Dom.get(CID), {title:"Test"});
+				cal.render();
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, CID + "_t", CID);
+				this.assertTitle(cal, "Test");
+
+				cal = null;
+			},
+			testConstructionI: function() {
+				var c = document.createElement("div");
+				document.body.appendChild(c);
+				c.id = CID;
+
+				var cal = new this.widgetclass(c);
+				cal.render();
+
+				this.assertConstruction(cal);
+				this.assertDomReferences(cal, CID + "_t", CID);
+
+				cal = null;
+				document.body.removeChild(c);
+			},
+			testConstructionJ: function() {
+				var c = document.createElement("div");
+				document.body.appendChild(c);
+
+				var cal = new this.widgetclass(c);
+				cal.render();
+				this.assertConstruction(cal);
+
+				cal = null;
+				document.body.removeChild(c);
+			},
 			testBasicRender: function() {
-
 				// Is this really a unit test?? Nice-to-have but isn't this better handled by a manual blackbox test?
-
 				var cal = this.createInstance({pagedate:"4/2007"});
 
 				var baseCount = (this.isGroupCalTest) ? 2 : 1;
@@ -640,9 +797,9 @@
 					cellThree = cal.cells[4];
 				}
 
-				Assert.areEqual(testStr+"_2007_3_1", cellOne.innerHTML, "Cell renderer not applied correctly");
-				Assert.areEqual(testStr+"_2007_3_3", cellTwo.innerHTML, "Cell renderer not applied correctly");
-				Assert.areEqual(testStr+"_2007_3_5", cellThree.innerHTML, "Cell renderer not applied correctly");
+				Assert.areEqual(testStr+"_2007_3_1", cellOne.innerHTML.replace(TRIM, ""), "Cell renderer not applied correctly");
+				Assert.areEqual(testStr+"_2007_3_3", cellTwo.innerHTML.replace(TRIM, ""), "Cell renderer not applied correctly");
+				Assert.areEqual(testStr+"_2007_3_5", cellThree.innerHTML.replace(TRIM, ""), "Cell renderer not applied correctly");
 
 				var customElements = Dom.getElementsByClassName(testClass, "td", this.container);
 				Assert.areEqual(3, customElements.length, "Applied renderer to more/less elements than expected");
@@ -675,15 +832,15 @@
 				
 				// Expect different lengths, based on OOM days
 				for (var i = 0; i < sundays.length; i++) {
-					Assert.areEqual(testStr, sundays[i].innerHTML, "Sunday cell content not set correctly");
+					Assert.areEqual(testStr, sundays[i].innerHTML.replace(TRIM, ""), "Sunday cell content not set correctly");
 				}
 
 				for (var j = 0; j < wednesdays.length; j++) {
-					Assert.areEqual(testStr, wednesdays[j].innerHTML, "Wednesday cell content not set correctly");
+					Assert.areEqual(testStr, wednesdays[j].innerHTML.replace(TRIM, ""), "Wednesday cell content not set correctly");
 				}
 
 				for (var k = 0; k < saturdays.length; k++) {
-					Assert.areEqual(testStr, saturdays[k].innerHTML, "Saturday cell content not set correctly");
+					Assert.areEqual(testStr, saturdays[k].innerHTML.replace(TRIM, ""), "Saturday cell content not set correctly");
 				}
 
 				var customElements = Dom.getElementsByClassName(testClass, "td", this.container);
@@ -734,6 +891,36 @@
 				cal = null;				
 			},
 
+			testRemoveRenderers : function() {
+
+				var cal = this.createInstance({pagedate: "10/2007"});
+
+				cal.addRenderer("10/24/2007", function(workingDate, cell) {
+				   Dom.addClass(cell, "dayRenderer");
+				});
+				cal.addWeekdayRenderer(2, function(workingDate, cell){
+				   Dom.addClass(cell, "weekdayRenderer");
+				});
+				cal.addMonthRenderer(10, function(workingDate, cell){
+				   Dom.addClass(cell, "monthRenderer")
+				});
+
+				cal.render();
+
+				Assert.areEqual(1, Dom.getElementsByClassName("dayRenderer", "td", this.oDomContainer).length);
+				Assert.areEqual((this.isGroupCalTest) ? 9 : 5, Dom.getElementsByClassName("weekdayRenderer", "td", this.oDomContainer).length);
+				Assert.areEqual(31, Dom.getElementsByClassName("monthRenderer", "td", this.oDomContainer).length);
+
+				cal.removeRenderers();
+				cal.render();
+
+				Assert.areEqual(0, Dom.getElementsByClassName("dayRenderer", "td", this.oDomContainer).length);
+				Assert.areEqual(0, Dom.getElementsByClassName("weekdayRenderer", "td", this.oDomContainer).length);
+				Assert.areEqual(0, Dom.getElementsByClassName("monthRenderer", "td", this.oDomContainer).length);
+				
+				cal = null;
+			},
+
 			testBasicEvents : function() {
 
 				var e = YAHOO.widget.Calendar._EVENT_TYPES;
@@ -752,14 +939,18 @@
 									 e.BEFORE_RENDER, e.RENDER, e.RESET, 
 									 e.BEFORE_RENDER, e.RENDER, e.RESET,
 									 e.BEFORE_RENDER, e.RENDER, 
-									 e.BEFORE_RENDER, e.RENDER ];
+									 e.BEFORE_RENDER, e.RENDER,
+									 e.BEFORE_HIDE, e.HIDE,
+									 e.BEFORE_SHOW, e.SHOW ];
 				} else {
 					expectedEvts = [ e.BEFORE_SELECT, e.SELECT,
 									 e.BEFORE_DESELECT, e.DESELECT,
 									 e.BEFORE_RENDER, e.RENDER, e.CHANGE_PAGE,
 									 e.BEFORE_RENDER, e.RENDER, e.CLEAR,
 									 e.BEFORE_RENDER, e.RENDER, e.RESET,
-									 e.BEFORE_RENDER, e.RENDER ];
+									 e.BEFORE_RENDER, e.RENDER,
+									 e.BEFORE_HIDE, e.HIDE,
+									 e.BEFORE_SHOW, e.SHOW ];
 				}
 
 				function monitor(type, args, obj) {
@@ -777,6 +968,10 @@
 				cal.changePageEvent.subscribe(monitor);
 				cal.resetEvent.subscribe(monitor);
 				cal.clearEvent.subscribe(monitor);
+				cal.hideEvent.subscribe(monitor);
+				cal.beforeHideEvent.subscribe(monitor);
+				cal.showEvent.subscribe(monitor);
+				cal.beforeShowEvent.subscribe(monitor);
 
 				cal.select("4/1/2007");   	// beforeSelect, select
 				cal.deselect("4/1/2007"); 	// beforeDeselect, deselect
@@ -784,10 +979,23 @@
 				cal.clear();				// beforeRender, render, clear 		(monitor is registered after default listener which calls cal.render())
 				cal.reset();				// beforeRender, render, reset 		(monitor is registered after default listener which calls cal.render())
 				cal.render();				// beforeRender, render
+				cal.hide();                 // beforeHide, Hide
+				cal.show();                 // beforeShow, Show
 
 				ArrayAssert.itemsAreEqual(expectedEvts, actualEvts, "Unexpected event order");
-				
+
 				cal = null;				
+			},
+			
+			testGetIndex : function() {
+				var c = this.createInstance({pagedate:"10/2007"});
+
+				var cal = (this.isGroupCalTest) ? c.pages[0] : c;
+				Assert.areEqual(0, cal.getCellIndex(new Date(2007, 8, 30)), "OOM not equal"); // OOM
+				Assert.areEqual(14, cal.getCellIndex(new Date(2007, 9, 14)), "In month not equal"); // In month
+				Assert.areEqual(36, cal.getCellIndex(new Date(2007, 10, 5)), "In month other end not equal"); //OOM, other end
+
+				c = null;
 			}
 		};
 
@@ -922,18 +1130,22 @@
 
 				cal.select(selStr);
 				cal.render();
+
 				this.assertSelectedDates(cal, [new Date(2007, 3, 14), new Date(2007, 3, 15)]);
 
 				cal.clear();
 
-				cal.cfg.setProperty("minDate", "");
-				cal.cfg.setProperty("mAxDate", "");
+				cal.cfg.setProperty("minDate", null);
+				cal.cfg.setProperty("mAxDate", null);
 				cal.render();
 
 				cal.select(selStr);
 				cal.render();
+				
 				this.assertSelectedDates(cal, [new Date(2007, 3, 9), new Date(2007, 3, 14), new Date(2007, 3, 15), new Date(2007, 3, 21)]);
-
+				
+				
+				
 				cal = null;
 			}, 
 			
@@ -1005,7 +1217,7 @@
 		];
 
 		var DEFAULT_SUITE = suites[2];
-        var suite;
+		var suite;
 
 		function configureTests() {
 			suite=new YAHOO.tool.TestSuite("calendarsuite");
@@ -1024,7 +1236,7 @@
 		}
 
 		function runTests() {
-            configureTests();
+			configureTests();
 
 			logger.clearConsole();
 			YAHOO.tool.TestRunner.run();
@@ -1045,10 +1257,10 @@
 			logger = new YAHOO.tool.TestLogger();
 			YAHOO.util.Event.addListener("btnRun", "click", runTests);
 
-            if (parent && parent != window) {
-                configureTests();
-                YAHOO.tool.TestManager.load();
-            }
+			if (parent && parent != window) {
+				configureTests();
+				YAHOO.tool.TestManager.load();
+			}
 		});
 	})();
 	</script>
