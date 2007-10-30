@@ -60,7 +60,10 @@ package com.yahoo.yui.charts
 			axis.orientation = input.orientation;
 			axis.reverse = input.reverse;
 			axis.hideOverlappingLabels = input.hideOverlappingLabels;
-			axis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
+			if(input.labelFunction)
+			{
+				axis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
+			}
 			
 			if(axis is NumericAxis)
 			{

@@ -7,6 +7,7 @@ package com.yahoo.yui.charts
 	import flash.display.BitmapData;
 	import flash.display.CapsStyle;
 	import flash.display.JointStyle;
+	import flash.display.Shape;
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -25,6 +26,12 @@ package com.yahoo.yui.charts
 		{
 			super();
 		}
+		
+		/**
+		 * @private
+		 * We use a mask so that large images don't cause trouble.
+		 */
+		private var _mask:Shape;
 		
 		private var _fillColor:uint = 0xffffff;
 		
@@ -127,6 +134,15 @@ package com.yahoo.yui.charts
 		private var _imageDefaultWidth:Number = 0;
 		private var _imageDefaultHeight:Number = 0;
 		
+		override protected function configUI():void
+		{
+			super.configUI();
+			
+			this._mask = new Shape();
+			this.addChild(this._mask);
+			this.mask = this._mask;
+		}
+		
 		override protected function draw():void
 		{
 			var graphicsInvalid:Boolean = this.isInvalid(GRAPHICS_INVALID);
@@ -227,8 +243,21 @@ package com.yahoo.yui.charts
 					}
 				}
 			}
+		
+			if(sizeInvalid)
+			{
+				this.drawMask();
+			}
 			
 			super.draw();
+		}
+		
+		protected function drawMask():void
+		{
+			this._mask.graphics.clear();
+			this._mask.graphics.beginFill(0xff00ff, 1);
+			this._mask.graphics.drawRect(0, 0, this.width, this.height);
+			this._mask.graphics.endFill();
 		}
 		
 		/**

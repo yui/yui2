@@ -114,7 +114,7 @@ package
 			chart.setStyle("backgroundSkin", Sprite);
 			var backgroundFactory:InstanceFactory = this.createBorderBackgroundFactory();
 			backgroundFactory.properties.fillColor = 0xffffff;
-			backgroundFactory.properties.fillAlpha = 0.8;
+			backgroundFactory.properties.fillAlpha = 0.9;
 			backgroundFactory.properties.borderWeight = 1;
 			backgroundFactory.properties.borderColor = 0x000000;
 			chart.setStyle("dataTipBackgroundSkin", backgroundFactory);
@@ -570,7 +570,9 @@ package
 				var style:Object = styles[i];
 				
 				//defaults
-				var defaultColors:Array = [0x729fcf, 0xfcaf3e, 0x73d216, 0xfce94f, 0xad7fa8, 0x3465a4];
+				var defaultColors:Array = [
+					0x2e434d, 0xc2d81e, 0x586b71, 0xf6c90a, 0x869ca4, 0xcfff83,
+					0xf46401, 0xe9e9e9, 0x4d95dd, 0x444444, 0xd81803, 0xc3eafb];
 				if(series is PieSeries)
 				{
 					defaultColors = [defaultColors.concat()];
@@ -596,6 +598,7 @@ package
 				var size:Number = defaultSize;
 				var color:Object = defaultColors[i % defaultColors.length];
 				var skin:Object = defaultSkin;
+				var mode:Object = BackgroundImageMode.REPEAT;
 				if(style)
 				{
 					for(var styleName:String in style)
@@ -613,6 +616,11 @@ package
 								break;
 							case "image":
 								skin = this.createMarkerSkin(style.image, series);
+								if(!(series is LineChart))
+								{
+									skin.properties.fillColor = color;
+									skin.properties.fillAlpha = 1;
+								}
 								break;
 							case "colors":
 								var colors:Array = style.colors;
@@ -625,14 +633,27 @@ package
 								break;
 							case "color":
 								color = this.parseColor(style.color);
+								
+								if(skin && !(series is LineChart))
+								{
+									skin.properties.fillColor = color;
+									skin.properties.fillAlpha = 1;
+								}
 								break;
 							case "size":
 								size = Number(style.size);
+								break;
+							case "mode":
+								mode = style.mode;
 								break;
 							default:
 								this.log("Unknown series style: " + styleName);
 						}
 					}
+				}
+				if(skin is InstanceFactory)
+				{
+					skin.properties.imageMode = mode;
 				}
 				
 				seriesColors[i] = color;
