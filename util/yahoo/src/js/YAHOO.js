@@ -55,7 +55,7 @@
  * @default undefined
  */
 
-if (typeof YAHOO == "undefined") {
+if (typeof YAHOO == "undefined" || !YAHOO) {
     /**
      * The YAHOO global namespace object.  If YAHOO is already defined, the
      * existing YAHOO object will not be overwritten so that defined
