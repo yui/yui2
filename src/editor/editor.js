@@ -376,7 +376,7 @@ var Dom = YAHOO.util.Dom,
             }
             if (this.get('limitCommands')) {
                 if (!this.toolbar.getButtonByValue('createlink')) {
-                    YAHOO.log('Toolbar Button for (createlink) was not found, skipping exec.', 'info', 'SimpleEditor');
+                    YAHOO.log('Toolbar Button for (createlink) was not found, skipping exec.', 'info', 'Editor');
                     return false;
                 }
             }
@@ -505,7 +505,7 @@ var Dom = YAHOO.util.Dom,
         _handleInsertImageClick: function() {
             if (this.get('limitCommands')) {
                 if (!this.toolbar.getButtonByValue('insertimage')) {
-                    YAHOO.log('Toolbar Button for (insertimage) was not found, skipping exec.', 'info', 'SimpleEditor');
+                    YAHOO.log('Toolbar Button for (insertimage) was not found, skipping exec.', 'info', 'Editor');
                     return false;
                 }
             }
@@ -1247,7 +1247,7 @@ var Dom = YAHOO.util.Dom,
             this._focusWindow();
             Event.removeListener(document, 'keypress', this._closeWindow);
         },
-    /* {{{  Command Overrides - These commands are only over written when we are using the advanced version */
+        /* {{{  Command Overrides - These commands are only over written when we are using the advanced version */
         /**
         * @method cmd_heading
         * @param value Value passed from the execCommand method
@@ -1418,7 +1418,7 @@ var Dom = YAHOO.util.Dom,
                         this._selectNode(_span);
                     }
                 } else {
-                    YAHOO.log('Can not outdent, we are not inside a blockquote', 'warn', 'SimpleEditor');
+                    YAHOO.log('Can not outdent, we are not inside a blockquote', 'warn', 'Editor');
                 }
                 exec = false;
             } else {
@@ -1426,7 +1426,7 @@ var Dom = YAHOO.util.Dom,
             }
             return [exec, 'indent', value];
         },
-    /* }}}*/        
+        /* }}}*/        
         /**
         * @method toString
         * @description Returns a string representing the editor.

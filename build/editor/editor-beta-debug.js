@@ -1261,6 +1261,10 @@ var Dom = YAHOO.util.Dom,
                                 YAHOO.log('clickEvent', 'warn', 'Toolbar');
                                 YAHOO.util.Event.stopEvent(args[0]);
                             });
+                            tmp.getMenu().mouseUpEvent.subscribe(function(ev, args) {
+                                YAHOO.log('mouseUpEvent', 'warn', 'Toolbar');
+                                YAHOO.util.Event.stopEvent(args[0]);
+                            });
                         }
                         
                     }
@@ -2847,7 +2851,6 @@ var Dom = YAHOO.util.Dom,
                 if (!sel || !range) {
                     return null;
                 }
-                //if (!this._hasSelection() && !this.browser.webkit) {
                 if (!this._hasSelection()) {
                     if (sel.anchorNode && (sel.anchorNode.nodeType == 3)) {
                         if (sel.anchorNode.parentNode) { //next check parentNode
@@ -2857,11 +2860,9 @@ var Dom = YAHOO.util.Dom,
                             elm = sel.anchorNode.nextSibling;
                         }
                     }
-                    
                     if (this._isElement(elm, 'br')) {
                         elm = null;
                     }
-                
                     if (!elm) {
                         elm = range.commonAncestorContainer;
                         if (!range.collapsed) {
@@ -2899,7 +2900,6 @@ var Dom = YAHOO.util.Dom,
                     elm = YAHOO.util.Event.getTarget(this.currentEvent);
                 }
             }
-
             if (!elm || !elm.tagName) {
                 elm = doc.body;
             }
@@ -3160,7 +3160,9 @@ var Dom = YAHOO.util.Dom,
             if (this._isNonEditable(ev)) {
                 return false;
             }
-            this._setCurrentEvent(ev);
+            //Don't set current event for mouseup.
+            //It get's fired after a menu is closed and gives up a bogus event to work with
+            //this._setCurrentEvent(ev);
             var self = this;
             if (this.browser.opera) {
                 /**
@@ -4822,7 +4824,7 @@ var Dom = YAHOO.util.Dom,
             /**
             * @browser opera
             * @knownissue - Opera fails to assign a background color on an element that already has one.
-            */
+            *
             if (this.browser.opera) {
                 if (!this._isElement(el, 'body') && Dom.getStyle(el, 'background-color')) {
                     Dom.setStyle(el, 'background-color', value);
@@ -4830,12 +4832,27 @@ var Dom = YAHOO.util.Dom,
                     this._createCurrentElement('span', { backgroundColor: value });
                 }
                 exec = false;
-            } else if (!this._hasSelection()) {
-                if (el !== this._getDoc().body) {
-                    Dom.setStyle(el, 'background-color', value);
-                    exec = false;
-                }
+            //} else if (!this._hasSelection()) {
+            } else if (el !== this._getDoc().body) {
+                Dom.setStyle(el, 'background-color', value);
+                this._selectNode(el);
+                exec = false;
+            } else {
+                this._createCurrentElement('span', { backgroundColor: value });
+                this._selectNode(this.currentElement[0]);
+                exec = false;
+            }*/
+
+            if (!this._isElement(el, 'body')) {
+                Dom.setStyle(el, 'background-color', value);
+                this._selectNode(el);
+                exec = false;
+            } else {
+                this._createCurrentElement('span', { backgroundColor: value });
+                this._selectNode(this.currentElement[0]);
+                exec = false;
             }
+
             return [exec, action];
         },
         /**
@@ -4847,8 +4864,15 @@ var Dom = YAHOO.util.Dom,
             var exec = true,
                 el = this._getSelectedElement();
 
-                if ((el !== this._getDoc().body) && (!this._hasSelection())) {
+                //if ((el !== this._getDoc().body) && (!this._hasSelection())) {
+                //if (el !== this._getDoc().body) {
+                if (!this._isElement(el, 'body')) {
                     Dom.setStyle(el, 'color', value);
+                    this._selectNode(el);
+                    exec = false;
+                } else {
+                    this._createCurrentElement('span', { color: value });
+                    this._selectNode(this.currentElement[0]);
                     exec = false;
                 }
                 return [exec];
@@ -6274,7 +6298,7 @@ var Dom = YAHOO.util.Dom,
             }
             if (this.get('limitCommands')) {
                 if (!this.toolbar.getButtonByValue('createlink')) {
-                    YAHOO.log('Toolbar Button for (createlink) was not found, skipping exec.', 'info', 'SimpleEditor');
+                    YAHOO.log('Toolbar Button for (createlink) was not found, skipping exec.', 'info', 'Editor');
                     return false;
                 }
             }
@@ -6403,7 +6427,7 @@ var Dom = YAHOO.util.Dom,
         _handleInsertImageClick: function() {
             if (this.get('limitCommands')) {
                 if (!this.toolbar.getButtonByValue('insertimage')) {
-                    YAHOO.log('Toolbar Button for (insertimage) was not found, skipping exec.', 'info', 'SimpleEditor');
+                    YAHOO.log('Toolbar Button for (insertimage) was not found, skipping exec.', 'info', 'Editor');
                     return false;
                 }
             }
@@ -7145,7 +7169,7 @@ var Dom = YAHOO.util.Dom,
             this._focusWindow();
             Event.removeListener(document, 'keypress', this._closeWindow);
         },
-    /* {{{  Command Overrides - These commands are only over written when we are using the advanced version */
+        /* {{{  Command Overrides - These commands are only over written when we are using the advanced version */
         /**
         * @method cmd_heading
         * @param value Value passed from the execCommand method
@@ -7316,7 +7340,7 @@ var Dom = YAHOO.util.Dom,
                         this._selectNode(_span);
                     }
                 } else {
-                    YAHOO.log('Can not outdent, we are not inside a blockquote', 'warn', 'SimpleEditor');
+                    YAHOO.log('Can not outdent, we are not inside a blockquote', 'warn', 'Editor');
                 }
                 exec = false;
             } else {
@@ -7324,7 +7348,7 @@ var Dom = YAHOO.util.Dom,
             }
             return [exec, 'indent', value];
         },
-    /* }}}*/        
+        /* }}}*/        
         /**
         * @method toString
         * @description Returns a string representing the editor.

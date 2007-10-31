@@ -956,6 +956,10 @@ var Dom = YAHOO.util.Dom,
                                 YAHOO.log('clickEvent', 'warn', 'Toolbar');
                                 YAHOO.util.Event.stopEvent(args[0]);
                             });
+                            tmp.getMenu().mouseUpEvent.subscribe(function(ev, args) {
+                                YAHOO.log('mouseUpEvent', 'warn', 'Toolbar');
+                                YAHOO.util.Event.stopEvent(args[0]);
+                            });
                         }
                         
                     }
