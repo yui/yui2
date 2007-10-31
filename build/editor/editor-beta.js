@@ -7160,12 +7160,21 @@ var Dom = YAHOO.util.Dom,
             * So here we are making the best possible guess and acting on it.
             */
             if (this.browser.webkit && !this._getDoc().queryCommandEnabled('removeformat')) {
+                var _txt = this._getSelection()+'';
+                this._createCurrentElement('span');
+                this.currentElement[0].className = 'yui-non';
+                this.currentElement[0].innerHTML = _txt;
+                for (var i = 1; i < this.currentElement.length; i++) {
+                    this.currentElement[i].parentNode.removeChild(this.currentElement[i]);
+                }
+                /*
                 this._createCurrentElement('span');
                 YAHOO.util.Dom.addClass(this.currentElement[0], 'yui-non');
                 var re= /<\S[^><]*>/g;
                 var str = this.currentElement[0].innerHTML.replace(re, '');
                 var _txt = this._getDoc().createTextNode(str);
                 this.currentElement[0].parentNode.parentNode.replaceChild(_txt, this.currentElement[0].parentNode);
+                */
                 
                 exec = false;
             }
