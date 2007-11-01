@@ -391,11 +391,49 @@ YAHOO.util.History = (function () {
     return {
 
         /**
-         * Fired when the Browser History Manager is ready.
+         * Fired when the Browser History Manager is ready. If you subscribe to
+         * this event after the Browser History Manager has been initialized,
+         * it will not fire. Therefore, it is recommended to use the onReady
+         * method instead.
          *
          * @event onLoadEvent
+         * @see onReady
          */
         onLoadEvent: new YAHOO.util.CustomEvent("onLoad"),
+
+        /**
+         * Executes the supplied callback when the Browser History Manager is
+         * ready. This will execute immediately if called after the Browser
+         * History Manager onLoad event has fired.
+         *
+         * @method onReady
+         * @param {function} fn what to execute when the Browser History Manager is ready.
+         * @param {object} obj an optional object to be passed back as a parameter to fn.
+         * @param {boolean|object} override If true, the obj passed in becomes fn's execution scope.
+         * @see onLoadEvent
+         */
+        onReady: function (fn, obj, override) {
+
+            if (_initialized) {
+
+                setTimeout(function () {
+                    var ctx = window;
+                    if (override) {
+                        if (override === true) {
+                            ctx = obj;
+                        } else {
+                            ctx = override;
+                        }
+                    }
+                    fn.call(ctx, "onLoad", [], obj);
+                }, 0);
+
+            } else {
+
+                YAHOO.util.History.onLoadEvent.subscribe(fn, obj, override);
+
+            }
+        },
 
         /**
          * Registers a new module.
