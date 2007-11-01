@@ -1,6 +1,7 @@
 YAHOO Global - Release Notes
 
 2.4.0
+  * Added YAHOO.env.ua.mobile
   * Removed the hasOwnProperty check in isArray to make it perform a bit better.
   * YAHOO will be created/overwritten if YAHOO is undefined or the defined YAHOO is falsy
 

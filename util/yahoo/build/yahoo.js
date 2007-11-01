@@ -275,7 +275,17 @@ YAHOO.env.ua = function() {
          * @property webkit
          * @type float
          */
-        webkit:0
+        webkit:0,
+
+        /**
+         * The mobile property will be set to a string containing any relevant
+         * user agent information when a modern mobile browser is detected.
+         * Currently limited to Safari on the iPhone/iPod Touch, Nokia N-series
+         * devices with the WebKit-based browser, and Opera Mini.  
+         * @property mobile 
+         * @type string
+         */
+        mobile: null 
     };
 
     var ua=navigator.userAgent, m;
@@ -288,6 +298,17 @@ YAHOO.env.ua = function() {
     m=ua.match(/AppleWebKit\/([^\s]*)/);
     if (m&&m[1]) {
         o.webkit=parseFloat(m[1]);
+
+        // Mobile browser check
+        if (/ Mobile\//.test(ua)) {
+            o.mobile = "Apple"; // iPhone or iPod Touch
+        } else {
+            m=ua.match(/NokiaN[^\/]*/);
+            if (m) {
+                o.mobile = m[0]; // Nokia N-series, ex: NokiaN95
+            }
+        }
+
     }
 
     if (!o.webkit) { // not webkit
@@ -295,6 +316,10 @@ YAHOO.env.ua = function() {
         m=ua.match(/Opera[\s\/]([^\s]*)/);
         if (m&&m[1]) {
             o.opera=parseFloat(m[1]);
+            m=ua.match(/Opera Mini[^;]*/);
+            if (m) {
+                o.mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
+            }
         } else { // not opera or webkit
             m=ua.match(/MSIE\s([^;]*)/);
             if (m&&m[1]) {
