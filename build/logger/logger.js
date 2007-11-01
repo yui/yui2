@@ -1535,7 +1535,9 @@ if(!YAHOO.widget.Logger) {
         _stack: [], // holds all log msgs
         maxStackEntries: 2500,
         _startTime: new Date().getTime(), // static start timestamp
-        _lastTime: null // timestamp of last logged message
+        _lastTime: null, // timestamp of last logged message
+        _windowErrorsHandled: false,
+        _origOnWindowError: null
     };
 
     /////////////////////////////////////////////////////////////////////////////
@@ -1746,6 +1748,53 @@ if(!YAHOO.widget.Logger) {
         YAHOO.log("Logger output to the function console.log() has been enabled.");
     };
 
+    /**
+     * Surpresses native JavaScript errors and outputs to console. By default,
+     * Logger does not handle JavaScript window error events.
+     * NB: Not all browsers support the window.onerror event.
+     *
+     * @method handleWindowErrors
+     */
+    YAHOO.widget.Logger.handleWindowErrors = function() {
+        if(!YAHOO.widget.Logger._windowErrorsHandled) {
+            // Save any previously defined handler to call
+            if(window.error) {
+                YAHOO.widget.Logger._origOnWindowError = window.onerror;
+            }
+            window.onerror = YAHOO.widget.Logger._onWindowError;
+            YAHOO.widget.Logger._windowErrorsHandled = true;
+            YAHOO.log("Logger handling of window.onerror has been enabled.");
+        }
+        else {
+            YAHOO.log("Logger handling of window.onerror had already been enabled.");
+        }
+    };
+
+    /**
+     * Unsurpresses native JavaScript errors. By default,
+     * Logger does not handle JavaScript window error events.
+     * NB: Not all browsers support the window.onerror event.
+     *
+     * @method unhandleWindowErrors
+     */
+    YAHOO.widget.Logger.unhandleWindowErrors = function() {
+        if(YAHOO.widget.Logger._windowErrorsHandled) {
+            // Revert to any previously defined handler to call
+            if(YAHOO.widget.Logger._origOnWindowError) {
+                window.onerror = YAHOO.widget.Logger._origOnWindowError;
+                YAHOO.widget.Logger._origOnWindowError = null;
+            }
+            else {
+                window.onerror = null;
+            }
+            YAHOO.widget.Logger._windowErrorsHandled = false;
+            YAHOO.log("Logger handling of window.onerror has been disabled.");
+        }
+        else {
+            YAHOO.log("Logger handling of window.onerror had already been disabled.");
+        }
+    };
+    
     /////////////////////////////////////////////////////////////////////////////
     //
     // Public events
@@ -1914,19 +1963,6 @@ if(!YAHOO.widget.Logger) {
             return false;
         }
     };
-
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Enable handling of native JavaScript errors
-    // NB: Not all browsers support the window.onerror event
-    //
-    /////////////////////////////////////////////////////////////////////////////
-
-    if(window.onerror) {
-        // Save any previously defined handler to call
-        YAHOO.widget.Logger._origOnWindowError = window.onerror;
-    }
-    window.onerror = YAHOO.widget.Logger._onWindowError;
 
     /////////////////////////////////////////////////////////////////////////////
     //
