@@ -806,7 +806,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
             if(!YAHOO.lang.isArray(jsonList)) {
                 jsonList = [jsonList];
             }
-            
+
             // Loop through the array of all responses...
             for(var i = jsonList.length-1; i >= 0 ; i--) {
                 var aResultItem = [];
@@ -918,6 +918,293 @@ YAHOO.widget.DS_XHR.prototype._oConn = null;
 /****************************************************************************/
 
 /**
+ * Implementation of YAHOO.widget.DataSource using the Get Utility to generate
+ * dynamic SCRIPT nodes for data retrieval.
+ *
+ * @class DS_ScriptNode
+ * @constructor
+ * @extends YAHOO.widget.DataSource
+ * @param sUri {String} URI to the script location that will return data.
+ * @param fnCallback {HTMLFunction} Callback functiont o receive data.
+ * @param oConfigs {Object} (optional) Object literal of config params.
+ */
+YAHOO.widget.DS_ScriptNode = function(sUri, aSchema, oConfigs) {
+    // Set any config params passed in to override defaults
+    if(oConfigs && (oConfigs.constructor == Object)) {
+        for(var sConfig in oConfigs) {
+            this[sConfig] = oConfigs[sConfig];
+        }
+    }
+
+    // Initialization sequence
+    if(!YAHOO.lang.isArray(aSchema) || !YAHOO.lang.isString(sUri)) {
+        YAHOO.log("Could not instantiate Script Node DataSource due to invalid arguments", "error", this.toString());
+        return;
+    }
+
+    this.schema = aSchema;
+    this.scriptURI = sUri;
+
+    this._init();
+    YAHOO.log("Script Node DataSource initialized","info",this.toString());
+};
+
+YAHOO.widget.DS_ScriptNode.prototype = new YAHOO.widget.DataSource();
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Alias to YUI Get Utility. Allows implementers to specify their own
+ * subclasses of the YUI Get Utility.
+ *
+ * @property getUtility
+ * @type Object
+ * @default YAHOO.util.Get
+ */
+YAHOO.widget.DS_ScriptNode.prototype.getUtility = YAHOO.util.Get;
+
+/**
+ * URI to the script that returns data.
+ *
+ * @property scriptURI
+ * @type String
+ */
+YAHOO.widget.DS_ScriptNode.prototype.scriptURI = null;
+
+/**
+ * Query string parameter name sent to scriptURI. For instance, requests will be
+ * sent to &#60;scriptURI&#62;?&#60;scriptQueryParam&#62;=queryString
+ *
+ * @property scriptQueryParam
+ * @type String
+ * @default "query"
+ */
+YAHOO.widget.DS_ScriptNode.prototype.scriptQueryParam = "query";
+
+/**
+ * Defines request/response management in the following manner:
+ * <dl>
+ *     <!--<dt>queueRequests</dt>
+ *     <dd>If a request is already in progress, wait until response is returned before sending the next request.</dd>
+ *     <dt>cancelStaleRequests</dt>
+ *     <dd>If a request is already in progress, cancel it before sending the next request.</dd>-->
+ *     <dt>ignoreStaleResponses</dt>
+ *     <dd>Send all requests, but handle only the response for the most recently sent request.</dd>
+ *     <dt>allowAll</dt>
+ *     <dd>Send all requests and handle all responses.</dd>
+ * </dl>
+ *
+ * @property asyncMode
+ * @type String
+ * @default "allowAll"
+ */
+YAHOO.widget.DS_ScriptNode.prototype.asyncMode = "allowAll";
+
+/**
+ * Callback string parameter name sent to scriptURI. For instance, requests will be
+ * sent to &#60;scriptURI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
+ *
+ * @property scriptCallbackParam
+ * @type String
+ * @default "callback"
+ */
+YAHOO.widget.DS_ScriptNode.prototype.scriptCallbackParam = "callback";
+
+/**
+ * Global array of callback functions, one for each request sent.
+ *
+ * @property callbacks
+ * @type Function[]
+ * @static
+ */
+YAHOO.widget.DS_ScriptNode.callbacks = [];
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Unique ID to track requests.
+ *
+ * @property _nId
+ * @type Number
+ * @private
+ * @static
+ */
+YAHOO.widget.DS_ScriptNode._nId = 0;
+
+/**
+ * Counter for pending requests. When this is 0, it is safe to purge callbacks
+ * array.
+ *
+ * @property _nPending
+ * @type Number
+ * @private
+ * @static
+ */
+YAHOO.widget.DS_ScriptNode._nPending = 0;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Queries the live data source. Results are passed back to a callback function.
+ *
+ * @method doQuery
+ * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
+ */
+YAHOO.widget.DS_ScriptNode.prototype.doQuery = function(oCallbackFn, sQuery, oParent) {
+    var oSelf = this;
+    
+    // If there are no global pending requests, it is safe to purge global callback stack and global counter
+    if(YAHOO.widget.DS_ScriptNode._nPending === 0) {
+        YAHOO.widget.DS_ScriptNode.callbacks = [];
+        YAHOO.widget.DS_ScriptNode._nId = 0;
+    }
+    
+    // ID for this request
+    var id = YAHOO.widget.DS_ScriptNode._nId;
+    YAHOO.widget.DS_ScriptNode._nId++;
+
+    // Dynamically add handler function with a closure to the callback stack
+    YAHOO.widget.DS_ScriptNode.callbacks[id] = function(oResponse) {
+        if((oSelf.asyncMode !== "ignoreStaleResponses")||
+                (id === YAHOO.widget.DS_ScriptNode.callbacks.length-1)) { // Must ignore stale responses
+            oSelf.handleResponse(oResponse, oCallbackFn, sQuery, oParent);
+        }
+        else {
+            YAHOO.log("DataSource ignored stale response for " + sQuery, "info", oSelf.toString());
+        }
+
+        delete YAHOO.widget.DS_ScriptNode.callbacks[id];
+    };
+
+    // We are now creating a request
+    YAHOO.widget.DS_ScriptNode._nPending++;
+
+    var sUri = this.scriptURI+"&"+ this.scriptQueryParam+"="+sQuery+"&"+
+            this.scriptCallbackParam+"=YAHOO.widget.DS_ScriptNode.callbacks["+id+"]";
+    YAHOO.log("DataSource is querying URL " + sUri, "info", this.toString());
+    this.getUtility.script(sUri,
+            {autopurge:true,
+            onsuccess:YAHOO.widget.DS_ScriptNode._bumpPendingDown,
+            onfail:YAHOO.widget.DS_ScriptNode._bumpPendingDown});
+};
+
+/**
+ * Parses JSON response data into an array of result objects and passes it to
+ * the callback function.
+ *
+ * @method handleResponse
+ * @param oResponse {Object} The raw response data to parse.
+ * @param oCallbackFn {HTMLFunction} Callback function defined by oParent object to which to return results.
+ * @param sQuery {String} Query string.
+ * @param oParent {Object} The object instance that has requested data.
+ */
+YAHOO.widget.DS_ScriptNode.prototype.handleResponse = function(oResponse, oCallbackFn, sQuery, oParent) {
+    var aSchema = this.schema;
+    var aResults = [];
+    var bError = false;
+
+    var jsonList, jsonObjParsed;
+
+    // Parse the JSON response as a string
+    try {
+        // Grab the object member that contains an array of all reponses...
+        // ...eval is necessary here since aSchema[0] is of unknown depth
+        jsonList = eval("(oResponse." + aSchema[0]+")");
+    }
+    catch(e) {
+        bError = true;
+   }
+
+    if(!jsonList) {
+        bError = true;
+        jsonList = [];
+    }
+
+    else if(!YAHOO.lang.isArray(jsonList)) {
+        jsonList = [jsonList];
+    }
+
+    // Loop through the array of all responses...
+    for(var i = jsonList.length-1; i >= 0 ; i--) {
+        var aResultItem = [];
+        var jsonResult = jsonList[i];
+        // ...and loop through each data field value of each response
+        for(var j = aSchema.length-1; j >= 1 ; j--) {
+            // ...and capture data into an array mapped according to the schema...
+            var dataFieldValue = jsonResult[aSchema[j]];
+            if(!dataFieldValue) {
+                dataFieldValue = "";
+            }
+            //YAHOO.log("data: " + i + " value:" +j+" = "+dataFieldValue,"debug",this.toString());
+            aResultItem.unshift(dataFieldValue);
+        }
+        // If schema isn't well defined, pass along the entire result object
+        if(aResultItem.length == 1) {
+            aResultItem.push(jsonResult);
+        }
+        // Capture the array of data field values in an array of results
+        aResults.unshift(aResultItem);
+    }
+
+    if(bError) {
+        aResults = null;
+    }
+
+    if(aResults === null) {
+        this.dataErrorEvent.fire(this, oParent, sQuery, YAHOO.widget.DataSource.ERROR_DATAPARSE);
+        YAHOO.log(YAHOO.widget.DataSource.ERROR_DATAPARSE, "error", this.toString());
+        aResults = [];
+    }
+    else {
+        var resultObj = {};
+        resultObj.query = decodeURIComponent(sQuery);
+        resultObj.results = aResults;
+        this._addCacheElem(resultObj);
+        
+        this.getResultsEvent.fire(this, oParent, sQuery, aResults);
+        YAHOO.log("Results returned for query \"" + sQuery + "\": " +
+                YAHOO.lang.dump(aResults), "info", this.toString());
+    }
+
+    oCallbackFn(sQuery, aResults, oParent);
+};
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Any success/failure response should decrement counter.
+ *
+ * @method _bumpPendingDown
+ * @private
+ */
+YAHOO.widget.DS_ScriptNode._bumpPendingDown = function() {
+    YAHOO.widget.DS_ScriptNode._nPending--;
+};
+
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
  * Implementation of YAHOO.widget.DataSource using a native Javascript function as
  * its live data source.
  *  
@@ -1000,6 +1287,7 @@ YAHOO.widget.DS_JSFunction.prototype.doQuery = function(oCallbackFn, sQuery, oPa
     oCallbackFn(sQuery, aResults, oParent);
     return;
 };
+
 
 /****************************************************************************/
 /****************************************************************************/
