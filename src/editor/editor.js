@@ -393,8 +393,8 @@ var Dom = YAHOO.util.Dom,
                     target = '',
                     localFile = false;
                 if (el) {
-                    if (el.getAttribute('href') !== null) {
-                        url = el.getAttribute('href');
+                    if (el.getAttribute('href', 2) !== null) {
+                        url = el.getAttribute('href', 2);
                         if (this._isLocalFile(url)) {
                             //Local File throw Warning
                             YAHOO.log('Local file reference found, show local warning', 'warn', 'Editor');
@@ -477,7 +477,10 @@ var Dom = YAHOO.util.Dom,
                         urlValue = 'mailto:' + urlValue;
                     } else {
                         /* :// not found adding */
-                        urlValue = 'http:/'+'/' + urlValue;
+                        if (urlValue.substring(0, 1) != '#') {
+                            urlValue = 'http:/'+'/' + urlValue;
+                        }
+                        
                     }
                 }
                 el.setAttribute('href', urlValue);
@@ -547,7 +550,7 @@ var Dom = YAHOO.util.Dom,
                     }
 
                     if (el.parentNode && this._isElement(el.parentNode, 'a')) {
-                        link = el.parentNode.getAttribute('href');
+                        link = el.parentNode.getAttribute('href', 2);
                         if (el.parentNode.getAttribute('target') !== null) {
                             target = el.parentNode.getAttribute('target');
                         }

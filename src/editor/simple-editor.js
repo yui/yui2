@@ -984,8 +984,8 @@ var Dom = YAHOO.util.Dom,
                     }
                     switch (tag) {
                         case 'a':
-                            if (path[i].getAttribute('href')) {
-                                pathStr += ':' + path[i].getAttribute('href').replace('mailto:', '').replace('http:/'+'/', '').replace('https:/'+'/', ''); //May need to add others here ftp
+                            if (path[i].getAttribute('href', 2)) {
+                                pathStr += ':' + path[i].getAttribute('href', 2).replace('mailto:', '').replace('http:/'+'/', '').replace('https:/'+'/', ''); //May need to add others here ftp
                             }
                             break;
                         case 'img':
@@ -1341,6 +1341,12 @@ var Dom = YAHOO.util.Dom,
                         }
                         this.currentElement[0] = li;
                         this._selectNode(li.firstChild);
+                        if (!this.browser.webkit3) {
+                            tar.parentNode.style.display = 'list-item';
+                            setTimeout(function() {
+                                tar.parentNode.style.display = 'block';
+                            }, 1);
+                        }
                         Event.stopEvent(ev);
                     }
                 }
@@ -1366,6 +1372,16 @@ var Dom = YAHOO.util.Dom,
                                 range.moveToElementText(testLi);
                                 range.collapse(false);
                                 range.select();
+                            }
+                            if (this.browser.webkit) {
+                                if (!this.browser.webkit3) {
+                                    par.style.display = 'list-item';
+                                    par.parentNode.style.display = 'list-item';
+                                    setTimeout(function() {
+                                        par.style.display = 'block';
+                                        par.parentNode.style.display = 'block';
+                                    }, 1);
+                                }
                             }
                             Event.stopEvent(ev);
                         }
@@ -1414,6 +1430,12 @@ var Dom = YAHOO.util.Dom,
                     newUl.appendChild(par);
                     if (this.browser.webkit) {
                         this._getSelection().setBaseAndExtent(par.firstChild, 1, par.firstChild, par.firstChild.innerText.length);
+                        if (!this.browser.webkit3) {
+                            par.parentNode.parentNode.style.display = 'list-item';
+                            setTimeout(function() {
+                                par.parentNode.parentNode.style.display = 'block';
+                            }, 1);
+                        }
                     } else if (this.browser.ie) {
                         range = this._getDoc().body.createTextRange();
                         range.moveToElementText(par);
@@ -2491,7 +2513,6 @@ var Dom = YAHOO.util.Dom,
             
         },
         _setBusy: function(off) {
-            /*
             if (off) {
                 Dom.removeClass(document.body, 'yui-busy');
                 Dom.removeClass(this._getDoc().body, 'yui-busy');
@@ -2499,7 +2520,6 @@ var Dom = YAHOO.util.Dom,
                 Dom.addClass(document.body, 'yui-busy');
                 Dom.addClass(this._getDoc().body, 'yui-busy');
             }
-            */
         },
         /**
         * @private
@@ -2579,7 +2599,7 @@ var Dom = YAHOO.util.Dom,
                     url = '';
 
                 if (el) {
-                    if (el.getAttribute('href') !== null) {
+                    if (el.getAttribute('href', 2) !== null) {
                         url = el.getAttribute('href', 2);
                     }
                 }
@@ -2592,7 +2612,9 @@ var Dom = YAHOO.util.Dom,
                             urlValue = 'mailto:' + urlValue;
                         } else {
                             /* :// not found adding */
-                            urlValue = 'http:/'+'/' + urlValue;
+                            if (urlValue.substring(0, 1) != '#') {
+                                urlValue = 'http:/'+'/' + urlValue;
+                            }
                         }
                     }
                     el.setAttribute('href', urlValue);

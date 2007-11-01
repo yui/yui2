@@ -599,6 +599,7 @@
 .yui-skin-sam .yui-editor-panel .ft span.tip {
     background-color: #EDF5FF;
     border-top: 1px solid #808080;
+    font-size: 85%;
 }
 /* Style the tip in the footer */
 .yui-skin-sam .yui-editor-panel .ft span.tip strong {
