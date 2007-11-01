@@ -120,10 +120,8 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         YAHOO.util.Event.addListener(oContent,"mouseout",oSelf._onContainerMouseout,oSelf);
         YAHOO.util.Event.addListener(oContent,"scroll",oSelf._onContainerScroll,oSelf);
         YAHOO.util.Event.addListener(oContent,"resize",oSelf._onContainerResize,oSelf);
-        if(oTextbox.form) {
-            YAHOO.util.Event.addListener(oTextbox.form,"submit",oSelf._onFormSubmit,oSelf);
-        }
         YAHOO.util.Event.addListener(oTextbox,"keypress",oSelf._onTextboxKeyPress,oSelf);
+        YAHOO.util.Event.addListener(window,"unload",oSelf._onWindowUnload,oSelf);
 
         // Custom events
         this.textboxFocusEvent = new YAHOO.util.CustomEvent("textboxFocus", this);
@@ -2116,18 +2114,15 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
 };
 
 /**
- * Handles form submission event.
+ * Handles window unload event.
  *
- * @method _onFormSubmit
- * @param v {HTMLEvent} The submit event.
+ * @method _onWindowUnload
+ * @param v {HTMLEvent} The unload event.
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._onFormSubmit = function(v,oSelf) {
-    if(oSelf.allowBrowserAutocomplete) {
+YAHOO.widget.AutoComplete.prototype._onWindowUnload = function(v,oSelf) {
+    if(oSelf && oSelf._oTextbox && oSelf.allowBrowserAutocomplete) {
         oSelf._oTextbox.setAttribute("autocomplete","on");
-    }
-    else {
-        oSelf._oTextbox.setAttribute("autocomplete","off");
     }
 };
