@@ -107,7 +107,7 @@ YAHOO.util.Event.on(window, "load", function() {
 
     YAHOO.log("css2 executed");
 
-    YAHOO.util.Get.script([
+    var o = YAHOO.util.Get.script([
             "../../build/yahoo-dom-event/yahoo-dom-event.js",
             //"../../build/yahoo/yahoo.js",
             //"../../build/dom/dom.js",
@@ -146,7 +146,7 @@ YAHOO.util.Event.on(window, "load", function() {
             //}
         });
 
-    YAHOO.log("script executed");
+    YAHOO.log("Script executed " + o.tId);
 });
 
 

@@ -124,14 +124,14 @@ YAHOO.util.Get = function() {
 
     /*
      * The request failed, execute fail handler with whatever
-     * was accomplished.  There isn't a failure case atm
+     * was accomplished.  There isn't a failure case at the
+     * moment unless you count aborted transactions
      * @method _fail
      * @param id {string} the id of the request
      * @private
      */
     // var _fail = function(id) {
     //     var q = queues[id], o;
-
     //     // execute fail callback
     //     if (q.onfail) {
     //         o = {
@@ -140,9 +140,7 @@ YAHOO.util.Get = function() {
     //             nodes: q.nodes,
     //             purge: _purge
     //         };
-
     //         var sc=q.scope || q.win;
-
     //         q.onfail.call(sc, o);
     //     }
     // };
@@ -155,14 +153,21 @@ YAHOO.util.Get = function() {
      */
     var _finish = function(id) {
         var q = queues[id], o;
+        queues[id].finished = true;
+
+        if (q.aborted) {
+            YAHOO.log("transaction " + id + " was aborted");
+            return;
+        }
 
         // execute callback
         if (q.onsuccess) {
             o = {
+                tId: q.tId,
                 win: q.win,
                 data: q.data,
                 nodes: q.nodes,
-                reference: q.reference,
+                //reference: q.reference,
                 purge: _purge
             };
 
@@ -170,7 +175,6 @@ YAHOO.util.Get = function() {
                 //var s = [];
                 //var t = "(function() {\n",
                     //b = "\nreturn YAHOO\n})();";
-
                 //var newyahoo = window.eval(t + s.join("\n") + b);
                 //o.reference = q.win.eval(q.opts.sandbox.reference);
                 //o.reference = newyahoo;
@@ -180,9 +184,6 @@ YAHOO.util.Get = function() {
 
             q.onsuccess.call(sc, o);
         }
-
-        // delete queues[id];
-        queues[id].finished = true;
     };
 
     /**
@@ -195,6 +196,11 @@ YAHOO.util.Get = function() {
     var _next = function(id, loaded) {
         YAHOO.log("_next: " + id + ", " + loaded);
         var q = queues[id];
+
+        if (q.aborted) {
+            YAHOO.log("transaction " + id + " was aborted");
+            return;
+        }
 
         if (loaded) {
             q.url.shift();
@@ -297,6 +303,7 @@ YAHOO.util.Get = function() {
         var win = opts.win || window;
 
         queues[id] = {
+            tId: id,
             type: type,
             url: url,
             onsuccess: opts.onsuccess,
@@ -325,8 +332,13 @@ YAHOO.util.Get = function() {
         //     }
         //     q.win = f.contentWindow || f;
         // }
+        //
 
-        _next(id);
+        lang.later(0, queues[id], _next, id);
+
+        return {
+            tId: id
+        };
     };
 
     /**
@@ -405,6 +417,21 @@ YAHOO.util.Get = function() {
         //IFRAME_SRC: "../../build/get/assets/blank.html",
 
         /**
+         * Abort a transaction
+         * @method abort
+         * @param {string|object} either the tId or the object returned from
+         * script() or css()
+         */
+        abort: function(o) {
+            var id = (lang.isString(o)) ? o : o.tId;
+            var q = queues[id];
+            if (q) {
+                YAHOO.log("Aborting " + id);
+                q.aborted = true;
+            }
+        }, 
+
+        /**
          * Fetches and inserts one or more script nodes into the head
          * of the current document or the document in a specified window.
          *
@@ -426,9 +453,6 @@ YAHOO.util.Get = function() {
          * <dt>nodes</dt>
          * <dd>An array containing references to the nodes that were
          * inserted</dd>
-         * <dt>reference</dt>
-         * <dd>If the request contained a scriptproperty, this will
-         * contain the reference to the object that was found.</dd>
          * <dt>purge</dt>
          * <dd>A function that, when executed, will remove the nodes
          * that were inserted</dd>
@@ -490,6 +514,7 @@ YAHOO.util.Get = function() {
          * &nbsp;&nbsp;&nbsp;&nbsp;autopurge: true // allow the utility to choose when to remove the nodes
          * &nbsp;&nbsp;&#125;);
          * </pre>
+         * @return {tId: string} an object containing info about the transaction
          */
         script: function(url, opts) { return _queue("script", url, opts); },
 
@@ -537,7 +562,7 @@ YAHOO.util.Get = function() {
          *      YAHOO.util.Get.css(["http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css",
          *                          "http://yui.yahooapis.com/2.3.1/build/logger/assets/skins/sam/logger.css"]);
          * </pre>
-         * 
+         * @return {tId: string} an object containing info about the transaction
          */
         css: function(url, opts) {
             return _queue("css", url, opts); 
