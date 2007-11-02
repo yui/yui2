@@ -4,8 +4,11 @@
 <head>
 
 <title>Yahoo! UI Library - Tree Control</title>
+<!--
 <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/fonts_2.0.0-b3.css" />
 <link rel="stylesheet" type="text/css" href="http://us.js2.yimg.com/us.js.yimg.com/lib/common/css/grids_2.0.0-b3.css" />
+-->
+
 
 <link rel="stylesheet" type="text/css" href="css/screen.css" />
 <!--
@@ -104,7 +107,7 @@
 	}
 
 	function buildRandomBranch(node) {
-		if (node.depth < 10) {
+		if (node.depth < 4) {
 			YAHOO.log("buildRandomBranch: " + node.index);
 			for ( var i = 0; i < Math.floor(Math.random() * 4) ; i++ ) {
                 var current = nodes.length;
@@ -192,9 +195,9 @@
 
 <div id="actions">
     <input type="button" value="remove" />
-    <input type="button" value="add" />
     <input type="button" value="insertBefore" />
     <input type="button" value="insertAfter" />
+    <input type="button" value="add" />
 </div>
   </body>
 </html>

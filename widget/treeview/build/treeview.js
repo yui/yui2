@@ -91,9 +91,7 @@ YAHOO.widget.TreeView.prototype = {
      * in YAHOO.widget.TVAnim)
      */
     setExpandAnim: function(type) {
-        if (YAHOO.widget.TVAnim.isValid(type)) {
-            this._expandAnim = type;
-        }
+        this._expandAnim = (YAHOO.widget.TVAnim.isValid(type)) ? type : null;
     },
 
     /**
@@ -103,9 +101,7 @@ YAHOO.widget.TreeView.prototype = {
      * YAHOO.widget.TVAnim)
      */
     setCollapseAnim: function(type) {
-        if (YAHOO.widget.TVAnim.isValid(type)) {
-            this._collapseAnim = type;
-        }
+        this._collapseAnim = (YAHOO.widget.TVAnim.isValid(type)) ? type : null;
     },
 
     /**
@@ -273,7 +269,7 @@ YAHOO.widget.TreeView.prototype = {
         // Set up the root node
         this.root = new YAHOO.widget.RootNode(this);
 
-        var LW = YAHOO.widget.LogWriter;
+        var lw = YAHOO.widget.LogWriter;
 
 
 
@@ -475,7 +471,7 @@ YAHOO.widget.TreeView.prototype = {
             if (this._collapseAnim) {
                 this.subscribe("animComplete", 
                         this._removeChildren_animComplete, this, true);
-                node.collapse();
+                YAHOO.widget.Node.prototype.collapse.call(node);
                 return;
             }
 
@@ -484,6 +480,10 @@ YAHOO.widget.TreeView.prototype = {
 
         while (node.children.length) {
             this._deleteNode(node.children[0]);
+        }
+
+        if (node.isRoot()) {
+            YAHOO.widget.Node.prototype.expand.call(node);
         }
 
         node.childrenRendered = false;
@@ -1806,7 +1806,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
         
         // update the link
         if (oData.href) {
-            this.href = oData.href;
+            this.href = encodeURI(oData.href);
         }
 
         // set the target

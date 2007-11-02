@@ -86,7 +86,7 @@
         tree.subscribe("labelClick", handleLabelClick);
 
 		for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
-			var tmpNode = new YAHOO.widget.TextNode("label-" + i, tree.getRoot(), false);
+			var tmpNode = new YAHOO.widget.TextNode("<>&^%label-" + i, tree.getRoot(), false);
             nodes.push(tmpNode);
 			buildRandomTextBranch(tmpNode);
 
@@ -108,8 +108,38 @@
 		}
 	}
 
+    function buttonAction(e) {
+        var target = YAHOO.util.Event.getTarget(e, true);
+
+        if (target.type == "button") {
+            var action = target.value;
+            switch (action) {
+                case "remove":
+                    tree.setCollapseAnim(null);
+                    tree.setExpandAnim(null);
+                case "add":
+                    //addChildren(nodes[0])
+                    //break;
+                case "insertBefore":
+                    //insertBefore(first);
+                    //insertBefore(last);
+                    //break;
+                case "insertAfter":
+                    //insertAfter(first);
+                    //insertAfter(last);
+                    //break;
+                default:
+            }
+        }
+    }
+
+    YAHOO.util.Event.addListener("actions", "click", buttonAction);
+
   </script>
 
+<div id="actions">
+    <input type="button" value="remove" />
+</div>
   </body>
 </html>
  

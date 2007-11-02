@@ -87,7 +87,7 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
         
         // update the link
         if (oData.href) {
-            this.href = oData.href;
+            this.href = encodeURI(oData.href);
         }
 
         // set the target
