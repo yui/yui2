@@ -1029,7 +1029,16 @@ package
 				image: null,
 				imageMode: BackgroundImageMode.REPEAT
 			};
+			factory.methods =
+			{
+				addEventListener: [ErrorEvent.ERROR, backgroundLoadErrorHandler, false, 0, true]
+			};
 			return factory;
+		}
+		
+		private function backgroundLoadErrorHandler(event:ErrorEvent):void
+		{
+			this.log(event.text);
 		}
 		
 		private function createMarkerSkin(imagePath:String, series:ISeries):InstanceFactory

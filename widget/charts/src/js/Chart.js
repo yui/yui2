@@ -130,6 +130,22 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_type: null,
 
 	/**
+	 * The id returned from the DataSource's setInterval function.
+	 * @property _pollingID
+	 * @type Number
+	 * @private
+	 */
+	_pollingID: null,
+
+	/**
+	 * The time, in ms, between requests for data.
+	 * @property _pollingInterval
+	 * @type Number
+	 * @private
+	 */
+	_pollingInterval: null,
+
+	/**
 	 * Public accessor to the unique name of the Chart instance.
 	 *
 	 * @method toString
@@ -260,6 +276,22 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		{
 			method: this._setDataTipFunction
 		});
+
+		/**
+		 * @attribute polling
+		 * @description A numeric value indicating the number of milliseconds between
+		 * polling requests to the DataSource.
+		 * @type Number
+		 */
+		this.getAttributeConfig("polling",
+		{
+			method: this._getPolling
+		});
+
+		this.setAttributeConfig("polling",
+		{
+			method: this._setPolling
+		});
 	},
 	
 	/**
@@ -298,7 +330,20 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	{
 		if(this._dataSource != null)
 		{
-			this._dataSource.sendRequest(this._request, this._loadDataHandler, this);
+			if(this._pollingID != null)
+			{
+				this._dataSource.clearInterval(this._pollingID);
+				this._pollingID = null;
+			}
+			
+			if(this._pollingInterval > 0)
+			{
+				this._pollingID = this._dataSource.setInterval(this._pollingInterval, this._request, this._loadDataHandler, this);
+			}
+			else
+			{
+				this._dataSource.sendRequest(this._request, this._loadDataHandler, this);
+			}
 		}
 	},
 
@@ -507,6 +552,29 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	{
 		this._dataTipFunction = value;
 		this._swf.setDataTipFunction(value);
+	},
+
+	/**
+	 * Getter for the polling attribute.
+	 *
+	 * @method _getPolling
+	 * @private
+	 */
+	_getPolling: function()
+	{
+		return this._pollingInterval;
+	},
+
+	/**
+	 * Setter for the polling attribute.
+	 *
+	 * @method _setPolling
+	 * @private
+	 */
+	_setPolling: function(value)
+	{
+		this._pollingInterval = value;
+		this._refreshData();
 	}
 });
 

@@ -193,14 +193,6 @@ package com.yahoo.yui.charts
 					this.imageLoader.maintainAspectRatio = true;
 					switch(this.imageMode)
 					{
-						case BackgroundImageMode.NO_REPEAT:
-							this.imageLoader.visible = true;
-							this.imageLoader.x = this._borderWeight;
-							this.imageLoader.y = this._borderWeight;
-							this.imageLoader.width = this._imageDefaultWidth;
-							this.imageLoader.height = this._imageDefaultHeight;
-							this.imageLoader.drawNow();
-							break;
 						case BackgroundImageMode.STRETCH:
 							this.imageLoader.maintainAspectRatio = false;
 						case BackgroundImageMode.STRETCH_AND_MAINTAIN_ASPECT_RATIO:
@@ -223,6 +215,13 @@ package com.yahoo.yui.charts
 									break;
 								case BackgroundImageMode.REPEAT_Y:
 									rectWidth = this.width - this._borderWeight * 2;
+									rectHeight = this._imageDefaultHeight;
+									break;
+									
+								//for some reason, positioning is off if we don't draw
+								//to bitmapdata, so no-repeat is accepted here too
+								case BackgroundImageMode.NO_REPEAT:
+									rectWidth = this._imageDefaultWidth;
 									rectHeight = this._imageDefaultHeight;
 									break;
 							}
