@@ -3,6 +3,7 @@
  * @module json
  * @requires yahoo
  * @class YAHOO.lang.JSON
+ * @static
  */
 YAHOO.namespace('lang');
 YAHOO.lang.JSON = {
