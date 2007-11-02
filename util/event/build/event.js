@@ -514,7 +514,9 @@ if (!YAHOO.util.Event) {
             63232: 38, // up
             63233: 40, // down
             63234: 37, // left
-            63235: 39  // right
+            63235: 39, // right
+            25: 9      // SHIFT-TAB (Safari provides a different key code in
+                       // this case, even though the shiftKey modifier is set
         };
 
         return {
@@ -1421,7 +1423,8 @@ if (!YAHOO.util.Event) {
              */
             _isValidCollection: function(o) {
                 try {
-                    return ( typeof o !== "string" && // o is not a string
+                    return ( o                     && // o is something
+                             typeof o !== "string" && // o is not a string
                              o.length              && // o is indexed
                              !o.tagName            && // o is not an HTML element
                              !o.alert              && // o is not a window
