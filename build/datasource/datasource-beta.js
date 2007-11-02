@@ -1278,6 +1278,14 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
                     bError = true;
                 }
             }
+            // Check for YUI JSON lib but divert KHTML clients
+            else if(YAHOO.lang.JSON && isNotMac) {
+                // Use the JSON utility if available
+                jsonObj = YAHOO.lang.JSON.parse(oRawResponse);
+                if(!jsonObj) {
+                    bError = true;
+                }
+            }
             // Check for older JSON lib but divert KHTML clients
             else if(window.JSON && JSON.parse && isNotMac) {
                 // Use the JSON utility if available
@@ -1545,6 +1553,67 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oRawResp
         // Still not a Number, just return unaltered
         else {
             return nData;
+        }
+    }
+ };
+
+
+
+/**
+ * The Date utility provides helper functions to deal with data of type Date.
+ *
+ * @namespace YAHOO.util
+ * @module date
+ * @requires datasource
+ * @title Date Utility
+ * @beta
+ */
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * The static Date class provides helper functions to deal with data of type
+ * Number.
+ *
+ * @class Date
+ * @static
+ */
+ YAHOO.util.Date = {
+     /**
+     * Takes a native JavaScript Date and formats to string for display to user.
+     *
+     * @method format
+     * @param oDate {Date} Date.
+     * @param oConfig {Object} (Optional) Optional configuration values:
+     *  <dl>
+     *   <dt>format {String}</dd>
+     *   <dd>Currently only the following formats are supported:
+     *   "MM/DD/YYYY", "YYYY/MM/DD", or "DD/MM/YYYY"</dd>
+     *  </dl>
+     * @return {String} Formatted date for display.
+     */
+    format: function(oDate, oConfig) {
+        oConfig = oConfig || {};
+        
+        if(oDate instanceof Date) {
+            var format = oConfig.format || "MM/DD/YYYY";
+            var mm = oDate.getMonth()+1;
+            var dd = oDate.getDate();
+            var yyyy = oDate.getFullYear();
+            
+            switch(format) {
+                case "YYYY/MM/DD":
+                    return yyyy + "/" + mm +"/" + dd;
+                case "DD/MM/YYYY":
+                    return dd + "/" + mm + "/" + yyyy;
+                default: // "MM/DD/YYYY"
+                    return mm + "/" + dd + "/" + yyyy;
+            }
+        }
+        else {
+            return YAHOO.lang.isValue(oDate) ? oDate : "";
         }
     }
  };

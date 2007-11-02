@@ -2872,6 +2872,25 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                    }
                 }
             }
+            // Check for YUI JSON lib but divert KHTML clients
+            else if(YAHOO.lang.JSON && isNotMac) {
+                // Use the JSON utility if available
+                jsonObjParsed = YAHOO.lang.JSON.parse(oResponse);
+                if(!jsonObjParsed) {
+                    bError = true;
+                    break;
+                }
+                else {
+                    try {
+                        // eval is necessary here since aSchema[0] is of unknown depth
+                        jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    }
+                    catch(e) {
+                        bError = true;
+                        break;
+                   }
+                }
+            }
             else if(window.JSON && isNotMac) {
                 // Use older JSON lib if available
                 jsonObjParsed = JSON.parse(oResponse);
