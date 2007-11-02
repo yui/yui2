@@ -298,6 +298,7 @@
 
 .yui-skin-sam .yui-cal-nav-y input.yui-invalid {
     background-color:#FFEE69;
+    border: 1px solid #000;
 }
 
 .yui-skin-sam .yui-cal-nav-yc {

@@ -31,6 +31,8 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	},
 
 	show : function() {
+		var CSS = YAHOO.widget.CalendarNavigator.CSS;
+
 		if (this.cal.beforeShowNavEvent.fire()) {
 			if (!this.__rendered) {
 				this.render();
@@ -38,19 +40,23 @@ YAHOO.widget.CalendarNavigator.prototype = {
 			this.clearErrors();
 			this._updateMonthUI();
 			this._updateYearUI();
-			this._show(this.navEl, true);
 
+			this._show(this.navEl, true);
 			this.setInitialFocus();
 			this.showMask();
 
+			YAHOO.util.Dom.addClass(this.cal.oDomContainer, CSS.NAV_VISIBLE);
 			this.cal.showNavEvent.fire();
 		}
 	},
 
 	hide : function() {
+		var CSS = YAHOO.widget.CalendarNavigator.CSS;
+
 		if (this.cal.beforeHideNavEvent.fire()) {
 			this._show(this.navEl, false);
 			this.hideMask();
+			YAHOO.util.Dom.removeClass(this.cal.oDomContainer,  CSS.NAV_VISIBLE);
 			this.cal.hideNavEvent.fire();
 		}
 	},
@@ -64,19 +70,19 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 			var cal = this.cal;
 			var nav = this;
-            
-            function update() {
+			
+			function update() {
 				cal.setYear(nav.getYear());
 				cal.setMonth(nav.getMonth());
 				cal.render();
 			}
 			// Artificial delay, just to help the user see something changed
-            var delay = YAHOO.widget.CalendarNavigator.UPDATE_DELAY;
-            if (delay > 0) {
-    			window.setTimeout(update, delay);
-            } else {
-                update();
-            }
+			var delay = YAHOO.widget.CalendarNavigator.UPDATE_DELAY;
+			if (delay > 0) {
+				window.setTimeout(update, delay);
+			} else {
+				update();
+			}
 		}
 	},
 
@@ -146,7 +152,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		this.errorEl = doc.getElementById(this.id + NAV.ERROR_SUFFIX);
 		this.submitEl = doc.getElementById(this.id + NAV.SUBMIT_SUFFIX);
 		this.cancelEl = doc.getElementById(this.id + NAV.CANCEL_SUFFIX);
-		
+
 		this.lastCtrl = this.cancelEl;
 		this.firstCtrl = this.monthEl;
 	},
@@ -274,6 +280,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		var E = YAHOO.util.Event;
 		E.on(this.submitEl, "click", this.submit, this, true);
 		E.on(this.cancelEl, "click", this.cancel, this, true);
+		E.on(this.yearEl, "blur", this.validate, this, true);
 
 		this.applyKeyListeners();
 	},
@@ -291,7 +298,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		var KEYS = YAHOO.util.KeyListener.KEY;
 		var E = YAHOO.util.Event;
 		var NAV = YAHOO.widget.CalendarNavigator;
-		
+
 		function enter(e) {
 			if (E.getCharCode(e) == KEYS.ENTER) {
 				this.submit();
@@ -397,6 +404,12 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		this.maskEl = null;
 		this.yearEl = null;
 		this.monthEl = null;
+		this.errorEl = null;
+		this.submitEl = null;
+		this.cancelEl = null;
+
+		this.firstCtrl = null;
+		this.lastCtrl = null;
 
 		if (this.navEl) {
 			this.navEl.innerHTML = "";
@@ -465,41 +478,47 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	}
 };
 
-YAHOO.widget.CalendarNavigator.YR_PATTERN = /^\d+$/;
-YAHOO.widget.CalendarNavigator.TRIM = /^\s*(.*?)\s*$/;
+(function() {
+	// Setup Static Variables (inside anon fn, so that we can use shortcuts)
+	var CN = YAHOO.widget.CalendarNavigator;
 
-YAHOO.widget.CalendarNavigator.ID_SUFFIX = "_nav";
-YAHOO.widget.CalendarNavigator.MONTH_SUFFIX = "_month";
-YAHOO.widget.CalendarNavigator.YEAR_SUFFIX = "_year";
-YAHOO.widget.CalendarNavigator.ERROR_SUFFIX = "_error";
-YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX = "_cancel";
-YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX = "_submit";
+	CN.YR_PATTERN = /^\d+$/;
+	CN.TRIM = /^\s*(.*?)\s*$/;
 
-YAHOO.widget.CalendarNavigator.YR_MINOR_INC = 1;
-YAHOO.widget.CalendarNavigator.YR_MAJOR_INC = 10;
-YAHOO.widget.CalendarNavigator.UPDATE_DELAY = 50;
+	CN.ID_SUFFIX = "_nav";
+	CN.MONTH_SUFFIX = "_month";
+	CN.YEAR_SUFFIX = "_year";
+	CN.ERROR_SUFFIX = "_error";
+	CN.CANCEL_SUFFIX = "_cancel";
+	CN.SUBMIT_SUFFIX = "_submit";
 
-YAHOO.widget.CalendarNavigator.CSS = {
-	NAV :"yui-cal-nav",
-	MASK : "yui-cal-nav-mask",
-	YEAR : "yui-cal-nav-y",
-	MONTH : "yui-cal-nav-m",
-	BUTTONS : "yui-cal-nav-b",
-	YEAR_CTRL : "yui-cal-nav-yc",
-	MONTH_CTRL : "yui-cal-nav-mc",
-	ERROR : "yui-cal-nav-e",
-	INVALID : "yui-invalid"
-};
+	CN.YR_MINOR_INC = 1;
+	CN.YR_MAJOR_INC = 10;
+	CN.UPDATE_DELAY = 50;
 
-YAHOO.widget.CalendarNavigator._DEFAULT_CFG = {
-	strings : {
-		month: "Month",
-		year: "Year",
-		submit: "Okay",
-		cancel: "Cancel",
-		invalidYear : "Please enter a valid year (a 1-4 digit number)"
-	},
-	monthFormat: YAHOO.widget.Calendar.LONG,
-	yearMaxDigits: 4,
-	initialFocus: "year"
-};
+	CN.CSS = {
+		NAV :"yui-cal-nav",
+		NAV_VISIBLE: "yui-cal-nav-visible",
+		MASK : "yui-cal-nav-mask",
+		YEAR : "yui-cal-nav-y",
+		MONTH : "yui-cal-nav-m",
+		BUTTONS : "yui-cal-nav-b",
+		YEAR_CTRL : "yui-cal-nav-yc",
+		MONTH_CTRL : "yui-cal-nav-mc",
+		ERROR : "yui-cal-nav-e",
+		INVALID : "yui-invalid"
+	};
+
+	CN._DEFAULT_CFG = {
+		strings : {
+			month: "Month",
+			year: "Year",
+			submit: "Okay",
+			cancel: "Cancel",
+			invalidYear : "Please enter a valid year (a 1-4 digit number)"
+		},
+		monthFormat: YAHOO.widget.Calendar.LONG,
+		yearMaxDigits: 4,
+		initialFocus: "year"
+	};
+})();
