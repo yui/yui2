@@ -1,6 +1,8 @@
 TreeView - Release Notes
 
 2.4.0
+  * added TreeView getNodeByElement, which will return a YAHOO.widget.Node 
+    reference for any ancestor HTML element of a node in the tree.
   * Added 'title' property to TextNode
   * Added treeview/tooltip example
   * Passing a null or invalid animation type to setExpandAnim/setCollapseAnim
