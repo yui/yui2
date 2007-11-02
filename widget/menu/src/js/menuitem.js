@@ -167,66 +167,6 @@ var Dom = YAHOO.util.Dom,
 
 MenuItem.prototype = {
 
-    // Constants
-
-    /**
-    * @property COLLAPSED_SUBMENU_INDICATOR_TEXT
-    * @description String representing the text for the <code>&#60;em&#62;</code>
-    * element used for the submenu arrow indicator.
-    * @default "Submenu collapsed.  Click to expand submenu."
-    * @final
-    * @type String
-    */
-    COLLAPSED_SUBMENU_INDICATOR_TEXT: 
-        "Submenu collapsed.  Click to expand submenu.",
-
-
-    /**
-    * @property EXPANDED_SUBMENU_INDICATOR_TEXT
-    * @description String representing the text for the submenu arrow indicator 
-    * element (<code>&#60;em&#62;</code>) when the submenu is visible.
-    * @default "Submenu expanded.  Click to collapse submenu."
-    * @final
-    * @type String
-    */
-    EXPANDED_SUBMENU_INDICATOR_TEXT: 
-        "Submenu expanded.  Click to collapse submenu.",
-
-
-    /**
-    * @property DISABLED_SUBMENU_INDICATOR_TEXT
-    * @description String representing the text for the submenu arrow indicator 
-    * element (<code>&#60;em&#62;</code>) when the menu item is disabled.
-    * @default "Submenu collapsed.  (Item disabled.)."
-    * @final
-    * @type String
-    */
-    DISABLED_SUBMENU_INDICATOR_TEXT: "Submenu collapsed.  (Item disabled.)",
-
-
-    /**
-    * @property CHECKED_TEXT
-    * @description String representing the text to be used for the checked 
-    * indicator element (<code>&#60;em&#62;</code>).
-    * @default "Checked."
-    * @final
-    * @type String
-    */
-    CHECKED_TEXT: "Menu item checked.",
-    
-    
-    /**
-    * @property DISABLED_CHECKED_TEXT
-    * @description String representing the text to be used for the checked 
-    * indicator element (<code>&#60;em&#62;</code>) when the menu item 
-    * is disabled.
-    * @default "Checked. (Item disabled.)"
-    * @final
-    * @type String
-    */
-    DISABLED_CHECKED_TEXT: "Checked. (Item disabled.)",
-
-
     /**
     * @property CSS_CLASS_NAME
     * @description String representing the CSS class(es) to be applied to the 
@@ -1916,7 +1856,7 @@ MenuItem.prototype = {
 
             if (oActiveItem) {
 
-                oActiveItem.blur();
+                oActiveItem.blurEvent.fire();
 
             }
 
