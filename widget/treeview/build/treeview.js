@@ -269,7 +269,7 @@ YAHOO.widget.TreeView.prototype = {
         // Set up the root node
         this.root = new YAHOO.widget.RootNode(this);
 
-        var lw = YAHOO.widget.LogWriter;
+        var LW = YAHOO.widget.LogWriter;
 
 
 
@@ -409,6 +409,39 @@ YAHOO.widget.TreeView.prototype = {
         }
 
         return (values.length) ? values : null;
+    },
+
+    /**
+     * Returns the treeview node reference for an anscestor element
+     * of the node, or null if it is not contained within any node
+     * in this tree.
+     * @method getNodeByElement
+     * @param {HTMLElement} the element to test
+     * @return {YAHOO.widget.Node} a node reference or null
+     */
+    getNodeByElement: function(el) {
+
+        var p=el, m, re=/ygtv([^\d]*)(.*)/;
+
+        do {
+
+            if (p && p.id) {
+                m = p.id.match(re);
+                if (m && m[2]) {
+                    return this.getNodeByIndex(m[2]);
+                }
+            }
+
+            p = p.parentNode;
+
+            if (!p || !p.tagName) {
+                break;
+            }
+
+        } 
+        while (p.id !== this.id && p.tagName.toLowerCase() !== "body");
+
+        return null;
     },
 
     /**

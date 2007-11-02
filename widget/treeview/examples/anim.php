@@ -134,6 +134,10 @@
     }
 
     YAHOO.util.Event.addListener("actions", "click", buttonAction);
+    YAHOO.util.Event.addListener("treeDiv1", "click", function(e) {
+                var n = tree.getNodeByElement(YAHOO.util.Event.getTarget(e));
+                YAHOO.log("TREE click on node: " + n.label, "warn");
+            });
 
   </script>
 
