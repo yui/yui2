@@ -854,7 +854,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 * @property _request
 	 * @private
 	 */
-	_request: null,
+	_request: "",
 	
 	/**
 	 * Getter for the request attribute.
