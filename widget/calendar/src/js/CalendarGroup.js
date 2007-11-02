@@ -457,6 +457,14 @@ YAHOO.widget.CalendarGroup.prototype = {
 		* @default ""
 		*/
 		this.cfg.addProperty(defCfg.MY_LABEL_YEAR_SUFFIX.key, { value:defCfg.MY_LABEL_YEAR_SUFFIX.value, handler:this.delegateConfig } );
+
+		/**
+		* Configuration for the Month Year Navigation UI. By default it is disabled
+		* @config NAV
+		* @type Object
+		* @default null
+		*/
+		this.cfg.addProperty(defCfg.NAV.key, { value:defCfg.NAV.value, handler:this.configNavigator } );
 	},
 
 	/**
@@ -586,6 +594,30 @@ YAHOO.widget.CalendarGroup.prototype = {
 		* @event hideEvent
 		*/
 		this.hideEvent = new YAHOO.util.CustomEvent(defEvents.HIDE);
+
+		/**
+		* Fired just before the CalendarNavigator is to be shown
+		* @event beforeShowEvent
+		*/
+		this.beforeShowNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW_NAV);
+	
+		/**
+		* Fired after the CalendarNavigator is shown
+		* @event showEvent
+		*/
+		this.showNavEvent = new YAHOO.util.CustomEvent(defEvents.SHOW_NAV);
+	
+		/**
+		* Fired just before the CalendarNavigator is to be hidden
+		* @event beforeHideEvent
+		*/
+		this.beforeHideNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE_NAV);
+	
+		/**
+		* Fired after the CalendarNavigator is hidden
+		* @event hideEvent
+		*/
+		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
 	},
 	
 	/**
@@ -1223,6 +1255,7 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "configIframe",
 																 "createTitleBar",
 																 "createCloseButton",
+                                                                 "configNavigator",
 																 "removeTitleBar",
 																 "removeCloseButton",
 																 "hide",
