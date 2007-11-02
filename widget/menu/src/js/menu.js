@@ -177,8 +177,8 @@ var Dom = YAHOO.util.Dom,
             supercedes: ["maxheight"]
         },
 
-        "MIN_HEIGHT": { 
-            key: "minheight", 
+        "MIN_SCROLL_HEIGHT": { 
+            key: "minscrollheight", 
             value: 90, 
             validator: Lang.isNumber,
             supercedes: ["maxheight"]
@@ -2027,7 +2027,7 @@ _onClick: function (p_sType, p_aArgs) {
         sURL = oItemCfg.getProperty("url");
         
 
-        if ((sURL.substr(0,1) == "#")) {
+        if ((sURL.substr(0,1) == "#") && !this.cfg.getProperty("target")) {
 
             Event.preventDefault(oEvent);
 
@@ -2754,7 +2754,7 @@ _onBeforeShow: function (p_sType, p_aArgs) {
 
 
     var nMaxHeight = this.cfg.getProperty("maxheight"),
-        nMinScrollHeight = this.cfg.getProperty("minheight"),
+        nMinScrollHeight = this.cfg.getProperty("minscrollheight"),
         bDynamicPos = this.cfg.getProperty("position") == "dynamic";
 
 
@@ -2960,7 +2960,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case "effect":
         case "classname":
         case "scrollincrement":
-        case "minheight":
+        case "minscrollheight":
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -2984,48 +2984,36 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
 */
 _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
-    var oParentMenu = p_oSubmenu.parent.parent,
+    var oParentCfg = p_oSubmenu.parent.parent.cfg,
 
         oConfig = {
 
-            constraintoviewport: 
-                oParentMenu.cfg.getProperty("constraintoviewport"),
+            constraintoviewport: oParentCfg.getProperty("constraintoviewport"),
 
             xy: [0,0],
 
-            clicktohide: oParentMenu.cfg.getProperty("clicktohide"),
+            clicktohide: oParentCfg.getProperty("clicktohide"),
                 
-            effect: oParentMenu.cfg.getProperty("effect"),
+            effect: oParentCfg.getProperty("effect"),
 
-            showdelay: oParentMenu.cfg.getProperty("showdelay"),
+            showdelay: oParentCfg.getProperty("showdelay"),
             
-            hidedelay: oParentMenu.cfg.getProperty("hidedelay"),
+            hidedelay: oParentCfg.getProperty("hidedelay"),
 
-            submenuhidedelay: oParentMenu.cfg.getProperty("submenuhidedelay"),
+            submenuhidedelay: oParentCfg.getProperty("submenuhidedelay"),
 
-            classname: oParentMenu.cfg.getProperty("classname"),
+            classname: oParentCfg.getProperty("classname"),
             
-            scrollincrement: oParentMenu.cfg.getProperty("scrollincrement"),
+            scrollincrement: oParentCfg.getProperty("scrollincrement"),
             
-            minheight: oParentMenu.cfg.getProperty("minheight")
+            minscrollheight: oParentCfg.getProperty("minscrollheight"),
+            
+            iframe: oParentCfg.getProperty("iframe")
 
         },
         
         oLI;
 
-
-    /*
-        Only sync the "iframe" configuration property if the parent
-        menu's "position" configuration is the same.
-    */
-
-    if (this.cfg.getProperty("position") == 
-        oParentMenu.cfg.getProperty("position")) {
-
-        oConfig.iframe = oParentMenu.cfg.getProperty("iframe");
-    
-    }
-               
 
     p_oSubmenu.cfg.applyConfig(oConfig);
 
@@ -3078,6 +3066,7 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
 
 
     var nScrollTop = oParent.parent.body.scrollTop,
+        oIFrame = this.iframe,
         nY;
 
 
@@ -3086,8 +3075,17 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
         nY = (this.cfg.getProperty("y") - nScrollTop);
 
         Dom.setY(this.element, nY);
+
+
+        if (oIFrame) {
+
+            Dom.setY(oIFrame, nY);
+
+        }
         
         this.cfg.setProperty("y", nY, true);
+    
+
     
     }
 
@@ -3360,33 +3358,19 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
         nZIndex;
 
 
-    Dom.setStyle(this.element, "position", sCSSPosition);
+    Dom.setStyle(oElement, "position", sCSSPosition);
 
 
     if (sCSSPosition == "static") {
 
-        /*
-            Remove the iframe for statically positioned menus since it will 
-            intercept mouse events.
-        */
-
-        oCfg.setProperty("iframe", false);
-
-
         // Statically positioned menus are visible by default
         
-        Dom.setStyle(this.element, "display", "block");
+        Dom.setStyle(oElement, "display", "block");
 
         oCfg.setProperty("visible", true);
 
     }
     else {
-
-        if (sCurrentPosition != "absolute") {
-
-            oCfg.setProperty("iframe", (UA.ie == 6 ? true : false));
-
-        }
 
         /*
             Even though the "visible" property is queued to 
@@ -3396,7 +3380,7 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
             or not to show an Overlay instance.
         */
 
-        Dom.setStyle(this.element, "visibility", "hidden");
+        Dom.setStyle(oElement, "visibility", "hidden");
     
     }
 
@@ -3551,8 +3535,15 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
         oFooter = this.footer,
         fnMouseOver = this._onScrollTargetMouseOver,
         fnMouseOut = this._onScrollTargetMouseOut,
-        nMinHeight = this.cfg.getProperty("minheight"),
+        nMinScrollHeight = this.cfg.getProperty("minscrollheight"),
         nHeight;
+
+
+    if (nMaxHeight !== 0 && nMaxHeight < nMinScrollHeight) {
+    
+        nMaxHeight = nMinScrollHeight;
+    
+    }
 
 
     if (this.lazyLoad && !oBody) {
@@ -3574,7 +3565,7 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     Dom.removeClass(oBody, "yui-menu-body-scrolled");
 
 
-    if (YAHOO.env.gecko && !this.cfg.getProperty("width")) {
+    if (UA.gecko && !this.cfg.getProperty("width")) {
 
         this._setWidth();
 
@@ -3601,8 +3592,8 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     nHeight = (nMaxHeight - (oHeader.offsetHeight + oHeader.offsetHeight));
 
 
-    if ((nMaxHeight >= nMinHeight) && nHeight > 0 && 
-        (oBody.offsetHeight > nMaxHeight)) {
+
+    if (nHeight > 0 && (oBody.offsetHeight > nMaxHeight)) {
 
         Dom.addClass(oBody, "yui-menu-body-scrolled");
         Dom.setStyle(oBody, "height", (nHeight + "px"));
@@ -3938,7 +3929,16 @@ initEvents: function () {
 */
 positionOffScreen: function () {
 
-    Dom.setXY(this.element, this.OFF_SCREEN_POSITION);
+    var oIFrame = this.iframe,
+        aPos = this.OFF_SCREEN_POSITION;
+
+    Dom.setXY(this.element, aPos);
+    
+    if (oIFrame) {
+
+        Dom.setXY(oIFrame, aPos);
+    
+    }
 
 },
 
@@ -4585,34 +4585,60 @@ subscribe: function () {
     }
 
 
+    function onSubmenuAdded(p_sType, p_aArgs, p_oObject) { 
+    
+        var oSubmenu = this.cfg.getProperty("submenu");
+        
+        if (oSubmenu) {
+
+            oSubmenu.subscribe.apply(oSubmenu, p_oObject);
+        
+        }
+    
+    }
+
+
     Menu.superclass.subscribe.apply(this, arguments);
     Menu.superclass.subscribe.call(this, "itemAdded", onItemAdded, arguments);
 
 
-    var aSubmenus = this.getSubmenus(),
-        nSubmenus,
+    var aItems = this.getItems(),
+        nItems,
+        oItem,
         oSubmenu,
         i;
-
-    if (aSubmenus) {
-
-        nSubmenus = aSubmenus.length;
-
-        if (nSubmenus > 0) {
         
-            i = nSubmenus - 1;
+
+    if (aItems) {
+
+        nItems = aItems.length;
+        
+        if (nItems > 0) {
+        
+            i = nItems - 1;
             
             do {
-    
-                oSubmenu = aSubmenus[i];
+
+                oItem = aItems[i];
                 
-                oSubmenu.subscribe.apply(oSubmenu, arguments);
-    
+                oSubmenu = oItem.cfg.getProperty("submenu");
+                
+                if (oSubmenu) {
+                
+                    oSubmenu.subscribe.apply(oSubmenu, arguments);
+                
+                }
+                else {
+                
+                    oItem.cfg.subscribeToConfigEvent("submenu", onSubmenuAdded, arguments);
+                
+                }
+
             }
-            while(i--);
+            while (i--);
         
         }
-    
+
     }
 
 },
@@ -4844,26 +4870,30 @@ initDefaultConfig: function () {
 
 
     /**
-    * @config minheight
-    * @description Number 
-    * @default 1
+    * @config minscrollheight
+    * @description Number defining the minimum threshold for the "maxheight" 
+    * configuration property.
+    * @default 90
     * @type Number
     */
     oConfig.addProperty(
-        DEFAULT_CONFIG.MIN_HEIGHT.key, 
+        DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.key, 
         { 
-            value: DEFAULT_CONFIG.MIN_HEIGHT.value, 
-            validator: DEFAULT_CONFIG.MIN_HEIGHT.validator,
-            suppressEvent: DEFAULT_CONFIG.MIN_HEIGHT.suppressEvent,
-            supercedes: DEFAULT_CONFIG.MIN_HEIGHT.supercedes
+            value: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.value, 
+            validator: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.validator,
+            suppressEvent: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.suppressEvent,
+            supercedes: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.supercedes
         }
     );
 
 
     /**
     * @config maxheight
-    * @description Defines the maximum height (in pixels) for a menu before the
-    * contents of the body are scrolled.
+    * @description Number defining the maximum height (in pixels) for a menu's 
+    * body element (<code>&#60;div class="bd"&#60;</code>).  Once a menu's body 
+    * exceeds this height, the contents of the body are scrolled to maintain 
+    * this value.  This value cannot be set lower than the value of the 
+    * "minscrollheight" configuration property.
     * @default 0
     * @type Number
     */
