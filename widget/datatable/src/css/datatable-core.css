@@ -18,34 +18,23 @@ th .yui-dt-label {
     zoom:1; /* needed to block events in ie */
 }
 
-/* foundational resizing css */
-/* TODO: remove redundancies with scrolling css */
-.yui-dt-table thead {
-    display:block; /* for safari and opera */
-}
-.yui-dt-table thead tr {
-    position:relative;  /* for ie */
-}
-.yui-dt-body {
-    display:block; /* for safari and opera */
-    overflow:auto; /* for gecko */
-}
-
 /* foundational scrolling css */
+.yui-dt-scrollable thead tr {
+    *position:relative;  /* for ie */
+}
 .yui-dt-scrollable  {
     *overflow-y:auto; /* for ie */
 }
-.yui-dt-scrollable  thead {
+
+.yui-dt-scrollblock thead, .yui-dt-scrollblock .yui-dt-scrollbody {
     display:block; /* for safari and opera */
-}
-.yui-dt-scrollable thead tr {
-    position:relative;  /* for ie */
-}
-.yui-dt-scrollbody {
-    display:block; /* for safari and opera */
-    overflow:auto; /* for gecko */
 }
 
+.yui-dt-scrollbody {
+    overflow:auto;overflow-x:hidden; /* for opera */
+}
+
+/* foundational editor css */
 .yui-dt-editor {
     position:absolute;z-index:9000;
 }

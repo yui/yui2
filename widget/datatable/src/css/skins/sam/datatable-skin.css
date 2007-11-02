@@ -192,3 +192,8 @@
     padding:2px 6px;
     text-decoration:none;
 }
+
+/* scrolling */
+.yui-skin-sam .yui-dt-scrolltable {
+    border-collapse:separate;  /*for gecko bug https://bugzilla.mozilla.org/show_bug.cgi?id=135236 */
+}

@@ -83,7 +83,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
                     }
                 };
                 countTerminalChildNodes(currentNode);
-                oColumn._colspan = terminalChildNodes;
+                oColumn._nColspan = terminalChildNodes;
 
                 // Cascade certain properties to children if not defined on their own
                 var currentChildren = currentNode.children;
@@ -145,7 +145,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             // This Column does not have any children
             else {
                 oColumn._nKeyIndex = keys.length;
-                oColumn._colspan = 1;
+                oColumn._nColspan = 1;
                 keys.push(oColumn);
             }
 
@@ -197,10 +197,10 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             for(var p=0; p<currentRow.length; p++) {
                 currentColumn = currentRow[p];
                 if(!YAHOO.lang.isArray(currentColumn.children)) {
-                    currentColumn._rowspan = maxRowDepth;
+                    currentColumn._nRowspan = maxRowDepth;
                 }
                 else {
-                    currentColumn._rowspan = 1;
+                    currentColumn._nRowspan = 1;
                 }
             }
 
@@ -439,38 +439,47 @@ YAHOO.widget.Column.prototype._nKeyIndex = null;
 /**
  * Number of table cells the Column spans.
  *
- * @property _colspan
+ * @property _nColspan
  * @type Number
  * @private
  */
-YAHOO.widget.Column.prototype._colspan = 1;
+YAHOO.widget.Column.prototype._nColspan = 1;
 
 /**
  * Number of table rows the Column spans.
  *
- * @property _rowspan
+ * @property _nRowspan
  * @type Number
  * @private
  */
-YAHOO.widget.Column.prototype._rowspan = 1;
+YAHOO.widget.Column.prototype._nRowspan = 1;
 
 /**
  * Column's parent Column instance, or null.
  *
- * @property _parent
+ * @property _oParent
  * @type YAHOO.widget.Column
  * @private
  */
-YAHOO.widget.Column.prototype._parent = null;
+YAHOO.widget.Column.prototype._oParent = null;
 
 /**
- * Current offsetWidth of the Column (in pixels).
+ * The DOM reference the associated COL element.
  *
- * @property _width
- * @type Number
+ * @property _elCol
+ * @type HTMLElement
  * @private
  */
-YAHOO.widget.Column.prototype._width = null;
+YAHOO.widget.Column.prototype._elCol = null;
+
+/**
+ * The DOM reference to the associated TH element.
+ *
+ * @property _elTh
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.Column.prototype._elTh = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -652,7 +661,7 @@ YAHOO.widget.Column.prototype.getKeyIndex = function() {
  * @return {YAHOO.widget.Column} Column's parent instance.
  */
 YAHOO.widget.Column.prototype.getParent = function() {
-    return this._parent;
+    return this._oParent;
 };
 
 /**
@@ -662,7 +671,7 @@ YAHOO.widget.Column.prototype.getParent = function() {
  * @return {Number} Column's COLSPAN value.
  */
 YAHOO.widget.Column.prototype.getColspan = function() {
-    return this._colspan;
+    return this._nColspan;
 };
 // Backward compatibility
 YAHOO.widget.Column.prototype.getColSpan = function() {
@@ -678,7 +687,27 @@ YAHOO.widget.Column.prototype.getColSpan = function() {
  * @return {Number} Column's ROWSPAN value.
  */
 YAHOO.widget.Column.prototype.getRowspan = function() {
-    return this._rowspan;
+    return this._nRowspan;
+};
+
+/**
+ * Returns DOM reference to associated COL element.
+ *
+ * @method getColEl
+ * @return {HTMLElement} COL element.
+ */
+YAHOO.widget.Column.prototype.getColEl = function() {
+    return this._elCol;
+};
+
+/**
+ * Returns DOM reference to the key TH element.
+ *
+ * @method getThEl
+ * @return {HTMLElement} TH element.
+ */
+YAHOO.widget.Column.prototype.getThEl = function() {
+    return this._elTh;
 };
 
 // Backward compatibility
@@ -844,15 +873,6 @@ if(YAHOO.util.DD) {
  * @param e {string} The mouseup event
  */
 YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
-    // Reset resizer
-    var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
-    resizerStyle.left = "auto";
-    resizerStyle.right = 0;
-    resizerStyle.top = "auto";
-    resizerStyle.bottom = 0;
-    
-    this.datatable._syncColWidths();
-
     this.bodyCell = null;
 
     // IE workaround for bug 1118318:
@@ -860,6 +880,18 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
     if(this.nOrigScrollTop !== null) {
         //this.datatable._elContainer.scrollTop = this.nOrigScrollTop; // This doesn't work for some reason...
     }
+    
+    if(this.datatable.bFixedScrollBlockWorkaround) {
+        this.datatable.syncColWidths();
+    }
+
+    // Reset resizer
+    var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
+    resizerStyle.left = "auto";
+    resizerStyle.right = 0;
+    resizerStyle.top = "auto";
+    resizerStyle.bottom = 0;
+
     this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
 };
 
@@ -903,32 +935,162 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
         // Resize the Column
         var oDataTable = this.datatable;
         var elHeadCell = this.headCell;
+        var elBodyCell = this.bodyCell;
 
         if(YAHOO.env.ua.ie && (this.datatable.get("scrollable")===true)) {
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", "auto");
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "hidden");
         }
 
-        elHeadCell.style.width = newWidth + "px";
-        
-        // Real-time sync-up body cell to head cell for non-IEs
-        if(!YAHOO.env.ua.ie && this.bodyCell) {
-            this.bodyCell.style.width = elHeadCell.offsetWidth + "px";
-            if(this.bodyCell.offsetWidth != elHeadCell.offsetWidth) {
-                this.bodyCell.style.width = (elHeadCell.offsetWidth - (this.bodyCell.offsetWidth - elHeadCell.offsetWidth)) + "px";
+        if(oDataTable.bFixedScrollBlockWorkaround) {
+            elHeadCell.firstChild.width = "auto";
+            if(elBodyCell) {
+                this.bodyCell.width = newWidth + "px";
             }
+            
+            elHeadCell.width = newWidth + "px";
+            
+        }
+        else {
+            this.column.getColEl().width = newWidth;
+        }
+
+        // Workaround to help Opera collapse columns
+        if(YAHOO.env.ua.opera) {
+            document.body.style += "";
         }
 
         if(YAHOO.env.ua.ie && (this.datatable.get("scrollable")===true)) {
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elTable.offsetWidth);
             YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "auto");
         }
-        
     }
     catch(e) {
     }
 };
 
 
+/*YAHOO.widget.DataTable.prototype.syncColWidths = function() {
+    var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
+
+    // First pass make all body cells equal to head cells
+    //for(i=this._oColumnSet.keys.length-1; i>-1; i--) {
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
+        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+        elBodyCell = this.getTbodyEl().rows[0].cells[i];
+        elHeadCellWidth = elHeadCell.offsetWidth;
+        elBodyCellWidth = elBodyCell.offsetWidth;
+
+        if(elBodyCellWidth < elHeadCellWidth) {
+            nWidth = elHeadCellWidth;
+            elBodyCell.style.width = nWidth + "px";
+
+            // Sync up offsets
+            if(elHeadCellWidth > elBodyCellWidth) {
+                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                    elBodyCell.style.width = nWidth + "px";
+                }
+            }
+            else if(elBodyCellWidth > elHeadCellWidth) {
+                elHeadCell.style.width = nWidth + "px";
+                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                    elHeadCell.style.width = nWidth + "px";
+                }
+            }
+        }
+    }
+    // Second pass make any too-narrow head cells equal to body cells
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
+        elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+        elBodyCell = this.getTbodyEl().rows[0].cells[i];
+        elHeadCellWidth = elHeadCell.offsetWidth;
+        elBodyCellWidth = elBodyCell.offsetWidth;
+
+        if(elBodyCellWidth > elHeadCellWidth) {
+            elHeadCell.style.width = elBodyCellWidth + "px";
+
+            // Sync up offsets
+            if(elHeadCellWidth > elBodyCellWidth) {
+                nWidth = elHeadCellWidth;
+                if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                    nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                    elBodyCell.style.width = nWidth + "px";
+                }
+            }
+            else if(elBodyCellWidth > elHeadCellWidth) {
+                nWidth = elBodyCellWidth;
+                elHeadCell.style.width = nWidth + "px";
+                if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                    nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                    elHeadCell.style.width = nWidth + "px";
+                }
+            }
+        }
+    }
+    
+    
+    
+    
+var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
+
+     // First pass make all body cells equal to head cells
+     //for(i=this._oColumnSet.keys.length-1; i>-1; i--) {
+     for(i=0; i<this._oColumnSet.keys.length; i++) {
+         elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+         elBodyCell = this.getTbodyEl().rows[0].cells[i];
+         elHeadCellWidth = elHeadCell.offsetWidth;
+         elBodyCellWidth = elBodyCell.offsetWidth;
+
+         if(elBodyCellWidth < elHeadCellWidth) {
+             nWidth = elHeadCellWidth;
+             elBodyCell.style.width = nWidth + "px";
+
+             // Sync up offsets
+             if(elHeadCellWidth > elBodyCellWidth) {
+                 if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                     nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                     elBodyCell.style.width = nWidth + "px";
+                 }
+             }
+             else if(elBodyCellWidth > elHeadCellWidth) {
+                 elHeadCell.style.width = nWidth + "px";
+                 if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                     nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                     elHeadCell.style.width = nWidth + "px";
+                 }
+             }
+         }
+     }
+     // Second pass make any too-narrow head cells equal to body cells
+     for(i=0; i<this._oColumnSet.keys.length; i++) {
+         elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
+         elBodyCell = this.getTbodyEl().rows[0].cells[i];
+         elHeadCellWidth = elHeadCell.offsetWidth;
+         elBodyCellWidth = elBodyCell.offsetWidth;
+
+         if(elBodyCellWidth > elHeadCellWidth) {
+             elHeadCell.style.width = elBodyCellWidth + "px";
+
+             // Sync up offsets
+             if(elHeadCellWidth > elBodyCellWidth) {
+                 nWidth = elHeadCellWidth;
+                 if(elBodyCell.offsetWidth > elHeadCell.offsetWidth) {
+                     nWidth -= (elBodyCell.offsetWidth - elHeadCell.offsetWidth);
+                     elBodyCell.style.width = nWidth + "px";
+                 }
+             }
+             else if(elBodyCellWidth > elHeadCellWidth) {
+                 nWidth = elBodyCellWidth;
+                 elHeadCell.style.width = nWidth + "px";
+                 if(elHeadCell.offsetWidth > elBodyCell.offsetWidth) {
+                     nWidth -= (elHeadCell.offsetWidth - elBodyCell.offsetWidth);
+                     elHeadCell.style.width = nWidth + "px";
+                 }
+             }
+         }
+     }
+ };*/
 
 
