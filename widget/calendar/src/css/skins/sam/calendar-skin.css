@@ -230,7 +230,9 @@
 	padding:2px 4px 2px 4px;
 	text-decoration:none;
 	color:#000;
-	*zoom:1;
+	zoom:1;
+	*position:relative;
+	*top:-2px;
 }
 
 .yui-skin-sam .yui-calendar a.calnav:hover { 
@@ -242,7 +244,7 @@
 .yui-skin-sam .yui-calcontainer .yui-cal-nav-mask {
 	background-color:#000;
 	opacity:0.25;
-	*filter:alpha(opacity=25);
+	*filter:alpha(opacity=25); /* IE */
 }
 
 .yui-skin-sam .yui-calcontainer .yui-cal-nav {
@@ -286,7 +288,7 @@
 
 .yui-skin-sam .yui-calcontainer .yui-cal-nav-mc {
 	width:100%;
-	_width:auto; /* IE doesn't like width 100% */
+	_width:auto; /* IE6 doesn't handle 100% well */
 }
 
 .yui-skin-sam .yui-calcontainer .yui-cal-nav-y input.yui-invalid {
@@ -300,15 +302,15 @@
 
 .yui-skin-sam .yui-calcontainer .yui-cal-nav-b button {
 	margin:2px;
-	padding:2px;
+	padding:0px 2px 0 2px;
 	border: 1px solid #808080;
 	background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 	color:#000;
 }
 
 .yui-skin-sam .yui-calcontainer .yui-cal-nav-b button.default {
-	border-color: #304369;
-	background-color: #304369;
+	border:1px solid #304369;
+	background-color: #426fd9;
 	background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1400px;
 	color:#fff;
 }

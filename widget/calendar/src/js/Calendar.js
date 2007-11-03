@@ -172,7 +172,7 @@ YAHOO.widget.Calendar._DEFAULT_CONFIG = {
 	SELECTED : {key:"selected", value:null},
 	TITLE : {key:"title", value:""},
 	CLOSE : {key:"close", value:false},
-	IFRAME : {key:"iframe", value:(YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) ? true : false},
+	IFRAME : {key:"iframe", value:false},
 	MINDATE : {key:"mindate", value:null},
 	MAXDATE : {key:"maxdate", value:null},
 	MULTI_SELECT : {key:"multi_select", value:false},
