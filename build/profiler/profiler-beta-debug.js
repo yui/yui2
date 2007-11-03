@@ -126,6 +126,16 @@ YAHOO.tool.Profiler = {
     },
 
     /**
+     * Returns an object containing profiling data for a single function.
+     * The object has an entry for min, max, avg, calls, and points).
+     * @return {Object} An object containing profile data for a given function.
+     * @static
+     */
+    getFunctionReport : function (name /*:String*/) /*:Object*/ {
+        return this._report[name];
+    },
+
+    /**
      * Returns an object containing profiling data for all of the functions 
      * that were profiled. The object has an entry for each function and 
      * returns all information (min, max, average, calls, etc.) for each
@@ -133,7 +143,8 @@ YAHOO.tool.Profiler = {
      * @return {Object} An object containing all profile data.
      * @static
      */
-    getReport : function (filter /*:Function*/) /*:Object*/ {
+    getFullReport : function (filter /*:Function*/) /*:Object*/ {
+        filter = filter || function(){return true;};
     
         if (YAHOO.lang.isFunction(filter)) {
             var report = {};
@@ -145,8 +156,6 @@ YAHOO.tool.Profiler = {
             }
             
             return report;
-        } else {
-            return this._report;
         }
     },
 
@@ -257,7 +266,9 @@ YAHOO.tool.Profiler = {
     
         for (var prop in object) {
             if (typeof object[prop] == "function"){
-                this.registerFunction(name + "." + prop, object);
+                if (prop != "constructor" && prop != "superclass"){ //don't do constructor or superclass, it's recursive
+                    this.registerFunction(name + "." + prop, object);
+                }
             } else if (typeof object[prop] == "object" && recurse){
                 this.registerObject(name + "." + prop, object[prop], recurse);
             }
@@ -278,14 +289,15 @@ YAHOO.tool.Profiler = {
         if (YAHOO.lang.isFunction(this._container[name])){
         
             //get original data
-            var owner /*:Object*/ = this._container[name].__yuiOwner;
-            var funcName /*:String*/ = this._container[name].__yuiFuncName;
-            delete this._container[name].__yuiOwner;
-            delete this._container[name].__yuiFuncName;
+            //var owner /*:Object*/ = this._container[name].__yuiOwner;
+            //var funcName /*:String*/ = this._container[name].__yuiFuncName;
+            //delete this._container[name].__yuiOwner;
+            //delete this._container[name].__yuiFuncName;
             
             //replace instrumented function
-            owner[funcName] = this._container[name];
-            delete this._containers[name];
+            //owner[funcName] = this._container[name];
+            //delete this._container[name];
+            this.unregisterFunction(name, true);
        
         }
 
@@ -317,7 +329,10 @@ YAHOO.tool.Profiler = {
             
             //replace instrumented function
             owner[funcName] = this._container[name];
-            delete this._containers[name];
+            
+            //delete supporting information
+            delete this._container[name];
+            delete this._report[name];
        
         }
             
@@ -330,23 +345,26 @@ YAHOO.tool.Profiler = {
      * mode, it will also unregister objects found inside of this object, 
      * using the same methodology.
      * @param {String} name The name of the object to unregister.
-     * @param {Object} object (Object) The object that represents the name.
      * @param {Boolean} recurse (Optional) Determines if subobject methods should also be
      *      unregistered.
      * @return {Void}
      * @static
      */
-    unregisterObject : function (name /*:String*/, object /*:Object*/, recurse /*:Boolean*/) /*:Void*/{
+    unregisterObject : function (name /*:String*/, recurse /*:Boolean*/) /*:Void*/{
     
         //get the object
-        object = (YAHOO.lang.isObject(object) ? object : eval(name));    
-    
-        for (var prop in object) {
-            if (typeof object[prop] == "function"){
-                this.unregisterFunction(name + "." + prop, object);
-            } else if (typeof object[prop] == "object" && recurse){
-                this.unregisterObject(name + "." + prop, object[prop], recurse);
+        if (YAHOO.lang.isObject(this._container[name])){            
+            object = this._container[name];    
+        
+            for (var prop in object) {
+                if (typeof object[prop] == "function"){
+                    this.unregisterFunction(name + "." + prop);
+                } else if (typeof object[prop] == "object" && recurse){
+                    this.unregisterObject(name + "." + prop, recurse);
+                }
             }
+            
+            delete this._container[name];
         }
     
     }
