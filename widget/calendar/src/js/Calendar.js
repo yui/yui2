@@ -205,7 +205,7 @@ YAHOO.widget.Calendar._DEFAULT_CONFIG = {
 	MY_LABEL_YEAR_POSITION:{key:"my_label_year_position", value:2},
 	MY_LABEL_MONTH_SUFFIX:{key:"my_label_month_suffix", value:" "},
 	MY_LABEL_YEAR_SUFFIX:{key:"my_label_year_suffix", value:""},
-	NAV: {key:"nav", value: null}
+	NAV: {key:"navigator", value: null}
 };
 
 /**
@@ -1292,15 +1292,20 @@ YAHOO.widget.Calendar.prototype = {
 	},
 
 	/**
-	 * The default handler for the "nav" property
+	 * The default handler for the "navigator" property
 	 * @method configNavigator
 	 */
 	configNavigator : function(type, args, obj) {
 		var val = args[0];
-		if (YAHOO.lang.isObject(val)) {
+		if (YAHOO.lang.isObject(val) || val === true) {
 			this.navigator = new YAHOO.widget.CalendarNavigator(this);
 			// Cleanup DOM Refs/Events before innerHTML is removed.
-			this.beforeRenderEvent.subscribe(this.navigator.erase, this.navigator, true);
+			function erase() {
+				if (!this.pages) { 
+					this.navigator.erase();
+				}
+			}
+			this.beforeRenderEvent.subscribe(erase, this, true);
 		} else {
 			if (this.navigator) {
 				this.navigator.destroy();
@@ -1460,7 +1465,7 @@ YAHOO.widget.Calendar.prototype = {
 	
 		var monthLabel  = this.Locale.LOCALE_MONTHS[pageDate.getMonth()] + this.Locale.MY_LABEL_MONTH_SUFFIX;
 		var yearLabel = pageDate.getFullYear() + this.Locale.MY_LABEL_YEAR_SUFFIX;
-	
+
 		if (this.Locale.MY_LABEL_MONTH_POSITION == 2 || this.Locale.MY_LABEL_YEAR_POSITION == 1) {
 			return yearLabel + monthLabel;
 		} else {
@@ -1560,7 +1565,7 @@ YAHOO.widget.Calendar.prototype = {
 			this.oDomContainer.removeChild(btn);
 		}
 	},
-	
+
 	/**
 	* Renders the calendar header.
 	* @method renderHeader
@@ -1612,14 +1617,11 @@ YAHOO.widget.Calendar.prototype = {
 			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' >&#160;</a>';
 		}
 
-		var bHasNav = (this.cfg.getProperty("nav") !== null);
-		if (bHasNav) {
-			html[html.length] = "<a class=\"" + this.Style.CSS_NAV + "\" href=\"#\">";
+        var lbl = this.buildMonthLabel();
+		if (this.cfg.getProperty("navigator")) {
+			lbl = "<a class=\"" + this.Style.CSS_NAV + "\" href=\"#\">" + lbl + "</a>";
 		}
-		html[html.length] = this.buildMonthLabel();
-		if (bHasNav) {
-			html[html.length] = "</a>";
-		}
+		html[html.length] = lbl;
 
 		if (renderRight) {
 			var rightArrow = this.cfg.getProperty(defCfg.NAV_ARROW_RIGHT.key);
@@ -1939,9 +1941,9 @@ YAHOO.widget.Calendar.prototype = {
 	
 		this.resetRenderers();
 		this.cellDates.length = 0;
-	
+
 		YAHOO.util.Event.purgeElement(this.oDomContainer, true);
-	
+
 		var html = [];
 	
 		html[html.length] = '<table cellSpacing="0" class="' + this.Style.CSS_CALENDAR + ' y' + workingDate.getFullYear() + '" id="' + this.id + '">';
@@ -1985,7 +1987,7 @@ YAHOO.widget.Calendar.prototype = {
 			YAHOO.util.Event.addListener(this.linkRight, mousedown, cal.nextMonth, cal, true);
 		}
 
-		if (this.cfg.getProperty("nav") !== null) {
+		if (this.cfg.getProperty("navigator") !== null) {
 			this.applyNavListeners();
 		}
 

@@ -225,97 +225,90 @@
 .yui-skin-sam .yui-calendar td.calcell.highlight4 { background-color:#ccff99; }
 
 /* CalendarNavigator */
-/*
-    YEAR : "yui-cal-nav-y",
-    MONTH : "yui-cal-nav-m",
-    BUTTONS : "yui-cal-nav-b",
-
-    YEAR_CTRL : "yui-cal-nav-yc",
-    MONTH_CTRL : "yui-cal-nav-mc",
-*/
-
 .yui-skin-sam .yui-calendar a.calnav { 
-    border: 1px solid #f2f2f2;
-    padding:2px 4px 2px 4px;
-    text-decoration:none;
-    color:#000;
-    *zoom:1;
+	border: 1px solid #f2f2f2;
+	padding:2px 4px 2px 4px;
+	text-decoration:none;
+	color:#000;
+	*zoom:1;
 }
 
 .yui-skin-sam .yui-calendar a.calnav:hover { 
-    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
-    border-color:#A0A0A0;
-    cursor:pointer;
+	background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
+	border-color:#A0A0A0;
+	cursor:pointer;
 }
 
-.yui-skin-sam .yui-cal-nav-mask {
-    background-color:#000;
-    opacity:0.25;
-    *filter:alpha(opacity=25);
-    display:none;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-mask {
+	background-color:#000;
+	opacity:0.25;
+	*filter:alpha(opacity=25);
 }
 
-.yui-skin-sam .yui-cal-nav {
-    border:1px solid #808080;
-	margin:0px;
-    padding:0px;
-    top:2.5em;
-    left:8px;
-    right:8px;
-    background-color:#f2f2f2;
-    font-size:93%;
-    display:none;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav {
+	font-size:93%;
+	border:1px solid #808080;
+	left:50%;
+	margin-left:-7em;
+	width:14em;
+	padding:0px;
+	top:2.5em;
+	background-color:#f2f2f2;
 }
 
-.yui-skin-sam .yui-cal-nav-y,
-.yui-skin-sam .yui-cal-nav-m,
-.yui-skin-sam .yui-cal-nav-b {
-    padding:5px 10px 5px 10px;
+.yui-skin-sam .yui-calcontainer.multi .yui-cal-nav {
+	width:16em;
+	margin-left:-8em;
 }
 
-.yui-skin-sam .yui-cal-nav-b {
-    text-align:center;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-y,
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-m,
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-b {
+	padding:5px 10px 5px 10px;
 }
 
-.yui-skin-sam .yui-cal-nav-e {
-    margin-top:5px;
-    padding:5px;
-    background-color:#EDF5FF;
-    border-top:1px solid black;
-    display:none;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-b {
+	text-align:center;
 }
 
-.yui-skin-sam .yui-cal-nav label {
-    display:block;
-    font-weight:bold;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-e {
+	margin-top:5px;
+	padding:5px;
+	background-color:#EDF5FF;
+	border-top:1px solid black;
+	display:none;
 }
 
-.yui-skin-sam .yui-cal-nav-mc {
-    width:100%;
-    _width:auto; /* IE doesn't like width 100% */
+.yui-skin-sam .yui-calcontainer .yui-cal-nav label {
+	display:block;
+	font-weight:bold;
 }
 
-
-.yui-skin-sam .yui-cal-nav-y input.yui-invalid {
-    background-color:#FFEE69;
-    border: 1px solid #000;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-mc {
+	width:100%;
+	_width:auto; /* IE doesn't like width 100% */
 }
 
-.yui-skin-sam .yui-cal-nav-yc {
-    width:4em;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-y input.yui-invalid {
+	background-color:#FFEE69;
+	border: 1px solid #000;
 }
 
-.yui-skin-sam .yui-cal-nav-b button {
-    margin:2px;
-    padding:2px;
-    border: 1px solid #808080;
-    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
-    color:#000;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-yc {
+	width:4em;
 }
 
-.yui-skin-sam .yui-cal-nav-b button.default {
-    border-color: #304369;
-    background-color: #304369;
-    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1400px;
-    color:#fff;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-b button {
+	margin:2px;
+	padding:2px;
+	border: 1px solid #808080;
+	background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
+	color:#000;
+}
+
+.yui-skin-sam .yui-calcontainer .yui-cal-nav-b button.default {
+	border-color: #304369;
+	background-color: #304369;
+	background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1400px;
+	color:#fff;
 }
