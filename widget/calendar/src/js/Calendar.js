@@ -172,7 +172,7 @@ YAHOO.widget.Calendar._DEFAULT_CONFIG = {
 	SELECTED : {key:"selected", value:null},
 	TITLE : {key:"title", value:""},
 	CLOSE : {key:"close", value:false},
-	IFRAME : {key:"iframe", value:false},
+	IFRAME : {key:"iframe", value:(YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) ? true : false},
 	MINDATE : {key:"mindate", value:null},
 	MAXDATE : {key:"maxdate", value:null},
 	MULTI_SELECT : {key:"multi_select", value:false},
@@ -360,6 +360,14 @@ YAHOO.widget.Calendar.prototype = {
 	* @type Array
 	*/
 	_renderStack : null,
+
+	/**
+	* A reference to the CalendarNavigator instance created for this Calendar.
+	* Will be null if the "navigator" configuration property has not been set
+	* @property navigator
+	* @type CalendarNavigator
+	*/
+	navigator : null,
 
 	/**
 	* The private list of initially selected dates.
