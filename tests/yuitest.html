@@ -522,8 +522,9 @@ YAHOO.test.YUITest_test = (function(){
         
         testWaitComplexPass : function (){
         
+            var that = this;
             setTimeout(function(){            
-                YAHOO.tool.TestRunner.resume(function(){
+                that.resume(function(){
                     Assert.areEqual(5, this.value, "Value should be 6.");
                 });            
             }, 500);
@@ -534,8 +535,9 @@ YAHOO.test.YUITest_test = (function(){
         
         testWaitComplexFail : function (){
         
+            var that = this;
             setTimeout(function(){            
-                YAHOO.tool.TestRunner.resume(function(){
+                that.resume(function(){
                     Assert.areEqual(6, this.value, "Value should be 6.");
                 });            
             }, 500);
