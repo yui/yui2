@@ -24,8 +24,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	/**
 	 * The Calendar/CalendarGroup instance to which the navigator belongs
 	 * @property cal
-	 * @type Calendar
-	 * @type CalendarGroup
+	 * @type {Calendar|CalendarGroup}
 	 */
 	cal : null,
 
@@ -497,12 +496,6 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		E.on(this.yearEl, arrowEvt, this._handleDirectionKeys, this, true);
 		E.on(this.lastCtrl, tabEvt, this._handleTabKey, this, true);
 		E.on(this.firstCtrl, tabEvt, this._handleShiftTabKey, this, true);
-
-		/*
-		if (this.__isMac && (ua.opera || ua.webkit)) {
-			E.on(this.yearEl, "keydown", this._handlePageKeyMacFix, this, true);
-		}
-		*/
 	},
 
 	/**
@@ -806,6 +799,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * Default Keyboard event handler to capture Enter 
 	 * on the Navigator's year control (yearEl)
 	 * 
+	 * @method _handleEnterKey
 	 * @protected
 	 * @param {Event} e The DOM event being handled
 	 */
@@ -821,6 +815,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * Default Keyboard event handler to capture up/down/pgup/pgdown
 	 * on the Navigator's year control (yearEl).
 	 * 
+	 * @method _handleDirectionKeys
 	 * @protected
 	 * @param {Event} e The DOM event being handled
 	 */
@@ -861,37 +856,11 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		}
 	},
 
-	
-	/**
-	 * Default Keyboard event handler to capture up/down/pgup/pgdown
-	 * on the Navigator's year control (yearEl).
-	 * 
-	 * @protected
-	 * @param {Event} e The DOM event being handled
-
-	_handlePageKeyMacFix : function(e) {
-		var E = YAHOO.util.Event;
-		var KEYS = YAHOO.util.KeyListener.KEY;
-		var NAV = YAHOO.widget.CalendarNavigator;
-
-		switch(E.getCharCode(e)) {
-			case KEYS.PAGE_UP:
-			case KEYS.PAGE_DOWN:
-				E.preventDefault(e);
-				if (e.type == "keydown") {
-					this._handleDirectionKeys(e);
-				}
-				break;
-			default:
-				break;
-		}
-	},
-	*/
-
 	/**
 	 * Default Keyboard event handler to capture Tab 
 	 * on the last control (lastCtrl) in the Navigator.
 	 * 
+	 * @method _handleTabKey
 	 * @protected
 	 * @param {Event} e The DOM event being handled
 	 */
@@ -1161,6 +1130,16 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @type Number
 	 */
 	CN.YR_MAJOR_INC = 10;
+
+	/**
+	 * Artificial delay (in ms) between the time the Navigator is hidden
+	 * and the Calendar/CalendarGroup state is updated. Allows the user
+	 * the see the Calendar/CalendarGroup page changing. If set to 0
+	 * the Calendar/CalendarGroup page will be updated instantly
+	 * @property YAHOO.widget.CalendarNavigator.UPDATE_DELAY
+	 * @static
+	 * @type Number
+	 */
 	CN.UPDATE_DELAY = 50;
 
 	/**
