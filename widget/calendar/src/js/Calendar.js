@@ -1173,9 +1173,47 @@ YAHOO.widget.Calendar.prototype = {
 		this.cfg.addProperty(defCfg.MY_LABEL_YEAR_SUFFIX.key, { value:defCfg.MY_LABEL_YEAR_SUFFIX.value, handler:this.configLocale } );
 
 		/**
-		* Configuration for the Month Year Navigation UI. By default it is disabled
-		* @config NAV
-		* @type Object
+		* Configuration for the Month/Year CalendarNavigator UI which allows the user to jump directly to a 
+		* specific Month/Year without having to scroll sequentially through months.
+		* <p>
+		* Setting this property to null (default value) or false, will disable the CalendarNavigator UI.
+		* </p>
+		* <p>
+		* Setting this property to true will enable the CalendarNavigatior UI with the default CalendarNavigator configuration values.
+		* </p>
+		* <p>
+		* This property can also be set to an object literal containing configuration properties for the CalendarNavigator UI.
+		* </p>
+		* <p>
+        * The configuration object expects the the following case-sensitive properties, with the "strings" property being a nested object.
+        * Any properties which are not provided will use the default values (defined in the CalendarNavigator class).
+        * <code>
+        * {<br/>
+        *    // An object containing the string labels to use in the Navigator's UI<br/>
+        *   strings : Object<br/>
+        *           {<br/>
+        *             // The string to use for the month label. Defaults to "Month"<br/> 
+        *             month : String, <br/>
+        *             // The string to use for the year label. Defaults to "Year".<br/>
+        *             year : String, <br/>
+        *             // The string to use for the submit button label. Defaults to "Okay".<br/>
+        *             submit : String, <br/>
+        *             // The string to use for the cancel button label. Defaults to "Cancel"<br/>
+        *             cancel : String, <br/>
+        *             // Default "Please enter a valid year. (a 1-4 digit string)"<br/>
+        *             invalidYear : String, <br/>
+        *           },
+        *   // The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT<br/>
+        *   monthFormat : String,<br/>
+        *   // The number of digits to which the year input control is to be limited <br/>
+        *   yearMaxDigits : Number,<br/>
+        *   // Either "year" or "month" specifying which input control should get initial focus<br/>
+        *   initialFocus : String, <br/>
+        * }<br/>
+        * </code>
+		* </p>
+		* @config navigator
+		* @type {Object|Boolean}
 		* @default null
 		*/
 		this.cfg.addProperty(defCfg.NAV.key, { value:defCfg.NAV.value, handler:this.configNavigator } );
@@ -1188,7 +1226,7 @@ YAHOO.widget.Calendar.prototype = {
 	configPageDate : function(type, args, obj) {
 		this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.PAGEDATE.key, this._parsePageDate(args[0]), true);
 	},
-	
+
 	/**
 	* The default handler for the "mindate" property
 	* @method configMinDate
@@ -1200,7 +1238,7 @@ YAHOO.widget.Calendar.prototype = {
 			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MINDATE.key, new Date(val[0],(val[1]-1),val[2]));
 		}
 	},
-	
+
 	/**
 	* The default handler for the "maxdate" property
 	* @method configMaxDate
