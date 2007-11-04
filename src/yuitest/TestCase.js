@@ -40,6 +40,17 @@ YAHOO.tool.TestCase = function (template /*:Object*/) {
 YAHOO.tool.TestCase.prototype = {  
 
     /**
+     * Resumes a paused test and runs the given function.
+     * @param {Function} segment (Optional) The function to run.
+     *      If omitted, the test automatically passes.
+     * @return {Void}
+     * @method resume
+     */
+    resume : function (segment /*:Function*/) /*:Void*/ {
+        YAHOO.tool.TestRunner.resume(segment);
+    },
+
+    /**
      * Causes the test case to wait a specified amount of time and then
      * continue executing the given code.
      * @param {Function} segment (Optional) The function to run after the delay.
