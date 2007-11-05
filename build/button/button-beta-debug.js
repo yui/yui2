@@ -1527,7 +1527,7 @@
                 bMenuFlipped = false,
                 nButtonY = Dom.getY(oButtonEL),
                 nScrollTop = Dom.getDocumentScrollTop(),
-                nMenuMinHeight,
+                nMenuMinScrollHeight,
                 nMenuHeight,
                 oMenuShadow;
     
@@ -1579,10 +1579,10 @@
         
                 if (nMenuHeight > nDisplayRegionHeight) {
         
-                    nMenuMinHeight = oMenu.cfg.getProperty("minheight");
+                    nMenuMinScrollHeight = oMenu.cfg.getProperty("minscrollheight");
         
         
-                    if (nDisplayRegionHeight > nMenuMinHeight) {
+                    if (nDisplayRegionHeight > nMenuMinScrollHeight) {
         
                         oMenu.cfg.setProperty("maxheight", 
                                     nDisplayRegionHeight);
@@ -1597,7 +1597,7 @@
                     }
             
         
-                    if (nDisplayRegionHeight < nMenuMinHeight) {
+                    if (nDisplayRegionHeight < nMenuMinScrollHeight) {
                    
                         if (bMenuFlipped) {
             

@@ -14,7 +14,7 @@
     border-style: solid;
     border-color: #808080;
     margin: 0 -1px;
-    *position: relative;
+    *position: relative;    /* Necessary to get negative margins working in IE */
     *left: -1px;
 
 }
@@ -29,6 +29,16 @@
     min-height: 2em; /* For Gecko */
     *min-height: auto; /* For IE */
     color: #000; 
+
+}
+
+.yui-skin-sam .yui-button a {
+
+    /*
+        Necessary to get Button's of type "link" to be the correct 
+        height in IE.
+    */
+    *line-height: 2;
 
 }
 
