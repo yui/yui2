@@ -233,7 +233,9 @@ YAHOO.widget.Calendar._EVENT_TYPES = {
 	BEFORE_HIDE_NAV : "beforeHideNav",
 	HIDE_NAV : "hideNav",
 	BEFORE_SHOW_NAV : "beforeShowNav",
-	SHOW_NAV : "showNav"
+	SHOW_NAV : "showNav",
+	BEFORE_RENDER_NAV : "beforeRenderNav",
+	RENDER_NAV : "renderNav"
 };
 
 /**
@@ -713,7 +715,19 @@ YAHOO.widget.Calendar.prototype = {
 		* @event hideEvent
 		*/
 		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
-	
+
+		/**
+		* Fired just before the CalendarNavigator is to be rendered
+		* @event beforeRenderNavEvent
+		*/
+		this.beforeRenderNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_RENDER_NAV);
+
+		/**
+		* Fired after the CalendarNavigator is rendered
+		* @event renderNavEvent
+		*/
+		this.renderNavEvent = new YAHOO.util.CustomEvent(defEvents.RENDER_NAV);
+
 		this.beforeSelectEvent.subscribe(this.onBeforeSelect, this, true);
 		this.selectEvent.subscribe(this.onSelect, this, true);
 		this.beforeDeselectEvent.subscribe(this.onBeforeDeselect, this, true);
@@ -1185,32 +1199,32 @@ YAHOO.widget.Calendar.prototype = {
 		* This property can also be set to an object literal containing configuration properties for the CalendarNavigator UI.
 		* </p>
 		* <p>
-        * The configuration object expects the the following case-sensitive properties, with the "strings" property being a nested object.
-        * Any properties which are not provided will use the default values (defined in the CalendarNavigator class).
-        * <code>
-        * {<br/>
-        *    // An object containing the string labels to use in the Navigator's UI<br/>
-        *   strings : Object<br/>
-        *           {<br/>
-        *             // The string to use for the month label. Defaults to "Month"<br/> 
-        *             month : String, <br/>
-        *             // The string to use for the year label. Defaults to "Year".<br/>
-        *             year : String, <br/>
-        *             // The string to use for the submit button label. Defaults to "Okay".<br/>
-        *             submit : String, <br/>
-        *             // The string to use for the cancel button label. Defaults to "Cancel"<br/>
-        *             cancel : String, <br/>
-        *             // Default "Please enter a valid year. (a 1-4 digit string)"<br/>
-        *             invalidYear : String, <br/>
-        *           },
-        *   // The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT<br/>
-        *   monthFormat : String,<br/>
-        *   // The number of digits to which the year input control is to be limited <br/>
-        *   yearMaxDigits : Number,<br/>
-        *   // Either "year" or "month" specifying which input control should get initial focus<br/>
-        *   initialFocus : String, <br/>
-        * }<br/>
-        * </code>
+		* The configuration object expects the the following case-sensitive properties, with the "strings" property being a nested object.
+		* Any properties which are not provided will use the default values (defined in the CalendarNavigator class).
+		* <code>
+		* {<br/>
+		*    // An object containing the string labels to use in the Navigator's UI<br/>
+		*   strings : Object<br/>
+		*           {<br/>
+		*             // The string to use for the month label. Defaults to "Month"<br/> 
+		*             month : String, <br/>
+		*             // The string to use for the year label. Defaults to "Year".<br/>
+		*             year : String, <br/>
+		*             // The string to use for the submit button label. Defaults to "Okay".<br/>
+		*             submit : String, <br/>
+		*             // The string to use for the cancel button label. Defaults to "Cancel"<br/>
+		*             cancel : String, <br/>
+		*             // Default "Please enter a valid year. (a 1-4 digit string)"<br/>
+		*             invalidYear : String, <br/>
+		*           },
+		*   // The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT<br/>
+		*   monthFormat : String,<br/>
+		*   // The number of digits to which the year input control is to be limited <br/>
+		*   yearMaxDigits : Number,<br/>
+		*   // Either "year" or "month" specifying which input control should get initial focus<br/>
+		*   initialFocus : String, <br/>
+		* }<br/>
+		* </code>
 		* </p>
 		* @config navigator
 		* @type {Object|Boolean}
@@ -1343,7 +1357,7 @@ YAHOO.widget.Calendar.prototype = {
 	 */
 	configNavigator : function(type, args, obj) {
 		var val = args[0];
-		if (YAHOO.lang.isObject(val) || val === true) {
+		if (YAHOO.lang.isObject(val) || val === true && YAHOO.widget.CalendarNavigator) {
 			this.navigator = new YAHOO.widget.CalendarNavigator(this);
 			// Cleanup DOM Refs/Events before innerHTML is removed.
 			function erase() {
@@ -1663,7 +1677,7 @@ YAHOO.widget.Calendar.prototype = {
 			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' >&#160;</a>';
 		}
 
-        var lbl = this.buildMonthLabel();
+		var lbl = this.buildMonthLabel();
 		if (this.cfg.getProperty("navigator")) {
 			lbl = "<a class=\"" + this.Style.CSS_NAV + "\" href=\"#\">" + lbl + "</a>";
 		}

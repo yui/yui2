@@ -268,12 +268,14 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @method render
 	 */
 	render: function() {
+		this.cal.beforeRenderNavEvent.fire();
 		if (!this.__rendered) {
 			this.createNav();
 			this.createMask();
 			this.applyListeners();
 			this.__rendered = true;
 		}
+		this.cal.renderNavEvent.fire();
 	},
 
 	/**

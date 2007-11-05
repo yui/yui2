@@ -618,6 +618,18 @@ YAHOO.widget.CalendarGroup.prototype = {
 		* @event hideEvent
 		*/
 		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
+
+		/**
+		* Fired just before the CalendarNavigator is to be rendered
+		* @event beforeRenderNavEvent
+		*/
+		this.beforeRenderNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_RENDER_NAV);
+
+		/**
+		* Fired after the CalendarNavigator is rendered
+		* @event renderNavEvent
+		*/
+		this.renderNavEvent = new YAHOO.util.CustomEvent(defEvents.RENDER_NAV);
 	},
 	
 	/**
@@ -1253,9 +1265,9 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "configTitle",
 																 "configClose",
 																 "configIframe",
+																 "configNavigator",
 																 "createTitleBar",
 																 "createCloseButton",
-                                                                 "configNavigator",
 																 "removeTitleBar",
 																 "removeCloseButton",
 																 "hide",
