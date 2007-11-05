@@ -467,7 +467,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	/**
 	 * Fires when the user moves the mouse over the bounds of an item renderer in the chart.
 	 *
-	 * @event itemMouseOver
+	 * @event itemMouseOverEvent
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -475,12 +475,12 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemMouseOver");
+	this.createEvent("itemMouseOverEvent");
 	
 	/**
 	 * Fires when the user moves the mouse out of the bounds of an item renderer in the chart.
 	 *
-	 * @event itemMouseOut
+	 * @event itemMouseOutEvent
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -488,12 +488,12 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemMouseOut");
+	this.createEvent("itemMouseOutEvent");
 	
 	/**
 	 * Fires when the user clicks an item renderer in the chart with the mouse.
 	 *
-	 * @event itemClick
+	 * @event itemClickEvent
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -501,12 +501,12 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemClick");
+	this.createEvent("itemClickEvent");
 	
 	/**
 	 * Fires when the user double-clicks an item renderer in the chart with the mouse.
 	 *
-	 * @event itemDoubleClick
+	 * @event itemDoubleClickEvent
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -514,12 +514,12 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemDoubleClick");
+	this.createEvent("itemDoubleClickEvent");
 	
 	/**
 	 * Fires when the user presses the mouse down on an item to initiate a drag action.
 	 *
-	 * @event itemDragStart
+	 * @event itemDragStartEvent
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -527,12 +527,12 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemDragStart");
+	this.createEvent("itemDragStartEvent");
 	
 	/**
 	 * Fires when the user moves the mouse during a drag action.
 	 *
-	 * @event itemDrag
+	 * @event itemDragEvent
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -540,12 +540,12 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemDrag");
+	this.createEvent("itemDragEvent");
 
 	/**
 	 * Fires when the user releases the mouse during a drag action.
 	 *
-	 * @event itemDragEnd
+	 * @event itemDragEndEvent
 	 * @param event.type {String} The event type
 	 * @param event.item {Object} The data displayed by the renderer
 	 * @param event.index {Number} The position within the series that the item appears.
@@ -553,7 +553,7 @@ YAHOO.widget.Chart = function(type, containerId, dataSource, attributes)
 	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.
 	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.
 	 */
-	this.createEvent("itemDragEnd");
+	this.createEvent("itemDragEndEvent");
 };
 
 YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,

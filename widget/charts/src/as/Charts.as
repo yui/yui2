@@ -570,12 +570,21 @@ package
 				var style:Object = styles[i];
 				
 				//defaults
-				var defaultColors:Array = [
-					0x2e434d, 0xc2d81e, 0x586b71, 0xf6c90a, 0x869ca4, 0xcfff83,
-					0xf46401, 0xe9e9e9, 0x4d95dd, 0x444444, 0xd81803, 0xc3eafb];
+				var defaultColors:Array =
+				[
+					0x00b8bf, 0x8dd5e7, 0xedff9f, 0xffa928, 0xc0fff6, 0xd00050,
+					0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
+					0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
+				];
+				
 				if(series is PieSeries)
 				{
-					defaultColors = [defaultColors.concat()];
+					defaultColors =
+					[[
+						0x00b8bf, 0x8dd5e7, 0xc0fff6, 0xffa928, 0xedff9f, 0xd00050,
+						0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
+						0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
+					]];
 				}
 				
 				var defaultSize:Number = 10;
@@ -787,6 +796,7 @@ package
 		protected function chartItemEventHandler(event:ChartEvent):void
 		{
 			var type:String = event.type.replace("Roll", "Mouse");
+			type += "Event";
 			var seriesIndex:int = (this.chart.dataProvider as Array).indexOf(event.series);
 			var itemEvent:Object = {type: type, seriesIndex: seriesIndex, index: event.index, item: event.item, x: this.mouseX, y: this.mouseY};
 			this.dispatchEventToJavaScript(itemEvent);
