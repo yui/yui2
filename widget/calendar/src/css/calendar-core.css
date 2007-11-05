@@ -103,18 +103,18 @@
 	display:none;
 }
 
-/* NAVIGATOR BUTTONS (based on button-core.css) */ 
-.yui-calcontainer .yui-cal-nav .yui-cal-nav-b .yui-cal-nav-btn  {
+/* NAVIGATOR BUTTONS (based on button-core.css) */
+.yui-calcontainer .yui-cal-nav .yui-cal-nav-btn  {
 	display: -moz-inline-box; /* Gecko */
 	display: inline-block; /* IE, Opera and Safari */
 }
 
-.yui-calcontainer .yui-cal-nav .yui-cal-nav-b .yui-cal-nav-btn button {
+.yui-calcontainer .yui-cal-nav .yui-cal-nav-btn button {
 	display: block;
 	*display: inline-block; /* IE */
+	*overflow: visible; /* Remove superfluous padding for IE */
 	border: none;
 	background-color: transparent;
-	*overflow: visible; /* Remove superfluous padding for IE */
 	cursor: pointer;
 }
 

@@ -1357,11 +1357,11 @@ YAHOO.widget.Calendar.prototype = {
 	 */
 	configNavigator : function(type, args, obj) {
 		var val = args[0];
-		if (YAHOO.lang.isObject(val) || val === true && YAHOO.widget.CalendarNavigator) {
+		if (YAHOO.widget.CalendarNavigator && (val === true || YAHOO.lang.isObject(val))) {
 			this.navigator = new YAHOO.widget.CalendarNavigator(this);
 			// Cleanup DOM Refs/Events before innerHTML is removed.
 			function erase() {
-				if (!this.pages) { 
+				if (!this.pages) {
 					this.navigator.erase();
 				}
 			}

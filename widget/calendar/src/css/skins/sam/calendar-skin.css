@@ -250,6 +250,7 @@
 
 /* NAVIGATOR BOUNDING BOX */
 .yui-skin-sam .yui-calcontainer .yui-cal-nav {
+	font-family:arial,helvetica,clean,sans-serif;
 	font-size:93%;
 	border:1px solid #808080;
 	left:50%;
@@ -311,7 +312,7 @@
 /* NAVIGATOR BUTTONS */
 
 /* BUTTON WRAPPER */
-.yui-skin-sam .yui-calcontainer .yui-cal-nav-b .yui-cal-nav-btn {
+.yui-skin-sam .yui-calcontainer .yui-cal-nav .yui-cal-nav-btn {
 	border:1px solid #808080;
 	background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 	background-color:#ccc;
@@ -319,24 +320,24 @@
 }
 
 /* BUTTON (based on button-skin.css) */
-.yui-skin-sam .yui-calcontainer .yui-cal-nav-b button {
-	padding: 0 8px;
+.yui-skin-sam .yui-calcontainer .yui-cal-nav .yui-cal-nav-btn button {
+	padding:0 8px;
 	font-size:93%;
 	line-height: 2;  /* ~24px */
 	*line-height: 1.7; /* For IE */
 	min-height: 2em; /* For Gecko */
 	*min-height: auto; /* For IE */
-	color: #000; 
+	color: #000;
 }
 
 /* DEFAULT BUTTONS */
 /* NOTE: IE6 will only pickup the yui-default specifier from the multiple class specifier */
-.yui-skin-sam .yui-calcontainer .yui-cal-nav-b .yui-cal-nav-btn.yui-default {
+.yui-skin-sam .yui-calcontainer .yui-cal-nav .yui-cal-nav-btn.yui-default {
 	border:1px solid #304369;
 	background-color: #426fd9;
 	background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1400px;
 }
 
-.yui-skin-sam .yui-calcontainer .yui-cal-nav-b .yui-cal-nav-btn.yui-default button {
+.yui-skin-sam .yui-calcontainer .yui-cal-nav .yui-cal-nav-btn.yui-default button {
 	color:#fff;
 }

@@ -13,26 +13,26 @@
 * The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those containers.
 * 
 * <p>
-* <strong>NOTE: As of 2.4.0, the ID parameter is optional.</strong> 
+* <strong>NOTE: As of 2.4.0, the constructor's ID argument is optional.</strong>
 * The CalendarGroup can be constructed by simply providing a container ID string, 
 * or a reference to a container DIV HTMLElement (the element needs to exist 
 * in the document).
 * 
-* For e.g.:
+* E.g.:
 *	<xmp>
 *		var c = new YAHOO.widget.CalendarGroup("calContainer", configOptions);
 *	</xmp>
 * or:
 *   <xmp>
-*       var divElem = YAHOO.util.Dom.get("calContainer");
-*		var c = new YAHOO.widget.CalendarGroup(divElem, configOptions);
+*       var containerDiv = YAHOO.util.Dom.get("calContainer");
+*		var c = new YAHOO.widget.CalendarGroup(containerDiv, configOptions);
 *	</xmp>
 * </p>
 * <p>
-* If not provided, the id will be generated from the container DIV id by adding an "_t" suffix.
-* For example if the containerId is "calContainer", the id will be set to "calContainer_t", if an
-* id is not provided.
+* If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
+* For example if an ID is not provided, and the container's ID is "calContainer", the CalendarGroup's ID will be set to "calContainer_t".
 * </p>
+* 
 * @namespace YAHOO.widget
 * @class CalendarGroup
 * @constructor
@@ -457,6 +457,14 @@ YAHOO.widget.CalendarGroup.prototype = {
 		* @default ""
 		*/
 		this.cfg.addProperty(defCfg.MY_LABEL_YEAR_SUFFIX.key, { value:defCfg.MY_LABEL_YEAR_SUFFIX.value, handler:this.delegateConfig } );
+
+		/**
+		* Configuration for the Month Year Navigation UI. By default it is disabled
+		* @config NAV
+		* @type Object
+		* @default null
+		*/
+		this.cfg.addProperty(defCfg.NAV.key, { value:defCfg.NAV.value, handler:this.configNavigator } );
 	},
 
 	/**
@@ -586,6 +594,42 @@ YAHOO.widget.CalendarGroup.prototype = {
 		* @event hideEvent
 		*/
 		this.hideEvent = new YAHOO.util.CustomEvent(defEvents.HIDE);
+
+		/**
+		* Fired just before the CalendarNavigator is to be shown
+		* @event beforeShowEvent
+		*/
+		this.beforeShowNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW_NAV);
+	
+		/**
+		* Fired after the CalendarNavigator is shown
+		* @event showEvent
+		*/
+		this.showNavEvent = new YAHOO.util.CustomEvent(defEvents.SHOW_NAV);
+	
+		/**
+		* Fired just before the CalendarNavigator is to be hidden
+		* @event beforeHideEvent
+		*/
+		this.beforeHideNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE_NAV);
+	
+		/**
+		* Fired after the CalendarNavigator is hidden
+		* @event hideEvent
+		*/
+		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
+
+		/**
+		* Fired just before the CalendarNavigator is to be rendered
+		* @event beforeRenderNavEvent
+		*/
+		this.beforeRenderNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_RENDER_NAV);
+
+		/**
+		* Fired after the CalendarNavigator is rendered
+		* @event renderNavEvent
+		*/
+		this.renderNavEvent = new YAHOO.util.CustomEvent(defEvents.RENDER_NAV);
 	},
 	
 	/**
@@ -1221,6 +1265,7 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "configTitle",
 																 "configClose",
 																 "configIframe",
+																 "configNavigator",
 																 "createTitleBar",
 																 "createCloseButton",
 																 "removeTitleBar",

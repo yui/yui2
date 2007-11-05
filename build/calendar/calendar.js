@@ -963,29 +963,28 @@ YAHOO.widget.DateMath = {
 * <p>To construct the placeholder for the calendar widget, the code is as
 * follows:
 *	<xmp>
-*		<div id="cal1Container"></div>
+*		<div id="calContainer"></div>
 *	</xmp>
 * </p>
 * <p>
-* <strong>NOTE: As of 2.4.0, the ID parameter is optional.</strong> 
+* <strong>NOTE: As of 2.4.0, the constructor's ID argument is optional.</strong>
 * The Calendar can be constructed by simply providing a container ID string, 
 * or a reference to a container DIV HTMLElement (the element needs to exist 
 * in the document).
 * 
-* For e.g.:
+* E.g.:
 *	<xmp>
 *		var c = new YAHOO.widget.Calendar("calContainer", configOptions);
 *	</xmp>
 * or:
 *   <xmp>
-*       var divElem = YAHOO.util.Dom.get("calContainer");
-*		var c = new YAHOO.widget.Calendar(divElem, configOptions);
+*       var containerDiv = YAHOO.util.Dom.get("calContainer");
+*		var c = new YAHOO.widget.Calendar(containerDiv, configOptions);
 *	</xmp>
 * </p>
 * <p>
-* If not provided, the id will be generated from the container DIV id by adding an "_t" suffix.
-* For example if the containerId is "calContainer", the id will be set to "calContainer_t", if an
-* id is not provided.
+* If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
+* For example if an ID is not provided, and the container's ID is "calContainer", the Calendar's ID will be set to "calContainer_t".
 * </p>
 * 
 * @namespace YAHOO.widget
@@ -1153,7 +1152,8 @@ YAHOO.widget.Calendar._DEFAULT_CONFIG = {
 	MY_LABEL_MONTH_POSITION:{key:"my_label_month_position", value:1},
 	MY_LABEL_YEAR_POSITION:{key:"my_label_year_position", value:2},
 	MY_LABEL_MONTH_SUFFIX:{key:"my_label_month_suffix", value:" "},
-	MY_LABEL_YEAR_SUFFIX:{key:"my_label_year_suffix", value:""}
+	MY_LABEL_YEAR_SUFFIX:{key:"my_label_year_suffix", value:""},
+	NAV: {key:"navigator", value: null}
 };
 
 /**
@@ -1177,7 +1177,13 @@ YAHOO.widget.Calendar._EVENT_TYPES = {
 	BEFORE_HIDE : "beforeHide",
 	HIDE : "hide",
 	BEFORE_SHOW : "beforeShow",
-	SHOW : "show"
+	SHOW : "show",
+	BEFORE_HIDE_NAV : "beforeHideNav",
+	HIDE_NAV : "hideNav",
+	BEFORE_SHOW_NAV : "beforeShowNav",
+	SHOW_NAV : "showNav",
+	BEFORE_RENDER_NAV : "beforeRenderNav",
+	RENDER_NAV : "renderNav"
 };
 
 /**
@@ -1210,6 +1216,7 @@ YAHOO.widget.Calendar._STYLES = {
 	CSS_CONTAINER : "yui-calcontainer",
 	CSS_NAV_LEFT : "calnavleft",
 	CSS_NAV_RIGHT : "calnavright",
+	CSS_NAV : "calnav",
 	CSS_CLOSE : "calclose",
 	CSS_CELL_TOP : "calcelltop",
 	CSS_CELL_LEFT : "calcellleft",
@@ -1303,6 +1310,14 @@ YAHOO.widget.Calendar.prototype = {
 	* @type Array
 	*/
 	_renderStack : null,
+
+	/**
+	* A reference to the CalendarNavigator instance created for this Calendar.
+	* Will be null if the "navigator" configuration property has not been set
+	* @property navigator
+	* @type CalendarNavigator
+	*/
+	navigator : null,
 
 	/**
 	* The private list of initially selected dates.
@@ -1621,7 +1636,43 @@ YAHOO.widget.Calendar.prototype = {
 		* @event hideEvent
 		*/
 		this.hideEvent = new YAHOO.util.CustomEvent(defEvents.HIDE);
+
+		/**
+		* Fired just before the CalendarNavigator is to be shown
+		* @event beforeShowEvent
+		*/
+		this.beforeShowNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW_NAV);
 	
+		/**
+		* Fired after the CalendarNavigator is shown
+		* @event showEvent
+		*/
+		this.showNavEvent = new YAHOO.util.CustomEvent(defEvents.SHOW_NAV);
+	
+		/**
+		* Fired just before the CalendarNavigator is to be hidden
+		* @event beforeHideEvent
+		*/
+		this.beforeHideNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE_NAV);
+	
+		/**
+		* Fired after the CalendarNavigator is hidden
+		* @event hideEvent
+		*/
+		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
+
+		/**
+		* Fired just before the CalendarNavigator is to be rendered
+		* @event beforeRenderNavEvent
+		*/
+		this.beforeRenderNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_RENDER_NAV);
+
+		/**
+		* Fired after the CalendarNavigator is rendered
+		* @event renderNavEvent
+		*/
+		this.renderNavEvent = new YAHOO.util.CustomEvent(defEvents.RENDER_NAV);
+
 		this.beforeSelectEvent.subscribe(this.onBeforeSelect, this, true);
 		this.selectEvent.subscribe(this.onSelect, this, true);
 		this.beforeDeselectEvent.subscribe(this.onBeforeDeselect, this, true);
@@ -1641,48 +1692,48 @@ YAHOO.widget.Calendar.prototype = {
 	*/
 	doSelectCell : function(e, cal) {
 		var cell,index,d,date;
-	
+
 		var target = YAHOO.util.Event.getTarget(e);
 		var tagName = target.tagName.toLowerCase();
 		var defSelector = false;
-	
+
 		while (tagName != "td" && ! YAHOO.util.Dom.hasClass(target, cal.Style.CSS_CELL_SELECTABLE)) {
-	
+
 			if (!defSelector && tagName == "a" && YAHOO.util.Dom.hasClass(target, cal.Style.CSS_CELL_SELECTOR)) {
 				defSelector = true;	
 			}
-	
+
 			target = target.parentNode;
-			tagName = target.tagName.toLowerCase(); 
+			tagName = target.tagName.toLowerCase();
 			// TODO: No need to go all the way up to html.
 			if (tagName == "html") {
 				return;
 			}
 		}
-	
+
 		if (defSelector) {
 			// Stop link href navigation for default renderer
 			YAHOO.util.Event.preventDefault(e);
 		}
 	
 		cell = target;
-	
+
 		if (YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_SELECTABLE)) {
 			index = cell.id.split("cell")[1];
 			d = cal.cellDates[index];
 			date = new Date(d[0],d[1]-1,d[2]);
 		
 			var link;
-	
+
 			if (cal.Options.MULTI_SELECT) {
 				link = cell.getElementsByTagName("a")[0];
 				if (link) {
 					link.blur();
 				}
-	
+
 				var cellDate = cal.cellDates[index];
 				var cellDateIndex = cal._indexOfSelectedFieldArray(cellDate);
-	
+
 				if (cellDateIndex > -1) {	
 					cal.deselectCell(index);
 				} else {
@@ -1698,7 +1749,7 @@ YAHOO.widget.Calendar.prototype = {
 			}
 		}
 	},
-	
+
 	/**
 	* The event that is executed when the user hovers over a cell
 	* @method doCellMouseOver
@@ -1712,19 +1763,19 @@ YAHOO.widget.Calendar.prototype = {
 		} else {
 			target = this;
 		}
-	
-		while (target.tagName.toLowerCase() != "td") {
+
+		while (target.tagName && target.tagName.toLowerCase() != "td") {
 			target = target.parentNode;
-			if (target.tagName.toLowerCase() == "html") {
+			if (!target.tagName || target.tagName.toLowerCase() == "html") {
 				return;
 			}
 		}
-	
+
 		if (YAHOO.util.Dom.hasClass(target, cal.Style.CSS_CELL_SELECTABLE)) {
 			YAHOO.util.Dom.addClass(target, cal.Style.CSS_CELL_HOVER);
 		}
 	},
-	
+
 	/**
 	* The event that is executed when the user moves the mouse out of a cell
 	* @method doCellMouseOut
@@ -1738,14 +1789,14 @@ YAHOO.widget.Calendar.prototype = {
 		} else {
 			target = this;
 		}
-	
-		while (target.tagName.toLowerCase() != "td") {
+
+		while (target.tagName && target.tagName.toLowerCase() != "td") {
 			target = target.parentNode;
-			if (target.tagName.toLowerCase() == "html") {
+			if (!target.tagName || target.tagName.toLowerCase() == "html") {
 				return;
 			}
 		}
-	
+
 		if (YAHOO.util.Dom.hasClass(target, cal.Style.CSS_CELL_SELECTABLE)) {
 			YAHOO.util.Dom.removeClass(target, cal.Style.CSS_CELL_HOVER);
 		}
@@ -1754,7 +1805,7 @@ YAHOO.widget.Calendar.prototype = {
 	setupConfig : function() {
 	
 		var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
-	
+
 		/**
 		* The month/year representing the current visible Calendar date (mm/yyyy)
 		* @config pagedate
@@ -1762,7 +1813,7 @@ YAHOO.widget.Calendar.prototype = {
 		* @default today's date
 		*/
 		this.cfg.addProperty(defCfg.PAGEDATE.key, { value:new Date(), handler:this.configPageDate } );
-	
+
 		/**
 		* The date or range of dates representing the current Calendar selection
 		* @config selected
@@ -1770,7 +1821,7 @@ YAHOO.widget.Calendar.prototype = {
 		* @default []
 		*/
 		this.cfg.addProperty(defCfg.SELECTED.key, { value:[], handler:this.configSelected } );
-	
+
 		/**
 		* The title to display above the Calendar's month header
 		* @config title
@@ -1778,7 +1829,7 @@ YAHOO.widget.Calendar.prototype = {
 		* @default ""
 		*/
 		this.cfg.addProperty(defCfg.TITLE.key, { value:defCfg.TITLE.value, handler:this.configTitle } );
-	
+
 		/**
 		* Whether or not a close button should be displayed for this Calendar
 		* @config close
@@ -1786,7 +1837,7 @@ YAHOO.widget.Calendar.prototype = {
 		* @default false
 		*/
 		this.cfg.addProperty(defCfg.CLOSE.key, { value:defCfg.CLOSE.value, handler:this.configClose } );
-	
+
 		/**
 		* Whether or not an iframe shim should be placed under the Calendar to prevent select boxes from bleeding through in Internet Explorer 6 and below.
 		* This property is enabled by default for IE6 and below. It is disabled by default for other browsers for performance reasons, but can be 
@@ -1797,7 +1848,7 @@ YAHOO.widget.Calendar.prototype = {
 		* @default true for IE6 and below, false for all other browsers
 		*/
 		this.cfg.addProperty(defCfg.IFRAME.key, { value:defCfg.IFRAME.value, handler:this.configIframe, validator:this.cfg.checkBoolean } );
-	
+
 		/**
 		* The minimum selectable date in the current Calendar (mm/dd/yyyy)
 		* @config mindate
@@ -1805,7 +1856,7 @@ YAHOO.widget.Calendar.prototype = {
 		* @default null
 		*/
 		this.cfg.addProperty(defCfg.MINDATE.key, { value:defCfg.MINDATE.value, handler:this.configMinDate } );
-	
+
 		/**
 		* The maximum selectable date in the current Calendar (mm/dd/yyyy)
 		* @config maxdate
@@ -1900,7 +1951,7 @@ YAHOO.widget.Calendar.prototype = {
 		* @default ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
 		*/	
 		this.cfg.addProperty(defCfg.MONTHS_LONG.key,		{ value:defCfg.MONTHS_LONG.value, handler:this.configLocale } );
-		
+
 		/**
 		* The 1-character weekday labels for the current locale.
 		* @config WEEKDAYS_1CHAR
@@ -2078,6 +2129,52 @@ YAHOO.widget.Calendar.prototype = {
 		* @default ""
 		*/
 		this.cfg.addProperty(defCfg.MY_LABEL_YEAR_SUFFIX.key, { value:defCfg.MY_LABEL_YEAR_SUFFIX.value, handler:this.configLocale } );
+
+		/**
+		* Configuration for the Month/Year CalendarNavigator UI which allows the user to jump directly to a 
+		* specific Month/Year without having to scroll sequentially through months.
+		* <p>
+		* Setting this property to null (default value) or false, will disable the CalendarNavigator UI.
+		* </p>
+		* <p>
+		* Setting this property to true will enable the CalendarNavigatior UI with the default CalendarNavigator configuration values.
+		* </p>
+		* <p>
+		* This property can also be set to an object literal containing configuration properties for the CalendarNavigator UI.
+		* </p>
+		* <p>
+		* The configuration object expects the the following case-sensitive properties, with the "strings" property being a nested object.
+		* Any properties which are not provided will use the default values (defined in the CalendarNavigator class).
+		* <code>
+		* {<br/>
+		*    // An object containing the string labels to use in the Navigator's UI<br/>
+		*   strings : Object<br/>
+		*           {<br/>
+		*             // The string to use for the month label. Defaults to "Month"<br/> 
+		*             month : String, <br/>
+		*             // The string to use for the year label. Defaults to "Year".<br/>
+		*             year : String, <br/>
+		*             // The string to use for the submit button label. Defaults to "Okay".<br/>
+		*             submit : String, <br/>
+		*             // The string to use for the cancel button label. Defaults to "Cancel"<br/>
+		*             cancel : String, <br/>
+		*             // Default "Please enter a valid year. (a 1-4 digit string)"<br/>
+		*             invalidYear : String, <br/>
+		*           },
+		*   // The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT<br/>
+		*   monthFormat : String,<br/>
+		*   // The number of digits to which the year input control is to be limited <br/>
+		*   yearMaxDigits : Number,<br/>
+		*   // Either "year" or "month" specifying which input control should get initial focus<br/>
+		*   initialFocus : String, <br/>
+		* }<br/>
+		* </code>
+		* </p>
+		* @config navigator
+		* @type {Object|Boolean}
+		* @default null
+		*/
+		this.cfg.addProperty(defCfg.NAV.key, { value:defCfg.NAV.value, handler:this.configNavigator } );
 	},
 	
 	/**
@@ -2087,7 +2184,7 @@ YAHOO.widget.Calendar.prototype = {
 	configPageDate : function(type, args, obj) {
 		this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.PAGEDATE.key, this._parsePageDate(args[0]), true);
 	},
-	
+
 	/**
 	* The default handler for the "mindate" property
 	* @method configMinDate
@@ -2099,7 +2196,7 @@ YAHOO.widget.Calendar.prototype = {
 			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MINDATE.key, new Date(val[0],(val[1]-1),val[2]));
 		}
 	},
-	
+
 	/**
 	* The default handler for the "maxdate" property
 	* @method configMaxDate
@@ -2197,15 +2294,38 @@ YAHOO.widget.Calendar.prototype = {
 				break;
 		}
 	},
-	
+
+	/**
+	 * The default handler for the "navigator" property
+	 * @method configNavigator
+	 */
+	configNavigator : function(type, args, obj) {
+		var val = args[0];
+		if (YAHOO.widget.CalendarNavigator && (val === true || YAHOO.lang.isObject(val))) {
+			this.navigator = new YAHOO.widget.CalendarNavigator(this);
+			// Cleanup DOM Refs/Events before innerHTML is removed.
+			function erase() {
+				if (!this.pages) {
+					this.navigator.erase();
+				}
+			}
+			this.beforeRenderEvent.subscribe(erase, this, true);
+		} else {
+			if (this.navigator) {
+				this.navigator.destroy();
+				this.navigator = null;
+			}
+		}
+	},
+
 	/**
 	* Defines the style constants for the Calendar
 	* @method initStyles
 	*/
 	initStyles : function() {
-	
+
 		var defStyle = YAHOO.widget.Calendar._STYLES;
-	
+
 		this.Style = {
 			/**
 			* @property Style.CSS_ROW_HEADER
@@ -2292,6 +2412,10 @@ YAHOO.widget.Calendar.prototype = {
 			*/
 			CSS_NAV_RIGHT : defStyle.CSS_NAV_RIGHT,
 			/**
+			* @property Style.CSS_NAV
+			*/
+			CSS_NAV : defStyle.CSS_NAV,
+			/**
 			* @property Style.CSS_CLOSE
 			*/
 			CSS_CLOSE : defStyle.CSS_CLOSE,
@@ -2345,7 +2469,7 @@ YAHOO.widget.Calendar.prototype = {
 	
 		var monthLabel  = this.Locale.LOCALE_MONTHS[pageDate.getMonth()] + this.Locale.MY_LABEL_MONTH_SUFFIX;
 		var yearLabel = pageDate.getFullYear() + this.Locale.MY_LABEL_YEAR_SUFFIX;
-	
+
 		if (this.Locale.MY_LABEL_MONTH_POSITION == 2 || this.Locale.MY_LABEL_YEAR_POSITION == 1) {
 			return yearLabel + monthLabel;
 		} else {
@@ -2445,7 +2569,7 @@ YAHOO.widget.Calendar.prototype = {
 			this.oDomContainer.removeChild(btn);
 		}
 	},
-	
+
 	/**
 	* Renders the calendar header.
 	* @method renderHeader
@@ -2495,9 +2619,13 @@ YAHOO.widget.Calendar.prototype = {
 			var leftStyle = (leftArrow === null) ? "" : ' style="background-image:url(' + leftArrow + ')"';
 			html[html.length] = '<a class="' + this.Style.CSS_NAV_LEFT + '"' + leftStyle + ' >&#160;</a>';
 		}
-		
-		html[html.length] = this.buildMonthLabel();
-		
+
+		var lbl = this.buildMonthLabel();
+		if (this.cfg.getProperty("navigator")) {
+			lbl = "<a class=\"" + this.Style.CSS_NAV + "\" href=\"#\">" + lbl + "</a>";
+		}
+		html[html.length] = lbl;
+
 		if (renderRight) {
 			var rightArrow = this.cfg.getProperty(defCfg.NAV_ARROW_RIGHT.key);
 			if (rightArrow === null && YAHOO.widget.Calendar.IMG_ROOT !== null) {
@@ -2809,9 +2937,9 @@ YAHOO.widget.Calendar.prototype = {
 	
 		this.resetRenderers();
 		this.cellDates.length = 0;
-	
+
 		YAHOO.util.Event.purgeElement(this.oDomContainer, true);
-	
+
 		var html = [];
 	
 		html[html.length] = '<table cellSpacing="0" class="' + this.Style.CSS_CALENDAR + ' y' + workingDate.getFullYear() + '" id="' + this.id + '">';
@@ -2831,7 +2959,7 @@ YAHOO.widget.Calendar.prototype = {
 	
 		this.renderEvent.fire();
 	},
-	
+
 	/**
 	* Applies the Calendar's DOM listeners to applicable elements.
 	* @method applyListeners
@@ -2841,7 +2969,7 @@ YAHOO.widget.Calendar.prototype = {
 		var cal = this.parent || this;
 		var anchor = "a";
 		var mousedown = "mousedown";
-	
+
 		var linkLeft = YAHOO.util.Dom.getElementsByClassName(this.Style.CSS_NAV_LEFT, anchor, root);
 		var linkRight = YAHOO.util.Dom.getElementsByClassName(this.Style.CSS_NAV_RIGHT, anchor, root);
 	
@@ -2849,12 +2977,16 @@ YAHOO.widget.Calendar.prototype = {
 			this.linkLeft = linkLeft[0];
 			YAHOO.util.Event.addListener(this.linkLeft, mousedown, cal.previousMonth, cal, true);
 		}
-	
+
 		if (linkRight && linkRight.length > 0) {
 			this.linkRight = linkRight[0];
 			YAHOO.util.Event.addListener(this.linkRight, mousedown, cal.nextMonth, cal, true);
 		}
-	
+
+		if (this.cfg.getProperty("navigator") !== null) {
+			this.applyNavListeners();
+		}
+
 		if (this.domEventMap) {
 			var el,elements;
 			for (var cls in this.domEventMap) {	
@@ -2882,7 +3014,36 @@ YAHOO.widget.Calendar.prototype = {
 		YAHOO.util.Event.addListener(this.oDomContainer, "mouseover", this.doCellMouseOver, this);
 		YAHOO.util.Event.addListener(this.oDomContainer, "mouseout", this.doCellMouseOut, this);
 	},
-	
+
+	applyNavListeners : function() {
+
+		var E = YAHOO.util.Event;
+
+		var calParent = this.parent || this;
+		var cal = this;
+
+		var navBtns = YAHOO.util.Dom.getElementsByClassName(this.Style.CSS_NAV, "a", this.oDomContainer);
+
+		if (navBtns.length > 0) {
+
+			function show(e, obj) {
+				var target = E.getTarget(e);
+				// this == navBtn
+				if (this === target || YAHOO.util.Dom.isAncestor(this, target)) {
+					E.preventDefault(e);
+				}
+				var navigator = calParent.navigator;
+				if (navigator) {
+					var pgdate = cal.cfg.getProperty("pagedate");
+					navigator.setYear(pgdate.getFullYear());
+					navigator.setMonth(pgdate.getMonth());
+					navigator.show();
+				}
+			}
+			E.addListener(navBtns, "click", show);
+		}
+	},
+
 	/**
 	* Retrieves the Date object for the specified Calendar cell
 	* @method getDateByCellId
@@ -3616,7 +3777,7 @@ YAHOO.widget.Calendar.prototype = {
 				aMonthYear = date.split(this.cfg.getProperty(defCfg.DATE_FIELD_DELIMITER.key));
 				month = parseInt(aMonthYear[this.cfg.getProperty(defCfg.MY_MONTH_POSITION.key)-1], 10)-1;
 				year = parseInt(aMonthYear[this.cfg.getProperty(defCfg.MY_YEAR_POSITION.key)-1], 10);
-				
+
 				parsedDate = new Date(year, month, 1);
 			}
 		} else {
@@ -4024,26 +4185,26 @@ YAHOO.widget.Cal_Core = YAHOO.widget.Calendar;
 * The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those containers.
 * 
 * <p>
-* <strong>NOTE: As of 2.4.0, the ID parameter is optional.</strong> 
+* <strong>NOTE: As of 2.4.0, the constructor's ID argument is optional.</strong>
 * The CalendarGroup can be constructed by simply providing a container ID string, 
 * or a reference to a container DIV HTMLElement (the element needs to exist 
 * in the document).
 * 
-* For e.g.:
+* E.g.:
 *	<xmp>
 *		var c = new YAHOO.widget.CalendarGroup("calContainer", configOptions);
 *	</xmp>
 * or:
 *   <xmp>
-*       var divElem = YAHOO.util.Dom.get("calContainer");
-*		var c = new YAHOO.widget.CalendarGroup(divElem, configOptions);
+*       var containerDiv = YAHOO.util.Dom.get("calContainer");
+*		var c = new YAHOO.widget.CalendarGroup(containerDiv, configOptions);
 *	</xmp>
 * </p>
 * <p>
-* If not provided, the id will be generated from the container DIV id by adding an "_t" suffix.
-* For example if the containerId is "calContainer", the id will be set to "calContainer_t", if an
-* id is not provided.
+* If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
+* For example if an ID is not provided, and the container's ID is "calContainer", the CalendarGroup's ID will be set to "calContainer_t".
 * </p>
+* 
 * @namespace YAHOO.widget
 * @class CalendarGroup
 * @constructor
@@ -4465,6 +4626,14 @@ YAHOO.widget.CalendarGroup.prototype = {
 		* @default ""
 		*/
 		this.cfg.addProperty(defCfg.MY_LABEL_YEAR_SUFFIX.key, { value:defCfg.MY_LABEL_YEAR_SUFFIX.value, handler:this.delegateConfig } );
+
+		/**
+		* Configuration for the Month Year Navigation UI. By default it is disabled
+		* @config NAV
+		* @type Object
+		* @default null
+		*/
+		this.cfg.addProperty(defCfg.NAV.key, { value:defCfg.NAV.value, handler:this.configNavigator } );
 	},
 
 	/**
@@ -4594,6 +4763,42 @@ YAHOO.widget.CalendarGroup.prototype = {
 		* @event hideEvent
 		*/
 		this.hideEvent = new YAHOO.util.CustomEvent(defEvents.HIDE);
+
+		/**
+		* Fired just before the CalendarNavigator is to be shown
+		* @event beforeShowEvent
+		*/
+		this.beforeShowNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW_NAV);
+	
+		/**
+		* Fired after the CalendarNavigator is shown
+		* @event showEvent
+		*/
+		this.showNavEvent = new YAHOO.util.CustomEvent(defEvents.SHOW_NAV);
+	
+		/**
+		* Fired just before the CalendarNavigator is to be hidden
+		* @event beforeHideEvent
+		*/
+		this.beforeHideNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE_NAV);
+	
+		/**
+		* Fired after the CalendarNavigator is hidden
+		* @event hideEvent
+		*/
+		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
+
+		/**
+		* Fired just before the CalendarNavigator is to be rendered
+		* @event beforeRenderNavEvent
+		*/
+		this.beforeRenderNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_RENDER_NAV);
+
+		/**
+		* Fired after the CalendarNavigator is rendered
+		* @event renderNavEvent
+		*/
+		this.renderNavEvent = new YAHOO.util.CustomEvent(defEvents.RENDER_NAV);
 	},
 	
 	/**
@@ -5229,6 +5434,7 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "configTitle",
 																 "configClose",
 																 "configIframe",
+																 "configNavigator",
 																 "createTitleBar",
 																 "createCloseButton",
 																 "removeTitleBar",
@@ -5267,5 +5473,1190 @@ YAHOO.extend(YAHOO.widget.Calendar2up, YAHOO.widget.CalendarGroup);
 * @deprecated The old Calendar2up class is no longer necessary, since CalendarGroup renders in a 2up view by default.
 */
 YAHOO.widget.Cal2up = YAHOO.widget.Calendar2up;
+
+/**
+ * The CalendarNavigator is used along with a Calendar/CalendarGroup to 
+ * provide a Month/Year popup navigation control, allowing the user to navigate 
+ * to a specific month/year without having to scroll through months sequentially
+ *
+ * @namespace YAHOO.widget
+ * @class CalendarNavigator
+ * @constructor
+ * @param {Calendar|CalendarGroup} cal The instance of the Calendar or CalendarGroup to which this CalendarNavigator should be attached.
+ */
+YAHOO.widget.CalendarNavigator = function(cal) {
+	this.init(cal);
+};
+
+YAHOO.widget.CalendarNavigator.prototype = {
+
+	/**
+	 * The unique ID for this CalendarNavigator instance
+	 * @property id
+	 * @type String
+	 */
+	id : null,
+
+	/**
+	 * The Calendar/CalendarGroup instance to which the navigator belongs
+	 * @property cal
+	 * @type {Calendar|CalendarGroup}
+	 */
+	cal : null,
+
+	/**
+	 * Reference to the HTMLElement used to render the navigator's bounding box
+	 * @property navEl
+	 * @type HTMLElement
+	 */
+	navEl : null,
+
+	/**
+	 * Reference to the HTMLElement used to render the navigator's mask
+	 * @property maskEl
+	 * @type HTMLElement
+	 */
+	maskEl : null,
+
+	/**
+	 * Reference to the HTMLElement used to input the year
+	 * @property yearEl
+	 * @type HTMLElement
+	 */
+	yearEl : null,
+
+	/**
+	 * Reference to the HTMLElement used to input the month
+	 * @property monthEl
+	 * @type HTMLElement
+	 */
+	monthEl : null,
+
+	/**
+	 * Reference to the HTMLElement used to display validation errors
+	 * @property errorEl
+	 * @type HTMLElement
+	 */
+	errorEl : null,
+
+	/**
+	 * Reference to the HTMLElement used to update the Calendar/Calendar group
+	 * with the month/year values
+	 * @property submitEl
+	 * @type HTMLElement
+	 */
+	submitEl : null,
+	
+	/**
+	 * Reference to the HTMLElement used to hide the navigator without updating the 
+	 * Calendar/Calendar group
+	 * @property cancelEl
+	 * @type HTMLElement
+	 */
+	cancelEl : null,
+
+	/** 
+	 * Reference to the first focusable control in the navigator (by default monthEl)
+	 * @property firstCtrl
+	 * @type HTMLElement
+	 */
+	firstCtrl : null,
+	
+	/** 
+	 * Reference to the last focusable control in the navigator (by default cancelEl)
+	 * @property lastCtrl
+	 * @type HTMLElement
+	 */
+	lastCtrl : null,
+
+	/**
+	 * The document containing the Calendar/Calendar group instance
+	 * @property _doc
+	 * @type HTMLDocument
+	 */
+	_doc : null,
+
+	/**
+	 * Internal state property for the current year displayed in the navigator
+	 * @protected
+	 * @property _year
+	 * @type Number
+	 */
+	_year: null,
+	
+	/**
+	 * Internal state property for the current month index displayed in the navigator
+	 * @protected
+	 * @property _month
+	 * @type Number
+	 */
+	_month: 0,
+
+	/**
+	 * Private internal state property which indicates whether or not the 
+	 * Navigator has been rendered.
+	 * @private
+	 * @property __rendered
+	 * @type Boolean
+	 */
+	__rendered: false,
+
+	/**
+	 * Init lifecycle method called as part of construction
+	 * 
+	 * @method init
+	 * @param {Calendar} cal The instance of the Calendar or CalendarGroup to which this CalendarNavigator should be attached
+	 */
+	init : function(cal) {
+		var calBox = cal.oDomContainer;
+
+		this.cal = cal;
+		this.id = calBox.id + YAHOO.widget.CalendarNavigator.ID_SUFFIX;
+		this._doc = calBox.ownerDocument;
+	},
+
+	/**
+	 * Displays the navigator and mask, updating the input controls to reflect the 
+	 * currently set month and year. The show method will invoke the render method
+	 * if the navigator has not been renderered already, allowing for lazy rendering
+	 * of the control.
+	 * 
+	 * The show method will fire the Calendar/CalendarGroup's beforeShowNav and showNav events
+	 * 
+	 * @method show
+	 */
+	show : function() {
+		var CLASSES = YAHOO.widget.CalendarNavigator.CLASSES;
+
+		if (this.cal.beforeShowNavEvent.fire()) {
+			if (!this.__rendered) {
+				this.render();
+			}
+			this.clearErrors();
+
+			this._updateMonthUI();
+			this._updateYearUI();
+			this._show(this.navEl, true);
+
+			this.setInitialFocus();
+			this.showMask();
+
+			YAHOO.util.Dom.addClass(this.cal.oDomContainer, CLASSES.NAV_VISIBLE);
+			this.cal.showNavEvent.fire();
+		}
+	},
+
+	/**
+	 * Hides the navigator and mask
+	 * 
+	 * The show method will fire the Calendar/CalendarGroup's beforeHideNav event and hideNav events
+	 * @method hide
+	 */
+	hide : function() {
+		var CLASSES = YAHOO.widget.CalendarNavigator.CLASSES;
+
+		if (this.cal.beforeHideNavEvent.fire()) {
+			this._show(this.navEl, false);
+			this.hideMask();
+			YAHOO.util.Dom.removeClass(this.cal.oDomContainer, CLASSES.NAV_VISIBLE);
+			this.cal.hideNavEvent.fire();
+		}
+	},
+	
+
+	/**
+	 * Displays the navigator's mask element
+	 * 
+	 * @method showMask
+	 */
+	showMask : function() {
+		this._show(this.maskEl, true);
+	},
+
+	/**
+	 * Hides the navigator's mask element
+	 * 
+	 * @method hideMask
+	 */
+	hideMask : function() {
+		this._show(this.maskEl, false);
+	},
+
+	/**
+	 * Returns the current month set on the navigator
+	 * 
+	 * Note: This may not be the month set in the UI, if 
+	 * the UI contains an invalid value.
+	 * 
+	 * @method getMonth
+	 * @return {Number} The Navigator's current month index
+	 */
+	getMonth: function() {
+		return this._month;
+	},
+
+	/**
+	 * Returns the current year set on the navigator
+	 * 
+	 * Note: This may not be the year set in the UI, if 
+	 * the UI contains an invalid value.
+	 * 
+	 * @method getYear
+	 * @return {Number} The Navigator's current year value
+	 */
+	getYear: function() {
+		return this._year;
+	},
+
+	/**
+	 * Sets the current month on the Navigator, and updates the UI
+	 * 
+	 * @method setMonth
+	 * @param {Number} nMonth The month index, from 0 (Jan) through 11 (Dec).
+	 */
+	setMonth : function(nMonth) {
+		if (nMonth > 0 && nMonth < 12) {
+			this._month = nMonth;
+		}
+		this._updateMonthUI();
+	},
+
+	/**
+	 * Sets the current year on the Navigator, and updates the UI. If the 
+	 * provided year is invalid, it will not be set.
+	 * 
+	 * @method setYear
+	 * @param {Number} The full year value to set the Navigator to
+	 */
+	setYear : function(nYear) {
+		var yrPattern = YAHOO.widget.CalendarNavigator.YR_PATTERN;
+		if (YAHOO.lang.isNumber(nYear) && yrPattern.test(nYear+"")) {
+			this._year = nYear;
+		}
+		this._updateYearUI();
+	},
+
+	/**
+	 * Renders the HTML for the navigator, adding it to the 
+	 * document and attaches event listeners if it has not 
+	 * already been rendered.
+	 * 
+	 * @method render
+	 */
+	render: function() {
+		this.cal.beforeRenderNavEvent.fire();
+		if (!this.__rendered) {
+			this.createNav();
+			this.createMask();
+			this.applyListeners();
+			this.__rendered = true;
+		}
+		this.cal.renderNavEvent.fire();
+	},
+
+	/**
+	 * Creates the navigator's containing HTMLElement, it's contents, and appends 
+	 * the containg element to the Calendar/CalendarGroup's container.
+	 * 
+	 * @method createNav
+	 */
+	createNav : function() {
+		var NAV = YAHOO.widget.CalendarNavigator;
+		var doc = this._doc;
+
+		var d = doc.createElement("div");
+		d.className = NAV.CLASSES.NAV;
+
+		var htmlBuf = this.renderNavContents([]);
+
+		d.innerHTML = htmlBuf.join('');
+		this.cal.oDomContainer.appendChild(d);
+
+		this.navEl = d;
+
+		this.yearEl = doc.getElementById(this.id + NAV.YEAR_SUFFIX);
+		this.monthEl = doc.getElementById(this.id + NAV.MONTH_SUFFIX);
+		this.errorEl = doc.getElementById(this.id + NAV.ERROR_SUFFIX);
+		this.submitEl = doc.getElementById(this.id + NAV.SUBMIT_SUFFIX);
+		this.cancelEl = doc.getElementById(this.id + NAV.CANCEL_SUFFIX);
+
+		this._setFirstLastElements();
+	},
+
+	/**
+	 * Creates the Mask HTMLElement and appends it to the Calendar/CalendarGroups
+	 * container.
+	 * 
+	 * @method createMask
+	 */
+	createMask : function() {
+		var C = YAHOO.widget.CalendarNavigator.CLASSES;
+
+		var d = this._doc.createElement("div");
+		d.className = C.MASK;
+		if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
+			d.className += " fixedsize";
+		}
+		this.cal.oDomContainer.appendChild(d);
+		this.maskEl = d;
+	},
+
+	/**
+	 * Renders the contents of the navigator
+	 * 
+	 * @method renderNavContents
+	 * 
+	 * @param {Array} html The HTML buffer to append the HTML to.
+	 * @return {Array} A reference to the buffer passed in.
+	 */
+	renderNavContents : function(html) {
+		var NAV = YAHOO.widget.CalendarNavigator,
+			C = NAV.CLASSES,
+			h = html; // just to use a shorter name
+
+		h[h.length] = '<div class="' + C.MONTH + '">';
+		this.renderMonth(h);
+		h[h.length] = '</div>';
+		h[h.length] = '<div class="' + C.YEAR + '">';
+		this.renderYear(h);
+		h[h.length] = '</div>';
+		h[h.length] = '<div class="' + C.BUTTONS + '">';
+		this.renderButtons(h);
+		h[h.length] = '</div>';
+		h[h.length] = '<div class="' + C.ERROR + '" id="' + this.id + NAV.ERROR_SUFFIX + '"></div>';
+
+		return h;
+	},
+
+	/**
+	 * Renders the month label and control for the navigator
+	 * 
+	 * @method renderNavContents
+	 * @param {Array} html The HTML buffer to append the HTML to.
+	 * @return {Array} A reference to the buffer passed in.
+	 */
+	renderMonth : function(html) {
+		var NAV = YAHOO.widget.CalendarNavigator,
+			C = NAV.CLASSES;
+
+		var id = this.id + NAV.MONTH_SUFFIX,
+			mf = this.__getCfg("monthFormat"),
+			months = this.cal.cfg.getProperty((mf == YAHOO.widget.Calendar.SHORT) ? "MONTHS_SHORT" : "MONTHS_LONG"),
+			h = html;
+
+		if (months && months.length > 0) {
+			h[h.length] = '<label for="' + id + '">';
+			h[h.length] = this.__getCfg("month", true);
+			h[h.length] = '</label>';
+			h[h.length] = '<select name="' + id + '" id="' + id + '" class="' + C.MONTH_CTRL + '">';
+			for (var i = 0; i < months.length; i++) {
+				h[h.length] = '<option value="' + i + '">';
+				h[h.length] = months[i];
+				h[h.length] = '</option>';
+			}
+			h[h.length] = '</select>';
+		}
+		return h;
+	},
+
+	/**
+	 * Renders the year label and control for the navigator
+	 * 
+	 * @method renderYear
+	 * @param {Array} html The HTML buffer to append the HTML to.
+	 * @return {Array} A reference to the buffer passed in.
+	 */
+	renderYear : function(html) {
+		var NAV = YAHOO.widget.CalendarNavigator,
+			C = NAV.CLASSES;
+
+		var id = this.id + NAV.YEAR_SUFFIX,
+			size = this.__getCfg("yearMaxDigits"),
+			h = html;
+
+		h[h.length] = '<label for="' + id + '">';
+		h[h.length] = this.__getCfg("year", true);
+		h[h.length] = '</label>';
+		h[h.length] = '<input type="text" name="' + id + '" id="' + id + '" class="' + C.YEAR_CTRL + '" maxlength="' + size + '"/>';
+		return h;
+	},
+
+	/**
+	 * Renders the submit/cancel buttons for the navigator
+	 * 
+	 * @method renderButton
+	 * @return {String} The HTML created for the Button UI
+	 */
+	renderButtons : function(html) {
+		var C = YAHOO.widget.CalendarNavigator.CLASSES;
+		var h = html;
+
+		h[h.length] = '<span class="' + C.BUTTON + ' ' + C.DEFAULT + '">';
+		h[h.length] = '<button type="button" id="' + this.id + '_submit' + '">';
+		h[h.length] = this.__getCfg("submit", true);
+		h[h.length] = '</button>';
+		h[h.length] = '</span>';
+		h[h.length] = '<span class="' + C.BUTTON +'">';
+		h[h.length] = '<button type="button" id="' + this.id + '_cancel' + '">';
+		h[h.length] = this.__getCfg("cancel", true);
+		h[h.length] = '</button>';
+		h[h.length] = '</span>';
+
+		return h;
+	},
+
+	/**
+	 * Attaches DOM event listeners to the rendered elements
+	 * <p>
+	 * The method will call applyKeyListeners, to setup keyboard specific 
+	 * listeners
+	 * </p>
+	 * @method applyListeners
+	 */
+	applyListeners : function() {
+		var E = YAHOO.util.Event;
+
+		function yearUpdateHandler() {
+			if (this.validate()) {
+				this.setYear(this._getYearFromUI());
+			}
+		}
+
+		function monthUpdateHandler() {
+			this.setMonth(this._getMonthFromUI());
+		}
+
+		E.on(this.submitEl, "click", this.submit, this, true);
+		E.on(this.cancelEl, "click", this.cancel, this, true);
+		E.on(this.yearEl, "blur", yearUpdateHandler, this, true);
+		E.on(this.monthEl, "change", monthUpdateHandler, this, true);
+
+		this.applyKeyListeners();
+	},
+
+	/**
+	 * Removes/purges DOM event listeners from the rendered elements
+	 * 
+	 * @method purgeListeners
+	 */
+	purgeListeners : function() {
+		var E = YAHOO.util.Event;
+		E.removeListener(this.submitEl, "click", this.submit);
+		E.removeListener(this.cancelEl, "click", this.cancel);
+		E.removeListener(this.yearEl, "blur");
+		E.removeListener(this.monthEl, "change");
+
+		this.purgeKeyListeners();
+	},
+
+	/**
+	 * Attaches DOM listeners for keyboard support. 
+	 * Tab/Shift-Tab looping, Enter Key Submit on Year element,
+	 * Up/Down/PgUp/PgDown year increment on Year element
+	 * <p>
+	 * NOTE: MacOSX Safari 2.x doesn't let you tab to buttons and 
+	 * MacOSX Gecko does not let you tab to buttons or select controls,
+	 * so for these browsers, Tab/Shift-Tab looping is limited to the 
+	 * elements which can be reached using the tab key.
+	 * </p>
+	 * @method applyKeyListeners
+	 */
+	applyKeyListeners : function() {
+		var E = YAHOO.util.Event;
+
+		// IE doesn't fire keypress for arrow/pg keys (non-char keys)
+		var ua = YAHOO.env.ua;
+		var arrowEvt = (ua.ie) ? "keydown" : "keypress";
+
+		// - IE doesn't fire keypress for non-char keys
+		// - Opera doesn't allow us to cancel keydown or keypress for tab, but 
+		//   changes focus successfully on keydown (keypress is too late to change focus - opera's already moved on).
+		var tabEvt = (ua.ie || ua.opera) ? "keydown" : "keypress";
+
+		// Everyone likes keypress for Enter (char keys) - whoo hoo!
+		E.on(this.yearEl, "keypress", this._handleEnterKey, this, true);
+
+		E.on(this.yearEl, arrowEvt, this._handleDirectionKeys, this, true);
+		E.on(this.lastCtrl, tabEvt, this._handleTabKey, this, true);
+		E.on(this.firstCtrl, tabEvt, this._handleShiftTabKey, this, true);
+	},
+
+	/**
+	 * Removes/purges DOM listeners for keyboard support
+	 *
+	 * @method purgeKeyListeners
+	 */
+	purgeKeyListeners : function() {
+		var E = YAHOO.util.Event;
+
+		var arrowEvt = (YAHOO.env.ua.ie) ? "keydown" : "keypress";
+		var tabEvt = (YAHOO.env.ua.ie || YAHOO.env.ua.opera) ? "keydown" : "keypress";
+
+		E.removeListener(this.yearEl, "keypress", this._handleEnterKey);
+		E.removeListener(this.yearEl, arrowEvt, this._handleDirectionKeys);
+		E.removeListener(this.lastCtrl, tabEvt, this._handleTabKey);
+		E.removeListener(this.firstCtrl, tabEvt, this._handleShiftTabKey);
+	},
+
+	/**
+	 * Updates the Calendar/CalendarGroup's pagedate with the currently set month and year if valid.
+	 * <p>
+	 * If the currently set month/year is invalid, a validation error will be displayed and the 
+	 * Calendar/CalendarGroup's pagedate will not be updated.
+	 * </p>
+	 * @method submit
+	 */
+	submit : function() {
+		if (this.validate()) {
+			this.hide();
+
+			this.setMonth(this._getMonthFromUI());
+			this.setYear(this._getYearFromUI());
+
+			var cal = this.cal;
+			var nav = this;
+			
+			function update() {
+				cal.setYear(nav.getYear());
+				cal.setMonth(nav.getMonth());
+				cal.render();
+			}
+			// Artificial delay, just to help the user see something changed
+			var delay = YAHOO.widget.CalendarNavigator.UPDATE_DELAY;
+			if (delay > 0) {
+				window.setTimeout(update, delay);
+			} else {
+				update();
+			}
+		}
+	},
+
+	/**
+	 * Hides the navigator and mask, without updating the Calendar/CalendarGroup's state
+	 * 
+	 * @method cancel
+	 */
+	cancel : function() {
+		this.hide();
+	},
+
+	/**
+	 * Validates the current state of the UI controls
+	 * 
+	 * @method validate
+	 * @return {Boolean} true, if the current UI state contains valid values, false if not
+	 */
+	validate : function() {
+		if (this._getYearFromUI() !== null) {
+			this.clearErrors();
+			return true;
+		} else {
+			this.setYearError();
+			this.setError(this.__getCfg("invalidYear", true));
+			return false;
+		}
+	},
+
+	/**
+	 * Displays an error message in the Navigator's error panel
+	 * @param {String} msg
+	 */
+	setError : function(msg) {
+		if (this.errorEl) {
+			this.errorEl.innerHTML = msg;
+			this._show(this.errorEl, true);
+		}
+	},
+
+	/**
+	 * Clears the navigator's error message and hides the error panel
+	 */
+	clearError : function() {
+		if (this.errorEl) {
+			this.errorEl.innerHTML = "";
+			this._show(this.errorEl, false);
+		}
+	},
+
+	/**
+	 * Displays the validation error UI for the year control
+	 */
+	setYearError : function() {
+		YAHOO.util.Dom.addClass(this.yearEl, YAHOO.widget.CalendarNavigator.CLASSES.INVALID);
+	},
+
+	/**
+	 * Removes the validation error UI for the year control
+	 */
+	clearYearError : function() {
+		YAHOO.util.Dom.removeClass(this.yearEl, YAHOO.widget.CalendarNavigator.CLASSES.INVALID);
+	},
+
+	/**
+	 * Clears all validation and error messages in the UI
+	 */
+	clearErrors : function() {
+		this.clearError();
+		this.clearYearError();
+	},
+
+	/**
+	 * Sets the initial focus, based on the configured value
+	 * @method setInitialFocus
+	 */
+	setInitialFocus : function() {
+		var el = this.submitEl;
+		var f = this.__getCfg("initialFocus");
+
+		if (f && f.toLowerCase) {
+			f = f.toLowerCase();
+			if (f == "year") {
+				el = this.yearEl;
+				try {
+					this.yearEl.select();
+				} catch (e) {
+					// Ignore;
+				}
+			} else if (f == "month") {
+				el = this.monthEl;
+			}
+		}
+
+		if (el && YAHOO.lang.isFunction(el.focus)) {
+			try {
+				el.focus();
+			} catch (e) {
+				// TODO: Fall back if focus fails?
+			}
+		}
+	},
+
+	/**
+	 * Removes all renderered HTML elements for the Navigator from
+	 * the DOM, purges event listeners and clears (nulls) any property
+	 * references to HTML references
+	 */
+	erase : function() {
+		if (this.__rendered) {
+			this.purgeListeners();
+
+			// Clear out innerHTML references
+			this.yearEl = null;
+			this.monthEl = null;
+			this.errorEl = null;
+			this.submitEl = null;
+			this.cancelEl = null;
+			this.firstCtrl = null;
+			this.lastCtrl = null;
+			if (this.navEl) {
+				this.navEl.innerHTML = "";
+			}
+
+			var p = this.navEl.parentNode;
+			if (p) {
+				p.removeChild(this.navEl);
+			}
+			this.navEl = null;
+
+			var pm = this.maskEl.parentNode;
+			if (pm) {
+				pm.removeChild(this.maskEl);
+			}
+			this.maskEl = null;
+			this.__rendered = false;
+		}
+	},
+
+	/**
+	 * Destroys the Navigator object and any HTML references
+	 */
+	destroy : function() {
+		this.erase();
+		this._doc = null;
+		this.cal = null;
+		this.id = null;
+	},
+
+	/**
+	 * Protected implementation to handle how UI elements are 
+	 * hidden/shown.
+	 *
+	 * @method _show
+	 * @protected
+	 */
+	_show : function(el, bShow) {
+		if (el) {
+			YAHOO.util.Dom.setStyle(el, "display", (bShow) ? "block" : "none");
+		}
+	},
+
+	/**
+	 * Returns the month value (index), from the month UI element
+	 * @protected
+	 * @method _getMonthFromUI
+	 * @return {Number} The month index, or 0 if a UI element for the month
+	 * is not found
+	 */
+	_getMonthFromUI : function() {
+		if (this.monthEl) {
+			return this.monthEl.selectedIndex;
+		} else {
+			return 0; // Default to Jan
+		}
+	},
+
+	/**
+	 * Returns the year value, from the Navitator's year UI element
+	 * @protected
+	 * @method _getYearFromUI
+	 * @return {Number} The year value set in the UI, if valid. null is returned if 
+	 * the UI does not contain a valid year value.
+	 */
+	_getYearFromUI : function() {
+		var NAV = YAHOO.widget.CalendarNavigator;
+
+		var yr = null;
+		if (this.yearEl) {
+			var value = this.yearEl.value;
+			value = value.replace(NAV.TRIM, "$1");
+
+			if (NAV.YR_PATTERN.test(value)) {
+				yr = parseInt(value, 10);
+			}
+		}
+		return yr;
+	},
+
+	/**
+	 * Updates the Navigator's year UI, based on the year value set on the Navigator object
+	 * @protected
+	 * @method _updateYearUI
+	 */
+	_updateYearUI : function() {
+		if (this.yearEl && this._year !== null) {
+			this.yearEl.value = this._year;
+		}
+	},
+
+	/**
+	 * Updates the Navigator's month UI, based on the month value set on the Navigator object
+	 * @protected
+	 * @method _updateMonthUI
+	 */
+	_updateMonthUI : function() {
+		if (this.monthEl) {
+			this.monthEl.selectedIndex = this._month;
+		}
+	},
+
+	/**
+	 * Sets up references to the first and last focusable element in the Navigator's UI
+	 * in terms of tab order (Naviagator's firstEl and lastEl properties). The references
+	 * are used to control modality by looping around from the first to the last control
+	 * and visa versa for tab/shift-tab navigation.
+	 * <p>
+	 * See <a href="#applyKeyListeners">applyKeyListeners</a>
+	 * </p>
+	 * @method _setFirstLastElements
+	 */
+	_setFirstLastElements : function() {
+		this.firstCtrl = this.monthEl;
+		this.lastCtrl = this.cancelEl;
+
+		// Special handling for MacOSX.
+		// - Safari 2.x can't focus on buttons
+		// - Gecko can't focus on select boxes or buttons
+		if (this.__isMac) {
+			if (YAHOO.env.ua.webkit && YAHOO.env.ua.webkit < 420){
+				this.firstCtrl = this.monthEl;
+				this.lastCtrl = this.yearEl;
+			}
+			if (YAHOO.env.ua.gecko) {
+				this.firstCtrl = this.yearEl;
+				this.lastCtrl = this.yearEl;
+			}
+		}
+	},
+
+	/**
+	 * Default Keyboard event handler to capture Enter 
+	 * on the Navigator's year control (yearEl)
+	 * 
+	 * @method _handleEnterKey
+	 * @protected
+	 * @param {Event} e The DOM event being handled
+	 */
+	_handleEnterKey : function(e) {
+		var KEYS = YAHOO.util.KeyListener.KEY;
+
+		if (YAHOO.util.Event.getCharCode(e) == KEYS.ENTER) {
+			this.submit();
+		}
+	},
+
+	/**
+	 * Default Keyboard event handler to capture up/down/pgup/pgdown
+	 * on the Navigator's year control (yearEl).
+	 * 
+	 * @method _handleDirectionKeys
+	 * @protected
+	 * @param {Event} e The DOM event being handled
+	 */
+	_handleDirectionKeys : function(e) {
+		var E = YAHOO.util.Event;
+		var KEYS = YAHOO.util.KeyListener.KEY;
+		var NAV = YAHOO.widget.CalendarNavigator;
+
+		var value = (this.yearEl.value) ? parseInt(this.yearEl.value, 10) : null;
+		if (isFinite(value)) {
+			var dir = false;
+			switch(E.getCharCode(e)) {
+				case KEYS.UP:
+					this.yearEl.value = value + NAV.YR_MINOR_INC;
+					dir = true;
+					break;
+				case KEYS.DOWN:
+					this.yearEl.value = Math.max(value - NAV.YR_MINOR_INC, 0);
+					dir = true;
+					break;
+				case 63276: // Safari PGUP keypress not normalized by Event.getCharCode
+				case KEYS.PAGE_UP:
+					this.yearEl.value = value + NAV.YR_MAJOR_INC;
+					dir = true;
+					break;
+				case 63277: // Safari PGDN keypress not normalized by Event.getCharCode
+				case KEYS.PAGE_DOWN:
+					this.yearEl.value = Math.max(value - NAV.YR_MAJOR_INC, 0);
+					dir = true;
+					break;
+				default:
+					break;
+			}
+			if (dir) {
+				E.preventDefault(e);
+				try {
+					this.yearEl.select();
+				} catch(e) {
+					// Ignore
+				}
+			}
+		}
+	},
+
+	/**
+	 * Default Keyboard event handler to capture Tab 
+	 * on the last control (lastCtrl) in the Navigator.
+	 * 
+	 * @method _handleTabKey
+	 * @protected
+	 * @param {Event} e The DOM event being handled
+	 */
+	_handleTabKey : function(e) {
+		var E = YAHOO.util.Event;
+		var KEYS = YAHOO.util.KeyListener.KEY;
+
+		if (E.getCharCode(e) == KEYS.TAB && !e.shiftKey) {
+			try {
+				E.preventDefault(e);
+				this.firstCtrl.focus();
+			} catch (e) {
+				// Ignore - mainly for focus edge cases
+			}
+		}
+	},
+
+	/**
+	 * Default Keyboard event handler to capture Shift-Tab 
+	 * on the first control (firstCtrl) in the Navigator.
+	 * 
+	 * @method _handleShiftTabKey
+	 * @protected
+	 * @param {Event} e The DOM event being handled
+	 */
+	_handleShiftTabKey : function(e) {
+		var E = YAHOO.util.Event;
+		var KEYS = YAHOO.util.KeyListener.KEY;
+
+		if (e.shiftKey && E.getCharCode(e) == KEYS.TAB) {
+			try {
+				E.preventDefault(e);
+				this.lastCtrl.focus();
+			} catch (e) {
+				// Ignore - mainly for focus edge cases
+			}
+		}
+	},
+
+	/**
+	 * Retrieve Navigator configuration values from 
+	 * the parent Calendar/CalendarGroup's config value.
+	 * <p>
+	 * If it has not been set in the user provided configuration, the method will 
+	 * return the default value of the configuration property, as set in _DEFAULT_CFG
+	 * </p>
+	 * @private
+	 * @method __getCfg
+	 * @param {String} Case sensitive property name.
+	 * @param {Boolean} true, if the property is a string property, false if not.
+	 * @return The value of the configuration property
+	 */
+	__getCfg : function(prop, bIsStr) {
+		var DEF_CFG = YAHOO.widget.CalendarNavigator._DEFAULT_CFG;
+		var cfg = this.cal.cfg.getProperty("navigator");
+
+		if (bIsStr) {
+			return (cfg !== true && cfg.strings && cfg.strings[prop]) ? cfg.strings[prop] : DEF_CFG.strings[prop];
+		} else {
+			return (cfg !== true && cfg[prop]) ? cfg[prop] : DEF_CFG[prop];
+		}
+	},
+
+	/**
+	 * Private flag, to identify MacOS
+	 * @private
+	 * @property __isMac
+	 */
+	__isMac : (navigator.userAgent.toLowerCase().indexOf("macintosh") != -1)
+};
+
+(function() {
+	// Setup static properties (inside anon fn, so that we can use shortcuts)
+	var CN = YAHOO.widget.CalendarNavigator;
+
+	/**
+	 * YAHOO.widget.CalendarNavigator.CLASSES contains constants
+	 * for the class values applied to the CalendarNaviatgator's 
+	 * DOM elements
+	 * @property CLASSES
+	 * @static
+	 */
+	CN.CLASSES = {
+		/**
+		 * Class applied to the Calendar Navigator's bounding box
+		 * @property NAV
+		 * @type String
+		 * @static
+		 */
+		NAV :"yui-cal-nav",
+		/**
+		 * Class applied to the Calendar/CalendarGroup's bounding box to indicate
+		 * the Navigator is currently visible
+		 * @property NAV_VISIBLE
+		 * @type String
+		 * @static
+		 */
+		NAV_VISIBLE: "yui-cal-nav-visible",
+		/**
+		 * Class applied to the Navigator mask's bounding box
+		 * @property MASK
+		 * @type String
+		 * @static
+		 */
+		MASK : "yui-cal-nav-mask",
+		/**
+		 * Class applied to the year label/control bounding box
+		 * @property YEAR
+		 * @type String
+		 * @static
+		 */
+		YEAR : "yui-cal-nav-y",
+		/**
+		 * Class applied to the month label/control bounding box
+		 * @property MONTH
+		 * @type String
+		 * @static
+		 */
+		MONTH : "yui-cal-nav-m",
+		/**
+		 * Class applied to the submit/cancel button's bounding box
+		 * @property BUTTONS
+		 * @type String
+		 * @static
+		 */
+		BUTTONS : "yui-cal-nav-b",
+		/**
+		 * Class applied to buttons wrapping element
+		 * @property BUTTON
+		 * @type String
+		 * @static
+		 */
+		BUTTON : "yui-cal-nav-btn",
+		/**
+		 * Class applied to the validation error area's bounding box
+		 * @property ERROR
+		 * @type String
+		 * @static
+		 */
+		ERROR : "yui-cal-nav-e",
+		/**
+		 * Class applied to the year input control
+		 * @property YEAR_CTRL
+		 * @type String
+		 * @static
+		 */
+		YEAR_CTRL : "yui-cal-nav-yc",
+		/**
+		 * Class applied to the month input control
+		 * @property MONTH_CTRL
+		 * @type String
+		 * @static
+		 */
+		MONTH_CTRL : "yui-cal-nav-mc",
+		/**
+		 * Class applied to controls with invalid data (e.g. a year input field with invalid an year)
+		 * @property INVALID
+		 * @type String
+		 * @static
+		 */
+		INVALID : "yui-invalid",
+		/**
+		 * Class applied to default controls
+		 * @property DEFAULT
+		 * @type String
+		 * @static
+		 */
+		DEFAULT : "yui-default"
+	};
+
+	/**
+	 * Object literal containing the default configuration values for the CalendarNavigator
+	 * The configuration object is expected to follow the format below, with the properties being
+	 * case sensitive.
+	 * <code>
+	 * {<br/>
+	 *    // An object containing the string labels to use in the Navigator's UI<br/>
+	 *   strings : Object<br/>
+	 *           {<br/>
+	 *             // The string to use for the month label. Defaults to "Month"<br/> 
+	 *             month : String, <br/>
+	 *             // The string to use for the year label. Defaults to "Year".<br/>
+	 *             year : String, <br/>
+	 *             // The string to use for the submit button label. Defaults to "Okay".<br/>
+	 *             submit : String, <br/>
+	 *             // The string to use for the cancel button label. Defaults to "Cancel"<br/>
+	 *             cancel : String, <br/>
+	 *             // Default "Please enter a valid year. (a 1-4 digit string)"<br/>
+	 *             invalidYear : String, <br/>
+	 *           },
+	 *   // The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT<br/>
+	 *   monthFormat : String,<br/>
+	 *   // The number of digits to which the year input control is to be limited <br/>
+	 *   yearMaxDigits : Number,<br/>
+	 *   // Either "year" or "month" specifying which input control should get initial focus<br/>
+	 *   initialFocus : String, <br/>
+	 * }<br/>
+	 * </code>
+	 * @property _DEFAULT_CFG
+	 * @protected
+	 * @type Object
+	 * @static
+	 */
+	CN._DEFAULT_CFG = {
+		strings : {
+			month: "Month",
+			year: "Year",
+			submit: "Okay",
+			cancel: "Cancel",
+			invalidYear : "Year needs to be a number"
+		},
+		monthFormat: YAHOO.widget.Calendar.LONG,
+		yearMaxDigits: 4,
+		initialFocus: "year"
+	};
+
+	/**
+	 * The suffix added to the Calendar/CalendarGroup's ID, to generate
+	 * a unique ID for the Navigator and it's bounding box.
+	 * @property YAHOO.widget.CalendarNavigator.ID_SUFFIX
+	 * @static
+	 * @final
+	 */
+	CN.ID_SUFFIX = "_nav";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the month control.
+	 * @property YAHOO.widget.CalendarNavigator.MONTH_SUFFIX
+	 * @static
+	 * @final
+	 */
+	CN.MONTH_SUFFIX = "_month";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the year control.
+	 * @property YAHOO.widget.CalendarNavigator.YEAR_SUFFIX
+	 * @static
+	 * @final
+	 */
+	CN.YEAR_SUFFIX = "_year";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the error bounding box.
+	 * @property YAHOO.widget.CalendarNavigator.ERROR_SUFFIX
+	 * @static
+	 * @final
+	 */
+	CN.ERROR_SUFFIX = "_error";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the "Cancel" button.
+	 * @property YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX
+	 * @static
+	 * @final
+	 */
+	CN.CANCEL_SUFFIX = "_cancel";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the "Submit" button.
+	 * @property YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX
+	 * @static
+	 * @final
+	 */
+	CN.SUBMIT_SUFFIX = "_submit";
+
+
+	/**
+	 * The amount by which to increment the current year value,
+	 * when the arrow up/down key is pressed on the year control
+	 * @property YAHOO.widget.CalendarNavigator.YR_MINOR_INC
+	 * @static
+	 * @type Number
+	 */
+	CN.YR_MINOR_INC = 1;
+
+	/**
+	 * The amount by which to increment the current year value,
+	 * when the page up/down key is pressed on the year control
+	 * @property YAHOO.widget.CalendarNavigator.YR_MAJOR_INC
+	 * @static
+	 * @type Number
+	 */
+	CN.YR_MAJOR_INC = 10;
+
+	/**
+	 * Artificial delay (in ms) between the time the Navigator is hidden
+	 * and the Calendar/CalendarGroup state is updated. Allows the user
+	 * the see the Calendar/CalendarGroup page changing. If set to 0
+	 * the Calendar/CalendarGroup page will be updated instantly
+	 * @property YAHOO.widget.CalendarNavigator.UPDATE_DELAY
+	 * @static
+	 * @type Number
+	 */
+	CN.UPDATE_DELAY = 50;
+
+	/**
+	 * Regular expression used to validate the year input
+	 * @property YAHOO.widget.CalendarNavigator.YR_PATTERN
+	 * @static
+	 * @type RegExp
+	 */
+	CN.YR_PATTERN = /^\d+$/;
+	/**
+	 * Regular expression used to trim strings
+	 * @property YAHOO.widget.CalendarNavigator.TRIM
+	 * @static
+	 * @type RegExp
+	 */
+	CN.TRIM = /^\s*(.*?)\s*$/;
+})();
 
 YAHOO.register("calendar", YAHOO.widget.Calendar, {version: "@VERSION@", build: "@BUILD@"});
