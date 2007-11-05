@@ -10,7 +10,7 @@ var X = {
     HYPHEN: '-',
     OR: '|',
     S: '\\s*',
-    SP: '\\s+',
+    SP: '\\s+'
 };
 
 //re = /([a-z0-9]*)*([\[\.#:]{1}[a-z0-9]+)*\s*([>~+]?)?\s*(.*)*/i;
@@ -70,7 +70,7 @@ Selector.prototype = {
             test: function(node, pseudo, val) {
                 return Y.Selector.pseudos[pseudo](node, val); 
             }
-        },
+        }
     },
 
     operators: {
@@ -170,7 +170,11 @@ Selector.prototype = {
 
         '+': function(node, tag) {
             var element = Y.Dom.getNextSiblingBy(node);
-            return ( (element && element.tagName.toUpperCase() == tag) ? [element]: [] );
+            if (!tag) {
+                return [element];
+            } else {
+                return ( (element && element.tagName.toLowerCase() == tag) ? [element]: [] );
+            }
         },
 
         '~': function(node, tag) {
@@ -186,7 +190,7 @@ Selector.prototype = {
                 return false; // to scan all sibilings
             });
             return elements;
-        },
+        }
     },
 
     simpleTest: function test(node, selector) {
