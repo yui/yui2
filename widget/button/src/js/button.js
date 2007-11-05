@@ -36,7 +36,6 @@
 * @namespace YAHOO.widget
 * @requires yahoo, dom, element, event
 * @optional container, menu
-* @beta
 */
 
 
