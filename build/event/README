@@ -9,6 +9,9 @@ YUI Library - Event - Release Notes
     to calling clearAttributes()
   * the DOMReady property is now public
   * Changed IE onDOMReady approach from the defered script node hack to the doScroll('left') hack
+  * getCharChode now Remaps SHIFT-TAB key code (25) to TAB (9) in Safari
+  * getCharCode provides the proper key codes for page up and page down in Safari
+  * Restored object check to _isValidCollection.
   * In KeyListener, added keycode constants for some of the special keys.
   * Rolled back the change added for hacking around IE errors from bubbled 
     events that originally targeted an ActiveX control.

@@ -528,8 +528,10 @@ if (!YAHOO.util.Event) {
             63233: 40, // down
             63234: 37, // left
             63235: 39, // right
+            63276: 33, // page up
+            63277: 34, // page down
             25: 9      // SHIFT-TAB (Safari provides a different key code in
-                       // this case, even though the shiftKey modifier is set
+                       // this case, even though the shiftKey modifier is set)
         };
 
         return {
@@ -2023,9 +2025,8 @@ setTimeout(arguments.callee, YAHOO.util.Event.POLL_INTERVAL);
                     clearInterval(EU._dri);
                     EU._dri = null;
                     EU._ready();
+                    n = null;
                 } catch (e) { 
-
-                } finally {
                     n = null;
                 }
             }, EU.POLL_INTERVAL); 
