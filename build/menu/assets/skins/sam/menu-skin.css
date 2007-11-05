@@ -6,48 +6,12 @@
     line-height: 2;  /* ~24px */
     *line-height: 1.9; /* For IE */
     border: solid 1px #808080;
-    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
-
-}
-
-/* 
-    The following two style rules cause a MenuBar's UL to clear its 
-    floating LIs.
-*/
-
-.yui-skin-sam .yuimenubar .bd,
-.yui-skin-sam .yuimenubar ul {
-
-    *zoom: 1;   /* For IE */
-
-}
-
-.yui-skin-sam .yuimenubar .bd .bd,
-.yui-skin-sam .yuimenubar ul ul {
-
-    *zoom: normal;   /* For IE */
-
-}
-
-.yui-skin-sam .yuimenubar>.bd>ul:after {
-
-    content: ".";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    height: 0;
-    line-height: 0;
+    background: url(../../../img/../../../../assets/skins/sam/../../../../assets/skins/sam/sprite.png) repeat-x 0 0;
 
 }
 
 
 /* MenuBarItem style rules */
-
-.yui-skin-sam .yuimenubaritem {
-
-    float: left;
-
-}
 
 .yui-skin-sam .yuimenubarnav .yuimenubaritem {
 
@@ -57,8 +21,6 @@
 
 .yui-skin-sam .yuimenubaritemlabel {
 
-    display: block;
-    *display: inline-block; /* For IE */
     padding: 0 10px;
     color: #000;
     text-decoration: none;
@@ -66,7 +28,7 @@
     border-style: solid;
     border-color: #808080;
     border-width: 1px 0;
-    position: relative;
+    *position: relative; /*  Necessary to get negative margins in IE. */
     margin: -1px 0;
 
 }
@@ -74,6 +36,14 @@
 .yui-skin-sam .yuimenubarnav .yuimenubaritemlabel {
 
     padding-right: 20px;
+
+    /*
+        Prevents the label from shifting left in IE when the 
+        ".yui-skin-sam .yuimenubarnav .yuimenubaritemlabel-selected" 
+        rule us applied.
+    */
+
+    *display: inline-block;
 
 }
 
@@ -91,7 +61,7 @@
 
 .yui-skin-sam .yuimenubaritem-selected {
 
-    background: url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -1700px;
+    background: url(../../../img/../../../../assets/skins/sam/../../../../assets/skins/sam/sprite.png) repeat-x 0 -1700px;
 
 }
 
@@ -202,7 +172,7 @@
 
     height: 16px;
     border: solid 1px #808080;
-    background: #fff url(../../../../assets/skins/sam/sprite.png) no-repeat 0 0;
+    background: #fff url(../../../img/../../../../assets/skins/sam/../../../../assets/skins/sam/sprite.png) no-repeat 0 0;
 
 }
 
@@ -237,7 +207,13 @@
 
 .yui-skin-sam .yuimenuitem {
 
-    /* For IE 7 Quirks and IE 6 Strict Mode and Quirks Mode */
+    /*
+        For IE 7 Quirks and IE 6 Strict Mode and Quirks Mode:
+        Used to collapse superfluous white space between <LI> elements
+        that is triggered by the "display" property of the <A> elements being
+        set to "block."
+    */
+
     _border-bottom: solid 1px #fff;
 
 }
@@ -245,7 +221,6 @@
 .yui-skin-sam .yuimenuitemlabel {
 
     padding: 0 20px;
-    display: block;
     color: #000;
     text-decoration: none;
     cursor: default;
@@ -254,9 +229,7 @@
 
 .yui-skin-sam .yuimenuitemlabel .helptext {
 
-    font-style: normal;
-    display: block;
-    margin: -1.5em 0 0 10em;
+    margin-top: -1.5em;
     *margin-top: -1.45em;  /* For IE*/
     
 }
@@ -285,14 +258,15 @@
 
 .yui-skin-sam .yui-menu-shadow-visible {
 
-    top: 2px;
-    right: -3px;
-    left: -3px;
-    bottom: -3px;
     background-color: #000;
+
+    /*
+        Opacity can be expensive, so defer the use of opacity until the 
+        menu is visible.
+    */
+
     opacity: .12;
     *filter: alpha(opacity=12);  /* For IE */
-    visibility: visible;
 
 }
 
@@ -312,7 +286,7 @@
 
 /* Disabled MenuItem */
 
-.yui-skin-sam .yuimenuitem-disabled .yuimenuitemlabel {
+.yui-skin-sam .yuimenuitemlabel-disabled {
 
     cursor: default;
     color: #A6A6A6;
