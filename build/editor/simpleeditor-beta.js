@@ -2053,6 +2053,12 @@ var Dom = YAHOO.util.Dom,
 
     YAHOO.extend(YAHOO.widget.SimpleEditor, YAHOO.util.Element, {
         /**
+        * @property _docType
+        * @description The DOCTYPE to use in the editable container.
+        * @type String
+        */
+        _docType: '<!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd">',
+        /**
         * @property editorDirty
         * @description This flag will be set when certain things in the Editor happen. It is to be used by the developer to check to see if content has changed.
         * @type Boolean
@@ -2384,7 +2390,7 @@ var Dom = YAHOO.util.Dom,
             }
             ifrmDom.setAttribute('src', isrc);
             var ifrm = new YAHOO.util.Element(ifrmDom);
-            ifrm.setStyle('zIndex', '-1');
+            //ifrm.setStyle('zIndex', '-1');
             return ifrm;
         },
         /**
@@ -2736,8 +2742,12 @@ var Dom = YAHOO.util.Dom,
                 CSS: this.get('css'),
                 HIDDEN_CSS: this.get('hiddencss')
             }),
-            
             check = true;
+            if (document.compatMode != 'BackCompat') {
+                html = this._docType + "\n" + html;
+            } else {
+            }
+
             if (this.browser.ie || this.browser.webkit || this.browser.opera || (navigator.userAgent.indexOf('Firefox/1.5') != -1)) {
                 //Firefox 1.5 doesn't like setting designMode on an document created with a data url
                 try {
@@ -4100,13 +4110,12 @@ var Dom = YAHOO.util.Dom,
             });
             /**
             * @attribute html
-            * @description The default HTML to be written to the iframe document before the contents are loaded
+            * @description The default HTML to be written to the iframe document before the contents are loaded (Note that the DOCTYPE attr will be added at render item)
             * @default This HTML requires a few things if you are to override:
                 <p><code>{TITLE}, {CSS}, {HIDDEN_CSS}</code> and <code>{CONTENT}</code> need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.<p>
                 <p><code>onload="document.body._rteLoaded = true;"</code> : the onload statement must be there or the editor will not finish loading.</p>
                 <code>
                 <pre>
-                &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;
                 &lt;html&gt;
                     &lt;head&gt;
                         &lt;title&gt;{TITLE}&lt;/title&gt;
@@ -4127,7 +4136,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('html', {
-                value: attr.html || '<!DOCTYPE HTML PUBLIC "-/'+'/W3C/'+'/DTD HTML 4.01/'+'/EN" "http:/'+'/www.w3.org/TR/html4/strict.dtd"><html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><base href="' + this._baseHREF + '"><style>{CSS}</style><style>{HIDDEN_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
+                value: attr.html || '<html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><base href="' + this._baseHREF + '"><style>{CSS}</style><style>{HIDDEN_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
                 writeOnce: true
             });
 
@@ -4207,7 +4216,7 @@ var Dom = YAHOO.util.Dom,
             * @type Boolean
             */            
             this.setAttributeConfig('animate', {
-                value: false,
+                value: attr.animate || false,
                 validator: function(value) {
                     var ret = true;
                     if (!YAHOO.util.Anim) {
@@ -4707,17 +4716,11 @@ var Dom = YAHOO.util.Dom,
             this.get('element_cont').setStyle('width', this.get('width'));
             Dom.setStyle(this.get('iframe').get('parentNode'), 'height', this.get('height'));
 
-            if (this.browser.ie4) {
-                this.get('iframe').setStyle('zoom', '1');
-                var iframe = this.get('iframe').get('element');
-                setTimeout(function() {
-                    iframe.style.height = '101%';
-                    iframe.style.zoom = '1';
-                }, 100);
-            }
             this.get('iframe').setStyle('width', '100%'); //WIDTH
-            //this.get('iframe').setStyle('_width', '99%'); //WIDTH
             this.get('iframe').setStyle('height', '100%');
+
+            if (this.browser.ie == 7) {
+            }
 
             this.fireEvent('afterRender', { type: 'afterRender', target: this });
         },

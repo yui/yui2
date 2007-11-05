@@ -193,11 +193,13 @@
 .yui-editor-container .yui-editor-masked {
     background-color: #CCC;
 }
-/* Style the eidtable iframe to hide it */
+/* Style the editable iframe to hide it */
 .yui-editor-container iframe {
     border: 0px;
     padding: 0;
     margin: 0;
+    zoom: 1;
+    display: block;
 }
 /* Reset some padding on the editable iframes container */
 .yui-editor-container .yui-editor-editable {
