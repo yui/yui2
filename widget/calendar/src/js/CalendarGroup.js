@@ -13,26 +13,26 @@
 * The tables for the calendars ("cal1_0" and "cal1_1") will be inserted into those containers.
 * 
 * <p>
-* <strong>NOTE: As of 2.4.0, the ID parameter is optional.</strong> 
+* <strong>NOTE: As of 2.4.0, the constructor's ID argument is optional.</strong>
 * The CalendarGroup can be constructed by simply providing a container ID string, 
 * or a reference to a container DIV HTMLElement (the element needs to exist 
 * in the document).
 * 
-* For e.g.:
+* E.g.:
 *	<xmp>
 *		var c = new YAHOO.widget.CalendarGroup("calContainer", configOptions);
 *	</xmp>
 * or:
 *   <xmp>
-*       var divElem = YAHOO.util.Dom.get("calContainer");
-*		var c = new YAHOO.widget.CalendarGroup(divElem, configOptions);
+*       var containerDiv = YAHOO.util.Dom.get("calContainer");
+*		var c = new YAHOO.widget.CalendarGroup(containerDiv, configOptions);
 *	</xmp>
 * </p>
 * <p>
-* If not provided, the id will be generated from the container DIV id by adding an "_t" suffix.
-* For example if the containerId is "calContainer", the id will be set to "calContainer_t", if an
-* id is not provided.
+* If not provided, the ID will be generated from the container DIV ID by adding an "_t" suffix.
+* For example if an ID is not provided, and the container's ID is "calContainer", the CalendarGroup's ID will be set to "calContainer_t".
 * </p>
+* 
 * @namespace YAHOO.widget
 * @class CalendarGroup
 * @constructor
