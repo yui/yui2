@@ -10,7 +10,7 @@ YAHOO.lang.JSON = {
 
     /**
      * Parse a JSON string, returning the native JavaScript representation.
-     * Code copied from http://www.json.org/json.js.
+     * Only minor modifications from http://www.json.org/json.js.
      * @param s {string} JSON string data
      * @param filter {function} (optional) function(k,v) passed each key value pair of object literals, allowing pruning or altering values
      * @return {MIXED} the native JavaScript representation of the JSON string
