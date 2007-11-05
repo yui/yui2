@@ -314,10 +314,10 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @method createMask
 	 */
 	createMask : function() {
-		var CLASSES = YAHOO.widget.CalendarNavigator.CLASSES;
+		var C = YAHOO.widget.CalendarNavigator.CLASSES;
 
 		var d = this._doc.createElement("div");
-		d.className = CLASSES.MASK;
+		d.className = C.MASK;
 		if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
 			d.className += " fixedsize";
 		}
@@ -335,19 +335,19 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 */
 	renderNavContents : function(html) {
 		var NAV = YAHOO.widget.CalendarNavigator,
-			CLASSES = NAV.CLASSES,
+			C = NAV.CLASSES,
 			h = html; // just to use a shorter name
 
-		h[h.length] = '<div class="' + CLASSES.MONTH + '">';
+		h[h.length] = '<div class="' + C.MONTH + '">';
 		this.renderMonth(h);
 		h[h.length] = '</div>';
-		h[h.length] = '<div class="' + CLASSES.YEAR + '">';
+		h[h.length] = '<div class="' + C.YEAR + '">';
 		this.renderYear(h);
 		h[h.length] = '</div>';
-		h[h.length] = '<div class="' + CLASSES.BUTTONS + '">';
+		h[h.length] = '<div class="' + C.BUTTONS + '">';
 		this.renderButtons(h);
 		h[h.length] = '</div>';
-		h[h.length] = '<div class="' + CLASSES.ERROR + '" id="' + this.id + NAV.ERROR_SUFFIX + '"></div>';
+		h[h.length] = '<div class="' + C.ERROR + '" id="' + this.id + NAV.ERROR_SUFFIX + '"></div>';
 
 		return h;
 	},
@@ -361,7 +361,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 */
 	renderMonth : function(html) {
 		var NAV = YAHOO.widget.CalendarNavigator,
-			CLASSES = YAHOO.widget.CalendarNavigator.CLASSES;
+			C = NAV.CLASSES;
 
 		var id = this.id + NAV.MONTH_SUFFIX,
 			mf = this.__getCfg("monthFormat"),
@@ -372,7 +372,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 			h[h.length] = '<label for="' + id + '">';
 			h[h.length] = this.__getCfg("month", true);
 			h[h.length] = '</label>';
-			h[h.length] = '<select name="' + id + '" id="' + id + '" class="' + CLASSES.MONTH_CTRL + '">';
+			h[h.length] = '<select name="' + id + '" id="' + id + '" class="' + C.MONTH_CTRL + '">';
 			for (var i = 0; i < months.length; i++) {
 				h[h.length] = '<option value="' + i + '">';
 				h[h.length] = months[i];
@@ -392,7 +392,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 */
 	renderYear : function(html) {
 		var NAV = YAHOO.widget.CalendarNavigator,
-			CLASSES = YAHOO.widget.CalendarNavigator.CLASSES;
+			C = NAV.CLASSES;
 
 		var id = this.id + NAV.YEAR_SUFFIX,
 			size = this.__getCfg("yearMaxDigits"),
@@ -401,7 +401,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		h[h.length] = '<label for="' + id + '">';
 		h[h.length] = this.__getCfg("year", true);
 		h[h.length] = '</label>';
-		h[h.length] = '<input type="text" name="' + id + '" id="' + id + '" class="' + CLASSES.YEAR_CTRL + '" maxlength="' + size + '"/>';
+		h[h.length] = '<input type="text" name="' + id + '" id="' + id + '" class="' + C.YEAR_CTRL + '" maxlength="' + size + '"/>';
 		return h;
 	},
 
@@ -412,15 +412,20 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @return {String} The HTML created for the Button UI
 	 */
 	renderButtons : function(html) {
+		var C = YAHOO.widget.CalendarNavigator.CLASSES;
 		var h = html;
-		
-		h[h.length] = '<button type="button" id="' + this.id + '_submit' + '" class="default">';
+
+		h[h.length] = '<span class="' + C.BUTTON + ' ' + C.DEFAULT + '">';
+		h[h.length] = '<button type="button" id="' + this.id + '_submit' + '">';
 		h[h.length] = this.__getCfg("submit", true);
 		h[h.length] = '</button>';
+		h[h.length] = '</span>';
+		h[h.length] = '<span class="' + C.BUTTON +'">';
 		h[h.length] = '<button type="button" id="' + this.id + '_cancel' + '">';
 		h[h.length] = this.__getCfg("cancel", true);
 		h[h.length] = '</button>';
-		
+		h[h.length] = '</span>';
+
 		return h;
 	},
 
@@ -853,7 +858,11 @@ YAHOO.widget.CalendarNavigator.prototype = {
 			}
 			if (dir) {
 				E.preventDefault(e);
-				this.yearEl.select();
+				try {
+					this.yearEl.select();
+				} catch(e) {
+					// Ignore
+				}
 			}
 		}
 	},
@@ -983,12 +992,19 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		 */
 		MONTH : "yui-cal-nav-m",
 		/**
-		 * Class applied to the submit/cancel button's  bounding box
+		 * Class applied to the submit/cancel button's bounding box
 		 * @property BUTTONS
 		 * @type String
 		 * @static
 		 */
 		BUTTONS : "yui-cal-nav-b",
+		/**
+		 * Class applied to buttons wrapping element
+		 * @property BUTTON
+		 * @type String
+		 * @static
+		 */
+		BUTTON : "yui-cal-nav-btn",
 		/**
 		 * Class applied to the validation error area's bounding box
 		 * @property ERROR
@@ -1016,7 +1032,14 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		 * @type String
 		 * @static
 		 */
-		INVALID : "yui-invalid"
+		INVALID : "yui-invalid",
+		/**
+		 * Class applied to default controls
+		 * @property DEFAULT
+		 * @type String
+		 * @static
+		 */
+		DEFAULT : "yui-default"
 	};
 
 	/**
@@ -1058,7 +1081,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 			year: "Year",
 			submit: "Okay",
 			cancel: "Cancel",
-			invalidYear : "Please enter a valid year (a 1-4 digit number)"
+			invalidYear : "Year needs to be a number"
 		},
 		monthFormat: YAHOO.widget.Calendar.LONG,
 		yearMaxDigits: 4,

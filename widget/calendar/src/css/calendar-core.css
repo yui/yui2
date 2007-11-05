@@ -95,11 +95,27 @@
 	height:20em;
 }
 
+/* NAVIGATOR BOUNDING BOX */
 .yui-calcontainer .yui-cal-nav {
 	position:absolute;
 	z-index:3;
 	top:0px;
 	display:none;
+}
+
+/* NAVIGATOR BUTTONS (based on button-core.css) */ 
+.yui-calcontainer .yui-cal-nav .yui-cal-nav-b .yui-cal-nav-btn  {
+	display: -moz-inline-box; /* Gecko */
+	display: inline-block; /* IE, Opera and Safari */
+}
+
+.yui-calcontainer .yui-cal-nav .yui-cal-nav-b .yui-cal-nav-btn button {
+	display: block;
+	*display: inline-block; /* IE */
+	border: none;
+	background-color: transparent;
+	*overflow: visible; /* Remove superfluous padding for IE */
+	cursor: pointer;
 }
 
 /* Specific changes for calendar running under fonts/reset */

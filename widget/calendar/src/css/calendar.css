@@ -290,14 +290,14 @@
     font-size:93%;
 	text-decoration:none;
 	cursor: pointer;
-	background-color: #6699cc;
+	background-color: #79b2ea;
 	border: 1px solid #003366;
 	border-top-color:#FFF;
 	border-left-color:#FFF;
 	margin:1px;
 }
 
-.yui-calcontainer .yui-cal-nav-b button.default {
+.yui-calcontainer .yui-cal-nav-b .yui-default button {
     /* not implemented */
 }
 
