@@ -1,7 +1,8 @@
 /**
  * The CalendarNavigator is used along with a Calendar/CalendarGroup to 
  * provide a Month/Year popup navigation control, allowing the user to navigate 
- * to a specific month/year without having to scroll through months sequentially
+ * to a specific month/year in the Calendar/CalendarGroup without having to 
+ * scroll through months sequentially
  *
  * @namespace YAHOO.widget
  * @class CalendarNavigator
@@ -95,6 +96,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * The document containing the Calendar/Calendar group instance
+	 * @protected
 	 * @property _doc
 	 * @type HTMLDocument
 	 */
@@ -781,6 +783,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * <p>
 	 * See <a href="#applyKeyListeners">applyKeyListeners</a>
 	 * </p>
+	 * @protected
 	 * @method _setFirstLastElements
 	 */
 	_setFirstLastElements : function() {
@@ -843,12 +846,10 @@ YAHOO.widget.CalendarNavigator.prototype = {
 					this.yearEl.value = Math.max(value - NAV.YR_MINOR_INC, 0);
 					dir = true;
 					break;
-				case 63276: // Safari PGUP keypress not normalized by Event.getCharCode
 				case KEYS.PAGE_UP:
 					this.yearEl.value = value + NAV.YR_MAJOR_INC;
 					dir = true;
 					break;
-				case 63277: // Safari PGDN keypress not normalized by Event.getCharCode
 				case KEYS.PAGE_DOWN:
 					this.yearEl.value = Math.max(value - NAV.YR_MAJOR_INC, 0);
 					dir = true;
@@ -951,13 +952,14 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * YAHOO.widget.CalendarNavigator.CLASSES contains constants
 	 * for the class values applied to the CalendarNaviatgator's 
 	 * DOM elements
-	 * @property CLASSES
+	 * @property YAHOO.widget.CalendarNavigator.CLASSES
+	 * @type Object
 	 * @static
 	 */
 	CN.CLASSES = {
 		/**
 		 * Class applied to the Calendar Navigator's bounding box
-		 * @property NAV
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV
 		 * @type String
 		 * @static
 		 */
@@ -965,77 +967,77 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		/**
 		 * Class applied to the Calendar/CalendarGroup's bounding box to indicate
 		 * the Navigator is currently visible
-		 * @property NAV_VISIBLE
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE
 		 * @type String
 		 * @static
 		 */
 		NAV_VISIBLE: "yui-cal-nav-visible",
 		/**
 		 * Class applied to the Navigator mask's bounding box
-		 * @property MASK
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MASK
 		 * @type String
 		 * @static
 		 */
 		MASK : "yui-cal-nav-mask",
 		/**
 		 * Class applied to the year label/control bounding box
-		 * @property YEAR
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR
 		 * @type String
 		 * @static
 		 */
 		YEAR : "yui-cal-nav-y",
 		/**
 		 * Class applied to the month label/control bounding box
-		 * @property MONTH
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH
 		 * @type String
 		 * @static
 		 */
 		MONTH : "yui-cal-nav-m",
 		/**
 		 * Class applied to the submit/cancel button's bounding box
-		 * @property BUTTONS
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS
 		 * @type String
 		 * @static
 		 */
 		BUTTONS : "yui-cal-nav-b",
 		/**
 		 * Class applied to buttons wrapping element
-		 * @property BUTTON
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTON
 		 * @type String
 		 * @static
 		 */
 		BUTTON : "yui-cal-nav-btn",
 		/**
 		 * Class applied to the validation error area's bounding box
-		 * @property ERROR
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.ERROR
 		 * @type String
 		 * @static
 		 */
 		ERROR : "yui-cal-nav-e",
 		/**
 		 * Class applied to the year input control
-		 * @property YEAR_CTRL
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL
 		 * @type String
 		 * @static
 		 */
 		YEAR_CTRL : "yui-cal-nav-yc",
 		/**
 		 * Class applied to the month input control
-		 * @property MONTH_CTRL
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL
 		 * @type String
 		 * @static
 		 */
 		MONTH_CTRL : "yui-cal-nav-mc",
 		/**
 		 * Class applied to controls with invalid data (e.g. a year input field with invalid an year)
-		 * @property INVALID
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.INVALID
 		 * @type String
 		 * @static
 		 */
 		INVALID : "yui-invalid",
 		/**
 		 * Class applied to default controls
-		 * @property DEFAULT
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT
 		 * @type String
 		 * @static
 		 */
@@ -1046,30 +1048,21 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * Object literal containing the default configuration values for the CalendarNavigator
 	 * The configuration object is expected to follow the format below, with the properties being
 	 * case sensitive.
-	 * <code>
-	 * {<br/>
-	 *    // An object containing the string labels to use in the Navigator's UI<br/>
-	 *   strings : Object<br/>
-	 *           {<br/>
-	 *             // The string to use for the month label. Defaults to "Month"<br/> 
-	 *             month : String, <br/>
-	 *             // The string to use for the year label. Defaults to "Year".<br/>
-	 *             year : String, <br/>
-	 *             // The string to use for the submit button label. Defaults to "Okay".<br/>
-	 *             submit : String, <br/>
-	 *             // The string to use for the cancel button label. Defaults to "Cancel"<br/>
-	 *             cancel : String, <br/>
-	 *             // Default "Please enter a valid year. (a 1-4 digit string)"<br/>
-	 *             invalidYear : String, <br/>
-	 *           },
-	 *   // The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT<br/>
-	 *   monthFormat : String,<br/>
-	 *   // The number of digits to which the year input control is to be limited <br/>
-	 *   yearMaxDigits : Number,<br/>
-	 *   // Either "year" or "month" specifying which input control should get initial focus<br/>
-	 *   initialFocus : String, <br/>
-	 * }<br/>
-	 * </code>
+	 * <dl>
+	 * <dt>strings</dt>
+	 * <dd><em>Object</em> :  An object with the properties shown below, defining the string labels to use in the Navigator's UI
+	 *     <dl>
+	 *         <dt>month</dt><dd><em>String</em> : The string to use for the month label. Defaults to "Month".</dd>
+	 *         <dt>year</dt><dd><em>String</em> : The string to use for the year label. Defaults to "Year".</dd>
+	 *         <dt>submit</dt><dd><em>String</em> : The string to use for the submit button label. Defaults to "Okay".</dd>
+	 *         <dt>cancel</dt><dd><em>String</em> : The string to use for the cancel button label. Defaults to "Cancel".</dd>
+	 *         <dt>invalidYear</dt><dd><em>String</em> : The string to use for invalid year values. Defaults to "Year needs to be a number".</dd>
+	 *     </dl>
+	 * </dd>
+	 * <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
+	 * <dt>yearMaxDigits</dt><dd><em>Number</em> : The number of digits to which the year input control is to be limited. Defaults to 4</dd>
+	 * <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
+	 * </dl>
 	 * @property _DEFAULT_CFG
 	 * @protected
 	 * @type Object
@@ -1093,6 +1086,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * a unique ID for the Navigator and it's bounding box.
 	 * @property YAHOO.widget.CalendarNavigator.ID_SUFFIX
 	 * @static
+	 * @type String
 	 * @final
 	 */
 	CN.ID_SUFFIX = "_nav";
@@ -1101,6 +1095,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * a unique ID for the month control.
 	 * @property YAHOO.widget.CalendarNavigator.MONTH_SUFFIX
 	 * @static
+	 * @type String 
 	 * @final
 	 */
 	CN.MONTH_SUFFIX = "_month";
@@ -1109,6 +1104,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * a unique ID for the year control.
 	 * @property YAHOO.widget.CalendarNavigator.YEAR_SUFFIX
 	 * @static
+	 * @type String
 	 * @final
 	 */
 	CN.YEAR_SUFFIX = "_year";
@@ -1117,6 +1113,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * a unique ID for the error bounding box.
 	 * @property YAHOO.widget.CalendarNavigator.ERROR_SUFFIX
 	 * @static
+	 * @type String
 	 * @final
 	 */
 	CN.ERROR_SUFFIX = "_error";
@@ -1125,6 +1122,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * a unique ID for the "Cancel" button.
 	 * @property YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX
 	 * @static
+	 * @type String
 	 * @final
 	 */
 	CN.CANCEL_SUFFIX = "_cancel";
@@ -1133,6 +1131,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * a unique ID for the "Submit" button.
 	 * @property YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX
 	 * @static
+	 * @type String
 	 * @final
 	 */
 	CN.SUBMIT_SUFFIX = "_submit";

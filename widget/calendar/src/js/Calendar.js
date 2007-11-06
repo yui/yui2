@@ -1197,42 +1197,46 @@ YAHOO.widget.Calendar.prototype = {
 		* </p>
 		* <p>
 		* This property can also be set to an object literal containing configuration properties for the CalendarNavigator UI.
-		* </p>
-		* <p>
 		* The configuration object expects the the following case-sensitive properties, with the "strings" property being a nested object.
 		* Any properties which are not provided will use the default values (defined in the CalendarNavigator class).
-		* <code>
-		* {<br/>
-		*    // An object containing the string labels to use in the Navigator's UI<br/>
-		*   strings : Object<br/>
-		*           {<br/>
-		*             // The string to use for the month label. Defaults to "Month"<br/> 
-		*             month : String, <br/>
-		*             // The string to use for the year label. Defaults to "Year".<br/>
-		*             year : String, <br/>
-		*             // The string to use for the submit button label. Defaults to "Okay".<br/>
-		*             submit : String, <br/>
-		*             // The string to use for the cancel button label. Defaults to "Cancel"<br/>
-		*             cancel : String, <br/>
-		*             // Default "Please enter a valid year. (a 1-4 digit string)"<br/>
-		*             invalidYear : String, <br/>
-		*           },
-		*   // The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT<br/>
-		*   monthFormat : String,<br/>
-		*   // The number of digits to which the year input control is to be limited <br/>
-		*   yearMaxDigits : Number,<br/>
-		*   // Either "year" or "month" specifying which input control should get initial focus<br/>
-		*   initialFocus : String, <br/>
-		* }<br/>
-		* </code>
 		* </p>
+		* <dl>
+		* <dt>strings</dt>
+		* <dd><em>Object</em> :  An object with the properties shown below, defining the string labels to use in the Navigator's UI
+		*     <dl>
+		*         <dt>month</dt><dd><em>String</em> : The string to use for the month label. Defaults to "Month".</dd>
+		*         <dt>year</dt><dd><em>String</em> : The string to use for the year label. Defaults to "Year".</dd>
+		*         <dt>submit</dt><dd><em>String</em> : The string to use for the submit button label. Defaults to "Okay".</dd>
+		*         <dt>cancel</dt><dd><em>String</em> : The string to use for the cancel button label. Defaults to "Cancel".</dd>
+		*         <dt>invalidYear</dt><dd><em>String</em> : The string to use for invalid year values. Defaults to "Year needs to be a number".</dd>
+		*     </dl>
+		* </dd>
+		* <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
+		* <dt>yearMaxDigits</dt><dd><em>Number</em> : The number of digits to which the year input control is to be limited. Defaults to 4</dd>
+		* <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
+		* </dl>
+		* <p>E.g.</p>
+		* <pre>
+		* var navConfig = {
+		*	  strings: {
+		*		  month:"Calendar Month",
+		*		  year:"Calendar Year",
+		*		  submit: "Submit",
+		*		  cancel: "Cancel",
+		*		  invalidYear: "Please enter a valid year"
+		*	  },
+		*	  monthFormat: YAHOO.widget.Calendar.SHORT,
+		*	  yearMaxDigits: 4,
+		*	  initialFocus: "month"
+		* }
+		* </pre>
 		* @config navigator
 		* @type {Object|Boolean}
 		* @default null
 		*/
 		this.cfg.addProperty(defCfg.NAV.key, { value:defCfg.NAV.value, handler:this.configNavigator } );
 	},
-	
+
 	/**
 	* The default handler for the "pagedate" property
 	* @method configPageDate

@@ -1074,6 +1074,8 @@ YAHOO.widget.CalendarGroup.prototype = {
 	 * Removes all custom renderers added to the CalendarGroup through the addRenderer, addMonthRenderer and 
 	 * addWeekRenderer methods. CalendarGroup's render method needs to be called to after removing renderers 
 	 * to see the changes applied.
+	 * 
+	 * @method removeRenderers
 	 */
 	removeRenderers : function() {
 		this.callChildFunction("removeRenderers");
