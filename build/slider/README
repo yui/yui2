@@ -1,5 +1,8 @@
 Slider - Release Notes
 
+2.4.0
+    * No change
+
 2.3.1
 
    * getValue will return the last value or 0 rather than NaN if the control 
