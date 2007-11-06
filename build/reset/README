@@ -2,6 +2,7 @@ YUI Library - Reset - Release Notes
 
 Version 2.4.0
 
+  * Moved background and default font color to HTML from BODY
   * Removed invalid sub/sup negative line-height values because they
     were invalid and because they weren't have a big impact.
   * Added legent element color to accomodate IE6 issues.
