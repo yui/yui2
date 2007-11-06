@@ -47,7 +47,7 @@ YAHOO.util.History = (function () {
     var _stateField = null;
 
     /**
-     * Flag used to tell whether YAHOO.util.History.initialize has been called.
+     * Flag used to tell whether the Browser History Manager is ready.
      *
      * @property _initialized
      * @type boolean
