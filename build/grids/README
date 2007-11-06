@@ -1,5 +1,9 @@
 YUI Library - Grids - Release Notes
 
+Version 2.4.0
+
+  * No changes.
+
 Version 2.3.1
 
   * Fixed bug in 2.3.0 that transposed the columns in deeply-

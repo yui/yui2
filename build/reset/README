@@ -1,5 +1,11 @@
 YUI Library - Reset - Release Notes
 
+Version 2.4.0
+
+  * Removed invalid sub/sup negative line-height values because they
+    were invalid and because they weren't have a big impact.
+  * Added legent element color to accomodate IE6 issues.
+
 Version 2.3.0
 
   * Removed: ul,ol {list-style:none;}
