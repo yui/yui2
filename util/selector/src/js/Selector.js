@@ -18,7 +18,7 @@ X.CAPTURE_IDENT = '(' + X.IDENT + ')';
 X.BEGIN_SPACE = '(?:' + X.BEGIN + X.OR + X.SP +')';
 X.END_SPACE = '(?:' + X.SP + X.OR + X.END + ')';
 X.SELECTOR = '^((\\*|[a-z0-9]+)?([\\.#:\[]?[a-z]+[\\w\\-\\[\\]\.:\\(\\)#^~=$\\|\\*"\\\'\\!]*)?\\s*([,>+~]?)?\\s*).*$';
-X.SIMPLE = '((\\*|[a-z0-9]+)?([\\.#:\[]?[a-z]+[\\w\\-\\[\\]\.:\\(\\)#^~=$\\|\\*"\\\'\\!]*)?\\s*)*';
+X.SIMPLE = '((\\*|[a-z0-9]+)?([\\.#:\[]?[a-z]+[\\w\\-\\[\\]\\.:\\(\\)#^~=$\\|\\*"\\\'\\!]*)?\\s*)*';
 
 Selector.prototype = {
     tokens: {
@@ -142,8 +142,11 @@ Selector.prototype = {
         },
 
         'not': function(node, simple) {
-            //console.log(simple);
             return !Y.Selector.simpleTest(node, simple);
+        },
+
+        'contains': function(node, str) {
+            return node.indexOf(str) > -1;
         }
     },
 
@@ -155,20 +158,21 @@ Selector.prototype = {
         '>': function() { // TODO: branch Y.Dom.getChildrenBy
             if (document.documentElement.children) {
                 return function(node, tag) {
-                    tag = tag || '*';
+                    tag = tag || '*'.toLowerCase();
                     //clearFoundCache(); // TODO: why clear here?
                     return node.children.tags(tag);
                 };
-            } else {
+            } else { // gecko
                 return function(node, tag) {
                     return Y.Dom.getChildrenBy(node, function(child) {
-                        return (tag) ? child.tagName === tag : true;
+                        return (tag) ? child.tagName.toLowerCase() === tag.toLowerCase() : true;
                     });
                 };
             }
         }(),
 
         '+': function(node, tag) {
+
             var element = Y.Dom.getNextSiblingBy(node);
             if (!tag) {
                 return [element];
@@ -193,7 +197,7 @@ Selector.prototype = {
         }
     },
 
-    simpleTest: function test(node, selector) {
+    simpleTest: function(node, selector) {
         var tag,
             simple,
             predicate,
@@ -206,7 +210,7 @@ Selector.prototype = {
         tag = RegExp.$2.toLowerCase() || '*';
         predicate = RegExp.$3;
 
-        if (tag && tag != '*' && node.tagName.toLowerCase() != tag) {
+        if (tag != '*' && node.tagName.toLowerCase() != tag) {
             return false;
         } 
 
@@ -220,6 +224,7 @@ Selector.prototype = {
                 continue;
             }
 
+//console.log(token, m);
             m[0] = node; // so we can pass args to test
             //while(m[0]) {
                 if (!tokens[token].test.apply(null, m)) {
@@ -228,25 +233,6 @@ Selector.prototype = {
             //}
         }
         return true;
-    },
-
-    test: function test(node, selector) {
-        throw('Selector::test not implemented');
-        var re = X.SELECTOR;
-        var token = {};
-        var tokens = Y.Selector.tokenize(selector);
-
-        while(tokens.length) {
-            token = tokens.pop();
-            if (!Y.Selector.simpleTest(node, token.simple)) {
-                return false;
-            }
-            if (token.previous && token.previous.combinator) {
-                if (Y.Selector.combinators[token.combinator].test(node, node.parentNode)) {
-
-                }
-            }
-        }
     },
 
     tokenize: function(selector) {
@@ -282,7 +268,7 @@ Selector.prototype = {
         }
     },
 
-    queryAll: function test(selector, root) {
+    queryAll: function(selector, root) {
         root = root || document;
 
         var node,
@@ -299,7 +285,7 @@ Selector.prototype = {
     }
 };
 
-var filter = function (nodes, token, noCache) {
+var filter = function(nodes, token, noCache) {
     var result = [],
         filtered = [],
         elements,
