@@ -1,5 +1,20 @@
 AutoComplete Release Notes
 
+*** version 2.4.0 ***
+
+* Support for YUI JSON Utility.
+
+* The allowBrowserAutocomplete property now supports cases when the user navigates
+away from page via mean other than a form submission.
+
+* Added support for integration with the Get Utility, for proxyless data
+retrieval from dynamically loaded script nodes.
+
+* Typing 'Enter' to select item no longer causes automatic form submission on
+Mac browsers.
+
+
+
 *** version 2.3.1 ***
 
 * AutoComplete no longer throw a JavaScript error due to an invalid or

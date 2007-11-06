@@ -1,5 +1,15 @@
 DataSource Release Notes
 
+**** version 2.4.0 ***
+
+* Support for YUI JSON Utility.
+
+* Implemented setInterval(), clearInterval(), and clearAllIntervals() for polling.
+
+* Text data parsing algorithm now tolerates newlines within and at the end of data.
+
+
+
 **** version 2.3.1 ***
 
 * No changes.
