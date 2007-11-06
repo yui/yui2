@@ -1,13 +1,17 @@
 /**
- * The Browser History Manager provides the ability to use the
- * back/forward navigation buttons in a DHTML application. It also allows
- * a DHTML application to be bookmarked in a specific state.
+ * The Browser History Manager provides the ability to use the back/forward
+ * navigation buttons in a DHTML application. It also allows a DHTML
+ * application to be bookmarked in a specific state.
+ *
+ * This library requires the following static markup:
+ *
+ * <iframe id="yui-history-iframe" src="path-to-real-asset-in-same-domain"></iframe>
+ * <input id="yui-history-field" type="hidden">
  *
  * @module history
  * @requires yahoo,event
  * @namespace YAHOO.util
  * @title Browser History Manager
- * @experimental
  */
 
 /**
@@ -18,29 +22,29 @@
  * @class History
  * @constructor
  */
-YAHOO.util.History = ( function () {
+YAHOO.util.History = (function () {
 
     /**
      * Our hidden IFrame used to store the browsing history.
      *
-     * @property _iframe
+     * @property _histFrame
      * @type HTMLIFrameElement
      * @default null
      * @private
      */
-    var _iframe = null;
+    var _histFrame = null;
 
     /**
      * INPUT field (with type="hidden" or type="text") or TEXTAREA.
      * This field keeps the value of the initial state, current state
      * the list of all states across pages within a single browser session.
      *
-     * @property _storageField
+     * @property _stateField
      * @type HTMLInputElement|HTMLTextAreaElement
      * @default null
      * @private
      */
-    var _storageField = null;
+    var _stateField = null;
 
     /**
      * Flag used to tell whether YAHOO.util.History.initialize has been called.
@@ -51,26 +55,6 @@ YAHOO.util.History = ( function () {
      * @private
      */
     var _initialized = false;
-
-    /**
-     * Flag used to tell whether the storage field is ready to be used.
-     *
-     * @property _storageFieldReady
-     * @type boolean
-     * @default false
-     * @private
-     */
-    var _storageFieldReady = false;
-
-    /**
-     * Flag used to tell whether the Browser History Manager is ready.
-     *
-     * @property _bhmReady
-     * @type boolean
-     * @default false
-     * @private
-     */
-    var _bhmReady = false;
 
     /**
      * List of registered modules.
@@ -93,18 +77,6 @@ YAHOO.util.History = ( function () {
     var _fqstates = [];
 
     /**
-     * Trims a string.
-     *
-     * @method _trim
-     * @param {string} str The string to be trimmed.
-     * @return {string} The trimmed string
-     * @private
-     */
-    function _trim( str ) {
-        return str.replace( /^\s*(\S*(\s+\S+)*)\s*$/, "$1" );
-    }
-
-    /**
      * location.hash is a bit buggy on Opera. I have seen instances where
      * navigating the history using the back/forward buttons, and hence
      * changing the URL, would not change location.hash. That's ok, the
@@ -115,13 +87,10 @@ YAHOO.util.History = ( function () {
      * @private
      */
     function _getHash() {
-
-        var href;
-        var i;
-
+        var i, href;
         href = top.location.href;
-        i = href.indexOf( "#" );
-        return i >= 0 ? href.substr( i + 1 ) : null;
+        i = href.indexOf("#");
+        return i >= 0 ? href.substr(i + 1) : null;
     }
 
     /**
@@ -135,23 +104,20 @@ YAHOO.util.History = ( function () {
      */
     function _storeStates() {
 
-        var moduleName;
-        var moduleObj;
-        var initialStates = [];
-        var currentStates = [];
+        var moduleName, moduleObj, initialStates = [], currentStates = [];
 
-        for ( moduleName in _modules ) {
-            if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+        for (moduleName in _modules) {
+            if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                 moduleObj = _modules[moduleName];
-                initialStates.push( moduleName + "=" + moduleObj.initialState );
-                currentStates.push( moduleName + "=" + moduleObj.currentState );
+                initialStates.push(moduleName + "=" + moduleObj.initialState);
+                currentStates.push(moduleName + "=" + moduleObj.currentState);
             }
         }
 
-        _storageField.value = initialStates.join( "&" ) + "|" + currentStates.join( "&" );
+        _stateField.value = initialStates.join("&") + "|" + currentStates.join("&");
 
-        if ( YAHOO.env.ua.webkit ) {
-            _storageField.value += "|" + _fqstates.join( "," );
+        if (YAHOO.env.ua.webkit) {
+            _stateField.value += "|" + _fqstates.join(",");
         }
     }
 
@@ -164,49 +130,66 @@ YAHOO.util.History = ( function () {
      * @param {string} fqstate Fully qualified state
      * @private
      */
-    function _handleFQStateChange( fqstate ) {
+    function _handleFQStateChange(fqstate) {
 
-        var i;
-        var len;
-        var moduleName;
-        var moduleObj;
-        var modules;
-        var states;
-        var tokens;
-        var currentState;
+        var i, len, moduleName, moduleObj, modules, states, tokens, currentState;
 
-        if ( !fqstate ) {
+        if (!fqstate) {
             // Notifies all modules
-            for ( moduleName in _modules ) {
-                if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+            for (moduleName in _modules) {
+                if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                     moduleObj = _modules[moduleName];
                     moduleObj.currentState = moduleObj.initialState;
-                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                    moduleObj.onStateChange(unescape(moduleObj.currentState));
                 }
             }
             return;
         }
 
         modules = [];
-        states = fqstate.split( "&" );
-        for ( i = 0, len = states.length ; i < len ; i++ ) {
-            tokens = states[i].split( "=" );
-            if ( tokens.length === 2 ) {
+        states = fqstate.split("&");
+        for (i = 0, len = states.length; i < len; i++) {
+            tokens = states[i].split("=");
+            if (tokens.length === 2) {
                 moduleName = tokens[0];
                 currentState = tokens[1];
                 modules[moduleName] = currentState;
             }
         }
 
-        for ( moduleName in _modules ) {
-            if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+        for (moduleName in _modules) {
+            if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                 moduleObj = _modules[moduleName];
                 currentState = modules[moduleName];
-                if ( !currentState || moduleObj.currentState !== currentState ) {
+                if (!currentState || moduleObj.currentState !== currentState) {
                     moduleObj.currentState = currentState || moduleObj.initialState;
-                    moduleObj.onStateChange( unescape( moduleObj.currentState ) );
+                    moduleObj.onStateChange(unescape(moduleObj.currentState));
                 }
             }
+        }
+    }
+
+    /**
+     * Update the IFrame with our new state.
+     *
+     * @method _updateIFrame
+     * @private
+     * @return {boolean} true if successful. false otherwise.
+     */
+    function _updateIFrame (fqstate) {
+
+        var html, doc;
+
+        html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
+
+        try {
+            doc = _histFrame.contentWindow.document;
+            doc.open();
+            doc.write(html);
+            doc.close();
+            return true;
+        } catch (e) {
+            return false;
         }
     }
 
@@ -218,13 +201,11 @@ YAHOO.util.History = ( function () {
      */
     function _checkIframeLoaded() {
 
-        var doc;
-        var elem;
-        var fqstate;
+        var doc, elem, fqstate, hash;
 
-        if ( !_iframe.contentWindow || !_iframe.contentWindow.document ) {
+        if (!_histFrame.contentWindow || !_histFrame.contentWindow.document) {
             // Check again in 10 msec...
-            setTimeout( _checkIframeLoaded, 10 );
+            setTimeout(_checkIframeLoaded, 10);
             return;
         }
 
@@ -234,41 +215,42 @@ YAHOO.util.History = ( function () {
         // YAHOO.util.History.navigate has been called or after
         // the user has hit the back/forward button.
 
-        doc = _iframe.contentWindow.document;
-        elem = doc.getElementById( "state" );
+        doc = _histFrame.contentWindow.document;
+        elem = doc.getElementById("state");
         // We must use innerText, and not innerHTML because our string contains
         // the "&" character (which would end up being escaped as "&amp;") and
         // the string comparison would fail...
         fqstate = elem ? elem.innerText : null;
 
-        setInterval( function () {
+        hash = _getHash();
 
-            var newfqstate;
-            var hash;
-            var states;
-            var moduleName;
-            var moduleObj;
+        setInterval(function () {
 
-            doc = _iframe.contentWindow.document;
-            elem = doc.getElementById( "state" );
+            var newfqstate, states, moduleName, moduleObj, newHash, historyLength;
+
+            doc = _histFrame.contentWindow.document;
+            elem = doc.getElementById("state");
             // See my comment above about using innerText instead of innerHTML...
             newfqstate = elem ? elem.innerText : null;
 
-            if ( newfqstate !== fqstate ) {
-                fqstate = newfqstate;
-                _handleFQStateChange( fqstate );
+            newHash = _getHash();
 
-                if ( !fqstate ) {
+            if (newfqstate !== fqstate) {
+
+                fqstate = newfqstate;
+                _handleFQStateChange(fqstate);
+
+                if (!fqstate) {
                     states = [];
-                    for ( moduleName in _modules ) {
-                        if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+                    for (moduleName in _modules) {
+                        if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                             moduleObj = _modules[moduleName];
-                            states.push( moduleName + "=" + moduleObj.initialState );
+                            states.push(moduleName + "=" + moduleObj.initialState);
                         }
                     }
-                    hash = states.join( "&" );
+                    newHash = states.join("&");
                 } else {
-                    hash = fqstate;
+                    newHash = fqstate;
                 }
 
                 // Allow the state to be bookmarked by setting the top window's
@@ -277,14 +259,35 @@ YAHOO.util.History = ( function () {
                 // (unlike all the other browsers). I used to write:
                 //     top.location.replace( "#" + hash );
                 // but this had a side effect when the page was not the top frame.
-                top.location.hash = hash;
+                top.location.hash = newHash;
+                hash = newHash;
 
                 _storeStates();
+
+            } else if (newHash !== hash) {
+
+                // The hash has changed. The user might have clicked on a link,
+                // or modified the URL directly, or opened the same application
+                // bookmarked in a specific state using a bookmark. However, we
+                // know the hash change was not caused by a hit on the back or
+                // forward buttons, or by a call to navigate() (because it would
+                // have been handled above) We must handle these cases, which is
+                // why we also need to keep track of hash changes on IE!
+
+                // Note that IE6 has some major issues with this kind of user
+                // interaction (the history stack gets completely messed up)
+                // but it seems to work fine on IE7.
+
+                hash = newHash;
+
+                // Now, store a new history entry. The following will cause the
+                // code above to execute, doing all the dirty work for us...
+                _updateIFrame(newHash);
             }
-        }, 50 );
 
-        _bhmReady = true;
+        }, 50);
 
+        _initialized = true;
         YAHOO.util.History.onLoadEvent.fire();
     }
 
@@ -296,62 +299,46 @@ YAHOO.util.History = ( function () {
      */
     function _initialize() {
 
-        var i;
-        var len;
-        var parts;
-        var tokens;
-        var moduleName;
-        var moduleObj;
-        var initialStates;
-        var initialState;
-        var currentStates;
-        var currentState;
-        var counter;
-        var hash;
-
-        _storageField = document.getElementById( "yui_hist_field" );
+        var i, len, parts, tokens, moduleName, moduleObj, initialStates, initialState, currentStates, currentState, counter, hash;
 
         // Decode the content of our storage field...
-        parts = _storageField.value.split( "|" );
+        parts = _stateField.value.split("|");
 
-        if ( parts.length > 1 ) {
+        if (parts.length > 1) {
 
-            initialStates = parts[0].split( "&" );
-            for ( i = 0, len = initialStates.length ; i < len ; i++ ) {
-                tokens = initialStates[i].split( "=" );
-                if ( tokens.length === 2 ) {
+            initialStates = parts[0].split("&");
+            for (i = 0, len = initialStates.length; i < len; i++) {
+                tokens = initialStates[i].split("=");
+                if (tokens.length === 2) {
                     moduleName = tokens[0];
                     initialState = tokens[1];
                     moduleObj = _modules[moduleName];
-                    if ( moduleObj ) {
+                    if (moduleObj) {
                         moduleObj.initialState = initialState;
                     }
                 }
             }
 
-            currentStates = parts[1].split( "&" );
-            for ( i = 0, len = currentStates.length ; i < len ; i++ ) {
-                tokens = currentStates[i].split( "=" );
-                if ( tokens.length >= 2 ) {
+            currentStates = parts[1].split("&");
+            for (i = 0, len = currentStates.length; i < len; i++) {
+                tokens = currentStates[i].split("=");
+                if (tokens.length >= 2) {
                     moduleName = tokens[0];
                     currentState = tokens[1];
                     moduleObj = _modules[moduleName];
-                    if ( moduleObj ) {
+                    if (moduleObj) {
                         moduleObj.currentState = currentState;
                     }
                 }
             }
         }
 
-        if ( parts.length > 2 ) {
-            _fqstates = parts[2].split( "," );
+        if (parts.length > 2) {
+            _fqstates = parts[2].split(",");
         }
 
-        _storageFieldReady = true;
+        if (YAHOO.env.ua.ie) {
 
-        if ( YAHOO.env.ua.ie ) {
-
-            _iframe = document.getElementById( "yui_hist_iframe" );
             _checkIframeLoaded();
 
         } else {
@@ -375,31 +362,28 @@ YAHOO.util.History = ( function () {
             // On Gecko and Opera, we just need to watch the hash...
             hash = _getHash();
 
-            setInterval( function () {
+            setInterval(function () {
 
-                var state;
-                var newHash;
-                var newCounter;
+                var state, newHash, newCounter;
 
                 newHash = _getHash();
                 newCounter = history.length;
-                if ( newHash !== hash ) {
+                if (newHash !== hash) {
                     hash = newHash;
                     counter = newCounter;
-                    _handleFQStateChange( hash );
+                    _handleFQStateChange(hash);
                     _storeStates();
-                } else if ( newCounter !== counter ) {
-                    // If we ever get here, we should be on Safari...
+                } else if (newCounter !== counter && YAHOO.env.ua.webkit) {
                     hash = newHash;
                     counter = newCounter;
                     state = _fqstates[counter - 1];
-                    _handleFQStateChange( state );
+                    _handleFQStateChange(state);
                     _storeStates();
                 }
-            }, 50 );
 
-            _bhmReady = true;
+            }, 50);
 
+            _initialized = true;
             YAHOO.util.History.onLoadEvent.fire();
         }
     }
@@ -407,11 +391,49 @@ YAHOO.util.History = ( function () {
     return {
 
         /**
-         * Fired when the Browser History Manager is ready.
+         * Fired when the Browser History Manager is ready. If you subscribe to
+         * this event after the Browser History Manager has been initialized,
+         * it will not fire. Therefore, it is recommended to use the onReady
+         * method instead.
          *
          * @event onLoadEvent
+         * @see onReady
          */
-        onLoadEvent: new YAHOO.util.CustomEvent( "onLoad" ),
+        onLoadEvent: new YAHOO.util.CustomEvent("onLoad"),
+
+        /**
+         * Executes the supplied callback when the Browser History Manager is
+         * ready. This will execute immediately if called after the Browser
+         * History Manager onLoad event has fired.
+         *
+         * @method onReady
+         * @param {function} fn what to execute when the Browser History Manager is ready.
+         * @param {object} obj an optional object to be passed back as a parameter to fn.
+         * @param {boolean|object} override If true, the obj passed in becomes fn's execution scope.
+         * @see onLoadEvent
+         */
+        onReady: function (fn, obj, override) {
+
+            if (_initialized) {
+
+                setTimeout(function () {
+                    var ctx = window;
+                    if (override) {
+                        if (override === true) {
+                            ctx = obj;
+                        } else {
+                            ctx = override;
+                        }
+                    }
+                    fn.call(ctx, "onLoad", [], obj);
+                }, 0);
+
+            } else {
+
+                YAHOO.util.History.onLoadEvent.subscribe(fn, obj, override);
+
+            }
+        },
 
         /**
          * Registers a new module.
@@ -428,18 +450,17 @@ YAHOO.util.History = ( function () {
          * @param {boolean} override If true, the obj passed in becomes the
          *     execution scope of the listener.
          */
-        register: function ( module, initialState, onStateChange, obj, override ) {
+        register: function (module, initialState, onStateChange, obj, override) {
 
-            var scope;
-            var wrappedFn;
+            var scope, wrappedFn;
 
-            if ( typeof module !== "string" || _trim( module ) === "" ||
-                 typeof initialState !== "string" ||
-                 typeof onStateChange !== "function" ) {
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.register" );
+            if (typeof module !== "string" || YAHOO.lang.trim(module) === "" ||
+                typeof initialState !== "string" ||
+                typeof onStateChange !== "function") {
+                throw new Error("Missing or invalid argument");
             }
 
-            if ( _modules[module] ) {
+            if (_modules[module]) {
                 // Here, we used to throw an exception. However, users have
                 // complained about this behavior, so we now just return.
                 return;
@@ -452,25 +473,25 @@ YAHOO.util.History = ( function () {
             // History Manager, you would not read the correct state using
             // YAHOO.util.History.getCurrentState when coming back to the
             // page using the back button.
-            if ( _initialized ) {
-                throw new Error( "All modules must be registered before calling YAHOO.util.History.initialize" );
+            if (_initialized) {
+                throw new Error("All modules must be registered before calling YAHOO.util.History.initialize");
             }
 
             // Make sure the strings passed in do not contain our separators "," and "|"
-            module = escape( module );
-            initialState = escape( initialState );
+            module = escape(module);
+            initialState = escape(initialState);
 
             // If the user chooses to override the scope, we use the
             // custom object passed in as the execution scope.
             scope = null;
-            if ( override === true ) {
+            if (override === true) {
                 scope = obj;
             } else {
                 scope = override;
             }
 
-            wrappedFn = function ( state ) {
-                return onStateChange.call( scope, state, obj );
+            wrappedFn = function (state) {
+                return onStateChange.call(scope, state, obj);
             };
 
             _modules[module] = {
@@ -486,48 +507,66 @@ YAHOO.util.History = ( function () {
          * from a script block located right after the opening body tag.
          *
          * @method initialize
-         * @param {string} iframeTarget Optional - Path to an existing
-         *     HTML document accessible from the same domain. If not
-         *     specified, defaults to "blank.html". This is only useful
-         *     if you use https.
+         * @param {string|HTML Element} stateField <input type="hidden"> used
+         *     to store application states. Must be in the static markup.
+         * @param {string|HTML Element} histFrame IFrame used to store
+         *     the history (only required on Internet Explorer)
          * @public
          */
-        initialize: function ( iframeTarget ) {
+        initialize: function (stateField, histFrame) {
 
-            // Return if the browser history manager has already been initialized
-            if ( _initialized ) {
+            if (_initialized) {
+                // The browser history manager has already been initialized.
                 return;
             }
 
-            if ( !iframeTarget ) {
-                iframeTarget = "blank.html";
+            if (YAHOO.env.ua.opera) {
+                // Opera cannot be supported because of several problems that
+                // have been reported to the Opera team, but never addressed:
+                //   1) Hash changes are not detected (started happening with
+                //      recent versions of Opera)
+                //   2) The entire DOM gets cached, so when you come back to
+                //      a page, the window's onload event does not get fired,
+                //      which prevents us from initializing the browser history
+                //      manager.
+                // As a consequence, the best thing we can do is to throw an
+                // exception. The application should catch it, and degrade
+                // gracefully. This is the sad state of history management.
+                throw new Error("Unsupported browser");
             }
 
-            if ( typeof iframeTarget !== "string" || _trim( iframeTarget ) === "" ) {
-                throw new Error( "Invalid argument passed to YAHOO.util.History.initialize" );
+            if (typeof stateField === "string") {
+                stateField = document.getElementById(stateField);
             }
 
-            document.write( '<input type="hidden" id="yui_hist_field">' );
+            if (!stateField ||
+                stateField.tagName !== "TEXTAREA" &&
+                (stateField.tagName !== "INPUT" ||
+                 stateField.type !== "hidden" &&
+                 stateField.type !== "text")) {
+                throw new Error("Missing or invalid argument");
+            }
 
-            if ( YAHOO.env.ua.ie ) {
-                if ( location.protocol === "https:" ) {
-                    // If we use https, we MUST point the IFrame to a valid
-                    // document on the same server. If we don't, we will get
-                    // a warning (do you want to display non secure items?)
-                    document.write( '<iframe id="yui_hist_iframe" src="' + iframeTarget + '" style="position:absolute;visibility:hidden;"></iframe>' );
-                } else {
-                    // This trick allows us to do without having to download
-                    // the asset, saving one HTTP request...
-                    document.write( '<iframe id="yui_hist_iframe" src="javascript:document.open();document.write(&quot;' + new Date().getTime() + '&quot;);document.close();" style="position:absolute;visibility:hidden;"></iframe>' );
+            _stateField = stateField;
+
+            if (YAHOO.env.ua.ie) {
+
+                if (typeof histFrame === "string") {
+                    histFrame = document.getElementById(histFrame);
                 }
+
+                if (!histFrame || histFrame.tagName !== "IFRAME") {
+                    throw new Error("Missing or invalid argument");
+                }
+
+                _histFrame = histFrame;
             }
 
-            // We have to wait for the window's onload handler. Otherwise, our
-            // hidden form field will always be empty (i.e. the browser won't
-            // have had enough time to restore the session)
-            YAHOO.util.Event.addListener( window, "load", _initialize );
-
-            _initialized = true;
+            // Note that the event utility MUST be included inline in the page.
+            // If it gets loaded later (which you may want to do to improve the
+            // loading speed of your site), the onDOMReady event never fires,
+            // and the history library never gets fully initialized.
+            YAHOO.util.Event.onDOMReady(_initialize);
         },
 
         /**
@@ -539,22 +578,18 @@ YAHOO.util.History = ( function () {
          * @return {boolean} Indicates whether the new state was successfully added to the history.
          * @public
          */
-        navigate: function ( module, state ) {
+        navigate: function (module, state) {
 
-            var currentStates;
-            var moduleName;
-            var moduleObj;
-            var currentState;
             var states;
 
-            if ( typeof module !== "string" || typeof state !== "string" ) {
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.navigate" );
+            if (typeof module !== "string" || typeof state !== "string") {
+                throw new Error("Missing or invalid argument");
             }
 
             states = {};
             states[module] = state;
 
-            return YAHOO.util.History.multiNavigate( states );
+            return YAHOO.util.History.multiNavigate(states);
         },
 
         /**
@@ -565,63 +600,49 @@ YAHOO.util.History = ( function () {
          * @return {boolean} Indicates whether the new state was successfully added to the history.
          * @public
          */
-        multiNavigate: function ( states ) {
+        multiNavigate: function (states) {
 
-            var currentStates;
-            var moduleName;
-            var moduleObj;
-            var currentState;
-            var fqstate;
-            var html;
-            var doc;
+            var currentStates, moduleName, moduleObj, currentState, fqstate;
 
-            if ( typeof states !== "object" ) {
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.multiNavigate" );
+            if (typeof states !== "object") {
+                throw new Error("Missing or invalid argument");
             }
 
-            if ( !_bhmReady ) {
-                throw new Error( "The Browser History Manager is not initialized" );
+            if (!_initialized) {
+                throw new Error("The Browser History Manager is not initialized");
             }
 
-            for ( moduleName in states ) {
-                if ( !_modules[moduleName] ) {
-                    throw new Error( "The following module has not been registered: " + moduleName );
+            for (moduleName in states) {
+                if (!_modules[moduleName]) {
+                    throw new Error("The following module has not been registered: " + moduleName);
                 }
             }
 
             // Generate our new full state string mod1=xxx&mod2=yyy
             currentStates = [];
 
-            for ( moduleName in _modules ) {
-                if ( YAHOO.lang.hasOwnProperty( _modules, moduleName ) ) {
+            for (moduleName in _modules) {
+                if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                     moduleObj = _modules[moduleName];
-                    if ( YAHOO.lang.hasOwnProperty( states, moduleName ) ) {
+                    if (YAHOO.lang.hasOwnProperty(states, moduleName)) {
                         currentState = states[moduleName];
                     } else {
                         currentState = moduleObj.currentState;
                     }
 
                     // Make sure the strings passed in do not contain our separators "," and "|"
-                    moduleName = escape( moduleName );
-                    currentState = escape( currentState );
+                    moduleName = escape(moduleName);
+                    currentState = escape(currentState);
 
-                    currentStates.push( moduleName + "=" + currentState );
+                    currentStates.push(moduleName + "=" + currentState);
                 }
             }
 
-            fqstate = currentStates.join( "&" );
+            fqstate = currentStates.join("&");
 
-            if ( YAHOO.env.ua.ie ) {
+            if (YAHOO.env.ua.ie) {
 
-                html = '<html><body><div id="state">' + fqstate + '</div></body></html>';
-                try {
-                    doc = _iframe.contentWindow.document;
-                    doc.open();
-                    doc.write( html );
-                    doc.close();
-                } catch ( e ) {
-                    return false;
-                }
+                return _updateIFrame(fqstate);
 
             } else {
 
@@ -634,7 +655,7 @@ YAHOO.util.History = ( function () {
                 // we'll consider this an acceptable bug, and hope that Apple
                 // comes out with their next version of Safari very soon.
                 top.location.hash = fqstate;
-                if ( YAHOO.env.ua.webkit ) {
+                if (YAHOO.env.ua.webkit) {
                     // The following two lines are only useful for Safari 1.x
                     // and 2.0. Recent nightly builds of WebKit do not require
                     // that, but unfortunately, it is not easy to differentiate
@@ -644,9 +665,9 @@ YAHOO.util.History = ( function () {
                     _storeStates();
                 }
 
-            }
+                return true;
 
-            return true;
+            }
         },
 
         /**
@@ -657,24 +678,24 @@ YAHOO.util.History = ( function () {
          * @return {string} The current state of the specified module.
          * @public
          */
-        getCurrentState: function ( module ) {
+        getCurrentState: function (module) {
 
             var moduleObj;
 
-            if ( typeof module !== "string" ) {
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getCurrentState" );
+            if (typeof module !== "string") {
+                throw new Error("Missing or invalid argument");
             }
 
-            if ( !_storageFieldReady ) {
-                throw new Error( "The Browser History Manager is not initialized" );
+            if (!_initialized) {
+                throw new Error("The Browser History Manager is not initialized");
             }
 
             moduleObj = _modules[module];
-            if ( !moduleObj ) {
-                throw new Error( "No such registered module: " + module );
+            if (!moduleObj) {
+                throw new Error("No such registered module: " + module);
             }
 
-            return unescape( moduleObj.currentState );
+            return unescape(moduleObj.currentState);
         },
 
         /**
@@ -687,27 +708,27 @@ YAHOO.util.History = ( function () {
          * @return {string} The bookmarked state of the specified module.
          * @public
          */
-        getBookmarkedState: function ( module ) {
+        getBookmarkedState: function (module) {
 
-            var i;
-            var len;
-            var hash;
-            var states;
-            var tokens;
-            var moduleName;
+            var i, len, idx, hash, states, tokens, moduleName;
 
-            if ( typeof module !== "string" ) {
-                throw new Error( "Missing or invalid argument passed to YAHOO.util.History.getBookmarkedState" );
+            if (typeof module !== "string") {
+                throw new Error("Missing or invalid argument");
             }
 
-            hash = top.location.hash.substr(1);
-            states = hash.split( "&" );
-            for ( i = 0, len = states.length ; i < len ; i++ ) {
-                tokens = states[i].split( "=" );
-                if ( tokens.length === 2 ) {
+            // Use location.href instead of location.hash which is already
+            // URL-decoded, which creates problems if the state value
+            // contained special characters...
+            idx = top.location.href.indexOf("#");
+            hash = idx >= 0 ? top.location.href.substr(idx + 1) : top.location.href;
+
+            states = hash.split("&");
+            for (i = 0, len = states.length; i < len; i++) {
+                tokens = states[i].split("=");
+                if (tokens.length === 2) {
                     moduleName = tokens[0];
-                    if ( moduleName === module ) {
-                        return unescape( tokens[1] );
+                    if (moduleName === module) {
+                        return unescape(tokens[1]);
                     }
                 }
             }
@@ -729,26 +750,26 @@ YAHOO.util.History = ( function () {
          * @return {string} The value of the specified parameter, or null.
          * @public
          */
-        getQueryStringParameter: function ( paramName, url ) {
+        getQueryStringParameter: function (paramName, url) {
 
-            var i;
-            var len;
-            var idx;
-            var queryString;
-            var params;
-            var tokens;
+            var i, len, idx, queryString, params, tokens;
 
             url = url || top.location.href;
 
-            idx = url.indexOf( "?" );
-            queryString = idx >= 0 ? url.substr( idx + 1 ) : url;
-            params = queryString.split( "&" );
+            idx = url.indexOf("?");
+            queryString = idx >= 0 ? url.substr(idx + 1) : url;
 
-            for ( i = 0, len = params.length ; i < len ; i++ ) {
-                tokens = params[i].split( "=" );
-                if ( tokens.length >= 2 ) {
-                    if ( tokens[0] === paramName ) {
-                        return unescape( tokens[1] );
+            // Remove the hash if any
+            idx = queryString.lastIndexOf("#");
+            queryString = idx >= 0 ? queryString.substr(0, idx) : queryString;
+
+            params = queryString.split("&");
+
+            for (i = 0, len = params.length; i < len; i++) {
+                tokens = params[i].split("=");
+                if (tokens.length >= 2) {
+                    if (tokens[0] === paramName) {
+                        return unescape(tokens[1]);
                     }
                 }
             }
@@ -758,4 +779,4 @@ YAHOO.util.History = ( function () {
 
     };
 
-} )();
+})();
