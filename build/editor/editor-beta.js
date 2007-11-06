@@ -4216,7 +4216,7 @@ var Dom = YAHOO.util.Dom,
             * @type Boolean
             */            
             this.setAttributeConfig('animate', {
-                value: attr.animate || false,
+                value: ((attr.animate) ? ((YAHOO.util.Anim) ? true : false) : false),
                 validator: function(value) {
                     var ret = true;
                     if (!YAHOO.util.Anim) {
@@ -4833,8 +4833,6 @@ var Dom = YAHOO.util.Dom,
             var exec = true,
                 el = this._getSelectedElement();
 
-                //if ((el !== this._getDoc().body) && (!this._hasSelection())) {
-                //if (el !== this._getDoc().body) {
                 if (!this._isElement(el, 'body')) {
                     Dom.setStyle(el, 'color', value);
                     this._selectNode(el);
