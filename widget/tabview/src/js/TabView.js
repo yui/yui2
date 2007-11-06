@@ -362,6 +362,7 @@
             }
         });
 
+        YAHOO.log('attributes initialized', 'info', 'TabView');`
         if ( this._tabParent ) {
             _initTabs.call(this);
         }
@@ -418,6 +419,7 @@
             el.className = this.CLASSNAME;
         }
         
+        YAHOO.log('TabView Dom created', 'info', 'TabView');
         return el;
     };
     

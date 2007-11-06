@@ -28,8 +28,6 @@
                 this.set('content', o.responseText);
             },
             failure: function(o) {
-                YAHOO.log('loading failed: ' + o.statusText,
-                        'error', 'Tab');
             }
         };
         
@@ -327,6 +325,7 @@
             },
             validator: YAHOO.lang.isBoolean
         });
+        YAHOO.log('attributes initialized', 'info', 'Tab');
     };
     
     var _createTabElement = function(attr) {
@@ -350,6 +349,7 @@
         
         a.appendChild(labelEl);
         
+        YAHOO.log('creating Tab Dom', 'info', 'Tab');
         return el;
     };
     
@@ -392,6 +392,7 @@
             this.get('dataSrc'), 
             {
                 success: function(o) {
+                    YAHOO.log('content loaded successfully', 'info', 'Tab');
                     this.loadHandler.success.call(this, o);
                     this.set('dataLoaded', true);
                     this.dataConnection = null;
@@ -400,6 +401,7 @@
                     this._loading = false;
                 },
                 failure: function(o) {
+                    YAHOO.log('loading failed: ' + o.statusText, 'error', 'Tab');
                     this.loadHandler.failure.call(this, o);
                     this.dataConnection = null;
                     Dom.removeClass(this.get('contentEl').parentNode,
