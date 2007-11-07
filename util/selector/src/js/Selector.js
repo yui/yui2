@@ -23,6 +23,7 @@ X.BEGIN_SPACE = '(?:' + X.BEGIN + X.OR + X.SP +')';
 X.END_SPACE = '(?:' + X.SP + X.OR + X.END + ')';
 X.SELECTOR = '^(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)?\\s*([' + CHARS.COMBINATORS + ']?)?\\s*).*$';
 X.SIMPLE = '(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)*)?';
+
 Selector.prototype = {
     selectors: {
         'id': {
@@ -76,7 +77,6 @@ Selector.prototype = {
         '=': function(attr, val) { return attr === val; }, // Equality
         '!=': function(attr, val) { return attr !== val; }, // Inequality
         '~=': function(attr, val) { // Match one of space seperated words 
-            //console.log(arguments);
             return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
         },
         '|=': function(attr, val) { return getRegExp(X.BEGIN + val + '[-]?', 'g').test(attr); }, // Match start with value followed by optional hyphen
@@ -154,7 +154,7 @@ Selector.prototype = {
             return node.getElementsByTagName(tag);
         },
 
-        '>': function() { // TODO: branch Y.Dom.getChildrenBy
+        '>': function() {
             if (document.documentElement.children) {
                 return function(node, tag) {
                     tag = tag || '*'.toLowerCase();
@@ -171,7 +171,6 @@ Selector.prototype = {
         }(),
 
         '+': function(node, tag) {
-
             var element = Y.Dom.getNextSiblingBy(node);
             if (!tag) {
                 return [element];
@@ -196,8 +195,8 @@ Selector.prototype = {
         }
     },
 
-    simpleTest: function(node, selector) {
-        var token = Y.Selector.tokenize(selector)[0];
+    simpleTest: function(node, selector, token) {
+        var token = token || Y.Selector.tokenize(selector)[0];
 
         if (token.tag != '*' && node.tagName.toLowerCase() != token.tag) {
             return false;
@@ -207,16 +206,14 @@ Selector.prototype = {
         var predicates = token.predicates;
         var args;
 
-        if (token.predicate) { // singular
-            for (var type in predicates) { // plural
-                if (!predicates[type]) {
-                    continue;
-                }
-
-                for (var i = 0, len = predicates[type].length; i < len; ++i) { // multiple of each type allowed
-                    args = [node].concat(predicates[type][i]);
-                    if (!selectors[type].test.apply(null, args)) {
-                        return false;
+        if (token.predicate) {
+            for (var type in predicates) {
+                if (predicates[type] !== undefined) {
+                    for (var i = 0, len = predicates[type].length; i < len; ++i) {
+                        args = [node].concat(predicates[type][i]);
+                        if (!selectors[type].test.apply(null, args)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -248,10 +245,10 @@ Selector.prototype = {
                     if (m) {
                         token.predicates[type] = [];
                         for (var i = 0, len = m.length; i < len; ++i) {
-                            args = new RegExp(selectors[type].pattern, 'g').exec(m[i]); // new re everytime for exec
+                            args = getRegExp(selectors[type].pattern, 'g').exec(m[i]);
                             if (args) {
                                 args.shift(); // remove full match
-                                token.predicates[type][i] = args;
+                                token.predicates[type].push(args); // to apply to type tests
                             }
                         }
                     }
@@ -281,17 +278,21 @@ Selector.prototype = {
 
     queryAll: function(selector, root) {
         root = root || document;
+        var tokens = Y.Selector.tokenize(selector);
+        var result,
+            nodes,
+            token = tokens.shift();
 
-        var todo = Y.Selector.tokenize(selector);
-        var result;
-        var token = todo.shift();
-        var nodes = root.getElementsByTagName(token.tag);
-
-        console.log(token);
-        if (!token.next) {
-            result = Y.Selector.simpleFilter(nodes, selector);
+        if (token.predicates.id) { // use ID shortcut
+            nodes = [document.getElementById(token.predicates.id[0][0])];
         } else {
+            nodes = root.getElementsByTagName(token.tag);
+        }
+
+        if (token.next) {
             result = filterByToken(nodes, token);
+        } else {
+            result = Y.Selector.simpleFilter(nodes, selector);
         }
 
         return result;
@@ -309,7 +310,7 @@ var filter = function(nodes, token, noCache) {
 
     for (var i = 0, len = nodes.length; i < len; ++i) {
         node = nodes[i];
-        if ( (node._found) || !Y.Selector.simpleTest(node, token.simple) ) {
+        if ( (node._found) || !Y.Selector.simpleTest(node, token.simple, token) ) {
             continue; // already found or failed test
         }
 
@@ -333,7 +334,8 @@ var filterByToken = function(nodes, token, root, noCache) {
     var result = filter(nodes, token, noCache); 
 
     if (token.next && token.combinator && token.combinator === ',') {
-        var elements = arguments.callee(root.getElementsByTagName(token.next.tagName), token.next, root, noCache);
+        var elements = arguments.callee(root.getElementsByTagName(token.next.tagName),
+                token.next, root, noCache);
         if (elements.length) {
            result = result.concat(elements); 
         }
@@ -346,12 +348,12 @@ var foundCache = [];
 var regexCache = {};
 
 var clearFoundCache = function() {
-    //YAHOO.log('getBySelector: clearing found cache of ' + foundCache.length + ' elements');
+    YAHOO.log('getBySelector: clearing found cache of ' + foundCache.length + ' elements');
     for (var i = 0, len = foundCache.length; i < len; ++i) {
         delete foundCache[i]._found;
     }
     foundCache = [];
-    //YAHOO.log('getBySelector: done clearing foundCache');
+    YAHOO.log('getBySelector: done clearing foundCache');
 };
 
 var getRegExp = function(str, flags) {
@@ -359,10 +361,8 @@ var getRegExp = function(str, flags) {
     var re = regexCache[str];
     if (!re) {
         re = new RegExp(str, flags);
-        regexCache[str] = re;
+        regexCache[str + flags] = re;
     }
-    //return (regexCache[str+flags] || (regexCache[str+flags] = new RegExp(str, flags)));
-    //return new RegExp(str, flags);
     return re;
 };
 
