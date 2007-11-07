@@ -366,10 +366,10 @@ YAHOO.widget.Calendar.prototype = {
 	/**
 	* A reference to the CalendarNavigator instance created for this Calendar.
 	* Will be null if the "navigator" configuration property has not been set
-	* @property navigator
+	* @property oNavigator
 	* @type CalendarNavigator
 	*/
-	navigator : null,
+	oNavigator : null,
 
 	/**
 	* The private list of initially selected dates.
@@ -1212,7 +1212,6 @@ YAHOO.widget.Calendar.prototype = {
 		*     </dl>
 		* </dd>
 		* <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
-		* <dt>yearMaxDigits</dt><dd><em>Number</em> : The number of digits to which the year input control is to be limited. Defaults to 4</dd>
 		* <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
 		* </dl>
 		* <p>E.g.</p>
@@ -1226,7 +1225,6 @@ YAHOO.widget.Calendar.prototype = {
 		*		  invalidYear: "Please enter a valid year"
 		*	  },
 		*	  monthFormat: YAHOO.widget.Calendar.SHORT,
-		*	  yearMaxDigits: 4,
 		*	  initialFocus: "month"
 		* }
 		* </pre>
@@ -1362,18 +1360,20 @@ YAHOO.widget.Calendar.prototype = {
 	configNavigator : function(type, args, obj) {
 		var val = args[0];
 		if (YAHOO.widget.CalendarNavigator && (val === true || YAHOO.lang.isObject(val))) {
-			this.navigator = new YAHOO.widget.CalendarNavigator(this);
-			// Cleanup DOM Refs/Events before innerHTML is removed.
-			function erase() {
-				if (!this.pages) {
-					this.navigator.erase();
+			if (!this.oNavigator) {
+				this.oNavigator = new YAHOO.widget.CalendarNavigator(this);
+				// Cleanup DOM Refs/Events before innerHTML is removed.
+				function erase() {
+					if (!this.pages) {
+						this.oNavigator.erase();
+					}
 				}
+				this.beforeRenderEvent.subscribe(erase, this, true);
 			}
-			this.beforeRenderEvent.subscribe(erase, this, true);
 		} else {
-			if (this.navigator) {
-				this.navigator.destroy();
-				this.navigator = null;
+			if (this.oNavigator) {
+				this.oNavigator.destroy();
+				this.oNavigator = null;
 			}
 		}
 	},
@@ -1682,7 +1682,8 @@ YAHOO.widget.Calendar.prototype = {
 		}
 
 		var lbl = this.buildMonthLabel();
-		if (this.cfg.getProperty("navigator")) {
+		var cal = this.parent || this;
+		if (cal.cfg.getProperty("navigator")) {
 			lbl = "<a class=\"" + this.Style.CSS_NAV + "\" href=\"#\">" + lbl + "</a>";
 		}
 		html[html.length] = lbl;
@@ -1695,9 +1696,9 @@ YAHOO.widget.Calendar.prototype = {
 			var rightStyle = (rightArrow === null) ? "" : ' style="background-image:url(' + rightArrow + ')"';
 			html[html.length] = '<a class="' + this.Style.CSS_NAV_RIGHT + '"' + rightStyle + ' >&#160;</a>';
 		}
-	
+
 		html[html.length] =	'</div>\n</th>\n</tr>';
-	
+
 		if (this.cfg.getProperty(defCfg.SHOW_WEEKDAYS.key)) {
 			html = this.buildWeekdays(html);
 		}
@@ -2051,7 +2052,7 @@ YAHOO.widget.Calendar.prototype = {
 			YAHOO.util.Event.addListener(this.linkRight, mousedown, cal.nextMonth, cal, true);
 		}
 
-		if (this.cfg.getProperty("navigator") !== null) {
+		if (cal.cfg.getProperty("navigator") !== null) {
 			this.applyNavListeners();
 		}
 
@@ -2100,7 +2101,7 @@ YAHOO.widget.Calendar.prototype = {
 				if (this === target || YAHOO.util.Dom.isAncestor(this, target)) {
 					E.preventDefault(e);
 				}
-				var navigator = calParent.navigator;
+				var navigator = calParent.oNavigator;
 				if (navigator) {
 					var pgdate = cal.cfg.getProperty("pagedate");
 					navigator.setYear(pgdate.getFullYear());

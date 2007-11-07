@@ -489,7 +489,7 @@ YAHOO.widget.CalendarGroup.prototype = {
 				cal[this.type + strEvent].subscribe(fn, obj, bOverride);
 			}
 		};
-	
+
 		/**
 		* Proxy unsubscriber to unsubscribe from the CalendarGroup's child Calendars' CustomEvents
 		* @method unsub
@@ -658,7 +658,8 @@ YAHOO.widget.CalendarGroup.prototype = {
 			var childConfig = this.cfg.getConfig();
 			childConfig.close = false;
 			childConfig.title = false;
-	
+			childConfig.navigator = null;
+
 			var cal = this.constructChild(calId, calContainerId, childConfig);
 			var caldate = cal.cfg.getProperty(cfgPageDate);
 			this._setMonthOnDate(caldate, caldate.getMonth() + p);
@@ -666,7 +667,7 @@ YAHOO.widget.CalendarGroup.prototype = {
 	
 			YAHOO.util.Dom.removeClass(cal.oDomContainer, this.Style.CSS_SINGLE);
 			YAHOO.util.Dom.addClass(cal.oDomContainer, groupCalClass);
-	
+
 			if (p===0) {
 				YAHOO.util.Dom.addClass(cal.oDomContainer, firstClass);
 			}

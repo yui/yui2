@@ -397,7 +397,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 			C = NAV.CLASSES;
 
 		var id = this.id + NAV.YEAR_SUFFIX,
-			size = this.__getCfg("yearMaxDigits"),
+			size = NAV.YR_MAX_DIGITS,
 			h = html;
 
 		h[h.length] = '<label for="' + id + '">';
@@ -585,7 +585,8 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * Displays an error message in the Navigator's error panel
-	 * @param {String} msg
+	 * @method setError
+	 * @param {String} msg The error message to display
 	 */
 	setError : function(msg) {
 		if (this.errorEl) {
@@ -596,6 +597,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * Clears the navigator's error message and hides the error panel
+	 * @method clearError 
 	 */
 	clearError : function() {
 		if (this.errorEl) {
@@ -606,6 +608,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * Displays the validation error UI for the year control
+	 * @method setYearError
 	 */
 	setYearError : function() {
 		YAHOO.util.Dom.addClass(this.yearEl, YAHOO.widget.CalendarNavigator.CLASSES.INVALID);
@@ -613,6 +616,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * Removes the validation error UI for the year control
+	 * @method clearYearError
 	 */
 	clearYearError : function() {
 		YAHOO.util.Dom.removeClass(this.yearEl, YAHOO.widget.CalendarNavigator.CLASSES.INVALID);
@@ -620,6 +624,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * Clears all validation and error messages in the UI
+	 * @method clearErrors
 	 */
 	clearErrors : function() {
 		this.clearError();
@@ -661,6 +666,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * Removes all renderered HTML elements for the Navigator from
 	 * the DOM, purges event listeners and clears (nulls) any property
 	 * references to HTML references
+	 * @method erase
 	 */
 	erase : function() {
 		if (this.__rendered) {
@@ -695,6 +701,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 	/**
 	 * Destroys the Navigator object and any HTML references
+	 * @method destroy
 	 */
 	destroy : function() {
 		this.erase();
@@ -1060,7 +1067,6 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 *     </dl>
 	 * </dd>
 	 * <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
-	 * <dt>yearMaxDigits</dt><dd><em>Number</em> : The number of digits to which the year input control is to be limited. Defaults to 4</dd>
 	 * <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
 	 * </dl>
 	 * @property _DEFAULT_CFG
@@ -1077,7 +1083,6 @@ YAHOO.widget.CalendarNavigator.prototype = {
 			invalidYear : "Year needs to be a number"
 		},
 		monthFormat: YAHOO.widget.Calendar.LONG,
-		yearMaxDigits: 4,
 		initialFocus: "year"
 	};
 
@@ -1136,6 +1141,13 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 */
 	CN.SUBMIT_SUFFIX = "_submit";
 
+	/**
+	 * The number of digits to which the year input control is to be limited.
+	 * @property YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS
+	 * @static
+	 * @type Number
+	 */
+	CN.YR_MAX_DIGITS = 4;
 
 	/**
 	 * The amount by which to increment the current year value,
