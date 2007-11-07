@@ -10,44 +10,8 @@
 
 }
 
-/* 
-    The following two style rules cause a MenuBar's UL to clear its 
-    floating LIs.
-*/
-
-.yui-skin-sam .yuimenubar .bd,
-.yui-skin-sam .yuimenubar ul {
-
-    *zoom: 1;   /* For IE */
-
-}
-
-.yui-skin-sam .yuimenubar .bd .bd,
-.yui-skin-sam .yuimenubar ul ul {
-
-    *zoom: normal;   /* For IE */
-
-}
-
-.yui-skin-sam .yuimenubar>.bd>ul:after {
-
-    content: ".";
-    display: block;
-    clear: both;
-    visibility: hidden;
-    height: 0;
-    line-height: 0;
-
-}
-
 
 /* MenuBarItem style rules */
-
-.yui-skin-sam .yuimenubaritem {
-
-    float: left;
-
-}
 
 .yui-skin-sam .yuimenubarnav .yuimenubaritem {
 
@@ -57,8 +21,6 @@
 
 .yui-skin-sam .yuimenubaritemlabel {
 
-    display: block;
-    *display: inline-block; /* For IE */
     padding: 0 10px;
     color: #000;
     text-decoration: none;
@@ -66,7 +28,7 @@
     border-style: solid;
     border-color: #808080;
     border-width: 1px 0;
-    position: relative;
+    *position: relative; /*  Necessary to get negative margins in IE. */
     margin: -1px 0;
 
 }
@@ -75,11 +37,19 @@
 
     padding-right: 20px;
 
+    /*
+        Prevents the label from shifting left in IE when the 
+        ".yui-skin-sam .yuimenubarnav .yuimenubaritemlabel-selected" 
+        rule us applied.
+    */
+
+    *display: inline-block;
+
 }
 
 .yui-skin-sam .yuimenubarnav .yuimenubaritemlabel-hassubmenu {
 
-    background: url(../../../img/menubaritem_submenuindicator.png) right center no-repeat;
+    background: url(../../../img/skins/sam/menubaritem_submenuindicator.png) right center no-repeat;
 
 }
 
@@ -121,7 +91,7 @@
 
 .yui-skin-sam .yuimenubarnav .yuimenubaritemlabel-hassubmenu-disabled {
 
-    background-image: url(../../../img/menubaritem_submenuindicator_disabled.png);
+    background-image: url(../../../img/skins/sam/menubaritem_submenuindicator_disabled.png);
 
 }
 
@@ -237,7 +207,13 @@
 
 .yui-skin-sam .yuimenuitem {
 
-    /* For IE 7 Quirks and IE 6 Strict Mode and Quirks Mode */
+    /*
+        For IE 7 Quirks and IE 6 Strict Mode and Quirks Mode:
+        Used to collapse superfluous white space between <LI> elements
+        that is triggered by the "display" property of the <A> elements being
+        set to "block."
+    */
+
     _border-bottom: solid 1px #fff;
 
 }
@@ -245,7 +221,6 @@
 .yui-skin-sam .yuimenuitemlabel {
 
     padding: 0 20px;
-    display: block;
     color: #000;
     text-decoration: none;
     cursor: default;
@@ -254,16 +229,14 @@
 
 .yui-skin-sam .yuimenuitemlabel .helptext {
 
-    font-style: normal;
-    display: block;
-    margin: -1.5em 0 0 10em;
+    margin-top: -1.5em;
     *margin-top: -1.45em;  /* For IE*/
     
 }
 
 .yui-skin-sam .yuimenuitem-hassubmenu {
 
-    background-image: url(../../../img/menuitem_submenuindicator.png);
+    background-image: url(../../../img/skins/sam/menuitem_submenuindicator.png);
     background-position: right center;
     background-repeat: no-repeat;
 
@@ -271,7 +244,7 @@
 
 .yui-skin-sam .yuimenuitem-checked {
 
-    background-image: url(../../../img/menuitem_checkbox.png);
+    background-image: url(../../../img/skins/sam/menuitem_checkbox.png);
     background-position: left center;
     background-repeat: no-repeat;
 
@@ -285,14 +258,15 @@
 
 .yui-skin-sam .yui-menu-shadow-visible {
 
-    top: 2px;
-    right: -3px;
-    left: -3px;
-    bottom: -3px;
     background-color: #000;
+
+    /*
+        Opacity can be expensive, so defer the use of opacity until the 
+        menu is visible.
+    */
+
     opacity: .12;
     *filter: alpha(opacity=12);  /* For IE */
-    visibility: visible;
 
 }
 
@@ -312,7 +286,7 @@
 
 /* Disabled MenuItem */
 
-.yui-skin-sam .yuimenuitem-disabled .yuimenuitemlabel {
+.yui-skin-sam .yuimenuitemlabel-disabled {
 
     cursor: default;
     color: #A6A6A6;
@@ -321,12 +295,12 @@
 
 .yui-skin-sam .yuimenuitem-hassubmenu-disabled {
 
-    background-image: url(../../../img/menuitem_submenuindicator_disabled.png);
+    background-image: url(../../../img/skins/sam/menuitem_submenuindicator_disabled.png);
 
 }
 
 .yui-skin-sam .yuimenuitem-checked-disabled {
 
-    background-image: url(../../../img/menuitem_checkbox_disabled.png);
+    background-image: url(../../../img/skins/sam/menuitem_checkbox_disabled.png);
 
 }

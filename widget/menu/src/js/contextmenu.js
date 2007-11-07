@@ -189,6 +189,9 @@ init: function (p_oElement, p_oConfig) {
 
     this.beforeInitEvent.fire(ContextMenu);
 
+    this.showEvent.subscribe(this._onContextMenuShow);
+    this.hideEvent.subscribe(this._onContextMenuHide);
+
 
     if(p_oConfig) {
 
@@ -611,9 +614,6 @@ configTrigger: function (p_sType, p_aArgs, p_oMenu) {
                 this, true);
 
         }
-
-        this.showEvent.subscribe(this._onContextMenuShow);
-        this.hideEvent.subscribe(this._onContextMenuHide);
 
     }
     else {

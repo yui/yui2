@@ -21,23 +21,38 @@
 
         <mkdir dir="${component.srcdir}/temp/" />
 
-        <copy file="${component.srcdir}/css/menu.css" tofile="${component.srcdir}/temp/menu.css" />
+        <copy file="${component.srcdir}/css/menu-original.css" tofile="${component.srcdir}/temp/menu-original.css" />
 		<replaceregexp 
-			file="${component.srcdir}/temp/menu.css"
+			file="${component.srcdir}/temp/menu-original.css"
 			byline="true"
 			match="(\.\./img/)"
 			replace=""
 			flags="g">
 		</replaceregexp>
 
+        <concat destfile="${component.srcdir}/temp/menu.css">
+            <filelist files="${component.srcdir}/css/menu-core.css, ${component.srcdir}/temp/menu-original.css"/>
+        </concat>
+        
+        <delete file="${component.srcdir}/temp/menu-original.css" />
+
         <copy file="${component.srcdir}/css/skins/sam/menu-skin.css" tofile="${component.srcdir}/temp/skins/sam/menu-skin.css" />
 		<replaceregexp 
 			file="${component.srcdir}/temp/skins/sam/menu-skin.css"
 			byline="true"
-			match="\.\./\.\./\.\./img/"
+			match="(\.\./\.\./\.\./img/skins/sam/)"
 			replace=""
 			flags="g">
 		</replaceregexp>
+
+		<replaceregexp 
+			file="${component.srcdir}/temp/skins/sam/menu-skin.css"
+			byline="true"
+			match="(\.\./\.\./\.\./img/)"
+			replace=""
+			flags="g">
+		</replaceregexp>
+
 		<replaceregexp 
 			file="${component.srcdir}/temp/skins/sam/menu-skin.css"
 			byline="true"
@@ -48,17 +63,19 @@
 
         <copy file="${component.srcdir}/css/menu-core.css" tofile="${component.srcdir}/temp/menu-core.css" />
 
-		<copy file="${component.srcdir}/img/menubaritem_submenuindicator.png" tofile="${component.srcdir}/temp/skins/sam/menubaritem_submenuindicator.png" />
-		<copy file="${component.srcdir}/img/menubaritem_submenuindicator_disabled.png" tofile="${component.srcdir}/temp/skins/sam/menubaritem_submenuindicator_disabled.png" />
-		<copy file="${component.srcdir}/img/menuitem_checkbox.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_checkbox.png" />
-		<copy file="${component.srcdir}/img/menuitem_checkbox_disabled.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_checkbox_disabled.png" />
-		<copy file="${component.srcdir}/img/menuitem_submenuindicator.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_submenuindicator.png" />
-		<copy file="${component.srcdir}/img/menuitem_submenuindicator_disabled.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_submenuindicator_disabled.png" />
+		<copy file="${component.srcdir}/img/skins/sam/menubaritem_submenuindicator.png" tofile="${component.srcdir}/temp/skins/sam/menubaritem_submenuindicator.png" />
+		<copy file="${component.srcdir}/img/skins/sam/menubaritem_submenuindicator_disabled.png" tofile="${component.srcdir}/temp/skins/sam/menubaritem_submenuindicator_disabled.png" />
+		<copy file="${component.srcdir}/img/skins/sam/menuitem_checkbox.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_checkbox.png" />
+		<copy file="${component.srcdir}/img/skins/sam/menuitem_checkbox_disabled.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_checkbox_disabled.png" />
+		<copy file="${component.srcdir}/img/skins/sam/menuitem_submenuindicator.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_submenuindicator.png" />
+		<copy file="${component.srcdir}/img/skins/sam/menuitem_submenuindicator_disabled.png" tofile="${component.srcdir}/temp/skins/sam/menuitem_submenuindicator_disabled.png" />
 
 	</target>
+
 
     <target name="deploy" depends="YuiTaskLib.deploy">
         <delete dir="${component.srcdir}/temp/" />
     </target>
+
 
 </project>
