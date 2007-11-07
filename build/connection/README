@@ -1,5 +1,22 @@
 Connection Manager Release Notes
 
+*** version 2.4.0 ***
+
+* [FIXED] SF1804153.  Transactions initialized with setForm() now properly clear
+the POST data field after each transaciton.
+
+* The callback object can accept a new member, cache, defined with a boolean
+value.  If set to false (e.g., var callback = { cache:false };), a timestamp
+will be appended to the URI to override HTTP GET caching.  This timestamp value
+will appear as rnd=timestamp in the request querystring.
+
+* Custom Events startEvent, completeEvent, and abortEvent now receive
+callback.argument, if defined, in addition to the transaction ID.  Each Custom
+Event's function handler receives two arguments -- the event type as the first
+argument, and an array as the second argument.  The first element in the array
+is the transaction ID, and the second element are any arguments defined in the
+callback object.
+
 *** version 2.3.1 ***
 
 * setDefaultPostHeader() can now be overloaded with a boolean, string, or
@@ -235,30 +252,4 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
