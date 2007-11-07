@@ -32,7 +32,7 @@
 
         'button': {
             'type': 'js',
-            'path': 'button/button-beta-min.js',
+            'path': 'button/button-min.js',
             'requires': ['element'],
             'optional': ['menu'],
             'skinnable': true
@@ -43,6 +43,12 @@
             'path': 'calendar/calendar-min.js',
             'requires': ['event', 'dom'],
             'skinnable': true
+        },
+
+        'charts': {
+            'type': 'js',
+            'path': 'charts/charts-beta-min.js',
+            'requires': ['element', 'datasource']
         },
 
         'colorpicker': {
@@ -64,8 +70,8 @@
             'path': 'container/container-min.js',
             'requires': ['dom', 'event'],
             // button is optional, but creates a circular dep
-            //'optional': ['dragdrop', 'animation', 'button'],
-            'optional': ['dragdrop', 'animation'],
+            //'optional': ['dragdrop', 'animation', 'connection', 'button'],
+            'optional': ['dragdrop', 'animation', 'connection'],
             'supersedes': ['containercore'],
             'skinnable': true
         },
@@ -143,13 +149,13 @@
 
         'history': {
             'type': 'js',
-            'path': 'history/history-beta-min.js',
+            'path': 'history/history-min.js',
             'requires': ['event']
         },
 
         'imageloader': {
             'type': 'js',
-            'path': 'imageloader/imageloader-experimental-min.js',
+            'path': 'imageloader/imageloader-beta-min.js',
             'requires': ['event', 'dom']
         },
 
@@ -189,6 +195,14 @@
             'type': 'css',
             'path': 'reset-fonts/reset-fonts.css',
             'supersedes': ['reset', 'fonts']
+        },
+
+        'simpleeditor': {
+            'type': 'js',
+            'path': 'editor/simpleeditor-beta-min.js',
+            'requires': ['element'],
+            'optional': ['containercore', 'menu', 'button', 'animation', 'dragdrop'],
+            'skinnable': true
         },
 
         'slider': {
@@ -232,10 +246,16 @@
             'rollup': 3
         },
 
-        'yuiloader': {
-            'type': 'js',
-            'path': 'yuiloader/yuiloader-beta-min.js'
-        },
+        // 'yuiloadercore': {
+        //     'type': 'js',
+        //     'path': 'yuiloader/yuiloader_core-beta-min.js'
+        // },
+
+        // 'yuiloader': {
+        //     'type': 'js',
+        //     'path': 'yuiloader/yuiloader-beta-min.js'
+        //     'supersedes': ['yuiloadercore']
+        // },
 
         'yuitest': {
             'type': 'js',

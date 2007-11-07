@@ -27,13 +27,17 @@
 
 </script>
 
-<script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
-<script type="text/javascript" src="../../build/yuiloader/yuiloader-beta.js"></script>
+<script type="text/javascript" src="../../../build/yuiloader/yuiloader-beta.js"></script>
+<script type="text/javascript" src="../../../build/dom/dom.js"></script>
+<script type="text/javascript" src="../../../build/event/event.js"></script>
+<script type="text/javascript" src="../../../build/logger/logger.js"></script>
 
 </head>
-<body>
+<body class="yui-skin-sam">
 
 <script type="text/javascript">
+
+new YAHOO.widget.LogReader();
 
 YAHOO.example.tabviewinit = function( ){
     var tabView = new YAHOO.widget.TabView( { id: 'demo' } );
@@ -58,16 +62,15 @@ YAHOO.example.tabviewinit = function( ){
         tabView.appendTo(this); 
     });
 };
-    var loader;
 
-    loader = new YAHOO.util.YUILoader();
-    loader.require("tabview", "menu");
-    // loader.require("tabview", "treeview", "calendar");
-    loader.loadOptional = true;
-    loader.base = '../../build/';
+//alert(YAHOO.lang.dump(YAHOO.env.modules, 1));
 
-
-    loader.insert(function() {
+    var loader = new YAHOO.util.YUILoader();
+    loader.insert({
+        require: ["tabview", "treeview", "skin-sam-logger"],
+        base: '../../build/',
+        loadOptional: true,
+        onSuccess: function() {
                 YAHOO.util.Event.onAvailable("treediv", function() {
                         var tree = new YAHOO.widget.TreeView("treediv");
                         var n = new YAHOO.widget.TextNode("node 1", tree.getRoot());
@@ -77,9 +80,14 @@ YAHOO.example.tabviewinit = function( ){
                     });
 
                 YAHOO.example.tabviewinit();
-            }, {
-                filter: 'raw'
-            });
+         },
+
+        onFailure: function(o) {
+            alert("error: " + YAHOO.lang.dump(o));
+        },
+
+        filter: 'raw'
+     });
 
     log(loader.sorted);
 

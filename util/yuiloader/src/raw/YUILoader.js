@@ -17,26 +17,13 @@
  *      version management, automatic sandboxing
  */
 (function() {
- 
-    // Define YAHOO_config if it doesn't exist.  Only relevant if YAHOO is not
-    // already on the page
-    if (typeof YAHOO_config === "undefined") {
-        YAHOO_config = {};
-    }
 
-    // YUI is locally scoped, only pieces of it will be referenced in YAHOO
-    // after YAHOO has been loaded.
+    var util = YAHOO.util,
+        lang = YAHOO.lang;
+ 
     var YUI = {
 
-        ua: function() {
-            var a=navigator.userAgent, o={};
-            if ((/KHTML/).test(a)) {
-                o.webkit=1;
-            } else if ((/MSIE/).test(a)) {
-                o.ie=1;
-            }
-            return o;
-        }(),
+        dupsAllowed: {'yahoo': true, 'get': true},
 
         /*
          * The library metadata for the current release  The is the default
@@ -46,7 +33,6 @@
          */
         info: '@yuiinfo@', 
 
-        // Simple utils since we can't count on YAHOO.lang being available.
         ObjectUtil: {
             appendArray: function(o, a) {
                 if (a) {
@@ -56,29 +42,12 @@
                 }
             },
 
-            clone: function(o) {
-                var c = {};
-                for (var i in o) {
-                    c[i] = o[i];
-                }
-                return c;
-            },
-
-            merge: function() {
-                var o={}, a=arguments, i, j;
-                for (i=0; i<a.length; i=i+1) {
-                    
-                    for (j in a[i]) {
-                        o[j] = a[i][j];
-                    }
-                }
-                return o;
-            },
-
             keys: function(o, ordered) {
                 var a=[], i;
                 for (i in o) {
-                    a.push(i);
+                    if (lang.hasOwnProperty(o, i)) {
+                        a.push(i);
+                    }
                 }
 
                 return a;
@@ -123,116 +92,10 @@
             uniq: function(a) {
                 return YUI.ObjectUtil.keys(YUI.ArrayUtil.toObject(a));
             }
-        },
-
-
-        // loader instances
-        loaders: [],
-
-        finishInit: function(yahooref) {
-
-            // YAHOO has been loaded either in this window or passed 
-            // from the sandbox routine.  Set up local references 
-            // to the loader and module metadata in the YAHOO object
-            // in question so additional modules can be loaded. 
-
-            yahooref = yahooref || YAHOO;
-
-            yahooref.env.YUIInfo=YUI.info;
-            yahooref.util.YUILoader=YUI.YUILoader;
-
-        },
-
-        /*
-         * Global handler for the module loaded event exposed by
-         * YAHOO
-         */
-        onModuleLoaded: function(minfo) {
-
-            var mname = minfo.name;
-
-            for (var i=0; i<YUI.loaders.length; i=i+1) {
-                YUI.loaders[i].loadNext(mname);
-                break;
-            }
-
-            //console.log(YAHOO.lang.dump(minfo));
-
-        },
-
-        /*
-         * Sets up the module metadata
-         */
-        init: function() {
-
-            var c = YAHOO_config, o = c.load, 
-                y_loaded = (typeof YAHOO !== "undefined" && YAHOO.env);
-
-
-            // add our listener to the existing YAHOO.env.listeners stack
-            if (y_loaded) {
-
-                YAHOO.env.listeners.push(YUI.onModuleLoaded);
-
-            // define a listener in YAHOO_config that YAHOO will pick up
-            // when it is loaded.
-            } else {
-
-                if (c.listener) {
-                    YUI.cachedCallback = c.listener;
-                }
-
-                c.listener = function(minfo) {
-                    YUI.onModuleLoaded(minfo);
-                    if (YUI.cachedCallback) {
-                        YUI.cachedCallback(minfo);
-                    }
-                };
-            }
-
-            // Fetch the required modules immediately if specified
-            // in YAHOO_config.  Otherwise detect YAHOO and fetch
-            // it if it doesn't exist so we have a place to put
-            // the loader.  The problem with this is that it will
-            // prevent rollups from working
-            if (o || !y_loaded) {
-
-                o = o || {};
-
-                var loader = new YUI.YUILoader(o);
-                loader.onLoadComplete = function() {
-
-                        YUI.finishInit();
-
-                        if (o.onLoadComplete) {
-
-                            loader._pushEvents();
-                            o.onLoadComplete(loader);
-                        }
-
-                        
-                    };
-
-                // If no load was requested, we must load YAHOO
-                // so we have a place to put the loader
-                if (!y_loaded) {
-                    loader.require("yahoo");
-                }
-
-                loader.insert(null, o);
-            } else {
-                YUI.finishInit();
-            }
         }
-
     };
 
-    YUI.YUILoader = function(o) {
-
-        // Inform the library that it is being injected
-        YAHOO_config.injecting = true;
-
-        o = o || {};
+    YAHOO.util.YUILoader = function(o) {
 
         /**
          * Internal callback to handle multiple internal insert() calls
@@ -245,18 +108,71 @@
         /**
          * Callback that will be executed when the loader is finished
          * with an insert
-         * @method onLoadComplete
+         * @method onSuccess
          * @type function
          */
-        this.onLoadComplete = null;
+        this.onSuccess = null;
+
+        /**
+         * Callback that will be executed if there is a failure
+         * @method onFailure
+         * @type function
+         */
+        this.onFailure = YAHOO.log;
+
+        /**
+         * Callback that will be executed each time a new module is loaded
+         * @method onProgress
+         * @type function
+         */
+        this.onProgress = null;
+
+        /**
+         * The execution scope for all callbacks
+         * @property scope
+         * @default this
+         */
+        this.scope = this;
+
+        /**
+         * Data that is passed to all callbacks
+         * @property data
+         */
+        this.data = null;
+
+        /**
+         * The name of the variable in a sandbox to reference when
+         * the load is complete.  If this variable is not available
+         * in the specified scripts, the operation will fail.
+         * @property varName
+         * @type string
+         * @default YAHOO
+         */
+        this.varName = "YAHOO";
 
         /**
          * The base directory.
          * @property base
          * @type string
-         * @default build
+         * @default http://yui.yahooapis.com/[YUI VERSION]/build/
          */
-        this.base = ("base" in o) ? o.base : YUI.info.base;
+        this.base = YUI.info.base;
+
+        /**
+         * A list of modules that should not be loaded, even if
+         * they turn up in the dependency tree
+         * @property ignore
+         * @type string[]
+         */
+        this.ignore = null;
+
+        /**
+         * A list of modules that should always be loaded, even
+         * if they have already been inserted into the page.
+         * @property force
+         * @type string
+         */
+        this.force = null;
 
         /**
          * Should we allow rollups
@@ -264,23 +180,37 @@
          * @type boolean
          * @default true
          */
-        this.allowRollup = ("allowRollup" in o) ? o.allowRollup : true;
+        this.allowRollup = true;
 
         /**
-         * Filter to apply to result url
+         * Filter to apply to result url.  This filter will modify the default
+         * path for all modules.  The default path for the YUI library is the
+         * minified version of the files (e.g., event-min.js).  The filter property
+         * can be a predefined filter or a custom filter.  The valid predefined 
+         * filters are:
+         * <dl>
+         *  <dt>debug</dt>
+         *  <dd>Selects the debug versions of the library (e.g., event-debug.js).
+         *      This option will automatically include the logger widget</dd>
+         *  <dt>raw</dt>
+         *  <dd>Selects the non-minified version of the library (e.g., event.js).
+         * </dl>
+         * You can also define a custom filter, which must be an object literal 
+         * containing a search expression and a replace string:
+         * <pre>
+         *  myFilter: &#123; 
+         *      'searchExp': "-min\\.js", 
+         *      'replaceStr': "-debug.js"
+         *  &#125;
+         * </pre>
+         * Note: the default base path for the YUI library is http://yui.yahooapis.com.
+         * Only the minified versions of the components are available on this host,
+         * so if you choose to use the raw or debug versions of the files, you will
+         * have to host these files locally, and change the "base" property.
          * @property filter
-         * @type string|object
+         * @type string|{searchExp: string, replaceStr: string}
          */
-        this.filter = o.filter;
-
-        /**
-         * Create a sandbox rather than inserting into lib into.
-         * the current context.  Not currently supported
-         * property sandbox
-         * @type boolean
-         * @default false
-         */
-        this.sandbox = o.sandbox;
+        this.filter = null;
 
         /**
          * The list of requested modules
@@ -293,7 +223,7 @@
          * The library metadata
          * @property moduleInfo
          */
-        this.moduleInfo = o.moduleInfo || YUI.info.moduleInfo;
+        this.moduleInfo = YUI.info.moduleInfo;
 
         /**
          * List of rollup files found in the library metadata
@@ -308,7 +238,7 @@
          * @type boolean
          * @default false
          */
-        this.loadOptional = o.loadOptional || false;
+        this.loadOptional = false;
 
         /**
          * All of the derived dependencies in sorted order, which
@@ -343,7 +273,6 @@
          * @type {string: boolean}
          */
         this.inserted = {};
-
 
         /**
          * Provides the information used to skin the skinnable components.
@@ -383,17 +312,13 @@
          *   </code>
          *   @property skin
          */
-        this.skin = o.skin || YUI.ObjectUtil.clone(YUI.info.skin); 
+        this.skin = lang.merge(YUI.info.skin); 
 
+        this._config(o);
 
-        if (o.require) {
-            this.require(o.require);
-        }
-
-        YUI.loaders.push(this);
     };
 
-    YUI.YUILoader.prototype = {
+    YAHOO.util.YUILoader.prototype = {
 
         FILTERS: {
             RAW: { 
@@ -408,10 +333,49 @@
 
         SKIN_PREFIX: "skin-",
 
-        /** Add a new module to the component metadata.  The javascript 
-         * component must also use YAHOO.register to notify the loader 
-         * when it has been loaded, or a verifier function must be
-         * provided
+        _config: function(o) {
+
+            if (!o) {
+                return;
+            }
+
+            // apply config values
+            lang.augmentObject(this, o);
+
+            for (var i in o) {
+                if (lang.hasOwnProperty(o, i)) {
+                    switch (i) {
+                        case "require":
+                            this.require(o[i]);
+                            break;
+
+                        case "filter":
+                            var f = o[i];
+
+                            if (typeof f === "string") {
+                                f = f.toUpperCase();
+
+                                // the logger must be available in order to use the debug
+                                // versions of the library
+                                if (f === "DEBUG") {
+                                    this.require("logger");
+                                }
+
+                                this.filter = this.FILTERS[f];
+                            } else {
+                                this.filter = f;
+                            }
+
+                            break;
+
+                        default:
+                            this[i] = o[i];
+                    }
+                }
+            }
+        },
+
+        /** Add a new module to the component metadata.         
          * <dl>
          *     <dt>name:</dt>       <dd>required, the component name</dd>
          *     <dt>type:</dt>       <dd>required, the component type (js or css)</dd>
@@ -420,7 +384,6 @@
          *     <dt>optional:</dt>   <dd>the optional modules for this component</dd>
          *     <dt>supersedes:</dt> <dd>the modules this component replaces</dd>
          *     <dt>rollup:</dt>     <dd>the number of superseded modules required for automatic rollup</dd>
-         *     <dt>verifier:</dt>   <dd>a function that is executed to determine when the module is fully loaded</dd>
          *     <dt>fullpath:</dt>   <dd>If fullpath is specified, this is used instead of the configured base + path</dd>
          *     <dt>skinnable:</dt>  <dd>flag to determine if skin assets should automatically be pulled in</dd>
          * </dl>
@@ -554,8 +517,8 @@
          */
         calculate: function(o) {
             if (this.dirty) {
-
-                this._setup(o);
+                this._config(o);
+                this._setup();
                 this._explode();
                 this._skin();
                 if (this.allowRollup) {
@@ -563,6 +526,8 @@
                 }
                 this._reduce();
                 this._sort();
+
+                // YAHOO.log("after calculate: " + lang.dump(this.required));
 
                 this.dirty = false;
             }
@@ -573,28 +538,28 @@
          * modules already detected will not be loaded again unless a force
          * option is encountered.  Called by calculate()
          * @method _setup
-         * @param o optional options object
          * @private
          */
-        _setup: function(o) {
+        _setup: function() {
 
-            o = o || {};
-            this.loaded = YUI.ObjectUtil.clone(this.inserted); 
+            this.loaded = lang.merge(this.inserted); // shallow clone
             
-            if (!this.sandbox && typeof YAHOO !== "undefined" && YAHOO.env) {
-                this.loaded = YUI.ObjectUtil.merge(this.loaded, YAHOO.env.modules);
+            if (!this._sandbox) {
+                this.loaded = lang.merge(this.loaded, YAHOO.env.modules);
             }
 
+            // YAHOO.log("already loaded stuff: " + lang.dump(this.loaded, 0));
+
             // add the ignore list to the list of loaded packages
-            if (o.ignore) {
-                YUI.ObjectUtil.appendArray(this.loaded, o.ignore);
+            if (this.ignore) {
+                YUI.ObjectUtil.appendArray(this.loaded, this.ignore);
             }
 
             // remove modules on the force list from the loaded list
-            if (o.force) {
-                for (var i=0; i<o.force.length; i=i+1) {
-                    if (o.force[i] in this.loaded) {
-                        delete this.loaded[o.force[i]];
+            if (this.force) {
+                for (var i=0; i<this.force.length; i=i+1) {
+                    if (this.force[i] in this.loaded) {
+                        delete this.loaded[this.force[i]];
                     }
                 }
             }
@@ -726,7 +691,6 @@
                             continue;
                         }
 
-
                         var skin = this.parseSkin(i), c = 0;
                         if (skin) {
 
@@ -743,12 +707,11 @@
 
                         } else {
 
-                            // require all modules to trigger a rollup (using the 
-                            // threshold value has not proved worthwhile)
+                            // check the threshold
                             for (j=0;j<s.length;j=j+1) {
 
                                 // if the superseded module is loaded, we can't load the rollup
-                                if (this.loaded[s[j]]) {
+                                if (this.loaded[s[j]] && (!YUI.dupsAllowed[s[j]])) {
                                     roll = false;
                                     break;
                                 // increment the counter if this module is required.  if we are
@@ -764,6 +727,7 @@
                         }
 
                         if (roll) {
+                            // YAHOO.log("rollup: " +  m + ", " + lang.dump(this.loaded,0));
                             // add the rollup
                             r[i] = true;
                             rolled = true;
@@ -922,60 +886,50 @@
             this.sorted = s;
         },
 
+        toString: function() {
+            var o = {
+                type: "YUILoader",
+                base: this.base,
+                filter: this.filter,
+                required: this.required,
+                loaded: this.loaded,
+                inserted: this.inserted
+            };
+
+            lang.dump(o, 1);
+        },
+
         /**
          * inserts the requested modules and their dependencies.  
          * <code>type</code> can be "js" or "css".  Both script and 
          * css are inserted if type is not provided.
          * @method insert
-         * @param callback {Function} a function to execute when the load
-         * is complete.
          * @param o optional options object
          * @param type {string} the type of dependency to insert
          */
-        insert: function(callback, o, type) {
-
-            //if (!this.onLoadComplete) {
-                //this.onLoadComplete = callback;
-            //}
-
-            if (!type) {
-                var self = this;
-                this._internalCallback = function() {
-                            self._internalCallback = null;
-                            self.insert(callback, o, "js");
-                        };
-                this.insert(null, o, "css");
-                return;
-            }
-
-            o = o || {};
-
-            // store the callback for when we are done
-            this.onLoadComplete = callback || this.onLoadComplete;
-
-            // store the optional filter
-            var f = o && o.filter || null;
-
-            if (typeof f === "string") {
-                f = f.toUpperCase();
-
-                // the logger must be available in order to use the debug
-                // versions of the library
-                if (f === "DEBUG") {
-                    this.require("logger");
-                }
-            }
-
-            this.filter = this.FILTERS[f] || f || this.FILTERS[this.filter] || this.filter;
-
-            // store the options... not currently in use
-            this.insertOptions = o;
+        insert: function(o, type) {
+            // if (o) {
+            //     YAHOO.log("insert: " + lang.dump(o, 1) + ", " + type);
+            // } else {
+            //     YAHOO.log("insert: " + this.toString() + ", " + type);
+            // }
 
             // build the dependency list
             this.calculate(o);
 
+            if (!type) {
+                // YAHOO.log("trying to load css first");
+                var self = this;
+                this._internalCallback = function() {
+                            self._internalCallback = null;
+                            self.insert(null, "js");
+                        };
+                this.insert(null, "css");
+                return;
+            }
+
             // set a flag to indicate the load has started
-            this.loading = true;
+            this._loading = true;
 
             // keep the loadType (js, css or undefined) cached
             this.loadType = type;
@@ -983,6 +937,160 @@
             // start the load
             this.loadNext();
 
+        },
+
+        /*
+         * Interns the script for the requested modules.  The callback is
+         * provided a reference to the sandboxed YAHOO object.  This only
+         * applies to the script: css can not be sandboxed; css will be
+         * loaded into the page normally if specified.
+         * @method sandbox
+         * @param callback {Function} the callback to exectued when the load is
+         *        complete.
+         */
+        sandbox: function(o, type) {
+            // if (o) {
+            //     YAHOO.log("sandbox: " + lang.dump(o, 1) + ", " + type);
+            // } else {
+            //     YAHOO.log("sandbox: " + this.toString() + ", " + type);
+            // }
+
+            this._config(o);
+
+            if (!this.onSuccess) {
+throw new Error("You must supply an onSuccess handler for your sandbox");
+            }
+
+            this._sandbox = true;
+
+            var self = this;
+
+            // take care of any css first (this can't be sandboxed)
+            if (!type || type !== "js") {
+                this._internalCallback = function() {
+                            self._internalCallback = null;
+                            self.sandbox(null, "js");
+                        };
+                this.insert(null, "css");
+                return;
+            }
+
+            // get the connection manager if not on the page
+            if (!util.Connect) {
+                // get a new loader instance to load connection.
+                var ld = new YAHOO.util.YUILoader();
+                ld.insert({
+                    base: this.base,
+                    filter: this.filter,
+                    require: "connection",
+                    onSuccess: function() {
+                        this.sandbox(null, "js");
+                    },
+                    scope: self
+                }, "js");
+                return;
+            }
+
+            this._scriptText = [];
+            this._loadCount = 0;
+            this._stopCount = this.sorted.length;
+            this._xhr = [];
+
+            this.calculate();
+
+            var s=this.sorted, l=s.length, i, m, url;
+
+            for (i=0; i<l; i=i+1) {
+                m = this.moduleInfo[s[i]];
+
+                // undefined modules cause a failure
+                if (!m) {
+                    this.onFailure.call(this.scope, {
+                            msg: "undefined module " + m,
+                            data: this.data
+                        });
+                    for (var j=0;j<this._xhr.length;j=j+1) {
+                        this._xhr[j].abort();
+                    }
+                    return;
+                }
+
+                // css files should be done
+                if (m.type !== "js") {
+                    this._loadCount++;
+                    continue;
+                }
+
+                url = m.fullpath || this._url(m.path);
+
+                // YAHOO.log("xhr request: " + url + ", " + i);
+
+                var xhrData = {
+
+                    success: function(o) {
+                        
+                        var idx=o.argument[0], url=o.argument[1], name=o.argument[2];
+
+                        // store the response in the position it was requested
+                        this._scriptText[idx] = o.responseText; 
+                        
+                        // YAHOO.log("received: " + o.responseText.substr(0, 100) + ", " + idx);
+                    
+                        if (this.onProgress) {
+                            this.onProgress.call(this.scope, {
+                                        name: name,
+                                        scriptText: o.responseText,
+                                        xhrResponse: o,
+                                        data: this.data
+                                    });
+                        }
+
+                        // only generate the sandbox once everything is loaded
+                        this._loadCount++;
+
+                        if (this._loadCount >= this._stopCount) {
+
+                            // wrap the contents of the requested modules in an anonymous function
+                            var t = "(function() {\n";
+                        
+                            // return the locally scoped reference.
+                            var b = "\nreturn " + this.varName + "\n})();";
+
+                            var ref = eval(t + this._scriptText.join("\n") + b);
+
+                            this._pushEvents(ref);
+
+                            if (ref) {
+                                this.onSuccess.call(this.scope, {
+                                        reference: ref,
+                                        data: this.data
+                                    });
+                            } else {
+                                this.onFailure.call(this.scope, {
+                                        msg: this.varName + " reference failure",
+                                        data: this.data
+                                    });
+                            }
+                        }
+                    },
+
+                    failure: function(o) {
+                        this.onFailure.call(this.scope, {
+                                msg: "XHR failure",
+                                xhrResponse: o,
+                                data: this.data
+                            });
+                    },
+
+                    scope: this,
+
+                    // module index, module name, sandbox name
+                    argument: [i, url, s[i]]
+
+                };
+
+                this._xhr.push(util.Connect.asyncRequest('GET', url, xhrData));
+            }
         },
 
         /**
@@ -997,37 +1105,44 @@
          */
         loadNext: function(mname) {
 
-            // console.log("loadNext executing, just loaded " + mname);
+            // YAHOO.log("loadNext executing, just loaded " + mname);
 
             // The global handler that is called when each module is loaded
             // will pass that module name to this function.  Storing this
             // data to avoid loading the same module multiple times
             if (mname) {
                 this.inserted[mname] = true;
+
+                if (this.onProgress) {
+                    this.onProgress.call(this.scope, {
+                            name: mname,
+                            data: this.data
+                        });
+                }
                 //var o = this.getProvides(mname);
-                //this.inserted = YUI.ObjectUtil.merge(this.inserted, o);
+                //this.inserted = lang.merge(this.inserted, o);
             }
 
             // It is possible that this function is executed due to something
             // else one the page loading a YUI module.  Only react when we
             // are actively loading something
-            if (!this.loading) {
+            if (!this._loading) {
                 return;
             }
 
             // if the module that was just loaded isn't what we were expecting,
             // continue to wait
-            if (mname && mname !== this.loading) {
+            if (mname && mname !== this._loading) {
                 return;
             }
             
-            var s=this.sorted, len=s.length, i, m, url;
+            var s=this.sorted, len=s.length, i, m;
 
             for (i=0; i<len; i=i+1) {
 
                 // This.inserted keeps track of what the loader has loaded
                 if (s[i] in this.inserted) {
-                    // console.log(s[i] + " alread loaded ");
+                    // YAHOO.log(s[i] + " alread loaded ");
                     continue;
                 }
 
@@ -1035,67 +1150,56 @@
                 // from YAHOO, loadNext may be called multiple times for
                 // the same module when loading a rollup.  We can safely
                 // skip the subsequent requests
-                if (s[i] === this.loading) {
-                    // console.log("still loading " + s[i] + ", waiting");
+                if (s[i] === this._loading) {
+                    // YAHOO.log("still loading " + s[i] + ", waiting");
                     return;
                 }
 
                 // log("inserting " + s[i]);
-
                 m = this.moduleInfo[s[i]];
+
+                if (!m) {
+                    this.onFailure.call(this.scope, {
+                            msg: "undefined module " + m,
+                            data: this.data
+                        });
+                    return;
+                }
 
                 // The load type is stored to offer the possibility to load
                 // the css separately from the script.
                 if (!this.loadType || this.loadType === m.type) {
-                    this.loading = s[i];
+                    this._loading = s[i];
+                    // YAHOO.log("attempting to load " + s[i] + ", " + this.base);
 
-                    // Insert the css node and continue.  It is possible
-                    // that the css file will load out of order ... this
-                    // may be a problem that needs to be addressed, but
-                    // unlike the script files, there is no notification
-                    // mechanism in place for the css files.
-                    if (m.type === "css") {
-
+                    var fn = (m.type === "css") ? util.Get.css : util.Get.script,
                         url = m.fullpath || this._url(m.path);
-                        
-                        this.insertCss(url, s[i]);
-                        this.inserted[s[i]] = true;
+                    var self = this;
+                    fn(url, {
+                        data: s[i],
+                        onSuccess: function(o) {
+                            self.loadNext(o.data);
+                        },
+                        scope: self 
+                    });
 
-                    // Scripts must be loaded in order, so we wait for the
-                    // notification from YAHOO or a verifier function to 
-                    // process the next script
-                    } else {
-
-                        url = m.fullpath || this._url(m.path);
-                        this.insertScript(url, s[i]);
-
-                        // if a verifier was included for this module, execute
-                        // it, passing the name of the module, and a callback
-                        // that must be exectued when the verifier is done.
-                        if (m.verifier) {
-                            var self = this, name=s[i];
-                            m.verifier(name, function() {
-                                    self.loadNext(name);
-                                });
-                        }
-
-                        return;
-                    }
+                    return;
                 }
             }
 
             // we are finished
-            this.loading = null;
-
+            this._loading = null;
 
             // internal callback for loading css first
             if (this._internalCallback) {
                 var f = this._internalCallback;
                 this._internalCallback = null;
-                f(this);
-            } else if (this.onLoadComplete) {
+                f.call(this);
+            } else if (this.onSuccess) {
                 this._pushEvents();
-                this.onLoadComplete(this);
+                this.onSuccess.call(this.scope, {
+                        data: this.data
+                    });
             }
 
         },
@@ -1104,11 +1208,13 @@
          * In IE, the onAvailable/onDOMReady events need help when Event is
          * loaded dynamically
          * @method _pushEvents
+         * @param {Function} optional function reference
          * @private
          */
-        _pushEvents: function() {
-            if (typeof YAHOO !== "undefined" && YAHOO.util && YAHOO.util.Event) {
-                YAHOO.util.Event._load();
+        _pushEvents: function(ref) {
+            var r = ref || YAHOO;
+            if (r.util && r.util.Event) {
+                r.util.Event._load();
             }
         },
 
@@ -1133,98 +1239,8 @@
             // console.log(u);
 
             return u;
-        },
-
-/*
-        _detectLoad: function(n) {
-            //if (YUI.ua.ie) {
-            if (false) {
-
-                n.onreadystatechange = function() {
-                    if ("complete" === this.readyState) {
-                        log(n.id + " onload");
-                    }
-                };
-
-            //} else if (YUI.ua.webkit) {
-            } else if (YUI.ua.ie || YUI.ua.webkit) {
-
-                YUI._poll = YUI._poll || {};
-                YUI._poll[n.id] = setInterval(function(){
-                    var rs=document.readyState;
-                    if ("loaded" === rs || "complete" === rs) {
-                        clearInterval(YUI._poll[n.id]);
-                        YUI._poll[n.id] = null;
-                        log(n.id + " onload");
-                    }
-                }, 1000); 
-
-            } else {
-                n.onload = function() {
-                    log(n.id + " onload");
-                };
-            }
-        },
-        */
-
-        /**
-         * Inserts a script node
-         * @method insertScript
-         * @param url {string} the full url for the script
-         * @param win {Window} optional window to target
-         */
-        insertScript: function(url, id, win) {
-
-            //console.log("inserting script " + url);
-            var w = win || window, d=w.document, n=d.createElement("script"),
-                h = d.getElementsByTagName("head")[0];
-
-            n.setAttribute("id", "yui_dyn_" + id);
-            n.setAttribute("type", "text/javascript");
-            n.setAttribute("src", url);
-
-            //this._detectLoad(n);
-
-            h.appendChild(n);
-        },
-
-        /**
-         * Inserts a css link node
-         * @method insertCss
-         * @param url {string} the full url for the script
-         * @param win {Window} optional window to target
-         */
-        insertCss: function(url, id, win) {
-            // console.log("inserting css " + url);
-            var w = win || window, d=w.document, n=d.createElement("link"),
-                h = d.getElementsByTagName("head")[0];
-
-            n.setAttribute("id", "yui_dyn_" + id);
-            n.setAttribute("href", url);
-            n.setAttribute("type", "text/css");
-            n.setAttribute("rel", "stylesheet");
-
-            //this._detectLoad(n);
-
-            h.appendChild(n);
-        },
-       
-        /*
-         * Interns the script for the requested modules.  The callback is
-         * provided a reference to the sandboxed YAHOO object.  This only
-         * applies to the script: css can not be sandboxed.  Not implemented.
-         * @method sandbox
-         * @param callback {Function} the callback to exectued when the load is
-         *        complete.
-         * @notimplemented
-         */
-        sandbox: function(callback) {
-            // this.calculate({
-                         //sandbox: true
-                     //});
         }
-    };
 
-    YUI.init();
+    };
 
 })();
