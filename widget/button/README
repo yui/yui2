@@ -26,6 +26,10 @@ Fixed the following bugs:
 
 + Menu is now truly an optional dependancy of Button.
 
++ Menus now render with the correct width when the "yui-skin-sam" CSS class 
+  name is applied to an element other than the <BODY>.
+
+
 
 *** Version 2.3.1 ***
 
