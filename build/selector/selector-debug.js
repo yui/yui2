@@ -10,7 +10,7 @@ var X = {
     HYPHEN: '-',
     OR: '|',
     S: '\\s*',
-    SP: '\\s+',
+    SP: '\\s+'
 };
 
 var CHARS = {
