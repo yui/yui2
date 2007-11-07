@@ -42,9 +42,9 @@ YAHOO.util.Get = function() {
      */
         nidx=0, 
 
-        //ridx=0,
+        // ridx=0,
 
-        //sandboxFrame=null,
+        // sandboxFrame=null,
 
     /**
      * interal property used to prevent multiple simultaneous purge 
@@ -117,8 +117,8 @@ YAHOO.util.Get = function() {
     //     var id = "yui__dyn_" + (nidx++);
     //     return _node("iframe", {
     //             "id": id,
-    //             "name": name,
-    //             "src": url
+    //             "name": id 
+    //             //,"src": url
     //         }, win);
     // };
 
@@ -133,7 +133,7 @@ YAHOO.util.Get = function() {
     // var _fail = function(id) {
     //     var q = queues[id], o;
     //     // execute fail callback
-    //     if (q.onfail) {
+    //     if (q.onFailure) {
     //         o = {
     //             win: q.win,
     //             data: q.data,
@@ -141,7 +141,7 @@ YAHOO.util.Get = function() {
     //             purge: _purge
     //         };
     //         var sc=q.scope || q.win;
-    //         q.onfail.call(sc, o);
+    //         q.onFailure.call(sc, o);
     //     }
     // };
 
@@ -153,35 +153,41 @@ YAHOO.util.Get = function() {
      */
     var _finish = function(id) {
         var q = queues[id], o;
-        queues[id].finished = true;
+        q.finished = true;
 
         if (q.aborted) {
             return;
         }
 
         // execute callback
-        if (q.onsuccess) {
+        if (q.onSuccess) {
             o = {
                 tId: q.tId,
                 win: q.win,
                 data: q.data,
                 nodes: q.nodes,
-                //reference: q.reference,
                 purge: _purge
             };
 
-            //if (q.opts.sandbox) {
-                //var s = [];
-                //var t = "(function() {\n",
-                    //b = "\nreturn YAHOO\n})();";
-                //var newyahoo = window.eval(t + s.join("\n") + b);
-                //o.reference = q.win.eval(q.opts.sandbox.reference);
-                //o.reference = newyahoo;
-            //}
+            // if (q.opts.sandbox) {
+            //     var ref = q.opts.sandbox.reference, refobj=q.win[ref];
+            //     //alert(ref + ", " + refobj);
+            //     //var src = "var " + ref + "=" + refobj.toSource();
+            //     var src = Function.toString.apply(refobj);
+            //     //var src = refobj.toSource().replace(/#1/, "var " + ref);
+            //     //alert(src);
+            //     var t = "(function() {\n",
+            //     //var t = "(function() {\nvar window=parent,document=parent.document,y=eval('" + q.sandboxid + ".YAHOO');",
+            //     //var t = "(function() {\nparent.MYYAHOO=eval('" + q.sandboxid + ".YAHOO.toSource()');",
+            //         b = "\nreturn " + ref + "\n})();";
+            //     o.reference = eval(t + src + b);
+            // }
 
             var sc=q.scope || q.win;
 
-            q.onsuccess.call(sc, o);
+            
+
+            q.onSuccess.call(sc, o);
         }
     };
 
@@ -301,8 +307,8 @@ YAHOO.util.Get = function() {
             tId: id,
             type: type,
             url: url,
-            onsuccess: opts.onsuccess,
-            onfail: opts.onfail,
+            onSuccess: opts.onSuccess,
+            onFailure: opts.onFailure,
             data: opts.data,
             opts: opts,
             win: win,
@@ -311,25 +317,30 @@ YAHOO.util.Get = function() {
             nodes: []
         };
 
-        // var q = queues[id];
+        var q = queues[id];
+
         // if (opts.sandbox) {
         //     var f = opts.iframe || sandboxFrame;
         //     if (!f) {
         //         var w = opts.win||window, d=w.document, b=d.getElementsByTagName("body")[0];
         //         f = _iframe(opts.iframesrc || YAHOO.util.Get.IFRAME_SRC , w);
-        //         _track("iframe", f, "safari_iframe", null, win, q.url.length, function() {
+        //         _track("iframe", f, "sandbox_iframe", null, win, q.url.length, function() {
+        //                     sandboxFrame = f;
+        //                     q.sandboxid = f.id;
+        //                     q.win = f.contentWindow || f;
+        //                     q.win.document.write('&nbsp;');
         //                     _next(id);
+        //                     //lang.later(0, q, _next, id);
         //                 });
         //         b.insertBefore(f, b.firstChild);
-        //         sandboxFrame = f;
-        //         q.win = f.contentWindow || f;
-        //         return;
+        //         return {
+        //             tId: id
+        //         };
         //     }
         //     q.win = f.contentWindow || f;
         // }
-        //
 
-        lang.later(0, queues[id], _next, id);
+        lang.later(0, q, _next, id);
 
         return {
             tId: id
@@ -381,6 +392,7 @@ YAHOO.util.Get = function() {
             // FireFox and Opera support the onload event for script nodes.
             // Opera, but not FF, supports the onload event for link nodes
             n.onload = function() {
+                //lang.later(20, null, f, [id, url]);
                 f(id, url);
             };
         }
@@ -431,7 +443,7 @@ YAHOO.util.Get = function() {
          * @param url {string|string[]} the url or urls to the script(s)
          * @param opts {object} Options: 
          * <dl>
-         * <dt>onsuccess</dt>
+         * <dt>onSuccess</dt>
          * <dd>
          * callback to execute when the script(s) are finished loading
          * The callback receives an object back with the following
@@ -450,7 +462,7 @@ YAHOO.util.Get = function() {
          * <dt>
          * </dl>
          * </dd>
-         * <dt>onfail</dt>
+         * <dt>onFailure</dt>
          * <dd>
          * callback to execute when the script load operation fails
          * The callback receives an object back with the following
@@ -489,13 +501,13 @@ YAHOO.util.Get = function() {
          * &nbsp;&nbsp;YAHOO.util.Get.script(
          * &nbsp;&nbsp;["http://yui.yahooapis.com/2.3.1/build/dragdrop/dragdrop-min.js",
          * &nbsp;&nbsp;&nbsp;"http://yui.yahooapis.com/2.3.1/build/animation/animation-min.js"], &#123;
-         * &nbsp;&nbsp;&nbsp;&nbsp;onsuccess: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;onSuccess: function(o) &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;new YAHOO.util.DDProxy("dd1"); // also new o.reference("dd1"); would work
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log("won't cause error because YAHOO is the scope");
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.log(o.nodes.length === 2) // true
          * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// o.purge(); // optionally remove the script nodes immediately
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
-         * &nbsp;&nbsp;&nbsp;&nbsp;onfail: function(o) &#123;
+         * &nbsp;&nbsp;&nbsp;&nbsp;onFailure: function(o) &#123;
          * &nbsp;&nbsp;&nbsp;&nbsp;&#125;,
          * &nbsp;&nbsp;&nbsp;&nbsp;data: "foo",
          * &nbsp;&nbsp;&nbsp;&nbsp;scope: YAHOO,
@@ -516,7 +528,7 @@ YAHOO.util.Get = function() {
          * @param url {string} the url or urls to the css file(s)
          * @param opts Options: 
          * <dl>
-         * <dt>onsuccess</dt>
+         * <dt>onSuccess</dt>
          * <dd>
          * callback to execute when the css file(s) are finished loading
          * The callback receives an object back with the following
