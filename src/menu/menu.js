@@ -72,6 +72,7 @@ var Dom = YAHOO.util.Dom,
     MenuManager = YAHOO.widget.MenuManager,
     CustomEvent = YAHOO.util.CustomEvent,
     Lang = YAHOO.lang,
+    UA = YAHOO.env.ua,
     
     m_oShadowTemplate,
 
@@ -168,6 +169,20 @@ var Dom = YAHOO.util.Dom,
         "CONTAINER": { 
             key: "container"
         }, 
+
+        "SCROLL_INCREMENT": { 
+            key: "scrollincrement", 
+            value: 1, 
+            validator: Lang.isNumber,
+            supercedes: ["maxheight"]
+        },
+
+        "MIN_SCROLL_HEIGHT": { 
+            key: "minscrollheight", 
+            value: 90, 
+            validator: Lang.isNumber,
+            supercedes: ["maxheight"]
+        },    
     
         "MAX_HEIGHT": { 
             key: "maxheight", 
@@ -185,7 +200,8 @@ var Dom = YAHOO.util.Dom,
         "DISABLED": { 
             key: "disabled", 
             value: false, 
-            validator: Lang.isBoolean
+            validator: Lang.isBoolean,
+            suppressEvent: true
         }
     
     };
@@ -232,6 +248,17 @@ ITEM_TYPE: null,
 */
 GROUP_TITLE_TAG_NAME: "h6",
 
+
+/**
+* @property OFF_SCREEN_POSITION
+* @description Array representing the default x and y position that a menu 
+* should have when it is positioned outside the viewport by the 
+* "poistionOffScreen" method.
+* @default [-10000, -10000]
+* @final
+* @type Array
+*/
+OFF_SCREEN_POSITION: [-10000, -10000],
 
 
 // Private properties
@@ -359,17 +386,6 @@ _nCurrentMouseX: 0,
 
 
 /**
-* @property _nMaxHeight
-* @description The original value of the "maxheight" configuration property 
-* as set by the user.
-* @default -1
-* @private
-* @type Number
-*/
-_nMaxHeight: -1,
-
-
-/**
 * @property _bStopMouseEventHandlers
 * @description Stops "mouseover," "mouseout," and "mousemove" event handlers 
 * from executing.
@@ -389,15 +405,6 @@ _bStopMouseEventHandlers: false,
 */
 _sClassName: null,
 
-
-/**
-* @property _bDisabled
-* @description The current value of the "disabled" configuration attribute.
-* @default false
-* @private
-* @type Boolean
-*/
-_bDisabled: false,
 
 
 // Public properties
@@ -693,16 +700,21 @@ init: function (p_oElement, p_oConfig) {
         this.renderEvent.subscribe(this._onRender);
         this.renderEvent.subscribe(this.onRender);
         this.beforeShowEvent.subscribe(this._onBeforeShow);
+        this.hideEvent.subscribe(this.positionOffScreen);
         this.showEvent.subscribe(this._onShow);
         this.beforeHideEvent.subscribe(this._onBeforeHide);
-        this.hideEvent.subscribe(this._onHide);
         this.mouseOverEvent.subscribe(this._onMouseOver);
         this.mouseOutEvent.subscribe(this._onMouseOut);
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
+        
 
-        Module.textResizeEvent.subscribe(this._onTextResize, this, true);
+        if (UA.gecko || UA.webkit) {
+
+            this.cfg.subscribeToConfigEvent("y", this._onYChange);
+
+        }
 
 
         if (p_oConfig) {
@@ -959,7 +971,6 @@ _getFirstEnabledItem: function () {
 _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
 
     var oItem,
-        bDisabled = this.cfg.getProperty("disabled"),
         nGroupIndex,
         aGroup,
         oGroupItem,
@@ -1396,11 +1407,7 @@ _configureSubmenu: function (p_oItem) {
 
         this.renderEvent.subscribe(this._onParentMenuRender, oSubmenu, true);
 
-        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow, null, 
-            oSubmenu);
-
-        oSubmenu.showEvent.subscribe(this._onSubmenuShow, null, p_oItem);
-        oSubmenu.hideEvent.subscribe(this._onSubmenuHide, null, p_oItem);
+        oSubmenu.beforeShowEvent.subscribe(this._onSubmenuBeforeShow);
 
     }
 
@@ -1434,19 +1441,27 @@ _subscribeToItemEvents: function (p_oItem) {
 */
 _getOffsetWidth: function () {
 
-    var oClone = this.element.cloneNode(true);
+    var oClone = this.element.cloneNode(true),
+        oRoot = this.getRoot(),
+        oParentNode = oRoot.element.parentNode,
+        sWidth;
 
     Dom.removeClass(oClone, "visible");
 
     Dom.setStyle(oClone, "width", "");
 
-    document.body.appendChild(oClone);
 
-    var sWidth = oClone.offsetWidth;
+    if (oParentNode) {
 
-    document.body.removeChild(oClone);
+        oParentNode.appendChild(oClone);
+    
+        sWidth = oClone.offsetWidth;
+    
+        oParentNode.removeChild(oClone);
+    
+        return sWidth;
 
-    return sWidth;
+    }
 
 },
 
@@ -1460,7 +1475,7 @@ _getOffsetWidth: function () {
 _setWidth: function () {
 
     var oElement = this.element,
-        bVisible = false,
+        bVisible = Dom.removeClass(oElement, "visible"),
         sWidth;
 
     if (oElement.parentNode.tagName.toUpperCase() == "BODY") {
@@ -1471,14 +1486,6 @@ _setWidth: function () {
         
         }
         else {
-
-            if (Dom.hasClass(oElement, "visible")) {
-
-                bVisible = true;
-                
-                Dom.removeClass(oElement, "visible");
-
-            }
 
             Dom.setStyle(oElement, "width", "auto");
             
@@ -1500,39 +1507,6 @@ _setWidth: function () {
     
         Dom.addClass(oElement, "visible");
     
-    }
-
-},
-
-
-/**
-* @method _onWidthChange
-* @description Change event handler for the the menu's "width" configuration
-* property.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onWidthChange: function (p_sType, p_aArgs) {
-
-    var sWidth = p_aArgs[0];
-    
-    if (sWidth && !this._hasSetWidthHandlers) {
-
-        this.itemAddedEvent.subscribe(this._setWidth);
-        this.itemRemovedEvent.subscribe(this._setWidth);
-
-        this._hasSetWidthHandlers = true;
-
-    }
-    else if (this._hasSetWidthHandlers) {
-
-        this.itemAddedEvent.unsubscribe(this._setWidth);
-        this.itemRemovedEvent.unsubscribe(this._setWidth);
-
-        this._hasSetWidthHandlers = false;
-
     }
 
 },
@@ -2047,7 +2021,6 @@ _onClick: function (p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
-        oTarget,
         oItemCfg,
         oSubmenu,
         sURL,
@@ -2056,75 +2029,37 @@ _onClick: function (p_sType, p_aArgs) {
 
     if (oItem && !oItem.cfg.getProperty("disabled")) {
 
-        oTarget = Event.getTarget(oEvent);
         oItemCfg = oItem.cfg;
         oSubmenu = oItemCfg.getProperty("submenu");
+        sURL = oItemCfg.getProperty("url");
+        
+
+        if ((sURL.substr(0,1) == "#") && !this.cfg.getProperty("target")) {
+
+            Event.preventDefault(oEvent);
+
+            oItem.focus();
+        
+        }
 
 
-        /*
-            ACCESSIBILITY FEATURE FOR SCREEN READERS: 
-            Expand/collapse the submenu when the user clicks 
-            on the submenu indicator image.
-        */        
+        if (!oSubmenu) {
 
-        if (oTarget == oItem.submenuIndicator && oSubmenu) {
+            oRoot = this.getRoot();
+            
+            if (oRoot instanceof YAHOO.widget.MenuBar || 
+                oRoot.cfg.getProperty("position") == "static") {
 
-            if (oSubmenu.cfg.getProperty("visible")) {
+                oRoot.clearActiveItem();
 
-                oSubmenu.hide();
-                
-                oSubmenu.parent.focus();
-    
             }
             else {
 
-                this.clearActiveItem();
-
-                oItemCfg.setProperty("selected", true);
-
-                oSubmenu.show();
-                
-                oSubmenu.setInitialFocus();
-    
+                oRoot.hide();
+            
             }
 
-            Event.preventDefault(oEvent);
-    
         }
-        else {
-
-            sURL = oItemCfg.getProperty("url");
-
-            //  Prevent the browser from following links equal to "#"
-            
-            if ((sURL.substr((sURL.length-1),1) == "#")) {
-
-                Event.preventDefault(oEvent);
-
-                oItem.focus();
-            
-            }
-
-
-            if (!oSubmenu) {
-    
-                oRoot = this.getRoot();
-                
-                if (oRoot instanceof YAHOO.widget.MenuBar || 
-                    oRoot.cfg.getProperty("position") == "static") {
-    
-                    oRoot.clearActiveItem();
-    
-                }
-                else if (oRoot.cfg.getProperty("clicktohide")) {
-
-                    oRoot.hide();
-                
-                }
-    
-            }
-
-        }                    
     
     }
 
@@ -2460,31 +2395,45 @@ _onKeyPress: function (p_sType, p_aArgs) {
 
 
 /**
-* @method _onTextResize
-* @description "textresize" event handler for the menu.
+* @method _onYChange
+* @description "y" event handler for a Menu instance.
 * @protected
-* @param {String} p_sType String representing the name of the event that 
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
 * was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-* @param {YAHOO.widget.Menu} p_oMenu Object representing the menu that 
-* fired the event.
 */
-_onTextResize: function (p_sType, p_aArgs, p_oMenu) {
+_onYChange: function (p_sType, p_aArgs) {
 
-    if (YAHOO.env.ua.gecko && !this._handleResize) {
+    var oParent = this.parent,
+        nScrollTop,
+        oIFrame,
+        nY;
 
-        this._handleResize = true;
-        return;
+
+    if (oParent) {
+
+        nScrollTop = oParent.parent.body.scrollTop;
+
+
+        if (nScrollTop > 0) {
     
-    }
+            nY = (this.cfg.getProperty("y") - nScrollTop);
+            
+            Dom.setY(this.element, nY);
 
+            oIFrame = this.iframe;            
+    
 
-    var oConfig = this.cfg;
-
-    if (oConfig.getProperty("position") == "dynamic") {
-
-        oConfig.setProperty("width", (this._getOffsetWidth() + "px"));
-
+            if (oIFrame) {
+    
+                Dom.setY(oIFrame, nY);
+    
+            }
+            
+            this.cfg.setProperty("y", nY, true);
+        
+        }
+    
     }
 
 },
@@ -2508,6 +2457,7 @@ _onScrollTargetMouseOver: function (p_oEvent, p_oMenu) {
     var oTarget = Event.getTarget(p_oEvent),
         oBody = this.body,
         me = this,
+        nScrollIncrement = this.cfg.getProperty("scrollincrement"),
         nScrollTarget,
         fnScrollFunction;
 
@@ -2519,7 +2469,7 @@ _onScrollTargetMouseOver: function (p_oEvent, p_oMenu) {
 
         if (nScrollTop < nScrollTarget) {
 
-            oBody.scrollTop = (nScrollTop + 1);
+            oBody.scrollTop = (nScrollTop + nScrollIncrement);
 
             me._enableScrollHeader();
 
@@ -2544,7 +2494,7 @@ _onScrollTargetMouseOver: function (p_oEvent, p_oMenu) {
 
         if (nScrollTop > 0) {
 
-            oBody.scrollTop = (nScrollTop - 1);
+            oBody.scrollTop = (nScrollTop - nScrollIncrement);
 
             me._enableScrollFooter();
 
@@ -2615,7 +2565,6 @@ _onScrollTargetMouseOut: function (p_oEvent, p_oMenu) {
 */
 _onInit: function (p_sType, p_aArgs) {
 
-    this.cfg.subscribeToConfigEvent("width", this._onWidthChange);
     this.cfg.subscribeToConfigEvent("visible", this._onVisibleChange);
 
     var bRootMenu = !this.parent,
@@ -2675,8 +2624,7 @@ _onInit: function (p_sType, p_aArgs) {
 */
 _onBeforeRender: function (p_sType, p_aArgs) {
 
-    var oConfig = this.cfg,
-        oEl = this.element,
+    var oEl = this.element,
         nListElements = this._aListElements.length,
         bFirstList = true,
         i = 0,
@@ -2743,14 +2691,20 @@ _onBeforeRender: function (p_sType, p_aArgs) {
 */
 _onRender: function (p_sType, p_aArgs) {
 
-    if (this.cfg.getProperty("position") == "dynamic" && 
-        !this.cfg.getProperty("width")) {
+    if (this.cfg.getProperty("position") == "dynamic") { 
 
-        this._setWidth();
+        if (!this.cfg.getProperty("visible")) {
+
+            this.positionOffScreen();
+
+        }
     
     }
 
 },
+
+
+
 
 
 /**
@@ -2767,8 +2721,6 @@ _onBeforeShow: function (p_sType, p_aArgs) {
         n,
         nViewportHeight,
         oRegion,
-        nMaxHeight,
-        oBody,
         oSrcElement;
 
 
@@ -2845,7 +2797,6 @@ _onBeforeShow: function (p_sType, p_aArgs) {
             else {
 
                 this.render(this.cfg.getProperty("container"));
-                this.cfg.refireEvent("xy");
 
             }                
 
@@ -2854,54 +2805,64 @@ _onBeforeShow: function (p_sType, p_aArgs) {
     }
 
 
-    if (!(this instanceof YAHOO.widget.MenuBar) && 
-        this.cfg.getProperty("position") == "dynamic") {
-
-        nViewportHeight = Dom.getViewportHeight();
-
-
-        if (this.parent && this.parent.parent instanceof YAHOO.widget.MenuBar) {
-           
-            oRegion = YAHOO.util.Region.getRegion(this.parent.element);
-            
-            nViewportHeight = (nViewportHeight - oRegion.bottom);
-
-        }
+    var nMaxHeight = this.cfg.getProperty("maxheight"),
+        nMinScrollHeight = this.cfg.getProperty("minscrollheight"),
+        bDynamicPos = this.cfg.getProperty("position") == "dynamic";
 
 
-        if (this.element.offsetHeight >= nViewportHeight) {
+    if (!this.parent && bDynamicPos) {
+
+        this.cfg.refireEvent("xy");
+   
+    }
+
+
+    function clearMaxHeight() {
     
-            nMaxHeight = this.cfg.getProperty("maxheight");
-
-            /*
-                Cache the original value for the "maxheight" configuration  
-                property so that we can set it back when the menu is hidden.
-            */
+        this.cfg.setProperty("maxheight", 0);
     
-            this._nMaxHeight = nMaxHeight;
+        this.hideEvent.unsubscribe(clearMaxHeight);
+    
+    }
 
-            this.cfg.setProperty("maxheight", (nViewportHeight - 20));
-        
-        }
+
+    if (!(this instanceof YAHOO.widget.MenuBar) && bDynamicPos) {
+
+
+        if (nMaxHeight === 0) {
+
+            nViewportHeight = Dom.getViewportHeight();
     
     
-        if (this.cfg.getProperty("maxheight") > 0) {
-    
-            oBody = this.body;
-    
-            if (oBody.scrollTop > 0) {
-    
-                oBody.scrollTop = 0;
+            if (this.parent && 
+                this.parent.parent instanceof YAHOO.widget.MenuBar) {
+               
+                oRegion = YAHOO.util.Region.getRegion(this.parent.element);
+                
+                nViewportHeight = (nViewportHeight - oRegion.bottom);
     
             }
-
-            this._disableScrollHeader();
-            this._enableScrollFooter();
     
+    
+            if (this.element.offsetHeight >= nViewportHeight) {
+    
+                nMaxHeight = (nViewportHeight - (Overlay.VIEWPORT_OFFSET * 2));
+
+                if (nMaxHeight < nMinScrollHeight) {
+
+                    nMaxHeight = nMinScrollHeight;
+                
+                }
+
+                this.cfg.setProperty("maxheight", nMaxHeight);
+
+                this.hideEvent.subscribe(clearMaxHeight);
+
+            }
+        
         }
 
     }
-
 
 },
 
@@ -3026,27 +2987,6 @@ _onBeforeHide: function (p_sType, p_aArgs) {
 
 
 /**
-* @method _onHide
-* @description "hide" event handler for the menu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onHide: function (p_sType, p_aArgs) {
-
-    if (this._nMaxHeight != -1) {
-
-        this.cfg.setProperty("maxheight", this._nMaxHeight);
-
-        this._nMaxHeight = -1;
-
-    }
-
-},
-
-
-/**
 * @method _onParentMenuConfigChange
 * @description "configchange" event handler for a submenu.
 * @private
@@ -3071,6 +3011,8 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case "clicktohide":
         case "effect":
         case "classname":
+        case "scrollincrement":
+        case "minscrollheight":
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -3094,44 +3036,36 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
 */
 _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 
-    var oParentMenu = p_oSubmenu.parent.parent,
+    var oParentCfg = p_oSubmenu.parent.parent.cfg,
 
         oConfig = {
 
-            constraintoviewport: 
-                oParentMenu.cfg.getProperty("constraintoviewport"),
+            constraintoviewport: oParentCfg.getProperty("constraintoviewport"),
 
             xy: [0,0],
-                
-            clicktohide: oParentMenu.cfg.getProperty("clicktohide"),
-                
-            effect: oParentMenu.cfg.getProperty("effect"),
 
-            showdelay: oParentMenu.cfg.getProperty("showdelay"),
+            clicktohide: oParentCfg.getProperty("clicktohide"),
+                
+            effect: oParentCfg.getProperty("effect"),
+
+            showdelay: oParentCfg.getProperty("showdelay"),
             
-            hidedelay: oParentMenu.cfg.getProperty("hidedelay"),
+            hidedelay: oParentCfg.getProperty("hidedelay"),
 
-            submenuhidedelay: oParentMenu.cfg.getProperty("submenuhidedelay"),
+            submenuhidedelay: oParentCfg.getProperty("submenuhidedelay"),
 
-            classname: oParentMenu.cfg.getProperty("classname")
+            classname: oParentCfg.getProperty("classname"),
+            
+            scrollincrement: oParentCfg.getProperty("scrollincrement"),
+            
+            minscrollheight: oParentCfg.getProperty("minscrollheight"),
+            
+            iframe: oParentCfg.getProperty("iframe")
 
         },
         
         oLI;
 
-
-    /*
-        Only sync the "iframe" configuration property if the parent
-        menu's "position" configuration is the same.
-    */
-
-    if (this.cfg.getProperty("position") == 
-        oParentMenu.cfg.getProperty("position")) {
-
-        oConfig.iframe = oParentMenu.cfg.getProperty("iframe");
-    
-    }
-               
 
     p_oSubmenu.cfg.applyConfig(oConfig);
 
@@ -3165,51 +3099,22 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
 */
 _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
-    
+
     var oParent = this.parent,
         aAlignment = oParent.parent.cfg.getProperty("submenualignment");
 
-    this.cfg.setProperty("context", 
-        [oParent.element, aAlignment[0], aAlignment[1]]);
 
+    if (!this.cfg.getProperty("context")) {
+    
+        this.cfg.setProperty("context", 
+            [oParent.element, aAlignment[0], aAlignment[1]]);
 
-    var nScrollTop = oParent.parent.body.scrollTop;
+    }
+    else {
 
-    if ((YAHOO.env.ua.gecko || YAHOO.env.ua.webkit) && nScrollTop > 0) {
-
-         this.cfg.setProperty("y", (this.cfg.getProperty("y") - nScrollTop));
+        this.align();
     
     }
-
-},
-
-
-/**
-* @method _onSubmenuShow
-* @description "show" event handler for a submenu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onSubmenuShow: function (p_sType, p_aArgs) {
-    
-    this.submenuIndicator.innerHTML = this.EXPANDED_SUBMENU_INDICATOR_TEXT;
-
-},
-
-
-/**
-* @method _onSubmenuHide
-* @description "hide" Custom Event handler for a submenu.
-* @private
-* @param {String} p_sType String representing the name of the event that 
-* was fired.
-* @param {Array} p_aArgs Array of arguments sent when the event was fired.
-*/
-_onSubmenuHide: function (p_sType, p_aArgs) {
-    
-    this.submenuIndicator.innerHTML = this.COLLAPSED_SUBMENU_INDICATOR_TEXT;
 
 },
 
@@ -3258,8 +3163,8 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
 
     var sPropertyName = p_aArgs[0][0],
         oPropertyValue = p_aArgs[0][1],
-        sWidth,
         oSubmenu;
+
 
     switch(sPropertyName) {
 
@@ -3280,25 +3185,6 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
             if (oSubmenu) {
 
                 this._configureSubmenu(p_oItem);
-
-            }
-
-        break;
-
-        case "text":
-        case "helptext":
-
-            /*
-                A change to an item's "text" or "helptext"
-                configuration properties requires the width of the parent
-                menu to be recalculated.
-            */
-
-            if (this.element.style.width) {
-    
-                sWidth = this._getOffsetWidth() + "px";
-
-                Dom.setStyle(this.element, "width", sWidth);
 
             }
 
@@ -3326,69 +3212,56 @@ _onMenuItemConfigChange: function (p_sType, p_aArgs, p_oItem) {
 enforceConstraints: function (type, args, obj) {
 
     var oParentMenuItem = this.parent,
-        oElement,
-        oConfig,
-        pos,
-        x,
-        y,
-        offsetHeight,
-        offsetWidth,
-        viewPortWidth,
-        viewPortHeight,
-        scrollX,
-        scrollY,
-        nPadding,
+        nViewportOffset = Overlay.VIEWPORT_OFFSET,
+        oElement = this.element,
+        oConfig = this.cfg,
+        pos = args[0],
+        offsetHeight = oElement.offsetHeight,
+        offsetWidth = oElement.offsetWidth,
+        viewPortWidth = Dom.getViewportWidth(),
+        viewPortHeight = Dom.getViewportHeight(),
+        nPadding = (oParentMenuItem && 
+            oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 
+            0 : nViewportOffset,
+        aContext = oConfig.getProperty("context"),
+        oContextElement = aContext ? aContext[0] : null,
         topConstraint,
         leftConstraint,
         bottomConstraint,
         rightConstraint,
-        aContext,
-        oContextElement;
-
-
-    if (oParentMenuItem && 
-        !(oParentMenuItem.parent instanceof YAHOO.widget.MenuBar)) {
-
-        oElement = this.element;
+        scrollX,
+        scrollY,
+        x,
+        y;
     
-        oConfig = this.cfg;
-        pos = args[0];
-        
+
+    if (offsetWidth < viewPortWidth) {
+
         x = pos[0];
-        y = pos[1];
-        
-        offsetHeight = oElement.offsetHeight;
-        offsetWidth = oElement.offsetWidth;
-        
-        viewPortWidth = Dom.getViewportWidth();
-        viewPortHeight = Dom.getViewportHeight();
-        
         scrollX = Dom.getDocumentScrollLeft();
-        scrollY = Dom.getDocumentScrollTop();
-        
-        nPadding = 
-            (oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) ? 0 : 10;
-        
-        topConstraint = scrollY + nPadding;
         leftConstraint = scrollX + nPadding;
-        
-        bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding;
         rightConstraint = scrollX + viewPortWidth - offsetWidth - nPadding;
-        
-        aContext = oConfig.getProperty("context");
-        oContextElement = aContext ? aContext[0] : null;
-    
-    
-        if (x < 10) {
+
+        if (x < nViewportOffset) {
     
             x = leftConstraint;
     
         } else if ((x + offsetWidth) > viewPortWidth) {
     
-            if (oContextElement &&
+            if(oContextElement &&
                 ((x - oContextElement.offsetWidth) > offsetWidth)) {
     
-                x = (x - (oContextElement.offsetWidth + offsetWidth));
+                if (oParentMenuItem && 
+                    oParentMenuItem.parent instanceof YAHOO.widget.MenuBar) {
+    
+                    x = (x - (offsetWidth - oContextElement.offsetWidth));
+    
+                }
+                else {
+    
+                    x = (x - (oContextElement.offsetWidth + offsetWidth));
+    
+                }
     
             }
             else {
@@ -3399,7 +3272,19 @@ enforceConstraints: function (type, args, obj) {
     
         }
     
-        if (y < 10) {
+    }
+
+
+    if (offsetHeight < viewPortHeight) {
+
+        y = pos[1];
+        scrollY = Dom.getDocumentScrollTop();
+        topConstraint = scrollY + nPadding;
+        bottomConstraint = scrollY + viewPortHeight - offsetHeight - nPadding;
+
+
+
+        if (y < nViewportOffset) {
     
             y = topConstraint;
     
@@ -3413,22 +3298,19 @@ enforceConstraints: function (type, args, obj) {
             else {
     
                 y = bottomConstraint;
+                
+
     
             }
     
         }
-    
-        oConfig.setProperty("x", x, true);
-        oConfig.setProperty("y", y, true);
-        oConfig.setProperty("xy", [x,y], true);
-    
+
     }
-    else if (this == this.getRoot() && 
-        this.cfg.getProperty("position") == "dynamic") {
-    
-        Menu.superclass.enforceConstraints.call(this, type, args, obj);
-    
-    }
+
+
+    oConfig.setProperty("x", x, true);
+    oConfig.setProperty("y", y, true);
+    oConfig.setProperty("xy", [x,y], true);
 
 },
 
@@ -3457,6 +3339,8 @@ configVisible: function (p_sType, p_aArgs, p_oMenu) {
 
         bVisible = p_aArgs[0];
         sDisplay = Dom.getStyle(this.element, "display");
+
+        Dom.setStyle(this.element, "visibility", "visible");
 
         if (bVisible) {
 
@@ -3496,38 +3380,23 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
 
     var oElement = this.element,
         sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute",
-        sCurrentPosition = Dom.getStyle(oElement, "position"),
         oCfg = this.cfg,
         nZIndex;
 
 
-    Dom.setStyle(this.element, "position", sCSSPosition);
+    Dom.setStyle(oElement, "position", sCSSPosition);
 
 
     if (sCSSPosition == "static") {
 
-        /*
-            Remove the iframe for statically positioned menus since it will 
-            intercept mouse events.
-        */
-
-        oCfg.setProperty("iframe", false);
-
-
         // Statically positioned menus are visible by default
         
-        Dom.setStyle(this.element, "display", "block");
+        Dom.setStyle(oElement, "display", "block");
 
         oCfg.setProperty("visible", true);
 
     }
     else {
-
-        if (sCurrentPosition != "absolute") {
-
-            oCfg.setProperty("iframe", (YAHOO.env.ua.ie == 6 ? true : false));
-
-        }
 
         /*
             Even though the "visible" property is queued to 
@@ -3537,7 +3406,7 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
             or not to show an Overlay instance.
         */
 
-        Dom.setStyle(this.element, "visibility", "hidden");
+        Dom.setStyle(oElement, "visibility", "hidden");
     
     }
 
@@ -3632,7 +3501,7 @@ configHideDelay: function (p_sType, p_aArgs, p_oMenu) {
 /**
 * @method configContainer
 * @description Event handler for when the "container" configuration property 
-of the menu changes.
+* of the menu changes.
 * @param {String} p_sType String representing the name of the event that 
 * was fired.
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
@@ -3686,12 +3555,21 @@ _setMaxHeight: function (p_sType, p_aArgs, p_nMaxHeight) {
 configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
 
     var nMaxHeight = p_aArgs[0],
+        oElement = this.element,
         oBody = this.body,
         oHeader = this.header,
         oFooter = this.footer,
         fnMouseOver = this._onScrollTargetMouseOver,
         fnMouseOut = this._onScrollTargetMouseOut,
+        nMinScrollHeight = this.cfg.getProperty("minscrollheight"),
         nHeight;
+
+
+    if (nMaxHeight !== 0 && nMaxHeight < nMinScrollHeight) {
+    
+        nMaxHeight = nMinScrollHeight;
+    
+    }
 
 
     if (this.lazyLoad && !oBody) {
@@ -3708,59 +3586,66 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     
     }
 
-    Dom.setStyle(oBody, "height", "auto");
-    Dom.setStyle(oBody, "overflow", "visible");    
+
+    Dom.setStyle(oBody, "height", "");
+    Dom.removeClass(oBody, "yui-menu-body-scrolled");
 
 
-    if ((nMaxHeight > 0) && (oBody.offsetHeight > nMaxHeight)) {
+    if (UA.gecko && !this.cfg.getProperty("width")) {
 
-        if (!this.cfg.getProperty("width")) {
+        this._setWidth();
 
-            this._setWidth();
+    }
 
-        }
 
-        if (!oHeader && !oFooter) {
+    if (!oHeader && !oFooter) {
 
-            this.setHeader("&#32;");
-            this.setFooter("&#32;");
+        this.setHeader("&#32;");
+        this.setFooter("&#32;");
 
-            oHeader = this.header;
-            oFooter = this.footer;
+        oHeader = this.header;
+        oFooter = this.footer;
 
-            Dom.addClass(oHeader, "topscrollbar");
-            Dom.addClass(oFooter, "bottomscrollbar");
-            
-            this.element.insertBefore(oHeader, oBody);
-            this.element.appendChild(oFooter);
-
-            Event.on(oHeader, "mouseover", fnMouseOver, this, true);
-            Event.on(oHeader, "mouseout", fnMouseOut, this, true);
-            Event.on(oFooter, "mouseover", fnMouseOver, this, true);
-            Event.on(oFooter, "mouseout", fnMouseOut, this, true);
+        Dom.addClass(oHeader, "topscrollbar");
+        Dom.addClass(oFooter, "bottomscrollbar");
         
-        }
+        oElement.insertBefore(oHeader, oBody);
+        oElement.appendChild(oFooter);
+    
+    }
 
-        nHeight = (nMaxHeight - (this.footer.offsetHeight + 
-                    this.header.offsetHeight));
 
+    nHeight = (nMaxHeight - (oHeader.offsetHeight + oHeader.offsetHeight));
+
+
+
+    if (nHeight > 0 && (oBody.offsetHeight > nMaxHeight)) {
+
+        Dom.addClass(oBody, "yui-menu-body-scrolled");
         Dom.setStyle(oBody, "height", (nHeight + "px"));
-        Dom.setStyle(oBody, "overflow", "hidden");
+
+        Event.on(oHeader, "mouseover", fnMouseOver, this, true);
+        Event.on(oHeader, "mouseout", fnMouseOut, this, true);
+        Event.on(oFooter, "mouseover", fnMouseOver, this, true);
+        Event.on(oFooter, "mouseout", fnMouseOut, this, true);
+
+        this._disableScrollHeader();
+        this._enableScrollFooter();
 
     }
     else if (oHeader && oFooter) {
 
-        Dom.setStyle(oBody, "height", "auto");
-        Dom.setStyle(oBody, "overflow", "visible");
+        this._enableScrollHeader();
+        this._enableScrollFooter();
 
         Event.removeListener(oHeader, "mouseover", fnMouseOver);
         Event.removeListener(oHeader, "mouseout", fnMouseOut);
         Event.removeListener(oFooter, "mouseover", fnMouseOver);
         Event.removeListener(oFooter, "mouseout", fnMouseOut);
 
-        this.element.removeChild(oHeader);
-        this.element.removeChild(oFooter);
-    
+        oElement.removeChild(oHeader);
+        oElement.removeChild(oFooter);
+
         this.header = null;
         this.footer = null;
     
@@ -3827,15 +3712,14 @@ _onItemAdded: function (p_sType, p_aArgs) {
 configDisabled: function (p_sType, p_aArgs, p_oMenu) {
 
     var bDisabled = p_aArgs[0],
-        aItems,
+        aItems = this.getItems(),
         nItems,
         i;
 
-    if (this._bDisabled != bDisabled) {
+    if (Lang.isArray(aItems)) {
 
-        aItems = this.getItems();
         nItems = aItems.length;
-
+    
         if (nItems > 0) {
         
             i = nItems - 1;
@@ -3848,14 +3732,23 @@ configDisabled: function (p_sType, p_aArgs, p_oMenu) {
             while (i--);
         
         }
-    
-        Dom[(bDisabled ? "addClass" : "removeClass")](this.element, "disabled");    
 
-        this.itemAddedEvent[(bDisabled ? "subscribe" : "unsubscribe")](
-            this._onItemAdded);
-    
-        this._bDisabled = bDisabled;
-    
+
+        if (bDisabled) {
+
+            Dom.addClass(this.element, "disabled");
+
+            this.itemAddedEvent.subscribe(this._onItemAdded);
+
+        }
+        else {
+
+            Dom.removeClass(this.element, "disabled");
+
+            this.itemAddedEvent.unsubscribe(this._onItemAdded);
+
+        }
+        
     }
 
 },
@@ -3882,6 +3775,13 @@ onRender: function (p_sType, p_aArgs) {
             
         }
     
+    }
+
+
+    function replaceShadow() {
+
+        this.element.appendChild(this._shadow);
+
     }
 
 
@@ -3928,7 +3828,7 @@ onRender: function (p_sType, p_aArgs) {
             this.beforeShowEvent.subscribe(addShadowVisibleClass);
             this.beforeHideEvent.subscribe(removeShadowVisibleClass);
 
-            if (YAHOO.env.ua.ie) {
+            if (UA.ie) {
         
                 /*
                      Need to call sizeShadow & syncIframe via setTimeout for 
@@ -3946,6 +3846,7 @@ onRender: function (p_sType, p_aArgs) {
 
                 this.cfg.subscribeToConfigEvent("width", sizeShadow);
                 this.cfg.subscribeToConfigEvent("height", sizeShadow);
+                this.cfg.subscribeToConfigEvent("maxheight", sizeShadow);
                 this.changeContentEvent.subscribe(sizeShadow);
 
                 Module.textResizeEvent.subscribe(sizeShadow, me, true);
@@ -3957,7 +3858,9 @@ onRender: function (p_sType, p_aArgs) {
                 });
         
             }
-        
+
+            this.cfg.subscribeToConfigEvent("maxheight", replaceShadow);
+
         }
 
     }
@@ -4040,6 +3943,28 @@ initEvents: function () {
     
     this.itemRemovedEvent = this.createEvent(EVENT_TYPES.ITEM_REMOVED);
     this.itemRemovedEvent.signature = SIGNATURE;
+
+},
+
+
+/**
+* @method positionOffScreen
+* @description Positions the menu outside of the boundaries of the browser's 
+* viewport.  Called automatically when a menu is hidden to ensure that 
+* it doesn't force the browser to render uncessary scrollbars.
+*/
+positionOffScreen: function () {
+
+    var oIFrame = this.iframe,
+        aPos = this.OFF_SCREEN_POSITION;
+
+    Dom.setXY(this.element, aPos);
+    
+    if (oIFrame) {
+
+        Dom.setXY(oIFrame, aPos);
+    
+    }
 
 },
 
@@ -4318,10 +4243,17 @@ removeItem: function (p_oObject, p_nGroupIndex) {
 getItems: function () {
 
     var aGroups = this._aItemGroups,
+        nGroups,
+        aItems = [];
+
+    if (Lang.isArray(aGroups)) {
+
         nGroups = aGroups.length;
 
-    return ((nGroups == 1) ? aGroups[0] : 
-                (Array.prototype.concat.apply([], aGroups)));
+        return ((nGroups == 1) ? aGroups[0] : 
+                    (Array.prototype.concat.apply(aItems, aGroups)));
+
+    }
 
 },
 
@@ -4411,6 +4343,7 @@ getSubmenus: function () {
 
 },
 
+
 /**
 * @method clearContent
 * @description Removes all of the content from the menu, including the menu 
@@ -4484,11 +4417,12 @@ clearContent: function () {
 
     }
 
+    this.activeItem = null;
 
     this._aItemGroups = [];
     this._aListElements = [];
     this._aGroupTitleElements = [];
-    
+
     this.cfg.setProperty("width", null);
 
 },
@@ -4500,9 +4434,6 @@ clearContent: function () {
 * (and accompanying child nodes) from the document.
 */
 destroy: function () {
-
-    Module.textResizeEvent.unsubscribe(this._onTextResize, this);
-
 
     // Remove all items
 
@@ -4680,34 +4611,60 @@ subscribe: function () {
     }
 
 
+    function onSubmenuAdded(p_sType, p_aArgs, p_oObject) { 
+    
+        var oSubmenu = this.cfg.getProperty("submenu");
+        
+        if (oSubmenu) {
+
+            oSubmenu.subscribe.apply(oSubmenu, p_oObject);
+        
+        }
+    
+    }
+
+
     Menu.superclass.subscribe.apply(this, arguments);
     Menu.superclass.subscribe.call(this, "itemAdded", onItemAdded, arguments);
 
 
-    var aSubmenus = this.getSubmenus(),
-        nSubmenus,
+    var aItems = this.getItems(),
+        nItems,
+        oItem,
         oSubmenu,
         i;
-
-    if (aSubmenus) {
-
-        nSubmenus = aSubmenus.length;
-
-        if (nSubmenus > 0) {
         
-            i = nSubmenus - 1;
+
+    if (aItems) {
+
+        nItems = aItems.length;
+        
+        if (nItems > 0) {
+        
+            i = nItems - 1;
             
             do {
-    
-                oSubmenu = aSubmenus[i];
+
+                oItem = aItems[i];
                 
-                oSubmenu.subscribe.apply(oSubmenu, arguments);
-    
+                oSubmenu = oItem.cfg.getProperty("submenu");
+                
+                if (oSubmenu) {
+                
+                    oSubmenu.subscribe.apply(oSubmenu, arguments);
+                
+                }
+                else {
+                
+                    oItem.cfg.subscribeToConfigEvent("submenu", onSubmenuAdded, arguments);
+                
+                }
+
             }
-            while(i--);
+            while (i--);
         
         }
-    
+
     }
 
 },
@@ -4920,9 +4877,49 @@ initDefaultConfig: function () {
 
 
     /**
+    * @config scrollincrement
+    * @description Number used to control the scroll speed of a menu.  Used to 
+    * increment the "scrollTop" property of the menu's body by when a menu's 
+    * content is scrolling.
+    * @default 1
+    * @type Number
+    */
+    oConfig.addProperty(
+        DEFAULT_CONFIG.SCROLL_INCREMENT.key, 
+        { 
+            value: DEFAULT_CONFIG.SCROLL_INCREMENT.value, 
+            validator: DEFAULT_CONFIG.SCROLL_INCREMENT.validator,
+            suppressEvent: DEFAULT_CONFIG.SCROLL_INCREMENT.suppressEvent,
+            supercedes: DEFAULT_CONFIG.SCROLL_INCREMENT.supercedes
+        }
+    );
+
+
+    /**
+    * @config minscrollheight
+    * @description Number defining the minimum threshold for the "maxheight" 
+    * configuration property.
+    * @default 90
+    * @type Number
+    */
+    oConfig.addProperty(
+        DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.key, 
+        { 
+            value: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.value, 
+            validator: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.validator,
+            suppressEvent: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.suppressEvent,
+            supercedes: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.supercedes
+        }
+    );
+
+
+    /**
     * @config maxheight
-    * @description Defines the maximum height (in pixels) for a menu before the
-    * contents of the body are scrolled.
+    * @description Number defining the maximum height (in pixels) for a menu's 
+    * body element (<code>&#60;div class="bd"&#60;</code>).  Once a menu's body 
+    * exceeds this height, the contents of the body are scrolled to maintain 
+    * this value.  This value cannot be set lower than the value of the 
+    * "minscrollheight" configuration property.
     * @default 0
     * @type Number
     */
@@ -4970,7 +4967,8 @@ initDefaultConfig: function () {
         { 
             handler: this.configDisabled,
             value: DEFAULT_CONFIG.DISABLED.value, 
-            validator: DEFAULT_CONFIG.DISABLED.validator
+            validator: DEFAULT_CONFIG.DISABLED.validator,
+            suppressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
         }
     );
 

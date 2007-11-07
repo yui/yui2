@@ -81,7 +81,7 @@
         }
         else {
     
-            sNodeName = p_oElement.nodeName;
+            sNodeName = p_oElement.nodeName.toUpperCase();
     
             if (sNodeName && sNodeName == this.NODE_NAME) {
         
@@ -415,7 +415,7 @@
         
         
             /**
-            * @config name
+            * @attribute name
             * @description String specifying the name for the button group.  
             * This name will be applied to each button in the button group.
             * @default null
@@ -430,7 +430,7 @@
         
         
             /**
-            * @config disabled
+            * @attribute disabled
             * @description Boolean indicating if the button group should be 
             * disabled.  Disabling the button group will disable each button 
             * in the button group.  Disabled buttons are dimmed and will not 
@@ -448,7 +448,7 @@
         
         
             /**
-            * @config value
+            * @attribute value
             * @description Object specifying the value for the button group.
             * @default null
             * @type Object
@@ -461,7 +461,7 @@
         
         
             /**
-            * @config container
+            * @attribute container
             * @description HTML element reference or string specifying the id 
             * attribute of the HTML element that the button group's markup
             * should be rendered into.
@@ -478,7 +478,7 @@
         
         
             /**
-            * @config checkedButton
+            * @attribute checkedButton
             * @description Reference for the button in the button group that 
             * is checked.
             * @type {<a href="YAHOO.widget.Button.html">YAHOO.widget.Button</a>}

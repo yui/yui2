@@ -25,7 +25,7 @@
 * @extends YAHOO.widget.Menu
 * @namespace YAHOO.widget
 */
-YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
+YAHOO.widget.ContextMenu = function (p_oElement, p_oConfig) {
 
     YAHOO.widget.ContextMenu.superclass.constructor.call(this, 
             p_oElement, p_oConfig);
@@ -35,13 +35,38 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 var Event = YAHOO.util.Event,
     ContextMenu = YAHOO.widget.ContextMenu,
 
-/**
-* Constant representing the name of the ContextMenu's events
-* @property EVENT_TYPES
-* @private
-* @final
-* @type Object
-*/
+    /*
+        Boolean indicating if the "mousedown" event listener as been added
+        to the document.
+    */
+
+    m_bMouseDownListenerAdded = false,
+
+    /*
+         Number representing the time-out setting used to cancel the hiding 
+         of a menu.
+    */
+
+    m_nHideDelayId,
+
+
+    //  Object representing the visible ContextMenu instance.
+
+    m_oVisibleContextMenu,
+
+
+    // Number indicating the number of ContextMenu instances created.
+
+    m_nContextMenus = 0,
+
+
+    /**
+    * Constant representing the name of the ContextMenu's events
+    * @property EVENT_TYPES
+    * @private
+    * @final
+    * @type Object
+    */
     EVENT_TYPES = {
 
         "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
@@ -62,6 +87,12 @@ var Event = YAHOO.util.Event,
     
         "TRIGGER": { 
             key: "trigger" 
+        },
+        
+        "CLICK_TO_HIDE": { 
+            key: "clicktohide", 
+            value: false, 
+            validator: YAHOO.lang.isBoolean
         }
     
     };
@@ -148,13 +179,7 @@ triggerContextMenuEvent: null,
 * configuration for the context menu. See configuration class documentation 
 * for more details.
 */
-init: function(p_oElement, p_oConfig) {
-
-    if(!this.ITEM_TYPE) {
-
-        this.ITEM_TYPE = YAHOO.widget.ContextMenuItem;
-
-    }
+init: function (p_oElement, p_oConfig) {
 
 
     // Call the init of the superclass (YAHOO.widget.Menu)
@@ -163,6 +188,9 @@ init: function(p_oElement, p_oConfig) {
 
 
     this.beforeInitEvent.fire(ContextMenu);
+
+    this.showEvent.subscribe(this._onContextMenuShow);
+    this.hideEvent.subscribe(this._onContextMenuHide);
 
 
     if(p_oConfig) {
@@ -174,6 +202,8 @@ init: function(p_oElement, p_oConfig) {
     
     this.initEvent.fire(ContextMenu);
     
+    m_nContextMenus++;
+    
 },
 
 
@@ -181,7 +211,7 @@ init: function(p_oElement, p_oConfig) {
 * @method initEvents
 * @description Initializes the custom events for the context menu.
 */
-initEvents: function() {
+initEvents: function () {
 
 	ContextMenu.superclass.initEvents.call(this);
 
@@ -199,7 +229,7 @@ initEvents: function() {
 * @method cancel
 * @description Cancels the display of the context menu.
 */
-cancel: function() {
+cancel: function () {
 
     this._bCancelled = true;
 
@@ -217,7 +247,7 @@ cancel: function() {
 * the context menu.
 * @private
 */
-_removeEventHandlers: function() {
+_removeEventHandlers: function () {
 
     var oTrigger = this._oTrigger;
 
@@ -255,7 +285,7 @@ _removeEventHandlers: function() {
 * @param {YAHOO.widget.ContextMenu} p_oMenu Object representing the context 
 * menu that is handling the event.
 */
-_onTriggerClick: function(p_oEvent, p_oMenu) {
+_onTriggerClick: function (p_oEvent, p_oMenu) {
 
     if(p_oEvent.ctrlKey) {
     
@@ -263,6 +293,74 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 
     }
     
+},
+
+
+/**
+* @method _onContextMenuShow
+* @description "show" event handler for the menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onContextMenuShow: function (p_sType, p_aArgs) {
+
+    m_oVisibleContextMenu = this;
+
+},
+
+
+/**
+* @method _onContextMenuHide
+* @description "hide" event handler for the menu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+*/
+_onContextMenuHide: function (p_sType, p_aArgs) {
+
+    if (m_oVisibleContextMenu && this == m_oVisibleContextMenu) {
+    
+        m_oVisibleContextMenu = null;
+    
+    }
+
+},
+
+
+/**
+* @method _onDocumentMouseDown
+* @description "mousedown" event handler for the document.
+* @private
+* @param {Event} p_oEvent Object representing the DOM event object passed back 
+* by the event utility (YAHOO.util.Event).
+*/
+_onDocumentMouseDown: function (p_oEvent) {
+
+    var oTarget = Event.getTarget(p_oEvent),
+        oElement = this.element;
+
+
+    if (m_oVisibleContextMenu && oTarget != oElement && 
+        !YAHOO.util.Dom.isAncestor(oElement, oTarget)) {
+
+        m_nHideDelayId = window.setTimeout(function () {
+
+            try {
+
+                m_oVisibleContextMenu.hide();
+            
+            }
+            catch(e) {
+            
+            }
+        
+        }, 200);
+
+    }
+
 },
 
 
@@ -276,7 +374,14 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 * @param {YAHOO.widget.ContextMenu} p_oMenu Object representing the context 
 * menu that is handling the event.
 */
-_onTriggerContextMenu: function(p_oEvent, p_oMenu) {
+_onTriggerContextMenu: function (p_oEvent, p_oMenu) {
+
+    if (m_nHideDelayId) {
+    
+        window.clearTimeout(m_nHideDelayId);
+    
+    }
+
 
     if(p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
 
@@ -294,10 +399,33 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     Event.stopEvent(p_oEvent);
 
 
-    // Hide any other ContextMenu instances that might be visible
+    // Hide any other Menu instances that might be visible
 
-    YAHOO.widget.MenuManager.hideVisible();
+    var oVisibleMenus = YAHOO.widget.MenuManager.getVisible(),
+        oVisibleMenu,
+        i;
 
+
+    if (oVisibleMenus) {
+    
+        for (i in oVisibleMenus) {
+
+            if (YAHOO.lang.hasOwnProperty(oVisibleMenus, i)) {
+
+                oVisibleMenu = oVisibleMenus[i];
+
+                if (this != oVisibleMenu) {
+        
+                    oVisibleMenu.hide();
+        
+                }
+            
+            }
+        
+        }
+    
+    }
+    
 
     this.contextEventTarget = Event.getTarget(p_oEvent);
 
@@ -307,10 +435,23 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     if(!this._bCancelled) {
 
         // Position and display the context menu
-    
+
         this.cfg.setProperty("xy", Event.getXY(p_oEvent));
 
-        this.show();
+        if (m_oVisibleContextMenu != this) {
+
+            this.show();
+        
+        }
+
+
+        if (!m_bMouseDownListenerAdded) {
+
+            Event.on(document, "mousedown", this._onDocumentMouseDown);
+            
+            m_bMouseDownListenerAdded = true;
+        
+        }
 
     }
 
@@ -328,7 +469,7 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 * @description Returns a string representing the context menu.
 * @return {String}
 */
-toString: function() {
+toString: function () {
 
     var sReturnVal = "ContextMenu",
         sId = this.id;
@@ -349,9 +490,11 @@ toString: function() {
 * @description Initializes the class's configurable properties which can be 
 * changed using the context menu's Config object ("cfg").
 */
-initDefaultConfig: function() {
+initDefaultConfig: function () {
 
     ContextMenu.superclass.initDefaultConfig.call(this);
+    
+    var oConfig = this.cfg;
 
     /**
     * @config trigger
@@ -363,8 +506,25 @@ initDefaultConfig: function() {
     * @type String|<a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
-    this.cfg.addProperty(DEFAULT_CONFIG.TRIGGER.key, 
+    oConfig.addProperty(DEFAULT_CONFIG.TRIGGER.key, 
         { handler: this.configTrigger });
+
+
+    /**
+    * @config clicktohide
+    * @description Boolean indicating if the menu will automatically be 
+    * hidden if the user clicks outside of it.
+    * @default true
+    * @type Boolean
+    */
+    oConfig.addProperty(
+        DEFAULT_CONFIG.CLICK_TO_HIDE.key,
+        {
+            value: DEFAULT_CONFIG.CLICK_TO_HIDE.value,
+            validator: DEFAULT_CONFIG.CLICK_TO_HIDE.validator
+        }
+    );
+
 
 },
 
@@ -374,19 +534,31 @@ initDefaultConfig: function() {
 * @description Removes the context menu's <code>&#60;div&#62;</code> element 
 * (and accompanying child nodes) from the document.
 */
-destroy: function() {
+destroy: function () {
 
     // Remove the DOM event handlers from the current trigger(s)
 
     this._removeEventHandlers();
+
+    this.showEvent.unsubscribe(this._onContextMenuShow);
+    this.hideEvent.unsubscribe(this._onContextMenuHide);
+
+    m_nContextMenus--;
+
+    if (m_nContextMenus === 0) {
     
+        Event.removeListener(document, "mousedown", this._onDocumentMouseDown);
+        
+        m_bMouseDownListenerAdded = false;    
+    
+    }
+
 
     // Continue with the superclass implementation of this method
 
     ContextMenu.superclass.destroy.call(this);
 
 },
-
 
 
 // Public event handlers for configuration properties
@@ -402,7 +574,7 @@ destroy: function() {
 * @param {YAHOO.widget.ContextMenu} p_oMenu Object representing the context 
 * menu that fired the event.
 */
-configTrigger: function(p_sType, p_aArgs, p_oMenu) {
+configTrigger: function (p_sType, p_aArgs, p_oMenu) {
     
     var oTrigger = p_aArgs[0];
 
