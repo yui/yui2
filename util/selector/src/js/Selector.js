@@ -4,44 +4,43 @@ var Selector = function() {};
 var Y = YAHOO.util;
 
 var X = {
-    IDENT: '-?[_a-z]+[_a-z0-9-]*',
+    IDENT: '-?[_a-z]+[-\\w]*',
     BEGIN: '^',
     END: '$',
     HYPHEN: '-',
     OR: '|',
     S: '\\s*',
-    SP: '\\s+'
+    SP: '\\s+',
 };
 
-//re = /([a-z0-9]*)*([\[\.#:]{1}[a-z0-9]+)*\s*([>~+]?)?\s*(.*)*/i;
+var CHARS = {
+    SIMPLE: '-\\w_\\[\\]\\.\\|\\*\\\'\\(\\)#:^~=$!"',
+    COMBINATORS: ',>+~'
+};
+
 X.CAPTURE_IDENT = '(' + X.IDENT + ')';
 X.BEGIN_SPACE = '(?:' + X.BEGIN + X.OR + X.SP +')';
 X.END_SPACE = '(?:' + X.SP + X.OR + X.END + ')';
-X.SELECTOR = '^((\\*|[a-z0-9]+)?([\\.#:\[]?[a-z]+[\\w\\-\\[\\]\.:\\(\\)#^~=$\\|\\*"\\\'\\!]*)?\\s*([,>+~]?)?\\s*).*$';
-X.SIMPLE = '((\\*|[a-z0-9]+)?([\\.#:\[]?[a-z]+[\\w\\-\\[\\]\\.:\\(\\)#^~=$\\|\\*"\\\'\\!]*)?\\s*)*';
-
+X.SELECTOR = '^(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)?\\s*([' + CHARS.COMBINATORS + ']?)?\\s*).*$';
+X.SIMPLE = '(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)*)?';
 Selector.prototype = {
-    tokens: {
-        '#': {
+    selectors: {
+        'id': {
             pattern: '#' + X.CAPTURE_IDENT,
             test: function(node, id) {
                 return node.id === id; 
             }
         },
 
-        '.': {
+        'className': {
             pattern: '\\.' + X.CAPTURE_IDENT,
             test: function(node, className) {
-//console.log(getRegex(X.BEGIN_SPACE + className + X.END_SPACE).test(node.className));
-//console.log(arguments);
-                return getRegex(X.BEGIN_SPACE + className + X.END_SPACE).test(node.className);
-                //return Y.Selector.tokens['['].test(node, 'className', '~=', node.className);
+                return getRegExp(X.BEGIN_SPACE + className + X.END_SPACE).test(node.className);
             }
         },
 
-        '[': {
+        'attribute': {
             pattern: '\\[([a-z]+\\w*)+([~\\|\\^\\$\\*!=]=?)?"?([^\\]"]*)"?\\]',
-            //pattern: '\\[' + X.CAPTURE_IDENT + '\\s*([!\\|\\*^$~=]*)\\s*[\\\'"]*([-_a-z0-9\\s]*)[\\\'"]*\\]',
             test: function(node, attr, op, value) {
                 op = op || '';
                 var nodeVal;
@@ -65,7 +64,7 @@ Selector.prototype = {
             }
         },
 
-        ':': {
+        'pseudo': {
             pattern: ':' + X.CAPTURE_IDENT + '(?:\\({1}' + X.SIMPLE + '\\){1})*',
             test: function(node, pseudo, val) {
                 return Y.Selector.pseudos[pseudo](node, val); 
@@ -78,9 +77,9 @@ Selector.prototype = {
         '!=': function(attr, val) { return attr !== val; }, // Inequality
         '~=': function(attr, val) { // Match one of space seperated words 
             //console.log(arguments);
-            return getRegex(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
+            return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
         },
-        '|=': function(attr, val) { return getRegex(X.BEGIN + val + '[-]?', 'g').test(attr); }, // Match start with value followed by optional hyphen
+        '|=': function(attr, val) { return getRegExp(X.BEGIN + val + '[-]?', 'g').test(attr); }, // Match start with value followed by optional hyphen
         '^=': function(attr, val) { return attr.indexOf(val) === 0; }, // Match starts with value
         '$=': function(attr, val) { return attr.lastIndexOf(val) === attr.length - val.length; }, // Match ends with value
         '*=': function(attr, val) { return attr.indexOf(val) > -1; }, // Match contains value as substring 
@@ -145,7 +144,7 @@ Selector.prototype = {
             return !Y.Selector.simpleTest(node, simple);
         },
 
-        'contains': function(node, str) {
+        'contains': function(node, str) { // TODO: unit test
             return node.indexOf(str) > -1;
         }
     },
@@ -198,39 +197,29 @@ Selector.prototype = {
     },
 
     simpleTest: function(node, selector) {
-        var tag,
-            simple,
-            predicate,
-            tokens = Y.Selector.tokens;
-        
-        var re = getRegex(X.SIMPLE);
-        re.test(selector);
+        var token = Y.Selector.tokenize(selector)[0];
 
-        simple = RegExp.$1;
-        tag = RegExp.$2.toLowerCase() || '*';
-        predicate = RegExp.$3;
-
-        if (tag != '*' && node.tagName.toLowerCase() != tag) {
+        if (token.tag != '*' && node.tagName.toLowerCase() != token.tag) {
             return false;
         } 
 
-        if (!predicate) {
-            return true;
-        }
-        var m;
-        for (var token in tokens) {
-            m = getRegex(tokens[token].pattern, 'g').exec(predicate);
-            if (!m) {
-                continue;
-            }
+        var selectors = Y.Selector.selectors;
+        var predicates = token.predicates;
+        var args;
 
-//console.log(token, m);
-            m[0] = node; // so we can pass args to test
-            //while(m[0]) {
-                if (!tokens[token].test.apply(null, m)) {
-                    return false;
+        if (token.predicate) { // singular
+            for (var type in predicates) { // plural
+                if (!predicates[type]) {
+                    continue;
                 }
-            //}
+
+                for (var i = 0, len = predicates[type].length; i < len; ++i) { // multiple of each type allowed
+                    args = [node].concat(predicates[type][i]);
+                    if (!selectors[type].test.apply(null, args)) {
+                        return false;
+                    }
+                }
+            }
         }
         return true;
     },
@@ -239,15 +228,36 @@ Selector.prototype = {
         var token,
             tokens = [];
 
-        while ( selector.length && getRegex(X.SELECTOR).test(selector) ) {
+        while ( selector.length && getRegExp(X.SELECTOR).test(selector) ) {
             token = {
                 previous: token,
                 simple: RegExp.$1,
                 tag: RegExp.$2.toLowerCase() || '*',
                 predicate: RegExp.$3,
-                combinator: RegExp.$4
+                combinator: RegExp.$4,
+                predicates: {}
             };
 
+            var selectors = Y.Selector.selectors;
+            var args;
+
+            if (token.predicate) {
+                var m;
+                for (var type in selectors) { // parse predicates
+                    m = token.predicate.match(getRegExp(selectors[type].pattern, 'g')); 
+                    if (m) {
+                        token.predicates[type] = [];
+                        for (var i = 0, len = m.length; i < len; ++i) {
+                            args = new RegExp(selectors[type].pattern, 'g').exec(m[i]); // new re everytime for exec
+                            if (args) {
+                                args.shift(); // remove full match
+                                token.predicates[type][i] = args;
+                            }
+                        }
+                    }
+                }
+            }
+            
             if (token.previous) {
                 token.previous.next = token;
                 token.previous.combinator = token.previous.combinator || ' ';
@@ -255,7 +265,7 @@ Selector.prototype = {
 
             tokens[tokens.length] = token;
             selector = trim(selector.substr(token.simple.length));
-        }
+        } 
         return tokens;
     },
 
@@ -266,20 +276,23 @@ Selector.prototype = {
                 result[result.length] = nodes[i];
             }
         }
+        return result;
     },
 
     queryAll: function(selector, root) {
         root = root || document;
 
-        var node,
-            candidates,
-            result = [],
-            todo = Y.Selector.tokenize(selector);
-
+        var todo = Y.Selector.tokenize(selector);
+        var result;
         var token = todo.shift();
         var nodes = root.getElementsByTagName(token.tag);
 
-        result = filterByToken(nodes, token, root);
+        console.log(token);
+        if (!token.next) {
+            result = Y.Selector.simpleFilter(nodes, selector);
+        } else {
+            result = filterByToken(nodes, token);
+        }
 
         return result;
     }
@@ -341,11 +354,11 @@ var clearFoundCache = function() {
     //YAHOO.log('getBySelector: done clearing foundCache');
 };
 
-var getRegex = function(str, flags) {
+var getRegExp = function(str, flags) {
     flags = flags || '';
     var re = regexCache[str];
     if (!re) {
-        re = new RegExp(str);
+        re = new RegExp(str, flags);
         regexCache[str] = re;
     }
     //return (regexCache[str+flags] || (regexCache[str+flags] = new RegExp(str, flags)));
@@ -354,7 +367,7 @@ var getRegex = function(str, flags) {
 };
 
 var trim = function(str) {
-    return str.replace(getRegex(X.BEGIN + X.SP + X.OR + X.SP + X.END, 'g'), "");
+    return str.replace(getRegExp(X.BEGIN + X.SP + X.OR + X.SP + X.END, 'g'), "");
 };
 
 Y.Selector = new Selector();
