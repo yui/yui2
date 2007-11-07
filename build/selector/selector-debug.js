@@ -23,6 +23,7 @@ X.BEGIN_SPACE = '(?:' + X.BEGIN + X.OR + X.SP +')';
 X.END_SPACE = '(?:' + X.SP + X.OR + X.END + ')';
 X.SELECTOR = '^(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)?\\s*([' + CHARS.COMBINATORS + ']?)?\\s*).*$';
 X.SIMPLE = '(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)*)?';
+
 Selector.prototype = {
     selectors: {
         'id': {
@@ -76,7 +77,6 @@ Selector.prototype = {
         '=': function(attr, val) { return attr === val; }, // Equality
         '!=': function(attr, val) { return attr !== val; }, // Inequality
         '~=': function(attr, val) { // Match one of space seperated words 
-            //console.log(arguments);
             return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
         },
         '|=': function(attr, val) { return getRegExp(X.BEGIN + val + '[-]?', 'g').test(attr); }, // Match start with value followed by optional hyphen
@@ -287,7 +287,6 @@ Selector.prototype = {
         var token = todo.shift();
         var nodes = root.getElementsByTagName(token.tag);
 
-        console.log(token);
         if (!token.next) {
             result = Y.Selector.simpleFilter(nodes, selector);
         } else {
@@ -346,12 +345,12 @@ var foundCache = [];
 var regexCache = {};
 
 var clearFoundCache = function() {
-    //YAHOO.log('getBySelector: clearing found cache of ' + foundCache.length + ' elements');
+    YAHOO.log('getBySelector: clearing found cache of ' + foundCache.length + ' elements');
     for (var i = 0, len = foundCache.length; i < len; ++i) {
         delete foundCache[i]._found;
     }
     foundCache = [];
-    //YAHOO.log('getBySelector: done clearing foundCache');
+    YAHOO.log('getBySelector: done clearing foundCache');
 };
 
 var getRegExp = function(str, flags) {
@@ -359,10 +358,8 @@ var getRegExp = function(str, flags) {
     var re = regexCache[str];
     if (!re) {
         re = new RegExp(str, flags);
-        regexCache[str] = re;
+        regexCache[str] = re; // TODO: cache w/flags?
     }
-    //return (regexCache[str+flags] || (regexCache[str+flags] = new RegExp(str, flags)));
-    //return new RegExp(str, flags);
     return re;
 };
 
