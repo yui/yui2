@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Selector Test Suite</title>
+
+<link rel="stylesheet" type="text/css" href="../build/logger/assets/logger.css">
+<link rel="stylesheet" type="text/css" href="../build/yuitest/assets/testlogger.css">
+
+<script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../build/dom/dom.js"></script>
+<script type="text/javascript" src="../build/event/event.js"></script>
+<script type="text/javascript" src="../util/selector/src/js/Selector.js"></script>
+
+<script type="text/javascript" src="../build/logger/logger-min.js"></script>
+<script type="text/javascript" src="../build/yuitest/yuitest-beta-min.js"></script>
+
+<script>
+onload = function() {
+    var Y = YAHOO.util;
+    var logger = new YAHOO.tool.TestLogger();
+    var suite = new YAHOO.tool.TestSuite("Selector Suite");
+    var Selector = Y.Selector;
+
+    var demo = Y.Dom.get('demo');
+    var demoFirstChild = Y.Dom.getFirstChild(demo);
+    var demoLastChild = Y.Dom.getLastChild(demo);
+
+    var selectorQueryAll = new YAHOO.tool.TestCase({
+        name: 'Query All',
+
+        testSelector: function() {
+            Y.ArrayAssert.itemsAreEqual([], Selector.queryAll('#demo.bar p'), '#demo.bar p');
+            Y.ArrayAssert.itemsAreEqual(Y.Dom.get('demo').getElementsByTagName('p'), Selector.queryAll('#demo.foo p'), '#demo.foo p');
+            Y.ArrayAssert.itemsAreEqual(Y.Dom.get('demo').getElementsByTagName('p'), Selector.queryAll('.foo p'), '.foo p');
+            Y.ArrayAssert.itemsAreEqual(Y.Dom.get('demo').getElementsByTagName('p'), Selector.queryAll('#demo p'), '#demo p');
+            Y.ArrayAssert.itemsAreEqual(Y.Dom.getFirstChild('demo'), Selector.queryAll('div > div'), 'div > div');
+            Y.ArrayAssert.itemsAreEqual(Y.Dom.getElementsByClassName('para'), Selector.queryAll('[class~=para]'), '[class=~para]');
+            Y.ArrayAssert.itemsAreEqual(document.body.getElementsByTagName('p'), Selector.queryAll('body div p'), 'body div p');
+            Y.ArrayAssert.itemsAreEqual([], Selector.queryAll('#demo .madeup'), '#demo .madeup');
+            Y.ArrayAssert.itemsAreEqual(Y.Dom.getElementsByClassName('para', 'p'), Selector.queryAll('div .para'), 'div .para');
+            Y.ArrayAssert.itemsAreEqual(Y.Dom.getElementsByClassName('first', null, 'demo'), Selector.queryAll('#demo .first'), '#demo .first');
+            Y.ArrayAssert.itemsAreEqual(document.getElementsByTagName('div'), Selector.queryAll('div'), 'div');
+            Y.ArrayAssert.itemsAreEqual(document.body.getElementsByTagName('div'), Selector.queryAll('body div'), 'body div');
+            Y.ArrayAssert.itemsAreEqual([demoFirstChild, Y.Dom.getNextSibling(demoFirstChild)], Selector.queryAll('#demo p:not(.last)'), '#demo p:not(.last)');
+        }
+    });
+
+    var simpleTest = new YAHOO.tool.TestCase({
+        name: 'Simple Node Test',
+
+        testPseudo: function() {
+            //console.log(Selector.simpleTest(demoFirstChild, ':not(.last)'));
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('empty'), ':empty'), 'empty');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo2'), ':empty'), 'empty');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo2'), ':only-of-type'), 'only-of-type');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':only-of-type'), 'only-of-type');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':first-child.last'), 'first-child class false pos');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':first-child.first'), 'first-child class');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':only-child'), 'only-child');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':first-of-type'), 'first-of-type');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getLastChild('demo'), ':last-of-type'), 'last-of-type');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.getLastChild('demo'), ':nth-last-of-type(3)'), 'nth-last-of-type(3)');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getLastChild('demo'), ':nth-last-of-type(1)'), 'nth-last-of-type(1)');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo').getElementsByTagName('p')[1], ':nth-last-of-type(2)'), 'nth-last-of-type(2)');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo').getElementsByTagName('p')[1], ':nth-of-type(2)'), 'nth-of-type(2)');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':nth-of-type(1)'), 'nth-of-type(1)');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':nth-last-child(3)'), 'nth-last-child(2)');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':nth-last-child(1)'), 'nth-last-child(1) false pos');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getLastChild('demo'), ':last-child'), 'last-child');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), 'p:first-child'), 'first-child tag');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), ':first-child'), 'first-child');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), 'div:nth-child(1)'), 'nth-child(1) tag');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), 'div:nth-child(2)'), 'nth-child(2) tag');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), 'p:nth-child(1)'), 'nth-child(1) tag false pos');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), ':not(.foo)'), 'not(.foo)');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), ':not(p)'), 'not(p)');
+            Y.Assert.isTrue(Selector.simpleTest(demoFirstChild, ':not(.last)'), 'not(.last)');
+        },
+
+        testAttr: function() {
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[title]'), 'title exists');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.getFirstChild('demo'), '[title]'), 'title exists false pos');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id=demo]'), 'id equality');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id|=de]'), 'id starts with optional hyphen');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), '[id|=me]'), 'id starts with false pos');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id~=demo]'), 'id includes');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[title~=demo]'), 'title includes');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), '[id!=demo]'), 'id negation');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id!=bar]'), 'id negation');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id^=de]'), 'id starts with');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id$=mo]'), 'id ends with');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), '[id$=m]'), 'id ends with false pos');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id*=em]'), 'id substr');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), '[id*=ex]'), 'id substr false pos');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '[id=demo][title~=demo]'), 'multiple attributes');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), 'div[id=demo][title~=demo]'), 'tag & multiple attributes');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), '[id=demo][title=demo]'), 'multiple attributes false pos');
+        },
+
+        testClass: function() {
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '.foo'), 'class match');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), 'div.foo'), 'tag match');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), 'span.foo'), 'tag false positive');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '#demo.foo'), 'id match');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), '.baz'), 'class false positive');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), '.first.para'), 'multiple class match');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.getFirstChild('demo'), 'p.first.para'), 'tag & multiple class match');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), '.foo.bar'), 'multiple class false pos');
+        },
+
+        testId: function() {
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '#demo'), 'id match');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), 'div#demo'), 'tag match');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), 'div#dmo'), 'id false positive');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), 'span#demo'), 'tag false positive');
+        },
+
+        testTag: function() {
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), 'div'), 'tag match');
+            Y.Assert.isFalse(Selector.simpleTest(Y.Dom.get('demo'), 'span'), 'tag false positive');
+            Y.Assert.isTrue(Selector.simpleTest(Y.Dom.get('demo'), '*'), 'universal tag');
+        }
+
+    });
+
+    suite.add(selectorQueryAll);
+    suite.add(simpleTest);
+    YAHOO.tool.TestRunner.add(suite);
+    YAHOO.tool.TestRunner.run();
+};
+</script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+    <div id="demo" class="foo" title="This is a demo">
+        <p class="para first">lorem ipsum</p>
+        <p class="para">lorem ipsum</p>
+        <p class="para last">lorem ipsum</p>
+    </div>
+
+    <div id="demo2">
+        <div>child of demo2</div>
+    </div>
+
+    <div id="empty"></div>
+</body>
+</html>
