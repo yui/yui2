@@ -1505,6 +1505,13 @@ init: function (p_oElement, p_oConfig) {
         this.clickEvent.subscribe(this._onClick);
         this.keyDownEvent.subscribe(this._onKeyDown);
         this.keyPressEvent.subscribe(this._onKeyPress);
+        
+
+        if (UA.gecko || UA.webkit) {
+
+            this.cfg.subscribeToConfigEvent("y", this._onYChange);
+
+        }
 
 
         if (p_oConfig) {
@@ -3164,6 +3171,51 @@ _onKeyPress: function (p_sType, p_aArgs) {
 
 
 /**
+* @method _onYChange
+* @description "y" event handler for a Menu instance.
+* @protected
+* @param {String} p_sType The name of the event that was fired.
+* @param {Array} p_aArgs Collection of arguments sent when the event 
+* was fired.
+*/
+_onYChange: function (p_sType, p_aArgs) {
+
+    var oParent = this.parent,
+        nScrollTop,
+        oIFrame,
+        nY;
+
+
+    if (oParent) {
+
+        nScrollTop = oParent.parent.body.scrollTop;
+
+
+        if (nScrollTop > 0) {
+    
+            nY = (this.cfg.getProperty("y") - nScrollTop);
+            
+            Dom.setY(this.element, nY);
+
+            oIFrame = this.iframe;            
+    
+
+            if (oIFrame) {
+    
+                Dom.setY(oIFrame, nY);
+    
+            }
+            
+            this.cfg.setProperty("y", nY, true);
+        
+        }
+    
+    }
+
+},
+
+
+/**
 * @method _onScrollTargetMouseOver
 * @description "mouseover" event handler for the menu's "header" and "footer" 
 * elements.  Used to scroll the body of the menu up and down when the 
@@ -3823,7 +3875,7 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
 * @param {Array} p_aArgs Array of arguments sent when the event was fired.
 */
 _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
-    
+
     var oParent = this.parent,
         aAlignment = oParent.parent.cfg.getProperty("submenualignment");
 
@@ -3837,31 +3889,6 @@ _onSubmenuBeforeShow: function (p_sType, p_aArgs) {
     else {
 
         this.align();
-    
-    }
-
-
-    var nScrollTop = oParent.parent.body.scrollTop,
-        oIFrame = this.iframe,
-        nY;
-
-
-    if ((UA.gecko || UA.webkit) && nScrollTop > 0) {
-
-        nY = (this.cfg.getProperty("y") - nScrollTop);
-
-        Dom.setY(this.element, nY);
-
-
-        if (oIFrame) {
-
-            Dom.setY(oIFrame, nY);
-
-        }
-        
-        this.cfg.setProperty("y", nY, true);
-    
-
     
     }
 
@@ -4129,7 +4156,6 @@ configPosition: function (p_sType, p_aArgs, p_oMenu) {
 
     var oElement = this.element,
         sCSSPosition = p_aArgs[0] == "static" ? "static" : "absolute",
-        sCurrentPosition = Dom.getStyle(oElement, "position"),
         oCfg = this.cfg,
         nZIndex;
 
@@ -7916,6 +7942,9 @@ init: function (p_oElement, p_oConfig) {
 
     this.beforeInitEvent.fire(ContextMenu);
 
+    this.showEvent.subscribe(this._onContextMenuShow);
+    this.hideEvent.subscribe(this._onContextMenuHide);
+
 
     if(p_oConfig) {
 
@@ -8338,9 +8367,6 @@ configTrigger: function (p_sType, p_aArgs, p_oMenu) {
                 this, true);
 
         }
-
-        this.showEvent.subscribe(this._onContextMenuShow);
-        this.hideEvent.subscribe(this._onContextMenuHide);
 
     }
     else {
