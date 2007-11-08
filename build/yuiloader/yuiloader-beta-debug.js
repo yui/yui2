@@ -2483,7 +2483,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
                     // there can be only one
                     if (!r[i] && !this.loaded[i]) {
-                        m =this.moduleInfo[i]; s = m.supersedes; roll=true;
+                        m =this.moduleInfo[i]; s = m.supersedes; roll=false;
 
                         if (!m.rollup) {
                             continue;
@@ -2497,11 +2497,11 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                                     c++;
                                     roll = (c >= m.rollup);
                                     if (roll) {
+                                        // YAHOO.log("skin rollup " + lang.dump(r));
                                         break;
                                     }
                                 }
                             }
-
 
                         } else {
 
@@ -2518,6 +2518,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                                     c++;
                                     roll = (c >= m.rollup);
                                     if (roll) {
+                                        // YAHOO.log("over thresh " + c + ", " + lang.dump(r));
                                         break;
                                     }
                                 }
@@ -2525,7 +2526,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                         }
 
                         if (roll) {
-                            // YAHOO.log("rollup: " +  m + ", " + lang.dump(this.loaded,0));
+                            // YAHOO.log("rollup: " +  i + ", " + lang.dump(this, 1));
                             // add the rollup
                             r[i] = true;
                             rolled = true;
@@ -2747,11 +2748,11 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          *        complete.
          */
         sandbox: function(o, type) {
-            // if (o) {
-            //     YAHOO.log("sandbox: " + lang.dump(o, 1) + ", " + type);
-            // } else {
-            //     YAHOO.log("sandbox: " + this.toString() + ", " + type);
-            // }
+            if (o) {
+                // YAHOO.log("sandbox: " + lang.dump(o, 1) + ", " + type);
+            } else {
+                // YAHOO.log("sandbox: " + this.toString() + ", " + type);
+            }
 
             this._config(o);
 
@@ -2784,7 +2785,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     onSuccess: function() {
                         this.sandbox(null, "js");
                     },
-                    scope: self
+                    scope: this
                 }, "js");
                 return;
             }
@@ -2852,7 +2853,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                             var t = "(function() {\n";
                         
                             // return the locally scoped reference.
-                            var b = "\nreturn " + this.varName + "\n})();";
+                            var b = "\nreturn " + this.varName + ";\n})();";
 
                             var ref = eval(t + this._scriptText.join("\n") + b);
 
