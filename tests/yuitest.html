@@ -550,6 +550,99 @@ YAHOO.test.YUITest_test = (function(){
     }));
     
     //-------------------------------------------------------------------------
+    // General Tests
+    //-------------------------------------------------------------------------
+    
+    suite.add(new YAHOO.tool.TestCase({
+    
+        //the name of the test case - if not provided, one is automatically generated
+        name: "Advanced Options Tests",
+        
+        /*
+         * Specifies tests that "should" be doing something other than the expected.
+         */
+        _should: {
+        
+            /*
+             * Tests listed in here should fail, meaning that if they fail, the test
+             * has passed. This is used mostly for YuiTest to test itself, but may
+             * be helpful in other cases.
+             */
+            fail: {
+            
+                //the test named "testFail" should fail
+                testFail: true
+            
+            },
+            
+            /*
+             * Tests listed here should throw an error of some sort. If they throw an
+             * error, then they are considered to have passed.
+             */
+            error: {
+            
+                /*
+                 * You can specify "true" for each test, in which case any error will
+                 * cause the test to pass.
+                 */
+                testGenericError: true,
+                
+                /*
+                 * You can specify an error message, in which case the test passes only
+                 * if the error thrown matches the given message.
+                 */
+                testStringError: "I'm a specific error message.",
+                
+                /*
+                 * You can also specify an error object, in which case the test passes only
+                 * if the error thrown is on the same type and has the same message.
+                 */
+                testObjectError: new TypeError("Number expected.")
+                
+            },
+            
+
+            ignore : {
+            
+                testIgnore: true
+                
+            }    
+        },
+        
+        //-------------------------------------------------------------------------
+        // Basic tests - all method names must begin with "test"
+        //-------------------------------------------------------------------------
+        
+        testFail : function() {
+        
+            //force a failure - but since this test "should" fail, it will pass
+            YAHOO.util.Assert.fail("Something bad happened.");
+            
+        },
+        
+        testGenericError : function() {    
+            throw new Error("Generic error");        
+        },
+        
+        testStringError : function() {
+            
+            //throw a specific error message - this will pass because it "should" happen
+            throw new Error("I'm a specific error message.");    
+        },
+        
+        testObjectError : function() {
+            
+            //throw a specific error and message - this will pass because it "should" happen
+            throw new TypeError("Number expected.");    
+        },
+        
+        testIgnore : function () {
+            YAHOO.util.Assert.fail("This test should not be run.");
+        }
+        
+    }));
+    
+    //-------------------------------------------------------------------------
     // Assert Tests
     //-------------------------------------------------------------------------
 

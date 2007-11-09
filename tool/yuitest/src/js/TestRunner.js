@@ -523,13 +523,24 @@ YAHOO.tool.TestRunner = (function(){
             //figure out if the test should be ignored or not
             if (shouldIgnore){
                 this.fireEvent(this.TEST_IGNORE_EVENT, { testCase: testCase, testName: testName });
+                
+                //some environments don't support setTimeout
+                if (typeof setTimeout != "undefined"){                    
+                    setTimeout(function(){
+                        YAHOO.tool.TestRunner._run();
+                    }, 0);              
+                } else {
+                    this._run();
+                }
+
+            } else {
+            
+                //run the setup
+                testCase.setUp();
+                
+                //now call the body of the test
+                this._resumeTest(test);                
             }
-            
-            //run the setup
-            testCase.setUp();
-            
-            //now call the body of the test
-            this._resumeTest(test);                
 
         },        
         
