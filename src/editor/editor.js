@@ -161,6 +161,13 @@ var Dom = YAHOO.util.Dom,
         * @type String
         */
         CLASS_LOCAL_FILE: 'warning-localfile',
+        /**
+        * @protected
+        * @property CLASS_HIDDEN
+        * @description CSS class applied to the body when the hiddenelements button is pressed.
+        * @type String
+        */
+        CLASS_HIDDEN: 'yui-hidden',
         /** 
         * @method init
         * @description The Editor class' initialization method
@@ -187,6 +194,26 @@ var Dom = YAHOO.util.Dom,
             */            
             this.setAttributeConfig('localFileWarning', {
                 value: attr.locaFileWarning || true
+            });
+
+            /**
+            * @attribute hiddencss
+            * @description The CSS used to show/hide hidden elements on the page, these rules must be prefixed with the class provided in <code>this.CLASS_HIDDEN</code>
+            * @default <code><pre>
+            .yui-hidden font, .yui-hidden strong, .yui-hidden b, .yui-hidden em, .yui-hidden i, .yui-hidden u, .yui-hidden div, .yui-hidden p, .yui-hidden span, .yui-hidden img, .yui-hidden ul, .yui-hidden ol, .yui-hidden li, .yui-hidden table {
+                border: 1px dotted #ccc;
+            }
+            .yui-hidden .yui-non {
+                border: none;
+            }
+            .yui-hidden img {
+                padding: 2px;
+            }</pre></code>
+            * @type String
+            */            
+            this.setAttributeConfig('hiddencss', {
+                value: attr.hiddencss || '.yui-hidden font, .yui-hidden strong, .yui-hidden b, .yui-hidden em, .yui-hidden i, .yui-hidden u, .yui-hidden div,.yui-hidden p,.yui-hidden span,.yui-hidden img, .yui-hidden ul, .yui-hidden ol, .yui-hidden li, .yui-hidden table { border: 1px dotted #ccc; } .yui-hidden .yui-non { border: none; } .yui-hidden img { padding: 2px; }',
+                writeOnce: true
             });
            
         },
@@ -1297,6 +1324,27 @@ var Dom = YAHOO.util.Dom,
                 exec = false;
             }
             return [exec, action];
+        },
+        /**
+        * @method cmd_hiddenelements
+        * @param value Value passed from the execCommand method
+        * @description This is an execCommand override method. It is called from execCommand when the execCommand('hiddenelements') is used.
+        */
+        cmd_hiddenelements: function(value) {
+            if (this._showingHiddenElements) {
+                //Don't auto highlight the hidden button
+                this._lastButton = null;
+                YAHOO.log('Enabling hidden CSS File', 'info', 'SimpleEditor');
+                this._showingHiddenElements = false;
+                this.toolbar.deselectButton('hiddenelements');
+                Dom.removeClass(this._getDoc().body, this.CLASS_HIDDEN);
+            } else {
+                YAHOO.log('Disabling hidden CSS File', 'info', 'SimpleEditor');
+                this._showingHiddenElements = true;
+                Dom.addClass(this._getDoc().body, this.CLASS_HIDDEN);
+                this.toolbar.selectButton('hiddenelements');
+            }
+            return [false];
         },
         /**
         * @method cmd_removeformat

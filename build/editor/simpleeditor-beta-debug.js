@@ -2769,7 +2769,8 @@ var Dom = YAHOO.util.Dom,
                 TITLE: this.STR_TITLE,
                 CONTENT: this._cleanIncomingHTML(this.get('element').value),
                 CSS: this.get('css'),
-                HIDDEN_CSS: this.get('hiddencss')
+                HIDDEN_CSS: ((this.get('hiddencss')) ? this.get('hiddencss') : '/* No Hidden CSS */'),
+                EXTRA_CSS: ((this.get('extracss')) ? this.get('extracss') : '/* No Extra CSS */')
             }),
             check = true;
             if (document.compatMode != 'BackCompat') {
@@ -3067,24 +3068,6 @@ var Dom = YAHOO.util.Dom,
             }
             var imgs = this._getDoc().getElementsByTagName('img');
             Dom.addClass(imgs, 'yui-img');   
-        },
-        /**
-        * @private
-        * @method _showHidden
-        * @description Toggle on/off the hidden.css file.
-        */
-        _showHidden: function() {
-            if (this._showingHiddenElements) {
-                YAHOO.log('Enabling hidden CSS File', 'info', 'SimpleEditor');
-                this._showingHiddenElements = false;
-                this.toolbar.deselectButton('hiddenelements');
-                Dom.removeClass(this._getDoc().body, this.CLASS_HIDDEN);
-            } else {
-                YAHOO.log('Disabling hidden CSS File', 'info', 'SimpleEditor');
-                this._showingHiddenElements = true;
-                Dom.addClass(this._getDoc().body, this.CLASS_HIDDEN);
-                this.toolbar.selectButton('hiddenelements');
-            }
         },
         /**
         * @private
@@ -3892,13 +3875,6 @@ var Dom = YAHOO.util.Dom,
         STOP_NODE_CHANGE: false,
         /**
         * @protected
-        * @property CLASS_HIDDEN
-        * @description CSS class applied to the body when the hiddenelements button is pressed.
-        * @type String
-        */
-        CLASS_HIDDEN: 'hidden',
-        /**
-        * @protected
         * @property CLASS_NOEDIT
         * @description CSS class applied to elements that are not editable.
         * @type String
@@ -4096,31 +4072,12 @@ var Dom = YAHOO.util.Dom,
                         
             /**
             * @attribute blankimage
-            * @description The CSS used to show/hide hidden elements on the page
-            * @default 'assets/blankimage.png'
+            * @description The URL for the image placeholder to put in when inserting an image.
+            * @default The yahooapis.com address for the current release + 'assets/blankimage.png'
             * @type String
             */            
             this.setAttributeConfig('blankimage', {
                 value: attr.blankimage || this._getBlankImage()
-            });
-            /**
-            * @attribute hiddencss
-            * @description The CSS used to show/hide hidden elements on the page, these rules must be prefixed with the class provided in <code>this.CLASS_HIDDEN</code>
-            * @default <code><pre>
-            .hidden font, .hidden strong, .hidden b, .hidden em, .hidden i, .hidden u, .hidden div, .hidden p, .hidden span, .hidden img, .hidden ul, .hidden ol, .hidden li, .hidden table {
-                border: 1px dotted #ccc;
-            }
-            .hidden .yui-non {
-                border: none;
-            }
-            .hidden img {
-                padding: 2px;
-            }</pre></code>
-            * @type String
-            */            
-            this.setAttributeConfig('hiddencss', {
-                value: attr.hiddencss || '.hidden font, .hidden strong, .hidden b, .hidden em, .hidden i, .hidden u, .hidden div,.hidden p,.hidden span,.hidden img, .hidden ul, .hidden ol, .hidden li, .hidden table { border: 1px dotted #ccc; } .hidden .yui-non { border: none; } .hidden img { padding: 2px; }',
-                writeOnce: true
             });
             /**
             * @attribute css
@@ -4161,7 +4118,7 @@ var Dom = YAHOO.util.Dom,
             * @attribute html
             * @description The default HTML to be written to the iframe document before the contents are loaded (Note that the DOCTYPE attr will be added at render item)
             * @default This HTML requires a few things if you are to override:
-                <p><code>{TITLE}, {CSS}, {HIDDEN_CSS}</code> and <code>{CONTENT}</code> need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.<p>
+                <p><code>{TITLE}, {CSS}, {HIDDEN_CSS}, {EXTRA_CSS}</code> and <code>{CONTENT}</code> need to be there, they are passed to YAHOO.lang.substitute to be replace with other strings.<p>
                 <p><code>onload="document.body._rteLoaded = true;"</code> : the onload statement must be there or the editor will not finish loading.</p>
                 <code>
                 <pre>
@@ -4175,6 +4132,9 @@ var Dom = YAHOO.util.Dom,
                         &lt;style&gt;
                         {HIDDEN_CSS}
                         &lt;/style&gt;
+                        &lt;style&gt;
+                        {EXTRA_CSS}
+                        &lt;/style&gt;
                     &lt;/head&gt;
                 &lt;body onload="document.body._rteLoaded = true;"&gt;
                 {CONTENT}
@@ -4185,7 +4145,18 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('html', {
-                value: attr.html || '<html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><base href="' + this._baseHREF + '"><style>{CSS}</style><style>{HIDDEN_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
+                value: attr.html || '<html><head><title>{TITLE}</title><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><base href="' + this._baseHREF + '"><style>{CSS}</style><style>{HIDDEN_CSS}</style><style>{EXTRA_CSS}</style></head><body onload="document.body._rteLoaded = true;">{CONTENT}</body></html>',
+                writeOnce: true
+            });
+
+            /**
+            * @attribute extracss
+            * @description Extra user defined css to load after the default SimpleEditor CSS
+            * @default ''
+            * @type String
+            */            
+            this.setAttributeConfig('extracss', {
+                value: attr.css || '',
                 writeOnce: true
             });
 
@@ -4901,15 +4872,6 @@ var Dom = YAHOO.util.Dom,
                     exec = false;
                 }
                 return [exec];
-        },
-        /**
-        * @method cmd_hiddenelements
-        * @param value Value passed from the execCommand method
-        * @description This is an execCommand override method. It is called from execCommand when the execCommand('hiddenelements') is used.
-        */
-        cmd_hiddenelements: function(value) {
-            this._showHidden();
-            return [false];
         },
         /**
         * @method cmd_unlink
