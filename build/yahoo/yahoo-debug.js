@@ -372,7 +372,7 @@ YAHOO.env.ua = function() {
  * Provides the language utilites and extensions used by the library
  * @class YAHOO.lang
  */
-YAHOO.lang = {
+YAHOO.lang = YAHOO.lang || {
     /**
      * Determines whether or not the provided object is an array.
      * Testing typeof/instanceof/constructor of arrays across frame 
