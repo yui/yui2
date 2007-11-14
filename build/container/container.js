@@ -5180,8 +5180,8 @@
                 // Webkit 523.6 doesn't have this problem and doesn't 
                 // need the fix
                 var u = this.underlay;
-                Dom.removeClass(u, "underlay");
-                window.setTimeout(function(){Dom.addClass(u, "underlay");}, 0);
+                Dom.addClass(u, "yui-force-redraw");
+                window.setTimeout(function(){Dom.removeClass(u, "yui-force-redraw");}, 0);
             }
 
             function createUnderlay() {

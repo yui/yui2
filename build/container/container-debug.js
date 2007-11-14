@@ -17,7 +17,7 @@
             this.init(owner);
         }
 
-        if (!owner) {  YAHOO.log("No owner specified for Config object", "error"); }
+        if (!owner) {  YAHOO.log("No owner specified for Config object", "error", "Config"); }
 
     };
 
@@ -145,7 +145,7 @@
         * @param {value} Object The value of the correct type for the property
         */ 
         fireEvent: function ( key, value ) {
-            YAHOO.log("Firing Config event: " + key + "=" + value, "info");
+            YAHOO.log("Firing Config event: " + key + "=" + value, "info", "Config");
             var property = this.config[key];
         
             if (property && property.event) {
@@ -162,7 +162,7 @@
         */
         addProperty: function ( key, propertyObject ) {
             key = key.toLowerCase();
-            YAHOO.log("Added property: " + key, "info");
+            YAHOO.log("Added property: " + key, "info", "Config");
         
             this.config[key] = propertyObject;
         
@@ -267,7 +267,7 @@
             var property;
         
             key = key.toLowerCase();
-            YAHOO.log("setProperty: " + key + "=" + value, "info");
+            YAHOO.log("setProperty: " + key + "=" + value, "info", "Config");
         
             if (this.queueInProgress && ! silent) {
                 // Currently running through a queue... 
@@ -306,7 +306,7 @@
         queueProperty: function (key, value) {
         
             key = key.toLowerCase();
-            YAHOO.log("queueProperty: " + key + "=" + value, "info");
+            YAHOO.log("queueProperty: " + key + "=" + value, "info", "Config");
         
             var property = this.config[key],
                 foundDuplicate = false,
@@ -404,7 +404,7 @@
                     }
                 }
 
-                YAHOO.log("Config event queue: " + this.outputEventQueue(), "info");
+                YAHOO.log("Config event queue: " + this.outputEventQueue(), "info", "Config");
 
                 return true;
             } else {
@@ -5209,8 +5209,8 @@
                 // Webkit 523.6 doesn't have this problem and doesn't 
                 // need the fix
                 var u = this.underlay;
-                Dom.removeClass(u, "underlay");
-                window.setTimeout(function(){Dom.addClass(u, "underlay");}, 0);
+                Dom.addClass(u, "yui-force-redraw");
+                window.setTimeout(function(){Dom.removeClass(u, "yui-force-redraw");}, 0);
             }
 
             function createUnderlay() {

@@ -126,10 +126,19 @@ PLEASE NOTE:
 
 }
 
+/* 
+   Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
+   the Panel's content changes, to force Safari 2.x to redraw the underlay.
+   We attempt to choose a CSS property which has no visual impact when added,
+   removed.
+*/
+.yui-panel-container.shadow .underlay.yui-force-redraw {
+    padding-bottom: 1px;
+}
+
 .yui-effect-fade .underlay {
     display:none;
 }
-
 
 /*
     PLEASE NOTE: The <DIV> element used for a Tooltip's shadow is appended 

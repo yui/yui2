@@ -167,6 +167,16 @@ PLEASE NOTE:
 
 }
 
+/* 
+   Workaround for Safari 2.x - the yui-force-redraw class is applied, and then removed when
+   the Panel's content changes, to force Safari 2.x to redraw the underlay.
+   We attempt to choose a CSS property which has no visual impact when added,
+   removed, but still causes Safari to redraw
+*/
+.yui-panel-container.shadow .underlay.yui-force-redraw {
+    padding-bottom: 1px;
+}
+
 .yui-effect-fade .underlay {
     display:none;
 }
