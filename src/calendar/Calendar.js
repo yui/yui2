@@ -1637,7 +1637,7 @@ YAHOO.widget.Calendar.prototype = {
 	* @return {Array} The current working HTML array
 	*/
 	renderHeader : function(html) {
-		this.logger.log("Rendering header", "info");
+		this.logger.log("Rendering header", "render");
 		var colSpan = 7;
 		
 		var DEPR_NAV_LEFT = "us/tr/callt.gif";
@@ -1745,7 +1745,7 @@ YAHOO.widget.Calendar.prototype = {
 	* @return {Array} The current working HTML array
 	*/
 	renderBody : function(workingDate, html) {
-		this.logger.log("Rendering body", "info");
+		this.logger.log("Rendering body", "render");
 		var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
 	
 		var startDay = this.cfg.getProperty(defCfg.START_WEEKDAY.key);
@@ -1760,12 +1760,12 @@ YAHOO.widget.Calendar.prototype = {
 		
 		this.monthDays = YAHOO.widget.DateMath.findMonthEnd(workingDate).getDate();
 		this.postMonthDays = YAHOO.widget.Calendar.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
-		this.logger.log(this.preMonthDays + " preciding out-of-month days", "info");
-		this.logger.log(this.monthDays + " month days", "info");
-		this.logger.log(this.postMonthDays + " post-month days", "info");
+		this.logger.log(this.preMonthDays + " preciding out-of-month days", "render");
+		this.logger.log(this.monthDays + " month days", "render");
+		this.logger.log(this.postMonthDays + " post-month days", "render");
 		
 		workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
-		this.logger.log("Calendar page starts on " + workingDate, "info");
+		this.logger.log("Calendar page starts on " + workingDate, "render");
 	
 		var weekNum,weekClass;
 		var weekPrefix = "w";
@@ -1826,7 +1826,7 @@ YAHOO.widget.Calendar.prototype = {
 					cell.className = this.Style.CSS_CELL;
 					cell.id = this.id + cellPrefix + i;
 					this.logger.log("Rendering cell " + cell.id + " (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
-	
+
 					if (workingDate.getDate()		== todayDate && 
 						workingDate.getMonth()		== todayMonth &&
 						workingDate.getFullYear()	== todayYear) {
@@ -2016,9 +2016,9 @@ YAHOO.widget.Calendar.prototype = {
 		html = this.renderBody(workingDate, html);
 		html = this.renderFooter(html);
 		html[html.length] = '</table>';
-	
+
 		this.oDomContainer.innerHTML = html.join("\n");
-	
+
 		this.applyListeners();
 		this.cells = this.oDomContainer.getElementsByTagName("td");
 	

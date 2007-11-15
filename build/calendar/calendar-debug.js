@@ -17,7 +17,7 @@
             this.init(owner);
         }
 
-        if (!owner) {  YAHOO.log("No owner specified for Config object", "error"); }
+        if (!owner) {  YAHOO.log("No owner specified for Config object", "error", "Config"); }
 
     };
 
@@ -145,7 +145,7 @@
         * @param {value} Object The value of the correct type for the property
         */ 
         fireEvent: function ( key, value ) {
-            YAHOO.log("Firing Config event: " + key + "=" + value, "info");
+            YAHOO.log("Firing Config event: " + key + "=" + value, "info", "Config");
             var property = this.config[key];
         
             if (property && property.event) {
@@ -162,7 +162,7 @@
         */
         addProperty: function ( key, propertyObject ) {
             key = key.toLowerCase();
-            YAHOO.log("Added property: " + key, "info");
+            YAHOO.log("Added property: " + key, "info", "Config");
         
             this.config[key] = propertyObject;
         
@@ -267,7 +267,7 @@
             var property;
         
             key = key.toLowerCase();
-            YAHOO.log("setProperty: " + key + "=" + value, "info");
+            YAHOO.log("setProperty: " + key + "=" + value, "info", "Config");
         
             if (this.queueInProgress && ! silent) {
                 // Currently running through a queue... 
@@ -306,7 +306,7 @@
         queueProperty: function (key, value) {
         
             key = key.toLowerCase();
-            YAHOO.log("queueProperty: " + key + "=" + value, "info");
+            YAHOO.log("queueProperty: " + key + "=" + value, "info", "Config");
         
             var property = this.config[key],
                 foundDuplicate = false,
@@ -404,7 +404,7 @@
                     }
                 }
 
-                YAHOO.log("Config event queue: " + this.outputEventQueue(), "info");
+                YAHOO.log("Config event queue: " + this.outputEventQueue(), "info", "Config");
 
                 return true;
             } else {
@@ -2591,7 +2591,7 @@ YAHOO.widget.Calendar.prototype = {
 	* @return {Array} The current working HTML array
 	*/
 	renderHeader : function(html) {
-		this.logger.log("Rendering header", "info");
+		this.logger.log("Rendering header", "render");
 		var colSpan = 7;
 		
 		var DEPR_NAV_LEFT = "us/tr/callt.gif";
@@ -2699,7 +2699,7 @@ YAHOO.widget.Calendar.prototype = {
 	* @return {Array} The current working HTML array
 	*/
 	renderBody : function(workingDate, html) {
-		this.logger.log("Rendering body", "info");
+		this.logger.log("Rendering body", "render");
 		var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
 	
 		var startDay = this.cfg.getProperty(defCfg.START_WEEKDAY.key);
@@ -2714,12 +2714,12 @@ YAHOO.widget.Calendar.prototype = {
 		
 		this.monthDays = YAHOO.widget.DateMath.findMonthEnd(workingDate).getDate();
 		this.postMonthDays = YAHOO.widget.Calendar.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
-		this.logger.log(this.preMonthDays + " preciding out-of-month days", "info");
-		this.logger.log(this.monthDays + " month days", "info");
-		this.logger.log(this.postMonthDays + " post-month days", "info");
+		this.logger.log(this.preMonthDays + " preciding out-of-month days", "render");
+		this.logger.log(this.monthDays + " month days", "render");
+		this.logger.log(this.postMonthDays + " post-month days", "render");
 		
 		workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
-		this.logger.log("Calendar page starts on " + workingDate, "info");
+		this.logger.log("Calendar page starts on " + workingDate, "render");
 	
 		var weekNum,weekClass;
 		var weekPrefix = "w";
@@ -2780,7 +2780,7 @@ YAHOO.widget.Calendar.prototype = {
 					cell.className = this.Style.CSS_CELL;
 					cell.id = this.id + cellPrefix + i;
 					this.logger.log("Rendering cell " + cell.id + " (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
-	
+
 					if (workingDate.getDate()		== todayDate && 
 						workingDate.getMonth()		== todayMonth &&
 						workingDate.getFullYear()	== todayYear) {
@@ -2970,9 +2970,9 @@ YAHOO.widget.Calendar.prototype = {
 		html = this.renderBody(workingDate, html);
 		html = this.renderFooter(html);
 		html[html.length] = '</table>';
-	
+
 		this.oDomContainer.innerHTML = html.join("\n");
-	
+
 		this.applyListeners();
 		this.cells = this.oDomContainer.getElementsByTagName("td");
 	
@@ -5653,6 +5653,14 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		this.cal = cal;
 		this.id = calBox.id + YAHOO.widget.CalendarNavigator.ID_SUFFIX;
 		this._doc = calBox.ownerDocument;
+
+		/**
+		 * Private flag, to identify IE6/IE7 Quirks
+		 * @private
+		 * @property __isIEQuirks
+		 */
+		var ie = YAHOO.env.ua.ie;
+		this.__isIEQuirks = (ie && ((ie <= 6) || (ie === 7 && this._doc.compatMode == "BackCompat")));
 	},
 
 	/**
@@ -5711,6 +5719,9 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 */
 	showMask : function() {
 		this._show(this.maskEl, true);
+		if (this.__isIEQuirks) {
+			this._syncMask();
+		}
 	},
 
 	/**
@@ -5755,7 +5766,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @param {Number} nMonth The month index, from 0 (Jan) through 11 (Dec).
 	 */
 	setMonth : function(nMonth) {
-		if (nMonth > 0 && nMonth < 12) {
+		if (nMonth >= 0 && nMonth < 12) {
 			this._month = nMonth;
 		}
 		this._updateMonthUI();
@@ -5834,11 +5845,27 @@ YAHOO.widget.CalendarNavigator.prototype = {
 
 		var d = this._doc.createElement("div");
 		d.className = C.MASK;
-		if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
-			d.className += " fixedsize";
-		}
+
 		this.cal.oDomContainer.appendChild(d);
 		this.maskEl = d;
+	},
+
+	/**
+	 * Used to set the width/height of the mask in pixels to match the Calendar Container.
+	 * Currently only used for IE6 and IE7 quirks mode. The other A-Grade browser are handled using CSS (width/height 100%).
+	 * <p>
+	 * The method is also registered as an HTMLElement resize listener on the Calendars container element.
+	 * </p>
+	 * @protected
+	 * @method _syncMask
+	 */
+	_syncMask : function() {
+		var c = this.cal.oDomContainer;
+		if (c && this.maskEl) {
+			var r = YAHOO.util.Dom.getRegion(c);
+			YAHOO.util.Dom.setStyle(this.maskEl, "width", r.right - r.left + "px");
+			YAHOO.util.Dom.setStyle(this.maskEl, "height", r.bottom - r.top + "px");
+		}
 	},
 
 	/**
@@ -5971,6 +5998,10 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		E.on(this.yearEl, "blur", yearUpdateHandler, this, true);
 		E.on(this.monthEl, "change", monthUpdateHandler, this, true);
 
+		if (this.__isIEQuirks) {
+			YAHOO.util.Event.on(this.cal.oDomContainer, "resize", this._syncMask, this, true);
+		}
+
 		this.applyKeyListeners();
 	},
 
@@ -5985,6 +6016,9 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		E.removeListener(this.cancelEl, "click", this.cancel);
 		E.removeListener(this.yearEl, "blur");
 		E.removeListener(this.monthEl, "change");
+		if (this.__isIEQuirks) {
+			E.removeListener(this.cal.oDomContainer, "resize", this._syncMask);
+		}
 
 		this.purgeKeyListeners();
 	},
@@ -6463,6 +6497,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @property __isMac
 	 */
 	__isMac : (navigator.userAgent.toLowerCase().indexOf("macintosh") != -1)
+
 };
 
 (function() {
