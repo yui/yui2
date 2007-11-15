@@ -14,10 +14,10 @@
 
 <script type="text/javascript" src="../build/utilities/utilities.js"></script>
 <script type="text/javascript" src="../build/logger/logger-min.js"></script>
-<script type="text/javascript" src="../build/container/container-min.js"></script>
+<script type="text/javascript" src="../build/container/container_core-min.js"></script>
 <script type="text/javascript" src="../build/menu/menu-min.js"></script>
-<script type="text/javascript" src="../build/button/button-beta-min.js"></script>
-<script type="text/javascript" src="../build/editor/editor-beta-min.js"></script>
+<script type="text/javascript" src="../build/button/button-min.js"></script>
+<script type="text/javascript" src="../build/editor/editor-beta.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
 
 <style>
@@ -71,7 +71,8 @@ var editor = null;
                 test_regex: function() {
                     editor.setEditorHTML(Dom.get('testRegEx').innerHTML);
                     var e_data = editor.cleanHTML();
-                    var real_data = Dom.get('testRegEx2').innerHTML;
+                    var real_data = editor.filter_all_rgb(Dom.get('testRegEx2').innerHTML);
+
                     Assert.areEqual(real_data, e_data, 'Regex save routine failed');
                 },
                 test_blank_image: function() {
@@ -99,9 +100,7 @@ var editor = null;
                 },
                 test_image_props: function() {
                     var pic = editor._getDoc().getElementsByTagName('img')[0];
-
                     YAHOO.util.UserAction.dblclick(pic);
-
                     Assert.isInstanceOf(YAHOO.widget.EditorWindow, editor.currentWindow, 'Editor Window Failed to Open');
                 },
                 test_close_window: function() {
@@ -126,9 +125,9 @@ var editor = null;
                 },
                 test_hidden_elements: function() {
                     editor.toolbar.getButtonByValue('hiddenelements').fireEvent('mousedown', { ev: 'mousedown' });
-                    Assert.areEqual(true, Dom.hasClass(editor._getDoc().body, 'hidden'), 'hidden class is not on the body');
+                    Assert.areEqual(true, Dom.hasClass(editor._getDoc().body, 'yui-hidden'), 'hidden class is not on the body');
                     editor.toolbar.getButtonByValue('hiddenelements').fireEvent('mousedown', { ev: 'mousedown' });
-                    Assert.areEqual(false, Dom.hasClass(editor._getDoc().body, 'hidden'), 'hidden class is on the body');
+                    Assert.areEqual(false, Dom.hasClass(editor._getDoc().body, 'yui-hidden'), 'hidden class is on the body');
                 },
                 test_event_mouseup: function() {
                     var event = false;
@@ -204,7 +203,6 @@ var editor = null;
                     var e_data = editor.getEditorHTML();
                     Assert.areEqual(t_data, e_data, 'Editor data is different than text area');
                 }
-
             })); 
             Tool.TestRunner.add(Suite);
 
@@ -226,7 +224,7 @@ var editor = null;
 <textarea id="editor" style="height: 300px; width: 522px">This is a test.</textarea>
 
 <div id="testRegEx">This is a test. <b>This</b> is a test. This is a <i>test</i>. This is a <u>test</u>. This is a test. This is a test. This is a test. <span style="font-size: 16px; font-family: Comic Sans MS;" tabindex="1" tag="span" class="yui-tag-span yui-tag">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </span>This is a test. This is a test. This is a test. This is a test. This is a test.<br><br>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. <span style="font-size: 18px; font-family: Trebuchet MS; color: rgb(160, 64, 255);" tabindex="1" tag="span" class="yui-tag-span yui-tag">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</span> This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </div>
-<div id="testRegEx2">This is a test. <strong>This</strong> is a test. This is a <em>test</em>. This is a <span style="text-decoration: underline;">test</span>. This is a test. This is a test. This is a test. <span style="font-size: 16px; font-family: Comic Sans MS;" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </span>This is a test. This is a test. This is a test. This is a test. This is a test.<br><br>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. <span style="font-size: 18px; font-family: Trebuchet MS; color: rgb(160, 64, 255);" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</span> This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</div>
+<div id="testRegEx2">This is a test. <strong>This</strong> is a test. This is a <em>test</em>. This is a <span style="text-decoration: underline;">test</span>. This is a test. This is a test. This is a test. <span style="font-size: 16px; font-family: Comic Sans MS;" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. </span>This is a test. This is a test. This is a test. This is a test. This is a test.<br><br>This is a test. This is a test. This is a test. This is a test. This is a test. This is a test. <span style="font-size: 18px; font-family: Trebuchet MS; color: #a040ff;" tabindex="1">This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</span> This is a test. This is a test. This is a test. This is a test. This is a test. This is a test.</div>
 </div>
 </body>
 </html>
