@@ -1033,7 +1033,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
 
                     success: function(o) {
                         
-                        var idx=o.argument[0], url=o.argument[1], name=o.argument[2];
+                        var idx=o.argument[0], name=o.argument[2];
 
                         // store the response in the position it was requested
                         this._scriptText[idx] = o.responseText; 

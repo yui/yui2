@@ -1611,7 +1611,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'charts': {
             'type': 'js',
-            'path': 'charts/charts-beta-min.js',
+            'path': 'charts/charts-experimental-min.js',
             'requires': ['element', 'datasource']
         },
 
@@ -1812,16 +1812,10 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'rollup': 3
         },
 
-        // 'yuiloadercore': {
-        //     'type': 'js',
-        //     'path': 'yuiloader/yuiloader_core-beta-min.js'
-        // },
-
-        // 'yuiloader': {
-        //     'type': 'js',
-        //     'path': 'yuiloader/yuiloader-beta-min.js'
-        //     'supersedes': ['yuiloadercore']
-        // },
+        'yuiloader': {
+            'type': 'js',
+            'path': 'yuiloader/yuiloader-beta-min.js'
+        },
 
         'yuitest': {
             'type': 'js',
@@ -2833,7 +2827,7 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
 
                     success: function(o) {
                         
-                        var idx=o.argument[0], url=o.argument[1], name=o.argument[2];
+                        var idx=o.argument[0], name=o.argument[2];
 
                         // store the response in the position it was requested
                         this._scriptText[idx] = o.responseText; 
