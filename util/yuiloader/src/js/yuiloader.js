@@ -103,7 +103,7 @@
             'path': 'container/container-min.js',
             'requires': ['dom', 'event'],
             // button is optional, but creates a circular dep
-            //'optional': ['dragdrop', 'animation', 'connection', 'button'],
+            //'optional': ['dragdrop', 'animation', 'connection', 'connection', 'button'],
             'optional': ['dragdrop', 'animation', 'connection'],
             'supersedes': ['containercore'],
             'skinnable': true
@@ -112,7 +112,8 @@
         'containercore': {
             'type': 'js',
             'path': 'container/container_core-min.js',
-            'requires': ['dom', 'event']
+            'requires': ['dom', 'event'],
+            'pkg': 'container'
         },
 
         'datasource': {
@@ -235,7 +236,8 @@
             'path': 'editor/simpleeditor-beta-min.js',
             'requires': ['element'],
             'optional': ['containercore', 'menu', 'button', 'animation', 'dragdrop'],
-            'skinnable': true
+            'skinnable': true,
+            'pkg': 'editor'
         },
 
         'slider': {
@@ -715,11 +717,14 @@
             if (mod) {
                 name = this.formatSkin(skin, mod);
                 if (!this.moduleInfo[name]) {
+                    var mdef = this.moduleInfo[mod];
+                    var pkg = mdef.pkg || mod;
                     this.addModule({
                         'name': name,
                         'type': 'css',
                         //'path': this.skin.base + skin + "/" + mod + ".css"
-                        'path': mod + '/' + this.skin.base + skin + "/" + mod + ".css"
+                        // 'path': mod + '/' + this.skin.base + skin + "/" + mod + ".css"
+                        'path': pkg + '/' + this.skin.base + skin + "/" + mod + ".css"
                     });
                 }
             }

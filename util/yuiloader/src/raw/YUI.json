@@ -70,7 +70,7 @@
             'path': 'container/container-min.js',
             'requires': ['dom', 'event'],
             // button is optional, but creates a circular dep
-            //'optional': ['dragdrop', 'animation', 'connection', 'button'],
+            //'optional': ['dragdrop', 'animation', 'connection', 'connection', 'button'],
             'optional': ['dragdrop', 'animation', 'connection'],
             'supersedes': ['containercore'],
             'skinnable': true
@@ -79,7 +79,8 @@
         'containercore': {
             'type': 'js',
             'path': 'container/container_core-min.js',
-            'requires': ['dom', 'event']
+            'requires': ['dom', 'event'],
+            'pkg': 'container'
         },
 
         'datasource': {
@@ -202,7 +203,8 @@
             'path': 'editor/simpleeditor-beta-min.js',
             'requires': ['element'],
             'optional': ['containercore', 'menu', 'button', 'animation', 'dragdrop'],
-            'skinnable': true
+            'skinnable': true,
+            'pkg': 'editor'
         },
 
         'slider': {

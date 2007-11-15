@@ -448,11 +448,14 @@
             if (mod) {
                 name = this.formatSkin(skin, mod);
                 if (!this.moduleInfo[name]) {
+                    var mdef = this.moduleInfo[mod];
+                    var pkg = mdef.pkg || mod;
                     this.addModule({
                         'name': name,
                         'type': 'css',
                         //'path': this.skin.base + skin + "/" + mod + ".css"
-                        'path': mod + '/' + this.skin.base + skin + "/" + mod + ".css"
+                        // 'path': mod + '/' + this.skin.base + skin + "/" + mod + ".css"
+                        'path': pkg + '/' + this.skin.base + skin + "/" + mod + ".css"
                     });
                 }
             }
