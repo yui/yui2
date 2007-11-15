@@ -1,4 +1,18 @@
+/**
+ * The selector module provides helper methods allowing CSS3 Selectors to be used with DOM elements.
+ * @module selector
+ * @title Selector Utility
+ * @namespace YAHOO.util
+ * @requires yahoo, dom
+ */
+
 (function() {
+/**
+ * Provides helper methods for collecting and filtering DOM elements.
+ * @namespace YAHOO.util
+ * @class Selector
+ * @static
+ */
 var Selector = function() {};
 
 var Y = YAHOO.util;
@@ -23,61 +37,45 @@ X.BEGIN_SPACE = '(?:' + X.BEGIN + X.OR + X.SP +')';
 X.END_SPACE = '(?:' + X.SP + X.OR + X.END + ')';
 X.SELECTOR = '^(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)?\\s*([' + CHARS.COMBINATORS + ']?)?\\s*).*$';
 X.SIMPLE = '(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)*)?';
+X.ATTRIBUTES = '\\[([a-z]+\\w*)+([~\\|\\^\\$\\*!=]=?)?"?([^\\]"]*)"?\\]';
+X.PSEUDO = ':' + X.CAPTURE_IDENT + '(?:\\({1}' + X.SIMPLE + '\\){1})*';
 
 Selector.prototype = {
-    selectors: {
-        'id': {
-            pattern: '#' + X.CAPTURE_IDENT,
-            test: function(node, id) {
-                return node.id === id; 
-            }
-        },
-
-        'className': {
-            pattern: '\\.' + X.CAPTURE_IDENT,
-            test: function(node, className) {
-                return getRegExp(X.BEGIN_SPACE + className + X.END_SPACE).test(node.className);
-            }
-        },
-
-        'attribute': {
-            pattern: '\\[([a-z]+\\w*)+([~\\|\\^\\$\\*!=]=?)?"?([^\\]"]*)"?\\]',
-            test: function(node, attr, op, value) {
-                op = op || '';
-                var nodeVal;
-                switch(attr) {
-                    case 'class':
-                        nodeVal = node.className;
-                        break;
-                    case 'for':
-                        nodeVal = node.htmlFor;
-                        break;
-                    case 'href':
-                        nodeVal = node.getAttributes('href', 2);
-                        break;
-                    default:
-                        nodeVal = node[attr];
-                }
-
-                if (nodeVal !== '') {
-                    return Y.Selector.operators[op](nodeVal, value);                
-                }
-            }
-        },
-
-        'pseudo': {
-            pattern: ':' + X.CAPTURE_IDENT + '(?:\\({1}' + X.SIMPLE + '\\){1})*',
-            test: function(node, pseudo, val) {
-                return Y.Selector.pseudos[pseudo](node, val); 
-            }
-        }
+    /**
+     * Mapping of attributes to aliases
+     * @property attrAliases
+     * @type object
+     */
+    attrAliases: {
+        'for': 'htmlFor',
+        'class': 'className'
     },
 
+    /**
+     * Mapping of shorthand tokens to corresponding attribute selector 
+     * @property shorthand
+     * @type object
+     */
+    shorthand: {
+        '#': '[id=$1]',
+        '\\.': '[className~=$1]'
+    },
+
+    /**
+     * List of operators and corresponding boolean functions. 
+     * These functions are passed the attribute and the current node's value of the attribute.
+     * @property operators
+     * @type object
+     */
     operators: {
         '=': function(attr, val) { return attr === val; }, // Equality
         '!=': function(attr, val) { return attr !== val; }, // Inequality
         '~=': function(attr, val) { // Match one of space seperated words 
-            return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
+            var str = X.BEGIN_SPACE + val + X.END_SPACE;
+            regexCache[str] = regexCache[str] || new RegExp(str);
+
+            //return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
+            return regexCache[str].test(attr);
         },
         '|=': function(attr, val) { return getRegExp(X.BEGIN + val + '[-]?', 'g').test(attr); }, // Match start with value followed by optional hyphen
         '^=': function(attr, val) { return attr.indexOf(val) === 0; }, // Match starts with value
@@ -86,6 +84,12 @@ Selector.prototype = {
         '': function(attr, val) { return attr; } // Just test for existence of attribute  // TODO: empty label is weak
     },
 
+    /**
+     * List of pseudo-classes and corresponding boolean functions. 
+     * These functions are called with the current node, and any value that was parsed with the pseudo regex.
+     * @property pseudos
+     * @type object
+     */
     pseudos: {
         'root': function(node) {
             return node === node.ownerDocument.documentElement;
@@ -149,6 +153,22 @@ Selector.prototype = {
         }
     },
 
+    // TODO: make private?
+    replaceShorthand: function(selector) {
+        var shorthand = Y.Selector.shorthand;
+        for (var re in shorthand) {
+            selector = selector.replace(getRegExp(re + X.CAPTURE_IDENT, 'g'), shorthand[re]);
+        }
+        return selector;
+    },
+
+    /**
+     * List of combinators and corresponding functions. 
+     * These functions are called with the current node and expected type (tag),
+     * and return an array of nodes.
+     * @property combinators
+     * @type object
+     */
     combinators: {
         ' ': function(node, tag) {
             return node.getElementsByTagName(tag);
@@ -157,102 +177,115 @@ Selector.prototype = {
         '>': function() {
             if (document.documentElement.children) {
                 return function(node, tag) {
-                    tag = tag || '*'.toLowerCase();
-                    //clearFoundCache(); // TODO: why clear here?
+                    tag = tag || '*';
                     return node.children.tags(tag);
                 };
             } else { // gecko
                 return function(node, tag) {
-                    return Y.Dom.getChildrenBy(node, function(child) {
-                        return (tag) ? child.tagName.toLowerCase() === tag.toLowerCase() : true;
-                    });
+                    var children = [],
+                        childNodes = node.childNodes;
+
+                    for (var i = 0, len = childNodes.length; i < len; ++i) {
+                        if (childNodes[i].nodeType === 1) {
+                            children[children.length] = childNodes[i];
+                        }
+                    }
+                    return children;
                 };
             }
         }(),
 
         '+': function(node, tag) {
-            var element = Y.Dom.getNextSiblingBy(node);
-            if (!tag) {
-                return [element];
-            } else {
-                return ( (element && element.tagName.toLowerCase() == tag) ? [element]: [] );
+            var sib = node.nextSibling;
+            while (sib && !sib.tagName) {
+                sib = sib.nextSibling;
             }
+
+            if (sib && (tag == '*' || sib.tagName.toLowerCase() == tag)) {
+                return [sib]; 
+            }
+            return [];
         },
 
         '~': function(node, tag) {
-            var elements = [];
-            Y.Dom.getNextSiblingBy(node, function(el) {
-                if (!el._found && testNode(el, token.next)) {
-                    // TODO: test tagName?
-                    if (el.tagName.toUpperCase() === token.next.tagName.toUpperCase()) {
-                        markFound(el);
-                        elements.push(el);
-                    }
-                }
-                return false; // to scan all sibilings
-            });
-            return elements;
+            var result = [];
+            var sib = node.nextSibling;
+            while (sib = sib.nextSibling) { // NOTE: assignment
+                if (sib.nodeType === 1) {
+                    result[result.length] = sib;
+                } 
+            }
+
+            return result;
         }
     },
 
+    /**
+     * Tests whether the supplied node matches the supplied simple selector.
+     * A simple selector does not contain combinators.
+     * @method simpleTest
+     *
+     * @param {HTMLElement} node A reference to the HTMLElement being tested.
+     * @param {string} selector The CSS Selector to test the node against.
+     * @return{boolean} Whether or not the node matches the selector.
+     * @static
+     */
     simpleTest: function(node, selector, token) {
         var token = token || Y.Selector.tokenize(selector)[0];
 
         if (token.tag != '*' && node.tagName.toLowerCase() != token.tag) {
-            return false;
+            return false; // tag match failed
         } 
 
-        var selectors = Y.Selector.selectors;
-        var predicates = token.predicates;
-        var args;
+        var ops = Y.Selector.operators;
+        var ps = Y.Selector.operators;
+        var attr = token.attributes;
+        var pseudos = token.pseudos;
 
-        if (token.predicate) {
-            for (var type in predicates) {
-                if (predicates[type] !== undefined) {
-                    for (var i = 0, len = predicates[type].length; i < len; ++i) {
-                        args = [node].concat(predicates[type][i]);
-                        if (!selectors[type].test.apply(null, args)) {
-                            return false;
-                        }
-                    }
-                }
+        for (var i = 0, len = attr.length; i < len; ++i) {
+            if (!ops[attr[i][1]](node[attr[i][0]], attr[i][2])) {
+                return false;
+            }
+        }
+        for (var i = 0, len = pseudos.length; i < len; ++i) {
+            if (ps[pseudos[i][0]] &&
+                    !ps[pseudos[i][0]](node, pseudos[i][1])) {
+                return false;
             }
         }
         return true;
     },
 
+    // TODO: make private?
     tokenize: function(selector) {
         var token,
-            tokens = [];
+            tokens = [],
+            m,
+            aliases = Y.Selector.attrAliases,
+            reAttr = getRegExp(X.ATTRIBUTES, 'g'),
+            rePseudo = getRegExp(X.PSEUDO, 'g');
 
+        selector = Y.Selector.replaceShorthand(selector);
         while ( selector.length && getRegExp(X.SELECTOR).test(selector) ) {
             token = {
                 previous: token,
                 simple: RegExp.$1,
                 tag: RegExp.$2.toLowerCase() || '*',
                 predicate: RegExp.$3,
-                combinator: RegExp.$4,
-                predicates: {}
+                attributes: [],
+                pseudos: [],
+                combinator: RegExp.$4
             };
 
-            var selectors = Y.Selector.selectors;
-            var args;
-
-            if (token.predicate) {
-                var m;
-                for (var type in selectors) { // parse predicates
-                    m = token.predicate.match(getRegExp(selectors[type].pattern, 'g')); 
-                    if (m) {
-                        token.predicates[type] = [];
-                        for (var i = 0, len = m.length; i < len; ++i) {
-                            args = getRegExp(selectors[type].pattern, 'g').exec(m[i]);
-                            if (args) {
-                                args.shift(); // remove full match
-                                token.predicates[type].push(args); // to apply to type tests
-                            }
-                        }
-                    }
+            while (m = reAttr.exec(token.predicate)) {
+                if (aliases[m[1]]) { // convert reserved words, etc
+                    m[1] = aliases[m[1]];
                 }
+                token.attributes[token.attributes.length] = m.slice(1); // capture attribute tokens
+            }
+            
+            while (m = rePseudo.exec(token.predicate)) {
+                token.pseudos[token.pseudos.length] = m.slice(1); // capture pseudo tokens
             }
             
             if (token.previous) {
@@ -266,16 +299,62 @@ Selector.prototype = {
         return tokens;
     },
 
-    simpleFilter: function(nodes, simple) {
-        var result = [];
+    /**
+     * Filters a set of nodes based on a given CSS simple selector. 
+     * A simple selector does not contain combinators.
+     * @method simpleFilter
+     *
+     * @param {HTMLElement} node A reference to the HTMLElement being tested.
+     * @param {string} simple The Simple Selector to test the node against.
+     * @return{array} An array of nodes from the supplied array that match the given selector.
+     * @static
+     */
+    simpleFilter: function(nodes, simple, token) {
+        var result = [],
+            simpleTest = Y.Selector.simpleTest,
+            ops = Y.Selector.operators,
+            ps = Y.Selector.pseudos,
+            attributes = token.attributes,
+            attr,
+            tag = token.tag,
+            pseudos = token.pseudos;
+
+        outer:
         for (var i = 0, len = nodes.length; i < len; ++i) {
-            if (Y.Selector.simpleTest(nodes[i], simple)) {
-                result[result.length] = nodes[i];
+            if (tag != '*' && nodes[i].tagName.toLowerCase() != tag) {
+                continue; // tag match failed
+            } 
+
+            for (var j = 0, jlen = attributes.length; j < jlen; ++j) {
+                attr = attributes[j];
+                if (nodes[i][attr[0]]  === '' || // TODO: hasAttribute? What if title=""?
+                        (ops[attr[1]] &&
+                        !ops[attr[1]](nodes[i][attr[0]], attr[2]))
+                ) {
+                    continue outer;
+                }
             }
+
+            for (var j = 0, jlen = pseudos.length; j < jlen; ++j) {
+                if (ps[pseudos[j][0]] &&
+                        !ps[pseudos[j][0]](nodes[i], pseudos[j][1])) {
+                    continue outer;
+                }
+            }
+            result[result.length] = nodes[i];
         }
         return result;
     },
 
+    /**
+     * Retrieves a set of nodes based on a given CSS selector. 
+     * @method queryAll
+     *
+     * @param {string} selector The CSS Selector to test the node against.
+     * @param {HTMLElement} optional An HTMLElement to start the query from. Defaults to document.
+     * @return{array} An array of nodes that match the given selector.
+     * @static
+     */
     queryAll: function(selector, root) {
         root = root || document;
         var tokens = Y.Selector.tokenize(selector);
@@ -283,8 +362,8 @@ Selector.prototype = {
             nodes,
             token = tokens.shift();
 
-        if (token.predicates.id) { // use ID shortcut
-            nodes = [document.getElementById(token.predicates.id[0][0])];
+        if (getRegExp('#' + X.CAPTURE_IDENT).test(token.predicates)) { // use ID shortcut
+            nodes = [document.getElementById(RegExp.$1)];
         } else {
             nodes = root.getElementsByTagName(token.tag);
         }
@@ -292,10 +371,23 @@ Selector.prototype = {
         if (token.next) {
             result = filterByToken(nodes, token);
         } else {
-            result = Y.Selector.simpleFilter(nodes, selector);
+            result = Y.Selector.simpleFilter(nodes, selector, token);
         }
 
         return result;
+    },
+
+    /**
+     * Retrieves the first node that matches the given CSS selector. 
+     * @method query
+     *
+     * @param {string} selector The CSS Selector to test the node against.
+     * @param {HTMLElement} optional An HTMLElement to start the query from. Defaults to document.
+     * @return{HTMLElement} A DOM node that match the given selector.
+     * @static
+     */
+    query: function(selector, root) {
+        return Y.Selector.queryAll(selector, root)[0]; // TODO: break out so scanning stops after first node found
     }
 };
 
@@ -303,28 +395,31 @@ var filter = function(nodes, token, noCache) {
     var result = [],
         filtered = [],
         elements,
-        tests = Y.Selector.tokens,
         getBy = Y.Selector.combinators,
         node,
+        noCache = noCache || !!token.next,
+        simple = token.simple,
+        next = token.next,
+        comb = token.combinator,
         j;
 
     for (var i = 0, len = nodes.length; i < len; ++i) {
         node = nodes[i];
-        if ( (node._found) || !Y.Selector.simpleTest(node, token.simple, token) ) {
+        if ( (node._found) || !Y.Selector.simpleTest(node, simple, token) ) {
             continue; // already found or failed test
         }
 
-        if (token.next && token.combinator !== ',') { // follow combinators to preserve source order
-            elements = arguments.callee(getBy[token.combinator](node, token.next.tag), token.next, noCache);
+        if (token.next && token.combinator !== ',') {
+            elements = arguments.callee(getBy[comb](node, next.tag), next, noCache);
             if (elements.length) {
                 filtered = filtered.concat(elements);
             }
         } else {
-            if (!node._found) {
+            if (!noCache) {
                 node._found = true;
                 foundCache.push(node);
             }
-            result.push(node);
+            result[result.length] = node;
         }
     }
     return (result.length) ? result : filtered;
@@ -333,7 +428,7 @@ var filter = function(nodes, token, noCache) {
 var filterByToken = function(nodes, token, root, noCache) {
     var result = filter(nodes, token, noCache); 
 
-    if (token.next && token.combinator && token.combinator === ',') {
+    if (token.next && token.combinator === ',') {
         var elements = arguments.callee(root.getElementsByTagName(token.next.tagName),
                 token.next, root, noCache);
         if (elements.length) {
@@ -350,7 +445,11 @@ var regexCache = {};
 var clearFoundCache = function() {
     YAHOO.log('getBySelector: clearing found cache of ' + foundCache.length + ' elements');
     for (var i = 0, len = foundCache.length; i < len; ++i) {
-        delete foundCache[i]._found;
+        try { // IE no like delete
+            delete foundCache[i]._found;
+        } catch(e) {
+            foundCache[i].removeAttribute('_found');
+        }
     }
     foundCache = [];
     YAHOO.log('getBySelector: done clearing foundCache');
@@ -358,12 +457,10 @@ var clearFoundCache = function() {
 
 var getRegExp = function(str, flags) {
     flags = flags || '';
-    var re = regexCache[str];
-    if (!re) {
-        re = new RegExp(str, flags);
-        regexCache[str + flags] = re;
+    if (!regexCache[str + flags]) {
+        regexCache[str + flags] = new RegExp(str, flags);
     }
-    return re;
+    return regexCache[str + flags];
 };
 
 var trim = function(str) {
