@@ -858,7 +858,7 @@ var Dom = YAHOO.util.Dom,
                                 Dom.addClass(url, 'warning');
                                 YAHOO.log('Local file reference found, show local warning', 'warn', 'Editor');
                                 this.get('panel').setFooter(this.STR_LOCAL_FILE_WARNING);
-                            } else {
+                            } else if (this.currentElement[0]) {
                                 Dom.removeClass(url, 'warning');
                                 this.get('panel').setFooter(' ');
                                 if ((this.browser.webkit && !this.browser.webkit3) || this.browser.opera) {
