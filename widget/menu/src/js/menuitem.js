@@ -142,7 +142,7 @@ var Dom = YAHOO.util.Dom,
             value: false, 
             validator: Lang.isBoolean, 
             suppressEvent: true,
-            supercedes: ["text"]
+            supercedes: ["text", "selected"]
         },
     
         "SELECTED": { 
@@ -340,18 +340,6 @@ MenuItem.prototype = {
     value: null,
 
 
-    /**
-    * @property submenuIndicator
-    * @description Object reference to the <code>&#60;em&#62;</code> element 
-    * used to create the submenu indicator for the menu item.
-    * @default <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-    * level-one-html.html#ID-58190037">HTMLElement</a>
-    * @type <a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/
-    * level-one-html.html#ID-58190037">HTMLElement</a>
-    */
-    submenuIndicator: null,
-
-
 	/**
     * @property browser
     * @deprecated Use YAHOO.env.ua
@@ -535,7 +523,8 @@ MenuItem.prototype = {
                     this._createRootNodeStructure();
 
                     oConfig.queueProperty("text", p_oObject.text);
-                    
+                    oConfig.queueProperty("disabled", p_oObject.disabled);
+
                     this.value = p_oObject.value;
 
                     this.srcElement = p_oObject;
@@ -547,6 +536,7 @@ MenuItem.prototype = {
                     this._createRootNodeStructure();
 
                     oConfig.queueProperty("text", p_oObject.label);
+                    oConfig.queueProperty("disabled", p_oObject.disabled);
 
                     this.srcElement = p_oObject;
 
@@ -566,15 +556,8 @@ MenuItem.prototype = {
                     if (oAnchor) {
 
                         sURL = oAnchor.getAttribute("href");
-
-                        if (YAHOO.env.ua.ie) {
-            
-                            sURL = sURL.substring(
-                                document.location.href.length, sURL.length);
-            
-                        }
-
                         sTarget = oAnchor.getAttribute("target");
+
                         sText = oAnchor.innerHTML;
 
                     }
@@ -604,7 +587,7 @@ MenuItem.prototype = {
 
         if (this.element) {
 
-            sId = this.element.id;
+            sId = (this.srcElement || this.element).id;
 
             if (!sId) {
 
@@ -1128,99 +1111,79 @@ MenuItem.prototype = {
     configSelected: function (p_sType, p_aArgs, p_oItem) {
 
         var oConfig = this.cfg,
-            bSelected,
-            oElement,
-            oAnchor,
-            oSubmenu,
-            bChecked,
-            sState,
-            sCheckedState,
-            sSubmenuState,
-            sClassName,
-            sLabelClassName,
-            sCheckedClassName,
-            sLabelCheckedClassName,
-            sSubmenuClassName,
-            sLabelSubmenuClassName;
-
-
-        if (!oConfig.getProperty("disabled")) {
-
-            bSelected = p_aArgs[0];
-            oElement = this.element;
-            oAnchor = this._oAnchor;
-            bChecked = oConfig.getProperty("checked");
-            oSubmenu = oConfig.getProperty("submenu");
-            sState = "-selected";
-            sCheckedState = "-checked" + sState;
-            sSubmenuState = "-hassubmenu" + sState;
-            sClassName = this.CSS_CLASS_NAME + sState;
-            sLabelClassName = this.CSS_LABEL_CLASS_NAME + sState;
-            sCheckedClassName = this.CSS_CLASS_NAME + sCheckedState;
-            sLabelCheckedClassName = this.CSS_LABEL_CLASS_NAME + sCheckedState;
-            sSubmenuClassName = this.CSS_CLASS_NAME + sSubmenuState;
+            bSelected = p_aArgs[0],
+            oElement = this.element,
+            oAnchor = this._oAnchor,
+            bChecked = oConfig.getProperty("checked"),
+            oSubmenu = oConfig.getProperty("submenu"),
+            sState = "-selected",
+            sCheckedState = "-checked" + sState,
+            sSubmenuState = "-hassubmenu" + sState,
+            sClassName = this.CSS_CLASS_NAME + sState,
+            sLabelClassName = this.CSS_LABEL_CLASS_NAME + sState,
+            sCheckedClassName = this.CSS_CLASS_NAME + sCheckedState,
+            sLabelCheckedClassName = this.CSS_LABEL_CLASS_NAME + sCheckedState,
+            sSubmenuClassName = this.CSS_CLASS_NAME + sSubmenuState,
             sLabelSubmenuClassName = this.CSS_LABEL_CLASS_NAME + sSubmenuState;
 
 
-            if (YAHOO.env.ua.opera) {
+        if (YAHOO.env.ua.opera) {
 
-                oAnchor.blur();
+            oAnchor.blur();
+        
+        }
+
+
+        if (bSelected && !oConfig.getProperty("disabled")) {
+
+            Dom.addClass(oElement, sClassName);
+            Dom.addClass(oAnchor, sLabelClassName);
+
+
+            if (oSubmenu) {
+
+                Dom.addClass(oElement, sSubmenuClassName);
+                Dom.addClass(oAnchor, sLabelSubmenuClassName);
             
             }
 
 
-            if (bSelected) {
+            if (bChecked) {
 
-                Dom.addClass(oElement, sClassName);
-                Dom.addClass(oAnchor, sLabelClassName);
-
-
-                if (oSubmenu) {
-    
-                    Dom.addClass(oElement, sSubmenuClassName);
-                    Dom.addClass(oAnchor, sLabelSubmenuClassName);
-                
-                }
-
-
-                if (bChecked) {
-    
-                    Dom.addClass(oElement, sCheckedClassName);
-                    Dom.addClass(oAnchor, sLabelCheckedClassName);
-    
-                }
+                Dom.addClass(oElement, sCheckedClassName);
+                Dom.addClass(oAnchor, sLabelCheckedClassName);
 
             }
-            else {
-    
-                Dom.removeClass(oElement, sClassName);
-                Dom.removeClass(oAnchor, sLabelClassName);
+
+        }
+        else {
+
+            Dom.removeClass(oElement, sClassName);
+            Dom.removeClass(oAnchor, sLabelClassName);
 
 
-                if (oSubmenu) {
-    
-                    Dom.removeClass(oElement, sSubmenuClassName);
-                    Dom.removeClass(oAnchor, sLabelSubmenuClassName);
-                
-                }
+            if (oSubmenu) {
 
-            
-                if (bChecked) {
-    
-                    Dom.removeClass(oElement, sCheckedClassName);
-                    Dom.removeClass(oAnchor, sLabelCheckedClassName);
-    
-                }
-    
-            }
-
-
-            if (this.hasFocus() && YAHOO.env.ua.opera) {
-            
-                oAnchor.focus();
+                Dom.removeClass(oElement, sSubmenuClassName);
+                Dom.removeClass(oAnchor, sLabelSubmenuClassName);
             
             }
 
+        
+            if (bChecked) {
+
+                Dom.removeClass(oElement, sCheckedClassName);
+                Dom.removeClass(oAnchor, sLabelCheckedClassName);
+
+            }
+
+        }
+
+
+        if (this.hasFocus() && YAHOO.env.ua.opera) {
+        
+            oAnchor.focus();
+        
         }
 
     },
@@ -1888,14 +1851,21 @@ MenuItem.prototype = {
         if (!this.cfg.getProperty("disabled") && oParent && 
             oParent.cfg.getProperty("visible")) {
 
-            try {
 
-                this._oAnchor.blur();
+            var me = this;
             
-            } 
-            catch (e) {
-            
-            }
+            window.setTimeout(function () {
+
+                try {
+    
+                    me._oAnchor.blur();
+    
+                } 
+                catch (e) {
+                
+                }
+                
+            }, 0);
 
             this.blurEvent.fire();
 
