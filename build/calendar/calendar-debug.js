@@ -5831,6 +5831,12 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		this.submitEl = doc.getElementById(this.id + NAV.SUBMIT_SUFFIX);
 		this.cancelEl = doc.getElementById(this.id + NAV.CANCEL_SUFFIX);
 
+		if (YAHOO.env.ua.gecko && this.yearEl && this.yearEl.type == "text") {
+			// Avoid XUL error on focus, select [ https://bugzilla.mozilla.org/show_bug.cgi?id=236791, 
+			// supposedly fixed in 1.8.1, but there are reports of it still being around for methods other than blur ]
+			this.yearEl.setAttribute("autocomplete", "off");
+		}
+
 		this._setFirstLastElements();
 	},
 
