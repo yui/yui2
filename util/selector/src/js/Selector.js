@@ -197,11 +197,11 @@ Selector.prototype = {
 
         '+': function(node, tag) {
             var sib = node.nextSibling;
-            while (sib && !sib.tagName) {
+            while (sib && sib.nodeType !== 1) {
                 sib = sib.nextSibling;
             }
 
-            if (sib && (tag == '*' || sib.tagName.toLowerCase() == tag)) {
+            if (sib && (tag === '*' || sib.tagName.toLowerCase() === tag)) {
                 return [sib]; 
             }
             return [];
@@ -243,7 +243,7 @@ Selector.prototype = {
         var pseudos = token.pseudos;
 
         for (var i = 0, len = attr.length; i < len; ++i) {
-            if (!ops[attr[i][1]](node[attr[i][0]], attr[i][2])) {
+            if (ops[attr[i][1]] && !ops[attr[i][1]](node[attr[i][0]], attr[i][2])) {
                 return false;
             }
         }
@@ -310,6 +310,8 @@ Selector.prototype = {
      * @static
      */
     simpleFilter: function(nodes, simple, token) {
+        token = token || Y.Selector.tokenize(simple)[0];
+
         var result = [],
             simpleTest = Y.Selector.simpleTest,
             ops = Y.Selector.operators,
@@ -328,7 +330,7 @@ Selector.prototype = {
             for (var j = 0, jlen = attributes.length; j < jlen; ++j) {
                 attr = attributes[j];
                 if (nodes[i][attr[0]]  === '' || // TODO: hasAttribute? What if title=""?
-                        (ops[attr[1]] &&
+                        (ops[attr[1]] !== undefined &&
                         !ops[attr[1]](nodes[i][attr[0]], attr[2]))
                 ) {
                     continue outer;
@@ -397,7 +399,7 @@ var filter = function(nodes, token, noCache) {
         elements,
         getBy = Y.Selector.combinators,
         node,
-        noCache = noCache || !!token.next,
+        //noCache = noCache || !!token.next,
         simple = token.simple,
         next = token.next,
         comb = token.combinator,
@@ -405,20 +407,20 @@ var filter = function(nodes, token, noCache) {
 
     for (var i = 0, len = nodes.length; i < len; ++i) {
         node = nodes[i];
-        if ( (node._found) || !Y.Selector.simpleTest(node, simple, token) ) {
+        if ( node._found || !Y.Selector.simpleTest(node, simple, token) ) {
             continue; // already found or failed test
         }
 
-        if (token.next && token.combinator !== ',') {
-            elements = arguments.callee(getBy[comb](node, next.tag), next, noCache);
+        if (next && comb !== ',') {
+            elements = arguments.callee(getBy[comb](node, next.tag), next);
             if (elements.length) {
                 filtered = filtered.concat(elements);
             }
         } else {
-            if (!noCache) {
+            //if (!noCache) {
                 node._found = true;
                 foundCache.push(node);
-            }
+            //}
             result[result.length] = node;
         }
     }
