@@ -474,6 +474,7 @@ YAHOO.util.Connect =
 	asyncRequest:function(method, uri, callback, postData)
 	{
 		var o = (this._isFileUpload)?this.getConnectionObject(true):this.getConnectionObject();
+		var args = (callback && callback.argument)?callback.argument:null;
 
 		if(!o){
 			YAHOO.log('Unable to create connection object.', 'error', 'Connection');
@@ -551,11 +552,11 @@ YAHOO.util.Connect =
 			}
 
 			// Fire global custom event -- startEvent
-			this.startEvent.fire(o, (callback.argument)?callback.argument:null);
+			this.startEvent.fire(o, args);
 
 			if(o.startEvent){
 				// Fire transaction custom event -- startEvent
-				o.startEvent.fire(o, (callback.argument)?callback.argument:null);
+				o.startEvent.fire(o, args);
 			}
 
 			return o;
@@ -606,6 +607,7 @@ YAHOO.util.Connect =
 
     {
 		var oConn = this;
+		var args = (callback && callback.argument)?callback.argument:null;
 
 		if(callback && callback.timeout){
 			this._timeOut[o.tId] = window.setTimeout(function(){ oConn.abort(o, callback, true); }, callback.timeout);
@@ -626,11 +628,11 @@ YAHOO.util.Connect =
 					}
 
 					// Fire global custom event -- completeEvent
-					oConn.completeEvent.fire(o, (callback.argument)?callback.argument:null);
+					oConn.completeEvent.fire(o, args);
 
 					if(o.completeEvent){
 						// Fire transaction custom event -- completeEvent
-						o.completeEvent.fire(o, (callback.argument)?callback.argument:null);
+						o.completeEvent.fire(o, args);
 					}
 
 					oConn.handleTransactionResponse(o, callback);
@@ -654,6 +656,7 @@ YAHOO.util.Connect =
     handleTransactionResponse:function(o, callback, isAbort)
     {
 		var httpStatus, responseObject;
+		var args = (callback && callback.argument)?callback.argument:null;
 
 		try
 		{
@@ -673,7 +676,7 @@ YAHOO.util.Connect =
 		}
 
 		if(httpStatus >= 200 && httpStatus < 300 || httpStatus === 1223){
-			responseObject = this.createResponseObject(o, (callback && callback.argument)?callback.argument:undefined);
+			responseObject = this.createResponseObject(o, args);
 			if(callback && callback.success){
 				if(!callback.scope){
 					callback.success(responseObject);
@@ -704,7 +707,7 @@ YAHOO.util.Connect =
 				case 12031:
 				case 12152: // Connection closed by server.
 				case 13030: // See above comments for variable status.
-					responseObject = this.createExceptionObject(o.tId, (callback && callback.argument)?callback.argument:undefined, (isAbort?isAbort:false));
+					responseObject = this.createExceptionObject(o.tId, args, (isAbort?isAbort:false));
 					if(callback && callback.failure){
 						if(!callback.scope){
 							callback.failure(responseObject);
@@ -718,7 +721,7 @@ YAHOO.util.Connect =
 
 					break;
 				default:
-					responseObject = this.createResponseObject(o, (callback && callback.argument)?callback.argument:undefined);
+					responseObject = this.createResponseObject(o, args);
 					if(callback && callback.failure){
 						if(!callback.scope){
 							callback.failure(responseObject);
@@ -784,7 +787,7 @@ YAHOO.util.Connect =
 		obj.responseText = o.conn.responseText;
 		obj.responseXML = o.conn.responseXML;
 
-		if(typeof callbackArg !== undefined){
+		if(callbackArg){
 			obj.argument = callbackArg;
 		}
 
@@ -1132,10 +1135,11 @@ YAHOO.util.Connect =
 
 		// Each iframe has an id prefix of "yuiIO" followed
 		// by the unique transaction id.
+		var oConn = this;
 		var frameId = 'yuiIO' + o.tId;
 		var uploadEncoding = 'multipart/form-data';
 		var io = document.getElementById(frameId);
-		var oConn = this;
+		var args = (callback && callback.argument)?callback.argument:null;
 
 		// Track original HTML form attribute values.
 		var rawFormAttributes =
@@ -1168,11 +1172,11 @@ YAHOO.util.Connect =
 		this._formNode.submit();
 
 		// Fire global custom event -- startEvent
-		this.startEvent.fire(o, (callback.argument)?callback.argument:null);
+		this.startEvent.fire(o, args);
 
 		if(o.startEvent){
 			// Fire transaction custom event -- startEvent
-			o.startEvent.fire(o, (callback.argument)?callback.argument:null);
+			o.startEvent.fire(o, args);
 		}
 
 		// Start polling if a callback is present and the timeout
@@ -1215,11 +1219,11 @@ YAHOO.util.Connect =
 			}
 
 			// Fire global custom event -- completeEvent
-			oConn.completeEvent.fire(o, (callback.argument)?callback.argument:null);
+			oConn.completeEvent.fire(o, args);
 
 			if(o.completeEvent){
 				// Fire transaction custom event -- completeEvent
-				o.completeEvent.fire(o, (callback.argument)?callback.argument:null);
+				o.completeEvent.fire(o, args);
 			}
 
 			var obj = {};
@@ -1281,8 +1285,10 @@ YAHOO.util.Connect =
 	abort:function(o, callback, isTimeout)
 	{
 		var abortStatus;
+		var args = (callback && callback.argument)?callback.argument:null;
 
-		if(o.conn){
+
+		if(o && o.conn){
 			if(this.isCallInProgress(o)){
 				// Issue abort request
 				o.conn.abort();
@@ -1298,7 +1304,7 @@ YAHOO.util.Connect =
 				abortStatus = true;
 			}
 		}
-		else if(o.isUpload === true){
+		else if(o && o.isUpload === true){
 			var frameId = 'yuiIO' + o.tId;
 			var io = document.getElementById(frameId);
 
@@ -1324,11 +1330,11 @@ YAHOO.util.Connect =
 
 		if(abortStatus === true){
 			// Fire global custom event -- abortEvent
-			this.abortEvent.fire(o, (callback.argument)?callback.argument:null);
+			this.abortEvent.fire(o, args);
 
 			if(o.abortEvent){
 				// Fire transaction custom event -- abortEvent
-				o.abortEvent.fire(o, (callback.argument)?callback.argument:null);
+				o.abortEvent.fire(o, args);
 			}
 
 			this.handleTransactionResponse(o, callback, true);
