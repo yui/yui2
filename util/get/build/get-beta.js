@@ -113,14 +113,22 @@ YAHOO.util.Get = function() {
             }, win);
     };
 
-    // var _iframe = function(url, win) {
-    //     var id = "yui__dyn_" + (nidx++);
-    //     return _node("iframe", {
-    //             "id": id,
-    //             "name": id 
-    //             //,"src": url
-    //         }, win);
-    // };
+    /**
+     * Returns the data payload for callback functions
+     * @method _returnData
+     * @private
+     */
+    var _returnData = function(q) {
+        return {
+                tId: q.tId,
+                win: q.win,
+                data: q.data,
+                nodes: q.nodes,
+                purge: function() {
+                    _purge(this.tId);
+                }
+            };
+    };
 
     /*
      * The request failed, execute fail handler with whatever
@@ -130,20 +138,14 @@ YAHOO.util.Get = function() {
      * @param id {string} the id of the request
      * @private
      */
-    // var _fail = function(id) {
-    //     var q = queues[id], o;
-    //     // execute fail callback
-    //     if (q.onFailure) {
-    //         o = {
-    //             win: q.win,
-    //             data: q.data,
-    //             nodes: q.nodes,
-    //             purge: _purge
-    //         };
-    //         var sc=q.scope || q.win;
-    //         q.onFailure.call(sc, o);
-    //     }
-    // };
+    var _fail = function(id) {
+        var q = queues[id];
+        // execute failure callback
+        if (q.onFailure) {
+            var sc=q.scope || q.win;
+            q.onFailure.call(sc, _returnData(q));
+        }
+    };
 
     /**
      * The request is complete, so executing the requester's callback
@@ -152,42 +154,18 @@ YAHOO.util.Get = function() {
      * @private
      */
     var _finish = function(id) {
-        var q = queues[id], o;
+        var q = queues[id];
         q.finished = true;
 
         if (q.aborted) {
+            _fail(id);
             return;
         }
 
-        // execute callback
+        // execute success callback
         if (q.onSuccess) {
-            o = {
-                tId: q.tId,
-                win: q.win,
-                data: q.data,
-                nodes: q.nodes,
-                purge: _purge
-            };
-
-            // if (q.opts.sandbox) {
-            //     var ref = q.opts.sandbox.reference, refobj=q.win[ref];
-            //     //alert(ref + ", " + refobj);
-            //     //var src = "var " + ref + "=" + refobj.toSource();
-            //     var src = Function.toString.apply(refobj);
-            //     //var src = refobj.toSource().replace(/#1/, "var " + ref);
-            //     //alert(src);
-            //     var t = "(function() {\n",
-            //     //var t = "(function() {\nvar window=parent,document=parent.document,y=eval('" + q.sandboxid + ".YAHOO');",
-            //     //var t = "(function() {\nparent.MYYAHOO=eval('" + q.sandboxid + ".YAHOO.toSource()');",
-            //         b = "\nreturn " + ref + "\n})();";
-            //     o.reference = eval(t + src + b);
-            // }
-
             var sc=q.scope || q.win;
-
-            
-
-            q.onSuccess.call(sc, o);
+            q.onSuccess.call(sc, _returnData(q));
         }
     };
 
@@ -202,6 +180,7 @@ YAHOO.util.Get = function() {
         var q = queues[id];
 
         if (q.aborted) {
+            _fail(id);
             return;
         }
 
@@ -259,10 +238,10 @@ YAHOO.util.Get = function() {
 
     /**
      * Removes processed queues and corresponding nodes
-     * @method _purge
+     * @method _autoPurge
      * @private
      */
-    var _purge = function() {
+    var _autoPurge = function() {
 
         if (purging) {
             return;
@@ -272,15 +251,27 @@ YAHOO.util.Get = function() {
         for (var i in queues) {
             var q = queues[i];
             if (q.autopurge && q.finished) {
-                var n=q.nodes, l=n.length, d=q.win.document, 
-                    h=d.getElementsByTagName("head")[0];
-                for (var j=0; j<l; j=j+1) {
-                    h.removeChild(n[j]);
-                }
-                delete queues[i];
+                _purge(q.tId);
             }
         }
+
         purging = false;
+    };
+
+    /**
+     * Removes the nodes for the specified queue
+     * @method _purge
+     * @private
+     */
+    var _purge = function(tId) {
+        var q=queues[tId];
+        if (q) {
+            var n=q.nodes, l=n.length, d=q.win.document, 
+                h=d.getElementsByTagName("head")[0];
+            for (var i=0; i<l; i=i+1) {
+                h.removeChild(n[i]);
+            }
+        }
     };
 
     /**
@@ -298,47 +289,22 @@ YAHOO.util.Get = function() {
         opts = opts || {};
 
         if (qidx % YAHOO.util.Get.PURGE_THRESH === 0) {
-            _purge();
+            _autoPurge();
         }
 
-        var win = opts.win || window;
-
-        queues[id] = {
+        queues[id] = lang.merge(opts, {
             tId: id,
             type: type,
             url: url,
-            onSuccess: opts.onSuccess,
-            onFailure: opts.onFailure,
-            data: opts.data,
-            opts: opts,
-            win: win,
-            scope: opts.scope || win,
             finished: false,
             nodes: []
-        };
+        });
 
         var q = queues[id];
-
-        // if (opts.sandbox) {
-        //     var f = opts.iframe || sandboxFrame;
-        //     if (!f) {
-        //         var w = opts.win||window, d=w.document, b=d.getElementsByTagName("body")[0];
-        //         f = _iframe(opts.iframesrc || YAHOO.util.Get.IFRAME_SRC , w);
-        //         _track("iframe", f, "sandbox_iframe", null, win, q.url.length, function() {
-        //                     sandboxFrame = f;
-        //                     q.sandboxid = f.id;
-        //                     q.win = f.contentWindow || f;
-        //                     q.win.document.write('&nbsp;');
-        //                     _next(id);
-        //                     //lang.later(0, q, _next, id);
-        //                 });
-        //         b.insertBefore(f, b.firstChild);
-        //         return {
-        //             tId: id
-        //         };
-        //     }
-        //     q.win = f.contentWindow || f;
-        // }
+        q.win = q.win || window;
+        q.scope = q.scope || q.win;
+        q.autopurge = ("autopurge" in q) ? q.autopurge : 
+                      (type === "script") ? true : false;
 
         lang.later(0, q, _next, id);
 
@@ -417,8 +383,6 @@ YAHOO.util.Get = function() {
          * @default 20
          */
         PURGE_THRESH: 20,
-
-        //IFRAME_SRC: "../../build/get/assets/blank.html",
 
         /**
          * Abort a transaction

@@ -75,7 +75,7 @@ function loadReset() {
     for (var i=0; i<20; i=i+1) {
         YAHOO.util.Get.css("../../build/reset/reset.js",
                 {
-            autocleanup: true
+            autopurge: true
         });
     }
 }
@@ -93,7 +93,7 @@ YAHOO.util.Event.on(window, "load", function() {
 
 
     YAHOO.util.Get.css(["../../build/menu/assets/skins/sam/menu.css",
-        "../../build/logger/assets/skins/sam/logger.css"]);
+        "../../build/logger/assets/skins/sam/logger.css"], { } );
 
     YAHOO.log("css1 executed");
 
@@ -103,6 +103,9 @@ YAHOO.util.Event.on(window, "load", function() {
     YAHOO.util.Get.css(["../../../build/reset-fonts-grids/reset-fonts-grids.css"], {
             //win: document.getElementById("frame1").contentWindow
             //win: frame1
+            onSuccess: function(o) {
+                o.purge();
+            }
         });
 
     YAHOO.log("css2 executed");
@@ -116,8 +119,8 @@ YAHOO.util.Event.on(window, "load", function() {
             "../../build/connection/connection.js"
             //"../../build/menu/menu.js",
         ], {
-            onsuccess: function(o) {
-                YAHOO.log("onsuccess: " + YAHOO.lang.dump(o));
+            onSuccess: function(o) {
+                YAHOO.log("onsuccess: " + YAHOO.lang.dump(o.tId));
                 var el = document.getElementById("dd");
                 if (o.sandbox) {
                     var MYYAHOO = o.sandbox;
@@ -128,9 +131,9 @@ YAHOO.util.Event.on(window, "load", function() {
                     new YAHOO.util.DD(el);
                 }
 
-                o.purge();
+                //o.purge();
             },
-            onfail: function(o) {
+            onFailure: function(o) {
 
                 YAHOO.log("transaction failed");
 
