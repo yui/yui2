@@ -776,7 +776,7 @@ YAHOO.widget.Calendar.prototype = {
 		if (YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_SELECTABLE)) {
 			index = cell.id.split("cell")[1];
 			d = cal.cellDates[index];
-			date = new Date(d[0],d[1]-1,d[2]);
+			date = YAHOO.widget.DateMath.getDate(d[0],d[1]-1,d[2]);
 		
 			var link;
 
@@ -1251,7 +1251,7 @@ YAHOO.widget.Calendar.prototype = {
 		var val = args[0];
 		if (YAHOO.lang.isString(val)) {
 			val = this._parseDate(val);
-			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MINDATE.key, new Date(val[0],(val[1]-1),val[2]));
+			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MINDATE.key, YAHOO.widget.DateMath.getDate(val[0],(val[1]-1),val[2]));
 		}
 	},
 
@@ -1263,7 +1263,7 @@ YAHOO.widget.Calendar.prototype = {
 		var val = args[0];
 		if (YAHOO.lang.isString(val)) {
 			val = this._parseDate(val);
-			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MAXDATE.key, new Date(val[0],(val[1]-1),val[2]));
+			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MAXDATE.key, YAHOO.widget.DateMath.getDate(val[0],(val[1]-1),val[2]));
 		}
 	},
 	
@@ -1882,13 +1882,13 @@ YAHOO.widget.Calendar.prototype = {
 									var d1day = date1[2];
 									var d1year = date1[0];
 									
-									var d1 = new Date(d1year, d1month-1, d1day);
+									var d1 = YAHOO.widget.DateMath.getDate(d1year, d1month-1, d1day);
 	
 									var d2month = date2[1];
 									var d2day = date2[2];
 									var d2year = date2[0];
 	
-									var d2 = new Date(d2year, d2month-1, d2day);
+									var d2 = YAHOO.widget.DateMath.getDate(d2year, d2month-1, d2day);
 	
 									if (workingDate.getTime() >= d1.getTime() && workingDate.getTime() <= d2.getTime()) {
 										renderer = rArray[2];
@@ -2121,7 +2121,7 @@ YAHOO.widget.Calendar.prototype = {
 	*/
 	getDateByCellId : function(id) {
 		var date = this.getDateFieldsByCellId(id);
-		return new Date(date[0],date[1]-1,date[2]);
+		return YAHOO.widget.DateMath.getDate(date[0],date[1]-1,date[2]);
 	},
 	
 	/**
@@ -2748,7 +2748,7 @@ YAHOO.widget.Calendar.prototype = {
 		if (dateFieldArray instanceof Date) {
 			return dateFieldArray;
 		} else {
-			return new Date(dateFieldArray[0],dateFieldArray[1]-1,dateFieldArray[2]);
+			return YAHOO.widget.DateMath.getDate(dateFieldArray[0],dateFieldArray[1]-1,dateFieldArray[2]);
 		}
 	},
 	
@@ -2856,10 +2856,10 @@ YAHOO.widget.Calendar.prototype = {
 				month = parseInt(aMonthYear[this.cfg.getProperty(defCfg.MY_MONTH_POSITION.key)-1], 10)-1;
 				year = parseInt(aMonthYear[this.cfg.getProperty(defCfg.MY_YEAR_POSITION.key)-1], 10);
 
-				parsedDate = new Date(year, month, 1);
+				parsedDate = YAHOO.widget.DateMath.getDate(year, month, 1);
 			}
 		} else {
-			parsedDate = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+			parsedDate = YAHOO.widget.DateMath.getDate(this.today.getFullYear(), this.today.getMonth(), 1);
 		}
 		return parsedDate;
 	},
@@ -3011,8 +3011,8 @@ YAHOO.widget.Calendar.prototype = {
 	* @type Array[](Number[])
 	*/
 	_parseRange : function(startDate, endDate) {
-		var dCurrent = YAHOO.widget.DateMath.add(new Date(startDate[0],startDate[1]-1,startDate[2]),YAHOO.widget.DateMath.DAY,1);
-		var dEnd     = new Date(endDate[0],  endDate[1]-1,  endDate[2]);
+		var dCurrent = YAHOO.widget.DateMath.add(YAHOO.widget.DateMath.getDate(startDate[0],startDate[1]-1,startDate[2]),YAHOO.widget.DateMath.DAY,1);
+		var dEnd     = YAHOO.widget.DateMath.getDate(endDate[0],  endDate[1]-1,  endDate[2]);
 	
 		var results = [];
 		results.push(startDate);
@@ -3173,7 +3173,7 @@ s	 * Removes all custom renderers added to the Calendar through the addRenderer,
 		for (var d=0;d<selected.length;++d) {
 			var dateArray = selected[d];
 
-			var date = new Date(dateArray[0],dateArray[1]-1,dateArray[2]);
+			var date = YAHOO.widget.DateMath.getDate(dateArray[0],dateArray[1]-1,dateArray[2]);
 			returnDates.push(date);
 		}
 

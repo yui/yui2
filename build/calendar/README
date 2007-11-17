@@ -63,7 +63,24 @@ Calendar Release Notes
       prior to 2.4.0. 
 
 + Fixed performance issue, where the same custom renderer was being 
-  applied multiple times to the same cell. 
+  applied multiple times to the same cell.
+
++ Added getDate(year, month, date) factory method to the DateMath utility, 
+  which can be used to create JavaScript Date instances for years less 
+  than 100.
+
+  The default Date(year, month, date) constructor implementations across 
+  browsers, assume that if year < 100, the caller is referring to the 
+  nineteen hundreds, and the year is set to 19xx instead of xx (as with
+  the deprecated setYear method). However Date.setFullYear(xx) can 
+  be used to set dates below 100. The above factory method provides a 
+  construction mechanism consistent with setFullYear.
+
++ Changed Calendar/CalendarGroup/DateMath code to use the DateMath.getDate
+  method, so that 2 digit years are  not assumed to be in the 1900's. 
+
+  NOTE: Calendar's API already expects 4 digit date strings when referring 
+  to years after 999.
 
 *** version 2.3.1 *** 
 

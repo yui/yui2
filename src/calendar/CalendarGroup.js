@@ -801,16 +801,16 @@ YAHOO.widget.CalendarGroup.prototype = {
 	setMonth : function(month) {
 		month = parseInt(month, 10);
 		var currYear;
-		
+
 		var cfgPageDate = YAHOO.widget.CalendarGroup._DEFAULT_CONFIG.PAGEDATE.key;
-		
+
 		for (var p=0; p<this.pages.length; ++p) {
 			var cal = this.pages[p];
 			var pageDate = cal.cfg.getProperty(cfgPageDate);
 			if (p === 0) {
 				currYear = pageDate.getFullYear();
 			} else {
-				pageDate.setYear(currYear);
+				pageDate.setFullYear(currYear);
 			}
 			this._setMonthOnDate(pageDate, month+p); 
 			cal.cfg.setProperty(cfgPageDate, pageDate);
@@ -1019,11 +1019,11 @@ YAHOO.widget.CalendarGroup.prototype = {
 		var selected = this.cfg.getProperty(YAHOO.widget.CalendarGroup._DEFAULT_CONFIG.SELECTED.key);
 		for (var d=0;d<selected.length;++d) {
 			var dateArray = selected[d];
-	
-			var date = new Date(dateArray[0],dateArray[1]-1,dateArray[2]);
+
+			var date = YAHOO.widget.DateMath.getDate(dateArray[0],dateArray[1]-1,dateArray[2]);
 			returnDates.push(date);
 		}
-	
+
 		returnDates.sort( function(a,b) { return a-b; } );
 		return returnDates;
 	},

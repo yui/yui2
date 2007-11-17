@@ -161,7 +161,7 @@ YAHOO.widget.DateMath = {
 	* @return {Date}	January 1 of the calendar year specified.
 	*/
 	getJan1 : function(calendarYear) {
-		return new Date(calendarYear,0,1); 
+		return this.getDate(calendarYear,0,1);
 	},
 
 	/**
@@ -197,7 +197,7 @@ YAHOO.widget.DateMath = {
 		date = this.clearTime(date);
 		var nearestThurs = new Date(date.getTime() + (4 * this.ONE_DAY_MS) - ((date.getDay()) * this.ONE_DAY_MS));
 
-		var jan1 = new Date(nearestThurs.getFullYear(),0,1);
+		var jan1 = this.getDate(nearestThurs.getFullYear(),0,1);
 		var dayOfYear = ((nearestThurs.getTime() - jan1.getTime()) / this.ONE_DAY_MS) - 1;
 
 		var weekNum = Math.ceil((dayOfYear)/ 7);
@@ -241,7 +241,7 @@ YAHOO.widget.DateMath = {
 	* @return {Date}		The JavaScript Date representing the first day of the month
 	*/
 	findMonthStart : function(date) {
-		var start = new Date(date.getFullYear(), date.getMonth(), 1);
+		var start = this.getDate(date.getFullYear(), date.getMonth(), 1);
 		return start;
 	},
 
@@ -267,5 +267,36 @@ YAHOO.widget.DateMath = {
 	clearTime : function(date) {
 		date.setHours(12,0,0,0);
 		return date;
+	},
+
+	/**
+	 * Returns a new JavaScript Date object, representing the given year, month and date. Time fields (hr, min, sec, ms) on the new Date object
+	 * are set to 0. The method allows Date instances to be created with the a year less than 100. "new Date(year, month, date)" implementations 
+	 * set the year to 19xx if a year (xx) which is less than 100 is provided.
+	 * <p>
+	 * <em>NOTE:</em>Validation on argument values is not performed. It is the caller's responsibility to ensure
+	 * arguments are valid as per the ECMAScript-262 Date object specification for the new Date(year, month[, date]) constructor.
+	 * </p>
+	 * @method getDate
+	 * @param {Number} y Year.
+	 * @param {Number} m Month index from 0 (Jan) to 11 (Dec).
+	 * @param {Number} d (optional) Date from 1 to 31. If not provided, defaults to 1.
+	 * @return {Date} The JavaScript date object with year, month, date set as provided.
+	 */
+	getDate : function(y, m, d) {
+		var dt = null;
+		if (YAHOO.lang.isUndefined(d)) {
+			d = 1;
+		}
+		if (y >= 100) {
+			dt = new Date(y, m, d);
+		} else {
+			dt = new Date();
+			dt.setFullYear(y);
+			dt.setMonth(m);
+			dt.setDate(d);
+			dt.setHours(0,0,0,0);
+		}
+		return dt;
 	}
 };

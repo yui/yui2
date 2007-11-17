@@ -837,7 +837,7 @@ YAHOO.widget.DateMath = {
 	* @return {Date}	January 1 of the calendar year specified.
 	*/
 	getJan1 : function(calendarYear) {
-		return new Date(calendarYear,0,1); 
+		return this.getDate(calendarYear,0,1);
 	},
 
 	/**
@@ -873,7 +873,7 @@ YAHOO.widget.DateMath = {
 		date = this.clearTime(date);
 		var nearestThurs = new Date(date.getTime() + (4 * this.ONE_DAY_MS) - ((date.getDay()) * this.ONE_DAY_MS));
 
-		var jan1 = new Date(nearestThurs.getFullYear(),0,1);
+		var jan1 = this.getDate(nearestThurs.getFullYear(),0,1);
 		var dayOfYear = ((nearestThurs.getTime() - jan1.getTime()) / this.ONE_DAY_MS) - 1;
 
 		var weekNum = Math.ceil((dayOfYear)/ 7);
@@ -917,7 +917,7 @@ YAHOO.widget.DateMath = {
 	* @return {Date}		The JavaScript Date representing the first day of the month
 	*/
 	findMonthStart : function(date) {
-		var start = new Date(date.getFullYear(), date.getMonth(), 1);
+		var start = this.getDate(date.getFullYear(), date.getMonth(), 1);
 		return start;
 	},
 
@@ -943,6 +943,37 @@ YAHOO.widget.DateMath = {
 	clearTime : function(date) {
 		date.setHours(12,0,0,0);
 		return date;
+	},
+
+	/**
+	 * Returns a new JavaScript Date object, representing the given year, month and date. Time fields (hr, min, sec, ms) on the new Date object
+	 * are set to 0. The method allows Date instances to be created with the a year less than 100. "new Date(year, month, date)" implementations 
+	 * set the year to 19xx if a year (xx) which is less than 100 is provided.
+	 * <p>
+	 * <em>NOTE:</em>Validation on argument values is not performed. It is the caller's responsibility to ensure
+	 * arguments are valid as per the ECMAScript-262 Date object specification for the new Date(year, month[, date]) constructor.
+	 * </p>
+	 * @method getDate
+	 * @param {Number} y Year.
+	 * @param {Number} m Month index from 0 (Jan) to 11 (Dec).
+	 * @param {Number} d (optional) Date from 1 to 31. If not provided, defaults to 1.
+	 * @return {Date} The JavaScript date object with year, month, date set as provided.
+	 */
+	getDate : function(y, m, d) {
+		var dt = null;
+		if (YAHOO.lang.isUndefined(d)) {
+			d = 1;
+		}
+		if (y >= 100) {
+			dt = new Date(y, m, d);
+		} else {
+			dt = new Date();
+			dt.setFullYear(y);
+			dt.setMonth(m);
+			dt.setDate(d);
+			dt.setHours(0,0,0,0);
+		}
+		return dt;
 	}
 };
 
@@ -1721,7 +1752,7 @@ YAHOO.widget.Calendar.prototype = {
 		if (YAHOO.util.Dom.hasClass(cell, cal.Style.CSS_CELL_SELECTABLE)) {
 			index = cell.id.split("cell")[1];
 			d = cal.cellDates[index];
-			date = new Date(d[0],d[1]-1,d[2]);
+			date = YAHOO.widget.DateMath.getDate(d[0],d[1]-1,d[2]);
 		
 			var link;
 
@@ -2195,7 +2226,7 @@ YAHOO.widget.Calendar.prototype = {
 		var val = args[0];
 		if (YAHOO.lang.isString(val)) {
 			val = this._parseDate(val);
-			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MINDATE.key, new Date(val[0],(val[1]-1),val[2]));
+			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MINDATE.key, YAHOO.widget.DateMath.getDate(val[0],(val[1]-1),val[2]));
 		}
 	},
 
@@ -2207,7 +2238,7 @@ YAHOO.widget.Calendar.prototype = {
 		var val = args[0];
 		if (YAHOO.lang.isString(val)) {
 			val = this._parseDate(val);
-			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MAXDATE.key, new Date(val[0],(val[1]-1),val[2]));
+			this.cfg.setProperty(YAHOO.widget.Calendar._DEFAULT_CONFIG.MAXDATE.key, YAHOO.widget.DateMath.getDate(val[0],(val[1]-1),val[2]));
 		}
 	},
 	
@@ -2819,13 +2850,13 @@ YAHOO.widget.Calendar.prototype = {
 									var d1day = date1[2];
 									var d1year = date1[0];
 									
-									var d1 = new Date(d1year, d1month-1, d1day);
+									var d1 = YAHOO.widget.DateMath.getDate(d1year, d1month-1, d1day);
 	
 									var d2month = date2[1];
 									var d2day = date2[2];
 									var d2year = date2[0];
 	
-									var d2 = new Date(d2year, d2month-1, d2day);
+									var d2 = YAHOO.widget.DateMath.getDate(d2year, d2month-1, d2day);
 	
 									if (workingDate.getTime() >= d1.getTime() && workingDate.getTime() <= d2.getTime()) {
 										renderer = rArray[2];
@@ -3057,7 +3088,7 @@ YAHOO.widget.Calendar.prototype = {
 	*/
 	getDateByCellId : function(id) {
 		var date = this.getDateFieldsByCellId(id);
-		return new Date(date[0],date[1]-1,date[2]);
+		return YAHOO.widget.DateMath.getDate(date[0],date[1]-1,date[2]);
 	},
 	
 	/**
@@ -3675,7 +3706,7 @@ YAHOO.widget.Calendar.prototype = {
 		if (dateFieldArray instanceof Date) {
 			return dateFieldArray;
 		} else {
-			return new Date(dateFieldArray[0],dateFieldArray[1]-1,dateFieldArray[2]);
+			return YAHOO.widget.DateMath.getDate(dateFieldArray[0],dateFieldArray[1]-1,dateFieldArray[2]);
 		}
 	},
 	
@@ -3783,10 +3814,10 @@ YAHOO.widget.Calendar.prototype = {
 				month = parseInt(aMonthYear[this.cfg.getProperty(defCfg.MY_MONTH_POSITION.key)-1], 10)-1;
 				year = parseInt(aMonthYear[this.cfg.getProperty(defCfg.MY_YEAR_POSITION.key)-1], 10);
 
-				parsedDate = new Date(year, month, 1);
+				parsedDate = YAHOO.widget.DateMath.getDate(year, month, 1);
 			}
 		} else {
-			parsedDate = new Date(this.today.getFullYear(), this.today.getMonth(), 1);
+			parsedDate = YAHOO.widget.DateMath.getDate(this.today.getFullYear(), this.today.getMonth(), 1);
 		}
 		return parsedDate;
 	},
@@ -3938,8 +3969,8 @@ YAHOO.widget.Calendar.prototype = {
 	* @type Array[](Number[])
 	*/
 	_parseRange : function(startDate, endDate) {
-		var dCurrent = YAHOO.widget.DateMath.add(new Date(startDate[0],startDate[1]-1,startDate[2]),YAHOO.widget.DateMath.DAY,1);
-		var dEnd     = new Date(endDate[0],  endDate[1]-1,  endDate[2]);
+		var dCurrent = YAHOO.widget.DateMath.add(YAHOO.widget.DateMath.getDate(startDate[0],startDate[1]-1,startDate[2]),YAHOO.widget.DateMath.DAY,1);
+		var dEnd     = YAHOO.widget.DateMath.getDate(endDate[0],  endDate[1]-1,  endDate[2]);
 	
 		var results = [];
 		results.push(startDate);
@@ -4100,7 +4131,7 @@ s	 * Removes all custom renderers added to the Calendar through the addRenderer,
 		for (var d=0;d<selected.length;++d) {
 			var dateArray = selected[d];
 
-			var date = new Date(dateArray[0],dateArray[1]-1,dateArray[2]);
+			var date = YAHOO.widget.DateMath.getDate(dateArray[0],dateArray[1]-1,dateArray[2]);
 			returnDates.push(date);
 		}
 
@@ -4975,16 +5006,16 @@ YAHOO.widget.CalendarGroup.prototype = {
 	setMonth : function(month) {
 		month = parseInt(month, 10);
 		var currYear;
-		
+
 		var cfgPageDate = YAHOO.widget.CalendarGroup._DEFAULT_CONFIG.PAGEDATE.key;
-		
+
 		for (var p=0; p<this.pages.length; ++p) {
 			var cal = this.pages[p];
 			var pageDate = cal.cfg.getProperty(cfgPageDate);
 			if (p === 0) {
 				currYear = pageDate.getFullYear();
 			} else {
-				pageDate.setYear(currYear);
+				pageDate.setFullYear(currYear);
 			}
 			this._setMonthOnDate(pageDate, month+p); 
 			cal.cfg.setProperty(cfgPageDate, pageDate);
@@ -5193,11 +5224,11 @@ YAHOO.widget.CalendarGroup.prototype = {
 		var selected = this.cfg.getProperty(YAHOO.widget.CalendarGroup._DEFAULT_CONFIG.SELECTED.key);
 		for (var d=0;d<selected.length;++d) {
 			var dateArray = selected[d];
-	
-			var date = new Date(dateArray[0],dateArray[1]-1,dateArray[2]);
+
+			var date = YAHOO.widget.DateMath.getDate(dateArray[0],dateArray[1]-1,dateArray[2]);
 			returnDates.push(date);
 		}
-	
+
 		returnDates.sort( function(a,b) { return a-b; } );
 		return returnDates;
 	},
@@ -5496,6 +5527,249 @@ YAHOO.widget.Cal2up = YAHOO.widget.Calendar2up;
 YAHOO.widget.CalendarNavigator = function(cal) {
 	this.init(cal);
 };
+
+(function() {
+	// Setup static properties (inside anon fn, so that we can use shortcuts)
+	var CN = YAHOO.widget.CalendarNavigator;
+
+	/**
+	 * YAHOO.widget.CalendarNavigator.CLASSES contains constants
+	 * for the class values applied to the CalendarNaviatgator's 
+	 * DOM elements
+	 * @property YAHOO.widget.CalendarNavigator.CLASSES
+	 * @type Object
+	 * @static
+	 */
+	CN.CLASSES = {
+		/**
+		 * Class applied to the Calendar Navigator's bounding box
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV
+		 * @type String
+		 * @static
+		 */
+		NAV :"yui-cal-nav",
+		/**
+		 * Class applied to the Calendar/CalendarGroup's bounding box to indicate
+		 * the Navigator is currently visible
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE
+		 * @type String
+		 * @static
+		 */
+		NAV_VISIBLE: "yui-cal-nav-visible",
+		/**
+		 * Class applied to the Navigator mask's bounding box
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MASK
+		 * @type String
+		 * @static
+		 */
+		MASK : "yui-cal-nav-mask",
+		/**
+		 * Class applied to the year label/control bounding box
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR
+		 * @type String
+		 * @static
+		 */
+		YEAR : "yui-cal-nav-y",
+		/**
+		 * Class applied to the month label/control bounding box
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH
+		 * @type String
+		 * @static
+		 */
+		MONTH : "yui-cal-nav-m",
+		/**
+		 * Class applied to the submit/cancel button's bounding box
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS
+		 * @type String
+		 * @static
+		 */
+		BUTTONS : "yui-cal-nav-b",
+		/**
+		 * Class applied to buttons wrapping element
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTON
+		 * @type String
+		 * @static
+		 */
+		BUTTON : "yui-cal-nav-btn",
+		/**
+		 * Class applied to the validation error area's bounding box
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.ERROR
+		 * @type String
+		 * @static
+		 */
+		ERROR : "yui-cal-nav-e",
+		/**
+		 * Class applied to the year input control
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL
+		 * @type String
+		 * @static
+		 */
+		YEAR_CTRL : "yui-cal-nav-yc",
+		/**
+		 * Class applied to the month input control
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL
+		 * @type String
+		 * @static
+		 */
+		MONTH_CTRL : "yui-cal-nav-mc",
+		/**
+		 * Class applied to controls with invalid data (e.g. a year input field with invalid an year)
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.INVALID
+		 * @type String
+		 * @static
+		 */
+		INVALID : "yui-invalid",
+		/**
+		 * Class applied to default controls
+		 * @property YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT
+		 * @type String
+		 * @static
+		 */
+		DEFAULT : "yui-default"
+	};
+
+	/**
+	 * Object literal containing the default configuration values for the CalendarNavigator
+	 * The configuration object is expected to follow the format below, with the properties being
+	 * case sensitive.
+	 * <dl>
+	 * <dt>strings</dt>
+	 * <dd><em>Object</em> :  An object with the properties shown below, defining the string labels to use in the Navigator's UI
+	 *     <dl>
+	 *         <dt>month</dt><dd><em>String</em> : The string to use for the month label. Defaults to "Month".</dd>
+	 *         <dt>year</dt><dd><em>String</em> : The string to use for the year label. Defaults to "Year".</dd>
+	 *         <dt>submit</dt><dd><em>String</em> : The string to use for the submit button label. Defaults to "Okay".</dd>
+	 *         <dt>cancel</dt><dd><em>String</em> : The string to use for the cancel button label. Defaults to "Cancel".</dd>
+	 *         <dt>invalidYear</dt><dd><em>String</em> : The string to use for invalid year values. Defaults to "Year needs to be a number".</dd>
+	 *     </dl>
+	 * </dd>
+	 * <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
+	 * <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
+	 * </dl>
+	 * @property _DEFAULT_CFG
+	 * @protected
+	 * @type Object
+	 * @static
+	 */
+	CN._DEFAULT_CFG = {
+		strings : {
+			month: "Month",
+			year: "Year",
+			submit: "Okay",
+			cancel: "Cancel",
+			invalidYear : "Year needs to be a number"
+		},
+		monthFormat: YAHOO.widget.Calendar.LONG,
+		initialFocus: "year"
+	};
+
+	/**
+	 * The suffix added to the Calendar/CalendarGroup's ID, to generate
+	 * a unique ID for the Navigator and it's bounding box.
+	 * @property YAHOO.widget.CalendarNavigator.ID_SUFFIX
+	 * @static
+	 * @type String
+	 * @final
+	 */
+	CN.ID_SUFFIX = "_nav";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the month control.
+	 * @property YAHOO.widget.CalendarNavigator.MONTH_SUFFIX
+	 * @static
+	 * @type String 
+	 * @final
+	 */
+	CN.MONTH_SUFFIX = "_month";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the year control.
+	 * @property YAHOO.widget.CalendarNavigator.YEAR_SUFFIX
+	 * @static
+	 * @type String
+	 * @final
+	 */
+	CN.YEAR_SUFFIX = "_year";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the error bounding box.
+	 * @property YAHOO.widget.CalendarNavigator.ERROR_SUFFIX
+	 * @static
+	 * @type String
+	 * @final
+	 */
+	CN.ERROR_SUFFIX = "_error";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the "Cancel" button.
+	 * @property YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX
+	 * @static
+	 * @type String
+	 * @final
+	 */
+	CN.CANCEL_SUFFIX = "_cancel";
+	/**
+	 * The suffix added to the Navigator's ID, to generate
+	 * a unique ID for the "Submit" button.
+	 * @property YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX
+	 * @static
+	 * @type String
+	 * @final
+	 */
+	CN.SUBMIT_SUFFIX = "_submit";
+
+	/**
+	 * The number of digits to which the year input control is to be limited.
+	 * @property YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS
+	 * @static
+	 * @type Number
+	 */
+	CN.YR_MAX_DIGITS = 4;
+
+	/**
+	 * The amount by which to increment the current year value,
+	 * when the arrow up/down key is pressed on the year control
+	 * @property YAHOO.widget.CalendarNavigator.YR_MINOR_INC
+	 * @static
+	 * @type Number
+	 */
+	CN.YR_MINOR_INC = 1;
+
+	/**
+	 * The amount by which to increment the current year value,
+	 * when the page up/down key is pressed on the year control
+	 * @property YAHOO.widget.CalendarNavigator.YR_MAJOR_INC
+	 * @static
+	 * @type Number
+	 */
+	CN.YR_MAJOR_INC = 10;
+
+	/**
+	 * Artificial delay (in ms) between the time the Navigator is hidden
+	 * and the Calendar/CalendarGroup state is updated. Allows the user
+	 * the see the Calendar/CalendarGroup page changing. If set to 0
+	 * the Calendar/CalendarGroup page will be updated instantly
+	 * @property YAHOO.widget.CalendarNavigator.UPDATE_DELAY
+	 * @static
+	 * @type Number
+	 */
+	CN.UPDATE_DELAY = 50;
+
+	/**
+	 * Regular expression used to validate the year input
+	 * @property YAHOO.widget.CalendarNavigator.YR_PATTERN
+	 * @static
+	 * @type RegExp
+	 */
+	CN.YR_PATTERN = /^\d+$/;
+	/**
+	 * Regular expression used to trim strings
+	 * @property YAHOO.widget.CalendarNavigator.TRIM
+	 * @static
+	 * @type RegExp
+	 */
+	CN.TRIM = /^\s*(.*?)\s*$/;
+})();
 
 YAHOO.widget.CalendarNavigator.prototype = {
 
@@ -6475,248 +6749,5 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	__isMac : (navigator.userAgent.toLowerCase().indexOf("macintosh") != -1)
 
 };
-
-(function() {
-	// Setup static properties (inside anon fn, so that we can use shortcuts)
-	var CN = YAHOO.widget.CalendarNavigator;
-
-	/**
-	 * YAHOO.widget.CalendarNavigator.CLASSES contains constants
-	 * for the class values applied to the CalendarNaviatgator's 
-	 * DOM elements
-	 * @property YAHOO.widget.CalendarNavigator.CLASSES
-	 * @type Object
-	 * @static
-	 */
-	CN.CLASSES = {
-		/**
-		 * Class applied to the Calendar Navigator's bounding box
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV
-		 * @type String
-		 * @static
-		 */
-		NAV :"yui-cal-nav",
-		/**
-		 * Class applied to the Calendar/CalendarGroup's bounding box to indicate
-		 * the Navigator is currently visible
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.NAV_VISIBLE
-		 * @type String
-		 * @static
-		 */
-		NAV_VISIBLE: "yui-cal-nav-visible",
-		/**
-		 * Class applied to the Navigator mask's bounding box
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MASK
-		 * @type String
-		 * @static
-		 */
-		MASK : "yui-cal-nav-mask",
-		/**
-		 * Class applied to the year label/control bounding box
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR
-		 * @type String
-		 * @static
-		 */
-		YEAR : "yui-cal-nav-y",
-		/**
-		 * Class applied to the month label/control bounding box
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH
-		 * @type String
-		 * @static
-		 */
-		MONTH : "yui-cal-nav-m",
-		/**
-		 * Class applied to the submit/cancel button's bounding box
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTONS
-		 * @type String
-		 * @static
-		 */
-		BUTTONS : "yui-cal-nav-b",
-		/**
-		 * Class applied to buttons wrapping element
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.BUTTON
-		 * @type String
-		 * @static
-		 */
-		BUTTON : "yui-cal-nav-btn",
-		/**
-		 * Class applied to the validation error area's bounding box
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.ERROR
-		 * @type String
-		 * @static
-		 */
-		ERROR : "yui-cal-nav-e",
-		/**
-		 * Class applied to the year input control
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.YEAR_CTRL
-		 * @type String
-		 * @static
-		 */
-		YEAR_CTRL : "yui-cal-nav-yc",
-		/**
-		 * Class applied to the month input control
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.MONTH_CTRL
-		 * @type String
-		 * @static
-		 */
-		MONTH_CTRL : "yui-cal-nav-mc",
-		/**
-		 * Class applied to controls with invalid data (e.g. a year input field with invalid an year)
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.INVALID
-		 * @type String
-		 * @static
-		 */
-		INVALID : "yui-invalid",
-		/**
-		 * Class applied to default controls
-		 * @property YAHOO.widget.CalendarNavigator.CLASSES.DEFAULT
-		 * @type String
-		 * @static
-		 */
-		DEFAULT : "yui-default"
-	};
-
-	/**
-	 * Object literal containing the default configuration values for the CalendarNavigator
-	 * The configuration object is expected to follow the format below, with the properties being
-	 * case sensitive.
-	 * <dl>
-	 * <dt>strings</dt>
-	 * <dd><em>Object</em> :  An object with the properties shown below, defining the string labels to use in the Navigator's UI
-	 *     <dl>
-	 *         <dt>month</dt><dd><em>String</em> : The string to use for the month label. Defaults to "Month".</dd>
-	 *         <dt>year</dt><dd><em>String</em> : The string to use for the year label. Defaults to "Year".</dd>
-	 *         <dt>submit</dt><dd><em>String</em> : The string to use for the submit button label. Defaults to "Okay".</dd>
-	 *         <dt>cancel</dt><dd><em>String</em> : The string to use for the cancel button label. Defaults to "Cancel".</dd>
-	 *         <dt>invalidYear</dt><dd><em>String</em> : The string to use for invalid year values. Defaults to "Year needs to be a number".</dd>
-	 *     </dl>
-	 * </dd>
-	 * <dt>monthFormat</dt><dd><em>String</em> : The month format to use. Either YAHOO.widget.Calendar.LONG, or YAHOO.widget.Calendar.SHORT. Defaults to YAHOO.widget.Calendar.LONG</dd>
-	 * <dt>initialFocus</dt><dd><em>String</em> : Either "year" or "month" specifying which input control should get initial focus. Defaults to "year"</dd>
-	 * </dl>
-	 * @property _DEFAULT_CFG
-	 * @protected
-	 * @type Object
-	 * @static
-	 */
-	CN._DEFAULT_CFG = {
-		strings : {
-			month: "Month",
-			year: "Year",
-			submit: "Okay",
-			cancel: "Cancel",
-			invalidYear : "Year needs to be a number"
-		},
-		monthFormat: YAHOO.widget.Calendar.LONG,
-		initialFocus: "year"
-	};
-
-	/**
-	 * The suffix added to the Calendar/CalendarGroup's ID, to generate
-	 * a unique ID for the Navigator and it's bounding box.
-	 * @property YAHOO.widget.CalendarNavigator.ID_SUFFIX
-	 * @static
-	 * @type String
-	 * @final
-	 */
-	CN.ID_SUFFIX = "_nav";
-	/**
-	 * The suffix added to the Navigator's ID, to generate
-	 * a unique ID for the month control.
-	 * @property YAHOO.widget.CalendarNavigator.MONTH_SUFFIX
-	 * @static
-	 * @type String 
-	 * @final
-	 */
-	CN.MONTH_SUFFIX = "_month";
-	/**
-	 * The suffix added to the Navigator's ID, to generate
-	 * a unique ID for the year control.
-	 * @property YAHOO.widget.CalendarNavigator.YEAR_SUFFIX
-	 * @static
-	 * @type String
-	 * @final
-	 */
-	CN.YEAR_SUFFIX = "_year";
-	/**
-	 * The suffix added to the Navigator's ID, to generate
-	 * a unique ID for the error bounding box.
-	 * @property YAHOO.widget.CalendarNavigator.ERROR_SUFFIX
-	 * @static
-	 * @type String
-	 * @final
-	 */
-	CN.ERROR_SUFFIX = "_error";
-	/**
-	 * The suffix added to the Navigator's ID, to generate
-	 * a unique ID for the "Cancel" button.
-	 * @property YAHOO.widget.CalendarNavigator.CANCEL_SUFFIX
-	 * @static
-	 * @type String
-	 * @final
-	 */
-	CN.CANCEL_SUFFIX = "_cancel";
-	/**
-	 * The suffix added to the Navigator's ID, to generate
-	 * a unique ID for the "Submit" button.
-	 * @property YAHOO.widget.CalendarNavigator.SUBMIT_SUFFIX
-	 * @static
-	 * @type String
-	 * @final
-	 */
-	CN.SUBMIT_SUFFIX = "_submit";
-
-	/**
-	 * The number of digits to which the year input control is to be limited.
-	 * @property YAHOO.widget.CalendarNavigator.YR_MAX_DIGITS
-	 * @static
-	 * @type Number
-	 */
-	CN.YR_MAX_DIGITS = 4;
-
-	/**
-	 * The amount by which to increment the current year value,
-	 * when the arrow up/down key is pressed on the year control
-	 * @property YAHOO.widget.CalendarNavigator.YR_MINOR_INC
-	 * @static
-	 * @type Number
-	 */
-	CN.YR_MINOR_INC = 1;
-
-	/**
-	 * The amount by which to increment the current year value,
-	 * when the page up/down key is pressed on the year control
-	 * @property YAHOO.widget.CalendarNavigator.YR_MAJOR_INC
-	 * @static
-	 * @type Number
-	 */
-	CN.YR_MAJOR_INC = 10;
-
-	/**
-	 * Artificial delay (in ms) between the time the Navigator is hidden
-	 * and the Calendar/CalendarGroup state is updated. Allows the user
-	 * the see the Calendar/CalendarGroup page changing. If set to 0
-	 * the Calendar/CalendarGroup page will be updated instantly
-	 * @property YAHOO.widget.CalendarNavigator.UPDATE_DELAY
-	 * @static
-	 * @type Number
-	 */
-	CN.UPDATE_DELAY = 50;
-
-	/**
-	 * Regular expression used to validate the year input
-	 * @property YAHOO.widget.CalendarNavigator.YR_PATTERN
-	 * @static
-	 * @type RegExp
-	 */
-	CN.YR_PATTERN = /^\d+$/;
-	/**
-	 * Regular expression used to trim strings
-	 * @property YAHOO.widget.CalendarNavigator.TRIM
-	 * @static
-	 * @type RegExp
-	 */
-	CN.TRIM = /^\s*(.*?)\s*$/;
-})();
 
 YAHOO.register("calendar", YAHOO.widget.Calendar, {version: "@VERSION@", build: "@BUILD@"});
