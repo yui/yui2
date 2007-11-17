@@ -11,9 +11,6 @@ Fixed the following bugs:
   the boundaries of the browser viewport when the "constraintoviewport" 
   property is set to "true."
 
-+ Visible YAHOO.widget.ContextMenu instances no longer hide immediately after
-  being requested to appear in a new location on the page.
-
 + A submenu will now appear in the correct position when its parent menu 
   is scrolled.
 
@@ -101,6 +98,10 @@ Changes:
     - YAHOO.widget.MenuItem.prototype.DISABLED_SUBMENU_INDICATOR_TEXT
     - YAHOO.widget.MenuItem.prototype.CHECKED_TEXT
     - YAHOO.widget.MenuItem.prototype.DISABLED_CHECKED_TEXT
+    
+  The "submenuIndicator" property of YAHOO.widget.MenuItem has also 
+  been removed.
+
 
 + Modified the CSS class names used to represent the state of 
   YAHOO.widget.MenuItem and YAHOO.widget.MenuBarItem instances.  Previous to 
