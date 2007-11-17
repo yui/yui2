@@ -15,6 +15,9 @@ YAHOO.lang.JSON = {
      * @param filter {function} (optional) function(k,v) passed each key value pair of object literals, allowing pruning or altering values
      * @return {MIXED} the native JavaScript representation of the JSON string
      * @throws SyntaxError
+     * @method parse
+     * @static
+     * @public
      */
     parse : function (s,filter) {
         var j;
@@ -82,6 +85,9 @@ YAHOO.lang.JSON = {
      * @param w {Array} (optional) whitelist of acceptable object keys to include
      * @param d {number} (optional) depth limit to recurse objects/arrays (practical minimum 1)
      * @return {string} JSON string representation of the input
+     * @method stringify
+     * @static
+     * @public
      */
     stringify : function (o,w,d) {
 
