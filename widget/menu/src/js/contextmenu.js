@@ -32,16 +32,19 @@ YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
 };
 
+
 var Event = YAHOO.util.Event,
     ContextMenu = YAHOO.widget.ContextMenu,
 
-/**
-* Constant representing the name of the ContextMenu's events
-* @property EVENT_TYPES
-* @private
-* @final
-* @type Object
-*/
+
+
+    /**
+    * Constant representing the name of the ContextMenu's events
+    * @property EVENT_TYPES
+    * @private
+    * @final
+    * @type Object
+    */
     EVENT_TYPES = {
 
         "TRIGGER_CONTEXT_MENU": "triggerContextMenu",
@@ -65,6 +68,24 @@ var Event = YAHOO.util.Event,
         }
     
     };
+
+
+/**
+* @method position
+* @description "beforeShow" event handler used to position the contextmenu.
+* @private
+* @param {String} p_sType String representing the name of the event that 
+* was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {Array} p_aPos Array representing the xy position for the context menu.
+*/
+function position(p_sType, p_aArgs, p_aPos) {
+
+    this.cfg.setProperty("xy", p_aPos);
+    
+    this.beforeShowEvent.unsubscribe(position, p_aPos);
+
+}
 
 
 YAHOO.lang.extend(ContextMenu, YAHOO.widget.Menu, {
@@ -239,6 +260,7 @@ _removeEventHandlers: function() {
 // Private event handlers
 
 
+
 /**
 * @method _onTriggerClick
 * @description "click" event handler for the HTML element(s) identified as the 
@@ -272,11 +294,14 @@ _onTriggerClick: function(p_oEvent, p_oMenu) {
 */
 _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
 
-    if(p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
+    if (p_oEvent.type == "mousedown" && !p_oEvent.ctrlKey) {
 
         return;
 
     }
+
+
+    var aXY;
 
 
     /*
@@ -288,21 +313,35 @@ _onTriggerContextMenu: function(p_oEvent, p_oMenu) {
     Event.stopEvent(p_oEvent);
 
 
-    // Hide any other ContextMenu instances that might be visible
-
-    YAHOO.widget.MenuManager.hideVisible();
-
-
     this.contextEventTarget = Event.getTarget(p_oEvent);
 
     this.triggerContextMenuEvent.fire(p_oEvent);
 
 
+    // Hide any other Menu instances that might be visible
+
+    YAHOO.widget.MenuManager.hideVisible();
+    
+
+
     if(!this._bCancelled) {
 
         // Position and display the context menu
-    
-        this.cfg.setProperty("xy", Event.getXY(p_oEvent));
+
+        aXY = Event.getXY(p_oEvent);
+
+
+        if (!YAHOO.util.Dom.inDocument(this.element)) {
+
+            this.beforeShowEvent.subscribe(position, aXY);
+
+        }
+        else {
+
+            this.cfg.setProperty("xy", aXY);
+        
+        }
+
 
         this.show();
 
@@ -373,7 +412,7 @@ destroy: function() {
     // Remove the DOM event handlers from the current trigger(s)
 
     this._removeEventHandlers();
-    
+
 
     // Continue with the superclass implementation of this method
 
