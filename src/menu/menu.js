@@ -1414,6 +1414,8 @@ _configureSubmenu: function (p_oItem) {
 },
 
 
+
+
 /**
 * @method _subscribeToItemEvents
 * @description Subscribes a menu to a menu item's event.
@@ -1426,6 +1428,8 @@ _subscribeToItemEvents: function (p_oItem) {
     p_oItem.focusEvent.subscribe(this._onMenuItemFocus);
 
     p_oItem.blurEvent.subscribe(this._onMenuItemBlur);
+
+    p_oItem.destroyEvent.subscribe(this._onMenuItemDestroy, p_oItem, this);
 
     p_oItem.cfg.configChangedEvent.subscribe(this._onMenuItemConfigChange,
         p_oItem, this);
@@ -2021,20 +2025,61 @@ _onClick: function (p_sType, p_aArgs) {
 
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
-        oItemCfg,
         oSubmenu,
+        bInMenuAnchor = false,
+        oRoot,
+        sId,
         sURL,
-        oRoot;
+        nHashPos,
+        nLen;
 
 
     if (oItem && !oItem.cfg.getProperty("disabled")) {
 
-        oItemCfg = oItem.cfg;
-        oSubmenu = oItemCfg.getProperty("submenu");
-        sURL = oItemCfg.getProperty("url");
-        
+        oSubmenu = oItem.cfg.getProperty("submenu");
 
-        if ((sURL.substr(0,1) == "#") && !this.cfg.getProperty("target")) {
+        
+        /*
+             Check if the URL of the anchor is pointing to an element that is 
+             a child of the menu.
+        */
+        
+        sURL = oItem.cfg.getProperty("url");
+
+        
+        if (sURL) {
+
+            nHashPos = sURL.indexOf("#");
+
+            nLen = sURL.length;
+
+
+            if (nHashPos != -1) {
+
+                sURL = sURL.substr(nHashPos, nLen);
+    
+                nLen = sURL.length;
+
+
+                if (nLen > 1) {
+
+                    sId = sURL.substr(1, nLen);
+
+                    bInMenuAnchor = Dom.isAncestor(this.element, sId);
+                    
+                }
+                else if (nLen === 1) {
+
+                    bInMenuAnchor = true;
+                
+                }
+
+            }
+        
+        }
+
+
+        if (bInMenuAnchor && !oItem.cfg.getProperty("target")) {
 
             Event.preventDefault(oEvent);
 
@@ -3150,6 +3195,23 @@ _onMenuItemBlur: function (p_sType, p_aArgs) {
 
 
 /**
+* @method _onMenuItemDestroy
+* @description "destroy" event handler for the menu's items.
+* @private
+* @param {String} p_sType String representing the name of the event 
+* that was fired.
+* @param {Array} p_aArgs Array of arguments sent when the event was fired.
+* @param {YAHOO.widget.MenuItem} p_oItem Object representing the menu item 
+* that fired the event.
+*/
+_onMenuItemDestroy: function (p_sType, p_aArgs, p_oItem) {
+
+    this._removeItemFromGroupByValue(p_oItem.groupIndex, p_oItem);
+
+},
+
+
+/**
 * @method _onMenuItemConfigChange
 * @description "configchange" event handler for the menu's items.
 * @private
@@ -3736,6 +3798,8 @@ configDisabled: function (p_sType, p_aArgs, p_oMenu) {
 
         if (bDisabled) {
 
+            this.clearActiveItem(true);
+
             Dom.addClass(this.element, "disabled");
 
             this.itemAddedEvent.subscribe(this._onItemAdded);
@@ -3768,7 +3832,7 @@ onRender: function (p_sType, p_aArgs) {
         var oElement = this.element,
             oShadow = this._shadow;
     
-        if (oShadow) {
+        if (oShadow && oElement) {
 
             oShadow.style.width = (oElement.offsetWidth + 6) + "px";
             oShadow.style.height = (oElement.offsetHeight + 1) + "px";
@@ -4681,6 +4745,98 @@ initDefaultConfig: function () {
 
     var oConfig = this.cfg;
 
+
+    // Module documentation overrides
+
+    /**
+    * @config effect
+    * @description Object or array of objects representing the ContainerEffect 
+    * classes that are active for animating the container.  When set this 
+    * property is automatically applied to all submenus.
+    * @type Object
+    * @default null
+    */
+
+    // Overlay documentation overrides
+
+
+    /**
+    * @config x
+    * @description Number representing the absolute x-coordinate position of 
+    * the Menu.  This property is only applied when the "position" 
+    * configuration property is set to dynamic.
+    * @type Number
+    * @default null
+    */
+    
+
+    /**
+    * @config y
+    * @description Number representing the absolute y-coordinate position of 
+    * the Menu.  This property is only applied when the "position" 
+    * configuration property is set to dynamic.
+    * @type Number
+    * @default null
+    */
+
+
+    /**
+    * @description Array of the absolute x and y positions of the Menu.  This 
+    * property is only applied when the "position" configuration property is 
+    * set to dynamic.
+    * @config xy
+    * @type Number[]
+    * @default null
+    */
+    
+
+    /**
+    * @config context
+    * @description Array of context arguments for context-sensitive positioning.  
+    * The format is: [id or element, element corner, context corner]. 
+    * For example, setting this property to ["img1", "tl", "bl"] would 
+    * align the Mnu's top left corner to the context element's 
+    * bottom left corner.  This property is only applied when the "position" 
+    * configuration property is set to dynamic.
+    * @type Array
+    * @default null
+    */
+    
+    
+    /**
+    * @config fixedcenter
+    * @description Boolean indicating if the Menu should be anchored to the 
+    * center of the viewport.  This property is only applied when the 
+    * "position" configuration property is set to dynamic.
+    * @type Boolean
+    * @default false
+    */
+
+    
+    /**
+    * @config zindex
+    * @description Number representing the CSS z-index of the Menu.  This 
+    * property is only applied when the "position" configuration property is 
+    * set to dynamic.
+    * @type Number
+    * @default null
+    */
+    
+    
+    /**
+    * @config iframe
+    * @description Boolean indicating whether or not the Menu should 
+    * have an IFRAME shim; used to prevent SELECT elements from 
+    * poking through an Overlay instance in IE6.  When set to "true", 
+    * the iframe shim is created when the Menu instance is intially
+    * made visible.  This property is only applied when the "position" 
+    * configuration property is set to dynamic and is automatically applied 
+    * to all submenus.
+    * @type Boolean
+    * @default true for IE6 and below, false for all other browsers.
+    */
+
+
 	// Add configuration attributes
 
     /*
@@ -4719,7 +4875,9 @@ initDefaultConfig: function () {
     /**
     * @config constraintoviewport
     * @description Boolean indicating if the menu will try to remain inside 
-    * the boundaries of the size of viewport.
+    * the boundaries of the size of viewport.  This property is only applied 
+    * when the "position" configuration property is set to dynamic and is 
+    * automatically applied to all submenus.
     * @default true
     * @type Boolean
     */
@@ -4793,7 +4951,9 @@ initDefaultConfig: function () {
     * @config showdelay
     * @description Number indicating the time (in milliseconds) that should 
     * expire before a submenu is made visible when the user mouses over 
-    * the menu's items.
+    * the menu's items.  This property is only applied when the "position" 
+    * configuration property is set to dynamic and is automatically applied 
+    * to all submenus.
     * @default 250
     * @type Number
     */
@@ -4809,7 +4969,9 @@ initDefaultConfig: function () {
     /**
     * @config hidedelay
     * @description Number indicating the time (in milliseconds) that should 
-    * expire before the menu is hidden.
+    * expire before the menu is hidden.  This property is only applied when 
+    * the "position" configuration property is set to dynamic and is 
+    * automatically applied to all submenus.
     * @default 0
     * @type Number
     */
@@ -4830,6 +4992,8 @@ initDefaultConfig: function () {
     * expire before a submenu is hidden when the user mouses out of a menu item 
     * heading in the direction of a submenu.  The value must be greater than or 
     * equal to the value specified for the "showdelay" configuration property.
+    * This property is only applied when the "position" configuration property 
+    * is set to dynamic and is automatically applied to all submenus.
     * @default 250
     * @type Number
     */
@@ -4845,7 +5009,9 @@ initDefaultConfig: function () {
     /**
     * @config clicktohide
     * @description Boolean indicating if the menu will automatically be 
-    * hidden if the user clicks outside of it.
+    * hidden if the user clicks outside of it.  This property is only 
+    * applied when the "position" configuration property is set to dynamic 
+    * and is automatically applied to all submenus.
     * @default true
     * @type Boolean
     */
@@ -4880,7 +5046,8 @@ initDefaultConfig: function () {
     * @config scrollincrement
     * @description Number used to control the scroll speed of a menu.  Used to 
     * increment the "scrollTop" property of the menu's body by when a menu's 
-    * content is scrolling.
+    * content is scrolling.  When set this property is automatically applied 
+    * to all submenus.
     * @default 1
     * @type Number
     */
@@ -4898,7 +5065,8 @@ initDefaultConfig: function () {
     /**
     * @config minscrollheight
     * @description Number defining the minimum threshold for the "maxheight" 
-    * configuration property.
+    * configuration property.  When set this property is automatically applied 
+    * to all submenus.
     * @default 90
     * @type Number
     */
@@ -4935,10 +5103,11 @@ initDefaultConfig: function () {
 
     /**
     * @config classname
-    * @description CSS class to be applied to the menu's root 
-    * <code>&#60;div&#62;</code> element.  The specified class(es) are 
-    * appended in addition to the default class as specified by the menu's
-    * CSS_CLASS_NAME constant.
+    * @description String representing the CSS class to be applied to the 
+    * menu's root <code>&#60;div&#62;</code> element.  The specified class(es)  
+    * are appended in addition to the default class as specified by the menu's
+    * CSS_CLASS_NAME constant. When set this property is automatically 
+    * applied to all submenus.
     * @default null
     * @type String
     */

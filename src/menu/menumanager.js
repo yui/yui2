@@ -264,11 +264,11 @@
                     dynamically positioned menus
                 */
                 
-                for (var i in m_oMenus) {
+                for (var i in m_oVisibleMenus) {
         
-                    if (YAHOO.lang.hasOwnProperty(m_oMenus, i)) {
+                    if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus, i)) {
         
-                        oMenu = m_oMenus[i];
+                        oMenu = m_oVisibleMenus[i];
         
                         if (oMenu.cfg.getProperty("clicktohide") && 
                             !(oMenu instanceof YAHOO.widget.MenuBar) && 
