@@ -457,9 +457,7 @@
                         
                         oMenu.show();
 
-                        alert(oMenu.body.style.height);
-
-                        Assert.areEqual(oMenu.element.offsetHeight, 100, "The offsetHeight of the menu's element should be 100.");
+                        Assert.areEqual(oMenu.element.offsetHeight, (YAHOO.env.ua.ie ? 98 : 100), "The offsetHeight of the menu's element should be " + (YAHOO.env.ua.ie ? 98 : 100) + ".");
                         Assert.isTrue(Dom.hasClass(oMenu.body, "yui-menu-body-scrolled"), "The Menu doe not have the correct CSS class name applied.");
 
                         oMenu.hide();
