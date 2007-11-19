@@ -278,6 +278,11 @@ Selector.prototype = {
             };
 
             var attr;
+            while (m = rePseudo.exec(token.predicate)) { // process pseudos first to avoid false pos with :not
+                token.predicate = token.predicate.replace(m[0], ''); // remove matched string from predicate
+                token.pseudos[token.pseudos.length] = m.slice(1); // capture pseudo tokens
+            }
+            
             while (m = reAttr.exec(token.predicate)) {
                 if (aliases[m[1]]) { // convert reserved words, etc
                     m[1] = aliases[m[1]];
@@ -287,10 +292,6 @@ Selector.prototype = {
                     attr[1] = ''; // test for existence if no operator
                 }
                 token.attributes[token.attributes.length] = attr;
-            }
-            
-            while (m = rePseudo.exec(token.predicate)) {
-                token.pseudos[token.pseudos.length] = m.slice(1); // capture pseudo tokens
             }
             
             if (token.previous) {
