@@ -7,6 +7,7 @@ package com.yahoo.yui
 	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
+	import flash.system.Security;
 
 	public class YUIAdapter extends Sprite
 	{
@@ -77,6 +78,13 @@ package com.yahoo.yui
 		{
 			this.elementID = this.loaderInfo.parameters["elementID"];
 			this.javaScriptEventHandler = this.loaderInfo.parameters["eventHandler"];
+			
+			var allowedDomain:String = this.loaderInfo.parameters["allowedDomain"];
+			if(allowedDomain)
+			{
+				Security.allowDomain(allowedDomain);
+				this.log("allowing: " + allowedDomain);
+			}
 		}
 		
 		protected function log(message:Object, category:String = null):void

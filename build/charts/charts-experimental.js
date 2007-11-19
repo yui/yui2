@@ -326,7 +326,10 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		var swfObj = new deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor, expressInstall);
 
 		//make sure we can communicate with ExternalInterface
-		swfObj.addVariable("allowScriptAccess", "always");
+		swfObj.addParam("allowScriptAccess", "always");
+		
+		//again, a useful ExternalInterface trick
+		swfObj.addVariable("allowedDomain", document.location.hostname);
 
 		//tell the SWF which HTML element it is in
 		swfObj.addVariable("elementID", swfID);

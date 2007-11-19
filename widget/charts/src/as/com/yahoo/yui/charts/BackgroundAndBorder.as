@@ -266,8 +266,18 @@ package com.yahoo.yui.charts
 		 */
 		private function loaderCompleteHandler(event:Event):void
 		{
-			this._imageDefaultWidth = this.imageLoader.content.width;
-			this._imageDefaultHeight = this.imageLoader.content.height;
+			try
+			{
+				this._imageDefaultWidth = this.imageLoader.content.width;
+				this._imageDefaultHeight = this.imageLoader.content.height;
+			}
+			catch(error:SecurityError)
+			{
+				//we don't have crossdomain permission
+				//unload the image because it is useless to us at this point anyway
+				this.imageLoader.unload();
+				this.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR, false, false, error.message));
+			}
 			this.invalidate(InvalidationType.SIZE);
 		}
 		
