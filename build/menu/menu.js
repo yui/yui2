@@ -8,7 +8,6 @@
 * context menus, or application-style menu bars with just a small amount of 
 * scripting.</p><p>The Menu family of controls features:</p>
 * <ul>
-*    <li>Screen-reader accessibility.</li>
 *    <li>Keyboard and mouse navigation.</li>
 *    <li>A rich event model that provides access to all of a menu's 
 *    interesting moments.</li>
