@@ -1048,7 +1048,7 @@ package
 		
 		private function backgroundLoadErrorHandler(event:ErrorEvent):void
 		{
-			this.log(event.text);
+			this.log(event.text, LoggerCategory.ERROR);
 		}
 		
 		private function createMarkerSkin(imagePath:String, series:ISeries):InstanceFactory
