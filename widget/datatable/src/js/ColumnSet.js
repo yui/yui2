@@ -10,10 +10,109 @@
  * @class ColumnSet
  * @uses YAHOO.util.EventProvider
  * @constructor
- * @param aHeaders {Object[]} Array of object literals that define header cells.
+ * @param aDefinitions {Object[]} Array of object literals that define header cells.
  */
-YAHOO.widget.ColumnSet = function(aHeaders) {
+YAHOO.widget.ColumnSet = function(aDefinitions) {
     this._sName = "instance" + YAHOO.widget.ColumnSet._nCount;
+
+    this._init(aDefinitions);
+
+    YAHOO.widget.ColumnSet._nCount++;
+    YAHOO.log("ColumnSet initialized", "info", this.toString());
+};
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Internal class variable to index multiple ColumnSet instances.
+ *
+ * @property ColumnSet._nCount
+ * @type Number
+ * @private
+ * @static
+ */
+YAHOO.widget.ColumnSet._nCount = 0;
+
+/**
+ * Unique instance name.
+ *
+ * @property _sName
+ * @type String
+ * @private
+ */
+YAHOO.widget.ColumnSet.prototype._sName = null;
+
+/**
+ * Array of object literal Column definitions passed to the constructor.
+ *
+ * @property _aDefinitions
+ * @type Object[]
+ * @private
+ */
+YAHOO.widget.ColumnSet.prototype._aDefinitions = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public member variables
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Top-down tree representation of Column hierarchy.
+ *
+ * @property tree
+ * @type YAHOO.widget.Column[]
+ */
+YAHOO.widget.ColumnSet.prototype.tree = null;
+
+/**
+ * Flattened representation of all Columns.
+ *
+ * @property flat
+ * @type YAHOO.widget.Column[]
+ * @default []
+ */
+YAHOO.widget.ColumnSet.prototype.flat = null;
+
+/**
+ * Array of Columns that map one-to-one to a table column.
+ *
+ * @property keys
+ * @type YAHOO.widget.Column[]
+ * @default []
+ */
+YAHOO.widget.ColumnSet.prototype.keys = null;
+
+/**
+ * ID index of nested parent hierarchies for HEADERS accessibility attribute.
+ *
+ * @property headers
+ * @type String[]
+ * @default []
+ */
+YAHOO.widget.ColumnSet.prototype.headers = null;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Initializes ColumnSet instance with data from Column definitions.
+ *
+ * @method _init
+ * @param aDefinitions {Object[]} Array of object literals that define header cells.
+ * @private
+ */
+
+YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
+    aDefinitions = aDefinitions.slice();
+    this._aDefinitions = aDefinitions;
 
     // DOM tree representation of all Columns
     var tree = [];
@@ -156,9 +255,15 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     };
 
     // Parse out Column instances from the array of object literals
-    if(YAHOO.lang.isArray(aHeaders)) {
-        parseColumns(aHeaders);
+    if(YAHOO.lang.isArray(aDefinitions)) {
+        parseColumns(aDefinitions);
     }
+    else {
+        YAHOO.log("Could not initialize ColumnSet due to invalid definitions","error");
+        return null;
+    }
+
+    var i;
 
     // Determine ROWSPAN value for each Column in the tree
     var parseTreeForRowspan = function(tree) {
@@ -210,9 +315,10 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     };
     parseTreeForRowspan(tree);
 
-
-
-
+    // Store tree index values
+    for(i=0; i<tree[0].length; i++) {
+        tree[0][i]._nTreeIndex = i;
+    }
 
     // Store header relationships in an array for HEADERS attribute
     var recurseAncestorsForHeaders = function(i, oColumn) {
@@ -221,7 +327,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
             recurseAncestorsForHeaders(i, oColumn.parent);
         }
     };
-    for(var i=0; i<keys.length; i++) {
+    for(i=0; i<keys.length; i++) {
         headers[i] = [];
         recurseAncestorsForHeaders(i, keys[i]);
         headers[i] = headers[i].reverse();
@@ -232,76 +338,7 @@ YAHOO.widget.ColumnSet = function(aHeaders) {
     this.flat = flat;
     this.keys = keys;
     this.headers = headers;
-
-    YAHOO.widget.ColumnSet._nCount++;
-    YAHOO.log("ColumnSet initialized", "info", this.toString());
 };
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal class variable to index multiple ColumnSet instances.
- *
- * @property ColumnSet._nCount
- * @type Number
- * @private
- * @static
- */
-YAHOO.widget.ColumnSet._nCount = 0;
-
-/**
- * Unique instance name.
- *
- * @property _sName
- * @type String
- * @private
- */
-YAHOO.widget.ColumnSet.prototype._sName = null;
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Public member variables
-//
-/////////////////////////////////////////////////////////////////////////////
-
-/**
- * Top-down tree representation of Column hierarchy.
- *
- * @property tree
- * @type YAHOO.widget.Column[]
- */
-YAHOO.widget.ColumnSet.prototype.tree = null;
-
-/**
- * Flattened representation of all Columns.
- *
- * @property flat
- * @type YAHOO.widget.Column[]
- * @default []
- */
-YAHOO.widget.ColumnSet.prototype.flat = null;
-
-/**
- * Array of Columns that map one-to-one to a table column.
- *
- * @property keys
- * @type YAHOO.widget.Column[]
- * @default []
- */
-YAHOO.widget.ColumnSet.prototype.keys = null;
-
-/**
- * ID index of nested parent hierarchies for HEADERS accessibility attribute.
- *
- * @property headers
- * @type String[]
- * @default []
- */
-YAHOO.widget.ColumnSet.prototype.headers = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -318,6 +355,17 @@ YAHOO.widget.ColumnSet.prototype.headers = null;
 
 YAHOO.widget.ColumnSet.prototype.toString = function() {
     return "ColumnSet " + this._sName;
+};
+
+/**
+ * Public accessor to the definitions array.
+ *
+ * @method getDefinitions
+ * @return {Object[]} Array of object literal definitions passed to the constructor.
+ */
+
+YAHOO.widget.ColumnSet.prototype.getDefinitions = function() {
+    return this._aDefinitions;
 };
 
 /**
@@ -380,7 +428,7 @@ YAHOO.widget.ColumnSet.prototype.getColumn = function(column) {
  * @namespace YAHOO.widget
  * @class Column
  * @constructor
- * @param oConfigs {Object} Object literal of configuration values.
+ * @param oConfigs {Object} Object literal of definitions.
  */
 YAHOO.widget.Column = function(oConfigs) {
     // Object literal defines Column attributes
@@ -390,6 +438,9 @@ YAHOO.widget.Column = function(oConfigs) {
                 this[sConfig] = oConfigs[sConfig];
             }
         }
+        
+        //TODO: by reference or by value?
+        this._oDefinition = oConfigs;
     }
 };
 
@@ -428,13 +479,35 @@ YAHOO.widget.Column.prototype._sName = null;
 YAHOO.widget.Column.prototype._sId = null;
 
 /**
- * Reference to Column's current position index within its ColumnSet's keys array, if applicable.
+ * Object literal definition.
+ *
+ * @property _oDefinition
+ * @type Object
+ * @private
+ */
+YAHOO.widget.Column.prototype._oDefinition = null;
+
+/**
+ * Reference to Column's current position index within its ColumnSet's keys
+ * array, if applicable. This property only applies to non-nested and bottom-
+ * level child Columns.
  *
  * @property _nKeyIndex
  * @type Number
  * @private
  */
 YAHOO.widget.Column.prototype._nKeyIndex = null;
+
+/**
+ * Reference to Column's current position index within its ColumnSet's tree
+ * array, if applicable. This property only applies to non-nested and top-
+ * level parent Columns.
+ *
+ * @property _nTreeIndex
+ * @type Number
+ * @private
+ */
+YAHOO.widget.Column.prototype._nTreeIndex = null;
 
 /**
  * Number of table cells the Column spans.
@@ -470,7 +543,7 @@ YAHOO.widget.Column.prototype._oParent = null;
  * @type HTMLElement
  * @private
  */
-YAHOO.widget.Column.prototype._elCol = null;
+//YAHOO.widget.Column.prototype._elCol = null;
 
 /**
  * The DOM reference to the associated TH element.
@@ -635,6 +708,16 @@ YAHOO.widget.Column.prototype.getId = function() {
 };
 
 /**
+ * Returns object literal definition.
+ *
+ * @method getDefinition
+ * @return {Object} Object literal definition.
+ */
+YAHOO.widget.Column.prototype.getDefinition = function() {
+    return this._oDefinition;
+};
+
+/**
  * Returns unique Column key.
  *
  * @method getKey
@@ -645,13 +728,27 @@ YAHOO.widget.Column.prototype.getKey = function() {
 };
 
 /**
- * Public accessor returns Column's current position index within its ColumnSet's keys array, if applicable.
+ * Public accessor returns Column's current position index within its
+ * ColumnSet's keys array, if applicable. Only non-nested and bottom-level
+ * child Columns will return a value.
  *
  * @method getKeyIndex
  * @return {Number} Position index, or null.
  */
 YAHOO.widget.Column.prototype.getKeyIndex = function() {
     return this._nKeyIndex;
+};
+
+/**
+ * Public accessor returns Column's current position index within its
+ * ColumnSet's tree array, if applicable. Only non-nested and top-level parent
+ * Columns will return a value;
+ *
+ * @method getTreeIndex
+ * @return {Number} Position index, or null.
+ */
+YAHOO.widget.Column.prototype.getTreeIndex = function() {
+    return this._nTreeIndex;
 };
 
 /**
@@ -697,7 +794,7 @@ YAHOO.widget.Column.prototype.getRowspan = function() {
  * @return {HTMLElement} COL element.
  */
 YAHOO.widget.Column.prototype.getColEl = function() {
-    return this._elCol;
+    //return this._elCol;
 };
 
 /**
@@ -877,13 +974,13 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
 
     // IE workaround for bug 1118318:
     // ...reinstate scrolltop
-    if(this.nOrigScrollTop !== null) {
+    /*if(this.nOrigScrollTop !== null) {
         //this.datatable._elContainer.scrollTop = this.nOrigScrollTop; // This doesn't work for some reason...
     }
     
     if(this.datatable.bFixedScrollBlockWorkaround) {
         this.datatable.syncColWidths();
-    }
+    }*/
 
     // Reset resizer
     var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
@@ -902,19 +999,34 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
  * @param e {string} The mousedown event
  */
 YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
-    // IE workaround for bug 1118318:
+    /*// IE workaround for bug 1118318:
     // Reset any scrolltop...
     this.nOrigScrollTop = null;
     if(this.datatable._elContainer.scrollTop > 0) {
         this.nOrigScrollTop = this.datatable._elContainer.scrollTop;
         this.datatable._elContainer.scrollTop = 0;
-    }
+    }*/
 
-    this.startWidth = this.headCell.offsetWidth;
+    this.startWidth = this.headCell.firstChild.offsetWidth;
     this.startX = YAHOO.util.Event.getXY(e)[0];
+    
+    var minWidth = parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"),10) || 0;
+    minWidth += parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"),10) || 0;
+    YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"), "warn");
+    YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"), "warn");
+    YAHOO.log(minWidth,"warn");
+
     if(this.datatable.getTbodyEl() && (this.datatable.getTbodyEl().rows.length > 0)) {
         this.bodyCell = this.datatable.getTbodyEl().rows[0].cells[this.headCell.yuiCellIndex];
+        minWidth += parseInt(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingLeft"),10) || 0;
+        minWidth += parseInt(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingRight"),10) || 0;
     }
+
+    YAHOO.log(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingLeft"), "warn");
+    YAHOO.log(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingRight"), "warn");
+    YAHOO.log(minWidth,"warn");
+    
+    this.minWidth = minWidth;
 };
 
 /**
@@ -924,7 +1036,16 @@ YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
  * @param e {string} The drag event
  */
 YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
-    try {
+        var newX = YAHOO.util.Event.getXY(e)[0];
+        if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
+            var offsetX = newX - this.startX;
+            var newWidth = this.startWidth + offsetX;
+            if(newWidth > this. minWidth) {
+                this.datatable.setColumnWidth(this.column, newWidth+"px");
+            }
+        }
+
+/*    try {
         var newX = YAHOO.util.Event.getXY(e)[0];
         var offsetX = newX - this.startX;
         var newWidth = this.startWidth + offsetX;
@@ -967,6 +1088,7 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
     }
     catch(e) {
     }
+*/
 };
 
 

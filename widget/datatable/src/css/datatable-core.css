@@ -1,9 +1,9 @@
 /*foundational css*/
-th .yui-dt-header {
+th .yui-dt-colhead {
     position:relative;
 }
 
-th .yui-dt-label {
+th .yui-dt-colheadliner {
     position:relative;
 }
 
@@ -18,20 +18,85 @@ th .yui-dt-label {
     zoom:1; /* needed to block events in ie */
 }
 
-/* foundational scrolling css */
-.yui-dt-scrollable thead tr {
-    *position:relative;  /* for ie */
-}
-.yui-dt-scrollable  {
-    *overflow-y:auto; /* for ie */
+/* foundational scrolling css FROM MATT
+TODO: clean redundancies */
+/*.yui-dt table {border-collapse:collapse;} skin*/
+/*.yui-dt thead th {text-align:left;} skin */
+
+/* variables */
+.yui-dt-scrollable {
+    xpadding-top:24px; /* thead height */ /* TODO: add dynamically */ /* orig 24px */
+    xmargin-bottom:-24px; /* thead height */ /* TODO: add dynamically */ /* orig 24px */
 }
 
-.yui-dt-scrollblock thead, .yui-dt-scrollblock .yui-dt-scrollbody {
-    display:block; /* for safari and opera */
+.yui-dt thead tr {
+    /*background-color:#d5d5d5;*/ /*IE: TH border-color*/
 }
 
-.yui-dt-scrollbody {
-    overflow:auto;overflow-x:hidden; /* for opera */
+/*.yui-dt tbody {
+    border-top:#a9a9a9; skin
+}*/
+
+/*TODO: is this necessary?
+.yui-dt thead th.yui-dt-first div,
+.yui-dt tbody td.yui-dt-first div {
+    overflow:hidden;
+    width:5em;
+}*/
+
+.yui-dt thead div,
+.yui-dt tbody div {
+    overflow:hidden;
+}
+
+/*.yui-dt thead th {
+    background:#ccc url(http://yui.yahooapis.com/2.3.1/build/assets/skins/sam/sprite.png) repeat-x 0 0; skin
+}*/
+
+/*.yui-dt .yui-dt-odd td {background:#f1f7ff;} skin */
+
+/*.yui-dt th,
+.yui-dt td {
+    border-right:1px solid #d5d5d5; skin
+    padding:3px 5px;
+}*/
+
+/*.yui-dt tbody th,
+.yui-dt td {
+    border-bottom:1px solid #d5d5d5; skin
+}*/
+
+/* constants */
+.yui-dt-scrollable {
+    position:relative; /* contain abs thead overflow */
+    overflow:hidden;
+
+}
+
+.yui-dt-scrollable .yui-dt-liner {
+    overflow:auto;
+    width:100%;
+    height:100%;
+}
+
+.yui-dt-scrollable table {
+    xheight:100%;
+    xwidth:100%;
+}
+
+.yui-dt-scrollable thead {
+    _margin-right:-16px;
+    display:block;
+    position:absolute;
+    *position:static;
+    left:0;
+    top:0;
+}
+
+.yui-dt-scrollable thead tr{  /*TODO: breaks nested headers in IE*/
+    *position: absolute;
+    *left: 0;
+    *top: 0;
 }
 
 /* foundational editor css */
