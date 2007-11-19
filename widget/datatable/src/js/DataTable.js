@@ -306,14 +306,14 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                     var pag0 = document.createElement("span");
                     pag0.id = this.id + "-paginator0";
                     YAHOO.util.Dom.addClass(pag0, YAHOO.widget.DataTable.CLASS_PAGINATOR);
-                    pag0 = this._elContainer.insertBefore(pag0, this._elTable);
+                    pag0 = this._elContainer.parentNode.insertBefore(pag0, this._elContainer);
                     aContainerEls.push(pag0);
 
                     // One after TABLE
                     var pag1 = document.createElement("span");
                     pag1.id = this.id + "-paginator1";
                     YAHOO.util.Dom.addClass(pag1, YAHOO.widget.DataTable.CLASS_PAGINATOR);
-                    pag1 = this._elContainer.insertBefore(pag1, this._elTable.nextSibling);
+                    pag1 = this._elContainer.parentNode.insertBefore(pag1, this._elContainer.nextSibling);
                     aContainerEls.push(pag1);
 
                     // Add containers directly to tracker
