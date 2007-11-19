@@ -148,8 +148,8 @@ Selector.prototype = {
             return !Y.Selector.simpleTest(node, simple);
         },
 
-        'contains': function(node, str) { // TODO: unit test
-            return node.indexOf(str) > -1;
+        'contains': function(node, str) {
+            return node.innerHTML.indexOf(str) > -1;
         }
     },
 
@@ -238,7 +238,7 @@ Selector.prototype = {
         } 
 
         var ops = Y.Selector.operators;
-        var ps = Y.Selector.operators;
+        var ps = Y.Selector.pseudos;
         var attr = token.attributes;
         var pseudos = token.pseudos;
 
@@ -277,11 +277,16 @@ Selector.prototype = {
                 combinator: RegExp.$4
             };
 
+            var attr;
             while (m = reAttr.exec(token.predicate)) {
                 if (aliases[m[1]]) { // convert reserved words, etc
                     m[1] = aliases[m[1]];
                 }
-                token.attributes[token.attributes.length] = m.slice(1); // capture attribute tokens
+                attr = m.slice(1); // capture attribute tokens
+                if (attr[1] === undefined) {
+                    attr[1] = ''; // test for existence if no operator
+                }
+                token.attributes[token.attributes.length] = attr;
             }
             
             while (m = rePseudo.exec(token.predicate)) {
