@@ -13,18 +13,11 @@
 YAHOO.util.Get = function() {
 
     /**
-     * hash of timer handles to deal with simultaneus script inserts
-     * @property timers
-     * @private
-     */
-    var timers = {}, 
-        
-    /**
      * hash of queues to manage multiple requests
      * @property queues
      * @private
      */
-        queues={}, 
+    var queues={}, 
         
     /**
      * queue index used to generate transaction ids
@@ -185,21 +178,38 @@ YAHOO.util.Get = function() {
         }
 
         if (loaded) {
-            q.url.shift();
+            q.url.shift(); 
+            if (q.varName) {
+                q.varName.shift(); 
+            }
         } else {
             // This is the first pass: make sure the url is an array
             q.url = (lang.isString(q.url)) ? [q.url] : q.url;
+            if (q.varName) {
+                q.varName = (lang.isString(q.varName)) ? [q.varName] : q.varName;
+            }
         }
 
-        if (q.url.length === 0) {
+        var w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], n;
 
-            // Safari workaround - add an extra script node.  When
-            // this one is done we know the script in the previous
-            // one is ready.
-            if (q.type === "script" && ua.webkit && !q.finalpass) {
-                q.finalpass = true;
+        if (q.url.length === 0) {
+            // Safari 2.x workaround - There is no way to know when 
+            // a script is ready in versions of Safari prior to 3.x.
+            // Adding an extra node reduces the problem, but doesn't
+            // eliminate it completely because the browser executes
+            // them asynchronously. 
+            if (q.type === "script" && ua.webkit && ua.webkit < 420 && 
+                    !q.finalpass && !q.varName) {
+                // Add another script node.  This does not guarantee that the
+                // scripts will execute in order, but it does appear to fix the
+                // problem on fast connections more effectively than using an
+                // arbitrary timeout.  It is possible that the browser does
+                // block subsequent script execution in this case for a limited
+                // time.
                 var extra = _scriptNode(null, q.win);
-                _track(q.type, extra, id, "safari_extra", q.win, 1);
+                extra.innerHTML='YAHOO.util.Get._finalize("' + id + '");';
+                q.nodes.push(extra); h.appendChild(extra);
+
             } else {
                 _finish(id);
             }
@@ -207,7 +217,6 @@ YAHOO.util.Get = function() {
             return;
         } 
 
-        var w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], n;
 
         var url = q.url[0];
 
@@ -230,8 +239,8 @@ YAHOO.util.Get = function() {
         // FireFox does not support the onload event for link nodes, so there is
         // no way to make the css requests synchronous. This means that the css 
         // rules in multiple files could be applied out of order in this browser
-        // if a later request returns before an earlier one.
-        if (ua.gecko && q.type === "css") {
+        // if a later request returns before an earlier one.  Safari too.
+        if ((ua.webkit || ua.gecko) && q.type === "css") {
             _next(id, url);
         }
     };
@@ -331,8 +340,9 @@ YAHOO.util.Get = function() {
      */
     var _track = function(type, n, id, url, win, qlength, trackfn) {
         var f = trackfn || _next;
+
+        // IE supports the readystatechange event for script and css nodes
         if (ua.ie) {
-            // IE supports the readystatechange event for script and css nodes
             n.onreadystatechange = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
@@ -340,25 +350,67 @@ YAHOO.util.Get = function() {
                 }
             };
 
+        // webkit prior to 3.x is problemmatic
         } else if (ua.webkit) {
-            // poll the document readyState.  When the readyState is complete
-            // or loaded, it is safe to insert the next item.  Script contents
-            // may not be ready yet, so we still need another workaround for
-            // the last script
-            timers[id] = setInterval(function(){
-                var rs=win.document.readyState;
-                if ("loaded" === rs || "complete" === rs) {
-                    clearInterval(timers[id]);
-                    timers[id] = null;
-                    f(id, url);
-                }
-            }, YAHOO.util.Get.POLL_FREQ); 
 
-        } else {
-            // FireFox and Opera support the onload event for script nodes.
-            // Opera, but not FF, supports the onload event for link nodes
+            if (type === "script") {
+
+                // Safari 3.x supports the load event for script nodes (DOM2)
+                if (ua.webkit > 419) {
+
+                    n.addEventListener("load", function() {
+                        f(id, url);
+                    });
+
+                // Nothing can be done with Safari < 3.x except to pause and hope
+                // for the best, particularly after last script is inserted. The
+                // scripts will always execute in the order they arrive, not
+                // necessarily the order in which they were inserted.  To support
+                // script nodes with complete reliability in these browsers, script
+                // nodes either need to invoke a function in the window once they
+                // are loaded or the implementer needs to provide a well-known
+                // property that the utility can poll for.
+                } else {
+                    // Poll for the existence of the named variable, if it
+                    // was supplied.
+                    var q = queues[id];
+                    if (q.varName) {
+                        var freq=YAHOO.util.Get.POLL_FREQ;
+                        q.maxattempts = YAHOO.util.Get.TIMEOUT/freq;
+                        q.attempts = 0;
+                        q._cache = q.varName[0].split(".");
+                        q.timer = lang.later(freq, q, function(o) {
+                            var a=this._cache, l=a.length, w=this.win, i;
+                            for (i=0; i<l; i=i+1) {
+                                w = w[a[i]];
+                                if (!w) {
+                                    // if we have exausted our attempts, give up
+                                    this.attempts++;
+                                    if (this.attempts++ > this.maxattempts) {
+                                        q.timer.cancel();
+                                        _fail(id);
+                                    } else {
+                                    }
+                                    return;
+                                }
+                            }
+                            
+
+                            q.timer.cancel();
+                            f(id, url);
+
+                        }, null, true);
+                    } else {
+                        lang.later(YAHOO.util.Get.POLL_FREQ, null, f, [id, url]);
+                    }
+                }
+            } 
+
+        // FireFox and Opera support onload (but not DOM2 in FF) handlers for
+        // script nodes.  Opera, but not FF, supports the onload event for link
+        // nodes.
+        } else { 
             n.onload = function() {
-                //lang.later(20, null, f, [id, url]);
                 f(id, url);
             };
         }
@@ -383,6 +435,26 @@ YAHOO.util.Get = function() {
          * @default 20
          */
         PURGE_THRESH: 20,
+
+        /**
+         * The length time to poll for varName when loading a script in
+         * Safari 2.x before the transaction fails.
+         * property TIMEOUT
+         * @static
+         * @type int
+         * @default 2000
+         */
+        TIMEOUT: 2000,
+        
+        /**
+         * Called by the the helper for detecting script load in Safari
+         * @method _finalize
+         * @param id {string} the transaction id
+         * @private
+         */
+        _finalize: function(id) {
+            lang.later(0, null, _finish, id);
+        },
 
         /**
          * Abort a transaction
@@ -459,6 +531,16 @@ YAHOO.util.Get = function() {
          * data that is supplied to the callback when the script(s) are
          * loaded.
          * </dd>
+         * <dt>varName</dt>
+         * <dd>
+         * variable that should be available when a script is finished
+         * loading.  Used to help Safari 2.x and below with script load 
+         * detection.  The type of this property should match what was
+         * passed into the url parameter: if loading a single url, a
+         * string can be supplied.  If loading multiple scripts, you
+         * must supply an array that contains the variable name for
+         * each script.
+         * </dd>
          * </dl>
          * <pre>
          * // assumes yahoo, dom, and event are already on the page
@@ -530,18 +612,6 @@ YAHOO.util.Get = function() {
          */
         css: function(url, opts) {
             return _queue("css", url, opts); 
-        },
-
-        /** Generates an HTML element, this is not appended to a document
-         * @method createNode
-         * @static
-         * @param type {string} the type of element
-         * @param attr {string} the attributes
-         * @param win {Window} optional window to create the element in
-         * @return {HTMLElement} the generated node
-         */
-        createNode: function(type, attr, win) {
-            return _node(type, attr, win);
         }
     };
 }();

@@ -7,6 +7,9 @@
 
     function log(msg) {
 
+        YAHOO.log(msg);
+
+        /*
         if (typeof console !== "undefined" && console.debug) {
             console.debug(msg);
         } else {
@@ -17,6 +20,7 @@
                 b.appendChild(n);
             }
         }
+        */
     }
 
     YAHOO_config = {
@@ -69,8 +73,6 @@ function checkDragDrop(callback, win) {
             }
         };
 
-
-
 function loadReset() {
     for (var i=0; i<20; i=i+1) {
         YAHOO.util.Get.css("../../build/reset/reset.js",
@@ -91,9 +93,14 @@ YAHOO.util.Event.on(window, "load", function() {
 
 //YAHOO.util.Event.onDOMReady(function() {
 
-
     YAHOO.util.Get.css(["../../build/menu/assets/skins/sam/menu.css",
-        "../../build/logger/assets/skins/sam/logger.css"], { } );
+        "../../build/logger/assets/skins/sam/logger.css"], { 
+
+            onSuccess: function() {
+                YAHOO.log("css1 (menu, logger) complet");
+            }
+        
+        } );
 
     YAHOO.log("css1 executed");
 
@@ -116,7 +123,7 @@ YAHOO.util.Event.on(window, "load", function() {
             //"../../build/dom/dom.js",
             //"../../build/event/event.js",
             "../../build/dragdrop/dragdrop.js",
-            "../../build/connection/connection.js"
+            //"../../build/connection/connection.js"
             //"../../build/menu/menu.js",
         ], {
             onSuccess: function(o) {
@@ -134,14 +141,10 @@ YAHOO.util.Event.on(window, "load", function() {
                 //o.purge();
             },
             onFailure: function(o) {
-
                 YAHOO.log("transaction failed");
-
             },
-            failafter: 1000,
             data: "foo",
-            //verifier: checkDragDrop,
-            scriptproperty: "YAHOO.util.DDProxy",
+            varName: ["YAHOO.util.Event", "YAHOO.util.DDProxy"],
             scope: YAHOO,
             autopurge: true
             //,sandbox: {
