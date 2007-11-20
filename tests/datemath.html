@@ -157,7 +157,7 @@
 				dt = new Date(2007, 1, 14);
 				rstDt = DateMath.findMonthEnd(dt);
 				DateAssert.datesAreEqual(new Date(2007, 1, 28), rstDt);
-				
+
 				// Leap
 				dt = new Date(2008, 1, 14);
 				rstDt = DateMath.findMonthEnd(dt);
@@ -213,6 +213,99 @@
 			testIsYearOverlapWeek : function() {
 				Assert.isTrue(DateMath.isYearOverlapWeek(new Date(2007, 11, 30)));
 				Assert.isFalse(DateMath.isMonthOverlapWeek(new Date(2007, 11, 23)));
+			},
+
+			testGetDate: function() {
+				var dt = new Date(2007, 3, 12);
+				var getDt = DateMath.getDate(2007, 3, 12);
+				DateAssert.datesAreEqual(dt, getDt);
+				DateAssert.timesAreEqual(dt, getDt);
+
+				// Leap
+				dt = new Date(2007, 1, 29);
+				getDt = DateMath.getDate(2007, 1, 29);
+				DateAssert.datesAreEqual(dt, getDt);
+				DateAssert.timesAreEqual(dt, getDt);
+
+				// Before gregorian shift - 1582
+				dt = new Date(1500, 10, 25);
+				getDt = DateMath.getDate(1500, 10, 25);
+				DateAssert.datesAreEqual(dt, getDt);
+				DateAssert.timesAreEqual(dt, getDt);
+
+				// No date specified
+				dt = new Date(2007, 10);
+				getDt = DateMath.getDate(2007, 10);
+				DateAssert.datesAreEqual(dt, getDt);
+				DateAssert.timesAreEqual(dt, getDt);
+
+				// Rollover args
+				dt = new Date(2007, 1, 31);
+				getDt = DateMath.getDate(2007, 1, 31);
+				DateAssert.datesAreEqual(dt, getDt);
+				DateAssert.timesAreEqual(dt, getDt);
+
+				// Time cloning
+				dt = new Date(new Date(2007, 10, 25).getTime());
+				getDt = DateMath.getDate(2007, 10, 25);
+				DateAssert.datesAreEqual(dt, getDt);
+				DateAssert.timesAreEqual(dt, getDt);
+
+				dt = new Date(); // new Date(99, 10, 25) returns 25th Nov, 1999
+				dt.setFullYear(99);
+				dt.setMonth(10);
+				dt.setDate(25);
+				dt.setHours(0,0,0,0);
+				getDt = DateMath.getDate(99, 10, 25);
+				DateAssert.datesAreEqual(dt, getDt);
+				DateAssert.timesAreEqual(dt, getDt);
+
+				// 25th December 0 was a Monday 
+				//
+				// * http://www.fourmilab.ch/documents/calendar/
+				getDt = DateMath.getDate(0, 11, 25);
+				Assert.areEqual(1, getDt.getDay());
+				Assert.areEqual(0, getDt.getFullYear());
+				Assert.areEqual(11, getDt.getMonth());
+				Assert.areEqual(25, getDt.getDate());
+
+				// 23rd April 0099 was a Thursday 
+				//
+				// * http://www.fourmilab.ch/documents/calendar/
+				getDt = DateMath.getDate(99, 3, 23);
+				Assert.areEqual(4, getDt.getDay());
+				Assert.areEqual(99, getDt.getFullYear());
+				Assert.areEqual(3, getDt.getMonth());
+				Assert.areEqual(23, getDt.getDate());
+
+				// 1st Jan 0100 was a Friday
+				//
+				// * http://www.fourmilab.ch/documents/calendar/
+				getDt = DateMath.getDate(100, 0, 1);
+				Assert.areEqual(5, getDt.getDay());
+				Assert.areEqual(100, getDt.getFullYear());
+				Assert.areEqual(0, getDt.getMonth());
+				Assert.areEqual(1, getDt.getDate());
+
+				// 15th Oct 1582 was a Friday
+				// 
+				// * http://www.fourmilab.ch/documents/calendar/
+				// * http://www.ddj.com/184405350 (Historical-Date Conversions)
+				getDt = DateMath.getDate(1582, 9, 15);
+				Assert.areEqual(5, getDt.getDay());
+				Assert.areEqual(1582, getDt.getFullYear());
+				Assert.areEqual(9, getDt.getMonth());
+				Assert.areEqual(15, getDt.getDate());
+
+				// 24th November 4714 B.C. was a Monday and OnohglDhootk didn't feel like going to work
+				//
+				// * http://www.fourmilab.ch/documents/calendar/
+				// * http://www.ddj.com/184405350 (Historical-Date Conversions)
+				getDt = DateMath.getDate(-4713, 10, 24);
+				Assert.areEqual(1, getDt.getDay());
+				Assert.areEqual(-4713, getDt.getFullYear());
+				Assert.areEqual(10, getDt.getMonth());
+				Assert.areEqual(24, getDt.getDate());
 			}
 		};
 		
@@ -236,9 +329,9 @@
 
 			YAHOO.util.Event.addListener("btnRun", "click", runTests);
 
-            if (parent && parent != window) {
-                YAHOO.tool.TestManager.load();
-            }
+			if (parent && parent != window) {
+				YAHOO.tool.TestManager.load();
+			}
 		});
 	})();
 	</script>
