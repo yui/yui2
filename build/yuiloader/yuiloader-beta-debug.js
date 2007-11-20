@@ -959,18 +959,11 @@ YAHOO.register("yahoo", YAHOO, {version: "@VERSION@", build: "@BUILD@"});
 YAHOO.util.Get = function() {
 
     /**
-     * hash of timer handles to deal with simultaneus script inserts
-     * @property timers
-     * @private
-     */
-    var timers = {}, 
-        
-    /**
      * hash of queues to manage multiple requests
      * @property queues
      * @private
      */
-        queues={}, 
+    var queues={}, 
         
     /**
      * queue index used to generate transaction ids
@@ -1131,21 +1124,38 @@ YAHOO.util.Get = function() {
         }
 
         if (loaded) {
-            q.url.shift();
+            q.url.shift(); 
+            if (q.varName) {
+                q.varName.shift(); 
+            }
         } else {
             // This is the first pass: make sure the url is an array
             q.url = (lang.isString(q.url)) ? [q.url] : q.url;
+            if (q.varName) {
+                q.varName = (lang.isString(q.varName)) ? [q.varName] : q.varName;
+            }
         }
 
-        if (q.url.length === 0) {
+        var w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], n;
 
-            // Safari workaround - add an extra script node.  When
-            // this one is done we know the script in the previous
-            // one is ready.
-            if (q.type === "script" && ua.webkit && !q.finalpass) {
-                q.finalpass = true;
+        if (q.url.length === 0) {
+            // Safari 2.x workaround - There is no way to know when 
+            // a script is ready in versions of Safari prior to 3.x.
+            // Adding an extra node reduces the problem, but doesn't
+            // eliminate it completely because the browser executes
+            // them asynchronously. 
+            if (q.type === "script" && ua.webkit && ua.webkit < 420 && 
+                    !q.finalpass && !q.varName) {
+                // Add another script node.  This does not guarantee that the
+                // scripts will execute in order, but it does appear to fix the
+                // problem on fast connections more effectively than using an
+                // arbitrary timeout.  It is possible that the browser does
+                // block subsequent script execution in this case for a limited
+                // time.
                 var extra = _scriptNode(null, q.win);
-                _track(q.type, extra, id, "safari_extra", q.win, 1);
+                extra.innerHTML='YAHOO.util.Get._finalize("' + id + '");';
+                q.nodes.push(extra); h.appendChild(extra);
+
             } else {
                 _finish(id);
             }
@@ -1153,7 +1163,6 @@ YAHOO.util.Get = function() {
             return;
         } 
 
-        var w=q.win, d=w.document, h=d.getElementsByTagName("head")[0], n;
 
         var url = q.url[0];
 
@@ -1176,8 +1185,8 @@ YAHOO.util.Get = function() {
         // FireFox does not support the onload event for link nodes, so there is
         // no way to make the css requests synchronous. This means that the css 
         // rules in multiple files could be applied out of order in this browser
-        // if a later request returns before an earlier one.
-        if (ua.gecko && q.type === "css") {
+        // if a later request returns before an earlier one.  Safari too.
+        if ((ua.webkit || ua.gecko) && q.type === "css") {
             _next(id, url);
         }
     };
@@ -1277,8 +1286,9 @@ YAHOO.util.Get = function() {
      */
     var _track = function(type, n, id, url, win, qlength, trackfn) {
         var f = trackfn || _next;
+
+        // IE supports the readystatechange event for script and css nodes
         if (ua.ie) {
-            // IE supports the readystatechange event for script and css nodes
             n.onreadystatechange = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
@@ -1286,25 +1296,67 @@ YAHOO.util.Get = function() {
                 }
             };
 
+        // webkit prior to 3.x is problemmatic
         } else if (ua.webkit) {
-            // poll the document readyState.  When the readyState is complete
-            // or loaded, it is safe to insert the next item.  Script contents
-            // may not be ready yet, so we still need another workaround for
-            // the last script
-            timers[id] = setInterval(function(){
-                var rs=win.document.readyState;
-                if ("loaded" === rs || "complete" === rs) {
-                    clearInterval(timers[id]);
-                    timers[id] = null;
-                    f(id, url);
-                }
-            }, YAHOO.util.Get.POLL_FREQ); 
 
-        } else {
-            // FireFox and Opera support the onload event for script nodes.
-            // Opera, but not FF, supports the onload event for link nodes
+            if (type === "script") {
+
+                // Safari 3.x supports the load event for script nodes (DOM2)
+                if (ua.webkit > 419) {
+
+                    n.addEventListener("load", function() {
+                        f(id, url);
+                    });
+
+                // Nothing can be done with Safari < 3.x except to pause and hope
+                // for the best, particularly after last script is inserted. The
+                // scripts will always execute in the order they arrive, not
+                // necessarily the order in which they were inserted.  To support
+                // script nodes with complete reliability in these browsers, script
+                // nodes either need to invoke a function in the window once they
+                // are loaded or the implementer needs to provide a well-known
+                // property that the utility can poll for.
+                } else {
+                    // Poll for the existence of the named variable, if it
+                    // was supplied.
+                    var q = queues[id];
+                    if (q.varName) {
+                        var freq=YAHOO.util.Get.POLL_FREQ;
+                        q.maxattempts = YAHOO.util.Get.TIMEOUT/freq;
+                        q.attempts = 0;
+                        q._cache = q.varName[0].split(".");
+                        q.timer = lang.later(freq, q, function(o) {
+                            var a=this._cache, l=a.length, w=this.win, i;
+                            for (i=0; i<l; i=i+1) {
+                                w = w[a[i]];
+                                if (!w) {
+                                    // if we have exausted our attempts, give up
+                                    this.attempts++;
+                                    if (this.attempts++ > this.maxattempts) {
+                                        q.timer.cancel();
+                                        _fail(id);
+                                    } else {
+                                    }
+                                    return;
+                                }
+                            }
+                            
+
+                            q.timer.cancel();
+                            f(id, url);
+
+                        }, null, true);
+                    } else {
+                        lang.later(YAHOO.util.Get.POLL_FREQ, null, f, [id, url]);
+                    }
+                }
+            } 
+
+        // FireFox and Opera support onload (but not DOM2 in FF) handlers for
+        // script nodes.  Opera, but not FF, supports the onload event for link
+        // nodes.
+        } else { 
             n.onload = function() {
-                //lang.later(20, null, f, [id, url]);
                 f(id, url);
             };
         }
@@ -1329,6 +1381,26 @@ YAHOO.util.Get = function() {
          * @default 20
          */
         PURGE_THRESH: 20,
+
+        /**
+         * The length time to poll for varName when loading a script in
+         * Safari 2.x before the transaction fails.
+         * property TIMEOUT
+         * @static
+         * @type int
+         * @default 2000
+         */
+        TIMEOUT: 2000,
+        
+        /**
+         * Called by the the helper for detecting script load in Safari
+         * @method _finalize
+         * @param id {string} the transaction id
+         * @private
+         */
+        _finalize: function(id) {
+            lang.later(0, null, _finish, id);
+        },
 
         /**
          * Abort a transaction
@@ -1405,6 +1477,16 @@ YAHOO.util.Get = function() {
          * data that is supplied to the callback when the script(s) are
          * loaded.
          * </dd>
+         * <dt>varName</dt>
+         * <dd>
+         * variable that should be available when a script is finished
+         * loading.  Used to help Safari 2.x and below with script load 
+         * detection.  The type of this property should match what was
+         * passed into the url parameter: if loading a single url, a
+         * string can be supplied.  If loading multiple scripts, you
+         * must supply an array that contains the variable name for
+         * each script.
+         * </dd>
          * </dl>
          * <pre>
          * // assumes yahoo, dom, and event are already on the page
@@ -1476,18 +1558,6 @@ YAHOO.util.Get = function() {
          */
         css: function(url, opts) {
             return _queue("css", url, opts); 
-        },
-
-        /** Generates an HTML element, this is not appended to a document
-         * @method createNode
-         * @static
-         * @param type {string} the type of element
-         * @param attr {string} the attributes
-         * @param win {Window} optional window to create the element in
-         * @return {HTMLElement} the generated node
-         */
-        createNode: function(type, attr, win) {
-            return _node(type, attr, win);
         }
     };
 }();
@@ -1513,8 +1583,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
  */
 (function() {
 
-    var util = YAHOO.util,
-        lang = YAHOO.lang;
+    var Y=YAHOO, util=Y.util, lang=Y.lang, env=Y.env;
  
     var YUI = {
 
@@ -1864,6 +1933,14 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         this._internalCallback = null;
 
         /**
+         * Use the YAHOO environment listener to detect script load.  This
+         * is only switched on for Safari 2.x and below.
+         * @property _useYahooListener
+         * @private
+         */
+        this._useYahooListener = false;
+
+        /**
          * Callback that will be executed when the loader is finished
          * with an insert
          * @method onSuccess
@@ -1876,7 +1953,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          * @method onFailure
          * @type function
          */
-        this.onFailure = YAHOO.log;
+        this.onFailure = Y.log;
 
         /**
          * Callback that will be executed each time a new module is loaded
@@ -1899,14 +1976,15 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         this.data = null;
 
         /**
-         * The name of the variable in a sandbox to reference when
-         * the load is complete.  If this variable is not available
-         * in the specified scripts, the operation will fail.
+         * The name of the variable in a sandbox or script node 
+         * (for external script support in Safari 2.x and earlier)
+         * to reference when the load is complete.  If this variable 
+         * is not available in the specified scripts, the operation will 
+         * fail.  
          * @property varName
          * @type string
-         * @default YAHOO
          */
-        this.varName = "YAHOO";
+        this.varName = null;
 
         /**
          * The base directory.
@@ -1981,7 +2059,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          * The library metadata
          * @property moduleInfo
          */
-        this.moduleInfo = YUI.info.moduleInfo;
+        this.moduleInfo = lang.merge(YUI.info.moduleInfo);
 
         /**
          * List of rollup files found in the library metadata
@@ -2070,13 +2148,23 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          *   </code>
          *   @property skin
          */
+
+        var self = this;
+
+        env.listeners.push(function(m) {
+            if (self._useYahooListener) {
+                //Y.log("YAHOO listener: " + m.name);
+                self.loadNext(m.name);
+            }
+        });
+
         this.skin = lang.merge(YUI.info.skin); 
 
         this._config(o);
 
     };
 
-    YAHOO.util.YUILoader.prototype = {
+    Y.util.YUILoader.prototype = {
 
         FILTERS: {
             RAW: { 
@@ -2097,9 +2185,9 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                 return;
             }
 
-            // apply config values
-            lang.augmentObject(this, o);
+            // lang.augmentObject(this, o);
 
+            // apply config values
             for (var i in o) {
                 if (lang.hasOwnProperty(o, i)) {
                     switch (i) {
@@ -2288,7 +2376,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                 this._reduce();
                 this._sort();
 
-                // YAHOO.log("after calculate: " + lang.dump(this.required));
+                // Y.log("after calculate: " + lang.dump(this.required));
 
                 this.dirty = false;
             }
@@ -2306,10 +2394,10 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             this.loaded = lang.merge(this.inserted); // shallow clone
             
             if (!this._sandbox) {
-                this.loaded = lang.merge(this.loaded, YAHOO.env.modules);
+                this.loaded = lang.merge(this.loaded, env.modules);
             }
 
-            // YAHOO.log("already loaded stuff: " + lang.dump(this.loaded, 0));
+            // Y.log("already loaded stuff: " + lang.dump(this.loaded, 0));
 
             // add the ignore list to the list of loaded packages
             if (this.ignore) {
@@ -2460,7 +2548,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                                     c++;
                                     roll = (c >= m.rollup);
                                     if (roll) {
-                                        // YAHOO.log("skin rollup " + lang.dump(r));
+                                        // Y.log("skin rollup " + lang.dump(r));
                                         break;
                                     }
                                 }
@@ -2481,7 +2569,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                                     c++;
                                     roll = (c >= m.rollup);
                                     if (roll) {
-                                        // YAHOO.log("over thresh " + c + ", " + lang.dump(r));
+                                        // Y.log("over thresh " + c + ", " + lang.dump(r));
                                         break;
                                     }
                                 }
@@ -2489,7 +2577,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                         }
 
                         if (roll) {
-                            // YAHOO.log("rollup: " +  i + ", " + lang.dump(this, 1));
+                            // Y.log("rollup: " +  i + ", " + lang.dump(this, 1));
                             // add the rollup
                             r[i] = true;
                             rolled = true;
@@ -2671,16 +2759,16 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          */
         insert: function(o, type) {
             // if (o) {
-            //     YAHOO.log("insert: " + lang.dump(o, 1) + ", " + type);
+            //     Y.log("insert: " + lang.dump(o, 1) + ", " + type);
             // } else {
-            //     YAHOO.log("insert: " + this.toString() + ", " + type);
+            //     Y.log("insert: " + this.toString() + ", " + type);
             // }
 
             // build the dependency list
             this.calculate(o);
 
             if (!type) {
-                // YAHOO.log("trying to load css first");
+                // Y.log("trying to load css first");
                 var self = this;
                 this._internalCallback = function() {
                             self._internalCallback = null;
@@ -2812,11 +2900,14 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
 
                         if (this._loadCount >= this._stopCount) {
 
+                            // the variable to find
+                            var v = this.varName || "YAHOO";
+
                             // wrap the contents of the requested modules in an anonymous function
                             var t = "(function() {\n";
                         
                             // return the locally scoped reference.
-                            var b = "\nreturn " + this.varName + ";\n})();";
+                            var b = "\nreturn " + v + ";\n})();";
 
                             var ref = eval(t + this._scriptText.join("\n") + b);
 
@@ -2867,12 +2958,26 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
          */
         loadNext: function(mname) {
 
-            // YAHOO.log("loadNext executing, just loaded " + mname);
+            // It is possible that this function is executed due to something
+            // else one the page loading a YUI module.  Only react when we
+            // are actively loading something
+            if (!this._loading) {
+                return;
+            }
 
-            // The global handler that is called when each module is loaded
-            // will pass that module name to this function.  Storing this
-            // data to avoid loading the same module multiple times
             if (mname) {
+
+                // if the module that was just loaded isn't what we were expecting,
+                // continue to wait
+                if (mname !== this._loading) {
+                    return;
+                }
+
+                // YAHOO.log("loadNext executing, just loaded " + mname);
+
+                // The global handler that is called when each module is loaded
+                // will pass that module name to this function.  Storing this
+                // data to avoid loading the same module multiple times
                 this.inserted[mname] = true;
 
                 if (this.onProgress) {
@@ -2885,19 +2990,6 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 //this.inserted = lang.merge(this.inserted, o);
             }
 
-            // It is possible that this function is executed due to something
-            // else one the page loading a YUI module.  Only react when we
-            // are actively loading something
-            if (!this._loading) {
-                return;
-            }
-
-            // if the module that was just loaded isn't what we were expecting,
-            // continue to wait
-            if (mname && mname !== this._loading) {
-                return;
-            }
-            
             var s=this.sorted, len=s.length, i, m;
 
             for (i=0; i<len; i=i+1) {
@@ -2932,16 +3024,27 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 // the css separately from the script.
                 if (!this.loadType || this.loadType === m.type) {
                     this._loading = s[i];
-                    // YAHOO.log("attempting to load " + s[i] + ", " + this.base);
+                    //YAHOO.log("attempting to load " + s[i] + ", " + this.base);
 
-                    var fn = (m.type === "css") ? util.Get.css : util.Get.script,
-                        url = m.fullpath || this._url(m.path);
-                    var self = this;
+                    var fn=(m.type === "css") ? util.Get.css : util.Get.script,
+                        url=m.fullpath || this._url(m.path), self=this, 
+                        c=function(o) {
+                            self.loadNext(o.data);
+                        };
+
+                    // safari 2.x or lower, script, and part of YUI
+                    if (env.ua.webkit && env.ua.webkit < 420 && m.type === "js" && 
+                          !m.varName) {
+                          //YUI.info.moduleInfo[s[i]]) {
+                          //YAHOO.log("using YAHOO env " + s[i] + ", " + m.varName);
+                        c = null;
+                        this._useYahooListener = true;
+                    }
+
                     fn(url, {
                         data: s[i],
-                        onSuccess: function(o) {
-                            self.loadNext(o.data);
-                        },
+                        onSuccess: c,
+                        varName: m.varName,
                         scope: self 
                     });
 

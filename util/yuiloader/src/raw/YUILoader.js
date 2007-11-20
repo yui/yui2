@@ -18,8 +18,7 @@
  */
 (function() {
 
-    var util = YAHOO.util,
-        lang = YAHOO.lang;
+    var Y=YAHOO, util=Y.util, lang=Y.lang, env=Y.env;
  
     var YUI = {
 
@@ -106,6 +105,14 @@
         this._internalCallback = null;
 
         /**
+         * Use the YAHOO environment listener to detect script load.  This
+         * is only switched on for Safari 2.x and below.
+         * @property _useYahooListener
+         * @private
+         */
+        this._useYahooListener = false;
+
+        /**
          * Callback that will be executed when the loader is finished
          * with an insert
          * @method onSuccess
@@ -118,7 +125,7 @@
          * @method onFailure
          * @type function
          */
-        this.onFailure = YAHOO.log;
+        this.onFailure = Y.log;
 
         /**
          * Callback that will be executed each time a new module is loaded
@@ -141,14 +148,15 @@
         this.data = null;
 
         /**
-         * The name of the variable in a sandbox to reference when
-         * the load is complete.  If this variable is not available
-         * in the specified scripts, the operation will fail.
+         * The name of the variable in a sandbox or script node 
+         * (for external script support in Safari 2.x and earlier)
+         * to reference when the load is complete.  If this variable 
+         * is not available in the specified scripts, the operation will 
+         * fail.  
          * @property varName
          * @type string
-         * @default YAHOO
          */
-        this.varName = "YAHOO";
+        this.varName = null;
 
         /**
          * The base directory.
@@ -223,7 +231,7 @@
          * The library metadata
          * @property moduleInfo
          */
-        this.moduleInfo = YUI.info.moduleInfo;
+        this.moduleInfo = lang.merge(YUI.info.moduleInfo);
 
         /**
          * List of rollup files found in the library metadata
@@ -312,13 +320,23 @@
          *   </code>
          *   @property skin
          */
+
+        var self = this;
+
+        env.listeners.push(function(m) {
+            if (self._useYahooListener) {
+                //Y.log("YAHOO listener: " + m.name);
+                self.loadNext(m.name);
+            }
+        });
+
         this.skin = lang.merge(YUI.info.skin); 
 
         this._config(o);
 
     };
 
-    YAHOO.util.YUILoader.prototype = {
+    Y.util.YUILoader.prototype = {
 
         FILTERS: {
             RAW: { 
@@ -339,9 +357,9 @@
                 return;
             }
 
-            // apply config values
-            lang.augmentObject(this, o);
+            // lang.augmentObject(this, o);
 
+            // apply config values
             for (var i in o) {
                 if (lang.hasOwnProperty(o, i)) {
                     switch (i) {
@@ -530,7 +548,7 @@
                 this._reduce();
                 this._sort();
 
-                // YAHOO.log("after calculate: " + lang.dump(this.required));
+                // Y.log("after calculate: " + lang.dump(this.required));
 
                 this.dirty = false;
             }
@@ -548,10 +566,10 @@
             this.loaded = lang.merge(this.inserted); // shallow clone
             
             if (!this._sandbox) {
-                this.loaded = lang.merge(this.loaded, YAHOO.env.modules);
+                this.loaded = lang.merge(this.loaded, env.modules);
             }
 
-            // YAHOO.log("already loaded stuff: " + lang.dump(this.loaded, 0));
+            // Y.log("already loaded stuff: " + lang.dump(this.loaded, 0));
 
             // add the ignore list to the list of loaded packages
             if (this.ignore) {
@@ -702,7 +720,7 @@
                                     c++;
                                     roll = (c >= m.rollup);
                                     if (roll) {
-                                        // YAHOO.log("skin rollup " + lang.dump(r));
+                                        // Y.log("skin rollup " + lang.dump(r));
                                         break;
                                     }
                                 }
@@ -723,7 +741,7 @@
                                     c++;
                                     roll = (c >= m.rollup);
                                     if (roll) {
-                                        // YAHOO.log("over thresh " + c + ", " + lang.dump(r));
+                                        // Y.log("over thresh " + c + ", " + lang.dump(r));
                                         break;
                                     }
                                 }
@@ -731,7 +749,7 @@
                         }
 
                         if (roll) {
-                            // YAHOO.log("rollup: " +  i + ", " + lang.dump(this, 1));
+                            // Y.log("rollup: " +  i + ", " + lang.dump(this, 1));
                             // add the rollup
                             r[i] = true;
                             rolled = true;
@@ -913,16 +931,16 @@
          */
         insert: function(o, type) {
             // if (o) {
-            //     YAHOO.log("insert: " + lang.dump(o, 1) + ", " + type);
+            //     Y.log("insert: " + lang.dump(o, 1) + ", " + type);
             // } else {
-            //     YAHOO.log("insert: " + this.toString() + ", " + type);
+            //     Y.log("insert: " + this.toString() + ", " + type);
             // }
 
             // build the dependency list
             this.calculate(o);
 
             if (!type) {
-                // YAHOO.log("trying to load css first");
+                // Y.log("trying to load css first");
                 var self = this;
                 this._internalCallback = function() {
                             self._internalCallback = null;
@@ -1054,11 +1072,14 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
 
                         if (this._loadCount >= this._stopCount) {
 
+                            // the variable to find
+                            var v = this.varName || "YAHOO";
+
                             // wrap the contents of the requested modules in an anonymous function
                             var t = "(function() {\n";
                         
                             // return the locally scoped reference.
-                            var b = "\nreturn " + this.varName + ";\n})();";
+                            var b = "\nreturn " + v + ";\n})();";
 
                             var ref = eval(t + this._scriptText.join("\n") + b);
 
@@ -1109,12 +1130,26 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
          */
         loadNext: function(mname) {
 
-            // YAHOO.log("loadNext executing, just loaded " + mname);
+            // It is possible that this function is executed due to something
+            // else one the page loading a YUI module.  Only react when we
+            // are actively loading something
+            if (!this._loading) {
+                return;
+            }
 
-            // The global handler that is called when each module is loaded
-            // will pass that module name to this function.  Storing this
-            // data to avoid loading the same module multiple times
             if (mname) {
+
+                // if the module that was just loaded isn't what we were expecting,
+                // continue to wait
+                if (mname !== this._loading) {
+                    return;
+                }
+
+                // YAHOO.log("loadNext executing, just loaded " + mname);
+
+                // The global handler that is called when each module is loaded
+                // will pass that module name to this function.  Storing this
+                // data to avoid loading the same module multiple times
                 this.inserted[mname] = true;
 
                 if (this.onProgress) {
@@ -1127,19 +1162,6 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 //this.inserted = lang.merge(this.inserted, o);
             }
 
-            // It is possible that this function is executed due to something
-            // else one the page loading a YUI module.  Only react when we
-            // are actively loading something
-            if (!this._loading) {
-                return;
-            }
-
-            // if the module that was just loaded isn't what we were expecting,
-            // continue to wait
-            if (mname && mname !== this._loading) {
-                return;
-            }
-            
             var s=this.sorted, len=s.length, i, m;
 
             for (i=0; i<len; i=i+1) {
@@ -1174,16 +1196,27 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                 // the css separately from the script.
                 if (!this.loadType || this.loadType === m.type) {
                     this._loading = s[i];
-                    // YAHOO.log("attempting to load " + s[i] + ", " + this.base);
+                    //YAHOO.log("attempting to load " + s[i] + ", " + this.base);
 
-                    var fn = (m.type === "css") ? util.Get.css : util.Get.script,
-                        url = m.fullpath || this._url(m.path);
-                    var self = this;
+                    var fn=(m.type === "css") ? util.Get.css : util.Get.script,
+                        url=m.fullpath || this._url(m.path), self=this, 
+                        c=function(o) {
+                            self.loadNext(o.data);
+                        };
+
+                    // safari 2.x or lower, script, and part of YUI
+                    if (env.ua.webkit && env.ua.webkit < 420 && m.type === "js" && 
+                          !m.varName) {
+                          //YUI.info.moduleInfo[s[i]]) {
+                          //YAHOO.log("using YAHOO env " + s[i] + ", " + m.varName);
+                        c = null;
+                        this._useYahooListener = true;
+                    }
+
                     fn(url, {
                         data: s[i],
-                        onSuccess: function(o) {
-                            self.loadNext(o.data);
-                        },
+                        onSuccess: c,
+                        varName: m.varName,
                         scope: self 
                     });
 
