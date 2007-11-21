@@ -80,7 +80,7 @@
         'charts': {
             'type': 'js',
             'path': 'charts/charts-experimental-min.js',
-            'requires': ['element', 'datasource']
+            'requires': ['element', 'json', 'datasource']
         },
 
         'colorpicker': {
@@ -228,6 +228,12 @@
             'type': 'css',
             'path': 'reset-fonts/reset-fonts.css',
             'supersedes': ['reset', 'fonts']
+        },
+
+        'selector': {
+            'type': 'js',
+            'path': 'selector/selector-beta-min.js',
+            'requires': ['yahoo', 'dom']
         },
 
         'simpleeditor': {
