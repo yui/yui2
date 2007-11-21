@@ -225,7 +225,7 @@ Selector.prototype = {
      * A simple selector does not contain combinators.
      * @method simpleTest
      *
-     * @param {HTMLElement} node A reference to the HTMLElement being tested.
+     * @param {HTMLElement | String} node An id or node reference to the HTMLElement being tested.
      * @param {string} selector The CSS Selector to test the node against.
      * @return{boolean} Whether or not the node matches the selector.
      * @static
@@ -305,6 +305,40 @@ Selector.prototype = {
         return tokens;
     },
 
+    filter: function(nodes, token, noCache) {
+        var result = [],
+            filtered = [],
+            elements,
+            getBy = Y.Selector.combinators,
+            node,
+            //noCache = noCache || !!token.next,
+            simple = token.simple,
+            next = token.next,
+            comb = token.combinator,
+            j;
+
+        for (var i = 0, len = nodes.length; i < len; ++i) {
+            node = nodes[i];
+            if ( node._found || !Y.Selector.simpleTest(node, simple, token) ) {
+                continue; // already found or failed test
+            }
+
+            if (next && comb !== ',') {
+                elements = arguments.callee(getBy[comb](node, next.tag), next);
+                if (elements.length) {
+                    filtered = filtered.concat(elements);
+                }
+            } else {
+                //if (!noCache) {
+                    node._found = true;
+                    foundCache.push(node);
+                //}
+                result[result.length] = node;
+            }
+        }
+        return (result.length) ? result : filtered;
+    },
+
     /**
      * Filters a set of nodes based on a given CSS simple selector. 
      * A simple selector does not contain combinators.
@@ -359,7 +393,7 @@ Selector.prototype = {
      * @method queryAll
      *
      * @param {string} selector The CSS Selector to test the node against.
-     * @param {HTMLElement} optional An HTMLElement to start the query from. Defaults to document.
+     * @param {HTMLElement | String} optional An id or HTMLElement to start the query from. Defaults to document.
      * @return{array} An array of nodes that match the given selector.
      * @static
      */
@@ -376,13 +410,7 @@ Selector.prototype = {
             nodes = root.getElementsByTagName(token.tag);
         }
 
-        if (token.next) {
-            result = filterByToken(nodes, token);
-        } else {
-            result = Y.Selector.simpleFilter(nodes, selector, token);
-        }
-
-        return result;
+        return filterByNodes(nodes, token, root);
     },
 
     /**
@@ -399,45 +427,11 @@ Selector.prototype = {
     }
 };
 
-var filter = function(nodes, token, noCache) {
-    var result = [],
-        filtered = [],
-        elements,
-        getBy = Y.Selector.combinators,
-        node,
-        //noCache = noCache || !!token.next,
-        simple = token.simple,
-        next = token.next,
-        comb = token.combinator,
-        j;
-
-    for (var i = 0, len = nodes.length; i < len; ++i) {
-        node = nodes[i];
-        if ( node._found || !Y.Selector.simpleTest(node, simple, token) ) {
-            continue; // already found or failed test
-        }
-
-        if (next && comb !== ',') {
-            elements = arguments.callee(getBy[comb](node, next.tag), next);
-            if (elements.length) {
-                filtered = filtered.concat(elements);
-            }
-        } else {
-            //if (!noCache) {
-                node._found = true;
-                foundCache.push(node);
-            //}
-            result[result.length] = node;
-        }
-    }
-    return (result.length) ? result : filtered;
-};
-
-var filterByToken = function(nodes, token, root, noCache) {
-    var result = filter(nodes, token, noCache); 
+var filterByNodes = function(nodes, token, root, noCache) {
+    var result = Y.Selector.filter(nodes, token, noCache); 
 
     if (token.next && token.combinator === ',') {
-        var elements = arguments.callee(root.getElementsByTagName(token.next.tagName),
+        var elements = arguments.callee(root.getElementsByTagName(token.next.tag),
                 token.next, root, noCache);
         if (elements.length) {
            result = result.concat(elements); 
