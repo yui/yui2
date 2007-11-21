@@ -184,28 +184,23 @@
 
 }
 
+.yui-skin-sam .yui-dialog .ft button.default {
+    font-weight:bold;
+}
 
-/* Dialog default button styles */
-
-.yui-skin-sam .yui-dialog .ft .default {
-
+/* Dialog default YUI Button styles */
+.yui-skin-sam .yui-dialog .ft span.default {
     border-color: #304369;
     background-position: 0 -1400px;
-
 }
 
-.yui-skin-sam .yui-dialog .ft .default .first-child {
-
+.yui-skin-sam .yui-dialog .ft span.default .first-child {
     border-color: #304369;
-
 }
 
-.yui-skin-sam .yui-dialog .ft .default button {
-
+.yui-skin-sam .yui-dialog .ft span.default button {
     color: #fff;
-
 }
-
 
 /* SimpleDialog icon styles */
 
@@ -280,18 +275,16 @@
 }
 
 .yui-skin-sam .yui-tt-shadow {
-
     top: 2px;
     right: -3px;
     left: -3px;
     bottom: -3px;
     background-color: #000;
-
 }
 
 .yui-skin-sam .yui-tt-shadow-visible {
 
     opacity: .12;
-    *filter: alpha(opacity=12);  /* For IE */    
+    *filter: alpha(opacity=12);  /* For IE */
 
 }
