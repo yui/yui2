@@ -362,7 +362,7 @@
             }
         });
 
-        YAHOO.log('attributes initialized', 'info', 'TabView');`
+        YAHOO.log('attributes initialized', 'info', 'TabView');
         if ( this._tabParent ) {
             _initTabs.call(this);
         }
