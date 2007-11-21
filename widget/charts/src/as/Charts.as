@@ -8,6 +8,7 @@ package
 	import flash.external.ExternalInterface;
 	import flash.text.TextFormat;
 	import flash.utils.getQualifiedClassName;
+	import flash.utils.describeType;
 	import fl.managers.StyleManager;
 	import com.yahoo.astra.fl.charts.*;
 	import com.yahoo.astra.fl.charts.series.*;
@@ -53,7 +54,7 @@ package
 		
 		protected var legend:Legend;
 		
-		protected var _legendDisplay:String = "left";
+		protected var _legendDisplay:String = "none";
 		
 		public function get legendDisplay():String
 		{
@@ -173,14 +174,17 @@ package
 				this.setSeriesStyles(seriesStyles);
 			}
 			
-			if(this.legendDisplay != "none")
+			if(this.legend)
 			{
-				this.legend.dataProvider = this.chart.dataProvider as Array;
-				this.refreshComponentSize();
-			}
-			else if(this.legend) //display: "none"
-			{
-				this.legend.visible = false;
+				if(this.legendDisplay != "none")
+				{
+					this.legend.dataProvider = this.chart.dataProvider as Array;
+					this.refreshComponentSize();
+				}
+				else if(this.legend) //display: "none"
+				{
+					this.legend.visible = false;
+				}
 			}
 		}
 		
@@ -563,12 +567,11 @@ package
 			var seriesColors:Array = [];
 			var seriesMarkerSizes:Array = [];
 			var seriesMarkerSkins:Array = [];
-			var seriesCount:int = styles.length;
+			var seriesCount:int = Math.min(this.chart.dataProvider.length, styles.length);
 			for(var i:int = 0; i < seriesCount; i++)
 			{
 				var series:ISeries = ISeries(this.chart.dataProvider[i]);
 				var style:Object = styles[i];
-				
 				//defaults
 				var defaultColors:Array =
 				[
@@ -642,8 +645,7 @@ package
 								break;
 							case "color":
 								color = this.parseColor(style.color);
-								
-								if(skin && !(series is LineChart))
+								if(skin is InstanceFactory && !(series is LineChart))
 								{
 									skin.properties.fillColor = color;
 									skin.properties.fillAlpha = 1;
