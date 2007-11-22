@@ -946,6 +946,7 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, elP
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
         this.nOrigScrollTop = null; // Needed for IE fixed scrolling workaround 1118318
+        //this.resetResizerPosition();
     }
     else {
         YAHOO.log("Column resizer could not be created due to invalid colElId","warn");
@@ -956,6 +957,23 @@ if(YAHOO.util.DD) {
     YAHOO.util.DragDropMgr.clickTimeThresh = 1;
     YAHOO.extend(YAHOO.util.ColumnResizer, YAHOO.util.DDProxy);
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Public methods
+//
+/////////////////////////////////////////////////////////////////////////////
+YAHOO.util.ColumnResizer.prototype.resetResizerPosition = function() {
+    /*var elResizer = YAHOO.util.Dom.get(this.handleElId);
+    var resizerStyle = elResizer.style;
+    this.headCell.firstChild.style.position = "relative";
+    resizerStyle.left = (this.headCell.firstChild.offsetLeft + this.headCell.firstChild.offsetWidth - elResizer.offsetWidth) + "px";
+    resizerStyle.right = "auto";
+    resizerStyle.top = this.headCell.firstChild.offsetTop + "px";
+    resizerStyle.bottom = "auto";
+    resizerStyle.height = this.headCell.firstChild.offsetHeight + "px";
+    this.headCell.firstChild.style.position = "";*/
+};
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -982,7 +1000,7 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
         this.datatable.syncColWidths();
     }*/
 
-    // Reset resizer
+    var elResizer = YAHOO.util.Dom.get(this.handleElId);
     var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
     resizerStyle.left = "auto";
     resizerStyle.right = 0;

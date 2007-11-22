@@ -444,12 +444,14 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
             if(oParam) {
                 //TODO: conf height?
                 YAHOO.util.Dom.addClass(this._elContainer,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
-                YAHOO.util.Event.addListener(this._elContainerLiner, 'scroll', this._onContainerLinerScroll, this);
+                //YAHOO.util.Event.addListener(this._elContainerLiner, 'scroll', this._onContainerLinerScroll, this);
 
                 // Unset snapped width
-                this._elContainer.style.width = "";
+                //this._elContainer.style.width = "";
                 // Set explicit padding
-                this._elContainer.style.paddingTop = this._elThead.offsetHeight + "px"; //"24px";
+                if(!YAHOO.env.ua.ie) {
+                    this._elContainer.style.paddingBottom = this._elThead.offsetHeight + "px"; //"24px";
+                }
 
                 /*if(YAHOO.env.ua.ie) {
                     YAHOO.util.Dom.setStyle(this._elContainer, "width", this._elTable.offsetWidth);
@@ -467,12 +469,15 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
             }
             else {
                 YAHOO.util.Dom.removeClass(this._elContainer,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
-                YAHOO.util.Event.removeListener(this._elContainerLiner, 'scroll', this._onContainerLinerScroll);
+                //YAHOO.util.Event.removeListener(this._elContainerLiner, 'scroll', this._onContainerLinerScroll);
 
                 // Snap container to width
-                this._elContainer.style.width = this._elTable.offsetWidth + "px";
+                //this._elContainer.style.width = this._elTable.offsetWidth + "px";
                 // Unset explicit padding
-                this._elContainer.style.paddingTop = "";
+                //this._elContainer.style.paddingTop = "";
+                if(!YAHOO.env.ua.ie) {
+                    this._elContainer.style.paddingBottom = ""; //"24px";
+                }
 
                 /*if(YAHOO.env.ua.ie) {
                     YAHOO.util.Dom.setStyle(this._elContainer, "width", "auto");
@@ -939,13 +944,22 @@ YAHOO.widget.DataTable.prototype._sName = null;
 YAHOO.widget.DataTable.prototype._elContainer = null;
 
 /**
- * DOM reference to the container's liner element into which the TABLE element gets created.
+ * DOM reference to the container element for the DataTable header.
  *
- * @property _elContainerLiner
+ * @property _elHeadContainer
  * @type HTMLElement
  * @private
  */
-YAHOO.widget.DataTable.prototype._elContainerLiner = null;
+YAHOO.widget.DataTable.prototype._elHeadContainer = null;
+
+/**
+ * DOM reference to the container element for the DataTable body.
+ *
+ * @property _elBodyContainer
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elBodyContainer = null;
 
 /**
  * DOM reference to the CAPTION element for the DataTable instance.
@@ -957,13 +971,22 @@ YAHOO.widget.DataTable.prototype._elContainerLiner = null;
 YAHOO.widget.DataTable.prototype._elCaption = null;
 
 /**
- * DOM reference to the TABLE element for the DataTable instance.
+ * DOM reference to the primary TABLE element for the DataTable instance.
  *
  * @property _elTable
  * @type HTMLElement
  * @private
  */
 YAHOO.widget.DataTable.prototype._elTable = null;
+
+/**
+ * DOM reference to the header TABLE element for the DataTable instance.
+ *
+ * @property _elTable
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elHeadTable = null;
 
 /**
  * DOM reference to the THEAD element for the DataTable instance.
@@ -1117,9 +1140,15 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
 };
 
 YAHOO.widget.DataTable.prototype.syncColWidths = function() {
-var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
+/*        for(var i=0;i<this._oColumnSet.keys.length;i++) {
+            var cell = this.getTbodyEl().rows[0].cells[i];
+            var hddiv = this._oColumnSet.keys[0].getThEl().firstChild;
+            hddiv.style.width = cell.firstChild.offsetWidth + "px";
+        }
+*/
+    /*var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
     // Set body and head cells to the narrower of the two widths
-   for(i=0; i<this._oColumnSet.keys.length; i++) {
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
         elHeadCell = this.getTheadEl().rows[this.getTheadEl().rows.length-1].cells[i];
         elBodyCell = this.getTbodyEl().rows[0].cells[i];
         //YAHOO.log(i + " start head " + elHeadCell.offsetWidth,"warn");
@@ -1146,7 +1175,7 @@ var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
         }
         //YAHOO.log(i + " end head " + elHeadCell.offsetWidth,"warn");
         //YAHOO.log(i + " end body " + elBodyCell.offsetWidth,"warn");
-    }
+    }*/
 
     // Make any too-narrow cells equal to the wider cell
     /*for(i=0; i<this._oColumnSet.keys.length; i++) {
@@ -1212,17 +1241,26 @@ var elHeadCell, elBodyCell, elHeadCellWidth, elBodyCellWidth, nWidth, i;
  */
 YAHOO.widget.DataTable.prototype._initContainerEl = function(elContainer) {
     // Clear any previous container
-    //YAHOO.util.Event.purgeElement(this._elContainer, true);
-    //this._elContainer.innerHTML = "";
+    if(this._elContainer) {
+        YAHOO.util.Event.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
 
     elContainer = YAHOO.util.Dom.get(elContainer);
     if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
         YAHOO.util.Dom.addClass(elContainer,"yui-dt");
+        
+        // Container for header elements
+        this._elHeadContainer = elContainer.appendChild(document.createElement("div"));
+        YAHOO.util.Dom.addClass(this._elHeadContainer, "yui-dt-hd");
+        
+        // Container for header elements
+        this._elBodyContainer = elContainer.appendChild(document.createElement("div"));
+        YAHOO.util.Dom.addClass(this._elBodyContainer, "yui-dt-bd");
+
+        //YAHOO.util.Event.addListener(elContainerLiner, "scroll", this._onScroll, this); // for IE
+
         this._elContainer = elContainer;
-        var elContainerLiner = elContainer.appendChild(document.createElement("div"));
-        YAHOO.util.Dom.addClass(elContainerLiner,YAHOO.widget.DataTable.CLASS_LINER);
-        this._elContainerLiner = elContainerLiner;
-        YAHOO.util.Event.addListener(elContainerLiner, "scroll", this._onScroll, this); // for IE
     }
 };
 
@@ -1341,15 +1379,27 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
         this._elTable = null;
     }
     
-    // Create TABLE
-    var elTable = document.createElement("table");
-    elTable.tabIndex = 0;
-    elTable.id = this.id + "-table";
-    YAHOO.util.Dom.addClass(elTable, YAHOO.widget.DataTable.CLASS_TABLE);
-    this._elTable = this._elContainerLiner.appendChild(elTable);
+    // Create elements for header
+    // Create TABLE for header
+    var elHeadTable = document.createElement("table");
+    elHeadTable.tabIndex = 0;
+    elHeadTable.id = this.id + "-headtable";
+    YAHOO.util.Dom.addClass(elHeadTable, YAHOO.widget.DataTable.CLASS_TABLE);
+    this._elHeadTable = this._elHeadContainer.appendChild(elHeadTable);
+
+    // Create THEAD
+    this._initTheadEl(elHeadTable,false);
+
+    // Create elements for body
+    // Create TABLE for body
+    var elBodyTable = document.createElement("table");
+    elBodyTable.tabIndex = 0;
+    elBodyTable.id = this.id + "-bodytable";
+    YAHOO.util.Dom.addClass(elBodyTable, YAHOO.widget.DataTable.CLASS_TABLE);
+    this._elTable = this._elBodyContainer.appendChild(elBodyTable);
     
     // Create THEAD
-    this._initTheadEl(elTable, this._oColumnSet);
+    this._initTheadEl(elBodyTable, true);
 
     // Create TBODY for messages
     var elMsgTbody = document.createElement("tbody");
@@ -1362,43 +1412,46 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     YAHOO.util.Dom.addClass(elMsgCell,YAHOO.widget.DataTable.CLASS_FIRST);
     YAHOO.util.Dom.addClass(elMsgCell,YAHOO.widget.DataTable.CLASS_LAST);
     this._elMsgTd = elMsgCell;
-    this._elMsgTbody = elTable.appendChild(elMsgTbody);
+    this._elMsgTbody = elBodyTable.appendChild(elMsgTbody);
     this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
 
     // Create TBODY for data
-    this._elTbody = elTable.appendChild(document.createElement("tbody"));
+    this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
     YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_BODY);
 
     var elThead = this._elThead;
     var elTbody = this._elTbody;
-    var elContainerLiner = this._elContainerLiner;
+    var elBodyContainer = this._elBodyContainer;
 
     // Set up DOM events
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
     YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
 
-    YAHOO.util.Event.addListener(elTable, "focus", this._onTableFocus, this);
-    YAHOO.util.Event.addListener(elTable, "mouseover", this._onTableMouseover, this);
-    YAHOO.util.Event.addListener(elTable, "mouseout", this._onTableMouseout, this);
-    YAHOO.util.Event.addListener(elTable, "mousedown", this._onTableMousedown, this);
-    YAHOO.util.Event.addListener(elTable, "keydown", this._onTableKeydown, this);
-    YAHOO.util.Event.addListener(elTable, "keypress", this._onTableKeypress, this);
+    YAHOO.util.Event.addListener(elBodyTable, "focus", this._onTableFocus, this);
+    YAHOO.util.Event.addListener(elBodyTable, "mouseover", this._onTableMouseover, this);
+    YAHOO.util.Event.addListener(elBodyTable, "mouseout", this._onTableMouseout, this);
+    YAHOO.util.Event.addListener(elBodyTable, "mousedown", this._onTableMousedown, this);
+    YAHOO.util.Event.addListener(elBodyTable, "keydown", this._onTableKeydown, this);
+    YAHOO.util.Event.addListener(elBodyTable, "keypress", this._onTableKeypress, this);
 
     // Since we can't listen for click and dblclick on the same element...
-    YAHOO.util.Event.addListener(elTable, "dblclick", this._onTableDblclick, this);
+    YAHOO.util.Event.addListener(elBodyTable, "dblclick", this._onTableDblclick, this);
     YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
     YAHOO.util.Event.addListener(elTbody, "click", this._onTbodyClick, this);
 
-    YAHOO.util.Event.addListener(elTbody, "scroll", this._onScroll, this); // for everyone else
+    YAHOO.util.Event.addListener(elBodyContainer, "scroll", this._onScroll, this); // to sync horiz scroll headera
 };
 
 /**
  * Populates THEAD element with TH cells as defined by ColumnSet.
  *
  * @method _initTheadEl
+ * @param elTable {HTMLElement} TABLE element into which to initialize THEAD.
+ * @param bA11y {Boolean} True if THEAD is for accessibility, so as not to
+ * initialize presentation elements.
  * @private
  */
-YAHOO.widget.DataTable.prototype._initTheadEl = function() {
+YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     var i,oColumn, colId;
     var oColumnSet = this._oColumnSet;
     this._sFirstLabelLinkId = null;
@@ -1407,8 +1460,8 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
 
     // Create COLs
     // Iterate through each Column key...
-    var colKeys = oColumnSet.keys;
-    this._elColGroup = this._elTable.appendChild(document.createElement("colgroup"));
+    /*var colKeys = oColumnSet.keys;
+    this._elColGroup = elTable.appendChild(document.createElement("colgroup"));
     for(i=0; i<colKeys.length; i++) {
         oColumn = colKeys[i];
         var elCol;
@@ -1416,14 +1469,17 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
         elCol.id = this.id + "-col" + oColumn.getId();
         YAHOO.util.Dom.addClass(elCol, "yui-dt-col-"+oColumn.getKey());
         //TODO: Traverse up Column parents to assign _elCol
-    }
+    }*/
 
     // Create THEAD
-    var elThead = document.createElement("thead");
-    var elTheadCell;
+    var elThead = elTable.appendChild(document.createElement("thead"));
+    if(!bA11y) {
+        this._elThead = elThead;
+    }
 
     // Iterate through each row of Column headers...
     var colTree = oColumnSet.tree;
+    var elTheadCell;
     for(i=0; i<colTree.length; i++) {
         var elTheadRow = elThead.appendChild(document.createElement("tr"));
         elTheadRow.id = this.id+"-hdrow"+i;
@@ -1431,11 +1487,15 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
         // ...and create THEAD cells
         for(var j=0; j<colTree[i].length; j++) {
             oColumn = colTree[i][j];
-            elTheadCell = oColumn._elTh = elTheadRow.appendChild(document.createElement("th"));
-            elTheadCell.id = this.id+"-th" + oColumn.getId();
+            elTheadCell = elTheadRow.appendChild(document.createElement("th"));
+            if(!bA11y) {
+                oColumn._elTh = elTheadCell;
+            }
+            var id = (bA11y) ? this.id+"-th-ally" + oColumn.getId() : this.id+"-th" + oColumn.getId();
+            elTheadCell.id = id;
             elTheadCell.yuiCellIndex = j;
             YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_COLHEAD);
-            this._initThEl(elTheadCell,oColumn,i,j);
+            this._initThEl(elTheadCell,oColumn,i,j, bA11y);
         }
 
         // Set FIRST/LAST on THEAD rows
@@ -1447,8 +1507,6 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
         }
     }
 
-//TODO: append thead to the table first
-    this._elThead = this._elTable.appendChild(elThead);
 
     // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
     var aFirstHeaders = oColumnSet.headers[0];
@@ -1464,35 +1522,37 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
 
     // Add Resizer only after DOM has been updated
     //TODO: Support resizers on parents of nested Columns?
-    var foundDD = (YAHOO.util.DD) ? true : false;
-    var needDD = false;
-    for(i=0; i<this._oColumnSet.keys.length; i++) {
-        oColumn = this._oColumnSet.keys[i];
-        var colKey = oColumn.getKey();
-        elTheadCell = oColumn.getThEl();
-        if(oColumn.resizeable) {
-            if(foundDD) {
-                YAHOO.util.Dom.addClass(this._elTable, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
-                YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
-                var elThContainer = elTheadCell.firstChild;
-                var elThResizer = elThContainer.appendChild(document.createElement("span"));
-                elThResizer.id = this.id + "-colresizer-" + colKey;
-                YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
-                this._initColumnResizerProxyEl();
-                oColumn.ddResizer = new YAHOO.util.ColumnResizer(
-                        this, oColumn, elTheadCell, elThResizer.id, this._elColumnResizerProxy);
-                var cancelClick = function(e) {
-                    YAHOO.util.Event.stopPropagation(e);
-                };
-                YAHOO.util.Event.addListener(elThResizer,"click",cancelClick);
-            }
-            else {
-                needDD = true;
+    if(!bA11y) {
+        var foundDD = (YAHOO.util.DD) ? true : false;
+        var needDD = false;
+        for(i=0; i<this._oColumnSet.keys.length; i++) {
+            oColumn = this._oColumnSet.keys[i];
+            var colKey = oColumn.getKey();
+            elTheadCell = oColumn.getThEl();
+            if(oColumn.resizeable) {
+                if(foundDD) {
+                    YAHOO.util.Dom.addClass(elTable, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
+                    YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
+                    var elThContainer = elTheadCell.firstChild;
+                    var elThResizer = elThContainer.appendChild(document.createElement("span"));
+                    elThResizer.id = this.id + "-colresizer-" + colKey;
+                    YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
+                    this._initColumnResizerProxyEl();
+                    oColumn.ddResizer = new YAHOO.util.ColumnResizer(
+                            this, oColumn, elTheadCell, elThResizer.id, this._elColumnResizerProxy);
+                    var cancelClick = function(e) {
+                        YAHOO.util.Event.stopPropagation(e);
+                    };
+                    YAHOO.util.Event.addListener(elThResizer,"click",cancelClick);
+                }
+                else {
+                    needDD = true;
+                }
             }
         }
-    }
-    if(needDD) {
-        YAHOO.log("Could not find DragDrop dependancy for resizeable Columns", "warn", this.toString());
+        if(needDD) {
+            YAHOO.log("Could not find DragDrop dependancy for resizeable Columns", "warn", this.toString());
+        }
     }
 
     YAHOO.log("Column headers for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
@@ -1504,11 +1564,13 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function() {
  * @method _initThEl
  * @param elTheadCell {HTMLElement} TH cell element reference.
  * @param oColumn {YAHOO.widget.Column} Column object.
- * @param row {number} Row index.
- * @param col {number} Column index.
+ * @param row {Number} Row index.
+ * @param col {Number} Column index.
+ * @param bA11y {Boolean} True if TH is for accessibility, so as not to
+ * initialize presentation elements.
  * @private
  */
-YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,col) {
+YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,col, bA11y) {
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var index = this._nIndex;
@@ -1528,7 +1590,8 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadCell.colSpan = oColumn.getColspan();
 
     var elColheadLiner = elTheadCell.appendChild(document.createElement("div"));
-    elColheadLiner.id = this.id + "-container" + colId;
+    var id = (bA11y) ? this.id + "-a11ycontainer" + colId : this.id + "-container" + colId;
+    elColheadLiner.id = id;
     YAHOO.util.Dom.addClass(elColheadLiner,YAHOO.widget.DataTable.CLASS_COLHEADLINER);
     var aCustomClasses;
     if(YAHOO.lang.isString(oColumn.className)) {
@@ -1554,7 +1617,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     YAHOO.util.Dom.addClass(elColheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
     var sLabel = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : colKey;
-    if(oColumn.sortable) {
+    if(!bA11y && oColumn.sortable) {
         YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
         //TODO: Make sortLink customizeable
         //TODO: Make title configurable
@@ -2034,6 +2097,36 @@ YAHOO.widget.DataTable.prototype._setRowStripes = function(row, range) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Syncs scrolltop and scrollleft of all TABLEs.
+ *
+ * @method _onScroll
+ * @param e {HTMLEvent} The scroll event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
+    /*for(var i=0; i<oSelf._oColumnSet.keys.length; i++) {
+        var elLiner = oSelf._oColumnSet.keys[i].getThEl().firstChild;
+        elLiner.style.position = "";
+    }*/
+    oSelf._elHeadContainer.scrollLeft = oSelf._elBodyContainer.scrollLeft;
+    /*for(i=0; i<oSelf._oColumnSet.keys.length; i++) {
+        elLiner = oSelf._oColumnSet.keys[i].getThEl().firstChild;
+        elLiner.style.position = "relative";
+    }*/
+
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+
+    if(oSelf._oCellEditor.isActive) {
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        oSelf.cancelCellEditor();
+    }
+
+    oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
+};
+
+/**
  * Handles scroll events on the container liner.
  *
  * @method _onContainerLinerScroll
@@ -2042,7 +2135,7 @@ YAHOO.widget.DataTable.prototype._setRowStripes = function(row, range) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onContainerLinerScroll = function(e, oSelf) {
-    var elThead = oSelf._elThead;
+    /*var elThead = oSelf._elThead;
     var elContainerLiner = this;
     var newScroll = 0 - elContainerLiner.scrollLeft + "px";
     YAHOO.log(newScroll,"warn");
@@ -2059,7 +2152,7 @@ YAHOO.widget.DataTable.prototype._onContainerLinerScroll = function(e, oSelf) {
         // Scroll entire THEAD
         elThead.style.left = newScroll;
 
-    }
+    }*/
 };
 
 /**
@@ -2070,7 +2163,7 @@ YAHOO.widget.DataTable.prototype._onContainerLinerScroll = function(e, oSelf) {
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
+/*YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
@@ -2080,27 +2173,7 @@ YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
     }
 
     oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
-};
-
-/**
- * Handles scroll events on the CONTAINER (for IE) and TBODY elements (for everyone else).
- *
- * @method _onScroll
- * @param e {HTMLEvent} The scroll event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
-
-    if(oSelf._oCellEditor.isActive) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
-        oSelf.cancelCellEditor();
-    }
-
-    oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
-};
+};*/
 
 /**
  * Handles click events on the DOCUMENT.
@@ -4485,11 +4558,11 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         // IE workaround for bug 1243089:
         // Reset any scrolltop...
-        var nOrigScrollTop = null;
+        /*var nOrigScrollTop = null;
         if(this._elContainerLiner.scrollTop > 0) {
             nOrigScrollTop = this._elContainerLiner.scrollTop;
             this._elContainerLiner.scrollTop = 0;
-        }
+        }*/
 
         // Update sortedBy tracker
         this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
@@ -4508,9 +4581,9 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 
         // IE workaround for bug 1243089:
         // ...reinstate scrolltop
-        if(nOrigScrollTop !== null) {
+        /*if(nOrigScrollTop !== null) {
             this._elContainerLiner.scrollTop = nOrigScrollTop;
-        }
+        }*/
 
         this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
         YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
@@ -4533,26 +4606,28 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, sWidth) {
         var nColKeyIndex = oColumn.getKeyIndex();
         //var elCol = oColumn.getColEl();
         var elColHead = oColumn.getThEl();
+        YAHOO.log(elColHead.id,"warn");
 
         //elCol.width = sWidth;
         var allrows = this.getTbodyEl().rows;
         var l = allrows.length;
 
-        this._elContainer.style.width = "auto";
+        //this._elContainer.style.width = "auto";
 
         for(var i=0;i<l;i++) {
             allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
+            allrows[i].cells[nColKeyIndex].style.width = sWidth;
         }
+        elColHead.style.width = sWidth;
         elColHead.firstChild.style.width = sWidth;
         allrows[0].cells[nColKeyIndex].style.width = sWidth;
 
-        if(!this.get("scrollable")) {
+        /*if(!this.get("scrollable")) {
                 this._elContainer.style.width = this._elTable.offsetWidth + "px";
         }
         else {
             this._elContainer.style.width = "";
-        }
-
+        }*/
     }
 };
 
@@ -4827,10 +4902,10 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
                 // IE workaround for bug 1225393:
                 // Reset any scrolltop...
                 var nOrigScrollTop = null;
-                if(this._elContainerLiner.scrollTop > 0) {
+                /*if(this._elContainerLiner.scrollTop > 0) {
                     nOrigScrollTop = this._elContainerLiner.scrollTop;
                     this._elContainerLiner.scrollTop = 0;
-                }
+                }*/
 
                 // Paginated so just refresh the view to keep pagination state
                 if(this.get("paginated")) {
@@ -4871,9 +4946,9 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
 
                 // IE workaround for bug 1225393:
                 // ...reinstate scrolltop
-                if(nOrigScrollTop !== null) {
+                /*if(nOrigScrollTop !== null) {
                     this._elContainerLiner.scrollTop = nOrigScrollTop;
-                }
+                }*/
             }
             // Record is not on current page so just update pagination UI
             else {
@@ -4974,18 +5049,18 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
         // IE workaround for bug 1225393:
         // Reset any scrolltop...
         var nOrigScrollTop = null;
-        if(this._elContainerLiner.scrollTop > 0) {
+        /*if(this._elContainerLiner.scrollTop > 0) {
             nOrigScrollTop = this._elContainerLiner.scrollTop;
             this._elContainerLiner.scrollTop = 0;
-        }
+        }*/
 
         this._updateTrEl(elRow, updatedRecord);
 
         // IE workaround for bug 1225393:
         // ...reinstate scrolltop
-        if(nOrigScrollTop !== null) {
+        /*if(nOrigScrollTop !== null) {
             this._elContainerLiner.scrollTop = nOrigScrollTop;
-        }
+        }*/
     }
 
     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -5048,10 +5123,10 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
             // IE workaround for bug 1225393:
             // Reset any scrolltop...
             var nOrigScrollTop = null;
-            if(this._elContainerLiner.scrollTop > 0) {
+            /*if(this._elContainerLiner.scrollTop > 0) {
                 nOrigScrollTop = this._elContainerLiner.scrollTop;
                 this._elContainerLiner.scrollTop = 0;
-            }
+            }*/
 
             var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex) ?
                     true : false;
@@ -5078,9 +5153,9 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
 
             // IE workaround for bug 1225393:
             // ...reinstate scrolltop
-            if(nOrigScrollTop !== null) {
+            /*if(nOrigScrollTop !== null) {
                 this._elContainerLiner.scrollTop = nOrigScrollTop;
-            }
+            }*/
         }
 
         this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
@@ -6716,19 +6791,19 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
         // IE workaround for bug 1512323:
         // Reset any scrolltop...
         var nOrigScrollTop = null;
-        if(this._elContainerLiner.scrollTop > 0) {
+        /*if(this._elContainerLiner.scrollTop > 0) {
             nOrigScrollTop = this._elContainerLiner.scrollTop;
             this._elContainerLiner.scrollTop = 0;
-        }
+        }*/
 
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
 
         // IE workaround for bug 1512323:
         // ...reinstate scrolltop
-        if(nOrigScrollTop !== null) {
+        /*if(nOrigScrollTop !== null) {
             this._elContainerLiner.scrollTop = nOrigScrollTop;
-        }
+        }*/
 
         // Clear out the Cell Editor
         this.resetCellEditor();

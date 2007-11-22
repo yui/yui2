@@ -1,13 +1,9 @@
-/*foundational css*/
-th .yui-dt-colhead {
-    position:relative;
-}
-
+/*foundational resizeable columns css*/
 th .yui-dt-colheadliner {
     position:relative;
 }
 
-.yui-dt-resizer {
+.yui-dt-resizer { border:1px solid red;
     position:absolute;
     right:0;
     bottom:0;
@@ -18,86 +14,30 @@ th .yui-dt-colheadliner {
     zoom:1; /* needed to block events in ie */
 }
 
-/* foundational scrolling css FROM MATT
-TODO: clean redundancies */
-/*.yui-dt table {border-collapse:collapse;} skin*/
-/*.yui-dt thead th {text-align:left;} skin */
+/* foundational scrolling css */
 
-/* variables */
-.yui-dt-scrollable {
-    xpadding-top:24px; /* thead height */ /* TODO: add dynamically */ /* orig 24px */
-    xmargin-bottom:-24px; /* thead height */ /* TODO: add dynamically */ /* orig 24px */
-}
+/* Column headers */
+.yui-dt-hd div{color:blue;overflow:hidden;}
 
-.yui-dt thead tr {
-    /*background-color:#d5d5d5;*/ /*IE: TH border-color*/
-}
+/* Body cells */
+.yui-dt-bd div{color:red;overflow:hidden;}
+/*.yui-dt-bd div{white-space:nowrap;color:red;}*/
 
-/*.yui-dt tbody {
-    border-top:#a9a9a9; skin
-}*/
+/* Ally headers */
+.yui-dt-bd thead tr, .yui-dt-bd thead th {position:absolute;top:-500px;}/* left:-1500px; */
+.a11yNote {position:absolute;left:-1500px;}
 
-/*TODO: is this necessary?
-.yui-dt thead th.yui-dt-first div,
-.yui-dt tbody td.yui-dt-first div {
+/*Vertical and horizontal scrolling */
+.yui-dt-scrollable .yui-dt-bd {overflow:auto;}
+.yui-dt-scrollable .yui-dt-hd {
     overflow:hidden;
-    width:5em;
-}*/
+    position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
+} 
+.yui-dt-scrollable .yui-dt-hd th.yui-dt-last {padding-right:48px;} /* for scrollbar */
 
-.yui-dt thead div,
-.yui-dt tbody div {
-    overflow:hidden;
-}
-
-/*.yui-dt thead th {
-    background:#ccc url(http://yui.yahooapis.com/2.3.1/build/assets/skins/sam/sprite.png) repeat-x 0 0; skin
-}*/
-
-/*.yui-dt .yui-dt-odd td {background:#f1f7ff;} skin */
-
-/*.yui-dt th,
-.yui-dt td {
-    border-right:1px solid #d5d5d5; skin
-    padding:3px 5px;
-}*/
-
-/*.yui-dt tbody th,
-.yui-dt td {
-    border-bottom:1px solid #d5d5d5; skin
-}*/
-
-/* constants */
-.yui-dt-scrollable {
-    position:relative; /* contain abs thead overflow */
-    overflow:hidden;
-
-}
-
-.yui-dt-scrollable .yui-dt-liner {
-    overflow:auto;
-    width:100%;
-    height:100%;
-}
-
-.yui-dt-scrollable table {
-    xheight:100%;
-    xwidth:100%;
-}
-
-.yui-dt-scrollable thead {
-    _margin-right:-16px;
-    display:block;
-    position:absolute;
-    *position:static;
-    left:0;
-    top:0;
-}
-
-.yui-dt-scrollable thead tr{  /*TODO: breaks nested headers in IE*/
-    *position: absolute;
-    *left: 0;
-    *top: 0;
-}
+/* TODO: customizable */
+.yui-dt-bd {width:40em;height:15em;}
+.yui-dt-hd {width:40em;}
 
 /* foundational editor css */
 .yui-dt-editor {

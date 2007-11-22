@@ -1,5 +1,5 @@
 /* basic skin styles */
-.yui-skin-sam .yui-dt {border:1px solid #7F7F7F;} /* outer border */
+.yui-skin-sam .yui-dt-scrollable {border:1px solid #7F7F7F;} /* outer border */ /*TODO: redo outer border styles for new markup */
 .yui-skin-sam .yui-dt-table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;}
 .yui-skin-sam .yui-dt-table thead {border-spacing:0;} /* for safari bug */
 .yui-skin-sam .yui-dt-table caption {padding-bottom:1em;text-align:left;}
