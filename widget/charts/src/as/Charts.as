@@ -1,5 +1,6 @@
 package
 {
+	import com.adobe.serialization.json.JSON;
 	import fl.containers.UILoader;
 	import flash.display.Sprite;
 	import flash.display.DisplayObject;
@@ -481,18 +482,26 @@ package
 		}
 		
 		/**
-		 * Accepts a JavaScript-friendly set of styles for the chart itself.
+		 * Accepts a JSON-encoded set of styles for the chart itself.
+		 * Flash Player versions below 9.0.60 don't encode ExternalInterface
+		 * calls correctly!
 		 */
-		public function setStyles(styles:Object):void
+		public function setStyles(styles:String):void
 		{
-			for(var styleName:String in styles)
+			var parsedStyles:Object = JSON.decode(styles);
+			for(var styleName:String in parsedStyles)
 			{
-				this.setStyle(styleName, styles[styleName]);
+				this.setStyle(styleName, parsedStyles[styleName], false);
 			}
 		}
 		
-		public function setStyle(name:String, value:Object):void
+		public function setStyle(name:String, value:Object, json:Boolean = true):void
 		{
+			if(json)
+			{
+				//by default, we assume it's json data, only setStyles will send false
+				value = JSON.decode(value as String);
+			}
 			switch(name)
 			{
 				case "padding":
@@ -572,6 +581,8 @@ package
 			{
 				var series:ISeries = ISeries(this.chart.dataProvider[i]);
 				var style:Object = styles[i];
+				style = JSON.decode(style as String);
+				
 				//defaults
 				var defaultColors:Array =
 				[

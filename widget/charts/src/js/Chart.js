@@ -165,6 +165,9 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	setStyle: function(name, value)
 	{
+		//we must jsonify this because Flash Player versions below 9.0.60 don't handle
+		//complex ExternalInterface parsing correctly
+		value = YAHOO.lang.JSON.stringify(value);
 		this._swf.setStyle(name, value);
 	},
 	
@@ -176,6 +179,9 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	setStyles: function(styles)
 	{
+		//we must jsonify this because Flash Player versions below 9.0.60 don't handle
+		//complex ExternalInterface parsing correctly
+		styles = YAHOO.lang.JSON.stringify(styles);
 		this._swf.setStyles(styles);
 	},
 	
@@ -187,6 +193,12 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	setSeriesStyles: function(styles)
 	{
+		//we must jsonify this because Flash Player versions below 9.0.60 don't handle
+		//complex ExternalInterface parsing correctly
+		for(var i = 0; i < styles.length; i++)
+		{
+			styles[i] = YAHOO.lang.JSON.stringify(styles[i]);	
+		}
 		this._swf.setSeriesStyles(styles);
 	},
 	
@@ -309,7 +321,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		if(this._attributes.style)
 		{
 			var style = this._attributes.style;
-			this._swf.setStyles(style);		
+			this.setStyles(style);		
 		}
 		
 		YAHOO.widget.Chart.superclass._loadHandler.call(this);
@@ -377,12 +389,17 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 					var clonedSeries = {};
 					for(var prop in currentSeries)
 					{
-						clonedSeries[prop] = currentSeries[prop];
-						if(prop == "style" && currentSeries[prop] != null)
+						
+						if(prop == "style" && currentSeries.style != null)
 						{
+							clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
 							styleChanged = true;
+							
+							//we don't want to modify the styles again next time
+							//so null out the style property.
 							currentSeries.style = null;
 						}
+						else clonedSeries[prop] = currentSeries[prop];
 					}
 					dataProvider.push(clonedSeries);
 				}

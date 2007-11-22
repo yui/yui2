@@ -17,7 +17,7 @@ YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 	//the Flash Player external interface code from Adobe doesn't play nicely
 	//with the default value, yui-gen, in IE
 	this._id = attributes.id = attributes.id || YAHOO.util.Dom.generateId(null, "yuigen");
-	attributes.version = attributes.version || "9";
+	attributes.version = attributes.version || "9.0.45";
 	attributes.backgroundColor = attributes.backgroundColor || "#ffffff";
 	
 	//we can't use the initial attributes right away
