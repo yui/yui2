@@ -16,7 +16,11 @@
     border-right:1px solid #CBCBCB;/*  inner column border */
 }
 .yui-skin-sam .yui-dt-colheadliner {
-    padding:4px 10px 4px 10px; /* cell padding */
+    margin:0;padding:0;
+    padding:4px 10px 4px 10px; /* cell padding moved to label */
+}
+.yui-skin-sam .yui-dt-label {
+    xmargin:4px 10px 4px 10px; /* cell padding */
 }
 .yui-skin-sam .yui-dt-table td {
     margin:0;padding:0;
@@ -24,6 +28,7 @@
     text-align:left;
 }
 .yui-skin-sam .yui-dt-table .yui-dt-cellliner {
+    margin:0;padding:0;
     padding:4px 10px 4px 10px; /* cell padding */
 }
 .yui-skin-sam .yui-dt-list td {

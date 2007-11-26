@@ -1006,7 +1006,7 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
     resizerStyle.right = 0;
     resizerStyle.top = "auto";
     resizerStyle.bottom = 0;
-
+    
     this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
 };
 
@@ -1058,9 +1058,9 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
         if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
             var offsetX = newX - this.startX;
             var newWidth = this.startWidth + offsetX;
-            if(newWidth > this. minWidth) {
+            //if(newWidth > this. minWidth) {
                 this.datatable.setColumnWidth(this.column, newWidth+"px");
-            }
+            //}
         }
 
 /*    try {

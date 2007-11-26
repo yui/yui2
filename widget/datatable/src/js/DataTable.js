@@ -583,6 +583,17 @@ YAHOO.widget.DataTable.CLASS_LABEL = "yui-dt-label";
 YAHOO.widget.DataTable.CLASS_RESIZER = "yui-dt-resizer";
 
 /**
+ * Class name assigned to resizer proxy elements.
+ *
+ * @property DataTable.CLASS_RESIZERPROXY
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-resizerproxy"
+ */
+YAHOO.widget.DataTable.CLASS_RESIZERPROXY = "yui-dt-resizerproxy";
+
+/**
  * Class name assigned to Editor container elements.
  *
  * @property DataTable.CLASS_EDITOR
@@ -1534,7 +1545,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
                     YAHOO.util.Dom.addClass(elTable, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                     YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                     var elThContainer = elTheadCell.firstChild;
-                    var elThResizer = elThContainer.appendChild(document.createElement("span"));
+                    var elThResizer = elThContainer.appendChild(document.createElement("div"));
                     elThResizer.id = this.id + "-colresizer-" + colKey;
                     YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
                     this._initColumnResizerProxyEl();
@@ -1612,7 +1623,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     
     
     
-    var elColheadLabel = elColheadLiner.appendChild(document.createElement("span"));
+    var elColheadLabel = elColheadLiner.appendChild(document.createElement("div"));
     elColheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elColheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
@@ -1689,9 +1700,9 @@ YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
         // Attach Column resizer element as first child of body
         var elColumnResizerProxy = document.createElement("div");
         elColumnResizerProxy.id = this.id + "-colresizerproxy";
-        elColumnResizerProxy.style.position = "absolute";
-        elColumnResizerProxy.style.visibility = "hidden";
-        YAHOO.util.Dom.addClass(elColumnResizerProxy, YAHOO.widget.DataTable.CLASS_RESIZER);
+        //elColumnResizerProxy.style.position = "absolute";
+        //elColumnResizerProxy.style.visibility = "hidden";
+        YAHOO.util.Dom.addClass(elColumnResizerProxy, YAHOO.widget.DataTable.CLASS_RESIZERPROXY);
         var elFirstChild = YAHOO.util.Dom.getFirstChild(document.body);
         if(elFirstChild) {
             elColumnResizerProxy = YAHOO.util.Dom.insertBefore(elColumnResizerProxy, elFirstChild);

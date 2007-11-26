@@ -3,25 +3,29 @@ th .yui-dt-colheadliner {
     position:relative;
 }
 
-.yui-dt-resizer { border:1px solid red;
+.yui-dt-resizer {
     position:absolute;
     right:0;
     bottom:0;
     height:100%;
     cursor:e-resize;
     cursor:col-resize;
+    background:url(transparent.gif); /* needed to block events in ie http://my.opera.com/hallvors/blog/show.dml/16391 */
+}
+.yui-dt-resizerproxy {
+    visibility:hidden;
+    position:absolute;
     z-index:9000;
-    zoom:1; /* needed to block events in ie */
+    background:url(transparent.gif); /* needed to block events in ie http://my.opera.com/hallvors/blog/show.dml/16391 */
 }
 
 /* foundational scrolling css */
 
 /* Column headers */
-.yui-dt-hd div{color:blue;overflow:hidden;}
+.yui-dt-hd div{overflow:hidden;}
 
 /* Body cells */
-.yui-dt-bd div{color:red;overflow:hidden;}
-/*.yui-dt-bd div{white-space:nowrap;color:red;}*/
+.yui-dt-bd div{overflow:hidden;}
 
 /* Ally headers */
 .yui-dt-bd thead tr, .yui-dt-bd thead th {position:absolute;top:-500px;}/* left:-1500px; */
@@ -33,7 +37,9 @@ th .yui-dt-colheadliner {
     overflow:hidden;
     position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
 } 
-.yui-dt-scrollable .yui-dt-hd th.yui-dt-last {padding-right:48px;} /* for scrollbar */
+.yui-dt-scrollable .yui-dt-hd th.yui-dt-last {
+    xpadding-right:48px; /* for scrollbar */
+}
 
 /* TODO: customizable */
 .yui-dt-bd {width:40em;height:15em;}
