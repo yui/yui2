@@ -3240,8 +3240,8 @@ var Dom = YAHOO.util.Dom,
                 this.currentElement[0] = sel;
                 this.toolbar.fireEvent('insertimageClick', { type: 'insertimageClick', target: this.toolbar });
                 this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
-            } else if (this._isElement(sel, 'a')) {
-                this.currentElement[0] = sel;
+            } else if (this._hasParent(sel, 'a')) { //Handle elements inside an a
+                this.currentElement[0] = this._hasParent(sel, 'a');
                 this.toolbar.fireEvent('createlinkClick', { type: 'createlinkClick', target: this.toolbar });
                 this.fireEvent('afterExecCommand', { type: 'afterExecCommand', target: this });
             }
@@ -4891,7 +4891,9 @@ var Dom = YAHOO.util.Dom,
         */
         cmd_createlink: function(value) {
             var el = this._getSelectedElement(), _a = null;
-            if (!this._isElement(el, 'a')) {
+            if (this._hasParent(el, 'a')) {
+                this.currentElement[0] = this._hasParent(el, 'a');
+            } else if (!this._isElement(el, 'a')) {
                 this._createCurrentElement('a');
                 _a = this._swapEl(this.currentElement[0], 'a');
                 this.currentElement[0] = _a;
