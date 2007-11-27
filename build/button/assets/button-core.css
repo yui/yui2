@@ -19,6 +19,7 @@
     display: block;
     *display: inline-block; /* IE */
     border: none;
+    margin: 0;
 
 }
 
