@@ -23,7 +23,7 @@ YAHOO.widget.Paginator = function (config) {
     }
 
     this._initialized = true;
-}
+};
 YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.EventProvider);
 YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
 
@@ -75,8 +75,8 @@ YAHOO.widget.Paginator.calculatePageRange = function (currentPage,totalPages,num
     }
 
     // Either has no pages, or unlimited pages.  Show none.
-    if (numPages == 0 || totalPages == 0
-    ||  (totalPages === YAHOO.widget.Paginator.VALUE_UNLIMITED &&
+    if (numPages === 0 || totalPages === 0 ||
+        (totalPages === YAHOO.widget.Paginator.VALUE_UNLIMITED &&
          numPages   === YAHOO.widget.Paginator.VALUE_UNLIMITED)) {
         return [0,-1];
     }
@@ -213,8 +213,8 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
         validator : function (newOffset) {
             var records = this.get('totalRecords');
 
-            if (YAHOO.lang.isNumber(newOffset) && newOffset >= 0
-            &&  (records === YAHOO.widget.Paginator.VALUE_UNLIMITED || newOffset < records)) {
+            if (YAHOO.lang.isNumber(newOffset) && newOffset >= 0 &&
+                (records === YAHOO.widget.Paginator.VALUE_UNLIMITED || newOffset < records)) {
                 return true;
             }
 
@@ -281,6 +281,18 @@ YAHOO.widget.Paginator.prototype.render = function () {
     this.fireEvent('rendered',this.getState());
 };
 
+YAHOO.widget.Paginator.prototype.destroy = function () {
+    var containers = this.get('containerNodes');
+
+    for (var i = 0,len = containers.length; i < len; ++i) {
+        // remove events
+        YAHOO.util.Event.purgeElement(containers[i],true);
+
+        // clear containers
+        containers[i].parentNode.removeChild(containers[i]);
+    }
+};
+
 /**
  * Override these methods to define custom pagination controls.
  */
@@ -290,7 +302,7 @@ YAHOO.widget.Paginator.prototype._initNodeCollections = function () {
         gotoInputs     : [],
         dropdowns      : []
     };
-}
+};
 
 YAHOO.widget.Paginator.prototype._renderControls = function (container, id_base, containerIndex, isUpdate) {
     var Dom         = YAHOO.util.Dom,
@@ -299,7 +311,7 @@ YAHOO.widget.Paginator.prototype._renderControls = function (container, id_base,
         currentPage = this.getCurrentPage(),
         currentSize = this.get('rowsPerPage'),
         wrapperId   = id_base + '-pages' + containerIndex,
-        wrapper, link, range, i;
+        wrapper, link, range, i, len;
 
     // Must have this info to paginate
     if (currentPage === null) {
@@ -375,7 +387,7 @@ YAHOO.widget.Paginator.prototype._renderControls = function (container, id_base,
         if (isUpdate) {
             // Make sure the right option is selected
             sizeOptionDropdown = Dom.get(dropdownId);
-            for (var i = 0, len = sizeOptions.length; i < len; ++i) {
+            for (i = 0, len = sizeOptions.length; i < len; ++i) {
                 if (sizeOptions[i] == currentSize) {
                     sizeOptionDropdown.options[i].selected = true;
                     break;
@@ -389,7 +401,7 @@ YAHOO.widget.Paginator.prototype._renderControls = function (container, id_base,
             sizeOptionDropdown.id = dropdownId;
 
             // Add the size options
-            for (var i = 0, len = sizeOptions.length; i < len; ++i) {
+            for (i = 0, len = sizeOptions.length; i < len; ++i) {
                 var opt = d.createElement('option');
                 opt.value = sizeOptions[i];
                 opt.appendChild(d.createTextNode(sizeOptions[i]));
@@ -408,8 +420,6 @@ YAHOO.widget.Paginator.prototype._renderControls = function (container, id_base,
             this._pageNavNodes.dropdowns.push(sizeOptionDropdown);
         }
     }
-
-
 };
 
 YAHOO.widget.Paginator.prototype._createPageEl = function(id_base,pgClass,currentPage,page) {
@@ -466,7 +476,7 @@ YAHOO.widget.Paginator.prototype._createPageEl = function(id_base,pgClass,curren
     Dom.addClass(el,pgClass);
 
     return el;
-}
+};
 
 YAHOO.widget.Paginator.prototype._initEvents = function () {
     this.createEvent('rendered');
@@ -479,7 +489,7 @@ YAHOO.widget.Paginator.prototype._onClickHandler = function (e) {
     var Event = YAHOO.util.Event,
         t     = Event.getTarget(e),
         re,
-        newRecords;
+        newPage;
 
     if (t.nodeName.toLowerCase() !== 'a') {
         return;
@@ -601,7 +611,7 @@ YAHOO.widget.Paginator.prototype.getTotalPages = function () {
     }
 
     return Math.ceil(records/perPage);
-}
+};
 YAHOO.widget.Paginator.prototype.getTotalRecords = function () {
     return this.get('totalRecords');
 };
@@ -625,7 +635,7 @@ YAHOO.widget.Paginator.prototype.getCurrentPage = function () {
 };
 YAHOO.widget.Paginator.prototype.getCurrentRecords = function () {
     return this.getPageRecords(this.getCurrentPage());
-}
+};
 
 YAHOO.widget.Paginator.prototype.hasNextPage = function () {
     var currentPage = this.getCurrentPage(),
@@ -718,12 +728,12 @@ YAHOO.widget.Paginator.prototype.getState = function (changes) {
                             currentState.totalRecords)
     };
 
-    if (state.totalRecords == 0) {
+    if (state.totalRecords === 0) {
         newOffset  = 0;
         state.page = 0;
     } else {
-        if (!YAHOO.lang.isNumber(changes.recordOffset)
-        &&   YAHOO.lang.isNumber(changes.page)) {
+        if (!YAHOO.lang.isNumber(changes.recordOffset) &&
+             YAHOO.lang.isNumber(changes.page)) {
             newOffset = (changes.page - 1) * state.rowsPerPage;
             if (state.totalRecords === YAHOO.widget.Paginator.VALUE_UNLIMITED) {
                 state.page = changes.page;

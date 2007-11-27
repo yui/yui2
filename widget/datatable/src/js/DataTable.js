@@ -80,7 +80,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
         //HACK: Set the paginator values.  Attribute doesn't afford for merging
         // obj value's keys.  It's all or nothing.  Merge in provided keys.
-        if(this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
+        if(this._oConfigs && this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
             this.updatePaginator(this._oConfigs.paginator);
         }
 
@@ -292,18 +292,17 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     */
     this.setAttributeConfig("paginated", {
         value: false,
-        validator: function (on) {
-            return YAHOO.lang.isBoolean(on) && this.get('paginator');
-        },
+        validator: YAHOO.lang.isBoolean,
         method : function (on) {
             var curVal = this.get('paginated');
+            var i,len;
             if (on == curVal) {
                 return;
             }
 
-            var paginator  = this.get('paginator');
-            if (paginator instanceof YAHOO.widget.Paginator) {
-                var containers = paginator.getContainers();
+            var oPaginator  = this.get('paginator');
+            if (oPaginator instanceof YAHOO.widget.Paginator) {
+                var containers = oPaginator.getContainers();
                 if (on) {
                     if (!containers || !containers.length) {
                         // Build the container nodes
@@ -318,24 +317,39 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                                     YAHOO.widget.DataTable.CLASS_PAGINATOR);
 
                         containers = [c_above,c_below];
-                        paginator.setContainers(containers);
+                        oPaginator.setContainers(containers);
                     }
 
                     // rendering handled in refreshView
-                    for (var i = 0, len = containers.length; i < len; ++i) {
+                    for (i = 0, len = containers.length; i < len; ++i) {
                         YAHOO.util.Dom.setStyle(containers[i],'display','');
                     }
                 } else {
                     // Can't just remove nodes from the DataTable container element
                     // because we need to know if the pagination was rendered then
                     // hidden.
-                    for (var i = 0, len = containers.length; i < len; ++i) {
+                    for (i = 0, len = containers.length; i < len; ++i) {
                         YAHOO.util.Dom.setStyle(containers[i],'display','none');
                     }
                 }
             } else {
                 // Backward compatibility--pagination generated here
-                var i;
+                oPaginator = oPaginator || {
+                    rowsPerPage     : 500,  // 500 rows per page
+                    currentPage     : 1,    // show page one
+                    startRecordIndex: 0,    // start with first Record
+                    totalRecords    : 0,    // how many Records total
+                    totalPages      : 0,    // how many pages total
+                    rowsThisPage    : 0,    // how many rows this page
+                    pageLinks       : 0,    // show all links
+                    pageLinksStart  : 1,    // first link is page 1
+                    dropdownOptions : null, // no dropdown
+                    containers      : [],   // Paginator container element references
+                    dropdowns       : [],   // dropdown element references,
+                    links           : []    // links elements
+                };
+                var aContainerEls = oPaginator.containers;
+
                 // Paginator is enabled
                 if(on) {
                     // No containers found, create two from scratch
@@ -354,9 +368,9 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                         pag1 = this._elContainer.parentNode.insertBefore(pag1, this._elContainer.nextSibling);
                         aContainerEls.push(pag1);
 
-                        // Add containers directly to tracker
-                        this._configs.paginator.value.containers = [pag0, pag1];
-
+                        // (re)set the paginator value directly
+                        oPaginator.containers = aContainerEls;
+                        this._configs.paginator.value= oPaginator;
                     }
                     else {
                         // Show each container
@@ -4173,6 +4187,7 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
                             oPaginator.get('rowsPerPage'));
             oPaginator.update();
         } else {
+            this.updatePaginator();
             var rowsPerPage = oPaginator.rowsPerPage;
             var startRecordIndex = (oPaginator.currentPage - 1) * rowsPerPage;
             aRecords = this._oRecordSet.getRecords(startRecordIndex, rowsPerPage);
@@ -5793,20 +5808,7 @@ YAHOO.widget.DataTable.formatTextbox = function(el, oRecord, oColumn, oData) {
 
 YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     // Complete the set (default if not present)
-    var oValidPaginator = this.get("paginator") || {
-        rowsPerPage     : 500,  // 500 rows per page
-        currentPage     : 1,    // show page one
-        startRecordIndex: 0,    // start with first Record
-        totalRecords    : 0,    // how many Records total
-        totalPages      : 0,    // how many pages total
-        rowsThisPage    : 0,    // how many rows this page
-        pageLinks       : 0,    // show all links
-        pageLinksStart  : 1,    // first link is page 1
-        dropdownOptions : null, // no dropdown
-        containers      : [],   // Paginator container element references
-        dropdowns       : [],   // dropdown element references,
-        links           : []    // links elements
-    };
+    var oValidPaginator = this.get("paginator");
 
     var nOrigCurrentPage = oValidPaginator.currentPage;
     for(var param in oNewValues) {
