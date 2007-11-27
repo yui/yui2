@@ -1327,7 +1327,9 @@ YAHOO.widget.Node.prototype = {
      */
     expand: function(lazySource) {
         // Only expand if currently collapsed.
-        if (this.expanded) { return; }
+        if (this.expanded && !lazySource) { 
+            return; 
+        }
 
         var ret = true;
 
@@ -1354,7 +1356,7 @@ YAHOO.widget.Node.prototype = {
             return;
         }
 
-        if (! this.childrenRendered) {
+        if (!this.childrenRendered) {
             this.getChildrenEl().innerHTML = this.renderChildren();
         } else {
         }
@@ -1587,6 +1589,7 @@ YAHOO.widget.Node.prototype = {
             sb[sb.length] = ' style="display:none;"';
         }
         sb[sb.length] = '>';
+
 
         // Don't render the actual child node HTML unless this node is expanded.
         if ( (this.hasChildren(true) && this.expanded) ||

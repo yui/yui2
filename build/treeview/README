@@ -10,6 +10,8 @@ TreeView - Release Notes
   * Spacer style set to 12px width to fix layout inside overflow containers.
   * Fixed removeAll() when executed on the root node.
   * TextNode's href property is now escaped.
+  * The 'expanded' property in a node's constructor now works for dynamically
+    loaded nodes.
 
 2.3.1
 

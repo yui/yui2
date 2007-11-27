@@ -577,7 +577,9 @@ YAHOO.widget.Node.prototype = {
      */
     expand: function(lazySource) {
         // Only expand if currently collapsed.
-        if (this.expanded) { return; }
+        if (this.expanded && !lazySource) { 
+            return; 
+        }
 
         var ret = true;
 
@@ -606,11 +608,11 @@ YAHOO.widget.Node.prototype = {
             return;
         }
 
-        if (! this.childrenRendered) {
+        if (!this.childrenRendered) {
             this.logger.log("children not rendered yet");
             this.getChildrenEl().innerHTML = this.renderChildren();
         } else {
-            this.logger.log("CHILDREN RENDERED");
+            this.logger.log("children already rendered");
         }
 
         this.expanded = true;
@@ -846,6 +848,12 @@ YAHOO.widget.Node.prototype = {
         }
         sb[sb.length] = '>';
 
+        // this.logger.log(["index", this.index, 
+                         // "hasChildren", this.hasChildren(true), 
+                         // "expanded", this.expanded, 
+                         // "renderHidden", this.renderHidden, 
+                         // "isDynamic", this.isDynamic()]);
+
         // Don't render the actual child node HTML unless this node is expanded.
         if ( (this.hasChildren(true) && this.expanded) ||
                 (this.renderHidden && !this.isDynamic()) ) {
@@ -933,7 +941,7 @@ YAHOO.widget.Node.prototype = {
      * @method loadComplete
      */
     loadComplete: function() {
-        this.logger.log("loadComplete: " + this.index);
+        this.logger.log(this.index + " loadComplete, children: " + this.children.length);
         this.getChildrenEl().innerHTML = this.completeRender();
         this.dynamicLoadComplete = true;
         this.isLoading = false;

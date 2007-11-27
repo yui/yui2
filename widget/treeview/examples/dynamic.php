@@ -6,15 +6,19 @@
 
 <link rel="stylesheet" type="text/css" href="../../build/fonts/fonts.css">
 <link rel="stylesheet" type="text/css" href="../../build/grids/grids.css"><!--end YUI CSS infrastructure--><!--begin YUIL Utilities -->
+<link rel="stylesheet" type="text/css" href="../../build/logger/assets/skins/sam/logger.css">
 
 <script src="../../build/yahoo/yahoo.js"></script>
 <script src="../../build/event/event.js"></script>
-<script src="../../build/treeview/treeview.js"></script>
+<script src="../../build/dom/dom.js"></script>
+<script src="../../build/logger/logger.js"></script>
+<script src="../../build/treeview/treeview-debug.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/code.css">
 <link rel="stylesheet" type="text/css" href="css/local/tree.css">
 
 <script>
+
 
 /*create namespace for examples:*/
 YAHOO.namespace("example");
@@ -37,6 +41,8 @@ YAHOO.example.treeExample = function() {
 			//We'll randomize our loader with stock data; in many implementations,
 			//this step would be replaced with an XMLHttpRequest call to the server
 			//for more data.
+
+            YAHOO.log(node.index + " implementer loadNodeData called, " + node.label, "warn");
 			
 			//Array of India's States
 			var aStates = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu and Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Orissa","Punjab","Rajasthan","Sikkim","Tamil Nadu","Tripura","Uttaranchal","Uttar","Pradesh","West Bengal"];
@@ -58,9 +64,12 @@ YAHOO.example.treeExample = function() {
 				//loop through to create each child node:
 				for (var i=0; i<childCount; i++) {
 					thisState = aStates[Math.round(Math.random()*27)];
+					//var newNode = new YAHOO.widget.TextNode(thisState, node, (i%2==0));
 					var newNode = new YAHOO.widget.TextNode(thisState, node, false);
 				}
 			}
+
+            YAHOO.log("children: " + node.children.length, "warn");
 			
 			//When we're done creating child nodes, we execute the node's
 			//loadComplete callback method which comes in as our loader's
@@ -74,7 +83,7 @@ YAHOO.example.treeExample = function() {
 		   tree = new YAHOO.widget.TreeView("treeContainer");
 
            tree.subscribe("expand", function() {
-              alert("expand", "warn");
+              YAHOO.log("onExpand", "warn");
            });
 		   
 		   //turn dynamic loading on for entire tree:
@@ -85,12 +94,12 @@ YAHOO.example.treeExample = function() {
 		   
 		   //add child nodes for tree:
 		   var tmpNode1 = new YAHOO.widget.TextNode("First Node", root, false);
-		   var tmpNode2 = new YAHOO.widget.TextNode("Second Node", root, false);
+		   var tmpNode2 = new YAHOO.widget.TextNode("Second Node", root, true);
 		   var tmpNode3 = new YAHOO.widget.TextNode("Third Node", root, false);
-		   var tmpNode4 = new YAHOO.widget.TextNode("Fourth Node", root, false);
+		   var tmpNode4 = new YAHOO.widget.TextNode("Fourth Node", root, true);
 		   var tmpNode5 = new YAHOO.widget.TextNode("Fifth Node", root, false);
 
-		   var tmpNode6 = new YAHOO.widget.TextNode("Sixth Node", root, false);
+		   var tmpNode6 = new YAHOO.widget.TextNode("Sixth Node", root, true);
            tmpNode6.setDynamicLoad(function(node, loadCompleteCallback) {
                   loadCompleteCallback();
                }, 1);
@@ -103,6 +112,7 @@ YAHOO.example.treeExample = function() {
 
 	return {
 		init: function() {
+new YAHOO.widget.LogReader();
             YAHOO.util.Event.on(["mode0", "mode1"], "click", changeIconMode);
             var el = document.getElementById("mode1");
             if (el && el.checked) {
@@ -121,7 +131,7 @@ YAHOO.util.Event.addListener(window, "load", YAHOO.example.treeExample.init, YAH
 </script>
 <title>Dynamic TreeView Example</title>
 </head>
-<body id="yahoo">
+<body id="yahoo" class="yui-skin-sam">
 
 
 <!-- id: optional property or feature signature -->
