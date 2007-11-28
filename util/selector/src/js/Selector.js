@@ -279,13 +279,13 @@ var query = function(selector, root, firstOnly) {
     }
 
     if (nodes.length) {
-        result = rFilter(nodes, token, root); 
+        result = rFilter(nodes, token, root, firstOnly); 
         clearFoundCache();
     }
     return result;
 };
 
-var rFilter = function(nodes, token, root) {
+var rFilter = function(nodes, token, root, firstOnly) {
     var result = [],
         prev = token.previous,
         markFound = false,
@@ -309,6 +309,9 @@ var rFilter = function(nodes, token, root) {
         node = nodes[i];
         if ( !rTestNode(node, null, token) ) {
             continue;
+        }
+        if (firstOnly) {
+            return [node];
         }
         result[result.length] = node;
     }
