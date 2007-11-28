@@ -72,7 +72,7 @@ Selector.prototype = {
         '!=': function(attr, val) { return attr !== val; }, // Inequality
         '~=': function(attr, val) { // Match one of space seperated words 
             var str = X.BEGIN_SPACE + val + X.END_SPACE;
-            regexCache[str] = regexCache[str] || new RegExp(str);
+            regexCache[str] = regexCache[str] || new RegExp(str); // skip getRegExp call for perf boost
 
             //return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
             return regexCache[str].test(attr);
@@ -81,7 +81,7 @@ Selector.prototype = {
         '^=': function(attr, val) { return attr.indexOf(val) === 0; }, // Match starts with value
         '$=': function(attr, val) { return attr.lastIndexOf(val) === attr.length - val.length; }, // Match ends with value
         '*=': function(attr, val) { return attr.indexOf(val) > -1; }, // Match contains value as substring 
-        '': function(attr, val) { return attr; } // Just test for existence of attribute  // TODO: empty label is weak
+        '': function(attr, val) { return attr; } // Just test for existence of attribute
     },
 
     /**
@@ -96,39 +96,36 @@ Selector.prototype = {
         },
 
         'nth-child': function(node, val) {
-            var children = Y.Selector.combinators['>'](node.parentNode); 
-            return children[val - 1] === node;
+            return getChildren(node.parentNode)[val - 1] === node;
         },
 
         'nth-last-child': function(node, val) {
-            var children = Y.Selector.combinators['>'](node.parentNode); 
-            return children[children.length - val] === node;
+            return getChildren(node.parentNode)[children.length - val] === node;
         },
 
         'nth-of-type': function(node, val) {
-            var children = Y.Selector.combinators['>'](node.parentNode, node.tagName); 
-            return children[val - 1] === node;
+            return getChildren(node.parentNode, node.tagName)[val - 1] === node;
         },
          
         'nth-last-of-type': function(node, val) {
-            var children = Y.Selector.combinators['>'](node.parentNode, node.tagName); 
+            var children = getChildren(node.parentNode, node.tagName); 
             return children[children.length - val] === node;
         },
          
         'first-child': function(node) {
-            return Y.Selector.pseudos['nth-child'](node, 1);
+            return Selector.pseudos['nth-child'](node, 1);
         },
 
         'last-child': function(node) {
-            return Y.Selector.pseudos['nth-last-child'](node, 1);
+            return Selector.pseudos['nth-last-child'](node, 1);
         },
 
         'first-of-type': function(node, val) {
-            return Y.Selector.pseudos['nth-of-type'](node, 1);
+            return Selector.pseudos['nth-of-type'](node, 1);
         },
          
         'last-of-type': function(node, val) {
-            return Y.Selector.pseudos['nth-last-of-type'](node, 1);
+            return Selector.pseudos['nth-last-of-type'](node, 1);
         },
          
         'only-child': function(node) {
@@ -136,8 +133,7 @@ Selector.prototype = {
         },
 
         'only-of-type': function(node) {
-            var children = Y.Selector.combinators['>'](node.parentNode, node.tagName); 
-            return (children.length === 1);
+            return getChildren(node.parentNode, node.tagName).length === 1;
         },
 
         'empty': function(node) {
@@ -145,7 +141,7 @@ Selector.prototype = {
         },
 
         'not': function(node, simple) {
-            return !Y.Selector.simpleTest(node, simple);
+            return !Selector.test(node, simple);
         },
 
         'contains': function(node, str) {
@@ -153,107 +149,18 @@ Selector.prototype = {
         }
     },
 
-    // TODO: make private?
-    replaceShorthand: function(selector) {
-        var shorthand = Y.Selector.shorthand;
-        for (var re in shorthand) {
-            selector = selector.replace(getRegExp(re + X.CAPTURE_IDENT, 'g'), shorthand[re]);
-        }
-        return selector;
-    },
-
     /**
-     * List of combinators and corresponding functions. 
-     * These functions are called with the current node and expected type (tag),
-     * and return an array of nodes.
-     * @property combinators
-     * @type object
-     */
-    combinators: {
-        ' ': function(node, tag) {
-            return node.getElementsByTagName(tag);
-        },
-
-        '>': function() {
-            if (document.documentElement.children) {
-                return function(node, tag) {
-                    tag = tag || '*';
-                    return node.children.tags(tag);
-                };
-            } else { // gecko
-                return function(node, tag) {
-                    var children = [],
-                        childNodes = node.childNodes;
-
-                    for (var i = 0, len = childNodes.length; i < len; ++i) {
-                        if (childNodes[i].nodeType === 1) {
-                            children[children.length] = childNodes[i];
-                        }
-                    }
-                    return children;
-                };
-            }
-        }(),
-
-        '+': function(node, tag) {
-            var sib = node.nextSibling;
-            while (sib && sib.nodeType !== 1) {
-                sib = sib.nextSibling;
-            }
-
-            if (sib && (tag === '*' || sib.tagName.toLowerCase() === tag)) {
-                return [sib]; 
-            }
-            return [];
-        },
-
-        '~': function(node, tag) {
-            var result = [];
-            var sib = node.nextSibling;
-            while (sib = sib.nextSibling) { // NOTE: assignment
-                if (sib.nodeType === 1) {
-                    result[result.length] = sib;
-                } 
-            }
-
-            return result;
-        }
-    },
-
-    /**
-     * Tests whether the supplied node matches the supplied simple selector.
-     * A simple selector does not contain combinators.
-     * @method simpleTest
+     * Test if the supplied node matches the supplied selector.
+     * @method test
      *
      * @param {HTMLElement | String} node An id or node reference to the HTMLElement being tested.
      * @param {string} selector The CSS Selector to test the node against.
      * @return{boolean} Whether or not the node matches the selector.
      * @static
      */
-    simpleTest: function(node, selector, token) {
-        var token = token || Y.Selector.tokenize(selector)[0];
-
-        if (token.tag != '*' && node.tagName.toLowerCase() != token.tag) {
-            return false; // tag match failed
-        } 
-
-        var ops = Y.Selector.operators;
-        var ps = Y.Selector.pseudos;
-        var attr = token.attributes;
-        var pseudos = token.pseudos;
-
-        for (var i = 0, len = attr.length; i < len; ++i) {
-            if (ops[attr[i][1]] && !ops[attr[i][1]](node[attr[i][0]], attr[i][2])) {
-                return false;
-            }
-        }
-        for (var i = 0, len = pseudos.length; i < len; ++i) {
-            if (ps[pseudos[i][0]] &&
-                    !ps[pseudos[i][0]](node, pseudos[i][1])) {
-                return false;
-            }
-        }
-        return true;
+    test: function(node, selector) {
+        node = document.getElementById(node) || node;
+        return rTestNode(node, selector);
     },
 
     // TODO: make private?
@@ -261,11 +168,11 @@ Selector.prototype = {
         var token,
             tokens = [],
             m,
-            aliases = Y.Selector.attrAliases,
+            aliases = Selector.attrAliases,
             reAttr = getRegExp(X.ATTRIBUTES, 'g'),
             rePseudo = getRegExp(X.PSEUDO, 'g');
 
-        selector = Y.Selector.replaceShorthand(selector);
+        selector = replaceShorthand(selector);
         while ( selector.length && getRegExp(X.SELECTOR).test(selector) ) {
             token = {
                 previous: token,
@@ -305,87 +212,18 @@ Selector.prototype = {
         return tokens;
     },
 
-    filter: function(nodes, token, noCache) {
-        var result = [],
-            filtered = [],
-            elements,
-            getBy = Y.Selector.combinators,
-            node,
-            //noCache = noCache || !!token.next,
-            simple = token.simple,
-            next = token.next,
-            comb = token.combinator,
-            j;
-
-        for (var i = 0, len = nodes.length; i < len; ++i) {
-            node = nodes[i];
-            if ( node._found || !Y.Selector.simpleTest(node, simple, token) ) {
-                continue; // already found or failed test
-            }
-
-            if (next && comb !== ',') {
-                elements = arguments.callee(getBy[comb](node, next.tag), next);
-                if (elements.length) {
-                    filtered = filtered.concat(elements);
-                }
-            } else {
-                //if (!noCache) {
-                    node._found = true;
-                    foundCache.push(node);
-                //}
-                result[result.length] = node;
-            }
-        }
-        return (result.length) ? result : filtered;
-    },
-
     /**
-     * Filters a set of nodes based on a given CSS simple selector. 
-     * A simple selector does not contain combinators.
-     * @method simpleFilter
+     * Filters a set of nodes based on a given CSS selector. 
+     * @method filter
      *
-     * @param {HTMLElement} node A reference to the HTMLElement being tested.
-     * @param {string} simple The Simple Selector to test the node against.
+     * @param {array} nodes A set of nodes to filter. 
+     * @param {string} selector The selector used to test each node.
      * @return{array} An array of nodes from the supplied array that match the given selector.
      * @static
      */
-    simpleFilter: function(nodes, simple, token) {
-        token = token || Y.Selector.tokenize(simple)[0];
-
-        var result = [],
-            simpleTest = Y.Selector.simpleTest,
-            ops = Y.Selector.operators,
-            ps = Y.Selector.pseudos,
-            attributes = token.attributes,
-            attr,
-            tag = token.tag,
-            pseudos = token.pseudos;
-
-        outer:
-        for (var i = 0, len = nodes.length; i < len; ++i) {
-            if (tag != '*' && nodes[i].tagName.toLowerCase() != tag) {
-                continue; // tag match failed
-            } 
-
-            for (var j = 0, jlen = attributes.length; j < jlen; ++j) {
-                attr = attributes[j];
-                if (nodes[i][attr[0]]  === '' || // TODO: hasAttribute? What if title=""?
-                        (ops[attr[1]] !== undefined &&
-                        !ops[attr[1]](nodes[i][attr[0]], attr[2]))
-                ) {
-                    continue outer;
-                }
-            }
-
-            for (var j = 0, jlen = pseudos.length; j < jlen; ++j) {
-                if (ps[pseudos[j][0]] &&
-                        !ps[pseudos[j][0]](nodes[i], pseudos[j][1])) {
-                    continue outer;
-                }
-            }
-            result[result.length] = nodes[i];
-        }
-        return result;
+    filter: function(nodes, selector) {
+        var tokens = Selector.tokenize(selector);
+        return rFilter(nodes, Selector.tokenize(selector));
     },
 
     /**
@@ -398,19 +236,8 @@ Selector.prototype = {
      * @static
      */
     queryAll: function(selector, root) {
-        root = root || document;
-        var tokens = Y.Selector.tokenize(selector);
-        var result,
-            nodes,
-            token = tokens.shift();
-
-        if (getRegExp('#' + X.CAPTURE_IDENT).test(token.predicates)) { // use ID shortcut
-            nodes = [document.getElementById(RegExp.$1)];
-        } else {
-            nodes = root.getElementsByTagName(token.tag);
-        }
-
-        return filterByNodes(nodes, token, root);
+        root = document.getElementById(root) || root || document; 
+        return query(selector, root);
     },
 
     /**
@@ -423,24 +250,106 @@ Selector.prototype = {
      * @static
      */
     query: function(selector, root) {
-        return Y.Selector.queryAll(selector, root)[0]; // TODO: break out so scanning stops after first node found
+        root = document.getElementById(root) || root || document; 
+        return query(selector, root, true); // TODO: break out so scanning stops after first node found
     }
 };
 
-var filterByNodes = function(nodes, token, root, noCache) {
-    var result = Y.Selector.filter(nodes, token, noCache); 
+var query = function(selector, root, firstOnly) {
+    root = root || document;
+    var tokens = Selector.tokenize(selector);
+    var firstToken = tokens[0];
+    var result = [],
+        nodes = [],
+        //token = tokens.shift();
+        token = tokens.pop();
 
-    if (token.next && token.combinator === ',') {
-        var elements = arguments.callee(root.getElementsByTagName(token.next.tag),
-                token.next, root, noCache);
-        if (elements.length) {
-           result = result.concat(elements); 
+    var id = getId(firstToken.attributes);
+
+    if (id && document === root) {
+        if (firstToken === token) { // zero depth
+            nodes = [document.getElementById(id)];
+        } else {
+            root = document.getElementById(id);
         }
     }
-    clearFoundCache();
+
+    if (root && !nodes.length) {
+        nodes = root.getElementsByTagName(token.tag);
+    }
+
+    if (nodes.length) {
+        result = rFilter(nodes, token, root); 
+        clearFoundCache();
+    }
     return result;
 };
-    
+
+var rFilter = function(nodes, token, root) {
+    var result = [],
+        prev = token.previous,
+        markFound = false,
+        candidates = [],
+        deDuped = [],
+        node;
+
+    if (prev && prev.combinator === ',') { // start group from top && deDupe
+        candidates = rFilter(root.getElementsByTagName(prev.tag), prev, root);
+        for (var i = 0, len = candidates.length; i < len; ++i) {
+            if (!candidates[i]._found) {
+                candidates[i]._found = true;
+                deDuped[deDuped.length] = candidates[i];
+                foundCache[foundCache.length] = candidates[i];
+            }
+        }
+        result = result.concat(deDuped);
+    }
+
+    for (var i = 0, len = nodes.length; i < len; ++i) {
+        node = nodes[i];
+        if ( !rTestNode(node, null, token) ) {
+            continue;
+        }
+        result[result.length] = node;
+    }
+
+    return result;
+};
+
+var rTestNode = function(node, selector, token) {
+    token = token || Selector.tokenize(selector).pop();
+
+    if (node._found || token.tag != '*' && node.tagName.toLowerCase() != token.tag) {
+        return false; // tag match failed
+    } 
+
+    var ops = Selector.operators;
+    var ps = Selector.pseudos;
+    var attr = token.attributes;
+    var pseudos = token.pseudos;
+    var prev = token.previous;
+
+    for (var i = 0, len = attr.length; i < len; ++i) {
+        if (ops[attr[i][1]] && !ops[attr[i][1]](node[attr[i][0]], attr[i][2])) {
+            return false;
+        }
+    }
+    for (var i = 0, len = pseudos.length; i < len; ++i) {
+        if (ps[pseudos[i][0]] &&
+                !ps[pseudos[i][0]](node, pseudos[i][1])) {
+            return false;
+        }
+    }
+
+    if (prev) {
+        if (prev.combinator !== ',') {
+            return combinators[prev.combinator](node, token);
+        }
+    }
+    return true;
+
+};
+
 var foundCache = [];
 var regexCache = {};
 
@@ -467,6 +376,83 @@ var trim = function(str) {
     return str.replace(getRegExp(X.BEGIN + X.SP + X.OR + X.SP + X.END, 'g'), "");
 };
 
-Y.Selector = new Selector();
+var combinators = {
+    ' ': function(node, token) {
+        node = node.parentNode;
+        while (node && node.tagName) {
+            if (rTestNode(node, null, token.previous)) {
+                return true;
+            }
+            node = node.parentNode;
+        }  
+        return false;
+    },
+
+    '>': function(node, token) {
+        return rTestNode(node.parentNode, null, token.previous);
+    },
+    '+': function(node, token) {
+        var sib = node.previousSibling;
+        while (sib && sib.nodeType !== 1) {
+            sib = sib.previousSibling;
+        }
+
+        if (sib && rTestNode(sib, null, token.previous)) {
+            return true; 
+        }
+        return false;
+    },
+
+    '~': function(node, token) {
+        var sib = node.previousSibling;
+        while (sib) {
+            if (sib.nodeType === 1 && rTestNode(sib, null, token.previous)) {
+                return true;
+            }
+            sib = sib.previousSibling;
+        }
+
+        return false;
+    }
+};
+
+var getChildren = function() {
+    if (document.documentElement.children) {
+        return function(node, tag) {
+            return tag ? node.children.tags(tag) : node.children;
+        };
+    } else {
+        return function(node, tag) { // TODO: tag?
+            var children = [],
+                childNodes = node.childNodes;
+
+            for (var i = 0, len = childNodes.length; i < len; ++i) {
+                if (childNodes[i].nodeType === 1) {
+                    children[children.length] = childNodes[i];
+                }
+            }
+            return children;
+        };
+    }
+}();
+
+var getId = function(attr) {
+    for (var i = 0, len = attr.length; i < len; ++i) {
+        if (attr[i][0] == 'id' && attr[i][1] === '=') {
+            return attr[i][2];
+        }
+    }
+};
+
+var replaceShorthand = function(selector) {
+    var shorthand = Selector.shorthand;
+    for (var re in shorthand) {
+        selector = selector.replace(getRegExp(re + X.CAPTURE_IDENT, 'g'), shorthand[re]);
+    }
+    return selector;
+};
+
+Selector = new Selector();
+Y.Selector = Selector;
 })();
 YAHOO.register("selector", YAHOO.util.Selector, {version: "@VERSION@", build: "@BUILD@"});
