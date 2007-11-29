@@ -28,7 +28,7 @@ var X = {
 };
 
 var CHARS = {
-    SIMPLE: '-\\w_\\[\\]\\.\\|\\*\\\'\\(\\)#:^~=$!"',
+    SIMPLE: '-+\\w_\\[\\]\\.\\|\\*\\\'\\(\\)#:^~=$!"',
     COMBINATORS: ',>+~'
 };
 
@@ -39,8 +39,16 @@ X.SELECTOR = '^(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)?\\s*([' + CHAR
 X.SIMPLE = '(' + X.CAPTURE_IDENT + '?([' + CHARS.SIMPLE + ']*)*)?';
 X.ATTRIBUTES = '\\[([a-z]+\\w*)+([~\\|\\^\\$\\*!=]=?)?"?([^\\]"]*)"?\\]';
 X.PSEUDO = ':' + X.CAPTURE_IDENT + '(?:\\({1}' + X.SIMPLE + '\\){1})*';
+X.NTH_CHILD = '^(?:(\\d*)(n){1}|(odd|even)$)*([-+])*(\\d*)$';
 
 Selector.prototype = {
+    /**
+     * Default document for use queries 
+     * @property document
+     * @type object
+     * @default window.document
+     */
+    document: window.document,
     /**
      * Mapping of attributes to aliases
      * @property attrAliases
@@ -96,20 +104,19 @@ Selector.prototype = {
         },
 
         'nth-child': function(node, val) {
-            return getChildren(node.parentNode)[val - 1] === node;
+            return getNthChild(node, val);
         },
 
         'nth-last-child': function(node, val) {
-            return getChildren(node.parentNode)[children.length - val] === node;
+            return getNthChild(node, val, null, true);
         },
 
         'nth-of-type': function(node, val) {
-            return getChildren(node.parentNode, node.tagName)[val - 1] === node;
+            return getNthChild(node, val, node.tagName);
         },
          
         'nth-last-of-type': function(node, val) {
-            var children = getChildren(node.parentNode, node.tagName); 
-            return children[children.length - val] === node;
+            return getNthChild(node.parentNode, val, node.tagName, true);
         },
          
         'first-child': function(node) {
@@ -117,15 +124,17 @@ Selector.prototype = {
         },
 
         'last-child': function(node) {
-            return Selector.pseudos['nth-last-child'](node, 1);
+            var children = getChildren(node.parentNode);
+            return children[children.length - 1];
         },
 
         'first-of-type': function(node, val) {
-            return Selector.pseudos['nth-of-type'](node, 1);
+            return getChildren(node.parentNode, node.tagName.toLowerCase())[0];
         },
          
         'last-of-type': function(node, val) {
-            return Selector.pseudos['nth-last-of-type'](node, 1);
+            var children = getChildren(node.parentNode, node.tagName.toLowerCase());
+            return children[children.length - 1];
         },
          
         'only-child': function(node) {
@@ -133,7 +142,7 @@ Selector.prototype = {
         },
 
         'only-of-type': function(node) {
-            return getChildren(node.parentNode, node.tagName).length === 1;
+            return getChildren(node.parentNode, node.tagName.toLowerCase()).length === 1;
         },
 
         'empty': function(node) {
@@ -157,22 +166,26 @@ Selector.prototype = {
      * @param {string} selector The CSS Selector to test the node against.
      * @return{boolean} Whether or not the node matches the selector.
      * @static
+    
      */
     test: function(node, selector) {
-        node = document.getElementById(node) || node;
+        node = Selector.document.getElementById(node) || node;
         return rTestNode(node, selector);
     },
 
     // TODO: make private?
     tokenize: function(selector) {
-        var token,
+        if (!selector) return [];
+            var token,
             tokens = [],
             m,
             aliases = Selector.attrAliases,
+            attr,
             reAttr = getRegExp(X.ATTRIBUTES, 'g'),
             rePseudo = getRegExp(X.PSEUDO, 'g');
 
         selector = replaceShorthand(selector);
+        // break selector into simple selector units
         while ( selector.length && getRegExp(X.SELECTOR).test(selector) ) {
             token = {
                 previous: token,
@@ -184,13 +197,15 @@ Selector.prototype = {
                 combinator: RegExp.$4
             };
 
-            var attr;
-            while (m = rePseudo.exec(token.predicate)) { // process pseudos first to avoid false pos with :not
-                token.predicate = token.predicate.replace(m[0], ''); // remove matched string from predicate
-                token.pseudos[token.pseudos.length] = m.slice(1); // capture pseudo tokens
+            // Parse pseudos first, then strip from predicate to 
+            // avoid false positive from :not.
+            while (m = rePseudo.exec(token.predicate)) {
+                token.predicate = token.predicate.replace(m[0], '');
+                token.pseudos[token.pseudos.length] = m.slice(1);
             }
             
-            while (m = reAttr.exec(token.predicate)) {
+            
+            while (m = reAttr.exec(token.predicate)) { // parse attributes
                 if (aliases[m[1]]) { // convert reserved words, etc
                     m[1] = aliases[m[1]];
                 }
@@ -201,11 +216,10 @@ Selector.prototype = {
                 token.attributes[token.attributes.length] = attr;
             }
             
+            token.id = getId(token.attributes);
             if (token.previous) {
-                token.previous.next = token;
                 token.previous.combinator = token.previous.combinator || ' ';
             }
-
             tokens[tokens.length] = token;
             selector = trim(selector.substr(token.simple.length));
         } 
@@ -216,14 +230,36 @@ Selector.prototype = {
      * Filters a set of nodes based on a given CSS selector. 
      * @method filter
      *
-     * @param {array} nodes A set of nodes to filter. 
+     * @param {array}  A set of nodes/ids to filter. 
      * @param {string} selector The selector used to test each node.
      * @return{array} An array of nodes from the supplied array that match the given selector.
      * @static
      */
-    filter: function(nodes, selector) {
-        var tokens = Selector.tokenize(selector);
-        return rFilter(nodes, Selector.tokenize(selector));
+    filter: function(arr, selector) {
+        if (!arr || !selector) {
+            YAHOO.log('filter: invalid input, returning array as is', 'warn', 'Selector');
+        }
+        var node,
+            nodes = arr,
+            result = [],
+            tokens = Selector.tokenize(selector);
+
+        if (!nodes.item) { // if not HTMLCollection, handle arrays of ids and/or nodes
+            YAHOO.log('filter: scanning input for HTMLElements/IDs', 'info', 'Selector');
+            for (var i = 0, len = arr.length; i < len; ++i) {
+                if (!arr[i].tagName) { // tagName limits to HTMLElements 
+                    node = Selector.document.getElementByid(arr[i]);
+                    if (node) { // skip IDs that return null 
+                        nodes[nodes.length] = node;
+                    } else {
+                        YAHOO.log('filter: skipping invalid node', 'warn', 'Selector');
+                    }
+                }
+            }
+        }
+        result = rFilter(nodes, Selector.tokenize(selector));
+        YAHOO.log('filter: returning:' + result.length, 'info', 'Selector');
+        return result;
     },
 
     /**
@@ -236,8 +272,10 @@ Selector.prototype = {
      * @static
      */
     queryAll: function(selector, root) {
-        root = document.getElementById(root) || root || document; 
-        return query(selector, root);
+        root = Selector.document.getElementById(root) || root; 
+        var result = query(selector, root);
+        YAHOO.log('queryAll: returning ' + result.length + ' nodes', 'info', 'Selector');
+        return result;
     },
 
     /**
@@ -250,27 +288,43 @@ Selector.prototype = {
      * @static
      */
     query: function(selector, root) {
-        root = document.getElementById(root) || root || document; 
-        return query(selector, root, true); // TODO: break out so scanning stops after first node found
+        root = Selector.document.getElementById(root) || root; 
+        var result = query(selector, root);
+        YAHOO.log('query: returning ' + result.length + ' nodes', 'info', 'Selector');
+        return result;
     }
 };
 
 var query = function(selector, root, firstOnly) {
-    root = root || document;
+    if (!selector) {
+        return []; // no nodes for you
+    }
+    root = root || Selector.document;
     var tokens = Selector.tokenize(selector);
-    var firstToken = tokens[0];
     var result = [],
+        idToken = tokens[getIdTokenIndex(tokens)],
         nodes = [],
-        //token = tokens.shift();
+        node,
+        id,
         token = tokens.pop();
-
-    var id = getId(firstToken.attributes);
-
-    if (id && document === root) {
-        if (firstToken === token) { // zero depth
-            nodes = [document.getElementById(id)];
-        } else {
-            root = document.getElementById(id);
+        
+    if (idToken) {
+        id = getId(idToken.attributes);
+    }
+    // if no root alternate root is specified use id shortcut
+    if (id) {
+        if (id === token.id) { // only one target
+            nodes = [Selector.document.getElementById(id)] || root;
+            YAHOO.log('_query: returning ' + result.length + ' nodes', 'info', 'Selector');
+        } else { // reset root to id node if passes
+            node = Selector.document.getElementById(id);
+            if (root === Selector.document || root.contains(node)) {
+                if ( node && rTestNode(node, null, idToken) ) {
+                    root = node; // start from here
+                }
+            } else {
+                return [];
+            }
         }
     }
 
@@ -279,13 +333,13 @@ var query = function(selector, root, firstOnly) {
     }
 
     if (nodes.length) {
-        result = rFilter(nodes, token, root); 
+        result = rFilter(nodes, token, root, firstOnly); 
         clearFoundCache();
     }
     return result;
 };
 
-var rFilter = function(nodes, token, root) {
+var rFilter = function(nodes, token, root, firstOnly) {
     var result = [],
         prev = token.previous,
         markFound = false,
@@ -294,7 +348,7 @@ var rFilter = function(nodes, token, root) {
         node;
 
     if (prev && prev.combinator === ',') { // start group from top && deDupe
-        candidates = rFilter(root.getElementsByTagName(prev.tag), prev, root);
+        candidates = arguments.callee(root.getElementsByTagName(prev.tag), prev, root);
         for (var i = 0, len = candidates.length; i < len; ++i) {
             if (!candidates[i]._found) {
                 candidates[i]._found = true;
@@ -309,6 +363,9 @@ var rFilter = function(nodes, token, root) {
         node = nodes[i];
         if ( !rTestNode(node, null, token) ) {
             continue;
+        }
+        if (firstOnly) {
+            return [node];
         }
         result[result.length] = node;
     }
@@ -419,24 +476,89 @@ var combinators = {
 };
 
 var getChildren = function() {
-    if (document.documentElement.children) {
+    if (document.documentElement.children) { // document for capability test
         return function(node, tag) {
             return tag ? node.children.tags(tag) : node.children;
         };
     } else {
-        return function(node, tag) { // TODO: tag?
+        return function(node, tag) {
             var children = [],
-                childNodes = node.childNodes;
+                childNodes = node.childNodes,
+                childTag;
 
             for (var i = 0, len = childNodes.length; i < len; ++i) {
-                if (childNodes[i].nodeType === 1) {
-                    children[children.length] = childNodes[i];
+                childTag = childNodes[i].tagName;
+                if (childTag) {
+                    if (!tag || childTag.toLowerCase() === tag) {
+                        children[children.length] = childNodes[i];
+                    }
                 }
             }
             return children;
         };
     }
 }();
+
+/*
+    an+b = get every _a_th node starting at the _b_th
+    0n+b = no repeat ("0" and "n" may both be omitted (together) , e.g. "0n+1" or "1", not "0+1"), return only the _b_th element
+    1n+b =  get every element starting from b ("1" may may be omitted, e.g. "1n+0" or "n+0" or "n")
+    an+0 = get every _a_th element, "0" may be omitted 
+*/
+var getNthChild = function(node, expr, tag, reverse) {
+    //var b = Number(expr);
+    if (tag) tag = tag.toLowerCase();
+    getRegExp(X.NTH_CHILD).test(expr);
+    var a = parseInt(RegExp.$1, 10), // include every _a_ elements (zero means no repeat, just first _a_)
+        n = RegExp.$2, // "n"
+        oddeven = RegExp.$3, // "odd" or "even"
+        op = RegExp.$4 || '+', // "+" or "-" (scan fwd or rev)
+        b = parseInt(RegExp.$5, 10) || 0; // start scan from element _b_
+
+
+YAHOO.log('n: ' + n);
+    if ( isNaN(a) ) {
+        a = 1;
+    }
+YAHOO.log('b: ' + b);
+    if (oddeven) {
+        a = 2; // always every other
+        op = '+';
+        n = 'n';
+        b = (oddeven === 'odd') ? 1 : 2;
+    }
+    var children = getChildren(node.parentNode, tag);
+    var result = [];
+
+
+    if ( (n && !a) || ( !n ) ) { // undefined or 0
+        return node === children[b-1]; 
+    }
+
+    if (a === 1) { // every node starting from b - 1
+        for (var i = 0, len = children.length; i < len; i++) {
+            if (children[i] === node && i > b - 1) {
+                return true;
+            }
+        }
+    }
+
+    // else every _a_th node starting from b - 1
+    if (!reverse) {
+        for (var i = b - 1, len = children.length; i < len; i += a) {
+            if ( children[i] === node ) {
+                return true;
+            }
+        }
+    } else {
+        for (var i = children.length - b; i >= 0; i -= a) {
+            if ( children[i] === node ) {
+                return true;
+            }
+        }
+    }
+    return false;
+};
 
 var getId = function(attr) {
     for (var i = 0, len = attr.length; i < len; ++i) {
@@ -446,6 +568,14 @@ var getId = function(attr) {
     }
 };
 
+var getIdTokenIndex = function(tokens) {
+    for (var i = 0, len = tokens.length; i < len; ++i) {
+        if (getId(tokens[i].attributes)) {
+            return i;
+        }
+    }
+    return -1;
+};
 var replaceShorthand = function(selector) {
     var shorthand = Selector.shorthand;
     for (var re in shorthand) {
@@ -455,5 +585,7 @@ var replaceShorthand = function(selector) {
 };
 
 Selector = new Selector();
+Selector.CHARS = CHARS;
+Selector.TOKENS = X;
 Y.Selector = Selector;
 })();
