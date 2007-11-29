@@ -72,13 +72,15 @@ var Event = YAHOO.util.Event,
     
         "SUBMENU_ALIGNMENT": { 
             key: "submenualignment", 
-            value: ["tl","bl"] 
+            value: ["tl","bl"],
+            suppressEvent: true 
         },
     
         "AUTO_SUBMENU_DISPLAY": { 
             key: "autosubmenudisplay", 
             value: false, 
-            validator: YAHOO.lang.isBoolean 
+            validator: YAHOO.lang.isBoolean,
+            suppressEvent: true
         }
     
     };
@@ -435,7 +437,8 @@ initDefaultConfig: function() {
     oConfig.addProperty(
         DEFAULT_CONFIG.SUBMENU_ALIGNMENT.key, 
         {
-            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value
+            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value,
+            suppressEvent: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.suppressEvent
         }
     );
 
@@ -456,7 +459,8 @@ initDefaultConfig: function() {
 	   DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.key, 
 	   {
 	       value: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.value, 
-	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator
+	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator,
+	       suppressEvent: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.suppressEvent
        } 
     );
 

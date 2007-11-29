@@ -94,7 +94,8 @@ var Dom = YAHOO.util.Dom,
     
         "HELP_TEXT": { 
             key: "helptext",
-            supercedes: ["text"]
+            supercedes: ["text"], 
+            suppressEvent: true 
         },
     
         "URL": { 
@@ -134,6 +135,7 @@ var Dom = YAHOO.util.Dom,
 
         "SUBMENU": { 
             key: "submenu",
+            suppressEvent: true,
             supercedes: ["disabled", "selected"]
         },
     
@@ -153,13 +155,15 @@ var Dom = YAHOO.util.Dom,
         },
     
         "ONCLICK": { 
-            key: "onclick"
+            key: "onclick",
+            suppressEvent: true
         },
     
         "CLASS_NAME": { 
             key: "classname", 
             value: null, 
-            validator: Lang.isString
+            validator: Lang.isString,
+            suppressEvent: true
         }
     
     };
@@ -1449,7 +1453,11 @@ MenuItem.prototype = {
         */
         oConfig.addProperty(
             DEFAULT_CONFIG.HELP_TEXT.key,
-            { handler: this.configHelpText }
+            {
+                handler: this.configHelpText, 
+                supercedes: DEFAULT_CONFIG.HELP_TEXT.supercedes,
+                suppressEvent: DEFAULT_CONFIG.HELP_TEXT.suppressEvent 
+            }
         );
 
 
@@ -1507,7 +1515,8 @@ MenuItem.prototype = {
                 handler: this.configEmphasis, 
                 value: DEFAULT_CONFIG.EMPHASIS.value, 
                 validator: DEFAULT_CONFIG.EMPHASIS.validator, 
-                suppressEvent: DEFAULT_CONFIG.EMPHASIS.suppressEvent 
+                suppressEvent: DEFAULT_CONFIG.EMPHASIS.suppressEvent,
+                supercedes: DEFAULT_CONFIG.EMPHASIS.supercedes
             }
         );
 
@@ -1528,7 +1537,8 @@ MenuItem.prototype = {
                 handler: this.configStrongEmphasis,
                 value: DEFAULT_CONFIG.STRONG_EMPHASIS.value,
                 validator: DEFAULT_CONFIG.STRONG_EMPHASIS.validator,
-                suppressEvent: DEFAULT_CONFIG.STRONG_EMPHASIS.suppressEvent
+                suppressEvent: DEFAULT_CONFIG.STRONG_EMPHASIS.suppressEvent,
+                supercedes: DEFAULT_CONFIG.STRONG_EMPHASIS.supercedes
             }
         );
 
@@ -1607,7 +1617,11 @@ MenuItem.prototype = {
         */
         oConfig.addProperty(
             DEFAULT_CONFIG.SUBMENU.key, 
-            { handler: this.configSubmenu }
+            {
+                handler: this.configSubmenu, 
+                supercedes: DEFAULT_CONFIG.SUBMENU.supercedes,
+                suppressEvent: DEFAULT_CONFIG.SUBMENU.suppressEvent
+            }
         );
 
 
@@ -1625,7 +1639,10 @@ MenuItem.prototype = {
         */
         oConfig.addProperty(
             DEFAULT_CONFIG.ONCLICK.key, 
-            { handler: this.configOnClick }
+            {
+                handler: this.configOnClick, 
+                suppressEvent: DEFAULT_CONFIG.ONCLICK.suppressEvent 
+            }
         );
 
 
@@ -1643,7 +1660,8 @@ MenuItem.prototype = {
             { 
                 handler: this.configClassName,
                 value: DEFAULT_CONFIG.CLASS_NAME.value, 
-                validator: DEFAULT_CONFIG.CLASS_NAME.validator
+                validator: DEFAULT_CONFIG.CLASS_NAME.validator,
+                suppressEvent: DEFAULT_CONFIG.CLASS_NAME.suppressEvent 
             }
         );
 
@@ -1790,7 +1808,8 @@ MenuItem.prototype = {
 
         var oParent = this.parent,
             oAnchor = this._oAnchor,
-            oActiveItem = oParent.activeItem;
+            oActiveItem = oParent.activeItem,
+            me = this;
 
 
         function setFocus() {
@@ -1803,7 +1822,15 @@ MenuItem.prototype = {
                 
                 }
 
+                if (oActiveItem) {
+    
+                    oActiveItem.blurEvent.fire();
+    
+                }
+
                 oAnchor.focus();
+                
+                me.focusEvent.fire();
 
             }
             catch(e) {
@@ -1817,12 +1844,6 @@ MenuItem.prototype = {
             oParent.cfg.getProperty("visible") && 
             this.element.style.display != "none") {
 
-            if (oActiveItem) {
-
-                oActiveItem.blurEvent.fire();
-
-            }
-
 
             /*
                 Setting focus via a timer fixes a race condition in Firefox, IE 
@@ -1831,8 +1852,6 @@ MenuItem.prototype = {
             */
 
             window.setTimeout(setFocus, 0);
-            
-            this.focusEvent.fire();
 
         }
 
@@ -1859,15 +1878,14 @@ MenuItem.prototype = {
                 try {
     
                     me._oAnchor.blur();
-    
+                    me.blurEvent.fire();    
+
                 } 
                 catch (e) {
                 
                 }
                 
             }, 0);
-
-            this.blurEvent.fire();
 
         }
 
