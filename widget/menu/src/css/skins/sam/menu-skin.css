@@ -209,8 +209,8 @@
 
     /*
         For IE 7 Quirks and IE 6 Strict Mode and Quirks Mode:
-        Used to collapse superfluous white space between <LI> elements
-        that is triggered by the "display" property of the <A> elements being
+        Used to collapse superfluous white space between <li> elements
+        that is triggered by the "display" property of the <a> elements being
         set to "block."
     */
 

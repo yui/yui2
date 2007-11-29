@@ -126,8 +126,8 @@
 .yuimenuitem {
 
     /*
-        For IE: Used to collapse superfluous white space between <LI> elements
-        that is triggered by the "display" property of the <A> elements being
+        For IE: Used to collapse superfluous white space between <li> elements
+        that is triggered by the "display" property of the <a> elements being
         set to "block."
     */
 

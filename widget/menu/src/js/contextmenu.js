@@ -64,7 +64,8 @@ var Event = YAHOO.util.Event,
     DEFAULT_CONFIG = {
     
         "TRIGGER": { 
-            key: "trigger" 
+            key: "trigger",
+            suppressEvent: true
         }
     
     };
@@ -397,7 +398,11 @@ initDefaultConfig: function() {
     * level-one-html.html#ID-58190037">HTMLElement</a>|Array
     */
     this.cfg.addProperty(DEFAULT_CONFIG.TRIGGER.key, 
-        { handler: this.configTrigger });
+        {
+            handler: this.configTrigger, 
+            suppressEvent: DEFAULT_CONFIG.TRIGGER.suppressEvent 
+        }
+    );
 
 },
 

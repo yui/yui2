@@ -132,19 +132,22 @@ var Dom = YAHOO.util.Dom,
     
         "SUBMENU_ALIGNMENT": { 
             key: "submenualignment", 
-            value: ["tl","tr"]
+            value: ["tl","tr"],
+            suppressEvent: true
         },
     
         "AUTO_SUBMENU_DISPLAY": { 
             key: "autosubmenudisplay", 
             value: true, 
-            validator: Lang.isBoolean 
+            validator: Lang.isBoolean,
+            suppressEvent: true
         }, 
     
         "SHOW_DELAY": { 
             key: "showdelay", 
             value: 250, 
-            validator: Lang.isNumber 
+            validator: Lang.isNumber, 
+            suppressEvent: true
         }, 
     
         "HIDE_DELAY": { 
@@ -157,44 +160,51 @@ var Dom = YAHOO.util.Dom,
         "SUBMENU_HIDE_DELAY": { 
             key: "submenuhidedelay", 
             value: 250, 
-            validator: Lang.isNumber
+            validator: Lang.isNumber,
+            suppressEvent: true
         }, 
     
         "CLICK_TO_HIDE": { 
             key: "clicktohide", 
             value: true, 
-            validator: Lang.isBoolean
+            validator: Lang.isBoolean,
+            suppressEvent: true
         },
     
         "CONTAINER": { 
-            key: "container"
+            key: "container",
+            suppressEvent: true
         }, 
 
         "SCROLL_INCREMENT": { 
             key: "scrollincrement", 
             value: 1, 
             validator: Lang.isNumber,
-            supercedes: ["maxheight"]
+            supercedes: ["maxheight"],
+            suppressEvent: true
         },
 
         "MIN_SCROLL_HEIGHT": { 
             key: "minscrollheight", 
             value: 90, 
             validator: Lang.isNumber,
-            supercedes: ["maxheight"]
+            supercedes: ["maxheight"],
+            suppressEvent: true
         },    
     
         "MAX_HEIGHT": { 
             key: "maxheight", 
             value: 0, 
             validator: Lang.isNumber,
-            supercedes: ["iframe"]
+            supercedes: ["iframe"],
+            suppressEvent: true
         }, 
     
         "CLASS_NAME": { 
             key: "classname", 
             value: null, 
-            validator: Lang.isString
+            validator: Lang.isString,
+            suppressEvent: true
         }, 
     
         "DISABLED": { 
@@ -1433,85 +1443,6 @@ _subscribeToItemEvents: function (p_oItem) {
 
     p_oItem.cfg.configChangedEvent.subscribe(this._onMenuItemConfigChange,
         p_oItem, this);
-
-},
-
-
-/**
-* @method _getOffsetWidth
-* @description Returns the offset width of the menu's 
-* <code>&#60;div&#62;</code> element.
-* @private
-*/
-_getOffsetWidth: function () {
-
-    var oClone = this.element.cloneNode(true),
-        oRoot = this.getRoot(),
-        oParentNode = oRoot.element.parentNode,
-        sWidth;
-
-    Dom.removeClass(oClone, "visible");
-
-    Dom.setStyle(oClone, "width", "");
-
-
-    if (oParentNode) {
-
-        oParentNode.appendChild(oClone);
-    
-        sWidth = oClone.offsetWidth;
-    
-        oParentNode.removeChild(oClone);
-    
-        return sWidth;
-
-    }
-
-},
-
-
-/**
-* @method _setWidth
-* @description Sets the width of the menu's root <code>&#60;div&#62;</code> 
-* element to its offsetWidth.
-* @private
-*/
-_setWidth: function () {
-
-    var oElement = this.element,
-        bVisible = Dom.removeClass(oElement, "visible"),
-        sWidth;
-
-    if (oElement.parentNode.tagName.toUpperCase() == "BODY") {
-
-        if (YAHOO.env.ua.opera) {
-
-            sWidth = this._getOffsetWidth();
-        
-        }
-        else {
-
-            Dom.setStyle(oElement, "width", "auto");
-            
-            sWidth = oElement.offsetWidth;
-        
-        }
-
-    }
-    else {
-    
-        sWidth = this._getOffsetWidth();
-    
-    }
-
-    this.cfg.setProperty("width", (sWidth + "px"));
-    
-
-    if (bVisible) {
-    
-        Dom.addClass(oElement, "visible");
-    
-    }
 
 },
 
@@ -3624,7 +3555,8 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
         fnMouseOver = this._onScrollTargetMouseOver,
         fnMouseOut = this._onScrollTargetMouseOut,
         nMinScrollHeight = this.cfg.getProperty("minscrollheight"),
-        nHeight;
+        nHeight,
+        nOffsetWidth;
 
 
     if (nMaxHeight !== 0 && nMaxHeight < nMinScrollHeight) {
@@ -3653,9 +3585,31 @@ configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
     Dom.removeClass(oBody, "yui-menu-body-scrolled");
 
 
-    if (UA.gecko && !this.cfg.getProperty("width")) {
+    /*
+        There is a bug in gecko-based browsers where an element whose 
+        "position" property is set to "absolute" and "overflow" property is set 
+        to "hidden" will not render at the correct width when its 
+        offsetParent's "position" property is also set to "absolute."  It is 
+        possible to work around this bug by specifying a value for the width 
+        property in addition to overflow.
+    */
 
-        this._setWidth();
+    if (UA.gecko && this.parent && this.parent.parent && 
+        this.parent.parent.cfg.getProperty("position") == "dynamic" && 
+        !this.cfg.getProperty("width")) {
+
+        nOffsetWidth = oElement.offsetWidth;
+
+        /*
+            Measuring the difference of the offsetWidth before and after
+            setting the "width" style attribute allows us to compute the 
+            about of padding and borders applied to the element, which in 
+            turn allows us to set the "width" property correctly.
+        */
+        
+        oElement.style.width = nOffsetWidth + "px";
+        oElement.style.width = 
+                (nOffsetWidth - (oElement.offsetWidth - nOffsetWidth)) + "px";
 
     }
 
@@ -3877,7 +3831,8 @@ onRender: function (p_sType, p_aArgs) {
             if (!m_oShadowTemplate) {
 
                 m_oShadowTemplate = document.createElement("div");
-                m_oShadowTemplate.className = "yui-menu-shadow";
+                m_oShadowTemplate.className = 
+                    "yui-menu-shadow yui-menu-shadow-visible";
             
             }
 
@@ -3886,8 +3841,6 @@ onRender: function (p_sType, p_aArgs) {
             oElement.appendChild(oShadow);
             
             this._shadow = oShadow;
-
-            addShadowVisibleClass.call(this);
 
             this.beforeShowEvent.subscribe(addShadowVisibleClass);
             this.beforeHideEvent.subscribe(removeShadowVisibleClass);
@@ -4926,7 +4879,8 @@ initDefaultConfig: function () {
     oConfig.addProperty(
         DEFAULT_CONFIG.SUBMENU_ALIGNMENT.key, 
         { 
-            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value 
+            value: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.value,
+            suppressEvent: DEFAULT_CONFIG.SUBMENU_ALIGNMENT.suppressEvent
         }
     );
 
@@ -4942,7 +4896,8 @@ initDefaultConfig: function () {
 	   DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.key, 
 	   { 
 	       value: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.value, 
-	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator
+	       validator: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.validator,
+	       suppressEvent: DEFAULT_CONFIG.AUTO_SUBMENU_DISPLAY.suppressEvent
        } 
     );
 
@@ -4961,7 +4916,8 @@ initDefaultConfig: function () {
 	   DEFAULT_CONFIG.SHOW_DELAY.key, 
 	   { 
 	       value: DEFAULT_CONFIG.SHOW_DELAY.value, 
-	       validator: DEFAULT_CONFIG.SHOW_DELAY.validator
+	       validator: DEFAULT_CONFIG.SHOW_DELAY.validator,
+	       suppressEvent: DEFAULT_CONFIG.SHOW_DELAY.suppressEvent
        } 
     );
 
@@ -5001,7 +4957,8 @@ initDefaultConfig: function () {
 	   DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.key, 
 	   { 
 	       value: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.value, 
-	       validator: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.validator
+	       validator: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.validator,
+	       suppressEvent: DEFAULT_CONFIG.SUBMENU_HIDE_DELAY.suppressEvent
        } 
     );
 
@@ -5019,7 +4976,8 @@ initDefaultConfig: function () {
         DEFAULT_CONFIG.CLICK_TO_HIDE.key,
         {
             value: DEFAULT_CONFIG.CLICK_TO_HIDE.value,
-            validator: DEFAULT_CONFIG.CLICK_TO_HIDE.validator
+            validator: DEFAULT_CONFIG.CLICK_TO_HIDE.validator,
+            suppressEvent: DEFAULT_CONFIG.CLICK_TO_HIDE.suppressEvent
         }
     );
 
@@ -5037,7 +4995,8 @@ initDefaultConfig: function () {
 	   DEFAULT_CONFIG.CONTAINER.key, 
 	   { 
 	       handler: this.configContainer,
-	       value: document.body
+	       value: document.body,
+           suppressEvent: DEFAULT_CONFIG.CONTAINER.suppressEvent
        } 
    );
 
@@ -5056,8 +5015,8 @@ initDefaultConfig: function () {
         { 
             value: DEFAULT_CONFIG.SCROLL_INCREMENT.value, 
             validator: DEFAULT_CONFIG.SCROLL_INCREMENT.validator,
-            suppressEvent: DEFAULT_CONFIG.SCROLL_INCREMENT.suppressEvent,
-            supercedes: DEFAULT_CONFIG.SCROLL_INCREMENT.supercedes
+            supercedes: DEFAULT_CONFIG.SCROLL_INCREMENT.supercedes,
+            suppressEvent: DEFAULT_CONFIG.SCROLL_INCREMENT.suppressEvent
         }
     );
 
@@ -5075,8 +5034,8 @@ initDefaultConfig: function () {
         { 
             value: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.value, 
             validator: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.validator,
-            suppressEvent: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.suppressEvent,
-            supercedes: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.supercedes
+            supercedes: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.supercedes,
+            suppressEvent: DEFAULT_CONFIG.MIN_SCROLL_HEIGHT.suppressEvent
         }
     );
 
@@ -5096,7 +5055,9 @@ initDefaultConfig: function () {
        {
             handler: this.configMaxHeight,
             value: DEFAULT_CONFIG.MAX_HEIGHT.value,
-            validator: DEFAULT_CONFIG.MAX_HEIGHT.validator
+            validator: DEFAULT_CONFIG.MAX_HEIGHT.validator,
+            suppressEvent: DEFAULT_CONFIG.MAX_HEIGHT.suppressEvent,
+            supercedes: DEFAULT_CONFIG.MAX_HEIGHT.supercedes            
        } 
     );
 
@@ -5116,7 +5077,8 @@ initDefaultConfig: function () {
         { 
             handler: this.configClassName,
             value: DEFAULT_CONFIG.CLASS_NAME.value, 
-            validator: DEFAULT_CONFIG.CLASS_NAME.validator
+            validator: DEFAULT_CONFIG.CLASS_NAME.validator,
+            supercedes: DEFAULT_CONFIG.CLASS_NAME.supercedes      
         }
     );
 
