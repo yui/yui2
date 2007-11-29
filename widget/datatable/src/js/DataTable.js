@@ -69,7 +69,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     else {
         // Initialize DOM elements
         this._initTableEl();
-        if(!this._elTable || !this._elThead || !this._elTbody) {
+        if(!this._elContainer || !this._elThead || !this._elTbody) {
             YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
             return;
         }
@@ -132,7 +132,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
         value: null,
         validator: YAHOO.lang.isString,
         method: function(sSummary) {
-            this._elTable.summary = sSummary;
+            this._elThead.parentNode.summary = sSummary;
         }
     });
 
@@ -465,12 +465,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
         method: function(sCaption) {
             // Create CAPTION element
             if(!this._elCaption) {
-                if(!this._elTable.firstChild) {
-                    this._elCaption = this._elTable.appendChild(document.createElement("caption"));
-                }
-                else {
-                    this._elCaption = this._elTable.insertBefore(document.createElement("caption"), this._elTable.firstChild);
-                }
+                this._elCaption = this._elThead.parentNode.insertBefore(document.createElement("caption"), this._elThead.parentNode.firstChild);
             }
             // Set CAPTION value
             this._elCaption.innerHTML = sCaption;
@@ -1008,22 +1003,22 @@ YAHOO.widget.DataTable.prototype._sName = null;
 YAHOO.widget.DataTable.prototype._elContainer = null;
 
 /**
- * DOM reference to the container element for the DataTable header.
+ * DOM reference to the container element for the DataTable's THEAD.
  *
- * @property _elHeadContainer
+ * @property _elTheadContainer
  * @type HTMLElement
  * @private
  */
-YAHOO.widget.DataTable.prototype._elHeadContainer = null;
+YAHOO.widget.DataTable.prototype._elTheadContainer = null;
 
 /**
- * DOM reference to the container element for the DataTable body.
+ * DOM reference to the container element for the DataTable's TBODY.
  *
- * @property _elBodyContainer
+ * @property _elTbodyContainer
  * @type HTMLElement
  * @private
  */
-YAHOO.widget.DataTable.prototype._elBodyContainer = null;
+YAHOO.widget.DataTable.prototype._elTbodyContainer = null;
 
 /**
  * DOM reference to the CAPTION element for the DataTable instance.
@@ -1033,15 +1028,6 @@ YAHOO.widget.DataTable.prototype._elBodyContainer = null;
  * @private
  */
 YAHOO.widget.DataTable.prototype._elCaption = null;
-
-/**
- * DOM reference to the primary TABLE element for the DataTable instance.
- *
- * @property _elTable
- * @type HTMLElement
- * @private
- */
-YAHOO.widget.DataTable.prototype._elTable = null;
 
 /**
  * DOM reference to the header TABLE element for the DataTable instance.
@@ -1196,7 +1182,7 @@ YAHOO.widget.DataTable.prototype._sLastTrId = null;
  * @private
  */
 YAHOO.widget.DataTable.prototype._focusEl = function(el) {
-    el = el || this._elTable;
+    el = el || this._elContainer;
     // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
     // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
     // strange unexpected things as the user clicks on buttons and other controls.
@@ -1315,12 +1301,12 @@ YAHOO.widget.DataTable.prototype._initContainerEl = function(elContainer) {
         YAHOO.util.Dom.addClass(elContainer,"yui-dt");
         
         // Container for header elements
-        this._elHeadContainer = elContainer.appendChild(document.createElement("div"));
-        YAHOO.util.Dom.addClass(this._elHeadContainer, "yui-dt-hd");
-        
+        this._elTheadContainer = elContainer.appendChild(document.createElement("div"));
+        YAHOO.util.Dom.addClass(this._elTheadContainer, "yui-dt-hd");
+
         // Container for header elements
-        this._elBodyContainer = elContainer.appendChild(document.createElement("div"));
-        YAHOO.util.Dom.addClass(this._elBodyContainer, "yui-dt-bd");
+        this._elTbodyContainer = elContainer.appendChild(document.createElement("div"));
+        YAHOO.util.Dom.addClass(this._elTbodyContainer, "yui-dt-bd");
 
         //YAHOO.util.Event.addListener(elContainerLiner, "scroll", this._onScroll, this); // for IE
 
@@ -1436,20 +1422,29 @@ YAHOO.widget.DataTable.prototype._initRecordSet = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initTableEl = function() {
+    var elTable;
+
     // Destroy existing
-    if(this._elTable) {
-        YAHOO.util.Event.purgeElement(this._elTable, true);
-        this._elTable.parentNode.removeChild(this._elTable);
-        this._elTable = null;
+    if(this._elThead) {
+        elTable = this._elThead.parentNode;
+        YAHOO.util.Event.purgeElement(elTable, true);
+        elTable.parentNode.removeChild(elTable);
+        this._elThead = null;
     }
-    
+    if(this._elTbody) {
+        elTable = this._elTbody.parentNode;
+        YAHOO.util.Event.purgeElement(elTable, true);
+        elTable.parentNode.removeChild(elTable);
+        this._elTbody = null;
+    }
+
     // Create elements for header
     // Create TABLE for header
     var elHeadTable = document.createElement("table");
-    elHeadTable.tabIndex = 0;
+    //elHeadTable.tabIndex = 0;
     elHeadTable.id = this.id + "-headtable";
     YAHOO.util.Dom.addClass(elHeadTable, YAHOO.widget.DataTable.CLASS_TABLE);
-    this._elHeadTable = this._elHeadContainer.appendChild(elHeadTable);
+    elHeadTable = this._elTheadContainer.appendChild(elHeadTable);
 
     // Create THEAD
     this._initTheadEl(elHeadTable,false);
@@ -1457,13 +1452,18 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     // Create elements for body
     // Create TABLE for body
     var elBodyTable = document.createElement("table");
-    elBodyTable.tabIndex = 0;
+    //elBodyTable.tabIndex = 0;
     elBodyTable.id = this.id + "-bodytable";
     YAHOO.util.Dom.addClass(elBodyTable, YAHOO.widget.DataTable.CLASS_TABLE);
-    this._elTable = this._elBodyContainer.appendChild(elBodyTable);
-    
+    this._elTbodyContainer.appendChild(elBodyTable);
+
     // Create THEAD
     this._initTheadEl(elBodyTable, true);
+
+    // Create TBODY for data
+    this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
+    this._elTbody.tabIndex = 0;
+    YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_BODY);
 
     // Create TBODY for messages
     var elMsgTbody = document.createElement("tbody");
@@ -1479,31 +1479,35 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     this._elMsgTbody = elBodyTable.appendChild(elMsgTbody);
     this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
 
-    // Create TBODY for data
-    this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
-    YAHOO.util.Dom.addClass(this._elTbody,YAHOO.widget.DataTable.CLASS_BODY);
-
+    var elContainer = this._elContainer;
     var elThead = this._elThead;
     var elTbody = this._elTbody;
-    var elBodyContainer = this._elBodyContainer;
+    var elTbodyContainer = this._elTbodyContainer;
 
     // Set up DOM events
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
     YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
 
-    YAHOO.util.Event.addListener(elBodyTable, "focus", this._onTableFocus, this);
-    YAHOO.util.Event.addListener(elBodyTable, "mouseover", this._onTableMouseover, this);
-    YAHOO.util.Event.addListener(elBodyTable, "mouseout", this._onTableMouseout, this);
-    YAHOO.util.Event.addListener(elBodyTable, "mousedown", this._onTableMousedown, this);
-    YAHOO.util.Event.addListener(elBodyTable, "keydown", this._onTableKeydown, this);
-    YAHOO.util.Event.addListener(elBodyTable, "keypress", this._onTableKeypress, this);
+    YAHOO.util.Event.addListener(elContainer, "focus", this._onTableFocus, this);
+    YAHOO.util.Event.addListener(elThead, "focus", this._onTheadFocus, this);
+    YAHOO.util.Event.addListener(elTbody, "focus", this._onTbodyFocus, this);
+
+    YAHOO.util.Event.addListener(elTbody, "mouseover", this._onTableMouseover, this);
+    YAHOO.util.Event.addListener(elTbody, "mouseout", this._onTableMouseout, this);
+    YAHOO.util.Event.addListener(elTbody, "mousedown", this._onTableMousedown, this);
+
+    YAHOO.util.Event.addListener(elThead, "keydown", this._onTheadKeydown, this);
+    YAHOO.util.Event.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
+
+    YAHOO.util.Event.addListener(elTbody, "keypress", this._onTableKeypress, this);
 
     // Since we can't listen for click and dblclick on the same element...
-    YAHOO.util.Event.addListener(elBodyTable, "dblclick", this._onTableDblclick, this);
+    YAHOO.util.Event.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
+    YAHOO.util.Event.addListener(elTbody.parentNode, "dblclick", this._onTableDblclick, this);
     YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
     YAHOO.util.Event.addListener(elTbody, "click", this._onTbodyClick, this);
 
-    YAHOO.util.Event.addListener(elBodyContainer, "scroll", this._onScroll, this); // to sync horiz scroll headera
+    YAHOO.util.Event.addListener(elTbodyContainer, "scroll", this._onScroll, this); // to sync horiz scroll headera
 };
 
 /**
@@ -2173,7 +2177,7 @@ YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
         var elLiner = oSelf._oColumnSet.keys[i].getThEl().firstChild;
         elLiner.style.position = "";
     }*/
-    oSelf._elHeadContainer.scrollLeft = oSelf._elBodyContainer.scrollLeft;
+    oSelf._elTheadContainer.scrollLeft = oSelf._elTbodyContainer.scrollLeft;
     /*for(i=0; i<oSelf._oColumnSet.keys.length; i++) {
         elLiner = oSelf._oColumnSet.keys[i].getThEl().firstChild;
         elLiner.style.position = "relative";
@@ -2251,7 +2255,7 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
-    if(!YAHOO.util.Dom.isAncestor(oSelf._elTable, elTarget)) {
+    if(!YAHOO.util.Dom.isAncestor(oSelf._elContainer, elTarget)) {
         oSelf.fireEvent("tableBlurEvent");
 
         // Fires editorBlurEvent when click is not within the TABLE.
@@ -2343,7 +2347,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
             elTag = elTarget.tagName.toLowerCase();
         }
     }
-    oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elTable),event:e});
+    oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
 /**
@@ -2391,7 +2395,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
             elTag = elTarget.tagName.toLowerCase();
         }
     }
-    oSelf.fireEvent("tableMouseoutEvent",{target:(elTarget || oSelf._elTable),event:e});
+    oSelf.fireEvent("tableMouseoutEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
 /**
@@ -2439,7 +2443,7 @@ YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
             elTag = elTarget.tagName.toLowerCase();
         }
     }
-    oSelf.fireEvent("tableMousedownEvent",{target:(elTarget || oSelf._elTable),event:e});
+    oSelf.fireEvent("tableMousedownEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
 /**
@@ -2485,740 +2489,46 @@ YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
             elTag = elTarget.tagName.toLowerCase();
         }
     }
-    oSelf.fireEvent("tableDblclickEvent",{target:(elTarget || oSelf._elTable),event:e});
+    oSelf.fireEvent("tableDblclickEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
-
 /**
- * Handles keydown events on the TABLE element. Handles arrow selection.
+ * Handles keydown events on the THEAD element.
  *
- * @method _onTableKeydown
+ * @method _onTheadKeydown
  * @param e {HTMLEvent} The key event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTableKeydown = function(e, oSelf) {
-    var bSHIFT = e.shiftKey;
-    var elTarget = YAHOO.util.Event.getTarget(e);
+YAHOO.widget.DataTable.prototype._onTheadKeydown = function(e, oSelf) {
+    //TODO: if tabbing to next Column header causes THEAD to scroll, need
+    // to sync scrollLeft with TBODY
+};
 
-    // Ignore actions in the THEAD
-    if(YAHOO.util.Dom.isAncestor(oSelf._elThead, elTarget)) {
-        return;
+/**
+ * Handles keydown events on the TBODY element. Handles selection behavior.
+ *
+ * @method _onTbodyKeydown
+ * @param e {HTMLEvent} The key event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
+    var sMode = oSelf.get("selectionMode");
+
+    if(sMode == "standard") {
+        oSelf._handleStandardSelectionByKey(e);
     }
-
-    var nKey = YAHOO.util.Event.getCharCode(e);
-
-    // Handle TAB
-    if(nKey === 9) {
-        // From TABLE el focus first TH label link, if any
-        if(!bSHIFT && (elTarget.id === oSelf._elTable.id) && oSelf._sFirstLabelLinkId) {
-            YAHOO.util.Event.stopEvent(e);
-
-            oSelf._focusEl(YAHOO.util.Dom.get(oSelf._sFirstLabelLinkId));
-        }
-        return;
+    else if(sMode == "single") {
+        oSelf._handleSingleSelectionByKey(e);
     }
-
-    // Handle ARROW selection
-    if((nKey > 36) && (nKey < 41)) {
-        YAHOO.util.Event.stopEvent(e);
-
-        var allRows = oSelf._elTbody.rows;
-        var sMode = oSelf.get("selectionMode");
-
-        var i, oAnchorCell, oAnchorRecord, nAnchorRecordIndex, nAnchorTrIndex, oAnchorColumn, nAnchorColKeyIndex,
-        oTriggerCell, oTriggerRecord, nTriggerRecordIndex, nTriggerTrIndex, oTriggerColumn, nTriggerColKeyIndex, elTriggerRow,
-        startIndex, endIndex, anchorPos, elNext;
-
-        // Row mode
-        if((sMode == "standard") || (sMode == "single")) {
-            // Validate trigger row:
-            // Arrow selection only works if last selected row is on current page
-            oTriggerRecord = oSelf.getLastSelectedRecord();
-            // No selected rows found
-            if(!oTriggerRecord) {
-                    return;
-            }
-            else {
-                oTriggerRecord = oSelf.getRecord(oTriggerRecord);
-                nTriggerRecordIndex = oSelf.getRecordIndex(oTriggerRecord);
-                elTriggerRow = oSelf.getTrEl(oTriggerRecord);
-                nTriggerTrIndex = oSelf.getTrIndex(elTriggerRow);
-
-                // Last selected row not found on this page
-                if(nTriggerTrIndex === null) {
-                    return;
-                }
-            }
-
-            // Validate anchor row
-            oAnchorRecord = oSelf._oAnchorRecord;
-            if(!oAnchorRecord) {
-                oAnchorRecord = oSelf._oAnchorRecord = oTriggerRecord;
-            }
-
-            nAnchorRecordIndex = oSelf.getRecordIndex(oAnchorRecord);
-            nAnchorTrIndex = oSelf.getTrIndex(oAnchorRecord);
-            // If anchor row is not on this page...
-            if(nAnchorTrIndex === null) {
-                // ...set TR index equal to top TR
-                if(nAnchorRecordIndex < oSelf.getRecordIndex(oSelf.getFirstTrEl())) {
-                    nAnchorTrIndex = 0;
-                }
-                // ...set TR index equal to bottom TR
-                else {
-                    nAnchorTrIndex = oSelf.getRecordIndex(oSelf.getLastTrEl());
-                }
-            }
-
-
-
-
-
-
-        ////////////////////////////////////////////////////////////////////////
-        //
-        // SHIFT row selection
-        //
-        ////////////////////////////////////////////////////////////////////////
-        if(bSHIFT && (sMode != "single")) {
-            if(nAnchorRecordIndex > nTriggerTrIndex) {
-                anchorPos = 1;
-            }
-            else if(nAnchorRecordIndex < nTriggerTrIndex) {
-                anchorPos = -1;
-            }
-            else {
-                anchorPos = 0;
-            }
-
-            // Arrow down
-            if(nKey == 40) {
-                // Selecting away from anchor row
-                if(anchorPos <= 0) {
-                    // Select the next row down
-                    if(nTriggerTrIndex < allRows.length-1) {
-                        oSelf.selectRow(allRows[nTriggerTrIndex+1]);
-                    }
-                }
-                // Unselecting toward anchor row
-                else {
-                    // Unselect this row towards the anchor row down
-                    oSelf.unselectRow(allRows[nTriggerTrIndex]);
-                }
-
-            }
-            // Arrow up
-            else if(nKey == 38) {
-                // Selecting away from anchor row
-                if(anchorPos >= 0) {
-                    // Select the next row up
-                    if(nTriggerTrIndex > 0) {
-                        oSelf.selectRow(allRows[nTriggerTrIndex-1]);
-                    }
-                }
-                // Unselect this row towards the anchor row up
-                else {
-                    oSelf.unselectRow(allRows[nTriggerTrIndex]);
-                }
-            }
-            // Arrow right
-            else if(nKey == 39) {
-                // Do nothing
-            }
-            // Arrow left
-            else if(nKey == 37) {
-                // Do nothing
-            }
-        }
-        ////////////////////////////////////////////////////////////////////////
-        //
-        // Simple single row selection
-        //
-        ////////////////////////////////////////////////////////////////////////
-        else {
-            // Arrow down
-            if(nKey == 40) {
-                oSelf.unselectAllRows();
-
-                // Select the next row
-                if(nTriggerTrIndex < allRows.length-1) {
-                    elNext = allRows[nTriggerTrIndex+1];
-                    oSelf.selectRow(elNext);
-                }
-                // Select only the last row
-                else {
-                    elNext = allRows[nTriggerTrIndex];
-                    oSelf.selectRow(elNext);
-                }
-
-                oSelf._oAnchorRecord = oSelf.getRecord(elNext);
-            }
-            // Arrow up
-            else if(nKey == 38) {
-                oSelf.unselectAllRows();
-
-                // Select the previous row
-                if(nTriggerTrIndex > 0) {
-                    elNext = allRows[nTriggerTrIndex-1];
-                    oSelf.selectRow(elNext);
-                }
-                // Select only the first row
-                else {
-                    elNext = allRows[nTriggerTrIndex];
-                    oSelf.selectRow(elNext);
-                }
-
-                oSelf._oAnchorRecord = oSelf.getRecord(elNext);
-            }
-            // Arrow right
-            else if(nKey == 39) {
-                // Do nothing
-            }
-            // Arrow left
-            else if(nKey == 37) {
-                // Do nothing
-            }
-
-
-
-
-
-
-
-
+    else if(sMode == "cellblock") {
+        oSelf._handleCellBlockSelectionByKey(e);
     }
-
-
-
-
-
-
-
-
-
-        }
-        // Cell mode
-        else {
-            // Validate trigger cell:
-            // Arrow selection only works if last selected cell is on current page
-            oTriggerCell = oSelf.getLastSelectedCell();
-            // No selected cells found
-            if(!oTriggerCell) {
-                return;
-            }
-            else {
-                oTriggerRecord = oSelf.getRecord(oTriggerCell.recordId);
-                nTriggerRecordIndex = oSelf.getRecordIndex(oTriggerRecord);
-                elTriggerRow = oSelf.getTrEl(oTriggerRecord);
-                nTriggerTrIndex = oSelf.getTrIndex(elTriggerRow);
-
-                // Last selected cell not found on this page
-                if(nTriggerTrIndex === null) {
-                    return;
-                }
-                else {
-                    oTriggerColumn = oSelf.getColumnById(oTriggerCell.columnId);
-                    nTriggerColKeyIndex = oTriggerColumn.getKeyIndex();
-                }
-            }
-
-            // Validate anchor cell
-            oAnchorCell = oSelf._oAnchorCell;
-            if(!oAnchorCell) {
-                oAnchorCell = oSelf._oAnchorCell = oTriggerCell;
-            }
-            oAnchorRecord = oSelf._oAnchorCell.record;
-            nAnchorRecordIndex = oSelf._oRecordSet.getRecordIndex(oAnchorRecord);
-            nAnchorTrIndex = oSelf.getTrIndex(oAnchorRecord);
-            // If anchor cell is not on this page...
-            if(nAnchorTrIndex === null) {
-                // ...set TR index equal to top TR
-                if(nAnchorRecordIndex < oSelf.getRecordIndex(oSelf.getFirstTrEl())) {
-                    nAnchorTrIndex = 0;
-                }
-                // ...set TR index equal to bottom TR
-                else {
-                    nAnchorTrIndex = oSelf.getRecordIndex(oSelf.getLastTrEl());
-                }
-            }
-
-            oAnchorColumn = oSelf._oAnchorCell.column;
-            nAnchorColKeyIndex = oAnchorColumn.getKeyIndex();
-
-
-            ////////////////////////////////////////////////////////////////////////
-            //
-            // SHIFT cell block selection
-            //
-            ////////////////////////////////////////////////////////////////////////
-            if(bSHIFT && (sMode == "cellblock")) {
-                // Arrow DOWN
-                if(nKey == 40) {
-                    // Is the anchor cell above, below, or same row as trigger
-                    if(nAnchorRecordIndex > nTriggerRecordIndex) {
-                        anchorPos = 1;
-                    }
-                    else if(nAnchorRecordIndex < nTriggerRecordIndex) {
-                        anchorPos = -1;
-                    }
-                    else {
-                        anchorPos = 0;
-                    }
-
-                    // Selecting away from anchor cell
-                    if(anchorPos <= 0) {
-                        // Select the horiz block on the next row...
-                        // ...making sure there is room below the trigger row
-                        if(nTriggerTrIndex < allRows.length-1) {
-                            // Select in order from anchor to trigger...
-                            startIndex = nAnchorColKeyIndex;
-                            endIndex = nTriggerColKeyIndex;
-                            // ...going left
-                            if(startIndex > endIndex) {
-                                for(i=startIndex; i>=endIndex; i--) {
-                                    elNext = allRows[nTriggerTrIndex+1].cells[i];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-                            // ... going right
-                            else {
-                                for(i=startIndex; i<=endIndex; i++) {
-                                    elNext = allRows[nTriggerTrIndex+1].cells[i];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-                        }
-                    }
-                    // Unselecting towards anchor cell
-                    else {
-                        startIndex = Math.min(nAnchorColKeyIndex, nTriggerColKeyIndex);
-                        endIndex = Math.max(nAnchorColKeyIndex, nTriggerColKeyIndex);
-                        // Unselect the horiz block on this row towards the next row
-                        for(i=startIndex; i<=endIndex; i++) {
-                            oSelf.unselectCell(allRows[nTriggerTrIndex].cells[i]);
-                        }
-                    }
-                }
-                // Arrow up
-                else if(nKey == 38) {
-                    // Is the anchor cell above, below, or same row as trigger
-                    if(nAnchorRecordIndex > nTriggerRecordIndex) {
-                        anchorPos = 1;
-                    }
-                    else if(nAnchorRecordIndex < nTriggerRecordIndex) {
-                        anchorPos = -1;
-                    }
-                    else {
-                        anchorPos = 0;
-                    }
-
-                    // Selecting away from anchor cell
-                    if(anchorPos >= 0) {
-                        // Select the horiz block on the previous row...
-                        // ...making sure there is room
-                        if(nTriggerTrIndex > 0) {
-                            // Select in order from anchor to trigger...
-                            startIndex = nAnchorColKeyIndex;
-                            endIndex = nTriggerColKeyIndex;
-                            // ...going left
-                            if(startIndex > endIndex) {
-                                for(i=startIndex; i>=endIndex; i--) {
-                                    elNext = allRows[nTriggerTrIndex-1].cells[i];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-                            // ... going right
-                            else {
-                                for(i=startIndex; i<=endIndex; i++) {
-                                    elNext = allRows[nTriggerTrIndex-1].cells[i];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-
-                        }
-                    }
-                    // Unselecting towards anchor cell
-                    else {
-                        startIndex = Math.min(nAnchorColKeyIndex, nTriggerColKeyIndex);
-                        endIndex = Math.max(nAnchorColKeyIndex, nTriggerColKeyIndex);
-                        // Unselect the horiz block on this row towards the previous row
-                        for(i=startIndex; i<=endIndex; i++) {
-                            oSelf.unselectCell(allRows[nTriggerTrIndex].cells[i]);
-                        }
-                    }
-                }
-                // Arrow right
-                else if(nKey == 39) {
-                    // Is the anchor cell left, right, or same column
-                    if(nAnchorColKeyIndex > nTriggerColKeyIndex) {
-                        anchorPos = 1;
-                    }
-                    else if(nAnchorColKeyIndex < nTriggerColKeyIndex) {
-                        anchorPos = -1;
-                    }
-                    else {
-                        anchorPos = 0;
-                    }
-
-                    // Selecting away from anchor cell
-                    if(anchorPos <= 0) {
-                        // Select the next vert block to the right...
-                        // ...making sure there is room
-                        if(nTriggerColKeyIndex < allRows[nTriggerTrIndex].cells.length-1) {
-                            // Select in order from anchor to trigger...
-                            startIndex = nAnchorTrIndex;
-                            endIndex = nTriggerTrIndex;
-                            // ...going up
-                            if(startIndex > endIndex) {
-                                for(i=startIndex; i>=endIndex; i--) {
-                                    elNext = allRows[i].cells[nTriggerColKeyIndex+1];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-                            // ... going down
-                            else {
-                                for(i=startIndex; i<=endIndex; i++) {
-                                    elNext = allRows[i].cells[nTriggerColKeyIndex+1];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-                        }
-                    }
-                    // Unselecting towards anchor cell
-                    else {
-                        // Unselect the vert block on this column towards the right
-                        startIndex = Math.min(nAnchorTrIndex, nTriggerTrIndex);
-                        endIndex = Math.max(nAnchorTrIndex, nTriggerTrIndex);
-                        for(i=startIndex; i<=endIndex; i++) {
-                            oSelf.unselectCell(allRows[i].cells[nTriggerColKeyIndex]);
-                        }
-                    }
-                }
-                // Arrow left
-                else if(nKey == 37) {
-                    // Is the anchor cell left, right, or same column
-                    if(nAnchorColKeyIndex > nTriggerColKeyIndex) {
-                        anchorPos = 1;
-                    }
-                    else if(nAnchorColKeyIndex < nTriggerColKeyIndex) {
-                        anchorPos = -1;
-                    }
-                    else {
-                        anchorPos = 0;
-                    }
-
-                    // Selecting away from anchor cell
-                    if(anchorPos >= 0) {
-                        //Select the previous vert block to the left
-                        if(nTriggerColKeyIndex > 0) {
-                            // Select in order from anchor to trigger...
-                            startIndex = nAnchorTrIndex;
-                            endIndex = nTriggerTrIndex;
-                            // ...going up
-                            if(startIndex > endIndex) {
-                                for(i=startIndex; i>=endIndex; i--) {
-                                    elNext = allRows[i].cells[nTriggerColKeyIndex-1];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-                            // ... going down
-                            else {
-                                for(i=startIndex; i<=endIndex; i++) {
-                                    elNext = allRows[i].cells[nTriggerColKeyIndex-1];
-                                    oSelf.selectCell(elNext);
-                                }
-                            }
-                        }
-                    }
-                    // Unselecting towards anchor cell
-                    else {
-                        // Unselect the vert block on this column towards the left
-                        startIndex = Math.min(nAnchorTrIndex, nTriggerTrIndex);
-                        endIndex = Math.max(nAnchorTrIndex, nTriggerTrIndex);
-                        for(i=startIndex; i<=endIndex; i++) {
-                            oSelf.unselectCell(allRows[i].cells[nTriggerColKeyIndex]);
-                        }
-                    }
-                }
-            }
-            ////////////////////////////////////////////////////////////////////////
-            //
-            // SHIFT cell range selection
-            //
-            ////////////////////////////////////////////////////////////////////////
-            else if(bSHIFT && (sMode == "cellrange")) {
-                // Is the anchor cell above, below, or same row as trigger
-                if(nAnchorRecordIndex > nTriggerRecordIndex) {
-                    anchorPos = 1;
-                }
-                else if(nAnchorRecordIndex < nTriggerRecordIndex) {
-                    anchorPos = -1;
-                }
-                else {
-                    anchorPos = 0;
-                }
-
-                // Arrow down
-                if(nKey == 40) {
-                    // Selecting away from anchor cell
-                    if(anchorPos <= 0) {
-                        // Select all cells to the end of this row
-                        for(i=nTriggerColKeyIndex+1; i<allRows[nTriggerTrIndex].cells.length; i++){
-                            elNext = allRows[nTriggerTrIndex].cells[i];
-                            oSelf.selectCell(elNext);
-                        }
-
-                        // Select some of the cells on the next row down
-                        if(nTriggerTrIndex < allRows.length-1) {
-                            for(i=0; i<=nTriggerColKeyIndex; i++){
-                                elNext = allRows[nTriggerTrIndex+1].cells[i];
-                                oSelf.selectCell(elNext);
-                            }
-                        }
-                    }
-                    // Unselecting towards anchor cell
-                    else {
-                        // Unselect all cells to the end of this row
-                        for(i=nTriggerColKeyIndex; i<allRows[nTriggerTrIndex].cells.length; i++){
-                            oSelf.unselectCell(allRows[nTriggerTrIndex].cells[i]);
-                        }
-
-                        // Unselect some of the cells on the next row down
-                        for(i=0; i<nTriggerColKeyIndex; i++){
-                            oSelf.unselectCell(allRows[nTriggerTrIndex+1].cells[i]);
-                        }
-                    }
-                }
-                // Arrow up
-                else if(nKey == 38) {
-                    // Selecting away from anchor cell
-                    if(anchorPos >= 0) {
-                        // Select all the cells to the beginning of this row
-                        for(i=nTriggerColKeyIndex-1; i>-1; i--){
-                            elNext = allRows[nTriggerTrIndex].cells[i];
-                            oSelf.selectCell(elNext);
-                        }
-
-                        // Select some of the cells from the end of the previous row
-                        if(nTriggerTrIndex > 0) {
-                            for(i=allRows[nTriggerTrIndex].cells.length-1; i>=nTriggerColKeyIndex; i--){
-                                elNext = allRows[nTriggerTrIndex-1].cells[i];
-                                oSelf.selectCell(elNext);
-                            }
-                        }
-                    }
-                    // Unselecting towards anchor cell
-                    else {
-                        // Unselect all the cells to the beginning of this row
-                        for(i=nTriggerColKeyIndex; i>-1; i--){
-                            oSelf.unselectCell(allRows[nTriggerTrIndex].cells[i]);
-                        }
-
-                        // Unselect some of the cells from the end of the previous row
-                        for(i=allRows[nTriggerTrIndex].cells.length-1; i>nTriggerColKeyIndex; i--){
-                            oSelf.unselectCell(allRows[nTriggerTrIndex-1].cells[i]);
-                        }
-                    }
-                }
-                // Arrow right
-                else if(nKey == 39) {
-                    // Selecting away from anchor cell
-                    if(anchorPos < 0) {
-                        // Select the next cell to the right
-                        if(nTriggerColKeyIndex < allRows[nTriggerTrIndex].cells.length-1) {
-                            elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex+1];
-                            oSelf.selectCell(elNext);
-                        }
-                        // Select the first cell of the next row
-                        else if(nTriggerTrIndex < allRows.length-1) {
-                            elNext = allRows[nTriggerTrIndex+1].cells[0];
-                            oSelf.selectCell(elNext);
-                        }
-                    }
-                    // Unselecting towards anchor cell
-                    else if(anchorPos > 0) {
-                        oSelf.unselectCell(allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex]);
-
-                        // Unselect this cell towards the right
-                        if(nTriggerColKeyIndex < allRows[nTriggerTrIndex].cells.length-1) {
-                        }
-                        // Unselect this cells towards the first cell of the next row
-                        else {
-                        }
-                    }
-                    // Anchor is on this row
-                    else {
-                        // Selecting away from anchor
-                        if(nAnchorColKeyIndex <= nTriggerColKeyIndex) {
-                            // Select the next cell to the right
-                            if(nTriggerColKeyIndex < allRows[nTriggerTrIndex].cells.length-1) {
-                                elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex+1];
-                                oSelf.selectCell(elNext);
-                            }
-                            // Select the first cell on the next row
-                            else if(nTriggerTrIndex < allRows.length-1){
-                                elNext = allRows[nTriggerTrIndex+1].cells[0];
-                                oSelf.selectCell(elNext);
-                            }
-                        }
-                        // Unselecting towards anchor
-                        else {
-                            // Unselect this cell towards the right
-                            oSelf.unselectCell(allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex]);
-                        }
-                    }
-                }
-                // Arrow left
-                else if(nKey == 37) {
-                    // Unselecting towards the anchor
-                    if(anchorPos < 0) {
-                        oSelf.unselectCell(allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex]);
-
-                        // Unselect this cell towards the left
-                        if(nTriggerColKeyIndex > 0) {
-                        }
-                        // Unselect this cell towards the last cell of the previous row
-                        else {
-                        }
-                    }
-                    // Selecting towards the anchor
-                    else if(anchorPos > 0) {
-                        // Select the next cell to the left
-                        if(nTriggerColKeyIndex > 0) {
-                            elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex-1];
-                            oSelf.selectCell(elNext);
-                        }
-                        // Select the last cell of the previous row
-                        else if(nTriggerTrIndex > 0){
-                            elNext = allRows[nTriggerTrIndex-1].cells[allRows[nTriggerTrIndex-1].cells.length-1];
-                            oSelf.selectCell(elNext);
-                        }
-                    }
-                    // Anchor is on this row
-                    else {
-                        // Selecting away from anchor cell
-                        if(nAnchorColKeyIndex >= nTriggerColKeyIndex) {
-                            // Select the next cell to the left
-                            if(nTriggerColKeyIndex > 0) {
-                                elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex-1];
-                                oSelf.selectCell(elNext);
-                            }
-                            // Select the last cell of the previous row
-                            else if(nTriggerTrIndex > 0){
-                                elNext = allRows[nTriggerTrIndex-1].cells[allRows[nTriggerTrIndex-1].cells.length-1];
-                                oSelf.selectCell(elNext);
-                            }
-                        }
-                        // Unselecting towards anchor cell
-                        else {
-                            oSelf.unselectCell(allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex]);
-
-                            // Unselect this cell towards the left
-                            if(nTriggerColKeyIndex > 0) {
-                            }
-                            // Unselect this cell towards the last cell of the previous row
-                            else {
-                            }
-                        }
-                    }
-                }
-            }
-            ////////////////////////////////////////////////////////////////////////
-            //
-            // Simple single cell selection
-            //
-            ////////////////////////////////////////////////////////////////////////
-            else if((sMode == "cellblock") || (sMode == "cellrange") || (sMode == "singlecell")) {
-                // Arrow down
-                if(nKey == 40) {
-                    oSelf.unselectAllCells();
-
-                    // Select the next cell down
-                    if(nTriggerTrIndex < allRows.length-1) {
-                        elNext = allRows[nTriggerTrIndex+1].cells[nTriggerColKeyIndex];
-                        oSelf.selectCell(elNext);
-                    }
-                    // Select only the bottom cell
-                    else {
-                        elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex];
-                        oSelf.selectCell(elNext);
-                    }
-
-                    oSelf._oAnchorCell = {record:oSelf.getRecord(elNext), column:oSelf.getColumn(elNext)};
-                }
-                // Arrow up
-                else if(nKey == 38) {
-                    oSelf.unselectAllCells();
-
-                    // Select the next cell up
-                    if(nTriggerTrIndex > 0) {
-                        elNext = allRows[nTriggerTrIndex-1].cells[nTriggerColKeyIndex];
-                        oSelf.selectCell(elNext);
-                    }
-                    // Select only the top cell
-                    else {
-                        elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex];
-                        oSelf.selectCell(elNext);
-                    }
-
-                    oSelf._oAnchorCell = {record:oSelf.getRecord(elNext), column:oSelf.getColumn(elNext)};
-                }
-                // Arrow right
-                else if(nKey == 39) {
-                    oSelf.unselectAllCells();
-
-                    // Select the next cell to the right
-                    if(nTriggerColKeyIndex < allRows[nTriggerTrIndex].cells.length-1) {
-                        elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex+1];
-                        oSelf.selectCell(elNext);
-                    }
-                    // Select only the right cell
-                    else {
-                        elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex];
-                        oSelf.selectCell(elNext);
-                    }
-
-                    oSelf._oAnchorCell = {record:oSelf.getRecord(elNext), column:oSelf.getColumn(elNext)};
-                }
-                // Arrow left
-                else if(nKey == 37) {
-                    oSelf.unselectAllCells();
-
-                    // Select the next cell to the left
-                    if(nTriggerColKeyIndex > 0) {
-                        elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex-1];
-                        oSelf.selectCell(elNext);
-                    }
-                    // Select only the left cell
-                    else {
-                        elNext = allRows[nTriggerTrIndex].cells[nTriggerColKeyIndex];
-                        oSelf.selectCell(elNext);
-                    }
-
-                    oSelf._oAnchorCell = {record:oSelf.getRecord(elNext), column:oSelf.getColumn(elNext)};
-                }
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
+    else if(sMode == "cellrange") {
+        oSelf._handleCellRangeSelectionByKey(e);
     }
-    else {
-        //TODO: handle tab across cells
-        //TODO: handle backspace
-        //TODO: handle delete
-        //TODO: handle arrow selection across pages
-        return;
+    else if(sMode == "singlecell") {
+        oSelf._handleSingleCellSelectionByKey(e);
     }
 };
 
@@ -3284,7 +2594,7 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
                 elTag = elTarget.tagName.toLowerCase();
             }
     }
-    oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+    oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
 /**
@@ -3314,15 +2624,15 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
                 else if(elTarget.type.toLowerCase() == "radio") {
                     oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
                 }
-                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
                 return;
             case "a":
                 oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
-                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
                 return;
             case "button":
                 oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
-                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
                 return;
             case "td":
                 oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
@@ -3338,7 +2648,7 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
             elTag = elTarget.tagName.toLowerCase();
         }
     }
-    oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elTable),event:e});
+    oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
 /*TODO: delete
@@ -3652,13 +2962,13 @@ YAHOO.widget.DataTable.prototype.getCellEditor = function() {
 // DOM ACCESSORS
 
 /**
- * Returns DOM reference to the DataTable's TABLE element.
+ * Returns DOM reference to the DataTable's container element.
  *
- * @method getTableEl
- * @return {HTMLElement} Reference to TABLE element.
+ * @method getContainerEl
+ * @return {HTMLElement} Reference to DIV element.
  */
-YAHOO.widget.DataTable.prototype.getTableEl = function() {
-    return this._elTable;
+YAHOO.widget.DataTable.prototype.getContainerEl = function() {
+    return this._elContainer;
 };
 
 /**
@@ -3866,11 +3176,24 @@ YAHOO.widget.DataTable.prototype.getTdEl = function(cell) {
             return elCell;
         }
     }
-    else if(cell.record && cell.column && cell.column.getKeyIndex) {
-        var oRecord = cell.record;
+    else {
+        var oRecord, nColKeyIndex;
+
+        if(YAHOO.lang.isString(cell.columnId) && YAHOO.lang.isString(cell.recordId)) {
+            oRecord = this.getRecord(cell.recordId);
+            var oColumn = this.getColumnById(cell.columnId);
+            if(oColumn) {
+                nColKeyIndex = oColumn.getKeyIndex();
+            }
+
+        }
+        if(cell.record && cell.column && cell.column.getKeyIndex) {
+            oRecord = cell.record;
+            nColKeyIndex = cell.column.getKeyIndex();
+        }
         var elRow = this.getTrEl(oRecord);
-        if(elRow && elRow.cells && elRow.cells.length > 0) {
-            return elRow.cells[cell.column.getKeyIndex()] || null;
+        if((nColKeyIndex !== null) && elRow && elRow.cells && elRow.cells.length > 0) {
+            return elRow.cells[nColKeyIndex] || null;
         }
     }
 
@@ -3889,7 +3212,7 @@ YAHOO.widget.DataTable.prototype.getTdEl = function(cell) {
 YAHOO.widget.DataTable.prototype.getFirstTdEl = function(row) {
     var elRow = this.getTrEl(row) || this.getFirstTrEl();
     if(elRow && (elRow.cells.length > 0)) {
-        return elRow.cells[elRow.cells.length-1];
+        return elRow.cells[0];
     }
     YAHOO.log("Could not get first TD element for row " + elRow, "warn", this.toString());
     return null;
@@ -3927,6 +3250,12 @@ YAHOO.widget.DataTable.prototype.getNextTdEl = function(cell) {
         if(nThisTdIndex < elRow.cells.length-1) {
             return elRow.cells[nThisTdIndex+1];
         }
+        else {
+            var elNextRow = this.getNextTrEl(elRow);
+            if(elNextRow) {
+                return elNextRow.cells[0];
+            }
+        }
     }
     YAHOO.log("Could not get next TD element for cell " + cell, "warn", this.toString());
     return null;
@@ -3940,13 +3269,19 @@ YAHOO.widget.DataTable.prototype.getNextTdEl = function(cell) {
  * object literal of syntax {record:oRecord, column:oColumn} from which to get previous TD element.
  * @return {HTMLElement} Reference to previous TD element, or null.
  */
-YAHOO.widget.DataTable.prototype.getPreviousTrEl = function(cell) {
+YAHOO.widget.DataTable.prototype.getPreviousTdEl = function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
         var nThisTdIndex = elCell.yuiCellIndex;
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex > 0) {
             return elRow.cells[nThisTdIndex-1];
+        }
+        else {
+            var elPreviousRow = this.getPreviousTrEl(elRow);
+            if(elPreviousRow) {
+                return this.getLastTdEl(elPreviousRow);
+            }
         }
     }
     YAHOO.log("Could not get next TD element for cell " + cell, "warn", this.toString());
@@ -4161,8 +3496,9 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
         YAHOO.util.Dom.setStyle(this._elContainer, "overflow", "auto");
     }*/
 
+    // Snap container width
     if(!this.get("scrollable")) {
-        this._elContainer.style.width = this._elTable.offsetWidth + "px";
+        this._elContainer.style.width = this._elTbody.parentNode.offsetWidth + "px";
     }
 
     this.fireEvent("initEvent");
@@ -4364,7 +3700,7 @@ YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
  * @method focus
  */
 YAHOO.widget.DataTable.prototype.focus = function() {
-    this._focusEl(this._elTable);
+    this._focusEl(this._elContainer);
 };
 
 
@@ -6145,6 +5481,1480 @@ YAHOO.widget.DataTable.prototype._unselectAllTrEls = function() {
 };
 
 /**
+ * Returns object literal of values that represent the selection trigger. Used
+ * to determine selection behavior resulting from a key event.
+ *
+ * @method _getSelectionTrigger
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._getSelectionTrigger = function() {
+    var sMode = this.get("selectionMode");
+    var oTrigger = {};
+    var oTriggerCell, oTriggerRecord, nTriggerRecordIndex, elTriggerRow, nTriggerTrIndex;
+
+    // Cell mode
+    if((sMode == "cellblock") || (sMode == "cellrange") || (sMode == "singlecell")) {
+        oTriggerCell = this.getLastSelectedCell();
+        // No selected cells found
+        if(!oTriggerCell) {
+            return null;
+        }
+        else {
+            oTriggerRecord = this.getRecord(oTriggerCell.recordId);
+            nTriggerRecordIndex = this.getRecordIndex(oTriggerRecord);
+            elTriggerRow = this.getTrEl(oTriggerRecord);
+            nTriggerTrIndex = this.getTrIndex(elTriggerRow);
+
+            // Selected cell not found on this page
+            if(nTriggerTrIndex === null) {
+                return null;
+            }
+            else {
+                oTrigger.record = oTriggerRecord;
+                oTrigger.recordIndex = nTriggerRecordIndex;
+                oTrigger.el = this.getTdEl(oTriggerCell);
+                oTrigger.trIndex = nTriggerTrIndex;
+                oTrigger.column = this.getColumnById(oTriggerCell.columnId);
+                oTrigger.colKeyIndex = oTrigger.column.getKeyIndex();
+                oTrigger.cell = oTriggerCell;
+                return oTrigger;
+            }
+        }
+    }
+    // Row mode
+    else {
+        oTriggerRecord = this.getLastSelectedRecord();
+        // No selected rows found
+        if(!oTriggerRecord) {
+                return null;
+        }
+        else {
+            // Selected row found, but is it on current page?
+            oTriggerRecord = this.getRecord(oTriggerRecord);
+            nTriggerRecordIndex = this.getRecordIndex(oTriggerRecord);
+            elTriggerRow = this.getTrEl(oTriggerRecord);
+            nTriggerTrIndex = this.getTrIndex(elTriggerRow);
+
+            // Selected row not found on this page
+            if(nTriggerTrIndex === null) {
+                return null;
+            }
+            else {
+                oTrigger.record = oTriggerRecord;
+                oTrigger.recordIndex = nTriggerRecordIndex;
+                oTrigger.el = elTriggerRow;
+                oTrigger.trIndex = nTriggerTrIndex;
+                return oTrigger;
+            }
+        }
+    }
+};
+
+/**
+ * Returns object literal of values that represent the selection anchor. Used
+ * to determine selection behavior resulting from a user event.
+ *
+ * @method _getSelectionAnchor
+ * @param oTrigger {Object} (Optional) Object literal of selection trigger values
+ * (for key events).
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._getSelectionAnchor = function(oTrigger) {
+    var sMode = this.get("selectionMode");
+    var oAnchor = {};
+    var oAnchorRecord, nAnchorRecordIndex, nAnchorTrIndex;
+
+    // Cell mode
+    if((sMode == "cellblock") || (sMode == "cellrange") || (sMode == "singlecell")) {
+        // Validate anchor cell
+        var oAnchorCell = this._oAnchorCell;
+        if(!oAnchorCell) {
+            if(oTrigger) {
+                oAnchorCell = this._oAnchorCell = oTrigger.cell;
+            }
+            else {
+                return null;
+            }
+        }
+        oAnchorRecord = this._oAnchorCell.record;
+        nAnchorRecordIndex = this._oRecordSet.getRecordIndex(oAnchorRecord);
+        nAnchorTrIndex = this.getTrIndex(oAnchorRecord);
+        // If anchor cell is not on this page...
+        if(nAnchorTrIndex === null) {
+            // ...set TR index equal to top TR
+            if(nAnchorRecordIndex < this.getRecordIndex(this.getFirstTrEl())) {
+                nAnchorTrIndex = 0;
+            }
+            // ...set TR index equal to bottom TR
+            else {
+                nAnchorTrIndex = this.getRecordIndex(this.getLastTrEl());
+            }
+        }
+
+        oAnchor.record = oAnchorRecord;
+        oAnchor.recordIndex = nAnchorRecordIndex;
+        oAnchor.trIndex = nAnchorTrIndex;
+        oAnchor.column = this._oAnchorCell.column;
+        oAnchor.colKeyIndex = oAnchor.column.getKeyIndex();
+        oAnchor.cell = oAnchorCell;
+        return oAnchor;
+    }
+    // Row mode
+    else {
+        oAnchorRecord = this._oAnchorRecord;
+        if(!oAnchorRecord) {
+            if(oTrigger) {
+                oAnchorRecord = this._oAnchorRecord = oTrigger.record;
+            }
+            else {
+                return null;
+            }
+        }
+
+        nAnchorRecordIndex = this.getRecordIndex(oAnchorRecord);
+        nAnchorTrIndex = this.getTrIndex(oAnchorRecord);
+        // If anchor row is not on this page...
+        if(nAnchorTrIndex === null) {
+            // ...set TR index equal to top TR
+            if(nAnchorRecordIndex < this.getRecordIndex(this.getFirstTrEl())) {
+                nAnchorTrIndex = 0;
+            }
+            // ...set TR index equal to bottom TR
+            else {
+                nAnchorTrIndex = this.getRecordIndex(this.getLastTrEl());
+            }
+        }
+
+        oAnchor.record = oAnchorRecord;
+        oAnchor.recordIndex = nAnchorRecordIndex;
+        oAnchor.trIndex = nAnchorTrIndex;
+        return oAnchor;
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a mouse event when selection mode
+ * is set to "standard".
+ *
+ * @method _handleStandardSelectionByMouse
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleStandardSelectionByMouse = function(oArgs) {
+    var elTarget = oArgs.target;
+
+    // Validate target row
+    var elTargetRow = this.getTrEl(elTarget);
+    if(elTargetRow) {
+        var e = oArgs.event;
+        var bSHIFT = e.shiftKey;
+        var bCTRL = e.ctrlKey || ((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && e.metaKey);
+
+        var oTargetRecord = this.getRecord(elTargetRow);
+        var nTargetRecordIndex = this._oRecordSet.getRecordIndex(oTargetRecord);
+
+        var oAnchor = this._getSelectionAnchor();
+
+        var i;
+
+        // Both SHIFT and CTRL
+        if(bSHIFT && bCTRL) {
+            // Validate anchor
+            if(oAnchor) {
+                if(this.isSelected(oAnchor.record)) {
+                    // Select all rows between anchor row and target row, including target row
+                    if(oAnchor.recordIndex < nTargetRecordIndex) {
+                        for(i=oAnchor.recordIndex+1; i<=nTargetRecordIndex; i++) {
+                            if(!this.isSelected(i)) {
+                                this.selectRow(i);
+                            }
+                        }
+                    }
+                    // Select all rows between target row and anchor row, including target row
+                    else {
+                        for(i=oAnchor.recordIndex-1; i>=nTargetRecordIndex; i--) {
+                            if(!this.isSelected(i)) {
+                                this.selectRow(i);
+                            }
+                        }
+                    }
+                }
+                else {
+                    // Unselect all rows between anchor row and target row
+                    if(oAnchor.recordIndex < nTargetRecordIndex) {
+                        for(i=oAnchor.recordIndex+1; i<=nTargetRecordIndex-1; i++) {
+                            if(this.isSelected(i)) {
+                                this.unselectRow(i);
+                            }
+                        }
+                    }
+                    // Unselect all rows between target row and anchor row
+                    else {
+                        for(i=nTargetRecordIndex+1; i<=oAnchor.recordIndex-1; i++) {
+                            if(this.isSelected(i)) {
+                                this.unselectRow(i);
+                            }
+                        }
+                    }
+                    // Select the target row
+                    this.selectRow(oTargetRecord);
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._oAnchorRecord = oTargetRecord;
+
+                // Toggle selection of target
+                if(this.isSelected(oTargetRecord)) {
+                    this.unselectRow(oTargetRecord);
+                }
+                else {
+                    this.selectRow(oTargetRecord);
+                }
+            }
+        }
+         // Only SHIFT
+        else if(bSHIFT) {
+            this.unselectAllRows();
+
+            // Validate anchor
+            if(oAnchor) {
+                // Select all rows between anchor row and target row,
+                // including the anchor row and target row
+                if(oAnchor.recordIndex < nTargetRecordIndex) {
+                    for(i=oAnchor.recordIndex; i<=nTargetRecordIndex; i++) {
+                        this.selectRow(i);
+                    }
+                }
+                // Select all rows between target row and anchor row,
+                // including the target row and anchor row
+                else {
+                    for(i=oAnchor.recordIndex; i>=nTargetRecordIndex; i--) {
+                        this.selectRow(i);
+                    }
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._oAnchorRecord = oTargetRecord;
+
+                // Select target row only
+                this.selectRow(oTargetRecord);
+            }
+        }
+        // Only CTRL
+        else if(bCTRL) {
+            // Set anchor
+            this._oAnchorRecord = oTargetRecord;
+
+            // Toggle selection of target
+            if(this.isSelected(oTargetRecord)) {
+                this.unselectRow(oTargetRecord);
+            }
+            else {
+                this.selectRow(oTargetRecord);
+            }
+        }
+        // Neither SHIFT nor CTRL
+        else {
+            this._handleSingleSelectionByMouse(oArgs);
+            return;
+        }
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a key event when selection mode
+ * is set to "standard".
+ *
+ * @method _handleStandardSelectionByKey
+ * @param e {HTMLEvent} Event object.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleStandardSelectionByKey = function(e) {
+    var nKey = YAHOO.util.Event.getCharCode(e);
+
+    if((nKey == 38) || (nKey == 40)) {
+        var bSHIFT = e.shiftKey;
+
+        // Validate trigger
+        var oTrigger = this._getSelectionTrigger();
+        // Arrow selection only works if last selected row is on current page
+        if(!oTrigger) {
+            return null;
+        }
+
+        YAHOO.util.Event.stopEvent(e);
+
+        // Validate anchor
+        var oAnchor = this._getSelectionAnchor(oTrigger);
+
+        // Determine which direction we're going to
+        if(bSHIFT) {
+            // Selecting down away from anchor row
+            if((nKey == 40) && (oAnchor.recordIndex <= oTrigger.trIndex)) {
+                this.selectRow(this.getNextTrEl(oTrigger.el));
+            }
+            // Selecting up away from anchor row
+            else if((nKey == 38) && (oAnchor.recordIndex >= oTrigger.trIndex)) {
+                this.selectRow(this.getPreviousTrEl(oTrigger.el));
+            }
+            // Unselect trigger
+            else {
+                this.unselectRow(oTrigger.el);
+            }
+        }
+        else {
+            this._handleSingleSelectionByKey(e);
+        }
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a mouse event when selection mode
+ * is set to "single".
+ *
+ * @method _handleSingleSelectionByMouse
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleSingleSelectionByMouse = function(oArgs) {
+    var elTarget = oArgs.target;
+
+    // Validate target row
+    var elTargetRow = this.getTrEl(elTarget);
+    if(elTargetRow) {
+        var oTargetRecord = this.getRecord(elTargetRow);
+
+        // Set anchor
+        this._oAnchorRecord = oTargetRecord;
+
+        // Select only target
+        this.unselectAllRows();
+        this.selectRow(oTargetRecord);
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a key event when selection mode
+ * is set to "single".
+ *
+ * @method _handleSingleSelectionByKey
+ * @param e {HTMLEvent} Event object.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleSingleSelectionByKey = function(e) {
+    var nKey = YAHOO.util.Event.getCharCode(e);
+
+    if((nKey == 38) || (nKey == 40)) {
+        // Validate trigger
+        var oTrigger = this._getSelectionTrigger();
+        // Arrow selection only works if last selected row is on current page
+        if(!oTrigger) {
+            return null;
+        }
+
+        YAHOO.util.Event.stopEvent(e);
+
+        // Validate anchor
+        var oAnchor = this._getSelectionAnchor(oTrigger);
+
+        // Determine the new row to select
+        var elNew;
+        if(nKey == 38) { // arrow up
+            elNew = this.getPreviousTrEl(oTrigger.el);
+
+            // Validate new row
+            if(elNew === null) {
+                //TODO: wrap around to last tr on current page
+                //elNew = this.getLastTrEl();
+
+                //TODO: wrap back to last tr of previous page
+
+                // Top row selection is sticky
+                elNew = this.getFirstTrEl();
+            }
+        }
+        else if(nKey == 40) { // arrow down
+            elNew = this.getNextTrEl(oTrigger.el);
+
+            // Validate new row
+            if(elNew === null) {
+                //TODO: wrap around to first tr on current page
+                //elNew = this.getFirstTrEl();
+
+                //TODO: wrap forward to first tr of previous page
+
+                // Bottom row selection is sticky
+                elNew = this.getLastTrEl();
+            }
+        }
+
+        // Unselect all rows
+        this.unselectAllRows();
+
+        // Select the new row
+        this.selectRow(elNew);
+
+        // Set new anchor
+        this._oAnchorRecord = this.getRecord(elNew);
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a mouse event when selection mode
+ * is set to "cellblock".
+ *
+ * @method _handleCellBlockSelectionByMouse
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleCellBlockSelectionByMouse = function(oArgs) {
+    var elTarget = oArgs.target;
+
+    // Validate target cell
+    var elTargetCell = this.getTdEl(elTarget);
+    if(elTargetCell) {
+        var e = oArgs.event;
+        var bSHIFT = e.shiftKey;
+        var bCTRL = e.ctrlKey || ((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && e.metaKey);
+
+        var elTargetRow = this.getTrEl(elTargetCell);
+        var nTargetTrIndex = this.getTrIndex(elTargetRow);
+        var oTargetColumn = this.getColumn(elTargetCell);
+        var nTargetColKeyIndex = oTargetColumn.getKeyIndex();
+        var oTargetRecord = this.getRecord(elTargetRow);
+        var nTargetRecordIndex = this._oRecordSet.getRecordIndex(oTargetRecord);
+        var oTargetCell = {record:oTargetRecord, column:oTargetColumn};
+
+        var oAnchor = this._getSelectionAnchor();
+
+        var allRows = this.getTbodyEl().rows;
+        var startIndex, endIndex, currentRow, i, j;
+
+        // Both SHIFT and CTRL
+        if(bSHIFT && bCTRL) {
+
+            // Validate anchor
+            if(oAnchor) {
+                // Anchor is selected
+                if(this.isSelected(oAnchor.cell)) {
+                    // All cells are on the same row
+                    if(oAnchor.recordIndex === nTargetRecordIndex) {
+                        // Select all cells between anchor cell and target cell, including target cell
+                        if(oAnchor.colKeyIndex < nTargetColKeyIndex) {
+                            for(i=oAnchor.colKeyIndex+1; i<=nTargetColKeyIndex; i++) {
+                                this.selectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                        // Select all cells between target cell and anchor cell, including target cell
+                        else if(nTargetColKeyIndex < oAnchor.colKeyIndex) {
+                            for(i=nTargetColKeyIndex; i<oAnchor.colKeyIndex; i++) {
+                                this.selectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                    }
+                    // Anchor row is above target row
+                    else if(oAnchor.recordIndex < nTargetRecordIndex) {
+                        startIndex = Math.min(oAnchor.colKeyIndex, nTargetColKeyIndex);
+                        endIndex = Math.max(oAnchor.colKeyIndex, nTargetColKeyIndex);
+
+                        // Select all cells from startIndex to endIndex on rows between anchor row and target row
+                        for(i=oAnchor.trIndex; i<=nTargetTrIndex; i++) {
+                            for(j=startIndex; j<=endIndex; j++) {
+                                this.selectCell(allRows[i].cells[j]);
+                            }
+                        }
+                    }
+                    // Anchor row is below target row
+                    else {
+                        startIndex = Math.min(oAnchor.trIndex, nTargetColKeyIndex);
+                        endIndex = Math.max(oAnchor.trIndex, nTargetColKeyIndex);
+
+                        // Select all cells from startIndex to endIndex on rows between target row and anchor row
+                        for(i=oAnchor.trIndex; i>=nTargetTrIndex; i--) {
+                            for(j=endIndex; j>=startIndex; j--) {
+                                this.selectCell(allRows[i].cells[j]);
+                            }
+                        }
+                    }
+                }
+                // Anchor cell is unselected
+                else {
+                    // All cells are on the same row
+                    if(oAnchor.recordIndex === nTargetRecordIndex) {
+                        // Unselect all cells between anchor cell and target cell
+                        if(oAnchor.colKeyIndex < nTargetColKeyIndex) {
+                            for(i=oAnchor.colKeyIndex+1; i<nTargetColKeyIndex; i++) {
+                                this.unselectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                        // Select all cells between target cell and anchor cell
+                        else if(nTargetColKeyIndex < oAnchor.colKeyIndex) {
+                            for(i=nTargetColKeyIndex+1; i<oAnchor.colKeyIndex; i++) {
+                                this.unselectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                    }
+                    // Anchor row is above target row
+                    if(oAnchor.recordIndex < nTargetRecordIndex) {
+                        // Unselect all cells from anchor cell to target cell
+                        for(i=oAnchor.trIndex; i<=nTargetTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the anchor row, only unselect cells after the anchor cell
+                                if(currentRow.sectionRowIndex === oAnchor.trIndex) {
+                                    if(j>oAnchor.colKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // This is the target row, only unelect cells before the target cell
+                                else if(currentRow.sectionRowIndex === nTargetTrIndex) {
+                                    if(j<nTargetColKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Unselect all cells on this row
+                                else {
+                                    this.unselectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
+                    // Anchor row is below target row
+                    else {
+                        // Unselect all cells from target cell to anchor cell
+                        for(i=nTargetTrIndex; i<=oAnchor.trIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the target row, only unselect cells after the target cell
+                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j>nTargetColKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // This is the anchor row, only unselect cells before the anchor cell
+                                else if(currentRow.sectionRowIndex == oAnchor.trIndex) {
+                                    if(j<oAnchor.colKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Unselect all cells on this row
+                                else {
+                                    this.unselectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
+
+                    // Select the target cell
+                    this.selectCell(elTargetCell);
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._oAnchorCell = oTargetCell;
+
+                // Toggle selection of target
+                if(this.isSelected(oTargetCell)) {
+                    this.unselectCell(oTargetCell);
+                }
+                else {
+                    this.selectCell(oTargetCell);
+                }
+            }
+
+        }
+         // Only SHIFT
+        else if(bSHIFT) {
+            this.unselectAllCells();
+
+            // Validate anchor
+            if(oAnchor) {
+                // All cells are on the same row
+                if(oAnchor.recordIndex === nTargetRecordIndex) {
+                    // Select all cells between anchor cell and target cell,
+                    // including the anchor cell and target cell
+                    if(oAnchor.colKeyIndex < nTargetColKeyIndex) {
+                        for(i=oAnchor.colKeyIndex; i<=nTargetColKeyIndex; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+                    }
+                    // Select all cells between target cell and anchor cell
+                    // including the target cell and anchor cell
+                    else if(nTargetColKeyIndex < oAnchor.colKeyIndex) {
+                        for(i=nTargetColKeyIndex; i<=oAnchor.colKeyIndex; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+                    }
+                }
+                // Anchor row is above target row
+                else if(oAnchor.recordIndex < nTargetRecordIndex) {
+                    // Select the cellblock from anchor cell to target cell
+                    // including the anchor cell and the target cell
+                    startIndex = Math.min(oAnchor.colKeyIndex, nTargetColKeyIndex);
+                    endIndex = Math.max(oAnchor.colKeyIndex, nTargetColKeyIndex);
+
+                    for(i=oAnchor.trIndex; i<=nTargetTrIndex; i++) {
+                        for(j=startIndex; j<=endIndex; j++) {
+                            this.selectCell(allRows[i].cells[j]);
+                        }
+                    }
+                }
+                // Anchor row is below target row
+                else {
+                    // Select the cellblock from target cell to anchor cell
+                    // including the target cell and the anchor cell
+                    startIndex = Math.min(oAnchor.colKeyIndex, nTargetColKeyIndex);
+                    endIndex = Math.max(oAnchor.colKeyIndex, nTargetColKeyIndex);
+
+                    for(i=nTargetTrIndex; i<=oAnchor.trIndex; i++) {
+                        for(j=startIndex; j<=endIndex; j++) {
+                            this.selectCell(allRows[i].cells[j]);
+                        }
+                    }
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._oAnchorCell = oTargetCell;
+
+                // Select target only
+                this.selectCell(oTargetCell);
+            }
+        }
+        // Only CTRL
+        else if(bCTRL) {
+
+            // Set anchor
+            this._oAnchorCell = oTargetCell;
+
+            // Toggle selection of target
+            if(this.isSelected(oTargetCell)) {
+                this.unselectCell(oTargetCell);
+            }
+            else {
+                this.selectCell(oTargetCell);
+            }
+
+        }
+        // Neither SHIFT nor CTRL
+        else {
+            this._handleSingleCellSelectionByMouse(oArgs);
+        }
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a key event when selection mode
+ * is set to "cellblock".
+ *
+ * @method _handleCellBlockSelectionByKey
+ * @param e {HTMLEvent} Event object.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleCellBlockSelectionByKey = function(e) {
+    var nKey = YAHOO.util.Event.getCharCode(e);
+    var bSHIFT = e.shiftKey;
+    if((nKey == 9) || !bSHIFT) {
+        this._handleSingleCellSelectionByKey(e);
+        return;
+    }
+
+    if((nKey > 36) && (nKey < 41)) {
+        // Validate trigger
+        var oTrigger = this._getSelectionTrigger();
+        // Arrow selection only works if last selected row is on current page
+        if(!oTrigger) {
+            return null;
+        }
+
+        YAHOO.util.Event.stopEvent(e);
+
+        // Validate anchor
+        var oAnchor = this._getSelectionAnchor(oTrigger);
+
+        var i, startIndex, endIndex, elNew, elNewRow;
+        var allRows = this.getTbodyEl().rows;
+        var elThisRow = oTrigger.el.parentNode;
+
+        // Determine which direction we're going to
+
+        if(nKey == 40) { // arrow down
+            // Selecting away from anchor cell
+            if(oAnchor.recordIndex <= oTrigger.recordIndex) {
+                // Select the horiz block on the next row...
+                // ...making sure there is room below the trigger row
+                elNewRow = this.getNextTrEl(oTrigger.el);
+                if(elNewRow) {
+                    startIndex = oAnchor.colKeyIndex;
+                    endIndex = oTrigger.colKeyIndex;
+                    // ...going left
+                    if(startIndex > endIndex) {
+                        for(i=startIndex; i>=endIndex; i--) {
+                            elNew = elNewRow.cells[i];
+                            this.selectCell(elNew);
+                        }
+                    }
+                    // ... going right
+                    else {
+                        for(i=startIndex; i<=endIndex; i++) {
+                            elNew = elNewRow.cells[i];
+                            this.selectCell(elNew);
+                        }
+                    }
+                }
+            }
+            // Unselecting towards anchor cell
+            else {
+                startIndex = Math.min(oAnchor.colKeyIndex, oTrigger.colKeyIndex);
+                endIndex = Math.max(oAnchor.colKeyIndex, oTrigger.colKeyIndex);
+                // Unselect the horiz block on this row towards the next row
+                for(i=startIndex; i<=endIndex; i++) {
+                    this.unselectCell(elThisRow.cells[i]);
+                }
+            }
+        }
+        // Arrow up
+        else if(nKey == 38) {
+            // Selecting away from anchor cell
+            if(oAnchor.recordIndex >= oTrigger.recordIndex) {
+                // Select the horiz block on the previous row...
+                // ...making sure there is room
+                elNewRow = this.getPreviousTrEl(oTrigger.el);
+                if(elNewRow) {
+                    // Select in order from anchor to trigger...
+                    startIndex = oAnchor.colKeyIndex;
+                    endIndex = oTrigger.colKeyIndex;
+                    // ...going left
+                    if(startIndex > endIndex) {
+                        for(i=startIndex; i>=endIndex; i--) {
+                            elNew = elNewRow.cells[i];
+                            this.selectCell(elNew);
+                        }
+                    }
+                    // ... going right
+                    else {
+                        for(i=startIndex; i<=endIndex; i++) {
+                            elNew = elNewRow.cells[i];
+                            this.selectCell(elNew);
+                        }
+                    }
+                }
+            }
+            // Unselecting towards anchor cell
+            else {
+                startIndex = Math.min(oAnchor.colKeyIndex, oTrigger.colKeyIndex);
+                endIndex = Math.max(oAnchor.colKeyIndex, oTrigger.colKeyIndex);
+                // Unselect the horiz block on this row towards the previous row
+                for(i=startIndex; i<=endIndex; i++) {
+                    this.unselectCell(elThisRow.cells[i]);
+                }
+            }
+        }
+        // Arrow right
+        else if(nKey == 39) {
+            // Selecting away from anchor cell
+            if(oAnchor.colKeyIndex <= oTrigger.colKeyIndex) {
+                // Select the next vert block to the right...
+                // ...making sure there is room
+                if(oTrigger.colKeyIndex < elThisRow.cells.length-1) {
+                    // Select in order from anchor to trigger...
+                    startIndex = oAnchor.trIndex;
+                    endIndex = oTrigger.trIndex;
+                    // ...going up
+                    if(startIndex > endIndex) {
+                        for(i=startIndex; i>=endIndex; i--) {
+                            elNew = allRows[i].cells[oTrigger.colKeyIndex+1];
+                            this.selectCell(elNew);
+                        }
+                    }
+                    // ... going down
+                    else {
+                        for(i=startIndex; i<=endIndex; i++) {
+                            elNew = allRows[i].cells[oTrigger.colKeyIndex+1];
+                            this.selectCell(elNew);
+                        }
+                    }
+                }
+            }
+            // Unselecting towards anchor cell
+            else {
+                // Unselect the vert block on this column towards the right
+                startIndex = Math.min(oAnchor.trIndex, oTrigger.trIndex);
+                endIndex = Math.max(oAnchor.trIndex, oTrigger.trIndex);
+                for(i=startIndex; i<=endIndex; i++) {
+                    this.unselectCell(allRows[i].cells[oTrigger.colKeyIndex]);
+                }
+            }
+        }
+        // Arrow left
+        else if(nKey == 37) {
+            // Selecting away from anchor cell
+            if(oAnchor.colKeyIndex >= oTrigger.colKeyIndex) {
+                //Select the previous vert block to the left
+                if(oTrigger.colKeyIndex > 0) {
+                    // Select in order from anchor to trigger...
+                    startIndex = oAnchor.trIndex;
+                    endIndex = oTrigger.trIndex;
+                    // ...going up
+                    if(startIndex > endIndex) {
+                        for(i=startIndex; i>=endIndex; i--) {
+                            elNew = allRows[i].cells[oTrigger.colKeyIndex-1];
+                            this.selectCell(elNew);
+                        }
+                    }
+                    // ... going down
+                    else {
+                        for(i=startIndex; i<=endIndex; i++) {
+                            elNew = allRows[i].cells[oTrigger.colKeyIndex-1];
+                            this.selectCell(elNew);
+                        }
+                    }
+                }
+            }
+            // Unselecting towards anchor cell
+            else {
+                // Unselect the vert block on this column towards the left
+                startIndex = Math.min(oAnchor.trIndex, oTrigger.trIndex);
+                endIndex = Math.max(oAnchor.trIndex, oTrigger.trIndex);
+                for(i=startIndex; i<=endIndex; i++) {
+                    this.unselectCell(allRows[i].cells[oTrigger.colKeyIndex]);
+                }
+            }
+        }
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a mouse event when selection mode
+ * is set to "cellrange".
+ *
+ * @method _handleCellRangeSelectionByMouse
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleCellRangeSelectionByMouse = function(oArgs) {
+    var elTarget = oArgs.target;
+
+    // Validate target cell
+    var elTargetCell = this.getTdEl(elTarget);
+    if(elTargetCell) {
+        var e = oArgs.event;
+        var bSHIFT = e.shiftKey;
+        var bCTRL = e.ctrlKey || ((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && e.metaKey);
+
+        var elTargetRow = this.getTrEl(elTargetCell);
+        var nTargetTrIndex = this.getTrIndex(elTargetRow);
+        var oTargetColumn = this.getColumn(elTargetCell);
+        var nTargetColKeyIndex = oTargetColumn.getKeyIndex();
+        var oTargetRecord = this.getRecord(elTargetRow);
+        var nTargetRecordIndex = this._oRecordSet.getRecordIndex(oTargetRecord);
+        var oTargetCell = {record:oTargetRecord, column:oTargetColumn};
+
+        var oAnchor = this._getSelectionAnchor();
+
+        var allRows = this.getTbodyEl().rows;
+        var startIndex, endIndex, currentRow, i, j;
+
+        // Both SHIFT and CTRL
+        if(bSHIFT && bCTRL) {
+
+            // Validate anchor
+            if(oAnchor) {
+                // Anchor is selected
+                if(this.isSelected(oAnchor.cell)) {
+                    // All cells are on the same row
+                    if(oAnchor.recordIndex === nTargetRecordIndex) {
+                        // Select all cells between anchor cell and target cell, including target cell
+                        if(oAnchor.colKeyIndex < nTargetColKeyIndex) {
+                            for(i=oAnchor.colKeyIndex+1; i<=nTargetColKeyIndex; i++) {
+                                this.selectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                        // Select all cells between target cell and anchor cell, including target cell
+                        else if(nTargetColKeyIndex < oAnchor.colKeyIndex) {
+                            for(i=nTargetColKeyIndex; i<oAnchor.colKeyIndex; i++) {
+                                this.selectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                    }
+                    // Anchor row is above target row
+                    else if(oAnchor.recordIndex < nTargetRecordIndex) {
+                        // Select all cells on anchor row from anchor cell to the end of the row
+                        for(i=oAnchor.colKeyIndex+1; i<elTargetRow.cells.length; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+
+                        // Select all cells on all rows between anchor row and target row
+                        for(i=oAnchor.trIndex+1; i<nTargetTrIndex; i++) {
+                            for(j=0; j<allRows[i].cells.length; j++){
+                                this.selectCell(allRows[i].cells[j]);
+                            }
+                        }
+
+                        // Select all cells on target row from first cell to the target cell
+                        for(i=0; i<=nTargetColKeyIndex; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+                    }
+                    // Anchor row is below target row
+                    else {
+                        // Select all cells on target row from target cell to the end of the row
+                        for(i=nTargetColKeyIndex; i<elTargetRow.cells.length; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+
+                        // Select all cells on all rows between target row and anchor row
+                        for(i=nTargetTrIndex+1; i<oAnchor.trIndex; i++) {
+                            for(j=0; j<allRows[i].cells.length; j++){
+                                this.selectCell(allRows[i].cells[j]);
+                            }
+                        }
+
+                        // Select all cells on anchor row from first cell to the anchor cell
+                        for(i=0; i<oAnchor.colKeyIndex; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+                    }
+                }
+                // Anchor cell is unselected
+                else {
+                    // All cells are on the same row
+                    if(oAnchor.recordIndex === nTargetRecordIndex) {
+                        // Unselect all cells between anchor cell and target cell
+                        if(oAnchor.colKeyIndex < nTargetColKeyIndex) {
+                            for(i=oAnchor.colKeyIndex+1; i<nTargetColKeyIndex; i++) {
+                                this.unselectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                        // Select all cells between target cell and anchor cell
+                        else if(nTargetColKeyIndex < oAnchor.colKeyIndex) {
+                            for(i=nTargetColKeyIndex+1; i<oAnchor.colKeyIndex; i++) {
+                                this.unselectCell(elTargetRow.cells[i]);
+                            }
+                        }
+                    }
+                    // Anchor row is above target row
+                    if(oAnchor.recordIndex < nTargetRecordIndex) {
+                        // Unselect all cells from anchor cell to target cell
+                        for(i=oAnchor.trIndex; i<=nTargetTrIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the anchor row, only unselect cells after the anchor cell
+                                if(currentRow.sectionRowIndex === oAnchor.trIndex) {
+                                    if(j>oAnchor.colKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // This is the target row, only unelect cells before the target cell
+                                else if(currentRow.sectionRowIndex === nTargetTrIndex) {
+                                    if(j<nTargetColKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Unselect all cells on this row
+                                else {
+                                    this.unselectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
+                    // Anchor row is below target row
+                    else {
+                        // Unselect all cells from target cell to anchor cell
+                        for(i=nTargetTrIndex; i<=oAnchor.trIndex; i++) {
+                            currentRow = allRows[i];
+                            for(j=0; j<currentRow.cells.length; j++) {
+                                // This is the target row, only unselect cells after the target cell
+                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                    if(j>nTargetColKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // This is the anchor row, only unselect cells before the anchor cell
+                                else if(currentRow.sectionRowIndex == oAnchor.trIndex) {
+                                    if(j<oAnchor.colKeyIndex) {
+                                        this.unselectCell(currentRow.cells[j]);
+                                    }
+                                }
+                                // Unselect all cells on this row
+                                else {
+                                    this.unselectCell(currentRow.cells[j]);
+                                }
+                            }
+                        }
+                    }
+
+                    // Select the target cell
+                    this.selectCell(elTargetCell);
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._oAnchorCell = oTargetCell;
+
+                // Toggle selection of target
+                if(this.isSelected(oTargetCell)) {
+                    this.unselectCell(oTargetCell);
+                }
+                else {
+                    this.selectCell(oTargetCell);
+                }
+            }
+        }
+         // Only SHIFT
+        else if(bSHIFT) {
+
+            this.unselectAllCells();
+
+            // Validate anchor
+            if(oAnchor) {
+                // All cells are on the same row
+                if(oAnchor.recordIndex === nTargetRecordIndex) {
+                    // Select all cells between anchor cell and target cell,
+                    // including the anchor cell and target cell
+                    if(oAnchor.colKeyIndex < nTargetColKeyIndex) {
+                        for(i=oAnchor.colKeyIndex; i<=nTargetColKeyIndex; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+                    }
+                    // Select all cells between target cell and anchor cell
+                    // including the target cell and anchor cell
+                    else if(nTargetColKeyIndex < oAnchor.colKeyIndex) {
+                        for(i=nTargetColKeyIndex; i<=oAnchor.colKeyIndex; i++) {
+                            this.selectCell(elTargetRow.cells[i]);
+                        }
+                    }
+                }
+                // Anchor row is above target row
+                else if(oAnchor.recordIndex < nTargetRecordIndex) {
+                    // Select all cells from anchor cell to target cell
+                    // including the anchor cell and target cell
+                    for(i=oAnchor.trIndex; i<=nTargetTrIndex; i++) {
+                        currentRow = allRows[i];
+                        for(j=0; j<currentRow.cells.length; j++) {
+                            // This is the anchor row, only select the anchor cell and after
+                            if(currentRow.sectionRowIndex == oAnchor.trIndex) {
+                                if(j>=oAnchor.colKeyIndex) {
+                                    this.selectCell(currentRow.cells[j]);
+                                }
+                            }
+                            // This is the target row, only select the target cell and before
+                            else if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                if(j<=nTargetColKeyIndex) {
+                                    this.selectCell(currentRow.cells[j]);
+                                }
+                            }
+                            // Select all cells on this row
+                            else {
+                                this.selectCell(currentRow.cells[j]);
+                            }
+                        }
+                    }
+                }
+                // Anchor row is below target row
+                else {
+                    // Select all cells from target cell to anchor cell,
+                    // including the target cell and anchor cell
+                    for(i=nTargetTrIndex; i<=oAnchor.trIndex; i++) {
+                        currentRow = allRows[i];
+                        for(j=0; j<currentRow.cells.length; j++) {
+                            // This is the target row, only select the target cell and after
+                            if(currentRow.sectionRowIndex == nTargetTrIndex) {
+                                if(j>=nTargetColKeyIndex) {
+                                    this.selectCell(currentRow.cells[j]);
+                                }
+                            }
+                            // This is the anchor row, only select the anchor cell and before
+                            else if(currentRow.sectionRowIndex == oAnchor.trIndex) {
+                                if(j<=oAnchor.colKeyIndex) {
+                                    this.selectCell(currentRow.cells[j]);
+                                }
+                            }
+                            // Select all cells on this row
+                            else {
+                                this.selectCell(currentRow.cells[j]);
+                            }
+                        }
+                    }
+                }
+            }
+            // Invalid anchor
+            else {
+                // Set anchor
+                this._oAnchorCell = oTargetCell;
+
+                // Select target only
+                this.selectCell(oTargetCell);
+            }
+
+
+        }
+        // Only CTRL
+        else if(bCTRL) {
+
+            // Set anchor
+            this._oAnchorCell = oTargetCell;
+
+            // Toggle selection of target
+            if(this.isSelected(oTargetCell)) {
+                this.unselectCell(oTargetCell);
+            }
+            else {
+                this.selectCell(oTargetCell);
+            }
+
+        }
+        // Neither SHIFT nor CTRL
+        else {
+            this._handleSingleCellSelectionByMouse(oArgs);
+        }
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a key event when selection mode
+ * is set to "cellrange".
+ *
+ * @method _handleCellRangeSelectionByKey
+ * @param e {HTMLEvent} Event object.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleCellRangeSelectionByKey = function(e) {
+    var nKey = YAHOO.util.Event.getCharCode(e);
+    var bSHIFT = e.shiftKey;
+    if((nKey == 9) || !bSHIFT) {
+        this._handleSingleCellSelectionByKey(e);
+        return;
+    }
+
+    if((nKey > 36) && (nKey < 41)) {
+        // Validate trigger
+        var oTrigger = this._getSelectionTrigger();
+        // Arrow selection only works if last selected row is on current page
+        if(!oTrigger) {
+            return null;
+        }
+
+        YAHOO.util.Event.stopEvent(e);
+
+        // Validate anchor
+        var oAnchor = this._getSelectionAnchor(oTrigger);
+
+        var i, startIndex, endIndex, elNewRow, elNew;
+        var allRows = this.getTbodyEl().rows;
+        var elThisRow = oTrigger.el.parentNode;
+
+        // Arrow down
+        if(nKey == 40) {
+            elNewRow = this.getNextTrEl(oTrigger.el);
+
+            // Selecting away from anchor cell
+            if(oAnchor.recordIndex <= oTrigger.recordIndex) {
+                // Select all cells to the end of this row
+                for(i=oTrigger.colKeyIndex+1; i<elThisRow.cells.length; i++){
+                    elNew = elThisRow.cells[i];
+                    this.selectCell(elNew);
+                }
+
+                // Select some of the cells on the next row down
+                if(elNewRow) {
+                    for(i=0; i<=oTrigger.colKeyIndex; i++){
+                        elNew = elNewRow.cells[i];
+                        this.selectCell(elNew);
+                    }
+                }
+            }
+            // Unselecting towards anchor cell
+            else {
+                // Unselect all cells to the end of this row
+                for(i=oTrigger.colKeyIndex; i<elThisRow.cells.length; i++){
+                    this.unselectCell(elThisRow.cells[i]);
+                }
+
+                // Unselect some of the cells on the next row down
+                if(elNewRow) {
+                    for(i=0; i<oTrigger.colKeyIndex; i++){
+                        this.unselectCell(elNewRow.cells[i]);
+                    }
+                }
+            }
+        }
+        // Arrow up
+        else if(nKey == 38) {
+            elNewRow = this.getPreviousTrEl(oTrigger.el);
+
+            // Selecting away from anchor cell
+            if(oAnchor.recordIndex >= oTrigger.recordIndex) {
+                // Select all the cells to the beginning of this row
+                for(i=oTrigger.colKeyIndex-1; i>-1; i--){
+                    elNew = elThisRow.cells[i];
+                    this.selectCell(elNew);
+                }
+
+                // Select some of the cells from the end of the previous row
+                if(elNewRow) {
+                    for(i=elThisRow.cells.length-1; i>=oTrigger.colKeyIndex; i--){
+                        elNew = elNewRow.cells[i];
+                        this.selectCell(elNew);
+                    }
+                }
+            }
+            // Unselecting towards anchor cell
+            else {
+                // Unselect all the cells to the beginning of this row
+                for(i=oTrigger.colKeyIndex; i>-1; i--){
+                    this.unselectCell(elThisRow.cells[i]);
+                }
+
+                // Unselect some of the cells from the end of the previous row
+                if(elNewRow) {
+                    for(i=elThisRow.cells.length-1; i>oTrigger.colKeyIndex; i--){
+                        this.unselectCell(elNewRow.cells[i]);
+                    }
+                }
+            }
+        }
+        // Arrow right
+        else if(nKey == 39) {
+            elNewRow = this.getNextTrEl(oTrigger.el);
+
+            // Selecting away from anchor cell
+            if(oAnchor.recordIndex < oTrigger.recordIndex) {
+                // Select the next cell to the right
+                if(oTrigger.colKeyIndex < elThisRow.cells.length-1) {
+                    elNew = elThisRow.cells[oTrigger.colKeyIndex+1];
+                    this.selectCell(elNew);
+                }
+                // Select the first cell of the next row
+                else if(elNewRow) {
+                    elNew = elNewRow.cells[0];
+                    this.selectCell(elNew);
+                }
+            }
+            // Unselecting towards anchor cell
+            else if(oAnchor.recordIndex > oTrigger.recordIndex) {
+                this.unselectCell(elThisRow.cells[oTrigger.colKeyIndex]);
+
+                // Unselect this cell towards the right
+                if(oTrigger.colKeyIndex < elThisRow.cells.length-1) {
+                }
+                // Unselect this cells towards the first cell of the next row
+                else {
+                }
+            }
+            // Anchor is on this row
+            else {
+                // Selecting away from anchor
+                if(oAnchor.colKeyIndex <= oTrigger.colKeyIndex) {
+                    // Select the next cell to the right
+                    if(oTrigger.colKeyIndex < elThisRow.cells.length-1) {
+                        elNew = elThisRow.cells[oTrigger.colKeyIndex+1];
+                        this.selectCell(elNew);
+                    }
+                    // Select the first cell on the next row
+                    else if(oTrigger.trIndex < allRows.length-1){
+                        elNew = elNewRow.cells[0];
+                        this.selectCell(elNew);
+                    }
+                }
+                // Unselecting towards anchor
+                else {
+                    // Unselect this cell towards the right
+                    this.unselectCell(elThisRow.cells[oTrigger.colKeyIndex]);
+                }
+            }
+        }
+        // Arrow left
+        else if(nKey == 37) {
+            elNewRow = this.getPreviousTrEl(oTrigger.el);
+
+            // Unselecting towards the anchor
+            if(oAnchor.recordIndex < oTrigger.recordIndex) {
+                this.unselectCell(elThisRow.cells[oTrigger.colKeyIndex]);
+
+                // Unselect this cell towards the left
+                if(oTrigger.colKeyIndex > 0) {
+                }
+                // Unselect this cell towards the last cell of the previous row
+                else {
+                }
+            }
+            // Selecting towards the anchor
+            else if(oAnchor.recordIndex > oTrigger.recordIndex) {
+                // Select the next cell to the left
+                if(oTrigger.colKeyIndex > 0) {
+                    elNew = elThisRow.cells[oTrigger.colKeyIndex-1];
+                    this.selectCell(elNew);
+                }
+                // Select the last cell of the previous row
+                else if(oTrigger.trIndex > 0){
+                    elNew = elNewRow.cells[elNewRow.cells.length-1];
+                    this.selectCell(elNew);
+                }
+            }
+            // Anchor is on this row
+            else {
+                // Selecting away from anchor cell
+                if(oAnchor.colKeyIndex >= oTrigger.colKeyIndex) {
+                    // Select the next cell to the left
+                    if(oTrigger.colKeyIndex > 0) {
+                        elNew = elThisRow.cells[oTrigger.colKeyIndex-1];
+                        this.selectCell(elNew);
+                    }
+                    // Select the last cell of the previous row
+                    else if(oTrigger.trIndex > 0){
+                        elNew = elNewRow.cells[elNewRow.cells.length-1];
+                        this.selectCell(elNew);
+                    }
+                }
+                // Unselecting towards anchor cell
+                else {
+                    this.unselectCell(elThisRow.cells[oTrigger.colKeyIndex]);
+
+                    // Unselect this cell towards the left
+                    if(oTrigger.colKeyIndex > 0) {
+                    }
+                    // Unselect this cell towards the last cell of the previous row
+                    else {
+                    }
+                }
+            }
+        }
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a mouse event when selection mode
+ * is set to "singlecell".
+ *
+ * @method _handleSingleCellSelectionByMouse
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleSingleCellSelectionByMouse = function(oArgs) {
+    var elTarget = oArgs.target;
+
+    // Validate target cell
+    var elTargetCell = this.getTdEl(elTarget);
+    if(elTargetCell) {
+        var elTargetRow = this.getTrEl(elTargetCell);
+        var oTargetRecord = this.getRecord(elTargetRow);
+        var oTargetColumn = this.getColumn(elTargetCell);
+        var oTargetCell = {record:oTargetRecord, column:oTargetColumn};
+
+        // Set anchor
+        this._oAnchorCell = oTargetCell;
+
+        // Select only target
+        this.unselectAllCells();
+        this.selectCell(oTargetCell);
+    }
+};
+
+/**
+ * Determines selection behavior resulting from a key event when selection mode
+ * is set to "singlecell".
+ *
+ * @method _handleSingleCellSelectionByKey
+ * @param e {HTMLEvent} Event object.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._handleSingleCellSelectionByKey = function(e) {
+    var nKey = YAHOO.util.Event.getCharCode(e);
+    if((nKey == 9) || ((nKey > 36) && (nKey < 41))) {
+        var bSHIFT = e.shiftKey;
+
+        // Validate trigger
+        var oTrigger = this._getSelectionTrigger();
+        // Arrow selection only works if last selected row is on current page
+        if(!oTrigger) {
+            return null;
+        }
+
+        YAHOO.util.Event.stopEvent(e);
+
+        // Validate anchor
+        var oAnchor = this._getSelectionAnchor(oTrigger);
+
+        // Determine the new cell to select
+        var elNew;
+        if(nKey == 40) { // Arrow down
+            elNew = this.getBelowTdEl(oTrigger.el);
+
+            // Validate new cell
+            if(elNew === null) {
+                //TODO: wrap around to first tr on current page
+
+                //TODO: wrap forward to first tr of next page
+
+                // Bottom selection is sticky
+                elNew = oTrigger.el;
+            }
+        }
+        else if(nKey == 38) { // Arrow up
+            elNew = this.getAboveTdEl(oTrigger.el);
+
+            // Validate new cell
+            if(elNew === null) {
+                //TODO: wrap around to last tr on current page
+
+                //TODO: wrap back to last tr of previous page
+
+                // Top selection is sticky
+                elNew = oTrigger.el;
+            }
+        }
+        else if((nKey == 39) || (!bSHIFT && (nKey == 9))) { // Arrow right or tab
+            elNew = this.getNextTdEl(oTrigger.el);
+
+            // Validate new cell
+            if(elNew === null) {
+                //TODO: wrap around to first td on current page
+
+                //TODO: wrap forward to first td of next page
+
+                // Top-left selection is sticky
+                elNew = oTrigger.el;
+            }
+        }
+        else if((nKey == 37) || (bSHIFT && (nKey == 9))) { // Arrow left or shift-tab
+            elNew = this.getPreviousTdEl(oTrigger.el);
+
+            // Validate new cell
+            if(elNew === null) {
+                //TODO: wrap around to last td on current page
+
+                //TODO: wrap back to last td of previous page
+
+                // Bottom-right selection is sticky
+                elNew = oTrigger.el;
+            }
+        }
+
+        // Unselect all cells
+        this.unselectAllCells();
+
+        // Select the new cell
+        this.selectCell(elNew);
+
+        // Set new anchor
+        this._oAnchorCell = {record:this.getRecord(elNew), column:this.getColumn(elNew)};
+    }
+};
+
+/**
  * Returns array of selected TR elements on the page.
  *
  * @method getSelectedTrEls
@@ -6781,10 +7591,10 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
             // when tbody display is set to block
             if(isNaN(x) || isNaN(y)) {
                 x = elCell.offsetLeft + // cell pos relative to table
-                        YAHOO.util.Dom.getX(this._elTable) - // plus table pos relative to document
+                        YAHOO.util.Dom.getX(this._elTbody.parentNode) - // plus table pos relative to document
                         this._elTbody.scrollLeft; // minus tbody scroll
                 y = elCell.offsetTop + // cell pos relative to table
-                        YAHOO.util.Dom.getY(this._elTable) - // plus table pos relative to document
+                        YAHOO.util.Dom.getY(this._elTbody.parentNode) - // plus table pos relative to document
                         this._elTbody.scrollTop + // minus tbody scroll
                         this._elThead.offsetHeight; // account for fixed headers
             }
@@ -7422,157 +8232,18 @@ YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
     var sMode = this.get("selectionMode");
-    if ((sMode == "singlecell") || (sMode == "cellblock") || (sMode == "cellrange")) {
-        return;
+    if(sMode == "single") {
+        this._handleSingleSelectionByMouse(oArgs);
+    }
+    else {
+        this._handleStandardSelectionByMouse(oArgs);
     }
 
-    var evt = oArgs.event;
-    var elTarget = oArgs.target;
+    // Clear any text selections that are a byproduct of the click or dblclick
+    var e = oArgs.event;
 
-    var bSHIFT = evt.shiftKey;
-    var bCTRL = evt.ctrlKey || ((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && evt.metaKey);
-    var i;
-    //var nAnchorPos;
-
-    // Validate target row
-    var elTargetRow = this.getTrEl(elTarget);
-    if(elTargetRow) {
-        var nAnchorRecordIndex, nAnchorTrIndex;
-        var allRows = this._elTbody.rows;
-        var oTargetRecord = this.getRecord(elTargetRow);
-        var nTargetRecordIndex = this._oRecordSet.getRecordIndex(oTargetRecord);
-        var nTargetTrIndex = this.getTrIndex(elTargetRow);
-
-        var oAnchorRecord = this._oAnchorRecord;
-        if(oAnchorRecord) {
-            nAnchorRecordIndex = this._oRecordSet.getRecordIndex(oAnchorRecord);
-            nAnchorTrIndex = this.getTrIndex(oAnchorRecord);
-            if(nAnchorTrIndex === null) {
-                if(nAnchorRecordIndex < this.getRecordIndex(this.getFirstTrEl())) {
-                    nAnchorTrIndex = 0;
-                }
-                else {
-                    nAnchorTrIndex = this.getRecordIndex(this.getLastTrEl());
-                }
-            }
-        }
-
-        // Both SHIFT and CTRL
-        if((sMode != "single") && bSHIFT && bCTRL) {
-            // Validate anchor
-            if(oAnchorRecord) {
-                if(this.isSelected(oAnchorRecord)) {
-                    // Select all rows between anchor row and target row, including target row
-                    if(nAnchorRecordIndex < nTargetRecordIndex) {
-                        for(i=nAnchorRecordIndex+1; i<=nTargetRecordIndex; i++) {
-                            if(!this.isSelected(i)) {
-                                this.selectRow(i);
-                            }
-                        }
-                    }
-                    // Select all rows between target row and anchor row, including target row
-                    else {
-                        for(i=nAnchorRecordIndex-1; i>=nTargetRecordIndex; i--) {
-                            if(!this.isSelected(i)) {
-                                this.selectRow(i);
-                            }
-                        }
-                    }
-                }
-                else {
-                    // Unselect all rows between anchor row and target row
-                    if(nAnchorRecordIndex < nTargetRecordIndex) {
-                        for(i=nAnchorRecordIndex+1; i<=nTargetRecordIndex-1; i++) {
-                            if(this.isSelected(i)) {
-                                this.unselectRow(i);
-                            }
-                        }
-                    }
-                    // Unselect all rows between target row and anchor row
-                    else {
-                        for(i=nTargetRecordIndex+1; i<=nAnchorRecordIndex-1; i++) {
-                            if(this.isSelected(i)) {
-                                this.unselectRow(i);
-                            }
-                        }
-                    }
-                    // Select the target row
-                    this.selectRow(oTargetRecord);
-                }
-            }
-            // Invalid anchor
-            else {
-                // Set anchor
-                this._oAnchorRecord = oTargetRecord;
-
-                // Toggle selection of target
-                if(this.isSelected(oTargetRecord)) {
-                    this.unselectRow(oTargetRecord);
-                }
-                else {
-                    this.selectRow(oTargetRecord);
-                }
-            }
-        }
-        // Only SHIFT
-        else if((sMode != "single") && bSHIFT) {
-            this.unselectAllRows();
-
-            // Validate anchor
-            if(oAnchorRecord) {
-                // Select all rows between anchor row and target row,
-                // including the anchor row and target row
-                if(nAnchorRecordIndex < nTargetRecordIndex) {
-                    for(i=nAnchorRecordIndex; i<=nTargetRecordIndex; i++) {
-                        this.selectRow(i);
-                    }
-                }
-                // Select all rows between target row and anchor row,
-                // including the target row and anchor row
-                else {
-                    for(i=nAnchorRecordIndex; i>=nTargetRecordIndex; i--) {
-                        this.selectRow(i);
-                    }
-                }
-            }
-            // Invalid anchor
-            else {
-                // Set anchor
-                this._oAnchorRecord = oTargetRecord;
-
-                // Select target row only
-                this.selectRow(oTargetRecord);
-            }
-        }
-        // Only CTRL
-        else if((sMode != "single") && bCTRL) {
-            // Set anchor
-            this._oAnchorRecord = oTargetRecord;
-
-            // Toggle selection of target
-            if(this.isSelected(oTargetRecord)) {
-                this.unselectRow(oTargetRecord);
-            }
-            else {
-                this.selectRow(oTargetRecord);
-            }
-        }
-        // Neither SHIFT nor CTRL and "single" mode
-        else if(sMode == "single") {
-            this.unselectAllRows();
-            this.selectRow(oTargetRecord);
-        }
-        // Neither SHIFT nor CTRL
-        else {
-            // Set anchor
-            this._oAnchorRecord = oTargetRecord;
-
-            // Select only target
-            this.unselectAllRows();
-            this.selectRow(oTargetRecord);
-        }
-
-        // Clear any selections that are a byproduct of the click or dblclick
+    var sType = e.type;
+    if((sType == "click") || (sType == "dblclick")) {
         var sel;
         if(window.getSelection) {
         	sel = window.getSelection();
@@ -7594,9 +8265,6 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
                 sel.collapse();
             }
         }
-    }
-    else {
-        YAHOO.log("Could not select row " + elTarget, "warn", this.toString());
     }
 };
 
@@ -7609,357 +8277,22 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     var sMode = this.get("selectionMode");
-    if ((sMode == "standard") || (sMode == "single")) {
-        return;
+    if(sMode == "cellblock") {
+        this._handleCellBlockSelectionByMouse(oArgs);
+    }
+    else if(sMode == "cellrange") {
+        this._handleCellRangeSelectionByMouse(oArgs);
+    }
+    else {
+        this._handleSingleCellSelectionByMouse(oArgs);
     }
 
-    var evt = oArgs.event;
-    var elTarget = oArgs.target;
+    // Clear any text selections that are a byproduct of the click or dblclick
+    var e = oArgs.event;
+    YAHOO.util.Event.preventDefault(e);
 
-    var bSHIFT = evt.shiftKey;
-    var bCTRL = evt.ctrlKey  || ((navigator.userAgent.toLowerCase().indexOf("mac") != -1) && evt.metaKey);
-    var i, j, currentRow, startIndex, endIndex;
-
-    var elTargetCell = this.getTdEl(elTarget);
-    if(elTargetCell) {
-        var nAnchorRecordIndex, nAnchorTrIndex, oAnchorColumn, nAnchorColKeyIndex;
-
-        var elTargetRow = this.getTrEl(elTargetCell);
-        var allRows = this._elTbody.rows;
-
-        var oTargetRecord = this.getRecord(elTargetRow);
-        var nTargetRecordIndex = this._oRecordSet.getRecordIndex(oTargetRecord);
-        var oTargetColumn = this.getColumn(elTargetCell);
-        var nTargetColKeyIndex = oTargetColumn.getKeyIndex();
-        var nTargetTrIndex = this.getTrIndex(elTargetRow);
-        var oTargetCell = {record:oTargetRecord, column:oTargetColumn};
-
-        var oAnchorRecord = (this._oAnchorCell) ? this._oAnchorCell.record : null;
-        if(oAnchorRecord) {
-            nAnchorRecordIndex = this._oRecordSet.getRecordIndex(oAnchorRecord);
-            oAnchorColumn = this._oAnchorCell.column;
-            nAnchorColKeyIndex = oAnchorColumn.getKeyIndex();
-            nAnchorTrIndex = this.getTrIndex(oAnchorRecord);
-            if(nAnchorTrIndex === null) {
-                if(nAnchorRecordIndex < this.getRecordIndex(this.getFirstTrEl())) {
-                    nAnchorTrIndex = 0;
-                }
-                else {
-                    nAnchorTrIndex = this.getRecordIndex(this.getLastTrEl());
-                }
-            }
-        }
-        var oAnchorCell = {record:oAnchorRecord, column:oAnchorColumn};
-
-        // Both SHIFT and CTRL
-        if((sMode != "singlecell") && bSHIFT && bCTRL) {
-            // Validate anchor
-            if(oAnchorRecord && oAnchorColumn) {
-                // Anchor is selected
-                if(this.isSelected(this._oAnchorCell)) {
-                    // All cells are on the same row
-                    if(nAnchorRecordIndex === nTargetRecordIndex) {
-                        // Select all cells between anchor cell and target cell, including target cell
-                        if(nAnchorColKeyIndex < nTargetColKeyIndex) {
-                            for(i=nAnchorColKeyIndex+1; i<=nTargetColKeyIndex; i++) {
-                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
-                            }
-                        }
-                        // Select all cells between target cell and anchor cell, including target cell
-                        else if(nTargetColKeyIndex < nAnchorColKeyIndex) {
-                            for(i=nTargetColKeyIndex; i<nAnchorColKeyIndex; i++) {
-                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
-                            }
-                        }
-                    }
-                    // Anchor row is above target row
-                    else if(nAnchorRecordIndex < nTargetRecordIndex) {
-                        if(sMode == "cellrange") {
-                            // Select all cells on anchor row from anchor cell to the end of the row
-                            for(i=nAnchorColKeyIndex+1; i<allRows[nAnchorTrIndex].cells.length; i++) {
-                                this.selectCell(allRows[nAnchorTrIndex].cells[i]);
-                            }
-
-                            // Select all cells on all rows between anchor row and target row
-                            for(i=nAnchorTrIndex+1; i<nTargetTrIndex; i++) {
-                                for(j=0; j<allRows[i].cells.length; j++){
-                                    this.selectCell(allRows[i].cells[j]);
-                                }
-                            }
-
-                            // Select all cells on target row from first cell to the target cell
-                            for(i=0; i<=nTargetColKeyIndex; i++) {
-                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
-                            }
-                        }
-                        else if(sMode == "cellblock") {
-                            startIndex = Math.min(nAnchorColKeyIndex, nTargetColKeyIndex);
-                            endIndex = Math.max(nAnchorColKeyIndex, nTargetColKeyIndex);
-
-                            // Select all cells from startIndex to endIndex on rows between anchor row and target row
-                            for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
-                                for(j=startIndex; j<=endIndex; j++) {
-                                    this.selectCell(allRows[i].cells[j]);
-                                }
-                            }
-                        }
-                    }
-                    // Anchor row is below target row
-                    else {
-                        if(sMode == "cellrange") {
-                            // Select all cells on target row from target cell to the end of the row
-                            for(i=nTargetColKeyIndex; i<allRows[nTargetTrIndex].cells.length; i++) {
-                                this.selectCell(allRows[nTargetTrIndex].cells[i]);
-                            }
-
-                            // Select all cells on all rows between target row and anchor row
-                            for(i=nTargetTrIndex+1; i<nAnchorTrIndex; i++) {
-                                for(j=0; j<allRows[i].cells.length; j++){
-                                    this.selectCell(allRows[i].cells[j]);
-                                }
-                            }
-
-                            // Select all cells on anchor row from first cell to the anchor cell
-                            for(i=0; i<nAnchorColKeyIndex; i++) {
-                                this.selectCell(allRows[nAnchorTrIndex].cells[i]);
-                            }
-                        }
-                        else if(sMode == "cellblock") {
-                            startIndex = Math.min(nAnchorTrIndex, nTargetColKeyIndex);
-                            endIndex = Math.max(nAnchorTrIndex, nTargetColKeyIndex);
-
-                            // Select all cells from startIndex to endIndex on rows between target row and anchor row
-                            for(i=nAnchorTrIndex; i>=nTargetTrIndex; i--) {
-                                for(j=endIndex; j>=startIndex; j--) {
-                                    this.selectCell(allRows[i].cells[j]);
-                                }
-                            }
-                        }
-                    }
-                }
-                // Anchor cell is unselected
-                else {
-                    // All cells are on the same row
-                    if(nAnchorRecordIndex === nTargetRecordIndex) {
-                        // Unselect all cells between anchor cell and target cell
-                        if(nAnchorColKeyIndex < nTargetColKeyIndex) {
-                            for(i=nAnchorColKeyIndex+1; i<nTargetColKeyIndex; i++) {
-                                this.unselectCell(allRows[nTargetTrIndex].cells[i]);
-                            }
-                        }
-                        // Select all cells between target cell and anchor cell
-                        else if(nTargetColKeyIndex < nAnchorColKeyIndex) {
-                            for(i=nTargetColKeyIndex+1; i<nAnchorColKeyIndex; i++) {
-                                this.unselectCell(allRows[nTargetTrIndex].cells[i]);
-                            }
-                        }
-                    }
-                    // Anchor row is above target row
-                    if(nAnchorRecordIndex < nTargetRecordIndex) {
-                        // Unselect all cells from anchor cell to target cell
-                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
-                            currentRow = allRows[i];
-                            for(j=0; j<currentRow.cells.length; j++) {
-                                // This is the anchor row, only unselect cells after the anchor cell
-                                if(currentRow.sectionRowIndex === nAnchorTrIndex) {
-                                    if(j>nAnchorColKeyIndex) {
-                                        this.unselectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // This is the target row, only unelect cells before the target cell
-                                else if(currentRow.sectionRowIndex === nTargetTrIndex) {
-                                    if(j<nTargetColKeyIndex) {
-                                        this.unselectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // Unselect all cells on this row
-                                else {
-                                    this.unselectCell(currentRow.cells[j]);
-                                }
-                            }
-                        }
-                    }
-                    // Anchor row is below target row
-                    else {
-                        // Unselect all cells from target cell to anchor cell
-                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
-                            currentRow = allRows[i];
-                            for(j=0; j<currentRow.cells.length; j++) {
-                                // This is the target row, only unselect cells after the target cell
-                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
-                                    if(j>nTargetColKeyIndex) {
-                                        this.unselectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // This is the anchor row, only unselect cells before the anchor cell
-                                else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
-                                    if(j<nAnchorColKeyIndex) {
-                                        this.unselectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // Unselect all cells on this row
-                                else {
-                                    this.unselectCell(currentRow.cells[j]);
-                                }
-                            }
-                        }
-                    }
-
-                    // Select the target cell
-                    this.selectCell(elTargetCell);
-                }
-            }
-            // Invalid anchor
-            else {
-                // Set anchor
-                this._oAnchorCell = oTargetCell;
-
-                // Toggle selection of target
-                if(this.isSelected(oTargetCell)) {
-                    this.unselectCell(oTargetCell);
-                }
-                else {
-                    this.selectCell(oTargetCell);
-                }
-            }
-        }
-        // Only SHIFT
-        else if((sMode != "singlecell") && bSHIFT) {
-            this.unselectAllCells();
-
-            // Validate anchor
-            if(oAnchorCell) {
-                // All cells are on the same row
-                if(nAnchorRecordIndex === nTargetRecordIndex) {
-                    // Select all cells between anchor cell and target cell,
-                    // including the anchor cell and target cell
-                    if(nAnchorColKeyIndex < nTargetColKeyIndex) {
-                        for(i=nAnchorColKeyIndex; i<=nTargetColKeyIndex; i++) {
-                            this.selectCell(allRows[nTargetTrIndex].cells[i]);
-                        }
-                    }
-                    // Select all cells between target cell and anchor cell
-                    // including the target cell and anchor cell
-                    else if(nTargetColKeyIndex < nAnchorColKeyIndex) {
-                        for(i=nTargetColKeyIndex; i<=nAnchorColKeyIndex; i++) {
-                            this.selectCell(allRows[nTargetTrIndex].cells[i]);
-                        }
-                    }
-                }
-                // Anchor row is above target row
-                else if(nAnchorRecordIndex < nTargetRecordIndex) {
-                    if(sMode == "cellrange") {
-                        // Select all cells from anchor cell to target cell
-                        // including the anchor cell and target cell
-                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
-                            currentRow = allRows[i];
-                            for(j=0; j<currentRow.cells.length; j++) {
-                                // This is the anchor row, only select the anchor cell and after
-                                if(currentRow.sectionRowIndex == nAnchorTrIndex) {
-                                    if(j>=nAnchorColKeyIndex) {
-                                        this.selectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // This is the target row, only select the target cell and before
-                                else if(currentRow.sectionRowIndex == nTargetTrIndex) {
-                                    if(j<=nTargetColKeyIndex) {
-                                        this.selectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // Select all cells on this row
-                                else {
-                                    this.selectCell(currentRow.cells[j]);
-                                }
-                            }
-                        }
-                    }
-                    else if(sMode == "cellblock") {
-                        // Select the cellblock from anchor cell to target cell
-                        // including the anchor cell and the target cell
-                        startIndex = Math.min(nAnchorColKeyIndex, nTargetColKeyIndex);
-                        endIndex = Math.max(nAnchorColKeyIndex, nTargetColKeyIndex);
-
-                        for(i=nAnchorTrIndex; i<=nTargetTrIndex; i++) {
-                            for(j=startIndex; j<=endIndex; j++) {
-                                this.selectCell(allRows[i].cells[j]);
-                            }
-                        }
-                    }
-                }
-                // Anchor row is below target row
-                else {
-                    if(sMode == "cellrange") {
-                        // Select all cells from target cell to anchor cell,
-                        // including the target cell and anchor cell
-                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
-                            currentRow = allRows[i];
-                            for(j=0; j<currentRow.cells.length; j++) {
-                                // This is the target row, only select the target cell and after
-                                if(currentRow.sectionRowIndex == nTargetTrIndex) {
-                                    if(j>=nTargetColKeyIndex) {
-                                        this.selectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // This is the anchor row, only select the anchor cell and before
-                                else if(currentRow.sectionRowIndex == nAnchorTrIndex) {
-                                    if(j<=nAnchorColKeyIndex) {
-                                        this.selectCell(currentRow.cells[j]);
-                                    }
-                                }
-                                // Select all cells on this row
-                                else {
-                                    this.selectCell(currentRow.cells[j]);
-                                }
-                            }
-                        }
-                    }
-                    else if(sMode == "cellblock") {
-                        // Select the cellblock from target cell to anchor cell
-                        // including the target cell and the anchor cell
-                        startIndex = Math.min(nAnchorColKeyIndex, nTargetColKeyIndex);
-                        endIndex = Math.max(nAnchorColKeyIndex, nTargetColKeyIndex);
-
-                        for(i=nTargetTrIndex; i<=nAnchorTrIndex; i++) {
-                            for(j=startIndex; j<=endIndex; j++) {
-                                this.selectCell(allRows[i].cells[j]);
-                            }
-                        }
-                    }
-                }
-            }
-            // Invalid anchor
-            else {
-                // Set anchor
-                this._oAnchorCell = oTargetCell;
-
-                // Select target only
-                this.selectCell(oTargetCell);
-            }
-        }
-        // Only CTRL
-        else if((sMode != "singlecell") && bCTRL) {
-            // Set anchor
-            this._oAnchorCell = oTargetCell;
-
-            // Toggle selection of target
-            if(this.isSelected(oTargetCell)) {
-                this.unselectCell(oTargetCell);
-            }
-            else {
-                this.selectCell(oTargetCell);
-            }
-        }
-        // Neither SHIFT nor CTRL, or multi-selection has been disabled
-        else {
-            // Set anchor
-            this._oAnchorCell = oTargetCell;
-
-            // Select only target
-            this.unselectAllCells();
-            this.selectCell(oTargetCell);
-        }
-
-        // Clear any selections that are a byproduct of the click or dblclick
+    var sType = e.type;
+    if((sType == "click") || (sType == "dblclick")) {
         var sel;
         if(window.getSelection) {
         	sel = window.getSelection();
@@ -7981,9 +8314,6 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
                 sel.collapse();
             }
         }
-    }
-    else {
-        YAHOO.log("Could not select cell " + elTarget, "warn", this.toString());
     }
 };
 
@@ -8130,7 +8460,7 @@ YAHOO.widget.DataTable.prototype._onDataReturnEnhanceTable = function(sRequest, 
 
         // Initialize DOM elements
         this._initTableEl();
-        if(!this._elTable || !this._elThead || !this._elTbody) {
+        if(!this._elContainer || !this._elThead || !this._elTbody) {
             YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
             return;
         }
