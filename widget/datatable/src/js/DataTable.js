@@ -6908,21 +6908,30 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         // Update selection trackers
         var tracker = this._aSelections || [];
         var sRecordId = oRecord.getId();
+        var index = -1;
 
         // Remove if already there:
         // Use Array.indexOf if available...
-        if(tracker.indexOf && (tracker.indexOf(sRecordId) >  -1)) {
+        /*if(tracker.indexOf && (tracker.indexOf(sRecordId) >  -1)) {
             tracker.splice(tracker.indexOf(sRecordId),1);
+        }*/
+        if(tracker.indexOf) {
+            index = tracker.indexOf(sRecordId);
+            
         }
         // ...or do it the old-fashioned way
         else {
             for(var j=tracker.length-1; j>-1; j--) {
-               if(tracker[j] === sRecordId){
-                    tracker.splice(j,1);
+                if(tracker[j] === sRecordId){
+                    index = j;
                     break;
                 }
             }
         }
+        if(index > -1) {
+            tracker.splice(index,1);
+        }
+        
         // Add to the end
         tracker.push(sRecordId);
         this._aSelections = tracker;
@@ -6979,22 +6988,26 @@ YAHOO.widget.DataTable.prototype.unselectRow = function(row) {
         // Update selection trackers
         var tracker = this._aSelections || [];
         var sRecordId = oRecord.getId();
+        var index = -1;
 
         // Remove if found
         var bFound = false;
 
         // Use Array.indexOf if available...
-        if(tracker.indexOf && (tracker.indexOf(sRecordId) >  -1)) {
-            tracker.splice(tracker.indexOf(sRecordId),1);
+        if(tracker.indexOf) {
+            index = tracker.indexOf(sRecordId);
         }
         // ...or do it the old-fashioned way
         else {
             for(var j=tracker.length-1; j>-1; j--) {
-               if(tracker[j] === sRecordId){
-                    tracker.splice(j,1);
+                if(tracker[j] === sRecordId){
+                    index = j;
                     break;
                 }
             }
+        }
+        if(index > -1) {
+            tracker.splice(index,1);
         }
 
         if(bFound) {
@@ -7218,8 +7231,10 @@ YAHOO.widget.DataTable.prototype.isSelected = function(o) {
 
                 // Is it there?
                 // Use Array.indexOf if available...
-                if(tracker.indexOf && (tracker.indexOf(sRecordId) >  -1)) {
-                    return true;
+                if(tracker.indexOf) {
+                    if(tracker.indexOf(sRecordId) >  -1) {
+                        return true;
+                    }
                 }
                 // ...or do it the old-fashioned way
                 else {
