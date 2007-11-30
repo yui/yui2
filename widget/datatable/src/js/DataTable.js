@@ -302,22 +302,24 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
             var oPaginator  = this.get('paginator');
             if (oPaginator instanceof YAHOO.widget.Paginator) {
-                var containers = oPaginator.getContainers();
+                var containers = oPaginator.getContainerNodes();
                 if (on) {
-                    if (!containers || !containers.length) {
+                    if (!containers.length && !oPaginator.hasControls()) {
                         // Build the container nodes
                         var c_above = document.createElement('div');
                         c_above.id = this.id + "-paginator0";
+                        this._elContainer.insertBefore(c_above,this._elContainer.firstChild);
+
+                        // ...and one below the table
                         var c_below = document.createElement('div');
                         c_below.id = this.id + "-paginator1";
-                        this._elContainer.parentNode.insertBefore(c_above,this._elContainer);
-                        this._elContainer.parentNode.insertBefore(c_below,this._elContainer.nextSibling);
+                        this._elContainer.appendChild(c_below);
 
-                        YAHOO.util.Dom.addClass([c_above,c_below],
+                        containers = [c_above, c_below];
+                        YAHOO.util.Dom.addClass(containers,
                                     YAHOO.widget.DataTable.CLASS_PAGINATOR);
 
-                        containers = [c_above,c_below];
-                        oPaginator.setContainers(containers);
+                        oPaginator.setContainerNodes(containers);
                     }
 
                     // rendering handled in refreshView
@@ -358,14 +360,14 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                         var pag0 = document.createElement("span");
                         pag0.id = this.id + "-paginator0";
                         YAHOO.util.Dom.addClass(pag0, YAHOO.widget.DataTable.CLASS_PAGINATOR);
-                        pag0 = this._elContainer.parentNode.insertBefore(pag0, this._elContainer);
+                        pag0 = this._elContainer.insertBefore(pag0, this._elContainer.firstChild);
                         aContainerEls.push(pag0);
 
                         // One after TABLE
                         var pag1 = document.createElement("span");
                         pag1.id = this.id + "-paginator1";
                         YAHOO.util.Dom.addClass(pag1, YAHOO.widget.DataTable.CLASS_PAGINATOR);
-                        pag1 = this._elContainer.parentNode.insertBefore(pag1, this._elContainer.nextSibling);
+                        pag1 = this._elContainer.appendChild(pag1);
                         aContainerEls.push(pag1);
 
                         // (re)set the paginator value directly
@@ -2720,8 +2722,8 @@ YAHOO.widget.DataTable.prototype._onDropdownChange = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onPaginatorChange = function (oState) {
-    oState.paginator.set('recordOffset',oState.recordOffset);
-    oState.paginator.set('rowsPerPage',oState.rowsPerPage);
+    oState.paginator.setRecordOffset(oState.recordOffset);
+    oState.paginator.setRowsPerPage(oState.rowsPerPage);
 
     // If server side pagination, poll the DataSource for more data
 
@@ -3471,7 +3473,7 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
     if(oPaginator) {
         if (oPaginator instanceof YAHOO.widget.Paginator) {
             aRecords = this._oRecordSet.getRecords(
-                            oPaginator.get('recordOffset'),
+                            oPaginator.getRecordOffset(),
                             oPaginator.get('rowsPerPage'));
             oPaginator.update();
         } else {
@@ -3755,7 +3757,7 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
     if(YAHOO.lang.isNumber(nTrIndex)) {
         var oPaginator = this.get("paginator");
         if(oPaginator instanceof YAHOO.widget.Paginator) {
-            return oPaginator.get('recordOffset') + nTrIndex;
+            return oPaginator.getRecordOffset() + nTrIndex;
         }
         else if (oPaginator) {
             return oPaginator.getStartRecordIndex + nTrIndex;
