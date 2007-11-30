@@ -7613,12 +7613,12 @@ YAHOO.widget.DataTable.prototype.showCellEditorBtns = function(elContainer) {
     var elSaveBtn = elBtnsDiv.appendChild(document.createElement("button"));
     YAHOO.util.Dom.addClass(elSaveBtn, YAHOO.widget.DataTable.CLASS_DEFAULT);
     elSaveBtn.innerHTML = "OK";
-    YAHOO.util.Event.addListener(elSaveBtn, "click", this.saveCellEditor, this, true);
+    YAHOO.util.Event.addListener(elSaveBtn, "click", this.onEventSaveCellEditor, this, true);
 
     // Cancel button
     var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
     elCancelBtn.innerHTML = "Cancel";
-    YAHOO.util.Event.addListener(elCancelBtn, "click", this.cancelCellEditor, this, true);
+    YAHOO.util.Event.addListener(elCancelBtn, "click", this.onEventCancelCellEditor, this, true);
 };
 
 /**
@@ -8373,6 +8373,16 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventSaveCellEditor = function(oArgs) {
     this.saveCellEditor();
+};
+
+/**
+ * Overridable custom event handler to cancel Cell Editor.
+ *
+ * @method onEventCancelCellEditor
+ * @param oArgs.editor {Object} Cell Editor object literal.
+ */
+YAHOO.widget.DataTable.prototype.onEventCancelCellEditor = function(oArgs) {
+    this.cancelCellEditor();
 };
 
 /**
