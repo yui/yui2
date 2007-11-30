@@ -7812,8 +7812,10 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
         calendar.render();
         calContainer.style.cssFloat = "none";
 
-        //var calFloatClearer = elContainer.appendChild(document.createElement("br"));
-        //calFloatClearer.style.clear = "both";
+        if(YAHOO.env.ua.ie == 6) {
+            var calFloatClearer = elContainer.appendChild(document.createElement("br"));
+            calFloatClearer.style.clear = "both";
+        }
 
         calendar.selectEvent.subscribe(function(type, args, obj) {
             oSelf._oCellEditor.value = new Date(args[0][0][0], args[0][0][1]-1, args[0][0][2]);
