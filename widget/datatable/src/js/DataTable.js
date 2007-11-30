@@ -7519,6 +7519,9 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
             elContainer.style.left = x + "px";
             elContainer.style.top = y + "px";
 
+            // Hook to customize the UI
+            this.doBeforeShowCellEditor(this._oCellEditor);
+
             // Show Editor
             elContainer.style.display = "";
 
@@ -7573,9 +7576,6 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                 if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
                     this.showCellEditorBtns(elContainer);
                 }
-
-                // Hook to customize the UI
-                this.doBeforeShowCellEditor(this._oCellEditor);
 
                 oCellEditor.isActive = true;
 
@@ -7723,7 +7723,7 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
     var oRecord = oEditor.record;
     var oColumn = oEditor.column;
     var elContainer = oEditor.container;
-    var aCheckedValues = oRecord.getData(oColumn.key);
+    var aCheckedValues = oEditor.value;
     if(!YAHOO.lang.isArray(aCheckedValues)) {
         aCheckedValues = [aCheckedValues];
     }
@@ -7792,7 +7792,7 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     var oRecord = oEditor.record;
     var oColumn = oEditor.column;
     var elContainer = oEditor.container;
-    var value = oRecord.getData(oColumn.key);
+    var value = oEditor.value;
     
     // Validate date
     if(!(value instanceof Date)) {
@@ -7840,7 +7840,7 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
     var oRecord = oEditor.record;
     var oColumn = oEditor.column;
     var elContainer = oEditor.container;
-    var value = oRecord.getData(oColumn.key);
+    var value = oEditor.value;
 
     // Textbox
     var elDropdown = elContainer.appendChild(document.createElement("select"));
@@ -7883,7 +7883,7 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
     var oRecord = oEditor.record;
     var oColumn = oEditor.column;
     var elContainer = oEditor.container;
-    var value = oRecord.getData(oColumn.key);
+    var value = oEditor.value;
 
     // Radios
     if(oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.radioOptions)) {
@@ -7932,7 +7932,7 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
    var oRecord = oEditor.record;
    var oColumn = oEditor.column;
    var elContainer = oEditor.container;
-   var value = oRecord.getData(oColumn.key);
+   var value = oEditor.value;
 
     // Textarea
     var elTextarea = elContainer.appendChild(document.createElement("textarea"));
@@ -7965,7 +7965,7 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
    var oRecord = oEditor.record;
    var oColumn = oEditor.column;
    var elContainer = oEditor.container;
-   var value = YAHOO.lang.isValue(oRecord.getData(oColumn.key)) ? oRecord.getData(oColumn.key) : "";
+   var value = YAHOO.lang.isValue(oEditor.value) ? oEditor.value : "";
 
     // Textbox
     var elTextbox = elContainer.appendChild(document.createElement("input"));
