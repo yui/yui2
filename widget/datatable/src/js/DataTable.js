@@ -1486,7 +1486,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
 
     // Set up DOM events
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
-    YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
+    //YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
 
     YAHOO.util.Event.addListener(elContainer, "focus", this._onTableFocus, this);
     YAHOO.util.Event.addListener(elThead, "focus", this._onTheadFocus, this);
@@ -1716,6 +1716,7 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
     var elCellEditor = document.createElement("div");
     elCellEditor.id = this.id + "-celleditor";
     elCellEditor.style.display = "none";
+    elCellEditor.tabIndex = 0;
     YAHOO.util.Dom.addClass(elCellEditor, YAHOO.widget.DataTable.CLASS_EDITOR);
     var elFirstChild = YAHOO.util.Dom.getFirstChild(document.body);
     if(elFirstChild) {
@@ -1724,7 +1725,7 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
     else {
         elCellEditor = document.body.appendChild(elCellEditor);
     }
-
+    
     // Internal tracker of Cell Editor values
     var oCellEditor = {};
     oCellEditor.container = elCellEditor;
@@ -1733,7 +1734,7 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
     this._oCellEditor = oCellEditor;
 
     // Handle ESC key
-    this.subscribe("editorKeydownEvent", function(oArgs) {
+    /*this.subscribe("editorKeydownEvent", function(oArgs) {
         var e = oArgs.event;
         var elTarget = YAHOO.util.Event.getTarget(e);
 
@@ -1741,7 +1742,7 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
         if((e.keyCode == 27)) {
             this.cancelCellEditor();
         }
-    });
+    });*/
 };
 
 /**
@@ -2195,55 +2196,6 @@ YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
 };
 
 /**
- * Handles scroll events on the container liner.
- *
- * @method _onContainerLinerScroll
- * @param e {HTMLEvent} The scroll event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance
- * @private
- */
-YAHOO.widget.DataTable.prototype._onContainerLinerScroll = function(e, oSelf) {
-    /*var elThead = oSelf._elThead;
-    var elContainerLiner = this;
-    var newScroll = 0 - elContainerLiner.scrollLeft + "px";
-    YAHOO.log(newScroll,"warn");
-
-    if (YAHOO.env.ua.ie) {
-        // Scroll each TR el within THEAD
-        for(var i=0; i<elThead.rows.length; i++) {
-            elThead.rows[0].style.left = newScroll;
-            YAHOO.log(elThead.rows[0].style.left,"warn");
-        }
-
-
-    } else {
-        // Scroll entire THEAD
-        elThead.style.left = newScroll;
-
-    }*/
-};
-
-/**
- * Handles scroll events on the CONTAINER (for IE) and TBODY elements (for everyone else).
- *
- * @method _onScroll
- * @param e {HTMLEvent} The scroll event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-/*YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
-
-    if(oSelf._oCellEditor.isActive) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
-        oSelf.cancelCellEditor();
-    }
-
-    oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
-};*/
-
-/**
  * Handles click events on the DOCUMENT.
  *
  * @method _onDocumentClick
@@ -2272,7 +2224,7 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
     }
 };
 
-/**
+/**TODO: remove from docs
  * Handles keydown events on the DOCUMENT.
  *
  * @method _onDocumentKeydown
@@ -2280,7 +2232,7 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
+/*YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
 
@@ -2288,7 +2240,7 @@ YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
             YAHOO.util.Dom.isAncestor(oSelf._oCellEditor.container, elTarget)) {
         oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
     }
-};
+};*/
 
 /**
  * Handles focus events on the TABLE element.
@@ -4069,41 +4021,6 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, sWidth) {
     }
 };
 
-
-/**
- * Sets given Column to given width.
- *
- * @method setColumnWidth
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param sWidth {String} New width.
- */
-/*YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, sWidth) {
-    oColumn = this.getColumn(oColumn);
-    if(oColumn) {
-        // Which Column
-        var nColKeyIndex = oColumn.getKeyIndex();
-
-        //TODO: Find key Column if this is a parent
-
-
-        // Adjust body cells
-        var allrows = this.getTbodyEl().rows;
-        var l = allrows.length;
-        // Save original width and delta to the original width
-        // in case we need to adjust any parents of nested headers
-        var nOrigWidth = allrows[0].cells[nColKeyIndex].firstChild.offsetWidth;
-        for(var i=0;i<l;i++) {
-            allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
-        }
-        var nDelta = allrows[0].cells[nColKeyIndex].firstChild.offsetWidth - nOrigWidth;
-
-        // Adjust header cell
-        var elColHead = oColumn.getThEl();
-        elColHead.firstChild.style.width = sWidth;
-        YAHOO.log("Column \"" + oColumn.key + "\" width set to " + sWidth, "info", this.toString());
-    }
-};*/
-
 /**
  * Hides given Column.
  *
@@ -4725,7 +4642,7 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         oRecord = this.getRecord(elCell);
     }
     if(!(oColumn instanceof YAHOO.widget.Column)) {
-        oColumn = this._oColumnSet.getColumn(elCell.yuiColumnKey);
+        oColumn = this._oColumnSet.getColumn(elCell.parentNode.yuiColumnKey);
     }
 
     if(oRecord && oColumn) {
@@ -7040,7 +6957,7 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
 /**
  * Sets given row to the selected state.
  *
- * @method selectRow
+ * @method unselectRow
  * @param row {HTMLElement | String | YAHOO.widget.Record | Number} HTML element
  * reference or ID string, Record instance, or RecordSet position index.
  */
@@ -7604,6 +7521,19 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
 
             // Show Editor
             elContainer.style.display = "";
+
+            // To enable ESC handling
+            YAHOO.util.Event.addListener(elContainer, "click", function(e, oSelf) {
+                oSelf.focus(elContainer);
+            }, this);
+
+            // Handle ESC key
+            YAHOO.util.Event.addListener(elContainer, "keydown", function(e, oSelf) {
+                // ESC hides Cell Editor
+                if((e.keyCode == 27)) {
+                    oSelf.cancelCellEditor();
+                }
+            }, this);
 
             // Render Editor markup
             var fnEditor;
