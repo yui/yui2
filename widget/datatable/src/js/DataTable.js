@@ -7793,6 +7793,11 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     var oColumn = oEditor.column;
     var elContainer = oEditor.container;
     var value = oRecord.getData(oColumn.key);
+    
+    // Validate date
+    if(!(value instanceof Date)) {
+        value = new Date();
+    }
 
     // Calendar widget
     if(YAHOO.widget.Calendar) {
