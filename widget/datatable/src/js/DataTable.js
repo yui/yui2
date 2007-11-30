@@ -4649,6 +4649,28 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         var sKey = oColumn.key;
         var oData = oRecord.getData(sKey);
 
+        // Add custom classNames
+        var aCustomClasses = null;
+        if(YAHOO.lang.isString(oColumn.className)) {
+            aCustomClasses = [oColumn.className];
+        }
+        else if(YAHOO.lang.isArray(oColumn.className)) {
+            aCustomClasses = oColumn.className;
+        }
+
+        if(aCustomClasses) {
+            for(var i=0; i<aCustomClasses.length; i++) {
+                YAHOO.util.Dom.addClass(elCell, aCustomClasses[i]);
+            }
+        }
+
+        YAHOO.util.Dom.addClass(elCell, "yui-dt-col-"+sKey);
+
+        // Is editable?
+        if(oColumn.editor) {
+            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
+        }
+
         var fnFormatter;
         if(YAHOO.lang.isString(oColumn.formatter)) {
             switch(oColumn.formatter) {
@@ -4707,28 +4729,6 @@ YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn)
         }
         else {
             elCell.innerHTML = (YAHOO.lang.isValue(oData)) ? oData.toString() : "";
-        }
-
-        // Add custom classNames
-        var aCustomClasses = null;
-        if(YAHOO.lang.isString(oColumn.className)) {
-            aCustomClasses = [oColumn.className];
-        }
-        else if(YAHOO.lang.isArray(oColumn.className)) {
-            aCustomClasses = oColumn.className;
-        }
-
-        if(aCustomClasses) {
-            for(var i=0; i<aCustomClasses.length; i++) {
-                YAHOO.util.Dom.addClass(elCell, aCustomClasses[i]);
-            }
-        }
-
-        YAHOO.util.Dom.addClass(elCell, "yui-dt-col-"+sKey);
-
-        // Is editable?
-        if(oColumn.editor) {
-            YAHOO.util.Dom.addClass(elCell,YAHOO.widget.DataTable.CLASS_EDITABLE);
         }
 
         this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:sKey, el:elCell});
