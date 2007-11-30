@@ -7649,8 +7649,8 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
 
         // Validate input data
         if(this._oCellEditor.validator) {
-            this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData, this._oCellEditor);
-            if(this._oCellEditor.value === null ) {
+            newData = this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData, this._oCellEditor);
+            if(newData === null ) {
                 this.resetCellEditor();
                 this.fireEvent("editorRevertEvent",
                         {editor:this._oCellEditor, oldData:oldData, newData:newData});
