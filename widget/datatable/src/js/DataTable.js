@@ -180,6 +180,24 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
+    * @attribute pageRequest
+    * @description Defines the parameter names sent to the DataSource for paged
+    * data.  Values associated to the following keys will be passed as parameter
+    * names in the XHR request for server side pagination.
+    * <dl>
+    *   <dt>page</dt><dd>The page number of the requested data.</dd>
+    *   <dt>startRecord</dt><dd>The zero based index offset identifying the first requested record in relation to the complete data set.</dd>
+    *   <dt>endRecord</dt><dd>The zero based index offset identifying the last requested record in relation to the complete data set.</dd>
+    *   <dt>rowsPerPage</dt><dd>The number of requested records.</dd>
+    * </ul>
+    * @type object
+    */
+    this.setAttributeConfig("pageRequest", {
+        value: {},
+        validator: YAHOO.lang.isObject
+    });
+
+    /**
     * @attribute sortedBy
     * @description Object literal provides metadata for initial sort values if
     * data will arrive pre-sorted:
@@ -2726,8 +2744,30 @@ YAHOO.widget.DataTable.prototype._onPaginatorChange = function (oState) {
     oState.paginator.setRowsPerPage(oState.rowsPerPage);
 
     // If server side pagination, poll the DataSource for more data
+    if (this._oDataSource.dataType === YAHOO.util.DataSource.TYPE_XHR) {
+        var request = [],
+            requestParams = this.get('pageRequest');
+        if (requestParams.page) {
+            request.push(escape(requestParams.page) + '=' + oState.page);
+        }
+        if (requestParams.startRecord) {
+            request.push(escape(requestParams.startRecord) + '=' + oState.recordOffset);
+        }
+        if (requestParams.endRecord) {
+            request.push(escape(requestParams.endRecord) + '=' + (oState.recordOffset + oState.rowsPerPage - 1));
+        }
+        if (requestParams.rowsPerPage) {
+            request.push(escape(requestParams.rowsPerPage) + '=' + oState.rowsPerPage);
+        }
 
-    this.refreshView();
+        if (request.length) {
+            request = '?' + request.join('&');
+        }
+
+        this._oDataSource.sendRequest(request,this.onDataReturnInitializeTable,this);
+    } else {
+        this.refreshView();
+    }
 };
 
 
@@ -8464,7 +8504,6 @@ YAHOO.widget.DataTable.prototype._onDataReturnEnhanceTable = function(sRequest, 
  * @method onDataReturnInitializeTable
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
- * @param bError {Boolean} (optional) True if there was a data error.
  */
 YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest, oResponse) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
@@ -8474,6 +8513,12 @@ YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest
 
     // Data ok to populate
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
+        // If paginating, set the number of total records if provided
+        var oPaginator = this.get('paginator');
+        if (oPaginator instanceof YAHOO.widget.Paginator && oResponse.totalRecords) {
+            oPaginator.set('totalRecords',oResponse.totalRecords);
+        }
+
         this.initializeTable(oResponse.results);
     }
     // Error

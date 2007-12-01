@@ -408,6 +408,7 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
  *
  * <dl>
  * <dt>resultsList</dt> <dd>Pointer to array of tabular data</dd>
+ * <dt>totalRecords</dt> <dd>Pointer to number of records (JSON over XHR only)</dd>
  * <dt>resultNode</dt> <dd>Pointer to node name of row data (XML data only)</dd>
  * <dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
  * <dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
@@ -1395,6 +1396,16 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oRawResponse)
             }
             catch(e) {
                 bError = true;
+            }
+
+            if (this.responseSchema.totalRecords) {
+                try {
+                    // eval is necessary here since schema can be of unknown depth
+                    oParsedResponse.totalRecords = eval("jsonObj." + this.responseSchema.totalRecords);
+                }
+                catch(e) {
+                    bError = true;
+                }
             }
         }
 
