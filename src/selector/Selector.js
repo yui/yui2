@@ -6,8 +6,6 @@
  * @requires yahoo, dom
  */
 
-// TODO: test div * p, test checked/selected radio/checkbox/option
-
 (function() {
 /**
  * Provides helper methods for collecting and filtering DOM elements.
