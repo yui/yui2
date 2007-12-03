@@ -1302,6 +1302,16 @@ var Dom = YAHOO.util.Dom,
             }
             this._setCurrentEvent(ev);
             if (this.browser.webkit) {
+                if (!this.browser.webkit3) {
+                    if (ev.keyCode && (ev.keyCode == 122) && (ev.metaKey)) {
+                        //This is CMD + z (for undo)
+                        if (this._hasParent(this._getSelectedElement(), 'li')) {
+                            YAHOO.log('We are in an LI and we found CMD + z, stopping the event', 'warn', 'SimpleEditor');
+                            Event.stopEvent(ev);
+                        }
+                    }
+                }
+                /* This was removed because it crashes Safari 2.x in some cases
                 if (ev.keyCode && (ev.keyCode == 8)) {
                     //Delete Key
                     if (this._isElement(this._getSelectedElement(), 'br')) {
@@ -1309,6 +1319,7 @@ var Dom = YAHOO.util.Dom,
                         el.parentNode.removeChild(el);
                     }
                 }
+                */
                 this._listFix(ev);
             }
             this.fireEvent('editorKeyPress', { type: 'editorKeyPress', target: this, ev: ev });
@@ -1325,8 +1336,8 @@ var Dom = YAHOO.util.Dom,
             //Enter Key
             if (this.browser.webkit) {
                 if (ev.keyCode && (ev.keyCode == 13)) {
-                    if (this._isElement(this._getSelectedElement(), 'li')) {
-                        var tar = this._getSelectedElement();
+                    if (this._hasParent(this._getSelectedElement(), 'li')) {
+                        var tar = this._hasParent(this._getSelectedElement(), 'li');
                         var li = this._getDoc().createElement('li');
                         li.innerHTML = '<span class="yui-non">&nbsp;</span>&nbsp;';
                         if (tar.nextSibling) {
@@ -1398,7 +1409,7 @@ var Dom = YAHOO.util.Dom,
                 if (this._hasParent(testLi, 'li')) {
                     YAHOO.log('We have a tab in an LI', 'info', 'SimpleEditor');
                     par = this._hasParent(testLi, 'li');
-                    //YAHOO.log('parLI: ' + par.tagName + ' :: ' + par.innerHTML);
+                    YAHOO.log('parLI: ' + par.tagName + ' :: ' + par.innerHTML);
                     var newUl = this._getDoc().createElement(par.parentNode.tagName.toLowerCase());
                     if (this.browser.webkit) {
                         var span = Dom.getElementsByClassName('Apple-tab-span', 'span', par);
@@ -1930,6 +1941,7 @@ var Dom = YAHOO.util.Dom,
                 this.DOMReady = true;
                 this.fireQueue();
             }, this, true);
+
         },
         /**
         * @method initAttributes
@@ -3012,20 +3024,25 @@ var Dom = YAHOO.util.Dom,
                     }
                     list.innerHTML = str;
                     this.currentElement[0] = el;
+                    this.currentElement[0].parentNode.replaceChild(list, this.currentElement[0]);
                 } else {
                     YAHOO.log('Create list item', 'info', 'SimpleEditor');
                     this._createCurrentElement(tag.toLowerCase());
                     list = this._getDoc().createElement(tag);
                     for (li = 0; li < this.currentElement.length; li++) {
                         var newli = this._getDoc().createElement('li');
-                        newli.innerHTML = this.currentElement[li].innerHTML + '&nbsp;';
+                        newli.innerHTML = this.currentElement[li].innerHTML + '<span class="yui-non">&nbsp;</span>&nbsp;';
                         list.appendChild(newli);
                         if (li > 0) {
                             this.currentElement[li].parentNode.removeChild(this.currentElement[li]);
                         }
                     }
+                    this.currentElement[0].parentNode.replaceChild(list, this.currentElement[0]);
+                    this.currentElement[0] = list;
+                    var _h = this.currentElement[0].firstChild;
+                    _h = Dom.getElementsByClassName('yui-non', 'span', _h)[0];
+                    this._getSelection().setBaseAndExtent(_h, 1, _h, _h.innerText.length);
                 }
-                this.currentElement[0].parentNode.replaceChild(list, this.currentElement[0]);
                 exec = false;
             } else {
                 el = this._getSelectedElement();
@@ -3219,7 +3236,10 @@ var Dom = YAHOO.util.Dom,
                     * inside of the iframe, so we have to place the newly inserted data in the best place that we can.
                     */
                     el = _elCreate();
-                    if (this._isElement(tar, 'body')) {
+                    if (this._isElement(tar, 'body') || this._isElement(tar, 'html')) {
+                        if (this._isElement(tar, 'html')) {
+                            tar = this._getDoc().body;
+                        }
                         tar.appendChild(el);
                     } else if (tar.nextSibling) {
                         tar.parentNode.insertBefore(el, tar.nextSibling);
@@ -3403,7 +3423,7 @@ var Dom = YAHOO.util.Dom,
             html = html.replace(/<strong([^>]*)>/gi, '<b$1>');
             html = html.replace(/<\/strong>/gi, '</b>');   
             html = html.replace(/<em([^>]*)>/gi, '<i$1>');
-            html = html.replace(/<\/em>/gi, '</i>');   
+            html = html.replace(/<\/em>/gi, '</i>');
             return html;
         },
         /**
