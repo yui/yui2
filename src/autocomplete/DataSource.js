@@ -944,7 +944,7 @@ YAHOO.widget.DS_XHR.prototype._oConn = null;
  * @constructor
  * @extends YAHOO.widget.DataSource
  * @param sUri {String} URI to the script location that will return data.
- * @param fnCallback {HTMLFunction} Callback functiont o receive data.
+ * @param aSchema {String[]} Data schema definition of results.
  * @param oConfigs {Object} (optional) Object literal of config params.
  */
 YAHOO.widget.DS_ScriptNode = function(sUri, aSchema, oConfigs) {
