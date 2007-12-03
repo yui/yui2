@@ -17,11 +17,11 @@
 <script>
 onload = function() {
     var Y = YAHOO.util;
-    var logger = new YAHOO.tool.TestLogger();
+    var logger = new YAHOO.tool.TestLogger(null, {height:'2000px'});
     var suite = new YAHOO.tool.TestSuite("Selector Suite");
     var Selector = Y.Selector;
 
-    var $ = Selector.queryAll;
+    var $ = Selector.query;
     var demo = Y.Dom.get('demo');
     children = Y.Dom.getChildren(demo);
     var demoFirstChild = children[0];
@@ -30,6 +30,24 @@ onload = function() {
     var selectorQueryAll = new YAHOO.tool.TestCase({
         name: 'Query All',
 
+        testTest: function() {
+            Y.Assert.isTrue(Selector.test(Y.Dom.get('checkbox-unchecked'), 'form [type=checkbox]'), 'form [type=checkbox]');
+            Y.Assert.isFalse(Selector.test(Y.Dom.get('checkbox-unchecked'), 'for [type=checkbox]'), 'for [type=checkbox] false pos');
+            Y.Assert.isTrue(Selector.test(Y.Dom.get('checkbox-unchecked'), '[type=checkbox], button'), '[type=checkbox], button');
+            Y.Assert.isTrue(Selector.test(Y.Dom.get('checkbox-unchecked'), 'button, [type=checkbox]'), 'button, [type=checkbox]');
+            Y.Assert.isFalse(Selector.test(Y.Dom.get('checkbox-unchecked'), 'foo, button'), 'foo, button');
+            Y.Assert.isFalse(Selector.test(Y.Dom.get('checkbox-unchecked'), '[type=checkbox]:checked'), 'type=checkbox:checked');
+            Y.Assert.isTrue(Selector.test(Y.Dom.get('checkbox-unchecked'), '[type=checkbox]:not(:checked)'), 'type=checkbox:not(:checked)');
+        },
+
+        testRootQuery: function() {
+            var all = Y.Dom.get('nth-test').getElementsByTagName('li');
+            Y.ArrayAssert.itemsAreEqual(all, $('li', 'nth-test'), 'id as root');
+            Y.ArrayAssert.itemsAreEqual([], $('li', 'nth-tes'), 'id as root false pos');
+            Y.ArrayAssert.itemsAreEqual(all, $('li', Y.Dom.get('nth-test')), 'node as root');
+            Y.ArrayAssert.itemsAreEqual(all, $('#nth-test li', Y.Dom.get('root-test')), 'id selector w/root');
+            Y.ArrayAssert.itemsAreEqual([], $('#root-test li', Y.Dom.get('nth-test')), 'id selector w/root false pos');
+        },
         testNthLastChild: function() {
             var all = Y.Dom.get('nth-test').getElementsByTagName('li');
             var odd = Y.Dom.getElementsByClassName('even', 'li', 'nth-test');
@@ -127,6 +145,7 @@ onload = function() {
         },
 
         testAttr: function() {
+            Y.Assert.isTrue(Selector.test(Y.Dom.get('href-test'), '[href=foo.html]'), 'href=foo.html');
             Y.Assert.isTrue(Selector.test(Y.Dom.get('demo'), '[title]'), 'title exists');
             Y.Assert.isFalse(Selector.test(Y.Dom.getFirstChild('demo'), '[title]'), 'title exists false pos');
             Y.Assert.isTrue(Selector.test(Y.Dom.get('demo'), '[id=demo]'), 'id equality');
@@ -195,17 +214,28 @@ onload = function() {
 
     <div id="empty"></div>
 
-    <ol id="nth-test">
-        <li class="odd three-1 four-1">foo</li>
-        <li class="even four-2 last-four-1">foo</li>
-        <li class="odd four-3">foo</li>
-        <li class="even three-1 four-4">foo</li>
-        <li class="odd four-1">foo</li>
-        <li class="even four-2 last-four-1">foo</li>
-        <li class="odd three-1 four-3">foo</li>
-        <li class="even four-4">foo</li>
-        <li class="odd four-1">foo</li>
-        <li class="even three-1 four-2 last-four-1">foo</li>
-    </ol>
+    <div id="root-test">
+        <ol id="nth-test">
+            <li class="odd three-1 four-1">foo</li>
+            <li class="even four-2 last-four-1">foo</li>
+            <li class="odd four-3">foo</li>
+            <li class="even three-1 four-4">foo</li>
+            <li class="odd four-1">foo</li>
+            <li class="even four-2 last-four-1">foo</li>
+            <li class="odd three-1 four-3">foo</li>
+            <li class="even four-4">foo</li>
+            <li class="odd four-1">foo</li>
+            <li class="even three-1 four-2 last-four-1">foo</li>
+        </ol>
+    </div>
+    <a id="href-test" href="foo.html">foo</a>
+    <form>
+        <input type="checkbox" id="checkbox-unchecked">
+        <input type="checkbox" checked id="checkbox-checked-noval">
+        <input type="checkbox" checked="true">
+        <input type="radio">
+        <input type="radio" checked>
+        <input type="radio" checked="true">
+    </form>
 </body>
 </html>

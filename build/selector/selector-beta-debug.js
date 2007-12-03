@@ -220,7 +220,7 @@ Selector.prototype = {
                 }
             }
         }
-        result = rFilter(nodes, tokenize(selector));
+        result = rFilter(nodes, tokenize(selector)[0]);
         clearParentCache();
         YAHOO.log('filter: returning:' + result.length, 'info', 'Selector');
         return result;
@@ -228,30 +228,16 @@ Selector.prototype = {
 
     /**
      * Retrieves a set of nodes based on a given CSS selector. 
-     * @method queryAll
-     *
-     * @param {string} selector The CSS Selector to test the node against.
-     * @param {HTMLElement | String} optional An id or HTMLElement to start the query from. Defaults to document.
-     * @return{array} An array of nodes that match the given selector.
-     * @static
-     */
-    queryAll: function(selector, root) {
-        var result = query(selector, root);
-        YAHOO.log('queryAll: returning ' + result.length + ' nodes', 'info', 'Selector');
-        return result;
-    },
-
-    /**
-     * Retrieves the first node that matches the given CSS selector. 
      * @method query
      *
      * @param {string} selector The CSS Selector to test the node against.
-     * @param {HTMLElement} optional An HTMLElement to start the query from. Defaults to document.
-     * @return{HTMLElement} A DOM node that match the given selector.
+     * @param {HTMLElement | String} root optional An id or HTMLElement to start the query from. Defaults to Selector.document.
+     * @param {Boolean} firstOnly optional Whether or not to return only the first match.
+     * @return {Array} An array of nodes that match the given selector.
      * @static
      */
-    query: function(selector, root) {
-        var result = query(selector, root);
+    query: function(selector, root, firstOnly) {
+        var result = query(selector, root, firstOnly);
         YAHOO.log('query: returning ' + result.length + ' nodes', 'info', 'Selector');
         return result;
     }
@@ -312,14 +298,14 @@ var query = function(selector, root, firstOnly, deDupe) {
     }
 
     if (nodes.length) {
-        result = rFilter(nodes, token, root, firstOnly, deDupe); 
+        result = rFilter(nodes, token, firstOnly, deDupe); 
     }
     clearParentCache();
     return result;
 };
 
 var contains = function() {
-    if (document.documentElement.contains && !YAHOO.env.ua.webkit < 420)  { // IE & Operra, Safari < 3 contains is broken
+    if (document.documentElement.contains && !YAHOO.env.ua.webkit < 420)  { // IE & Opera, Safari < 3 contains is broken
         return function(needle, haystack) {
             return haystack.contains(needle);
         };
@@ -341,7 +327,7 @@ var contains = function() {
     }
 }();
 
-var rFilter = function(nodes, token, root, firstOnly, deDupe) {
+var rFilter = function(nodes, token, firstOnly, deDupe) {
     var result = [],
         node;
 
@@ -357,6 +343,7 @@ var rFilter = function(nodes, token, root, firstOnly, deDupe) {
             node._found = true;
             foundCache[foundCache.length] = node;
         }
+
         result[result.length] = node;
     }
 
