@@ -88,7 +88,7 @@ Selector.prototype = {
             //return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
             return regexCache[str].test(attr);
         },
-        '|=': function(attr, val) { return getRegExp(X.BEGIN + val + '[-]?', 'g').test(attr); }, // Match start with value followed by optional hyphen
+        '|=': function(attr, val) { return getRegExp(X.BEGIN + val + '[-]?').test(attr); }, // Match start with value followed by optional hyphen
         '^=': function(attr, val) { return attr.indexOf(val) === 0; }, // Match starts with value
         '$=': function(attr, val) { return attr.lastIndexOf(val) === attr.length - val.length; }, // Match ends with value
         '*=': function(attr, val) { return attr.indexOf(val) > -1; }, // Match contains value as substring 
