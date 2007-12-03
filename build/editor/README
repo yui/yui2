@@ -10,17 +10,17 @@
         1. [1423860] - [SF 1774823] Change text size removes selection highlight
         2. [1487601] - [SF 1796897] Font size issue
         3. [1508412] - [SF 1799379] setEditorHTML strips title attribute
-        4. [1528759] - [SF 1810162] [example] Link Options Window appears behin
+        4. [1528759] - [SF 1810162] [example] Link Options Window appears behind the editor
             Added a config option "limitCommands" when set to true, the editor will not execute a command that is not bound to a button.
 
         5. [1544149] - [SF 1808154] add non-editable snippets to YUI-RTE
             Added a config option "allowNoEdit", when set to true the "_isNonEditalble method is called at the beginning of all event handlers to check if this element or
                 a parent element has the class yui-noedit (this.CLASS_NOEDIT) applied. If it does, then this method will stop the event and return true. The event handlers
-                will then return false and stop the nodeChange from occuring. This method will also disable and enable the Editor's toolbar based on the noedit state.
+                will then return false and stop the nodeChange from occurring. This method will also disable and enable the Editor's toolbar based on the noedit state.
 
         6. [1544160] - [SF 1808102] Keep the content of invalidHTML
             If you set the value of a key in this.invalidHTML to "{ keepContents: true }", then the element will be replaced with a yui-non span to be filtered out when 
-                cleanHTML is called. The only tag that is ignored here is the span tag as it will force the Editor into a loop and freeze the browser. However.. all of
+                cleanHTML is called. The only tag that is ignored here is the span tag as it will force the Editor into a loop and freeze the browser. However, all of
                 these tags will be removed in the cleanHTML routine
 
         7. [1560982] - [SF 1818681] RTE converts input tags to emnput

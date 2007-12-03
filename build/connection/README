@@ -3,7 +3,7 @@ Connection Manager Release Notes
 *** version 2.4.0 ***
 
 * [FIXED] SF1804153.  Transactions initialized with setForm() now properly clear
-the POST data field after each transaciton.
+the POST data field after each transaction.
 
 * The callback object can accept a new member, cache, defined with a boolean
 value.  If set to false (e.g., var callback = { cache:false };), a timestamp
