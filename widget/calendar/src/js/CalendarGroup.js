@@ -597,25 +597,25 @@ YAHOO.widget.CalendarGroup.prototype = {
 
 		/**
 		* Fired just before the CalendarNavigator is to be shown
-		* @event beforeShowEvent
+		* @event beforeShowNavEvent
 		*/
 		this.beforeShowNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW_NAV);
 	
 		/**
 		* Fired after the CalendarNavigator is shown
-		* @event showEvent
+		* @event showNavEvent
 		*/
 		this.showNavEvent = new YAHOO.util.CustomEvent(defEvents.SHOW_NAV);
 	
 		/**
 		* Fired just before the CalendarNavigator is to be hidden
-		* @event beforeHideEvent
+		* @event beforeHideNavEvent
 		*/
 		this.beforeHideNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE_NAV);
 	
 		/**
 		* Fired after the CalendarNavigator is hidden
-		* @event hideEvent
+		* @event hideNavEvent
 		*/
 		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
 
@@ -1144,7 +1144,7 @@ YAHOO.widget.CalendarGroup.prototype = {
 	 * Returns null if no match is found.
 	 * 
 	 * @method getCalendarPage
-	 * @param {Date} The JavaScript Date object for which a Calendar page is to be found.
+	 * @param {Date} date The JavaScript Date object for which a Calendar page is to be found.
 	 * @return {Calendar} The Calendar page instance representing the month to which the date 
 	 * belongs.
 	 */

@@ -506,7 +506,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * provided year is invalid, it will not be set.
 	 * 
 	 * @method setYear
-	 * @param {Number} The full year value to set the Navigator to
+	 * @param {Number} nYear The full year value to set the Navigator to.
 	 */
 	setYear : function(nYear) {
 		var yrPattern = YAHOO.widget.CalendarNavigator.YR_PATTERN;

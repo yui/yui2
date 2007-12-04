@@ -1679,25 +1679,25 @@ YAHOO.widget.Calendar.prototype = {
 
 		/**
 		* Fired just before the CalendarNavigator is to be shown
-		* @event beforeShowEvent
+		* @event beforeShowNavEvent
 		*/
 		this.beforeShowNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW_NAV);
 	
 		/**
 		* Fired after the CalendarNavigator is shown
-		* @event showEvent
+		* @event showNavEvent
 		*/
 		this.showNavEvent = new YAHOO.util.CustomEvent(defEvents.SHOW_NAV);
 	
 		/**
 		* Fired just before the CalendarNavigator is to be hidden
-		* @event beforeHideEvent
+		* @event beforeHideNavEvent
 		*/
 		this.beforeHideNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE_NAV);
 	
 		/**
 		* Fired after the CalendarNavigator is hidden
-		* @event hideEvent
+		* @event hideNavEvent
 		*/
 		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
 
@@ -3133,7 +3133,7 @@ YAHOO.widget.Calendar.prototype = {
 	 * See <a href="#cells">cells</a>, <a href="#selectCell">selectCell</a>.
 	 *
 	 * @method getCellIndex
-	 * @param {Date} JavaScript Date object, for which to find a cell index.
+	 * @param {Date} date JavaScript Date object, for which to find a cell index.
 	 * @return {Number} The index of the date in Calendars cellDates/cells arrays, or -1 if the date 
 	 * is not on the curently rendered Calendar page.
 	 */
@@ -4020,7 +4020,7 @@ YAHOO.widget.Calendar.prototype = {
 	},
 	
 	/**
-s	 * Removes all custom renderers added to the Calendar through the addRenderer, addMonthRenderer and 
+	 * Removes all custom renderers added to the Calendar through the addRenderer, addMonthRenderer and 
 	 * addWeekdayRenderer methods. Calendar's render method needs to be called after removing renderers 
 	 * to re-render the Calendar without custom renderers applied.
 	 */
@@ -4032,7 +4032,7 @@ s	 * Removes all custom renderers added to the Calendar through the addRenderer,
 	/**
 	* Clears the inner HTML, CSS class and style information from the specified cell.
 	* @method clearElement
-	* @param	{HTMLTableCellElement}	The cell to clear
+	* @param	{HTMLTableCellElement} cell The cell to clear
 	*/ 
 	clearElement : function(cell) {
 		cell.innerHTML = "&#160;";
@@ -4111,7 +4111,7 @@ s	 * Removes all custom renderers added to the Calendar through the addRenderer,
 	/**
 	* Removes all styles from all body cells in the current calendar table.
 	* @method clearAllBodyCellStyles
-	* @param	{style}		The CSS class name to remove from all calendar body cells
+	* @param	{style}	style The CSS class name to remove from all calendar body cells
 	*/
 	clearAllBodyCellStyles : function(style) {
 		for (var c=0;c<this.cells.length;++c) {
@@ -4832,25 +4832,25 @@ YAHOO.widget.CalendarGroup.prototype = {
 
 		/**
 		* Fired just before the CalendarNavigator is to be shown
-		* @event beforeShowEvent
+		* @event beforeShowNavEvent
 		*/
 		this.beforeShowNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_SHOW_NAV);
 	
 		/**
 		* Fired after the CalendarNavigator is shown
-		* @event showEvent
+		* @event showNavEvent
 		*/
 		this.showNavEvent = new YAHOO.util.CustomEvent(defEvents.SHOW_NAV);
 	
 		/**
 		* Fired just before the CalendarNavigator is to be hidden
-		* @event beforeHideEvent
+		* @event beforeHideNavEvent
 		*/
 		this.beforeHideNavEvent = new YAHOO.util.CustomEvent(defEvents.BEFORE_HIDE_NAV);
 	
 		/**
 		* Fired after the CalendarNavigator is hidden
-		* @event hideEvent
+		* @event hideNavEvent
 		*/
 		this.hideNavEvent = new YAHOO.util.CustomEvent(defEvents.HIDE_NAV);
 
@@ -5379,7 +5379,7 @@ YAHOO.widget.CalendarGroup.prototype = {
 	 * Returns null if no match is found.
 	 * 
 	 * @method getCalendarPage
-	 * @param {Date} The JavaScript Date object for which a Calendar page is to be found.
+	 * @param {Date} date The JavaScript Date object for which a Calendar page is to be found.
 	 * @return {Calendar} The Calendar page instance representing the month to which the date 
 	 * belongs.
 	 */
@@ -6051,7 +6051,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * provided year is invalid, it will not be set.
 	 * 
 	 * @method setYear
-	 * @param {Number} The full year value to set the Navigator to
+	 * @param {Number} nYear The full year value to set the Navigator to.
 	 */
 	setYear : function(nYear) {
 		var yrPattern = YAHOO.widget.CalendarNavigator.YR_PATTERN;
