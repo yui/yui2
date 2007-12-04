@@ -9,7 +9,6 @@ This release introduces five new components into YUI:
    * Get Utility
    * Profiler
    * JSON Utility
-   * YUI Test Utility
    
 These new components are introduced as "beta", with the exception of the Charts
 Widget which is released as an experimental component.  Please see the YUI FAQ
