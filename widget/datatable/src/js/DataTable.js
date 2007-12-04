@@ -7555,6 +7555,7 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                     YAHOO.lang.isFunction(oColumn.editorOptions.validator)) ?
                     oColumn.editorOptions.validator : null;
             oCellEditor.value = oRecord.getData(oColumn.key);
+            oCellEditor.defaultValue = null;
 
             // Move Editor
             var elContainer = oCellEditor.container;
@@ -7851,9 +7852,9 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     var elContainer = oEditor.container;
     var value = oEditor.value;
     
-    // Validate date
+    // Set a default
     if(!(value instanceof Date)) {
-        value = new Date();
+        value = oEditor.defaultValue || new Date();
     }
 
     // Calendar widget
@@ -7898,6 +7899,12 @@ YAHOO.widget.DataTable.editDropdown = function(oEditor, oSelf) {
     var oColumn = oEditor.column;
     var elContainer = oEditor.container;
     var value = oEditor.value;
+    
+    // Set a default
+    if(!YAHOO.lang.isValue(value)) {
+        value = oEditor.defaultValue;
+    }
+
 
     // Textbox
     var elDropdown = elContainer.appendChild(document.createElement("select"));
@@ -7941,6 +7948,11 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
     var oColumn = oEditor.column;
     var elContainer = oEditor.container;
     var value = oEditor.value;
+
+    // Set a default
+    if(!YAHOO.lang.isValue(value)) {
+        value = oEditor.defaultValue;
+    }
 
     // Radios
     if(oColumn.editorOptions && YAHOO.lang.isArray(oColumn.editorOptions.radioOptions)) {
@@ -7991,11 +8003,16 @@ YAHOO.widget.DataTable.editTextarea = function(oEditor, oSelf) {
    var elContainer = oEditor.container;
    var value = oEditor.value;
 
+    // Set a default
+    if(!YAHOO.lang.isValue(value)) {
+        value = oEditor.defaultValue || "";
+    }
+
     // Textarea
     var elTextarea = elContainer.appendChild(document.createElement("textarea"));
     elTextarea.style.width = elCell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
     elTextarea.style.height = "3em"; //(parseInt(elCell.offsetHeight,10)) + "px";
-    elTextarea.value = YAHOO.lang.isValue(value) ? value : "";
+    elTextarea.value = value;
 
     // Set up a listener on each check box to track the input value
     YAHOO.util.Event.addListener(elTextarea, "keyup", function(){
@@ -8022,7 +8039,12 @@ YAHOO.widget.DataTable.editTextbox = function(oEditor, oSelf) {
    var oRecord = oEditor.record;
    var oColumn = oEditor.column;
    var elContainer = oEditor.container;
-   var value = YAHOO.lang.isValue(oEditor.value) ? oEditor.value : "";
+   var value = oEditor.value;
+
+    // Set a default
+    if(!YAHOO.lang.isValue(value)) {
+        value = oEditor.defaultValue || "";
+    }
 
     // Textbox
     var elTextbox = elContainer.appendChild(document.createElement("input"));
