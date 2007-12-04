@@ -1,5 +1,30 @@
 YUI Library Release Notes
 
+*** version 2.4.0 ***
+
+This release introduces five new components into YUI:
+
+   * Selector
+   * Charts Widget
+   * Get Utility
+   * Profiler
+   * JSON Utility
+   * YUI Test Utility
+   
+These new components are introduced as "beta", with the exception of the Charts
+Widget which is released as an experimental component.  Please see the YUI FAQ
+on the definition of beta and experimental at:
+http://developer.yahoo.com/yui/articles/faq/#beta
+
+In addition to new components, you'll find updates and bug fixes throughout the
+library.
+
+*** version 2.3.1 ***
+
+This update contains general fixes to the YUI library.  Please see the README
+file for each component in the build directory for specific updates since
+version 2.3.0.
+
 *** version 2.3.0 ***
 
 This release introduces six new components into YUI:
