@@ -5035,7 +5035,7 @@
             * The property is set to false by default to maintain backwards compatibility but should be 
             * set to true if drop target interaction is not required for the Panel, to improve performance.</p>
             * 
-            * @config dragonly
+            * @config dragOnly
             * @type Boolean
             * @default false
             */

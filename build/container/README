@@ -52,12 +52,13 @@ Fixed the following bugs:
 Added the following features:
 -----------------------------
 
-+ Added "dragonly" configuration property to Panel, to leverage
-  "dragonly" performance optimizations made to the DragDrop utility.
++ Added "dragOnly" configuration property to Panel, to leverage
+  the "dragOnly" configuration property added to the DragDrop 
+  utility for 2.4.0.
 
-  When the "dragonly" configuration property is set to true,
+  When the "dragOnly" configuration property is set to true,
   the DD instance created for the Panel will not check for drop 
-  targets on the page improving performance during drag operations 
+  targets on the page, improving performance during drag operations 
   which don't require drop target interaction.
 
   The property is set to "false" by default to maintain backwards
