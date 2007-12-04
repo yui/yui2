@@ -2263,19 +2263,45 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
 };*/
 
 /**
- * Handles focus events on the TABLE element.
+ * Handles focus events on the DataTable instance.
  *
  * @method _onTableFocus
  * @param e {HTMLEvent} The focus event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTableFocus = function(e, oSelf) {
     oSelf.fireEvent("tableFocusEvent");
 };
 
 /**
- * Handles mouseover events on the TABLE element.
+ * Handles focus events on the THEAD element.
+ *
+ * @method _onTheadFocus
+ * @param e {HTMLEvent} The focus event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onTableFocus = function(e, oSelf) {
+    oSelf.fireEvent("theadFocusEvent");
+    oSelf.fireEvent("tableFocusEvent");
+};
+
+/**
+ * Handles focus events on the TBODY element.
+ *
+ * @method _onTbodyFocus
+ * @param e {HTMLEvent} The focus event.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._onTableFocus = function(e, oSelf) {
+    oSelf.fireEvent("tbodyFocusEvent");
+    oSelf.fireEvent("tableFocusEvent");
+};
+
+/**
+ * Handles mouseover events on the DataTable instance.
  *
  * @method _onTableMouseover
  * @param e {HTMLEvent} The mouseover event.
@@ -2323,7 +2349,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
 };
 
 /**
- * Handles mouseout events on the TABLE element.
+ * Handles mouseout events on the DataTable instance.
  *
  * @method _onTableMouseout
  * @param e {HTMLEvent} The mouseout event.
@@ -2371,7 +2397,7 @@ YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
 };
 
 /**
- * Handles mousedown events on the TABLE element.
+ * Handles mousedown events on the DataTable instance.
  *
  * @method _onTableMousedown
  * @param e {HTMLEvent} The mousedown event.
@@ -2419,7 +2445,7 @@ YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
 };
 
 /**
- * Handles dblclick events on the TABLE element.
+ * Handles dblclick events on the DataTable instance.
  *
  * @method _onTableDblclick
  * @param e {HTMLEvent} The dblclick event.
@@ -2474,10 +2500,31 @@ YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onTheadKeydown = function(e, oSelf) {
     //TODO: if tabbing to next Column header causes THEAD to scroll, need
     // to sync scrollLeft with TBODY
+    
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+
+    while(elTarget && (elTag != "table")) {
+        switch(elTag) {
+            case "body":
+                break;
+            case "thead":
+                oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});
+                break;
+            default:
+                break;
+        }
+        elTarget = elTarget.parentNode;
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
+    }
+    oSelf.fireEvent("tableKeyEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
 /**
- * Handles keydown events on the TBODY element. Handles selection behavior.
+ * Handles keydown events on the TBODY element. Handles selection behavior,
+ * provides hooks for ENTER to edit functionality.
  *
  * @method _onTbodyKeydown
  * @param e {HTMLEvent} The key event.
@@ -2502,6 +2549,30 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
     else if(sMode == "singlecell") {
         oSelf._handleSingleCellSelectionByKey(e);
     }
+    
+    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+    }
+
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+
+    while(elTarget && (elTag != "table")) {
+        switch(elTag) {
+            case "body":
+                break;
+            case "tbody":
+                oSelf.fireEvent("tbodyKeyEvent",{target:elTarget,event:e});
+                break;
+            default:
+                break;
+        }
+        elTarget = elTarget.parentNode;
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
+    }
+    oSelf.fireEvent("tableKeyEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
 /**
@@ -3283,6 +3354,46 @@ YAHOO.widget.DataTable.prototype.getPreviousTdEl = function(cell) {
 };
 
 /**
+ * Returns DOM reference to the above TD element from the given cell, or null.
+ *
+ * @method getAboveTdEl
+ * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * object literal of syntax {record:oRecord, column:oColumn} from which to get next TD element.
+ * @return {HTMLElement} Reference to next TD element, or null.
+ */
+YAHOO.widget.DataTable.prototype.getAboveTdEl = function(cell) {
+    var elCell = this.getTdEl(cell);
+    if(elCell) {
+        var elPreviousRow = this.getPreviousTrEl(elCell);
+        if(elPreviousRow) {
+            return elPreviousRow.cells[elCell.yuiCellIndex];
+        }
+    }
+    YAHOO.log("Could not get above TD element for cell " + cell, "warn", this.toString());
+    return null;
+};
+
+/**
+ * Returns DOM reference to the below TD element from the given cell, or null.
+ *
+ * @method getBelowTdEl
+ * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * object literal of syntax {record:oRecord, column:oColumn} from which to get previous TD element.
+ * @return {HTMLElement} Reference to previous TD element, or null.
+ */
+YAHOO.widget.DataTable.prototype.getBelowTdEl = function(cell) {
+    var elCell = this.getTdEl(cell);
+    if(elCell) {
+        var elNextRow = this.getNextTrEl(elCell);
+        if(elNextRow) {
+            return elNextRow.cells[elCell.yuiCellIndex];
+        }
+    }
+    YAHOO.log("Could not get below TD element for cell " + cell, "warn", this.toString());
+    return null;
+};
+
+/**
  * Returns DOM reference to a TH element.
  *
  * @method getThEl
@@ -3697,6 +3808,23 @@ YAHOO.widget.DataTable.prototype.focus = function() {
     this._focusEl(this._elContainer);
 };
 
+/**
+ * Brings focus to the THEAD element.
+ *
+ * @method focusTheadEl
+ */
+YAHOO.widget.DataTable.prototype.focusTheadEl = function() {
+    this._focusEl(this._elThead);
+};
+
+/**
+ * Brings focus to the TBODY element.
+ *
+ * @method focusTbodyEl
+ */
+YAHOO.widget.DataTable.prototype.focusTbodyEl = function() {
+    this._focusEl(this._elTbody);
+};
 
 
 
@@ -6842,7 +6970,6 @@ YAHOO.widget.DataTable.prototype._handleSingleCellSelectionByKey = function(e) {
             return null;
         }
 
-        YAHOO.util.Event.stopEvent(e);
 
         // Validate anchor
         var oAnchor = this._getSelectionAnchor(oTrigger);
@@ -6884,8 +7011,9 @@ YAHOO.widget.DataTable.prototype._handleSingleCellSelectionByKey = function(e) {
 
                 //TODO: wrap forward to first td of next page
 
-                // Top-left selection is sticky
-                elNew = oTrigger.el;
+                // Top-left selection is sticky, and release TAB focus
+                //elNew = oTrigger.el;
+                return;
             }
         }
         else if((nKey == 37) || (bSHIFT && (nKey == 9))) { // Arrow left or shift-tab
@@ -6897,11 +7025,14 @@ YAHOO.widget.DataTable.prototype._handleSingleCellSelectionByKey = function(e) {
 
                 //TODO: wrap back to last td of previous page
 
-                // Bottom-right selection is sticky
-                elNew = oTrigger.el;
+                // Bottom-right selection is sticky, and release TAB focus
+                //elNew = oTrigger.el;
+                return;
             }
         }
 
+        YAHOO.util.Event.stopEvent(e);
+        
         // Unselect all cells
         this.unselectAllCells();
 
@@ -7507,20 +7638,11 @@ YAHOO.widget.DataTable.prototype.unhighlightCell = function(cell) {
 
 // INLINE EDITING
 
-/*TODO: for TAB handling
- * Shows Cell Editor for next cell.
- *
- * @method editNextCell
- * @param elCell {HTMLElement} Cell element from which to edit next cell.
- */
-//YAHOO.widget.DataTable.prototype.editNextCell = function(elCell) {
-//};
-
 /**
  * Shows Cell Editor for given cell.
  *
  * @method showCellEditor
- * @param elCell {HTMLElement | String} Cell element to edit.
+ * @param elCell {HTMLElement | String} Cell to edit.
  * @param oRecord {YAHOO.widget.Record} (Optional) Record instance.
  * @param oColumn {YAHOO.widget.Column} (Optional) Column instance.
  */
@@ -7593,6 +7715,7 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                 // ESC hides Cell Editor
                 if((e.keyCode == 27)) {
                     oSelf.cancelCellEditor();
+                    oSelf.focusTbodyEl();
                 }
             }, this);
 
@@ -7671,12 +7794,18 @@ YAHOO.widget.DataTable.prototype.showCellEditorBtns = function(elContainer) {
     var elSaveBtn = elBtnsDiv.appendChild(document.createElement("button"));
     YAHOO.util.Dom.addClass(elSaveBtn, YAHOO.widget.DataTable.CLASS_DEFAULT);
     elSaveBtn.innerHTML = "OK";
-    YAHOO.util.Event.addListener(elSaveBtn, "click", this.onEventSaveCellEditor, this, true);
+    YAHOO.util.Event.addListener(elSaveBtn, "click", function(oArgs, oSelf) {
+        oSelf.onEventSaveCellEditor(oArgs, oSelf);
+        oSelf.focusTbodyEl();
+    }, this, true);
 
     // Cancel button
     var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
     elCancelBtn.innerHTML = "Cancel";
-    YAHOO.util.Event.addListener(elCancelBtn, "click", this.onEventCancelCellEditor, this, true);
+    YAHOO.util.Event.addListener(elCancelBtn, "click", function(oArgs, oSelf) {
+        oSelf.onEventCancelCellEditor(oArgs, oSelf);
+        oSelf.focusTbodyEl();
+    }, this, true);
 };
 
 /**
@@ -8688,15 +8817,57 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
      */
 
     /**
-     * Fired when the DataTable has a focus.
+     * Fired when the DataTable has a focus event.
      *
      * @event tableFocusEvent
      */
 
     /**
-     * Fired when the DataTable has a blur.
+     * Fired when the DataTable THEAD element has a focus event.
+     *
+     * @event theadFocusEvent
+     */
+
+    /**
+     * Fired when the DataTable TBODY element has a focus event.
+     *
+     * @event tbodyFocusEvent
+     */
+
+    /**
+     * Fired when the DataTable has a blur event.
      *
      * @event tableBlurEvent
+     */
+
+    /*TODO
+     * Fired when the DataTable THEAD element has a blur event.
+     *
+     * @event theadBlurEvent
+     */
+
+    /*TODO
+     * Fired when the DataTable TBODY element has a blur event.
+     *
+     * @event tbodyBlurEvent
+     */
+
+    /**
+     * Fired when the DataTable has a key event.
+     *
+     * @event tableKeyEvent
+     */
+
+    /**
+     * Fired when the DataTable THEAD element has a key event.
+     *
+     * @event theadKeyEvent
+     */
+
+    /**
+     * Fired when the DataTable TBODY element has a key event.
+     *
+     * @event tbodyKeyEvent
      */
 
     /**
