@@ -1700,7 +1700,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     
     
     
-    var elColheadLabel = elColheadLiner.appendChild(document.createElement("div"));
+    var elColheadLabel = elColheadLiner.appendChild(document.createElement("span"));
     elColheadLabel.id = this.id + "-label" + colId;
     YAHOO.util.Dom.addClass(elColheadLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
@@ -4293,8 +4293,8 @@ YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
         // TODO: do this ONLY if this is the first visible child...
         var oParent = oColumn.parent;
         while(oParent) {
-            oParent.getThEl().firstChild.style.margin = 0;
-            oParent.getThEl().firstChild.style.padding = 0;
+            oParent.getThEl().firstChild.style.margin = "";
+            oParent.getThEl().firstChild.style.padding = "";
             oParent = oParent.parent;
         }
 
@@ -4325,6 +4325,7 @@ YAHOO.widget.DataTable.prototype.removeColumn = function(oColumn) {
         YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
         return oColumn;
     }
+    YAHOO.log("Could not remove Column \"" + oColumn.key + "\". Only non-nested Columns can be removed", "warn", this.toString());
 };
 
 /**
@@ -4360,6 +4361,7 @@ YAHOO.widget.DataTable.prototype.insertColumn = function(oColumn, index) {
 
     this._initTableEl();
     this.refreshView();
+    YAHOO.log("Column \"" + oColumn.key + "\" inserted", "info", this.toString());
 };
 
 

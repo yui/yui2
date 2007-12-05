@@ -37,8 +37,9 @@ th .yui-dt-colheadliner {
     overflow:hidden;
     position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
 } 
-.yui-dt-scrollable .yui-dt-hd th.yui-dt-last {
-    xpadding-right:48px; /* for scrollbar */
+
+.yui-dt-scrollable th.yui-dt-last .yui-dt-colheadliner {
+    padding-right:27px; /* for scrollbar */
 }
 
 /* TODO: customizable */

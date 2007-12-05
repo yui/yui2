@@ -1028,22 +1028,19 @@ YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
     this.startWidth = this.headCell.firstChild.offsetWidth;
     this.startX = YAHOO.util.Event.getXY(e)[0];
     
-    var minWidth = parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"),10) || 0;
-    minWidth += parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"),10) || 0;
-    YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"), "warn");
-    YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"), "warn");
-    YAHOO.log(minWidth,"warn");
+    //TODO: make this configurable
+    var minWidth = 10;
+    //var minWidth = parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"),10) || 0;
+    //minWidth += parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"),10) || 0;
+    //minWidth += this.headCell.firstChild.firstChild.offsetWidth;
+    //YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"), "warn");
+    //YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"), "warn");
+    //YAHOO.log("minwidth " + minWidth,"time");
 
     if(this.datatable.getTbodyEl() && (this.datatable.getTbodyEl().rows.length > 0)) {
         this.bodyCell = this.datatable.getTbodyEl().rows[0].cells[this.headCell.yuiCellIndex];
-        minWidth += parseInt(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingLeft"),10) || 0;
-        minWidth += parseInt(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingRight"),10) || 0;
     }
 
-    YAHOO.log(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingLeft"), "warn");
-    YAHOO.log(YAHOO.util.Dom.getStyle(this.bodyCell.firstChild,"paddingRight"), "warn");
-    YAHOO.log(minWidth,"warn");
-    
     this.minWidth = minWidth;
 };
 
@@ -1054,59 +1051,15 @@ YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
  * @param e {string} The drag event
  */
 YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
-        var newX = YAHOO.util.Event.getXY(e)[0];
-        if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
-            var offsetX = newX - this.startX;
-            var newWidth = this.startWidth + offsetX;
-            //if(newWidth > this. minWidth) {
-                this.datatable.setColumnWidth(this.column, newWidth+"px");
-            //}
-        }
-
-/*    try {
-        var newX = YAHOO.util.Event.getXY(e)[0];
+    var newX = YAHOO.util.Event.getXY(e)[0];
+    if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
         var offsetX = newX - this.startX;
         var newWidth = this.startWidth + offsetX;
-        if(newWidth < this.headLabel.offsetWidth) {
-            newWidth = this.headLabel.offsetWidth;
-        }
-
-        // Resize the Column
-        var oDataTable = this.datatable;
-        var elHeadCell = this.headCell;
-        var elBodyCell = this.bodyCell;
-
-        if(YAHOO.env.ua.ie && (this.datatable.get("scrollable")===true)) {
-            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", "auto");
-            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "hidden");
-        }
-
-        if(oDataTable.bFixedScrollBlockWorkaround) {
-            elHeadCell.firstChild.width = "auto";
-            if(elBodyCell) {
-                this.bodyCell.width = newWidth + "px";
-            }
-            
-            elHeadCell.width = newWidth + "px";
-            
-        }
-        else {
-            this.column.getColEl().width = newWidth;
-        }
-
-        // Workaround to help Opera collapse columns
-        if(YAHOO.env.ua.opera) {
-            document.body.style += "";
-        }
-
-        if(YAHOO.env.ua.ie && (this.datatable.get("scrollable")===true)) {
-            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "width", this.datatable._elTable.offsetWidth);
-            YAHOO.util.Dom.setStyle(this.datatable._elContainer, "overflow", "auto");
+        YAHOO.log("newwidth " + newWidth,"time");
+        if(newWidth > this.minWidth) {
+            this.datatable.setColumnWidth(this.column, newWidth+"px");
         }
     }
-    catch(e) {
-    }
-*/
 };
 
 

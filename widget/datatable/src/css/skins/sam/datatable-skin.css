@@ -45,8 +45,10 @@
 .yui-skin-sam .yui-dt-loading {
     background-color:#FFF;
 }
-
-.yui-skin-sam .yui-dt-loading {
+.yui-skin-sam .yui-dt-empty {
+    background-color:#FFF;
+}
+.yui-skin-sam .yui-dt-error {
     background-color:#FFF;
 }
 
@@ -54,23 +56,15 @@
 .yui-skin-sam .yui-dt-sortable {
     cursor:pointer;
 }
-.yui-skin-sam th.yui-dt-sortable {
-    margin-right:5px; /* room for arrow */
-}
-.yui-skin-sam th.yui-dt-sortable .yui-dt-label {
-    margin-right:15px; /* room for arrow */
-}
 .yui-skin-sam th.yui-dt-asc,
 .yui-skin-sam th.yui-dt-desc {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -100px; /* sorted header gradient */
 }
 .yui-skin-sam th.yui-dt-asc .yui-dt-colheadliner {
     background:url(dt-arrow-up.png) no-repeat right; /* sorted header gradient */
-    /*background-image: url('../img/arrow_up.gif'); background-repeat:no-repeat; background-position:right; sorted header icon */
 }
 .yui-skin-sam th.yui-dt-desc .yui-dt-colheadliner {
     background:url(dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
-    /*background-image: url('../img/arrow_dn.gif'); background-repeat:no-repeat; background-position:right; /*sorted header icon */
 }
 
 /* editing */
