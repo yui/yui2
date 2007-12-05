@@ -89,7 +89,12 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall)
 	{
 		//standard SWFObject embed
-		var swfObj = new deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor, expressInstall);
+		var swfObj = new deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor);
+
+		if(expressInstall)
+		{
+			swfObj.useExpressInstall(expressInstall);
+		}
 
 		//make sure we can communicate with ExternalInterface
 		swfObj.addParam("allowScriptAccess", "always");
