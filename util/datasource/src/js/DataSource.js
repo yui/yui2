@@ -422,8 +422,7 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
 YAHOO.util.DataSource.prototype.responseSchema = null;
 
  /**
- * Alias to YUI Connection Manager. Allows implementers to specify their own
- * subclasses of the YUI Connection Manager utility.
+ * Alias to YUI Connection Manager, to allow implementers to customize the utility.
  *
  * @property connMgr
  * @type Object
