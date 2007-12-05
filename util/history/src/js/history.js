@@ -5,8 +5,8 @@
  *
  * This library requires the following static markup:
  *
- * <iframe id="yui-history-iframe" src="path-to-real-asset-in-same-domain"></iframe>
- * <input id="yui-history-field" type="hidden">
+ * &lt;iframe id="yui-history-iframe" src="path-to-real-asset-in-same-domain"&gt;&lt;/iframe&gt;
+ * &lt;input id="yui-history-field" type="hidden"&gt;
  *
  * @module history
  * @requires yahoo,event
@@ -47,7 +47,7 @@ YAHOO.util.History = (function () {
     var _stateField = null;
 
     /**
-     * Flag used to tell whether the Browser History Manager is ready.
+     * Flag used to tell whether YAHOO.util.History.initialize has been called.
      *
      * @property _initialized
      * @type boolean

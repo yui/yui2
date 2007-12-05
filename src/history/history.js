@@ -5,8 +5,8 @@
  *
  * This library requires the following static markup:
  *
- * <iframe id="yui-history-iframe" src="path-to-real-asset-in-same-domain"></iframe>
- * <input id="yui-history-field" type="hidden">
+ * &lt;iframe id="yui-history-iframe" src="path-to-real-asset-in-same-domain"&gt;&lt;/iframe&gt;
+ * &lt;input id="yui-history-field" type="hidden"&gt;
  *
  * @module history
  * @requires yahoo,event
