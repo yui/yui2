@@ -1260,31 +1260,34 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
  * @method syncColWidths
  */
 YAHOO.widget.DataTable.prototype.syncColWidths = function() {
-var oSelf = this;
+    var oSelf = this;
 
-setTimeout(function() {
-    var allKeys = oSelf._oColumnSet.keys;
-    var elFirstRow = oSelf.getFirstTrEl();
-    
-    if(elFirstRow && (elFirstRow.cells.length > 0) && (allKeys.length > 0)) {
-        var elHeadLiner, nHeadLinerWidth, elCellLiner, nCellLinerWidth, nNewWidth;
+    setTimeout(function() {
+        // Only if instance is still valid
+        if((oSelf instanceof YAHOO.widget.DataTable) && (oSelf.id)) {
+            var allKeys = oSelf._oColumnSet.keys;
+            var elFirstRow = oSelf.getFirstTrEl();
 
-        for(var i=0; i<allKeys.length; i++) {
-            elHeadLiner = allKeys[i].getThEl().firstChild;
-            nHeadLinerWidth = elHeadLiner.offsetWidth -
-                    (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingLeft"),10)) -
-                    (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingRight"),10));
-            elCellLiner = elFirstRow.cells[i].firstChild;
-            nCellLinerWidth = elCellLiner.offsetWidth -
-                    (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
-                    (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10));
-            if(nHeadLinerWidth !== nCellLinerWidth) {
-                nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
-                oSelf.setColumnWidth(allKeys[i],nNewWidth);
+            if(elFirstRow && (elFirstRow.cells.length > 0) && (allKeys.length > 0)) {
+                var elHeadLiner, nHeadLinerWidth, elCellLiner, nCellLinerWidth, nNewWidth;
+
+                for(var i=0; i<allKeys.length; i++) {
+                    elHeadLiner = allKeys[i].getThEl().firstChild;
+                    nHeadLinerWidth = elHeadLiner.offsetWidth -
+                            (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingLeft"),10)) -
+                            (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingRight"),10));
+                    elCellLiner = elFirstRow.cells[i].firstChild;
+                    nCellLinerWidth = elCellLiner.offsetWidth -
+                            (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
+                            (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10));
+                    if(nHeadLinerWidth !== nCellLinerWidth) {
+                        nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
+                        oSelf.setColumnWidth(allKeys[i],nNewWidth);
+                    }
+                }
             }
         }
-    }
-}, 0);
+    }, 0);
 };
 
 YAHOO.widget.DataTable.prototype.syncColWidthsOld = function() {
