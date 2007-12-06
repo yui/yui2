@@ -1,8 +1,12 @@
-/*foundational resizeable columns css*/
-th .yui-dt-colheadliner {
+/* foundational CSS */
+
+/* resizeable columns */
+.yui-dt-resizeable {
+    overflow:hidden;
+}
+th .yui-dt-liner {
     position:relative;
 }
-
 .yui-dt-resizer {
     position:absolute;
     right:0;
@@ -19,34 +23,21 @@ th .yui-dt-colheadliner {
     background:url(transparent.gif); /* needed to block events in ie http://my.opera.com/hallvors/blog/show.dml/16391 */
 }
 
-/* foundational scrolling css */
-
-/* Column headers */
-.yui-dt-hd div{overflow:hidden;}
-
-/* Body cells */
-.yui-dt-bd div{overflow:hidden;}
-
-/* Ally headers */
+/* ally headers */
 .yui-dt-bd thead tr, .yui-dt-bd thead th {position:absolute;top:-500px;}/* left:-1500px; */
 .a11yNote {position:absolute;left:-1500px;}
 
-/*Vertical and horizontal scrolling */
+/* vertical and horizontal scrolling */
 .yui-dt-scrollable .yui-dt-bd {overflow:auto;}
 .yui-dt-scrollable .yui-dt-hd {
     overflow:hidden;
     position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
 } 
-
-.yui-dt-scrollable th.yui-dt-last .yui-dt-colheadliner {
+.yui-dt-scrollable th.yui-dt-last .yui-dt-liner {
     padding-right:27px; /* for scrollbar */
 }
 
-/* TODO: customizable */
-.yui-dt-bd {width:40em;height:15em;}
-.yui-dt-hd {width:40em;}
-
-/* foundational editor css */
+/* editing */
 .yui-dt-editor {
     position:absolute;z-index:9000;
 }

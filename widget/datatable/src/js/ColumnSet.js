@@ -601,6 +601,14 @@ YAHOO.widget.Column.prototype.children = null;
 YAHOO.widget.Column.prototype.width = null;
 
 /**
+ * Minimum Column width (in pixels).
+ *
+ * @property minWidth
+ * @type Number
+ */
+YAHOO.widget.Column.prototype.minWidth = 10;
+
+/**
  * Custom CSS class or array of classes to be applied to every cell in the Column.
  *
  * @property className
@@ -1029,7 +1037,7 @@ YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
     this.startX = YAHOO.util.Event.getXY(e)[0];
     
     //TODO: make this configurable
-    var minWidth = 10;
+    //var minWidth = 10;
     //var minWidth = parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"),10) || 0;
     //minWidth += parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"),10) || 0;
     //minWidth += this.headCell.firstChild.firstChild.offsetWidth;
@@ -1041,7 +1049,7 @@ YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
         this.bodyCell = this.datatable.getTbodyEl().rows[0].cells[this.headCell.yuiCellIndex];
     }
 
-    this.minWidth = minWidth;
+    //this.minWidth = minWidth;
 };
 
 /**
@@ -1056,9 +1064,9 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
         var offsetX = newX - this.startX;
         var newWidth = this.startWidth + offsetX;
         YAHOO.log("newwidth " + newWidth,"time");
-        if(newWidth > this.minWidth) {
-            this.datatable.setColumnWidth(this.column, newWidth+"px");
-        }
+        //if(newWidth > this.minWidth) {
+            this.datatable.setColumnWidth(this.column, newWidth);
+        //}
     }
 };
 

@@ -1,40 +1,36 @@
 /* basic skin styles */
 .yui-skin-sam .yui-dt-scrollable {border:1px solid #7F7F7F;} /* outer border */ /*TODO: redo outer border styles for new markup */
-.yui-skin-sam .yui-dt-table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;}
-.yui-skin-sam .yui-dt-table thead {border-spacing:0;} /* for safari bug */
-.yui-skin-sam .yui-dt-table caption {padding-bottom:1em;text-align:left;}
-.yui-skin-sam .yui-dt-table th {
+.yui-skin-sam .yui-dt table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;}
+.yui-skin-sam .yui-dt thead {border-spacing:0;} /* for safari bug */
+.yui-skin-sam .yui-dt caption {padding-bottom:1em;text-align:left;}
+.yui-skin-sam .yui-dt th {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
 }
-.yui-skin-sam .yui-dt-table th,
-.yui-skin-sam .yui-dt-table th a {
+.yui-skin-sam .yui-dt th,
+.yui-skin-sam .yui-dt th a {
     font-weight:normal;text-decoration:none;color:#000; /* header text */
     vertical-align:bottom;
 }
-.yui-skin-sam .yui-dt-table th {
+.yui-skin-sam .yui-dt th {
     margin:0;padding:0;
     border-right:1px solid #CBCBCB;/*  inner column border */
 }
-.yui-skin-sam .yui-dt-colheadliner {
+.yui-skin-sam .yui-dt-liner {
     margin:0;padding:0;
-    padding:4px 10px 4px 10px; /* cell padding moved to label */
+    padding:4px 10px 4px 10px; /* cell padding */
 }
 .yui-skin-sam .yui-dt-label {
     xmargin:4px 10px 4px 10px; /* cell padding */
 }
-.yui-skin-sam .yui-dt-table td {
+.yui-skin-sam .yui-dt td {
     margin:0;padding:0;
     border-right:1px solid #CBCBCB; /* inner column border */
     text-align:left;
 }
-.yui-skin-sam .yui-dt-table .yui-dt-cellliner {
-    margin:0;padding:0;
-    padding:4px 10px 4px 10px; /* cell padding */
-}
 .yui-skin-sam .yui-dt-list td {
     border-right:none; /* disable inner column border in list mode */
 }
-.yui-skin-sam .yui-dt-table thead { /* TODO:  this misaligns cols. need to do another way */
+.yui-skin-sam .yui-dt thead { /* TODO:  this misaligns cols. need to do another way */
     xborder:1px solid #989898; /* outer border */
 }
 .yui-skin-sam .yui-dt-resizer {
@@ -60,10 +56,10 @@
 .yui-skin-sam th.yui-dt-desc {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -100px; /* sorted header gradient */
 }
-.yui-skin-sam th.yui-dt-asc .yui-dt-colheadliner {
+.yui-skin-sam th.yui-dt-asc .yui-dt-liner {
     background:url(dt-arrow-up.png) no-repeat right; /* sorted header gradient */
 }
-.yui-skin-sam th.yui-dt-desc .yui-dt-colheadliner {
+.yui-skin-sam th.yui-dt-desc .yui-dt-liner {
     background:url(dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
 }
 
