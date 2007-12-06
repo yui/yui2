@@ -264,7 +264,7 @@ YAHOO.widget.RecordSet.prototype.getRecord = function(record) {
     var i;
     if(record instanceof YAHOO.widget.Record) {
         for(i=0; i<this._records.length; i++) {
-            if(this.records[i] && this._records[i]._sId === record._sId) {
+            if(this._records[i] && (this._records[i]._sId === record._sId)) {
                 return record;
             }
         }
@@ -276,7 +276,7 @@ YAHOO.widget.RecordSet.prototype.getRecord = function(record) {
     }
     else if(YAHOO.lang.isString(record)) {
         for(i=0; i<this._records.length; i++) {
-            if(this.records[i] && this._records[i]._sId === record) {
+            if(this._records[i] && (this._records[i]._sId === record)) {
                 return this._records[i];
             }
         }

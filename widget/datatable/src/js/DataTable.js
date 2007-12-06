@@ -7519,7 +7519,7 @@ YAHOO.widget.DataTable.prototype.isSelected = function(o) {
     }
     else {
         var tracker = this._aSelections;
-        if(tracker && tracker.length > 1) {
+        if(tracker && tracker.length > 0) {
             // Looking for a Record?
             if(o instanceof YAHOO.widget.Record) {
                 oRecord = o;
@@ -7605,7 +7605,7 @@ YAHOO.widget.DataTable.prototype.getSelectedCells = function() {
  */
 YAHOO.widget.DataTable.prototype.getLastSelectedRecord = function() {
     var tracker = this._aSelections;
-    if(tracker.length > 0) {
+    if(tracker && tracker.length > 0) {
         for(var i=tracker.length-1; i>-1; i--) {
            if(YAHOO.lang.isString(tracker[i])){
                 return tracker[i];
@@ -7623,7 +7623,7 @@ YAHOO.widget.DataTable.prototype.getLastSelectedRecord = function() {
  */
 YAHOO.widget.DataTable.prototype.getLastSelectedCell = function() {
     var tracker = this._aSelections;
-    if(tracker.length > 0) {
+    if(tracker && tracker.length > 0) {
         for(var i=tracker.length-1; i>-1; i--) {
            if(tracker[i].recordId && tracker[i].columnId){
                 return tracker[i];
