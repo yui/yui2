@@ -84,8 +84,22 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
             this.updatePaginator(this._oConfigs.paginator);
         }
 
+        // Use the configured initial request or generate the initial request
+        var initialRequest = this.get('initialRequest');
+        if (!initialRequest || /^\s*$/.test(initialRequest)) {
+            var generateRequest = this.get('generateRequest'),
+                state = {},
+                oPaginator = this.get('paginator');
+            
+            if (oPaginator && oPaginator instanceof YAHOO.widget.Paginator) {
+                state.pagination = oPaginator.getState();
+            }
+
+            initialRequest = generateRequest(state,this);
+        }
+
         // Send out for data in an asynchronous request
-        this._oDataSource.sendRequest(this.get("initialRequest"), this.onDataReturnInitializeTable, this);
+        this._oDataSource.sendRequest(initialRequest, this.onDataReturnInitializeTable, this);
     }
 
     // Initialize inline Cell editing
@@ -173,6 +187,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     * @attribute initialRequest
     * @description Defines the initial request that gets sent to the DataSource.
     * @type String
+    * @deprecated Use generateRequest attribute
     */
     this.setAttributeConfig("initialRequest", {
         value: "",
@@ -180,21 +195,19 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @attribute pageRequest
-    * @description Defines the parameter names sent to the DataSource for paged
-    * data.  Values associated to the following keys will be passed as parameter
-    * names in the XHR request for server side pagination.
-    * <dl>
-    *   <dt>page</dt><dd>The page number of the requested data.</dd>
-    *   <dt>startRecord</dt><dd>The zero based index offset identifying the first requested record in relation to the complete data set.</dd>
-    *   <dt>endRecord</dt><dd>The zero based index offset identifying the last requested record in relation to the complete data set.</dd>
-    *   <dt>rowsPerPage</dt><dd>The number of requested records.</dd>
-    * </ul>
-    * @type object
-    */
-    this.setAttributeConfig("pageRequest", {
-        value: {},
-        validator: YAHOO.lang.isObject
+     * @attribute generateRequest
+     * @description A function used to translate proposed DataTable state into
+     * into a value which is then passed to the DataSource's sendRequest method.
+     * This function is called to get the DataTable's initial data as well as
+     * any data changes or requests such as pagination or sorting.  The method
+     * is passed two params, an object literal with the state data and a
+     * reference to the DataTable.
+     * @type function
+     * @default YAHOO.widget.DataTable._generateRequest
+     */
+    this.setAttributeConfig("generateRequest", {
+        value: YAHOO.widget.DataTable._generateRequest,
+        validator: YAHOO.lang.isFunction
     });
 
     /**
@@ -238,8 +251,9 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
     * @attribute paginator
-    * @description Object literal of pagination values.
-    * @default <br>
+    * @description Stores an instance of YAHOO.widget.Paginator, or (for
+    * backward compatibility), an object literal of pagination values in the
+    * following form:<br>
     *   { containers:[], // UI container elements <br>
     *   rowsPerPage:500, // 500 rows <br>
     *   currentPage:1,  // page one <br>
@@ -249,7 +263,8 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     *   links: [], // links elements <br>
     *   dropdowns: [] } //dropdown elements
     *
-    * @type Object
+    * @default null
+    * @type {Object|YAHOO.widget.Paginator}
     */
     this.setAttributeConfig("paginator", {
         value : null,
@@ -297,7 +312,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
         method : function (oNewPaginator) {
             // Hook into the pagintor's change event
             if (oNewPaginator instanceof YAHOO.widget.Paginator) {
-                oNewPaginator.subscribe('changeRequest', this._onPaginatorChange, this, true);
+                oNewPaginator.subscribe('changeRequest', this.onPaginatorChange, this, true);
             }
         }
     });
@@ -472,6 +487,25 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                 }
             }
         }
+    });
+
+    /**
+     * @attribute paginationEventHandler
+     * @description A function that receives the requestChange event from the
+     * configured paginator if that paginator is an instance of
+     * YAHOO.widget.Paginator.  The function will receive two parameters, an
+     * object literal desicribing the proposed pagination state and a reference
+     * to the DataTable instance.
+     * For pagination through dynamic or server side data, assign
+     * YAHOO.widget.DataTable.handleDataSourcePagination or your own custom
+     * handler.  You may also need to set a custom handler to the
+     * paginationDataProcessor attribute.
+     * @type function
+     * @default YAHOO.widget.DataTable.handleSimplePagination
+     */
+    this.setAttributeConfig("paginationEventHandler", {
+        value : YAHOO.widget.DataTable.handleSimplePagination,
+        validator : YAHOO.lang.isFunction
     });
 
     /**
@@ -2805,43 +2839,65 @@ YAHOO.widget.DataTable.prototype._onDropdownChange = function(e, oSelf) {
 };
 
 /**
- * Handles pagination events from Paginator objects
- * @method _onPaginatorChange
+ * Delegates the YAHOO.widget.Paginator changeRequest events to the configured
+ * handler.
+ * @method onPaginatorChange
+ * @param {Object} an object literal describing the proposed pagination state
+ */
+YAHOO.widget.DataTable.prototype.onPaginatorChange = function (oState) {
+    var handler = this.get('paginationEventHandler');
+
+    handler(oState,this);
+};
+
+/**
+ * Handles YAHOO.widget.Paginator changeRequest events for static DataSources
+ * (i.e. DataSources that return all data immediately)
+ * @method handleSimplePagination
  * @param {object} the requested state of the pagination
+ * @param {DataTable} the DataTable instance
  * @private
  */
-YAHOO.widget.DataTable.prototype._onPaginatorChange = function (oState) {
+YAHOO.widget.DataTable.handleSimplePagination = function (oState,self) {
     oState.paginator.setRecordOffset(oState.recordOffset);
     oState.paginator.setRowsPerPage(oState.rowsPerPage);
 
-    // If server side pagination, poll the DataSource for more data
-    if (this._oDataSource.dataType === YAHOO.util.DataSource.TYPE_XHR) {
-        var request = [],
-            requestParams = this.get('pageRequest');
-        if (requestParams.page) {
-            request.push(escape(requestParams.page) + '=' + oState.page);
-        }
-        if (requestParams.startRecord) {
-            request.push(escape(requestParams.startRecord) + '=' + oState.recordOffset);
-        }
-        if (requestParams.endRecord) {
-            request.push(escape(requestParams.endRecord) + '=' + (oState.recordOffset + oState.rowsPerPage - 1));
-        }
-        if (requestParams.rowsPerPage) {
-            request.push(escape(requestParams.rowsPerPage) + '=' + oState.rowsPerPage);
-        }
-
-        if (request.length) {
-            request = '?' + request.join('&');
-        }
-
-        this._oDataSource.sendRequest(request,this.onDataReturnInitializeTable,this);
-    } else {
-        this.refreshView();
-    }
+    self.refreshView();
 };
 
+/**
+ * Handles YAHOO.widget.Paginator changeRequest events for dynamic DataSources
+ * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
+ * @method handleDataSourcePagination
+ * @param {object} the requested state of the pagination
+ * @param {DataTable} the DataTable instance
+ */
+YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
+    var requestedRecords = oState.records[1] - oState.recordOffset;
 
+    if (self._oRecordSet.hasRecords(oState.recordOffset, requestedRecords)) {
+        oState.paginator.setRecordOffset(oState.recordOffset);
+        oState.paginator.setRowsPerPage(oState.rowsPerPage);
+
+        self.refreshView();
+    } else {
+        // Translate the proposed page state into a DataSource request param
+        var generateRequest = self.get('generateRequest');
+        var request = generateRequest({ pagination : oState }, self);
+
+        var callback = {
+            success : self.onDataReturnSetPageData,
+            failure : self.onDataFailure,
+            argument : {
+                datatable : self,
+                pagination : oState
+            },
+            scope : self
+        };
+
+        self._oDataSource.sendRequest(request, callback);
+    }
+};
 
 
 
@@ -8220,6 +8276,31 @@ YAHOO.widget.DataTable.validateNumber = function(oData) {
     }
 };
 
+/**
+ * Translates (proposed) DataTable state data into a form consumable by
+ * DataSource sendRequest as the request parameter.  Use
+ * set('generateParameter', yourFunc) to use a custom function rather than this
+ * one.
+ * @method _generateRequest
+ * @param oData {Object} Object literal defining the current or proposed state
+ * @param oDataTable {DataTable} Reference to the DataTable instance
+ * @returns {MIXED} Returns appropriate value based on DataSource type
+ * @private
+ */
+YAHOO.widget.DataTable._generateRequest = function (oData, oDataTable) {
+    var request = oData;
+
+    if (oData.pagination) {
+        if (oDataTable._oDataSource.dataType === YAHOO.util.DataSource.TYPE_XHR) {
+            request = ['?page=',        oData.pagination.page,
+                       '&recordOffset=',oData.pagination.recordOffset,
+                       '&rowsPerPage=', oData.pagination.rowsPerPage].join('');
+        }
+    }
+    
+    return request;
+};
+
 
 
 
@@ -8755,6 +8836,44 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
     if(this.bFixedScrollBlockWorkaround) {
         this.syncColWidths();
     }
+};
+
+YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, oPayload) {
+    this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse});
+
+    // Pass data through abstract method for any transformations
+    var ok = this.doBeforeLoadData(oRequest, oResponse);
+
+    // Data ok to set
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
+        var oState = oPayload.pagination;
+
+        if (oState) {
+            // Set the paginator values in preparation to refresh
+            var oPaginator = this.get('paginator');
+            if (oPaginator && oPaginator instanceof YAHOO.widget.Paginator) {
+                oPaginator.setRecordOffset(oState.recordOffset);
+                oPaginator.setRowsPerPage(oState.rowsPerPage);
+            }
+
+            this._oRecordSet.setRecords(oResponse.results,oState.recordOffset);
+        }
+
+        this.refreshView();
+    }
+    // Error
+    else if(ok && oResponse.error) {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
+    }
+
+    // Opera and Safari workaround for fixed scrolling
+    if(this.bFixedScrollBlockWorkaround) {
+        this.syncColWidths();
+    }
+};
+
+YAHOO.widget.DataTable.prototype.onDataFailure = function (oRequest,oResponse,oPayload) {
+    alert("Oh Noes!");
 };
 
 

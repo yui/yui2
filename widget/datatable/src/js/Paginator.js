@@ -517,7 +517,7 @@ YAHOO.widget.Paginator.prototype._buildRowsPerPageControls = function (id_base,c
                 var opt = d.createElement('option');
                 opt.value = sizeOptions[j];
                 opt.appendChild(d.createTextNode(sizeOptions[j]));
-                if (sizeOptions[i] === currentSize) {
+                if (sizeOptions[j] === currentSize) {
                     opt.selected = true;
                 }
 
@@ -855,12 +855,12 @@ YAHOO.widget.Paginator.prototype.getPageRecords = function (page) {
 
     start = (page - 1) * perPage;
     if (records !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
-        if (start > records) {
+        if (start >= records) {
             return null;
         }
-        end = Math.min(start + perPage, records);
+        end = Math.min(start + perPage, records) - 1;
     } else {
-        end = start + perPage;
+        end = start + perPage - 1;
     }
 
     return [start,end];
@@ -968,7 +968,8 @@ YAHOO.widget.Paginator.prototype.getState = function (changes) {
         page         : this.getCurrentPage(),
         totalRecords : this.get('totalRecords'),
         recordOffset : this._recordOffset,
-        rowsPerPage  : this.get('rowsPerPage')
+        rowsPerPage  : this.get('rowsPerPage'),
+        records      : this.getPageRecords()
     };
 
     if (!changes) {
@@ -1011,6 +1012,16 @@ YAHOO.widget.Paginator.prototype.getState = function (changes) {
     // Jump offset to top of page
     state.recordOffset = state.recordOffset ||
                          newOffset - (newOffset % state.rowsPerPage);
+
+    state.records = [ state.recordOffset,
+                      state.recordOffset + state.rowsPerPage - 1 ];
+
+    if (state.totalRecords !== YAHOO.widget.Paginator.VALUE_UNLIMITED &&
+        state.recordOffset < state.totalRecords &&
+        state.records[1] > state.totalRecords - 1) {
+        // limit upper index to totalRecords - 1
+        state.records[1] = state.totalRecords - 1;
+    }
 
     return state;
 };
