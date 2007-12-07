@@ -373,7 +373,7 @@ YAHOO.tool.TestRunner = (function(){
                     if (typeof setTimeout != "undefined"){                    
                         setTimeout(function(){
                             YAHOO.tool.TestRunner._run();
-                        }, 0);              
+                        }, 0);
                     } else {
                         this._run();
                     }
@@ -452,6 +452,14 @@ YAHOO.tool.TestRunner = (function(){
                                 error = new YAHOO.util.UnexpectedError(thrown);
                                 failed = true;                                    
                             }
+                        } else if (YAHOO.lang.isFunction(shouldError)){
+                        
+                            //if it's a function, see if the error is an instance of it
+                            if (!(thrown instanceof shouldError)){
+                                error = new YAHOO.util.UnexpectedError(thrown);
+                                failed = true;
+                            }
+                        
                         } else if (YAHOO.lang.isObject(shouldError)){
                         
                             //if it's an object, check the instance and message
