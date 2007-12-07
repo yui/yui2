@@ -2387,8 +2387,15 @@ YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onTheadKeydown = function(e, oSelf) {
-    //TODO: if tabbing to next Column header causes THEAD to scroll, need
-    // to sync scrollLeft with TBODY
+    // If tabbing to next Column header causes THEAD to scroll,
+    // need to sync scrollLeft with TBODY
+    if(YAHOO.util.Event.getCharCode(e) === 9) {
+        setTimeout(function() {
+            if((oSelf instanceof YAHOO.widget.DataTable) && oSelf.id) {
+                oSelf._elTbodyContainer.scrollLeft = oSelf._elTheadContainer.scrollLeft;
+            }
+        },0);
+    }
     
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
