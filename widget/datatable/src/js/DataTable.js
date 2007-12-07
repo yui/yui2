@@ -576,28 +576,6 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 //
 /////////////////////////////////////////////////////////////////////////////
 
-/*TODO delete
- * Class name assigned to TABLE element.
- *
- * @property DataTable.CLASS_TABLE
- * @type String
- * @static
- * @final
- * @default "yui-dt-table"
- */
-//YAHOO.widget.DataTable.CLASS_TABLE = "yui-dt-table";
-
-/**
- * Class name assigned to the primary TBODY element.
- *
- * @property DataTable.CLASS_BODY
- * @type String
- * @static
- * @final
- * @default "yui-dt-body"
- */
-YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
-
 /**
  * Class name assigned to the container liner DIV elements.
  *
@@ -608,39 +586,6 @@ YAHOO.widget.DataTable.CLASS_BODY = "yui-dt-body";
  * @default "yui-dt-liner"
  */
 YAHOO.widget.DataTable.CLASS_LINER = "yui-dt-liner";
-
-/*TODO: delete
- * Class name assigned to TH elements in the THEAD.
- *
- * @property DataTable.CLASS_COLHEAD
- * @type String
- * @static
- * @final
- * @default "yui-dt-colhead"
- */
-//YAHOO.widget.DataTable.CLASS_COLHEADLINER = "yui-dt-colhead";
-
-/*TODO: delete
- * Class name assigned to the liner element for each TH element in the THEAD.
- *
- * @property DataTable.CLASS_COLHEADLINER
- * @type String
- * @static
- * @final
- * @default "yui-dt-colheadliner"
- */
-//YAHOO.widget.DataTable.CLASS_COLHEADLINER = "yui-dt-colheadliner";
-
-/*TODO: delete
- * Class name assigned to the liner element for each TD element in the primary TBODY.
- *
- * @property DataTable.CLASS_CELLLINER
- * @type String
- * @static
- * @final
- * @default "yui-dt-cellliner"
- */
-//YAHOO.widget.DataTable.CLASS_CELLLINER = "yui-dt-cellliner";
 
 /**
  * Class name assigned to display label elements.
@@ -1323,8 +1268,6 @@ YAHOO.widget.DataTable.prototype._initContainerEl = function(elContainer) {
         this._elTbodyContainer = elContainer.appendChild(document.createElement("div"));
         YAHOO.util.Dom.addClass(this._elTbodyContainer, "yui-dt-bd");
 
-        //YAHOO.util.Event.addListener(elContainerLiner, "scroll", this._onScroll, this); // for IE
-
         this._elContainer = elContainer;
     }
 };
@@ -1454,22 +1397,18 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     }
 
     // Create elements for header
-    // Create TABLE for header
+    // Create TABLE
     var elHeadTable = document.createElement("table");
-    //elHeadTable.tabIndex = 0;
     elHeadTable.id = this.id + "-headtable";
-    //YAHOO.util.Dom.addClass(elHeadTable, YAHOO.widget.DataTable.CLASS_TABLE);
     elHeadTable = this._elTheadContainer.appendChild(elHeadTable);
 
     // Create THEAD
     this._initTheadEl(elHeadTable,false);
 
     // Create elements for body
-    // Create TABLE for body
+    // Create TABLE
     var elBodyTable = document.createElement("table");
-    //elBodyTable.tabIndex = 0;
     elBodyTable.id = this.id + "-bodytable";
-    //YAHOO.util.Dom.addClass(elBodyTable, YAHOO.widget.DataTable.CLASS_TABLE);
     this._elTbodyContainer.appendChild(elBodyTable);
 
     // Create THEAD
@@ -1501,8 +1440,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
 
     // Set up DOM events
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
-    //YAHOO.util.Event.addListener(document, "keydown", this._onDocumentKeydown, this);
-
+    
     YAHOO.util.Event.addListener(elContainer, "focus", this._onTableFocus, this);
     YAHOO.util.Event.addListener(elThead, "focus", this._onTheadFocus, this);
     YAHOO.util.Event.addListener(elTbody, "focus", this._onTbodyFocus, this);
@@ -1539,21 +1477,6 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     var oColumnSet = this._oColumnSet;
     this._sFirstLabelLinkId = null;
 
-    //TODO: Create before the CAPTION in Safari
-
-    // Create COLs
-    // Iterate through each Column key...
-    /*var colKeys = oColumnSet.keys;
-    this._elColGroup = elTable.appendChild(document.createElement("colgroup"));
-    for(i=0; i<colKeys.length; i++) {
-        oColumn = colKeys[i];
-        var elCol;
-        elCol = oColumn._elCol = this._elColGroup.appendChild(document.createElement("col"));
-        elCol.id = this.id + "-col" + oColumn.getId();
-        YAHOO.util.Dom.addClass(elCol, "yui-dt-col-"+oColumn.getKey());
-        //TODO: Traverse up Column parents to assign _elCol
-    }*/
-
     // Create THEAD
     var elThead = elTable.appendChild(document.createElement("thead"));
     if(!bA11y) {
@@ -1577,7 +1500,6 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
             var id = (bA11y) ? this.id+"-th-ally" + oColumn.getId() : this.id+"-th" + oColumn.getId();
             elTheadCell.id = id;
             elTheadCell.yuiCellIndex = j;
-            //YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_COLHEAD);
             this._initThEl(elTheadCell,oColumn,i,j, bA11y);
         }
 
@@ -1614,7 +1536,6 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
             elTheadCell = oColumn.getThEl();
             if(oColumn.resizeable) {
                 if(foundDD) {
-                    YAHOO.util.Dom.addClass(elTable, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                     YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                     var elThContainer = elTheadCell.firstChild;
                     var elThResizer = elThContainer.appendChild(document.createElement("div"));
@@ -1754,17 +1675,6 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
     oCellEditor.value = null;
     oCellEditor.isActive = false;
     this._oCellEditor = oCellEditor;
-
-    // Handle ESC key
-    /*this.subscribe("editorKeydownEvent", function(oArgs) {
-        var e = oArgs.event;
-        var elTarget = YAHOO.util.Event.getTarget(e);
-
-        // ESC hides Cell Editor
-        if((e.keyCode == 27)) {
-            this.cancelCellEditor();
-        }
-    });*/
 };
 
 /**
@@ -1780,8 +1690,6 @@ YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
         // Attach Column resizer element as first child of body
         var elColumnResizerProxy = document.createElement("div");
         elColumnResizerProxy.id = this.id + "-colresizerproxy";
-        //elColumnResizerProxy.style.position = "absolute";
-        //elColumnResizerProxy.style.visibility = "hidden";
         YAHOO.util.Dom.addClass(elColumnResizerProxy, YAHOO.widget.DataTable.CLASS_RESIZERPROXY);
         var elFirstChild = YAHOO.util.Dom.getFirstChild(document.body);
         if(elFirstChild) {
@@ -2198,24 +2106,15 @@ YAHOO.widget.DataTable.prototype._setRowStripes = function(row, range) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onScroll = function(e, oSelf) {
-    /*for(var i=0; i<oSelf._oColumnSet.keys.length; i++) {
-        var elLiner = oSelf._oColumnSet.keys[i].getThEl().firstChild;
-        elLiner.style.position = "";
-    }*/
     oSelf._elTheadContainer.scrollLeft = oSelf._elTbodyContainer.scrollLeft;
-    /*for(i=0; i<oSelf._oColumnSet.keys.length; i++) {
-        elLiner = oSelf._oColumnSet.keys[i].getThEl().firstChild;
-        elLiner.style.position = "relative";
-    }*/
-
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
 
     if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
         oSelf.cancelCellEditor();
     }
 
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
     oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
 };
 
@@ -2248,24 +2147,6 @@ YAHOO.widget.DataTable.prototype._onDocumentClick = function(e, oSelf) {
     }
 };
 
-/**TODO: remove from docs
- * Handles keydown events on the DOCUMENT.
- *
- * @method _onDocumentKeydown
- * @param e {HTMLEvent} The keydown event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-/*YAHOO.widget.DataTable.prototype._onDocumentKeydown = function(e, oSelf) {
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
-
-    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive &&
-            YAHOO.util.Dom.isAncestor(oSelf._oCellEditor.container, elTarget)) {
-        oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
-    }
-};*/
-
 /**
  * Handles focus events on the DataTable instance.
  *
@@ -2286,7 +2167,7 @@ YAHOO.widget.DataTable.prototype._onTableFocus = function(e, oSelf) {
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTableFocus = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTheadFocus = function(e, oSelf) {
     oSelf.fireEvent("theadFocusEvent");
     oSelf.fireEvent("tableFocusEvent");
 };
@@ -2299,7 +2180,7 @@ YAHOO.widget.DataTable.prototype._onTableFocus = function(e, oSelf) {
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
  */
-YAHOO.widget.DataTable.prototype._onTableFocus = function(e, oSelf) {
+YAHOO.widget.DataTable.prototype._onTbodyFocus = function(e, oSelf) {
     oSelf.fireEvent("tbodyFocusEvent");
     oSelf.fireEvent("tableFocusEvent");
 };
@@ -2698,22 +2579,6 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
     oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
-/*TODO: delete
- * Handles keyup events on the TBODY. Executes deletion.
- *
- * @method _onTbodyKeyup
- * @param e {HTMLEvent} The key event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- */
-/*YAHOO.widget.DataTable.prototype._onTbodyKeyup = function(e, oSelf) {
-   var nKey = YAHOO.util.Event.getCharCode(e);
-    // delete
-    if(nKey == 46) {//TODO: if something is selected
-        //TODO: delete row
-    }
-};*/
-
 /**
  * Handles click events on paginator links.
  *
@@ -2992,10 +2857,13 @@ YAHOO.widget.DataTable.prototype.getRecordSet = function() {
  *
  *  </dd>
  *
+ * <dt>defaultValue</dt>
+ * <dd>Dynamically settable default value</dd>
+ * </dl>
+ *
  * <dt>value</dt>
  * <dd>Current input value</dd>
  * </dl>
- *
  *
  *
  *
@@ -3598,11 +3466,6 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
  * object literals containing data.
  */
 YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
-    /*if(YAHOO.env.ua.ie && (this.get("scrollable")===true)) {
-        YAHOO.util.Dom.setStyle(this._elContainer, "width", "auto");
-        YAHOO.util.Dom.setStyle(this._elContainer, "overflow", "hidden");
-    }*/
-
     // Clear the RecordSet
     this._oRecordSet.reset();
 
@@ -3731,7 +3594,6 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
 
         // Width synchronizations
         this._syncColWidths();
-        this._snapContainerWidth();
 
 
         this.fireEvent("refreshEvent");
@@ -4127,14 +3989,6 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
             this._oRecordSet.reverseRecords();
         }
 
-        // IE workaround for bug 1243089:
-        // Reset any scrolltop...
-        /*var nOrigScrollTop = null;
-        if(this._elContainerLiner.scrollTop > 0) {
-            nOrigScrollTop = this._elContainerLiner.scrollTop;
-            this._elContainerLiner.scrollTop = 0;
-        }*/
-
         // Update sortedBy tracker
         this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
 
@@ -4184,8 +4038,6 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bOve
             else {
                 sWidth = (nWidth > oColumn.minWidth) ? nWidth + "px" : oColumn.minWidth + "px";
             }
-            
-
         }
 
         var allrows = this.getTbodyEl().rows;
@@ -4197,7 +4049,6 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bOve
         }
         elTheadCell.style.width = sWidth;
         elTheadCell.firstChild.style.width = sWidth;
-        //allrows[0].cells[nColKeyIndex].style.width = sWidth;
 
         this._snapContainerWidth();
 
@@ -4224,7 +4075,6 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
             var allDescendants = this._oColumnSet.getDescendants(oColumn);
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
-                var thisKeyIndex = thisColumn.getKeyIndex();
 
                 // Adjust header cell
                 var elTheadCell = thisColumn.getThEl();
@@ -4236,6 +4086,7 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
                 thisColumn._nLastWidth = elLiner.offsetWidth;// Store for later
 
                 // Adjust body cells (if key Column)
+                var thisKeyIndex = thisColumn.getKeyIndex();
                 if(thisKeyIndex !== null) {
                     for(var j=0;j<l;j++) {
                         var cellStyle = allrows[j].cells[thisKeyIndex].firstChild.style;
@@ -4261,6 +4112,7 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
                 }
                 
                 thisColumn.hidden = true;
+                this.fireEvent("columnHideEvent",{column:thisColumn});
             }
         }
         else {
@@ -4278,7 +4130,6 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
  * @param oColumn {YAHOO.widget.Column} Column instance.
  */
 YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
-    //TODO: enable dd resizer
     oColumn = this.getColumn(oColumn);
     if(oColumn && oColumn.hidden) {
         // Only top-level Columns can get hidden
@@ -4288,16 +4139,17 @@ YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
             var allDescendants = this._oColumnSet.getDescendants(oColumn);
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
-                var thisKeyIndex = thisColumn.getKeyIndex();
+                
+                // Adjust header cell
                 var elTheadCell = thisColumn.getThEl();
                 var elLiner = elTheadCell.firstChild;
-                // Adjust header cell
                 var linerStyle = elLiner.style;
                 linerStyle.margin = "";
                 linerStyle.padding = "";
                 linerStyle.overflow = "";
 
                 // Adjust body cells (if key Column)
+                var thisKeyIndex = thisColumn.getKeyIndex();
                 if(thisKeyIndex !== null) {
                     for(var j=0;j<l;j++) {
                         var cellStyle = allrows[j].cells[thisKeyIndex].firstChild.style;
@@ -4325,6 +4177,7 @@ YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
 
                 thisColumn._nLastWidth = null;
                 thisColumn.hidden = false;
+                this.fireEvent("columnShowEvent",{column:thisColumn});
             }
         }
         else {
@@ -4467,14 +4320,6 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
 
             // Row is on current page
             if(YAHOO.lang.isNumber(nTrIndex)) {
-                // IE workaround for bug 1225393:
-                // Reset any scrolltop...
-                var nOrigScrollTop = null;
-                /*if(this._elContainerLiner.scrollTop > 0) {
-                    nOrigScrollTop = this._elContainerLiner.scrollTop;
-                    this._elContainerLiner.scrollTop = 0;
-                }*/
-
                 // Paginated so just refresh the view to keep pagination state
                 if(oPaginator) {
                     this.refreshView();
@@ -4614,22 +4459,8 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
 
     // Update the TR only if row is on current page
     if(elRow) {
-        // IE workaround for bug 1225393:
-        // Reset any scrolltop...
-        var nOrigScrollTop = null;
-        /*if(this._elContainerLiner.scrollTop > 0) {
-            nOrigScrollTop = this._elContainerLiner.scrollTop;
-            this._elContainerLiner.scrollTop = 0;
-        }*/
-
         this._updateTrEl(elRow, updatedRecord);
         this._syncColWidths();
-
-        // IE workaround for bug 1225393:
-        // ...reinstate scrolltop
-        /*if(nOrigScrollTop !== null) {
-            this._elContainerLiner.scrollTop = nOrigScrollTop;
-        }*/
     }
 
     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -4689,14 +4520,6 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
 
         // If row is on current page, delete the TR element
         if(YAHOO.lang.isNumber(nTrIndex)) {
-            // IE workaround for bug 1225393:
-            // Reset any scrolltop...
-            var nOrigScrollTop = null;
-            /*if(this._elContainerLiner.scrollTop > 0) {
-                nOrigScrollTop = this._elContainerLiner.scrollTop;
-                this._elContainerLiner.scrollTop = 0;
-            }*/
-
             var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex) ?
                     true : false;
             this._deleteTrEl(nTrIndex);
@@ -7880,22 +7703,8 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
         // Update the Record
         this._oRecordSet.updateKey(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
 
-        // IE workaround for bug 1512323:
-        // Reset any scrolltop...
-        var nOrigScrollTop = null;
-        /*if(this._elContainerLiner.scrollTop > 0) {
-            nOrigScrollTop = this._elContainerLiner.scrollTop;
-            this._elContainerLiner.scrollTop = 0;
-        }*/
-
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
-
-        // IE workaround for bug 1512323:
-        // ...reinstate scrolltop
-        /*if(nOrigScrollTop !== null) {
-            this._elContainerLiner.scrollTop = nOrigScrollTop;
-        }*/
 
         // Clear out the Cell Editor
         this.resetCellEditor();
@@ -8517,16 +8326,6 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     }
 };
 
-
-
-
-
-
-
-
-
-
-
 /**
  * Overridable custom event handler to highlight row.
  *
@@ -8924,18 +8723,24 @@ YAHOO.widget.DataTable.prototype.onDataFailure = function (oRequest,oResponse,oP
      * Fired when the DataTable has a key event.
      *
      * @event tableKeyEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
      */
 
     /**
      * Fired when the DataTable THEAD element has a key event.
      *
      * @event theadKeyEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
      */
 
     /**
      * Fired when the DataTable TBODY element has a key event.
      *
      * @event tbodyKeyEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
      */
 
     /**
@@ -9146,6 +8951,20 @@ YAHOO.widget.DataTable.prototype.onDataFailure = function (oRequest,oResponse,oP
      * @event columnResizeEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      * @param oArgs.target {HTMLElement} The TH element.
+     */
+
+    /**
+     * Fired when a column is hidden.
+     *
+     * @event columnHideEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     */
+
+    /**
+     * Fired when a column is shown.
+     *
+     * @event columnShowEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      */
 
     /**
