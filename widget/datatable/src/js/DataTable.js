@@ -1625,21 +1625,25 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     if(!bA11y) {
         if(oColumn.sortable) {
             YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
+
+            //TODO: Make sortLink customizeable
+            //TODO: Make title configurable
+            //TODO: Separate label from an accessibility link that says
+            // "Click to sort ascending" and push it offscreen
+            var sLabelLinkId = this.id + "-labellink" + colId;
+            var sortLink = "?key=" + colKey;
+            elTheadCellLabel.innerHTML = "<a id=\"" + sLabelLinkId + "\" href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
+            if(!this._sFirstLabelLinkId) {
+                this._sFirstLabelLinkId = sLabelLinkId;
+            }
+        }
+        else {
+            elTheadCellLabel.innerHTML = sLabel;
         }
         if(oColumn.resizeable) {
             YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_RESIZEABLE);
         }
         
-        //TODO: Make sortLink customizeable
-        //TODO: Make title configurable
-        //TODO: Separate label from an accessibility link that says
-        // "Click to sort ascending" and push it offscreen
-        var sLabelLinkId = this.id + "-labellink" + colId;
-        var sortLink = "?key=" + colKey;
-        elTheadCellLabel.innerHTML = "<a id=\"" + sLabelLinkId + "\" href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
-        if(!this._sFirstLabelLinkId) {
-            this._sFirstLabelLinkId = sLabelLinkId;
-        }
     }
     else {
         elTheadCellLabel.innerHTML = sLabel;
@@ -8211,20 +8215,16 @@ YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventSortColumn = function(oArgs) {
-//TODO: support nested header column sorting
-
+//TODO: support form elements in sortable columns
     var evt = oArgs.event;
     var target = oArgs.target;
-    YAHOO.util.Event.stopEvent(evt);
 
     var el = this.getThEl(target) || this.getTdEl(target);
     if(el && el.yuiColumnKey) {
         var oColumn = this.getColumn(el.yuiColumnKey);
         if(oColumn.sortable) {
+            YAHOO.util.Event.stopEvent(evt);
             this.sortColumn(oColumn);
-        }
-        else {
-            YAHOO.log("Column for " + target + " not sortable", "warn", this.toString());
         }
     }
     else {
