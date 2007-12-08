@@ -3527,8 +3527,15 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
         aRecords = this._oRecordSet.getRecords();
     }
 
+    // Remove TABLE from DOM for faster rendering
     var elTbody = this._elTbody;
-    var elRows = elTbody.rows;
+    var elTable = elTbody.parentNode;
+    var elTbodyContainer = this._elTbodyContainer;
+    elTable = elTbodyContainer.removeChild(elTable);
+    
+    var startTime = new Date();
+
+    var allRows = elTbody.rows;
 
     // Has rows
     if(YAHOO.lang.isArray(aRecords) && (aRecords.length > 0)) {
@@ -3542,7 +3549,7 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
         var bReselect = (aSelectedRows.length>0) || (aSelectedCells.length > 0);
 
         // Remove extra rows from the bottom so as to preserve ID order
-        while(elTbody.hasChildNodes() && (elRows.length > aRecords.length)) {
+        while(elTbody.hasChildNodes() && (allRows.length > aRecords.length)) {
             elTbody.deleteRow(-1);
         }
 
@@ -3553,27 +3560,27 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
         }
 
         // From the top, update in-place existing rows
-        for(i=0; i<elRows.length; i++) {
-            this._updateTrEl(elRows[i], aRecords[i]);
+        for(i=0; i<allRows.length; i++) {
+            this._updateTrEl(allRows[i], aRecords[i]);
         }
 
         // Add TR elements as necessary
-        for(i=elRows.length; i<aRecords.length; i++) {
+        for(i=allRows.length; i<aRecords.length; i++) {
             this._addTrEl(aRecords[i]);
         }
 
         // Reinstate selected and sorted classes
         if(bReselect) {
             // Loop over each row
-            for(j=0; j<elRows.length; j++) {
-                var thisRow = elRows[j];
+            for(j=0; j<allRows.length; j++) {
+                var thisRow = allRows[j];
                 var sMode = this.get("selectionMode");
                 if ((sMode == "standard") || (sMode == "single")) {
                     // Set SELECTED
                     for(k=0; k<aSelectedRows.length; k++) {
                         if(aSelectedRows[k] === thisRow.yuiRecordId) {
                             YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
-                            if(j === elRows.length-1) {
+                            if(j === allRows.length-1) {
                                 this._oAnchorRecord = this.getRecord(thisRow.yuiRecordId);
                             }
                         }
@@ -3602,10 +3609,15 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
         this._setFirstRow();
         this._setLastRow();
         this._setRowStripes();
+        
+        // Reappend TABLE
+        elTbodyContainer.appendChild(elTable);
 
         // Width synchronizations
         this._syncColWidths();
 
+        var endTime = new Date();
+        YAHOO.log("diff: " + (endTime - startTime), "time");
 
         this.fireEvent("refreshEvent");
         YAHOO.log("DataTable showing " + aRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
