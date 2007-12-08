@@ -4153,7 +4153,7 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
  * hide/show non-nested Columns, and top-level parent Columns (which will
  * hide/show all children Columns).
  *
- * @method
+ * @method showColumn
  * @param oColumn {YAHOO.widget.Column} Column instance.
  */
 YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
