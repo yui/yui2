@@ -1,3 +1,17 @@
+/**
+ * The Paginator widget provides a set of controls to navigate through paged
+ * data.
+ *
+ * @module paginator
+ * @requires yahoo, dom, event, element
+ * @title Paginator widget
+ *
+ * @namespace YAHOO.widget
+ * @class Paginator
+ * @uses YAHOO.util.EventProvider, YAHOO.util.AttributeProvider
+ * @constructor
+ * @param config {Object} Object literal to set instance attributes.
+ */
 YAHOO.widget.Paginator = function (config) {
     config = YAHOO.lang.isObject(config) ? config : {};
     var attrib, initialPage, records, perPage;
@@ -30,6 +44,14 @@ YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.EventProvider);
 YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
 
 
+
+
+
+
+
+
+// Static members
+
 /**
  * Incrementing index used to give instances unique ids.
  * @static
@@ -38,24 +60,122 @@ YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
  */
 YAHOO.widget.Paginator.id = 0;
 
+/**
+ * Used to identify unset, optional configurations, or used explicitly in the
+ * case of totalRecords to indicate unlimited pagination.
+ * @static
+ * @property VALUE_UNLIMITED
+ * @public
+ * @readonly
+ */
 YAHOO.widget.Paginator.VALUE_UNLIMITED = -1;
 
+/**
+ * Class assigned to the (optional) element(s) containing pagination controls.
+ * @static
+ * @property CLASS_CONTAINER
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_CONTAINER = 'yui-pg-container';
 
+/**
+ * Class assigned to the element(s) containing pagination links, including
+ * first, previous, next, last and any page links.
+ * @static
+ * @property CLASS_PAGE_LINKS
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_PAGE_LINKS = 'yui-pg-page-links';
+
+/**
+ * Class assigned to the first, previous, next, or last links when no such
+ * such action is possible.
+ * @static
+ * @property CLASS_DISABLED
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_DISABLED   = 'yui-pg-disabled';
+
+/**
+ * Class assigned to the current page's page link element.
+ * @static
+ * @property CLASS_SELECTED
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_SELECTED   = 'yui-pg-selected';
+
+/**
+ * Class assigned to the page number link elements.
+ * @static
+ * @property CLASS_PAGE
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_PAGE       = 'yui-pg-page';
+
+/**
+ * Class assigned to the link to the first page.
+ * @static
+ * @property CLASS_FIRST
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_FIRST      = 'yui-pg-first';
+
+/**
+ * Class assigned to the link to the last page.
+ * @static
+ * @property CLASS_LAST
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_LAST       = 'yui-pg-last';
+
+/**
+ * Class assigned to the link to the previous page.
+ * @static
+ * @property CLASS_PREVIOUS
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_PREVIOUS   = 'yui-pg-previous';
+
+/**
+ * Class assigned to the link to the next page.
+ * @static
+ * @property CLASS_NEXT
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_NEXT       = 'yui-pg-next';
 
+/**
+ * Class assigned to the rows-per-page select element(s).
+ * @static
+ * @property CLASS_PAGE_SIZE_OPTIONS
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_PAGE_SIZE_OPTIONS = 'yui-pg-sizes';
 
+/**
+ * Class assigned to the input field to jump to a specific page.
+ * @static
+ * @property CLASS_PAGE_INPUT
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_PAGE_INPUT        = 'yui-pg-jump';
+
+/**
+ * Class assigned to the (optional) button to &quot;submit&quot; the jump to
+ * page request.
+ * @static
+ * @property CLASS_PAGE_INPUT_BUTTON
+ * @public
+ */
 YAHOO.widget.Paginator.CLASS_PAGE_INPUT_BUTTON = 'yui-pg-jump-go';
 
+/**
+ * Regular expression used in event delegation to determine which type of
+ * page link was clicked (page, first, previous, next, last).
+ * @static
+ * @property hasClassRE
+ * @private
+ */
 YAHOO.widget.Paginator.hasClassRE = new RegExp("("+[ YAHOO.widget.Paginator.CLASS_DISABLED,
                                         YAHOO.widget.Paginator.CLASS_SELECTED,
                                         YAHOO.widget.Paginator.CLASS_PAGE,
@@ -63,6 +183,22 @@ YAHOO.widget.Paginator.hasClassRE = new RegExp("("+[ YAHOO.widget.Paginator.CLAS
                                         YAHOO.widget.Paginator.CLASS_LAST,
                                         YAHOO.widget.Paginator.CLASS_PREVIOUS,
                                         YAHOO.widget.Paginator.CLASS_NEXT ].join('|')+")");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Static methods
+
 /**
  * Calculates start and end page numbers given a current page, attempting
  * to keep the current page in the middle
@@ -137,18 +273,110 @@ YAHOO.widget.Paginator._toNodeArray = function (list) {
 
 
 
+
+
+
+
+
+
+
+
+
 // Instance members
+
+/**
+ * HTML label placed in the link to the first page.
+ * @attribute LABEL_FIRST
+ * @type string
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.LABEL_FIRST      = '&lt;&lt; first';
+
+/**
+ * HTML label placed in the link to the previous page.
+ * @attribute LABEL_PREVIOUS
+ * @type string
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.LABEL_PREVIOUS   = '&lt; prev';
+
+/**
+ * HTML label placed in the link to the next page.
+ * @attribute LABEL_NEXT
+ * @type string
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.LABEL_NEXT       = 'next &gt;';
+
+/**
+ * HTML label placed in the link to the last page.
+ * @attribute LABEL_LAST
+ * @type string
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.LABEL_LAST       = 'last &gt;&gt;';
+
+/**
+ * Text label placed in the button to jump to a page.
+ * @attribute LABEL_GO_BUTTON
+ * @type string
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.LABEL_GO_BUTTON  = 'go';
+
+/**
+ * HTML placed inside the label element associated with the jump to page input.
+ * @attribute LABEL_JUMP
+ * @type string
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.LABEL_JUMP       = 'Jump to page';
 
+
+/**
+ * Internal marker of the data record index associated with the first record
+ * on the current page.  Use setRecordOffset(n) or setPage(n) to modify.
+ * @attribute _recordOffset
+ * @type number
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._recordOffset    = 0;
+
+/**
+ * Object literal containing the HTMLElement nodes of each paging control or
+ * their respresentative containers.  By default, this will have the following
+ * keys:
+ * <ul>
+ * <li>controlContainerNodes - array of HTMLElements</li>
+ * <li>pageLinkContainerNodes - array of HTMLElements</li>
+ * <li>rowsPerPageNodes - array of <code>select</code> HTMLElements</li>
+ * <li>pageInputNodes - array of object literals containing keys
+ * &quot;input&quot; and (optionally) &quot;button&quot;.</li>
+ * </ul>
+ * @attribute _controlNodes
+ * @type object
+ * @public
+ */
 YAHOO.widget.Paginator.prototype._controlNodes    = {};
 
+
+
+
+
+
+
+
+
+
+
 // Instance methods
+
+/**
+ * Initialize the Paginator's attributes (see YAHOO.util.Element class
+ * AttributeProvider).
+ * @method _initConfig
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     // Read only attributes
@@ -181,7 +409,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
     // Constructor config options
 
     /**
-     * REQUIRED. Number of records constituting a <q>page</q>
+     * REQUIRED. Number of records constituting a &quot;page&quot;
      * @property rowsPerPage
      * @type integer
      * @public
@@ -205,8 +433,8 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Update the UI immediately upon interaction.  If false, changeRequest
-     * subscribers or other external code will need to call <code>update</code>
-     * manually to trigger repaint.
+     * subscribers or other external code will need to explicitly set the new
+     * values and call <code>update</code> to trigger repaint.
      * @property updateOnChange
      * @type boolean
      * @default false
@@ -326,7 +554,8 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
     });
 
     /**
-     * Input HTMLElement(s), or id(s) of, to control rows per page setting.
+     * HTMLElement(s) (presumably select nodes), or id(s) of, to control rows
+     * per page setting.
      * @property rowsPerPageNodes
      * @type string|HTMLElement|array
      * @default []
@@ -352,6 +581,13 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
     });
 };
 
+/**
+ * Create this instance's _controlNodes structure, ensuring that the stored
+ * values are in the proper data form--usually arrays of DOM nodes.  Override
+ * this method to create a proper storage space for custom controls.
+ * @method _initControlNodes
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._initControlNodes = function () {
     this._controlNodes = {
         controlContainerNodes : [],
@@ -367,6 +603,12 @@ YAHOO.widget.Paginator.prototype._initControlNodes = function () {
 
 };
 
+/**
+ * Starting point to render the pagination controls to the UI.  Calls, in turn,
+ * createControls, addControlEvents, and placeControls.
+ * @method render
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.render = function () {
     if (this.get('rendered')) {
         return true;
@@ -384,6 +626,13 @@ YAHOO.widget.Paginator.prototype.render = function () {
     this.fireEvent('rendered',this.getState());
 };
 
+/**
+ * Create the DOM nodes for the pagination controls and store them in their
+ * respective arrays in _controlNodes.  Override this to create custom DOM
+ * elements.
+ * @method createControls
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.createControls = function () {
     var id_base = 'yui-pg' + this.get('id');
 
@@ -415,6 +664,21 @@ YAHOO.widget.Paginator.prototype.createControls = function () {
 
 };
 
+/**
+ * Generate a set of page links, including first, previous, next, and last (if
+ * configured), all wrapped in a container node and tucked away in
+ * _controlNodes.pageLinkContainerNodes.
+ * @method _buildPageLinks
+ * @param id_base {string} base string for generated node ids for this instance.
+ * @param containers {Array} (optional) HTMLElement containers to which all
+ * created control nodes will be appended.
+ * @param linkContainers {Array} (optional) HTMLElement containers to wrap the
+ * page links nodes.
+ * @param numLinks {number} number of page links to show.
+ * @param prevNext {boolean} show the links for previous and next page?
+ * @param firstLast {boolean} show the links for first and last page?
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._buildPageLinks = function (id_base,containers,linkContainers,numLinks,prevNext,firstLast) {
     var Dom = YAHOO.util.Dom,
         Pag = YAHOO.widget.Paginator,
@@ -504,6 +768,20 @@ YAHOO.widget.Paginator.prototype._buildPageLinks = function (id_base,containers,
     }
 };
 
+/**
+ * Creates the <code>select</code> HTMLElement nodes for selecting how many rows
+ * make up a page.  Stores the created nodes in _controlNodes.rowsPerPageNodes.
+ * @method _buildRowsPerPageControls
+ * @param id_base {string} base string for generated node ids for this instance.
+ * @param containers {Array} (optional) HTMLElement containers to which all
+ * created control nodes will be appended.
+ * @param controlNodes {Array} (optional) Existing nodes to use (causes this
+ * method to do nothing).
+ * @param sizeOptions {Array(number)} Size values to use when generating option
+ * nodes.
+ * @param currentSize {number} The current number of rows per page.
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._buildRowsPerPageControls = function (id_base,containers,controlNodes,sizeOptions,currentSize) {
     var d = document;
     // Build the page input nodes if containers declared, no nodes currently
@@ -528,6 +806,19 @@ YAHOO.widget.Paginator.prototype._buildRowsPerPageControls = function (id_base,c
     }
 };
 
+/**
+ * Creates the label, text input, and (optional) &quot;go&quot; button for the
+ * Jump-top-page controls.  Stores the nodes in _controlNodes.pageInputNodes.
+ * @method _buildPageInputControls
+ * @param id_base {string} base string for generated node ids for this instance.
+ * @param containers {Array} (optional) HTMLElement containers to which all
+ * created control nodes will be appended.
+ * @param controlNodes {Array} (optional) Existing nodes to use (causes this
+ * method to do nothing).
+ * @param showInputs {boolean} Generate inputs if not provided?
+ * @param showGoButtons {boolean} Generate &quot;go&quot; buttons for inputs.
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._buildPageInputControls = function (id_base,containers,controlNodes,showInputs,showGoButtons) {
     // Build the page input nodes if containers declared, no nodes currently
     var d = document;
@@ -556,6 +847,12 @@ YAHOO.widget.Paginator.prototype._buildPageInputControls = function (id_base,con
     }
 };
 
+/**
+ * Adds the event listeners to the control nodes.
+ * @method addControlEvents
+ * @param controls {object} A reference to this instance's _controlNodes object.
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.addControlEvents = function (controls) {
     var Event = YAHOO.util.Event,
         i,len;
@@ -587,27 +884,39 @@ YAHOO.widget.Paginator.prototype.addControlEvents = function (controls) {
 };
 
 /**
- * Override this method to render controls differently
+ * Places generated controls on the page.  If existing nodes were provided in
+ * the configuration, this method will not alter them.  Generated elements will
+ * be placed in the configured container elements.  Override this method to
+ * place controls in custom locations.
+ * @method placeControls
+ * @param controls {object} A reference to this instance's _controlNodes object.
+ * @public
  */
 YAHOO.widget.Paginator.prototype.placeControls = function (controls) {
     for (var i = 0, len = controls.controlContainerNodes.length; i < len; ++i) {
         var container = controls.controlContainerNodes[i];
         
         if (controls.pageLinkContainerNodes.length) {
-            if (!controls.pageLinkContainerNodes[i].parentNode) {
+            // IE reports widowed elements as having a parentNode of type 11
+            if (!controls.pageLinkContainerNodes[i].parentNode ||
+                 controls.pageLinkContainerNodes[i].parentNode.nodeType === 11) {
                 container.appendChild(controls.pageLinkContainerNodes[i]);
             }
         }
 
         if (controls.rowsPerPageNodes.length) {
-            if (!controls.rowsPerPageNodes[i].parentNode) {
+            // IE reports widowed elements as having a parentNode of type 11
+            if (!controls.rowsPerPageNodes[i].parentNode ||
+                 controls.rowsPerPageNodes[i].parentNode.nodeType === 11) {
                 container.appendChild(controls.rowsPerPageNodes[i]);
             }
         }
 
         if (controls.pageInputNodes.length) {
             var inputSet = controls.pageInputNodes[i];
-            if (!inputSet.input.parentNode) {
+            // IE reports widowed elements as having a parentNode of type 11
+            if (!inputSet.input.parentNode ||
+                 inputSet.input.parentNode.nodeType === 11) {
                 var label = document.createElement('label');
                 label.htmlFor = inputSet.input.id;
                 label.innerHTML = this.LABEL_JUMP;
@@ -621,17 +930,34 @@ YAHOO.widget.Paginator.prototype.placeControls = function (controls) {
     }
 };
 
+/**
+ * Removes controls from the page and unhooks events.
+ * @method destroy
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.destroy = function () {
     // TODO
 };
 
 
+/**
+ * Initialize this instance's CustomEvents.
+ * @method _initEvents
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._initEvents = function () {
     this.createEvent('rendered');
     this.createEvent('updated');
     this.createEvent('changeRequest');
 };
 
+/**
+ * Handler function that receives the click event from page links and either
+ * calls update or fires a changeRequest event (per the configuration).
+ * @method _pageClickHandler
+ * @param e {ClickEvent} Click event that occurred on the page link container.
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._pageClickHandler = function (e) {
     var Event = YAHOO.util.Event,
         t     = Event.getTarget(e),
@@ -677,6 +1003,13 @@ YAHOO.widget.Paginator.prototype._pageClickHandler = function (e) {
     }
 };
 
+/**
+ * Evaluate the clicked page link node to determine which page it represents.
+ * Override this method if you are rendering custom text into the page links.
+ * @method _determinePage
+ * @param el {HTMLElement} the link element that received the click event.
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._determinePage = function (el) {
     if (el && el.nodeType === 1) {
         return parseInt(el.innerHTML,10) || 1;
@@ -684,6 +1017,12 @@ YAHOO.widget.Paginator.prototype._determinePage = function (el) {
     return 1;
 };
 
+/**
+ * Handles the change event for rows-per-page <code>select</code> HTMLElements.
+ * @method _rowsPerPageChangeHandler
+ * @param e {ChangeEvent} Change event fired by the rows-per-page HTMLElement.
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._rowsPerPageChangeHandler = function (e) {
     var sel            = YAHOO.util.Event.getTarget(e),
         newRowsPerPage = parseInt(sel.options[sel.selectedIndex].value,10);
@@ -697,6 +1036,12 @@ YAHOO.widget.Paginator.prototype._rowsPerPageChangeHandler = function (e) {
     }
 };
 
+/**
+ * Handles the click on the jump-to-page &quot;go&quot; button HTMLElement.
+ * @method _jumpToPageButtonHandler
+ * @param e {ClickEvent} Click event fired by the button HTMLElement.
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._jumpToPageButtonHandler = function (e) {
     var button = YAHOO.util.Event.getTarget(e);
     if (button && button.type === 'button' && /(.*-jump\d+)-go$/.test(button.id)) {

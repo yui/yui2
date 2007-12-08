@@ -491,21 +491,25 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
      * @attribute paginationEventHandler
-     * @description A function that receives the requestChange event from the
-     * configured paginator if that paginator is an instance of
-     * YAHOO.widget.Paginator.  The function will receive two parameters, an
-     * object literal desicribing the proposed pagination state and a reference
-     * to the DataTable instance.
+     * @description For use with YAHOO.widget.Paginator pagination.  A
+     * handler function that receives the requestChange event from the
+     * configured paginator.  The handler method will be passed these
+     * parameters:
+     * <ol>
+     * <li>oState {Object} - an object literal describing the requested
+     * pagination state</li>
+     * <li>oSelf {DataTable} - The DataTable instance.</li>
+     * </ol>
+     * 
      * For pagination through dynamic or server side data, assign
      * YAHOO.widget.DataTable.handleDataSourcePagination or your own custom
-     * handler.  You may also need to set a custom handler to the
-     * paginationDataProcessor attribute.
-     * @type function
+     * handler.
+     * @type {function|Object}
      * @default YAHOO.widget.DataTable.handleSimplePagination
      */
     this.setAttributeConfig("paginationEventHandler", {
-        value : YAHOO.widget.DataTable.handleSimplePagination,
-        validator : YAHOO.lang.isFunction
+        value     : YAHOO.widget.DataTable.handleSimplePagination,
+        validator : YAHOO.lang.isObject
     });
 
     /**
@@ -2733,7 +2737,7 @@ YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
 
         var callback = {
             success : self.onDataReturnSetPageData,
-            failure : self.onDataFailure,
+            failure : self.onDataReturnSetPageData,
             argument : {
                 datatable : self,
                 pagination : oState
@@ -8608,14 +8612,23 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
     }
 };
 
-YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, oPayload) {
+/**
+ * Receives reponse from DataSource and populates the RecordSet with the
+ * results.
+ * @method onDataReturnSetPageData
+ * @param oRequest {MIXED} Original generated request.
+ * @param oResponse {Object} Response object.
+ * @param bError {Boolean} (optional) True if there was a data error.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
+ */
+YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, bError, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(oRequest, oResponse);
 
     // Data ok to set
-    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
+    if(ok && oResponse && !(oResponse.error || bError) && YAHOO.lang.isArray(oResponse.results)) {
         var oState = oPayload.pagination;
 
         if (oState) {
@@ -8632,13 +8645,9 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
         this.refreshView();
     }
     // Error
-    else if(ok && oResponse.error) {
+    else if(ok && (oResponse.error || bError)) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
-};
-
-YAHOO.widget.DataTable.prototype.onDataFailure = function (oRequest,oResponse,oPayload) {
-    alert("Oh Noes!");
 };
 
 
