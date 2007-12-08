@@ -1,10 +1,10 @@
 /* foundational CSS */
 
 /* resizeable columns */
-.yui-dt-resizeable {
+th.yui-dt-resizeable .yui-dt-liner {
     overflow:hidden;
 }
-th .yui-dt-liner {
+th.yui-dt-resizeable .yui-dt-liner {
     position:relative;
 }
 .yui-dt-resizer {

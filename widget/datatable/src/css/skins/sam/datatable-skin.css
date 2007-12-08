@@ -1,5 +1,5 @@
 /* basic skin styles */
-.yui-skin-sam .yui-dt-scrollable {border:1px solid #7F7F7F;} /* outer border */ /*TODO: redo outer border styles for new markup */
+.yui-skin-sam .yui-dt {border:1px solid #7F7F7F;} /* outer border */
 .yui-skin-sam .yui-dt table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;}
 .yui-skin-sam .yui-dt thead {border-spacing:0;} /* for safari bug */
 .yui-skin-sam .yui-dt caption {padding-bottom:1em;text-align:left;}
@@ -13,6 +13,7 @@
 }
 .yui-skin-sam .yui-dt th {
     margin:0;padding:0;
+    border:none;
     border-right:1px solid #CBCBCB;/*  inner column border */
 }
 .yui-skin-sam .yui-dt-liner {
@@ -24,6 +25,7 @@
 }
 .yui-skin-sam .yui-dt td {
     margin:0;padding:0;
+    border:none;
     border-right:1px solid #CBCBCB; /* inner column border */
     text-align:left;
 }
