@@ -2,10 +2,6 @@
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
  *
- * @module paginator
- * @requires yahoo, dom, event, element
- * @title Paginator widget
- *
  * @namespace YAHOO.widget
  * @class Paginator
  * @uses YAHOO.util.EventProvider, YAHOO.util.AttributeProvider
@@ -61,17 +57,17 @@ YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
 YAHOO.widget.Paginator.id = 0;
 
 /**
- * Used to identify unset, optional configurations, or used explicitly in the
+ * @description Used to identify unset, optional configurations, or used explicitly in the
  * case of totalRecords to indicate unlimited pagination.
  * @static
  * @property VALUE_UNLIMITED
  * @public
- * @readonly
+ * @final
  */
 YAHOO.widget.Paginator.VALUE_UNLIMITED = -1;
 
 /**
- * Class assigned to the (optional) element(s) containing pagination controls.
+ * @description Class assigned to the (optional) element(s) containing pagination controls.
  * @static
  * @property CLASS_CONTAINER
  * @public
@@ -79,7 +75,7 @@ YAHOO.widget.Paginator.VALUE_UNLIMITED = -1;
 YAHOO.widget.Paginator.CLASS_CONTAINER = 'yui-pg-container';
 
 /**
- * Class assigned to the element(s) containing pagination links, including
+ * @description Class assigned to the element(s) containing pagination links, including
  * first, previous, next, last and any page links.
  * @static
  * @property CLASS_PAGE_LINKS
@@ -88,7 +84,7 @@ YAHOO.widget.Paginator.CLASS_CONTAINER = 'yui-pg-container';
 YAHOO.widget.Paginator.CLASS_PAGE_LINKS = 'yui-pg-page-links';
 
 /**
- * Class assigned to the first, previous, next, or last links when no such
+ * @description Class assigned to the first, previous, next, or last links when no such
  * such action is possible.
  * @static
  * @property CLASS_DISABLED
@@ -97,7 +93,7 @@ YAHOO.widget.Paginator.CLASS_PAGE_LINKS = 'yui-pg-page-links';
 YAHOO.widget.Paginator.CLASS_DISABLED   = 'yui-pg-disabled';
 
 /**
- * Class assigned to the current page's page link element.
+ * @description Class assigned to the current page's page link element.
  * @static
  * @property CLASS_SELECTED
  * @public
@@ -105,7 +101,7 @@ YAHOO.widget.Paginator.CLASS_DISABLED   = 'yui-pg-disabled';
 YAHOO.widget.Paginator.CLASS_SELECTED   = 'yui-pg-selected';
 
 /**
- * Class assigned to the page number link elements.
+ * @description Class assigned to the page number link elements.
  * @static
  * @property CLASS_PAGE
  * @public
@@ -113,7 +109,7 @@ YAHOO.widget.Paginator.CLASS_SELECTED   = 'yui-pg-selected';
 YAHOO.widget.Paginator.CLASS_PAGE       = 'yui-pg-page';
 
 /**
- * Class assigned to the link to the first page.
+ * @description Class assigned to the link to the first page.
  * @static
  * @property CLASS_FIRST
  * @public
@@ -121,7 +117,7 @@ YAHOO.widget.Paginator.CLASS_PAGE       = 'yui-pg-page';
 YAHOO.widget.Paginator.CLASS_FIRST      = 'yui-pg-first';
 
 /**
- * Class assigned to the link to the last page.
+ * @description Class assigned to the link to the last page.
  * @static
  * @property CLASS_LAST
  * @public
@@ -129,7 +125,7 @@ YAHOO.widget.Paginator.CLASS_FIRST      = 'yui-pg-first';
 YAHOO.widget.Paginator.CLASS_LAST       = 'yui-pg-last';
 
 /**
- * Class assigned to the link to the previous page.
+ * @description Class assigned to the link to the previous page.
  * @static
  * @property CLASS_PREVIOUS
  * @public
@@ -137,7 +133,7 @@ YAHOO.widget.Paginator.CLASS_LAST       = 'yui-pg-last';
 YAHOO.widget.Paginator.CLASS_PREVIOUS   = 'yui-pg-previous';
 
 /**
- * Class assigned to the link to the next page.
+ * @description Class assigned to the link to the next page.
  * @static
  * @property CLASS_NEXT
  * @public
@@ -145,7 +141,7 @@ YAHOO.widget.Paginator.CLASS_PREVIOUS   = 'yui-pg-previous';
 YAHOO.widget.Paginator.CLASS_NEXT       = 'yui-pg-next';
 
 /**
- * Class assigned to the rows-per-page select element(s).
+ * @description Class assigned to the rows-per-page select element(s).
  * @static
  * @property CLASS_PAGE_SIZE_OPTIONS
  * @public
@@ -153,7 +149,7 @@ YAHOO.widget.Paginator.CLASS_NEXT       = 'yui-pg-next';
 YAHOO.widget.Paginator.CLASS_PAGE_SIZE_OPTIONS = 'yui-pg-sizes';
 
 /**
- * Class assigned to the input field to jump to a specific page.
+ * @description Class assigned to the input field to jump to a specific page.
  * @static
  * @property CLASS_PAGE_INPUT
  * @public
@@ -161,7 +157,7 @@ YAHOO.widget.Paginator.CLASS_PAGE_SIZE_OPTIONS = 'yui-pg-sizes';
 YAHOO.widget.Paginator.CLASS_PAGE_INPUT        = 'yui-pg-jump';
 
 /**
- * Class assigned to the (optional) button to &quot;submit&quot; the jump to
+ * @description Class assigned to the (optional) button to &quot;submit&quot; the jump to
  * page request.
  * @static
  * @property CLASS_PAGE_INPUT_BUTTON
@@ -170,7 +166,7 @@ YAHOO.widget.Paginator.CLASS_PAGE_INPUT        = 'yui-pg-jump';
 YAHOO.widget.Paginator.CLASS_PAGE_INPUT_BUTTON = 'yui-pg-jump-go';
 
 /**
- * Regular expression used in event delegation to determine which type of
+ * @description Regular expression used in event delegation to determine which type of
  * page link was clicked (page, first, previous, next, last).
  * @static
  * @property hasClassRE
@@ -285,48 +281,48 @@ YAHOO.widget.Paginator._toNodeArray = function (list) {
 // Instance members
 
 /**
- * HTML label placed in the link to the first page.
- * @attribute LABEL_FIRST
+ * @description HTML label placed in the link to the first page.
+ * @property LABEL_FIRST
  * @type string
  * @public
  */
 YAHOO.widget.Paginator.prototype.LABEL_FIRST      = '&lt;&lt; first';
 
 /**
- * HTML label placed in the link to the previous page.
- * @attribute LABEL_PREVIOUS
+ * @description HTML label placed in the link to the previous page.
+ * @property LABEL_PREVIOUS
  * @type string
  * @public
  */
 YAHOO.widget.Paginator.prototype.LABEL_PREVIOUS   = '&lt; prev';
 
 /**
- * HTML label placed in the link to the next page.
- * @attribute LABEL_NEXT
+ * @description HTML label placed in the link to the next page.
+ * @property LABEL_NEXT
  * @type string
  * @public
  */
 YAHOO.widget.Paginator.prototype.LABEL_NEXT       = 'next &gt;';
 
 /**
- * HTML label placed in the link to the last page.
- * @attribute LABEL_LAST
+ * @description HTML label placed in the link to the last page.
+ * @property LABEL_LAST
  * @type string
  * @public
  */
 YAHOO.widget.Paginator.prototype.LABEL_LAST       = 'last &gt;&gt;';
 
 /**
- * Text label placed in the button to jump to a page.
- * @attribute LABEL_GO_BUTTON
+ * @description Text label placed in the button to jump to a page.
+ * @property LABEL_GO_BUTTON
  * @type string
  * @public
  */
 YAHOO.widget.Paginator.prototype.LABEL_GO_BUTTON  = 'go';
 
 /**
- * HTML placed inside the label element associated with the jump to page input.
- * @attribute LABEL_JUMP
+ * @description HTML placed inside the label element associated with the jump to page input.
+ * @property LABEL_JUMP
  * @type string
  * @public
  */
@@ -334,16 +330,16 @@ YAHOO.widget.Paginator.prototype.LABEL_JUMP       = 'Jump to page';
 
 
 /**
- * Internal marker of the data record index associated with the first record
+ * @description Internal marker of the data record index associated with the first record
  * on the current page.  Use setRecordOffset(n) or setPage(n) to modify.
- * @attribute _recordOffset
+ * @property _recordOffset
  * @type number
  * @private
  */
 YAHOO.widget.Paginator.prototype._recordOffset    = 0;
 
 /**
- * Object literal containing the HTMLElement nodes of each paging control or
+ * @description Object literal containing the HTMLElement nodes of each paging control or
  * their respresentative containers.  By default, this will have the following
  * keys:
  * <ul>
@@ -353,7 +349,7 @@ YAHOO.widget.Paginator.prototype._recordOffset    = 0;
  * <li>pageInputNodes - array of object literals containing keys
  * &quot;input&quot; and (optionally) &quot;button&quot;.</li>
  * </ul>
- * @attribute _controlNodes
+ * @property _controlNodes
  * @type object
  * @public
  */
@@ -385,7 +381,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
      * Unique id assigned to this instance
      * @property id
      * @type integer
-     * @readonly
+     * @final
      * @public
      */
     this.setAttributeConfig('id', {
@@ -397,7 +393,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
      * Indicator of whether the DOM nodes have been initially created
      * @property rendered
      * @type boolean
-     * @readonly
+     * @final
      * @public
      */
     this.setAttributeConfig('rendered', {
@@ -1064,10 +1060,21 @@ YAHOO.widget.Paginator.prototype._jumpToPageButtonHandler = function (e) {
     }
 };
 
+/**
+ * Handles the keyup event on the jump-to-page input.  Not yet implemented.
+ * @method _jumpToPageInputHandler
+ * @param e {KeyUpEvent} Keyup event on the text input.
+ * @private
+ */
 YAHOO.widget.Paginator.prototype._jumpToPageInputHandler = function (e) {
     // TODO: add KeyListener and send change request on pause or enter
 };
 
+/**
+ * Regenerate the UI to reflect any changed settings.
+ * @method update
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.update = function () {
     if (!this.get('rendered')) {
         return this.render();
