@@ -379,7 +379,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Unique id assigned to this instance
-     * @property id
+     * @attribute id
      * @type integer
      * @final
      * @public
@@ -391,7 +391,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Indicator of whether the DOM nodes have been initially created
-     * @property rendered
+     * @attribute rendered
      * @type boolean
      * @final
      * @public
@@ -406,7 +406,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * REQUIRED. Number of records constituting a &quot;page&quot;
-     * @property rowsPerPage
+     * @attribute rowsPerPage
      * @type integer
      * @public
      */
@@ -417,7 +417,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Total number of records to paginate through
-     * @property totalRecords
+     * @attribute totalRecords
      * @type integer
      * @default YAHOO.widget.Paginator.VALUE_UNLIMITED
      * @public
@@ -431,7 +431,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
      * Update the UI immediately upon interaction.  If false, changeRequest
      * subscribers or other external code will need to explicitly set the new
      * values and call <code>update</code> to trigger repaint.
-     * @property updateOnChange
+     * @attribute updateOnChange
      * @type boolean
      * @default false
      * @public
@@ -444,7 +444,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Array of available page sizes
-     * @property rowsPerPageOptions
+     * @attribute rowsPerPageOptions
      * @type Array of integers
      * @public
      */
@@ -455,7 +455,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Number of page links to display
-     * @property pageLinks
+     * @attribute pageLinks
      * @type integer
      * @default YAHOO.widget.Paginator.VALUE_UNLIMITED
      * @public
@@ -467,7 +467,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Include links to previous page and next page in page links
-     * @property showNextPreviousLinks
+     * @attribute showNextPreviousLinks
      * @type boolean
      * @default true
      * @public
@@ -479,7 +479,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Include links to first page and last page in page links
-     * @property showFirstLastLinks
+     * @attribute showFirstLastLinks
      * @type boolean
      * @default true
      * @public
@@ -491,7 +491,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Flag to show a Jump to page [ ] input
-     * @property showPageInput
+     * @attribute showPageInput
      * @type boolean
      * @default false
      * @public
@@ -504,7 +504,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
     /**
      * Include &quot;go&quot; buttons after page inputs.  This option works in
      * conjunction with showPageInput.
-     * @property showPageInputGoButton
+     * @attribute showPageInputGoButton
      * @type boolean
      * @default true
      * @public
@@ -516,7 +516,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Page to display on initial paint
-     * @property initialPage
+     * @attribute initialPage
      * @type integer
      * @public
      */
@@ -527,7 +527,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Container node(s) in which to render pagination controls.
-     * @property controlContainerNodes
+     * @attribute controlContainerNodes
      * @type string|HTMLElement|array
      * @default []
      * @public
@@ -539,7 +539,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
 
     /**
      * Container node(s) in which to render page links.
-     * @property pageLinkContainerNodes
+     * @attribute pageLinkContainerNodes
      * @type string|HTMLElement|array
      * @default []
      * @public
@@ -552,7 +552,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
     /**
      * HTMLElement(s) (presumably select nodes), or id(s) of, to control rows
      * per page setting.
-     * @property rowsPerPageNodes
+     * @attribute rowsPerPageNodes
      * @type string|HTMLElement|array
      * @default []
      * @public
@@ -566,7 +566,7 @@ YAHOO.widget.Paginator.prototype._initConfig = function () {
      * Input HTMLElement(s), or id(s) of, to control jumping to a specific page.
      * Value can take the form of an array of ids, HTMLElement nodes, or object
      * literals in the form {"input": id|HTMLElement, "button": id|HTMLElement}.
-     * @property pageInputNodes
+     * @attribute pageInputNodes
      * @type string|HTMLElement|object|array
      * @default []
      * @public
@@ -1117,7 +1117,13 @@ YAHOO.widget.Paginator.prototype.update = function () {
 };
 
 
-
+/**
+ * Are there configured or generated HTMLElement nodes for any of the available
+ * pagination controls?
+ * @method hasControls
+ * @returns boolean
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.hasControls = function () {
     if (this.getPageLinkContainerNodes().length ||
         this.getRowsPerPageNodes().length ||
@@ -1127,6 +1133,13 @@ YAHOO.widget.Paginator.prototype.hasControls = function () {
 
     return false;
 };
+
+/**
+ * Returns a reference to the instance's collection of HTMLElement nodes.
+ * @method getControlNodes
+ * @returns boolean
+ * @public
+ */
 YAHOO.widget.Paginator.prototype.getControlNodes = function () {
     return this._controlNodes;
 };
