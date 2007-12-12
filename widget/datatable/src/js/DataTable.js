@@ -3,8 +3,8 @@
  * displaying tabular data across A-grade browsers.
  *
  * @module datatable
- * @requires yahoo, dom, event, datasource
- * @optional dragdrop
+ * @requires yahoo, dom, event, element, datasource
+ * @optional connection, dragdrop
  * @title DataTable Widget
  * @beta
  */
@@ -434,9 +434,6 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                            }
                        }
                     }
-
-                    // Show these options in the dropdown
-                    var dropdownOptions = oPaginator.dropdownOptions || [];
 
                     for(i=0; i<aContainerEls.length; i++) {
                         // Create one SELECT element per Paginator container
@@ -1180,7 +1177,13 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
     // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
     // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
     // strange unexpected things as the user clicks on buttons and other controls.
-    setTimeout(function() { el.focus(); },0);
+    setTimeout(function() {
+        try {
+            el.focus();
+        }
+        catch(e) {
+        }
+    },0);
 };
 
 /**
@@ -1477,7 +1480,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
-    var i,oColumn, colId;
+    var i, oColumn;
     var oColumnSet = this._oColumnSet;
     this._sFirstLabelLinkId = null;
 
@@ -1582,7 +1585,6 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
 YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,col, bA11y) {
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
-    var index = this._nIndex;
     var colKey = oColumn.getKey();
     var colId = oColumn.getId();
     elTheadCell.yuiColumnKey = colKey;
@@ -1782,7 +1784,6 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
             (index >= (this._elTbody.rows.length))) ? true : false;
 
     var oColumnSet = this._oColumnSet;
-    var oRecordSet = this._oRecordSet;
     var isSortedBy = this.get("sortedBy");
     var sortedColKeyIndex  = null;
     var sortedDir, newClass;
@@ -2515,27 +2516,27 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
     }
 
     while(elTarget && (elTag != "thead")) {
-            switch(elTag) {
-                case "body":
-                    break;
-                case "span":
-                    if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
-                        oSelf.fireEvent("headerLabelClickEvent",{target:elTarget,event:e});
-                    }
-                    break;
-                case "th":
-                    oSelf.fireEvent("headerCellClickEvent",{target:elTarget,event:e});
-                    break;
-                case "tr":
-                    oSelf.fireEvent("headerRowClickEvent",{target:elTarget,event:e});
-                    break;
-                default:
-                    break;
-            }
-            elTarget = elTarget.parentNode;
-            if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
-            }
+        switch(elTag) {
+            case "body":
+                break;
+            case "span":
+                if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
+                    oSelf.fireEvent("headerLabelClickEvent",{target:elTarget,event:e});
+                }
+                break;
+            case "th":
+                oSelf.fireEvent("headerCellClickEvent",{target:elTarget,event:e});
+                break;
+            case "tr":
+                oSelf.fireEvent("headerRowClickEvent",{target:elTarget,event:e});
+                break;
+            default:
+                break;
+        }
+        elTarget = elTarget.parentNode;
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
     }
     oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
@@ -3485,7 +3486,7 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
     this._oRecordSet.reset();
 
     // Add data to RecordSet
-    var records = this._oRecordSet.addRecords(oData);
+    this._oRecordSet.addRecords(oData);
 
     // Clear selections
     this._unselectAllTrEls();
@@ -5827,9 +5828,6 @@ YAHOO.widget.DataTable.prototype._handleSingleSelectionByKey = function(e) {
 
         YAHOO.util.Event.stopEvent(e);
 
-        // Validate anchor
-        var oAnchor = this._getSelectionAnchor(oTrigger);
-
         // Determine the new row to select
         var elNew;
         if(nKey == 38) { // arrow up
@@ -6330,7 +6328,7 @@ YAHOO.widget.DataTable.prototype._handleCellRangeSelectionByMouse = function(oAr
         var oAnchor = this._getSelectionAnchor();
 
         var allRows = this.getTbodyEl().rows;
-        var startIndex, endIndex, currentRow, i, j;
+        var currentRow, i, j;
 
         // Both SHIFT and CTRL
         if(bSHIFT && bCTRL) {
@@ -6618,7 +6616,7 @@ YAHOO.widget.DataTable.prototype._handleCellRangeSelectionByKey = function(e) {
         // Validate anchor
         var oAnchor = this._getSelectionAnchor(oTrigger);
 
-        var i, startIndex, endIndex, elNewRow, elNew;
+        var i, elNewRow, elNew;
         var allRows = this.getTbodyEl().rows;
         var elThisRow = oTrigger.el.parentNode;
 
@@ -6850,10 +6848,6 @@ YAHOO.widget.DataTable.prototype._handleSingleCellSelectionByKey = function(e) {
             return null;
         }
 
-
-        // Validate anchor
-        var oAnchor = this._getSelectionAnchor(oTrigger);
-
         // Determine the new cell to select
         var elNew;
         if(nKey == 40) { // Arrow down
@@ -7002,7 +6996,9 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         this.fireEvent("rowSelectEvent", {record:oRecord, el:elRow});
         YAHOO.log("Selected " + elRow, "info", this.toString());
     }
-    YAHOO.log("Could not select " + row, "warn", this.toString());
+    else {
+        YAHOO.log("Could not select " + row, "warn", this.toString());
+    }
 };
 // Backward compatibility
 YAHOO.widget.DataTable.prototype.select = function(els) {
@@ -8357,9 +8353,7 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventHighlightRow = function(oArgs) {
-    var evt = oArgs.event;
-    var elTarget = oArgs.target;
-    this.highlightRow(elTarget);
+    this.highlightRow(oArgs.target);
 };
 
 /**
@@ -8370,9 +8364,7 @@ YAHOO.widget.DataTable.prototype.onEventHighlightRow = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventUnhighlightRow = function(oArgs) {
-    var evt = oArgs.event;
-    var elTarget = oArgs.target;
-    this.unhighlightRow(elTarget);
+    this.unhighlightRow(oArgs.target);
 };
 
 /**
@@ -8383,9 +8375,7 @@ YAHOO.widget.DataTable.prototype.onEventUnhighlightRow = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
-    var evt = oArgs.event;
-    var elTarget = oArgs.target;
-    this.highlightCell(elTarget);
+    this.highlightCell(oArgs.target);
 };
 
 /**
@@ -8396,9 +8386,7 @@ YAHOO.widget.DataTable.prototype.onEventHighlightCell = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
-    var evt = oArgs.event;
-    var elTarget = oArgs.target;
-    this.unhighlightCell(elTarget);
+    this.unhighlightCell(oArgs.target);
 };
 
 /**
@@ -8409,9 +8397,7 @@ YAHOO.widget.DataTable.prototype.onEventUnhighlightCell = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
-    var evt = oArgs.event;
     var target = oArgs.target;
-    var elTag = target.tagName.toLowerCase();
 
     var elCell = this.getTdEl(target);
     if(elCell && elCell.yuiColumnKey) {
@@ -8431,9 +8417,7 @@ YAHOO.widget.DataTable.prototype.onEventFormatCell = function(oArgs) {
  * @param oArgs.target {HTMLElement} Target element.
  */
 YAHOO.widget.DataTable.prototype.onEventShowCellEditor = function(oArgs) {
-    var evt = oArgs.event;
     var target = oArgs.target;
-    var elTag = target.tagName.toLowerCase();
 
     var elCell = this.getTdEl(target);
     if(elCell) {

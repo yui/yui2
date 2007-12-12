@@ -127,7 +127,6 @@ YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
     var nodeDepth = -1;
 
     // Internal recursive function to defined Column instances
-    var oSelf = this;
     var parseColumns = function(nodeList, parent) {
         // One level down
         nodeDepth++;
@@ -1013,7 +1012,6 @@ if(YAHOO.util.DD) {
  * @method resetResizerEl
  */
 YAHOO.util.ColumnResizer.prototype.resetResizerEl = function() {
-    var elResizer = YAHOO.util.Dom.get(this.handleElId);
     var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
     resizerStyle.left = "auto";
     resizerStyle.right = 0;
