@@ -7578,6 +7578,7 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
             // Hook to customize the UI
             this.doBeforeShowCellEditor(this._oCellEditor);
 
+            //TODO: This is temporarily up here due so elements can be focused
             // Show Editor
             elContainer.style.display = "";
 
@@ -7592,6 +7593,9 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                 if((e.keyCode == 27)) {
                     oSelf.cancelCellEditor();
                     oSelf.focusTbodyEl();
+                }
+                else {
+                    oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
                 }
             }, this);
 
