@@ -1,8 +1,19 @@
 /* basic skin styles */
-.yui-skin-sam .yui-dt {border:1px solid #7F7F7F;} /* outer border */
-.yui-skin-sam .yui-dt table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;}
+.yui-skin-sam .yui-dt table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;border-spacing:0;}
 .yui-skin-sam .yui-dt thead {border-spacing:0;} /* for safari bug */
 .yui-skin-sam .yui-dt caption {padding-bottom:1em;text-align:left;}
+
+/*outer border */
+.yui-skin-sam .yui-dt-hd table {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
+.yui-skin-sam .yui-dt-bd table {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
+
+.yui-skin-sam .yui-dt-scrollable .yui-dt-hd table {border:0px;}
+.yui-skin-sam .yui-dt-scrollable .yui-dt-bd table {border:0px;}
+.yui-skin-sam .yui-dt-scrollable .yui-dt-hd {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
+.yui-skin-sam .yui-dt-scrollable .yui-dt-bd {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
+
+
+
 .yui-skin-sam .yui-dt th {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
 }

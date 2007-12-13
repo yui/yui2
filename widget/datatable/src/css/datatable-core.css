@@ -33,6 +33,7 @@ th.yui-dt-resizeable .yui-dt-liner {
     overflow:hidden;
     position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
 } 
+/* TODO: set via JS */
 .yui-dt-scrollable th.yui-dt-last .yui-dt-liner {
     padding-right:27px; /* for scrollbar */
 }

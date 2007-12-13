@@ -31,15 +31,15 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     this._sName = "instance" + this._nIndex;
     this.id = "yui-dt"+this._nIndex;
 
-    // Initialize container element
-    this._initContainerEl(elContainer);
-    if(!this._elContainer) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid container element", "error", this.toString());
-        return;
-    }
-
     // Initialize configs
     this._initConfigs(oConfigs);
+
+    // Initialize DataSource
+    this._initDataSource(oDataSource);
+    if(!this._oDataSource) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
+        return;
+    }
 
     // Initialize ColumnSet
     this._initColumnSet(aColumnDefs);
@@ -55,51 +55,39 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         return;
     }
 
-    // Initialize DataSource
-    this._initDataSource(oDataSource);
-    if(!this._oDataSource) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid DataSource", "error", this.toString());
+    // Initialize container element
+    this._initContainerEl(elContainer);
+    if(!this._elContainer) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid container element", "error", this.toString());
         return;
     }
 
-    // Progressive enhancement special case
-    if(this._oDataSource.dataType == YAHOO.util.DataSource.TYPE_HTMLTABLE) {
-        this._oDataSource.sendRequest(this.get("initialRequest"), this._onDataReturnEnhanceTable, this);
+    // Initialize the rest of the DOM elements
+    this._initTableEl();
+    if(!this._elContainer || !this._elThead || !this._elTbody) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        return;
+    }
+
+    // Call Element's constructor after DOM elements are created
+    // but *before* table is populated with data
+    YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+
+    //HACK: Set the paginator values.  Attribute doesn't afford for merging
+    // obj value's keys.  It's all or nothing.  Merge in provided keys.
+    if(this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
+        this.updatePaginator(this._oConfigs.paginator);
+    }
+
+    // Send out for initial data in an asynchronous request
+    var initialRequest = this.get('initialRequest');
+    var noInitialData = this.get('noInitialData');
+
+    if(!noInitialData) {
+        this._oDataSource.sendRequest(initialRequest, this.onDataReturnInitializeTable, this);
     }
     else {
-        // Initialize DOM elements
-        this._initTableEl();
-        if(!this._elContainer || !this._elThead || !this._elTbody) {
-            YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
-            return;
-        }
-
-        // Call Element's constructor after DOM elements are created
-        // but *before* table is populated with data
-        YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
-
-        //HACK: Set the paginator values.  Attribute doesn't afford for merging
-        // obj value's keys.  It's all or nothing.  Merge in provided keys.
-        if(this._oConfigs && this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
-            this.updatePaginator(this._oConfigs.paginator);
-        }
-
-        // Use the configured initial request or generate the initial request
-        var initialRequest = this.get('initialRequest');
-        if (!initialRequest || /^\s*$/.test(initialRequest)) {
-            var generateRequest = this.get('generateRequest'),
-                state = {},
-                oPaginator = this.get('paginator');
-            
-            if (oPaginator && oPaginator instanceof YAHOO.widget.Paginator) {
-                state.pagination = oPaginator.getState();
-            }
-
-            initialRequest = generateRequest(state,this);
-        }
-
-        // Send out for data in an asynchronous request
-        this._oDataSource.sendRequest(initialRequest, this.onDataReturnInitializeTable, this);
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
 
     // Initialize inline Cell editing
@@ -185,13 +173,23 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
     * @attribute initialRequest
-    * @description Defines the initial request that gets sent to the DataSource.
-    * @type String
-    * @deprecated Use generateRequest attribute
+    * @description Defines the initial request that gets sent to the DataSource
+    * during initialization.
+    * @type Object
+    * @default null
     */
     this.setAttributeConfig("initialRequest", {
-        value: "",
-        validator: YAHOO.lang.isString
+        value: null
+    });
+
+    /**
+    * @attribute noInitialData
+    * @description If true, no data will be requested during construction.
+    * @type Boolean
+    * @default false
+    */
+    this.setAttributeConfig("noInitialData", {
+        value: false
     });
 
     /**
@@ -548,9 +546,6 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                 //TODO: conf height?
                 YAHOO.util.Dom.addClass(this._elContainer,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
 
-                // Unset snapped width
-                this._elContainer.style.width = "";
-
                 // Set explicit padding
                 if(!YAHOO.env.ua.ie) {
                     this._elContainer.style.paddingBottom = this._elThead.offsetHeight + "px";
@@ -559,9 +554,6 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
             else {
                 YAHOO.util.Dom.removeClass(this._elContainer,YAHOO.widget.DataTable.CLASS_SCROLLABLE);
 
-                // Snap container to width
-                this._snapContainerWidth();
-                
                 // Unset explicit padding
                 if(!YAHOO.env.ua.ie) {
                     this._elContainer.style.paddingBottom = "";
@@ -1187,19 +1179,6 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
 };
 
 /**
- * Snaps outer container width to TABLE width for nonscrollable DataTables, for
- * whenever TABLE width changes to keep outer border the correct width.
- *
- * @method _snapContainerWidth
- * @private
- */
-YAHOO.widget.DataTable.prototype._snapContainerWidth = function() {
-    if(!this.get("scrollable")) {
-        this._elContainer.style.width = this._elTbody.parentNode.offsetWidth + "px";
-    }
-};
-
-/**
  * Syncs up widths of THs and TDs across all Columns.
  *
  * @method _syncColWidths
@@ -1231,6 +1210,9 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function() {
                         oSelf.setColumnWidth(allKeys[i],nNewWidth);
                     }
                 }
+            }
+            else {
+                oSelf.getTbodyEl().parentNode.style.width = oSelf.getTheadEl().parentNode.offsetWidth + "px";
             }
         }
     }, 0);
@@ -1265,6 +1247,10 @@ YAHOO.widget.DataTable.prototype._initContainerEl = function(elContainer) {
 
     elContainer = YAHOO.util.Dom.get(elContainer);
     if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
+        // Esp for progressive enhancement
+        YAHOO.util.Event.purgeElement(elContainer, true);
+        elContainer.innerHTML = "";
+
         YAHOO.util.Dom.addClass(elContainer,"yui-dt");
         
         // Container for header elements
@@ -1299,6 +1285,9 @@ YAHOO.widget.DataTable.prototype._initConfigs = function(oConfigs) {
             " details", "warn", this.toString());
         }
         this._oConfigs = oConfigs;
+    }
+    else {
+        this._oConfigs = {};
     }
 };
 
@@ -3689,6 +3678,7 @@ YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) 
     if(YAHOO.lang.isString(sClassName)) {
         YAHOO.util.Dom.addClass(elCell, sClassName);
     }
+    this.getMsgTbodyEl().parentNode.style.width = this.getTheadEl().parentNode.offsetWidth + "px";
     this._elMsgTbody.style.display = "";
     this.fireEvent("tableMsgShowEvent", {html:sHTML, className:sClassName});
     YAHOO.log("DataTable showing message: " + sHTML, "info", this.toString());
@@ -4077,8 +4067,6 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bOve
         }
         elTheadCell.style.width = sWidth;
         elTheadCell.firstChild.style.width = sWidth;
-
-        this._snapContainerWidth();
 
         return;
     }
@@ -8456,56 +8444,6 @@ YAHOO.widget.DataTable.prototype.onEventSaveCellEditor = function(oArgs) {
  */
 YAHOO.widget.DataTable.prototype.onEventCancelCellEditor = function(oArgs) {
     this.cancelCellEditor();
-};
-
-/**
- * Callback function for creating a progressively enhanced DataTable first
- * receives data from DataSource and populates the RecordSet, then initializes
- * DOM elements.
- *
- * @method _onDataReturnEnhanceTable
- * @param sRequest {String} Original request.
- * @param oResponse {Object} Response object.
- * @param bError {Boolean} (optional) True if there was a data error.
- * @private
- */
-YAHOO.widget.DataTable.prototype._onDataReturnEnhanceTable = function(sRequest, oResponse) {
-    // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
-
-    // Data ok to populate
-    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        // Update RecordSet
-        this._oRecordSet.addRecords(oResponse.results);
-
-        // Initialize DOM elements
-        this._initTableEl();
-        if(!this._elContainer || !this._elThead || !this._elTbody) {
-            YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
-            return;
-        }
-
-        // Call Element's constructor after DOM elements are created
-        // but *before* UI is updated with data
-        YAHOO.widget.DataTable.superclass.constructor.call(this, this._elContainer, this._oConfigs);
-
-        //HACK: Set the Paginator values.  Attribute doesn't afford for merging
-        // attribute obj keys (all or nothing).
-        if(this._oConfigs.paginator) {
-            this.updatePaginator(this._oConfigs.paginator);
-        }
-
-        // Update the UI
-        this.refreshView();
-    }
-    // Error
-    else if(ok && oResponse.error) {
-        this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
-    }
-    // Empty
-    else if(ok){
-        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
-    }
 };
 
 /**
