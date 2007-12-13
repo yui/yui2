@@ -42,6 +42,9 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
                 "error", this.toString());
         return;
     }
+    
+    this.liveData = oLiveData;
+    this._oQueue = {interval:null, conn:null, requests:[]};
 
     if(oLiveData.nodeType && oLiveData.nodeType == 9) {
         this.dataType = YAHOO.util.DataSource.TYPE_XML;
@@ -57,6 +60,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     }
     else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) {
         this.dataType = YAHOO.util.DataSource.TYPE_HTMLTABLE;
+        this.liveData = oLiveData.cloneNode(true);
     }
     else if(YAHOO.lang.isObject(oLiveData)) {
         this.dataType = YAHOO.util.DataSource.TYPE_JSON;
@@ -64,10 +68,6 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
     else {
         this.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
     }
-
-    this.liveData = oLiveData;
-    this._oQueue = {interval:null, conn:null, requests:[]};
-
 
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
