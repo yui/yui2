@@ -255,9 +255,9 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
                 } else {
                     try {
                         ret = s.fn.call(scope, this.type, args, s.obj);
-                    } catch(e) {
-                        this.lastError = e;
-                        YAHOO.log(this + " subscriber exception: " + e,
+                    } catch(ex) {
+                        this.lastError = ex;
+                        YAHOO.log(this + " subscriber exception: " + ex,
                                   "error", "Event");
                     }
                 }

@@ -1041,7 +1041,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                              !o.tagName            && // o is not an HTML element
                              !o.alert              && // o is not a window
                              typeof o[0] !== "undefined" );
-                } catch(e) {
+                } catch(ex) {
                     YAHOO.log("_isValidCollection error, assuming that " +
                 " this is a cross frame problem and not a collection", "warn");
                     return false;
@@ -1353,16 +1353,20 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
 
                 unloadListeners = null;
 
-                // use clearAttributes to handle IE memory leaks
-                if (YAHOO.env.ua.IE && listeners && listeners.length > 0) {
+                // call clearAttributes or remove listeners to handle IE memory leaks
+                if (YAHOO.env.ua.ie && listeners && listeners.length > 0) {
                     j = listeners.length;
                     while (j) {
                         index = j-1;
                         l = listeners[index];
                         if (l) {
-                            l[EU.EL].clearAttributes();
+                            //try {
+                                //l[EU.EL].clearAttributes(); // errors on window objects
+                            //} catch(ex) {
+                            EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], index);
+                            //}
                         } 
-                        j = j - 1;
+                        j--;
                     }
                     l=null;
                 }
@@ -1460,7 +1464,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     // throws an error until the doc is ready
                     n.doScroll('left'); 
                     ready = true;
-                } catch(er){ 
+                } catch(ex){ 
                     // document is not ready
                 }
 
@@ -1598,7 +1602,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     n.doScroll('left');
                     n = null;
                     YAHOO.util.Event._ready();
-                } catch (e){
+                } catch (ex){
                     n = null;
 setTimeout(arguments.callee, YAHOO.util.Event.POLL_INTERVAL);
                 }
@@ -1614,7 +1618,7 @@ setTimeout(arguments.callee, YAHOO.util.Event.POLL_INTERVAL);
                     EU._dri = null;
                     EU._ready();
                     n = null;
-                } catch (e) { 
+                } catch (ex) { 
                     n = null;
                 }
             }, EU.POLL_INTERVAL); 
