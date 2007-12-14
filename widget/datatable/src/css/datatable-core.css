@@ -3,9 +3,10 @@
 /* resizeable columns */
 th.yui-dt-resizeable .yui-dt-liner {
     overflow:hidden;
-}
-th.yui-dt-resizeable .yui-dt-liner {
     position:relative;
+}
+td.yui-dt-resizeable .yui-dt-liner {
+    overflow:hidden;
 }
 .yui-dt-resizer {
     position:absolute;

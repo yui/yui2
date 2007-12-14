@@ -700,6 +700,14 @@ YAHOO.widget.Column.prototype.sortable = false;
  * @property sortOptions.defaultOrder
  * @type String
  * @default null
+ * @deprecated
+ */
+/**
+ * Default sort direction for Column: YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTable.CLASS_DESC.
+ *
+ * @property sortOptions.defaultDir
+ * @type String
+ * @default null
  */
 /**
  * Custom sort handler.
