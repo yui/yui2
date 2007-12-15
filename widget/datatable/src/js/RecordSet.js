@@ -356,6 +356,7 @@ YAHOO.widget.RecordSet.prototype.getRecordIndex = function(oRecord) {
  */
 YAHOO.widget.RecordSet.prototype.addRecord = function(oData, index) {
     if(oData && (oData.constructor == Object)) {
+        index = index || 0;
         var oRecord = this._addRecord(oData, index);
         this.fireEvent("recordAddEvent",{record:oRecord,data:oData});
         YAHOO.log("Added Record at index " + index +
@@ -381,6 +382,7 @@ YAHOO.widget.RecordSet.prototype.addRecord = function(oData, index) {
  */
 YAHOO.widget.RecordSet.prototype.addRecords = function(aData, index) {
     if(YAHOO.lang.isArray(aData)) {
+        index = index || 0;
         var newRecords = [];
         // Can't go backwards bc we need to preserve order
         for(var i=0; i<aData.length; i++) {

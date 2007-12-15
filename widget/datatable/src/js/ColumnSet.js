@@ -628,10 +628,10 @@ YAHOO.widget.Column.prototype.abbr = null;
 YAHOO.widget.Column.prototype.children = null;
 
 /**
- * Column width.
+ * Column width (in pixels).
  *
  * @property width
- * @type String
+ * @type Number
  */
 YAHOO.widget.Column.prototype.width = null;
 
@@ -640,6 +640,7 @@ YAHOO.widget.Column.prototype.width = null;
  *
  * @property minWidth
  * @type Number
+ * @default 10
  */
 YAHOO.widget.Column.prototype.minWidth = 10;
 
@@ -993,11 +994,8 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, elP
         this.datatable = oDataTable;
         this.column = oColumn;
         this.headCell = elThead;
-        this.headLabel = elThead.firstChild.firstChild;
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
-        this.nOrigScrollTop = null; // Needed for IE fixed scrolling workaround 1118318
-        //this.resetResizerPosition();
     }
     else {
         YAHOO.log("Column resizer could not be created due to invalid colElId","warn");
@@ -1040,8 +1038,8 @@ YAHOO.util.ColumnResizer.prototype.resetResizerEl = function() {
  * @param e {string} The mouseup event
  */
 YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
-    this.bodyCell = null;
     this.resetResizerEl();
+    this.datatable._syncColWidths();
     this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
 };
 
@@ -1052,31 +1050,8 @@ YAHOO.util.ColumnResizer.prototype.onMouseUp = function(e) {
  * @param e {string} The mousedown event
  */
 YAHOO.util.ColumnResizer.prototype.onMouseDown = function(e) {
-    /*// IE workaround for bug 1118318:
-    // Reset any scrolltop...
-    this.nOrigScrollTop = null;
-    if(this.datatable._elContainer.scrollTop > 0) {
-        this.nOrigScrollTop = this.datatable._elContainer.scrollTop;
-        this.datatable._elContainer.scrollTop = 0;
-    }*/
-
     this.startWidth = this.headCell.firstChild.offsetWidth;
     this.startX = YAHOO.util.Event.getXY(e)[0];
-    
-    //TODO: make this configurable
-    //var minWidth = 10;
-    //var minWidth = parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"),10) || 0;
-    //minWidth += parseInt(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"),10) || 0;
-    //minWidth += this.headCell.firstChild.firstChild.offsetWidth;
-    //YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingLeft"), "warn");
-    //YAHOO.log(YAHOO.util.Dom.getStyle(this.headCell.firstChild,"paddingRight"), "warn");
-    //YAHOO.log("minwidth " + minWidth,"time");
-
-    if(this.datatable.getTbodyEl() && (this.datatable.getTbodyEl().rows.length > 0)) {
-        this.bodyCell = this.datatable.getTbodyEl().rows[0].cells[this.headCell.yuiCellIndex];
-    }
-
-    //this.minWidth = minWidth;
 };
 
 /**
@@ -1106,9 +1081,6 @@ YAHOO.util.ColumnResizer.prototype.onDrag = function(e) {
     if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
         var offsetX = newX - this.startX;
         var newWidth = this.startWidth + offsetX;
-        YAHOO.log("newwidth " + newWidth,"time");
-        //if(newWidth > this.minWidth) {
-            this.datatable.setColumnWidth(this.column, newWidth);
-        //}
+        this.datatable.setColumnWidth(this.column, newWidth);
     }
 };

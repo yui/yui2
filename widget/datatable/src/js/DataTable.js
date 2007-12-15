@@ -992,6 +992,15 @@ YAHOO.widget.DataTable.prototype._nTrCount = 0;
 YAHOO.widget.DataTable.prototype._sName = null;
 
 /**
+ * True when DOM mutations are in progress.
+ *
+ * @property _bRendering
+ * @type Boolean
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._bRendering = false;
+
+/**
  * DOM reference to the container element for the DataTable instance into which
  * the container liner and TABLE element get created.
  *
@@ -1572,7 +1581,12 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
         }
     }
 
-    YAHOO.log("Column headers for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+    if(bA11y) {
+        YAHOO.log("Accessibility Column headers for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+    }
+    else {
+        YAHOO.log("Column headers for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+    }
 };
 
 /**
@@ -1594,21 +1608,18 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     var colId = oColumn.getId();
     elTheadCell.yuiColumnKey = colKey;
     elTheadCell.yuiColumnId = colId;
-    if(oColumn.abbr) {
-        elTheadCell.abbr = oColumn.abbr;
-    }
-    if(oColumn.width) {
-        elTheadCell.style.width = oColumn.width;
-    }
-
     elTheadCell.innerHTML = "";
     elTheadCell.rowSpan = oColumn.getRowspan();
     elTheadCell.colSpan = oColumn.getColspan();
+    if(oColumn.abbr) {
+        elTheadCell.abbr = oColumn.abbr;
+    }
 
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
     var id = (bA11y) ? this.id + "-a11ycontainer" + colId : this.id + "-container" + colId;
     elTheadCellLiner.id = id;
     YAHOO.util.Dom.addClass(elTheadCellLiner,YAHOO.widget.DataTable.CLASS_LINER);
+    YAHOO.util.Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey);
     var aCustomClasses;
     if(YAHOO.lang.isString(oColumn.className)) {
         aCustomClasses = [oColumn.className];
@@ -1621,12 +1632,9 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
             YAHOO.util.Dom.addClass(elTheadCellLiner,aCustomClasses[i]);
         }
     }
-
-    YAHOO.util.Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey);
-
-
-    
-    
+    if(oColumn.width) {
+        elTheadCellLiner.style.width = oColumn.width + "px";
+    }
     
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
     elTheadCellLabel.id = this.id + "-label" + colId;
@@ -1778,7 +1786,7 @@ YAHOO.widget.DataTable.prototype._initColumnSort = function() {
  * @param oRecord {YAHOO.widget.Record} Record instance.
  * @param index {Number} (optional) The page row index at which to add the TR
  * element.
- * @return {HTMLElement} DOM reference to the new TR element, or null.
+ * @return {HTMLElement} DOM reference to the new TR element.
  * @private
  */
 YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
@@ -1840,8 +1848,14 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         if(oColumn.key === sortKey) {
             YAHOO.util.Dom.addClass(elCell, sortClass);
         }
+
+        // Set width if given
+        if(oColumn.width) {
+            elCellLiner.style.width = oColumn.width + "px";
+        }
     }
 
+    // Sync up widths with Column headers
     this._syncColWidths(elRow);
     
     return elRow;
@@ -1853,12 +1867,10 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
  * @method _updateTrEl
  * @param elRow {HTMLElement} The TR element to update.
  * @param oRecord {YAHOO.widget.Record} The associated Record instance.
- * @return {String} ID of the updated TR element, or null.
+ * @return {HTMLElement} DOM reference to the new TR element.
  * @private
  */
 YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
-    this.hideTableMessage();
-
     var sortKey, sortClass, isSortedBy = this.get("sortedBy");
     if(isSortedBy) {
         sortKey = isSortedBy.key;
@@ -1880,12 +1892,17 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
             YAHOO.util.Dom.addClass(elCell, sortClass);
         }
         
-        this._syncColWidths();
+        // Set width if given
+        if(oColumn.width) {
+            elCell.firstChild.style.width = oColumn.width + "px";
+        }
+
     }
 
     // Update Record ID
     elRow.yuiRecordId = oRecord.getId();
     
+    // Sync up widths with Column headers
     this._syncColWidths(elRow);
 
     return elRow;
@@ -3469,9 +3486,6 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
     // Clear the RecordSet
     this._oRecordSet.reset();
 
-    // Add data to RecordSet
-    this._oRecordSet.addRecords(oData);
-
     // Clear selections
     this._unselectAllTrEls();
     this._unselectAllTdEls();
@@ -3479,11 +3493,14 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
     this._oAnchorRecord = null;
     this._oAnchorCell = null;
 
+    YAHOO.log("DataTable state initialized" ,"info", this.toString());
+    this.fireEvent("initEvent");
+
+    // Add data to RecordSet
+    this._oRecordSet.addRecords(oData);
+
     // Refresh the view
     this.refreshView();
-
-    this.fireEvent("initEvent");
-    YAHOO.log("DataTable initialized" ,"info", this.toString());
 };
 
 /**
@@ -3494,7 +3511,10 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
  * @method refreshView
  */
 YAHOO.widget.DataTable.prototype.refreshView = function() {
+    this._bRendering = true;
+    this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
     YAHOO.log("DataTable refreshing...", "info", this.toString());
+    
     var i, j, k, l, allRecords;
 
     // Paginator is enabled, show a subset of Records and update Paginator UI
@@ -3523,8 +3543,6 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
 
     // Should have rows
     if(YAHOO.lang.isArray(allRecords) && (allRecords.length > 0)) {
-        this.hideTableMessage();
-        
         // Keep track of selected rows
         var allSelectedRows = this.getSelectedRows();
         // Keep track of selected cells
@@ -3543,6 +3561,8 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
             this._unselectAllTdEls();
         }
 
+        this.hideTableMessage();
+
         // From the top, update in-place existing rows, so as to reuse DOM elements
         for(i=0; i<allRows.length; i++) {
             this._updateTrEl(allRows[i], allRecords[i]);
@@ -3554,9 +3574,56 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
         var nMaxIndex = allRecords.length; // where to end
         var loopN = this.get("renderLoopSize"); // how many per loop
 
+        // Post loop stuff to reinstate various states
+        var endLoops = function() {
+            setTimeout(function() {
+                if((oSelf instanceof YAHOO.widget.DataTable) && oSelf.id) {
+                     // Reinstate selected and sorted classes
+                    if(bReselect) {
+                        // Loop over each row
+                        for(j=0; j<allRows.length; j++) {
+                            var thisRow = allRows[j];
+                            var sMode = oSelf.get("selectionMode");
+                            if ((sMode == "standard") || (sMode == "single")) {
+                                // Set SELECTED
+                                for(k=0; k<allSelectedRows.length; k++) {
+                                    if(allSelectedRows[k] === thisRow.yuiRecordId) {
+                                        YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
+                                        if(j === allRows.length-1) {
+                                            oSelf._oAnchorRecord = oSelf.getRecord(thisRow.yuiRecordId);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                // Loop over each cell
+                                for(k=0; k<thisRow.cells.length; k++) {
+                                    var thisCell = thisRow.cells[k];
+                                    // Set SELECTED
+                                    for(l=0; l<allSelectedCells.length; l++) {
+                                        if((allSelectedCells[l].recordId === thisRow.yuiRecordId) &&
+                                                (allSelectedCells[l].columnId === thisCell.yuiColumnId)) {
+                                            YAHOO.util.Dom.addClass(thisCell, YAHOO.widget.DataTable.CLASS_SELECTED);
+                                            if(k === thisRow.cells.length-1) {
+                                                oSelf._oAnchorCell = {record:oSelf.getRecord(thisRow.yuiRecordId), column:oSelf.getColumnById(thisCell.yuiColumnId)};
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                //oSelf._syncColWidths();
+                oSelf._bRendering = false;
+                oSelf.fireEvent("refreshEvent");
+                YAHOO.log("DataTable showing " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
+            },0);
+        };
+
+        // Timeout loops to add TR elements
         var startLoops = function(nRowIndex) {
             setTimeout(function() {
-                var elNewRow;
                 for(var n=nRowIndex; n<nRowIndex+loopN; n++) {
                     if(n < nMaxIndex) {
                         oSelf._addTrEl(allRecords[n]);
@@ -3565,7 +3632,7 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
                     else {
                         oSelf._setFirstRow();
                         oSelf._setLastRow();
-                        YAHOO.log("DataTable refreshed", "info", oSelf.toString());
+                        endLoops();
                         return;
                     }
                 }
@@ -3573,86 +3640,6 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
             }, 0);
         };
         startLoops(nStartIndex);
-
-
-
-
-
-
-
-
-
-
-
-
-
-var endLoops = function() {
-    setTimeout(function() {
-        if((oSelf instanceof YAHOO.widget.DataTable) && oSelf.id) {
-             // Reinstate selected and sorted classes
-            if(bReselect) {
-                // Loop over each row
-                for(j=0; j<allRows.length; j++) {
-                    var thisRow = allRows[j];
-                    var sMode = oSelf.get("selectionMode");
-                    if ((sMode == "standard") || (sMode == "single")) {
-                        // Set SELECTED
-                        for(k=0; k<allSelectedRows.length; k++) {
-                            if(allSelectedRows[k] === thisRow.yuiRecordId) {
-                                YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
-                                if(j === allRows.length-1) {
-                                    oSelf._oAnchorRecord = oSelf.getRecord(thisRow.yuiRecordId);
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        // Loop over each cell
-                        for(k=0; k<thisRow.cells.length; k++) {
-                            var thisCell = thisRow.cells[k];
-                            // Set SELECTED
-                            for(l=0; l<allSelectedCells.length; l++) {
-                                if((allSelectedCells[l].recordId === thisRow.yuiRecordId) &&
-                                        (allSelectedCells[l].columnId === thisCell.yuiColumnId)) {
-                                    YAHOO.util.Dom.addClass(thisCell, YAHOO.widget.DataTable.CLASS_SELECTED);
-                                    if(k === thisRow.cells.length-1) {
-                                        oSelf._oAnchorCell = {record:oSelf.getRecord(thisRow.yuiRecordId), column:oSelf.getColumnById(thisCell.yuiColumnId)};
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            // Set FIRST/LAST, EVEN/ODD
-            //oSelf._setFirstRow();
-            //oSelf._setLastRow();
-            //oSelf._setRowStripes();
-
-            // Reappend TABLE
-            //elTbodyContainer.appendChild(elTable);
-
-            // Width synchronizations
-            //oSelf._syncColWidths();
-
-
-            oSelf.fireEvent("refreshEvent");
-            YAHOO.log("DataTable showing " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
-        }
-    },0);
-};
-endLoops();
-
-
-
-
-
-
-
-
-
-
     }
     // Empty
     else {
@@ -3716,7 +3703,12 @@ YAHOO.widget.DataTable.prototype.showTableMessage = function(sHTML, sClassName) 
     if(YAHOO.lang.isString(sClassName)) {
         YAHOO.util.Dom.addClass(elCell.firstChild, sClassName);
     }
-    elCell.firstChild.style.width = this.getTheadEl().parentNode.offsetWidth + "px";
+
+    var elCellLiner = elCell.firstChild;
+    elCellLiner.style.width = ((this.getTheadEl().parentNode.offsetWidth) -
+        (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
+        (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10))) + "px";
+
     this._elMsgTbody.style.display = "";
     this.fireEvent("tableMsgShowEvent", {html:sHTML, className:sClassName});
     YAHOO.log("DataTable showing message: " + sHTML, "info", this.toString());
@@ -4087,8 +4079,10 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
  * @method setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param nWidth {Number} New width in pixels.
+ * @param bHide {Boolean} (Optional) Set to true if hiding Column so that any
+ * minimum value can be overridden.
  */
-YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bOverrideMin) {
+YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bHide) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
         var nColKeyIndex = oColumn.getKeyIndex();
@@ -4097,7 +4091,7 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bOve
         // Validate new width against minimum width
         var sWidth = "";
         if(YAHOO.lang.isNumber(nWidth)) {
-            if(bOverrideMin) { // Override the min if explicitly hiding
+            if(bHide) { // Override the min if explicitly hiding
                 sWidth = nWidth + "px";
             }
             else {
@@ -4105,19 +4099,23 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bOve
             }
         }
 
+        if(!bHide) {
+            oColumn.width = parseInt(sWidth,10);
+        }
+        
+        elTheadCell.style.width = sWidth;
+        elTheadCell.firstChild.style.width = sWidth;
+        
         var allrows = this.getTbodyEl().rows;
-        var l = allrows.length;
-
-        for(var i=0;i<l;i++) {
+        var nMaxIndex = allrows.length;
+        for(var i=0;i<nMaxIndex;i++) {
             allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
             allrows[i].cells[nColKeyIndex].style.width = sWidth;
         }
-        elTheadCell.style.width = sWidth;
-        elTheadCell.firstChild.style.width = sWidth;
-
-        return;
     }
-    YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    else {
+        YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
+    }
 };
 
 /**
@@ -4524,7 +4522,7 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
     // Update the TR only if row is on current page
     if(elRow) {
         this._updateTrEl(elRow, updatedRecord);
-        //this._syncColWidths();
+        this._syncColWidths();
     }
 
     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
