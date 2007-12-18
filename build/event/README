@@ -1,6 +1,9 @@
 
 YUI Library - Event - Release Notes
 
+2.4.1
+  * Reverted clearAttributes() change to fix IE memory leak on iframes/windows
+
 2.4.0
   * getListeners/purgeElement accepts either an element reference or an element id
   * onAvailable/onContentReady accepts a single id or an array of ids
