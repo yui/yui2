@@ -61,7 +61,7 @@ var Dom = YAHOO.util.Dom,
     * @method _cleanClassName
     * @description Makes a useable classname from dynamic data, by dropping it to lowercase and replacing spaces with -'s.
     * @param {String} str The classname to clean up
-    * @returns {String}
+    * @return {String}
     */
     function _cleanClassName(str) {
         return str.replace(/ /g, '-').toLowerCase();
@@ -379,7 +379,7 @@ var Dom = YAHOO.util.Dom,
         * @private _createIframe
         * @description Creates the DOM and YUI Element for the iFrame editor area.
         * @param {String} id The string ID to prefix the iframe with
-        * @returns {Object} iFrame object
+        * @return {Object} iFrame object
         */
         _createIframe: function() {
             var ifrmDom = document.createElement('iframe');
@@ -415,7 +415,7 @@ var Dom = YAHOO.util.Dom,
         * @description Checks to see if an Element reference is a valid one and has a certain tag type
         * @param {HTMLElement} el The element to check
         * @param {String} tag The tag that the element needs to be
-        * @returns {Boolean}
+        * @return {Boolean}
         */
         _isElement: function(el, tag) {
             if (el && el.tagName && (el.tagName.toLowerCase() == tag)) {
@@ -431,7 +431,7 @@ var Dom = YAHOO.util.Dom,
         * @description Checks to see if an Element reference or one of it's parents is a valid one and has a certain tag type
         * @param {HTMLElement} el The element to check
         * @param {String} tag The tag that the element needs to be
-        * @returns HTMLElement
+        * @return HTMLElement
         */
         _hasParent: function(el, tag) {
             if (!el || !el.parentNode) {
@@ -523,7 +523,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _hasSelection
         * @description Determines if there is a selection in the editor document.
-        * @returns {Boolean}
+        * @return {Boolean}
         */
         _hasSelection: function() {
             var sel = this._getSelection();
@@ -555,7 +555,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _getSelection
         * @description Handles the different selection objects across the A-Grade list.
-        * @returns {Object} Selection Object
+        * @return {Object} Selection Object
         */
         _getSelection: function() {
             var _sel = null;
@@ -626,7 +626,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _getRange
         * @description Handles the different range objects across the A-Grade list.
-        * @returns {Object} Range Object
+        * @return {Object} Range Object
         */
         _getRange: function() {
             var sel = this._getSelection();
@@ -670,7 +670,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _toggleDesignMode
         * @description Toggles the designMode of the iFrame document on and off.
-        * @returns {String} The state that it was set to.
+        * @return {String} The state that it was set to.
         */
         _toggleDesignMode: function() {
             var _dMode = this._getDoc().designMode.toLowerCase(),
@@ -831,7 +831,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _getSelectedElement
         * @description This method will attempt to locate the element that was last interacted with, either via selection, location or event.
-        * @returns {HTMLElement} The currently selected element.
+        * @return {HTMLElement} The currently selected element.
         */
         _getSelectedElement: function() {
             var doc = this._getDoc(),
@@ -931,7 +931,7 @@ var Dom = YAHOO.util.Dom,
         * @method _getDomPath
         * @description This method will attempt to build the DOM path from the currently selected element.
         * @param HTMLElement el The element to start with, if not provided _getSelectedElement is used
-        * @returns {Array} An array of node references that will create the DOM Path.
+        * @return {Array} An array of node references that will create the DOM Path.
         */
         _getDomPath: function(el) {
             if (!el) {
@@ -1070,7 +1070,7 @@ var Dom = YAHOO.util.Dom,
         * @description Method is called at the beginning of all event handlers to check if this element or a parent element has the class yui-noedit (this.CLASS_NOEDIT) applied.
         * If it does, then this method will stop the event and return true. The event handlers will then return false and stop the nodeChange from occuring. This method will also
         * disable and enable the Editor's toolbar based on the noedit state.
-        * @returns Boolean
+        * @return Boolean
         */
         _isNonEditable: function(ev) {
             if (this.get('allowNoEdit')) {
@@ -2350,7 +2350,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _getBlankImage
         * @description Retrieves the full url of the image to use as the blank image.
-        * @returns {String} The URL to the blank image
+        * @return {String} The URL to the blank image
         */
         _getBlankImage: function() {
             if (!this.DOMReady) {
@@ -3417,7 +3417,7 @@ var Dom = YAHOO.util.Dom,
         * @method _cleanIncomingHTML
         * @param {String} html The unfiltered HTML
         * @description Process the HTML with a few regexes to clean it up and stabilize the input
-        * @returns {String} The filtered HTML
+        * @return {String} The filtered HTML
         */
         _cleanIncomingHTML: function(html) {
             html = html.replace(/<strong([^>]*)>/gi, '<b$1>');
@@ -3430,7 +3430,7 @@ var Dom = YAHOO.util.Dom,
         * @method cleanHTML
         * @param {String} html The unfiltered HTML
         * @description Process the HTML with a few regexes to clean it up and stabilize the output
-        * @returns {String} The filtered HTML
+        * @return {String} The filtered HTML
         */
         cleanHTML: function(html) {
             //Start Filtering Output
@@ -3549,7 +3549,7 @@ var Dom = YAHOO.util.Dom,
         * @method filter_invalid_lists
         * @param String html The HTML string to filter
         * @description Filters invalid ol and ul list markup, converts this: <li></li><ol>..</ol> to this: <li></li><li><ol>..</ol></li>
-        * @returns String
+        * @return String
         */
         filter_invalid_lists: function(html) {
             html = html.replace(/<\/li>\n/gi, '</li>');
@@ -3572,7 +3572,7 @@ var Dom = YAHOO.util.Dom,
         * @method filter_safari
         * @param String html The HTML string to filter
         * @description Filters strings specific to Safari
-        * @returns String
+        * @return String
         */
         filter_safari: function(html) {
             if (this.browser.webkit) {
@@ -3592,7 +3592,7 @@ var Dom = YAHOO.util.Dom,
         * @method filter_internals
         * @param String html The HTML string to filter
         * @description Filters internal RTE strings and bogus attrs we don't want
-        * @returns String
+        * @return String
         */
         filter_internals: function(html) {
 		    html = html.replace(/\r/g, '');
@@ -3626,7 +3626,7 @@ var Dom = YAHOO.util.Dom,
         * @method filter_all_rgb
         * @param String str The HTML string to filter
         * @description Converts all RGB color strings found in passed string to a hex color, example: style="color: rgb(0, 255, 0)" converts to style="color: #00ff00"
-        * @returns String
+        * @return String
         */
         filter_all_rgb: function(str) {
             var exp = new RegExp("rgb\\s*?\\(\\s*?([0-9]+).*?,\\s*?([0-9]+).*?,\\s*?([0-9]+).*?\\)", "gi");
@@ -3644,7 +3644,7 @@ var Dom = YAHOO.util.Dom,
         * @method filter_rgb
         * @param String css The CSS string containing rgb(#,#,#);
         * @description Converts an RGB color string to a hex color, example: rgb(0, 255, 0) converts to #00ff00
-        * @returns String
+        * @return String
         */
         filter_rgb: function(css) {
             if (css.toLowerCase().indexOf('rgb') != -1) {
@@ -3670,7 +3670,7 @@ var Dom = YAHOO.util.Dom,
         * @param String html The HTML to filter
         * @param String markup The markup type to filter to
         * @description HTML Pre Filter
-        * @returns String
+        * @return String
         */
         pre_filter_linebreaks: function(html, markup) {
             if (this.browser.webkit) {
@@ -3696,7 +3696,7 @@ var Dom = YAHOO.util.Dom,
         * @param String html The HTML to filter
         * @param String markup The markup type to filter to
         * @description HTML Pre Filter
-        * @returns String
+        * @return String
         */
         post_filter_linebreaks: function(html, markup) {
             if (markup == 'xhtml') {
@@ -3893,7 +3893,7 @@ var Dom = YAHOO.util.Dom,
         * @method getEditorById
         * @description Returns a reference to the Editor object associated with the given textarea
         * @param {String/HTMLElement} id The id or reference of the textarea to return the Editor instance of
-        * @returns Object <a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a>
+        * @return Object <a href="YAHOO.widget.Editor.html">YAHOO.widget.Editor</a>
         */
         getEditorById: function(id) {
             if (!YAHOO.lang.isString(id)) {

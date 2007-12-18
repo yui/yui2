@@ -44,7 +44,7 @@ var Dom = YAHOO.util.Dom,
     * @method _cleanClassName
     * @description Makes a useable classname from dynamic data, by dropping it to lowercase and replacing spaces with -'s.
     * @param {String} str The classname to clean up
-    * @returns {String}
+    * @return {String}
     */
     function _cleanClassName(str) {
         return str.replace(/ /g, '-').toLowerCase();
@@ -962,7 +962,7 @@ var Dom = YAHOO.util.Dom,
         * @private
         * @method _renderPanel
         * @description Renders the panel used for Editor Windows to the document so we can start using it..
-        * @returns {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>}
+        * @return {<a href="YAHOO.widget.Overlay.html">YAHOO.widget.Overlay</a>}
         */
         _renderPanel: function() {
             var panel = null;
