@@ -12,7 +12,7 @@
  */
 YAHOO.widget.RecordSet = function(data) {
     // Internal variables
-    this._sName = "RecordSet instance" + YAHOO.widget.RecordSet._nCount;
+    this._sId = "yui-rs" + YAHOO.widget.RecordSet._nCount;
     YAHOO.widget.RecordSet._nCount++;
     this._records = [];
     this._length = 0;
@@ -137,13 +137,13 @@ else {
 YAHOO.widget.RecordSet._nCount = 0;
 
 /**
- * Unique instance name.
+ * Unique String identifier assigned at instantiation.
  *
- * @property _sName
+ * @property _sId
  * @type String
  * @private
  */
-YAHOO.widget.RecordSet.prototype._sName = null;
+YAHOO.widget.RecordSet.prototype._sId = null;
 
 /**
  * Internal counter of how many Records are in the RecordSet.
@@ -233,13 +233,23 @@ YAHOO.widget.RecordSet.prototype._deleteRecord = function(index, range) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Returns unique name of the RecordSet instance.
+ *
+ * @method getId
+ * @return {String} Unique name of the RecordSet instance.
+ */
+YAHOO.widget.RecordSet.prototype.getId = function() {
+    return this._sId;
+};
+
+/**
  * Public accessor to the unique name of the RecordSet instance.
  *
  * @method toString
  * @return {String} Unique name of the RecordSet instance.
  */
 YAHOO.widget.RecordSet.prototype.toString = function() {
-    return this._sName;
+    return "RecordSet instance " + this._sId;
 };
 
 /**
@@ -670,7 +680,7 @@ YAHOO.widget.RecordSet.prototype.reset = function() {
  * @param oConfigs {Object} (optional) Object literal of key/value pairs.
  */
 YAHOO.widget.Record = function(oLiteral) {
-    this._sId = YAHOO.widget.Record._nCount + "";
+    this._sId = "yui-rec" + YAHOO.widget.Record._nCount;
     YAHOO.widget.Record._nCount++;
     this._oData = {};
     if(oLiteral && (oLiteral.constructor == Object)) {

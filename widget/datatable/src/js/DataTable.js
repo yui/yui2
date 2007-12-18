@@ -28,8 +28,7 @@
 YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
     // Internal vars
     this._nIndex = YAHOO.widget.DataTable._nCount;
-    this._sName = "instance" + this._nIndex;
-    this.id = "yui-dt"+this._nIndex;
+    this._sId = "yui-dt"+this._nIndex;
 
     // Initialize configs
     this._initConfigs(oConfigs);
@@ -87,14 +86,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         this._configs.initialRequest.value = undefined;
     }
 
-    // Send out for initial data in an asynchronous request
-    var initialRequest = this.get('initialRequest');
-    if(initialRequest !== undefined) {
-        this._oDataSource.sendRequest(initialRequest, this.onDataReturnInitializeTable, this);
-    }
-    else {
-        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
-    }
 
     // Initialize inline Cell editing
     this._initCellEditorEl();
@@ -103,7 +94,18 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     this._initColumnSort();
 
     YAHOO.widget.DataTable._nCount++;
-    YAHOO.log("DataTable initialized", "info", this.toString());
+    
+    // Send out for initial data in an asynchronous request
+    var initialRequest = this.get('initialRequest');
+    if(initialRequest !== undefined) {
+        this._oDataSource.sendRequest(initialRequest, this.onDataReturnInitializeTable, this);
+    }
+    else {
+        this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+        this.fireEvent("initEvent");
+        YAHOO.log("DataTable initialized with no rows", "info", this.toString());
+
+    }
 };
 
 if(YAHOO.util.Element) {
@@ -354,12 +356,12 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                     if (!containers.length && !oPaginator.hasControls()) {
                         // Build the container nodes
                         var c_above = document.createElement('div');
-                        c_above.id = this.id + "-paginator0";
+                        c_above.id = this._sId + "-paginator0";
                         this._elContainer.insertBefore(c_above,this._elContainer.firstChild);
 
                         // ...and one below the table
                         var c_below = document.createElement('div');
-                        c_below.id = this.id + "-paginator1";
+                        c_below.id = this._sId + "-paginator1";
                         this._elContainer.appendChild(c_below);
 
                         containers = [c_above, c_below];
@@ -405,14 +407,14 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                     if(aContainerEls.length === 0) {
                         // One before TABLE
                         var pag0 = document.createElement("span");
-                        pag0.id = this.id + "-paginator0";
+                        pag0.id = this._sId + "-paginator0";
                         YAHOO.util.Dom.addClass(pag0, YAHOO.widget.DataTable.CLASS_PAGINATOR);
                         pag0 = this._elContainer.insertBefore(pag0, this._elContainer.firstChild);
                         aContainerEls.push(pag0);
 
                         // One after TABLE
                         var pag1 = document.createElement("span");
-                        pag1.id = this.id + "-paginator1";
+                        pag1.id = this._sId + "-paginator1";
                         YAHOO.util.Dom.addClass(pag1, YAHOO.widget.DataTable.CLASS_PAGINATOR);
                         pag1 = this._elContainer.appendChild(pag1);
                         aContainerEls.push(pag1);
@@ -965,6 +967,17 @@ YAHOO.widget.DataTable.MSG_ERROR = "Data error.";
 YAHOO.widget.DataTable._nCount = 0;
 
 /**
+ * True if instance is initialized, so as to fire the initEvent rather than
+ * renderEvent.
+ *
+ * @property _bInit
+ * @type Boolean
+ * @default true
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._bInit = true;
+
+/**
  * Index assigned to instance.
  *
  * @property _nIndex
@@ -983,13 +996,14 @@ YAHOO.widget.DataTable.prototype._nIndex = null;
 YAHOO.widget.DataTable.prototype._nTrCount = 0;
 
 /**
- * Unique name assigned to instance.
+ * Unique id assigned to instance "yui-dtN", useful prefix for generating unique
+ * DOM ID strings and log messages.
  *
- * @property _sName
+ * @property _sId
  * @type String
  * @private
  */
-YAHOO.widget.DataTable.prototype._sName = null;
+YAHOO.widget.DataTable.prototype._sId = null;
 
 /**
  * True when DOM mutations are in progress.
@@ -1119,16 +1133,6 @@ YAHOO.widget.DataTable.prototype._oColumnSet = null;
 YAHOO.widget.DataTable.prototype._oRecordSet = null;
 
 /**
- * ID string of first label link element of the current DataTable page, if any.
- * Used for focusing sortable Columns with TAB.
- *
- * @property _sFirstLabelLinkId
- * @type String
- * @private
- */
-YAHOO.widget.DataTable.prototype._sFirstLabelLinkId = null;
-
-/**
  * ID string of first TR element of the current DataTable page.
  *
  * @property _sFirstTrId
@@ -1190,7 +1194,7 @@ YAHOO.widget.DataTable.prototype._sLastTrId = null;
  * @private
  */
 YAHOO.widget.DataTable.prototype._focusEl = function(el) {
-    el = el || this._elContainer;
+    el = el || this._elTbody;
     // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
     // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
     // strange unexpected things as the user clicks on buttons and other controls.
@@ -1215,7 +1219,7 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
 
     setTimeout(function() {
         // Only if instance is still valid
-        if((oSelf instanceof YAHOO.widget.DataTable) && (oSelf.id)) {
+        if((oSelf instanceof YAHOO.widget.DataTable) && (oSelf._sId)) {
             var allKeys = oSelf._oColumnSet.keys;
             var elFirstRow = oSelf.getFirstTrEl();
 
@@ -1418,7 +1422,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     // Create elements for header
     // Create TABLE
     var elHeadTable = document.createElement("table");
-    elHeadTable.id = this.id + "-headtable";
+    elHeadTable.id = this._sId + "-headtable";
     elHeadTable = this._elTheadContainer.appendChild(elHeadTable);
 
     // Create THEAD
@@ -1427,7 +1431,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     // Create elements for body
     // Create TABLE
     var elBodyTable = document.createElement("table");
-    elBodyTable.id = this.id + "-bodytable";
+    elBodyTable.id = this._sId + "-bodytable";
     this._elTbodyContainer.appendChild(elBodyTable);
 
     // Create THEAD
@@ -1496,7 +1500,6 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
 YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     var i, oColumn;
     var oColumnSet = this._oColumnSet;
-    this._sFirstLabelLinkId = null;
 
     // Create THEAD
     var elThead = elTable.appendChild(document.createElement("thead"));
@@ -1509,7 +1512,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     var elTheadCell;
     for(i=0; i<colTree.length; i++) {
         var elTheadRow = elThead.appendChild(document.createElement("tr"));
-        elTheadRow.id = this.id+"-hdrow"+i;
+        elTheadRow.id = this._sId+"-hdrow"+i;
 
         // ...and create THEAD cells
         for(var j=0; j<colTree[i].length; j++) {
@@ -1518,7 +1521,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
             if(!bA11y) {
                 oColumn._elTh = elTheadCell;
             }
-            var id = (bA11y) ? this.id+"-th-ally" + oColumn.getId() : this.id+"-th" + oColumn.getId();
+            var id = (bA11y) ? this._sId+"-th-ally" + oColumn.getId() : this._sId+"-th" + oColumn.getId();
             elTheadCell.id = id;
             elTheadCell.yuiCellIndex = j;
             this._initThEl(elTheadCell,oColumn,i,j, bA11y);
@@ -1539,11 +1542,11 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
     for(i=0; i<aFirstHeaders.length; i++) {
         //TODO: A better way to get th cell
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this.id+"-th"+aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
     }
     for(i=0; i<aLastHeaders.length; i++) {
         //TODO: A better way to get th cell
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this.id+"-th"+aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
+        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
     }
 
     // Add Resizer only after DOM has been updated
@@ -1560,7 +1563,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
                     YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
                     var elThContainer = elTheadCell.firstChild;
                     var elThResizer = elThContainer.appendChild(document.createElement("div"));
-                    elThResizer.id = this.id + "-colresizer-" + colKey;
+                    elThResizer.id = this._sId + "-colresizer-" + colKey;
                     oColumn._elResizer = elThResizer;
                     YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
                     this._initColumnResizerProxyEl();
@@ -1616,7 +1619,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     }
 
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
-    var id = (bA11y) ? this.id + "-a11ycontainer" + colId : this.id + "-container" + colId;
+    var id = (bA11y) ? this._sId + "-a11ycontainer" + colId : this._sId + "-container" + colId;
     elTheadCellLiner.id = id;
     YAHOO.util.Dom.addClass(elTheadCellLiner,YAHOO.widget.DataTable.CLASS_LINER);
     YAHOO.util.Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey);
@@ -1637,35 +1640,23 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     }
     
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
-    elTheadCellLabel.id = this.id + "-label" + colId;
+    elTheadCellLabel.id = this._sId + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadCellLabel,YAHOO.widget.DataTable.CLASS_LABEL);
 
-    var sLabel = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : colKey;
-    if(!bA11y) {
-        if(oColumn.sortable) {
-            YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
-
-            //TODO: Make sortLink customizeable
-            //TODO: Make title configurable
-            //TODO: Separate label from an accessibility link that says
-            // "Click to sort ascending" and push it offscreen
-            var sLabelLinkId = this.id + "-labellink" + colId;
-            var sortLink = "?key=" + colKey;
-            elTheadCellLabel.innerHTML = "<a id=\"" + sLabelLinkId + "\" href=\"" + sortLink + "\" title=\"Click to sort\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
-            if(!this._sFirstLabelLinkId) {
-                this._sFirstLabelLinkId = sLabelLinkId;
-            }
-        }
-        else {
-            elTheadCellLabel.innerHTML = sLabel;
-        }
+    // Keep it basic for screen readers
+    if(bA11y) {
+        elTheadCellLabel.innerHTML = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : colKey;
+    }
+    // Format the TH label element
+    else {
         if(oColumn.resizeable) {
             YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_RESIZEABLE);
         }
-        
-    }
-    else {
-        elTheadCellLabel.innerHTML = sLabel;
+        if(oColumn.sortable) {
+            YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_SORTABLE);
+        }
+
+        YAHOO.widget.DataTable.formatHeadCell(elTheadCellLabel, oColumn, this);
     }
 };
 
@@ -1680,7 +1671,7 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
 
     // Attach Cell Editor container element as first child of body
     var elCellEditor = document.createElement("div");
-    elCellEditor.id = this.id + "-celleditor";
+    elCellEditor.id = this._sId + "-celleditor";
     elCellEditor.style.display = "none";
     elCellEditor.tabIndex = 0;
     YAHOO.util.Dom.addClass(elCellEditor, YAHOO.widget.DataTable.CLASS_EDITOR);
@@ -1712,7 +1703,7 @@ YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
 
         // Attach Column resizer element as first child of body
         var elColumnResizerProxy = document.createElement("div");
-        elColumnResizerProxy.id = this.id + "-colresizerproxy";
+        elColumnResizerProxy.id = this._sId + "-colresizerproxy";
         YAHOO.util.Dom.addClass(elColumnResizerProxy, YAHOO.widget.DataTable.CLASS_RESIZERPROXY);
         var elFirstChild = YAHOO.util.Dom.getFirstChild(document.body);
         if(elFirstChild) {
@@ -1798,7 +1789,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
     var elRow = (append) ? this._elTbody.appendChild(document.createElement("tr")) :
         this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]);
 
-    elRow.id = this.id+"-bdrow"+this._nTrCount;
+    elRow.id = this._sId+"-bdrow"+this._nTrCount;
     this._nTrCount++;
     elRow.yuiRecordId = oRecord.getId();
 
@@ -1827,7 +1818,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         elCell.yuiColumnId = oColumn.getId();
 
         for(var k=0; k<oColumnSet.headers[j].length; k++) {
-            elCell.headers += this.id + "-th" + oColumnSet.headers[j][k] + " ";
+            elCell.headers += this._sId + "-th" + oColumnSet.headers[j][k] + " ";
         }
 
         // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
@@ -2397,7 +2388,7 @@ YAHOO.widget.DataTable.prototype._onTheadKeydown = function(e, oSelf) {
     // need to sync scrollLeft with TBODY
     if(YAHOO.util.Event.getCharCode(e) === 9) {
         setTimeout(function() {
-            if((oSelf instanceof YAHOO.widget.DataTable) && oSelf.id) {
+            if((oSelf instanceof YAHOO.widget.DataTable) && oSelf._sId) {
                 oSelf._elTbodyContainer.scrollLeft = oSelf._elTheadContainer.scrollLeft;
             }
         },0);
@@ -2520,6 +2511,12 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
         switch(elTag) {
             case "body":
                 break;
+            //TODO: fire headerXXXClickEvent?
+            case "input":
+            case "textarea":
+            case "select":
+            case "button":
+                return;
             case "span":
                 if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
                     oSelf.fireEvent("headerLabelClickEvent",{target:elTarget,event:e});
@@ -2668,7 +2665,7 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
     if(newRowsPerPage !== null) {
         var newStartRecordIndex = (oSelf.get("paginator").currentPage-1) * newRowsPerPage;
         oSelf.updatePaginator({rowsPerPage:newRowsPerPage, startRecordIndex:newStartRecordIndex});
-        oSelf.refreshView();
+        oSelf.render();
     }
     else {
         YAHOO.log("Could not paginate with " + newValue + " rows per page", "error", oSelf.toString());
@@ -2714,7 +2711,7 @@ YAHOO.widget.DataTable.handleSimplePagination = function (oState,self) {
     oState.paginator.setRecordOffset(oState.recordOffset);
     oState.paginator.setRowsPerPage(oState.rowsPerPage);
 
-    self.refreshView();
+    self.render();
 };
 
 /**
@@ -2731,7 +2728,7 @@ YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
         oState.paginator.setRecordOffset(oState.recordOffset);
         oState.paginator.setRowsPerPage(oState.rowsPerPage);
 
-        self.refreshView();
+        self.render();
     } else {
         // Translate the proposed page state into a DataSource request param
         var generateRequest = self.get('generateRequest');
@@ -2794,17 +2791,26 @@ YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
 //
 /////////////////////////////////////////////////////////////////////////////
 
-// OBJECT ACCESSORS
+/**
+ * Returns unique id assigned to instance, which is a useful prefix for
+ * generating unique DOM ID strings.
+ *
+ * @property getId
+ * @type String
+ */
+YAHOO.widget.DataTable.prototype.getId = function() {
+    return this._sId;
+};
 
 /**
- * Public accessor to the unique name of the DataSource instance.
+ * DataSource instance name, for logging.
  *
  * @method toString
  * @return {String} Unique name of the DataSource instance.
  */
 
 YAHOO.widget.DataTable.prototype.toString = function() {
-    return "DataTable " + this._sName;
+    return "DataTable instance " + this._sId;
 };
 
 /**
@@ -3097,7 +3103,7 @@ YAHOO.widget.DataTable.prototype.getNextTrEl = function(row) {
         }
     }
 
-    YAHOO.log("Could not get next TR element for row " + row, "warn", this.toString());
+    YAHOO.log("Could not get next TR element for row " + row, "info", this.toString());
     return null;
 };
 
@@ -3118,7 +3124,7 @@ YAHOO.widget.DataTable.prototype.getPreviousTrEl = function(row) {
         }
     }
 
-    YAHOO.log("Could not get previous TR element for row " + row, "warn", this.toString());
+    YAHOO.log("Could not get previous TR element for row " + row, "info", this.toString());
     return null;
 };
 
@@ -3188,7 +3194,7 @@ YAHOO.widget.DataTable.prototype.getFirstTdEl = function(row) {
     if(elRow && (elRow.cells.length > 0)) {
         return elRow.cells[0];
     }
-    YAHOO.log("Could not get first TD element for row " + elRow, "warn", this.toString());
+    YAHOO.log("Could not get first TD element for row " + elRow, "info", this.toString());
     return null;
 };
 
@@ -3204,7 +3210,7 @@ YAHOO.widget.DataTable.prototype.getLastTdEl = function(row) {
     if(elRow && (elRow.cells.length > 0)) {
         return elRow.cells[elRow.cells.length-1];
     }
-    YAHOO.log("Could not get last TD element for row " + elRow, "warn", this.toString());
+    YAHOO.log("Could not get last TD element for row " + elRow, "info", this.toString());
     return null;
 };
 
@@ -3231,7 +3237,7 @@ YAHOO.widget.DataTable.prototype.getNextTdEl = function(cell) {
             }
         }
     }
-    YAHOO.log("Could not get next TD element for cell " + cell, "warn", this.toString());
+    YAHOO.log("Could not get next TD element for cell " + cell, "info", this.toString());
     return null;
 };
 
@@ -3258,7 +3264,7 @@ YAHOO.widget.DataTable.prototype.getPreviousTdEl = function(cell) {
             }
         }
     }
-    YAHOO.log("Could not get next TD element for cell " + cell, "warn", this.toString());
+    YAHOO.log("Could not get next TD element for cell " + cell, "info", this.toString());
     return null;
 };
 
@@ -3278,7 +3284,7 @@ YAHOO.widget.DataTable.prototype.getAboveTdEl = function(cell) {
             return elPreviousRow.cells[elCell.yuiCellIndex];
         }
     }
-    YAHOO.log("Could not get above TD element for cell " + cell, "warn", this.toString());
+    YAHOO.log("Could not get above TD element for cell " + cell, "info", this.toString());
     return null;
 };
 
@@ -3298,7 +3304,7 @@ YAHOO.widget.DataTable.prototype.getBelowTdEl = function(cell) {
             return elNextRow.cells[elCell.yuiCellIndex];
         }
     }
-    YAHOO.log("Could not get below TD element for cell " + cell, "warn", this.toString());
+    YAHOO.log("Could not get below TD element for cell " + cell, "info", this.toString());
     return null;
 };
 
@@ -3418,7 +3424,7 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
         }
     }
 
-    YAHOO.log("Could not get page row index for row " + row, "warn", this.toString());
+    YAHOO.log("Could not get page row index for row " + row, "info", this.toString());
     return null;
 };
 
@@ -3483,6 +3489,9 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
  * object literals containing data.
  */
 YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
+    // Reset init flag
+    this._bInit = true;
+    
     // Clear the RecordSet
     this._oRecordSet.reset();
 
@@ -3493,27 +3502,24 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
     this._oAnchorRecord = null;
     this._oAnchorCell = null;
 
-    YAHOO.log("DataTable state initialized" ,"info", this.toString());
-    this.fireEvent("initEvent");
-
     // Add data to RecordSet
     this._oRecordSet.addRecords(oData);
 
-    // Refresh the view
-    this.refreshView();
+    // Render the view
+    this.render(); // The initEvent will be fired by render method...
 };
 
 /**
- * Refreshes the view with existing Records from the RecordSet while
+ * Renders the view with existing Records from the RecordSet while
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
  *
  * @method refreshView
  */
-YAHOO.widget.DataTable.prototype.refreshView = function() {
+YAHOO.widget.DataTable.prototype.render = function() {
+    YAHOO.log("DataTable rendering...", "info", this.toString());
     this._bRendering = true;
     this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
-    YAHOO.log("DataTable refreshing...", "info", this.toString());
     
     var i, j, k, l, allRecords;
 
@@ -3577,7 +3583,7 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
         // Post loop stuff to reinstate various states
         var endLoops = function() {
             setTimeout(function() {
-                if((oSelf instanceof YAHOO.widget.DataTable) && oSelf.id) {
+                if((oSelf instanceof YAHOO.widget.DataTable) && oSelf._sId) {
                      // Reinstate selected and sorted classes
                     if(bReselect) {
                         // Loop over each row
@@ -3616,27 +3622,36 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
                 }
                 //oSelf._syncColWidths();
                 oSelf._bRendering = false;
-                oSelf.fireEvent("refreshEvent");
-                YAHOO.log("DataTable showing " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
+                if(oSelf._bInit) {
+                    oSelf._bInit = false;
+                    oSelf.fireEvent("initEvent");
+                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", this.toString());
+                }
+                else {
+                    oSelf.fireEvent("renderEvent");
+                    YAHOO.log("DataTable rendered " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
+                }
             },0);
         };
 
         // Timeout loops to add TR elements
         var startLoops = function(nRowIndex) {
             setTimeout(function() {
-                for(var n=nRowIndex; n<nRowIndex+loopN; n++) {
-                    if(n < nMaxIndex) {
-                        oSelf._addTrEl(allRecords[n]);
-                        
+                if((oSelf instanceof YAHOO.widget.DataTable) && oSelf._sId) {
+                    for(var n=nRowIndex; n<nRowIndex+loopN; n++) {
+                        if(n < nMaxIndex) {
+                            oSelf._addTrEl(allRecords[n]);
+
+                        }
+                        else {
+                            oSelf._setFirstRow();
+                            oSelf._setLastRow();
+                            endLoops();
+                            return;
+                        }
                     }
-                    else {
-                        oSelf._setFirstRow();
-                        oSelf._setLastRow();
-                        endLoops();
-                        return;
-                    }
+                    startLoops(n);
                 }
-                startLoops(n);
             }, 0);
         };
         startLoops(nStartIndex);
@@ -3650,6 +3665,12 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
 
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
+};
+/* Backward compatibility */
+YAHOO.widget.DataTable.prototype.refreshView = function() {
+    YAHOO.log("The method refreshView() has been deprecated" +
+            " in favor of render()", "warn", this.toString());
+    this.render();
 };
 
 /**
@@ -3728,12 +3749,12 @@ YAHOO.widget.DataTable.prototype.hideTableMessage = function() {
 };
 
 /**
- * Brings focus to DataTable instance.
+ * Brings focus to the TBODY element. Alias to focusTbodyEl.
  *
  * @method focus
  */
 YAHOO.widget.DataTable.prototype.focus = function() {
-    this._focusEl(this._elContainer);
+    this.focusTbodyEl();
 };
 
 /**
@@ -3863,7 +3884,7 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
         }
     }
 
-    YAHOO.log("Could not get Record index for row " + row, "warn", this.toString());
+    YAHOO.log("Could not get Record index for row " + row, "info", this.toString());
     return null;
 };
 
@@ -3890,7 +3911,7 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
         return this._oRecordSet.getRecord(oRecord);
     }
     else {
-        YAHOO.log("Could not get Record for row at " + row, "warn", this.toString());
+        YAHOO.log("Could not get Record for row at " + row, "info", this.toString());
         return null;
     }
 };
@@ -3969,7 +3990,7 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
         }
     }
     if(!oColumn) {
-        YAHOO.log("Could not get Column for column at " + column, "warn", this.toString());
+        YAHOO.log("Could not get Column for column at " + column, "info", this.toString());
     }
     return oColumn;
 };
@@ -3987,6 +4008,42 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
 };
 
 /**
+ * For the given Column instance, returns next direction to sort.
+ *
+ * @method getColumnSortDir
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @return {String} DataTable.widget.CLASS_ASC or DataTable.widget.CLASS_DESC.
+ */
+ YAHOO.widget.DataTable.prototype.getColumnSortDir = function(oColumn) {
+    // Backward compatibility
+    if(oColumn.sortOptions && oColumn.sortOptions.defaultDir) {
+        if(oColumn.sortOptions.defaultDir == "asc") {
+            oColumn.sortOptions.defaultDir = YAHOO.widget.DataTable.CLASS_ASC;
+        }
+        else if (oColumn.sortOptions.defaultDir == "desc") {
+            oColumn.sortOptions.defaultDir = YAHOO.widget.DataTable.CLASS_DESC;
+        }
+    }
+    
+    // What is the Column's default sort direction?
+    var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir) ? oColumn.sortOptions.defaultDir : YAHOO.widget.DataTable.CLASS_ASC;
+
+    // Already sorted?
+    var bSorted = false;
+    var oSortedBy = this.get("sortedBy");
+    if(oSortedBy && (oSortedBy.key === oColumn.key)) {
+        bSorted = true;
+        if(oSortedBy.dir) {
+            sortDir = (oSortedBy.dir == YAHOO.widget.DataTable.CLASS_ASC) ? YAHOO.widget.DataTable.CLASS_DESC : YAHOO.widget.DataTable.CLASS_ASC;
+        }
+        else {
+            sortDir = (sortDir == YAHOO.widget.DataTable.CLASS_ASC) ? YAHOO.widget.DataTable.CLASS_DESC : YAHOO.widget.DataTable.CLASS_ASC;
+        }
+    }
+    return sortDir;
+};
+
+/**
  * Sorts given Column.
  *
  * @method sortColumn
@@ -3997,30 +4054,12 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         if(!oColumn.sortable) {
             YAHOO.util.Dom.addClass(this.getThEl(oColumn), YAHOO.widget.DataTable.CLASS_SORTABLE);
         }
-        // What is the default sort direction?
-        // Backward compatibility
-        if(oColumn.sortOptions && oColumn.sortOptions.defaultDir) {
-            if(oColumn.sortOptions.defaultDir == "asc") {
-                oColumn.sortOptions.defaultDir = YAHOO.widget.DataTable.CLASS_ASC;
-            }
-            else if (oColumn.sortOptions.defaultDir == "desc") {
-                oColumn.sortOptions.defaultDir = YAHOO.widget.DataTable.CLASS_DESC;
-            }
-        }
-        var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir) ? oColumn.sortOptions.defaultDir : YAHOO.widget.DataTable.CLASS_ASC;
-
-        // Already sorted?
-        var bSorted = false;
+        
         var oSortedBy = this.get("sortedBy");
-        if(oSortedBy && (oSortedBy.key === oColumn.key)) {
-            bSorted = true;
-            if(oSortedBy.dir) {
-                sortDir = (oSortedBy.dir == YAHOO.widget.DataTable.CLASS_ASC) ? "desc" : "asc";
-            }
-            else {
-                sortDir = (sortDir == YAHOO.widget.DataTable.CLASS_ASC) ? "desc" : "asc";
-            }
-        }
+        var bSorted = (oSortedBy && (oSortedBy.key === oColumn.key)) ? true : false;
+
+        // Get the sort dir
+        var sortDir = this.getColumnSortDir(oColumn);
 
         // Do the actual sort
         if(!bSorted) {
@@ -4038,9 +4077,9 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
                         else {
                             return sorted;
                         }
-            };
+                    };
 
-            this._oRecordSet.sortRecords(sortFnc, ((sortDir == "desc") ? true : false));
+            this._oRecordSet.sortRecords(sortFnc, ((sortDir == YAHOO.widget.DataTable.CLASS_DESC) ? true : false));
         }
         else {
             this._oRecordSet.reverseRecords();
@@ -4061,7 +4100,8 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         }
 
         // Update the UI
-        this.refreshView();
+        YAHOO.widget.DataTable.formatHeadCell(oColumn.getThEl().firstChild, oColumn, this);
+        this.render();
 
         this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
         YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
@@ -4265,7 +4305,7 @@ YAHOO.widget.DataTable.prototype.removeColumn = function(oColumn) {
         this._initColumnSet(aOrigColumnDefs);
 
         this._initTableEl();
-        this.refreshView();
+        this.render();
         YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
         return oColumn;
     }
@@ -4304,7 +4344,7 @@ YAHOO.widget.DataTable.prototype.insertColumn = function(oColumn, index) {
     this._initColumnSet(aNewColumnDefs);
 
     this._initTableEl();
-    this.refreshView();
+    this.render();
     YAHOO.log("Column \"" + oColumn.key + "\" inserted", "info", this.toString());
 };
 
@@ -4383,7 +4423,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
             if(YAHOO.lang.isNumber(nTrIndex)) {
                 // Paginated so just refresh the view to keep pagination state
                 if(oPaginator) {
-                    this.refreshView();
+                    this.render();
                 }
                 // Add the TR element
                 else {
@@ -4709,13 +4749,46 @@ YAHOO.widget.DataTable.prototype.deleteRows = function(row, count) {
 // CELL FUNCTIONS
 
 /**
+ * Outputs markup into the given TH based on given Column.
+ *
+ * @method formatHeadCell
+ * @param elCell {HTMLElement} The liner DIV element within the TH.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
+ * @static
+ */
+YAHOO.widget.DataTable.formatHeadCell = function(elCell, oColumn, oSelf) {
+    var sKey = oColumn.getKey();
+    var sLabel = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : sKey;
+
+    // Add accessibility link for sortable Columns
+    if(oColumn.sortable) {
+        // Calculate the direction
+        var sSortClass = oSelf.getColumnSortDir(oColumn);
+        var sSortDir = (sSortClass === YAHOO.widget.DataTable.CLASS_DESC) ? "descending" : " ascending";
+
+        // Generate a unique HREF for visited status
+        var sHref = oSelf.getId() + "-sort" + oColumn.getId() + "-" + sSortDir;
+        
+        // Generate a dynamic TITLE for sort status
+        var sTitle = "Click to sort " + sLabel + " " + sSortDir;
+        
+        // Format the element
+        elCell.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
+    }
+    // Just display the label for non-sortable Columns
+    else {
+        elCell.innerHTML = sLabel;
+    }
+};
+
+/**
  * Outputs markup into the given TD based on given Record.
  *
  * @method formatCell
  * @param elCell {HTMLElement} The liner DIV element within the TD.
  * @param oRecord {YAHOO.widget.Record} (Optional) Record instance.
  * @param oColumn {YAHOO.widget.Column} (Optional) Column instance.
- * @return {HTML} Markup.
  */
 YAHOO.widget.DataTable.prototype.formatCell = function(elCell, oRecord, oColumn) {
     if(!(oRecord instanceof YAHOO.widget.Record)) {
@@ -5203,7 +5276,7 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     } else {
         this.updatePaginator({currentPage:nPage});
     }
-    this.refreshView();
+    this.render();
 };
 
 /**
@@ -7031,7 +7104,7 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         YAHOO.log("Selected " + elRow, "info", this.toString());
     }
     else {
-        YAHOO.log("Could not select " + row, "warn", this.toString());
+        YAHOO.log("Could not select row " + row, "warn", this.toString());
     }
 };
 // Backward compatibility
@@ -7211,7 +7284,7 @@ accept {record}
             return;
         }
     }
-    YAHOO.log("Could not select " + cell, "warn", this.toString());
+    YAHOO.log("Could not select cell " + cell, "warn", this.toString());
 };
 
 /**
@@ -7252,7 +7325,7 @@ YAHOO.widget.DataTable.prototype.unselectCell = function(cell) {
             }
         }
     }
-    YAHOO.log("Could not unselect " + cell, "warn", this.toString());
+    YAHOO.log("Could not unselect cell " + cell, "warn", this.toString());
 };
 
 /**
@@ -7435,7 +7508,7 @@ YAHOO.widget.DataTable.prototype.highlightRow = function(row) {
         YAHOO.log("Highlighted " + elRow, "info", this.toString());
         return;
     }
-    YAHOO.log("Could not highlight " + row, "warn", this.toString());
+    YAHOO.log("Could not highlight row " + row, "warn", this.toString());
 };
 
 /**
@@ -7454,7 +7527,7 @@ YAHOO.widget.DataTable.prototype.unhighlightRow = function(row) {
         YAHOO.log("Unhighlighted " + elRow, "info", this.toString());
         return;
     }
-    YAHOO.log("Could not unhighlight " + row, "warn", this.toString());
+    YAHOO.log("Could not unhighlight row " + row, "warn", this.toString());
 };
 
 /**
@@ -7480,7 +7553,7 @@ YAHOO.widget.DataTable.prototype.highlightCell = function(cell) {
         YAHOO.log("Highlighted " + elCell, "info", this.toString());
         return;
     }
-    YAHOO.log("Could not highlight " + cell, "warn", this.toString());
+    YAHOO.log("Could not highlight cell " + cell, "warn", this.toString());
 };
 
 /**
@@ -7499,7 +7572,7 @@ YAHOO.widget.DataTable.prototype.unhighlightCell = function(cell) {
         YAHOO.log("Unhighlighted " + elCell, "info", this.toString());
         return;
     }
-    YAHOO.log("Could not unhighlight " + cell, "warn", this.toString());
+    YAHOO.log("Could not unhighlight cell " + cell, "warn", this.toString());
 };
 
 
@@ -7823,9 +7896,9 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
         for(j=0; j<checkboxOptions.length; j++) {
             checkboxValue = YAHOO.lang.isValue(checkboxOptions[j].label) ?
                     checkboxOptions[j].label : checkboxOptions[j];
-            checkboxId =  oSelf.id + "-editor-checkbox" + j;
+            checkboxId =  oSelf.getId() + "-editor-checkbox" + j;
             elContainer.innerHTML += "<input type=\"checkbox\"" +
-                    " name=\"" + oSelf.id + "-editor-checkbox\"" +
+                    " name=\"" + oSelf.getId() + "-editor-checkbox\"" +
                     " value=\"" + checkboxValue + "\"" +
                     " id=\"" +  checkboxId + "\">";
             // Then create the labels in an IE-friendly way
@@ -7837,7 +7910,7 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
         var checkboxEl;
         // Loop through checkboxes to check them
         for(j=0; j<checkboxOptions.length; j++) {
-            checkboxEl = YAHOO.util.Dom.get(oSelf.id + "-editor-checkbox" + j);
+            checkboxEl = YAHOO.util.Dom.get(oSelf.getId() + "-editor-checkbox" + j);
             aCheckboxEls.push(checkboxEl);
             for(k=0; k<aCheckedValues.length; k++) {
                 if(checkboxEl.value === aCheckedValues[k]) {
@@ -7851,7 +7924,7 @@ YAHOO.widget.DataTable.editCheckbox = function(oEditor, oSelf) {
         }
         // Loop through checkboxes to assign click handlers
         for(j=0; j<checkboxOptions.length; j++) {
-            checkboxEl = YAHOO.util.Dom.get(oSelf.id + "-editor-checkbox" + j);
+            checkboxEl = YAHOO.util.Dom.get(oSelf.getId() + "-editor-checkbox" + j);
             YAHOO.util.Event.addListener(checkboxEl, "click", function(){
                 var aNewValues = [];
                 for(var m=0; m<aCheckboxEls.length; m++) {
@@ -7991,9 +8064,9 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
         for(j=0; j<radioOptions.length; j++) {
             radioValue = YAHOO.lang.isValue(radioOptions[j].label) ?
                     radioOptions[j].label : radioOptions[j];
-            radioId =  oSelf.id + "-editor-radio" + j;
+            radioId =  oSelf.getId() + "-editor-radio" + j;
             elContainer.innerHTML += "<input type=\"radio\"" +
-                    " name=\"" + oSelf.id + "-editor-radio\"" +
+                    " name=\"" + oSelf.getId() + "-editor-radio\"" +
                     " value=\"" + radioValue + "\"" +
                     " id=\"" +  radioId + "\">";
             // Then create the labels in an IE-friendly way
@@ -8003,7 +8076,7 @@ YAHOO.widget.DataTable.editRadio = function(oEditor, oSelf) {
         }
         // Then check one, and assign click handlers
         for(j=0; j<radioOptions.length; j++) {
-            var radioEl = YAHOO.util.Dom.get(oSelf.id + "-editor-radio" + j);
+            var radioEl = YAHOO.util.Dom.get(oSelf.getId() + "-editor-radio" + j);
             if(value === radioEl.value) {
                 radioEl.checked = true;
                 oSelf._focusEl(radioEl);
@@ -8614,7 +8687,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
             this._oRecordSet.setRecords(oResponse.results,oState.recordOffset);
         }
 
-        this.refreshView();
+        this.render();
     }
     // Error
     else if(ok && (oResponse.error || bError)) {
@@ -8669,9 +8742,9 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when the DataTable's view is refreshed.
+     * Fired when the DataTable's view is rendered.
      *
-     * @event refreshEvent
+     * @event renderEvent
      */
 
     /**

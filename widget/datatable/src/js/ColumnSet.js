@@ -13,7 +13,7 @@
  * @param aDefinitions {Object[]} Array of object literals that define header cells.
  */
 YAHOO.widget.ColumnSet = function(aDefinitions) {
-    this._sName = "instance" + YAHOO.widget.ColumnSet._nCount;
+    this._sId = "yui-cs" + YAHOO.widget.ColumnSet._nCount;
 
     this._init(aDefinitions);
 
@@ -40,11 +40,11 @@ YAHOO.widget.ColumnSet._nCount = 0;
 /**
  * Unique instance name.
  *
- * @property _sName
+ * @property _sId
  * @type String
  * @private
  */
-YAHOO.widget.ColumnSet.prototype._sName = null;
+YAHOO.widget.ColumnSet.prototype._sId = null;
 
 /**
  * Array of object literal Column definitions passed to the constructor.
@@ -144,7 +144,6 @@ YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
             // Instantiate a new Column for each node
             var oColumn = new YAHOO.widget.Column(currentNode);
             oColumn._sId = YAHOO.widget.Column._nCount + "";
-            oColumn._sName = "Column instance" + YAHOO.widget.Column._nCount;
             // Assign a key if not found
             if(!YAHOO.lang.isValue(oColumn.key)) {
                 oColumn.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
@@ -346,14 +345,25 @@ YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Public accessor to the unique name of the ColumnSet instance.
+ * Returns unique name of the ColumnSet instance.
+ *
+ * @method getId
+ * @return {String} Unique name of the ColumnSet instance.
+ */
+
+YAHOO.widget.ColumnSet.prototype.getId = function() {
+    return this._sId;
+};
+
+/**
+ * ColumnSet instance name, for logging.
  *
  * @method toString
  * @return {String} Unique name of the ColumnSet instance.
  */
 
 YAHOO.widget.ColumnSet.prototype.toString = function() {
-    return "ColumnSet " + this._sName;
+    return "ColumnSet instance " + this._sId;
 };
 
 /**
@@ -485,15 +495,6 @@ YAHOO.widget.Column = function(oConfigs) {
  * @static
  */
 YAHOO.widget.Column._nCount = 0;
-
-/**
- * Unique instance name.
- *
- * @property _sName
- * @type String
- * @private
- */
-YAHOO.widget.Column.prototype._sName = null;
 
 /**
  * Unique String identifier assigned at instantiation.
@@ -740,16 +741,6 @@ YAHOO.widget.Column.prototype.sortOptions = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Public accessor to the unique name of the Column instance.
- *
- * @method toString
- * @return {String} Column's unique name.
- */
-YAHOO.widget.Column.prototype.toString = function() {
-    return this._sName;
-};
-
-/**
  * Returns unique ID string.
  *
  * @method getId
@@ -757,6 +748,16 @@ YAHOO.widget.Column.prototype.toString = function() {
  */
 YAHOO.widget.Column.prototype.getId = function() {
     return this._sId;
+};
+
+/**
+ * Column instance name, for logging.
+ *
+ * @method toString
+ * @return {String} Column's unique name.
+ */
+YAHOO.widget.Column.prototype.toString = function() {
+    return "Column instance " + this._sId;
 };
 
 /**
