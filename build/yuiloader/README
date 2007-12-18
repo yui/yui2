@@ -1,5 +1,8 @@
 yuiloader - Release Notes
 
+2.4.1
+   * Updated metadata for 2.4.1
+
 2.4.0
    * NOTE: the API in this release has changed significantly.  Existing implementations
      will need to be modified in order to use the new version.

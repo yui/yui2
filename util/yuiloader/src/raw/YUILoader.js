@@ -191,16 +191,16 @@
         this.allowRollup = true;
 
         /**
-         * Filter to apply to result url.  This filter will modify the default
+         * A filter to apply to result urls.  This filter will modify the default
          * path for all modules.  The default path for the YUI library is the
          * minified version of the files (e.g., event-min.js).  The filter property
          * can be a predefined filter or a custom filter.  The valid predefined 
          * filters are:
          * <dl>
-         *  <dt>debug</dt>
+         *  <dt>DEBUG</dt>
          *  <dd>Selects the debug versions of the library (e.g., event-debug.js).
          *      This option will automatically include the logger widget</dd>
-         *  <dt>raw</dt>
+         *  <dt>RAW</dt>
          *  <dd>Selects the non-minified version of the library (e.g., event.js).
          * </dl>
          * You can also define a custom filter, which must be an object literal 
@@ -211,10 +211,6 @@
          *      'replaceStr': "-debug.js"
          *  &#125;
          * </pre>
-         * Note: the default base path for the YUI library is http://yui.yahooapis.com.
-         * Only the minified versions of the components are available on this host,
-         * so if you choose to use the raw or debug versions of the files, you will
-         * have to host these files locally, and change the "base" property.
          * @property filter
          * @type string|{searchExp: string, replaceStr: string}
          */

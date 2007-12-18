@@ -1,6 +1,6 @@
 {
 
-    'base': 'http://yui.yahooapis.com/2.4.0/build/',
+    'base': 'http://yui.yahooapis.com/2.4.1/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -189,13 +189,15 @@
         'reset-fonts-grids': {
             'type': 'css',
             'path': 'reset-fonts-grids/reset-fonts-grids.css',
-            'supersedes': ['reset', 'fonts', 'grids']
+            'supersedes': ['reset', 'fonts', 'grids', 'reset-fonts'],
+            'rollup': 3
         },
 
         'reset-fonts': {
             'type': 'css',
             'path': 'reset-fonts/reset-fonts.css',
-            'supersedes': ['reset', 'fonts']
+            'supersedes': ['reset', 'fonts'],
+            'rollup': 2
         },
 
         'selector': {
