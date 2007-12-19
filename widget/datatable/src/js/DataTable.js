@@ -4172,21 +4172,27 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
  *
  * @method sortColumn
  * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param sDir {String} (Optional) YAHOO.widget.DataTable.CLASS_ASC or
+ * YAHOO.widget.DataTable.CLASS_DESC
  */
-YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
+YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn, sDir) {
     if(oColumn && (oColumn instanceof YAHOO.widget.Column)) {
         if(!oColumn.sortable) {
             YAHOO.util.Dom.addClass(this.getThEl(oColumn), YAHOO.widget.DataTable.CLASS_SORTABLE);
         }
         
-        var oSortedBy = this.get("sortedBy");
-        var bSorted = (oSortedBy && (oSortedBy.key === oColumn.key)) ? true : false;
-
+        // Validate given direction
+        if(sDir && (sDir !== YAHOO.widget.DataTable.CLASS_ASC) && (sDir !== YAHOO.widget.DataTable.CLASS_DESC)) {
+            sDir = null;
+        }
+        
         // Get the sort dir
-        var sortDir = this.getColumnSortDir(oColumn);
+        var sortDir = sDir || this.getColumnSortDir(oColumn);
 
         // Do the actual sort
-        if(!bSorted) {
+        var oSortedBy = this.get("sortedBy") || {};
+        var bSorted = (oSortedBy.key === oColumn.key) ? true : false;
+        if(!bSorted || sDir) {
             // Is there a custom sort handler function defined?
             var sortFnc = (oColumn.sortOptions && YAHOO.lang.isFunction(oColumn.sortOptions.sortFunction)) ?
                     // Custom sort function
