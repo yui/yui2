@@ -1221,9 +1221,9 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
         // Only if instance is still valid
         if((oSelf instanceof YAHOO.widget.DataTable) && (oSelf._sId)) {
             var allKeys = oSelf._oColumnSet.keys;
-            var elFirstRow = oSelf.getFirstTrEl();
+            var elWhichRow = elRow || oSelf.getFirstTrEl();
 
-            if(elFirstRow && (elFirstRow.cells.length > 0) && (allKeys.length > 0)) {
+            if(elWhichRow && (elWhichRow.cells.length > 0) && (allKeys.length > 0)) {
                 var elHeadLiner, nHeadLinerWidth, elCellLiner, nCellLinerWidth, nNewWidth;
 
                 for(var i=0; i<allKeys.length; i++) {
@@ -1231,13 +1231,13 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
                     nHeadLinerWidth = elHeadLiner.offsetWidth -
                             (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingLeft"),10)) -
                             (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingRight"),10));
-                    elCellLiner = elFirstRow.cells[i].firstChild;
+                    elCellLiner = elWhichRow.cells[i].firstChild;
                     nCellLinerWidth = elCellLiner.offsetWidth -
                             (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
                             (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10));
                     if(nHeadLinerWidth !== nCellLinerWidth) {
                         nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
-                        oSelf.setColumnWidth(allKeys[i],nNewWidth);
+                        oSelf._setColumnWidth(allKeys[i],nNewWidth+"px");
                     }
                 }
             }
@@ -1638,7 +1638,7 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     if(oColumn.width) {
         elTheadCellLiner.style.width = oColumn.width + "px";
     }
-    
+
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
     elTheadCellLabel.id = this._sId + "-label" + colId;
     YAHOO.util.Dom.addClass(elTheadCellLabel,YAHOO.widget.DataTable.CLASS_LABEL);
@@ -1844,6 +1844,11 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         if(oColumn.width) {
             elCellLiner.style.width = oColumn.width + "px";
         }
+        // Or else bump up to fit content width when necessary
+        else if(elCellLiner.offsetWidth < elCellLiner.scrollWidth) {
+            elCellLiner.style.width = elCellLiner.scrollWidth + "px";
+            oColumn.getThEl().firstChild.style.width = elCellLiner.scrollWidth + "px";
+        }
     }
 
     // Sync up widths with Column headers
@@ -1872,7 +1877,8 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     for(var j=0; j<elRow.cells.length; j++) {
         var oColumn = this._oColumnSet.keys[j];
         var elCell = elRow.cells[j];
-        this.formatCell(elCell.firstChild, oRecord, oColumn);
+        var elCellLiner = elCell.firstChild;
+        this.formatCell(elCellLiner, oRecord, oColumn);
 
         // Remove ASC/DESC
         YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_ASC);
@@ -1885,9 +1891,12 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
         
         // Set width if given
         if(oColumn.width) {
-            elCell.firstChild.style.width = oColumn.width + "px";
+            elCellLiner.style.width = oColumn.width + "px";
         }
-
+        // Or else bump up to fit content width when necessary
+        else if(elCellLiner.offsetWidth < elCellLiner.scrollWidth) {
+            elCellLiner.style.width = elCellLiner.scrollWidth + "px";
+        }
     }
 
     // Update Record ID
@@ -3620,7 +3629,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
                         }
                     }
                 }
-                //oSelf._syncColWidths();
+
                 oSelf._bRendering = false;
                 if(oSelf._bInit) {
                     oSelf._bInit = false;
@@ -4112,37 +4121,20 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
 };
 
 /**
- * Sets given Column to given pixel width. If new width is less than minimum
- * width, sets to minimum width. If given pixel width is undefined or otherwise
- * invalid, sets to width "".
+ * Sets given Column to given pixel width. No validations against minimum width
+ * and no updating Column.width value.
  *
- * @method setColumnWidth
+ * @method _setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param nWidth {Number} New width in pixels.
- * @param bHide {Boolean} (Optional) Set to true if hiding Column so that any
- * minimum value can be overridden.
+ * @param sWidth {String} New width value.
+ * @private
  */
-YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bHide) {
+YAHOO.widget.DataTable.prototype._setColumnWidth = function(oColumn, sWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
         var nColKeyIndex = oColumn.getKeyIndex();
         var elTheadCell = oColumn.getThEl();
 
-        // Validate new width against minimum width
-        var sWidth = "";
-        if(YAHOO.lang.isNumber(nWidth)) {
-            if(bHide) { // Override the min if explicitly hiding
-                sWidth = nWidth + "px";
-            }
-            else {
-                sWidth = (nWidth > oColumn.minWidth) ? nWidth + "px" : oColumn.minWidth + "px";
-            }
-        }
-
-        if(!bHide) {
-            oColumn.width = parseInt(sWidth,10);
-        }
-        
         elTheadCell.style.width = sWidth;
         elTheadCell.firstChild.style.width = sWidth;
         
@@ -4152,11 +4144,46 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth, bHid
             allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
             allrows[i].cells[nColKeyIndex].style.width = sWidth;
         }
+        if(YAHOO.env.ua.opera && !this.get("scrollable")) {
+            this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
+            document.body.style += '';
+        }
+    }
+    else {
+        YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
+    }
+};
+
+/**
+ * Sets given Column to given pixel width. If new width is less than minimum
+ * width, sets to minimum width. Updates oColumn.width value.
+ *
+ * @method setColumnWidth
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param nWidth {Number} New width in pixels.
+ */
+YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth) {
+    oColumn = this.getColumn(oColumn);
+    if(oColumn) {
+        // Validate new width against minimum width
+        var sWidth = "";
+        if(YAHOO.lang.isNumber(nWidth)) {
+            sWidth = (nWidth > oColumn.minWidth) ? nWidth + "px" : oColumn.minWidth + "px";
+        }
+
+        // Save state
+        oColumn.width = parseInt(sWidth,10);
+        
+        // Resize the DOM elements
+        this._setColumnWidth(oColumn, sWidth);
+        
+        YAHOO.log("Set width of Column " + oColumn + " to " + sWidth, "info", this.toString());
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
     }
 };
+
 
 /**
  * Hides given Column. NOTE: You cannot hide/show nested Columns. You can only
@@ -4196,7 +4223,7 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
                         cellStyle.overflow = "hidden";
                     }
 
-                    this.setColumnWidth(thisColumn, 1, true);
+                    this._setColumnWidth(thisColumn, "1px");
                     
                     // Disable interactive features
                     if(thisColumn.resizeable) {
@@ -5315,7 +5342,7 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     }
 
     // For Opera artifacting in dropdowns
-    if(dropdownEnabled && navigator.userAgent.toLowerCase().indexOf("opera") != -1) {
+    if(dropdownEnabled && YAHOO.env.ua.opera) {
         document.body.style += '';
     }
     YAHOO.log("Paginators formatted", "info", this.toString());

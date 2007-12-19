@@ -28,7 +28,9 @@ th.yui-dt-resizeable .yui-dt-liner {
 .a11yNote {position:absolute;left:-1500px;}
 
 /* vertical and horizontal scrolling */
-.yui-dt-scrollable .yui-dt-bd {overflow:auto;}
+.yui-dt-scrollable .yui-dt-bd {
+    overflow:auto;
+}
 .yui-dt-scrollable .yui-dt-hd {
     overflow:hidden;
     position:relative; /* for ie overflow bug http://rowanw.com/bugs/overflow_relative.htm */
