@@ -1187,6 +1187,37 @@ YAHOO.widget.DataTable.prototype._sLastTrId = null;
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Clears browser text selection. Useful to call on rowSelectEvent or
+ * cellSelectEvent to prevent clicks or dblclicks from selecting text in the
+ * browser.
+ *
+ * @method clearTextSelection
+ */
+YAHOO.widget.DataTable.prototype.clearTextSelection = function() {
+    var sel;
+    if(window.getSelection) {
+    	sel = window.getSelection();
+    }
+    else if(document.getSelection) {
+    	sel = document.getSelection();
+    }
+    else if(document.selection) {
+    	sel = document.selection;
+    }
+    if(sel) {
+        if(sel.empty) {
+            sel.empty();
+        }
+        else if (sel.removeAllRanges) {
+            sel.removeAllRanges();
+        }
+        else if(sel.collapse) {
+            sel.collapse();
+        }
+    }
+};
+
+/**
  * Sets focus on the given element.
  *
  * @method _focusEl
@@ -3523,7 +3554,7 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
  * maintaining sort, pagination, and selection states. For performance, reuses
  * existing DOM elements when possible while deleting extraneous elements.
  *
- * @method refreshView
+ * @method render
  */
 YAHOO.widget.DataTable.prototype.render = function() {
     YAHOO.log("DataTable rendering...", "info", this.toString());
@@ -3676,6 +3707,14 @@ YAHOO.widget.DataTable.prototype.render = function() {
     }
 };
 /* Backward compatibility */
+/**
+ * Renders the view with existing Records from the RecordSet while
+ * maintaining sort, pagination, and selection states. For performance, reuses
+ * existing DOM elements when possible while deleting extraneous elements.
+ *
+ * @method refreshView
+ * @deprecated
+ */
 YAHOO.widget.DataTable.prototype.refreshView = function() {
     YAHOO.log("The method refreshView() has been deprecated" +
             " in favor of render()", "warn", this.toString());
@@ -8404,34 +8443,6 @@ YAHOO.widget.DataTable.prototype.onEventSelectRow = function(oArgs) {
     else {
         this._handleStandardSelectionByMouse(oArgs);
     }
-
-    // Clear any text selections that are a byproduct of the click or dblclick
-    var e = oArgs.event;
-
-    var sType = e.type;
-    if((sType == "click") || (sType == "dblclick")) {
-        var sel;
-        if(window.getSelection) {
-        	sel = window.getSelection();
-        }
-        else if(document.getSelection) {
-        	sel = document.getSelection();
-        }
-        else if(document.selection) {
-        	sel = document.selection;
-        }
-        if(sel) {
-            if(sel.empty) {
-                sel.empty();
-            }
-            else if (sel.removeAllRanges) {
-                sel.removeAllRanges();
-            }
-            else if(sel.collapse) {
-                sel.collapse();
-            }
-        }
-    }
 };
 
 /**
@@ -8451,35 +8462,6 @@ YAHOO.widget.DataTable.prototype.onEventSelectCell = function(oArgs) {
     }
     else {
         this._handleSingleCellSelectionByMouse(oArgs);
-    }
-
-    // Clear any text selections that are a byproduct of the click or dblclick
-    var e = oArgs.event;
-    YAHOO.util.Event.preventDefault(e);
-
-    var sType = e.type;
-    if((sType == "click") || (sType == "dblclick")) {
-        var sel;
-        if(window.getSelection) {
-        	sel = window.getSelection();
-        }
-        else if(document.getSelection) {
-        	sel = document.getSelection();
-        }
-        else if(document.selection) {
-        	sel = document.selection;
-        }
-        if(sel) {
-            if(sel.empty) {
-                sel.empty();
-            }
-            else if (sel.removeAllRanges) {
-                sel.removeAllRanges();
-            }
-            else if(sel.collapse) {
-                sel.collapse();
-            }
-        }
     }
 };
 
