@@ -1052,16 +1052,7 @@ YAHOO.widget.DataTable.prototype._elTbodyContainer = null;
 YAHOO.widget.DataTable.prototype._elCaption = null;
 
 /**
- * DOM reference to the header TABLE element for the DataTable instance.
- *
- * @property _elTable
- * @type HTMLElement
- * @private
- */
-YAHOO.widget.DataTable.prototype._elHeadTable = null;
-
-/**
- * DOM reference to the THEAD element for the DataTable instance.
+ * DOM reference to the primary THEAD element for the DataTable instance.
  *
  * @property _elThead
  * @type HTMLElement
@@ -1242,7 +1233,8 @@ YAHOO.widget.DataTable.prototype._focusEl = function(el) {
  * Syncs up widths of THs and TDs across all Columns.
  *
  * @method _syncColWidths
- * @param elRow {HTMLElement} (optional) Sync header widths with given row only
+ * @param elRow {HTMLElement} Sync THEAD cell widths with cells from
+ * the given TBODY row.
  * @private
  */
 YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
@@ -1311,11 +1303,11 @@ YAHOO.widget.DataTable.prototype._initContainerEl = function(elContainer) {
 
         YAHOO.util.Dom.addClass(elContainer,"yui-dt");
         
-        // Container for header elements
+        // Container for header TABLE
         this._elTheadContainer = elContainer.appendChild(document.createElement("div"));
         YAHOO.util.Dom.addClass(this._elTheadContainer, "yui-dt-hd");
 
-        // Container for header elements
+        // Container for body TABLE
         this._elTbodyContainer = elContainer.appendChild(document.createElement("div"));
         YAHOO.util.Dom.addClass(this._elTbodyContainer, "yui-dt-bd");
 
@@ -1516,7 +1508,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
     YAHOO.util.Event.addListener(elTbody, "click", this._onTbodyClick, this);
 
-    YAHOO.util.Event.addListener(elTbodyContainer, "scroll", this._onScroll, this); // to sync horiz scroll headera
+    YAHOO.util.Event.addListener(elTbodyContainer, "scroll", this._onScroll, this); // to sync horiz scroll headers
 };
 
 /**
@@ -1538,7 +1530,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
         this._elThead = elThead;
     }
 
-    // Iterate through each row of Column headers...
+    // Iterate through each row of THEAD cells...
     var colTree = oColumnSet.tree;
     var elTheadCell;
     for(i=0; i<colTree.length; i++) {
@@ -1616,10 +1608,10 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     }
 
     if(bA11y) {
-        YAHOO.log("Accessibility Column headers for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+        YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
     }
     else {
-        YAHOO.log("Column headers for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+        YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
     }
 };
 
@@ -1756,7 +1748,7 @@ YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._initColumnSort = function() {
-    this.subscribe("headerCellClickEvent", this.onEventSortColumn);
+    this.subscribe("theadCellClickEvent", this.onEventSortColumn);
 };
 
 
@@ -1882,7 +1874,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         }
     }
 
-    // Sync up widths with Column headers
+    // Sync up widths of cells for given row with corresponding TH elements
     this._syncColWidths(elRow);
     
     return elRow;
@@ -1933,7 +1925,7 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     // Update Record ID
     elRow.yuiRecordId = oRecord.getId();
     
-    // Sync up widths with Column headers
+    // Sync up widths of cells for given row with corresponding TH elements
     this._syncColWidths(elRow);
 
     return elRow;
@@ -2237,38 +2229,49 @@ YAHOO.widget.DataTable.prototype._onTbodyFocus = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
-
+    var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
-                 break;
+                 return;
             case "a":
                 break;
             case "td":
-                oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
-                    oSelf.fireEvent("headerLabelMouseoverEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadLabelMouseoverEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerLabelMouseoverEvent",{target:elTarget,event:e});
                 }
                 break;
             case "th":
-                oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("theadCellMouseoverEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
                 break;
             case "tr":
                 if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
-                    oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
                 }
                 else {
-                    oSelf.fireEvent("rowMouseoverEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("rowMouseoverEvent",{target:elTarget,event:e});
                 }
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2285,38 +2288,49 @@ YAHOO.widget.DataTable.prototype._onTableMouseover = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
-
+    var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
-                break;
+                return;
             case "a":
                 break;
             case "td":
-                oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("cellMouseoutEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
-                    oSelf.fireEvent("headerLabelMouseoutEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadLabelMouseoutEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerLabelMouseoutEvent",{target:elTarget,event:e});
                 }
                 break;
             case "th":
-                oSelf.fireEvent("headerCellMouseoutEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("theadCellMouseoutEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMouseoutEvent",{target:elTarget,event:e});
                 break;
             case "tr":
                 if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
-                    oSelf.fireEvent("headerRowMouseoutEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadRowMouseoutEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerRowMouseoutEvent",{target:elTarget,event:e});
                 }
                 else {
-                    oSelf.fireEvent("rowMouseoutEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("rowMouseoutEvent",{target:elTarget,event:e});
                 }
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableMouseoutEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2333,38 +2347,49 @@ YAHOO.widget.DataTable.prototype._onTableMouseout = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
-
+    var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
-                break;
+                return;
             case "a":
                 break;
             case "td":
-                oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("cellMousedownEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
-                    oSelf.fireEvent("headerLabelMousedownEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadLabelMousedownEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerLabelMousedownEvent",{target:elTarget,event:e});
                 }
                 break;
             case "th":
-                oSelf.fireEvent("headerCellMousedownEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("theadCellMousedownEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMousedownEvent",{target:elTarget,event:e});
                 break;
             case "tr":
                 if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
-                    oSelf.fireEvent("headerRowMousedownEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadRowMousedownEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerRowMousedownEvent",{target:elTarget,event:e});
                 }
                 else {
-                    oSelf.fireEvent("rowMousedownEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("rowMousedownEvent",{target:elTarget,event:e});
                 }
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableMousedownEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2381,36 +2406,47 @@ YAHOO.widget.DataTable.prototype._onTableMousedown = function(e, oSelf) {
 YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
-
+    var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
-                break;
+                return;
             case "td":
-                oSelf.fireEvent("cellDblclickEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("cellDblclickEvent",{target:elTarget,event:e});
                 break;
             case "span":
                 if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
-                    oSelf.fireEvent("headerLabelDblclickEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadLabelDblclickEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerLabelDblclickEvent",{target:elTarget,event:e});
                 }
                 break;
             case "th":
-                oSelf.fireEvent("headerCellDblclickEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("theadCellDblclickEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellDblclickEvent",{target:elTarget,event:e});
                 break;
             case "tr":
                 if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
-                    oSelf.fireEvent("headerRowDblclickEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadRowDblclickEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerRowDblclickEvent",{target:elTarget,event:e});
                 }
                 else {
-                    oSelf.fireEvent("rowDblclickEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("rowDblclickEvent",{target:elTarget,event:e});
                 }
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableDblclickEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2424,7 +2460,7 @@ YAHOO.widget.DataTable.prototype._onTableDblclick = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onTheadKeydown = function(e, oSelf) {
-    // If tabbing to next Column header causes THEAD to scroll,
+    // If tabbing to next TH label link causes THEAD to scroll,
     // need to sync scrollLeft with TBODY
     if(YAHOO.util.Event.getCharCode(e) === 9) {
         setTimeout(function() {
@@ -2436,20 +2472,29 @@ YAHOO.widget.DataTable.prototype._onTheadKeydown = function(e, oSelf) {
     
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
-
+    var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
+                return;
+            case "input":
+            case "textarea":
+                // TODO
                 break;
             case "thead":
-                oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("theadKeyEvent",{target:elTarget,event:e});
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableKeyEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2489,20 +2534,25 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
 
     var elTarget = YAHOO.util.Event.getTarget(e);
     var elTag = elTarget.tagName.toLowerCase();
-
+    var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
-                break;
+                return;
             case "tbody":
-                oSelf.fireEvent("tbodyKeyEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("tbodyKeyEvent",{target:elTarget,event:e});
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableKeyEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2517,8 +2567,7 @@ YAHOO.widget.DataTable.prototype._onTbodyKeydown = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onTableKeypress = function(e, oSelf) {
-    var isMac = (navigator.userAgent.toLowerCase().indexOf("mac") != -1);
-    if(isMac) {
+    if(YAHOO.env.ua.webkit) {
         var nKey = YAHOO.util.Event.getCharCode(e);
         // arrow down
         if(nKey == 40) {
@@ -2540,40 +2589,60 @@ YAHOO.widget.DataTable.prototype._onTableKeypress = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
-
+    // Always blur the cell editor
     if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
-    while(elTarget && (elTag != "thead")) {
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+    var bKeepBubbling = true;
+    while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
-                break;
-            //TODO: fire headerXXXClickEvent?
-            case "input":
-            case "textarea":
-            case "select":
-            case "button":
                 return;
+            case "input":
+                if(elTarget.type.toLowerCase() == "checkbox") {
+                    bKeepBubbling = oSelf.fireEvent("theadCheckboxClickEvent",{target:elTarget,event:e});
+                }
+                else if(elTarget.type.toLowerCase() == "radio") {
+                    bKeepBubbling = oSelf.fireEvent("theadRadioClickEvent",{target:elTarget,event:e});
+                }
+                break;
+            case "a":
+                bKeepBubbling = oSelf.fireEvent("theadLinkClickEvent",{target:elTarget,event:e});
+                break;
+            case "button":
+                bKeepBubbling = oSelf.fireEvent("theadButtonClickEvent",{target:elTarget,event:e});
+                break;
             case "span":
                 if(YAHOO.util.Dom.hasClass(elTarget, YAHOO.widget.DataTable.CLASS_LABEL)) {
-                    oSelf.fireEvent("headerLabelClickEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("theadLabelClickEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerLabelClickEvent",{target:elTarget,event:e});
                 }
                 break;
             case "th":
-                oSelf.fireEvent("headerCellClickEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("theadCellClickEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellClickEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                oSelf.fireEvent("headerRowClickEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("theadRowClickEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerRowClickEvent",{target:elTarget,event:e});
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2588,46 +2657,50 @@ YAHOO.widget.DataTable.prototype._onTheadClick = function(e, oSelf) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
-
+    // Always blur the cell editor
     if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
+    // Fire Custom Events
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+    var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
             case "body":
-                break;
+                return;
             case "input":
                 if(elTarget.type.toLowerCase() == "checkbox") {
-                    oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("checkboxClickEvent",{target:elTarget,event:e});
                 }
                 else if(elTarget.type.toLowerCase() == "radio") {
-                    oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("radioClickEvent",{target:elTarget,event:e});
                 }
-                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
-                return;
+                break;
             case "a":
-                oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
-                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
-                return;
+                bKeepBubbling = oSelf.fireEvent("linkClickEvent",{target:elTarget,event:e});
+                break;
             case "button":
-                oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
-                oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
-                return;
+                bKeepBubbling = oSelf.fireEvent("buttonClickEvent",{target:elTarget,event:e});
+                break;
             case "td":
-                oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("cellClickEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                oSelf.fireEvent("rowClickEvent",{target:elTarget,event:e});
+                bKeepBubbling = oSelf.fireEvent("rowClickEvent",{target:elTarget,event:e});
                 break;
             default:
                 break;
         }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+        if(!bKeepBubbling) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.tagName.toLowerCase();
+            }
         }
     }
     oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
@@ -2640,6 +2713,7 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
  * @param e {HTMLEvent} The click event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
@@ -2696,6 +2770,7 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
  * @param e {HTMLEvent} The change event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
@@ -2719,6 +2794,7 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
  * @param e {HTMLEvent} The change event.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @private
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype._onDropdownChange = function(e, oSelf) {
     var elTarget = YAHOO.util.Event.getTarget(e);
@@ -3352,39 +3428,39 @@ YAHOO.widget.DataTable.prototype.getBelowTdEl = function(cell) {
  * Returns DOM reference to a TH element.
  *
  * @method getThEl
- * @param header {YAHOO.widget.Column | HTMLElement | String} Column instance,
+ * @param theadCell {YAHOO.widget.Column | HTMLElement | String} Column instance,
  * DOM element reference, or string ID.
  * @return {HTMLElement} Reference to TH element.
  */
-YAHOO.widget.DataTable.prototype.getThEl = function(header) {
-    var elHeader;
+YAHOO.widget.DataTable.prototype.getThEl = function(theadCell) {
+    var elTheadCell;
 
     // Validate Column instance
-    if(header instanceof YAHOO.widget.Column) {
-        var oColumn = header;
-        elHeader = oColumn.getThEl();
-        if(elHeader) {
-            return elHeader;
+    if(theadCell instanceof YAHOO.widget.Column) {
+        var oColumn = theadCell;
+        elTheadCell = oColumn.getThEl();
+        if(elTheadCell) {
+            return elTheadCell;
         }
     }
     // Validate HTML element
     else {
-        var el = YAHOO.util.Dom.get(header);
+        var el = YAHOO.util.Dom.get(theadCell);
 
         if(el && (el.ownerDocument == document)) {
             // Validate TH element
             if(el.tagName.toLowerCase() != "th") {
                 // Traverse up the DOM to find the corresponding TR element
-                elHeader = YAHOO.util.Dom.getAncestorByTagName(el,"th");
+                elTheadCell = YAHOO.util.Dom.getAncestorByTagName(el,"th");
             }
             else {
-                elHeader = el;
+                elTheadCell = el;
             }
 
             // Make sure the TH is in this THEAD
-            if(elHeader && (elHeader.parentNode.parentNode == this._elThead)) {
+            if(elTheadCell && (elTheadCell.parentNode.parentNode == this._elThead)) {
                 // Now we can return the TD element
-                return elHeader;
+                return elTheadCell;
             }
         }
     }
@@ -4148,7 +4224,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn) {
         }
 
         // Update the UI
-        YAHOO.widget.DataTable.formatHeadCell(oColumn.getThEl().firstChild, oColumn, this);
+        YAHOO.widget.DataTable.formatHeadCell(oColumn.getThEl().firstChild.firstChild, oColumn, this);
         this.render();
 
         this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
@@ -4243,7 +4319,7 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
 
-                // Adjust header cell
+                // Adjust thead cell
                 var elTheadCell = thisColumn.getThEl();
                 var elLiner = elTheadCell.firstChild;
                 var linerStyle = elLiner.style;
@@ -4273,7 +4349,7 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
                         thisColumn.getThEl().firstChild.firstChild.firstChild.style.display = "none";
                     }
                 }
-                // Just set header cell width directly for parent Column
+                // Just set thead cell width directly for parent Column
                 else {
                     elLiner.style.width = "1px";
                 }
@@ -4307,7 +4383,7 @@ YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
                 
-                // Adjust header cell
+                // Adjust thead cell
                 var elTheadCell = thisColumn.getThEl();
                 var elLiner = elTheadCell.firstChild;
                 var linerStyle = elLiner.style;
@@ -4818,12 +4894,12 @@ YAHOO.widget.DataTable.prototype.deleteRows = function(row, count) {
  * Outputs markup into the given TH based on given Column.
  *
  * @method formatHeadCell
- * @param elCell {HTMLElement} The liner DIV element within the TH.
+ * @param elCellLabel {HTMLElement} The label DIV element within the TH liner.
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
  * @static
  */
-YAHOO.widget.DataTable.formatHeadCell = function(elCell, oColumn, oSelf) {
+YAHOO.widget.DataTable.formatHeadCell = function(elCellLabel, oColumn, oSelf) {
     var sKey = oColumn.getKey();
     var sLabel = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : sKey;
 
@@ -4831,20 +4907,20 @@ YAHOO.widget.DataTable.formatHeadCell = function(elCell, oColumn, oSelf) {
     if(oColumn.sortable) {
         // Calculate the direction
         var sSortClass = oSelf.getColumnSortDir(oColumn);
-        var sSortDir = (sSortClass === YAHOO.widget.DataTable.CLASS_DESC) ? "descending" : " ascending";
+        var sSortDir = (sSortClass === YAHOO.widget.DataTable.CLASS_DESC) ? "descending" : "ascending";
 
         // Generate a unique HREF for visited status
         var sHref = oSelf.getId() + "-sort" + oColumn.getId() + "-" + sSortDir;
         
         // Generate a dynamic TITLE for sort status
-        var sTitle = "Click to sort " + sLabel + " " + sSortDir;
+        var sTitle = "Click to sort " + sSortDir;
         
         // Format the element
-        elCell.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
+        elCellLabel.innerHTML = "<a href=\"" + sHref + "\" title=\"" + sTitle + "\" class=\"" + YAHOO.widget.DataTable.CLASS_SORTABLE + "\">" + sLabel + "</a>";
     }
     // Just display the label for non-sortable Columns
     else {
-        elCell.innerHTML = sLabel;
+        elCellLabel.innerHTML = sLabel;
     }
 };
 
@@ -7742,7 +7818,7 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
                 y = elCell.offsetTop + // cell pos relative to table
                         YAHOO.util.Dom.getY(this._elTbody.parentNode) - // plus table pos relative to document
                         this._elTbody.scrollTop + // minus tbody scroll
-                        this._elThead.offsetHeight; // account for fixed headers
+                        this._elThead.offsetHeight; // account for fixed THEAD cells
             }
 
             elContainer.style.left = x + "px";
@@ -8896,125 +8972,140 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a header row has a mouseover.
+     * Fired when a THEAD row has a mouseover. Replaces deprecated
+     * headerRowMouseoverEvent.
      *
-     * @event headerRowMouseoverEvent
+     * @event theadRowMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TR element.
      */
 
     /**
-     * Fired when a header row has a mouseout.
+     * Fired when a THEAD row has a mouseout. Replaces deprecated
+     * headerRowMouseoutEvent.
      *
-     * @event headerRowMouseoutEvent
+     * @event theadRowMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TR element.
      */
 
     /**
-     * Fired when a header row has a mousedown.
+     * Fired when a THEAD row has a mousedown. Replaces deprecated
+     * headerRowMousedownEvent.
      *
-     * @event headerRowMousedownEvent
+     * @event theadRowMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TR element.
      */
 
     /**
-     * Fired when a header row has a click.
+     * Fired when a THEAD row has a click. Replaces deprecated
+     * headerRowClickEvent.
      *
-     * @event headerRowClickEvent
+     * @event theadRowClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TR element.
      */
 
     /**
-     * Fired when a header row has a dblclick.
+     * Fired when a THEAD row has a dblclick. Replaces deprecated
+     * headerRowDblclickEvent.
      *
-     * @event headerRowDblclickEvent
+     * @event theadRowDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TR element.
      */
 
     /**
-     * Fired when a header cell has a mouseover.
+     * Fired when a THEAD cell has a mouseover. Replaces deprecated
+     * headerCellMouseoverEvent.
      *
-     * @event headerCellMouseoverEvent
+     * @event theadCellMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      *
      */
 
     /**
-     * Fired when a header cell has a mouseout.
+     * Fired when a THEAD cell has a mouseout. Replaces deprecated
+     * headerCellMouseoutEvent.
      *
-     * @event headerCellMouseoutEvent
+     * @event theadCellMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      *
      */
 
     /**
-     * Fired when a header cell has a mousedown.
+     * Fired when a THEAD cell has a mousedown. Replaces deprecated
+     * headerCellMousedownEvent.
      *
-     * @event headerCellMousedownEvent
+     * @event theadCellMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      */
 
     /**
-     * Fired when a header cell has a click.
+     * Fired when a THEAD cell has a click. Replaces deprecated
+     * headerCellClickEvent.
      *
-     * @event headerCellClickEvent
+     * @event theadCellClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      */
 
     /**
-     * Fired when a header cell has a dblclick.
+     * Fired when a THEAD cell has a dblclick. Replaces deprecated
+     * headerCellDblclickEvent.
      *
-     * @event headerCellDblclickEvent
+     * @event theadCellDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TH element.
      */
 
     /**
-     * Fired when a header label has a mouseover.
+     * Fired when a THEAD label has a mouseover. Replaces deprecated
+     * headerLabelMouseoverEvent.
      *
-     * @event headerLabelMouseoverEvent
+     * @event theadLabelMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      *
      */
 
     /**
-     * Fired when a header label has a mouseout.
+     * Fired when a THEAD label has a mouseout. Replaces deprecated
+     * headerLabelMouseoutEvent.
      *
-     * @event headerLabelMouseoutEvent
+     * @event theadLabelMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      *
      */
 
     /**
-     * Fired when a header label has a mousedown.
+     * Fired when a THEAD label has a mousedown. Replaces deprecated
+     * headerLabelMousedownEvent.
      *
-     * @event headerLabelMousedownEvent
+     * @event theadLabelMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      */
 
     /**
-     * Fired when a header label has a click.
+     * Fired when a THEAD label has a click. Replaces deprecated
+     * headerLabelClickEvent.
      *
-     * @event headerLabelClickEvent
+     * @event theadLabelClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      */
 
     /**
-     * Fired when a header label has a dblclick.
+     * Fired when a THEAD label has a dblclick. Replaces deprecated
+     * headerLabelClickEvent.
      *
-     * @event headerLabelDblclickEvent
+     * @event theadLabelDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      */

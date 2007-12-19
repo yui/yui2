@@ -10,7 +10,8 @@
  * @class ColumnSet
  * @uses YAHOO.util.EventProvider
  * @constructor
- * @param aDefinitions {Object[]} Array of object literals that define header cells.
+ * @param aDefinitions {Object[]} Array of object literals that define cells in
+ * the THEAD.
  */
 YAHOO.widget.ColumnSet = function(aDefinitions) {
     this._sId = "yui-cs" + YAHOO.widget.ColumnSet._nCount;
@@ -106,7 +107,8 @@ YAHOO.widget.ColumnSet.prototype.headers = null;
  * Initializes ColumnSet instance with data from Column definitions.
  *
  * @method _init
- * @param aDefinitions {Object[]} Array of object literals that define header cells.
+ * @param aDefinitions {Object[]} Array of object literals that define cells in
+ * the THEAD .
  * @private
  */
 
