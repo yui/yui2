@@ -75,6 +75,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     //HACK: Set the paginator values.  Attribute doesn't afford for merging
     // obj value's keys.  It's all or nothing.  Merge in provided keys.
     if(this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
+        // Backward compatibility
         this.updatePaginator(this._oConfigs.paginator);
     }
 
@@ -283,12 +284,27 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     * @type {Object|YAHOO.widget.Paginator}
     */
     this.setAttributeConfig("paginator", {
-        value : null,
+        value : { // Backward compatibility
+            rowsPerPage:500, // 500 rows per page
+            currentPage:1,  // show page one
+            startRecordIndex:0, // start with first Record
+            totalRecords:0, // how many Records total
+            totalPages:0, // how many pages total
+            rowsThisPage:0, // how many rows this page
+            pageLinks:0,    // show all links
+            pageLinksStart:1, // first link is page 1
+            dropdownOptions: null, //no dropdown
+            containers:[], // Paginator container element references
+            dropdowns: [], //dropdown element references,
+            links: [] // links elements
+        },
         validator : function (oNewPaginator) {
             if (typeof oNewPaginator === 'object' && oNewPaginator) {
                 if (oNewPaginator instanceof YAHOO.widget.Paginator) {
                     return true;
-                } else { // backward compatibility
+                }
+                else {
+                    // Backward compatibility
                     if(oNewPaginator && (oNewPaginator.constructor == Object)) {
                         // Check for incomplete set of values
                         if((oNewPaginator.rowsPerPage !== undefined) &&
@@ -2706,88 +2722,7 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
     oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
 };
 
-/**
- * Handles click events on paginator links.
- *
- * @method _onPaginatorLinkClick
- * @param e {HTMLEvent} The click event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- * @deprecated
- */
-YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
-
-    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
-    }
-
-    while(elTarget && (elTag != "table")) {
-        switch(elTag) {
-            case "body":
-                return;
-            case "a":
-                YAHOO.util.Event.stopEvent(e);
-                //TODO: after the showPage call, figure out which link
-                //TODO: was clicked and reset focus to the new version of it
-                //TODO: support multiple custom classnames
-                switch(elTarget.className) {
-                    case YAHOO.widget.DataTable.CLASS_PAGE:
-                        oSelf.showPage(parseInt(elTarget.innerHTML,10));
-                        return;
-                    case YAHOO.widget.DataTable.CLASS_FIRST:
-                        oSelf.showPage(1);
-                        return;
-                    case YAHOO.widget.DataTable.CLASS_LAST:
-                        oSelf.showPage(oSelf.get("paginator").totalPages);
-                        return;
-                    case YAHOO.widget.DataTable.CLASS_PREVIOUS:
-                        oSelf.showPage(oSelf.get("paginator").currentPage - 1);
-                        return;
-                    case YAHOO.widget.DataTable.CLASS_NEXT:
-                        oSelf.showPage(oSelf.get("paginator").currentPage + 1);
-                        return;
-                }
-                break;
-            default:
-                return;
-        }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
-        }
-        else {
-            return;
-        }
-    }
-};
-
-/**
- * Handles change events on paginator SELECT element.
- *
- * @method _onPaginatorDropdownChange
- * @param e {HTMLEvent} The change event.
- * @param oSelf {YAHOO.widget.DataTable} DataTable instance.
- * @private
- * @deprecated
- */
-YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf) {
-    var elTarget = YAHOO.util.Event.getTarget(e);
-    var newValue = elTarget[elTarget.selectedIndex].value;
-
-    var newRowsPerPage = YAHOO.lang.isValue(parseInt(newValue,10)) ? parseInt(newValue,10) : null;
-    if(newRowsPerPage !== null) {
-        var newStartRecordIndex = (oSelf.get("paginator").currentPage-1) * newRowsPerPage;
-        oSelf.updatePaginator({rowsPerPage:newRowsPerPage, startRecordIndex:newStartRecordIndex});
-        oSelf.render();
-    }
-    else {
-        YAHOO.log("Could not paginate with " + newValue + " rows per page", "error", oSelf.toString());
-    }
-};
-
-/**
+/*TODO undeprecate?
  * Handles change events on SELECT elements within DataTable.
  *
  * @method _onDropdownChange
@@ -2803,66 +2738,6 @@ YAHOO.widget.DataTable.prototype._onDropdownChange = function(e, oSelf) {
     oSelf.fireEvent("dropdownChangeEvent", {event:e, target:elTarget});
 };
 
-/**
- * Delegates the YAHOO.widget.Paginator changeRequest events to the configured
- * handler.
- * @method onPaginatorChange
- * @param {Object} an object literal describing the proposed pagination state
- */
-YAHOO.widget.DataTable.prototype.onPaginatorChange = function (oState) {
-    var handler = this.get('paginationEventHandler');
-
-    handler(oState,this);
-};
-
-/**
- * Handles YAHOO.widget.Paginator changeRequest events for static DataSources
- * (i.e. DataSources that return all data immediately)
- * @method handleSimplePagination
- * @param {object} the requested state of the pagination
- * @param {DataTable} the DataTable instance
- * @private
- */
-YAHOO.widget.DataTable.handleSimplePagination = function (oState,self) {
-    oState.paginator.setRecordOffset(oState.recordOffset);
-    oState.paginator.setRowsPerPage(oState.rowsPerPage);
-
-    self.render();
-};
-
-/**
- * Handles YAHOO.widget.Paginator changeRequest events for dynamic DataSources
- * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
- * @method handleDataSourcePagination
- * @param {object} the requested state of the pagination
- * @param {DataTable} the DataTable instance
- */
-YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
-    var requestedRecords = oState.records[1] - oState.recordOffset;
-
-    if (self._oRecordSet.hasRecords(oState.recordOffset, requestedRecords)) {
-        oState.paginator.setRecordOffset(oState.recordOffset);
-        oState.paginator.setRowsPerPage(oState.rowsPerPage);
-
-        self.render();
-    } else {
-        // Translate the proposed page state into a DataSource request param
-        var generateRequest = self.get('generateRequest');
-        var request = generateRequest({ pagination : oState }, self);
-
-        var callback = {
-            success : self.onDataReturnSetPageData,
-            failure : self.onDataReturnSetPageData,
-            argument : {
-                datatable : self,
-                pagination : oState
-            },
-            scope : self
-        };
-
-        self._oDataSource.sendRequest(request, callback);
-    }
-};
 
 
 
@@ -3088,12 +2963,6 @@ YAHOO.widget.DataTable.prototype.getTheadEl = function() {
 YAHOO.widget.DataTable.prototype.getTbodyEl = function() {
     return this._elTbody;
 };
-// Backward compatibility
-YAHOO.widget.DataTable.prototype.getBody = function() {
-    YAHOO.log("The method getBody() has been deprecated" +
-            " in favor of getTbodyEl()", "warn", this.toString());
-    return this.getTbodyEl();
-};
 
 /**
  * Returns DOM reference to the DataTable's secondary TBODY element that is
@@ -3171,12 +3040,6 @@ YAHOO.widget.DataTable.prototype.getTrEl = function(row) {
     }
 
     return null;
-};
-// Backward compatibility
-YAHOO.widget.DataTable.prototype.getRow = function(index) {
-    YAHOO.log("The method getRow() has been deprecated" +
-            " in favor of getTrEl()", "warn", this.toString());
-    return this.getTrEl(index);
 };
 
 /**
@@ -3647,7 +3510,9 @@ YAHOO.widget.DataTable.prototype.render = function() {
                             oPaginator.getRecordOffset(),
                             oPaginator.get('rowsPerPage'));
             oPaginator.update();
-        } else {
+        }
+        else {
+            // Backward compatibility
             this.updatePaginator();
             var rowsPerPage = oPaginator.rowsPerPage;
             var startRecordIndex = (oPaginator.currentPage - 1) * rowsPerPage;
@@ -3745,6 +3610,8 @@ YAHOO.widget.DataTable.prototype.render = function() {
                 }
                 else {
                     oSelf.fireEvent("renderEvent");
+                    // Backward compatibility
+                    oSelf.fireEvent("refreshEvent");
                     YAHOO.log("DataTable rendered " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
                 }
             },0);
@@ -3781,20 +3648,6 @@ YAHOO.widget.DataTable.prototype.render = function() {
 
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
-};
-/* Backward compatibility */
-/**
- * Renders the view with existing Records from the RecordSet while
- * maintaining sort, pagination, and selection states. For performance, reuses
- * existing DOM elements when possible while deleting extraneous elements.
- *
- * @method refreshView
- * @deprecated
- */
-YAHOO.widget.DataTable.prototype.refreshView = function() {
-    YAHOO.log("The method refreshView() has been deprecated" +
-            " in favor of render()", "warn", this.toString());
-    this.render();
 };
 
 /**
@@ -4224,7 +4077,9 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn, sDir) {
         if (oPaginator) {
             if (oPaginator instanceof YAHOO.widget.Paginator) {
                 oPaginator.setPage(1);
-            } else {
+            }
+            else {
+                // Backward compatibility
                 this.updatePaginator({currentPage:1});
             }
         }
@@ -4613,7 +4468,9 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
             else {
                 if (oPaginator instanceof YAHOO.widget.Paginator) {
                     oPaginator.update();
-                } else {
+                }
+                else {
+                    // Backward compatibility
                     this.updatePaginator();
                 }
             }
@@ -5356,242 +5213,64 @@ YAHOO.widget.DataTable.formatTextbox = function(el, oRecord, oColumn, oData) {
 // PAGINATION
 
 /**
- * Updates Paginator values in response to RecordSet changes and/or DOM events.
- * Pass in all, a subset, or no values.
- *
- * @method updatePaginator
- * @param oNewValues {Object} (Optional) Object literal of Paginator values, or
- * a subset of Paginator values.
- * @param {Object} Object literal of all Paginator values.
+ * Delegates the YAHOO.widget.Paginator changeRequest events to the configured
+ * handler.
+ * @method onPaginatorChange
+ * @param {Object} an object literal describing the proposed pagination state
  */
+YAHOO.widget.DataTable.prototype.onPaginatorChange = function (oState) {
+    var handler = this.get('paginationEventHandler');
 
-YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
-    // Complete the set (default if not present)
-    var oValidPaginator = this.get("paginator");
-
-    var nOrigCurrentPage = oValidPaginator.currentPage;
-    for(var param in oNewValues) {
-        if(YAHOO.lang.hasOwnProperty(oValidPaginator, param)) {
-            oValidPaginator[param] = oNewValues[param];
-        }
-    }
-
-    oValidPaginator.totalRecords = this._oRecordSet.getLength();
-    oValidPaginator.rowsThisPage = Math.min(oValidPaginator.rowsPerPage, oValidPaginator.totalRecords);
-    oValidPaginator.totalPages = Math.ceil(oValidPaginator.totalRecords / oValidPaginator.rowsThisPage);
-    if(isNaN(oValidPaginator.totalPages)) {
-        oValidPaginator.totalPages = 0;
-    }
-    if(oValidPaginator.currentPage > oValidPaginator.totalPages) {
-        if(oValidPaginator.totalPages < 1) {
-            oValidPaginator.currentPage = 1;
-        }
-        else {
-            oValidPaginator.currentPage = oValidPaginator.totalPages;
-        }
-    }
-
-    if(oValidPaginator.currentPage !== nOrigCurrentPage) {
-        oValidPaginator.startRecordIndex = (oValidPaginator.currentPage-1)*oValidPaginator.rowsPerPage;
-    }
-
-
-    this.set("paginator", oValidPaginator);
-    return this.get("paginator");
+    handler(oState,this);
 };
 
 /**
- * Displays given page of a paginated DataTable.
- *
- * @method showPage
- * @param nPage {Number} Which page.
+ * Handles YAHOO.widget.Paginator changeRequest events for static DataSources
+ * (i.e. DataSources that return all data immediately)
+ * @method handleSimplePagination
+ * @param {object} the requested state of the pagination
+ * @param {DataTable} the DataTable instance
+ * @private
  */
-YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
-    var oPaginator = this.get('paginator');
-    // Validate input
-    if(!YAHOO.lang.isNumber(nPage) || (nPage < 1)) {
-        if (oPaginator instanceof YAHOO.widget.Paginator) {
-            if (!oPaginator.hasPage(nPage)) {
-                nPage = 1;
-            }
-        } else if (nPage > oPaginator.totalPages) {
-            nPage = 1;
-        }
-    }
+YAHOO.widget.DataTable.handleSimplePagination = function (oState,self) {
+    oState.paginator.setRecordOffset(oState.recordOffset);
+    oState.paginator.setRowsPerPage(oState.rowsPerPage);
 
-    if (oPaginator instanceof YAHOO.widget.Paginator) {
-        oPaginator.setPage(nPage);
+    self.render();
+};
+
+/**
+ * Handles YAHOO.widget.Paginator changeRequest events for dynamic DataSources
+ * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
+ * @method handleDataSourcePagination
+ * @param {object} the requested state of the pagination
+ * @param {DataTable} the DataTable instance
+ */
+YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
+    var requestedRecords = oState.records[1] - oState.recordOffset;
+
+    if (self._oRecordSet.hasRecords(oState.recordOffset, requestedRecords)) {
+        oState.paginator.setRecordOffset(oState.recordOffset);
+        oState.paginator.setRowsPerPage(oState.rowsPerPage);
+
+        self.render();
     } else {
-        this.updatePaginator({currentPage:nPage});
+        // Translate the proposed page state into a DataSource request param
+        var generateRequest = self.get('generateRequest');
+        var request = generateRequest({ pagination : oState }, self);
+
+        var callback = {
+            success : self.onDataReturnSetPageData,
+            failure : self.onDataReturnSetPageData,
+            argument : {
+                datatable : self,
+                pagination : oState
+            },
+            scope : self
+        };
+
+        self._oDataSource.sendRequest(request, callback);
     }
-    this.render();
-};
-
-/**
- * Updates Paginator containers with markup. Override this method to customize pagination UI.
- *
- * @method formatPaginators
- */
- YAHOO.widget.DataTable.prototype.formatPaginators = function() {
-    var pag = this.get("paginator");
-    if (pag instanceof YAHOO.widget.Paginator) {
-        pag.update();
-        return;
-    }
-
-    var i;
-
-    // For Opera workaround
-    var dropdownEnabled = false;
-
-    // Links are enabled
-    if(pag.pageLinks > -1) {
-        for(i=0; i<pag.links.length; i++) {
-            this.formatPaginatorLinks(pag.links[i], pag.currentPage, pag.pageLinksStart, pag.pageLinks, pag.totalPages);
-        }
-    }
-
-    // Dropdown is enabled
-    for(i=0; i<pag.dropdowns.length; i++) {
-         if(pag.dropdownOptions) {
-            dropdownEnabled = true;
-            this.formatPaginatorDropdown(pag.dropdowns[i], pag.dropdownOptions);
-        }
-        else {
-            pag.dropdowns[i].style.display = "none";
-        }
-    }
-
-    // For Opera artifacting in dropdowns
-    if(dropdownEnabled && YAHOO.env.ua.opera) {
-        document.body.style += '';
-    }
-    YAHOO.log("Paginators formatted", "info", this.toString());
-};
-
-/**
- * Updates Paginator dropdown. If dropdown doesn't exist, the markup is created.
- * Sets dropdown elements's "selected" value.
- *
- * @method formatPaginatorDropdown
- * @param elDropdown {HTMLElement} The SELECT element.
- * @param dropdownOptions {Object[]} OPTION values for display in the SELECT element.
- */
-YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown, dropdownOptions) {
-    if(elDropdown && (elDropdown.ownerDocument == document)) {
-        // Clear OPTION elements
-        while (elDropdown.firstChild) {
-            elDropdown.removeChild(elDropdown.firstChild);
-        }
-
-        // Create OPTION elements
-        for(var j=0; j<dropdownOptions.length; j++) {
-            var dropdownOption = dropdownOptions[j];
-            var optionEl = document.createElement("option");
-            optionEl.value = (YAHOO.lang.isValue(dropdownOption.value)) ?
-                    dropdownOption.value : dropdownOption;
-            optionEl.innerHTML = (YAHOO.lang.isValue(dropdownOption.text)) ?
-                    dropdownOption.text : dropdownOption;
-            optionEl = elDropdown.appendChild(optionEl);
-        }
-
-        var options = elDropdown.options;
-        // Update dropdown's "selected" value
-        if(options.length) {
-            for(var i=options.length-1; i>-1; i--) {
-                if((this.get("paginator").rowsPerPage + "") === options[i].value) {
-                    options[i].selected = true;
-                }
-            }
-        }
-
-        // Show the dropdown
-        elDropdown.style.display = "";
-        return;
-    }
-    YAHOO.log("Could not update Paginator dropdown " + elDropdown, "error", this.toString());
-};
-
-/**
- * Updates Paginator links container with markup.
- *
- * @method formatPaginatorLinks
- * @param elContainer {HTMLElement} The link container element.
- * @param nCurrentPage {Number} Current page.
- * @param nPageLinksStart {Number} First page link to display.
- * @param nPageLinksLength {Number} How many page links to display.
- * @param nTotalPages {Number} Total number of pages.
- */
-YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nCurrentPage, nPageLinksStart, nPageLinksLength, nTotalPages) {
-    if(elContainer && (elContainer.ownerDocument == document) &&
-            YAHOO.lang.isNumber(nCurrentPage) && YAHOO.lang.isNumber(nPageLinksStart) &&
-            YAHOO.lang.isNumber(nTotalPages)) {
-        // Set up markup for first/last/previous/next
-        var bIsFirstPage = (nCurrentPage == 1) ? true : false;
-        var bIsLastPage = (nCurrentPage == nTotalPages) ? true : false;
-        var sFirstLinkMarkup = (bIsFirstPage) ?
-                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
-                " " + YAHOO.widget.DataTable.CLASS_FIRST + "\">&lt;&lt;</span> " :
-                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRST + "\">&lt;&lt;</a> ";
-        var sPrevLinkMarkup = (bIsFirstPage) ?
-                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
-                " " + YAHOO.widget.DataTable.CLASS_PREVIOUS + "\">&lt;</span> " :
-                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVIOUS + "\">&lt;</a> " ;
-        var sNextLinkMarkup = (bIsLastPage) ?
-                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
-                " " + YAHOO.widget.DataTable.CLASS_NEXT + "\">&gt;</span> " :
-                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXT + "\">&gt;</a> " ;
-        var sLastLinkMarkup = (bIsLastPage) ?
-                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
-                " " + YAHOO.widget.DataTable.CLASS_LAST +  "\">&gt;&gt;</span> " :
-                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LAST + "\">&gt;&gt;</a> ";
-
-        // Start with first and previous
-        var sMarkup = sFirstLinkMarkup + sPrevLinkMarkup;
-
-        // Ok to show all links
-        var nMaxLinks = nTotalPages;
-        var nFirstLink = 1;
-        var nLastLink = nTotalPages;
-
-        if(nPageLinksLength > 0) {
-        // Calculate how many links to show
-            nMaxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
-                    nPageLinksStart+nPageLinksLength-1 : nTotalPages;
-
-            // Try to keep the current page in the middle
-            nFirstLink = (nCurrentPage - Math.floor(nMaxLinks/2) > 0) ? nCurrentPage - Math.floor(nMaxLinks/2) : 1;
-            nLastLink = (nCurrentPage + Math.floor(nMaxLinks/2) <= nTotalPages) ? nCurrentPage + Math.floor(nMaxLinks/2) : nTotalPages;
-
-            // Keep the last link in range
-            if(nFirstLink === 1) {
-                nLastLink = nMaxLinks;
-            }
-            // Keep the first link in range
-            else if(nLastLink === nTotalPages) {
-                nFirstLink = nTotalPages - nMaxLinks + 1;
-            }
-
-            // An even number of links can get funky
-            if(nLastLink - nFirstLink === nMaxLinks) {
-                nLastLink--;
-            }
-      }
-
-        // Generate markup for each page
-        for(var i=nFirstLink; i<=nLastLink; i++) {
-            if(i != nCurrentPage) {
-                sMarkup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGE + "\">" + i + "</a> ";
-            }
-            else {
-                sMarkup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_SELECTED + "\">" + i + "</span>";
-            }
-        }
-        sMarkup += sNextLinkMarkup + sLastLinkMarkup;
-        elContainer.innerHTML = sMarkup;
-        return;
-    }
-    YAHOO.log("Could not format Paginator links", "error", this.toString());
 };
 
 
@@ -7255,17 +6934,6 @@ YAHOO.widget.DataTable.prototype.selectRow = function(row) {
         YAHOO.log("Could not select row " + row, "warn", this.toString());
     }
 };
-// Backward compatibility
-YAHOO.widget.DataTable.prototype.select = function(els) {
-    YAHOO.log("The method select() has been deprecated" +
-            " in favor of selectRow()", "warn", this.toString());
-    if(!YAHOO.lang.isArray(els)) {
-        els = [els];
-    }
-    for(var i=0; i<els.length; i++) {
-        this.selectRow(els[i]);
-    }
-};
 
 /**
  * Sets given row to the selected state.
@@ -8629,12 +8297,6 @@ YAHOO.widget.DataTable.prototype.onEventShowCellEditor = function(oArgs) {
         YAHOO.log("Could not edit cell " + target, "warn", this.toString());
     }
 };
-// Backward compatibility
-YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
-    YAHOO.log("The method onEventEditCell() has been deprecated" +
-        " in favor of onEventShowCellEditor()", "warn", this.toString());
-    this.onEventShowCellEditor(oArgs);
-};
 
 /**
  * Overridable custom event handler to save Cell Editor input.
@@ -8688,12 +8350,6 @@ YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest
     else if(ok){
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
     }
-};
-// Backward compatibility
-YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
-    YAHOO.log("The method onDataReturnReplaceRows() has been deprecated" +
-            " in favor of onDataReturnInitializeTable()", "warn", this.toString());
-    this.onDataReturnInitializeTable(sRequest, oResponse);
 };
 
 /**
@@ -8978,8 +8634,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD row has a mouseover. Replaces deprecated
-     * headerRowMouseoverEvent.
+     * Fired when a THEAD row has a mouseover.
      *
      * @event theadRowMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -8987,8 +8642,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD row has a mouseout. Replaces deprecated
-     * headerRowMouseoutEvent.
+     * Fired when a THEAD row has a mouseout.
      *
      * @event theadRowMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -8996,8 +8650,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD row has a mousedown. Replaces deprecated
-     * headerRowMousedownEvent.
+     * Fired when a THEAD row has a mousedown.
      *
      * @event theadRowMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9005,8 +8658,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD row has a click. Replaces deprecated
-     * headerRowClickEvent.
+     * Fired when a THEAD row has a click.
      *
      * @event theadRowClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9014,8 +8666,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD row has a dblclick. Replaces deprecated
-     * headerRowDblclickEvent.
+     * Fired when a THEAD row has a dblclick.
      *
      * @event theadRowDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9023,8 +8674,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD cell has a mouseover. Replaces deprecated
-     * headerCellMouseoverEvent.
+     * Fired when a THEAD cell has a mouseover.
      *
      * @event theadCellMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9033,8 +8683,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD cell has a mouseout. Replaces deprecated
-     * headerCellMouseoutEvent.
+     * Fired when a THEAD cell has a mouseout.
      *
      * @event theadCellMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9043,8 +8692,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD cell has a mousedown. Replaces deprecated
-     * headerCellMousedownEvent.
+     * Fired when a THEAD cell has a mousedown.
      *
      * @event theadCellMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9052,8 +8700,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD cell has a click. Replaces deprecated
-     * headerCellClickEvent.
+     * Fired when a THEAD cell has a click.
      *
      * @event theadCellClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9061,8 +8708,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD cell has a dblclick. Replaces deprecated
-     * headerCellDblclickEvent.
+     * Fired when a THEAD cell has a dblclick.
      *
      * @event theadCellDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9070,8 +8716,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD label has a mouseover. Replaces deprecated
-     * headerLabelMouseoverEvent.
+     * Fired when a THEAD label has a mouseover.
      *
      * @event theadLabelMouseoverEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9080,8 +8725,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD label has a mouseout. Replaces deprecated
-     * headerLabelMouseoutEvent.
+     * Fired when a THEAD label has a mouseout.
      *
      * @event theadLabelMouseoutEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9090,8 +8734,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD label has a mousedown. Replaces deprecated
-     * headerLabelMousedownEvent.
+     * Fired when a THEAD label has a mousedown.
      *
      * @event theadLabelMousedownEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9099,8 +8742,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD label has a click. Replaces deprecated
-     * headerLabelClickEvent.
+     * Fired when a THEAD label has a click.
      *
      * @event theadLabelClickEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9108,8 +8750,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      */
 
     /**
-     * Fired when a THEAD label has a dblclick. Replaces deprecated
-     * headerLabelClickEvent.
+     * Fired when a THEAD label has a dblclick.
      *
      * @event theadLabelDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
@@ -9446,5 +9087,531 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The RADIO element.
      */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Deprecated APIs
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Use getTbodyEl().
+ *
+ * @method getBody
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.getBody = function() {
+    // Backward compatibility
+    YAHOO.log("The method getBody() has been deprecated" +
+            " in favor of getTbodyEl()", "warn", this.toString());
+    return this.getTbodyEl();
+};
+
+/**
+ * Use getTrEl().
+ *
+ * @method getRow
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.getRow = function(index) {
+    // Backward compatibility
+    YAHOO.log("The method getRow() has been deprecated" +
+            " in favor of getTrEl()", "warn", this.toString());
+    return this.getTrEl(index);
+};
+
+/**
+ * Use render.
+ *
+ * @method refreshView
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.refreshView = function() {
+    // Backward compatibility
+    YAHOO.log("The method refreshView() has been deprecated" +
+            " in favor of render()", "warn", this.toString());
+    this.render();
+};
+
+/**
+ * Use selectRow.
+ *
+ * @method select
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.select = function(els) {
+    // Backward compatibility
+    YAHOO.log("The method select() has been deprecated" +
+            " in favor of selectRow()", "warn", this.toString());
+    if(!YAHOO.lang.isArray(els)) {
+        els = [els];
+    }
+    for(var i=0; i<els.length; i++) {
+        this.selectRow(els[i]);
+    }
+};
+
+/**
+ * Use Paginator class APIs.
+ *
+ * @method updatePaginator
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
+    // Complete the set (default if not present)
+    var oValidPaginator = this.get("paginator");
+
+    var nOrigCurrentPage = oValidPaginator.currentPage;
+    for(var param in oNewValues) {
+        if(YAHOO.lang.hasOwnProperty(oValidPaginator, param)) {
+            oValidPaginator[param] = oNewValues[param];
+        }
+    }
+
+    oValidPaginator.totalRecords = this._oRecordSet.getLength();
+    oValidPaginator.rowsThisPage = Math.min(oValidPaginator.rowsPerPage, oValidPaginator.totalRecords);
+    oValidPaginator.totalPages = Math.ceil(oValidPaginator.totalRecords / oValidPaginator.rowsThisPage);
+    if(isNaN(oValidPaginator.totalPages)) {
+        oValidPaginator.totalPages = 0;
+    }
+    if(oValidPaginator.currentPage > oValidPaginator.totalPages) {
+        if(oValidPaginator.totalPages < 1) {
+            oValidPaginator.currentPage = 1;
+        }
+        else {
+            oValidPaginator.currentPage = oValidPaginator.totalPages;
+        }
+    }
+
+    if(oValidPaginator.currentPage !== nOrigCurrentPage) {
+        oValidPaginator.startRecordIndex = (oValidPaginator.currentPage-1)*oValidPaginator.rowsPerPage;
+    }
+
+
+    this.set("paginator", oValidPaginator);
+    return this.get("paginator");
+};
+
+/**
+ * Use Paginator class APIs.
+ *
+ * @method showPage
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
+    var oPaginator = this.get('paginator');
+    // Validate input
+    if(!YAHOO.lang.isNumber(nPage) || (nPage < 1)) {
+        if (oPaginator instanceof YAHOO.widget.Paginator) {
+            if (!oPaginator.hasPage(nPage)) {
+                nPage = 1;
+            }
+        } else if (nPage > oPaginator.totalPages) {
+            nPage = 1;
+        }
+    }
+
+    if (oPaginator instanceof YAHOO.widget.Paginator) {
+        oPaginator.setPage(nPage);
+    } else {
+        this.updatePaginator({currentPage:nPage});
+    }
+    this.render();
+};
+
+/**
+ * Use Paginator class APIs.
+ *
+ * @method formatPaginators
+ * @deprecated
+ */
+ YAHOO.widget.DataTable.prototype.formatPaginators = function() {
+    var pag = this.get("paginator");
+    if (pag instanceof YAHOO.widget.Paginator) {
+        pag.update();
+        return;
+    }
+
+    var i;
+
+    // For Opera workaround
+    var dropdownEnabled = false;
+
+    // Links are enabled
+    if(pag.pageLinks > -1) {
+        for(i=0; i<pag.links.length; i++) {
+            this.formatPaginatorLinks(pag.links[i], pag.currentPage, pag.pageLinksStart, pag.pageLinks, pag.totalPages);
+        }
+    }
+
+    // Dropdown is enabled
+    for(i=0; i<pag.dropdowns.length; i++) {
+         if(pag.dropdownOptions) {
+            dropdownEnabled = true;
+            this.formatPaginatorDropdown(pag.dropdowns[i], pag.dropdownOptions);
+        }
+        else {
+            pag.dropdowns[i].style.display = "none";
+        }
+    }
+
+    // For Opera artifacting in dropdowns
+    if(dropdownEnabled && YAHOO.env.ua.opera) {
+        document.body.style += '';
+    }
+    YAHOO.log("Paginators formatted", "info", this.toString());
+};
+
+/**
+ * Use Paginator class APIs.
+ *
+ * @method formatPaginatorDropdown
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown, dropdownOptions) {
+    if(elDropdown && (elDropdown.ownerDocument == document)) {
+        // Clear OPTION elements
+        while (elDropdown.firstChild) {
+            elDropdown.removeChild(elDropdown.firstChild);
+        }
+
+        // Create OPTION elements
+        for(var j=0; j<dropdownOptions.length; j++) {
+            var dropdownOption = dropdownOptions[j];
+            var optionEl = document.createElement("option");
+            optionEl.value = (YAHOO.lang.isValue(dropdownOption.value)) ?
+                    dropdownOption.value : dropdownOption;
+            optionEl.innerHTML = (YAHOO.lang.isValue(dropdownOption.text)) ?
+                    dropdownOption.text : dropdownOption;
+            optionEl = elDropdown.appendChild(optionEl);
+        }
+
+        var options = elDropdown.options;
+        // Update dropdown's "selected" value
+        if(options.length) {
+            for(var i=options.length-1; i>-1; i--) {
+                if((this.get("paginator").rowsPerPage + "") === options[i].value) {
+                    options[i].selected = true;
+                }
+            }
+        }
+
+        // Show the dropdown
+        elDropdown.style.display = "";
+        return;
+    }
+    YAHOO.log("Could not update Paginator dropdown " + elDropdown, "error", this.toString());
+};
+
+/**
+ * Use Paginator class APIs.
+ *
+ * @method formatPaginatorLinks
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nCurrentPage, nPageLinksStart, nPageLinksLength, nTotalPages) {
+    if(elContainer && (elContainer.ownerDocument == document) &&
+            YAHOO.lang.isNumber(nCurrentPage) && YAHOO.lang.isNumber(nPageLinksStart) &&
+            YAHOO.lang.isNumber(nTotalPages)) {
+        // Set up markup for first/last/previous/next
+        var bIsFirstPage = (nCurrentPage == 1) ? true : false;
+        var bIsLastPage = (nCurrentPage == nTotalPages) ? true : false;
+        var sFirstLinkMarkup = (bIsFirstPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
+                " " + YAHOO.widget.DataTable.CLASS_FIRST + "\">&lt;&lt;</span> " :
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_FIRST + "\">&lt;&lt;</a> ";
+        var sPrevLinkMarkup = (bIsFirstPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
+                " " + YAHOO.widget.DataTable.CLASS_PREVIOUS + "\">&lt;</span> " :
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PREVIOUS + "\">&lt;</a> " ;
+        var sNextLinkMarkup = (bIsLastPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
+                " " + YAHOO.widget.DataTable.CLASS_NEXT + "\">&gt;</span> " :
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_NEXT + "\">&gt;</a> " ;
+        var sLastLinkMarkup = (bIsLastPage) ?
+                " <span class=\"" + YAHOO.widget.DataTable.CLASS_DISABLED +
+                " " + YAHOO.widget.DataTable.CLASS_LAST +  "\">&gt;&gt;</span> " :
+                " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_LAST + "\">&gt;&gt;</a> ";
+
+        // Start with first and previous
+        var sMarkup = sFirstLinkMarkup + sPrevLinkMarkup;
+
+        // Ok to show all links
+        var nMaxLinks = nTotalPages;
+        var nFirstLink = 1;
+        var nLastLink = nTotalPages;
+
+        if(nPageLinksLength > 0) {
+        // Calculate how many links to show
+            nMaxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
+                    nPageLinksStart+nPageLinksLength-1 : nTotalPages;
+
+            // Try to keep the current page in the middle
+            nFirstLink = (nCurrentPage - Math.floor(nMaxLinks/2) > 0) ? nCurrentPage - Math.floor(nMaxLinks/2) : 1;
+            nLastLink = (nCurrentPage + Math.floor(nMaxLinks/2) <= nTotalPages) ? nCurrentPage + Math.floor(nMaxLinks/2) : nTotalPages;
+
+            // Keep the last link in range
+            if(nFirstLink === 1) {
+                nLastLink = nMaxLinks;
+            }
+            // Keep the first link in range
+            else if(nLastLink === nTotalPages) {
+                nFirstLink = nTotalPages - nMaxLinks + 1;
+            }
+
+            // An even number of links can get funky
+            if(nLastLink - nFirstLink === nMaxLinks) {
+                nLastLink--;
+            }
+      }
+
+        // Generate markup for each page
+        for(var i=nFirstLink; i<=nLastLink; i++) {
+            if(i != nCurrentPage) {
+                sMarkup += " <a href=\"#\" class=\"" + YAHOO.widget.DataTable.CLASS_PAGE + "\">" + i + "</a> ";
+            }
+            else {
+                sMarkup += " <span class=\"" + YAHOO.widget.DataTable.CLASS_SELECTED + "\">" + i + "</span>";
+            }
+        }
+        sMarkup += sNextLinkMarkup + sLastLinkMarkup;
+        elContainer.innerHTML = sMarkup;
+        return;
+    }
+    YAHOO.log("Could not format Paginator links", "error", this.toString());
+};
+
+/**
+ * Use Paginator class APIs.
+ *
+ * @method _onPaginatorLinkClick
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
+    // Backward compatibility
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var elTag = elTarget.tagName.toLowerCase();
+
+    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+    }
+
+    while(elTarget && (elTag != "table")) {
+        switch(elTag) {
+            case "body":
+                return;
+            case "a":
+                YAHOO.util.Event.stopEvent(e);
+                //TODO: after the showPage call, figure out which link
+                //TODO: was clicked and reset focus to the new version of it
+                //TODO: support multiple custom classnames
+                switch(elTarget.className) {
+                    case YAHOO.widget.DataTable.CLASS_PAGE:
+                        oSelf.showPage(parseInt(elTarget.innerHTML,10));
+                        return;
+                    case YAHOO.widget.DataTable.CLASS_FIRST:
+                        oSelf.showPage(1);
+                        return;
+                    case YAHOO.widget.DataTable.CLASS_LAST:
+                        oSelf.showPage(oSelf.get("paginator").totalPages);
+                        return;
+                    case YAHOO.widget.DataTable.CLASS_PREVIOUS:
+                        oSelf.showPage(oSelf.get("paginator").currentPage - 1);
+                        return;
+                    case YAHOO.widget.DataTable.CLASS_NEXT:
+                        oSelf.showPage(oSelf.get("paginator").currentPage + 1);
+                        return;
+                }
+                break;
+            default:
+                return;
+        }
+        elTarget = elTarget.parentNode;
+        if(elTarget) {
+            elTag = elTarget.tagName.toLowerCase();
+        }
+        else {
+            return;
+        }
+    }
+};
+
+/**
+ * Use Paginator class APIs.
+ *
+ * @method _onPaginatorDropdownChange
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf) {
+    // Backward compatibility
+    var elTarget = YAHOO.util.Event.getTarget(e);
+    var newValue = elTarget[elTarget.selectedIndex].value;
+
+    var newRowsPerPage = YAHOO.lang.isValue(parseInt(newValue,10)) ? parseInt(newValue,10) : null;
+    if(newRowsPerPage !== null) {
+        var newStartRecordIndex = (oSelf.get("paginator").currentPage-1) * newRowsPerPage;
+        oSelf.updatePaginator({rowsPerPage:newRowsPerPage, startRecordIndex:newStartRecordIndex});
+        oSelf.render();
+    }
+    else {
+        YAHOO.log("Could not paginate with " + newValue + " rows per page", "error", oSelf.toString());
+    }
+};
+
+/**
+ * Use onEventShowCellEditor.
+ *
+ * @method onEventEditCell
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
+    // Backward compatibility
+    YAHOO.log("The method onEventEditCell() has been deprecated" +
+        " in favor of onEventShowCellEditor()", "warn", this.toString());
+    this.onEventShowCellEditor(oArgs);
+};
+
+/**
+ * Use onDataReturnInitializeTable.
+ *
+ * @method onDataReturnReplaceRows
+ * @deprecated
+ */
+YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
+    // Backward compatibility
+    YAHOO.log("The method onDataReturnReplaceRows() has been deprecated" +
+            " in favor of onDataReturnInitializeTable()", "warn", this.toString());
+    this.onDataReturnInitializeTable(sRequest, oResponse);
+};
+
+/**
+ * Use theadRowMouseoverEvent.
+ *
+ * @event headerRowMouseoverEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadRowMouseoutEvent.
+ *
+ * @event headerRowMouseoutEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadRowMousedownEvent.
+ *
+ * @event headerRowMousedownEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadRowClickEvent.
+ *
+ * @event headerRowClickEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadRowDblclickEvent.
+ *
+ * @event headerRowDblclickEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadCellMouseoverEvent.
+ *
+ * @event headerCellMouseoverEvent
+ * @deprecated
+ */
+
+/**
+ * Use headerCellMouseoutEvent.
+ *
+ * @event theadCellMouseoutEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadCellMousedownEvent.
+ *
+ * @event headerCellMousedownEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadCellClickEvent.
+ *
+ * @event headerCellClickEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadCellDblclickEvent.
+ *
+ * @event headerCellDblclickEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadLabelMouseoverEvent.
+ *
+ * @event headerLabelMouseoverEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadLabelMouseoutEvent.
+ *
+ * @event headerLabelMouseoutEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadLabelMousedownEvent.
+ *
+ * @event headerLabelMousedownEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadLabelClickEvent.
+ *
+ * @event headerLabelClickEvent
+ * @deprecated
+ */
+
+/**
+ * Use theadLabelDblclickEvent.
+ *
+ * @event headerLabelClickEvent
+ * @deprecated
+ */
 
 
