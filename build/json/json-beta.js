@@ -26,7 +26,7 @@ YAHOO.lang.JSON = {
             var i, n;
             if (v && typeof v === 'object') {
                 for (i in v) {
-                    if (YAHOO.lang.hasOwnProperty.apply(v, [i])) {
+                    if (YAHOO.lang.hasOwnProperty(v,i)) {
                         n = walk(i, v[i]);
                         if (n !== undefined) {
                             v[i] = n;
