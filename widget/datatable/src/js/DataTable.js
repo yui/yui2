@@ -369,7 +369,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
             if (oPaginator instanceof YAHOO.widget.Paginator) {
                 var containers = oPaginator.getContainerNodes();
                 if (on) {
-                    if (!containers.length && !oPaginator.hasControls()) {
+                    if (!containers.length) {
                         // Build the container nodes
                         var c_above = document.createElement('div');
                         c_above.id = this._sId + "-paginator0";
@@ -384,7 +384,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
                         YAHOO.util.Dom.addClass(containers,
                                     YAHOO.widget.DataTable.CLASS_PAGINATOR);
 
-                        oPaginator.setContainerNodes(containers);
+                        oPaginator.set('containers',containers);
                     }
 
                     // rendering handled in refreshView
@@ -3361,7 +3361,7 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
         if((nRecordIndex > -1) && (nRecordIndex < this._oRecordSet.getLength())) {
             // DataTable is paginated
             var oPaginator = this.get('paginator');
-            if(oPaginator) {
+            if(oPaginator instanceof YAHOO.widget.Paginator || this.get('paginated')) {
                 // Get the first and last Record on current page
                 var startRecordIndex = 0,
                     endRecordIndex   = 0;
@@ -3374,6 +3374,7 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
                     startRecordIndex = oPaginator.startRecordIndex;
                     endRecordIndex = startRecordIndex + oPaginator.rowsPerPage - 1;
                 }
+
                 // This Record is on current page
                 if((nRecordIndex >= startRecordIndex) && (nRecordIndex <= endRecordIndex)) {
                     return nRecordIndex - startRecordIndex;
@@ -3504,12 +3505,13 @@ YAHOO.widget.DataTable.prototype.render = function() {
 
     // Paginator is enabled, show a subset of Records and update Paginator UI
     var oPaginator = this.get('paginator');
+    var bPaginated = oPaginator instanceof YAHOO.widget.Paginator || this.get('paginated');
     if(oPaginator) {
         if (oPaginator instanceof YAHOO.widget.Paginator) {
             allRecords = this._oRecordSet.getRecords(
-                            oPaginator.getRecordOffset(),
+                            oPaginator.get('recordOffset'),
                             oPaginator.get('rowsPerPage'));
-            oPaginator.update();
+            oPaginator.render();
         }
         else {
             // Backward compatibility
@@ -3851,9 +3853,9 @@ YAHOO.widget.DataTable.prototype.getRecordIndex = function(row) {
     if(YAHOO.lang.isNumber(nTrIndex)) {
         var oPaginator = this.get("paginator");
         if(oPaginator instanceof YAHOO.widget.Paginator) {
-            return oPaginator.getRecordOffset() + nTrIndex;
+            return oPaginator.get('recordOffset') + nTrIndex;
         }
-        else if (oPaginator) {
+        else if (this.get('paginated')) {
             return oPaginator.getStartRecordIndex + nTrIndex;
         }
         else {
@@ -4074,14 +4076,12 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn, sDir) {
         // Reset to first page
         //TODO: Keep selection in view
         var oPaginator = this.get('paginator');
-        if (oPaginator) {
-            if (oPaginator instanceof YAHOO.widget.Paginator) {
-                oPaginator.setPage(1);
-            }
-            else {
-                // Backward compatibility
-                this.updatePaginator({currentPage:1});
-            }
+        if (oPaginator instanceof YAHOO.widget.Paginator) {
+            oPaginator.setPage(1);
+        }
+        else if (this.get('paginated')) {
+            // Backward compatibility
+            this.updatePaginator({currentPage:1});
         }
 
         // Update the UI
@@ -4411,12 +4411,12 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
         if(oRecord) {
             // Update the paginator's totalRecords if applicable
             var oPaginator = this.get('paginator');
-            if (oPaginator) {
-                if (oPaginator instanceof YAHOO.widget.Paginator) {
-                    var totalRecords = oPaginator.get('totalRecords');
-                    if (totalRecords !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
-                        oPaginator.set('totalRecords',totalRecords + 1);
-                    }
+            var bPaginated = oPaginator instanceof YAHOO.widget.Paginator ||
+                             this.get('paginated');
+            if (oPaginator instanceof YAHOO.widget.Paginator) {
+                var totalRecords = oPaginator.get('totalRecords');
+                if (totalRecords !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
+                    oPaginator.set('totalRecords',totalRecords + 1);
                 }
             }
 
@@ -4425,7 +4425,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
             // Row is on current page
             if(YAHOO.lang.isNumber(nTrIndex)) {
                 // Paginated so just refresh the view to keep pagination state
-                if(oPaginator) {
+                if(bPaginated) {
                     this.render();
                 }
                 // Add the TR element
@@ -4465,7 +4465,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
                 this.hideTableMessage();
             }
             // Record is not on current page so just update pagination UI
-            else {
+            else if (bPaginated) {
                 if (oPaginator instanceof YAHOO.widget.Paginator) {
                     oPaginator.update();
                 }
@@ -5233,8 +5233,8 @@ YAHOO.widget.DataTable.prototype.onPaginatorChange = function (oState) {
  * @private
  */
 YAHOO.widget.DataTable.handleSimplePagination = function (oState,self) {
-    oState.paginator.setRecordOffset(oState.recordOffset);
-    oState.paginator.setRowsPerPage(oState.rowsPerPage);
+    oState.paginator.set('recordOffset',oState.recordOffset);
+    oState.paginator.set('rowsPerPage',oState.rowsPerPage);
 
     self.render();
 };
@@ -5250,8 +5250,8 @@ YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
     var requestedRecords = oState.records[1] - oState.recordOffset;
 
     if (self._oRecordSet.hasRecords(oState.recordOffset, requestedRecords)) {
-        oState.paginator.setRecordOffset(oState.recordOffset);
-        oState.paginator.setRowsPerPage(oState.rowsPerPage);
+        oState.paginator.set('recordOffset',oState.recordOffset);
+        oState.paginator.set('rowsPerPage',oState.rowsPerPage);
 
         self.render();
     } else {
@@ -8427,8 +8427,8 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
             // Set the paginator values in preparation to refresh
             var oPaginator = this.get('paginator');
             if (oPaginator && oPaginator instanceof YAHOO.widget.Paginator) {
-                oPaginator.setRecordOffset(oState.recordOffset);
-                oPaginator.setRowsPerPage(oState.rowsPerPage);
+                oPaginator.set('recordOffset',oState.recordOffset);
+                oPaginator.set('rowsPerPage',oState.rowsPerPage);
             }
 
             this._oRecordSet.setRecords(oResponse.results,oState.recordOffset);
