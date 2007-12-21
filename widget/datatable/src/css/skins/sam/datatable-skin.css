@@ -69,6 +69,9 @@
 .yui-skin-sam th.yui-dt-desc {
     background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 -100px; /* sorted header gradient */
 }
+.yui-skin-sam th.yui-dt-sortable .yui-dt-label {
+    margin-right:10px;
+}
 .yui-skin-sam th.yui-dt-asc .yui-dt-liner {
     background:url(dt-arrow-up.png) no-repeat right; /* sorted header gradient */
 }

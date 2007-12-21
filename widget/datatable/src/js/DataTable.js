@@ -3993,11 +3993,11 @@ YAHOO.widget.DataTable.prototype.getRecord = function(row) {
  */
  YAHOO.widget.DataTable.prototype.getColumnSortDir = function(oColumn) {
     // Backward compatibility
-    if(oColumn.sortOptions && oColumn.sortOptions.defaultDir) {
-        if(oColumn.sortOptions.defaultDir == "asc") {
+    if(oColumn.sortOptions && oColumn.sortOptions.defaultOrder) {
+        if(oColumn.sortOptions.defaultOrder == "asc") {
             oColumn.sortOptions.defaultDir = YAHOO.widget.DataTable.CLASS_ASC;
         }
-        else if (oColumn.sortOptions.defaultDir == "desc") {
+        else if (oColumn.sortOptions.defaultOrder == "desc") {
             oColumn.sortOptions.defaultDir = YAHOO.widget.DataTable.CLASS_DESC;
         }
     }

@@ -699,7 +699,7 @@ YAHOO.widget.Column.prototype.resizeable = false;
 YAHOO.widget.Column.prototype.sortable = false;
 
 /**
- * Default sort order for Column: "asc" or "desc".
+ * Use sortOptions.defaultDir
  *
  * @property sortOptions.defaultOrder
  * @type String
