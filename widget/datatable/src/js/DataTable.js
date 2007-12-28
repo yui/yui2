@@ -1560,7 +1560,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
             if(!bA11y) {
                 oColumn._elTh = elTheadCell;
             }
-            var id = (bA11y) ? this._sId+"-th-ally" + oColumn.getId() : this._sId+"-th" + oColumn.getId();
+            var id = (bA11y) ? this._sId+"-th" + oColumn.getId() + "-a11y": this._sId+"-th" + oColumn.getId();
             elTheadCell.id = id;
             elTheadCell.yuiCellIndex = j;
             this._initThEl(elTheadCell,oColumn,i,j, bA11y);
@@ -1857,7 +1857,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         elCell.yuiColumnId = oColumn.getId();
 
         for(var k=0; k<oColumnSet.headers[j].length; k++) {
-            elCell.headers += this._sId + "-th" + oColumnSet.headers[j][k] + " ";
+            elCell.headers += this._sId + "-th" + oColumnSet.headers[j][k] + "-a11y ";
         }
 
         // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
