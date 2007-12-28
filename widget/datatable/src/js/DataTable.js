@@ -604,7 +604,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Class name assigned to the container liner DIV elements.
+ * Class name assigned to liner DIV elements.
  *
  * @property DataTable.CLASS_LINER
  * @type String
@@ -1032,7 +1032,7 @@ YAHOO.widget.DataTable.prototype._bRendering = false;
 
 /**
  * DOM reference to the container element for the DataTable instance into which
- * the container liner and TABLE element get created.
+ * all other elements get created.
  *
  * @property _elContainer
  * @type HTMLElement
@@ -1041,7 +1041,7 @@ YAHOO.widget.DataTable.prototype._bRendering = false;
 YAHOO.widget.DataTable.prototype._elContainer = null;
 
 /**
- * DOM reference to the container element for the DataTable's THEAD.
+ * DOM reference to the container element for the DataTable's primary THEAD.
  *
  * @property _elTheadContainer
  * @type HTMLElement
@@ -1050,7 +1050,7 @@ YAHOO.widget.DataTable.prototype._elContainer = null;
 YAHOO.widget.DataTable.prototype._elTheadContainer = null;
 
 /**
- * DOM reference to the container element for the DataTable's TBODY.
+ * DOM reference to the container element for the DataTable's primary TBODY.
  *
  * @property _elTbodyContainer
  * @type HTMLElement
@@ -1298,7 +1298,7 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
 // INIT FUNCTIONS
 
 /**
- * Initializes container element.
+ * Initializes the DataTable container element.
  *
  * @method _initContainerEl
  * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
@@ -1596,14 +1596,13 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
         var needDD = false;
         for(i=0; i<this._oColumnSet.keys.length; i++) {
             oColumn = this._oColumnSet.keys[i];
-            var colKey = oColumn.getKey();
-            elTheadCell = oColumn.getThEl();
             if(oColumn.resizeable) {
                 if(foundDD) {
+                    elTheadCell = oColumn.getThEl();
                     YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
-                    var elThContainer = elTheadCell.firstChild;
-                    var elThResizer = elThContainer.appendChild(document.createElement("div"));
-                    elThResizer.id = this._sId + "-colresizer-" + colKey;
+                    var elThLiner = elTheadCell.firstChild;
+                    var elThResizer = elThLiner.appendChild(document.createElement("div"));
+                    elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
                     oColumn._elResizer = elThResizer;
                     YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
                     this._initColumnResizerProxyEl();
@@ -1652,25 +1651,23 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     elTheadCell.innerHTML = "";
     elTheadCell.rowSpan = oColumn.getRowspan();
     elTheadCell.colSpan = oColumn.getColspan();
-    if(oColumn.abbr) {
-        elTheadCell.abbr = oColumn.abbr;
-    }
 
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
-    var id = (bA11y) ? this._sId + "-container" + colId + "-a11y" : this._sId + "-container" + colId;
-    elTheadCellLiner.id = id;
-
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
-    id = (bA11y) ? this._sId + "-label" + colId + "-a11y" : this._sId + "-label" + colId;
-    elTheadCellLabel.id = id;
 
     // Keep it basic for screen readers
     if(bA11y) {
         //TODO: remove IDs and form elements from label
+        if(oColumn.abbr) {
+            elTheadCell.abbr = oColumn.abbr;
+        }
         elTheadCellLabel.innerHTML = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : colKey;
     }
     // Visually format the elements
     else {
+        // Needed for resizer
+        elTheadCellLiner.id = elTheadCell.id + "-liner";
+        
         YAHOO.util.Dom.addClass(elTheadCellLiner,YAHOO.widget.DataTable.CLASS_LINER);
         YAHOO.util.Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey);
         var aCustomClasses;
