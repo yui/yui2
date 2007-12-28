@@ -1566,31 +1566,32 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
             this._initThEl(elTheadCell,oColumn,i,j, bA11y);
         }
 
-        // Set FIRST/LAST on THEAD rows
-        if(i === 0) {
-            YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_FIRST);
+        if(!bA11y) {
+            // Set FIRST/LAST on THEAD rows
+            if(i === 0) {
+                YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_FIRST);
+            }
+            if(i === (colTree.length-1)) {
+                YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_LAST);
+            }
         }
-        if(i === (colTree.length-1)) {
-            YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_LAST);
-        }
     }
 
-
-    // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
-    var aFirstHeaders = oColumnSet.headers[0];
-    var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
-    for(i=0; i<aFirstHeaders.length; i++) {
-        //TODO: A better way to get th cell
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
-    }
-    for(i=0; i<aLastHeaders.length; i++) {
-        //TODO: A better way to get th cell
-        YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
-    }
-
-    // Add Resizer only after DOM has been updated
-    //TODO: Support resizers on parents of nested Columns?
     if(!bA11y) {
+        // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
+        var aFirstHeaders = oColumnSet.headers[0];
+        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
+        for(i=0; i<aFirstHeaders.length; i++) {
+            //TODO: A better way to get th cell
+            YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
+        }
+        for(i=0; i<aLastHeaders.length; i++) {
+            //TODO: A better way to get th cell
+            YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
+        }
+    
+        // Add Resizer only after DOM has been updated
+        //TODO: Support resizers on parents of nested Columns?
         var foundDD = (YAHOO.util.DD) ? true : false;
         var needDD = false;
         for(i=0; i<this._oColumnSet.keys.length; i++) {
@@ -1621,13 +1622,11 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
         if(needDD) {
             YAHOO.log("Could not find DragDrop dependancy for resizeable Columns", "warn", this.toString());
         }
-    }
-
-    if(bA11y) {
-        YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+        
+        YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
     }
     else {
-        YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+        YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
     }
 };
 
@@ -1658,36 +1657,40 @@ YAHOO.widget.DataTable.prototype._initThEl = function(elTheadCell,oColumn,row,co
     }
 
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
-    var id = (bA11y) ? this._sId + "-a11ycontainer" + colId : this._sId + "-container" + colId;
+    var id = (bA11y) ? this._sId + "-container" + colId + "-a11y" : this._sId + "-container" + colId;
     elTheadCellLiner.id = id;
-    YAHOO.util.Dom.addClass(elTheadCellLiner,YAHOO.widget.DataTable.CLASS_LINER);
-    YAHOO.util.Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey);
-    var aCustomClasses;
-    if(YAHOO.lang.isString(oColumn.className)) {
-        aCustomClasses = [oColumn.className];
-    }
-    else if(YAHOO.lang.isArray(oColumn.className)) {
-        aCustomClasses = oColumn.className;
-    }
-    if(aCustomClasses) {
-        for(var i=0; i<aCustomClasses.length; i++) {
-            YAHOO.util.Dom.addClass(elTheadCellLiner,aCustomClasses[i]);
-        }
-    }
-    if(oColumn.width) {
-        elTheadCellLiner.style.width = oColumn.width + "px";
-    }
 
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
-    elTheadCellLabel.id = this._sId + "-label" + colId;
-    YAHOO.util.Dom.addClass(elTheadCellLabel,YAHOO.widget.DataTable.CLASS_LABEL);
+    id = (bA11y) ? this._sId + "-label" + colId + "-a11y" : this._sId + "-label" + colId;
+    elTheadCellLabel.id = id;
 
     // Keep it basic for screen readers
     if(bA11y) {
+        //TODO: remove IDs and form elements from label
         elTheadCellLabel.innerHTML = YAHOO.lang.isValue(oColumn.label) ? oColumn.label : colKey;
     }
-    // Format the TH label element
+    // Visually format the elements
     else {
+        YAHOO.util.Dom.addClass(elTheadCellLiner,YAHOO.widget.DataTable.CLASS_LINER);
+        YAHOO.util.Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey);
+        var aCustomClasses;
+        if(YAHOO.lang.isString(oColumn.className)) {
+            aCustomClasses = [oColumn.className];
+        }
+        else if(YAHOO.lang.isArray(oColumn.className)) {
+            aCustomClasses = oColumn.className;
+        }
+        if(aCustomClasses) {
+            for(var i=0; i<aCustomClasses.length; i++) {
+                YAHOO.util.Dom.addClass(elTheadCellLiner,aCustomClasses[i]);
+            }
+        }
+        if(oColumn.width) {
+            elTheadCellLiner.style.width = oColumn.width + "px";
+        }
+        
+        YAHOO.util.Dom.addClass(elTheadCellLabel,YAHOO.widget.DataTable.CLASS_LABEL);
+        
         if(oColumn.resizeable) {
             YAHOO.util.Dom.addClass(elTheadCell,YAHOO.widget.DataTable.CLASS_RESIZEABLE);
         }
