@@ -576,6 +576,7 @@ package
 			var seriesColors:Array = [];
 			var seriesMarkerSizes:Array = [];
 			var seriesMarkerSkins:Array = [];
+			var seriesLineWeights:Array = [];
 			var seriesCount:int = Math.min(this.chart.dataProvider.length, styles.length);
 			for(var i:int = 0; i < seriesCount; i++)
 			{
@@ -616,12 +617,15 @@ package
 				{
 					defaultSkin = [defaultSkin];
 				}
+				
+				var defaultLineSize:Number = 3;
 			
 				//initialize styles with defaults
 				var size:Number = defaultSize;
 				var color:Object = defaultColors[i % defaultColors.length];
 				var skin:Object = defaultSkin;
 				var mode:Object = BackgroundImageMode.REPEAT;
+				var lineSize:Number = defaultLineSize;
 				if(style)
 				{
 					for(var styleName:String in style)
@@ -668,6 +672,9 @@ package
 							case "mode":
 								mode = style.mode;
 								break;
+							case "lineSize":
+								lineSize = style.lineSize;
+								break;
 							default:
 								this.log("Unknown series style: " + styleName);
 						}
@@ -681,11 +688,13 @@ package
 				seriesColors[i] = color;
 				seriesMarkerSizes[i] = size;
 				seriesMarkerSkins[i] = skin;
+				seriesLineWeights[i] = lineSize;
 			}
 			
 			this.chart.setStyle("seriesColors", seriesColors);
 			this.chart.setStyle("seriesMarkerSizes", seriesMarkerSizes);
 			this.chart.setStyle("seriesMarkerSkins", seriesMarkerSkins);
+			this.chart.setStyle("seriesLineWeights", seriesLineWeights);
 
 			this.chart.drawNow();
 		}
