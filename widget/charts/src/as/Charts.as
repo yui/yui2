@@ -488,6 +488,7 @@ package
 		 */
 		public function setStyles(styles:String):void
 		{
+			if(!styles) return;
 			var parsedStyles:Object = JSON.decode(styles);
 			for(var styleName:String in parsedStyles)
 			{
@@ -497,7 +498,7 @@ package
 		
 		public function setStyle(name:String, value:Object, json:Boolean = true):void
 		{
-			if(json)
+			if(json && value)
 			{
 				//by default, we assume it's json data, only setStyles will send false
 				value = JSON.decode(value as String);
@@ -582,7 +583,10 @@ package
 			{
 				var series:ISeries = ISeries(this.chart.dataProvider[i]);
 				var style:Object = styles[i];
-				style = JSON.decode(style as String);
+				if(style)
+				{
+					style = JSON.decode(style as String);
+				}
 				
 				//defaults
 				var defaultColors:Array =
@@ -690,7 +694,6 @@ package
 				seriesMarkerSkins[i] = skin;
 				seriesLineWeights[i] = lineSize;
 			}
-			
 			this.chart.setStyle("seriesColors", seriesColors);
 			this.chart.setStyle("seriesMarkerSizes", seriesMarkerSizes);
 			this.chart.setStyle("seriesMarkerSkins", seriesMarkerSkins);
