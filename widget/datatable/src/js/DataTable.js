@@ -206,7 +206,7 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
 
     /**
      * @attribute generateRequest
-     * @description A function used to translate proposed DataTable state into
+     * @description A function used to translate proposed DataTable state info
      * into a value which is then passed to the DataSource's sendRequest method.
      * This function is called to get the DataTable's initial data as well as
      * any data changes or requests such as pagination or sorting.  The method
@@ -3367,7 +3367,7 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
                     endRecordIndex   = 0;
 
                 if (oPaginator instanceof YAHOO.widget.Paginator) {
-                    var rng = oPaginator.getCurrentRecords();
+                    var rng = oPaginator.getPageRecords();
                     startRecordIndex = rng[0];
                     endRecordIndex   = rng[1];
                 } else {
@@ -4423,7 +4423,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
                         oPaginator.set('totalRecords',totalRecords + 1);
                     }
 
-                    endRecIndex = (oPaginator.getCurrentRecords())[1];
+                    endRecIndex = (oPaginator.getPageRecords())[1];
                 } else {
                 // Paginated so just refresh the view to keep pagination state
                     endRecIndex = oPaginator.startRecordIndex +
@@ -4639,7 +4639,7 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
                     oPaginator.set('totalRecords',totalRecords - 1);
                 }
 
-                endRecIndex = (oPaginator.getCurrentRecords())[1];
+                endRecIndex = (oPaginator.getPageRecords())[1];
             } else {
                 // Backward compatibility
                 endRecIndex = oPaginator.startRecordIndex +
@@ -8050,9 +8050,9 @@ YAHOO.widget.DataTable._generateRequest = function (oData, oDataTable) {
 
     if (oData.pagination) {
         if (oDataTable._oDataSource.dataType === YAHOO.util.DataSource.TYPE_XHR) {
-            request = ['?page=',        oData.pagination.page,
-                       '&recordOffset=',oData.pagination.recordOffset,
-                       '&rowsPerPage=', oData.pagination.rowsPerPage].join('');
+            request = '?page=' +         oData.pagination.page +
+                      '&recordOffset=' + oData.pagination.recordOffset +
+                      '&rowsPerPage=' +  oData.pagination.rowsPerPage;
         }
     }
     
