@@ -12,25 +12,26 @@
  * plugin attributes.
  */
 YAHOO.widget.Paginator = function (config) {
-    config = YAHOO.lang.isObject(config) ? config : {};
     var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
         attrib, initialPage, records, perPage;
 
-    this.initConfig();
+    config = YAHOO.lang.isObject(config) ? config : {};
 
-    this.initPlugins();
+    this.initConfig();
 
     this.initEvents();
 
     // Set the basic config keys first
-    this.set('rowsPerPage',config.rowsPerPage);
+    this.set('rowsPerPage',config.rowsPerPage,true);
     if (YAHOO.lang.isNumber(config.totalRecords)) {
-        this.set('totalRecords',config.totalRecords);
+        this.set('totalRecords',config.totalRecords,true);
     }
+    
+    this.initPlugins();
 
     // Update the other config values
     for (attrib in config) {
-        this.set(attrib,config[attrib]);
+        this.set(attrib,config[attrib],true);
     }
 
     // Calculate the initial record offset
@@ -40,7 +41,7 @@ YAHOO.widget.Paginator = function (config) {
     if (initialPage > 1 && perPage !== UNLIMITED) {
         var startIndex = (initialPage - 1) * perPage;
         if (records === UNLIMITED || startIndex < records) {
-            this.set('recordOffset',startIndex);
+            this.set('recordOffset',startIndex,true);
         }
     }
 };
@@ -65,16 +66,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
      * @type number
      * @final
      */
-    VALUE_UNLIMITED : -1,
-
-    /**
-     * Map of plugin names to the plugin class.  Used by Paginator instances
-     * while rendering their &quot;template&quot; attribute.
-     * @static
-     * @property PLUGINS
-     * @type object
-     */
-    PLUGINS : {}
+    VALUE_UNLIMITED : -1
 
 },true);
 
@@ -198,14 +190,14 @@ YAHOO.widget.Paginator.prototype = {
         /**
          * Template used to render controls.  The string will be used as
          * innerHTML on all specified container nodes.  Bracketed keys
-         * (e.g. {pageLinks}) in the string will be replaced with the so named
-         * view plugin.
+         * (e.g. {pageLinks}) in the string will be replaced with an instance
+         * of the so named view plugin.
          * @attribute template
          * @type string
-         * @default "{firstPageLink} {previousPageLink} {pageLinks} {nextPageLink} {lastPageLink}"
+         * @default "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
          */
         this.setAttributeConfig('template', {
-            value : "{firstPageLink} {previousPageLink} {pageLinks} {nextPageLink} {lastPageLink}",
+            value : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
             validator : l.isString
         });
 
@@ -282,7 +274,7 @@ YAHOO.widget.Paginator.prototype = {
      * @private
      */
     initPlugins : function () {
-        var P = YAHOO.widget.Paginator.PLUGINS;
+        var P = YAHOO.widget.Paginator.Plugin;
         for (var name in P) {
             var plugin = P[name];
             if (YAHOO.lang.isObject(plugin) &&
@@ -305,6 +297,7 @@ YAHOO.widget.Paginator.prototype = {
 
         this.createEvent('rendered');
         this.createEvent('changeRequest');
+        this.createEvent('beforeDestroy');
 
         // Listen for changes to totalRecords and alwaysVisible 
         this.subscribe('totalRecordsChange',this.updateVisibility,this,true);
@@ -348,13 +341,13 @@ YAHOO.widget.Paginator.prototype = {
             for (var j = 0, jlen = markers.length; j < jlen; ++j) {
                 var m      = markers[j],
                     mp     = m.parentNode,
-                    plugin = m.className.replace(/\s*yui-pg-plugin\s+/g,''),
-                    PluginClass = YAHOO.widget.Paginator.PLUGINS[plugin];
+                    name   = m.className.replace(/\s*yui-pg-plugin\s+/g,''),
+                    Plugin = YAHOO.widget.Paginator.Plugin[name];
 
-                if (YAHOO.lang.isFunction(PluginClass)) {
-                    var p = new PluginClass(this);
-                    if (YAHOO.lang.isFunction(p.render)) {
-                        mp.insertBefore(p.render(),m);
+                if (YAHOO.lang.isFunction(Plugin)) {
+                    var plugin = new Plugin(this);
+                    if (YAHOO.lang.isFunction(plugin.render)) {
+                        mp.insertBefore(plugin.render(),m);
                     }
                 }
 
@@ -376,7 +369,11 @@ YAHOO.widget.Paginator.prototype = {
      * @method destroy
      */
     destroy : function () {
-        //TODO
+        this.fireEvent('beforeDestroy');
+        for (var i = 0, len = this._containers.length; i < len; ++i) {
+            this._containers[i].innerHTML = '';
+        }
+        this.setAttributeConfig('rendered',{value:false});
     },
 
     /**
@@ -420,7 +417,7 @@ YAHOO.widget.Paginator.prototype = {
     /**
      * Get the configured container nodes
      * @method getContainerNodes
-     * @return {Array(HTMLElement)}
+     * @return {Array} array of HTMLElement nodes
      */
     getContainerNodes : function () {
         return this._containers;
@@ -430,7 +427,7 @@ YAHOO.widget.Paginator.prototype = {
      * Get the start and end record indexes of the specified page.
      * @method getPageRecords
      * @param page {number} (optional) The page (current page if not specified)
-     * @return {Array(start_index, end_index)}
+     * @return {Array} [start_index, end_index]
      */
     getPageRecords : function (page) {
         if (!YAHOO.lang.isNumber(page)) {
@@ -859,7 +856,6 @@ Plugin.FirstPageLink.prototype = {
         this.paginator.requestPage(1);
     }
 };
-Paginator.PLUGINS.firstPageLink = Plugin.FirstPageLink;
 
 
 
@@ -1030,7 +1026,6 @@ Plugin.LastPageLink.prototype = {
         this.paginator.requestPage(this.paginator.getTotalPages());
     }
 };
-Paginator.PLUGINS.lastPageLink = Plugin.LastPageLink;
 
 
 /**
@@ -1176,7 +1171,6 @@ Plugin.PreviousPageLink.prototype = {
         this.paginator.requestPage(this.paginator.getPreviousPage());
     }
 };
-Paginator.PLUGINS.previousPageLink = Plugin.PreviousPageLink;
 
 
 
@@ -1329,7 +1323,6 @@ Plugin.NextPageLink.prototype = {
         this.paginator.requestPage(this.paginator.getNextPage());
     }
 };
-Paginator.PLUGINS.nextPageLink = Plugin.NextPageLink;
 
 
 /**
@@ -1407,15 +1400,7 @@ Plugin.PageLinks.init = function (paginator) {
      */
     paginator.setAttributeConfig('pageLinks', {
         value : 10,
-        validator : function (val) {
-            if (l.isNumber(val)) {
-                var last = this.getTotalPages();
-                return last === YAHOO.widget.Paginator.VALUE_UNLIMITED ||
-                       last >= val;
-            }
-
-            return false;
-        }
+        validator : l.isNumber
     });
 
     /**
@@ -1439,7 +1424,7 @@ Plugin.PageLinks.init = function (paginator) {
  * @param {int} currentPage  The current page
  * @param {int} totalPages   (optional) Maximum number of pages
  * @param {int} numPages     (optional) Preferred number of pages in range
- * @return {Array} [{int} startPage, {int} endPage]
+ * @return {Array} [start_page_number, end_page_number]
  */
 Plugin.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
     var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
@@ -1589,7 +1574,6 @@ Plugin.PageLinks.prototype = {
     }
 
 };
-Paginator.PLUGINS.pageLinks = Plugin.PageLinks;
 
 
 /**
@@ -1733,7 +1717,6 @@ Plugin.RowsPerPageDropdown.prototype = {
                 parseInt(this.select.options[this.select.selectedIndex].value,10));
     }
 };
-Paginator.PLUGINS.rowsPerPageDropdown = Plugin.RowsPerPageDropdown;
 
 
 
@@ -1888,6 +1871,5 @@ Plugin.CurrentPageReport.prototype = {
             this.paginator.get('pageReportValueGenerator')(this.paginator));
     }
 };
-Paginator.PLUGINS.currentPageReport = Plugin.CurrentPageReport;
 
 })();
