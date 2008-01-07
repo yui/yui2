@@ -75,12 +75,6 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
         maxCacheEntries = 0;
     }
 
-    // Initialize local cache
-    if(maxCacheEntries > 0 && !this._aCache) {
-        this._aCache = [];
-        YAHOO.log("Cache initialized", "info", this.toString());
-    }
-    
     // Initialize interval tracker
     this._aIntervals = [];
 
@@ -608,34 +602,55 @@ YAHOO.util.DataSource.prototype.toString = function() {
  */
 YAHOO.util.DataSource.prototype.getCachedResponse = function(oRequest, oCallback, oCaller) {
     var aCache = this._aCache;
-    var nCacheLength = (aCache) ? aCache.length : 0;
-    var oResponse = null;
 
     // If cache is enabled...
-    if((this.maxCacheEntries > 0) && aCache && (nCacheLength > 0)) {
-        this.fireEvent("cacheRequestEvent", {request:oRequest,callback:oCallback,caller:oCaller});
-
-        // Loop through each cached element
-        for(var i = nCacheLength-1; i >= 0; i--) {
-            var oCacheElem = aCache[i];
-
-            // Defer cache hit logic to a public overridable method
-            if(this.isCacheHit(oRequest,oCacheElem.request)) {
-                // Grab the cached response
-                oResponse = oCacheElem.response;
-                // The cache returned a hit!
-                // Remove element from its original location
-                aCache.splice(i,1);
-                // Add as newest
-                this.addToCache(oRequest, oResponse);
-                this.fireEvent("cacheResponseEvent", {request:oRequest,response:oResponse,callback:oCallback,caller:oCaller});
-                break;
+    if(this.maxCacheEntries > 0) {        
+        // Initialize local cache
+        if(!aCache) {
+            this._aCache = [];
+            YAHOO.log("Cache initialized", "info", this.toString());
+        }
+        // Look in local cache
+        else {
+            var nCacheLength = aCache.length;
+            if(nCacheLength > 0) {
+                var oResponse = null;
+                this.fireEvent("cacheRequestEvent", {request:oRequest,callback:oCallback,caller:oCaller});
+        
+                // Loop through each cached element
+                for(var i = nCacheLength-1; i >= 0; i--) {
+                    var oCacheElem = aCache[i];
+        
+                    // Defer cache hit logic to a public overridable method
+                    if(this.isCacheHit(oRequest,oCacheElem.request)) {
+                        // The cache returned a hit!
+                        // Grab the cached response
+                        oResponse = oCacheElem.response;
+                        this.fireEvent("cacheResponseEvent", {request:oRequest,response:oResponse,callback:oCallback,caller:oCaller});
+                        
+                        // Refresh the position of the cache hit
+                        if(i < nCacheLength-1) {
+                            YAHOO.log("Refreshing cache position of the response for \"" +  oRequest + "\"", "info", this.toString());
+                            // Remove element from its original location
+                            aCache.splice(i,1);
+                            YAHOO.log("Cleared from cache the response for \"" +  oRequest + "\"", "info", this.toString());
+                            // Add as newest
+                            this.addToCache(oRequest, oResponse);
+                        }
+                        break;
+                    }
+                }
+                YAHOO.log("The cached response for \"" + YAHOO.lang.dump(oRequest) +
+                        "\" is " + YAHOO.lang.dump(oResponse), "info", this.toString());
+                return oResponse;
             }
         }
     }
-    YAHOO.log("The cached response for \"" + YAHOO.lang.dump(oRequest) +
-            "\" is " + YAHOO.lang.dump(oResponse), "info", this.toString());
-    return oResponse;
+    else if(aCache) {
+        this._aCache = null;
+        YAHOO.log("Cache destroyed", "info", this.toString());
+    }
+    return null;
 };
 
 /**
@@ -675,7 +690,7 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
 
     // Add to cache in the newest position, at the end of the array
     var oCacheElem = {request:oRequest,response:oResponse};
-    aCache.push(oCacheElem);
+    aCache[aCache.length] = oCacheElem;
     this.fireEvent("responseCacheEvent", {request:oRequest,response:oResponse});
     YAHOO.log("Cached the response for \"" +  oRequest + "\"", "info", this.toString());
 };
