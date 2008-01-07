@@ -24,8 +24,10 @@ th.yui-dt-resizeable .yui-dt-liner {
 }
 
 /* ally headers */
-.yui-dt-bd thead tr, .yui-dt-bd thead th {position:absolute;top:-500px;}/* left:-1500px; */
-.a11yNote {position:absolute;left:-1500px;}
+.yui-dt-bd thead tr, .yui-dt-bd thead th {
+    position:absolute;
+    left:-1500px;
+}
 
 /* vertical and horizontal scrolling */
 .yui-dt-scrollable .yui-dt-bd {
