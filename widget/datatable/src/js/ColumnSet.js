@@ -699,12 +699,8 @@ YAHOO.widget.Column.prototype.resizeable = false;
 YAHOO.widget.Column.prototype.sortable = false;
 
 /**
- * Use sortOptions.defaultDir
- *
  * @property sortOptions.defaultOrder
- * @type String
- * @default null
- * @deprecated
+ * @deprecated Use sortOptions.defaultDir.
  */
 /**
  * Default sort direction for Column: YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTable.CLASS_DESC.

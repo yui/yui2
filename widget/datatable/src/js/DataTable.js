@@ -9147,10 +9147,8 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Use getTbodyEl().
- *
  * @method getBody
- * @deprecated
+ * @deprecated Use getTbodyEl.
  */
 YAHOO.widget.DataTable.prototype.getBody = function() {
     // Backward compatibility
@@ -9160,10 +9158,8 @@ YAHOO.widget.DataTable.prototype.getBody = function() {
 };
 
 /**
- * Use getTrEl().
- *
  * @method getRow
- * @deprecated
+ * @deprecated Use getTrEl.
  */
 YAHOO.widget.DataTable.prototype.getRow = function(index) {
     // Backward compatibility
@@ -9173,10 +9169,8 @@ YAHOO.widget.DataTable.prototype.getRow = function(index) {
 };
 
 /**
- * Use render.
- *
  * @method refreshView
- * @deprecated
+ * @deprecated Use render.
  */
 YAHOO.widget.DataTable.prototype.refreshView = function() {
     // Backward compatibility
@@ -9186,10 +9180,8 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
 };
 
 /**
- * Use selectRow.
- *
  * @method select
- * @deprecated
+ * @deprecated Use selectRow.
  */
 YAHOO.widget.DataTable.prototype.select = function(els) {
     // Backward compatibility
@@ -9204,10 +9196,8 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
 };
 
 /**
- * Use Paginator class APIs.
- *
  * @method updatePaginator
- * @deprecated
+ * @deprecated Use Paginator class APIs.
  */
 YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     // Complete the set (default if not present)
@@ -9245,10 +9235,8 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
 };
 
 /**
- * Use Paginator class APIs.
- *
  * @method showPage
- * @deprecated
+ * @deprecated Use Paginator class APIs.
  */
 YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     var oPaginator = this.get('paginator');
@@ -9272,10 +9260,8 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 };
 
 /**
- * Use Paginator class APIs.
- *
  * @method formatPaginators
- * @deprecated
+ * @deprecated Use Paginator class APIs.
  */
  YAHOO.widget.DataTable.prototype.formatPaginators = function() {
     var pag = this.get("paginator");
@@ -9315,10 +9301,8 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 };
 
 /**
- * Use Paginator class APIs.
- *
  * @method formatPaginatorDropdown
- * @deprecated
+ * @deprecated Use Paginator class APIs.
  */
 YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown, dropdownOptions) {
     if(elDropdown && (elDropdown.ownerDocument == document)) {
@@ -9356,10 +9340,8 @@ YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown, 
 };
 
 /**
- * Use Paginator class APIs.
- *
  * @method formatPaginatorLinks
- * @deprecated
+ * @deprecated Use Paginator class APIs.
  */
 YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nCurrentPage, nPageLinksStart, nPageLinksLength, nTotalPages) {
     if(elContainer && (elContainer.ownerDocument == document) &&
@@ -9434,10 +9416,8 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
 };
 
 /**
- * Use Paginator class APIs.
- *
  * @method _onPaginatorLinkClick
- * @deprecated
+ * @deprecated Use Paginator class APIs.
  */
 YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
     // Backward compatibility
@@ -9489,10 +9469,8 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
 };
 
 /**
- * Use Paginator class APIs.
- *
  * @method _onPaginatorDropdownChange
- * @deprecated
+ * @deprecated Use Paginator class APIs.
  */
 YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf) {
     // Backward compatibility
@@ -9511,10 +9489,8 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
 };
 
 /**
- * Use onEventShowCellEditor.
- *
  * @method onEventEditCell
- * @deprecated
+ * @deprecated Use onEventShowCellEditor.
  */
 YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
     // Backward compatibility
@@ -9524,10 +9500,8 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
 };
 
 /**
- * Use onDataReturnInitializeTable.
- *
  * @method onDataReturnReplaceRows
- * @deprecated
+ * @deprecated Use onDataReturnInitializeTable.
  */
 YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
     // Backward compatibility
@@ -9537,108 +9511,78 @@ YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oR
 };
 
 /**
- * Use theadRowMouseoverEvent.
- *
  * @event headerRowMouseoverEvent
- * @deprecated
+ * @deprecated Use theadRowMouseoverEvent.
  */
 
 /**
- * Use theadRowMouseoutEvent.
- *
  * @event headerRowMouseoutEvent
- * @deprecated
+ * @deprecated Use theadRowMouseoutEvent.
  */
 
 /**
- * Use theadRowMousedownEvent.
- *
  * @event headerRowMousedownEvent
- * @deprecated
+ * @deprecated Use theadRowMousedownEvent.
  */
 
 /**
- * Use theadRowClickEvent.
- *
  * @event headerRowClickEvent
- * @deprecated
+ * @deprecated Use theadRowClickEvent.
  */
 
 /**
- * Use theadRowDblclickEvent.
- *
  * @event headerRowDblclickEvent
- * @deprecated
+ * @deprecated Use theadRowDblclickEvent.
  */
 
 /**
- * Use theadCellMouseoverEvent.
- *
  * @event headerCellMouseoverEvent
- * @deprecated
+ * @deprecated Use theadCellMouseoverEvent.
  */
 
 /**
- * Use headerCellMouseoutEvent.
- *
- * @event theadCellMouseoutEvent
- * @deprecated
+ * @event headerCellMouseoutEvent
+ * @deprecated Use theadCellMouseoutEvent.
  */
 
 /**
- * Use theadCellMousedownEvent.
- *
  * @event headerCellMousedownEvent
- * @deprecated
+ * @deprecated Use theadCellMousedownEvent.
  */
 
 /**
- * Use theadCellClickEvent.
- *
  * @event headerCellClickEvent
- * @deprecated
+ * @deprecated Use theadCellClickEvent.
  */
 
 /**
- * Use theadCellDblclickEvent.
- *
  * @event headerCellDblclickEvent
- * @deprecated
+ * @deprecated Use theadCellDblclickEvent.
  */
 
 /**
- * Use theadLabelMouseoverEvent.
- *
  * @event headerLabelMouseoverEvent
- * @deprecated
+ * @deprecated Use theadLabelMouseoverEvent.
  */
 
 /**
- * Use theadLabelMouseoutEvent.
- *
  * @event headerLabelMouseoutEvent
- * @deprecated
+ * @deprecated Use theadLabelMouseoutEvent.
  */
 
 /**
- * Use theadLabelMousedownEvent.
- *
  * @event headerLabelMousedownEvent
- * @deprecated
+ * @deprecated Use theadLabelMousedownEvent.
  */
 
 /**
- * Use theadLabelClickEvent.
- *
  * @event headerLabelClickEvent
- * @deprecated
+ * @deprecated Use theadLabelClickEvent.
  */
 
 /**
- * Use theadLabelDblclickEvent.
- *
- * @event headerLabelClickEvent
- * @deprecated
+ * @event headerLabelDblclickEvent
+ * @deprecated Use theadLabelDblclickEvent.
  */
 
 
