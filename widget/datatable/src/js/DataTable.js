@@ -1820,80 +1820,63 @@ YAHOO.widget.DataTable.prototype._initColumnSort = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
-    // It's an append if no index provided, or index is negative or too big
-    var append = (!YAHOO.lang.isNumber(index) || (index < 0) ||
-            (index >= (this._elTbody.rows.length))) ? true : false;
+    var DT = YAHOO.widget.DataTable,
+        Dom = YAHOO.util.Dom,
+        oColumnSet = this._oColumnSet,
+        d = document,
+        elRow = d.createElement('tr'),
+        elCellT = d.createElement('td'),
+        i,len,j,jlen;
 
-    var oColumnSet = this._oColumnSet;
-    var elRow = (append) ? this._elTbody.appendChild(document.createElement("tr")) :
-        this._elTbody.insertBefore(document.createElement("tr"),this._elTbody.rows[index]);
+    elCellT.appendChild(d.createElement('div'));
+    Dom.addClass(elCellT.firstChild,DT.CLASS_LINER);
 
     elRow.id = this._sId+"-bdrow"+this._nTrCount;
     this._nTrCount++;
     elRow.yuiRecordId = oRecord.getId();
 
-    // Stripe the new row
-    if(elRow.sectionRowIndex%2) {
-        YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_ODD);
-    }
-    else {
-        YAHOO.util.Dom.addClass(elRow, YAHOO.widget.DataTable.CLASS_EVEN);
-    }
-
-    var sortKey, sortClass, isSortedBy = this.get("sortedBy");
-    if(isSortedBy) {
-        sortKey = isSortedBy.key;
-        sortClass = isSortedBy.dir;
-    }
-
     // Create TD cells
-    for(var j=0; j<oColumnSet.keys.length; j++) {
-        var oColumn = oColumnSet.keys[j];
-        var elCell = elRow.appendChild(document.createElement("td"));
-        var elCellLiner = elCell.appendChild(document.createElement("div"));
-        YAHOO.util.Dom.addClass(elCellLiner, YAHOO.widget.DataTable.CLASS_LINER);
+    for(i=0,len=oColumnSet.keys.length; i < len; ++i) {
+        var oColumn = oColumnSet.keys[i];
+        var elCell = elRow.appendChild(elCellT.cloneNode(true)),
+            elCellLiner = elCell.firstChild;
+
         elCell.id = elRow.id+"-cell"+j;
         elCell.yuiColumnKey = oColumn.getKey();
         elCell.yuiColumnId = oColumn.getId();
 
-        for(var k=0; k<oColumnSet.headers[j].length; k++) {
-            elCell.headers += this._sId + "-th" + oColumnSet.headers[j][k] + "-a11y ";
+        for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
+            elCell.headers += this._sId + "-th" + oColumnSet.headers[i][j] + "-a11y ";
         }
 
         // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
-        elCell.yuiCellIndex = j;
-
-        // Update UI
-        this.formatCell(elCellLiner, oRecord, oColumn);
+        elCell.yuiCellIndex = i;
 
         // Set FIRST/LAST on TD
-        if (j === 0) {
-            YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_FIRST);
+        if (i === 0) {
+            Dom.addClass(elCell, DT.CLASS_FIRST);
         }
-        else if (j === this._oColumnSet.keys.length-1) {
-            YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_LAST);
-        }
-
-        // Set ASC/DESC on TD
-        if(oColumn.key === sortKey) {
-            YAHOO.util.Dom.addClass(elCell, sortClass);
-        }
-
-        // Set width if given
-        if(oColumn.width) {
-            elCellLiner.style.width = oColumn.width + "px";
-        }
-        // Or else bump up to fit content width when necessary
-        else if(elCellLiner.offsetWidth < elCellLiner.scrollWidth) {
-            elCellLiner.style.width = elCellLiner.scrollWidth + "px";
-            oColumn.getThEl().firstChild.style.width = elCellLiner.scrollWidth + "px";
+        else if (i === this._oColumnSet.keys.length-1) {
+            Dom.addClass(elCell, DT.CLASS_LAST);
         }
     }
 
-    // Sync up widths of cells for given row with corresponding TH elements
-    this._syncColWidths(elRow);
-    
-    return elRow;
+    // Hide the row initially, allowing _updateTrEl to manage the pae reflows
+    Dom.setStyle(elRow,'display','none');
+
+    // It's an append if no index provided, or index is negative or too big
+    if (!YAHOO.lang.isNumber(index) || (index < 0) ||
+            (index >= (this._elTbody.rows.length))) {
+        this._elTbody.appendChild(elRow);
+    } else {
+        this._elTbody.insertBefore(elRow,this._elTbody.rows[index]);
+    }
+
+    // Stripe the new row
+    Dom.addClass(elRow, elRow.sectionRowIndex%2 ? DT.CLASS_ODD : DT.CLASS_EVEN);
+
+    // Call _updateTrEl to populate and align the row contents
+    return this._updateTrEl(elRow,oRecord);
 };
 
 /**
@@ -1906,41 +1889,68 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
  * @private
  */
 YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
-    var sortKey, sortClass, isSortedBy = this.get("sortedBy");
+    var DT = YAHOO.widget.DataTable,
+        Dom = YAHOO.util.Dom,
+        sortKey,
+        sortClass,
+        isSortedBy = this.get("sortedBy"),
+        aSetWidths = [],
+        i,len;
+
     if(isSortedBy) {
         sortKey = isSortedBy.key;
         sortClass = isSortedBy.dir;
     }
 
+    // Hide the row to prevent constant reflows
+    Dom.setStyle(elRow,'display','none');
+
     // Update TD elements with new data
-    for(var j=0; j<elRow.cells.length; j++) {
-        var oColumn = this._oColumnSet.keys[j];
-        var elCell = elRow.cells[j];
+    for(i=0,len=elRow.cells.length; i<len; ++i) {
+        var oColumn = this._oColumnSet.keys[i];
+        var elCell = elRow.cells[i];
         var elCellLiner = elCell.firstChild;
         this.formatCell(elCellLiner, oRecord, oColumn);
 
         // Remove ASC/DESC
-        YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_ASC);
-        YAHOO.util.Dom.removeClass(elCell, YAHOO.widget.DataTable.CLASS_DESC);
+        Dom.removeClass(elCell, DT.CLASS_ASC);
+        Dom.removeClass(elCell, DT.CLASS_DESC);
 
         // Set ASC/DESC on TD
         if(oColumn.key === sortKey) {
-            YAHOO.util.Dom.addClass(elCell, sortClass);
+            Dom.addClass(elCell, sortClass);
         }
         
         // Set width if given
         if(oColumn.width) {
             elCellLiner.style.width = oColumn.width + "px";
         }
-        // Or else bump up to fit content width when necessary
-        else if(elCellLiner.offsetWidth < elCellLiner.scrollWidth) {
-            elCellLiner.style.width = elCellLiner.scrollWidth + "px";
+        // Or mark for post-paint width assignment
+        else {
+            aSetWidths.push([elCellLiner,oColumn.getThEl().firstChild]);
         }
     }
 
     // Update Record ID
     elRow.yuiRecordId = oRecord.getId();
     
+    // Redisplay the row for reflow
+    Dom.setStyle(elRow,'display','');
+
+    // Loop through the cells that have not had their widths set from
+    // oColumn.width and check if the column is wide enough to support the
+    // content.  If not, expand the header width.
+    for (i=0,len=aSetWidths.length; i < len; ++i) {
+        var elLiner   = aSetWidths[i][0],
+            elThLiner = aSetWidths[i][1];
+
+        // increase the column size to fit content width when necessary
+        if (elLiner.offsetWidth < elLiner.scrollWidth) {
+            elLiner.style.width =  // assign both
+            elThLiner.style.width = elLiner.scrollWidth + "px";
+        }
+    }
+
     // Sync up widths of cells for given row with corresponding TH elements
     this._syncColWidths(elRow);
 
@@ -3608,7 +3618,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
                 if(oSelf._bInit) {
                     oSelf._bInit = false;
                     oSelf.fireEvent("initEvent");
-                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
+                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", this.toString());
                 }
                 else {
                     oSelf.fireEvent("renderEvent");
@@ -7806,7 +7816,7 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     if(YAHOO.widget.Calendar) {
         var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
         var calContainer = elContainer.appendChild(document.createElement("div"));
-        var calPrefix = oColumn.getThEl().id;
+        var calPrefix = oColumn.getColEl();
         calContainer.id = calPrefix + "-dateContainer";
         var calendar =
                 new YAHOO.widget.Calendar(calPrefix + "-date",
@@ -8437,16 +8447,17 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
  * @method onDataReturnSetPageData
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
+ * @param bError {Boolean} (optional) True if there was a data error.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
-YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, oPayload) {
+YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, bError, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(oRequest, oResponse);
 
     // Data ok to set
-    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
+    if(ok && oResponse && !(oResponse.error || bError) && YAHOO.lang.isArray(oResponse.results)) {
         var oState = oPayload.pagination;
 
         if (oState) {
@@ -8463,7 +8474,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
         this.render();
     }
     // Error
-    else if(ok && oResponse.error) {
+    else if(ok && (oResponse.error || bError)) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
 };
@@ -9146,8 +9157,10 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
 /////////////////////////////////////////////////////////////////////////////
 
 /**
+ * Use getTbodyEl().
+ *
  * @method getBody
- * @deprecated Use getTbodyEl.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.getBody = function() {
     // Backward compatibility
@@ -9157,8 +9170,10 @@ YAHOO.widget.DataTable.prototype.getBody = function() {
 };
 
 /**
+ * Use getTrEl().
+ *
  * @method getRow
- * @deprecated Use getTrEl.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.getRow = function(index) {
     // Backward compatibility
@@ -9168,8 +9183,10 @@ YAHOO.widget.DataTable.prototype.getRow = function(index) {
 };
 
 /**
+ * Use render.
+ *
  * @method refreshView
- * @deprecated Use render.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.refreshView = function() {
     // Backward compatibility
@@ -9179,8 +9196,10 @@ YAHOO.widget.DataTable.prototype.refreshView = function() {
 };
 
 /**
+ * Use selectRow.
+ *
  * @method select
- * @deprecated Use selectRow.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.select = function(els) {
     // Backward compatibility
@@ -9195,8 +9214,10 @@ YAHOO.widget.DataTable.prototype.select = function(els) {
 };
 
 /**
+ * Use Paginator class APIs.
+ *
  * @method updatePaginator
- * @deprecated Use Paginator class APIs.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
     // Complete the set (default if not present)
@@ -9234,8 +9255,10 @@ YAHOO.widget.DataTable.prototype.updatePaginator = function(oNewValues) {
 };
 
 /**
+ * Use Paginator class APIs.
+ *
  * @method showPage
- * @deprecated Use Paginator class APIs.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     var oPaginator = this.get('paginator');
@@ -9259,8 +9282,10 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 };
 
 /**
+ * Use Paginator class APIs.
+ *
  * @method formatPaginators
- * @deprecated Use Paginator class APIs.
+ * @deprecated
  */
  YAHOO.widget.DataTable.prototype.formatPaginators = function() {
     var pag = this.get("paginator");
@@ -9300,8 +9325,10 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
 };
 
 /**
+ * Use Paginator class APIs.
+ *
  * @method formatPaginatorDropdown
- * @deprecated Use Paginator class APIs.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown, dropdownOptions) {
     if(elDropdown && (elDropdown.ownerDocument == document)) {
@@ -9339,8 +9366,10 @@ YAHOO.widget.DataTable.prototype.formatPaginatorDropdown = function(elDropdown, 
 };
 
 /**
+ * Use Paginator class APIs.
+ *
  * @method formatPaginatorLinks
- * @deprecated Use Paginator class APIs.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nCurrentPage, nPageLinksStart, nPageLinksLength, nTotalPages) {
     if(elContainer && (elContainer.ownerDocument == document) &&
@@ -9415,8 +9444,10 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
 };
 
 /**
+ * Use Paginator class APIs.
+ *
  * @method _onPaginatorLinkClick
- * @deprecated Use Paginator class APIs.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
     // Backward compatibility
@@ -9468,8 +9499,10 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
 };
 
 /**
+ * Use Paginator class APIs.
+ *
  * @method _onPaginatorDropdownChange
- * @deprecated Use Paginator class APIs.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf) {
     // Backward compatibility
@@ -9488,8 +9521,10 @@ YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf)
 };
 
 /**
+ * Use onEventShowCellEditor.
+ *
  * @method onEventEditCell
- * @deprecated Use onEventShowCellEditor.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
     // Backward compatibility
@@ -9499,8 +9534,10 @@ YAHOO.widget.DataTable.prototype.onEventEditCell = function(oArgs) {
 };
 
 /**
+ * Use onDataReturnInitializeTable.
+ *
  * @method onDataReturnReplaceRows
- * @deprecated Use onDataReturnInitializeTable.
+ * @deprecated
  */
 YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oResponse) {
     // Backward compatibility
@@ -9510,78 +9547,108 @@ YAHOO.widget.DataTable.prototype.onDataReturnReplaceRows = function(sRequest, oR
 };
 
 /**
+ * Use theadRowMouseoverEvent.
+ *
  * @event headerRowMouseoverEvent
- * @deprecated Use theadRowMouseoverEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadRowMouseoutEvent.
+ *
  * @event headerRowMouseoutEvent
- * @deprecated Use theadRowMouseoutEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadRowMousedownEvent.
+ *
  * @event headerRowMousedownEvent
- * @deprecated Use theadRowMousedownEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadRowClickEvent.
+ *
  * @event headerRowClickEvent
- * @deprecated Use theadRowClickEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadRowDblclickEvent.
+ *
  * @event headerRowDblclickEvent
- * @deprecated Use theadRowDblclickEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadCellMouseoverEvent.
+ *
  * @event headerCellMouseoverEvent
- * @deprecated Use theadCellMouseoverEvent.
+ * @deprecated
  */
 
 /**
- * @event headerCellMouseoutEvent
- * @deprecated Use theadCellMouseoutEvent.
+ * Use headerCellMouseoutEvent.
+ *
+ * @event theadCellMouseoutEvent
+ * @deprecated
  */
 
 /**
+ * Use theadCellMousedownEvent.
+ *
  * @event headerCellMousedownEvent
- * @deprecated Use theadCellMousedownEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadCellClickEvent.
+ *
  * @event headerCellClickEvent
- * @deprecated Use theadCellClickEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadCellDblclickEvent.
+ *
  * @event headerCellDblclickEvent
- * @deprecated Use theadCellDblclickEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadLabelMouseoverEvent.
+ *
  * @event headerLabelMouseoverEvent
- * @deprecated Use theadLabelMouseoverEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadLabelMouseoutEvent.
+ *
  * @event headerLabelMouseoutEvent
- * @deprecated Use theadLabelMouseoutEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadLabelMousedownEvent.
+ *
  * @event headerLabelMousedownEvent
- * @deprecated Use theadLabelMousedownEvent.
+ * @deprecated
  */
 
 /**
+ * Use theadLabelClickEvent.
+ *
  * @event headerLabelClickEvent
- * @deprecated Use theadLabelClickEvent.
+ * @deprecated
  */
 
 /**
- * @event headerLabelDblclickEvent
- * @deprecated Use theadLabelDblclickEvent.
+ * Use theadLabelDblclickEvent.
+ *
+ * @event headerLabelClickEvent
+ * @deprecated
  */
 
 
