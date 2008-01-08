@@ -775,7 +775,7 @@ YAHOO.util.DataSource.prototype.clearAllIntervals = function(nId) {
  * @param params {Array} params to be passed to the callback method
  * @param error {Boolean} whether an error occurred
  */
-YAHOO.util.DataSource.prototype.issueCallback = function (callback,scope,params,error) {
+YAHOO.util.DataSource.issueCallback = function (callback,scope,params,error) {
     if (YAHOO.lang.isFunction(callback)) {
         callback.apply(scope, params);
     } else if (YAHOO.lang.isObject(callback)) {
@@ -804,7 +804,7 @@ YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCal
     // First look in cache
     var oCachedResponse = this.getCachedResponse(oRequest, oCallback, oCaller);
     if(oCachedResponse) {
-        this.issueCallback(oCallback,oCaller,[oRequest,oCachedResponse,false],false);
+        YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,oCachedResponse],false);
 
         return null;
     }
@@ -873,7 +873,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
                     // Send error response back to the caller with the error flag on
                     // TODO: should this send oResponse, considering the fork?
-                    this.issueCallback(oCallback,oCaller,[oRequest, oResponse,true], true);
+                    YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest, {error:true}], true);
 
                     return null;
                 }
@@ -906,7 +906,9 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                 }
 
                 // Send failure response back to the caller with the error flag on
-                this.issueCallback(oCallback,oCaller,[oRequest,oResponse,true],true);
+                oResponse = oResponse || {};
+                oResponse.error = true;
+                YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,oResponse],true);
 
                 return null;
             };
@@ -998,7 +1000,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             else {
                 YAHOO.log("Could not find Connection Manager asyncRequest() function", "error", this.toString());
                 // Send null response back to the caller with the error flag on
-                this.issueCallback(oCallback,oCaller,[oRequest,null,true],true);
+                YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,{error:true}],true);
             }
 
             break;
@@ -1155,7 +1157,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     }
 
     // Send the response back to the caller
-    this.issueCallback(oCallback,oCaller,[oRequest,oParsedResponse,oParsedResponse.error],oParsedResponse.error);
+    YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,oParsedResponse],oParsedResponse.error);
 };
 
 /**
