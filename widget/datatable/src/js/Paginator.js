@@ -424,38 +424,6 @@ YAHOO.widget.Paginator.prototype = {
     },
 
     /**
-     * Get the start and end record indexes of the specified page.
-     * @method getPageRecords
-     * @param page {number} (optional) The page (current page if not specified)
-     * @return {Array} [start_index, end_index]
-     */
-    getPageRecords : function (page) {
-        if (!YAHOO.lang.isNumber(page)) {
-            page = this.getCurrentPage();
-        }
-
-        var perPage = this.get('rowsPerPage'),
-            records = this.get('totalRecords'),
-            start, end;
-
-        if (!perPage) {
-            return null;
-        }
-
-        start = (page - 1) * perPage;
-        if (records !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
-            if (start >= records) {
-                return null;
-            }
-            end = Math.min(start + perPage, records) - 1;
-        } else {
-            end = start + perPage - 1;
-        }
-
-        return [start,end];
-    },
-
-    /**
      * Get the total number of pages in the data set according to the current
      * rowsPerPage and totalRecords values.  If totalRecords is not set, or
      * set to YAHOO.widget.Paginator.VALUE_UNLIMITED, returns
@@ -554,6 +522,38 @@ YAHOO.widget.Paginator.prototype = {
     },
 
     /**
+     * Get the start and end record indexes of the specified page.
+     * @method getPageRecords
+     * @param page {number} (optional) The page (current page if not specified)
+     * @return {Array} [start_index, end_index]
+     */
+    getPageRecords : function (page) {
+        if (!YAHOO.lang.isNumber(page)) {
+            page = this.getCurrentPage();
+        }
+
+        var perPage = this.get('rowsPerPage'),
+            records = this.get('totalRecords'),
+            start, end;
+
+        if (!perPage) {
+            return null;
+        }
+
+        start = (page - 1) * perPage;
+        if (records !== YAHOO.widget.Paginator.VALUE_UNLIMITED) {
+            if (start >= records) {
+                return null;
+            }
+            end = Math.min(start + perPage, records) - 1;
+        } else {
+            end = start + perPage - 1;
+        }
+
+        return [start,end];
+    },
+
+    /**
      * Set the current page to the provided page number if possible.
      * @method setPage
      * @param newPage {number} the new page number
@@ -585,6 +585,24 @@ YAHOO.widget.Paginator.prototype = {
     },
 
     /**
+     * Get the number of rows per page.
+     * @method getRowsPerPage
+     * @return {number} the current setting of the rowsPerPage attribute
+     */
+    getRowsPerPage : function () {
+        return this.get('rowsPerPage');
+    },
+
+    /**
+     * Set the number of rows per page.
+     * @method setRowsPerPage
+     * @param rpp {number} the new number of rows per page
+     */
+    setRowsPerPage : function (rpp) {
+        return this.set('rowsPerPage',rpp);
+    },
+
+    /**
      * Set the rowsPerPage or fire the changeRequest event per the setting of
      * the updateOnChange attribute.
      * @method requestRowsPerPage
@@ -597,6 +615,77 @@ YAHOO.widget.Paginator.prototype = {
             } else {
                 this.fireEvent('changeRequest',
                     this.getState({'rowsPerPage':rpp}));
+            }
+        }
+    },
+
+    /**
+     * Get the total number of records.
+     * @method getTotalRecords
+     * @return {number} the current setting of totalRecords attribute
+     */
+    getTotalRecords : function () {
+        return this.get('totalRecords');
+    },
+
+    /**
+     * Set the total number of records.
+     * @method setTotalRecords
+     * @param total {number} the new total number of records
+     */
+    setTotalRecords : function (total) {
+        return this.set('totalRecords',total);
+    },
+
+    /**
+     * Set the totalRecords or fire the changeRequest event per the setting of
+     * the updateOnChange attribute.
+     * @method requestTotalRecords
+     * @param total {number} the new total number of records
+     */
+    requestRowsPerPage : function (total) {
+        if (total !== this.get('totalRecords')) {
+            if (this.get('updateOnChange')) {
+                this.set('totalRecords',total);
+            } else {
+                this.fireEvent('changeRequest',
+                    this.getState({'totalRecords':total}));
+            }
+        }
+    },
+
+    /**
+     * Get the index of the first record on the current page
+     * @method getStartIndex
+     * @return {number} the index of the first record on the current page
+     */
+    getStartIndex : function () {
+        return this.get('recordOffset');
+    },
+
+    /**
+     * Move the record offset to a new starting index.  This will likely cause
+     * the calculated current page to change.  You should probably use setPage.
+     * @method setStartIndex
+     * @param offset {number} the new record offset
+     */
+    setStartIndex : function (offset) {
+        return this.set('recordOffset',offset);
+    },
+
+    /**
+     * Set the recordOffset or fire the changeRequest event per the setting of
+     * the updateOnChange attribute.
+     * @method requestStartIndex
+     * @param offset {number} the new record offset
+     */
+    requestStartIndex : function (offset) {
+        if (offset !== this.get('recordOffset')) {
+            if (this.get('updateOnChange')) {
+                this.set('recordOffset',offset);
+            } else {
+                this.fireEvent('changeRequest',
+                    this.getState({'recordOffset':offset}));
             }
         }
     },
