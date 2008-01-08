@@ -3608,7 +3608,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
                 if(oSelf._bInit) {
                     oSelf._bInit = false;
                     oSelf.fireEvent("initEvent");
-                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", this.toString());
+                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
                 }
                 else {
                     oSelf.fireEvent("renderEvent");
@@ -7806,7 +7806,7 @@ YAHOO.widget.DataTable.editDate = function(oEditor, oSelf) {
     if(YAHOO.widget.Calendar) {
         var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
         var calContainer = elContainer.appendChild(document.createElement("div"));
-        var calPrefix = oColumn.getColEl();
+        var calPrefix = oColumn.getThEl().id;
         calContainer.id = calPrefix + "-dateContainer";
         var calendar =
                 new YAHOO.widget.Calendar(calPrefix + "-date",
@@ -8437,17 +8437,16 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
  * @method onDataReturnSetPageData
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
- * @param bError {Boolean} (optional) True if there was a data error.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
-YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, bError, oPayload) {
+YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(oRequest, oResponse);
 
     // Data ok to set
-    if(ok && oResponse && !(oResponse.error || bError) && YAHOO.lang.isArray(oResponse.results)) {
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         var oState = oPayload.pagination;
 
         if (oState) {
@@ -8464,7 +8463,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
         this.render();
     }
     // Error
-    else if(ok && (oResponse.error || bError)) {
+    else if(ok && oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
 };

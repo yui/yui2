@@ -859,6 +859,16 @@ YAHOO.widget.Column.prototype.getResizerEl = function() {
 };
 
 // Backward compatibility
+/**
+ * @method getColEl
+ * @deprecated Use getThEl
+ */
+YAHOO.widget.Column.prototype.getColEl = function() {
+    YAHOO.log("The method getColEl() has been" +
+    " deprecated in favor of getThEl()", "warn",
+    this.toString());
+    return this.getThEl();
+};
 YAHOO.widget.Column.prototype.getIndex = function() {
     YAHOO.log("The method getIndex() has been" +
     " deprecated in favor of getKeyIndex()", "warn",
