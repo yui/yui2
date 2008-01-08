@@ -29,6 +29,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Internal vars
     this._nIndex = YAHOO.widget.DataTable._nCount;
     this._sId = "yui-dt"+this._nIndex;
+    this._oChain = new YAHOO.util.Chain();
 
     // Initialize configs
     this._initConfigs(oConfigs);
@@ -1022,13 +1023,13 @@ YAHOO.widget.DataTable.prototype._nTrCount = 0;
 YAHOO.widget.DataTable.prototype._sId = null;
 
 /**
- * True when DOM mutations are in progress.
+ * Render chain.
  *
- * @property _bRendering
- * @type Boolean
+ * @property _oChain
+ * @type YAHOO.util.Chain
  * @private
  */
-YAHOO.widget.DataTable.prototype._bRendering = false;
+YAHOO.widget.DataTable.prototype._oChain = null;
 
 /**
  * DOM reference to the container element for the DataTable instance into which
@@ -3507,10 +3508,10 @@ YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
  * @method render
  */
 YAHOO.widget.DataTable.prototype.render = function() {
-    YAHOO.log("DataTable rendering...", "info", this.toString());
-    this._bRendering = true;
+    this._oChain.stop();
     this.showTableMessage(YAHOO.widget.DataTable.MSG_LOADING, YAHOO.widget.DataTable.CLASS_LOADING);
-    
+    YAHOO.log("DataTable rendering...", "info", this.toString());
+
     var i, j, k, l, allRecords;
 
     // Paginator is enabled, show a subset of Records and update Paginator UI
@@ -3563,33 +3564,56 @@ YAHOO.widget.DataTable.prototype.render = function() {
         this.hideTableMessage();
 
         // From the top, update in-place existing rows, so as to reuse DOM elements
-        for(i=0; i<allRows.length; i++) {
-            this._updateTrEl(allRows[i], allRecords[i]);
+        if(allRows.length > 0) {
+            this._oChain.add({
+                method: function(oArg) {
+                    if((this instanceof YAHOO.widget.DataTable) && this._sId) {
+                        this._updateTrEl(allRows[oArg.nRowIndex], allRecords[oArg.nRowIndex]);
+                    }
+                    oArg.nRowIndex++;
+                },
+                iterations: allRows.length - 1,
+                argument: {nRowIndex:0},
+                scope: this
+            });
         }
 
         // Add more TR elements as necessary
-        var oSelf = this;
         var nStartIndex = allRows.length; // where to start
-        var nMaxIndex = allRecords.length; // where to end
-        var loopN = this.get("renderLoopSize"); // how many per loop
+        var nIterations = (allRecords.length - nStartIndex); // how many needed
+        if(nIterations > 0) {
+            this._oChain.add({
+                method: function(oArg) {
+                    if((this instanceof YAHOO.widget.DataTable) && this._sId) {
+                        this._addTrEl(allRecords[oArg.nRowIndex]);
+                    }
+                    oArg.nRowIndex++;
+                },
+                iterations: nIterations,
+                argument: {nRowIndex:nStartIndex},
+                scope: this
+            });
+        }
 
-        // Post loop stuff to reinstate various states
-        var endLoops = function() {
-            setTimeout(function() {
-                if((oSelf instanceof YAHOO.widget.DataTable) && oSelf._sId) {
-                     // Reinstate selected and sorted classes
+        this._oChain.add({
+            method: function(oArg) {
+                if((this instanceof YAHOO.widget.DataTable) && this._sId) {
+                    this._setFirstRow();
+                    this._setLastRow();
+
+                    // Reinstate selected and sorted classes
                     if(bReselect) {
                         // Loop over each row
                         for(j=0; j<allRows.length; j++) {
                             var thisRow = allRows[j];
-                            var sMode = oSelf.get("selectionMode");
+                            var sMode = this.get("selectionMode");
                             if ((sMode == "standard") || (sMode == "single")) {
                                 // Set SELECTED
                                 for(k=0; k<allSelectedRows.length; k++) {
                                     if(allSelectedRows[k] === thisRow.yuiRecordId) {
                                         YAHOO.util.Dom.addClass(thisRow, YAHOO.widget.DataTable.CLASS_SELECTED);
                                         if(j === allRows.length-1) {
-                                            oSelf._oAnchorRecord = oSelf.getRecord(thisRow.yuiRecordId);
+                                            this._oAnchorRecord = this.getRecord(thisRow.yuiRecordId);
                                         }
                                     }
                                 }
@@ -3604,7 +3628,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
                                                 (allSelectedCells[l].columnId === thisCell.yuiColumnId)) {
                                             YAHOO.util.Dom.addClass(thisCell, YAHOO.widget.DataTable.CLASS_SELECTED);
                                             if(k === thisRow.cells.length-1) {
-                                                oSelf._oAnchorCell = {record:oSelf.getRecord(thisRow.yuiRecordId), column:oSelf.getColumnById(thisCell.yuiColumnId)};
+                                                this._oAnchorCell = {record:this.getRecord(thisRow.yuiRecordId), column:this.getColumnById(thisCell.yuiColumnId)};
                                             }
                                         }
                                     }
@@ -3614,42 +3638,24 @@ YAHOO.widget.DataTable.prototype.render = function() {
                     }
                 }
 
-                oSelf._bRendering = false;
-                if(oSelf._bInit) {
-                    oSelf._bInit = false;
-                    oSelf.fireEvent("initEvent");
-                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", this.toString());
+                if(this._bInit) {
+                    this._bInit = false;
+                    this.fireEvent("initEvent");
+                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
                 }
                 else {
-                    oSelf.fireEvent("renderEvent");
+                    this.fireEvent("renderEvent");
                     // Backward compatibility
-                    oSelf.fireEvent("refreshEvent");
-                    YAHOO.log("DataTable rendered " + allRecords.length + " of " + oSelf._oRecordSet.getLength() + " rows", "info", oSelf.toString());
+                    this.fireEvent("refreshEvent");
+                    YAHOO.log("DataTable rendered " + allRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
                 }
-            },0);
-        };
-
-        // Timeout loops to add TR elements
-        var startLoops = function(nRowIndex) {
-            setTimeout(function() {
-                if((oSelf instanceof YAHOO.widget.DataTable) && oSelf._sId) {
-                    for(var n=nRowIndex; n<nRowIndex+loopN; n++) {
-                        if(n < nMaxIndex) {
-                            oSelf._addTrEl(allRecords[n]);
-
-                        }
-                        else {
-                            oSelf._setFirstRow();
-                            oSelf._setLastRow();
-                            endLoops();
-                            return;
-                        }
-                    }
-                    startLoops(n);
-                }
-            }, 0);
-        };
-        startLoops(nStartIndex);
+            
+            
+            },
+            scope: this
+        });     
+        
+        this._oChain.run();   
     }
     // Empty
     else {
@@ -4422,6 +4428,7 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
             var recIndex;
             var oPaginator = this.get('paginator');
 
+            // Paginated
             if (oPaginator instanceof YAHOO.widget.Paginator ||
                 this.get('paginated')) {
                 recIndex = this.getRecordIndex(oRecord);
@@ -4434,69 +4441,88 @@ YAHOO.widget.DataTable.prototype.addRow = function(oData, index) {
                     }
 
                     endRecIndex = (oPaginator.getPageRecords())[1];
-                } else {
-                // Paginated so just refresh the view to keep pagination state
+                }
+                // Backward compatibility
+                else {
                     endRecIndex = oPaginator.startRecordIndex +
                                   oPaginator.rowsPerPage - 1;
-
-                    // Backward compatibility
                     this.updatePaginator();
                 }
 
+                // New record affects the view
                 if (recIndex <= endRecIndex) {
                     this.render();
                 }
-            } else {
-                recIndex = this.getTrIndex(oRecord);
-
-                // Row is on current page
-                if(YAHOO.lang.isNumber(recIndex)) {
-                    // Add the TR element
-                    var elNewTr = this._addTrEl(oRecord, recIndex);
-                    if(elNewTr) {
-                        // Is this an insert or an append?
-                        var append = (YAHOO.lang.isNumber(recIndex) &&
-                                (recIndex == this._elTbody.rows.length-1)) ? true : false;
-
-                        // Stripe the one new row
-                        if(append) {
-                            if(elNewTr.sectionRowIndex%2) {
-                                YAHOO.util.Dom.addClass(elNewTr, YAHOO.widget.DataTable.CLASS_ODD);
-                            }
-                            else {
-                                YAHOO.util.Dom.addClass(elNewTr, YAHOO.widget.DataTable.CLASS_EVEN);
-                            }
-                        }
-                        // Restripe all the rows after the new one
-                        else {
-                            this._setRowStripes(recIndex);
-                        }
-
-                        // If new row is at the bottom
-                        if(append) {
-                            this._setLastRow();
-                        }
-                        // If new row is at the top
-                        else if(YAHOO.lang.isNumber(index) && (recIndex === 0)) {
-                            this._setFirstRow();
-                        }
-                        
-                        this._syncColWidths();
-                    }
-                    this.hideTableMessage();
-                }
+                
+                // TODO: what args to pass?
+                this.fireEvent("rowAddEvent", {record:oRecord});
+        
+                // For log message
+                recIndex = (YAHOO.lang.isValue(recIndex))? recIndex : "n/a";
+        
+                YAHOO.log("Added row: Record ID = " + oRecord.getId() +
+                        ", Record index = " + this.getRecordIndex(oRecord) +
+                        ", page row index = " + recIndex, "info", this.toString());
+                
+                return;
             }
+            // Not paginated
+            else {
+                recIndex = this.getTrIndex(oRecord);
+                if(YAHOO.lang.isNumber(recIndex)) {
+                    this._oChain.add({
+                        method: function() {
+                            // Add the TR element
+                            var elNewTr = this._addTrEl(oRecord, recIndex);
+                            if(elNewTr) {
+                                // Is this an insert or an append?
+                                var append = (YAHOO.lang.isNumber(recIndex) &&
+                                        (recIndex == this._elTbody.rows.length-1)) ? true : false;
+        
+                                // Stripe the one new row
+                                if(append) {
+                                    if(elNewTr.sectionRowIndex%2) {
+                                        YAHOO.util.Dom.addClass(elNewTr, YAHOO.widget.DataTable.CLASS_ODD);
+                                    }
+                                    else {
+                                        YAHOO.util.Dom.addClass(elNewTr, YAHOO.widget.DataTable.CLASS_EVEN);
+                                    }
+                                }
+                                // Restripe all the rows after the new one
+                                else {
+                                    this._setRowStripes(recIndex);
+                                }
+        
+                                // If new row is at the bottom
+                                if(append) {
+                                    this._setLastRow();
+                                }
+                                // If new row is at the top
+                                else if(YAHOO.lang.isNumber(index) && (recIndex === 0)) {
+                                    this._setFirstRow();
+                                }
+                                
+                                this._syncColWidths();
+                            }
+                            this.hideTableMessage();
 
-            // TODO: what args to pass?
-            this.fireEvent("rowAddEvent", {record:oRecord});
-
-            // For log message
-            recIndex = (YAHOO.lang.isValue(recIndex))? recIndex : "n/a";
-
-            YAHOO.log("Added row: Record ID = " + oRecord.getId() +
-                    ", Record index = " + this.getRecordIndex(oRecord) +
-                    ", page row index = " + recIndex, "info", this.toString());
-            return;
+                            // TODO: what args to pass?
+                            this.fireEvent("rowAddEvent", {record:oRecord});
+                    
+                            // For log message
+                            recIndex = (YAHOO.lang.isValue(recIndex))? recIndex : "n/a";
+                    
+                            YAHOO.log("Added row: Record ID = " + oRecord.getId() +
+                                    ", Record index = " + this.getRecordIndex(oRecord) +
+                                    ", page row index = " + recIndex, "info", this.toString());
+                            
+                        },
+                        scope: this
+                    });
+                    this._oChain.run();
+                    return;
+                }
+            }            
         }
     }
     YAHOO.log("Could not add row with " + YAHOO.lang.dump(oData), "error", this.toString());
@@ -4578,14 +4604,26 @@ YAHOO.widget.DataTable.prototype.updateRow = function(row, oData) {
 
     // Update the TR only if row is on current page
     if(elRow) {
-        this._updateTrEl(elRow, updatedRecord);
+        this._oChain.add({
+            method: function() {
+                this._updateTrEl(elRow, updatedRecord);
+                this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
+                YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
+                        ", Record index = " + this.getRecordIndex(updatedRecord) +
+                        ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
+                        },
+            scope: this
+        });
+        this._oChain.run();
         this._syncColWidths();
     }
+    else {
+        this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
+        YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
+                ", Record index = " + this.getRecordIndex(updatedRecord) +
+                ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());   
+    }
 
-    this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
-    YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
-            ", Record index = " + this.getRecordIndex(updatedRecord) +
-            ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
 };
 
 /**
@@ -4662,31 +4700,45 @@ YAHOO.widget.DataTable.prototype.deleteRow = function(row) {
             if (nRecordIndex <= endRecIndex) {
                 this.render();
             }
-        } else {
+        }
+        else {
             if(YAHOO.lang.isNumber(nTrIndex)) {
-                var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
-                this._deleteTrEl(nTrIndex);
-
-                // Empty body
-                if(this._elTbody.rows.length === 0) {
-                    this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
-                }
-                // Update UI
-                else {
-                    // Set FIRST/LAST
-                    if(nTrIndex === 0) {
-                        this._setFirstRow();
-                    }
-                    if(isLast) {
-                        this._setLastRow();
-                    }
-                    // Set EVEN/ODD
-                    if(nTrIndex != this._elTbody.rows.length) {
-                        this._setRowStripes(nTrIndex);
-                    }
-                    
-                    this._syncColWidths();
-                }
+                this._oChain.add({
+                    method: function() {                    
+                        var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
+                        this._deleteTrEl(nTrIndex);
+        
+                        // Empty body
+                        if(this._elTbody.rows.length === 0) {
+                            this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
+                        }
+                        // Update UI
+                        else {
+                            // Set FIRST/LAST
+                            if(nTrIndex === 0) {
+                                this._setFirstRow();
+                            }
+                            if(isLast) {
+                                this._setLastRow();
+                            }
+                            // Set EVEN/ODD
+                            if(nTrIndex != this._elTbody.rows.length) {
+                                this._setRowStripes(nTrIndex);
+                            }
+                            
+                            this._syncColWidths();
+                        }
+        
+                        this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
+                                oldData:oData, trElIndex:nTrIndex});
+                        YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
+                                ", Record index = " + nRecordIndex +
+                                ", page row index = " + nTrIndex, "info", this.toString());
+                    },
+                    scope: this
+                });
+                this._oChain.run();
+                return;
             }
         }
 
