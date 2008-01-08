@@ -16,8 +16,8 @@
 .sizer { position:absolute; top:450px; left:20px; height:150px; width:200px; }
 .sharedTrigger1 { position:absolute; top:10px; left:420px; height:72px; width:100px; }
 .sharedTrigger2 { position:absolute; top:10px; left:550px; height:67px; width:100px; }
-.topLeft { position:absolute; top:0; left:0; height:15px; width:20px; }
-.offPage { position:absolute; top:5000px; left:4000px; height:53px; width:100px; }
+.fold-top { position:absolute; top:130px; left:420px; height:75px; width:100px; }
+.fold-bottom { position:absolute; top:500px; left:420px; height:75px; width:100px; }
 
 .yui-imgload { background:none !important; }
 </style>
@@ -41,10 +41,12 @@
 	</div>
 	<div class='sharedTrigger1' id='sharedTrigger1'></div>
 	<div class='sharedTrigger2' id='sharedTrigger2'></div>
-	<div class='topLeft' id='topLeft'>
-		<img id='topLeftImg' />
+	<div class='fold-top'>
+		<img id='foldImgTop' />
 	</div>
-	<div class='offPage' id='offPage'></div>
+	<div class='fold-bottom'>
+		<img id='foldImgBottom' />
+	</div>
 </div>
 
 <script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
@@ -209,47 +211,48 @@ var triggerRemovalTestCase = new YAHOO.tool.TestCase({
 
 });
 
-var foldCheckTestCase = new YAHOO.tool.TestCase({
+var foldConditionalTestCase = new YAHOO.tool.TestCase({
 	/*
-	 * Test case to check the foldConditional functionality.
-	 * Has an image at 0,0 and one at 4000,5000. The assumption is that 0,0 is in the viewport, while 4000,5000 can't possibly be.
-	 * Includes a test for 0,0 in the viewport anyway.
-	 *
-	 * Need to see what happens when this is run in an automated environment, without a real browser and viewport.
+	 * Test case to check fold-conditional loading of a group
+	 * We're faking the viewport size and fold determination so that everything will be dependable in any situation (including automated runs)
 	 */
 
-	name: 'Fold Check',
+	name: "Fold Conditional Loading",
 
 	setUp: function() {
-		this.topLeftUrl = 'http://developer.yahoo.com/yui/docs/assets/examples/exampleimages/small/japan.jpg';
-		this.botRightUrl = 'http://developer.yahoo.com/yui/docs/assets/examples/exampleimages/small/katatjuta.jpg';
-		this.foldGroup = new YAHOO.util.ImageLoader.group('topLeft', 'dblclick');
+		this.imageTopUrl = 'http://developer.yahoo.com/yui/docs/assets/examples/exampleimages/small/japan.jpg';
+		this.imageBotUrl = 'http://developer.yahoo.com/yui/docs/assets/examples/exampleimages/small/japan.jpg';
+		this.foldGroup = new YAHOO.util.ImageLoader.group();
+		this.foldGroup.registerSrcImage('foldImgTop', this.imageTopUrl);
+		this.foldGroup.registerSrcImage('foldImgBottom', this.imageBotUrl);
 		this.foldGroup.foldConditional = true;
-		this.foldGroup.name = 'FoldCheckGroup';
-		this.foldGroup.registerSrcImage('topLeftImg', this.topLeftUrl, 20, 15);
-		this.foldGroup.registerBgImage('offPage', this.botRightUrl);
-		this.topLeftImage = document.getElementById('topLeftImg');
-		this.botRightImage = document.getElementById('offPage');
+		this.foldGroup.name = 'foldConditionalGroup';
+		this.groupTopImage = document.getElementById('foldImgTop');
+		this.groupBotImage = document.getElementById('foldImgBottom');
+
+		// override the foldCheck function of this group, because we'll need to fake things to make them dependable
+		this.foldGroup._foldCheck = function() {
+			var hLimit = 300;
+			var wLimit = 1000;
+			for (var id in this._imgObjs) {
+				if (YAHOO.lang.hasOwnProperty(this._imgObjs, id)) {
+					var elPos = YAHOO.util.Dom.getXY(this._imgObjs[id].domId);
+					if (elPos[1] < hLimit && elPos[0] < wLimit) {
+						this._imgObjs[id].fetch();
+					}
+				}
+			}
+		};
+		
 	},
 
 	testFoldCheck: function() {
-		/* cheating a bit by calling the private _foldCheck method
-		 * reason: don't want to compete with the onload and don't want to set a timeout
-		 */
 		this.foldGroup._foldCheck();
-		var height = YAHOO.util.Dom.getViewportHeight();
-		// only checking viewport height, not scroll. technically, if the height were 0 but the scrollTop was > 0, then the image would be fetched in _foldCheck(). not sure that's possible. assume that's never the case in this test
-		if (height > 0) {
-			YAHOO.util.Assert.areEqual(this.topLeftImage.src, this.topLeftUrl);
-		}
-		else {
-			YAHOO.util.Assert.areEqual(this.topLeftImage.src, '');
-		}
-		YAHOO.util.Assert.areEqual(this.botRightImage.style.backgroundImage, '');
+		YAHOO.util.Assert.areEqual(this.groupTopImage.src, this.imageTopUrl);
+		YAHOO.util.Assert.areEqual(this.groupBotImage.src, '');
 	}
-	
-});
 
+});
 
 var imageLoaderTestSuite = new YAHOO.tool.TestSuite('YUI ImageLoader Utility');
 imageLoaderTestSuite.add(imgUrlsTestCase);
@@ -257,7 +260,7 @@ imageLoaderTestSuite.add(classNameTestCase);
 imageLoaderTestSuite.add(addTriggerTestCase);
 imageLoaderTestSuite.add(imgSizingTestCase);
 imageLoaderTestSuite.add(triggerRemovalTestCase);
-imageLoaderTestSuite.add(foldCheckTestCase);
+imageLoaderTestSuite.add(foldConditionalTestCase);
 
 YAHOO.tool.TestRunner.add(imageLoaderTestSuite);
 
