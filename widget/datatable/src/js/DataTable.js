@@ -193,19 +193,6 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
-    * @attribute renderLoopSize
-    * @description How many rows to write to the DOM in each render loop.
-    * @type Number
-    * @default 1
-    */
-    this.setAttributeConfig("renderLoopSize", {
-        value: 1,
-        validator: function(n) {
-            return (YAHOO.lang.isNumber(n) && (n > 0));
-        }
-    });
-
-    /**
      * @attribute generateRequest
      * @description A function used to translate proposed DataTable state info
      * into a value which is then passed to the DataSource's sendRequest method.
