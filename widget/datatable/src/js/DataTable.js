@@ -98,9 +98,14 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     YAHOO.widget.DataTable._nCount++;
     
     // Send out for initial data in an asynchronous request
-    var initialRequest = this.get('initialRequest');
-    if(initialRequest !== undefined) {
-        this._oDataSource.sendRequest(initialRequest, this.onDataReturnInitializeTable, this);
+    var sInitialRequest = this.get('initialRequest');
+    if(sInitialRequest !== undefined) {
+        var oCallback = {
+            success : this.onDataReturnInitializeTable,
+            failure : this.onDataReturnInitializeTable,
+            scope : this
+        };
+        this._oDataSource.sendRequest(sInitialRequest, oCallback);
     }
     else {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_EMPTY, YAHOO.widget.DataTable.CLASS_EMPTY);
@@ -2707,7 +2712,7 @@ YAHOO.widget.DataTable.prototype._onTbodyClick = function(e, oSelf) {
             default:
                 break;
         }
-        if(!bKeepBubbling) {
+        if(bKeepBubbling === false) {
             return;
         }
         else {
@@ -5341,7 +5346,6 @@ YAHOO.widget.DataTable.handleDataSourcePagination = function (oState,self) {
             success : self.onDataReturnSetPageData,
             failure : self.onDataReturnSetPageData,
             argument : {
-                datatable : self,
                 pagination : oState
             },
             scope : self
@@ -7724,7 +7728,7 @@ YAHOO.widget.DataTable.prototype.saveCellEditor = function() {
         }
 
         // Update the Record
-        this._oRecordSet.updateKey(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
+        this._oRecordSet.setRecordValue(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
 
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
@@ -8151,10 +8155,11 @@ YAHOO.widget.DataTable._generateRequest = function (oData, oDataTable) {
  * @method doBeforeLoadData
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
  * @return {Boolean} Return true to continue loading data into RecordSet and
  * updating DataTable with new Records, false to cancel.
  */
-YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.doBeforeLoadData = function(sRequest, oResponse, oPayload) {
     return true;
 };
 
@@ -8398,12 +8403,13 @@ YAHOO.widget.DataTable.prototype.onEventCancelCellEditor = function(oArgs) {
  * @method onDataReturnInitializeTable
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
  */
-YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
 
     // Data ok to populate
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
@@ -8433,13 +8439,13 @@ YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest
  * @method onDataReturnAppendRows
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
- * @param bError {Boolean} (optional) True if there was a data error.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
  */
-YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
 
     // Data ok to append
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
@@ -8459,13 +8465,13 @@ YAHOO.widget.DataTable.prototype.onDataReturnAppendRows = function(sRequest, oRe
  * @method onDataReturnInsertRows
  * @param sRequest {String} Original request.
  * @param oResponse {Object} Response object.
- * @param bError {Boolean} (optional) True if there was a data error.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
  */
-YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse) {
+YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(sRequest, oResponse);
+    var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
 
     // Data ok to append
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
@@ -8489,7 +8495,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
-    var ok = this.doBeforeLoadData(oRequest, oResponse);
+    var ok = this.doBeforeLoadData(oRequest, oResponse, oPayload);
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
@@ -9483,6 +9489,7 @@ YAHOO.widget.DataTable.prototype.formatPaginatorLinks = function(elContainer, nC
  * Use Paginator class APIs.
  *
  * @method _onPaginatorLinkClick
+ * @private 
  * @deprecated
  */
 YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
@@ -9538,6 +9545,7 @@ YAHOO.widget.DataTable.prototype._onPaginatorLinkClick = function(e, oSelf) {
  * Use Paginator class APIs.
  *
  * @method _onPaginatorDropdownChange
+ * @private 
  * @deprecated
  */
 YAHOO.widget.DataTable.prototype._onPaginatorDropdownChange = function(e, oSelf) {

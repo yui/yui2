@@ -511,15 +511,22 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
 };
 
 /**
- * Updates given Record at given key with given data.
- *
  * @method updateKey
+ * @deprecated Use updateRecordValue
+ */
+YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
+    this.setRecordValue(record, sKey, oData);
+};
+/**
+ * Sets given Record at given key to given data.
+ *
+ * @method setRecordValue
  * @param record {YAHOO.widget.Record | Number | String} A Record instance,
  * a RecordSet position index, or a Record ID.
  * @param sKey {String} Key name.
  * @param oData {Object) New data.
  */
-YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
+YAHOO.widget.RecordSet.prototype.setRecordValue = function(record, sKey, oData) {
     var oRecord = this.getRecord(record);
     if(oRecord) {
         var oldData = null;
@@ -761,3 +768,14 @@ YAHOO.widget.Record.prototype.getData = function(sKey) {
     }
 };
 
+/**
+ * Sets given data at the given key. Use the RecordSet method setValue to trigger
+ * events. 
+ *
+ * @method setData
+ * @param sKey {String} The key of the new value.
+ * @param oData {MIXED} The new value.
+ */
+YAHOO.widget.Record.prototype.setData = function(sKey, oData) {
+    this._oData[sKey] = oData;
+};
