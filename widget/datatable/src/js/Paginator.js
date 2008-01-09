@@ -557,27 +557,12 @@ YAHOO.widget.Paginator.prototype = {
      * Set the current page to the provided page number if possible.
      * @method setPage
      * @param newPage {number} the new page number
-     * @return {boolean}
+     * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
-    setPage : function (newPage) {
-        if (this.hasPage(newPage)) {
-            this.set('recordOffset', (newPage - 1) * this.get('rowsPerPage'));
-            return true;
-        }
-        
-        return false;
-    },
-
-    /**
-     * Set the page or fire the changeRequest event per the setting of the
-     * updateOnChange attribute.
-     * @method requestPage
-     * @param page {number} the new page number
-     */
-    requestPage : function (page) {
+    setPage : function (page,silent) {
         if (page !== this.getCurrentPage()) {
-            if (this.get('updateOnChange')) {
-                this.setPage(page);
+            if (this.get('updateOnChange') || silent) {
+                this.set('recordOffset', (page - 1) * this.get('rowsPerPage'));
             } else {
                 this.fireEvent('changeRequest',this.getState({'page':page}));
             }
@@ -597,20 +582,11 @@ YAHOO.widget.Paginator.prototype = {
      * Set the number of rows per page.
      * @method setRowsPerPage
      * @param rpp {number} the new number of rows per page
+     * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
-    setRowsPerPage : function (rpp) {
-        return this.set('rowsPerPage',rpp);
-    },
-
-    /**
-     * Set the rowsPerPage or fire the changeRequest event per the setting of
-     * the updateOnChange attribute.
-     * @method requestRowsPerPage
-     * @param rpp {number} the new rowsPerPage setting
-     */
-    requestRowsPerPage : function (rpp) {
+    setRowsPerPage : function (rpp,silent) {
         if (rpp !== this.get('rowsPerPage')) {
-            if (this.get('updateOnChange')) {
+            if (this.get('updateOnChange') || silent) {
                 this.set('rowsPerPage',rpp);
             } else {
                 this.fireEvent('changeRequest',
@@ -632,20 +608,11 @@ YAHOO.widget.Paginator.prototype = {
      * Set the total number of records.
      * @method setTotalRecords
      * @param total {number} the new total number of records
+     * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
-    setTotalRecords : function (total) {
-        return this.set('totalRecords',total);
-    },
-
-    /**
-     * Set the totalRecords or fire the changeRequest event per the setting of
-     * the updateOnChange attribute.
-     * @method requestTotalRecords
-     * @param total {number} the new total number of records
-     */
-    requestTotalRecords : function (total) {
+    setTotalRecords : function (total,silent) {
         if (total !== this.get('totalRecords')) {
-            if (this.get('updateOnChange')) {
+            if (this.get('updateOnChange') || silent) {
                 this.set('totalRecords',total);
             } else {
                 this.fireEvent('changeRequest',
@@ -668,20 +635,11 @@ YAHOO.widget.Paginator.prototype = {
      * the calculated current page to change.  You should probably use setPage.
      * @method setStartIndex
      * @param offset {number} the new record offset
+     * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
-    setStartIndex : function (offset) {
-        return this.set('recordOffset',offset);
-    },
-
-    /**
-     * Set the recordOffset or fire the changeRequest event per the setting of
-     * the updateOnChange attribute.
-     * @method requestStartIndex
-     * @param offset {number} the new record offset
-     */
-    requestStartIndex : function (offset) {
+    setStartIndex : function (offset,silent) {
         if (offset !== this.get('recordOffset')) {
-            if (this.get('updateOnChange')) {
+            if (this.get('updateOnChange') || silent) {
                 this.set('recordOffset',offset);
             } else {
                 this.fireEvent('changeRequest',
@@ -935,14 +893,13 @@ Plugin.FirstPageLink.prototype = {
     },
 
     /**
-     * Listener for the link's onclick event.  Delegates to the Paginator's
-     * requestPage method.
+     * Listener for the link's onclick event.  Pass new value to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
      */
     onClick : function (e) {
         YAHOO.util.Event.stopEvent(e);
-        this.paginator.requestPage(1);
+        this.paginator.setPage(1);
     }
 };
 
@@ -1105,14 +1062,13 @@ Plugin.LastPageLink.prototype = {
     },
 
     /**
-     * Listener for the link's onclick event.  Delegates to the Paginator's
-     * requestPage method.
+     * Listener for the link's onclick event.  Passes to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
      */
     onClick : function (e) {
         YAHOO.util.Event.stopEvent(e);
-        this.paginator.requestPage(this.paginator.getTotalPages());
+        this.paginator.setPage(this.paginator.getTotalPages());
     }
 };
 
@@ -1250,14 +1206,13 @@ Plugin.PreviousPageLink.prototype = {
     },
 
     /**
-     * Listener for the link's onclick event.  Delegates to the Paginator's
-     * requestPage method.
+     * Listener for the link's onclick event.  Passes to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
      */
     onClick : function (e) {
         YAHOO.util.Event.stopEvent(e);
-        this.paginator.requestPage(this.paginator.getPreviousPage());
+        this.paginator.setPage(this.paginator.getPreviousPage());
     }
 };
 
@@ -1402,14 +1357,13 @@ Plugin.NextPageLink.prototype = {
     },
 
     /**
-     * Listener for the link's onclick event.  Delegates to the Paginator's
-     * requestPage method.
+     * Listener for the link's onclick event.  Passes to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
      */
     onClick : function (e) {
         YAHOO.util.Event.stopEvent(e);
-        this.paginator.requestPage(this.paginator.getNextPage());
+        this.paginator.setPage(this.paginator.getNextPage());
     }
 };
 
@@ -1647,7 +1601,7 @@ Plugin.PageLinks.prototype = {
     /**
      * Listener for the container's onclick event.  Looks for qualifying link
      * clicks, and pulls the page number from the link's page attribute.
-     * Delegates to the Paginator's requestPage method.
+     * Sends link's page attribute to the Paginator's setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
      */
@@ -1658,7 +1612,7 @@ Plugin.PageLinks.prototype = {
 
             YAHOO.util.Event.stopEvent(e);
 
-            this.paginator.requestPage(parseInt(t.getAttribute('page'),10));
+            this.paginator.setPage(parseInt(t.getAttribute('page'),10));
         }
     }
 
@@ -1797,13 +1751,12 @@ Plugin.RowsPerPageDropdown.prototype = {
     },
 
     /**
-     * Listener for the select's onchange event.  Delegates to the Paginator's
-     * requestRowsPerPage method.
+     * Listener for the select's onchange event.  Sent to setRowsPerPage method.
      * @method onChange
      * @param e {DOMEvent} The change event
      */
     onChange : function (e) {
-        this.paginator.requestRowsPerPage(
+        this.paginator.setRowsPerPage(
                 parseInt(this.select.options[this.select.selectedIndex].value,10));
     }
 };
