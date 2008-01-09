@@ -9307,11 +9307,11 @@ YAHOO.widget.DataTable.prototype.showPage = function(nPage) {
     }
 
     if (oPaginator instanceof YAHOO.widget.Paginator) {
-        oPaginator.setPage(nPage);
+        oPaginator.requestPage(nPage);
     } else {
         this.updatePaginator({currentPage:nPage});
+        this.render();
     }
-    this.render();
 };
 
 /**
