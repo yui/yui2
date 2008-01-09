@@ -3559,7 +3559,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
                     }
                     oArg.nRowIndex++;
                 },
-                iterations: allRows.length - 1,
+                iterations: allRows.length,
                 argument: {nRowIndex:0},
                 scope: this
             });
@@ -3574,7 +3574,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
                     if((this instanceof YAHOO.widget.DataTable) && this._sId) {
                         this._addTrEl(allRecords[oArg.nRowIndex]);
                     }
-                    oArg.nRowIndex++;
+                    ++oArg.nRowIndex;
                 },
                 iterations: nIterations,
                 argument: {nRowIndex:nStartIndex},
@@ -8481,17 +8481,16 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
  * @method onDataReturnSetPageData
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
- * @param bError {Boolean} (optional) True if there was a data error.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
-YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, bError, oPayload) {
+YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse});
 
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(oRequest, oResponse);
 
     // Data ok to set
-    if(ok && oResponse && !(oResponse.error || bError) && YAHOO.lang.isArray(oResponse.results)) {
+    if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
         var oState = oPayload.pagination;
 
         if (oState) {
@@ -8508,7 +8507,7 @@ YAHOO.widget.DataTable.prototype.onDataReturnSetPageData = function(oRequest, oR
         this.render();
     }
     // Error
-    else if(ok && (oResponse.error || bError)) {
+    else if(ok && oResponse.error) {
         this.showTableMessage(YAHOO.widget.DataTable.MSG_ERROR, YAHOO.widget.DataTable.CLASS_ERROR);
     }
 };
