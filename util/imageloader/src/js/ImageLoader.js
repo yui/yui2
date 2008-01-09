@@ -63,6 +63,15 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	this._triggers = [];
 
 	/**
+	 * Collection of custom-event triggers for this group.
+	 * Keeps track of each trigger's event object and event-listener-callback "fetch" function
+	 * @property _customTriggers
+	 * @private
+	 * @type Array
+	 */
+	this._customTriggers = [];
+
+	/**
 	 * Flag to check if images are above the fold. If foldConditional is true, the group will check each of its image locations at page load. If any part of the image is within the client viewport, the image is displayed immediately
 	 * @property foldConditional
 	 * @type Boolean
@@ -113,6 +122,25 @@ YAHOO.util.ImageLoader.group.prototype.addTrigger = function(trigEl, trigAct) {
 	};
 	this._triggers.push([trigEl, trigAct, wrappedFetch]);
 	YAHOO.util.Event.addListener(trigEl, trigAct, wrappedFetch, this, true);
+};
+
+/**
+ * Adds a custom event trigger to the group.
+ * @method addCustomTrigger
+ * @param {Object} event A YAHOO.util.CustomEvent object
+ */
+YAHOO.util.ImageLoader.group.prototype.addCustomTrigger = function(event) {
+	// make sure we're dealing with a CustomEvent object
+	if (! event || ! event instanceof YAHOO.util.CustomEvent) {
+		return;
+	}
+
+	// see comment in addTrigger()
+	var wrappedFetch = function() {
+		this.fetch();
+	};
+	this._customTriggers.push([event, wrappedFetch]);
+	event.subscribe(wrappedFetch, this, true);
 };
 
 /**
@@ -189,6 +217,10 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
 	// remove all listeners
 	for (var i=0; i < this._triggers.length; i++) {
 		YAHOO.util.Event.removeListener(this._triggers[i][0], this._triggers[i][1], this._triggers[i][2]);
+	}
+	// remove custom event subscriptions
+	for (var i=0; i < this._customTriggers.length; i++) {
+		this._customTriggers[i][0].unsubscribe(this._customTriggers[i][1], this);
 	}
 
 	// fetch whatever we need to by className
