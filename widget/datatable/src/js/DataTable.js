@@ -7581,11 +7581,6 @@ YAHOO.widget.DataTable.prototype.showCellEditor = function(elCell, oRecord, oCol
             // Show Editor
             elContainer.style.display = "";
 
-            // To enable ESC handling
-            YAHOO.util.Event.addListener(elContainer, "click", function(e, oSelf) {
-                oSelf.focus(elContainer);
-            }, this);
-
             // Handle ESC key
             YAHOO.util.Event.addListener(elContainer, "keydown", function(e, oSelf) {
                 // ESC hides Cell Editor
