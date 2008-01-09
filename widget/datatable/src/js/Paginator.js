@@ -643,7 +643,7 @@ YAHOO.widget.Paginator.prototype = {
      * @method requestTotalRecords
      * @param total {number} the new total number of records
      */
-    requestRowsPerPage : function (total) {
+    requestTotalRecords : function (total) {
         if (total !== this.get('totalRecords')) {
             if (this.get('updateOnChange')) {
                 this.set('totalRecords',total);
@@ -1739,6 +1739,7 @@ Plugin.RowsPerPageDropdown.prototype = {
     render : function () {
         this.select = document.createElement('select');
         this.select.className = this.paginator.get('rowsPerPageDropdownClass');
+        this.select.title = 'Rows per page';
 
         YAHOO.util.Event.on(this.select,'change',this.onChange,this,true);
 
