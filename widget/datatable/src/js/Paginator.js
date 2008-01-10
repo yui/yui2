@@ -560,7 +560,7 @@ YAHOO.widget.Paginator.prototype = {
      * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
     setPage : function (page,silent) {
-        if (page !== this.getCurrentPage()) {
+        if (this.hasPage(page) && page !== this.getCurrentPage()) {
             if (this.get('updateOnChange') || silent) {
                 this.set('recordOffset', (page - 1) * this.get('rowsPerPage'));
             } else {
@@ -585,7 +585,8 @@ YAHOO.widget.Paginator.prototype = {
      * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
     setRowsPerPage : function (rpp,silent) {
-        if (rpp !== this.get('rowsPerPage')) {
+        if (YAHOO.lang.isNumber(rpp) && rpp > 0 &&
+            rpp !== this.get('rowsPerPage')) {
             if (this.get('updateOnChange') || silent) {
                 this.set('rowsPerPage',rpp);
             } else {
@@ -611,7 +612,8 @@ YAHOO.widget.Paginator.prototype = {
      * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
     setTotalRecords : function (total,silent) {
-        if (total !== this.get('totalRecords')) {
+        if (YAHOO.lang.isNumber(total) && total >= 0 &&
+            total !== this.get('totalRecords')) {
             if (this.get('updateOnChange') || silent) {
                 this.set('totalRecords',total);
             } else {
@@ -638,7 +640,8 @@ YAHOO.widget.Paginator.prototype = {
      * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
      */
     setStartIndex : function (offset,silent) {
-        if (offset !== this.get('recordOffset')) {
+        if (YAHOO.lang.isNumber(offset) && offset >= 0 &&
+            offset !== this.get('recordOffset')) {
             if (this.get('updateOnChange') || silent) {
                 this.set('recordOffset',offset);
             } else {
