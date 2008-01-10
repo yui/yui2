@@ -269,8 +269,18 @@ YAHOO.tool.TestRunner = (function(){
         this.results /*:Object*/ = {
             passed : 0,
             failed : 0,
-            total : 0
+            total : 0,
+            ignored : 0
         };
+        
+        //initialize results
+        if (testObject instanceof YAHOO.tool.TestSuite){
+            this.results.type = "testsuite";
+            this.results.name = testObject.name;
+        } else if (testObject instanceof YAHOO.tool.TestCase){
+            this.results.type = "testcase";
+            this.results.name = testObject.name;
+        }
        
     }
     
@@ -306,7 +316,7 @@ YAHOO.tool.TestRunner = (function(){
          * @property masterSuite
          * @private
          */
-        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("MasterSuite");        
+        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("YUI Test Results");        
 
         /**
          * Pointer to the current node in the test tree.
@@ -484,11 +494,21 @@ YAHOO.tool.TestRunner = (function(){
         //-------------------------------------------------------------------------
         // Private Methods
         //-------------------------------------------------------------------------
+        
+        /**
+         * Handles the completion of a test object's tests. Tallies test results 
+         * from one level up to the next.
+         * @param {TestNode} node The TestNode representing the test object.
+         * @return {Void}
+         * @method _handleTestObjectComplete
+         * @private
+         */
         _handleTestObjectComplete : function (node /*:TestNode*/) /*:Void*/ {
             if (YAHOO.lang.isObject(node.testObject)){
                 node.parent.results.passed += node.results.passed;
                 node.parent.results.failed += node.results.failed;
                 node.parent.results.total += node.results.total;                
+                node.parent.results.ignored += node.results.ignored;                
                 node.parent.results[node.testObject.name] = node.results;
             
                 if (node.testObject instanceof YAHOO.tool.TestSuite){
@@ -498,8 +518,7 @@ YAHOO.tool.TestRunner = (function(){
                     this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: node.testObject, results: node.results});
                 }      
             } 
-        },        
-        
+        },                
         
         //-------------------------------------------------------------------------
         // Navigation Methods
@@ -525,6 +544,7 @@ YAHOO.tool.TestRunner = (function(){
                 }
                 
                 if (this._cur == this._root){
+                    this._cur.results.type = "report";
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
                     this._cur = null;
                 } else {
@@ -568,7 +588,7 @@ YAHOO.tool.TestRunner = (function(){
                     if (typeof setTimeout != "undefined"){                    
                         setTimeout(function(){
                             YAHOO.tool.TestRunner._run();
-                        }, 0);              
+                        }, 0);
                     } else {
                         this._run();
                     }
@@ -647,6 +667,14 @@ YAHOO.tool.TestRunner = (function(){
                                 error = new YAHOO.util.UnexpectedError(thrown);
                                 failed = true;                                    
                             }
+                        } else if (YAHOO.lang.isFunction(shouldError)){
+                        
+                            //if it's a function, see if the error is an instance of it
+                            if (!(thrown instanceof shouldError)){
+                                error = new YAHOO.util.UnexpectedError(thrown);
+                                failed = true;
+                            }
+                        
                         } else if (YAHOO.lang.isObject(shouldError)){
                         
                             //if it's an object, check the instance and message
@@ -676,7 +704,9 @@ YAHOO.tool.TestRunner = (function(){
             //update results
             node.parent.results[testName] = { 
                 result: failed ? "fail" : "pass",
-                message : error ? error.getMessage() : "Test passed"
+                message: error ? error.getMessage() : "Test passed",
+                type: "test",
+                name: testName
             };
             
             if (failed){
@@ -684,7 +714,7 @@ YAHOO.tool.TestRunner = (function(){
             } else {
                 node.parent.results.passed++;
             }
-            node.parent.results.total++;    
+            node.parent.results.total++;
 
             //set timeout not supported in all environments
             if (typeof setTimeout != "undefined"){
@@ -717,6 +747,18 @@ YAHOO.tool.TestRunner = (function(){
             
             //figure out if the test should be ignored or not
             if (shouldIgnore){
+            
+                //update results
+                node.parent.results[testName] = { 
+                    result: "ignore",
+                    message: "Test ignored",
+                    type: "test",
+                    name: testName
+                };
+                
+                node.parent.results.ignored++;
+                node.parent.results.total++;
+            
                 this.fireEvent(this.TEST_IGNORE_EVENT, { testCase: testCase, testName: testName });
                 
                 //some environments don't support setTimeout
@@ -2621,6 +2663,8 @@ YAHOO.tool.TestManager = {
             this._timeoutId = setTimeout(function(){
                 YAHOO.tool.TestManager._run();
             }, 1000);
+        } else {
+            this.fireEvent(this.TEST_MANAGER_COMPLETE_EVENT, this._results);
         }
     },
     
@@ -2634,26 +2678,22 @@ YAHOO.tool.TestManager = {
     _processResults : function (page /*:String*/, results /*:Object*/) /*:Void*/ {
 
         var r = this._results;
-
-        r.page_results[page] = results;
-
-        if (results.passed) {
-            r.pages_passed++;
-            r.tests_passed += results.passed;
-        }
-
-        if (results.failed) {
-            r.pages_failed++;
-            r.tests_failed += results.failed;
-            r.failed.push(page);
+        
+        r.passed += results.passed;
+        r.failed += results.failed;
+        r.ignored += results.ignored;
+        r.total += results.total;
+        
+        if (results.failed){
+            r.failedPages.push(page);
         } else {
-            r.passed.push(page);
+            r.passedPages.push(page);
         }
-
-        if (!this._pages.length) {
-            this.fireEvent(this.TEST_MANAGER_COMPLETE_EVENT, this._results);
-        }
-
+        
+        results.name = page;
+        results.type = "page";
+        
+        r[page] = results;
     },
     
     /**
@@ -2778,6 +2818,16 @@ YAHOO.tool.TestManager = {
 
         // reset the results cache
         this._results = {
+        
+            passed: 0,
+            failed: 0,
+            ignored: 0,
+            total: 0,
+            type: "report",
+            name: "YUI Test Results",
+            failedPages:[],
+            passedPages:[]
+            /*
             // number of pages that pass
             pages_passed: 0,
             // number of pages that fail
@@ -2791,7 +2841,7 @@ YAHOO.tool.TestManager = {
             // array of pages that failed
             failed: [],
             // map of full results for each page
-            page_results: {}
+            page_results: {}*/
         };
 
         this.fireEvent(this.TEST_MANAGER_BEGIN_EVENT, null);
@@ -2997,5 +3047,171 @@ YAHOO.lang.extend(YAHOO.tool.TestLogger, YAHOO.widget.LogReader, {
     }
     
 });
+
+YAHOO.namespace("tool.TestFormat");
+
+/**
+ * Returns test results formatted as a JSON string. Requires JSON utility.
+ * @param {Object} result The results object created by TestRunner.
+ * @return {String} An XML-formatted string of results.
+ * @namespace YAHOO.tool.TestFormat
+ * @method JSON
+ * @static
+ */
+YAHOO.tool.TestFormat.JSON = function(results /*:Object*/) /*:String*/ {
+    return YAHOO.lang.JSON.stringify(results);
+};
+
+/**
+ * Returns test results formatted as an XML string.
+ * @param {Object} result The results object created by TestRunner.
+ * @return {String} An XML-formatted string of results.
+ * @namespace YAHOO.tool.TestFormat
+ * @method XML
+ * @static
+ */
+YAHOO.tool.TestFormat.XML = function(results /*:Object*/) /*:String*/ {
+
+    var l = YAHOO.lang;
+    var xml /*:String*/ = "<" + results.type + " name=\"" + results.name.replace(/"/g, "&quot;").replace(/'/g, "&apos;") + "\"";
+    
+    if (results.type == "test"){
+        xml += " result=\"" + results.result + "\" message=\"" + results.message + "\">";
+    } else {
+        xml += " passed=\"" + results.passed + "\" failed=\"" + results.failed + "\" ignored=\"" + results.ignored + "\" total=\"" + results.total + "\">";
+        for (var prop in results) {
+            if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
+                xml += arguments.callee(results[prop]);
+            }
+        }        
+    }
+
+    xml += "</" + results.type + ">";
+    
+    return xml;
+
+};
+
+YAHOO.namespace("tool");
+
+/**
+ * An object capable of sending test results to a server.
+ * @param {String} url The URL to submit the results to.
+ * @param {Function} format (Optiona) A function that outputs the results in a specific format.
+ *      Default is YAHOO.tool.TestFormat.XML.
+ * @constructor
+ * @namespace YAHOO.tool
+ * @class TestReporter
+ */
+YAHOO.tool.TestReporter = function(url /*:String*/, format /*:Function*/) {
+
+    /**
+     * The URL to submit the data to.
+     * @type String
+     * @property url
+     */
+    this.url /*:String*/ = url;
+
+    /**
+     * The formatting function to call when submitting the data.
+     * @type Function
+     * @property format
+     */
+    this.format /*:Function*/ = format || YAHOO.tool.TestFormat.XML;
+
+    /**
+     * Extra fields to submit with the request.
+     * @type Object
+     * @property _fields
+     * @private
+     */
+    this._fields /*:Object*/ = new Object();
+    
+    /**
+     * The form element used to submit the results.
+     * @type HTMLFormElement
+     * @property _form
+     * @private
+     */
+    this._form /*:HTMLElement*/ = null;
+
+
+    this._iframe /*:HTMLElement*/ = null;
+};
+
+YAHOO.tool.TestReporter.prototype = {
+
+    //restore missing constructor
+    constructor: YAHOO.tool.TestReporter,
+
+    /**
+     * Adds a field to the form that submits the results.
+     * @param {String} name The name of the field.
+     * @param {Variant} value The value of the field.
+     * @return {Void}
+     * @method addField
+     */
+    addField : function (name /*:String*/, value /*:Variant*/) /*:Void*/{
+        this._fields[name] = value;    
+    },
+    
+    /**
+     * Removes all previous defined fields.
+     * @return {Void}
+     * @method addField
+     */
+    clearFields : function() /*:Void*/{
+        this._fields = new Object();
+    },
+
+    /**
+     * Sends the report to the server.
+     * @param {Object} results The results object created by TestRunner.
+     * @return {Void}
+     * @method report
+     */
+    report : function(results /*:Object*/) /*:Void*/{
+    
+        //if the form hasn't been created yet, create it
+        if (!this._form){
+            this._form = document.createElement("form");
+            this._form.method = "post";
+            this._form.style.visibility = "hidden";
+            this._form.style.position = "absolute";
+            this._form.style.top = 0;
+            document.body.appendChild(this._form);
+        }
+
+        //set the form's action
+        this._form.action = this.url;
+    
+        //remove any existing fields
+        while(this._form.hasChildNodes()){
+            this._form.removeChild(this._form.lastChild);
+        }
+        
+        //create results field
+        var resultsInput /*:HTMLElement*/ = document.createElement("input");
+        resultsInput.type = "hidden";
+        resultsInput.name = "results";
+        resultsInput.value = this.format(results);
+        this._form.appendChild(resultsInput);
+        
+        //add fields to the form
+        for (var prop in this._fields){
+            if (YAHOO.lang.hasOwnProperty(this._fields, prop) && typeof this._fields[prop] != "function"){
+                var input /*:HTMLElement*/ = document.createElement("input");
+                input.type = "hidden";
+                input.name = prop;
+                input.value = this._fields[prop];
+                this._form.appendChild(input);
+            }
+        }
+        
+        this._form.submit();
+    
+    }
+
+};
 
 YAHOO.register("yuitest", YAHOO.tool.TestRunner, {version: "@VERSION@", build: "@BUILD@"});

@@ -61,10 +61,10 @@
         ]);
 
         TM.subscribe(TM.TEST_MANAGER_COMPLETE_EVENT, function(o) {
-            log("# of pages passed: " + o.pages_passed);
-            log("# of pages failed: " + o.pages_failed + ": " + o.failed.join(", "));
-            log("# of tests passed: " + o.tests_passed);
-            log("# of tests failed: " + o.tests_failed);
+            log("# of pages passed: " + o.passedPages.length);
+            log("# of pages failed: " + o.failedPages.length + ": " + o.failedPages.join(", "));
+            log("# of tests passed: " + o.passed);
+            log("# of tests failed: " + o.failed);
 
             // log("Passed: " + o.passed.join(", "));
             // log("Failed: " + o.failed.join(", "));

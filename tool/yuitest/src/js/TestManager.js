@@ -139,6 +139,8 @@ YAHOO.tool.TestManager = {
             this._timeoutId = setTimeout(function(){
                 YAHOO.tool.TestManager._run();
             }, 1000);
+        } else {
+            this.fireEvent(this.TEST_MANAGER_COMPLETE_EVENT, this._results);
         }
     },
     
@@ -152,26 +154,22 @@ YAHOO.tool.TestManager = {
     _processResults : function (page /*:String*/, results /*:Object*/) /*:Void*/ {
 
         var r = this._results;
-
-        r.page_results[page] = results;
-
-        if (results.passed) {
-            r.pages_passed++;
-            r.tests_passed += results.passed;
-        }
-
-        if (results.failed) {
-            r.pages_failed++;
-            r.tests_failed += results.failed;
-            r.failed.push(page);
+        
+        r.passed += results.passed;
+        r.failed += results.failed;
+        r.ignored += results.ignored;
+        r.total += results.total;
+        
+        if (results.failed){
+            r.failedPages.push(page);
         } else {
-            r.passed.push(page);
+            r.passedPages.push(page);
         }
-
-        if (!this._pages.length) {
-            this.fireEvent(this.TEST_MANAGER_COMPLETE_EVENT, this._results);
-        }
-
+        
+        results.name = page;
+        results.type = "page";
+        
+        r[page] = results;
     },
     
     /**
@@ -296,6 +294,16 @@ YAHOO.tool.TestManager = {
 
         // reset the results cache
         this._results = {
+        
+            passed: 0,
+            failed: 0,
+            ignored: 0,
+            total: 0,
+            type: "report",
+            name: "YUI Test Results",
+            failedPages:[],
+            passedPages:[]
+            /*
             // number of pages that pass
             pages_passed: 0,
             // number of pages that fail
@@ -309,7 +317,7 @@ YAHOO.tool.TestManager = {
             // array of pages that failed
             failed: [],
             // map of full results for each page
-            page_results: {}
+            page_results: {}*/
         };
 
         this.fireEvent(this.TEST_MANAGER_BEGIN_EVENT, null);

@@ -30,7 +30,7 @@ YAHOO.tool.TestFormat.XML = function(results /*:Object*/) /*:String*/ {
     } else {
         xml += " passed=\"" + results.passed + "\" failed=\"" + results.failed + "\" ignored=\"" + results.ignored + "\" total=\"" + results.total + "\">";
         for (var prop in results) {
-            if (l.hasOwnProperty(results, prop) && l.isObject(results[prop])){
+            if (l.hasOwnProperty(results, prop) && l.isObject(results[prop]) && !l.isArray(results[prop])){
                 xml += arguments.callee(results[prop]);
             }
         }        

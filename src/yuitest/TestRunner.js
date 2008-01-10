@@ -74,8 +74,18 @@ YAHOO.tool.TestRunner = (function(){
         this.results /*:Object*/ = {
             passed : 0,
             failed : 0,
-            total : 0
+            total : 0,
+            ignored : 0
         };
+        
+        //initialize results
+        if (testObject instanceof YAHOO.tool.TestSuite){
+            this.results.type = "testsuite";
+            this.results.name = testObject.name;
+        } else if (testObject instanceof YAHOO.tool.TestCase){
+            this.results.type = "testcase";
+            this.results.name = testObject.name;
+        }
        
     }
     
@@ -111,7 +121,7 @@ YAHOO.tool.TestRunner = (function(){
          * @property masterSuite
          * @private
          */
-        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("MasterSuite");        
+        this.masterSuite /*:YAHOO.tool.TestSuite*/ = new YAHOO.tool.TestSuite("YUI Test Results");        
 
         /**
          * Pointer to the current node in the test tree.
@@ -289,11 +299,21 @@ YAHOO.tool.TestRunner = (function(){
         //-------------------------------------------------------------------------
         // Private Methods
         //-------------------------------------------------------------------------
+        
+        /**
+         * Handles the completion of a test object's tests. Tallies test results 
+         * from one level up to the next.
+         * @param {TestNode} node The TestNode representing the test object.
+         * @return {Void}
+         * @method _handleTestObjectComplete
+         * @private
+         */
         _handleTestObjectComplete : function (node /*:TestNode*/) /*:Void*/ {
             if (YAHOO.lang.isObject(node.testObject)){
                 node.parent.results.passed += node.results.passed;
                 node.parent.results.failed += node.results.failed;
                 node.parent.results.total += node.results.total;                
+                node.parent.results.ignored += node.results.ignored;                
                 node.parent.results[node.testObject.name] = node.results;
             
                 if (node.testObject instanceof YAHOO.tool.TestSuite){
@@ -303,8 +323,7 @@ YAHOO.tool.TestRunner = (function(){
                     this.fireEvent(this.TEST_CASE_COMPLETE_EVENT, { testCase: node.testObject, results: node.results});
                 }      
             } 
-        },        
-        
+        },                
         
         //-------------------------------------------------------------------------
         // Navigation Methods
@@ -330,6 +349,7 @@ YAHOO.tool.TestRunner = (function(){
                 }
                 
                 if (this._cur == this._root){
+                    this._cur.results.type = "report";
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
                     this._cur = null;
                 } else {
@@ -373,7 +393,7 @@ YAHOO.tool.TestRunner = (function(){
                     if (typeof setTimeout != "undefined"){                    
                         setTimeout(function(){
                             YAHOO.tool.TestRunner._run();
-                        }, 0);              
+                        }, 0);
                     } else {
                         this._run();
                     }
@@ -452,6 +472,14 @@ YAHOO.tool.TestRunner = (function(){
                                 error = new YAHOO.util.UnexpectedError(thrown);
                                 failed = true;                                    
                             }
+                        } else if (YAHOO.lang.isFunction(shouldError)){
+                        
+                            //if it's a function, see if the error is an instance of it
+                            if (!(thrown instanceof shouldError)){
+                                error = new YAHOO.util.UnexpectedError(thrown);
+                                failed = true;
+                            }
+                        
                         } else if (YAHOO.lang.isObject(shouldError)){
                         
                             //if it's an object, check the instance and message
@@ -481,7 +509,9 @@ YAHOO.tool.TestRunner = (function(){
             //update results
             node.parent.results[testName] = { 
                 result: failed ? "fail" : "pass",
-                message : error ? error.getMessage() : "Test passed"
+                message: error ? error.getMessage() : "Test passed",
+                type: "test",
+                name: testName
             };
             
             if (failed){
@@ -489,7 +519,7 @@ YAHOO.tool.TestRunner = (function(){
             } else {
                 node.parent.results.passed++;
             }
-            node.parent.results.total++;    
+            node.parent.results.total++;
 
             //set timeout not supported in all environments
             if (typeof setTimeout != "undefined"){
@@ -522,6 +552,18 @@ YAHOO.tool.TestRunner = (function(){
             
             //figure out if the test should be ignored or not
             if (shouldIgnore){
+            
+                //update results
+                node.parent.results[testName] = { 
+                    result: "ignore",
+                    message: "Test ignored",
+                    type: "test",
+                    name: testName
+                };
+                
+                node.parent.results.ignored++;
+                node.parent.results.total++;
+            
                 this.fireEvent(this.TEST_IGNORE_EVENT, { testCase: testCase, testName: testName });
                 
                 //some environments don't support setTimeout
