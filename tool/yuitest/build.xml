@@ -15,6 +15,11 @@
     <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
     <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
 
+    <!-- Hook into customlocal, to build yuitest_core -->
+    <target name="customlocal">
+       <ant antfile="${buildfile.dir}/buildcore.xml" target="yuitest_local_subtask" inheritAll="false" />
+    </target>
+
     <target name="examples" description="Component Specific Over-ride">
         <copy todir="${srcdir}/examples/${component}" preservelastmodified="true">
             <fileset dir="${component.basedir}/examples">
