@@ -545,6 +545,7 @@ YAHOO.tool.TestRunner = (function(){
                 
                 if (this._cur == this._root){
                     this._cur.results.type = "report";
+                    this._cur.results.timestamp = (new Date()).toLocaleString();
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
                     this._cur = null;
                 } else {
@@ -3135,7 +3136,12 @@ YAHOO.tool.TestReporter = function(url /*:String*/, format /*:Function*/) {
      */
     this._form /*:HTMLElement*/ = null;
 
-
+    /**
+     * Iframe used as a target for form submission.
+     * @type HTMLIFrameElement
+     * @property _iframe
+     * @private
+     */
     this._iframe /*:HTMLElement*/ = null;
 };
 
@@ -3165,6 +3171,24 @@ YAHOO.tool.TestReporter.prototype = {
     },
 
     /**
+     * Cleans up the memory associated with the TestReporter, removing DOM elements
+     * that were created.
+     * @return {Void}
+     * @method destroy
+     */
+    destroy : function() /*:Void*/ {
+        if (this._form){
+            this._form.parentNode.removeChild(this._form);
+            this._form = null;
+        }        
+        if (this._iframe){
+            this._iframe.parentNode.removeChild(this._iframe);
+            this._iframe = null;
+        }
+        this._fields = null;
+    },
+
+    /**
      * Sends the report to the server.
      * @param {Object} results The results object created by TestRunner.
      * @return {Void}
@@ -3180,6 +3204,22 @@ YAHOO.tool.TestReporter.prototype = {
             this._form.style.position = "absolute";
             this._form.style.top = 0;
             document.body.appendChild(this._form);
+        
+            //IE won't let you assign a name using the DOM, must do it the hacky way
+            if (YAHOO.env.ua.ie){
+                this._iframe = document.createElement("<iframe name=\"yuiTestTarget\" />");
+            } else {
+                this._iframe = document.createElement("iframe");
+                this._iframe.name = "yuiTestTarget";
+            }
+
+            this._iframe.src = "javascript:false";
+            this._iframe.style.visibility = "hidden";
+            this._iframe.style.position = "absolute";
+            this._iframe.style.top = 0;
+            document.body.appendChild(this._iframe);
+
+            this._form.target = "yuiTestTarget";
         }
 
         //set the form's action
@@ -3190,25 +3230,30 @@ YAHOO.tool.TestReporter.prototype = {
             this._form.removeChild(this._form.lastChild);
         }
         
-        //create results field
-        var resultsInput /*:HTMLElement*/ = document.createElement("input");
-        resultsInput.type = "hidden";
-        resultsInput.name = "results";
-        resultsInput.value = this.format(results);
-        this._form.appendChild(resultsInput);
-        
+        //create default fields
+        this._fields.results = this.format(results);
+        this._fields.useragent = navigator.userAgent;
+        this._fields.timestamp = (new Date()).toLocaleString();
+
         //add fields to the form
         for (var prop in this._fields){
             if (YAHOO.lang.hasOwnProperty(this._fields, prop) && typeof this._fields[prop] != "function"){
-                var input /*:HTMLElement*/ = document.createElement("input");
+                input = document.createElement("input");
                 input.type = "hidden";
                 input.name = prop;
                 input.value = this._fields[prop];
                 this._form.appendChild(input);
             }
         }
+
+        //remove default fields
+        delete this._fields.results;
+        delete this._fields.useragent;
+        delete this._fields.timestamp;
         
-        this._form.submit();
+        if (arguments[1] !== false){
+            this._form.submit();
+        }
     
     }
 

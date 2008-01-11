@@ -8,6 +8,7 @@
 <script type="text/javascript" src="../build/dom/dom.js"></script>
 <script type="text/javascript" src="../build/event/event.js"></script>
 <script type="text/javascript" src="../build/logger/logger.js"></script>
+<script type="text/javascript" src="../build/json/json-beta.js"></script>
 <script type="text/javascript" src="../build/yuitest/yuitest-beta.js"></script>
 
 </head>
@@ -547,6 +548,353 @@ YAHOO.test.YUITest_test = (function(){
         }        
         
     
+    }));
+    
+    //-------------------------------------------------------------------------
+    // Assert Tests
+    //-------------------------------------------------------------------------
+
+    //the user action suite
+    var reportSuite /*:YAHOO.tool.TestSuite*/ 
+        = new YAHOO.tool.TestSuite("Test Reporting Tests");
+    suite.add(reportSuite);
+    
+    reportSuite.add(new YAHOO.tool.TestCase({
+ 
+        name: "Test Results Formatting Tests",
+        
+        setUp : function(){
+            this.report = {
+                passed: 2,
+                failed: 2,
+                ignored: 1,
+                total: 5,
+                type: "report",
+                name: "YUI Test Results",
+                
+                "Some Suite":{
+                    passed: 2,
+                    failed: 2,
+                    ignored: 1,
+                    total: 5,
+                    type: "testsuite",
+                    name: "Some Suite",
+                    
+                    "Some Tests": {
+                        passed: 2,
+                        failed: 2,
+                        ignored: 1,
+                        total: 5,
+                        type: "testcase",
+                        name: "Some Tests",
+                        
+                        test1:{
+                            result: "pass",
+                            message: "Test passed.",
+                            type: "test",
+                            name: "test1"
+                        },
+                    
+                        test2:{
+                            result: "pass",
+                            message: "Test passed.",
+                            type: "test",
+                            name: "test2"
+                        },
+                    
+                        test3:{
+                            result: "ignore",
+                            message: "Test ignored.",
+                            type: "test",
+                            name: "test3"
+                        },
+                    
+                        test4:{
+                            result: "fail",
+                            message: "Test failed.",
+                            type: "test",
+                            name: "test4"
+                        },
+                    
+                        test5:{
+                            result: "fail",
+                            message: "Test failed.",
+                            type: "test",
+                            name: "test5"
+                        }                    
+                    }
+                }
+            }
+        },
+        
+        tearDown : function(){
+            delete this.report;
+        },
+        
+        
+        testJsonFormat : function(){
+            var json = YAHOO.tool.TestFormat.JSON(this.report);
+            var expectedJson = 
+            "{\"passed\":2,\"failed\":2,\"ignored\":1,\"total\":5,\"type\":\"report\",\"name\":\"YUI Test Results\"," +
+                "\"Some Suite\":{\"passed\":2,\"failed\":2,\"ignored\":1,\"total\":5,\"type\":\"testsuite\",\"name\":\"Some Suite\"," +
+                    "\"Some Tests\":{\"passed\":2,\"failed\":2,\"ignored\":1,\"total\":5,\"type\":\"testcase\",\"name\":\"Some Tests\"," +
+                        "\"test1\":{\"result\":\"pass\",\"message\":\"Test passed.\",\"type\":\"test\",\"name\":\"test1\"}," +
+                        "\"test2\":{\"result\":\"pass\",\"message\":\"Test passed.\",\"type\":\"test\",\"name\":\"test2\"}," +
+                        "\"test3\":{\"result\":\"ignore\",\"message\":\"Test ignored.\",\"type\":\"test\",\"name\":\"test3\"}," +
+                        "\"test4\":{\"result\":\"fail\",\"message\":\"Test failed.\",\"type\":\"test\",\"name\":\"test4\"}," +
+                        "\"test5\":{\"result\":\"fail\",\"message\":\"Test failed.\",\"type\":\"test\",\"name\":\"test5\"}" +                 
+                    "}" +
+                "}" +
+            "}";
+            Assert.areEqual(expectedJson, json, "JSON formatting is incorrect.");        
+        },
+        
+        testXmlFormat : function(){
+            var xml = YAHOO.tool.TestFormat.XML(this.report);
+            var expectedXml = 
+                "<report name=\"YUI Test Results\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
+                    "<testsuite name=\"Some Suite\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
+                        "<testcase name=\"Some Tests\" passed=\"2\" failed=\"2\" ignored=\"1\" total=\"5\">" +
+                            "<test name=\"test1\" result=\"pass\" message=\"Test passed.\"></test>" +
+                            "<test name=\"test2\" result=\"pass\" message=\"Test passed.\"></test>" +
+                            "<test name=\"test3\" result=\"ignore\" message=\"Test ignored.\"></test>" +
+                            "<test name=\"test4\" result=\"fail\" message=\"Test failed.\"></test>" +
+                            "<test name=\"test5\" result=\"fail\" message=\"Test failed.\"></test>" +
+                        "</testcase>" +
+                    "</testsuite>" + 
+                "</report>";
+            
+            Assert.areEqual(expectedXml, xml, "XML formatting is incorrect.");
+        
+        }
+    }));
+    
+    reportSuite.add(new YAHOO.tool.TestCase({
+ 
+        name: "Test Results Reporting Tests",  
+
+        tearDown: function(){
+            this.reporter.destroy();
+            delete this.reporter;
+        },
+        
+        testConstructorWithUrl: function(){
+            var url = "http://www.yahoo.com/";
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            
+            Assert.areEqual(url, this.reporter.url, "URL was not set correctly.");
+            Assert.areEqual(YAHOO.tool.TestFormat.XML, this.reporter.format, "Formatter is not set correctly.");        
+        },
+        
+        testConstructorWithBoth: function(){
+            var url = "http://www.yahoo.com/";
+            this.reporter = new YAHOO.tool.TestReporter(url, YAHOO.tool.TestFormat.JSON);
+            
+            Assert.areEqual(url, this.reporter.url, "URL was not set correctly.");
+            Assert.areEqual(YAHOO.tool.TestFormat.JSON, this.reporter.format, "Formatter is not set correctly.");        
+        },
+        
+        testReporting: function(){
+            var url = "http://www.yahoo.com/";
+            var report = {
+                passed: 2,
+                failed: 2,
+                ignored: 1,
+                total: 5,
+                type: "report",
+                name: "YUI Test Results",
+                
+                "Some Suite":{
+                    passed: 2,
+                    failed: 2,
+                    ignored: 1,
+                    total: 5,
+                    type: "testsuite",
+                    name: "Some Suite",
+                    
+                    "Some Tests": {
+                        passed: 2,
+                        failed: 2,
+                        ignored: 1,
+                        total: 5,
+                        type: "testcase",
+                        name: "Some Tests",
+                        
+                        test1:{
+                            result: "pass",
+                            message: "Test passed.",
+                            type: "test",
+                            name: "test1"
+                        }                  
+                    }
+                }
+            };
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            this.reporter.report(report, false);
+            
+            Assert.isNotNull(this.reporter._iframe, "Iframe wasn't created.");
+            Assert.isNotNull(this.reporter._form, "Form wasn't created.");
+            Assert.isObject(this.reporter._form.useragent, "Useragent field wasn't created.");
+            Assert.areEqual(navigator.userAgent, this.reporter._form.useragent.value, "Useragent field is incorrect.");
+            Assert.isObject(this.reporter._form.timestamp, "Timestamp field wasn't created.");
+            Assert.isTrue(this.reporter._form.timestamp.value.length > 0, "Timestamp field is not filled in.");
+            Assert.isObject(this.reporter._form.results, "Results field wasn't created.");            
+            Assert.areEqual(YAHOO.tool.TestFormat.XML(report), this.reporter._form.results.value, "Form field is not filled in.");
+        },
+    
+        testReportingWithFields: function(){
+            var url = "http://www.yahoo.com/";
+            var report = {
+                passed: 2,
+                failed: 2,
+                ignored: 1,
+                total: 5,
+                type: "report",
+                name: "YUI Test Results",
+                
+                "Some Suite":{
+                    passed: 2,
+                    failed: 2,
+                    ignored: 1,
+                    total: 5,
+                    type: "testsuite",
+                    name: "Some Suite",
+                    
+                    "Some Tests": {
+                        passed: 2,
+                        failed: 2,
+                        ignored: 1,
+                        total: 5,
+                        type: "testcase",
+                        name: "Some Tests",
+                        
+                        test1:{
+                            result: "pass",
+                            message: "Test passed.",
+                            type: "test",
+                            name: "test1"
+                        }                  
+                    }
+                }
+            };
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            this.reporter.addField("version", 2.5);
+            this.reporter.addField("browser", "custom");
+            this.reporter.report(report, false);
+            
+            Assert.isNotNull(this.reporter._iframe, "Iframe wasn't created.");
+            Assert.isNotNull(this.reporter._form, "Form wasn't created.");
+            Assert.isObject(this.reporter._form.useragent, "Useragent field wasn't created.");
+            Assert.areEqual(navigator.userAgent, this.reporter._form.useragent.value, "Useragent field is incorrect.");
+            Assert.isObject(this.reporter._form.timestamp, "Timestamp field wasn't created.");
+            Assert.isTrue(this.reporter._form.timestamp.value.length > 0, "Timestamp field is not filled in.");
+            Assert.isObject(this.reporter._form.results, "Results field wasn't created.");            
+            Assert.areEqual(YAHOO.tool.TestFormat.XML(report), this.reporter._form.results.value, "Form field is not filled in.");
+            Assert.isObject(this.reporter._form.version, "Version field wasn't created.");            
+            Assert.areEqual(2.5, this.reporter._form.version.value, "Version field is not filled in.");
+            Assert.isObject(this.reporter._form.browser, "Browser field wasn't created.");            
+            Assert.areEqual("custom", this.reporter._form.browser.value, "Browser field is not filled in.");
+        },
+        
+        testReportingWithFieldsCleared: function(){
+            var url = "http://www.yahoo.com/";
+            var report = {
+                passed: 2,
+                failed: 2,
+                ignored: 1,
+                total: 5,
+                type: "report",
+                name: "YUI Test Results",
+                
+                "Some Suite":{
+                    passed: 2,
+                    failed: 2,
+                    ignored: 1,
+                    total: 5,
+                    type: "testsuite",
+                    name: "Some Suite",
+                    
+                    "Some Tests": {
+                        passed: 2,
+                        failed: 2,
+                        ignored: 1,
+                        total: 5,
+                        type: "testcase",
+                        name: "Some Tests",
+                        
+                        test1:{
+                            result: "pass",
+                            message: "Test passed.",
+                            type: "test",
+                            name: "test1"
+                        }                  
+                    }
+                }
+            };
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            this.reporter.addField("version", 2.5);
+            this.reporter.addField("browser", "custom");
+            this.reporter.clearFields();
+            this.reporter.report(report, false);
+            
+            Assert.isNotNull(this.reporter._iframe, "Iframe wasn't created.");
+            Assert.isNotNull(this.reporter._form, "Form wasn't created.");
+            Assert.isObject(this.reporter._form.useragent, "Useragent field wasn't created.");
+            Assert.areEqual(navigator.userAgent, this.reporter._form.useragent.value, "Useragent field is incorrect.");
+            Assert.isObject(this.reporter._form.timestamp, "Timestamp field wasn't created.");
+            Assert.isTrue(this.reporter._form.timestamp.value.length > 0, "Timestamp field is not filled in.");
+            Assert.isObject(this.reporter._form.results, "Results field wasn't created.");            
+            Assert.areEqual(YAHOO.tool.TestFormat.XML(report), this.reporter._form.results.value, "Form field is not filled in.");
+            Assert.isUndefined(this.reporter._form.version, "Version field was created.");            
+            Assert.isUndefined(this.reporter._form.browser, "Browser field was created.");            
+        },
+        
+        testDestroy: function(){
+            var url = "http://www.yahoo.com/";
+            var report = {
+                passed: 2,
+                failed: 2,
+                ignored: 1,
+                total: 5,
+                type: "report",
+                name: "YUI Test Results",
+                
+                "Some Suite":{
+                    passed: 2,
+                    failed: 2,
+                    ignored: 1,
+                    total: 5,
+                    type: "testsuite",
+                    name: "Some Suite",
+                    
+                    "Some Tests": {
+                        passed: 2,
+                        failed: 2,
+                        ignored: 1,
+                        total: 5,
+                        type: "testcase",
+                        name: "Some Tests",
+                        
+                        test1:{
+                            result: "pass",
+                            message: "Test passed.",
+                            type: "test",
+                            name: "test1"
+                        }                  
+                    }
+                }
+            };
+            this.reporter = new YAHOO.tool.TestReporter(url);
+            this.reporter.addField("version", 2.5);
+            this.reporter.addField("browser", "custom");
+            this.reporter.report(report, false);
+            
+            this.reporter.destroy();
+            
+            Assert.isNull(this.reporter._form, "Form wasn't destroyed.");
+            Assert.isNull(this.reporter._iframe, "IFrame wasn't destroyed.");
+            Assert.isNull(this.reporter._fields, "Fields weren't destroyed.");        
+        }
     }));
     
     //-------------------------------------------------------------------------
