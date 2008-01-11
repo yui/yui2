@@ -553,10 +553,9 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
     });
 
     /**
+    * TODO: update for latest xy-scrolling    
     * @attribute scrollable
-    * @description True if primary TBODY should scroll while THEAD remains fixed.
-    * When enabling this feature, captions cannot be used, and the following
-    * features are not recommended: inline editing, resizeable columns.
+    * @description True if primary TBODY should scroll.
     * @default false
     * @type Boolean
     */
@@ -826,6 +825,17 @@ YAHOO.widget.DataTable.CLASS_ERROR = "yui-dt-error";
  * @default "yui-dt-editable"
  */
 YAHOO.widget.DataTable.CLASS_EDITABLE = "yui-dt-editable";
+
+/**
+ * Class name assigned to draggable elements.
+ *
+ * @property DataTable.CLASS_DRAGGABLE
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-draggable"
+ */
+YAHOO.widget.DataTable.CLASS_DRAGGABLE = "yui-dt-draggable";
 
 /**
  * Class name assigned to resizeable elements.
@@ -1150,6 +1160,24 @@ YAHOO.widget.DataTable.prototype._sFirstTrId = null;
  */
 YAHOO.widget.DataTable.prototype._sLastTrId = null;
 
+/**
+ * Element reference to shared Column drag target.
+ *
+ * @property _elColumnDragTarget
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elColumnDragTarget = null;
+
+/**
+ * Element reference to shared Column resizer proxy.
+ *
+ * @property _elColumnResizerProxy
+ * @type HTMLElement
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._elColumnResizerProxy = null;
+
 
 
 
@@ -1445,6 +1473,7 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
         this._elThead = null;
     }
     if(this._elTbody) {
+        this._oChain.stop();
         elTable = this._elTbody.parentNode;
         YAHOO.util.Event.purgeElement(elTable, true);
         elTable.parentNode.removeChild(elTable);
@@ -1583,10 +1612,27 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
             YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
         }
     
-        // Add Resizer only after DOM has been updated
-        //TODO: Support resizers on parents of nested Columns?
+        // Add DD features only after DOM has been updated
         var foundDD = (YAHOO.util.DD) ? true : false;
         var needDD = false;
+        // draggable
+        for(i=0; i<this._oColumnSet.tree[0].length; i++) {
+            oColumn = this._oColumnSet.tree[0][i];
+            if(oColumn.draggable) {
+                if(foundDD) {
+                    elTheadCell = oColumn.getThEl();
+                    YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_DRAGGABLE);
+                    var elDragTarget = this._initColumnDragTargetEl();
+                    //TODO: add dd to Column APIDOC
+                    oColumn.dd = new YAHOO.widget.ColumnDD(
+                        this, oColumn, elTheadCell, elDragTarget);
+                }
+                else {
+                    needDD = true;
+                }
+            }
+        }
+        // resizeable
         for(i=0; i<this._oColumnSet.keys.length; i++) {
             oColumn = this._oColumnSet.keys[i];
             if(oColumn.resizeable) {
@@ -1598,9 +1644,10 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
                     elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
                     oColumn._elResizer = elThResizer;
                     YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
-                    this._initColumnResizerProxyEl();
+                    var elResizerProxy = this._initColumnResizerProxyEl();
+                    //TODO: add ddResizer to Column APIDOC
                     oColumn.ddResizer = new YAHOO.util.ColumnResizer(
-                            this, oColumn, elTheadCell, elThResizer.id, this._elColumnResizerProxy);
+                            this, oColumn, elTheadCell, elThResizer.id, elResizerProxy);
                     var cancelClick = function(e) {
                         YAHOO.util.Event.stopPropagation(e);
                     };
@@ -1612,7 +1659,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
             }
         }
         if(needDD) {
-            YAHOO.log("Could not find DragDrop dependancy for resizeable Columns", "warn", this.toString());
+            YAHOO.log("Could not find DragDrop dependancy", "warn", this.toString());
         }
         
         YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
@@ -1724,9 +1771,34 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
 };
 
 /**
+ * Creates HTML markup for shared Column drag target.
+ *
+ * @method _initColumnDragTargetEl
+ * @return {HTMLElement} Reference to Column drag target. 
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initColumnDragTargetEl = function() {
+    // TODO: destroy previous instances
+    if(!this._elColumnDragTarget) {
+        // Attach Column drag target element as first child of body
+        var elColumnDragTarget = document.createElement('div');
+        elColumnDragTarget.id = this._sId + "-coldragtarget";
+        elColumnDragTarget.className = "yui-dt-coltarget";
+        elColumnDragTarget.style.display = "none";
+        document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
+
+        // Internal tracker of Cell Editor values
+        this._elColumnDragTarget = elColumnDragTarget;
+        
+    }
+    return this._elColumnDragTarget;
+};
+
+/**
  * Creates HTML markup for shared Column resizer proxy.
  *
  * @method _initColumnResizerProxyEl
+ * @return {HTMLElement} Reference to Column resizer proxy. 
  * @private
  */
 YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
@@ -1748,6 +1820,7 @@ YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
         // Internal tracker of Cell Editor values
         this._elColumnResizerProxy = elColumnResizerProxy;
     }
+    return this._elColumnResizerProxy;
 };
 
 /**
@@ -3663,6 +3736,10 @@ YAHOO.widget.DataTable.prototype.render = function() {
  * @method destroy
  */
 YAHOO.widget.DataTable.prototype.destroy = function() {
+    this._oChain.stop();
+    
+    //TODO: destroy resizer proxy and column proxy...
+    
     // Destroy Cell Editor
     YAHOO.util.Event.purgeElement(this._oCellEditor.container, true);
     document.body.removeChild(this._oCellEditor.container);
@@ -4308,7 +4385,7 @@ YAHOO.widget.DataTable.prototype.removeColumn = function(oColumn) {
     if(nColTreeIndex !== null) {
         var aOrigColumnDefs = this._oColumnSet.getDefinitions();
 
-        oColumn = aOrigColumnDefs.splice(nColTreeIndex,1);
+        oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
         this._initColumnSet(aOrigColumnDefs);
 
         this._initTableEl();

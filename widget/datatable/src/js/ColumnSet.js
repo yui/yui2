@@ -680,8 +680,20 @@ YAHOO.widget.Column.prototype.editor = null;
 YAHOO.widget.Column.prototype.editorOptions = null;
 
 /**
+ * True if Column is draggable, false otherwise. The Drag & Drop Utility is
+ * required to enable this feature. Only top-level and non-nested Columns are
+ * draggable.  
+ *
+ * @property draggable
+ * @type Boolean
+ * @default false
+ */
+YAHOO.widget.Column.prototype.draggable = false;
+
+/**
  * True if Column is resizeable, false otherwise. The Drag & Drop Utility is
- * required to enable this feature.
+ * required to enable this feature. Only bottom-level and non-nested Columns are
+ * resizeble. 
  *
  * @property resizeable
  * @type Boolean
@@ -985,6 +997,121 @@ YAHOO.util.Sort = {
 /****************************************************************************/
 
 /**
+ * ColumnDD subclasses DragDrop to support rearrangeable Columns.
+ *
+ * @namespace YAHOO.util
+ * @class ColumnDD
+ * @extends YAHOO.util.DragDrop
+ * @constructor
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param elTh {HTMLElement} TH element reference.
+ * @param elTarget {HTMLElement} Drag target element.
+ */
+YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
+    if(oDataTable && oColumn && elTh && elTarget) {
+        this.datatable = oDataTable;
+        this.table = oDataTable.getTheadEl().parentNode;
+        this.column = oColumn;
+        this.headCell = elTh;
+        this.pointer = elTarget;
+        this.newIndex = null;
+        this.init(elTh);
+        this.initFrame(); // Needed for DDProxy
+    }
+    else {
+        YAHOO.log("Column dragdrop could not be created","warn");
+    }
+};
+
+if(YAHOO.util.DDProxy) {
+    YAHOO.extend(YAHOO.widget.ColumnDD, YAHOO.util.DDProxy, {
+        initConstraints: function() {
+            //Get the top, right, bottom and left positions
+            var region = YAHOO.util.Dom.getRegion(this.table),
+                //Get the element we are working on
+                el = this.getEl(),
+                //Get the xy position of it
+                xy = YAHOO.util.Dom.getXY(el),
+                //Get the width and height
+                width = parseInt(YAHOO.util.Dom.getStyle(el, 'width'), 10),
+                height = parseInt(YAHOO.util.Dom.getStyle(el, 'height'), 10),
+                //Set left to x minus left
+                left = ((xy[0] - region.left) + 15), //Buffer of 15px
+                //Set right to right minus x minus width
+                right = ((region.right - xy[0] - width) + 15);
+    
+            //Set the constraints based on the above calculations
+            this.setXConstraint(left, right);
+            this.setYConstraint(10, 10);
+            this.setPadding(0, 25, (this.table.parentNode.offsetHeight + 10) , 25);
+    
+            YAHOO.util.Event.on(window, 'resize', function() {
+                this.initConstraints();
+            }, this, true);
+        },
+        _resizeProxy: function() {
+            this.constructor.superclass._resizeProxy.apply(this, arguments);
+            var dragEl = this.getDragEl(),
+                el = this.getEl();
+            YAHOO.util.Dom.setStyle(dragEl, 'height', YAHOO.util.Dom.getStyle(this.datatable.getContainerEl(), 'height'));
+            YAHOO.util.Dom.setStyle(dragEl, 'width', (parseInt(YAHOO.util.Dom.getStyle(dragEl, 'width'),10) + 4) + 'px');
+
+            YAHOO.util.Dom.setStyle(this.pointer, 'height', (this.table.parentNode.offsetHeight + 10) + 'px');
+            YAHOO.util.Dom.setStyle(this.pointer, 'display', 'block');
+            var xy = YAHOO.util.Dom.getXY(el);
+            YAHOO.util.Dom.setXY(this.pointer, [xy[0], (xy[1] - 5)]);
+        },
+        onMouseDown: function() {
+                this.initConstraints();
+        },
+        onDragOver: function(ev, id) {
+            var target = this.datatable.getColumn(id),
+                mouseX = YAHOO.util.Event.getPageX(ev),
+                targetX = YAHOO.util.Dom.getX(id),
+                midX = targetX + ((YAHOO.util.Dom.get(id).offsetWidth)/2),
+                currentIndex =  this.column.getTreeIndex(),
+                targetIndex = target.getTreeIndex(),
+                newIndex = targetIndex;
+            
+            
+            if (mouseX < midX) {
+               YAHOO.util.Dom.setX(this.pointer, targetX);
+            } else {
+                var thisWidth = parseInt(target.getThEl().offsetWidth, 10);
+                YAHOO.util.Dom.setX(this.pointer, (targetX + thisWidth));
+                newIndex++;
+            }
+            if (targetIndex > currentIndex) {
+                newIndex--;
+            }
+            if(newIndex < 0) {
+                newIndex = 0;
+            }
+            else if(newIndex > this.datatable.getColumnSet().tree[0].length) {
+                newIndex = this.datatable.getColumnSet().tree[0].length;
+            }
+            this.newIndex = newIndex;
+        },
+        onDragDrop: function() {
+            if(this.newIndex !== this.column.getTreeIndex()) {
+                var oColumn = this.datatable.removeColumn(this.column);
+                this.datatable.insertColumn(oColumn, this.newIndex);
+            }
+        },
+        endDrag: function() {
+            YAHOO.util.Dom.removeClass(this.rows, 'hidden');
+            this.newIndex = null;
+            YAHOO.util.Dom.setStyle(this.pointer, 'display', 'none');
+        }
+    });
+}
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
  * ColumnResizer subclasses DragDrop to support resizeable Columns.
  *
  * @namespace YAHOO.util
@@ -993,21 +1120,20 @@ YAHOO.util.Sort = {
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param elThead {HTMLElement} TH element reference.
+ * @param elTh {HTMLElement} TH element reference.
  * @param sHandleElId {String} DOM ID of the handle element that causes the resize.
- * @param sGroup {String} Group name of related DragDrop items.
- * @param oConfig {Object} (Optional) Object literal of config values.
+ * @param elProxy {HTMLElement} Resizer proxy element.
  */
-YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elThead, sHandleId, elProxy, oConfig) {
-    if(oDataTable && oColumn && elThead && sHandleId) {
+YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProxy) {
+    if(oDataTable && oColumn && elTh && sHandleId) {
         this.datatable = oDataTable;
         this.column = oColumn;
-        this.headCell = elThead;
+        this.headCell = elTh;
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
     }
     else {
-        YAHOO.log("Column resizer could not be created due to invalid colElId","warn");
+        YAHOO.log("Column resizer could not be created","warn");
     }
 };
 

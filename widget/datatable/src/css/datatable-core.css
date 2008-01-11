@@ -3,6 +3,10 @@
     overflow:hidden;
 }
 
+.yui-dt-draggable {
+    cursor: move;
+}
+
 /* resizeable columns */
 th.yui-dt-resizeable .yui-dt-liner {
     position:relative;
