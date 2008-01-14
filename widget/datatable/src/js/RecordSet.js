@@ -178,7 +178,7 @@ YAHOO.widget.RecordSet.prototype._addRecord = function(oData, index) {
     }
     else {
         index = this.getLength();
-        this._records.push(oRecord);
+        this._records[index] = oRecord;
     }
     this._length++;
     return oRecord;
@@ -200,10 +200,12 @@ YAHOO.widget.RecordSet.prototype._setRecord = function(oData, index) {
     
     if(YAHOO.lang.isNumber(index) && (index > -1)) {
         this._records[index] = oRecord;
+        if((index+1) > this.getLength()) {
+            this._length = index+1;
+        }
     }
     else {
-        index = this.getLength();
-        this._records.push(oRecord);
+        this._records[this.getLength()] = oRecord;
         this._length++;
     }
     return oRecord;

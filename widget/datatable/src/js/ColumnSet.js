@@ -113,9 +113,6 @@ YAHOO.widget.ColumnSet.prototype.headers = null;
  */
 
 YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
-    aDefinitions = aDefinitions.slice();
-    this._aDefinitions = aDefinitions;
-
     // DOM tree representation of all Columns
     var tree = [];
     // Flat representation of all Columns
@@ -128,7 +125,7 @@ YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
     // Tracks current node list depth being tracked
     var nodeDepth = -1;
 
-    // Internal recursive function to defined Column instances
+    // Internal recursive function to define Column instances
     var parseColumns = function(nodeList, parent) {
         // One level down
         nodeDepth++;
@@ -145,7 +142,11 @@ YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
 
             // Instantiate a new Column for each node
             var oColumn = new YAHOO.widget.Column(currentNode);
-            oColumn._sId = YAHOO.widget.Column._nCount + "";
+            
+            // Assign unique ID to Column and cross-reference it back to the
+            // original definition
+            currentNode.yuiColumnId = oColumn._sId = YAHOO.widget.Column._nCount + "";
+            
             // Assign a key if not found
             if(!YAHOO.lang.isValue(oColumn.key)) {
                 oColumn.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
@@ -257,6 +258,9 @@ YAHOO.widget.ColumnSet.prototype._init = function(aDefinitions) {
     // Parse out Column instances from the array of object literals
     if(YAHOO.lang.isArray(aDefinitions)) {
         parseColumns(aDefinitions);
+
+        // Store the array
+        this._aDefinitions = aDefinitions;
     }
     else {
         YAHOO.log("Could not initialize ColumnSet due to invalid definitions","error");
@@ -372,11 +376,48 @@ YAHOO.widget.ColumnSet.prototype.toString = function() {
  * Public accessor to the definitions array.
  *
  * @method getDefinitions
- * @return {Object[]} Array of object literal definitions passed to the constructor.
+ * @return {Object[]} Array of object literal Column definitions.
  */
 
 YAHOO.widget.ColumnSet.prototype.getDefinitions = function() {
-    return this._aDefinitions;
+    var aDefinitions = this._aDefinitions;
+    
+    // Internal recursive function to define Column instances
+    var parseColumns = function(nodeList, oSelf) {
+        // Parse each node at this depth for attributes and any children
+        for(var j=0; j<nodeList.length; j++) {
+            var currentNode = nodeList[j];
+            
+            // Get the Column for each node
+            var oColumn = oSelf.getColumnById(currentNode.yuiColumnId);
+            
+            if(oColumn) {    
+                // Update the definition
+                currentNode.abbr = oColumn.abbr;
+                currentNode.className = oColumn.className;
+                currentNode.editor = oColumn.editor;
+                currentNode.editorOptions = oColumn.editorOptions;
+                currentNode.formatter = oColumn.formatter;
+                currentNode.key = oColumn.key;
+                currentNode.label = oColumn.label;
+                currentNode.minWidth = oColumn.minWidth;
+                currentNode.resizeable = oColumn.resizeable;
+                currentNode.sortable = oColumn.sortable;
+                currentNode.sortOptions = oColumn.sortOptions;
+                currentNode.width = oColumn.width;
+            }
+                        
+            // The Column has descendants
+            if(YAHOO.lang.isArray(currentNode.children)) {
+                // The children themselves must also be parsed for Column instances
+                parseColumns(currentNode.children, oSelf);
+            }
+        }
+    };
+
+    parseColumns(aDefinitions, this);
+    this._aDefinitions = aDefinitions;
+    return aDefinitions;
 };
 
 /**
@@ -476,10 +517,7 @@ YAHOO.widget.Column = function(oConfigs) {
                 this[sConfig] = oConfigs[sConfig];
             }
         }
-        
-        //TODO: by reference or by value?
-        this._oDefinition = oConfigs;
-    }
+   }
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -508,7 +546,7 @@ YAHOO.widget.Column._nCount = 0;
 YAHOO.widget.Column.prototype._sId = null;
 
 /**
- * Object literal definition.
+ * Object literal definition
  *
  * @property _oDefinition
  * @type Object
@@ -565,7 +603,7 @@ YAHOO.widget.Column.prototype._nRowspan = 1;
  */
 YAHOO.widget.Column.prototype._oParent = null;
 
-/**
+/*TODO: remove
  * The DOM reference the associated COL element.
  *
  * @property _elCol
@@ -591,6 +629,24 @@ YAHOO.widget.Column.prototype._elTh = null;
  * @private
  */
 YAHOO.widget.Column.prototype._elResizer = null;
+
+/**
+ * For unreg() purposes, a reference to the Column's DragDrop instance.
+ *
+ * @property _dd
+ * @type YAHOO.util.DragDrop
+ * @private
+ */
+YAHOO.widget.Column.prototype._dd = null;
+
+/**
+ * For unreg() purposes, a reference to the Column resizer's DragDrop instance.
+ *
+ * @property _ddResizer
+ * @type YAHOO.util.DragDrop
+ * @private
+ */
+YAHOO.widget.Column.prototype._ddResizer = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -680,17 +736,6 @@ YAHOO.widget.Column.prototype.editor = null;
 YAHOO.widget.Column.prototype.editorOptions = null;
 
 /**
- * True if Column is draggable, false otherwise. The Drag & Drop Utility is
- * required to enable this feature. Only top-level and non-nested Columns are
- * draggable.  
- *
- * @property draggable
- * @type Boolean
- * @default false
- */
-YAHOO.widget.Column.prototype.draggable = false;
-
-/**
  * True if Column is resizeable, false otherwise. The Drag & Drop Utility is
  * required to enable this feature. Only bottom-level and non-nested Columns are
  * resizeble. 
@@ -777,7 +822,23 @@ YAHOO.widget.Column.prototype.toString = function() {
  * @return {Object} Object literal definition.
  */
 YAHOO.widget.Column.prototype.getDefinition = function() {
-    return this._oDefinition;
+    var oDefinition = this._oDefinition;
+    
+    // Update the definition
+    oDefinition.abbr = this.abbr;
+    oDefinition.className = this.className;
+    oDefinition.editor = this.editor;
+    oDefinition.editorOptions = this.editorOptions;
+    oDefinition.formatter = this.formatter;
+    oDefinition.key = this.key;
+    oDefinition.label = this.label;
+    oDefinition.minWidth = this.minWidth;
+    oDefinition.resizeable = this.resizeable;
+    oDefinition.sortable = this.sortable;
+    oDefinition.sortOptions = this.sortOptions;
+    oDefinition.width = this.width;
+
+    return oDefinition;
 };
 
 /**
@@ -1054,13 +1115,15 @@ if(YAHOO.util.DDProxy) {
             this.constructor.superclass._resizeProxy.apply(this, arguments);
             var dragEl = this.getDragEl(),
                 el = this.getEl();
-            YAHOO.util.Dom.setStyle(dragEl, 'height', YAHOO.util.Dom.getStyle(this.datatable.getContainerEl(), 'height'));
-            YAHOO.util.Dom.setStyle(dragEl, 'width', (parseInt(YAHOO.util.Dom.getStyle(dragEl, 'width'),10) + 4) + 'px');
 
             YAHOO.util.Dom.setStyle(this.pointer, 'height', (this.table.parentNode.offsetHeight + 10) + 'px');
             YAHOO.util.Dom.setStyle(this.pointer, 'display', 'block');
             var xy = YAHOO.util.Dom.getXY(el);
             YAHOO.util.Dom.setXY(this.pointer, [xy[0], (xy[1] - 5)]);
+            
+            YAHOO.util.Dom.setStyle(dragEl, 'height', YAHOO.util.Dom.getStyle(this.datatable.getContainerEl(), 'height'));
+            YAHOO.util.Dom.setStyle(dragEl, 'width', (parseInt(YAHOO.util.Dom.getStyle(dragEl, 'width'),10) + 4) + 'px');
+            YAHOO.util.Dom.setXY(this.dragEl, xy);
         },
         onMouseDown: function() {
                 this.initConstraints();
@@ -1094,13 +1157,19 @@ if(YAHOO.util.DDProxy) {
             this.newIndex = newIndex;
         },
         onDragDrop: function() {
-            if(this.newIndex !== this.column.getTreeIndex()) {
-                var oColumn = this.datatable.removeColumn(this.column);
-                this.datatable.insertColumn(oColumn, this.newIndex);
+            if(this.newIndex && (this.newIndex !== this.column.getTreeIndex())) {
+                var oDataTable = this.datatable;
+                oDataTable._oChain.stop();
+                var aColumnDefs = oDataTable._oColumnSet.getDefinitions();
+                var oColumn = aColumnDefs.splice(this.column.getTreeIndex(),1)[0];
+                aColumnDefs.splice(this.newIndex, 0, oColumn);
+                oDataTable._initColumnSet(aColumnDefs);
+                //oDataTable._initTableEl();
+                oDataTable._initTheadEls();
+                oDataTable.render();
             }
         },
         endDrag: function() {
-            YAHOO.util.Dom.removeClass(this.rows, 'hidden');
             this.newIndex = null;
             YAHOO.util.Dom.setStyle(this.pointer, 'display', 'none');
         }

@@ -91,9 +91,9 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     // Initialize inline Cell editing
     this._initCellEditorEl();
-
-    // Initialize Column sort
-    this._initColumnSort();
+    
+    // Once per instance
+    YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
 
     YAHOO.widget.DataTable._nCount++;
     
@@ -587,6 +587,22 @@ YAHOO.widget.DataTable.prototype.initAttributes = function(oConfigs) {
             }
         }
     });
+
+    /**
+    * @attribute draggableColumns
+    * @description True if Columns are draggable to reorder, false otherwise.
+    * The Drag & Drop Utility is required to enable this feature. Only top-level
+    * and non-nested Columns are draggable. Write once.
+    * @default false
+    * @type Boolean
+    */
+    this.setAttributeConfig("draggableColumns", {
+        value: false,
+        validator: function(oParam) {
+            return YAHOO.lang.isBoolean(oParam);
+        },
+        writeOnce: true
+    });
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -616,6 +632,17 @@ YAHOO.widget.DataTable.CLASS_LINER = "yui-dt-liner";
  * @default "yui-dt-label"
  */
 YAHOO.widget.DataTable.CLASS_LABEL = "yui-dt-label";
+
+/**
+ * Class name assigned to Column drag target.
+ *
+ * @property DataTable.CLASS_COLTARGET
+ * @type String
+ * @static
+ * @final
+ * @default "yui-dt-coltarget"
+ */
+YAHOO.widget.DataTable.CLASS_COLTARGET = "yui-dt-coltarget";
 
 /**
  * Class name assigned to resizer handle elements.
@@ -1015,6 +1042,15 @@ YAHOO.widget.DataTable.prototype._nIndex = null;
 YAHOO.widget.DataTable.prototype._nTrCount = 0;
 
 /**
+ * Counter for IDs assigned to TD elements.
+ *
+ * @property _nTdCount
+ * @type Number
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._nTdCount = 0;
+
+/**
  * Unique id assigned to instance "yui-dtN", useful prefix for generating unique
  * DOM ID strings and log messages.
  *
@@ -1166,8 +1202,9 @@ YAHOO.widget.DataTable.prototype._sLastTrId = null;
  * @property _elColumnDragTarget
  * @type HTMLElement
  * @private
+ * @static 
  */
-YAHOO.widget.DataTable.prototype._elColumnDragTarget = null;
+YAHOO.widget.DataTable._elColumnDragTarget = null;
 
 /**
  * Element reference to shared Column resizer proxy.
@@ -1175,8 +1212,9 @@ YAHOO.widget.DataTable.prototype._elColumnDragTarget = null;
  * @property _elColumnResizerProxy
  * @type HTMLElement
  * @private
+ * @static 
  */
-YAHOO.widget.DataTable.prototype._elColumnResizerProxy = null;
+YAHOO.widget.DataTable._elColumnResizerProxy = null;
 
 
 
@@ -1286,18 +1324,20 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
             if(elWhichRow && (elWhichRow.cells.length > 0) && (allKeys.length > 0)) {
                 var elHeadLiner, nHeadLinerWidth, elCellLiner, nCellLinerWidth, nNewWidth;
 
-                for(var i=0; i<allKeys.length; i++) {
-                    elHeadLiner = allKeys[i].getThEl().firstChild;
-                    nHeadLinerWidth = elHeadLiner.offsetWidth -
-                            (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingLeft"),10)) -
-                            (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingRight"),10));
-                    elCellLiner = elWhichRow.cells[i].firstChild;
-                    nCellLinerWidth = elCellLiner.offsetWidth -
-                            (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
-                            (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10));
-                    if(nHeadLinerWidth !== nCellLinerWidth) {
-                        nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
-                        oSelf._setColumnWidth(allKeys[i],nNewWidth+"px");
+                for(var i=0; i<elWhichRow.cells.length; i++) {
+                    if(allKeys[i]) {
+                        elHeadLiner = allKeys[i].getThEl().firstChild;
+                        nHeadLinerWidth = elHeadLiner.offsetWidth -
+                                (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingLeft"),10)) -
+                                (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingRight"),10));
+                        elCellLiner = elWhichRow.cells[i].firstChild;
+                        nCellLinerWidth = elCellLiner.offsetWidth -
+                                (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
+                                (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10));
+                        if(nHeadLinerWidth !== nCellLinerWidth) {
+                            nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
+                            oSelf._setColumnWidth(allKeys[i],nNewWidth+"px");
+                        }
                     }
                 }
             }
@@ -1467,13 +1507,28 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
 
     // Destroy existing
     if(this._elThead) {
+        var i;
+        // Destroy ColumnDDs
+        var aTree = this._oColumnSet.tree[0];
+        for(i=0; i<aTree.length; i++) {
+            if(aTree[i]._dd) {
+                aTree[i]._dd = aTree[i]._dd.unreg();
+            }
+        }
+    
+        // Destroy ColumnResizers
+        var aKeys = this._oColumnSet.keys;
+        for(i=0; i<aKeys.length; i++) {
+            if(aKeys[i]._ddResizer) {
+                aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
+            }
+        }
         elTable = this._elThead.parentNode;
         YAHOO.util.Event.purgeElement(elTable, true);
         elTable.parentNode.removeChild(elTable);
         this._elThead = null;
     }
     if(this._elTbody) {
-        this._oChain.stop();
         elTable = this._elTbody.parentNode;
         YAHOO.util.Event.purgeElement(elTable, true);
         elTable.parentNode.removeChild(elTable);
@@ -1486,17 +1541,14 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     elHeadTable.id = this._sId + "-headtable";
     elHeadTable = this._elTheadContainer.appendChild(elHeadTable);
 
-    // Create THEAD
-    this._initTheadEl(elHeadTable,false);
-
     // Create elements for body
     // Create TABLE
     var elBodyTable = document.createElement("table");
     elBodyTable.id = this._sId + "-bodytable";
     this._elTbodyContainer.appendChild(elBodyTable);
 
-    // Create THEAD
-    this._initTheadEl(elBodyTable, true);
+    // Create THEAD for display and for a11y
+    this._initTheadEls();
 
     // Create TBODY for data
     this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
@@ -1525,40 +1577,170 @@ YAHOO.widget.DataTable.prototype._initTableEl = function() {
     var elTbodyContainer = this._elTbodyContainer;
 
     // Set up DOM events
-    YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
-    
     YAHOO.util.Event.addListener(elContainer, "focus", this._onTableFocus, this);
-    YAHOO.util.Event.addListener(elThead, "focus", this._onTheadFocus, this);
     YAHOO.util.Event.addListener(elTbody, "focus", this._onTbodyFocus, this);
 
     YAHOO.util.Event.addListener(elTbody, "mouseover", this._onTableMouseover, this);
     YAHOO.util.Event.addListener(elTbody, "mouseout", this._onTableMouseout, this);
     YAHOO.util.Event.addListener(elTbody, "mousedown", this._onTableMousedown, this);
 
-    YAHOO.util.Event.addListener(elThead, "keydown", this._onTheadKeydown, this);
     YAHOO.util.Event.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
 
     YAHOO.util.Event.addListener(elTbody, "keypress", this._onTableKeypress, this);
 
     // Since we can't listen for click and dblclick on the same element...
-    YAHOO.util.Event.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
     YAHOO.util.Event.addListener(elTbody.parentNode, "dblclick", this._onTableDblclick, this);
-    YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
     YAHOO.util.Event.addListener(elTbody, "click", this._onTbodyClick, this);
 
     YAHOO.util.Event.addListener(elTbodyContainer, "scroll", this._onScroll, this); // to sync horiz scroll headers
 };
 
 /**
- * Populates THEAD element with TH cells as defined by ColumnSet.
+ * Initializes THEAD elements for display and for screen readers.
  *
- * @method _initTheadEl
- * @param elTable {HTMLElement} TABLE element into which to initialize THEAD.
- * @param bA11y {Boolean} True if THEAD is for accessibility, so as not to
- * initialize presentation elements.
+ * @method _initTheadEls
  * @private
  */
-YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
+ YAHOO.widget.DataTable.prototype._initTheadEls = function() {
+    var i,j, l, elThead, elA11yThead, aTheads;
+    
+    // First time through
+    if(!this._elThead) {
+        // Create THEADs
+        elThead = this._elTheadContainer.firstChild.appendChild(document.createElement("thead"));
+        this._elThead = elThead;
+    
+        elA11yThead = this._elTbodyContainer.firstChild.appendChild(document.createElement("thead"));
+        this._elA11yThead = elA11yThead;
+        
+        aTheads = [elThead, elA11yThead];
+
+        YAHOO.util.Event.addListener(elThead, "focus", this._onTheadFocus, this);
+        YAHOO.util.Event.addListener(elThead, "keydown", this._onTheadKeydown, this);
+        YAHOO.util.Event.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
+        YAHOO.util.Event.addListener(elThead, "click", this._onTheadClick, this);
+    }
+    // Reinitialization
+    else {
+        // Clear rows from THEADs
+        elThead = this._elThead;
+        elA11yThead = this._elA11yThead;
+        aTheads = [elThead, elA11yThead];
+            
+        for(i=0; i<aTheads.length; i++) {
+            for(j=aTheads[i].rows.length-1; j>-1; j--) {
+                YAHOO.util.Event.purgeElement(aTheads[i].rows[j], true);
+                aTheads[i].removeChild(aTheads[i].rows[j]);
+            }     
+        }
+    }
+
+    
+    var oColumn,
+        oColumnSet = this._oColumnSet;
+
+    // Add TRs to the THEADs
+    var colTree = oColumnSet.tree;
+    var elTheadCell;
+    for(l=0; l<aTheads.length; l++) {
+        for(i=0; i<colTree.length; i++) {
+            var elTheadRow = aTheads[l].appendChild(document.createElement("tr"));
+            elTheadRow.id = this._sId+"-hdrow"+i;
+    
+            // ...and create TH cells
+            for(j=0; j<colTree[i].length; j++) {
+                oColumn = colTree[i][j];
+                elTheadCell = elTheadRow.appendChild(document.createElement("th"));
+                if(l===0) {
+                    oColumn._elTh = elTheadCell;
+                }
+                var id = (l===1) ? this._sId+"-th" + oColumn.getId() + "-a11y": this._sId+"-th" + oColumn.getId();
+                elTheadCell.id = id;
+                elTheadCell.yuiCellIndex = j;
+                this._initThEl(elTheadCell,oColumn,i,j, (l===1));
+            }
+    
+            if(l===0) {
+                // Set FIRST/LAST on THEAD rows
+                if(i === 0) {
+                    YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_FIRST);
+                }
+                if(i === (colTree.length-1)) {
+                    YAHOO.util.Dom.addClass(elTheadRow, YAHOO.widget.DataTable.CLASS_LAST);
+                }
+            }
+        }
+
+        if(l===0) {
+            // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
+            var aFirstHeaders = oColumnSet.headers[0];
+            var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
+            for(i=0; i<aFirstHeaders.length; i++) {
+                //TODO: A better way to get th cell
+                YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aFirstHeaders[i]), YAHOO.widget.DataTable.CLASS_FIRST);
+            }
+            for(i=0; i<aLastHeaders.length; i++) {
+                //TODO: A better way to get th cell
+                YAHOO.util.Dom.addClass(YAHOO.util.Dom.get(this._sId+"-th"+aLastHeaders[i]), YAHOO.widget.DataTable.CLASS_LAST);
+            }
+        
+            // Add DD features only after DOM has been updated
+            var foundDD = (YAHOO.util.DD) ? true : false;
+            var needDD = false;
+            // draggable
+            // HACK: Not able to use attribute since this code is run before
+            // attributes are initialized
+            if(this._oConfigs.draggableColumns) {
+                for(i=0; i<this._oColumnSet.tree[0].length; i++) {
+                    oColumn = this._oColumnSet.tree[0][i];
+                    if(foundDD) {
+                        elTheadCell = oColumn.getThEl();
+                        YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_DRAGGABLE);
+                        var elDragTarget = YAHOO.widget.DataTable._initColumnDragTargetEl();
+                        oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTheadCell, elDragTarget);
+                    }
+                    else {
+                        needDD = true;
+                    }    
+                }
+            }
+            // resizeable
+            for(i=0; i<this._oColumnSet.keys.length; i++) {
+                oColumn = this._oColumnSet.keys[i];
+                if(oColumn.resizeable) {
+                    if(foundDD) {
+                        elTheadCell = oColumn.getThEl();
+                        YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_RESIZEABLE);
+                        var elThLiner = elTheadCell.firstChild;
+                        var elThResizer = elThLiner.appendChild(document.createElement("div"));
+                        elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
+                        oColumn._elResizer = elThResizer;
+                        YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
+                        var elResizerProxy = YAHOO.widget.DataTable._initColumnResizerProxyEl();
+                        oColumn._ddResizer = new YAHOO.util.ColumnResizer(
+                                this, oColumn, elTheadCell, elThResizer.id, elResizerProxy);
+                        var cancelClick = function(e) {
+                            YAHOO.util.Event.stopPropagation(e);
+                        };
+                        YAHOO.util.Event.addListener(elThResizer,"click",cancelClick);
+                    }
+                    else {
+                        needDD = true;
+                    }
+                }
+            }
+            if(needDD) {
+                YAHOO.log("Could not find DragDrop dependancy", "warn", this.toString());
+            }
+            
+            YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+        }
+        else {
+            YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+        }
+    }
+};
+/*YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     var i, oColumn;
     var oColumnSet = this._oColumnSet;
 
@@ -1616,20 +1798,20 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
         var foundDD = (YAHOO.util.DD) ? true : false;
         var needDD = false;
         // draggable
-        for(i=0; i<this._oColumnSet.tree[0].length; i++) {
-            oColumn = this._oColumnSet.tree[0][i];
-            if(oColumn.draggable) {
+        // HACK: Not able to use attribute since this code is run before
+        // attributes are initialized
+        if(this._oConfigs.draggableColumns) {
+            for(i=0; i<this._oColumnSet.tree[0].length; i++) {
+                oColumn = this._oColumnSet.tree[0][i];
                 if(foundDD) {
                     elTheadCell = oColumn.getThEl();
                     YAHOO.util.Dom.addClass(elTheadCell, YAHOO.widget.DataTable.CLASS_DRAGGABLE);
-                    var elDragTarget = this._initColumnDragTargetEl();
-                    //TODO: add dd to Column APIDOC
-                    oColumn.dd = new YAHOO.widget.ColumnDD(
-                        this, oColumn, elTheadCell, elDragTarget);
+                    var elDragTarget = YAHOO.widget.DataTable._initColumnDragTargetEl();
+                    oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTheadCell, elDragTarget);
                 }
                 else {
                     needDD = true;
-                }
+                }    
             }
         }
         // resizeable
@@ -1644,9 +1826,8 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
                     elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
                     oColumn._elResizer = elThResizer;
                     YAHOO.util.Dom.addClass(elThResizer,YAHOO.widget.DataTable.CLASS_RESIZER);
-                    var elResizerProxy = this._initColumnResizerProxyEl();
-                    //TODO: add ddResizer to Column APIDOC
-                    oColumn.ddResizer = new YAHOO.util.ColumnResizer(
+                    var elResizerProxy = YAHOO.widget.DataTable._initColumnResizerProxyEl();
+                    oColumn._ddResizer = new YAHOO.util.ColumnResizer(
                             this, oColumn, elTheadCell, elThResizer.id, elResizerProxy);
                     var cancelClick = function(e) {
                         YAHOO.util.Event.stopPropagation(e);
@@ -1667,7 +1848,7 @@ YAHOO.widget.DataTable.prototype._initTheadEl = function(elTable, bA11y) {
     else {
         YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
     }
-};
+};*/
 
 /**
  * Populates TH cell as defined by Column.
@@ -1776,63 +1957,46 @@ YAHOO.widget.DataTable.prototype._initCellEditorEl = function() {
  * @method _initColumnDragTargetEl
  * @return {HTMLElement} Reference to Column drag target. 
  * @private
+ * @static 
  */
-YAHOO.widget.DataTable.prototype._initColumnDragTargetEl = function() {
-    // TODO: destroy previous instances
-    if(!this._elColumnDragTarget) {
+YAHOO.widget.DataTable._initColumnDragTargetEl = function() {
+    if(!YAHOO.widget.DataTable._elColumnDragTarget) {
         // Attach Column drag target element as first child of body
         var elColumnDragTarget = document.createElement('div');
-        elColumnDragTarget.id = this._sId + "-coldragtarget";
-        elColumnDragTarget.className = "yui-dt-coltarget";
+        elColumnDragTarget.id = "yui-dt-coltarget";
+        elColumnDragTarget.className = YAHOO.widget.DataTable.CLASS_COLTARGET;
         elColumnDragTarget.style.display = "none";
         document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
 
-        // Internal tracker of Cell Editor values
-        this._elColumnDragTarget = elColumnDragTarget;
+        // Internal tracker of Column drag target
+        YAHOO.widget.DataTable._elColumnDragTarget = elColumnDragTarget;
         
     }
-    return this._elColumnDragTarget;
+    return YAHOO.widget.DataTable._elColumnDragTarget;
 };
 
 /**
  * Creates HTML markup for shared Column resizer proxy.
  *
  * @method _initColumnResizerProxyEl
- * @return {HTMLElement} Reference to Column resizer proxy. 
- * @private
+ * @return {HTMLElement} Reference to Column resizer proxy.
+ * @private 
+ * @static 
  */
-YAHOO.widget.DataTable.prototype._initColumnResizerProxyEl = function() {
-    // TODO: destroy previous instances
-    if(!this._elColumnResizerProxy) {
+YAHOO.widget.DataTable._initColumnResizerProxyEl = function() {
+    if(!YAHOO.widget.DataTable._elColumnResizerProxy) {
 
         // Attach Column resizer element as first child of body
         var elColumnResizerProxy = document.createElement("div");
-        elColumnResizerProxy.id = this._sId + "-colresizerproxy";
+        elColumnResizerProxy.id = "yui-dt-colresizerproxy";
         YAHOO.util.Dom.addClass(elColumnResizerProxy, YAHOO.widget.DataTable.CLASS_RESIZERPROXY);
-        var elFirstChild = YAHOO.util.Dom.getFirstChild(document.body);
-        if(elFirstChild) {
-            elColumnResizerProxy = YAHOO.util.Dom.insertBefore(elColumnResizerProxy, elFirstChild);
-        }
-        else {
-            elColumnResizerProxy = document.body.appendChild(elColumnResizerProxy);
-        }
+        document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
 
-        // Internal tracker of Cell Editor values
-        this._elColumnResizerProxy = elColumnResizerProxy;
+        // Internal tracker of Column resizer proxy
+        YAHOO.widget.DataTable._elColumnResizerProxy = elColumnResizerProxy;
     }
-    return this._elColumnResizerProxy;
+    return YAHOO.widget.DataTable._elColumnResizerProxy;
 };
-
-/**
- * Initializes Column sorting.
- *
- * @method _initColumnSort
- * @private
- */
-YAHOO.widget.DataTable.prototype._initColumnSort = function() {
-    this.subscribe("theadCellClickEvent", this.onEventSortColumn);
-};
-
 
 
 
@@ -1907,7 +2071,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
         var elCell = elRow.appendChild(elCellT.cloneNode(true)),
             elCellLiner = elCell.firstChild;
 
-        elCell.id = elRow.id+"-cell"+j;
+        elCell.id = elRow.id+"-cell"+this._nTdCount;
         elCell.yuiColumnKey = oColumn.getKey();
         elCell.yuiColumnId = oColumn.getId();
 
@@ -1957,11 +2121,15 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
 YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     var DT = YAHOO.widget.DataTable,
         Dom = YAHOO.util.Dom,
+        d = document,
+        oColumnSet = this._oColumnSet,
+        oColumn,
+        elCell,
         sortKey,
         sortClass,
         isSortedBy = this.get("sortedBy"),
         aSetWidths = [],
-        i,len;
+        i,j,len,jlen;
 
     if(isSortedBy) {
         sortKey = isSortedBy.key;
@@ -1971,12 +2139,52 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     // Hide the row to prevent constant reflows
     Dom.setStyle(elRow,'display','none');
 
+    // Remove extra TD elements
+    while(elRow.cells.length > oColumnSet.keys.length) {
+        elRow.removeChild(elRow.firstChild);
+    }
+    // Add more TD elements as needed
+    if(elRow.cells.length < oColumnSet.keys.length) {
+        //TODO: break out into private method to be shared by _addTrEl
+        var elCellT = d.createElement('td');
+        elCellT.appendChild(d.createElement('div'));
+    
+        // Create TD cells from template
+        for(i=elRow.cells.length, len=oColumnSet.keys.length; i<len; ++i) {
+            oColumn = oColumnSet.keys[i];
+            elCell = elRow.appendChild(elCellT.cloneNode(true));
+    
+            elCell.id = elRow.id+"-cell"+this._nTdCount;
+        }
+    }
+
+    
     // Update TD elements with new data
-    for(i=0,len=elRow.cells.length; i<len; ++i) {
-        var oColumn = this._oColumnSet.keys[i];
-        var elCell = elRow.cells[i];
+    for(i=0,len=oColumnSet.keys.length; i<len; ++i) {
+        oColumn = oColumnSet.keys[i];
+        elCell = elRow.cells[i];
         var elCellLiner = elCell.firstChild;
+        elCellLiner.className = DT.CLASS_LINER;
         this.formatCell(elCellLiner, oRecord, oColumn);
+
+        elCell.yuiColumnKey = oColumn.getKey();
+        elCell.yuiColumnId = oColumn.getId();
+
+        elCell.headers = "";
+        for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
+            elCell.headers += this._sId + "-th" + oColumnSet.headers[i][j] + "-a11y ";
+        }
+
+        // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
+        elCell.yuiCellIndex = i;
+
+        // Set FIRST/LAST on TD
+        if (i === 0) {
+            Dom.addClass(elCell, DT.CLASS_FIRST);
+        }
+        else if (i === len-1) {
+            Dom.addClass(elCell, DT.CLASS_LAST);
+        }
 
         // Remove ASC/DESC
         Dom.removeClass(elCell, DT.CLASS_ASC);
@@ -1987,6 +2195,8 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
             Dom.addClass(elCell, sortClass);
         }
         
+        elCell.style.width = "";
+                    
         // Set width if given
         if(oColumn.width) {
             elCellLiner.style.width = oColumn.width + "px";
@@ -3541,10 +3751,8 @@ YAHOO.widget.DataTable.prototype.getTrIndex = function(row) {
  * DOM elements are reused when possible.
  *
  * @method initializeTable
- * @param oData {Object | Object[]} An object literal of data or an array of
- * object literals containing data.
  */
-YAHOO.widget.DataTable.prototype.initializeTable = function(oData) {
+YAHOO.widget.DataTable.prototype.initializeTable = function() {
     // Reset init flag
     this._bInit = true;
     
@@ -3712,7 +3920,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
             
             },
             scope: this
-        });     
+        }); 
         
         this._oChain.run();   
     }
@@ -3738,7 +3946,24 @@ YAHOO.widget.DataTable.prototype.render = function() {
 YAHOO.widget.DataTable.prototype.destroy = function() {
     this._oChain.stop();
     
-    //TODO: destroy resizer proxy and column proxy...
+    //TODO: destroy static resizer proxy and column proxy?
+    
+    var i;
+    // Destroy ColumnDDs
+    var aTree = this._oColumnSet.tree[0];
+    for(i=0; i<aTree.length; i++) {
+        if(aTree[i]._dd) {
+            aTree[i]._dd = aTree[i]._dd.unreg();
+        }
+    }
+
+    // Destroy ColumnResizers
+    var aKeys = this._oColumnSet.keys;
+    for(i=0; i<aKeys.length; i++) {
+        if(aKeys[i]._ddResizer) {
+            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
+        }
+    }
     
     // Destroy Cell Editor
     YAHOO.util.Event.purgeElement(this._oCellEditor.container, true);
@@ -3753,6 +3978,7 @@ YAHOO.widget.DataTable.prototype.destroy = function() {
 
     // Unhook DOM events
     YAHOO.util.Event.purgeElement(elContainer, true);
+    YAHOO.util.Event.removeListener(document, "click", this._onDocumentClick);
 
     // Remove DOM elements
     elContainer.innerHTML = "";
@@ -4198,8 +4424,10 @@ YAHOO.widget.DataTable.prototype._setColumnWidth = function(oColumn, sWidth) {
         var allrows = this.getTbodyEl().rows;
         var nMaxIndex = allrows.length;
         for(var i=0;i<nMaxIndex;i++) {
-            allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
-            allrows[i].cells[nColKeyIndex].style.width = sWidth;
+            if(allrows[i].cells[nColKeyIndex] && allrows[i].cells[nColKeyIndex].firstChild) {
+                allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
+                allrows[i].cells[nColKeyIndex].style.width = sWidth;
+            }
         }
         if(YAHOO.env.ua.opera && !this.get("scrollable")) {
             this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
@@ -4234,7 +4462,8 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth) {
         // Resize the DOM elements
         this._setColumnWidth(oColumn, sWidth);
         
-        YAHOO.log("Set width of Column " + oColumn + " to " + sWidth, "info", this.toString());
+        this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
+        YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
@@ -4298,6 +4527,7 @@ YAHOO.widget.DataTable.prototype.hideColumn = function(oColumn) {
                 
                 thisColumn.hidden = true;
                 this.fireEvent("columnHideEvent",{column:thisColumn});
+                YAHOO.log("Column \"" + oColumn.key + "\" hidden", "info", this.toString());
             }
         }
         else {
@@ -4351,7 +4581,7 @@ YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
                         YAHOO.util.Dom.removeClass(thisColumn.getThEl(),YAHOO.widget.DataTable.CLASS_SORTABLE);
                     }
                     if(thisColumn.resizeable) {
-                        thisColumn.ddResizer.resetResizerEl();
+                        thisColumn._ddResizer.resetResizerEl();
                         YAHOO.util.Dom.addClass(thisColumn.getResizerEl(),YAHOO.widget.DataTable.CLASS_RESIZER);
                     }
                 }
@@ -4363,6 +4593,7 @@ YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
                 thisColumn._nLastWidth = null;
                 thisColumn.hidden = false;
                 this.fireEvent("columnShowEvent",{column:thisColumn});
+                YAHOO.log("Column \"" + oColumn.key + "\" shown", "info", this.toString());
             }
         }
         else {
@@ -4383,13 +4614,16 @@ YAHOO.widget.DataTable.prototype.showColumn = function(oColumn) {
 YAHOO.widget.DataTable.prototype.removeColumn = function(oColumn) {
     var nColTreeIndex = oColumn.getTreeIndex();
     if(nColTreeIndex !== null) {
+        this._oChain.stop();
         var aOrigColumnDefs = this._oColumnSet.getDefinitions();
 
         oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
         this._initColumnSet(aOrigColumnDefs);
+        //this._initTableEl();
+        this._initTheadEls();
 
-        this._initTableEl();
         this.render();
+        this.fireEvent("columnRemoveEvent",{column:oColumn});
         YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
         return oColumn;
     }
@@ -4420,16 +4654,18 @@ YAHOO.widget.DataTable.prototype.insertColumn = function(oColumn, index) {
 
     // Validate index
     if(!YAHOO.lang.isValue(index) || !YAHOO.lang.isNumber(index)) {
-        index = oColumnSet.keys.length;
+        index = oColumnSet.tree[0].length;
     }
     
+    this._oChain.stop();
     var aNewColumnDefs = this._oColumnSet.getDefinitions();
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
-
-    this._initTableEl();
+    //this._initTableEl();
+    this._initTheadEls();
     this.render();
-    YAHOO.log("Column \"" + oColumn.key + "\" inserted", "info", this.toString());
+    this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
+    YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
 };
 
 
@@ -8478,7 +8714,7 @@ YAHOO.widget.DataTable.prototype.onEventCancelCellEditor = function(oArgs) {
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
 YAHOO.widget.DataTable.prototype.onDataReturnInitializeTable = function(sRequest, oResponse, oPayload) {
-    this.initializeTable(oResponse.results);
+    this.initializeTable();
 
     this.onDataReturnSetRecordData(sRequest,oResponse,oPayload);
 };
@@ -8935,7 +9171,15 @@ YAHOO.widget.DataTable.prototype._handleDataReturnPayload = function (oRequest, 
      */
 
     /**
-     * Fired when a column is resized.
+     * Fired when a column width is set.
+     *
+     * @event columnSetWidthEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     * @param oArgs.width {Number} The width in pixels.
+     */
+
+    /**
+     * Fired when a column is drag-resized.
      *
      * @event columnResizeEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
@@ -8954,6 +9198,21 @@ YAHOO.widget.DataTable.prototype._handleDataReturnPayload = function (oRequest, 
      *
      * @event columnShowEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     */
+
+    /**
+     * Fired when a column is removed.
+     *
+     * @event columnRemoveEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     */
+
+    /**
+     * Fired when a column is inserted.
+     *
+     * @event columnInsertEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     * @param oArgs.index {Number} The index position.
      */
 
     /**
