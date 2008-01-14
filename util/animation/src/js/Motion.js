@@ -13,7 +13,7 @@
  * @requires YAHOO.util.Event
  * @requires YAHOO.util.CustomEvent 
  * @constructor
- * @extends YAHOO.util.Anim
+ * @extends YAHOO.util.ColorAnim
  * @param {String | HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
  * Each attribute is an object with at minimum a "to" or "by" member defined.  
@@ -22,25 +22,22 @@
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-    YAHOO.util.Motion = function(el, attributes, duration,  method) {
+    var Motion = function(el, attributes, duration,  method) {
         if (el) { // dont break existing subclasses not using YAHOO.extend
-            YAHOO.util.Motion.superclass.constructor.call(this, el, attributes, duration, method);
+            Motion.superclass.constructor.call(this, el, attributes, duration, method);
         }
     };
 
-    YAHOO.extend(YAHOO.util.Motion, YAHOO.util.ColorAnim);
-    
+
+    Motion.NAME = 'Motion';
+
     // shorthand
     var Y = YAHOO.util;
-    var superclass = Y.Motion.superclass;
-    var proto = Y.Motion.prototype;
-
-    proto.toString = function() {
-        var el = this.getEl();
-        var id = el.id || el.tagName;
-        return ("Motion " + id);
-    };
+    YAHOO.extend(Motion, Y.ColorAnim);
     
+    var superclass = Motion.superclass;
+    var proto = Motion.prototype;
+
     proto.patterns.points = /^points$/i;
     
     proto.setAttribute = function(attr, val, unit) {
@@ -149,4 +146,6 @@
     var isset = function(prop) {
         return (typeof prop !== 'undefined');
     };
+
+    Y.Motion = Motion;
 })();

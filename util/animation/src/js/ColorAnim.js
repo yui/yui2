@@ -21,23 +21,19 @@
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-    YAHOO.util.ColorAnim = function(el, attributes, duration,  method) {
-        YAHOO.util.ColorAnim.superclass.constructor.call(this, el, attributes, duration, method);
+    var ColorAnim = function(el, attributes, duration,  method) {
+        ColorAnim.superclass.constructor.call(this, el, attributes, duration, method);
     };
     
-    YAHOO.extend(YAHOO.util.ColorAnim, YAHOO.util.Anim);
-    
+    ColorAnim.NAME = 'ColorAnim';
+
     // shorthand
     var Y = YAHOO.util;
-    var superclass = Y.ColorAnim.superclass;
-    var proto = Y.ColorAnim.prototype;
-    
-    proto.toString = function() {
-        var el = this.getEl();
-        var id = el.id || el.tagName;
-        return ("ColorAnim " + id);
-    };
+    YAHOO.extend(ColorAnim, Y.Anim);
 
+    var superclass = ColorAnim.superclass;
+    var proto = ColorAnim.prototype;
+    
     proto.patterns.color = /color$/i;
     proto.patterns.rgb            = /^rgb\(([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)\)$/i;
     proto.patterns.hex            = /^#?([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})$/i;
@@ -133,4 +129,6 @@
             this.runtimeAttributes[attr].end = end;
         }
     };
+
+    Y.ColorAnim = ColorAnim;
 })();

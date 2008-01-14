@@ -1,3 +1,7 @@
+(function() {
+
+var Y = YAHOO.util;
+
 /*
 Copyright (c) 2006, Yahoo! Inc. All rights reserved.
 Code licensed under the BSD License:
@@ -31,23 +35,25 @@ http://developer.yahoo.net/yui/license.txt
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
 
-YAHOO.util.Anim = function(el, attributes, duration, method) {
+var Anim = function(el, attributes, duration, method) {
     if (!el) {
         YAHOO.log('element required to create Anim instance', 'error', 'Anim');
     }
     this.init(el, attributes, duration, method); 
 };
 
-YAHOO.util.Anim.prototype = {
+Anim.NAME = 'Anim';
+
+Anim.prototype = {
     /**
      * Provides a readable name for the Anim instance.
      * @method toString
      * @return {String}
      */
     toString: function() {
-        var el = this.getEl();
-        var id = el.id || el.tagName || el;
-        return ("Anim " + id);
+        var el = this.getEl() || {};
+        var id = el.id || el.tagName;
+        return (this.constructor.NAME + ': ' + id);
     },
     
     patterns: { // cached for performance
@@ -81,7 +87,7 @@ YAHOO.util.Anim.prototype = {
             val = (val > 0) ? val : 0;
         }
 
-        YAHOO.util.Dom.setStyle(this.getEl(), attr, val + unit);
+        Y.Dom.setStyle(this.getEl(), attr, val + unit);
     },                        
     
     /**
@@ -92,7 +98,7 @@ YAHOO.util.Anim.prototype = {
      */
     getAttribute: function(attr) {
         var el = this.getEl();
-        var val = YAHOO.util.Dom.getStyle(el, attr);
+        var val = Y.Dom.getStyle(el, attr);
 
         if (val !== 'auto' && !this.patterns.offsetUnit.test(val)) {
             return parseFloat(val);
@@ -103,7 +109,7 @@ YAHOO.util.Anim.prototype = {
         var box = !!( a[2] ); // width or height
         
         // use offsets for width/height and abs pos top/left
-        if ( box || (YAHOO.util.Dom.getStyle(el, 'position') == 'absolute' && pos) ) {
+        if ( box || (Y.Dom.getStyle(el, 'position') == 'absolute' && pos) ) {
             val = el['offset' + a[0].charAt(0).toUpperCase() + a[0].substr(1)];
         } else { // default to zero for other 'auto'
             val = 0;
@@ -214,7 +220,7 @@ YAHOO.util.Anim.prototype = {
          * @private
          * @type HTMLElement
          */
-        el = YAHOO.util.Dom.get(el);
+        el = Y.Dom.get(el);
         
         /**
          * The collection of attributes to be animated.  
@@ -241,7 +247,7 @@ YAHOO.util.Anim.prototype = {
          * @property method
          * @type Function
          */
-        this.method = method || YAHOO.util.Easing.easeNone;
+        this.method = method || Y.Easing.easeNone;
 
         /**
          * Whether or not the duration should be treated as seconds.
@@ -265,14 +271,14 @@ YAHOO.util.Anim.prototype = {
          * @property totalFrames
          * @type Int
          */
-        this.totalFrames = YAHOO.util.AnimMgr.fps;
+        this.totalFrames = Y.AnimMgr.fps;
         
         /**
          * Changes the animated element
          * @method setEl
          */
         this.setEl = function(element) {
-            el = YAHOO.util.Dom.get(element);
+            el = Y.Dom.get(element);
         };
         
         /**
@@ -318,12 +324,12 @@ YAHOO.util.Anim.prototype = {
             
             this.currentFrame = 0;
             
-            this.totalFrames = ( this.useSeconds ) ? Math.ceil(YAHOO.util.AnimMgr.fps * this.duration) : this.duration;
+            this.totalFrames = ( this.useSeconds ) ? Math.ceil(Y.AnimMgr.fps * this.duration) : this.duration;
     
             if (this.duration === 0 && this.useSeconds) { // jump to last frame if zero second duration 
                 this.totalFrames = 1; 
             }
-            YAHOO.util.AnimMgr.registerElement(this);
+            Y.AnimMgr.registerElement(this);
             return true;
         };
           
@@ -341,7 +347,7 @@ YAHOO.util.Anim.prototype = {
                  this.currentFrame = this.totalFrames;
                  this._onTween.fire();
             }
-            YAHOO.util.AnimMgr.stop(this);
+            Y.AnimMgr.stop(this);
         };
         
         var onStart = function() {            
@@ -412,39 +418,39 @@ YAHOO.util.Anim.prototype = {
          * Custom event that fires after onStart, useful in subclassing
          * @private
          */    
-        this._onStart = new YAHOO.util.CustomEvent('_start', this, true);
+        this._onStart = new Y.CustomEvent('_start', this, true);
 
         /**
          * Custom event that fires when animation begins
          * Listen via subscribe method (e.g. myAnim.onStart.subscribe(someFunction)
          * @event onStart
          */    
-        this.onStart = new YAHOO.util.CustomEvent('start', this);
+        this.onStart = new Y.CustomEvent('start', this);
         
         /**
          * Custom event that fires between each frame
          * Listen via subscribe method (e.g. myAnim.onTween.subscribe(someFunction)
          * @event onTween
          */
-        this.onTween = new YAHOO.util.CustomEvent('tween', this);
+        this.onTween = new Y.CustomEvent('tween', this);
         
         /**
          * Custom event that fires after onTween
          * @private
          */
-        this._onTween = new YAHOO.util.CustomEvent('_tween', this, true);
+        this._onTween = new Y.CustomEvent('_tween', this, true);
         
         /**
          * Custom event that fires when animation ends
          * Listen via subscribe method (e.g. myAnim.onComplete.subscribe(someFunction)
          * @event onComplete
          */
-        this.onComplete = new YAHOO.util.CustomEvent('complete', this);
+        this.onComplete = new Y.CustomEvent('complete', this);
         /**
          * Custom event that fires after onComplete
          * @private
          */
-        this._onComplete = new YAHOO.util.CustomEvent('_complete', this, true);
+        this._onComplete = new Y.CustomEvent('_complete', this, true);
 
         this._onStart.subscribe(onStart);
         this._onTween.subscribe(onTween);
@@ -452,3 +458,5 @@ YAHOO.util.Anim.prototype = {
     }
 };
 
+    Y.Anim = Anim;
+})();
