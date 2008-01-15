@@ -2195,6 +2195,7 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
             Dom.addClass(elCell, sortClass);
         }
         
+        elCellLiner.style.width = "";
         elCell.style.width = "";
                     
         // Set width if given
@@ -3422,7 +3423,7 @@ YAHOO.widget.DataTable.prototype.getTdEl = function(cell) {
             return elCell;
         }
     }
-    else {
+    else if(cell) {
         var oRecord, nColKeyIndex;
 
         if(YAHOO.lang.isString(cell.columnId) && YAHOO.lang.isString(cell.recordId)) {
@@ -4433,6 +4434,9 @@ YAHOO.widget.DataTable.prototype._setColumnWidth = function(oColumn, sWidth) {
             this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
             document.body.style += '';
         }
+
+        // Save state
+        oColumn.width = parseInt(sWidth,10);
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
@@ -4456,8 +4460,9 @@ YAHOO.widget.DataTable.prototype.setColumnWidth = function(oColumn, nWidth) {
             sWidth = (nWidth > oColumn.minWidth) ? nWidth + "px" : oColumn.minWidth + "px";
         }
 
+        // Note: Now saving in _setColumnWidth
         // Save state
-        oColumn.width = parseInt(sWidth,10);
+        //oColumn.width = parseInt(sWidth,10);
         
         // Resize the DOM elements
         this._setColumnWidth(oColumn, sWidth);

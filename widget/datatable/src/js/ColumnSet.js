@@ -1079,6 +1079,10 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
         this.newIndex = null;
         this.init(elTh);
         this.initFrame(); // Needed for DDProxy
+
+        //Set padding to account for children of nested columns
+        this.setPadding(10, 25, (this.datatable.getTheadEl().offsetHeight + 10) , 25);
+    
     }
     else {
         YAHOO.log("Column dragdrop could not be created","warn");
@@ -1105,8 +1109,7 @@ if(YAHOO.util.DDProxy) {
             //Set the constraints based on the above calculations
             this.setXConstraint(left, right);
             this.setYConstraint(10, 10);
-            this.setPadding(0, 25, (this.table.parentNode.offsetHeight + 10) , 25);
-    
+            
             YAHOO.util.Event.on(window, 'resize', function() {
                 this.initConstraints();
             }, this, true);
@@ -1127,6 +1130,14 @@ if(YAHOO.util.DDProxy) {
         },
         onMouseDown: function() {
                 this.initConstraints();
+        },
+        clickValidator: function(e) {
+            if(!this.column.hidden) {
+                var target = YAHOO.util.Event.getTarget(e);
+                return ( this.isValidHandleChild(target) &&
+                            (this.id == this.handleElId ||
+                                this.DDM.handleWasClicked(target, this.id)) );
+            }
         },
         onDragOver: function(ev, id) {
             var target = this.datatable.getColumn(id),
@@ -1157,14 +1168,13 @@ if(YAHOO.util.DDProxy) {
             this.newIndex = newIndex;
         },
         onDragDrop: function() {
-            if(this.newIndex && (this.newIndex !== this.column.getTreeIndex())) {
+            if(YAHOO.lang.isNumber(this.newIndex) && (this.newIndex !== this.column.getTreeIndex())) {
                 var oDataTable = this.datatable;
                 oDataTable._oChain.stop();
                 var aColumnDefs = oDataTable._oColumnSet.getDefinitions();
                 var oColumn = aColumnDefs.splice(this.column.getTreeIndex(),1)[0];
                 aColumnDefs.splice(this.newIndex, 0, oColumn);
                 oDataTable._initColumnSet(aColumnDefs);
-                //oDataTable._initTableEl();
                 oDataTable._initTheadEls();
                 oDataTable.render();
             }
