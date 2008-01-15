@@ -1081,7 +1081,7 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
         this.initFrame(); // Needed for DDProxy
 
         //Set padding to account for children of nested columns
-        this.setPadding(10, 25, (this.datatable.getTheadEl().offsetHeight + 10) , 25);
+        this.setPadding(10, 0, (this.datatable.getTheadEl().offsetHeight + 10) , 0);
     
     }
     else {
@@ -1124,12 +1124,13 @@ if(YAHOO.util.DDProxy) {
             var xy = YAHOO.util.Dom.getXY(el);
             YAHOO.util.Dom.setXY(this.pointer, [xy[0], (xy[1] - 5)]);
             
-            YAHOO.util.Dom.setStyle(dragEl, 'height', YAHOO.util.Dom.getStyle(this.datatable.getContainerEl(), 'height'));
+            YAHOO.util.Dom.setStyle(dragEl, 'height', this.datatable.getContainerEl().offsetHeight + "px");
             YAHOO.util.Dom.setStyle(dragEl, 'width', (parseInt(YAHOO.util.Dom.getStyle(dragEl, 'width'),10) + 4) + 'px');
             YAHOO.util.Dom.setXY(this.dragEl, xy);
         },
         onMouseDown: function() {
                 this.initConstraints();
+                this.resetConstraints();
         },
         clickValidator: function(e) {
             if(!this.column.hidden) {

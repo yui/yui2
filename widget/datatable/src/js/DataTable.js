@@ -1428,6 +1428,7 @@ YAHOO.widget.DataTable.prototype._initConfigs = function(oConfigs) {
 YAHOO.widget.DataTable.prototype._initColumnSet = function(aColumnDefs) {
     this._oColumnSet = null;
     if(YAHOO.lang.isArray(aColumnDefs)) {
+        aColumnDefs = aColumnDefs.slice();
         this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
     }
     // Backward compatibility
