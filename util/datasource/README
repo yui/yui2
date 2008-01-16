@@ -1,6 +1,9 @@
 DataSource Release Notes
 
-**** version 2.4.0 ***
+**** version 2.5.0 ****
+
+
+**** version 2.4.0 ****
 
 * Support for YUI JSON Utility.
 
@@ -10,7 +13,7 @@ DataSource Release Notes
 
 
 
-**** version 2.3.1 ***
+**** version 2.3.1 ****
 
 * No changes.
 

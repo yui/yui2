@@ -95,18 +95,18 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
      * @event cacheRequestEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.callback {Function} The callback function.
-     * @param oArgs.caller {Object} The parent object of the callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("cacheRequestEvent");
 
     /**
      * Fired when data is retrieved from the local cache.
      *
-     * @event getCachedResponseEvent
+     * @event cacheResponseEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The response object.
      * @param oArgs.callback {Function} The callback function.
-     * @param oArgs.caller {Object} The parent object of the callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      * @param oArgs.tId {Number} Transaction ID.
      */
     this.createEvent("cacheResponseEvent");
@@ -117,7 +117,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
      * @event requestEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.callback {Function} The callback function.
-     * @param oArgs.caller {Object} The parent object of the callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("requestEvent");
 
@@ -128,7 +128,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The raw response object.
      * @param oArgs.callback {Function} The callback function.
-     * @param oArgs.caller {Object} The parent object of the callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("responseEvent");
 
@@ -139,7 +139,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The parsed response object.
      * @param oArgs.callback {Function} The callback function.
-     * @param oArgs.caller {Object} The parent object of the callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("responseParseEvent");
 
@@ -150,7 +150,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
      * @param oArgs.request {Object} The request object.
      * @param oArgs.response {Object} The parsed response object.
      * @param oArgs.callback {Function} The callback function.
-     * @param oArgs.caller {Object} The parent object of the callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      */
     this.createEvent("responseCacheEvent");
     /**
@@ -159,7 +159,7 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
      * @event dataErrorEvent
      * @param oArgs.request {Object} The request object.
      * @param oArgs.callback {Function} The callback function.
-     * @param oArgs.caller {Object} The parent object of the callback function.
+     * @param oArgs.caller {Object} (deprecated) Use callback.scope.
      * @param oArgs.message {String} The error message.
      */
     this.createEvent("dataErrorEvent");
@@ -716,7 +716,7 @@ YAHOO.util.DataSource.prototype.flushCache = function() {
  * @param nMsec {Number} Length of interval in milliseconds.
  * @param oRequest {Object} Request object.
  * @param oCallback {Function} Handler function to receive the response.
- * @param oCaller {Object} The Calling object that is making the request.
+ * @param oCaller {Object} (deprecated) Use oCallback.scope.
  * @return {Number} Interval ID.
  */
 YAHOO.util.DataSource.prototype.setInterval = function(nMsec, oRequest, oCallback, oCaller) {
@@ -770,12 +770,12 @@ YAHOO.util.DataSource.prototype.clearAllIntervals = function(nId) {
  * param determines whether to execute the success handler or failure handler.
  * @method issueCallback
  * @param callback {Function|Object} the callback to execute
- * @param scope {Object} the scope from which to execute the callback
- * (deprecated - use an object literal callback)
  * @param params {Array} params to be passed to the callback method
  * @param error {Boolean} whether an error occurred
+ * @param scope {Object} the scope from which to execute the callback
+ * (deprecated - use an object literal callback)
  */
-YAHOO.util.DataSource.issueCallback = function (callback,scope,params,error) {
+YAHOO.util.DataSource.issueCallback = function (callback,params,error,scope) {
     if (YAHOO.lang.isFunction(callback)) {
         callback.apply(scope, params);
     } else if (YAHOO.lang.isObject(callback)) {
@@ -795,17 +795,15 @@ YAHOO.util.DataSource.issueCallback = function (callback,scope,params,error) {
  *
  * @method sendRequest
  * @param oRequest {Object} Request object.
- * @param oCallback {Object|Function} Handler function to receive the response.
- * @param oCaller {Object} The Calling object that is making the request.
- * (parameter deprecated. Use object literal param, populating key 'scope'.
+ * @param oCallback {Object} Callback object literal.
+ * @param oCaller {Object} (deprecated) Use oCallback.scope.
  * @return {Number} Transaction ID, or null if response found in cache.
  */
 YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCaller) {
     // First look in cache
     var oCachedResponse = this.getCachedResponse(oRequest, oCallback, oCaller);
     if(oCachedResponse) {
-        YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,oCachedResponse],false);
-
+        YAHOO.util.DataSource.issueCallback(oCallback,[oRequest,oCachedResponse],false,oCaller);
         return null;
     }
 
@@ -822,8 +820,8 @@ YAHOO.util.DataSource.prototype.sendRequest = function(oRequest, oCallback, oCal
  *
  * @method makeConnection
  * @param oRequest {Object} Request object.
- * @param oCallback {Function} Handler function to receive the response.
- * @param oCaller {Object} The Calling object that is making the request.
+ * @param oCallback {Object} Callback object literal.
+ * @param oCaller {Object} (deprecated) Use oCallback.scope.
  * @return {Number} Transaction ID.
  */
 YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, oCaller) {
@@ -873,7 +871,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 
                     // Send error response back to the caller with the error flag on
                     // TODO: should this send oResponse, considering the fork?
-                    YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest, {error:true}], true);
+                    YAHOO.util.DataSource.issueCallback(oCallback,[oRequest, {error:true}], true, oCaller);
 
                     return null;
                 }
@@ -908,7 +906,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
                 // Send failure response back to the caller with the error flag on
                 oResponse = oResponse || {};
                 oResponse.error = true;
-                YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,oResponse],true);
+                YAHOO.util.DataSource.issueCallback(oCallback,[oRequest,oResponse],true, oCaller);
 
                 return null;
             };
@@ -1000,7 +998,7 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
             else {
                 YAHOO.log("Could not find Connection Manager asyncRequest() function", "error", this.toString());
                 // Send null response back to the caller with the error flag on
-                YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,{error:true}],true);
+                YAHOO.util.DataSource.issueCallback(oCallback,[oRequest,{error:true}],true,oCaller);
             }
 
             break;
@@ -1031,13 +1029,14 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
  *     <li>tId {Number} Unique transaction ID</li>
  *     <li>results {Array} Array of parsed data results</li>
  *     <li>error {Boolean} True if there was an error</li>
+ *     <li>totalRecords (Number) Total number of records (if available)</li> 
  * </ul>
  *
  * @method handleResponse
  * @param oRequest {Object} Request object
  * @param oRawResponse {Object} The raw response from the live database.
- * @param oCallback {Function} Handler function to receive the response.
- * @param oCaller {Object} The calling object that is making the request.
+ * @param oCallback {Object} Callback object literal.
+ * @param oCaller {Object} (deprecated) Use oCallback.scope.
  * @param tId {Number} Transaction ID.
  */
 YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse, oCallback, oCaller, tId) {
@@ -1157,7 +1156,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     }
 
     // Send the response back to the caller
-    YAHOO.util.DataSource.issueCallback(oCallback,oCaller,[oRequest,oParsedResponse],oParsedResponse.error);
+    YAHOO.util.DataSource.issueCallback(oCallback,[oRequest,oParsedResponse],oParsedResponse.error,oCaller);
 };
 
 /**
