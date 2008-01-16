@@ -142,7 +142,7 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if (el && (el.tagName || el.item)) { // HTMLElement, or HTMLCollection
+            if (el && (el.nodeName || el.item)) { // HTMLElement, or HTMLCollection
                 return el;
             }
 
@@ -441,7 +441,7 @@
             var re = getClassRegEx(className);
             
             var f = function(el) {
-                if (!this.hasClass(el, className)) {
+                if (!className || !this.hasClass(el, className)) {
                     return false; // not present
                 }                 
 
