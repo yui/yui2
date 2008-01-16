@@ -452,7 +452,7 @@
             var re = getClassRegEx(className);
             
             var f = function(el) {
-                if (!this.hasClass(el, className)) {
+                if (!className || !this.hasClass(el, className)) {
                     return false; // not present
                 }                 
 
