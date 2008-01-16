@@ -96,12 +96,9 @@ YAHOO.extend(YAHOO.util.DD, YAHOO.util.DragDrop, {
         } else {
             YAHOO.util.Dom.setStyle(el, "left", (oCoord.x + this.deltaSetXY[0]) + "px");
             YAHOO.util.Dom.setStyle(el, "top",  (oCoord.y + this.deltaSetXY[1]) + "px");
-            //el.style.left = (oCoord.x + this.deltaSetXY[0]) + "px";
-            //el.style.top = (oCoord.y + this.deltaSetXY[1]) + "px";
         }
         
         this.cachePosition(oCoord.x, oCoord.y);
-        //DAV
         var self = this;
         setTimeout(function() {
             self.autoScroll.call(self, oCoord.x, oCoord.y, el.offsetHeight, el.offsetWidth);

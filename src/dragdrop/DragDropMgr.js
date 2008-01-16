@@ -27,7 +27,6 @@ YAHOO.util.DragDropMgr = function() {
     var Event = YAHOO.util.Event;
 
     return {
-
         /**
          * Two dimensional Array of registered DragDrop objects.  The first 
          * dimension is the DragDrop item group, the second the DragDrop 
@@ -570,11 +569,13 @@ YAHOO.util.DragDropMgr = function() {
             YAHOO.log("firing drag start events", "info", "DragDropMgr");
             clearTimeout(this.clickTimeout);
             var dc = this.dragCurrent;
-            if (dc) {
+            if (dc && dc.events.b4StartDrag) {
                 dc.b4StartDrag(x, y);
+                dc.b4StartDragEvent.fire({ x: x, y: y });
             }
-            if (dc) {
+            if (dc && dc.events.startDrag) {
                 dc.startDrag(x, y);
+                dc.startDragEvent.fire({ x: x, y: y });
             }
             this.dragThreshMet = true;
         },
@@ -594,7 +595,7 @@ YAHOO.util.DragDropMgr = function() {
                 if (this.dragThreshMet) {
                     YAHOO.log("mouseup detected - completing drag", "info", "DragDropMgr");
                     if (this.fromTimeout) {
-                        YAHOO.log('fromTimeout is true (mouse didn\'t move), call handleMouseDown so we can get the dragOver event', 'info', 'DragDropMgr');
+                        YAHOO.log('fromTimeout is true (mouse didn\'t move), call handleMouseMove so we can get the dragOver event', 'info', 'DragDropMgr');
                         this.handleMouseMove(e);
                     }
                     this.fromTimeout = false;
@@ -645,17 +646,25 @@ YAHOO.util.DragDropMgr = function() {
          */
         stopDrag: function(e, silent) {
             // YAHOO.log("mouseup - removing event handlers");
-
+            var dc = this.dragCurrent;
             // Fire the drag end event for the item that was dragged
-            if (this.dragCurrent && !silent) {
+            if (dc && !silent) {
                 if (this.dragThreshMet) {
                     YAHOO.log("firing endDrag events", "info", "DragDropMgr");
-                    this.dragCurrent.b4EndDrag(e);
-                    this.dragCurrent.endDrag(e);
+                    if (dc.events.b4EndDrag) {
+                        dc.b4EndDrag(e);
+                        dc.b4EndDragEvent.fire({ e: e });
+                    }
+                    if (dc.events.endDrag) {
+                        dc.endDrag(e);
+                        dc.endDragEvent.fire({ e: e });
+                    }
                 }
-
-                YAHOO.log("firing dragdrop onMouseUp event", "info", "DragDropMgr");
-                this.dragCurrent.onMouseUp(e);
+                if (dc.events.mouseUp) {
+                    YAHOO.log("firing dragdrop onMouseUp event", "info", "DragDropMgr");
+                    dc.onMouseUp(e);
+                    dc.mouseUpEvent.fire({ e: e });
+                }
             }
 
             this.dragCurrent = null;
@@ -691,6 +700,14 @@ YAHOO.util.DragDropMgr = function() {
                     YAHOO.log("button failure", "info", "DragDropMgr");
                     this.stopEvent(e);
                     return this.handleMouseUp(e);
+                } else {
+                    if (e.clientX < 0 || e.clientY < 0) {
+                        //This will stop the element from leaving the viewport in FF, Opera & Safari
+                        //Not turned on yet
+                        //YAHOO.log("Either clientX or clientY is negative, stop the event.", "info", "DragDropMgr");
+                        //this.stopEvent(e);
+                        //return false;
+                    }
                 }
 
                 if (!this.dragThreshMet) {
@@ -705,9 +722,13 @@ YAHOO.util.DragDropMgr = function() {
                 }
 
                 if (this.dragThreshMet) {
-                    dc.b4Drag(e);
-                    if (dc) {
+                    if (dc && dc.events.b4Drag) {
+                        dc.b4Drag(e);
+                        dc.b4DragEvent.fire({ e: e});
+                    }
+                    if (dc && dc.events.drag) {
                         dc.onDrag(e);
+                        dc.dragEvent.fire({ e: e});
                     }
                     if (dc) {
                         this.fireEvents(e, false);
@@ -742,18 +763,21 @@ YAHOO.util.DragDropMgr = function() {
                 pt = new YAHOO.util.Point(x,y),
                 pos = dc.getTargetCoord(pt.x, pt.y),
                 el = dc.getDragEl(),
+                events = ['out', 'over', 'drop', 'enter'],
                 curRegion = new YAHOO.util.Region( pos.y, 
                                                pos.x + el.offsetWidth,
                                                pos.y + el.offsetHeight, 
                                                pos.x ),
             
                 oldOvers = [], // cache the previous dragOver array
-                outEvts   = [],
-                overEvts  = [],
-                dropEvts  = [],
-                enterEvts = [],
                 inGroupsObj  = {},
-                inGroups  = [];
+                inGroups  = [],
+                data = {
+                    outEvts: [],
+                    overEvts: [],
+                    dropEvts: [],
+                    enterEvts: []
+                };
 
 
             // Check to see if the object(s) we were hovering over is no longer 
@@ -766,7 +790,7 @@ YAHOO.util.DragDropMgr = function() {
                     continue;
                 }
                 if (! this.isOverTarget(pt, ddo, this.mode, curRegion)) {
-                    outEvts.push( ddo );
+                    data.outEvts.push( ddo );
                 }
 
                 oldOvers[i] = true;
@@ -791,16 +815,16 @@ YAHOO.util.DragDropMgr = function() {
                             inGroupsObj[sGroup] = true;
                             // look for drop interactions
                             if (isDrop) {
-                                dropEvts.push( oDD );
+                                data.dropEvts.push( oDD );
                             // look for drag enter and drag over interactions
                             } else {
 
                                 // initial drag over: dragEnter fires
                                 if (!oldOvers[oDD.id]) {
-                                    enterEvts.push( oDD );
+                                    data.enterEvts.push( oDD );
                                 // subsequent drag overs: dragOver fires
                                 } else {
-                                    overEvts.push( oDD );
+                                    data.overEvts.push( oDD );
                                 }
 
                                 this.dragOvers[oDD.id] = oDD;
@@ -811,10 +835,10 @@ YAHOO.util.DragDropMgr = function() {
             }
 
             this.interactionInfo = {
-                out:       outEvts,
-                enter:     enterEvts,
-                over:      overEvts,
-                drop:      dropEvts,
+                out:       data.outEvts,
+                enter:     data.enterEvts,
+                over:      data.overEvts,
+                drop:      data.dropEvts,
                 point:     pt,
                 draggedRegion:    curRegion,
                 sourceRegion: this.locationCache[dc.id],
@@ -827,95 +851,51 @@ YAHOO.util.DragDropMgr = function() {
             }
 
             // notify about a drop that did not find a target
-            if (isDrop && !dropEvts.length) {
+            if (isDrop && !data.dropEvts.length) {
                 YAHOO.log(dc.id + " dropped, but not on a target", "info", "DragDropMgr");
                 this.interactionInfo.validDrop = false;
-                dc.onInvalidDrop(e);
+                if (dc.events.invalidDrop) {
+                    dc.onInvalidDrop(e);
+                    dc.invalidDropEvent.fire({ e: e });
+                }
             }
 
+            for (i = 0; i < events.length; i++) {
+                var tmp = null;
+                if (data[events[i] + 'Evts']) {
+                    tmp = data[events[i] + 'Evts'];
+                }
+                if (tmp && tmp.length) {
+                    var type = events[i].charAt(0).toUpperCase() + events[i].substr(1),
+                        ev = 'onDrag' + type,
+                        b4 = 'b4Drag' + type,
+                        cev = 'drag' + type + 'Event',
+                        check = 'drag' + type;
 
-            if (this.mode) {
-                if (outEvts.length) {
-                    YAHOO.log(dc.id+" onDragOut: " + outEvts, "info", "DragDropMgr");
-                    dc.b4DragOut(e, outEvts);
-                    if (dc) {
-                        dc.onDragOut(e, outEvts);
+                    if (this.mode) {
+                        YAHOO.log(dc.id + ' ' + ev + ': ' + tmp, "info", "DragDropMgr");
+                        if (dc.events[b4]) {
+                            dc[b4](e, tmp, inGroups);
+                            dc[b4 + 'Event'].fire({ event: e, info: tmp, group: inGroups });
+                        }
+                        if (dc.events[check]) {
+                            dc[ev](e, tmp, inGroups);
+                            dc[cev].fire({ event: e, info: tmp, group: inGroups });
+                        }
+                    } else {
+                        for (var b = 0, len = tmp.length; b < len; ++b) {
+                            YAHOO.log(dc.id + ' ' + ev + ': ' + tmp[b].id, "info", "DragDropMgr");
+                            if (dc.events[b4]) {
+                                dc[b4](e, tmp[b].id, inGroups[0]);
+                                dc[b4 + 'Event'].fire({ event: e, info: tmp[b].id, group: inGroups[0] });
+                            }
+                            if (dc.events[check]) {
+                                dc[ev](e, tmp[b].id, inGroups[0]);
+                                dc[cev].fire({ event: e, info: tmp[b].id, group: inGroups[0] });
+                            }
+                        }
                     }
                 }
-
-                if (enterEvts.length) {
-                    YAHOO.log(dc.id+" onDragEnter: " + enterEvts + " (group: " + inGroups + ")", "info", "DragDropMgr");
-                    if (dc) {
-                        dc.onDragEnter(e, enterEvts, inGroups);
-                    }
-                }
-
-                if (overEvts.length) {
-                    YAHOO.log(dc.id+" onDragOver: " + overEvts + " (group: " + inGroups + ")", "info", "DragDropMgr");
-                    if (dc) {
-                        dc.b4DragOver(e, overEvts, inGroups);
-                    }
-
-                    if (dc) {
-                        dc.onDragOver(e, overEvts, inGroups);
-                    }
-                }
-
-                if (dropEvts.length) {
-                    YAHOO.log(dc.id+" onDragDrop: " + dropEvts + " (group: " + inGroups + ")", "info", "DragDropMgr");
-                    if (dc) {
-                        dc.b4DragDrop(e, dropEvts, inGroups);
-                    }
-                    if (dc) {
-                        dc.onDragDrop(e, dropEvts, inGroups);
-                    }
-                }
-
-            } else {
-                // fire dragout events
-                var len = 0;
-                for (i=0, len=outEvts.length; i<len; ++i) {
-                    YAHOO.log(dc.id+" onDragOut: " + outEvts[i].id, "info", "DragDropMgr");
-                    if (dc) {
-                        dc.b4DragOut(e, outEvts[i].id, inGroups[0]);
-                    }
-                    if (dc) {
-                        dc.onDragOut(e, outEvts[i].id, inGroups[0]);
-                    }
-                }
-                 
-                // fire enter events
-                for (i=0,len=enterEvts.length; i<len; ++i) {
-                    YAHOO.log(dc.id + " onDragEnter " + enterEvts[i].id + " (group: " + inGroups + ")", "info", "DragDropMgr");
-                    // dc.b4DragEnter(e, oDD.id);
-
-                    if (dc) {
-                        dc.onDragEnter(e, enterEvts[i].id, inGroups[0]);
-                    }
-                }
-         
-                // fire over events
-                for (i=0,len=overEvts.length; i<len; ++i) {
-                    YAHOO.log(dc.id + " onDragOver " + overEvts[i].id + " (group: " + inGroups + ")", "info", "DragDropMgr");
-                    if (dc) {
-                        dc.b4DragOver(e, overEvts[i].id, inGroups[0]);
-                    }
-                    if (dc) {
-                        dc.onDragOver(e, overEvts[i].id, inGroups[0]);
-                    }
-                }
-
-                // fire drop events
-                for (i=0, len=dropEvts.length; i<len; ++i) {
-                    YAHOO.log(dc.id + " dropped on " + dropEvts[i].id + " (group: " + inGroups + ")", "info", "DragDropMgr");
-                    if (dc) {
-                        dc.b4DragDrop(e, dropEvts[i].id, inGroups[0]);
-                    }
-                    if (dc) {
-                        dc.onDragDrop(e, dropEvts[i].id, inGroups[0]);
-                    }
-                }
-
             }
         },
 
