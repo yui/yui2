@@ -3,6 +3,8 @@ Drag and Drop Release Notes
 2.5.0
     * Added CustomEvents in addition to method overrides
         (See API Docs for more information)
+    * Added an IFRAME element to the proxy div (only in IE) to keep select
+        elements and other object from bleeding through
 
 2.4.0
   * Added configuration option called "dragOnly". If dragOnly is set to true,
