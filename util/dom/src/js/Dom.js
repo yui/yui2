@@ -144,11 +144,11 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if (el && (el.tagName || el.item)) { // HTMLElement, or HTMLCollection
+            if (el && (el.nodeType || el.item)) { // Node, or NodeList
                 return el;
             }
 
-            if (YAHOO.lang.isString(el) || !el) { // HTMLElement or null
+            if (YAHOO.lang.isString(el) || !el) { // id or null
                 return document.getElementById(el);
             }
             
