@@ -100,16 +100,21 @@ YAHOO.widget.RecordSet = function(data) {
     this.createEvent("resetEvent");
 
     /**
-     * Fired when a Record Key is updated with new data.
+     * @event keyUpdateEvent    
+     * @deprecated Use recordValueUpdateEvent     
+     */
+    this.createEvent("keyUpdateEvent");
+    /**
+     * Fired when a Record value is updated with new data.
      *
-     * @event keyUpdateEvent
+     * @event recordValueUpdateEvent
      * @param oArgs.record {YAHOO.widget.Record} The Record instance.
      * @param oArgs.key {String} The updated key.
      * @param oArgs.newData {Object} New data.
      * @param oArgs.oldData {Object} Old data.
      *
      */
-    this.createEvent("keyUpdateEvent");
+    this.createEvent("recordValueUpdateEvent");
 
     YAHOO.log("RecordSet initialized", "info", this.toString());
 };
@@ -517,18 +522,18 @@ YAHOO.widget.RecordSet.prototype.updateRecord = function(record, oData) {
  * @deprecated Use updateRecordValue
  */
 YAHOO.widget.RecordSet.prototype.updateKey = function(record, sKey, oData) {
-    this.setRecordValue(record, sKey, oData);
+    this.updateRecordValue(record, sKey, oData);
 };
 /**
  * Sets given Record at given key to given data.
  *
- * @method setRecordValue
+ * @method updateRecordValue
  * @param record {YAHOO.widget.Record | Number | String} A Record instance,
  * a RecordSet position index, or a Record ID.
  * @param sKey {String} Key name.
  * @param oData {Object) New data.
  */
-YAHOO.widget.RecordSet.prototype.setRecordValue = function(record, sKey, oData) {
+YAHOO.widget.RecordSet.prototype.updateRecordValue = function(record, sKey, oData) {
     var oRecord = this.getRecord(record);
     if(oRecord) {
         var oldData = null;
@@ -547,6 +552,7 @@ YAHOO.widget.RecordSet.prototype.setRecordValue = function(record, sKey, oData) 
 
         oRecord._oData[sKey] = oData;
         this.fireEvent("keyUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
+        this.fireEvent("recordValueUpdateEvent",{record:oRecord,key:sKey,newData:oData,oldData:oldData});
         YAHOO.log("Key \"" + sKey +
                 "\" for Record at index " + this.getRecordIndex(oRecord) +
                 " updated to \"" + YAHOO.lang.dump(oData) + "\"", "info", this.toString());

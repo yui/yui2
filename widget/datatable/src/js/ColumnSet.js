@@ -1062,7 +1062,7 @@ YAHOO.util.Sort = {
  *
  * @namespace YAHOO.util
  * @class ColumnDD
- * @extends YAHOO.util.DragDrop
+ * @extends YAHOO.util.DDProxy
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -1196,7 +1196,7 @@ if(YAHOO.util.DDProxy) {
  *
  * @namespace YAHOO.util
  * @class ColumnResizer
- * @extends YAHOO.util.DragDrop
+ * @extends YAHOO.util.DDProxy
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
  * @param oColumn {YAHOO.widget.Column} Column instance.

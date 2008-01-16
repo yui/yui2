@@ -1,5 +1,61 @@
 DataTable Release Notes
 
+*** version 2.5.0 ***
+
+Removed APIs
+
+    * CLASS_SCROLLBODY
+    * CLASS_TABLE
+    * getTableEl()
+
+Changed APIs
+
+    * doBeforeLoadData(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
+    * formatCell() - first arg elCell is now a reference to the cell liner element rather than the TD itself.
+    * onDataReturnAppendRows(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
+    * onDataReturnInitializeTable(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
+    * onDataReturnInsertRows(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
+    * sortedBy.dir - Use CLASS_ASC or CLASS_DESC instead of "asc" and "desc" strings.
+
+Deprecated APIs
+
+    * formatPaginatorDropdown() - Use new Paginator class.
+    * formatPaginatorLinks() - Use new Paginator class.
+    * formatPaginators() - Use new Paginator class.
+    * refreshView() - Use render().
+    * showPage() - Use new Paginator class.
+    * updatePaginator() - Use new Paginator class.
+    * headerCellClickEvent - Use theadCellClickEvent.
+    * headerCellDblclickEvent - Use theadCellDblclickEvent.
+    * headerCellMousedownEvent - Use theadCellMousedownEvent.
+    * headerCellMouseoutEvent - Use theadCellMouseoutEvent.
+    * headerCellMouseoverEvent - Use theadCellMouseoverEvent.
+    * headerLabelClickEvent - Use theadLabelClickEvent.
+    * headerLabelDblclickEvent - Use theadLabelDblclickEvent.
+    * headerLabelMousedownEvent - Use theadLabelMousedownEvent.
+    * headerLabelMouseoutEvent - Use theadLabelMouseoutEvent.
+    * headerLabelMouseoverEvent - Use theadLabelMouseoverEvent.
+    * headerRowClickEvent - Use theadRowClickEvent.
+    * headerRowDblclickEvent - Use theadRowDblclickEvent.
+    * headerRowMousedownEvent - Use theadRowMousedownEvent.
+    * headerRowMouseoutEvent - Use theadRowMouseoutEvent.
+    * headerRowMouseoverEvent - Use theadRowMouseoverEvent.
+    * refreshEvent - Use renderEvent.
+    * paginated - Use new Paginator class. (?)
+    * paginator - Use new Paginator class. (?)
+    *
+
+RecordSet
+
+    * updateKey() - Use updateRecordValue().
+    * keyUpdateEvent - Use recordValueUpdateEvent.
+
+Column
+
+    * sortOptions.defaultOrder - Use sortOptions.defaultDir, and use CLASS_ASC or CLASS_DESC instead of "asc" and "desc" strings.
+
+
+
 *** version 2.4.0 ***
 
 * No changes.
