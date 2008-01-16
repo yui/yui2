@@ -1346,12 +1346,12 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
                     if(allKeys[i]) {
                         elHeadLiner = allKeys[i].getThEl().firstChild;
                         nHeadLinerWidth = elHeadLiner.offsetWidth -
-                                (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingLeft"),10)) -
-                                (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingRight"),10));
+                                (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingLeft"),10)|0) -
+                                (parseInt(YAHOO.util.Dom.getStyle(elHeadLiner,"paddingRight"),10)|0);
                         elCellLiner = elWhichRow.cells[i].firstChild;
                         nCellLinerWidth = elCellLiner.offsetWidth -
-                                (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
-                                (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10));
+                                (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingLeft"),10)|0) -
+                                (parseInt(YAHOO.util.Dom.getStyle(elCellLiner,"paddingRight"),10)|0);
                         if(nHeadLinerWidth !== nCellLinerWidth) {
                             nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
                             oSelf._setColumnWidth(allKeys[i],nNewWidth+"px");
@@ -2192,20 +2192,32 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
 
     // Loop through the cells that have not had their widths set from
     // oColumn.width and check if the column is wide enough to support the
-    // content.  If not, expand the header width.
-    for (i=0,len=aSetWidths.length; i < len; ++i) {
-        var elLiner   = aSetWidths[i][0],
-            elThLiner = aSetWidths[i][1];
+    // content.  If not, expand the cell and header width to accommodate.
+    if (aSetWidths.length) {
+        var pl = 'padding-left',
+            pr = 'padding-right';
 
-        // increase the column size to fit content width when necessary
-        if (elThLiner.scrollWidth < elLiner.scrollWidth) {
-            elLiner.style.width =  // assign both
-            elThLiner.style.width = elLiner.scrollWidth + "px";
+        for (i=aSetWidths.length - 1; i >= 0; --i) {
+            var elLiner   = aSetWidths[i][0],
+                elThLiner = aSetWidths[i][1];
+
+            // increase the column size to fit content width when necessary
+            if (elThLiner.scrollWidth !== elLiner.scrollWidth) {
+                var padding =
+                    Math.max(
+                        parseInt(Dom.getStyle(elThLiner,pl),10)|0,
+                        parseInt(Dom.getStyle(elLiner,pl),10)|0) +
+                    Math.max(
+                        parseInt(Dom.getStyle(elThLiner,pr),10)|0,
+                        parseInt(Dom.getStyle(elLiner,pr),10)|0);
+
+                var newWidth = Math.max(elThLiner.scrollWidth,
+                                        elLiner.scrollWidth) - padding + 'px';
+
+                Dom.setStyle([elLiner,elThLiner],'width',newWidth);
+            }
         }
     }
-
-    // Sync up widths of cells for given row with corresponding TH elements
-    this._syncColWidths(elRow);
 
     return elRow;
 };
