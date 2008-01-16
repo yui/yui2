@@ -968,6 +968,31 @@ var _registerHTMLAttr = function(key, map) {
  * @event contentReady
  */
 
+/**
+ * Fires before the Element is appended to another Element.
+ * <p>See: <a href="#addListener">Element.addListener</a></p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> beforeAppendTo<br>
+ * <code>&lt;HTMLElement/Element&gt;
+ * target</code> the HTMLElement/Element being appended to 
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var target = e.target};<br>
+ * myTabs.addListener('beforeAppendTo', handler);</code></p>
+ * @event beforeAppendTo
+ */
+
+/**
+ * Fires after the Element is appended to another Element.
+ * <p>See: <a href="#addListener">Element.addListener</a></p>
+ * <p><strong>Event fields:</strong><br>
+ * <code>&lt;String&gt; type</code> appendTo<br>
+ * <code>&lt;HTMLElement/Element&gt;
+ * target</code> the HTMLElement/Element being appended to 
+ * <p><strong>Usage:</strong><br>
+ * <code>var handler = function(e) {var target = e.target};<br>
+ * myTabs.addListener('appendTo', handler);</code></p>
+ * @event appendTo
+ */
 
 YAHOO.augment(YAHOO.util.Element, AttributeProvider);
 })();
