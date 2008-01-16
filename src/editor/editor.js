@@ -24,19 +24,7 @@ var Dom = YAHOO.util.Dom,
     
     YAHOO.widget.Editor = function(el, attrs) {
         YAHOO.log('Editor Initalizing', 'info', 'Editor');
-        
-        var oConfig = {
-            element: null,
-            attributes: (attrs || {})
-        }, id = null;
-
-        if (Lang.isString(el)) {
-            id = el;
-        } else {
-            id = el.id;
-        }
-        oConfig.element = el;
-        YAHOO.widget.Editor.superclass.constructor.call(this, oConfig.element, oConfig.attributes);
+        YAHOO.widget.Editor.superclass.constructor.call(this, el, attrs);
     };
 
     /**
@@ -174,7 +162,94 @@ var Dom = YAHOO.util.Dom,
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.log('init', 'info', 'Editor');
+
+            this._defaultToolbar = {
+                collapse: true,
+                titlebar: 'Text Editing Tools',
+                draggable: false,
+                buttonType: 'advanced',
+                buttons: [
+                    { group: 'fontstyle', label: 'Font Name and Size',
+                        buttons: [
+                            { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                                menu: [
+                                    { text: 'Arial', checked: true },
+                                    { text: 'Arial Black' },
+                                    { text: 'Comic Sans MS' },
+                                    { text: 'Courier New' },
+                                    { text: 'Lucida Console' },
+                                    { text: 'Tahoma' },
+                                    { text: 'Times New Roman' },
+                                    { text: 'Trebuchet MS' },
+                                    { text: 'Verdana' }
+                                ]
+                            },
+                            { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
+                        ]
+                    },
+                    { type: 'separator' },
+                    { group: 'textstyle', label: 'Font Style',
+                        buttons: [
+                            { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
+                            { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
+                            { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
+                            { type: 'separator' },
+                            { type: 'push', label: 'Subscript', value: 'subscript', disabled: true },
+                            { type: 'push', label: 'Superscript', value: 'superscript', disabled: true },
+                            { type: 'separator' },
+                            { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                            { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
+                            { type: 'separator' },
+                            { type: 'push', label: 'Remove Formatting', value: 'removeformat', disabled: true },
+                            { type: 'push', label: 'Show/Hide Hidden Elements', value: 'hiddenelements' }
+                        ]
+                    },
+                    { type: 'separator' },
+                    { group: 'alignment', label: 'Alignment',
+                        buttons: [
+                            { type: 'push', label: 'Align Left CTRL + SHIFT + [', value: 'justifyleft' },
+                            { type: 'push', label: 'Align Center CTRL + SHIFT + |', value: 'justifycenter' },
+                            { type: 'push', label: 'Align Right CTRL + SHIFT + ]', value: 'justifyright' },
+                            { type: 'push', label: 'Justify', value: 'justifyfull' }
+                        ]
+                    },
+                    { type: 'separator' },
+                    { group: 'parastyle', label: 'Paragraph Style',
+                        buttons: [
+                        { type: 'select', label: 'Normal', value: 'heading', disabled: true,
+                            menu: [
+                                { text: 'Normal', value: 'none', checked: true },
+                                { text: 'Header 1', value: 'h1' },
+                                { text: 'Header 2', value: 'h2' },
+                                { text: 'Header 3', value: 'h3' },
+                                { text: 'Header 4', value: 'h4' },
+                                { text: 'Header 5', value: 'h5' },
+                                { text: 'Header 6', value: 'h6' }
+                            ]
+                        }
+                        ]
+                    },
+                    { type: 'separator' },
+                    { group: 'indentlist', label: 'Indenting and Lists',
+                        buttons: [
+                            { type: 'push', label: 'Indent', value: 'indent', disabled: true },
+                            { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
+                            { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
+                            { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
+                        ]
+                    },
+                    { type: 'separator' },
+                    { group: 'insertitem', label: 'Insert Item',
+                        buttons: [
+                            { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
+                            { type: 'push', label: 'Insert Image', value: 'insertimage' }
+                        ]
+                    }
+                ]
+            };
+
             YAHOO.widget.Editor.superclass.init.call(this, p_oElement, p_oAttributes);
+
         },
         /**
         * @method initAttributes
@@ -270,96 +345,6 @@ var Dom = YAHOO.util.Dom,
         * @type Object
         */
         _alwaysEnabled: { hiddenelements: true },
-        /**
-        * @property _defaultToolbar
-        * @private
-        * @description Default toolbar config.
-        * @type Object
-        */
-        _defaultToolbar: {
-            collapse: true,
-            titlebar: 'Text Editing Tools',
-            draggable: false,
-            buttonType: 'advanced',
-            buttons: [
-                { group: 'fontstyle', label: 'Font Name and Size',
-                    buttons: [
-                        { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
-                            menu: [
-                                { text: 'Arial', checked: true },
-                                { text: 'Arial Black' },
-                                { text: 'Comic Sans MS' },
-                                { text: 'Courier New' },
-                                { text: 'Lucida Console' },
-                                { text: 'Tahoma' },
-                                { text: 'Times New Roman' },
-                                { text: 'Trebuchet MS' },
-                                { text: 'Verdana' }
-                            ]
-                        },
-                        { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'textstyle', label: 'Font Style',
-                    buttons: [
-                        { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
-                        { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
-                        { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
-                        { type: 'separator' },
-                        { type: 'push', label: 'Subscript', value: 'subscript', disabled: true },
-                        { type: 'push', label: 'Superscript', value: 'superscript', disabled: true },
-                        { type: 'separator' },
-                        { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
-                        { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true },
-                        { type: 'separator' },
-                        { type: 'push', label: 'Remove Formatting', value: 'removeformat', disabled: true },
-                        { type: 'push', label: 'Show/Hide Hidden Elements', value: 'hiddenelements' }
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'alignment', label: 'Alignment',
-                    buttons: [
-                        { type: 'push', label: 'Align Left CTRL + SHIFT + [', value: 'justifyleft' },
-                        { type: 'push', label: 'Align Center CTRL + SHIFT + |', value: 'justifycenter' },
-                        { type: 'push', label: 'Align Right CTRL + SHIFT + ]', value: 'justifyright' },
-                        { type: 'push', label: 'Justify', value: 'justifyfull' }
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'parastyle', label: 'Paragraph Style',
-                    buttons: [
-                    { type: 'select', label: 'Normal', value: 'heading', disabled: true,
-                        menu: [
-                            { text: 'Normal', value: 'none', checked: true },
-                            { text: 'Header 1', value: 'h1' },
-                            { text: 'Header 2', value: 'h2' },
-                            { text: 'Header 3', value: 'h3' },
-                            { text: 'Header 4', value: 'h4' },
-                            { text: 'Header 5', value: 'h5' },
-                            { text: 'Header 6', value: 'h6' }
-                        ]
-                    }
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'indentlist', label: 'Indenting and Lists',
-                    buttons: [
-                        { type: 'push', label: 'Indent', value: 'indent', disabled: true },
-                        { type: 'push', label: 'Outdent', value: 'outdent', disabled: true },
-                        { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
-                        { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'insertitem', label: 'Insert Item',
-                    buttons: [
-                        { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
-                        { type: 'push', label: 'Insert Image', value: 'insertimage' }
-                    ]
-                }
-            ]
-        },
         /**
         * @private
         * @method _handleKeyDown
@@ -1128,13 +1113,12 @@ var Dom = YAHOO.util.Dom,
                 yDiff = 0,
                 anim = false;
 
+
             newXY[0] = ((newXY[0] - wWidth) + 20);
             //Account for the Scroll bars in a scrolled editor window.
             newXY[0] = newXY[0] - Dom.getDocumentScrollLeft(this._getDoc());
             newXY[1] = newXY[1] - Dom.getDocumentScrollTop(this._getDoc());
             
-
-
             if (this._isElement(this.currentElement[0], 'img')) {
                 if (this.currentElement[0].src.indexOf(this.get('blankimage')) != -1) {
                     newXY[0] = (newXY[0] + (75 / 2)); //Placeholder size
@@ -1168,6 +1152,16 @@ var Dom = YAHOO.util.Dom,
                 xDiff = (newXY[0] - orgXY[0]);
                 yDiff = (newXY[1] - orgXY[1]);
             } catch (e) {}
+
+
+            var iTop = elXY[1] + parseInt(this.get('height'), 10);
+            var iLeft = elXY[0] + parseInt(this.get('width'), 10);
+            if (newXY[1] > iTop) {
+                newXY[1] = iTop;
+            }
+            if (newXY[0] > iLeft) {
+                newXY[0] = (iLeft / 2);
+            }
             
             //Convert negative numbers to positive so we can get the difference in distance
             xDiff = ((xDiff < 0) ? (xDiff * -1) : xDiff);

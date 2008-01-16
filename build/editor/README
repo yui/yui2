@@ -1,3 +1,32 @@
+**** version 2.5.0 ***
+
+    *Examples:
+        1. [1687273] - [SF 1861119 ] Flickr Example code is incorrect
+
+    *Config
+        1. [1556954] - [SF 1816784 ] tabbing troubles...
+            Added a new config option called plainText. (See API docs for more information)
+        2. Removed the requirement for a textarea. If you pass the config as the first argument to the constructor
+            the Editor will create the textarea for you.
+
+    *Internet Explorer
+        1. [1515145] - [SF 1807057 ] RTE _setDesignMode reloads page content
+        2. [1687267] - [SF 1861514 ] editorContentLoaded fires early in IE6/7
+        3. [1687244] - [SF 1866217 ] Editor in frameset causes "unspecified error" in IE6
+        4. [1687278] - [SF 1859031 ] Change Font Color on IE
+        5. [1687283] - [SF 1857798 ] IE7 RTE HTTPS problem
+        6. [1687316] - [SF 1854657 ] IE bullet/number strange behaviour
+    
+    *All
+        1. [1687258] - [SF 1862824 ] Problem with <script> tags in editor content
+        2. [1687292] - [SF 1857235 ] cleanHTML function stripping closing tags
+        3. [1687322] - [SF 1849730 ] Multiple Editors' toolbars conflict
+        4. [1688270] - [SF 1867927] Editor dynamic height adjust
+        5. [1693656] - [SF 1870215] handleSubmit hijacks the value of the submit button
+        6. [1693686] - [SF 1869619] Image Modification Dialog
+        7. [1693719] - [SF 1850814] Editor produces faulty code
+
+
 **** version 2.4.0 ***
 
 * Performance enhancements and bug fixes.

@@ -510,7 +510,7 @@ var Dom = YAHOO.util.Dom,
             * @type Boolean
             */
             this.setAttributeConfig('grouplabels', {
-                value: attr.grouplabels || true,
+                value: ((attr.grouplabels === false) ? false : true),
                 method: function(grouplabels) {
                     if (grouplabels) {
                         Dom.removeClass(this.get('cont'), (this.CLASS_PREFIX + '-nogrouplabels'));
@@ -762,9 +762,6 @@ var Dom = YAHOO.util.Dom,
                                         oButton.menucmd = oButton.value;
                                     }
                                     oButton.value = ((oMenu.value) ? oMenu.value : oMenu._oText.nodeValue);
-                                    //This line made Opera fire the click event and the mousedown,
-                                    //  so events for menus where firing twice.
-                                    //this._buttonClick('click', oButton);
                                 },
                                 scope: this
                             };
@@ -815,7 +812,7 @@ var Dom = YAHOO.util.Dom,
             } else {
                 //Add to .get('buttons') manually
                 this._configs.buttons.value[this._configs.buttons.value.length] = oButton;
-
+                
                 var tmp = new this.buttonType(_oButton);
                 if (!tmp.buttonType) {
                     tmp.buttonType = 'rich';
@@ -888,7 +885,11 @@ var Dom = YAHOO.util.Dom,
                     if (!Lang.isArray(oButton.range)) {
                         oButton.range = [ 10, 100 ];
                     }
-                    this._makeSpinButton(tmp, oButton);
+                    var self = this;
+                    //this._makeSpinButton(tmp, oButton);
+                    window.setTimeout(function() {
+                        self._makeSpinButton.call(self, tmp, oButton);
+                    }, 0);
                 }
                 tmp.get('element').setAttribute('title', tmp.get('label'));
                 if (oButton.type != 'spin') {
@@ -899,7 +900,9 @@ var Dom = YAHOO.util.Dom,
                                 exec = false;
                             }
                             if (exec) {
-                                this._colorPicker._button = oButton.value;
+                                if (this._colorPicker) {
+                                    this._colorPicker._button = oButton.value;
+                                }
                                 var menuEL = tmp.getMenu().element;
                                 if (Dom.getStyle(menuEL, 'visibility') == 'hidden') {
                                     tmp.getMenu().show();
@@ -936,7 +939,6 @@ var Dom = YAHOO.util.Dom,
                             oButton.value = ev.value;
                             this._buttonClick(ev, oButton);
                         }, this, true);
-                        var self = this;
                         //Hijack the mousedown event in the menu and make it fire a button click..
                         if (tmp.getMenu().mouseDownEvent) {
                             tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
@@ -1089,11 +1091,14 @@ var Dom = YAHOO.util.Dom,
                 }
             }
             html += '<span><em>X</em><strong></strong></span>';
-            picker.innerHTML = html;
-            var em = picker.getElementsByTagName('em')[0];
-            var strong = picker.getElementsByTagName('strong')[0];
+            window.setTimeout(function() {
+                picker.innerHTML = html;
+            }, 0);
 
             Event.on(picker, 'mouseover', function(ev) {
+                var picker = this._colorPicker;
+                var em = picker.getElementsByTagName('em')[0];
+                var strong = picker.getElementsByTagName('strong')[0];
                 var tar = Event.getTarget(ev);
                 if (tar.tagName.toLowerCase() == 'a') {
                     em.style.backgroundColor = tar.style.backgroundColor;
@@ -1110,7 +1115,16 @@ var Dom = YAHOO.util.Dom,
                 Event.stopEvent(ev);
                 var tar = Event.getTarget(ev);
                 if (tar.tagName.toLowerCase() == 'a') {
-                    this.fireEvent('colorPickerClicked', { type: 'colorPickerClicked', target: this, button: this._colorPicker._button, color: tar.innerHTML, colorName: this._colorData['#' + tar.innerHTML] } );
+                    var retVal = this.fireEvent('colorPickerClicked', { type: 'colorPickerClicked', target: this, button: this._colorPicker._button, color: tar.innerHTML, colorName: this._colorData['#' + tar.innerHTML] } );
+                    if (retVal !== false) {
+                        var info = {
+                            color: tar.innerHTML,
+                            colorName: this._colorData['#' + tar.innerHTML],
+                            value: this._colorPicker._button 
+                        };
+                    
+                        this.fireEvent('buttonClick', { type: 'buttonClick', target: this.get('element'), button: info });
+                    }
                     this.getButtonByValue(this._colorPicker._button).getMenu().hide();
                 }
             }, this, true);

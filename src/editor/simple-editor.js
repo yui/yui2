@@ -23,16 +23,35 @@ var Dom = YAHOO.util.Dom,
     
     YAHOO.widget.SimpleEditor = function(el, attrs) {
         YAHOO.log('SimpleEditor Initalizing', 'info', 'SimpleEditor');
+        
+        var o = {};
+        if (Lang.isObject(el) && (!el.tagName) && !attrs) {
+            Lang.augmentObject(o, el); //Break the config reference
+            el = document.createElement('textarea');
+            this.DOMReady = true;
+            if (o.container) {
+                var c = Dom.get(o.container);
+                c.appendChild(el);
+            } else {
+                document.body.appendChild(el);
+            }
+        } else {
+            Lang.augmentObject(o, attrs); //Break the config reference
+        }
 
         var oConfig = {
             element: null,
-            attributes: (attrs || {})
+            attributes: o
         }, id = null;
 
         if (Lang.isString(el)) {
             id = el;
         } else {
-            id = el.id;
+            if (oConfig.attributes.id) {
+                id = oConfig.attributes.id;
+            } else {
+                id = Dom.generateId(el);
+            }
         }
         oConfig.element = el;
 
@@ -80,7 +99,7 @@ var Dom = YAHOO.util.Dom,
         * @description This flag will be set when certain things in the Editor happen. It is to be used by the developer to check to see if content has changed.
         * @type Boolean
         */
-        editorDirty: false,
+        editorDirty: null,
         /**
         * @property _defaultCSS
         * @description The default CSS used in the config for 'css'. This way you can add to the config like this: { css: YAHOO.widget.SimpleEditor.prototype._defaultCSS + 'ADD MYY CSS HERE' }
@@ -93,57 +112,7 @@ var Dom = YAHOO.util.Dom,
         * @description Default toolbar config.
         * @type Object
         */
-        _defaultToolbar: {
-            collapse: true,
-            titlebar: 'Text Editing Tools',
-            draggable: false,
-            buttons: [
-                { group: 'fontstyle', label: 'Font Name and Size',
-                    buttons: [
-                        { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
-                            menu: [
-                                { text: 'Arial', checked: true },
-                                { text: 'Arial Black' },
-                                { text: 'Comic Sans MS' },
-                                { text: 'Courier New' },
-                                { text: 'Lucida Console' },
-                                { text: 'Tahoma' },
-                                { text: 'Times New Roman' },
-                                { text: 'Trebuchet MS' },
-                                { text: 'Verdana' }
-                            ]
-                        },
-                        { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'textstyle', label: 'Font Style',
-                    buttons: [
-                        { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
-                        { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
-                        { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
-                        { type: 'separator' },
-                        { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
-                        { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
-                        
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'indentlist', label: 'Lists',
-                    buttons: [
-                        { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
-                        { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
-                    ]
-                },
-                { type: 'separator' },
-                { group: 'insertitem', label: 'Insert Item',
-                    buttons: [
-                        { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
-                        { type: 'push', label: 'Insert Image', value: 'insertimage' }
-                    ]
-                }
-            ]
-        },
+        _defaultToolbar: null,
         /**
         * @property _lastButton
         * @private
@@ -176,9 +145,9 @@ var Dom = YAHOO.util.Dom,
         * @property _blankImageLoaded
         * @private
         * @description Don't load the blank image more than once..
-        * @type Date
+        * @type Boolean
         */
-        _blankImageLoaded: false,
+        _blankImageLoaded: null,
         /**
         * @property _fixNodesTimer
         * @private
@@ -213,7 +182,7 @@ var Dom = YAHOO.util.Dom,
         * @description Flag to determine if editor has been rendered or not
         * @type Boolean
         */
-        _rendered: false,
+        _rendered: null,
         /**
         * @property DOMReady
         * @private
@@ -272,7 +241,7 @@ var Dom = YAHOO.util.Dom,
         * @description A reference to the current working element in the editor
         * @type Array
         */
-        currentElement: [],
+        currentElement: null,
         /**
         * @property dompath
         * @description A reference to the dompath container for writing the current working dom path to.
@@ -394,6 +363,9 @@ var Dom = YAHOO.util.Dom,
                 allowTransparency: 'true',
                 width: '100%'
             };
+            if (this.get('autoHeight')) {
+                config.scrolling = 'no';
+            }
             for (var i in config) {
                 if (Lang.hasOwnProperty(config, i)) {
                     ifrmDom.setAttribute(i, config[i]);
@@ -401,9 +373,7 @@ var Dom = YAHOO.util.Dom,
             }
             var isrc = 'javascript:;';
             if (this.browser.ie) {
-                if (window.location.href.toLowerCase().indexOf("https") !== 0) {
-                    isrc = 'about:blank';
-                }
+                isrc = 'about:blank';
             }
             ifrmDom.setAttribute('src', isrc);
             var ifrm = new YAHOO.util.Element(ifrmDom);
@@ -530,6 +500,10 @@ var Dom = YAHOO.util.Dom,
             var range = this._getRange();
             var hasSel = false;
 
+            if (!sel || !range) {
+                return hasSel;
+            }
+
             //Internet Explorer
             if (this.browser.ie || this.browser.opera) {
                 if (range.text) {
@@ -647,7 +621,11 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (this.browser.ie || this.browser.opera) {
-                return sel.createRange();
+                try {
+                    return sel.createRange();
+                } catch (e) {
+                    return null;
+                }
             }
 
             if (sel.rangeCount > 0) {
@@ -663,7 +641,14 @@ var Dom = YAHOO.util.Dom,
         */
         _setDesignMode: function(state) {
             try {
-                this._getDoc().designMode = state;
+                var set = true;
+                //SourceForge Bug #1807057
+                if (this.browser.ie && (state.toLowerCase() == 'off')) {
+                    set = false;
+                }
+                if (set) {
+                    this._getDoc().designMode = state;
+                }
             } catch(e) { }
         },
         /**
@@ -687,14 +672,23 @@ var Dom = YAHOO.util.Dom,
         * @description This method is fired from _checkLoaded when the document is ready. It turns on designMode and set's up the listeners.
         */
         _initEditor: function() {
-            YAHOO.log('editorLoaded', 'info', 'SimpleEditor');
             if (this.browser.ie) {
                 this._getDoc().body.style.margin = '0';
             }
             if (!this.get('disabled')) {
-                this._setDesignMode('on');
+                if (this._getDoc().designMode.toLowerCase() != 'on') {
+                    this._setDesignMode('on');
+                    this._contentTimerCounter = 0;
+                }
+            }
+            if (!this._getDoc().body) {
+                YAHOO.log('Body is null, check again', 'error', 'SimpleEditor');
+                this._contentTimerCounter = 0;
+                this._checkLoaded();
+                return false;
             }
             
+            YAHOO.log('editorLoaded', 'info', 'SimpleEditor');
             this.toolbar.on('buttonClick', this._handleToolbarClick, this, true);
             //Setup Listeners on iFrame
             Event.on(this._getDoc(), 'mouseup', this._handleMouseUp, this, true);
@@ -728,14 +722,22 @@ var Dom = YAHOO.util.Dom,
             if (this._contentTimer) {
                 clearTimeout(this._contentTimer);
             }
-            if (this._contentTimerCounter > 250) {
+            if (this._contentTimerCounter > 500) {
                 YAHOO.log('ERROR: Body Did Not load', 'error', 'SimpleEditor');
                 return false;
             }
             var init = false;
             try {
-                if (this._getDoc() && this._getDoc().body && (this._getDoc().body._rteLoaded === true)) {
-                    init = true;
+                if (this._getDoc() && this._getDoc().body) {
+                    if (this.browser.ie) {
+                        if (this._getDoc().body.readyState == 'complete') {
+                            init = true;
+                        }
+                    } else {
+                        if (this._getDoc().body._rteLoaded === true) {
+                            init = true;
+                        }
+                    }
                 }
             } catch (e) {
                 init = false;
@@ -899,7 +901,7 @@ var Dom = YAHOO.util.Dom,
                 } catch (e) {
                     YAHOO.log('Firefox 1.5 errors here: ' + e, 'error', 'SimpleEditor');
                 }
-            } else if (this.currentElement && this.currentElement[0]) {
+            } else if ((this.currentElement && this.currentElement[0]) && (!this.browser.ie)) {
                 elm = this.currentElement[0];
             }
             if (this.browser.opera || this.browser.webkit) {
@@ -1775,6 +1777,13 @@ var Dom = YAHOO.util.Dom,
         * @description Creates the accessibility h2 header and places it after the iframe in the Dom for navigation.
         */
         _setupAfterElement: function() {
+            if (!this.beforeElement) {
+                this.beforeElement = document.createElement('h2');
+                this.beforeElement.className = 'yui-editor-skipheader';
+                this.beforeElement.tabIndex = '-1';
+                this.beforeElement.innerHTML = this.STR_BEFORE_EDITOR;
+                this.get('element_cont').get('firstChild').insertBefore(this.beforeElement, this.toolbar.get('nextSibling'));
+            }
             if (!this.afterElement) {
                 this.afterElement = document.createElement('h2');
                 this.afterElement.className = 'yui-editor-skipheader';
@@ -1934,9 +1943,66 @@ var Dom = YAHOO.util.Dom,
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.log('init', 'info', 'SimpleEditor');
+
+            if (!this._defaultToolbar) {
+                this._defaultToolbar = {
+                    collapse: true,
+                    titlebar: 'Text Editing Tools',
+                    draggable: false,
+                    buttons: [
+                        { group: 'fontstyle', label: 'Font Name and Size',
+                            buttons: [
+                                { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                                    menu: [
+                                        { text: 'Arial', checked: true },
+                                        { text: 'Arial Black' },
+                                        { text: 'Comic Sans MS' },
+                                        { text: 'Courier New' },
+                                        { text: 'Lucida Console' },
+                                        { text: 'Tahoma' },
+                                        { text: 'Times New Roman' },
+                                        { text: 'Trebuchet MS' },
+                                        { text: 'Verdana' }
+                                    ]
+                                },
+                                { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'textstyle', label: 'Font Style',
+                            buttons: [
+                                { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
+                                { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
+                                { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
+                                { type: 'separator' },
+                                { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                                { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
+                                
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'indentlist', label: 'Lists',
+                            buttons: [
+                                { type: 'push', label: 'Create an Unordered List', value: 'insertunorderedlist' },
+                                { type: 'push', label: 'Create an Ordered List', value: 'insertorderedlist' }
+                            ]
+                        },
+                        { type: 'separator' },
+                        { group: 'insertitem', label: 'Insert Item',
+                            buttons: [
+                                { type: 'push', label: 'HTML Link CTRL + SHIFT + L', value: 'createlink', disabled: true },
+                                { type: 'push', label: 'Insert Image', value: 'insertimage' }
+                            ]
+                        }
+                    ]
+                };
+            }
+
             YAHOO.widget.SimpleEditor.superclass.init.call(this, p_oElement, p_oAttributes);
             YAHOO.widget.EditorInfo._instances[this.get('id')] = this;
 
+
+            this.currentElement = [];
             this.on('contentReady', function() {
                 this.DOMReady = true;
                 this.fireQueue();
@@ -1954,6 +2020,27 @@ var Dom = YAHOO.util.Dom,
             YAHOO.widget.SimpleEditor.superclass.initAttributes.call(this, attr);
             var self = this;
 
+            /**
+            * @config container
+            * @description Used when dynamically creating the Editor from Javascript with no default textarea.
+            * We will create one and place it in this container. If no container is passed we will append to document.body.
+            * @default false
+            * @type HTMLElement
+            */
+            this.setAttributeConfig('container', {
+                writeOnce: true,
+                value: attr.container || false
+            });
+            /**
+            * @config plainText
+            * @description Process the inital textarea data as if it was plain text. Accounting for spaces, tabs and line feeds.
+            * @default false
+            * @type Boolean
+            */
+            this.setAttributeConfig('plainText', {
+                writeOnce: true,
+                value: attr.plainText || false
+            });
             /**
             * @private
             * @config iframe
@@ -1975,6 +2062,17 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('textarea', {
                 value: null,
                 writeOnce: true
+            });
+            /**
+            * @private
+            * @config container
+            * @description Internal config for holding a reference to the container to append a dynamic editor to.
+            * @default null
+            * @type HTMLElement
+            */
+            this.setAttributeConfig('container', {
+                readOnly: true,
+                value: null
             });
             /**
             * @config nodeChangeThreshold
@@ -2048,6 +2146,32 @@ var Dom = YAHOO.util.Dom,
                         } else {
                             Dom.setStyle(this.get('iframe').get('parentNode'), 'height', height);
                         }
+                    }
+                }
+            });
+            /**
+            * @config autoHeight
+            * @description Remove the scrollbars from the edit area and resize it to fit the content. It will not go any lower than the current config height.
+            * @default false
+            * @type Boolean || Number
+            */
+            this.setAttributeConfig('autoHeight', {
+                value: attr.autoHeight || false,
+                method: function(a) {
+                    if (a) {
+                        if (this.get('iframe')) {
+                            this.get('iframe').get('element').setAttribute('scrolling', 'no');
+                        }
+                        this.on('afterNodeChange', this._handleAutoHeight, this, true);
+                        this.on('editorKeyDown', this._handleAutoHeight, this, true);
+                        this.on('editorKeyPress', this._handleAutoHeight, this, true);
+                    } else {
+                        if (this.get('iframe')) {
+                            this.get('iframe').get('element').setAttribute('scrolling', 'auto');
+                        }
+                        this.unsubscribe('afterNodeChange', this._handleAutoHeight);
+                        this.unsubscribe('editorKeyDown', this._handleAutoHeight);
+                        this.unsubscribe('editorKeyPress', this._handleAutoHeight);
                     }
                 }
             });
@@ -2175,21 +2299,27 @@ var Dom = YAHOO.util.Dom,
             * @type Boolean
             */            
             this.setAttributeConfig('handleSubmit', {
-                value: false,
-                writeOnce: true,
+                value: attr.handleSubmit || false,
                 method: function(exec) {
-                    if (exec) {
-                        var ta = this.get('element');
-                        if (ta.form) {
-                            var submitForm = function(ev) {
-                                Event.stopEvent(ev);
-                                this.saveHTML();
-                                window.setTimeout(function() {
-                                    YAHOO.util.Event.removeListener(ta.form, 'submit', submitForm);
-                                    ta.form.submit();
-                                }, 200);
-                            };
-                            Event.on(ta.form, 'submit', submitForm, this, true);
+                    if (this.get('element').form) {
+                        if (!this._formButtons) {
+                            this._formButtons = [];
+                        }
+                        if (exec) {
+                            Event.on(this.get('element').form, 'submit', this._handleFormSubmit, this, true);
+                            var i = this.get('element').form.getElementsByTagName('input');
+                            for (var s = 0; s < i.length; s++) {
+                                var type = i[s].getAttribute('type');
+                                if (type && (type.toLowerCase() == 'submit')) {
+                                    Event.on(i[s], 'click', this._handleFormButtonClick, this, true);
+                                    this._formButtons[this._formButtons.length] = i[s];
+                                }
+                            }
+                        } else {
+                            Event.unsubscribe(this.get('element').form, 'submit', this._handleFormSubmit);
+                            if (this._formButtons) {
+                                Event.unsubscribe(this._formButtons, 'click', this._handleFormButtonClick);
+                            }
                         }
                     }
                 }
@@ -2308,7 +2438,6 @@ var Dom = YAHOO.util.Dom,
                         this.dompath.parentNode.removeChild(this.dompath);
                         this.dompath = null;
                     }
-                    this._setupAfterElement();
                 }
             });
             /**
@@ -2359,20 +2488,106 @@ var Dom = YAHOO.util.Dom,
             }
             var img = '';
             if (!this._blankImageLoaded) {
-                var div = document.createElement('div');
-                div.style.position = 'absolute';
-                div.style.top = '-9999px';
-                div.style.left = '-9999px';
-                div.className = this.CLASS_PREFIX + '-blankimage';
-                document.body.appendChild(div);
-                img = YAHOO.util.Dom.getStyle(div, 'background-image');
-                img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
-                this.set('blankimage', img);
-                this._blankImageLoaded = true;
+                var self = this;
+                window.setTimeout(function() {
+                    var div = document.createElement('div');
+                    div.style.position = 'absolute';
+                    div.style.top = '-9999px';
+                    div.style.left = '-9999px';
+                    div.className = self.CLASS_PREFIX + '-blankimage';
+                    document.body.appendChild(div);
+                    img = YAHOO.util.Dom.getStyle(div, 'background-image');
+                    img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
+                    self.set('blankimage', img);
+                    self._blankImageLoaded = true;
+                }, 1000);
             } else {
                 img = this.get('blankimage');
             }
             return img;
+        },
+        /**
+        * @private
+        * @method _handleAutoHeight
+        * @description Handles resizing the editor's height based on the content
+        */
+        _handleAutoHeight: function() {
+            var doc = this._getDoc(),
+                body = doc.body,
+                docEl = doc.documentElement;
+
+            var height = parseInt(Dom.getStyle(this.get('editor_wrapper'), 'height'), 10);
+            var newHeight = ((this.browser.ie) ? body.scrollHeight : docEl.scrollHeight);
+            if ((height != newHeight) && (newHeight > parseInt(this.get('height'), 10))) {   
+                Dom.setStyle(this.get('editor_wrapper'), 'height', newHeight + 'px');
+                if (this.browser.ie) {
+                    //Internet Explorer needs this
+                    this.get('iframe').setStyle('height', '99%');
+                    this.get('iframe').setStyle('zoom', '1');
+                    var self = this;
+                    window.setTimeout(function() {
+                        self.get('iframe').setStyle('height', '100%');
+                    }, 1);
+                }
+            }
+        },
+        _formButtons: null,
+        _formButtonClicked: null,
+        _handleFormButtonClick: function(ev) {
+            var tar = Event.getTarget(ev);
+            this._formButtonClicked = tar;
+        },
+        /**
+        * @private
+        * @method _handleFormSubmit
+        * @description Handles the form submission.
+        * @param {Object} ev The Form Submit Event
+        */
+        _handleFormSubmit: function(ev) {
+            Event.stopEvent(ev);
+            YAHOO.log('Button: ' + this._formButtonClicked.id, 'info', 'SimpleEditor');
+            
+            this.saveHTML();
+            var form = this.get('element').form;
+            var tar = this._formButtonClicked || false;
+            var self = this;
+
+            window.setTimeout(function() {
+                YAHOO.util.Event.removeListener(form, 'submit', self._handleFormSubmit);
+                if (YAHOO.env.ua.ie) {
+                    form.fireEvent("onsubmit");
+                    if (tar) {
+                        tar.click();
+                    }
+                } else {  // Gecko, Opera, and Safari
+                    if (tar) {
+                        tar.click();
+                    } else {
+                        var oEvent = document.createEvent("HTMLEvents");
+                        oEvent.initEvent("submit", true, true);
+                        form.dispatchEvent(oEvent);
+                        if (YAHOO.env.ua.webkit) {
+                            if (YAHOO.lang.isFunction(form.submit)) {
+                                form.submit();
+                            }
+                        }
+                    }
+                }
+                /*
+                if (YAHOO.env.ua.ie || YAHOO.env.ua.webkit) {
+                    if (YAHOO.lang.isFunction(form.submit)) {
+                        form.submit();
+                    } else {
+                        if (YAHOO.lang.isObject(form.submit)) {
+                            form.submit.click();
+                        } else {
+                            YAHOO.log('Form submit failed because form.submit was not a function. Please change the submit buttons name and id.', 'error', 'SimpleEditor');
+                        }
+                    }
+                }
+                */
+            }, 200);
+            
         },
         /**
         * @private
@@ -2499,7 +2714,6 @@ var Dom = YAHOO.util.Dom,
                 this.toolbar.disableButton('indent');
                 this.toolbar.enableButton('outdent');
             }
-            //if (this._isElement(elm, 'ol') || this._isElement(elm, 'ul') || this._isElement(elm, 'li')) {
             if (this._hasParent(elm, 'ol') || this._hasParent(elm, 'ul')) {
                 this.toolbar.disableButton('indent');
             }
@@ -2507,6 +2721,7 @@ var Dom = YAHOO.util.Dom,
             
         },
         _setBusy: function(off) {
+            /*
             if (off) {
                 Dom.removeClass(document.body, 'yui-busy');
                 Dom.removeClass(this._getDoc().body, 'yui-busy');
@@ -2514,6 +2729,7 @@ var Dom = YAHOO.util.Dom,
                 Dom.addClass(document.body, 'yui-busy');
                 Dom.addClass(this._getDoc().body, 'yui-busy');
             }
+            */
         },
         /**
         * @private
@@ -2633,7 +2849,7 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @method render
-        * @description Causes the toolbar and the editor to render and replace the textarea.
+        * @description Calls the private method _render in a setTimeout to allow for other things on the page to continue to load.
         */
         render: function() {
             if (this._rendered) {
@@ -2644,10 +2860,20 @@ var Dom = YAHOO.util.Dom,
                 this._queue[this._queue.length] = ['render', arguments];
                 return false;
             }
-            this._setBusy();
             this._rendered = true;
             var self = this;
-
+            window.setTimeout(function() {
+                self._render.call(self);
+            }, 4);
+        },
+        /**
+        * @private
+        * @method _render
+        * @description Causes the toolbar and the editor to render and replace the textarea.
+        */
+        _render: function() {
+            this._setBusy();
+            var self = this;
             this.set('textarea', this.get('element'));
 
             this.get('element_cont').setStyle('display', 'none');
@@ -2696,6 +2922,7 @@ var Dom = YAHOO.util.Dom,
             
             this.toolbar.on('colorPickerClicked', function(o) {
                 this._handleColorPicker(o);
+                return false; //Stop the buttonClick event
             }, this, true);
 
             this.toolbar.on('alignClick', function(o) {
@@ -2719,18 +2946,9 @@ var Dom = YAHOO.util.Dom,
             
 
             //Replace Textarea with editable area
-            
             this.get('parentNode').replaceChild(this.get('element_cont').get('element'), this.get('element'));
 
             
-            if (!this.beforeElement) {
-                this.beforeElement = document.createElement('h2');
-                this.beforeElement.className = 'yui-editor-skipheader';
-                this.beforeElement.tabIndex = '-1';
-                this.beforeElement.innerHTML = this.STR_BEFORE_EDITOR;
-                this.get('element_cont').get('firstChild').insertBefore(this.beforeElement, this.toolbar.get('nextSibling'));
-            }
-
             this.setStyle('visibility', 'hidden');
             this.setStyle('position', 'absolute');
             this.setStyle('top', '-9999px');
@@ -2749,9 +2967,9 @@ var Dom = YAHOO.util.Dom,
             this.get('iframe').setStyle('width', '100%'); //WIDTH
             this.get('iframe').setStyle('height', '100%');
 
-            if (this.browser.ie == 7) {
-            }
-
+            window.setTimeout(function() {
+                self._setupAfterElement.call(self);
+            }, 0);
             this.fireEvent('afterRender', { type: 'afterRender', target: this });
         },
         /**
@@ -3046,9 +3264,13 @@ var Dom = YAHOO.util.Dom,
                 exec = false;
             } else {
                 el = this._getSelectedElement();
-                if (this._isElement(el, 'li') && this._isElement(el.parentNode, tag) || (this.browser.ie && this._isElement(this._getRange().parentElement, 'li'))) { //we are in a list..
+                YAHOO.log(el.tagName);
+                if (this._isElement(el, 'li') && this._isElement(el.parentNode, tag) || (this.browser.ie && this._isElement(this._getRange().parentElement, 'li')) || (this.browser.ie && this._isElement(el, 'ul')) || (this.browser.ie && this._isElement(el, 'ol'))) { //we are in a list..
                     YAHOO.log('We already have a list, undo it', 'info', 'SimpleEditor');
                     if (this.browser.ie) {
+                        if ((this.browser.ie && this._isElement(el, 'ul')) || (this.browser.ie && this._isElement(el, 'ol'))) {
+                            el = el.getElementsByTagName('li')[0];
+                        }
                         YAHOO.log('Undo IE', 'info', 'SimpleEditor');
                         str = '';
                         var lis2 = el.parentNode.getElementsByTagName('li');
@@ -3081,7 +3303,15 @@ var Dom = YAHOO.util.Dom,
                     if (this._getRange().html) {
                         html = '<li>' + this._getRange().html+ '</li>';
                     } else {
-                        html = '<li>' + this._getRange().text + '</li>';
+                        var t = this._getRange().text.split('\n');
+                        if (t.length > 1) {
+                            html = '';
+                            for (var ie = 0; ie < t.length; ie++) {
+                                html += '<li>' + t[ie] + '</li>';
+                            }
+                        } else {
+                            html = '<li>' + this._getRange().text + '</li>';
+                        }
                     }
 
                     this._getRange().pasteHTML('<' + tag + '>' + html + '</' + tag + '>');
@@ -3128,7 +3358,7 @@ var Dom = YAHOO.util.Dom,
         * @description This is an execCommand override method. It is called from execCommand when the execCommand('fontsize') is used.
         */
         cmd_fontsize: function(value) {
-            if ((this.currentElement.length > 0) && (!this._hasSelection())) {
+            if (this.currentElement && (this.currentElement.length > 0) && (!this._hasSelection())) {
                 YAHOO.util.Dom.setStyle(this.currentElement, 'fontSize', value);
             } else if (!this._isElement(this._getSelectedElement(), 'body')) {
                 var el = this._getSelectedElement();
@@ -3345,6 +3575,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method saveHTML
         * @description Cleans the HTML with the cleanHTML method then places that string back into the textarea.
+        * @return String
         */
         saveHTML: function() {
             var html = this.cleanHTML();
@@ -3366,6 +3597,11 @@ var Dom = YAHOO.util.Dom,
         * @description Gets the unprocessed/unfiltered HTML from the editor
         */
         getEditorHTML: function() {
+            var b = this._getDoc().body;
+            if (b === null) {
+                YAHOO.log('Body is null, returning null.', 'error', 'SimpleEditor');
+                return null;
+            }
             return this._getDoc().body.innerHTML;
         },
         /**
@@ -3424,6 +3660,23 @@ var Dom = YAHOO.util.Dom,
             html = html.replace(/<\/strong>/gi, '</b>');   
             html = html.replace(/<em([^>]*)>/gi, '<i$1>');
             html = html.replace(/<\/em>/gi, '</i>');
+            if (this.get('plainText')) {
+                YAHOO.log('Filtering as plain text', 'info', 'SimpleEditor');
+                html = html.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
+                html = html.replace(/  /gi, '&nbsp;&nbsp;'); //Replace all double spaces
+                html = html.replace(/\t/gi, '&nbsp;&nbsp;&nbsp;&nbsp;'); //Replace all tabs
+            }
+            //Removing Script Tags from the Editor
+            html = html.replace(/<script([^>]*)>/gi, '<bad>');
+            html = html.replace(/<\/script([^>]*)>/gi, '</bad>');
+            html = html.replace(/&lt;script([^>]*)&gt;/gi, '<bad>');
+            html = html.replace(/&lt;\/script([^>]*)&gt;/gi, '</bad>');
+            //Replace the line feeds
+            html = html.replace(/\n/g, '<YUI_LF>').replace(/\r/g, '<YUI_LF>');
+            //Remove Bad HTML elements (used to be script nodes)
+            html = html.replace(new RegExp('<bad([^>]*)>(.*?)<\/bad>', 'gi'), '');
+            //Replace the lines feeds
+            html = html.replace(/<YUI_LF>/g, '\n');
             return html;
         },
         /**
@@ -3452,6 +3705,9 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<\/ul>/gi, '<\/YUI_UL>');
 		    html = html.replace(/<blockquote([^>]*)>/gi, '<YUI_BQ$1>');
 		    html = html.replace(/<\/blockquote>/gi, '<\/YUI_BQ>');
+
+		    html = html.replace(/<embed([^>]*)>/gi, '<YUI_EMBED$1>');
+		    html = html.replace(/<\/embed>/gi, '<\/YUI_EMBED>');
 
             //Convert b and i tags to strong and em tags
             if ((markup == 'semantic') || (markup == 'xhtml')) {
@@ -3499,8 +3755,8 @@ var Dom = YAHOO.util.Dom,
             html = this.post_filter_linebreaks(html, markup);
 
             if (markup == 'xhtml') {
-		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1/>');
-		        html = html.replace(/<YUI_INPUT([^>]*)>/g, '<input $1/>');
+		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1 />');
+		        html = html.replace(/<YUI_INPUT([^>]*)>/g, '<input $1 />');
             } else {
 		        html = html.replace(/<YUI_IMG([^>]*)>/g, '<img $1>');
 		        html = html.replace(/<YUI_INPUT([^>]*)>/g, '<input $1>');
@@ -3513,6 +3769,9 @@ var Dom = YAHOO.util.Dom,
 		    html = html.replace(/<YUI_BQ([^>]*)>/g, '<blockquote$1>');
 		    html = html.replace(/<\/YUI_BQ>/g, '<\/blockquote>');
 
+		    html = html.replace(/<YUI_EMBED([^>]*)>/g, '<embed$1>');
+		    html = html.replace(/<\/YUI_EMBED>/g, '<\/embed>');
+
             //Trim the output, removing whitespace from the beginning and end
             html = YAHOO.lang.trim(html);
 
@@ -3524,12 +3783,11 @@ var Dom = YAHOO.util.Dom,
             //First empty span
             if (html.substring(0, 6).toLowerCase() == '<span>')  {
                 html = html.substring(6);
+                //Last empty span
+                if (html.substring(html.length - 7, html.length).toLowerCase() == '</span>')  {
+                    html = html.substring(0, html.length - 7);
+                }
             }
-            //Last empty span
-            if (html.substring(html.length - 7, html.length).toLowerCase() == '</span>')  {
-                html = html.substring(0, html.length - 7);
-            }
-
 
             for (var v in this.invalidHTML) {
                 if (YAHOO.lang.hasOwnProperty(this.invalidHTML, v)) {
@@ -3549,7 +3807,6 @@ var Dom = YAHOO.util.Dom,
         * @method filter_invalid_lists
         * @param String html The HTML string to filter
         * @description Filters invalid ol and ul list markup, converts this: <li></li><ol>..</ol> to this: <li></li><li><ol>..</ol></li>
-        * @return String
         */
         filter_invalid_lists: function(html) {
             html = html.replace(/<\/li>\n/gi, '</li>');
@@ -3700,7 +3957,7 @@ var Dom = YAHOO.util.Dom,
         */
         post_filter_linebreaks: function(html, markup) {
             if (markup == 'xhtml') {
-		        html = html.replace(/<YUI_BR>/g, '<br/>');
+		        html = html.replace(/<YUI_BR>/g, '<br />');
             } else {
 		        html = html.replace(/<YUI_BR>/g, '<br>');
             }
@@ -3763,6 +4020,7 @@ var Dom = YAHOO.util.Dom,
             var textArea = this.get('element');
             this.get('element_cont').get('parentNode').replaceChild(textArea, this.get('element_cont').get('element'));
             this.get('element_cont').get('element').innerHTML = '';
+            this.set('handleSubmit', false); //Remove the submit handler
             //Brutal Object Destroy
             for (var i in this) {
                 if (Lang.hasOwnProperty(this, i)) {
