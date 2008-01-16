@@ -329,7 +329,7 @@ YAHOO.util.Element.prototype = {
 
         // set based on configOrder
         for (var i = 0, len = this._configOrder.length; i < len; ++i) {
-            if (map[this._configOrder[i]]) {
+            if (map[this._configOrder[i]] !== undefined) {
                 this.set(this._configOrder[i], map[this._configOrder[i]], silent);
             }
         }
@@ -444,7 +444,7 @@ var _initElement = function(el, attr) {
 var _initHTMLElement = function(attr) {
     /**
      * The HTMLElement the Element instance refers to.
-     * @config element
+     * @attribute element
      * @type HTMLElement
      */
     this.setAttributeConfig('element', {
