@@ -55,6 +55,9 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         return;
     }
 
+    // Initialize node templates
+    this._initNodeTemplates();
+
     // Initialize container element
     this._initContainerEl(elContainer);
     if(!this._elContainer) {
@@ -103,7 +106,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         var oCallback = {
             success : this.onDataReturnSetRecords,
             failure : this.onDataReturnSetRecords,
-            scope   : this
+            scope   : this,
+            argument: {}
         };
         this._oDataSource.sendRequest(sInitialRequest, oCallback);
     }
@@ -1216,6 +1220,20 @@ YAHOO.widget.DataTable._elColumnDragTarget = null;
  */
 YAHOO.widget.DataTable._elColumnResizerProxy = null;
 
+/**
+ * Template cell to create all new cells from.
+ * @property _tdElTemplate
+ * @type {HTMLElement}
+ */
+YAHOO.widget.DataTable.prototype._tdElTemplate = null;
+
+/**
+ * Template row to create all new rows from.
+ * @property _trElTemplate
+ * @type {HTMLElement}
+ */
+YAHOO.widget.DataTable.prototype._trElTemplate = null;
+
 
 
 
@@ -1357,6 +1375,26 @@ YAHOO.widget.DataTable.prototype._syncColWidths = function(elRow) {
 
 
 // INIT FUNCTIONS
+
+/**
+ * Initializes the HTMLElement templates used to create various table child
+ * nodes.
+ * @method _initNodeTemplates
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._initNodeTemplates = function () {
+    var d   = document,
+        tr  = d.createElement('tr'),
+        td  = d.createElement('td'),
+        div = d.createElement('div');
+
+    // Append the liner element
+    YAHOO.util.Dom.addClass(div,YAHOO.widget.DataTable.CLASS_LINER);
+    td.appendChild(div);
+
+    this._tdElTemplate = td;
+    this._trElTemplate = tr;
+};
 
 /**
  * Initializes the DataTable container element.
@@ -2051,60 +2089,24 @@ YAHOO.widget.DataTable._initColumnResizerProxyEl = function() {
  * @private
  */
 YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
-    var DT = YAHOO.widget.DataTable,
-        Dom = YAHOO.util.Dom,
-        oColumnSet = this._oColumnSet,
-        d = document,
-        elRow = d.createElement('tr'),
-        elCellT = d.createElement('td'),
-        i,len,j,jlen;
-
-    elCellT.appendChild(d.createElement('div'));
-    Dom.addClass(elCellT.firstChild,DT.CLASS_LINER);
+    var elRow     = this._trElTemplate.cloneNode(true),
+        beforeRow = YAHOO.lang.isNumber(index) && index >= 0 ?
+                    this._elTbody.rows[index] : null;
 
     elRow.id = this._sId+"-bdrow"+this._nTrCount;
     this._nTrCount++;
     elRow.yuiRecordId = oRecord.getId();
 
-    // Create TD cells
-    for(i=0,len=oColumnSet.keys.length; i < len; ++i) {
-        var oColumn = oColumnSet.keys[i];
-        var elCell = elRow.appendChild(elCellT.cloneNode(true)),
-            elCellLiner = elCell.firstChild;
-
-        elCell.id = elRow.id+"-cell"+this._nTdCount;
-        elCell.yuiColumnKey = oColumn.getKey();
-        elCell.yuiColumnId = oColumn.getId();
-
-        for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
-            elCell.headers += this._sId + "-th" + oColumnSet.headers[i][j] + "-a11y ";
-        }
-
-        // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
-        elCell.yuiCellIndex = i;
-
-        // Set FIRST/LAST on TD
-        if (i === 0) {
-            Dom.addClass(elCell, DT.CLASS_FIRST);
-        }
-        else if (i === this._oColumnSet.keys.length-1) {
-            Dom.addClass(elCell, DT.CLASS_LAST);
-        }
-    }
-
-    // Hide the row initially, allowing _updateTrEl to manage the pae reflows
-    Dom.setStyle(elRow,'display','none');
+    // Hide the row initially, allowing _updateTrEl to manage the page reflows
+    elRow.style.display = 'none';
 
     // It's an append if no index provided, or index is negative or too big
-    if (!YAHOO.lang.isNumber(index) || (index < 0) ||
-            (index >= (this._elTbody.rows.length))) {
-        this._elTbody.appendChild(elRow);
-    } else {
-        this._elTbody.insertBefore(elRow,this._elTbody.rows[index]);
-    }
+    this._elTbody.insertBefore(elRow,beforeRow);
 
     // Stripe the new row
-    Dom.addClass(elRow, elRow.sectionRowIndex%2 ? DT.CLASS_ODD : DT.CLASS_EVEN);
+    YAHOO.util.Dom.addClass(elRow, elRow.sectionRowIndex % 2 ?
+                        YAHOO.widget.DataTable.CLASS_ODD :
+                        YAHOO.widget.DataTable.CLASS_EVEN);
 
     // Call _updateTrEl to populate and align the row contents
     return this._updateTrEl(elRow,oRecord);
@@ -2122,10 +2124,7 @@ YAHOO.widget.DataTable.prototype._addTrEl = function(oRecord, index) {
 YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     var DT = YAHOO.widget.DataTable,
         Dom = YAHOO.util.Dom,
-        d = document,
         oColumnSet = this._oColumnSet,
-        oColumn,
-        elCell,
         sortKey,
         sortClass,
         isSortedBy = this.get("sortedBy"),
@@ -2145,53 +2144,29 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
         elRow.removeChild(elRow.firstChild);
     }
     // Add more TD elements as needed
-    if(elRow.cells.length < oColumnSet.keys.length) {
-        //TODO: break out into private method to be shared by _addTrEl
-        var elCellT = d.createElement('td');
-        elCellT.appendChild(d.createElement('div'));
-    
-        // Create TD cells from template
-        for(i=elRow.cells.length, len=oColumnSet.keys.length; i<len; ++i) {
-            oColumn = oColumnSet.keys[i];
-            elCell = elRow.appendChild(elCellT.cloneNode(true));
-    
-            elCell.id = elRow.id+"-cell"+this._nTdCount;
-        }
+    for (i=elRow.cells.length, len=oColumnSet.keys.length; i < len; ++i) {
+        this._addTdEl(elRow,oColumnSet.keys[i],i);
     }
 
-    
     // Update TD elements with new data
     for(i=0,len=oColumnSet.keys.length; i<len; ++i) {
-        oColumn = oColumnSet.keys[i];
-        elCell = elRow.cells[i];
-        var elCellLiner = elCell.firstChild;
-        elCellLiner.className = DT.CLASS_LINER;
+        var oColumn     = oColumnSet.keys[i],
+            elCell      = elRow.cells[i],
+            elCellLiner = elCell.firstChild,
+            cellHeaders = '';
+
+        // Set the cell content
         this.formatCell(elCellLiner, oRecord, oColumn);
 
-        elCell.yuiColumnKey = oColumn.getKey();
-        elCell.yuiColumnId = oColumn.getId();
-
-        elCell.headers = "";
+        // Set the cell's accessibility headers
         for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
-            elCell.headers += this._sId + "-th" + oColumnSet.headers[i][j] + "-a11y ";
+            cellHeaders += this._sId + "-th" + oColumnSet.headers[i][j] + "-a11y ";
         }
-
-        // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
-        elCell.yuiCellIndex = i;
-
-        // Set FIRST/LAST on TD
-        if (i === 0) {
-            Dom.addClass(elCell, DT.CLASS_FIRST);
-        }
-        else if (i === len-1) {
-            Dom.addClass(elCell, DT.CLASS_LAST);
-        }
-
-        // Remove ASC/DESC
-        Dom.removeClass(elCell, DT.CLASS_ASC);
-        Dom.removeClass(elCell, DT.CLASS_DESC);
+        elCell.headers = cellHeaders;
 
         // Set ASC/DESC on TD
+        Dom.removeClass(elCell, DT.CLASS_ASC);
+        Dom.removeClass(elCell, DT.CLASS_DESC);
         if(oColumn.key === sortKey) {
             Dom.addClass(elCell, sortClass);
         }
@@ -2223,7 +2198,7 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
             elThLiner = aSetWidths[i][1];
 
         // increase the column size to fit content width when necessary
-        if (elLiner.offsetWidth < elLiner.scrollWidth) {
+        if (elThLiner.scrollWidth < elLiner.scrollWidth) {
             elLiner.style.width =  // assign both
             elThLiner.style.width = elLiner.scrollWidth + "px";
         }
@@ -2235,6 +2210,39 @@ YAHOO.widget.DataTable.prototype._updateTrEl = function(elRow, oRecord) {
     return elRow;
 };
 
+
+/**
+ * Creates a cell within the specified row and column.
+ * @method _addTdEl
+ * @param elRow {HTMLElement} The row to add the cell to
+ * @param oColumn {Column} The column definition to use for the cell
+ * @param index {number} (optional) the index to add the cell at (default null)
+ * @return {HTMLElement} the new cell
+ * @private
+ */
+YAHOO.widget.DataTable.prototype._addTdEl = function (elRow,oColumn,index) {
+    var elCell      = this._tdElTemplate.cloneNode(true),
+        elCellLiner = elCell.firstChild;
+
+    index = index || elRow.cells.length;
+
+    elCell.id           = elRow.id+"-cell"+this._nTdCount;
+    elCell.yuiColumnKey = oColumn.getKey();
+    elCell.yuiColumnId  = oColumn.getId();
+
+    // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
+    elCell.yuiCellIndex = index;
+
+    // Set FIRST/LAST on TD
+    if (index === 0) {
+        YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_FIRST);
+    }
+    else if (index === this._oColumnSet.keys.length-1) {
+        YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_LAST);
+    }
+
+    return elRow.insertBefore(elCell,elRow.cells[index]);
+};
 
 /**
  * Deletes TR element by DOM reference or by DataTable page row index.
@@ -3789,8 +3797,8 @@ YAHOO.widget.DataTable.prototype.render = function() {
     if(oPaginator) {
         if (oPaginator instanceof YAHOO.widget.Paginator) {
             allRecords = this._oRecordSet.getRecords(
-                            oPaginator.get('recordOffset'),
-                            oPaginator.get('rowsPerPage'));
+                            oPaginator.getStartIndex(),
+                            oPaginator.getRowsPerPage());
             oPaginator.render();
         }
         else {
@@ -4386,7 +4394,7 @@ YAHOO.widget.DataTable.prototype.sortColumn = function(oColumn, sDir) {
         if (oPaginator instanceof YAHOO.widget.Paginator) {
             // TODO : is this server-side op safe?  Will fire changeRequest
             // event mechanism
-            oPaginator.setPage(1);
+            oPaginator.setPage(1,true);
         }
         else if (this.get('paginated')) {
             // Backward compatibility
@@ -8796,20 +8804,21 @@ YAHOO.widget.DataTable.prototype.onDataReturnInsertRows = function(sRequest, oRe
 YAHOO.widget.DataTable.prototype.onDataReturnSetRecords = function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
 
-    oPayload = oPayload || { startIndex : 0 };
-
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(oRequest, oResponse, oPayload);
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-        // If paginating, set the number of total records if provided
         var oPaginator = this.get('paginator');
+        var startIndex = oPayload && YAHOO.lang.isNumber(oPayload.startIndex) ?
+                            oPayload.startIndex : 0;
+
+        // If paginating, set the number of total records if provided
         if (oPaginator instanceof YAHOO.widget.Paginator && oResponse.totalRecords) {
             oPaginator.setTotalRecords(oResponse.totalRecords,true);
         }
 
-        this._oRecordSet.setRecords(oResponse.results,oPayload.startIndex);
+        this._oRecordSet.setRecords(oResponse.results, startIndex);
 
         // Update the instance with any payload data
         this._handleDataReturnPayload(oRequest,oResponse,oPayload);
