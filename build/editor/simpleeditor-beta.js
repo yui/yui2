@@ -3774,7 +3774,7 @@ var Dom = YAHOO.util.Dom,
         _disableEditor: function(disabled) {
             if (disabled) {
                 if (!this._mask) {
-                    if (!this.browser.ie) {
+                    if (!!this.browser.ie) {
                         this._setDesignMode('off');
                     }
                     if (this.toolbar) {
@@ -5613,8 +5613,17 @@ var Dom = YAHOO.util.Dom,
         _cleanIncomingHTML: function(html) {
             html = html.replace(/<strong([^>]*)>/gi, '<b$1>');
             html = html.replace(/<\/strong>/gi, '</b>');   
+
+            //replace embed before em check
+            html = html.replace(/<embed([^>]*)>/gi, '<YUI_EMBED$1>');
+            html = html.replace(/<\/embed>/gi, '</YUI_EMBED>');
+
             html = html.replace(/<em([^>]*)>/gi, '<i$1>');
             html = html.replace(/<\/em>/gi, '</i>');
+            
+            //Put embed tags back in..
+            html = html.replace(/<YUI_EMBED([^>]*)>/gi, '<embed$1>');
+            html = html.replace(/<\/YUI_EMBED>/gi, '</embed>');
             if (this.get('plainText')) {
                 html = html.replace(/\n/g, '<br>').replace(/\r/g, '<br>');
                 html = html.replace(/  /gi, '&nbsp;&nbsp;'); //Replace all double spaces
