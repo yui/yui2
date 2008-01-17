@@ -1,9 +1,7 @@
 /**
  * @description <p>Creates a Image Crop control.</p>
- * @class ImageCropper
  * @namespace YAHOO.widget
  * @requires yahoo, dom, dragdrop, element, event, resize
- * @extends Element
  * @beta
  */
 (function() {
@@ -13,6 +11,8 @@ var Dom = YAHOO.util.Dom,
 
     /**
      * @constructor
+     * @class ImageCropper
+     * @extends YAHOO.util.Element
      * @param {String/HTMLElement} el The image element to make croppable.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */

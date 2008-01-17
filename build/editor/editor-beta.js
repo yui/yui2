@@ -303,7 +303,6 @@ var Dom = YAHOO.util.Dom,
 })();
 /**
  * @description <p>Creates a rich Toolbar widget based on Button. Primarily used with the Rich Text Editor</p>
- * @class Toolbar
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbarbutton
  * @optional container_core, dragdrop
@@ -320,6 +319,8 @@ var Dom = YAHOO.util.Dom,
     /**
      * Provides a rich toolbar widget based on the button and menu widgets
      * @constructor
+     * @class Toolbar
+     * @extends YAHOO.util.Element
      * @param {String/HTMLElement} el The element to turn into a toolbar.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
