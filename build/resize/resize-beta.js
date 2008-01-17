@@ -1089,6 +1089,9 @@ var D = YAHOO.util.Dom,
             };
 
             Resize.superclass.init.call(this, p_oElement, p_oAttributes);
+
+            this.set('setSize', this.get('setSize'));
+
             if (p_oAttributes.height) {
                 this.set('height', parseInt(p_oAttributes.height, 10));
             }
@@ -1159,6 +1162,18 @@ var D = YAHOO.util.Dom,
             Resize.superclass.initAttributes.call(this, attr);
 
             /**
+            * @attribute setSize
+            * @description Set the size of the resized element, if set to false the element will not be auto resized,
+            * the resize event will contain the dimensions so the end user can resize it on their own.
+            * This setting will only work with proxy set to true and animate set to false.
+            * @type Boolean
+            */
+            this.setAttributeConfig('setSize', {
+                value: ((attr.setSize === false) ? false : true),
+                validator: YAHOO.lang.isBoolean
+            });
+
+            /**
             * @attribute wrap
             * @description Should we wrap the element
             * @type Boolean
@@ -1200,7 +1215,9 @@ var D = YAHOO.util.Dom,
                 validator: YAHOO.lang.isNumber,
                 method: function(width) {
                     width = parseInt(width, 10);
-                    this.setStyle('width', width + 'px');
+                    if (this.get('setSize')) {
+                        this.setStyle('width', width + 'px');
+                    }
                     this._cache.width = width;
                     this._configs.width.value = width;
                 }
@@ -1216,7 +1233,9 @@ var D = YAHOO.util.Dom,
                 validator: YAHOO.lang.isNumber,
                 method: function(height) {
                     height = parseInt(height, 10);
-                    this.setStyle('height', height + 'px');
+                    if (this.get('setSize')) {
+                        this.setStyle('height', height + 'px');
+                    }
                     this._cache.height = height;
                     this._configs.height.value = height;
                 }
@@ -1452,18 +1471,6 @@ var D = YAHOO.util.Dom,
             */
             this.setAttributeConfig('autoRatio', {
                 value: attr.autoRatio || false,
-                validator: YAHOO.lang.isBoolean
-            });
-
-            /**
-            * @attribute setSize
-            * @description Set the size of the resized element, if set to false the element will not be auto resized,
-            * the resize event will contain the dimensions so the end user can resize it on their own.
-            * This setting will only work with proxy set to true and animate set to false.
-            * @type Boolean
-            */
-            this.setAttributeConfig('setSize', {
-                value: ((attr.setSize === false) ? false : true),
                 validator: YAHOO.lang.isBoolean
             });
 
