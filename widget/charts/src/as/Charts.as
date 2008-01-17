@@ -6,6 +6,7 @@ package
 	import flash.display.DisplayObject;
 	import flash.events.ErrorEvent;
 	import flash.events.MouseEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.external.ExternalInterface;
 	import flash.text.TextFormat;
 	import flash.utils.getQualifiedClassName;
@@ -715,30 +716,37 @@ package
 			
 			super.initializeComponent();
 			
-			ExternalInterface.addCallback("setType", setType);
-			ExternalInterface.addCallback("setStyle", setStyle);
-			ExternalInterface.addCallback("setStyles", setStyles);
-			ExternalInterface.addCallback("setSeriesStyles", setSeriesStyles);
-			ExternalInterface.addCallback("setDataProvider", setDataProvider);
-			ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
-			ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
-			ExternalInterface.addCallback("setDataTipFunction", setDataTipFunction);
-			ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
-			ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
-			
-			//CartesianChart
-			ExternalInterface.addCallback("getHorizontalField", getHorizontalField);
-			ExternalInterface.addCallback("setHorizontalField", setHorizontalField);
-			ExternalInterface.addCallback("getVerticalField", getVerticalField);
-			ExternalInterface.addCallback("setVerticalField", setVerticalField);
-			ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
-			ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
-			
-			//PieChart
-			ExternalInterface.addCallback("getDataField", getDataField);
-			ExternalInterface.addCallback("setDataField", setDataField);
-			ExternalInterface.addCallback("getCategoryField", getCategoryField);
-			ExternalInterface.addCallback("setCategoryField", setCategoryField);
+			try
+			{
+				ExternalInterface.addCallback("setType", setType);
+				ExternalInterface.addCallback("setStyle", setStyle);
+				ExternalInterface.addCallback("setStyles", setStyles);
+				ExternalInterface.addCallback("setSeriesStyles", setSeriesStyles);
+				ExternalInterface.addCallback("setDataProvider", setDataProvider);
+				ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
+				ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
+				ExternalInterface.addCallback("setDataTipFunction", setDataTipFunction);
+				ExternalInterface.addCallback("getCategoryNames", getCategoryNames);
+				ExternalInterface.addCallback("setCategoryNames", setCategoryNames);
+				
+				//CartesianChart
+				ExternalInterface.addCallback("getHorizontalField", getHorizontalField);
+				ExternalInterface.addCallback("setHorizontalField", setHorizontalField);
+				ExternalInterface.addCallback("getVerticalField", getVerticalField);
+				ExternalInterface.addCallback("setVerticalField", setVerticalField);
+				ExternalInterface.addCallback("setHorizontalAxis", setHorizontalAxis);
+				ExternalInterface.addCallback("setVerticalAxis", setVerticalAxis);
+				
+				//PieChart
+				ExternalInterface.addCallback("getDataField", getDataField);
+				ExternalInterface.addCallback("setDataField", setDataField);
+				ExternalInterface.addCallback("getCategoryField", getCategoryField);
+				ExternalInterface.addCallback("setCategoryField", setCategoryField);
+			}
+			catch(error:SecurityError)
+			{
+				//do nothing. it will be caught by the YUIAdapter.
+			}
 
 			this.backgroundAndBorder = new BackgroundAndBorder();
 			this.backgroundAndBorder.width = this.stage.stageWidth;
@@ -941,7 +949,12 @@ package
 			{
 				this.chart.setStyle(axisName + "AxisWeight", styles.size);
 			}
-				
+			
+			if(styles.showLabels != null)
+			{
+				this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisLabels", styles.showLabels);
+			}
+			
 			if(styles.majorGridLines)
 			{
 				var majorGridLines:Object = styles.majorGridLines;
