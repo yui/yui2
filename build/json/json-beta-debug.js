@@ -126,84 +126,27 @@ YAHOO.lang.JSON = {
      * @return {boolean} is the string safe for eval?
      * @static
      */
-    isValid : YAHOO.env.ua.webkit && YAHOO.env.ua.webkit < 500 ?
-        // Load time fork to protect Safari 2.x against a crash bug when
-        // regex capture groups exceed a certain length (_VALUES regex).
-        // Safari gets a less efficient function
-        // TODO: This may be obviated by a regex change made to json.js before
-        // it was used as a basis for this code.  I'm unable to recreate the
-        // crash bug on Safari 2.0.4 with the regex used injson.js or json2.js.
-        function (str) {
-            if (!YAHOO.lang.isString(str)) {
-                return false;
-            }
-
-            var bits = str.replace(this._ESCAPES,'@').split('"'),
-                arr  = [];
-
-            // unmatched quote
-            if (!bits.length % 2) {
-                return false;
-            }
-
-            // walk bits
-            for (var i = bits.length - 1; i >= 0; i -= 2) {
-                arr[i/2] = bits[i];
-            }
-
-            return this._INVALID.test(arr.join(']').
-                    replace(this._VALUES,']').
-                    replace(this._BRACKETS,''));
-
-        } :
-
-        // All other browsers can use regex validation
-        function (str) {
-            if (!YAHOO.lang.isString(str)) {
-                return false;
-            }
-
-            return this._INVALID.test(str.
-                    replace(this._ESCAPES,'@').
-                    replace(this._VALUES,']').
-                    replace(this._BRACKETS,''));
-        },
-
-
-    /**
-     * Wrap string values and object keys in double quotes after replacing
-     * any odd characters.
-     * @method _wrapString
-     * @param s {String} the string to wrap
-     * @return {String} the quoted, escaped string
-     * @static
-     * @private
-     */
-    _wrapString : function (s) {
-        var m = this._CHARS;
-
-        function encodeChar(c) {
-            if (!m[c]) {
-                var a = c.charCodeAt();
-                m[c] = '\\u00' + Math.floor(a / 16).toString(16) +
-                                           (a % 16).toString(16);
-            }
-            return m[c];
+    isValid : function (str) {
+        if (!YAHOO.lang.isString(str)) {
+            return false;
         }
 
-        return '"' + s.replace(this._SPECIAL_CHARS, encodeChar) + '"';
+        return this._INVALID.test(str.
+                replace(this._ESCAPES,'@').
+                replace(this._VALUES,']').
+                replace(this._BRACKETS,''));
     },
-    
+
     /**
      * Serializes a Date instance as a UTC date string.  Used internally by
      * stringify.  Override this method if you need Dates serialized in a
      * different format.
-     * @method date2Str
+     * @method dateToString
      * @param d {Date} The Date to serialize
      * @return {String} stringified Date in UTC format YYYY-MM-DDTHH:mm:SSZ
      * @static
      */
-    date2Str : function (d) {
+    dateToString : function (d) {
         function _zeroPad(v) {
             return v < 10 ? '0' + v : v;
         }
@@ -220,11 +163,11 @@ YAHOO.lang.JSON = {
      * Reconstitute Date instances from the default JSON UTC serialization.
      * Reference this from a parse filter function to rebuild Dates during the
      * parse operation.
-     * @method str2Date
+     * @method stringToDate
      * @param str {String} String serialization of a Date
      * @return {Date}
      */
-    str2Date : function (str) {
+    stringToDate : function (str) {
         if (this._PARSE_DATE.test(str)) {
             var d = new Date();
             d.setUTCFullYear(RegExp.$1, (RegExp.$2|0)-1, RegExp.$3);
@@ -275,11 +218,31 @@ YAHOO.lang.JSON = {
 
         var l      = YAHOO.lang,
             J      = l.JSON,
+            m      = J._CHARS,
+            str_re = this._SPECIAL_CHARS,
             pstack = []; // Processing stack used for cyclical ref protection
 
+        // escape encode special characters
+        var _char = function (c) {
+            if (!m[c]) {
+                var a = c.charCodeAt();
+                m[c] = '\\u00' + Math.floor(a / 16).toString(16) +
+                                           (a % 16).toString(16);
+            }
+            return m[c];
+        };
+
+        // Enclose the escaped string in double quotes
+        var _string = function (s) {
+            return '"' + s.replace(str_re, _char) + '"';
+        };
+
+        // Use the configured date conversion
+        var _date = this.dateToString;
+    
         // Worker function.  Fork behavior on data type and recurse objects and
         // arrays per the configured depth.
-        function _stringify(o,w,d) {
+        var _stringify = function (o,w,d) {
             var t = typeof o,
                 i,len,j, // array iteration
                 k,v,     // object iteration
@@ -288,7 +251,7 @@ YAHOO.lang.JSON = {
 
             // String
             if (t === 'string') {
-                return J._wrapString(o);
+                return _string(o);
             }
 
             // native boolean and Boolean instance
@@ -303,7 +266,7 @@ YAHOO.lang.JSON = {
 
             // Date
             if (o instanceof Date) {
-                return J.date2Str(o);
+                return _date(o);
             }
 
             // Array
@@ -356,7 +319,7 @@ YAHOO.lang.JSON = {
 
                             // Omit invalid values
                             if (vt !== 'undefined' && vt !== 'function') {
-                                a[j++] = J._wrapString(w[i]) + ':' + _stringify(v,w,d-1);
+                                a[j++] = _string(w[i]) + ':' + _stringify(v,w,d-1);
                             }
                         }
 
@@ -369,7 +332,7 @@ YAHOO.lang.JSON = {
                                 v = o[k];
                                 vt = typeof v;
                                 if (vt !== 'undefined' && vt !== 'function') {
-                                    a[j++] = J._wrapString(k) + ':' + _stringify(v,w,d-1);
+                                    a[j++] = _string(k) + ':' + _stringify(v,w,d-1);
                                 }
                             }
                         }
@@ -383,7 +346,7 @@ YAHOO.lang.JSON = {
             }
 
             return 'null';
-        }
+        };
 
         // process the input
         d = d >= 0 ? d : 1/0;  // Default depth to POSITIVE_INFINITY
