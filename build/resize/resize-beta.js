@@ -1,19 +1,19 @@
 /**
  * @description <p>Makes an element resizable</p>
- * @class Resize
  * @namespace YAHOO.util
  * @requires yahoo, dom, dragdrop, element, event
  * @optional animation
- * @extends Element
  * @beta
  */
 (function() {
-var Dom = YAHOO.util.Dom,
+var D = YAHOO.util.Dom,
     Event = YAHOO.util.Event,
     Lang = YAHOO.lang;
 
     /**
      * @constructor
+     * @class Resize
+     * @extends YAHOO.util.Element
      * @param {String/HTMLElement} el The element to make resizable.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
@@ -221,7 +221,7 @@ var Dom = YAHOO.util.Dom,
                 this._proxy.className = this.CSS_PROXY;
                 this._proxy.style.height = this.get('element').clientHeight + 'px';
                 this._proxy.style.width = this.get('element').clientWidth + 'px';
-                document.body.appendChild(this._proxy);
+                this._wrap.parentNode.appendChild(this._proxy);
             } else {
                 this.set('animate', false);
             }
@@ -247,24 +247,26 @@ var Dom = YAHOO.util.Dom,
                 this._wrap = document.createElement('div');
                 this._wrap.id = this.get('element').id + '_wrap';
                 this._wrap.className = this.CSS_WRAP;
-                Dom.setStyle(this._wrap, 'width', this.get('width'));
-                Dom.setStyle(this._wrap, 'height', this.get('height'));
-                var pos = Dom.getStyle(this.get('element'), 'position');
-                Dom.setStyle(this._wrap, 'position', ((pos == 'static') ? 'relative' : pos));
-                Dom.setStyle(this._wrap, 'top', Dom.getStyle(this.get('element'), 'top'));
-                Dom.setStyle(this._wrap, 'left', Dom.getStyle(this.get('element'), 'left'));
-                if (Dom.getStyle(this.get('element'), 'position') == 'absolute') {
+                D.setStyle(this._wrap, 'width', this.get('width'));
+                D.setStyle(this._wrap, 'height', this.get('height'));
+                D.setStyle(this._wrap, 'z-index', this.getStyle('z-index'));
+                this.setStyle('z-index', 0);
+                var pos = D.getStyle(this.get('element'), 'position');
+                D.setStyle(this._wrap, 'position', ((pos == 'static') ? 'relative' : pos));
+                D.setStyle(this._wrap, 'top', D.getStyle(this.get('element'), 'top'));
+                D.setStyle(this._wrap, 'left', D.getStyle(this.get('element'), 'left'));
+                if (D.getStyle(this.get('element'), 'position') == 'absolute') {
                     this._positioned = true;
-                    Dom.setStyle(this.get('element'), 'position', 'relative');
-                    Dom.setStyle(this.get('element'), 'top', '0');
-                    Dom.setStyle(this.get('element'), 'left', '0');
+                    D.setStyle(this.get('element'), 'position', 'relative');
+                    D.setStyle(this.get('element'), 'top', '0');
+                    D.setStyle(this.get('element'), 'left', '0');
                 }
                 var par = this.get('element').parentNode;
                 par.replaceChild(this._wrap, this.get('element'));
                 this._wrap.appendChild(this.get('element'));
             } else {
                 this._wrap = this.get('element');
-                if (Dom.getStyle(this._wrap, 'position') == 'absolute') {
+                if (D.getStyle(this._wrap, 'position') == 'absolute') {
                     this._positioned = true;
                 }
             }
@@ -272,15 +274,15 @@ var Dom = YAHOO.util.Dom,
                 this._setupDragDrop();
             }
             if (this.get('hover')) {
-                Dom.addClass(this._wrap, this.CSS_HOVER);
+                D.addClass(this._wrap, this.CSS_HOVER);
             }
             if (this.get('knobHandles')) {
-                Dom.addClass(this._wrap, this.CSS_KNOB);
+                D.addClass(this._wrap, this.CSS_KNOB);
             }
             if (this.get('hiddenHandles')) {
-                Dom.addClass(this._wrap, this.CSS_HIDDEN);
+                D.addClass(this._wrap, this.CSS_HIDDEN);
             }
-            Dom.addClass(this._wrap, this.CSS_RESIZE);
+            D.addClass(this._wrap, this.CSS_RESIZE);
         },
         /** 
         * @private
@@ -288,7 +290,7 @@ var Dom = YAHOO.util.Dom,
         * @description Setup the DragDrop instance on the element
         */
         _setupDragDrop: function() {
-            Dom.addClass(this._wrap, this.CSS_DRAG);
+            D.addClass(this._wrap, this.CSS_DRAG);
             this.dd = new YAHOO.util.DD(this._wrap, this.get('id') + '-resize', { dragOnly: true });
             this.dd.on('dragEvent', function() {
                 this.fireEvent('dragEvent', arguments);
@@ -305,7 +307,7 @@ var Dom = YAHOO.util.Dom,
             var h = this.get('handles');
             for (var i = 0; i < h.length; i++) {
                 this._handles[h[i]] = document.createElement('div');
-                this._handles[h[i]].id = Dom.generateId(this._handles[h[i]]);
+                this._handles[h[i]].id = D.generateId(this._handles[h[i]]);
                 this._handles[h[i]].className = this.CSS_HANDLE + ' ' + this.CSS_HANDLE + '-' + h[i];
                 this._wrap.appendChild(this._handles[h[i]]);
                 Event.on(this._handles[h[i]], 'mouseover', this._handleMouseOver, this, true);
@@ -360,7 +362,7 @@ var Dom = YAHOO.util.Dom,
         * @description This method preps the autoRatio on MouseDown.
         */
         _handleMouseDown: function(cev, ev) {
-            if (Dom.getStyle(this._wrap, 'position') == 'absolute') {
+            if (D.getStyle(this._wrap, 'position') == 'absolute') {
                 this._positioned = true;
             }
             if (ev && ev[0]) {
@@ -375,17 +377,17 @@ var Dom = YAHOO.util.Dom,
         */
         _handleMouseOver: function(ev) {
             //Internet Explorer needs this
-            Dom.removeClass(this._wrap, this.CSS_RESIZE);
+            D.removeClass(this._wrap, this.CSS_RESIZE);
             if (this.get('hover')) {
-                Dom.removeClass(this._wrap, this.CSS_HOVER);
+                D.removeClass(this._wrap, this.CSS_HOVER);
             }
             var tar = Event.getTarget(ev);
-            if (Dom.hasClass(tar, this.CSS_HANDLE) && !this._active) {
-                Dom.addClass(tar, this.CSS_HANDLE + '-active');
+            if (D.hasClass(tar, this.CSS_HANDLE) && !this._active) {
+                D.addClass(tar, this.CSS_HANDLE + '-active');
                 for (var i in this._handles) {
                     if (Lang.hasOwnProperty(this._handles, i)) {
                         if (this._handles[i] == tar) {
-                            Dom.addClass(tar, this.CSS_HANDLE + '-' + i + '-active');
+                            D.addClass(tar, this.CSS_HANDLE + '-' + i + '-active');
                             break;
                         }
                     }
@@ -393,7 +395,7 @@ var Dom = YAHOO.util.Dom,
             }
 
             //Internet Explorer needs this
-            Dom.addClass(this._wrap, this.CSS_RESIZE);
+            D.addClass(this._wrap, this.CSS_RESIZE);
         },
         /** 
         * @private
@@ -403,24 +405,24 @@ var Dom = YAHOO.util.Dom,
         */
         _handleMouseOut: function(ev) {
             //Internet Explorer needs this
-            Dom.removeClass(this._wrap, this.CSS_RESIZE);
+            D.removeClass(this._wrap, this.CSS_RESIZE);
             if (this.get('hover') && !this._active) {
-                Dom.addClass(this._wrap, this.CSS_HOVER);
+                D.addClass(this._wrap, this.CSS_HOVER);
             }
             var tar = Event.getTarget(ev);
-            if (Dom.hasClass(tar, this.CSS_HANDLE) && !this._active) {
-                Dom.removeClass(tar, this.CSS_HANDLE + '-active');
+            if (D.hasClass(tar, this.CSS_HANDLE) && !this._active) {
+                D.removeClass(tar, this.CSS_HANDLE + '-active');
                 for (var i in this._handles) {
                     if (Lang.hasOwnProperty(this._handles, i)) {
                         if (this._handles[i] == tar) {
-                            Dom.removeClass(tar, this.CSS_HANDLE + '-' + i + '-active');
+                            D.removeClass(tar, this.CSS_HANDLE + '-' + i + '-active');
                             break;
                         }
                     }
                 }
             }
             //Internet Explorer needs this
-            Dom.addClass(this._wrap, this.CSS_RESIZE);
+            D.addClass(this._wrap, this.CSS_RESIZE);
         },
         /** 
         * @private
@@ -432,8 +434,8 @@ var Dom = YAHOO.util.Dom,
         */
         _handleStartDrag: function(ev, args, dd) {
             var tar = dd.getDragEl();
-            if (Dom.hasClass(tar, this.CSS_HANDLE)) {
-                if (Dom.getStyle(this._wrap, 'position') == 'absolute') {
+            if (D.hasClass(tar, this.CSS_HANDLE)) {
+                if (D.getStyle(this._wrap, 'position') == 'absolute') {
                     this._positioned = true;
                 }
                 this._active = true;
@@ -450,7 +452,7 @@ var Dom = YAHOO.util.Dom,
                         if (this._handles[i] == tar) {
                             this._currentHandle = i;
                             var handle = '_handle_for_' + i;
-                            Dom.addClass(tar, this.CSS_HANDLE + '-' + i + '-active');
+                            D.addClass(tar, this.CSS_HANDLE + '-' + i + '-active');
                             dd.on('dragEvent', this[handle], this, true);
                             dd.on('mouseUpEvent', this._handleMouseUp, this, true);
                             break;
@@ -459,16 +461,16 @@ var Dom = YAHOO.util.Dom,
                 }
 
 
-                Dom.addClass(tar, this.CSS_HANDLE + '-active');
+                D.addClass(tar, this.CSS_HANDLE + '-active');
 
                 if (this.get('proxy')) {
-                    var xy = Dom.getXY(this.get('element'));
-                    Dom.setXY(this._proxy, xy);
+                    var xy = D.getXY(this.get('element'));
+                    D.setXY(this._proxy, xy);
                     if (this.get('ghost')) {
                         this.addClass(this.CSS_GHOST);
                     }
                 }
-                Dom.addClass(this._wrap, this.CSS_RESIZING);
+                D.addClass(this._wrap, this.CSS_RESIZING);
                 this._setCache();
                 this._updateStatus(this._cache.height, this._cache.width, this._cache.top, this._cache.left);
                 this.fireEvent('startResize', { type: 'startresize', target: this});
@@ -480,8 +482,8 @@ var Dom = YAHOO.util.Dom,
         * @description Sets up the this._cache hash table.
         */
         _setCache: function() {
-            this._cache.xy = Dom.getXY(this._wrap);
-            Dom.setXY(this._wrap, this._cache.xy);
+            this._cache.xy = D.getXY(this._wrap);
+            D.setXY(this._wrap, this._cache.xy);
             this._cache.height = this.get('clientHeight');
             this._cache.width = this.get('clientWidth');
             this._cache.start.height = this._cache.height;
@@ -504,8 +506,8 @@ var Dom = YAHOO.util.Dom,
             this._currentDD.unsubscribe('dragEvent', this[handle], this, true);
             this._currentDD.unsubscribe('mouseUpEvent', this._handleMouseUp, this, true);
 
-            Dom.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-' + this._currentHandle + '-active');
-            Dom.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-active');
+            D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-' + this._currentHandle + '-active');
+            D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-active');
 
             this._currentHandle = null;
             if (!this.get('animate')) {
@@ -532,23 +534,23 @@ var Dom = YAHOO.util.Dom,
                 }
             }
 
-            Dom.removeClass(this._wrap, this.CSS_RESIZING);
+            D.removeClass(this._wrap, this.CSS_RESIZING);
             if (this.get('hover')) {
-                Dom.addClass(this._wrap, this.CSS_HOVER);
+                D.addClass(this._wrap, this.CSS_HOVER);
             }
             if (this._status) {
-                Dom.setStyle(this._status, 'display', 'none');
+                D.setStyle(this._status, 'display', 'none');
             }
             if (this.browser.ie) {
                 document.body.onselectstart = this._ieSelectBack;
             }
             for (var i in this._handles) {
                 if (Lang.hasOwnProperty(this._handles, i)) {
-                    Dom.removeClass(this._handles[i], this.CSS_HANDLE + '-active');
+                    D.removeClass(this._handles[i], this.CSS_HANDLE + '-active');
                 }
             }
             if (this.get('hover') && !this._active) {
-                Dom.addClass(this._wrap, this.CSS_HOVER);
+                D.addClass(this._wrap, this.CSS_HOVER);
             }
             this._resizeEvent = null;
         },
@@ -642,7 +644,7 @@ var Dom = YAHOO.util.Dom,
         _updateStatus: function(h, w, t, l) {
             if (this._resizeEvent && (!Lang.isString(this._resizeEvent))) {
                 if (this.get('status')) {
-                    Dom.setStyle(this._status, 'display', 'inline');
+                    D.setStyle(this._status, 'display', 'inline');
                 }
                 h = ((h === 0) ? this._cache.start.height : h);
                 w = ((w === 0) ? this._cache.start.width : w);
@@ -660,7 +662,7 @@ var Dom = YAHOO.util.Dom,
                 this._cache.offsetHeight = diffH;
                 this._cache.offsetWidth = diffW;
                 this._status.innerHTML = '<strong>' + parseInt(h, 10) + ' x ' + parseInt(w, 10) + '</strong><em>' + ((diffH > 0) ? '+' : '') + diffH + ' x ' + ((diffW > 0) ? '+' : '') + diffW + '</em>';
-                Dom.setXY(this._status, [Event.getPageX(this._resizeEvent) + 12, Event.getPageY(this._resizeEvent) + 12]);
+                D.setXY(this._status, [Event.getPageX(this._resizeEvent) + 12, Event.getPageY(this._resizeEvent) + 12]);
             }
         },
         /** 
@@ -706,11 +708,11 @@ var Dom = YAHOO.util.Dom,
 
             if (t == 0) {
                 //No Offset, get from cache
-                t = Dom.getY(el);
+                t = D.getY(el);
             }
             if (l == 0) {
                 //No Offset, get from cache
-                l = Dom.getX(el);
+                l = D.getX(el);
             }
 
             this._updateStatus(h, w, t, l);
@@ -765,11 +767,11 @@ var Dom = YAHOO.util.Dom,
                     //Do nothing
                 } else {
                     if (t) {
-                        Dom.setY(el, t);
+                        D.setY(el, t);
                         this._cache.top = t;
                     }
                     if (l) {
-                        Dom.setX(el, l);
+                        D.setX(el, l);
                         this._cache.left = l;
                     }
                 }
@@ -1096,7 +1098,7 @@ var Dom = YAHOO.util.Dom,
             
             var id = p_oElement;
             if (!Lang.isString(id)) {
-                id = Dom.generateId(id);
+                id = D.generateId(id);
             }
             Resize._instances[id] = this;
 
@@ -1378,7 +1380,7 @@ var Dom = YAHOO.util.Dom,
                         this._setupDragDrop();
                     } else {
                         if (this.dd) {
-                            Dom.removeClass(this._wrap, this.CSS_DRAG);
+                            D.removeClass(this._wrap, this.CSS_DRAG);
                             this.dd.unreg();
                         }
                     }
@@ -1482,7 +1484,7 @@ var Dom = YAHOO.util.Dom,
             }
             if (this.dd) {
                 this.dd.unreg();
-                Dom.removeClass(this._wrap, this.CSS_DRAG);
+                D.removeClass(this._wrap, this.CSS_DRAG);
             }
             if (this._wrap != this.get('element')) {
                 this.setStyle('position', '');
