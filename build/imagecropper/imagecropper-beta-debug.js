@@ -2,6 +2,7 @@
  * @description <p>Creates a Image Crop control.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, dragdrop, element, event, resize
+ * @module imagecropper
  * @beta
  */
 (function() {

@@ -3,6 +3,7 @@
  * @namespace YAHOO.util
  * @requires yahoo, dom, dragdrop, element, event
  * @optional animation
+ * @module resize
  * @beta
  */
 (function() {

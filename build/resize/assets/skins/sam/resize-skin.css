@@ -1,11 +1,12 @@
 .yui-skin-sam .yui-resize .yui-resize-handle {
     background-color: #F2F2F2;
-    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-resize .yui-resize-handle-active {
     background-color: #7D98B8;
-    border: 1px solid #304369;
     zoom: 1;
+}
+.yui-skin-sam .yui-resize-knob .yui-resize-handle {
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-resize-hover .yui-resize-handle-active {
     opacity: 1;
