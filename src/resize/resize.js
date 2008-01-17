@@ -15,6 +15,7 @@ var D = YAHOO.util.Dom,
      * @constructor
      * @class Resize
      * @extends YAHOO.util.Element
+     * @description <p>Makes an element resizable</p>
      * @param {String/HTMLElement} el The element to make resizable.
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
