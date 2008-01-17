@@ -95,6 +95,9 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize inline Cell editing
     this._initCellEditorEl();
     
+    // Initialize Column sort
+    this._initColumnSort();
+
     // Once per instance
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
 
@@ -2037,7 +2040,16 @@ YAHOO.widget.DataTable._initColumnResizerProxyEl = function() {
     return YAHOO.widget.DataTable._elColumnResizerProxy;
 };
 
-
+/** 	 
+  * Initializes Column sorting. 	 
+  * 	 
+  * @method _initColumnSort 	 
+  * @private 	 
+  */ 	 
+ YAHOO.widget.DataTable.prototype._initColumnSort = function() { 	 
+     this.subscribe("theadCellClickEvent", this.onEventSortColumn); 	 
+ }; 	 
+ 
 
 
 
@@ -2253,7 +2265,8 @@ YAHOO.widget.DataTable.prototype._addTdEl = function (elRow,oColumn,index) {
         YAHOO.util.Dom.addClass(elCell, YAHOO.widget.DataTable.CLASS_LAST);
     }
 
-    return elRow.insertBefore(elCell,elRow.cells[index]);
+    var insertBeforeCell = elRow.cells[index] || null;
+    return elRow.insertBefore(elCell,insertBeforeCell);
 };
 
 /**
@@ -3926,7 +3939,7 @@ YAHOO.widget.DataTable.prototype.render = function() {
                         }
                     }
                 }
-
+                
                 if(this._bInit) {
                     this._bInit = false;
                     this.fireEvent("initEvent");
