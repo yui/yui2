@@ -1,6 +1,6 @@
 {
 
-    'base': 'http://yui.yahooapis.com/2.4.1/build/',
+    'base': 'http://yui.yahooapis.com/2.5.0/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -83,6 +83,12 @@
             'pkg': 'container'
         },
 
+        'cookie': {
+            'type': 'js',
+            'path': 'cookie/cookie-beta-min.js',
+            'requires': ['yahoo']
+        },
+
         'datasource': {
             'type': 'js',
             'path': 'datasource/datasource-beta-min.js',
@@ -154,6 +160,13 @@
             'requires': ['event']
         },
 
+         'imagecropper': {
+             'type': 'js',
+             'path': 'imagecropper/imagecropper-beta-min.js',
+             'requires': ['dom', 'event', 'dragdrop', 'element', 'resize'],
+             'skinnable': true
+         },
+
         'imageloader': {
             'type': 'js',
             'path': 'imageloader/imageloader-beta-min.js',
@@ -199,6 +212,14 @@
             'supersedes': ['reset', 'fonts'],
             'rollup': 2
         },
+
+         'resize': {
+             'type': 'js',
+             'path': 'resize/resize-beta-min.js',
+             'requires': ['dom', 'event', 'dragdrop', 'element'],
+             'optional': ['animation'],
+             'skinnable': true
+         },
 
         'selector': {
             'type': 'js',

@@ -482,15 +482,35 @@
          * @param mod The module definition from moduleInfo
          */
         getRequires: function(mod) {
+            if (!mod) {
+                return [];
+            }
+
             if (!this.dirty && mod.expanded) {
                 return mod.expanded;
             }
 
             mod.requires=mod.requires || [];
-            var i, d=[], r=mod.requires, o=mod.optional, info=this.moduleInfo;
+            var i, d=[], r=mod.requires, o=mod.optional, info=this.moduleInfo, m;
             for (i=0; i<r.length; i=i+1) {
                 d.push(r[i]);
-                YUI.ArrayUtil.appendArray(d, this.getRequires(info[r[i]]));
+                m = info[r[i]];
+                YUI.ArrayUtil.appendArray(d, this.getRequires(m));
+
+                // add existing skins for skinnable modules as well.  The only
+                // way to do this is go through the list of required items (this
+                // assumes that _skin is called before getRequires is called on
+                // the module.
+                if (m.skinnable) {
+                    var req=this.required, l=req.length;
+                    for (var j=0; j<l; j=j+1) {
+                        console.log('checking ' + r[j]);
+                        if (req[j].indexOf(r[j]) > -1) {
+                            console.log('adding ' + r[j]);
+                            d.push(req[j]);
+                        }
+                    }
+                }
             }
 
             if (o && this.loadOptional) {

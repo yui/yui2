@@ -1597,7 +1597,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          */
         info: {
 
-    'base': 'http://yui.yahooapis.com/2.4.1/build/',
+    'base': 'http://yui.yahooapis.com/2.5.0/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -1680,6 +1680,12 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'pkg': 'container'
         },
 
+        'cookie': {
+            'type': 'js',
+            'path': 'cookie/cookie-beta-min.js',
+            'requires': ['yahoo']
+        },
+
         'datasource': {
             'type': 'js',
             'path': 'datasource/datasource-beta-min.js',
@@ -1751,6 +1757,13 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'requires': ['event']
         },
 
+         'imagecropper': {
+             'type': 'js',
+             'path': 'imagecropper/imagecropper-beta-min.js',
+             'requires': ['dom', 'event', 'dragdrop', 'element', 'resize'],
+             'skinnable': true
+         },
+
         'imageloader': {
             'type': 'js',
             'path': 'imageloader/imageloader-beta-min.js',
@@ -1796,6 +1809,14 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'supersedes': ['reset', 'fonts'],
             'rollup': 2
         },
+
+         'resize': {
+             'type': 'js',
+             'path': 'resize/resize-beta-min.js',
+             'requires': ['dom', 'event', 'dragdrop', 'element'],
+             'optional': ['animation'],
+             'skinnable': true
+         },
 
         'selector': {
             'type': 'js',
@@ -2318,15 +2339,35 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          * @param mod The module definition from moduleInfo
          */
         getRequires: function(mod) {
+            if (!mod) {
+                return [];
+            }
+
             if (!this.dirty && mod.expanded) {
                 return mod.expanded;
             }
 
             mod.requires=mod.requires || [];
-            var i, d=[], r=mod.requires, o=mod.optional, info=this.moduleInfo;
+            var i, d=[], r=mod.requires, o=mod.optional, info=this.moduleInfo, m;
             for (i=0; i<r.length; i=i+1) {
                 d.push(r[i]);
-                YUI.ArrayUtil.appendArray(d, this.getRequires(info[r[i]]));
+                m = info[r[i]];
+                YUI.ArrayUtil.appendArray(d, this.getRequires(m));
+
+                // add existing skins for skinnable modules as well.  The only
+                // way to do this is go through the list of required items (this
+                // assumes that _skin is called before getRequires is called on
+                // the module.
+                if (m.skinnable) {
+                    var req=this.required, l=req.length;
+                    for (var j=0; j<l; j=j+1) {
+                        console.log('checking ' + r[j]);
+                        if (req[j].indexOf(r[j]) > -1) {
+                            console.log('adding ' + r[j]);
+                            d.push(req[j]);
+                        }
+                    }
+                }
             }
 
             if (o && this.loadOptional) {
