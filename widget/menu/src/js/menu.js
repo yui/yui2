@@ -1954,90 +1954,102 @@ _onMouseMove: function (p_oEvent, p_oMenu) {
 */
 _onClick: function (p_sType, p_aArgs) {
 
-    var oEvent = p_aArgs[0],
-        oItem = p_aArgs[1],
-        oSubmenu,
-        bInMenuAnchor = false,
-        oRoot,
-        sId,
-        sURL,
-        nHashPos,
-        nLen;
+	var Event = YAHOO.util.Event,
+		Dom = YAHOO.util.Dom,
+		oEvent = p_aArgs[0],
+		oItem = p_aArgs[1],
+		oSubmenu,
+		bInMenuAnchor = false,
+		oRoot,
+		sId,
+		sURL,
+		nHashPos,
+		nLen;
 
 
-    if (oItem && !oItem.cfg.getProperty("disabled")) {
+	if (oItem) {
+	
+		if (oItem.cfg.getProperty("disabled")) {
+		
+			Event.preventDefault(oEvent);
 
-        oSubmenu = oItem.cfg.getProperty("submenu");
+		}
+		else {
 
-        
-        /*
-             Check if the URL of the anchor is pointing to an element that is 
-             a child of the menu.
-        */
-        
-        sURL = oItem.cfg.getProperty("url");
+			oSubmenu = oItem.cfg.getProperty("submenu");
+	
+			
+			/*
+				 Check if the URL of the anchor is pointing to an element that is 
+				 a child of the menu.
+			*/
+			
+			sURL = oItem.cfg.getProperty("url");
 
-        
-        if (sURL) {
-
-            nHashPos = sURL.indexOf("#");
-
-            nLen = sURL.length;
-
-
-            if (nHashPos != -1) {
-
-                sURL = sURL.substr(nHashPos, nLen);
-    
-                nLen = sURL.length;
-
-
-                if (nLen > 1) {
-
-                    sId = sURL.substr(1, nLen);
-
-                    bInMenuAnchor = Dom.isAncestor(this.element, sId);
-                    
-                }
-                else if (nLen === 1) {
-
-                    bInMenuAnchor = true;
-                
-                }
-
-            }
-        
-        }
-
-
-        if (bInMenuAnchor && !oItem.cfg.getProperty("target")) {
-
-            Event.preventDefault(oEvent);
-
-            oItem.focus();
-        
-        }
+		
+			if (sURL) {
+	
+				nHashPos = sURL.indexOf("#");
+	
+				nLen = sURL.length;
+	
+	
+				if (nHashPos != -1) {
+	
+					sURL = sURL.substr(nHashPos, nLen);
+		
+					nLen = sURL.length;
+	
+	
+					if (nLen > 1) {
+	
+						sId = sURL.substr(1, nLen);
+	
+						bInMenuAnchor = Dom.isAncestor(this.element, sId);
+						
+					}
+					else if (nLen === 1) {
+	
+						bInMenuAnchor = true;
+					
+					}
+	
+				}
+			
+			}
 
 
-        if (!oSubmenu) {
-
-            oRoot = this.getRoot();
-            
-            if (oRoot instanceof YAHOO.widget.MenuBar || 
-                oRoot.cfg.getProperty("position") == "static") {
-
-                oRoot.clearActiveItem();
-
-            }
-            else {
-
-                oRoot.hide();
-            
-            }
-
-        }
-    
-    }
+	
+			if (bInMenuAnchor && !oItem.cfg.getProperty("target")) {
+	
+				Event.preventDefault(oEvent);
+	
+				oItem.focus();
+			
+			}
+	
+	
+			if (!oSubmenu) {
+	
+				oRoot = this.getRoot();
+				
+				if (oRoot instanceof YAHOO.widget.MenuBar || 
+					oRoot.cfg.getProperty("position") == "static") {
+	
+					oRoot.clearActiveItem();
+	
+				}
+				else {
+	
+					oRoot.hide();
+				
+				}
+	
+			}
+			
+		}
+	
+	}
 
 },
 
