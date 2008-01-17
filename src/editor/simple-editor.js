@@ -1801,7 +1801,9 @@ var Dom = YAHOO.util.Dom,
         _disableEditor: function(disabled) {
             if (disabled) {
                 if (!this._mask) {
-                    this._setDesignMode('off');
+                    if (!this.browser.ie) {
+                        this._setDesignMode('off');
+                    }
                     if (this.toolbar) {
                         this.toolbar.set('disabled', true);
                     }
@@ -2379,7 +2381,7 @@ var Dom = YAHOO.util.Dom,
                         ret = false;
                     }
                     return ret;
-                }               
+                }
             });
             /**
             * @config panel
