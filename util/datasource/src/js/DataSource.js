@@ -1062,19 +1062,17 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
 
             // Convert to JSON object if it's a string
             if(YAHOO.lang.isString(oFullResponse)) {
-                // Check for latest JSON lib but divert KHTML clients
-                var isNotMac = (navigator.userAgent.toLowerCase().indexOf('khtml')== -1);
-                if(oFullResponse.parseJSON && isNotMac) {
+                if(oFullResponse.parseJSON) {
                     // Use the new JSON utility if available
                     oFullResponse = oFullResponse.parseJSON();
                 }
                 // Check for YUI JSON lib but divert KHTML clients
-                else if(YAHOO.lang.JSON && isNotMac) {
+                else if(YAHOO.lang.JSON) {
                     // Use the JSON utility if available
                     oFullResponse = YAHOO.lang.JSON.parse(oFullResponse);
                 }
                 // Check for older JSON lib but divert KHTML clients
-                else if(window.JSON && JSON.parse && isNotMac) {
+                else if(window.JSON && JSON.parse) {
                     // Use the JSON utility if available
                     oFullResponse = JSON.parse(oFullResponse);
                 }

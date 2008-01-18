@@ -724,8 +724,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
         case YAHOO.widget.DS_XHR.TYPE_JSON:
             var jsonList, jsonObjParsed;
             // Check for JSON lib but divert KHTML clients
-            var isNotMac = (navigator.userAgent.toLowerCase().indexOf('khtml')== -1);
-            if(oResponse.parseJSON && isNotMac) {
+            if(oResponse.parseJSON) {
                 // Use the new JSON utility if available
                 jsonObjParsed = oResponse.parseJSON();
                 if(!jsonObjParsed) {
@@ -743,7 +742,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                 }
             }
             // Check for YUI JSON lib but divert KHTML clients
-            else if(YAHOO.lang.JSON && isNotMac) {
+            else if(YAHOO.lang.JSON) {
                 // Use the JSON utility if available
                 jsonObjParsed = YAHOO.lang.JSON.parse(oResponse);
                 if(!jsonObjParsed) {
@@ -761,7 +760,7 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                    }
                 }
             }
-            else if(window.JSON && isNotMac) {
+            else if(window.JSON) {
                 // Use older JSON lib if available
                 jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
