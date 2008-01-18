@@ -504,9 +504,9 @@
                 if (m.skinnable) {
                     var req=this.required, l=req.length;
                     for (var j=0; j<l; j=j+1) {
-                        console.log('checking ' + r[j]);
+                        // YAHOO.log('checking ' + r[j]);
                         if (req[j].indexOf(r[j]) > -1) {
-                            console.log('adding ' + r[j]);
+                            // YAHOO.log('adding ' + r[j]);
                             d.push(req[j]);
                         }
                     }
@@ -541,7 +541,7 @@
 
             YUI.ObjectUtil.appendArray(o, s);
 
-            // console.log(this.sorted + ", " + name + " provides " + YUI.ObjectUtil.keys(o));
+            // YAHOO.log(this.sorted + ", " + name + " provides " + YUI.ObjectUtil.keys(o));
 
             return o;
         },
@@ -804,14 +804,14 @@
                     var skinDef = this.parseSkin(i);
 
                     if (skinDef) {
-                        //console.log("skin found in reduce: " + skinDef.skin + ", " + skinDef.module);
+                        //YAHOO.log("skin found in reduce: " + skinDef.skin + ", " + skinDef.module);
                         // the skin rollup will not have a module name
                         if (!skinDef.module) {
                             var skin_pre = this.SKIN_PREFIX + skinDef.skin;
-                            //console.log("skin_pre: " + skin_pre);
+                            //YAHOO.log("skin_pre: " + skin_pre);
                             for (j in r) {
                                 if (j !== i && j.indexOf(skin_pre) > -1) {
-                                    //console.log ("removing component skin: " + j);
+                                    //YAHOO.log ("removing component skin: " + j);
                                     delete r[j];
                                 }
                             }
@@ -1284,12 +1284,12 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
             u = u + path;
 
             if (f) {
-                // console.log("filter: " + f + ", " + f.searchExp + 
+                // YAHOO.log("filter: " + f + ", " + f.searchExp + 
                 // ", " + f.replaceStr);
                 u = u.replace(new RegExp(f.searchExp), f.replaceStr);
             }
 
-            // console.log(u);
+            // YAHOO.log(u);
 
             return u;
         }

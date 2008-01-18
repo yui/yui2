@@ -261,6 +261,7 @@ YAHOO.util.Get = function() {
             var q = queues[i];
             if (q.autopurge && q.finished) {
                 _purge(q.tId);
+                delete queues[i];
             }
         }
 
@@ -281,6 +282,7 @@ YAHOO.util.Get = function() {
                 h.removeChild(n[i]);
             }
         }
+        q.nodes = [];
     };
 
     /**
