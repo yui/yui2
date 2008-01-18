@@ -27,7 +27,7 @@
  */
 YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
     var DT = YAHOO.widget.DataTable,
-        DS = YAHOO.widget.DataSource;
+        DS = YAHOO.util.DataSource;
 
     // Internal vars
     this._nIndex = DT._nCount;
