@@ -723,26 +723,8 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     switch (this.responseType) {
         case YAHOO.widget.DS_XHR.TYPE_JSON:
             var jsonList, jsonObjParsed;
-            // Check for JSON lib but divert KHTML clients
-            if(oResponse.parseJSON) {
-                // Use the new JSON utility if available
-                jsonObjParsed = oResponse.parseJSON();
-                if(!jsonObjParsed) {
-                    bError = true;
-                }
-                else {
-                    try {
-                        // eval is necessary here since aSchema[0] is of unknown depth
-                        jsonList = eval("jsonObjParsed." + aSchema[0]);
-                    }
-                    catch(e) {
-                        bError = true;
-                        break;
-                   }
-                }
-            }
-            // Check for YUI JSON lib but divert KHTML clients
-            else if(YAHOO.lang.JSON) {
+            // Check for YUI JSON
+            if(YAHOO.lang.JSON) {
                 // Use the JSON utility if available
                 jsonObjParsed = YAHOO.lang.JSON.parse(oResponse);
                 if(!jsonObjParsed) {
@@ -760,8 +742,26 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                    }
                 }
             }
+            // Check for JSON lib
+            else if(oResponse.parseJSON) {
+                // Use the new JSON utility if available
+                jsonObjParsed = oResponse.parseJSON();
+                if(!jsonObjParsed) {
+                    bError = true;
+                }
+                else {
+                    try {
+                        // eval is necessary here since aSchema[0] is of unknown depth
+                        jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    }
+                    catch(e) {
+                        bError = true;
+                        break;
+                   }
+                }
+            }
+            // Use older JSON lib if available
             else if(window.JSON) {
-                // Use older JSON lib if available
                 jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
                     bError = true;

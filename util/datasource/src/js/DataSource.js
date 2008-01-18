@@ -1062,18 +1062,16 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
 
             // Convert to JSON object if it's a string
             if(YAHOO.lang.isString(oFullResponse)) {
-                if(oFullResponse.parseJSON) {
-                    // Use the new JSON utility if available
-                    oFullResponse = oFullResponse.parseJSON();
-                }
-                // Check for YUI JSON lib but divert KHTML clients
-                else if(YAHOO.lang.JSON) {
-                    // Use the JSON utility if available
+                // Check for YUI JSON lib
+                if(YAHOO.lang.JSON) {
                     oFullResponse = YAHOO.lang.JSON.parse(oFullResponse);
                 }
-                // Check for older JSON lib but divert KHTML clients
+                // Check for JSON lib
+                else if(oFullResponse.parseJSON) {
+                    oFullResponse = oFullResponse.parseJSON();
+                }
+                // Check for older JSON lib
                 else if(window.JSON && JSON.parse) {
-                    // Use the JSON utility if available
                     oFullResponse = JSON.parse(oFullResponse);
                 }
                 // No JSON lib found so parse the string
