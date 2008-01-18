@@ -68,12 +68,12 @@ YAHOO.util.AnimMgr = new function() {
      * @private
      */
     this.unRegister = function(tween, index) {
-        tween._onComplete.fire();
         index = index || getIndex(tween);
-        if (index == -1) {
+        if (!tween.isAnimated() || index == -1) {
             return false;
         }
         
+        tween._onComplete.fire();
         queue.splice(index, 1);
 
         tweenCount -= 1;
@@ -106,9 +106,7 @@ YAHOO.util.AnimMgr = new function() {
             clearInterval(thread);
             
             for (var i = 0, len = queue.length; i < len; ++i) {
-                if ( queue[0].isAnimated() ) {
-                    this.unRegister(queue[0], 0);  
-                }
+                this.unRegister(queue[0], 0);  
             }
 
             queue = [];

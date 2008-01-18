@@ -12,7 +12,7 @@
  * @requires YAHOO.util.Dom
  * @requires YAHOO.util.Event
  * @requires YAHOO.util.CustomEvent 
- * @extends YAHOO.util.Anim
+ * @extends YAHOO.util.ColorAnim
  * @constructor
  * @param {String or HTMLElement} el Reference to the element that will be animated
  * @param {Object} attributes The attribute(s) to be animated.  
@@ -22,24 +22,20 @@
  * @param {Number} duration (optional, defaults to 1 second) Length of animation (frames or seconds), defaults to time-based
  * @param {Function} method (optional, defaults to YAHOO.util.Easing.easeNone) Computes the values that are applied to the attributes per frame (generally a YAHOO.util.Easing method)
  */
-    YAHOO.util.Scroll = function(el, attributes, duration,  method) {
+    var Scroll = function(el, attributes, duration,  method) {
         if (el) { // dont break existing subclasses not using YAHOO.extend
-            YAHOO.util.Scroll.superclass.constructor.call(this, el, attributes, duration, method);
+            Scroll.superclass.constructor.call(this, el, attributes, duration, method);
         }
     };
 
-    YAHOO.extend(YAHOO.util.Scroll, YAHOO.util.ColorAnim);
-    
+    Scroll.NAME = 'Scroll';
+
     // shorthand
     var Y = YAHOO.util;
-    var superclass = Y.Scroll.superclass;
-    var proto = Y.Scroll.prototype;
-
-    proto.toString = function() {
-        var el = this.getEl();
-        var id = el.id || el.tagName;
-        return ("Scroll " + id);
-    };
+    YAHOO.extend(Scroll, Y.ColorAnim);
+    
+    var superclass = Scroll.superclass;
+    var proto = Scroll.prototype;
 
     proto.doMethod = function(attr, start, end) {
         var val = null;
@@ -79,4 +75,6 @@
             superclass.setAttribute.call(this, attr, val, unit);
         }
     };
+
+    Y.Scroll = Scroll;
 })();
