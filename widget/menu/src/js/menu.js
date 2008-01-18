@@ -1724,7 +1724,11 @@ _onMouseOver: function (p_sType, p_aArgs) {
         Event.on(this.element, "mousemove", this._onMouseMove, this, true);
 
 
-        this.clearActiveItem();
+		if (!Dom.isAncestor(oItem.element, Event.getRelatedTarget(oEvent))) {
+
+        	this.clearActiveItem();
+        
+        }
 
 
         if (this.parent && this._nSubmenuHideDelayId) {
