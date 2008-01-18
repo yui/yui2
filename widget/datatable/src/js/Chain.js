@@ -34,13 +34,21 @@ YAHOO.util.Chain.prototype = {
                 args = [args];
             }
 
-            this.id = setTimeout(function () {
+            var f = function () {
                 fn.apply(o,args);
                 if (me.id) {
                     me.id = 0;
                     me.run();
                 }
-            },ms);
+            };
+            // Execute immediately if the callback timeout is set to -1.
+            // Otherwise set to execute after the configured timeout
+            if (ms === -1) {
+                me.id = 1;
+                f();
+            } else {
+                this.id = setTimeout(f,ms);
+            }
         }
 
         return this;
