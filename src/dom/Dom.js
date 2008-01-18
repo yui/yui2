@@ -10,7 +10,8 @@
         setStyle,           // ditto
         id_counter = 0,     // for use with generateId
         propertyCache = {}, // for faster hyphen converts
-        reClassNameCache = {}; // cache regexes for className
+        reClassNameCache = {},          // cache regexes for className
+        document = window.document;     // cache for faster lookups
     
     // brower detection
     var isOpera = YAHOO.env.ua.opera,
@@ -125,7 +126,7 @@
             el.style[property] = val;
         };
     }
-    
+
     var testElement = function(node, method) {
         return node && node.nodeType == 1 && ( !method || method(node) );
     };
@@ -143,11 +144,11 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if (el && (el.tagName || el.item)) { // HTMLElement, or HTMLCollection
+            if (el && (el.nodeType || el.item)) { // Node, or NodeList
                 return el;
             }
 
-            if (YAHOO.lang.isString(el) || !el) { // HTMLElement or null
+            if (YAHOO.lang.isString(el) || !el) { // id or null
                 return document.getElementById(el);
             }
             
@@ -207,65 +208,15 @@
          */
         getXY: function(el) {
             var f = function(el) {
-    
-            // has to be part of document to have pageXY
+                // has to be part of document to have pageXY
                 if ( (el.parentNode === null || el.offsetParent === null ||
-                        this.getStyle(el, 'display') == 'none') && el != document.body) {
+                        this.getStyle(el, 'display') == 'none') && el != el.ownerDocument.body) {
                     YAHOO.log('getXY failed: element not available', 'error', 'Dom');
                     return false;
                 }
                 
-                var parentNode = null;
-                var pos = [];
-                var box;
-                var doc = el.ownerDocument; 
-
-                if (el.getBoundingClientRect) { // IE
-                    box = el.getBoundingClientRect();
-                    return [box.left + Y.Dom.getDocumentScrollLeft(el.ownerDocument), box.top + Y.Dom.getDocumentScrollTop(el.ownerDocument)];
-                }
-                else { // safari, opera, & gecko
-                    pos = [el.offsetLeft, el.offsetTop];
-                    parentNode = el.offsetParent;
-
-                    // safari: if el is abs or any parent is abs, subtract body offsets
-                    var hasAbs = this.getStyle(el, 'position') == 'absolute';
-
-                    if (parentNode != el) {
-                        while (parentNode) {
-                            pos[0] += parentNode.offsetLeft;
-                            pos[1] += parentNode.offsetTop;
-                            if (isSafari && !hasAbs && 
-                                    this.getStyle(parentNode,'position') == 'absolute' ) {
-                                hasAbs = true; // we need to offset if any parent is absolutely positioned
-                            }
-                            parentNode = parentNode.offsetParent;
-                        }
-                    }
-
-                    if (isSafari && hasAbs) { //safari doubles in this case
-                        pos[0] -= el.ownerDocument.body.offsetLeft;
-                        pos[1] -= el.ownerDocument.body.offsetTop;
-                    } 
-                }
-                
-                parentNode = el.parentNode;
-
-                // account for any scrolled ancestors
-                while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
-                {
-                   // work around opera inline/table scrollLeft/Top bug
-                   if (Y.Dom.getStyle(parentNode, 'display').search(/^inline|table-row.*$/i)) { 
-                        pos[0] -= parentNode.scrollLeft;
-                        pos[1] -= parentNode.scrollTop;
-                    }
-                    
-                    parentNode = parentNode.parentNode; 
-                }
-       
-                YAHOO.log('getXY returning ' + pos, 'info', 'Dom');
-                
-                return pos;
+                YAHOO.log('getXY returning ' + getXY(el), 'info', 'Dom');
+                return getXY(el);
             };
             
             return Y.Dom.batch(el, f, Y.Dom, true);
@@ -501,7 +452,7 @@
             var re = getClassRegEx(className);
             
             var f = function(el) {
-                if (!this.hasClass(el, className)) {
+                if (!className || !this.hasClass(el, className)) {
                     return false; // not present
                 }                 
 
@@ -596,27 +547,27 @@
          */
         isAncestor: function(haystack, needle) {
             haystack = Y.Dom.get(haystack);
-            if (!haystack || !needle) { return false; }
+            needle = Y.Dom.get(needle);
             
-            var f = function(node) {
-                if (haystack.contains && node.nodeType && !isSafari) { // safari contains is broken
-                    YAHOO.log('isAncestor returning ' + haystack.contains(node), 'info', 'Dom');
-                    return haystack.contains(node);
-                }
-                else if ( haystack.compareDocumentPosition && node.nodeType ) {
-                    YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(node) & 16), 'info', 'Dom');
-                    return !!(haystack.compareDocumentPosition(node) & 16);
-                } else if (node.nodeType) {
-                    // fallback to crawling up (safari)
-                    return !!this.getAncestorBy(node, function(el) {
-                        return el == haystack; 
-                    }); 
-                }
-                YAHOO.log('isAncestor failed; most likely needle is not an HTMLElement', 'error', 'Dom');
+            if (!haystack || !needle) {
                 return false;
-            };
-            
-            return Y.Dom.batch(needle, f, Y.Dom, true);      
+            }
+
+            if (haystack.contains && needle.nodeType && !isSafari) { // safari contains is broken
+                YAHOO.log('isAncestor returning ' + haystack.contains(needle), 'info', 'Dom');
+                return haystack.contains(needle);
+            }
+            else if ( haystack.compareDocumentPosition && needle.nodeType ) {
+                YAHOO.log('isAncestor returning ' + !!(haystack.compareDocumentPosition(needle) & 16), 'info', 'Dom');
+                return !!(haystack.compareDocumentPosition(needle) & 16);
+            } else if (needle.nodeType) {
+                // fallback to crawling up (safari)
+                return !!this.getAncestorBy(needle, function(el) {
+                    return el == haystack; 
+                }); 
+            }
+            YAHOO.log('isAncestor failed; most likely needle is not an HTMLElement', 'error', 'Dom');
+            return false;
         },
         
         /**
@@ -626,19 +577,7 @@
          * @return {Boolean} Whether or not the element is present in the current document
          */
         inDocument: function(el) {
-            var f = function(el) { // safari contains fails for body so crawl up
-                if (isSafari) {
-                    while (el = el.parentNode) { // note assignment
-                        if (el == document.documentElement) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-                return this.isAncestor(document.documentElement, el);
-            };
-            
-            return Y.Dom.batch(el, f, Y.Dom, true);
+            return this.isAncestor(document.documentElement, el);
         },
         
         /**
@@ -1055,6 +994,74 @@
             } else {
                 return referenceNode.parentNode.appendChild(newNode);
             }
+        },
+
+        /**
+         * Creates a Region based on the viewport relative to the document. 
+         * @method getClientRegion
+         * @return {Region} A Region object representing the viewport which accounts for document scroll
+         */
+        getClientRegion: function() {
+            var t = Y.Dom.getDocumentScrollTop(),
+                l = Y.Dom.getDocumentScrollLeft(),
+                r = Y.Dom.getViewportWidth() + l,
+                b = Y.Dom.getViewportHeight() + t;
+
+            return new Y.Region(t, r, b, l);
         }
     };
+    
+    var getXY = function() {
+        if (document.documentElement.getBoundingClientRect) { // IE
+            return function(el) {
+                var box = el.getBoundingClientRect();
+
+                var rootNode = el.ownerDocument;
+                return [box.left + Y.Dom.getDocumentScrollLeft(rootNode), box.top +
+                        Y.Dom.getDocumentScrollTop(rootNode)];
+            };
+        } else {
+            return function(el) { // manually calculate by crawling up offsetParents
+                var pos = [el.offsetLeft, el.offsetTop];
+                var parentNode = el.offsetParent;
+
+                // safari: subtract body offsets if el is abs (or any offsetParent), unless body is offsetParent
+                var accountForBody = (isSafari &&
+                        Y.Dom.getStyle(el, 'position') == 'absolute' &&
+                        el.offsetParent == el.ownerDocument.body);
+
+                if (parentNode != el) {
+                    while (parentNode) {
+                        pos[0] += parentNode.offsetLeft;
+                        pos[1] += parentNode.offsetTop;
+                        if (!accountForBody && isSafari && 
+                                Y.Dom.getStyle(parentNode,'position') == 'absolute' ) { 
+                            accountForBody = true;
+                        }
+                        parentNode = parentNode.offsetParent;
+                    }
+                }
+
+                if (accountForBody) { //safari doubles in this case
+                    pos[0] -= el.ownerDocument.body.offsetLeft;
+                    pos[1] -= el.ownerDocument.body.offsetTop;
+                } 
+                parentNode = el.parentNode;
+
+                // account for any scrolled ancestors
+                while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
+                {
+                   // work around opera inline/table scrollLeft/Top bug
+                   if (Y.Dom.getStyle(parentNode, 'display').search(/^inline|table-row.*$/i)) { 
+                        pos[0] -= parentNode.scrollLeft;
+                        pos[1] -= parentNode.scrollTop;
+                    }
+                    
+                    parentNode = parentNode.parentNode; 
+                }
+
+                return pos;
+            };
+        }
+    }() // NOTE: Executing for loadtime branching
 })();
