@@ -28,15 +28,6 @@
  * @param oConfigs {Object} (optional) Object literal of configuration values.
  */
 YAHOO.util.DataSource = function(oLiveData, oConfigs) {
-    // Set any config params passed in to override defaults
-    if(oConfigs && (oConfigs.constructor == Object)) {
-        for(var sConfig in oConfigs) {
-            if(sConfig) {
-                this[sConfig] = oConfigs[sConfig];
-            }
-        }
-    }
-    
     if(!oLiveData) {
         YAHOO.log("Could not instantiate DataSource due to invalid live database",
                 "error", this.toString());
@@ -69,6 +60,15 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
         this.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
     }
 
+    // Set any config params passed in to override defaults
+    if(oConfigs && (oConfigs.constructor == Object)) {
+        for(var sConfig in oConfigs) {
+            if(sConfig) {
+                this[sConfig] = oConfigs[sConfig];
+            }
+        }
+    }
+    
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
     if(!YAHOO.lang.isNumber(maxCacheEntries) || (maxCacheEntries < 0)) {
