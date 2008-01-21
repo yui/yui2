@@ -18,6 +18,7 @@
 .sharedTrigger2 { position:absolute; top:10px; left:550px; height:67px; width:100px; }
 .fold-top { position:absolute; top:130px; left:420px; height:75px; width:100px; }
 .fold-bottom { position:absolute; top:500px; left:420px; height:75px; width:100px; }
+.customTrigger { position:absolute; top:330px; left:420px; height:67px; width:100px; }
 
 .yui-imgload { background:none !important; }
 </style>
@@ -47,6 +48,7 @@
 	<div class='fold-bottom'>
 		<img id='foldImgBottom' />
 	</div>
+	<div class='customTrigger' id='customTrigger'></div>
 </div>
 
 <script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
@@ -145,6 +147,31 @@ var addTriggerTestCase = new YAHOO.tool.TestCase({
 		YAHOO.util.Assert.areNotEqual(this.triggerImage.style.backgroundImage.indexOf(this.imageUrl), -1);
 	}
 
+});
+
+var customTriggerTestCase = new YAHOO.tool.TestCase({
+	/*
+	 * Test case for checking adding custom event triggers to a group
+	 */
+	
+	name: 'custom trigger test',
+
+	setUp: function() {
+		this.imageUrl = 'http://developer.yahoo.com/yui/docs/assets/examples/exampleimages/small/uluru.jpg';
+		this.customEvent = new YAHOO.util.CustomEvent('imageloader_unit_test_for_custom_trigger');
+		this.triggerGroup = new YAHOO.util.ImageLoader.group();
+		this.triggerGroup.addCustomTrigger(this.customEvent);
+		this.triggerGroup.registerBgImage('customTrigger', this.imageUrl);
+		this.triggerGroup.name = 'customTriggerGroup';
+		this.triggerImage = document.getElementById('customTrigger');
+	},
+
+	testCustomTrigger: function() {
+		YAHOO.util.Assert.areEqual(this.triggerImage.style.backgroundImage, '');
+		this.customEvent.fire();
+		YAHOO.util.Assert.areNotEqual(this.triggerImage.style.backgroundImage.indexOf(this.imageUrl), -1);
+	}
+	
 });
 
 var imgSizingTestCase = new YAHOO.tool.TestCase({
@@ -258,6 +285,7 @@ var imageLoaderTestSuite = new YAHOO.tool.TestSuite('YUI ImageLoader Utility');
 imageLoaderTestSuite.add(imgUrlsTestCase);
 imageLoaderTestSuite.add(classNameTestCase);
 imageLoaderTestSuite.add(addTriggerTestCase);
+imageLoaderTestSuite.add(customTriggerTestCase);
 imageLoaderTestSuite.add(imgSizingTestCase);
 imageLoaderTestSuite.add(triggerRemovalTestCase);
 imageLoaderTestSuite.add(foldConditionalTestCase);
