@@ -201,8 +201,8 @@ YAHOO.util.ImageLoader.group.prototype.registerSrcImage = function(domId, url, w
  * @param {String}	url	URL for the image
  * @return {Object}	pngBgImgObj that was registered, for modifying any attributes in the object
  */
-YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url) {
-	this._imgObjs[domId] = new YAHOO.util.ImageLoader.pngBgImgObj(domId, url);
+YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url, ailProps) {
+	this._imgObjs[domId] = new YAHOO.util.ImageLoader.pngBgImgObj(domId, url, ailProps);
 	return this._imgObjs[domId];
 };
 
@@ -443,9 +443,19 @@ YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
  * @extends YAHOO.util.ImageLoader.imgObj
  * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
+ * @param {Object}  ailProps The AlphaImageLoader properties to be set for the image
+ *                    Valid properties are 'sizingMethod' and 'enabled'
  */
-YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url) {
+YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url, ailProps) {
 	YAHOO.util.ImageLoader.pngBgImgObj.superclass.constructor.call(this, domId, url);
+
+	/**
+	 * AlphaImageLoader properties to be set for the image.
+	 * Valid properties are "sizingMethod" and "enabled".
+	 * @property props
+	 * @type Object
+	 */
+	this.props = ailProps || {};
 };
 
 YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.imgObj);
@@ -459,7 +469,9 @@ YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.img
  */
 YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
 	if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
-		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="scale")';
+		var sizingMethod = (YAHOO.lang.isUndefined(this.props.sizingMethod)) ? 'scale' : this.props.sizingMethod;
+		var enabled = (YAHOO.lang.isUndefined(this.props.enabled)) ? 'true' : this.props.enabled;
+		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="' + sizingMethod + '", enabled="' + enabled + '")';
 	}
 	else {
 		el.style.backgroundImage = "url('" + this.url + "')";
