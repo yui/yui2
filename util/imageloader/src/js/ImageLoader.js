@@ -215,11 +215,11 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
 
 	clearTimeout(this._timeout);
 	// remove all listeners
-	for (var i=0; i < this._triggers.length; i++) {
+	for (var i=0, len = this._triggers.length; i < len; i++) {
 		YAHOO.util.Event.removeListener(this._triggers[i][0], this._triggers[i][1], this._triggers[i][2]);
 	}
 	// remove custom event subscriptions
-	for (var i=0; i < this._customTriggers.length; i++) {
+	for (var i=0, len = this._customTriggers.length; i < len; i++) {
 		this._customTriggers[i][0].unsubscribe(this._customTriggers[i][1], this);
 	}
 
@@ -259,7 +259,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 	// and by class
 	if (this.className) {
 		this._classImageEls = YAHOO.util.Dom.getElementsByClassName(this.className);
-		for (var i=0; i < this._classImageEls.length; i++) {
+		for (var i=0, len = this._classImageEls.length; i < len; i++) {
 			var elPos = YAHOO.util.Dom.getXY(this._classImageEls[i]);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
 				YAHOO.log('Image with id "' + this._classImageEls[i].id + '" is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)', 'info', 'imageloader');
