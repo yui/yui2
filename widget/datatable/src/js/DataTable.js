@@ -1782,11 +1782,22 @@ initAttributes : function(oConfigs) {
     */
     this.setAttributeConfig("draggableColumns", {
         value: false,
-        validator: function(oParam) {
-            return lang.isBoolean(oParam);
-        },
+        validator: lang.isBoolean,
         writeOnce: true
     });
+
+    /**
+     * @attribute renderLoopSize 	 
+     * @description A value greater than 0 enables DOM rendering of rows to be
+     * executed from a non-blocking timeout queue and sets how many rows to be
+     * rendered per timeout. Recommended for very large data sets.     
+     * @type Number 	 
+     * @default 0 	 
+     */ 	 
+     this.setAttributeConfig("renderLoopSize", { 	 
+         value: 0, 	 
+         validator: lang.isNumber 	 
+     }); 	 
 },
 
 /////////////////////////////////////////////////////////////////////////////
@@ -4524,7 +4535,7 @@ render : function() {
     this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
-    var i, j, k, l, allRecords;
+    var i, j, k, l, len, allRecords;
 
     // Paginator is enabled, show a subset of Records and update Paginator UI
     var oPaginator = this.get('paginator');
@@ -4575,35 +4586,60 @@ render : function() {
 
         this.hideTableMessage();
 
+        // How many rows to work with each loop
+        var loopN = this.get("renderLoopSize");
+        var loopStart,
+            loopEnd;
+
         // From the top, update in-place existing rows, so as to reuse DOM elements
         if(allRows.length > 0) {
+            loopEnd = allRows.length; // End at last row
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        this._updateTrEl(allRows[oArg.nRowIndex], allRecords[oArg.nRowIndex]);
+                        var nCurrentRow = oArg.nCurrentRow;
+                        for(i=nCurrentRow,len=(loopN>0)?nCurrentRow+loopN:nCurrentRow+1; i<len; i++) {
+                            if(i < loopEnd) {
+                                this._updateTrEl(allRows[i], allRecords[i]);
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        oArg.nCurrentRow = i;
                     }
-                    oArg.nRowIndex++;
                 },
-                iterations: allRows.length,
-                argument: {nRowIndex:0},
-                scope: this
+                iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : loopEnd,
+                argument: {nCurrentRow:0}, // Start at first row
+                scope: this,
+                timeout: (loopN > 0) ? 0 : -1
             });
         }
 
         // Add more TR elements as necessary
-        var nStartIndex = allRows.length; // where to start
-        var nIterations = (allRecords.length - nStartIndex); // how many needed
-        if(nIterations > 0) {
+        loopStart = allRows.length; // where to start
+        loopEnd = allRecords.length; // where to end
+        var nRowsNeeded = (loopEnd - loopStart); // how many needed
+        if(nRowsNeeded > 0) {
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        this._addTrEl(allRecords[oArg.nRowIndex]);
+                        var nCurrentRow = oArg.nCurrentRow;
+                        for(i=nCurrentRow,len=(loopN>0)?nCurrentRow+loopN:nCurrentRow+1; i<len; i++) {
+                            if(i < loopEnd) {
+                                this._addTrEl(allRecords[i]);
+                            }
+                            else {
+                                break;
+                            }
+                        }
+                        oArg.nCurrentRow = i;
                     }
-                    ++oArg.nRowIndex;
                 },
-                iterations: nIterations,
-                argument: {nRowIndex:nStartIndex},
-                scope: this
+                iterations: (loopN > 0) ? Math.ceil(nRowsNeeded/loopN) : nRowsNeeded,
+                argument: {nCurrentRow:loopStart}, // start at last row
+                scope: this,
+                timeout: (loopN > 0) ? 0 : -1
             });
         }
 
@@ -4664,7 +4700,8 @@ render : function() {
             
             
             },
-            scope: this
+            scope: this,
+            timeout: (loopN > 0) ? 0 : -1
         }); 
         
         this._oChain.run();   
@@ -5567,7 +5604,8 @@ addRow : function(oData, index) {
                                     ", page row index = " + recIndex, "info", this.toString());
                             
                         },
-                        scope: this
+                        scope: this,
+                        timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                     });
                     this._oChain.run();
                     return;
@@ -5662,7 +5700,8 @@ updateRow : function(row, oData) {
                         ", Record index = " + this.getRecordIndex(updatedRecord) +
                         ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
                         },
-            scope: this
+            scope: this,
+            timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
         this._oChain.run();
         this._syncColWidths();
@@ -5785,7 +5824,8 @@ deleteRow : function(row) {
                                 ", Record index = " + nRecordIndex +
                                 ", page row index = " + nTrIndex, "info", this.toString());
                     },
-                    scope: this
+                    scope: this,
+                    timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                 });
                 this._oChain.run();
                 return;
