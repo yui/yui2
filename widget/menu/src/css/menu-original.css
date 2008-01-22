@@ -179,7 +179,7 @@
 
 .yuimenuitem-checked {
 
-    background: url(../img/menuitem_checked.png) left center no-repeat;
+    background: url(../img/menuitem_checkbox.png) left center no-repeat;
 
 }
 
@@ -226,7 +226,7 @@
 
 .yuimenuitem-checked-selected {
 
-    background-image: url(../img/menuitem_checked_selected.png);
+    background-image: url(../img/menuitem_checkbox_selected.png);
 
 }
 
@@ -255,6 +255,6 @@
 
 .yuimenuitem-checked-disabled {
 
-    background-image: url(../img/menuitem_checked_disabled.png);
+    background-image: url(../img/menuitem_checkbox_disabled.png);
 
 }
