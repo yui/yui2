@@ -131,7 +131,7 @@
 
 }
 
-.yui-skin-sam .yui-menu-shadow-visible {
+.yui-menu-shadow-visible {
 
     top: 2px;
     right: -3px;
@@ -407,7 +407,7 @@ when one of its submenus is visible.
 
 .yuimenuitem-checked {
 
-    background: url(menuitem_checkbox.png) left center no-repeat;
+    background: url(menuitem_checked.png) left center no-repeat;
 
 }
 
@@ -454,7 +454,7 @@ when one of its submenus is visible.
 
 .yuimenuitem-checked-selected {
 
-    background-image: url(menuitem_checkbox_selected.png);
+    background-image: url(menuitem_checked_selected.png);
 
 }
 
@@ -483,6 +483,6 @@ when one of its submenus is visible.
 
 .yuimenuitem-checked-disabled {
 
-    background-image: url(menuitem_checkbox_disabled.png);
+    background-image: url(menuitem_checked_disabled.png);
 
 }
