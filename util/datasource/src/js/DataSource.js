@@ -28,15 +28,6 @@
  * @param oConfigs {Object} (optional) Object literal of configuration values.
  */
 YAHOO.util.DataSource = function(oLiveData, oConfigs) {
-    // Set any config params passed in to override defaults
-    if(oConfigs && (oConfigs.constructor == Object)) {
-        for(var sConfig in oConfigs) {
-            if(sConfig) {
-                this[sConfig] = oConfigs[sConfig];
-            }
-        }
-    }
-    
     if(!oLiveData) {
         YAHOO.log("Could not instantiate DataSource due to invalid live database",
                 "error", this.toString());
@@ -69,6 +60,15 @@ YAHOO.util.DataSource = function(oLiveData, oConfigs) {
         this.dataType = YAHOO.util.DataSource.TYPE_UNKNOWN;
     }
 
+    // Set any config params passed in to override defaults
+    if(oConfigs && (oConfigs.constructor == Object)) {
+        for(var sConfig in oConfigs) {
+            if(sConfig) {
+                this[sConfig] = oConfigs[sConfig];
+            }
+        }
+    }
+    
     // Validate and initialize public configs
     var maxCacheEntries = this.maxCacheEntries;
     if(!YAHOO.lang.isNumber(maxCacheEntries) || (maxCacheEntries < 0)) {
@@ -1257,46 +1257,52 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse
                 }
                 // Split along record delimiter to get an array of strings
                 var recordsarray = oFullResponse.split(recDelim);
-                // Cycle through each record, except the first which contains header info
+                // Cycle through each record
                 for(var i = recordsarray.length-1; i>-1; i--) {
                     var oResult = {};
                     var bError = false;
-                    for(var j=fields.length-1; j>-1; j--) {
-                        try {
-                            // Split along field delimiter to get each data value
-                            var fielddataarray = recordsarray[i].split(fieldDelim);
-    
-                            // Remove quotation marks from edges, if applicable
-                            var data = fielddataarray[j];
-                            if(data.charAt(0) == "\"") {
-                                data = data.substr(1);
+                    if (YAHOO.lang.isString(recordsarray[i])) {
+                        // Split each record along field delimiter to get data array
+                        var fielddataarray = recordsarray[i].split(fieldDelim);
+                        for(var j=fields.length-1; j>-1; j--) {
+                            try {
+                                // Remove quotation marks from edges, if applicable
+                                var data = fielddataarray[j];
+                                if (YAHOO.lang.isString(data)) {
+                                    if(data.charAt(0) == "\"") {
+                                        data = data.substr(1);
+                                    }
+                                    if(data.charAt(data.length-1) == "\"") {
+                                        data = data.substr(0,data.length-1);
+                                    }
+                                    var field = fields[j];
+                                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
+                                    // Backward compatibility
+                                    if(!field.parser && field.converter) {
+                                        field.parser = field.converter;
+                                        YAHOO.log("The field property converter has been deprecated" +
+                                                " in favor of parser", "warn", this.toString());
+                                    }
+                                    if(field.parser) {
+                                        data = field.parser.call(this, data);
+                                    }
+                                    // Safety measure
+                                    if(data === undefined) {
+                                        data = null;
+                                    }
+                                    oResult[key] = data;
+                                }
+                                else {
+                                    bError = true;
+                                }
                             }
-                            if(data.charAt(data.length-1) == "\"") {
-                                data = data.substr(0,data.length-1);
+                            catch(e) {
+                                bError = true;
                             }
-                            var field = fields[j];
-                            var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
-                            // Backward compatibility
-                            if(!field.parser && field.converter) {
-                                field.parser = field.converter;
-                                YAHOO.log("The field property converter has been deprecated" +
-                                        " in favor of parser", "warn", this.toString());
-                            }
-                            if(field.parser) {
-                                data = field.parser.call(this, data);
-                            }
-                            // Safety measure
-                            if(data === undefined) {
-                                data = null;
-                            }
-                            oResult[key] = data;
                         }
-                        catch(e) {
-                            bError = true;
+                        if(!bError) {
+                            oParsedResponse.results.unshift(oResult);
                         }
-                    }
-                    if(!bError) {
-                        oParsedResponse.results.unshift(oResult);
                     }
                 }
             }
