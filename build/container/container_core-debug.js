@@ -1334,7 +1334,8 @@
                                  "type=\"text/javascript\">",
                                  "window.onresize=function(){window.parent.",
                                  "YAHOO.widget.Module.textResizeEvent.",
-                                 "fire();};<\/script></head>",
+                                 "fire();};<",
+                                 "\/script></head>",
                                  "<body></body></html>"].join('');
 
                         oIFrame.src = "data:text/html;charset=utf-8," + encodeURIComponent(sHTML);
@@ -2929,7 +2930,7 @@
             }
         },
 
-       /**
+        /**
          * Set's the container's XY value from DOM if not already set.
          * 
          * Differs from syncPosition, in that the XY value is only sync'd with DOM if 
