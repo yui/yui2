@@ -1107,6 +1107,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		var KEYS = YAHOO.util.KeyListener.KEY;
 
 		if (YAHOO.util.Event.getCharCode(e) == KEYS.ENTER) {
+			YAHOO.util.Event.preventDefault(e);
 			this.submit();
 		}
 	},

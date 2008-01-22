@@ -1275,11 +1275,30 @@
         },
 
         /**
-        * Initialized an empty IFRAME that is placed out of the visible area 
+        * Initialize an empty IFRAME that is placed out of the visible area 
         * that can be used to detect text resize.
         * @method initResizeMonitor
         */
         initResizeMonitor: function () {
+
+            var isGeckoWin = (YAHOO.env.ua.gecko && this.platform == "windows");
+            if (isGeckoWin) {
+                // Help prevent spinning loading icon which 
+                // started with FireFox 2.0.0.8/Win
+                var self = this;
+                setTimeout(function(){self._initResizeMonitor();}, 0);
+            } else {
+                this._initResizeMonitor();
+            }
+        },
+
+        /**
+         * Create and initialize the text resize monitoring iframe.
+         * 
+         * @protected
+         * @method _initResizeMonitor
+         */
+        _initResizeMonitor : function() {
 
             var oDoc, 
                 oIFrame, 
@@ -1292,6 +1311,8 @@
             if (!YAHOO.env.ua.opera) {
                 oIFrame = Dom.get("_yuiResizeMonitor");
 
+                var supportsCWResize = this._supportsCWResize();
+
                 if (!oIFrame) {
                     oIFrame = document.createElement("iframe");
 
@@ -1299,21 +1320,16 @@
                         oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
                     }
 
-                    /*
-                        Need to set the iframe document for Gecko
-                        to fire resize events on the iframe contentWindow.
-                     */
-                    if (YAHOO.env.ua.gecko) {
-                         sHTML = ["<html><head><script ",
-                                  "type=\"text/javascript\">",
-                                  "window.onresize=function(){window.parent.",
-                                  "YAHOO.widget.Module.textResizeEvent.",
-                                  "fire();}", 
-                                  "<\/script></head>",
-                                  "<body></body></html>"].join('');
+                    if (!supportsCWResize) {
+                        // Can't monitor on contentWindow, so fire from inside iframe
+                        sHTML = ["<html><head><script ",
+                                 "type=\"text/javascript\">",
+                                 "window.onresize=function(){window.parent.",
+                                 "YAHOO.widget.Module.textResizeEvent.",
+                                 "fire();};<\/script></head>",
+                                 "<body></body></html>"].join('');
 
-                        oIFrame.src = "data:text/html;charset=utf-8," +
-                            encodeURIComponent(sHTML);
+                        oIFrame.src = "data:text/html;charset=utf-8," + encodeURIComponent(sHTML);
                     }
 
                     oIFrame.id = "_yuiResizeMonitor";
@@ -1326,11 +1342,12 @@
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
 
-                    var fc = document.body.firstChild;
+                    var db = document.body,
+                        fc = db.firstChild;
                     if (fc) {
-                        document.body.insertBefore(oIFrame, fc);
+                        db.insertBefore(oIFrame, fc);
                     } else {
-                        document.body.appendChild(oIFrame);
+                        db.appendChild(oIFrame);
                     }
 
                     oIFrame.style.width = "10em";
@@ -1355,8 +1372,7 @@
                     Module.textResizeEvent.subscribe(this.onDomResize, this, true);
 
                     if (!Module.textResizeInitialized) {
-                         // We already handle gecko using the iframe's document content
-                        if (!YAHOO.env.ua.gecko) {
+                        if (supportsCWResize) {
                             if (!Event.on(oIFrame.contentWindow, "resize", fireTextResize)) {
                                 /*
                                      This will fail in IE if document.domain has 
@@ -1374,13 +1390,46 @@
         },
 
         /**
+         * Text resize monitor helper method.
+         * Determines if the browser supports resize events on iframe content windows.
+         * 
+         * @private
+         * @method _supportsCWResize
+         */
+        _supportsCWResize : function() {
+            /*
+                Gecko 1.8.0 (FF1.5), 1.8.1.0-5 (FF2) won't fire resize on contentWindow.
+                Gecko 1.8.1.6+ (FF2.0.0.6+) and all other browsers will fire resize on contentWindow.
+
+                We don't want to start sniffing for patch versions, so fire textResize the same
+                way on all FF, until 1.9 (3.x) is out
+             */
+            var bSupported = true;
+            if (YAHOO.env.ua.gecko && YAHOO.env.ua.gecko <= 1.8) {
+                bSupported = false;
+                /*
+                var v = navigator.userAgent.match(/rv:([^\s\)]*)/); // From YAHOO.env.ua
+                if (v && v[0]) {
+                    var sv = v[0].match(/\d\.\d\.(\d)/);
+                    if (sv && sv[1]) {
+                        if (parseInt(sv[1], 10) > 0) {
+                            bSupported = true;
+                        }
+                    }
+                }
+                */
+            }
+            return bSupported;
+        },
+
+        /**
         * Event handler fired when the resize monitor element is resized.
         * @method onDomResize
         * @param {DOMEvent} e The DOM resize event
         * @param {Object} obj The scope object passed to the handler
         */
         onDomResize: function (e, obj) {
-        
+
             var nLeft = -1 * this.resizeMonitor.offsetWidth,
                 nTop = -1 * this.resizeMonitor.offsetHeight;
         
@@ -1388,37 +1437,37 @@
             this.resizeMonitor.style.left =  nLeft + "px";
 
         },
-        
+
         /**
-        * Sets the Module's header content to the HTML specified, or appends 
+        * Sets the Module's header content to the string specified, or appends 
         * the passed element to the header. If no header is present, one will 
-        * be automatically created.
+        * be automatically created. An empty string can be passed to the method
+        * to clear the contents of the header.
+        * 
         * @method setHeader
-        * @param {String} headerContent The HTML used to set the header 
+        * @param {String} headerContent The string used to set the header.
+        * As a convenience, non HTMLElement objects can also be passed into 
+        * the method, and will be treated as strings, with the header innerHTML
+        * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} headerContent The HTMLElement to append to 
         * the header
         */
         setHeader: function (headerContent) {
-
             var oHeader = this.header || (this.header = createHeader());
-        
-            if (typeof headerContent == "string") {
 
-                oHeader.innerHTML = headerContent;
-
-            } else {
-
+            if (headerContent.tagName) {
                 oHeader.innerHTML = "";
                 oHeader.appendChild(headerContent);
-
+            } else {
+                oHeader.innerHTML = headerContent;
             }
-        
+
             this.changeHeaderEvent.fire(headerContent);
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Appends the passed element to the header. If no header is present, 
         * one will be automatically created.
@@ -1426,7 +1475,6 @@
         * @param {HTMLElement} element The element to append to the header
         */
         appendToHeader: function (element) {
-
             var oHeader = this.header || (this.header = createHeader());
         
             oHeader.appendChild(element);
@@ -1435,35 +1483,34 @@
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Sets the Module's body content to the HTML specified, or appends the
         * passed element to the body. If no body is present, one will be 
-        * automatically created.
+        * automatically created. An empty string can be passed to the method
+        * to clear the contents of the body.
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body <em>OR</em>
+        * @param {String} bodyContent The HTML used to set the body. 
+        * As a convenience, non HTMLElement objects can also be passed into 
+        * the method, and will be treated as strings, with the body innerHTML
+        * set to their default toString implementations.
+        * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to append to the body
         */
         setBody: function (bodyContent) {
-
             var oBody = this.body || (this.body = createBody());
-        
-            if (typeof bodyContent == "string") {
 
-                oBody.innerHTML = bodyContent;
-
-            } else {
-
+            if (bodyContent.tagName) {
                 oBody.innerHTML = "";
                 oBody.appendChild(bodyContent);
-
+            } else {
+                oBody.innerHTML = bodyContent;
             }
-        
+
             this.changeBodyEvent.fire(bodyContent);
             this.changeContentEvent.fire();
-
         },
-        
+
         /**
         * Appends the passed element to the body. If no body is present, one 
         * will be automatically created.
@@ -1471,7 +1518,6 @@
         * @param {HTMLElement} element The element to append to the body
         */
         appendToBody: function (element) {
-
             var oBody = this.body || (this.body = createBody());
         
             oBody.appendChild(element);
@@ -1484,9 +1530,13 @@
         /**
         * Sets the Module's footer content to the HTML specified, or appends 
         * the passed element to the footer. If no footer is present, one will 
-        * be automatically created.
+        * be automatically created. An empty string can be passed to the method
+        * to clear the contents of the footer.
         * @method setFooter
         * @param {String} footerContent The HTML used to set the footer 
+        * As a convenience, non HTMLElement objects can also be passed into 
+        * the method, and will be treated as strings, with the footer innerHTML
+        * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} footerContent The HTMLElement to append to 
         * the footer
@@ -1494,18 +1544,14 @@
         setFooter: function (footerContent) {
 
             var oFooter = this.footer || (this.footer = createFooter());
-        
-            if (typeof footerContent == "string") {
 
-                oFooter.innerHTML = footerContent;
-
-            } else {
-
+            if (footerContent.tagName) {
                 oFooter.innerHTML = "";
                 oFooter.appendChild(footerContent);
-
+            } else {
+                oFooter.innerHTML = footerContent;
             }
-        
+
             this.changeFooterEvent.fire(footerContent);
             this.changeContentEvent.fire();
 
@@ -1855,12 +1901,12 @@
                 key: "height", 
                 suppressEvent: true, 
                 supercedes: ["context", "fixedcenter", "iframe"] 
-            }, 
+            },
 
             "ZINDEX": { 
                 key: "zindex", 
                 value: null 
-            }, 
+            },
 
             "CONSTRAIN_TO_VIEWPORT": { 
                 key: "constraintoviewport", 
@@ -2145,7 +2191,7 @@
                 supercedes: DEFAULT_CONFIG.X.supercedes
     
             });
-    
+
             /**
             * The absolute y-coordinate position of the Overlay
             * @config y
@@ -2153,12 +2199,12 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.Y.key, {
-    
+
                 handler: this.configY, 
                 validator: DEFAULT_CONFIG.Y.validator, 
                 suppressEvent: DEFAULT_CONFIG.Y.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.Y.supercedes
-    
+
             });
     
             /**
@@ -2236,7 +2282,7 @@
                 supercedes: DEFAULT_CONFIG.HEIGHT.supercedes
             
             });
-
+            
             /**
             * CSS z-index of the Overlay.
             * @config zIndex
@@ -2249,7 +2295,7 @@
                 value: DEFAULT_CONFIG.ZINDEX.value
 
             });
-            
+
             /**
             * True if the Overlay should be prevented from being positioned 
             * out of the viewport.
@@ -2265,7 +2311,7 @@
                 supercedes: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.supercedes
 
             });
-            
+
             /**
             * @config iframe
             * @description Boolean indicating whether or not the Overlay should 
@@ -2527,7 +2573,7 @@
         * this will usually equal the owner.
         */
         configHeight: function (type, args, obj) {
-    
+
             var height = args[0],
                 el = this.element;
 
@@ -2639,9 +2685,9 @@
             y = this.cfg.getProperty("y");
             
             Dom.setX(this.element, x, true);
-            
+
             this.cfg.setProperty("xy", [x, y], true);
-           
+
             this.cfg.refireEvent("iframe");
             this.moveEvent.fire([x, y]);
         },
@@ -2873,6 +2919,26 @@
             }
         },
 
+       /**
+         * Set's the container's XY value from DOM if not already set.
+         * 
+         * Differs from syncPosition, in that the XY value is only sync'd with DOM if 
+         * not already set. The method also refire's the XY config property event, so any
+         * beforeMove, Move event listeners are invoked.
+         * 
+         * @method _primeXYFromDOM
+         * @protected
+         */
+        _primeXYFromDOM : function() {
+            if (YAHOO.lang.isUndefined(this.cfg.getProperty("xy"))) {
+                // Set CFG XY based on DOM XY
+                this.syncPosition();
+                // Account for XY being set silently in syncPosition (no moveTo fired/called)
+                this.cfg.refireEvent("xy");
+                this.beforeShowEvent.unsubscribe(this._primeXYFromDOM);
+            }
+        },
+
         /**
         * The default event handler fired when the "constraintoviewport" 
         * property is changed.
@@ -2885,39 +2951,22 @@
         * this will usually equal the owner.
         */
         configConstrainToViewport: function (type, args, obj) {
-
-            function constrainBeforeShow() {
-                if (YAHOO.lang.isUndefined(this.cfg.getProperty("xy"))) {
-                    // Set CFG XY based on DOM XY
-                    this.syncPosition();
-                }
-                var x = this.cfg.getProperty("x");
-                var y = this.cfg.getProperty("y");
-
-                // Account for XY being set silently (no moveTo fired/called)
-                var cXY = this.getConstrainedXY(x, y);
-                if (cXY[0] !== x || cXY[1] !== y) {
-                    this.moveTo(cXY[0], cXY[1]);
-                }
-            }
-
             var val = args[0];
 
             if (val) {
                 if (! Config.alreadySubscribed(this.beforeMoveEvent, this.enforceConstraints, this)) {
                     this.beforeMoveEvent.subscribe(this.enforceConstraints, this, true);
                 }
-
-                if (! Config.alreadySubscribed(this.beforeShowEvent, constrainBeforeShow)) {
-                    this.beforeShowEvent.subscribe(constrainBeforeShow);
+                if (! Config.alreadySubscribed(this.beforeShowEvent, this._primeXYFromDOM)) {
+                    this.beforeShowEvent.subscribe(this._primeXYFromDOM);
                 }
             } else {
-                this.beforeShowEvent.unsubscribe(constrainBeforeShow);
+                this.beforeShowEvent.unsubscribe(this._primeXYFromDOM);
                 this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
             }
         },
 
-        /**
+         /**
         * The default event handler fired when the "context" property 
         * is changed.
         * @method configContext
@@ -2933,38 +2982,28 @@
                 contextEl,
                 elementMagnetCorner,
                 contextMagnetCorner;
-            
+
             if (contextArgs) {
-            
                 contextEl = contextArgs[0];
                 elementMagnetCorner = contextArgs[1];
                 contextMagnetCorner = contextArgs[2];
                 
                 if (contextEl) {
-    
                     if (typeof contextEl == "string") {
-
                         this.cfg.setProperty("context", 
                             [document.getElementById(contextEl), 
                                 elementMagnetCorner, contextMagnetCorner], 
                                 true);
-
                     }
                     
                     if (elementMagnetCorner && contextMagnetCorner) {
-
                         this.align(elementMagnetCorner, contextMagnetCorner);
-
                     }
-
                 }
-
             }
-
         },
 
         // END BUILT-IN PROPERTY EVENT HANDLERS //
-
         /**
         * Aligns the Overlay to its context element using the specified corner 
         * points (represented by the constants TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, 

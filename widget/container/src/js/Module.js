@@ -601,23 +601,43 @@
         },
 
         /**
-        * Initialized an empty IFRAME that is placed out of the visible area 
+        * Initialize an empty IFRAME that is placed out of the visible area 
         * that can be used to detect text resize.
         * @method initResizeMonitor
         */
         initResizeMonitor: function () {
+
+            var isGeckoWin = (YAHOO.env.ua.gecko && this.platform == "windows");
+            if (isGeckoWin) {
+                // Help prevent spinning loading icon which 
+                // started with FireFox 2.0.0.8/Win
+                var self = this;
+                setTimeout(function(){self._initResizeMonitor();}, 0);
+            } else {
+                this._initResizeMonitor();
+            }
+        },
+
+        /**
+         * Create and initialize the text resize monitoring iframe.
+         * 
+         * @protected
+         * @method _initResizeMonitor
+         */
+        _initResizeMonitor : function() {
 
             var oDoc, 
                 oIFrame, 
                 sHTML;
 
             function fireTextResize() {
-                YAHOO.log("Module got iframe contentWindow resize event", "info");
                 Module.textResizeEvent.fire();
             }
 
             if (!YAHOO.env.ua.opera) {
                 oIFrame = Dom.get("_yuiResizeMonitor");
+
+                var supportsCWResize = this._supportsCWResize();
 
                 if (!oIFrame) {
                     oIFrame = document.createElement("iframe");
@@ -626,21 +646,16 @@
                         oIFrame.src = Module.RESIZE_MONITOR_SECURE_URL;
                     }
 
-                    /*
-                        Need to set the iframe document for Gecko
-                        to fire resize events on the iframe contentWindow.
-                     */
-                    if (YAHOO.env.ua.gecko) {
-                         sHTML = ["<html><head><script ",
-                                  "type=\"text/javascript\">",
-                                  "window.onresize=function(){window.parent.",
-                                  "YAHOO.widget.Module.textResizeEvent.",
-                                  "fire();}", 
-                                  "<\/script></head>",
-                                  "<body></body></html>"].join('');
+                    if (!supportsCWResize) {
+                        // Can't monitor on contentWindow, so fire from inside iframe
+                        sHTML = ["<html><head><script ",
+                                 "type=\"text/javascript\">",
+                                 "window.onresize=function(){window.parent.",
+                                 "YAHOO.widget.Module.textResizeEvent.",
+                                 "fire();};<\/script></head>",
+                                 "<body></body></html>"].join('');
 
-                        oIFrame.src = "data:text/html;charset=utf-8," +
-                            encodeURIComponent(sHTML);
+                        oIFrame.src = "data:text/html;charset=utf-8," + encodeURIComponent(sHTML);
                     }
 
                     oIFrame.id = "_yuiResizeMonitor";
@@ -653,11 +668,12 @@
                     oIFrame.style.position = "absolute";
                     oIFrame.style.visibility = "hidden";
 
-                    var fc = document.body.firstChild;
+                    var db = document.body,
+                        fc = db.firstChild;
                     if (fc) {
-                        document.body.insertBefore(oIFrame, fc);
+                        db.insertBefore(oIFrame, fc);
                     } else {
-                        document.body.appendChild(oIFrame);
+                        db.appendChild(oIFrame);
                     }
 
                     oIFrame.style.width = "10em";
@@ -682,8 +698,7 @@
                     Module.textResizeEvent.subscribe(this.onDomResize, this, true);
 
                     if (!Module.textResizeInitialized) {
-                         // We already handle gecko using the iframe's document content
-                        if (!YAHOO.env.ua.gecko) {
+                        if (supportsCWResize) {
                             if (!Event.on(oIFrame.contentWindow, "resize", fireTextResize)) {
                                 /*
                                      This will fail in IE if document.domain has 
@@ -701,13 +716,46 @@
         },
 
         /**
+         * Text resize monitor helper method.
+         * Determines if the browser supports resize events on iframe content windows.
+         * 
+         * @private
+         * @method _supportsCWResize
+         */
+        _supportsCWResize : function() {
+            /*
+                Gecko 1.8.0 (FF1.5), 1.8.1.0-5 (FF2) won't fire resize on contentWindow.
+                Gecko 1.8.1.6+ (FF2.0.0.6+) and all other browsers will fire resize on contentWindow.
+
+                We don't want to start sniffing for patch versions, so fire textResize the same
+                way on all FF, until 1.9 (3.x) is out
+             */
+            var bSupported = true;
+            if (YAHOO.env.ua.gecko && YAHOO.env.ua.gecko <= 1.8) {
+                bSupported = false;
+                /*
+                var v = navigator.userAgent.match(/rv:([^\s\)]*)/); // From YAHOO.env.ua
+                if (v && v[0]) {
+                    var sv = v[0].match(/\d\.\d\.(\d)/);
+                    if (sv && sv[1]) {
+                        if (parseInt(sv[1], 10) > 0) {
+                            bSupported = true;
+                        }
+                    }
+                }
+                */
+            }
+            return bSupported;
+        },
+
+        /**
         * Event handler fired when the resize monitor element is resized.
         * @method onDomResize
         * @param {DOMEvent} e The DOM resize event
         * @param {Object} obj The scope object passed to the handler
         */
         onDomResize: function (e, obj) {
-        
+
             var nLeft = -1 * this.resizeMonitor.offsetWidth,
                 nTop = -1 * this.resizeMonitor.offsetHeight;
         
@@ -715,37 +763,37 @@
             this.resizeMonitor.style.left =  nLeft + "px";
 
         },
-        
+
         /**
-        * Sets the Module's header content to the HTML specified, or appends 
+        * Sets the Module's header content to the string specified, or appends 
         * the passed element to the header. If no header is present, one will 
-        * be automatically created.
+        * be automatically created. An empty string can be passed to the method
+        * to clear the contents of the header.
+        * 
         * @method setHeader
-        * @param {String} headerContent The HTML used to set the header 
+        * @param {String} headerContent The string used to set the header.
+        * As a convenience, non HTMLElement objects can also be passed into 
+        * the method, and will be treated as strings, with the header innerHTML
+        * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} headerContent The HTMLElement to append to 
         * the header
         */
         setHeader: function (headerContent) {
-
             var oHeader = this.header || (this.header = createHeader());
-        
-            if (typeof headerContent == "string") {
 
-                oHeader.innerHTML = headerContent;
-
-            } else {
-
+            if (headerContent.tagName) {
                 oHeader.innerHTML = "";
                 oHeader.appendChild(headerContent);
-
+            } else {
+                oHeader.innerHTML = headerContent;
             }
-        
+
             this.changeHeaderEvent.fire(headerContent);
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Appends the passed element to the header. If no header is present, 
         * one will be automatically created.
@@ -753,7 +801,6 @@
         * @param {HTMLElement} element The element to append to the header
         */
         appendToHeader: function (element) {
-
             var oHeader = this.header || (this.header = createHeader());
         
             oHeader.appendChild(element);
@@ -762,35 +809,34 @@
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Sets the Module's body content to the HTML specified, or appends the
         * passed element to the body. If no body is present, one will be 
-        * automatically created.
+        * automatically created. An empty string can be passed to the method
+        * to clear the contents of the body.
         * @method setBody
-        * @param {String} bodyContent The HTML used to set the body <em>OR</em>
+        * @param {String} bodyContent The HTML used to set the body. 
+        * As a convenience, non HTMLElement objects can also be passed into 
+        * the method, and will be treated as strings, with the body innerHTML
+        * set to their default toString implementations.
+        * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to append to the body
         */
         setBody: function (bodyContent) {
-
             var oBody = this.body || (this.body = createBody());
-        
-            if (typeof bodyContent == "string") {
 
-                oBody.innerHTML = bodyContent;
-
-            } else {
-
+            if (bodyContent.tagName) {
                 oBody.innerHTML = "";
                 oBody.appendChild(bodyContent);
-
+            } else {
+                oBody.innerHTML = bodyContent;
             }
-        
+
             this.changeBodyEvent.fire(bodyContent);
             this.changeContentEvent.fire();
-
         },
-        
+
         /**
         * Appends the passed element to the body. If no body is present, one 
         * will be automatically created.
@@ -798,7 +844,6 @@
         * @param {HTMLElement} element The element to append to the body
         */
         appendToBody: function (element) {
-
             var oBody = this.body || (this.body = createBody());
         
             oBody.appendChild(element);
@@ -811,9 +856,13 @@
         /**
         * Sets the Module's footer content to the HTML specified, or appends 
         * the passed element to the footer. If no footer is present, one will 
-        * be automatically created.
+        * be automatically created. An empty string can be passed to the method
+        * to clear the contents of the footer.
         * @method setFooter
         * @param {String} footerContent The HTML used to set the footer 
+        * As a convenience, non HTMLElement objects can also be passed into 
+        * the method, and will be treated as strings, with the footer innerHTML
+        * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} footerContent The HTMLElement to append to 
         * the footer
@@ -821,18 +870,14 @@
         setFooter: function (footerContent) {
 
             var oFooter = this.footer || (this.footer = createFooter());
-        
-            if (typeof footerContent == "string") {
 
-                oFooter.innerHTML = footerContent;
-
-            } else {
-
+            if (footerContent.tagName) {
                 oFooter.innerHTML = "";
                 oFooter.appendChild(footerContent);
-
+            } else {
+                oFooter.innerHTML = footerContent;
             }
-        
+
             this.changeFooterEvent.fire(footerContent);
             this.changeContentEvent.fire();
 

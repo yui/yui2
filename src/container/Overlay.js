@@ -95,12 +95,12 @@
                 key: "height", 
                 suppressEvent: true, 
                 supercedes: ["context", "fixedcenter", "iframe"] 
-            }, 
+            },
 
             "ZINDEX": { 
                 key: "zindex", 
                 value: null 
-            }, 
+            },
 
             "CONSTRAIN_TO_VIEWPORT": { 
                 key: "constraintoviewport", 
@@ -385,7 +385,7 @@
                 supercedes: DEFAULT_CONFIG.X.supercedes
     
             });
-    
+
             /**
             * The absolute y-coordinate position of the Overlay
             * @config y
@@ -393,12 +393,12 @@
             * @default null
             */
             this.cfg.addProperty(DEFAULT_CONFIG.Y.key, {
-    
+
                 handler: this.configY, 
                 validator: DEFAULT_CONFIG.Y.validator, 
                 suppressEvent: DEFAULT_CONFIG.Y.suppressEvent, 
                 supercedes: DEFAULT_CONFIG.Y.supercedes
-    
+
             });
     
             /**
@@ -476,7 +476,7 @@
                 supercedes: DEFAULT_CONFIG.HEIGHT.supercedes
             
             });
-
+            
             /**
             * CSS z-index of the Overlay.
             * @config zIndex
@@ -489,7 +489,7 @@
                 value: DEFAULT_CONFIG.ZINDEX.value
 
             });
-            
+
             /**
             * True if the Overlay should be prevented from being positioned 
             * out of the viewport.
@@ -505,7 +505,7 @@
                 supercedes: DEFAULT_CONFIG.CONSTRAIN_TO_VIEWPORT.supercedes
 
             });
-            
+
             /**
             * @config iframe
             * @description Boolean indicating whether or not the Overlay should 
@@ -767,7 +767,7 @@
         * this will usually equal the owner.
         */
         configHeight: function (type, args, obj) {
-    
+
             var height = args[0],
                 el = this.element;
 
@@ -880,9 +880,9 @@
             y = this.cfg.getProperty("y");
             
             Dom.setX(this.element, x, true);
-            
+
             this.cfg.setProperty("xy", [x, y], true);
-           
+
             this.cfg.refireEvent("iframe");
             this.moveEvent.fire([x, y]);
         },
@@ -1114,6 +1114,26 @@
             }
         },
 
+       /**
+         * Set's the container's XY value from DOM if not already set.
+         * 
+         * Differs from syncPosition, in that the XY value is only sync'd with DOM if 
+         * not already set. The method also refire's the XY config property event, so any
+         * beforeMove, Move event listeners are invoked.
+         * 
+         * @method _primeXYFromDOM
+         * @protected
+         */
+        _primeXYFromDOM : function() {
+            if (YAHOO.lang.isUndefined(this.cfg.getProperty("xy"))) {
+                // Set CFG XY based on DOM XY
+                this.syncPosition();
+                // Account for XY being set silently in syncPosition (no moveTo fired/called)
+                this.cfg.refireEvent("xy");
+                this.beforeShowEvent.unsubscribe(this._primeXYFromDOM);
+            }
+        },
+
         /**
         * The default event handler fired when the "constraintoviewport" 
         * property is changed.
@@ -1126,39 +1146,22 @@
         * this will usually equal the owner.
         */
         configConstrainToViewport: function (type, args, obj) {
-
-            function constrainBeforeShow() {
-                if (YAHOO.lang.isUndefined(this.cfg.getProperty("xy"))) {
-                    // Set CFG XY based on DOM XY
-                    this.syncPosition();
-                }
-                var x = this.cfg.getProperty("x");
-                var y = this.cfg.getProperty("y");
-
-                // Account for XY being set silently (no moveTo fired/called)
-                var cXY = this.getConstrainedXY(x, y);
-                if (cXY[0] !== x || cXY[1] !== y) {
-                    this.moveTo(cXY[0], cXY[1]);
-                }
-            }
-
             var val = args[0];
 
             if (val) {
                 if (! Config.alreadySubscribed(this.beforeMoveEvent, this.enforceConstraints, this)) {
                     this.beforeMoveEvent.subscribe(this.enforceConstraints, this, true);
                 }
-
-                if (! Config.alreadySubscribed(this.beforeShowEvent, constrainBeforeShow)) {
-                    this.beforeShowEvent.subscribe(constrainBeforeShow);
+                if (! Config.alreadySubscribed(this.beforeShowEvent, this._primeXYFromDOM)) {
+                    this.beforeShowEvent.subscribe(this._primeXYFromDOM);
                 }
             } else {
-                this.beforeShowEvent.unsubscribe(constrainBeforeShow);
+                this.beforeShowEvent.unsubscribe(this._primeXYFromDOM);
                 this.beforeMoveEvent.unsubscribe(this.enforceConstraints, this);
             }
         },
 
-        /**
+         /**
         * The default event handler fired when the "context" property 
         * is changed.
         * @method configContext
@@ -1174,38 +1177,28 @@
                 contextEl,
                 elementMagnetCorner,
                 contextMagnetCorner;
-            
+
             if (contextArgs) {
-            
                 contextEl = contextArgs[0];
                 elementMagnetCorner = contextArgs[1];
                 contextMagnetCorner = contextArgs[2];
                 
                 if (contextEl) {
-    
                     if (typeof contextEl == "string") {
-
                         this.cfg.setProperty("context", 
                             [document.getElementById(contextEl), 
                                 elementMagnetCorner, contextMagnetCorner], 
                                 true);
-
                     }
                     
                     if (elementMagnetCorner && contextMagnetCorner) {
-
                         this.align(elementMagnetCorner, contextMagnetCorner);
-
                     }
-
                 }
-
             }
-
         },
 
         // END BUILT-IN PROPERTY EVENT HANDLERS //
-
         /**
         * Aligns the Overlay to its context element using the specified corner 
         * points (represented by the constants TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, 

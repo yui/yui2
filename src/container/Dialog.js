@@ -18,11 +18,8 @@
     * documentation for more details.
     */
     YAHOO.widget.Dialog = function (el, userConfig) {
-    
         YAHOO.widget.Dialog.superclass.constructor.call(this, el, userConfig);
-    
     };
-
 
     var Event = YAHOO.util.Event,
         CustomEvent = YAHOO.util.CustomEvent,
@@ -49,7 +46,7 @@
             "CANCEL": "cancel"
         
         },
-        
+
         /**
         * Constant representing the Dialog's configuration properties
         * @property DEFAULT_CONFIG
@@ -58,17 +55,22 @@
         * @type Object
         */
         DEFAULT_CONFIG = {
-        
+
             "POST_METHOD": { 
                 key: "postmethod", 
                 value: "async" 
             },
-            
+
             "BUTTONS": { 
                 key: "buttons", 
                 value: "none" 
+            },
+
+            "HIDEAFTERSUBMIT" : {
+                key: "hideaftersubmit",
+                value: true
             }
-        };    
+        };
 
     /**
     * Constant representing the default CSS class used for a Dialog
@@ -109,7 +111,6 @@
     
     YAHOO.extend(Dialog, YAHOO.widget.Panel, { 
 
-        
         /**
         * @property form
         * @description Object reference to the Dialog's 
@@ -161,10 +162,8 @@
                 argument: null
     
             };
-        
 
             // Add form dialog config properties //
-            
             /**
             * The method to use for posting the Dialog's form. Possible values 
             * are "async", "form", and "manual".
@@ -184,7 +183,19 @@
                     }
                 }
             });
-            
+
+            /**
+            * This property is used to configure whether or not the 
+            * dialog should be automatically hidden after submit.
+            * 
+            * @config hideaftersubmit
+            * @type Boolean
+            * @default true
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.HIDEAFTERSUBMIT.key, {
+                value: DEFAULT_CONFIG.HIDEAFTERSUBMIT.value
+            }); 
+
             /**
             * Array of object literals, each containing a set of properties 
             * defining a button to be appended into the Dialog's footer.
@@ -220,9 +231,9 @@
                 handler: this.configButtons,
                 value: DEFAULT_CONFIG.BUTTONS.value
             }); 
-            
+
         },
-        
+
         /**
         * Initializes the custom events for Dialog which are fired 
         * automatically at appropriate times by the Dialog class.
@@ -342,7 +353,6 @@
                 i,
                 sMethod;
 
-
             switch (this.cfg.getProperty("postmethod")) {
     
             case "async":
@@ -351,36 +361,24 @@
                 nElements = aElements.length;
 
                 if (nElements > 0) {
-                
                     i = nElements - 1;
-                
                     do {
-                    
                         if (aElements[i].type == "file") {
-                        
                             bUseFileUpload = true;
                             break;
-                        
                         }
-                    
                     }
                     while(i--);
-                
                 }
 
                 if (bUseFileUpload && YAHOO.env.ua.ie && this.isSecure) {
-
                     bUseSecureFileUpload = true;
-                
                 }
 
-                sMethod = 
-                    (oForm.getAttribute("method") || "POST").toUpperCase();
+                sMethod = (oForm.getAttribute("method") || "POST").toUpperCase();
 
                 Connect.setForm(oForm, bUseFileUpload, bUseSecureFileUpload);
-
-                Connect.asyncRequest(sMethod, oForm.getAttribute("action"), 
-                    this.callback);
+                Connect.asyncRequest(sMethod, oForm.getAttribute("action"), this.callback);
 
                 this.asyncSubmitEvent.fire();
 
@@ -693,14 +691,12 @@
 
             this.cfg.refireEvent("iframe");
             this.cfg.refireEvent("underlay");
-
         },
-
 
         /**
         * @method getButtons
         * @description Returns an array containing each of the Dialog's 
-        * buttons, by default an array of HTML <code>&#60;BUTTON&#60;</code> 
+        * buttons, by default an array of HTML <code>&#60;BUTTON&#62;</code> 
         * elements.  If the Dialog's buttons were created using the 
         * YAHOO.widget.Button class (via the inclusion of the optional Button 
         * dependancy on the page), an array of YAHOO.widget.Button instances 
@@ -708,17 +704,11 @@
         * @return {Array}
         */
         getButtons: function () {
-        
             var aButtons = this._aButtons;
-            
             if (aButtons) {
-            
                 return aButtons;
-            
             }
-        
         },
-
         
         /**
         * Sets focus to the first element in the Dialog's form or the first 
@@ -732,41 +722,27 @@
                 oEvent;
 
             if (args) {
-
                 oEvent = args[1];
-
                 if (oEvent) {
-
                     Event.stopEvent(oEvent);
-
                 }
-
             }
-        
 
             if (oElement) {
-
                 /*
                     Place the call to the "focus" method inside a try/catch
                     block to prevent IE from throwing JavaScript errors if
                     the element is disabled or hidden.
                 */
-
                 try {
-
                     oElement.focus();
-
                 }
                 catch(oException) {
-
                 }
 
             } else {
-
                 this.focusDefaultButton();
-
             }
-
         },
         
         /**
@@ -781,25 +757,16 @@
                 oEvent;
     
             if (args) {
-
                 oEvent = args[1];
-
                 if (oEvent) {
-
                     Event.stopEvent(oEvent);
-
                 }
-
             }
             
             if (aButtons && Lang.isArray(aButtons)) {
-
                 this.focusLastButton();
-
             } else {
-
                 if (oElement) {
-
                     /*
                         Place the call to the "focus" method inside a try/catch
                         block to prevent IE from throwing JavaScript errors if
@@ -807,18 +774,11 @@
                     */
     
                     try {
-    
                         oElement.focus();
-    
+                    } catch(oException) {
                     }
-                    catch(oException) {
-    
-                    }
-
                 }
-
             }
-
         },
         
         /**
@@ -838,14 +798,9 @@
                     block to prevent IE from throwing JavaScript errors if
                     the element is disabled or hidden.
                 */
-
                 try {
-
                     oElement.focus();
-                
-                }
-                catch(oException) {
-                
+                } catch(oException) {
                 }
 
             }
@@ -873,7 +828,6 @@
                     i = (nButtons - 1);
                     
                     do {
-                    
                         oButton = aButtons[i];
                         
                         if (oButton) {
@@ -881,35 +835,22 @@
                             oElement = oButton.htmlButton;
 
                             if (oElement) {
-
                                 /*
                                     Place the call to the "blur" method inside  
                                     a try/catch block to prevent IE from  
                                     throwing JavaScript errors if the element 
                                     is disabled or hidden.
                                 */
-    
                                 try {
-            
                                     oElement.blur();
-                                
+                                } catch(oException) {
                                 }
-                                catch(oException) {
-                                
-                                
-                                }
-                            
                             }
-
                         }
                     
-                    }
-                    while(i--);
-                
+                    } while(i--);
                 }
-            
             }
-
         },
         
         /**
@@ -941,19 +882,12 @@
                         */
     
                         try {
-    
                             oElement.focus();
-                        
                         }
                         catch(oException) {
-                        
-                        
                         }
-                    
                     }
-
                 }
-
             }
         },
         
@@ -974,15 +908,11 @@
                 nButtons = aButtons.length;
                 
                 if (nButtons > 0) {
-
                     oButton = aButtons[(nButtons - 1)];
                     
                     if (oButton) {
-                    
                         oElement = oButton.htmlButton;
-
                         if (oElement) {
-
                             /*
                                 Place the call to the "focus" method inside a 
                                 try/catch block to prevent IE from throwing 
@@ -991,23 +921,13 @@
                             */
         
                             try {
-        
                                 oElement.focus();
-                            
+                            } catch(oException) {
                             }
-                            catch(oException) {
-                            
-                            
-                            }
-                        
                         }
-                    
                     }
-                
                 }
-            
             }
-
         },
         
         /**
@@ -1038,8 +958,12 @@
         },
         
         /**
-        * Executes a submit of the Dialog followed by a hide, if validation 
-        * is successful.
+        * Executes a submit of the Dialog if validation 
+        * is successful. By default the Dialog is hidden
+        * after submission, but you can set the "hideaftersubmit"
+        * configuration property to false, to prevent the Dialog
+        * from being hidden.
+        * 
         * @method submit
         */
         submit: function () {
@@ -1047,13 +971,17 @@
                 this.beforeSubmitEvent.fire();
                 this.doSubmit();
                 this.submitEvent.fire();
-                this.hide();
+
+                if (this.cfg.getProperty("hideaftersubmit")) {
+                    this.hide();
+                }
+
                 return true;
             } else {
                 return false;
             }
         },
-        
+
         /**
         * Executes the cancel of the Dialog followed by a hide.
         * @method cancel
