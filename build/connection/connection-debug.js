@@ -229,7 +229,7 @@ YAHOO.util.Connect =
 				'click',
 				function(e){
 					var obj = YAHOO.util.Event.getTarget(e);
-					if(obj.type && obj.type.toLowerCase() == 'submit'){
+					if(obj.nodeName.toLowerCase() == 'input' && (obj.type && obj.type.toLowerCase() == 'submit')){
 						YAHOO.util.Connect._submitElementValue = encodeURIComponent(obj.name) + "=" + encodeURIComponent(obj.value);
 					}
 				});
@@ -950,7 +950,7 @@ YAHOO.util.Connect =
 		if(isUpload){
 
 			// Create iframe in preparation for file upload.
-			var io = this.createFrame(secureUri?secureUri:null);
+			var io = this.createFrame((window.location.href.toLowerCase().indexOf("https") !== -1 || secureUri)?true:false);
 			// Set form reference and file upload properties to true.
 			this._isFormSubmit = true;
 			this._isFileUpload = true;
