@@ -1234,86 +1234,83 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
 };
 
 if(YAHOO.util.DD) {
-    YAHOO.util.DragDropMgr.clickTimeThresh = 1;
-    YAHOO.extend(YAHOO.util.ColumnResizer, YAHOO.util.DDProxy);
+    YAHOO.extend(YAHOO.util.ColumnResizer, YAHOO.util.DDProxy, {
+        /////////////////////////////////////////////////////////////////////////////
+        //
+        // Public methods
+        //
+        /////////////////////////////////////////////////////////////////////////////
+        /**
+         * Resets resizer element.
+         *
+         * @method resetResizerEl
+         */
+        resetResizerEl : function() {
+            var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
+            resizerStyle.left = "auto";
+            resizerStyle.right = 0;
+            resizerStyle.top = "auto";
+            resizerStyle.bottom = 0;
+        },
+    
+        /////////////////////////////////////////////////////////////////////////////
+        //
+        // Public DOM event handlers
+        //
+        /////////////////////////////////////////////////////////////////////////////
+    
+        /**
+         * Handles mouseup events on the Column resizer.
+         *
+         * @method onMouseUp
+         * @param e {string} The mouseup event
+         */
+        onMouseUp : function(e) {
+            this.resetResizerEl();
+            this.datatable._syncColWidths();
+            this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
+        },
+    
+        /**
+         * Handles mousedown events on the Column resizer.
+         *
+         * @method onMouseDown
+         * @param e {string} The mousedown event
+         */
+        onMouseDown : function(e) {
+            this.startWidth = this.headCell.firstChild.offsetWidth;
+            this.startX = YAHOO.util.Event.getXY(e)[0];
+        },
+    
+        /**
+         * Custom clickValidator to ensure Column is not in hidden state.
+         *
+         * @method clickValidator
+         * @param {Event} e
+         * @private
+         */
+        clickValidator : function(e) {
+            if(!this.column.hidden) {
+                var target = YAHOO.util.Event.getTarget(e);
+                return ( this.isValidHandleChild(target) &&
+                            (this.id == this.handleElId ||
+                                this.DDM.handleWasClicked(target, this.id)) );
+            }
+        },
+    
+        /**
+         * Handles drag events on the Column resizer.
+         *
+         * @method onDrag
+         * @param e {string} The drag event
+         */
+        onDrag : function(e) {
+            var newX = YAHOO.util.Event.getXY(e)[0];
+            if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
+                var offsetX = newX - this.startX;
+                var newWidth = this.startWidth + offsetX;
+                this.datatable.setColumnWidth(this.column, newWidth);
+            }
+        }
+    });
 }
-
-YAHOO.lang.augmentObject(YAHOO.util.ColumnResizer.prototype, {
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Public methods
-    //
-    /////////////////////////////////////////////////////////////////////////////
-    /**
-     * Resets resizer element.
-     *
-     * @method resetResizerEl
-     */
-    resetResizerEl : function() {
-        var resizerStyle = YAHOO.util.Dom.get(this.handleElId).style;
-        resizerStyle.left = "auto";
-        resizerStyle.right = 0;
-        resizerStyle.top = "auto";
-        resizerStyle.bottom = 0;
-    },
-
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // Public DOM event handlers
-    //
-    /////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Handles mouseup events on the Column resizer.
-     *
-     * @method onMouseUp
-     * @param e {string} The mouseup event
-     */
-    onMouseUp : function(e) {
-        this.resetResizerEl();
-        this.datatable._syncColWidths();
-        this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
-    },
-
-    /**
-     * Handles mousedown events on the Column resizer.
-     *
-     * @method onMouseDown
-     * @param e {string} The mousedown event
-     */
-    onMouseDown : function(e) {
-        this.startWidth = this.headCell.firstChild.offsetWidth;
-        this.startX = YAHOO.util.Event.getXY(e)[0];
-    },
-
-    /**
-     * Custom clickValidator to ensure Column is not in hidden state.
-     *
-     * @method clickValidator
-     * @param {Event} e
-     * @private
-     */
-    clickValidator : function(e) {
-        if(!this.column.hidden) {
-            var target = YAHOO.util.Event.getTarget(e);
-            return ( this.isValidHandleChild(target) &&
-                        (this.id == this.handleElId ||
-                            this.DDM.handleWasClicked(target, this.id)) );
-        }
-    },
-
-    /**
-     * Handles drag events on the Column resizer.
-     *
-     * @method onDrag
-     * @param e {string} The drag event
-     */
-    onDrag : function(e) {
-        var newX = YAHOO.util.Event.getXY(e)[0];
-        if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
-            var offsetX = newX - this.startX;
-            var newWidth = this.startWidth + offsetX;
-            this.datatable.setColumnWidth(this.column, newWidth);
-        }
-    }
-});
