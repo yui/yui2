@@ -205,7 +205,7 @@ YAHOO.util.Cookie = {
                 return converter(hash[subName]);
             }
         } else {
-            return value;
+            return null;
         }
     
     },
