@@ -3528,16 +3528,17 @@
         
         fireEvent: function (p_sType , p_aArgs) {
         
-            //  Disabled buttons should not respond to DOM events
-        
-            if (this.DOM_EVENTS[p_sType] && this.get("disabled")) {
-        
-                return;
-        
-            }
-        
-            YAHOO.widget.Button.superclass.fireEvent.call(this, p_sType, 
-                p_aArgs);
+			var sType = arguments[0];
+		
+			//  Disabled buttons should not respond to DOM events
+		
+			if (this.DOM_EVENTS[sType] && this.get("disabled")) {
+		
+				return;
+		
+			}
+		
+			return YAHOO.widget.Button.superclass.fireEvent.apply(this, arguments);
         
         },
         
