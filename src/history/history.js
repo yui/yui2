@@ -540,8 +540,8 @@ YAHOO.util.History = (function () {
             }
 
             if (!stateField ||
-                stateField.tagName !== "TEXTAREA" &&
-                (stateField.tagName !== "INPUT" ||
+                stateField.tagName.toUpperCase() !== "TEXTAREA" &&
+                (stateField.tagName.toUpperCase() !== "INPUT" ||
                  stateField.type !== "hidden" &&
                  stateField.type !== "text")) {
                 throw new Error("Missing or invalid argument");
@@ -555,7 +555,7 @@ YAHOO.util.History = (function () {
                     histFrame = document.getElementById(histFrame);
                 }
 
-                if (!histFrame || histFrame.tagName !== "IFRAME") {
+                if (!histFrame || histFrame.tagName.toUpperCase() !== "IFRAME") {
                     throw new Error("Missing or invalid argument");
                 }
 
