@@ -681,8 +681,6 @@ YAHOO.util.DataSource.prototype.addToCache = function(oRequest, oResponse) {
         return;
     }
 
-    //TODO: check for duplicate entries
-
     // If the cache is full, make room by removing stalest element (index=0)
     while(aCache.length >= this.maxCacheEntries) {
         aCache.shift();
@@ -720,8 +718,7 @@ YAHOO.util.DataSource.prototype.flushCache = function() {
  * @return {Number} Interval ID.
  */
 YAHOO.util.DataSource.prototype.setInterval = function(nMsec, oRequest, oCallback, oCaller) {
-    //TODO: management and cleanup of interval IDs
-    try {
+    if(YAHOO.lang.isNumber(nMsec) && (nMsec >= 0)) {
         YAHOO.log("Enabling polling to live data for \"" + oRequest + "\" at interval " + nMsec, "info", this.toString());
         var oSelf = this;
         var nId = setInterval(function() {
@@ -730,7 +727,7 @@ YAHOO.util.DataSource.prototype.setInterval = function(nMsec, oRequest, oCallbac
         this._aIntervals.push(nId);
         return nId;
     }
-    catch(e) {
+    else {
         YAHOO.log("Could not enable polling to live data for \"" + oRequest + "\" at interval " + nMsec, "info", this.toString());
     }
 };
@@ -1019,18 +1016,21 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 };
 
 /**
- * Handles raw data response from live data source. Sends a parsed response object
- * to the callback function in this format:
- *
- * fnCallback(oRequest, oParsedResponse)
- *
- * where the oParsedResponse object literal with the following properties:
- * <ul>
- *     <li>tId {Number} Unique transaction ID</li>
- *     <li>results {Array} Array of parsed data results</li>
- *     <li>error {Boolean} True if there was an error</li>
- *     <li>totalRecords (Number) Total number of records (if available)</li> 
- * </ul>
+ * Handles raw data response from live data source. Calls appropriate parsing
+ * function to get oParsedResponse. Passes oParsedResponse to callback function
+ * which will get called with arguments:
+ * 
+ * <dl>      
+ *     <dd>fnCallback(oRequest, oParsedResponse)</dd>
+ * </dl> 
+ * 
+ * where the oParsedResponse object literal has the following properties:
+ * <dl>
+ *     <dd><dt>tId {Number}</dt> Unique transaction ID</dd>
+ *     <dd><dt>results {Array}</dt> Array of parsed data results</dd>
+ *     <dd><dt>error {Boolean}</dt> True if there was an error</dd>
+ *     <dd><dt>totalRecords {Number}</dt> Total number of records (if available)</dd> 
+ * </dl>
  *
  * @method handleResponse
  * @param oRequest {Object} Request object
@@ -1101,7 +1101,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
             }
 
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
-            oParsedResponse = this.processJSONData(oRequest, oFullResponse);
+            oParsedResponse = this.parseJSONData(oRequest, oFullResponse);
             break;
         case YAHOO.util.DataSource.TYPE_HTMLTABLE:
             if(xhr && oRawResponse.responseText) {
@@ -1134,7 +1134,6 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
 
     if(oParsedResponse && !oParsedResponse.error) {
         // Last chance to touch the raw response or the parsed response
-        oParsedResponse.tId = tId;
         oParsedResponse = this.doBeforeCallback(oRequest, oFullResponse, oParsedResponse);
         this.fireEvent("responseParseEvent", {request:oRequest,
                 response:oParsedResponse, callback:oCallback, caller:oCaller});
@@ -1152,6 +1151,7 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     }
 
     // Send the response back to the caller
+    oParsedResponse.tId = tId;
     YAHOO.util.DataSource.issueCallback(oCallback,[oRequest,oParsedResponse],oParsedResponse.error,oCaller);
 };
 
@@ -1192,7 +1192,10 @@ YAHOO.util.DataSource.prototype.doBeforeCallback = function(oRequest, oFullRespo
  * @method parseArrayData
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full Array from the live database.
- * @return {Object} Parsed response object.
+ * @return {Object} Parsed response object with the following properties:<br>
+ *     - results (Array) Array of parsed data results<br>
+ *     - error (Boolean) True if there was an error<br>
+ *     - totalRecords (Number) Total number of records (if available)
  */
 YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oFullResponse) {
     if(YAHOO.lang.isArray(oFullResponse)) {
@@ -1238,7 +1241,10 @@ YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oFullRespons
  * @method parseTextData
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full text response from the live database.
- * @return {Object} Parsed response object.
+ * @return {Object} Parsed response object with the following properties:<br>
+ *     - results (Array) Array of parsed data results<br>
+ *     - error (Boolean) True if there was an error<br>
+ *     - totalRecords (Number) Total number of records (if available)
  */
 YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse) {
     if(YAHOO.lang.isString(oFullResponse)) {
@@ -1323,7 +1329,10 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse
  * @method parseXMLData
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full XML response from the live database.
- * @return {Object} Parsed response object.
+ * @return {Object} Parsed response object with the following properties<br>
+ *     - results (Array) Array of parsed data results<br>
+ *     - error (Boolean) True if there was an error<br>
+ *     - totalRecords (Number) Total number of records (if available)
  */
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse) {
     var bError = false;
@@ -1399,13 +1408,14 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
 };
 
 /**
- * Creates a function on the fly to parse the response JSON.
- * @method parseJSONData
- * @param oFullResponse {Object} The raw JSON from the server (parsed)
+ * Executes a function created on the fly to parse the response JSON according to 
+ * the defined schema.
+ * @method executeJSONParser
+ * @param oFullResponse {Object} The raw JSON-typed data from the server.
  * @return {Object}
  * @private
  */
-YAHOO.util.DataSource.prototype.parseJSONData = function (oFullResponse) {
+YAHOO.util.DataSource.prototype.executeJSONParser = function (oFullResponse) {
     // Create the parsing method per the responseSchema only once
     if (!this.jsonResponseParser) {
         YAHOO.log("Creating json parsing function","info",this.toString());
@@ -1491,14 +1501,17 @@ YAHOO.util.DataSource.prototype.parseJSONData = function (oFullResponse) {
 };
 
 /**
- * Process the JSON parsed data, applying record key:value conversions.
+ * Overridable method parses JSON data into a response object.
  *
- * @method processJSONData
+ * @method parseJSONData
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full JSON from the live database.
- * @return {Object} Parsed response object.
+ * @return {Object} Parsed response object with the following properties<br>
+ *     - results (Array) Array of parsed data results<br>
+ *     - error (Boolean) True if there was an error<br>
+ *     - totalRecords (Number) Total number of records (if available)
  */
-YAHOO.util.DataSource.prototype.processJSONData = function(oRequest, oFullResponse) {
+YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse) {
     var oParsedResponse = {results:[]};
     if(oFullResponse && (oFullResponse.constructor == Object)) {
         if(YAHOO.lang.isArray(this.responseSchema.fields)) {
@@ -1521,7 +1534,7 @@ YAHOO.util.DataSource.prototype.processJSONData = function(oRequest, oFullRespon
 
             // Parse out a jsonList
             try {
-                oParsedResponse = this.parseJSONData(oFullResponse);
+                oParsedResponse = this.executeJSONParser(oFullResponse);
             }
             catch(e) {
                 bError = true;
@@ -1569,7 +1582,10 @@ YAHOO.util.DataSource.prototype.processJSONData = function(oRequest, oFullRespon
  * @method parseHTMLTableData
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full HTML element reference from the live database.
- * @return {Object} Parsed response object.
+ * @return {Object} Parsed response object with the following properties<br>
+ *     - results (Array) Array of parsed data results<br>
+ *     - error (Boolean) True if there was an error<br>
+ *     - totalRecords (Number) Total number of records (if available)
  */
 YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullResponse) {
     var bError = false;
