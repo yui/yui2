@@ -1092,10 +1092,10 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
         this.newIndex = null;
         this.init(elTh);
         this.initFrame(); // Needed for DDProxy
+        this.invalidHandleTypes = {};
 
         //Set padding to account for children of nested columns
         this.setPadding(10, 0, (this.datatable.getTheadEl().offsetHeight + 10) , 0);
-    
     }
     else {
         YAHOO.log("Column dragdrop could not be created","warn");
@@ -1154,32 +1154,35 @@ if(YAHOO.util.DDProxy) {
             }
         },
         onDragOver: function(ev, id) {
-            var target = this.datatable.getColumn(id),
-                mouseX = YAHOO.util.Event.getPageX(ev),
+            // Validate target
+            var target = this.datatable.getColumn(id);
+            if(target) {
+                var mouseX = YAHOO.util.Event.getPageX(ev),
                 targetX = YAHOO.util.Dom.getX(id),
                 midX = targetX + ((YAHOO.util.Dom.get(id).offsetWidth)/2),
                 currentIndex =  this.column.getTreeIndex(),
                 targetIndex = target.getTreeIndex(),
                 newIndex = targetIndex;
-            
-            
-            if (mouseX < midX) {
-               YAHOO.util.Dom.setX(this.pointer, targetX);
-            } else {
-                var thisWidth = parseInt(target.getThEl().offsetWidth, 10);
-                YAHOO.util.Dom.setX(this.pointer, (targetX + thisWidth));
-                newIndex++;
+                
+                
+                if (mouseX < midX) {
+                   YAHOO.util.Dom.setX(this.pointer, targetX);
+                } else {
+                    var thisWidth = parseInt(target.getThEl().offsetWidth, 10);
+                    YAHOO.util.Dom.setX(this.pointer, (targetX + thisWidth));
+                    newIndex++;
+                }
+                if (targetIndex > currentIndex) {
+                    newIndex--;
+                }
+                if(newIndex < 0) {
+                    newIndex = 0;
+                }
+                else if(newIndex > this.datatable.getColumnSet().tree[0].length) {
+                    newIndex = this.datatable.getColumnSet().tree[0].length;
+                }
+                this.newIndex = newIndex;
             }
-            if (targetIndex > currentIndex) {
-                newIndex--;
-            }
-            if(newIndex < 0) {
-                newIndex = 0;
-            }
-            else if(newIndex > this.datatable.getColumnSet().tree[0].length) {
-                newIndex = this.datatable.getColumnSet().tree[0].length;
-            }
-            this.newIndex = newIndex;
         },
         onDragDrop: function() {
             if(YAHOO.lang.isNumber(this.newIndex) && (this.newIndex !== this.column.getTreeIndex())) {

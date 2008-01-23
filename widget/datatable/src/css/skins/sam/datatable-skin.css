@@ -64,7 +64,7 @@
 }
 
 /* sortable columns */
-.yui-skin-sam .yui-dt-sortable {
+.yui-skin-sam thead .yui-dt-sortable {
     cursor:pointer;
 }
 .yui-skin-sam th.yui-dt-asc,
