@@ -1178,13 +1178,13 @@ var Dom = YAHOO.util.Dom,
                 var leftOffset = xy[0] + elXY[0] + elW;
                 _knobLeft = leftOffset - newXY[0];
                 //Check to see if the knob will go off either side & reposition it
-                if (_knobLeft > (parseInt(win.attrs.width, 10) - 40)) {
-                    _knobLeft = parseInt(win.attrs.width, 10) - 40;
+                if (_knobLeft > (parseInt(win.attrs.width, 10) - 1)) {
+                    _knobLeft = parseInt(win.attrs.width, 10) - 1;
                 } else if (_knobLeft < 40) {
-                    _knobLeft = 40;
+                    _knobLeft = 1;
                 }
                 if (isNaN(_knobLeft)) {
-                    _knobLeft = 40;
+                    _knobLeft = 1;
                 }
                 if (force) {
                     if (_knob) {

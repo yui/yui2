@@ -2126,7 +2126,7 @@ var Dom = YAHOO.util.Dom,
         * @description The default CSS used in the config for 'css'. This way you can add to the config like this: { css: YAHOO.widget.SimpleEditor.prototype._defaultCSS + 'ADD MYY CSS HERE' }
         * @type String
         */
-        _defaultCSS: 'html { height: 95%; } body { height: 100%; padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: pointer; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
+        _defaultCSS: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: pointer; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
         /**
         * @property _defaultToolbar
         * @private
@@ -4540,8 +4540,14 @@ var Dom = YAHOO.util.Dom,
                 docEl = doc.documentElement;
 
             var height = parseInt(Dom.getStyle(this.get('editor_wrapper'), 'height'), 10);
-            var newHeight = ((this.browser.ie) ? body.scrollHeight : docEl.scrollHeight);
-            if ((height != newHeight) && (newHeight > parseInt(this.get('height'), 10))) {   
+            var newHeight = body.scrollHeight;
+            if (this.browser.webkit) {
+                newHeight = docEl.scrollHeight;
+            }
+            if (newHeight < parseInt(this.get('height'), 10)) {
+                newHeight = parseInt(this.get('height'), 10);
+            }
+            if ((height != newHeight) && (newHeight >= parseInt(this.get('height'), 10))) {   
                 Dom.setStyle(this.get('editor_wrapper'), 'height', newHeight + 'px');
                 if (this.browser.ie) {
                     //Internet Explorer needs this
