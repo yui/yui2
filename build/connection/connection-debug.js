@@ -950,7 +950,7 @@ YAHOO.util.Connect =
 		if(isUpload){
 
 			// Create iframe in preparation for file upload.
-			var io = this.createFrame((window.location.href.toLowerCase().indexOf("https") !== -1 || secureUri)?true:false);
+			var io = this.createFrame((window.location.href.toLowerCase().indexOf("https") === 0 || secureUri)?true:false);
 			// Set form reference and file upload properties to true.
 			this._isFormSubmit = true;
 			this._isFileUpload = true;
@@ -1072,10 +1072,6 @@ YAHOO.util.Connect =
 			// iframe source is undefined.
 			if(typeof secureUri == 'boolean'){
 				io.src = 'javascript:false';
-			}
-			else if(typeof secureURI == 'string'){
-				// Deprecated
-				io.src = secureUri;
 			}
 		}
 		else{
