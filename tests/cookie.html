@@ -601,6 +601,11 @@ YAHOO.test.cookie_test = (function(){
             YAHOO.util.Cookie.getSub("data", null);
         },
         
+        testGetSubOnNonExistantCookie : function(){
+            var hash = YAHOO.util.Cookie.getSub("invalid", "i");
+            Assert.isNull(hash, "Retrieved cookie value is should be null.");
+        },
+                
         testGetSubWithBooleanConverter : function(){
             var value = YAHOO.util.Cookie.getSub("data", "found", Boolean);
             Assert.isBoolean(value, "Retrieved subcookie value should be a boolean.");
