@@ -2702,7 +2702,8 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
         elTheadCellLiner.id = elTheadCell.id + "-liner";
         
         Dom.addClass(elTheadCellLiner,DT.CLASS_LINER);
-        Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey);
+        //TODO: document special keys will get stripped here
+        Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,""));
         var aCustomClasses;
         if(lang.isString(oColumn.className)) {
             aCustomClasses = [oColumn.className];
@@ -5967,7 +5968,8 @@ formatCell : function(elCell, oRecord, oColumn) {
             }
         }
 
-        Dom.addClass(elCell, "yui-dt-col-"+sKey);
+        //TODO: document special keys will get stripped here
+        Dom.addClass(elCell, "yui-dt-col-"+sKey.replace(/[^\w\-.:]/g,""));
 
         if(oColumn.sortable) {
             Dom.addClass(elCell.parentNode,DT.CLASS_SORTABLE);

@@ -383,11 +383,11 @@ YAHOO.widget.RecordSet.prototype = {
 
     /**
      * Adds multiple Records at once to the RecordSet at the given index with the
-     * given data. If index is null, then the new Records are added to the end of
-     * the RecordSet.
+     * given object literal data. If index is null, then the new Records are
+     * added to the end of the RecordSet.
      *
      * @method addRecords
-     * @param aData {Object[]} An array of object literal data.
+     * @param aData {Object[]} An object literal data or an array of data object literals.
      * @param index {Number} (optional) Position index.
      * @return {YAHOO.widget.Record[]} An array of Record instances.
      */
@@ -558,11 +558,11 @@ YAHOO.widget.RecordSet.prototype = {
     },
 
     /**
-     * Replaces all Records in RecordSet with new data.
+     * Replaces all Records in RecordSet with new object literal data.
      *
      * @method replaceRecords
      * @param data {Object || Object[]} An object literal of data or an array of
-     * object literal data.
+     * data object literals.
      * @return {YAHOO.widget.Record || YAHOO.widget.Record[]} A Record instance or
      * an array of Records.
      */
