@@ -627,7 +627,7 @@ YAHOO.util.History = (function () {
                     if (YAHOO.lang.hasOwnProperty(states, moduleName)) {
                         currentState = states[moduleName];
                     } else {
-                        currentState = moduleObj.currentState;
+                        currentState = unescape(moduleObj.currentState);
                     }
 
                     // Make sure the strings passed in do not contain our separators "," and "|"
