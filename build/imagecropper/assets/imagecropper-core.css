@@ -5,9 +5,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #000;
-    opacity: .5;
-    filter: alpha(opacity=50);
     height: 100%;
     width: 100%;
 }
@@ -16,9 +13,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    border: 1px dashed #fff;   
 }
-
 
 .yui-crop .yui-crop-resize-mask {
     position: absolute;
