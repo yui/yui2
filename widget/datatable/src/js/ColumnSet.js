@@ -16,6 +16,8 @@
 YAHOO.widget.ColumnSet = function(aDefinitions) {
     this._sId = "yui-cs" + YAHOO.widget.ColumnSet._nCount;
 
+    // First clone the defs
+    aDefinitions = YAHOO.widget.DataTable._cloneObject(aDefinitions);
     this._init(aDefinitions);
 
     YAHOO.widget.ColumnSet._nCount++;
@@ -113,7 +115,7 @@ YAHOO.widget.ColumnSet.prototype = {
      * @private
      */
 
-    _init : function(aDefinitions) {
+    _init : function(aDefinitions) {        
         // DOM tree representation of all Columns
         var tree = [];
         // Flat representation of all Columns
@@ -145,7 +147,7 @@ YAHOO.widget.ColumnSet.prototype = {
                 var oColumn = new YAHOO.widget.Column(currentNode);
                 
                 // Assign unique ID to Column and cross-reference it back to the
-                // original definition
+                // original object literal definition
                 currentNode.yuiColumnId = oColumn._sId = YAHOO.widget.Column._nCount + "";
                 
                 // Assign a key if not found
@@ -399,6 +401,7 @@ YAHOO.widget.ColumnSet.prototype = {
                     currentNode.editor = oColumn.editor;
                     currentNode.editorOptions = oColumn.editorOptions;
                     currentNode.formatter = oColumn.formatter;
+                    currentNode.hidden = oColumn.hidden;
                     currentNode.key = oColumn.key;
                     currentNode.label = oColumn.label;
                     currentNode.minWidth = oColumn.minWidth;
@@ -756,6 +759,15 @@ YAHOO.widget.Column.prototype = {
      * @default 10
      */
     minWidth : 10,
+
+    /**
+     * True if Column is in hidden state.
+     *
+     * @property hidden
+     * @type Boolean
+     * @default false     
+     */
+    width : false,
 
     /**
      * Custom CSS class or array of classes to be applied to every cell in the Column.

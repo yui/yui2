@@ -332,6 +332,17 @@ lang.augmentObject(DT, {
     CLASS_HIGHLIGHTED : "yui-dt-highlighted",
 
     /**
+     * Class name assigned to hidden elements.
+     *
+     * @property DataTable.CLASS_HIDDEN
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-hidden"
+     */
+    CLASS_HIDDEN : "yui-dt-hidden",
+
+    /**
      * Class name assigned to disabled elements.
      *
      * @property DataTable.CLASS_DISABLED
@@ -564,6 +575,40 @@ lang.augmentObject(DT, {
      * @static 
      */
     _elColumnResizerProxy : null,
+
+    /**
+     * Clones object literal or array of object literals.
+     *
+     * @method YAHOO.widget.DataTable._cloneObject
+     * @param o {Object} Object.
+     * @private
+     * @static     
+     */
+    _cloneObject : function(o) {
+        var copy = {};
+        
+        if(lang.isArray(o)) {
+            var array = [];
+            for(var i=0,len=o.length;i<len;i++) {
+                array[i] = DT._cloneObject(o[i]);
+            }
+            copy = array;
+        }
+        else if(o.constructor == Object) { 
+            for (var x in o){
+                if(lang.hasOwnProperty(o, x)) {
+                    if(lang.isValue(o[x]) && (o[x].constructor == Object) || lang.isArray(o[x])) {
+                        copy[x] = DT._cloneObject(o[x]);
+                    }
+                    else {
+                        copy[x] = o[x];
+                    }
+                }
+            }
+        }
+    
+        return copy;
+    },
 
     /**
      * Creates HTML markup for shared Column drag target.
@@ -2145,6 +2190,7 @@ _syncColWidths : function() {
 
                 for(var i=0; i<elWhichRow.cells.length; i++) {
                     // Validate THEAD cell for this TBODY cell
+                    // Only proceed with this Column doesn't have a width set
                     if(allKeys[i] && !allKeys[i].width) {
                         // Grab TH liner width minus padding
                         elHeadLiner = allKeys[i].getThEl().firstChild;
@@ -2273,7 +2319,6 @@ _initConfigs : function(oConfigs) {
 _initColumnSet : function(aColumnDefs) {
     this._oColumnSet = null;
     if(lang.isArray(aColumnDefs)) {
-        aColumnDefs = aColumnDefs.slice();
         this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
     }
     // Backward compatibility
@@ -2644,11 +2689,6 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
 
         Dom.addClass(elTheadCellLiner,aClasses.join(" "));
 
-        //Set width if given
-        if(oColumn.width) {
-            elTheadCellLiner.style.width = oColumn.width + "px";
-        }
-        
         // Add classes on the liner
         Dom.addClass(elTheadCellLabel,DT.CLASS_LABEL);
         
@@ -2660,6 +2700,16 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
         if(oColumn.sortable) {
             aClasses[aClasses.length] = DT.CLASS_SORTABLE;
         }
+
+        //Set width if available
+        if(oColumn.hidden) {
+            aClasses[aClasses.length] = DT.CLASS_HIDDEN;
+            elTheadCellLiner.style.width = "1px";
+        }
+        else if(oColumn.width) {
+            elTheadCellLiner.style.width = oColumn.width + "px";
+        }
+        
         Dom.addClass(elTheadCell,aClasses.join(" "));
 
         DT.formatTheadCell(elTheadCellLabel, oColumn, this);
@@ -2840,9 +2890,17 @@ _updateTrEl : function(elRow, oRecord) {
         elCellLiner.style.width = "";
         elCell.style.width = "";
                     
-        // Set width if given
-        if(oColumn.width) {
-            elCellLiner.style.width = oColumn.width + "px";
+        // Set width if available
+        if(oColumn.hidden) {
+            Dom.addClass(elCell, DT.CLASS_HIDDEN);
+            elCellLiner.style.width = "1px";
+        }
+        else {
+            Dom.removeClass(elCell, DT.CLASS_HIDDEN);
+            
+            if(oColumn.width) {
+                elCellLiner.style.width = oColumn.width + "px";
+            }
         }
     }
 
@@ -5179,23 +5237,15 @@ hideColumn : function(oColumn) {
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
 
-                // Adjust thead cell
                 var elTheadCell = thisColumn.getThEl();
-                var elLiner = elTheadCell.firstChild;
-                var linerStyle = elLiner.style;
-                linerStyle.margin = 0;
-                linerStyle.padding = 0;
-                linerStyle.overflow = "hidden";
-                thisColumn._nLastWidth = elLiner.offsetWidth;// Store for later
+                thisColumn._nLastWidth = elTheadCell.firstChild.offsetWidth;// Store for later
+                Dom.addClass(elTheadCell,DT.CLASS_HIDDEN);
 
                 // Adjust body cells (if key Column)
                 var thisKeyIndex = thisColumn.getKeyIndex();
                 if(thisKeyIndex !== null) {
                     for(var j=0;j<l;j++) {
-                        var cellStyle = allrows[j].cells[thisKeyIndex].firstChild.style;
-                        cellStyle.margin = 0;
-                        cellStyle.padding = 0;
-                        cellStyle.overflow = "hidden";
+                        Dom.addClass(allrows[j].cells[thisKeyIndex],DT.CLASS_HIDDEN);
                     }
 
                     this._setColumnWidth(thisColumn, "1px");
@@ -5211,7 +5261,7 @@ hideColumn : function(oColumn) {
                 }
                 // Just set thead cell width directly for parent Column
                 else {
-                    elLiner.style.width = "1px";
+                    elTheadCell.firstChild.style.width = "1px";
                 }
                 
                 thisColumn.hidden = true;
@@ -5244,22 +5294,14 @@ showColumn : function(oColumn) {
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
                 
-                // Adjust thead cell
                 var elTheadCell = thisColumn.getThEl();
-                var elLiner = elTheadCell.firstChild;
-                var linerStyle = elLiner.style;
-                linerStyle.margin = "";
-                linerStyle.padding = "";
-                linerStyle.overflow = "";
+                Dom.removeClass(elTheadCell,DT.CLASS_HIDDEN);
 
                 // Adjust body cells (if key Column)
                 var thisKeyIndex = thisColumn.getKeyIndex();
                 if(thisKeyIndex !== null) {
                     for(var j=0;j<l;j++) {
-                        var cellStyle = allrows[j].cells[thisKeyIndex].firstChild.style;
-                        cellStyle.margin = "";
-                        cellStyle.padding = "";
-                        cellStyle.overflow = "";
+                        Dom.removeClass(allrows[j].cells[thisKeyIndex],DT.CLASS_HIDDEN);
                     }
                     
                     this.setColumnWidth(thisColumn, (thisColumn._nLastWidth || thisColumn.minWidth), true);
@@ -5275,7 +5317,7 @@ showColumn : function(oColumn) {
                     }
                 }
                 else {
-                    linerStyle.width = "";
+                    elTheadCell.firstChild.style.width = "";
                 }
 
 
@@ -5308,7 +5350,6 @@ removeColumn : function(oColumn) {
 
         oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
         this._initColumnSet(aOrigColumnDefs);
-        //this._initTableEl();
         this._initTheadEls();
 
         this.render();
@@ -5350,7 +5391,6 @@ insertColumn : function(oColumn, index) {
     var aNewColumnDefs = this._oColumnSet.getDefinitions();
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
-    //this._initTableEl();
     this._initTheadEls();
     this.render();
     this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
@@ -5579,10 +5619,7 @@ updateRow : function(row, oData) {
     if(oldRecord) {
         // Copy data from the Record for the event that gets fired later
         var oRecordData = oldRecord.getData();
-        oldData = {};
-        for(var param in oRecordData) {
-            oldData[param] = oRecordData[param];
-        }
+        oldData = YAHOO.widget.DataTable._cloneObject(oRecordData);
 
         updatedRecord = this._oRecordSet.updateRecord(oldRecord, oData);
     }
@@ -5658,10 +5695,7 @@ deleteRow : function(row) {
         var nTrIndex = this.getTrIndex(oRecord);
         var nRecordIndex = this.getRecordIndex(oRecord);
         var oRecordData = oRecord.getData();
-        var oData = {};
-        for(var param in oRecordData) {
-            oData[param] = oRecordData[param];
-        }
+        var oData = YAHOO.widget.DataTable._cloneObject(oRecordData);
 
         // Delete Record from RecordSet
         this._oRecordSet.deleteRecord(nRecordIndex);
@@ -8368,10 +8402,10 @@ resetCellEditor : function() {
  * @method saveCellEditor
  */
 saveCellEditor : function() {
-    //TODO: Copy the editor's values to pass to the event
     if(this._oCellEditor.isActive) {
         var newData = this._oCellEditor.value;
-        var oldData = this._oCellEditor.record.getData(this._oCellEditor.column.key);
+        // Copy the data to pass to the event
+        var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
 
         // Validate input data
         if(this._oCellEditor.validator) {

@@ -38,6 +38,14 @@ th.yui-dt-resizeable .yui-dt-liner {
     background:url(transparent.gif); /* needed to block events in ie http://my.opera.com/hallvors/blog/show.dml/16391 */
 }
 
+/* hidden columns */
+.yui-skin-sam th.yui-dt-hidden .yui-dt-liner, 
+.yui-skin-sam td.yui-dt-hidden .yui-dt-liner {
+    margin:0;
+    padding:0;
+    overflow:hidden;
+}
+
 /* vertical and horizontal scrolling */
 .yui-dt-scrollable .yui-dt-bd {
     overflow:auto;
