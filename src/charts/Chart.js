@@ -380,7 +380,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 			//editing them directly.
 			var dataProvider = [];	
 			var seriesCount = 0;
-			if(this._seriesDefs)
+			if(this._seriesDefs != null)
 			{
 				seriesCount = this._seriesDefs.length;
 				for(var i = 0; i < seriesCount; i++)
@@ -389,7 +389,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 					var clonedSeries = {};
 					for(var prop in currentSeries)
 					{
-						
 						if(prop == "style" && currentSeries.style != null)
 						{
 							clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
@@ -516,6 +515,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setSeriesDefs: function(value)
 	{
 		this._seriesDefs = value;
+		this._refreshData();
 	},
 
 	/**

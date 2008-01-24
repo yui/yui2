@@ -16,7 +16,7 @@ package
 	import com.yahoo.astra.fl.charts.series.*;
 	import com.yahoo.astra.fl.charts.skins.*;
 	import com.yahoo.astra.fl.charts.events.ChartEvent;
-	import com.yahoo.astra.fl.charts.legend.Legend;
+	//import com.yahoo.astra.fl.charts.legend.Legend;
 	import com.yahoo.astra.utils.InstanceFactory;
 	import com.yahoo.astra.utils.JavaScriptUtil;
 	import com.yahoo.yui.YUIAdapter;
@@ -54,11 +54,11 @@ package
 		 */
 		protected var chart:Chart;
 		
-		protected var legend:Legend;
+		//protected var legend:Legend;
 		
-		protected var _legendDisplay:String = "none";
+		//protected var _legendDisplay:String = "none";
 		
-		public function get legendDisplay():String
+		/*public function get legendDisplay():String
 		{
 			return this._legendDisplay;
 		}
@@ -67,7 +67,7 @@ package
 		{
 			this._legendDisplay = value;
 			this.refreshComponentSize();
-		}
+		}*/
 		
 		/**
 		 * @private (protected)
@@ -176,7 +176,7 @@ package
 				this.setSeriesStyles(seriesStyles);
 			}
 			
-			if(this.legend)
+			/*if(this.legend)
 			{
 				if(this.legendDisplay != "none")
 				{
@@ -187,7 +187,7 @@ package
 				{
 					this.legend.visible = false;
 				}
-			}
+			}*/
 		}
 		
 		/**
@@ -561,12 +561,12 @@ package
 				case "yAxis":
 					this.setAxisStyles(value, "vertical");
 					break;
-				case "legend":
+				/*case "legend":
 					if(this.legend)
 					{
 						this.setLegendStyles(value);
 					}
-					break;
+					break;*/
 				default:
 					this.log("Unknown style: " + name);
 			}
@@ -775,7 +775,7 @@ package
 			
 			if(this.chart)
 			{
-				if(this.legend && this.legendDisplay != "none")
+				/*if(this.legend && this.legendDisplay != "none")
 				{
 					this.legend.drawNow();
 					var padding:Number = this.chart.getStyle("contentPadding") as Number;
@@ -807,7 +807,7 @@ package
 						this.legend.x = (this.stage.stageWidth - this.legend.width) / 2;
 						this.chart.height -= (this.legend.height + padding);
 					}
-				}
+				}*/
 				this.chart.drawNow();
 			}
 		}
@@ -1029,7 +1029,7 @@ package
 			}
 		}
 		
-		protected function setLegendStyles(styles:Object):void
+		/*protected function setLegendStyles(styles:Object):void
 		{
 			if(styles.font)
 			{
@@ -1055,7 +1055,7 @@ package
 				}
 				this.legendDisplay = styles.display;
 			}
-		}
+		}*/
 		
 	//--------------------------------------
 	//  Private Methods
@@ -1110,12 +1110,12 @@ package
 		{
 			if(!(value is Number))
 			{
-				value = value.toString();
-				if(value.indexOf("0x") != 0)
+				var valueAsString:String = value.toString().replace("#", "");
+				if(valueAsString.indexOf("0x") != 0)
 				{
-					value = "0x" + value;
+					valueAsString = "0x" + valueAsString;
 				}
-				return parseInt(String(value), 16);
+				return parseInt(String(valueAsString), 16);
 			}
 			return uint(value);
 		}
