@@ -2558,118 +2558,6 @@ _initTheadEls : function() {
     }
 },
 
-/*
-_initTheadEl : function(elTable, bA11y) {
-    var i, oColumn;
-    var oColumnSet = this._oColumnSet;
-
-    // Create THEAD
-    var elThead = elTable.appendChild(document.createElement("thead"));
-    if(!bA11y) {
-        this._elThead = elThead;
-    }
-
-    // Iterate through each row of THEAD cells...
-    var colTree = oColumnSet.tree;
-    var elTheadCell;
-    for(i=0; i<colTree.length; i++) {
-        var elTheadRow = elThead.appendChild(document.createElement("tr"));
-        elTheadRow.id = this._sId+"-hdrow"+i;
-
-        // ...and create THEAD cells
-        for(var j=0; j<colTree[i].length; j++) {
-            oColumn = colTree[i][j];
-            elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-            if(!bA11y) {
-                oColumn._elTh = elTheadCell;
-            }
-            var id = (bA11y) ? this._sId+"-th" + oColumn.getId() + "-a11y": this._sId+"-th" + oColumn.getId();
-            elTheadCell.id = id;
-            elTheadCell.yuiCellIndex = j;
-            this._initThEl(elTheadCell,oColumn,i,j, bA11y);
-        }
-
-        if(!bA11y) {
-            // Set FIRST/LAST on THEAD rows
-            if(i === 0) {
-                Dom.addClass(elTheadRow, DT.CLASS_FIRST);
-            }
-            if(i === (colTree.length-1)) {
-                Dom.addClass(elTheadRow, DT.CLASS_LAST);
-            }
-        }
-    }
-
-    if(!bA11y) {
-        // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
-        var aFirstHeaders = oColumnSet.headers[0];
-        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
-        for(i=0; i<aFirstHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th"+aFirstHeaders[i]), DT.CLASS_FIRST);
-        }
-        for(i=0; i<aLastHeaders.length; i++) {
-            //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th"+aLastHeaders[i]), DT.CLASS_LAST);
-        }
-    
-        // Add DD features only after DOM has been updated
-        var foundDD = (YAHOO.util.DD) ? true : false;
-        var needDD = false;
-        // draggable
-        // HACK: Not able to use attribute since this code is run before
-        // attributes are initialized
-        if(this._oConfigs.draggableColumns) {
-            for(i=0; i<this._oColumnSet.tree[0].length; i++) {
-                oColumn = this._oColumnSet.tree[0][i];
-                if(foundDD) {
-                    elTheadCell = oColumn.getThEl();
-                    Dom.addClass(elTheadCell, DT.CLASS_DRAGGABLE);
-                    var elDragTarget = DT._initColumnDragTargetEl();
-                    oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTheadCell, elDragTarget);
-                }
-                else {
-                    needDD = true;
-                }    
-            }
-        }
-        // resizeable
-        for(i=0; i<this._oColumnSet.keys.length; i++) {
-            oColumn = this._oColumnSet.keys[i];
-            if(oColumn.resizeable) {
-                if(foundDD) {
-                    elTheadCell = oColumn.getThEl();
-                    Dom.addClass(elTheadCell, DT.CLASS_RESIZEABLE);
-                    var elThLiner = elTheadCell.firstChild;
-                    var elThResizer = elThLiner.appendChild(document.createElement("div"));
-                    elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
-                    oColumn._elResizer = elThResizer;
-                    Dom.addClass(elThResizer,DT.CLASS_RESIZER);
-                    var elResizerProxy = DT._initColumnResizerProxyEl();
-                    oColumn._ddResizer = new YAHOO.util.ColumnResizer(
-                            this, oColumn, elTheadCell, elThResizer.id, elResizerProxy);
-                    var cancelClick = function(e) {
-                        Ev.stopPropagation(e);
-                    };
-                    Ev.addListener(elThResizer,"click",cancelClick);
-                }
-                else {
-                    needDD = true;
-                }
-            }
-        }
-        if(needDD) {
-            YAHOO.log("Could not find DragDrop dependancy", "warn", this.toString());
-        }
-        
-        YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
-    }
-    else {
-        YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
-    }
-},
-*/
-
 /**
  * Populates TH cell as defined by Column.
  *
@@ -2709,33 +2597,41 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
         // Needed for resizer
         elTheadCellLiner.id = elTheadCell.id + "-liner";
         
-        Dom.addClass(elTheadCellLiner,DT.CLASS_LINER);
-        //TODO: document special keys will get stripped here
-        Dom.addClass(elTheadCellLiner, "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,""));
-        var aCustomClasses;
+        // Add classes on the liner
+        var aClasses;
         if(lang.isString(oColumn.className)) {
-            aCustomClasses = [oColumn.className];
+            aClasses = [oColumn.className];
         }
         else if(lang.isArray(oColumn.className)) {
-            aCustomClasses = oColumn.className;
+            aClasses = oColumn.className;
         }
-        if(aCustomClasses) {
-            for(var i=0; i<aCustomClasses.length; i++) {
-                Dom.addClass(elTheadCellLiner,aCustomClasses[i]);
-            }
+        else {
+            aClasses = [];
         }
+        
+        aClasses[aClasses.length] = DT.CLASS_LINER;
+        //TODO: document special keys will get stripped here
+        aClasses[aClasses.length] = "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,"");
+
+        Dom.addClass(elTheadCellLiner,aClasses.join(" "));
+
+        //Set width if given
         if(oColumn.width) {
             elTheadCellLiner.style.width = oColumn.width + "px";
         }
         
+        // Add classes on the liner
         Dom.addClass(elTheadCellLabel,DT.CLASS_LABEL);
         
+        // Add classes on the cell
+        aClasses = [];
         if(oColumn.resizeable) {
-            Dom.addClass(elTheadCell,DT.CLASS_RESIZEABLE);
+            aClasses[aClasses.length] = DT.CLASS_RESIZEABLE;
         }
         if(oColumn.sortable) {
-            Dom.addClass(elTheadCell,DT.CLASS_SORTABLE);
+            aClasses[aClasses.length] = DT.CLASS_SORTABLE;
         }
+        Dom.addClass(elTheadCell,aClasses.join(" "));
 
         DT.formatTheadCell(elTheadCellLabel, oColumn, this);
     }
@@ -5930,33 +5826,33 @@ formatCell : function(elCell, oRecord, oColumn) {
         var sKey = oColumn.key;
         var oData = oRecord.getData(sKey);
 
-        // Add custom classNames
-        var aCustomClasses = null;
+        // Add classNames
+        var aClasses;
         if(lang.isString(oColumn.className)) {
-            aCustomClasses = [oColumn.className];
+            aClasses = [oColumn.className];
         }
         else if(lang.isArray(oColumn.className)) {
-            aCustomClasses = oColumn.className;
+            aClasses = oColumn.className;
         }
-
-        if(aCustomClasses) {
-            for(var i=0; i<aCustomClasses.length; i++) {
-                Dom.addClass(elCell, aCustomClasses[i]);
-            }
+        else {
+            aClasses = [];
         }
 
         //TODO: document special keys will get stripped here
-        Dom.addClass(elCell, "yui-dt-col-"+sKey.replace(/[^\w\-.:]/g,""));
+        aClasses[aClasses.length] = "yui-dt-col-"+sKey.replace(/[^\w\-.:]/g,"");
 
         if(oColumn.sortable) {
-            Dom.addClass(elCell.parentNode,DT.CLASS_SORTABLE);
+            aClasses[aClasses.length] = DT.CLASS_SORTABLE;
         }
         if(oColumn.resizeable) {
-            Dom.addClass(elCell.parentNode,DT.CLASS_RESIZEABLE);
+            aClasses[aClasses.length] = DT.CLASS_RESIZEABLE;
         }
         if(oColumn.editor) {
-            Dom.addClass(elCell.parentNode,DT.CLASS_EDITABLE);
+            aClasses[aClasses.length] = DT.CLASS_EDITABLE;
         }
+
+        Dom.addClass(elCell, aClasses.join(" "));
+
 
         var fnFormatter;
         if(lang.isString(oColumn.formatter)) {
