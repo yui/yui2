@@ -743,7 +743,6 @@ YAHOO.widget.Paginator.prototype = {
     }
 };
 
-YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.EventProvider);
 YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
 
 
