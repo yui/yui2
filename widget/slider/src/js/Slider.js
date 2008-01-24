@@ -199,7 +199,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         /**
          * Specifies the number of pixels the arrow keys will move the slider.
-         * Default is 25.
+         * Default is 20.
          * @property keyIncrement
          * @type int
          */
