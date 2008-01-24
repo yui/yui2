@@ -8805,8 +8805,12 @@ onDataReturnSetRecords : function(oRequest, oResponse, oPayload) {
                             oPayload.startIndex : 0;
 
         // If paginating, set the number of total records if provided
-        if (oPaginator instanceof Pag && oResponse.totalRecords) {
-            oPaginator.setTotalRecords(oResponse.totalRecords,true);
+        if (oPaginator instanceof Pag) {
+            if (lang.isNumber(oResponse.totalRecords)) {
+                oPaginator.setTotalRecords(oResponse.totalRecords,true);
+            } else {
+                oPaginator.setTotalRecords(oResponse.results.length,true);
+            }
         }
 
         this._oRecordSet.setRecords(oResponse.results, startIndex);
