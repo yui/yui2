@@ -1309,6 +1309,7 @@ if(YAHOO.util.DD) {
                 var offsetX = newX - this.startX;
                 var newWidth = this.startWidth + offsetX;
                 this.datatable.setColumnWidth(this.column, newWidth);
+                this.datatable._syncColWidths();
             }
         }
     });

@@ -1773,6 +1773,37 @@ initAttributes : function(oConfigs) {
     });
 
     /**
+    * @attribute width
+    * @description Table width for scrollable tables
+    * @type String
+    */
+    this.setAttributeConfig("width", {
+        value: null,
+        validator: lang.isString,
+        method: function(oParam) {
+            if(this.get("scrollable")) {
+                this._elTheadContainer.style.width = oParam;
+                this._elTbodyContainer.style.width = oParam;            
+            }
+        }
+    });
+
+    /**
+    * @attribute height
+    * @description Table height for scrollable tables
+    * @type String
+    */
+    this.setAttributeConfig("height", {
+        value: null,
+        validator: lang.isString,
+        method: function(oParam) {
+            if(this.get("scrollable")) {
+                this._elTbodyContainer.style.height = oParam;  
+            }          
+        }
+    });
+
+    /**
     * @attribute draggableColumns
     * @description True if Columns are draggable to reorder, false otherwise.
     * The Drag & Drop Utility is required to enable this feature. Only top-level
@@ -1994,6 +2025,7 @@ _sLastTrId : null,
  * Template cell to create all new cells from.
  * @property _tdElTemplate
  * @type {HTMLElement}
+ * @private 
  */
 _tdElTemplate : null,
 
@@ -2001,6 +2033,7 @@ _tdElTemplate : null,
  * Template row to create all new rows from.
  * @property _trElTemplate
  * @type {HTMLElement}
+ * @private 
  */
 _trElTemplate : null,
 
@@ -2126,13 +2159,9 @@ _syncColWidths : function() {
                         // If TH and TD liners are out of sync
                         if(nHeadLinerWidth !== nCellLinerWidth) {
                             // Set all liners for this Column to the greater of the 2 values
-                            nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
-                            if(nHeadLinerWidth<nCellLinerWidth) {
-                                elHeadLiner.style.width = nNewWidth+"px";
-                            }
-                            else {
-                                elCellLiner.style.width = nNewWidth+"px";
-                            }
+                            nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth) + "px";
+                                elHeadLiner.style.width = nNewWidth;
+                                elCellLiner.style.width = nNewWidth;
                         }
                     }
                 }
