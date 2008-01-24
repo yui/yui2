@@ -3,7 +3,7 @@
     overflow:hidden;
 }
 
-/* ally headers */
+/* a11y headers */
 .yui-dt-bd thead tr, .yui-dt-bd thead th {
     position:absolute;
     left:-1500px;

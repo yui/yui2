@@ -2093,38 +2093,46 @@ _focusEl : function(el) {
 },
 
 /**
- * Syncs up widths of THs and TDs across all Columns.
+ * Syncs up widths of THs and TDs across all those Columns without width values.
  *
  * @method _syncColWidths
- * @param elRow {HTMLElement} Sync THEAD cell widths with cells from
- * the given TBODY row.
  * @private
  */
-_syncColWidths : function(elRow) {
+_syncColWidths : function() {
     var oSelf = this;
 
     setTimeout(function() {
         // Only if instance is still valid
         if((oSelf instanceof DT) && (oSelf._sId)) {
             var allKeys = oSelf._oColumnSet.keys;
-            var elWhichRow = elRow || oSelf.getFirstTrEl();
-
+            // Validate TBODY row
+            var elWhichRow = oSelf.getFirstTrEl();
             if(elWhichRow && (elWhichRow.cells.length > 0) && (allKeys.length > 0)) {
                 var elHeadLiner, nHeadLinerWidth, elCellLiner, nCellLinerWidth, nNewWidth;
 
                 for(var i=0; i<elWhichRow.cells.length; i++) {
-                    if(allKeys[i]) {
+                    // Validate THEAD cell for this TBODY cell
+                    if(allKeys[i] && !allKeys[i].width) {
+                        // Grab TH liner width minus padding
                         elHeadLiner = allKeys[i].getThEl().firstChild;
                         nHeadLinerWidth = elHeadLiner.offsetWidth -
                                 (parseInt(Dom.getStyle(elHeadLiner,"paddingLeft"),10)|0) -
                                 (parseInt(Dom.getStyle(elHeadLiner,"paddingRight"),10)|0);
+                        // Grab TD liner width minus padding
                         elCellLiner = elWhichRow.cells[i].firstChild;
                         nCellLinerWidth = elCellLiner.offsetWidth -
                                 (parseInt(Dom.getStyle(elCellLiner,"paddingLeft"),10)|0) -
                                 (parseInt(Dom.getStyle(elCellLiner,"paddingRight"),10)|0);
+                        // If TH and TD liners are out of sync
                         if(nHeadLinerWidth !== nCellLinerWidth) {
+                            // Set all liners for this Column to the greater of the 2 values
                             nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth);
-                            oSelf._setColumnWidth(allKeys[i],nNewWidth+"px");
+                            if(nHeadLinerWidth<nCellLinerWidth) {
+                                elHeadLiner.style.width = nNewWidth+"px";
+                            }
+                            else {
+                                elCellLiner.style.width = nNewWidth+"px";
+                            }
                         }
                     }
                 }
@@ -2862,7 +2870,6 @@ _updateTrEl : function(elRow, oRecord) {
         sortKey,
         sortClass,
         isSortedBy = this.get("sortedBy"),
-        aSetWidths = [],
         i,j,len,jlen;
 
     if(isSortedBy) {
@@ -2912,10 +2919,6 @@ _updateTrEl : function(elRow, oRecord) {
         if(oColumn.width) {
             elCellLiner.style.width = oColumn.width + "px";
         }
-        // Or mark for post-paint width assignment
-        else {
-            aSetWidths.push([elCellLiner,oColumn.getThEl().firstChild]);
-        }
     }
 
     // Update Record ID
@@ -2923,35 +2926,6 @@ _updateTrEl : function(elRow, oRecord) {
     
     // Redisplay the row for reflow
     Dom.setStyle(elRow,'display','');
-
-    // Loop through the cells that have not had their widths set from
-    // oColumn.width and check if the column is wide enough to support the
-    // content.  If not, expand the cell and header width to accommodate.
-    if (aSetWidths.length) {
-        var pl = 'padding-left',
-            pr = 'padding-right';
-
-        for (i=aSetWidths.length - 1; i >= 0; --i) {
-            var elLiner   = aSetWidths[i][0],
-                elThLiner = aSetWidths[i][1];
-
-            // increase the column size to fit content width when necessary
-            if (elThLiner.scrollWidth !== elLiner.scrollWidth) {
-                var padding =
-                    Math.max(
-                        parseInt(Dom.getStyle(elThLiner,pl),10)|0,
-                        parseInt(Dom.getStyle(elLiner,pl),10)|0) +
-                    Math.max(
-                        parseInt(Dom.getStyle(elThLiner,pr),10)|0,
-                        parseInt(Dom.getStyle(elLiner,pr),10)|0);
-
-                var newWidth = Math.max(elThLiner.scrollWidth,
-                                        elLiner.scrollWidth) - padding + 'px';
-
-                Dom.setStyle([elLiner,elThLiner],'width',newWidth);
-            }
-        }
-    }
 
     return elRow;
 },
@@ -4705,6 +4679,13 @@ render : function() {
             timeout: (loopN > 0) ? 0 : -1
         }); 
         
+        this._oChain.add({
+            method: function() {
+                this._syncColWidths();
+            },
+            scope: this
+        });
+        
         this._oChain.run();   
     }
     // Empty
@@ -5187,7 +5168,7 @@ sortColumn : function(oColumn, sDir) {
 },
 
 /**
- * Sets given Column to given pixel width. No validations against minimum width
+ * Sets DOM elements to given pixel width. No validations against minimum width
  * and no updating Column.width value.
  *
  * @method _setColumnWidth
@@ -5216,9 +5197,6 @@ _setColumnWidth : function(oColumn, sWidth) {
             this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
             document.body.style += '';
         }
-
-        // Save state
-        oColumn.width = parseInt(sWidth,10);
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
@@ -5242,9 +5220,8 @@ setColumnWidth : function(oColumn, nWidth) {
             sWidth = (nWidth > oColumn.minWidth) ? nWidth + "px" : oColumn.minWidth + "px";
         }
 
-        // Note: Now saving in _setColumnWidth
         // Save state
-        //oColumn.width = parseInt(sWidth,10);
+        oColumn.width = parseInt(sWidth,10);
         
         // Resize the DOM elements
         this._setColumnWidth(oColumn, sWidth);

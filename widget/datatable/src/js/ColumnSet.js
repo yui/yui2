@@ -1267,7 +1267,6 @@ if(YAHOO.util.DD) {
          */
         onMouseUp : function(e) {
             this.resetResizerEl();
-            this.datatable._syncColWidths();
             this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
         },
     
