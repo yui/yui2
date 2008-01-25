@@ -86,15 +86,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         this.updatePaginator(this._oConfigs.paginator);
     }
 
-    //HACK: Set initialRequest to undefined explicitly when necessary.
-    // Attribute doesn't afford for default value of undefined.
-    if((this._oConfigs.initialRequest === undefined) &&
-            ((this._oDataSource.dataType == DS.TYPE_XHR) ||
-            (this._oDataSource.dataType == DS.TYPE_JSFUNCTION))) {
-        this._configs.initialRequest.value = undefined;
-    }
-
-
     // Initialize inline Cell editing
     this._initCellEditorEl();
     
@@ -106,16 +97,17 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     YAHOO.widget.DataTable._nCount++;
     
-    // Send out for initial data in an asynchronous request
-    var sInitialRequest = this.get('initialRequest');
-    if(sInitialRequest !== undefined) {
+    //HACK: Send out for initial data in an asynchronous request unless
+    // initialRequest was originally undefined and DS type is XHR
+    if(!((this._oConfigs.initialRequest === undefined) &&
+            (this._oDataSource.dataType === DS.TYPE_XHR))) {
         var oCallback = {
             success : this.onDataReturnSetRecords,
             failure : this.onDataReturnSetRecords,
             scope   : this,
             argument: {}
         };
-        this._oDataSource.sendRequest(sInitialRequest, oCallback);
+        this._oDataSource.sendRequest(this.get("initialRequest"), oCallback);
     }
     else {
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
