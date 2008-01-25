@@ -1559,6 +1559,26 @@ initAttributes : function(oConfigs) {
             // Hook into the pagintor's change event
             if (oNewPaginator instanceof Pag) {
                 oNewPaginator.subscribe('changeRequest', this.onPaginatorChange, this, true);
+
+                // If the paginator has no configured containers, add some
+                var containers = oNewPaginator.getContainerNodes();
+                if (!containers.length) {
+                    // Build the container nodes
+                    var c_above = document.createElement('div');
+                    c_above.id = this._sId + "-paginator0";
+                    this._elContainer.insertBefore(c_above,this._elContainer.firstChild);
+
+                    // ...and one below the table
+                    var c_below = document.createElement('div');
+                    c_below.id = this._sId + "-paginator1";
+                    this._elContainer.appendChild(c_below);
+
+                    containers = [c_above, c_below];
+                    Dom.addClass(containers,
+                                DT.CLASS_PAGINATOR);
+
+                    oNewPaginator.set('containers',containers);
+                }
             }
         }
     });
@@ -1580,40 +1600,7 @@ initAttributes : function(oConfigs) {
             }
 
             var oPaginator  = this.get('paginator');
-            if (oPaginator instanceof Pag) {
-                var containers = oPaginator.getContainerNodes();
-                if (on) {
-                    if (!containers.length) {
-                        // Build the container nodes
-                        var c_above = document.createElement('div');
-                        c_above.id = this._sId + "-paginator0";
-                        this._elContainer.insertBefore(c_above,this._elContainer.firstChild);
-
-                        // ...and one below the table
-                        var c_below = document.createElement('div');
-                        c_below.id = this._sId + "-paginator1";
-                        this._elContainer.appendChild(c_below);
-
-                        containers = [c_above, c_below];
-                        Dom.addClass(containers,
-                                    DT.CLASS_PAGINATOR);
-
-                        oPaginator.set('containers',containers);
-                    }
-
-                    // rendering handled in refreshView
-                    for (i = 0, len = containers.length; i < len; ++i) {
-                        Dom.setStyle(containers[i],'display','');
-                    }
-                } else {
-                    // Can't just remove nodes from the DataTable container element
-                    // because we need to know if the pagination was rendered then
-                    // hidden.
-                    for (i = 0, len = containers.length; i < len; ++i) {
-                        Dom.setStyle(containers[i],'display','none');
-                    }
-                }
-            } else {
+            if (!(oPaginator instanceof Pag)) {
                 // Backward compatibility--pagination generated here
                 oPaginator = oPaginator || {
                     rowsPerPage     : 500,  // 500 rows per page
