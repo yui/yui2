@@ -2177,43 +2177,53 @@ _focusEl : function(el) {
  * @private
  */
 _syncColWidths : function() {
-    var oSelf = this;
-
-    setTimeout(function() {
-        // Only if instance is still valid
-        if((oSelf instanceof DT) && (oSelf._sId)) {
-            var allKeys = oSelf._oColumnSet.keys;
-            // Validate TBODY row
-            var elWhichRow = oSelf.getFirstTrEl();
-            if(elWhichRow && (elWhichRow.cells.length > 0) && (allKeys.length > 0)) {
-                var elHeadLiner, nHeadLinerWidth, elCellLiner, nCellLinerWidth, nNewWidth;
-
-                for(var i=0; i<elWhichRow.cells.length; i++) {
-                    // Validate THEAD cell for this TBODY cell
-                    // Only proceed with this Column doesn't have a width set
-                    if(allKeys[i] && !allKeys[i].width) {
-                        // Grab TH liner width minus padding
-                        elHeadLiner = allKeys[i].getThEl().firstChild;
-                        nHeadLinerWidth = elHeadLiner.offsetWidth -
-                                (parseInt(Dom.getStyle(elHeadLiner,"paddingLeft"),10)|0) -
-                                (parseInt(Dom.getStyle(elHeadLiner,"paddingRight"),10)|0);
-                        // Grab TD liner width minus padding
-                        elCellLiner = elWhichRow.cells[i].firstChild;
-                        nCellLinerWidth = elCellLiner.offsetWidth -
-                                (parseInt(Dom.getStyle(elCellLiner,"paddingLeft"),10)|0) -
-                                (parseInt(Dom.getStyle(elCellLiner,"paddingRight"),10)|0);
-                        // If TH and TD liners are out of sync
-                        if(nHeadLinerWidth !== nCellLinerWidth) {
-                            // Set all liners for this Column to the greater of the 2 values
-                            nNewWidth = Math.max(nHeadLinerWidth, nCellLinerWidth) + "px";
-                                elHeadLiner.style.width = nNewWidth;
-                                elCellLiner.style.width = nNewWidth;
-                        }
-                    }
+    // Validate there is at least one row with cells and at least one Column
+    var allKeys = this._oColumnSet.keys;
+    var elRow = this.getFirstTrEl();
+    if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
+        var elTh, elTd, elThLiner, elTdLiner, newWidth;
+    
+        // Only proceed for Columns without widths
+        for(var i=0,rowsLen=elRow.cells.length; i<rowsLen; i++) {
+            if(!allKeys[i].width) {
+                // Only proceed if TH and TD widths are out of sync
+                elTh = allKeys[i].getThEl();
+                elTd = elRow.cells[i];
+                if(elTh.offsetWidth !== elTd.offsetWidth) {
+                    // Calculate the final width by comparing liner widths
+                    elThLiner = elTh.firstChild;
+                    elTdLiner = elTd.firstChild;
+                    // Reset the width to get an accurate measure of the TD
+                    elTdLiner.style.width = "";
+                    newWidth = Math.max(elThLiner.offsetWidth, elTdLiner.offsetWidth);
+                    
+                    // Apply new width to TH liner minus appropriate padding
+                    elThLiner.style.width = newWidth -
+                            (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
+                            
+                    // Apply new width to every TD liner minus appropriate padding
+                    var oChain = this._oChain;
+                    //for(var j=0,cellsLen=this._elTbody.rows.length; j<cellsLen; j++) {
+                        oChain.add({
+                            method: function(oArg) {
+                                var cellLiner = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex].firstChild;
+                                cellLiner.style.width = oArg.nWidth -
+                                (parseInt(Dom.getStyle(cellLiner,"paddingLeft"),10)|0) -
+                                (parseInt(Dom.getStyle(cellLiner,"paddingRight"),10)|0) + "px";
+                                oArg.rowIndex++;
+                            },
+                            scope: this,
+                            iterations:this._elTbody.rows.length,
+                            argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
+                        });
+                    //}
+                    oChain.run();       
                 }
             }
         }
-    }, 0);
+    
+    }
 },
 
 
@@ -5238,7 +5248,11 @@ hideColumn : function(oColumn) {
                 var thisColumn = allDescendants[i];
 
                 var elTheadCell = thisColumn.getThEl();
-                thisColumn._nLastWidth = elTheadCell.firstChild.offsetWidth;// Store for later
+                var elTheadCellLiner = elTheadCell.firstChild;
+                // Store to reinstate later
+                thisColumn._nLastWidth = elTheadCellLiner.offsetWidth - 
+                        (parseInt(Dom.getStyle(elTheadCellLiner,"paddingLeft"),10)|0) -
+                        (parseInt(Dom.getStyle(elTheadCellLiner,"paddingRight"),10)|0);
                 Dom.addClass(elTheadCell,DT.CLASS_HIDDEN);
 
                 // Adjust body cells (if key Column)
