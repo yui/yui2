@@ -155,6 +155,10 @@
 }
 
 /* selection */
+.yui-skin-sam th.yui-dt-selected .yui-dt-liner,
+.yui-skin-sam th.yui-dt-selected .yui-dt-liner a {
+    font-weight:bold;
+}
 .yui-skin-sam tr.yui-dt-selected td,
 .yui-skin-sam tr.yui-dt-selected td.yui-dt-asc,
 .yui-skin-sam tr.yui-dt-selected td.yui-dt-desc {
@@ -168,6 +172,9 @@
 }
 
 /* enable selection in list mode */
+.yui-skin-sam .yui-dt-list th.yui-dt-selected {
+    font-weight:bold;
+}
 .yui-skin-sam .yui-dt-list tr.yui-dt-selected td,
 .yui-skin-sam .yui-dt-list tr.yui-dt-selected td.yui-dt-asc,
 .yui-skin-sam .yui-dt-list tr.yui-dt-selected td.yui-dt-desc {

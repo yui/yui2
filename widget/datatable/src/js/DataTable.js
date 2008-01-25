@@ -2204,20 +2204,18 @@ _syncColWidths : function() {
                             
                     // Apply new width to every TD liner minus appropriate padding
                     var oChain = this._oChain;
-                    //for(var j=0,cellsLen=this._elTbody.rows.length; j<cellsLen; j++) {
-                        oChain.add({
-                            method: function(oArg) {
-                                var cellLiner = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex].firstChild;
-                                cellLiner.style.width = oArg.nWidth -
-                                (parseInt(Dom.getStyle(cellLiner,"paddingLeft"),10)|0) -
-                                (parseInt(Dom.getStyle(cellLiner,"paddingRight"),10)|0) + "px";
-                                oArg.rowIndex++;
-                            },
-                            scope: this,
-                            iterations:this._elTbody.rows.length,
-                            argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
-                        });
-                    //}
+                    oChain.add({
+                        method: function(oArg) {
+                            var cellLiner = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex].firstChild;
+                            cellLiner.style.width = oArg.nWidth -
+                            (parseInt(Dom.getStyle(cellLiner,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(cellLiner,"paddingRight"),10)|0) + "px";
+                            oArg.rowIndex++;
+                        },
+                        scope: this,
+                        iterations:this._elTbody.rows.length,
+                        argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
+                    });
                     oChain.run();       
                 }
             }
@@ -2720,6 +2718,11 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
             elTheadCellLiner.style.width = oColumn.width + "px";
         }
         
+        // Set Column selection on TD
+        if(oColumn.selected) {
+            aClasses[aClasses.length] = DT.CLASS_SELECTED;
+        }
+
         Dom.addClass(elTheadCell,aClasses.join(" "));
 
         DT.formatTheadCell(elTheadCellLabel, oColumn, this);
@@ -2911,6 +2914,14 @@ _updateTrEl : function(elRow, oRecord) {
             if(oColumn.width) {
                 elCellLiner.style.width = oColumn.width + "px";
             }
+        }
+
+        // Set Column selection on TH
+        if(oColumn.selected) {
+            Dom.addClass(elCell, DT.CLASS_SELECTED);
+        }
+        else {
+            Dom.removeClass(elCell, DT.CLASS_SELECTED);
         }
     }
 
@@ -5246,6 +5257,7 @@ hideColumn : function(oColumn) {
             var allDescendants = this._oColumnSet.getDescendants(oColumn);
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
+                thisColumn.hidden = true;
 
                 var elTheadCell = thisColumn.getThEl();
                 var elTheadCellLiner = elTheadCell.firstChild;
@@ -5278,7 +5290,6 @@ hideColumn : function(oColumn) {
                     elTheadCell.firstChild.style.width = "1px";
                 }
                 
-                thisColumn.hidden = true;
                 this.fireEvent("columnHideEvent",{column:thisColumn});
                 YAHOO.log("Column \"" + oColumn.key + "\" hidden", "info", this.toString());
             }
@@ -5307,6 +5318,7 @@ showColumn : function(oColumn) {
             var allDescendants = this._oColumnSet.getDescendants(oColumn);
             for(var i=0; i<allDescendants.length; i++) {
                 var thisColumn = allDescendants[i];
+                thisColumn.hidden = false;
                 
                 var elTheadCell = thisColumn.getThEl();
                 Dom.removeClass(elTheadCell,DT.CLASS_HIDDEN);
@@ -5336,7 +5348,6 @@ showColumn : function(oColumn) {
 
 
                 thisColumn._nLastWidth = null;
-                thisColumn.hidden = false;
                 this.fireEvent("columnShowEvent",{column:thisColumn});
                 YAHOO.log("Column \"" + oColumn.key + "\" shown", "info", this.toString());
             }
@@ -5411,6 +5422,87 @@ insertColumn : function(oColumn, index) {
     YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
 },
 
+/**
+ * Selects given Column. NOTE: You cannot select/unselect nested Columns. You can only
+ * select/unselect non-nested Columns, and bottom-level key Columns.
+ *
+ * @method selectColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+selectColumn : function(oColumn) {
+    oColumn = this.getColumn(oColumn);
+    if(oColumn && !oColumn.selected) {
+        // Only bottom-level Columns can get hidden
+        if(oColumn.getKeyIndex() !== null) {
+            oColumn.selected = true;
+            
+            // Update head cell
+            var elTh = oColumn.getThEl();
+            Dom.addClass(elTh,DT.CLASS_SELECTED);
+
+            // Update body cells
+            var allRows = this.getTbodyEl().rows;
+            var oChain = this._oChain;
+            oChain.add({
+                method: function(oArg) {
+                    Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED);                    
+                    oArg.rowIndex++;
+                },
+                scope: this,
+                iterations: allRows.length,
+                argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            });
+            oChain.run();       
+            
+            this.fireEvent("columnSelectEvent",{column:oColumn});
+            YAHOO.log("Column \"" + oColumn.key + "\" selected", "info", this.toString());
+        }
+        else {
+            YAHOO.log("Could not select Column \"" + oColumn.key + "\". Only non-nested Columns can be selected", "warn", this.toString());
+        }
+    }
+},
+
+/**
+ * Unselects given Column. NOTE: You cannot select/unselect nested Columns. You can only
+ * select/unselect non-nested Columns, and bottom-level key Columns.
+ *
+ * @method unSelectColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ */
+unselectColumn : function(oColumn) {
+    oColumn = this.getColumn(oColumn);
+    if(oColumn && oColumn.selected) {
+        // Only bottom-level Columns can get hidden
+        if(oColumn.getKeyIndex() !== null) {
+            oColumn.selected = false;
+            
+            // Update head cell
+            var elTh = oColumn.getThEl();
+            Dom.removeClass(elTh,DT.CLASS_SELECTED);
+
+            // Update body cells
+            var allRows = this.getTbodyEl().rows;
+            var oChain = this._oChain;
+            oChain.add({
+                method: function(oArg) {
+                    Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED);                    
+                    oArg.rowIndex++;
+                },
+                scope: this,
+                iterations:allRows.length,
+                argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+            });
+            oChain.run();       
+            
+            this.fireEvent("columnUnselectEvent",{column:oColumn});
+            YAHOO.log("Column \"" + oColumn.key + "\" unselected", "info", this.toString());
+        }
+        else {
+            YAHOO.log("Could not unselect Column \"" + oColumn.key + "\". Only non-nested Columns can be unselected", "warn", this.toString());
+        }
+    }
+},
 
 
 
@@ -9258,6 +9350,19 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      */
 
+    /**
+     * Fired when a column is selected.
+     *
+     * @event columnSelectEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     */
+
+    /**
+     * Fired when a column is unselected.
+     *
+     * @event columnUnselectEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     */
     /**
      * Fired when a column is removed.
      *

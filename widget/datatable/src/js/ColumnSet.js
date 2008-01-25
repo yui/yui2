@@ -406,6 +406,7 @@ YAHOO.widget.ColumnSet.prototype = {
                     currentNode.label = oColumn.label;
                     currentNode.minWidth = oColumn.minWidth;
                     currentNode.resizeable = oColumn.resizeable;
+                    currentNode.selected = oColumn.selected;
                     currentNode.sortable = oColumn.sortable;
                     currentNode.sortOptions = oColumn.sortOptions;
                     currentNode.width = oColumn.width;
@@ -767,7 +768,16 @@ YAHOO.widget.Column.prototype = {
      * @type Boolean
      * @default false     
      */
-    width : false,
+    hidden : false,
+
+    /**
+     * True if Column is in selected state.
+     *
+     * @property selected
+     * @type Boolean
+     * @default false     
+     */
+    selected : false,
 
     /**
      * Custom CSS class or array of classes to be applied to every cell in the Column.
