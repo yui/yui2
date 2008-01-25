@@ -99,6 +99,8 @@
 	//handlers to the <code>onSizeChange</code> custom event:
 	onSizeChange.subscribe(fnSubscriberWidth);
 	onSizeChange.subscribe(fnSubscriberHeight);
+
+    alert(onSizeChange instanceof YAHOO.util.CustomEvent);
 	
 })();
 

@@ -1,6 +1,15 @@
 
 YUI Library - Event - Release Notes
 
+2.5.0
+  * Increased the default poll interval to 20ms, and decreased poll
+    retries to 2000 to reduce IE CPU usage.
+  * onDOMReady now uses the native DOMContentLoaded event for the
+    latest releases of WebKit since it support for it was added.
+  * Restored the code that removes all listeners during the unload event to
+    address issues caused by the way FireFox persists listeners through 
+    page refreshes.
+
 2.4.1
   * Reverted clearAttributes() change to fix IE memory leak on iframes/windows
 
