@@ -5496,6 +5496,23 @@ unselectColumn : function(oColumn) {
     }
 },
 
+/**
+ * Returns an array selected Column instances.
+ *
+ * @method getSelectedColumns
+ * @return {YAHOO.widget.Column[]} Array of Column instances.
+ */
+getSelectedColumns : function(oColumn) {
+    var selectedColumns = [];
+    var aKeys = this._oColumnSet.keys;
+    for(var i=0,len=aKeys.length; i<len; i++) {
+        if(aKeys[i].selected) {
+            selectedColumns[selectedColumns.length] = aKeys[i];
+        }
+    }
+    return selectedColumns;
+},
+
 
 
 
