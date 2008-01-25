@@ -8870,7 +8870,7 @@ onEventCancelCellEditor : function(oArgs) {
 onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
     this.initializeTable();
 
-    this.onDataReturnSetRecordData(sRequest,oResponse,oPayload);
+    this.onDataReturnSetRecords(sRequest,oResponse,oPayload);
 },
 
 /**
