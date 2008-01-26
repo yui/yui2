@@ -95,7 +95,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Once per instance
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
 
-    YAHOO.widget.DataTable._nCount++;
+    DT._nCount++;
     
     //HACK: Send out for initial data in an asynchronous request unless
     // initialRequest was originally undefined and DS type is XHR
@@ -1705,7 +1705,7 @@ initAttributes : function(oConfigs) {
                         /*TODO?
                         // Destroy each container
                         for(i=0; i<aContainerEls.length; i++) {
-                            Event.purgeElement(aContainerEls[i], true);
+                            Ev.purgeElement(aContainerEls[i], true);
                             aContainerEls.innerHTML = null;
                             //TODO: remove container?
                             // aContainerEls[i].parentNode.removeChild(aContainerEls[i]);
@@ -2495,8 +2495,12 @@ _initTheadEls : function() {
 
         Ev.addListener(elThead, "focus", this._onTheadFocus, this);
         Ev.addListener(elThead, "keydown", this._onTheadKeydown, this);
-        Ev.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
+        Ev.addListener(elThead, "mouseover", this._onTableMouseover, this);
+        Ev.addListener(elThead, "mouseout", this._onTableMouseout, this);
+        Ev.addListener(elThead, "mousedown", this._onTableMousedown, this);
+        Ev.addListener(elThead, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elThead, "click", this._onTheadClick, this);
+        Ev.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
     }
     // Reinitialization
     else {
@@ -3244,53 +3248,53 @@ _onTbodyFocus : function(e, oSelf) {
  */
 _onTableMouseover : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
-    var bKeepBubbling = true;
-    while(elTarget && (elTag != "table")) {
-        switch(elTag) {
-            case "body":
-                 return;
-            case "a":
-                break;
-            case "td":
-                bKeepBubbling = oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
-                break;
-            case "span":
-                if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
-                    bKeepBubbling = oSelf.fireEvent("theadLabelMouseoverEvent",{target:elTarget,event:e});
+        var elTag = elTarget.tagName.toLowerCase();
+        var bKeepBubbling = true;
+        while(elTarget && (elTag != "table")) {
+            switch(elTag) {
+                case "body":
+                     return;
+                case "a":
+                    break;
+                case "td":
+                    bKeepBubbling = oSelf.fireEvent("cellMouseoverEvent",{target:elTarget,event:e});
+                    break;
+                case "span":
+                    if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
+                        bKeepBubbling = oSelf.fireEvent("theadLabelMouseoverEvent",{target:elTarget,event:e});
+                        // Backward compatibility
+                        bKeepBubbling = oSelf.fireEvent("headerLabelMouseoverEvent",{target:elTarget,event:e});
+                    }
+                    break;
+                case "th":
+                    bKeepBubbling = oSelf.fireEvent("theadCellMouseoverEvent",{target:elTarget,event:e});
                     // Backward compatibility
-                    bKeepBubbling = oSelf.fireEvent("headerLabelMouseoverEvent",{target:elTarget,event:e});
+                    bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
+                    break;
+                case "tr":
+                    if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                        bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
+                        // Backward compatibility
+                        bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
+                    }
+                    else {
+                        bKeepBubbling = oSelf.fireEvent("rowMouseoverEvent",{target:elTarget,event:e});
+                    }
+                    break;
+                default:
+                    break;
+            }
+            if(bKeepBubbling === false) {
+                return;
+            }
+            else {
+                elTarget = elTarget.parentNode;
+                if(elTarget) {
+                    elTag = elTarget.tagName.toLowerCase();
                 }
-                break;
-            case "th":
-                bKeepBubbling = oSelf.fireEvent("theadCellMouseoverEvent",{target:elTarget,event:e});
-                // Backward compatibility
-                bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
-                break;
-            case "tr":
-                if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
-                    bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
-                    // Backward compatibility
-                    bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
-                }
-                else {
-                    bKeepBubbling = oSelf.fireEvent("rowMouseoverEvent",{target:elTarget,event:e});
-                }
-                break;
-            default:
-                break;
-        }
-        if(bKeepBubbling === false) {
-            return;
-        }
-        else {
-            elTarget = elTarget.parentNode;
-            if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
             }
         }
-    }
-    oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elContainer),event:e});
+        oSelf.fireEvent("tableMouseoverEvent",{target:(elTarget || oSelf._elContainer),event:e});
 },
 
 /**
@@ -5406,7 +5410,8 @@ insertColumn : function(oColumn, index) {
  * select/unselect non-nested Columns, and bottom-level key Columns.
  *
  * @method selectColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param column {HTMLElement | String | Number} DOM reference or ID string to a
+ * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
  */
 selectColumn : function(oColumn) {
     oColumn = this.getColumn(oColumn);
@@ -5447,7 +5452,8 @@ selectColumn : function(oColumn) {
  * select/unselect non-nested Columns, and bottom-level key Columns.
  *
  * @method unSelectColumn
- * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param column {HTMLElement | String | Number} DOM reference or ID string to a
+ * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
  */
 unselectColumn : function(oColumn) {
     oColumn = this.getColumn(oColumn);
@@ -5499,6 +5505,95 @@ getSelectedColumns : function(oColumn) {
     }
     return selectedColumns;
 },
+
+/**
+ * Assigns the class DT.CLASS_HIGHLIGHTED to cells of the given Column.
+ * NOTE: You cannot highlight/unhighlight nested Columns. You can only
+ * highlight/unhighlight non-nested Columns, and bottom-level key Columns.
+ *
+ * @method highlightColumn
+ * @param column {HTMLElement | String | Number} DOM reference or ID string to a
+ * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
+ */
+highlightColumn : function(column) {
+    var oColumn = this.getColumn(column);
+    // Only bottom-level Columns can get highlighted
+    if(oColumn && (oColumn.getKeyIndex() !== null)) {
+        /*// Make sure previous row is unhighlighted
+        var sId = oColumn.getId();
+        var sLastId = this._sLastHighlightedColumnId;
+        if(sLastId && (sLastId !== sId)) {
+            this.unhighlightColumn(this.getColumn(sLastId));
+        }*/
+
+        //this._sLastHighlightedColumnId = sId;
+            
+        // Update head cell
+        var elTh = oColumn.getThEl();
+        Dom.addClass(elTh,DT.CLASS_HIGHLIGHTED);
+
+        // Update body cells
+        var allRows = this.getTbodyEl().rows;
+        var oChain = this._oChain;
+        oChain.add({
+            method: function(oArg) {
+                Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);                    
+                oArg.rowIndex++;
+            },
+            scope: this,
+            iterations:allRows.length,
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+        });
+        oChain.run();       
+            
+        this.fireEvent("columnHighlightEvent",{column:oColumn});
+        YAHOO.log("Column \"" + oColumn.key + "\" highlighed", "info", this.toString());
+    }
+    else {
+        YAHOO.log("Could not highlight Column \"" + oColumn.key + "\". Only non-nested Columns can be highlighted", "warn", this.toString());
+    }
+},
+
+/**
+ * Removes the class DT.CLASS_HIGHLIGHTED to cells of the given Column.
+ * NOTE: You cannot highlight/unhighlight nested Columns. You can only
+ * highlight/unhighlight non-nested Columns, and bottom-level key Columns.
+ *
+ * @method unhighlightColumn
+ * @param column {HTMLElement | String | Number} DOM reference or ID string to a
+ * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
+ */
+unhighlightColumn : function(column) {
+    var oColumn = this.getColumn(column);
+    // Only bottom-level Columns can get highlighted
+    if(oColumn && (oColumn.getKeyIndex() !== null)) {
+        // Update head cell
+        var elTh = oColumn.getThEl();
+        Dom.removeClass(elTh,DT.CLASS_HIGHLIGHTED);
+
+        // Update body cells
+        var allRows = this.getTbodyEl().rows;
+        var oChain = this._oChain;
+        oChain.add({
+            method: function(oArg) {
+                Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);                    
+                oArg.rowIndex++;
+            },
+            scope: this,
+            iterations:allRows.length,
+            argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
+        });
+        oChain.run();       
+            
+        this.fireEvent("columnUnhighlightEvent",{column:oColumn});
+        YAHOO.log("Column \"" + oColumn.key + "\" unhighlighted", "info", this.toString());
+    }
+    else {
+        YAHOO.log("Could not unhighlight Column \"" + oColumn.key + "\". Only non-nested Columns can be unhighlighted", "warn", this.toString());
+    }
+},
+
+
 
 
 
@@ -6207,7 +6302,7 @@ onPaginatorChange : function (oState) {
  * @type String
  * @private
  */
-_sLastHighlightedTdElId : null,
+//_sLastHighlightedTdElId : null,
 
 /**
  * ID string of last highlighted row element
@@ -6216,7 +6311,7 @@ _sLastHighlightedTdElId : null,
  * @type String
  * @private
  */
-_sLastHighlightedTrElId : null,
+//_sLastHighlightedTrElId : null,
 
 /**
  * Array to track row selections (by sRecordId) and/or cell selections
@@ -8191,12 +8286,12 @@ highlightRow : function(row) {
 
     if(elRow) {
         // Make sure previous row is unhighlighted
-        if(this._sLastHighlightedTrElId) {
+/*        if(this._sLastHighlightedTrElId) {
             Dom.removeClass(this._sLastHighlightedTrElId,DT.CLASS_HIGHLIGHTED);
-        }
+        }*/
         var oRecord = this.getRecord(elRow);
         Dom.addClass(elRow,DT.CLASS_HIGHLIGHTED);
-        this._sLastHighlightedTrElId = elRow.id;
+        //this._sLastHighlightedTrElId = elRow.id;
         this.fireEvent("rowHighlightEvent", {record:oRecord, el:elRow});
         YAHOO.log("Highlighted " + elRow, "info", this.toString());
         return;
@@ -8234,14 +8329,14 @@ highlightCell : function(cell) {
 
     if(elCell) {
         // Make sure previous cell is unhighlighted
-        if(this._sLastHighlightedTdElId) {
+        /*if(this._sLastHighlightedTdElId) {
             Dom.removeClass(this._sLastHighlightedTdElId,DT.CLASS_HIGHLIGHTED);
-        }
+        }*/
 
         var oRecord = this.getRecord(elCell);
         var sColumnId = elCell.yuiColumnId;
         Dom.addClass(elCell,DT.CLASS_HIGHLIGHTED);
-        this._sLastHighlightedTdElId = elCell.id;
+        //this._sLastHighlightedTdElId = elCell.id;
         this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumnById(sColumnId), key:elCell.yuiColumnKey, el:elCell});
         YAHOO.log("Highlighted " + elCell, "info", this.toString());
         return;
@@ -8706,6 +8801,47 @@ onEventSortColumn : function(oArgs) {
 },
 
 /**
+ * Overridable custom event handler to select Column.
+ *
+ * @method onEventSelectColumn
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+onEventSelectColumn : function(oArgs) {
+    this.selectColumn(oArgs.target);
+},
+
+/**
+ * Overridable custom event handler to highlight Column. Accounts for spurious
+ * caused-by-child events. 
+ *
+ * @method onEventHighlightColumn
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+onEventHighlightColumn : function(oArgs) {
+    //TODO: filter for all spurious events at a lower level
+    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
+        this.highlightColumn(oArgs.target);
+    }
+},
+
+/**
+ * Overridable custom event handler to unhighlight Column. Accounts for spurious
+ * caused-by-child events. 
+ *
+ * @method onEventUnhighlightColumn
+ * @param oArgs.event {HTMLEvent} Event object.
+ * @param oArgs.target {HTMLElement} Target element.
+ */
+onEventUnhighlightColumn : function(oArgs) {
+    //TODO: filter for all spurious events at a lower level
+    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
+        this.unhighlightColumn(oArgs.target);
+    }
+},
+
+/**
  * Overridable custom event handler to manage selection according to desktop paradigm.
  *
  * @method onEventSelectRow
@@ -8743,47 +8879,63 @@ onEventSelectCell : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to highlight row.
+ * Overridable custom event handler to highlight row. Accounts for spurious
+ * caused-by-child events. 
  *
  * @method onEventHighlightRow
  * @param oArgs.event {HTMLEvent} Event object.
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightRow : function(oArgs) {
-    this.highlightRow(oArgs.target);
+    //TODO: filter for all spurious events at a lower level
+    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
+        this.highlightRow(oArgs.target);
+    }
 },
 
 /**
- * Overridable custom event handler to unhighlight row.
+ * Overridable custom event handler to unhighlight row. Accounts for spurious
+ * caused-by-child events. 
  *
  * @method onEventUnhighlightRow
  * @param oArgs.event {HTMLEvent} Event object.
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightRow : function(oArgs) {
-    this.unhighlightRow(oArgs.target);
+    //TODO: filter for all spurious events at a lower level
+    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
+        this.unhighlightRow(oArgs.target);
+    }
 },
 
 /**
- * Overridable custom event handler to highlight cell.
+ * Overridable custom event handler to highlight cell. Accounts for spurious
+ * caused-by-child events. 
  *
  * @method onEventHighlightCell
  * @param oArgs.event {HTMLEvent} Event object.
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventHighlightCell : function(oArgs) {
-    this.highlightCell(oArgs.target);
+    //TODO: filter for all spurious events at a lower level
+    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
+        this.highlightCell(oArgs.target);
+    }
 },
 
 /**
- * Overridable custom event handler to unhighlight cell.
+ * Overridable custom event handler to unhighlight cell. Accounts for spurious
+ * caused-by-child events. 
  *
  * @method onEventUnhighlightCell
  * @param oArgs.event {HTMLEvent} Event object.
  * @param oArgs.target {HTMLElement} Target element.
  */
 onEventUnhighlightCell : function(oArgs) {
-    this.unhighlightCell(oArgs.target);
+    //TODO: filter for all spurious events at a lower level
+    if(!Dom.isAncestor(oArgs.target,Ev.getRelatedTarget(oArgs.event))) {
+        this.unhighlightCell(oArgs.target);
+    }
 },
 
 /**
@@ -9373,6 +9525,21 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      * @param oArgs.index {Number} The index position.
      */
+
+    /*
+     * Fired when a column is highlighted.
+     *
+     * @event columnHighlightEvent
+     * @param oArgs.column {YAHOO.widget.Column} The highlighted Column.
+     */
+
+    /*
+     * Fired when a column is unhighlighted.
+     *
+     * @event columnUnhighlightEvent
+     * @param oArgs.column {YAHOO.widget.Column} The unhighlighted Column.
+     */
+
 
     /**
      * Fired when a row has a mouseover.

@@ -135,6 +135,10 @@
 .yui-skin-sam .yui-dt-list tr.yui-dt-odd td.yui-dt-desc { background-color:#EDF5FF; } /* light blue sorted */
 
 /* highlighting */
+.yui-skin-sam th.yui-dt-highlighted,
+.yui-skin-sam th.yui-dt-highlighted a {
+    background-color:#B2D2FF; /* med blue hover */
+}
 .yui-skin-sam tr.yui-dt-highlighted,
 .yui-skin-sam tr.yui-dt-highlighted td.yui-dt-asc,
 .yui-skin-sam tr.yui-dt-highlighted td.yui-dt-desc,
@@ -145,6 +149,10 @@
 }
 
 /* enable highlighting in list mode */
+.yui-skin-sam .yui-dt-list th.yui-dt-highlighted,
+.yui-skin-sam .yui-dt-list th.yui-dt-highlighted a {
+    background-color:#B2D2FF; /* med blue hover */
+}
 .yui-skin-sam .yui-dt-list tr.yui-dt-highlighted,
 .yui-skin-sam .yui-dt-list tr.yui-dt-highlighted td.yui-dt-asc,
 .yui-skin-sam .yui-dt-list tr.yui-dt-highlighted td.yui-dt-desc,
@@ -155,9 +163,9 @@
 }
 
 /* selection */
-.yui-skin-sam th.yui-dt-selected .yui-dt-liner,
-.yui-skin-sam th.yui-dt-selected .yui-dt-liner a {
-    font-weight:bold;
+.yui-skin-sam th.yui-dt-selected,
+.yui-skin-sam th.yui-dt-selected a {
+    background-color:#446CD7; /* bright blue selected cell */
 }
 .yui-skin-sam tr.yui-dt-selected td,
 .yui-skin-sam tr.yui-dt-selected td.yui-dt-asc,
@@ -172,8 +180,9 @@
 }
 
 /* enable selection in list mode */
-.yui-skin-sam .yui-dt-list th.yui-dt-selected {
-    font-weight:bold;
+.yui-skin-sam .yui-dt-list th.yui-dt-selected,
+.yui-skin-sam .yui-dt-list th.yui-dt-selected a {
+    background-color:#446CD7; /* bright blue selected cell */
 }
 .yui-skin-sam .yui-dt-list tr.yui-dt-selected td,
 .yui-skin-sam .yui-dt-list tr.yui-dt-selected td.yui-dt-asc,
