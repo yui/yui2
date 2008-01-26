@@ -1338,11 +1338,39 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
     var bError = false;
     var oParsedResponse = {};
     var xmlList = null;
+    var totRecLocator = this.responseSchema.totalRecords;
+
     // In case oFullResponse is something funky
     try {
         xmlList = (this.responseSchema.resultNode) ?
             oFullResponse.getElementsByTagName(this.responseSchema.resultNode) :
             null;
+
+        if (totRecLocator) {
+            // Look for a totalRecords node
+            var totalRecords = null;
+            var totRec = oFullResponse.getElementsByTagName(totRecLocator)[0];
+            if (totRec) {
+                totalRecords = totRec.firstChild.nodeValue;
+            } else {
+                totRec = oFullResponse.attributes.getNamedItem(totRecLocator);
+                if (totRec) {
+                    totalRecords = totRec.value;
+                } else if (xmlList && xmlList.length) {
+                    var par = xmlList.item(0).parentNode;
+                    if (par) {
+                        totRec = par.attributes.getNamedItem(totRecLocator);
+                        if (totRec) {
+                            totalRecords = totRec.value;
+                        }
+                    }
+                }
+            }
+
+            if (YAHOO.lang.isNumber(totalRecords)) {
+                oParsedResponse.totalRecords = totalRecords;
+            }
+        }
     }
     catch(e) {
     }
@@ -1392,7 +1420,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
                 oResult[key] = data;
             }
             // Capture each array of values into an array of results
-            oParsedResponse.results.unshift(oResult);
+            oParsedResponse.results[k] = oResult;
         }
     }
     if(bError) {
