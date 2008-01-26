@@ -2061,6 +2061,13 @@ _tdElTemplate : null,
  */
 _trElTemplate : null,
 
+/**
+ * True if x-scrollbar is enabled.
+ * @property _bScrollbarX
+ * @type {Boolean}
+ * @private 
+ */
+_bScrollbarX : false,
 
 
 
@@ -2195,14 +2202,65 @@ _syncColWidths : function() {
                         iterations:this._elTbody.rows.length,
                         argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
                     });
-                    oChain.run();       
+                    oChain.run();
                 }
             }
         }
-    
     }
+    this._syncScrollbarPadding();
 },
 
+/**
+ * Syncs padding for x-scrollbar.
+ *
+ * @method _syncScrollbarPadding
+ * @private
+ */
+_syncScrollbarPadding : function() {
+    // Only if scrollable is enabled
+    if(this.get("scrollable")) {
+        this._oChain.add({
+            method: function() {
+                var elTbodyContainer = this._elTbodyContainer,
+                    aLastHeaders, len, prefix, i, elLiner;
+                // Add scrollbar padding
+                if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
+                    if(!this._bScrollbarX) {
+                        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+                        len = aLastHeaders.length;
+                        prefix = this._sId+"-th";
+                        for(i=0; i<len; i++) {
+                            //TODO: A better way to get th cell
+                            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+                            elLiner.style.paddingRight = 
+                                    (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) + 
+                                    27) + "px";
+                        }
+                        this._bScrollbarX = true;
+                    }
+                }
+                // Remove scrollbar padding
+                else {
+                    if(this._bScrollbarX) {                                    
+                        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+                        len = aLastHeaders.length;
+                        prefix = this._sId+"-th";
+                        for(i=0; i<len; i++) {
+                            //TODO: A better way to get th cell
+                            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+                            elLiner.style.paddingRight = 
+                                    (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) - 
+                                    27) + "px";
+                        }
+                        this._bScrollbarX = false;
+                    }
+                }
+            },
+            scope: this
+        });
+    }
+    this._oChain.run();       
+},
 
 
 
@@ -5212,6 +5270,8 @@ setColumnWidth : function(oColumn, nWidth) {
         
         // Resize the DOM elements
         this._setColumnWidth(oColumn, sWidth);
+        
+        this._syncScrollbarPadding();
         
         this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
         YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
