@@ -2510,6 +2510,10 @@ _initTableEl : function() {
     this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
     this._elTbody.tabIndex = 0;
     Dom.addClass(this._elTbody,DT.CLASS_BODY);
+    // Bug 1716354 - fix gap in Safari 2 and 3
+    if(YAHOO.env.ua.webkit) {
+        this._elTbody.parentNode.style.marginTop = "-13px";
+    }
 
     // Create TBODY for messages
     var elMsgTbody = document.createElement("tbody");
