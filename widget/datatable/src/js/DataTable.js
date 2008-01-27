@@ -2062,13 +2062,12 @@ _tdElTemplate : null,
 _trElTemplate : null,
 
 /**
- * True if x-scrollbar is enabled.
+ * True if x-scrollbar is currently visible.
  * @property _bScrollbarX
  * @type {Boolean}
  * @private 
  */
 _bScrollbarX : false,
-
 
 
 
@@ -2207,25 +2206,40 @@ _syncColWidths : function() {
             }
         }
     }
-    this._syncScrollbarPadding();
+    this._syncScrollPadding();
 },
 
 /**
- * Syncs padding for x-scrollbar.
+ * Syncs padding around scrollable tables, including Column header right-padding
+ * and container width and height.
  *
- * @method _syncScrollbarPadding
+ * @method _syncScrollPadding
  * @private
  */
-_syncScrollbarPadding : function() {
-    // Only if scrollable is enabled
+_syncScrollPadding : function() {
+    // Proceed only if scrollable is enabled
     if(this.get("scrollable")) {
         this._oChain.add({
             method: function() {
-                var elTbodyContainer = this._elTbodyContainer,
+                var elTbody = this._elTbody,
+                    elTbodyContainer = this._elTbodyContainer,
                     aLastHeaders, len, prefix, i, elLiner;
-                // Add scrollbar padding
-                if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
+                
+                // Y-scrolling not enabled
+                if(!this.get("height") && (YAHOO.env.ua.ie)) {
+                    // Snap outer container height to content - needed only for IE 6 and 7
+                    elTbodyContainer.style.height = (elTbody.parentNode.offsetHeight + 19) + "px";
+                }
+                // X-scrolling not enabled
+                if(!this.get("width")) {
+                    // Snap outer container width to content
+                    this._elContainer.style.width = (elTbody.parentNode.offsetWidth + 19) + "px";
+                }
+                // X-scrolling enabled and x-scrollbar is visible
+                else if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
+                    // Perform sync routine
                     if(!this._bScrollbarX) {
+                        // Add Column header right-padding
                         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
                         len = aLastHeaders.length;
                         prefix = this._sId+"-th";
@@ -2236,12 +2250,16 @@ _syncScrollbarPadding : function() {
                                     (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) + 
                                     27) + "px";
                         }
+                        
+                        // Save state   
                         this._bScrollbarX = true;
                     }
                 }
-                // Remove scrollbar padding
+                // X-scrollbar enabled but x-scrollbar is not visible
                 else {
-                    if(this._bScrollbarX) {                                    
+                    // Perform sync routine
+                    if(this._bScrollbarX) {                 
+                        // Remove Column header right-padding                   
                         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
                         len = aLastHeaders.length;
                         prefix = this._sId+"-th";
@@ -2252,6 +2270,8 @@ _syncScrollbarPadding : function() {
                                     (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) - 
                                     27) + "px";
                         }
+                                                
+                        // Save state
                         this._bScrollbarX = false;
                     }
                 }
@@ -5271,7 +5291,7 @@ setColumnWidth : function(oColumn, nWidth) {
         // Resize the DOM elements
         this._setColumnWidth(oColumn, sWidth);
         
-        this._syncScrollbarPadding();
+        this._syncScrollPadding();
         
         this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
         YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
