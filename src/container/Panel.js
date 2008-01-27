@@ -558,9 +558,10 @@
         * this will usually equal the owner.
         */
         configUnderlay: function (type, args, obj) {
-    
+
             var UA = YAHOO.env.ua,
                 bMacGecko = (this.platform == "mac" && UA.gecko),
+                bIEQuirks = (UA.ie == 6 || (UA.ie == 7 && document.compatMode == "BackCompat")),
                 sUnderlay = args[0].toLowerCase(),
                 oUnderlay = this.underlay,
                 oElement = this.element;
@@ -579,9 +580,7 @@
             }
 
             function createUnderlay() {
-
-                var nIE;
-
+                var bNew = false;
                 if (!oUnderlay) { // create if not already in DOM
 
                     if (!m_oUnderlayTemplate) {
@@ -594,28 +593,26 @@
 
                     this.underlay = oUnderlay;
 
-                    nIE = UA.ie;
-
-                    if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
-
+                    if (bIEQuirks) {
                         this.sizeUnderlay();
-
                         this.cfg.subscribeToConfigEvent("width", this.sizeUnderlay);
                         this.cfg.subscribeToConfigEvent("height",this.sizeUnderlay);
                         this.changeContentEvent.subscribe(this.sizeUnderlay);
-
                         YAHOO.widget.Module.textResizeEvent.subscribe(this.sizeUnderlay, this, true);
                     }
 
                     if (UA.webkit && UA.webkit < 420) {
                         this.changeContentEvent.subscribe(fixWebkitUnderlay);
                     }
+                    bNew = true;
                 }
-
             }
 
             function onBeforeShow() {
-                createUnderlay.call(this);
+                var bNew = createUnderlay.call(this);
+                if (!bNew && bIEQuirks) {
+                    this.sizeUnderlay();
+                }
                 this._underlayDeferred = false;
                 this.beforeShowEvent.unsubscribe(onBeforeShow);
             }
@@ -638,51 +635,41 @@
                     this.underlay = null;
                 }
             }
-        
 
             switch (sUnderlay) {
-    
                 case "shadow":
-    
                     Dom.removeClass(oElement, "matte");
                     Dom.addClass(oElement, "shadow");
-    
                     break;
-    
                 case "matte":
-    
                     if (!bMacGecko) {
                         destroyUnderlay.call(this);
                     }
-    
                     Dom.removeClass(oElement, "shadow");
                     Dom.addClass(oElement, "matte");
-    
                     break;
                 default:
-    
                     if (!bMacGecko) {
                         destroyUnderlay.call(this);
                     }
                     Dom.removeClass(oElement, "shadow");
                     Dom.removeClass(oElement, "matte");
-    
                     break;
             }
 
             if ((sUnderlay == "shadow") || (bMacGecko && !oUnderlay)) {
-                
                 if (this.cfg.getProperty("visible")) {
-                    createUnderlay.call(this);
-                }
-                else {
+                    var bNew = createUnderlay.call(this);
+                    if (!bNew && bIEQuirks) {
+                        this.sizeUnderlay();
+                    }
+                } else {
                     if (!this._underlayDeferred) {
                         this.beforeShowEvent.subscribe(onBeforeShow);
                         this._underlayDeferred = true;
                     }
                 }
             }
-    
         },
         
         /**
@@ -930,19 +917,14 @@
         * @method sizeUnderlay
         */
         sizeUnderlay: function () {
-
             var oUnderlay = this.underlay,
                 oElement;
 
             if (oUnderlay) {
-
                 oElement = this.element;
-
                 oUnderlay.style.width = oElement.offsetWidth + "px";
                 oUnderlay.style.height = oElement.offsetHeight + "px";
-
             }
-
         },
 
         

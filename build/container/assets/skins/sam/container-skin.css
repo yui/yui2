@@ -184,11 +184,12 @@
 
 }
 
+/* Dialog default button style */
 .yui-skin-sam .yui-dialog .ft button.default {
     font-weight:bold;
 }
 
-/* Dialog default YUI Button styles */
+/* Dialog default YUI Button style */
 .yui-skin-sam .yui-dialog .ft span.default {
     border-color: #304369;
     background-position: 0 -1400px;

@@ -3852,19 +3852,17 @@
     * documentation for more details.
     */
     YAHOO.widget.Tooltip = function (el, userConfig) {
-    
         YAHOO.widget.Tooltip.superclass.constructor.call(this, el, userConfig);
-    
     };
-
 
     var Lang = YAHOO.lang,
         Event = YAHOO.util.Event,
+        CustomEvent = YAHOO.util.CustomEvent,
         Dom = YAHOO.util.Dom,
         Tooltip = YAHOO.widget.Tooltip,
-    
+
         m_oShadowTemplate,
-        
+
         /**
         * Constant representing the Tooltip's configuration properties
         * @property DEFAULT_CONFIG
@@ -3873,44 +3871,61 @@
         * @type Object
         */
         DEFAULT_CONFIG = {
-        
+
             "PREVENT_OVERLAP": { 
                 key: "preventoverlap", 
                 value: true, 
                 validator: Lang.isBoolean, 
                 supercedes: ["x", "y", "xy"] 
             },
-        
+
             "SHOW_DELAY": { 
                 key: "showdelay", 
                 value: 200, 
                 validator: Lang.isNumber 
             }, 
-        
+
             "AUTO_DISMISS_DELAY": { 
                 key: "autodismissdelay", 
                 value: 5000, 
                 validator: Lang.isNumber 
             }, 
-        
+
             "HIDE_DELAY": { 
                 key: "hidedelay", 
                 value: 250, 
                 validator: Lang.isNumber 
             }, 
-        
+
             "TEXT": { 
                 key: "text", 
                 suppressEvent: true 
             }, 
-        
+
             "CONTAINER": { 
                 key: "container"
+            },
+
+            "DISABLED": {
+                key: "disabled",
+                value: false,
+                suppressEvent: true
             }
-        
+        },
+
+        /**
+        * Constant representing the name of the Tooltip's events
+        * @property EVENT_TYPES
+        * @private
+        * @final
+        * @type Object
+        */
+        EVENT_TYPES = {
+            "CONTEXT_MOUSE_OVER": "contextMouseOver",
+            "CONTEXT_MOUSE_OUT": "contextMouseOut",
+            "CONTEXT_TRIGGER": "contextTrigger"
         };
 
-    
     /**
     * Constant representing the Tooltip CSS class
     * @property YAHOO.widget.Tooltip.CSS_TOOLTIP
@@ -3920,13 +3935,11 @@
     */
     Tooltip.CSS_TOOLTIP = "yui-tt";
 
-
     /* 
         "hide" event handler that sets a Tooltip instance's "width"
         configuration property back to its original value before 
         "setWidthToOffsetWidth" was called.
     */
-    
     function restoreOriginalWidth(p_sType, p_aArgs, p_oObject) {
 
         var sOriginalWidth = p_oObject[0],
@@ -3935,13 +3948,10 @@
             sCurrentWidth = oConfig.getProperty("width");
 
         if (sCurrentWidth == sNewWidth) {
-            
             oConfig.setProperty("width", sOriginalWidth);
-        
         }
 
         this.unsubscribe("hide", this._onHide, p_oObject);
-    
     }
 
     /* 
@@ -3958,7 +3968,6 @@
             sNewWidth,
             oClone;
 
-        
         if ((!sOriginalWidth || sOriginalWidth == "auto") && 
             (oConfig.getProperty("container") != oBody || 
             oConfig.getProperty("x") >= Dom.getViewportWidth() || 
@@ -3968,46 +3977,35 @@
             oClone.style.visibility = "hidden";
             oClone.style.top = "0px";
             oClone.style.left = "0px";
-            
+
             oBody.appendChild(oClone);
 
             sNewWidth = (oClone.offsetWidth + "px");
 
             oBody.removeChild(oClone);
-
             oClone = null;
 
             oConfig.setProperty("width", sNewWidth);
-
             oConfig.refireEvent("xy");
 
-            this.subscribe("hide", restoreOriginalWidth, 
-                [(sOriginalWidth || ""), sNewWidth]);
-        
+            this.subscribe("hide", restoreOriginalWidth, [(sOriginalWidth || ""), sNewWidth]);
         }
-
     }
 
     // "onDOMReady" that renders the ToolTip
 
     function onDOMReady(p_sType, p_aArgs, p_oObject) {
-    
         this.render(p_oObject);
-    
     }
-
 
     //  "init" event handler that automatically renders the Tooltip
 
     function onInit() {
-
         Event.onDOMReady(onDOMReady, this.cfg.getProperty("container"), this);
-
     }
 
-    
     YAHOO.extend(Tooltip, YAHOO.widget.Overlay, { 
-    
+
         /**
         * The Tooltip initialization method. This method is automatically 
         * called by the constructor. A Tooltip is automatically rendered by 
@@ -4035,17 +4033,80 @@
 
             this.cfg.queueProperty("visible", false);
             this.cfg.queueProperty("constraintoviewport", true);
-    
+
             this.setBody("");
 
             this.subscribe("beforeShow", setWidthToOffsetWidth);
             this.subscribe("init", onInit);
             this.subscribe("render", this.onRender);
-    
-            this.initEvent.fire(Tooltip);
 
+            this.initEvent.fire(Tooltip);
         },
-        
+
+        /**
+        * Initializes the custom events for Tooltip
+        * @method initEvents
+        */
+        initEvents: function () {
+
+            Tooltip.superclass.initEvents.call(this);
+            var SIGNATURE = CustomEvent.LIST;
+
+            /**
+            * CustomEvent fired when user mouses over a context element. Returning false from
+            * a subscriber to this event will prevent the tooltip from being displayed for
+            * the current context element.
+            * 
+            * @event contextMouseOverEvent
+            * @param {HTMLElement} context The context element which the user just moused over
+            * @param {DOMEvent} e The DOM event object, associated with the mouse over
+            */
+            this.contextMouseOverEvent = this.createEvent(EVENT_TYPES.CONTEXT_MOUSE_OVER);
+            this.contextMouseOverEvent.signature = SIGNATURE;
+
+            /**
+            * CustomEvent fired when the user mouses out of a context element.
+            * 
+            * @event contextMouseOutEvent
+            * @param {HTMLElement} context The context element which the user just moused out of
+            * @param {DOMEvent} e The DOM event object, associated with the mouse out
+            */
+            this.contextMouseOutEvent = this.createEvent(EVENT_TYPES.CONTEXT_MOUSE_OUT);
+            this.contextMouseOutEvent.signature = SIGNATURE;
+
+            /**
+            * CustomEvent fired just before the tooltip is displayed for the current context.
+            * <p>
+            *  You can subscribe to this event if you need to set up the text for the 
+            *  tooltip based on the context element for which it is about to be displayed.
+            * </p>
+            * <p>This event differs from the beforeShow event in following respects:</p>
+            * <ol>
+            *   <li>
+            *    When moving from one context element to another, if the tooltip is not
+            *    hidden (the <code>hidedelay</code> is not reached), the beforeShow and Show events will not
+            *    be fired when the tooltip is displayed for the new context since it is already visible.
+            *    However the contextTrigger event is always fired before displaying the tooltip for
+            *    a new context.
+            *   </li>
+            *   <li>
+            *    The trigger event provides access to the context element, allowing you to 
+            *    set the text of the tooltip based on context element for which the tooltip is
+            *    triggered.
+            *   </li>
+            * </ol>
+            * <p>
+            *  It is not possible to prevent the tooltip from being displayed
+            *  using this event. You can use the contextMouseOverEvent if you need to prevent
+            *  the tooltip from being displayed.
+            * </p>
+            * @event contextTriggerEvent
+            * @param {HTMLElement} context The context element for which the tooltip is triggered
+            */
+            this.contextTriggerEvent = this.createEvent(EVENT_TYPES.CONTEXT_TRIGGER);
+            this.contextTriggerEvent.signature = SIGNATURE;
+        },
+
         /**
         * Initializes the class's configurable properties which can be 
         * changed using the Overlay's Config object (cfg).
@@ -4054,7 +4115,7 @@
         initDefaultConfig: function () {
 
             Tooltip.superclass.initDefaultConfig.call(this);
-        
+
             /**
             * Specifies whether the Tooltip should be kept from overlapping 
             * its context element.
@@ -4067,7 +4128,7 @@
                 validator: DEFAULT_CONFIG.PREVENT_OVERLAP.validator, 
                 supercedes: DEFAULT_CONFIG.PREVENT_OVERLAP.supercedes
             });
-        
+
             /**
             * The number of milliseconds to wait before showing a Tooltip 
             * on mouseover.
@@ -4080,7 +4141,7 @@
                 value: 200, 
                 validator: DEFAULT_CONFIG.SHOW_DELAY.validator
             });
-        
+
             /**
             * The number of milliseconds to wait before automatically 
             * dismissing a Tooltip after the mouse has been resting on the 
@@ -4094,7 +4155,7 @@
                 value: DEFAULT_CONFIG.AUTO_DISMISS_DELAY.value,
                 validator: DEFAULT_CONFIG.AUTO_DISMISS_DELAY.validator
             });
-        
+
             /**
             * The number of milliseconds to wait before hiding a Tooltip 
             * on mouseover.
@@ -4107,7 +4168,7 @@
                 value: DEFAULT_CONFIG.HIDE_DELAY.value, 
                 validator: DEFAULT_CONFIG.HIDE_DELAY.validator
             });
-        
+
             /**
             * Specifies the Tooltip's text. 
             * @config text
@@ -4130,7 +4191,23 @@
                 handler: this.configContainer,
                 value: document.body
             });
-        
+
+            /**
+            * Specifies whether or not the tooltip is disabled. Disabled tooltips
+            * will not be displayed. If the tooltip is driven by the title attribute
+            * of the context element, the title attribute will still be removed for 
+            * disabled tooltips, to prevent default tooltip behavior.
+            * 
+            * @config disabled
+            * @type Boolean
+            * @default false
+            */
+            this.cfg.addProperty(DEFAULT_CONFIG.DISABLED.key, {
+                handler: this.configContainer,
+                value: DEFAULT_CONFIG.DISABLED.value,
+                supressEvent: DEFAULT_CONFIG.DISABLED.suppressEvent
+            });
+
             /**
             * Specifies the element or elements that the Tooltip should be 
             * anchored to on mouseover.
@@ -4189,16 +4266,11 @@
         * this will usually equal the owner.
         */
         configContainer: function (type, args, obj) {
-
             var container = args[0];
 
             if (typeof container == 'string') {
-
-                this.cfg.setProperty("container", 
-                    document.getElementById(container), true);
-
+                this.cfg.setProperty("container", document.getElementById(container), true);
             }
-
         },
         
         /**
@@ -4213,23 +4285,16 @@
                 nElements,
                 oElement,
                 i;
-        
-            
+
             if (aElements) {
                 nElements = aElements.length;
                 if (nElements > 0) {
                     i = nElements - 1;
                     do {
                         oElement = aElements[i];
-        
-                        Event.removeListener(oElement, "mouseover", 
-                            this.onContextMouseOver);
-
-                        Event.removeListener(oElement, "mousemove", 
-                            this.onContextMouseMove);
-
-                        Event.removeListener(oElement, "mouseout", 
-                            this.onContextMouseOut);
+                        Event.removeListener(oElement, "mouseover", this.onContextMouseOver);
+                        Event.removeListener(oElement, "mousemove", this.onContextMouseMove);
+                        Event.removeListener(oElement, "mouseout", this.onContextMouseOut);
                     }
                     while (i--);
                 }
@@ -4253,72 +4318,47 @@
                 nElements,
                 oElement,
                 i;
-            
-        
+
             if (context) {
-        
+
                 // Normalize parameter into an array
                 if (! (context instanceof Array)) {
-
                     if (typeof context == "string") {
-
-                        this.cfg.setProperty("context", 
-                            [document.getElementById(context)], true);
-
+                        this.cfg.setProperty("context", [document.getElementById(context)], true);
                     } else { // Assuming this is an element
-
                         this.cfg.setProperty("context", [context], true);
-
                     }
-
                     context = this.cfg.getProperty("context");
-
                 }
-        
-        
+
                 // Remove any existing mouseover/mouseout listeners
                 this._removeEventListeners();
-        
+
                 // Add mouseover/mouseout listeners to context elements
                 this._context = context;
-        
+
                 aElements = this._context;
-                
+
                 if (aElements) {
-            
                     nElements = aElements.length;
-                    
                     if (nElements > 0) {
-                    
                         i = nElements - 1;
-                        
                         do {
-            
                             oElement = aElements[i];
-            
-                            Event.on(oElement, "mouseover", 
-                                this.onContextMouseOver, this);
-
-                            Event.on(oElement, "mousemove", 
-                                this.onContextMouseMove, this);
-
-                            Event.on(oElement, "mouseout", 
-                                this.onContextMouseOut, this);
-                        
+                            Event.on(oElement, "mouseover", this.onContextMouseOver, this);
+                            Event.on(oElement, "mousemove", this.onContextMouseMove, this);
+                            Event.on(oElement, "mouseout", this.onContextMouseOut, this);
                         }
                         while (i--);
-                    
                     }
-            
                 }
-        
             }
         },
-        
+
         // END BUILT-IN PROPERTY EVENT HANDLERS //
-        
+
         // BEGIN BUILT-IN DOM EVENT HANDLERS //
-        
+
         /**
         * The default event handler fired when the user moves the mouse while 
         * over the context element.
@@ -4329,9 +4369,8 @@
         onContextMouseMove: function (e, obj) {
             obj.pageX = Event.getPageX(e);
             obj.pageY = Event.getPageY(e);
-        
         },
-        
+
         /**
         * The default event handler fired when the user mouses over the 
         * context element.
@@ -4340,34 +4379,34 @@
         * @param {Object} obj The object argument
         */
         onContextMouseOver: function (e, obj) {
-        
             var context = this;
-        
-            if (obj.hideProcId) {
-
-                clearTimeout(obj.hideProcId);
-
-
-                obj.hideProcId = null;
-
-            }
-
-            Event.on(context, "mousemove", obj.onContextMouseMove, obj);
 
             if (context.title) {
                 obj._tempTitle = context.title;
                 context.title = "";
             }
 
-            /**
-            * The unique process ID associated with the thread responsible 
-            * for showing the Tooltip.
-            * @type int
-            */
-            obj.showProcId = obj.doShow(e, context);
+            // Fire first, to honor disabled set in the listner
+            if (obj.fireEvent("contextMouseOver", context, e) !== false 
+                    && !obj.cfg.getProperty("disabled")) {
 
+                // Stop the tooltip from being hidden (set on last mouseout)
+                if (obj.hideProcId) {
+                    clearTimeout(obj.hideProcId);
+                    obj.hideProcId = null;
+                }
+
+                Event.on(context, "mousemove", obj.onContextMouseMove, obj);
+
+                /**
+                * The unique process ID associated with the thread responsible 
+                * for showing the Tooltip.
+                * @type int
+                */
+                obj.showProcId = obj.doShow(e, context);
+            }
         },
-        
+
         /**
         * The default event handler fired when the user mouses out of 
         * the context element.
@@ -4377,32 +4416,31 @@
         */
         onContextMouseOut: function (e, obj) {
             var el = this;
-        
+
             if (obj._tempTitle) {
                 el.title = obj._tempTitle;
                 obj._tempTitle = null;
             }
-        
+
             if (obj.showProcId) {
                 clearTimeout(obj.showProcId);
                 obj.showProcId = null;
             }
-        
+
             if (obj.hideProcId) {
                 clearTimeout(obj.hideProcId);
                 obj.hideProcId = null;
             }
-        
-        
+
+            obj.fireEvent("contextMouseOut", el, e);
+
             obj.hideProcId = setTimeout(function () {
                 obj.hide();
-    
             }, obj.cfg.getProperty("hidedelay"));
-    
         },
-        
+
         // END BUILT-IN DOM EVENT HANDLERS //
-        
+
         /**
         * Processes the showing of the Tooltip by setting the timeout delay 
         * and offset of the Tooltip.
@@ -4418,14 +4456,13 @@
 
             if (YAHOO.env.ua.opera && context.tagName && 
                 context.tagName.toUpperCase() == "A") {
-
                 yOffset += 12;
-
             }
 
             return setTimeout(function () {
 
                 var txt = me.cfg.getProperty("text");
+
                 // title does not over-ride text
                 if (me._tempTitle && (txt === "" || YAHOO.lang.isUndefined(txt) || YAHOO.lang.isNull(txt))) {
                     me.setBody(me._tempTitle);
@@ -4439,17 +4476,17 @@
                     me.preventOverlap(me.pageX, me.pageY);
                 }
 
-                Event.removeListener(context, "mousemove", 
-                    me.onContextMouseMove);
+                Event.removeListener(context, "mousemove", me.onContextMouseMove);
+
+                me.contextTriggerEvent.fire(context);
 
                 me.show();
+
                 me.hideProcId = me.doHide();
 
-
             }, this.cfg.getProperty("showdelay"));
-        
         },
-        
+
         /**
         * Sets the timeout for the auto-dismiss delay, which by default is 5 
         * seconds, meaning that a tooltip will automatically dismiss itself 
@@ -4457,16 +4494,16 @@
         * @method doHide
         */
         doHide: function () {
-        
+
             var me = this;
-        
-        
+
+
             return setTimeout(function () {
-        
+
                 me.hide();
-        
+
             }, this.cfg.getProperty("autodismissdelay"));
-        
+
         },
         
         /**
@@ -4510,29 +4547,21 @@
                     oShadow = this._shadow;
             
                 if (oShadow) {
-            
                     oShadow.style.width = (oElement.offsetWidth + 6) + "px";
                     oShadow.style.height = (oElement.offsetHeight + 1) + "px"; 
-            
                 }
             
             }
 
-
             function addShadowVisibleClass() {
-            
                 Dom.addClass(this._shadow, "yui-tt-shadow-visible");
-            
             }
             
 
             function removeShadowVisibleClass() {
-        
                 Dom.removeClass(this._shadow, "yui-tt-shadow-visible");
-            
             }
-    
-    
+
             function createShadow() {
     
                 var oShadow = this._shadow,
@@ -4547,73 +4576,49 @@
                     Module = YAHOO.widget.Module;
                     nIE = YAHOO.env.ua.ie;
                     me = this;
-    
+
                     if (!m_oShadowTemplate) {
-        
                         m_oShadowTemplate = document.createElement("div");
                         m_oShadowTemplate.className = "yui-tt-shadow";
-                    
                     }
-        
+
                     oShadow = m_oShadowTemplate.cloneNode(false);
-        
+
                     oElement.appendChild(oShadow);
-                    
+
                     this._shadow = oShadow;
-    
+
                     addShadowVisibleClass.call(this);
-        
+
                     this.subscribe("beforeShow", addShadowVisibleClass);
                     this.subscribe("beforeHide", removeShadowVisibleClass);
 
-                    if (nIE == 6 || 
-                        (nIE == 7 && document.compatMode == "BackCompat")) {
-                
+                    if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
                         window.setTimeout(function () { 
-        
                             sizeShadow.call(me); 
-        
                         }, 0);
     
                         this.cfg.subscribeToConfigEvent("width", sizeShadow);
                         this.cfg.subscribeToConfigEvent("height", sizeShadow);
                         this.subscribe("changeContent", sizeShadow);
-    
-                        Module.textResizeEvent.subscribe(sizeShadow, 
-                                                            this, true);
-                        
+
+                        Module.textResizeEvent.subscribe(sizeShadow, this, true);
                         this.subscribe("destroy", function () {
-                        
-                            Module.textResizeEvent.unsubscribe(sizeShadow, 
-                                                                    this);
-                        
+                            Module.textResizeEvent.unsubscribe(sizeShadow, this);
                         });
-                
                     }
-                
                 }
-    
             }
-    
-    
+
             function onBeforeShow() {
-            
                 createShadow.call(this);
-    
                 this.unsubscribe("beforeShow", onBeforeShow);
-            
             }
-    
-    
+
             if (this.cfg.getProperty("visible")) {
-    
                 createShadow.call(this);
-            
-            }
-            else {
-    
+            } else {
                 this.subscribe("beforeShow", onBeforeShow);
-            
             }
         
         },
@@ -4627,7 +4632,7 @@
         
             // Remove any existing mouseover/mouseout listeners
             this._removeEventListeners();
-        
+
             Tooltip.superclass.destroy.call(this);  
         
         },
@@ -5204,9 +5209,10 @@
         * this will usually equal the owner.
         */
         configUnderlay: function (type, args, obj) {
-    
+
             var UA = YAHOO.env.ua,
                 bMacGecko = (this.platform == "mac" && UA.gecko),
+                bIEQuirks = (UA.ie == 6 || (UA.ie == 7 && document.compatMode == "BackCompat")),
                 sUnderlay = args[0].toLowerCase(),
                 oUnderlay = this.underlay,
                 oElement = this.element;
@@ -5225,9 +5231,7 @@
             }
 
             function createUnderlay() {
-
-                var nIE;
-
+                var bNew = false;
                 if (!oUnderlay) { // create if not already in DOM
 
                     if (!m_oUnderlayTemplate) {
@@ -5240,28 +5244,26 @@
 
                     this.underlay = oUnderlay;
 
-                    nIE = UA.ie;
-
-                    if (nIE == 6 || (nIE == 7 && document.compatMode == "BackCompat")) {
-
+                    if (bIEQuirks) {
                         this.sizeUnderlay();
-
                         this.cfg.subscribeToConfigEvent("width", this.sizeUnderlay);
                         this.cfg.subscribeToConfigEvent("height",this.sizeUnderlay);
                         this.changeContentEvent.subscribe(this.sizeUnderlay);
-
                         YAHOO.widget.Module.textResizeEvent.subscribe(this.sizeUnderlay, this, true);
                     }
 
                     if (UA.webkit && UA.webkit < 420) {
                         this.changeContentEvent.subscribe(fixWebkitUnderlay);
                     }
+                    bNew = true;
                 }
-
             }
 
             function onBeforeShow() {
-                createUnderlay.call(this);
+                var bNew = createUnderlay.call(this);
+                if (!bNew && bIEQuirks) {
+                    this.sizeUnderlay();
+                }
                 this._underlayDeferred = false;
                 this.beforeShowEvent.unsubscribe(onBeforeShow);
             }
@@ -5284,51 +5286,41 @@
                     this.underlay = null;
                 }
             }
-        
 
             switch (sUnderlay) {
-    
                 case "shadow":
-    
                     Dom.removeClass(oElement, "matte");
                     Dom.addClass(oElement, "shadow");
-    
                     break;
-    
                 case "matte":
-    
                     if (!bMacGecko) {
                         destroyUnderlay.call(this);
                     }
-    
                     Dom.removeClass(oElement, "shadow");
                     Dom.addClass(oElement, "matte");
-    
                     break;
                 default:
-    
                     if (!bMacGecko) {
                         destroyUnderlay.call(this);
                     }
                     Dom.removeClass(oElement, "shadow");
                     Dom.removeClass(oElement, "matte");
-    
                     break;
             }
 
             if ((sUnderlay == "shadow") || (bMacGecko && !oUnderlay)) {
-                
                 if (this.cfg.getProperty("visible")) {
-                    createUnderlay.call(this);
-                }
-                else {
+                    var bNew = createUnderlay.call(this);
+                    if (!bNew && bIEQuirks) {
+                        this.sizeUnderlay();
+                    }
+                } else {
                     if (!this._underlayDeferred) {
                         this.beforeShowEvent.subscribe(onBeforeShow);
                         this._underlayDeferred = true;
                     }
                 }
             }
-    
         },
         
         /**
@@ -5576,19 +5568,14 @@
         * @method sizeUnderlay
         */
         sizeUnderlay: function () {
-
             var oUnderlay = this.underlay,
                 oElement;
 
             if (oUnderlay) {
-
                 oElement = this.element;
-
                 oUnderlay.style.width = oElement.offsetWidth + "px";
                 oUnderlay.style.height = oElement.offsetHeight + "px";
-
             }
-
         },
 
         
