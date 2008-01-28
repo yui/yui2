@@ -59,6 +59,15 @@ YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
     id : 0,
 
     /**
+     * Base of id strings used for plugin nodes.
+     * @static
+     * @property ID_BASE
+     * @type string
+     * @private
+     */
+    ID_BASE : 'yui-pg',
+
+    /**
      * Used to identify unset, optional configurations, or used explicitly in
      * the case of totalRecords to indicate unlimited pagination.
      * @static
@@ -353,7 +362,11 @@ YAHOO.widget.Paginator.prototype = {
         template = template.replace(/\{([a-z0-9_ \-]+)\}/gi,
             '<span class="yui-pg-plugin $1"></span>');
         for (var i = 0, len = this._containers.length; i < len; ++i) {
-            var c = this._containers[i];
+            var c       = this._containers[i],
+                // ex. yui-pg0-1 (first paginator, second container)
+                id_base = YAHOO.widget.Paginator.ID_BASE + this.get('id') +
+                          '-' + i;
+
             if (!c) {
                 continue;
             }
@@ -377,7 +390,7 @@ YAHOO.widget.Paginator.prototype = {
                 if (YAHOO.lang.isFunction(Plugin)) {
                     var plugin = new Plugin(this);
                     if (YAHOO.lang.isFunction(plugin.render)) {
-                        mp.insertBefore(plugin.render(),m);
+                        mp.insertBefore(plugin.render(id_base),m);
                     }
                 }
 
@@ -882,9 +895,10 @@ Plugin.FirstPageLink.prototype = {
      * Generate the nodes and return the appropriate node given the current
      * pagination state.
      * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
      * @return {HTMLElement}
      */
-    render : function () {
+    render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('firstPageLinkClass'),
             label = p.get('firstPageLinkLabel');
@@ -892,11 +906,13 @@ Plugin.FirstPageLink.prototype = {
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
 
-        this.link.href = '#';
+        this.link.id        = id_base + '-first-link';
+        this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
+        this.span.id        = id_base + '-first-span';
         this.span.className = c;
         this.span.innerHTML = label;
 
@@ -1049,9 +1065,10 @@ Plugin.LastPageLink.prototype = {
      * Generate the nodes and return the appropriate node given the current
      * pagination state.
      * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
      * @return {HTMLElement}
      */
-    render : function () {
+    render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('lastPageLinkClass'),
             label = p.get('lastPageLinkLabel'),
@@ -1061,13 +1078,17 @@ Plugin.LastPageLink.prototype = {
         this.span = document.createElement('span');
         this.na   = this.span.cloneNode(false);
 
-        this.link.href = '#';
+        this.link.id        = id_base + '-last-link';
+        this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
+        this.span.id        = id_base + '-last-span';
         this.span.className = c;
         this.span.innerHTML = label;
+
+        this.na.id = id_base + '-last-na';
 
         switch (last) {
             case YAHOO.widget.Paginator.VALUE_UNLIMITED :
@@ -1217,9 +1238,10 @@ Plugin.PreviousPageLink.prototype = {
      * Generate the nodes and return the appropriate node given the current
      * pagination state.
      * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
      * @return {HTMLElement}
      */
-    render : function () {
+    render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('previousPageLinkClass'),
             label = p.get('previousPageLinkLabel');
@@ -1227,11 +1249,13 @@ Plugin.PreviousPageLink.prototype = {
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
 
-        this.link.href = '#';
+        this.link.id        = id_base + '-prev-link';
+        this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
+        this.span.id        = id_base + '-prev-span';
         this.span.className = c;
         this.span.innerHTML = label;
 
@@ -1375,9 +1399,10 @@ Plugin.NextPageLink.prototype = {
      * Generate the nodes and return the appropriate node given the current
      * pagination state.
      * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
      * @return {HTMLElement}
      */
-    render : function () {
+    render : function (id_base) {
         var p     = this.paginator,
             c     = p.get('nextPageLinkClass'),
             label = p.get('nextPageLinkLabel'),
@@ -1386,11 +1411,13 @@ Plugin.NextPageLink.prototype = {
         this.link     = document.createElement('a');
         this.span     = document.createElement('span');
 
-        this.link.href = '#';
+        this.link.id        = id_base + '-next-link';
+        this.link.href      = '#';
         this.link.className = c;
         this.link.innerHTML = label;
         YAHOO.util.Event.on(this.link,'click',this.onClick,this,true);
 
+        this.span.id        = id_base + '-next-span';
         this.span.className = c;
         this.span.innerHTML = label;
 
@@ -1611,13 +1638,15 @@ Plugin.PageLinks.prototype = {
      * Generate the nodes and return the container node containing page links
      * appropriate to the current pagination state.
      * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
      * @return {HTMLElement}
      */
-    render : function () {
+    render : function (id_base) {
         var p = this.paginator;
 
         // Set up container
         this.container = document.createElement('span');
+        this.container.id        = id_base + '-pages';
         this.container.className = p.get('pageLinksContainerClass');
         YAHOO.util.Event.on(this.container,'click',this.onClick,this,true);
 
@@ -1780,10 +1809,12 @@ Plugin.RowsPerPageDropdown.prototype = {
     /**
      * Generate the select and option nodes and returns the select node.
      * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
      * @return {HTMLElement}
      */
-    render : function () {
+    render : function (id_base) {
         this.select = document.createElement('select');
+        this.select.id        = id_base + '-rpp';
         this.select.className = this.paginator.get('rowsPerPageDropdownClass');
         this.select.title = 'Rows per page';
 
@@ -1987,10 +2018,12 @@ Plugin.CurrentPageReport.prototype = {
      * Generate the span containing info formatted per the pageReportTemplate
      * attribute.
      * @method render
+     * @param id_base {string} used to create unique ids for generated nodes
      * @return {HTMLElement}
      */
-    render : function () {
+    render : function (id_base) {
         this.span = document.createElement('span');
+        this.span.id        = id_base + '-page-report';
         this.span.className = this.paginator.get('pageReportClass');
         this.update();
         
