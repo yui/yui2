@@ -9969,6 +9969,17 @@ getBody : function() {
 },
 
 /**
+ * @method getCell
+ * @deprecated Use getTdEl().
+ */
+getCell : function(index) {
+    // Backward compatibility
+    YAHOO.log("The method getCell() has been deprecated" +
+            " in favor of getTdEl()", "warn", this.toString());
+    return this.getTdEl(index);
+},
+
+/**
  * @method getRow
  * @deprecated Use getTrEl().
  */
