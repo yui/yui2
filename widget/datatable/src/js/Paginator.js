@@ -66,7 +66,26 @@ YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
      * @type number
      * @final
      */
-    VALUE_UNLIMITED : -1
+    VALUE_UNLIMITED : -1,
+
+    /**
+     * Default template used by Paginator instances.  Update this if you want
+     * all new Paginators to use a different default template.
+     * @static
+     * @property TEMPLATE_DEFAULT
+     * @type string
+     */
+    TEMPLATE_DEFAULT : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
+
+    /**
+     * Common alternate pagination format, including page links, links for
+     * previous, next, first and last pages as well as a rows-per-page
+     * dropdown.  Offered as a convenience.
+     * @static
+     * @property TEMPLATE_ROWS_PER_PAGE
+     * @type string
+     */
+    TEMPLATE_ROWS_PER_PAGE : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 
 },true);
 
@@ -192,12 +211,13 @@ YAHOO.widget.Paginator.prototype = {
          * innerHTML on all specified container nodes.  Bracketed keys
          * (e.g. {pageLinks}) in the string will be replaced with an instance
          * of the so named view plugin.
+         * @see Paginator.TEMPLATE_DEFAULT
+         * @see Paginator.TEMPLATE_ROWS_PER_PAGE
          * @attribute template
          * @type string
-         * @default "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
          */
         this.setAttributeConfig('template', {
-            value : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}",
+            value : YAHOO.widget.Paginator.TEMPLATE_DEFAULT,
             validator : l.isString
         });
 
@@ -322,8 +342,10 @@ YAHOO.widget.Paginator.prototype = {
             return;
         }
 
-        var template       = this.get('template'),
+        var Dom            = YAHOO.util.Dom,
+            template       = this.get('template'),
             containerClass = this.get('containerClass');
+
         this._plugins = [];
 
         // add marker spans to the template html to indicate drop zones
@@ -331,13 +353,21 @@ YAHOO.widget.Paginator.prototype = {
         template = template.replace(/\{([a-z0-9_ \-]+)\}/gi,
             '<span class="yui-pg-plugin $1"></span>');
         for (var i = 0, len = this._containers.length; i < len; ++i) {
-            YAHOO.util.Dom.addClass(this._containers[i],containerClass);
+            var c = this._containers[i];
+            if (!c) {
+                continue;
+            }
+            // Hide the container while its contents are rendered
+            Dom.setStyle(c,'display','none');
+
+            Dom.addClass(c,containerClass);
 
             // Place the template innerHTML
-            this._containers[i].innerHTML = template;
+            c.innerHTML = template;
 
             // Replace each marker with the appropriate plugin's render() output
-            var markers = YAHOO.util.Dom.getElementsByClassName('yui-pg-plugin','span',this._containers[i]);
+            var markers = Dom.getElementsByClassName('yui-pg-plugin','span',c);
+
             for (var j = 0, jlen = markers.length; j < jlen; ++j) {
                 var m      = markers[j],
                     mp     = m.parentNode,
@@ -354,11 +384,14 @@ YAHOO.widget.Paginator.prototype = {
                 // remove the marker
                 mp.removeChild(m);
             }
+
+            // Show the container allowing page reflow
+            Dom.setStyle(c,'display','');
         }
 
         // Set render attribute manually to support its readOnly contract
         if (this._containers.length) {
-            this._configs.rendered.value = true;
+            this.setAttributeConfig('rendered',{value:true});
 
             this.fireEvent('rendered',this.getState());
         }
@@ -557,7 +590,8 @@ YAHOO.widget.Paginator.prototype = {
      * Set the current page to the provided page number if possible.
      * @method setPage
      * @param newPage {number} the new page number
-     * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
+     * @param silent {boolean} whether to forcibly avoid firing the
+     * changeRequest event
      */
     setPage : function (page,silent) {
         if (this.hasPage(page) && page !== this.getCurrentPage()) {
@@ -582,7 +616,8 @@ YAHOO.widget.Paginator.prototype = {
      * Set the number of rows per page.
      * @method setRowsPerPage
      * @param rpp {number} the new number of rows per page
-     * @param silent {boolean} whether to forcibly avoid firing the changeRequest event
+     * @param silent {boolean} whether to forcibly avoid firing the
+     * changeRequest event
      */
     setRowsPerPage : function (rpp,silent) {
         if (YAHOO.lang.isNumber(rpp) && rpp > 0 &&
@@ -770,36 +805,37 @@ var Paginator = YAHOO.widget.Paginator,
  * @for YAHOO.widget.Paginator
  *
  * @constructor
- * @param paginator {Pagintor} Paginator instance to attach to
+ * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.FirstPageLink = function (paginator) {
-    this.paginator = paginator;
+Plugin.FirstPageLink = function (p) {
+    this.paginator = p;
 
-    this.paginator.createEvent('firstPageLinkLabelChange');
-    this.paginator.createEvent('firstPageLinkClassChange');
+    p.createEvent('firstPageLinkLabelChange');
+    p.createEvent('firstPageLinkClassChange');
 
-    this.paginator.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('beforeDestroy',this.destroy,this,true);
 
     // TODO: make this work
-    this.paginator.subscribe('firstPageLinkLabelChange',this.update,this,true);
-    this.paginator.subscribe('firstPageLinkClassChange',this.update,this,true);
+    p.subscribe('firstPageLinkLabelChange',this.update,this,true);
+    p.subscribe('firstPageLinkClassChange',this.update,this,true);
 };
 
 /**
  * Decorates Paginator instances with new attributes. Called during
  * Paginator instantiation.
  * @method init
- * @param paginator {Paginator} Paginator instance to decorate
+ * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.FirstPageLink.init = function (paginator) {
+Plugin.FirstPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the first page link/span.
      * @attribute firstPageLinkLabel
      * @default '&lt;&lt;&nbsp;first'
      */
-    paginator.setAttributeConfig('firstPageLinkLabel', {
+    p.setAttributeConfig('firstPageLinkLabel', {
         value : '&lt;&lt;&nbsp;first',
         validator : l.isString
     });
@@ -809,7 +845,7 @@ Plugin.FirstPageLink.init = function (paginator) {
      * @attribute firstPageLinkClass
      * @default 'yui-pg-first'
      */
-    paginator.setAttributeConfig('firstPageLinkClass', {
+    p.setAttributeConfig('firstPageLinkClass', {
         value : 'yui-pg-first',
         validator : l.isString
     });
@@ -895,6 +931,16 @@ Plugin.FirstPageLink.prototype = {
     },
 
     /**
+     * Removes the onClick listener from the link in preparation for content
+     * removal.
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        YAHOO.util.Event.purgeElement(this.link);
+    },
+
+    /**
      * Listener for the link's onclick event.  Pass new value to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
@@ -915,21 +961,22 @@ Plugin.FirstPageLink.prototype = {
  * @for YAHOO.widget.Paginator
  *
  * @constructor
- * @param paginator {Pagintor} Paginator instance to attach to
+ * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.LastPageLink = function (paginator) {
-    this.paginator = paginator;
+Plugin.LastPageLink = function (p) {
+    this.paginator = p;
 
-    this.paginator.createEvent('lastPageLinkLabelChange');
-    this.paginator.createEvent('lastPageLinkClassChange');
+    p.createEvent('lastPageLinkLabelChange');
+    p.createEvent('lastPageLinkClassChange');
 
-    this.paginator.subscribe('recordOffsetChange',this.update,this,true);
-    this.paginator.subscribe('totalRecordsChange',this.update,this,true);
-    this.paginator.subscribe('rowsPerPageChange', this.update,this,true);
+    p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('totalRecordsChange',this.update,this,true);
+    p.subscribe('rowsPerPageChange', this.update,this,true);
+    p.subscribe('beforeDestroy',this.destroy,this,true);
 
     // TODO: make this work
-    this.paginator.subscribe('lastPageLinkLabelChange',this.update,this,true);
-    this.paginator.subscribe('lastPageLinkClassChange', this.update,this,true);
+    p.subscribe('lastPageLinkLabelChange',this.update,this,true);
+    p.subscribe('lastPageLinkClassChange', this.update,this,true);
 };
 
 /**
@@ -939,14 +986,14 @@ Plugin.LastPageLink = function (paginator) {
  * @param paginator {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.LastPageLink.init = function (paginator) {
+Plugin.LastPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the last page link/span.
      * @attribute lastPageLinkLabel
      * @default 'last&nbsp;&gt;&gt;'
      */
-    paginator.setAttributeConfig('lastPageLinkLabel', {
+    p.setAttributeConfig('lastPageLinkLabel', {
         value : 'last&nbsp;&gt;&gt;',
         validator : l.isString
     });
@@ -956,7 +1003,7 @@ Plugin.LastPageLink.init = function (paginator) {
      * @attribute lastPageLinkClass
      * @default 'yui-pg-last'
      */
-    paginator.setAttributeConfig('lastPageLinkClass', {
+    p.setAttributeConfig('lastPageLinkClass', {
         value : 'yui-pg-last',
         validator : l.isString
     });
@@ -1064,6 +1111,16 @@ Plugin.LastPageLink.prototype = {
     },
 
     /**
+     * Removes the onClick listener from the link in preparation for content
+     * removal.
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        YAHOO.util.Event.purgeElement(this.link);
+    },
+
+    /**
      * Listener for the link's onclick event.  Passes to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
@@ -1083,36 +1140,37 @@ Plugin.LastPageLink.prototype = {
  * @for YAHOO.widget.Paginator
  *
  * @constructor
- * @param paginator {Pagintor} Paginator instance to attach to
+ * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.PreviousPageLink = function (paginator) {
-    this.paginator = paginator;
+Plugin.PreviousPageLink = function (p) {
+    this.paginator = p;
 
-    this.paginator.createEvent('previousPageLinkLabelChange');
-    this.paginator.createEvent('previousPageLinkClassChange');
+    p.createEvent('previousPageLinkLabelChange');
+    p.createEvent('previousPageLinkClassChange');
 
-    this.paginator.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('beforeDestroy',this.destroy,this,true);
 
     // TODO: make this work
-    this.paginator.subscribe('previousPageLinkLabelChange',this.update,this,true);
-    this.paginator.subscribe('previousPageLinkClassChange',this.update,this,true);
+    p.subscribe('previousPageLinkLabelChange',this.update,this,true);
+    p.subscribe('previousPageLinkClassChange',this.update,this,true);
 };
 
 /**
  * Decorates Paginator instances with new attributes. Called during
  * Paginator instantiation.
  * @method init
- * @param paginator {Paginator} Paginator instance to decorate
+ * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.PreviousPageLink.init = function (paginator) {
+Plugin.PreviousPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the previous page link/span.
      * @attribute previousPageLinkLabel
      * @default '&lt;&nbsp;prev'
      */
-    paginator.setAttributeConfig('previousPageLinkLabel', {
+    p.setAttributeConfig('previousPageLinkLabel', {
         value : '&lt;&nbsp;prev',
         validator : l.isString
     });
@@ -1122,7 +1180,7 @@ Plugin.PreviousPageLink.init = function (paginator) {
      * @attribute previousPageLinkClass
      * @default 'yui-pg-previous'
      */
-    paginator.setAttributeConfig('previousPageLinkClass', {
+    p.setAttributeConfig('previousPageLinkClass', {
         value : 'yui-pg-previous',
         validator : l.isString
     });
@@ -1208,6 +1266,16 @@ Plugin.PreviousPageLink.prototype = {
     },
 
     /**
+     * Removes the onClick listener from the link in preparation for content
+     * removal.
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        YAHOO.util.Event.purgeElement(this.link);
+    },
+
+    /**
      * Listener for the link's onclick event.  Passes to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
@@ -1228,38 +1296,39 @@ Plugin.PreviousPageLink.prototype = {
  * @for YAHOO.widget.Paginator
  *
  * @constructor
- * @param paginator {Pagintor} Paginator instance to attach to
+ * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.NextPageLink = function (paginator) {
-    this.paginator = paginator;
+Plugin.NextPageLink = function (p) {
+    this.paginator = p;
 
-    this.paginator.createEvent('nextPageLinkLabelChange');
-    this.paginator.createEvent('nextPageLinkClassChange');
+    p.createEvent('nextPageLinkLabelChange');
+    p.createEvent('nextPageLinkClassChange');
 
-    this.paginator.subscribe('recordOffsetChange',this.update,this,true);
-    this.paginator.subscribe('totalRecordsChange',this.update,this,true);
-    this.paginator.subscribe('rowsPerPageChange', this.update,this,true);
+    p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('totalRecordsChange',this.update,this,true);
+    p.subscribe('rowsPerPageChange', this.update,this,true);
+    p.subscribe('beforeDestroy',this.destroy,this,true);
 
     // TODO: make this work
-    this.paginator.subscribe('nextPageLinkLabelChange', this.update,this,true);
-    this.paginator.subscribe('nextPageLinkClassChange', this.update,this,true);
+    p.subscribe('nextPageLinkLabelChange', this.update,this,true);
+    p.subscribe('nextPageLinkClassChange', this.update,this,true);
 };
 
 /**
  * Decorates Paginator instances with new attributes. Called during
  * Paginator instantiation.
  * @method init
- * @param paginator {Paginator} Paginator instance to decorate
+ * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.NextPageLink.init = function (paginator) {
+Plugin.NextPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the next page link/span.
      * @attribute nextPageLinkLabel
      * @default 'next&nbsp;&gt;'
      */
-    paginator.setAttributeConfig('nextPageLinkLabel', {
+    p.setAttributeConfig('nextPageLinkLabel', {
         value : 'next&nbsp;&gt;',
         validator : l.isString
     });
@@ -1269,7 +1338,7 @@ Plugin.NextPageLink.init = function (paginator) {
      * @attribute nextPageLinkClass
      * @default 'yui-pg-next'
      */
-    paginator.setAttributeConfig('nextPageLinkClass', {
+    p.setAttributeConfig('nextPageLinkClass', {
         value : 'yui-pg-next',
         validator : l.isString
     });
@@ -1359,6 +1428,16 @@ Plugin.NextPageLink.prototype = {
     },
 
     /**
+     * Removes the onClick listener from the link in preparation for content
+     * removal.
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        YAHOO.util.Event.purgeElement(this.link);
+    },
+
+    /**
      * Listener for the link's onclick event.  Passes to setPage method.
      * @method onClick
      * @param e {DOMEvent} The click event
@@ -1378,42 +1457,43 @@ Plugin.NextPageLink.prototype = {
  * @for YAHOO.widget.Paginator
  *
  * @constructor
- * @param paginator {Pagintor} Paginator instance to attach to
+ * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.PageLinks = function (paginator) {
-    this.paginator = paginator;
+Plugin.PageLinks = function (p) {
+    this.paginator = p;
 
-    this.paginator.createEvent('pageLinkClassChange');
-    this.paginator.createEvent('currentPageClassChange');
-    this.paginator.createEvent('pageLinksContainerClassChange');
-    this.paginator.createEvent('pageLinksChange');
+    p.createEvent('pageLinkClassChange');
+    p.createEvent('currentPageClassChange');
+    p.createEvent('pageLinksContainerClassChange');
+    p.createEvent('pageLinksChange');
 
-    this.paginator.subscribe('recordOffsetChange',this.update,this,true);
-    this.paginator.subscribe('pageLinksChange',   this.rebuild,this,true);
-    this.paginator.subscribe('totalRecordsChange',this.rebuild,this,true);
-    this.paginator.subscribe('rowsPerPageChange', this.rebuild,this,true);
-    this.paginator.subscribe('pageLinkClassChange', this.rebuild,this,true);
-    this.paginator.subscribe('currentPageClassChange', this.rebuild,this,true);
+    p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('pageLinksChange',   this.rebuild,this,true);
+    p.subscribe('totalRecordsChange',this.rebuild,this,true);
+    p.subscribe('rowsPerPageChange', this.rebuild,this,true);
+    p.subscribe('pageLinkClassChange', this.rebuild,this,true);
+    p.subscribe('currentPageClassChange', this.rebuild,this,true);
+    p.subscribe('beforeDestroy',this.destroy,this,true);
 
     //TODO: Make this work
-    this.paginator.subscribe('pageLinksContainerClassChange', this.rebuild,this,true);
+    p.subscribe('pageLinksContainerClassChange', this.rebuild,this,true);
 };
 
 /**
  * Decorates Paginator instances with new attributes. Called during
  * Paginator instantiation.
  * @method init
- * @param paginator {Paginator} Paginator instance to decorate
+ * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.PageLinks.init = function (paginator) {
+Plugin.PageLinks.init = function (p) {
 
     /**
      * CSS class assigned to each page link/span.
      * @attribute pageLinkClass
      * @default 'yui-pg-page'
      */
-    paginator.setAttributeConfig('pageLinkClass', {
+    p.setAttributeConfig('pageLinkClass', {
         value : 'yui-pg-page',
         validator : l.isString
     });
@@ -1423,7 +1503,7 @@ Plugin.PageLinks.init = function (paginator) {
      * @attribute currentPageClass
      * @default 'yui-pg-current-page'
      */
-    paginator.setAttributeConfig('currentPageClass', {
+    p.setAttributeConfig('currentPageClass', {
         value : 'yui-pg-current-page',
         validator : l.isString
     });
@@ -1433,7 +1513,7 @@ Plugin.PageLinks.init = function (paginator) {
      * @attribute pageLinksContainerClass
      * @default 'yui-pg-pages'
      */
-    paginator.setAttributeConfig('pageLinksContainerClass', {
+    p.setAttributeConfig('pageLinksContainerClass', {
         value : 'yui-pg-pages',
         validator : l.isString
     });
@@ -1443,7 +1523,7 @@ Plugin.PageLinks.init = function (paginator) {
      * @attribute pageLinks
      * @default 10
      */
-    paginator.setAttributeConfig('pageLinks', {
+    p.setAttributeConfig('pageLinks', {
         value : 10,
         validator : l.isNumber
     });
@@ -1455,7 +1535,7 @@ Plugin.PageLinks.init = function (paginator) {
      * @attribute pageLabelBuilder
      * @default function (page, paginator) { return page; }
      */
-    paginator.setAttributeConfig('pageLabelBuilder', {
+    p.setAttributeConfig('pageLabelBuilder', {
         value : function (page, paginator) { return page; },
         validator : l.isFunction
     });
@@ -1536,11 +1616,12 @@ Plugin.PageLinks.prototype = {
     render : function () {
         var p = this.paginator;
 
-        //Set up container
+        // Set up container
         this.container = document.createElement('span');
         this.container.className = p.get('pageLinksContainerClass');
         YAHOO.util.Event.on(this.container,'click',this.onClick,this,true);
 
+        // Call update, flagging a need to rebuild
         this.update({newValue : null, rebuild : true});
 
         return this.container;
@@ -1559,8 +1640,6 @@ Plugin.PageLinks.prototype = {
         var p           = this.paginator,
             currentPage = p.getCurrentPage();
 
-        // TODO: don't update for totalRecordsChange if not applicable
-
         // Replace content if there's been a change
         if (this.current !== currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
@@ -1570,23 +1649,23 @@ Plugin.PageLinks.prototype = {
                                 p.get('pageLinks')),
                 start        = range[0],
                 end          = range[1],
-                content      = [],
+                content      = '',
                 linkTemplate,i;
 
             linkTemplate = '<a href="#" class="' + p.get('pageLinkClass') +
                            '" page="';
             for (i = start; i <= end; ++i) {
                 if (i === currentPage) {
-                    content[content.length] =
+                    content +=
                         '<span class="' + p.get('currentPageClass') + '">' +
                         labelBuilder(i,p) + '</span>';
                 } else {
-                    content[content.length] =
+                    content +=
                         linkTemplate + i + '">' + labelBuilder(i,p) + '</a>';
                 }
             }
 
-            this.container.innerHTML = content.join('');
+            this.container.innerHTML = content;
         }
     },
 
@@ -1598,6 +1677,16 @@ Plugin.PageLinks.prototype = {
     rebuild     : function (e) {
         e.rebuild = true;
         this.update(e);
+    },
+
+    /**
+     * Removes the onClick listener from the container in preparation for
+     * content removal.
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        YAHOO.util.Event.purgeElement(this.container,true);
     },
 
     /**
@@ -1629,29 +1718,30 @@ Plugin.PageLinks.prototype = {
  * @for YAHOO.widget.Paginator
  *
  * @constructor
- * @param paginator {Pagintor} Paginator instance to attach to
+ * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.RowsPerPageDropdown = function (paginator) {
-    this.paginator = paginator;
+Plugin.RowsPerPageDropdown = function (p) {
+    this.paginator = p;
 
-    this.paginator.createEvent('rowsPerPageOptionsChange');
-    this.paginator.createEvent('rowsPerPageDropdownClassChange');
+    p.createEvent('rowsPerPageOptionsChange');
+    p.createEvent('rowsPerPageDropdownClassChange');
 
-    this.paginator.subscribe('rowsPerPageChange',this.update,this,true);
-    this.paginator.subscribe('rowsPerPageOptionsChange',this.rebuild,this,true);
+    p.subscribe('rowsPerPageChange',this.update,this,true);
+    p.subscribe('rowsPerPageOptionsChange',this.rebuild,this,true);
+    p.subscribe('beforeDestroy',this.destroy,this,true);
 
     // TODO: make this work
-    this.paginator.subscribe('rowsPerPageDropdownClassChange',this.rebuild,this,true);
+    p.subscribe('rowsPerPageDropdownClassChange',this.rebuild,this,true);
 };
 
 /**
  * Decorates Paginator instances with new attributes. Called during
  * Paginator instantiation.
  * @method init
- * @param paginator {Paginator} Paginator instance to decorate
+ * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.RowsPerPageDropdown.init = function (paginator) {
+Plugin.RowsPerPageDropdown.init = function (p) {
 
     /**
      * Array of available rows-per-page sizes.  Converted into select options.
@@ -1660,7 +1750,7 @@ Plugin.RowsPerPageDropdown.init = function (paginator) {
      * @attribute rowsPerPageOptions
      * @default []
      */
-    paginator.setAttributeConfig('rowsPerPageOptions', {
+    p.setAttributeConfig('rowsPerPageOptions', {
         value : [],
         validator : l.isArray
     });
@@ -1670,7 +1760,7 @@ Plugin.RowsPerPageDropdown.init = function (paginator) {
      * @attribute rowsPerPageDropdownClass
      * @default 'yui-pg-rpp-options'
      */
-    paginator.setAttributeConfig('rowsPerPageDropdownClass', {
+    p.setAttributeConfig('rowsPerPageDropdownClass', {
         value : 'yui-pg-rpp-options',
         validator : l.isString
     });
@@ -1753,6 +1843,16 @@ Plugin.RowsPerPageDropdown.prototype = {
     },
 
     /**
+     * Removes the onChange listener from the select in preparation for content
+     * removal.
+     * @method destroy
+     * @private
+     */
+    destroy : function () {
+        YAHOO.util.Event.purgeElement(this.select);
+    },
+
+    /**
      * Listener for the select's onchange event.  Sent to setRowsPerPage method.
      * @method onChange
      * @param e {DOMEvent} The change event
@@ -1774,38 +1874,38 @@ Plugin.RowsPerPageDropdown.prototype = {
  * @for YAHOO.widget.Paginator
  *
  * @constructor
- * @param paginator {Pagintor} Paginator instance to attach to
+ * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.CurrentPageReport = function (paginator) {
-    this.paginator = paginator;
+Plugin.CurrentPageReport = function (p) {
+    this.paginator = p;
 
-    this.paginator.createEvent('pageReportClassChange');
-    this.paginator.createEvent('pageReportTemplateChange');
+    p.createEvent('pageReportClassChange');
+    p.createEvent('pageReportTemplateChange');
 
-    this.paginator.subscribe('recordOffsetChange',this.update,this,true);
-    this.paginator.subscribe('totalRecordsChange',this.update,this,true);
-    this.paginator.subscribe('rowsPerPageChange', this.update,this,true);
-    this.paginator.subscribe('pageReportTemplateChange', this.update,this,true);
+    p.subscribe('recordOffsetChange',this.update,this,true);
+    p.subscribe('totalRecordsChange',this.update,this,true);
+    p.subscribe('rowsPerPageChange', this.update,this,true);
+    p.subscribe('pageReportTemplateChange', this.update,this,true);
 
     //TODO: make this work
-    this.paginator.subscribe('pageReportClassChange', this.update,this,true);
+    p.subscribe('pageReportClassChange', this.update,this,true);
 };
 
 /**
  * Decorates Paginator instances with new attributes. Called during
  * Paginator instantiation.
  * @method init
- * @param paginator {Paginator} Paginator instance to decorate
+ * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.CurrentPageReport.init = function (paginator) {
+Plugin.CurrentPageReport.init = function (p) {
 
     /**
      * CSS class assigned to the span containing the info.
      * @attribute pageReportClass
      * @default 'yui-pg-current'
      */
-    paginator.setAttributeConfig('pageReportClass', {
+    p.setAttributeConfig('pageReportClass', {
         value : 'yui-pg-current',
         validator : l.isString
     });
@@ -1818,7 +1918,7 @@ Plugin.CurrentPageReport.init = function (paginator) {
      * @default '({currentPage} of {totalPages})'
      * @see pageReportValueGenerator attribute
      */
-    paginator.setAttributeConfig('pageReportTemplate', {
+    p.setAttributeConfig('pageReportTemplate', {
         value : '({currentPage} of {totalPages})',
         validator : l.isString
     });
@@ -1838,7 +1938,7 @@ Plugin.CurrentPageReport.init = function (paginator) {
      * </ul>
      * @attribute pageReportValueGenarator
      */
-    paginator.setAttributeConfig('pageReportValueGenerator', {
+    p.setAttributeConfig('pageReportValueGenerator', {
         value : function (paginator) {
             var curPage = paginator.getCurrentPage(),
                 records = paginator.getPageRecords(curPage);
