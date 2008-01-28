@@ -1353,7 +1353,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
             if (totRec) {
                 totalRecords = totRec.firstChild.nodeValue;
             } else {
-                totRec = oFullResponse.attributes.getNamedItem(totRecLocator);
+                totRec = oFullResponse.firstChild.attributes.getNamedItem(totRecLocator);
                 if (totRec) {
                     totalRecords = totRec.value;
                 } else if (xmlList && xmlList.length) {
@@ -1367,12 +1367,13 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
                 }
             }
 
-            if (YAHOO.lang.isNumber(totalRecords)) {
-                oParsedResponse.totalRecords = totalRecords;
+            if (YAHOO.lang.isValue(totalRecords)) {
+                oParsedResponse.totalRecords = parseInt(totalRecords,10)|0;
             }
         }
     }
     catch(e) {
+        YAHOO.log("Error while parsing XML data: " + e.message);
     }
     if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
         bError = true;
@@ -1464,11 +1465,19 @@ YAHOO.util.DataSource.prototype.executeJSONParser = function (oFullResponse) {
         // Commit the atrocity of creating a function on the fly. parserDef
         // will become the body passed to new Function.  The signature will be
         // function (oFullResponse)
-        var parserDef =
+        var parserDef = 
             // grab the results list from the response
-            "var results=oFullResponse." + resultsList + ";";
+            "var results=oFullResponse";
+        
+        // Default direct assignment of oFullResponse as the resultsList if
+        // the schema was not configured with a resultsList key.  Otherwise
+        // create results=oFullResponse.location['in'].resultsList
+        if (YAHOO.lang.isValue(resultsList)) {
+            parserDef += "." + resultsList;
+        }
+        parserDef += ";";
 
-            // if it wasn't found, default an empty array
+        // if the list wasn't found at that location, default an empty array
         parserDef +=
             "if(!results){" +
                 "results=[];" +
@@ -1541,7 +1550,7 @@ YAHOO.util.DataSource.prototype.executeJSONParser = function (oFullResponse) {
  */
 YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse) {
     var oParsedResponse = {results:[]};
-    if(oFullResponse && (oFullResponse.constructor == Object)) {
+    if(oFullResponse && (YAHOO.lang.isObject(oFullResponse))) {
         if(YAHOO.lang.isArray(this.responseSchema.fields)) {
             var fields          = this.responseSchema.fields,
                 parserMap       = {},
