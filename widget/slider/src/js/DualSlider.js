@@ -205,10 +205,10 @@ YAHOO.widget.DualSlider.prototype = {
 
         if (this.isHoriz) {
             d = YAHOO.util.Event.getPageX(e) - this.minSlider.initPageX -
-                this.minSlider.thumb.getEl().offsetWidth/2;
+                this.minSlider.thumbCenterPoint.x;
         } else {
             d = YAHOO.util.Event.getPageY(e) - this.minSlider.initPageY -
-                this.minSlider.thumb.getEl().offsetHeight/2;
+                this.minSlider.thumbCenterPoint.y;
         }
                 
         // Below the minSlider thumb.  Move the minSlider thumb
