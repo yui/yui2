@@ -199,17 +199,25 @@
              'skinnable': true
          },
 
-        'imageloader': {
+         'imageloader': {
             'type': 'js',
             'path': 'imageloader/imageloader-beta-min.js',
             'requires': ['event', 'dom']
-        },
+         },
 
-        'json': {
+         'json': {
             'type': 'js',
             'path': 'json/json-beta-min.js',
             'requires': ['yahoo']
-        },
+         },
+
+         'layout': {
+             'type': 'js',
+             'path': 'layout/layout-beta-min.js',
+             'requires': ['dom', 'event', 'element'],
+             'optional': ['animation', 'dragdrop', 'resize', 'selector'],
+             'skinnable': true
+         }, 
 
         'logger': {
             'type': 'js',
