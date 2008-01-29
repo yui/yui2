@@ -17,9 +17,13 @@
     left: 0;
     right: 0;
     bottom: 0;
+}
+
+.mask.block-scrollbars {
     /*
         Application of "overflow:auto" prevents Mac scrollbars from bleeding
-        through the modality mask in Gecko.
+        through the modality mask in Gecko. The block-scollbars class is only 
+        added for Gecko on MacOS
     */
     overflow: auto;
 }
@@ -101,22 +105,16 @@ PLEASE NOTE:
 }
 
 .hide-scrollbars select {
-
     display: none;
-
 }
 
 .show-scrollbars {
-
     overflow: auto;
-
 }
 
 .yui-panel-container.show-scrollbars,
 .yui-tt.show-scrollbars {
-
     overflow: visible;
-
 }
 
 .yui-panel-container.show-scrollbars .underlay,

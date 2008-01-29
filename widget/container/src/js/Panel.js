@@ -1050,6 +1050,10 @@
 
                 this.mask = oMask;
 
+                if (YAHOO.env.ua.gecko && this.platform == "mac") {
+                    Dom.addClass(this.mask, "block-scrollbars");
+                }
+
                 // Stack mask based on the element zindex
                 this.stackMask();
             }
