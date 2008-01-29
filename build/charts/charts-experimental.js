@@ -1608,7 +1608,20 @@ YAHOO.widget.Series = function() {};
 
 YAHOO.widget.Series.prototype = 
 {
+	/**
+	 * The type of series.
+	 *
+	 * @property type
+	 * @type String
+	 */
 	type: null,
+	
+	/**
+	 * The human-readable name of the series.
+	 *
+	 * @property displayName
+	 * @type String
+	 */
 	displayName: null
 };
 
@@ -1626,7 +1639,20 @@ YAHOO.widget.CartesianSeries = function()
 
 YAHOO.lang.extend(YAHOO.widget.CartesianSeries, YAHOO.widget.Series,
 {
+	/**
+	 * The field used to access the x-axis value from the items from the data source.
+	 *
+	 * @property xField
+	 * @type String
+	 */
 	xField: null,
+	
+	/**
+	 * The field used to access the y-axis value from the items from the data source.
+	 *
+	 * @property yField
+	 * @type String
+	 */
 	yField: null
 });
 
