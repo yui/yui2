@@ -273,6 +273,7 @@ var Dom = YAHOO.util.Dom,
             link: true,
             html: true,
             body: true,
+            iframe: true,
             script: true,
             style: true,
             textarea: true
@@ -3728,7 +3729,7 @@ var Dom = YAHOO.util.Dom,
 
             //Convert b and i tags to strong and em tags
             if ((markup == 'semantic') || (markup == 'xhtml')) {
-                html = html.replace(/<i([^>]*)>/gi, '<em$1>');
+                html = html.replace(/<i(\s+[^>]*)?>/gi, '<em$1>');
                 html = html.replace(/<\/i>/gi, '</em>');
                 html = html.replace(/<b([^>]*)>/gi, '<strong$1>');
                 html = html.replace(/<\/b>/gi, '</strong>');
