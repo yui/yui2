@@ -41,10 +41,10 @@ YAHOO.extend(YAHOO.widget.HTMLNode, YAHOO.widget.Node, {
 
     /**
      * The HTML content to use for this node's display
-     * @property content
+     * @property html
      * @type string
      */
-    content: null,
+    html: null,
 
     /**
      * Sets up the node label

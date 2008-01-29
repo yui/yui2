@@ -3,6 +3,8 @@
 <head>
 <title>Yahoo! UI Library - Tree Control</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css">
+<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css" />
+<link rel="stylesheet" type="text/css" href="../../build/base/base.css" />
 <style type="text/css">
     .emLabel, .emLabel:link, .emLabel:visited, .emLabel:hover { 
         font-weight: bold;

@@ -4,6 +4,8 @@
 <head>
 <title>Yahoo! UI Library - Tree Control</title>
 <link rel="stylesheet" type="text/css" href="css/screen.css">
+<link rel="stylesheet" type="text/css" href="../../build/reset-fonts-grids/reset-fonts-grids.css" />
+<link rel="stylesheet" type="text/css" href="../../build/base/base.css" />
 </head>
   
 <body onload="treeInit()">
