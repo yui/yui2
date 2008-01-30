@@ -1,5 +1,15 @@
 Drag and Drop Release Notes
 
+2.5.0
+    * Added CustomEvents in addition to method overrides
+        (See API Docs for more information)
+        If you are extending DragDrop or a subclass and then want to augment EventProvider (to add custom events)
+        You must pass a third parameter of true to augment when augmenting EventProvider.
+            YAHOO.augment(mySubClass, YAHOO.util.EventProvider, true);
+        In this case, you will loose all CustomEvents in DragDrop, but since you are extending it, you shouldn't need them.
+    * Added an IFRAME element to the proxy div (only in IE) to keep select
+        elements and other object from bleeding through
+
 2.4.0
   * Added configuration option called "dragOnly". If dragOnly is set to true,
     all event in the fireEvents method will not fire. These events are:
