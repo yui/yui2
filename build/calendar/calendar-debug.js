@@ -747,7 +747,6 @@ YAHOO.widget.DateMath = {
 				var newMonth = date.getMonth() + amount;
 				var years = 0;
 
-
 				if (newMonth < 0) {
 					while (newMonth < 0) {
 						newMonth += 12;
@@ -759,21 +758,53 @@ YAHOO.widget.DateMath = {
 						years += 1;
 					}
 				}
-				
+
 				d.setMonth(newMonth);
 				d.setFullYear(date.getFullYear() + years);
 				break;
 			case this.DAY:
-				d.setDate(date.getDate() + amount);
+				this._addDays(d, amount);
+				// d.setDate(date.getDate() + amount);
 				break;
 			case this.YEAR:
 				d.setFullYear(date.getFullYear() + amount);
 				break;
 			case this.WEEK:
-				d.setDate(date.getDate() + (amount * 7));
+				this._addDays(d, (amount * 7));
+				// d.setDate(date.getDate() + (amount * 7));
 				break;
 		}
 		return d;
+	},
+
+	/**
+	 * Private helper method to account for bug in Safari 2 (webkit < 420)
+	 * when Date.setDate(n) is called with n less than -128 or greater than 127.
+	 * <p>
+	 * Fix approach and original findings are available here:
+	 * http://brianary.blogspot.com/2006/03/safari-date-bug.html
+	 * </p>
+	 * @method _addDays
+	 * @param {Date} d JavaScript date object
+	 * @param {Number} nDays The number of days to add to the date object (can be negative)
+	 * @private
+	 */
+	_addDays : function(d, nDays) {
+		if (YAHOO.env.ua.webkit && YAHOO.env.ua.webkit < 420) {
+			if (nDays < 0) {
+				// Ensure we don't go below -128 (getDate() is always 1 to 31, so we won't go above 127)
+				for(var min = -128; nDays < min; nDays -= min) {
+					d.setDate(d.getDate() + min);
+				}
+			} else {
+				// Ensure we don't go above 96 + 31 = 127
+				for(var max = 96; nDays > max; nDays -= max) {
+					d.setDate(d.getDate() + max);
+				}
+			}
+			// nDays should be remainder between -128 and 96
+		}
+		d.setDate(d.getDate() + nDays);
 	},
 
 	/**

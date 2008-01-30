@@ -28,9 +28,18 @@
 			name: "datemathtestcase",
 
 			testAdd : function() {
+
 				var dt = new Date(2007, 3, 12);
 				var resDt = DateMath.add(dt, DateMath.DAY, 4);
 				DateAssert.datesAreEqual(new Date(2007, 3, 16), resDt, "Incorrect results adding to DAY field");
+
+				dt = new Date(2008, 0, 1);
+				var resDt = DateMath.add(dt, DateMath.DAY, 127);
+				DateAssert.datesAreEqual(new Date(2008, 4, 7), resDt, "Incorrect results adding 127 to DAY field");
+
+				dt = new Date(2008, 0, 1);
+				var resDt = DateMath.add(dt, DateMath.DAY, 366); // 2008 Leap Year
+				DateAssert.datesAreEqual(new Date(2009, 0 , 1), resDt, "Incorrect results adding 366 to DAY field");
 
 				dt = new Date(2007, 3, 12);
 				resDt = DateMath.add(dt, DateMath.MONTH, 5);
@@ -43,6 +52,10 @@
 				dt = new Date(2007, 3, 12);
 				resDt = DateMath.add(dt, DateMath.WEEK, 2);
 				DateAssert.datesAreEqual(new Date(2007, 3, 26), resDt, "Incorrect results adding to WEEK field");
+
+				dt = new Date(2007, 3, 12);
+				resDt = DateMath.add(dt, DateMath.WEEK, 52);
+				DateAssert.datesAreEqual(new Date(2008, 3, 10), resDt, "Incorrect results adding to 52 WEEKS to field");
 
 				// Rollover Tests
 				dt = new Date(2007, 3, 29);
@@ -68,6 +81,18 @@
 				var resDt = DateMath.subtract(dt, DateMath.DAY, 4);
 				DateAssert.datesAreEqual(new Date(2007, 3, 8), resDt, "Incorrect results subtracting from DAY field");
 
+				dt = new Date(2008, 0, 1);
+				var resDt = DateMath.subtract(dt, DateMath.DAY, 130);
+				DateAssert.datesAreEqual(new Date(2007, 7, 24), resDt, "Incorrect results subtracting 129 from DAY field");
+
+				dt = new Date(2008, 0, 1);
+				var resDt = DateMath.subtract(dt, DateMath.DAY, 365);
+				DateAssert.datesAreEqual(new Date(2007, 0 , 1), resDt, "Incorrect results subtracting 366 from DAY field");
+
+				dt = new Date(2008, 0, 1);
+				var resDt = DateMath.subtract(dt, DateMath.DAY, 1);
+				DateAssert.datesAreEqual(new Date(2007, 11 , 31), resDt, "Incorrect results subtracting 1 from DAY field");
+
 				dt = new Date(2007, 3, 12);
 				resDt = DateMath.subtract(dt, DateMath.MONTH, 2);
 				DateAssert.datesAreEqual(new Date(2007, 1, 12), resDt, "Incorrect results subtracting from MONTH field");
@@ -79,6 +104,10 @@
 				dt = new Date(2007, 3, 12);
 				resDt = DateMath.subtract(dt, DateMath.WEEK, 1);
 				DateAssert.datesAreEqual(new Date(2007, 3, 5), resDt, "Incorrect results subtracting from WEEK field");
+
+				dt = new Date(2007, 3, 12);
+				resDt = DateMath.subtract(dt, DateMath.WEEK, 52);
+				DateAssert.datesAreEqual(new Date(2006, 3, 13), resDt, "Incorrect results subtracting 52 WEEKS from field");
 
 				// Rollover Tests
 				dt = new Date(2007, 3, 3);
