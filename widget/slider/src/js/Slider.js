@@ -1118,5 +1118,5 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
 });
 
-YAHOO.augment(YAHOO.widget.Slider, YAHOO.util.EventProvider,true);
+YAHOO.augment(YAHOO.widget.Slider, YAHOO.util.EventProvider);
 
