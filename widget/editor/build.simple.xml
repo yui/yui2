@@ -8,14 +8,12 @@
     <property name="srcdir" value="${env.YUI_SRC_DIR}" />
     <property name="builddir" value="${env.YUI_BUILD_DIR}" />
     
-    <property file="${buildfile.dir}/build.properties" />
+    <property file="${buildfile.dir}/build.simple.properties" />
 
     <import file="${builddir}/buildproperties.xml" description="Shared Build Properties - tools, build paths etc." />
     <import file="${builddir}/targetlib.xml" description="Component Build Targets" />
 
-    <target name="customlocal">
-       <ant antfile="${buildfile.dir}/build.simple.xml" target="advanced_local_subtask" inheritAll="false" />
-    </target>    
+    <target name="advanced_local_subtask" depends="core, debug" />
 
     <target name="examples" description="Component Specific Over-ride">
         <echo>DOES NOT DO ANYTHING CURRENTLY</echo>

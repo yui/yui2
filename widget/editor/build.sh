@@ -16,14 +16,22 @@ wait
 echo "Copy source.."
 cp $src_dir/js/editor.js ./js/
 wait
+cp $src_dir/js/toolbar-button.js ./js/
+wait
 cp $src_dir/js/toolbar.js ./js/
 wait
+cp $src_dir/js/simple-editor.js ./js/
+wait
 cp $src_dir/css/editor-core.css ./css/
+wait
+cp $src_dir/css/editor-core.css ./css/simpleeditor-core.css
 wait
 mkdir -p ./css/skins/sam
 wait
 echo "Setup skinning"
 cat $src_dir/css/skin-sam.css | sed -e 's/sprite\.png/..\/..\/..\/..\/assets\/skins\/sam\/sprite\.png/' > ./css/skins/sam/editor-skin.css
+wait
+cp ./css/skins/sam/editor-skin.css ./css/skins/sam/simpleeditor-skin.css
 wait
 cp $src_dir/css/*.png ./css/skins/sam/
 wait
@@ -38,3 +46,15 @@ wait
 cd ../
 wait
 /usr/bin/ant all
+wait
+cd $YUI_SRC_DIR/build/editor/assets
+wait
+cp -f editor-core.css simpleeditor-core.css
+wait
+cd skins/sam
+wait
+cp -f editor-skin.css simpleeditor-skin.css
+wait
+cp -f editor.css simpleeditor.css
+wait
+date
