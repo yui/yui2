@@ -359,16 +359,15 @@ var D = YAHOO.util.Dom,
         /** 
         * @private
         * @method _handleMouseDown
-        * @param {Event} cev The CustomEvent.
         * @param {Event} ev A mouse event.
         * @description This method preps the autoRatio on MouseDown.
         */
-        _handleMouseDown: function(cev, ev) {
+        _handleMouseDown: function(ev) {
             if (D.getStyle(this._wrap, 'position') == 'absolute') {
                 this._positioned = true;
             }
-            if (ev && ev[0]) {
-                this._setAutoRatio(ev[0]);
+            if (ev) {
+                this._setAutoRatio(ev);
             }
         },
         /** 
@@ -429,12 +428,11 @@ var D = YAHOO.util.Dom,
         /** 
         * @private
         * @method _handleStartDrag
-        * @param {Event} ev A mouse event.
         * @param {Object} args The args passed from the CustomEvent.
         * @param {Object} dd The DragDrop object we are working with.
         * @description Resizes the proxy, sets up the DragDrop handlers, updates the status div and preps the cache
         */
-        _handleStartDrag: function(ev, args, dd) {
+        _handleStartDrag: function(args, dd) {
             var tar = dd.getDragEl();
             if (D.hasClass(tar, this.CSS_HANDLE)) {
                 if (D.getStyle(this._wrap, 'position') == 'absolute') {
@@ -692,9 +690,7 @@ var D = YAHOO.util.Dom,
                 el = this._proxy;
                 anim = false;
             }
-            if (this.get('autoRatio')) {
-                this._setAutoRatio(ev);
-            }
+            this._setAutoRatio(ev);
             if (this._positioned) {
                 if (this._proxy) {
                     t = this._cache.top - t;
@@ -866,105 +862,97 @@ var D = YAHOO.util.Dom,
         /** 
         * @private
         * @method _handle_for_br
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Bottom Right handle.
         */
-        _handle_for_br: function(ev, args) {
-            var newW = this._setWidth(args[0].e);
-            var newH = this._setHeight(args[0].e);
-            this.resize(args[0].e, newH, newW, 0, 0);
+        _handle_for_br: function(args) {
+            var newW = this._setWidth(args.e);
+            var newH = this._setHeight(args.e);
+            this.resize(args.e, newH, newW, 0, 0);
         },
         /** 
         * @private
         * @method _handle_for_bl
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Bottom Left handle.
         */
-        _handle_for_bl: function(ev, args) {
-            var newW = this._setWidth(args[0].e, true);
-            var newH = this._setHeight(args[0].e);
+        _handle_for_bl: function(args) {
+            var newW = this._setWidth(args.e, true);
+            var newH = this._setHeight(args.e);
             var l = (newW - this._cache.width);
-            this.resize(args[0].e, newH, newW, 0, l);
+            this.resize(args.e, newH, newW, 0, l);
         },
         /** 
         * @private
         * @method _handle_for_tl
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Top Left handle.
         */
-        _handle_for_tl: function(ev, args) {
-            var newW = this._setWidth(args[0].e, true);
-            var newH = this._setHeight(args[0].e, true);
+        _handle_for_tl: function(args) {
+            var newW = this._setWidth(args.e, true);
+            var newH = this._setHeight(args.e, true);
             var t = (newH - this._cache.height);
             var l = (newW - this._cache.width);
-            this.resize(args[0].e, newH, newW, t, l);
+            this.resize(args.e, newH, newW, t, l);
         },
         /** 
         * @private
         * @method _handle_for_tr
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Top Right handle.
         */
-        _handle_for_tr: function(ev, args) {
-            var newW = this._setWidth(args[0].e);
-            var newH = this._setHeight(args[0].e, true);
+        _handle_for_tr: function(args) {
+            var newW = this._setWidth(args.e);
+            var newH = this._setHeight(args.e, true);
             var t = (newH - this._cache.height);
-            this.resize(args[0].e, newH, newW, t, 0);
+            this.resize(args.e, newH, newW, t, 0);
         },
         /** 
         * @private
         * @method _handle_for_r
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Right handle.
         */
-        _handle_for_r: function(ev, args) {
+        _handle_for_r: function(args) {
             this._dds.r.setYConstraint(0,0);
-            var newW = this._setWidth(args[0].e);
-            var newH = this._setHeight(args[0].e);
-            this.resize(args[0].e, 0, newW, 0, 0);
+            var newW = this._setWidth(args.e);
+            var newH = this._setHeight(args.e);
+            this.resize(args.e, 0, newW, 0, 0);
         },
         /** 
         * @private
         * @method _handle_for_l
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Left handle.
         */
-        _handle_for_l: function(ev, args) {
+        _handle_for_l: function(args) {
             this._dds.l.setYConstraint(0,0);
-            var newW = this._setWidth(args[0].e, true);
+            var newW = this._setWidth(args.e, true);
             var l = (newW - this._cache.width);
-            this.resize(args[0].e, 0, newW, 0, l);
+            this.resize(args.e, 0, newW, 0, l);
         },
         /** 
         * @private
         * @method _handle_for_b
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Bottom handle.
         */
-        _handle_for_b: function(ev, args) {
+        _handle_for_b: function(args) {
             this._dds.b.setXConstraint(0,0);
-            var newH = this._setHeight(args[0].e);
-            this.resize(args[0].e, newH, 0, 0, 0);
+            var newH = this._setHeight(args.e);
+            this.resize(args.e, newH, 0, 0, 0);
         },
         /** 
         * @private
         * @method _handle_for_t
-        * @param {Event} ev The CustomEvent.
         * @param {Object} args The arguments from the CustomEvent.
         * @description Handles the sizes for the Top handle.
         */
-        _handle_for_t: function(ev, args) {
+        _handle_for_t: function(args) {
             this._dds.t.setXConstraint(0,0);
-            var newH = this._setHeight(args[0].e, true);
+            var newH = this._setHeight(args.e, true);
             var t = (newH - this._cache.height);
-            this.resize(args[0].e, newH, 0, t, 0);
+            this.resize(args.e, newH, 0, t, 0);
         },
         /** 
         * @private
