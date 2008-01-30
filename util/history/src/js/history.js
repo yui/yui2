@@ -625,7 +625,7 @@ YAHOO.util.History = (function () {
                 if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                     moduleObj = _modules[moduleName];
                     if (YAHOO.lang.hasOwnProperty(states, moduleName)) {
-                        currentState = states[moduleName];
+                        currentState = states[unescape(moduleName)];
                     } else {
                         currentState = unescape(moduleObj.currentState);
                     }
