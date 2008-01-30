@@ -2,7 +2,7 @@ YUI Library - History - Release Notes
 
 2.5.0
 
-  * Fixed bug involving the escaping/unescaping of state names.
+  * Fixed bug involving the escaping/unescaping of state and module names.
   * In initialize method, do case insensitive string comparison of tagName
     (See SourceForge Bug #1868730)
 
