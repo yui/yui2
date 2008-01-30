@@ -2,11 +2,19 @@
 
     /**
     * Dialog is an implementation of Panel that can be used to submit form 
-    * data. Built-in functionality for buttons with event handlers is included, 
-    * and button sets can be build dynamically, or the preincluded ones for 
-    * Submit/Cancel and OK/Cancel can be utilized. Forms can be processed in 3
-    * ways -- via an asynchronous Connection utility call, a simple form 
-    * POST or GET, or manually.
+    * data.
+    * <p>
+    * Built-in functionality for buttons with event handlers is included. 
+    * If the optional YUI Button dependancy is included on the page, the buttons
+    * created will be instances of YAHOO.widget.Button, otherwise regular HTML buttons
+    * will be created.
+    * </p>
+    * <p>
+    * Forms can be processed in 3 ways -- via an asynchronous Connection utility call, 
+    * a simple form POST or GET, or manually. The YUI Connection utility should be
+    * included if you're using the default "async" postmethod, but is not required if
+    * you're using any of the other postmethod values.
+    * </p>
     * @namespace YAHOO.widget
     * @class Dialog
     * @extends YAHOO.widget.Panel
@@ -128,23 +136,28 @@
         */
         initDefaultConfig: function () {
             Dialog.superclass.initDefaultConfig.call(this);
-        
+
             /**
             * The internally maintained callback object for use with the 
-            * Connection utility
+            * Connection utility. The format of the callback object is 
+            * similar to Connection Manager's callback object and is 
+            * simply passed through to Connection Manager when the async 
+            * request is made.
             * @property callback
             * @type Object
             */
             this.callback = {
-    
+
                 /**
                 * The function to execute upon success of the 
-                * Connection submission
+                * Connection submission (when the form does not
+                * contain a file input element).
+                * 
                 * @property callback.success
                 * @type Function
                 */
                 success: null,
-    
+
                 /**
                 * The function to execute upon failure of the 
                 * Connection submission
@@ -152,7 +165,27 @@
                 * @type Function
                 */
                 failure: null,
-    
+
+                /**
+                * The function to execute upon success of the 
+                * Connection submission, when the form contains
+                * a file input element in the form (the async request
+                * uses Connection Manager's file upload support)
+                *
+                * <p>
+                * <em>NOTE:</em> Connection manager will not
+                * invoke the success or failure handlers for file
+                * upload usecases. This will be the only callback
+                * invoked.
+                * </p>
+                * <p>
+                * For more information, see the <a href="http://developer.yahoo.com/yui/connection/#file">
+                * Connection Manager documenation on file uploads</a>.
+                * </p>
+                * @property callback.upload
+                * @type Function
+                */
+
                 /**
                 * The arbitraty argument or arguments to pass to the Connection 
                 * callback functions
@@ -160,7 +193,7 @@
                 * @type Object
                 */
                 argument: null
-    
+
             };
 
             // Add form dialog config properties //
@@ -199,11 +232,12 @@
             /**
             * Array of object literals, each containing a set of properties 
             * defining a button to be appended into the Dialog's footer.
+            * 
             * Each button object in the buttons array can have three properties:
             * <dt>text:</dt>
-            * <dd>The text that will display on the face of the button.  <em>
-            * Please note:</em> As of version 2.3, the text can include 
-            * HTML.</dd>
+            * <dd>The text that will display on the face of the button. The text can 
+            * include HTML, as long as it is compliant with HTML Button specifications.
+            * </dd>
             * <dt>handler:</dt>
             * <dd>Can be either:
             *     <ol>
@@ -216,13 +250,20 @@
             * when  the event fires.<br> <strong>obj:</strong> Object, 
             * &#47;&#47; An  object to pass back to the handler.<br> <strong>
             * scope:</strong>  Object &#47;&#47; The object to use for the 
-            * scope of the handler. <br> } </code> <br><em>Please note: this 
-            * functionality was added in version 2.3.</em></li>
+            * scope of the handler. <br> } </code> <br></li>
             *     </ol>
             * </dd>
             * <dt>isDefault:</dt>
             * <dd>An optional boolean value that specifies that a button 
             * should be highlighted and focused by default.</dd>
+            * 
+            * <p>
+            * <em>NOTE:</em>If the YUI Button Widget is included on the page, 
+            * the buttons created will be instances of YAHOO.widget.Button. 
+            * Otherwise, HTML Buttons (<code>&#60;BUTTON&#62;</code>) will be 
+            * created.
+            * </p>
+            * 
             * @config buttons
             * @type {Array|String}
             * @default "none"
