@@ -571,11 +571,11 @@ YAHOO.util.DragDropMgr = function() {
             var dc = this.dragCurrent;
             if (dc && dc.events.b4StartDrag) {
                 dc.b4StartDrag(x, y);
-                dc.b4StartDragEvent.fire({ x: x, y: y });
+                dc.fireEvent('b4StartDragEvent', { x: x, y: y });
             }
             if (dc && dc.events.startDrag) {
                 dc.startDrag(x, y);
-                dc.startDragEvent.fire({ x: x, y: y });
+                dc.fireEvent('startDragEvent', { x: x, y: y });
             }
             this.dragThreshMet = true;
         },
@@ -653,17 +653,17 @@ YAHOO.util.DragDropMgr = function() {
                     YAHOO.log("firing endDrag events", "info", "DragDropMgr");
                     if (dc.events.b4EndDrag) {
                         dc.b4EndDrag(e);
-                        dc.b4EndDragEvent.fire({ e: e });
+                        dc.fireEvent('b4EndDragEvent', { e: e });
                     }
                     if (dc.events.endDrag) {
                         dc.endDrag(e);
-                        dc.endDragEvent.fire({ e: e });
+                        dc.fireEvent('endDragEvent', { e: e });
                     }
                 }
                 if (dc.events.mouseUp) {
                     YAHOO.log("firing dragdrop onMouseUp event", "info", "DragDropMgr");
                     dc.onMouseUp(e);
-                    dc.mouseUpEvent.fire({ e: e });
+                    dc.fireEvent('mouseUpEvent', { e: e });
                 }
             }
 
@@ -724,11 +724,11 @@ YAHOO.util.DragDropMgr = function() {
                 if (this.dragThreshMet) {
                     if (dc && dc.events.b4Drag) {
                         dc.b4Drag(e);
-                        dc.b4DragEvent.fire({ e: e});
+                        dc.fireEvent('b4DragEvent', { e: e});
                     }
                     if (dc && dc.events.drag) {
                         dc.onDrag(e);
-                        dc.dragEvent.fire({ e: e});
+                        dc.fireEvent('dragEvent', { e: e});
                     }
                     if (dc) {
                         this.fireEvents(e, false);
@@ -856,7 +856,7 @@ YAHOO.util.DragDropMgr = function() {
                 this.interactionInfo.validDrop = false;
                 if (dc.events.invalidDrop) {
                     dc.onInvalidDrop(e);
-                    dc.invalidDropEvent.fire({ e: e });
+                    dc.fireEvent('invalidDropEvent', { e: e });
                 }
             }
 
@@ -871,27 +871,27 @@ YAHOO.util.DragDropMgr = function() {
                         b4 = 'b4Drag' + type,
                         cev = 'drag' + type + 'Event',
                         check = 'drag' + type;
-
+                    
                     if (this.mode) {
                         YAHOO.log(dc.id + ' ' + ev + ': ' + tmp, "info", "DragDropMgr");
                         if (dc.events[b4]) {
                             dc[b4](e, tmp, inGroups);
-                            dc[b4 + 'Event'].fire({ event: e, info: tmp, group: inGroups });
+                            dc.fireEvent(b4 + 'Event', { event: e, info: tmp, group: inGroups });
                         }
                         if (dc.events[check]) {
                             dc[ev](e, tmp, inGroups);
-                            dc[cev].fire({ event: e, info: tmp, group: inGroups });
+                            dc.fireEvent(cev, { event: e, info: tmp, group: inGroups });
                         }
                     } else {
                         for (var b = 0, len = tmp.length; b < len; ++b) {
                             YAHOO.log(dc.id + ' ' + ev + ': ' + tmp[b].id, "info", "DragDropMgr");
                             if (dc.events[b4]) {
                                 dc[b4](e, tmp[b].id, inGroups[0]);
-                                dc[b4 + 'Event'].fire({ event: e, info: tmp[b].id, group: inGroups[0] });
+                                dc.fireEvent(b4 + 'Event', { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
                             if (dc.events[check]) {
                                 dc[ev](e, tmp[b].id, inGroups[0]);
-                                dc[cev].fire({ event: e, info: tmp[b].id, group: inGroups[0] });
+                                dc.fireEvent(cev, { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
                         }
                     }

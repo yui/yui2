@@ -567,11 +567,11 @@ YAHOO.util.DragDropMgr = function() {
             var dc = this.dragCurrent;
             if (dc && dc.events.b4StartDrag) {
                 dc.b4StartDrag(x, y);
-                dc.b4StartDragEvent.fire({ x: x, y: y });
+                dc.fireEvent('b4StartDragEvent', { x: x, y: y });
             }
             if (dc && dc.events.startDrag) {
                 dc.startDrag(x, y);
-                dc.startDragEvent.fire({ x: x, y: y });
+                dc.fireEvent('startDragEvent', { x: x, y: y });
             }
             this.dragThreshMet = true;
         },
@@ -644,16 +644,16 @@ YAHOO.util.DragDropMgr = function() {
                 if (this.dragThreshMet) {
                     if (dc.events.b4EndDrag) {
                         dc.b4EndDrag(e);
-                        dc.b4EndDragEvent.fire({ e: e });
+                        dc.fireEvent('b4EndDragEvent', { e: e });
                     }
                     if (dc.events.endDrag) {
                         dc.endDrag(e);
-                        dc.endDragEvent.fire({ e: e });
+                        dc.fireEvent('endDragEvent', { e: e });
                     }
                 }
                 if (dc.events.mouseUp) {
                     dc.onMouseUp(e);
-                    dc.mouseUpEvent.fire({ e: e });
+                    dc.fireEvent('mouseUpEvent', { e: e });
                 }
             }
 
@@ -707,11 +707,11 @@ YAHOO.util.DragDropMgr = function() {
                 if (this.dragThreshMet) {
                     if (dc && dc.events.b4Drag) {
                         dc.b4Drag(e);
-                        dc.b4DragEvent.fire({ e: e});
+                        dc.fireEvent('b4DragEvent', { e: e});
                     }
                     if (dc && dc.events.drag) {
                         dc.onDrag(e);
-                        dc.dragEvent.fire({ e: e});
+                        dc.fireEvent('dragEvent', { e: e});
                     }
                     if (dc) {
                         this.fireEvents(e, false);
@@ -837,7 +837,7 @@ YAHOO.util.DragDropMgr = function() {
                 this.interactionInfo.validDrop = false;
                 if (dc.events.invalidDrop) {
                     dc.onInvalidDrop(e);
-                    dc.invalidDropEvent.fire({ e: e });
+                    dc.fireEvent('invalidDropEvent', { e: e });
                 }
             }
 
@@ -852,25 +852,25 @@ YAHOO.util.DragDropMgr = function() {
                         b4 = 'b4Drag' + type,
                         cev = 'drag' + type + 'Event',
                         check = 'drag' + type;
-
+                    
                     if (this.mode) {
                         if (dc.events[b4]) {
                             dc[b4](e, tmp, inGroups);
-                            dc[b4 + 'Event'].fire({ event: e, info: tmp, group: inGroups });
+                            dc.fireEvent(b4 + 'Event', { event: e, info: tmp, group: inGroups });
                         }
                         if (dc.events[check]) {
                             dc[ev](e, tmp, inGroups);
-                            dc[cev].fire({ event: e, info: tmp, group: inGroups });
+                            dc.fireEvent(cev, { event: e, info: tmp, group: inGroups });
                         }
                     } else {
                         for (var b = 0, len = tmp.length; b < len; ++b) {
                             if (dc.events[b4]) {
                                 dc[b4](e, tmp[b].id, inGroups[0]);
-                                dc[b4 + 'Event'].fire({ event: e, info: tmp[b].id, group: inGroups[0] });
+                                dc.fireEvent(b4 + 'Event', { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
                             if (dc.events[check]) {
                                 dc[ev](e, tmp[b].id, inGroups[0]);
-                                dc[cev].fire({ event: e, info: tmp[b].id, group: inGroups[0] });
+                                dc.fireEvent(cev, { event: e, info: tmp[b].id, group: inGroups[0] });
                             }
                         }
                     }
@@ -1474,30 +1474,13 @@ YAHOO.util.DragDrop.prototype = {
      * @type object
      */
     events: null,
-    // wrapper for EventProvider.unsubscribe
-    // to create events on the fly    
-    unsubscribe: function(type, callback, scope, override) {
-        if (this.events[type.substring(0, (type.length - 5))]) {
-            this[type].unsubscribe(callback, scope, override);
-        }
-    },
-    // wrapper for EventProvider.subscribe
-    // to create events on the fly    
-    subscribe: function(type, callback, scope, override) {
-        if (this.events[type.substring(0, (type.length - 5))]) {
-            this[type].subscribe(callback, scope, override);
-        }
-    },
-    // wrapper for EventProvider.subscribe
-    // to create events on the fly    
+    /**
+    * @method on
+    * @description Shortcut for EventProvider.subscribe, see <a href="YAHOO.util.EventProvider.html#subscribe">YAHOO.util.EventProvider.subscribe</a>
+    */
     on: function() {
         this.subscribe.apply(this, arguments);
     },
-    // wrapper for EventProvider.subscribe
-    // to create events on the fly    
-    addListener: function() {
-        this.subscribe.apply(this, arguments);
-    },    
     /**
      * The id of the element associated with this object.  This is what we 
      * refer to as the "linked element" because the size and position of 
@@ -1976,9 +1959,9 @@ YAHOO.util.DragDrop.prototype = {
 
         // Event.on(this.id, "selectstart", Event.preventDefault);
         for (var i in this.events) {
-            var type = i + 'Event';
-            this[type] = new YAHOO.util.CustomEvent(type, this);
+            this.createEvent(i + 'Event');
         }
+        
     },
 
     /**
@@ -2281,11 +2264,11 @@ YAHOO.util.DragDrop.prototype = {
         // firing the mousedown events prior to calculating positions
         var b4Return = this.b4MouseDown(e);
         if (this.events.b4MouseDown) {
-            b4Return = this.b4MouseDownEvent.fire(e);
+            b4Return = this.fireEvent('b4MouseDownEvent', e);
         }
         var mDownReturn = this.onMouseDown(e);
         if (this.events.mouseDown) {
-            mDownReturn = this.mouseDownEvent.fire(e);
+            mDownReturn = this.fireEvent('mouseDownEvent', e);
         }
 
         if ((b4Return === false) || (mDownReturn === false)) {
@@ -2673,6 +2656,7 @@ YAHOO.util.DragDrop.prototype = {
     }
 
 };
+YAHOO.augment(YAHOO.util.DragDrop, YAHOO.util.EventProvider);
 
 /**
 * @event mouseDownEvent
