@@ -19,7 +19,6 @@ var Dom = YAHOO.util.Dom,
      * @param {Object} attrs Object liternal containing configuration parameters.
     */
     var Crop = function(el, config) {
-        YAHOO.log('Initializing', 'log', 'ImageCropper');
         var oConfig = {
             element: el,
             attributes: config || {}
@@ -127,7 +126,6 @@ var Dom = YAHOO.util.Dom,
         * @description Creates the wrapper element used to wrap the image
         */
         _createWrap: function() {
-            YAHOO.log('Creating the wrap element', 'log', 'ImageCropper');
             this._wrap = document.createElement('div');
             this._wrap.id = this.get('element').id + '_wrap';
             this._wrap.className = this.CSS_MAIN;
@@ -149,7 +147,6 @@ var Dom = YAHOO.util.Dom,
         * @description Creates the mask element used to mask the image
         */
         _createMask: function() {
-            YAHOO.log('Creating the Mask', 'log', 'ImageCropper');
             this._mask = document.createElement('div');
             this._mask.className = this.CSS_MASK;
             this._wrap.appendChild(this._mask);
@@ -161,7 +158,6 @@ var Dom = YAHOO.util.Dom,
         * @description Creates the resize element and the instance of the Resize Utility
         */
         _createResize: function() {
-            YAHOO.log('Creating the Resize element', 'log', 'ImageCropper');
             this._resizeEl = document.createElement('div');
             this._resizeEl.className = YAHOO.util.Resize.prototype.CSS_RESIZE;
             this._resizeEl.style.position = 'absolute';
@@ -226,7 +222,6 @@ var Dom = YAHOO.util.Dom,
         * @description Moves the resize element based on the arrow keys
         */
         _moveEl: function(dir, inc) {
-            YAHOO.log('Moving the element', 'log', 'ImageCropper');
             var t = 0, l = 0,
                 region = this._setConstraints(),
                 resize = true;
@@ -263,7 +258,6 @@ var Dom = YAHOO.util.Dom,
             }
 
             if (resize) {
-                YAHOO.log('Moving via Key Listener: ' + dir, 'log', 'ImageCropper');
                 this._resizeEl.style.left = (parseInt(this._resizeEl.style.left, 10) - l) + 'px';
                 this._resizeEl.style.top = (parseInt(this._resizeEl.style.top, 10) - t) + 'px';
                 this.fireEvent('moveEvent', { target: 'keypress' });
@@ -364,7 +358,6 @@ var Dom = YAHOO.util.Dom,
         * @description Sets the background image position to the top and left position
         */
         _setBackgroundPosition: function(l, t) {
-            YAHOO.log('Setting the image background position of the mask to: (' + l + ', ' + t + ')', 'log', 'ImageCropper');
             var mask = this._resize.getWrapEl().firstChild;
             var pos = l + 'px ' + t + 'px';
             mask.style.backgroundPosition = pos;
@@ -377,7 +370,6 @@ var Dom = YAHOO.util.Dom,
         * @description Sets the background image of the resize element
         */
         _setBackgroundImage: function(url) {
-            YAHOO.log('Setting the background image', 'log', 'ImageCropper');
             var mask = this._resize.getWrapEl().firstChild;
             this._image = url;
             mask.style.backgroundImage = 'url(' + url + '#)';
@@ -414,11 +406,9 @@ var Dom = YAHOO.util.Dom,
              }
 
              if (maxH) {
-                YAHOO.log('Setting the maxHeight on the resize object to: ' + maxH, 'log', 'ImageCropper');
                  this._resize.set('maxHeight', maxH);
              }
              if (maxW) {
-                YAHOO.log('Setting the maxWidth on the resize object to: ' + maxW, 'log', 'ImageCropper');
                  this._resize.set('maxWidth', maxW);
              }
 
@@ -432,7 +422,6 @@ var Dom = YAHOO.util.Dom,
         * @description Set the DragDrop constraints to keep the element inside the crop area.
         */
         _setConstraints: function(inside) {
-            YAHOO.log('Setting Contraints', 'log', 'ImageCropper');
             var resize = this._resize;
             resize.dd.resetConstraints();
             var height = parseInt(resize.get('height'), 10),
@@ -472,7 +461,6 @@ var Dom = YAHOO.util.Dom,
             resize.set('maxY', region.bottom);
             resize.set('maxX', region.right);
 
-            YAHOO.log('Constraints: ' + top + ',' + right + ',' + bottom + ',' + left, 'log', 'ImageCropper');
 
             return {
                 top: top,
@@ -497,12 +485,10 @@ var Dom = YAHOO.util.Dom,
                 width: this._resize._cache.width,
                 image: this._image
             };
-            YAHOO.log('Getting the crop coordinates: ' + Lang.dump(coords), 'log', 'ImageCropper');
             return coords;
         },
 
         reset: function() {
-            YAHOO.log('Resetting the control', 'log', 'ImageCropper');
             this._resize.resize(null, this.get('initHeight'), this.get('initWidth'), 0, 0, true);
             this._resizeEl.style.top = this.get('initialXY')[0] + 'px';
             this._resizeEl.style.left = this.get('initialXY')[1] + 'px';
@@ -567,7 +553,6 @@ var Dom = YAHOO.util.Dom,
         * @description The ImageCropper class's initialization method
         */        
         init: function(p_oElement, p_oAttributes) {
-            YAHOO.log('init', 'info', 'ImageCropper');
             Crop.superclass.init.call(this, p_oElement, p_oAttributes);
 
             var id = p_oElement;
@@ -576,7 +561,6 @@ var Dom = YAHOO.util.Dom,
                 if (id.tagName && (id.tagName.toLowerCase() == 'img')) {
                     id = Dom.generateId(id);                    
                 } else {
-                    YAHOO.log('Element is not an image.', 'error', 'ImageCropper');
                     return false;
                 }
             } else {
@@ -584,7 +568,6 @@ var Dom = YAHOO.util.Dom,
                 if (el.tagName && el.tagName.toLowerCase() == 'img') {
                     //All good
                 } else {
-                    YAHOO.log('Element is not an image.', 'error', 'ImageCropper');
                     return false;
                 }
             }
@@ -751,7 +734,6 @@ var Dom = YAHOO.util.Dom,
         * @description Destroys the ImageCropper object and all of it's elements & listeners.
         */        
         destroy: function() {
-            YAHOO.log('Destroying the ImageCropper', 'info', 'ImageCropper');
             this._resize.destroy();
             this._resizeEl.parentNode.removeChild(this._resizeEl);
             this._mask.parentNode.removeChild(this._mask);
@@ -804,3 +786,4 @@ var Dom = YAHOO.util.Dom,
 
 })();
 
+YAHOO.register("imagecropper", YAHOO.widget.ImageCropper, {version: "@VERSION@", build: "@BUILD@"});

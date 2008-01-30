@@ -1619,3 +1619,4 @@ var D = YAHOO.util.Dom,
 
 })();
 
+YAHOO.register("resize", YAHOO.util.Resize, {version: "@VERSION@", build: "@BUILD@"});

@@ -804,3 +804,4 @@ var Dom = YAHOO.util.Dom,
 
 })();
 
+YAHOO.register("imagecropper", YAHOO.widget.ImageCropper, {version: "@VERSION@", build: "@BUILD@"});
