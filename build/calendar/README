@@ -1,5 +1,17 @@
 Calendar Release Notes 
 
+*** version 2.5.0 *** 
+
++ Prevent default event handling in CalendarNavigator enter key 
+  listener, to prevent automatic form submission when using Calendar
+  inside a form.
+
++ Added workaround to DateMath.add and subtract for Safari 2 (webkit) 
+  bug in Date.setDate(n) which doesn't handle value of n less than -128 
+  or greater than 127 correctly.
+
+  See: http://brianary.blogspot.com/2006/03/safari-date-bug.html
+
 *** version 2.4.0 *** 
 
 + Added CalendarNavigator (year selector) feature to allow the user to 
@@ -84,7 +96,7 @@ Calendar Release Notes
 
 *** version 2.3.1 *** 
 
-- Changed Calendar/CalendarGroup to render an empty title bar element 
++ Changed Calendar/CalendarGroup to render an empty title bar element 
   when "close" is set to true, but "title" has not been set, to allow Sam 
   Skin to render a title bar correctly. 
 

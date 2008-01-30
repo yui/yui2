@@ -1,5 +1,51 @@
 Container Release Notes
 
+*** version 2.5.0 ***
+
+Fixed the following bugs:
+-------------------------
+
++ We now add the text resize monitor iframe to the DOM in a timeout,
+  to help alleviate the perpetual loading indicator seen in 
+  Firefox 2.0.0.8 (Gecko 1.8.1.8) and above on Windows.
+
++ Changed the closing script tag string used in the resize monitor, to 
+  allow container-min.js, container_core-min.js content to be used inline.
+
++ Fixed problem with underlay size being too short in IE6 when setting up
+  an initially visible Dialog with buttons.
+  
++ Removed overflow:auto applied to the modal mask for all browsers other 
+  than gecko/MacOS to help avoid the "missing text cursor" Gecko bug. 
+  Overflow:auto is still applied to for Gecko/MacOS to help avoid 
+  scrollbar bleedthrough, another Gecko bug (discussed in Container's 
+  known issues section).
+  
+Added the following features:
+-----------------------------
+
++ Added a "hideaftersubmit" config property to Dialog, to allow the end
+  user to configure whether or not the Dialog should be hidden after
+  it has been submitted. By default it is set to false, to provide 
+  backwards compatibility.
+  
++ Added contextMouseOverEvent, contextMouseOutEvent and 
+  contextTriggerEvent events to Tooltip, which provide access to the 
+  context element when the user mouses over a context element, mouses 
+  out of a context element, and before a tooltip is about to be 
+  triggered (displayed) for a context element. See the API docs for
+  these events for futher details.
+  
++ Added a "disabled" config property to Tooltip, to allow the user
+  to dynamically disable a tooltip.
+  
+Changes:
+--------
+
++ Optimized constraintoviewport handling for Overlays which haven't
+  been specifically positioned, so that the constraint checks aren't
+  made before every show.
+
 *** version 2.4.0 ***
 
 Fixed the following bugs:
