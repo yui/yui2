@@ -62,30 +62,13 @@ YAHOO.util.DragDrop.prototype = {
      * @type object
      */
     events: null,
-    // wrapper for EventProvider.unsubscribe
-    // to create events on the fly    
-    unsubscribe: function(type, callback, scope, override) {
-        if (this.events[type.substring(0, (type.length - 5))]) {
-            this[type].unsubscribe(callback, scope, override);
-        }
-    },
-    // wrapper for EventProvider.subscribe
-    // to create events on the fly    
-    subscribe: function(type, callback, scope, override) {
-        if (this.events[type.substring(0, (type.length - 5))]) {
-            this[type].subscribe(callback, scope, override);
-        }
-    },
-    // wrapper for EventProvider.subscribe
-    // to create events on the fly    
+    /**
+    * @method on
+    * @description Shortcut for EventProvider.subscribe, see <a href="YAHOO.util.EventProvider.html#subscribe">YAHOO.util.EventProvider.subscribe</a>
+    */
     on: function() {
         this.subscribe.apply(this, arguments);
     },
-    // wrapper for EventProvider.subscribe
-    // to create events on the fly    
-    addListener: function() {
-        this.subscribe.apply(this, arguments);
-    },    
     /**
      * The id of the element associated with this object.  This is what we 
      * refer to as the "linked element" because the size and position of 
@@ -565,9 +548,9 @@ YAHOO.util.DragDrop.prototype = {
 
         // Event.on(this.id, "selectstart", Event.preventDefault);
         for (var i in this.events) {
-            var type = i + 'Event';
-            this[type] = new YAHOO.util.CustomEvent(type, this);
+            this.createEvent(i + 'Event');
         }
+        
     },
 
     /**
@@ -889,11 +872,11 @@ YAHOO.util.DragDrop.prototype = {
         // firing the mousedown events prior to calculating positions
         var b4Return = this.b4MouseDown(e);
         if (this.events.b4MouseDown) {
-            b4Return = this.b4MouseDownEvent.fire(e);
+            b4Return = this.fireEvent('b4MouseDownEvent', e);
         }
         var mDownReturn = this.onMouseDown(e);
         if (this.events.mouseDown) {
-            mDownReturn = this.mouseDownEvent.fire(e);
+            mDownReturn = this.fireEvent('mouseDownEvent', e);
         }
 
         if ((b4Return === false) || (mDownReturn === false)) {
@@ -1309,6 +1292,7 @@ this.logger.log("clickValidator returned false, drag not initiated");
     }
 
 };
+YAHOO.augment(YAHOO.util.DragDrop, YAHOO.util.EventProvider);
 
 /**
 * @event mouseDownEvent
