@@ -199,6 +199,8 @@ YAHOO.util.ImageLoader.group.prototype.registerSrcImage = function(domId, url, w
  * @method registerPngBgImage
  * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
+ * @param {Object}  ailProps The AlphaImageLoader properties to be set for the image
+ *                    Valid properties are 'sizingMethod' and 'enabled'
  * @return {Object}	pngBgImgObj that was registered, for modifying any attributes in the object
  */
 YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url, ailProps) {
