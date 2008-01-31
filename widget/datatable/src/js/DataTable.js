@@ -79,6 +79,17 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // but *before* table is populated with data
     DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
 
+    // HACK: Set sortedBy values for backward compatibility
+    var oSortedBy = this.get("sortedBy");
+    if(oSortedBy) {
+        if(oSortedBy.dir == "desc") {
+            this._configs.sortedBy.value.dir = DT.CLASS_DESC;
+        }
+        else if(oSortedBy.dir == "asc") {
+            this._configs.sortedBy.value.dir = DT.CLASS_ASC;
+        }
+    }
+
     //HACK: Set the paginator values.  Attribute doesn't afford for merging
     // obj value's keys.  It's all or nothing.  Merge in provided keys.
     if(this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
@@ -1490,7 +1501,7 @@ initAttributes : function(oConfigs) {
             }
         }
     });
-
+    
     /**
     * @attribute paginator
     * @description Stores an instance of Pag, or (for
