@@ -5826,8 +5826,10 @@
 (function () {
 
     /**
+    * <p>
     * Dialog is an implementation of Panel that can be used to submit form 
     * data.
+    * </p>
     * <p>
     * Built-in functionality for buttons with event handlers is included. 
     * If the optional YUI Button dependancy is included on the page, the buttons
@@ -5992,16 +5994,16 @@
                 failure: null,
 
                 /**
+                 *<p>
                 * The function to execute upon success of the 
                 * Connection submission, when the form contains
-                * a file input element in the form (the async request
-                * uses Connection Manager's file upload support)
-                *
+                * a file input element.
+                * </p>
                 * <p>
                 * <em>NOTE:</em> Connection manager will not
-                * invoke the success or failure handlers for file
-                * upload usecases. This will be the only callback
-                * invoked.
+                * invoke the success or failure handlers for the file
+                * upload use case. This will be the only callback
+                * handler invoked.
                 * </p>
                 * <p>
                 * For more information, see the <a href="http://developer.yahoo.com/yui/connection/#file">
@@ -6070,9 +6072,9 @@
             * button is clicked.  (In this case scope of this function is 
             * always its Dialog instance.)</li>
             *         <li>An object literal representing the code to be 
-            * executed when the button is clicked.  Format:<br> <code> {<br>  
+            * executed when the button is clicked.  Format:<br> <code> {<br>
             * <strong>fn:</strong> Function,   &#47;&#47; The handler to call 
-            * when  the event fires.<br> <strong>obj:</strong> Object, 
+            * when  the event fires.<br> <strong>obj:</strong> Object,
             * &#47;&#47; An  object to pass back to the handler.<br> <strong>
             * scope:</strong>  Object &#47;&#47; The object to use for the 
             * scope of the handler. <br> } </code> <br></li>
@@ -6082,12 +6084,10 @@
             * <dd>An optional boolean value that specifies that a button 
             * should be highlighted and focused by default.</dd>
             * 
-            * <p>
             * <em>NOTE:</em>If the YUI Button Widget is included on the page, 
             * the buttons created will be instances of YAHOO.widget.Button. 
             * Otherwise, HTML Buttons (<code>&#60;BUTTON&#62;</code>) will be 
             * created.
-            * </p>
             * 
             * @config buttons
             * @type {Array|String}
@@ -6107,9 +6107,9 @@
         */
         initEvents: function () {
             Dialog.superclass.initEvents.call(this);
-        
+
             var SIGNATURE = CustomEvent.LIST;
-        
+
             /**
             * CustomEvent fired prior to submission
             * @event beforeSubmitEvent
