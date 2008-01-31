@@ -17,6 +17,7 @@ Changed APIs
     * onDataReturnInitializeTable(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
     * onDataReturnInsertRows(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
     * sortedBy.dir - Use CLASS_ASC or CLASS_DESC instead of "asc" and "desc" strings.
+    * Scrolling must be enabled via the configs "scrollable", "width", and "height". CSS should no longer be used to set width or height on scrollable tables.    
 
 Deprecated APIs
 

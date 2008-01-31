@@ -2197,7 +2197,17 @@ _syncColWidths : function() {
     var allKeys = this._oColumnSet.keys;
     var elRow = this.getFirstTrEl();
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-        var elTh, elTd, elThLiner, elTdLiner, newWidth, oChain = this._oChain;
+        var oChain = this._oChain,
+            elTh, elTd, elThLiner, elTdLiner, newWidth;
+        
+        // Temporarily unsnap container since it causes inaccurate calculations
+        var bUnsnap = false;
+        if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
+            bUnsnap = true;
+            this._elTheadContainer.style.width = "";
+            this._elTbodyContainer.style.width = "";
+        }
+
         // Only proceed for Columns without widths
         for(var i=0,rowsLen=elRow.cells.length; i<rowsLen; i++) {
             if(!allKeys[i].width) {
@@ -2205,14 +2215,6 @@ _syncColWidths : function() {
                 elTh = allKeys[i].getThEl();
                 elTd = elRow.cells[i];
                 if(elTh.offsetWidth !== elTd.offsetWidth) {
-                    // Temporarily unsnap container when it causes inaccurate calculations
-                    var bUnsnap = false;
-                    if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
-                        bUnsnap = true;
-                        this._elTheadContainer.style.width = "";
-                        this._elTbodyContainer.style.width = "";     
-                    }
-
                     // Column header is wider - bump the body cells up
                     if(elTh.offsetWidth > elTd.offsetWidth) {
                         elTd.style.width = elTh.offsetWidth + "px";
@@ -2247,22 +2249,17 @@ _syncColWidths : function() {
                         iterations:this._elTbody.rows.length,
                         argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
                     });
-
-                    // Resnap unsnapped containers
-                    if(bUnsnap) {
-                        oChain.add({
-                            method: function(oArg) {
-                                // Resnap containers
-                                var sWidth = this.get("width");
-                                this._elTheadContainer.style.width = sWidth;
-                                this._elTbodyContainer.style.width = sWidth;     
-                            },
-                            scope: this
-                        });                    
-                    }
                 }
             }
         }
+        
+        // Resnap unsnapped containers
+        if(bUnsnap) {
+            var sWidth = this.get("width");
+            this._elTheadContainer.style.width = sWidth;
+            this._elTbodyContainer.style.width = sWidth;     
+        }
+        
         oChain.run();
     }
     this._syncScrollPadding();
