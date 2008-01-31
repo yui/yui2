@@ -5,7 +5,7 @@
  *
  * @module imageloader
  * @namespace YAHOO.util
- * @experimental
+ * @beta
  */
 
 if (typeof(YAHOO.util.ImageLoader) == 'undefined') {
@@ -63,6 +63,15 @@ YAHOO.util.ImageLoader.group = function(trigEl, trigAct, timeout) {
 	this._triggers = [];
 
 	/**
+	 * Collection of custom-event triggers for this group.
+	 * Keeps track of each trigger's event object and event-listener-callback "fetch" function
+	 * @property _customTriggers
+	 * @private
+	 * @type Array
+	 */
+	this._customTriggers = [];
+
+	/**
 	 * Flag to check if images are above the fold. If foldConditional is true, the group will check each of its image locations at page load. If any part of the image is within the client viewport, the image is displayed immediately
 	 * @property foldConditional
 	 * @type Boolean
@@ -113,6 +122,25 @@ YAHOO.util.ImageLoader.group.prototype.addTrigger = function(trigEl, trigAct) {
 	};
 	this._triggers.push([trigEl, trigAct, wrappedFetch]);
 	YAHOO.util.Event.addListener(trigEl, trigAct, wrappedFetch, this, true);
+};
+
+/**
+ * Adds a custom event trigger to the group.
+ * @method addCustomTrigger
+ * @param {Object} event A YAHOO.util.CustomEvent object
+ */
+YAHOO.util.ImageLoader.group.prototype.addCustomTrigger = function(event) {
+	// make sure we're dealing with a CustomEvent object
+	if (! event || ! event instanceof YAHOO.util.CustomEvent) {
+		return;
+	}
+
+	// see comment in addTrigger()
+	var wrappedFetch = function() {
+		this.fetch();
+	};
+	this._customTriggers.push([event, wrappedFetch]);
+	event.subscribe(wrappedFetch, this, true);
 };
 
 /**
@@ -171,10 +199,12 @@ YAHOO.util.ImageLoader.group.prototype.registerSrcImage = function(domId, url, w
  * @method registerPngBgImage
  * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
+ * @param {Object}  ailProps The AlphaImageLoader properties to be set for the image
+ *                    Valid properties are 'sizingMethod' and 'enabled'
  * @return {Object}	pngBgImgObj that was registered, for modifying any attributes in the object
  */
-YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url) {
-	this._imgObjs[domId] = new YAHOO.util.ImageLoader.pngBgImgObj(domId, url);
+YAHOO.util.ImageLoader.group.prototype.registerPngBgImage = function(domId, url, ailProps) {
+	this._imgObjs[domId] = new YAHOO.util.ImageLoader.pngBgImgObj(domId, url, ailProps);
 	return this._imgObjs[domId];
 };
 
@@ -187,8 +217,12 @@ YAHOO.util.ImageLoader.group.prototype.fetch = function() {
 
 	clearTimeout(this._timeout);
 	// remove all listeners
-	for (var i=0; i < this._triggers.length; i++) {
+	for (var i=0, len = this._triggers.length; i < len; i++) {
 		YAHOO.util.Event.removeListener(this._triggers[i][0], this._triggers[i][1], this._triggers[i][2]);
+	}
+	// remove custom event subscriptions
+	for (var i=0, len = this._customTriggers.length; i < len; i++) {
+		this._customTriggers[i][0].unsubscribe(this._customTriggers[i][1], this);
 	}
 
 	// fetch whatever we need to by className
@@ -227,7 +261,7 @@ YAHOO.util.ImageLoader.group.prototype._foldCheck = function() {
 	// and by class
 	if (this.className) {
 		this._classImageEls = YAHOO.util.Dom.getElementsByClassName(this.className);
-		for (var i=0; i < this._classImageEls.length; i++) {
+		for (var i=0, len = this._classImageEls.length; i < len; i++) {
 			var elPos = YAHOO.util.Dom.getXY(this._classImageEls[i]);
 			if (elPos[1] < hLimit && elPos[0] < wLimit) {
 				YAHOO.log('Image with id "' + this._classImageEls[i].id + '" is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)', 'info', 'imageloader');
@@ -411,9 +445,19 @@ YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
  * @extends YAHOO.util.ImageLoader.imgObj
  * @param {String}	domId	HTML DOM id of the image element
  * @param {String}	url	URL for the image
+ * @param {Object}  ailProps The AlphaImageLoader properties to be set for the image
+ *                    Valid properties are 'sizingMethod' and 'enabled'
  */
-YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url) {
+YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url, ailProps) {
 	YAHOO.util.ImageLoader.pngBgImgObj.superclass.constructor.call(this, domId, url);
+
+	/**
+	 * AlphaImageLoader properties to be set for the image.
+	 * Valid properties are "sizingMethod" and "enabled".
+	 * @property props
+	 * @type Object
+	 */
+	this.props = ailProps || {};
 };
 
 YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.imgObj);
@@ -427,7 +471,9 @@ YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.img
  */
 YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
 	if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
-		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="scale")';
+		var sizingMethod = (YAHOO.lang.isUndefined(this.props.sizingMethod)) ? 'scale' : this.props.sizingMethod;
+		var enabled = (YAHOO.lang.isUndefined(this.props.enabled)) ? 'true' : this.props.enabled;
+		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="' + sizingMethod + '", enabled="' + enabled + '")';
 	}
 	else {
 		el.style.backgroundImage = "url('" + this.url + "')";
