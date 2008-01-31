@@ -116,6 +116,16 @@
                 h = parseInt(this.getStyle('height'), 10);
                 w = parseInt(this.getStyle('width'), 10);
             }
+            if (this.get('minWidth')) {
+                if (w < this.get('minWidth')) {
+                    w = this.get('minWidth');
+                }
+            }
+            if (this.get('minHeight')) {
+                if (h < this.get('minHeight')) {
+                    h = this.get('minHeight');
+                }
+            }
             if (set) {
                 Dom.setStyle(this._doc, 'height', h + 'px');
                 Dom.setStyle(this._doc, 'width', w + 'px');
@@ -485,8 +495,7 @@
         render: function() {
             YAHOO.log('Render', 'info', 'Layout');
             this._stamp();
-            var el = this.get('element'),
-                self = this;
+            var el = this.get('element');
             if (el && el.tagName && (el.tagName.toLowerCase() == 'body')) {
                 this._isBody = true;
                 Dom.addClass(document.body, 'yui-layout');
@@ -540,8 +549,28 @@
             });
 
             /**
+            * @config minHeight
+            * @description The minimum height in pixels
+            * @type Number
+            */
+            this.setAttributeConfig('minHeight', {
+                value: attr.minHeight || false,
+                validator: YAHOO.lang.isNumber
+            });
+
+            /**
+            * @config minWidth
+            * @description The minimum width in pixels
+            * @type Number
+            */
+            this.setAttributeConfig('minWidth', {
+                value: attr.minWidth || false,
+                validator: YAHOO.lang.isNumber
+            });
+
+            /**
             * @config height
-            * @description The height in pixels to the the layout to
+            * @description The height in pixels
             * @type Number
             */
             this.setAttributeConfig('height', {
@@ -554,7 +583,7 @@
 
             /**
             * @config width
-            * @description The width in pixels to the the layout to
+            * @description The width in pixels
             * @type Number
             */
             this.setAttributeConfig('width', {

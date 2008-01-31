@@ -48,6 +48,7 @@
         if (LayoutUnit._instances[id]) {
             return LayoutUnit._instances[id];
         }
+        console.log(id);
         return false;
     };
 
@@ -196,8 +197,7 @@
                 var nh = (box[0] - hd[0] - ft[0]) - (this._padding.top + this._padding.bottom),
                     nw = box[1] - (this._padding.left + this._padding.right);
 
-                var wb = this._getBorderSizes(this.get('wrap')),
-                    wrapH = (nh + (hd[0] + ft[0])),
+                var wrapH = (nh + (hd[0] + ft[0])),
                     wrapW = nw;
 
                 if (this._collapsed && !this._collapsing) {
@@ -216,11 +216,8 @@
 
                     Dom.setStyle(this.footer, 'bottom', '0px');
 
-                    var bb = this._getBorderSizes(this.body),
-                        bh = (wrapH - (hd[0] + ft[0])),
-                        bw = wrapW;
-                    this._setHeight(this.body, bh);
-                    this._setWidth(this.body, bw);
+                    this._setHeight(this.body, (wrapH - (hd[0] + ft[0])));
+                    this._setWidth(this.body, wrapW);
                     Dom.setStyle(this.body, 'top', hd[0] + 'px');
 
 
@@ -369,9 +366,9 @@
 
 
                 var nh = (box[0] - hd[0] - ft[0]) - (this._padding.top + this._padding.bottom),
-                    nw = box[1] - (this._padding.left + this._padding.right);
-                var wb = this._getBorderSizes(this.get('wrap')),
+                    nw = box[1] - (this._padding.left + this._padding.right),
                     wrapH = (nh + (hd[0] + ft[0]));
+
                 switch (this.get('position')) {
                     case 'top':
                     case 'bottom':
@@ -485,7 +482,6 @@
                 };
                 var expand = function() {
                     this._collapsing = false;
-                    this._toggleClip();
                     this.setStyle('zIndex', this.get('parent')._zIndex);
                     this.set('width', this._lastWidth);
                     this.set('height', this._lastHeight);
@@ -497,6 +493,7 @@
                 this._anim.onStart.subscribe(exStart, this, true);
                 this._anim.onComplete.subscribe(expand, this, true);
                 this._anim.animate();
+                this._toggleClip();
             } else {
                 this._collapsing = false;
                 this._toggleClip();
@@ -672,7 +669,13 @@
             * @type HTMLElement
             */
             this.setAttributeConfig('wrap', {
-                value: attr.wrap || null
+                value: attr.wrap || null,
+                method: function(w) {
+                    if (w) {
+                        var id = Dom.generateId(w);
+                        LayoutUnit._instances[id] = this;
+                    }
+                }
             });
             /**
             * @config grids
@@ -712,6 +715,47 @@
                     }
                 }
             });
+
+            /**
+            * @config minWidth
+            * @description The minWidth parameter passed to the Resize Utility
+            * @type Number
+            */
+            this.setAttributeConfig('minWidth', {
+                value: attr.minWidth || 50,
+                validator: YAHOO.lang.isNumber
+            });
+
+            /**
+            * @config maxWidth
+            * @description The maxWidth parameter passed to the Resize Utility
+            * @type Number
+            */
+            this.setAttributeConfig('maxWidth', {
+                value: attr.maxWidth || 500,
+                validator: YAHOO.lang.isNumber
+            });
+
+            /**
+            * @config minHeight
+            * @description The minHeight parameter passed to the Resize Utility
+            * @type Number
+            */
+            this.setAttributeConfig('minHeight', {
+                value: attr.minHeight || 50,
+                validator: YAHOO.lang.isNumber
+            });
+
+            /**
+            * @config maxHeight
+            * @description The maxHeight parameter passed to the Resize Utility
+            * @type Number
+            */
+            this.setAttributeConfig('maxHeight', {
+                value: attr.maxHeight || (((this.get('position') == 'top') || (this.get('position') == 'bottom')) ? 200 : 5000),
+                validator: YAHOO.lang.isNumber
+            });
+
             /**
             * @config height
             * @description The height of the Unit
@@ -782,45 +826,6 @@
                 }
             });
             /**
-            * @config minWidth
-            * @description The minWidth parameter passed to the Resize Utility
-            * @type Number
-            */
-            this.setAttributeConfig('minWidth', {
-                value: attr.minWidth || 50,
-                validator: YAHOO.lang.isNumber
-            });
-
-            /**
-            * @config maxWidth
-            * @description The maxWidth parameter passed to the Resize Utility
-            * @type Number
-            */
-            this.setAttributeConfig('maxWidth', {
-                value: attr.maxWidth || 500,
-                validator: YAHOO.lang.isNumber
-            });
-
-            /**
-            * @config minHeight
-            * @description The minHeight parameter passed to the Resize Utility
-            * @type Number
-            */
-            this.setAttributeConfig('minHeight', {
-                value: attr.minHeight || 50,
-                validator: YAHOO.lang.isNumber
-            });
-
-            /**
-            * @config maxHeight
-            * @description The maxHeight parameter passed to the Resize Utility
-            * @type Number
-            */
-            this.setAttributeConfig('maxHeight', {
-                value: attr.maxHeight || (((this.get('position') == 'top') || (this.get('position') == 'bottom')) ? 200 : 5000),
-                validator: YAHOO.lang.isNumber
-            });
-            /**
             * @config parent
             * @description The parent Layout that we are assigned to
             * @type {Object} YAHOO.widget.Layout
@@ -856,7 +861,7 @@
             * @description The Animation Easing to apply to the Animation instance for this unit.
             */
             this.setAttributeConfig('easing', {
-                value: attr.easing || YAHOO.util.Easing.BounceIn
+                value: attr.easing || ((YAHOO.util && YAHOO.util.Easing) ? YAHOO.util.Easing.BounceIn : 'false')
             });
             /**
             * @config animate
@@ -946,6 +951,7 @@
                     }
                     Dom.addClass(this.body, 'yui-layout-bd-noft');
 
+
                     var el = null;
                     if (Lang.isString(content)) {
                         el = Dom.get(content);
@@ -953,6 +959,8 @@
                         el = content;
                     }
                     if (el) {
+                        var id = Dom.generateId(el);
+                        LayoutUnit._instances[id] = this;
                         this.body.appendChild(el);
                     } else {
                         this.body.innerHTML = content;
@@ -1090,6 +1098,12 @@
 
             this.setAttributeConfig('resize', {
                 value: attr.resize || false,
+                validator: function(r) {
+                    if (YAHOO.util && YAHOO.util.Resize) {
+                        return true;
+                    }
+                    return false;
+                },
                 method: function(resize) {
                     if (resize && !this._resize) {
                         var handle = false; //To catch center

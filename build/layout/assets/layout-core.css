@@ -62,7 +62,6 @@ body.yui-layout {
     left: 0;
     zoom: 1;
     width: 100%;
-    height: 20px;
     overflow: hidden;
 }
 .yui-layout div.yui-layout-bd {
@@ -91,23 +90,25 @@ body.yui-layout {
 
 .yui-layout .yui-layout-unit div.yui-layout-hd .collapse {
     cursor: pointer;
-    height: 15px;
+    height: 13px;
     position: absolute;
     right: 2px;
     top: 2px;
-    width: 15px;
+    width: 17px;
+    font-size: 0;
 }
 
 .yui-layout .yui-layout-unit div.yui-layout-hd .close {
     cursor: pointer;
-    height: 15px;
+    height: 13px;
     position: absolute;
     right: 2px;
     top: 2px;
-    width: 15px;
+    width: 17px;
+    font-size: 0;
 }
 .yui-layout .yui-layout-unit div.yui-layout-hd .collapse-close {
-    right: 20px;
+    right: 25px;
 }
 
 
@@ -120,11 +121,12 @@ body.yui-layout {
 
 .yui-layout .yui-layout-clip .collapse {
     cursor: pointer;
-    height: 15px;
+    height: 13px;
     position: absolute;
     right: 2px;
     top: 2px;
-    width: 15px;
+    width: 17px;
+    font-size: 0px;
 }
 
 .yui-layout .yui-layout-wrap {

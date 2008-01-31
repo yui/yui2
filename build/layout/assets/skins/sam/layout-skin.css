@@ -39,41 +39,40 @@
     height: 5px;
 }
 
-.yui-skin-sam .yui-layout .yui-layout-unit div.yui-layout-hd .collapse, 
-.yui-skin-sam .yui-layout .yui-layout-clip .collapse {
+.yui-skin-sam .yui-layout .yui-layout-unit-left div.yui-layout-hd .collapse {
+    background: transparent url(layout_sprite.png) no-repeat -20px -160px;
     border: 1px solid #808080;
 }
-
-.yui-skin-sam .yui-layout .yui-layout-unit div.yui-layout-hd .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll 0pt -400px;
-}
-
-.yui-skin-sam .yui-layout .yui-layout-unit-left div.yui-layout-hd .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -552px;
-}
 .yui-skin-sam .yui-layout .yui-layout-clip-left .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -602px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -140px;
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-layout .yui-layout-unit-right div.yui-layout-hd .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -602px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -200px;
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-layout .yui-layout-clip-right .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -552px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -120px;
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-layout .yui-layout-unit-bottom div.yui-layout-hd .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -802px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -260px;
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-layout .yui-layout-clip-bottom .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -752px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -180px;
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-layout .yui-layout-unit-top div.yui-layout-hd .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -752px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -220px;
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-layout .yui-layout-clip-top .collapse {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -12px -802px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -240px;
+    border: 1px solid #808080;
 }
 .yui-skin-sam .yui-layout .yui-layout-unit div.yui-layout-hd .close {
-    background: transparent url(../../../../assets/skins/sam/sprite.png) no-repeat scroll -5px -300px;
+    background: transparent url(layout_sprite.png) no-repeat -20px -100px;
     border: 1px solid #808080;
 }
 
@@ -93,6 +92,8 @@
     border: 1px solid #808080;
     border-bottom: none;
     border-top: none;
+    *border-bottom-width: 0;
+    *border-top-width: 0;
     background-color: #f2f2f2;
     text-align: left;
 }
@@ -113,6 +114,7 @@
 .yui-skin-sam .yui-layout div.yui-layout-ft {
     border: 1px solid #808080;
     border-top: none;
+    *border-top-width: 0;
     background-color: #f2f2f2;
 }
 
@@ -122,32 +124,37 @@
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-r {
     right: 0;
     top: 0;
+    background-image: none;
 }
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-l {
     left: 0;
     top: 0;
+    background-image: none;
 }
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-b {
     right: 0;
     bottom: 0;
+    background-image: none;
 }
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-t {
     right: 0;
     top: 0;
+    background-image: none;
 }
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-r .yui-layout-resize-knob,
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-l .yui-layout-resize-knob {
     position: absolute;
-    height: 30px;
+    height: 16px;
     width: 6px;
-    background-color: black;
     top: 45%;
+    left: 0px;
+    background: transparent url(layout_sprite.png) no-repeat 0 -5px;
 }
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-t .yui-layout-resize-knob,
 .yui-skin-sam .yui-layout-unit .yui-resize-handle-b .yui-layout-resize-knob {
     position: absolute;
     height: 6px;
-    width: 30px;
-    background-color: black;
+    width: 16px;
     left: 45%;
+    background: transparent url(layout_sprite.png) no-repeat -20px 0;
 }
