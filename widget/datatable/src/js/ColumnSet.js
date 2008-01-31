@@ -524,6 +524,11 @@ YAHOO.widget.Column = function(oConfigs) {
             }
         }
    }
+    // Backward compatibility
+    if(this.width && !YAHOO.lang.isNumber(this.width)) {
+        this.width = null;
+        YAHOO.log("The Column property width must be a number", "warn", this.toString());
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////

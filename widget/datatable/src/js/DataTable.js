@@ -125,14 +125,18 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 (function () {
 
 var lang   = YAHOO.lang,
-    widget = YAHOO.widget,
-    DT     = widget.DataTable,
-    Pag    = widget.Paginator,
-
     util   = YAHOO.util,
+    widget = YAHOO.widget,
+    ua     = YAHOO.env.ua,
+    
     Dom    = util.Dom,
     Ev     = util.Event,
-    DS     = util.DataSource;
+    DS     = util.DataSource,
+    DT     = widget.DataTable,
+    Pag    = widget.Paginator;
+    
+
+    
 
 lang.augmentObject(DT, {
 
@@ -577,6 +581,10 @@ lang.augmentObject(DT, {
      * @static     
      */
     _cloneObject : function(o) {
+        if(lang.isUndefined(o)) {
+            return o;
+        }
+        
         var copy = {};
         
         if(lang.isArray(o)) {
@@ -597,6 +605,9 @@ lang.augmentObject(DT, {
                     }
                 }
             }
+        }
+        else {
+            copy = o;
         }
     
         return copy;
@@ -1096,7 +1107,7 @@ lang.augmentObject(DT, {
             calendar.render();
             calContainer.style.cssFloat = "none";
 
-            if(YAHOO.env.ua.ie == 6) {
+            if(ua.ie == 6) {
                 var calFloatClearer = elContainer.appendChild(document.createElement("br"));
                 calFloatClearer.style.clear = "both";
             }
@@ -1467,7 +1478,7 @@ initAttributes : function(oConfigs) {
             if(column) {
                 // Backward compatibility
                 if(oNewSortedBy.dir && ((oNewSortedBy.dir == "asc") ||  (oNewSortedBy.dir == "desc"))) {
-                    var newClass = (oNewSortedBy.dir && (oNewSortedBy.dir != DT.CLASS_ASC)) ?
+                    var newClass = (oNewSortedBy.dir == "desc") ?
                             DT.CLASS_DESC :
                             DT.CLASS_ASC;
                     Dom.addClass(column.getThEl(), newClass);
@@ -1777,21 +1788,29 @@ initAttributes : function(oConfigs) {
         },
         method: function(oParam) {
             if(oParam) {
-                //TODO: conf height?
                 Dom.addClass(this._elContainer,DT.CLASS_SCROLLABLE);
 
-                // Set explicit padding
-                if(!YAHOO.env.ua.ie) {
-                    this._elContainer.style.paddingBottom = this._elThead.offsetHeight + "px";
-                }
+                // Is this necessary?
+                // Only for non-IE set explicit padding to account for THEAD
+                //if(!ua.ie) {
+                    //this._elContainer.style.paddingBottom = this._elThead.offsetHeight + "px";
+                //}
+                
+                // X-scrolling not enabled
+                //if(!this.get("width")) {
+                    // Snap outer container width to content
+                    //this._elContainer.style.width = (this._elTbody.parentNode.offsetWidth + 19) + "px";
+                //}
+                
+                this._syncScrollPadding();
             }
             else {
                 Dom.removeClass(this._elContainer,DT.CLASS_SCROLLABLE);
 
                 // Unset explicit padding
-                if(!YAHOO.env.ua.ie) {
-                    this._elContainer.style.paddingBottom = "";
-                }
+                //if(!ua.ie) {
+                    //this._elContainer.style.paddingBottom = "";
+                //}
             }
         }
     });
@@ -2067,7 +2086,7 @@ _trElTemplate : null,
  * @type {Boolean}
  * @private 
  */
-_bScrollbarX : false,
+_bScrollbarX : null,
 
 
 
@@ -2157,6 +2176,7 @@ _focusEl : function(el) {
 
 /**
  * Syncs up widths of THs and TDs across all those Columns without width values.
+ * Actual adjustment is to the liner DIVs so window resizing will not affect cells. 
  *
  * @method _syncColWidths
  * @private
@@ -2166,8 +2186,7 @@ _syncColWidths : function() {
     var allKeys = this._oColumnSet.keys;
     var elRow = this.getFirstTrEl();
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-        var elTh, elTd, elThLiner, elTdLiner, newWidth;
-    
+        var elTh, elTd, elThLiner, elTdLiner, newWidth, oChain = this._oChain;
         // Only proceed for Columns without widths
         for(var i=0,rowsLen=elRow.cells.length; i<rowsLen; i++) {
             if(!allKeys[i].width) {
@@ -2175,20 +2194,36 @@ _syncColWidths : function() {
                 elTh = allKeys[i].getThEl();
                 elTd = elRow.cells[i];
                 if(elTh.offsetWidth !== elTd.offsetWidth) {
+                    // Temporarily unsnap container when it causes inaccurate calculations
+                    var bUnsnap = false;
+                    if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
+                        bUnsnap = true;
+                        this._elTheadContainer.style.width = "";
+                        this._elTbodyContainer.style.width = "";     
+                    }
+
+                    // Column header is wider - bump the body cells up
+                    if(elTh.offsetWidth > elTd.offsetWidth) {
+                        elTd.style.width = elTh.offsetWidth + "px";
+                    }
+                    // Body cells are wider - bump the Column header up
+                    else {
+                        elTh.style.width = elTd.offsetWidth + "px";
+                    }
+                    
                     // Calculate the final width by comparing liner widths
                     elThLiner = elTh.firstChild;
                     elTdLiner = elTd.firstChild;
                     // Reset the width to get an accurate measure of the TD
                     elTdLiner.style.width = "";
                     newWidth = Math.max(elThLiner.offsetWidth, elTdLiner.offsetWidth);
-                    
+                                        
                     // Apply new width to TH liner minus appropriate padding
                     elThLiner.style.width = newWidth -
                             (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) -
                             (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
-                            
+                                                        
                     // Apply new width to every TD liner minus appropriate padding
-                    var oChain = this._oChain;
                     oChain.add({
                         method: function(oArg) {
                             var cellLiner = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex].firstChild;
@@ -2201,10 +2236,23 @@ _syncColWidths : function() {
                         iterations:this._elTbody.rows.length,
                         argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
                     });
-                    oChain.run();
+
+                    // Resnap unsnapped containers
+                    if(bUnsnap) {
+                        oChain.add({
+                            method: function(oArg) {
+                                // Resnap containers
+                                var sWidth = this.get("width");
+                                this._elTheadContainer.style.width = sWidth;
+                                this._elTbodyContainer.style.width = sWidth;     
+                            },
+                            scope: this
+                        });                    
+                    }
                 }
             }
         }
+        oChain.run();
     }
     this._syncScrollPadding();
 },
@@ -2221,58 +2269,67 @@ _syncScrollPadding : function() {
     if(this.get("scrollable")) {
         this._oChain.add({
             method: function() {
-                var elTbody = this._elTbody,
-                    elTbodyContainer = this._elTbodyContainer,
-                    aLastHeaders, len, prefix, i, elLiner;
-                
-                // Y-scrolling not enabled
-                if(!this.get("height") && (YAHOO.env.ua.ie)) {
-                    // Snap outer container height to content - needed only for IE 6 and 7
-                    elTbodyContainer.style.height = (elTbody.parentNode.offsetHeight + 19) + "px";
-                }
-                // X-scrolling not enabled
-                if(!this.get("width")) {
-                    // Snap outer container width to content
-                    this._elContainer.style.width = (elTbody.parentNode.offsetWidth + 19) + "px";
-                }
-                // X-scrolling enabled and x-scrollbar is visible
-                else if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
-                    // Perform sync routine
-                    if(!this._bScrollbarX) {
-                        // Add Column header right-padding
-                        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-                        len = aLastHeaders.length;
-                        prefix = this._sId+"-th";
-                        for(i=0; i<len; i++) {
-                            //TODO: A better way to get th cell
-                            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                            elLiner.style.paddingRight = 
-                                    (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) + 
-                                    27) + "px";
-                        }
-                        
-                        // Save state   
-                        this._bScrollbarX = true;
+                if((this instanceof DT) && this._sId) {
+                    var elTbody = this._elTbody,
+                        elTbodyContainer = this._elTbodyContainer,
+                        aLastHeaders, len, prefix, i, elLiner;
+                    
+                    // IE 6 and 7 only when y-scrolling not enabled
+                    if(!this.get("height") && (ua.ie)) {
+                        // Snap outer container height to content
+                        // but account for x-scrollbar if it is visible
+                        elTbodyContainer.style.height = 
+                                (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
+                                (elTbody.offsetHeight + 19) + "px" : 
+                                elTbody.offsetHeight + "px";
                     }
-                }
-                // X-scrollbar enabled but x-scrollbar is not visible
-                else {
-                    // Perform sync routine
-                    if(this._bScrollbarX) {                 
-                        // Remove Column header right-padding                   
-                        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-                        len = aLastHeaders.length;
-                        prefix = this._sId+"-th";
-                        for(i=0; i<len; i++) {
-                            //TODO: A better way to get th cell
-                            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                            elLiner.style.paddingRight = 
-                                    (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) - 
-                                    27) + "px";
+                    
+                    // X-scrolling not enabled
+                    if(!this.get("width")) {
+                        // Snap outer container width to content
+                        // but account for y-scrollbar if it is visible
+                        this._elContainer.style.width = 
+                                (elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) ?
+                                (elTbody.parentNode.offsetWidth + 19) + "px" :
+                                (elTbody.parentNode.offsetWidth) + "px";
+                    }
+                    // X-scrolling is enabled and x-scrollbar is visible
+                    else if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
+                        // Perform sync routine
+                        if(!this._bScrollbarX) {
+                            // Add Column header right-padding
+                            aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+                            len = aLastHeaders.length;
+                            prefix = this._sId+"-th";
+                            for(i=0; i<len; i++) {
+                                //TODO: A better way to get th cell
+                                elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+                                elLiner.style.paddingRight = 
+                                        (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) + 
+                                        27) + "px";
+                            }
+                            
+                            // Save state   
+                            this._bScrollbarX = true;
                         }
-                                                
-                        // Save state
-                        this._bScrollbarX = false;
+                    }
+                    // X-scrollbar enabled but x-scrollbar is not visible
+                    else {
+                        // Perform sync routine
+                        if(this._bScrollbarX) {                 
+                            // Remove Column header right-padding                   
+                            aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+                            len = aLastHeaders.length;
+                            prefix = this._sId+"-th";
+                            for(i=0; i<len; i++) {
+                                //TODO: A better way to get th cell
+                                elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+                                Dom.setStyle(elLiner,"paddingRight","");
+                            }
+                                                    
+                            // Save state
+                            this._bScrollbarX = false;
+                        }
                     }
                 }
             },
@@ -2511,7 +2568,7 @@ _initTableEl : function() {
     this._elTbody.tabIndex = 0;
     Dom.addClass(this._elTbody,DT.CLASS_BODY);
     // Bug 1716354 - fix gap in Safari 2 and 3
-    if(YAHOO.env.ua.webkit) {
+    if(ua.webkit) {
         this._elTbody.parentNode.style.marginTop = "-13px";
     }
 
@@ -2534,6 +2591,11 @@ _initTableEl : function() {
     var elContainer = this._elContainer;
     var elThead = this._elThead;
     var elTbody = this._elTbody;
+    
+    // IE puts focus outline in the wrong place
+    if(ua.ie) {
+        elTbody.hideFocus=true;
+    }
     var elTbodyContainer = this._elTbodyContainer;
 
     // Set up DOM events
@@ -2887,7 +2949,7 @@ _initColumnSort : function() {
  */
 _addTrEl : function(oRecord, index) {
     var elRow     = this._trElTemplate.cloneNode(true),
-        beforeRow = lang.isNumber(index) && index >= 0 ?
+        beforeRow = (lang.isNumber(index) && index >= 0 && this._elTbody.rows[index]) ?
                     this._elTbody.rows[index] : null;
 
     elRow.id = this._sId+"-bdrow"+this._nTrCount;
@@ -3016,6 +3078,7 @@ _addTdEl : function (elRow,oColumn,index) {
     index = index || elRow.cells.length;
 
     elCell.id           = elRow.id+"-cell"+this._nTdCount;
+    this._nTdCount++;
     elCell.yuiColumnKey = oColumn.getKey();
     elCell.yuiColumnId  = oColumn.getId();
 
@@ -3669,7 +3732,7 @@ _onTbodyKeydown : function(e, oSelf) {
  * @private
  */
 _onTableKeypress : function(e, oSelf) {
-    if(YAHOO.env.ua.webkit) {
+    if(ua.webkit) {
         var nKey = Ev.getCharCode(e);
         // arrow down
         if(nKey == 40) {
@@ -4750,7 +4813,9 @@ render : function() {
         
         this._oChain.add({
             method: function() {
-                this._syncColWidths();
+                if((this instanceof DT) && this._sId) {
+                    this._syncColWidths();
+                }
             },
             scope: this
         });
@@ -5262,7 +5327,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                 allrows[i].cells[nColKeyIndex].style.width = sWidth;
             }
         }
-        if(YAHOO.env.ua.opera && !this.get("scrollable")) {
+        if(ua.opera && !this.get("scrollable")) {
             this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
             document.body.style += '';
         }
@@ -5513,7 +5578,9 @@ selectColumn : function(oColumn) {
             var oChain = this._oChain;
             oChain.add({
                 method: function(oArg) {
-                    Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED);                    
+                    if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
+                        Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED);                    
+                    }
                     oArg.rowIndex++;
                 },
                 scope: this,
@@ -5555,7 +5622,9 @@ unselectColumn : function(oColumn) {
             var oChain = this._oChain;
             oChain.add({
                 method: function(oArg) {
-                    Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED);                    
+                    if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
+                        Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED); 
+                    }                   
                     oArg.rowIndex++;
                 },
                 scope: this,
@@ -5621,7 +5690,9 @@ highlightColumn : function(column) {
         var oChain = this._oChain;
         oChain.add({
             method: function(oArg) {
-                Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);                    
+                if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
+                    Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);   
+                }                 
                 oArg.rowIndex++;
             },
             scope: this,
@@ -5660,7 +5731,9 @@ unhighlightColumn : function(column) {
         var oChain = this._oChain;
         oChain.add({
             method: function(oArg) {
-                Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);                    
+                if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
+                    Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);
+                }                 
                 oArg.rowIndex++;
             },
             scope: this,
@@ -5783,50 +5856,51 @@ addRow : function(oData, index) {
                 if(lang.isNumber(recIndex)) {
                     this._oChain.add({
                         method: function() {
-                            // Add the TR element
-                            var elNewTr = this._addTrEl(oRecord, recIndex);
-                            if(elNewTr) {
-                                // Is this an insert or an append?
-                                var append = (lang.isNumber(recIndex) &&
-                                        (recIndex == this._elTbody.rows.length-1)) ? true : false;
-        
-                                // Stripe the one new row
-                                if(append) {
-                                    if(elNewTr.sectionRowIndex%2) {
-                                        Dom.addClass(elNewTr, DT.CLASS_ODD);
+                            if((this instanceof DT) && this._sId) {
+                                // Add the TR element
+                                var elNewTr = this._addTrEl(oRecord, recIndex);
+                                if(elNewTr) {
+                                    // Is this an insert or an append?
+                                    var append = (lang.isNumber(recIndex) &&
+                                            (recIndex == this._elTbody.rows.length-1)) ? true : false;
+            
+                                    // Stripe the one new row
+                                    if(append) {
+                                        if(elNewTr.sectionRowIndex%2) {
+                                            Dom.addClass(elNewTr, DT.CLASS_ODD);
+                                        }
+                                        else {
+                                            Dom.addClass(elNewTr, DT.CLASS_EVEN);
+                                        }
                                     }
+                                    // Restripe all the rows after the new one
                                     else {
-                                        Dom.addClass(elNewTr, DT.CLASS_EVEN);
+                                        this._setRowStripes(recIndex);
                                     }
+            
+                                    // If new row is at the bottom
+                                    if(append) {
+                                        this._setLastRow();
+                                    }
+                                    // If new row is at the top
+                                    else if(lang.isNumber(index) && (recIndex === 0)) {
+                                        this._setFirstRow();
+                                    }
+                                    
+                                    this._syncColWidths();
                                 }
-                                // Restripe all the rows after the new one
-                                else {
-                                    this._setRowStripes(recIndex);
-                                }
-        
-                                // If new row is at the bottom
-                                if(append) {
-                                    this._setLastRow();
-                                }
-                                // If new row is at the top
-                                else if(lang.isNumber(index) && (recIndex === 0)) {
-                                    this._setFirstRow();
-                                }
-                                
-                                this._syncColWidths();
+                                this.hideTableMessage();
+    
+                                // TODO: what args to pass?
+                                this.fireEvent("rowAddEvent", {record:oRecord});
+                        
+                                // For log message
+                                recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
+                        
+                                YAHOO.log("Added row: Record ID = " + oRecord.getId() +
+                                        ", Record index = " + this.getRecordIndex(oRecord) +
+                                        ", page row index = " + recIndex, "info", this.toString());
                             }
-                            this.hideTableMessage();
-
-                            // TODO: what args to pass?
-                            this.fireEvent("rowAddEvent", {record:oRecord});
-                    
-                            // For log message
-                            recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
-                    
-                            YAHOO.log("Added row: Record ID = " + oRecord.getId() +
-                                    ", Record index = " + this.getRecordIndex(oRecord) +
-                                    ", page row index = " + recIndex, "info", this.toString());
-                            
                         },
                         scope: this,
                         timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
@@ -5915,12 +5989,14 @@ updateRow : function(row, oData) {
     if(elRow) {
         this._oChain.add({
             method: function() {
-                this._updateTrEl(elRow, updatedRecord);
-                this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
-                YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
-                        ", Record index = " + this.getRecordIndex(updatedRecord) +
-                        ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
-                        },
+                if((this instanceof DT) && this._sId) {
+                    this._updateTrEl(elRow, updatedRecord);
+                    this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
+                    YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
+                            ", Record index = " + this.getRecordIndex(updatedRecord) +
+                            ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());
+                }
+            },
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
@@ -6011,36 +6087,38 @@ deleteRow : function(row) {
         else {
             if(lang.isNumber(nTrIndex)) {
                 this._oChain.add({
-                    method: function() {                    
-                        var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
-                        this._deleteTrEl(nTrIndex);
-        
-                        // Empty body
-                        if(this._elTbody.rows.length === 0) {
-                            this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+                    method: function() {
+                        if((this instanceof DT) && this._sId) {
+                            var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
+                            this._deleteTrEl(nTrIndex);
+            
+                            // Empty body
+                            if(this._elTbody.rows.length === 0) {
+                                this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+                            }
+                            // Update UI
+                            else {
+                                // Set FIRST/LAST
+                                if(nTrIndex === 0) {
+                                    this._setFirstRow();
+                                }
+                                if(isLast) {
+                                    this._setLastRow();
+                                }
+                                // Set EVEN/ODD
+                                if(nTrIndex != this._elTbody.rows.length) {
+                                    this._setRowStripes(nTrIndex);
+                                }
+                                
+                                this._syncColWidths();
+                            }
+            
+                            this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
+                                    oldData:oData, trElIndex:nTrIndex});
+                            YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
+                                    ", Record index = " + nRecordIndex +
+                                    ", page row index = " + nTrIndex, "info", this.toString());
                         }
-                        // Update UI
-                        else {
-                            // Set FIRST/LAST
-                            if(nTrIndex === 0) {
-                                this._setFirstRow();
-                            }
-                            if(isLast) {
-                                this._setLastRow();
-                            }
-                            // Set EVEN/ODD
-                            if(nTrIndex != this._elTbody.rows.length) {
-                                this._setRowStripes(nTrIndex);
-                            }
-                            
-                            this._syncColWidths();
-                        }
-        
-                        this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                                oldData:oData, trElIndex:nTrIndex});
-                        YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
-                                ", Record index = " + nRecordIndex +
-                                ", page row index = " + nTrIndex, "info", this.toString());
                     },
                     scope: this,
                     timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
@@ -10116,7 +10194,7 @@ formatPaginators : function() {
     }
 
     // For Opera artifacting in dropdowns
-    if(dropdownEnabled && YAHOO.env.ua.opera) {
+    if(dropdownEnabled && ua.opera) {
         document.body.style += '';
     }
     YAHOO.log("Paginators formatted", "info", this.toString());

@@ -19,6 +19,9 @@
 }
 
 /* resizeable columns */
+.yui-dt-hd {
+    zoom:1; 
+}
 th.yui-dt-resizeable .yui-dt-liner {
     position:relative;
 }

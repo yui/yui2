@@ -52,6 +52,7 @@ RecordSet
 
 Column
 
+    * width - Must now be a number. Strings will be ignored.
     * sortOptions.defaultOrder - Use sortOptions.defaultDir, and use CLASS_ASC or CLASS_DESC instead of "asc" and "desc" strings.
 
 
