@@ -1,5 +1,10 @@
 TreeView - Release Notes
 
+2.5.0
+  * Made CSS adjustments to work with base.css
+  * HTMLNode: removed unused property 'content', and documented the correct
+    property 'html'.
+
 2.4.0
   * added TreeView getNodeByElement, which will return a YAHOO.widget.Node 
     reference for any ancestor HTML element of a node in the tree.
