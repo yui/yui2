@@ -265,7 +265,7 @@
         
         /**
          * The Tabs belonging to the TabView instance.
-         * @config tabs
+         * @attribute tabs
          * @type Array
          */
         this.setAttributeConfig('tabs', {
@@ -295,7 +295,7 @@
         
         /**
          * How the Tabs should be oriented relative to the TabView.
-         * @config orientation
+         * @attribute orientation
          * @type String
          * @default "top"
          */
@@ -319,7 +319,7 @@
         
         /**
          * The index of the tab currently active.
-         * @config activeIndex
+         * @attribute activeIndex
          * @type Int
          */
         this.setAttributeConfig('activeIndex', {
@@ -334,7 +334,7 @@
         
         /**
          * The tab currently active.
-         * @config activeTab
+         * @attribute activeTab
          * @type YAHOO.widget.Tab
          */
         this.setAttributeConfig('activeTab', {
@@ -362,6 +362,7 @@
             }
         });
 
+        YAHOO.log('attributes initialized', 'info', 'TabView');
         if ( this._tabParent ) {
             _initTabs.call(this);
         }
@@ -418,6 +419,7 @@
             el.className = this.CLASSNAME;
         }
         
+        YAHOO.log('TabView Dom created', 'info', 'TabView');
         return el;
     };
     
@@ -457,69 +459,5 @@
         
         return nodes;
     };
-
-/**
- * Fires before the activeTab is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p>If handler returns false, the change will be cancelled, and the value will not
- * be set.</p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> beforeActiveTabChange<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * prevValue</code> the currently active tab<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * newValue</code> the tab to be made active</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('beforeActiveTabChange', handler);</code></p>
- * @event beforeActiveTabChange
- */
-    
-/**
- * Fires after the activeTab is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> activeTabChange<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * prevValue</code> the formerly active tab<br>
- * <code>&lt;<a href="YAHOO.widget.Tab.html">YAHOO.widget.Tab</a>&gt;
- * newValue</code> the new active tab</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('activeTabChange', handler);</code></p>
- * @event activeTabChange
- */
- 
-/**
- * Fires before the orientation is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p>If handler returns false, the change will be cancelled, and the value will not
- * be set.</p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> beforeOrientationChange<br>
- * <code>&lt;String&gt;
- * prevValue</code> the current orientation<br>
- * <code>&lt;String&gt;
- * newValue</code> the new orientation to be applied</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('beforeOrientationChange', handler);</code></p>
- * @event beforeOrientationChange
- */
-    
-/**
- * Fires after the orientation is changed.
- * <p>See: <a href="YAHOO.util.Element.html#addListener">Element.addListener</a></p>
- * <p><strong>Event fields:</strong><br>
- * <code>&lt;String&gt; type</code> orientationChange<br>
- * <code>&lt;String&gt;
- * prevValue</code> the former orientation<br>
- * <code>&lt;String&gt;
- * newValue</code> the new orientation</p>
- * <p><strong>Usage:</strong><br>
- * <code>var handler = function(e) {var previous = e.prevValue};<br>
- * myTabs.addListener('orientationChange', handler);</code></p>
- * @event orientationChange
- */
 })();
 
