@@ -2,6 +2,7 @@ DataSource Release Notes
 
 **** version 2.5.0 ****
 
+* doBeforeCallback() - The second argument is now oFullResponse rather than oRawResponse.
 * handleResponse() -
       o oCallback is now an object literal pointing to success and failure
       handlers and can contain scope and argument values.
