@@ -255,8 +255,3 @@
     margin-right:1em;
     margin-left:1em;
 }
-
-/* scrolling */
-.yui-skin-sam .yui-dt-scrolltable {
-    /* TESTMATT border-collapse:separate;  for gecko bug https://bugzilla.mozilla.org/show_bug.cgi?id=135236 */
-}

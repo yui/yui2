@@ -900,7 +900,7 @@ lang.augmentObject(DT, {
         var bChecked = oData;
         bChecked = (bChecked) ? " checked" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
-                " name=\"" + oColumn.getKey() + "-radio\"" +
+                " name=\"col" + oColumn.getId() + "-radio\"" +
                 " class=\"" + DT.CLASS_RADIO+ "\">";
     },
 
@@ -1199,7 +1199,7 @@ lang.augmentObject(DT, {
             for(j=0; j<radioOptions.length; j++) {
                 radioValue = lang.isValue(radioOptions[j].label) ?
                         radioOptions[j].label : radioOptions[j];
-                radioId =  oSelf.getId() + "-editor-radio" + j;
+                radioId =  oSelf.getId() + "-col" + oColumn.getId() + "-radioeditor" + j;
                 elContainer.innerHTML += "<input type=\"radio\"" +
                         " name=\"" + oSelf.getId() + "-editor-radio\"" +
                         " value=\"" + radioValue + "\"" +
@@ -1211,7 +1211,7 @@ lang.augmentObject(DT, {
             }
             // Then check one, and assign click handlers
             for(j=0; j<radioOptions.length; j++) {
-                var radioEl = Dom.get(oSelf.getId() + "-editor-radio" + j);
+                var radioEl = Dom.get(oSelf.getId() + "-col" + oColumn.getId() + "-radioeditor" + j);
                 if(value === radioEl.value) {
                     radioEl.checked = true;
                     oSelf._focusEl(radioEl);
