@@ -1,5 +1,18 @@
 *** Version 2.4.0 ***
 
++ Fixed issue where returning false inside the scope of a listener for attribute "before" 
+  events (i.e "beforeCheckedChange") would not cancel the attribute's default setter.
+
+
+
+*** Version 2.4.1 ***
+
++ No changes.
+
+
+
+*** Version 2.4.0 ***
+
 Added the following features:
 -----------------------------
 

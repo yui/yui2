@@ -1,3 +1,29 @@
+*** version 2.5.0 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Corrected the paths to all images in the original Menu CSS file so that checked MenuItems now
+  render correctly.
+
++ Clicking on a disabled MenuItem instance will no longer cause the browser to navigate to 
+  the top of the current page.
+
++ Removed the use of the "yui-skin-sam" class name from the Menu core CSS file.
+
++ Scrolling Menus now render correctly in IE 6 and IE 7.
+
++ Submenus are no longer hidden then re-shown when the mouse is moving from a visible submenu back
+  to its parent MenuItem instance.
+
+
+
+*** version 2.4.1 ***
+
++ No changes
+
+
+
 *** version 2.4.0 ***
 
 
