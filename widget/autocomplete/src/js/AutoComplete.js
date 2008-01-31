@@ -2020,7 +2020,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
  */
 YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
     var nKeyCode = v.keyCode;
-    YAHOO.log("keypress keycode: " + nKeyCode, "warn");
 
         //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
         if(YAHOO.env.ua.webkit) {
@@ -2044,10 +2043,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
                 else {
                     oSelf._toggleContainer(false);
                 }
-                break;
-            case 38: // up
-            case 40: // down
-                YAHOO.util.Event.stopEvent(v);
                 break;
             default:
                 break;
@@ -2074,6 +2069,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     oSelf._initProps();
 
     var nKeyCode = v.keyCode;
+
     oSelf._nKeyCode = nKeyCode;
     var sText = this.value; //string in textbox
 
