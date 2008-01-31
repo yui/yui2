@@ -112,6 +112,14 @@ YAHOO.widget.Slider.ANIM_AVAIL = false;
 YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
     /**
+     * Override the default setting of dragOnly to true.
+     * @property dragOnly
+     * @type boolean
+     * @default true
+     */
+    dragOnly : true,
+
+    /**
      * Initializes the slider.  Executed in the constructor
      * @method initSlider
      * @param {string} sType the type of slider (horiz, vert, region)
@@ -191,7 +199,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
 
         /**
          * Specifies the number of pixels the arrow keys will move the slider.
-         * Default is 25.
+         * Default is 20.
          * @property keyIncrement
          * @type int
          */
@@ -1029,6 +1037,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             var x = YAHOO.util.Event.getPageX(e);
             var y = YAHOO.util.Event.getPageY(e);
             this.moveThumb(x, y, true, true);
+            this.fireEvents();
         }
     },
 

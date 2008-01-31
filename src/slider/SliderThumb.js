@@ -79,6 +79,14 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
     startOffset: null,
 
     /**
+     * Override the default setting of dragOnly to true.
+     * @property dragOnly
+     * @type boolean
+     * @default true
+     */
+    dragOnly : true,
+
+    /**
      * Flag used to figure out if this is a horizontal or vertical slider
      * @property _isHoriz
      * @type boolean

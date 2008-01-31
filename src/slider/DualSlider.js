@@ -8,7 +8,6 @@
  * Constructor assumes both thumbs are positioned absolutely at the 0 mark on
  * the background.
  *
- * @namespace YAHOO.widget
  * @class DualSlider
  * @uses YAHOO.util.EventProvider
  * @constructor
@@ -50,7 +49,6 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVa
      * @property minRange
      * @type int
      * @default 0
-     * @private
      */
     this.minRange = minRange|0;
 
@@ -114,17 +112,8 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVa
     maxSlider.subscribe("slideStart", this._handleSlideStart, maxSlider, this);
     maxSlider.subscribe("slideEnd", this._handleSlideEnd, maxSlider, this);
 
-    /**
-     * The current value of the min thumb. <strong>read only</strong>.
-     * @property minVal
-     * @type int
-     */
+    // store the current min and max values
     this.minVal = -1;
-    /**
-     * The current value of the max thumb. <strong>read only</strong>.
-     * @property maxVal
-     * @type int
-     */
     this.maxVal = -1;
     
     this.isHoriz = minSlider.thumb._isHoriz;
@@ -144,14 +133,14 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVa
     this.createEvent("change", this);
 
     /**
-     * Event that fires when one of the thumbs begins to move
+     * Event that fires when one of the sliders begin to move
      * @event slideStart
      * @param {Slider} the moving slider
      */
     this.createEvent("slideStart", this);
 
     /**
-     * Event that fires when one of the thumbs finishes moving
+     * Event that fires when one of the sliders finishes moving
      * @event slideEnd
      * @param {Slider} the moving slider
      */
@@ -301,8 +290,8 @@ YAHOO.widget.DualSlider.prototype = {
 
     /**
      * Set the max thumb position to a new value.
-     * @method setMaxValue
-     * @param max {int} Pixel offset for max thumb
+     * @method setMinValue
+     * @param min {int} Pixel offset for max thumb
      * @param skipAnim {boolean} (optional) Set to true to skip thumb animation.
      * Default false
      * @param force {boolean} (optional) ignore the locked setting and set
@@ -333,7 +322,6 @@ YAHOO.widget.DualSlider.prototype = {
      * @method updateValue
      * @param silent {boolean} (optional) Set to true to skip firing change
      * events.  Default false
-     * @private
      */
     updateValue: function(silent) {
         var min     = this.minSlider.getValue(),
@@ -388,8 +376,8 @@ YAHOO.widget.DualSlider.prototype = {
     },
 
     /**
-     * A background click will move the slider thumb nearest to the click.
-     * Override if you need different behavior.
+     * By default, a background click will move the slider on the side of the
+     * background that was clicked.  This is very implementation specific.
      * @method selectActiveSlider
      * @param e {Event} the mousedown event
      */
@@ -485,8 +473,7 @@ YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
 
 /**
  * Factory method for creating a horizontal dual-thumb slider
- * @for YAHOO.widget.Slider
- * @method YAHOO.widget.Slider.getHorizDualSlider
+ * @method YAHOO.widget.Slider.getHorizSlider
  * @static
  * @param {String} bg the id of the slider's background element
  * @param {String} minthumb the id of the min thumb
@@ -497,7 +484,7 @@ YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
  * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
  * from one another.  The default 0 allows the thumbs to touch, but not overlap.
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
- * @return {DualSlider} a horizontal dual-thumb slider control
+ * @return {Slider} a horizontal slider control
  */
 YAHOO.widget.Slider.getHorizDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, minRange, initVals) {
@@ -513,7 +500,6 @@ YAHOO.widget.Slider.getHorizDualSlider =
 
 /**
  * Factory method for creating a vertical dual-thumb slider.
- * @for YAHOO.widget.Slider
  * @method YAHOO.widget.Slider.getVertDualSlider
  * @static
  * @param {String} bg the id of the slider's background element
@@ -525,7 +511,7 @@ YAHOO.widget.Slider.getHorizDualSlider =
  * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
  * from one another.  The default 0 allows the thumbs to touch, but not overlap.
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
- * @return {DualSlider} a vertical dual-thumb slider control
+ * @return {Slider} a vertical slider control
  */
 YAHOO.widget.Slider.getVertDualSlider = 
     function (bg, minthumb, maxthumb, range, iTickSize, minRange, initVals) {
