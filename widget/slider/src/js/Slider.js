@@ -1037,6 +1037,7 @@ YAHOO.extend(YAHOO.widget.Slider, YAHOO.util.DragDrop, {
             var x = YAHOO.util.Event.getPageX(e);
             var y = YAHOO.util.Event.getPageY(e);
             this.moveThumb(x, y, true, true);
+            this.fireEvents();
         }
     },
 

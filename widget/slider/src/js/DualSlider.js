@@ -5,16 +5,20 @@
  * dynamically so that the min value of the max slider is equal or greater
  * to the current value of the min slider, and the max value of the min
  * slider is the current value of the max slider.
+ * Constructor assumes both thumbs are positioned absolutely at the 0 mark on
+ * the background.
+ *
  * @class DualSlider
  * @uses YAHOO.util.EventProvider
  * @constructor
- * @param {String}      id       The id of the element linked to this instance
- * @param {String}      sGroup   The group of related DragDrop items
- * @param {SliderThumb} minThumb The min value thumb
- * @param {SliderThumb} maxThumb The max value thumb
- * @param {String}      sType    The type of slider (horiz, vert)
+ * @param {Slider} minSlider The Slider instance used for the min value thumb
+ * @param {Slider} maxSlider The Slider instance used for the max value thumb
+ * @param {int}    range The number of pixels the thumbs may move within
+ * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
+ * from one another.  The default 0 allows the thumbs to touch, but not overlap.
+ * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  */
-YAHOO.widget.DualSlider = function(minSlider, maxSlider, initMinVal, initMaxVal) {
+YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVals) {
 
     var self = this,
         lang = YAHOO.lang;
@@ -40,10 +44,45 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, initMinVal, initMaxVal)
      */
     this.activeSlider = minSlider;
 
-    initMinVal = lang.isNumber(initMinVal) ? initMinVal : 0;
-    initMaxVal = lang.isNumber(initMaxVal) ? initMaxVal : Number.MAX_VALUE;
-    this.minSlider.setValue(initMinVal,true, true, true);
-    this.maxSlider.setValue(initMaxVal,true, true, true);
+    /**
+     * Pixel distance to maintain between thumbs.
+     * @property minRange
+     * @type int
+     * @default 0
+     */
+    this.minRange = minRange|0;
+
+    // Validate initial values
+    initVals = YAHOO.lang.isArray(initVals) ? initVals : [0,range];
+    initVals[0] = Math.min(Math.max(parseInt(initVals[0],10)|0,0),range);
+    initVals[1] = Math.max(Math.min(parseInt(initVals[1],10)|0,range),0);
+    // Swamp initVals if min > max
+    if (initVals[0] > initVals[1]) {
+        initVals.splice(0,2,initVals[1],initVals[0]);
+    }
+
+    var ready = { min : false, max : false };
+
+    this.minSlider.thumb.onAvailable = function () {
+        minSlider.setStartSliderState();
+        ready.min = true;
+        if (ready.max) {
+            minSlider.setValue(initVals[0],true,true,true);
+            maxSlider.setValue(initVals[1],true,true,true);
+            self.updateValue(true);
+            self.fireEvent('ready',self);
+        }
+    };
+    this.maxSlider.thumb.onAvailable = function () {
+        maxSlider.setStartSliderState();
+        ready.max = true;
+        if (ready.min) {
+            minSlider.setValue(initVals[0],true,true,true);
+            maxSlider.setValue(initVals[1],true,true,true);
+            self.updateValue(true);
+            self.fireEvent('ready',self);
+        }
+    };
 
     // dispatch mousedowns to the active slider
     minSlider.onMouseDown = function(e) {
@@ -74,10 +113,17 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, initMinVal, initMaxVal)
     maxSlider.subscribe("slideEnd", this._handleSlideEnd, maxSlider, this);
 
     // store the current min and max values
-    this.minVal = minSlider.getValue();
-    this.maxVal = maxSlider.getValue();
+    this.minVal = -1;
+    this.maxVal = -1;
     
     this.isHoriz = minSlider.thumb._isHoriz;
+
+    /**
+     * Event that fires when the slider is finished setting up
+     * @event ready
+     * @param {DualSlider} dualslider the DualSlider instance
+     */
+    this.createEvent("ready", this);
 
     /**
      * Event that fires when either the min or max value changes
@@ -151,24 +197,158 @@ YAHOO.widget.DualSlider.prototype = {
     },
 
     /**
+     * Sets the min and max thumbs to new values.
+     * @method setValues
+     * @param min {int} Pixel offset to assign to the min thumb
+     * @param max {int} Pixel offset to assign to the max thumb
+     * @param skipAnim {boolean} (optional) Set to true to skip thumb animation.
+     * Default false
+     * @param force {boolean} (optional) ignore the locked setting and set
+     * value anyway. Default false
+     * @param silent {boolean} (optional) Set to true to skip firing change
+     * events.  Default false
+     */
+    setValues : function (min, max, skipAnim, force, silent) {
+        var mins = this.minSlider,
+            maxs = this.maxSlider,
+            mint = mins.thumb,
+            maxt = maxs.thumb,
+            self = this,
+            done = { min : false, max : false };
+
+        // Clear constraints to prevent animated thumbs from prematurely
+        // stopping when hitting a constraint that's moving with the other
+        // thumb.
+        if (mint._isHoriz) {
+            mint.setXConstraint(mint.leftConstraint,maxt.rightConstraint,mint.tickSize);
+            maxt.setXConstraint(mint.leftConstraint,maxt.rightConstraint,maxt.tickSize);
+        } else {
+            mint.setYConstraint(mint.topConstraint,maxt.bottomConstraint,mint.tickSize);
+            maxt.setYConstraint(mint.topConstraint,maxt.bottomConstraint,maxt.tickSize);
+        }
+
+        // Set up one-time slideEnd callbacks to call updateValue when both
+        // thumbs have been set
+        this._oneTimeCallback(mins,'slideEnd',function () {
+            done.min = true;
+            if (done.max) {
+                self.updateValue(silent);
+                // Clean the slider's slideEnd events on a timeout since this
+                // will be executed from inside the event's fire
+                setTimeout(function () {
+                    self._cleanEvent(mins,'slideEnd');
+                    self._cleanEvent(maxs,'slideEnd');
+                },0);
+            }
+        });
+
+        this._oneTimeCallback(maxs,'slideEnd',function () {
+            done.max = true;
+            if (done.min) {
+                self.updateValue(silent);
+                // Clean both sliders' slideEnd events on a timeout since this
+                // will be executed from inside one of the event's fire
+                setTimeout(function () {
+                    self._cleanEvent(mins,'slideEnd');
+                    self._cleanEvent(maxs,'slideEnd');
+                },0);
+            }
+        });
+
+        mins.setValue(min,skipAnim,force,silent);
+        maxs.setValue(max,skipAnim,force,silent);
+    },
+
+    /**
+     * Set the min thumb position to a new value.
+     * @method setMinValue
+     * @param min {int} Pixel offset for min thumb
+     * @param skipAnim {boolean} (optional) Set to true to skip thumb animation.
+     * Default false
+     * @param force {boolean} (optional) ignore the locked setting and set
+     * value anyway. Default false
+     * @param silent {boolean} (optional) Set to true to skip firing change
+     * events.  Default false
+     */
+    setMinValue : function (min, skipAnim, force, silent) {
+        var mins = this.minSlider;
+
+        this.activeSlider = mins;
+
+        // Use a one-time event callback to delay the updateValue call
+        // until after the slide operation is done
+        var self = this;
+        this._oneTimeCallback(mins,'slideEnd',function () {
+            self.updateValue(silent);
+            // Clean the slideEnd event on a timeout since this
+            // will be executed from inside the event's fire
+            setTimeout(function () { self._cleanEvent(mins,'slideEnd'); }, 0);
+        });
+
+        mins.setValue(min, skipAnim, force, silent);
+    },
+
+    /**
+     * Set the max thumb position to a new value.
+     * @method setMinValue
+     * @param min {int} Pixel offset for max thumb
+     * @param skipAnim {boolean} (optional) Set to true to skip thumb animation.
+     * Default false
+     * @param force {boolean} (optional) ignore the locked setting and set
+     * value anyway. Default false
+     * @param silent {boolean} (optional) Set to true to skip firing change
+     * events.  Default false
+     */
+    setMaxValue : function (max, skipAnim, force, silent) {
+        var maxs = this.maxSlider;
+
+        this.activeSlider = maxs;
+
+        // Use a one-time event callback to delay the updateValue call
+        // until after the slide operation is done
+        var self = this;
+        this._oneTimeCallback(maxs,'slideEnd',function () {
+            self.updateValue(silent);
+            // Clean the slideEnd event on a timeout since this
+            // will be executed from inside the event's fire
+            setTimeout(function () { self._cleanEvent(maxs,'slideEnd'); }, 0);
+        });
+
+        maxs.setValue(max, skipAnim, force, silent);
+    },
+
+    /**
      * Executed when one of the sliders is moved
      * @method updateValue
+     * @param silent {boolean} (optional) Set to true to skip firing change
+     * events.  Default false
      */
-    updateValue: function(newOffset, slider) {
-        var min = this.minSlider.getValue();
-        var max = this.maxSlider.getValue();
+    updateValue: function(silent) {
+        var min     = this.minSlider.getValue(),
+            max     = this.maxSlider.getValue(),
+            changed = false;
+
         if (min != this.minVal || max != this.maxVal) {
-            this.fireEvent("change", this);
+            changed = true;
 
             var mint = this.minSlider.thumb;
             var maxt = this.maxSlider.thumb;
 
+            var thumbInnerWidth = this.minSlider.thumbCenterPoint.x +
+                                  this.maxSlider.thumbCenterPoint.x;
+
+            var minConstraint = Math.max(max-thumbInnerWidth-this.minRange,0);
+            var maxConstraint = Math.min(-min-thumbInnerWidth-this.minRange,0);
+
             if (this.isHoriz) {
-                mint.setXConstraint(mint.initLeft, max, mint.tickSize);
-                maxt.setXConstraint((-1*min), maxt.initRight, maxt.tickSize);
+
+                mint.setXConstraint(mint.leftConstraint,minConstraint, mint.tickSize);
+
+                maxt.setXConstraint(maxConstraint,maxt.rightConstraint, maxt.tickSize);
             } else {
-                mint.setYConstraint(mint.initUp, max, mint.tickSize);
-                maxt.setYConstraint((-1*min), maxt.initDown, maxt.tickSize);
+                mint.setYConstraint(mint.leftConstraint,minConstraint, mint.tickSize);
+
+                maxt.setYConstraint(maxConstraint,maxt.bottomConstraint, maxt.tickSize);
             }
 
             // it is possible that the slider is already out of position when
@@ -190,6 +370,9 @@ YAHOO.widget.DualSlider.prototype = {
         this.minVal = min;
         this.maxVal = max;
 
+        if (changed && !silent) {
+            this.fireEvent("change", this);
+        }
     },
 
     /**
@@ -231,6 +414,56 @@ YAHOO.widget.DualSlider.prototype = {
     _handleMouseDown: function(e) {
         this.selectActiveSlider(e);
         YAHOO.widget.Slider.prototype.onMouseDown.call(this.activeSlider, e);
+    },
+
+    /**
+     * Schedule an event callback that will execute once, then unsubscribe
+     * itself.
+     * @method _oneTimeCallback
+     * @param o {EventProvider} Object to attach the event to
+     * @param evt {string} Name of the event
+     * @param fn {Function} function to execute once
+     * @private
+     */
+    _oneTimeCallback : function (o,evt,fn) {
+        o.subscribe(evt,function () {
+            // Unsubscribe myself
+            o.unsubscribe(evt,arguments.callee);
+            // Pass the event handler arguments to the one time callback
+            fn.apply({},[].slice.apply(arguments));
+        });
+    },
+
+    /**
+     * Clean up the slideEnd event subscribers array, since each one-time
+     * callback will be replaced in the event's subscribers property with
+     * null.  This will cause memory bloat and loss of performance.
+     * @method _cleanEvent
+     * @param o {EventProvider} object housing the CustomEvent
+     * @param evt {string} name of the CustomEvent
+     * @private
+     */
+    _cleanEvent : function (o,evt) {
+        if (o.__yui_events && o.events[evt]) {
+            var ce, i, len;
+            for (i = o.__yui_events.length; i >= 0; --i) {
+                if (o.__yui_events[i].type === evt) {
+                    ce = o.__yui_events[i];
+                    break;
+                }
+            }
+            if (ce) {
+                var subs    = ce.subscribers,
+                    newSubs = [],
+                    j = 0;
+                for (i = 0, len = subs.length; i < len; ++i) {
+                    if (subs[i]) {
+                        newSubs[j++] = subs[i];
+                    }
+                }
+                ce.subscribers = newSubs;
+            }
+        }
     }
 
 };
@@ -239,59 +472,55 @@ YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
 
 
 /**
- * Factory method for creating a horizontal slider
+ * Factory method for creating a horizontal dual-thumb slider
  * @method YAHOO.widget.Slider.getHorizSlider
  * @static
  * @param {String} bg the id of the slider's background element
  * @param {String} minthumb the id of the min thumb
  * @param {String} maxthumb the id of the thumb thumb
- * @param {int} iLeft the number of pixels the element can move left
- * @param {int} iRight the number of pixels the element can move right
- * @param {int} iTickSize optional parameter for specifying that the element 
- * should move a certain number pixels at a time.
+ * @param {int} range the number of pixels the thumbs can move within
+ * @param {int} iTickSize (optional) the element should move this many pixels
+ * at a time
+ * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
+ * from one another.  The default 0 allows the thumbs to touch, but not overlap.
+ * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {Slider} a horizontal slider control
  */
 YAHOO.widget.Slider.getHorizDualSlider = 
-    function (bg, minthumb, maxthumb, iLeft, iRight, iTickSize) {
+    function (bg, minthumb, maxthumb, range, iTickSize, minRange, initVals) {
         var mint, maxt;
         var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        minRange = minRange|0;
 
-        mint = new Thumb(minthumb, bg, iLeft, iRight, 0, 0, iTickSize);
-        maxt = new Thumb(maxthumb, bg, iLeft, iRight, 0, 0, iTickSize);
+        mint = new Thumb(minthumb, bg, 0, range, 0, 0, iTickSize);
+        maxt = new Thumb(maxthumb, bg, 0, range, 0, 0, iTickSize);
 
-        // for backwards compatibility.  Not needed for 0.12.1 and up
-        mint.initLeft  = maxt.initLeft  = iLeft;
-        mint.initRight = maxt.initRight = iRight;
-        mint.initUp    = mint.initDown  = maxt.initUp = maxt.initDown = 0;
-
-        return new YW.DualSlider(new Slider(bg, bg, mint, "horiz"), new Slider(bg, bg, maxt, "horiz"));
+        return new YW.DualSlider(new Slider(bg, bg, mint, "horiz"), new Slider(bg, bg, maxt, "horiz"), range, minRange, initVals);
 };
 
 /**
- * Factory method for creating a vertical slider
+ * Factory method for creating a vertical dual-thumb slider.
  * @method YAHOO.widget.Slider.getVertDualSlider
  * @static
  * @param {String} bg the id of the slider's background element
  * @param {String} minthumb the id of the min thumb
  * @param {String} maxthumb the id of the thumb thumb
- * @param {int} iUp the number of pixels the element can move up
- * @param {int} iDown the number of pixels the element can move down
- * @param {int} iTickSize optional parameter for specifying that the element 
- * should move a certain number pixels at a time.
+ * @param {int} range the number of pixels the thumbs can move within
+ * @param {int} iTickSize (optional) the element should move this many pixels
+ * at a time
+ * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
+ * from one another.  The default 0 allows the thumbs to touch, but not overlap.
+ * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {Slider} a vertical slider control
  */
 YAHOO.widget.Slider.getVertDualSlider = 
-    function (bg, minthumb, maxthumb, iUp, iDown, iTickSize) {
+    function (bg, minthumb, maxthumb, range, iTickSize, minRange, initVals) {
         var mint, maxt;
         var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
+        minRange = minRange|0;
 
-        mint = new Thumb(minthumb, bg, 0, 0, iUp,iDown, iTickSize);
-        maxt = new Thumb(maxthumb, bg, 0, 0, iUp, iDown, iTickSize);
+        mint = new Thumb(minthumb, bg, 0, 0, 0, range, iTickSize);
+        maxt = new Thumb(maxthumb, bg, 0, 0, 0, range, iTickSize);
 
-        // for backwards compatibility.  Not needed for 0.12.1 and up
-        mint.initLeft  = maxt.initLeft  = mint.initRight = maxt.initRight = 0;
-        mint.initUp    = maxt.initUp    = iUp;
-        mint.initDown  = maxt.initDown  = iDown;
-
-        return new YW.DualSlider(new Slider(bg, bg, mint, "vert"), new Slider(bg, bg, maxt, "vert"));
+        return new YW.DualSlider(new Slider(bg, bg, mint, "vert"), new Slider(bg, bg, maxt, "vert"), range, minRange, initVals);
 };
