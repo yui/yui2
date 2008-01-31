@@ -328,7 +328,7 @@
 
             unit.on('heightChange', this.resize, this, true);
             unit.on('widthChange', this.resize, this, true);
-            unit.on('paddingChange', this.resize, this, true);
+            unit.on('gutterChange', this.resize, this, true);
             this['_' + cfg.position] = unit;
 
             if (this._rendered) {

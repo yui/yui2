@@ -328,7 +328,7 @@
 
             unit.on('heightChange', this.resize, this, true);
             unit.on('widthChange', this.resize, this, true);
-            unit.on('paddingChange', this.resize, this, true);
+            unit.on('gutterChange', this.resize, this, true);
             this['_' + cfg.position] = unit;
 
             if (this._rendered) {
@@ -741,11 +741,11 @@
         _clip: null,
         /**
         * @private
-        * @property _padding
-        * @description A simple hash table used to store the padding to apply to the Unit
+        * @property _gutter
+        * @description A simple hash table used to store the gutter to apply to the Unit
         * @type Object
         */
-        _padding: null,
+        _gutter: null,
         /**
         * @property header
         * @description A reference to the HTML element used for the Header
@@ -835,8 +835,8 @@
                     box = [this.get('height'), this.get('width')];
 
 
-                var nh = (box[0] - hd[0] - ft[0]) - (this._padding.top + this._padding.bottom),
-                    nw = box[1] - (this._padding.left + this._padding.right);
+                var nh = (box[0] - hd[0] - ft[0]) - (this._gutter.top + this._gutter.bottom),
+                    nw = box[1] - (this._gutter.left + this._gutter.right);
 
                 var wrapH = (nh + (hd[0] + ft[0])),
                     wrapW = nw;
@@ -844,13 +844,13 @@
                 if (this._collapsed && !this._collapsing) {
                     this._setHeight(this._clip, wrapH);
                     this._setWidth(this._clip, wrapW);
-                    Dom.setStyle(this._clip, 'top', this.get('top') + this._padding.top + 'px');
-                    Dom.setStyle(this._clip, 'left', this.get('left') + this._padding.left + 'px');
+                    Dom.setStyle(this._clip, 'top', this.get('top') + this._gutter.top + 'px');
+                    Dom.setStyle(this._clip, 'left', this.get('left') + this._gutter.left + 'px');
                 } else if (!this._collapsed || (this._collapsed && this._collapsing)) {
                     wrapH = this._setHeight(this.get('wrap'), wrapH);
                     wrapW = this._setWidth(this.get('wrap'), wrapW);
-                    Dom.setStyle(this.get('wrap'), 'top', this._padding.top + 'px');
-                    Dom.setStyle(this.get('wrap'), 'left', this._padding.left + 'px');
+                    Dom.setStyle(this.get('wrap'), 'top', this._gutter.top + 'px');
+                    Dom.setStyle(this.get('wrap'), 'left', this._gutter.left + 'px');
 
                     this._setWidth(this.header, wrapW);
                     this._setWidth(this.footer, wrapW);
@@ -1006,8 +1006,8 @@
                     box = [this.get('height'), this.get('width')];
 
 
-                var nh = (box[0] - hd[0] - ft[0]) - (this._padding.top + this._padding.bottom),
-                    nw = box[1] - (this._padding.left + this._padding.right),
+                var nh = (box[0] - hd[0] - ft[0]) - (this._gutter.top + this._gutter.bottom),
+                    nw = box[1] - (this._gutter.left + this._gutter.right),
                     wrapH = (nh + (hd[0] + ft[0]));
 
                 switch (this.get('position')) {
@@ -1015,22 +1015,22 @@
                     case 'bottom':
                         this._setWidth(this._clip, nw);
                         this._setHeight(this._clip, this.get('collapseSize'));
-                        Dom.setStyle(this._clip, 'left', (this._lastLeft + this._padding.left) + 'px');
+                        Dom.setStyle(this._clip, 'left', (this._lastLeft + this._gutter.left) + 'px');
                         if (this.get('position') == 'bottom') {
-                            Dom.setStyle(this._clip, 'top', ((this._lastTop + this._lastHeight) - (this.get('collapseSize') - this._padding.top)) + 'px');
+                            Dom.setStyle(this._clip, 'top', ((this._lastTop + this._lastHeight) - (this.get('collapseSize') - this._gutter.top)) + 'px');
                         } else {
-                            Dom.setStyle(this._clip, 'top', this.get('top') + this._padding.top + 'px');
+                            Dom.setStyle(this._clip, 'top', this.get('top') + this._gutter.top + 'px');
                         }
                         break;
                     case 'left':
                     case 'right':
                         this._setWidth(this._clip, this.get('collapseSize'));
                         this._setHeight(this._clip, wrapH);
-                        Dom.setStyle(this._clip, 'top', (this.get('top') + this._padding.top) + 'px');
+                        Dom.setStyle(this._clip, 'top', (this.get('top') + this._gutter.top) + 'px');
                         if (this.get('position') == 'right') {
-                            Dom.setStyle(this._clip, 'left', (((this._lastLeft + this._lastWidth) - this.get('collapseSize')) - this._padding.left) + 'px');
+                            Dom.setStyle(this._clip, 'left', (((this._lastLeft + this._lastWidth) - this.get('collapseSize')) - this._gutter.left) + 'px');
                         } else {
-                            Dom.setStyle(this._clip, 'left', (this.get('left') + this._padding.left) + 'px');
+                            Dom.setStyle(this._clip, 'left', (this.get('left') + this._gutter.left) + 'px');
                         }
                         break;
                 }
@@ -1130,6 +1130,7 @@
                     this.resize();
                     this.set('scroll', this._lastScroll);
                     this._anim.onComplete.unsubscribe(expand, this, true);
+                    this.fireEvent('expand');
                 };
                 this._anim.onStart.subscribe(exStart, this, true);
                 this._anim.onComplete.subscribe(expand, this, true);
@@ -1145,6 +1146,7 @@
                 this._collapsed = false;
                 this.resize();
                 this.set('scroll', this._lastScroll);
+                this.fireEvent('expand');
             }
             return this;
         },
@@ -1187,7 +1189,7 @@
             switch (pos) {
                 case 'top':
                 case 'bottom':
-                    this.set('height', (this.get('collapseSize') + (this._padding.top + this._padding.bottom)));
+                    this.set('height', (this.get('collapseSize') + (this._gutter.top + this._gutter.bottom)));
                     attr = {
                         top: {
                             to: (this.get('top') - h)
@@ -1199,7 +1201,7 @@
                     break;
                 case 'left':
                 case 'right':
-                    this.set('width', (this.get('collapseSize') + (this._padding.left + this._padding.right)));
+                    this.set('width', (this.get('collapseSize') + (this._gutter.left + this._gutter.right)));
                     attr = {
                         left: {
                             to: -(this._lastWidth)
@@ -1221,6 +1223,7 @@
                     this._collapsed = true;
                     this.get('parent').resize();
                     this._anim.onComplete.unsubscribe(collapse, this, true);
+                    this.fireEvent('collapse');
                 };
                 this._anim.onComplete.subscribe(collapse, this, true);
                 this._anim.animate();
@@ -1231,6 +1234,7 @@
                 this.setStyle('zIndex', this.get('parent')._zIndex);
                 this.get('parent').resize();
                 this._collapsed = true;
+                this.fireEvent('collapse');
             }
             return this;
         },
@@ -1242,6 +1246,7 @@
         close: function() {
             this.setStyle('display', 'none');
             this.get('parent').removeUnit(this);
+            this.fireEvent('close');
             if (this._clip) {
                 this._clip.parentNode.removeChild(this._clip);
                 this._clip = null;
@@ -1255,7 +1260,7 @@
         */
         init: function(p_oElement, p_oAttributes) {
             YAHOO.log('init', 'info', 'LayoutUnit');
-            this._padding = {
+            this._gutter = {
                 left: 0,
                 right: 0,
                 top: 0,
@@ -1435,33 +1440,33 @@
                 value: attr.position
             });
             /**
-            * @config padding
-            * @description The padding that we should apply to the parent Layout around this Unit. Supports standard CSS markup: (2 4 0 5) or (2) or (2 5)
+            * @config gutter
+            * @description The gutter that we should apply to the parent Layout around this Unit. Supports standard CSS markup: (2 4 0 5) or (2) or (2 5)
             * @type String
             */
-            this.setAttributeConfig('padding', {
-                value: attr.padding || 0,
+            this.setAttributeConfig('gutter', {
+                value: attr.gutter || 0,
                 validator: YAHOO.lang.isString,
-                method: function(padding) {
-                    var p = padding.split(' ');
+                method: function(gutter) {
+                    var p = gutter.split(' ');
                     if (p.length) {
-                        this._padding.top = parseInt(p[0], 10);
+                        this._gutter.top = parseInt(p[0], 10);
                         if (p[1]) {
-                            this._padding.right = parseInt(p[1], 10);
+                            this._gutter.right = parseInt(p[1], 10);
                         } else {
-                            this._padding.right = this._padding.top;
+                            this._gutter.right = this._gutter.top;
                         }
                         if (p[2]) {
-                            this._padding.bottom = parseInt(p[2], 10);
+                            this._gutter.bottom = parseInt(p[2], 10);
                         } else {
-                            this._padding.bottom = this._padding.top;
+                            this._gutter.bottom = this._gutter.top;
                         }
                         if (p[3]) {
-                            this._padding.left = parseInt(p[3], 10);
+                            this._gutter.left = parseInt(p[3], 10);
                         } else if (p[1]) {
-                            this._padding.left = this._padding.right;
+                            this._gutter.left = this._gutter.right;
                         } else {
-                            this._padding.left = this._padding.top;
+                            this._gutter.left = this._gutter.top;
                         }
                     }
                 }
@@ -1892,6 +1897,21 @@
     /**
     * @event contentChange
     * @description Fired when the content in the header, body or footer is changed via the API
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event close
+    * @description Fired when the unit is closed
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event collapse
+    * @description Fired when the unit is collapsed
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event expand
+    * @description Fired when the unit is exanded
     * @type YAHOO.util.CustomEvent
     */
     });
