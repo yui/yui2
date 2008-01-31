@@ -32,3 +32,63 @@
     text-align: center;
 }
 
+.yui-skin-sam .yui-resize .yui-resize-handle-inner-r,
+.yui-skin-sam .yui-resize .yui-resize-handle-inner-l {
+    background: transparent url( layout_sprite.png) no-repeat 0 -5px;
+    height: 16px;
+    width: 5px;
+    position: absolute;
+    top: 45%;
+}
+
+.yui-skin-sam .yui-resize .yui-resize-handle-inner-t,
+.yui-skin-sam .yui-resize .yui-resize-handle-inner-b {
+    background: transparent url(layout_sprite.png) no-repeat -20px 0;
+    height: 5px;
+    width: 16px;
+    position: absolute;
+    left: 50%;
+}
+
+.yui-skin-sam .yui-resize .yui-resize-handle-br {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -62px;
+}
+
+.yui-skin-sam .yui-resize .yui-resize-handle-tr {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -42px;
+}
+
+.yui-skin-sam .yui-resize .yui-resize-handle-tl {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -82px;
+}
+
+.yui-skin-sam .yui-resize .yui-resize-handle-bl {
+    background-image: url( layout_sprite.png );
+    background-repeat: no-repeat;
+    background-position: -22px -23px;
+}
+
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-t,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-r,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-b,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-l,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-tl,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-tr,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-bl,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-br,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-t,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-r,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-b,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-l,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-tl,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-tr,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-bl,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-br {
+    background-image: none;
+}

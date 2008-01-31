@@ -322,6 +322,9 @@ var D = YAHOO.util.Dom,
                 this._handles[h[i]] = document.createElement('div');
                 this._handles[h[i]].id = D.generateId(this._handles[h[i]]);
                 this._handles[h[i]].className = this.CSS_HANDLE + ' ' + this.CSS_HANDLE + '-' + h[i];
+                var k = document.createElement('div');
+                k.className = this.CSS_HANDLE + '-inner-' + h[i];
+                this._handles[h[i]].appendChild(k);
                 this._wrap.appendChild(this._handles[h[i]]);
                 Event.on(this._handles[h[i]], 'mouseover', this._handleMouseOver, this, true);
                 Event.on(this._handles[h[i]], 'mouseout', this._handleMouseOut, this, true);
@@ -398,6 +401,9 @@ var D = YAHOO.util.Dom,
                 D.removeClass(this._wrap, this.CSS_HOVER);
             }
             var tar = Event.getTarget(ev);
+            if (!D.hasClass(tar, this.CSS_HANDLE)) {
+                tar = tar.parentNode;
+            }
             if (D.hasClass(tar, this.CSS_HANDLE) && !this._active) {
                 D.addClass(tar, this.CSS_HANDLE + '-active');
                 for (var i in this._handles) {
@@ -427,6 +433,9 @@ var D = YAHOO.util.Dom,
                 D.addClass(this._wrap, this.CSS_HOVER);
             }
             var tar = Event.getTarget(ev);
+            if (!D.hasClass(tar, this.CSS_HANDLE)) {
+                tar = tar.parentNode;
+            }
             if (D.hasClass(tar, this.CSS_HANDLE) && !this._active) {
                 D.removeClass(tar, this.CSS_HANDLE + '-active');
                 for (var i in this._handles) {
