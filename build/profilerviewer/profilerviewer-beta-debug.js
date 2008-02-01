@@ -225,6 +225,15 @@
 		 */
 		this.createEvent("dataRefreshEvent");
 		
+		/**
+		 * Fired when the viewer canvas first renders. No arguments are passed
+		 * with this event.
+		 *
+		 * @event refreshDataEvent
+		 */
+		this.createEvent("renderEvent");
+
+		
 		this.on("dataRefreshEvent", this._refreshDataTable, this, true);
 		
 		this._initLauncherDOM();
@@ -334,6 +343,8 @@
 		this._initDashboardDOM();
 		this._rendered = true;
 		this._toggleVisibleEl.innerHTML = PV.STRINGS.buttons.hideprofiler;
+		
+		this.fireEvent("renderEvent");
 
 		YAHOO.log("ProfilerViewer rendering complete...", "info", "ProfilerViewer");
 	};
@@ -553,23 +564,22 @@
 				resizeable: (YAHOO.util.DragDrop) ? true : false,
 				minWidth:180},
 			{key:"calls", sortable:true, label: c.calls,
-				sortOptions: {defaultDir:d},
-				width:40},
+				sortOptions: {defaultDir:d}},
 			{key:"avg", sortable:true, label: c.avg,
 				sortOptions: {defaultDir:d},
-				formatter:f, width:70},
+				formatter:f},
 			{key:"min", sortable:true, label: c.min,
 				sortOptions: {defaultDir:a},
-				formatter:f, width:70}, 
+				formatter:f}, 
 			{key:"max", sortable:true, label: c.max,
 				sortOptions: {defaultDir:d},
-				formatter:f, width:70},
+				formatter:f},
 			{key:"total", sortable:true, label: c.total,
 				sortOptions: {defaultDir:d},
-				formatter:f, width:70},
+				formatter:f},
 			{key:"pct", sortable:true, label: c.pct,
 				sortOptions: {defaultDir:d}, 
-				formatter:formatPercent, width:65}
+				formatter:formatPercent}
 		];
 
 		this._dataTable = new YAHOO.widget.DataTable(this._tableEl, cols, ds, {
@@ -858,10 +868,10 @@
 		 * or a path relative to the page being profiled. Changes at runtime
 		 * not supported; pass this value in at instantiation.
 		 * @attribute sfwUrl
-		 * @default "http://yui.yahooapis.com/2.4.1/build/charts/assets/charts.swf"
+		 * @default "http://yui.yahooapis.com/2.5.0/build/charts/assets/charts.swf"
 		 */
 		this.setAttributeConfig('swfUrl', {
-			value: attr.swfUrl || "http://yui.yahooapis.com/2.4.1/build/charts/assets/charts.swf"
+			value: attr.swfUrl || "http://yui.yahooapis.com/2.5.0/build/charts/assets/charts.swf"
 		});
 
         /**
