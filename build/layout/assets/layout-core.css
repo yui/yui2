@@ -133,6 +133,7 @@ body.yui-layout {
     height: 100%;
     width: 100%;
     position: absolute;
+    left: 0;
 }
 
 .yui-layout .yui-layout-unit .yui-content {

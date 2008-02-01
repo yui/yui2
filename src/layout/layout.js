@@ -115,6 +115,12 @@
             } else {
                 h = parseInt(this.getStyle('height'), 10);
                 w = parseInt(this.getStyle('width'), 10);
+                if (isNaN(w)) {
+                    w = this.get('element').clientWidth;
+                }
+                if (isNaN(h)) {
+                    h = this.get('element').clientHeight;
+                }
             }
             if (this.get('minWidth')) {
                 if (w < this.get('minWidth')) {
@@ -132,7 +138,6 @@
             }
             this._sizes.doc = { h: h, w: w };
             YAHOO.log('Setting Body height and width: (' + h + ',' + w + ')', 'info', 'Layout');
-
             this._setSides(set);
         },
         /**
