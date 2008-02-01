@@ -234,6 +234,20 @@
             'skinnable': true
         },
 
+        'profiler': {
+            'type': 'js',
+            'path': 'profiler/profiler-beta-min.js',
+            'requires': ['yahoo']
+        },
+
+
+        'profilerviewer': {
+            'type': 'js',
+            'path': 'profilerviewer/profilerviewer-beta-min.js',
+            'requires': ['yuiloader', 'element'],
+            'skinnable': true
+        },
+
         'reset': {
             'type': 'css',
             'path': 'reset/reset-min.css'
@@ -296,6 +310,12 @@
             'path': 'treeview/treeview-min.js',
             'requires': ['event'],
             'skinnable': true
+        },
+
+        'uploader': {
+            'type': 'js',
+            'path': 'uploader/uploader-experimental.js',
+            'requires': ['yahoo']
         },
 
         'utilities': {
