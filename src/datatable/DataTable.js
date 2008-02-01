@@ -79,6 +79,17 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // but *before* table is populated with data
     DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
 
+    // HACK: Set sortedBy values for backward compatibility
+    var oSortedBy = this.get("sortedBy");
+    if(oSortedBy) {
+        if(oSortedBy.dir == "desc") {
+            this._configs.sortedBy.value.dir = DT.CLASS_DESC;
+        }
+        else if(oSortedBy.dir == "asc") {
+            this._configs.sortedBy.value.dir = DT.CLASS_ASC;
+        }
+    }
+
     //HACK: Set the paginator values.  Attribute doesn't afford for merging
     // obj value's keys.  It's all or nothing.  Merge in provided keys.
     if(this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
@@ -1490,7 +1501,7 @@ initAttributes : function(oConfigs) {
             }
         }
     });
-
+    
     /**
     * @attribute paginator
     * @description Stores an instance of Pag, or (for
@@ -2186,7 +2197,17 @@ _syncColWidths : function() {
     var allKeys = this._oColumnSet.keys;
     var elRow = this.getFirstTrEl();
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-        var elTh, elTd, elThLiner, elTdLiner, newWidth, oChain = this._oChain;
+        var oChain = this._oChain,
+            elTh, elTd, elThLiner, elTdLiner, newWidth;
+        
+        // Temporarily unsnap container since it causes inaccurate calculations
+        var bUnsnap = false;
+        if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
+            bUnsnap = true;
+            this._elTheadContainer.style.width = "";
+            this._elTbodyContainer.style.width = "";
+        }
+
         // Only proceed for Columns without widths
         for(var i=0,rowsLen=elRow.cells.length; i<rowsLen; i++) {
             if(!allKeys[i].width) {
@@ -2194,14 +2215,6 @@ _syncColWidths : function() {
                 elTh = allKeys[i].getThEl();
                 elTd = elRow.cells[i];
                 if(elTh.offsetWidth !== elTd.offsetWidth) {
-                    // Temporarily unsnap container when it causes inaccurate calculations
-                    var bUnsnap = false;
-                    if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
-                        bUnsnap = true;
-                        this._elTheadContainer.style.width = "";
-                        this._elTbodyContainer.style.width = "";     
-                    }
-
                     // Column header is wider - bump the body cells up
                     if(elTh.offsetWidth > elTd.offsetWidth) {
                         elTd.style.width = elTh.offsetWidth + "px";
@@ -2236,22 +2249,17 @@ _syncColWidths : function() {
                         iterations:this._elTbody.rows.length,
                         argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
                     });
-
-                    // Resnap unsnapped containers
-                    if(bUnsnap) {
-                        oChain.add({
-                            method: function(oArg) {
-                                // Resnap containers
-                                var sWidth = this.get("width");
-                                this._elTheadContainer.style.width = sWidth;
-                                this._elTbodyContainer.style.width = sWidth;     
-                            },
-                            scope: this
-                        });                    
-                    }
                 }
             }
         }
+        
+        // Resnap unsnapped containers
+        if(bUnsnap) {
+            var sWidth = this.get("width");
+            this._elTheadContainer.style.width = sWidth;
+            this._elTbodyContainer.style.width = sWidth;     
+        }
+        
         oChain.run();
     }
     this._syncScrollPadding();
