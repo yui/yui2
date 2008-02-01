@@ -531,8 +531,7 @@ YAHOO.widget.DS_XHR.ERROR_DATAXHR = "XHR response failed";
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Alias to YUI Connection Manager. Allows implementers to specify their own
- * subclasses of the YUI Connection Manager utility.
+ * Alias to YUI Connection Manager, to allow implementers to customize the utility.
  *
  * @property connMgr
  * @type Object
@@ -724,27 +723,8 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
     switch (this.responseType) {
         case YAHOO.widget.DS_XHR.TYPE_JSON:
             var jsonList, jsonObjParsed;
-            // Check for JSON lib but divert KHTML clients
-            var isNotMac = (navigator.userAgent.toLowerCase().indexOf('khtml')== -1);
-            if(oResponse.parseJSON && isNotMac) {
-                // Use the new JSON utility if available
-                jsonObjParsed = oResponse.parseJSON();
-                if(!jsonObjParsed) {
-                    bError = true;
-                }
-                else {
-                    try {
-                        // eval is necessary here since aSchema[0] is of unknown depth
-                        jsonList = eval("jsonObjParsed." + aSchema[0]);
-                    }
-                    catch(e) {
-                        bError = true;
-                        break;
-                   }
-                }
-            }
-            // Check for YUI JSON lib but divert KHTML clients
-            else if(YAHOO.lang.JSON && isNotMac) {
+            // Check for YUI JSON
+            if(YAHOO.lang.JSON) {
                 // Use the JSON utility if available
                 jsonObjParsed = YAHOO.lang.JSON.parse(oResponse);
                 if(!jsonObjParsed) {
@@ -762,8 +742,26 @@ YAHOO.widget.DS_XHR.prototype.parseResponse = function(sQuery, oResponse, oParen
                    }
                 }
             }
-            else if(window.JSON && isNotMac) {
-                // Use older JSON lib if available
+            // Check for JSON lib
+            else if(oResponse.parseJSON) {
+                // Use the new JSON utility if available
+                jsonObjParsed = oResponse.parseJSON();
+                if(!jsonObjParsed) {
+                    bError = true;
+                }
+                else {
+                    try {
+                        // eval is necessary here since aSchema[0] is of unknown depth
+                        jsonList = eval("jsonObjParsed." + aSchema[0]);
+                    }
+                    catch(e) {
+                        bError = true;
+                        break;
+                   }
+                }
+            }
+            // Use older JSON lib if available
+            else if(window.JSON) {
                 jsonObjParsed = JSON.parse(oResponse);
                 if(!jsonObjParsed) {
                     bError = true;
