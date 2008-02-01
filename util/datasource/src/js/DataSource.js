@@ -1200,31 +1200,48 @@ YAHOO.util.DataSource.prototype.doBeforeCallback = function(oRequest, oFullRespo
 YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oFullResponse) {
     if(YAHOO.lang.isArray(oFullResponse)) {
         if(YAHOO.lang.isArray(this.responseSchema.fields)) {
-            var oParsedResponse = {results:[]};
-            var fields = this.responseSchema.fields;
-            for(var i=oFullResponse.length-1; i>-1; i--) {
-                var oResult = {};
-                for(var j=fields.length-1; j>-1; j--) {
-                    var field = fields[j];
-                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
-                    var data = (YAHOO.lang.isValue(oFullResponse[i][j])) ? oFullResponse[i][j] : oFullResponse[i][key];
-                    // Backward compatibility
-                    if(!field.parser && field.converter) {
-                        field.parser = field.converter;
-                        YAHOO.log("The field property converter has been deprecated" +
-                                " in favor of parser", "warn", this.toString());
-                    }
-                    if(field.parser) {
-                        data = field.parser.call(this, data);
-                    }
-                    // Safety measure
-                    if(data === undefined) {
-                        data = null;
-                    }
-                    oResult[key] = data;
+            var results = [],
+                fields = this.responseSchema.fields,
+                i;
+            for (i = fields.length - 1; i >= 0; --i) {
+                if (typeof fields[i] !== 'object') {
+                    fields[i] = { key : fields[i] };
                 }
-                oParsedResponse.results.unshift(oResult);
             }
+
+            var parsers = {};
+            for (i = fields.length - 1; i >= 0; --i) {
+                var p = fields[i].parser || fields[i].converter;
+                if (p) {
+                    parsers[fields[i].key] = p;
+                }
+            }
+
+            var arrType = YAHOO.lang.isArray(oFullResponse[0]);
+            for(i=oFullResponse.length-1; i>-1; i--) {
+                var oResult = {};
+                var rec = oFullResponse[i];
+                if (typeof rec === 'object') {
+                    for(var j=fields.length-1; j>-1; j--) {
+                        var field = fields[j];
+                        var data = arrType ? rec[j] : rec[field.key];
+
+                        if (parsers[field.key]) {
+                            data = parsers[field.key].call(this,data);
+                        }
+
+                        // Safety measure
+                        if(data === undefined) {
+                            data = null;
+                        }
+
+                        oResult[field.key] = data;
+                    }
+                }
+                results[i] = oResult;
+            }
+
+            var oParsedResponse = {results:results};
             YAHOO.log("Parsed array data is " +
                     YAHOO.lang.dump(oParsedResponse), "info", this.toString());
             return oParsedResponse;
@@ -1264,7 +1281,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse
                 // Split along record delimiter to get an array of strings
                 var recordsarray = oFullResponse.split(recDelim);
                 // Cycle through each record
-                for(var i = recordsarray.length-1; i>-1; i--) {
+                for(var i = 0, len = recordsarray.length, recIdx = 0; i < len; ++i) {
                     var oResult = {};
                     var bError = false;
                     if (YAHOO.lang.isString(recordsarray[i])) {
@@ -1307,7 +1324,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse
                             }
                         }
                         if(!bError) {
-                            oParsedResponse.results.unshift(oResult);
+                            oParsedResponse.results[recIdx++] = oResult;
                         }
                     }
                 }
@@ -1659,7 +1676,7 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
                 }
                 oResult[key] = data;
             }
-            oParsedResponse.results.unshift(oResult);
+            oParsedResponse.results[i] = oResult;
         }
     }
 
