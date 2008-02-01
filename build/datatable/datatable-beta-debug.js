@@ -6521,11 +6521,11 @@ _focusEl : function(el) {
  */
 _syncColWidths : function() {
     // Validate there is at least one row with cells and at least one Column
-    var allKeys = this._oColumnSet.keys;
-    var elRow = this.getFirstTrEl();
+    var allKeys = this._oColumnSet.keys,
+        elRow = this.getFirstTrEl(),
+        oChain = this._oChain;
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-        var oChain = this._oChain,
-            elTh, elTd, elThLiner, elTdLiner, newWidth;
+        var elTh, elTd, elThLiner, elTdLiner, newWidth;
         
         // Temporarily unsnap container since it causes inaccurate calculations
         var bUnsnap = false;
@@ -6589,7 +6589,16 @@ _syncColWidths : function() {
         
         oChain.run();
     }
+    
     this._syncScrollPadding();
+    
+    oChain.add({
+        method: function(oArg) {
+            this._syncScrollPadding();
+        },
+        scope: this
+    });  
+    oChain.run();
 },
 
 /**
@@ -6602,76 +6611,68 @@ _syncColWidths : function() {
 _syncScrollPadding : function() {
     // Proceed only if scrollable is enabled
     if(this.get("scrollable")) {
-        this._oChain.add({
-            method: function() {
-                if((this instanceof DT) && this._sId) {
-                    var elTbody = this._elTbody,
-                        elTbodyContainer = this._elTbodyContainer,
-                        aLastHeaders, len, prefix, i, elLiner;
-                    
-                    // IE 6 and 7 only when y-scrolling not enabled
-                    if(!this.get("height") && (ua.ie)) {
-                        // Snap outer container height to content
-                        // but account for x-scrollbar if it is visible
-                        elTbodyContainer.style.height = 
-                                (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
-                                (elTbody.offsetHeight + 19) + "px" : 
-                                elTbody.offsetHeight + "px";
-                    }
-                    
-                    // X-scrolling not enabled
-                    if(!this.get("width")) {
-                        // Snap outer container width to content
-                        // but account for y-scrollbar if it is visible
-                        this._elContainer.style.width = 
-                                (elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) ?
-                                (elTbody.parentNode.offsetWidth + 19) + "px" :
-                                (elTbody.parentNode.offsetWidth) + "px";
-                    }
-                    // X-scrolling is enabled and x-scrollbar is visible
-                    else if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
-                        // Perform sync routine
-                        if(!this._bScrollbarX) {
-                            // Add Column header right-padding
-                            aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-                            len = aLastHeaders.length;
-                            prefix = this._sId+"-th";
-                            for(i=0; i<len; i++) {
-                                //TODO: A better way to get th cell
-                                elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                                elLiner.style.paddingRight = 
-                                        (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) + 
-                                        27) + "px";
-                            }
-                            
-                            // Save state   
-                            this._bScrollbarX = true;
-                        }
-                    }
-                    // X-scrollbar enabled but x-scrollbar is not visible
-                    else {
-                        // Perform sync routine
-                        if(this._bScrollbarX) {                 
-                            // Remove Column header right-padding                   
-                            aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-                            len = aLastHeaders.length;
-                            prefix = this._sId+"-th";
-                            for(i=0; i<len; i++) {
-                                //TODO: A better way to get th cell
-                                elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                                Dom.setStyle(elLiner,"paddingRight","");
-                            }
-                                                    
-                            // Save state
-                            this._bScrollbarX = false;
-                        }
-                    }
+        var elTbody = this._elTbody,
+            elTbodyContainer = this._elTbodyContainer,
+            aLastHeaders, len, prefix, i, elLiner;
+        
+        // IE 6 and 7 only when y-scrolling not enabled
+        if(!this.get("height") && (ua.ie)) {
+            // Snap outer container height to content
+            // but account for x-scrollbar if it is visible
+            elTbodyContainer.style.height = 
+                    (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
+                    (elTbody.offsetHeight + 19) + "px" : 
+                    elTbody.offsetHeight + "px";
+        }
+        
+        // X-scrolling not enabled
+        if(!this.get("width")) {
+            // Snap outer container width to content
+            // but account for y-scrollbar if it is visible
+            this._elContainer.style.width = 
+                    (elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) ?
+                    (elTbody.parentNode.offsetWidth + 19) + "px" :
+                    (elTbody.parentNode.offsetWidth) + "px";
+        }
+        // X-scrolling is enabled and x-scrollbar is visible
+        else if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
+            // Perform sync routine
+            if(!this._bScrollbarX) {
+                // Add Column header right-padding
+                aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+                len = aLastHeaders.length;
+                prefix = this._sId+"-th";
+                for(i=0; i<len; i++) {
+                    //TODO: A better way to get th cell
+                    elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+                    elLiner.style.paddingRight = 
+                            (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) + 
+                            27) + "px";
                 }
-            },
-            scope: this
-        });
+                
+                // Save state   
+                this._bScrollbarX = true;
+            }
+        }
+        // X-scrollbar enabled but x-scrollbar is not visible
+        else {
+            // Perform sync routine
+            if(this._bScrollbarX) {                 
+                // Remove Column header right-padding                   
+                aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+                len = aLastHeaders.length;
+                prefix = this._sId+"-th";
+                for(i=0; i<len; i++) {
+                    //TODO: A better way to get th cell
+                    elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+                    Dom.setStyle(elLiner,"paddingRight","");
+                }
+                                        
+                // Save state
+                this._bScrollbarX = false;
+            }
+        }
     }
-    this._oChain.run();       
 },
 
 
