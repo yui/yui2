@@ -2209,7 +2209,7 @@ _syncColWidths : function() {
         }
 
         // Only proceed for Columns without widths
-        for(var i=0,keysLen=allKeys.length; i<keysLen; i++) {
+        for(var i=0,rowsLen=elRow.cells.length; i<rowsLen; i++) {
             if(!allKeys[i].width) {
                 // Only proceed if TH and TD widths are out of sync
                 elTh = allKeys[i].getThEl();
@@ -2236,14 +2236,7 @@ _syncColWidths : function() {
                             (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) -
                             (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
                                                         
-                    // Apply new width to every TD liner minus appropriate padding in first row
-                    var cellLiner = elRow.cells[i].firstChild;
-                    cellLiner.style.width = newWidth -
-                            (parseInt(Dom.getStyle(cellLiner,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(cellLiner,"paddingRight"),10)|0) + "px";
-
-
-                    /*// Apply new width to every TD liner minus appropriate padding
+                    // Apply new width to every TD liner minus appropriate padding
                     oChain.add({
                         method: function(oArg) {
                             var cellLiner = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex].firstChild;
@@ -2255,7 +2248,7 @@ _syncColWidths : function() {
                         scope: this,
                         iterations:this._elTbody.rows.length,
                         argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
-                    });*/
+                    });
                 }
             }
         }
@@ -2272,13 +2265,13 @@ _syncColWidths : function() {
     
     this._syncScrollPadding();
     
-    /*oChain.add({
+    oChain.add({
         method: function(oArg) {
             this._syncScrollPadding();
         },
         scope: this
     });  
-    oChain.run();*/
+    oChain.run();
 },
 
 /**
@@ -3192,8 +3185,6 @@ _setFirstRow : function() {
     else {
         this._sFirstTrId = null;
     }
-    
-    this._syncColWidths();
 },
 
 /**
