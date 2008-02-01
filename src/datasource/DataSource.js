@@ -1200,31 +1200,48 @@ YAHOO.util.DataSource.prototype.doBeforeCallback = function(oRequest, oFullRespo
 YAHOO.util.DataSource.prototype.parseArrayData = function(oRequest, oFullResponse) {
     if(YAHOO.lang.isArray(oFullResponse)) {
         if(YAHOO.lang.isArray(this.responseSchema.fields)) {
-            var oParsedResponse = {results:[]};
-            var fields = this.responseSchema.fields;
-            for(var i=oFullResponse.length-1; i>-1; i--) {
-                var oResult = {};
-                for(var j=fields.length-1; j>-1; j--) {
-                    var field = fields[j];
-                    var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
-                    var data = (YAHOO.lang.isValue(oFullResponse[i][j])) ? oFullResponse[i][j] : oFullResponse[i][key];
-                    // Backward compatibility
-                    if(!field.parser && field.converter) {
-                        field.parser = field.converter;
-                        YAHOO.log("The field property converter has been deprecated" +
-                                " in favor of parser", "warn", this.toString());
-                    }
-                    if(field.parser) {
-                        data = field.parser.call(this, data);
-                    }
-                    // Safety measure
-                    if(data === undefined) {
-                        data = null;
-                    }
-                    oResult[key] = data;
+            var results = [],
+                fields = this.responseSchema.fields,
+                i;
+            for (i = fields.length - 1; i >= 0; --i) {
+                if (typeof fields[i] !== 'object') {
+                    fields[i] = { key : fields[i] };
                 }
-                oParsedResponse.results.unshift(oResult);
             }
+
+            var parsers = {};
+            for (i = fields.length - 1; i >= 0; --i) {
+                var p = fields[i].parser || fields[i].converter;
+                if (p) {
+                    parsers[fields[i].key] = p;
+                }
+            }
+
+            var arrType = YAHOO.lang.isArray(oFullResponse[0]);
+            for(i=oFullResponse.length-1; i>-1; i--) {
+                var oResult = {};
+                var rec = oFullResponse[i];
+                if (typeof rec === 'object') {
+                    for(var j=fields.length-1; j>-1; j--) {
+                        var field = fields[j];
+                        var data = arrType ? rec[j] : rec[field.key];
+
+                        if (parsers[field.key]) {
+                            data = parsers[field.key].call(this,data);
+                        }
+
+                        // Safety measure
+                        if(data === undefined) {
+                            data = null;
+                        }
+
+                        oResult[field.key] = data;
+                    }
+                }
+                results[i] = oResult;
+            }
+
+            var oParsedResponse = {results:results};
             YAHOO.log("Parsed array data is " +
                     YAHOO.lang.dump(oParsedResponse), "info", this.toString());
             return oParsedResponse;
@@ -1264,7 +1281,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse
                 // Split along record delimiter to get an array of strings
                 var recordsarray = oFullResponse.split(recDelim);
                 // Cycle through each record
-                for(var i = recordsarray.length-1; i>-1; i--) {
+                for(var i = 0, len = recordsarray.length, recIdx = 0; i < len; ++i) {
                     var oResult = {};
                     var bError = false;
                     if (YAHOO.lang.isString(recordsarray[i])) {
@@ -1307,7 +1324,7 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse
                             }
                         }
                         if(!bError) {
-                            oParsedResponse.results.unshift(oResult);
+                            oParsedResponse.results[recIdx++] = oResult;
                         }
                     }
                 }
@@ -1338,13 +1355,42 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
     var bError = false;
     var oParsedResponse = {};
     var xmlList = null;
+    var totRecLocator = this.responseSchema.totalRecords;
+
     // In case oFullResponse is something funky
     try {
         xmlList = (this.responseSchema.resultNode) ?
             oFullResponse.getElementsByTagName(this.responseSchema.resultNode) :
             null;
+
+        if (totRecLocator) {
+            // Look for a totalRecords node
+            var totalRecords = null;
+            var totRec = oFullResponse.getElementsByTagName(totRecLocator)[0];
+            if (totRec) {
+                totalRecords = totRec.firstChild.nodeValue;
+            } else {
+                totRec = oFullResponse.firstChild.attributes.getNamedItem(totRecLocator);
+                if (totRec) {
+                    totalRecords = totRec.value;
+                } else if (xmlList && xmlList.length) {
+                    var par = xmlList.item(0).parentNode;
+                    if (par) {
+                        totRec = par.attributes.getNamedItem(totRecLocator);
+                        if (totRec) {
+                            totalRecords = totRec.value;
+                        }
+                    }
+                }
+            }
+
+            if (YAHOO.lang.isValue(totalRecords)) {
+                oParsedResponse.totalRecords = parseInt(totalRecords,10)|0;
+            }
+        }
     }
     catch(e) {
+        YAHOO.log("Error while parsing XML data: " + e.message);
     }
     if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
         bError = true;
@@ -1392,7 +1438,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
                 oResult[key] = data;
             }
             // Capture each array of values into an array of results
-            oParsedResponse.results.unshift(oResult);
+            oParsedResponse.results[k] = oResult;
         }
     }
     if(bError) {
@@ -1436,11 +1482,19 @@ YAHOO.util.DataSource.prototype.executeJSONParser = function (oFullResponse) {
         // Commit the atrocity of creating a function on the fly. parserDef
         // will become the body passed to new Function.  The signature will be
         // function (oFullResponse)
-        var parserDef =
+        var parserDef = 
             // grab the results list from the response
-            "var results=oFullResponse." + resultsList + ";";
+            "var results=oFullResponse";
+        
+        // Default direct assignment of oFullResponse as the resultsList if
+        // the schema was not configured with a resultsList key.  Otherwise
+        // create results=oFullResponse.location['in'].resultsList
+        if (YAHOO.lang.isValue(resultsList)) {
+            parserDef += "." + resultsList;
+        }
+        parserDef += ";";
 
-            // if it wasn't found, default an empty array
+        // if the list wasn't found at that location, default an empty array
         parserDef +=
             "if(!results){" +
                 "results=[];" +
@@ -1513,7 +1567,7 @@ YAHOO.util.DataSource.prototype.executeJSONParser = function (oFullResponse) {
  */
 YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse) {
     var oParsedResponse = {results:[]};
-    if(oFullResponse && (oFullResponse.constructor == Object)) {
+    if(oFullResponse && (YAHOO.lang.isObject(oFullResponse))) {
         if(YAHOO.lang.isArray(this.responseSchema.fields)) {
             var fields          = this.responseSchema.fields,
                 parserMap       = {},
@@ -1622,7 +1676,7 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
                 }
                 oResult[key] = data;
             }
-            oParsedResponse.results.unshift(oResult);
+            oParsedResponse.results[i] = oResult;
         }
     }
 
