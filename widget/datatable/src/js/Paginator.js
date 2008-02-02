@@ -27,7 +27,7 @@ YAHOO.widget.Paginator = function (config) {
         this.set('totalRecords',config.totalRecords,true);
     }
     
-    this.initPlugins();
+    this.initModules();
 
     // Update the other config values
     for (attrib in config) {
@@ -97,9 +97,6 @@ YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
     TEMPLATE_ROWS_PER_PAGE : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 
 },true);
-
-
-
 
 
 // Instance members and methods
@@ -299,11 +296,11 @@ YAHOO.widget.Paginator.prototype = {
 
     /**
      * Initialize registered view plugins onto this instance.
-     * @method initPlugins
+     * @method initModules
      * @private
      */
-    initPlugins : function () {
-        var P = YAHOO.widget.Paginator.Plugin;
+    initModules : function () {
+        var P = YAHOO.widget.Paginator.Module;
         for (var name in P) {
             var plugin = P[name];
             if (YAHOO.lang.isObject(plugin) &&
@@ -371,7 +368,7 @@ YAHOO.widget.Paginator.prototype = {
                 continue;
             }
             // Hide the container while its contents are rendered
-            Dom.setStyle(c,'display','none');
+            c.style.display = 'none';
 
             Dom.addClass(c,containerClass);
 
@@ -385,12 +382,12 @@ YAHOO.widget.Paginator.prototype = {
                 var m      = markers[j],
                     mp     = m.parentNode,
                     name   = m.className.replace(/\s*yui-pg-plugin\s+/g,''),
-                    Plugin = YAHOO.widget.Paginator.Plugin[name];
+                    Module = YAHOO.widget.Paginator.Module[name];
 
-                if (YAHOO.lang.isFunction(Plugin)) {
-                    var plugin = new Plugin(this);
-                    if (YAHOO.lang.isFunction(plugin.render)) {
-                        mp.insertBefore(plugin.render(id_base),m);
+                if (YAHOO.lang.isFunction(Module)) {
+                    var mod = new Module(this);
+                    if (YAHOO.lang.isFunction(mod.render)) {
+                        mp.insertBefore(mod.render(id_base),m);
                     }
                 }
 
@@ -399,7 +396,7 @@ YAHOO.widget.Paginator.prototype = {
             }
 
             // Show the container allowing page reflow
-            Dom.setStyle(c,'display','');
+            c.style.display = '';
         }
 
         // Set render attribute manually to support its readOnly contract
@@ -798,29 +795,28 @@ YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
 
 
 
-// View Plugins
-
+// View Modules
 
 (function () {
 
-// Plugin namespace
-YAHOO.widget.Paginator.Plugin = {};
+// Module namespace
+YAHOO.widget.Paginator.Module = {};
 
 var Paginator = YAHOO.widget.Paginator,
-    Plugin    = Paginator.Plugin,
+    Mod       = Paginator.Module,
     l         = YAHOO.lang;
 
 /**
- * Plugin to generate the link to jump to the first page.
+ * Module to generate the link to jump to the first page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.Module
  * @class FirstPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.FirstPageLink = function (p) {
+Mod.FirstPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('firstPageLinkLabelChange');
@@ -841,7 +837,7 @@ Plugin.FirstPageLink = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.FirstPageLink.init = function (p) {
+Mod.FirstPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the first page link/span.
@@ -865,7 +861,7 @@ Plugin.FirstPageLink.init = function (p) {
 };
 
 // Instance members and methods
-Plugin.FirstPageLink.prototype = {
+Mod.FirstPageLink.prototype = {
 
     /**
      * The currently placed HTMLElement node
@@ -970,16 +966,16 @@ Plugin.FirstPageLink.prototype = {
 
 
 /**
- * Plugin to generate the link to jump to the last page.
+ * Module to generate the link to jump to the last page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.Module
  * @class LastPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.LastPageLink = function (p) {
+Mod.LastPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('lastPageLinkLabelChange');
@@ -1002,7 +998,7 @@ Plugin.LastPageLink = function (p) {
  * @param paginator {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.LastPageLink.init = function (p) {
+Mod.LastPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the last page link/span.
@@ -1025,7 +1021,7 @@ Plugin.LastPageLink.init = function (p) {
     });
 };
 
-Plugin.LastPageLink.prototype = {
+Mod.LastPageLink.prototype = {
 
     /**
      * Currently placed HTMLElement node
@@ -1091,7 +1087,7 @@ Plugin.LastPageLink.prototype = {
         this.na.id = id_base + '-last-na';
 
         switch (last) {
-            case YAHOO.widget.Paginator.VALUE_UNLIMITED :
+            case Paginator.VALUE_UNLIMITED :
                     this.current = this.na; break;
             case p.getCurrentPage() :
                     this.current = this.span; break;
@@ -1117,7 +1113,7 @@ Plugin.LastPageLink.prototype = {
 
         if (par) {
             switch (this.paginator.getTotalPages()) {
-                case YAHOO.widget.Paginator.VALUE_UNLIMITED :
+                case Paginator.VALUE_UNLIMITED :
                         after = this.na; break;
                 case this.paginator.getCurrentPage() :
                         after = this.span; break;
@@ -1154,16 +1150,16 @@ Plugin.LastPageLink.prototype = {
 
 
 /**
- * Plugin to generate the link to jump to the previous page.
+ * Module to generate the link to jump to the previous page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.Module
  * @class PreviousPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.PreviousPageLink = function (p) {
+Mod.PreviousPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('previousPageLinkLabelChange');
@@ -1184,7 +1180,7 @@ Plugin.PreviousPageLink = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.PreviousPageLink.init = function (p) {
+Mod.PreviousPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the previous page link/span.
@@ -1207,7 +1203,7 @@ Plugin.PreviousPageLink.init = function (p) {
     });
 };
 
-Plugin.PreviousPageLink.prototype = {
+Mod.PreviousPageLink.prototype = {
 
     /**
      * Currently placed HTMLElement node
@@ -1313,16 +1309,16 @@ Plugin.PreviousPageLink.prototype = {
 
 
 /**
- * Plugin to generate the link to jump to the next page.
+ * Module to generate the link to jump to the next page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.Module
  * @class NextPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.NextPageLink = function (p) {
+Mod.NextPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('nextPageLinkLabelChange');
@@ -1345,7 +1341,7 @@ Plugin.NextPageLink = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.NextPageLink.init = function (p) {
+Mod.NextPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the next page link/span.
@@ -1368,7 +1364,7 @@ Plugin.NextPageLink.init = function (p) {
     });
 };
 
-Plugin.NextPageLink.prototype = {
+Mod.NextPageLink.prototype = {
 
     /**
      * Currently placed HTMLElement node
@@ -1477,16 +1473,16 @@ Plugin.NextPageLink.prototype = {
 
 
 /**
- * Plugin to generate the page links
+ * Module to generate the page links
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.Module
  * @class PageLinks
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.PageLinks = function (p) {
+Mod.PageLinks = function (p) {
     this.paginator = p;
 
     p.createEvent('pageLinkClassChange');
@@ -1513,7 +1509,7 @@ Plugin.PageLinks = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.PageLinks.init = function (p) {
+Mod.PageLinks.init = function (p) {
 
     /**
      * CSS class assigned to each page link/span.
@@ -1578,8 +1574,8 @@ Plugin.PageLinks.init = function (p) {
  * @param {int} numPages     (optional) Preferred number of pages in range
  * @return {Array} [start_page_number, end_page_number]
  */
-Plugin.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
-    var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
+Mod.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
+    var UNLIMITED = Paginator.VALUE_UNLIMITED,
         start, end, delta;
 
     if (!currentPage) {
@@ -1615,7 +1611,7 @@ Plugin.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
 };
 
 
-Plugin.PageLinks.prototype = {
+Mod.PageLinks.prototype = {
 
     /**
      * Current page
@@ -1672,7 +1668,7 @@ Plugin.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
-                range        = Plugin.PageLinks.calculateRange(
+                range        = Mod.PageLinks.calculateRange(
                                 currentPage,
                                 p.getTotalPages(),
                                 p.get('pageLinks')),
@@ -1740,16 +1736,16 @@ Plugin.PageLinks.prototype = {
 
 
 /**
- * Plugin to generate the rows-per-page dropdown
+ * Module to generate the rows-per-page dropdown
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.Module
  * @class RowsPerPageDropdown
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.RowsPerPageDropdown = function (p) {
+Mod.RowsPerPageDropdown = function (p) {
     this.paginator = p;
 
     p.createEvent('rowsPerPageOptionsChange');
@@ -1770,7 +1766,7 @@ Plugin.RowsPerPageDropdown = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.RowsPerPageDropdown.init = function (p) {
+Mod.RowsPerPageDropdown.init = function (p) {
 
     /**
      * Array of available rows-per-page sizes.  Converted into select options.
@@ -1795,7 +1791,7 @@ Plugin.RowsPerPageDropdown.init = function (p) {
     });
 };
 
-Plugin.RowsPerPageDropdown.prototype = {
+Mod.RowsPerPageDropdown.prototype = {
 
     /**
      * select node
@@ -1897,17 +1893,17 @@ Plugin.RowsPerPageDropdown.prototype = {
 
 
 /**
- * Plugin to generate the textual report of current pagination status.  E.g.
+ * Module to generate the textual report of current pagination status.  E.g.
  * "Now viewing page 1 of 13".
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.Module
  * @class CurrentPageReport
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.CurrentPageReport = function (p) {
+Mod.CurrentPageReport = function (p) {
     this.paginator = p;
 
     p.createEvent('pageReportClassChange');
@@ -1929,7 +1925,7 @@ Plugin.CurrentPageReport = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.CurrentPageReport.init = function (p) {
+Mod.CurrentPageReport.init = function (p) {
 
     /**
      * CSS class assigned to the span containing the info.
@@ -1997,13 +1993,13 @@ Plugin.CurrentPageReport.init = function (p) {
  * @param values {object} The key:value pairs used to replace the place holders
  * @return {string}
  */
-Plugin.CurrentPageReport.sprintf = function (template, values) {
+Mod.CurrentPageReport.sprintf = function (template, values) {
     return template.replace(/{([\w\s\-]+)}/g, function (x,key) {
             return (key in values) ? values[key] : '';
         });
 };
 
-Plugin.CurrentPageReport.prototype = {
+Mod.CurrentPageReport.prototype = {
 
     /**
      * Span node containing the formatted info
@@ -2044,7 +2040,7 @@ Plugin.CurrentPageReport.prototype = {
         }
 
 
-        this.span.innerHTML = Plugin.CurrentPageReport.sprintf(
+        this.span.innerHTML = Mod.CurrentPageReport.sprintf(
             this.paginator.get('pageReportTemplate'),
             this.paginator.get('pageReportValueGenerator')(this.paginator));
     }
