@@ -2195,16 +2195,16 @@ _focusEl : function(el) {
 _syncColWidths : function() {
     // Validate there is at least one row with cells and at least one Column
     var allKeys = this._oColumnSet.keys,
-        elRow = this.getFirstTrEl(),
-        oChain = this._oChain;
+        elRow   = this.getFirstTrEl(),
+        bUnsnap = false,
+        elTh, elTd, elThLiner, elTdLiner, newWidth;
+
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-        var elTh, elTd, elThLiner, elTdLiner, newWidth;
         
         // Temporarily unsnap container since it causes inaccurate calculations
-        var bUnsnap = false;
         if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
             bUnsnap = true;
-            this._elTheadContainer.style.width = "";
+            this._elTheadContainer.style.width =
             this._elTbodyContainer.style.width = "";
         }
 
@@ -2214,41 +2214,26 @@ _syncColWidths : function() {
                 // Only proceed if TH and TD widths are out of sync
                 elTh = allKeys[i].getThEl();
                 elTd = elRow.cells[i];
+                elThLiner = elTh.firstChild;
+                elTdLiner = elTd.firstChild;
+
+                // Reset the width to get an accurate measure of the TD
+                elThLiner.style.width =
+                elTdLiner.style.width = "";
+
                 if(elTh.offsetWidth !== elTd.offsetWidth) {
-                    // Column header is wider - bump the body cells up
-                    if(elTh.offsetWidth > elTd.offsetWidth) {
-                        elTd.style.width = elTh.offsetWidth + "px";
-                    }
-                    // Body cells are wider - bump the Column header up
-                    else {
-                        elTh.style.width = elTd.offsetWidth + "px";
-                    }
-                    
                     // Calculate the final width by comparing liner widths
-                    elThLiner = elTh.firstChild;
-                    elTdLiner = elTd.firstChild;
-                    // Reset the width to get an accurate measure of the TD
-                    elTdLiner.style.width = "";
                     newWidth = Math.max(elThLiner.offsetWidth, elTdLiner.offsetWidth);
                                         
                     // Apply new width to TH liner minus appropriate padding
-                    elThLiner.style.width = newWidth -
-                            (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
-                                                        
-                    // Apply new width to every TD liner minus appropriate padding
-                    oChain.add({
-                        method: function(oArg) {
-                            var cellLiner = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex].firstChild;
-                            cellLiner.style.width = oArg.nWidth -
-                            (parseInt(Dom.getStyle(cellLiner,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(cellLiner,"paddingRight"),10)|0) + "px";
-                            oArg.rowIndex++;
-                        },
-                        scope: this,
-                        iterations:this._elTbody.rows.length,
-                        argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
-                    });
+                    elThLiner.style.width = (newWidth -
+                        (parseInt(elThLiner.style.paddingLeft,10)|0) -
+                        (parseInt(elThLiner.style.paddingRight,10)|0)) + "px";
+
+                    elTdLiner.style.width = (newWidth -
+                        (parseInt(elTdLiner.style.paddingLeft,10)|0) -
+                        (parseInt(elTdLiner.style.paddingRight,10)|0)) + "px";
+
                 }
             }
         }
@@ -2256,22 +2241,12 @@ _syncColWidths : function() {
         // Resnap unsnapped containers
         if(bUnsnap) {
             var sWidth = this.get("width");
-            this._elTheadContainer.style.width = sWidth;
+            this._elTheadContainer.style.width =
             this._elTbodyContainer.style.width = sWidth;     
         }
-        
-        oChain.run();
     }
     
     this._syncScrollPadding();
-    
-    oChain.add({
-        method: function(oArg) {
-            this._syncScrollPadding();
-        },
-        scope: this
-    });  
-    oChain.run();
 },
 
 /**
@@ -2373,7 +2348,7 @@ _initNodeTemplates : function () {
         div = d.createElement('div');
 
     // Append the liner element
-    Dom.addClass(div,DT.CLASS_LINER);
+    div.className = DT.CLASS_LINER;
     td.appendChild(div);
 
     this._tdElTemplate = td;
@@ -2957,13 +2932,14 @@ _initColumnSort : function() {
  * @private
  */
 _addTrEl : function(oRecord, index) {
+    // Clone the empty tr template.  We can't clone an existing row
+    // because of the expandos and td ids that must be set in _addTdEl
     var elRow     = this._trElTemplate.cloneNode(true),
         beforeRow = (lang.isNumber(index) && index >= 0 && this._elTbody.rows[index]) ?
                     this._elTbody.rows[index] : null;
 
     elRow.id = this._sId+"-bdrow"+this._nTrCount;
     this._nTrCount++;
-    elRow.yuiRecordId = oRecord.getId();
 
     // Hide the row initially, allowing _updateTrEl to manage the page reflows
     elRow.style.display = 'none';
@@ -2972,9 +2948,7 @@ _addTrEl : function(oRecord, index) {
     this._elTbody.insertBefore(elRow,beforeRow);
 
     // Stripe the new row
-    Dom.addClass(elRow, elRow.sectionRowIndex % 2 ?
-                        DT.CLASS_ODD :
-                        DT.CLASS_EVEN);
+    elRow.className = elRow.sectionRowIndex % 2 ? DT.CLASS_ODD : DT.CLASS_EVEN;
 
     // Call _updateTrEl to populate and align the row contents
     return this._updateTrEl(elRow,oRecord);
@@ -3002,7 +2976,7 @@ _updateTrEl : function(elRow, oRecord) {
     }
 
     // Hide the row to prevent constant reflows
-    Dom.setStyle(elRow,'display','none');
+    elRow.style.display = 'none';
 
     // Remove extra TD elements
     while(elRow.cells.length > oColumnSet.keys.length) {
@@ -3030,14 +3004,16 @@ _updateTrEl : function(elRow, oRecord) {
         elCell.headers = cellHeaders;
 
         // Set ASC/DESC on TD
-        Dom.removeClass(elCell, DT.CLASS_ASC);
-        Dom.removeClass(elCell, DT.CLASS_DESC);
         if(oColumn.key === sortKey) {
-            Dom.addClass(elCell, sortClass);
+            Dom.replaceClass(elCell, sortClass === DT.CLASS_ASC ?
+                                     DT.CLASS_DESC : DT.CLASS_ASC, sortClass);
+        } else {
+            Dom.removeClass(elCell, DT.CLASS_ASC);
+            Dom.removeClass(elCell, DT.CLASS_DESC);
         }
         
+        elCell.style.width =
         elCellLiner.style.width = "";
-        elCell.style.width = "";
                     
         // Set width if available
         if(oColumn.hidden) {
@@ -3065,7 +3041,7 @@ _updateTrEl : function(elRow, oRecord) {
     elRow.yuiRecordId = oRecord.getId();
     
     // Redisplay the row for reflow
-    Dom.setStyle(elRow,'display','');
+    elRow.style.display = '';
 
     return elRow;
 },
@@ -3095,11 +3071,8 @@ _addTdEl : function (elRow,oColumn,index) {
     elCell.yuiCellIndex = index;
 
     // Set FIRST/LAST on TD
-    if (index === 0) {
-        Dom.addClass(elCell, DT.CLASS_FIRST);
-    }
-    else if (index === this._oColumnSet.keys.length-1) {
-        Dom.addClass(elCell, DT.CLASS_LAST);
+    if (!(index % this._oColumnSet.keys.length - 1)) {
+        elCell.className = index ? DT.CLASS_LAST : DT.CLASS_FIRST;
     }
 
     var insertBeforeCell = elRow.cells[index] || null;
@@ -4656,7 +4629,7 @@ render : function() {
     // Paginator is enabled, show a subset of Records and update Paginator UI
     var oPaginator = this.get('paginator');
     var bPaginated = oPaginator instanceof Pag || this.get('paginated');
-    if(oPaginator) {
+    if(bPaginated) {
         if (oPaginator instanceof Pag) {
             allRecords = this._oRecordSet.getRecords(
                             oPaginator.getStartIndex(),
@@ -4714,13 +4687,11 @@ render : function() {
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
                         var nCurrentRow = oArg.nCurrentRow;
-                        for(i=nCurrentRow,len=(loopN>0)?nCurrentRow+loopN:nCurrentRow+1; i<len; i++) {
-                            if(i < loopEnd) {
-                                this._updateTrEl(allRows[i], allRecords[i]);
-                            }
-                            else {
-                                break;
-                            }
+                        for(i = nCurrentRow, len = loopN > 0 ? nCurrentRow + loopN : nCurrentRow + 1; i < len && i < loopEnd; ++i) {
+                            this._updateTrEl(allRows[i], allRecords[i]);
+                        }
+                        if (loopN > 0) {
+                            this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
@@ -4741,13 +4712,11 @@ render : function() {
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
                         var nCurrentRow = oArg.nCurrentRow;
-                        for(i=nCurrentRow,len=(loopN>0)?nCurrentRow+loopN:nCurrentRow+1; i<len; i++) {
-                            if(i < loopEnd) {
-                                this._addTrEl(allRecords[i]);
-                            }
-                            else {
-                                break;
-                            }
+                        for(i = nCurrentRow, len = loopN > 0 ? nCurrentRow + loopN : nCurrentRow + 1; i<len && i < loopEnd; ++i) {
+                            this._addTrEl(allRecords[i]);
+                        }
+                        if (loopN > 0) {
+                            this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
