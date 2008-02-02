@@ -15,7 +15,7 @@ YAHOO.widget.RecordSet = function(data) {
     this._sId = "yui-rs" + YAHOO.widget.RecordSet._nCount;
     YAHOO.widget.RecordSet._nCount++;
     this._records = [];
-    this._length = 0;
+    //this._length = 0;
 
     if(data) {
         if(YAHOO.lang.isArray(data)) {
@@ -151,8 +151,9 @@ YAHOO.widget.RecordSet.prototype = {
      * @property _length
      * @type Number
      * @private
+     * @deprecated No longer used
      */
-    _length : null,
+    //_length : null,
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -177,10 +178,11 @@ YAHOO.widget.RecordSet.prototype = {
             this._records.splice(index,0,oRecord);
         }
         else {
-            index = this.getLength();
-            this._records[index] = oRecord;
+            //index = this.getLength();
+            //this._records[index] = oRecord;
+            this._records[this._records.length] = oRecord;
         }
-        this._length++;
+        //this._length++;
         return oRecord;
     },
 
@@ -196,8 +198,11 @@ YAHOO.widget.RecordSet.prototype = {
      * @private
      */
     _setRecord : function(oData, index) {
-        var oRecord = new YAHOO.widget.Record(oData);
-        
+        if (!YAHOO.lang.isNumber(index) || index < 0) {
+            index = this._records.length;
+        }
+        return (this._records[index] = new YAHOO.widget.Record(oData));
+        /*
         if(YAHOO.lang.isNumber(index) && (index > -1)) {
             this._records[index] = oRecord;
             if((index+1) > this.getLength()) {
@@ -209,6 +214,7 @@ YAHOO.widget.RecordSet.prototype = {
             this._length++;
         }
         return oRecord;
+        */
     },
 
     /**
@@ -225,7 +231,7 @@ YAHOO.widget.RecordSet.prototype = {
             range = 1;
         }
         this._records.splice(index, range);
-        this._length = this._length - range;
+        //this._length = this._length - range;
     },
 
     /////////////////////////////////////////////////////////////////////////////
@@ -261,7 +267,8 @@ YAHOO.widget.RecordSet.prototype = {
      * @return {Number} Number of records in the RecordSet.
      */
     getLength : function() {
-            return this._length;
+            //return this._length;
+            return this._records.length;
     },
 
     /**
@@ -456,19 +463,24 @@ YAHOO.widget.RecordSet.prototype = {
      */
     setRecords : function(aData, index) {
         if(YAHOO.lang.isArray(aData)) {
-            var newRecords = [];
-            // Can't go backwards bc we need to preserve order
-            var i = 0;
-            for(; i<aData.length; i++) {
-                if(aData[i] && (aData[i].constructor == Object)) {
-                    var record = this._setRecord(aData[i], index + i);
-                    newRecords.push(record);
+            var Rec = YAHOO.widget.Record,
+                spliceParams = [index,0],
+                i = aData.length,
+                r;
+            for(; i >= 0 ; --i) {
+                r = aData[i] && typeof aData[i] === 'object' ?
+                                new Rec(aData[i]) : this._records[i];
+                if (r) {
+                    spliceParams[i+2] = r;
                 }
-           }
-            this.fireEvent("recordsSet",{records:newRecords,data:aData});
-            YAHOO.log("Set " + newRecords.length + " Record(s) at index " + index +
-                    " through " + (index + i - 1) + " with data " + YAHOO.lang.dump(aData), "info", this.toString());
-           return newRecords;
+            }
+            spliceParams[1] = spliceParams.length - 2;
+            Array.prototype.splice.apply(this._records,spliceParams);
+            this.fireEvent("recordsSet",{records:spliceParams,data:aData});
+            YAHOO.log("Set " + spliceParams[1] + " Record(s) at index " +
+                      spliceParams[0] + " through " +
+                      (spliceParams[0] + spliceParams[1])/* + " with data " + YAHOO.lang.dump(aData)*/, "info", this.toString());
+            return spliceParams.slice(2);
         }
         else if(aData && (aData.constructor == Object)) {
             var oRecord = this._setRecord(aData);
@@ -669,7 +681,7 @@ YAHOO.widget.RecordSet.prototype = {
      */
     reset : function() {
         this._records = [];
-        this._length = 0;
+        //this._length = 0;
         this.fireEvent("resetEvent");
         YAHOO.log("All Records deleted from RecordSet", "info", this.toString());
     }
