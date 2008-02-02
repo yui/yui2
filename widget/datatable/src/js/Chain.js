@@ -40,7 +40,8 @@ YAHOO.util.Chain.prototype = {
      */
     run : function () {
         // Grab the first callback in the queue
-        var c  = this.q[0];
+        var c  = this.q[0],
+            fn;
 
         // If there is no callback in the queue or the Chain is currently
         // in an execution mode, return
@@ -48,21 +49,7 @@ YAHOO.util.Chain.prototype = {
             return this;
         }
 
-        // If the until condition is set, check if we're done
-        if (c.until) {
-            if (c.until()) {
-                // Shift this callback from the queue and execute the next
-                // callback
-                this.q.shift();
-                return this.run();
-            }
-        // Otherwise if either iterations is not set or we're executing the
-        // last iteration, shift this callback from the queue
-        } else if (!c.iterations || !--c.iterations) {
-            this.q.shift();
-        }
-
-        var fn = c.method || c;
+        fn = c.method || c;
 
         if (typeof fn === 'function') {
             var o    = c.scope || {},
@@ -74,26 +61,49 @@ YAHOO.util.Chain.prototype = {
                 args = [args];
             }
 
-            // Build the callback closure
-            var f = function () {
-                // Execute the callback from scope, with argument
-                fn.apply(o,args);
-                // Check if the Chain was not paused from inside the callback
-                if (me.id) {
-                    // Indicate ready to run state
-                    me.id = 0;
-                    // Start the fun all over again
-                    me.run();
-                }
-            };
-
             // Execute immediately if the callback timeout is negative.
-            // Otherwise set to execute after the configured timeout
             if (ms < 0) {
-                me.id = ms;
-                f();
+                if (c.until) {
+                    for (;!c.until();) {
+                        // Execute the callback from scope, with argument
+                        fn.apply(o,args);
+                    }
+                } else if (c.iterations) {
+                    for (;c.iterations-- > 0;) {
+                        fn.apply(o,args);
+                    }
+                } else {
+                    fn.apply(o,args);
+                }
+                this.q.shift();
+                return this.run();
             } else {
-                this.id = setTimeout(f,ms);
+                // If the until condition is set, check if we're done
+                if (c.until) {
+                    if (c.until()) {
+                        // Shift this callback from the queue and execute the next
+                        // callback
+                        this.q.shift();
+                        return this.run();
+                    }
+                // Otherwise if either iterations is not set or we're
+                // executing the last iteration, shift callback from the queue
+                } else if (!c.iterations || !--c.iterations) {
+                    this.q.shift();
+                }
+
+                // Otherwise set to execute after the configured timeout
+                this.id = setTimeout(function () {
+                    // Execute the callback from scope, with argument
+                    fn.apply(o,args);
+                    // Check if the Chain was not paused from inside the callback
+                    if (me.id) {
+                        // Indicate ready to run state
+                        me.id = 0;
+                        // Start the fun all over again
+                        me.run();
+                    }
+                },ms);
             }
         }
 
