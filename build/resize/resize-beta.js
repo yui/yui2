@@ -350,10 +350,6 @@ var D = YAHOO.util.Dom,
                 if (ev && ev.shiftKey) {
                     //Shift Pressed
                     this.set('ratio', true);
-                    if (this.browser.ie) {
-                        this._ieSelectBack = document.body.onselectstart;
-                        document.body.onselectstart = this._ieSelectFix;
-                    }
                 } else {
                     this.set('ratio', this._configs.ratio._initialConfig.value);
                 }
@@ -371,6 +367,10 @@ var D = YAHOO.util.Dom,
             }
             if (ev) {
                 this._setAutoRatio(ev);
+            }
+            if (this.browser.ie) {
+                this._ieSelectBack = document.body.onselectstart;
+                document.body.onselectstart = this._ieSelectFix;
             }
         },
         /** 

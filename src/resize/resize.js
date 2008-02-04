@@ -364,10 +364,6 @@ var D = YAHOO.util.Dom,
                     //Shift Pressed
                     YAHOO.log('Shift key presses, turning on ratio', 'info', 'Resize');
                     this.set('ratio', true);
-                    if (this.browser.ie) {
-                        this._ieSelectBack = document.body.onselectstart;
-                        document.body.onselectstart = this._ieSelectFix;
-                    }
                 } else {
                     YAHOO.log('Resetting ratio back to default', 'info', 'Resize');
                     this.set('ratio', this._configs.ratio._initialConfig.value);
@@ -386,6 +382,10 @@ var D = YAHOO.util.Dom,
             }
             if (ev) {
                 this._setAutoRatio(ev);
+            }
+            if (this.browser.ie) {
+                this._ieSelectBack = document.body.onselectstart;
+                document.body.onselectstart = this._ieSelectFix;
             }
         },
         /** 
