@@ -2099,6 +2099,15 @@ _trElTemplate : null,
  */
 _bScrollbarX : null,
 
+/**
+ * TR element which is used to track sync Column widths.
+ *
+ * @property _elWidthTr
+ * @type {HTMLElement} 
+ * @private
+ */
+_elWidthTr : null,
+
 
 
 
@@ -2186,6 +2195,20 @@ _focusEl : function(el) {
 },
 
 /**
+ * Returns _elWidthTr, which is the TR el being used to track and sync Column
+ * widths. If one is not aleady set or no longer in the document, sets the first
+ * TR el to be _elWidthTr. 
+ *
+ * @method _getWidthTrEl
+ * @private
+ */
+_getWidthTrEl : function() {
+    this._elWidthTr = Dom.inDocument(this._elWidthTr) ?
+            this._elWidthTr :this.getFirstTrEl();
+    return this._elWidthTr;
+},
+
+/**
  * Syncs up widths of THs and TDs across all those Columns without width values.
  * Actual adjustment is to the liner DIVs so window resizing will not affect cells. 
  *
@@ -2195,45 +2218,60 @@ _focusEl : function(el) {
 _syncColWidths : function() {
     // Validate there is at least one row with cells and at least one Column
     var allKeys = this._oColumnSet.keys,
-        elRow   = this.getFirstTrEl(),
-        bUnsnap = false,
-        elTh, elTd, elThLiner, elTdLiner, newWidth;
-
+        elRow = this._getWidthTrEl(),
+        oChain = this._oChain;
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
+        var elTh, elTd, elThLiner, elTdLiner, newWidth, i;
+        var cellsLen = elRow.cells.length;
         
         // Temporarily unsnap container since it causes inaccurate calculations
+        var bUnsnap = false;
         if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
             bUnsnap = true;
-            this._elTheadContainer.style.width =
+            this._elTheadContainer.style.width = "";
             this._elTbodyContainer.style.width = "";
         }
 
-        // Only proceed for Columns without widths
-        for(var i=0,rowsLen=elRow.cells.length; i<rowsLen; i++) {
+        // First time through, reset the widths to get an accurate measure of the TD
+        for(i=0; i<cellsLen; i++) {
+            //Only proceed for Columns without widths
             if(!allKeys[i].width) {
-                // Only proceed if TH and TD widths are out of sync
+                allKeys[i].getThEl().firstChild.style.width = "";
+                allKeys[i].getThEl().style.width = "";
+                elRow.cells[i].firstChild.style.width = "";
+                elRow.cells[i].style.width = "";
+            }
+            //TODO: set hidden column to "1px"
+            else {
+                allKeys[i].getThEl().firstChild.style.width = allKeys[i].width + "px";
+                allKeys[i].getThEl().style.width = allKeys[i].width + "px";
+                elRow.cells[i].firstChild.style.width = allKeys[i].width + "px";
+                elRow.cells[i].style.width = allKeys[i].width + "px";
+            }
+        }
+
+        // Second time through update the widths to sync
+        for(i=0; i<cellsLen; i++) {
+            //Only proceed for Columns without widths
+            if(!allKeys[i].width) {
                 elTh = allKeys[i].getThEl();
                 elTd = elRow.cells[i];
-                elThLiner = elTh.firstChild;
-                elTdLiner = elTd.firstChild;
-
-                // Reset the width to get an accurate measure of the TD
-                elThLiner.style.width =
-                elTdLiner.style.width = "";
-
-                if(elTh.offsetWidth !== elTd.offsetWidth) {
+                
+                if(elTh.offsetWidth !== elTd.offsetWidth) {                    
                     // Calculate the final width by comparing liner widths
+                    elThLiner = elTh.firstChild;
+                    elTdLiner = elTd.firstChild;
                     newWidth = Math.max(elThLiner.offsetWidth, elTdLiner.offsetWidth);
                                         
                     // Apply new width to TH liner minus appropriate padding
-                    elThLiner.style.width = (newWidth -
-                        (parseInt(elThLiner.style.paddingLeft,10)|0) -
-                        (parseInt(elThLiner.style.paddingRight,10)|0)) + "px";
-
-                    elTdLiner.style.width = (newWidth -
-                        (parseInt(elTdLiner.style.paddingLeft,10)|0) -
-                        (parseInt(elTdLiner.style.paddingRight,10)|0)) + "px";
-
+                    elThLiner.style.width = newWidth -
+                            (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
+                                                        
+                    // Apply new width to every TD liner minus appropriate padding in the width TR
+                    elTdLiner.style.width = newWidth -
+                            (parseInt(Dom.getStyle(elTdLiner,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elTdLiner,"paddingRight"),10)|0) + "px";
                 }
             }
         }
@@ -2241,11 +2279,87 @@ _syncColWidths : function() {
         // Resnap unsnapped containers
         if(bUnsnap) {
             var sWidth = this.get("width");
-            this._elTheadContainer.style.width =
+            this._elTheadContainer.style.width = sWidth;
             this._elTbodyContainer.style.width = sWidth;     
         }
+        
+        //oChain.run();
+        this._elWidthTr = elRow;
     }
     
+    this._syncScrollPadding();
+    
+    oChain.add({
+        method: function(oArg) {
+            this._syncScrollPadding();
+        },
+        scope: this
+    });  
+    oChain.run();
+},
+
+/**
+ * Syncs up widths of THs and TDs across all those Columns without width values
+ * to accommodate any new content that may be wider than current width. 
+ *
+ * @method _syncColWidths
+ * @param el {HTMLElement} TR or TD element with new content. 
+ * @private
+ */
+_syncNewContent : function(el) {
+    var elRefTds = this._getWidthTrEl().cells;
+    var i, l, elRefTdLiner, elRefThLiner, newWidth;
+    
+    // Sync the entire row
+    if(el.tagName.toLowerCase() == "tr") {
+        for(i=0, l=el.cells.length; i<l; i++) {
+            // Only proceed if Column doesn't have a width set
+            if(!this.getColumn(i).width) {
+                elRefTdLiner = elRefTds[i].firstChild;
+                
+                // Only proceed if new content is wider than current width
+                if(el.cells[i].firstChild.scrollWidth > elRefTdLiner.offsetWidth) {
+                    newWidth = el.cells[i].firstChild.scrollWidth;
+                    
+                    // Apply new width to TH liner minus appropriate padding
+                    elRefThLiner = this.getColumn(i).getThEl().firstChild;
+                    elRefThLiner.style.width = newWidth -
+                            (parseInt(Dom.getStyle(elRefThLiner,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elRefThLiner,"paddingRight"),10)|0) + "px";
+                                                        
+                    // Apply new width to TD liner minus appropriate padding
+                    elRefTdLiner.style.width = newWidth -
+                            (parseInt(Dom.getStyle(elRefTdLiner,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elRefTdLiner,"paddingRight"),10)|0) + "px";
+                }
+            }
+        }
+    }
+    // Sync one cell
+    else if(el.tagName.toLowerCase() == "td") {
+        i = el.yuiCellIndex;
+
+        // Only proceed if Column doesn't have a width set
+        if(!this.getColumn(i).width) {
+            elRefTdLiner = elRefTds[i].firstChild;
+            
+            // Only proceed if new content is wider than current width
+            if(el.firstChild.scrollWidth > elRefTdLiner.offsetWidth) {
+                newWidth = el.firstChild.scrollWidth;
+                
+                // Apply new width to TH liner minus appropriate padding
+                elRefThLiner = this.getColumn(i).getThEl().firstChild;
+                elRefThLiner.style.width = newWidth -
+                        (parseInt(Dom.getStyle(elRefThLiner,"paddingLeft"),10)|0) -
+                        (parseInt(Dom.getStyle(elRefThLiner,"paddingRight"),10)|0) + "px";
+                                                    
+                // Apply new width to TD liner minus appropriate padding
+                elRefTdLiner.style.width = newWidth -
+                        (parseInt(Dom.getStyle(elRefTdLiner,"paddingLeft"),10)|0) -
+                        (parseInt(Dom.getStyle(elRefTdLiner,"paddingRight"),10)|0) + "px";
+            }
+        }
+    }
     this._syncScrollPadding();
 },
 
@@ -2826,7 +2940,7 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
             elTheadCellLiner.style.width = "1px";
         }
         else if(oColumn.width) {
-            elTheadCellLiner.style.width = oColumn.width + "px";
+            //elTheadCellLiner.style.width = oColumn.width + "px";
         }
         
         // Set Column selection on TD
@@ -3012,19 +3126,16 @@ _updateTrEl : function(elRow, oRecord) {
             Dom.removeClass(elCell, DT.CLASS_DESC);
         }
         
-        elCell.style.width =
-        elCellLiner.style.width = "";
-                    
         // Set width if available
         if(oColumn.hidden) {
             Dom.addClass(elCell, DT.CLASS_HIDDEN);
-            elCellLiner.style.width = "1px";
+            //elCellLiner.style.width = "1px";
         }
         else {
             Dom.removeClass(elCell, DT.CLASS_HIDDEN);
             
             if(oColumn.width) {
-                elCellLiner.style.width = oColumn.width + "px";
+                //elCellLiner.style.width = oColumn.width + "px";
             }
         }
 
@@ -5291,24 +5402,23 @@ sortColumn : function(oColumn, sDir) {
 _setColumnWidth : function(oColumn, sWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
-        var nColKeyIndex = oColumn.getKeyIndex();
+        // Set width on TH
         var elTheadCell = oColumn.getThEl();
-
-        elTheadCell.style.width = sWidth;
+        elTheadCell.firstChild.width = sWidth;
         elTheadCell.firstChild.style.width = sWidth;
         
-        var allrows = this.getTbodyEl().rows;
-        var nMaxIndex = allrows.length;
-        for(var i=0;i<nMaxIndex;i++) {
-            if(allrows[i].cells[nColKeyIndex] && allrows[i].cells[nColKeyIndex].firstChild) {
-                allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
-                allrows[i].cells[nColKeyIndex].style.width = sWidth;
-            }
-        }
+        // Set width on TD
+        var elRow = this._getWidthTrEl();
+        var nColKeyIndex = oColumn.getKeyIndex();
+        elRow.cells[nColKeyIndex].style.width = sWidth;
+        elRow.cells[nColKeyIndex].firstChild.style.width = sWidth;
+        
         if(ua.opera && !this.get("scrollable")) {
             this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
             document.body.style += '';
         }
+        
+        this._elWidthTr = elRow;
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
@@ -5455,7 +5565,6 @@ showColumn : function(oColumn) {
                 else {
                     elTheadCell.firstChild.style.width = "";
                 }
-
 
                 thisColumn._nLastWidth = null;
                 this.fireEvent("columnShowEvent",{column:thisColumn});
@@ -5865,7 +5974,7 @@ addRow : function(oData, index) {
                                         this._setFirstRow();
                                     }
                                     
-                                    this._syncColWidths();
+                                    this._syncNewContent(elNewTr);
                                 }
                                 this.hideTableMessage();
     
@@ -5979,7 +6088,7 @@ updateRow : function(row, oData) {
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
         this._oChain.run();
-        this._syncColWidths();
+        this._syncNewContent(elRow);
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -6086,11 +6195,11 @@ deleteRow : function(row) {
                                 // Set EVEN/ODD
                                 if(nTrIndex != this._elTbody.rows.length) {
                                     this._setRowStripes(nTrIndex);
-                                }
-                                
-                                this._syncColWidths();
+                                }                                
                             }
             
+                            this._syncColWidths();
+                            
                             this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
                                     oldData:oData, trElIndex:nTrIndex});
                             YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
@@ -8762,6 +8871,7 @@ saveCellEditor : function() {
 
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
+        this._syncNewContent(this._oCellEditor.cell);
 
         // Clear out the Cell Editor
         this.resetCellEditor();
