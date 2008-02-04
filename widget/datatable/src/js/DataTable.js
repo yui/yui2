@@ -584,6 +584,27 @@ lang.augmentObject(DT, {
     _elColumnResizerProxy : null,
 
     /**
+     * Cell formatting functions.
+     * @property Formatter
+     * @type Object
+     * @static
+     */
+    Formatter : {
+        button   : DT.formatButton,
+        checkbox : DT.formatCheckbox,
+        currency : DT.formatCurrency,
+        "date"   : DT.formatDate,
+        dropdown : DT.formatDropdown,
+        email    : DT.formatEmail,
+        link     : DT.formatLink,
+        "number" : DT.formatNumber,
+        radio    : DT.formatRadio,
+        text     : DT.formatText,
+        textarea : DT.formatTextarea,
+        textbox  : DT.formatTextbox
+    },
+
+    /**
      * Clones object literal or array of object literals.
      *
      * @method YAHOO.widget.DataTable._cloneObject
@@ -3032,37 +3053,19 @@ _initColumnSort : function() {
 
 
 
-
 /**
- * Adds a TR element to the primary TBODY at the page row index if given, otherwise
- * at the end of the page. Formats TD elements within the TR element using data
- * from the given Record.
- *
- * @method _addTrEl
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} (optional) The page row index at which to add the TR
- * element.
- * @return {HTMLElement} DOM reference to the new TR element.
- * @private
+ * Create a TR element for a given Record.
+ * @method _createTrEl
+ * @param oRecord {YAHOO.widget.Record} Record instance
+ * @return {HTMLElement} The new TR element.  This must be added to the DOM.
  */
-_addTrEl : function(oRecord, index) {
+_createTrEl : function (oRecord) {
     // Clone the empty tr template.  We can't clone an existing row
     // because of the expandos and td ids that must be set in _addTdEl
-    var elRow     = this._trElTemplate.cloneNode(true),
-        beforeRow = (lang.isNumber(index) && index >= 0 && this._elTbody.rows[index]) ?
-                    this._elTbody.rows[index] : null;
+    var elRow     = this._trElTemplate.cloneNode(true);
 
     elRow.id = this._sId+"-bdrow"+this._nTrCount;
     this._nTrCount++;
-
-    // Hide the row initially, allowing _updateTrEl to manage the page reflows
-    elRow.style.display = 'none';
-
-    // It's an append if no index provided, or index is negative or too big
-    this._elTbody.insertBefore(elRow,beforeRow);
-
-    // Stripe the new row
-    elRow.className = elRow.sectionRowIndex % 2 ? DT.CLASS_ODD : DT.CLASS_EVEN;
 
     // Call _updateTrEl to populate and align the row contents
     return this._updateTrEl(elRow,oRecord);
@@ -3126,17 +3129,12 @@ _updateTrEl : function(elRow, oRecord) {
             Dom.removeClass(elCell, DT.CLASS_DESC);
         }
         
-        // Set width if available
+        // Set Column hidden if appropriate
         if(oColumn.hidden) {
             Dom.addClass(elCell, DT.CLASS_HIDDEN);
-            //elCellLiner.style.width = "1px";
         }
         else {
             Dom.removeClass(elCell, DT.CLASS_HIDDEN);
-            
-            if(oColumn.width) {
-                //elCellLiner.style.width = oColumn.width + "px";
-            }
         }
 
         // Set Column selection on TH
@@ -4797,8 +4795,12 @@ render : function() {
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        var nCurrentRow = oArg.nCurrentRow;
-                        for(i = nCurrentRow, len = loopN > 0 ? nCurrentRow + loopN : nCurrentRow + 1; i < len && i < loopEnd; ++i) {
+                        var i = oArg.nCurrentRow,
+                            // Must reference allRows.length instead of loopEnd
+                            // here because loopEnd is reused below outside
+                            // this closure.
+                            len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length;
+                        for(; i < len; ++i) {
                             this._updateTrEl(allRows[i], allRecords[i]);
                         }
                         if (loopN > 0) {
@@ -4807,7 +4809,7 @@ render : function() {
                         oArg.nCurrentRow = i;
                     }
                 },
-                iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : loopEnd,
+                iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
                 argument: {nCurrentRow:0}, // Start at first row
                 scope: this,
                 timeout: (loopN > 0) ? 0 : -1
@@ -4822,17 +4824,23 @@ render : function() {
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        var nCurrentRow = oArg.nCurrentRow;
-                        for(i = nCurrentRow, len = loopN > 0 ? nCurrentRow + loopN : nCurrentRow + 1; i<len && i < loopEnd; ++i) {
-                            this._addTrEl(allRecords[i]);
+                        var i = oArg.nCurrentRow,
+                            len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd,
+                            df = document.createDocumentFragment(),
+                            tr;
+                        for(; i < len; ++i) {
+                            tr = this._createTrEl(allRecords[i]);
+                            tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
+                            df.appendChild(tr);
                         }
+                        this._elTbody.appendChild(df);
                         if (loopN > 0) {
                             this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
                 },
-                iterations: (loopN > 0) ? Math.ceil(nRowsNeeded/loopN) : nRowsNeeded,
+                iterations: (loopN > 0) ? Math.ceil(nRowsNeeded/loopN) : 1,
                 argument: {nCurrentRow:loopStart}, // start at last row
                 scope: this,
                 timeout: (loopN > 0) ? 0 : -1
@@ -5941,58 +5949,39 @@ addRow : function(oData, index) {
             else {
                 recIndex = this.getTrIndex(oRecord);
                 if(lang.isNumber(recIndex)) {
-                    this._oChain.add({
-                        method: function() {
-                            if((this instanceof DT) && this._sId) {
-                                // Add the TR element
-                                var elNewTr = this._addTrEl(oRecord, recIndex);
-                                if(elNewTr) {
-                                    // Is this an insert or an append?
-                                    var append = (lang.isNumber(recIndex) &&
-                                            (recIndex == this._elTbody.rows.length-1)) ? true : false;
-            
-                                    // Stripe the one new row
-                                    if(append) {
-                                        if(elNewTr.sectionRowIndex%2) {
-                                            Dom.addClass(elNewTr, DT.CLASS_ODD);
-                                        }
-                                        else {
-                                            Dom.addClass(elNewTr, DT.CLASS_EVEN);
-                                        }
-                                    }
-                                    // Restripe all the rows after the new one
-                                    else {
-                                        this._setRowStripes(recIndex);
-                                    }
-            
-                                    // If new row is at the bottom
-                                    if(append) {
-                                        this._setLastRow();
-                                    }
-                                    // If new row is at the top
-                                    else if(lang.isNumber(index) && (recIndex === 0)) {
-                                        this._setFirstRow();
-                                    }
-                                    
-                                    this._syncNewContent(elNewTr);
+                    if((this instanceof DT) && this._sId) {
+                        // Add the TR element
+                        var elNewTr = this._createTrEl(oRecord);
+                        if(elNewTr) {
+                            if (recIndex >= 0 && recIndex < this._elTbody.rows.length) {
+                                this._elTbody.insertBefore(elNewTr,
+                                    this._elTbody.rows[recIndex]);
+                                if (!recIndex) {
+                                    this._setFirstRow();
                                 }
-                                this.hideTableMessage();
-    
-                                // TODO: what args to pass?
-                                this.fireEvent("rowAddEvent", {record:oRecord});
-                        
-                                // For log message
-                                recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
-                        
-                                YAHOO.log("Added row: Record ID = " + oRecord.getId() +
-                                        ", Record index = " + this.getRecordIndex(oRecord) +
-                                        ", page row index = " + recIndex, "info", this.toString());
+                            } else {
+                                this._elTbody.appendChild(elNewTr);
+                                this._setLastRow();
+                                recIndex = this._elTbody.rows.length - 1;
                             }
-                        },
-                        scope: this,
-                        timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
-                    });
-                    this._oChain.run();
+                            this._setRowStripes(recIndex);
+
+                            this._syncNewContent(elNewTr);
+
+                            this._syncColWidths();
+                        }
+                        this.hideTableMessage();
+
+                        // TODO: what args to pass?
+                        this.fireEvent("rowAddEvent", {record:oRecord});
+
+                        // For log message
+                        recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
+
+                        YAHOO.log("Added row: Record ID = " + oRecord.getId() +
+                                ", Record index = " + this.getRecordIndex(oRecord) +
+                                ", page row index = " + recIndex, "info", this.toString());
+                    }
                     return;
                 }
             }            
@@ -6363,64 +6352,19 @@ formatCell : function(elCell, oRecord, oColumn) {
         Dom.addClass(elCell, aClasses.join(" "));
 
 
-        var fnFormatter;
-        if(lang.isString(oColumn.formatter)) {
-            switch(oColumn.formatter) {
-                case "button":
-                    fnFormatter = DT.formatButton;
-                    break;
-                case "checkbox":
-                    fnFormatter = DT.formatCheckbox;
-                    break;
-                case "currency":
-                    fnFormatter = DT.formatCurrency;
-                    break;
-                case "date":
-                    fnFormatter = DT.formatDate;
-                    break;
-                case "dropdown":
-                    fnFormatter = DT.formatDropdown;
-                    break;
-                case "email":
-                    fnFormatter = DT.formatEmail;
-                    break;
-                case "link":
-                    fnFormatter = DT.formatLink;
-                    break;
-                case "number":
-                    fnFormatter = DT.formatNumber;
-                    break;
-                case "radio":
-                    fnFormatter = DT.formatRadio;
-                    break;
-                case "text":
-                    fnFormatter = DT.formatText;
-                    break;
-                case "textarea":
-                    fnFormatter = DT.formatTextarea;
-                    break;
-                case "textbox":
-                    fnFormatter = DT.formatTextbox;
-                    break;
-                case "html":
-                    // This is the default
-                    break;
-                default:
-                    YAHOO.log("Could not find formatter function \"" +
-                            oColumn.formatter + "\"", "warn", this.toString());
-                    fnFormatter = null;
-            }
-        }
-        else if(lang.isFunction(oColumn.formatter)) {
-            fnFormatter = oColumn.formatter;
-        }
+        var fnFormatter = typeof oColumn.formatter === 'function' ?
+                          oColumn.formatter :
+                          DT.Formatter[oColumn.formatter+''];
 
         // Apply special formatter
         if(fnFormatter) {
             fnFormatter.call(this, elCell, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = (lang.isValue(oData)) ? oData.toString() : "";
+            elCell.innerHTML = oData === undefined ||
+                               oData === null ||
+                               (typeof oData === 'number' && isNaN(oData)) ?
+                                "" : oData.toString();
         }
 
         this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:sKey, el:elCell});

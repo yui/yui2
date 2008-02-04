@@ -63,6 +63,7 @@ YAHOO.util.Chain.prototype = {
 
             // Execute immediately if the callback timeout is negative.
             if (ms < 0) {
+                this.id = ms;
                 if (c.until) {
                     for (;!c.until();) {
                         // Execute the callback from scope, with argument
@@ -76,6 +77,7 @@ YAHOO.util.Chain.prototype = {
                     fn.apply(o,args);
                 }
                 this.q.shift();
+                this.id = 0;
                 return this.run();
             } else {
                 // If the until condition is set, check if we're done
