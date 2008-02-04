@@ -1676,7 +1676,7 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
                 }
                 oResult[key] = data;
             }
-            oParsedResponse.results[i] = oResult;
+            oParsedResponse.results[j] = oResult;
         }
     }
 
