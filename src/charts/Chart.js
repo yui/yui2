@@ -144,6 +144,15 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 * @private
 	 */
 	_pollingInterval: null,
+	
+	/**
+	 * Indicates whether all attributes have been set and
+	 * the dataSource may be passed to the SWF.
+	 * @property _initialized
+	 * @type Boolean
+	 * @private
+	 */
+	_initialized: false,
 
 	/**
 	 * Public accessor to the unique name of the Chart instance.
@@ -326,6 +335,8 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		
 		YAHOO.widget.Chart.superclass._loadHandler.call(this);
 		
+		this._initialized = true;
+		
 		if(this._dataSource)
 		{
 			this.set("dataSource", this._dataSource);
@@ -340,9 +351,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_refreshData: function()
 	{
-		if(this._dataSource != null)
+		if(!this._initialized) return;
+		
+		if(this._dataSource !== null)
 		{
-			if(this._pollingID != null)
+			if(this._pollingID !== null)
 			{
 				this._dataSource.clearInterval(this._pollingID);
 				this._pollingID = null;

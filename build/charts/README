@@ -8,6 +8,7 @@ YUI Library - Charts - Release Notes
   * Fixed animation and marker positioning bugs
   * Fixed bug that caused series definition update to fail
   * Fixed bug that caused setting hex color values with # symbol to fail
+  * Added initialization flag to ensure DataSource doesn't receive multiple requests during initialization.
 
 2.4.0
   * Experimental release
