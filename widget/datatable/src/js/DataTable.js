@@ -3096,18 +3096,18 @@ _updateTrEl : function(elRow, oRecord) {
     elRow.style.display = 'none';
 
     // Remove extra TD elements
-    while(elRow.cells.length > oColumnSet.keys.length) {
+    while(elRow.childNodes.length > oColumnSet.keys.length) {
         elRow.removeChild(elRow.firstChild);
     }
     // Add more TD elements as needed
-    for (i=elRow.cells.length, len=oColumnSet.keys.length; i < len; ++i) {
+    for (i=elRow.childNodes.length||0, len=oColumnSet.keys.length; i < len; ++i) {
         this._addTdEl(elRow,oColumnSet.keys[i],i);
     }
 
     // Update TD elements with new data
     for(i=0,len=oColumnSet.keys.length; i<len; ++i) {
         var oColumn     = oColumnSet.keys[i],
-            elCell      = elRow.cells[i],
+            elCell      = elRow.childNodes[i],
             elCellLiner = elCell.firstChild,
             cellHeaders = '';
 
