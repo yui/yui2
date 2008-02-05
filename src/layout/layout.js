@@ -230,6 +230,14 @@
             YAHOO.log('Setting Center size to: (' + h + ', ' + w + ')', 'info', 'Layout');
         },
         /**
+        * @method getSizes
+        * @description Get a reference to the internal Layout Unit sizes
+        * @return {Object} An object of the layout unit sizes
+        */
+        getSizes: function() {
+            return this._sizes;
+        },
+        /**
         * @method getUnitById
         * @param {String} id The HTML element id of the unit
         * @description Get the LayoutUnit by it's HTML id
@@ -629,6 +637,11 @@
     /**
     * @event resize
     * @description Fired when this.resize is called
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event startResize
+    * @description Fired when the Resize Utility for a Unit fires it's startResize Event.
     * @type YAHOO.util.CustomEvent
     */
     /**

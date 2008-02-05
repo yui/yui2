@@ -230,6 +230,14 @@
             YAHOO.log('Setting Center size to: (' + h + ', ' + w + ')', 'info', 'Layout');
         },
         /**
+        * @method getSizes
+        * @description Get a reference to the internal Layout Unit sizes
+        * @return {Object} An object of the layout unit sizes
+        */
+        getSizes: function() {
+            return this._sizes;
+        },
+        /**
         * @method getUnitById
         * @param {String} id The HTML element id of the unit
         * @description Get the LayoutUnit by it's HTML id
@@ -632,6 +640,11 @@
     * @type YAHOO.util.CustomEvent
     */
     /**
+    * @event startResize
+    * @description Fired when the Resize Utility for a Unit fires it's startResize Event.
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
     * @event beforeResize
     * @description Firef at the beginning of the resize method. If you return false, the resize is cancelled.
     * @type YAHOO.util.CustomEvent
@@ -694,7 +707,6 @@
         if (LayoutUnit._instances[id]) {
             return LayoutUnit._instances[id];
         }
-        console.log(id);
         return false;
     };
 
@@ -723,6 +735,13 @@
         * @type Object
         */
         browser: null,
+        /**
+        * @private
+        * @property _sizes
+        * @description A collection of the current sizes of the contents of this Layout Unit
+        * @type Object
+        */
+        _sizes: null,
         /**
         * @private
         * @property _anim
@@ -854,18 +873,23 @@
                 } else if (!this._collapsed || (this._collapsed && this._collapsing)) {
                     wrapH = this._setHeight(this.get('wrap'), wrapH);
                     wrapW = this._setWidth(this.get('wrap'), wrapW);
+                    this._sizes.wrap.h = wrapH;
+                    this._sizes.wrap.w = wrapW;
+
                     Dom.setStyle(this.get('wrap'), 'top', this._gutter.top + 'px');
                     Dom.setStyle(this.get('wrap'), 'left', this._gutter.left + 'px');
 
-                    this._setWidth(this.header, wrapW);
-                    this._setWidth(this.footer, wrapW);
+                    this._sizes.header.w = this._setWidth(this.header, wrapW);
+                    this._sizes.header.h = hd[0];
+
+                    this._sizes.footer.w = this._setWidth(this.footer, wrapW);
+                    this._sizes.footer.h = ft[0];
 
                     Dom.setStyle(this.footer, 'bottom', '0px');
 
-                    this._setHeight(this.body, (wrapH - (hd[0] + ft[0])));
-                    this._setWidth(this.body, wrapW);
+                    this._sizes.body.h = this._setHeight(this.body, (wrapH - (hd[0] + ft[0])));
+                    this._sizes.body.w =this._setWidth(this.body, wrapW);
                     Dom.setStyle(this.body, 'top', hd[0] + 'px');
-
 
                     this.set('scroll', scroll);
                     this.fireEvent('resize');
@@ -974,6 +998,7 @@
             s[1] = parseInt(Dom.getStyle(el, 'borderRightWidth'), 10);
             s[2] = parseInt(Dom.getStyle(el, 'borderBottomWidth'), 10);
             s[3] = parseInt(Dom.getStyle(el, 'borderLeftWidth'), 10);
+            
             //IE will return NaN on these if they are set to auto, we'll set them to 0
             for (var i = 0; i < s.length; i++) {
                 if (isNaN(s[i])) {
@@ -1048,6 +1073,14 @@
             }
         },
         /**
+        * @method getSizes
+        * @description Get a reference to the internal sizes object
+        * @return {Object} An object of the sizes used for calculations
+        */
+        getSizes: function() {
+            return this._sizes;
+        },
+        /**
         * @method toggle
         * @description Toggles the Unit, replacing it with a clipped version.
         * @return {Object} YAHOO.widget.LayoutUnit
@@ -1087,7 +1120,7 @@
                         this.set('width', this._lastWidth, true);
                         this.setStyle('width', this._lastWidth + 'px');
                         this.get('parent').resize(false);
-                        s = this.get('parent')._sizes[this.get('position')];
+                        s = this.get('parent').getSizes()[this.get('position')];
                         this.set('height', s.h, true);
                         var left = s.l;
                         attr = {
@@ -1105,7 +1138,7 @@
                         this.set('height', this._lastHeight, true);
                         this.setStyle('height', this._lastHeight + 'px');
                         this.get('parent').resize(false);
-                        s = this.get('parent')._sizes[this.get('position')];
+                        s = this.get('parent').getSizes()[this.get('position')];
                         this.set('width', s.w, true);
                         var top = s.t;
                         attr = {
@@ -1270,6 +1303,24 @@
                 right: 0,
                 top: 0,
                 bottom: 0
+            };
+            this._sizes = {
+                wrap: {
+                    h: 0,
+                    w: 0
+                },
+                header: {
+                    h: 0,
+                    w: 0
+                },
+                body: {
+                    h: 0,
+                    w: 0
+                },
+                footer: {
+                    h: 0,
+                    w: 0
+                }
             };
             
             LayoutUnit.superclass.init.call(this, p_oElement, p_oAttributes);
@@ -1798,6 +1849,12 @@
                                 proxy.innerHTML = '<div class="yui-layout-handle-' + handle + '"></div>';
                             }
 
+                            this._resize.on('startResize', function(ev) {
+                                if (this.get('parent')) {
+                                    this.get('parent').fireEvent('startResize');
+                                }
+                                this.fireEvent('startResize');
+                            }, this, true);
                             this._resize.on('resize', function(ev) {
                                 this.set('height', ev.height);
                                 this.set('width', ev.width);
@@ -1892,6 +1949,11 @@
     /**
     * @event resize
     * @description Fired when this.resize is called
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event startResize
+    * @description Fired when the Resize Utility fires it's startResize Event.
     * @type YAHOO.util.CustomEvent
     */
     /**
