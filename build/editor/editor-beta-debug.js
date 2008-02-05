@@ -874,34 +874,36 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('collapse', {
                 value: false,
                 method: function(collapse) {
-                    var collapseEl = null;
-                    var el = Dom.getElementsByClassName('collapse', 'span', this._titlebar);
-                    if (collapse) {
-                        if (el.length > 0) {
-                            //There is already a collapse button
-                            return true;
-                        }
-                        collapseEl = document.createElement('SPAN');
-                        collapseEl.innerHTML = 'X';
-                        collapseEl.title = this.STR_COLLAPSE;
+                    if (this._titlebar) {
+                        var collapseEl = null;
+                        var el = Dom.getElementsByClassName('collapse', 'span', this._titlebar);
+                        if (collapse) {
+                            if (el.length > 0) {
+                                //There is already a collapse button
+                                return true;
+                            }
+                            collapseEl = document.createElement('SPAN');
+                            collapseEl.innerHTML = 'X';
+                            collapseEl.title = this.STR_COLLAPSE;
 
-                        Dom.addClass(collapseEl, 'collapse');
-                        this._titlebar.appendChild(collapseEl);
-                        Event.addListener(collapseEl, 'click', function() {
-                            if (Dom.hasClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed')) {
-                                this.collapse(false); //Expand Toolbar
-                            } else {
-                                this.collapse(); //Collapse Toolbar
+                            Dom.addClass(collapseEl, 'collapse');
+                            this._titlebar.appendChild(collapseEl);
+                            Event.addListener(collapseEl, 'click', function() {
+                                if (Dom.hasClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed')) {
+                                    this.collapse(false); //Expand Toolbar
+                                } else {
+                                    this.collapse(); //Collapse Toolbar
+                                }
+                            }, this, true);
+                        } else {
+                            collapseEl = Dom.getElementsByClassName('collapse', 'span', this._titlebar);
+                            if (collapseEl[0]) {
+                                if (Dom.hasClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed')) {
+                                    //We are closed, reopen the titlebar..
+                                    this.collapse(false); //Expand Toolbar
+                                }
+                                collapseEl[0].parentNode.removeChild(collapseEl[0]);
                             }
-                        }, this, true);
-                    } else {
-                        collapseEl = Dom.getElementsByClassName('collapse', 'span', this._titlebar);
-                        if (collapseEl[0]) {
-                            if (Dom.hasClass(this.get('cont').parentNode, 'yui-toolbar-container-collapsed')) {
-                                //We are closed, reopen the titlebar..
-                                this.collapse(false); //Expand Toolbar
-                            }
-                            collapseEl[0].parentNode.removeChild(collapseEl[0]);
                         }
                     }
                 }
