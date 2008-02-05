@@ -33,6 +33,7 @@
 		
 		this._init();
 		
+		YAHOO.log("ProfilerViewer instantiated.", "info", "ProfilerViewer");
     };
 
     YAHOO.extend(YAHOO.widget.ProfilerViewer, YAHOO.util.Element);
@@ -161,9 +162,9 @@
 	},true);
 	
 
-	/**
-	 * STANDARD SHORTCUTS
-	 */
+	//
+	// STANDARD SHORTCUTS
+	//
     var Dom = YAHOO.util.Dom;
     var Event = YAHOO.util.Event;
 	var Profiler = YAHOO.tool.Profiler;
@@ -171,9 +172,9 @@
 	var proto = PV.prototype;
 
 
-	/**
-	 * PUBLIC METHODS
-	 **/
+	//
+	// PUBLIC METHODS
+	//
 	
 	 /**
      * Refreshes the data displayed in the ProfilerViewer. When called,
@@ -184,13 +185,14 @@
 	 * @public
      */	
 	proto.refreshData = function() {
+		YAHOO.log("Data refresh requested via refreshData method.", "info", "ProfilerViewer");
 		this.fireEvent("dataRefreshEvent");
 	};
 	
 
-    /**
-     * PRIVATE PROPERTIES
-     */
+    //
+    // PRIVATE PROPERTIES
+    //
     proto._rendered = false;
 	proto._headEl = null;
 	proto._bodyEl = null;
@@ -206,9 +208,9 @@
 	proto._chart = null;
 	proto._chartInitialized = false;
 
-    /**
-     * PRIVATE METHODS
-     **/
+    //
+    // PRIVATE METHODS
+    //
 
 	proto._init = function() {
 		/**
@@ -227,7 +229,7 @@
 		 * Fired when the viewer canvas first renders. No arguments are passed
 		 * with this event.
 		 *
-		 * @event refreshDataEvent
+		 * @event renderEvent
 		 */
 		this.createEvent("renderEvent");
 
@@ -240,18 +242,24 @@
 			this.on("sortedByChange", this._refreshChart);
 		}
 
+		YAHOO.log("ProfilerViewer instance initialization complete.", "info", "ProfilerViewer");
 	};
 
 	/**
 	 * If no element is passed in, create it as the first element
 	 * in the document.
+	 * @method _createProfilerViewerElement
+	 * @return HTMLElement
+	 * @private
 	 */
 	proto._createProfilerViewerElement = function() {
+		YAHOO.log("Creating root element...", "info", "ProfilerViewer");
 
 		var el = document.createElement("div");
 		document.body.insertBefore(el, document.body.firstChild);
 		Dom.addClass(el, this.SKIN_CLASS);
 		Dom.addClass(el, PV.CLASS);
+		YAHOO.log(el);
 		return el;
 	};
 			
@@ -272,6 +280,7 @@
 	 * @private
      */	
 	proto._toggleVisible = function() {
+		YAHOO.log("Toggling visibility to " + !this.get("visible") + ".", "info", "ProfilerViewer");
 		
 		var newVis = (this.get("visible")) ? false : true;
 		this.set("visible", newVis);
@@ -324,8 +333,12 @@
 	
 	/**
 	 * Render the viewer canvas
+	 * @method _render
+	 * @return void
+	 * @private
 	 */
 	proto._render = function() {
+		YAHOO.log("Beginning to render ProfilerViewer canvas...", "info", "ProfilerViewer");
 		
 		this._initViewerDOM();
 		this._initDataTable();
@@ -339,12 +352,16 @@
 		
 		this.fireEvent("renderEvent");
 
+		YAHOO.log("ProfilerViewer rendering complete...", "info", "ProfilerViewer");
 	};
 	
 	/**
 	 * Set up the DOM structure for the ProfilerViewer launcher.
+	 * @method _initLauncherDOM
+	 * @private
 	 */
 	proto._initLauncherDOM = function() {
+		YAHOO.log("Creating the launcher...", "info", "ProfilerViewer");
 		
 		var el = this.get("element");
 		Dom.addClass(el, PV.CLASS);
@@ -367,8 +384,11 @@
 	/**
 	 * Set up the DOM structure for the ProfilerViewer canvas,
 	 * including the holder for the DataTable.
+	 * @method _initViewerDOM
+	 * @private
 	 */
 	proto._initViewerDOM = function() {
+		YAHOO.log("Creating DOM structure for viewer...", "info", "ProfilerViewer");
 		
 		var el = this.get("element");
 		this._bodyEl = document.createElement("div");
@@ -381,8 +401,11 @@
 
 	/**
 	 * Set up the DOM structure for the ProfilerViewer canvas.
+	 * @method _initChartDOM
+	 * @private
 	 */
 	proto._initChartDOM = function() {
+		YAHOO.log("Adding DOM structure for chart...", "info", "ProfilerViewer");
 		
 		this._chartContainer = document.createElement("div");
 		Dom.addClass(this._chartContainer, PV.CLASS_CHART_CONTAINER);
@@ -412,8 +435,11 @@
 	
 	/**
 	 * Set up the DOM structure for the ProfilerViewer dashboard.
+	 * @method _initDashboardDOM
+	 * @private
 	 */
 	proto._initDashboardDOM = function() {
+		YAHOO.log("Adding DOM structure for dashboard controls...", "info", "ProfilerViewer");
 		
 		var db = this._dashboardEl;
 		this._refreshEl = this._createButton(PV.STRINGS.buttons.refreshdata, db, true);
@@ -426,6 +452,8 @@
 	 * is the el to which the anchor will be attached, position
 	 * is true for inserting as the first node and false for
 	 * inserting as the last node of the parentEl.
+	 * @method _createButton
+	 * @private
 	 */	
 	proto._createButton = function(label, parentEl, position) {
 		var b = document.createElement("a");
@@ -439,7 +467,13 @@
 		}
 		return b;
 	};
-	
+
+	/**
+	 * Generages a sorting function based on current sortedBy
+	 * values.
+	 * @method _createProfilerViewerElement
+	 * @private
+	 **/
 	proto._genSortFunction = function(key, dir) {
 		var by = key;
 		var direction = dir;
@@ -452,13 +486,26 @@
 		};
 	};
 
-	var _arraySum = function(arr){
+	/**
+	 * Utility function for array sums.
+	 * @method _arraySum
+	 * @private
+	 **/	
+	 var _arraySum = function(arr){
 		var ct = 0;
 		for(var i = 0; i < arr.length; ct+=arr[i++]){}
 		return ct;
 	};
 	
+	/**
+	 * Retrieves data from Profiler, filtering and sorting as needed
+	 * based on current widget state.  Adds calculated percentage
+	 * column and function name to data returned by Profiler.
+	 * @method _getProfilerData
+	 * @private
+	 **/
 	proto._getProfilerData = function() {
+		YAHOO.log("Profiler data requested from function DataSource.", "info", "ProfilerViewer");
 		
 		var obj = Profiler.getFullReport();
 		var arr = [];
@@ -483,7 +530,7 @@
 			}
 		}
 		
-		/*add calculated percentage column*/
+		//add calculated percentage column
 		for (var i = 0, j = arr.length; i < j; i++) {
 			arr[i].pct = (arr[i].total * 100) / totalTime;	
 		}
@@ -494,21 +541,23 @@
 
 		arr.sort(this._genSortFunction(key, dir));
 		
+		YAHOO.log("Returning data from DataSource: " + YAHOO.lang.dump(arr), "info", "ProfilerViewer");
 		
 		return arr;
 	};
 	
 	/**
 	 * Set up the DataTable.
+	 * @method _initDataTable
+	 * @private
 	 */
 	proto._initDataTable = function() {
+		YAHOO.log("Creating DataTable instance...", "info", "ProfilerViewer");
 		
 		var self = this;
 		
-		/**
-		 * Set up the JS Function DataSource, pulling data from
-		 * the Profiler.
-		 */
+		//Set up the JS Function DataSource, pulling data from
+		//the Profiler.
 		this._dataSource = new YAHOO.util.DataSource(
 			function() {
 				return self._getProfilerData.call(self);	
@@ -525,9 +574,7 @@
 			fields: [ "fn", "avg", "calls", "max", "min", "total", "pct", "points"]
 		};
 		
-		/**
-		 * Set up the DataTable.
-		 */
+		//Set up the DataTable.
 		var formatTimeValue = function(elCell, oRecord, oColumn, oData) {
 			var a = (oData === Math.floor(oData)) ? oData : (Math.round(oData*1000))/1000;
 			elCell.innerHTML = a + " " + PV.STRINGS.millisecondsAbbrev;
@@ -578,32 +625,41 @@
 		});
 		var dt = this._dataTable;
 
-		/**
-		 * Wire up DataTable events to drive the rest of the UI.
-		 */
+		//Wire up DataTable events to drive the rest of the UI.
 		dt.subscribe("sortedByChange", this._sortedByChange, this, true);		
+		YAHOO.log("DataTable initialized.", "info", "ProfilerViewer");
 	};
 		
 	/**
 	 * Proxy the sort event in DataTable into the ProfilerViewer
 	 * attribute.
+	 * @method _sortedByChange
+	 * @private
 	 **/
 	proto._sortedByChange = function(o) {
+		YAHOO.log("Relaying DataTable sortedBy value change; new key: " + o.newValue.key + "; new direction: " + o.newValue.dir + ".", "info", "ProfilerViewer");
 		this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
 	};
 
 	/**
 	 * Refresh DataTable, getting new data from Profiler.
+	 * @method _refreshDataTable
+	 * @private
 	 **/
 	proto._refreshDataTable = function(args) {
+		YAHOO.log("Beginning to refresh DataTable contents...", "info", "ProfilerViewer");
 		var dt = this._dataTable;
 		dt.getDataSource().sendRequest("", dt.onDataReturnInitializeTable, dt);
+		YAHOO.log("DataTable refresh complete.", "info", "ProfilerViewer");
 	};
 
 	/**
 	 * Refresh chart, getting new data from table.
+	 * @method _refreshChart
+	 * @private
 	 **/
 	proto._refreshChart = function() {
+		YAHOO.log("Beginning to refresh Chart contents...", "info", "ProfilerViewer");
 		
 		switch (this.get("sortedBy").key) {
 			case "fn":
@@ -629,22 +685,29 @@
 		this._drawChartLegend();
 		this._chart.set("series", this._getSeriesDef(this.get("sortedBy").key));
 
+		YAHOO.log("Chart refresh complete.", "info", "ProfilerViewer");
 	};
 	
 	/**
 	 * Get data for the Chart from DataTable recordset
+	 * @method _getChartData
+	 * @private
 	 */
 	proto._getChartData = function() {
+		YAHOO.log("Getting data for chart from function DataSource.", "info", "ProfilerViewer");
 		var records = this._dataTable.getRecordSet().getRecords(0, this.get("maxChartFunctions"));
 		var arr = [];
 		for (var i = records.length - 1; i>-1; i--) {
 			arr.push(records[i].getData());	
 		}
+		YAHOO.log("Returning data to Chart: " + YAHOO.lang.dump(arr), "info", "ProfilerViewer");
 		return arr;
 	};
 	
 	/**
 	 * Build series definition based on current configuration attributes.
+	 * @method _getSeriesDef
+	 * @private
 	 */
 	proto._getSeriesDef = function(field) {
 		var sd = this.get("chartSeriesDefinitions")[field];
@@ -659,22 +722,24 @@
 			);
 		}
 		
+		YAHOO.log("Returning new series definition to chart: " + YAHOO.lang.dump(arr), "info", "ProfilerViewer");
 		return arr;
 	};
 	
 	/**
 	 * Set up the Chart.
+	 * @method _initChart
+	 * @private
 	 */
 	proto._initChart = function() {
+		YAHOO.log("Initializing chart...", "info", "ProfilerViewer");
 		
 		YAHOO.widget.Chart.SWFURL = this.get("swfUrl");
 
 		var self = this;
-		
-		/**
-		 * Create DataSource based on records currently displayed
-		 * at the top of the sort list in the DataTable.
-		 */
+
+		//Create DataSource based on records currently displayed
+		//at the top of the sort list in the DataTable.
 		var ds = new YAHOO.util.DataSource(
 			//force the jsfunction DataSource to run in the scope of
 			//the ProfilerViewer, not in the YAHOO.util.DataSource scope:
@@ -694,9 +759,7 @@
 		
 		ds.subscribe('responseEvent', this._sizeChartCanvas, this, true);
 		
-		/**
-		 * Set up the chart itself.
-		 */
+		//Set up the chart itself.
 		this._chartAxisDefinitionTime = new YAHOO.widget.NumericAxis();
 		this._chartAxisDefinitionTime.labelFunction = "YAHOO.widget.ProfilerViewer.timeAxisLabelFunction";
 		
@@ -718,12 +781,16 @@
 		this._dataTable.unsubscribe("initEvent", this._initChart, this);
 		this._dataTable.subscribe("initEvent", this._refreshChart, this, true);
 		
+		YAHOO.log("Chart initialization complete.", "info", "ProfilerViewer");
 	};
 	
 	/**
 	 * Set up the Chart's legend
+	 * @method _drawChartLegend
+	 * @private
 	 **/
 	proto._drawChartLegend = function() {
+		YAHOO.log("Drawing chart legend...", "info", "ProfilerViewer");
 		var seriesDefs = this.get("chartSeriesDefinitions");
 		var currentDef = seriesDefs[this.get("sortedBy").key];
 		var l = this._chartLegendEl;
@@ -742,8 +809,11 @@
 	/**
 	 * Resize the chart's canvas if based on number of records
 	 * returned from the chart's datasource.
+	 * @method _sizeChartCanvas
+	 * @private
 	 **/
 	proto._sizeChartCanvas = function(o) {
+		YAHOO.log("Resizing chart canvas...", "info", "ProfilerViewer");
 		var s = (o.response.length * 36) + 34;
 		if (s != this._chartElHeight) {
 			this._chartElHeight = s;
@@ -755,8 +825,11 @@
      * setAttributeConfigs TabView specific properties.
      * @method initAttributes
      * @param {Object} attr Hash of initial attributes
+	 * @method initAttributes
+	 * @private
      */
     proto.initAttributes = function(attr) {
+		YAHOO.log("Initializing attributes...", "info", "ProfilerViewer");
         YAHOO.widget.ProfilerViewer.superclass.initAttributes.call(this, attr);
         /**
          * The YUI Loader base path from which to pull YUI files needed
@@ -838,7 +911,7 @@
 		 * The path to the YUI Charts swf file; must be a full URI
 		 * or a path relative to the page being profiled. Changes at runtime
 		 * not supported; pass this value in at instantiation.
-		 * @attribute sfwUrl
+		 * @attribute swfUrl
 		 * @default "http://yui.yahooapis.com/2.5.0/build/charts/assets/charts.swf"
 		 */
 		this.setAttributeConfig('swfUrl', {
@@ -871,19 +944,7 @@
 		 * on how to format this object.
          * @attribute chartStyle
          * @type obj
-		 * @default 
-		 * {
-		 *		font:
-		 *			{
-		 *				name: "Arial",
-		 *				color: 0xeeee5c,
-		 *				size: 12
-		 *			},
-		 *		background:
-		 *			{
-		 *				color: "6e6e63"
-		 *			}
-		 *		}
+		 * @default See JS source for default definitions.
          */
         this.setAttributeConfig('chartStyle', {
             value: 	attr.chartStyle || {
@@ -914,13 +975,7 @@
 		 * given field.
          * @attribute chartSeriesDefinitions
          * @type obj
-		 * @default 
-		 * 		{
-		 *				displayName: "Total",
-		 *				xField: "total",
-		 *				style: {color:"#ff0000", size:23},
-		 *				group: ["total"]
-		 *		}...
+		 * @default See JS source for full default definitions.
          */
         this.setAttributeConfig('chartSeriesDefinitions', {
             value: 	attr.chartSeriesDefinitions ||  {
@@ -982,6 +1037,7 @@
             value: attr.visible || false,
 			validator: YAHOO.lang.isBoolean,
 			method: function(b) {
+				YAHOO.log("visible setting changing to " + b);
 				if(b) {
 					this._show();
 				} else {
@@ -1007,7 +1063,7 @@
 		
 		YAHOO.widget.ProfilerViewer.superclass.initAttributes.call(this, attr);
 		
+		YAHOO.log("Attributes initialized.", "info", "ProfilerViewer");
     };
 	
 })();
-YAHOO.register("profilerviewer", YAHOO.widget.ProfilerViewer, {version: "@VERSION@", build: "@BUILD@"});
