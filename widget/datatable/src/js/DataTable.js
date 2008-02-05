@@ -107,6 +107,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
 
     DT._nCount++;
+    DT._nCurrentCount++;
     
     //HACK: Send out for initial data in an asynchronous request unless
     // initialRequest was originally undefined and DS type is XHR
@@ -564,9 +565,51 @@ lang.augmentObject(DT, {
     _nCount : 0,
 
     /**
+     * Internal class variable tracking current number of DataTable instances,
+     * so that certain class values can be reset when all instances are destroyed.          
+     *
+     * @property DataTable._nCurrentCount
+     * @type Number
+     * @private
+     * @static
+     */
+    _nCurrentCount : 0,
+
+    /**
+     * Reference to STYLE node that is dynamically created and written to
+     * in order to manage Column widths.
+     *
+     * @property DataTable._elStylesheet
+     * @type HTMLElement
+     * @private
+     * @static     
+     */
+    _elStylesheet : null,
+
+    /**
+     * Set to true if _elStylesheet cannot be populated due to browser incompatibility.
+     *
+     * @property DataTable._bStylesheetFallback
+     * @type boolean
+     * @private
+     * @static     
+     */
+    _bStylesheetFallback : false,
+
+    /**
+     * Object literal hash of Columns and their dynamically create style rules.
+     *
+     * @property DataTable._oStylesheetRules
+     * @type Object
+     * @private
+     * @static     
+     */
+    _oStylesheetRules : {},
+
+    /**
      * Element reference to shared Column drag target.
      *
-     * @property _elColumnDragTarget
+     * @property DataTable._elColumnDragTarget
      * @type HTMLElement
      * @private
      * @static 
@@ -576,7 +619,7 @@ lang.augmentObject(DT, {
     /**
      * Element reference to shared Column resizer proxy.
      *
-     * @property _elColumnResizerProxy
+     * @property DataTable._elColumnResizerProxy
      * @type HTMLElement
      * @private
      * @static 
@@ -585,7 +628,7 @@ lang.augmentObject(DT, {
 
     /**
      * Cell formatting functions.
-     * @property Formatter
+     * @property DataTable.Formatter
      * @type Object
      * @static
      */
@@ -607,7 +650,7 @@ lang.augmentObject(DT, {
     /**
      * Clones object literal or array of object literals.
      *
-     * @method YAHOO.widget.DataTable._cloneObject
+     * @method DataTable._cloneObject
      * @param o {Object} Object.
      * @private
      * @static     
@@ -648,7 +691,7 @@ lang.augmentObject(DT, {
     /**
      * Creates HTML markup for shared Column drag target.
      *
-     * @method _initColumnDragTargetEl
+     * @method DataTable._initColumnDragTargetEl
      * @return {HTMLElement} Reference to Column drag target. 
      * @private
      * @static 
@@ -672,7 +715,7 @@ lang.augmentObject(DT, {
     /**
      * Creates HTML markup for shared Column resizer proxy.
      *
-     * @method _initColumnResizerProxyEl
+     * @method DataTable._initColumnResizerProxyEl
      * @return {HTMLElement} Reference to Column resizer proxy.
      * @private 
      * @static 
@@ -695,7 +738,7 @@ lang.augmentObject(DT, {
     /**
      * Outputs markup into the given TH based on given Column.
      *
-     * @method formatTheadCell
+     * @method DataTable.formatTheadCell
      * @param elCellLabel {HTMLElement} The label DIV element within the TH liner.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oSelf {DT} DataTable instance.
@@ -990,10 +1033,10 @@ lang.augmentObject(DT, {
     /**
      * Handles Pag changeRequest events for static DataSources
      * (i.e. DataSources that return all data immediately)
-     * @method handleSimplePagination
+     * @method DataTable.handleSimplePagination
      * @param {object} the requested state of the pagination
      * @param {DataTable} the DataTable instance
-     * @private
+     * @static     
      */
     handleSimplePagination : function (oState,self) {
         // Set the core pagination values silently (the second param)
@@ -1008,9 +1051,10 @@ lang.augmentObject(DT, {
     /**
      * Handles Pag changeRequest events for dynamic DataSources
      * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
-     * @method handleDataSourcePagination
+     * @method DataTable.handleDataSourcePagination
      * @param {object} the requested state of the pagination
      * @param {DataTable} the DataTable instance
+     * @static     
      */
     handleDataSourcePagination : function (oState,self) {
         var requestedRecords = oState.records[1] - oState.recordOffset;
@@ -1039,7 +1083,7 @@ lang.augmentObject(DT, {
     /**
      * Enables CHECKBOX Editor.
      *
-     * @method editCheckbox
+     * @method DataTable.editCheckbox
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -1109,7 +1153,7 @@ lang.augmentObject(DT, {
     /**
      * Enables Date Editor.
      *
-     * @method editDate
+     * @method DataTable.editDate
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -1157,7 +1201,7 @@ lang.augmentObject(DT, {
     /**
      * Enables SELECT Editor.
      *
-     * @method editDropdown
+     * @method DataTable.editDropdown
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -1206,7 +1250,7 @@ lang.augmentObject(DT, {
     /**
      * Enables INPUT TYPE=RADIO Editor.
      *
-     * @method editRadio
+     * @method DataTable.editRadio
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -1260,7 +1304,7 @@ lang.augmentObject(DT, {
     /**
      * Enables TEXTAREA Editor.
      *
-     * @method editTextarea
+     * @method DataTable.editTextarea
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -1298,7 +1342,7 @@ lang.augmentObject(DT, {
     /**
      * Enables INPUT TYPE=TEXT Editor.
      *
-     * @method editTextbox
+     * @method DataTable.editTextbox
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -1340,7 +1384,7 @@ lang.augmentObject(DT, {
      * if input value does not validate.
      *
      *
-     * @method validateNumber
+     * @method DataTable.validateNumber
      * @param oData {Object} Data to validate.
      * @static
     */
@@ -1363,11 +1407,12 @@ lang.augmentObject(DT, {
      * DataSource sendRequest as the request parameter.  Use
      * set('generateParameter', yourFunc) to use a custom function rather than this
      * one.
-     * @method _generateRequest
+     * @method DataTable._generateRequest
      * @param oData {Object} Object literal defining the current or proposed state
      * @param oDataTable {DataTable} Reference to the DataTable instance
      * @returns {MIXED} Returns appropriate value based on DataSource type
      * @private
+     * @static     
      */
     _generateRequest : function (oData, oDataTable) {
         var request = oData;
@@ -2239,6 +2284,61 @@ _getWidthTrEl : function() {
 _syncColWidths : function() {
     // Validate there is at least one row with cells and at least one Column
     var allKeys = this._oColumnSet.keys,
+        elRow = this.getFirstTrEl();
+
+    if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
+        // Temporarily unsnap container since it causes inaccurate calculations
+        var bUnsnap = false;
+        if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
+            bUnsnap = true;
+            this._elTheadContainer.style.width = "";
+            this._elTbodyContainer.style.width = "";
+        }
+
+        // Update the widths to sync
+        for(var i=0, l=elRow.cells.length; i<l; i++) {
+            var oColumn = allKeys[i];
+            
+            // Columns without widths
+            if(!oColumn.width) {
+                var elTh = oColumn.getThEl();
+                var elTd = elRow.cells[i];
+                
+                if(elTh.offsetWidth !== elTd.offsetWidth) {
+                    var elWider = (elTh.offsetWidth > elTd.offsetWidth) ? elTh.firstChild : elTd.firstChild;               
+                    // Calculate the final width by comparing liner widths
+                    var newWidth = elWider.offsetWidth -
+                            (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0);
+                            
+                    this._setColumnWidth(oColumn, newWidth+"px");                     
+                }
+            }
+            // Columns with widths
+            else {
+                this._setColumnWidth(oColumn,oColumn.width+"px"); 
+            }
+        }
+        
+        // Resnap unsnapped containers
+        if(bUnsnap) {
+            var sWidth = this.get("width");
+            this._elTheadContainer.style.width = sWidth;
+            this._elTbodyContainer.style.width = sWidth;     
+        } 
+    }
+    
+    this._syncScrollPadding();
+    
+    /*oChain.add({
+        method: function(oArg) {
+            this._syncScrollPadding();
+        },
+        scope: this
+    });  
+    oChain.run();*/
+
+    /*var allKeys = this._oColumnSet.keys,
         elRow = this._getWidthTrEl(),
         oChain = this._oChain;
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
@@ -2316,7 +2416,7 @@ _syncColWidths : function() {
         },
         scope: this
     });  
-    oChain.run();
+    oChain.run();*/
 },
 
 /**
@@ -2483,7 +2583,6 @@ _initNodeTemplates : function () {
         div = d.createElement('div');
 
     // Append the liner element
-    div.className = DT.CLASS_LINER;
     td.appendChild(div);
 
     this._tdElTemplate = td;
@@ -2558,7 +2657,15 @@ _initConfigs : function(oConfigs) {
  * @private
  */
 _initColumnSet : function(aColumnDefs) {
-    this._oColumnSet = null;
+    if(this._oColumnSet) {
+        // First clear _oStylesheetRules for existing ColumnSet
+        for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+            DT._oStylesheetRules[".yui-dt-col-"+this._oColumnSet.keys[i].getId()] = undefined;
+        }
+        
+        this._oColumnSet = null;
+    }
+    
     if(lang.isArray(aColumnDefs)) {
         this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
     }
@@ -2937,13 +3044,16 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
             aClasses = [];
         }
         
-        aClasses[aClasses.length] = DT.CLASS_LINER;
         //TODO: document special keys will get stripped here
         aClasses[aClasses.length] = "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,"");
+        
+        aClasses[aClasses.length] = "yui-dt-col-"+oColumn.getId();
+        
+        aClasses[aClasses.length] = DT.CLASS_LINER;
 
         Dom.addClass(elTheadCellLiner,aClasses.join(" "));
 
-        // Add classes on the liner
+        // Add classes on the label
         Dom.addClass(elTheadCellLabel,DT.CLASS_LABEL);
         
         // Add classes on the cell
@@ -4804,7 +4914,7 @@ render : function() {
                             this._updateTrEl(allRows[i], allRecords[i]);
                         }
                         if (loopN > 0) {
-                            this._syncColWidths();
+                            //this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
@@ -4835,7 +4945,7 @@ render : function() {
                         }
                         this._elTbody.appendChild(df);
                         if (loopN > 0) {
-                            this._syncColWidths();
+                            //this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
@@ -4982,6 +5092,16 @@ destroy : function() {
     for(var param in this) {
         if(lang.hasOwnProperty(this, param)) {
             this[param] = null;
+        }
+    }
+    
+    // Clean up static values
+    DT._nCurrentCount--;
+    
+    if(DT._nCurrentCount < 1) {
+        if(DT._elStylesheet) {
+            document.getElementsByTagName('head')[0].removeChild(DT._elStylesheet);
+            DT._elStylesheet = null;
         }
     }
 
@@ -5399,8 +5519,8 @@ sortColumn : function(oColumn, sDir) {
 },
 
 /**
- * Sets DOM elements to given pixel width. No validations against minimum width
- * and no updating Column.width value.
+ * Sets DOM elements of given Column to given pixel width. No validations
+ * against minimum width and no updating Column.width value.
  *
  * @method _setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -5410,7 +5530,51 @@ sortColumn : function(oColumn, sDir) {
 _setColumnWidth : function(oColumn, sWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
-        // Set width on TH
+        // Create STYLE node
+        if(!DT._bStylesheetFallback) {
+            var s;
+            if(!DT._elStylesheet) {
+                    s = document.createElement('style');
+                    s.type = 'text/css';
+                    DT._elStylesheet = document.getElementsByTagName('head').item(0).appendChild(s);
+            }
+                
+            if(DT._elStylesheet) {
+                s = DT._elStylesheet;
+                
+                var sClassname = ".yui-dt-col-" + oColumn.getId();
+                
+                // Create rule for the Column
+                var rule = DT._oStylesheetRules[sClassname];
+                if (!rule) {
+                    if (s.styleSheet && s.styleSheet.addRule) {
+                        s.styleSheet.addRule(sClassname,"width:"+sWidth);
+                        rule = s.styleSheet.rules[s.styleSheet.rules.length-1];
+                    } else if (s.sheet && s.sheet.insertRule) {
+                        s.sheet.insertRule(sClassname+" {width:"+sWidth+";}",0);
+                        rule = s.sheet.cssRules[0];
+                    } else {
+                        DT._bStylesheetFallback = true;
+                    }
+                    DT._oStylesheetRules[sClassname] = rule;
+                }
+                
+                // Update existing rule for the Column
+                else {
+                    rule.style.width = sWidth;
+                }
+                return;
+            }
+            
+            DT._bStylesheetFallback = true;
+        }
+        // Do it the old fashioned way
+        if(DT._bStylesheetFallback) {
+            alert("are you on safari 2 or on safari 3/win?");
+        }
+
+
+        /*// Set width on TH
         var elTheadCell = oColumn.getThEl();
         elTheadCell.firstChild.width = sWidth;
         elTheadCell.firstChild.style.width = sWidth;
@@ -5426,7 +5590,7 @@ _setColumnWidth : function(oColumn, sWidth) {
             document.body.style += '';
         }
         
-        this._elWidthTr = elRow;
+        this._elWidthTr = elRow;*/
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
@@ -6067,6 +6231,7 @@ updateRow : function(row, oData) {
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._updateTrEl(elRow, updatedRecord);
+                    this._synColWidths();
                     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                     YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
                             ", Record index = " + this.getRecordIndex(updatedRecord) +
@@ -6077,7 +6242,6 @@ updateRow : function(row, oData) {
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
         this._oChain.run();
-        this._syncNewContent(elRow);
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -6338,6 +6502,10 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         //TODO: document special keys will get stripped here
         aClasses[aClasses.length] = "yui-dt-col-"+sKey.replace(/[^\w\-.:]/g,"");
+        
+        aClasses[aClasses.length] = "yui-dt-col-"+oColumn.getId();
+        
+        aClasses[aClasses.length] = DT.CLASS_LINER;
 
         if(oColumn.sortable) {
             aClasses[aClasses.length] = DT.CLASS_SORTABLE;
@@ -6349,6 +6517,7 @@ formatCell : function(elCell, oRecord, oColumn) {
             aClasses[aClasses.length] = DT.CLASS_EDITABLE;
         }
 
+        elCell.className = "";
         Dom.addClass(elCell, aClasses.join(" "));
 
 

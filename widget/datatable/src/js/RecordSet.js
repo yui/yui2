@@ -485,11 +485,12 @@ YAHOO.widget.RecordSet.prototype = {
             this._records[index + spliceParams.length - 3] =
                 spliceParams[spliceParams.length - 1];
 
-            // Set the number of records to change.  This must be done here
-            // because the end of aData may have contained invalid record data
-            // so we avoid increasing _records.length incorrectly.  And no
-            // need to set the last record, since we just did that.
-            spliceParams[1] = spliceParams.length - 3;
+            // Set the number of records to change (length minus first 2
+            // placeholders).  This must be done here because the end of aData
+            // may have contained invalid record data so we avoid increasing
+            // _records.length incorrectly.  And we do need to set the last
+            // record, although we just did that.
+            spliceParams[1] = spliceParams.length - 2;
 
             // Call splice.apply to simulate a single update to _records
             // rather than looping through the new records and setting them
