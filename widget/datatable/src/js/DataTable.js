@@ -3034,6 +3034,7 @@ _initColumnSort : function() {
  * @method _createTrEl
  * @param oRecord {YAHOO.widget.Record} Record instance
  * @return {HTMLElement} The new TR element.  This must be added to the DOM.
+ * @private 
  */
 _createTrEl : function (oRecord) {
     // Clone the empty tr template.  We can't clone an existing row
