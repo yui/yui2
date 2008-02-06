@@ -109,23 +109,27 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     DT._nCount++;
     DT._nCurrentCount++;
     
-    //HACK: Send out for initial data in an asynchronous request unless
-    // initialRequest was originally undefined and DS type is XHR
-    if(!((this._oConfigs.initialRequest === undefined) &&
-            (this._oDataSource.dataType === DS.TYPE_XHR))) {
-        var oCallback = {
-            success : this.onDataReturnSetRecords,
-            failure : this.onDataReturnSetRecords,
-            scope   : this,
-            argument: {}
-        };
+    // Send a simple initial request
+    var oCallback = {
+        success : this.onDataReturnSetRecords,
+        failure : this.onDataReturnSetRecords,
+        scope   : this,
+        argument: {}
+    };
+    if(this.get("initialLoad") === true) {
         this._oDataSource.sendRequest(this.get("initialRequest"), oCallback);
     }
-    else {
+    // Do not send an initial request at all
+    else if(this.get("initialLoad") === false) {
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
         this.fireEvent("initEvent");
         YAHOO.log("DataTable initialized with no rows", "info", this.toString());
-
+    }
+    // Send an initial request with a custom payload
+    else {
+        var oCustom = this.get("initialLoad");
+        oCallback.argument = oCustom.argument;
+        this._oDataSource.sendRequest(oCustom.request, oCallback);
     }
 };
 
@@ -1498,12 +1502,37 @@ initAttributes : function(oConfigs) {
     /**
     * @attribute initialRequest
     * @description Defines the initial request that gets sent to the DataSource
-    * during initialization.
-    * @type Object
+    * during initialization. Value is ignored if initialLoad is set to any value
+    * other than true.    
+    * @type MIXED
     * @default null
     */
     this.setAttributeConfig("initialRequest", {
         value: null
+    });
+
+    /**
+    * @attribute initialLoad
+    * @description Determines whether or not to load data at instantiation. By
+    * default, will trigger a sendRequest() to the DataSource and pass in the
+    * request defined by initialRequest. If set to false, data will not load
+    * at instantiation. Alternatively, implementers who wish to work with a 
+    * custom payload may pass in an object literal with the following values:
+    *     
+    *    <dl>
+    *      <dt>request (MIXED)</dt>
+    *      <dd>Request value.</dd>
+    *
+    *      <dt>argument (MIXED)</dt>
+    *      <dd>Custom data that will be passed through to the callback function.</dd>
+    *    </dl>
+    *
+    *                    
+    * @type Boolean | Object
+    * @default true
+    */
+    this.setAttributeConfig("initialLoad", {
+        value: true
     });
 
     /**
