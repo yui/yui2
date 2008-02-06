@@ -2157,17 +2157,6 @@ _trElTemplate : null,
  */
 _bScrollbarX : null,
 
-/**
- * TR element which is used to track sync Column widths.
- *
- * @property _elWidthTr
- * @type {HTMLElement} 
- * @private
- */
-_elWidthTr : null,
-
-
-
 
 
 
@@ -2250,20 +2239,6 @@ _focusEl : function(el) {
         catch(e) {
         }
     },0);
-},
-
-/**
- * Returns _elWidthTr, which is the TR el being used to track and sync Column
- * widths. If one is not aleady set or no longer in the document, sets the first
- * TR el to be _elWidthTr. 
- *
- * @method _getWidthTrEl
- * @private
- */
-_getWidthTrEl : function() {
-    this._elWidthTr = Dom.inDocument(this._elWidthTr) ?
-            this._elWidthTr :this.getFirstTrEl();
-    return this._elWidthTr;
 },
 
 /**
