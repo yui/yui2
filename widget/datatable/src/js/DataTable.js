@@ -1998,6 +1998,15 @@ _sId : null,
 _oChain : null,
 
 /**
+ * Fallback chain for browsers incompatible with dynamic CSS rules.
+ *
+ * @property _oFallbackChain
+ * @type YAHOO.util.Chain
+ * @private
+ */
+_oFallbackChain : null,
+
+/**
  * DOM reference to the container element for the DataTable instance into which
  * all other elements get created.
  *
@@ -2295,8 +2304,8 @@ _syncColWidths : function() {
             oColumn = allKeys[i];
             
             // Columns without widths
-            //TODO: set hidden column to "1px"
             if(oColumn.hidden) {
+                this._setColumnWidth(oColumn, "1px"); 
             }
             else if(!oColumn.width) {
                 var elTh = oColumn.getThEl();
@@ -5415,27 +5424,33 @@ _setColumnWidth : function(oColumn, sWidth) {
         }
         // Do it the old fashioned way
         if(DT._bStylesheetFallback) {
-            alert("are you on safari 2 or on safari 3/win?");
-        }
+            if(!this._oFallbackChain) {
+                this._oFallbackChain = new YAHOO.util.Chain();
+            }
+            
+            if(sWidth == "auto") {
+                sWidth = ""; 
+            }
 
+            // Set width on TH
+            oColumn.getThEl().firstChild.style.width = sWidth;
+            
+            var oChain = this._oFallbackChain;
+            oChain.add({
+                method: function(oArg) {
 
-        /*// Set width on TH
-        var elTheadCell = oColumn.getThEl();
-        elTheadCell.firstChild.width = sWidth;
-        elTheadCell.firstChild.style.width = sWidth;
-        
-        // Set width on TD
-        var elRow = this._getWidthTrEl();
-        var nColKeyIndex = oColumn.getKeyIndex();
-        elRow.cells[nColKeyIndex].style.width = sWidth;
-        elRow.cells[nColKeyIndex].firstChild.style.width = sWidth;
-        
-        if(ua.opera && !this.get("scrollable")) {
-            this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
-            document.body.style += '';
+                    // Apply new width to every TD liner minus appropriate padding
+                    var elCell = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex];
+                    elCell.firstChild.style.width = oArg.sWidth;
+                    elCell.style.width = oArg.sWidth;
+                    oArg.rowIndex++;
+                },
+                scope: this,
+                iterations:this._elTbody.rows.length,
+                argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex(),sWidth:sWidth}
+            });          
+            oChain.run();   
         }
-        
-        this._elWidthTr = elRow;*/
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
