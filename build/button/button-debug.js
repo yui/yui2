@@ -393,6 +393,20 @@
 
     YAHOO.widget.Button = function (p_oElement, p_oAttributes) {
     
+		if (!Overlay && YAHOO.widget.Overlay) {
+		
+			Overlay = YAHOO.widget.Overlay;
+		
+		}
+
+
+		if (!Menu && YAHOO.widget.Menu) {
+		
+			Menu = YAHOO.widget.Menu;
+		
+		}
+
+
         var fnSuperClass = YAHOO.widget.Button.superclass.constructor,
             oConfig,
             oElement;
