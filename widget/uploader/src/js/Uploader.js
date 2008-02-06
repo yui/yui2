@@ -446,35 +446,168 @@ YAHOO.widget.FlashAdapter.eventHandler = function(elementID, event)
 	}
 	else loadedSWF.owner._eventHandler(event);
 };
-
+/**
+ * Uploader class for the YUI Uploader component.
+ *
+ * @namespace YAHOO.widget
+ * @class Uploader
+ * @uses YAHOO.widget.FlashAdapter
+ * @constructor
+ * @param containerId {HTMLElement} Container element for the Flash Player instance.
+ */
 YAHOO.widget.Uploader = function(containerId)
 {
 	YAHOO.widget.Uploader.superclass.constructor.call(this, YAHOO.widget.Uploader.SWFURL, containerId, null);
+	
+	/**
+	 * Fires when the user has finished selecting files in the "Open File" dialog.
+	 *
+	 * @event fileSelect
+	 * @param event.type {String} The event type
+	 * @param event.fileList {Array} An array of objects with file information
+	 * @param event.fileList[].size {Number} File size in bytes for a specific file in fileList
+	 * @param event.fileList[].cDate {Date} Creation date for a specific file in fileList
+	 * @param event.fileList[].mDate {Date} Modification date for a specific file in fileList
+	 * @param event.fileList[].name {String} File name for a specific file in fileList
+	 * @param event.fileList[].id {String} Unique file id of a specific file in fileList
+	 */
+	this.createEvent("fileSelect");
+
+	/**
+	 * Fires when an upload of a specific file has started.
+	 *
+	 * @event uploadStart
+	 * @param event.type {String} The event type
+	 * @param event.id {String} The id of the file that's started to upload
+	 */
+	this.createEvent("uploadStart");
+
+	/**
+	 * Fires when new information about the upload progress for a specific file is available.
+	 *
+	 * @event uploadProgress
+	 * @param event.type {String} The event type
+	 * @param event.id {String} The id of the file with which the upload progress data is associated
+	 * @param bytesLoaded {Number} The number of bytes of the file uploaded so far
+	 * @param bytesTotal {Number} The total size of the file
+	 */
+	this.createEvent("uploadProgress");
+	
+	/**
+	 * Fires when an upload for a specific file is cancelled.
+	 *
+	 * @event uploadCancel
+	 * @param event.type {String} The event type
+	 * @param event.id {String} The id of the file with which the upload has been cancelled.
+	 */	
+	this.createEvent("uploadCancel");
+
+	/**
+	 * Fires when an upload for a specific file is complete.
+	 *
+	 * @event uploadComplete
+	 * @param event.type {String} The event type
+	 * @param event.id {String} The id of the file for which the upload has been completed.
+	 */	
+	this.createEvent("uploadComplete");
+
+	/**
+	 * Fires when the server sends data in response to a completed upload.
+	 *
+	 * @event uploadCompleteData
+	 * @param event.type {String} The event type
+	 * @param event.id {String} The id of the file for which the upload has been completed.
+	 * @param event.data {String} The raw data returned by the server in response to the upload.
+	 */	
+	this.createEvent("uploadCompleteData");
+	
+	/**
+	 * Fires when an upload error occurs.
+	 *
+	 * @event uploadError
+	 * @param event.type {String} The event type
+	 * @param event.id {String} The id of the file that was being uploaded when the error has occurred.
+	 * @param event.status {String} The status message associated with the error.
+	 */	
+	this.createEvent("uploadError");
 }
+
+/**
+ * Location of the Uploader SWF
+ *
+ * @property Chart.SWFURL
+ * @private
+ * @static
+ * @final
+ * @default "assets/Uploader.swf"
+ */
 YAHOO.widget.Uploader.SWFURL = "assets/Uploader.swf";
 
 YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
 {
+/**
+ * Invokes the "Open File" dialog and allows the user to select the files for upload
+ *
+ * @param allowMultiple {Boolean} If true, allows for multiple file selection; if false, only a single file can be selected. False by default.
+ * @param extensionFilterArray {Array} An array of key-value pairs for permissible file extensions. The array elements should 
+ * be of the form: {description: "Images", extensions: "*.jpg, *.gif, *.png"}.
+ */
 	browse: function(allowMultiple,extensionFilterArray)
 	{
 		this._swf.browse(allowMultiple,extensionFilterArray);
 	},
+	
+/**
+ * Starts the upload of the file specified by fileID to the location specified by uploadScriptPath.
+ *
+ * @param fileID {String} The id of the file to start uploading.
+ * @param uploadScriptPath {String} The URL of the upload location.
+ * @param method {String} Either "GET" or "POST", specifying how the variables accompanying the file upload POST request should be submitted. "GET" by default.
+ * @param vars {Object} The object containing variables to be sent in the same request as the file upload.
+ * @param fieldName {String} The name of the variable in the POST request containing the file data. "Filedata" by default.
+ */
 	upload: function(fileID, uploadScriptPath, method, vars, fieldName)
 	{
 		this._swf.upload(fileID, uploadScriptPath, method, vars, fieldName);
 	},
+	
+/**
+ * Starts uploading all files in the queue. If this function is called, the upload queue is automatically managed.
+ *
+ * @param uploadScriptPath {String} The URL of the upload location.
+ * @param method {String} Either "GET" or "POST", specifying how the variables accompanying the file upload POST request should be submitted. "GET" by default.
+ * @param vars {Object} The object containing variables to be sent in the same request as the file upload.
+ * @param fieldName {String} The name of the variable in the POST request containing the file data. "Filedata" by default.
+ */
 	uploadAll: function(uploadScriptPath, method, vars, fieldName)
 	{
 		this._swf.uploadAll(uploadScriptPath, method, vars, fieldName);
 	},
-	cancel: function()
+
+/**
+ * Cancels the upload of a specified file. If no file id is specified, all ongoing uploads are cancelled.
+ *
+ * @param fileID {String} The ID of the file whose upload should be cancelled.
+ */
+	cancel: function(fileID)
 	{
-		this._swf.cancel();
+		this._swf.cancel(fileID);
 	},
+
+/**
+ * Clears the list of files queued for upload.
+ *
+ */
 	clearFileList: function()
 	{
 		this._swf.clearFileList();
 	},
+	
+/**
+ * Removes the specified file from the upload queue. 
+ *
+ * @param fileID {String} The id of the file to remove from the upload queue. 
+ */
 	removeFile: function (fileID) 
 	{
 		this._swf.removeFile(fileID);

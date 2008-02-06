@@ -1,4 +1,4 @@
-package
+﻿package
 
 {
 
@@ -490,7 +490,8 @@ package
 
 
 
-			newEvent.type = "uploadError"
+			newEvent.type = "uploadError";
+			newEvent.id = fileIDList[event.target];
 
 			super.dispatchEventToJavaScript(newEvent);
 
