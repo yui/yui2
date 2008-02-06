@@ -1998,13 +1998,15 @@ _sId : null,
 _oChain : null,
 
 /**
- * Fallback chain for browsers incompatible with dynamic CSS rules.
+ * Sparse array of custom functions to set column widths for browsers that don't
+ * support dynamic CSS rules.  Functions are added at the index representing
+ * the number of rows they update.
  *
- * @property _oFallbackChain
- * @type YAHOO.util.Chain
+ * @property _aFallbackColResizer
+ * @type Array
  * @private
  */
-_oFallbackChain : null,
+_aFallbackColResizer : [],
 
 /**
  * DOM reference to the container element for the DataTable instance into which
@@ -3245,9 +3247,11 @@ _setLastRow : function() {
  */
 _setRowStripes : function(row, range) {
     // Default values stripe all rows
-    var allRows = this._elTbody.rows;
-    var nStartIndex = 0;
-    var nEndIndex = allRows.length;
+    var allRows = this._elTbody.rows,
+        nStartIndex = 0,
+        nEndIndex = allRows.length,
+        aOdds = [], nOddIdx = 0,
+        aEvens = [], nEvenIdx = 0;
 
     // Stripe a subset
     if((row !== null) && (row !== undefined)) {
@@ -3265,13 +3269,18 @@ _setRowStripes : function(row, range) {
 
     for(var i=nStartIndex; i<nEndIndex; i++) {
         if(i%2) {
-            Dom.removeClass(allRows[i], DT.CLASS_EVEN);
-            Dom.addClass(allRows[i], DT.CLASS_ODD);
+            aOdds[nOddIdx++] = allRows[i];
+        } else {
+            aEvens[nEvenIdx++] = allRows[i];
         }
-        else {
-            Dom.removeClass(allRows[i], DT.CLASS_ODD);
-            Dom.addClass(allRows[i], DT.CLASS_EVEN);
-        }
+    }
+
+    if (aOdds.length) {
+        Dom.replaceClass(aOdds, DT.CLASS_EVEN, DT.CLASS_ODD);
+    }
+
+    if (aEvens.length) {
+        Dom.replaceClass(aEvens, DT.CLASS_ODD, DT.CLASS_EVEN);
     }
 },
 
@@ -5399,32 +5408,51 @@ _setColumnWidth : function(oColumn, sWidth) {
         }
         // Do it the old fashioned way
         if(DT._bStylesheetFallback) {
-            if(!this._oFallbackChain) {
-                this._oFallbackChain = new YAHOO.util.Chain();
-            }
-            
             if(sWidth == "auto") {
                 sWidth = ""; 
             }
 
-            // Set width on TH
-            oColumn.getThEl().firstChild.style.width = sWidth;
-            
-            var oChain = this._oFallbackChain;
-            oChain.add({
-                method: function(oArg) {
+            if (!this._aFallbackColResizer[this._elTbody.rows.length]) {
+                /*
+                Compile a custom function to do all the cell width
+                assignments at the same time.  A new resizer function is created
+                for each new unique number of rows in _elTbody.  This will
+                result in a function declaration like:
+                function (oColumn,sWidth) {
+                    var colIdx = oColumn.getKeyIndex();
+                    oColumn.getThEl().firstChild.style.width =
+                    this._elTbody.rows[0].cells[colIdx].firstChild.style.width =
+                    this._elTbody.rows[0].cells[colIdx].style.width =
+                    this._elTbody.rows[1].cells[colIdx].firstChild.style.width =
+                    this._elTbody.rows[1].cells[colIdx].style.width =
+                    ... (for all row indices in this._elTbody.rows.length - 1)
+                    this._elTbody.rows[99].cells[colIdx].firstChild.style.width =
+                    this._elTbody.rows[99].cells[colIdx].style.width = sWidth;
+                    ending with the sWidth as the initial assignment   ^
+                }
+                */
 
-                    // Apply new width to every TD liner minus appropriate padding
-                    var elCell = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex];
-                    elCell.firstChild.style.width = oArg.sWidth;
-                    elCell.style.width = oArg.sWidth;
-                    oArg.rowIndex++;
-                },
-                scope: this,
-                iterations:this._elTbody.rows.length,
-                argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex(),sWidth:sWidth}
-            });          
-            oChain.run();   
+                var resizerDef = [
+                    'var colIdx=oColumn.getKeyIndex();',
+                    'oColumn.getThEl().firstChild.style.width='
+                ];
+                for (var i=this._elTbody.rows.length-1, j=2; i >= 0; --i) {
+                    resizerDef[j++] = 'this._elTbody.rows[';
+                    resizerDef[j++] = i;
+                    resizerDef[j++] = '].cells[colIdx].firstChild.style.width=';
+                    resizerDef[j++] = 'this._elTbody.rows[';
+                    resizerDef[j++] = i;
+                    resizerDef[j++] = '].cells[colIdx].style.width=';
+                }
+                resizerDef[j] = 'sWidth;';
+                this._aFallbackColResizer[this._elTbody.rows.length] =
+                    new Function('oColumn','sWidth',resizerDef.join(''));
+            }
+            var resizerFn = this._aFallbackColResizer[this._elTbody.rows.length];
+
+            if (resizerFn) {
+                resizerFn.call(this,oColumn,sWidth);
+            }
         }
     }
     else {
