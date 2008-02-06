@@ -888,11 +888,7 @@ var Dom = YAHOO.util.Dom,
                     if (!Lang.isArray(oButton.range)) {
                         oButton.range = [ 10, 100 ];
                     }
-                    var self = this;
-                    //this._makeSpinButton(tmp, oButton);
-                    window.setTimeout(function() {
-                        self._makeSpinButton.call(self, tmp, oButton);
-                    }, 0);
+                    this._makeSpinButton(tmp, oButton);
                 }
                 tmp.get('element').setAttribute('title', tmp.get('label'));
                 if (oButton.type != 'spin') {
@@ -942,6 +938,8 @@ var Dom = YAHOO.util.Dom,
                             oButton.value = ev.value;
                             this._buttonClick(ev, oButton);
                         }, this, true);
+
+                        var self = this;
                         //Hijack the mousedown event in the menu and make it fire a button click..
                         if (tmp.getMenu().mouseDownEvent) {
                             tmp.getMenu().mouseDownEvent.subscribe(function(ev, args) {
