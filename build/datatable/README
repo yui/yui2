@@ -13,7 +13,6 @@ Removed APIs
 
 Changed APIs
 
-    * initialRequest - A non-undefined value is required in order to load initial data from XHR types of DataSources .
     * doBeforeLoadData(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
     * formatCell() - first arg elCell is now a reference to the cell liner element rather than the TD itself.
     * onDataReturnAppendRows(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.

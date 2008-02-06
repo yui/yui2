@@ -40,7 +40,8 @@ YAHOO.util.Chain.prototype = {
      */
     run : function () {
         // Grab the first callback in the queue
-        var c  = this.q[0];
+        var c  = this.q[0],
+            fn;
 
         // If there is no callback in the queue or the Chain is currently
         // in an execution mode, return
@@ -48,21 +49,7 @@ YAHOO.util.Chain.prototype = {
             return this;
         }
 
-        // If the until condition is set, check if we're done
-        if (c.until) {
-            if (c.until()) {
-                // Shift this callback from the queue and execute the next
-                // callback
-                this.q.shift();
-                return this.run();
-            }
-        // Otherwise if either iterations is not set or we're executing the
-        // last iteration, shift this callback from the queue
-        } else if (!c.iterations || !--c.iterations) {
-            this.q.shift();
-        }
-
-        var fn = c.method || c;
+        fn = c.method || c;
 
         if (typeof fn === 'function') {
             var o    = c.scope || {},
@@ -74,26 +61,51 @@ YAHOO.util.Chain.prototype = {
                 args = [args];
             }
 
-            // Build the callback closure
-            var f = function () {
-                // Execute the callback from scope, with argument
-                fn.apply(o,args);
-                // Check if the Chain was not paused from inside the callback
-                if (me.id) {
-                    // Indicate ready to run state
-                    me.id = 0;
-                    // Start the fun all over again
-                    me.run();
-                }
-            };
-
             // Execute immediately if the callback timeout is negative.
-            // Otherwise set to execute after the configured timeout
             if (ms < 0) {
-                me.id = ms;
-                f();
+                this.id = ms;
+                if (c.until) {
+                    for (;!c.until();) {
+                        // Execute the callback from scope, with argument
+                        fn.apply(o,args);
+                    }
+                } else if (c.iterations) {
+                    for (;c.iterations-- > 0;) {
+                        fn.apply(o,args);
+                    }
+                } else {
+                    fn.apply(o,args);
+                }
+                this.q.shift();
+                this.id = 0;
+                return this.run();
             } else {
-                this.id = setTimeout(f,ms);
+                // If the until condition is set, check if we're done
+                if (c.until) {
+                    if (c.until()) {
+                        // Shift this callback from the queue and execute the next
+                        // callback
+                        this.q.shift();
+                        return this.run();
+                    }
+                // Otherwise if either iterations is not set or we're
+                // executing the last iteration, shift callback from the queue
+                } else if (!c.iterations || !--c.iterations) {
+                    this.q.shift();
+                }
+
+                // Otherwise set to execute after the configured timeout
+                this.id = setTimeout(function () {
+                    // Execute the callback from scope, with argument
+                    fn.apply(o,args);
+                    // Check if the Chain was not paused from inside the callback
+                    if (me.id) {
+                        // Indicate ready to run state
+                        me.id = 0;
+                        // Start the fun all over again
+                        me.run();
+                    }
+                },ms);
             }
         }
 
@@ -1348,6 +1360,7 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
         this.datatable = oDataTable;
         this.column = oColumn;
         this.headCell = elTh;
+        this.headCellLiner = elTh.firstChild;
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
     }
@@ -1401,6 +1414,8 @@ if(YAHOO.util.DD) {
         onMouseDown : function(e) {
             this.startWidth = this.headCell.firstChild.offsetWidth;
             this.startX = YAHOO.util.Event.getXY(e)[0];
+            this.nLinerPadding = (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingLeft"),10)|0) +
+                    (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingRight"),10)|0);
         },
     
         /**
@@ -1427,11 +1442,10 @@ if(YAHOO.util.DD) {
          */
         onDrag : function(e) {
             var newX = YAHOO.util.Event.getXY(e)[0];
-            if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
+            if(newX > YAHOO.util.Dom.getX(this.headCellLiner)) {
                 var offsetX = newX - this.startX;
-                var newWidth = this.startWidth + offsetX;
+                var newWidth = this.startWidth + offsetX - this.nLinerPadding;
                 this.datatable.setColumnWidth(this.column, newWidth);
-                this.datatable._syncColWidths();
             }
         }
     });
@@ -1454,7 +1468,7 @@ YAHOO.widget.RecordSet = function(data) {
     this._sId = "yui-rs" + YAHOO.widget.RecordSet._nCount;
     YAHOO.widget.RecordSet._nCount++;
     this._records = [];
-    this._length = 0;
+    //this._length = 0;
 
     if(data) {
         if(YAHOO.lang.isArray(data)) {
@@ -1589,8 +1603,9 @@ YAHOO.widget.RecordSet.prototype = {
      * @property _length
      * @type Number
      * @private
+     * @deprecated No longer used
      */
-    _length : null,
+    //_length : null,
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -1615,10 +1630,11 @@ YAHOO.widget.RecordSet.prototype = {
             this._records.splice(index,0,oRecord);
         }
         else {
-            index = this.getLength();
-            this._records[index] = oRecord;
+            //index = this.getLength();
+            //this._records[index] = oRecord;
+            this._records[this._records.length] = oRecord;
         }
-        this._length++;
+        //this._length++;
         return oRecord;
     },
 
@@ -1634,8 +1650,11 @@ YAHOO.widget.RecordSet.prototype = {
      * @private
      */
     _setRecord : function(oData, index) {
-        var oRecord = new YAHOO.widget.Record(oData);
-        
+        if (!YAHOO.lang.isNumber(index) || index < 0) {
+            index = this._records.length;
+        }
+        return (this._records[index] = new YAHOO.widget.Record(oData));
+        /*
         if(YAHOO.lang.isNumber(index) && (index > -1)) {
             this._records[index] = oRecord;
             if((index+1) > this.getLength()) {
@@ -1647,6 +1666,7 @@ YAHOO.widget.RecordSet.prototype = {
             this._length++;
         }
         return oRecord;
+        */
     },
 
     /**
@@ -1663,7 +1683,7 @@ YAHOO.widget.RecordSet.prototype = {
             range = 1;
         }
         this._records.splice(index, range);
-        this._length = this._length - range;
+        //this._length = this._length - range;
     },
 
     /////////////////////////////////////////////////////////////////////////////
@@ -1699,7 +1719,8 @@ YAHOO.widget.RecordSet.prototype = {
      * @return {Number} Number of records in the RecordSet.
      */
     getLength : function() {
-            return this._length;
+            //return this._length;
+            return this._records.length;
     },
 
     /**
@@ -1880,17 +1901,47 @@ YAHOO.widget.RecordSet.prototype = {
      */
     setRecords : function(aData, index) {
         if(YAHOO.lang.isArray(aData)) {
-            var newRecords = [];
-            // Can't go backwards bc we need to preserve order
-            var i = 0;
-            for(; i<aData.length; i++) {
-                if(aData[i] && (aData[i].constructor == Object)) {
-                    var record = this._setRecord(aData[i], index + i);
-                    newRecords.push(record);
+            var Rec = YAHOO.widget.Record,
+                spliceParams = [index,0],
+                i = aData.length - 1,
+                r;
+
+            // build up a parameter array for a single call to splice in
+            // the new records.
+            for(; i >= 0 ; --i) {
+                // If the data in aData isn't valid, use the existing
+                // record to avoid harming valid records
+                r = aData[i] && typeof aData[i] === 'object' ?
+                                new Rec(aData[i]) : this._records[i];
+                if (r) {
+                    spliceParams[i+2] = r;
                 }
-           }
-            this.fireEvent("recordsSet",{records:newRecords,data:aData});
-           return newRecords;
+            }
+
+            // We need to explicitly set the last record because splice doesn't
+            // honor start indexes higher than the current length.
+            this._records[index + spliceParams.length - 3] =
+                spliceParams[spliceParams.length - 1];
+
+            // Set the number of records to change (length minus first 2
+            // placeholders).  This must be done here because the end of aData
+            // may have contained invalid record data so we avoid increasing
+            // _records.length incorrectly.  And we do need to set the last
+            // record, although we just did that.
+            spliceParams[1] = spliceParams.length - 2;
+
+            // Call splice.apply to simulate a single update to _records
+            // rather than looping through the new records and setting them
+            // to the index one by one.  Use the spliceParams array to get
+            // the splice method to apply.  A bit convoluted, I know.
+            spliceParams.splice.apply(this._records,spliceParams);
+
+            this.fireEvent("recordsSet",{records:spliceParams,data:aData});
+
+            // return the records that were set.  The first two indexes
+            // in spliceParams are the start index and length, so return
+            // everything starting at index 2
+            return spliceParams.slice(2);
         }
         else if(aData && (aData.constructor == Object)) {
             var oRecord = this._setRecord(aData);
@@ -2074,7 +2125,7 @@ YAHOO.widget.RecordSet.prototype = {
      */
     reset : function() {
         this._records = [];
-        this._length = 0;
+        //this._length = 0;
         this.fireEvent("resetEvent");
     }
 };
@@ -2201,8 +2252,8 @@ YAHOO.widget.Record.prototype = {
  * @uses YAHOO.util.AttributeProvider
  *
  * @constructor
- * @param config {Object} Object literal to set instance and visualization
- * plugin attributes.
+ * @param config {Object} Object literal to set instance and ui component
+ * configuration.
  */
 YAHOO.widget.Paginator = function (config) {
     var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
@@ -2220,7 +2271,7 @@ YAHOO.widget.Paginator = function (config) {
         this.set('totalRecords',config.totalRecords,true);
     }
     
-    this.initPlugins();
+    this.initUIComponents();
 
     // Update the other config values
     for (attrib in config) {
@@ -2252,7 +2303,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
     id : 0,
 
     /**
-     * Base of id strings used for plugin nodes.
+     * Base of id strings used for ui components.
      * @static
      * @property ID_BASE
      * @type string
@@ -2290,9 +2341,6 @@ YAHOO.lang.augmentObject(YAHOO.widget.Paginator, {
     TEMPLATE_ROWS_PER_PAGE : "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 
 },true);
-
-
-
 
 
 // Instance members and methods
@@ -2412,7 +2460,7 @@ YAHOO.widget.Paginator.prototype = {
          * Template used to render controls.  The string will be used as
          * innerHTML on all specified container nodes.  Bracketed keys
          * (e.g. {pageLinks}) in the string will be replaced with an instance
-         * of the so named view plugin.
+         * of the so named ui component.
          * @see Paginator.TEMPLATE_DEFAULT
          * @see Paginator.TEMPLATE_ROWS_PER_PAGE
          * @attribute template
@@ -2438,7 +2486,7 @@ YAHOO.widget.Paginator.prototype = {
          * Display pagination controls even when there is only one page.  Set
          * to false to forgo rendering and/or hide the containers when there
          * is only one page of data.  Note if you are using the rowsPerPage
-         * dropdown plugin, visibility will be maintained as long as the
+         * dropdown ui component, visibility will be maintained as long as the
          * number of records exceeds the smallest page size.
          * @attribute alwaysVisible
          * @type boolean
@@ -2491,17 +2539,17 @@ YAHOO.widget.Paginator.prototype = {
     },
 
     /**
-     * Initialize registered view plugins onto this instance.
-     * @method initPlugins
+     * Initialize registered ui components onto this instance.
+     * @method initUIComponents
      * @private
      */
-    initPlugins : function () {
-        var P = YAHOO.widget.Paginator.Plugin;
-        for (var name in P) {
-            var plugin = P[name];
-            if (YAHOO.lang.isObject(plugin) &&
-                YAHOO.lang.isFunction(plugin.init)) {
-                plugin.init(this);
+    initUIComponents : function () {
+        var ui = YAHOO.widget.Paginator.ui;
+        for (var name in ui) {
+            var UIComp = ui[name];
+            if (YAHOO.lang.isObject(UIComp) &&
+                YAHOO.lang.isFunction(UIComp.init)) {
+                UIComp.init(this);
             }
         }
     },
@@ -2548,12 +2596,10 @@ YAHOO.widget.Paginator.prototype = {
             template       = this.get('template'),
             containerClass = this.get('containerClass');
 
-        this._plugins = [];
-
         // add marker spans to the template html to indicate drop zones
-        // for plugins
+        // for ui components
         template = template.replace(/\{([a-z0-9_ \-]+)\}/gi,
-            '<span class="yui-pg-plugin $1"></span>');
+            '<span class="yui-pg-ui $1"></span>');
         for (var i = 0, len = this._containers.length; i < len; ++i) {
             var c       = this._containers[i],
                 // ex. yui-pg0-1 (first paginator, second container)
@@ -2564,35 +2610,32 @@ YAHOO.widget.Paginator.prototype = {
                 continue;
             }
             // Hide the container while its contents are rendered
-            Dom.setStyle(c,'display','none');
+            c.style.display = 'none';
 
             Dom.addClass(c,containerClass);
 
             // Place the template innerHTML
             c.innerHTML = template;
 
-            // Replace each marker with the appropriate plugin's render() output
-            var markers = Dom.getElementsByClassName('yui-pg-plugin','span',c);
+            // Replace each marker with the ui component's render() output
+            var markers = Dom.getElementsByClassName('yui-pg-ui','span',c);
 
             for (var j = 0, jlen = markers.length; j < jlen; ++j) {
                 var m      = markers[j],
                     mp     = m.parentNode,
-                    name   = m.className.replace(/\s*yui-pg-plugin\s+/g,''),
-                    Plugin = YAHOO.widget.Paginator.Plugin[name];
+                    name   = m.className.replace(/\s*yui-pg-ui\s+/g,''),
+                    UIComp = YAHOO.widget.Paginator.ui[name];
 
-                if (YAHOO.lang.isFunction(Plugin)) {
-                    var plugin = new Plugin(this);
-                    if (YAHOO.lang.isFunction(plugin.render)) {
-                        mp.insertBefore(plugin.render(id_base),m);
+                if (YAHOO.lang.isFunction(UIComp)) {
+                    var comp = new UIComp(this);
+                    if (YAHOO.lang.isFunction(comp.render)) {
+                        mp.replaceChild(comp.render(id_base),m);
                     }
                 }
-
-                // remove the marker
-                mp.removeChild(m);
             }
 
             // Show the container allowing page reflow
-            Dom.setStyle(c,'display','');
+            c.style.display = '';
         }
 
         // Set render attribute manually to support its readOnly contract
@@ -2991,29 +3034,28 @@ YAHOO.lang.augmentProto(YAHOO.widget.Paginator, YAHOO.util.AttributeProvider);
 
 
 
-// View Plugins
-
+// UI Components
 
 (function () {
 
-// Plugin namespace
-YAHOO.widget.Paginator.Plugin = {};
+// UI Component namespace
+YAHOO.widget.Paginator.ui = {};
 
 var Paginator = YAHOO.widget.Paginator,
-    Plugin    = Paginator.Plugin,
+    ui        = Paginator.ui,
     l         = YAHOO.lang;
 
 /**
- * Plugin to generate the link to jump to the first page.
+ * ui Component to generate the link to jump to the first page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.ui
  * @class FirstPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.FirstPageLink = function (p) {
+ui.FirstPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('firstPageLinkLabelChange');
@@ -3034,7 +3076,7 @@ Plugin.FirstPageLink = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.FirstPageLink.init = function (p) {
+ui.FirstPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the first page link/span.
@@ -3058,7 +3100,7 @@ Plugin.FirstPageLink.init = function (p) {
 };
 
 // Instance members and methods
-Plugin.FirstPageLink.prototype = {
+ui.FirstPageLink.prototype = {
 
     /**
      * The currently placed HTMLElement node
@@ -3163,16 +3205,16 @@ Plugin.FirstPageLink.prototype = {
 
 
 /**
- * Plugin to generate the link to jump to the last page.
+ * ui Component to generate the link to jump to the last page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.ui
  * @class LastPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.LastPageLink = function (p) {
+ui.LastPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('lastPageLinkLabelChange');
@@ -3195,7 +3237,7 @@ Plugin.LastPageLink = function (p) {
  * @param paginator {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.LastPageLink.init = function (p) {
+ui.LastPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the last page link/span.
@@ -3218,7 +3260,7 @@ Plugin.LastPageLink.init = function (p) {
     });
 };
 
-Plugin.LastPageLink.prototype = {
+ui.LastPageLink.prototype = {
 
     /**
      * Currently placed HTMLElement node
@@ -3284,7 +3326,7 @@ Plugin.LastPageLink.prototype = {
         this.na.id = id_base + '-last-na';
 
         switch (last) {
-            case YAHOO.widget.Paginator.VALUE_UNLIMITED :
+            case Paginator.VALUE_UNLIMITED :
                     this.current = this.na; break;
             case p.getCurrentPage() :
                     this.current = this.span; break;
@@ -3310,7 +3352,7 @@ Plugin.LastPageLink.prototype = {
 
         if (par) {
             switch (this.paginator.getTotalPages()) {
-                case YAHOO.widget.Paginator.VALUE_UNLIMITED :
+                case Paginator.VALUE_UNLIMITED :
                         after = this.na; break;
                 case this.paginator.getCurrentPage() :
                         after = this.span; break;
@@ -3347,16 +3389,16 @@ Plugin.LastPageLink.prototype = {
 
 
 /**
- * Plugin to generate the link to jump to the previous page.
+ * ui Component to generate the link to jump to the previous page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.ui
  * @class PreviousPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.PreviousPageLink = function (p) {
+ui.PreviousPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('previousPageLinkLabelChange');
@@ -3377,7 +3419,7 @@ Plugin.PreviousPageLink = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.PreviousPageLink.init = function (p) {
+ui.PreviousPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the previous page link/span.
@@ -3400,7 +3442,7 @@ Plugin.PreviousPageLink.init = function (p) {
     });
 };
 
-Plugin.PreviousPageLink.prototype = {
+ui.PreviousPageLink.prototype = {
 
     /**
      * Currently placed HTMLElement node
@@ -3506,16 +3548,16 @@ Plugin.PreviousPageLink.prototype = {
 
 
 /**
- * Plugin to generate the link to jump to the next page.
+ * ui Component to generate the link to jump to the next page.
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.ui
  * @class NextPageLink
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.NextPageLink = function (p) {
+ui.NextPageLink = function (p) {
     this.paginator = p;
 
     p.createEvent('nextPageLinkLabelChange');
@@ -3538,7 +3580,7 @@ Plugin.NextPageLink = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.NextPageLink.init = function (p) {
+ui.NextPageLink.init = function (p) {
 
     /**
      * Used as innerHTML for the next page link/span.
@@ -3561,7 +3603,7 @@ Plugin.NextPageLink.init = function (p) {
     });
 };
 
-Plugin.NextPageLink.prototype = {
+ui.NextPageLink.prototype = {
 
     /**
      * Currently placed HTMLElement node
@@ -3670,16 +3712,16 @@ Plugin.NextPageLink.prototype = {
 
 
 /**
- * Plugin to generate the page links
+ * ui Component to generate the page links
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.ui
  * @class PageLinks
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.PageLinks = function (p) {
+ui.PageLinks = function (p) {
     this.paginator = p;
 
     p.createEvent('pageLinkClassChange');
@@ -3706,7 +3748,7 @@ Plugin.PageLinks = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.PageLinks.init = function (p) {
+ui.PageLinks.init = function (p) {
 
     /**
      * CSS class assigned to each page link/span.
@@ -3771,8 +3813,8 @@ Plugin.PageLinks.init = function (p) {
  * @param {int} numPages     (optional) Preferred number of pages in range
  * @return {Array} [start_page_number, end_page_number]
  */
-Plugin.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
-    var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
+ui.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
+    var UNLIMITED = Paginator.VALUE_UNLIMITED,
         start, end, delta;
 
     if (!currentPage) {
@@ -3808,7 +3850,7 @@ Plugin.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
 };
 
 
-Plugin.PageLinks.prototype = {
+ui.PageLinks.prototype = {
 
     /**
      * Current page
@@ -3865,7 +3907,7 @@ Plugin.PageLinks.prototype = {
         // Replace content if there's been a change
         if (this.current !== currentPage || e.rebuild) {
             var labelBuilder = p.get('pageLabelBuilder'),
-                range        = Plugin.PageLinks.calculateRange(
+                range        = ui.PageLinks.calculateRange(
                                 currentPage,
                                 p.getTotalPages(),
                                 p.get('pageLinks')),
@@ -3933,16 +3975,16 @@ Plugin.PageLinks.prototype = {
 
 
 /**
- * Plugin to generate the rows-per-page dropdown
+ * ui Component to generate the rows-per-page dropdown
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.ui
  * @class RowsPerPageDropdown
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.RowsPerPageDropdown = function (p) {
+ui.RowsPerPageDropdown = function (p) {
     this.paginator = p;
 
     p.createEvent('rowsPerPageOptionsChange');
@@ -3963,7 +4005,7 @@ Plugin.RowsPerPageDropdown = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.RowsPerPageDropdown.init = function (p) {
+ui.RowsPerPageDropdown.init = function (p) {
 
     /**
      * Array of available rows-per-page sizes.  Converted into select options.
@@ -3988,7 +4030,7 @@ Plugin.RowsPerPageDropdown.init = function (p) {
     });
 };
 
-Plugin.RowsPerPageDropdown.prototype = {
+ui.RowsPerPageDropdown.prototype = {
 
     /**
      * select node
@@ -4090,17 +4132,17 @@ Plugin.RowsPerPageDropdown.prototype = {
 
 
 /**
- * Plugin to generate the textual report of current pagination status.  E.g.
- * "Now viewing page 1 of 13".
+ * ui Component to generate the textual report of current pagination status.
+ * E.g. "Now viewing page 1 of 13".
  *
- * @namespace YAHOO.widget.Paginator.Plugin
+ * @namespace YAHOO.widget.Paginator.ui
  * @class CurrentPageReport
  * @for YAHOO.widget.Paginator
  *
  * @constructor
  * @param p {Pagintor} Paginator instance to attach to
  */
-Plugin.CurrentPageReport = function (p) {
+ui.CurrentPageReport = function (p) {
     this.paginator = p;
 
     p.createEvent('pageReportClassChange');
@@ -4122,7 +4164,7 @@ Plugin.CurrentPageReport = function (p) {
  * @param p {Paginator} Paginator instance to decorate
  * @static
  */
-Plugin.CurrentPageReport.init = function (p) {
+ui.CurrentPageReport.init = function (p) {
 
     /**
      * CSS class assigned to the span containing the info.
@@ -4190,13 +4232,13 @@ Plugin.CurrentPageReport.init = function (p) {
  * @param values {object} The key:value pairs used to replace the place holders
  * @return {string}
  */
-Plugin.CurrentPageReport.sprintf = function (template, values) {
+ui.CurrentPageReport.sprintf = function (template, values) {
     return template.replace(/{([\w\s\-]+)}/g, function (x,key) {
             return (key in values) ? values[key] : '';
         });
 };
 
-Plugin.CurrentPageReport.prototype = {
+ui.CurrentPageReport.prototype = {
 
     /**
      * Span node containing the formatted info
@@ -4237,7 +4279,7 @@ Plugin.CurrentPageReport.prototype = {
         }
 
 
-        this.span.innerHTML = Plugin.CurrentPageReport.sprintf(
+        this.span.innerHTML = ui.CurrentPageReport.sprintf(
             this.paginator.get('pageReportTemplate'),
             this.paginator.get('pageReportValueGenerator')(this.paginator));
     }
@@ -4349,23 +4391,28 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
 
     DT._nCount++;
+    DT._nCurrentCount++;
     
-    //HACK: Send out for initial data in an asynchronous request unless
-    // initialRequest was originally undefined and DS type is XHR
-    if(!((this._oConfigs.initialRequest === undefined) &&
-            (this._oDataSource.dataType === DS.TYPE_XHR))) {
-        var oCallback = {
-            success : this.onDataReturnSetRecords,
-            failure : this.onDataReturnSetRecords,
-            scope   : this,
-            argument: {}
-        };
+    // Send a simple initial request
+    var oCallback = {
+        success : this.onDataReturnSetRecords,
+        failure : this.onDataReturnSetRecords,
+        scope   : this,
+        argument: {}
+    };
+    if(this.get("initialLoad") === true) {
         this._oDataSource.sendRequest(this.get("initialRequest"), oCallback);
     }
-    else {
+    // Do not send an initial request at all
+    else if(this.get("initialLoad") === false) {
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
         this.fireEvent("initEvent");
-
+    }
+    // Send an initial request with a custom payload
+    else {
+        var oCustom = this.get("initialLoad");
+        oCallback.argument = oCustom.argument;
+        this._oDataSource.sendRequest(oCustom.request, oCallback);
     }
 };
 
@@ -4805,9 +4852,51 @@ lang.augmentObject(DT, {
     _nCount : 0,
 
     /**
+     * Internal class variable tracking current number of DataTable instances,
+     * so that certain class values can be reset when all instances are destroyed.          
+     *
+     * @property DataTable._nCurrentCount
+     * @type Number
+     * @private
+     * @static
+     */
+    _nCurrentCount : 0,
+
+    /**
+     * Reference to STYLE node that is dynamically created and written to
+     * in order to manage Column widths.
+     *
+     * @property DataTable._elStylesheet
+     * @type HTMLElement
+     * @private
+     * @static     
+     */
+    _elStylesheet : null,
+
+    /**
+     * Set to true if _elStylesheet cannot be populated due to browser incompatibility.
+     *
+     * @property DataTable._bStylesheetFallback
+     * @type boolean
+     * @private
+     * @static     
+     */
+    _bStylesheetFallback : false,
+
+    /**
+     * Object literal hash of Columns and their dynamically create style rules.
+     *
+     * @property DataTable._oStylesheetRules
+     * @type Object
+     * @private
+     * @static     
+     */
+    _oStylesheetRules : {},
+
+    /**
      * Element reference to shared Column drag target.
      *
-     * @property _elColumnDragTarget
+     * @property DataTable._elColumnDragTarget
      * @type HTMLElement
      * @private
      * @static 
@@ -4817,7 +4906,7 @@ lang.augmentObject(DT, {
     /**
      * Element reference to shared Column resizer proxy.
      *
-     * @property _elColumnResizerProxy
+     * @property DataTable._elColumnResizerProxy
      * @type HTMLElement
      * @private
      * @static 
@@ -4825,9 +4914,30 @@ lang.augmentObject(DT, {
     _elColumnResizerProxy : null,
 
     /**
+     * Cell formatting functions.
+     * @property DataTable.Formatter
+     * @type Object
+     * @static
+     */
+    Formatter : {
+        button   : DT.formatButton,
+        checkbox : DT.formatCheckbox,
+        currency : DT.formatCurrency,
+        "date"   : DT.formatDate,
+        dropdown : DT.formatDropdown,
+        email    : DT.formatEmail,
+        link     : DT.formatLink,
+        "number" : DT.formatNumber,
+        radio    : DT.formatRadio,
+        text     : DT.formatText,
+        textarea : DT.formatTextarea,
+        textbox  : DT.formatTextbox
+    },
+
+    /**
      * Clones object literal or array of object literals.
      *
-     * @method YAHOO.widget.DataTable._cloneObject
+     * @method DataTable._cloneObject
      * @param o {Object} Object.
      * @private
      * @static     
@@ -4868,7 +4978,7 @@ lang.augmentObject(DT, {
     /**
      * Creates HTML markup for shared Column drag target.
      *
-     * @method _initColumnDragTargetEl
+     * @method DataTable._initColumnDragTargetEl
      * @return {HTMLElement} Reference to Column drag target. 
      * @private
      * @static 
@@ -4892,7 +5002,7 @@ lang.augmentObject(DT, {
     /**
      * Creates HTML markup for shared Column resizer proxy.
      *
-     * @method _initColumnResizerProxyEl
+     * @method DataTable._initColumnResizerProxyEl
      * @return {HTMLElement} Reference to Column resizer proxy.
      * @private 
      * @static 
@@ -4915,7 +5025,7 @@ lang.augmentObject(DT, {
     /**
      * Outputs markup into the given TH based on given Column.
      *
-     * @method formatTheadCell
+     * @method DataTable.formatTheadCell
      * @param elCellLabel {HTMLElement} The label DIV element within the TH liner.
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oSelf {DT} DataTable instance.
@@ -5210,10 +5320,10 @@ lang.augmentObject(DT, {
     /**
      * Handles Pag changeRequest events for static DataSources
      * (i.e. DataSources that return all data immediately)
-     * @method handleSimplePagination
+     * @method DataTable.handleSimplePagination
      * @param {object} the requested state of the pagination
      * @param {DataTable} the DataTable instance
-     * @private
+     * @static     
      */
     handleSimplePagination : function (oState,self) {
         // Set the core pagination values silently (the second param)
@@ -5228,9 +5338,10 @@ lang.augmentObject(DT, {
     /**
      * Handles Pag changeRequest events for dynamic DataSources
      * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
-     * @method handleDataSourcePagination
+     * @method DataTable.handleDataSourcePagination
      * @param {object} the requested state of the pagination
      * @param {DataTable} the DataTable instance
+     * @static     
      */
     handleDataSourcePagination : function (oState,self) {
         var requestedRecords = oState.records[1] - oState.recordOffset;
@@ -5259,7 +5370,7 @@ lang.augmentObject(DT, {
     /**
      * Enables CHECKBOX Editor.
      *
-     * @method editCheckbox
+     * @method DataTable.editCheckbox
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -5329,7 +5440,7 @@ lang.augmentObject(DT, {
     /**
      * Enables Date Editor.
      *
-     * @method editDate
+     * @method DataTable.editDate
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -5377,7 +5488,7 @@ lang.augmentObject(DT, {
     /**
      * Enables SELECT Editor.
      *
-     * @method editDropdown
+     * @method DataTable.editDropdown
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -5426,7 +5537,7 @@ lang.augmentObject(DT, {
     /**
      * Enables INPUT TYPE=RADIO Editor.
      *
-     * @method editRadio
+     * @method DataTable.editRadio
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -5480,7 +5591,7 @@ lang.augmentObject(DT, {
     /**
      * Enables TEXTAREA Editor.
      *
-     * @method editTextarea
+     * @method DataTable.editTextarea
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -5518,7 +5629,7 @@ lang.augmentObject(DT, {
     /**
      * Enables INPUT TYPE=TEXT Editor.
      *
-     * @method editTextbox
+     * @method DataTable.editTextbox
      * @param oEditor {Object} Object literal representation of Editor values.
      * @param oSelf {DT} Reference back to DataTable instance.
      * @static
@@ -5560,7 +5671,7 @@ lang.augmentObject(DT, {
      * if input value does not validate.
      *
      *
-     * @method validateNumber
+     * @method DataTable.validateNumber
      * @param oData {Object} Data to validate.
      * @static
     */
@@ -5582,11 +5693,12 @@ lang.augmentObject(DT, {
      * DataSource sendRequest as the request parameter.  Use
      * set('generateParameter', yourFunc) to use a custom function rather than this
      * one.
-     * @method _generateRequest
+     * @method DataTable._generateRequest
      * @param oData {Object} Object literal defining the current or proposed state
      * @param oDataTable {DataTable} Reference to the DataTable instance
      * @returns {MIXED} Returns appropriate value based on DataSource type
      * @private
+     * @static     
      */
     _generateRequest : function (oData, oDataTable) {
         var request = oData;
@@ -5672,12 +5784,37 @@ initAttributes : function(oConfigs) {
     /**
     * @attribute initialRequest
     * @description Defines the initial request that gets sent to the DataSource
-    * during initialization.
-    * @type Object
+    * during initialization. Value is ignored if initialLoad is set to any value
+    * other than true.    
+    * @type MIXED
     * @default null
     */
     this.setAttributeConfig("initialRequest", {
         value: null
+    });
+
+    /**
+    * @attribute initialLoad
+    * @description Determines whether or not to load data at instantiation. By
+    * default, will trigger a sendRequest() to the DataSource and pass in the
+    * request defined by initialRequest. If set to false, data will not load
+    * at instantiation. Alternatively, implementers who wish to work with a 
+    * custom payload may pass in an object literal with the following values:
+    *     
+    *    <dl>
+    *      <dt>request (MIXED)</dt>
+    *      <dd>Request value.</dd>
+    *
+    *      <dt>argument (MIXED)</dt>
+    *      <dd>Custom data that will be passed through to the callback function.</dd>
+    *    </dl>
+    *
+    *                    
+    * @type Boolean | Object
+    * @default true
+    */
+    this.setAttributeConfig("initialLoad", {
+        value: true
     });
 
     /**
@@ -6038,28 +6175,11 @@ initAttributes : function(oConfigs) {
         method: function(oParam) {
             if(oParam) {
                 Dom.addClass(this._elContainer,DT.CLASS_SCROLLABLE);
-
-                // Is this necessary?
-                // Only for non-IE set explicit padding to account for THEAD
-                //if(!ua.ie) {
-                    //this._elContainer.style.paddingBottom = this._elThead.offsetHeight + "px";
-                //}
-                
-                // X-scrolling not enabled
-                //if(!this.get("width")) {
-                    // Snap outer container width to content
-                    //this._elContainer.style.width = (this._elTbody.parentNode.offsetWidth + 19) + "px";
-                //}
-                
                 this._syncScrollPadding();
             }
             else {
                 Dom.removeClass(this._elContainer,DT.CLASS_SCROLLABLE);
-
-                // Unset explicit padding
-                //if(!ua.ie) {
-                    //this._elContainer.style.paddingBottom = "";
-                //}
+                this._syncScrollPadding();
             }
         }
     });
@@ -6185,6 +6305,17 @@ _sId : null,
  * @private
  */
 _oChain : null,
+
+/**
+ * Sparse array of custom functions to set column widths for browsers that don't
+ * support dynamic CSS rules.  Functions are added at the index representing
+ * the number of rows they update.
+ *
+ * @property _aFallbackColResizer
+ * @type Array
+ * @private
+ */
+_aFallbackColResizer : [],
 
 /**
  * DOM reference to the container element for the DataTable instance into which
@@ -6363,8 +6494,6 @@ _bScrollbarX : null,
 
 
 
-
-
 /////////////////////////////////////////////////////////////////////////////
 //
 // Private methods
@@ -6433,11 +6562,9 @@ _focusEl : function(el) {
 _syncColWidths : function() {
     // Validate there is at least one row with cells and at least one Column
     var allKeys = this._oColumnSet.keys,
-        elRow = this.getFirstTrEl(),
-        oChain = this._oChain;
+        elRow = this.getFirstTrEl();
+
     if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-        var elTh, elTd, elThLiner, elTdLiner, newWidth;
-        
         // Temporarily unsnap container since it causes inaccurate calculations
         var bUnsnap = false;
         if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
@@ -6446,49 +6573,54 @@ _syncColWidths : function() {
             this._elTbodyContainer.style.width = "";
         }
 
-        // Only proceed for Columns without widths
-        for(var i=0,rowsLen=elRow.cells.length; i<rowsLen; i++) {
-            if(!allKeys[i].width) {
-                // Only proceed if TH and TD widths are out of sync
-                elTh = allKeys[i].getThEl();
-                elTd = elRow.cells[i];
+        var i,
+            oColumn,
+            cellsLen = elRow.cells.length;
+        // First time through, reset the widths to get an accurate measure of the TD
+        for(i=0; i<cellsLen; i++) {
+            oColumn = allKeys[i];
+            // Only for Columns without widths
+            if(!oColumn.width) {
+                this._setColumnWidth(oColumn, "auto");
+            }
+        }
+
+        // Calculate width for every Column
+        for(i=0; i<cellsLen; i++) {
+            oColumn = allKeys[i];
+            var newWidth;
+            
+            // Columns without widths
+            if(!oColumn.width) {
+                var elTh = oColumn.getThEl();
+                var elTd = elRow.cells[i];
+                
                 if(elTh.offsetWidth !== elTd.offsetWidth) {
-                    // Column header is wider - bump the body cells up
-                    if(elTh.offsetWidth > elTd.offsetWidth) {
-                        elTd.style.width = elTh.offsetWidth + "px";
-                    }
-                    // Body cells are wider - bump the Column header up
-                    else {
-                        elTh.style.width = elTd.offsetWidth + "px";
-                    }
-                    
+                    var elWider = (elTh.offsetWidth > elTd.offsetWidth) ? elTh.firstChild : elTd.firstChild;               
                     // Calculate the final width by comparing liner widths
-                    elThLiner = elTh.firstChild;
-                    elTdLiner = elTd.firstChild;
-                    // Reset the width to get an accurate measure of the TD
-                    elTdLiner.style.width = "";
-                    newWidth = Math.max(elThLiner.offsetWidth, elTdLiner.offsetWidth);
-                                        
-                    // Apply new width to TH liner minus appropriate padding
-                    elThLiner.style.width = newWidth -
-                            (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
-                                                        
-                    // Apply new width to every TD liner minus appropriate padding
-                    oChain.add({
-                        method: function(oArg) {
-                            var cellLiner = this._elTbody.rows[oArg.rowIndex].cells[oArg.cellIndex].firstChild;
-                            cellLiner.style.width = oArg.nWidth -
-                            (parseInt(Dom.getStyle(cellLiner,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(cellLiner,"paddingRight"),10)|0) + "px";
-                            oArg.rowIndex++;
-                        },
-                        scope: this,
-                        iterations:this._elTbody.rows.length,
-                        argument: {rowIndex:0,cellIndex:i,nWidth:newWidth}
-                    });
+                    newWidth = elWider.offsetWidth -
+                            (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0);
+                    
+                    // Validate against minWidth        
+                    newWidth = (oColumn.minWidth && (oColumn.minWidth > newWidth)) ?
+                            oColumn.minWidth : newWidth;
+            
                 }
             }
+            // Columns with widths
+            else {
+                newWidth = oColumn.width;
+            }
+            
+            // Hidden Columns
+            if(oColumn.hidden) {
+                oColumn._nLastWidth = newWidth;
+                newWidth = 1;
+            }
+            
+            // Update to the new width
+            this._setColumnWidth(oColumn, newWidth+"px"); 
         }
         
         // Resnap unsnapped containers
@@ -6496,20 +6628,10 @@ _syncColWidths : function() {
             var sWidth = this.get("width");
             this._elTheadContainer.style.width = sWidth;
             this._elTbodyContainer.style.width = sWidth;     
-        }
-        
-        oChain.run();
+        } 
     }
     
     this._syncScrollPadding();
-    
-    oChain.add({
-        method: function(oArg) {
-            this._syncScrollPadding();
-        },
-        scope: this
-    });  
-    oChain.run();
 },
 
 /**
@@ -6556,8 +6678,8 @@ _syncScrollPadding : function() {
                 for(i=0; i<len; i++) {
                     //TODO: A better way to get th cell
                     elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                    elLiner.style.paddingRight = 
-                            (parseInt(Dom.getStyle(elLiner,"paddingRight"),10) + 
+                    elLiner.style.marginRight = 
+                            (parseInt(Dom.getStyle(elLiner,"marginRight"),10) + 
                             27) + "px";
                 }
                 
@@ -6576,7 +6698,7 @@ _syncScrollPadding : function() {
                 for(i=0; i<len; i++) {
                     //TODO: A better way to get th cell
                     elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                    Dom.setStyle(elLiner,"paddingRight","");
+                    Dom.setStyle(elLiner,"marginRight","");
                 }
                                         
                 // Save state
@@ -6611,7 +6733,6 @@ _initNodeTemplates : function () {
         div = d.createElement('div');
 
     // Append the liner element
-    Dom.addClass(div,DT.CLASS_LINER);
     td.appendChild(div);
 
     this._tdElTemplate = td;
@@ -6633,7 +6754,7 @@ _initContainerEl : function(elContainer) {
     }
 
     elContainer = Dom.get(elContainer);
-    if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
+    if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
         // Esp for progressive enhancement
         Ev.purgeElement(elContainer, true);
         elContainer.innerHTML = "";
@@ -6682,7 +6803,15 @@ _initConfigs : function(oConfigs) {
  * @private
  */
 _initColumnSet : function(aColumnDefs) {
-    this._oColumnSet = null;
+    if(this._oColumnSet) {
+        // First clear _oStylesheetRules for existing ColumnSet
+        for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+            DT._oStylesheetRules[".yui-dt-col-"+this._oColumnSet.keys[i].getId()] = undefined;
+        }
+        
+        this._oColumnSet = null;
+    }
+    
     if(lang.isArray(aColumnDefs)) {
         this._oColumnSet =  new YAHOO.widget.ColumnSet(aColumnDefs);
     }
@@ -6713,7 +6842,7 @@ _initDataSource : function(oDataSource) {
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
             for(i=0; i<tmpChildren.length; i++) {
-                if(tmpChildren[i].tagName && tmpChildren[i].tagName.toLowerCase() == "table") {
+                if(tmpChildren[i].nodeName && tmpChildren[i].nodeName.toLowerCase() == "table") {
                     tmpTable = tmpChildren[i];
                     break;
                 }
@@ -6807,7 +6936,7 @@ _initTableEl : function() {
     Dom.addClass(this._elTbody,DT.CLASS_BODY);
     // Bug 1716354 - fix gap in Safari 2 and 3
     if(ua.webkit) {
-        this._elTbody.parentNode.style.marginTop = "-13px";
+        this._elTbody.parentNode.style.marginTop = ua.webkit > 500 ? "-13px" : "-7px";
     }
 
     // Create TBODY for messages
@@ -7053,13 +7182,16 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
             aClasses = [];
         }
         
-        aClasses[aClasses.length] = DT.CLASS_LINER;
         //TODO: document special keys will get stripped here
         aClasses[aClasses.length] = "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,"");
+        
+        aClasses[aClasses.length] = "yui-dt-col-"+oColumn.getId();
+        
+        aClasses[aClasses.length] = DT.CLASS_LINER;
 
         Dom.addClass(elTheadCellLiner,aClasses.join(" "));
 
-        // Add classes on the liner
+        // Add classes on the label
         Dom.addClass(elTheadCellLabel,DT.CLASS_LABEL);
         
         // Add classes on the cell
@@ -7071,13 +7203,9 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
             aClasses[aClasses.length] = DT.CLASS_SORTABLE;
         }
 
-        //Set width if available
+        //Set Column hidden
         if(oColumn.hidden) {
             aClasses[aClasses.length] = DT.CLASS_HIDDEN;
-            elTheadCellLiner.style.width = "1px";
-        }
-        else if(oColumn.width) {
-            elTheadCellLiner.style.width = oColumn.width + "px";
         }
         
         // Set Column selection on TD
@@ -7169,38 +7297,19 @@ _initColumnSort : function() {
 
 
 
-
 /**
- * Adds a TR element to the primary TBODY at the page row index if given, otherwise
- * at the end of the page. Formats TD elements within the TR element using data
- * from the given Record.
- *
- * @method _addTrEl
- * @param oRecord {YAHOO.widget.Record} Record instance.
- * @param index {Number} (optional) The page row index at which to add the TR
- * element.
- * @return {HTMLElement} DOM reference to the new TR element.
- * @private
+ * Create a TR element for a given Record.
+ * @method _createTrEl
+ * @param oRecord {YAHOO.widget.Record} Record instance
+ * @return {HTMLElement} The new TR element.  This must be added to the DOM.
  */
-_addTrEl : function(oRecord, index) {
-    var elRow     = this._trElTemplate.cloneNode(true),
-        beforeRow = (lang.isNumber(index) && index >= 0 && this._elTbody.rows[index]) ?
-                    this._elTbody.rows[index] : null;
+_createTrEl : function (oRecord) {
+    // Clone the empty tr template.  We can't clone an existing row
+    // because of the expandos and td ids that must be set in _addTdEl
+    var elRow     = this._trElTemplate.cloneNode(true);
 
     elRow.id = this._sId+"-bdrow"+this._nTrCount;
     this._nTrCount++;
-    elRow.yuiRecordId = oRecord.getId();
-
-    // Hide the row initially, allowing _updateTrEl to manage the page reflows
-    elRow.style.display = 'none';
-
-    // It's an append if no index provided, or index is negative or too big
-    this._elTbody.insertBefore(elRow,beforeRow);
-
-    // Stripe the new row
-    Dom.addClass(elRow, elRow.sectionRowIndex % 2 ?
-                        DT.CLASS_ODD :
-                        DT.CLASS_EVEN);
 
     // Call _updateTrEl to populate and align the row contents
     return this._updateTrEl(elRow,oRecord);
@@ -7228,21 +7337,21 @@ _updateTrEl : function(elRow, oRecord) {
     }
 
     // Hide the row to prevent constant reflows
-    Dom.setStyle(elRow,'display','none');
+    elRow.style.display = 'none';
 
     // Remove extra TD elements
-    while(elRow.cells.length > oColumnSet.keys.length) {
+    while(elRow.childNodes.length > oColumnSet.keys.length) {
         elRow.removeChild(elRow.firstChild);
     }
     // Add more TD elements as needed
-    for (i=elRow.cells.length, len=oColumnSet.keys.length; i < len; ++i) {
+    for (i=elRow.childNodes.length||0, len=oColumnSet.keys.length; i < len; ++i) {
         this._addTdEl(elRow,oColumnSet.keys[i],i);
     }
 
     // Update TD elements with new data
     for(i=0,len=oColumnSet.keys.length; i<len; ++i) {
         var oColumn     = oColumnSet.keys[i],
-            elCell      = elRow.cells[i],
+            elCell      = elRow.childNodes[i],
             elCellLiner = elCell.firstChild,
             cellHeaders = '';
 
@@ -7256,26 +7365,20 @@ _updateTrEl : function(elRow, oRecord) {
         elCell.headers = cellHeaders;
 
         // Set ASC/DESC on TD
-        Dom.removeClass(elCell, DT.CLASS_ASC);
-        Dom.removeClass(elCell, DT.CLASS_DESC);
         if(oColumn.key === sortKey) {
-            Dom.addClass(elCell, sortClass);
+            Dom.replaceClass(elCell, sortClass === DT.CLASS_ASC ?
+                                     DT.CLASS_DESC : DT.CLASS_ASC, sortClass);
+        } else {
+            Dom.removeClass(elCell, DT.CLASS_ASC);
+            Dom.removeClass(elCell, DT.CLASS_DESC);
         }
         
-        elCellLiner.style.width = "";
-        elCell.style.width = "";
-                    
-        // Set width if available
+        // Set Column hidden if appropriate
         if(oColumn.hidden) {
             Dom.addClass(elCell, DT.CLASS_HIDDEN);
-            elCellLiner.style.width = "1px";
         }
         else {
             Dom.removeClass(elCell, DT.CLASS_HIDDEN);
-            
-            if(oColumn.width) {
-                elCellLiner.style.width = oColumn.width + "px";
-            }
         }
 
         // Set Column selection on TH
@@ -7291,7 +7394,7 @@ _updateTrEl : function(elRow, oRecord) {
     elRow.yuiRecordId = oRecord.getId();
     
     // Redisplay the row for reflow
-    Dom.setStyle(elRow,'display','');
+    elRow.style.display = '';
 
     return elRow;
 },
@@ -7321,11 +7424,8 @@ _addTdEl : function (elRow,oColumn,index) {
     elCell.yuiCellIndex = index;
 
     // Set FIRST/LAST on TD
-    if (index === 0) {
-        Dom.addClass(elCell, DT.CLASS_FIRST);
-    }
-    else if (index === this._oColumnSet.keys.length-1) {
-        Dom.addClass(elCell, DT.CLASS_LAST);
+    if (!(index % this._oColumnSet.keys.length - 1)) {
+        elCell.className = index ? DT.CLASS_LAST : DT.CLASS_FIRST;
     }
 
     var insertBeforeCell = elRow.cells[index] || null;
@@ -7450,9 +7550,11 @@ _setLastRow : function() {
  */
 _setRowStripes : function(row, range) {
     // Default values stripe all rows
-    var allRows = this._elTbody.rows;
-    var nStartIndex = 0;
-    var nEndIndex = allRows.length;
+    var allRows = this._elTbody.rows,
+        nStartIndex = 0,
+        nEndIndex = allRows.length,
+        aOdds = [], nOddIdx = 0,
+        aEvens = [], nEvenIdx = 0;
 
     // Stripe a subset
     if((row !== null) && (row !== undefined)) {
@@ -7470,13 +7572,18 @@ _setRowStripes : function(row, range) {
 
     for(var i=nStartIndex; i<nEndIndex; i++) {
         if(i%2) {
-            Dom.removeClass(allRows[i], DT.CLASS_EVEN);
-            Dom.addClass(allRows[i], DT.CLASS_ODD);
+            aOdds[nOddIdx++] = allRows[i];
+        } else {
+            aEvens[nEvenIdx++] = allRows[i];
         }
-        else {
-            Dom.removeClass(allRows[i], DT.CLASS_ODD);
-            Dom.addClass(allRows[i], DT.CLASS_EVEN);
-        }
+    }
+
+    if (aOdds.length) {
+        Dom.replaceClass(aOdds, DT.CLASS_EVEN, DT.CLASS_ODD);
+    }
+
+    if (aEvens.length) {
+        Dom.replaceClass(aEvens, DT.CLASS_ODD, DT.CLASS_EVEN);
     }
 },
 
@@ -7547,7 +7654,7 @@ _onScroll : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
 },
 
@@ -7561,7 +7668,7 @@ _onScroll : function(e, oSelf) {
  */
 _onDocumentClick : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
 
     if(!Dom.isAncestor(oSelf._elContainer, elTarget)) {
         oSelf.fireEvent("tableBlurEvent");
@@ -7628,7 +7735,7 @@ _onTbodyFocus : function(e, oSelf) {
  */
 _onTableMouseover : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-        var elTag = elTarget.tagName.toLowerCase();
+        var elTag = elTarget.nodeName.toLowerCase();
         var bKeepBubbling = true;
         while(elTarget && (elTag != "table")) {
             switch(elTag) {
@@ -7652,7 +7759,7 @@ _onTableMouseover : function(e, oSelf) {
                     bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
                     break;
                 case "tr":
-                    if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                    if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                         bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
                         // Backward compatibility
                         bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
@@ -7670,7 +7777,7 @@ _onTableMouseover : function(e, oSelf) {
             else {
                 elTarget = elTarget.parentNode;
                 if(elTarget) {
-                    elTag = elTarget.tagName.toLowerCase();
+                    elTag = elTarget.nodeName.toLowerCase();
                 }
             }
         }
@@ -7687,7 +7794,7 @@ _onTableMouseover : function(e, oSelf) {
  */
 _onTableMouseout : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -7711,7 +7818,7 @@ _onTableMouseout : function(e, oSelf) {
                 bKeepBubbling = oSelf.fireEvent("headerCellMouseoutEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowMouseoutEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowMouseoutEvent",{target:elTarget,event:e});
@@ -7729,7 +7836,7 @@ _onTableMouseout : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -7746,7 +7853,7 @@ _onTableMouseout : function(e, oSelf) {
  */
 _onTableMousedown : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -7770,7 +7877,7 @@ _onTableMousedown : function(e, oSelf) {
                 bKeepBubbling = oSelf.fireEvent("headerCellMousedownEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowMousedownEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowMousedownEvent",{target:elTarget,event:e});
@@ -7788,7 +7895,7 @@ _onTableMousedown : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -7805,7 +7912,7 @@ _onTableMousedown : function(e, oSelf) {
  */
 _onTableDblclick : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -7827,7 +7934,7 @@ _onTableDblclick : function(e, oSelf) {
                 bKeepBubbling = oSelf.fireEvent("headerCellDblclickEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowDblclickEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowDblclickEvent",{target:elTarget,event:e});
@@ -7845,7 +7952,7 @@ _onTableDblclick : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -7871,7 +7978,7 @@ _onTheadKeydown : function(e, oSelf) {
     }
     
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -7893,7 +8000,7 @@ _onTheadKeydown : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -7933,7 +8040,7 @@ _onTbodyKeydown : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -7951,7 +8058,7 @@ _onTbodyKeydown : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -7995,7 +8102,7 @@ _onTheadClick : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -8041,7 +8148,7 @@ _onTheadClick : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -8064,7 +8171,7 @@ _onTbodyClick : function(e, oSelf) {
 
     // Fire Custom Events
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -8099,7 +8206,7 @@ _onTbodyClick : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -8407,7 +8514,7 @@ getTrEl : function(row) {
         // Validate HTML element
         if(el && (el.ownerDocument == document)) {
             // Validate TR element
-            if(el.tagName.toLowerCase() != "tr") {
+            if(el.nodeName.toLowerCase() != "tr") {
                 // Traverse up the DOM to find the corresponding TR element
                 elRow = Dom.getAncestorByTagName(el,"tr");
             }
@@ -8490,6 +8597,19 @@ getPreviousTrEl : function(row) {
 },
 
 /**
+ * Returns DOM reference to a TD liner element.
+ *
+ * @method getTdLinerEl
+ * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
+ * @return {HTMLElement} Reference to TD liner element.
+ */
+getTdLinerEl : function(cell) {
+    var elCell = this.getTdEl(cell);
+    return elCell.firstChild || null;
+},
+
+/**
  * Returns DOM reference to a TD element.
  *
  * @method getTdEl
@@ -8504,7 +8624,7 @@ getTdEl : function(cell) {
     // Validate HTML element
     if(el && (el.ownerDocument == document)) {
         // Validate TD element
-        if(el.tagName.toLowerCase() != "td") {
+        if(el.nodeName.toLowerCase() != "td") {
             // Traverse up the DOM to find the corresponding TR element
             elCell = Dom.getAncestorByTagName(el, "td");
         }
@@ -8664,6 +8784,19 @@ getBelowTdEl : function(cell) {
 },
 
 /**
+ * Returns DOM reference to a TH liner element.
+ *
+ * @method getThLinerEl
+ * @param theadCell {YAHOO.widget.Column | HTMLElement | String} Column instance,
+ * DOM element reference, or string ID.
+ * @return {HTMLElement} Reference to TH liner element.
+ */
+getThLinerEl : function(theadCell) {
+    var elCell = this.getThEl(theadCell);
+    return elCell.firstChild || null;
+},
+
+/**
  * Returns DOM reference to a TH element.
  *
  * @method getThEl
@@ -8688,7 +8821,7 @@ getThEl : function(theadCell) {
 
         if(el && (el.ownerDocument == document)) {
             // Validate TH element
-            if(el.tagName.toLowerCase() != "th") {
+            if(el.nodeName.toLowerCase() != "th") {
                 // Traverse up the DOM to find the corresponding TR element
                 elTheadCell = Dom.getAncestorByTagName(el,"th");
             }
@@ -8872,7 +9005,7 @@ render : function() {
     // Paginator is enabled, show a subset of Records and update Paginator UI
     var oPaginator = this.get('paginator');
     var bPaginated = oPaginator instanceof Pag || this.get('paginated');
-    if(oPaginator) {
+    if(bPaginated) {
         if (oPaginator instanceof Pag) {
             allRecords = this._oRecordSet.getRecords(
                             oPaginator.getStartIndex(),
@@ -8929,19 +9062,21 @@ render : function() {
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        var nCurrentRow = oArg.nCurrentRow;
-                        for(i=nCurrentRow,len=(loopN>0)?nCurrentRow+loopN:nCurrentRow+1; i<len; i++) {
-                            if(i < loopEnd) {
-                                this._updateTrEl(allRows[i], allRecords[i]);
-                            }
-                            else {
-                                break;
-                            }
+                        var i = oArg.nCurrentRow,
+                            // Must reference allRows.length instead of loopEnd
+                            // here because loopEnd is reused below outside
+                            // this closure.
+                            len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length;
+                        for(; i < len; ++i) {
+                            this._updateTrEl(allRows[i], allRecords[i]);
+                        }
+                        if (loopN > 0) {
+                            this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
                 },
-                iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : loopEnd,
+                iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
                 argument: {nCurrentRow:0}, // Start at first row
                 scope: this,
                 timeout: (loopN > 0) ? 0 : -1
@@ -8956,19 +9091,23 @@ render : function() {
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        var nCurrentRow = oArg.nCurrentRow;
-                        for(i=nCurrentRow,len=(loopN>0)?nCurrentRow+loopN:nCurrentRow+1; i<len; i++) {
-                            if(i < loopEnd) {
-                                this._addTrEl(allRecords[i]);
-                            }
-                            else {
-                                break;
-                            }
+                        var i = oArg.nCurrentRow,
+                            len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd,
+                            df = document.createDocumentFragment(),
+                            tr;
+                        for(; i < len; ++i) {
+                            tr = this._createTrEl(allRecords[i]);
+                            tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
+                            df.appendChild(tr);
+                        }
+                        this._elTbody.appendChild(df);
+                        if (loopN > 0) {
+                            this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
                 },
-                iterations: (loopN > 0) ? Math.ceil(nRowsNeeded/loopN) : nRowsNeeded,
+                iterations: (loopN > 0) ? Math.ceil(nRowsNeeded/loopN) : 1,
                 argument: {nCurrentRow:loopStart}, // start at last row
                 scope: this,
                 timeout: (loopN > 0) ? 0 : -1
@@ -9108,6 +9247,16 @@ destroy : function() {
     for(var param in this) {
         if(lang.hasOwnProperty(this, param)) {
             this[param] = null;
+        }
+    }
+    
+    // Clean up static values
+    DT._nCurrentCount--;
+    
+    if(DT._nCurrentCount < 1) {
+        if(DT._elStylesheet) {
+            document.getElementsByTagName('head')[0].removeChild(DT._elStylesheet);
+            DT._elStylesheet = null;
         }
     }
 
@@ -9517,8 +9666,8 @@ sortColumn : function(oColumn, sDir) {
 },
 
 /**
- * Sets DOM elements to given pixel width. No validations against minimum width
- * and no updating Column.width value.
+ * Sets DOM elements of given Column to given pixel width. No validations
+ * against minimum width and no updating Column.width value.
  *
  * @method _setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -9528,23 +9677,91 @@ sortColumn : function(oColumn, sDir) {
 _setColumnWidth : function(oColumn, sWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
-        var nColKeyIndex = oColumn.getKeyIndex();
-        var elTheadCell = oColumn.getThEl();
-
-        elTheadCell.style.width = sWidth;
-        elTheadCell.firstChild.style.width = sWidth;
-        
-        var allrows = this.getTbodyEl().rows;
-        var nMaxIndex = allrows.length;
-        for(var i=0;i<nMaxIndex;i++) {
-            if(allrows[i].cells[nColKeyIndex] && allrows[i].cells[nColKeyIndex].firstChild) {
-                allrows[i].cells[nColKeyIndex].firstChild.style.width = sWidth;
-                allrows[i].cells[nColKeyIndex].style.width = sWidth;
+        // Create STYLE node
+        if(!DT._bStylesheetFallback) {
+            var s;
+            if(!DT._elStylesheet) {
+                    s = document.createElement('style');
+                    s.type = 'text/css';
+                    DT._elStylesheet = document.getElementsByTagName('head').item(0).appendChild(s);
             }
+                
+            if(DT._elStylesheet) {
+                s = DT._elStylesheet;
+                
+                var sClassname = ".yui-dt-col-" + oColumn.getId();
+                
+                // Create rule for the Column
+                var rule = DT._oStylesheetRules[sClassname];
+                if (!rule) {
+                    if (s.styleSheet && s.styleSheet.addRule) {
+                        s.styleSheet.addRule(sClassname,"width:"+sWidth);
+                        rule = s.styleSheet.rules[s.styleSheet.rules.length-1];
+                    } else if (s.sheet && s.sheet.insertRule) {
+                        s.sheet.insertRule(sClassname+" {width:"+sWidth+";}",s.sheet.cssRules.length);
+                        rule = s.sheet.cssRules[s.sheet.cssRules.length];
+                    } else {
+                        DT._bStylesheetFallback = true;
+                    }
+                    DT._oStylesheetRules[sClassname] = rule;
+                }
+                
+                // Update existing rule for the Column
+                else {
+                    rule.style.width = sWidth;
+                }
+                return;
+            }
+            
+            DT._bStylesheetFallback = true;
         }
-        if(ua.opera && !this.get("scrollable")) {
-            this.getTbodyEl().parentNode.style.width = this.getTheadEl().offsetWidth + "px";
-            document.body.style += '';
+        // Do it the old fashioned way
+        if(DT._bStylesheetFallback) {
+            if(sWidth == "auto") {
+                sWidth = ""; 
+            }
+
+            if (!this._aFallbackColResizer[this._elTbody.rows.length]) {
+                /*
+                Compile a custom function to do all the cell width
+                assignments at the same time.  A new resizer function is created
+                for each new unique number of rows in _elTbody.  This will
+                result in a function declaration like:
+                function (oColumn,sWidth) {
+                    var colIdx = oColumn.getKeyIndex();
+                    oColumn.getThEl().firstChild.style.width =
+                    this._elTbody.rows[0].cells[colIdx].firstChild.style.width =
+                    this._elTbody.rows[0].cells[colIdx].style.width =
+                    this._elTbody.rows[1].cells[colIdx].firstChild.style.width =
+                    this._elTbody.rows[1].cells[colIdx].style.width =
+                    ... (for all row indices in this._elTbody.rows.length - 1)
+                    this._elTbody.rows[99].cells[colIdx].firstChild.style.width =
+                    this._elTbody.rows[99].cells[colIdx].style.width = sWidth;
+                    ending with the sWidth as the initial assignment   ^
+                }
+                */
+
+                var resizerDef = [
+                    'var colIdx=oColumn.getKeyIndex();',
+                    'oColumn.getThEl().firstChild.style.width='
+                ];
+                for (var i=this._elTbody.rows.length-1, j=2; i >= 0; --i) {
+                    resizerDef[j++] = 'this._elTbody.rows[';
+                    resizerDef[j++] = i;
+                    resizerDef[j++] = '].cells[colIdx].firstChild.style.width=';
+                    resizerDef[j++] = 'this._elTbody.rows[';
+                    resizerDef[j++] = i;
+                    resizerDef[j++] = '].cells[colIdx].style.width=';
+                }
+                resizerDef[j] = 'sWidth;';
+                this._aFallbackColResizer[this._elTbody.rows.length] =
+                    new Function('oColumn','sWidth',resizerDef.join(''));
+            }
+            var resizerFn = this._aFallbackColResizer[this._elTbody.rows.length];
+
+            if (resizerFn) {
+                resizerFn.call(this,oColumn,sWidth);
+            }
         }
     }
     else {
@@ -9687,7 +9904,6 @@ showColumn : function(oColumn) {
                 else {
                     elTheadCell.firstChild.style.width = "";
                 }
-
 
                 thisColumn._nLastWidth = null;
                 this.fireEvent("columnShowEvent",{column:thisColumn});
@@ -10047,55 +10263,34 @@ addRow : function(oData, index) {
             else {
                 recIndex = this.getTrIndex(oRecord);
                 if(lang.isNumber(recIndex)) {
-                    this._oChain.add({
-                        method: function() {
-                            if((this instanceof DT) && this._sId) {
-                                // Add the TR element
-                                var elNewTr = this._addTrEl(oRecord, recIndex);
-                                if(elNewTr) {
-                                    // Is this an insert or an append?
-                                    var append = (lang.isNumber(recIndex) &&
-                                            (recIndex == this._elTbody.rows.length-1)) ? true : false;
-            
-                                    // Stripe the one new row
-                                    if(append) {
-                                        if(elNewTr.sectionRowIndex%2) {
-                                            Dom.addClass(elNewTr, DT.CLASS_ODD);
-                                        }
-                                        else {
-                                            Dom.addClass(elNewTr, DT.CLASS_EVEN);
-                                        }
-                                    }
-                                    // Restripe all the rows after the new one
-                                    else {
-                                        this._setRowStripes(recIndex);
-                                    }
-            
-                                    // If new row is at the bottom
-                                    if(append) {
-                                        this._setLastRow();
-                                    }
-                                    // If new row is at the top
-                                    else if(lang.isNumber(index) && (recIndex === 0)) {
-                                        this._setFirstRow();
-                                    }
-                                    
-                                    this._syncColWidths();
+                    if((this instanceof DT) && this._sId) {
+                        // Add the TR element
+                        var elNewTr = this._createTrEl(oRecord);
+                        if(elNewTr) {
+                            if (recIndex >= 0 && recIndex < this._elTbody.rows.length) {
+                                this._elTbody.insertBefore(elNewTr,
+                                    this._elTbody.rows[recIndex]);
+                                if (!recIndex) {
+                                    this._setFirstRow();
                                 }
-                                this.hideTableMessage();
-    
-                                // TODO: what args to pass?
-                                this.fireEvent("rowAddEvent", {record:oRecord});
-                        
-                                // For log message
-                                recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
-                        
+                            } else {
+                                this._elTbody.appendChild(elNewTr);
+                                this._setLastRow();
+                                recIndex = this._elTbody.rows.length - 1;
                             }
-                        },
-                        scope: this,
-                        timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
-                    });
-                    this._oChain.run();
+                            this._setRowStripes(recIndex);
+
+                            this._syncColWidths();
+                        }
+                        this.hideTableMessage();
+
+                        // TODO: what args to pass?
+                        this.fireEvent("rowAddEvent", {record:oRecord});
+
+                        // For log message
+                        recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
+
+                    }
                     return;
                 }
             }            
@@ -10177,6 +10372,7 @@ updateRow : function(row, oData) {
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._updateTrEl(elRow, updatedRecord);
+                    this._syncColWidths();
                     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                 }
             },
@@ -10184,7 +10380,6 @@ updateRow : function(row, oData) {
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
         this._oChain.run();
-        this._syncColWidths();
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -10288,11 +10483,11 @@ deleteRow : function(row) {
                                 // Set EVEN/ODD
                                 if(nTrIndex != this._elTbody.rows.length) {
                                     this._setRowStripes(nTrIndex);
-                                }
-                                
-                                this._syncColWidths();
+                                }                                
                             }
             
+                            this._syncColWidths();
+                            
                             this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
                                     oldData:oData, trElIndex:nTrIndex});
                         }
@@ -10434,6 +10629,10 @@ formatCell : function(elCell, oRecord, oColumn) {
 
         //TODO: document special keys will get stripped here
         aClasses[aClasses.length] = "yui-dt-col-"+sKey.replace(/[^\w\-.:]/g,"");
+        
+        aClasses[aClasses.length] = "yui-dt-col-"+oColumn.getId();
+        
+        aClasses[aClasses.length] = DT.CLASS_LINER;
 
         if(oColumn.sortable) {
             aClasses[aClasses.length] = DT.CLASS_SORTABLE;
@@ -10445,65 +10644,23 @@ formatCell : function(elCell, oRecord, oColumn) {
             aClasses[aClasses.length] = DT.CLASS_EDITABLE;
         }
 
+        elCell.className = "";
         Dom.addClass(elCell, aClasses.join(" "));
 
 
-        var fnFormatter;
-        if(lang.isString(oColumn.formatter)) {
-            switch(oColumn.formatter) {
-                case "button":
-                    fnFormatter = DT.formatButton;
-                    break;
-                case "checkbox":
-                    fnFormatter = DT.formatCheckbox;
-                    break;
-                case "currency":
-                    fnFormatter = DT.formatCurrency;
-                    break;
-                case "date":
-                    fnFormatter = DT.formatDate;
-                    break;
-                case "dropdown":
-                    fnFormatter = DT.formatDropdown;
-                    break;
-                case "email":
-                    fnFormatter = DT.formatEmail;
-                    break;
-                case "link":
-                    fnFormatter = DT.formatLink;
-                    break;
-                case "number":
-                    fnFormatter = DT.formatNumber;
-                    break;
-                case "radio":
-                    fnFormatter = DT.formatRadio;
-                    break;
-                case "text":
-                    fnFormatter = DT.formatText;
-                    break;
-                case "textarea":
-                    fnFormatter = DT.formatTextarea;
-                    break;
-                case "textbox":
-                    fnFormatter = DT.formatTextbox;
-                    break;
-                case "html":
-                    // This is the default
-                    break;
-                default:
-                    fnFormatter = null;
-            }
-        }
-        else if(lang.isFunction(oColumn.formatter)) {
-            fnFormatter = oColumn.formatter;
-        }
+        var fnFormatter = typeof oColumn.formatter === 'function' ?
+                          oColumn.formatter :
+                          DT.Formatter[oColumn.formatter+''];
 
         // Apply special formatter
         if(fnFormatter) {
             fnFormatter.call(this, elCell, oRecord, oColumn, oData);
         }
         else {
-            elCell.innerHTML = (lang.isValue(oData)) ? oData.toString() : "";
+            elCell.innerHTML = oData === undefined ||
+                               oData === null ||
+                               (typeof oData === 'number' && isNaN(oData)) ?
+                                "" : oData.toString();
         }
 
         this.fireEvent("cellFormatEvent", {record:oRecord, column:oColumn, key:sKey, el:elCell});
@@ -12930,6 +13087,7 @@ saveCellEditor : function() {
 
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
+        this._syncColWidths();
 
         // Clear out the Cell Editor
         this.resetCellEditor();
@@ -14449,7 +14607,7 @@ formatPaginatorLinks : function(elContainer, nCurrentPage, nPageLinksStart, nPag
 _onPaginatorLinkClick : function(e, oSelf) {
     // Backward compatibility
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
 
     if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
@@ -14487,7 +14645,7 @@ _onPaginatorLinkClick : function(e, oSelf) {
         }
         elTarget = elTarget.parentNode;
         if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+            elTag = elTarget.nodeName.toLowerCase();
         }
         else {
             return;

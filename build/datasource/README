@@ -2,37 +2,41 @@ DataSource Release Notes
 
 **** version 2.5.0 ****
 
-DataSource API Changes
-
-    * handleResponse() -
-          o oCallback now is an object literal a la Connection Manager and can contain scope and argument values.
-          o oCaller argument is now deprecated
-          o When callback function is passed oRequest and oParsed Response, the oParsedResponse object now consistently returns the following values
-                + tId (Number)
-                + results (Array)
-                + error (Boolean)
-                + totalResults (Number) When available
-    * makeConnection()
-          o oCallback now is an object literal a la Connection Manager and can contain scope and argument values.
-          o oCaller argument is now deprecated.
-    * parseArrayData() - Second argument is now oFullResponse rather than oRawResponse
-    * parseHTMLTableData() - Second argument is now oFullResponse rather than oRawResponse
-    * parseJsonData() - Second argument is now oFullResponse rather than oRawResponse
-    * parseTextData() - Second argument is now oFullResponse rather than oRawResponse
-    * parseXMLData() - Second argument is now oFullResponse rather than oRawResponse
-    * sendRequest()
-          o oCallback now is an object literal a la Connection Manager and can contain scope and argument values.
-          o oCaller argument is now deprecated
-    * setInterval()
-          o oCallback now is an object literal a la Connection Manager and can contain scope and argument values.
-          o oCaller argument is now deprecated
-    * cacheRequestEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
-    * dataErrorEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
-    * getCachedResponseEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
-    * requestEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
-    * responseCacheEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
-    * responseEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
-    * responseParseEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
+* doBeforeCallback() - The second argument is now oFullResponse rather than oRawResponse.
+* handleResponse() -
+      o oCallback is now an object literal pointing to success and failure
+      handlers and can contain scope and argument values.
+      o The oCaller argument is now deprecated.
+      o When callback function is passed oRequest and oParsedResponse values,
+      the oParsedResponse object now consistently returns the following values:
+            + tId (Number)
+            + results (Array)
+            + error (Boolean)
+            + totalResults (Number) (when available)
+* makeConnection() -
+      o oCallback is now an object literal pointing to success and failure
+      handlers and can contain scope and argument values.
+      o The oCaller argument is now deprecated.
+* parseArrayData() - The second argument is now oFullResponse rather than oRawResponse.
+* parseHTMLTableData() - The second argument is now oFullResponse rather than oRawResponse.
+* parseJsonData() - The second argument is now oFullResponse rather than oRawResponse.
+* parseTextData() - The second argument is now oFullResponse rather than oRawResponse.
+* parseXMLData() - The second argument is now oFullResponse rather than oRawResponse.
+* sendRequest() -
+      o oCallback is now an object literal pointing to success and failure
+      handlers and can contain scope and argument values.
+      o The oCaller argument is now deprecated.
+* setInterval() -
+      o oCallback is now an object literal pointing to success and failure
+      handlers and can contain scope and argument values.
+      o The oCaller argument is now deprecated.
+* cacheRequestEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
+* dataErrorEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
+* getCachedResponseEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
+* requestEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
+* responseCacheEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
+* responseEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
+* responseParseEvent - oArgs.caller is now deprecated in favor of oCallback object literal.
 
 
 

@@ -1676,7 +1676,7 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
                 }
                 oResult[key] = data;
             }
-            oParsedResponse.results[i] = oResult;
+            oParsedResponse.results[j] = oResult;
         }
     }
 
@@ -1696,7 +1696,6 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
  * The Number utility provides helper functions to deal with data of type Number.
  *
  * @namespace YAHOO.util
- * @module number
  * @requires datasource
  * @title Number Utility
  * @beta
@@ -1810,7 +1809,6 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
  * The Date utility provides helper functions to deal with data of type Date.
  *
  * @namespace YAHOO.util
- * @module date
  * @requires datasource
  * @title Date Utility
  * @beta
@@ -1865,4 +1863,5 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
     }
  };
  
+
 YAHOO.register("datasource", YAHOO.util.DataSource, {version: "@VERSION@", build: "@BUILD@"});

@@ -1252,6 +1252,7 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
         this.datatable = oDataTable;
         this.column = oColumn;
         this.headCell = elTh;
+        this.headCellLiner = elTh.firstChild;
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
     }
@@ -1306,6 +1307,8 @@ if(YAHOO.util.DD) {
         onMouseDown : function(e) {
             this.startWidth = this.headCell.firstChild.offsetWidth;
             this.startX = YAHOO.util.Event.getXY(e)[0];
+            this.nLinerPadding = (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingLeft"),10)|0) +
+                    (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingRight"),10)|0);
         },
     
         /**
@@ -1332,11 +1335,10 @@ if(YAHOO.util.DD) {
          */
         onDrag : function(e) {
             var newX = YAHOO.util.Event.getXY(e)[0];
-            if(newX > YAHOO.util.Dom.getX(this.headCell.firstChild)) {
+            if(newX > YAHOO.util.Dom.getX(this.headCellLiner)) {
                 var offsetX = newX - this.startX;
-                var newWidth = this.startWidth + offsetX;
+                var newWidth = this.startWidth + offsetX - this.nLinerPadding;
                 this.datatable.setColumnWidth(this.column, newWidth);
-                this.datatable._syncColWidths();
             }
         }
     });

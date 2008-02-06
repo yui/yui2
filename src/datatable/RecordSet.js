@@ -465,21 +465,47 @@ YAHOO.widget.RecordSet.prototype = {
         if(YAHOO.lang.isArray(aData)) {
             var Rec = YAHOO.widget.Record,
                 spliceParams = [index,0],
-                i = aData.length,
+                i = aData.length - 1,
                 r;
+
+            // build up a parameter array for a single call to splice in
+            // the new records.
             for(; i >= 0 ; --i) {
+                // If the data in aData isn't valid, use the existing
+                // record to avoid harming valid records
                 r = aData[i] && typeof aData[i] === 'object' ?
                                 new Rec(aData[i]) : this._records[i];
                 if (r) {
                     spliceParams[i+2] = r;
                 }
             }
+
+            // We need to explicitly set the last record because splice doesn't
+            // honor start indexes higher than the current length.
+            this._records[index + spliceParams.length - 3] =
+                spliceParams[spliceParams.length - 1];
+
+            // Set the number of records to change (length minus first 2
+            // placeholders).  This must be done here because the end of aData
+            // may have contained invalid record data so we avoid increasing
+            // _records.length incorrectly.  And we do need to set the last
+            // record, although we just did that.
             spliceParams[1] = spliceParams.length - 2;
-            Array.prototype.splice.apply(this._records,spliceParams);
+
+            // Call splice.apply to simulate a single update to _records
+            // rather than looping through the new records and setting them
+            // to the index one by one.  Use the spliceParams array to get
+            // the splice method to apply.  A bit convoluted, I know.
+            spliceParams.splice.apply(this._records,spliceParams);
+
             this.fireEvent("recordsSet",{records:spliceParams,data:aData});
             YAHOO.log("Set " + spliceParams[1] + " Record(s) at index " +
                       spliceParams[0] + " through " +
                       (spliceParams[0] + spliceParams[1])/* + " with data " + YAHOO.lang.dump(aData)*/, "info", this.toString());
+
+            // return the records that were set.  The first two indexes
+            // in spliceParams are the start index and length, so return
+            // everything starting at index 2
             return spliceParams.slice(2);
         }
         else if(aData && (aData.constructor == Object)) {
