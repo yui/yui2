@@ -4331,6 +4331,19 @@ getPreviousTrEl : function(row) {
 },
 
 /**
+ * Returns DOM reference to a TD liner element.
+ *
+ * @method getTdLinerEl
+ * @param cell {HTMLElement | String | Object} DOM element reference or string ID, or
+ * object literal of syntax {record:oRecord, column:oColumn}.
+ * @return {HTMLElement} Reference to TD liner element.
+ */
+getTdLinerEl : function(cell) {
+    var elCell = this.getTdEl(cell);
+    return elCell.firstChild || null;
+},
+
+/**
  * Returns DOM reference to a TD element.
  *
  * @method getTdEl
@@ -4508,6 +4521,19 @@ getBelowTdEl : function(cell) {
     }
     YAHOO.log("Could not get below TD element for cell " + cell, "info", this.toString());
     return null;
+},
+
+/**
+ * Returns DOM reference to a TH liner element.
+ *
+ * @method getThLinerEl
+ * @param theadCell {YAHOO.widget.Column | HTMLElement | String} Column instance,
+ * DOM element reference, or string ID.
+ * @return {HTMLElement} Reference to TH liner element.
+ */
+getThLinerEl : function(theadCell) {
+    var elCell = this.getThEl(theadCell);
+    return elCell.firstChild || null;
 },
 
 /**
