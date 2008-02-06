@@ -2665,7 +2665,7 @@ _initTableEl : function() {
     Dom.addClass(this._elTbody,DT.CLASS_BODY);
     // Bug 1716354 - fix gap in Safari 2 and 3
     if(ua.webkit) {
-        this._elTbody.parentNode.style.marginTop = "-13px";
+        this._elTbody.parentNode.style.marginTop = ua.webkit > 500 ? "-13px" : "-7px";
     }
 
     // Create TBODY for messages
