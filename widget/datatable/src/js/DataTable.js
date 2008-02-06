@@ -2305,32 +2305,42 @@ _syncColWidths : function() {
             }
         }
 
-        // Update the widths
+        // Calculate width for every Column
         for(i=0; i<cellsLen; i++) {
             oColumn = allKeys[i];
+            var newWidth;
             
             // Columns without widths
-            if(oColumn.hidden) {
-                this._setColumnWidth(oColumn, "1px"); 
-            }
-            else if(!oColumn.width) {
+            if(!oColumn.width) {
                 var elTh = oColumn.getThEl();
                 var elTd = elRow.cells[i];
                 
                 if(elTh.offsetWidth !== elTd.offsetWidth) {
                     var elWider = (elTh.offsetWidth > elTd.offsetWidth) ? elTh.firstChild : elTd.firstChild;               
                     // Calculate the final width by comparing liner widths
-                    var newWidth = elWider.offsetWidth -
+                    newWidth = elWider.offsetWidth -
                             (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
                             (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0);
-                            
-                    this._setColumnWidth(oColumn, newWidth+"px");                     
+                    
+                    // Validate against minWidth        
+                    newWidth = (oColumn.minWidth && (oColumn.minWidth > newWidth)) ?
+                            oColumn.minWidth : newWidth;
+            
                 }
             }
             // Columns with widths
             else {
-                this._setColumnWidth(oColumn,oColumn.width+"px"); 
+                newWidth = oColumn.width;
             }
+            
+            // Hidden Columns
+            if(oColumn.hidden) {
+                oColumn._nLastWidth = newWidth;
+                newWidth = 1;
+            }
+            
+            // Update to the new width
+            this._setColumnWidth(oColumn, newWidth+"px"); 
         }
         
         // Resnap unsnapped containers
@@ -2925,13 +2935,9 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
             aClasses[aClasses.length] = DT.CLASS_SORTABLE;
         }
 
-        //Set width if available
+        //Set Column hidden
         if(oColumn.hidden) {
             aClasses[aClasses.length] = DT.CLASS_HIDDEN;
-            elTheadCellLiner.style.width = "1px";
-        }
-        else if(oColumn.width) {
-            //elTheadCellLiner.style.width = oColumn.width + "px";
         }
         
         // Set Column selection on TD
