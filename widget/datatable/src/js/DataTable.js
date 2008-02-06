@@ -2382,8 +2382,8 @@ _syncScrollPadding : function() {
                 for(i=0; i<len; i++) {
                     //TODO: A better way to get th cell
                     elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                    elLiner.style.borderRight = 
-                            (parseInt(Dom.getStyle(elLiner,"borderRight"),10) + 
+                    elLiner.style.marginRight = 
+                            (parseInt(Dom.getStyle(elLiner,"marginRight"),10) + 
                             27) + "px";
                 }
                 
@@ -2402,7 +2402,7 @@ _syncScrollPadding : function() {
                 for(i=0; i<len; i++) {
                     //TODO: A better way to get th cell
                     elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                    Dom.setStyle(elLiner,"borderRight","");
+                    Dom.setStyle(elLiner,"marginRight","");
                 }
                                         
                 // Save state
@@ -2458,7 +2458,7 @@ _initContainerEl : function(elContainer) {
     }
 
     elContainer = Dom.get(elContainer);
-    if(elContainer && elContainer.tagName && (elContainer.tagName.toLowerCase() == "div")) {
+    if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
         // Esp for progressive enhancement
         Ev.purgeElement(elContainer, true);
         elContainer.innerHTML = "";
@@ -2553,7 +2553,7 @@ _initDataSource : function(oDataSource) {
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
             for(i=0; i<tmpChildren.length; i++) {
-                if(tmpChildren[i].tagName && tmpChildren[i].tagName.toLowerCase() == "table") {
+                if(tmpChildren[i].nodeName && tmpChildren[i].nodeName.toLowerCase() == "table") {
                     tmpTable = tmpChildren[i];
                     break;
                 }
@@ -3367,7 +3367,7 @@ _onScroll : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
 },
 
@@ -3381,7 +3381,7 @@ _onScroll : function(e, oSelf) {
  */
 _onDocumentClick : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
 
     if(!Dom.isAncestor(oSelf._elContainer, elTarget)) {
         oSelf.fireEvent("tableBlurEvent");
@@ -3448,7 +3448,7 @@ _onTbodyFocus : function(e, oSelf) {
  */
 _onTableMouseover : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-        var elTag = elTarget.tagName.toLowerCase();
+        var elTag = elTarget.nodeName.toLowerCase();
         var bKeepBubbling = true;
         while(elTarget && (elTag != "table")) {
             switch(elTag) {
@@ -3472,7 +3472,7 @@ _onTableMouseover : function(e, oSelf) {
                     bKeepBubbling = oSelf.fireEvent("headerCellMouseoverEvent",{target:elTarget,event:e});
                     break;
                 case "tr":
-                    if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                    if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                         bKeepBubbling = oSelf.fireEvent("theadRowMouseoverEvent",{target:elTarget,event:e});
                         // Backward compatibility
                         bKeepBubbling = oSelf.fireEvent("headerRowMouseoverEvent",{target:elTarget,event:e});
@@ -3490,7 +3490,7 @@ _onTableMouseover : function(e, oSelf) {
             else {
                 elTarget = elTarget.parentNode;
                 if(elTarget) {
-                    elTag = elTarget.tagName.toLowerCase();
+                    elTag = elTarget.nodeName.toLowerCase();
                 }
             }
         }
@@ -3507,7 +3507,7 @@ _onTableMouseover : function(e, oSelf) {
  */
 _onTableMouseout : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3531,7 +3531,7 @@ _onTableMouseout : function(e, oSelf) {
                 bKeepBubbling = oSelf.fireEvent("headerCellMouseoutEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowMouseoutEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowMouseoutEvent",{target:elTarget,event:e});
@@ -3549,7 +3549,7 @@ _onTableMouseout : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -3566,7 +3566,7 @@ _onTableMouseout : function(e, oSelf) {
  */
 _onTableMousedown : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3590,7 +3590,7 @@ _onTableMousedown : function(e, oSelf) {
                 bKeepBubbling = oSelf.fireEvent("headerCellMousedownEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowMousedownEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowMousedownEvent",{target:elTarget,event:e});
@@ -3608,7 +3608,7 @@ _onTableMousedown : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -3625,7 +3625,7 @@ _onTableMousedown : function(e, oSelf) {
  */
 _onTableDblclick : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3647,7 +3647,7 @@ _onTableDblclick : function(e, oSelf) {
                 bKeepBubbling = oSelf.fireEvent("headerCellDblclickEvent",{target:elTarget,event:e});
                 break;
             case "tr":
-                if(elTarget.parentNode.tagName.toLowerCase() == "thead") {
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
                     bKeepBubbling = oSelf.fireEvent("theadRowDblclickEvent",{target:elTarget,event:e});
                     // Backward compatibility
                     bKeepBubbling = oSelf.fireEvent("headerRowDblclickEvent",{target:elTarget,event:e});
@@ -3665,7 +3665,7 @@ _onTableDblclick : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -3691,7 +3691,7 @@ _onTheadKeydown : function(e, oSelf) {
     }
     
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3713,7 +3713,7 @@ _onTheadKeydown : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -3753,7 +3753,7 @@ _onTbodyKeydown : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3771,7 +3771,7 @@ _onTbodyKeydown : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -3815,7 +3815,7 @@ _onTheadClick : function(e, oSelf) {
     }
 
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3861,7 +3861,7 @@ _onTheadClick : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -3884,7 +3884,7 @@ _onTbodyClick : function(e, oSelf) {
 
     // Fire Custom Events
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
     while(elTarget && (elTag != "table")) {
         switch(elTag) {
@@ -3919,7 +3919,7 @@ _onTbodyClick : function(e, oSelf) {
         else {
             elTarget = elTarget.parentNode;
             if(elTarget) {
-                elTag = elTarget.tagName.toLowerCase();
+                elTag = elTarget.nodeName.toLowerCase();
             }
         }
     }
@@ -4227,7 +4227,7 @@ getTrEl : function(row) {
         // Validate HTML element
         if(el && (el.ownerDocument == document)) {
             // Validate TR element
-            if(el.tagName.toLowerCase() != "tr") {
+            if(el.nodeName.toLowerCase() != "tr") {
                 // Traverse up the DOM to find the corresponding TR element
                 elRow = Dom.getAncestorByTagName(el,"tr");
             }
@@ -4326,7 +4326,7 @@ getTdEl : function(cell) {
     // Validate HTML element
     if(el && (el.ownerDocument == document)) {
         // Validate TD element
-        if(el.tagName.toLowerCase() != "td") {
+        if(el.nodeName.toLowerCase() != "td") {
             // Traverse up the DOM to find the corresponding TR element
             elCell = Dom.getAncestorByTagName(el, "td");
         }
@@ -4516,7 +4516,7 @@ getThEl : function(theadCell) {
 
         if(el && (el.ownerDocument == document)) {
             // Validate TH element
-            if(el.tagName.toLowerCase() != "th") {
+            if(el.nodeName.toLowerCase() != "th") {
                 // Traverse up the DOM to find the corresponding TR element
                 elTheadCell = Dom.getAncestorByTagName(el,"th");
             }
@@ -10382,7 +10382,7 @@ formatPaginatorLinks : function(elContainer, nCurrentPage, nPageLinksStart, nPag
 _onPaginatorLinkClick : function(e, oSelf) {
     // Backward compatibility
     var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.tagName.toLowerCase();
+    var elTag = elTarget.nodeName.toLowerCase();
 
     if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
         oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
@@ -10420,7 +10420,7 @@ _onPaginatorLinkClick : function(e, oSelf) {
         }
         elTarget = elTarget.parentNode;
         if(elTarget) {
-            elTag = elTarget.tagName.toLowerCase();
+            elTag = elTarget.nodeName.toLowerCase();
         }
         else {
             return;
