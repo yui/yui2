@@ -1,5 +1,10 @@
 YUI Library - Grids - Release Notes
 
+Version 2.5.0
+
+  * Tweaked em widths for "template presets" .yui-t1-6
+  * Pruned two redundant lines
+
 Version 2.4.0
 
   * No changes.

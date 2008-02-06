@@ -1,5 +1,9 @@
 YUI Library - Reset - Release Notes
 
+Version 2.5.0
+
+  * Added input,textarea,select{*font-size:100%;} to enable resizing on IE
+
 Version 2.4.0
 
   * Moved background and default font color to HTML from BODY
