@@ -169,12 +169,14 @@ package
 			
 			//set data provider and new styles
 			this.chart.dataProvider = dataProvider;
-				
+			
+			this.chart.drawNow();
+			
 			if(styleChanged)
 			{
 				this.setSeriesStyles(seriesStyles);
+				this.chart.drawNow();
 			}
-			this.chart.drawNow();
 			
 			/*if(this.legend)
 			{
