@@ -1,5 +1,11 @@
 AutoComplete Release Notes
 
+*** version 2.5.0 ***
+
+* Fixed bug where Mac users were not able to input "&" or "(" characters.
+
+
+
 *** version 2.4.0 ***
 
 * Support for YUI JSON Utility.

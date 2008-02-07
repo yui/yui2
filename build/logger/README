@@ -1,5 +1,11 @@
 Logger Release Notes
 
+*** version 2.5.0 ***
+
+* No changes.
+
+
+
 *** version 2.4.0 ***
 
 * Global window error event no longer being handled by default. Implemented
