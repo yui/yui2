@@ -7,6 +7,9 @@ Dom Release Notes
 
 ----------------------------
 
+*** version 2.5.0 ***
+* get() now correctly handles textNodes
+
 *** version 2.4.0 ***
 * no longer accounting for safari body margin when offsetParent == body
 * isAncestor and inDocument no longer use batch

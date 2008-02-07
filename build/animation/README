@@ -1,5 +1,8 @@
 Animation Release Notes
 
+*** version 2.5.0 ***
+* replace toString overrides with static NAME property
+
 *** version 2.4.0 ***
 * calling stop() on an non-animated Anim no longer fires onComplete
 
