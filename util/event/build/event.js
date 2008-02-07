@@ -1158,12 +1158,14 @@ if (!YAHOO.util.Event) {
              * @return {HTMLElement} the normized node
              * @static
              */
-            resolveTextNode: function(node) {
-                if (node && 3 == node.nodeType) {
-                    return node.parentNode;
-                } else {
-                    return node;
-                }
+            resolveTextNode: function(n) {
+                try {
+                    if (n && 3 == n.nodeType) {
+                        return n.parentNode;
+                    }
+                } catch(e) { }
+
+                return n;
             },
 
             /**
@@ -1325,30 +1327,6 @@ if (!YAHOO.util.Event) {
                     }
                 }
 
-                // IE events that target non-browser objects (e.g., VML
-                // canvas) will sometimes throw errors when you try to
-                // inspect the properties of the event target.  We try to
-                // detect this condition, and provide a dummy target (the bound
-                // element) to eliminate spurious errors.  
-
-                // the implementation caused unexpected results in some 
-                // implementations, so this has been rolled back for now
-                /* 
-                if (ev && this.isIE) {
-
-                    try {
-
-                        var el = ev.srcElement;
-
-                    } catch(ex) {
-
-                         
-                        ev.target = boundEl;
-                    }
-
-                }
-                */
-
                 return ev;
             },
 
@@ -1362,7 +1340,7 @@ if (!YAHOO.util.Event) {
             getCharCode: function(ev) {
                 var code = ev.keyCode || ev.charCode || 0;
 
-                // webkit normalization
+                // webkit key normalization
                 if (YAHOO.env.ua.webkit && (code in webkitKeymap)) {
                     code = webkitKeymap[code];
                 }
@@ -1872,9 +1850,10 @@ if (!YAHOO.util.Event) {
          */
         EU.on = EU.addListener;
 
-        /////////////////////////////////////////////////////////////
-        // DOMReady
-        // based on work by: Dean Edwards/John Resig/Matthias Miller 
+        /*!
+         * DOMReady
+         * based on work by: Dean Edwards/John Resig/Matthias Miller 
+         */
 
         // Internet Explorer: use the readyState of a defered script.
         // This isolates what appears to be a safe moment to manipulate
