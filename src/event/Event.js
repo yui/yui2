@@ -1461,10 +1461,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
          */
         EU.on = EU.addListener;
 
-        /*!
-         * DOMReady
-         * based on work by: Dean Edwards/John Resig/Matthias Miller 
-         */
+/*! DOMReady: based on work by: Dean Edwards/John Resig/Matthias Miller */
 
         // Internet Explorer: use the readyState of a defered script.
         // This isolates what appears to be a safe moment to manipulate

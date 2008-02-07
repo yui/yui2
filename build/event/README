@@ -2,6 +2,8 @@
 YUI Library - Event - Release Notes
 
 2.5.0
+  * Added try/catch to getTarget to suppress errors when targeting
+    ActiveX controls.
   * Increased the default poll interval to 20ms, and decreased poll
     retries to 2000 to reduce IE CPU usage.
   * onDOMReady now uses the native DOMContentLoaded event for the
