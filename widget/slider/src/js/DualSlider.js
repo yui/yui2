@@ -15,11 +15,9 @@
  * @param {Slider} minSlider The Slider instance used for the min value thumb
  * @param {Slider} maxSlider The Slider instance used for the max value thumb
  * @param {int}    range The number of pixels the thumbs may move within
- * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
- * from one another.  The default 0 allows the thumbs to touch, but not overlap.
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  */
-YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVals) {
+YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
 
     var self = this,
         lang = YAHOO.lang;
@@ -46,19 +44,18 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVa
     this.activeSlider = minSlider;
 
     /**
-     * Pixel distance to maintain between thumbs.
-     * @property minRange
-     * @type int
-     * @default 0
-     * @private
+     * Is the DualSlider oriented horizontally or vertically?
+     * <strong>read only</strong>
+     * @property isHoriz
+     * @type boolean
      */
-    this.minRange = minRange|0;
+    this.isHoriz = minSlider.thumb._isHoriz;
 
     // Validate initial values
     initVals = YAHOO.lang.isArray(initVals) ? initVals : [0,range];
     initVals[0] = Math.min(Math.max(parseInt(initVals[0],10)|0,0),range);
     initVals[1] = Math.max(Math.min(parseInt(initVals[1],10)|0,range),0);
-    // Swamp initVals if min > max
+    // Swap initVals if min > max
     if (initVals[0] > initVals[1]) {
         initVals.splice(0,2,initVals[1],initVals[0]);
     }
@@ -115,21 +112,6 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVa
     maxSlider.subscribe("slideEnd", this._handleSlideEnd, maxSlider, this);
 
     /**
-     * The current value of the min thumb. <strong>read only</strong>.
-     * @property minVal
-     * @type int
-     */
-    this.minVal = -1;
-    /**
-     * The current value of the max thumb. <strong>read only</strong>.
-     * @property maxVal
-     * @type int
-     */
-    this.maxVal = -1;
-    
-    this.isHoriz = minSlider.thumb._isHoriz;
-
-    /**
      * Event that fires when the slider is finished setting up
      * @event ready
      * @param {DualSlider} dualslider the DualSlider instance
@@ -159,6 +141,29 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, minRange, initVa
 };
 
 YAHOO.widget.DualSlider.prototype = {
+
+    /**
+     * The current value of the min thumb. <strong>read only</strong>.
+     * @property minVal
+     * @type int
+     */
+    minVal : -1,
+
+    /**
+     * The current value of the max thumb. <strong>read only</strong>.
+     * @property maxVal
+     * @type int
+     */
+    maxVal : -1,
+
+    /**
+     * Pixel distance to maintain between thumbs.
+     * @property minRange
+     * @type int
+     * @default 0
+     * @private
+     */
+    minRange : 0,
 
     /**
      * Executed when one of the sliders fires the slideStart event
@@ -494,21 +499,18 @@ YAHOO.augment(YAHOO.widget.DualSlider, YAHOO.util.EventProvider);
  * @param {int} range the number of pixels the thumbs can move within
  * @param {int} iTickSize (optional) the element should move this many pixels
  * at a time
- * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
- * from one another.  The default 0 allows the thumbs to touch, but not overlap.
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {DualSlider} a horizontal dual-thumb slider control
  */
 YAHOO.widget.Slider.getHorizDualSlider = 
-    function (bg, minthumb, maxthumb, range, iTickSize, minRange, initVals) {
+    function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
         var mint, maxt;
         var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
-        minRange = minRange|0;
 
         mint = new Thumb(minthumb, bg, 0, range, 0, 0, iTickSize);
         maxt = new Thumb(maxthumb, bg, 0, range, 0, 0, iTickSize);
 
-        return new YW.DualSlider(new Slider(bg, bg, mint, "horiz"), new Slider(bg, bg, maxt, "horiz"), range, minRange, initVals);
+        return new YW.DualSlider(new Slider(bg, bg, mint, "horiz"), new Slider(bg, bg, maxt, "horiz"), range, initVals);
 };
 
 /**
@@ -522,19 +524,16 @@ YAHOO.widget.Slider.getHorizDualSlider =
  * @param {int} range the number of pixels the thumbs can move within
  * @param {int} iTickSize (optional) the element should move this many pixels
  * at a time
- * @param {int}    minRange (optional) Pixel distance the thumbs will maintain
- * from one another.  The default 0 allows the thumbs to touch, but not overlap.
  * @param {Array}  initVals (optional) [min,max] Initial thumb placement
  * @return {DualSlider} a vertical dual-thumb slider control
  */
 YAHOO.widget.Slider.getVertDualSlider = 
-    function (bg, minthumb, maxthumb, range, iTickSize, minRange, initVals) {
+    function (bg, minthumb, maxthumb, range, iTickSize, initVals) {
         var mint, maxt;
         var YW = YAHOO.widget, Slider = YW.Slider, Thumb = YW.SliderThumb;
-        minRange = minRange|0;
 
         mint = new Thumb(minthumb, bg, 0, 0, 0, range, iTickSize);
         maxt = new Thumb(maxthumb, bg, 0, 0, 0, range, iTickSize);
 
-        return new YW.DualSlider(new Slider(bg, bg, mint, "vert"), new Slider(bg, bg, maxt, "vert"), range, minRange, initVals);
+        return new YW.DualSlider(new Slider(bg, bg, mint, "vert"), new Slider(bg, bg, maxt, "vert"), range, initVals);
 };
