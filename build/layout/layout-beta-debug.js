@@ -1424,7 +1424,7 @@
             * @type Number
             */
             this.setAttributeConfig('minWidth', {
-                value: attr.minWidth || 50,
+                value: attr.minWidth || false,
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1434,7 +1434,7 @@
             * @type Number
             */
             this.setAttributeConfig('maxWidth', {
-                value: attr.maxWidth || 500,
+                value: attr.maxWidth || false,
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1444,7 +1444,7 @@
             * @type Number
             */
             this.setAttributeConfig('minHeight', {
-                value: attr.minHeight || 50,
+                value: attr.minHeight || false,
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1454,7 +1454,7 @@
             * @type Number
             */
             this.setAttributeConfig('maxHeight', {
-                value: attr.maxHeight || (((this.get('position') == 'top') || (this.get('position') == 'bottom')) ? 200 : 5000),
+                value: attr.maxHeight || false,
                 validator: YAHOO.lang.isNumber
             });
 
@@ -1468,7 +1468,10 @@
                 validator: Lang.isNumber,
                 method: function(h) {
                     if (!this._collapsing) {
-                        this.setStyle('height', h + 'px');
+                        var self = this;
+                        setTimeout(function() {
+                            self.setStyle('height', h + 'px');
+                        }, 0);
                     }
                 }
             });
@@ -1483,7 +1486,10 @@
                 validator: Lang.isNumber,
                 method: function(w) {
                     if (!this._collapsing) {
-                        this.setStyle('width', w + 'px');
+                        var self = this;
+                        setTimeout(function() {
+                            self.setStyle('width', w + 'px');
+                        }, 0);
                     }
                 }
             });

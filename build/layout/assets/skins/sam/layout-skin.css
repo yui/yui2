@@ -66,16 +66,6 @@
     background: transparent url(layout_sprite.png) no-repeat -20px -120px;
     border: 1px solid #808080;
 }
-/* Bottom Collapse Button */
-.yui-skin-sam .yui-layout .yui-layout-unit-bottom div.yui-layout-hd .collapse {
-    background: transparent url(layout_sprite.png) no-repeat -20px -260px;
-    border: 1px solid #808080;
-}
-/* Bottom Collapsed Expand Button */
-.yui-skin-sam .yui-layout .yui-layout-clip-bottom .collapse {
-    background: transparent url(layout_sprite.png) no-repeat -20px -180px;
-    border: 1px solid #808080;
-}
 /* Top Collapse Button */
 .yui-skin-sam .yui-layout .yui-layout-unit-top div.yui-layout-hd .collapse {
     background: transparent url(layout_sprite.png) no-repeat -20px -220px;
@@ -84,6 +74,16 @@
 /* Top Collapsed Expand Button */
 .yui-skin-sam .yui-layout .yui-layout-clip-top .collapse {
     background: transparent url(layout_sprite.png) no-repeat -20px -240px;
+    border: 1px solid #808080;
+}
+/* Bottom Collapse Button */
+.yui-skin-sam .yui-layout .yui-layout-unit-bottom div.yui-layout-hd .collapse {
+    background: transparent url(layout_sprite.png) no-repeat -20px -260px;
+    border: 1px solid #808080;
+}
+/* Bottom Collapsed Expand Button */
+.yui-skin-sam .yui-layout .yui-layout-clip-bottom .collapse {
+    background: transparent url(layout_sprite.png) no-repeat -20px -180px;
     border: 1px solid #808080;
 }
 /* Close Button */
