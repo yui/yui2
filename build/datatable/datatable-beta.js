@@ -4924,27 +4924,6 @@ lang.augmentObject(DT, {
     _elColumnResizerProxy : null,
 
     /**
-     * Cell formatting functions.
-     * @property DataTable.Formatter
-     * @type Object
-     * @static
-     */
-    Formatter : {
-        button   : DT.formatButton,
-        checkbox : DT.formatCheckbox,
-        currency : DT.formatCurrency,
-        "date"   : DT.formatDate,
-        dropdown : DT.formatDropdown,
-        email    : DT.formatEmail,
-        link     : DT.formatLink,
-        "number" : DT.formatNumber,
-        radio    : DT.formatRadio,
-        text     : DT.formatText,
-        textarea : DT.formatTextarea,
-        textbox  : DT.formatTextbox
-    },
-
-    /**
      * Clones object literal or array of object literals.
      *
      * @method DataTable._cloneObject
@@ -5724,6 +5703,29 @@ lang.augmentObject(DT, {
         return request;
     }
 });
+
+// Do in separate step so referenced properties are available
+// TODO: editor shortcuts
+/**
+ * Cell formatting functions.
+ * @property DataTable.Formatter
+ * @type Object
+ * @static
+ */
+DT.Formatter = {
+    button   : DT.formatButton,
+    checkbox : DT.formatCheckbox,
+    currency : DT.formatCurrency,
+    "date"   : DT.formatDate,
+    dropdown : DT.formatDropdown,
+    email    : DT.formatEmail,
+    link     : DT.formatLink,
+    "number" : DT.formatNumber,
+    radio    : DT.formatRadio,
+    text     : DT.formatText,
+    textarea : DT.formatTextarea,
+    textbox  : DT.formatTextbox
+};
 
 lang.extend(DT, util.Element, {
 
