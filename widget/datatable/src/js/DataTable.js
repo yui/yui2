@@ -122,8 +122,17 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Do not send an initial request at all
     else if(this.get("initialLoad") === false) {
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
-        this.fireEvent("initEvent");
-        YAHOO.log("DataTable initialized with no rows", "info", this.toString());
+        this._oChain.add({
+            method: function() {
+                if((this instanceof DT) && this._sId && this._bInit) {
+                    this._bInit = false;
+                    this.fireEvent("initEvent");
+                    YAHOO.log("DataTable initialized with no rows", "info", this.toString());
+                }
+            },
+            scope: this
+        });
+        this._oChain.run();
     }
     // Send an initial request with a custom payload
     else {
@@ -4901,9 +4910,17 @@ render : function() {
                 }
                 
                 if(this._bInit) {
-                    this._bInit = false;
-                    this.fireEvent("initEvent");
-                    YAHOO.log("DataTable initialized with " + allRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
+                    this._oChain.add({
+                        method: function() {
+                            if((this instanceof DT) && this._sId && this._bInit) {
+                                this._bInit = false;
+                                this.fireEvent("initEvent");
+                                YAHOO.log("DataTable initialized with " + allRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
+                            }
+                        },
+                        scope: this
+                    });
+                    this._oChain.run();
                 }
                 else {
                     this.fireEvent("renderEvent");

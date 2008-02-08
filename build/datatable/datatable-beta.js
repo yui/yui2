@@ -149,6 +149,7 @@ YAHOO.util.Chain.prototype = {
         return this;
     }
 };
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1449,6 +1450,7 @@ if(YAHOO.util.DD) {
         }
     });
 }
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2239,6 +2241,7 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
+
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -4284,6 +4287,7 @@ ui.CurrentPageReport.prototype = {
 };
 
 })();
+
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
@@ -4403,7 +4407,16 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Do not send an initial request at all
     else if(this.get("initialLoad") === false) {
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
-        this.fireEvent("initEvent");
+        this._oChain.add({
+            method: function() {
+                if((this instanceof DT) && this._sId && this._bInit) {
+                    this._bInit = false;
+                    this.fireEvent("initEvent");
+                }
+            },
+            scope: this
+        });
+        this._oChain.run();
     }
     // Send an initial request with a custom payload
     else {
@@ -9156,8 +9169,16 @@ render : function() {
                 }
                 
                 if(this._bInit) {
-                    this._bInit = false;
-                    this.fireEvent("initEvent");
+                    this._oChain.add({
+                        method: function() {
+                            if((this instanceof DT) && this._sId && this._bInit) {
+                                this._bInit = false;
+                                this.fireEvent("initEvent");
+                            }
+                        },
+                        scope: this
+                    });
+                    this._oChain.run();
                 }
                 else {
                     this.fireEvent("renderEvent");
@@ -14766,4 +14787,5 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
 
 });
 })();
+
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
