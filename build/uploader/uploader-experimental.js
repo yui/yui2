@@ -541,7 +541,7 @@ YAHOO.widget.Uploader = function(containerId)
  * @final
  * @default "assets/Uploader.swf"
  */
-YAHOO.widget.Uploader.SWFURL = "assets/Uploader.swf";
+YAHOO.widget.Uploader.SWFURL = "assets/uploader.swf";
 
 YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
 {
