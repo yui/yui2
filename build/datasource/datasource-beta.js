@@ -1025,24 +1025,23 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
             if(xhr && oRawResponse.responseText) {
                 oFullResponse = oRawResponse.responseText;
             }
-
-            // Convert to JSON object if it's a string
-            if(YAHOO.lang.isString(oFullResponse)) {
-                // Check for YUI JSON Util
-                if(YAHOO.lang.JSON) {
-                    oFullResponse = YAHOO.lang.JSON.parse(oFullResponse);
-                }
-                // Look for JSON parsers using an API similar to json2.js
-                else if(window.JSON && JSON.parse) {
-                    oFullResponse = JSON.parse(oFullResponse);
-                }
-                // Look for JSON parsers using an API similar to json.js
-                else if(oFullResponse.parseJSON) {
-                    oFullResponse = oFullResponse.parseJSON();
-                }
-                // No JSON lib found so parse the string
-                else {
-                    try {
+            try {
+                // Convert to JSON object if it's a string
+                if(YAHOO.lang.isString(oFullResponse)) {
+                    // Check for YUI JSON Util
+                    if(YAHOO.lang.JSON) {
+                        oFullResponse = YAHOO.lang.JSON.parse(oFullResponse);
+                    }
+                    // Look for JSON parsers using an API similar to json2.js
+                    else if(window.JSON && JSON.parse) {
+                        oFullResponse = JSON.parse(oFullResponse);
+                    }
+                    // Look for JSON parsers using an API similar to json.js
+                    else if(oFullResponse.parseJSON) {
+                        oFullResponse = oFullResponse.parseJSON();
+                    }
+                    // No JSON lib found so parse the string
+                    else {
                         // Trim leading spaces
                         while (oFullResponse.length > 0 &&
                                 (oFullResponse.charAt(0) != "{") &&
@@ -1061,9 +1060,9 @@ YAHOO.util.DataSource.prototype.handleResponse = function(oRequest, oRawResponse
     
                         }
                     }
-                    catch(e) {
-                    }
                 }
+            }
+            catch(e) {
             }
 
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
