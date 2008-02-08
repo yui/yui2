@@ -329,6 +329,7 @@ var D = YAHOO.util.Dom,
                 Event.on(this._handles[h[i]], 'mouseover', this._handleMouseOver, this, true);
                 Event.on(this._handles[h[i]], 'mouseout', this._handleMouseOut, this, true);
                 this._dds[h[i]] = new YAHOO.util.DragDrop(this._handles[h[i]], this.get('id') + '-handle-' + h);
+                this._dds[h[i]].setPadding(15, 15, 15, 15);
                 this._dds[h[i]].on('startDragEvent', this._handleStartDrag, this._dds[h[i]], this);
                 this._dds[h[i]].on('mouseDownEvent', this._handleMouseDown, this._dds[h[i]], this);
             }
@@ -409,7 +410,6 @@ var D = YAHOO.util.Dom,
                 for (var i in this._handles) {
                     if (Lang.hasOwnProperty(this._handles, i)) {
                         if (this._handles[i] == tar) {
-                            YAHOO.log('Handle active: ' + i, 'info', 'Resize');
                             D.addClass(tar, this.CSS_HANDLE + '-' + i + '-active');
                             break;
                         }
@@ -441,7 +441,6 @@ var D = YAHOO.util.Dom,
                 for (var i in this._handles) {
                     if (Lang.hasOwnProperty(this._handles, i)) {
                         if (this._handles[i] == tar) {
-                            YAHOO.log('Handle Inactive: ' + i, 'info', 'Resize');
                             D.removeClass(tar, this.CSS_HANDLE + '-' + i + '-active');
                             break;
                         }
@@ -1277,11 +1276,13 @@ var D = YAHOO.util.Dom,
                 validator: YAHOO.lang.isNumber,
                 method: function(width) {
                     width = parseInt(width, 10);
-                    if (this.get('setSize')) {
-                        this.setStyle('width', width + 'px');
+                    if (width > 0) {
+                        if (this.get('setSize')) {
+                            this.setStyle('width', width + 'px');
+                        }
+                        this._cache.width = width;
+                        this._configs.width.value = width;
                     }
-                    this._cache.width = width;
-                    this._configs.width.value = width;
                 }
             });
 
@@ -1295,11 +1296,13 @@ var D = YAHOO.util.Dom,
                 validator: YAHOO.lang.isNumber,
                 method: function(height) {
                     height = parseInt(height, 10);
-                    if (this.get('setSize')) {
-                        this.setStyle('height', height + 'px');
+                    if (height > 0) {
+                        if (this.get('setSize')) {
+                            this.setStyle('height', height + 'px');
+                        }
+                        this._cache.height = height;
+                        this._configs.height.value = height;
                     }
-                    this._cache.height = height;
-                    this._configs.height.value = height;
                 }
             });
 
