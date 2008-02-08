@@ -99,8 +99,8 @@
             var ac = this.createInstance();
             ac.destroy();
             Assert.isNull(ac.dataSource, "Expected datasource to be null");
-            Assert.isNull(ac._oContainer, "Expected container to be null");
-            Assert.isNull(ac._oTextbox, "Expected textbox to be null");
+            Assert.isNull(ac._elContainer, "Expected container to be null");
+            Assert.isNull(ac._elTextbox, "Expected textbox to be null");
             ac = null;
         },
 

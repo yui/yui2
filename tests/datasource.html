@@ -42,6 +42,7 @@
     function DataSourceTestCase(template) {
         DataSourceTestCase.superclass.constructor.call(this, template);
         this.data = ["a","b","c"];
+        this.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     };
     YAHOO.lang.extend(DataSourceTestCase, TestCase);
 
@@ -52,7 +53,12 @@
     };
 
     DataSourceTestCase.prototype.createInstance = function(oConfigs) {
-        return new DataSource(this.data, oConfigs);
+        ds =  new DataSource(this.data, oConfigs);
+        ds.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+        ds.responseSchema = {
+            fields: ["a","b","c"]
+        };
+        return ds;
     };
 
     /**
@@ -87,6 +93,72 @@
         data:[{a:"1a",b:"1b",c:"1c"}, {a:"2a",b:"2b",c:"2c"}, {a:"3a",b:"3b",c:"3c"}]
     });
     var dsComplexArrayTest = new DataSourceTestCase(dsComplexArrayTemplate);
+
+    /**
+     *
+     *
+     * Tests DataSource Cache.
+     *
+     *
+     */
+    var dsCacheTemplate = {
+        name: "Cache Test",
+        
+        testDefault: function() {
+            var ds = this.createInstance();
+            Assert.areSame(null, ds._aCache, "Failed to NOT init cache (default)");
+            ds = null;
+        },
+
+        testViaConfig: function() {
+            var ds = this.createInstance({maxCacheEntries:5});
+            Assert.areSame(null, ds._aCache, "Cache should not be initialized yet");   
+            
+            ds.sendRequest("a", function() {
+                Assert.areSame(true, YAHOO.lang.isArray(ds._aCache), "Failed to init cache (via constructor)");       
+                Assert.areSame(1, ds._aCache.length, "Cache should have one item");
+                                      
+                ds.flushCache();
+                Assert.areSame(0, ds._aCache.length, "Cache should be empty");
+        
+                ds = null;                    
+            });
+
+        },
+        
+        testViaProperty: function() {
+            var ds = this.createInstance();
+            ds.maxCacheEntries = 5;
+            ds.sendRequest("a", function() {
+                Assert.areSame(true, YAHOO.lang.isArray(ds._aCache), "Failed to init cache (via property)");
+                Assert.areSame(1, ds._aCache.length, "Cache should have one item");
+                
+                ds.maxCacheEntries = 0;
+                Assert.areSame(1, ds._aCache.length, "Cache should still have one item");
+                
+                ds.sendRequest("a", function() {
+                    Assert.areSame(null, ds._aCache, "Cache should be destroyed");            
+                
+                    ds = null; 
+                });
+            });
+        }
+    };
+    var dsCacheTest = new DataSourceTestCase(dsCacheTemplate);
+
+    /**
+     *
+     *
+     * Tests XHR.
+     *
+     *
+     */
+
+    var dsXHRTemplate = YAHOO.lang.merge(datasourceTemplate, {
+        name:"XHR Test",
+        data:"path/to/proxy"
+    });
+    var dsXHRTest = new DataSourceTestCase(dsXHRTemplate);
 
     /**
      *
@@ -234,8 +306,10 @@
 
         var datasourcesuite = new TestSuite("DataSource Test Suite");
         datasourcesuite.add(datasourceTest);
+        datasourcesuite.add(dsCacheTest);
         datasourcesuite.add(dsComplexArrayTest);
         datasourcesuite.add(dsStaticMethodsTest);
+        datasourcesuite.add(dsXHRTest);
         datasourcesuite.add(dataNumberTest);
 
         TestRunner.add(datasourcesuite);
