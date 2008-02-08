@@ -32,13 +32,11 @@ th.yui-dt-resizeable .yui-dt-liner {
     height:100%;
     cursor:e-resize;
     cursor:col-resize;
-    background:url(transparent.gif); /* needed to block events in ie http://my.opera.com/hallvors/blog/show.dml/16391 */
 }
 .yui-dt-resizerproxy {
     visibility:hidden;
     position:absolute;
     z-index:9000;
-    background:url(transparent.gif); /* needed to block events in ie http://my.opera.com/hallvors/blog/show.dml/16391 */
 }
 
 /* hidden columns */
