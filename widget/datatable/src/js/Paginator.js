@@ -1677,7 +1677,8 @@ ui.PageLinks.prototype = {
             for (i = start; i <= end; ++i) {
                 if (i === currentPage) {
                     content +=
-                        '<span class="' + p.get('currentPageClass') + '">' +
+                        '<span class="' + p.get('currentPageClass') + ' ' +
+                                          p.get('pageLinkClass') + '">' +
                         labelBuilder(i,p) + '</span>';
                 } else {
                     content +=

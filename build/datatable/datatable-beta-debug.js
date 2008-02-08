@@ -149,7 +149,6 @@ YAHOO.util.Chain.prototype = {
         return this;
     }
 };
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1495,7 +1494,6 @@ if(YAHOO.util.DD) {
         }
     });
 }
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2322,7 +2320,6 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
-
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -4002,7 +3999,8 @@ ui.PageLinks.prototype = {
             for (i = start; i <= end; ++i) {
                 if (i === currentPage) {
                     content +=
-                        '<span class="' + p.get('currentPageClass') + '">' +
+                        '<span class="' + p.get('currentPageClass') + ' ' +
+                                          p.get('pageLinkClass') + '">' +
                         labelBuilder(i,p) + '</span>';
                 } else {
                     content +=
@@ -4367,7 +4365,6 @@ ui.CurrentPageReport.prototype = {
 };
 
 })();
-
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
@@ -14983,5 +14980,4 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
 
 });
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
