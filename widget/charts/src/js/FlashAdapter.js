@@ -117,7 +117,10 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 			//this will allow the event handler to communicate with a YAHOO.widget.FlashAdapter
 			this._swf.owner = this;
 		}
-		else YAHOO.log("Unable to load SWF " + swfURL);
+		else
+		{
+			YAHOO.log("Unable to load SWF " + swfURL);
+		}
 	},
 
 	/**
@@ -132,15 +135,11 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		switch(type)
 		{
 			case "swfReady":
-			{
    				this._loadHandler();
 				return;
-			}
 			case "log":
-			{
 				YAHOO.log(event.message, event.category, this.toString());
 				return;
-			}
 		}
 		
 		//be sure to return after your case or the event will automatically fire!
@@ -211,5 +210,8 @@ YAHOO.widget.FlashAdapter.eventHandler = function(elementID, event)
 		//fix for ie: if owner doesn't exist yet, try again in a moment
 		setTimeout(function() { YAHOO.widget.FlashAdapter.eventHandler( elementID, event ); }, 0);
 	}
-	else loadedSWF.owner._eventHandler(event);
+	else
+	{
+		loadedSWF.owner._eventHandler(event);
+	}
 };
