@@ -73,6 +73,7 @@
 	border-collapse:collapse;
 	font:100% sans-serif;
 	text-align:center;
+	margin:0;
 }
 
 /* NAVBAR BOUNDING BOX */
@@ -80,6 +81,7 @@
 	background:transparent;
 	border:none;
 	vertical-align:middle;
+	padding:0;
 }
 
 /* NAVBAR TEXT CONTAINER */
@@ -123,6 +125,11 @@
 	height:2em;
 }
 
+.yui-skin-sam .yui-calendar .calweekdayrow th {
+	padding:0;
+	border:none;
+}
+
 /* WEEKDAY (Su, Mo, Tu...) HEADER CELLS */
 .yui-skin-sam .yui-calendar .calweekdaycell {
 	color:#000;
@@ -142,16 +149,17 @@
 	font-size:85%;
 	font-style:normal;
 	font-weight:normal;
+	border:none;
 }
 
 .yui-skin-sam .yui-calendar .calrowhead {
 	text-align:right;
-	padding-right:2px;
+	padding:0 2px 0 0;
 }
 
 .yui-skin-sam .yui-calendar .calrowfoot {
 	text-align:left;
-	padding-left:2px;
+	padding:0 0 0 2px;
 }
 
 /* NORMAL CELLS */

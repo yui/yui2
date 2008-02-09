@@ -1,4 +1,4 @@
-Calendar Release Notes 
+Calendar Release Notes
 
 *** version 2.5.0 *** 
 
@@ -11,6 +11,10 @@ Calendar Release Notes
   or greater than 127 correctly.
 
   See: http://brianary.blogspot.com/2006/03/safari-date-bug.html
+
++ Added border, padding and margin rules to Calendar Sam Skin to 
+  protect Sam Skin's look and feel when Calendar is used with 
+  YUI base.css
 
 *** version 2.4.0 *** 
 
