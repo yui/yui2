@@ -2,13 +2,13 @@
 
     /**
      * The ProfilerViewer module provides a graphical display for viewing
-	 * the output of the YUI Profiler.
+	 * the output of the YUI Profiler <http://developer.yahoo.com/yui/profiler>.
      * @module profilerviewer
      * @requires yahoo, dom, event, element, profiler, yuiloader
-     *
      */
+
     /**
-     * A widget to view YUI Profiler Output.
+     * A widget to view YUI Profiler output.
      * @namespace YAHOO.widget
      * @class ProfilerViewer
      * @extends YAHOO.util.Element
@@ -17,7 +17,7 @@
      * element into which the ProfileViewer should be rendered. 
      * An element will be created if none provided.
      * @param {Object} attr (optional) A key map of the ProfilerViewer's 
-     * initial attributes.  Ignored if first arg is attributes object.
+     * initial attributes.  Ignored if first arg is an attributes object.
      */
     YAHOO.widget.ProfilerViewer = function(el, attr) {
         attr = attr || {};
@@ -51,7 +51,7 @@
 		CLASS: 'yui-pv',
 	
 		/**
-		 * Classname for ProfilerViewer button menu. 
+		 * Classname for ProfilerViewer button dashboard. 
 		 * @static
 		 * @property CLASS_DASHBOARD
 		 * @type string
@@ -59,6 +59,26 @@
 		 * @default "yui-pv-dashboard"
 		 */
 		CLASS_DASHBOARD: 'yui-pv-dashboard',
+
+		/**
+		 * Classname for the "refresh data" button. 
+		 * @static
+		 * @property CLASS_REFRESH
+		 * @type string
+		 * @public
+		 * @default "yui-pv-refresh"
+		 */
+		CLASS_REFRESH: 'yui-pv-refresh',
+
+		/**
+		 * Classname for busy indicator in the dashboard. 
+		 * @static
+		 * @property CLASS_BUSY
+		 * @type string
+		 * @public
+		 * @default "yui-pv-busy"
+		 */
+		CLASS_BUSY: 'yui-pv-busy',
 	
 		/**
 		 * Classname for element containing the chart and chart
@@ -107,7 +127,7 @@
 		 * @property STRINGS
 		 * @object
 		 * @public
-		 * @default "English language strings for UI."
+		 * @default English language strings for UI.
 		 */
 		STRINGS: {
 			title: "YUI Profiler (beta)",
@@ -119,13 +139,14 @@
 				refreshdata: "Refresh Data"
 			},
 			colHeads: {
-				fn: "Function/Method",
-				calls: "Calls",
-				avg: "Average",
-				min: "Shortest",
-				max: "Longest",
-				total: "Total Time",
-				pct: "Percent"
+				//key: [column head label, width in pixels]
+				fn: ["Function/Method", null], //must auto-size
+				calls: ["Calls", 40],
+				avg: ["Average", 70],
+				min: ["Shortest", 70],
+				max: ["Longest", 70],
+				total: ["Total Time", 70],
+				pct: ["Percent", 70]
 			},
 			millisecondsAbbrev: "ms",
 			initMessage: "initialiazing chart...",
@@ -188,7 +209,75 @@
 		YAHOO.log("Data refresh requested via refreshData method.", "info", "ProfilerViewer");
 		this.fireEvent("dataRefreshEvent");
 	};
-	
+
+	 /**
+     * Returns the element containing the console's header.
+     * @method getHeadEl
+     * @return HTMLElement
+	 * @public
+     */	
+	proto.getHeadEl = function() {
+		YAHOO.log("Head element requested via getHeadEl.", "info", "ProfilerViewer");
+		return (this._headEl) ? Dom.get(this._headEl) : false;
+	};
+
+	 /**
+     * Returns the element containing the console's body, including
+	 * the chart and the datatable..
+     * @method getBodyEl
+     * @return HTMLElement
+	 * @public
+     */	
+	proto.getBodyEl = function() {
+		YAHOO.log("Body element requested via getBodyEl.", "info", "ProfilerViewer");
+		return (this._bodyEl) ? Dom.get(this._bodyEl) : false;
+	};
+
+	 /**
+     * Returns the element containing the console's chart.
+     * @method getChartEl
+     * @return HTMLElement
+	 * @public
+     */	
+	proto.getChartEl = function() {
+		YAHOO.log("Chart element requested via getChartEl.", "info", "ProfilerViewer");
+		return (this._chartEl) ? Dom.get(this._chartEl) : false;
+	};
+
+	 /**
+     * Returns the element containing the console's dataTable.
+     * @method getTableEl
+     * @return HTMLElement
+	 * @public
+     */	
+	proto.getTableEl = function() {
+		YAHOO.log("DataTable element requested via getTableEl.", "info", "ProfilerViewer");
+		return (this._tableEl) ? Dom.get(this._tableEl) : false;
+	};
+
+	 /**
+     * Returns the element containing the console's DataTable
+	 * instance.
+     * @method getDataTable
+     * @return YAHOO.widget.DataTable
+	 * @public
+     */	
+	proto.getDataTable = function() {
+		YAHOO.log("DataTable instance requested via getDataTable.", "info", "ProfilerViewer");
+		return this._dataTable;
+	};
+
+	 /**
+     * Returns the element containing the console's Chart instance.
+     * @method getChart
+     * @return YAHOO.widget.BarChart
+	 * @public
+     */	
+	proto.getChart = function() {
+		YAHOO.log("Chart instance requested via getChart.", "info", "ProfilerViewer");
+		return this._chart;
+	};
+
 
     //
     // PRIVATE PROPERTIES
@@ -196,8 +285,9 @@
     proto._rendered = false;
 	proto._headEl = null;
 	proto._bodyEl = null;
-	proto._refreshEl = null;
 	proto._toggleVisibleEl = null;
+	proto._busyEl = null;
+	proto._busy = false;
 	
 	proto._tableEl = null;
 	proto._dataTable = null;
@@ -233,7 +323,6 @@
 		 */
 		this.createEvent("renderEvent");
 
-		
 		this.on("dataRefreshEvent", this._refreshDataTable, this, true);
 		
 		this._initLauncherDOM();
@@ -293,6 +382,7 @@
 	 * @private
      */	
 	 proto._show = function() {
+		this._setBusyState(true);
 		if(!this._rendered) {
 			var loader = new YAHOO.util.YUILoader();
 			if (this.get("base")) {
@@ -310,10 +400,11 @@
 							},
 							scope: this});
 		} else {
-			Dom.setStyle(this._bodyEl, "top", "");
-			Dom.setStyle(this.get("element"), "height", "");
-			Dom.setStyle(this._refreshEl, "display", "");
+			var el = this.get("element");
+			Dom.removeClass(el, "yui-pv-minimized");
 			this._toggleVisibleEl.innerHTML = PV.STRINGS.buttons.hideprofiler;
+			Dom.addClass(el, "yui-pv-null");
+			Dom.removeClass(el, "yui-pv-null");
 			this.refreshData();
 		}
     };
@@ -325,10 +416,8 @@
 	 * @private
      */	
 	proto._hide = function() {
-		Dom.setStyle(this._bodyEl, "top", "-3000px");
-		Dom.setStyle(this.get("element"), "height", (this._headEl.offsetHeight + "px"));
-		Dom.setStyle(this._refreshEl, "display", "none");
 		this._toggleVisibleEl.innerHTML = PV.STRINGS.buttons.viewprofiler;
+		Dom.addClass(this.get("element"), "yui-pv-minimized");
     };
 	
 	/**
@@ -340,13 +429,14 @@
 	proto._render = function() {
 		YAHOO.log("Beginning to render ProfilerViewer canvas...", "info", "ProfilerViewer");
 		
+		Dom.removeClass(this.get("element"), "yui-pv-minimized");
+		
 		this._initViewerDOM();
 		this._initDataTable();
 		if(this.get("showChart")) {
 			this._initChartDOM();
 			this._initChart();
 		}
-		this._initDashboardDOM();
 		this._rendered = true;
 		this._toggleVisibleEl.innerHTML = PV.STRINGS.buttons.hideprofiler;
 		
@@ -365,20 +455,35 @@
 		
 		var el = this.get("element");
 		Dom.addClass(el, PV.CLASS);
+		Dom.addClass(el, "yui-pv-minimized");
+
 		this._headEl = document.createElement("div");
-		this._dashboardEl = document.createElement("div");
 		Dom.addClass(this._headEl, "hd");
-		Dom.addClass(this._dashboardEl, PV.CLASS_DASHBOARD);
-		var title = document.createElement("h4");
-		title.innerHTML = PV.STRINGS.title;
-		this._headEl.appendChild(this._dashboardEl);
-		this._headEl.appendChild(title);
-		el.appendChild(this._headEl);
 		
 		var s = PV.STRINGS.buttons;
 		var b = (this.get("visible")) ? s.hideprofiler : s.viewprofiler;
-		this._toggleVisibleEl = this._createButton(b, this._dashboardEl);
+		
+		this._toggleVisibleEl = this._createButton(b, this._headEl);
+		
+		this._refreshEl = this._createButton(s.refreshdata, this._headEl);
+		Dom.addClass(this._refreshEl, PV.CLASS_REFRESH);
+		
+		this._busyEl = document.createElement("span");
+		this._headEl.appendChild(this._busyEl);
+
+		var title = document.createElement("h4");
+		title.innerHTML = PV.STRINGS.title;
+		this._headEl.appendChild(title);
+		
+		el.appendChild(this._headEl);
+		
 		Event.on(this._toggleVisibleEl, "click", this._toggleVisible, this, true);
+		Event.on(this._refreshEl, "click", function() {
+			if(!this._busy) {
+				this._setBusyState(true);
+				this.fireEvent("dataRefreshEvent");
+			}
+		}, this, true);
 	};
 
 	/**
@@ -430,22 +535,9 @@
 		chw.appendChild(this._chartLegendEl);
 		this._chartContainer.appendChild(this._chartEl);
 		this._bodyEl.insertBefore(this._chartContainer,this._tableEl);
-		
 	};
-	
-	/**
-	 * Set up the DOM structure for the ProfilerViewer dashboard.
-	 * @method _initDashboardDOM
-	 * @private
-	 */
-	proto._initDashboardDOM = function() {
-		YAHOO.log("Adding DOM structure for dashboard controls...", "info", "ProfilerViewer");
-		
-		var db = this._dashboardEl;
-		this._refreshEl = this._createButton(PV.STRINGS.buttons.refreshdata, db, true);
-		Event.on(this._refreshEl, "click", function() {this.fireEvent("dataRefreshEvent");}, this, true);
-	};
-	
+
+
 	/**
 	 * Create anchor elements for use as buttons. Args: label
 	 * is text to appear on the face of the button, parentEl
@@ -466,6 +558,21 @@
 			}
 		}
 		return b;
+	};
+	
+	/**
+	 * Set's console busy state.
+	 * @method _setBusyState
+	 * @private
+	 **/
+	proto._setBusyState = function(b) {
+		if(b) {
+			Dom.addClass(this._busyEl, PV.CLASS_BUSY);
+			this._busy = true;
+		} else {
+			Dom.removeClass(this._busyEl, PV.CLASS_BUSY);
+			this._busy = false;
+		}
 	};
 
 	/**
@@ -532,7 +639,7 @@
 		
 		//add calculated percentage column
 		for (var i = 0, j = arr.length; i < j; i++) {
-			arr[i].pct = (arr[i].total * 100) / totalTime;	
+			arr[i].pct = (totalTime) ? (arr[i].total * 100) / totalTime : 0;	
 		}
 
 		var sortedBy = this.get("sortedBy");
@@ -591,27 +698,33 @@
 		var f = formatTimeValue;
 		
 		var cols = [
-			{key:"fn", sortable:true, label: c.fn,
+			{key:"fn", sortable:true, label: c.fn[0],
 				sortOptions: {defaultDir:a}, 
 				resizeable: (YAHOO.util.DragDrop) ? true : false,
-				minWidth:180},
-			{key:"calls", sortable:true, label: c.calls,
-				sortOptions: {defaultDir:d}},
-			{key:"avg", sortable:true, label: c.avg,
+				minWidth:c.fn[1]},
+			{key:"calls", sortable:true, label: c.calls[0],
 				sortOptions: {defaultDir:d},
-				formatter:f},
-			{key:"min", sortable:true, label: c.min,
+				width:c.calls[1]},
+			{key:"avg", sortable:true, label: c.avg[0],
+				sortOptions: {defaultDir:d},
+				formatter:f,
+				width:c.avg[1]},
+			{key:"min", sortable:true, label: c.min[0],
 				sortOptions: {defaultDir:a},
-				formatter:f}, 
-			{key:"max", sortable:true, label: c.max,
+				formatter:f,
+				width:c.min[1]}, 
+			{key:"max", sortable:true, label: c.max[0],
 				sortOptions: {defaultDir:d},
-				formatter:f},
-			{key:"total", sortable:true, label: c.total,
+				formatter:f,
+				width:c.max[1]},
+			{key:"total", sortable:true, label: c.total[0],
 				sortOptions: {defaultDir:d},
-				formatter:f},
-			{key:"pct", sortable:true, label: c.pct,
+				formatter:f,
+				width:c.total[1]},
+			{key:"pct", sortable:true, label: c.pct[0],
 				sortOptions: {defaultDir:d}, 
-				formatter:formatPercent}
+				formatter:formatPercent,
+				width:c.pct[1]}
 		];
 
 		this._dataTable = new YAHOO.widget.DataTable(this._tableEl, cols, ds, {
@@ -626,7 +739,10 @@
 		var dt = this._dataTable;
 
 		//Wire up DataTable events to drive the rest of the UI.
-		dt.subscribe("sortedByChange", this._sortedByChange, this, true);		
+		dt.subscribe("sortedByChange", this._sortedByChange, this, true);
+		dt.subscribe("renderEvent", this._dataTableRenderHandler, this, true);
+		dt.subscribe("initEvent", this._dataTableRenderHandler, this, true);
+		Event.on(this._tableEl.getElementsByTagName("th"), "click", this._thClickHandler, this, true);
 		YAHOO.log("DataTable initialized.", "info", "ProfilerViewer");
 	};
 		
@@ -639,6 +755,28 @@
 	proto._sortedByChange = function(o) {
 		YAHOO.log("Relaying DataTable sortedBy value change; new key: " + o.newValue.key + "; new direction: " + o.newValue.dir + ".", "info", "ProfilerViewer");
 		this.set("sortedBy", {key: o.newValue.key, dir:o.newValue.dir});
+	};
+
+	/**
+	 * Proxy the render event in DataTable into the ProfilerViewer
+	 * attribute.
+	 * @method _dataTableRenderHandler
+	 * @private
+	 **/
+	proto._dataTableRenderHandler = function(o) {
+		YAHOO.log("DataTable's render event has fired.", "info", "ProfilerViewer");
+		this._setBusyState(false);
+	};
+	
+	/**
+	 * Event handler for clicks on the DataTable's sortable column
+	 * heads.
+	 * @method _thClickHandler
+	 * @private
+	 **/
+	proto._thClickHandler = function(o) {
+		YAHOO.log("DataTable's header row was clicked for sorting.", "info", "ProfilerViewer");
+		this._setBusyState(true);
 	};
 
 	/**
@@ -734,6 +872,8 @@
 	proto._initChart = function() {
 		YAHOO.log("Initializing chart...", "info", "ProfilerViewer");
 		
+		this._sizeChartCanvas();
+		
 		YAHOO.widget.Chart.SWFURL = this.get("swfUrl");
 
 		var self = this;
@@ -814,8 +954,9 @@
 	 **/
 	proto._sizeChartCanvas = function(o) {
 		YAHOO.log("Resizing chart canvas...", "info", "ProfilerViewer");
-		var s = (o.response.length * 36) + 34;
-		if (s != this._chartElHeight) {
+		var bars = (o) ? o.response.length : this.get("maxChartFunctions");
+		var s = (bars * 36) + 34;
+		if (s != parseInt(this._chartElHeight, 10)) {
 			this._chartElHeight = s;
 			Dom.setStyle(this._chartEl, "height", s + "px");
 		}
@@ -980,37 +1121,37 @@
         this.setAttributeConfig('chartSeriesDefinitions', {
             value: 	attr.chartSeriesDefinitions ||  {
 						total: {
-							displayName: PV.STRINGS.colHeads.total,
+							displayName: PV.STRINGS.colHeads.total[0],
 							xField: "total",
 							style: {color:"CC3333", size:21},
 							group: ["total"]
 						},
 						calls: {		
-							displayName: PV.STRINGS.colHeads.calls,
+							displayName: PV.STRINGS.colHeads.calls[0],
 							xField: "calls",
 							style: {color:"A658BD", size:21},
 							group: ["calls"]
 						},
 						avg: {
-							displayName: PV.STRINGS.colHeads.avg,
+							displayName: PV.STRINGS.colHeads.avg[0],
 							xField: "avg",
 							style: {color:"209daf", size:9},
 							group: ["avg", "min", "max"]
 						},
 						min: {
-							displayName: PV.STRINGS.colHeads.min,
+							displayName: PV.STRINGS.colHeads.min[0],
 							xField: "min",
 							style: {color:"b6ecf4", size:9},
 							group: ["avg", "min", "max"]
 						},
 						max: {
-							displayName: PV.STRINGS.colHeads.max,
+							displayName: PV.STRINGS.colHeads.max[0],
 							xField: "max",
 							style: {color:"29c7de", size:9},
 							group: ["avg", "min", "max"]
 						},
 						pct: {
-							displayName: PV.STRINGS.colHeads.pct,
+							displayName: PV.STRINGS.colHeads.pct[0],
 							xField: "pct",
 							style: {color:"bdb327", size:21},
 							group: ["pct"]
