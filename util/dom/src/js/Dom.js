@@ -8,11 +8,12 @@
     var Y = YAHOO.util,     // internal shorthand
         getStyle,           // for load time browser branching
         setStyle,           // ditto
-        id_counter = 0,     // for use with generateId
         propertyCache = {}, // for faster hyphen converts
         reClassNameCache = {},          // cache regexes for className
         document = window.document;     // cache for faster lookups
     
+    YAHOO.env._id_counter = YAHOO.env._id_counter || 0;     // for use with generateId (global to save state if Dom is overwritten)
+
     // brower detection
     var isOpera = YAHOO.env.ua.opera,
         isSafari = YAHOO.env.ua.webkit, 
@@ -524,7 +525,7 @@
                     return el.id;
                 } 
 
-                var id = prefix + id_counter++;
+                var id = prefix + YAHOO.env._id_counter++;
                 YAHOO.log('generateId generating ' + id, 'info', 'Dom');
 
                 if (el) {
