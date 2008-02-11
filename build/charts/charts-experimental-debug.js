@@ -348,7 +348,8 @@ YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 	this._swfURL = swfURL;
 	
 	//embed the SWF file in the page
-	this._embedSWF(this._swfURL, containerID, attributes.id, attributes.version, attributes.backgroundColor, attributes.expressInstall);
+	this._embedSWF(this._swfURL, containerID, attributes.id, attributes.version,
+		attributes.backgroundColor, attributes.expressInstall, attributes.wmode);
 	
 	/**
 	 * Fires when the SWF is initialized and communication is possible.
@@ -407,7 +408,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	 * @method _embedSWF
 	 * @private
 	 */
-	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall)
+	_embedSWF: function(swfURL, containerID, swfID, version, backgroundColor, expressInstall, wmode)
 	{
 		//standard SWFObject embed
 		var swfObj = new deconcept.SWFObject(swfURL, swfID, "100%", "100%", version, backgroundColor);
@@ -419,6 +420,11 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 
 		//make sure we can communicate with ExternalInterface
 		swfObj.addParam("allowScriptAccess", "always");
+		
+		if(wmode !== null)
+		{
+			swfObj.addParam("wmode", wmode);
+		}
 		
 		//again, a useful ExternalInterface trick
 		swfObj.addVariable("allowedDomain", document.location.hostname);
