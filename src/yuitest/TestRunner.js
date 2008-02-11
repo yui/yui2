@@ -352,6 +352,7 @@ YAHOO.tool.TestRunner = (function(){
                     this._cur.results.type = "report";
                     this._cur.results.timestamp = (new Date()).toLocaleString();
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
+                    this.results = this._cur.results;
                     this._cur = null;
                 } else {
                     this._handleTestObjectComplete(this._cur);               
