@@ -115,6 +115,22 @@
             } else {
                 h = parseInt(this.getStyle('height'), 10);
                 w = parseInt(this.getStyle('width'), 10);
+                if (isNaN(w)) {
+                    w = this.get('element').clientWidth;
+                }
+                if (isNaN(h)) {
+                    h = this.get('element').clientHeight;
+                }
+            }
+            if (this.get('minWidth')) {
+                if (w < this.get('minWidth')) {
+                    w = this.get('minWidth');
+                }
+            }
+            if (this.get('minHeight')) {
+                if (h < this.get('minHeight')) {
+                    h = this.get('minHeight');
+                }
             }
             if (set) {
                 Dom.setStyle(this._doc, 'height', h + 'px');
@@ -122,7 +138,6 @@
             }
             this._sizes.doc = { h: h, w: w };
             YAHOO.log('Setting Body height and width: (' + h + ',' + w + ')', 'info', 'Layout');
-
             this._setSides(set);
         },
         /**
@@ -213,6 +228,14 @@
             }
             this._sizes.center = { h: h, w: w, t: this._sizes.top.h, l: this._sizes.left.w };
             YAHOO.log('Setting Center size to: (' + h + ', ' + w + ')', 'info', 'Layout');
+        },
+        /**
+        * @method getSizes
+        * @description Get a reference to the internal Layout Unit sizes
+        * @return {Object} An object of the layout unit sizes
+        */
+        getSizes: function() {
+            return this._sizes;
         },
         /**
         * @method getUnitById
@@ -318,7 +341,7 @@
 
             unit.on('heightChange', this.resize, this, true);
             unit.on('widthChange', this.resize, this, true);
-            unit.on('paddingChange', this.resize, this, true);
+            unit.on('gutterChange', this.resize, this, true);
             this['_' + cfg.position] = unit;
 
             if (this._rendered) {
@@ -485,8 +508,7 @@
         render: function() {
             YAHOO.log('Render', 'info', 'Layout');
             this._stamp();
-            var el = this.get('element'),
-                self = this;
+            var el = this.get('element');
             if (el && el.tagName && (el.tagName.toLowerCase() == 'body')) {
                 this._isBody = true;
                 Dom.addClass(document.body, 'yui-layout');
@@ -540,8 +562,28 @@
             });
 
             /**
+            * @config minHeight
+            * @description The minimum height in pixels
+            * @type Number
+            */
+            this.setAttributeConfig('minHeight', {
+                value: attr.minHeight || false,
+                validator: YAHOO.lang.isNumber
+            });
+
+            /**
+            * @config minWidth
+            * @description The minimum width in pixels
+            * @type Number
+            */
+            this.setAttributeConfig('minWidth', {
+                value: attr.minWidth || false,
+                validator: YAHOO.lang.isNumber
+            });
+
+            /**
             * @config height
-            * @description The height in pixels to the the layout to
+            * @description The height in pixels
             * @type Number
             */
             this.setAttributeConfig('height', {
@@ -554,7 +596,7 @@
 
             /**
             * @config width
-            * @description The width in pixels to the the layout to
+            * @description The width in pixels
             * @type Number
             */
             this.setAttributeConfig('width', {
@@ -595,6 +637,11 @@
     /**
     * @event resize
     * @description Fired when this.resize is called
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event startResize
+    * @description Fired when the Resize Utility for a Unit fires it's startResize Event.
     * @type YAHOO.util.CustomEvent
     */
     /**

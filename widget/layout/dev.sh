@@ -10,4 +10,10 @@ rm -rRf *
 wait
 cp -R ~/Sites/working/yahoo/presentation/2.x/build/layout/* ./
 wait
+mkdir -p /Users/davglass/Sites/yui/yui-dev/build/layout
+wait
+cd /Users/davglass/Sites/yui/yui-dev/build/layout
+wait
+cp -R ~/Sites/working/yahoo/presentation/2.x/build/layout/* ./
+wait
 date

@@ -11,4 +11,6 @@ wait
 cp ~/Sites/yui/yui-layout/css/layout-core.css ./src/css/layout-core.css
 wait
 cp ~/Sites/yui/yui-layout/css/skin-sam.css ./src/css/
+wait
+cp ~/Sites/yui/yui-layout/css/layout_sprite.png ./src/css/skins/sam/
 
