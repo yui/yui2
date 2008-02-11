@@ -1622,6 +1622,7 @@
             * @type Boolean
             */
             this.setAttributeConfig('proxy', {
+                writeOnce: true,
                 value: ((attr.proxy === false) ? false : true)
             });
             /**
@@ -1717,6 +1718,10 @@
             this.setAttributeConfig('close', {
                 value: attr.close || false,
                 method: function(close) {
+                    //Position Center doesn't get this
+                    if (this.get('position') == 'center') {
+                        return false;
+                    }
                     if (!this.header) {
                         this._createHeader();
                     }
@@ -1745,6 +1750,10 @@
             this.setAttributeConfig('collapse', {
                 value: attr.collapse || false,
                 method: function(collapse) {
+                    //Position Center doesn't get this
+                    if (this.get('position') == 'center') {
+                        return false;
+                    }
                     if (!this.header) {
                         this._createHeader();
                     }
@@ -1802,6 +1811,10 @@
                 },
                 method: function(resize) {
                     if (resize && !this._resize) {
+                        //Position Center doesn't get this
+                        if (this.get('position') == 'center') {
+                            return false;
+                        }
                         var handle = false; //To catch center
                         switch (this.get('position')) {
                             case 'top':
@@ -1865,20 +1878,18 @@
         /**
         * @private
         * @method _cleanGrids
-        * @description This method attempts to clean up the first level of the YUI CSS Grids
+        * @description This method attempts to clean up the first level of the YUI CSS Grids, YAHOO.util.Selector is required for this operation.
         */
         _cleanGrids: function() {
             if (this.get('grids')) {
                 var b = Sel.query('div.yui-b', this.body, true);
-                if (b.length) {
+                if (b) {
                     Dom.removeClass(b, 'yui-b');
                 }
-                if (this._isBody) {
-                    Event.onAvailable('yui-main', function() {
-                        Dom.setStyle(Sel.query('#yui-main'), 'margin-left', '0');
-                        Dom.setStyle(Sel.query('#yui-main'), 'margin-right', '0');
-                    });
-                }
+                Event.onAvailable('yui-main', function() {
+                    Dom.setStyle(Sel.query('#yui-main'), 'margin-left', '0');
+                    Dom.setStyle(Sel.query('#yui-main'), 'margin-right', '0');
+                });
             }
         },
         /**
