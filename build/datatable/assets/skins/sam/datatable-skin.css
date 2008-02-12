@@ -13,7 +13,7 @@
 .yui-skin-sam .yui-dt-scrollable .yui-dt-bd {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
 
 .yui-skin-sam .yui-dt th {
-    background:url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
+    background:#D8D8DA url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
 }
 .yui-skin-sam .yui-dt th,
 .yui-skin-sam .yui-dt th a {
@@ -29,9 +29,6 @@
     margin:0;padding:0;
     padding:4px 10px 4px 10px; /* cell padding */
 }
-.yui-skin-sam .yui-dt-label {
-    xmargin:4px 10px 4px 10px; /* cell padding */
-}
 .yui-skin-sam .yui-dt-coltarget {
     width: 5px;
     background-color: red;
@@ -44,9 +41,6 @@
 }
 .yui-skin-sam .yui-dt-list td {
     border-right:none; /* disable inner column border in list mode */
-}
-.yui-skin-sam .yui-dt thead { /* TODO:  this misaligns cols. need to do another way */
-    xborder:1px solid #989898; /* outer border */
 }
 .yui-skin-sam .yui-dt-resizer {
     width:6px;

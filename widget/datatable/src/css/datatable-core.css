@@ -45,6 +45,7 @@ th.yui-dt-resizeable .yui-dt-liner {
     margin:0;
     padding:0;
     overflow:hidden;
+    white-space:nowrap;
 }
 
 /* vertical and horizontal scrolling */
