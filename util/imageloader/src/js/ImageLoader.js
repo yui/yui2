@@ -5,7 +5,6 @@
  *
  * @module imageloader
  * @namespace YAHOO.util
- * @beta
  */
 
 if (typeof(YAHOO.util.ImageLoader) == 'undefined') {
