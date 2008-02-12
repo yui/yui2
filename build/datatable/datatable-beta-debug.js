@@ -9317,7 +9317,26 @@ render : function() {
             scope: this
         });
         
-        this._oChain.run();   
+        if(ua.gecko) {
+            this._oChain.add({
+                method: function(oArg) {
+                    if((this instanceof DT) && this._sId) {
+                        Dom.removeClass(this.getContainerEl(),"yui-dt");
+                    }
+                },
+                scope: this
+            });
+            this._oChain.add({
+                method: function() {
+                    if((this instanceof DT) && this._sId) {
+                        Dom.addClass(this.getContainerEl(),"yui-dt");
+                    }
+                },
+                scope:this
+            });
+        }
+            
+        this._oChain.run();  
     }
     // Empty
     else {
@@ -9853,6 +9872,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                 else {
                     rule.style.width = sWidth;
                 }
+                
                 return;
             }
             
