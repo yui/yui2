@@ -391,11 +391,22 @@ YAHOO.lang = YAHOO.lang || {
      */
     isArray: function(o) { 
 
+    //return YAHOO.lang.isObject(o) && o.constructor.prototype.hasOwnProperty('length');  
+
+       if (o && typeof o === 'object') {                                                                                                                                
+          var p = o.constructor.prototype;                                                                                                                              
+          return p.hasOwnProperty('splice') &&                                                                                                                          
+   !p.isPropertyEnumerable('splice');                                                                                                                                   
+       }                                                                                                                                                                
+       return false;   
+
+/*
         if (o) {
            var l = YAHOO.lang;
            return l.isNumber(o.length) && l.isFunction(o.splice);
         }
         return false;
+        */
     },
 
     /**
@@ -1657,7 +1668,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'colorpicker': {
             'type': 'js',
-            'path': 'colorpicker/colorpicker-beta-min.js',
+            'path': 'colorpicker/colorpicker-min.js',
             'requires': ['slider', 'element'],
             'optional': ['animation'],
             'skinnable': true
@@ -1747,7 +1758,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'get': {
             'type': 'js',
-            'path': 'get/get-beta-min.js',
+            'path': 'get/get-min.js',
             'requires': ['yahoo']
         },
 
@@ -1773,13 +1784,13 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
          'imageloader': {
             'type': 'js',
-            'path': 'imageloader/imageloader-beta-min.js',
+            'path': 'imageloader/imageloader-min.js',
             'requires': ['event', 'dom']
          },
 
          'json': {
             'type': 'js',
-            'path': 'json/json-beta-min.js',
+            'path': 'json/json-min.js',
             'requires': ['yahoo']
          },
 
@@ -1916,7 +1927,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
         'yuitest': {
             'type': 'js',
-            'path': 'yuitest/yuitest-beta-min.js',
+            'path': 'yuitest/yuitest-min.js',
             'requires': ['logger'],
             'skinnable': true
         }
