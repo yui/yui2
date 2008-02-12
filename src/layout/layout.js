@@ -72,9 +72,6 @@
         browser: function() {
             var b = YAHOO.env.ua;
             b.standardsMode = false;
-            b.mac = false;
-            b.windows = false;
-            b.unix = false;
             b.secure = false;
             return b;
         }(),
@@ -551,7 +548,7 @@
         initAttributes: function(attr) {
             Layout.superclass.initAttributes.call(this, attr);
             /**
-            * @config units
+            * @attribute units
             * @description An array of config definitions for the LayoutUnits to add to this layout
             * @type Array
             */
@@ -562,7 +559,7 @@
             });
 
             /**
-            * @config minHeight
+            * @attribute minHeight
             * @description The minimum height in pixels
             * @type Number
             */
@@ -572,7 +569,7 @@
             });
 
             /**
-            * @config minWidth
+            * @attribute minWidth
             * @description The minimum width in pixels
             * @type Number
             */
@@ -582,7 +579,7 @@
             });
 
             /**
-            * @config height
+            * @attribute height
             * @description The height in pixels
             * @type Number
             */
@@ -595,7 +592,7 @@
             });
 
             /**
-            * @config width
+            * @attribute width
             * @description The width in pixels
             * @type Number
             */
@@ -608,7 +605,7 @@
             });
 
             /**
-            * @config parent
+            * @attribute parent
             * @description If this layout is to be used as a child of another Layout instance, this config will bind the resize event's together.
             * @type Object YAHOO.widget.Layout
             */
