@@ -7360,7 +7360,7 @@ MenuItem.prototype = {
         * accompany the text for the menu item.
         * @deprecated Use "text" configuration property to add help text markup.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "Copy &#60;em 
-        * class=\"helptext\"&#62;Ctrl + C&#60;/em&#60;");</code>
+        * class=\"helptext\"&#62;Ctrl + C&#60;/em&#62;");</code>
         * @default null
         * @type String|<a href="http://www.w3.org/TR/
         * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037">
@@ -7420,7 +7420,7 @@ MenuItem.prototype = {
         * rendered with emphasis.
         * @deprecated Use "text" configuration property to add emphasis.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;em&#62;Some 
-        * Text&#60;/em&#60;");</code>
+        * Text&#60;/em&#62;");</code>
         * @default false
         * @type Boolean
         */
@@ -7442,7 +7442,7 @@ MenuItem.prototype = {
         * rendered with strong emphasis.
         * @deprecated Use "text" configuration property to add strong emphasis.  
         * For example: <code>oMenuItem.cfg.setProperty("text", "&#60;strong&#62; 
-        * Some Text&#60;/strong&#60;");</code>
+        * Some Text&#60;/strong&#62;");</code>
         * @default false
         * @type Boolean
         */
