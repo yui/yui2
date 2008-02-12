@@ -85,7 +85,7 @@
 
         'colorpicker': {
             'type': 'js',
-            'path': 'colorpicker/colorpicker-beta-min.js',
+            'path': 'colorpicker/colorpicker-min.js',
             'requires': ['slider', 'element'],
             'optional': ['animation'],
             'skinnable': true
@@ -175,7 +175,7 @@
 
         'get': {
             'type': 'js',
-            'path': 'get/get-beta-min.js',
+            'path': 'get/get-min.js',
             'requires': ['yahoo']
         },
 
@@ -201,13 +201,13 @@
 
          'imageloader': {
             'type': 'js',
-            'path': 'imageloader/imageloader-beta-min.js',
+            'path': 'imageloader/imageloader-min.js',
             'requires': ['event', 'dom']
          },
 
          'json': {
             'type': 'js',
-            'path': 'json/json-beta-min.js',
+            'path': 'json/json-min.js',
             'requires': ['yahoo']
          },
 
@@ -344,7 +344,7 @@
 
         'yuitest': {
             'type': 'js',
-            'path': 'yuitest/yuitest-beta-min.js',
+            'path': 'yuitest/yuitest-min.js',
             'requires': ['logger'],
             'skinnable': true
         }
