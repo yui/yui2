@@ -792,7 +792,17 @@ YAHOO.util.DataSource.issueCallback = function (callback,params,error,scope) {
  *
  * @method sendRequest
  * @param oRequest {Object} Request object.
- * @param oCallback {Object} Callback object literal.
+ * @param oCallback {Object} An object literal with the following properties:
+ *     <dl>
+ *     <dt><code>success</code></dt>
+ *     <dd>The function to call when the data is ready.</dd>
+ *     <dt><code>failure</code></dt>
+ *     <dd>The function to call upon a response failure condition.</dd>
+ *     <dt><code>scope</code></dt>
+ *     <dd>The object to serve as the scope for the success and failure handlers.</dd>
+ *     <dt><code>argument</code></dt>
+ *     <dd>Arbitrary data that will be passed back to the success and failure handlers.</dd>
+ *     </dl> 
  * @param oCaller {Object} (deprecated) Use oCallback.scope.
  * @return {Number} Transaction ID, or null if response found in cache.
  */
@@ -1016,15 +1026,12 @@ YAHOO.util.DataSource.prototype.makeConnection = function(oRequest, oCallback, o
 };
 
 /**
- * Handles raw data response from live data source. Calls appropriate parsing
- * function to get oParsedResponse. Passes oParsedResponse to callback function
- * which will get called with arguments:
+ * Receives raw data response and type converts to XML, JSON, etc as necessary.
+ * Forwards oFullResponse to appropriate parsing function to get turned into
+ * oParsedResponse. Calls doBeforeCallback() and adds oParsedResponse to 
+ * the cache when appropriate before calling issueCallback().
  * 
- * <dl>      
- *     <dd>fnCallback(oRequest, oParsedResponse)</dd>
- * </dl> 
- * 
- * where the oParsedResponse object literal has the following properties:
+ * The oParsedResponse object literal has the following properties:
  * <dl>
  *     <dd><dt>tId {Number}</dt> Unique transaction ID</dd>
  *     <dd><dt>results {Array}</dt> Array of parsed data results</dd>
@@ -1691,15 +1698,6 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
     return oParsedResponse;
 };
 
-/**
- * The Number utility provides helper functions to deal with data of type Number.
- *
- * @namespace YAHOO.util
- * @requires datasource
- * @title Number Utility
- * @beta
- */
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1708,6 +1706,8 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
  * The static Number class provides helper functions to deal with data of type
  * Number.
  *
+ * @namespace YAHOO.util
+ * @requires datasource
  * @class Number
  * @static
  */
@@ -1804,15 +1804,6 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
 
 
 
-/**
- * The Date utility provides helper functions to deal with data of type Date.
- *
- * @namespace YAHOO.util
- * @requires datasource
- * @title Date Utility
- * @beta
- */
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1821,6 +1812,8 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
  * The static Date class provides helper functions to deal with data of type
  * Number.
  *
+ * @namespace YAHOO.util
+ * @requires datasource
  * @class Date
  * @static
  */
