@@ -54,7 +54,7 @@
     * @static
     * @method getLayoutById 
     * @description Get's a layout object by the HTML id of the element associated with the Layout object.
-    * @return Object The Layout Object
+    * @return {Object} The Layout Object
     */ 
     Layout.getLayoutById = function(id) {
         if (Layout._instances[id]) {
@@ -238,7 +238,7 @@
         * @method getUnitById
         * @param {String} id The HTML element id of the unit
         * @description Get the LayoutUnit by it's HTML id
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         getUnitById: function(id) {
             return YAHOO.widget.LayoutUnit.getLayoutUnitById(id);
@@ -247,7 +247,7 @@
         * @method getUnitByPosition
         * @param {String} pos The position of the unit in this layout
         * @description Get the LayoutUnit by it's position in this layout
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         getUnitByPosition: function(pos) {
             if (pos) {
@@ -271,6 +271,7 @@
         * @method addUnit
         * @param {Object} cfg The config for the LayoutUnit that you want to add
         * @description Add a unit to this layout and if the layout is rendered, resize the layout. 
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         addUnit: function(cfg) {
             if (!cfg.position) {
@@ -364,7 +365,7 @@
         * @method resize
         * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)
         * @description Starts the chain of resize routines that will resize all the units.
-        * @return {Object} YAHOO.widget.Layout
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The Layout instance
         */
         resize: function(set) {
             set = ((set === false) ? false : true);
@@ -444,35 +445,35 @@
         * @private
         * @property _left
         * @description Reference to the left LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _left: null,
         /**
         * @private
         * @property _right
         * @description Reference to the right LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _right: null,
         /**
         * @private
         * @property _top
         * @description Reference to the top LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _top: null,
         /**
         * @private
         * @property _bottom
         * @description Reference to the bottom LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _bottom: null,
         /**
         * @private
         * @property _center
         * @description Reference to the center LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _center: null,
         /**
@@ -500,7 +501,7 @@
         /**
         * @method render
         * @description This method starts the render process, applying classnames and creating elements
-        * @return {Object} YAHOO.widget.Layout
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The Layout instance
         */        
         render: function() {
             YAHOO.log('Render', 'info', 'Layout');
@@ -606,7 +607,7 @@
 
             /**
             * @attribute parent
-            * @description If this layout is to be used as a child of another Layout instance, this config will bind the resize event's together.
+            * @description If this layout is to be used as a child of another Layout instance, this config will bind the resize events together.
             * @type Object YAHOO.widget.Layout
             */
             this.setAttributeConfig('parent', {

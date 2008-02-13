@@ -33,7 +33,7 @@ var D = YAHOO.util.Dom,
     * @private
     * @static
     * @property _instances
-    * @description Internal has table for all resize instances
+    * @description Internal hash table for all resize instances
     * @type Object
     */ 
     Resize._instances = {};
@@ -41,7 +41,7 @@ var D = YAHOO.util.Dom,
     * @static
     * @method getResizeById 
     * @description Get's a resize object by the HTML id of the element associated with the Resize object.
-    * @return Object The Resize Object
+    * @return {Object} The Resize Object
     */ 
     Resize.getResizeById = function(id) {
         if (Resize._instances[id]) {
@@ -138,7 +138,7 @@ var D = YAHOO.util.Dom,
         /**
         * @private
         * @property dd
-        * @description The DragDrop instance used if draggable is true
+        * @description The <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> instance used if draggable is true
         * @type Object
         */ 
         dd: null,
@@ -159,7 +159,7 @@ var D = YAHOO.util.Dom,
         /** 
         * @private
         * @property _dds
-        * @description An Object containing references to all of the DragDrop instances used for the resize handles
+        * @description An Object containing references to all of the <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> instances used for the resize handles
         * @type Object
         */
         _dds: null,
@@ -289,7 +289,7 @@ var D = YAHOO.util.Dom,
         /** 
         * @private
         * @method _setupDragDrop
-        * @description Setup the DragDrop instance on the element
+        * @description Setup the <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> instance on the element
         */
         _setupDragDrop: function() {
             D.addClass(this._wrap, this.CSS_DRAG);
@@ -439,8 +439,8 @@ var D = YAHOO.util.Dom,
         * @private
         * @method _handleStartDrag
         * @param {Object} args The args passed from the CustomEvent.
-        * @param {Object} dd The DragDrop object we are working with.
-        * @description Resizes the proxy, sets up the DragDrop handlers, updates the status div and preps the cache
+        * @param {Object} dd The <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> object we are working with.
+        * @description Resizes the proxy, sets up the <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> handlers, updates the status div and preps the cache
         */
         _handleStartDrag: function(args, dd) {
             var tar = dd.getDragEl();
@@ -572,7 +572,7 @@ var D = YAHOO.util.Dom,
         * @param {Number} t The top offset.
         * @param {Number} l The left offset.
         * @description Using the Height, Width, Top & Left, it recalcuates them based on the original element size.
-        * @return Array The new Height, Width, Top & Left settings
+        * @return {Array} The new Height, Width, Top & Left settings
         */
         _setRatio: function(h, w, t, l) {
             var oh = h, ow = w;
@@ -678,6 +678,7 @@ var D = YAHOO.util.Dom,
         /** 
         * @method reset
         * @description Resets the element to is start state.
+        * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */
         reset: function() {
             this.resize(null, this._cache.start.height, this._cache.start.width, this._cache.start.top, this._cache.start.left, true);
@@ -692,6 +693,7 @@ var D = YAHOO.util.Dom,
         * @param {Number} l The new left setting.
         * @param {Boolean} force Resize the element (used for proxy resize).
         * @description Resizes the element, wrapper or proxy based on the data from the handlers.
+        * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */
         resize: function(ev, h, w, t, l, force) {
             this._resizeEvent = ev;
@@ -970,7 +972,7 @@ var D = YAHOO.util.Dom,
         * @param {Event} ev The mouse event.
         * @param {Boolean} flip Argument to determine the direction of the movement.
         * @description Calculates the width based on the mouse event.
-        * @return Number
+        * @return {Number} The new value
         */
         _setWidth: function(ev, flip) {
             var xy = this._cache.xy[0],
@@ -991,6 +993,7 @@ var D = YAHOO.util.Dom,
         * @method _checkWidth
         * @param {Number} w The width to check.
         * @description Checks the value passed against the maxWidth and minWidth.
+        * @return {Number} the new value
         */
         _checkWidth: function(w) {
             if (this.get('minWidth')) {
@@ -1010,6 +1013,7 @@ var D = YAHOO.util.Dom,
         * @method _checkHeight
         * @param {Number} h The height to check.
         * @description Checks the value passed against the maxHeight and minHeight.
+        * @return {Number} The new value
         */
         _checkHeight: function(h) {
             if (this.get('minHeight')) {
@@ -1030,6 +1034,7 @@ var D = YAHOO.util.Dom,
         * @param {Event} ev The mouse event.
         * @param {Boolean} flip Argument to determine the direction of the movement.
         * @description Calculated the height based on the mouse event.
+        * @return {Number} The new value
         */
         _setHeight: function(ev, flip) {
             var xy = this._cache.xy[1],
@@ -1051,6 +1056,7 @@ var D = YAHOO.util.Dom,
         * @param {Number} size The size to tick against.
         * @param {Number} pix The tick pixels.
         * @description Adjusts the number based on the ticks used.
+        * @return {Number} the new snapped position
         */
         _snapTick: function(size, pix) {
             if (!size || !pix) {
@@ -1068,6 +1074,7 @@ var D = YAHOO.util.Dom,
             return _s;
         },
         /** 
+        * @private
         * @method init
         * @description The Resize class's initialization method
         */        
@@ -1115,7 +1122,7 @@ var D = YAHOO.util.Dom,
         /**
         * @method getProxyEl
         * @description Get the HTML reference for the proxy, returns null if no proxy.
-        * @return HTMLElement
+        * @return {HTMLElement} The proxy element
         */      
         getProxyEl: function() {
             return this._proxy;
@@ -1123,7 +1130,7 @@ var D = YAHOO.util.Dom,
         /**
         * @method getWrapEl
         * @description Get the HTML reference for the wrap element, returns the current element if not wrapped.
-        * @return HTMLElement
+        * @return {HTMLElement} The wrap element
         */      
         getWrapEl: function() {
             return this._wrap;
@@ -1131,7 +1138,7 @@ var D = YAHOO.util.Dom,
         /**
         * @method getStatusEl
         * @description Get the HTML reference for the status element.
-        * @return HTMLElement
+        * @return {HTMLElement} The status element
         */      
         getStatusEl: function() {
             return this._status;
@@ -1139,7 +1146,7 @@ var D = YAHOO.util.Dom,
         /**
         * @method getActiveHandleEl
         * @description Get the HTML reference for the currently active resize handle.
-        * @return HTMLElement
+        * @return {HTMLElement} The handle element that is active
         */      
         getActiveHandleEl: function() {
             return this._handles[this._currentHandle];
@@ -1147,12 +1154,13 @@ var D = YAHOO.util.Dom,
         /**
         * @method isActive
         * @description Returns true or false if a resize operation is currently active on the element.
-        * @return Boolean
+        * @return {Boolean}
         */      
         isActive: function() {
             return ((this._active) ? true : false);
         },
         /**
+        * @private
         * @method initAttributes
         * @description Initializes all of the configuration attributes used to create a resizable element.
         * @param {Object} attr Object literal specifying a set of 
@@ -1531,7 +1539,7 @@ var D = YAHOO.util.Dom,
  
 /**
 * @event dragEvent
-* @description Fires when the DragDrop dragEvent is fired for the config option draggable.
+* @description Fires when the <a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a> dragEvent is fired for the config option draggable.
 * @type YAHOO.util.CustomEvent
 */
 /**

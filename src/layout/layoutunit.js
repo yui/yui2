@@ -42,7 +42,7 @@
     * @static
     * @method getLayoutUnitById 
     * @description Get's a layout unit object by the HTML id of the element associated with the Layout Unit object.
-    * @return Object The Layout Object
+    * @return {Object} The Layout Object
     */ 
     LayoutUnit.getLayoutUnitById = function(id) {
         if (LayoutUnit._instances[id]) {
@@ -182,7 +182,7 @@
         * @method resize
         * @description Resize either the unit or it's clipped state, also updating the box inside
         * @param {Boolean} force This will force full calculations even when the unit is collapsed
-        * @return YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         resize: function(force) {
             YAHOO.log('Resize', 'info', 'LayoutUnit');
@@ -279,7 +279,7 @@
         * @param {HTMLElement} el The HTMLElement to set the dimension on
         * @param {Number} dim The number of the dimension to fix
         * @param {String} side The dimension (h or w) to fix. Defaults to h
-        * @return The fixed dimension
+        * @return {Number} The fixed dimension
         */
         _fixQuirks: function(el, dim, side) {
             var i1 = 0, i2 = 2;
@@ -424,7 +424,7 @@
         /**
         * @method toggle
         * @description Toggles the Unit, replacing it with a clipped version.
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         toggle: function() {
             if (this._collapsed) {
@@ -437,7 +437,7 @@
         /**
         * @method expand
         * @description Expand the Unit if it is collapsed.
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         expand: function() {
             if (!this.get('collapse')) {
@@ -532,7 +532,7 @@
         /**
         * @method collapse
         * @description Collapse the Unit if it is not collapsed.
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         collapse: function() {
             if (!this.get('collapse')) {
@@ -620,7 +620,7 @@
         /**
         * @method close
         * @description Close the unit, removing it from the parent Layout.
-        * @return {Object} YAHOO.widget.Layout
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The parent Layout instance
         */
         close: function() {
             this.setStyle('display', 'none');
@@ -965,7 +965,7 @@
             });
             /**
             * @attribute proxy
-            * @description Use the procy config setting for the Resize Utility
+            * @description Use the proxy config setting for the Resize Utility
             * @type Boolean
             */
             this.setAttributeConfig('proxy', {
@@ -1262,6 +1262,7 @@
         /**
         * @method destroy
         * @description Removes this unit from the parent and cleans up after itself.
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The parent Layout instance
         */
         destroy: function() {
             if (this._resize) {

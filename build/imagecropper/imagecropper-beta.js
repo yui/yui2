@@ -31,7 +31,7 @@ var Dom = YAHOO.util.Dom,
     * @private
     * @static
     * @property _instances
-    * @description Internal has table for all ImageCropper instances
+    * @description Internal hash table for all ImageCropper instances
     * @type Object
     */ 
     Crop._instances = {};
@@ -39,7 +39,7 @@ var Dom = YAHOO.util.Dom,
     * @static
     * @method getCropperById 
     * @description Get's an ImageCropper object by the HTML id of the image associated with the ImageCropper object.
-    * @return Object The ImageCropper Object
+    * @return {Object} The ImageCropper Object
     */ 
     Crop.getCropperById = function(id) {
         if (Crop._instances[id]) {
@@ -420,6 +420,7 @@ var Dom = YAHOO.util.Dom,
         * @method _setConstraints
         * @param Boolean inside Used when called from inside a resize event, false by default (dragging)
         * @description Set the DragDrop constraints to keep the element inside the crop area.
+        * @return {Object} Object containing Top, Right, Bottom and Left constraints
         */
         _setConstraints: function(inside) {
             var resize = this._resize;
@@ -475,7 +476,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getCropCoords
         * @description Returns the coordinates needed to crop the image
-        * @return Object The top, left, height, width and image url of the image being cropped
+        * @return {Object} The top, left, height, width and image url of the image being cropped
         */
         getCropCoords: function() {
             var coords = {
@@ -487,7 +488,11 @@ var Dom = YAHOO.util.Dom,
             };
             return coords;
         },
-
+        /**
+        * @method reset
+        * @description Resets the crop element back to it's original position
+        * @return {<a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a> The ImageCropper instance
+        */
         reset: function() {
             this._resize.resize(null, this.get('initHeight'), this.get('initWidth'), 0, 0, true);
             this._resizeEl.style.top = this.get('initialXY')[0] + 'px';
@@ -499,7 +504,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getEl
         * @description Get the HTML reference for the image element.
-        * @return HTMLElement
+        * @return {HTMLElement} The image element
         */      
         getEl: function() {
             return this.get('element');
@@ -507,7 +512,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getResizeEl
         * @description Get the HTML reference for the resize element.
-        * @return HTMLElement
+        * @return {HTMLElement} The resize element
         */      
         getResizeEl: function() {
             return this._resizeEl;
@@ -515,7 +520,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getWrapEl
         * @description Get the HTML reference for the wrap element.
-        * @return HTMLElement
+        * @return {HTMLElement} The wrap element
         */      
         getWrapEl: function() {
             return this._wrap;
@@ -524,7 +529,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getMaskEl
         * @description Get the HTML reference for the mask element.
-        * @return HTMLElement
+        * @return {HTMLElement} The mask element
         */      
         getMaskEl: function() {
             return this._mask;
@@ -533,7 +538,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getResizeMaskEl
         * @description Get the HTML reference for the resizable object's mask element.
-        * @return HTMLElement
+        * @return {HTMLElement} The resize objects mask element.
         */      
         getResizeMaskEl: function() {
             return this._resizeMaskEl;
@@ -542,13 +547,14 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getResizeObject
         * @description Get the Resize Utility object.
-        * @return Object
+        * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */      
         getResizeObject: function() {
             return this._resize;
         },
 
         /** 
+        * @private
         * @method init
         * @description The ImageCropper class's initialization method
         */        
@@ -582,6 +588,7 @@ var Dom = YAHOO.util.Dom,
 
         },
         /**
+        * @private
         * @method initAttributes
         * @description Initializes all of the configuration attributes used to create a croppable element.
         * @param {Object} attr Object literal specifying a set of 
