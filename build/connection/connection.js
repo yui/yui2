@@ -532,7 +532,7 @@ YAHOO.util.Connect =
 			}
 
 			this.handleReadyState(o, callback);
-			o.conn.send(postData || null);
+			o.conn.send(postData || '');
 
 
 			// Reset the HTML form data and state properties as

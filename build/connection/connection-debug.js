@@ -541,7 +541,7 @@ YAHOO.util.Connect =
 			}
 
 			this.handleReadyState(o, callback);
-			o.conn.send(postData || null);
+			o.conn.send(postData || '');
 			YAHOO.log('Transaction ' + o.tId + ' sent.', 'info', 'Connection');
 
 
