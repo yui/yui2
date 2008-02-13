@@ -149,7 +149,6 @@ YAHOO.util.Chain.prototype = {
         return this;
     }
 };
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1450,7 +1449,6 @@ if(YAHOO.util.DD) {
         }
     });
 }
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2241,7 +2239,6 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
-
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -3168,14 +3165,12 @@ ui.FirstPageLink.prototype = {
         var par = this.current ? this.current.parentNode : null;
         if (this.paginator.get('recordOffset') < 1) {
             if (par && this.current === this.link) {
-                par.insertBefore(this.span,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.span,this.current);
                 this.current = this.span;
             }
         } else {
             if (par && this.current === this.span) {
-                par.insertBefore(this.link,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.link,this.current);
                 this.current = this.link;
             }
         }
@@ -3359,8 +3354,7 @@ ui.LastPageLink.prototype = {
             }
 
             if (this.current !== after) {
-                par.insertBefore(after,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(after,this.current);
                 this.current = after;
             }
         }
@@ -3511,14 +3505,12 @@ ui.PreviousPageLink.prototype = {
         var par = this.current ? this.current.parentNode : null;
         if (this.paginator.get('recordOffset') < 1) {
             if (par && this.current === this.link) {
-                par.insertBefore(this.span,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.span,this.current);
                 this.current = this.span;
             }
         } else {
             if (par && this.current === this.span) {
-                par.insertBefore(this.link,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.link,this.current);
                 this.current = this.link;
             }
         }
@@ -3676,14 +3668,12 @@ ui.NextPageLink.prototype = {
 
         if (this.paginator.getCurrentPage() !== last) {
             if (par && this.current === this.span) {
-                par.insertBefore(this.link,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.link,this.current);
                 this.current = this.link;
             }
         } else if (this.current === this.link) {
             if (par) {
-                par.insertBefore(this.span,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.span,this.current);
                 this.current = this.span;
             }
         }
@@ -4287,7 +4277,6 @@ ui.CurrentPageReport.prototype = {
 };
 
 })();
-
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
@@ -6187,10 +6176,21 @@ initAttributes : function(oConfigs) {
         method: function(oParam) {
             if(oParam) {
                 Dom.addClass(this._elContainer,DT.CLASS_SCROLLABLE);
+                // Bug 1743176 - Safari 2 shifts the _elTbodyContainer up
+                // when placed in overflow:auto container.  Should only shift
+                // the table inside.  Apply topMargin to _elTbodyContainer
+                // to account for the bug.
+                if (ua.webkit && ua.webkit < 420) {
+                    this._elTbodyContainer.style.marginTop =
+                        this._elTbody.parentNode.style.marginTop.replace('-','');
+                }
                 this._syncScrollPadding();
             }
             else {
                 Dom.removeClass(this._elContainer,DT.CLASS_SCROLLABLE);
+                if (ua.webkit && ua.webkit < 420) {
+                    this._elTbodyContainer.style.marginTop = "";
+                }
                 this._syncScrollPadding();
             }
         }
@@ -6946,10 +6946,9 @@ _initTableEl : function() {
     this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
     this._elTbody.tabIndex = 0;
     Dom.addClass(this._elTbody,DT.CLASS_BODY);
-    // Bug 1716354 - fix gap in Safari 2 and 3
-    if(ua.webkit) {
-        this._elTbody.parentNode.style.marginTop = ua.webkit > 500 ? "-13px" : "-7px";
-    }
+    // Bug 1716354 - fix gap in Safari 2 and 3 (Also saw small gap in Opera.
+    // this fixes all)
+    this._elTbody.parentNode.style.marginTop = "-"+this._elTbody.offsetTop+"px";
 
     // Create TBODY for messages
     var elMsgTbody = document.createElement("tbody");
@@ -9203,6 +9202,7 @@ render : function() {
             scope: this
         });
         
+        // Bug 1741322: Force FF to redraw to fix squishy headers on wide tables
         if(ua.gecko) {
             this._oChain.add({
                 method: function(oArg) {
@@ -14809,5 +14809,4 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
 
 });
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});

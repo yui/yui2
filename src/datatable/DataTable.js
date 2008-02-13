@@ -1906,10 +1906,21 @@ initAttributes : function(oConfigs) {
         method: function(oParam) {
             if(oParam) {
                 Dom.addClass(this._elContainer,DT.CLASS_SCROLLABLE);
+                // Bug 1743176 - Safari 2 shifts the _elTbodyContainer up
+                // when placed in overflow:auto container.  Should only shift
+                // the table inside.  Apply topMargin to _elTbodyContainer
+                // to account for the bug.
+                if (ua.webkit && ua.webkit < 420) {
+                    this._elTbodyContainer.style.marginTop =
+                        this._elTbody.parentNode.style.marginTop.replace('-','');
+                }
                 this._syncScrollPadding();
             }
             else {
                 Dom.removeClass(this._elContainer,DT.CLASS_SCROLLABLE);
+                if (ua.webkit && ua.webkit < 420) {
+                    this._elTbodyContainer.style.marginTop = "";
+                }
                 this._syncScrollPadding();
             }
         }
@@ -2674,10 +2685,9 @@ _initTableEl : function() {
     this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
     this._elTbody.tabIndex = 0;
     Dom.addClass(this._elTbody,DT.CLASS_BODY);
-    // Bug 1716354 - fix gap in Safari 2 and 3
-    if(ua.webkit) {
-        this._elTbody.parentNode.style.marginTop = ua.webkit > 500 ? "-13px" : "-7px";
-    }
+    // Bug 1716354 - fix gap in Safari 2 and 3 (Also saw small gap in Opera.
+    // this fixes all)
+    this._elTbody.parentNode.style.marginTop = "-"+this._elTbody.offsetTop+"px";
 
     // Create TBODY for messages
     var elMsgTbody = document.createElement("tbody");
@@ -4946,6 +4956,7 @@ render : function() {
             scope: this
         });
         
+        // Bug 1741322: Force FF to redraw to fix squishy headers on wide tables
         if(ua.gecko) {
             this._oChain.add({
                 method: function(oArg) {
