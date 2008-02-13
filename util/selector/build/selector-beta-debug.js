@@ -27,7 +27,6 @@ var X = {
 X.BEGIN_SPACE = '(?:' + X.BEGIN + X.OR + X.SP +')';
 X.END_SPACE = '(?:' + X.SP + X.OR + X.END + ')';
 X.NTH_CHILD = '^(?:([-]?\\d*)(n){1}|(odd|even)$)*([-+]?\\d*)$';
-X.URL_ATTR = '^href|url$';
 
 Selector.prototype = {
     /**
@@ -44,8 +43,7 @@ Selector.prototype = {
      * @type object
      */
     attrAliases: {
-        'for': 'htmlFor',
-        'class': 'className'
+        'for': 'htmlFor'
     },
 
     /**
@@ -56,7 +54,7 @@ Selector.prototype = {
     shorthand: {
         //'(?:(?:[^\\)\\]\\s*>+~,]+)(?:-?[_a-z]+[-\\w]))+#(-?[_a-z]+[-\\w]*)': '[id=$1]',
         '\\#(-?[_a-z]+[-\\w]*)': '[id=$1]',
-        '\\.(-?[_a-z]+[-\\w]*)': '[className~=$1]'
+        '\\.(-?[_a-z]+[-\\w]*)': '[class~=$1]'
     },
 
     /**
@@ -69,11 +67,8 @@ Selector.prototype = {
         '=': function(attr, val) { return attr === val; }, // Equality
         '!=': function(attr, val) { return attr !== val; }, // Inequality
         '~=': function(attr, val) { // Match one of space seperated words 
-            var str = X.BEGIN_SPACE + val + X.END_SPACE;
-            regexCache[str] = regexCache[str] || new RegExp(str); // skip getRegExp call for perf boost
-
-            //return getRegExp(X.BEGIN_SPACE + val + X.END_SPACE).test(attr);
-            return regexCache[str].test(attr);
+            var s = ' ';
+            return (s + attr + s).indexOf((s + val + s)) > -1;
         },
         '|=': function(attr, val) { return getRegExp(X.BEGIN + val + '[-]?').test(attr); }, // Match start with value followed by optional hyphen
         '^=': function(attr, val) { return attr.indexOf(val) === 0; }, // Match starts with value
@@ -294,7 +289,7 @@ var query = function(selector, root, firstOnly, deDupe) {
 };
 
 var contains = function() {
-    if (document.documentElement.contains && !YAHOO.env.ua.webkit < 420)  { // IE & Opera, Safari < 3 contains is broken
+    if (document.documentElement.contains && !YAHOO.env.ua.webkit < 422)  { // IE & Opera, Safari < 3 contains is broken
         return function(needle, haystack) {
             return haystack.contains(needle);
         };
@@ -317,23 +312,22 @@ var contains = function() {
 }();
 
 var rFilter = function(nodes, token, firstOnly, deDupe) {
-    var result = [],
-        node;
+    var result = [];
 
     for (var i = 0, len = nodes.length; i < len; ++i) {
-        node = nodes[i];
-        if ( !rTestNode(node, null, token) || (deDupe && node._found) ) {
+        if (!rTestNode(nodes[i], 0, token) || (deDupe && nodes[i]._found) ) {
             continue;
         }
+
         if (firstOnly) {
-            return node;
+            return nodes[i];
         }
         if (deDupe) {
-            node._found = true;
-            foundCache[foundCache.length] = node;
+            nodes[i]._found = true;
+            foundCache[foundCache.length] = nodes[i];
         }
 
-        result[result.length] = node;
+        result[result.length] = nodes[i];
     }
 
     return result;
@@ -348,27 +342,28 @@ var rTestNode = function(node, selector, token) {
 
     var ops = Selector.operators,
         ps = Selector.pseudos,
-        attributes = token.attributes,
-        attr,
+        attr = token.attributes,
         pseudos = token.pseudos,
         prev = token.previous;
 
-    for (var i = 0, len = attributes.length; i < len; ++i) {
-        attr = (getRegExp(X.URL_ATTR).test(attributes[i][0])) ?
-                node.getAttribute(attributes[i][0], 2) : // preserve relative urls
-                node[attributes[i][0]];
-
-        if (ops[attributes[i][1]] && !ops[attributes[i][1]](attr, attributes[i][2])) {
-            return false;
-        }
-    }
-    for (var i = 0, len = pseudos.length; i < len; ++i) {
-        if (ps[pseudos[i][0]] &&
-                !ps[pseudos[i][0]](node, pseudos[i][1])) {
-            return false;
+    if (attr.length) {
+        for (var i = 0, len = attr.length; i < len; ++i) {
+            if (ops[attr[i][1]] &&
+                    !ops[attr[i][1]](node.getAttribute(attr[i][0], 2),
+                            attr[i][2])) {
+                return false;
+            }
         }
     }
 
+    if (pseudos.length) {
+        for (i = 0, len = pseudos.length; i < len; ++i) {
+            if (ps[pseudos[i][0]] &&
+                    !ps[pseudos[i][0]](node, pseudos[i][1])) {
+                return false;
+            }
+        }
+    }
     if (prev) {
         if (prev.combinator !== ',') {
             return combinators[prev.combinator](node, token);
@@ -611,14 +606,16 @@ var tokenize = function(selector) {
                     token.pseudos = token.pseudos || [];
                     token.tag = token.tag || '*';
                     tokens.push(token);
+
                     token = { // prep next token
                         previous: token
                     };
                 }
             }
         }
-     } while (found);
-     return tokens;
+    } while (found);
+
+    return tokens;
 };
 
 var fixAttributes = function(attr) {
@@ -652,6 +649,10 @@ var replaceShorthand = function(selector) {
     }
     return selector;
 };
+
+if (YAHOO.env.ua.ie) { // rewrite class for IE (others use getAttribute('class')
+    Selector.prototype.attrAliases['class'] = 'className';
+}
 
 Selector = new Selector();
 Selector.TOKENS = X;
