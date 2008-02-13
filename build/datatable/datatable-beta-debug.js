@@ -2335,9 +2335,10 @@ YAHOO.widget.Record.prototype = {
  */
 YAHOO.widget.Paginator = function (config) {
     var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
+        lang      = YAHOO.lang,
         attrib, initialPage, records, perPage;
 
-    config = YAHOO.lang.isObject(config) ? config : {};
+    config = lang.isObject(config) ? config : {};
 
     this.initConfig();
 
@@ -2345,7 +2346,7 @@ YAHOO.widget.Paginator = function (config) {
 
     // Set the basic config keys first
     this.set('rowsPerPage',config.rowsPerPage,true);
-    if (YAHOO.lang.isNumber(config.totalRecords)) {
+    if (lang.isNumber(config.totalRecords)) {
         this.set('totalRecords',config.totalRecords,true);
     }
     
@@ -2353,7 +2354,9 @@ YAHOO.widget.Paginator = function (config) {
 
     // Update the other config values
     for (attrib in config) {
-        this.set(attrib,config[attrib],true);
+        if (lang.hasOwnProperty(config,attrib)) {
+            this.set(attrib,config[attrib],true);
+        }
     }
 
     // Calculate the initial record offset
@@ -6249,7 +6252,6 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-    * TODO: update for latest xy-scrolling    
     * @attribute scrollable
     * @description True if primary TBODY should scroll.
     * @default false
@@ -6258,10 +6260,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("scrollable", {
         value: false,
         validator: function(oParam) {
-            //TODO: validate agnst resizeable
-            return (lang.isBoolean(oParam) &&
-                    // Not compatible with caption
-                    !lang.isString(this.get("caption")));
+            return (lang.isBoolean(oParam));
         },
         method: function(oParam) {
             if(oParam) {
@@ -14465,7 +14464,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      *
      * @event editorRevertEvent
      * @param oArgs.editor {Object} The Editor object literal.
-     * @param oArgs.newData {Object} New data value.
+     * @param oArgs.newData {Object} New data value from form input field.
      * @param oArgs.oldData {Object} Old data value.
      */
 
@@ -14474,7 +14473,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      *
      * @event editorSaveEvent
      * @param oArgs.editor {Object} The Editor object literal.
-     * @param oArgs.newData {Object} New data value.
+     * @param oArgs.newData {Object} New data value from form input field.
      * @param oArgs.oldData {Object} Old data value.
      */
 

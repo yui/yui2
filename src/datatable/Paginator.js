@@ -13,9 +13,10 @@
  */
 YAHOO.widget.Paginator = function (config) {
     var UNLIMITED = YAHOO.widget.Paginator.VALUE_UNLIMITED,
+        lang      = YAHOO.lang,
         attrib, initialPage, records, perPage;
 
-    config = YAHOO.lang.isObject(config) ? config : {};
+    config = lang.isObject(config) ? config : {};
 
     this.initConfig();
 
@@ -23,7 +24,7 @@ YAHOO.widget.Paginator = function (config) {
 
     // Set the basic config keys first
     this.set('rowsPerPage',config.rowsPerPage,true);
-    if (YAHOO.lang.isNumber(config.totalRecords)) {
+    if (lang.isNumber(config.totalRecords)) {
         this.set('totalRecords',config.totalRecords,true);
     }
     
@@ -31,7 +32,9 @@ YAHOO.widget.Paginator = function (config) {
 
     // Update the other config values
     for (attrib in config) {
-        this.set(attrib,config[attrib],true);
+        if (lang.hasOwnProperty(config,attrib)) {
+            this.set(attrib,config[attrib],true);
+        }
     }
 
     // Calculate the initial record offset
@@ -924,14 +927,12 @@ ui.FirstPageLink.prototype = {
         var par = this.current ? this.current.parentNode : null;
         if (this.paginator.get('recordOffset') < 1) {
             if (par && this.current === this.link) {
-                par.insertBefore(this.span,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.span,this.current);
                 this.current = this.span;
             }
         } else {
             if (par && this.current === this.span) {
-                par.insertBefore(this.link,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.link,this.current);
                 this.current = this.link;
             }
         }
@@ -1115,8 +1116,7 @@ ui.LastPageLink.prototype = {
             }
 
             if (this.current !== after) {
-                par.insertBefore(after,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(after,this.current);
                 this.current = after;
             }
         }
@@ -1267,14 +1267,12 @@ ui.PreviousPageLink.prototype = {
         var par = this.current ? this.current.parentNode : null;
         if (this.paginator.get('recordOffset') < 1) {
             if (par && this.current === this.link) {
-                par.insertBefore(this.span,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.span,this.current);
                 this.current = this.span;
             }
         } else {
             if (par && this.current === this.span) {
-                par.insertBefore(this.link,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.link,this.current);
                 this.current = this.link;
             }
         }
@@ -1432,14 +1430,12 @@ ui.NextPageLink.prototype = {
 
         if (this.paginator.getCurrentPage() !== last) {
             if (par && this.current === this.span) {
-                par.insertBefore(this.link,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.link,this.current);
                 this.current = this.link;
             }
         } else if (this.current === this.link) {
             if (par) {
-                par.insertBefore(this.span,this.current);
-                par.removeChild(this.current);
+                par.replaceChild(this.span,this.current);
                 this.current = this.span;
             }
         }
