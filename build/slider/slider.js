@@ -1490,14 +1490,14 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
     /**
      * Event that fires when one of the thumbs begins to move
      * @event slideStart
-     * @param {Slider} the moving slider
+     * @param {Slider} activeSlider the moving slider
      */
     this.createEvent("slideStart", this);
 
     /**
      * Event that fires when one of the thumbs finishes moving
      * @event slideEnd
-     * @param {Slider} the moving slider
+     * @param {Slider} activeSlider the moving slider
      */
     this.createEvent("slideEnd", this);
 };
