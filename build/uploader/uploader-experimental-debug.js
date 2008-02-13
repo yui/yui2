@@ -1,10 +1,24 @@
-/*
-Copyright (c) 2007, Yahoo! Inc. All rights reserved.
-Code licensed under the BSD License:
-http://developer.yahoo.net/yui/license.txt
-version: 2.4.0
-*/
 /**
+ * The YUI Uploader Control
+ * @module uploader
+ * @description <p>YUI Uploader provides file upload functionality that goes beyond the basic browser-based methods. 
+ * Specifically, the YUI Uploader allows for:
+ * <ol>
+ * <li> Multiple file selection in a single "Open File" dialog.</li>
+ * <li> File extension filters to facilitate the user's selection.</li>
+ * <li> Progress tracking for file uploads.</li>
+ * <li> A range of file metadata: filename, size, date created, date modified, and author.</li>
+ * <li> A set of events dispatched on various aspects of the file upload process: file selection, upload progress, upload completion, etc.</li>
+ * <li> Inclusion of additional data in the file upload POST request.</li>
+ * <li> Faster file upload on broadband connections due to the modified SEND buffer size.</li>
+ * <li> Same-page server response upon completion of the file upload.</li>
+ * </ol>
+ * </p>
+ * @title Uploader
+ * @namespace YAHOO.widget
+ * @requires yahoo, dom, element, event
+ */
+/*!
  * SWFObject v1.5: Flash Player detection and embed - http://blog.deconcept.com/swfobject/
  *
  * SWFObject is (c) 2007 Geoff Stearns and is released under the MIT License:
