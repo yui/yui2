@@ -176,10 +176,41 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	_initAttributes: function(attributes)
 	{
 		//should be overridden if other attributes need to be set up
+
+		/**
+		 * @attribute wmode
+		 * @description Sets the window mode of the Flash Player control. May be
+		 *		"window", "opaque", or "transparent". Only available in the constructor
+		 *		because it may not be set after Flash Player has been embedded in the page.
+		 * @type String
+		 */
+		 
+		/**
+		 * @attribute expressInstall
+		 * @description URL pointing to a SWF file that handles Flash Player's express
+		 *		install feature. Only available in the constructor because it may not be
+		 *		set after Flash Player has been embedded in the page.
+		 * @type String
+		 */
+
+		/**
+		 * @attribute version
+		 * @description Minimum required version for the SWF file. Only available in the constructor because it may not be
+		 *		set after Flash Player has been embedded in the page.
+		 * @type String
+		 */
+
+		/**
+		 * @attribute backgroundColor
+		 * @description The background color of the SWF. Only available in the constructor because it may not be
+		 *		set after Flash Player has been embedded in the page.
+		 * @type String
+		 */
 		
 		/**
 		 * @attribute swfURL
-		 * @description Absolute or relative URL to the SWF displayed by the FlashAdapter.
+		 * @description Absolute or relative URL to the SWF displayed by the FlashAdapter. Only available in the constructor because it may not be
+		 *		set after Flash Player has been embedded in the page.
 		 * @type String
 		 */
 		this.getAttributeConfig("swfURL",
