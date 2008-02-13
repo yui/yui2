@@ -504,7 +504,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method reset
         * @description Resets the crop element back to it's original position
-        * @return {<a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a> The ImageCropper instance
+        * @return {<a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a>} The ImageCropper instance
         */
         reset: function() {
             YAHOO.log('Resetting the control', 'log', 'ImageCropper');
