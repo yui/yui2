@@ -1359,7 +1359,7 @@ YAHOO.extend(YAHOO.widget.SliderThumb, YAHOO.util.DD, {
 });
 
 /**
- * A slider with two thumbs, one that represents defines the min value and 
+ * A slider with two thumbs, one that represents the min value and 
  * the other the max.  Actually a composition of two sliders, both with
  * the same background.  The constraints for each slider are adjusted
  * dynamically so that the min value of the max slider is equal or greater
@@ -1384,6 +1384,7 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
 
     /**
      * A slider instance that keeps track of the lower value of the range.
+     * <strong>read only</strong>
      * @property minSlider
      * @type Slider
      */
@@ -1391,13 +1392,14 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
 
     /**
      * A slider instance that keeps track of the upper value of the range.
+     * <strong>read only</strong>
      * @property maxSlider
      * @type Slider
      */
     this.maxSlider = maxSlider;
 
     /**
-     * The currently active slider (min or max).
+     * The currently active slider (min or max). <strong>read only</strong>
      * @property activeSlider
      * @type Slider
      */
@@ -1521,7 +1523,6 @@ YAHOO.widget.DualSlider.prototype = {
      * @property minRange
      * @type int
      * @default 0
-     * @private
      */
     minRange : 0,
 
@@ -1714,34 +1715,24 @@ YAHOO.widget.DualSlider.prototype = {
             var thumbInnerWidth = this.minSlider.thumbCenterPoint.x +
                                   this.maxSlider.thumbCenterPoint.x;
 
+            // Establish barriers within the respective other thumb's edge, less
+            // the minRange.  Limit to the Slider's range in the case of
+            // negative minRanges.
             var minConstraint = Math.max(max-thumbInnerWidth-this.minRange,0);
             var maxConstraint = Math.min(-min-thumbInnerWidth-this.minRange,0);
 
             if (this.isHoriz) {
+                minConstraint = Math.min(minConstraint,maxt.rightConstraint);
 
                 mint.setXConstraint(mint.leftConstraint,minConstraint, mint.tickSize);
 
                 maxt.setXConstraint(maxConstraint,maxt.rightConstraint, maxt.tickSize);
             } else {
+                minConstraint = Math.min(minConstraint,maxt.bottomConstraint);
                 mint.setYConstraint(mint.leftConstraint,minConstraint, mint.tickSize);
 
                 maxt.setYConstraint(maxConstraint,maxt.bottomConstraint, maxt.tickSize);
             }
-
-            // it is possible that the slider is already out of position when
-            // the constraint is applied.  If so, we adjust to the new constraint.
-            // A side effect of this is that if both sliders are changed at the same
-            // time to a value that will not be legal, and animation is on, 
-            // the resulting position will be somewhat random since the constraint
-            // violation may be detected in the middle of the animation.
-            if (min > max) {
-                this.minSlider.setValue(max);
-            }
-
-            if (max < min) {
-                this.maxSlider.setValue(min);
-            }
-
         }
 
         this.minVal = min;
@@ -1757,6 +1748,7 @@ YAHOO.widget.DualSlider.prototype = {
      * Override if you need different behavior.
      * @method selectActiveSlider
      * @param e {Event} the mousedown event
+     * @private
      */
     selectActiveSlider: function(e) {
         var min = this.minSlider.getValue(),
