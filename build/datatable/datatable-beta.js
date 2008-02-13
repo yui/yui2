@@ -149,6 +149,7 @@ YAHOO.util.Chain.prototype = {
         return this;
     }
 };
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1449,6 +1450,7 @@ if(YAHOO.util.DD) {
         }
     });
 }
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2239,6 +2241,7 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
+
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -4280,6 +4283,7 @@ ui.CurrentPageReport.prototype = {
 };
 
 })();
+
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
@@ -6770,7 +6774,7 @@ _initContainerEl : function(elContainer) {
         Ev.purgeElement(elContainer, true);
         elContainer.innerHTML = "";
 
-        Dom.addClass(elContainer,"yui-dt");
+        Dom.addClass(elContainer,"yui-dt yui-dt-noop");
         
         // Container for header TABLE
         this._elTheadContainer = elContainer.appendChild(document.createElement("div"));
@@ -9206,7 +9210,7 @@ render : function() {
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        Dom.removeClass(this.getContainerEl(),"yui-dt");
+                        Dom.removeClass(this.getContainerEl(),"yui-dt-noop");
                     }
                 },
                 scope: this
@@ -9214,7 +9218,7 @@ render : function() {
             this._oChain.add({
                 method: function() {
                     if((this instanceof DT) && this._sId) {
-                        Dom.addClass(this.getContainerEl(),"yui-dt");
+                        Dom.addClass(this.getContainerEl(),"yui-dt-noop");
                     }
                 },
                 scope:this
@@ -14808,4 +14812,5 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
 
 });
 })();
+
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});

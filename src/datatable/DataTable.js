@@ -1889,7 +1889,6 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-    * TODO: update for latest xy-scrolling    
     * @attribute scrollable
     * @description True if primary TBODY should scroll.
     * @default false
@@ -1898,10 +1897,7 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("scrollable", {
         value: false,
         validator: function(oParam) {
-            //TODO: validate agnst resizeable
-            return (lang.isBoolean(oParam) &&
-                    // Not compatible with caption
-                    !lang.isString(this.get("caption")));
+            return (lang.isBoolean(oParam));
         },
         method: function(oParam) {
             if(oParam) {
@@ -2501,7 +2497,7 @@ _initContainerEl : function(elContainer) {
         Ev.purgeElement(elContainer, true);
         elContainer.innerHTML = "";
 
-        Dom.addClass(elContainer,"yui-dt");
+        Dom.addClass(elContainer,"yui-dt yui-dt-noop");
         
         // Container for header TABLE
         this._elTheadContainer = elContainer.appendChild(document.createElement("div"));
@@ -4961,7 +4957,7 @@ render : function() {
             this._oChain.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
-                        Dom.removeClass(this.getContainerEl(),"yui-dt");
+                        Dom.removeClass(this.getContainerEl(),"yui-dt-noop");
                     }
                 },
                 scope: this
@@ -4969,7 +4965,7 @@ render : function() {
             this._oChain.add({
                 method: function() {
                     if((this instanceof DT) && this._sId) {
-                        Dom.addClass(this.getContainerEl(),"yui-dt");
+                        Dom.addClass(this.getContainerEl(),"yui-dt-noop");
                     }
                 },
                 scope:this
@@ -10105,7 +10101,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      *
      * @event editorRevertEvent
      * @param oArgs.editor {Object} The Editor object literal.
-     * @param oArgs.newData {Object} New data value.
+     * @param oArgs.newData {Object} New data value from form input field.
      * @param oArgs.oldData {Object} Old data value.
      */
 
@@ -10114,7 +10110,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      *
      * @event editorSaveEvent
      * @param oArgs.editor {Object} The Editor object literal.
-     * @param oArgs.newData {Object} New data value.
+     * @param oArgs.newData {Object} New data value from form input field.
      * @param oArgs.oldData {Object} Old data value.
      */
 

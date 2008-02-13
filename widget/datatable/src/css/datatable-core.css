@@ -1,4 +1,12 @@
 /* foundational CSS */
+.yui-dt {
+    border:1px solid transparent;
+}
+
+.yui-dt-noop {
+    border:none;
+}
+
 .yui-dt-liner {
     overflow:hidden;
 }
