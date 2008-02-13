@@ -1,5 +1,15 @@
 Connection Manager Release Notes
 
+*** version 2.5.0 ***
+
+* setForm() can now detects HTTPS in the URI for file upload transactions.  The
+third, boolean argument for HTTPS when using IE is no longer necessary.
+
+* [FIXED] SF1882101.  POST transactions without a message will now have a
+Content-Length value set to 0 for FF 2.x.  This is accomplished by passing a
+value of empty string instead of null to XHR's send().  All other A-Grade
+browsers remain unaffected and perform correctly.
+
 *** version 2.4.0 ***
 
 * [FIXED] SF1804153.  Transactions initialized with setForm() now properly clear
@@ -252,4 +262,6 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
+
 
