@@ -5,7 +5,8 @@
  * @class Node
  * @uses YAHOO.util.EventProvider
  * @param oData {object} a string or object containing the data that will
- * be used to render this node
+ * be used to render this node, and any custom attributes that should be
+ * stored with the node (which is available in noderef.data).
  * @param oParent {Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state
  * @constructor
@@ -178,6 +179,17 @@ YAHOO.widget.Node.prototype = {
      * @default false
      */
     nowrap: false,
+
+    /**
+     * If true, the node will alway be rendered as a leaf node.  This can be
+     * used to override the presentation when dynamically loading the entire
+     * tree.  Setting this to true also disables the dynamic load call for the
+     * node.
+     * @property isLeaf
+     * @type boolean
+     * @default false
+     */
+    isLeaf: false,
 
     /**
      * The node type
@@ -766,14 +778,19 @@ YAHOO.widget.Node.prototype = {
      * @return {boolean} true if this node's children are to be loaded dynamically
      */
     isDynamic: function() { 
-        var lazy = (!this.isRoot() && (this._dynLoad || this.tree.root._dynLoad));
-        // this.logger.log("isDynamic: " + lazy);
-        return lazy;
+        if (this.isLeaf) {
+            return false;
+        } else {
+            return (!this.isRoot() && (this._dynLoad || this.tree.root._dynLoad));
+            // this.logger.log("isDynamic: " + lazy);
+            // return lazy;
+        }
     },
 
     /**
      * Returns the current icon mode.  This refers to the way childless dynamic
-     * load nodes appear.
+     * load nodes appear (this comes into play only after the initial dynamic
+     * load request produced no children).
      * @method getIconMode
      * @return {int} 0 for collapse style, 1 for leaf node style
      */
@@ -794,8 +811,12 @@ YAHOO.widget.Node.prototype = {
      * checking for this condition.
      */
     hasChildren: function(checkForLazyLoad) { 
-        return ( this.children.length > 0 || 
-                (checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) );
+        if (this.isLeaf) {
+            return false;
+        } else {
+            return ( this.children.length > 0 || 
+(checkForLazyLoad && this.isDynamic() && !this.dynamicLoadComplete) );
+        }
     },
 
     /**

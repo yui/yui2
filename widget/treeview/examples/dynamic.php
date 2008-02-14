@@ -66,6 +66,9 @@ YAHOO.example.treeExample = function() {
 					thisState = aStates[Math.round(Math.random()*27)];
 					//var newNode = new YAHOO.widget.TextNode(thisState, node, (i%2==0));
 					var newNode = new YAHOO.widget.TextNode(thisState, node, false);
+                    if (i > 0) {
+                        newNode.isLeaf = true;
+                    }
 				}
 			}
 

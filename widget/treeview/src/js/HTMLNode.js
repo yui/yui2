@@ -9,11 +9,22 @@
  * @extends YAHOO.widget.Node
  * @constructor
  * @param oData {object} a string or object containing the data that will
- * be used to render this node
+ * be used to render this node.  
+ * Valid configuration properties: 
+ * <dl>
+ *   <dt>html</dt>
+ *   <dd>The html content for the node</dd>
+ * </dl>
+ * All other attributes are made available in noderef.data, which
+ * can be used to store custom attributes.  TreeView.getNode(s)ByProperty
+ * can be used to retreive a node by one of the attributes.
  * @param oParent {YAHOO.widget.Node} this node's parent node
  * @param expanded {boolean} the initial expanded/collapsed state
  * @param hasIcon {boolean} specifies whether or not leaf nodes should
- * have an icon
+ * be rendered with or without a horizontal line line icon. If the icon
+ * is not displayed, the content fills the space it would have occupied.
+ * This option operates independently of the leaf node presentation logic
+ * for dynamic nodes.
  */
 YAHOO.widget.HTMLNode = function(oData, oParent, expanded, hasIcon) {
     if (oData) { 
