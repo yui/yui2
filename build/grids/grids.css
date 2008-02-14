@@ -70,6 +70,8 @@ body{text-align:center;}
 .yui-gc .yui-g,
 .yui-gd .yui-u{float:left;margin-left:1.99%;width:32%;}
 
+#doc3 .yui-gb .yui-u {*width:31.9%;}/*for IE rounding issue in fluid page doc */
+
 .yui-gb .yui-gb .yui-u,
 .yui-gb .yui-gc .yui-u {*margin-left:1.8%;_margin-left:4%;}
 
