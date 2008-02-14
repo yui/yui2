@@ -18,6 +18,7 @@ Changed APIs
     * onDataReturnAppendRows(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
     * onDataReturnInitializeTable(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
     * onDataReturnInsertRows(sRequest, oResponse, oPayload) - oResponse is now the converted full response (typed JSON or XML as appropriate). oPayload is now an optional data payload implementer can pass in to DataSource.sendRequest via the callback object literal.
+    * paginator - Should now be an instance of YAHOO.widget.Paginator.
     * sortedBy.dir - Use CLASS_ASC or CLASS_DESC instead of "asc" and "desc" strings.
     * Scrolling must be enabled via the configs "scrollable", "width", and "height". CSS should no longer be used to set width or height on scrollable tables.    
 
@@ -45,9 +46,8 @@ Deprecated APIs
     * headerRowMouseoutEvent - Use theadRowMouseoutEvent.
     * headerRowMouseoverEvent - Use theadRowMouseoverEvent.
     * refreshEvent - Use renderEvent.
-    * paginated - Use new Paginator class. (?)
-    * paginator - Use new Paginator class. (?)
-    *
+    * paginated - No longer used, as long as "paginator" value is an instance of Paginator class.
+
 
 RecordSet
 

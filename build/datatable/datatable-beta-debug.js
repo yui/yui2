@@ -5990,7 +5990,7 @@ initAttributes : function(oConfigs) {
     *   dropdowns: [] } //dropdown elements
     *
     * @default null
-    * @type {Object|Pag}
+    * @type {Object|YAHOO.widget.Paginator}
     */
     this.setAttributeConfig("paginator", {
         value : { // Backward compatibility
@@ -6080,9 +6080,8 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute paginated
-    * @description True if built-in client-side pagination is enabled
-    * @default false
-    * @type Boolean
+    * @deprecated No longer used, as long as "paginator" value is an instance of
+    * Paginator class.  
     */
     this.setAttributeConfig("paginated", {
         value: false,
