@@ -14224,14 +14224,14 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @param oArgs.index {Number} The index position.
      */
 
-    /*
+    /**
      * Fired when a column is highlighted.
      *
      * @event columnHighlightEvent
      * @param oArgs.column {YAHOO.widget.Column} The highlighted Column.
      */
 
-    /*
+    /**
      * Fired when a column is unhighlighted.
      *
      * @event columnUnhighlightEvent
@@ -14319,13 +14319,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @param oArgs.record {YAHOO.widget.Record} The unselected Record.
      */
 
-    /*TODO: delete and use rowUnselectEvent?
+    /**
      * Fired when all row selections are cleared.
      *
      * @event unselectAllRowsEvent
      */
 
-    /*
+    /**
      * Fired when a row is highlighted.
      *
      * @event rowHighlightEvent
@@ -14333,7 +14333,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @param oArgs.record {YAHOO.widget.Record} The highlighted Record.
      */
 
-    /*
+    /**
      * Fired when a row is unhighlighted.
      *
      * @event rowUnhighlightEvent
@@ -14434,17 +14434,10 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
 
      */
 
-    /*TODO: hide from doc and use cellUnselectEvent
+    /**
      * Fired when all cell selections are cleared.
      *
      * @event unselectAllCellsEvent
-     */
-
-    /*TODO: implement
-     * Fired when DataTable paginator is updated.
-     *
-     * @event paginatorUpdateEvent
-     * @param paginator {Object} Object literal of Paginator values.
      */
 
     /**
