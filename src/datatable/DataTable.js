@@ -9796,7 +9796,8 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      *
      * @event columnSortEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
-     * @param oArgs.dir {String} Sort direction "asc" or "desc".
+     * @param oArgs.dir {String} Sort direction: YAHOO.widget.DataTable.CLASS_ASC
+     * or YAHOO.widget.DataTable.CLASS_DESC.
      */
 
     /**
