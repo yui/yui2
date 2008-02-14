@@ -100,7 +100,9 @@ YAHOO.lang.JSON = {
                 for (i in v) {
                     if (YAHOO.lang.hasOwnProperty(v,i)) {
                         n = walk(i, v[i]);
-                        if (n !== undefined) {
+                        if (n === undefined) {
+                            delete v[i];
+                        } else {
                             v[i] = n;
                         }
                     }
