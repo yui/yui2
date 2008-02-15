@@ -171,6 +171,8 @@ var Dom = YAHOO.util.Dom,
             this._wrap.appendChild(this._resizeEl);
             this._resizeEl.style.top = this.get('initialXY')[0] + 'px';
             this._resizeEl.style.left = this.get('initialXY')[1] + 'px';
+            this._resizeMaskEl.style.height = Math.floor(this.get('initHeight')) + 'px';
+            this._resizeMaskEl.style.width = Math.floor(this.get('initWidth')) + 'px';
 
             this._resize = new YAHOO.util.Resize(this._resizeEl, {
                 knobHandles: true,
@@ -338,9 +340,12 @@ var Dom = YAHOO.util.Dom,
         /**
         * @private
         * @method _handleResizeEvent
+        * @param Event ev The Resize Utilitys resize event.
         * @description Handles the Resize Utilitys Resize event
         */
-        _handleResizeEvent: function() {
+        _handleResizeEvent: function(ev) {
+            this._resizeMaskEl.style.height = Math.floor(ev.height) + 'px';
+            this._resizeMaskEl.style.width = Math.floor(ev.width) + 'px';
             this._setConstraints(true);
             this._syncBackgroundPosition();
             this.fireEvent('resizeEvent', arguments);
