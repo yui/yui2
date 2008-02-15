@@ -733,7 +733,9 @@ var D = YAHOO.util.Dom,
         * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */
         resize: function(ev, h, w, t, l, force) {
-            YAHOO.log('Resize', 'info', 'Resize');
+            //Internet Explorer needs this
+            D.removeClass(this._wrap, this.CSS_RESIZE);
+            YAHOO.log('Resize: ' + h + ',' + w, 'info', 'Resize');
             this._resizeEvent = ev;
             var el = this._wrap, anim = this.get('animate'), set = true;
             if (this._proxy && !force) {
@@ -827,7 +829,6 @@ var D = YAHOO.util.Dom,
                 }
             }
             if (h) {
-                this._cache.height = h;
                 if (!anim) {
                     set = true;
                     if (this._proxy && force) {
@@ -836,6 +837,11 @@ var D = YAHOO.util.Dom,
                         }
                     }
                     if (set) {
+                        if (this.browser.ie > 6) {
+                            if (h === this._cache.height) {
+                                h = h + 1;
+                            }
+                        }
                         el.style.height = h + 'px';
                     }
                     if ((this._proxy && force) || !this._proxy) {
@@ -844,6 +850,7 @@ var D = YAHOO.util.Dom,
                         }
                     }
                 }
+                this._cache.height = h;
             }
             if (w) {
                 this._cache.width = w;
@@ -912,6 +919,9 @@ var D = YAHOO.util.Dom,
                     this.fireEvent('resize', { ev: 'resize', target: this, height: h, width: w, top: t, left: l });
                 }
             }
+            
+            //Internet Explorer needs this
+            D.addClass(this._wrap, this.CSS_RESIZE);
             return this;
         },
         /** 
@@ -924,7 +934,7 @@ var D = YAHOO.util.Dom,
             YAHOO.log('Handle BR', 'info', 'Resize');
             var newW = this._setWidth(args.e);
             var newH = this._setHeight(args.e);
-            this.resize(args.e, newH, newW, 0, 0);
+            this.resize(args.e, (newH + 1), newW, 0, 0);
         },
         /** 
         * @private
@@ -976,7 +986,6 @@ var D = YAHOO.util.Dom,
             YAHOO.log('Handle R', 'info', 'Resize');
             this._dds.r.setYConstraint(0,0);
             var newW = this._setWidth(args.e);
-            var newH = this._setHeight(args.e);
             this.resize(args.e, 0, newW, 0, 0);
         },
         /** 
