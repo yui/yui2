@@ -1862,8 +1862,9 @@
                                 var proxy = this._resize.getProxyEl();
                                 proxy.innerHTML = '<div class="yui-layout-handle-' + handle + '"></div>';
                             }
-
                             this._resize.on('startResize', function(ev) {
+                                this._lastScroll = this.get('scroll');
+                                this.set('scroll', false);
                                 if (this.get('parent')) {
                                     this.get('parent').fireEvent('startResize');
                                 }
@@ -1872,6 +1873,7 @@
                             this._resize.on('resize', function(ev) {
                                 this.set('height', ev.height);
                                 this.set('width', ev.width);
+                                this.set('scroll', this._lastScroll);
                             }, this, true);
                         }
                     } else {
