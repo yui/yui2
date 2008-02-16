@@ -735,7 +735,7 @@
             * @type Number
             */
             this.setAttributeConfig('top', {
-                value: attr.top,
+                value: attr.top || 0,
                 validator: Lang.isNumber,
                 method: function(t) {
                     if (!this._collapsing) {
@@ -750,7 +750,7 @@
             * @type Number
             */
             this.setAttributeConfig('left', {
-                value: attr.left,
+                value: attr.left || 0,
                 validator: Lang.isNumber,
                 method: function(l) {
                     if (!this._collapsing) {
