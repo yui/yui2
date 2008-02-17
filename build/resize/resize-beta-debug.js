@@ -733,8 +733,6 @@ var D = YAHOO.util.Dom,
         * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */
         resize: function(ev, h, w, t, l, force) {
-            //Internet Explorer needs this
-            D.removeClass(this._wrap, this.CSS_RESIZE);
             YAHOO.log('Resize: ' + h + ',' + w, 'info', 'Resize');
             this._resizeEvent = ev;
             var el = this._wrap, anim = this.get('animate'), set = true;
@@ -919,9 +917,6 @@ var D = YAHOO.util.Dom,
                     this.fireEvent('resize', { ev: 'resize', target: this, height: h, width: w, top: t, left: l });
                 }
             }
-            
-            //Internet Explorer needs this
-            D.addClass(this._wrap, this.CSS_RESIZE);
             return this;
         },
         /** 
