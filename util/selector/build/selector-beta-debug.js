@@ -583,6 +583,9 @@ var tokenize = function(selector) {
     do {
         found = false; // reset after full pass
         for (var re in patterns) {
+                if (!YAHOO.lang.hasOwnProperty(patterns, re)) {
+                    continue;
+                }
                 if (re != 'tag' && re != 'combinator') { // only one allowed
                     token[re] = token[re] || [];
                 }
@@ -639,6 +642,9 @@ var replaceShorthand = function(selector) {
         selector = selector.replace(patterns.attributes, 'REPLACED_ATTRIBUTE');
     }
     for (var re in shorthand) {
+        if (!YAHOO.lang.hasOwnProperty(shorthand, re)) {
+            continue;
+        }
         selector = selector.replace(getRegExp(re, 'gi'), shorthand[re]);
     }
 
