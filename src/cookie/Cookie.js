@@ -1,8 +1,13 @@
+/**
+ * Utilities for cookie management
+ * @namespace YAHOO.util
+ * @module cookie
+ * @beta
+ */
 YAHOO.namespace("util");
 
 /**
  * Cookie utility.
- * @namespace YAHOO.util
  * @class Cookie
  * @static
  */
