@@ -3,6 +3,7 @@ get - Release Notes
 2.5.0
     * autopurge no longer attempts to remove nodes that have been
       removed previously.
+    * Fixed Safari 2.x external script insert.
 
 2.4.1
    * No change

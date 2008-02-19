@@ -365,7 +365,7 @@ YAHOO.util.Get = function() {
             if (type === "script") {
 
                 // Safari 3.x supports the load event for script nodes (DOM2)
-                if (ua.webkit > 419) {
+                if (ua.webkit >= 420) {
 
                     n.addEventListener("load", function() {
                         YAHOO.log(id + " DOM2 onload " + url, "info", "Get");
