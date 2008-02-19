@@ -1,5 +1,8 @@
 ColorPicker - Release Notes
 
+2.5.0
+   * No change
+
 2.4.0
    * Initialization values assigned to showcontrols, showrgbcontrols,
      showwebsafe, showhexsummary, animate, red, green, and blue in the
