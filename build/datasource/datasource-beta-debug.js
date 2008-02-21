@@ -1460,107 +1460,6 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
 };
 
 /**
- * Executes a function created on the fly to parse the response JSON according to 
- * the defined schema.
- * @method executeJSONParser
- * @param oFullResponse {Object} The raw JSON-typed data from the server.
- * @return {Object}
- * @private
- */
-YAHOO.util.DataSource.prototype.executeJSONParser = function (oFullResponse) {
-    // Create the parsing method per the responseSchema only once
-    if (!this.jsonResponseParser) {
-        YAHOO.log("Creating json parsing function","info",this.toString());
-
-        var schema       = this.responseSchema,
-            fields       = schema.fields,
-            resultsList  = schema.resultsList,
-            totalRecords = schema.totalRecords,
-            keys         = [],
-            keyAssign,
-            i;
-
-        if (/\(/.test(resultsList)) {
-            YAHOO.log("Invalid contents in resultsList: '"+resultsList+"'","error",this.toString());
-            throw new SyntaxError("resultsList may only contain valid characters for variable names");
-        }
-
-        // Commit the atrocity of creating a function on the fly. parserDef
-        // will become the body passed to new Function.  The signature will be
-        // function (oFullResponse)
-        var parserDef = 
-            // grab the results list from the response
-            "var results=oFullResponse";
-        
-        // Default direct assignment of oFullResponse as the resultsList if
-        // the schema was not configured with a resultsList key.  Otherwise
-        // create results=oFullResponse.location['in'].resultsList
-        if (YAHOO.lang.isValue(resultsList)) {
-            parserDef += "." + resultsList;
-        }
-        parserDef += ";";
-
-        // if the list wasn't found at that location, default an empty array
-        parserDef +=
-            "if(!results){" +
-                "results=[];" +
-            "}" +
-
-            // make sure it's an array
-            "if(!YAHOO.lang.isArray(results)){" +
-                "results=[results];" +
-            "}";
-
-        // Check for non-flat field keys.  If no keys need depth greater than
-        // 1 (e.g. {key:"a.b.c"}), the raw data records can be used.
-        for (i = fields.length - 1; i >= 0; --i) {
-            keys[i] = typeof fields[i] === 'object' ? fields[i].key : fields[i];
-        }
-
-        // Test for any key having a '.' or '[' char
-        if (/\[|\./.test(keys.join(''))) {
-            // There are non-flat keys.  Iterate through the results, flattening
-            // the keys -- {key:'a.b.c'} pulls value into result data like
-            // { 'a.b.c': result.a.b.c, ... } (note the key is a flat string)
-            parserDef +=
-            "for(var i=results.length-1;i>=0;--i){" +
-                "var r=results[i];" +
-                "results[i]={";
-
-            keyAssign = [];
-            for (i = keys.length - 1; i >= 0; --i) {
-                // Escape the quotes in 'a["b"]' style notation for the key
-                // portion.
-                keyAssign[i] = '"'+keys[i].replace(/"/g,'\\"')+'":r.'+keys[i];
-            }
-            parserDef += keyAssign.join(',') +
-                "};" +
-            "}";
-        }
-
-        // Generate the oParsedResponse
-        parserDef +=
-            "return {" +
-                "results:results";
-
-        // Include totalRecords if defined in the schema
-        if (totalRecords) {
-            parserDef += "," +
-                "totalRecords:oFullResponse."+totalRecords;
-        }
-        
-        parserDef +=
-            "};";
-
-        YAHOO.log("Parser defined as:\n"+parserDef,"info",this.toString());
-
-        this.jsonResponseParser = new Function("oFullResponse",parserDef);
-    }
-
-    return this.jsonResponseParser(oFullResponse);
-};
-
-/**
  * Overridable method parses JSON data into a response object.
  *
  * @method parseJSONData
@@ -1576,55 +1475,124 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse
     if(oFullResponse && (YAHOO.lang.isObject(oFullResponse))) {
         if(YAHOO.lang.isArray(this.responseSchema.fields)) {
             var fields          = this.responseSchema.fields,
-                parserMap       = {},
+                results         = oFullResponse,
+                totalRecs       = oFullResponse,
+                fieldParsers    = [],
+                fieldPaths      = [],
                 bError          = false,
-                bHasParser      = false,
-                i;
+                i,len,j,v,key,parser,path;
 
-            // Build the parser map
+            // Function to parse the schema's locator keys into walk paths
+            var buildPath = function (needle) {
+                var path = null, keys = [], i = 0;
+                if (needle) {
+                    // Strip the ["string keys"] and [1] array indexes
+                    needle = needle.
+                        replace(/\[(['"])(.*?)\1\]/g,
+                        function (x,$1,$2) {keys[i++]=$2;return '.#'+(i-1);}).
+                        replace(/\[(\d+)\]/g,
+                        function (x,$1,$2) {keys[i++]=parseInt($1,10)|0;return '.#'+(i-1);}).
+                        replace(/^\./,'');
+
+                    // if the needle 
+                    if (!/[^\w\.-$]/.test(needle)) {
+                        path = needle.split('.');
+                        for (i=path.length-1; i >= 0; --i) {
+                            if (path[i].charAt(0) === '#') {
+                                path[i] = keys[parseInt(path[i].substr(1),10)];
+                            }
+                        }
+                    }
+                }
+                return path;
+            };
+
+            // build function to walk a path and return the pot of gold
+            var walkPath = function (path, origin) {
+                var v=origin,i=0,len=path.length;
+                for (;i<len && v;++i) {
+                    v = v[path[i]];
+                }
+                return v;
+            };
+
+            // Build the parser map and parse the location paths
             for (i = fields.length - 1; i >= 0; --i) {
-                var key    = fields[i].key || fields[i],
-                    parser = fields[i].parser || fields[i].converter;
+                key    = fields[i].key || fields[i];
+                parser = fields[i].parser || fields[i].converter;
+                path   = buildPath(key);
 
                 if (parser) {
-                    parserMap[key] = parser;
-                    bHasParser = true;
+                    fieldParsers[fieldParsers.length] = {key:key,parser:parser};
+                }
+
+                if (path && path.length > 1) {
+                    fieldPaths[fieldPaths.length] = {key:key,path:path};
                 }
             }
 
-            // Parse out a jsonList
-            try {
-                oParsedResponse = this.executeJSONParser(oFullResponse);
-            }
-            catch(e) {
-                bError = true;
-            }
-
-            // Check for errors
-            if(bError || !oParsedResponse || !oParsedResponse.results) {
-                YAHOO.log("JSON data could not be parsed: " +
-                        YAHOO.lang.dump(oFullResponse), "error", this.toString());
-                if (!oParsedResponse) {
-                    oParsedResponse = {results:[]};
+            // Parse the response
+            // Step 1. Pull the resultsList from oFullResponse (default assumes
+            // oFullResponse IS the resultsList)
+            if (this.responseSchema.resultsList) {
+                path = buildPath(this.responseSchema.resultsList);
+                if (path) {
+                    results = walkPath(path, oFullResponse);
+                    if (!results) {
+                        bError = true;
+                    }
+                } else {
+                    bError = true;
                 }
-
-                oParsedResponse.error = true;
+            }
+            if (!results) {
+                results = [];
             }
 
-            // Loop through the results to parse data if there are parsers
-            if (bHasParser) {
-                for (i = oParsedResponse.results.length - 1; i >= 0; --i) {
-                    var r = oParsedResponse.results[i];
-                    for (var p in parserMap) {
-                        if (YAHOO.lang.hasOwnProperty(parserMap,p)) {
-                            r[p] = parserMap[p].call(this,r[p]);
+            if (!YAHOO.lang.isArray(results)) {
+                results = [results];
+            }
+
+            oParsedResponse.results = results;
+
+            if (!bError) {
+                // Step 2. Process the results, flattening the records and/or
+                // applying parsers if needed
+                if (fieldParsers.length || fieldPaths.length) {
+                    for (i = results.length - 1; i >= 0; --i) {
+                        var r = results[i];
+                        for (j = fieldPaths.length - 1; j >= 0; --j) {
+                            r[fieldPaths[j].key] = walkPath(fieldPaths[j].path,r);
+                        }
+
+                        for (j = fieldParsers.length - 1; j >= 0; --j) {
+                            var p = fieldParsers[j].key;
+                            r[p] = fieldParsers[j].parser(r[p]);
                             if (r[p] === undefined) {
                                 r[p] = null;
                             }
                         }
                     }
                 }
+
+                // Step 3. Pull totalRecords from oFullResponse if identified
+                if (this.responseSchema.totalRecords) {
+                    path = buildPath(this.responseSchema.totalRecords);
+                    if (path) {
+                        totalRecs = walkPath(path, oFullResponse);
+                        if (typeof totalRecs === 'string') {
+                            totalRecs = parseInt(totalRecs,10)|0;
+                        }
+                        oParsedResponse.totalRecords = totalRecs;
+                    }
+                }
+            } else {
+                YAHOO.log("JSON data could not be parsed: " +
+                        YAHOO.lang.dump(oFullResponse), "error", this.toString());
+
+                oParsedResponse.error = true;
             }
+
         }
     }
     else {
@@ -1855,5 +1823,4 @@ YAHOO.util.DataSource.prototype.parseHTMLTableData = function(oRequest, oFullRes
     }
  };
  
-
 YAHOO.register("datasource", YAHOO.util.DataSource, {version: "@VERSION@", build: "@BUILD@"});
