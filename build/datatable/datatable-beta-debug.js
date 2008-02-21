@@ -6734,7 +6734,7 @@ _syncColWidths : function() {
             this._elTbodyContainer.style.width = sWidth;     
         } 
     }
-    
+
     this._syncScrollPadding();
 },
 
@@ -6811,6 +6811,42 @@ _syncScrollPadding : function() {
         }
     }
 },
+
+/**
+ * Forces browser repaint by removing/adding the no-op class name
+ *
+ * @method _forceBrowserRedraw
+ * @private
+ */
+_forceBrowserRedraw : function() {
+    this._oChain.add({
+        method: function(oArg) {
+            if((this instanceof DT) && this._sId) {
+                Dom.removeClass(this.getContainerEl(),"yui-dt-noop");
+            }
+        },
+        scope: this
+    });
+    this._oChain.add({
+        method: function() {
+            if((this instanceof DT) && this._sId) {
+                Dom.addClass(this.getContainerEl(),"yui-dt-noop");
+            }
+        },
+        scope:this
+    });
+    this._oChain.run();
+},
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9284,6 +9320,11 @@ render : function() {
                 }
                 
                 if(this._bInit) {
+                    // Bug 1741322: Force FF to redraw to fix squishy headers on wide tables
+                    if(ua.gecko) {
+                        this._forceBrowserRedraw();
+                    }
+    
                     this._oChain.add({
                         method: function() {
                             if((this instanceof DT) && this._sId && this._bInit) {
@@ -9317,27 +9358,7 @@ render : function() {
             },
             scope: this
         });
-        
-        // Bug 1741322: Force FF to redraw to fix squishy headers on wide tables
-        if(ua.gecko) {
-            this._oChain.add({
-                method: function(oArg) {
-                    if((this instanceof DT) && this._sId) {
-                        Dom.removeClass(this.getContainerEl(),"yui-dt-noop");
-                    }
-                },
-                scope: this
-            });
-            this._oChain.add({
-                method: function() {
-                    if((this instanceof DT) && this._sId) {
-                        Dom.addClass(this.getContainerEl(),"yui-dt-noop");
-                    }
-                },
-                scope:this
-            });
-        }
-            
+                    
         this._oChain.run();  
     }
     // Empty
