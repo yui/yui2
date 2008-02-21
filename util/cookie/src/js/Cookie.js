@@ -131,7 +131,7 @@ YAHOO.util.Cookie = {
                 var cookieValue /*:String*/ = null;
                 
                 for (var i=0, len=cookieParts.length; i < len; i++){
-                    cookieName = decodeURIComponent(cookieParts[i].match(/([a-z]+)=/i)[1]);
+                    cookieName = decodeURIComponent(cookieParts[i].match(/([^=]+)=/i)[1]);
                     cookieValue = decodeURIComponent(cookieParts[i].substring(cookieName.length+1));
                     cookies[cookieName] = cookieValue;
                 }
