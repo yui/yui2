@@ -8952,7 +8952,14 @@ saveCellEditor : function() {
 
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
-        this._syncColWidths();
+        
+        // Bug fix 1764044
+        this._oChain.add({
+            method: function() {
+                this._syncColWidths();
+            },
+            scope: this
+        });
 
         // Clear out the Cell Editor
         this.resetCellEditor();
