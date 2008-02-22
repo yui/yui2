@@ -149,7 +149,6 @@ YAHOO.util.Chain.prototype = {
         return this;
     }
 };
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1456,7 +1455,6 @@ if(YAHOO.util.DD) {
         }
     });
 }
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2247,7 +2245,6 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
-
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -2761,8 +2758,8 @@ YAHOO.widget.Paginator.prototype = {
      */
     getCurrentPage : function () {
         var perPage = this.get('rowsPerPage');
-        if (!perPage) {
-            return null;
+        if (!perPage || !this.get('totalRecords')) {
+            return 0;
         }
         return Math.floor(this.get('recordOffset') / perPage) + 1;
     },
@@ -2776,11 +2773,7 @@ YAHOO.widget.Paginator.prototype = {
         var currentPage = this.getCurrentPage(),
             totalPages  = this.getTotalPages();
 
-        if (currentPage === null) {
-            return false;
-        }
-
-        return (totalPages === YAHOO.widget.Paginator.VALUE_UNLIMITED ? true : currentPage < totalPages);
+        return currentPage && (totalPages === YAHOO.widget.Paginator.VALUE_UNLIMITED || currentPage < totalPages);
     },
 
     /**
@@ -3819,12 +3812,8 @@ ui.PageLinks.calculateRange = function (currentPage,totalPages,numPages) {
     var UNLIMITED = Paginator.VALUE_UNLIMITED,
         start, end, delta;
 
-    if (!currentPage) {
-        return null;
-    }
-
     // Either has no pages, or unlimited pages.  Show none.
-    if (numPages === 0 || totalPages === 0 ||
+    if (!currentPage || numPages === 0 || totalPages === 0 ||
         (totalPages === UNLIMITED && numPages === UNLIMITED)) {
         return [0,-1];
     }
@@ -3860,7 +3849,7 @@ ui.PageLinks.prototype = {
      * @type number
      * @private
      */
-    current     : null,
+    current     : 0,
 
     /**
      * Span node containing the page links
@@ -4210,15 +4199,15 @@ ui.CurrentPageReport.init = function (p) {
     p.setAttributeConfig('pageReportValueGenerator', {
         value : function (paginator) {
             var curPage = paginator.getCurrentPage(),
-                records = paginator.getPageRecords(curPage);
+                records = paginator.getPageRecords();
 
             return {
-                'currentPage' : curPage,
+                'currentPage' : records ? curPage : 0,
                 'totalPages'  : paginator.getTotalPages(),
-                'startIndex'  : records[0],
-                'endIndex'    : records[1],
-                'startRecord' : records[0] + 1,
-                'endRecord'   : records[1] + 1,
+                'startIndex'  : records ? records[0] : -1,
+                'endIndex'    : records ? records[1] : -1,
+                'startRecord' : records ? records[0] + 1 : 0,
+                'endRecord'   : records ? records[1] + 1 : 0,
                 'totalRecords': paginator.get('totalRecords')
             };
         },
@@ -4289,7 +4278,6 @@ ui.CurrentPageReport.prototype = {
 };
 
 })();
-
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
@@ -14853,5 +14841,4 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
 
 });
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
