@@ -1295,7 +1295,13 @@ if(YAHOO.util.DD) {
          */
         onMouseUp : function(e) {
             this.resetResizerEl();
-            this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
+            
+            var el = this.headCell.firstChild;
+            var newWidth = el.offsetWidth -
+                (parseInt(YAHOO.util.Dom.getStyle(el,"paddingLeft"),10)|0) -
+                (parseInt(YAHOO.util.Dom.getStyle(el,"paddingRight"),10)|0);
+
+            this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell,width:newWidth});
         },
     
         /**

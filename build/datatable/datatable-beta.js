@@ -1402,7 +1402,13 @@ if(YAHOO.util.DD) {
          */
         onMouseUp : function(e) {
             this.resetResizerEl();
-            this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell});
+            
+            var el = this.headCell.firstChild;
+            var newWidth = el.offsetWidth -
+                (parseInt(YAHOO.util.Dom.getStyle(el,"paddingLeft"),10)|0) -
+                (parseInt(YAHOO.util.Dom.getStyle(el,"paddingRight"),10)|0);
+
+            this.datatable.fireEvent("columnResizeEvent", {column:this.column,target:this.headCell,width:newWidth});
         },
     
         /**
@@ -5639,10 +5645,16 @@ lang.augmentObject(DT, {
         elTextbox.value = value;
 
         // Set up a listener on each textbox to track the input value
-        Ev.addListener(elTextbox, "keyup", function(){
-            //TODO: set on a timeout
-            oSelf._oCellEditor.value = elTextbox.value;
-            oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
+        Ev.addListener(elTextbox, "keyup", function(v){
+            // Save on "enter"
+            if(v.keyCode === 13) {
+                oSelf.saveCellEditor();
+            }
+            // Update the tracker value
+            else {
+                oSelf._oCellEditor.value = elTextbox.value;
+                oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
+            }
         });
 
         // Select the text
@@ -5851,13 +5863,18 @@ initAttributes : function(oConfigs) {
     *     <dt>sortedBy.dir</dt>
     *     <dd>{String} Initial sort direction, either DT.CLASS_ASC or DT.CLASS_DESC</dd>
     * </dl>
-    * @type Object
+    * @type Object | null
     */
     this.setAttributeConfig("sortedBy", {
         value: null,
         // TODO: accepted array for nested sorts
         validator: function(oNewSortedBy) {
-            return (oNewSortedBy && (oNewSortedBy.constructor == Object) && oNewSortedBy.key);
+            if(oNewSortedBy) {
+                return ((oNewSortedBy.constructor == Object) && oNewSortedBy.key);
+            }
+            else {
+                return (oNewSortedBy === null);
+            }
         },
         method: function(oNewSortedBy) {
             // Remove ASC/DESC from TH
@@ -5870,18 +5887,20 @@ initAttributes : function(oConfigs) {
             }
 
             // Set ASC/DESC on TH
-            var column = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
-            if(column) {
-                // Backward compatibility
-                if(oNewSortedBy.dir && ((oNewSortedBy.dir == "asc") ||  (oNewSortedBy.dir == "desc"))) {
-                    var newClass = (oNewSortedBy.dir == "desc") ?
-                            DT.CLASS_DESC :
-                            DT.CLASS_ASC;
-                    Dom.addClass(column.getThEl(), newClass);
-                }
-                else {
-                     var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
-                     Dom.addClass(column.getThEl(), sortClass);
+            if(oNewSortedBy) {
+                var column = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
+                if(column) {
+                    // Backward compatibility
+                    if(oNewSortedBy.dir && ((oNewSortedBy.dir == "asc") ||  (oNewSortedBy.dir == "desc"))) {
+                        var newClass = (oNewSortedBy.dir == "desc") ?
+                                DT.CLASS_DESC :
+                                DT.CLASS_ASC;
+                        Dom.addClass(column.getThEl(), newClass);
+                    }
+                    else {
+                         var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
+                         Dom.addClass(column.getThEl(), sortClass);
+                    }
                 }
             }
         }
@@ -9015,12 +9034,9 @@ getTrIndex : function(row) {
 
 /**
  * Resets a RecordSet with the given data and populates the page view
- * with the new data. Any previous data and selection states are cleared.
- * However, sort states are not cleared, so if the given data is in a particular
- * sort order, implementers should take care to reset the sortedBy property. If
- * pagination is enabled, the currentPage is shown and Paginator UI updated,
- * otherwise all rows are displayed as a single page. For performance, existing
- * DOM elements are reused when possible.
+ * with the new data. Any previous data, and selection and sort states are
+ * cleared. The render method should be called as a separate step in order
+ * to update the UI. 
  *
  * @method initializeTable
  */
@@ -9037,6 +9053,9 @@ initializeTable : function() {
     this._aSelections = null;
     this._oAnchorRecord = null;
     this._oAnchorCell = null;
+    
+    // Clear sort
+    this.set("sortedBy", null);
 },
 
 /**
@@ -14013,6 +14032,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * @event columnResizeEvent
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      * @param oArgs.target {HTMLElement} The TH element.
+     * @param oArgs.width {Number} Width in pixels.     
      */
 
     /**
