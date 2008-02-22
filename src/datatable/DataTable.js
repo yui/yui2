@@ -648,7 +648,7 @@ lang.augmentObject(DT, {
      * @static     
      */
     _cloneObject : function(o) {
-        if(lang.isUndefined(o)) {
+        if(!lang.isValue(o)) {
             return o;
         }
         
@@ -661,7 +661,7 @@ lang.augmentObject(DT, {
             }
             copy = array;
         }
-        else if(o.constructor == Object) { 
+        else if(o.constructor && (o.constructor == Object)) { 
             for (var x in o){
                 if(lang.hasOwnProperty(o, x)) {
                     if(lang.isValue(o[x]) && (o[x].constructor == Object) || lang.isArray(o[x])) {

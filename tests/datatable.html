@@ -1633,6 +1633,74 @@
         }
     });
     var dtPaginationTest = new DataTableTestCase(dtPaginationTemplate);
+    
+    /**
+     *
+     *
+     * Tests the _cloneObject API.
+     *
+     *
+     */
+    var dtCloneObjectTemplate = YAHOO.lang.merge(dtBaseTemplate, {
+        name: "DataTable Clone Object Tests",
+        
+        testUndefined: function() {
+            var dt = this.createInstance();
+            Assert.areSame(undefined, YAHOO.widget.DataTable._cloneObject(undefined), "Expected undefined");
+        },
+
+        testNull: function() {
+            var dt = this.createInstance();
+            Assert.areSame(null, YAHOO.widget.DataTable._cloneObject(null), "Expected null");
+        },
+        
+        testNaN: function() {
+            var dt = this.createInstance();
+            Assert.areSame(isNaN(NaN), isNaN(YAHOO.widget.DataTable._cloneObject(NaN)), "Expected NaN");
+        },
+        
+        testZero: function() {
+            var dt = this.createInstance();
+            Assert.areSame(0, YAHOO.widget.DataTable._cloneObject(0), "Expected 0");
+        },
+        
+        testNumber: function() {
+            var dt = this.createInstance();
+            Assert.areSame(5, YAHOO.widget.DataTable._cloneObject(5), "Expected 5");
+        },
+        
+        testString: function() {
+            var dt = this.createInstance();
+            Assert.areSame("abc", YAHOO.widget.DataTable._cloneObject("abc"), "Expected abc");
+        },
+        
+        testFalse: function() {
+            var dt = this.createInstance();
+            Assert.areSame(false, YAHOO.widget.DataTable._cloneObject(false), "Expected false");
+        },
+        
+        testTrue: function() {
+            var dt = this.createInstance();
+            Assert.areSame(true, YAHOO.widget.DataTable._cloneObject(true), "Expected true");
+        },
+        
+        testArraySimple: function() {
+            var dt = this.createInstance();
+            ArrayAssert.itemsAreSame([1,2,3], YAHOO.widget.DataTable._cloneObject([1,2,3]), "Expected simple array");
+        },
+        
+        testObjectSimple: function() {
+            var dt = this.createInstance();
+            ObjectAssert.propertiesAreEqual({"a":1,"b":2,"c":3}, YAHOO.widget.DataTable._cloneObject({"a":1,"b":2,"c":3}), "Expected simple object");
+        },
+        
+        testObjectInstance: function() {
+            var dt = this.createInstance();
+            ObjectAssert.propertiesAreEqual(dt, YAHOO.widget.DataTable._cloneObject(dt), "Expected complex object");
+        }
+    });
+
+    var dtCloneObjectTest = new DataTableTestCase(dtCloneObjectTemplate);
 
     /**
      *
@@ -1654,6 +1722,7 @@
         datatablesuite.add(dtRowSelectionTest);
         datatablesuite.add(dtCellSelectionTest);
         datatablesuite.add(dtPaginationTest);
+        datatablesuite.add(dtCloneObjectTest);
         
         TestRunner.add(datatablesuite);
 
