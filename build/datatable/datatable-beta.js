@@ -5449,7 +5449,7 @@ lang.augmentObject(DT, {
             calendar.render();
             calContainer.style.cssFloat = "none";
 
-            if(ua.ie == 6) {
+            if(ua.ie) {
                 var calFloatClearer = elContainer.appendChild(document.createElement("br"));
                 calFloatClearer.style.clear = "both";
             }
