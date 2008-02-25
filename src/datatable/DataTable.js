@@ -2407,7 +2407,7 @@ _syncScrollPadding : function() {
                     (elTbody.offsetHeight + 19) + "px" : 
                     elTbody.offsetHeight + "px";
         }
-        
+
         // X-scrolling not enabled
         if(!this.get("width")) {
             // Snap outer container width to content
@@ -2418,7 +2418,8 @@ _syncScrollPadding : function() {
                     (elTbody.parentNode.offsetWidth) + "px";
         }
         // X-scrolling is enabled and x-scrollbar is visible
-        else if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
+        else if((elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ||
+            ((elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) && (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth-16))) {
             // Perform sync routine
             if(!this._bScrollbarX) {
                 // Add Column header right-padding
@@ -2430,7 +2431,7 @@ _syncScrollPadding : function() {
                     elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
                     elLiner.style.marginRight = 
                             (parseInt(Dom.getStyle(elLiner,"marginRight"),10) + 
-                            27) + "px";
+                            16) + "px";
                 }
                 
                 // Save state   
@@ -5595,6 +5596,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                 resizerFn.call(this,oColumn,sWidth);
             }
         }
+    this._syncScrollPadding();
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());

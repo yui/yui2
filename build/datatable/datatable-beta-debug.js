@@ -149,6 +149,7 @@ YAHOO.util.Chain.prototype = {
         return this;
     }
 };
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1500,6 +1501,7 @@ if(YAHOO.util.DD) {
         }
     });
 }
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2326,6 +2328,7 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
+
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -4359,6 +4362,7 @@ ui.CurrentPageReport.prototype = {
 };
 
 })();
+
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
@@ -6768,7 +6772,7 @@ _syncScrollPadding : function() {
                     (elTbody.offsetHeight + 19) + "px" : 
                     elTbody.offsetHeight + "px";
         }
-        
+
         // X-scrolling not enabled
         if(!this.get("width")) {
             // Snap outer container width to content
@@ -6779,7 +6783,8 @@ _syncScrollPadding : function() {
                     (elTbody.parentNode.offsetWidth) + "px";
         }
         // X-scrolling is enabled and x-scrollbar is visible
-        else if(elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) {
+        else if((elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ||
+            ((elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) && (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth-16))) {
             // Perform sync routine
             if(!this._bScrollbarX) {
                 // Add Column header right-padding
@@ -6791,7 +6796,7 @@ _syncScrollPadding : function() {
                     elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
                     elLiner.style.marginRight = 
                             (parseInt(Dom.getStyle(elLiner,"marginRight"),10) + 
-                            27) + "px";
+                            16) + "px";
                 }
                 
                 // Save state   
@@ -9956,6 +9961,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                 resizerFn.call(this,oColumn,sWidth);
             }
         }
+    this._syncScrollPadding();
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
@@ -15055,4 +15061,5 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
 
 });
 })();
+
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
