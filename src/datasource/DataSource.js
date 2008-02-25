@@ -1489,13 +1489,14 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse
                     // Strip the ["string keys"] and [1] array indexes
                     needle = needle.
                         replace(/\[(['"])(.*?)\1\]/g,
-                        function (x,$1,$2) {keys[i++]=$2;return '.#'+(i-1);}).
+                        function (x,$1,$2) {keys[i]=$2;return '.#'+(i++);}).
                         replace(/\[(\d+)\]/g,
-                        function (x,$1,$2) {keys[i++]=parseInt($1,10)|0;return '.#'+(i-1);}).
-                        replace(/^\./,'');
+                        function (x,$1) {keys[i]=parseInt($1,10)|0;return '.#'+(i++);}).
+                        replace(/^\./,''); // remove leading dot
 
-                    // if the needle 
-                    if (!/[^\w\.-$]/.test(needle)) {
+                    // If the cleaned needle contains invalid characters, the
+                    // path is invalid
+                    if (!/[^\w\.\-\$#]/.test(needle)) {
                         path = needle.split('.');
                         for (i=path.length-1; i >= 0; --i) {
                             if (path[i].charAt(0) === '#') {
@@ -1516,7 +1517,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse
                 return v;
             };
 
-            // Build the parser map and parse the location paths
+            // Build the parser map and location paths
             for (i = fields.length - 1; i >= 0; --i) {
                 key    = fields[i].key || fields[i];
                 parser = fields[i].parser || fields[i].converter;
