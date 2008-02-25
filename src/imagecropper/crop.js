@@ -344,8 +344,12 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the Resize Utilitys Resize event
         */
         _handleResizeEvent: function(ev) {
-            this._resizeMaskEl.style.height = Math.floor(ev.height) + 'px';
-            this._resizeMaskEl.style.width = Math.floor(ev.width) + 'px';
+            if (ev.height) {
+                this._resizeMaskEl.style.height = Math.floor(ev.height) + 'px';
+            }
+            if (ev.width) {
+                this._resizeMaskEl.style.width = Math.floor(ev.width) + 'px';
+            }
             this._setConstraints(true);
             this._syncBackgroundPosition();
             this.fireEvent('resizeEvent', arguments);
