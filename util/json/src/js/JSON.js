@@ -53,7 +53,7 @@ YAHOO.lang.JSON = {
      * @static
      * @private
      */
-    _SPECIAL_CHARS : /["\\\x00-\x1f]/g,
+    _SPECIAL_CHARS : /["\\\x00-\x1f\x7f-\x9f]/g,
 
     /**
      * Regex used to reconstitute serialized Dates.
@@ -240,7 +240,7 @@ YAHOO.lang.JSON = {
         };
 
         // Use the configured date conversion
-        var _date = this.dateToString;
+        var _date = J.dateToString;
     
         // Worker function.  Fork behavior on data type and recurse objects and
         // arrays per the configured depth.
@@ -250,6 +250,11 @@ YAHOO.lang.JSON = {
                 k,v,     // object iteration
                 vt,      // typeof v during iteration
                 a;       // composition array for performance over string concat
+
+            // Test for native support
+            if (o && typeof o.toJSON === 'function') {
+                return o.toJSON();
+            }
 
             // String
             if (t === 'string') {
@@ -287,7 +292,7 @@ YAHOO.lang.JSON = {
                 // Only recurse if we're above depth config
                 if (d > 0) {
                     for (i = o.length - 1; i >= 0; --i) {
-                        a[i] = _stringify(o[i],w,d-1);
+                        a[i] = _stringify(o[i],w,d-1) || 'null';
                     }
                 }
 
@@ -298,7 +303,12 @@ YAHOO.lang.JSON = {
             }
 
             // Object
-            if (t === 'object' && o) {
+            if (t === 'object') {
+                // Test for null reporting as typeof 'object'
+                if (!o) {
+                    return 'null';
+                }
+
                 // Check for cyclical references
                 for (i = pstack.length - 1; i >= 0; --i) {
                     if (pstack[i] === o) {
@@ -316,12 +326,11 @@ YAHOO.lang.JSON = {
                     // If whitelist provided, take only those keys
                     if (w) {
                         for (i = 0, j = 0, len = w.length; i < len; ++i) {
-                            v = o[w[i]];
-                            vt = typeof v;
-
-                            // Omit invalid values
-                            if (vt !== 'undefined' && vt !== 'function') {
-                                a[j++] = _string(w[i]) + ':' + _stringify(v,w,d-1);
+                            if (typeof w[i] === 'string') {
+                                v = _stringify(o[w[i]],w,d-1);
+                                if (v) {
+                                    a[j++] = _string(w[i]) + ':' + v;
+                                }
                             }
                         }
 
@@ -331,10 +340,9 @@ YAHOO.lang.JSON = {
                         j = 0;
                         for (k in o) {
                             if (typeof k === 'string' && l.hasOwnProperty(o,k)) {
-                                v = o[k];
-                                vt = typeof v;
-                                if (vt !== 'undefined' && vt !== 'function') {
-                                    a[j++] = _string(k) + ':' + _stringify(v,w,d-1);
+                                v = _stringify(o[k],w,d-1);
+                                if (v) {
+                                    a[j++] = _string(k) + ':' + v;
                                 }
                             }
                         }
@@ -347,11 +355,13 @@ YAHOO.lang.JSON = {
                 return '{' + a.join(',') + '}';
             }
 
-            return 'null';
+            return undefined; // invalid input
         };
 
+        // Default depth to POSITIVE_INFINITY
+        d = d >= 0 ? d : 1/0;
+
         // process the input
-        d = d >= 0 ? d : 1/0;  // Default depth to POSITIVE_INFINITY
         return _stringify(o,w,d);
     }
 };
