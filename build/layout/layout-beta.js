@@ -826,6 +826,20 @@
         */
         _lastScroll: null,
         /**
+        * @private
+        * @property _lastCenetrScroll
+        * @description A holder for the last known scroll state of the center unit
+        * @type Boolean
+        */
+        _lastCenterScroll: null,
+        /**
+        * @private
+        * @property _lastScrollTop
+        * @description A holder for the last known scrollTop state of the unit
+        * @type Number
+        */
+        _lastScrollTop: null,
+        /**
         * @method resize
         * @description Resize either the unit or it's clipped state, also updating the box inside
         * @param {Boolean} force This will force full calculations even when the unit is collapsed
@@ -1092,6 +1106,10 @@
             if (!this._collapsed) {
                 return this;
             }
+            var retVal = this.fireEvent('beforeExpand');
+            if (retVal === false) {
+                return this;
+            }
 
             this._collapsing = true;
             this.setStyle('zIndex', this.get('parent')._zIndex + 1);
@@ -1154,6 +1172,9 @@
                     this._collapsed = false;
                     this.resize();
                     this.set('scroll', this._lastScroll);
+                    if (this._lastScrollTop > 0) {
+                        this.body.scrollTop = this._lastScrollTop;
+                    }
                     this._anim.onComplete.unsubscribe(expand, this, true);
                     this.fireEvent('expand');
                 };
@@ -1171,6 +1192,9 @@
                 this._collapsed = false;
                 this.resize();
                 this.set('scroll', this._lastScroll);
+                if (this._lastScrollTop > 0) {
+                    this.body.scrollTop = this._lastScrollTop;
+                }
                 this.fireEvent('expand');
             }
             return this;
@@ -1187,6 +1211,10 @@
             if (this._collapsed) {
                 return this;
             }
+            var retValue = this.fireEvent('beforeCollapse');
+            if (retValue === false) {
+                return this;
+            }
             if (!this._clip) {
                 this._createClip();
             }
@@ -1197,6 +1225,7 @@
             this._lastWidth = w;
             this._lastHeight = h;
             this._lastScroll = this.get('scroll');
+            this._lastScrollTop = this.body.scrollTop;            
             this.set('scroll', false, true);
             this._lastLeft = parseInt(this.get('element').style.left, 10);
             this._lastTop = parseInt(this.get('element').style.top, 10);
@@ -1339,7 +1368,8 @@
             }
 
             this.on('contentChange', this.resize, this, true);
-            
+            this._lastScrollTop = 0;
+
             this.set('animate', this.get('animate'));
         },
         /**
@@ -1772,8 +1802,17 @@
             this.setAttributeConfig('scroll', {
                 value: attr.scroll || false,
                 method: function(scroll) {
+                    if ((scroll === false) && !this._collapsed) { //Removing scroll bar
+                        if (this.body.scrollTop > 0) {
+                            this._lastScrollTop = this.body.scrollTop;
+                        }
+                    }
+                    
                     if (scroll) {
                         this.addClass('yui-layout-scroll');
+                        if (this._lastScrollTop > 0) {
+                            this.body.scrollTop = this._lastScrollTop;
+                        }
                     } else {
                         this.removeClass('yui-layout-scroll');
                     }
@@ -1852,6 +1891,9 @@
                                 this.set('scroll', false);
                                 if (this.get('parent')) {
                                     this.get('parent').fireEvent('startResize');
+                                    var c = this.get('parent').getUnitByPosition('center');
+                                    this._lastCenterScroll = c.get('scroll');
+                                    c.set('scroll', false);
                                 }
                                 this.fireEvent('startResize');
                             }, this, true);
@@ -1859,6 +1901,10 @@
                                 this.set('height', ev.height);
                                 this.set('width', ev.width);
                                 this.set('scroll', this._lastScroll);
+                                if (this.get('parent')) {
+                                    var c = this.get('parent').getUnitByPosition('center');
+                                    c.set('scroll', this._lastCenterScroll);
+                                }
                             }, this, true);
                         }
                     } else {
@@ -1972,6 +2018,11 @@
     * @type YAHOO.util.CustomEvent
     */
     /**
+    * @event beforeCollapse
+    * @description Fired before the unit is collapsed. If you return false, the collapse is cancelled.
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
     * @event collapse
     * @description Fired when the unit is collapsed
     * @type YAHOO.util.CustomEvent
@@ -1979,6 +2030,11 @@
     /**
     * @event expand
     * @description Fired when the unit is exanded
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event beforeExpand
+    * @description Fired before the unit is exanded. If you return false, the collapse is cancelled.
     * @type YAHOO.util.CustomEvent
     */
     });
