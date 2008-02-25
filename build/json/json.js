@@ -11,7 +11,7 @@ YAHOO.lang.JSON = {
     /**
      * First step in the validation.  Regex used to replace all escape
      * sequences (i.e. "\\", etc) with '@' characters (a non-JSON character).
-     * @property RE_REPLACE_ESCAPES
+     * @property _ESCAPES
      * @type {RegExp}
      * @static
      * @private
@@ -20,7 +20,7 @@ YAHOO.lang.JSON = {
     /**
      * Second step in the validation.  Regex used to replace all simple
      * values with ']' characters.
-     * @property RE_REPLACE_VALUES
+     * @property _VALUES
      * @type {RegExp}
      * @static
      * @private
@@ -29,7 +29,7 @@ YAHOO.lang.JSON = {
     /**
      * Third step in the validation.  Regex used to remove all open square
      * brackets following a colon, comma, or at the beginning of the string.
-     * @property RE_REPLACE_BRACKETS
+     * @property _BRACKETS
      * @type {RegExp}
      * @static
      * @private
@@ -38,7 +38,7 @@ YAHOO.lang.JSON = {
     /**
      * Final step in the validation.  Regex used to test the string left after
      * all previous replacements for invalid characters.
-     * @property RE_INVALID
+     * @property _INVALID
      * @type {RegExp}
      * @static
      * @private
