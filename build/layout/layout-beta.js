@@ -177,16 +177,16 @@
                 this._right.set('height', this._sizes.right.h, true);
             }
             if (this._left) {
+                this._sizes.left.l = 0;
                 if (this._top) {
                     this._sizes.left.t = this._sizes.top.h;
-                    this._sizes.left.l = 0;
                     if (set) {
                         this._left.set('top', this._sizes.top.h);
-                        this._left.set('left', 0);
                     }
                 }
                 if (set) {
                     this._left.set('height', this._sizes.left.h, true);
+                    this._left.set('left', 0);
                 }
             }
             if (this._bottom) {
