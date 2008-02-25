@@ -1567,6 +1567,9 @@ var D = YAHOO.util.Dom,
             if (this._proxy) {
                 this._proxy.parentNode.removeChild(this._proxy);
             }
+            if (this._status) {
+                this._status.parentNode.removeChild(this._status);
+            }
             if (this.dd) {
                 this.dd.unreg();
                 D.removeClass(this._wrap, this.CSS_DRAG);
