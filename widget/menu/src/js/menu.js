@@ -1959,7 +1959,6 @@ _onMouseMove: function (p_oEvent, p_oMenu) {
 _onClick: function (p_sType, p_aArgs) {
 
 	var Event = YAHOO.util.Event,
-		Dom = YAHOO.util.Dom,
 		oEvent = p_aArgs[0],
 		oItem = p_aArgs[1],
 		oSubmenu,
@@ -2009,7 +2008,7 @@ _onClick: function (p_sType, p_aArgs) {
 	
 						sId = sURL.substr(1, nLen);
 	
-						bInMenuAnchor = Dom.isAncestor(this.element, sId);
+						bInMenuAnchor = (oSubmenu && (oSubmenu.element.id == sId)); 
 						
 					}
 					else if (nLen === 1) {
@@ -2028,7 +2027,7 @@ _onClick: function (p_sType, p_aArgs) {
 	
 				Event.preventDefault(oEvent);
 	
-				oItem.focus();
+				oItem.focusEvent.fire();
 			
 			}
 	
