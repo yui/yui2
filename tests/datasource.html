@@ -41,7 +41,6 @@
      */
     function DataSourceTestCase(template) {
         DataSourceTestCase.superclass.constructor.call(this, template);
-        this.data = ["a","b","c"];
         this.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
     };
     YAHOO.lang.extend(DataSourceTestCase, TestCase);
@@ -53,7 +52,7 @@
     };
 
     DataSourceTestCase.prototype.createInstance = function(oConfigs) {
-        ds =  new DataSource(this.data, oConfigs);
+        ds =  new DataSource((this.data||["a","b","c"]), oConfigs);
         ds.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
         ds.responseSchema = {
             fields: ["a","b","c"]
@@ -163,6 +162,75 @@
     /**
      *
      *
+     * Tests JSON parsing.
+     *
+     *
+     */
+
+    var dsParseJSONTemplate = YAHOO.lang.merge(datasourceTemplate, {
+        name:"Parse JSON Test",
+        data: {"ResultSet":{
+                "totalResultsAvailable":506,
+                "totalResultsReturned":10,
+                "first Result Position":1,
+                "ResultSetMapUrl":"http:\/\/maps.yahoo.com\/broadband\/?q1=Sunnyvale%2C+CA+94089&tt=pizza&tp=1",
+                "Result":[
+                    {Title:"Giovannis Pizzeria",5:"1127 N Lawrence Expy","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[408,734,4221],"for":"37.397058","Longitude":"-121.996017","Nested":{"Average-Rating":"4","Total Ratings":"54","TotalReviews":"36",5:"1201994139"},"Distance":"0.62","Url":"http:\/\/local.yahoo.com\/details?id=21341983&stx=pizza&csz=Sunnyvale+CA&ed=MKz.rq160SwrCmnpe6IIB6SO8HQ4zpqeQiusehO32jPu0kFQONfQkxJV87YlenT7OdxlEDHPoHfJqkjm","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21341983&stx=pizza&csz=Sunnyvale+CA&ed=MKz.rq160SwrCmnpe6IIB6SO8HQ4zpqeQiusehO32jPu0kFQONfQkxJV87YlenT7OdxlEDHPoHfJqkjm","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Giovannis+Pizzeria&desc=4087344221&csz=Sunnyvale+CA&qty=9&cs=9&ed=MKz.rq160SwrCmnpe6IIB6SO8HQ4zpqeQiusehO32jPu0kFQONfQkxJV87YlenT7OdxlEDHPoHfJqkjm&gid1=21341983","BusinessUrl":"","BusinessClickUrl":""},
+                    {Title:"Gumbas Cafe Italian Restaurant & Pizzeria",5:"176 S Murphy Ave","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[408,737,8384],"for":"37.376442","Longitude":"-122.030102","Nested":{"Average-Rating":"4","Total Ratings":"38","TotalReviews":"26",5:"1199489524"},"Distance":"2.05","Url":"http:\/\/local.yahoo.com\/details?id=21337886&stx=pizza&csz=Sunnyvale+CA&ed=uj7cXq160SxhJq9XTxZy.yXDsYz0FRBPkLX2zpjvEH6o4FWX9XPNxDcQ6y3QcRkD8A_GfKyDEVY-","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21337886&stx=pizza&csz=Sunnyvale+CA&ed=uj7cXq160SxhJq9XTxZy.yXDsYz0FRBPkLX2zpjvEH6o4FWX9XPNxDcQ6y3QcRkD8A_GfKyDEVY-","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Gumbas+Cafe+Italian+Restaurant+%26+Pizzeria&desc=4087378384&csz=Sunnyvale+CA&qty=9&cs=9&ed=uj7cXq160SxhJq9XTxZy.yXDsYz0FRBPkLX2zpjvEH6o4FWX9XPNxDcQ6y3QcRkD8A_GfKyDEVY-&gid1=21337886","BusinessUrl":"","BusinessClickUrl":""},
+                    {Title:"Vitos Famous Pizza",5:"1155 Reed Ave","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),246,8800],"for":"37.367029","Longitude":"-121.997904","Nested":{"Average-Rating":"4.5","Total Ratings":"16","TotalReviews":"13",5:"1195089220"},"Distance":"2.30","Url":"http:\/\/local.yahoo.com\/details?id=21332026&stx=pizza&csz=Sunnyvale+CA&ed=N38lFq160SymmdPNQF8OuFWLoPx_i.6GZDIVFehy9mWH6xbhRaqIfTx6ts8pKvY20AnKblM-","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21332026&stx=pizza&csz=Sunnyvale+CA&ed=N38lFq160SymmdPNQF8OuFWLoPx_i.6GZDIVFehy9mWH6xbhRaqIfTx6ts8pKvY20AnKblM-","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Vitos+Famous+Pizza&desc=4082468800&csz=Sunnyvale+CA&qty=9&cs=9&ed=N38lFq160SymmdPNQF8OuFWLoPx_i.6GZDIVFehy9mWH6xbhRaqIfTx6ts8pKvY20AnKblM-&gid1=21332026","BusinessUrl":"http:\/\/vitosfamouspizza.com\/","BusinessClickUrl":"http:\/\/vitosfamouspizza.com\/"},
+                    {Title:"Domino's Pizza",5:"615 Caliente Dr","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408), 732,3030],"for":"37.391271","Longitude":"-122.013742","Nested":{"Average-Rating":"4","Total Ratings":"5","TotalReviews":"0"},"Distance":"0.81","Url":"http:\/\/local.yahoo.com\/details?id=21335892&stx=pizza&csz=Sunnyvale+CA&ed=8AfC_K160Sxfwh8iare3qmr9FJ3PN3F1hAEsxLQGY7jUiik2FpVQoHyE7foPhoqHownL0ORw2A--","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21335892&stx=pizza&csz=Sunnyvale+CA&ed=8AfC_K160Sxfwh8iare3qmr9FJ3PN3F1hAEsxLQGY7jUiik2FpVQoHyE7foPhoqHownL0ORw2A--","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Domino%27s+Pizza&desc=4087323030&csz=Sunnyvale+CA&qty=9&cs=9&ed=8AfC_K160Sxfwh8iare3qmr9FJ3PN3F1hAEsxLQGY7jUiik2FpVQoHyE7foPhoqHownL0ORw2A--&gid1=21335892","BusinessUrl":"http:\/\/www.dominos.com\/","BusinessClickUrl":"http:\/\/www.dominos.com\/"},
+                    {Title:"Domino's Pizza",5:"992 W El Camino Real","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),736,3666],"for":"37.371434","Longitude":"-122.047559","Nested":{"Average-Rating":"4","Total Ratings":"7","TotalReviews":"3",5:"1127363766"},"Distance":"2.80","Url":"http:\/\/local.yahoo.com\/details?id=21341882&stx=pizza&csz=Sunnyvale+CA&ed=q0udl6160Sx.AqTKVZbNw3XSw.U4VT.yixioJ6k.H7cOEZSOqMOl7Kf6Mc21zYe1tziGcwBKEW9HzCfs","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21341882&stx=pizza&csz=Sunnyvale+CA&ed=q0udl6160Sx.AqTKVZbNw3XSw.U4VT.yixioJ6k.H7cOEZSOqMOl7Kf6Mc21zYe1tziGcwBKEW9HzCfs","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Domino%27s+Pizza&desc=4087363666&csz=Sunnyvale+CA&qty=9&cs=9&ed=q0udl6160Sx.AqTKVZbNw3XSw.U4VT.yixioJ6k.H7cOEZSOqMOl7Kf6Mc21zYe1tziGcwBKEW9HzCfs&gid1=21341882","BusinessUrl":"http:\/\/www.dominos.com\/","BusinessClickUrl":"http:\/\/www.dominos.com\/"},
+                    {Title:"Pizza Depot",5:"919 E Duane Ave","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),245,7760],"for":"37.388527","Longitude":"-122.004046","Nested":{"Average-Rating":"3.5","Total Ratings":"6","TotalReviews":"5",5:"1161370760"},"Distance":"0.93","Url":"http:\/\/local.yahoo.com\/details?id=21332021&stx=pizza&csz=Sunnyvale+CA&ed=7KK7mK160SzRB7AzH1MQcGzaJtl1F1AhRiRj3iKI5XIyMK5AKtQ2d5fqhwSD1KvtPBjDptclVg--","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21332021&stx=pizza&csz=Sunnyvale+CA&ed=7KK7mK160SzRB7AzH1MQcGzaJtl1F1AhRiRj3iKI5XIyMK5AKtQ2d5fqhwSD1KvtPBjDptclVg--","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Pizza+Depot&desc=4082457760&csz=Sunnyvale+CA&qty=9&cs=9&ed=7KK7mK160SzRB7AzH1MQcGzaJtl1F1AhRiRj3iKI5XIyMK5AKtQ2d5fqhwSD1KvtPBjDptclVg--&gid1=21332021","BusinessUrl":"http:\/\/pizza-depot.com\/","BusinessClickUrl":"http:\/\/pizza-depot.com\/"},
+                    {Title:"Round Table Pizza Sunnyvale",5:"665 S Bernardo Ave","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),732,6670],"for":"37.372847","Longitude":"-122.056805","Nested":{"Average-Rating":"4","Total Ratings":"2","TotalReviews":"2",5:"1186612286"},"Distance":"3.05","Url":"http:\/\/local.yahoo.com\/details?id=21328190&stx=pizza&csz=Sunnyvale+CA&ed=7UuQPq160SyTLgsCywr8RVh7QMTEamkpxTk1eEvusFf6qe0s4ZWcRmYd.2M0jmVjLcEFk_Gf1v10hg--","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21328190&stx=pizza&csz=Sunnyvale+CA&ed=7UuQPq160SyTLgsCywr8RVh7QMTEamkpxTk1eEvusFf6qe0s4ZWcRmYd.2M0jmVjLcEFk_Gf1v10hg--","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Round+Table+Pizza+Sunnyvale&desc=4087326670&csz=Sunnyvale+CA&qty=9&cs=9&ed=7UuQPq160SyTLgsCywr8RVh7QMTEamkpxTk1eEvusFf6qe0s4ZWcRmYd.2M0jmVjLcEFk_Gf1v10hg--&gid1=21328190","BusinessUrl":"http:\/\/www.roundtablepizza.com\/","BusinessClickUrl":"http:\/\/www.roundtablepizza.com\/"},
+                    {Title:"Big Bite Pizza",5:"109 E Fremont Ave","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),481,0666],"for":"37.352338","Longitude":"-122.031861","Nested":{"Average-Rating":"4","Total Ratings":"4","TotalReviews":"2",5:"1190777914"},"Distance":"3.42","Url":"http:\/\/local.yahoo.com\/details?id=25660586&stx=pizza&csz=Sunnyvale+CA&ed=XUNURa160SwU43kPscbu1nhShMQE1ZF7Bnnh8qSivRQ4ASxOcRXUml7KMN.4QoLsYF0xn5KhnpoW","ClickUrl":"http:\/\/local.yahoo.com\/details?id=25660586&stx=pizza&csz=Sunnyvale+CA&ed=XUNURa160SwU43kPscbu1nhShMQE1ZF7Bnnh8qSivRQ4ASxOcRXUml7KMN.4QoLsYF0xn5KhnpoW","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Big+Bite+Pizza&desc=4084810666&csz=Sunnyvale+CA&qty=9&cs=9&ed=XUNURa160SwU43kPscbu1nhShMQE1ZF7Bnnh8qSivRQ4ASxOcRXUml7KMN.4QoLsYF0xn5KhnpoW&gid1=25660586","BusinessUrl":"","BusinessClickUrl":""},
+                    {Title:"Pizza Hut",5:"464 N Mathilda Ave","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),735,1900],"for":"37.388298","Longitude":"-122.03056","Nested":{"Average-Rating":"2.5","Total Ratings":"8","TotalReviews":"5",5:"1195096424"},"Distance":"1.49","Url":"http:\/\/local.yahoo.com\/details?id=21340811&stx=pizza&csz=Sunnyvale+CA&ed=fg.eBq160Sw0QwGltksNXPMtnWxCI0URPWb4E5ZutY7RPm_Jjd5xK395KtaeM7l1A_hYAS0FkNn4","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21340811&stx=pizza&csz=Sunnyvale+CA&ed=fg.eBq160Sw0QwGltksNXPMtnWxCI0URPWb4E5ZutY7RPm_Jjd5xK395KtaeM7l1A_hYAS0FkNn4","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Pizza+Hut&desc=4087351900&csz=Sunnyvale+CA&qty=9&cs=9&ed=fg.eBq160Sw0QwGltksNXPMtnWxCI0URPWb4E5ZutY7RPm_Jjd5xK395KtaeM7l1A_hYAS0FkNn4&gid1=21340811","BusinessUrl":"http:\/\/www.pizzahut.com\/","BusinessClickUrl":"http:\/\/www.pizzahut.com\/"},
+                    {Title:"Round Table Pizza",5:"415 N Mary Ave","Hy-phenated":"Sunnyvale","State":"CA","Array Index":[(408),733,1365],"for":"37.390247","Longitude":"-122.041498","Nested":{"Average-Rating":"2.5","Total Ratings":"5","TotalReviews":"2",5:"1155195814"},"Distance":"1.86","Url":"http:\/\/local.yahoo.com\/details?id=21329046&stx=pizza&csz=Sunnyvale+CA&ed=uyby8a160Sy9qe0i.PcxDTgLyA.E934puXrbc.yiwzLvQHghOQRbey19BpfYd2SdELp9wnqw","ClickUrl":"http:\/\/local.yahoo.com\/details?id=21329046&stx=pizza&csz=Sunnyvale+CA&ed=uyby8a160Sy9qe0i.PcxDTgLyA.E934puXrbc.yiwzLvQHghOQRbey19BpfYd2SdELp9wnqw","MapUrl":"http:\/\/maps.yahoo.com\/maps_result?name=Round+Table+Pizza&desc=4087331365&csz=Sunnyvale+CA&qty=9&cs=9&ed=uyby8a160Sy9qe0i.PcxDTgLyA.E934puXrbc.yiwzLvQHghOQRbey19BpfYd2SdELp9wnqw&gid1=21329046","BusinessUrl":"http:\/\/www.roundtablepizza.com\/","BusinessClickUrl":"http:\/\/www.roundtablepizza.com\/"}
+                ]
+            }},
+        
+        testSchemaSyntaxes: function() {
+            var ds = this.createInstance();
+            ds.responseType = YAHOO.util.DataSource.TYPE_JSON;
+            
+            // Simple shema
+            ds.responseSchema = {
+                resultsList: "ResultSet.Result",
+                fields: ["Title",5,"Hy-phenated","Array Index","for"]
+            };
+            var oCallback = {
+                success:function(oRequest, oResponse, oPayload) {
+                    Assert.areSame(this.data.ResultSet.Result[9]["Title"], oResponse.results[9]["Title"], "Incorrect parsing of String");
+                    Assert.areSame(this.data.ResultSet.Result[9][5], oResponse.results[9][5], "Incorrect parsing of Number");
+                    Assert.areSame(this.data.ResultSet.Result[9]["Hy-phenated"], oResponse.results[9]["Hy-phenated"], "Incorrect parsing of hyphenated String");
+                    Assert.areSame(this.data.ResultSet.Result[9]["Array Index"], oResponse.results[9]["Array Index"], "Incorrect parsing of empty space");
+                    Assert.areSame(this.data.ResultSet.Result[9]["for"], oResponse.results[9]["for"], "Incorrect parsing of reserved word");
+                },
+                scope:this
+            };
+            ds.sendRequest(null,oCallback);
+
+            // Nested schema
+            ds.responseSchema.fields = ["Nested.TotalReviews","Nested.Average-Rating","Nested.Total Ratings","Nested.for","Nested.5"];
+            var oCallback = {
+                success:function(oRequest, oResponse, oPayload) {
+                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["TotalReviews"], oResponse.results[9]["Nested"]["TotalReviews"], "Incorrect parsing of nested String");
+                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["Average-Rating"], oResponse.results[9]["Nested"]["Average-Rating"], "Incorrect parsing of nested hyphen");
+                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["Total Ratings"], oResponse.results[9]["Nested"]["Total Ratings"], "Incorrect parsing of nested empty space");
+                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["for"], oResponse.results[9]["Nested"]["for"], "Incorrect parsing of nested reserved word");
+                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"][5], oResponse.results[9]["Nested"][5], "Incorrect parsing of nested Number");
+                },
+                scope:this
+            };
+            ds.sendRequest(null,oCallback);
+
+        }
+        
+    });
+    var dsParseJSONTest = new DataSourceTestCase(dsParseJSONTemplate);
+
+    /**
+     *
+     *
      * Tests static methods.
      *
      *
@@ -230,7 +298,7 @@
      *
      */
     var dataNumberTemplate = {
-        name:"Data Util Number Test",
+        name:"Util Number Test",
 
         testFormat: function() {
             output = YAHOO.util.Number.format("1");
@@ -310,6 +378,7 @@
         datasourcesuite.add(dsComplexArrayTest);
         datasourcesuite.add(dsStaticMethodsTest);
         datasourcesuite.add(dsXHRTest);
+        datasourcesuite.add(dsParseJSONTest);
         datasourcesuite.add(dataNumberTest);
 
         TestRunner.add(datasourcesuite);
