@@ -559,7 +559,7 @@ MenuItem.prototype = {
 
                     if (oAnchor) {
 
-                        sURL = oAnchor.getAttribute("href");
+                        sURL = oAnchor.getAttribute("href", 2);
                         sTarget = oAnchor.getAttribute("target");
 
                         sText = oAnchor.innerHTML;
