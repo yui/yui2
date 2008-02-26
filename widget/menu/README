@@ -1,3 +1,17 @@
+*** version 2.5.1 ***
+
+Fixed the following bugs:
+-------------------------
+
++ The "url" configuration property of YAHOO.widget.MenuItem now returns the exact value of the 
+  "href" attribute of its anchor element in Internet Explorer. 
+
++ Clicking on an item in a Menu will no longer cause Firefox to scroll to the top of the window.
+
++ Improved Menu's viewport boundary awareness.
+
+
+
 *** version 2.5.0 ***
 
 Fixed the following bugs:
