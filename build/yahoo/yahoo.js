@@ -270,17 +270,21 @@ YAHOO.env.ua = function() {
          *                                   updated, but not updated
          *                                   to the latest patch.
          * Webkit 212 nightly:   522+    <-- Safari 3.0 precursor (with native SVG
-         *                                   and many major issues fixed).
+         *                                   and many major issues fixed).  
+         * 3.x yahoo.com, flickr:422     <-- Safari 3.x hacks the user agent
+         *                                   string when hitting yahoo.com and 
+         *                                   flickr.com.
          * Safari 3.0.4 (523.12):523.12  <-- First Tiger release - automatic update
          *                                   from 2.x via the 10.4.11 OS patch
-         * Webkit nightly 1/2008:525+    <-- Supports DOMContentLoaded event
+         * Webkit nightly 1/2008:525+    <-- Supports DOMContentLoaded event.
+         *                                   yahoo.com user agent hack removed.
          *                                   
          * </pre>
          * http://developer.apple.com/internet/safari/uamatrix.html
          * @property webkit
          * @type float
          */
-        webkit:0,
+        webkit: 0,
 
         /**
          * The mobile property will be set to a string containing any relevant
@@ -290,7 +294,16 @@ YAHOO.env.ua = function() {
          * @property mobile 
          * @type string
          */
-        mobile: null 
+        mobile: null,
+
+        /**
+         * Adobe AIR version number or 0.  Only populated if webkit is detected.
+         * Example: 1.0
+         * @property air
+         * @type float
+         */
+        air: 0
+
     };
 
     var ua=navigator.userAgent, m;
@@ -312,6 +325,11 @@ YAHOO.env.ua = function() {
             if (m) {
                 o.mobile = m[0]; // Nokia N-series, ex: NokiaN95
             }
+        }
+
+        m=ua.match(/AdobeAIR\/([^\s]*)/);
+        if (m) {
+            o.air = m[0]; // Adobe AIR 1.0 or better
         }
 
     }
@@ -391,11 +409,22 @@ YAHOO.lang = YAHOO.lang || {
      */
     isArray: function(o) { 
 
+    //return YAHOO.lang.isObject(o) && o.constructor.prototype.hasOwnProperty('length');  
+
+       if (o && typeof o === 'object') {                                                                                                                                
+          var p = o.constructor.prototype;                                                                                                                              
+          return p.hasOwnProperty('splice') &&                                                                                                                          
+   !p.isPropertyEnumerable('splice');                                                                                                                                   
+       }                                                                                                                                                                
+       return false;   
+
+/*
         if (o) {
            var l = YAHOO.lang;
            return l.isNumber(o.length) && l.isFunction(o.splice);
         }
         return false;
+        */
     },
 
     /**

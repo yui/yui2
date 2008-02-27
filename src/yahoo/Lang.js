@@ -16,11 +16,22 @@ YAHOO.lang = YAHOO.lang || {
      */
     isArray: function(o) { 
 
+    //return YAHOO.lang.isObject(o) && o.constructor.prototype.hasOwnProperty('length');  
+
+       if (o && typeof o === 'object') {                                                                                                                                
+          var p = o.constructor.prototype;                                                                                                                              
+          return p.hasOwnProperty('splice') &&                                                                                                                          
+   !p.isPropertyEnumerable('splice');                                                                                                                                   
+       }                                                                                                                                                                
+       return false;   
+
+/*
         if (o) {
            var l = YAHOO.lang;
            return l.isNumber(o.length) && l.isFunction(o.splice);
         }
         return false;
+        */
     },
 
     /**
