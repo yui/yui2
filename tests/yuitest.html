@@ -23,6 +23,7 @@ YAHOO.test.YUITest_test = (function(){
 
     //shortcuts
     var Assert /*:Object*/ = YAHOO.util.Assert;
+    var ObjectAssert /*:Object*/ = YAHOO.util.ObjectAssert;
     var UserAction /*:Object*/ = YAHOO.util.UserAction;
     var YUE /*:Object*/ = YAHOO.util.Event;
     var YUD /*:Object*/ = YAHOO.util.Dom;
@@ -1142,7 +1143,49 @@ YAHOO.test.YUITest_test = (function(){
 
         
     }));    
+    //-------------------------------------------------------------------------
+    // ObjectAssert Tests
+    //-------------------------------------------------------------------------
+
+    //the user action suite
+    var objectAssertSuite /*:YAHOO.tool.TestSuite*/ 
+        = new YAHOO.tool.TestSuite("ObjectAssert Tests");
+    suite.add(objectAssertSuite);
     
+    objectAssertSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "HasProperty Assert Tests",
+        
+        _should: {
+            fail: {
+                testUndeclaredProperty: true
+            }
+        },
+        
+        setUp: function(){
+            this.testObject = {
+                name: "value",
+                name2: undefined,
+            };
+        },
+        
+        tearDown: function(){
+            delete this.testObject;
+        },
+        
+        testExistingProperty: function () {
+            ObjectAssert.hasProperty("name", this.testObject, "Object should have a property 'name'.");
+        },
+        
+        testUndefinedProperty: function () {
+            ObjectAssert.hasProperty("name2", this.testObject, "Object should have a property 'name2'.");
+        },
+        
+        testUndeclaredProperty: function () {
+            ObjectAssert.hasProperty("name3", this.testObject, "Object should not have a property 'name3'.");
+        }
+    }));
+  
     //-------------------------------------------------------------------------
     // UserAction Tests
     //-------------------------------------------------------------------------
