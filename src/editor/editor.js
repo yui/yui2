@@ -802,7 +802,8 @@ var Dom = YAHOO.util.Dom,
 
                 win.setHeader(this.STR_IMAGE_PROP_TITLE);
                 win.setBody(body);
-                if ((this.browser.webkit && !this.browser.webkit3) || this.browser.opera) {
+                //Adobe AIR Code
+                if ((this.browser.webkit && !this.browser.webkit3 || this.browser.air) || this.browser.opera) {                
                     win.setFooter(this.STR_IMAGE_COPY);
                 }
                 this.openWindow(win);
@@ -830,7 +831,8 @@ var Dom = YAHOO.util.Dom,
                             } else {
                                 Dom.removeClass(url, 'warning');
                                 this.get('panel').setFooter(' ');
-                                if ((this.browser.webkit && !this.browser.webkit3) || this.browser.opera) {
+                                //Adobe AIR Code
+                                if ((this.browser.webkit && !this.browser.webkit3 || this.browser.air) || this.browser.opera) {                
                                     this.get('panel').setFooter(this.STR_IMAGE_COPY);
                                 }
                             }
@@ -846,7 +848,8 @@ var Dom = YAHOO.util.Dom,
                             } else if (this.currentElement[0]) {
                                 Dom.removeClass(url, 'warning');
                                 this.get('panel').setFooter(' ');
-                                if ((this.browser.webkit && !this.browser.webkit3) || this.browser.opera) {
+                                //Adobe AIR Code
+                                if ((this.browser.webkit && !this.browser.webkit3 || this.browser.air) || this.browser.opera) {                
                                     this.get('panel').setFooter(this.STR_IMAGE_COPY);
                                 }
                                 

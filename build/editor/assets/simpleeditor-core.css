@@ -2,7 +2,9 @@
 .yui-busy {
     cursor: wait !important;
 }
-
+.yui-toolbar-container legend {
+    display: none;
+}
 /* Setup the container with some padding and zoom it for IE's hasLayout */
 .yui-toolbar-container .yui-toolbar-subcont {
     padding: .25em 0;
@@ -45,6 +47,11 @@
     color: #000;
     margin: 0;
     padding: .2em;
+}
+.yui-toolbar-container .yui-toolbar-titlebar h2 a {
+    text-decoration: none;
+    color: #000;
+    cursor: default;
 }
 /* If the toolbar is grouped the draghandle needs to be bigger */
 .yui-toolbar-container.yui-toolbar-grouped span.yui-toolbar-draghandle {

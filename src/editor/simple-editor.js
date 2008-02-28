@@ -105,7 +105,7 @@ var Dom = YAHOO.util.Dom,
         * @description The default CSS used in the config for 'css'. This way you can add to the config like this: { css: YAHOO.widget.SimpleEditor.prototype._defaultCSS + 'ADD MYY CSS HERE' }
         * @type String
         */
-        _defaultCSS: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: pointer; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
+        _defaultCSS: 'html { height: 95%; } body { padding: 7px; background-color: #fff; font:13px/1.22 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small; } a { color: blue; text-decoration: underline; cursor: text; } .warning-localfile { border-bottom: 1px dashed red !important; } .yui-busy { cursor: wait !important; } img.selected { border: 2px dotted #808080; } img { cursor: pointer !important; border: none; }',
         /**
         * @property _defaultToolbar
         * @private
@@ -780,9 +780,23 @@ var Dom = YAHOO.util.Dom,
             if (this.browser.ie || this.browser.webkit || this.browser.opera || (navigator.userAgent.indexOf('Firefox/1.5') != -1)) {
                 //Firefox 1.5 doesn't like setting designMode on an document created with a data url
                 try {
-                    this._getDoc().open();
-                    this._getDoc().write(html);
-                    this._getDoc().close();
+                    //Adobe AIR Code
+                    if (this.browser.air) {
+                        var doc = this._getDoc().implementation.createHTMLDocument();
+                        var origDoc = this._getDoc();
+                        origDoc.open();
+                        origDoc.close();
+                        doc.open();
+                        doc.write(html);
+                        doc.close();
+                        var node = origDoc.importNode(doc.getElementsByTagName("html")[0], true);
+                        origDoc.replaceChild(node, origDoc.getElementsByTagName("html")[0]);
+                        origDoc.body._rteLoaded = true;
+                    } else {               
+                        this._getDoc().open();
+                        this._getDoc().write(html);
+                        this._getDoc().close();
+                    }
                 } catch (e) {
                     YAHOO.log('Setting doc failed.. (_setInitialContent)', 'error', 'SimpleEditor');
                     //Safari will only be here if we are hidden
@@ -1488,7 +1502,10 @@ var Dom = YAHOO.util.Dom,
             switch (ev.keyCode) {
                 case 84: //Focus Toolbar Header -- Ctrl + Shift + T
                     if (ev.shiftKey && ev.ctrlKey) {
-                        this.toolbar._titlebar.firstChild.focus();
+                        var h = this.toolbar.getElementsByTagName('h2')[0];
+                        if (h) {
+                            h.focus();
+                        }
                         Event.stopEvent(ev);
                         doExec = false;
                     }
@@ -1933,7 +1950,7 @@ var Dom = YAHOO.util.Dom,
         browser: function() {
             var br = YAHOO.env.ua;
             //Check for webkit3
-            if (br.webkit > 420) {
+            if (br.webkit >= 420) {
                 br.webkit3 = br.webkit;
             } else {
                 br.webkit3 = 0;
@@ -2289,7 +2306,7 @@ var Dom = YAHOO.util.Dom,
             * @type String
             */            
             this.setAttributeConfig('extracss', {
-                value: attr.css || '',
+                value: attr.extracss || '',
                 writeOnce: true
             });
 
@@ -2491,16 +2508,24 @@ var Dom = YAHOO.util.Dom,
             }
             var img = '';
             if (!this._blankImageLoaded) {
-                var div = document.createElement('div');
-                div.style.position = 'absolute';
-                div.style.top = '-9999px';
-                div.style.left = '-9999px';
-                div.className = this.CLASS_PREFIX + '-blankimage';
-                document.body.appendChild(div);
-                img = YAHOO.util.Dom.getStyle(div, 'background-image');
-                img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
-                this.set('blankimage', img);
-                this._blankImageLoaded = true;
+                if (YAHOO.widget.EditorInfo.blankImage) {
+                    this.set('blankimage', YAHOO.widget.EditorInfo.blankImage);
+                    this._blankImageLoaded = true;
+                } else {
+                    var div = document.createElement('div');
+                    div.style.position = 'absolute';
+                    div.style.top = '-9999px';
+                    div.style.left = '-9999px';
+                    div.className = this.CLASS_PREFIX + '-blankimage';
+                    document.body.appendChild(div);
+                    img = YAHOO.util.Dom.getStyle(div, 'background-image');
+                    img = img.replace('url(', '').replace(')', '').replace(/"/g, '');
+                    //Adobe AIR Code
+                    img = img.replace('app:/', '');                    
+                    this.set('blankimage', img);
+                    this._blankImageLoaded = true;
+                    YAHOO.widget.EditorInfo.blankImage = img;
+                }
             } else {
                 img = this.get('blankimage');
             }
@@ -2562,11 +2587,11 @@ var Dom = YAHOO.util.Dom,
                 YAHOO.util.Event.removeListener(form, 'submit', self._handleFormSubmit);
                 if (YAHOO.env.ua.ie) {
                     form.fireEvent("onsubmit");
-                    if (tar) {
+                    if (tar && !tar.disabled) {
                         tar.click();
                     }
                 } else {  // Gecko, Opera, and Safari
-                    if (tar) {
+                    if (tar && !tar.disabled) {
                         tar.click();
                     } else {
                         var oEvent = document.createEvent("HTMLEvents");
@@ -2579,19 +2604,6 @@ var Dom = YAHOO.util.Dom,
                         }
                     }
                 }
-                /*
-                if (YAHOO.env.ua.ie || YAHOO.env.ua.webkit) {
-                    if (YAHOO.lang.isFunction(form.submit)) {
-                        form.submit();
-                    } else {
-                        if (YAHOO.lang.isObject(form.submit)) {
-                            form.submit.click();
-                        } else {
-                            YAHOO.log('Form submit failed because form.submit was not a function. Please change the submit buttons name and id.', 'error', 'SimpleEditor');
-                        }
-                    }
-                }
-                */
             }, 200);
             
         },
@@ -2665,6 +2677,8 @@ var Dom = YAHOO.util.Dom,
                 family = elm.getAttribute('face');
                 if (Dom.getStyle(elm, 'font-family')) {
                     family = Dom.getStyle(elm, 'font-family');
+                    //Adobe AIR Code
+                    family = family.replace(/'/g, '');                    
                 }
 
                 if (tag.substring(0, 1) == 'h') {
@@ -3741,6 +3755,10 @@ var Dom = YAHOO.util.Dom,
             if ((markup == 'semantic') || (markup == 'xhtml') || (markup == 'css')) {
                 html = html.replace(new RegExp('<font([^>]*)face="([^>]*)">(.*?)<\/font>', 'gi'), '<span $1 style="font-family: $2;">$3</span>');
                 html = html.replace(/<u/gi, '<span style="text-decoration: underline;"');
+                if (this.browser.webkit) {
+                    html = html.replace(new RegExp('<span class="Apple-style-span" style="font-weight: bold;">([^>]*)<\/span>', 'gi'), '<strong>$1</strong>');
+                    html = html.replace(new RegExp('<span class="Apple-style-span" style="font-style: italic;">([^>]*)<\/span>', 'gi'), '<em>$1</em>');
+                }
                 html = html.replace(/\/u>/gi, '/span>');
                 if (markup == 'css') {
                     html = html.replace(/<em([^>]*)>/gi, '<i$1>');
@@ -3849,6 +3867,8 @@ var Dom = YAHOO.util.Dom,
         */
         filter_safari: function(html) {
             if (this.browser.webkit) {
+                //<span class="Apple-tab-span" style="white-space:pre">	</span>
+                html = html.replace(/<span class="Apple-tab-span" style="white-space:pre">([^>])<\/span>/gi, '&nbsp;&nbsp;&nbsp;&nbsp;');
                 html = html.replace(/Apple-style-span/gi, '');
                 html = html.replace(/style="line-height: normal;"/gi, '');
                 //Remove bogus LI's
@@ -4149,6 +4169,13 @@ var Dom = YAHOO.util.Dom,
         * @type Object
         */
         _instances: {},
+        /**
+        * @private
+        * @property blankImage
+        * @description A reference to the blankImage url
+        * @type String 
+        */
+        blankImage: '',
         /**
         * @private
         * @property window
