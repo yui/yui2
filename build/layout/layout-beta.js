@@ -164,13 +164,11 @@
             this._sizes.right = {
                 h: newH, w: ((this._right) ? this._right.get('width') : 0),
                 l: ((this._right) ? (w - this._right.get('width')) : 0),
-                t: this._sizes.top.h
+                t: ((this._top) ? this._sizes.top.h : 0)
             };
             
             if (this._right && set) {
-                if (this._top) {
-                    this._right.set('top', this._sizes.right.t);
-                }
+                this._right.set('top', this._sizes.right.t);
                 if (!this._right._collapsing) { 
                     this._right.set('left', this._sizes.right.l);
                 }
@@ -180,11 +178,11 @@
                 this._sizes.left.l = 0;
                 if (this._top) {
                     this._sizes.left.t = this._sizes.top.h;
-                    if (set) {
-                        this._left.set('top', this._sizes.top.h);
-                    }
+                } else {
+                    this._sizes.left.t = 0;
                 }
                 if (set) {
+                    this._left.set('top', this._sizes.left.t);
                     this._left.set('height', this._sizes.left.h, true);
                     this._left.set('left', 0);
                 }
