@@ -18,7 +18,7 @@ YAHOO.util.DateAssert = {
      * @param {Date} expected The expected date.
      * @param {Date} actual The actual date to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
-     * @method areEqual
+     * @method datesAreEqual
      * @static
      */
     datesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){
@@ -36,7 +36,7 @@ YAHOO.util.DateAssert = {
      * @param {Date} expected The expected date.
      * @param {Date} actual The actual date to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
-     * @method areEqual
+     * @method timesAreEqual
      * @static
      */
     timesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){

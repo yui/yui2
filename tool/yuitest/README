@@ -23,3 +23,4 @@ YUI Library - YUITest - Release Notes
 2.5.1
 
   * Fixed ObjectAssert.hasProperty() so that is correctly identifies declared properties with a value of undefined.
+  * Fixed DateAssert documentation errors.
