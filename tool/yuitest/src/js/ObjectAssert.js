@@ -49,7 +49,7 @@ YAHOO.util.ObjectAssert = {
      * @static
      */    
     hasProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
-        if (YAHOO.lang.isUndefined(object[propertyName])){
+        if (!(propertyName in object)){
             YAHOO.util.Assert.fail(message || 
                     "Property " + propertyName + " not found on object.");
         }    
