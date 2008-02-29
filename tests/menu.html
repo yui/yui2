@@ -470,9 +470,10 @@
                         
                         oMenu.show();
                         
-                        Assert.areNotEqual(oMenu.element.offsetHeight, 50, "Setting the \"maxheight\" property should have failed since the value is below the value defined by the \"minscrollheight\" property.");
-                        Assert.areEqual((oMenu.element.offsetHeight - 2), oMenu.cfg.getProperty("minscrollheight"), "The \"maxheight\" property should be set to the value of the \"minscrollheight\" property.");
 
+                        
+                        Assert.areNotEqual(oMenu.element.offsetHeight , 50, "Setting the \"maxheight\" property should have failed since the value is below the value defined by the \"minscrollheight\" property.");
+                        Assert.areEqual((oMenu.element.offsetHeight - (YAHOO.env.ua.ie ? 0 : 2)), oMenu.cfg.getProperty("minscrollheight"), "The \"maxheight\" property should be set to the value of the \"minscrollheight\" property.");
                         
                         oMenu.hide();        
 
@@ -485,7 +486,9 @@
                         
                         oMenu.show();
 
-                        Assert.areEqual(oMenu.element.offsetHeight, 50, "The offsetHeight of the menu's element should be 50.");
+
+
+                        Assert.areEqual((oMenu.element.offsetHeight + (YAHOO.env.ua.ie ? 2 : 0)), 50, "The offsetHeight of the menu's element should be 50.");
 
 
                         // Test #6: Turning it off
@@ -740,111 +743,200 @@
 
                         // Test the "setInitialFocus" method.
                         
+                        function focusTest1() {
+
+							Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
+							Assert.isTrue(oMenu.getItem(0).hasFocus(), "The first item in the menu isn't focused when it should be.");
+                        
+                        	this.unsubscribe("focus", focusTest1);
+                        
+                        }
+                        
+                        oMenu.subscribe("focus", focusTest1);
+                        
                         oMenu.setInitialFocus();
-                        
-                        Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
-                        Assert.isTrue(oMenu.getItem(0).hasFocus(), "The first item in the menu isn't focused when it should be.");
-                        
-                        
-                        // Test the "blur" method
+
+
+                        // Test the "blur" method                        
+
+						function focusTest2() {
+
+							Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
+							Assert.isFalse(oMenu.getItem(0).hasFocus(), "The first item in the menu isn't blurred when it should be.");
+
+                        	this.unsubscribe("blur", focusTest2);
+						
+						}
+
+                        oMenu.subscribe("blur", focusTest2);
                         
                         oMenu.blur();
                         
-                        Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
-                        Assert.isFalse(oMenu.getItem(0).hasFocus(), "The first item in the menu isn't blurred when it should be.");
-                        
-                        
+
                         // Test the "focus" method
+
+						function focusTest3() {
+
+							Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
+							Assert.isTrue(oMenu.getItem(0).hasFocus(), "The first item in the menu isn't focused when it should be.");
+
+							this.unsubscribe("focus", focusTest3);
+						
+						}
+
+						oMenu.subscribe("focus", focusTest3);
                         
                         oMenu.focus();
-                        
-                        Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
-                        Assert.isTrue(oMenu.getItem(0).hasFocus(), "The first item in the menu isn't focused when it should be.");
                         
                         oMenu.blur();
                         
                         
                         // Test focus related methods with the first item in the first group disabled
-                        
-                        oMenu.getItem(0).cfg.setProperty("disabled", true);
-                        
+
                         // Test the "setInitialFocus" method
-                        
+
+						function focusTest4() {
+
+							Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
+							Assert.isTrue(oMenu.getItem(1).hasFocus(), "The second item in the menu isn't focused when it should be.");
+						
+							this.unsubscribe("focus", focusTest4);
+						
+						}
+
+						oMenu.subscribe("focus", focusTest4);
+
+                        oMenu.getItem(0).cfg.setProperty("disabled", true);
+
                         oMenu.setInitialFocus();
                         
-                        Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
-                        Assert.isTrue(oMenu.getItem(1).hasFocus(), "The second item in the menu isn't focused when it should be.");
-                        
-                        
+
                         // Test the "blur" method
                         
-                        oMenu.blur();
+						function focusTest6() {
+
+							Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
+							Assert.isFalse(oMenu.getItem(1).hasFocus(), "The second item in the menu isn't blurred when it should be.");
+						
+							this.unsubscribe("blur", focusTest6);
+						
+						}
                         
-                        Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
-                        Assert.isFalse(oMenu.getItem(1).hasFocus(), "The second item in the menu isn't blurred when it should be.");
+						oMenu.subscribe("blur", focusTest6);
+                        
+                        oMenu.blur();
                         
                         
                         // Test the "focus" method
+
+						function focusTest7() {
+
+							Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
+							Assert.isTrue(oMenu.getItem(1).hasFocus(), "The second item in the menu isn't focused when it should be.");
+						
+							this.unsubscribe("focus", focusTest7);
+						
+						}
+                        
+						oMenu.subscribe("focus", focusTest7);
                         
                         oMenu.focus();
                         
-                        Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
-                        Assert.isTrue(oMenu.getItem(1).hasFocus(), "The second item in the menu isn't focused when it should be.");
-                        
                         oMenu.blur();
                         
-                        
+
                         // Test focus related methods with both the first and second item in the first group disabled
+
+                        // Test the "setInitialFocus" method
+
+						function focusTest8() {
+
+							Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
+							Assert.isTrue(oMenu.getItem(0, 1).hasFocus(), "The first item in the second group isn't focused when it should be.");
+						
+							this.unsubscribe("focus", focusTest8);
+						
+						}
+                        
+						oMenu.subscribe("focus", focusTest8);
                         
                         oMenu.getItem(1).cfg.setProperty("disabled", true);
                         
-                        
-                        // Test the "setInitialFocus" method
-                        
                         oMenu.setInitialFocus();
-                        
-                        Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
-                        Assert.isTrue(oMenu.getItem(0, 1).hasFocus(), "The first item in the second group isn't focused when it should be.");
                         
                         
                         // Test the "blur" method
+
+						function focusTest9() {
+
+							Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
+							Assert.isFalse(oMenu.getItem(0, 1).hasFocus(), "The first item in the second group isn't blurred when it should be.");
+						
+							this.unsubscribe("focus", focusTest9);
+						
+						}
+                        
+						oMenu.subscribe("focus", focusTest9);
                         
                         oMenu.blur();
-                        
-                        Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
-                        Assert.isFalse(oMenu.getItem(0, 1).hasFocus(), "The first item in the second group isn't blurred when it should be.");
                         
                         
                         // Test the "focus" method
                         
-                        oMenu.focus();
+						function focusTest10() {
+						
+							Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
+							Assert.isTrue(oMenu.getItem(0, 1).hasFocus(), "The first item in the second group isn't focused when it should be.");
+
+							this.unsubscribe("focus", focusTest10);
+						
+						}
                         
-                        Assert.isTrue(oMenu.hasFocus(), "The menu isn't focused when it should be.");
-                        Assert.isTrue(oMenu.getItem(0, 1).hasFocus(), "The first item in the second group isn't focused when it should be.");
+						oMenu.subscribe("focus", focusTest10);
+                        
+                        oMenu.focus();
                         
                         oMenu.blur();
 
 
                         // Test focus related methods with the menu disabled
 
-                        oMenu.cfg.setProperty("disabled", true);
-                        
                         // Test setInitialFocus
+
+						function focusTest11() {
+
+	                        Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
+						
+							this.unsubscribe("focus", focusTest11);
+						
+						}
+                        
+						oMenu.subscribe("focus", focusTest11);
+
+                        oMenu.cfg.setProperty("disabled", true);
                         
                         oMenu.setInitialFocus();
                         
-                        Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
+						oMenu.blur();
                         
                         
                         // Test focus
                         
-                        oMenu.focus();
+						function focusTest12() {
+
+	                        Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
+						
+							this.unsubscribe("focus", focusTest12);
+						
+						}
                         
-                        Assert.isFalse(oMenu.hasFocus(), "The menu isn't blurred when it should be.");
+						oMenu.subscribe("focus", focusTest12);
+
+                        oMenu.focus();
 
                         oMenu.cfg.setProperty("disabled", false);
 
-                        
+
 
                         // Test the "setInitialSelection" and the "clearActiveItem" methods along with the "activeItem" property
 
@@ -887,35 +979,66 @@
 
 
                         oMenu.setInitialSelection();
-                        oMenu.focus();
+
+
+						function focusTest13() {
+						
+							oMenu.clearActiveItem(true);
+	
+							Assert.isFalse(oMenu.hasFocus(), "The menu should not have focus when \"true\" is passed to the \"clearActiveItem\" method.");
+							Assert.isNull(oMenu.activeItem, "The \"activeItem\" property should return null after the \"clearActiveItem\" method is called.");
+
+							this.unsubscribe("focus", focusTest13);
+						
+						}
                         
+						oMenu.subscribe("focus", focusTest13);
 
-                        oMenu.clearActiveItem(true);
+                        oMenu.focus();
 
-                        Assert.isFalse(oMenu.hasFocus(), "The menu should not have focus when \"true\" is passed to the \"clearActiveItem\" method.");
-                        Assert.isNull(oMenu.activeItem, "The \"activeItem\" property should return null after the \"clearActiveItem\" method is called.");
 
+
+                        
+						function focusTest14() {
+
+							oMenu.clearActiveItem(true);
+	
+							Assert.isFalse(oMenu.hasFocus(), "The menu should not have focus when \"true\" is passed to the \"clearActiveItem\" method.");
+							Assert.isNull(oMenu.activeItem, "The \"activeItem\" property should return null after the \"clearActiveItem\" method is called.");
+						
+							this.unsubscribe("focus", focusTest14);
+						
+						}
+                        
+						oMenu.subscribe("focus", focusTest14);
 
                         oMenu.getItem(0).cfg.setProperty("disabled", true);
 
                         oMenu.setInitialSelection();
+                        
                         oMenu.focus();
                         
-                        oMenu.clearActiveItem(true);
 
-                        Assert.isFalse(oMenu.hasFocus(), "The menu should not have focus when \"true\" is passed to the \"clearActiveItem\" method.");
-                        Assert.isNull(oMenu.activeItem, "The \"activeItem\" property should return null after the \"clearActiveItem\" method is called.");
 
 
                         oMenu.getItem(1).cfg.setProperty("disabled", true);
 
                         oMenu.setInitialSelection();
-                        oMenu.focus();
-                        
-                        oMenu.clearActiveItem(true);
 
-                        Assert.isFalse(oMenu.hasFocus(), "The menu should not have focus when \"true\" is passed to the \"clearActiveItem\" method.");
-                        Assert.isNull(oMenu.activeItem, "The \"activeItem\" property should return null after the \"clearActiveItem\" method is called.");
+						function focusTest15() {
+						
+							oMenu.clearActiveItem(true);
+	
+							Assert.isFalse(oMenu.hasFocus(), "The menu should not have focus when \"true\" is passed to the \"clearActiveItem\" method.");
+							Assert.isNull(oMenu.activeItem, "The \"activeItem\" property should return null after the \"clearActiveItem\" method is called.");
+
+							this.unsubscribe("focus", focusTest15);
+						
+						}
+                        
+						oMenu.subscribe("focus", focusTest15);
+
+                        oMenu.focus();
 
 
                         // Test clearContent
@@ -1109,7 +1232,7 @@
                         oMenu = new Menu(Dom.generateId());
                         
                         oMenu.addItems([
-                        
+
                             { text: "Menu Item 1", checked: true },
                             { text: "Menu Item 2", submenu: { id: Dom.generateId(), itemdata: ["Menu Item 1", "Menu Item 2"] } },
                             { text: "Menu Item 3", selected: true },
@@ -1125,6 +1248,7 @@
 
                             { text: "Menu Item 7", checked: true, disabled: true },
                             { text: "Menu Item 8", submenu: { id: Dom.generateId(), itemdata: ["Menu Item 1", "Menu Item 2"] }, disabled: true }
+
                         
                         ]);
 
@@ -1132,6 +1256,7 @@
                         oMenu.render(document.body);
                         oMenu.show();
 
+                        Assert.areEqual(oMenu.getItem(0).cfg.getProperty("url"), "#", "The value of the \"url\" configuration property should be \"#.\"");
 
                         Assert.isTrue(Dom.hasClass(oMenu.getItem(0).element, "yuimenuitem-checked"), "The root <LI> element should have a CSS class name of \"yuimenuitem-checked.\"");
                         Assert.isTrue(Dom.hasClass(oMenu.getItem(0).element.firstChild, "yuimenuitemlabel-checked"), "The <A> element should have a CSS class name of \"yuimenuitemlabel-checked.\"");
@@ -1238,14 +1363,32 @@
 
                         // Test the "focus," "blur," and "hasFocus" methods
 
+						function focusTest16() {
+
+	                        Assert.isTrue(oMenu.getItem(0).hasFocus(), "The first item in the menu should have focus.");
+						
+							this.unsubscribe("focus", focusTest16);
+						
+						}
+                        
+						oMenu.subscribe("focus", focusTest16);
+
                         oMenu.getItem(0).focus();
                         
-                        Assert.isTrue(oMenu.getItem(0).hasFocus(), "The first item in the menu should have focus.");
+
+						function focusTest5() {
+
+	                        Assert.isFalse(oMenu.getItem(0).hasFocus(), "The first item in the menu should not have focus.");
+						
+							this.unsubscribe("blur", focusTest5);
+						
+						}
                         
+						oMenu.subscribe("blur", focusTest5);
 
                         oMenu.getItem(0).blur();
 
-                        Assert.isFalse(oMenu.getItem(0).hasFocus(), "The first item in the menu should not have focus.");
+
 
 
                         // Test the "getPreviousEnabledSibling" and "getNextEnabledSibling"
@@ -1396,10 +1539,15 @@
                         // Test the "getFocusedMenu" and "getFocusedMenuItem" methods
 
                         aMenus[4].show();
-                        aMenus[4].focus();
 
-                        Assert.isInstanceOf(Menu, MenuManager.getFocusedMenu(), " ");
-                        Assert.isInstanceOf(MenuItem, MenuManager.getFocusedMenuItem(), " ");
+						aMenus[4].subscribe("focus", function () {
+						
+							Assert.isInstanceOf(Menu, MenuManager.getFocusedMenu(), " ");
+							Assert.isInstanceOf(MenuItem, MenuManager.getFocusedMenuItem(), " ");
+						
+						});
+
+                        aMenus[4].focus();
 
 
                         aMenus[0].destroy();
