@@ -731,7 +731,6 @@
         * @type Object
         */
         EVENT_TYPES = {
-        
             "BEFORE_INIT": "beforeInit",
             "INIT": "init",
             "APPEND": "append",
@@ -746,7 +745,6 @@
             "SHOW": "show",
             "BEFORE_HIDE": "beforeHide",
             "HIDE": "hide"
-        
         },
             
         /**
@@ -816,7 +814,7 @@
     * @type String
     */
     Module.CSS_HEADER = "hd";
-    
+
     /**
     * Constant representing the module body
     * @property YAHOO.widget.Module.CSS_BODY
@@ -1452,12 +1450,14 @@
         * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} headerContent The HTMLElement to append to 
-        * the header
+        * <em>OR</em>
+        * @param {DocumentFragment} headerContent The document fragment 
+        * containing elements which are to be added to the header
         */
         setHeader: function (headerContent) {
             var oHeader = this.header || (this.header = createHeader());
 
-            if (headerContent.tagName) {
+            if (headerContent.nodeName) {
                 oHeader.innerHTML = "";
                 oHeader.appendChild(headerContent);
             } else {
@@ -1473,11 +1473,13 @@
         * Appends the passed element to the header. If no header is present, 
         * one will be automatically created.
         * @method appendToHeader
-        * @param {HTMLElement} element The element to append to the header
+        * @param {HTMLElement | DocumentFragment} element The element to 
+        * append to the header. In the case of a document fragment, the
+        * children of the fragment will be appended to the header.
         */
         appendToHeader: function (element) {
             var oHeader = this.header || (this.header = createHeader());
-        
+
             oHeader.appendChild(element);
 
             this.changeHeaderEvent.fire(element);
@@ -1497,11 +1499,14 @@
         * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to append to the body
+        * <em>OR</em>
+        * @param {DocumentFragment} bodyContent The document fragment 
+        * containing elements which are to be added to the body
         */
         setBody: function (bodyContent) {
             var oBody = this.body || (this.body = createBody());
 
-            if (bodyContent.tagName) {
+            if (bodyContent.nodeName) {
                 oBody.innerHTML = "";
                 oBody.appendChild(bodyContent);
             } else {
@@ -1516,7 +1521,10 @@
         * Appends the passed element to the body. If no body is present, one 
         * will be automatically created.
         * @method appendToBody
-        * @param {HTMLElement} element The element to append to the body
+        * @param {HTMLElement | DocumentFragment} element The element to 
+        * append to the body. In the case of a document fragment, the
+        * children of the fragment will be appended to the body.
+        * 
         */
         appendToBody: function (element) {
             var oBody = this.body || (this.body = createBody());
@@ -1541,12 +1549,15 @@
         * <em>OR</em>
         * @param {HTMLElement} footerContent The HTMLElement to append to 
         * the footer
+        * <em>OR</em>
+        * @param {DocumentFragment} footerContent The document fragment containing 
+        * elements which are to be added to the footer
         */
         setFooter: function (footerContent) {
 
             var oFooter = this.footer || (this.footer = createFooter());
 
-            if (footerContent.tagName) {
+            if (footerContent.nodeName) {
                 oFooter.innerHTML = "";
                 oFooter.appendChild(footerContent);
             } else {
@@ -1555,26 +1566,27 @@
 
             this.changeFooterEvent.fire(footerContent);
             this.changeContentEvent.fire();
-
         },
-        
+
         /**
         * Appends the passed element to the footer. If no footer is present, 
         * one will be automatically created.
         * @method appendToFooter
-        * @param {HTMLElement} element The element to append to the footer
+        * @param {HTMLElement | DocumentFragment} element The element to 
+        * append to the footer. In the case of a document fragment, the
+        * children of the fragment will be appended to the footer
         */
         appendToFooter: function (element) {
 
             var oFooter = this.footer || (this.footer = createFooter());
-        
+
             oFooter.appendChild(element);
 
             this.changeFooterEvent.fire(element);
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Renders the Module by inserting the elements that are not already 
         * in the main Module into their correct places. Optionally appends 
@@ -1700,7 +1712,7 @@
             }
 
         },
-        
+
         /**
         * Shows the Module element by setting the visible configuration 
         * property to true. Also fires two events: beforeShowEvent prior to 
@@ -1710,7 +1722,7 @@
         show: function () {
             this.cfg.setProperty("visible", true);
         },
-        
+
         /**
         * Hides the Module element by setting the visible configuration 
         * property to false. Also fires two events: beforeHideEvent prior to 

@@ -38,11 +38,9 @@
         * @type Object
         */
         EVENT_TYPES = {
-        
             "SHOW_MASK": "showMask",
             "HIDE_MASK": "hideMask",
             "DRAG": "drag"
-        
         },
 
         /**
@@ -114,6 +112,23 @@
     */
     Panel.CSS_PANEL_CONTAINER = "yui-panel-container";
 
+    /**
+     * Constant representing the default set of focusable elements 
+     * on the pagewhich Modal Panels will prevent access to, when
+     * the modal mask is displayed
+     * 
+     * @property YAHOO.widget.Panel.FOCUSABLE
+     * @static
+     * @type Array
+     */
+    Panel.FOCUSABLE = [
+        "a",
+        "button",
+        "select",
+        "textarea",
+        "input"
+    ];
+
     // Private CustomEvent listeners
 
     /* 
@@ -179,86 +194,6 @@
         }
     }
 
-    /* 
-        "focus" event handler for a focuable element.  Used to automatically 
-        blur the element when it receives focus to ensure that a Panel 
-        instance's modality is not compromised.
-    */
-
-    function onElementFocus() {
-        this.blur();
-    }
-
-    /* 
-        "showMask" event handler that adds a "focus" event handler to all
-        focusable elements in the document to enforce a Panel instance's 
-        modality from being compromised.
-    */
-
-    function addFocusEventHandlers(p_sType, p_aArgs) {
-
-        var me = this;
-
-        function isFocusable(el) {
-
-            var sTagName = el.tagName.toUpperCase(),
-                bFocusable = false;
-            
-            switch (sTagName) {
-            
-            case "A":
-            case "BUTTON":
-            case "SELECT":
-            case "TEXTAREA":
-
-                if (!Dom.isAncestor(me.element, el)) {
-                    Event.on(el, "focus", onElementFocus, el, true);
-                    bFocusable = true;
-                }
-
-                break;
-
-            case "INPUT":
-
-                if (el.type != "hidden" && 
-                    !Dom.isAncestor(me.element, el)) {
-
-                    Event.on(el, "focus", onElementFocus, el, true);
-                    bFocusable = true;
-
-                }
-
-                break;
-            
-            }
-
-            return bFocusable;
-
-        }
-
-        this.focusableElements = Dom.getElementsBy(isFocusable);
-    
-    }
-
-    /* 
-        "hideMask" event handler that removes all "focus" event handlers added 
-        by the "addFocusEventHandlers" method.
-    */
-    
-    function removeFocusEventHandlers(p_sType, p_aArgs) {
-
-        var aElements = this.focusableElements,
-            nElements = aElements.length,
-            el2,
-            i;
-
-        for (i = 0; i < nElements; i++) {
-            el2 = aElements[i];
-            Event.removeListener(el2, "focus", onElementFocus);
-        }
-
-    }
-
     YAHOO.extend(Panel, Overlay, {
 
         /**
@@ -292,13 +227,87 @@
                 this.cfg.applyConfig(userConfig, true);
             }
 
-            this.subscribe("showMask", addFocusEventHandlers);
-            this.subscribe("hideMask", removeFocusEventHandlers);
+            this.subscribe("showMask", this._addFocusHandlers);
+            this.subscribe("hideMask", this._removeFocusHandlers);
             this.subscribe("beforeRender", createHeader);
 
             this.initEvent.fire(Panel);
         },
-        
+
+        /**
+         * @method _onElementFocus 
+         * @private
+         * 
+         * "focus" event handler for a focuable element. Used to automatically 
+         * blur the element when it receives focus to ensure that a Panel 
+         * instance's modality is not compromised.
+         * 
+         * @param {Event} e The DOM event object
+         */
+        _onElementFocus : function(e){
+            this.blur();
+        },
+
+        /** 
+         *  @method _addFocusHandlers
+         *  @protected
+         *  
+         *  "showMask" event handler that adds a "focus" event handler to all
+         *  focusable elements in the document to enforce a Panel instance's 
+         *  modality from being compromised.
+         *  
+         *  @param p_sType {String} Custom event type
+         *  @param p_aArgs {Array} Custom event arguments
+         */
+        _addFocusHandlers: function(p_sType, p_aArgs) {
+            var me = this,
+                focus = "focus",
+                hidden = "hidden",
+                isAncestor = Dom.isAncestor;
+
+            function isFocusable(el) {
+                // NOTE: if e.type is undefined that's fine, want to avoid perf 
+                // impact of tagName check to filter for inputs
+                if (el.type !== hidden && !isAncestor(me.element, el)) {
+                    Event.on(el, focus, me._onElementFocus);
+                    return true;
+                }
+                return false;
+            }
+
+            var focusable = Panel.FOCUSABLE,
+                l = focusable.length,
+                arr = [];
+
+            for (var i = 0; i < l; i++) {
+                arr = arr.concat(Dom.getElementsBy(isFocusable, focusable[i]));
+            }
+
+            this.focusableElements = arr;
+        },
+
+        /** 
+         *  @method _removeFocusHandlers
+         *  @protected
+         *  
+         *  "hideMask" event handler that removes all "focus" event handlers added 
+         *  by the "addFocusEventHandlers" method.
+         *  
+         *  @param p_sType {String} Event type
+         *  @param p_aArgs {Array} Event Arguments
+         */
+        _removeFocusHandlers: function(p_sType, p_aArgs) {
+            var aElements = this.focusableElements,
+                nElements = aElements.length,
+                focus = "focus";
+
+            if (aElements) {
+                for (var i = 0; i < nElements; i++) {
+                    Event.removeListener(aElements[i], focus, this._onElementFocus);
+                }
+            }
+        },
+
         /**
         * Initializes the custom events for Module which are fired 
         * automatically at appropriate times by the Module class.

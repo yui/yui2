@@ -739,7 +739,6 @@
         * @type Object
         */
         EVENT_TYPES = {
-        
             "BEFORE_INIT": "beforeInit",
             "INIT": "init",
             "APPEND": "append",
@@ -754,7 +753,6 @@
             "SHOW": "show",
             "BEFORE_HIDE": "beforeHide",
             "HIDE": "hide"
-        
         },
             
         /**
@@ -824,7 +822,7 @@
     * @type String
     */
     Module.CSS_HEADER = "hd";
-    
+
     /**
     * Constant representing the module body
     * @property YAHOO.widget.Module.CSS_BODY
@@ -1460,12 +1458,14 @@
         * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} headerContent The HTMLElement to append to 
-        * the header
+        * <em>OR</em>
+        * @param {DocumentFragment} headerContent The document fragment 
+        * containing elements which are to be added to the header
         */
         setHeader: function (headerContent) {
             var oHeader = this.header || (this.header = createHeader());
 
-            if (headerContent.tagName) {
+            if (headerContent.nodeName) {
                 oHeader.innerHTML = "";
                 oHeader.appendChild(headerContent);
             } else {
@@ -1481,11 +1481,13 @@
         * Appends the passed element to the header. If no header is present, 
         * one will be automatically created.
         * @method appendToHeader
-        * @param {HTMLElement} element The element to append to the header
+        * @param {HTMLElement | DocumentFragment} element The element to 
+        * append to the header. In the case of a document fragment, the
+        * children of the fragment will be appended to the header.
         */
         appendToHeader: function (element) {
             var oHeader = this.header || (this.header = createHeader());
-        
+
             oHeader.appendChild(element);
 
             this.changeHeaderEvent.fire(element);
@@ -1505,11 +1507,14 @@
         * set to their default toString implementations.
         * <em>OR</em>
         * @param {HTMLElement} bodyContent The HTMLElement to append to the body
+        * <em>OR</em>
+        * @param {DocumentFragment} bodyContent The document fragment 
+        * containing elements which are to be added to the body
         */
         setBody: function (bodyContent) {
             var oBody = this.body || (this.body = createBody());
 
-            if (bodyContent.tagName) {
+            if (bodyContent.nodeName) {
                 oBody.innerHTML = "";
                 oBody.appendChild(bodyContent);
             } else {
@@ -1524,7 +1529,10 @@
         * Appends the passed element to the body. If no body is present, one 
         * will be automatically created.
         * @method appendToBody
-        * @param {HTMLElement} element The element to append to the body
+        * @param {HTMLElement | DocumentFragment} element The element to 
+        * append to the body. In the case of a document fragment, the
+        * children of the fragment will be appended to the body.
+        * 
         */
         appendToBody: function (element) {
             var oBody = this.body || (this.body = createBody());
@@ -1549,12 +1557,15 @@
         * <em>OR</em>
         * @param {HTMLElement} footerContent The HTMLElement to append to 
         * the footer
+        * <em>OR</em>
+        * @param {DocumentFragment} footerContent The document fragment containing 
+        * elements which are to be added to the footer
         */
         setFooter: function (footerContent) {
 
             var oFooter = this.footer || (this.footer = createFooter());
 
-            if (footerContent.tagName) {
+            if (footerContent.nodeName) {
                 oFooter.innerHTML = "";
                 oFooter.appendChild(footerContent);
             } else {
@@ -1563,26 +1574,27 @@
 
             this.changeFooterEvent.fire(footerContent);
             this.changeContentEvent.fire();
-
         },
-        
+
         /**
         * Appends the passed element to the footer. If no footer is present, 
         * one will be automatically created.
         * @method appendToFooter
-        * @param {HTMLElement} element The element to append to the footer
+        * @param {HTMLElement | DocumentFragment} element The element to 
+        * append to the footer. In the case of a document fragment, the
+        * children of the fragment will be appended to the footer
         */
         appendToFooter: function (element) {
 
             var oFooter = this.footer || (this.footer = createFooter());
-        
+
             oFooter.appendChild(element);
 
             this.changeFooterEvent.fire(element);
             this.changeContentEvent.fire();
 
         },
-        
+
         /**
         * Renders the Module by inserting the elements that are not already 
         * in the main Module into their correct places. Optionally appends 
@@ -1709,7 +1721,7 @@
             }
 
         },
-        
+
         /**
         * Shows the Module element by setting the visible configuration 
         * property to true. Also fires two events: beforeShowEvent prior to 
@@ -1719,7 +1731,7 @@
         show: function () {
             this.cfg.setProperty("visible", true);
         },
-        
+
         /**
         * Hides the Module element by setting the visible configuration 
         * property to false. Also fires two events: beforeHideEvent prior to 
@@ -4712,11 +4724,9 @@
         * @type Object
         */
         EVENT_TYPES = {
-        
             "SHOW_MASK": "showMask",
             "HIDE_MASK": "hideMask",
             "DRAG": "drag"
-        
         },
 
         /**
@@ -4788,6 +4798,23 @@
     */
     Panel.CSS_PANEL_CONTAINER = "yui-panel-container";
 
+    /**
+     * Constant representing the default set of focusable elements 
+     * on the pagewhich Modal Panels will prevent access to, when
+     * the modal mask is displayed
+     * 
+     * @property YAHOO.widget.Panel.FOCUSABLE
+     * @static
+     * @type Array
+     */
+    Panel.FOCUSABLE = [
+        "a",
+        "button",
+        "select",
+        "textarea",
+        "input"
+    ];
+
     // Private CustomEvent listeners
 
     /* 
@@ -4853,86 +4880,6 @@
         }
     }
 
-    /* 
-        "focus" event handler for a focuable element.  Used to automatically 
-        blur the element when it receives focus to ensure that a Panel 
-        instance's modality is not compromised.
-    */
-
-    function onElementFocus() {
-        this.blur();
-    }
-
-    /* 
-        "showMask" event handler that adds a "focus" event handler to all
-        focusable elements in the document to enforce a Panel instance's 
-        modality from being compromised.
-    */
-
-    function addFocusEventHandlers(p_sType, p_aArgs) {
-
-        var me = this;
-
-        function isFocusable(el) {
-
-            var sTagName = el.tagName.toUpperCase(),
-                bFocusable = false;
-            
-            switch (sTagName) {
-            
-            case "A":
-            case "BUTTON":
-            case "SELECT":
-            case "TEXTAREA":
-
-                if (!Dom.isAncestor(me.element, el)) {
-                    Event.on(el, "focus", onElementFocus, el, true);
-                    bFocusable = true;
-                }
-
-                break;
-
-            case "INPUT":
-
-                if (el.type != "hidden" && 
-                    !Dom.isAncestor(me.element, el)) {
-
-                    Event.on(el, "focus", onElementFocus, el, true);
-                    bFocusable = true;
-
-                }
-
-                break;
-            
-            }
-
-            return bFocusable;
-
-        }
-
-        this.focusableElements = Dom.getElementsBy(isFocusable);
-    
-    }
-
-    /* 
-        "hideMask" event handler that removes all "focus" event handlers added 
-        by the "addFocusEventHandlers" method.
-    */
-    
-    function removeFocusEventHandlers(p_sType, p_aArgs) {
-
-        var aElements = this.focusableElements,
-            nElements = aElements.length,
-            el2,
-            i;
-
-        for (i = 0; i < nElements; i++) {
-            el2 = aElements[i];
-            Event.removeListener(el2, "focus", onElementFocus);
-        }
-
-    }
-
     YAHOO.extend(Panel, Overlay, {
 
         /**
@@ -4966,13 +4913,87 @@
                 this.cfg.applyConfig(userConfig, true);
             }
 
-            this.subscribe("showMask", addFocusEventHandlers);
-            this.subscribe("hideMask", removeFocusEventHandlers);
+            this.subscribe("showMask", this._addFocusHandlers);
+            this.subscribe("hideMask", this._removeFocusHandlers);
             this.subscribe("beforeRender", createHeader);
 
             this.initEvent.fire(Panel);
         },
-        
+
+        /**
+         * @method _onElementFocus 
+         * @private
+         * 
+         * "focus" event handler for a focuable element. Used to automatically 
+         * blur the element when it receives focus to ensure that a Panel 
+         * instance's modality is not compromised.
+         * 
+         * @param {Event} e The DOM event object
+         */
+        _onElementFocus : function(e){
+            this.blur();
+        },
+
+        /** 
+         *  @method _addFocusHandlers
+         *  @protected
+         *  
+         *  "showMask" event handler that adds a "focus" event handler to all
+         *  focusable elements in the document to enforce a Panel instance's 
+         *  modality from being compromised.
+         *  
+         *  @param p_sType {String} Custom event type
+         *  @param p_aArgs {Array} Custom event arguments
+         */
+        _addFocusHandlers: function(p_sType, p_aArgs) {
+            var me = this,
+                focus = "focus",
+                hidden = "hidden",
+                isAncestor = Dom.isAncestor;
+
+            function isFocusable(el) {
+                // NOTE: if e.type is undefined that's fine, want to avoid perf 
+                // impact of tagName check to filter for inputs
+                if (el.type !== hidden && !isAncestor(me.element, el)) {
+                    Event.on(el, focus, me._onElementFocus);
+                    return true;
+                }
+                return false;
+            }
+
+            var focusable = Panel.FOCUSABLE,
+                l = focusable.length,
+                arr = [];
+
+            for (var i = 0; i < l; i++) {
+                arr = arr.concat(Dom.getElementsBy(isFocusable, focusable[i]));
+            }
+
+            this.focusableElements = arr;
+        },
+
+        /** 
+         *  @method _removeFocusHandlers
+         *  @protected
+         *  
+         *  "hideMask" event handler that removes all "focus" event handlers added 
+         *  by the "addFocusEventHandlers" method.
+         *  
+         *  @param p_sType {String} Event type
+         *  @param p_aArgs {Array} Event Arguments
+         */
+        _removeFocusHandlers: function(p_sType, p_aArgs) {
+            var aElements = this.focusableElements,
+                nElements = aElements.length,
+                focus = "focus";
+
+            if (aElements) {
+                for (var i = 0; i < nElements; i++) {
+                    Event.removeListener(aElements[i], focus, this._onElementFocus);
+                }
+            }
+        },
+
         /**
         * Initializes the custom events for Module which are fired 
         * automatically at appropriate times by the Module class.
