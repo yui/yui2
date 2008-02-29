@@ -211,14 +211,11 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
     fire: function() {
         var len=this.subscribers.length;
         if (!len && this.silent) {
+            //YAHOO.log('DEBUG no subscribers');
             return true;
         }
 
-        var args=[], ret=true, i, rebuild=false;
-
-        for (i=0; i<arguments.length; ++i) {
-            args.push(arguments[i]);
-        }
+        var args=[].slice.call(arguments, 0), ret=true, i, rebuild=false;
 
         if (!this.silent) {
             YAHOO.log( "Firing "       + this  + ", " + 
@@ -227,14 +224,18 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
                        "info", "Event"                  );
         }
 
+        // make a copy of the subscribers so that there are
+        // no index problems if one subscriber removes another.
+        var subs = this.subscribers.slice();
+
         for (i=0; i<len; ++i) {
-            var s = this.subscribers[i];
+            var s = subs[i];
             if (!s) {
+                //YAHOO.log('DEBUG rebuilding array');
                 rebuild=true;
             } else {
                 if (!this.silent) {
-                    YAHOO.log( this.type + "->" + (i+1) + ": " +  s, 
-                                "info", "Event" );
+YAHOO.log( this.type + "->" + (i+1) + ": " +  s, "info", "Event" );
                 }
 
                 var scope = s.getScope(this.scope);
@@ -249,22 +250,19 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
                         ret = s.fn.call(scope, param, s.obj);
                     } catch(e) {
                         this.lastError = e;
-                        YAHOO.log(this + " subscriber exception: " + e,
-                                  "error", "Event");
+YAHOO.log(this + " subscriber exception: " + e, "error", "Event");
                     }
                 } else {
                     try {
                         ret = s.fn.call(scope, this.type, args, s.obj);
                     } catch(ex) {
                         this.lastError = ex;
-                        YAHOO.log(this + " subscriber exception: " + ex,
-                                  "error", "Event");
+YAHOO.log(this + " subscriber exception: " + ex, "error", "Event");
                     }
                 }
                 if (false === ret) {
                     if (!this.silent) {
-                        YAHOO.log("Event cancelled, subscriber " + i + 
-                                  " of " + len, "info", "Event");
+YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
                     }
 
                     //break;
@@ -273,14 +271,15 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             }
         }
 
-        if (rebuild) {
-            var newlist=[],subs=this.subscribers;
-            for (i=0,len=subs.length; i<len; i=i+1) {
-                newlist.push(subs[i]);
-            }
-
-            this.subscribers=newlist;
-        }
+        
+        // if (rebuild) {
+        //     var newlist=this.,subs=this.subscribers;
+        //     for (i=0,len=subs.length; i<len; i=i+1) {
+        //         // this wasn't doing anything before
+        //         newlist.push(subs[i]);
+        //     }
+        //     this.subscribers=newlist;
+        // }
 
         return true;
     },
@@ -291,8 +290,9 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
      * @return {int} The number of listeners unsubscribed
      */
     unsubscribeAll: function() {
-        for (var i=0, len=this.subscribers.length; i<len; ++i) {
-            this._delete(len - 1 - i);
+        // for (var i=0, len=this.subscribers.length; i<len; ++i) {
+        for (var i=this.subscribers.length-1; i>-1; i--) {
+            this._delete(i);
         }
 
         this.subscribers=[];
@@ -311,7 +311,8 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
             delete s.obj;
         }
 
-        this.subscribers[index]=null;
+        // this.subscribers[index]=null;
+        this.subscribers.splice(index, 1);
     },
 
     /**

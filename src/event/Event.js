@@ -569,10 +569,11 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              */
             fireLegacyEvent: function(e, legacyIndex) {
                 // this.logger.debug("fireLegacyEvent " + legacyIndex);
-                var ok=true,le,lh,li,scope,ret;
+                var ok=true, le, lh, li, scope, ret;
                 
-                lh = legacyHandlers[legacyIndex];
+                lh = legacyHandlers[legacyIndex].slice();
                 for (var i=0,len=lh.length; i<len; ++i) {
+                // for (var i in lh.length) {
                     li = lh[i];
                     if ( li && li[this.WFN] ) {
                         scope = li[this.ADJ_SCOPE];
@@ -652,7 +653,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 // The el argument can be an array of elements or element ids.
                 } else if ( this._isValidCollection(el)) {
                     var ok = true;
-                    for (i=0,len=el.length; i<len; ++i) {
+                    for (i=el.length-1; i>-1; i--) {
                         ok = ( this.removeListener(el[i], sType, fn) && ok );
                     }
                     return ok;
@@ -666,14 +667,14 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
 
                 if ("unload" == sType) {
 
-                    for (i=0, len=unloadListeners.length; i<len; i++) {
+                    for (i=unloadListeners.length-1; i>-1; i--) {
                         li = unloadListeners[i];
                         if (li && 
                             li[0] == el && 
                             li[1] == sType && 
                             li[2] == fn) {
-                                //unloadListeners.splice(i, 1);
-                                unloadListeners[i]=null;
+                                unloadListeners.splice(i, 1);
+                                // unloadListeners[i]=null;
                                 return true;
                         }
                     }
@@ -708,13 +709,14 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     var llist = legacyHandlers[legacyIndex];
                     if (llist) {
                         for (i=0, len=llist.length; i<len; ++i) {
+                        // for (i in llist.length) {
                             li = llist[i];
                             if (li && 
                                 li[this.EL] == el && 
                                 li[this.TYPE] == sType && 
                                 li[this.FN] == fn) {
-                                    //llist.splice(i, 1);
-                                    llist[i]=null;
+                                    llist.splice(i, 1);
+                                    // llist[i]=null;
                                     break;
                             }
                         }
@@ -732,8 +734,8 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 // removed the wrapped handler
                 delete listeners[index][this.WFN];
                 delete listeners[index][this.FN];
-                //listeners.splice(index, 1);
-                listeners[index]=null;
+                listeners.splice(index, 1);
+                // listeners[index]=null;
 
                 return true;
 
@@ -963,7 +965,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @private
              */
             _getCacheIndex: function(el, sType, fn) {
-                for (var i=0,len=listeners.length; i<len; ++i) {
+                for (var i=listeners.length-1; i>-1; i--) {
                     var li = listeners[i];
                     if ( li                 && 
                          li[this.FN] == fn  && 
@@ -1140,7 +1142,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 // tested appropriately
                 var tryAgain = !loadComplete;
                 if (!tryAgain) {
-                    tryAgain = (retryCount > 0);
+                    tryAgain = (retryCount > 0 && onAvailStack.length > 0);
                 }
 
                 // onAvailable
@@ -1160,12 +1162,12 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
 
                 var i,len,item,el;
 
-                // onAvailable
-                for (i=0,len=onAvailStack.length; i<len; ++i) {
+                // onAvailable onContentReady
+                for (i=onAvailStack.length-1; i>-1; i--) {
                     item = onAvailStack[i];
-                    if (item && !item.checkReady) {
+                    if (item) {
                         el = this.getEl(item.id);
-                        if (el) {
+                        if (el && (!item.checkReady || el.nextSibling || !tryAgain)) {
                             executeItem(el, item);
                             onAvailStack[i] = null;
                         } else {
@@ -1174,24 +1176,6 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     }
                 }
 
-                // onContentReady
-                for (i=0,len=onAvailStack.length; i<len; ++i) {
-                    item = onAvailStack[i];
-                    if (item && item.checkReady) {
-                        el = this.getEl(item.id);
-
-                        if (el) {
-                            // The element is available, but not necessarily ready
-                            // @todo should we test parentNode.nextSibling?
-                            if (loadComplete || el.nextSibling) {
-                                executeItem(el, item);
-                                onAvailStack[i] = null;
-                            }
-                        } else {
-                            notAvail.push(item);
-                        }
-                    }
-                }
 
                 retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
 
@@ -1225,9 +1209,10 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 var oEl = (YAHOO.lang.isString(el)) ? this.getEl(el) : el;
                 var elListeners = this.getListeners(oEl, sType), i, len;
                 if (elListeners) {
-                    for (i=0,len=elListeners.length; i<len ; ++i) {
+                    for (i=elListeners.length-1; i>-1; i--) {
                         var l = elListeners[i];
-                        this.removeListener(oEl, l.type, l.fn, l.index);
+                        // this.removeListener(oEl, l.type, l.fn, l.index);
+                        this.removeListener(oEl, l.type, l.fn, i);
                     }
                 }
 
@@ -1268,8 +1253,8 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
 
                 for (var j=0;j<searchLists.length; j=j+1) {
                     var searchList = searchLists[j];
-                    if (searchList && searchList.length > 0) {
-                        for (var i=0,len=searchList.length; i<len ; ++i) {
+                    if (searchList) {
+                        for (var i=searchList.length-1; i>-1; i--) {
                             var l = searchList[i];
                             if ( l  && l[this.EL] === oEl && 
                                     (!sType || sType === l[this.TYPE]) ) {
@@ -1298,11 +1283,12 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              */
             _unload: function(e) {
 
-                var EU = YAHOO.util.Event, i, j, l, len, index;
+                var EU = YAHOO.util.Event, i, j, l, len, index,
+                         ul = unloadListeners.slice();
 
                 // execute and clear stored unload listeners
                 for (i=0,len=unloadListeners.length; i<len; ++i) {
-                    l = unloadListeners[i];
+                    l = ul[i];
                     if (l) {
                         var scope = window;
                         if (l[EU.ADJ_SCOPE]) {
@@ -1313,7 +1299,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                             }
                         }
                         l[EU.FN].call(scope, EU.getEvent(e, l[EU.EL]), l[EU.UNLOAD_OBJ] );
-                        unloadListeners[i] = null;
+                        ul[i] = null;
                         l=null;
                         scope=null;
                     }
@@ -1328,15 +1314,12 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 // at least some listeners between page refreshes, potentially causing
                 // errors during page load (mouseover listeners firing before they
                 // should if the user moves the mouse at the correct moment).
-                if (listeners && listeners.length > 0) {
-                    j = listeners.length;
-                    while (j) {
-                        index = j-1;
-                        l = listeners[index];
+                if (listeners) {
+                    for (j=listeners.length-1; j>-1; j--) {
+                        l = listeners[j];
                         if (l) {
-                            EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], index);
+                            EU.removeListener(l[EU.EL], l[EU.TYPE], l[EU.FN], j);
                         } 
-                        j--;
                     }
                     l=null;
                 }
@@ -1469,7 +1452,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
         // it is safe to do so.
         if (EU.isIE) {
 
-            // Process onAvailable/onContentReady items when when the 
+            // Process onAvailable/onContentReady items when the 
             // DOM is ready.
             YAHOO.util.Event.onDOMReady(
                     YAHOO.util.Event._tryPreloadAttach,
