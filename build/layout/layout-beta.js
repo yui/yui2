@@ -386,7 +386,7 @@
         * @description Sets up the main doc element when using the body as the main element.
         */
         _setupBodyElements: function() {
-            this._doc = Dom.get('doc');
+            this._doc = Dom.get('layout-doc');
             if (!this._doc) {
                 this._doc = document.createElement('div');
                 this._doc.id = 'layout-doc';
