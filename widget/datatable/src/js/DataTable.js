@@ -1684,7 +1684,7 @@ initAttributes : function(oConfigs) {
                                     lang.isNumber(oNewPaginator.rowsThisPage) &&
                                     lang.isNumber(oNewPaginator.pageLinks) &&
                                     lang.isNumber(oNewPaginator.pageLinksStart) &&
-                                    lang.isArray(oNewPaginator.dropdownOptions) &&
+                                    (lang.isArray(oNewPaginator.dropdownOptions) || lang.isNull(oNewPaginator.dropdownOptions)) &&
                                     lang.isArray(oNewPaginator.containers) &&
                                     lang.isArray(oNewPaginator.dropdowns) &&
                                     lang.isArray(oNewPaginator.links)) {
@@ -9404,10 +9404,19 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
 
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+
         this.addRows(oResponse.results);
 
-        // Update the instance with any payload data
-        this._handleDataReturnPayload(sRequest,oResponse,oPayload);
+        // Handle the meta && payload
+        this._handleDataReturnPayload(sRequest, oResponse,
+            this._mergeResponseMeta(oPayload, oResponse.meta));
+
+        // Default the Paginator's totalRecords from the RecordSet length
+        var oPaginator = this.get('paginator');
+        if (oPaginator && oPaginator instanceof Pag &&
+            oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
+            oPaginator.set('totalRecords',this._oRecordSet.getLength());
+        }
     }
     // Error
     else if(ok && oResponse.error) {
@@ -9428,17 +9437,27 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
 onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:sRequest,response:oResponse,payload:oPayload});
 
-    oPayload = oPayload || { insertIndex : 0 };
-
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
 
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        this.addRows(oResponse.results, oPayload.insertIndex || 0);
+        var meta = this._mergeResponseMeta({
+                // backward compatibility
+                recordInsertIndex: (oPayload ? oPayload.insertIndex || 0 : 0) },
+                oPayload, oResponse.meta);
 
-        // Update the instance with any payload data
-        this._handleDataReturnPayload(sRequest,oResponse,oPayload);
+        this.addRows(oResponse.results, meta.insertIndex);
+
+        // Handle the magic meta values
+        this._handleDataReturnPayload(sRequest,oResponse,meta);
+
+        // Default the Paginator's totalRecords from the RecordSet length
+        var oPaginator = this.get('paginator');
+        if (oPaginator && oPaginator instanceof Pag &&
+            oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
+            oPaginator.set('totalRecords',this._oRecordSet.getLength());
+        }
     }
     // Error
     else if(ok && oResponse.error) {
@@ -9463,22 +9482,30 @@ onDataReturnSetRecords : function(oRequest, oResponse, oPayload) {
     // Data ok to set
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
         var oPaginator = this.get('paginator');
-        var startIndex = oPayload && lang.isNumber(oPayload.startIndex) ?
-                            oPayload.startIndex : 0;
-
-        // If paginating, set the number of total records if provided
-        if (oPaginator instanceof Pag) {
-            if (lang.isNumber(oResponse.totalRecords)) {
-                oPaginator.setTotalRecords(oResponse.totalRecords,true);
-            } else {
-                oPaginator.setTotalRecords(oResponse.results.length,true);
-            }
+        if (!(oPaginator instanceof Pag)) {
+            oPaginator = null;
         }
 
-        this._oRecordSet.setRecords(oResponse.results, startIndex);
+        var meta = this._mergeResponseMeta({
+                // backward compatibility
+                recordStartIndex: oPayload ? oPayload.startIndex : null },
+                oPayload, oResponse.meta);
 
-        // Update the instance with any payload data
-        this._handleDataReturnPayload(oRequest,oResponse,oPayload);
+        if (!lang.isNumber(meta.recordStartIndex)) {
+            // Default to the current page offset if paginating; 0 if not.
+            meta.recordStartIndex = oPaginator ?
+                meta.paginationRecordOffset || 0 : 0;
+        }
+
+        this._oRecordSet.setRecords(oResponse.results, meta.recordStartIndex);
+
+        // Handle the magic meta values
+        this._handleDataReturnPayload(oRequest,oResponse,meta);
+
+        // Default the Paginator's totalRecords from the RecordSet length
+        if (oPaginator && oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
+            oPaginator.set('totalRecords',this._oRecordSet.getLength());
+        }
 
         this.render();
     }
@@ -9489,34 +9516,77 @@ onDataReturnSetRecords : function(oRequest, oResponse, oPayload) {
 },
 
 /**
+ * Merges meta information from the response (as defined in the DataSource's
+ * responseSchema.metaFields member) into the payload.  A few magic keys are
+ * given special treatment: sortKey and sortDir => sorting.key|dir and all
+ * keys paginationFoo => pagination.foo.  Merging is shallow with the exception
+ * of the magic keys being added to their respective nested objects.
+ *
+ * @method _mergeResponseMeta
+ * @param * {object} Any number of objects to merge together.  Last in wins.
+ * @return {object} A new object containing the combined keys of all objects.
+ * @private
+ */
+_mergeResponseMeta : function () {
+    var meta = {},
+        a = arguments,
+        i = 0,len = a.length,
+        k,o;
+
+    for (; i < len; ++i) {
+        o = a[i];
+        if (lang.isObject(o)) {
+            for (k in o) {
+                if (lang.hasOwnProperty(o,k)) {
+                    if (k.indexOf('pagination') === 0 && k.charAt(10)) {
+                        if (!meta.pagination) {
+                            meta.pagination = {};
+                        }
+                        meta.pagination[k.substr(0,1).toLowerCase()+k.substr(1)] = o[k];
+                    } else if (/^sort(Key|Dir)/.test(k)) {
+                        if (!meta.sorting) {
+                            meta.sorting = this.get('sortedBy') || {};
+                        }
+                        meta.sorting[RegExp.$1.toLowerCase()] = o[k];
+                    } else {
+                        meta[k] = o[k];
+                    }
+                }
+            }
+        }
+    }
+
+    return meta;
+},
+
+/**
  * Updates the DataTable with data sent in an onDataReturn* payload
  * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
- * @param oPayload {MIXED} Additional argument(s)
+ * @param meta {MIXED} Argument(s) provided in payload or response meta
  * @private
  */
-_handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
-    if (oPayload) {
+_handleDataReturnPayload : function (oRequest, oResponse, meta) {
+    if (meta) {
         // Update with any pagination information
-        var oState = oPayload.pagination;
-
-        if (oState) {
-            // Set the paginator values in preparation for refresh
-            var oPaginator = this.get('paginator');
-            if (oPaginator && oPaginator instanceof Pag) {
-                oPaginator.setStartIndex(oState.recordOffset,true);
-                oPaginator.setRowsPerPage(oState.rowsPerPage,true);
+        var oPaginator = this.get('paginator');
+        if (oPaginator instanceof Pag) {
+            if (!lang.isUndefined(meta.totalRecords)) {
+                oPaginator.set('totalRecords',parseInt(meta.totalRecords,10)|0);
             }
 
+            if (lang.isObject(meta.pagination)) {
+                // Set the paginator values in preparation for refresh
+                oPaginator.set('rowsPerPage',meta.pagination.rowsPerPage);
+                oPaginator.set('recordOffset',meta.pagination.recordOffset);
+            }
         }
 
         // Update with any sorting information
-        oState = oPayload.sorting;
-
-        if (oState) {
+        if (meta.sorting) {
             // Set the sorting values in preparation for refresh
-            this.set('sortedBy', oState);
+            this.set('sortedBy', meta.sorting);
         }
     }
 },

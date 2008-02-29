@@ -177,10 +177,10 @@ YAHOO.widget.Paginator.prototype = {
          * Total number of records to paginate through
          * @attribute totalRecords
          * @type integer
-         * @default Paginator.VALUE_UNLIMITED
+         * @default 0
          */
         this.setAttributeConfig('totalRecords', {
-            value     : UNLIMITED,
+            value     : 0,
             validator : l.isNumber
         });
 
