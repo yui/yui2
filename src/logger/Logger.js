@@ -431,10 +431,9 @@ if(!YAHOO.widget.Logger) {
             var output =
                 localTime + " (" +
                 elapsedTime + "ms): " +
-                oEntry.source + ": " +
-                oEntry.msg;
+                oEntry.source + ": ";
 
-            console.log(output);
+            console.log(output, oEntry.msg);
         }
     };
 
