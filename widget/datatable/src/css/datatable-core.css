@@ -1,10 +1,10 @@
 /* foundational CSS */
 .yui-dt {
-    border:1px solid transparent;
+    border-bottom:1px solid transparent;
 }
 
 .yui-dt-noop {
-    border:none;
+    border-bottom:none;
 }
 
 .yui-dt-liner {

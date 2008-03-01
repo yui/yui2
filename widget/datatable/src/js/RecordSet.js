@@ -423,6 +423,7 @@ YAHOO.widget.RecordSet.prototype = {
         else {
             YAHOO.log("Could not add Records with data " +
                     YAHOO.lang.dump(aData), "info", this.toString());
+            return null;
         }
     },
 

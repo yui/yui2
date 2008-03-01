@@ -32,7 +32,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Internal vars
     this._nIndex = DT._nCount;
     this._sId = "yui-dt"+this._nIndex;
-    this._oChain = new YAHOO.util.Chain();
+    this._oChainRender = new YAHOO.util.Chain();
+    this._oChainSync = new YAHOO.util.Chain();
 
     // Initialize configs
     this._initConfigs(oConfigs);
@@ -122,7 +123,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Do not send an initial request at all
     else if(this.get("initialLoad") === false) {
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
-        this._oChain.add({
+        this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId && this._bInit) {
                     this._bInit = false;
@@ -132,7 +133,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
             },
             scope: this
         });
-        this._oChain.run();
+        this._oChainRender.run();
     }
     // Send an initial request with a custom payload
     else {
@@ -607,7 +608,7 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _bStylesheetFallback : false,
+    _bStylesheetFallback : (ua.ie && (ua.ie<7)) ? true : false,
 
     /**
      * Object literal hash of Columns and their dynamically create style rules.
@@ -2050,11 +2051,20 @@ _sId : null,
 /**
  * Render chain.
  *
- * @property _oChain
+ * @property _oChainRender
  * @type YAHOO.util.Chain
  * @private
  */
-_oChain : null,
+_oChainRender : null,
+
+/**
+ * Sync chain.
+ *
+ * @property _oChainSync
+ * @type YAHOO.util.Chain
+ * @private
+ */
+_oChainSync : null,
 
 /**
  * Sparse array of custom functions to set column widths for browsers that don't
@@ -2303,6 +2313,26 @@ _focusEl : function(el) {
 },
 
 /**
+ * Post render syncing of Column widths and scroll padding
+ *
+ * @method _sync
+ * @private
+ */
+_sync : function() {
+    this._oChainSync.stop();
+    
+    this._oChainSync.add({
+        method: function() {
+            if((this instanceof DT) && this._sId) {
+                this._syncColWidths();
+                this._forceGeckoRedraw();
+            }
+        },
+        scope:this
+    });
+},
+
+/**
  * Syncs up widths of THs and TDs across all those Columns without width values.
  * Actual adjustment is to the liner DIVs so window resizing will not affect cells. 
  *
@@ -2370,7 +2400,9 @@ _syncColWidths : function() {
             }
             
             // Update to the new width
-            this._setColumnWidth(oColumn, newWidth+"px"); 
+            if(newWidth) {
+                this._setColumnWidth(oColumn, newWidth+"px"); 
+            }
         }
         
         // Resnap unsnapped containers
@@ -2460,29 +2492,32 @@ _syncScrollPadding : function() {
 },
 
 /**
- * Forces browser repaint by removing/adding the no-op class name
+ * Forces Gecko repaint by removing/adding the no-op class name
  *
- * @method _forceBrowserRedraw
+ * @method _forceGeckoRedraw
  * @private
  */
-_forceBrowserRedraw : function() {
-    this._oChain.add({
-        method: function(oArg) {
-            if((this instanceof DT) && this._sId) {
-                Dom.removeClass(this.getContainerEl(),"yui-dt-noop");
-            }
-        },
-        scope: this
-    });
-    this._oChain.add({
-        method: function() {
-            if((this instanceof DT) && this._sId) {
-                Dom.addClass(this.getContainerEl(),"yui-dt-noop");
-            }
-        },
-        scope:this
-    });
-    this._oChain.run();
+_forceGeckoRedraw : function() {
+    // Bug 1741322: Needed to force FF to redraw to fix squishy headers on wide tables when new content comes in
+    if(ua.gecko) {
+        this._oChainRender.add({
+            method: function(oArg) {
+                if((this instanceof DT) && this._sId) {
+                    Dom.removeClass(this.getContainerEl(),"yui-dt-noop");
+                }
+            },
+            scope: this
+        });
+        this._oChainRender.add({
+            method: function() {
+                if((this instanceof DT) && this._sId) {
+                    Dom.addClass(this.getContainerEl(),"yui-dt-noop");
+                }
+            },
+            scope:this
+        });
+        this._oChainRender.run();
+    }
 },
 
 
@@ -4805,7 +4840,7 @@ initializeTable : function() {
  * @method render
  */
 render : function() {
-    this._oChain.stop();
+    this._oChainRender.stop();
     this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
@@ -4868,7 +4903,7 @@ render : function() {
         // From the top, update in-place existing rows, so as to reuse DOM elements
         if(allRows.length > 0) {
             loopEnd = allRows.length; // End at last row
-            this._oChain.add({
+            this._oChainRender.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
                         var i = oArg.nCurrentRow,
@@ -4897,7 +4932,7 @@ render : function() {
         loopEnd = allRecords.length; // where to end
         var nRowsNeeded = (loopEnd - loopStart); // how many needed
         if(nRowsNeeded > 0) {
-            this._oChain.add({
+            this._oChainRender.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId) {
                         var i = oArg.nCurrentRow,
@@ -4923,7 +4958,7 @@ render : function() {
             });
         }
 
-        this._oChain.add({
+        this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
                     this._setFirstRow();
@@ -4967,12 +5002,9 @@ render : function() {
                 }
                 
                 if(this._bInit) {
-                    // Bug 1741322: Force FF to redraw to fix squishy headers on wide tables
-                    if(ua.gecko) {
-                        this._forceBrowserRedraw();
-                    }
-    
-                    this._oChain.add({
+                    this._forceGeckoRedraw();
+
+                    this._oChainRender.add({
                         method: function() {
                             if((this instanceof DT) && this._sId && this._bInit) {
                                 this._bInit = false;
@@ -4982,7 +5014,7 @@ render : function() {
                         },
                         scope: this
                     });
-                    this._oChain.run();
+                    this._oChainRender.run();
                 }
                 else {
                     this.fireEvent("renderEvent");
@@ -4997,7 +5029,7 @@ render : function() {
             timeout: (loopN > 0) ? 0 : -1
         }); 
         
-        this._oChain.add({
+        this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._syncColWidths();
@@ -5006,7 +5038,7 @@ render : function() {
             scope: this
         });
                     
-        this._oChain.run();  
+        this._oChainRender.run();  
     }
     // Empty
     else {
@@ -5028,7 +5060,7 @@ render : function() {
  * @method destroy
  */
 destroy : function() {
-    this._oChain.stop();
+    this._oChainRender.stop();
     
     //TODO: destroy static resizer proxy and column proxy?
     
@@ -5541,15 +5573,14 @@ _setColumnWidth : function(oColumn, sWidth) {
                 // Update existing rule for the Column
                 else {
                     rule.style.width = sWidth;
-                }
-                
+                } 
                 return;
             }
             
             DT._bStylesheetFallback = true;
         }
         // Do it the old fashioned way
-        if(DT._bStylesheetFallback) {
+        if(DT._bStylesheetFallback) {           
             if(sWidth == "auto") {
                 sWidth = ""; 
             }
@@ -5594,9 +5625,10 @@ _setColumnWidth : function(oColumn, sWidth) {
 
             if (resizerFn) {
                 resizerFn.call(this,oColumn,sWidth);
+                //this._syncScrollPadding();
+                return;
             }
         }
-    this._syncScrollPadding();
     }
     else {
         YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
@@ -5624,8 +5656,8 @@ setColumnWidth : function(oColumn, nWidth) {
         oColumn.width = parseInt(sWidth,10);
         
         // Resize the DOM elements
+        this._oChainSync.stop();
         this._setColumnWidth(oColumn, sWidth);
-        
         this._syncScrollPadding();
         
         this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
@@ -5767,7 +5799,7 @@ showColumn : function(oColumn) {
 removeColumn : function(oColumn) {
     var nColTreeIndex = oColumn.getTreeIndex();
     if(nColTreeIndex !== null) {
-        this._oChain.stop();
+        this._oChainRender.stop();
         var aOrigColumnDefs = this._oColumnSet.getDefinitions();
 
         oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
@@ -5809,7 +5841,7 @@ insertColumn : function(oColumn, index) {
         index = oColumnSet.tree[0].length;
     }
     
-    this._oChain.stop();
+    this._oChainRender.stop();
     var aNewColumnDefs = this._oColumnSet.getDefinitions();
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
@@ -5840,8 +5872,8 @@ selectColumn : function(oColumn) {
 
             // Update body cells
             var allRows = this.getTbodyEl().rows;
-            var oChain = this._oChain;
-            oChain.add({
+            var oChainRender = this._oChainRender;
+            oChainRender.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
                         Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED);                    
@@ -5852,7 +5884,7 @@ selectColumn : function(oColumn) {
                 iterations: allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChain.run();       
+            oChainRender.run();       
             
             this.fireEvent("columnSelectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" selected", "info", this.toString());
@@ -5884,8 +5916,8 @@ unselectColumn : function(oColumn) {
 
             // Update body cells
             var allRows = this.getTbodyEl().rows;
-            var oChain = this._oChain;
-            oChain.add({
+            var oChainRender = this._oChainRender;
+            oChainRender.add({
                 method: function(oArg) {
                     if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
                         Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_SELECTED); 
@@ -5896,7 +5928,7 @@ unselectColumn : function(oColumn) {
                 iterations:allRows.length,
                 argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
             });
-            oChain.run();       
+            oChainRender.run();       
             
             this.fireEvent("columnUnselectEvent",{column:oColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" unselected", "info", this.toString());
@@ -5952,8 +5984,8 @@ highlightColumn : function(column) {
 
         // Update body cells
         var allRows = this.getTbodyEl().rows;
-        var oChain = this._oChain;
-        oChain.add({
+        var oChainRender = this._oChainRender;
+        oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
                     Dom.addClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);   
@@ -5964,7 +5996,7 @@ highlightColumn : function(column) {
             iterations:allRows.length,
             argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
         });
-        oChain.run();       
+        oChainRender.run();       
             
         this.fireEvent("columnHighlightEvent",{column:oColumn});
         YAHOO.log("Column \"" + oColumn.key + "\" highlighed", "info", this.toString());
@@ -5993,8 +6025,8 @@ unhighlightColumn : function(column) {
 
         // Update body cells
         var allRows = this.getTbodyEl().rows;
-        var oChain = this._oChain;
-        oChain.add({
+        var oChainRender = this._oChainRender;
+        oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId && allRows[oArg.rowIndex] && allRows[oArg.rowIndex].cells[oArg.cellIndex]) {
                     Dom.removeClass(allRows[oArg.rowIndex].cells[oArg.cellIndex],DT.CLASS_HIGHLIGHTED);
@@ -6005,7 +6037,7 @@ unhighlightColumn : function(column) {
             iterations:allRows.length,
             argument: {rowIndex:0,cellIndex:oColumn.getKeyIndex()}
         });
-        oChain.run();       
+        oChainRender.run();       
             
         this.fireEvent("columnUnhighlightEvent",{column:oColumn});
         YAHOO.log("Column \"" + oColumn.key + "\" unhighlighted", "info", this.toString());
@@ -6060,6 +6092,32 @@ unhighlightColumn : function(column) {
 
 // ROW FUNCTIONS
 
+/**
+ * Adds one TR element at the given index.
+ *
+ * @method addTrEl
+ * @param oRecord {YAHOO.widget.Record} Record instance. 
+ * @param index {Number} TR index.
+ * @return {HTMLElement} Reference to new TR element. 
+ */
+_addTrEl : function(oRecord, index) {
+    var elNewTr = this._createTrEl(oRecord);
+    if(elNewTr) {
+        if (index >= 0 && index < this._elTbody.rows.length) {
+            this._elTbody.insertBefore(elNewTr,
+                this._elTbody.rows[index]);
+            if (!index) {
+                this._setFirstRow();
+            }
+        } else {
+            this._elTbody.appendChild(elNewTr);
+            this._setLastRow();
+            index = this._elTbody.rows.length - 1;
+        }
+        this._setRowStripes(index);
+    }
+    return elNewTr;
+},
 
 /**
  * Adds one new Record of data into the RecordSet at the index if given,
@@ -6103,15 +6161,8 @@ addRow : function(oData, index) {
                     this.render();
                 }
                 
-                // TODO: what args to pass?
                 this.fireEvent("rowAddEvent", {record:oRecord});
-        
-                // For log message
-                recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
-        
-                YAHOO.log("Added row: Record ID = " + oRecord.getId() +
-                        ", Record index = " + this.getRecordIndex(oRecord) +
-                        ", page row index = " + recIndex, "info", this.toString());
+                YAHOO.log("Added a row for Record " + YAHOO.lang.dump(oRecord) + " at RecordSet index " + recIndex, "info", this.toString());
                 
                 return;
             }
@@ -6119,37 +6170,24 @@ addRow : function(oData, index) {
             else {
                 recIndex = this.getTrIndex(oRecord);
                 if(lang.isNumber(recIndex)) {
-                    if((this instanceof DT) && this._sId) {
-                        // Add the TR element
-                        var elNewTr = this._createTrEl(oRecord);
-                        if(elNewTr) {
-                            if (recIndex >= 0 && recIndex < this._elTbody.rows.length) {
-                                this._elTbody.insertBefore(elNewTr,
-                                    this._elTbody.rows[recIndex]);
-                                if (!recIndex) {
-                                    this._setFirstRow();
+                    // Add the TR element
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                var elNewTr = this._addTrEl(oRecord, recIndex);
+                                if(elNewTr) {
+                                    this.hideTableMessage();
+                                    this._oChainSync.run();
+            
+                                    this.fireEvent("rowAddEvent", {record:oRecord});
+                                    YAHOO.log("Added a row for Record " + YAHOO.lang.dump(oRecord) + " at RecordSet index " + recIndex, "info", this.toString());
                                 }
-                            } else {
-                                this._elTbody.appendChild(elNewTr);
-                                this._setLastRow();
-                                recIndex = this._elTbody.rows.length - 1;
                             }
-                            this._setRowStripes(recIndex);
-
-                            this._syncColWidths();
-                        }
-                        this.hideTableMessage();
-
-                        // TODO: what args to pass?
-                        this.fireEvent("rowAddEvent", {record:oRecord});
-
-                        // For log message
-                        recIndex = (lang.isValue(recIndex))? recIndex : "n/a";
-
-                        YAHOO.log("Added row: Record ID = " + oRecord.getId() +
-                                ", Record index = " + this.getRecordIndex(oRecord) +
-                                ", page row index = " + recIndex, "info", this.toString());
-                    }
+                        },
+                        scope: this
+                    });
+                    this._sync();
+                    this._oChainRender.run();
                     return;
                 }
             }            
@@ -6167,21 +6205,107 @@ addRow : function(oData, index) {
  */
 addRows : function(aData, index) {
     if(lang.isArray(aData)) {
-        var i;
-        if(lang.isNumber(index)) {
-            for(i=aData.length-1; i>-1; i--) {
-                this.addRow(aData[i], index);
+        var aRecords = this._oRecordSet.addRecords(aData, index);
+        if(aRecords) {
+            var recIndex = this.getRecordIndex(aRecords[0]);
+            
+            // Paginated
+            var oPaginator = this.get('paginator');
+            if (oPaginator instanceof Pag ||
+                this.get('paginated')) {
+                var endRecIndex;
+                if (oPaginator instanceof Pag) {
+                    // Update the paginator's totalRecords
+                    var totalRecords = oPaginator.get('totalRecords');
+                    if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                        oPaginator.set('totalRecords',totalRecords + aRecords.length);
+                    }
+
+                    endRecIndex = (oPaginator.getPageRecords())[1];
+                }
+                // Backward compatibility
+                else {
+                    endRecIndex = oPaginator.startRecordIndex +
+                                  oPaginator.rowsPerPage - 1;
+                    this.updatePaginator();
+                }
+
+                // At least one of the new records affects the view
+                if (recIndex <= endRecIndex) {
+                    this.render();
+                }
+                
+                this.fireEvent("rowsAddEvent", {records:aRecords});
+                YAHOO.log("Added " + aRecords.length + " rows at index " + recIndex, "info", this.toString());
+                
+                return;
             }
-        }
-        else {
-            for(i=0; i<aData.length; i++) {
-                this.addRow(aData[i]);
-            }
+            // Not paginated
+            else {
+                // Add the TR elements
+                var loopN = this.get("renderLoopSize");
+                var loopEnd = recIndex + aData.length;
+                var nRowsNeeded = (loopEnd - recIndex); // how many needed
+                this._oChainRender.add({
+                    method: function(oArg) {
+                        if((this instanceof DT) && this._sId) {
+                            var i = oArg.nCurrentRow,
+                                j = oArg.nCurrentRecord,
+                                len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd;
+                            for(; i < len; ++i,++j) {
+                                this._addTrEl(aRecords[j], i);
+                            }
+                            oArg.nCurrentRow = i;
+                            oArg.nCurrentRecord = j;
+                        }
+                    },
+                    iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
+                    argument: {nCurrentRow:recIndex,nCurrentRecord:0},
+                    scope: this,
+                    timeout: (loopN > 0) ? 0 : -1
+                });
+                this._sync();
+                this._oChainRender.add({
+                    method: function() {
+                        this._oChainSync.run();
+                    },
+                    scope: this
+                });
+                this._oChainRender.run();
+                
+                this.hideTableMessage();
+                
+                    /*// Add the TR element
+                    for(var i=0,l=aRecords.length; i<l; i++) {
+                        this._oChainRender.add({
+                            method: function(oArg) {
+                                if((this instanceof DT) && this._sId) {
+                                    var oRecord = oArg.record;
+                                    var elNewTr = this._addTrEl(oArg.record, oArg.nIndex);
+                                    if(elNewTr) {
+                                        this._oChainSync.run();
+                
+                                        this.fireEvent("rowAddEvent", {record:oRecord});
+                                        YAHOO.log("Added a row for Record " + YAHOO.lang.dump(oRecord) + " at RecordSet index " + oArg.nIndex, "info", this.toString());
+                                    }
+                                }
+                            },
+                            scope: this,
+                            argument: {record: aRecords[i],index:recIndex}
+                        });
+                        this._sync();
+                    }
+                    this._oChainRender.run();*/
+                
+
+                this.fireEvent("rowsAddEvent", {records:aRecords});
+                YAHOO.log("Added " + aRecords.length + " rows at index " + recIndex, "info", this.toString());
+
+                return;
+            }            
         }
     }
-    else {
-        YAHOO.log("Could not add rows " + lang.dump(aData));
-    }
+    YAHOO.log("Could not add rows with " + lang.dump(aData));    
 },
 
 /**
@@ -6231,7 +6355,7 @@ updateRow : function(row, oData) {
 
     // Update the TR only if row is on current page
     if(elRow) {
-        this._oChain.add({
+        this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._updateTrEl(elRow, updatedRecord);
@@ -6245,7 +6369,7 @@ updateRow : function(row, oData) {
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
-        this._oChain.run();
+        this._oChainRender.run();
     }
     else {
         this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
@@ -6253,7 +6377,6 @@ updateRow : function(row, oData) {
                 ", Record index = " + this.getRecordIndex(updatedRecord) +
                 ", page row index = " + this.getTrIndex(updatedRecord), "info", this.toString());   
     }
-
 },
 
 /**
@@ -6330,7 +6453,7 @@ deleteRow : function(row) {
         }
         else {
             if(lang.isNumber(nTrIndex)) {
-                this._oChain.add({
+                this._oChainRender.add({
                     method: function() {
                         if((this instanceof DT) && this._sId) {
                             var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
@@ -6367,7 +6490,7 @@ deleteRow : function(row) {
                     scope: this,
                     timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                 });
-                this._oChain.run();
+                this._oChainRender.run();
                 return;
             }
         }
@@ -8990,7 +9113,7 @@ saveCellEditor : function() {
         this.formatCell(this._oCellEditor.cell.firstChild);
         
         // Bug fix 1764044
-        this._oChain.add({
+        this._oChainRender.add({
             method: function() {
                 this._syncColWidths();
             },
