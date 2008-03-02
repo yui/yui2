@@ -1805,15 +1805,14 @@ YAHOO.widget.Calendar.prototype = {
 		var cal = this.parent || this;
 	
 		for (var r=0;r<6;r++) {
-	
-			weekNum = YAHOO.widget.DateMath.getWeekNumber(workingDate, useDate.getFullYear(), startDay);
+
+			weekNum = YAHOO.widget.DateMath.getWeekNumber(workingDate, startDay);
 			weekClass = weekPrefix + weekNum;
-	
+
 			// Local OOM check for performance, since we already have pagedate
 			if (r !== 0 && hideBlankWeeks === true && workingDate.getMonth() != useDate.getMonth()) {
 				break;
 			} else {
-	
 				html[html.length] = '<tr class="' + weekClass + '">';
 				
 				if (showWeekHeader) { html = this.renderRowHeader(weekNum, html); }
@@ -1842,24 +1841,24 @@ YAHOO.widget.Calendar.prototype = {
 					} else {
 						YAHOO.util.Dom.addClass(cell, workingDayPrefix + workingDate.getDay());
 						YAHOO.util.Dom.addClass(cell, dayPrefix + workingDate.getDate());
-					
+
 						for (var s=0;s<this.renderStack.length;++s) {
-	
+
 							renderer = null;
-	
+
 							var rArray = this.renderStack[s];
 							var type = rArray[0];
-							
+
 							var month;
 							var day;
 							var year;
-							
+
 							switch (type) {
 								case YAHOO.widget.Calendar.DATE:
 									month = rArray[1][1];
 									day = rArray[1][2];
 									year = rArray[1][0];
-	
+
 									if (workingDate.getMonth()+1 == month && workingDate.getDate() == day && workingDate.getFullYear() == year) {
 										renderer = rArray[2];
 										this.renderStack.splice(s,1);
@@ -1868,7 +1867,7 @@ YAHOO.widget.Calendar.prototype = {
 								case YAHOO.widget.Calendar.MONTH_DAY:
 									month = rArray[1][0];
 									day = rArray[1][1];
-									
+
 									if (workingDate.getMonth()+1 == month && workingDate.getDate() == day) {
 										renderer = rArray[2];
 										this.renderStack.splice(s,1);

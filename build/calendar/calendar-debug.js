@@ -731,6 +731,19 @@ YAHOO.widget.DateMath = {
 	* @type Number
 	*/
 	ONE_DAY_MS : 1000*60*60*24,
+	
+	/**
+	 * Constant field representing the date in first week of January
+	 * which identifies the first week of the year.
+	 * <p>
+	 * In the U.S, Jan 1st is normally used based on a Sunday start of week.
+	 * ISO 8601, used widely throughout Europe, uses Jan 4th, based on a Monday start of week.
+	 * </p>
+	 * @property WEEK_ONE_JAN_DATE
+	 * @static
+	 * @type Number
+	 */
+	WEEK_ONE_JAN_DATE : 1,
 
 	/**
 	* Adds the specified amount of time to the this instance.
@@ -894,27 +907,76 @@ YAHOO.widget.DateMath = {
 	},
 
 	/**
-	* Calculates the week number for the given date. This function assumes that week 1 is the
-	* week in which January 1 appears, regardless of whether the week consists of a full 7 days.
-	* The calendar year can be specified to help find what a the week number would be for a given
-	* date if the date overlaps years. For instance, a week may be considered week 1 of 2005, or
-	* week 53 of 2004. Specifying the optional calendarYear allows one to make this distinction
-	* easily.
+	* Calculates the week number for the given date. Can currently support standard
+	* U.S. week numbers, based on Jan 1st defining the 1st week of the year, and 
+	* ISO8601 week numbers, based on Jan 4th defining the 1st week of the year.
+	* 
 	* @method getWeekNumber
-	* @param {Date}	date	The JavaScript date for which to find the week number
-	* @param {Number} calendarYear	OPTIONAL - The calendar year to use for determining the week number. Default is
-	*											the calendar year of parameter "date".
-	* @return {Number}	The week number of the given date.
+	* @param {Date}	date The JavaScript date for which to find the week number
+	* @param {Number} firstDayOfWeek The index of the first day of the week (0 = Sun, 1 = Mon ... 6 = Sat).
+	* Defaults to 0
+	* @param {Number} janDate The date in the first week of January which defines week one for the year
+	* Defaults to the value of YAHOO.widget.DateMath.WEEK_ONE_JAN_DATE, which is 1 (Jan 1st). 
+	* For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first week of the year.
+	* 
+	* @return {Number} The number of the week containing the given date.
 	*/
-	getWeekNumber : function(date, calendarYear) {
-		date = this.clearTime(date);
-		var nearestThurs = new Date(date.getTime() + (4 * this.ONE_DAY_MS) - ((date.getDay()) * this.ONE_DAY_MS));
+	getWeekNumber : function(date, firstDayOfWeek, janDate) {
 
-		var jan1 = this.getDate(nearestThurs.getFullYear(),0,1);
-		var dayOfYear = ((nearestThurs.getTime() - jan1.getTime()) / this.ONE_DAY_MS) - 1;
+		// Setup Defaults
+		firstDayOfWeek = firstDayOfWeek || 0;
+		janDate = janDate || this.WEEK_ONE_JAN_DATE;
 
-		var weekNum = Math.ceil((dayOfYear)/ 7);
+		var targetDate = this.clearTime(date),
+			startOfWeek,
+			endOfWeek;
+
+		if (targetDate.getDay() === firstDayOfWeek) { 
+			startOfWeek = targetDate;
+		} else {
+			startOfWeek = this.getFirstDayOfWeek(targetDate, firstDayOfWeek);
+		}
+
+		var startYear = startOfWeek.getFullYear(),
+			startTime = startOfWeek.getTime();
+
+		// DST shouldn't be a problem here, math is quicker than setDate();
+		endOfWeek = new Date(startOfWeek.getTime() + 6*this.ONE_DAY_MS);
+
+		var weekNum;
+		if (startYear !== endOfWeek.getFullYear() && endOfWeek.getDate() >= janDate) {
+			// If years don't match, endOfWeek is in Jan. and if the 
+			// week has WEEK_ONE_JAN_DATE in it, it's week one by definition.
+			weekNum = 1;
+		} else {
+			// Get the 1st day of the 1st week, and 
+			// find how many days away we are from it.
+			var weekOne = this.clearTime(this.getDate(startYear, 0, janDate)),
+				weekOneDayOne = this.getFirstDayOfWeek(weekOne, firstDayOfWeek);
+
+			// Round days to smoothen out 1 hr DST diff
+			var daysDiff  = Math.round((targetDate.getTime() - weekOneDayOne.getTime())/this.ONE_DAY_MS);
+
+			// Calc. Full Weeks
+			var rem = daysDiff % 7;
+			var weeksDiff = (daysDiff - rem)/7;
+			weekNum = weeksDiff + 1;
+		}
 		return weekNum;
+	},
+
+	/**
+	 * Get the first day of the week, for the give date. 
+	 * @param {Date} dt The date in the week for which the first day is required.
+	 * @param {Number} startOfWeek The index for the first day of the week, 0 = Sun, 1 = Mon ... 6 = Sat (defaults to 0)
+	 * @return {Date} The first day of the week
+	 */
+	getFirstDayOfWeek : function (dt, startOfWeek) {
+		startOfWeek = startOfWeek || 0;
+		var dayOfWeekIndex = dt.getDay(),
+			dayOfWeek = (dayOfWeekIndex - startOfWeek + 7) % 7;
+
+		return this.subtract(dt, this.DAY, dayOfWeek);
 	},
 
 	/**
@@ -2821,15 +2883,14 @@ YAHOO.widget.Calendar.prototype = {
 		var cal = this.parent || this;
 	
 		for (var r=0;r<6;r++) {
-	
-			weekNum = YAHOO.widget.DateMath.getWeekNumber(workingDate, useDate.getFullYear(), startDay);
+
+			weekNum = YAHOO.widget.DateMath.getWeekNumber(workingDate, startDay);
 			weekClass = weekPrefix + weekNum;
-	
+
 			// Local OOM check for performance, since we already have pagedate
 			if (r !== 0 && hideBlankWeeks === true && workingDate.getMonth() != useDate.getMonth()) {
 				break;
 			} else {
-	
 				html[html.length] = '<tr class="' + weekClass + '">';
 				
 				if (showWeekHeader) { html = this.renderRowHeader(weekNum, html); }
@@ -2858,24 +2919,24 @@ YAHOO.widget.Calendar.prototype = {
 					} else {
 						YAHOO.util.Dom.addClass(cell, workingDayPrefix + workingDate.getDay());
 						YAHOO.util.Dom.addClass(cell, dayPrefix + workingDate.getDate());
-					
+
 						for (var s=0;s<this.renderStack.length;++s) {
-	
+
 							renderer = null;
-	
+
 							var rArray = this.renderStack[s];
 							var type = rArray[0];
-							
+
 							var month;
 							var day;
 							var year;
-							
+
 							switch (type) {
 								case YAHOO.widget.Calendar.DATE:
 									month = rArray[1][1];
 									day = rArray[1][2];
 									year = rArray[1][0];
-	
+
 									if (workingDate.getMonth()+1 == month && workingDate.getDate() == day && workingDate.getFullYear() == year) {
 										renderer = rArray[2];
 										this.renderStack.splice(s,1);
@@ -2884,7 +2945,7 @@ YAHOO.widget.Calendar.prototype = {
 								case YAHOO.widget.Calendar.MONTH_DAY:
 									month = rArray[1][0];
 									day = rArray[1][1];
-									
+
 									if (workingDate.getMonth()+1 == month && workingDate.getDate() == day) {
 										renderer = rArray[2];
 										this.renderStack.splice(s,1);
