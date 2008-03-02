@@ -1746,10 +1746,14 @@ YAHOO.widget.Calendar.prototype = {
 	*/
 	renderBody : function(workingDate, html) {
 		this.logger.log("Rendering body", "render");
-		var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
-	
+
+		var DM = YAHOO.widget.DateMath,
+			CAL = YAHOO.widget.Calendar,
+			D = YAHOO.util.Dom,
+			defCfg = CAL._DEFAULT_CONFIG;
+
 		var startDay = this.cfg.getProperty(defCfg.START_WEEKDAY.key);
-	
+
 		this.preMonthDays = workingDate.getDay();
 		if (startDay > 0) {
 			this.preMonthDays -= startDay;
@@ -1758,55 +1762,52 @@ YAHOO.widget.Calendar.prototype = {
 			this.preMonthDays += 7;
 		}
 		
-		this.monthDays = YAHOO.widget.DateMath.findMonthEnd(workingDate).getDate();
-		this.postMonthDays = YAHOO.widget.Calendar.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
+		this.monthDays = DM.findMonthEnd(workingDate).getDate();
+		this.postMonthDays = CAL.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
 		this.logger.log(this.preMonthDays + " preciding out-of-month days", "render");
 		this.logger.log(this.monthDays + " month days", "render");
 		this.logger.log(this.postMonthDays + " post-month days", "render");
 		
-		workingDate = YAHOO.widget.DateMath.subtract(workingDate, YAHOO.widget.DateMath.DAY, this.preMonthDays);
+		workingDate = DM.subtract(workingDate, DM.DAY, this.preMonthDays);
 		this.logger.log("Calendar page starts on " + workingDate, "render");
 	
-		var weekNum,weekClass;
-		var weekPrefix = "w";
-		var cellPrefix = "_cell";
-		var workingDayPrefix = "wd";
-		var dayPrefix = "d";
-		
-		var cellRenderers;
-		var renderer;
-		
-		var todayYear = this.today.getFullYear();
-		var todayMonth = this.today.getMonth();
-		var todayDate = this.today.getDate();
-		
-		var useDate = this.cfg.getProperty(defCfg.PAGEDATE.key);
-		var hideBlankWeeks = this.cfg.getProperty(defCfg.HIDE_BLANK_WEEKS.key);
-		var showWeekFooter = this.cfg.getProperty(defCfg.SHOW_WEEK_FOOTER.key);
-		var showWeekHeader = this.cfg.getProperty(defCfg.SHOW_WEEK_HEADER.key);
-		var mindate = this.cfg.getProperty(defCfg.MINDATE.key);
-		var maxdate = this.cfg.getProperty(defCfg.MAXDATE.key);
-	
+		var weekNum,
+			weekClass,
+			weekPrefix = "w",
+			cellPrefix = "_cell",
+			workingDayPrefix = "wd",
+			dayPrefix = "d",
+			cellRenderers,
+			renderer,
+			todayYear = this.today.getFullYear(),
+			todayMonth = this.today.getMonth(),
+			todayDate = this.today.getDate(),
+			useDate = this.cfg.getProperty(defCfg.PAGEDATE.key),
+			hideBlankWeeks = this.cfg.getProperty(defCfg.HIDE_BLANK_WEEKS.key),
+			showWeekFooter = this.cfg.getProperty(defCfg.SHOW_WEEK_FOOTER.key),
+			showWeekHeader = this.cfg.getProperty(defCfg.SHOW_WEEK_HEADER.key),
+			mindate = this.cfg.getProperty(defCfg.MINDATE.key),
+			maxdate = this.cfg.getProperty(defCfg.MAXDATE.key);
+
 		if (mindate) {
-			mindate = YAHOO.widget.DateMath.clearTime(mindate);
+			mindate = DM.clearTime(mindate);
 		}
 		if (maxdate) {
-			maxdate = YAHOO.widget.DateMath.clearTime(maxdate);
+			maxdate = DM.clearTime(maxdate);
 		}
-		
-		html[html.length] = '<tbody class="m' + (useDate.getMonth()+1) + ' ' + this.Style.CSS_BODY + '">';
-		
-		var i = 0;
-	
-		var tempDiv = document.createElement("div");
-		var cell = document.createElement("td");
-		tempDiv.appendChild(cell);
-	
-		var cal = this.parent || this;
-	
-		for (var r=0;r<6;r++) {
 
-			weekNum = YAHOO.widget.DateMath.getWeekNumber(workingDate, startDay);
+		html[html.length] = '<tbody class="m' + (useDate.getMonth()+1) + ' ' + this.Style.CSS_BODY + '">';
+
+		var i = 0,
+			tempDiv = document.createElement("div"),
+			cell = document.createElement("td");
+
+		tempDiv.appendChild(cell);
+
+		var cal = this.parent || this;
+
+		for (var r=0;r<6;r++) {
+			weekNum = DM.getWeekNumber(workingDate, startDay);
 			weekClass = weekPrefix + weekNum;
 
 			// Local OOM check for performance, since we already have pagedate
@@ -1814,13 +1815,13 @@ YAHOO.widget.Calendar.prototype = {
 				break;
 			} else {
 				html[html.length] = '<tr class="' + weekClass + '">';
-				
+
 				if (showWeekHeader) { html = this.renderRowHeader(weekNum, html); }
-				
-				for (var d=0;d<7;d++){ // Render actual days
-	
+
+				for (var d=0; d < 7; d++){ // Render actual days
+
 					cellRenderers = [];
-	
+
 					this.clearElement(cell);
 					cell.className = this.Style.CSS_CELL;
 					cell.id = this.id + cellPrefix + i;
@@ -1831,30 +1832,29 @@ YAHOO.widget.Calendar.prototype = {
 						workingDate.getFullYear()	== todayYear) {
 						cellRenderers[cellRenderers.length]=cal.renderCellStyleToday;
 					}
-					
+
 					var workingArray = [workingDate.getFullYear(),workingDate.getMonth()+1,workingDate.getDate()];
 					this.cellDates[this.cellDates.length] = workingArray; // Add this date to cellDates
-					
+
 					// Local OOM check for performance, since we already have pagedate
 					if (workingDate.getMonth() != useDate.getMonth()) {
 						cellRenderers[cellRenderers.length]=cal.renderCellNotThisMonth;
 					} else {
-						YAHOO.util.Dom.addClass(cell, workingDayPrefix + workingDate.getDay());
-						YAHOO.util.Dom.addClass(cell, dayPrefix + workingDate.getDate());
+						D.addClass(cell, workingDayPrefix + workingDate.getDay());
+						D.addClass(cell, dayPrefix + workingDate.getDate());
 
 						for (var s=0;s<this.renderStack.length;++s) {
 
 							renderer = null;
 
-							var rArray = this.renderStack[s];
-							var type = rArray[0];
-
-							var month;
-							var day;
-							var year;
+							var rArray = this.renderStack[s],
+								type = rArray[0],
+								month,
+								day,
+								year;
 
 							switch (type) {
-								case YAHOO.widget.Calendar.DATE:
+								case CAL.DATE:
 									month = rArray[1][1];
 									day = rArray[1][2];
 									year = rArray[1][0];
@@ -1864,7 +1864,7 @@ YAHOO.widget.Calendar.prototype = {
 										this.renderStack.splice(s,1);
 									}
 									break;
-								case YAHOO.widget.Calendar.MONTH_DAY:
+								case CAL.MONTH_DAY:
 									month = rArray[1][0];
 									day = rArray[1][1];
 
@@ -1873,22 +1873,18 @@ YAHOO.widget.Calendar.prototype = {
 										this.renderStack.splice(s,1);
 									}
 									break;
-								case YAHOO.widget.Calendar.RANGE:
-									var date1 = rArray[1][0];
-									var date2 = rArray[1][1];
-	
-									var d1month = date1[1];
-									var d1day = date1[2];
-									var d1year = date1[0];
-									
-									var d1 = YAHOO.widget.DateMath.getDate(d1year, d1month-1, d1day);
-	
-									var d2month = date2[1];
-									var d2day = date2[2];
-									var d2year = date2[0];
-	
-									var d2 = YAHOO.widget.DateMath.getDate(d2year, d2month-1, d2day);
-	
+								case CAL.RANGE:
+									var date1 = rArray[1][0],
+										date2 = rArray[1][1],
+										d1month = date1[1],
+										d1day = date1[2],
+										d1year = date1[0],
+										d1 = DM.getDate(d1year, d1month-1, d1day),
+										d2month = date2[1],
+										d2day = date2[2],
+										d2year = date2[0],
+										d2 = DM.getDate(d2year, d2month-1, d2day);
+
 									if (workingDate.getTime() >= d1.getTime() && workingDate.getTime() <= d2.getTime()) {
 										renderer = rArray[2];
 	
@@ -1897,33 +1893,31 @@ YAHOO.widget.Calendar.prototype = {
 										}
 									}
 									break;
-								case YAHOO.widget.Calendar.WEEKDAY:
-									
+								case CAL.WEEKDAY:
 									var weekday = rArray[1][0];
 									if (workingDate.getDay()+1 == weekday) {
 										renderer = rArray[2];
 									}
 									break;
-								case YAHOO.widget.Calendar.MONTH:
-									
+								case CAL.MONTH:
 									month = rArray[1][0];
 									if (workingDate.getMonth()+1 == month) {
 										renderer = rArray[2];
 									}
 									break;
 							}
-							
+
 							if (renderer) {
 								cellRenderers[cellRenderers.length]=renderer;
 							}
 						}
-	
+
 					}
-	
+
 					if (this._indexOfSelectedFieldArray(workingArray) > -1) {
 						cellRenderers[cellRenderers.length]=cal.renderCellStyleSelected; 
 					}
-	
+
 					if ((mindate && (workingDate.getTime() < mindate.getTime())) ||
 						(maxdate && (workingDate.getTime() > maxdate.getTime()))
 					) {
@@ -1932,26 +1926,28 @@ YAHOO.widget.Calendar.prototype = {
 						cellRenderers[cellRenderers.length]=cal.styleCellDefault;
 						cellRenderers[cellRenderers.length]=cal.renderCellDefault;	
 					}
-					
+
 					for (var x=0; x < cellRenderers.length; ++x) {
 						this.logger.log("renderer[" + x + "] for (" + workingDate.getFullYear() + "-" + (workingDate.getMonth()+1) + "-" + workingDate.getDate() + ")", "cellrender");
-						if (cellRenderers[x].call(cal, workingDate, cell) == YAHOO.widget.Calendar.STOP_RENDER) {
+						if (cellRenderers[x].call(cal, workingDate, cell) == CAL.STOP_RENDER) {
 							break;
 						}
 					}
-	
-					workingDate.setTime(workingDate.getTime() + YAHOO.widget.DateMath.ONE_DAY_MS);
-	
+
+					workingDate.setTime(workingDate.getTime() + DM.ONE_DAY_MS);
+					// Just in case we crossed DST/Summertime boundaries
+					workingDate = DM.clearTime(workingDate);
+
 					if (i >= 0 && i <= 6) {
-						YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_TOP);
+						D.addClass(cell, this.Style.CSS_CELL_TOP);
 					}
 					if ((i % 7) === 0) {
-						YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_LEFT);
+						D.addClass(cell, this.Style.CSS_CELL_LEFT);
 					}
 					if (((i+1) % 7) === 0) {
-						YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_RIGHT);
+						D.addClass(cell, this.Style.CSS_CELL_RIGHT);
 					}
-					
+
 					var postDays = this.postMonthDays; 
 					if (hideBlankWeeks && postDays >= 7) {
 						var blankWeeks = Math.floor(postDays/7);
@@ -1961,7 +1957,7 @@ YAHOO.widget.Calendar.prototype = {
 					}
 					
 					if (i >= ((this.preMonthDays+postDays+this.monthDays)-7)) {
-						YAHOO.util.Dom.addClass(cell, this.Style.CSS_CELL_BOTTOM);
+						D.addClass(cell, this.Style.CSS_CELL_BOTTOM);
 					}
 	
 					html[html.length] = tempDiv.innerHTML;

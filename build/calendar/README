@@ -2,9 +2,15 @@ Calendar Release Notes
 
 *** version 2.5.1 *** 
 
++ Fixed bug with mindate, maxdate being applied incorrectly 
+  if set to a day on which time change took place (DST, 
+  E.U Summertime) and the day is not the first day of the 
+  week.
+
 + Fixed DateMath.getWeekNumber implementation to return
   correct week numbers. The older implementation would
-  return Week 0, for the week starting Sun Dec 28th.
+  return Week 0 for certain week (e.g. the week starting 
+  Sun Dec 28th 2008)
 
   The method has a signature change in 2.5.1 and can 
   now support U.S Week calculations based on Jan 1st 
