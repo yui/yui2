@@ -4948,13 +4948,12 @@
         _addFocusHandlers: function(p_sType, p_aArgs) {
             var me = this,
                 focus = "focus",
-                hidden = "hidden",
-                isAncestor = Dom.isAncestor;
+                hidden = "hidden";
 
             function isFocusable(el) {
                 // NOTE: if e.type is undefined that's fine, want to avoid perf 
                 // impact of tagName check to filter for inputs
-                if (el.type !== hidden && !isAncestor(me.element, el)) {
+                if (el.type !== hidden && !Dom.isAncestor(me.element, el)) {
                     Event.on(el, focus, me._onElementFocus);
                     return true;
                 }
