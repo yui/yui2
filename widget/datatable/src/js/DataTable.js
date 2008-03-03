@@ -6339,7 +6339,7 @@ updateRow : function(row, oData) {
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._updateTrEl(elRow, updatedRecord);
-                    this._syncColWidths();
+                    this._oChainSync.run();
                     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                     YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
                             ", Record index = " + this.getRecordIndex(updatedRecord) +
@@ -6349,6 +6349,7 @@ updateRow : function(row, oData) {
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
+        this._sync();
         this._oChainRender.run();
     }
     else {
