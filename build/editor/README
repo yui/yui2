@@ -1,3 +1,27 @@
+**** version 2.5.1 ***
+
+    * Adobe AIR Support
+        * 1763867 - Adobe AIR: iFrame document open
+        * 1763869 - Adobe AIR: Blank Image insertion fails
+        * 1763872 - Adobe AIR: Setting font-family fails
+        * 1763880 - Adobe AIR: Image Editor should show copy/paste note
+
+    * Internet Explorer
+        * 1556954 - [SF 1816784 ] tabbing troubles...
+        * 1776579 - [SF 1873881 ] IE Bulleting Behavior
+
+    * Safari
+        * 1775802 - [SF 1899803] Links in safari are treated as regular links...
+        * 1777918 - [SF 1898878 ] Safari uses <span> instead of <strong> tags...
+
+    * All
+        * 1776107 - ToolbarButton doesn't have a destroy method
+        * 1776117 - Editor Accessibility Enhancements
+        * 1776539 - [SF 1874009 ] Greedy Regex in RTE Eats embed and other tags
+        * 1777925 - [SF 1878976 ] Regex matches both <i> and <iframe>
+        * 1764038 - [SF 1898886 ] Problem with handleSubmit after move to 2.5.0
+
+
 **** version 2.5.0 ***
 
     *Examples:
