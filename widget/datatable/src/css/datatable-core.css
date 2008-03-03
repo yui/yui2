@@ -12,7 +12,15 @@
 }
 
 /* a11y headers */
-.yui-dt-bd thead tr, .yui-dt-bd thead th {
+.yui-dt-hd {
+    display: none;
+}
+
+.yui-dt-scrollable .yui-dt-hd {
+    display: block;
+}
+.yui-dt-scrollable .yui-dt-bd thead tr,
+.yui-dt-scrollable .yui-dt-bd thead th {
     position:absolute;
     left:-1500px;
 }

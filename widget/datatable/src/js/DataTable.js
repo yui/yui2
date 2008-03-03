@@ -1894,7 +1894,9 @@ initAttributes : function(oConfigs) {
         method: function(sCaption) {
             // Create CAPTION element
             if(!this._elCaption) {
-                this._elCaption = this._elThead.parentNode.insertBefore(document.createElement("caption"), this._elThead.parentNode.firstChild);
+                var bodyTable = this._elTbodyContainer.getElementsByTagName('table')[0];
+                
+                this._elCaption = bodyTable.createCaption();
             }
             // Set CAPTION value
             this._elCaption.innerHTML = sCaption;
@@ -1913,24 +1915,67 @@ initAttributes : function(oConfigs) {
             return (lang.isBoolean(oParam));
         },
         method: function(oParam) {
+            var headTable = this._elTheadContainer.getElementsByTagName('table')[0],
+                bodyTable = this._elTbodyContainer.getElementsByTagName('table')[0],
+                headThead = headTable.getElementsByTagName('thead')[0],
+                bodyThead = bodyTable.getElementsByTagName('thead')[0];
+
             if(oParam) {
+                if (headThead) {
+                    headTable.removeChild(headThead);
+                }
+                if (bodyThead) {
+                    bodyTable.removeChild(bodyThead);
+                }
+                headTable.appendChild(this._elThead);
+                bodyTable.insertBefore(this._elA11yThead,bodyTable.firstChild || null);
+
+                // Move the caption from the body table to the head table
+                // if there is a caption
+                if (bodyTable.caption) {
+                    headTable.insertBefore(bodyTable.caption,headTable.firstChild);
+                }
+
                 Dom.addClass(this._elContainer,DT.CLASS_SCROLLABLE);
+
+                // Bug 1716354 - fix gap in Safari 2 and 3 (also seen in
+                // other browsers)
+                bodyTable.style.marginTop = "-"+this._elTbody.offsetTop+"px";
+
                 // Bug 1743176 - Safari 2 shifts the _elTbodyContainer up
                 // when placed in overflow:auto container.  Should only shift
                 // the table inside.  Apply topMargin to _elTbodyContainer
                 // to account for the bug.
                 if (ua.webkit && ua.webkit < 420) {
                     this._elTbodyContainer.style.marginTop =
-                        this._elTbody.parentNode.style.marginTop.replace('-','');
+                        bodyTable.style.marginTop.replace('-','');
                 }
+                this._syncColWidths();
                 this._syncScrollPadding();
             }
             else {
+                if (headThead) {
+                    headTable.removeChild(headThead);
+                }
+                if (bodyThead) {
+                    bodyTable.removeChild(bodyThead);
+                }
+                headTable.appendChild(this._elA11yThead);
+                bodyTable.insertBefore(this._elThead,bodyTable.firstChild || null);
+                bodyTable.style.marginTop = '';
+
+                // Move the caption from the head table to the body table
+                // if there is a caption
+                if (headTable.caption) {
+                    bodyTable.insertBefore(headTable.caption,bodyTable.firstChild);
+                }
+
                 Dom.removeClass(this._elContainer,DT.CLASS_SCROLLABLE);
+
                 if (ua.webkit && ua.webkit < 420) {
                     this._elTbodyContainer.style.marginTop = "";
                 }
-                this._syncScrollPadding();
+                //this._syncScrollPadding();
             }
         }
     });
@@ -2340,6 +2385,10 @@ _sync : function() {
  * @private
  */
 _syncColWidths : function() {
+    if (!this.get('scrollable')) {
+        return;
+    }
+
     // Validate there is at least one row with cells and at least one Column
     var allKeys = this._oColumnSet.keys,
         elRow = this.getFirstTrEl();
@@ -2765,9 +2814,6 @@ _initTableEl : function() {
     this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
     this._elTbody.tabIndex = 0;
     Dom.addClass(this._elTbody,DT.CLASS_BODY);
-    // Bug 1716354 - fix gap in Safari 2 and 3 (Also saw small gap in Opera.
-    // this fixes all)
-    this._elTbody.parentNode.style.marginTop = "-"+this._elTbody.offsetTop+"px";
 
     // Create TBODY for messages
     var elMsgTbody = document.createElement("tbody");
@@ -2826,11 +2872,8 @@ _initTheadEls : function() {
     // First time through
     if(!this._elThead) {
         // Create THEADs
-        elThead = this._elTheadContainer.firstChild.appendChild(document.createElement("thead"));
-        this._elThead = elThead;
-    
-        elA11yThead = this._elTbodyContainer.firstChild.appendChild(document.createElement("thead"));
-        this._elA11yThead = elA11yThead;
+        elThead     = this._elThead     = document.createElement('thead');
+        elA11yThead = this._elA11yThead = document.createElement('thead');
         
         aTheads = [elThead, elA11yThead];
 
@@ -2842,6 +2885,12 @@ _initTheadEls : function() {
         Ev.addListener(elThead, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elThead, "click", this._onTheadClick, this);
         Ev.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
+        
+        // Add the accessibility-only thead to the header table by default.
+        // The theads will be swapped for scrollable DataTables, the display
+        // thead fixed in place, and the a11y thead hidden
+        this._elTheadContainer.firstChild.appendChild(elA11yThead);
+        this._elTbodyContainer.firstChild.appendChild(elThead);
     }
     // Reinitialization
     else {
@@ -3188,14 +3237,15 @@ _updateTrEl : function(elRow, oRecord) {
         var oColumn     = oColumnSet.keys[i],
             elCell      = elRow.childNodes[i],
             elCellLiner = elCell.firstChild,
-            cellHeaders = '';
+            cellHeaders = '',
+            headerType  = this.get('scrollable') ? "-a11y " : " ";
 
         // Set the cell content
         this.formatCell(elCellLiner, oRecord, oColumn);
 
         // Set the cell's accessibility headers
         for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
-            cellHeaders += this._sId + "-th" + oColumnSet.headers[i][j] + "-a11y ";
+            cellHeaders += this._sId + "-th" + oColumnSet.headers[i][j] + headerType;
         }
         elCell.headers = cellHeaders;
 
