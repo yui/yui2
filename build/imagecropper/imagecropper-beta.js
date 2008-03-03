@@ -129,8 +129,10 @@ var Dom = YAHOO.util.Dom,
             this._wrap = document.createElement('div');
             this._wrap.id = this.get('element').id + '_wrap';
             this._wrap.className = this.CSS_MAIN;
-            this._wrap.style.width = this.get('element').width + 'px';
-            this._wrap.style.height = this.get('element').height + 'px';
+            var el = this.get('element');
+            this._wrap.style.width = el.width ? el.width + 'px' : Dom.getStyle(el, 'width');
+            this._wrap.style.height = el.height ? el.height + 'px' : Dom.getStyle(el, 'height');
+            
             var par = this.get('element').parentNode;
             par.replaceChild(this._wrap, this.get('element'));
             this._wrap.appendChild(this.get('element'));
@@ -165,8 +167,8 @@ var Dom = YAHOO.util.Dom,
             this._resizeEl.innerHTML = '<div class="' + this.CSS_RESIZE_MASK + '"></div>';
             this._resizeMaskEl = this._resizeEl.firstChild;
             this._wrap.appendChild(this._resizeEl);
-            this._resizeEl.style.top = this.get('initialXY')[0] + 'px';
-            this._resizeEl.style.left = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.top = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.left = this.get('initialXY')[0] + 'px';
             this._resizeMaskEl.style.height = Math.floor(this.get('initHeight')) + 'px';
             this._resizeMaskEl.style.width = Math.floor(this.get('initWidth')) + 'px';
 
@@ -329,7 +331,60 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the Resize Utilitys beforeResize event
         */
         _handleBeforeResizeEvent: function(args) {
-            //Nothing
+            var region = Dom.getRegion(this.get('element')),
+                c = this._resize._cache,
+                ch = this._resize._currentHandle, h = 0, w = 0;
+
+            if (args.top && (args.top < region.top)) {
+                h = (c.height + c.top) - region.top;
+                Dom.setY(this._resize.getWrapEl(), region.top);
+                this._resize.getWrapEl().style.height = h + 'px';
+                this._resize._cache.height = h;
+                this._resize._cache.top = region.top;
+                this._syncBackgroundPosition();
+                return false;
+            }
+            if (args.left && (args.left < region.left)) {
+                w = (c.width + c.left) - region.left;
+                Dom.setX(this._resize.getWrapEl(), region.left);
+                this._resize._cache.left = region.left;
+                this._resize.getWrapEl().style.width = w + 'px';
+                this._resize._cache.width = w;
+                this._syncBackgroundPosition();
+                return false;
+            }
+            if (ch != 'tl' && ch != 'l' && ch != 'bl') {
+                if (c.left && args.width && ((c.left + args.width) > region.right)) {
+                    w = (region.right - c.left);
+                    Dom.setX(this._resize.getWrapEl(), (region.right - w));
+                    this._resize.getWrapEl().style.width = w + 'px';
+                    this._resize._cache.left = (region.right - w);
+                    this._resize._cache.width = w;
+                    this._syncBackgroundPosition();
+                    return false;
+                }
+            }
+            if (ch != 't' && ch != 'tr' && ch != 'tl') {
+                if (c.top && args.height && ((c.top + args.height) > region.bottom)) {
+                    h = (region.bottom - c.top);
+                    Dom.setY(this._resize.getWrapEl(), (region.bottom - h));
+                    this._resize.getWrapEl().style.height = h + 'px';
+                    this._resize._cache.height = h;
+                    this._resize._cache.top = (region.bottom - h);
+                    this._syncBackgroundPosition();
+                    return false;
+                }
+            }
+        },
+        /**
+        * @private
+        * @method _handleResizeMaskEl
+        * @description Resizes the inner mask element
+        */
+        _handleResizeMaskEl: function() {
+            var a = this._resize._cache;
+            this._resizeMaskEl.style.height = Math.floor(a.height) + 'px';
+            this._resizeMaskEl.style.width = Math.floor(a.width) + 'px';
         },
         /**
         * @private
@@ -338,12 +393,6 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the Resize Utilitys Resize event
         */
         _handleResizeEvent: function(ev) {
-            if (ev.height) {
-                this._resizeMaskEl.style.height = Math.floor(ev.height) + 'px';
-            }
-            if (ev.width) {
-                this._resizeMaskEl.style.width = Math.floor(ev.width) + 'px';
-            }
             this._setConstraints(true);
             this._syncBackgroundPosition();
             this.fireEvent('resizeEvent', arguments);
@@ -356,6 +405,7 @@ var Dom = YAHOO.util.Dom,
         * @description Syncs the packground position of the resize element with the resize elements top and left style position
         */
         _syncBackgroundPosition: function() {
+            this._handleResizeMaskEl();
             this._setBackgroundPosition(-(parseInt(this._resizeEl.style.left, 10)), -(parseInt(this._resizeEl.style.top, 10)));
         },
 
@@ -399,6 +449,12 @@ var Dom = YAHOO.util.Dom,
                  maxH = 0, maxW = 0;
  
             switch (this._resize._currentHandle) {
+                case 'b':
+                    maxH = (h + this._resize.dd.bottomConstraint);
+                    break;
+                case 'l':
+                    maxW = (w + this._resize.dd.leftConstraint);
+                    break;
                 case 'r':
                     maxH = (h + t);
                     maxW = (w + this._resize.dd.rightConstraint);
@@ -413,12 +469,12 @@ var Dom = YAHOO.util.Dom,
                      break;
 
              }
-
+            
              if (maxH) {
-                 this._resize.set('maxHeight', maxH);
+                 //this._resize.set('maxHeight', maxH);
              }
              if (maxW) {
-                 this._resize.set('maxWidth', maxW);
+                 //this._resize.set('maxWidth', maxW);
              }
 
             this.fireEvent('startResizeEvent', arguments);
@@ -462,14 +518,13 @@ var Dom = YAHOO.util.Dom,
 
             //Set bottom to bottom minus y minus height
             var bottom = region.bottom - xy[1] - height;
+
+            if (top < 0) {
+                top = 0;
+            }
             
             resize.dd.setXConstraint(left, right); 
             resize.dd.setYConstraint(top, bottom);
-            resize.set('minY', region.top);
-            resize.set('minX', region.left);
-
-            resize.set('maxY', region.bottom);
-            resize.set('maxX', region.right);
 
 
             return {
@@ -504,8 +559,8 @@ var Dom = YAHOO.util.Dom,
         */
         reset: function() {
             this._resize.resize(null, this.get('initHeight'), this.get('initWidth'), 0, 0, true);
-            this._resizeEl.style.top = this.get('initialXY')[0] + 'px';
-            this._resizeEl.style.left = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.top = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.left = this.get('initialXY')[0] + 'px';
             this._syncBackgroundPosition();
             return this;
         },
