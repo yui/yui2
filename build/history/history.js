@@ -5,8 +5,8 @@
  *
  * This library requires the following static markup:
  *
- * <iframe id="yui-history-iframe" src="path-to-real-asset-in-same-domain"></iframe>
- * <input id="yui-history-field" type="hidden">
+ * &lt;iframe id="yui-history-iframe" src="path-to-real-asset-in-same-domain"&gt;&lt;/iframe&gt;
+ * &lt;input id="yui-history-field" type="hidden"&gt;
  *
  * @module history
  * @requires yahoo,event
@@ -532,7 +532,6 @@ YAHOO.util.History = (function () {
                 // As a consequence, the best thing we can do is to throw an
                 // exception. The application should catch it, and degrade
                 // gracefully. This is the sad state of history management.
-                throw new Error("Unsupported browser");
             }
 
             if (typeof stateField === "string") {
@@ -540,8 +539,8 @@ YAHOO.util.History = (function () {
             }
 
             if (!stateField ||
-                stateField.tagName !== "TEXTAREA" &&
-                (stateField.tagName !== "INPUT" ||
+                stateField.tagName.toUpperCase() !== "TEXTAREA" &&
+                (stateField.tagName.toUpperCase() !== "INPUT" ||
                  stateField.type !== "hidden" &&
                  stateField.type !== "text")) {
                 throw new Error("Missing or invalid argument");
@@ -555,7 +554,7 @@ YAHOO.util.History = (function () {
                     histFrame = document.getElementById(histFrame);
                 }
 
-                if (!histFrame || histFrame.tagName !== "IFRAME") {
+                if (!histFrame || histFrame.tagName.toUpperCase() !== "IFRAME") {
                     throw new Error("Missing or invalid argument");
                 }
 
@@ -625,9 +624,9 @@ YAHOO.util.History = (function () {
                 if (YAHOO.lang.hasOwnProperty(_modules, moduleName)) {
                     moduleObj = _modules[moduleName];
                     if (YAHOO.lang.hasOwnProperty(states, moduleName)) {
-                        currentState = states[moduleName];
+                        currentState = states[unescape(moduleName)];
                     } else {
-                        currentState = moduleObj.currentState;
+                        currentState = unescape(moduleObj.currentState);
                     }
 
                     // Make sure the strings passed in do not contain our separators "," and "|"

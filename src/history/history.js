@@ -532,7 +532,7 @@ YAHOO.util.History = (function () {
                 // As a consequence, the best thing we can do is to throw an
                 // exception. The application should catch it, and degrade
                 // gracefully. This is the sad state of history management.
-                throw new Error("Unsupported browser");
+                YAHOO.log("Unsupported browser.", "error", this.toString());
             }
 
             if (typeof stateField === "string") {
