@@ -2,6 +2,11 @@
 .yui-busy {
     cursor: wait !important;
 }
+.yui-toolbar-container fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
 .yui-toolbar-container legend {
     display: none;
 }
