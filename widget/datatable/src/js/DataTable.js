@@ -1404,7 +1404,7 @@ lang.augmentObject(DT, {
     /**
      * Translates (proposed) DataTable state data into a form consumable by
      * DataSource sendRequest as the request parameter.  Use
-     * set('generateParameter', yourFunc) to use a custom function rather than this
+     * set('generateRequest', yourFunc) to use a custom function rather than this
      * one.
      * @method DataTable._generateRequest
      * @param oData {Object} Object literal defining the current or proposed state
