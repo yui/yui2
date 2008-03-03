@@ -7,7 +7,7 @@ YUI Library - History - Release Notes
     causes execution to stop.  Instead, we're messaging the unsupported
     browser issue via YAHOO.log.  This will allow other aspects of a BHM-
     managed script to continue executing in Opera.
-  * Fixed issue with case-sensitive tagName comparisons.
+  * Fixed issue with case-sensitive tagName comparisons
     (SourceForge bug 1868730).
 
 2.5.0
