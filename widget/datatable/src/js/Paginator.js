@@ -573,7 +573,7 @@ YAHOO.widget.Paginator.prototype = {
             records = this.get('totalRecords'),
             start, end;
 
-        if (!perPage) {
+        if (!page || !perPage) {
             return null;
         }
 
@@ -1957,8 +1957,8 @@ ui.CurrentPageReport.init = function (p) {
             return {
                 'currentPage' : records ? curPage : 0,
                 'totalPages'  : paginator.getTotalPages(),
-                'startIndex'  : records ? records[0] : -1,
-                'endIndex'    : records ? records[1] : -1,
+                'startIndex'  : records ? records[0] : 0,
+                'endIndex'    : records ? records[1] : 0,
                 'startRecord' : records ? records[0] + 1 : 0,
                 'endRecord'   : records ? records[1] + 1 : 0,
                 'totalRecords': paginator.get('totalRecords')
