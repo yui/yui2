@@ -1,6 +1,9 @@
 /* Remove the dotted border on the resize proxy */
 .yui-skin-sam .yui-layout .yui-resize-proxy {
     border: none;
+    font-size: 0;
+    margin: 0;
+    padding: 0;
 }
 /* During resize, hide the handles */
 .yui-skin-sam .yui-layout .yui-resize-resizing .yui-resize-handle {

@@ -42,7 +42,7 @@
     * @static
     * @method getLayoutUnitById 
     * @description Get's a layout unit object by the HTML id of the element associated with the Layout Unit object.
-    * @return Object The Layout Object
+    * @return {Object} The Layout Object
     */ 
     LayoutUnit.getLayoutUnitById = function(id) {
         if (LayoutUnit._instances[id]) {
@@ -179,10 +179,24 @@
         */
         _lastScroll: null,
         /**
+        * @private
+        * @property _lastCenetrScroll
+        * @description A holder for the last known scroll state of the center unit
+        * @type Boolean
+        */
+        _lastCenterScroll: null,
+        /**
+        * @private
+        * @property _lastScrollTop
+        * @description A holder for the last known scrollTop state of the unit
+        * @type Number
+        */
+        _lastScrollTop: null,
+        /**
         * @method resize
         * @description Resize either the unit or it's clipped state, also updating the box inside
         * @param {Boolean} force This will force full calculations even when the unit is collapsed
-        * @return YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         resize: function(force) {
             YAHOO.log('Resize', 'info', 'LayoutUnit');
@@ -279,7 +293,7 @@
         * @param {HTMLElement} el The HTMLElement to set the dimension on
         * @param {Number} dim The number of the dimension to fix
         * @param {String} side The dimension (h or w) to fix. Defaults to h
-        * @return The fixed dimension
+        * @return {Number} The fixed dimension
         */
         _fixQuirks: function(el, dim, side) {
             var i1 = 0, i2 = 2;
@@ -424,7 +438,7 @@
         /**
         * @method toggle
         * @description Toggles the Unit, replacing it with a clipped version.
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         toggle: function() {
             if (this._collapsed) {
@@ -437,13 +451,17 @@
         /**
         * @method expand
         * @description Expand the Unit if it is collapsed.
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         expand: function() {
             if (!this.get('collapse')) {
                 return this;
             }
             if (!this._collapsed) {
+                return this;
+            }
+            var retVal = this.fireEvent('beforeExpand');
+            if (retVal === false) {
                 return this;
             }
 
@@ -508,6 +526,9 @@
                     this._collapsed = false;
                     this.resize();
                     this.set('scroll', this._lastScroll);
+                    if (this._lastScrollTop > 0) {
+                        this.body.scrollTop = this._lastScrollTop;
+                    }
                     this._anim.onComplete.unsubscribe(expand, this, true);
                     this.fireEvent('expand');
                 };
@@ -525,6 +546,9 @@
                 this._collapsed = false;
                 this.resize();
                 this.set('scroll', this._lastScroll);
+                if (this._lastScrollTop > 0) {
+                    this.body.scrollTop = this._lastScrollTop;
+                }
                 this.fireEvent('expand');
             }
             return this;
@@ -532,13 +556,17 @@
         /**
         * @method collapse
         * @description Collapse the Unit if it is not collapsed.
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         collapse: function() {
             if (!this.get('collapse')) {
                 return this;
             }
             if (this._collapsed) {
+                return this;
+            }
+            var retValue = this.fireEvent('beforeCollapse');
+            if (retValue === false) {
                 return this;
             }
             if (!this._clip) {
@@ -551,6 +579,7 @@
             this._lastWidth = w;
             this._lastHeight = h;
             this._lastScroll = this.get('scroll');
+            this._lastScrollTop = this.body.scrollTop;            
             this.set('scroll', false, true);
             this._lastLeft = parseInt(this.get('element').style.left, 10);
             this._lastTop = parseInt(this.get('element').style.top, 10);
@@ -620,7 +649,7 @@
         /**
         * @method close
         * @description Close the unit, removing it from the parent Layout.
-        * @return {Object} YAHOO.widget.Layout
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The parent Layout instance
         */
         close: function() {
             this.setStyle('display', 'none');
@@ -694,7 +723,8 @@
             }
 
             this.on('contentChange', this.resize, this, true);
-            
+            this._lastScrollTop = 0;
+
             this.set('animate', this.get('animate'));
         },
         /**
@@ -707,7 +737,7 @@
 
             /**
             * @private
-            * @config wrap
+            * @attribute wrap
             * @description A reference to the wrap element
             * @type HTMLElement
             */
@@ -721,7 +751,7 @@
                 }
             });
             /**
-            * @config grids
+            * @attribute grids
             * @description Set this option to true if you want the LayoutUnit to fix the first layer of YUI CSS Grids (margins)
             * @type Boolean
             */
@@ -730,12 +760,12 @@
             });
             /**
             * @private
-            * @config top
+            * @attribute top
             * @description The current top positioning of the Unit
             * @type Number
             */
             this.setAttributeConfig('top', {
-                value: attr.top,
+                value: attr.top || 0,
                 validator: Lang.isNumber,
                 method: function(t) {
                     if (!this._collapsing) {
@@ -745,12 +775,12 @@
             });
             /**
             * @private
-            * @config left
+            * @attribute left
             * @description The current left position of the Unit
             * @type Number
             */
             this.setAttributeConfig('left', {
-                value: attr.left,
+                value: attr.left || 0,
                 validator: Lang.isNumber,
                 method: function(l) {
                     if (!this._collapsing) {
@@ -760,7 +790,7 @@
             });
 
             /**
-            * @config minWidth
+            * @attribute minWidth
             * @description The minWidth parameter passed to the Resize Utility
             * @type Number
             */
@@ -770,7 +800,7 @@
             });
 
             /**
-            * @config maxWidth
+            * @attribute maxWidth
             * @description The maxWidth parameter passed to the Resize Utility
             * @type Number
             */
@@ -780,7 +810,7 @@
             });
 
             /**
-            * @config minHeight
+            * @attribute minHeight
             * @description The minHeight parameter passed to the Resize Utility
             * @type Number
             */
@@ -790,7 +820,7 @@
             });
 
             /**
-            * @config maxHeight
+            * @attribute maxHeight
             * @description The maxHeight parameter passed to the Resize Utility
             * @type Number
             */
@@ -800,7 +830,7 @@
             });
 
             /**
-            * @config height
+            * @attribute height
             * @description The height of the Unit
             * @type Number
             */
@@ -809,16 +839,13 @@
                 validator: Lang.isNumber,
                 method: function(h) {
                     if (!this._collapsing) {
-                        var self = this;
-                        setTimeout(function() {
-                            self.setStyle('height', h + 'px');
-                        }, 0);
+                        this.setStyle('height', h + 'px');
                     }
                 }
             });
 
             /**
-            * @config width
+            * @attribute width
             * @description The width of the Unit
             * @type Number
             */
@@ -827,15 +854,12 @@
                 validator: Lang.isNumber,
                 method: function(w) {
                     if (!this._collapsing) {
-                        var self = this;
-                        setTimeout(function() {
-                            self.setStyle('width', w + 'px');
-                        }, 0);
+                        this.setStyle('width', w + 'px');
                     }
                 }
             });
             /**
-            * @config position
+            * @attribute position
             * @description The position (top, right, bottom, left or center) of the Unit in the Layout
             * @type {String}
             */
@@ -843,7 +867,7 @@
                 value: attr.position
             });
             /**
-            * @config gutter
+            * @attribute gutter
             * @description The gutter that we should apply to the parent Layout around this Unit. Supports standard CSS markup: (2 4 0 5) or (2) or (2 5)
             * @type String
             */
@@ -875,7 +899,7 @@
                 }
             });
             /**
-            * @config parent
+            * @attribute parent
             * @description The parent Layout that we are assigned to
             * @type {Object} YAHOO.widget.Layout
             */
@@ -890,7 +914,7 @@
                 }
             });
             /**
-            * @config collapseSize
+            * @attribute collapseSize
             * @description The pixel size of the Clip that we will collapse to
             * @type Number
             */
@@ -899,21 +923,21 @@
                 validator: YAHOO.lang.isNumber
             });
             /**
-            * @config duration
+            * @attribute duration
             * @description The duration to give the Animation Utility when animating the opening and closing of Units
             */
             this.setAttributeConfig('duration', {
                 value: attr.duration || 0.5
             });
             /**
-            * @config easing
+            * @attribute easing
             * @description The Animation Easing to apply to the Animation instance for this unit.
             */
             this.setAttributeConfig('easing', {
                 value: attr.easing || ((YAHOO.util && YAHOO.util.Easing) ? YAHOO.util.Easing.BounceIn : 'false')
             });
             /**
-            * @config animate
+            * @attribute animate
             * @description Use animation to collapse/expand the unit
             * @type Boolean
             */
@@ -935,7 +959,7 @@
                 }
             });
             /**
-            * @config header
+            * @attribute header
             * @description The text to use as the Header of the Unit
             */
             this.setAttributeConfig('header', {
@@ -970,8 +994,8 @@
                 }
             });
             /**
-            * @config proxy
-            * @description Use the procy config setting for the Resize Utility
+            * @attribute proxy
+            * @description Use the proxy config setting for the Resize Utility
             * @type Boolean
             */
             this.setAttributeConfig('proxy', {
@@ -979,7 +1003,7 @@
                 value: ((attr.proxy === false) ? false : true)
             });
             /**
-            * @config body
+            * @attribute body
             * @description The content for the body. If we find an element in the page with an id that matches the passed option we will move that element into the body of this unit.
             */
             this.setAttributeConfig('body', {
@@ -1023,7 +1047,7 @@
             });
 
             /**
-            * @config footer
+            * @attribute footer
             * @description The content for the footer. If we find an element in the page with an id that matches the passed option we will move that element into the footer of this unit.
             */
             this.setAttributeConfig('footer', {
@@ -1065,7 +1089,7 @@
                 }
             });
             /**
-            * @config close
+            * @attribute close
             * @description Adds a close icon to the unit
             */
             this.setAttributeConfig('close', {
@@ -1098,7 +1122,7 @@
             });
 
             /**
-            * @config collapse
+            * @attribute collapse
             * @description Adds a collapse icon to the unit
             */
             this.setAttributeConfig('collapse', {
@@ -1128,22 +1152,31 @@
                 }
             });
             /**
-            * @config scroll
+            * @attribute scroll
             * @description Adds a class to the unit to allow for overflow: auto, default is overflow: hidden
             */
 
             this.setAttributeConfig('scroll', {
                 value: attr.scroll || false,
                 method: function(scroll) {
+                    if ((scroll === false) && !this._collapsed) { //Removing scroll bar
+                        if (this.body.scrollTop > 0) {
+                            this._lastScrollTop = this.body.scrollTop;
+                        }
+                    }
+                    
                     if (scroll) {
                         this.addClass('yui-layout-scroll');
+                        if (this._lastScrollTop > 0) {
+                            this.body.scrollTop = this._lastScrollTop;
+                        }
                     } else {
                         this.removeClass('yui-layout-scroll');
                     }
                 }
             });
             /**
-            * @config hover
+            * @attribute hover
             * @description Config option to pass to the Resize Utility
             */
             this.setAttributeConfig('hover', {
@@ -1152,7 +1185,7 @@
                 validator: YAHOO.lang.isBoolean
             });
             /**
-            * @config resize
+            * @attribute resize
             * @description Should a Resize instance be added to this unit
             */
 
@@ -1211,16 +1244,25 @@
                                 var proxy = this._resize.getProxyEl();
                                 proxy.innerHTML = '<div class="yui-layout-handle-' + handle + '"></div>';
                             }
-
                             this._resize.on('startResize', function(ev) {
+                                this._lastScroll = this.get('scroll');
+                                this.set('scroll', false);
                                 if (this.get('parent')) {
                                     this.get('parent').fireEvent('startResize');
+                                    var c = this.get('parent').getUnitByPosition('center');
+                                    this._lastCenterScroll = c.get('scroll');
+                                    c.set('scroll', false);
                                 }
                                 this.fireEvent('startResize');
                             }, this, true);
                             this._resize.on('resize', function(ev) {
                                 this.set('height', ev.height);
                                 this.set('width', ev.width);
+                                this.set('scroll', this._lastScroll);
+                                if (this.get('parent')) {
+                                    var c = this.get('parent').getUnitByPosition('center');
+                                    c.set('scroll', this._lastCenterScroll);
+                                }
                             }, this, true);
                         }
                     } else {
@@ -1268,6 +1310,7 @@
         /**
         * @method destroy
         * @description Removes this unit from the parent and cleans up after itself.
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The parent Layout instance
         */
         destroy: function() {
             if (this._resize) {
@@ -1333,6 +1376,11 @@
     * @type YAHOO.util.CustomEvent
     */
     /**
+    * @event beforeCollapse
+    * @description Fired before the unit is collapsed. If you return false, the collapse is cancelled.
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
     * @event collapse
     * @description Fired when the unit is collapsed
     * @type YAHOO.util.CustomEvent
@@ -1340,6 +1388,11 @@
     /**
     * @event expand
     * @description Fired when the unit is exanded
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event beforeExpand
+    * @description Fired before the unit is exanded. If you return false, the collapse is cancelled.
     * @type YAHOO.util.CustomEvent
     */
     });

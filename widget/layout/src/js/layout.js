@@ -54,7 +54,7 @@
     * @static
     * @method getLayoutById 
     * @description Get's a layout object by the HTML id of the element associated with the Layout object.
-    * @return Object The Layout Object
+    * @return {Object} The Layout Object
     */ 
     Layout.getLayoutById = function(id) {
         if (Layout._instances[id]) {
@@ -72,9 +72,6 @@
         browser: function() {
             var b = YAHOO.env.ua;
             b.standardsMode = false;
-            b.mac = false;
-            b.windows = false;
-            b.unix = false;
             b.secure = false;
             return b;
         }(),
@@ -170,29 +167,27 @@
             this._sizes.right = {
                 h: newH, w: ((this._right) ? this._right.get('width') : 0),
                 l: ((this._right) ? (w - this._right.get('width')) : 0),
-                t: this._sizes.top.h
+                t: ((this._top) ? this._sizes.top.h : 0)
             };
             
             if (this._right && set) {
-                if (this._top) {
-                    this._right.set('top', this._sizes.right.t);
-                }
+                this._right.set('top', this._sizes.right.t);
                 if (!this._right._collapsing) { 
                     this._right.set('left', this._sizes.right.l);
                 }
                 this._right.set('height', this._sizes.right.h, true);
             }
             if (this._left) {
+                this._sizes.left.l = 0;
                 if (this._top) {
                     this._sizes.left.t = this._sizes.top.h;
-                    this._sizes.left.l = 0;
-                    if (set) {
-                        this._left.set('top', this._sizes.top.h);
-                        this._left.set('left', 0);
-                    }
+                } else {
+                    this._sizes.left.t = 0;
                 }
                 if (set) {
+                    this._left.set('top', this._sizes.left.t);
                     this._left.set('height', this._sizes.left.h, true);
+                    this._left.set('left', 0);
                 }
             }
             if (this._bottom) {
@@ -241,7 +236,7 @@
         * @method getUnitById
         * @param {String} id The HTML element id of the unit
         * @description Get the LayoutUnit by it's HTML id
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         getUnitById: function(id) {
             return YAHOO.widget.LayoutUnit.getLayoutUnitById(id);
@@ -250,7 +245,7 @@
         * @method getUnitByPosition
         * @param {String} pos The position of the unit in this layout
         * @description Get the LayoutUnit by it's position in this layout
-        * @return {Object} YAHOO.widget.LayoutUnit
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         getUnitByPosition: function(pos) {
             if (pos) {
@@ -274,6 +269,7 @@
         * @method addUnit
         * @param {Object} cfg The config for the LayoutUnit that you want to add
         * @description Add a unit to this layout and if the layout is rendered, resize the layout. 
+        * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         addUnit: function(cfg) {
             if (!cfg.position) {
@@ -367,7 +363,7 @@
         * @method resize
         * @param {Boolean} set If set to false, it will NOT set the size, just perform the calculations (used for collapsing units)
         * @description Starts the chain of resize routines that will resize all the units.
-        * @return {Object} YAHOO.widget.Layout
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The Layout instance
         */
         resize: function(set) {
             set = ((set === false) ? false : true);
@@ -398,7 +394,7 @@
         * @description Sets up the main doc element when using the body as the main element.
         */
         _setupBodyElements: function() {
-            this._doc = Dom.get('doc');
+            this._doc = Dom.get('layout-doc');
             if (!this._doc) {
                 this._doc = document.createElement('div');
                 this._doc.id = 'layout-doc';
@@ -447,35 +443,35 @@
         * @private
         * @property _left
         * @description Reference to the left LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _left: null,
         /**
         * @private
         * @property _right
         * @description Reference to the right LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _right: null,
         /**
         * @private
         * @property _top
         * @description Reference to the top LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _top: null,
         /**
         * @private
         * @property _bottom
         * @description Reference to the bottom LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _bottom: null,
         /**
         * @private
         * @property _center
         * @description Reference to the center LayoutUnit Object
-        * @type {Object} YAHOO.widget.LayoutUnit
+        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
         */
         _center: null,
         /**
@@ -503,7 +499,7 @@
         /**
         * @method render
         * @description This method starts the render process, applying classnames and creating elements
-        * @return {Object} YAHOO.widget.Layout
+        * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The Layout instance
         */        
         render: function() {
             YAHOO.log('Render', 'info', 'Layout');
@@ -551,7 +547,7 @@
         initAttributes: function(attr) {
             Layout.superclass.initAttributes.call(this, attr);
             /**
-            * @config units
+            * @attribute units
             * @description An array of config definitions for the LayoutUnits to add to this layout
             * @type Array
             */
@@ -562,7 +558,7 @@
             });
 
             /**
-            * @config minHeight
+            * @attribute minHeight
             * @description The minimum height in pixels
             * @type Number
             */
@@ -572,7 +568,7 @@
             });
 
             /**
-            * @config minWidth
+            * @attribute minWidth
             * @description The minimum width in pixels
             * @type Number
             */
@@ -582,7 +578,7 @@
             });
 
             /**
-            * @config height
+            * @attribute height
             * @description The height in pixels
             * @type Number
             */
@@ -595,7 +591,7 @@
             });
 
             /**
-            * @config width
+            * @attribute width
             * @description The width in pixels
             * @type Number
             */
@@ -608,8 +604,8 @@
             });
 
             /**
-            * @config parent
-            * @description If this layout is to be used as a child of another Layout instance, this config will bind the resize event's together.
+            * @attribute parent
+            * @description If this layout is to be used as a child of another Layout instance, this config will bind the resize events together.
             * @type Object YAHOO.widget.Layout
             */
             this.setAttributeConfig('parent', {
