@@ -463,7 +463,7 @@ YAHOO.widget.RecordSet.prototype = {
      * @return {YAHOO.widget.Record[]} An array of Record instances.
      */
     setRecords : function(aData, index) {
-        if(YAHOO.lang.isArray(aData)) {
+        if(YAHOO.lang.isArray(aData) && (aData.length > 0)) {
             var Rec = YAHOO.widget.Record,
                 spliceParams = [index,0],
                 i = aData.length - 1,
@@ -647,11 +647,7 @@ YAHOO.widget.RecordSet.prototype = {
     deleteRecord : function(index) {
         if(YAHOO.lang.isNumber(index) && (index > -1) && (index < this.getLength())) {
             // Copy data from the Record for the event that gets fired later
-            var oRecordData = this.getRecord(index).getData();
-            var oData = {};
-            for(var key in oRecordData) {
-                oData[key] = oRecordData[key];
-            }
+            var oData = YAHOO.widget.DataTable._cloneObject(this.getRecord(index).getData());
             
             this._deleteRecord(index);
             this.fireEvent("recordDeleteEvent",{data:oData,index:index});
@@ -673,6 +669,7 @@ YAHOO.widget.RecordSet.prototype = {
      * @method deleteRecords
      * @param index {Number} Record's RecordSet position index.
      * @param range {Number} (optional) How many Records to delete.
+     * @return {Object[]} An array of copies of the data held by the deleted Records.     
      */
     deleteRecords : function(index, range) {
         if(!YAHOO.lang.isNumber(range)) {
@@ -682,12 +679,9 @@ YAHOO.widget.RecordSet.prototype = {
             var recordsToDelete = this.getRecords(index, range);
             // Copy data from each Record for the event that gets fired later
             var deletedData = [];
+            
             for(var i=0; i<recordsToDelete.length; i++) {
-                var oData = {};
-                for(var key in recordsToDelete[i]) {
-                    oData[key] = recordsToDelete[i][key];
-                }
-                deletedData.push(oData);
+                deletedData[deletedData.length] = YAHOO.widget.DataTable._cloneObject(recordsToDelete[i]);
             }
             this._deleteRecord(index, range);
 
@@ -695,9 +689,11 @@ YAHOO.widget.RecordSet.prototype = {
             YAHOO.log(range + "Record(s) deleted at index " + index +
                     " and containing data " + YAHOO.lang.dump(deletedData), "info", this.toString());
 
+            return deletedData;
         }
         else {
             YAHOO.log("Could not delete Records at index " + index, "error", this.toString());
+            return null;
         }
     },
 

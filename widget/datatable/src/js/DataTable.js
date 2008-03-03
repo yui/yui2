@@ -3285,11 +3285,10 @@ _deleteTrEl : function(row) {
         rowIndex = row;
     }
     if(lang.isNumber(rowIndex) && (rowIndex > -2) && (rowIndex < this._elTbody.rows.length)) {
-        this._elTbody.deleteRow(rowIndex);
-        return true;
+        return this._elTbody.deleteRow(rowIndex);
     }
     else {
-        return false;
+        return null;
     }
 },
 
@@ -6093,12 +6092,13 @@ unhighlightColumn : function(column) {
 // ROW FUNCTIONS
 
 /**
- * Adds one TR element at the given index.
+ * Adds one TR element at the given index and populates with given Record data.
  *
- * @method addTrEl
+ * @method _addTrEl
  * @param oRecord {YAHOO.widget.Record} Record instance. 
  * @param index {Number} TR index.
  * @return {HTMLElement} Reference to new TR element. 
+ * @private 
  */
 _addTrEl : function(oRecord, index) {
     var elNewTr = this._createTrEl(oRecord);
@@ -6236,7 +6236,9 @@ addRows : function(aData, index) {
                 }
                 
                 this.fireEvent("rowsAddEvent", {records:aRecords});
-                YAHOO.log("Added " + aRecords.length + " rows at index " + recIndex, "info", this.toString());
+                YAHOO.log("Added " + aRecords.length + 
+                        " rows at index " + recIndex +
+                        " with data " + lang.dump(aData), "info", this.toString());
                 
                 return;
             }
@@ -6272,34 +6274,12 @@ addRows : function(aData, index) {
                     scope: this
                 });
                 this._oChainRender.run();
-                
-                this.hideTableMessage();
-                
-                    /*// Add the TR element
-                    for(var i=0,l=aRecords.length; i<l; i++) {
-                        this._oChainRender.add({
-                            method: function(oArg) {
-                                if((this instanceof DT) && this._sId) {
-                                    var oRecord = oArg.record;
-                                    var elNewTr = this._addTrEl(oArg.record, oArg.nIndex);
-                                    if(elNewTr) {
-                                        this._oChainSync.run();
-                
-                                        this.fireEvent("rowAddEvent", {record:oRecord});
-                                        YAHOO.log("Added a row for Record " + YAHOO.lang.dump(oRecord) + " at RecordSet index " + oArg.nIndex, "info", this.toString());
-                                    }
-                                }
-                            },
-                            scope: this,
-                            argument: {record: aRecords[i],index:recIndex}
-                        });
-                        this._sync();
-                    }
-                    this._oChainRender.run();*/
-                
+                this.hideTableMessage();                
 
                 this.fireEvent("rowsAddEvent", {records:aRecords});
-                YAHOO.log("Added " + aRecords.length + " rows at index " + recIndex, "info", this.toString());
+                YAHOO.log("Added " + aRecords.length + 
+                        " rows at index " + recIndex +
+                        " with data " + lang.dump(aData), "info", this.toString());
 
                 return;
             }            
@@ -6388,122 +6368,101 @@ updateRow : function(row, oData) {
  * to DataTable page element or RecordSet index.
  */
 deleteRow : function(row) {
-    // Get the Record index...
-    var oRecord = null;
-    // ...by Record index
-    if(lang.isNumber(row)) {
-        oRecord = this._oRecordSet.getRecord(row);
-    }
-    // ...by element reference
-    else {
-        var elRow = Dom.get(row);
-        elRow = this.getTrEl(elRow);
-        if(elRow) {
-            oRecord = this.getRecord(elRow);
-        }
-    }
-    if(oRecord) {
-        var oPaginator = this.get('paginator');
-        var sRecordId = oRecord.getId();
-
-        // Remove from selection tracker if there
-        var tracker = this._aSelections || [];
-        for(var j=tracker.length-1; j>-1; j--) {
-            if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
-                    ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
-                tracker.splice(j,1);
-            }
-        }
-
-        // Copy data from the Record for the event that gets fired later
-        var nTrIndex = this.getTrIndex(oRecord);
-        var nRecordIndex = this.getRecordIndex(oRecord);
-        var oRecordData = oRecord.getData();
-        var oData = YAHOO.widget.DataTable._cloneObject(oRecordData);
-
-        // Delete Record from RecordSet
-        this._oRecordSet.deleteRecord(nRecordIndex);
-
-        // If paginated and the deleted row was on this or a prior page, just
-        // re-render
-        if (oPaginator instanceof Pag ||
-            this.get('paginated')) {
-
-            var endRecIndex;
-            if (oPaginator instanceof Pag) {
-                // Update the paginator's totalRecords
-                var totalRecords = oPaginator.get('totalRecords');
-                if (totalRecords !== Pag.VALUE_UNLIMITED) {
-                    oPaginator.set('totalRecords',totalRecords - 1);
+    var nRecordIndex = this.getRecordIndex(row);
+    if(lang.isNumber(nRecordIndex)) {
+        var oRecord = this.getRecord(nRecordIndex);
+        if(oRecord) {
+            var nTrIndex = this.getTrIndex(nRecordIndex);
+            
+            // Remove from selection tracker if there
+            var sRecordId = oRecord.getId();
+            var tracker = this._aSelections || [];
+            for(var j=tracker.length-1; j>-1; j--) {
+                if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                        ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
+                    tracker.splice(j,1);
                 }
-
-                endRecIndex = (oPaginator.getPageRecords())[1];
-            } else {
-                // Backward compatibility
-                endRecIndex = oPaginator.startRecordIndex +
-                              oPaginator.rowsPerPage - 1;
-
-                this.updatePaginator();
             }
-
-            // If the deleted record was on this or a prior page, re-render
-            if (nRecordIndex <= endRecIndex) {
-                this.render();
-            }
-        }
-        else {
-            if(lang.isNumber(nTrIndex)) {
-                this._oChainRender.add({
-                    method: function() {
-                        if((this instanceof DT) && this._sId) {
-                            var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
-                            this._deleteTrEl(nTrIndex);
-            
-                            // Empty body
-                            if(this._elTbody.rows.length === 0) {
-                                this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
-                            }
-                            // Update UI
-                            else {
-                                // Set FIRST/LAST
-                                if(nTrIndex === 0) {
-                                    this._setFirstRow();
-                                }
-                                if(isLast) {
-                                    this._setLastRow();
-                                }
-                                // Set EVEN/ODD
-                                if(nTrIndex != this._elTbody.rows.length) {
-                                    this._setRowStripes(nTrIndex);
-                                }                                
-                            }
-            
-                            this._syncColWidths();
-                            
-                            this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                                    oldData:oData, trElIndex:nTrIndex});
-                            YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
-                                    ", Record index = " + nRecordIndex +
-                                    ", page row index = " + nTrIndex, "info", this.toString());
+    
+            // Delete Record from RecordSet
+            var oData = this._oRecordSet.deleteRecord(nRecordIndex);
+    
+            // Update the UI
+            if(oData) {
+                // If paginated and the deleted row was on this or a prior page, just
+                // re-render
+                var oPaginator = this.get('paginator');
+                if (oPaginator instanceof Pag ||
+                    this.get('paginated')) {
+        
+                    var endRecIndex;
+                    if (oPaginator instanceof Pag) {
+                        // Update the paginator's totalRecords
+                        var totalRecords = oPaginator.get('totalRecords');
+                        if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                            oPaginator.set('totalRecords',totalRecords - 1);
                         }
-                    },
-                    scope: this,
-                    timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
-                });
-                this._oChainRender.run();
-                return;
+        
+                        endRecIndex = (oPaginator.getPageRecords())[1];
+                    } else {
+                        // Backward compatibility
+                        endRecIndex = oPaginator.startRecordIndex +
+                                      oPaginator.rowsPerPage - 1;
+        
+                        this.updatePaginator();
+                    }
+        
+                    // If the deleted record was on this or a prior page, re-render
+                    if (nRecordIndex <= endRecIndex) {
+                        this.render();
+                    }
+                }
+                else {
+                    if(lang.isNumber(nTrIndex)) {
+                        this._oChainRender.add({
+                            method: function() {
+                                if((this instanceof DT) && this._sId) {
+                                    var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
+                                    this._deleteTrEl(nTrIndex);
+                    
+                                    // Empty body
+                                    if(this._elTbody.rows.length === 0) {
+                                        this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+                                    }
+                                    // Update UI
+                                    else {
+                                        // Set FIRST/LAST
+                                        if(nTrIndex === 0) {
+                                            this._setFirstRow();
+                                        }
+                                        if(isLast) {
+                                            this._setLastRow();
+                                        }
+                                        // Set EVEN/ODD
+                                        if(nTrIndex != this._elTbody.rows.length) {
+                                            this._setRowStripes(nTrIndex);
+                                        }                                
+                                    }
+                    
+                                    this._oChainSync.run();                                    
+                                }
+                            },
+                            scope: this
+                        });
+                        this._sync();
+                        this._oChainRender.run();
+                    }
+                }
+                this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
+                        oldData:oData, trElIndex:nTrIndex});
+                YAHOO.log("Deleted row with data " + YAHOO.lang.dump(oData) +
+                        " at RecordSet index " + nRecordIndex + " and page row index " + nTrIndex, "info", this.toString());
+                return oData;
             }
         }
-
-        this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                oldData:oData, trElIndex:nTrIndex});
-        YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
-                ", Record index = " + nRecordIndex +
-                ", page row index = " + nTrIndex, "info", this.toString());
     }
-    else {
-        YAHOO.log("Could not delete row: " + row, "warn", this.toString());
-    }
+    YAHOO.log("Could not delete row: " + row, "warn", this.toString());
+    return null;
 },
 
 /**
@@ -6516,36 +6475,121 @@ deleteRow : function(row) {
  * will delete towards the beginning.
  */
 deleteRows : function(row, count) {
-    // Get the Record index...
-    var nRecordIndex = null;
-    // ...by Record index
-    if(lang.isNumber(row)) {
-        nRecordIndex = row;
-    }
-    // ...by element reference
-    else {
-        var elRow = Dom.get(row);
-        elRow = this.getTrEl(elRow);
-        if(elRow) {
-            nRecordIndex = this.getRecordIndex(elRow);
-        }
-    }
-    if(nRecordIndex !== null) {
-        if(count && lang.isNumber(count)) {
-            // Start with highest index and work down
-            var startIndex = (count > 0) ? nRecordIndex + count -1 : nRecordIndex;
-            var endIndex = (count > 0) ? nRecordIndex : nRecordIndex + count + 1;
-            for(var i=startIndex; i>endIndex-1; i--) {
-                this.deleteRow(i);
+    var nRecordIndex = this.getRecordIndex(row);
+    if(lang.isNumber(nRecordIndex)) {
+        var oRecord = this.getRecord(nRecordIndex);
+        if(oRecord) {
+            var nTrIndex = this.getTrIndex(nRecordIndex);
+            
+            // Remove from selection tracker if there
+            var sRecordId = oRecord.getId();
+            var tracker = this._aSelections || [];
+            for(var j=tracker.length-1; j>-1; j--) {
+                if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
+                        ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
+                    tracker.splice(j,1);
+                }
+            }
+    
+            // Delete Record from RecordSet
+            var highIndex = nRecordIndex+1;
+            var lowIndex = nRecordIndex;
+        
+            // Validate count and account for negative value
+            if(count && lang.isNumber(count)) {
+                highIndex = (count > 0) ? nRecordIndex + count : nRecordIndex;
+                lowIndex = (count > 0) ? nRecordIndex : nRecordIndex + count + 1;
+                count = (count > 0) ? count : count*-1;
+            }
+            else {
+                count = 1;
+            }
+            
+            var aData = this._oRecordSet.deleteRecords(lowIndex, count);
+    
+            // Update the UI
+            if(aData) {
+                // If paginated and the deleted row was on this or a prior page, just
+                // re-render
+                var oPaginator = this.get('paginator');
+                if (oPaginator instanceof Pag ||
+                    this.get('paginated')) {
+        
+                    var endRecIndex;
+                    if (oPaginator instanceof Pag) {
+                        // Update the paginator's totalRecords
+                        var totalRecords = oPaginator.get('totalRecords');
+                        if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                            oPaginator.set('totalRecords',totalRecords - 1);
+                        }
+        
+                        endRecIndex = (oPaginator.getPageRecords())[1];
+                    } else {
+                        // Backward compatibility
+                        endRecIndex = oPaginator.startRecordIndex +
+                                      oPaginator.rowsPerPage - 1;
+        
+                        this.updatePaginator();
+                    }
+        
+                    // If the lowest deleted record was on this or a prior page, re-render
+                    if (lowIndex <= endRecIndex) {
+                        this.render();
+                    }
+                }
+                else {
+                    if(lang.isNumber(nTrIndex)) {
+                        // Delete the TR elements starting with highest index
+                        var loopN = this.get("renderLoopSize");
+                        var loopEnd = lowIndex;
+                        var nRowsNeeded = count; // how many needed
+                        this._oChainRender.add({
+                            method: function(oArg) {
+                                if((this instanceof DT) && this._sId) {
+                                    var i = oArg.nCurrentRow,
+                                        len = (loopN > 0) ? (Math.max(i - loopN,loopEnd)-1) : loopEnd-1;
+                                    for(; i>len; --i) {
+                                        this._deleteTrEl(i);
+                                    }
+                                    oArg.nCurrentRow = i;
+                                }
+                            },
+                            iterations: (loopN > 0) ? Math.ceil(count/loopN) : 1,
+                            argument: {nCurrentRow:highIndex},
+                            scope: this,
+                            timeout: (loopN > 0) ? 0 : -1
+                        });
+                        this._sync();
+                        this._oChainRender.add({
+                            method: function() {    
+                                // Empty body
+                                if(this._elTbody.rows.length === 0) {
+                                    this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+                                }
+                                else {
+                                    this._setFirstRow();
+                                    this._setLastRow();
+                                    this._setRowStripes();
+                                }
+                                
+                                this._oChainSync.run();
+                            },
+                            scope: this
+                        });
+                        this._oChainRender.run();
+                    }
+                }
+                this.fireEvent("rowsDeleteEvent", {recordIndex:count,
+                        oldData:aData, count:nTrIndex});
+                YAHOO.log("DataTable row deleted: Record ID = " + sRecordId +
+                        ", Record index = " + nRecordIndex +
+                        ", page row index = " + nTrIndex, "info", this.toString());
+                return aData;
             }
         }
-        else {
-            this.deleteRow(nRecordIndex);
-        }
     }
-    else {
-        YAHOO.log("Could not delete row " + row, "info", this.toString());
-    }
+    YAHOO.log("Could not delete " + count + " rows at row " + row, "warn", this.toString());
+    return null;
 },
 
 
@@ -10156,6 +10200,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      * @event rowAddEvent
      * @param oArgs.record {YAHOO.widget.Record} The added Record.
      */
+     
+    /**
+     * Fired when rows are added.
+     *
+     * @event rowsAddEvent
+     * @param oArgs.record {YAHOO.widget.Record[]} The added Records.
+     */
 
     /**
      * Fired when a row is updated.
@@ -10172,6 +10223,15 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      * @param oArgs.oldData {Object} Object literal of the deleted data.
      * @param oArgs.recordIndex {Number} Index of the deleted Record.
      * @param oArgs.trElIndex {Number} Index of the deleted TR element, if on current page.
+     */
+     
+    /**
+     * Fired when rows are deleted.
+     *
+     * @event rowsDeleteEvent
+     * @param oArgs.oldData {Object[]} Array of object literals of the deleted data.
+     * @param oArgs.recordIndex {Number} Index of the first deleted Record.
+     * @param oArgs.count {Number} Number of deleted Records.
      */
 
     /**
