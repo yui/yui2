@@ -2864,11 +2864,12 @@ _initTheadEls : function() {
 
     // Add TRs to the THEADs
     var colTree = oColumnSet.tree;
-    var elTheadCell;
+    var elTheadCell, id;
     for(l=0; l<aTheads.length; l++) {
         for(i=0; i<colTree.length; i++) {
             var elTheadRow = aTheads[l].appendChild(document.createElement("tr"));
-            elTheadRow.id = this._sId+"-hdrow"+i;
+            id = (l===1) ? this._sId+"-hdrow" + i + "-a11y": this._sId+"-hdrow" + i;
+            elTheadRow.id = id;
     
             // ...and create TH cells
             for(j=0; j<colTree[i].length; j++) {
@@ -2877,7 +2878,7 @@ _initTheadEls : function() {
                 if(l===0) {
                     oColumn._elTh = elTheadCell;
                 }
-                var id = (l===1) ? this._sId+"-th" + oColumn.getId() + "-a11y": this._sId+"-th" + oColumn.getId();
+                id = (l===1) ? this._sId+"-th" + oColumn.getId() + "-a11y": this._sId+"-th" + oColumn.getId();
                 elTheadCell.id = id;
                 elTheadCell.yuiCellIndex = j;
                 this._initThEl(elTheadCell,oColumn,i,j, (l===1));

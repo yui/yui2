@@ -1214,7 +1214,7 @@ if(YAHOO.util.DDProxy) {
         onDragDrop: function() {
             if(YAHOO.lang.isNumber(this.newIndex) && (this.newIndex !== this.column.getTreeIndex())) {
                 var oDataTable = this.datatable;
-                oDataTable._oChain.stop();
+                oDataTable._oChainRender.stop();
                 var aColumnDefs = oDataTable._oColumnSet.getDefinitions();
                 var oColumn = aColumnDefs.splice(this.column.getTreeIndex(),1)[0];
                 aColumnDefs.splice(this.newIndex, 0, oColumn);
