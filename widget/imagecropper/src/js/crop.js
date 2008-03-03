@@ -32,7 +32,7 @@ var Dom = YAHOO.util.Dom,
     * @private
     * @static
     * @property _instances
-    * @description Internal has table for all ImageCropper instances
+    * @description Internal hash table for all ImageCropper instances
     * @type Object
     */ 
     Crop._instances = {};
@@ -40,7 +40,7 @@ var Dom = YAHOO.util.Dom,
     * @static
     * @method getCropperById 
     * @description Get's an ImageCropper object by the HTML id of the image associated with the ImageCropper object.
-    * @return Object The ImageCropper Object
+    * @return {Object} The ImageCropper Object
     */ 
     Crop.getCropperById = function(id) {
         if (Crop._instances[id]) {
@@ -131,8 +131,10 @@ var Dom = YAHOO.util.Dom,
             this._wrap = document.createElement('div');
             this._wrap.id = this.get('element').id + '_wrap';
             this._wrap.className = this.CSS_MAIN;
-            this._wrap.style.width = this.get('element').width + 'px';
-            this._wrap.style.height = this.get('element').height + 'px';
+            var el = this.get('element');
+            this._wrap.style.width = el.width ? el.width + 'px' : Dom.getStyle(el, 'width');
+            this._wrap.style.height = el.height ? el.height + 'px' : Dom.getStyle(el, 'height');
+            
             var par = this.get('element').parentNode;
             par.replaceChild(this._wrap, this.get('element'));
             this._wrap.appendChild(this.get('element'));
@@ -169,8 +171,10 @@ var Dom = YAHOO.util.Dom,
             this._resizeEl.innerHTML = '<div class="' + this.CSS_RESIZE_MASK + '"></div>';
             this._resizeMaskEl = this._resizeEl.firstChild;
             this._wrap.appendChild(this._resizeEl);
-            this._resizeEl.style.top = this.get('initialXY')[0] + 'px';
-            this._resizeEl.style.left = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.top = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.left = this.get('initialXY')[0] + 'px';
+            this._resizeMaskEl.style.height = Math.floor(this.get('initHeight')) + 'px';
+            this._resizeMaskEl.style.width = Math.floor(this.get('initWidth')) + 'px';
 
             this._resize = new YAHOO.util.Resize(this._resizeEl, {
                 knobHandles: true,
@@ -333,14 +337,68 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the Resize Utilitys beforeResize event
         */
         _handleBeforeResizeEvent: function(args) {
-            //Nothing
+            var region = Dom.getRegion(this.get('element')),
+                c = this._resize._cache,
+                ch = this._resize._currentHandle, h = 0, w = 0;
+
+            if (args.top && (args.top < region.top)) {
+                h = (c.height + c.top) - region.top;
+                Dom.setY(this._resize.getWrapEl(), region.top);
+                this._resize.getWrapEl().style.height = h + 'px';
+                this._resize._cache.height = h;
+                this._resize._cache.top = region.top;
+                this._syncBackgroundPosition();
+                return false;
+            }
+            if (args.left && (args.left < region.left)) {
+                w = (c.width + c.left) - region.left;
+                Dom.setX(this._resize.getWrapEl(), region.left);
+                this._resize._cache.left = region.left;
+                this._resize.getWrapEl().style.width = w + 'px';
+                this._resize._cache.width = w;
+                this._syncBackgroundPosition();
+                return false;
+            }
+            if (ch != 'tl' && ch != 'l' && ch != 'bl') {
+                if (c.left && args.width && ((c.left + args.width) > region.right)) {
+                    w = (region.right - c.left);
+                    Dom.setX(this._resize.getWrapEl(), (region.right - w));
+                    this._resize.getWrapEl().style.width = w + 'px';
+                    this._resize._cache.left = (region.right - w);
+                    this._resize._cache.width = w;
+                    this._syncBackgroundPosition();
+                    return false;
+                }
+            }
+            if (ch != 't' && ch != 'tr' && ch != 'tl') {
+                if (c.top && args.height && ((c.top + args.height) > region.bottom)) {
+                    h = (region.bottom - c.top);
+                    Dom.setY(this._resize.getWrapEl(), (region.bottom - h));
+                    this._resize.getWrapEl().style.height = h + 'px';
+                    this._resize._cache.height = h;
+                    this._resize._cache.top = (region.bottom - h);
+                    this._syncBackgroundPosition();
+                    return false;
+                }
+            }
+        },
+        /**
+        * @private
+        * @method _handleResizeMaskEl
+        * @description Resizes the inner mask element
+        */
+        _handleResizeMaskEl: function() {
+            var a = this._resize._cache;
+            this._resizeMaskEl.style.height = Math.floor(a.height) + 'px';
+            this._resizeMaskEl.style.width = Math.floor(a.width) + 'px';
         },
         /**
         * @private
         * @method _handleResizeEvent
+        * @param Event ev The Resize Utilitys resize event.
         * @description Handles the Resize Utilitys Resize event
         */
-        _handleResizeEvent: function() {
+        _handleResizeEvent: function(ev) {
             this._setConstraints(true);
             this._syncBackgroundPosition();
             this.fireEvent('resizeEvent', arguments);
@@ -353,6 +411,7 @@ var Dom = YAHOO.util.Dom,
         * @description Syncs the packground position of the resize element with the resize elements top and left style position
         */
         _syncBackgroundPosition: function() {
+            this._handleResizeMaskEl();
             this._setBackgroundPosition(-(parseInt(this._resizeEl.style.left, 10)), -(parseInt(this._resizeEl.style.top, 10)));
         },
 
@@ -364,7 +423,7 @@ var Dom = YAHOO.util.Dom,
         * @description Sets the background image position to the top and left position
         */
         _setBackgroundPosition: function(l, t) {
-            YAHOO.log('Setting the image background position of the mask to: (' + l + ', ' + t + ')', 'log', 'ImageCropper');
+            //YAHOO.log('Setting the image background position of the mask to: (' + l + ', ' + t + ')', 'log', 'ImageCropper');
             var mask = this._resize.getWrapEl().firstChild;
             var pos = l + 'px ' + t + 'px';
             mask.style.backgroundPosition = pos;
@@ -398,6 +457,12 @@ var Dom = YAHOO.util.Dom,
                  maxH = 0, maxW = 0;
  
             switch (this._resize._currentHandle) {
+                case 'b':
+                    maxH = (h + this._resize.dd.bottomConstraint);
+                    break;
+                case 'l':
+                    maxW = (w + this._resize.dd.leftConstraint);
+                    break;
                 case 'r':
                     maxH = (h + t);
                     maxW = (w + this._resize.dd.rightConstraint);
@@ -412,14 +477,14 @@ var Dom = YAHOO.util.Dom,
                      break;
 
              }
-
+            
              if (maxH) {
                 YAHOO.log('Setting the maxHeight on the resize object to: ' + maxH, 'log', 'ImageCropper');
-                 this._resize.set('maxHeight', maxH);
+                 //this._resize.set('maxHeight', maxH);
              }
              if (maxW) {
                 YAHOO.log('Setting the maxWidth on the resize object to: ' + maxW, 'log', 'ImageCropper');
-                 this._resize.set('maxWidth', maxW);
+                 //this._resize.set('maxWidth', maxW);
              }
 
             this.fireEvent('startResizeEvent', arguments);
@@ -430,6 +495,7 @@ var Dom = YAHOO.util.Dom,
         * @method _setConstraints
         * @param Boolean inside Used when called from inside a resize event, false by default (dragging)
         * @description Set the DragDrop constraints to keep the element inside the crop area.
+        * @return {Object} Object containing Top, Right, Bottom and Left constraints
         */
         _setConstraints: function(inside) {
             YAHOO.log('Setting Contraints', 'log', 'ImageCropper');
@@ -463,14 +529,13 @@ var Dom = YAHOO.util.Dom,
 
             //Set bottom to bottom minus y minus height
             var bottom = region.bottom - xy[1] - height;
+
+            if (top < 0) {
+                top = 0;
+            }
             
             resize.dd.setXConstraint(left, right); 
             resize.dd.setYConstraint(top, bottom);
-            resize.set('minY', region.top);
-            resize.set('minX', region.left);
-
-            resize.set('maxY', region.bottom);
-            resize.set('maxX', region.right);
 
             YAHOO.log('Constraints: ' + top + ',' + right + ',' + bottom + ',' + left, 'log', 'ImageCropper');
 
@@ -487,7 +552,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getCropCoords
         * @description Returns the coordinates needed to crop the image
-        * @return Object The top, left, height, width and image url of the image being cropped
+        * @return {Object} The top, left, height, width and image url of the image being cropped
         */
         getCropCoords: function() {
             var coords = {
@@ -500,12 +565,16 @@ var Dom = YAHOO.util.Dom,
             YAHOO.log('Getting the crop coordinates: ' + Lang.dump(coords), 'log', 'ImageCropper');
             return coords;
         },
-
+        /**
+        * @method reset
+        * @description Resets the crop element back to it's original position
+        * @return {<a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a>} The ImageCropper instance
+        */
         reset: function() {
             YAHOO.log('Resetting the control', 'log', 'ImageCropper');
             this._resize.resize(null, this.get('initHeight'), this.get('initWidth'), 0, 0, true);
-            this._resizeEl.style.top = this.get('initialXY')[0] + 'px';
-            this._resizeEl.style.left = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.top = this.get('initialXY')[1] + 'px';
+            this._resizeEl.style.left = this.get('initialXY')[0] + 'px';
             this._syncBackgroundPosition();
             return this;
         },
@@ -513,7 +582,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getEl
         * @description Get the HTML reference for the image element.
-        * @return HTMLElement
+        * @return {HTMLElement} The image element
         */      
         getEl: function() {
             return this.get('element');
@@ -521,7 +590,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getResizeEl
         * @description Get the HTML reference for the resize element.
-        * @return HTMLElement
+        * @return {HTMLElement} The resize element
         */      
         getResizeEl: function() {
             return this._resizeEl;
@@ -529,7 +598,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getWrapEl
         * @description Get the HTML reference for the wrap element.
-        * @return HTMLElement
+        * @return {HTMLElement} The wrap element
         */      
         getWrapEl: function() {
             return this._wrap;
@@ -538,7 +607,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getMaskEl
         * @description Get the HTML reference for the mask element.
-        * @return HTMLElement
+        * @return {HTMLElement} The mask element
         */      
         getMaskEl: function() {
             return this._mask;
@@ -547,7 +616,7 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getResizeMaskEl
         * @description Get the HTML reference for the resizable object's mask element.
-        * @return HTMLElement
+        * @return {HTMLElement} The resize objects mask element.
         */      
         getResizeMaskEl: function() {
             return this._resizeMaskEl;
@@ -556,13 +625,14 @@ var Dom = YAHOO.util.Dom,
         /**
         * @method getResizeObject
         * @description Get the Resize Utility object.
-        * @return Object
+        * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */      
         getResizeObject: function() {
             return this._resize;
         },
 
         /** 
+        * @private
         * @method init
         * @description The ImageCropper class's initialization method
         */        
@@ -599,6 +669,7 @@ var Dom = YAHOO.util.Dom,
 
         },
         /**
+        * @private
         * @method initAttributes
         * @description Initializes all of the configuration attributes used to create a croppable element.
         * @param {Object} attr Object literal specifying a set of 
