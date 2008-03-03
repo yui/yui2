@@ -692,10 +692,11 @@ var D = YAHOO.util.Dom,
         * @param {Number} t The new top setting.
         * @param {Number} l The new left setting.
         * @param {Boolean} force Resize the element (used for proxy resize).
+        * @param {Boolean} silent Don't fire the beforeResize Event.
         * @description Resizes the element, wrapper or proxy based on the data from the handlers.
         * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */
-        resize: function(ev, h, w, t, l, force) {
+        resize: function(ev, h, w, t, l, force, silent) {
             this._resizeEvent = ev;
             var el = this._wrap, anim = this.get('animate'), set = true;
             if (this._proxy && !force) {
@@ -725,7 +726,6 @@ var D = YAHOO.util.Dom,
                 l = D.getX(el);
             }
 
-            this._updateStatus(h, w, t, l);
             
 
             if (this._positioned) {
@@ -749,8 +749,8 @@ var D = YAHOO.util.Dom,
                             }
                         }
                         if (this.get('maxY')) {
-                            if ((t + h) > this.get('maxY')) {
-                                t = (this.get('maxY') - h);
+                            if (t > this.get('maxY')) {
+                                t = this.get('maxY');
                             }
                         }
                     }
@@ -768,10 +768,15 @@ var D = YAHOO.util.Dom,
                     }
                 }
             }
-            var beforeReturn = this.fireEvent('beforeResize', { ev: 'beforeResize', target: this, height: h, width: w, top: t, left: l });
-            if (beforeReturn === false) {
-                return false;
+            if (!silent) {
+                var beforeReturn = this.fireEvent('beforeResize', { ev: 'beforeResize', target: this, height: h, width: w, top: t, left: l });
+                if (beforeReturn === false) {
+                    return false;
+                }
             }
+
+            this._updateStatus(h, w, t, l);
+
             if (this._positioned) {
                 if (this._proxy && force) {
                     //Do nothing
