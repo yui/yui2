@@ -883,6 +883,29 @@ YAHOO.namespace("util");
 YAHOO.util.Assert = {
 
     //-------------------------------------------------------------------------
+    // Helper Methods
+    //-------------------------------------------------------------------------
+    
+    /**
+     * Formats a message so that it can contain the original assertion message
+     * in addition to the custom message.
+     * @param {String} customMessage The message passed in by the developer.
+     * @param {String} defaultMessage The message created by the error by default.
+     * @return {String} The final error message, containing either or both.
+     * @protected
+     * @static
+     * @method _formatMessage
+     */
+    _formatMessage : function (customMessage /*:String*/, defaultMessage /*:String*/) /*:String*/ {
+        var message = customMessage;
+        if (YAHOO.lang.isString(customMessage) && customMessage.length > 0){
+            return YAHOO.lang.substitute(customMessage, { message: defaultMessage });
+        } else {
+            return defaultMessage;
+        }        
+    },
+    
+    //-------------------------------------------------------------------------
     // Generic Assertion Methods
     //-------------------------------------------------------------------------
     
@@ -893,7 +916,7 @@ YAHOO.util.Assert = {
      * @static
      */
     fail : function (message /*:String*/) /*:Void*/ {
-        throw new YAHOO.util.AssertionError(message || "Test force-failed.");
+        throw new YAHOO.util.AssertionError(this._formatMessage(message, "Test force-failed."));
     },       
     
     //-------------------------------------------------------------------------
@@ -911,7 +934,7 @@ YAHOO.util.Assert = {
      */
     areEqual : function (expected /*:Object*/, actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (expected != actual) {
-            throw new YAHOO.util.ComparisonFailure(message || "Values should be equal.", expected, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Values should be equal."), expected, actual);
         }
     },
     
@@ -927,7 +950,7 @@ YAHOO.util.Assert = {
     areNotEqual : function (unexpected /*:Object*/, actual /*:Object*/, 
                          message /*:String*/) /*:Void*/ {
         if (unexpected == actual) {
-            throw new YAHOO.util.UnexpectedValue(message || "Values should not be equal.", unexpected);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Values should not be equal."), unexpected);
         }
     },
     
@@ -942,7 +965,7 @@ YAHOO.util.Assert = {
      */
     areNotSame : function (unexpected /*:Object*/, actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (unexpected === actual) {
-            throw new YAHOO.util.UnexpectedValue(message || "Values should not be the same.", unexpected);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Values should not be the same."), unexpected);
         }
     },
 
@@ -957,7 +980,7 @@ YAHOO.util.Assert = {
      */
     areSame : function (expected /*:Object*/, actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (expected !== actual) {
-            throw new YAHOO.util.ComparisonFailure(message || "Values should be the same.", expected, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Values should be the same."), expected, actual);
         }
     },    
     
@@ -975,7 +998,7 @@ YAHOO.util.Assert = {
      */
     isFalse : function (actual /*:Boolean*/, message /*:String*/) {
         if (false !== actual) {
-            throw new YAHOO.util.ComparisonFailure(message || "Value should be false.", false, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be false."), false, actual);
         }
     },
     
@@ -989,7 +1012,7 @@ YAHOO.util.Assert = {
      */
     isTrue : function (actual /*:Boolean*/, message /*:String*/) /*:Void*/ {
         if (true !== actual) {
-            throw new YAHOO.util.ComparisonFailure(message || "Value should be true.", true, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be true."), true, actual);
         }
 
     },
@@ -1007,7 +1030,7 @@ YAHOO.util.Assert = {
      */
     isNaN : function (actual /*:Object*/, message /*:String*/) /*:Void*/{
         if (!isNaN(actual)){
-            throw new YAHOO.util.ComparisonFailure(message || "Value should be NaN.", NaN, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be NaN."), NaN, actual);
         }    
     },
     
@@ -1020,7 +1043,7 @@ YAHOO.util.Assert = {
      */
     isNotNaN : function (actual /*:Object*/, message /*:String*/) /*:Void*/{
         if (isNaN(actual)){
-            throw new YAHOO.util.UnexpectedValue(message || "Values should not be NaN.", NaN);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Values should not be NaN."), NaN);
         }    
     },
     
@@ -1034,7 +1057,7 @@ YAHOO.util.Assert = {
      */
     isNotNull : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (YAHOO.lang.isNull(actual)) {
-            throw new YAHOO.util.UnexpectedValue(message || "Values should not be null.", null);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Values should not be null."), null);
         }
     },
 
@@ -1048,7 +1071,7 @@ YAHOO.util.Assert = {
      */
     isNotUndefined : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (YAHOO.lang.isUndefined(actual)) {
-            throw new YAHOO.util.UnexpectedValue(message || "Value should not be undefined.", undefined);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Value should not be undefined."), undefined);
         }
     },
 
@@ -1062,14 +1085,13 @@ YAHOO.util.Assert = {
      */
     isNull : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isNull(actual)) {
-            throw new YAHOO.util.ComparisonFailure(message || "Value should be null.", null, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be null."), null, actual);
         }
     },
         
     /**
      * Asserts that a value is undefined. This uses the triple equals sign
      * so no type cohersion may occur.
-     * @param {Object} expected The expected value.
      * @param {Object} actual The actual value to test.
      * @param {String} message (Optional) The message to display if the assertion fails.
      * @method isUndefined
@@ -1077,7 +1099,7 @@ YAHOO.util.Assert = {
      */
     isUndefined : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isUndefined(actual)) {
-            throw new YAHOO.util.ComparisonFailure(message || "Value should be undefined.", undefined, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be undefined."), undefined, actual);
         }
     },    
     
@@ -1094,7 +1116,7 @@ YAHOO.util.Assert = {
      */
     isArray : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isArray(actual)){
-            throw new YAHOO.util.UnexpectedValue(message || "Value should be an array.", actual);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Value should be an array."), actual);
         }    
     },
    
@@ -1107,7 +1129,7 @@ YAHOO.util.Assert = {
      */
     isBoolean : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isBoolean(actual)){
-            throw new YAHOO.util.UnexpectedValue(message || "Value should be a Boolean.", actual);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Value should be a Boolean."), actual);
         }    
     },
    
@@ -1120,7 +1142,7 @@ YAHOO.util.Assert = {
      */
     isFunction : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isFunction(actual)){
-            throw new YAHOO.util.UnexpectedValue(message || "Value should be a function.", actual);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Value should be a function."), actual);
         }    
     },
    
@@ -1136,7 +1158,7 @@ YAHOO.util.Assert = {
      */
     isInstanceOf : function (expected /*:Function*/, actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!(actual instanceof expected)){
-            throw new YAHOO.util.ComparisonFailure(message || "Value isn't an instance of expected type.", expected, actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value isn't an instance of expected type."), expected, actual);
         }
     },
     
@@ -1149,7 +1171,7 @@ YAHOO.util.Assert = {
      */
     isNumber : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isNumber(actual)){
-            throw new YAHOO.util.UnexpectedValue(message || "Value should be a number.", actual);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Value should be a number."), actual);
         }    
     },    
     
@@ -1162,7 +1184,7 @@ YAHOO.util.Assert = {
      */
     isObject : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isObject(actual)){
-            throw new YAHOO.util.UnexpectedValue(message || "Value should be an object.", actual);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Value should be an object."), actual);
         }
     },
     
@@ -1175,7 +1197,7 @@ YAHOO.util.Assert = {
      */
     isString : function (actual /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.isString(actual)){
-            throw new YAHOO.util.UnexpectedValue(message || "Value should be a string.", actual);
+            throw new YAHOO.util.UnexpectedValue(this._formatMessage(message, "Value should be a string."), actual);
         }
     },
     
@@ -1189,7 +1211,7 @@ YAHOO.util.Assert = {
      */
     isTypeOf : function (expectedType /*:String*/, actualValue /*:Object*/, message /*:String*/) /*:Void*/{
         if (typeof actualValue != expectedType){
-            throw new YAHOO.util.ComparisonFailure(message || "Value should be of type " + expected + ".", expected, typeof actual);
+            throw new YAHOO.util.ComparisonFailure(this._formatMessage(message, "Value should be of type " + expected + "."), expected, typeof actual);
         }
     }
 };
@@ -1453,6 +1475,13 @@ YAHOO.util.UnexpectedError = function (cause /*:Object*/){
      */
     this.name /*:String*/ = "UnexpectedError";
     
+    /**
+     * Stack information for the error (if provided).
+     * @type String
+     * @property stack
+     */
+    this.stack /*:String*/ = cause.stack;
+    
 };
 
 //inherit methods
@@ -1486,6 +1515,7 @@ YAHOO.util.ArrayAssert = {
                            message /*:String*/) /*:Void*/ {
         
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -1495,7 +1525,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (!found){
-            YAHOO.util.Assert.fail(message || "Value (" + needle + ") not found in array.");
+            Assert.fail(Assert._formatMessage(message, "Value " + needle + " (" + (typeof needle) + ") not found in array [" + haystack + "]."));
         }
     },
 
@@ -1515,10 +1545,6 @@ YAHOO.util.ArrayAssert = {
         //begin checking values
         for (var i=0; i < needles.length; i++){
             this.contains(needles[i], haystack, message);
-        }
-        
-        if (!found){
-            YAHOO.util.Assert.fail(message || "Value not found in array.");
         }
     },
 
@@ -1540,6 +1566,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -1549,7 +1576,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (!found){
-            YAHOO.util.Assert.fail(message || "No match found in array.");
+            Assert.fail(Assert._formatMessage(message, "No match found in array [" + haystack + "]."));
         }
     },
 
@@ -1566,6 +1593,7 @@ YAHOO.util.ArrayAssert = {
                            message /*:String*/) /*:Void*/ {
         
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -1575,7 +1603,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (found){
-            YAHOO.util.Assert.fail(message || "Value found in array.");
+            Assert.fail(Assert._formatMessage(message, "Value found in array [" + haystack + "]."));
         }
     },
 
@@ -1616,6 +1644,7 @@ YAHOO.util.ArrayAssert = {
         }
 
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -1625,7 +1654,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (found){
-            YAHOO.util.Assert.fail(message || "Value found in array.");
+            Assert.fail(Assert._formatMessage(message, "Value found in array [" + haystack + "]."));
         }
     },
         
@@ -1649,8 +1678,10 @@ YAHOO.util.ArrayAssert = {
             }
         }
         
+        var Assert = YAHOO.util.Assert;
+        
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
+        Assert.fail(Assert._formatMessage(message, "Value doesn't exist in array [" + haystack + "]."));
     },
         
     /**
@@ -1669,11 +1700,12 @@ YAHOO.util.ArrayAssert = {
         
         //one may be longer than the other, so get the maximum length
         var len /*:int*/ = Math.max(expected.length, actual.length);
-        
+        var Assert = YAHOO.util.Assert;
+       
         //begin checking values
         for (var i=0; i < len; i++){
-            YAHOO.util.Assert.areEqual(expected[i], actual[i], message || 
-                    "Values in position " + i + " are not equal.");
+            Assert.areEqual(expected[i], actual[i], 
+                Assert._formatMessage(message, "Values in position " + i + " are not equal."));
         }
     },
     
@@ -1705,7 +1737,7 @@ YAHOO.util.ArrayAssert = {
         //begin checking values
         for (var i=0; i < len; i++){
             if (!comparator(expected[i], actual[i])){
-                throw new YAHOO.util.ComparisonFailure(message || "Values in position " + i + " are not equivalent.", expected[i], actual[i]);
+                throw new YAHOO.util.ComparisonFailure(YAHOO.util.Assert._formatMessage(message, "Values in position " + i + " are not equivalent."), expected[i], actual[i]);
             }
         }
     },
@@ -1719,7 +1751,8 @@ YAHOO.util.ArrayAssert = {
      */
     isEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length > 0){
-            YAHOO.util.Assert.fail(message || "Array should be empty.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Array should be empty."));
         }
     },    
     
@@ -1732,7 +1765,8 @@ YAHOO.util.ArrayAssert = {
      */
     isNotEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length === 0){
-            YAHOO.util.Assert.fail(message || "Array should not be empty.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Array should not be empty."));
         }
     },    
     
@@ -1752,11 +1786,12 @@ YAHOO.util.ArrayAssert = {
         
         //one may be longer than the other, so get the maximum length
         var len /*:int*/ = Math.max(expected.length, actual.length);
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < len; i++){
-            YAHOO.util.Assert.areSame(expected[i], actual[i], 
-                message || "Values in position " + i + " are not the same.");
+            Assert.areSame(expected[i], actual[i], 
+                Assert._formatMessage(message, "Values in position " + i + " are not the same."));
         }
     },
     
@@ -1773,16 +1808,18 @@ YAHOO.util.ArrayAssert = {
      */
     lastIndexOf : function (needle /*:Object*/, haystack /*:Array*/, index /*:int*/, message /*:String*/) /*:Void*/ {
     
+        var Assert = YAHOO.util.Assert;
+    
         //try to find the value in the array
         for (var i=haystack.length; i >= 0; i--){
             if (haystack[i] === needle){
-                YAHOO.util.Assert.areEqual(index, i, message || "Value exists at index " + i + " but should be at index " + index + ".");
+                Assert.areEqual(index, i, Assert._formatMessage(message, "Value exists at index " + i + " but should be at index " + index + "."));
                 return;
             }
         }
         
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
+        Assert.fail(Assert._formatMessage(message, "Value doesn't exist in array."));        
     }
     
 };
@@ -1815,6 +1852,8 @@ YAHOO.util.ObjectAssert = {
     propertiesAreEqual : function (expected /*:Object*/, actual /*:Object*/, 
                            message /*:String*/) /*:Void*/ {
         
+        var Assert = YAHOO.util.Assert;
+        
         //get all properties in the object
         var properties /*:Array*/ = [];        
         for (var property in expected){
@@ -1823,8 +1862,8 @@ YAHOO.util.ObjectAssert = {
         
         //see if the properties are in the expected object
         for (var i=0; i < properties.length; i++){
-            YAHOO.util.Assert.isNotUndefined(actual[properties[i]], message || 
-                    "Property'" + properties[i] + "' expected.");
+            Assert.isNotUndefined(actual[properties[i]], 
+                Assert._formatMessage(message, "Property '" + properties[i] + "' expected."));
         }
 
     },
@@ -1839,8 +1878,8 @@ YAHOO.util.ObjectAssert = {
      */    
     hasProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!(propertyName in object)){
-            YAHOO.util.Assert.fail(message || 
-                    "Property " + propertyName + " not found on object.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Property '" + propertyName + "' not found on object."));
         }    
     },
     
@@ -1854,8 +1893,8 @@ YAHOO.util.ObjectAssert = {
      */    
     hasOwnProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.hasOwnProperty(object, propertyName)){
-            YAHOO.util.Assert.fail(message || 
-                    "Property " + propertyName + " not found on object instance.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Property '" + propertyName + "' not found on object instance."));
         }     
     }
 };
@@ -1885,9 +1924,10 @@ YAHOO.util.DateAssert = {
      */
     datesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){
         if (expected instanceof Date && actual instanceof Date){
-            YAHOO.util.Assert.areEqual(expected.getFullYear(), actual.getFullYear(), message || "Years should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getMonth(), actual.getMonth(), message || "Months should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getDate(), actual.getDate(), message || "Day of month should be equal.");
+            var Assert = YAHOO.util.Assert;
+            Assert.areEqual(expected.getFullYear(), actual.getFullYear(), Assert._formatMessage(message, "Years should be equal."));
+            Assert.areEqual(expected.getMonth(), actual.getMonth(), Assert._formatMessage(message, "Months should be equal."));
+            Assert.areEqual(expected.getDate(), actual.getDate(), Assert._formatMessage(message, "Day of month should be equal."));
         } else {
             throw new TypeError("DateAssert.datesAreEqual(): Expected and actual values must be Date objects.");
         }
@@ -1903,9 +1943,10 @@ YAHOO.util.DateAssert = {
      */
     timesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){
         if (expected instanceof Date && actual instanceof Date){
-            YAHOO.util.Assert.areEqual(expected.getHours(), actual.getHours(), message || "Hours should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getMinutes(), actual.getMinutes(), message || "Minutes should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getSeconds(), actual.getSeconds(), message || "Seconds should be equal.");
+            var Assert = YAHOO.util.Assert;
+            Assert.areEqual(expected.getHours(), actual.getHours(), Assert._formatMessage(message, "Hours should be equal."));
+            Assert.areEqual(expected.getMinutes(), actual.getMinutes(), Assert._formatMessage(message, "Minutes should be equal."));
+            Assert.areEqual(expected.getSeconds(), actual.getSeconds(), Assert._formatMessage(message, "Seconds should be equal."));
         } else {
             throw new TypeError("DateAssert.timesAreEqual(): Expected and actual values must be Date objects.");
         }

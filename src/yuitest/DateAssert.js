@@ -23,9 +23,10 @@ YAHOO.util.DateAssert = {
      */
     datesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){
         if (expected instanceof Date && actual instanceof Date){
-            YAHOO.util.Assert.areEqual(expected.getFullYear(), actual.getFullYear(), message || "Years should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getMonth(), actual.getMonth(), message || "Months should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getDate(), actual.getDate(), message || "Day of month should be equal.");
+            var Assert = YAHOO.util.Assert;
+            Assert.areEqual(expected.getFullYear(), actual.getFullYear(), Assert._formatMessage(message, "Years should be equal."));
+            Assert.areEqual(expected.getMonth(), actual.getMonth(), Assert._formatMessage(message, "Months should be equal."));
+            Assert.areEqual(expected.getDate(), actual.getDate(), Assert._formatMessage(message, "Day of month should be equal."));
         } else {
             throw new TypeError("DateAssert.datesAreEqual(): Expected and actual values must be Date objects.");
         }
@@ -41,9 +42,10 @@ YAHOO.util.DateAssert = {
      */
     timesAreEqual : function (expected /*:Date*/, actual /*:Date*/, message /*:String*/){
         if (expected instanceof Date && actual instanceof Date){
-            YAHOO.util.Assert.areEqual(expected.getHours(), actual.getHours(), message || "Hours should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getMinutes(), actual.getMinutes(), message || "Minutes should be equal.");
-            YAHOO.util.Assert.areEqual(expected.getSeconds(), actual.getSeconds(), message || "Seconds should be equal.");
+            var Assert = YAHOO.util.Assert;
+            Assert.areEqual(expected.getHours(), actual.getHours(), Assert._formatMessage(message, "Hours should be equal."));
+            Assert.areEqual(expected.getMinutes(), actual.getMinutes(), Assert._formatMessage(message, "Minutes should be equal."));
+            Assert.areEqual(expected.getSeconds(), actual.getSeconds(), Assert._formatMessage(message, "Seconds should be equal."));
         } else {
             throw new TypeError("DateAssert.timesAreEqual(): Expected and actual values must be Date objects.");
         }

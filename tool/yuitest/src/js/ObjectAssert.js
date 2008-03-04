@@ -26,6 +26,8 @@ YAHOO.util.ObjectAssert = {
     propertiesAreEqual : function (expected /*:Object*/, actual /*:Object*/, 
                            message /*:String*/) /*:Void*/ {
         
+        var Assert = YAHOO.util.Assert;
+        
         //get all properties in the object
         var properties /*:Array*/ = [];        
         for (var property in expected){
@@ -34,8 +36,8 @@ YAHOO.util.ObjectAssert = {
         
         //see if the properties are in the expected object
         for (var i=0; i < properties.length; i++){
-            YAHOO.util.Assert.isNotUndefined(actual[properties[i]], message || 
-                    "Property'" + properties[i] + "' expected.");
+            Assert.isNotUndefined(actual[properties[i]], 
+                Assert._formatMessage(message, "Property '" + properties[i] + "' expected."));
         }
 
     },
@@ -50,8 +52,8 @@ YAHOO.util.ObjectAssert = {
      */    
     hasProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!(propertyName in object)){
-            YAHOO.util.Assert.fail(message || 
-                    "Property " + propertyName + " not found on object.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Property '" + propertyName + "' not found on object."));
         }    
     },
     
@@ -65,8 +67,8 @@ YAHOO.util.ObjectAssert = {
      */    
     hasOwnProperty : function (propertyName /*:String*/, object /*:Object*/, message /*:String*/) /*:Void*/ {
         if (!YAHOO.lang.hasOwnProperty(object, propertyName)){
-            YAHOO.util.Assert.fail(message || 
-                    "Property " + propertyName + " not found on object instance.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Property '" + propertyName + "' not found on object instance."));
         }     
     }
 };

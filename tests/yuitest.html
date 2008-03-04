@@ -23,6 +23,7 @@ YAHOO.test.YUITest_test = (function(){
 
     //shortcuts
     var Assert /*:Object*/ = YAHOO.util.Assert;
+    var ArrayAssert /*:Object*/ = YAHOO.util.ArrayAssert;
     var ObjectAssert /*:Object*/ = YAHOO.util.ObjectAssert;
     var UserAction /*:Object*/ = YAHOO.util.UserAction;
     var YUE /*:Object*/ = YAHOO.util.Event;
@@ -1140,9 +1141,9 @@ YAHOO.test.YUITest_test = (function(){
             var o = {};
             Assert.areSame(o, o);
         }
-
-        
+                
     }));    
+    
     //-------------------------------------------------------------------------
     // ObjectAssert Tests
     //-------------------------------------------------------------------------
@@ -1185,6 +1186,117 @@ YAHOO.test.YUITest_test = (function(){
             ObjectAssert.hasProperty("name3", this.testObject, "Object should not have a property 'name3'.");
         }
     }));
+  
+
+    //-------------------------------------------------------------------------
+    // ArrayAssert Tests
+    //-------------------------------------------------------------------------
+
+    //the user action suite
+    var arrayAssertSuite /*:YAHOO.tool.TestSuite*/ 
+        = new YAHOO.tool.TestSuite("ArrayAssert Tests");
+    suite.add(arrayAssertSuite);
+    
+    arrayAssertSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "Contains Assert Tests",
+        
+        _should: {
+            fail: {
+                testSimilarItem: new YAHOO.util.AssertionError("Value 1 (number) not found in array [1,0,false,text]."),
+                testCustomFailureMessage: new YAHOO.util.AssertionError("True should not be there: Value 1 (number) not found in array [1,0,false,text]."),
+                testNonExistingItem: new YAHOO.util.AssertionError("Value true (boolean) not found in array [1,0,false,text].")
+            }
+        },
+        
+        setUp: function(){
+            this.testArray = ["1", 0, false, "text"];
+        },
+        
+        tearDown: function(){
+            delete this.testArray;
+        },
+        
+        testExistingItem: function () {
+            ArrayAssert.contains("1", this.testArray);
+        },
+        
+        testSimilarItem: function () {
+            ArrayAssert.contains(1, this.testArray);
+        },
+        
+        testNonExistingItem: function() {
+            ArrayAssert.contains(true, this.testArray);
+        },
+        
+        testCustomFailureMessage: function(){
+            ArrayAssert.contains(true, this.testArray, "True should not be there: {message}");
+        }
+    }));
+    
+    arrayAssertSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "ContainsItems Assert Tests",
+        
+        _should: {
+            fail: {
+                testSimilarItems: new YAHOO.util.AssertionError("Value 1 (number) not found in array [1,0,false,text]."),
+                testNonExistingItems: new YAHOO.util.AssertionError("Value true (boolean) not found in array [1,0,false,text].")
+            }
+        },
+        
+        setUp: function(){
+            this.testArray = ["1", 0, false, "text"];
+        },
+        
+        tearDown: function(){
+            delete this.testArray;
+        },
+        
+        testExistingItems: function () {
+            ArrayAssert.containsItems(["1",0], this.testArray);
+        },
+        
+        testSimilarItems: function () {
+            ArrayAssert.containsItems([1,0], this.testArray);
+        },
+        
+        testNonExistingItems: function() {
+            ArrayAssert.containsItems([true], this.testArray);
+        }
+    }));
+    
+    arrayAssertSuite.add(new YAHOO.tool.TestCase({
+    
+        name: "ContainsMatch Assert Tests",
+        
+        _should: {
+            fail: {
+                testNonExistingItems: new YAHOO.util.AssertionError("No match found in array [1,0,false,text].")
+            }
+        },
+        
+        setUp: function(){
+            this.testArray = ["1", 0, false, "text"];
+        },
+        
+        tearDown: function(){
+            delete this.testArray;
+        },
+        
+        testExistingItems: function () {
+            ArrayAssert.containsMatch(function(value){
+                return YAHOO.lang.isString(value);
+            }, this.testArray);
+        },
+        
+        testNonExistingItems: function() {
+            ArrayAssert.containsMatch(function(value){
+                return YAHOO.lang.isObject(value);
+            }, this.testArray);
+        }
+    }));
+    
   
     //-------------------------------------------------------------------------
     // UserAction Tests

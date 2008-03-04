@@ -26,6 +26,7 @@ YAHOO.util.ArrayAssert = {
                            message /*:String*/) /*:Void*/ {
         
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -35,7 +36,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (!found){
-            YAHOO.util.Assert.fail(message || "Value (" + needle + ") not found in array.");
+            Assert.fail(Assert._formatMessage(message, "Value " + needle + " (" + (typeof needle) + ") not found in array [" + haystack + "]."));
         }
     },
 
@@ -55,10 +56,6 @@ YAHOO.util.ArrayAssert = {
         //begin checking values
         for (var i=0; i < needles.length; i++){
             this.contains(needles[i], haystack, message);
-        }
-        
-        if (!found){
-            YAHOO.util.Assert.fail(message || "Value not found in array.");
         }
     },
 
@@ -80,6 +77,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -89,7 +87,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (!found){
-            YAHOO.util.Assert.fail(message || "No match found in array.");
+            Assert.fail(Assert._formatMessage(message, "No match found in array [" + haystack + "]."));
         }
     },
 
@@ -106,6 +104,7 @@ YAHOO.util.ArrayAssert = {
                            message /*:String*/) /*:Void*/ {
         
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -115,7 +114,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (found){
-            YAHOO.util.Assert.fail(message || "Value found in array.");
+            Assert.fail(Assert._formatMessage(message, "Value found in array [" + haystack + "]."));
         }
     },
 
@@ -156,6 +155,7 @@ YAHOO.util.ArrayAssert = {
         }
 
         var found /*:Boolean*/ = false;
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < haystack.length && !found; i++){
@@ -165,7 +165,7 @@ YAHOO.util.ArrayAssert = {
         }
         
         if (found){
-            YAHOO.util.Assert.fail(message || "Value found in array.");
+            Assert.fail(Assert._formatMessage(message, "Value found in array [" + haystack + "]."));
         }
     },
         
@@ -189,8 +189,10 @@ YAHOO.util.ArrayAssert = {
             }
         }
         
+        var Assert = YAHOO.util.Assert;
+        
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
+        Assert.fail(Assert._formatMessage(message, "Value doesn't exist in array [" + haystack + "]."));
     },
         
     /**
@@ -209,11 +211,12 @@ YAHOO.util.ArrayAssert = {
         
         //one may be longer than the other, so get the maximum length
         var len /*:int*/ = Math.max(expected.length, actual.length);
-        
+        var Assert = YAHOO.util.Assert;
+       
         //begin checking values
         for (var i=0; i < len; i++){
-            YAHOO.util.Assert.areEqual(expected[i], actual[i], message || 
-                    "Values in position " + i + " are not equal.");
+            Assert.areEqual(expected[i], actual[i], 
+                Assert._formatMessage(message, "Values in position " + i + " are not equal."));
         }
     },
     
@@ -245,7 +248,7 @@ YAHOO.util.ArrayAssert = {
         //begin checking values
         for (var i=0; i < len; i++){
             if (!comparator(expected[i], actual[i])){
-                throw new YAHOO.util.ComparisonFailure(message || "Values in position " + i + " are not equivalent.", expected[i], actual[i]);
+                throw new YAHOO.util.ComparisonFailure(YAHOO.util.Assert._formatMessage(message, "Values in position " + i + " are not equivalent."), expected[i], actual[i]);
             }
         }
     },
@@ -259,7 +262,8 @@ YAHOO.util.ArrayAssert = {
      */
     isEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length > 0){
-            YAHOO.util.Assert.fail(message || "Array should be empty.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Array should be empty."));
         }
     },    
     
@@ -272,7 +276,8 @@ YAHOO.util.ArrayAssert = {
      */
     isNotEmpty : function (actual /*:Array*/, message /*:String*/) /*:Void*/ {        
         if (actual.length === 0){
-            YAHOO.util.Assert.fail(message || "Array should not be empty.");
+            var Assert = YAHOO.util.Assert;
+            Assert.fail(Assert._formatMessage(message, "Array should not be empty."));
         }
     },    
     
@@ -292,11 +297,12 @@ YAHOO.util.ArrayAssert = {
         
         //one may be longer than the other, so get the maximum length
         var len /*:int*/ = Math.max(expected.length, actual.length);
+        var Assert = YAHOO.util.Assert;
         
         //begin checking values
         for (var i=0; i < len; i++){
-            YAHOO.util.Assert.areSame(expected[i], actual[i], 
-                message || "Values in position " + i + " are not the same.");
+            Assert.areSame(expected[i], actual[i], 
+                Assert._formatMessage(message, "Values in position " + i + " are not the same."));
         }
     },
     
@@ -313,16 +319,18 @@ YAHOO.util.ArrayAssert = {
      */
     lastIndexOf : function (needle /*:Object*/, haystack /*:Array*/, index /*:int*/, message /*:String*/) /*:Void*/ {
     
+        var Assert = YAHOO.util.Assert;
+    
         //try to find the value in the array
         for (var i=haystack.length; i >= 0; i--){
             if (haystack[i] === needle){
-                YAHOO.util.Assert.areEqual(index, i, message || "Value exists at index " + i + " but should be at index " + index + ".");
+                Assert.areEqual(index, i, Assert._formatMessage(message, "Value exists at index " + i + " but should be at index " + index + "."));
                 return;
             }
         }
         
         //if it makes it here, it wasn't found at all
-        YAHOO.util.Assert.fail(message || "Value doesn't exist in array.");        
+        Assert.fail(Assert._formatMessage(message, "Value doesn't exist in array."));        
     }
     
 };
