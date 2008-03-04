@@ -24,3 +24,5 @@ YUI Library - YUITest - Release Notes
 
   * Fixed ObjectAssert.hasProperty() so that is correctly identifies declared properties with a value of undefined.
   * Fixed DateAssert documentation errors.
+  * Added ability to include framework assertion message in addition to custom assertion message.
+  * Fixed Assert.isUndefined() documentation error.
