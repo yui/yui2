@@ -5609,10 +5609,11 @@ _setColumnWidth : function(oColumn, sWidth) {
                 var rule = DT._oStylesheetRules[sClassname];
                 if (!rule) {
                     if (s.styleSheet && s.styleSheet.addRule) {
+                        s.styleSheet.addRule(sClassname,"overflow:hidden");
                         s.styleSheet.addRule(sClassname,"width:"+sWidth);
                         rule = s.styleSheet.rules[s.styleSheet.rules.length-1];
                     } else if (s.sheet && s.sheet.insertRule) {
-                        s.sheet.insertRule(sClassname+" {width:"+sWidth+";}",s.sheet.cssRules.length);
+                        s.sheet.insertRule(sClassname+" {overflow:hidden;width:"+sWidth+";}",s.sheet.cssRules.length);
                         rule = s.sheet.cssRules[s.sheet.cssRules.length];
                     } else {
                         DT._bStylesheetFallback = true;
@@ -5654,12 +5655,12 @@ _setColumnWidth : function(oColumn, sWidth) {
                     ending with the sWidth as the initial assignment   ^
                 }
                 */
-
+                var i,j,k;
                 var resizerDef = [
                     'var colIdx=oColumn.getKeyIndex();',
                     'oColumn.getThEl().firstChild.style.width='
                 ];
-                for (var i=this._elTbody.rows.length-1, j=2; i >= 0; --i) {
+                for (i=this._elTbody.rows.length-1, j=2; i >= 0; --i) {
                     resizerDef[j++] = 'this._elTbody.rows[';
                     resizerDef[j++] = i;
                     resizerDef[j++] = '].cells[colIdx].firstChild.style.width=';
@@ -5668,6 +5669,15 @@ _setColumnWidth : function(oColumn, sWidth) {
                     resizerDef[j++] = '].cells[colIdx].style.width=';
                 }
                 resizerDef[j] = 'sWidth;';
+                resizerDef[j+1] = 'oColumn.getThEl().firstChild.style.overflow=';
+                for (i=this._elTbody.rows.length-1, k=j+2; i >= 0; --i) {
+                    resizerDef[k++] = 'this._elTbody.rows[';
+                    resizerDef[k++] = i;
+                    resizerDef[k++] = '].cells[colIdx].firstChild.style.overflow=';
+                    resizerDef[k++] = 'this._elTbody.rows[';
+                    resizerDef[k++] = i;
+                    resizerDef[k++] = '].cells[colIdx].style.overflow="hidden";';
+                }
                 this._aFallbackColResizer[this._elTbody.rows.length] =
                     new Function('oColumn','sWidth',resizerDef.join(''));
             }

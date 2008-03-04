@@ -7,10 +7,6 @@
     border-bottom:none;
 }
 
-.yui-dt-liner {
-    overflow:hidden;
-}
-
 /* a11y headers */
 .yui-dt-hd {
     display: none;
