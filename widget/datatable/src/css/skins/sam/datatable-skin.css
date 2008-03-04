@@ -5,7 +5,7 @@
 
 /*outer border */
 .yui-skin-sam .yui-dt-hd table {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
-.yui-skin-sam .yui-dt-bd table {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
+.yui-skin-sam .yui-dt-bd table {border:1px solid #7F7F7F;}
 
 .yui-skin-sam .yui-dt-scrollable .yui-dt-hd table {border:0px;}
 .yui-skin-sam .yui-dt-scrollable .yui-dt-bd table {border:0px;}
