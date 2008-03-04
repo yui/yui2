@@ -1624,8 +1624,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 if (elListeners) {
                     for (i=elListeners.length-1; i>-1; i--) {
                         var l = elListeners[i];
-                        // this.removeListener(oEl, l.type, l.fn, l.index);
-                        this.removeListener(oEl, l.type, l.fn, i);
+                        this.removeListener(oEl, l.type, l.fn);
                     }
                 }
 
