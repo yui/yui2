@@ -1052,25 +1052,21 @@ lang.augmentObject(DT, {
     handleDataSourcePagination : function (oState,self) {
         var requestedRecords = oState.records[1] - oState.recordOffset;
 
-        if (self._oRecordSet.hasRecords(oState.recordOffset, requestedRecords)) {
-            DT.handleSimplePagination(oState,self);
-        } else {
-            // Translate the proposed page state into a DataSource request param
-            var generateRequest = self.get('generateRequest');
-            var request = generateRequest({ pagination : oState }, self);
+        // Translate the proposed page state into a DataSource request param
+        var generateRequest = self.get('generateRequest');
+        var request = generateRequest({ pagination : oState }, self);
 
-            var callback = {
-                success : self.onDataReturnSetRecords,
-                failure : self.onDataReturnSetRecords,
-                argument : {
-                    startIndex : oState.recordOffset,
-                    pagination : oState
-                },
-                scope : self
-            };
+        var callback = {
+            success : self.onDataReturnSetRecords,
+            failure : self.onDataReturnSetRecords,
+            argument : {
+                startIndex : oState.recordOffset,
+                pagination : oState
+            },
+            scope : self
+        };
 
-            self._oDataSource.sendRequest(request, callback);
-        }
+        self._oDataSource.sendRequest(request, callback);
     },
 
     /**
@@ -6197,8 +6193,7 @@ addRow : function(oData, index) {
             var oPaginator = this.get('paginator');
 
             // Paginated
-            if (oPaginator instanceof Pag ||
-                this.get('paginated')) {
+            if (oPaginator instanceof Pag || this.get('paginated')) {
                 recIndex = this.getRecordIndex(oRecord);
                 var endRecIndex;
                 if (oPaginator instanceof Pag) {
@@ -6219,6 +6214,7 @@ addRow : function(oData, index) {
 
                 // New record affects the view
                 if (recIndex <= endRecIndex) {
+                    // Defer UI updates to the render method
                     this.render();
                 }
                 
