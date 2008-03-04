@@ -471,66 +471,6 @@ YAHOO.widget.LogReader.prototype.getLastTime = function() {
 };
 
 /**
- * Formats message string to HTML for output to console.
- *
- * @method formatMsg
- * @param oLogMsg {Object} Log message object.
- * @return {String} HTML-formatted message for output to console.
- */
-YAHOO.widget.LogReader.prototype.formatMsg = function(oLogMsg) {
-    var category = oLogMsg.category;
-    
-    // Label for color-coded display
-    var label = category.substring(0,4).toUpperCase();
-
-    // Calculate the elapsed time to be from the last item that passed through the filter,
-    // not the absolute previous item in the stack
-
-    var time = oLogMsg.time;
-    var localTime;
-    if (time.toLocaleTimeString) {
-        localTime  = time.toLocaleTimeString();
-    }
-    else {
-        localTime = time.toString();
-    }
-
-    var msecs = time.getTime();
-    var startTime = YAHOO.widget.Logger.getStartTime();
-    var totalTime = msecs - startTime;
-    var elapsedTime = msecs - this.getLastTime();
-
-    var source = oLogMsg.source;
-    var sourceDetail = oLogMsg.sourceDetail;
-    var sourceAndDetail = (sourceDetail) ?
-        source + " " + sourceDetail : source;
-        
-    
-    // Escape HTML entities in the log message itself for output to console
-    //var msg = this.html2Text(oLogMsg.msg); //TODO: delete
-    var msg = this.html2Text(YAHOO.lang.dump(oLogMsg.msg));
-
-    // Verbose output includes extra line breaks
-    var output =  (this.verboseOutput) ?
-        ["<pre class=\"yui-log-verbose\"><p><span class='", category, "'>", label, "</span> ",
-        totalTime, "ms (+", elapsedTime, ") ",
-        localTime, ": ",
-        "</p><p>",
-        sourceAndDetail,
-        ": </p><p>",
-        msg,
-        "</p></pre>"] :
-
-        ["<pre><p><span class='", category, "'>", label, "</span> ",
-        totalTime, "ms (+", elapsedTime, ") ",
-        localTime, ": ",
-        sourceAndDetail, ": ",
-        msg, "</p></pre>"];
-
-    return output.join("");
-};
-
-/**
  * Converts input chars "<", ">", and "&" to HTML entities.
  *
  * @method html2Text
@@ -1164,13 +1104,9 @@ YAHOO.widget.LogReader.prototype._printToConsole = function(aEntries) {
             }
         }
         if(okToPrint) {
-            var output = this.formatMsg(entry);
-            if(this.newestOnTop) {
-                this._elConsole.innerHTML = output + this._elConsole.innerHTML;
-            }
-            else {
-                this._elConsole.innerHTML += output;
-            }
+            this._elConsole.insertBefore(
+                entry.toLogEntry(this._lastTime,this.verboseOutput),
+                this.newestOnTop ? this._elConsole.firstChild || null : null);
             this._consoleMsgCount++;
             this._lastTime = entry.time.getTime();
         }
