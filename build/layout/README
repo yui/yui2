@@ -5,7 +5,7 @@
         * 1770567 - [SF 1901621] Left Unit Disappears on Expand
         * 1778721 - [SF 1904062] Layout Manager documentation error
         * 1781653 - Don't assume element with id "doc" is the body
-        
+        * Removed the requirement for the collapse config option in order to programatically collapse a unit.   
 
 **** version 2.5.0 ***
 

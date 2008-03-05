@@ -226,7 +226,7 @@
         },
         /**
         * @method getSizes
-        * @description Get a reference to the internal Layout Unit sizes
+        * @description Get a reference to the internal Layout Unit sizes object used to build the layout wireframe
         * @return {Object} An object of the layout unit sizes
         */
         getSizes: function() {
