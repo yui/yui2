@@ -66,7 +66,7 @@
                 property = 'cssFloat';
             }
 
-            var computed = document.defaultView.getComputedStyle(el, '');
+            var computed = el.ownerDocument.defaultView.getComputedStyle(el, '');
             if (computed) { // test computed before touching for safari
                 value = computed[toCamel(property)];
             }
@@ -330,7 +330,7 @@
         getRegion: function(el) {
             var f = function(el) {
                 if ( (el.parentNode === null || el.offsetParent === null ||
-                        this.getStyle(el, 'display') == 'none') && el != document.body) {
+                        this.getStyle(el, 'display') == 'none') && el != el.ownerDocument.body) {
                     return false;
                 }
 

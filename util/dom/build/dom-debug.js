@@ -66,7 +66,7 @@
                 property = 'cssFloat';
             }
 
-            var computed = document.defaultView.getComputedStyle(el, '');
+            var computed = el.ownerDocument.defaultView.getComputedStyle(el, '');
             if (computed) { // test computed before touching for safari
                 value = computed[toCamel(property)];
             }
@@ -337,7 +337,7 @@
         getRegion: function(el) {
             var f = function(el) {
                 if ( (el.parentNode === null || el.offsetParent === null ||
-                        this.getStyle(el, 'display') == 'none') && el != document.body) {
+                        this.getStyle(el, 'display') == 'none') && el != el.ownerDocument.body) {
                     YAHOO.log('getRegion failed: element not available', 'error', 'Dom');
                     return false;
                 }
@@ -1057,7 +1057,6 @@
                         // work around opera inline/table scrollLeft/Top bug (false reports offset as scroll)
                         if (!patterns.OP_SCROLL.test(Y.Dom.getStyle(parentNode, 'display'))) { 
                             if (!isOpera || Y.Dom.getStyle(parentNode, 'overflow') !== 'visible') { // opera inline-block misreports when visible
-                    YAHOO.log(parentNode.tagName + ' scrollTop: ' + parentNode.scrollTop);
                                 pos[0] -= parentNode.scrollLeft;
                                 pos[1] -= parentNode.scrollTop;
                             }
