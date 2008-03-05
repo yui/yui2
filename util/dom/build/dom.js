@@ -23,7 +23,8 @@
     // regex cache
     var patterns = {
         HYPHEN: /(-[a-z])/i, // to normalize get/setStyle
-        ROOT_TAG: /^body|html$/i // body for quirks mode, html for standards
+        ROOT_TAG: /^body|html$/i, // body for quirks mode, html for standards,
+        OP_SCROLL:/^(?:inline|table-row)$/i
     };
 
     var toCamel = function(property) {
@@ -1017,10 +1018,14 @@
                 // account for any scrolled ancestors
                 while ( parentNode.tagName && !patterns.ROOT_TAG.test(parentNode.tagName) ) 
                 {
-                   // work around opera inline/table scrollLeft/Top bug
-                   if (Y.Dom.getStyle(parentNode, 'display').search(/^inline|table-row.*$/i)) { 
-                        pos[0] -= parentNode.scrollLeft;
-                        pos[1] -= parentNode.scrollTop;
+                    if (parentNode.scrollTop || parentNode.scrollLeft) {
+                        // work around opera inline/table scrollLeft/Top bug (false reports offset as scroll)
+                        if (!patterns.OP_SCROLL.test(Y.Dom.getStyle(parentNode, 'display'))) { 
+                            if (!isOpera || Y.Dom.getStyle(parentNode, 'overflow') !== 'visible') { // opera inline-block misreports when visible
+                                pos[0] -= parentNode.scrollLeft;
+                                pos[1] -= parentNode.scrollTop;
+                            }
+                        }
                     }
                     
                     parentNode = parentNode.parentNode; 
