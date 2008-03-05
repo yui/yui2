@@ -424,9 +424,11 @@ var Dom = YAHOO.util.Dom,
         */
         _setBackgroundPosition: function(l, t) {
             //YAHOO.log('Setting the image background position of the mask to: (' + l + ', ' + t + ')', 'log', 'ImageCropper');
+            var bl = parseInt(Dom.getStyle(this._resize.get('element'), 'borderLeftWidth'), 10);
+            var bt = parseInt(Dom.getStyle(this._resize.get('element'), 'borderTopWidth'), 10);
             var mask = this._resize.getWrapEl().firstChild;
-            var pos = l + 'px ' + t + 'px';
-            mask.style.backgroundPosition = pos;
+            var pos = (l - bl) + 'px ' + (t - bt) + 'px';
+            this._resizeMaskEl.style.backgroundPosition = pos;
         },
 
         /**
