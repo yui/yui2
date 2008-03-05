@@ -35,16 +35,6 @@
 <link rel="stylesheet" type="text/css" href="../../build/logger/assets/skins/sam/logger.css" />
 -->
 
-<style>
-
-#dd {
-    position: relative;
-    height: 100px;
-    width: 100px;
-    background-color: red
-}
-
-</style>
 
 <script type="text/javascript" src="../../build/yahoo/yahoo.js"></script>
 <script type="text/javascript" src="../../build/dom/dom.js"></script>
@@ -54,6 +44,18 @@
 -->
 <script type="text/javascript" src="../../build/logger/logger.js"></script>
 <script type="text/javascript" src="../src/js/Get.js"></script>
+
+
+<style id="styleoverrides">
+
+#dd {
+    position: relative;
+    height: 100px;
+    width: 100px;
+    background-color: red
+}
+
+</style>
 
 </head>
 <body class="yui-skin-sam">
@@ -110,8 +112,9 @@ YAHOO.util.Event.on(window, "load", function() {
     YAHOO.util.Get.css(["../../../build/reset-fonts-grids/reset-fonts-grids.css"], {
             //win: document.getElementById("frame1").contentWindow
             //win: frame1
+            insertBefore: "styleoverrides",
             onSuccess: function(o) {
-                o.purge();
+                //o.purge();
             }
         });
 
@@ -146,6 +149,7 @@ YAHOO.util.Event.on(window, "load", function() {
             data: "foo",
             varName: ["YAHOO.util.Event", "YAHOO.util.DDProxy"],
             scope: YAHOO,
+            charset: "ascii",
             autopurge: true
             //,sandbox: {
                 //reference: "YAHOO"
