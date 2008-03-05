@@ -454,9 +454,6 @@
         * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         expand: function() {
-            if (!this.get('collapse')) {
-                return this;
-            }
             if (!this._collapsed) {
                 return this;
             }
@@ -559,9 +556,6 @@
         * @return {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} The LayoutUnit instance
         */
         collapse: function() {
-            if (!this.get('collapse')) {
-                return this;
-            }
             if (this._collapsed) {
                 return this;
             }
