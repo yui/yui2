@@ -32,7 +32,7 @@
          */
         info: {
 
-    'base': 'http://yui.yahooapis.com/2.5.0/build/',
+    'base': 'http://yui.yahooapis.com/2.5.1/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -466,6 +466,21 @@
          * @property data
          */
         this.data = null;
+
+        /**
+         * Node reference or id where new nodes should be inserted before
+         * @property insertBefore
+         * @type string|HTMLElement
+         */
+        this.insertBefore = null;
+
+        /**
+         * The charset attribute for inserted nodes
+         * @property charset
+         * @type string
+         * @default utf-8
+         */
+        this.charset = null;
 
         /**
          * The name of the variable in a sandbox or script node 
@@ -1341,6 +1356,8 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     base: this.base,
                     filter: this.filter,
                     require: "connection",
+                    insertBefore: this.insertBefore,
+                    charset: this.charset,
                     onSuccess: function() {
                         this.sandbox(null, "js");
                     },
@@ -1552,6 +1569,8 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     fn(url, {
                         data: s[i],
                         onSuccess: c,
+                        insertBefore: this.insertBefore,
+                        charset: this.charset,
                         varName: m.varName,
                         scope: self 
                     });

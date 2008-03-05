@@ -270,17 +270,21 @@ YAHOO.env.ua = function() {
          *                                   updated, but not updated
          *                                   to the latest patch.
          * Webkit 212 nightly:   522+    <-- Safari 3.0 precursor (with native SVG
-         *                                   and many major issues fixed).
+         *                                   and many major issues fixed).  
+         * 3.x yahoo.com, flickr:422     <-- Safari 3.x hacks the user agent
+         *                                   string when hitting yahoo.com and 
+         *                                   flickr.com.
          * Safari 3.0.4 (523.12):523.12  <-- First Tiger release - automatic update
          *                                   from 2.x via the 10.4.11 OS patch
-         * Webkit nightly 1/2008:525+    <-- Supports DOMContentLoaded event
+         * Webkit nightly 1/2008:525+    <-- Supports DOMContentLoaded event.
+         *                                   yahoo.com user agent hack removed.
          *                                   
          * </pre>
          * http://developer.apple.com/internet/safari/uamatrix.html
          * @property webkit
          * @type float
          */
-        webkit:0,
+        webkit: 0,
 
         /**
          * The mobile property will be set to a string containing any relevant
@@ -290,7 +294,16 @@ YAHOO.env.ua = function() {
          * @property mobile 
          * @type string
          */
-        mobile: null 
+        mobile: null,
+
+        /**
+         * Adobe AIR version number or 0.  Only populated if webkit is detected.
+         * Example: 1.0
+         * @property air
+         * @type float
+         */
+        air: 0
+
     };
 
     var ua=navigator.userAgent, m;
@@ -312,6 +325,11 @@ YAHOO.env.ua = function() {
             if (m) {
                 o.mobile = m[0]; // Nokia N-series, ex: NokiaN95
             }
+        }
+
+        m=ua.match(/AdobeAIR\/([^\s]*)/);
+        if (m) {
+            o.air = m[0]; // Adobe AIR 1.0 or better
         }
 
     }
@@ -390,7 +408,6 @@ YAHOO.lang = YAHOO.lang || {
      * @return {boolean} the result
      */
     isArray: function(o) { 
-
         if (o) {
            var l = YAHOO.lang;
            return l.isNumber(o.length) && l.isFunction(o.splice);
@@ -1032,12 +1049,14 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _linkNode = function(url, win) {
+    var _linkNode = function(url, win, charset) {
+        var c = charset || "utf-8";
         return _node("link", {
-                "id": "yui__dyn_" + (nidx++),
-                "type": "text/css",
-                "rel": "stylesheet",
-                "href": url
+                "id":      "yui__dyn_" + (nidx++),
+                "type":    "text/css",
+                "charset": c,
+                "rel":     "stylesheet",
+                "href":    url
             }, win);
     };
 
@@ -1049,11 +1068,13 @@ YAHOO.util.Get = function() {
      * @return {HTMLElement} the generated node
      * @private
      */
-    var _scriptNode = function(url, win) {
+    var _scriptNode = function(url, win, charset) {
+        var c = charset || "utf-8";
         return _node("script", {
-                "id": "yui__dyn_" + (nidx++),
-                "type": "text/javascript",
-                "src": url
+                "id":      "yui__dyn_" + (nidx++),
+                "type":    "text/javascript",
+                "charset": c,
+                "src":     url
             }, win);
     };
 
@@ -1062,16 +1083,27 @@ YAHOO.util.Get = function() {
      * @method _returnData
      * @private
      */
-    var _returnData = function(q) {
+    var _returnData = function(q, msg) {
         return {
                 tId: q.tId,
                 win: q.win,
                 data: q.data,
                 nodes: q.nodes,
+                msg: msg,
                 purge: function() {
                     _purge(this.tId);
                 }
             };
+    };
+
+    var _get = function(nId, tId) {
+        var q = queues[tId],
+            n = (lang.isString(nId)) ? q.win.document.getElementById(nId) : nId;
+        if (!n) {
+            _fail(tId, "target node not found: " + nId);
+        }
+
+        return n;
     };
 
     /*
@@ -1082,12 +1114,12 @@ YAHOO.util.Get = function() {
      * @param id {string} the id of the request
      * @private
      */
-    var _fail = function(id) {
+    var _fail = function(id, msg) {
         var q = queues[id];
         // execute failure callback
         if (q.onFailure) {
             var sc=q.scope || q.win;
-            q.onFailure.call(sc, _returnData(q));
+            q.onFailure.call(sc, _returnData(q, msg));
         }
     };
 
@@ -1102,7 +1134,8 @@ YAHOO.util.Get = function() {
         q.finished = true;
 
         if (q.aborted) {
-            _fail(id);
+            var msg = "transaction " + id + " was aborted";
+            _fail(id, msg);
             return;
         }
 
@@ -1124,7 +1157,8 @@ YAHOO.util.Get = function() {
         var q = queues[id];
 
         if (q.aborted) {
-            _fail(id);
+            var msg = "transaction " + id + " was aborted";
+            _fail(id, msg);
             return;
         }
 
@@ -1157,7 +1191,7 @@ YAHOO.util.Get = function() {
                 // arbitrary timeout.  It is possible that the browser does
                 // block subsequent script execution in this case for a limited
                 // time.
-                var extra = _scriptNode(null, q.win);
+                var extra = _scriptNode(null, q.win, q.charset);
                 extra.innerHTML='YAHOO.util.Get._finalize("' + id + '");';
                 q.nodes.push(extra); h.appendChild(extra);
 
@@ -1172,9 +1206,9 @@ YAHOO.util.Get = function() {
         var url = q.url[0];
 
         if (q.type === "script") {
-            n = _scriptNode(url, w);
+            n = _scriptNode(url, w, q.charset);
         } else {
-            n = _linkNode(url, w);
+            n = _linkNode(url, w, q.charset);
         }
 
         // track this node's load progress
@@ -1183,8 +1217,15 @@ YAHOO.util.Get = function() {
         // add the node to the queue so we can return it to the user supplied callback
         q.nodes.push(n);
 
-        // add it to the head
-        h.appendChild(n);
+        // add it to the head or insert it before 'insertBefore'
+        if (q.insertBefore) {
+            var s = _get(q.insertBefore, id);
+            if (s) {
+                s.parentNode.insertBefore(n, s);
+            }
+        } else {
+            h.appendChild(n);
+        }
         
 
         // FireFox does not support the onload event for link nodes, so there is
@@ -1229,6 +1270,14 @@ YAHOO.util.Get = function() {
         if (q) {
             var n=q.nodes, l=n.length, d=q.win.document, 
                 h=d.getElementsByTagName("head")[0];
+
+            if (q.insertBefore) {
+                var s = _get(q.insertBefore, tId);
+                if (s) {
+                    h = s.parentNode;
+                }
+            }
+
             for (var i=0; i<l; i=i+1) {
                 h.removeChild(n[i]);
             }
@@ -1340,8 +1389,9 @@ YAHOO.util.Get = function() {
                                     // if we have exausted our attempts, give up
                                     this.attempts++;
                                     if (this.attempts++ > this.maxattempts) {
+                                        var msg = "Over retry limit, giving up";
                                         q.timer.cancel();
-                                        _fail(id);
+                                        _fail(id, msg);
                                     } else {
                                     }
                                     return;
@@ -1494,7 +1544,11 @@ YAHOO.util.Get = function() {
          * must supply an array that contains the variable name for
          * each script.
          * </dd>
+         * <dt>insertBefore</dt>
+         * <dd>node or node id that will become the new node's nextSibling</dd>
          * </dl>
+         * <dt>charset</dt>
+         * <dd>Node charset, default utf-8</dd>
          * <pre>
          * // assumes yahoo, dom, and event are already on the page
          * &nbsp;&nbsp;YAHOO.util.Get.script(
@@ -1554,6 +1608,10 @@ YAHOO.util.Get = function() {
          * data that is supplied to the callbacks when the nodes(s) are
          * loaded.
          * </dd>
+         * <dt>insertBefore</dt>
+         * <dd>node or node id that will become the new node's nextSibling</dd>
+         * <dt>charset</dt>
+         * <dd>Node charset, default utf-8</dd>
          * </dl>
          * <pre>
          *      YAHOO.util.Get.css("http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css");
@@ -1604,7 +1662,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          */
         info: {
 
-    'base': 'http://yui.yahooapis.com/2.5.0/build/',
+    'base': 'http://yui.yahooapis.com/2.5.1/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -2038,6 +2096,21 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          * @property data
          */
         this.data = null;
+
+        /**
+         * Node reference or id where new nodes should be inserted before
+         * @property insertBefore
+         * @type string|HTMLElement
+         */
+        this.insertBefore = null;
+
+        /**
+         * The charset attribute for inserted nodes
+         * @property charset
+         * @type string
+         * @default utf-8
+         */
+        this.charset = null;
 
         /**
          * The name of the variable in a sandbox or script node 
@@ -2913,6 +2986,8 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     base: this.base,
                     filter: this.filter,
                     require: "connection",
+                    insertBefore: this.insertBefore,
+                    charset: this.charset,
                     onSuccess: function() {
                         this.sandbox(null, "js");
                     },
@@ -3124,6 +3199,8 @@ throw new Error("You must supply an onSuccess handler for your sandbox");
                     fn(url, {
                         data: s[i],
                         onSuccess: c,
+                        insertBefore: this.insertBefore,
+                        charset: this.charset,
                         varName: m.varName,
                         scope: self 
                     });

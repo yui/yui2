@@ -1,5 +1,10 @@
 yuiloader - Release Notes
 
+2.5.1
+   * Updated metadata for 2.5.1.
+   * Added the get utility's support for 'insertBefore'
+   * Added the get utility's support for 'charset'
+
 2.5.0
    * Updated metadata for 2.5.0
    * (from the get utility) fixed autopurge.

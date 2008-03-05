@@ -32,6 +32,12 @@
 <script type="text/javascript" src="../../../build/event/event.js"></script>
 <script type="text/javascript" src="../../../build/logger/logger.js"></script>
 
+<style id="styleoverrides">
+
+
+
+</style>
+
 </head>
 <body class="yui-skin-sam">
 
@@ -42,7 +48,7 @@ new YAHOO.widget.LogReader();
 YAHOO.example.tabviewinit = function( ){
     var tabView = new YAHOO.widget.TabView( { id: 'demo' } );
 
-    debugger;
+    //debugger;
     
     tabView.addTab( new YAHOO.widget.Tab({
         label: 'lorem',
@@ -69,9 +75,11 @@ YAHOO.example.tabviewinit = function( ){
 
     var loader = new YAHOO.util.YUILoader();
     loader.insert({
-        require: ["tabview", "treeview", "skin-sam-logger"],
+        require: ["tabview", "treeview"],
         //require: ["charts", "simpleeditor"],
         base: '../../build/',
+        insertBefore: 'styleoverrides',
+        //charset: 'utf-8',
         //loadOptional: true,
         onSuccess: function() {
                 YAHOO.util.Event.onAvailable("treediv", function() {
