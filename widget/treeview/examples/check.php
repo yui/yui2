@@ -71,7 +71,7 @@
 		}
         
         tree.subscribe("checkClick", onCheckClick);
-        // tree.subscribe("labelClick", onLabelClick);
+        tree.subscribe("labelClick", onLabelClick);
 		tree.draw();
 	}
 
@@ -111,9 +111,13 @@
     }
 
    function onLabelClick(node) {
+       /*
        new YAHOO.widget.TaskNode("new", node, false);
        node.refresh();
        return false;
+       */
+
+       node.getLabelEl().style.backgroundColor = 'red';
    }
 
 
