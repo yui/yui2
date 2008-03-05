@@ -34,6 +34,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     this._sId = "yui-dt"+this._nIndex;
     this._oChainRender = new YAHOO.util.Chain();
     this._oChainSync = new YAHOO.util.Chain();
+    this._oChainRender.subscribe("end",this._sync, this, true);
 
     // Initialize configs
     this._initConfigs(oConfigs);
@@ -2360,17 +2361,8 @@ _focusEl : function(el) {
  * @private
  */
 _sync : function() {
-    this._oChainSync.stop();
-    
-    this._oChainSync.add({
-        method: function() {
-            if((this instanceof DT) && this._sId) {
-                this._syncColWidths();
-                this._forceGeckoRedraw();
-            }
-        },
-        scope:this
-    });
+    this._syncColWidths();
+    this._forceGeckoRedraw();
 },
 
 /**
@@ -2381,81 +2373,88 @@ _sync : function() {
  * @private
  */
 _syncColWidths : function() {
-    if (!this.get('scrollable')) {
+    if(!this.get('scrollable')) {
         return;
     }
 
-    // Validate there is at least one row with cells and at least one Column
-    var allKeys = this._oColumnSet.keys,
-        elRow = this.getFirstTrEl();
-
-    if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-        // Temporarily unsnap container since it causes inaccurate calculations
-        var bUnsnap = false;
-        if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable") && this.get("width")) {
-            bUnsnap = true;
-            this._elTheadContainer.style.width = "";
-            this._elTbodyContainer.style.width = "";
-        }
-
-        var i,
-            oColumn,
-            cellsLen = elRow.cells.length;
-        // First time through, reset the widths to get an accurate measure of the TD
-        for(i=0; i<cellsLen; i++) {
-            oColumn = allKeys[i];
-            // Only for Columns without widths
-            if(!oColumn.width) {
-                this._setColumnWidth(oColumn, "auto");
-            }
-        }
-
-        // Calculate width for every Column
-        for(i=0; i<cellsLen; i++) {
-            oColumn = allKeys[i];
-            var newWidth;
-            
-            // Columns without widths
-            if(!oColumn.width) {
-                var elTh = oColumn.getThEl();
-                var elTd = elRow.cells[i];
-                
-                if(elTh.offsetWidth !== elTd.offsetWidth) {
-                    var elWider = (elTh.offsetWidth > elTd.offsetWidth) ? elTh.firstChild : elTd.firstChild;               
-                    // Calculate the final width by comparing liner widths
-                    newWidth = elWider.offsetWidth -
-                            (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0);
-                    
-                    // Validate against minWidth        
-                    newWidth = (oColumn.minWidth && (oColumn.minWidth > newWidth)) ?
-                            oColumn.minWidth : newWidth;
-            
+    if(this._elTbody.rows.length > 0) {
+        // Validate there is at least one row with cells and at least one Column
+        var allKeys = this._oColumnSet.keys,
+            elRow = this.getFirstTrEl();
+    
+        if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
+            // Temporarily unsnap container since it causes inaccurate calculations
+            var bUnsnap = false;
+            if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable")) {
+                bUnsnap = true;
+                if(this.get("width")) {
+                    this._elTheadContainer.style.width = "";
+                    this._elTbodyContainer.style.width = "";
+                }
+                else {
+                    this._elContainer.style.width = "";
                 }
             }
-            // Columns with widths
-            else {
-                newWidth = oColumn.width;
+    
+            var i,
+                oColumn,
+                cellsLen = elRow.cells.length;
+            // First time through, reset the widths to get an accurate measure of the TD
+            for(i=0; i<cellsLen; i++) {
+                oColumn = allKeys[i];
+                // Only for Columns without widths
+                if(!oColumn.width) {
+                    this._setColumnWidth(oColumn, "auto");
+                }
+            }
+    
+            // Calculate width for every Column
+            for(i=0; i<cellsLen; i++) {
+                oColumn = allKeys[i];
+                var newWidth;
+                
+                // Columns without widths
+                if(!oColumn.width) {
+                    var elTh = oColumn.getThEl();
+                    var elTd = elRow.cells[i];
+                    
+                    if(elTh.offsetWidth !== elTd.offsetWidth) {
+                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ? elTh.firstChild : elTd.firstChild;               
+                        // Calculate the final width by comparing liner widths
+                        newWidth = elWider.offsetWidth -
+                                (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
+                                (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0);
+                        
+                        // Validate against minWidth        
+                        newWidth = (oColumn.minWidth && (oColumn.minWidth > newWidth)) ?
+                                oColumn.minWidth : newWidth;
+                
+                    }
+                }
+                // Columns with widths
+                else {
+                    newWidth = oColumn.width;
+                }
+                
+                // Hidden Columns
+                if(oColumn.hidden) {
+                    oColumn._nLastWidth = newWidth;
+                    newWidth = 1;
+                }
+                
+                // Update to the new width
+                if(newWidth) {
+                    this._setColumnWidth(oColumn, newWidth+"px"); 
+                }
             }
             
-            // Hidden Columns
-            if(oColumn.hidden) {
-                oColumn._nLastWidth = newWidth;
-                newWidth = 1;
-            }
-            
-            // Update to the new width
-            if(newWidth) {
-                this._setColumnWidth(oColumn, newWidth+"px"); 
-            }
+            // Resnap unsnapped containers
+            if(bUnsnap) {
+                var sWidth = this.get("width");
+                this._elTheadContainer.style.width = sWidth;
+                this._elTbodyContainer.style.width = sWidth;     
+            } 
         }
-        
-        // Resnap unsnapped containers
-        if(bUnsnap) {
-            var sWidth = this.get("width");
-            this._elTheadContainer.style.width = sWidth;
-            this._elTbodyContainer.style.width = sWidth;     
-        } 
     }
 
     this._syncScrollPadding();
@@ -2533,6 +2532,14 @@ _syncScrollPadding : function() {
                 this._bScrollbarX = false;
             }
         }
+    
+        // Sync message tbody
+        if(this._elTbody.rows.length === 0) {
+            this._elMsgTbody.parentNode.width = this.getTheadEl().parentNode.offsetWidth;
+        }
+        else {
+            this._elMsgTbody.parentNode.width = "";
+        }
     }
 },
 
@@ -2545,23 +2552,13 @@ _syncScrollPadding : function() {
 _forceGeckoRedraw : function() {
     // Bug 1741322: Needed to force FF to redraw to fix squishy headers on wide tables when new content comes in
     if(ua.gecko) {
-        this._oChainRender.add({
-            method: function(oArg) {
-                if((this instanceof DT) && this._sId) {
-                    Dom.removeClass(this.getContainerEl(),"yui-dt-noop");
-                }
-            },
-            scope: this
-        });
-        this._oChainRender.add({
-            method: function() {
-                if((this instanceof DT) && this._sId) {
-                    Dom.addClass(this.getContainerEl(),"yui-dt-noop");
-                }
-            },
-            scope:this
-        });
-        this._oChainRender.run();
+        var elContainer = this.getContainerEl();
+        setTimeout(function() {
+            Dom.removeClass(elContainer,"yui-dt-noop");
+        },0);
+        setTimeout(function() {
+            Dom.addClass(elContainer,"yui-dt-noop");
+        },0);
     }
 },
 
@@ -3332,7 +3329,9 @@ _deleteTrEl : function(row) {
         rowIndex = row;
     }
     if(lang.isNumber(rowIndex) && (rowIndex > -2) && (rowIndex < this._elTbody.rows.length)) {
-        return this._elTbody.deleteRow(rowIndex);
+        // Cannot use tbody.deleteRow due to IE6 instability
+        //return this._elTbody.deleteRow(rowIndex);
+        return this._elTbody.removeChild(this.getTrEl(row));
     }
     else {
         return null;
@@ -5181,12 +5180,16 @@ showTableMessage : function(sHTML, sClassName) {
         Dom.addClass(elCell.firstChild, sClassName);
     }
 
-    var elCellLiner = elCell.firstChild;
+    /*var elCellLiner = elCell.firstChild;
     elCellLiner.style.width = ((this.getTheadEl().parentNode.offsetWidth) -
         (parseInt(Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
         (parseInt(Dom.getStyle(elCellLiner,"paddingRight"),10))) + "px";
+    */
+    
+    this._elMsgTbody.parentNode.width = this.getTheadEl().parentNode.offsetWidth;
 
     this._elMsgTbody.style.display = "";
+
     this.fireEvent("tableMsgShowEvent", {html:sHTML, className:sClassName});
     YAHOO.log("DataTable showing message: " + sHTML, "info", this.toString());
 },
@@ -5199,6 +5202,7 @@ showTableMessage : function(sHTML, sClassName) {
 hideTableMessage : function() {
     if(this._elMsgTbody.style.display != "none") {
         this._elMsgTbody.style.display = "none";
+        
         this.fireEvent("tableMsgHideEvent");
         YAHOO.log("DataTable message hidden", "info", this.toString());
     }
@@ -5672,8 +5676,9 @@ _setColumnWidth : function(oColumn, sWidth) {
                     resizerDef[k++] = '].cells[colIdx].firstChild.style.overflow=';
                     resizerDef[k++] = 'this._elTbody.rows[';
                     resizerDef[k++] = i;
-                    resizerDef[k++] = '].cells[colIdx].style.overflow="hidden";';
+                    resizerDef[k++] = '].cells[colIdx].style.overflow=';
                 }
+                resizerDef[k] = '"hidden";';
                 this._aFallbackColResizer[this._elTbody.rows.length] =
                     new Function('oColumn','sWidth',resizerDef.join(''));
             }
@@ -5712,7 +5717,7 @@ setColumnWidth : function(oColumn, nWidth) {
         oColumn.width = parseInt(sWidth,10);
         
         // Resize the DOM elements
-        this._oChainSync.stop();
+        //this._oChainSync.stop();
         this._setColumnWidth(oColumn, sWidth);
         this._syncScrollPadding();
         
@@ -6234,7 +6239,7 @@ addRow : function(oData, index) {
                                 var elNewTr = this._addTrEl(oRecord, recIndex);
                                 if(elNewTr) {
                                     this.hideTableMessage();
-                                    this._oChainSync.run();
+                                    //this._oChainSync.run();
             
                                     this.fireEvent("rowAddEvent", {record:oRecord});
                                     YAHOO.log("Added a row for Record " + YAHOO.lang.dump(oRecord) + " at RecordSet index " + recIndex, "info", this.toString());
@@ -6243,7 +6248,7 @@ addRow : function(oData, index) {
                         },
                         scope: this
                     });
-                    this._sync();
+                    //this._sync();
                     this._oChainRender.run();
                     return;
                 }
@@ -6323,10 +6328,10 @@ addRows : function(aData, index) {
                     scope: this,
                     timeout: (loopN > 0) ? 0 : -1
                 });
-                this._sync();
+                //this._sync();
                 this._oChainRender.add({
                     method: function() {
-                        this._oChainSync.run();
+                        //this._oChainSync.run();
                     },
                     scope: this
                 });
@@ -6396,7 +6401,7 @@ updateRow : function(row, oData) {
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._updateTrEl(elRow, updatedRecord);
-                    this._oChainSync.run();
+                    //this._oChainSync.run();
                     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                     YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
                             ", Record index = " + this.getRecordIndex(updatedRecord) +
@@ -6406,7 +6411,7 @@ updateRow : function(row, oData) {
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
-        this._sync();
+        //this._sync();
         this._oChainRender.run();
     }
     else {
@@ -6502,12 +6507,12 @@ deleteRow : function(row) {
                                         }                                
                                     }
                     
-                                    this._oChainSync.run();                                    
+                                    //this._oChainSync.run();                                    
                                 }
                             },
                             scope: this
                         });
-                        this._sync();
+                        //this._sync();
                         this._oChainRender.run();
                     }
                 }
@@ -6617,7 +6622,7 @@ deleteRows : function(row, count) {
                             scope: this,
                             timeout: (loopN > 0) ? 0 : -1
                         });
-                        this._sync();
+                        //this._sync();
                         this._oChainRender.add({
                             method: function() {    
                                 // Empty body
@@ -6630,7 +6635,7 @@ deleteRows : function(row, count) {
                                     this._setRowStripes();
                                 }
                                 
-                                this._oChainSync.run();
+                                //this._oChainSync.run();
                             },
                             scope: this
                         });
