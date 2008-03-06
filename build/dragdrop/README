@@ -1,5 +1,8 @@
 Drag and Drop Release Notes
 
+2.5.1
+    * No change
+
 2.5.0
     * Added CustomEvents in addition to method overrides
         (See API Docs for more information)
