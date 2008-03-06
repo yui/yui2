@@ -9710,8 +9710,8 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
 
         if (!lang.isNumber(meta.recordStartIndex)) {
             // Default to the current page offset if paginating; 0 if not.
-            meta.recordStartIndex = oPaginator ?
-                meta.paginationRecordOffset || 0 : 0;
+            meta.recordStartIndex = oPaginator && meta.pagination ?
+                meta.pagination.recordOffset || 0 : 0;
         }
 
         this._oRecordSet.setRecords(oResponse.results, meta.recordStartIndex);
@@ -9759,10 +9759,11 @@ _mergeResponseMeta : function () {
                         if (!meta.pagination) {
                             meta.pagination = {};
                         }
-                        meta.pagination[k.substr(0,1).toLowerCase()+k.substr(1)] = o[k];
+                        meta.pagination[k.substr(10,1).toLowerCase()+k.substr(11)] = o[k];
                     } else if (/^sort(Key|Dir)/.test(k)) {
                         if (!meta.sorting) {
-                            meta.sorting = this.get('sortedBy') || {};
+                            var curSort = this.get('sortedBy');
+                            meta.sorting = curSort ? { key : curSort.key } : {};
                         }
                         meta.sorting[RegExp.$1.toLowerCase()] = o[k];
                     } else {

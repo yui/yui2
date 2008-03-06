@@ -1365,7 +1365,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
         metaNode      = schema.metaNode,
         metaLocators  = schema.metaFields || {},
         totRecLocator = schema.totalRecords, // Back compat
-        i,k,v;
+        i,k,loc,v;
 
     if (totRecLocator && !metaLocators.totalRecords) {
         metaLocators.totalRecords = totRecLocator;
@@ -1384,14 +1384,15 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
         if (metaNode) {
             for (k in metaLocators) {
                 if (YAHOO.lang.hasOwnProperty(metaLocators, k)) {
+                    loc = metaLocators[k];
                     // Look for a node
-                    v = metaNode.getElementsByTagName(k)[0];
+                    v = metaNode.getElementsByTagName(loc)[0];
 
                     if (v) {
                         v = v.firstChild.nodeValue;
                     } else {
                         // Look for an attribute
-                        v = metaNode.attributes.getNamedItem(k);
+                        v = metaNode.attributes.getNamedItem(loc);
                         if (v) {
                             v = v.value;
                         }
@@ -1607,7 +1608,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse
 
                 for (key in metaFields) {
                     if (YAHOO.lang.hasOwnProperty(metaFields,key)) {
-                        path = buildPath(key);
+                        path = buildPath(metaFields[key]);
                         if (path) {
                             v = walkPath(path, oFullResponse);
                             oParsedResponse.meta[key] = v;
