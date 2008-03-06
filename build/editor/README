@@ -20,6 +20,7 @@
         * 1776539 - [SF 1874009 ] Greedy Regex in RTE Eats embed and other tags
         * 1777925 - [SF 1878976 ] Regex matches both <i> and <iframe>
         * 1764038 - [SF 1898886 ] Problem with handleSubmit after move to 2.5.0
+        * 1693686 - [SF 1869619] Image Modification Dialog
 
 
 **** version 2.5.0 ***

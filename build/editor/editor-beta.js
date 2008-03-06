@@ -6940,7 +6940,7 @@ var Dom = YAHOO.util.Dom,
                 if ((height != oheight) || (width != owidth)) {
                     orgSize = '<span class="info">' + this.STR_IMAGE_ORIG_SIZE + '<br>'+ owidth +' x ' + oheight + '</span>';
                 }
-                hw.innerHTML += '<span><input type="text" size="3" value="'+width+'" id="insertimage_width"> x <input type="text" size="3" value="'+height+'" id="insertimage_height"></span>' + orgSize;
+                hw.innerHTML += '<span tabIndex="-1"><input type="text" size="3" value="'+width+'" id="insertimage_width"> x <input type="text" size="3" value="'+height+'" id="insertimage_height"></span>' + orgSize;
                 cont.insertBefore(hw, cont.firstChild);
 
                 Event.onAvailable('insertimage_width', function() {
@@ -6948,7 +6948,8 @@ var Dom = YAHOO.util.Dom,
                         var value = parseInt(Dom.get('insertimage_width').value, 10);
                         if (value > 5) {
                             el.style.width = value + 'px';
-                            this.moveWindow();
+                            //Removed moveWindow call so the window doesn't jump
+                            //this.moveWindow();
                         }
                     }, this, true);
                 }, this, true);
@@ -6957,7 +6958,8 @@ var Dom = YAHOO.util.Dom,
                         var value = parseInt(Dom.get('insertimage_height').value, 10);
                         if (value > 5) {
                             el.style.height = value + 'px';
-                            this.moveWindow();
+                            //Removed moveWindow call so the window doesn't jump
+                            //this.moveWindow();
                         }
                     }, this, true);
                 }, this, true);
@@ -7102,6 +7104,11 @@ var Dom = YAHOO.util.Dom,
 
                         Event.on('insertimage_url', 'blur', function() {
                             var url = Dom.get('insertimage_url');
+                            if (url.value && el) {
+                                if (url.value == el.getAttribute('src', 2)) {
+                                    return false;
+                                }
+                            }
                             if (this._isLocalFile(url.value)) {
                                 //Local File throw Warning
                                 Dom.addClass(url, 'warning');
@@ -7137,8 +7144,9 @@ var Dom = YAHOO.util.Dom,
                                                 self.currentElement[0]._width = img.width;
                                             }
                                         }
-                                        self.moveWindow();
-                                    }, 200);
+                                        //Removed moveWindow call so the window doesn't jump
+                                        //self.moveWindow();
+                                    }, 800); //Bumped the timeout up to account for larger images..
 
                                     if (url.value != this.STR_IMAGE_HERE) {
                                         img.src = url.value;
@@ -7370,7 +7378,7 @@ var Dom = YAHOO.util.Dom,
                 newXY = [(xy[0] + elXY[0]), (xy[1] + elXY[1])],
                 wWidth = (parseInt(win.attrs.width, 10) / 2),
                 align = 'center',
-                orgXY = panel.cfg.getProperty('xy'),
+                orgXY = panel.cfg.getProperty('xy') || [0,0],
                 _knob = win._knob,
                 xDiff = 0,
                 yDiff = 0,
@@ -7442,7 +7450,7 @@ var Dom = YAHOO.util.Dom,
                 _knobLeft = leftOffset - newXY[0];
                 //Check to see if the knob will go off either side & reposition it
                 if (_knobLeft > (parseInt(win.attrs.width, 10) - 1)) {
-                    _knobLeft = parseInt(win.attrs.width, 10) - 1;
+                    _knobLeft = ((parseInt(win.attrs.width, 10) - 30) - 1);
                 } else if (_knobLeft < 40) {
                     _knobLeft = 1;
                 }
