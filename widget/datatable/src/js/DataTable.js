@@ -1939,14 +1939,6 @@ initAttributes : function(oConfigs) {
                 // other browsers)
                 bodyTable.style.marginTop = "-"+this._elTbody.offsetTop+"px";
 
-                // Bug 1743176 - Safari 2 shifts the _elTbodyContainer up
-                // when placed in overflow:auto container.  Should only shift
-                // the table inside.  Apply topMargin to _elTbodyContainer
-                // to account for the bug.
-                if (ua.webkit && ua.webkit < 420) {
-                    this._elTbodyContainer.style.marginTop =
-                        bodyTable.style.marginTop.replace('-','');
-                }
                 this._syncColWidths();
                 this._syncScrollPadding();
             }
@@ -1968,11 +1960,6 @@ initAttributes : function(oConfigs) {
                 }
 
                 Dom.removeClass(this._elContainer,DT.CLASS_SCROLLABLE);
-
-                if (ua.webkit && ua.webkit < 420) {
-                    this._elTbodyContainer.style.marginTop = "";
-                }
-                //this._syncScrollPadding();
             }
         }
     });
