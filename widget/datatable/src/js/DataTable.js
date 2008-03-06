@@ -113,8 +113,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     
     // Send a simple initial request
     var oCallback = {
-        success : this.onDataReturnSetRecords,
-        failure : this.onDataReturnSetRecords,
+        success : this.onDataReturnSetRows,
+        failure : this.onDataReturnSetRows,
         scope   : this,
         argument: {}
     };
@@ -1058,8 +1058,8 @@ lang.augmentObject(DT, {
         var request = generateRequest({ pagination : oState }, self);
 
         var callback = {
-            success : self.onDataReturnSetRecords,
-            failure : self.onDataReturnSetRecords,
+            success : self.onDataReturnSetRows,
+            failure : self.onDataReturnSetRows,
             argument : {
                 startIndex : oState.recordOffset,
                 pagination : oState
@@ -9613,7 +9613,7 @@ onEventCancelCellEditor : function(oArgs) {
 onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
     this.initializeTable();
 
-    this.onDataReturnSetRecords(sRequest,oResponse,oPayload);
+    this.onDataReturnSetRows(sRequest,oResponse,oPayload);
 },
 
 /**
@@ -9698,12 +9698,12 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
 /**
  * Receives reponse from DataSource and populates the RecordSet with the
  * results.
- * @method onDataReturnSetRecords
+ * @method onDataReturnSetRows
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
  * @param oPayload {MIXED} (optional) Additional argument(s)
  */
-onDataReturnSetRecords : function(oRequest, oResponse, oPayload) {
+onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
     this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
 
     // Pass data through abstract method for any transformations
@@ -11011,4 +11011,12 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
  */
 
 });
+
+/**
+ * Alias for onDataReturnSetRows for backward compatibility
+ * @method onDataReturnSetRecords
+ * @deprecated Use onDataReturnSetRows
+ */
+DT.prototype.onDataReturnSetRecords = DT.prototype.onDataReturnSetRows;
+
 })();
