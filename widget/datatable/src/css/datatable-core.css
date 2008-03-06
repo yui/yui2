@@ -21,6 +21,10 @@
     left:-1500px;
 }
 
+.yui-dt-scrollable tbody {
+    -moz-outline:none;
+}
+
 /* draggable columns */
 .yui-dt-draggable {
     cursor: move;
