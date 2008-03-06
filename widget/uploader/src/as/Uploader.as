@@ -447,6 +447,16 @@
 			super.dispatchEventToJavaScript(newEvent);
 
 		}
+		
+		private function uploadCancel (event:Event) : void {
+			
+			t("Canceled upload for " + fileIDList[event.target]);
+			var newEvent:Object = new Object();
+			newEvent.id = fileIDList[event.target];
+			newEvent.type = "uploadCancel";
+			super.dispatchEventToJavaScript(newEvent);
+			
+		}
 
 
 
@@ -733,6 +743,7 @@
 
             fr.addEventListener(SecurityErrorEvent.SECURITY_ERROR, uploadError);
 
+			fr.addEventListener(Event.CANCEL,uploadCancel);
 
 
 			fileRefList[fileID] = fr;

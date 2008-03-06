@@ -553,7 +553,7 @@ YAHOO.widget.Uploader = function(containerId)
  * @private
  * @static
  * @final
- * @default "assets/Uploader.swf"
+ * @default "assets/uploader.swf"
  */
 YAHOO.widget.Uploader.SWFURL = "assets/uploader.swf";
 
@@ -564,7 +564,7 @@ YAHOO.extend(YAHOO.widget.Uploader, YAHOO.widget.FlashAdapter,
  *
  * @param allowMultiple {Boolean} If true, allows for multiple file selection; if false, only a single file can be selected. False by default.
  * @param extensionFilterArray {Array} An array of key-value pairs for permissible file extensions. The array elements should 
- * be of the form: {description: "Images", extensions: "*.jpg, *.gif, *.png"}.
+ * be of the form: {description: "Images", extensions: "*.jpg; *.gif; *.png"}.
  */
 	browse: function(allowMultiple,extensionFilterArray)
 	{
