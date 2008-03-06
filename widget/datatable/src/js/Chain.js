@@ -52,8 +52,10 @@ YAHOO.util.Chain.prototype = {
 
         // If there is no callback in the queue or the Chain is currently
         // in an execution mode, return
-        if (!c || this.id) {
+        if (!c) {
             this.fireEvent('end');
+            return this;
+        } else if (this.id) {
             return this;
         }
 
