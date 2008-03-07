@@ -2478,7 +2478,8 @@ _syncScrollPadding : function() {
             this._elContainer.style.width = 
                     (elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) ?
                     (elTbody.parentNode.offsetWidth + 19) + "px" :
-                    (elTbody.parentNode.offsetWidth) + "px";
+                    //TODO: Can we detect left and right border widths instead of hard coding?
+                    (elTbody.parentNode.offsetWidth + 2) + "px";
         }
         // X-scrolling is enabled and x-scrollbar is visible
         else if((elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ||
@@ -5695,25 +5696,23 @@ setColumnWidth : function(oColumn, nWidth) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
         // Validate new width against minimum width
-        var sWidth = "";
         if(lang.isNumber(nWidth)) {
-            sWidth = (nWidth > oColumn.minWidth) ? nWidth + "px" : oColumn.minWidth + "px";
-        }
+            nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
 
-        // Save state
-        oColumn.width = parseInt(sWidth,10);
-        
-        // Resize the DOM elements
-        //this._oChainSync.stop();
-        this._setColumnWidth(oColumn, sWidth);
-        this._syncScrollPadding();
-        
-        this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
-        YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
+            // Save state
+            oColumn.width = nWidth;
+            
+            // Resize the DOM elements
+            //this._oChainSync.stop();
+            this._setColumnWidth(oColumn, nWidth+"px");
+            this._syncScrollPadding();
+            
+            this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
+            YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
+            return;
+        }
     }
-    else {
-        YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
-    }
+    YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
 },
 
 
