@@ -244,7 +244,7 @@
         'profilerviewer': {
             'type': 'js',
             'path': 'profilerviewer/profilerviewer-beta-min.js',
-            'requires': ['yuiloader', 'element'],
+            'requires': ['profiler', 'yuiloader', 'element'],
             'skinnable': true
         },
 

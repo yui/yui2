@@ -4,6 +4,7 @@ yuiloader - Release Notes
    * Updated metadata for 2.5.1.
    * Added the get utility's support for 'insertBefore'
    * Added the get utility's support for 'charset'
+   * Fixed profilerviewer's dependency list
 
 2.5.0
    * Updated metadata for 2.5.0

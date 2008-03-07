@@ -1874,7 +1874,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'profilerviewer': {
             'type': 'js',
             'path': 'profilerviewer/profilerviewer-beta-min.js',
-            'requires': ['yuiloader', 'element'],
+            'requires': ['profiler', 'yuiloader', 'element'],
             'skinnable': true
         },
 
