@@ -1,5 +1,10 @@
 JSON Utility - Release Notes
 
+2.5.1
+    * Added support for native toJSON method
+    * Updated special characters RegExp
+    * Changed stringification to account for odd responses to typeof
+
 2.5.0
     * Restructured for customization and readability
     * Extracted isValid method to test a JSON string

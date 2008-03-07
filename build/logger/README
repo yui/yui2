@@ -2,6 +2,11 @@ Logger Release Notes
 
 *** version 2.5.0 ***
 
+* Performance enhancements
+* Added entryFormat configuration for custom output formats
+
+*** version 2.5.0 ***
+
 * No changes.
 
 

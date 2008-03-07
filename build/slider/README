@@ -1,5 +1,8 @@
 Slider - Release Notes
 
+2.5.1
+    * No change
+
 2.5.0
     * Slider onDrag now calls fireEvents, so bg mousedown, drag, mouseup fires change events
     * Slider uses new dragOnly=true property added in dragdrop
