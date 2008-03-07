@@ -5189,7 +5189,7 @@ showTableMessage : function(sHTML, sClassName) {
 hideTableMessage : function() {
     if(this._elMsgTbody.style.display != "none") {
         this._elMsgTbody.style.display = "none";
-        
+        this._elMsgTbody.parentNode.width = this.getTheadEl().parentNode.offsetWidth;
         this.fireEvent("tableMsgHideEvent");
         YAHOO.log("DataTable message hidden", "info", this.toString());
     }
