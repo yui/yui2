@@ -402,7 +402,7 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
  *
  * <dl>
  * <dt>resultsList</dt> <dd>Pointer to array of tabular data</dd>
- * <dt>totalRecords</dt> <dd>Pointer to number of records (JSON over XHR only)</dd>
+ * <dt>totalRecords</dt> <dd>Pointer to number of records (JSON/XML over XHR only)</dd>
  * <dt>resultNode</dt> <dd>Pointer to node name of row data (XML data only)</dd>
  * <dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
  * <dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
@@ -1358,59 +1358,70 @@ YAHOO.util.DataSource.prototype.parseTextData = function(oRequest, oFullResponse
  *     - totalRecords (Number) Total number of records (if available)
  */
 YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse) {
-    var bError = false;
-    var oParsedResponse = {};
-    var xmlList = null;
-    var totRecLocator = this.responseSchema.totalRecords;
+    var bError = false,
+        schema = this.responseSchema,
+        oParsedResponse = {meta:{}},
+        xmlList = null,
+        metaNode      = schema.metaNode,
+        metaLocators  = schema.metaFields || {},
+        totRecLocator = schema.totalRecords, // Back compat
+        i,k,loc,v;
+
+    if (totRecLocator && !metaLocators.totalRecords) {
+        metaLocators.totalRecords = totRecLocator;
+    }
 
     // In case oFullResponse is something funky
     try {
-        xmlList = (this.responseSchema.resultNode) ?
-            oFullResponse.getElementsByTagName(this.responseSchema.resultNode) :
+        xmlList = (schema.resultNode) ?
+            oFullResponse.getElementsByTagName(schema.resultNode) :
             null;
 
-        if (totRecLocator) {
-            // Look for a totalRecords node
-            var totalRecords = null;
-            var totRec = oFullResponse.getElementsByTagName(totRecLocator)[0];
-            if (totRec) {
-                totalRecords = totRec.firstChild.nodeValue;
-            } else {
-                totRec = oFullResponse.firstChild.attributes.getNamedItem(totRecLocator);
-                if (totRec) {
-                    totalRecords = totRec.value;
-                } else if (xmlList && xmlList.length) {
-                    var par = xmlList.item(0).parentNode;
-                    if (par) {
-                        totRec = par.attributes.getNamedItem(totRecLocator);
-                        if (totRec) {
-                            totalRecords = totRec.value;
+        // Pull any meta identified
+        metaNode = metaNode ? oFullResponse.getElementsByTagName(metaNode)[0] :
+                   oFullResponse;
+
+        if (metaNode) {
+            for (k in metaLocators) {
+                if (YAHOO.lang.hasOwnProperty(metaLocators, k)) {
+                    loc = metaLocators[k];
+                    // Look for a node
+                    v = metaNode.getElementsByTagName(loc)[0];
+
+                    if (v) {
+                        v = v.firstChild.nodeValue;
+                    } else {
+                        // Look for an attribute
+                        v = metaNode.attributes.getNamedItem(loc);
+                        if (v) {
+                            v = v.value;
                         }
                     }
-                }
-            }
 
-            if (YAHOO.lang.isValue(totalRecords)) {
-                oParsedResponse.totalRecords = parseInt(totalRecords,10)|0;
+                    if (YAHOO.lang.isValue(v)) {
+                        oParsedResponse.meta[k] = v;
+                    }
+                }
+                
             }
         }
     }
     catch(e) {
         YAHOO.log("Error while parsing XML data: " + e.message);
     }
-    if(!xmlList || !YAHOO.lang.isArray(this.responseSchema.fields)) {
+    if(!xmlList || !YAHOO.lang.isArray(schema.fields)) {
         bError = true;
     }
     // Loop through each result
     else {
 
         oParsedResponse.results = [];
-        for(var k = xmlList.length-1; k >= 0 ; k--) {
-            var result = xmlList.item(k);
+        for(i = xmlList.length-1; i >= 0 ; --i) {
+            var result = xmlList.item(i);
             var oResult = {};
             // Loop through each data field in each result using the schema
-            for(var m = this.responseSchema.fields.length-1; m >= 0 ; m--) {
-                var field = this.responseSchema.fields[m];
+            for(var m = schema.fields.length-1; m >= 0 ; m--) {
+                var field = schema.fields[m];
                 var key = (YAHOO.lang.isValue(field.key)) ? field.key : field;
                 var data = null;
                 // Values may be held in an attribute...
@@ -1444,7 +1455,7 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
                 oResult[key] = data;
             }
             // Capture each array of values into an array of results
-            oParsedResponse.results[k] = oResult;
+            oParsedResponse.results[i] = oResult;
         }
     }
     if(bError) {
@@ -1471,14 +1482,18 @@ YAHOO.util.DataSource.prototype.parseXMLData = function(oRequest, oFullResponse)
  *     - totalRecords (Number) Total number of records (if available)
  */
 YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse) {
-    var oParsedResponse = {results:[]};
-    if(oFullResponse && (YAHOO.lang.isObject(oFullResponse))) {
-        if(YAHOO.lang.isArray(this.responseSchema.fields)) {
-            var fields          = this.responseSchema.fields,
-                results         = oFullResponse,
-                totalRecs       = oFullResponse,
+    var oParsedResponse = {results:[],meta:{}},
+        schema          = this.responseSchema;
+
+    if(YAHOO.lang.isObject(oFullResponse)) {
+        if(YAHOO.lang.isArray(schema.fields)) {
+            var fields          = schema.fields,
+                resultsList     = oFullResponse,
+                results         = [],
+                metaFields      = schema.metaFields || {},
                 fieldParsers    = [],
                 fieldPaths      = [],
+                simpleFields    = [],
                 bError          = false,
                 i,len,j,v,key,parser,path;
 
@@ -1489,17 +1504,17 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse
                     // Strip the ["string keys"] and [1] array indexes
                     needle = needle.
                         replace(/\[(['"])(.*?)\1\]/g,
-                        function (x,$1,$2) {keys[i]=$2;return '.#'+(i++);}).
+                        function (x,$1,$2) {keys[i]=$2;return '.@'+(i++);}).
                         replace(/\[(\d+)\]/g,
-                        function (x,$1) {keys[i]=parseInt($1,10)|0;return '.#'+(i++);}).
+                        function (x,$1) {keys[i]=parseInt($1,10)|0;return '.@'+(i++);}).
                         replace(/^\./,''); // remove leading dot
 
                     // If the cleaned needle contains invalid characters, the
                     // path is invalid
-                    if (!/[^\w\.\-\$#]/.test(needle)) {
+                    if (!/[^\w\.\$@]/.test(needle)) {
                         path = needle.split('.');
                         for (i=path.length-1; i >= 0; --i) {
-                            if (path[i].charAt(0) === '#') {
+                            if (path[i].charAt(0) === '@') {
                                 path[i] = keys[parseInt(path[i].substr(1),10)];
                             }
                         }
@@ -1527,66 +1542,80 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse
                     fieldParsers[fieldParsers.length] = {key:key,parser:parser};
                 }
 
-                if (path && path.length > 1) {
-                    fieldPaths[fieldPaths.length] = {key:key,path:path};
+                if (path) {
+                    if (path.length > 1) {
+                        fieldPaths[fieldPaths.length] = {key:key,path:path};
+                    } else {
+                        simpleFields[simpleFields.length] = key;
+                    }
+                } else {
+                    YAHOO.log("Invalid key syntax: " + key,"warn",this.toString());
                 }
             }
 
             // Parse the response
             // Step 1. Pull the resultsList from oFullResponse (default assumes
             // oFullResponse IS the resultsList)
-            if (this.responseSchema.resultsList) {
-                path = buildPath(this.responseSchema.resultsList);
+            if (schema.resultsList) {
+                path = buildPath(schema.resultsList);
                 if (path) {
-                    results = walkPath(path, oFullResponse);
-                    if (!results) {
+                    resultsList = walkPath(path, oFullResponse);
+                    if (resultsList === undefined) {
                         bError = true;
                     }
                 } else {
                     bError = true;
                 }
             }
-            if (!results) {
-                results = [];
+            if (!resultsList) {
+                resultsList = [];
             }
 
-            if (!YAHOO.lang.isArray(results)) {
-                results = [results];
+            if (!YAHOO.lang.isArray(resultsList)) {
+                resultsList = [resultsList];
             }
-
-            oParsedResponse.results = results;
 
             if (!bError) {
                 // Step 2. Process the results, flattening the records and/or
                 // applying parsers if needed
-                if (fieldParsers.length || fieldPaths.length) {
-                    for (i = results.length - 1; i >= 0; --i) {
-                        var r = results[i];
+                //if (fieldParsers.length || fieldPaths.length) {
+                    for (i = resultsList.length - 1; i >= 0; --i) {
+                        var r = resultsList[i], rec = {};
+                        for (j = simpleFields.length - 1; j >= 0; --j) {
+                            rec[simpleFields[j]] = r[simpleFields[j]];
+                        }
+
                         for (j = fieldPaths.length - 1; j >= 0; --j) {
-                            r[fieldPaths[j].key] = walkPath(fieldPaths[j].path,r);
+                            rec[fieldPaths[j].key] = walkPath(fieldPaths[j].path,r);
                         }
 
                         for (j = fieldParsers.length - 1; j >= 0; --j) {
                             var p = fieldParsers[j].key;
-                            r[p] = fieldParsers[j].parser(r[p]);
-                            if (r[p] === undefined) {
-                                r[p] = null;
+                            rec[p] = fieldParsers[j].parser(rec[p]);
+                            if (rec[p] === undefined) {
+                                rec[p] = null;
                             }
+                        }
+                        results[i] = rec;
+                    }
+                //}
+
+                // Step 3. Pull meta fields from oFullResponse if identified
+                if (schema.totalRecords && !metaFields.totalRecords) {
+                    // for backward compatibility
+                    metaFields.totalRecords = schema.totalRecords;
+                }
+
+                for (key in metaFields) {
+                    if (YAHOO.lang.hasOwnProperty(metaFields,key)) {
+                        path = buildPath(metaFields[key]);
+                        if (path) {
+                            v = walkPath(path, oFullResponse);
+                            oParsedResponse.meta[key] = v;
                         }
                     }
                 }
 
-                // Step 3. Pull totalRecords from oFullResponse if identified
-                if (this.responseSchema.totalRecords) {
-                    path = buildPath(this.responseSchema.totalRecords);
-                    if (path) {
-                        totalRecs = walkPath(path, oFullResponse);
-                        if (typeof totalRecs === 'string') {
-                            totalRecs = parseInt(totalRecs,10)|0;
-                        }
-                        oParsedResponse.totalRecords = totalRecs;
-                    }
-                }
             } else {
                 YAHOO.log("JSON data could not be parsed: " +
                         YAHOO.lang.dump(oFullResponse), "error", this.toString());
@@ -1594,6 +1623,7 @@ YAHOO.util.DataSource.prototype.parseJSONData = function(oRequest, oFullResponse
                 oParsedResponse.error = true;
             }
 
+            oParsedResponse.results = results;
         }
     }
     else {
