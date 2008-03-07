@@ -2465,10 +2465,18 @@ _syncScrollPadding : function() {
         if(!this.get("height") && (ua.ie)) {
             // Snap outer container height to content
             // but account for x-scrollbar if it is visible
-            elTbodyContainer.style.height = 
-                    (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
-                    (elTbody.offsetHeight + 19) + "px" : 
-                    elTbody.offsetHeight + "px";
+            if(elTbody.rows.length > 0) {
+                elTbodyContainer.style.height = 
+                        (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
+                        (elTbody.offsetHeight + 19) + "px" : 
+                        elTbody.offsetHeight + "px";
+            }
+            else {
+                elTbodyContainer.style.height = 
+                        (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
+                        (this._elMsgTbody.offsetHeight + 19) + "px" : 
+                        this._elMsgTbody.offsetHeight + "px";
+            }
         }
 
         // X-scrolling not enabled
