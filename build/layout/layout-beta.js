@@ -1795,15 +1795,19 @@
                 value: attr.scroll || false,
                 method: function(scroll) {
                     if ((scroll === false) && !this._collapsed) { //Removing scroll bar
-                        if (this.body.scrollTop > 0) {
-                            this._lastScrollTop = this.body.scrollTop;
+                        if (this.body) {
+                            if (this.body.scrollTop > 0) {
+                                this._lastScrollTop = this.body.scrollTop;
+                            }
                         }
                     }
                     
                     if (scroll) {
                         this.addClass('yui-layout-scroll');
                         if (this._lastScrollTop > 0) {
-                            this.body.scrollTop = this._lastScrollTop;
+                            if (this.body) {
+                                this.body.scrollTop = this._lastScrollTop;
+                            }
                         }
                     } else {
                         this.removeClass('yui-layout-scroll');
