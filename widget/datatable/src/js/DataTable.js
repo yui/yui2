@@ -6554,7 +6554,7 @@ deleteRows : function(row, count) {
         
             // Validate count and account for negative value
             if(count && lang.isNumber(count)) {
-                highIndex = (count > 0) ? nRecordIndex + count : nRecordIndex;
+                highIndex = (count > 0) ? nRecordIndex + count -1 : nRecordIndex;
                 lowIndex = (count > 0) ? nRecordIndex : nRecordIndex + count + 1;
                 count = (count > 0) ? count : count*-1;
             }
