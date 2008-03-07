@@ -9406,13 +9406,7 @@ showTableMessage : function(sHTML, sClassName) {
         Dom.addClass(elCell.firstChild, sClassName);
     }
 
-    /*var elCellLiner = elCell.firstChild;
-    elCellLiner.style.width = ((this.getTheadEl().parentNode.offsetWidth) -
-        (parseInt(Dom.getStyle(elCellLiner,"paddingLeft"),10)) -
-        (parseInt(Dom.getStyle(elCellLiner,"paddingRight"),10))) + "px";
-    */
-    
-    this._elMsgTbody.parentNode.width = this.getTheadEl().parentNode.offsetWidth;
+    this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth+"px";
 
     this._elMsgTbody.style.display = "";
 
@@ -9427,7 +9421,7 @@ showTableMessage : function(sHTML, sClassName) {
 hideTableMessage : function() {
     if(this._elMsgTbody.style.display != "none") {
         this._elMsgTbody.style.display = "none";
-        this._elMsgTbody.parentNode.width = this.getTheadEl().parentNode.offsetWidth;
+        this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth+"px";
         this.fireEvent("tableMsgHideEvent");
     }
 },
