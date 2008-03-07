@@ -638,6 +638,12 @@ var D = YAHOO.util.Dom,
                 if ((oh != h) || (ow != w)) {
                     t = 0;
                     l = 0;
+                    if (oh != h) {
+                        ow = this._cache.width;
+                    }
+                    if (ow != w) {
+                        oh = this._cache.height;
+                    }
                 }
             }
             return [oh, ow, t, l];
