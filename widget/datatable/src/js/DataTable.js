@@ -886,11 +886,14 @@ lang.augmentObject(DT, {
                     optionEl.innerHTML = (lang.isValue(option.text)) ?
                             option.text : option;
                     optionEl = selectEl.appendChild(optionEl);
+                    if (optionEl.value == selectedValue) {
+                        optionEl.selected = true;
+                    }
                 }
             }
             // Selected value is our only option
             else {
-                selectEl.innerHTML = "<option value=\"" + selectedValue + "\">" + selectedValue + "</option>";
+                selectEl.innerHTML = "<option selected value=\"" + selectedValue + "\">" + selectedValue + "</option>";
             }
         }
         else {
