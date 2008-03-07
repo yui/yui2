@@ -1125,7 +1125,7 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
         this.setPadding(10, 0, (this.datatable.getTheadEl().offsetHeight + 10) , 0);
     }
     else {
-        YAHOO.log("Column dragdrop could not be created","warn");
+        YAHOO.log("Column dragdrop could not be created","warn",oDataTable.toString());
     }
 };
 
@@ -1214,7 +1214,7 @@ if(YAHOO.util.DDProxy) {
         onDragDrop: function() {
             if(YAHOO.lang.isNumber(this.newIndex) && (this.newIndex !== this.column.getTreeIndex())) {
                 var oDataTable = this.datatable;
-                oDataTable._oChain.stop();
+                oDataTable._oChainRender.stop();
                 var aColumnDefs = oDataTable._oColumnSet.getDefinitions();
                 var oColumn = aColumnDefs.splice(this.column.getTreeIndex(),1)[0];
                 aColumnDefs.splice(this.newIndex, 0, oColumn);
@@ -1257,7 +1257,7 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
         this.initFrame(); // Needed for proxy
     }
     else {
-        YAHOO.log("Column resizer could not be created","warn");
+        YAHOO.log("Column resizer could not be created","warn",oDataTable.toString());
     }
 };
 

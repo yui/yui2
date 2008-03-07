@@ -22,6 +22,13 @@ YAHOO.util.Chain = function () {
      * @private
      */
     this.q = [].slice.call(arguments);
+
+    /**
+     * Event fired when the callback queue is emptied via execution (not via
+     * a call to chain.stop().
+     * @event end
+     */
+    this.createEvent('end');
 };
 
 YAHOO.util.Chain.prototype = {
@@ -45,7 +52,10 @@ YAHOO.util.Chain.prototype = {
 
         // If there is no callback in the queue or the Chain is currently
         // in an execution mode, return
-        if (!c || this.id) {
+        if (!c) {
+            this.fireEvent('end');
+            return this;
+        } else if (this.id) {
             return this;
         }
 
@@ -149,3 +159,4 @@ YAHOO.util.Chain.prototype = {
         return this;
     }
 };
+YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);

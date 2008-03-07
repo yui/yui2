@@ -1,20 +1,28 @@
 /* foundational CSS */
 .yui-dt {
-    border:1px solid transparent;
+    border-bottom:1px solid transparent;
 }
 
 .yui-dt-noop {
-    border:none;
-}
-
-.yui-dt-liner {
-    overflow:hidden;
+    border-bottom:none;
 }
 
 /* a11y headers */
-.yui-dt-bd thead tr, .yui-dt-bd thead th {
+.yui-dt-hd {
+    display: none;
+}
+
+.yui-dt-scrollable .yui-dt-hd {
+    display: block;
+}
+.yui-dt-scrollable .yui-dt-bd thead tr,
+.yui-dt-scrollable .yui-dt-bd thead th {
     position:absolute;
     left:-1500px;
+}
+
+.yui-dt-scrollable tbody {
+    -moz-outline:none;
 }
 
 /* draggable columns */
