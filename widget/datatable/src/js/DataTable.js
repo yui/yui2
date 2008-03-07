@@ -2689,6 +2689,8 @@ _initColumnSet : function(aColumnDefs) {
         " of object literal Column definitions instead of a ColumnSet instance",
         "warn", this.toString());
     }
+
+
 },
 
 /**
@@ -3004,6 +3006,20 @@ _initTheadEls : function() {
             YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
         }
     }
+
+
+         // Set widths for hidden Columns
+        for(var g=0, h=this._oColumnSet.keys.length; g<h; g++) {
+            // Hidden Columns
+            if(this._oColumnSet.keys[g].hidden) {
+                var oHiddenColumn = this._oColumnSet.keys[g];
+                var oHiddenThEl = oHiddenColumn.getThEl();
+                oHiddenColumn._nLastWidth = oHiddenThEl.offsetWidth -
+                            (parseInt(Dom.getStyle(oHiddenThEl,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(oHiddenThEl,"paddingRight"),10)|0);
+                this._setColumnWidth(oHiddenColumn, "1px"); 
+            }
+        }
 },
 
 /**
@@ -5195,7 +5211,7 @@ showTableMessage : function(sHTML, sClassName) {
 hideTableMessage : function() {
     if(this._elMsgTbody.style.display != "none") {
         this._elMsgTbody.style.display = "none";
-        this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth+"px";
+        this._elMsgTbody.parentNode.style.width = "";
         this.fireEvent("tableMsgHideEvent");
         YAHOO.log("DataTable message hidden", "info", this.toString());
     }
@@ -10150,6 +10166,12 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      * @param oArgs.column {YAHOO.widget.Column} The Column instance.
      * @param oArgs.target {HTMLElement} The TH element.
      * @param oArgs.width {Number} Width in pixels.     
+     */
+
+    /**
+     * Fired when a ColumnSet is re-initialized due to a Column being drag-reordered.
+     *
+     * @event columnReorderEvent
      */
 
     /**

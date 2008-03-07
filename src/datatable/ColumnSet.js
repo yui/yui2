@@ -1221,6 +1221,7 @@ if(YAHOO.util.DDProxy) {
                 oDataTable._initColumnSet(aColumnDefs);
                 oDataTable._initTheadEls();
                 oDataTable.render();
+                oDataTable.fireEvent("columnReorderEvent");
             }
         },
         endDrag: function() {
