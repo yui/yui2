@@ -9946,7 +9946,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                         rule = s.styleSheet.rules[s.styleSheet.rules.length-1];
                     } else if (s.sheet && s.sheet.insertRule) {
                         s.sheet.insertRule(sClassname+" {overflow:hidden;width:"+sWidth+";}",s.sheet.cssRules.length);
-                        rule = s.sheet.cssRules[s.sheet.cssRules.length];
+                        rule = s.sheet.cssRules[s.sheet.cssRules.length-1];
                     } else {
                         DT._bStylesheetFallback = true;
                     }
