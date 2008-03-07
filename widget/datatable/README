@@ -1,5 +1,13 @@
 DataTable Release Notes
 
+*** version 2.5.1 ***
+
+* Only split THEAD from TBODY markup for scrollable tables.
+* columnResizeEvent sends new width value.
+* Improved performance for adding, deleting, and updating rows dynamically.
+
+
+
 *** version 2.5.0 ***
 
 * Introduced YAHOO.widget.Paginator to manage pagination.

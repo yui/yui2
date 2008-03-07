@@ -2,16 +2,11 @@ DataTable Release Notes
 
 *** version 2.5.1 ***
 
-* Added DataSource response introspection via oParsedResponse.meta magic meta
-* Split the rendering of fixed headers to only scrollable tables
-* Removed call to handleSimplePagination from handleDataSourcePagination when
-  Records exist in RecordSet for destination page
-* Renamed onDataReturnSetRecords to onDataReturnSetRows (alias provided)
+* Only split THEAD from TBODY markup for scrollable tables.
+* columnResizeEvent sends new width value.
+* Improved performance for adding, deleting, and updating rows dynamically.
 
-*** version 2.5.0 ***
 
-* Changed Paginator default totalRecords from unlimited to 0
-* Paginator bug fixes for CurrentPageReport UI component
 
 *** version 2.5.0 ***
 
