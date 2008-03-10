@@ -1559,7 +1559,7 @@ if (!YAHOO.util.Event) {
                     item = onAvailStack[i];
                     if (item) {
                         el = this.getEl(item.id);
-                        if (el && (!item.checkReady || el.nextSibling || !tryAgain)) {
+if (el && (!item.checkReady || loadComplete || el.nextSibling || !tryAgain)) {
                             executeItem(el, item);
                             onAvailStack[i] = null;
                         } else {
