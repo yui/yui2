@@ -725,7 +725,7 @@ YAHOO.widget.LogReader.prototype = {
 
         var msg = Static.ENTRY_TEMPLATE.cloneNode(true);
         if (this.verboseOutput) {
-            YAHOO.util.Dom.addClass(msg,'yui-log-verbose');
+            msg.className += ' yui-log-verbose';
         }
 
         msg.innerHTML = YAHOO.lang.substitute(entryFormat, info);
