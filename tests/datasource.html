@@ -1,20 +1,31 @@
 <html>
 <head>
 <title>YUI DataSource Tests</title>
-<link type="text/css" rel="stylesheet" href="../build/logger/assets/logger.css" />
+<link type="text/css" rel="stylesheet" href="../build/logger/assets/skins/sam/logger.css" />
 <link type="text/css" rel="stylesheet" href="../build/yuitest/assets/testlogger.css" />
+<style type="text/css">
+    .yui-skin-sam .yui-log {
+        padding: 2.5em 1em 1em;
+        height: 90%;
+    }
+    .yui-skin-sam .yui-log .yui-log-bd {
+        width: auto;
+        height: 100%;
+    }
+</style>
 
-<script type="text/javascript" src="../build/yahoo/yahoo-min.js"></script>
-<script type="text/javascript" src="../build/dom/dom-min.js"></script>
-<script type="text/javascript" src="../build/event/event-min.js"></script>
-<script type="text/javascript" src="../build/logger/logger-min.js"></script>
-<script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
-<script type="text/javascript" src="../build/datasource/datasource-beta.js"></script>
 </head>
-<body>
+<body class="yui-skin-sam">
 <h1>DataSource Tests</h1>
 <p><input type="button" value="Run Tests" id="btnRun" disabled="true" /></p>
 
+<script type="text/javascript" src="../build/yahoo/yahoo.js"></script>
+<script type="text/javascript" src="../build/dom/dom.js"></script>
+<script type="text/javascript" src="../build/event/event.js"></script>
+<script type="text/javascript" src="../build/logger/logger.js"></script>
+<script type="text/javascript" src="../build/yuitest/yuitest.js"></script>
+<script type="text/javascript" src="../build/json/json.js"></script>
+<script type="text/javascript" src="../build/datasource/datasource-beta-debug.js"></script>
 <script type="text/javascript">
 
 (function() {
@@ -29,8 +40,32 @@
         TestLogger = YAHOO.tool.TestLogger,
         TestRunner = YAHOO.tool.TestRunner,
         TestSuite = YAHOO.tool.TestSuite,
+        lang = YAHOO.lang,
 
         DataSource = YAHOO.util.DataSource;
+
+
+    // Create utility function for pass-by-ref + reuse errors
+    var cloneObject = function(o) {
+        if (lang.isArray(o)) {
+            var a = [];
+            for (var i=0,l=o.length;i<l;i++) {
+                a[i] = cloneObject(o[i]);
+            }
+            return a;
+        } else if (typeof o === 'object' && o) {
+            var c = {};
+            for (var x in o) {
+                if (lang.hasOwnProperty(o, x)) {
+                    c[x] = cloneObject(o[x]);
+                }
+            }
+            return c;
+        }
+        else {
+            return o;
+        }
+    }
 
     /**
      *
@@ -52,7 +87,7 @@
     };
 
     DataSourceTestCase.prototype.createInstance = function(oConfigs) {
-        ds =  new DataSource((this.data||["a","b","c"]), oConfigs);
+        ds =  new DataSource((cloneObject(this.data)||["a","b","c"]), oConfigs);
         ds.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
         ds.responseSchema = {
             fields: ["a","b","c"]
@@ -200,24 +235,27 @@
             var oCallback = {
                 success:function(oRequest, oResponse, oPayload) {
                     Assert.areSame(this.data.ResultSet.Result[9]["Title"], oResponse.results[9]["Title"], "Incorrect parsing of String");
-                    Assert.areSame(this.data.ResultSet.Result[9]["MyArray"][0], oResponse.results[9]["MyArray"][0], "Incorrect parsing of Array index");
-                    Assert.areSame(this.data.ResultSet.Result[9]["Hy-phenated"], oResponse.results[9]["Hy-phenated"], "Incorrect parsing of hyphenated String");
-                    Assert.areSame(this.data.ResultSet.Result[9]["Array Index"], oResponse.results[9]["Array Index"], "Incorrect parsing of empty space");
+                    Assert.areSame(this.data.ResultSet.Result[9]["MyArray"][0], oResponse.results[9]["MyArray[0]"], "Incorrect parsing of Array index");
                     Assert.areSame(this.data.ResultSet.Result[9]["for"], oResponse.results[9]["for"], "Incorrect parsing of reserved word");
+
+                    // Verify invalids didn't parse
+                    Assert.isUndefined(oResponse.results[9]["Hy-phenated"], "Incorrect parsing of invalid dot syntax key with dash");
+                    Assert.isUndefined(oResponse.results[9]["Array Index"], "Incorrect parsing of invalid dot syntax key with empty space");
                 },
                 scope:this
             };
             ds.sendRequest(null,oCallback);
 
             // Nested schema
-            ds.responseSchema.fields = ["Nested.TotalReviews","Nested.Average-Rating","Nested.Total Ratings","Nested.for","Nested.5"];
+            ds.responseSchema.fields = ["Nested.TotalReviews","Nested.Average-Rating","Nested.Total Ratings","Nested.MyArray[0]"];
             var oCallback = {
                 success:function(oRequest, oResponse, oPayload) {
-                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["TotalReviews"], oResponse.results[9]["Nested"]["TotalReviews"], "Incorrect parsing of nested String");
-                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["Average-Rating"], oResponse.results[9]["Nested"]["Average-Rating"], "Incorrect parsing of nested hyphen");
-                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["Total Ratings"], oResponse.results[9]["Nested"]["Total Ratings"], "Incorrect parsing of nested empty space");
-                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["for"], oResponse.results[9]["Nested"]["for"], "Incorrect parsing of nested reserved word");
-                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["MyArray"][0], oResponse.results[9]["Nested"]["MyArray"][0], "Incorrect parsing of nested Array index");
+                    Assert.areSame(this.data.ResultSet.Result[9]["Nested"]["TotalReviews"], oResponse.results[9]["Nested.TotalReviews"], "Incorrect parsing of nested String");
+                    ArrayAssert.itemsAreSame(this.data.ResultSet.Result[9]["Nested"]["MyArray"][0], oResponse.results[9]["Nested.MyArray[0]"], "Incorrect parsing of nested Array index");
+
+                    // Verify invalids didn't parse
+                    Assert.isUndefined(oResponse.results[9]["Nested.Average-Rating"], "Incorrect parsing of invalid nested key containing hyphen");
+                    Assert.isUndefined(oResponse.results[9]["Nested.Total Ratings"], "Incorrect parsing of invalid dot syntax key containing empty space");
                 },
                 scope:this
             };
@@ -371,6 +409,7 @@
      */
     YAHOO.util.Event.addListener(window, "load", function() {
         var logger = new TestLogger();
+        logger.hideCategory('info');
 
         var datasourcesuite = new TestSuite("DataSource Test Suite");
         datasourcesuite.add(datasourceTest);
