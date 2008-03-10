@@ -18,7 +18,9 @@
  */
 (function() {
 
-    var Y=YAHOO, util=Y.util, lang=Y.lang, env=Y.env;
+    var Y=YAHOO, util=Y.util, lang=Y.lang, env=Y.env,
+        PROV = "_provides", SUPER = "_supersedes",
+        REQ = "expanded", AFTER = "_after";
  
     var YUI = {
 
@@ -364,44 +366,43 @@
 
         _config: function(o) {
 
-            if (!o) {
-                return;
-            }
-
-            // lang.augmentObject(this, o);
-
             // apply config values
-            for (var i in o) {
-                if (lang.hasOwnProperty(o, i)) {
-                    switch (i) {
-                        case "require":
+            if (o) {
+                for (var i in o) {
+                    if (lang.hasOwnProperty(o, i)) {
+                        if (i == "require") {
                             this.require(o[i]);
-                            break;
-
-                        case "filter":
-                            var f = o[i];
-
-                            if (typeof f === "string") {
-                                f = f.toUpperCase();
-
-                                // the logger must be available in order to use the debug
-                                // versions of the library
-                                if (f === "DEBUG") {
-                                    this.require("logger");
-                                }
-
-                                this.filter = this.FILTERS[f];
-                            } else {
-                                this.filter = f;
-                            }
-
-                            break;
-
-                        default:
+                        } else {
                             this[i] = o[i];
+                        }
                     }
                 }
             }
+
+            // fix filter
+            var f = this.filter;
+
+            if (lang.isString(f)) {
+                f = f.toUpperCase();
+
+                // the logger must be available in order to use the debug
+                // versions of the library
+                if (f === "DEBUG") {
+                    this.require("logger");
+                }
+
+                // hack to handle a a bug where LogWriter is being instantiated
+                // at load time, and the loader has no way to sort above it
+                // at the moment.
+                if (!Y.widget.LogWriter) {
+                    Y.widget.LogWriter = function() {
+                        return Y;
+                    };
+                }
+
+                this.filter = this.FILTERS[f];
+            }
+
         },
 
         /** Add a new module to the component metadata.         
@@ -441,54 +442,51 @@
          */
         require: function(what) {
             var a = (typeof what === "string") ? arguments : what;
-
             this.dirty = true;
-
-            for (var i=0; i<a.length; i=i+1) {
-                this.required[a[i]] = true;
-                var s = this.parseSkin(a[i]);
-                if (s) {
-                    this._addSkin(s.skin, s.module);
-                }
-            }
             YUI.ObjectUtil.appendArray(this.required, a);
         },
-
 
         /**
          * Adds the skin def to the module info
          * @method _addSkin
+         * @param skin {string} the name of the skin
+         * @param mod {string} the name of the module
+         * @return {string} the module name for the skin
          * @private
          */
         _addSkin: function(skin, mod) {
 
             // Add a module definition for the skin rollup css
-            var name = this.formatSkin(skin);
-            if (!this.moduleInfo[name]) {
+            var name = this.formatSkin(skin), info = this.moduleInfo,
+                sinf = this.skin;
+            if (!info[name]) {
+                // Y.log('adding skin ' + name);
                 this.addModule({
                     'name': name,
                     'type': 'css',
-                    'path': this.skin.base + skin + "/" + this.skin.path,
+                    'path': sinf.base + skin + "/" + sinf.path,
                     //'supersedes': '*',
-                    'rollup': this.skin.rollup
+                    'after': sinf.after,
+                    'rollup': sinf.rollup
                 });
             }
 
             // Add a module definition for the module-specific skin css
             if (mod) {
                 name = this.formatSkin(skin, mod);
-                if (!this.moduleInfo[name]) {
-                    var mdef = this.moduleInfo[mod];
-                    var pkg = mdef.pkg || mod;
+                if (!info[name]) {
+                    var mdef = info[mod], pkg = mdef.pkg || mod;
+                    // Y.log('adding skin ' + name);
                     this.addModule({
                         'name': name,
                         'type': 'css',
-                        //'path': this.skin.base + skin + "/" + mod + ".css"
-                        // 'path': mod + '/' + this.skin.base + skin + "/" + mod + ".css"
-                        'path': pkg + '/' + this.skin.base + skin + "/" + mod + ".css"
+                        'after': sinf.after,
+                        'path': pkg + '/' + sinf.base + skin + "/" + mod + ".css"
                     });
                 }
             }
+
+            return name;
         },
 
         /**
@@ -517,16 +515,16 @@
                 // way to do this is go through the list of required items (this
                 // assumes that _skin is called before getRequires is called on
                 // the module.
-                if (m.skinnable) {
-                    var req=this.required, l=req.length;
-                    for (var j=0; j<l; j=j+1) {
-                        // YAHOO.log('checking ' + r[j]);
-                        if (req[j].indexOf(r[j]) > -1) {
-                            // YAHOO.log('adding ' + r[j]);
-                            d.push(req[j]);
-                        }
-                    }
-                }
+                // if (m.skinnable) {
+                //     var req=this.required, l=req.length;
+                //     for (var j=0; j<l; j=j+1) {
+                //         // YAHOO.log('checking ' + r[j]);
+                //         if (req[j].indexOf(r[j]) > -1) {
+                //             // YAHOO.log('adding ' + r[j]);
+                //             d.push(req[j]);
+                //         }
+                //     }
+                // }
             }
 
             if (o && this.loadOptional) {
@@ -541,26 +539,59 @@
             return mod.expanded;
         },
 
+
         /**
          * Returns an object literal of the modules the supplied module satisfies
          * @method getProvides
-         * @param mod The module definition from moduleInfo
+         * @param name{string} The name of the module
+         * @param notMe {string} don't add this module name, only include superseded modules
          * @return what this module provides
          */
-        getProvides: function(name) {
-            var mod = this.moduleInfo[name];
+        getProvides: function(name, notMe) {
+            var addMe = !(notMe), ckey = (addMe) ? PROV : SUPER;
 
-            var o = {};
-            o[name] = true;
+            if (this.moduleInfo[name][ckey]) {
+// Y.log('cached: ' + name + ' ' + ckey + ' ' + lang.dump(this.moduleInfo[name][ckey], 0));
+                return this.moduleInfo[name][ckey];
+            }
 
-            var s = mod && mod.supersedes;
+            var m = this.moduleInfo[name], o = {},
+                s = m && m.supersedes, done={}, me = this;
 
-            YUI.ObjectUtil.appendArray(o, s);
+            // use worker to break cycles
+            var add = function(mm) {
+                if (!done[mm]) {
+                    // Y.log(name + ' provides worker trying: ' + mm);
+                    done[mm] = true;
+                    // we always want the return value normal behavior 
+                    // (provides) for superseded modules.
+                    lang.augmentObject(o, me.getProvides(mm));
+                } 
+                
+                // else {
+                // Y.log(name + ' provides worker skipping done: ' + mm);
+                // }
+            };
 
-            // YAHOO.log(this.sorted + ", " + name + " provides " + YUI.ObjectUtil.keys(o));
+            // calculate superseded modules
+            if (s) {
+                for (var i=0; i<s.length; i=i+1) {
+                    add(s[i]);
+                }
+            }
 
-            return o;
+            // supersedes cache
+            m[SUPER] = o;
+            // provides cache
+            m[PROV] = lang.merge(o);
+            m[PROV][name] = true;
+
+// Y.log(name + " supersedes " + lang.dump(m[SUPER], 0));
+// Y.log(name + " provides " + lang.dump(m[PROV], 0));
+
+            return m[ckey];
         },
+
 
         /**
          * Calculates the dependency tree, the result is stored in the sorted 
@@ -573,7 +604,7 @@
                 this._config(o);
                 this._setup();
                 this._explode();
-                this._skin();
+                // this._skin(); // deprecated
                 if (this.allowRollup) {
                     this._rollup();
                 }
@@ -595,27 +626,61 @@
          */
         _setup: function() {
 
-            this.loaded = lang.merge(this.inserted); // shallow clone
-            
-            if (!this._sandbox) {
-                this.loaded = lang.merge(this.loaded, env.modules);
+            var info = this.moduleInfo, name, i, j;
+
+            // Create skin modules
+            for (name in info) {
+                var m = info[name];
+                if (m && m.skinnable) {
+                    // Y.log("skinning: " + name);
+                    var o=this.skin.overrides, smod;
+                    if (o && o[name]) {
+                        for (i=0; i<o[name].length; i=i+1) {
+                            smod = this._addSkin(o[name][i], name);
+                        }
+                    } else {
+                        smod = this._addSkin(this.skin.defaultSkin, name);
+                    }
+
+                    m.requires.push(smod);
+                }
+
             }
 
-            // Y.log("already loaded stuff: " + lang.dump(this.loaded, 0));
+            var l = lang.merge(this.inserted); // shallow clone
+            
+            if (!this._sandbox) {
+                l = lang.merge(l, env.modules);
+            }
+
+            // Y.log("Already loaded stuff: " + lang.dump(l, 0));
 
             // add the ignore list to the list of loaded packages
             if (this.ignore) {
-                YUI.ObjectUtil.appendArray(this.loaded, this.ignore);
+                YUI.ObjectUtil.appendArray(l, this.ignore);
             }
 
             // remove modules on the force list from the loaded list
             if (this.force) {
-                for (var i=0; i<this.force.length; i=i+1) {
-                    if (this.force[i] in this.loaded) {
-                        delete this.loaded[this.force[i]];
+                for (i=0; i<this.force.length; i=i+1) {
+                    if (this.force[i] in l) {
+                        delete l[this.force[i]];
                     }
                 }
             }
+
+            // expand the list to include superseded modules
+            for (j in l) {
+                // Y.log("expanding: " + j);
+                if (lang.hasOwnProperty(l, j)) {
+                    lang.augmentObject(l, this.getProvides(j));
+                }
+            }
+
+            // Y.log("loaded expanded: " + lang.dump(l, 0));
+
+            this.loaded = l;
+
         },
         
 
@@ -648,24 +713,10 @@
          * requested modules are skinnable
          * @method _skin
          * @private
+         * @deprecated skins modules are generated for all skinnable
          */
         _skin: function() {
 
-            var r=this.required, i, mod;
-
-            for (i in r) {
-                mod = this.moduleInfo[i];
-                if (mod && mod.skinnable) {
-                    var o=this.skin.overrides, j;
-                    if (o && o[i]) {
-                        for (j=0; j<o[i].length; j=j+1) {
-                            this.require(this.formatSkin(o[i][j], i));
-                        }
-                    } else {
-                        this.require(this.formatSkin(this.skin.defaultSkin, i));
-                    }
-                }
-            }
         },
 
         /**

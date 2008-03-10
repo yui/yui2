@@ -5,8 +5,11 @@
         'defaultSkin': 'sam',
         'base': 'assets/skins/',
         'path': 'skin.css',
+        'after': ['reset', 'fonts', 'grids', 'base'],
         'rollup': 3
     },
+
+    dupsAllowed: ['yahoo', 'get'],
 
     'moduleInfo': {
 
@@ -69,8 +72,9 @@
             'type': 'js',
             'path': 'container/container-min.js',
             'requires': ['dom', 'event'],
-            // button is optional, but creates a circular dep
-            //'optional': ['dragdrop', 'animation', 'connection', 'connection', 'button'],
+            // button is also optional, but this creates a circular 
+            // dependency when loadOptional is specified.  button
+            // optionally includes menu, menu requires container.
             'optional': ['dragdrop', 'animation', 'connection'],
             'supersedes': ['containercore'],
             'skinnable': true
@@ -289,8 +293,8 @@
         'utilities': {
             'type': 'js',
             'path': 'utilities/utilities.js',
-            'supersedes': ['yahoo', 'event', 'dragdrop', 'animation', 'dom', 'connection', 'element', 'yahoo-dom-event'],
-            'rollup': 6
+            'supersedes': ['yahoo', 'event', 'dragdrop', 'animation', 'dom', 'connection', 'element', 'yahoo-dom-event', 'get', 'yuiloader', 'yuiloader-dom-event'],
+            'rollup': 8
         },
 
         'yahoo': {
@@ -309,6 +313,13 @@
             'type': 'js',
             'path': 'yuiloader/yuiloader-beta-min.js',
             'supersedes': ['yahoo', 'get']
+        },
+
+        'yuiloader-dom-event': {
+            'type': 'js',
+            'path': 'yuiloader-dom-event/yuiloader-dom-event.js',
+            'supersedes': ['yahoo', 'dom', 'event', 'get', 'yuiloader', 'yahoo-dom-event'],
+            'rollup': 5
         },
 
         'yuitest': {
