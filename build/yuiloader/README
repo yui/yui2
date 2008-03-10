@@ -11,14 +11,15 @@ yuiloader - Release Notes
    * Modules now can have an 'after' property that can be used to specify
      a list of modules that are not dependencies, but need to be included
      above the module if they are present.
-   * base will always be included after reset, fonts, and grids, skins will
-     be included after all four of those.
+   * base will always be included after reset, fonts, and grids. Skin css
+     will be included after all of the above.
    * Added a new rollup: yuiloader-dom-event (yuiloader includes yahoo and get as well).
    * utilities.js now includes yuiloader and get.
    * loaded modules which supersede other modules but don't allow automatic 
      rollup work correctly (the superseded modules won't load).
    * Addessed a source order issue when logger is included after a component
      which tries to instantiate it at load time.
+   * the filter property can be set on the instance.
 
 2.5.0
    * Updated metadata for 2.5.0
