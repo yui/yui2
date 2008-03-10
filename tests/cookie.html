@@ -20,7 +20,6 @@ YAHOO.namespace("test");
 
 YAHOO.test.cookie_test = (function(){
 
-    var testCookieString = "YLS=v=1&p=0&n=9; BA=ba=8044&ip=207.126.230.225&t=1196880891; B=1ff1cn93lbv9g&b=3&s=ec; PH=fn=Uwvz.dSbEP8HCp7UH8lrbms-&l=en-US; F=a=xlA0DVQMvT9xdiu51ezfgpRU7sdz6bLd1XiQrAchhEegEaDCET47zqF.zd1sa1taNnlj7KwyFqkY8GxAnvBW5Gsms51yR3wvvWYJfRU9qf.j2BWg0TEVRN8jTxtK4zo-&b=3AA4; myc=d=YATj9yRbwkCxVIvkQtXfg24KR3To7uKY6ZsgomGi_y5LG96BgQEO2uBy1r4rawqp2NCYNEGai5hxp9reYMHi1YRqdi6bulTnhzUFVwGdpnaO62zvvSPRwA09HNeH0Iru1WzaYBn63M3zULs5BHkA5jhhwZ.__Axfu3jva7V29eEwPCdqLdVsGsDi2J1JgXJGFXTjEu.07mOKm7RLkuF19kT2Qsa75qTZE8JivD9a4rUm8_17dK6cd2RvbDNU3Z4Ob6QiD0lE6k3pttX.C7nIfadGyr7bzbMYHY86Ya5_7YmissrB3P6BO5cNUGxYdjc2EakFAPK5xGYAtZDa54MLix7VjO_wOusMEY8KbFD04uOCm5Xz3YKyogjruOZGunVNFpBdhwshDBYotYPHfzXwWNs0WjWeAQd54L_WSMNTzGLw_OI6Zkoqdhiuul0efieOXQPNMJVXkc5EKmAud.r38dHC80lye_E1va1RKGL92nHCl7J1MaQWGNscdZj2wcGVlXPTHbOFZj2mPSYgQ9cDiyf4kEIun3nUhcARlkvNS9gT_y5Z8j0BvMheD5AGzIgW6pKRWq7ZTxDQ&v=2; myc_s=d=9hvlWei140Cf7FqOWejmD3d3X.hQhJE6NuVXuTQCEsdMmwI8hLvfXI0_M0Rm7j0dJmezPcWRvIMocrtvpguWCGKf0IYgoIXJppMGXTdstSCUXIpaZoCAuD6yifFd86ec4uT9ZVVnA37egFJ9U9od12F7Y0Jc_mz2B0IC_jBovlthXdk5.PyKOguLja6DrEvMn5hEN1XbCYrsp.pTVSI2s6zxkfsStIiOp0MvU1wD_.3r4hQxnCaVIeeWqC8ZlpYtaxghDK8VLxQp6EU6UFhk1bjSF_XuGkS45umsIopOzdBvNGfagiOehra5TznpVcmVFCTYjUd0pWA12QwmKRJsGO64tZ26tu065kiGmwzyq6ad1KHglyHaUTNyGJ1ho8zCikiGGbnPCy857wLEzpEYldl1Av7xqVYb3kpi5Pl.Z5pOQnPOn4P9DTrN7inTENGCGNLYnfL7OxxX39kjxP6OufMi6pwfKkRhPS9DdSYSIa6nWIEonXyV3ckglpONaqgpSOjqPLQyy2kRuvldgPH9cldBM.aAnGHD9eHBo8d8escr_aM0rZMqKa.PN569Tbzme5HmcfFUt.mL5_UfNe88ZJ7EcZfznQM3O48YfdsEXs4necZzglXc0aDon6JXX_RFjJ8ZWuv184KSAQdCk5fe&v=2; YCorp=id%3D129818%26userid%3Dnzakas%26sign%3D78556ea5cbd849cf261713d5339a1b6c%26time%3D1196965844%26expires%3D480%26ip%3D10.72.114.202%26roles%3D%7C1.IE%7C121.U%7C13.V%7C20.U%7C266.U%7C50.U%7C6951.I%7C6982.I%7C7181.I%7C7330.U%7C7490.U%7C7585.U%7C7741.U%7C%5BProperty%7CViewers%5D%7C; YBY=id%3D129818%26userid%3Dnzakas%26sign%3DrBWXjsWBJpSlrRJ9cebuwusuVL9AH127LcU7xWdtR_HjtFLHNFhuf5eNLR2NbYVkOOYfeY8JlR8xtK_uA5xhY6.4_HhrdOW516PaV6LdHmwaIZWwa4Tvz85Fy8A1ccztFFsqRwi5n56BzT.bmkHtwPcjFX1cYFl.3NpezEOidS4-%26time%3D1196965844%26expires%3D480%26ip%3D10.72.114.202%26roles%3D%7C1.IE%7C121.U%7C13.V%7C20.U%7C266.U%7C50.U%7C6951.I%7C6982.I%7C7181.I%7C7330.U%7C7490.U%7C7585.U%7C7741.U%7C%5BProperty%7CViewers%5D%7C; RT=s=1196880920819&u=&r=http%3A//upcoming.yahoo.com/event/343493/; Y=v=1&n=05eotct29o4tq&l=d827eb0i.p0a0i/o&p=m2e01t8053000000&r=g8&lg=en-US&intl=us&np=1; HP=1; U_mtupes=YToyOntzOjE6ImIiO3M6MTM6IjFmZjFjbjkzbGJ2OWciO3M6MjoibXQiO2k6MTE5Njk2ODkzMTt9; CV=T=1196980007; U=mt=6A8PBp2MhYo0EB_jN8aRyLv2Mj6kBSVis9ZPy2Ru&ux=0bHWHB&un=7u2md2fadd4tt; YGCV=d=; T=z=srHWHBs/uaHBKumRlVuz/YdMjAwBjYyMk4zN043MDE-&a=YAE&sk=DAAb1nIr0ng/N6&ks=EAAkGKmIl5hMrYUsdX.1LgigA--~A&d=c2wBTlRjM0FURTFOVGswTURrd056WS0BYQFZQUUBb2sBWlcwLQF0aXABUDduNWhEAXp6AXNySFdIQkE3RQ--; sS=l=d827eb0i.p0a0i%2Fo; s_cc=true; s_sq=";
     var Assert = YAHOO.util.Assert;
     var ObjectAssert = YAHOO.util.ObjectAssert;
     var Profiler = YAHOO.tool.Profiler;
@@ -134,6 +133,17 @@ YAHOO.test.cookie_test = (function(){
             ObjectAssert.hasProperty("B", cookies, "Cookie 'B' is missing.");
             ObjectAssert.hasProperty("LYC", cookies, "Cookie 'LYC' is missing.");
             ObjectAssert.hasProperty("l_PD3", cookies, "Cookie 'l_PD3' is missing.");                       
+        },
+        
+        testParseCookieStringIncorrectFormat: function(){
+            var cookieString = "SESSION=27bedbdf3d35252d0db07f34d81dcca6; STATS=OK; SCREEN=1280x1024; undefined; ys-bottom-preview=o%3Aheight%3Dn%253A389"
+            var cookies = YAHOO.util.Cookie._parseCookieString(cookieString);
+            
+            ObjectAssert.hasProperty("SCREEN", cookies, "Cookie 'SCREEN' is missing.");
+            ObjectAssert.hasProperty("STATS", cookies, "Cookie 'STATS' is missing.");
+            ObjectAssert.hasProperty("SESSION", cookies, "Cookie 'SESSION' is missing.");
+            ObjectAssert.hasProperty("ys-bottom-preview", cookies, "Cookie 'ys-bottom-preview' is missing.");
+            ObjectAssert.hasProperty("undefined", cookies, "Cookie 'undefined' is missing.");
         },
         
         testParseCookieStringWithHash : function(){
