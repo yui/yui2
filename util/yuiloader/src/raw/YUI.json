@@ -1,5 +1,4 @@
 {
-
     'base': 'http://yui.yahooapis.com/2.5.1/build/',
 
     'skin': {
@@ -27,7 +26,8 @@
 
         'base': {
             'type': 'css',
-            'path': 'base/base-min.css'
+            'path': 'base/base-min.css',
+            'after': ['reset', 'fonts', 'grids']
         },
 
         'button': {
@@ -225,7 +225,7 @@
             'type': 'css',
             'path': 'reset-fonts-grids/reset-fonts-grids.css',
             'supersedes': ['reset', 'fonts', 'grids', 'reset-fonts'],
-            'rollup': 3
+            'rollup': 4
         },
 
         'reset-fonts': {
@@ -307,7 +307,8 @@
 
         'yuiloader': {
             'type': 'js',
-            'path': 'yuiloader/yuiloader-beta-min.js'
+            'path': 'yuiloader/yuiloader-beta-min.js',
+            'supersedes': ['yahoo', 'get']
         },
 
         'yuitest': {

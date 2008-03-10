@@ -31,7 +31,6 @@
          * @static
          */
         info: {
-
     'base': 'http://yui.yahooapis.com/2.5.1/build/',
 
     'skin': {
@@ -59,7 +58,8 @@
 
         'base': {
             'type': 'css',
-            'path': 'base/base-min.css'
+            'path': 'base/base-min.css',
+            'after': ['reset', 'fonts', 'grids']
         },
 
         'button': {
@@ -257,7 +257,7 @@
             'type': 'css',
             'path': 'reset-fonts-grids/reset-fonts-grids.css',
             'supersedes': ['reset', 'fonts', 'grids', 'reset-fonts'],
-            'rollup': 3
+            'rollup': 4
         },
 
         'reset-fonts': {
@@ -339,7 +339,8 @@
 
         'yuiloader': {
             'type': 'js',
-            'path': 'yuiloader/yuiloader-beta-min.js'
+            'path': 'yuiloader/yuiloader-beta-min.js',
+            'supersedes': ['yahoo', 'get']
         },
 
         'yuitest': {
@@ -513,7 +514,7 @@
          * A list of modules that should always be loaded, even
          * if they have already been inserted into the page.
          * @property force
-         * @type string
+         * @type string[]
          */
         this.force = null;
 
@@ -732,6 +733,7 @@
          *     <dt>requires:</dt>   <dd>the modules required by this component</dd>
          *     <dt>optional:</dt>   <dd>the optional modules for this component</dd>
          *     <dt>supersedes:</dt> <dd>the modules this component replaces</dd>
+         *     <dt>after:</dt>      <dd>modules the components which, if present, should be sorted above this one</dd>
          *     <dt>rollup:</dt>     <dd>the number of superseded modules required for automatic rollup</dd>
          *     <dt>fullpath:</dt>   <dd>If fullpath is specified, this is used instead of the configured base + path</dd>
          *     <dt>skinnable:</dt>  <dd>flag to determine if skin assets should automatically be pulled in</dd>
@@ -1183,12 +1185,20 @@
                     return false;
                 }
 
-                var ii, mm=info[aa], rr=mm && mm.expanded;
+                var ii, mm=info[aa], rr=mm && mm.expanded, 
+                    after = mm && mm.after;
 
+                // check if this module requires the other directly
                 if (rr && YUI.ArrayUtil.indexOf(rr, bb) > -1) {
                     return true;
                 }
 
+                // check if this module should be sorted after the other
+                if (after && YUI.ArrayUtil.indexOf(after, bb) > -1) {
+                    return true;
+                }
+
+                // check if this module requires one the other supersedes
                 var ss=info[bb] && info[bb].supersedes;
                 if (ss) {
                     for (ii=0; ii<ss.length; ii=ii+1) {
