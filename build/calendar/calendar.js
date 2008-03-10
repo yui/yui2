@@ -1999,9 +1999,9 @@ YAHOO.widget.Calendar.prototype = {
 		* @default false
 		*/
 		this.cfg.addProperty(defCfg.MULTI_SELECT.key,	{ value:defCfg.MULTI_SELECT.value, handler:this.configOptions, validator:this.cfg.checkBoolean } );
-	
+
 		/**
-		* The weekday the week begins on. Default is 0 (Sunday).
+		* The weekday the week begins on. Default is 0 (Sunday = 0, Monday = 1 ... Saturday = 6).
 		* @config START_WEEKDAY
 		* @type number
 		* @default 0
@@ -2706,7 +2706,7 @@ YAHOO.widget.Calendar.prototype = {
 	*/
 	renderHeader : function(html) {
 		var colSpan = 7;
-		
+
 		var DEPR_NAV_LEFT = "us/tr/callt.gif";
 		var DEPR_NAV_RIGHT = "us/tr/calrt.gif";	
 		var defCfg = YAHOO.widget.Calendar._DEFAULT_CONFIG;
@@ -2718,14 +2718,14 @@ YAHOO.widget.Calendar.prototype = {
 		if (this.cfg.getProperty(defCfg.SHOW_WEEK_FOOTER.key)) {
 			colSpan += 1;
 		}
-	
+
 		html[html.length] = "<thead>";
 		html[html.length] =		"<tr>";
 		html[html.length] =			'<th colspan="' + colSpan + '" class="' + this.Style.CSS_HEADER_TEXT + '">';
 		html[html.length] =				'<div class="' + this.Style.CSS_HEADER + '">';
-	
+
 		var renderLeft, renderRight = false;
-	
+
 		if (this.parent) {
 			if (this.index === 0) {
 				renderLeft = true;
@@ -2737,7 +2737,7 @@ YAHOO.widget.Calendar.prototype = {
 			renderLeft = true;
 			renderRight = true;
 		}
-	
+
 		if (renderLeft) {
 			var leftArrow = this.cfg.getProperty(defCfg.NAV_ARROW_LEFT.key);
 			// Check for deprecated customization - If someone set IMG_ROOT, but didn't set NAV_ARROW_LEFT, then set NAV_ARROW_LEFT to the old deprecated value
@@ -2827,10 +2827,11 @@ YAHOO.widget.Calendar.prototype = {
 		if (this.preMonthDays < 0) {
 			this.preMonthDays += 7;
 		}
-		
+
 		this.monthDays = DM.findMonthEnd(workingDate).getDate();
 		this.postMonthDays = CAL.DISPLAY_DAYS-this.preMonthDays-this.monthDays;
-		
+
+
 		workingDate = DM.subtract(workingDate, DM.DAY, this.preMonthDays);
 	
 		var weekNum,
@@ -4158,13 +4159,13 @@ YAHOO.widget.Calendar.prototype = {
 	* Adds a weekday to the render stack. The function reference passed to this method will be executed
 	* when a date cell matches the weekday passed to this method.
 	* @method addWeekdayRenderer
-	* @param	{Number}	weekday		The weekday (0-6) to associate with this renderer
+	* @param	{Number}	weekday		The weekday (Sunday = 1, Monday = 2 ... Saturday = 7) to associate with this renderer
 	* @param	{Function}	fnRender	The function executed to render cells that match the render rules for this renderer.
 	*/
 	addWeekdayRenderer : function(weekday, fnRender) {
 		this._addRenderer(YAHOO.widget.Calendar.WEEKDAY,[weekday],fnRender);
 	},
-	
+
 	// END RENDERER METHODS
 	
 	// BEGIN CSS METHODS
