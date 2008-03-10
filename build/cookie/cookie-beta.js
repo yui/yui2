@@ -129,10 +129,20 @@ YAHOO.util.Cookie = {
                 var cookieParts /*:Array*/ = text.split(/;\s/g);
                 var cookieName /*:String*/ = null;
                 var cookieValue /*:String*/ = null;
+                var cookieNameValue /*:Array*/ = null;
                 
                 for (var i=0, len=cookieParts.length; i < len; i++){
-                    cookieName = decodeURIComponent(cookieParts[i].match(/([^=]+)=/i)[1]);
-                    cookieValue = decodeURIComponent(cookieParts[i].substring(cookieName.length+1));
+                
+                    //check for normally-formatted cookie (name-value)
+                    cookieNameValue = cookieParts[i].match(/([^=]+)=/i);
+                    if (cookieNameValue instanceof Array){
+                        cookieName = decodeURIComponent(cookieNameValue[1]);
+                        cookieValue = decodeURIComponent(cookieParts[i].substring(cookieName.length+1));
+                    } else {
+                        //means the cookie does not have an "=", so treat it as a boolean flag
+                        cookieName = decodeURIComponent(cookieParts[i]);
+                        cookieValue = true;
+                    }
                     cookies[cookieName] = cookieValue;
                 }
             }
@@ -352,4 +362,5 @@ YAHOO.util.Cookie = {
     }    
 
 };
+
 YAHOO.register("cookie", YAHOO.util.Cookie, {version: "@VERSION@", build: "@BUILD@"});
