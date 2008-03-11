@@ -290,7 +290,6 @@ YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
      * @return {int} The number of listeners unsubscribed
      */
     unsubscribeAll: function() {
-        // for (var i=0, len=this.subscribers.length; i<len; ++i) {
         for (var i=this.subscribers.length-1; i>-1; i--) {
             this._delete(i);
         }

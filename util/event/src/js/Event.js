@@ -572,7 +572,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                 var ok=true, le, lh, li, scope, ret;
                 
                 lh = legacyHandlers[legacyIndex].slice();
-                for (var i=0,len=lh.length; i<len; ++i) {
+                for (var i=0, len=lh.length; i<len; ++i) {
                 // for (var i in lh.length) {
                     li = lh[i];
                     if ( li && li[this.WFN] ) {
@@ -965,7 +965,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
              * @private
              */
             _getCacheIndex: function(el, sType, fn) {
-                for (var i=listeners.length-1; i>-1; i--) {
+                for (var i=0, l=listeners.length; i<l; i=i+1) {
                     var li = listeners[i];
                     if ( li                 && 
                          li[this.FN] == fn  && 
@@ -1160,10 +1160,10 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     item.fn.call(scope, item.obj);
                 };
 
-                var i,len,item,el;
+                var i, len, item, el;
 
                 // onAvailable onContentReady
-                for (i=onAvailStack.length-1; i>-1; i--) {
+                for (i=0, len=onAvailStack.length; i<len; i=i+1) {
                     item = onAvailStack[i];
                     if (item) {
                         el = this.getEl(item.id);
@@ -1253,7 +1253,7 @@ if (el && (!item.checkReady || loadComplete || el.nextSibling || !tryAgain)) {
                 for (var j=0;j<searchLists.length; j=j+1) {
                     var searchList = searchLists[j];
                     if (searchList) {
-                        for (var i=searchList.length-1; i>-1; i--) {
+                        for (var i=0,len=searchList.length; i<len ; ++i) {
                             var l = searchList[i];
                             if ( l  && l[this.EL] === oEl && 
                                     (!sType || sType === l[this.TYPE]) ) {
