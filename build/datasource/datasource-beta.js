@@ -399,12 +399,13 @@ YAHOO.util.DataSource.prototype.responseType = YAHOO.util.DataSource.TYPE_UNKNOW
  *
  * <dl>
  * <dt>resultsList</dt> <dd>Pointer to array of tabular data</dd>
- * <dt>totalRecords</dt> <dd>Pointer to number of records (JSON/XML over XHR only)</dd>
  * <dt>resultNode</dt> <dd>Pointer to node name of row data (XML data only)</dd>
  * <dt>recordDelim</dt> <dd>Record delimiter (text data only)</dd>
  * <dt>fieldDelim</dt> <dd>Field delimiter (text data only)</dd>
  * <dt>fields</dt> <dd>Array of field names (aka keys), or array of object literals
  * such as: {key:"fieldname",parser:YAHOO.util.DataSource.parseDate}</dd>
+ * <dt>metaFields</dt> <dd>Object literal of keys to include in the oParsedResponse.meta collection</dd>
+ * <dt>metaNode</dt> <dd>Name of the node under which to search for meta information in XML response data</dd>
  * </dl>
  *
  * @property responseSchema
