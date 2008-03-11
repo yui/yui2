@@ -21,6 +21,7 @@ yuiloader - Release Notes
      which tries to instantiate it at load time.
    * The filter property can be set on the instance.
    * Custom css modules are always sorted below YUI css.
+   * The loader will not attempt to rollup the skin css for custom skinnable modules.
 
 2.5.0
    * Updated metadata for 2.5.0

@@ -2372,10 +2372,10 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          *     <dt>name:</dt>       <dd>required, the component name</dd>
          *     <dt>type:</dt>       <dd>required, the component type (js or css)</dd>
          *     <dt>path:</dt>       <dd>required, the path to the script from "base"</dd>
-         *     <dt>requires:</dt>   <dd>the modules required by this component</dd>
-         *     <dt>optional:</dt>   <dd>the optional modules for this component</dd>
-         *     <dt>supersedes:</dt> <dd>the modules this component replaces</dd>
-         *     <dt>after:</dt>      <dd>modules the components which, if present, should be sorted above this one</dd>
+         *     <dt>requires:</dt>   <dd>array of modules required by this component</dd>
+         *     <dt>optional:</dt>   <dd>array of optional modules for this component</dd>
+         *     <dt>supersedes:</dt> <dd>array of the modules this component replaces</dd>
+         *     <dt>after:</dt>      <dd>array of modules the components which, if present, should be sorted above this one</dd>
          *     <dt>rollup:</dt>     <dd>the number of superseded modules required for automatic rollup</dd>
          *     <dt>fullpath:</dt>   <dd>If fullpath is specified, this is used instead of the configured base + path</dd>
          *     <dt>skinnable:</dt>  <dd>flag to determine if skin assets should automatically be pulled in</dd>
@@ -2392,6 +2392,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             }
 
             o.ext = ('ext' in o) ? o.ext : true;
+            o.requires = o.requires || [];
 
             this.moduleInfo[o.name] = o;
             this.dirty = true;
@@ -2422,7 +2423,9 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
 
             // Add a module definition for the skin rollup css
             var name = this.formatSkin(skin), info = this.moduleInfo,
-                sinf = this.skin;
+                sinf = this.skin, ext = info[mod] && info[mod].ext;
+
+            // Y.log('ext? ' + mod + ": " + ext);
             if (!info[name]) {
                 // Y.log('adding skin ' + name);
                 this.addModule({
@@ -2432,7 +2435,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                     //'supersedes': '*',
                     'after': sinf.after,
                     'rollup': sinf.rollup,
-                    'ext': false
+                    'ext': ext
                 });
             }
 
@@ -2447,7 +2450,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                         'type': 'css',
                         'after': sinf.after,
                         'path': pkg + '/' + sinf.base + skin + '/' + mod + '.css',
-                        'ext': false
+                        'ext': ext
                     });
                 }
             }
@@ -2763,9 +2766,10 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                             continue;
                         }
 
-                        var skin = this.parseSkin(i), c = 0;
-                        if (skin) {
+                        var skin = (m.ext) ? false : this.parseSkin(i), c = 0;
 
+                        // Y.log('skin? ' + i + ": " + skin);
+                        if (skin) {
                             for (j in r) {
                                 if (i !== j && this.parseSkin(j)) {
                                     c++;
@@ -2845,8 +2849,10 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
                             var skin_pre = this.SKIN_PREFIX + skinDef.skin;
                             //YAHOO.log("skin_pre: " + skin_pre);
                             for (j in r) {
-                                if (j !== i && j.indexOf(skin_pre) > -1) {
-                                    //YAHOO.log ("removing component skin: " + j);
+                                m = this.moduleInfo[j];
+                                var ext = m && m.ext;
+                                if (!ext && j !== i && j.indexOf(skin_pre) > -1) {
+                                    // Y.log ("removing component skin: " + j);
                                     delete r[j];
                                 }
                             }
