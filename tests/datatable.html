@@ -278,29 +278,29 @@
 
         testGetFirstTrEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elRow = dt.getFirstTrEl();
                 var oTestRecord = dt._oRecordSet._records[0];
     
                 Assert.areSame(dt.getId()+"-bdrow0", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Expected row and Record to be in sync");
-            });
+            //});
         },
 
         testGetLastTrEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elRow = dt.getLastTrEl();
                 var oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 
-                Assert.areSame(dt.getId()+"-bdrow3", elRow.id, "Unexpected DOM ID");
+                Assert.areSame(dt.getId()+"-bdrow"+elRow.sectionRowIndex, elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Expected row and Record to be in sync");
-            });
+            //});
         },
         
         testGetTrEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elRow = dt.getTrEl(dt.getId()+"-bdrow0");
                 var elFirstTr = dt.getTbodyEl().rows[0];
     
@@ -317,12 +317,12 @@
                 elRow = dt.getTrEl(dt._oRecordSet._records[0]);
     
                 Assert.areSame(elFirstTr, elRow, "Record instance: TR el mismatch");
-            });
+            //});
         },
 
         testGetNextTrEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elFirstTr = dt.getTbodyEl().rows[0];
                 var elSecondTr = dt.getTbodyEl().rows[1];
                 var elTr = dt.getNextTrEl(elFirstTr);
@@ -338,12 +338,12 @@
                 elTr = dt.getNextTrEl(elLastTr);
     
                 Assert.areSame(null, elTr, "Expected null");
-            });
+            //});
         },
 
         testGetPreviousTrEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elFirstTr = dt.getTbodyEl().rows[0];
                 var elTr = dt.getPreviousTrEl(elFirstTr);
     
@@ -359,12 +359,12 @@
                 elTr = dt.getPreviousTrEl(elLastTr);
     
                 Assert.areSame(elPenultimateTr, elTr, "Expected penultimate TR element");
-            });
+            //});
         },
 
         testGetFirstTdEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var oTestRecord = dt._oRecordSet._records[0];
                 var oTestColumn = dt._oColumnSet.keys[0];
                 var elCell = dt.getFirstTdEl();
@@ -372,12 +372,12 @@
                 Assert.areSame(dt.getId()+"-bdrow0-cell0", elCell.id, "Unexpected DOM ID");
                 Assert.areSame(dt._elTbody.rows[0].cells[0], elCell, "Unexpected DOM element");
                 DataTableAssert.areSameCell(elCell, oTestRecord, oTestColumn, dt, "Expected cell, Record, and Column to be in sync");
-            });
+            //});
         },
 
         testGetLastTdEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var nRowIndex = dt._elTbody.rows.length-1;
                 var nColumnIndex = dt._elTbody.rows[nRowIndex].cells.length-1;
                 var oRecordSet = dt._oRecordSet;
@@ -386,15 +386,15 @@
                 var oTestColumn = dt._oColumnSet.keys[oColumnSet.keys.length-1];
                 var elCell = dt.getLastTdEl();
     
-                Assert.areSame(dt.getId()+"-bdrow"+nRowIndex+"-cell"+nColumnIndex, elCell.id, "Unexpected DOM ID");
+                Assert.areSame(dt.getId()+"-bdrow"+nRowIndex+"-cell"+((nRowIndex+1)*(nColumnIndex+1)-1), elCell.id, "Unexpected DOM ID");
                 Assert.areSame(dt._elTbody.rows[nRowIndex].cells[nColumnIndex], elCell, "Unexpected DOM element");
                 DataTableAssert.areSameCell(elCell, oTestRecord, oTestColumn, dt, "Expected cell, Record, and Column to be in sync");
-            });
+            //});
         },
 
         testGetTdEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elCell = dt.getTdEl(dt.getId()+"-bdrow0-cell0");
                 var elFirstTd = dt.getTbodyEl().rows[0].cells[0];
     
@@ -409,12 +409,12 @@
                 elCell = dt.getTdEl({record:oRecord, column:oColumn});
     
                 Assert.areSame(elFirstTd, elCell, "By obj literal: TD el mismatch");
-            });
+            //});
         },
 
         testGetTdLinerEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elLiner = dt.getTdLinerEl(dt.getId()+"-bdrow0-cell0");
                 var elFirstTdLiner = dt.getTbodyEl().rows[0].cells[0].firstChild;
     
@@ -426,15 +426,15 @@
     
                 var oRecord = dt._oRecordSet._records[0];
                 var oColumn = dt._oColumnSet.keys[0];
-                elLiner = dt.getTdEl({record:oRecord, column:oColumn});
+                elLiner = dt.getTdLinerEl({record:oRecord, column:oColumn});
     
-                Assert.areSame(elFirstTdLiner, elCell, "By obj literal: liner el mismatch");
-            });
+                Assert.areSame(elFirstTdLiner, elLiner, "By obj literal: liner el mismatch");
+            //});
         },
 
         testGetNextTdEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elFirstTd = dt.getFirstTdEl();
                 var elSecondTd = elFirstTd.nextSibling;
                 var elLastTd = dt.getLastTdEl();
@@ -451,12 +451,12 @@
                 elTd = dt.getNextTdEl(elLastTd);
     
                 Assert.areSame(null, elTd, "Expected null");
-            });
+            //});
         },
 
         testGetPreviousTdEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elFirstTd = dt.getFirstTdEl();
                 var elSecondTd = elFirstTd.nextSibling;
                 var elLastTd = dt.getLastTdEl();
@@ -473,12 +473,12 @@
                 elTd = dt.getPreviousTdEl(elLastTd);
                 
                 Assert.areSame(elPenultimateTd, elTd, "Expected penultimate TD element");
-            });
+            //});
         },
 
         testGetsAfterDeleteRow: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var oRecord = dt.getRecord(0);
                 dt.deleteRow(0);
                 var elTestRow = dt.getTrEl(oRecord);
@@ -496,7 +496,7 @@
                 oTestRecord = dt.getRecordSet().getRecord(oRecord);
     
                 Assert.areSame(null, oTestRecord, "Expected null Record returned (RecordSet method)");
-            });
+            //});
         }
     });
     var dtDomAccessorsTest = new DataTableTestCase(dtDomAccessorsTemplate);
@@ -520,7 +520,7 @@
         
         testGetRecord: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var rs = dt.getRecordSet();
                 var oRecord = rs._records[3];
                 var sRecordId = oRecord.getId();
@@ -554,12 +554,12 @@
                 
                 oTestRecord = rs.getRecord(oRecord);
                 Assert.areSame(oRecord, oTestRecord, "Expected to get Record by Record instance (RecordSet method)");
-            });
+            //});
         },
         
         testGetInvalidRecord: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var rs = dt.getRecordSet();
                 var oRecord = rs._records[3];
                 dt.deleteRow(3);
@@ -569,12 +569,12 @@
     
                 oTestRecord = rs.getRecord(oRecord);
                 Assert.areSame(null, oTestRecord, "Expected not to get Record by invalid Record instance (RecordSet method)");
-            });
+            //});
         },
 
         testUpdateKey: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var rs = dt.getRecordSet();
                 var oTestRecord = rs._records[0];
                 rs.updateKey(0, "b", "xxx");
@@ -585,7 +585,7 @@
     
                 rs.updateKey(oTestRecord.getId(), "b", "yyy");
                 Assert.areSame("yyy", oTestRecord.getData("b"), "Failed to update key b of Record 0 by ID");
-            });
+            //});
         }
 
 
@@ -612,7 +612,7 @@
         
         testGetColumn: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var cs = dt.getColumnSet();
                 var oColumn = cs.keys[0];
                 var sColId = oColumn.getId();
@@ -636,7 +636,7 @@
     
                 oTestColumn = cs.getColumnById(sColId);
                 Assert.areSame(oColumn, oTestColumn, "Expected to get Column by Column ID (ColumnSet method)");
-            });
+            //});
         }
 
         //TODO: More ColumnSet APIs
@@ -654,31 +654,31 @@
         name: "DataTable Row Mutation Tests",
         testInsertRow: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.addRow({a:"4a",b:"4b",c:"4c"}, 0);
                 
                 var oTestRecord = dt._oRecordSet._records[0];
                 var elRow = dt.getFirstTrEl();
                 Assert.areSame(dt.getId()+"-bdrow4", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Expected row and Record to be in sync");
-            });
+            //});
         },
         
         testAppendRow: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.addRow({a:"4a",b:"4b",c:"4c"});
                 
                 var oTestRecord = dt._oRecordSet._records[4];
                 var elRow = dt.getLastTrEl();
                 Assert.areSame(dt.getId()+"-bdrow4", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Expected row and Record to be in sync");
-            });
+            //});
         },
 
         testUpdateRow: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var newData = {a:"4a",b:"4b",c:"4c"};
                 dt.updateRow(0, newData);
                 
@@ -708,12 +708,12 @@
     
                 oData = dt._oRecordSet._records[0].getData();
                 Assert.areSame(newData, oData, "Failed to update by TR el reference");
-            });
+            //});
         },
 
         testUpdateInvalidRow: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var oRecord = dt.getRecord(0);
                 dt.deleteRow(0);
                 var oData = {a:"4a", b:"4b", c:"4b"};
@@ -724,13 +724,13 @@
                     var oTestData = oTestRecords[i].getData();
                     Assert.areNotSame(oData, oTestData, "Record "+i+"should not have updated");
                 }
-            });
+            //});
         },
 
         testDeleteRow: function() {
             //TODO: Test all the arg sigs of deleteRow() method
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.deleteRow(0);
                 
                 var nRecordsLength = dt.getRecordSet().getLength();
@@ -760,12 +760,12 @@
                 Assert.areSame(0, nTrElsLength, "Expected 0 TR els left");
                 Assert.areSame("", dt.getMsgTbodyEl().rows[0].cells[0].style.display, "Expected message displayed");
                 Assert.areSame(true, Dom.hasClass(dt.getMsgTbodyEl().rows[0].cells[0], "yui-dt-empty"), "Expected empty message");
-            });
+            //});
         },
 
         testDeleteAppendThenInsert: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.deleteRow(dt.getFirstTrEl());
                 dt.addRow({a:"4a",b:"4b",c:"4c"});
                 dt.addRow({a:"5a",b:"5b",c:"5c"},0);
@@ -779,12 +779,12 @@
                 oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 Assert.areSame(dt.getId()+"-bdrow4", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Expected row and Record to be in sync");
-            });
+            //});
         },
 
         testDeleteRowsInReverse: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.deleteRow(3);
                 
                 var nRecordsLength = dt.getRecordSet().getLength();
@@ -814,12 +814,12 @@
                 Assert.areSame(0, nTrElsLength, "Expected 0 TR els left");
                 Assert.areSame("", dt.getMsgTbodyEl().rows[0].cells[0].style.display, "Expected message displayed");
                 Assert.areSame(true, Dom.hasClass(dt.getMsgTbodyEl().rows[0].cells[0], "yui-dt-empty"), "Expected empty message");
-            });
+            //});
         },
 
         testDeleteThenInsertRows: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.deleteRow(0);
                 dt.deleteRow(0);
                 dt.deleteRow(0);
@@ -856,12 +856,12 @@
                 elRow = dt.getFirstTrEl();
                 oTestRecord = dt.getRecord(dt.getFirstTrEl());
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Insert 3: Row mismatch");
-            });
+            //});
         },
 
         testDeleteInsertThenSortRows: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.deleteRow(0);
                 dt.deleteRow(0);
                 dt.deleteRow(0);
@@ -875,7 +875,7 @@
                 var oTestRecord = dt._oRecordSet._records[0];
                 Assert.areSame(dt.getId()+"-bdrow6", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Expected row and Record to be in sync");
-            });
+            //});
         }
     });
     var dtRowMutationTest = new DataTableTestCase(dtRowMutationTemplate);
@@ -909,7 +909,7 @@
 
         testSortByElementClick: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var oColumn = dt.getColumn(1);
                 var el = dt.getThEl(oColumn);
                 UserAction.click(el);
@@ -936,12 +936,12 @@
                 Assert.areSame("one", dt.getRecord(dt.getFirstTrEl()).getData("b"), "Click label: Unexpected data");
                 Assert.areSame(dt.getId()+"-bdrow0", elRow.id, "Click label: Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Click label: Row mismatch");
-            });
+            //});
         },
 
         testSortNumber: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var oColumn = dt.getColumn(0);
                 dt.sortColumn(oColumn);
                 
@@ -966,12 +966,12 @@
                 oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 Assert.areSame(dt.getId()+"-bdrow3", elRow.id, "Bottom desc: Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Bottom desc: Row mismatch");
-            });
+            //});
         },
 
         testSortString: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var oColumn = dt.getColumn(1);
                 dt.sortColumn(oColumn);
     
@@ -996,12 +996,12 @@
                 oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 Assert.areSame(dt.getId()+"-bdrow3", elRow.id, "Bottom desc: Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Bottom desc: Row mismatch");
-            });
+            //});
         },
 
         testInsertThenSort: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.addRow({a:4,b:"four"}, 0)
                 dt.sortColumn(dt.getColumn(1));
                 
@@ -1026,12 +1026,12 @@
                 oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 Assert.areSame(dt.getId()+"-bdrow3", elRow.id, "Bottom desc: Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Bottom desc: Row mismatch");
-            });
+            //});
         },
         
         testSortThenAppend: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.sortColumn(dt.getColumn(1));
                 dt.addRow({a:4,b:"four"});
     
@@ -1056,12 +1056,12 @@
                 oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 Assert.areSame(dt.getId()+"-bdrow4", elRow.id, "Bottom desc: Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Bottom desc: Row mismatch");
-            });
+            //});
         },
         
         testDeleteAppendInsertThenSort: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.deleteRow(dt.getFirstTrEl());
                 dt.addRow({a:4,b:"four"});
                 dt.addRow({a:5,b:"five"},0);
@@ -1076,7 +1076,7 @@
                 oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 Assert.areSame(dt.getId()+"-bdrow4", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Row mismatch");
-            });
+            //});
         }
     });
     var dtSortingTest = new DataTableTestCase(dtSortingTemplate);
@@ -1093,7 +1093,7 @@
 
         testSelectUnselectByEl: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elRow = dt.getFirstTrEl();
                 dt.selectRow(elRow);
                 
@@ -1106,12 +1106,12 @@
                 aSelectedRows = dt.getSelectedRows();
                 Assert.areSame(false, YAHOO.util.Dom.hasClass(elRow, "yui-dt-selected"), "Failed to remove CSS");
                 ArrayAssert.doesNotContain(elRow.yuiRecordId, aSelectedRows, "Failed to unselect first row");
-            });
+            //});
         },
         
         testSelectThenInsert: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 var elRow = dt.getFirstTrEl();
                 dt.selectRow(elRow);
                 dt.addRow({a:"4a",b:"4b",c:"4c"}, 0);
@@ -1124,7 +1124,7 @@
                 elTestRow = dt.getTbodyEl().rows[0];
                 Assert.areNotSame(true, YAHOO.util.Dom.hasClass(elTestRow, "yui-dt-selected"), "Unexpected CSS");
                 ArrayAssert.doesNotContain(elTestRow.yuiRecordId, aSelectedRows, "First row should not be selected");
-            });
+            //});
         },
         
         testSingleSelect: function() {
@@ -1132,7 +1132,7 @@
                 selectionMode:"single"
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 var el = Dom.get(dt.getId()+"-bdrow0");
                 UserAction.click(el);
@@ -1155,12 +1155,12 @@
                 var elTestRow = dt.getTbodyEl().rows[3];
                 ArrayAssert.itemsAreSame([elTestRow.yuiRecordId], aSelectedRows, "Expected only fourth row selected");
                 ArrayAssert.itemsAreSame([el], aSelectedEls, "Expected only fourth TR el selected");
-            });
+            //});
         },
         
         testShiftSelect: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 var el = Dom.get(dt.getId()+"-bdrow0");
                 UserAction.click(el);
@@ -1215,12 +1215,12 @@
                 ];
                 ArrayAssert.itemsAreSame(aTestRecordIds, aSelectedRows, "Expected three rows selected");
                 ArrayAssert.itemsAreSame(aTestTrEls, aSelectedEls, "Expected three TR els selected");
-            });
+            //});
         },
         
         testUnselectAllRows: function() {
             var dt = this.createInstance();
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 var el = Dom.get(dt.getId()+"-bdrow0");
                 UserAction.click(el);
@@ -1245,13 +1245,13 @@
                 aSelectedEls = Dom.getElementsByClassName("yui-dt-selected", "*", dt.getTbodyEl());
                 ArrayAssert.itemsAreSame(aTestRecordIds, aSelectedRows, "Ctrl-select: Expected no rows selected");
                 ArrayAssert.itemsAreSame(aTestTrEls, aSelectedEls, "Ctrl-select: Expected no rows selected");
-            });
+            //});
         },
         
         testAppendX3ThenDeleteSingleSelectedFromTop: function() {
             var i;
             var dt = this.createInstance({selectionMode:"single"});
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 dt.addRow({a:"4a",b:"4b",c:"4c"});
                 dt.addRow({a:"5a",b:"5b",c:"5c"});
@@ -1286,7 +1286,63 @@
                 Assert.areSame(4, dt.getTbodyEl().rows.length, "Expected 4 TR els");
                 Assert.areSame(dt.getId()+"-bdrow2", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Row mismatch");
-            });
+            //});
+        },
+
+        testIsSelected: function() {
+            var dt = this.createInstance();
+            //dt.subscribe("initEvent", function() {
+                var elRow = dt.getFirstTrEl();
+                
+                // TR el reference agnst row selection
+                dt.selectRow(elRow);
+                Assert.areSame(true, dt.isSelected(elRow), "Failed to detect selected row by TR");
+                dt.unselectRow(elRow);
+                Assert.areSame(false, dt.isSelected(elRow), "Failed to detect unselected row by TR");
+                
+                // TD el reference agnst row selection
+                dt.selectRow(elRow.cells[0]);
+                Assert.areSame(true, dt.isSelected(elRow.cells[0]), "Failed to detect selected row by TD");
+                dt.unselectRow(elRow.cells[0]);
+                Assert.areSame(false, dt.isSelected(elRow.cells[0]), "Failed to detect unselected by row TD");
+
+                // Child elements agnst row selection
+                dt.selectRow(elRow.cells[0].firstChild);
+                Assert.areSame(true, dt.isSelected(elRow.cells[0].firstChild), "Failed to detect selected row by liner el");
+                dt.unselectRow(elRow.cells[0].firstChild);
+                Assert.areSame(false, dt.isSelected(elRow.cells[0].firstChild), "Failed to detect unselected by row liner el");
+                
+                // TD el reference agnst cell selection
+                dt.selectCell(elRow.cells[0]);
+                Assert.areSame(true, dt.isSelected(elRow.cells[0]), "Failed to detect selected cell by TD");
+                dt.unselectCell(elRow.cells[0]);
+                Assert.areSame(false, dt.isSelected(elRow.cells[0]), "Failed to detect unselected cell by TD");
+
+                // Child elements agnst cell selection
+                dt.selectCell(elRow.cells[0].firstChild);
+                Assert.areSame(true, dt.isSelected(elRow.cells[0].firstChild), "Failed to detect selected cell by liner el");
+                dt.unselectCell(elRow.cells[0].firstChild);
+                Assert.areSame(false, dt.isSelected(elRow.cells[0].firstChild), "Failed to detect unselected cell by liner el");
+
+                // Record instance
+                dt.selectRow(dt._oRecordSet._records[0]);
+                Assert.areSame(true, dt.isSelected(dt._oRecordSet._records[0]), "Failed to detect selected row by Record instance");
+                dt.unselectRow(dt._oRecordSet._records[0]);
+                Assert.areSame(false, dt.isSelected(dt._oRecordSet._records[0]), "Failed to detect unselected row by Record instance");
+                
+                // RecordSet index
+                dt.selectRow(0);
+                Assert.areSame(true, dt.isSelected(0), "Failed to detect selected row by RecordSet index");
+                dt.unselectRow(0);
+                Assert.areSame(false, dt.isSelected(0), "Failed to detect unselected row by RecordSet index");
+                
+                // {record: oRecord, column: oColumn}
+                dt.selectCell({record:dt._oRecordSet._records[0], column: dt._oColumnSet.keys[0]});
+                Assert.areSame(true, dt.isSelected({record:dt._oRecordSet._records[0], column: dt._oColumnSet.keys[0]}), "Failed to detect selected cell by object literal");
+                dt.unselectCell({record:dt._oRecordSet._records[0], column: dt._oColumnSet.keys[0]});
+                Assert.areSame(false, dt.isSelected({record:dt._oRecordSet._records[0], column: dt._oColumnSet.keys[0]}), "Failed to detect unselected cell by object literal");
+                
+            //});
         }
     });
     var dtRowSelectionTest = new DataTableTestCase(dtRowSelectionTemplate);
@@ -1334,9 +1390,9 @@
                 paginator: {rowsPerPage:5}
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 Assert.areSame(5, dt.get("paginator").totalPages, "Expected 5 pages");
-            });
+            //});
         },
 
         testPageThenSort: function() {
@@ -1346,7 +1402,7 @@
                 sortedBy: {key:"a"}
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.showPage(2);
                 dt.sortColumn(dt.getColumn("a"));
                 
@@ -1360,7 +1416,7 @@
                 oTestRecord = dt._oRecordSet._records[dt.getTbodyEl().rows.length-1];
                 Assert.areSame(dt.getId()+"-bdrow4", elRow.id, "Unexpected DOM ID");
                 DataTableAssert.areSameRow(elRow, oTestRecord, dt, "Row mismatch");
-            });
+            //});
         },
 
         testDeleteRowsCurrentPage: function() {
@@ -1369,13 +1425,13 @@
                 paginator: {rowsPerPage:5}
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.deleteRows(0,2);
                 // Workaround bug 1391828
                 dt.refreshView();
                 
                 Assert.areSame(4, dt.get("paginator").totalPages, "Expected 4 pages");
-            });
+            //});
         },
         
          testDeleteRowsDifferentPage: function() {
@@ -1384,7 +1440,7 @@
                 paginator: {rowsPerPage:5}
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.showPage(5);
                 dt.deleteRows(0,2);
                 // Workaround bug 1391828
@@ -1392,7 +1448,7 @@
                 
                 Assert.areSame(4, dt.get("paginator").totalPages, "Expected 4 pages");
                 Assert.areSame(4, dt.get("paginator").currentPage, "Expected to be on page 4");
-            });
+            //});
         },
         
         testSingleSelectAcrossPages: function() {
@@ -1402,7 +1458,7 @@
                 selectionMode:"single"
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 var el = Dom.get(dt.getId()+"-bdrow0");
                 UserAction.click(el);
@@ -1422,7 +1478,7 @@
                 ];
                 ArrayAssert.itemsAreSame(aTestRecords, aSelectedRows, "Expected only second row of last page (Record index 21) selected");
                 ArrayAssert.itemsAreSame(aTestTrEls, aSelectedEls, "Expected only second TR el selected");
-            });
+            //});
         },
         
         testSingleSelectAcrossPagesAfterSort: function() {
@@ -1433,7 +1489,7 @@
                 sortedBy: {key:"a"}
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 dt.showPage(4);
                 var el = Dom.get(dt.getId()+"-bdrow0");
@@ -1469,7 +1525,7 @@
                 ];
                 ArrayAssert.itemsAreSame(aTestRecords, aSelectedRows, "Expected only third row of third page (Record index 12) selected");
                 ArrayAssert.itemsAreSame(aTestTrEls, aSelectedEls, "Expected only third TR el selected");
-            });
+            //});
         },
 
         testShiftSelectAcrossPages: function() {
@@ -1479,7 +1535,7 @@
                 selectionMode:"standard"
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 var el = Dom.get(dt.getId()+"-bdrow0");
                 UserAction.click(el);
@@ -1518,7 +1574,7 @@
                 ];
                 ArrayAssert.itemsAreSame(aTestRecords, aSelectedRows, "Expected only third row of second page selected");
                 ArrayAssert.itemsAreSame(aTestTrEls, aSelectedEls, "Expected only third TR el selected");
-            });
+            //});
         },
 
         testUnselectAllRowsAcrossPages: function() {
@@ -1528,7 +1584,7 @@
                 selectionMode:"standard"
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 var el = Dom.get(dt.getId()+"-bdrow0");
                 UserAction.click(el);
@@ -1559,7 +1615,7 @@
                 aSelectedEls = Dom.getElementsByClassName("yui-dt-selected", "*", dt.getTbodyEl());
                 ArrayAssert.itemsAreSame(aTestRecords, aSelectedRows, "Ctrl-select: Expected no rows on any page selected");
                 ArrayAssert.itemsAreSame(aTestTrEls, aSelectedEls, "Ctrl-select: Expected no TR els selected");
-            });
+            //});
         },
 
 
@@ -1570,7 +1626,7 @@
                 selectionMode:"single"
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.subscribe("rowClickEvent",dt.onEventSelectRow,dt);
                 var el = Dom.get(dt.getId()+"-bdrow0");
                 UserAction.click(el);
@@ -1590,7 +1646,7 @@
                 ];
                 ArrayAssert.itemsAreSame(aTestRecords, aSelectedRows, "Expected only one row selected");
                 ArrayAssert.itemsAreSame(aTestTrEls, aSelectedEls, "Expected seventh TR el selected");
-            });
+            //});
         },
         
         testGetRecordAcrossPages: function() {
@@ -1600,7 +1656,7 @@
                 selectionMode:"single"
             }
             var dt = this.createInstance(oConfig);
-            dt.subscribe("initEvent", function() {
+            //dt.subscribe("initEvent", function() {
                 dt.showPage(4);
     
                 // Get Record on this page
@@ -1629,7 +1685,7 @@
     
                 oTestRecord = dt.getRecord(sRecordId);
                 Assert.areSame(oRecord, oTestRecord, "Expected to get Record 1 by Record ID");
-            });
+            //});
         }
     });
     var dtPaginationTest = new DataTableTestCase(dtPaginationTemplate);

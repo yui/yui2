@@ -10433,7 +10433,6 @@ addRow : function(oData, index) {
                 }
                 
                 this.fireEvent("rowAddEvent", {record:oRecord});
-                
                 return;
             }
             // Not paginated
@@ -10447,15 +10446,14 @@ addRow : function(oData, index) {
                                 var elNewTr = this._addTrEl(oRecord, recIndex);
                                 if(elNewTr) {
                                     this.hideTableMessage();
-                                    //this._oChainSync.run();
             
                                     this.fireEvent("rowAddEvent", {record:oRecord});
                                 }
                             }
                         },
-                        scope: this
+                        scope: this,
+                        timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                     });
-                    //this._sync();
                     this._oChainRender.run();
                     return;
                 }
@@ -10504,7 +10502,6 @@ addRows : function(aData, index) {
                 }
                 
                 this.fireEvent("rowsAddEvent", {records:aRecords});
-                
                 return;
             }
             // Not paginated
@@ -10531,18 +10528,15 @@ addRows : function(aData, index) {
                     scope: this,
                     timeout: (loopN > 0) ? 0 : -1
                 });
-                //this._sync();
                 this._oChainRender.add({
                     method: function() {
-                        //this._oChainSync.run();
+                        this.fireEvent("rowsAddEvent", {records:aRecords});
                     },
-                    scope: this
+                    scope: this,
+                    timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
                 this._oChainRender.run();
                 this.hideTableMessage();                
-
-                this.fireEvent("rowsAddEvent", {records:aRecords});
-
                 return;
             }            
         }
@@ -10605,7 +10599,6 @@ updateRow : function(row, oData) {
             scope: this,
             timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
         });
-        //this._sync();
         this._oChainRender.run();
     }
     else {
@@ -10670,6 +10663,7 @@ deleteRow : function(row) {
                     if (nRecordIndex <= endRecIndex) {
                         this.render();
                     }
+                    return;
                 }
                 else {
                     if(lang.isNumber(nTrIndex)) {
@@ -10698,18 +10692,17 @@ deleteRow : function(row) {
                                         }                                
                                     }
                     
-                                    //this._oChainSync.run();                                    
+                                    this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
+                                    oldData:oData, trElIndex:nTrIndex});
                                 }
                             },
-                            scope: this
+                            scope: this,
+                            timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                         });
-                        //this._sync();
                         this._oChainRender.run();
+                        return;
                     }
                 }
-                this.fireEvent("rowDeleteEvent", {recordIndex:nRecordIndex,
-                        oldData:oData, trElIndex:nTrIndex});
-                return oData;
             }
         }
     }
@@ -10787,6 +10780,7 @@ deleteRows : function(row, count) {
                     if (lowIndex <= endRecIndex) {
                         this.render();
                     }
+                    return;
                 }
                 else {
                     if(lang.isNumber(nTrIndex)) {
@@ -10810,7 +10804,6 @@ deleteRows : function(row, count) {
                             scope: this,
                             timeout: (loopN > 0) ? 0 : -1
                         });
-                        //this._sync();
                         this._oChainRender.add({
                             method: function() {    
                                 // Empty body
@@ -10823,16 +10816,16 @@ deleteRows : function(row, count) {
                                     this._setRowStripes();
                                 }
                                 
-                                //this._oChainSync.run();
+                                this.fireEvent("rowsDeleteEvent", {recordIndex:count,
+                                oldData:aData, count:nTrIndex});
                             },
-                            scope: this
+                            scope: this,
+                            timeout: -1 // Needs to run immediately after the DOM deletions above
                         });
                         this._oChainRender.run();
+                        return;
                     }
                 }
-                this.fireEvent("rowsDeleteEvent", {recordIndex:count,
-                        oldData:aData, count:nTrIndex});
-                return aData;
             }
         }
     }
@@ -12922,13 +12915,11 @@ unselectAllCells: function() {
  * @return {Boolean} True if item is selected.
  */
 isSelected : function(o) {
-    var oRecord, sRecordId, j;
-
-    var el = this.getTrEl(o) || this.getTdEl(o);
-    if(el) {
-        return Dom.hasClass(el,DT.CLASS_SELECTED);
+    if(o && (o.ownerDocument == document)) {
+        return (Dom.hasClass(this.getTdEl(o),DT.CLASS_SELECTED) || Dom.hasClass(this.getTrEl(o),DT.CLASS_SELECTED));
     }
     else {
+        var oRecord, sRecordId, j;
         var tracker = this._aSelections;
         if(tracker && tracker.length > 0) {
             // Looking for a Record?
