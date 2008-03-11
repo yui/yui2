@@ -19,7 +19,8 @@ yuiloader - Release Notes
      rollup work correctly (the superseded modules won't load).
    * Addessed a source order issue when logger is included after a component
      which tries to instantiate it at load time.
-   * the filter property can be set on the instance.
+   * The filter property can be set on the instance.
+   * Custom css modules are always sorted below YUI css.
 
 2.5.0
    * Updated metadata for 2.5.0

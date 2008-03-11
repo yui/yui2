@@ -761,6 +761,8 @@
                 return false;
             }
 
+            o.ext = ('ext' in o) ? o.ext : true;
+
             this.moduleInfo[o.name] = o;
             this.dirty = true;
 
@@ -796,10 +798,11 @@
                 this.addModule({
                     'name': name,
                     'type': 'css',
-                    'path': sinf.base + skin + "/" + sinf.path,
+                    'path': sinf.base + skin + '/' + sinf.path,
                     //'supersedes': '*',
                     'after': sinf.after,
-                    'rollup': sinf.rollup
+                    'rollup': sinf.rollup,
+                    'ext': false
                 });
             }
 
@@ -813,7 +816,8 @@
                         'name': name,
                         'type': 'css',
                         'after': sinf.after,
-                        'path': pkg + '/' + sinf.base + skin + "/" + mod + ".css"
+                        'path': pkg + '/' + sinf.base + skin + '/' + mod + '.css',
+                        'ext': false
                     });
                 }
             }
@@ -1238,7 +1242,8 @@
          */
         _sort: function() {
             // create an indexed list
-            var s=[], info=this.moduleInfo, loaded=this.loaded;
+            var s=[], info=this.moduleInfo, loaded=this.loaded,
+                me = this;
 
             // returns true if b is not loaded, and is required
             // directly or by means of modules it supersedes.
@@ -1248,7 +1253,7 @@
                 }
 
                 var ii, mm=info[aa], rr=mm && mm.expanded, 
-                    after = mm && mm.after;
+                    after = mm && mm.after, other=info[bb];
 
                 // check if this module requires the other directly
                 if (rr && YUI.ArrayUtil.indexOf(rr, bb) > -1) {
@@ -1268,6 +1273,20 @@
                             return true;
                         }
                     }
+                }
+
+                // var ss=me.getProvides(bb, true);
+                // if (ss) {
+                //     for (ii in ss) {
+                //         if (requires(aa, ii)) {
+                //             return true;
+                //         }
+                //     }
+                // }
+
+                // external css files should be sorted below yui css
+                if (mm.ext && mm.type == 'css' && (!other.ext)) {
+                    return true;
                 }
 
                 return false;
