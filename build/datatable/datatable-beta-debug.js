@@ -5693,23 +5693,35 @@ lang.augmentObject(DT, {
         }
 
         // Textbox
-        var elTextbox = elContainer.appendChild(document.createElement("input"));
+        var elTextbox;
+        // Bug 1802582: SF3/Mac needs a form element wrapping the input
+        if(ua.webkit) {
+            elTextbox = elContainer.appendChild(document.createElement("form")).appendChild(document.createElement("input"));
+        }
+        else {
+            elTextbox = elContainer.appendChild(document.createElement("input"));
+        }
         elTextbox.type = "text";
         elTextbox.style.width = elCell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
         //elTextbox.style.height = "1em"; //(parseInt(elCell.offsetHeight,10)) + "px";
         elTextbox.value = value;
 
-        // Set up a listener on each textbox to track the input value
-        Ev.addListener(elTextbox, "keyup", function(v){
+        // Bug: 1802582 Set up a listener on each textbox to track on keypress
+        // since SF/OP can't preventDefault on keydown
+        Ev.addListener(elTextbox, "keypress", function(v){
+            // Prevent form submit
             // Save on "enter"
-            if(v.keyCode === 13) {
+            if((v.keyCode === 13)) {
+                YAHOO.util.Event.preventDefault(v);
                 oSelf.saveCellEditor();
             }
+        });
+
+        // Set up a listener on each textbox to track the input value
+        Ev.addListener(elTextbox, "keyup", function(v){
             // Update the tracker value
-            else {
-                oSelf._oCellEditor.value = elTextbox.value;
-                oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
-            }
+            oSelf._oCellEditor.value = elTextbox.value;
+            oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
         });
 
         // Select the text
@@ -13525,6 +13537,7 @@ resetCellEditor : function() {
     elContainer.innerHTML = "";
     this._oCellEditor.value = null;
     this._oCellEditor.isActive = false;
+    
 },
 
 /**
@@ -13550,10 +13563,8 @@ saveCellEditor : function() {
                 return;
             }
         }
-
         // Update the Record
         this._oRecordSet.updateRecordValue(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
-
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
         
@@ -13564,7 +13575,7 @@ saveCellEditor : function() {
             },
             scope: this
         });
-
+        this._oChainRender.run();
         // Clear out the Cell Editor
         this.resetCellEditor();
 
