@@ -2,8 +2,6 @@ YUI Library - Grids - Release Notes
 
 Version 2.5.1
 
-  * Removed .yui-b{_position:static;} /* for IE < 7 */ to address
-    Bugzilla #1777703, Sourceforge #1903592
   * Added more specific selectors to allow nesting on "yui-gd" grids 
     within "yui-ge" for Bugzilla #1779582, Sourceforge #1897741 
   * Modified Page Width and Template Preset values for IE
