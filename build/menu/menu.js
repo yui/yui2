@@ -2802,8 +2802,18 @@ _onClick: function (p_sType, p_aArgs) {
 			if (bInMenuAnchor && !oItem.cfg.getProperty("target")) {
 	
 				Event.preventDefault(oEvent);
-	
-				oItem.focusEvent.fire();
+				
+
+				if (UA.webkit) {
+				
+					oItem.focus();
+				
+				}
+				else {
+
+					oItem.focusEvent.fire();
+				
+				}
 			
 			}
 	
