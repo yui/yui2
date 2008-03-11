@@ -1049,7 +1049,9 @@
          * requested modules are skinnable
          * @method _skin
          * @private
-         * @deprecated skins modules are generated for all skinnable
+         * @deprecated skin modules are generated for all skinnable
+         *             components during _setup(), and the components
+         *             are configured to require the skin.
          */
         _skin: function() {
 
