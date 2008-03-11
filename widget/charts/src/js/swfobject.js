@@ -1,3 +1,4 @@
+/*extern ActiveXObject, __flash_unloadHandler, __flash_savedUnloadHandler */
 /*!
  * SWFObject v1.5: Flash Player detection and embed - http://blog.deconcept.com/swfobject/
  *
