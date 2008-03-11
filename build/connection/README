@@ -1,5 +1,9 @@
 Connection Manager Release Notes
 
+*** version 2.5.1 ***
+
+* no changes.
+
 *** version 2.5.0 ***
 
 * setForm() can now detects HTTPS in the URI for file upload transactions.  The

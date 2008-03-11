@@ -1,5 +1,8 @@
 YUI Library - Charts - Release Notes
 
+2.5.1
+  * No changes
+
 2.5.0
   * Added lineSize style to series styles
   * Added showLabels substyle to xAxis and yAxis styles
