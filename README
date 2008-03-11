@@ -1,5 +1,38 @@
 YUI Library Release Notes
 
+*** version 2.5.1 ***
+
+This update contains additions to the Yahoo, Uploader, Editor, and DataSource components
+to improve YUI support for Adobe AIR as well as general fixes to the YUI library.  Please 
+see the README file for each component in the build directory for specific updates since
+version 2.5.0.
+
+*** version 2.5.0 ***
+
+This release introduces six new components into YUI:
+
+   * Cookie Utility
+   * ImageCropper
+   * Layout Manager
+   * Resize
+   * Uploader
+   * Profiler Viewer
+   
+These new components are introduced as "beta", with the exception of the Charts
+WidgeUploadert which is released as an experimental component.  Please see the YUI FAQ
+on the definition of beta and experimental at:
+http://developer.yahoo.com/yui/articles/faq/#beta
+
+In addition to new components, you'll find updates and bug fixes throughout the
+library.
+
+*** version 2.4.1 ***
+
+This update contains one change.  We have reverted the change to the way the Event Utility cleans up 
+events in its page unload handler that was introduced in 2.4.0. The change resulted in some events
+not being properly unloaded, which in turn resulted in IE-specific memory leaks in some YUI components
+including the Menu Control and controls in the Container Family.
+
 *** version 2.4.0 ***
 
 This release introduces five new components into YUI:
