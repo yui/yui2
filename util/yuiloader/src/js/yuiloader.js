@@ -887,15 +887,19 @@
          * @return what this module provides
          */
         getProvides: function(name, notMe) {
-            var addMe = !(notMe), ckey = (addMe) ? PROV : SUPER;
+            var addMe = !(notMe), ckey = (addMe) ? PROV : SUPER,
+                m = this.moduleInfo[name], o = {};
 
-            if (this.moduleInfo[name][ckey]) {
-// Y.log('cached: ' + name + ' ' + ckey + ' ' + lang.dump(this.moduleInfo[name][ckey], 0));
-                return this.moduleInfo[name][ckey];
+            if (!m) {
+                return o;
             }
 
-            var m = this.moduleInfo[name], o = {},
-                s = m && m.supersedes, done={}, me = this;
+            if (m[ckey]) {
+// Y.log('cached: ' + name + ' ' + ckey + ' ' + lang.dump(this.moduleInfo[name][ckey], 0));
+                return m[ckey];
+            }
+
+            var s = m.supersedes, done={}, me = this;
 
             // use worker to break cycles
             var add = function(mm) {
@@ -1232,7 +1236,7 @@
                          m = this.moduleInfo[i];
                          s = m && m.supersedes;
                          if (s) {
-                             for (j=0;j<s.length;j=j+1) {
+                             for (j=0; j<s.length; j=j+1) {
                                  if (s[j] in r) {
                                      delete r[s[j]];
                                  }
