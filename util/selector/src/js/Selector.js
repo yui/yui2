@@ -151,6 +151,11 @@ Selector.prototype = {
      */
     test: function(node, selector) {
         node = Selector.document.getElementById(node) || node;
+
+        if (!node) {
+            return false;
+        }
+
         var groups = selector ? selector.split(',') : [];
         if (groups.length) {
             for (var i = 0, len = groups.length; i < len; ++i) {
@@ -167,27 +172,25 @@ Selector.prototype = {
      * Filters a set of nodes based on a given CSS selector. 
      * @method filter
      *
-     * @param {array}  A set of nodes/ids to filter. 
+     * @param {array} nodes A set of nodes/ids to filter. 
      * @param {string} selector The selector used to test each node.
      * @return{array} An array of nodes from the supplied array that match the given selector.
      * @static
      */
-    filter: function(arr, selector) {
-        if (!arr || !selector) {
-            YAHOO.log('filter: invalid input, returning array as is', 'warn', 'Selector');
-        }
+    filter: function(nodes, selector) {
+        nodes = nodes || [];
+
         var node,
-            nodes = arr,
             result = [],
             tokens = tokenize(selector);
 
         if (!nodes.item) { // if not HTMLCollection, handle arrays of ids and/or nodes
             YAHOO.log('filter: scanning input for HTMLElements/IDs', 'info', 'Selector');
-            for (var i = 0, len = arr.length; i < len; ++i) {
-                if (!arr[i].tagName) { // tagName limits to HTMLElements 
-                    node = Selector.document.getElementById(arr[i]);
+            for (var i = 0, len = nodes.length; i < len; ++i) {
+                if (!nodes[i].tagName) { // tagName limits to HTMLElements 
+                    node = Selector.document.getElementById(nodes[i]);
                     if (node) { // skip IDs that return null 
-                        nodes[nodes.length] = node;
+                        nodes[i] = node;
                     } else {
                         YAHOO.log('filter: skipping invalid node', 'warn', 'Selector');
                     }
