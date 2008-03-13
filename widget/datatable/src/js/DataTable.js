@@ -1355,7 +1355,7 @@ lang.augmentObject(DT, {
         // Textbox
         var elTextbox;
         // Bug 1802582: SF3/Mac needs a form element wrapping the input
-        if(ua.webkit) {
+        if(ua.webkit>420) {
             elTextbox = elContainer.appendChild(document.createElement("form")).appendChild(document.createElement("input"));
         }
         else {
@@ -3020,18 +3020,30 @@ _initTheadEls : function() {
     }
 
 
-         // Set widths for hidden Columns
-        for(var g=0, h=this._oColumnSet.keys.length; g<h; g++) {
-            // Hidden Columns
-            if(this._oColumnSet.keys[g].hidden) {
-                var oHiddenColumn = this._oColumnSet.keys[g];
-                var oHiddenThEl = oHiddenColumn.getThEl();
-                oHiddenColumn._nLastWidth = oHiddenThEl.offsetWidth -
-                            (parseInt(Dom.getStyle(oHiddenThEl,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(oHiddenThEl,"paddingRight"),10)|0);
-                this._setColumnWidth(oHiddenColumn, "1px"); 
-            }
+     // Set widths for hidden Columns
+    for(var g=0, h=this._oColumnSet.keys.length; g<h; g++) {
+        // Hidden Columns
+        if(this._oColumnSet.keys[g].hidden) {
+            var oHiddenColumn = this._oColumnSet.keys[g];
+            var oHiddenThEl = oHiddenColumn.getThEl();
+            oHiddenColumn._nLastWidth = oHiddenThEl.offsetWidth -
+                        (parseInt(Dom.getStyle(oHiddenThEl,"paddingLeft"),10)|0) -
+                        (parseInt(Dom.getStyle(oHiddenThEl,"paddingRight"),10)|0);
+            this._setColumnWidth(oHiddenColumn, "1px"); 
         }
+    }
+
+
+    // Bug 1806891
+    if(ua.webkit<=420) {
+        var elTheadDisplay = this._elThead.style.display;
+        setTimeout(function() {
+            oSelf._elThead.style.display = "none";
+        },0);
+        setTimeout(function() {
+            oSelf._elThead.style.display = "";
+        },0);
+    }
 },
 
 /**
@@ -4971,7 +4983,7 @@ render : function() {
         var loopN = this.get("renderLoopSize");
         var loopStart,
             loopEnd;
-
+        
         // From the top, update in-place existing rows, so as to reuse DOM elements
         if(allRows.length > 0) {
             loopEnd = allRows.length; // End at last row
@@ -5094,7 +5106,6 @@ render : function() {
                     this.fireEvent("refreshEvent");
                     YAHOO.log("DataTable rendered " + allRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
                 }
-            
             
             },
             scope: this,
