@@ -848,8 +848,7 @@ if (!YAHOO.util.Event) {
             addListener: function(el, sType, fn, obj, override) {
 
                 if (!fn || !fn.call) {
-// throw new TypeError(sType + " addListener call failed, callback undefined");
-YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event");
+YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
                     return false;
                 }
 
@@ -1434,8 +1433,7 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                              !o.alert              && // o is not a window
                              typeof o[0] !== "undefined" );
                 } catch(ex) {
-                    YAHOO.log("_isValidCollection error, assuming that " +
-                " this is a cross frame problem and not a collection", "warn");
+                    YAHOO.log("node access error (xframe?)", "warn");
                     return false;
                 }
 
@@ -1581,21 +1579,35 @@ YAHOO.log(sType + " addListener call failed, invalid callback", "error", "Event"
                     item.fn.call(scope, item.obj);
                 };
 
-                var i, len, item, el;
+                var i, len, item, el, ready=[];
 
                 // onAvailable onContentReady
                 for (i=0, len=onAvailStack.length; i<len; i=i+1) {
                     item = onAvailStack[i];
                     if (item) {
                         el = this.getEl(item.id);
-if (el && (!item.checkReady || loadComplete || el.nextSibling || !tryAgain)) {
-                            executeItem(el, item);
-                            onAvailStack[i] = null;
+                        if (el) {
+                            if (item.checkReady) {
+                                if (loadComplete || el.nextSibling || !tryAgain) {
+                                    ready.push(item);
+                                    onAvailStack[i] = null;
+                                }
+                            } else {
+                                executeItem(el, item);
+                                onAvailStack[i] = null;
+                            }
                         } else {
                             notAvail.push(item);
                         }
                     }
                 }
+                
+                // make sure onContentReady fires after onAvailable
+                for (i=0, len=ready.length; i<len; i=i+1) {
+                    item = ready[i];
+                    executeItem(this.getEl(item.id), item);
+                }
+
 
                 retryCount--;
 

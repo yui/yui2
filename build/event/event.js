@@ -837,7 +837,6 @@ if (!YAHOO.util.Event) {
             addListener: function(el, sType, fn, obj, override) {
 
                 if (!fn || !fn.call) {
-// throw new TypeError(sType + " addListener call failed, callback undefined");
                     return false;
                 }
 
@@ -1560,21 +1559,35 @@ if (!YAHOO.util.Event) {
                     item.fn.call(scope, item.obj);
                 };
 
-                var i, len, item, el;
+                var i, len, item, el, ready=[];
 
                 // onAvailable onContentReady
                 for (i=0, len=onAvailStack.length; i<len; i=i+1) {
                     item = onAvailStack[i];
                     if (item) {
                         el = this.getEl(item.id);
-if (el && (!item.checkReady || loadComplete || el.nextSibling || !tryAgain)) {
-                            executeItem(el, item);
-                            onAvailStack[i] = null;
+                        if (el) {
+                            if (item.checkReady) {
+                                if (loadComplete || el.nextSibling || !tryAgain) {
+                                    ready.push(item);
+                                    onAvailStack[i] = null;
+                                }
+                            } else {
+                                executeItem(el, item);
+                                onAvailStack[i] = null;
+                            }
                         } else {
                             notAvail.push(item);
                         }
                     }
                 }
+                
+                // make sure onContentReady fires after onAvailable
+                for (i=0, len=ready.length; i<len; i=i+1) {
+                    item = ready[i];
+                    executeItem(this.getEl(item.id), item);
+                }
+
 
                 retryCount--;
 
