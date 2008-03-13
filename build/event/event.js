@@ -732,7 +732,9 @@ if (!YAHOO.util.Event) {
                                        override:   p_override, 
                                        checkReady: checkContent });
                 }
+
                 retryCount = this.POLL_RETRYS;
+
                 this.startInterval();
             },
 
@@ -1510,6 +1512,13 @@ if (!YAHOO.util.Event) {
              */
             _tryPreloadAttach: function() {
 
+                if (onAvailStack.length === 0) {
+                    retryCount = 0;
+                    clearInterval(this._interval);
+                    this._interval = null;
+                    return false;
+                }
+
                 if (this.locked) {
                     return false;
                 }
@@ -1567,11 +1576,16 @@ if (el && (!item.checkReady || loadComplete || el.nextSibling || !tryAgain)) {
                     }
                 }
 
-
-                retryCount = (notAvail.length === 0) ? 0 : retryCount - 1;
+                retryCount--;
 
                 if (tryAgain) {
-                    // we may need to strip the nulled out items here
+                    for (i=onAvailStack.length-1; i>-1; i--) {
+                        item = onAvailStack[i];
+                        if (!item || !item.id) {
+                            onAvailStack.splice(i, 1);
+                        }
+                    }
+
                     this.startInterval();
                 } else {
                     clearInterval(this._interval);
