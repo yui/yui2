@@ -1511,7 +1511,7 @@ if (!YAHOO.util.Event) {
              */
             _tryPreloadAttach: function() {
 
-                if (onAvailStack.length === 0) {
+                if (this.DOMReady && onAvailStack.length === 0) {
                     retryCount = 0;
                     clearInterval(this._interval);
                     this._interval = null;
