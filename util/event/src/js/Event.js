@@ -1118,7 +1118,7 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
              */
             _tryPreloadAttach: function() {
 
-                if (loadComplete && onAvailStack.length === 0) {
+                if (onAvailStack.length === 0) {
                     retryCount = 0;
                     clearInterval(this._interval);
                     this._interval = null;
@@ -1214,8 +1214,6 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
                 }
 
                 this.locked = false;
-
-                return;
 
             },
 
@@ -1482,9 +1480,10 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
             YAHOO.util.Event.onDOMReady(
                     YAHOO.util.Event._tryPreloadAttach,
                     YAHOO.util.Event, true);
+            
+            var n = document.createElement('p');  
 
             EU._dri = setInterval(function() {
-                var n = document.createElement('p');  
                 try {
                     // throws an error if doc is not ready
                     n.doScroll('left');
@@ -1493,7 +1492,6 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
                     EU._ready();
                     n = null;
                 } catch (ex) { 
-                    n = null;
                 }
             }, EU.POLL_INTERVAL); 
 
