@@ -1515,11 +1515,11 @@ if (!YAHOO.util.Event) {
                     retryCount = 0;
                     clearInterval(this._interval);
                     this._interval = null;
-                    return false;
+                    return;
                 }
 
                 if (this.locked) {
-                    return false;
+                    return;
                 }
 
                 if (this.isIE) {
@@ -1528,7 +1528,7 @@ if (!YAHOO.util.Event) {
                     // issue.
                     if (!this.DOMReady) {
                         this.startInterval();
-                        return false;
+                        return;
                     }
                 }
 
@@ -1607,7 +1607,7 @@ if (!YAHOO.util.Event) {
 
                 this.locked = false;
 
-                return true;
+                return;
 
             },
 

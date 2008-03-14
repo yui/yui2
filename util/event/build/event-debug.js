@@ -1534,11 +1534,11 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
                     retryCount = 0;
                     clearInterval(this._interval);
                     this._interval = null;
-                    return false;
+                    return;
                 }
 
                 if (this.locked) {
-                    return false;
+                    return;
                 }
 
                 if (this.isIE) {
@@ -1547,7 +1547,7 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
                     // issue.
                     if (!this.DOMReady) {
                         this.startInterval();
-                        return false;
+                        return;
                     }
                 }
 
@@ -1627,7 +1627,7 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
 
                 this.locked = false;
 
-                return true;
+                return;
 
             },
 
