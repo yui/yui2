@@ -1118,7 +1118,7 @@ YAHOO.log(sType + " addListener failed, invalid callback", "error", "Event");
              */
             _tryPreloadAttach: function() {
 
-                if (this.DOMReady && onAvailStack.length === 0) {
+                if (loadComplete && onAvailStack.length === 0) {
                     retryCount = 0;
                     clearInterval(this._interval);
                     this._interval = null;
