@@ -160,7 +160,6 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -1513,7 +1512,6 @@ if(YAHOO.util.DD) {
         }
     });
 }
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -2303,7 +2301,6 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
-
 /**
  * The Paginator widget provides a set of controls to navigate through paged
  * data.
@@ -4337,7 +4334,6 @@ ui.CurrentPageReport.prototype = {
 };
 
 })();
-
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
@@ -7375,14 +7371,12 @@ _initTheadEls : function() {
 
 
     // Bug 1806891
-    if(ua.webkit<=420) {
-        var elTheadDisplay = this._elThead.style.display;
-        setTimeout(function() {
-            oSelf._elThead.style.display = "none";
-        },0);
+    if(ua.webkit && ua.webkit < 420) {
+        var oSelf = this;
         setTimeout(function() {
             oSelf._elThead.style.display = "";
         },0);
+        this._elThead.style.display = 'none';
     }
 },
 
@@ -15387,5 +15381,4 @@ onDataReturnReplaceRows : function(sRequest, oResponse) {
 DT.prototype.onDataReturnSetRecords = DT.prototype.onDataReturnSetRows;
 
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});

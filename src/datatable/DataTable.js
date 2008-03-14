@@ -3035,14 +3035,12 @@ _initTheadEls : function() {
 
 
     // Bug 1806891
-    if(ua.webkit<=420) {
-        var elTheadDisplay = this._elThead.style.display;
-        setTimeout(function() {
-            oSelf._elThead.style.display = "none";
-        },0);
+    if(ua.webkit && ua.webkit < 420) {
+        var oSelf = this;
         setTimeout(function() {
             oSelf._elThead.style.display = "";
         },0);
+        this._elThead.style.display = 'none';
     }
 },
 
