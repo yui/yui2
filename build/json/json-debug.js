@@ -16,7 +16,7 @@ YAHOO.lang.JSON = {
      * @static
      * @private
      */
-    _ESCAPES : /\\./g,
+    _ESCAPES : /\\["\\\/bfnrtu]/g,
     /**
      * Second step in the validation.  Regex used to replace all simple
      * values with ']' characters.
@@ -250,11 +250,6 @@ YAHOO.lang.JSON = {
                 k,v,     // object iteration
                 vt,      // typeof v during iteration
                 a;       // composition array for performance over string concat
-
-            // Test for native support
-            if (o && typeof o.toJSON === 'function') {
-                return o.toJSON();
-            }
 
             // String
             if (t === 'string') {

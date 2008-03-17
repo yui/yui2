@@ -1,7 +1,7 @@
 JSON Utility - Release Notes
 
 2.5.1
-    * Added support for native toJSON method
+    * Updated validation regex to address poor unicode escape treatment in FF
     * Updated special characters RegExp
     * Changed stringification to account for odd responses to typeof
 
