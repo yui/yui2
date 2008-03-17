@@ -3279,9 +3279,13 @@ YAHOO.tool.TestReporter.prototype = {
         //add fields to the form
         for (var prop in this._fields){
             if (YAHOO.lang.hasOwnProperty(this._fields, prop) && typeof this._fields[prop] != "function"){
-                input = document.createElement("input");
+                if (YAHOO.env.ua.ie){
+                    input = document.createElement("<input name=\"" + prop + "\" >");
+                } else {
+                    input = document.createElement("input");
+                    input.name = prop;
+                }
                 input.type = "hidden";
-                input.name = prop;
                 input.value = this._fields[prop];
                 this._form.appendChild(input);
             }
