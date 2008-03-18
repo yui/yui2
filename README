@@ -2,9 +2,16 @@ YUI Library Release Notes
 
 *** version 2.5.1 ***
 
-This update contains additions to the Yahoo, Uploader, Editor, and DataSource components
-to improve YUI support for Adobe AIR as well as general fixes to the YUI library.  Please 
-see the README file for each component in the build directory for specific updates since
+This update contains the following:
+
+- additions to the Yahoo, Uploader, Editor, and DataSource components to improve YUI support for Adobe AIR
+- Douglas Crockford's fix for a security vulnerability where the JSON parser could be tricked into processing
+an unquoted string as quoted which could allow unsafe scripts to be evaled
+- a new aggregate file Ñ yuiloader-dom-event.js that is the ideal baseline rollup to use to be able to 
+lazy-load any part of YUI on-demand
+- over 60 bug fixes
+
+Please see the README file for each component in the build directory for specific updates since
 version 2.5.0.
 
 *** version 2.5.0 ***
