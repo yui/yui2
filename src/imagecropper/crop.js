@@ -205,10 +205,14 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the mouseover event
         */
         _handleMouseOver: function(ev) {
+            var evType = 'keydown';
+            if (YAHOO.env.ua.gecko || YAHOO.env.ua.opera) {
+                evType = 'keypress';
+            }
             if (!this._active) {
                 this._active = true;
                 if (this.get('useKeys')) {
-                    Event.on(document, 'keypress', this._handleKeyPress, this, true);
+                    Event.on(document, evType, this._handleKeyPress, this, true);
                 }
             }
         },
@@ -218,9 +222,13 @@ var Dom = YAHOO.util.Dom,
         * @description Handles the mouseout event
         */
         _handleMouseOut: function(ev) {
+            var evType = 'keydown';
+            if (YAHOO.env.ua.gecko || YAHOO.env.ua.opera) {
+                evType = 'keypress';
+            }
             this._active = false;
             if (this.get('useKeys')) {
-                Event.removeListener(document, 'keypress', this._handleKeyPress);
+                Event.removeListener(document, evType, this._handleKeyPress);
             }
         },
 
