@@ -771,16 +771,16 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @method applyKeyListeners
 	 */
 	applyKeyListeners : function() {
-		var E = YAHOO.util.Event;
+		var E = YAHOO.util.Event,
+			ua = YAHOO.env.ua;
 
-		// IE doesn't fire keypress for arrow/pg keys (non-char keys)
-		var ua = YAHOO.env.ua;
-		var arrowEvt = (ua.ie) ? "keydown" : "keypress";
+		// IE/Safari 3.1 doesn't fire keypress for arrow/pg keys (non-char keys)
+		var arrowEvt = (ua.ie || ua.webkit) ? "keydown" : "keypress";
 
-		// - IE doesn't fire keypress for non-char keys
+		// - IE/Safari 3.1 doesn't fire keypress for non-char keys
 		// - Opera doesn't allow us to cancel keydown or keypress for tab, but 
 		//   changes focus successfully on keydown (keypress is too late to change focus - opera's already moved on).
-		var tabEvt = (ua.ie || ua.opera) ? "keydown" : "keypress";
+		var tabEvt = (ua.ie || ua.opera || ua.webkit) ? "keydown" : "keypress";
 
 		// Everyone likes keypress for Enter (char keys) - whoo hoo!
 		E.on(this.yearEl, "keypress", this._handleEnterKey, this, true);
@@ -796,10 +796,11 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @method purgeKeyListeners
 	 */
 	purgeKeyListeners : function() {
-		var E = YAHOO.util.Event;
+		var E = YAHOO.util.Event,
+			ua = YAHOO.env.ua;
 
-		var arrowEvt = (YAHOO.env.ua.ie) ? "keydown" : "keypress";
-		var tabEvt = (YAHOO.env.ua.ie || YAHOO.env.ua.opera) ? "keydown" : "keypress";
+		var arrowEvt = (ua.ie || ua.webkit) ? "keydown" : "keypress";
+		var tabEvt = (ua.ie || ua.opera || ua.webkit) ? "keydown" : "keypress";
 
 		E.removeListener(this.yearEl, "keypress", this._handleEnterKey);
 		E.removeListener(this.yearEl, arrowEvt, this._handleDirectionKeys);
