@@ -542,17 +542,6 @@ var D = YAHOO.util.Dom,
             D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-active');
 
             this._currentHandle = null;
-            if (!this.get('animate')) {
-                if (this.get('setSize')) {
-                    YAHOO.log('Setting Height and Width', 'info', 'Resize');
-                    this.set('height', this._cache.height);
-                    this.set('width', this._cache.width);
-                } else {
-                    YAHOO.log('Setting Height and Width silently', 'info', 'Resize');
-                    this.set('height', this._cache.height, true);
-                    this.set('width', this._cache.width, true);
-                }
-            }
 
             if (this._proxy) {
                 YAHOO.log('Hide Proxy Element', 'info', 'Resize');

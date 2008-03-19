@@ -520,15 +520,6 @@ var D = YAHOO.util.Dom,
             D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-active');
 
             this._currentHandle = null;
-            if (!this.get('animate')) {
-                if (this.get('setSize')) {
-                    this.set('height', this._cache.height);
-                    this.set('width', this._cache.width);
-                } else {
-                    this.set('height', this._cache.height, true);
-                    this.set('width', this._cache.width, true);
-                }
-            }
 
             if (this._proxy) {
                 this._proxy.style.visibility = 'hidden';
