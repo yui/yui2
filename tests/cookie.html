@@ -542,11 +542,11 @@ YAHOO.test.cookie_test = (function(){
         _should : {
         
             error : {
-                testGetSubInvalidName1 : new TypeError("Cookie.get(): Cookie name must be a non-empty string."),
-                testGetSubInvalidName2 : new TypeError("Cookie.get(): Cookie name must be a non-empty string."),
-                testGetSubInvalidName3 : new TypeError("Cookie.get(): Cookie name must be a non-empty string."),
-                testGetSubInvalidName4 : new TypeError("Cookie.get(): Cookie name must be a non-empty string."),
-                testGetSubInvalidName5 : new TypeError("Cookie.get(): Cookie name must be a non-empty string."),
+                testGetSubInvalidName1 : new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string."),
+                testGetSubInvalidName2 : new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string."),
+                testGetSubInvalidName3 : new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string."),
+                testGetSubInvalidName4 : new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string."),
+                testGetSubInvalidName5 : new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string."),
             
                 testGetSubInvalidSubName1 : new TypeError("Cookie.getSub(): Subcookie name must be a non-empty string."),
                 testGetSubInvalidSubName2 : new TypeError("Cookie.getSub(): Subcookie name must be a non-empty string."),
@@ -560,7 +560,7 @@ YAHOO.test.cookie_test = (function(){
         },
         
         setUp : function () {
-            setCookie("data", "a=b&c=d&e=f&g=h&found=true&count=11&age=29&title=f2e&stuff=no%20way");
+            setCookie("data", "a=b&c=d&e=f&g=h&found=true&count=11&age=29&title=f2e&stuff=no%20way&special=" + encodeURIComponent("Something with & and ="));            
             setCookie("name", "Nicholas%20Zakas");
             setCookie("component", "Cookie%20Utility");
         },
@@ -668,7 +668,12 @@ YAHOO.test.cookie_test = (function(){
         testSubGetWithConverterAndUnknownCookie : function(){
             var value = YAHOO.util.Cookie.getSub("data", "count2", Number);
             Assert.isNull(value, "Retrieved subcookie value should be null.");
-        }        
+        },
+        
+        testSubGetSpecial : function(){
+            var value = YAHOO.util.Cookie.getSub("data", "special");
+            Assert.areEqual("Something with & and =", value, "Sub cookie string is incorrect.");        
+        }
     }));
 
     //-------------------------------------------------------------------------
@@ -1049,6 +1054,12 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual("name=sub=value; expires=" + expires.toGMTString() + "; path=/; domain=yahoo.com; secure", text, "Cookie string is incorrect.");
             //won't work unless the page is loaded from that domain
             //Assert.areEqual("name=value", document.cookie, "Cookie was not set to document.");
+        },
+        
+        testSetSubSpecial : function(){
+            var value = "Something with & and =";
+            var cookieText = YAHOO.util.Cookie.setSub("name", "sub", value);
+            Assert.areEqual("name=sub=" + encodeURIComponent(value), cookieText, "Sub cookie string is incorrect.");        
         }
 
         /*testSetSubComplex : function(){            

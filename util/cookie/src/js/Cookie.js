@@ -105,7 +105,7 @@ YAHOO.util.Cookie = {
         
         for (var i=0, len=hashParts.length; i < len; i++){
             hashPart = hashParts[i].split("=");
-            hash[hashPart[0]] = hashPart[1];
+            hash[decodeURIComponent(hashPart[0])] = decodeURIComponent(hashPart[1]);
         }
         
         return hash;
@@ -114,16 +114,19 @@ YAHOO.util.Cookie = {
     /**
      * Parses a cookie string into an object representing all accessible cookies.
      * @param {String} text The cookie string to parse.
+     * @param {Boolean} decode (Optional) Indicates if the cookie values should be decoded or not. Default is true.
      * @return {Object} An object containing entries for each accessible cookie.
      * @method _parseCookieString
      * @private
      * @static
      */
-    _parseCookieString : function (text /*:String*/) /*:Object*/ {
+    _parseCookieString : function (text /*:String*/, decode /*:Boolean*/) /*:Object*/ {
     
-        var cookies /*:Object*/ = new Object();
+        var cookies /*:Object*/ = new Object();        
         
         if (YAHOO.lang.isString(text) && text.length > 0) {
+        
+            var decodeValue = (decode === false ? function(s){return s;} : decodeURIComponent);
         
             if (/[^=]+=[^=;]?(?:; [^=]+=[^=]?)?/.test(text)){            
                 var cookieParts /*:Array*/ = text.split(/;\s/g);
@@ -137,11 +140,11 @@ YAHOO.util.Cookie = {
                     cookieNameValue = cookieParts[i].match(/([^=]+)=/i);
                     if (cookieNameValue instanceof Array){
                         cookieName = decodeURIComponent(cookieNameValue[1]);
-                        cookieValue = decodeURIComponent(cookieParts[i].substring(cookieName.length+1));
+                        cookieValue = decodeValue(cookieParts[i].substring(cookieName.length+1));
                     } else {
                         //means the cookie does not have an "=", so treat it as a boolean flag
                         cookieName = decodeURIComponent(cookieParts[i]);
-                        cookieValue = true;
+                        cookieValue = cookieName;
                     }
                     cookies[cookieName] = cookieValue;
                 }
@@ -234,7 +237,17 @@ YAHOO.util.Cookie = {
      * @static
      */
     getSubs : function (name /*:String*/) /*:Object*/ {
-        return this.get(name, this._parseCookieHash);    
+        
+        //check cookie name
+        if (!YAHOO.lang.isString(name) || name === ""){
+            throw new TypeError("Cookie.getSubs(): Cookie name must be a non-empty string.");
+        }
+        
+        var cookies = this._parseCookieString(document.cookie, false);
+        if (YAHOO.lang.isString(cookies[name])){
+            return this._parseCookieHash(cookies[name]);
+        }
+        return null;
     },
     
     /**
