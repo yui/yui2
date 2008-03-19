@@ -524,6 +524,8 @@ var D = YAHOO.util.Dom,
             this._cache.start.left = this._cache.xy[0];
             this._cache.top = this._cache.xy[1];
             this._cache.left = this._cache.xy[0];
+            this.set('height', this._cache.height, true);
+            this.set('width', this._cache.width, true);
         },
         /** 
         * @private
@@ -537,11 +539,6 @@ var D = YAHOO.util.Dom,
             var handle = '_handle_for_' + this._currentHandle;
             this._currentDD.unsubscribe('dragEvent', this[handle], this, true);
             this._currentDD.unsubscribe('mouseUpEvent', this._handleMouseUp, this, true);
-
-            D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-' + this._currentHandle + '-active');
-            D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-active');
-
-            this._currentHandle = null;
 
             if (this._proxy) {
                 YAHOO.log('Hide Proxy Element', 'info', 'Resize');
@@ -561,7 +558,6 @@ var D = YAHOO.util.Dom,
                 }
             }
 
-            D.removeClass(this._wrap, this.CSS_RESIZING);
             if (this.get('hover')) {
                 D.addClass(this._wrap, this.CSS_HOVER);
             }
@@ -572,6 +568,11 @@ var D = YAHOO.util.Dom,
                 YAHOO.log('Resetting IE onselectstart function', 'info', 'Resize');
                 document.body.onselectstart = this._ieSelectBack;
             }
+
+            if (this.browser.ie) {
+                D.removeClass(this._wrap, this.CSS_RESIZE);
+            }
+
             for (var i in this._handles) {
                 if (Lang.hasOwnProperty(this._handles, i)) {
                     D.removeClass(this._handles[i], this.CSS_HANDLE + '-active');
@@ -580,7 +581,17 @@ var D = YAHOO.util.Dom,
             if (this.get('hover') && !this._active) {
                 D.addClass(this._wrap, this.CSS_HOVER);
             }
+            D.removeClass(this._wrap, this.CSS_RESIZING);
+
+            D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-' + this._currentHandle + '-active');
+            D.removeClass(this._handles[this._currentHandle], this.CSS_HANDLE + '-active');
+
+            if (this.browser.ie) {
+                D.addClass(this._wrap, this.CSS_RESIZE);
+            }
+
             this._resizeEvent = null;
+            this._currentHandle = null;
         },
         /** 
         * @private

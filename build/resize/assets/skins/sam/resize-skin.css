@@ -7,6 +7,12 @@
     background-color: #7D98B8;
     zoom: 1;
 }
+.yui-skin-sam .yui-resize .yui-resize-handle-l,
+.yui-skin-sam .yui-resize .yui-resize-handle-r,
+.yui-skin-sam .yui-resize .yui-resize-handle-l-active,
+.yui-skin-sam .yui-resize .yui-resize-handle-r-active {
+    height: 100%;
+}
 /* Give a border to the 8-way knob style handles */
 .yui-skin-sam .yui-resize-knob .yui-resize-handle {
     border: 1px solid #808080;
@@ -105,4 +111,12 @@
 .yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-bl,
 .yui-skin-sam .yui-resize-knob .yui-resize-handle-inner-br {
     background-image: none;
+}
+
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-l,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-r,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-l-active,
+.yui-skin-sam .yui-resize-knob .yui-resize-handle-r-active {
+    height: 6px;
+    width: 6px;
 }
