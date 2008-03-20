@@ -1,27 +1,27 @@
 package
 {
 	import com.adobe.serialization.json.JSON;
-	import fl.containers.UILoader;
-	import flash.display.Sprite;
+	import com.yahoo.astra.fl.charts.*;
+	import com.yahoo.astra.fl.charts.events.ChartEvent;
+	import com.yahoo.astra.fl.charts.legend.Legend;
+	import com.yahoo.astra.fl.charts.series.*;
+	import com.yahoo.astra.fl.charts.skins.*;
+	import com.yahoo.astra.utils.InstanceFactory;
+	import com.yahoo.astra.utils.JavaScriptUtil;
+	import com.yahoo.yui.LoggerCategory;
+	import com.yahoo.yui.YUIAdapter;
+	import com.yahoo.yui.charts.*;
+	
+	import fl.core.UIComponent;
+	
 	import flash.display.DisplayObject;
+	import flash.display.Shape;
+	import flash.display.Sprite;
 	import flash.events.ErrorEvent;
 	import flash.events.MouseEvent;
-	import flash.events.SecurityErrorEvent;
 	import flash.external.ExternalInterface;
 	import flash.text.TextFormat;
 	import flash.utils.getQualifiedClassName;
-	import flash.utils.describeType;
-	import fl.managers.StyleManager;
-	import com.yahoo.astra.fl.charts.*;
-	import com.yahoo.astra.fl.charts.series.*;
-	import com.yahoo.astra.fl.charts.skins.*;
-	import com.yahoo.astra.fl.charts.events.ChartEvent;
-	//import com.yahoo.astra.fl.charts.legend.Legend;
-	import com.yahoo.astra.utils.InstanceFactory;
-	import com.yahoo.astra.utils.JavaScriptUtil;
-	import com.yahoo.yui.YUIAdapter;
-	import com.yahoo.yui.LoggerCategory;
-	import com.yahoo.yui.charts.*;
 
 	[SWF(backgroundColor=0xffffff)]
 	/**
@@ -54,11 +54,11 @@ package
 		 */
 		protected var chart:Chart;
 		
-		//protected var legend:Legend;
+		protected var legend:Legend;
 		
-		//protected var _legendDisplay:String = "none";
+		protected var _legendDisplay:String = "none";
 		
-		/*public function get legendDisplay():String
+		public function get legendDisplay():String
 		{
 			return this._legendDisplay;
 		}
@@ -67,7 +67,32 @@ package
 		{
 			this._legendDisplay = value;
 			this.refreshComponentSize();
-		}*/
+		}
+		
+		protected var _spacing:Number = 6;
+		
+		public function get spacing():Number
+		{
+			return this._spacing;
+		}
+		
+		public function set spacing(value:Number):void
+		{
+			this._spacing = value;
+			this.refreshComponentSize();
+		}
+		
+		protected var _padding:Number = 10;
+		
+		public function get padding():Number
+		{
+			return this._padding;
+		}
+		
+		public function set padding(value:Number):void
+		{
+			this._padding = value;
+		}
 		
 		/**
 		 * @private (protected)
@@ -113,7 +138,7 @@ package
 			
 			var ChartType:Class = ChartSerializer.getType(value);
 			var chart:Chart = new ChartType();
-			chart.setStyle("contentPadding", 10);
+			chart.setStyle("contentPadding", 0);
 			chart.setStyle("backgroundSkin", Sprite);
 			var backgroundFactory:InstanceFactory = this.createBorderBackgroundFactory();
 			backgroundFactory.properties.fillColor = 0xffffff;
@@ -121,6 +146,7 @@ package
 			backgroundFactory.properties.borderWeight = 1;
 			backgroundFactory.properties.borderColor = 0x000000;
 			chart.setStyle("dataTipBackgroundSkin", backgroundFactory);
+			chart.setStyle("seriesMarkerSkins", []);
 			this.addChildAt(chart, 1);
 			
 			this.component = chart;
@@ -129,6 +155,8 @@ package
 			this.chart.addEventListener(ChartEvent.ITEM_ROLL_OUT, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(ChartEvent.ITEM_ROLL_OVER, chartItemEventHandler, false, 0, true);
 			this.chart.addEventListener(MouseEvent.MOUSE_DOWN, chartItemExtraEventHandler, false, 0, true);
+			
+			this.chart.legend = this.legend;
 			
 			this.log("Type set to \"" + value + "\"");
 		}
@@ -170,26 +198,16 @@ package
 			//set data provider and new styles
 			this.chart.dataProvider = dataProvider;
 			
+			//make sures the series are created!
 			this.chart.drawNow();
 			
+			//set the styles for the series
 			if(styleChanged)
 			{
 				this.setSeriesStyles(seriesStyles);
-				this.chart.drawNow();
 			}
 			
-			/*if(this.legend)
-			{
-				if(this.legendDisplay != "none")
-				{
-					this.legend.dataProvider = this.chart.dataProvider as Array;
-					this.refreshComponentSize();
-				}
-				else if(this.legend) //display: "none"
-				{
-					this.legend.visible = false;
-				}
-			}*/
+			this.refreshComponentSize();
 		}
 		
 		/**
@@ -506,11 +524,18 @@ package
 				//by default, we assume it's json data, only setStyles will send false
 				value = JSON.decode(value as String);
 			}
+			
+			var needsSizingRefresh:Boolean = false;
+			
 			switch(name)
 			{
 				case "padding":
-					var contentPadding:Number = this.backgroundAndBorder.borderWeight + Number(value);
-					this.chart.setStyle("contentPadding", contentPadding);
+					this.padding = value as Number;
+					needsSizingRefresh = true;
+					break;
+				case "spacing":
+					this.spacing = value as Number;
+					needsSizingRefresh = true;
 					break;
 				case "animationEnabled":
 					this.chart.setStyle("animationEnabled", value);
@@ -524,10 +549,7 @@ package
 					if(value.size != null)
 					{
 						this.backgroundAndBorder.borderWeight = value.size;
-						contentPadding = this.chart.getStyle("contentPadding") as Number;
-						contentPadding += value.size;
-						this.chart.setStyle("contentPadding", contentPadding);
-						this.refreshComponentSize();
+						needsSizingRefresh = true;
 					}
 					break;
 				case "background":
@@ -563,24 +585,29 @@ package
 				case "yAxis":
 					this.setAxisStyles(value, "vertical");
 					break;
-				/*case "legend":
-					if(this.legend)
-					{
-						this.setLegendStyles(value);
-					}
-					break;*/
+				case "legend":
+					this.setLegendStyles(value);
+					break;
 				default:
 					this.log("Unknown style: " + name);
+			}
+			
+			if(needsSizingRefresh)
+			{
+				this.refreshComponentSize();
 			}
 		}
 		
 		public function setSeriesStyles(styles:Array):void
 		{
+			var defaultPointSkins:Array = [CircleSkin, DiamondSkin, RectangleSkin, TriangleSkin];
+			var defaultSeriesColors:Array =
+					[0x00b8bf, 0x8dd5e7, 0xedff9f, 0xffa928, 0xc0fff6, 0xd00050,
+					0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
+					0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77];
+					
 			//will be filled based on the defaults or the series style definition, if present.
 			var seriesColors:Array = [];
-			var seriesMarkerSizes:Array = [];
-			var seriesMarkerSkins:Array = [];
-			var seriesLineWeights:Array = [];
 			var seriesCount:int = Math.min(this.chart.dataProvider.length, styles.length);
 			for(var i:int = 0; i < seriesCount; i++)
 			{
@@ -592,21 +619,10 @@ package
 				}
 				
 				//defaults
-				var defaultColors:Array =
-				[
-					0x00b8bf, 0x8dd5e7, 0xedff9f, 0xffa928, 0xc0fff6, 0xd00050,
-					0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
-					0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
-				];
-				
+				var defaultColors:Array = defaultSeriesColors.concat();
 				if(series is PieSeries)
 				{
-					defaultColors =
-					[[
-						0x00b8bf, 0x8dd5e7, 0xc0fff6, 0xffa928, 0xedff9f, 0xd00050,
-						0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
-						0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
-					]];
+					defaultColors = [defaultColors];
 				}
 				
 				var defaultSize:Number = 10;
@@ -618,21 +634,17 @@ package
 				var defaultSkin:Object = RectangleSkin;
 				if(series is LineSeries)
 				{
-					defaultSkin = CircleSkin;
+					defaultSkin = defaultPointSkins[i % defaultPointSkins.length];
 				}
 				else if(series is PieSeries)
 				{
 					defaultSkin = [defaultSkin];
 				}
-				
-				var defaultLineSize:Number = 3;
 			
 				//initialize styles with defaults
-				var size:Number = defaultSize;
 				var color:Object = defaultColors[i % defaultColors.length];
 				var skin:Object = defaultSkin;
-				var mode:Object = BackgroundImageMode.REPEAT;
-				var lineSize:Number = defaultLineSize;
+				var mode:Object = null;
 				if(style)
 				{
 					for(var styleName:String in style)
@@ -640,6 +652,11 @@ package
 						switch(styleName)
 						{
 							case "images":
+								if(!series is PieSeries)
+								{
+									this.log(styleName + " style not supported by specified series type.");
+									break;
+								}
 								var images:Array = style.images as Array;
 								var imageCount:int = images.length;
 								for(var j:int = 0; j < imageCount; j++)
@@ -650,13 +667,21 @@ package
 								break;
 							case "image":
 								skin = this.createMarkerSkin(style.image, series);
-								if(!(series is LineChart))
+								if(!(series is LineSeries))
 								{
 									skin.properties.fillColor = color;
 									skin.properties.fillAlpha = 1;
 								}
 								break;
+							case "mode":
+								mode = style.mode;
+								break;
 							case "colors":
+								if(!series is PieSeries)
+								{
+									this.log(styleName + " style not supported by specified series type.");
+									break;
+								}
 								var colors:Array = style.colors;
 								var colorCount:int = colors.length;
 								for(j = 0; j < colorCount; j++)
@@ -667,40 +692,42 @@ package
 								break;
 							case "color":
 								color = this.parseColor(style.color);
-								if(skin is InstanceFactory && !(series is LineChart))
+								if(skin is InstanceFactory && !(series is LineSeries))
 								{
 									skin.properties.fillColor = color;
 									skin.properties.fillAlpha = 1;
 								}
 								break;
 							case "size":
-								size = Number(style.size);
-								break;
-							case "mode":
-								mode = style.mode;
+								UIComponent(series).setStyle("markerSize", style.size);
 								break;
 							case "lineSize":
-								lineSize = style.lineSize;
+								UIComponent(series).setStyle("lineWeight", style.lineSize);
+								break;
+							case "connectPoints":
+								UIComponent(series).setStyle("connectPoints", style.connectPoints);
+								break;
+							case "connectDiscontinuousPoints":
+								UIComponent(series).setStyle("connectDiscontinuousPoints", style.connectDiscontinuousPoints);
+								break;
+							case "discontinuousDashLength":
+								UIComponent(series).setStyle("discontinuousDashLength", style.discontinuousDashLength);
 								break;
 							default:
 								this.log("Unknown series style: " + styleName);
 						}
 					}
 				}
-				if(skin is InstanceFactory)
+				if(skin is InstanceFactory && mode)
 				{
 					skin.properties.imageMode = mode;
 				}
 				
+				UIComponent(series).setStyle("markerSkin", skin);
+				
 				seriesColors[i] = color;
-				seriesMarkerSizes[i] = size;
-				seriesMarkerSkins[i] = skin;
-				seriesLineWeights[i] = lineSize;
 			}
 			this.chart.setStyle("seriesColors", seriesColors);
-			this.chart.setStyle("seriesMarkerSizes", seriesMarkerSizes);
-			this.chart.setStyle("seriesMarkerSkins", seriesMarkerSkins);
-			this.chart.setStyle("seriesLineWeights", seriesLineWeights);
 
 			this.chart.drawNow();
 		}
@@ -715,7 +742,6 @@ package
 		 */
 		override protected function initializeComponent():void
 		{
-			
 			super.initializeComponent();
 			
 			try
@@ -756,8 +782,9 @@ package
 			this.backgroundAndBorder.addEventListener(ErrorEvent.ERROR, backgroundErrorHandler);
 			this.addChild(this.backgroundAndBorder);
 			
-			/*this.legend = new Legend();
-			this.addChild(this.legend);*/
+			this.legend = new Legend();
+			this.legend.setStyle("backgroundSkin", Shape);
+			this.addChild(this.legend);
 		}
 		
 		/**
@@ -777,39 +804,50 @@ package
 			
 			if(this.chart)
 			{
-				/*if(this.legend && this.legendDisplay != "none")
+				this.chart.x = this.chart.y = this.backgroundAndBorder.borderWeight + this.padding;
+				this.chart.width -= 2 * (this.backgroundAndBorder.borderWeight + this.padding);
+				this.chart.height -= 2 * (this.backgroundAndBorder.borderWeight + this.padding);
+				if(this.legend && this.legendDisplay != "none")
 				{
+					this.legend.visible = true;
+					//we need to draw because the legend resizes itself
 					this.legend.drawNow();
-					var padding:Number = this.chart.getStyle("contentPadding") as Number;
+					
 					if(this.legendDisplay == "left" || this.legendDisplay == "right")
 					{
 						if(this.legendDisplay == "left")
 						{
-							this.legend.x = padding;
-							this.chart.x += this.legend.width + padding - this.backgroundAndBorder.borderWeight;
+							this.legend.x = this.backgroundAndBorder.borderWeight + this.padding;
+							this.chart.x = this.legend.x + this.legend.width + this.spacing;
 						}
 						else //right
 						{
-							this.legend.x = this.stage.stageWidth - this.legend.width - padding;
+							this.legend.x = this.stage.stageWidth - this.backgroundAndBorder.borderWeight - this.legend.width - padding;
 						}
-						this.legend.y = (this.stage.stageHeight - this.legend.height) / 2;
-						this.chart.width -= (this.legend.width + padding);
+						//center vertically
+						this.legend.y = Math.max(0, (this.stage.stageHeight - this.legend.height) / 2);
+						this.chart.width -= (this.legend.width + this.spacing);
 					}
-					else
+					else //top or bottom
 					{
 						if(this.legendDisplay == "top")
 						{
-							this.legend.y = padding;
-							this.chart.y += this.legend.height + padding - this.backgroundAndBorder.borderWeight;
+							this.legend.y = this.backgroundAndBorder.borderWeight + this.padding;
+							this.chart.y = this.legend.y + this.legend.height + this.spacing;
 						}
 						else //bottom
 						{
-							this.legend.y = this.stage.stageHeight - this.legend.height - padding;
+							this.legend.y = this.stage.stageHeight - this.backgroundAndBorder.borderWeight - this.legend.height - padding;
 						}
-						this.legend.x = (this.stage.stageWidth - this.legend.width) / 2;
-						this.chart.height -= (this.legend.height + padding);
+						//center horizontally
+						this.legend.x = Math.max(0, (this.stage.stageWidth - this.legend.width) / 2);
+						this.chart.height -= (this.legend.height + this.spacing);
 					}
-				}*/
+				}
+				else
+				{
+					this.legend.visible = false;
+				}
 				this.chart.drawNow();
 			}
 		}
@@ -887,14 +925,19 @@ package
 		protected function setDataTipStyles(styles:Object):void
 		{
 			var contentPadding:Number = 6;
-			if(styles.padding)
+			if(styles.padding >= 0)
 			{
 				contentPadding = styles.padding;
 			}
 			
 			if(styles.border || styles.background)
 			{
+				//defaults
 				var backgroundFactory:InstanceFactory = this.createBorderBackgroundFactory();
+				backgroundFactory.properties.fillColor = 0xffffff;
+				backgroundFactory.properties.fillAlpha = 0.9;
+				backgroundFactory.properties.borderWeight = 1;
+				backgroundFactory.properties.borderColor = 0x000000;
 				var border:Object = styles.border;
 				if(border)
 				{
@@ -982,7 +1025,6 @@ package
 				{
 					this.chart.setStyle(axisName + "AxisMinorGridLineWeight", minorGridLines.size);
 					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines", minorGridLines.size > 0);
-					this.log("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorGridLines" + " " + minorGridLines.size + " " + (minorGridLines.size > 0));
 				}
 			}
 			
@@ -996,15 +1038,18 @@ package
 				if(majorTicks.size != null)
 				{
 					this.chart.setStyle(axisName + "AxisTickWeight", majorTicks.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisTicks", majorTicks.size > 0);
 				}
 				if(majorTicks.length != null)
 				{
 					this.chart.setStyle(axisName + "AxisTickLength", majorTicks.length);
 				}
-				if(majorTicks.position)
+				if(majorTicks.display)
 				{
-					this.chart.setStyle(axisName + "AxisTickPosition", majorTicks.position);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisTicks", majorTicks.display != "none");
+					if(majorTicks.display != "none")
+					{
+						this.chart.setStyle(axisName + "AxisTickPosition", majorTicks.display);
+					}
 				}
 			}
 			
@@ -1018,20 +1063,23 @@ package
 				if(minorTicks.size != null)
 				{
 					this.chart.setStyle(axisName + "AxisMinorTickWeight", minorTicks.size);
-					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorTicks", minorTicks.size > 0);
 				}
 				if(minorTicks.length != null)
 				{
 					this.chart.setStyle(axisName + "AxisMinorTickLength", minorTicks.length);
 				}
-				if(minorTicks.position)
+				if(minorTicks.display)
 				{
-					this.chart.setStyle(axisName + "AxisMinorTickPosition", minorTicks.position);
+					this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisMinorTicks", minorTicks.display != "none");
+					if(minorTicks.display != "none")
+					{
+						this.chart.setStyle(axisName + "AxisMinorTickPosition", minorTicks.display);
+					}
 				}
 			}
 		}
 		
-		/*protected function setLegendStyles(styles:Object):void
+		protected function setLegendStyles(styles:Object):void
 		{
 			if(styles.font)
 			{
@@ -1039,9 +1087,9 @@ package
 				this.legend.setStyle("textFormat", textFormat);
 			}
 			
-			if(styles.spacing)
+			if(styles.spacing != null)
 			{
-				this.legend.setStyle("itemSpacing", styles.spacing);
+				this.legend.setStyle("gap", styles.spacing);
 			}
 			
 			if(styles.display)
@@ -1050,14 +1098,61 @@ package
 				{
 					case "left":
 					case "right":
-						this.legend.setStyle("orientation", "vertical");
+						this.legend.setStyle("direction", "vertical");
 						break;
 					default: //top, bottom
-						this.legend.setStyle("orientation", "horizontal");
+						this.legend.setStyle("direction", "horizontal");
 				}
 				this.legendDisplay = styles.display;
 			}
-		}*/
+			
+			var contentPadding:Number = 6;
+			if(styles.padding != null)
+			{
+				contentPadding = styles.padding;
+			}
+			
+			if(styles.border || styles.background)
+			{
+				var backgroundFactory:InstanceFactory = this.createBorderBackgroundFactory();
+				var border:Object = styles.border;
+				if(border)
+				{
+					if(border.color != null)
+					{
+						backgroundFactory.properties.borderColor = this.parseColor(border.color)
+					}
+					if(border.size != null)
+					{
+						backgroundFactory.properties.borderWeight = border.size;
+						contentPadding += border.size;
+					}
+				}
+				var background:Object = styles.background;
+				if(background)
+				{
+					if(background.color != null)
+					{
+						backgroundFactory.properties.fillColor = this.parseColor(background.color);
+					}
+					if(background.image)
+					{
+						backgroundFactory.properties.image = background.image;
+					}
+					if(background.alpha != null)
+					{
+						backgroundFactory.properties.fillAlpha = background.alpha;
+					}
+					if(background.mode)
+					{
+						backgroundFactory.properties.imageMode = background.mode;
+					}
+				}
+				this.legend.setStyle("backgroundSkin", backgroundFactory);
+			}
+			
+			this.legend.setStyle("contentPadding", contentPadding);
+		}
 		
 	//--------------------------------------
 	//  Private Methods
@@ -1075,7 +1170,7 @@ package
 				fillColor: 0xffffff,
 				fillAlpha: 1,
 				borderColor: 0x000000,
-				borderWeight: 1,
+				borderWeight: 0,
 				image: null,
 				imageMode: BackgroundImageMode.REPEAT
 			};
@@ -1100,6 +1195,7 @@ package
 			//turn off the fill
 			skin.properties.fillAlpha = 0;
 			skin.properties.image = imagePath;
+			skin.properties.imageMode = BackgroundImageMode.REPEAT;
 			if(series is LineSeries)
 			{
 				//make points fit to size and maintain their aspect ratio

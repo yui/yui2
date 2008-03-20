@@ -3,7 +3,7 @@
  *
  * @namespace YAHOO.widget
  * @class PieChart
- * @uses YAHOO.widget.CartesianChart
+ * @uses YAHOO.widget.Chart
  * @constructor
  * @param containerId {HTMLElement} Container element for the Flash Player instance.
  * @param dataSource {YAHOO.util.DataSource} DataSource instance.

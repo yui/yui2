@@ -25,9 +25,10 @@ YAHOO.widget.FlashAdapter = function(swfURL, containerID, attributes)
 	this._attributes = attributes;
 	
 	this._swfURL = swfURL;
+	this._containerID = containerID;
 	
 	//embed the SWF file in the page
-	this._embedSWF(this._swfURL, containerID, attributes.id, attributes.version,
+	this._embedSWF(this._swfURL, this._containerID, attributes.id, attributes.version,
 		attributes.backgroundColor, attributes.expressInstall, attributes.wmode);
 	
 	/**
@@ -46,6 +47,14 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	 * @private
 	 */
 	_swfURL: null,
+
+	/**
+	 * The ID of the containing DIV.
+	 * @property _containerID
+	 * @type String
+	 * @private
+	 */
+	_containerID: null,
 
 	/**
 	 * A reference to the embedded SWF file.
@@ -79,6 +88,37 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	toString: function()
 	{
 		return "FlashAdapter " + this._id;
+	},
+
+	/**
+	 * Nulls out the entire FlashAdapter instance and related objects and removes attached
+	 * event listeners and clears out DOM elements inside the container. After calling
+	 * this method, the instance reference should be expliclitly nulled by implementer,
+	 * as in myChart = null. Use with caution!
+	 *
+	 * @method destroy
+	 */
+	destroy: function()
+	{
+		//kill the Flash Player instance
+		if(this._swf)
+		{
+			var container = YAHOO.util.Dom.get(this._containerID);
+			container.removeChild(this._swf);
+		}
+		
+		var instanceName = this._id;
+		
+		//null out properties
+		for(var prop in this)
+		{
+			if(YAHOO.lang.hasOwnProperty(this, prop))
+			{
+				this[prop] = null;
+			}
+		}
+		
+		YAHOO.log("FlashAdapter instance destroyed: " + instanceName);
 	},
 
 	/**
@@ -251,4 +291,50 @@ YAHOO.widget.FlashAdapter.eventHandler = function(elementID, event)
 	{
 		loadedSWF.owner._eventHandler(event);
 	}
+};
+
+/**
+ * The number of proxy functions that have been created.
+ * @static
+ * @private
+ */
+YAHOO.widget.FlashAdapter.proxyFunctionCount = 0;
+
+/**
+ * Creates a globally accessible function that wraps a function reference.
+ * Returns the proxy function's name as a string for use by the SWF through
+ * ExternalInterface.
+ *
+ * @method YAHOO.widget.FlashAdapter.createProxyFunction
+ * @static
+ * @private
+ */
+YAHOO.widget.FlashAdapter.createProxyFunction = function(func)
+{
+	var index = YAHOO.widget.FlashAdapter.proxyFunctionCount;
+	YAHOO.widget.FlashAdapter["proxyFunction" + index] = function()
+	{
+		return func.apply(null, arguments);
+	};
+	YAHOO.widget.FlashAdapter.proxyFunctionCount++;
+	return "YAHOO.widget.FlashAdapter.proxyFunction" + index.toString();
+};
+
+/**
+ * Removes a function created with createProxyFunction()
+ * 
+ * @method YAHOO.widget.FlashAdapter.removeProxyFunction
+ * @static
+ * @private
+ */
+YAHOO.widget.FlashAdapter.removeProxyFunction = function(funcName)
+{
+	//quick error check
+	if(!funcName || funcName.indexOf("YAHOO.widget.FlashAdapter.proxyFunction") < 0)
+	{
+		return;
+	}
+	
+	funcName = funcName.substr(26);
+	YAHOO.widget.FlashAdapter[funcName] = null;
 };

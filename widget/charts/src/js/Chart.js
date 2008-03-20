@@ -155,6 +155,15 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_initialized: false,
 
 	/**
+	 * Stores a reference to the dataTipFunction created by
+	 * YAHOO.widget.FlashAdapter.createProxyFunction()
+	 * @property _dataTipFunction
+	 * @type String
+	 * @private
+	 */
+	_dataTipFunction: null,
+
+	/**
 	 * Public accessor to the unique name of the Chart instance.
 	 *
 	 * @method toString
@@ -209,6 +218,28 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 			styles[i] = YAHOO.lang.JSON.stringify(styles[i]);	
 		}
 		this._swf.setSeriesStyles(styles);
+	},
+	
+	destroy: function()
+	{
+		//stop polling if needed
+		if(this._dataSource !== null)
+		{
+			if(this._pollingID !== null)
+			{
+				this._dataSource.clearInterval(this._pollingID);
+				this._pollingID = null;
+			}
+		}
+		
+		//remove proxy functions
+		if(this._dataTipFunction)
+		{
+			YAHOO.widget.FlashAdapter.removeProxyFunction(this._dataTipFunction);
+		}
+		
+		//call last
+		YAHOO.widget.Chart.superclass.destroy.call(this);
 	},
 	
 	/**
@@ -368,10 +399,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 			{
 				this._pollingID = this._dataSource.setInterval(this._pollingInterval, this._request, this._loadDataHandler, this);
 			}
-			else
-			{
-				this._dataSource.sendRequest(this._request, this._loadDataHandler, this);
-			}
+			this._dataSource.sendRequest(this._request, this._loadDataHandler, this);
 		}
 	},
 
@@ -407,18 +435,21 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 					var clonedSeries = {};
 					for(var prop in currentSeries)
 					{
-						if(prop == "style" && currentSeries.style !== null)
+						if(YAHOO.lang.hasOwnProperty(currentSeries, prop))
 						{
-							clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
-							styleChanged = true;
-							
-							//we don't want to modify the styles again next time
-							//so null out the style property.
-							currentSeries.style = null;
-						}
-						else
-						{
-							clonedSeries[prop] = currentSeries[prop];
+							if(prop == "style" && currentSeries.style !== null)
+							{
+								clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
+								styleChanged = true;
+   
+								//we don't want to modify the styles again next time
+								//so null out the style property.
+								currentSeries.style = null;
+							}
+							else
+							{
+								clonedSeries[prop] = currentSeries[prop];
+							}
 						}
 					}
 					dataProvider.push(clonedSeries);
@@ -547,7 +578,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_getCategoryNames: function()
 	{
-		return this._swf.getCategoryNames();
+		this._swf.getCategoryNames();
 	},
 
 	/**
@@ -562,25 +593,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	},
 	
 	/**
-	 * Storage for the dataTipFunction attribute.
-	 *
-	 * @property _dataTipFunction
-	 * @private
-	 */
-	_dataTipFunction: null,
-	
-	/**
-	 * Getter for the dataTipFunction attribute.
-	 *
-	 * @method _getDataTipFunction
-	 * @private
-	 */
-	_getDataTipFunction: function()
-	{
-		return this._dataTipFunction;
-	},
-	
-	/**
 	 * Setter for the dataTipFunction attribute.
 	 *
 	 * @method _setDataTipFunction
@@ -588,7 +600,16 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_setDataTipFunction: function(value)
 	{
-		this._dataTipFunction = value;
+		if(this._dataTipFunction)
+		{
+			YAHOO.widget.FlashAdapter.removeProxyFunction(this._dataTipFunction);
+		}
+		
+		if(value && typeof value == "function")
+		{
+			value = YAHOO.widget.FlashAdapter.createProxyFunction(value);
+			this._dataTipFunction = value;
+		}
 		this._swf.setDataTipFunction(value);
 	},
 

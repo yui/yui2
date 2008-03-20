@@ -1,5 +1,12 @@
 YUI Library - Charts - Release Notes
 
+2.6.0
+  * Support for legends
+  * New series styles connectPoints, connectDiscontinuousPoints, and discontinuousDashLength
+  * dataTipFunction, xAxisLabelFunction, and yAxisLabelFunction attributes now support function references
+  * Added destroy() function.
+  * Changed majorTicks and minorTicks substyle "position" to "display". New option "none" will hide ticks.
+
 2.5.1
   * No changes
 

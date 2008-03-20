@@ -18,6 +18,43 @@
 YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 {
 	/**
+	 * Stores a reference to the xAxis labelFunction created by
+	 * YAHOO.widget.FlashAdapter.createProxyFunction()
+	 * @property _xAxisLabelFunction
+	 * @type String
+	 * @private
+	 */
+	_xAxisLabelFunction: null,
+	
+	/**
+	 * Stores a reference to the yAxis labelFunction created by
+	 * YAHOO.widget.FlashAdapter.createProxyFunction()
+	 * @property _yAxisLabelFunction
+	 * @type String
+	 * @private
+	 */
+	_yAxisLabelFunction: null,
+	
+	destroy: function()
+	{
+		//remove proxy functions
+		if(this._xAxisLabelFunction)
+		{
+			YAHOO.widget.FlashAdapter.removeProxyFunction(this._xAxisLabelFunction);
+			this._xAxisLabelFunction = null;
+		}
+		
+		if(this._yAxisLabelFunction)
+		{
+			YAHOO.widget.FlashAdapter.removeProxyFunction(this._yAxisLabelFunction);
+			this._yAxisLabelFunction = null;
+		}
+	
+		//call last
+		YAHOO.widget.CartesianChart.superclass.destroy.call(this);
+	},
+	
+	/**
 	 * Initializes the attributes.
 	 *
 	 * @method _initAttributes
@@ -132,6 +169,16 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setXAxis: function(value)
 	{
+		if(this._xAxisLabelFunction)
+		{
+			YAHOO.widget.FlashAdapter.removeProxyFunction(this._xAxisLabelFunction);
+		}
+		
+		if(value.labelFunction && typeof value.labelFunction == "function")
+		{
+			value.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value);
+			this._xAxisLabelFunction = value.labelFunction;
+		}
 		this._swf.setHorizontalAxis(value);
 	},
 
@@ -143,6 +190,16 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setYAxis: function(value)
 	{
+		if(this._yAxisLabelFunction)
+		{
+			YAHOO.widget.FlashAdapter.removeProxyFunction(this._yAxisLabelFunction);
+		}
+
+		if(value.labelFunction && typeof value.labelFunction == "function")
+		{
+			value.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+			this._yAxisLabelFunction = value.labelFunction;
+		}
 		this._swf.setVerticalAxis(value);
 	}
 });
