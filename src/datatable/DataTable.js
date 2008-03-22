@@ -2375,19 +2375,17 @@ _sync : function() {
  * @private
  */
 _syncColWidths : function() {
-    if(!this.get('scrollable')) {
-        return;
-    }
+    var scrolling = this.get('scrollable');
 
     if(this._elTbody.rows.length > 0) {
         // Validate there is at least one row with cells and at least one Column
-        var allKeys = this._oColumnSet.keys,
-            elRow = this.getFirstTrEl();
+        var allKeys   = this._oColumnSet.keys,
+            elRow     = this.getFirstTrEl();
     
         if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
             // Temporarily unsnap container since it causes inaccurate calculations
             var bUnsnap = false;
-            if((YAHOO.env.ua.gecko || YAHOO.env.ua.opera) && this.get("scrollable")) {
+            if(scrolling && (YAHOO.env.ua.gecko || YAHOO.env.ua.opera)) {
                 bUnsnap = true;
                 if(this.get("width")) {
                     this._elTheadContainer.style.width = "";
@@ -2406,31 +2404,41 @@ _syncColWidths : function() {
                 oColumn = allKeys[i];
                 // Only for Columns without widths
                 if(!oColumn.width) {
-                    this._setColumnWidth(oColumn, "auto");
+                    this._setColumnWidth(oColumn, "auto","visible");
                 }
             }
     
             // Calculate width for every Column
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
-                var newWidth;
+                var newWidth = 0;
+                var overflow = 'hidden';
                 
                 // Columns without widths
                 if(!oColumn.width) {
                     var elTh = oColumn.getThEl();
                     var elTd = elRow.cells[i];
+
+                    if (scrolling) {
+                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
+                                elTh.firstChild : elTd.firstChild;               
                     
-                    if(elTh.offsetWidth !== elTd.offsetWidth) {
-                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ? elTh.firstChild : elTd.firstChild;               
-                        // Calculate the final width by comparing liner widths
-                        newWidth = elWider.offsetWidth -
+                        if(elTh.offsetWidth !== elTd.offsetWidth ||
+                            elWider.offsetWidth < oColumn.minWidth) {
+
+                            // Calculate the new width by comparing liner widths
+                            newWidth = Math.max(0, oColumn.minWidth,
+                                elWider.offsetWidth -
                                 (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
-                                (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0);
-                        
-                        // Validate against minWidth        
-                        newWidth = (oColumn.minWidth && (oColumn.minWidth > newWidth)) ?
-                                oColumn.minWidth : newWidth;
-                
+                                (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
+                        }
+                    } else if (elTd.offsetWidth < oColumn.minWidth) {
+                        // bug parity between scrolling and non-scrolling tables
+                        overflow = elTd.offsetWidth ? 'visible' : 'hidden';
+                        newWidth = Math.max(0, oColumn.minWidth,
+                            elTd.offsetWidth -
+                            (parseInt(Dom.getStyle(elTd,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elTd,"paddingRight"),10)|0));
                     }
                 }
                 // Columns with widths
@@ -2441,12 +2449,11 @@ _syncColWidths : function() {
                 // Hidden Columns
                 if(oColumn.hidden) {
                     oColumn._nLastWidth = newWidth;
-                    newWidth = 1;
-                }
-                
+                    this._setColumnWidth(oColumn, '1px','hidden'); 
+
                 // Update to the new width
-                if(newWidth) {
-                    this._setColumnWidth(oColumn, newWidth+"px"); 
+                } else if (newWidth) {
+                    this._setColumnWidth(oColumn, newWidth+'px', overflow);
                 }
             }
             
@@ -2456,6 +2463,7 @@ _syncColWidths : function() {
                 this._elTheadContainer.style.width = sWidth;
                 this._elTbodyContainer.style.width = sWidth;     
             } 
+
         }
     }
 
@@ -3029,7 +3037,7 @@ _initTheadEls : function() {
             oHiddenColumn._nLastWidth = oHiddenThEl.offsetWidth -
                         (parseInt(Dom.getStyle(oHiddenThEl,"paddingLeft"),10)|0) -
                         (parseInt(Dom.getStyle(oHiddenThEl,"paddingRight"),10)|0);
-            this._setColumnWidth(oHiddenColumn, "1px"); 
+            this._setColumnWidth(oHiddenColumn.getKeyIndex(), "1px"); 
         }
     }
 
@@ -5618,16 +5626,17 @@ sortColumn : function(oColumn, sDir) {
  * @param sWidth {String} New width value.
  * @private
  */
-_setColumnWidth : function(oColumn, sWidth) {
+_setColumnWidth : function(oColumn, sWidth, sOverflow) {
     oColumn = this.getColumn(oColumn);
     if(oColumn) {
+        sOverflow = sOverflow || 'hidden';
         // Create STYLE node
         if(!DT._bStylesheetFallback) {
             var s;
             if(!DT._elStylesheet) {
-                    s = document.createElement('style');
-                    s.type = 'text/css';
-                    DT._elStylesheet = document.getElementsByTagName('head').item(0).appendChild(s);
+                s = document.createElement('style');
+                s.type = 'text/css';
+                DT._elStylesheet = document.getElementsByTagName('head').item(0).appendChild(s);
             }
                 
             if(DT._elStylesheet) {
@@ -5639,11 +5648,11 @@ _setColumnWidth : function(oColumn, sWidth) {
                 var rule = DT._oStylesheetRules[sClassname];
                 if (!rule) {
                     if (s.styleSheet && s.styleSheet.addRule) {
-                        s.styleSheet.addRule(sClassname,"overflow:hidden");
+                        s.styleSheet.addRule(sClassname,"overflow:"+sOverflow);
                         s.styleSheet.addRule(sClassname,"width:"+sWidth);
                         rule = s.styleSheet.rules[s.styleSheet.rules.length-1];
                     } else if (s.sheet && s.sheet.insertRule) {
-                        s.sheet.insertRule(sClassname+" {overflow:hidden;width:"+sWidth+";}",s.sheet.cssRules.length);
+                        s.sheet.insertRule(sClassname+" {overflow:"+sOverflow+";width:"+sWidth+";}",s.sheet.cssRules.length);
                         rule = s.sheet.cssRules[s.sheet.cssRules.length-1];
                     } else {
                         DT._bStylesheetFallback = true;
@@ -5653,6 +5662,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                 
                 // Update existing rule for the Column
                 else {
+                    rule.style.overflow = sOverflow;
                     rule.style.width = sWidth;
                 } 
                 return;
@@ -5666,7 +5676,8 @@ _setColumnWidth : function(oColumn, sWidth) {
                 sWidth = ""; 
             }
 
-            if (!this._aFallbackColResizer[this._elTbody.rows.length]) {
+            var rowslen = this._elTbody ? this._elTbody.rows.length : 0;
+            if (!this._aFallbackColResizer[rowslen]) {
                 /*
                 Compile a custom function to do all the cell width
                 assignments at the same time.  A new resizer function is created
@@ -5690,7 +5701,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                     'var colIdx=oColumn.getKeyIndex();',
                     'oColumn.getThEl().firstChild.style.width='
                 ];
-                for (i=this._elTbody.rows.length-1, j=2; i >= 0; --i) {
+                for (i=rowslen-1, j=2; i >= 0; --i) {
                     resizerDef[j++] = 'this._elTbody.rows[';
                     resizerDef[j++] = i;
                     resizerDef[j++] = '].cells[colIdx].firstChild.style.width=';
@@ -5700,7 +5711,7 @@ _setColumnWidth : function(oColumn, sWidth) {
                 }
                 resizerDef[j] = 'sWidth;';
                 resizerDef[j+1] = 'oColumn.getThEl().firstChild.style.overflow=';
-                for (i=this._elTbody.rows.length-1, k=j+2; i >= 0; --i) {
+                for (i=rowslen-1, k=j+2; i >= 0; --i) {
                     resizerDef[k++] = 'this._elTbody.rows[';
                     resizerDef[k++] = i;
                     resizerDef[k++] = '].cells[colIdx].firstChild.style.overflow=';
@@ -5708,14 +5719,14 @@ _setColumnWidth : function(oColumn, sWidth) {
                     resizerDef[k++] = i;
                     resizerDef[k++] = '].cells[colIdx].style.overflow=';
                 }
-                resizerDef[k] = '"hidden";';
-                this._aFallbackColResizer[this._elTbody.rows.length] =
-                    new Function('oColumn','sWidth',resizerDef.join(''));
+                resizerDef[k] = 'sOverflow;';
+                this._aFallbackColResizer[rowslen] =
+                    new Function('oColumn','sWidth','sOverflow',resizerDef.join(''));
             }
-            var resizerFn = this._aFallbackColResizer[this._elTbody.rows.length];
+            var resizerFn = this._aFallbackColResizer[rowslen];
 
             if (resizerFn) {
-                resizerFn.call(this,oColumn,sWidth);
+                resizerFn.call(this,oColumn,sWidth,sOverflow);
                 //this._syncScrollPadding();
                 return;
             }
@@ -6388,11 +6399,11 @@ updateRow : function(row, oData) {
 
     // Get the Record directly
     if((row instanceof YAHOO.widget.Record) || (lang.isNumber(row))) {
-            // Get the Record directly
-            oldRecord = this._oRecordSet.getRecord(row);
+        // Get the Record directly
+        oldRecord = this._oRecordSet.getRecord(row);
 
-            // Is this row on current page?
-            elRow = this.getTrEl(oldRecord);
+        // Is this row on current page?
+        elRow = this.getTrEl(oldRecord);
     }
     // Get the Record by TR element
     else {
