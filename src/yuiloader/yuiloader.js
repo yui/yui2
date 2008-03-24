@@ -159,6 +159,7 @@
             'path': 'editor/editor-beta-min.js',
             'requires': ['menu', 'element', 'button'],
             'optional': ['animation', 'dragdrop'],
+            'supersedes': ['simpleeditor'],
             'skinnable': true
         },
 

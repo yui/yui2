@@ -1789,6 +1789,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'path': 'editor/editor-beta-min.js',
             'requires': ['menu', 'element', 'button'],
             'optional': ['animation', 'dragdrop'],
+            'supersedes': ['simpleeditor'],
             'skinnable': true
         },
 
