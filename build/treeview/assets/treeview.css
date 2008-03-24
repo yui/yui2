@@ -84,11 +84,11 @@
 /* the style of the div around each node */
 .ygtvitem { }  
 
-
-.ygtvitem  table{
-    margin-bottom:0;
+.ygtvitem table {
+    margin-bottom:0; border:none;
 }
-.ygtvitem  td {
+
+.ygtvitem th td {
     border:none;padding:0;
 } 
 
