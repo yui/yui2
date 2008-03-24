@@ -1724,7 +1724,7 @@ _onMouseOver: function (p_sType, p_aArgs) {
         Event.on(this.element, "mousemove", this._onMouseMove, this, true);
 
 
-		if (!Dom.isAncestor(oItem.element, Event.getRelatedTarget(oEvent))) {
+		if (oItem && !Dom.isAncestor(oItem.element, Event.getRelatedTarget(oEvent))) {
 
         	this.clearActiveItem();
         
@@ -2027,8 +2027,18 @@ _onClick: function (p_sType, p_aArgs) {
 			if (bInMenuAnchor && !oItem.cfg.getProperty("target")) {
 	
 				Event.preventDefault(oEvent);
-	
-				oItem.focusEvent.fire();
+				
+
+				if (UA.webkit) {
+				
+					oItem.focus();
+				
+				}
+				else {
+
+					oItem.focusEvent.fire();
+				
+				}
 			
 			}
 	
