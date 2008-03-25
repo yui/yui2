@@ -1340,6 +1340,7 @@
                     }
 
                     oIFrame.id = "_yuiResizeMonitor";
+                    oIFrame.title = "Text Resize Monitor";
                     /*
                         Need to set "position" property before inserting the 
                         iframe into the document or Safari's status bar will 

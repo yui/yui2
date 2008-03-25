@@ -113,8 +113,6 @@
         if (sCurrentWidth == sNewWidth) {
             oConfig.setProperty("width", sOriginalWidth);
         }
-
-        this.unsubscribe("hide", this._onHide, p_oObject);
     }
 
     /* 
@@ -322,7 +320,7 @@
 
             /**
             * The number of milliseconds to wait before hiding a Tooltip 
-            * on mouseover.
+            * after mouseout.
             * @config hidedelay
             * @type Number
             * @default 250
