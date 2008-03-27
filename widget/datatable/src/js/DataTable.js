@@ -4974,7 +4974,7 @@ render : function() {
 
         // Remove extra rows from the bottom so as to preserve ID order
         while(elTbody.hasChildNodes() && (allRows.length > allRecords.length)) {
-            elTbody.deleteRow(-1);
+            elTbody.removeChild(allRows[allRows.length-1]); // Bug 1831689
         }
 
         // Unselect all TR and TD elements in the UI
