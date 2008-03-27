@@ -395,7 +395,14 @@ YAHOO.env.ua = function() {
  * Provides the language utilites and extensions used by the library
  * @class YAHOO.lang
  */
-YAHOO.lang = YAHOO.lang || {
+YAHOO.lang = YAHOO.lang || {};
+
+(function() {
+
+var L = YAHOO.lang,
+
+    o = {
+
     /**
      * Determines whether or not the provided object is an array.
      * Testing typeof/instanceof/constructor of arrays across frame 
@@ -409,8 +416,7 @@ YAHOO.lang = YAHOO.lang || {
      */
     isArray: function(o) { 
         if (o) {
-           var l = YAHOO.lang;
-           return l.isNumber(o.length) && l.isFunction(o.splice);
+           return L.isNumber(o.length) && L.isFunction(o.splice);
         }
         return false;
     },
@@ -463,7 +469,7 @@ YAHOO.lang = YAHOO.lang || {
      * @return {boolean} the result
      */  
     isObject: function(o) {
-return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
+return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     },
         
     /**
@@ -511,7 +517,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             return o.hasOwnProperty(prop);
         }
         
-        return !YAHOO.lang.isUndefined(o[prop]) && 
+        return !L.isUndefined(o[prop]) && 
                 o.constructor.prototype[prop] !== o[prop];
     },
  
@@ -530,7 +536,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             var add=["toString", "valueOf"], i;
             for (i=0;i<add.length;i=i+1) {
                 var fname=add[i],f=s[fname];
-                if (YAHOO.lang.isFunction(f) && f!=Object.prototype[fname]) {
+                if (L.isFunction(f) && f!=Object.prototype[fname]) {
                     r[fname]=f;
                 }
             }
@@ -553,7 +559,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      */
     extend: function(subc, superc, overrides) {
         if (!superc||!subc) {
-            throw new Error("YAHOO.lang.extend failed, please check that " +
+            throw new Error("extend failed, please check that " +
                             "all dependencies are included.");
         }
         var F = function() {};
@@ -567,10 +573,12 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     
         if (overrides) {
             for (var i in overrides) {
-                subc.prototype[i]=overrides[i];
+                if (L.hasOwnProperty(overrides, i)) {
+                    subc.prototype[i]=overrides[i];
+                }
             }
 
-            YAHOO.lang._IEEnumFix(subc.prototype, overrides);
+            L._IEEnumFix(subc.prototype, overrides);
         }
     },
    
@@ -612,7 +620,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                 }
             }
             
-            YAHOO.lang._IEEnumFix(r, s);
+            L._IEEnumFix(r, s);
         }
     },
  
@@ -639,7 +647,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         for (var i=2;i<arguments.length;i=i+1) {
             a.push(arguments[i]);
         }
-        YAHOO.lang.augmentObject.apply(this, a);
+        L.augmentObject.apply(this, a);
     },
 
       
@@ -655,30 +663,30 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return {String} the dump result
      */
     dump: function(o, d) {
-        var l=YAHOO.lang,i,len,s=[],OBJ="{...}",FUN="f(){...}",
+        var i,len,s=[],OBJ="{...}",FUN="f(){...}",
             COMMA=', ', ARROW=' => ';
 
         // Cast non-objects to string
         // Skip dates because the std toString is what we want
         // Skip HTMLElement-like objects because trying to dump 
         // an element will cause an unhandled exception in FF 2.x
-        if (!l.isObject(o)) {
+        if (!L.isObject(o)) {
             return o + "";
         } else if (o instanceof Date || ("nodeType" in o && "tagName" in o)) {
             return o;
-        } else if  (l.isFunction(o)) {
+        } else if  (L.isFunction(o)) {
             return FUN;
         }
 
         // dig into child objects the depth specifed. Default 3
-        d = (l.isNumber(d)) ? d : 3;
+        d = (L.isNumber(d)) ? d : 3;
 
         // arrays [1, 2, 3]
-        if (l.isArray(o)) {
+        if (L.isArray(o)) {
             s.push("[");
             for (i=0,len=o.length;i<len;i=i+1) {
-                if (l.isObject(o[i])) {
-                    s.push((d > 0) ? l.dump(o[i], d-1) : OBJ);
+                if (L.isObject(o[i])) {
+                    s.push((d > 0) ? L.dump(o[i], d-1) : OBJ);
                 } else {
                     s.push(o[i]);
                 }
@@ -692,10 +700,10 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         } else {
             s.push("{");
             for (i in o) {
-                if (l.hasOwnProperty(o, i)) {
+                if (L.hasOwnProperty(o, i)) {
                     s.push(i + ARROW);
-                    if (l.isObject(o[i])) {
-                        s.push((d > 0) ? l.dump(o[i], d-1) : OBJ);
+                    if (L.isObject(o[i])) {
+                        s.push((d > 0) ? L.dump(o[i], d-1) : OBJ);
                     } else {
                         s.push(o[i]);
                     }
@@ -735,7 +743,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      * @return {String} the substituted string
      */
     substitute: function (s, o, f) {
-        var i, j, k, key, v, meta, l=YAHOO.lang, saved=[], token, 
+        var i, j, k, key, v, meta, saved=[], token, 
             DUMP='dump', SPACE=' ', LBRACE='{', RBRACE='}';
 
 
@@ -767,9 +775,9 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                 v = f(key, v, meta);
             }
 
-            if (l.isObject(v)) {
-                if (l.isArray(v)) {
-                    v = l.dump(v, parseInt(meta, 10));
+            if (L.isObject(v)) {
+                if (L.isArray(v)) {
+                    v = L.dump(v, parseInt(meta, 10));
                 } else {
                     meta = meta || "";
 
@@ -782,12 +790,12 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
                     // use the toString if it is not the Object toString 
                     // and the 'dump' meta info was not found
                     if (v.toString===Object.prototype.toString||dump>-1) {
-                        v = l.dump(v, parseInt(meta, 10));
+                        v = L.dump(v, parseInt(meta, 10));
                     } else {
                         v = v.toString();
                     }
                 }
-            } else if (!l.isString(v) && !l.isNumber(v)) {
+            } else if (!L.isString(v) && !L.isNumber(v)) {
                 // This {block} has no replace string. Save it for later.
                 v = "~-" + saved.length + "-~";
                 saved[saved.length] = token;
@@ -837,7 +845,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
     merge: function() {
         var o={}, a=arguments;
         for (var i=0, l=a.length; i<l; i=i+1) {
-            YAHOO.lang.augmentObject(o, a[i], true);
+            L.augmentObject(o, a[i], true);
         }
         return o;
     },
@@ -868,7 +876,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
         o = o || {};
         var m=fn, d=data, f, r;
 
-        if (YAHOO.lang.isString(fn)) {
+        if (L.isString(fn)) {
             m = o[fn];
         }
 
@@ -876,7 +884,7 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
             throw new TypeError("method undefined");
         }
 
-        if (!YAHOO.lang.isArray(d)) {
+        if (!L.isArray(d)) {
             d = [data];
         }
 
@@ -909,17 +917,19 @@ return (o && (typeof o === 'object' || YAHOO.lang.isFunction(o))) || false;
      */
     isValue: function(o) {
         // return (o || o === false || o === 0 || o === ''); // Infinity fails
-        var l = YAHOO.lang;
-return (l.isObject(o) || l.isString(o) || l.isNumber(o) || l.isBoolean(o));
+return (L.isObject(o) || L.isString(o) || L.isNumber(o) || L.isBoolean(o));
     }
 
 };
+
+// new lang wins
+o.augmentObject(L, o, true);
 
 /*
  * An alias for <a href="YAHOO.lang.html">YAHOO.lang</a>
  * @class YAHOO.util.Lang
  */
-YAHOO.util.Lang = YAHOO.lang;
+YAHOO.util.Lang = L;
  
 /**
  * Same as YAHOO.lang.augmentObject, except it only applies prototype 
@@ -937,7 +947,7 @@ YAHOO.util.Lang = YAHOO.lang;
  *        be applied and will overwrite an existing property in
  *        the receiver
  */
-YAHOO.lang.augment = YAHOO.lang.augmentProto;
+L.augment = L.augmentProto;
 
 /**
  * An alias for <a href="YAHOO.lang.html#augment">YAHOO.lang.augment</a>
@@ -951,7 +961,7 @@ YAHOO.lang.augment = YAHOO.lang.augmentProto;
  *        in the supplier will be used unless it would
  *        overwrite an existing property in the receiver
  */
-YAHOO.augment = YAHOO.lang.augmentProto;
+YAHOO.augment = L.augmentProto;
        
 /**
  * An alias for <a href="YAHOO.lang.html#extend">YAHOO.lang.extend</a>
@@ -963,6 +973,7 @@ YAHOO.augment = YAHOO.lang.augmentProto;
  *        subclass prototype.  These will override the
  *        matching items obtained from the superclass if present.
  */
-YAHOO.extend = YAHOO.lang.extend;
+YAHOO.extend = L.extend;
 
+})();
 YAHOO.register("yahoo", YAHOO, {version: "@VERSION@", build: "@BUILD@"});
