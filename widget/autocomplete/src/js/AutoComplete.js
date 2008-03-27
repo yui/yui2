@@ -1999,12 +1999,16 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             oSelf._jumpSelection();
             break;
         case 38: // up
-            YAHOO.util.Event.stopEvent(v);
-            oSelf._moveSelection(nKeyCode);
+            if(oSelf._bContainerOpen) {
+                YAHOO.util.Event.stopEvent(v);
+                oSelf._moveSelection(nKeyCode);
+            }
             break;
         case 40: // down
-            YAHOO.util.Event.stopEvent(v);
-            oSelf._moveSelection(nKeyCode);
+            if(oSelf._bContainerOpen) {
+                YAHOO.util.Event.stopEvent(v);
+                oSelf._moveSelection(nKeyCode);
+            }
             break;
         default:
             break;
