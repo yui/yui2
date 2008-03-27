@@ -592,6 +592,9 @@ var D = YAHOO.util.Dom,
 
             this._resizeEvent = null;
             this._currentHandle = null;
+
+            YAHOO.log('Firing endResize Event', 'info', 'Resize');
+            this.fireEvent('endResize', { ev: 'endResize', target: this, height: this._cache.height, width: this._cache.width, top: this._cache.top, left: this._cache.left });
         },
         /** 
         * @private
@@ -1620,7 +1623,12 @@ var D = YAHOO.util.Dom,
 */
 /**
 * @event startResize
-* @description Fires when when a resize action is started.
+* @description Fires when a resize action is started.
+* @type YAHOO.util.CustomEvent
+*/
+/**
+* @event endResize
+* @description Fires when the mouseUp event from the Drag Instance fires.
 * @type YAHOO.util.CustomEvent
 */
 /**
