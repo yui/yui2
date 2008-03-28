@@ -213,7 +213,6 @@
                     ft = this._getBoxSize(this.footer),
                     box = [this.get('height'), this.get('width')];
 
-
                 var nh = (box[0] - hd[0] - ft[0]) - (this._gutter.top + this._gutter.bottom),
                     nw = box[1] - (this._gutter.left + this._gutter.right);
 
@@ -467,7 +466,6 @@
 
             if (this._anim) {
                 this.setStyle('display', 'none');
-                //Animation Fails Here
                 var attr = {}, s;
 
                 switch (this.get('position')) {
@@ -536,11 +534,11 @@
             } else {
                 this._collapsing = false;
                 this._toggleClip();
+                this._collapsed = false;
                 this.setStyle('zIndex', this.get('parent')._zIndex);
                 this.setStyle('display', 'block');
                 this.set('width', this._lastWidth);
                 this.set('height', this._lastHeight);
-                this._collapsed = false;
                 this.resize();
                 this.set('scroll', this._lastScroll);
                 if (this._lastScrollTop > 0) {
@@ -853,6 +851,17 @@
                 }
             });
             /**
+            * @attribute zIndex
+            * @description The CSS zIndex to give to the unit, so you can have overlapping elements such as menus in a unit.
+            * @type {Number}
+            */
+            this.setAttributeConfig('zIndex', {
+                value: attr.zIndex || false,
+                method: function(z) {
+                    this.setStyle('zIndex', z);
+                }
+            });
+            /**
             * @attribute position
             * @description The position (top, right, bottom, left or center) of the Unit in the Layout
             * @type {String}
@@ -1161,15 +1170,20 @@
                         }
                     }
                     
-                    if (scroll) {
+                    if (scroll === true) {
                         this.addClass('yui-layout-scroll');
+                        this.removeClass('yui-layout-noscroll');
                         if (this._lastScrollTop > 0) {
                             if (this.body) {
                                 this.body.scrollTop = this._lastScrollTop;
                             }
                         }
-                    } else {
+                    } else if (scroll === false) {
                         this.removeClass('yui-layout-scroll');
+                        this.addClass('yui-layout-noscroll');
+                    } else if (scroll === null) {
+                        this.removeClass('yui-layout-scroll');
+                        this.removeClass('yui-layout-noscroll');
                     }
                 }
             });
@@ -1256,11 +1270,15 @@
                             this._resize.on('resize', function(ev) {
                                 this.set('height', ev.height);
                                 this.set('width', ev.width);
+                            }, this, true);
+                            this._resize.on('endResize', function(ev) {
                                 this.set('scroll', this._lastScroll);
                                 if (this.get('parent')) {
                                     var c = this.get('parent').getUnitByPosition('center');
                                     c.set('scroll', this._lastCenterScroll);
                                 }
+                                this.resize();
+                                this.fireEvent('endResize');
                             }, this, true);
                         }
                     } else {
@@ -1307,22 +1325,30 @@
         },
         /**
         * @method destroy
+        * @param {Boolean} force Don't report to the parent, because we are being called from the parent.
         * @description Removes this unit from the parent and cleans up after itself.
         * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The parent Layout instance
         */
-        destroy: function() {
+        destroy: function(force) {
             if (this._resize) {
                 this._resize.destroy();
             }
             var par = this.get('parent');
 
             this.setStyle('display', 'none');
-            par.removeUnit(this);
             if (this._clip) {
                 this._clip.parentNode.removeChild(this._clip);
                 this._clip = null;
             }
 
+            if (!force) {
+                par.removeUnit(this);
+            }
+            
+            if (par) {
+                par.removeListener('resize', this.resize, this, true);
+            }
+            this.unsubscribeAll();
             Event.purgeElement(this.get('element'));
             this.get('parentNode').removeChild(this.get('element'));
 
@@ -1356,6 +1382,11 @@
     /**
     * @event startResize
     * @description Fired when the Resize Utility fires it's startResize Event.
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event endResize
+    * @description Fired when the Resize Utility fires it's endResize Event.
     * @type YAHOO.util.CustomEvent
     */
     /**

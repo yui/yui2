@@ -76,6 +76,13 @@
         }(),
         /**
         * @private
+        * @property _units
+        * @description An object literal that contains a list of units in the layout
+        * @type Object
+        */
+        _rendered: null,
+        /**
+        * @private
         * @property _rendered
         * @description Set to true when the layout is rendered
         * @type Boolean
@@ -142,61 +149,61 @@
         * @description Used to set the size and position of the left, right, top and bottom units
         */
         _setSides: function(set) {
-            var h1 = ((this._top) ? this._top.get('height') : 0),
-                h2 = ((this._bottom) ? this._bottom.get('height') : 0),
+            var h1 = ((this._units.top) ? this._units.top.get('height') : 0),
+                h2 = ((this._units.bottom) ? this._units.bottom.get('height') : 0),
                 h = this._sizes.doc.h,
                 w = this._sizes.doc.w;
             set = ((set === false) ? false : true);
 
             this._sizes.top = {
-                h: h1, w: ((this._top) ? w : 0),
+                h: h1, w: ((this._units.top) ? w : 0),
                 t: 0
             };
             this._sizes.bottom = {
-                h: h2, w: ((this._bottom) ? w : 0)
+                h: h2, w: ((this._units.bottom) ? w : 0)
             };
             
             var newH = (h - (h1 + h2));
 
             this._sizes.left = {
-                h: newH, w: ((this._left) ? this._left.get('width') : 0)
+                h: newH, w: ((this._units.left) ? this._units.left.get('width') : 0)
             };
             this._sizes.right = {
-                h: newH, w: ((this._right) ? this._right.get('width') : 0),
-                l: ((this._right) ? (w - this._right.get('width')) : 0),
-                t: ((this._top) ? this._sizes.top.h : 0)
+                h: newH, w: ((this._units.right) ? this._units.right.get('width') : 0),
+                l: ((this._units.right) ? (w - this._units.right.get('width')) : 0),
+                t: ((this._units.top) ? this._sizes.top.h : 0)
             };
             
-            if (this._right && set) {
-                this._right.set('top', this._sizes.right.t);
-                if (!this._right._collapsing) { 
-                    this._right.set('left', this._sizes.right.l);
+            if (this._units.right && set) {
+                this._units.right.set('top', this._sizes.right.t);
+                if (!this._units.right._collapsing) { 
+                    this._units.right.set('left', this._sizes.right.l);
                 }
-                this._right.set('height', this._sizes.right.h, true);
+                this._units.right.set('height', this._sizes.right.h, true);
             }
-            if (this._left) {
+            if (this._units.left) {
                 this._sizes.left.l = 0;
-                if (this._top) {
+                if (this._units.top) {
                     this._sizes.left.t = this._sizes.top.h;
                 } else {
                     this._sizes.left.t = 0;
                 }
                 if (set) {
-                    this._left.set('top', this._sizes.left.t);
-                    this._left.set('height', this._sizes.left.h, true);
-                    this._left.set('left', 0);
+                    this._units.left.set('top', this._sizes.left.t);
+                    this._units.left.set('height', this._sizes.left.h, true);
+                    this._units.left.set('left', 0);
                 }
             }
-            if (this._bottom) {
+            if (this._units.bottom) {
                 this._sizes.bottom.t = this._sizes.top.h + this._sizes.left.h;
                 if (set) {
-                    this._bottom.set('top', this._sizes.bottom.t);
-                    this._bottom.set('width', this._sizes.bottom.w, true);
+                    this._units.bottom.set('top', this._sizes.bottom.t);
+                    this._units.bottom.set('width', this._sizes.bottom.w, true);
                 }
             }
-            if (this._top) {
+            if (this._units.top) {
                 if (set) {
-                    this._top.set('width', this._sizes.top.w, true);
+                    this._units.top.set('width', this._sizes.top.w, true);
                 }
             }
             this._setCenter(set);
@@ -212,10 +219,10 @@
             var h = this._sizes.left.h;
             var w = (this._sizes.doc.w - (this._sizes.left.w + this._sizes.right.w));
             if (set) {
-                this._center.set('height', h, true);
-                this._center.set('width', w, true);
-                this._center.set('top', this._sizes.top.h);
-                this._center.set('left', this._sizes.left.w);
+                this._units.center.set('height', h, true);
+                this._units.center.set('width', w, true);
+                this._units.center.set('top', this._sizes.top.h);
+                this._units.center.set('left', this._sizes.left.w);
             }
             this._sizes.center = { h: h, w: w, t: this._sizes.top.h, l: this._sizes.left.w };
         },
@@ -245,9 +252,10 @@
         getUnitByPosition: function(pos) {
             if (pos) {
                 pos = pos.toLowerCase();
-                if (this['_' + pos]) {
-                    return this['_' + pos];
+                if (this._units[pos]) {
+                    return this._units[pos];
                 }
+                return false;
             }
             return false;
         },
@@ -257,7 +265,7 @@
         * @description Remove the unit from this layout and resize the layout.
         */
         removeUnit: function(unit) {
-            this['_' + unit.get('position')] = null;
+            delete this._units[unit.get('position')];
             this.resize();
         },
         /**
@@ -270,7 +278,7 @@
             if (!cfg.position) {
                 return false;
             }
-            if (this['_' + cfg.position]) {
+            if (this._units[cfg.position]) {
                 return false;
             }
             var element = null,
@@ -330,7 +338,7 @@
             unit.on('heightChange', this.resize, this, true);
             unit.on('widthChange', this.resize, this, true);
             unit.on('gutterChange', this.resize, this, true);
-            this['_' + cfg.position] = unit;
+            this._units[cfg.position] = unit;
 
             if (this._rendered) {
                 this.resize();
@@ -407,14 +415,13 @@
         * @description Sets up the main doc element when not using the body as the main element.
         */
         _setupElements: function() {
-            this._doc = this.getElementsByClassName('doc')[0];
+            this._doc = this.getElementsByClassName('yui-layout-doc')[0];
             if (!this._doc) {
                 this._doc = document.createElement('div');
                 this.get('element').appendChild(this._doc);
             }
             this._createUnits();
             this._setBodySize();
-            Event.on(window, 'resize', this.resize, this, true);
             Dom.addClass(this._doc, 'yui-layout-doc');
         },
         /**
@@ -433,46 +440,13 @@
         _doc: null,
         /**
         * @private
-        * @property _left
-        * @description Reference to the left LayoutUnit Object
-        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
-        */
-        _left: null,
-        /**
-        * @private
-        * @property _right
-        * @description Reference to the right LayoutUnit Object
-        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
-        */
-        _right: null,
-        /**
-        * @private
-        * @property _top
-        * @description Reference to the top LayoutUnit Object
-        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
-        */
-        _top: null,
-        /**
-        * @private
-        * @property _bottom
-        * @description Reference to the bottom LayoutUnit Object
-        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
-        */
-        _bottom: null,
-        /**
-        * @private
-        * @property _center
-        * @description Reference to the center LayoutUnit Object
-        * @type {<a href="YAHOO.widget.LayoutUnit.html">YAHOO.widget.LayoutUnit</a>} A LayoutUnit instance
-        */
-        _center: null,
-        /**
-        * @private
         * @method init
         * @description The Layout class' initialization method
         */        
         init: function(p_oElement, p_oAttributes) {
+
             this._zIndex = 0;
+
             Layout.superclass.init.call(this, p_oElement, p_oAttributes);
             
             if (this.get('parent')) {
@@ -480,6 +454,7 @@
             }
 
             this._sizes = {};
+            this._units = {};
 
             var id = p_oElement;
             if (!Lang.isString(id)) {
@@ -607,6 +582,42 @@
                     }
                 }
             });
+        },
+        /**
+        * @method destroy
+        * @description Removes this layout from the page and destroys all units that it contains. This will destroy all data inside the layout and it's children.
+        */
+        destroy: function() {
+            var par = this.get('parent');
+            if (par) {
+                par.removeListener('resize', this.resize, this, true);
+            }
+            Event.removeListener(window, 'resize', this.resize, this, true);
+
+            this.unsubscribeAll();
+            for (var u in this._units) {
+                if (Lang.hasOwnProperty(this._units, u)) {
+                    if (this._units[u]) {
+                        this._units[u].destroy(true);
+                    }
+                }
+            }
+
+            Event.purgeElement(this.get('element'));
+            this.get('parentNode').removeChild(this.get('element'));
+            
+            delete YAHOO.widget.Layout._instances[this.get('id')];
+            //Brutal Object Destroy
+            for (var i in this) {
+                if (Lang.hasOwnProperty(this, i)) {
+                    this[i] = null;
+                    delete this[i];
+                }
+            }
+            
+            if (par) {
+                par.resize();
+            }
         },
         /**
         * @method toString
@@ -856,7 +867,6 @@
                 var hd = this._getBoxSize(this.header),
                     ft = this._getBoxSize(this.footer),
                     box = [this.get('height'), this.get('width')];
-
 
                 var nh = (box[0] - hd[0] - ft[0]) - (this._gutter.top + this._gutter.bottom),
                     nw = box[1] - (this._gutter.left + this._gutter.right);
@@ -1111,7 +1121,6 @@
 
             if (this._anim) {
                 this.setStyle('display', 'none');
-                //Animation Fails Here
                 var attr = {}, s;
 
                 switch (this.get('position')) {
@@ -1180,11 +1189,11 @@
             } else {
                 this._collapsing = false;
                 this._toggleClip();
+                this._collapsed = false;
                 this.setStyle('zIndex', this.get('parent')._zIndex);
                 this.setStyle('display', 'block');
                 this.set('width', this._lastWidth);
                 this.set('height', this._lastHeight);
-                this._collapsed = false;
                 this.resize();
                 this.set('scroll', this._lastScroll);
                 if (this._lastScrollTop > 0) {
@@ -1496,6 +1505,17 @@
                 }
             });
             /**
+            * @attribute zIndex
+            * @description The CSS zIndex to give to the unit, so you can have overlapping elements such as menus in a unit.
+            * @type {Number}
+            */
+            this.setAttributeConfig('zIndex', {
+                value: attr.zIndex || false,
+                method: function(z) {
+                    this.setStyle('zIndex', z);
+                }
+            });
+            /**
             * @attribute position
             * @description The position (top, right, bottom, left or center) of the Unit in the Layout
             * @type {String}
@@ -1802,15 +1822,20 @@
                         }
                     }
                     
-                    if (scroll) {
+                    if (scroll === true) {
                         this.addClass('yui-layout-scroll');
+                        this.removeClass('yui-layout-noscroll');
                         if (this._lastScrollTop > 0) {
                             if (this.body) {
                                 this.body.scrollTop = this._lastScrollTop;
                             }
                         }
-                    } else {
+                    } else if (scroll === false) {
                         this.removeClass('yui-layout-scroll');
+                        this.addClass('yui-layout-noscroll');
+                    } else if (scroll === null) {
+                        this.removeClass('yui-layout-scroll');
+                        this.removeClass('yui-layout-noscroll');
                     }
                 }
             });
@@ -1896,11 +1921,15 @@
                             this._resize.on('resize', function(ev) {
                                 this.set('height', ev.height);
                                 this.set('width', ev.width);
+                            }, this, true);
+                            this._resize.on('endResize', function(ev) {
                                 this.set('scroll', this._lastScroll);
                                 if (this.get('parent')) {
                                     var c = this.get('parent').getUnitByPosition('center');
                                     c.set('scroll', this._lastCenterScroll);
                                 }
+                                this.resize();
+                                this.fireEvent('endResize');
                             }, this, true);
                         }
                     } else {
@@ -1947,22 +1976,30 @@
         },
         /**
         * @method destroy
+        * @param {Boolean} force Don't report to the parent, because we are being called from the parent.
         * @description Removes this unit from the parent and cleans up after itself.
         * @return {<a href="YAHOO.widget.Layout.html">YAHOO.widget.Layout</a>} The parent Layout instance
         */
-        destroy: function() {
+        destroy: function(force) {
             if (this._resize) {
                 this._resize.destroy();
             }
             var par = this.get('parent');
 
             this.setStyle('display', 'none');
-            par.removeUnit(this);
             if (this._clip) {
                 this._clip.parentNode.removeChild(this._clip);
                 this._clip = null;
             }
 
+            if (!force) {
+                par.removeUnit(this);
+            }
+            
+            if (par) {
+                par.removeListener('resize', this.resize, this, true);
+            }
+            this.unsubscribeAll();
             Event.purgeElement(this.get('element'));
             this.get('parentNode').removeChild(this.get('element'));
 
@@ -1996,6 +2033,11 @@
     /**
     * @event startResize
     * @description Fired when the Resize Utility fires it's startResize Event.
+    * @type YAHOO.util.CustomEvent
+    */
+    /**
+    * @event endResize
+    * @description Fired when the Resize Utility fires it's endResize Event.
     * @type YAHOO.util.CustomEvent
     */
     /**
