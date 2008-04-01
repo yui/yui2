@@ -3764,6 +3764,15 @@ onRender: function (p_sType, p_aArgs) {
     
         if (oShadow && oElement) {
 
+			// Clear the previous width
+
+			if (oShadow.style.width && oShadow.style.height) {
+			
+				oShadow.style.width = "";
+				oShadow.style.height = "";
+			
+			}
+
             oShadow.style.width = (oElement.offsetWidth + 6) + "px";
             oShadow.style.height = (oElement.offsetHeight + 1) + "px";
             
