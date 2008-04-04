@@ -36,12 +36,38 @@
 YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
     if(elInput && elContainer && oDataSource) {
         // Validate DataSource
-        if(oDataSource instanceof YAHOO.widget.DataSource) {
+        if(oDataSource instanceof YAHOO.util.DataSourceBase) {
             this.dataSource = oDataSource;
         }
         else {
             YAHOO.log("Could not instantiate AutoComplete due to an invalid DataSource", "error", this.toString());
             return;
+        }
+
+        // Schema backwards compatibility
+        // First assume key data is held in position 0 of results array
+        this.key = 0;
+        var schema = oDataSource.responseSchema;
+        // An old school schema has been defined in the deprecated DataSource constructor
+        if(oDataSource._aSchema) {
+            var aDeprecatedSchema = oDataSource._aSchema;
+            if(YAHOO.lang.isArray(aDeprecatedSchema)) {
+                if(oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_JSON) {
+                    schema.resultsList = aDeprecatedSchema[0];
+                    schema.fields = (aDeprecatedSchema.length < 3) ? null : aDeprecatedSchema.slice(1);
+                    this.key = aDeprecatedSchema[1];
+                }
+                else if(oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_XML) {
+                    schema.resultNode = aDeprecatedSchema[0];
+                    schema.fields = aDeprecatedSchema.slice(1);
+                    this.key = aDeprecatedSchema[1];
+                }                
+                else if(oDataSource.responseType === YAHOO.util.DataSourceBase.TYPE_TEXT) {
+                    schema.recordDelim = aDeprecatedSchema[0];
+                    schema.fieldDelim = aDeprecatedSchema[1];
+                }                
+                oDataSource.responseSchema = schema;
+            }
         }
 
         // Validate input element
@@ -464,18 +490,64 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
  * displayed within &lt;li&gt; element tags in the container.
  *
  * @method formatResult
- * @param oResultItem {Object} Result item representing one query result. Data is held in an array.
+ * @param aResultItem {Array} Result item representing one query result. Data is held in an array.
  * @param sQuery {String} The current query string.
  * @return {String} HTML markup of formatted result data.
+ * @deprecated 
  */
-YAHOO.widget.AutoComplete.prototype.formatResult = function(oResultItem, sQuery) {
-    var sResult = oResultItem[0];
+/*YAHOO.widget.AutoComplete.prototype.formatResult = function(aResultItem, sQuery) {
+    var sResult = aResultItem[0];
     if(sResult) {
         return sResult;
     }
     else {
         return "";
     }
+};*/
+
+/**
+ * Overridable method that converts a result item object into HTML markup
+ * for display. Return data values are accessible via the oResultItem object,
+ * and the key value will by default be determined by the first value defined 
+ * in the DataSource's responseSchema fields array. Markup will be
+ * displayed within &lt;li&gt; element tags in the container.
+ *
+ * @method formatResultNEW
+ * @param oResultItem {Object} Result item representing one query result. Data is held in an object.
+ * @param sQuery {String} The current query string.
+ * @return {String} HTML markup of formatted result data.
+ */
+YAHOO.widget.AutoComplete.prototype.formatResultNEW = function(oResultItem, sQuery) {
+    //TODO: RENAME
+    var sResult = "";
+    // Backward compatibility - result is an array
+    if(YAHOO.lang.isArray(oResultItem)) {
+        sResult = oResultItem[0];
+        if(sResult) {
+            return sResult;
+        }
+    } // result is an object
+    else if(this.dataSource.responseSchema.fields) {
+        sResult = oResultItem[this.dataSource.responseSchema.fields[0]];
+        if(sResult) {
+            return sResult;
+        }
+    }
+    
+    return sResult;
+};
+
+/**
+ * Overridable method called before container is loaded with result data.
+ *
+ * @method doBeforeLoadData
+ * @param sQuery {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
+ * @return {Boolean} Return true to continue loading data, false to cancel.
+ */
+YAHOO.widget.AutoComplete.prototype.doBeforeLoadData = function(sQuery, oResponse, oPayload) {
+    return true;
 };
 
 /**
@@ -1261,91 +1333,232 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     sQuery = this.doBeforeSendQuery(sQuery);
     this.dataRequestEvent.fire(this, sQuery);
     YAHOO.log("Sending query \"" + sQuery + "\"", "info", this.toString());
-    this.dataSource.getResults(this._populateList, sQuery, this);
+    
+    if(this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_JSARRAY) {
+        this.dataSource.doBeforeCallback = this.filterResults;
+    }
+    
+    this.dataSource.sendRequest(this.generateRequest(sQuery), {
+            success : this._populateList,
+            failure : this._populateList,
+            scope   : this,
+            argument: {
+                query: sQuery
+            }
+    });
+};
+
+//TODO: NEW
+YAHOO.widget.AutoComplete.prototype.generateRequest = function(sQuery) {
+    var dataType = this.dataSource.dataType;
+    // Backward compatibility
+    if(dataType === YAHOO.util.DataSourceBase.TYPE_XHR) {
+        // Default XHR get requests look like "{scriptURI}?{scriptQueryParam}={sQuery}&{scriptQueryAppend}"
+        if(!this.dataSource.connMethodPost) {
+            sQuery = "?" + (this.dataSource.scriptQueryParam || "query") + "=" + sQuery + 
+                (this.dataSource.scriptQueryAppend ? ("&" + this.dataSource.scriptQueryAppend) : "");        
+        }
+        // Default XHR post bodies are sent to the {scriptURI} like "{scriptQueryParam}={sQuery}&{scriptQueryAppend}"
+        else {
+            sQuery = (this.dataSource.scriptQueryParam || "query") + "=" + sQuery + 
+                (this.dataSource.scriptQueryAppend ? ("&" + this.dataSource.scriptQueryAppend) : "");
+        }
+    }
+    // Default remote script requests look like "{scriptURI}&{scriptCallbackParam}={callbackString}&{scriptQueryParam}={sQuery}&{scriptQueryAppend}"
+    else if(dataType === YAHOO.util.DataSourceBase.TYPE_SCRIPTNODE) {
+        sQuery = "&" + (this.dataSource.scriptQueryParam || "query") + "=" + sQuery + 
+            (this.dataSource.scriptQueryAppend ? ("&" + this.dataSource.scriptQueryAppend) : "");    
+    }
+    return sQuery;
+};
+
+//TODO: NEW
+YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullResponse, oParsedResponse) {
+    var i;
+    var aData = oParsedResponse.results; // the array
+    var aResults = []; // container for results
+    var bMatchFound = false;
+    var bMatchContains = this.queryMatchContains;
+    if(sQuery && sQuery !== "") {
+        if(!this.queryMatchCase) {
+            sQuery = sQuery.toLowerCase();
+        }
+
+        // Loop through each element of the array...
+        // which can be a string or an array of strings
+        for(i = aData.length-1; i >= 0; i--) {
+            var aDataset = [];
+
+            if(YAHOO.lang.isString(aData[i])) {
+                aDataset[0] = aData[i];
+            }
+            else if(YAHOO.lang.isArray(aData[i])) {
+                aDataset = aData[i];
+            }
+
+            if(YAHOO.lang.isString(aDataset[0])) {
+                var sKeyIndex = (this.queryMatchCase) ?
+                encodeURIComponent(aDataset[0]).indexOf(sQuery):
+                encodeURIComponent(aDataset[0]).toLowerCase().indexOf(sQuery);
+
+                // A STARTSWITH match is when the query is found at the beginning of the key string...
+                if((!bMatchContains && (sKeyIndex === 0)) ||
+                // A CONTAINS match is when the query is found anywhere within the key string...
+                (bMatchContains && (sKeyIndex > -1))) {
+                    // Stash a match into aResults[].
+                    aResults.unshift(aDataset);
+                }
+            }
+        }
+    }
+    else {
+        for(i = aData.length-1; i >= 0; i--) {
+            if(YAHOO.lang.isString(aData[i])) {
+                aResults.unshift([aData[i]]);
+            }
+            else if(YAHOO.lang.isArray(aData[i])) {
+                aResults.unshift(aData[i]);
+            }
+        }
+    }
+    
+    oParsedResponse.results = aResults;
+    return oParsedResponse;
 };
 
 /**
  * Populates the array of &lt;li&gt; elements in the container with query
- * results. This method is passed to YAHOO.widget.DataSource#getResults as a
- * callback function so results from the DataSource instance are returned to the
- * AutoComplete instance.
+ * results. This is the callback function method passed to YAHOO.util.DataSourceBase#sendRequest
+ * so results from the DataSource are returned to the AutoComplete instance.
  *
  * @method _populateList
- * @param sQuery {String} The query string.
- * @param aResults {Object[]} An array of query result objects from the DataSource.
- * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ * @param sQuery {String} Original request.
+ * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, aResults, oSelf) {
-    if(aResults === null) {
-        oSelf.dataErrorEvent.fire(oSelf, sQuery);
-    }
-    if(!oSelf._bFocused || !aResults) {
-        YAHOO.log("Could not populate list", "info", oSelf.toString());
-        return;
-    }
+YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, oPayload) {
+    sQuery = oPayload.query || sQuery;
+    
+    this.dataReturnEvent.fire(this, sQuery, oResponse.results);
+    
+    // Pass data through abstract method for any transformations
+    var ok = this.doBeforeLoadData(sQuery, oResponse, oPayload);
 
-    var isOpera = (navigator.userAgent.toLowerCase().indexOf("opera") != -1);
-    var contentStyle = oSelf._elContent.style;
-    contentStyle.width = (!isOpera) ? null : "";
-    contentStyle.height = (!isOpera) ? null : "";
+    // Data ok
+    if(ok && this._bFocused && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
 
-    var sCurQuery = decodeURIComponent(sQuery);
-    oSelf._sCurQuery = sCurQuery;
-    oSelf._bItemSelected = false;
-
-    if(oSelf._maxResultsDisplayed != oSelf.maxResultsDisplayed) {
-        oSelf._initList();
-    }
-
-    var nItems = Math.min(aResults.length,oSelf.maxResultsDisplayed);
-    oSelf._nDisplayedItems = nItems;
-    if(nItems > 0) {
-        oSelf._initContainerHelpers();
-        var aItems = oSelf._aListItems;
-
-        // Fill items with data
-        for(var i = nItems-1; i >= 0; i--) {
-            var oItemi = aItems[i];
-            var oResultItemi = aResults[i];
-            oItemi.innerHTML = oSelf.formatResult(oResultItemi, sCurQuery);
-            oItemi.style.display = "list-item";
-            oItemi._sResultKey = oResultItemi[0];
-            oItemi._oResultData = oResultItemi;
-
+        //POPULATE LIST HERE
+        var isOpera = (YAHOO.env.ua.opera);
+        var contentStyle = this._elContent.style;
+        contentStyle.width = (!isOpera) ? null : "";
+        contentStyle.height = (!isOpera) ? null : "";
+    
+        var sCurQuery = decodeURIComponent(sQuery);
+        this._sCurQuery = sCurQuery;
+        this._bItemSelected = false;
+    
+        if(this._maxResultsDisplayed != this.maxResultsDisplayed) {
+            this._initList();
         }
-
-        // Empty out remaining items if any
-        for(var j = aItems.length-1; j >= nItems ; j--) {
-            var oItemj = aItems[j];
-            oItemj.innerHTML = null;
-            oItemj.style.display = "none";
-            oItemj._sResultKey = null;
-            oItemj._oResultData = null;
-        }
-
-        // Expand the container
-        var ok = oSelf.doBeforeExpandContainer(oSelf._elTextbox, oSelf._elContainer, sQuery, aResults);
-        oSelf._toggleContainer(ok);
-        
-        if(oSelf.autoHighlight) {
-            // Go to the first item
-            var oFirstItem = aItems[0];
-            oSelf._toggleHighlight(oFirstItem,"to");
-            oSelf.itemArrowToEvent.fire(oSelf, oFirstItem);
-            YAHOO.log("Arrowed to first item", "info", oSelf.toString());
-            oSelf._typeAhead(oFirstItem,sQuery);
+    
+        var aResults = oResponse.results;
+        var nItems = Math.min(aResults.length,this.maxResultsDisplayed);
+        this._nDisplayedItems = nItems;
+        if(nItems > 0) {
+            this._initContainerHelpers();
+            var aItems = this._aListItems;
+            
+            // Fill items with data
+            for(var i = nItems-1; i >= 0; i--) {
+                var oItemi = aItems[i];
+                var oResultItemi = aResults[i];
+                
+                // Backward compatibility
+                var key = this.key;
+                // The deprecated formatResult overridable method has been defined by implementer...
+                if(this.formatResult) {
+                    // ...And the results are held in hash not an array and need to be converted back to an array
+                    if(key !== 0) {
+                        var aResultItemi = [];
+                        aResultItemi[0] = oResultItemi[key];
+                        // Add field data to the array
+                        var fields = this.dataSource.responseSchema.fields;
+                        if(YAHOO.lang.isArray(fields)) {
+                            for(var k=1, l=fields.length; k<l; k++) {
+                                aResultItemi[aResultItemi.length] = oResultItemi[fields[k]];
+                            }
+                        }
+                        // Null fields defined, so pass along entire data object
+                        else {
+                            aResultItemi[1] = oResultItemi;
+                        }
+                        // Call the old method with the newly created array
+                        oItemi.innerHTML = this.formatResult(aResultItemi, sCurQuery);
+                    }
+                    // ...And the results are already held in an array
+                    else {
+                        // Call the old method with the array
+                        oItemi.innerHTML = this.formatResult(oResultItemi, sCurQuery);
+                    }
+                }
+                // OK to call the new method with the hash
+                else {
+                    oItemi.innerHTML = this.formatResultNEW(oResultItemi, sCurQuery);
+                }
+                
+                oItemi.style.display = "list-item";
+                oItemi._sResultKey = oResultItemi[key];
+                oItemi._oResultData = oResultItemi;
+    
+            }
+    
+            // Empty out remaining items if any
+            for(var j = aItems.length-1; j >= nItems ; j--) {
+                var oItemj = aItems[j];
+                oItemj.innerHTML = null;
+                oItemj.style.display = "none";
+                oItemj._sResultKey = null;
+                oItemj._oResultData = null;
+            }
+    
+            // Expand the container
+            ok = this.doBeforeExpandContainer(this._elTextbox, this._elContainer, sQuery, aResults);
+            this._toggleContainer(ok);
+            
+            if(this.autoHighlight) {
+                // Go to the first item
+                var oFirstItem = aItems[0];
+                this._toggleHighlight(oFirstItem,"to");
+                this.itemArrowToEvent.fire(this, oFirstItem);
+                YAHOO.log("Arrowed to first item", "info", this.toString());
+                this._typeAhead(oFirstItem,sQuery);
+            }
+            else {
+                this._oCurItem = null;
+            }
         }
         else {
-            oSelf._oCurItem = null;
+            this._toggleContainer(false);
         }
+        
+        // TODO: document that this got moved to the top of the method
+        //oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
+        YAHOO.log("Container populated with list items", "info", this.toString());
+
+
+
+
+        return;
+
     }
-    else {
-        oSelf._toggleContainer(false);
-    }
-    oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
-    YAHOO.log("Container populated with list items", "info", oSelf.toString());
     
+    // Error
+    if(ok && oResponse.error) {
+        this.dataErrorEvent.fire(this, sQuery);
+    }
+    
+    YAHOO.log("Could not populate list", "info", this.toString());    
 };
 
 /**
