@@ -573,9 +573,9 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     
         if (overrides) {
             for (var i in overrides) {
-                if (L.hasOwnProperty(overrides, i)) {
+                // if (L.hasOwnProperty(overrides, i)) {
                     subc.prototype[i]=overrides[i];
-                }
+                // }
             }
 
             L._IEEnumFix(subc.prototype, overrides);
