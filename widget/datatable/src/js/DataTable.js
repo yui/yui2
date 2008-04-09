@@ -1,10 +1,22 @@
+(function () {
+
+var lang   = YAHOO.lang,
+    util   = YAHOO.util,
+    widget = YAHOO.widget,
+    ua     = YAHOO.env.ua,
+    
+    Dom    = util.Dom,
+    Ev     = util.Event,
+    DS     = util.DataSourceBase,
+    Pag    = widget.Paginator;
+
 /**
  * The DataTable widget provides a progressively enhanced DHTML control for
  * displaying tabular data across A-grade browsers.
  *
  * @module datatable
  * @requires yahoo, dom, event, element, datasource
- * @optional connection, dragdrop
+ * @optional dragdrop, dragdrop
  * @title DataTable Widget
  * @beta
  */
@@ -26,15 +38,16 @@
  * @param oConfigs {object} (optional) Object literal of configuration values.
  */
 YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
-    var DT = YAHOO.widget.DataTable,
-        DS = YAHOO.util.DataSource;
+    if(oConfigs && oConfigs.scrollable) {
+        return new YAHOO.widget.ScrollingDataTable(elContainer,aColumnDefs,oDataSource,oConfigs);
+    }
 
+    var DT = widget.DataTable;
+    
     // Internal vars
     this._nIndex = DT._nCount;
     this._sId = "yui-dt"+this._nIndex;
     this._oChainRender = new YAHOO.util.Chain();
-    this._oChainSync = new YAHOO.util.Chain();
-    this._oChainRender.subscribe("end",this._sync, this, true);
 
     // Initialize configs
     this._initConfigs(oConfigs);
@@ -144,28 +157,18 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     }
 };
 
+var DT = widget.DataTable;
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Public constants
 //
 /////////////////////////////////////////////////////////////////////////////
-(function () {
-
-var lang   = YAHOO.lang,
-    util   = YAHOO.util,
-    widget = YAHOO.widget,
-    ua     = YAHOO.env.ua,
-    
-    Dom    = util.Dom,
-    Ev     = util.Event,
-    DS     = util.DataSource,
-    DT     = widget.DataTable,
-    Pag    = widget.Paginator;
-    
-
-    
 
 lang.augmentObject(DT, {
+
+//TODO: yui-dt, yui-dt-noop, yui-dt-table, yui-dt-hd, yui-dt-bd
+
 
     /**
      * Class name assigned to liner DIV elements.
@@ -1916,70 +1919,6 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-    * @attribute scrollable
-    * @description True if primary TBODY should scroll.
-    * @default false
-    * @type Boolean
-    */
-    this.setAttributeConfig("scrollable", {
-        value: false,
-        validator: function(oParam) {
-            return (lang.isBoolean(oParam));
-        },
-        method: function(oParam) {
-            var headTable = this._elTheadContainer.getElementsByTagName('table')[0],
-                bodyTable = this._elTbodyContainer.getElementsByTagName('table')[0],
-                headThead = headTable.getElementsByTagName('thead')[0],
-                bodyThead = bodyTable.getElementsByTagName('thead')[0];
-
-            if(oParam) {
-                if (headThead) {
-                    headTable.removeChild(headThead);
-                }
-                if (bodyThead) {
-                    bodyTable.removeChild(bodyThead);
-                }
-                headTable.appendChild(this._elThead);
-                bodyTable.insertBefore(this._elA11yThead,bodyTable.firstChild || null);
-
-                // Move the caption from the body table to the head table
-                // if there is a caption
-                if (bodyTable.caption) {
-                    headTable.insertBefore(bodyTable.caption,headTable.firstChild);
-                }
-
-                Dom.addClass(this._elContainer,DT.CLASS_SCROLLABLE);
-
-                // Bug 1716354 - fix gap in Safari 2 and 3 (also seen in
-                // other browsers)
-                bodyTable.style.marginTop = "-"+this._elTbody.offsetTop+"px";
-
-                this._syncColWidths();
-                this._syncScrollPadding();
-            }
-            else {
-                if (headThead) {
-                    headTable.removeChild(headThead);
-                }
-                if (bodyThead) {
-                    bodyTable.removeChild(bodyThead);
-                }
-                headTable.appendChild(this._elA11yThead);
-                bodyTable.insertBefore(this._elThead,bodyTable.firstChild || null);
-                bodyTable.style.marginTop = '';
-
-                // Move the caption from the head table to the body table
-                // if there is a caption
-                if (headTable.caption) {
-                    bodyTable.insertBefore(headTable.caption,bodyTable.firstChild);
-                }
-
-                Dom.removeClass(this._elContainer,DT.CLASS_SCROLLABLE);
-            }
-        }
-    });
-
-    /**
     * @attribute width
     * @description Table width for scrollable tables
     * @type String
@@ -1988,10 +1927,9 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(oParam) {
-            if(this.get("scrollable")) {
-                this._elTheadContainer.style.width = oParam;
-                this._elTbodyContainer.style.width = oParam;            
-            }
+            //TODO: repurpose?
+            //this._elTheadContainer.style.width = oParam;
+            //this._elTbodyContainer.style.width = oParam;            
         }
     });
 
@@ -2004,9 +1942,8 @@ initAttributes : function(oConfigs) {
         value: null,
         validator: lang.isString,
         method: function(oParam) {
-            if(this.get("scrollable")) {
-                this._elTbodyContainer.style.height = oParam;  
-            }          
+            //TODO: repurpose?
+            //this._elTbodyContainer.style.height = oParam;        
         }
     });
 
@@ -2100,15 +2037,6 @@ _sId : null,
  * @private
  */
 _oChainRender : null,
-
-/**
- * Sync chain.
- *
- * @property _oChainSync
- * @type YAHOO.util.Chain
- * @private
- */
-_oChainSync : null,
 
 /**
  * Sparse array of custom functions to set column widths for browsers that don't
@@ -2264,14 +2192,6 @@ _tdElTemplate : null,
  */
 _trElTemplate : null,
 
-/**
- * True if x-scrollbar is currently visible.
- * @property _bScrollbarX
- * @type {Boolean}
- * @private 
- */
-_bScrollbarX : null,
-
 
 
 
@@ -2375,27 +2295,12 @@ _sync : function() {
  * @private
  */
 _syncColWidths : function() {
-    var scrolling = this.get('scrollable');
-
     if(this._elTbody.rows.length > 0) {
         // Validate there is at least one row with cells and at least one Column
         var allKeys   = this._oColumnSet.keys,
             elRow     = this.getFirstTrEl();
     
-        if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-            // Temporarily unsnap container since it causes inaccurate calculations
-            var bUnsnap = false;
-            if(scrolling && (YAHOO.env.ua.gecko || YAHOO.env.ua.opera)) {
-                bUnsnap = true;
-                if(this.get("width")) {
-                    this._elTheadContainer.style.width = "";
-                    this._elTbodyContainer.style.width = "";
-                }
-                else {
-                    this._elContainer.style.width = "";
-                }
-            }
-    
+        if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {    
             var i,
                 oColumn,
                 cellsLen = elRow.cells.length;
@@ -2419,20 +2324,7 @@ _syncColWidths : function() {
                     var elTh = oColumn.getThEl();
                     var elTd = elRow.cells[i];
 
-                    if (scrolling) {
-                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                                elTh.firstChild : elTd.firstChild;               
-                    
-                        if(elTh.offsetWidth !== elTd.offsetWidth ||
-                            elWider.offsetWidth < oColumn.minWidth) {
-
-                            // Calculate the new width by comparing liner widths
-                            newWidth = Math.max(0, oColumn.minWidth,
-                                elWider.offsetWidth -
-                                (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
-                                (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
-                        }
-                    } else if (elTd.offsetWidth < oColumn.minWidth) {
+                    if (elTd.offsetWidth < oColumn.minWidth) {
                         // bug parity between scrolling and non-scrolling tables
                         overflow = elTd.offsetWidth ? 'visible' : 'hidden';
                         newWidth = Math.max(0, oColumn.minWidth,
@@ -2456,111 +2348,10 @@ _syncColWidths : function() {
                     this._setColumnWidth(oColumn, newWidth+'px', overflow);
                 }
             }
-            
-            // Resnap unsnapped containers
-            if(bUnsnap) {
-                var sWidth = this.get("width");
-                this._elTheadContainer.style.width = sWidth;
-                this._elTbodyContainer.style.width = sWidth;     
-            } 
-
-        }
-    }
-
-    this._syncScrollPadding();
-},
-
-/**
- * Syncs padding around scrollable tables, including Column header right-padding
- * and container width and height.
- *
- * @method _syncScrollPadding
- * @private
- */
-_syncScrollPadding : function() {
-    // Proceed only if scrollable is enabled
-    if(this.get("scrollable")) {
-        var elTbody = this._elTbody,
-            elTbodyContainer = this._elTbodyContainer,
-            aLastHeaders, len, prefix, i, elLiner;
-        
-        // IE 6 and 7 only when y-scrolling not enabled
-        if(!this.get("height") && (ua.ie)) {
-            // Snap outer container height to content
-            // but account for x-scrollbar if it is visible
-            if(elTbody.rows.length > 0) {
-                elTbodyContainer.style.height = 
-                        (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
-                        (elTbody.offsetHeight + 19) + "px" : 
-                        elTbody.offsetHeight + "px";
-            }
-            else {
-                elTbodyContainer.style.height = 
-                        (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ?
-                        (this._elMsgTbody.offsetHeight + 19) + "px" : 
-                        this._elMsgTbody.offsetHeight + "px";
-            }
-        }
-
-        // X-scrolling not enabled
-        if(!this.get("width")) {
-            // Snap outer container width to content
-            // but account for y-scrollbar if it is visible
-            this._elContainer.style.width = 
-                    (elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) ?
-                    (elTbody.parentNode.offsetWidth + 19) + "px" :
-                    //TODO: Can we detect left and right border widths instead of hard coding?
-                    (elTbody.parentNode.offsetWidth + 2) + "px";
-        }
-        // X-scrolling is enabled and x-scrollbar is visible
-        else if((elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth) ||
-            ((elTbodyContainer.scrollHeight > elTbodyContainer.offsetHeight) && (elTbodyContainer.scrollWidth > elTbodyContainer.offsetWidth-16))) {
-            // Perform sync routine
-            if(!this._bScrollbarX) {
-                // Add Column header right-padding
-                aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-                len = aLastHeaders.length;
-                prefix = this._sId+"-th";
-                for(i=0; i<len; i++) {
-                    //TODO: A better way to get th cell
-                    elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                    elLiner.style.marginRight = 
-                            (parseInt(Dom.getStyle(elLiner,"marginRight"),10) + 
-                            16) + "px";
-                }
-                
-                // Save state   
-                this._bScrollbarX = true;
-            }
-        }
-        // X-scrollbar enabled but x-scrollbar is not visible
-        else {
-            // Perform sync routine
-            if(this._bScrollbarX) {                 
-                // Remove Column header right-padding                   
-                aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-                len = aLastHeaders.length;
-                prefix = this._sId+"-th";
-                for(i=0; i<len; i++) {
-                    //TODO: A better way to get th cell
-                    elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                    Dom.setStyle(elLiner,"marginRight","");
-                }
-                                        
-                // Save state
-                this._bScrollbarX = false;
-            }
-        }
-    
-        // Sync message tbody
-        if(this._elTbody.rows.length === 0) {
-            this._elMsgTbody.parentNode.width = this.getTheadEl().parentNode.offsetWidth;
-        }
-        else {
-            this._elMsgTbody.parentNode.width = "";
         }
     }
 },
+
 
 /**
  * Forces Gecko repaint by removing/adding the no-op class name
@@ -2620,40 +2411,6 @@ _initNodeTemplates : function () {
 
     this._tdElTemplate = td;
     this._trElTemplate = tr;
-},
-
-/**
- * Initializes the DataTable container element.
- *
- * @method _initContainerEl
- * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
- * @private
- */
-_initContainerEl : function(elContainer) {
-    // Clear any previous container
-    if(this._elContainer) {
-        Ev.purgeElement(this._elContainer, true);
-        this._elContainer.innerHTML = "";
-    }
-
-    elContainer = Dom.get(elContainer);
-    if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
-        // Esp for progressive enhancement
-        Ev.purgeElement(elContainer, true);
-        elContainer.innerHTML = "";
-
-        Dom.addClass(elContainer,"yui-dt yui-dt-noop");
-        
-        // Container for header TABLE
-        this._elTheadContainer = elContainer.appendChild(document.createElement("div"));
-        Dom.addClass(this._elTheadContainer, "yui-dt-hd");
-
-        // Container for body TABLE
-        this._elTbodyContainer = elContainer.appendChild(document.createElement("div"));
-        Dom.addClass(this._elTbodyContainer, "yui-dt-bd");
-
-        this._elContainer = elContainer;
-    }
 },
 
 /**
@@ -2771,6 +2528,37 @@ _initRecordSet : function() {
 },
 
 /**
+ * Initializes the DataTable container element.
+ *
+ * @method _initContainerEl
+ * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
+ * @private
+ */
+_initContainerEl : function(elContainer) {
+    // Clear any previous container
+    if(this._elContainer) {
+        Ev.purgeElement(this._elContainer, true);
+        this._elContainer.innerHTML = "";
+    }
+
+    elContainer = Dom.get(elContainer);
+    if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
+        // Esp for progressive enhancement
+        Ev.purgeElement(elContainer, true);
+        elContainer.innerHTML = "";
+
+        Dom.addClass(elContainer,"yui-dt yui-dt-noop");
+        
+        // Container for TABLE
+        // 2 container references in case of scrollability
+        this._elTbodyContainer = elContainer.appendChild(document.createElement("div"));
+        Dom.addClass(this._elTbodyContainer, "yui-dt-table");
+
+        this._elContainer = elContainer;
+    }
+},
+
+/**
  * Creates HTML markup for TABLE, THEAD and TBODY elements.
  *
  * @method _initTableEl
@@ -2797,31 +2585,28 @@ _initTableEl : function() {
                 aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
             }
         }
-        elTable = this._elThead.parentNode;
-        Ev.purgeElement(elTable, true);
-        elTable.parentNode.removeChild(elTable);
         this._elThead = null;
     }
     if(this._elTbody) {
-        elTable = this._elTbody.parentNode;
-        Ev.purgeElement(elTable, true);
-        elTable.parentNode.removeChild(elTable);
+        if(elTable) {
+            elTable = this._elTbody.parentNode;
+        }
+        
+        Ev.purgeElement(this._elTbody, true);
         this._elTbody = null;
     }
-
-    // Create elements for header
-    // Create TABLE
-    var elHeadTable = document.createElement("table");
-    elHeadTable.id = this._sId + "-headtable";
-    elHeadTable = this._elTheadContainer.appendChild(elHeadTable);
-
-    // Create elements for body
+    if(elTable) {
+        Ev.purgeElement(elTable, true);
+        elTable.parentNode.removeChild(elTable);
+        elTable = null;
+    }
+        
     // Create TABLE
     var elBodyTable = document.createElement("table");
     elBodyTable.id = this._sId + "-bodytable";
     this._elTbodyContainer.appendChild(elBodyTable);
 
-    // Create THEAD for display and for a11y
+    // Create THEAD
     this._initTheadEls();
 
     // Create TBODY for data
@@ -2881,15 +2666,12 @@ _initTableEl : function() {
  * @private
  */
 _initTheadEls : function() {
-    var i,j, l, elThead, elA11yThead, aTheads;
+    var i,j, l, elThead;
     
     // First time through
     if(!this._elThead) {
         // Create THEADs
         elThead     = this._elThead     = document.createElement('thead');
-        elA11yThead = this._elA11yThead = document.createElement('thead');
-        
-        aTheads = [elThead, elA11yThead];
 
         Ev.addListener(elThead, "focus", this._onTheadFocus, this);
         Ev.addListener(elThead, "keydown", this._onTheadKeydown, this);
@@ -2900,54 +2682,40 @@ _initTheadEls : function() {
         Ev.addListener(elThead, "click", this._onTheadClick, this);
         Ev.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
         
-        // Add the accessibility-only thead to the header table by default.
-        // The theads will be swapped for scrollable DataTables, the display
-        // thead fixed in place, and the a11y thead hidden
-        this._elTheadContainer.firstChild.appendChild(elA11yThead);
         this._elTbodyContainer.firstChild.appendChild(elThead);
     }
     // Reinitialization
     else {
-        // Clear rows from THEADs
-        elThead = this._elThead;
-        elA11yThead = this._elA11yThead;
-        aTheads = [elThead, elA11yThead];
-            
-        for(i=0; i<aTheads.length; i++) {
-            for(j=aTheads[i].rows.length-1; j>-1; j--) {
-                Ev.purgeElement(aTheads[i].rows[j], true);
-                aTheads[i].removeChild(aTheads[i].rows[j]);
-            }     
-        }
+        // Clear rows from THEAD
+        elThead = this._elThead;     
+        for(j=elThead.rows.length-1; j>-1; j--) {
+            Ev.purgeElement(elThead.rows[j], true);
+            elThead.removeChild(elThead.rows[j]);
+        }     
     }
-
     
     var oColumn,
         oColumnSet = this._oColumnSet;
 
-    // Add TRs to the THEADs
+    // Add TRs to the THEAD
     var colTree = oColumnSet.tree;
     var elTheadCell, id;
-    for(l=0; l<aTheads.length; l++) {
         for(i=0; i<colTree.length; i++) {
-            var elTheadRow = aTheads[l].appendChild(document.createElement("tr"));
-            id = (l===1) ? this._sId+"-hdrow" + i + "-a11y": this._sId+"-hdrow" + i;
+            var elTheadRow = elThead.appendChild(document.createElement("tr"));
+            id = this._sId+"-hdrow" + i;
             elTheadRow.id = id;
     
             // ...and create TH cells
             for(j=0; j<colTree[i].length; j++) {
                 oColumn = colTree[i][j];
                 elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-                if(l===0) {
                     oColumn._elTh = elTheadCell;
-                }
-                id = (l===1) ? this._sId+"-th" + oColumn.getId() + "-a11y": this._sId+"-th" + oColumn.getId();
+                id = this._sId+"-th" + oColumn.getId();
                 elTheadCell.id = id;
                 elTheadCell.yuiCellIndex = j;
                 this._initThEl(elTheadCell,oColumn,i,j, (l===1));
             }
     
-            if(l===0) {
                 // Set FIRST/LAST on THEAD rows
                 if(i === 0) {
                     Dom.addClass(elTheadRow, DT.CLASS_FIRST);
@@ -2955,10 +2723,9 @@ _initTheadEls : function() {
                 if(i === (colTree.length-1)) {
                     Dom.addClass(elTheadRow, DT.CLASS_LAST);
                 }
-            }
+
         }
 
-        if(l===0) {
             // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
             var aFirstHeaders = oColumnSet.headers[0];
             var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
@@ -3021,11 +2788,6 @@ _initTheadEls : function() {
             }
             
             YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
-        }
-        else {
-            YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
-        }
-    }
 
 
      // Set widths for hidden Columns
@@ -3060,11 +2822,10 @@ _initTheadEls : function() {
  * @param oColumn {YAHOO.widget.Column} Column object.
  * @param row {Number} Row index.
  * @param col {Number} Column index.
- * @param bA11y {Boolean} True if TH is for accessibility, so as not to
  * initialize presentation elements.
  * @private
  */
-_initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
+_initThEl : function(elTheadCell,oColumn,row,col) {
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var colKey = oColumn.getKey();
@@ -3078,16 +2839,6 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
 
-    // Keep it basic for screen readers
-    if(bA11y) {
-        //TODO: remove IDs and form elements from label
-        if(oColumn.abbr) {
-            elTheadCell.abbr = oColumn.abbr;
-        }
-        elTheadCellLabel.innerHTML = lang.isValue(oColumn.label) ? oColumn.label : colKey;
-    }
-    // Visually format the elements
-    else {
         // Needed for resizer
         elTheadCellLiner.id = elTheadCell.id + "-liner";
         
@@ -3137,7 +2888,7 @@ _initThEl : function(elTheadCell,oColumn,row,col, bA11y) {
         Dom.addClass(elTheadCell,aClasses.join(" "));
 
         DT.formatTheadCell(elTheadCellLabel, oColumn, this);
-    }
+
 },
 
 /**
@@ -3260,14 +3011,19 @@ _updateTrEl : function(elRow, oRecord) {
 
     // Hide the row to prevent constant reflows
     elRow.style.display = 'none';
+    
+    // Track whether to reaassing first/last classes
+    var bFirstLast = false;
 
     // Remove extra TD elements
     while(elRow.childNodes.length > oColumnSet.keys.length) {
         elRow.removeChild(elRow.firstChild);
+        bFirstLast = true;
     }
     // Add more TD elements as needed
     for (i=elRow.childNodes.length||0, len=oColumnSet.keys.length; i < len; ++i) {
         this._addTdEl(elRow,oColumnSet.keys[i],i);
+        bFirstLast = true;
     }
 
     // Update TD elements with new data
@@ -3276,16 +3032,25 @@ _updateTrEl : function(elRow, oRecord) {
             elCell      = elRow.childNodes[i],
             elCellLiner = elCell.firstChild,
             cellHeaders = '',
-            headerType  = this.get('scrollable') ? "-a11y " : " ";
-
-        // Set the cell content
-        this.formatCell(elCellLiner, oRecord, oColumn);
+            headerType  = " ";
 
         // Set the cell's accessibility headers
         for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
             cellHeaders += this._sId + "-th" + oColumnSet.headers[i][j] + headerType;
         }
         elCell.headers = cellHeaders;
+
+        // Set First/Last on TD if necessary
+        if(bFirstLast) {
+            Dom.removeClass(elCell, DT.CLASS_FIRST);
+            Dom.removeClass(elCell, DT.CLASS_LAST);
+            if(i === 0) {
+                Dom.addClass(elCell, DT.CLASS_FIRST);
+            }
+            else if(i === len-1) {
+                Dom.addClass(elCell, DT.CLASS_LAST);
+            }
+        }
 
         // Set ASC/DESC on TD
         if(oColumn.key === sortKey) {
@@ -3311,6 +3076,10 @@ _updateTrEl : function(elRow, oRecord) {
         else {
             Dom.removeClass(elCell, DT.CLASS_SELECTED);
         }
+
+        // Set the cell content
+        this.formatCell(elCellLiner, oRecord, oColumn);
+
     }
 
     // Update Record ID
@@ -3347,9 +3116,9 @@ _addTdEl : function (elRow,oColumn,index) {
     elCell.yuiCellIndex = index;
 
     // Set FIRST/LAST on TD
-    if (!(index % this._oColumnSet.keys.length - 1)) {
-        elCell.className = index ? DT.CLASS_LAST : DT.CLASS_FIRST;
-    }
+    //if (!(index % this._oColumnSet.keys.length - 1)) {
+    //    elCell.className = index ? DT.CLASS_LAST : DT.CLASS_FIRST;
+    //}
 
     var insertBeforeCell = elRow.cells[index] || null;
     return elRow.insertBefore(elCell,insertBeforeCell);
@@ -3560,27 +3329,6 @@ _setRowStripes : function(row, range) {
 // Private DOM Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
-
-/**
- * Syncs scrolltop and scrollleft of all TABLEs.
- *
- * @method _onScroll
- * @param e {HTMLEvent} The scroll event.
- * @param oSelf {DT} DataTable instance
- * @private
- */
-_onScroll : function(e, oSelf) {
-    oSelf._elTheadContainer.scrollLeft = oSelf._elTbodyContainer.scrollLeft;
-
-    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
-        oSelf.cancelCellEditor();
-    }
-
-    var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
-    oSelf.fireEvent("tableScrollEvent", {event:e, target:elTarget});
-},
 
 /**
  * Handles click events on the DOCUMENT.
@@ -3891,16 +3639,6 @@ _onTableDblclick : function(e, oSelf) {
  * @private
  */
 _onTheadKeydown : function(e, oSelf) {
-    // If tabbing to next TH label link causes THEAD to scroll,
-    // need to sync scrollLeft with TBODY
-    if(Ev.getCharCode(e) === 9) {
-        setTimeout(function() {
-            if((oSelf instanceof DT) && oSelf._sId) {
-                oSelf._elTbodyContainer.scrollLeft = oSelf._elTheadContainer.scrollLeft;
-            }
-        },0);
-    }
-    
     var elTarget = Ev.getTarget(e);
     var elTag = elTarget.nodeName.toLowerCase();
     var bKeepBubbling = true;
@@ -5758,7 +5496,6 @@ setColumnWidth : function(oColumn, nWidth) {
             // Resize the DOM elements
             //this._oChainSync.stop();
             this._setColumnWidth(oColumn, nWidth+"px");
-            this._syncScrollPadding();
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
@@ -10012,16 +9749,6 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      * @event tableDblclickEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
-     *
-     */
-
-    /**
-     * Fired when a fixed scrolling DataTable has a scroll.
-     *
-     * @event tableScrollEvent
-     * @param oArgs.event {HTMLEvent} The event object.
-     * @param oArgs.target {HTMLElement} The DataTable's CONTAINER element (in IE)
-     * or the DataTable's TBODY element (everyone else).
      *
      */
 

@@ -1,3 +1,13 @@
+(function () {
+
+var lang   = YAHOO.lang,
+    util   = YAHOO.util,
+    widget = YAHOO.widget,
+    
+    Dom    = util.Dom,
+    Ev     = util.Event,
+    DT     = widget.DataTable;
+
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -26,98 +36,10 @@ YAHOO.widget.RecordSet = function(data) {
         }
     }
 
-    /**
-     * Fired when a new Record is added to the RecordSet.
-     *
-     * @event recordAddEvent
-     * @param oArgs.record {YAHOO.widget.Record} The Record instance.
-     * @param oArgs.data {Object} Data added.
-     */
-    this.createEvent("recordAddEvent");
-
-    /**
-     * Fired when multiple Records are added to the RecordSet at once.
-     *
-     * @event recordsAddEvent
-     * @param oArgs.records {YAHOO.widget.Record[]} An array of Record instances.
-     * @param oArgs.data {Object[]} Data added.
-     */
-    this.createEvent("recordsAddEvent");
-
-    /**
-     * Fired when a Record is set in the RecordSet.
-     *
-     * @event recordSetEvent
-     * @param oArgs.record {YAHOO.widget.Record} The Record instance.
-     * @param oArgs.data {Object} Data added.
-     */
-    this.createEvent("recordSetEvent");
-
-    /**
-     * Fired when multiple Records are set in the RecordSet at once.
-     *
-     * @event recordsSetEvent
-     * @param oArgs.records {YAHOO.widget.Record[]} An array of Record instances.
-     * @param oArgs.data {Object[]} Data added.
-     */
-    this.createEvent("recordsSetEvent");
-
-    /**
-     * Fired when a Record is updated with new data.
-     *
-     * @event recordUpdateEvent
-     * @param oArgs.record {YAHOO.widget.Record} The Record instance.
-     * @param oArgs.newData {Object} New data.
-     * @param oArgs.oldData {Object} Old data.
-     */
-    this.createEvent("recordUpdateEvent");
-    
-    /**
-     * Fired when a Record is deleted from the RecordSet.
-     *
-     * @event recordDeleteEvent
-     * @param oArgs.data {Object} A copy of the data held by the Record,
-     * or an array of data object literals if multiple Records were deleted at once.
-     * @param oArgs.index {Object} Index of the deleted Record.
-     */
-    this.createEvent("recordDeleteEvent");
-
-    /**
-     * Fired when multiple Records are deleted from the RecordSet at once.
-     *
-     * @event recordsDeleteEvent
-     * @param oArgs.data {Object[]} An array of data object literals copied
-     * from the Records.
-     * @param oArgs.index {Object} Index of the first deleted Record.
-     */
-    this.createEvent("recordsDeleteEvent");
-    
-    /**
-     * Fired when all Records are deleted from the RecordSet at once.
-     *
-     * @event resetEvent
-     */
-    this.createEvent("resetEvent");
-
-    /**
-     * @event keyUpdateEvent    
-     * @deprecated Use recordValueUpdateEvent     
-     */
-    this.createEvent("keyUpdateEvent");
-    /**
-     * Fired when a Record value is updated with new data.
-     *
-     * @event recordValueUpdateEvent
-     * @param oArgs.record {YAHOO.widget.Record} The Record instance.
-     * @param oArgs.key {String} The updated key.
-     * @param oArgs.newData {Object} New data.
-     * @param oArgs.oldData {Object} Old data.
-     *
-     */
-    this.createEvent("recordValueUpdateEvent");
-
     YAHOO.log("RecordSet initialized", "info", this.toString());
 };
+
+var RS = widget.RecordSet;
 
 /**
  * Internal class variable to name multiple Recordset instances.
@@ -127,9 +49,9 @@ YAHOO.widget.RecordSet = function(data) {
  * @private
  * @static
  */
-YAHOO.widget.RecordSet._nCount = 0;
+RS._nCount = 0;
 
-YAHOO.widget.RecordSet.prototype = {
+RS.prototype = {
 
     /////////////////////////////////////////////////////////////////////////////
     //
@@ -676,7 +598,96 @@ YAHOO.widget.RecordSet.prototype = {
     }
 };
 
-YAHOO.augment(YAHOO.widget.RecordSet, YAHOO.util.EventProvider);
+/////////////////////////////////////////////////////////////////////////////
+//
+// Custom Events
+//
+/////////////////////////////////////////////////////////////////////////////
+
+// RecordSet uses EventProvider
+YAHOO.lang.augmentProto(RS, util.EventProvider);
+
+/**
+ * Fired when a new Record is added to the RecordSet.
+ *
+ * @event recordAddEvent
+ * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+ * @param oArgs.data {Object} Data added.
+ */
+
+/**
+ * Fired when multiple Records are added to the RecordSet at once.
+ *
+ * @event recordsAddEvent
+ * @param oArgs.records {YAHOO.widget.Record[]} An array of Record instances.
+ * @param oArgs.data {Object[]} Data added.
+ */
+
+/**
+ * Fired when a Record is set in the RecordSet.
+ *
+ * @event recordSetEvent
+ * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+ * @param oArgs.data {Object} Data added.
+ */
+
+/**
+ * Fired when multiple Records are set in the RecordSet at once.
+ *
+ * @event recordsSetEvent
+ * @param oArgs.records {YAHOO.widget.Record[]} An array of Record instances.
+ * @param oArgs.data {Object[]} Data added.
+ */
+
+/**
+ * Fired when a Record is updated with new data.
+ *
+ * @event recordUpdateEvent
+ * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+ * @param oArgs.newData {Object} New data.
+ * @param oArgs.oldData {Object} Old data.
+ */
+
+/**
+ * Fired when a Record is deleted from the RecordSet.
+ *
+ * @event recordDeleteEvent
+ * @param oArgs.data {Object} A copy of the data held by the Record,
+ * or an array of data object literals if multiple Records were deleted at once.
+ * @param oArgs.index {Object} Index of the deleted Record.
+ */
+
+/**
+ * Fired when multiple Records are deleted from the RecordSet at once.
+ *
+ * @event recordsDeleteEvent
+ * @param oArgs.data {Object[]} An array of data object literals copied
+ * from the Records.
+ * @param oArgs.index {Object} Index of the first deleted Record.
+ */
+
+/**
+ * Fired when all Records are deleted from the RecordSet at once.
+ *
+ * @event resetEvent
+ */
+
+/**
+ * @event keyUpdateEvent    
+ * @deprecated Use recordValueUpdateEvent     
+ */
+
+/**
+ * Fired when a Record value is updated with new data.
+ *
+ * @event recordValueUpdateEvent
+ * @param oArgs.record {YAHOO.widget.Record} The Record instance.
+ * @param oArgs.key {String} The updated key.
+ * @param oArgs.newData {Object} New data.
+ * @param oArgs.oldData {Object} Old data.
+ *
+ */
+
 
 /****************************************************************************/
 /****************************************************************************/
@@ -787,3 +798,5 @@ YAHOO.widget.Record.prototype = {
         this._oData[sKey] = oData;
     }
 };
+
+})();
