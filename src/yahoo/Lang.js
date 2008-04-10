@@ -152,9 +152,9 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
     
         if (overrides) {
             for (var i in overrides) {
-                // if (L.hasOwnProperty(overrides, i)) {
+                if (L.hasOwnProperty(overrides, i)) {
                     subc.prototype[i]=overrides[i];
-                // }
+                }
             }
 
             L._IEEnumFix(subc.prototype, overrides);
@@ -519,6 +519,7 @@ return (L.isObject(o) || L.isString(o) || L.isNumber(o) || L.isBoolean(o));
  * </pre>
  * @method hasOwnProperty
  * @param {any} o The object being testing
+ * @param prop {string} the name of the property to test
  * @return {boolean} the result
  */
 L.hasOwnProperty = (Object.prototype.hasOwnProperty) ?
