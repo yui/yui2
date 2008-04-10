@@ -401,7 +401,7 @@ YAHOO.lang = YAHOO.lang || {};
 
 var L = YAHOO.lang,
 
-    o = {
+    OB = {
 
     /**
      * Determines whether or not the provided object is an array.
@@ -923,7 +923,7 @@ return (L.isObject(o) || L.isString(o) || L.isNumber(o) || L.isBoolean(o));
 };
 
 // new lang wins
-o.augmentObject(L, o, true);
+OB.augmentObject(L, OB, true);
 
 /*
  * An alias for <a href="YAHOO.lang.html">YAHOO.lang</a>
