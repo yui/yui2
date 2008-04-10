@@ -8,7 +8,8 @@ YAHOO.lang = YAHOO.lang || {};
 
 var L = YAHOO.lang,
 
-    ADD = ["toString", "valueOf", "hasOwnProperty"],
+    // ADD = ["toString", "valueOf", "hasOwnProperty"],
+    ADD = ["toString", "valueOf"],
 
     OB = {
 
@@ -101,34 +102,6 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
         return typeof o === 'undefined';
     },
     
-    /**
-     * Determines whether or not the property was added
-     * to the object instance.  Returns false if the property is not present
-     * in the object, or was inherited from the prototype.
-     * This abstraction is provided to enable hasOwnProperty for Safari 1.3.x.
-     * There is a discrepancy between YAHOO.lang.hasOwnProperty and
-     * Object.prototype.hasOwnProperty when the property is a primitive added to
-     * both the instance AND prototype with the same value:
-     * <pre>
-     * var A = function() {};
-     * A.prototype.foo = 'foo';
-     * var a = new A();
-     * a.foo = 'foo';
-     * alert(a.hasOwnProperty('foo')); // true
-     * alert(YAHOO.lang.hasOwnProperty(a, 'foo')); // false when using fallback
-     * </pre>
-     * @method hasOwnProperty
-     * @param {any} o The object being testing
-     * @return {boolean} the result
-     */
-    hasOwnProperty: function(o, prop) {
-        if (Object.prototype.hasOwnProperty) {
-            return o.hasOwnProperty(prop);
-        }
-        
-        return !L.isUndefined(o[prop]) && 
-                o.constructor.prototype[prop] !== o[prop];
-    },
  
     /**
      * IE will not enumerate native functions in a derived object even if the
@@ -140,16 +113,14 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      * @static
      * @private
      */
-    _IEEnumFix: function(r, s) {
-        if (YAHOO.env.ua.ie) {
+    _IEEnumFix: (YAHOO.env.ua.ie) ? function(r, s) {
             for (var i=0;i<ADD.length;i=i+1) {
                 var fname=ADD[i],f=s[fname];
                 if (L.isFunction(f) && f!=Object.prototype[fname]) {
                     r[fname]=f;
                 }
             }
-        }
-    },
+    } : function(){},
        
     /**
      * Utility to set up the prototype, constructor and superclass properties to
@@ -529,6 +500,34 @@ return (L.isObject(o) || L.isString(o) || L.isNumber(o) || L.isBoolean(o));
     }
 
 };
+
+/**
+ * Determines whether or not the property was added
+ * to the object instance.  Returns false if the property is not present
+ * in the object, or was inherited from the prototype.
+ * This abstraction is provided to enable hasOwnProperty for Safari 1.3.x.
+ * There is a discrepancy between YAHOO.lang.hasOwnProperty and
+ * Object.prototype.hasOwnProperty when the property is a primitive added to
+ * both the instance AND prototype with the same value:
+ * <pre>
+ * var A = function() {};
+ * A.prototype.foo = 'foo';
+ * var a = new A();
+ * a.foo = 'foo';
+ * alert(a.hasOwnProperty('foo')); // true
+ * alert(YAHOO.lang.hasOwnProperty(a, 'foo')); // false when using fallback
+ * </pre>
+ * @method hasOwnProperty
+ * @param {any} o The object being testing
+ * @return {boolean} the result
+ */
+L.hasOwnProperty = (Object.prototype.hasOwnProperty) ?
+    function(o, prop) {
+        return o && o.hasOwnProperty(prop);
+    } : function(o, prop) {
+        return !L.isUndefined(o[prop]) && 
+                o.constructor.prototype[prop] !== o[prop];
+    };
 
 // new lang wins
 OB.augmentObject(L, OB, true);
