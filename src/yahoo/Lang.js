@@ -8,6 +8,8 @@ YAHOO.lang = YAHOO.lang || {};
 
 var L = YAHOO.lang,
 
+    ADD = ["toString", "valueOf", "hasOwnProperty"],
+
     OB = {
 
     /**
@@ -140,9 +142,8 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
      */
     _IEEnumFix: function(r, s) {
         if (YAHOO.env.ua.ie) {
-            var add=["toString", "valueOf"], i;
-            for (i=0;i<add.length;i=i+1) {
-                var fname=add[i],f=s[fname];
+            for (var i=0;i<ADD.length;i=i+1) {
+                var fname=ADD[i],f=s[fname];
                 if (L.isFunction(f) && f!=Object.prototype[fname]) {
                     r[fname]=f;
                 }
