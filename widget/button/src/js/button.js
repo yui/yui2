@@ -1457,7 +1457,7 @@
             if (oForm) {
         
                 Event.on(oForm, "reset", this._onFormReset, null, this);
-                Event.on(oForm, "submit", this.createHiddenFields, null, this);
+                Event.on(oForm, "submit", this._onFormSubmit, null, this);
         
                 oSrcElement = this.get("srcelement");
         
@@ -2315,6 +2315,20 @@
                 this.resetValue("selectedMenuItem");
         
             }
+        
+        },
+
+
+        /**
+        * @method _onFormSubmit
+        * @description "submit" event handler for the button's form.
+        * @protected
+        * @param {Event} p_oEvent Object representing the DOM event 
+        * object passed back by the event utility (YAHOO.util.Event).
+        */        
+        _onFormSubmit: function (p_oEvent) {
+        
+        	this.createHiddenFields();
         
         },
         
@@ -3543,7 +3557,7 @@
             if (oForm) {
         
                 Event.removeListener(oForm, "reset", this._onFormReset);
-                Event.removeListener(oForm, "submit", this.createHiddenFields);
+                Event.removeListener(oForm, "submit", this._onFormSubmit);
         
             }
 
