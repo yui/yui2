@@ -1,5 +1,12 @@
 Drag and Drop Release Notes
 
+2.6.0
+    * Fixed issue with loop when mouseup occured outside of an iframe in Internet Explorer
+    * Added useShim flag to DragDropMgr to place a shim over the page during a drag operation.
+        It must be set by hand to be backward compatible. This will allow a draggable element
+        to pass over things like an IFRAME without interrupting the drag movement.
+            YAHOO.util.DDM.useShim = true;
+
 2.5.1
     * No change
 

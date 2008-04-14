@@ -201,6 +201,13 @@ YAHOO.util.DragDrop.prototype = {
     dragOnly: false,
 
     /**
+     * If this flag is true, a shim will be placed over the screen/viewable area to track mouse events. Should help with dragging elements over iframes and other controls.
+     * @property useShim
+     * @type Boolean
+     */
+    useShim: false,
+
+    /**
      * Cached reference to the linked element
      * @property _domRef
      * @private
@@ -655,6 +662,7 @@ YAHOO.util.DragDrop.prototype = {
         this.maintainOffset    = (this.config.maintainOffset);
         this.primaryButtonOnly = (this.config.primaryButtonOnly !== false);
         this.dragOnly = ((this.config.dragOnly === true) ? true : false);
+        this.useShim = ((this.config.useShim === true) ? true : false);
     },
 
     /**
