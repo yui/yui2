@@ -293,7 +293,7 @@ var D = YAHOO.util.Dom,
         */
         _setupDragDrop: function() {
             D.addClass(this._wrap, this.CSS_DRAG);
-            this.dd = new YAHOO.util.DD(this._wrap, this.get('id') + '-resize', { dragOnly: true });
+            this.dd = new YAHOO.util.DD(this._wrap, this.get('id') + '-resize', { dragOnly: true, useShim: this.get('useShim') });
             this.dd.on('dragEvent', function() {
                 this.fireEvent('dragEvent', arguments);
             }, this, true);
@@ -317,7 +317,7 @@ var D = YAHOO.util.Dom,
                 this._wrap.appendChild(this._handles[h[i]]);
                 Event.on(this._handles[h[i]], 'mouseover', this._handleMouseOver, this, true);
                 Event.on(this._handles[h[i]], 'mouseout', this._handleMouseOut, this, true);
-                this._dds[h[i]] = new YAHOO.util.DragDrop(this._handles[h[i]], this.get('id') + '-handle-' + h);
+                this._dds[h[i]] = new YAHOO.util.DragDrop(this._handles[h[i]], this.get('id') + '-handle-' + h, { dragOnly: true, useShim: this.get('useShim') });
                 this._dds[h[i]].setPadding(15, 15, 15, 15);
                 this._dds[h[i]].on('startDragEvent', this._handleStartDrag, this._dds[h[i]], this);
                 this._dds[h[i]].on('mouseDownEvent', this._handleMouseDown, this._dds[h[i]], this);
@@ -565,6 +565,7 @@ var D = YAHOO.util.Dom,
 
             this._resizeEvent = null;
             this._currentHandle = null;
+            
 
             this.fireEvent('endResize', { ev: 'endResize', target: this, height: this._cache.height, width: this._cache.width, top: this._cache.top, left: this._cache.left });
         },
@@ -695,6 +696,7 @@ var D = YAHOO.util.Dom,
             return this;
         },
         /** 
+        * @private
         * @method resize
         * @param {Event} ev The mouse event.
         * @param {Number} h The new height setting.
@@ -1188,6 +1190,24 @@ var D = YAHOO.util.Dom,
         initAttributes: function(attr) {
             Resize.superclass.initAttributes.call(this, attr);
 
+            /**
+            * @attribute useShime
+            * @description This setting will be passed to the DragDrop instances on the resize handles and for the draggable property.
+            * This property should be used if you want the resize handles to work over iframe and other elements.
+            * @type Boolean
+            */
+            this.setAttributeConfig('useShim', {
+                value: ((attr.useShim === true) ? true : false),
+                validator: YAHOO.lang.isBoolean,
+                method: function(u) {
+                    for (var i in this._dds) {
+                        this._dds[i].useShim = u;
+                    }
+                    if (this.dd) {
+                        this.dd.useShim = u;
+                    }
+                }
+            });
             /**
             * @attribute setSize
             * @description Set the size of the resized element, if set to false the element will not be auto resized,

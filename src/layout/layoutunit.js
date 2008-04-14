@@ -1156,7 +1156,8 @@
             });
             /**
             * @attribute scroll
-            * @description Adds a class to the unit to allow for overflow: auto, default is overflow: hidden
+            * @description Adds a class to the unit to allow for overflow: auto (yui-layout-scroll), default is overflow: hidden (yui-layout-noscroll). If true scroll bars will be placed on the element when the content exceeds the given area, false will put overflow hidden to hide the content. Passing null will render the content as usual overflow.
+            * @type Boolean/Null
             */
 
             this.setAttributeConfig('scroll', {
@@ -1195,6 +1196,19 @@
                 writeOnce: true,
                 value: attr.hover || false,
                 validator: YAHOO.lang.isBoolean
+            });
+            /**
+            * @attribute useShim
+            * @description Config option to pass to the Resize Utility
+            */
+            this.setAttributeConfig('useShim', {
+                value: attr.useShim || false,
+                validator: YAHOO.lang.isBoolean,
+                method: function(u) {
+                    if (this._resize) {
+                        this._resize.set('useShim', u)
+                    }
+                }
             });
             /**
             * @attribute resize
@@ -1247,7 +1261,8 @@
                                 maxHeight: this.get('maxHeight'),
                                 height: this.get('height'),
                                 width: this.get('width'),
-                                setSize: false
+                                setSize: false,
+                                useShim: this.get('useShim')
                             });
                             
                             this._resize._handles[handle].innerHTML = '<div class="yui-layout-resize-knob"></div>';
