@@ -789,5 +789,3 @@
     U.History = H;
 
 })();
-
-YAHOO.register("history", YAHOO.util.History, {version: "2.5.1", build: "984"});
