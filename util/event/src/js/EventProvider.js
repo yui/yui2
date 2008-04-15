@@ -177,8 +177,6 @@ YAHOO.log("EventProvider createEvent skipped: '"+p_type+"' already exists");
      *   <li>The custom object (if any) that was passed into the subscribe() 
      *       method</li>
      *   </ul>
-     * If the custom event has not been explicitly created, it will be
-     * created now with the default config, scoped to the host object
      * @method fireEvent
      * @param p_type    {string}  the type, or name of the event
      * @param arguments {Object*} an arbitrary set of parameters to pass to 
