@@ -278,6 +278,45 @@ YAHOO.util.Cookie = {
     },
 
     /**
+     * Removes a sub cookie with a given name.
+     * @param {String} name The name of the cookie in which the subcookie exists.
+     * @param {String} subName The name of the subcookie to remove.
+     * @param {Object} options (Optional) An object containing one or more
+     *      cookie options: path (a string), domain (a string), expires (a Date object),
+     *      and secure (true/false). This must be the same settings as the original
+     *      subcookie.
+     * @return {String} The created cookie string.
+     * @method removeSub
+     * @static
+     */
+    removeSub : function(name /*:String*/, subName /*:String*/, options /*:Object*/) /*:String*/ {
+    
+        //check cookie name
+        if (!YAHOO.lang.isString(name) || name === ""){
+            throw new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string.");
+        }
+        
+        //check subcookie name
+        if (!YAHOO.lang.isString(subName) || subName === ""){
+            throw new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string.");
+        }
+        
+        //get all subcookies for this cookie
+        var subs = this.getSubs(name);
+        
+        //delete the indicated subcookie
+        if (YAHOO.lang.isObject(subs) && YAHOO.lang.hasOwnProperty(subs, subName)){
+            delete subs[subName];
+            
+            //reset the cookie
+            return this.setSubs(name, subs, options);
+        } else {
+            return "";
+        }
+        
+    },
+
+    /**
      * Sets a cookie with a given name and value.
      * @param {String} name The name of the cookie to set.
      * @param {Variant} value The value to set for the cookie.

@@ -677,6 +677,106 @@ YAHOO.test.cookie_test = (function(){
     }));
 
     //-------------------------------------------------------------------------
+    // Test Case for removing individual cookie sub.
+    //-------------------------------------------------------------------------
+    
+    suite.add(new YAHOO.tool.TestCase({
+    
+        name : "Remove Cookie Sub Tests",       
+        
+        _should : {
+        
+            error : {
+                testRemoveSubInvalidName1 : new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string."),
+                testRemoveSubInvalidName2 : new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string."),
+                testRemoveSubInvalidName3 : new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string."),
+                testRemoveSubInvalidName4 : new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string."),
+                testRemoveSubInvalidName5 : new TypeError("Cookie.removeSub(): Cookie name must be a non-empty string."),
+            
+                testRemoveSubInvalidSubName1 : new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string."),
+                testRemoveSubInvalidSubName2 : new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string."),
+                testRemoveSubInvalidSubName3 : new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string."),
+                testRemoveSubInvalidSubName4 : new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string."),
+                testRemoveSubInvalidSubName5 : new TypeError("Cookie.removeSub(): Subcookie name must be a non-empty string.")
+            
+            }
+        
+        
+        },
+        
+        setUp : function () {
+            setCookie("data", "a=b&c=d&e=f&g=h&found=true&count=11&age=29&title=f2e&stuff=no%20way&special=" + encodeURIComponent("Something with & and ="));            
+            setCookie("name", "Nicholas%20Zakas");
+            setCookie("component", "Cookie%20Utility");
+        },
+        
+        tearDown : function () {
+            deleteCookie("data");
+            deleteCookie("name");
+            deleteCookie("component");            
+        },
+
+        //---------------------------------------------------------------------
+        // Tests
+        //---------------------------------------------------------------------
+    
+        testRemoveSubSimple : function(){
+            var value = YAHOO.util.Cookie.removeSub("data", "c");          
+            Assert.areEqual("data=a=b&e=f&g=h&found=true&count=11&age=29&title=f2e&stuff=no%20way&special=" + encodeURIComponent("Something with & and ="), value, "Cookie string is incorrect.");
+        },
+        
+        testRemoveSubUnknown : function(){
+            var value = YAHOO.util.Cookie.removeSub("data", "i");
+            Assert.areEqual("", value, "Cookie string is incorrect.");
+        },
+        
+        testRemoveSubInvalidName1 : function(){        
+            YAHOO.util.Cookie.removeSub(12);        
+        },
+        
+        testRemoveSubInvalidName2 : function(){        
+            YAHOO.util.Cookie.removeSub(true);        
+        },
+        
+        testRemoveSubInvalidName3 : function(){        
+            YAHOO.util.Cookie.removeSub("");        
+        },
+        
+        testRemoveSubInvalidName4 : function(){        
+            YAHOO.util.Cookie.removeSub();        
+        },
+
+        testRemoveSubInvalidName5 : function(){        
+            YAHOO.util.Cookie.removeSub(null);        
+        },
+        
+        testRemoveSubInvalidSubName1 : function(){        
+            YAHOO.util.Cookie.removeSub("data", 12);
+        },
+        
+        testRemoveSubInvalidSubName2 : function(){        
+            YAHOO.util.Cookie.removeSub("data", true);
+        },
+        
+        testRemoveSubInvalidSubName3 : function(){        
+            YAHOO.util.Cookie.removeSub("data", "");
+        },
+        
+        testRemoveSubInvalidSubName4 : function(){        
+            YAHOO.util.Cookie.removeSub("data");
+        },
+
+        testRemoveSubInvalidSubName5 : function(){        
+            YAHOO.util.Cookie.removeSub("data", null);
+        },
+        
+        testRemoveSubOnNonExistantCookie : function(){
+            var value = YAHOO.util.Cookie.removeSub("invalid", "i");
+            Assert.areEqual("",value, "Cookie string is incorrect.");
+        }
+    }));
+    
+    //-------------------------------------------------------------------------
     // Test Case for removing cookies
     //-------------------------------------------------------------------------
     
