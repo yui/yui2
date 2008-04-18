@@ -189,6 +189,7 @@ var Dom = YAHOO.util.Dom,
             this._setBackgroundPosition(-(this.get('initialXY')[0]),  -(this.get('initialXY')[1]));
 
             this._resize.on('startResize', this._handleStartResizeEvent, this, true);
+            this._resize.on('endResize', this._handleEndResizeEvent, this, true);
             this._resize.on('dragEvent', this._handleDragEvent, this, true);
             this._resize.on('beforeResize', this._handleBeforeResizeEvent, this, true);
             this._resize.on('resize', this._handleResizeEvent, this, true);
@@ -446,8 +447,16 @@ var Dom = YAHOO.util.Dom,
         
         /**
         * @private
+        * @method _handleEndResizeEvent
+        * @description Handles the Resize Utilitys endResize event
+        */
+        _handleEndResizeEvent: function() {
+            this._setConstraints(true);
+        },
+        /**
+        * @private
         * @method _handleStartResizeEvent
-        * @description Handles the Resize Utilitys startResizeEvent event
+        * @description Handles the Resize Utilitys startResize event
         */
         _handleStartResizeEvent: function() {
             this._setConstraints(true);
@@ -502,7 +511,6 @@ var Dom = YAHOO.util.Dom,
             resize.dd.resetConstraints();
             var height = parseInt(resize.get('height'), 10),
                 width = parseInt(resize.get('width'), 10);
-
             if (inside) {
                 //Called from inside the resize callback
                 height = resize._cache.height;
@@ -535,7 +543,6 @@ var Dom = YAHOO.util.Dom,
             
             resize.dd.setXConstraint(left, right); 
             resize.dd.setYConstraint(top, bottom);
-
 
             return {
                 top: top,
