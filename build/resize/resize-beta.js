@@ -151,6 +151,13 @@ var D = YAHOO.util.Dom,
         browser: YAHOO.env.ua,
         /** 
         * @private
+        * @property _locked
+        * @description A flag to show if the resize is locked
+        * @type Boolean
+        */
+        _locked: null,
+        /** 
+        * @private
         * @property _positioned
         * @description A flag to show if the element is absolutely positioned
         * @type Boolean
@@ -363,6 +370,9 @@ var D = YAHOO.util.Dom,
         * @description This method preps the autoRatio on MouseDown.
         */
         _handleMouseDown: function(ev) {
+            if (this._locked) {
+                return false;
+            }
             if (D.getStyle(this._wrap, 'position') == 'absolute') {
                 this._positioned = true;
             }
@@ -381,6 +391,9 @@ var D = YAHOO.util.Dom,
         * @description Adds CSS class names to the handles
         */
         _handleMouseOver: function(ev) {
+            if (this._locked) {
+                return false;
+            }
             //Internet Explorer needs this
             D.removeClass(this._wrap, this.CSS_RESIZE);
             if (this.get('hover')) {
@@ -689,6 +702,42 @@ var D = YAHOO.util.Dom,
             }
         },
         /** 
+        * @method lock
+        * @description Lock the resize so it can't be resized
+        * @param {Boolean} dd If the draggable config is set, lock it too
+        * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
+        */
+        lock: function(dd) {
+            this._locked = true;
+            if (dd && this.dd) {
+                D.removeClass(this._wrap, 'yui-draggable');
+                this.dd.lock();
+            }
+            return this;
+        },
+        /** 
+        * @method unlock
+        * @description Unlock the resize so it can be resized
+        * @param {Boolean} dd If the draggable config is set, unlock it too
+        * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
+        */
+        unlock: function(dd) {
+            this._locked = false;
+            if (dd && this.dd) {
+                D.addClass(this._wrap, 'yui-draggable');
+                this.dd.unlock();
+            }
+            return this;
+        },
+        /** 
+        * @method isLocked
+        * @description Check the locked status of the resize instance
+        * @return {Boolean}
+        */
+        isLocked: function() {
+            return this._locked;
+        },
+        /** 
         * @method reset
         * @description Resets the element to is start state.
         * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
@@ -711,6 +760,9 @@ var D = YAHOO.util.Dom,
         * @return {<a href="YAHOO.util.Resize.html">YAHOO.util.Resize</a>} The Resize instance
         */
         resize: function(ev, h, w, t, l, force, silent) {
+            if (this._locked) {
+                return false;
+            }
             this._resizeEvent = ev;
             var el = this._wrap, anim = this.get('animate'), set = true;
             if (this._proxy && !force) {
@@ -1102,6 +1154,7 @@ var D = YAHOO.util.Dom,
         * @description The Resize class's initialization method
         */        
         init: function(p_oElement, p_oAttributes) {
+            this._locked = false;
             this._cache = {
                 xy: [],
                 height: 0,
