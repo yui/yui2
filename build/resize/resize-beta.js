@@ -566,6 +566,8 @@ var D = YAHOO.util.Dom,
             this._resizeEvent = null;
             this._currentHandle = null;
             
+            this.set('height', this._cache.height, true);
+            this.set('width', this._cache.width, true);
 
             this.fireEvent('endResize', { ev: 'endResize', target: this, height: this._cache.height, width: this._cache.width, top: this._cache.top, left: this._cache.left });
         },
