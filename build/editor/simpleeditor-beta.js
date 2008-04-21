@@ -361,7 +361,11 @@ var Dom = YAHOO.util.Dom,
         if (Lang.isObject(arguments[0]) && !Dom.get(el).nodeType) {
             attrs = el;
         }
-        var local_attrs = (attrs || {});
+        var local_attrs = {};
+        if (attrs) {
+            Lang.augmentObject(local_attrs, attrs); //Break the config reference
+        }
+        
 
         var oConfig = {
             element: null,
@@ -1164,22 +1168,6 @@ var Dom = YAHOO.util.Dom,
                 tmp.get('element').tabIndex = '-1';
                 tmp.get('element').setAttribute('role', 'button');
                 tmp._selected = true;
-                if (!tmp.buttonType) {
-                    tmp.buttonType = 'rich';
-                    tmp.checkValue = function(value) {
-                        var _menuItems = this.getMenu().getItems();
-                        if (_menuItems.length === 0) {
-                            this.getMenu()._onBeforeShow();
-                            _menuItems = this.getMenu().getItems();
-                        }
-                        for (var i = 0; i < _menuItems.length; i++) {
-                            _menuItems[i].cfg.setProperty('checked', false);
-                            if (_menuItems[i].value == value) {
-                                _menuItems[i].cfg.setProperty('checked', true);
-                            }
-                        }      
-                    };
-                }
                 
                 if (this.get('disabled')) {
                     //Toolbar is disabled, disable the new button too!
@@ -2091,7 +2079,7 @@ var Dom = YAHOO.util.Dom,
  * @description <p>The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images. The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
  * @namespace YAHOO.widget
  * @requires yahoo, dom, element, event, toolbar
- * @optional animation, container_core
+ * @optional animation, container_core, resize, dragdrop
  * @beta
  */
 
@@ -2124,7 +2112,9 @@ var Dom = YAHOO.util.Dom,
                 document.body.appendChild(el);
             }
         } else {
-            Lang.augmentObject(o, attrs); //Break the config reference
+            if (attrs) {
+                Lang.augmentObject(o, attrs); //Break the config reference
+            }
         }
 
         var oConfig = {
@@ -2843,47 +2833,8 @@ var Dom = YAHOO.util.Dom,
         * @description This method will open the iframes content document and write the textareas value into it, then start the body.onload checking.
         */
         _setInitialContent: function() {
-            var html = Lang.substitute(this.get('html'), {
-                TITLE: this.STR_TITLE,
-                CONTENT: this._cleanIncomingHTML(this.get('element').value),
-                CSS: this.get('css'),
-                HIDDEN_CSS: ((this.get('hiddencss')) ? this.get('hiddencss') : '/* No Hidden CSS */'),
-                EXTRA_CSS: ((this.get('extracss')) ? this.get('extracss') : '/* No Extra CSS */')
-            }),
-            check = true;
-            if (document.compatMode != 'BackCompat') {
-                html = this._docType + "\n" + html;
-            } else {
-            }
-
-            if (this.browser.ie || this.browser.webkit || this.browser.opera || (navigator.userAgent.indexOf('Firefox/1.5') != -1)) {
-                //Firefox 1.5 doesn't like setting designMode on an document created with a data url
-                try {
-                    //Adobe AIR Code
-                    if (this.browser.air) {
-                        var doc = this._getDoc().implementation.createHTMLDocument();
-                        var origDoc = this._getDoc();
-                        origDoc.open();
-                        origDoc.close();
-                        doc.open();
-                        doc.write(html);
-                        doc.close();
-                        var node = origDoc.importNode(doc.getElementsByTagName("html")[0], true);
-                        origDoc.replaceChild(node, origDoc.getElementsByTagName("html")[0]);
-                        origDoc.body._rteLoaded = true;
-                    } else {               
-                        this._getDoc().open();
-                        this._getDoc().write(html);
-                        this._getDoc().close();
-                    }
-                } catch (e) {
-                    //Safari will only be here if we are hidden
-                    check = false;
-                }
-            } else {
-                //This keeps Firefox 2 from writing the iframe to history preserving the back buttons functionality
-                this.get('iframe').get('element').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
-            }
+            //Most of this logic was moved to setEditorHTML
+            var check = this.setEditorHTML(this.get('element').value);
             if (check) {
                 this._checkLoaded();
             }
@@ -3104,7 +3055,7 @@ var Dom = YAHOO.util.Dom,
                             if (path[i].style.width) {
                                 w = parseInt(path[i].style.width, 10);
                             }
-                            pathStr += '(' + h + 'x' + w + ')';
+                            pathStr += '(' + w + 'x' + h + ')';
                         break;
                     }
 
@@ -3219,8 +3170,8 @@ var Dom = YAHOO.util.Dom,
             if (this.currentWindow) {
                 this.closeWindow();
             }
-            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
-                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
+            if (this.currentWindow) {
+                this.closeWindow();
             }
             if (this.browser.webkit) {
                 var tar =Event.getTarget(ev);
@@ -3306,6 +3257,9 @@ var Dom = YAHOO.util.Dom,
                         Dom.addClass(sel, 'selected');
                         this._lastImage = sel;
                     }
+                }
+                if (this.currentWindow) {
+                    this.closeWindow();
                 }
                 this.nodeChange();
             }
@@ -3402,15 +3356,6 @@ var Dom = YAHOO.util.Dom,
                         }
                     }
                 }
-                /* This was removed because it crashes Safari 2.x in some cases
-                if (ev.keyCode && (ev.keyCode == 8)) {
-                    //Delete Key
-                    if (this._isElement(this._getSelectedElement(), 'br')) {
-                        var el = this._getSelectedElement();
-                        el.parentNode.removeChild(el);
-                    }
-                }
-                */
                 this._listFix(ev);
             }
             this.fireEvent('editorKeyPress', { type: 'editorKeyPress', target: this, ev: ev });
@@ -3548,6 +3493,7 @@ var Dom = YAHOO.util.Dom,
         * @description Handles all keydown events inside the iFrame document.
         */
         _handleKeyDown: function(ev) {
+            var tar = null, _range = null;
             if (this._isNonEditable(ev)) {
                 return false;
             }
@@ -3555,8 +3501,8 @@ var Dom = YAHOO.util.Dom,
             if (this.currentWindow) {
                 this.closeWindow();
             }
-            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
-                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
+            if (this.currentWindow) {
+                this.closeWindow();
             }
             var doExec = false,
                 action = null,
@@ -3617,11 +3563,26 @@ var Dom = YAHOO.util.Dom,
                 case 85: //U
                     action = 'underline';
                     break;
+                case 9:
+                    if (this.browser.ie) {
+                        //Insert a tab in Internet Explorer
+                        _range = this._getRange();
+                        tar = this._getSelectedElement();
+                        if (!this._isElement(tar, 'li')) {
+                            if (_range) {
+                                _range.pasteHTML('&nbsp;&nbsp;&nbsp;&nbsp;');
+                                _range.collapse(false);
+                                _range.select();
+                            }
+                            Event.stopEvent(ev);
+                        }
+                    }
+                    break;
                 case 13:
                     if (this.browser.ie) {
                         //Insert a <br> instead of a <p></p> in Internet Explorer
-                        var _range = this._getRange();
-                        var tar = this._getSelectedElement();
+                        _range = this._getRange();
+                        tar = this._getSelectedElement();
                         if (!this._isElement(tar, 'li')) {
                             if (_range) {
                                 _range.pasteHTML('<br>');
@@ -3759,6 +3720,9 @@ var Dom = YAHOO.util.Dom,
                         }
                         if (path[i].style.textDecoration.toLowerCase() == 'underline') {
                             cmd[cmd.length] = 'underline';
+                        }
+                        if (path[i].style.textDecoration.toLowerCase() == 'line-through') {
+                            cmd[cmd.length] = 'strikethrough';
                         }
                         if (cmd.length > 0) {
                             for (var j = 0; j < cmd.length; j++) {
@@ -3915,12 +3879,6 @@ var Dom = YAHOO.util.Dom,
             }
         },
         /**
-        * @property EDITOR_PANEL_ID
-        * @description HTML id to give the properties window in the DOM.
-        * @type String
-        */
-        EDITOR_PANEL_ID: 'yui-editor-panel',
-        /**
         * @property SEP_DOMPATH
         * @description The value to place in between the Dom path items
         * @type String
@@ -3949,7 +3907,7 @@ var Dom = YAHOO.util.Dom,
         * @description The text to place in the URL textbox when using the blankimage.
         * @type String
         */
-        STR_IMAGE_HERE: 'Image Url Here',
+        STR_IMAGE_HERE: 'Image URL Here',
         /**
         * @property STR_LINK_URL
         * @description The label string for the Link URL.
@@ -4056,6 +4014,7 @@ var Dom = YAHOO.util.Dom,
                                 { type: 'push', label: 'Bold CTRL + SHIFT + B', value: 'bold' },
                                 { type: 'push', label: 'Italic CTRL + SHIFT + I', value: 'italic' },
                                 { type: 'push', label: 'Underline CTRL + SHIFT + U', value: 'underline' },
+                                //{ type: 'push', label: 'Strike Through', value: 'strikethrough' },
                                 { type: 'separator' },
                                 { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
                                 { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
@@ -4398,9 +4357,9 @@ var Dom = YAHOO.util.Dom,
                                 }
                             }
                         } else {
-                            Event.unsubscribe(this.get('element').form, 'submit', this._handleFormSubmit);
+                            Event.removeListener(this.get('element').form, 'submit', this._handleFormSubmit);
                             if (this._formButtons) {
-                                Event.unsubscribe(this._formButtons, 'click', this._handleFormButtonClick);
+                                Event.removeListener(this._formButtons, 'click', this._handleFormButtonClick);
                             }
                         }
                     }
@@ -4489,14 +4448,16 @@ var Dom = YAHOO.util.Dom,
             this.setAttributeConfig('focusAtStart', {
                 value: attr.focusAtStart || false,
                 writeOnce: true,
-                method: function() {
-                    this.on('editorContentLoaded', function() {
-                        var self = this;
-                        setTimeout(function() {
-                            self._focusWindow.call(self, true);
-                            self.editorDirty = false;
-                        }, 400);
-                    }, this, true);
+                method: function(fs) {
+                    if (fs) {
+                        this.on('editorContentLoaded', function() {
+                            var self = this;
+                            setTimeout(function() {
+                                self._focusWindow.call(self, true);
+                                self.editorDirty = false;
+                            }, 400);
+                        }, this, true);
+                    }
                 }
             });
             /**
@@ -4552,10 +4513,6 @@ var Dom = YAHOO.util.Dom,
                 validator: YAHOO.lang.isBoolean
             });
             
-
-            this.on('afterRender', function() {
-                this._renderPanel();
-            });
         },
         /**
         * @private
@@ -4866,7 +4823,7 @@ var Dom = YAHOO.util.Dom,
         * @description Checks to see if a string (href or img src) is possibly a local file reference..
         */
         _isLocalFile: function(url) {
-            if ((url !== '') && ((url.indexOf('file:/') != -1) || (url.indexOf(':\\') != -1))) {
+            if ((url) && (url !== '') && ((url.indexOf('file:/') != -1) || (url.indexOf(':\\') != -1))) {
                 return true;
             }
             return false;
@@ -4939,6 +4896,17 @@ var Dom = YAHOO.util.Dom,
                 this._queue[this._queue.length] = ['render', arguments];
                 return false;
             }
+            if (this.get('element')) {
+                if (this.get('element').tagName) {
+                    if (this.get('element').tagName.toLowerCase() !== 'textarea') {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
             this._rendered = true;
             var self = this;
             window.setTimeout(function() {
@@ -4994,33 +4962,19 @@ var Dom = YAHOO.util.Dom,
                     this.moveWindow();
                 }
             }, this, true);
-            this.toolbar.on('fontsizeClick', function(o) {
-                this._handleFontSize(o);
-            }, this, true);
+            this.toolbar.on('fontsizeClick', this._handleFontSize, this, true);
             
             this.toolbar.on('colorPickerClicked', function(o) {
                 this._handleColorPicker(o);
                 return false; //Stop the buttonClick event
             }, this, true);
 
-            this.toolbar.on('alignClick', function(o) {
-                this._handleAlign(o);
-            }, this, true);
-            this.on('afterNodeChange', function() {
-                this._handleAfterNodeChange();
-            }, this, true);
-            this.toolbar.on('insertimageClick', function() {
-                this._handleInsertImageClick();
-            }, this, true);
-            this.on('windowinsertimageClose', function() {
-                this._handleInsertImageWindowClose();
-            }, this, true);
-            this.toolbar.on('createlinkClick', function() {
-                this._handleCreateLinkClick();
-            }, this, true);
-            this.on('windowcreatelinkClose', function() {
-                this._handleCreateLinkWindowClose();
-            }, this, true);
+            this.toolbar.on('alignClick', this._handleAlign, this, true);
+            this.on('afterNodeChange', this._handleAfterNodeChange, this, true);
+            this.toolbar.on('insertimageClick', this._handleInsertImageClick, this, true);
+            this.on('windowinsertimageClose', this._handleInsertImageWindowClose, this, true);
+            this.toolbar.on('createlinkClick', this._handleCreateLinkClick, this, true);
+            this.on('windowcreatelinkClose', this._handleCreateLinkWindowClose, this, true);
             
 
             //Replace Textarea with editable area
@@ -5496,7 +5450,7 @@ var Dom = YAHOO.util.Dom,
                         el.setAttribute('tag', tagName);
 
                         for (var k in tagStyle) {
-                            if (YAHOO.util.Lang.hasOwnProperty(tagStyle, k)) {
+                            if (YAHOO.util.lang.hasOwnProperty(tagStyle, k)) {
                                 el.style[k] = tagStyle[k];
                             }
                         }
@@ -5650,13 +5604,58 @@ var Dom = YAHOO.util.Dom,
         },
         /**
         * @method setEditorHTML
-        * @param {String} html The html content to load into the editor
+        * @param {String} incomingHTML The html content to load into the editor
         * @description Loads HTML into the editors body
         */
-        setEditorHTML: function(html) {
-            html = this._cleanIncomingHTML(html);
-            this._getDoc().body.innerHTML = html;
-            this.nodeChange();
+        setEditorHTML: function(incomingHTML) {
+            //html = this._cleanIncomingHTML(html);
+            //this._getDoc().body.innerHTML = html;
+
+            var html = Lang.substitute(this.get('html'), {
+                TITLE: this.STR_TITLE,
+                CONTENT: this._cleanIncomingHTML(incomingHTML),
+                CSS: this.get('css'),
+                HIDDEN_CSS: ((this.get('hiddencss')) ? this.get('hiddencss') : '/* No Hidden CSS */'),
+                EXTRA_CSS: ((this.get('extracss')) ? this.get('extracss') : '/* No Extra CSS */')
+            }),
+            check = true;
+
+            if (document.compatMode != 'BackCompat') {
+                html = this._docType + "\n" + html;
+            } else {
+            }
+            if (this.browser.ie || this.browser.webkit || this.browser.opera || (navigator.userAgent.indexOf('Firefox/1.5') != -1)) {
+                //Firefox 1.5 doesn't like setting designMode on an document created with a data url
+                try {
+                    //Adobe AIR Code
+                    if (this.browser.air) {
+                        var doc = this._getDoc().implementation.createHTMLDocument();
+                        var origDoc = this._getDoc();
+                        origDoc.open();
+                        origDoc.close();
+                        doc.open();
+                        doc.write(html);
+                        doc.close();
+                        var node = origDoc.importNode(doc.getElementsByTagName("html")[0], true);
+                        origDoc.replaceChild(node, origDoc.getElementsByTagName("html")[0]);
+                        origDoc.body._rteLoaded = true;
+                    } else {               
+                        this._getDoc().open();
+                        this._getDoc().write(html);
+                        this._getDoc().close();
+                    }
+                } catch (e) {
+                    //Safari will only be here if we are hidden
+                    check = false;
+                }
+            } else {
+                //This keeps Firefox 2 from writing the iframe to history preserving the back buttons functionality
+                this.get('iframe').get('element').src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+            }
+            if (check) {
+                this.nodeChange();
+            }
+            return check;
         },
         /**
         * @method getEditorHTML
@@ -5685,8 +5684,8 @@ var Dom = YAHOO.util.Dom,
                 }, 10);
             }
             //Adding this will close all other Editor window's when showing this one.
-            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
-                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
+            if (this.currentWindow) {
+                this.closeWindow();
             }
             //Put the iframe back in place
             this.get('iframe').setStyle('position', 'static');
@@ -5698,8 +5697,8 @@ var Dom = YAHOO.util.Dom,
         */
         hide: function() {
             //Adding this will close all other Editor window's.
-            if (YAHOO.widget.EditorInfo.window.win && YAHOO.widget.EditorInfo.window.scope) {
-                YAHOO.widget.EditorInfo.window.scope.closeWindow.call(YAHOO.widget.EditorInfo.window.scope);
+            if (this.currentWindow) {
+                this.closeWindow();
             }
             if (this._fixNodesTimer) {
                 clearTimeout(this._fixNodesTimer);
@@ -5894,7 +5893,7 @@ var Dom = YAHOO.util.Dom,
 
             html = html.replace(/<\/li><ul>/gi, '</li><li><ul>');
             html = html.replace(/<\/ul>/gi, '</ul></li>');
-            html = html.replace(/<\/ul><\/li>\n/gi, "</ul>\n");
+            html = html.replace(/<\/ul><\/li>\n?/gi, "</ul>\n");
 
             html = html.replace(/<\/li>/gi, "</li>\n");
             html = html.replace(/<\/ol>/gi, "</ol>\n");
@@ -6025,6 +6024,9 @@ var Dom = YAHOO.util.Dom,
 	        html = html.replace(/<YUI_BR>$/, '');
             //Fix last BR in P
 	        html = html.replace(/<YUI_BR><\/p>/g, '</p>');
+            if (this.browser.ie) {
+	            html = html.replace(/&nbsp;&nbsp;&nbsp;&nbsp;/g, '\t');
+            }
             return html;
         },
         /**
@@ -6048,13 +6050,6 @@ var Dom = YAHOO.util.Dom,
         */
         clearEditorDoc: function() {
             this._getDoc().body.innerHTML = '&nbsp;';
-        },
-        /**
-        * @private
-        * @method _renderPanel
-        * @description Override Method for Advanced Editor
-        */
-        _renderPanel: function() {
         },
         /**
         * @method openWindow
@@ -6092,10 +6087,10 @@ var Dom = YAHOO.util.Dom,
         destroy: function() {
             this.saveHTML();
             this.toolbar.destroy();
-            this.setStyle('visibility', 'hidden');
-            this.setStyle('position', 'absolute');
-            this.setStyle('top', '-9999px');
-            this.setStyle('left', '-9999px');
+            this.setStyle('visibility', 'visible');
+            this.setStyle('position', 'static');
+            this.setStyle('top', '');
+            this.setStyle('left', '');
             var textArea = this.get('element');
             this.get('element_cont').get('parentNode').replaceChild(textArea, this.get('element_cont').get('element'));
             this.get('element_cont').get('element').innerHTML = '';

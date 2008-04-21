@@ -45,7 +45,11 @@ var Dom = YAHOO.util.Dom,
         if (Lang.isObject(arguments[0]) && !Dom.get(el).nodeType) {
             attrs = el;
         }
-        var local_attrs = (attrs || {});
+        var local_attrs = {};
+        if (attrs) {
+            Lang.augmentObject(local_attrs, attrs); //Break the config reference
+        }
+        
 
         var oConfig = {
             element: null,
@@ -856,22 +860,6 @@ var Dom = YAHOO.util.Dom,
                 tmp.get('element').tabIndex = '-1';
                 tmp.get('element').setAttribute('role', 'button');
                 tmp._selected = true;
-                if (!tmp.buttonType) {
-                    tmp.buttonType = 'rich';
-                    tmp.checkValue = function(value) {
-                        var _menuItems = this.getMenu().getItems();
-                        if (_menuItems.length === 0) {
-                            this.getMenu()._onBeforeShow();
-                            _menuItems = this.getMenu().getItems();
-                        }
-                        for (var i = 0; i < _menuItems.length; i++) {
-                            _menuItems[i].cfg.setProperty('checked', false);
-                            if (_menuItems[i].value == value) {
-                                _menuItems[i].cfg.setProperty('checked', true);
-                            }
-                        }      
-                    };
-                }
                 
                 if (this.get('disabled')) {
                     //Toolbar is disabled, disable the new button too!

@@ -327,6 +327,7 @@
 /* Image Height/Width original info container */
 .yui-editor-panel .height-width span.info {
     font-size: 70%;
+    margin-top: 3px;
 }
 
 /* Border Size/Type button widths */
