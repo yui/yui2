@@ -1,5 +1,5 @@
 {
-    'base': 'http://yui.yahooapis.com/2.5.1/build/',
+    'base': 'http://yui.yahooapis.com/2.6.0/build/',
 
     'skin': {
         'defaultSkin': 'sam',

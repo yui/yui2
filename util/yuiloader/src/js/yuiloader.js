@@ -33,7 +33,7 @@
          * @static
          */
         info: {
-    'base': 'http://yui.yahooapis.com/2.5.1/build/',
+    'base': 'http://yui.yahooapis.com/2.6.0/build/',
 
     'skin': {
         'defaultSkin': 'sam',
@@ -1256,7 +1256,7 @@
         _sort: function() {
             // create an indexed list
             var s=[], info=this.moduleInfo, loaded=this.loaded,
-                me = this;
+                checkOptional=!this.loadOptional, me = this;
 
             // returns true if b is not loaded, and is required
             // directly or by means of modules it supersedes.
@@ -1266,7 +1266,8 @@
                 }
 
                 var ii, mm=info[aa], rr=mm && mm.expanded, 
-                    after = mm && mm.after, other=info[bb];
+                    after = mm && mm.after, other=info[bb],
+                    optional = mm && mm.optional;
 
                 // check if this module requires the other directly
                 if (rr && YUI.ArrayUtil.indexOf(rr, bb) > -1) {
@@ -1275,6 +1276,12 @@
 
                 // check if this module should be sorted after the other
                 if (after && YUI.ArrayUtil.indexOf(after, bb) > -1) {
+                    return true;
+                }
+
+                // if loadOptional is not specified, optional dependencies still
+                // must be sorted correctly when present.
+                if (checkOptional && optional && YUI.ArrayUtil.indexOf(optional, bb) > -1) {
                     return true;
                 }
 
