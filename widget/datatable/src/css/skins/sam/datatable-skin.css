@@ -1,5 +1,9 @@
 /* basic skin styles */
-.yui-skin-sam .yui-dt table {margin:0;padding:0;font-family:arial;font-size:inherit;border-collapse:collapse;border-spacing:0;}
+.yui-skin-sam .yui-dt table {
+    margin:0;padding:0;
+    font-family:arial;font-size:inherit;
+    border-collapse:separate;*border-collapse:collapse;border-spacing:0; /* since ie6 and ie7 behave differently */
+}
 .yui-skin-sam .yui-dt thead {border-spacing:0;} /* for safari bug */
 .yui-skin-sam .yui-dt caption {padding-bottom:1em;text-align:left;}
 
@@ -20,6 +24,9 @@
     margin:0;padding:0;
     border:none;
     border-right:1px solid #CBCBCB;/*  inner column border */
+}
+.yui-skin-sam .yui-dt tr.yui-dt-last th {
+    border-bottom:1px solid #7F7F7F;/*  thead bottom border */
 }
 .yui-skin-sam .yui-dt-liner {
     margin:0;padding:0;
@@ -194,7 +201,7 @@
 .yui-skin-sam .yui-pg-first,
 .yui-skin-sam .yui-pg-last,
 .yui-skin-sam .yui-pg-current-page,
-.yui-skin-sam .yui-dt-first,
+.yui-skin-sam .yui-dt-paginator .yui-dt-first,
 .yui-skin-sam .yui-dt-paginator .yui-dt-last,
 .yui-skin-sam .yui-dt-paginator .yui-dt-selected {
     padding:2px 6px;

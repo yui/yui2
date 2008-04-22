@@ -73,9 +73,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         return;
     }
 
-    // Initialize node templates
-    this._initNodeTemplates();
-
     // Initialize container element
     this._initContainerEl(elContainer);
     if(!this._elContainer) {
@@ -131,11 +128,13 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         scope   : this,
         argument: {}
     };
-    if(this.get("initialLoad") === true) {
+    
+    var initialLoad = this.get("initialLoad");
+    if(initialLoad === true) {
         this._oDataSource.sendRequest(this.get("initialRequest"), oCallback);
     }
     // Do not send an initial request at all
-    else if(this.get("initialLoad") === false) {
+    else if(initialLoad === false) {
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
         this._oChainRender.add({
             method: function() {
@@ -151,8 +150,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     }
     // Send an initial request with a custom payload
     else {
-        var oCustom = this.get("initialLoad");
-        oCallback.argument = oCustom.argument;
+        var oCustom = initialLoad || {};
+        oCallback.argument = oCustom.argument || {};
         this._oDataSource.sendRequest(oCustom.request, oCallback);
     }
 };
@@ -568,7 +567,7 @@ lang.augmentObject(DT, {
 
     /////////////////////////////////////////////////////////////////////////
     //
-    // Private static variables
+    // Private static properties
     //
     /////////////////////////////////////////////////////////////////////////
 
@@ -594,35 +593,35 @@ lang.augmentObject(DT, {
     _nCurrentCount : 0,
 
     /**
-     * Reference to STYLE node that is dynamically created and written to
+     * Reference to the STYLE node that is dynamically created and updated
      * in order to manage Column widths.
      *
-     * @property DataTable._elStylesheet
+     * @property DataTable._elDynStyleNode
      * @type HTMLElement
      * @private
      * @static     
      */
-    _elStylesheet : null,
+    _elDynStyleNode : null,
 
     /**
-     * Set to true if _elStylesheet cannot be populated due to browser incompatibility.
+     * Set to true if _elDynStyleNode cannot be populated due to browser incompatibility.
      *
-     * @property DataTable._bStylesheetFallback
+     * @property DataTable._bDynStylesFallback
      * @type boolean
      * @private
      * @static     
      */
-    _bStylesheetFallback : (ua.ie && (ua.ie<7)) ? true : false,
+    _bDynStylesFallback : (ua.ie && (ua.ie<7)) ? true : false,
 
     /**
      * Object literal hash of Columns and their dynamically create style rules.
      *
-     * @property DataTable._oStylesheetRules
+     * @property DataTable._oDynStyles
      * @type Object
      * @private
      * @static     
      */
-    _oStylesheetRules : {},
+    _oDynStyles : {},
 
     /**
      * Element reference to shared Column drag target.
@@ -643,6 +642,12 @@ lang.augmentObject(DT, {
      * @static 
      */
     _elColumnResizerProxy : null,
+
+    /////////////////////////////////////////////////////////////////////////
+    //
+    // Private static methods
+    //
+    /////////////////////////////////////////////////////////////////////////
 
     /**
      * Clones object literal or array of object literals.
@@ -683,6 +688,53 @@ lang.augmentObject(DT, {
         }
     
         return copy;
+    },
+
+    /**
+     * Forces Gecko repaint.
+     *
+     * @method _repaintGecko
+     * @el {HTMLElement} (Optional) Element to repaint, otherwise entire document body.
+     * @private
+     * @static     
+     */
+    _repaintGecko : function(el) {
+        if(ua.gecko) {
+            el = el || document.body;
+            var parent = el.parentNode;
+            var nextSibling = el.nextSibling;
+            parent.insertBefore(parent.removeChild(el), nextSibling);
+        }
+    },
+
+    /**
+     * Forces Opera repaint.
+     *
+     * @method _repaintOpera
+     * @private
+     * @static     
+     */
+    _repaintOpera : function() {
+        if(ua.opera) {
+            document.body.style += '';
+        }
+    },
+    
+    /**
+     * Forces Webkit repaint.
+     *
+     * @method _repaintWebkit
+     * @el {HTMLElement} (Optional) Element to repaint, otherwise entire document body.
+     * @private
+     * @static     
+     */
+    _repaintWebkit : function(el) {
+        if(ua.webkit) {
+            el = el || document.body;
+            var parent = el.parentNode;
+            var nextSibling = el.nextSibling;
+            parent.insertBefore(parent.removeChild(el), nextSibling);
+        }
     },
 
     /**
@@ -2039,17 +2091,6 @@ _sId : null,
 _oChainRender : null,
 
 /**
- * Sparse array of custom functions to set column widths for browsers that don't
- * support dynamic CSS rules.  Functions are added at the index representing
- * the number of rows they update.
- *
- * @property _aFallbackColResizer
- * @type Array
- * @private
- */
-_aFallbackColResizer : [],
-
-/**
  * DOM reference to the container element for the DataTable instance into which
  * all other elements get created.
  *
@@ -2085,6 +2126,15 @@ _elTbodyContainer : null,
  * @private
  */
 _elCaption : null,
+
+/**
+ * DOM reference to the COLGROUP element for the DataTable instance.
+ *
+ * @property _elColgroup
+ * @type HTMLElement
+ * @private
+ */
+_elColgroup : null,
 
 /**
  * DOM reference to the primary THEAD element for the DataTable instance.
@@ -2177,20 +2227,25 @@ _sFirstTrId : null,
 _sLastTrId : null,
 
 /**
- * Template cell to create all new cells from.
- * @property _tdElTemplate
+ * Template row to create all new rows from.
+ * @property _elTrTemplate
  * @type {HTMLElement}
  * @private 
  */
-_tdElTemplate : null,
+_elTrTemplate : null,
 
 /**
- * Template row to create all new rows from.
- * @property _trElTemplate
- * @type {HTMLElement}
- * @private 
+ * Sparse array of custom functions to set column widths for browsers that don't
+ * support dynamic CSS rules.  Functions are added at the index representing
+ * the number of rows they update.
+ *
+ * @property _aDynFunctions
+ * @type Array
+ * @private
  */
-_trElTemplate : null,
+_aDynFunctions : [],
+
+
 
 
 
@@ -2283,9 +2338,9 @@ _focusEl : function(el) {
  * @private
  */
 _sync : function() {
-    this._syncColWidths();
+/*    this._syncColWidths();
     this._forceGeckoRedraw();
-},
+*/},
 
 /**
  * Syncs up widths of THs and TDs across all those Columns without width values.
@@ -2295,7 +2350,7 @@ _sync : function() {
  * @private
  */
 _syncColWidths : function() {
-    if(this._elTbody.rows.length > 0) {
+/*    if(this._elTbody.rows.length > 0) {
         // Validate there is at least one row with cells and at least one Column
         var allKeys   = this._oColumnSet.keys,
             elRow     = this.getFirstTrEl();
@@ -2317,7 +2372,6 @@ _syncColWidths : function() {
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
                 var newWidth = 0;
-                var overflow = 'hidden';
                 
                 // Columns without widths
                 if(!oColumn.width) {
@@ -2326,7 +2380,6 @@ _syncColWidths : function() {
 
                     if (elTd.offsetWidth < oColumn.minWidth) {
                         // bug parity between scrolling and non-scrolling tables
-                        overflow = elTd.offsetWidth ? 'visible' : 'hidden';
                         newWidth = Math.max(0, oColumn.minWidth,
                             elTd.offsetWidth -
                             (parseInt(Dom.getStyle(elTd,"paddingLeft"),10)|0) -
@@ -2345,12 +2398,12 @@ _syncColWidths : function() {
 
                 // Update to the new width
                 } else if (newWidth) {
-                    this._setColumnWidth(oColumn, newWidth+'px', overflow);
+                    this._setColumnWidth(oColumn, newWidth+'px');
                 }
             }
         }
     }
-},
+*/},
 
 
 /**
@@ -2360,7 +2413,7 @@ _syncColWidths : function() {
  * @private
  */
 _forceGeckoRedraw : function() {
-    // Bug 1741322: Needed to force FF to redraw to fix squishy headers on wide tables when new content comes in
+/*    // Bug 1741322: Needed to force FF to redraw to fix squishy headers on wide tables when new content comes in
     if(ua.gecko) {
         var elContainer = this.getContainerEl();
         setTimeout(function() {
@@ -2370,8 +2423,7 @@ _forceGeckoRedraw : function() {
             Dom.addClass(elContainer,"yui-dt-noop");
         },0);
     }
-},
-
+*/},
 
 
 
@@ -2393,25 +2445,6 @@ _forceGeckoRedraw : function() {
 
 
 // INIT FUNCTIONS
-
-/**
- * Initializes the HTMLElement templates used to create various table child
- * nodes.
- * @method _initNodeTemplates
- * @private
- */
-_initNodeTemplates : function () {
-    var d   = document,
-        tr  = d.createElement('tr'),
-        td  = d.createElement('td'),
-        div = d.createElement('div');
-
-    // Append the liner element
-    td.appendChild(div);
-
-    this._tdElTemplate = td;
-    this._trElTemplate = tr;
-},
 
 /**
  * Initializes object literal of config values.
@@ -2448,9 +2481,9 @@ _initConfigs : function(oConfigs) {
  */
 _initColumnSet : function(aColumnDefs) {
     if(this._oColumnSet) {
-        // First clear _oStylesheetRules for existing ColumnSet
+        // First clear _oDynStyles for existing ColumnSet
         for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
-            DT._oStylesheetRules[".yui-dt-col-"+this._oColumnSet.keys[i].getId()] = undefined;
+            DT._oDynStyles[".yui-dt-col"+this._oColumnSet.keys[i].getId()] = undefined;
         }
         
         this._oColumnSet = null;
@@ -2606,9 +2639,12 @@ _initTableEl : function() {
     elBodyTable.id = this._sId + "-bodytable";
     this._elTbodyContainer.appendChild(elBodyTable);
 
-    // Create THEAD
-    this._initTheadEls();
+    // Create COLGROUP and COLS
+    this._initColgroupEl();
 
+    // Create THEAD
+    this._initTheadEl();
+    
     // Create TBODY for data
     this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
     this._elTbody.tabIndex = 0;
@@ -2660,12 +2696,53 @@ _initTableEl : function() {
 },
 
 /**
- * Initializes THEAD elements for display and for screen readers.
+ * Initializes COLGROUP and COL elements.
  *
- * @method _initTheadEls
+ * @method _initColgroupEl
  * @private
  */
-_initTheadEls : function() {
+_initColgroupEl : function() {
+    var allCols = this._aColIds || [],
+        allKeys = this._oColumnSet.keys,
+        elTable = this._elTbodyContainer.firstChild,
+        i = 0,
+        len = allCols.length;
+        
+    // First remove existing COLs, if any
+    var elColgroup;
+    if(this._elColgroup) {
+        elColgroup = this._elColgroup;
+        Ev.purgeElement(this._elColgroup, true);
+        this._elColgroup.innerHTML = '';
+    }
+    else {
+        elColgroup = elTable.insertBefore(document.createElement("colgroup"), elTable.firstChild);
+    }
+    
+    // Add COLs   
+    var elCol, oColumn,
+        elFragment = document.createDocumentFragment(),
+        elColTemplate = document.createElement("col");
+
+    for(i=0,len=allKeys.length; i<len; i++) {
+        oColumn = allKeys[i];
+        elCol = elFragment.appendChild(elColTemplate.cloneNode(false));
+        //TODO: is this necessary?
+        //elCol.id = this._sId + "-col" + oColumn.getId();
+        // Applying minWidth is why we need the COL elements
+        elCol.style.width = oColumn.minWidth + "px";
+    }
+    elColgroup.appendChild(elFragment);
+    this._elColgroup = elColgroup;
+},
+
+/**
+ * Initializes THEAD element.
+ *
+ * @method _initTheadEl
+ * @private
+ */
+_initTheadEl : function() {
     var i,j, l, elThead;
     
     // First time through
@@ -2713,7 +2790,7 @@ _initTheadEls : function() {
                 id = this._sId+"-th" + oColumn.getId();
                 elTheadCell.id = id;
                 elTheadCell.yuiCellIndex = j;
-                this._initThEl(elTheadCell,oColumn,i,j, (l===1));
+                this._initThEl(elTheadCell,oColumn);
             }
     
                 // Set FIRST/LAST on THEAD rows
@@ -2789,21 +2866,7 @@ _initTheadEls : function() {
             
             YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
 
-
-     // Set widths for hidden Columns
-    for(var g=0, h=this._oColumnSet.keys.length; g<h; g++) {
-        // Hidden Columns
-        if(this._oColumnSet.keys[g].hidden) {
-            var oHiddenColumn = this._oColumnSet.keys[g];
-            var oHiddenThEl = oHiddenColumn.getThEl();
-            oHiddenColumn._nLastWidth = oHiddenThEl.offsetWidth -
-                        (parseInt(Dom.getStyle(oHiddenThEl,"paddingLeft"),10)|0) -
-                        (parseInt(Dom.getStyle(oHiddenThEl,"paddingRight"),10)|0);
-            this._setColumnWidth(oHiddenColumn.getKeyIndex(), "1px"); 
-        }
-    }
-
-
+    ///TODO: try _repaintGecko() instead
     // Bug 1806891
     if(ua.webkit && ua.webkit < 420) {
         var oSelf = this;
@@ -2820,12 +2883,10 @@ _initTheadEls : function() {
  * @method _initThEl
  * @param elTheadCell {HTMLElement} TH cell element reference.
  * @param oColumn {YAHOO.widget.Column} Column object.
- * @param row {Number} Row index.
- * @param col {Number} Column index.
  * initialize presentation elements.
  * @private
  */
-_initThEl : function(elTheadCell,oColumn,row,col) {
+_initThEl : function(elTheadCell,oColumn) {
     // Clear out the cell of prior content
     // TODO: purgeListeners and other validation-related things
     var colKey = oColumn.getKey();
@@ -2857,7 +2918,7 @@ _initThEl : function(elTheadCell,oColumn,row,col) {
         //TODO: document special keys will get stripped here
         aClasses[aClasses.length] = "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,"");
         
-        aClasses[aClasses.length] = "yui-dt-col-"+oColumn.getId();
+        aClasses[aClasses.length] = "yui-dt-colliner"+oColumn.getId();
         
         aClasses[aClasses.length] = DT.CLASS_LINER;
 
@@ -2878,6 +2939,8 @@ _initThEl : function(elTheadCell,oColumn,row,col) {
         //Set Column hidden
         if(oColumn.hidden) {
             aClasses[aClasses.length] = DT.CLASS_HIDDEN;
+            // TODO: scrolling DTs have 2 colgroups...
+            this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = ''; // Remove minWidth
         }
         
         // Set Column selection on TD
@@ -2886,6 +2949,11 @@ _initThEl : function(elTheadCell,oColumn,row,col) {
         }
 
         Dom.addClass(elTheadCell,aClasses.join(" "));
+        
+        // Set Column width for non fallback cases
+        if(oColumn.width && !this._bDynStylesFallback) {
+            this._setColumnWidthDynStyles(oColumn, oColumn.width + 'px', 'hidden');
+        }
 
         DT.formatTheadCell(elTheadCellLabel, oColumn, this);
 
@@ -2968,161 +3036,201 @@ _initColumnSort : function() {
 // DOM MUTATION FUNCTIONS
 
 
+/**
+ * Retruns a new TR element template with TD elements classed with current
+ * Column states.
+ * @method _getTrTemplateEl 
+ * @return {HTMLElement} A TR element to be cloned and added to the DOM.
+ * @private 
+ */
+_getTrTemplateEl : function (oRecord, index) {
+    //TODO: Template must be nulled or updated with the following actions:
+    // showColumn, hideColumn, setColumnWidth, insertColumn, removeColumn, selectColumn, sortColumn
+
+    // Template is already available
+    if(this._elTrTemplate) {
+        return this._elTrTemplate;
+    }
+    // Template needs to be created
+    else {
+        var d   = document,
+            tr  = d.createElement('tr'),
+            td  = d.createElement('td'),
+            div = d.createElement('div');
+    
+        // Append the liner element
+        td.appendChild(div);
+
+        // Create TD elements into DOCUMENT FRAGMENT
+        var df = document.createDocumentFragment(),
+            oColumnSet = this._oColumnSet,
+            allKeys = oColumnSet.keys,
+            allHeaders = oColumnSet.headers,
+            allColHeaders, sHeader, sTdHeaders,
+            oColumn, allClasses, 
+            isSortedBy = this.get("sortedBy"),
+            sortKey = (isSortedBy) ? isSortedBy.key : null,
+            sortClass = (isSortedBy) ? isSortedBy.dir : null,
+            elTd;
+
+        // Set state for each TD
+        for(var i=0, keysLen=allKeys.length; i<keysLen; i++) {
+            // Clone the TD template
+            elTd = td.cloneNode(true);
+            
+            // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
+            elTd.yuiCellIndex = i;
+    
+            // Add structural attributes, derived from Column
+            oColumn = allKeys[i];
+            elTd.yuiColumnKey = oColumn.getKey();
+            elTd.yuiColumnId  = oColumn.getId();
+            
+            // Set the TD's accessibility headers
+            allColHeaders = allHeaders[i];
+            for(var j=0, headersLen=allColHeaders.length; j < headersLen; ++j) {
+                sHeader = this._sId + "-th" + allColHeaders[j] + ' ';
+                sTdHeaders += sHeader;
+            }
+            elTd.headers = sTdHeaders;
+            
+            //TODO: separate out into setClassNames() for reuse by THs
+    
+            // Add CSS classes
+            if(lang.isString(oColumn.className)) {
+                // Single custom class
+                allClasses = [oColumn.className];
+            }
+            else if(lang.isArray(oColumn.className)) {
+                // Array of custom classes
+                allClasses = oColumn.className;
+            }
+            else {
+                // no custom classes
+                allClasses = [];
+            }
+            
+            // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
+            allClasses[allClasses.length] = "yui-dt-col-"+oColumn.getKey().replace(/[^\w\-.:]/g,"");
+            // Column ID
+            allClasses[allClasses.length] = "yui-dt-col"+oColumn.getId();
+
+            // First TD
+            if(i === 0) {
+                 allClasses[allClasses.length] = DT.CLASS_FIRST;
+            }
+            // Last TD
+            else if(i === (keysLen-1)) {
+                 allClasses[allClasses.length] = DT.CLASS_LAST;
+            }
+            // Sorted
+            if(oColumn.key === sortKey) {
+                allClasses[allClasses.length] = sortClass;
+            }
+            // Hidden
+            if(oColumn.hidden) {
+                allClasses[allClasses.length] = DT.CLASS_HIDDEN;
+            }
+            // Selected
+            if(oColumn.selected) {
+                allClasses[allClasses.length] = DT.CLASS_SELECTED;
+            }
+            // Sortable
+            if(oColumn.sortable) {
+                allClasses[allClasses.length] = DT.CLASS_SORTABLE;
+            }
+            // Resizeable
+            if(oColumn.resizeable) {
+                allClasses[allClasses.length] = DT.CLASS_RESIZEABLE;
+            }
+            // Editable
+            if(oColumn.editor) {
+                allClasses[allClasses.length] = DT.CLASS_EDITABLE;
+            }
+            
+            //TODO: apply what to TD vs liner
+            // Apply to TD
+            elTd.className = allClasses.join(' ');
+            
+            
+            elTd.firstChild.className = DT.CLASS_LINER + ' yui-dt-colliner'+oColumn.getId();
+
+            // Set Column width for fallback cases
+            if(oColumn.width && this._bDynStylesFallback) {
+                elTd.firstChild.style.overflow = 'hidden';
+                elTd.firstChild.style.width = oColumn.width + 'px';
+            }
+            
+            df.appendChild(elTd);
+        }
+        tr.appendChild(df);
+        this._elTrTemplate = tr;
+        return tr;
+    }   
+},
 
 /**
- * Create a TR element for a given Record.
+ * Create a new TR element for a given Record and appends it with the correct
+ * number of Column-state-classed TD elements. Striping is the responsibility of
+ * the calling function, which may decide to stripe the single row, a subset of
+ * rows, or all the rows.
  * @method _createTrEl
  * @param oRecord {YAHOO.widget.Record} Record instance
  * @return {HTMLElement} The new TR element.  This must be added to the DOM.
  * @private 
  */
-_createTrEl : function (oRecord) {
-    // Clone the empty tr template.  We can't clone an existing row
-    // because of the expandos and td ids that must be set in _addTdEl
-    var elRow     = this._trElTemplate.cloneNode(true);
-
-    elRow.id = this._sId+"-bdrow"+this._nTrCount;
-    this._nTrCount++;
-
-    // Call _updateTrEl to populate and align the row contents
-    return this._updateTrEl(elRow,oRecord);
+_addTrEl : function (oRecord, index) {
+    var elTrTemplate = this._getTrTemplateEl();
+    
+    // Clone the TR template.
+    var elTr = elTrTemplate.cloneNode(true);
+    
+    // Set row-specific attributes
+    elTr.id = this._sId+"-bdrow"+this._nTrCount++;
+    
+    // Populate content
+    return this._updateTrEl(elTr,oRecord);
 },
 
 /**
- * Formats all TD elements of given TR element with data from the given Record.
+ * Formats the contents of the given TR's TD elements with data from the given
+ * Record. Only innerHTML should change, nothing structural.
  *
  * @method _updateTrEl
- * @param elRow {HTMLElement} The TR element to update.
+ * @param elTr {HTMLElement} The TR element to update.
  * @param oRecord {YAHOO.widget.Record} The associated Record instance.
  * @return {HTMLElement} DOM reference to the new TR element.
  * @private
  */
-_updateTrEl : function(elRow, oRecord) {
-    var oColumnSet = this._oColumnSet,
-        sortKey,
-        sortClass,
-        isSortedBy = this.get("sortedBy"),
-        i,j,len,jlen;
-
-    if(isSortedBy) {
-        sortKey = isSortedBy.key;
-        sortClass = isSortedBy.dir;
-    }
-
+_updateTrEl : function(elTr, oRecord) {
     // Hide the row to prevent constant reflows
-    elRow.style.display = 'none';
+    elTr.style.display = 'none';
     
-    // Track whether to reaassing first/last classes
-    var bFirstLast = false;
-
-    // Remove extra TD elements
-    while(elRow.childNodes.length > oColumnSet.keys.length) {
-        elRow.removeChild(elRow.firstChild);
-        bFirstLast = true;
-    }
-    // Add more TD elements as needed
-    for (i=elRow.childNodes.length||0, len=oColumnSet.keys.length; i < len; ++i) {
-        this._addTdEl(elRow,oColumnSet.keys[i],i);
-        bFirstLast = true;
-    }
-
     // Update TD elements with new data
-    for(i=0,len=oColumnSet.keys.length; i<len; ++i) {
-        var oColumn     = oColumnSet.keys[i],
-            elCell      = elRow.childNodes[i],
-            elCellLiner = elCell.firstChild,
-            cellHeaders = '',
-            headerType  = " ";
-
-        // Set the cell's accessibility headers
-        for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
-            cellHeaders += this._sId + "-th" + oColumnSet.headers[i][j] + headerType;
-        }
-        elCell.headers = cellHeaders;
-
-        // Set First/Last on TD if necessary
-        if(bFirstLast) {
-            Dom.removeClass(elCell, DT.CLASS_FIRST);
-            Dom.removeClass(elCell, DT.CLASS_LAST);
-            if(i === 0) {
-                Dom.addClass(elCell, DT.CLASS_FIRST);
-            }
-            else if(i === len-1) {
-                Dom.addClass(elCell, DT.CLASS_LAST);
-            }
-        }
-
-        // Set ASC/DESC on TD
-        if(oColumn.key === sortKey) {
-            Dom.replaceClass(elCell, sortClass === DT.CLASS_ASC ?
-                                     DT.CLASS_DESC : DT.CLASS_ASC, sortClass);
-        } else {
-            Dom.removeClass(elCell, DT.CLASS_ASC);
-            Dom.removeClass(elCell, DT.CLASS_DESC);
-        }
+    var allTds = elTr.childNodes,
+        elTd;
+    for(var i=0,len=allTds.length; i<len; ++i) {
+        elTd = allTds[i];
         
-        // Set Column hidden if appropriate
-        if(oColumn.hidden) {
-            Dom.addClass(elCell, DT.CLASS_HIDDEN);
+        // Set cell-specific attributes
+        // TODO: are IDs necessary?
+        if(!elTd.id) {
+            elTd.id = this._sId+"-bdcell"+this._nTdCount++;
         }
-        else {
-            Dom.removeClass(elCell, DT.CLASS_HIDDEN);
-        }
-
-        // Set Column selection on TH
-        if(oColumn.selected) {
-            Dom.addClass(elCell, DT.CLASS_SELECTED);
-        }
-        else {
-            Dom.removeClass(elCell, DT.CLASS_SELECTED);
-        }
-
+   
         // Set the cell content
-        this.formatCell(elCellLiner, oRecord, oColumn);
-
+        this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
     }
 
     // Update Record ID
-    elRow.yuiRecordId = oRecord.getId();
+    elTr.yuiRecordId = oRecord.getId();
     
     // Redisplay the row for reflow
-    elRow.style.display = '';
+    elTr.style.display = '';
 
-    return elRow;
+    return elTr;
 },
 
-
-/**
- * Creates a cell within the specified row and column.
- * @method _addTdEl
- * @param elRow {HTMLElement} The row to add the cell to
- * @param oColumn {Column} The column definition to use for the cell
- * @param index {number} (optional) the index to add the cell at (default null)
- * @return {HTMLElement} the new cell
- * @private
- */
-_addTdEl : function (elRow,oColumn,index) {
-    var elCell      = this._tdElTemplate.cloneNode(true),
-        elCellLiner = elCell.firstChild;
-
-    index = index || elRow.cells.length;
-
-    elCell.id           = elRow.id+"-cell"+this._nTdCount;
-    this._nTdCount++;
-    elCell.yuiColumnKey = oColumn.getKey();
-    elCell.yuiColumnId  = oColumn.getId();
-
-    // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
-    elCell.yuiCellIndex = index;
-
-    // Set FIRST/LAST on TD
-    //if (!(index % this._oColumnSet.keys.length - 1)) {
-    //    elCell.className = index ? DT.CLASS_LAST : DT.CLASS_FIRST;
-    //}
-
-    var insertBeforeCell = elRow.cells[index] || null;
-    return elRow.insertBefore(elCell,insertBeforeCell);
-},
 
 /**
  * Deletes TR element by DOM reference or by DataTable page row index.
@@ -3230,9 +3338,7 @@ _setLastRow : function() {
 },
 
 /**
- * Assigns the classes DT.CLASS_EVEN and
- * DT.CLASS_ODD to alternating TR elements of the DataTable
- * page. For performance, a subset of rows may be specified.
+ * Assigns the classes DT.CLASS_EVEN and DT.CLASS_ODD to one, many, or all TR elements.
  *
  * @method _setRowStripes
  * @param row {HTMLElement | String | Number} (optional) HTML TR element reference
@@ -4668,6 +4774,8 @@ initializeTable : function() {
  * @method render
  */
 render : function() {
+YAHOO.log("start render","time");
+
     this._oChainRender.stop();
     this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
     YAHOO.log("DataTable rendering...", "info", this.toString());
@@ -4743,7 +4851,7 @@ render : function() {
                             this._updateTrEl(allRows[i], allRecords[i]);
                         }
                         if (loopN > 0) {
-                            this._syncColWidths();
+                            //this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
@@ -4758,6 +4866,19 @@ render : function() {
         // Add more TR elements as necessary
         loopStart = allRows.length; // where to start
         loopEnd = allRecords.length; // where to end
+                        i = 0;
+                            len = loopEnd;
+                            var df = document.createDocumentFragment(),
+                            tr;
+                        for(; i < len; ++i) {
+                            tr = this._addTrEl(allRecords[i]);
+                            tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
+                            df.appendChild(tr);
+                        }
+                        this._elTbody.appendChild(df);
+YAHOO.log("end render","time");
+return;
+/*
         var nRowsNeeded = (loopEnd - loopStart); // how many needed
         if(nRowsNeeded > 0) {
             this._oChainRender.add({
@@ -4768,13 +4889,13 @@ render : function() {
                             df = document.createDocumentFragment(),
                             tr;
                         for(; i < len; ++i) {
-                            tr = this._createTrEl(allRecords[i]);
+                            tr = this._addTrEl(allRecords[i]);
                             tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
                             df.appendChild(tr);
                         }
                         this._elTbody.appendChild(df);
                         if (loopN > 0) {
-                            this._syncColWidths();
+                            //this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
@@ -4860,12 +4981,14 @@ render : function() {
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._syncColWidths();
+                    YAHOO.log("end render","time");
                 }
             },
             scope: this
         });
                     
-        this._oChainRender.run();  
+        this._oChainRender.run();
+*/
     }
     // Empty
     else {
@@ -4876,6 +4999,7 @@ render : function() {
 
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
     }
+
 },
 
 /**
@@ -4937,9 +5061,9 @@ destroy : function() {
     DT._nCurrentCount--;
     
     if(DT._nCurrentCount < 1) {
-        if(DT._elStylesheet) {
-            document.getElementsByTagName('head')[0].removeChild(DT._elStylesheet);
-            DT._elStylesheet = null;
+        if(DT._elDynStyleNode) {
+            document.getElementsByTagName('head')[0].removeChild(DT._elDynStyleNode);
+            DT._elDynStyleNode = null;
         }
     }
 
@@ -5356,126 +5480,6 @@ sortColumn : function(oColumn, sDir) {
 },
 
 /**
- * Sets DOM elements of given Column to given pixel width. No validations
- * against minimum width and no updating Column.width value.
- *
- * @method _setColumnWidth
- * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param sWidth {String} New width value.
- * @private
- */
-_setColumnWidth : function(oColumn, sWidth, sOverflow) {
-    oColumn = this.getColumn(oColumn);
-    if(oColumn) {
-        sOverflow = sOverflow || 'hidden';
-        // Create STYLE node
-        if(!DT._bStylesheetFallback) {
-            var s;
-            if(!DT._elStylesheet) {
-                s = document.createElement('style');
-                s.type = 'text/css';
-                DT._elStylesheet = document.getElementsByTagName('head').item(0).appendChild(s);
-            }
-                
-            if(DT._elStylesheet) {
-                s = DT._elStylesheet;
-                
-                var sClassname = ".yui-dt-col-" + oColumn.getId();
-                
-                // Create rule for the Column
-                var rule = DT._oStylesheetRules[sClassname];
-                if (!rule) {
-                    if (s.styleSheet && s.styleSheet.addRule) {
-                        s.styleSheet.addRule(sClassname,"overflow:"+sOverflow);
-                        s.styleSheet.addRule(sClassname,"width:"+sWidth);
-                        rule = s.styleSheet.rules[s.styleSheet.rules.length-1];
-                    } else if (s.sheet && s.sheet.insertRule) {
-                        s.sheet.insertRule(sClassname+" {overflow:"+sOverflow+";width:"+sWidth+";}",s.sheet.cssRules.length);
-                        rule = s.sheet.cssRules[s.sheet.cssRules.length-1];
-                    } else {
-                        DT._bStylesheetFallback = true;
-                    }
-                    DT._oStylesheetRules[sClassname] = rule;
-                }
-                
-                // Update existing rule for the Column
-                else {
-                    rule.style.overflow = sOverflow;
-                    rule.style.width = sWidth;
-                } 
-                return;
-            }
-            
-            DT._bStylesheetFallback = true;
-        }
-        // Do it the old fashioned way
-        if(DT._bStylesheetFallback) {           
-            if(sWidth == "auto") {
-                sWidth = ""; 
-            }
-
-            var rowslen = this._elTbody ? this._elTbody.rows.length : 0;
-            if (!this._aFallbackColResizer[rowslen]) {
-                /*
-                Compile a custom function to do all the cell width
-                assignments at the same time.  A new resizer function is created
-                for each new unique number of rows in _elTbody.  This will
-                result in a function declaration like:
-                function (oColumn,sWidth) {
-                    var colIdx = oColumn.getKeyIndex();
-                    oColumn.getThEl().firstChild.style.width =
-                    this._elTbody.rows[0].cells[colIdx].firstChild.style.width =
-                    this._elTbody.rows[0].cells[colIdx].style.width =
-                    this._elTbody.rows[1].cells[colIdx].firstChild.style.width =
-                    this._elTbody.rows[1].cells[colIdx].style.width =
-                    ... (for all row indices in this._elTbody.rows.length - 1)
-                    this._elTbody.rows[99].cells[colIdx].firstChild.style.width =
-                    this._elTbody.rows[99].cells[colIdx].style.width = sWidth;
-                    ending with the sWidth as the initial assignment   ^
-                }
-                */
-                var i,j,k;
-                var resizerDef = [
-                    'var colIdx=oColumn.getKeyIndex();',
-                    'oColumn.getThEl().firstChild.style.width='
-                ];
-                for (i=rowslen-1, j=2; i >= 0; --i) {
-                    resizerDef[j++] = 'this._elTbody.rows[';
-                    resizerDef[j++] = i;
-                    resizerDef[j++] = '].cells[colIdx].firstChild.style.width=';
-                    resizerDef[j++] = 'this._elTbody.rows[';
-                    resizerDef[j++] = i;
-                    resizerDef[j++] = '].cells[colIdx].style.width=';
-                }
-                resizerDef[j] = 'sWidth;';
-                resizerDef[j+1] = 'oColumn.getThEl().firstChild.style.overflow=';
-                for (i=rowslen-1, k=j+2; i >= 0; --i) {
-                    resizerDef[k++] = 'this._elTbody.rows[';
-                    resizerDef[k++] = i;
-                    resizerDef[k++] = '].cells[colIdx].firstChild.style.overflow=';
-                    resizerDef[k++] = 'this._elTbody.rows[';
-                    resizerDef[k++] = i;
-                    resizerDef[k++] = '].cells[colIdx].style.overflow=';
-                }
-                resizerDef[k] = 'sOverflow;';
-                this._aFallbackColResizer[rowslen] =
-                    new Function('oColumn','sWidth','sOverflow',resizerDef.join(''));
-            }
-            var resizerFn = this._aFallbackColResizer[rowslen];
-
-            if (resizerFn) {
-                resizerFn.call(this,oColumn,sWidth,sOverflow);
-                //this._syncScrollPadding();
-                return;
-            }
-        }
-    }
-    else {
-        YAHOO.log("Could not set width of Column " + oColumn + " to " + sWidth, "warn", this.toString());
-    }
-},
-
-/**
  * Sets given Column to given pixel width. If new width is less than minimum
  * width, sets to minimum width. Updates oColumn.width value.
  *
@@ -5488,13 +5492,13 @@ setColumnWidth : function(oColumn, nWidth) {
     if(oColumn) {
         // Validate new width against minimum width
         if(lang.isNumber(nWidth)) {
+            // This is why we must require a Number... :-|
             nWidth = (nWidth > oColumn.minWidth) ? nWidth : oColumn.minWidth;
 
             // Save state
             oColumn.width = nWidth;
             
             // Resize the DOM elements
-            //this._oChainSync.stop();
             this._setColumnWidth(oColumn, nWidth+"px");
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
@@ -5505,6 +5509,182 @@ setColumnWidth : function(oColumn, nWidth) {
     YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
 },
 
+/**
+ * Sets liner DIV elements of given Column to given width. When value should be
+ * auto-calculated to fit content overflow is set to visible, otherwise overflow
+ * is set to hidden. No validations against minimum width and no updating
+ * Column.width value.
+ *
+ * @method _setColumnWidth
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param sWidth {String} New width value.
+ * @private
+ */
+_setColumnWidth : function(oColumn, sWidth) {
+///TODO: blow away the tr template for fallback cases
+YAHOO.log('start _sColumnWidth','time');
+    if(oColumn && (oColumn.getKeyIndex() !== null)) {
+        var sOverflow = ((sWidth === '') || (sWidth === 'auto')) ? 'visible' : 'hidden';
+    
+        // Dynamic style algorithm
+        if(!DT._bDynStylesFallback) {
+            this._setColumnWidthDynStyles(oColumn, sWidth, sOverflow);
+        }
+        // Dynamic function algorithm
+        else {
+            this._setColumnWidthDynFunction(oColumn, sWidth, sOverflow);
+        }
+    }
+    else {
+        YAHOO.log("Could not set width of unknown Column " + oColumn + " to " + sWidth, "warn", this.toString());
+    }
+    YAHOO.log('end _sColumnWidth','time');
+},
+
+/**
+ * Updates width of a Column's liner DIV elements by dynamically creating a
+ * STYLE node and writing and updating CSS style rules to it. If this fails during
+ * runtime, the fallback method _setColumnWidthDynFunction() will be called.
+ * Notes: This technique is not performant in IE6. IE7 crashes if DataTable is
+ * nested within another TABLE element. For these cases, it is recommended to
+ * use the method _setColumnWidthDynFunction by setting _bDynStylesFallback to TRUE.
+ *
+ * @method _setColumnWidthDynStyles
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param sWidth {String} New width value.
+ * @private
+ */
+_setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
+YAHOO.log('start _setColumnWidthDynStyles','time');
+    var s = DT._elDynStyleNode,
+        rule;
+    
+    // Create a new STYLE node
+    if(!s) {
+        s = document.createElement('style');
+        s.type = 'text/css';
+        s = document.getElementsByTagName('head').item(0).appendChild(s);
+        DT._elDynStyleNode = s;
+    }
+    
+    // We have a STYLE node to update
+    if(s) {
+        // Unique classname for this Column instance
+        var sClassname = '.yui-dt-colliner' + oColumn.getId();
+        
+        // Hide for performance
+        ///this._elTbody.style.display = 'none';
+        
+        rule = DT._oDynStyles[sClassname];
+
+        // The Column does not yet have a rule
+        if(!rule) {
+            if(s.styleSheet && s.styleSheet.addRule) {
+                s.styleSheet.addRule(sClassname,"overflow:"+sOverflow);
+                s.styleSheet.addRule(sClassname,'width:'+sWidth);
+                rule = s.styleSheet.rules[s.styleSheet.rules.length-1];
+                DT._oDynStyles[sClassname] = rule;
+            }
+            else if(s.sheet && s.sheet.insertRule) {
+                s.sheet.insertRule(sClassname+" {overflow:"+sOverflow+";width:"+sWidth+";}",s.sheet.cssRules.length);
+                rule = s.sheet.cssRules[s.sheet.cssRules.length-1];
+                DT._oDynStyles[sClassname] = rule;
+            }
+        }
+        // We have a rule to update
+        else {
+            rule.style.overflow = sOverflow;
+            rule.style.width = sWidth;
+        } 
+        
+        // Unhide
+        ///this._elTbody.style.display = '';
+    }
+YAHOO.log('end _setColumnWidthDynStyles','time');
+    
+    // That was not a success, we must call the fallback routine
+    if(!rule) {
+        DT._bDynStylesFallback = true;
+        this._setColumnWidthDynFunction(oColumn, sWidth);
+    }
+},
+
+/**
+ * Updates width of a Column's liner DIV elements by dynamically creating a
+ * function to update all element style properties in one pass. Note: This
+ * technique is not supported in sandboxed environments that prohibit EVALs.    
+ *
+ * @method _setColumnWidthDynFunction
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param sWidth {String} New width value.
+ * @private
+ */
+_setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
+YAHOO.log('start _setColumnWidthDynFunction','time');
+    ///TODO: why is this here?
+    if(sWidth == 'auto') {
+        sWidth = ''; 
+    }
+    
+    // Create one function for each value of rows.length
+    var rowslen = this._elTbody ? this._elTbody.rows.length : 0;
+    
+    // Dynamically create the function
+    if (!this._aDynFunctions[rowslen]) {
+        
+        //Compile a custom function to do all the liner div width
+        //assignments at the same time.  A unique function is required
+        //for each unique number of rows in _elTbody.  This will
+        //result in a function declaration like:
+        //function (oColumn,sWidth,sOverflow) {
+        //    var colIdx = oColumn.getKeyIndex();
+        //    oColumn.getThEl().firstChild.style.overflow =
+        //    this._elTbody.rows[0].cells[colIdx].firstChild.style.overflow =
+        //    this._elTbody.rows[1].cells[colIdx].firstChild.style.overflow =
+        //    ... (for all row indices in this._elTbody.rows.length - 1)
+        //    this._elTbody.rows[99].cells[colIdx].firstChild.style.overflow =
+        //    sOverflow;
+        //    oColumn.getThEl().firstChild.style.width =
+        //    this._elTbody.rows[0].cells[colIdx].firstChild.style.width =
+        //    this._elTbody.rows[1].cells[colIdx].firstChild.style.width =
+        //    ... (for all row indices in this._elTbody.rows.length - 1)
+        //    this._elTbody.rows[99].cells[colIdx].firstChild.style.width =
+        //    sWidth;
+        //}
+        
+        var i,j,k;
+        var resizerDef = [
+            'var colIdx=oColumn.getKeyIndex();',
+            'oColumn.getThEl().firstChild.style.overflow='
+        ];
+        for (i=rowslen-1, j=2; i >= 0; --i) {
+            resizerDef[j++] = 'this._elTbody.rows[';
+            resizerDef[j++] = i;
+            resizerDef[j++] = '].cells[colIdx].firstChild.style.overflow=';
+        }
+        resizerDef[j] = 'sOverflow;';
+        resizerDef[j+1] = 'oColumn.getThEl().firstChild.style.width=';
+        for (i=rowslen-1, k=j+2; i >= 0; --i) {
+            resizerDef[k++] = 'this._elTbody.rows[';
+            resizerDef[k++] = i;
+            resizerDef[k++] = '].cells[colIdx].firstChild.style.width=';
+        }
+        resizerDef[k] = 'sWidth;';
+        this._aDynFunctions[rowslen] =
+            new Function('oColumn','sWidth','sOverflow',resizerDef.join(''));
+    }
+    
+    // Get the function to execute
+    var resizerFn = this._aDynFunctions[rowslen];
+
+    ///TODO: Hide TBODY for performance?
+    if (resizerFn) {
+        ///this._elTbody.style.display = 'none';
+        resizerFn.call(this,oColumn,sWidth,sOverflow);
+        ///this._elTbody.style.display = '';
+    }
+YAHOO.log('end _setColumnWidthDynFunction','time');
+},
 
 /**
  * Hides given Column. NOTE: You cannot hide/show nested Columns. You can only
@@ -5516,54 +5696,42 @@ setColumnWidth : function(oColumn, nWidth) {
  */
 hideColumn : function(oColumn) {
     oColumn = this.getColumn(oColumn);
-    if(oColumn && !oColumn.hidden) {
-        // Only top-level Columns can get hidden
-        if(oColumn.getTreeIndex() !== null) {
-            var allrows = this.getTbodyEl().rows;
-            var l = allrows.length;
-            var allDescendants = this._oColumnSet.getDescendants(oColumn);
-            for(var i=0; i<allDescendants.length; i++) {
-                var thisColumn = allDescendants[i];
-                thisColumn.hidden = true;
+    // Only top-level Columns can get hidden due to issues in FF2 and SF3
+    if(oColumn && !oColumn.hidden && oColumn.getTreeIndex() !== null) {
+        
+        var allrows = this.getTbodyEl().rows;
+        var l = allrows.length;
+        var allDescendants = this._oColumnSet.getDescendants(oColumn);
+        
+        // Hide each nested Column
+        for(var i=0; i<allDescendants.length; i++) {
+            var thisColumn = allDescendants[i];
+            thisColumn.hidden = true;
 
-                var elTheadCell = thisColumn.getThEl();
-                var elTheadCellLiner = elTheadCell.firstChild;
-                // Store to reinstate later
-                thisColumn._nLastWidth = elTheadCellLiner.offsetWidth - 
-                        (parseInt(Dom.getStyle(elTheadCellLiner,"paddingLeft"),10)|0) -
-                        (parseInt(Dom.getStyle(elTheadCellLiner,"paddingRight"),10)|0);
-                Dom.addClass(elTheadCell,DT.CLASS_HIDDEN);
+            // Style the head cell
+            Dom.addClass(thisColumn.getThEl(), DT.CLASS_HIDDEN);
+            
+            // Does this Column have body cells?
+            var thisKeyIndex = thisColumn.getKeyIndex();
+            if(thisKeyIndex !== null) {                    
+                // Clear minWidth
+                //TODO: scrolling DTs have 2 colgroups
+                this._elColgroup.childNodes[thisKeyIndex].style.width = ''; 
 
-                // Adjust body cells (if key Column)
-                var thisKeyIndex = thisColumn.getKeyIndex();
-                if(thisKeyIndex !== null) {
-                    for(var j=0;j<l;j++) {
-                        Dom.addClass(allrows[j].cells[thisKeyIndex],DT.CLASS_HIDDEN);
-                    }
-
-                    this._setColumnWidth(thisColumn, "1px");
-                    
-                    // Disable interactive features
-                    if(thisColumn.resizeable) {
-                        Dom.removeClass(thisColumn.getResizerEl(),DT.CLASS_RESIZER);
-                    }
-                    if(thisColumn.sortable) {
-                        Dom.removeClass(thisColumn.getThEl(),DT.CLASS_SORTABLE);
-                        thisColumn.getThEl().firstChild.firstChild.firstChild.style.display = "none";
-                    }
+                // Style the body cells
+                for(var j=0;j<l;j++) {
+                    Dom.addClass(allrows[j].cells[thisKeyIndex],DT.CLASS_HIDDEN);
                 }
-                // Just set thead cell width directly for parent Column
-                else {
-                    elTheadCell.firstChild.style.width = "1px";
-                }
-                
-                this.fireEvent("columnHideEvent",{column:thisColumn});
-                YAHOO.log("Column \"" + oColumn.key + "\" hidden", "info", this.toString());
             }
+            
+            this.fireEvent("columnHideEvent",{column:thisColumn});
+            YAHOO.log("Column \"" + oColumn.key + "\" hidden", "info", this.toString());
         }
-        else {
-            YAHOO.log("Could not hide Column \"" + oColumn.key + "\". Only non-nested Columns can be hidden", "warn", this.toString());
-        }
+      
+        DT._repaintOpera();
+    }
+    else {
+        YAHOO.log("Could not hide Column \"" + oColumn.key + "\". Only non-nested Columns can be hidden", "warn", this.toString());
     }
 },
 
@@ -5577,50 +5745,39 @@ hideColumn : function(oColumn) {
  */
 showColumn : function(oColumn) {
     oColumn = this.getColumn(oColumn);
-    if(oColumn && oColumn.hidden) {
-        // Only top-level Columns can get hidden
-        if(oColumn.getTreeIndex() !== null) {
-            var allrows = this.getTbodyEl().rows;
-            var l = allrows.length;
-            var allDescendants = this._oColumnSet.getDescendants(oColumn);
-            for(var i=0; i<allDescendants.length; i++) {
-                var thisColumn = allDescendants[i];
-                thisColumn.hidden = false;
-                
-                var elTheadCell = thisColumn.getThEl();
-                Dom.removeClass(elTheadCell,DT.CLASS_HIDDEN);
+    // Only top-level Columns can get hidden
+    if(oColumn && oColumn.hidden && oColumn.getTreeIndex() !== null) {
+        var allrows = this.getTbodyEl().rows;
+        var l = allrows.length;
+        var allDescendants = this._oColumnSet.getDescendants(oColumn);
+        
+        // Show each nested Column
+        for(var i=0; i<allDescendants.length; i++) {
+            var thisColumn = allDescendants[i];
+            thisColumn.hidden = false;
+            
+            // Unstyle the head cell
+            Dom.removeClass(thisColumn.getThEl(), DT.CLASS_HIDDEN);
 
-                // Adjust body cells (if key Column)
-                var thisKeyIndex = thisColumn.getKeyIndex();
-                if(thisKeyIndex !== null) {
-                    for(var j=0;j<l;j++) {
-                        Dom.removeClass(allrows[j].cells[thisKeyIndex],DT.CLASS_HIDDEN);
-                    }
-                    
-                    this.setColumnWidth(thisColumn, (thisColumn._nLastWidth || thisColumn.minWidth), true);
-
-                    // Enable interactive features
-                    if(thisColumn.sortable) {
-                        thisColumn.getThEl().firstChild.firstChild.firstChild.style.display = "";
-                        Dom.removeClass(thisColumn.getThEl(),DT.CLASS_SORTABLE);
-                    }
-                    if(thisColumn.resizeable) {
-                        thisColumn._ddResizer.resetResizerEl();
-                        Dom.addClass(thisColumn.getResizerEl(),DT.CLASS_RESIZER);
-                    }
+            // Does this Column have body cells?
+            var thisKeyIndex = thisColumn.getKeyIndex();
+            if(thisKeyIndex !== null) {
+                // Restore minWidth
+                ///TODO: scrolling DTs have 2 colgroups
+                this._elColgroup.childNodes[thisKeyIndex].style.width = oColumn.minWidth + 'px';
+            
+                // Unstyle the body cells
+                for(var j=0;j<l;j++) {
+                    Dom.removeClass(allrows[j].cells[thisKeyIndex],DT.CLASS_HIDDEN);
                 }
-                else {
-                    elTheadCell.firstChild.style.width = "";
-                }
-
-                thisColumn._nLastWidth = null;
-                this.fireEvent("columnShowEvent",{column:thisColumn});
-                YAHOO.log("Column \"" + oColumn.key + "\" shown", "info", this.toString());
             }
+
+            this.fireEvent("columnShowEvent",{column:thisColumn});
+            YAHOO.log("Column \"" + oColumn.key + "\" shown", "info", this.toString());
         }
-        else {
-            YAHOO.log("Could not show Column \"" + oColumn.key + "\". Only non-nested Columns can be shown", "warn", this.toString());
-        }
+    }
+    else {
+        YAHOO.log("Could not show Column \"" + oColumn.key + "\". Only non-nested Columns can be shown", "warn", this.toString());
     }
 },
 
@@ -5736,7 +5893,7 @@ selectColumn : function(oColumn) {
  * Unselects given Column. NOTE: You cannot select/unselect nested Columns. You can only
  * select/unselect non-nested Columns, and bottom-level key Columns.
  *
- * @method unSelectColumn
+ * @method unselectColumn
  * @param column {HTMLElement | String | Number} DOM reference or ID string to a
  * TH/TD element (or child of a TH/TD element), a Column key, or a ColumnSet key index.
  */
@@ -5928,34 +6085,6 @@ unhighlightColumn : function(column) {
 
 
 // ROW FUNCTIONS
-
-/**
- * Adds one TR element at the given index and populates with given Record data.
- *
- * @method _addTrEl
- * @param oRecord {YAHOO.widget.Record} Record instance. 
- * @param index {Number} TR index.
- * @return {HTMLElement} Reference to new TR element. 
- * @private 
- */
-_addTrEl : function(oRecord, index) {
-    var elNewTr = this._createTrEl(oRecord);
-    if(elNewTr) {
-        if (index >= 0 && index < this._elTbody.rows.length) {
-            this._elTbody.insertBefore(elNewTr,
-                this._elTbody.rows[index]);
-            if (!index) {
-                this._setFirstRow();
-            }
-        } else {
-            this._elTbody.appendChild(elNewTr);
-            this._setLastRow();
-            index = this._elTbody.rows.length - 1;
-        }
-        this._setRowStripes(index);
-    }
-    return elNewTr;
-},
 
 /**
  * Adds one new Record of data into the RecordSet at the index if given,
@@ -6490,39 +6619,6 @@ formatCell : function(elCell, oRecord, oColumn) {
     if(oRecord && oColumn) {
         var sKey = oColumn.key;
         var oData = oRecord.getData(sKey);
-
-        // Add classNames
-        var aClasses;
-        if(lang.isString(oColumn.className)) {
-            aClasses = [oColumn.className];
-        }
-        else if(lang.isArray(oColumn.className)) {
-            aClasses = oColumn.className;
-        }
-        else {
-            aClasses = [];
-        }
-
-        //TODO: document special keys will get stripped here
-        aClasses[aClasses.length] = "yui-dt-col-"+sKey.replace(/[^\w\-.:]/g,"");
-        
-        aClasses[aClasses.length] = "yui-dt-col-"+oColumn.getId();
-        
-        aClasses[aClasses.length] = DT.CLASS_LINER;
-
-        if(oColumn.sortable) {
-            aClasses[aClasses.length] = DT.CLASS_SORTABLE;
-        }
-        if(oColumn.resizeable) {
-            aClasses[aClasses.length] = DT.CLASS_RESIZEABLE;
-        }
-        if(oColumn.editor) {
-            aClasses[aClasses.length] = DT.CLASS_EDITABLE;
-        }
-
-        elCell.className = "";
-        Dom.addClass(elCell, aClasses.join(" "));
-
 
         var fnFormatter = typeof oColumn.formatter === 'function' ?
                           oColumn.formatter :

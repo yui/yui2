@@ -666,15 +666,6 @@ YAHOO.widget.Column.prototype = {
      */
     _oParent : null,
 
-    /*TODO: remove
-     * The DOM reference the associated COL element.
-     *
-     * @property _elCol
-     * @type HTMLElement
-     * @private
-     */
-    //YAHOO.widget.Column.prototype._elCol = null;
-
     /**
      * The DOM reference to the associated TH element.
      *
