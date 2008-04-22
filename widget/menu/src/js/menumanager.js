@@ -268,7 +268,7 @@
                     if (YAHOO.lang.hasOwnProperty(m_oVisibleMenus, i)) {
         
                         oMenu = m_oVisibleMenus[i];
-        
+
                         if (oMenu.cfg.getProperty("clicktohide") && 
                             !(oMenu instanceof YAHOO.widget.MenuBar) && 
                             oMenu.cfg.getProperty("position") == "dynamic") {
@@ -277,8 +277,22 @@
         
                         }
                         else {
-    
-                            oMenu.clearActiveItem(true);
+                            
+							if (oMenu.cfg.getProperty("showdelay") > 0) {
+							
+								oMenu._cancelShowDelay();
+							
+							}
+
+
+							if (oMenu.activeItem) {
+						
+								oMenu.activeItem.blur();
+								oMenu.activeItem.cfg.setProperty("selected", false);
+						
+								oMenu.activeItem = null;            
+						
+							}
         
                         }
         
