@@ -644,7 +644,7 @@ package
 				//initialize styles with defaults
 				var color:Object = defaultColors[i % defaultColors.length];
 				var skin:Object = defaultSkin;
-				var mode:Object = null;
+				var mode:Object = "repeat";
 				if(style)
 				{
 					for(var styleName:String in style)
@@ -718,12 +718,31 @@ package
 						}
 					}
 				}
-				if(skin is InstanceFactory && mode)
+				if(mode)
 				{
-					skin.properties.imageMode = mode;
+					if(skin is InstanceFactory)
+					{
+						skin.properties.imageMode = mode;
+					}
+					else if(skin is Array)
+					{
+						var skinCount:int = (skin as Array).length;
+						for(j = 0; j < skinCount; j++)
+						{
+							var subSkin:InstanceFactory = skin[j] as InstanceFactory;
+							if(subSkin)
+							{
+								subSkin.properties.imageMode = mode;
+							}
+						}
+					}
 				}
 				
-				UIComponent(series).setStyle("markerSkin", skin);
+				if(series is PieSeries)
+				{
+					PieSeries(series).setStyle("markerSkins", skin);
+				}
+				else UIComponent(series).setStyle("markerSkin", skin);
 				
 				seriesColors[i] = color;
 			}
