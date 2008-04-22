@@ -68,10 +68,22 @@ package com.yahoo.yui.charts
 			if(axis is NumericAxis)
 			{
 				var numericAxis:NumericAxis = NumericAxis(axis);
-				numericAxis.minimum = input.minimum;
-				numericAxis.maximum = input.maximum;
-				numericAxis.majorUnit = input.majorUnit;
-				numericAxis.minorUnit = input.minorUnit;
+				if(input.minimum != null && !isNaN(input.minimum))
+				{
+					numericAxis.minimum = input.minimum;
+				}
+				if(input.maximum != null && !isNaN(input.maximum))
+				{
+					numericAxis.maximum = input.maximum;
+				}
+				if(input.majorUnit != null && !isNaN(input.majorUnit))
+				{
+					numericAxis.majorUnit = input.majorUnit;
+				}
+				if(input.minorUnit != null && !isNaN(input.minorUnit))
+				{
+					numericAxis.minorUnit = input.minorUnit;
+				}
 				numericAxis.snapToUnits = input.snapToUnits;
 				numericAxis.alwaysShowZero = input.alwaysShowZero;
 				numericAxis.scale = input.scale;
@@ -79,18 +91,39 @@ package com.yahoo.yui.charts
 			else if(axis is TimeAxis)
 			{
 				var timeAxis:TimeAxis = TimeAxis(axis);
-				timeAxis.minimum = input.minimum;
-				timeAxis.maximum = input.maximum;
-				timeAxis.majorUnit = input.majorUnit;
-				timeAxis.majorTimeUnit = input.majorTimeUnit;
-				timeAxis.minorUnit = input.minorUnit;
-				timeAxis.minorTimeUnit = input.minorTimeUnit;
+				if(input.minimum != null && !isNaN(input.minimum))
+				{
+					timeAxis.minimum = input.minimum;
+				}
+				if(input.maximum != null && !isNaN(input.maximum))
+				{
+					timeAxis.maximum = input.maximum;
+				}
+				if(input.majorUnit != null && !isNaN(input.majorUnit))
+				{
+					timeAxis.majorUnit = input.majorUnit;
+				}
+				if(input.majorTimeUnit != null)
+				{
+					timeAxis.majorTimeUnit = input.majorTimeUnit;
+				}
+				if(input.minorUnit != null && !isNaN(input.minorUnit))
+				{
+					timeAxis.minorUnit = input.minorUnit;
+				}
+				if(input.minorTimeUnit != null)
+				{
+					timeAxis.minorTimeUnit = input.minorTimeUnit;
+				}
 				timeAxis.snapToUnits = input.snapToUnits;
 			}
 			else if(axis is CategoryAxis)
 			{
 				var categoryAxis:CategoryAxis = CategoryAxis(axis);
-				categoryAxis.categoryNames = input.categoryNames;
+				if(input.categoryNames != null)
+				{
+					categoryAxis.categoryNames = input.categoryNames;
+				}
 			}
 			return axis;
 		}
