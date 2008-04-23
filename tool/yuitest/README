@@ -26,3 +26,8 @@ YUI Library - YUITest - Release Notes
   * Fixed DateAssert documentation errors.
   * Added ability to include framework assertion message in addition to custom assertion message.
   * Fixed Assert.isUndefined() documentation error.
+  
+2.6.0
+
+  * Added failsafe mechanism for wait() - will automatically fail a test after 10 seconds if resume() isn't called.
+  * Augmented wait() to allow a single argument, a timeout after which point the test should fail.
