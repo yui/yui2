@@ -494,7 +494,9 @@ YAHOO.test.YUITest_test = (function(){
         _should : {
             fail : {
                 testWaitSimpleFail : true,
-                testWaitComplexFail : true
+                testWaitComplexFail : true,
+                testWaitComplexFail2 : true,
+                testWaitTimeout: true
             }
         
         },
@@ -536,6 +538,19 @@ YAHOO.test.YUITest_test = (function(){
             
         },
         
+        testWaitComplexPass2 : function (){
+        
+            var that = this;
+            setTimeout(function(){            
+                that.resume(function(){
+                    Assert.areEqual(5, this.value, "Value should be 6.");
+                });            
+            }, 500);
+        
+            this.wait(1000);
+            
+        },
+        
         testWaitComplexFail : function (){
         
             var that = this;
@@ -547,7 +562,24 @@ YAHOO.test.YUITest_test = (function(){
 
             this.wait();
            
-        }        
+        },
+        
+        testWaitComplexFail2 : function (){
+        
+            var that = this;
+            setTimeout(function(){            
+                that.resume(function(){
+                    Assert.areEqual(6, this.value, "Value should be 6.");
+                });            
+            }, 5000);
+
+            this.wait(1000);
+           
+        },
+        
+        testWaitTimeout: function(){
+            this.wait();   //should pause 10 seconds
+        }
         
     
     }));

@@ -352,7 +352,6 @@ YAHOO.tool.TestRunner = (function(){
                     this._cur.results.type = "report";
                     this._cur.results.timestamp = (new Date()).toLocaleString();
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
-                    this.results = this._cur.results;
                     this._cur = null;
                 } else {
                     this._handleTestObjectComplete(this._cur);               
@@ -413,6 +412,12 @@ YAHOO.tool.TestRunner = (function(){
             var testName /*:String*/ = node.testObject;
             var testCase /*:YAHOO.tool.TestCase*/ = node.parent.testObject;
             
+            //cancel other waits if available
+            if (testCase.__yui_wait){
+                clearTimeout(testCase.__yui_wait);
+                delete testCase.__yui_wait;
+            }            
+            
             //get the "should" test cases
             var shouldFail /*:Object*/ = (testCase._should.fail || {})[testName];
             var shouldError /*:Object*/ = (testCase._should.error || {})[testName];
@@ -449,9 +454,9 @@ YAHOO.tool.TestRunner = (function(){
                         
                             //some environments don't support setTimeout
                             if (typeof setTimeout != "undefined"){
-                                setTimeout(function(){
+                                testCase.__yui_wait = setTimeout(function(){
                                     YAHOO.tool.TestRunner._resumeTest(thrown.segment);
-                                }, thrown.delay);
+                                }, thrown.delay);                             
                             } else {
                                 throw new Error("Asynchronous tests not supported in this environment.");
                             }
