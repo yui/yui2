@@ -3,14 +3,10 @@
     margin:0;padding:0;
     font-family:arial;font-size:inherit;
     border-collapse:separate;*border-collapse:collapse;border-spacing:0; /* since ie6 and ie7 behave differently */
+    border:1px solid #7F7F7F;
 }
 .yui-skin-sam .yui-dt thead {border-spacing:0;} /* for safari bug */
 .yui-skin-sam .yui-dt caption {padding-bottom:1em;text-align:left;}
-
-/*outer border */
-.yui-skin-sam .yui-dt-table table {border:1px solid #7F7F7F;}
-.yui-skin-sam .yui-dt-scrollable .yui-dt-hd {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
-.yui-skin-sam .yui-dt-scrollable .yui-dt-bd {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
 
 .yui-skin-sam .yui-dt th {
     background:#D8D8DA url(../../../../assets/skins/sam/sprite.png) repeat-x 0 0; /* header gradient */
@@ -77,6 +73,11 @@
 .yui-skin-sam th.yui-dt-desc .yui-dt-liner {
     background:url(dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
 }
+
+/* scrolling */
+.yui-skin-sam .yui-dt-scrollable table {border:none;}
+.yui-skin-sam .yui-dt-scrollable .yui-dt-hd {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
+.yui-skin-sam .yui-dt-scrollable .yui-dt-bd {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
 
 /* editing */
 .yui-dt-editable {

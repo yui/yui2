@@ -69,24 +69,18 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Initialize RecordSet
     this._initRecordSet();
     if(!this._oRecordSet) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid RecordSet", "error", this.toString());
-        return;
     }
 
-    // Initialize container element
-    this._initContainerEl(elContainer);
-    if(!this._elContainer) {
-        YAHOO.log("Could not instantiate DataTable due to an invalid container element", "error", this.toString());
-        return;
-    }
-
-    // Initialize the rest of the DOM elements
-    this._initTableEl();
-    if(!this._elContainer || !this._elThead || !this._elTbody) {
+    // Initialize DOM elements
+    var okDom = this._initDomElements(elContainer);
+    if(!okDom) {
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return;
     }
-
+    
+    ///TODO: a better way to set up initial state, esp for DT created in hidden container
+    this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
+    
     // Call Element's constructor after DOM elements are created
     // but *before* table is populated with data
     DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
@@ -110,7 +104,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     }
 
     // Initialize inline Cell editing
-    this._initCellEditorEl();
+    this._oCellEditor = this._initCellEditor();
     
     // Initialize Column sort
     this._initColumnSort();
@@ -166,8 +160,16 @@ var DT = widget.DataTable;
 
 lang.augmentObject(DT, {
 
-//TODO: yui-dt, yui-dt-noop, yui-dt-table, yui-dt-hd, yui-dt-bd
-
+    /**
+     * Class name assigned to outer DataTable container.
+     *
+     * @property DataTable.CLASS_DATATABLE
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt"
+     */
+    CLASS_DATATABLE : "yui-dt",
 
     /**
      * Class name assigned to liner DIV elements.
@@ -2101,22 +2103,13 @@ _oChainRender : null,
 _elContainer : null,
 
 /**
- * DOM reference to the container element for the DataTable's primary THEAD.
+ * DOM reference to the TABLE element for the DataTable instance.
  *
- * @property _elTheadContainer
+ * @property _elTable
  * @type HTMLElement
  * @private
  */
-_elTheadContainer : null,
-
-/**
- * DOM reference to the container element for the DataTable's primary TBODY.
- *
- * @property _elTbodyContainer
- * @type HTMLElement
- * @private
- */
-_elTbodyContainer : null,
+_elTable : null,
 
 /**
  * DOM reference to the CAPTION element for the DataTable instance.
@@ -2137,7 +2130,16 @@ _elCaption : null,
 _elColgroup : null,
 
 /**
- * DOM reference to the primary THEAD element for the DataTable instance.
+ * DOM reference to the TABLE element for the DataTable instance.
+ *
+ * @property _elTable
+ * @type HTMLElement
+ * @private
+ */
+_elTable : null,
+
+/**
+ * DOM reference to the THEAD element for the DataTable instance.
  *
  * @property _elThead
  * @type HTMLElement
@@ -2331,99 +2333,7 @@ _focusEl : function(el) {
     },0);
 },
 
-/**
- * Post render syncing of Column widths and scroll padding
- *
- * @method _sync
- * @private
- */
-_sync : function() {
-/*    this._syncColWidths();
-    this._forceGeckoRedraw();
-*/},
 
-/**
- * Syncs up widths of THs and TDs across all those Columns without width values.
- * Actual adjustment is to the liner DIVs so window resizing will not affect cells. 
- *
- * @method _syncColWidths
- * @private
- */
-_syncColWidths : function() {
-/*    if(this._elTbody.rows.length > 0) {
-        // Validate there is at least one row with cells and at least one Column
-        var allKeys   = this._oColumnSet.keys,
-            elRow     = this.getFirstTrEl();
-    
-        if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {    
-            var i,
-                oColumn,
-                cellsLen = elRow.cells.length;
-            // First time through, reset the widths to get an accurate measure of the TD
-            for(i=0; i<cellsLen; i++) {
-                oColumn = allKeys[i];
-                // Only for Columns without widths
-                if(!oColumn.width) {
-                    this._setColumnWidth(oColumn, "auto","visible");
-                }
-            }
-    
-            // Calculate width for every Column
-            for(i=0; i<cellsLen; i++) {
-                oColumn = allKeys[i];
-                var newWidth = 0;
-                
-                // Columns without widths
-                if(!oColumn.width) {
-                    var elTh = oColumn.getThEl();
-                    var elTd = elRow.cells[i];
-
-                    if (elTd.offsetWidth < oColumn.minWidth) {
-                        // bug parity between scrolling and non-scrolling tables
-                        newWidth = Math.max(0, oColumn.minWidth,
-                            elTd.offsetWidth -
-                            (parseInt(Dom.getStyle(elTd,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(elTd,"paddingRight"),10)|0));
-                    }
-                }
-                // Columns with widths
-                else {
-                    newWidth = oColumn.width;
-                }
-                
-                // Hidden Columns
-                if(oColumn.hidden) {
-                    oColumn._nLastWidth = newWidth;
-                    this._setColumnWidth(oColumn, '1px','hidden'); 
-
-                // Update to the new width
-                } else if (newWidth) {
-                    this._setColumnWidth(oColumn, newWidth+'px');
-                }
-            }
-        }
-    }
-*/},
-
-
-/**
- * Forces Gecko repaint by removing/adding the no-op class name
- *
- * @method _forceGeckoRedraw
- * @private
- */
-_forceGeckoRedraw : function() {
-/*    // Bug 1741322: Needed to force FF to redraw to fix squishy headers on wide tables when new content comes in
-    if(ua.gecko) {
-        var elContainer = this.getContainerEl();
-        setTimeout(function() {
-            Dom.removeClass(elContainer,"yui-dt-noop");
-        },0);
-        setTimeout(function() {
-            Dom.addClass(elContainer,"yui-dt-noop");
-        },0);
-    }
-*/},
 
 
 
@@ -2519,7 +2429,7 @@ _initDataSource : function(oDataSource) {
     else {
         var tmpTable = null;
         var tmpContainer = this._elContainer;
-        var i;
+        var i=0;
         // Peek in container child nodes to see if TABLE already exists
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
@@ -2531,7 +2441,7 @@ _initDataSource : function(oDataSource) {
             }
             if(tmpTable) {
                 var tmpFieldsArray = [];
-                for(i=0; i<this._oColumnSet.keys.length; i++) {
+                for(; i<this._oColumnSet.keys.length; i++) {
                     tmpFieldsArray.push({key:this._oColumnSet.keys[i].key});
                 }
 
@@ -2561,195 +2471,198 @@ _initRecordSet : function() {
 },
 
 /**
- * Initializes the DataTable container element.
+ * Initializes DOM elements.
  *
- * @method _initContainerEl
- * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
+ * @method _initDomElements
+ * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID. 
+ * return {Boolean} False in case of error, otherwise true 
  * @private
  */
-_initContainerEl : function(elContainer) {
-    // Clear any previous container
+_initDomElements : function(elContainer) {
+    // Outer container
+    this._elContainer = this._initContainerEl(elContainer);
+    // TABLE
+    this._elTable = this._initTableEl(this._elContainer);
+    // COLGROUP
+    this._elColgroup = this._initColgroupEl(this._elTable);
+    // THEAD
+    this._elThead = this._initTheadEl(this._elTable);
+    // Primary TBODY
+    this._elTbody = this._initTbodyEl(this._elTable);
+    // Message TBODY
+    this._elMsgTbody = this._initMsgTbodyEl(this._elTable);  
+    // Column helpers
+    this._initColumnHelpers(this._elThead);  
+
+    if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
+        YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
+        return false;
+    }
+    else {
+        return true;
+    }
+},
+
+/**
+ * Destroy's the DataTable outer container element, if available.
+ *
+ * @method _destroyContainerEl
+ * @private
+ */
+_destroyContainerEl : function() {
     if(this._elContainer) {
         Ev.purgeElement(this._elContainer, true);
         this._elContainer.innerHTML = "";
-    }
-
-    elContainer = Dom.get(elContainer);
-    if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
-        // Esp for progressive enhancement
-        Ev.purgeElement(elContainer, true);
-        elContainer.innerHTML = "";
-
-        Dom.addClass(elContainer,"yui-dt yui-dt-noop");
-        
-        // Container for TABLE
-        // 2 container references in case of scrollability
-        this._elTbodyContainer = elContainer.appendChild(document.createElement("div"));
-        Dom.addClass(this._elTbodyContainer, "yui-dt-table");
-
-        this._elContainer = elContainer;
+        this._elContainer = null;
+        this._elColgroup = null;
+        this._elThead = null;
+        this._elTbody = null;
     }
 },
 
 /**
- * Creates HTML markup for TABLE, THEAD and TBODY elements.
+ * Initializes the DataTable outer container element.
  *
- * @method _initTableEl
+ * @method _initContainerEl
+ * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
+ * @return {HTMLElement} Initialized container element. 
  * @private
  */
-_initTableEl : function() {
-    var elTable;
+_initContainerEl : function(elContainer) {
+    // Destroy previous
+    this._destroyContainerEl();
 
-    // Destroy existing
-    if(this._elThead) {
-        var i;
-        // Destroy ColumnDDs
-        var aTree = this._oColumnSet.tree[0];
-        for(i=0; i<aTree.length; i++) {
-            if(aTree[i]._dd) {
-                aTree[i]._dd = aTree[i]._dd.unreg();
-            }
-        }
-    
-        // Destroy ColumnResizers
-        var aKeys = this._oColumnSet.keys;
-        for(i=0; i<aKeys.length; i++) {
-            if(aKeys[i]._ddResizer) {
-                aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
-            }
-        }
-        this._elThead = null;
+    // Validate container
+    elContainer = Dom.get(elContainer);
+    if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
+        Dom.addClass(elContainer, DT.CLASS_DATATABLE);
+        return elContainer;
     }
-    if(this._elTbody) {
-        if(elTable) {
-            elTable = this._elTbody.parentNode;
-        }
-        
-        Ev.purgeElement(this._elTbody, true);
-        this._elTbody = null;
-    }
+},
+
+/**
+ * Destroy's the DataTable TABLE element, if available.
+ *
+ * @method _destroyTableEl
+ * @private
+ */
+_destroyTableEl : function() {
+    var elTable = this._elTable;
     if(elTable) {
         Ev.purgeElement(elTable, true);
         elTable.parentNode.removeChild(elTable);
-        elTable = null;
+        this._elColgroup = null;
+        this._elThead = null;
+        this._elTbody = null;
     }
-        
-    // Create TABLE
-    var elBodyTable = document.createElement("table");
-    elBodyTable.id = this._sId + "-bodytable";
-    this._elTbodyContainer.appendChild(elBodyTable);
-
-    // Create COLGROUP and COLS
-    this._initColgroupEl();
-
-    // Create THEAD
-    this._initTheadEl();
-    
-    // Create TBODY for data
-    this._elTbody = elBodyTable.appendChild(document.createElement("tbody"));
-    this._elTbody.tabIndex = 0;
-    Dom.addClass(this._elTbody,DT.CLASS_BODY);
-
-    // Create TBODY for messages
-    var elMsgTbody = document.createElement("tbody");
-    var elMsgRow = elMsgTbody.appendChild(document.createElement("tr"));
-    Dom.addClass(elMsgRow,DT.CLASS_FIRST);
-    Dom.addClass(elMsgRow,DT.CLASS_LAST);
-    this._elMsgRow = elMsgRow;
-    var elMsgCell = elMsgRow.appendChild(document.createElement("td"));
-    elMsgCell.colSpan = this._oColumnSet.keys.length;
-    Dom.addClass(elMsgCell,DT.CLASS_FIRST);
-    Dom.addClass(elMsgCell,DT.CLASS_LAST);
-    this._elMsgTd = elMsgCell;
-    this._elMsgTbody = elBodyTable.appendChild(elMsgTbody);
-    var elMsgCellLiner = elMsgCell.appendChild(document.createElement("div"));
-    Dom.addClass(elMsgCellLiner,DT.CLASS_LINER);
-    this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
-
-    var elContainer = this._elContainer;
-    var elThead = this._elThead;
-    var elTbody = this._elTbody;
-    
-    // IE puts focus outline in the wrong place
-    if(ua.ie) {
-        elTbody.hideFocus=true;
-    }
-    var elTbodyContainer = this._elTbodyContainer;
-
-    // Set up DOM events
-    Ev.addListener(elContainer, "focus", this._onTableFocus, this);
-    Ev.addListener(elTbody, "focus", this._onTbodyFocus, this);
-
-    Ev.addListener(elTbody, "mouseover", this._onTableMouseover, this);
-    Ev.addListener(elTbody, "mouseout", this._onTableMouseout, this);
-    Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
-
-    Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
-
-    Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
-
-    // Since we can't listen for click and dblclick on the same element...
-    Ev.addListener(elTbody.parentNode, "dblclick", this._onTableDblclick, this);
-    Ev.addListener(elTbody, "click", this._onTbodyClick, this);
-
-    Ev.addListener(elTbodyContainer, "scroll", this._onScroll, this); // to sync horiz scroll headers
 },
 
 /**
- * Initializes COLGROUP and COL elements.
+ * Creates HTML markup for TABLE, COLGROUP, THEAD and TBODY elements in outer
+ * container element.
  *
- * @method _initColgroupEl
+ * @method _initTableEl
+ * @param elContainer {HTMLElement} Container element into which to create TABLE.
+ * @return {HTMLElement} Initialized TABLE element.
  * @private
  */
-_initColgroupEl : function() {
-    var allCols = this._aColIds || [],
-        allKeys = this._oColumnSet.keys,
-        elTable = this._elTbodyContainer.firstChild,
-        i = 0,
-        len = allCols.length;
-        
-    // First remove existing COLs, if any
-    var elColgroup;
-    if(this._elColgroup) {
-        elColgroup = this._elColgroup;
-        Ev.purgeElement(this._elColgroup, true);
-        this._elColgroup.innerHTML = '';
-    }
-    else {
-        elColgroup = elTable.insertBefore(document.createElement("colgroup"), elTable.firstChild);
-    }
+_initTableEl : function(elContainer) {
+    if(elContainer) {
+        // Destroy previous
+        this._destroyTableEl();
     
-    // Add COLs   
-    var elCol, oColumn,
-        elFragment = document.createDocumentFragment(),
-        elColTemplate = document.createElement("col");
+        // Create TABLE
+        return elContainer.appendChild(document.createElement("table"));   
+    } 
+},
 
-    for(i=0,len=allKeys.length; i<len; i++) {
-        oColumn = allKeys[i];
-        elCol = elFragment.appendChild(elColTemplate.cloneNode(false));
-        //TODO: is this necessary?
-        //elCol.id = this._sId + "-col" + oColumn.getId();
-        // Applying minWidth is why we need the COL elements
-        elCol.style.width = oColumn.minWidth + "px";
+/**
+ * Destroy's the DataTable COLGROUP element, if available.
+ *
+ * @method _destroyColgroupEl
+ * @private
+ */
+_destroyColgroupEl : function() {
+    var elColgroup = this._elColgroup;
+    if(elColgroup) {
+        var elTable = elColgroup.parentNode;
+        Ev.purgeElement(elColgroup, true);
+        elTable.removeChild(elColgroup);
+        this._elColgroup = null;
     }
-    elColgroup.appendChild(elFragment);
-    this._elColgroup = elColgroup;
+},
+
+/**
+ * Initializes COLGROUP and COL elements for managing minWidth.
+ *
+ * @method _initColgroupEl
+ * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
+ * @return {HTMLElement} Initialized COLGROUP element. 
+ * @private
+ */
+_initColgroupEl : function(elTable) {
+    if(elTable) {
+        // Destroy previous
+        this._destroyColgroupEl();
+
+        // Add COLs to DOCUMENT FRAGMENT
+        var allCols = this._aColIds || [],
+            allKeys = this._oColumnSet.keys,
+            i = 0, len = allCols.length,
+            elCol, oColumn,
+            elFragment = document.createDocumentFragment(),
+            elColTemplate = document.createElement("col");
+    
+        for(i=0,len=allKeys.length; i<len; i++) {
+            oColumn = allKeys[i];
+            elCol = elFragment.appendChild(elColTemplate.cloneNode(false));
+            elCol.style.width = oColumn.minWidth + "px";
+        }
+    
+        // Create COLGROUP
+        var elColgroup = elTable.insertBefore(document.createElement("colgroup"), elTable.firstChild);
+        elColgroup.appendChild(elFragment);
+        return elColgroup;
+    }
+},
+
+/**
+ * Destroy's the DataTable THEAD element, if available.
+ *
+ * @method _destroyTheadEl
+ * @private
+ */
+_destroyTheadEl : function() {
+    var elThead = this._elThead;
+    if(elThead) {
+        var elTable = elThead.parentNode;
+        Ev.purgeElement(elThead, true);
+        elTable.removeChild(elThead);
+        this._elThead = null;
+
+        this._destroyColumnHelpers();
+    }
 },
 
 /**
  * Initializes THEAD element.
  *
  * @method _initTheadEl
+ * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
+ * @param {HTMLElement} Initialized THEAD element. 
  * @private
  */
-_initTheadEl : function() {
-    var i,j, l, elThead;
+_initTheadEl : function(elTable) {
+    if(elTable) {
+        // Destroy previous
+        this._destroyTheadEl();
     
-    // First time through
-    if(!this._elThead) {
-        // Create THEADs
-        elThead     = this._elThead     = document.createElement('thead');
-
+        ///TODO: append to DOM later
+        var elThead = (this._elColgroup) ?
+            elTable.insertBefore(document.createElement("thead"), this._elColgroup.nextSibling) :
+            elTable.appendChild(document.createElement("thead"));
+    
+         ///TODO: Move to container
         Ev.addListener(elThead, "focus", this._onTheadFocus, this);
         Ev.addListener(elThead, "keydown", this._onTheadKeydown, this);
         Ev.addListener(elThead, "mouseover", this._onTableMouseover, this);
@@ -2757,123 +2670,64 @@ _initTheadEl : function() {
         Ev.addListener(elThead, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elThead, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elThead, "click", this._onTheadClick, this);
-        Ev.addListener(elThead.parentNode, "dblclick", this._onTableDblclick, this);
+        Ev.addListener(elTable, "dblclick", this._onTableDblclick, this);
         
-        this._elTbodyContainer.firstChild.appendChild(elThead);
-    }
-    // Reinitialization
-    else {
-        // Clear rows from THEAD
-        elThead = this._elThead;     
-        for(j=elThead.rows.length-1; j>-1; j--) {
-            Ev.purgeElement(elThead.rows[j], true);
-            elThead.removeChild(elThead.rows[j]);
-        }     
-    }
+       var oColumnSet = this._oColumnSet,
+            oColumn, i,j, l;
+        
     
-    var oColumn,
-        oColumnSet = this._oColumnSet;
-
-    // Add TRs to the THEAD
-    var colTree = oColumnSet.tree;
-    var elTheadCell, id;
-        for(i=0; i<colTree.length; i++) {
-            var elTheadRow = elThead.appendChild(document.createElement("tr"));
-            id = this._sId+"-hdrow" + i;
-            elTheadRow.id = id;
+        // Add TRs to the THEAD
+        var colTree = oColumnSet.tree;
+        var elTheadCell, id;
+            for(i=0; i<colTree.length; i++) {
+                var elTheadRow = elThead.appendChild(document.createElement("tr"));
+                ///TODO: is this necessary?
+                elTheadRow.id = this._sId+"-hdrow" + i;
+        
+                // ...and create TH cells
+                for(j=0; j<colTree[i].length; j++) {
+                    oColumn = colTree[i][j];
+                    elTheadCell = elTheadRow.appendChild(document.createElement("th"));
+                        oColumn._elTh = elTheadCell;
+                    elTheadCell.yuiCellIndex = j;
+                    this._initThEl(elTheadCell,oColumn);
+                }
+        
+                    // Set FIRST/LAST on THEAD rows
+                    if(i === 0) {
+                        Dom.addClass(elTheadRow, DT.CLASS_FIRST);
+                    }
+                    if(i === (colTree.length-1)) {
+                        Dom.addClass(elTheadRow, DT.CLASS_LAST);
+                    }
     
-            // ...and create TH cells
-            for(j=0; j<colTree[i].length; j++) {
-                oColumn = colTree[i][j];
-                elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-                    oColumn._elTh = elTheadCell;
-                id = this._sId+"-th" + oColumn.getId();
-                elTheadCell.id = id;
-                elTheadCell.yuiCellIndex = j;
-                this._initThEl(elTheadCell,oColumn);
             }
     
-                // Set FIRST/LAST on THEAD rows
-                if(i === 0) {
-                    Dom.addClass(elTheadRow, DT.CLASS_FIRST);
+                // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
+                var aFirstHeaders = oColumnSet.headers[0];
+                var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
+                for(i=0; i<aFirstHeaders.length; i++) {
+                    //TODO: A better way to get th cell
+                    Dom.addClass(Dom.get(this._sId+"-th"+aFirstHeaders[i]), DT.CLASS_FIRST);
                 }
-                if(i === (colTree.length-1)) {
-                    Dom.addClass(elTheadRow, DT.CLASS_LAST);
+                for(i=0; i<aLastHeaders.length; i++) {
+                    //TODO: A better way to get th cell
+                    Dom.addClass(Dom.get(this._sId+"-th"+aLastHeaders[i]), DT.CLASS_LAST);
                 }
-
+                
+                YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+    
+        ///TODO: try _repaintGecko() instead
+        // Bug 1806891
+        if(ua.webkit && ua.webkit < 420) {
+            var oSelf = this;
+            setTimeout(function() {
+                elThead.style.display = "";
+            },0);
+            elThead.style.display = 'none';
         }
-
-            // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
-            var aFirstHeaders = oColumnSet.headers[0];
-            var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
-            for(i=0; i<aFirstHeaders.length; i++) {
-                //TODO: A better way to get th cell
-                Dom.addClass(Dom.get(this._sId+"-th"+aFirstHeaders[i]), DT.CLASS_FIRST);
-            }
-            for(i=0; i<aLastHeaders.length; i++) {
-                //TODO: A better way to get th cell
-                Dom.addClass(Dom.get(this._sId+"-th"+aLastHeaders[i]), DT.CLASS_LAST);
-            }
         
-            // Add DD features only after DOM has been updated
-            var foundDD = (util.DD) ? true : false;
-            var needDD = false;
-            // draggable
-            // HACK: Not able to use attribute since this code is run before
-            // attributes are initialized
-            if(this._oConfigs.draggableColumns) {
-                for(i=0; i<this._oColumnSet.tree[0].length; i++) {
-                    oColumn = this._oColumnSet.tree[0][i];
-                    if(foundDD) {
-                        elTheadCell = oColumn.getThEl();
-                        Dom.addClass(elTheadCell, DT.CLASS_DRAGGABLE);
-                        var elDragTarget = DT._initColumnDragTargetEl();
-                        oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTheadCell, elDragTarget);
-                    }
-                    else {
-                        needDD = true;
-                    }    
-                }
-            }
-            // resizeable
-            for(i=0; i<this._oColumnSet.keys.length; i++) {
-                oColumn = this._oColumnSet.keys[i];
-                if(oColumn.resizeable) {
-                    if(foundDD) {
-                        elTheadCell = oColumn.getThEl();
-                        Dom.addClass(elTheadCell, DT.CLASS_RESIZEABLE);
-                        var elThLiner = elTheadCell.firstChild;
-                        var elThResizer = elThLiner.appendChild(document.createElement("div"));
-                        elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
-                        oColumn._elResizer = elThResizer;
-                        Dom.addClass(elThResizer,DT.CLASS_RESIZER);
-                        var elResizerProxy = DT._initColumnResizerProxyEl();
-                        oColumn._ddResizer = new YAHOO.util.ColumnResizer(
-                                this, oColumn, elTheadCell, elThResizer.id, elResizerProxy);
-                        var cancelClick = function(e) {
-                            Ev.stopPropagation(e);
-                        };
-                        Ev.addListener(elThResizer,"click",cancelClick);
-                    }
-                    else {
-                        needDD = true;
-                    }
-                }
-            }
-            if(needDD) {
-                YAHOO.log("Could not find DragDrop dependancy", "warn", this.toString());
-            }
-            
-            YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
-
-    ///TODO: try _repaintGecko() instead
-    // Bug 1806891
-    if(ua.webkit && ua.webkit < 420) {
-        var oSelf = this;
-        setTimeout(function() {
-            oSelf._elThead.style.display = "";
-        },0);
-        this._elThead.style.display = 'none';
+        return elThead;
     }
 },
 
@@ -2883,20 +2737,20 @@ _initTheadEl : function() {
  * @method _initThEl
  * @param elTheadCell {HTMLElement} TH cell element reference.
  * @param oColumn {YAHOO.widget.Column} Column object.
- * initialize presentation elements.
  * @private
  */
 _initThEl : function(elTheadCell,oColumn) {
-    // Clear out the cell of prior content
-    // TODO: purgeListeners and other validation-related things
     var colKey = oColumn.getKey();
     var colId = oColumn.getId();
+    
+    // This is necessary for accessibility
+    elTheadCell.id = this._sId+"-th" + oColumn.getId();
     elTheadCell.yuiColumnKey = colKey;
     elTheadCell.yuiColumnId = colId;
     elTheadCell.innerHTML = "";
     elTheadCell.rowSpan = oColumn.getRowspan();
     elTheadCell.colSpan = oColumn.getColspan();
-
+    
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
 
@@ -2956,7 +2810,196 @@ _initThEl : function(elTheadCell,oColumn) {
         }
 
         DT.formatTheadCell(elTheadCellLabel, oColumn, this);
+},
 
+/**
+ * Destroys elements associated with Column functionality: ColumnDD and ColumnResizers.
+ *
+ * @method _destroyColumnHelpers
+ * @private
+ */
+_destroyColumnHelpers : function() {
+    var i=0;
+    // Destroy ColumnDDs
+    var aTree = this._oColumnSet.tree[0];
+    for(; i<aTree.length; i++) {
+        if(aTree[i]._dd) {
+            aTree[i]._dd = aTree[i]._dd.unreg();
+        }
+    }
+
+    // Destroy ColumnResizers
+    var aKeys = this._oColumnSet.keys;
+    for(i=0; i<aKeys.length; i++) {
+        if(aKeys[i]._ddResizer) {
+            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
+        }
+    }
+},
+
+/**
+ * Initializes elements associated with Column functionality: ColumnDD and ColumnResizers.
+ *
+ * @method _initColumnHelpers
+ * @private
+ */
+_initColumnHelpers : function() {
+    this._destroyColumnHelpers();
+    
+    var aTree = this._oColumnSet.tree[0],
+        foundDD = (util.DD) ? true : false,
+        needDD = false,
+        oColumn, elTheadCell,
+        i=0;
+    
+    ///TODO: converge the following loops
+    
+    // draggable
+    // HACK: Not able to use attribute since this code is run before
+    // attributes are initialized
+    if(this._oConfigs.draggableColumns) {
+        for(; i<this._oColumnSet.tree[0].length; i++) {
+            oColumn = this._oColumnSet.tree[0][i];
+            if(foundDD) {
+                elTheadCell = oColumn.getThEl();
+                Dom.addClass(elTheadCell, DT.CLASS_DRAGGABLE);
+                var elDragTarget = DT._initColumnDragTargetEl();
+                oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTheadCell, elDragTarget);
+            }
+            else {
+                needDD = true;
+            }    
+        }
+    }
+    // resizeable
+    for(i=0; i<this._oColumnSet.keys.length; i++) {
+        oColumn = this._oColumnSet.keys[i];
+        if(oColumn.resizeable) {
+            if(foundDD) {
+                elTheadCell = oColumn.getThEl();
+                Dom.addClass(elTheadCell, DT.CLASS_RESIZEABLE);
+                var elThLiner = elTheadCell.firstChild;
+                var elThResizer = elThLiner.appendChild(document.createElement("div"));
+                elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
+                oColumn._elResizer = elThResizer;
+                Dom.addClass(elThResizer,DT.CLASS_RESIZER);
+                var elResizerProxy = DT._initColumnResizerProxyEl();
+                oColumn._ddResizer = new YAHOO.util.ColumnResizer(
+                        this, oColumn, elTheadCell, elThResizer.id, elResizerProxy);
+                var cancelClick = function(e) {
+                    Ev.stopPropagation(e);
+                };
+                Ev.addListener(elThResizer,"click",cancelClick);
+            }
+            else {
+                needDD = true;
+            }
+        }
+    }
+    if(needDD) {
+        YAHOO.log("Could not find DragDrop dependancy", "warn", this.toString());
+    }
+},
+
+/**
+ * Destroy's the DataTable TBODY element, if available.
+ *
+ * @method _destroyTbodyEl
+ * @private
+ */
+_destroyTbodyEl : function() {
+    var elTbody = this._elTbody;
+    if(elTbody) {
+        var elTable = elTbody.parentNode;
+        Ev.purgeElement(elTbody, true);
+        elTable.removeChild(elTbody);
+        this._elTbody = null;
+    }
+},
+
+/**
+ * Initializes TBODY element for data.
+ *
+ * @method _initTbodyEl
+ * @param elTable {HTMLElement} TABLE element into which to create TBODY .
+ * @return {HTMLElement} Initialized TBODY element. 
+ * @private
+ */
+_initTbodyEl : function(elTable) {
+    if(elTable) {
+        // Destroy previous
+        this._destroyTbodyEl();
+        
+        // Create TBODY
+        var elTbody = elTable.insertBefore(document.createElement("tbody"), this._elMsgTbody);
+        elTbody.tabIndex = 0;
+    
+        ///TODO: move to container
+        // Set up DOM events
+        Ev.addListener(this.elContainer, "focus", this._onTableFocus, this);
+        Ev.addListener(elTbody, "focus", this._onTbodyFocus, this);
+    
+        Ev.addListener(elTbody, "mouseover", this._onTableMouseover, this);
+        Ev.addListener(elTbody, "mouseout", this._onTableMouseout, this);
+        Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
+    
+        Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
+    
+        Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
+    
+        // Since we can't listen for click and dblclick on the same element...
+        Ev.addListener(elTbody.parentNode, "dblclick", this._onTableDblclick, this);
+        Ev.addListener(elTbody, "click", this._onTbodyClick, this);
+    
+        // IE puts focus outline in the wrong place
+        if(ua.ie) {
+            elTbody.hideFocus=true;
+        }
+
+        return elTbody;
+    }
+},
+
+/**
+ * Destroy's the DataTable message TBODY element, if available.
+ *
+ * @method _destroyMsgTbodyEl
+ * @private
+ */
+_destroyMsgTbodyEl : function() {
+    var elMsgTbody = this._elMsgTbody;
+    if(elMsgTbody) {
+        var elTable = elMsgTbody.parentNode;
+        Ev.purgeElement(elMsgTbody, true);
+        elTable.removeChild(elMsgTbody);
+        this._elTbody = null;
+    }
+},
+
+/**
+ * Initializes TBODY element for messaging.
+ *
+ * @method _initMsgTbodyEl
+ * @param elTable {HTMLElement} TABLE element into which to create TBODY 
+ * @private
+ */
+_initMsgTbodyEl : function(elTable) {
+    if(elTable) {
+        var elMsgTbody = document.createElement("tbody");
+        var elMsgRow = elMsgTbody.appendChild(document.createElement("tr"));
+        Dom.addClass(elMsgRow,DT.CLASS_FIRST);
+        Dom.addClass(elMsgRow,DT.CLASS_LAST);
+        this._elMsgRow = elMsgRow;
+        var elMsgCell = elMsgRow.appendChild(document.createElement("td"));
+        elMsgCell.colSpan = this._oColumnSet.keys.length;
+        Dom.addClass(elMsgCell,DT.CLASS_FIRST);
+        Dom.addClass(elMsgCell,DT.CLASS_LAST);
+        this._elMsgTd = elMsgCell;
+        elMsgTbody = elTable.appendChild(elMsgTbody);
+        var elMsgCellLiner = elMsgCell.appendChild(document.createElement("div"));
+        Dom.addClass(elMsgCellLiner,DT.CLASS_LINER);  
+        return elMsgTbody;
+    }
 },
 
 /**
@@ -2965,7 +3008,7 @@ _initThEl : function(elTheadCell,oColumn) {
  * @method _initCellEditorEl
  * @private
  */
-_initCellEditorEl : function() {
+_initCellEditor : function() {
     // TODO: destroy previous instances
 
     // Attach Cell Editor container element as first child of body
@@ -2987,7 +3030,7 @@ _initCellEditorEl : function() {
     oCellEditor.container = elCellEditor;
     oCellEditor.value = null;
     oCellEditor.isActive = false;
-    this._oCellEditor = oCellEditor;
+    return oCellEditor;
 },
 
 /** 	 
@@ -3213,7 +3256,7 @@ _updateTrEl : function(elTr, oRecord) {
         elTd = allTds[i];
         
         // Set cell-specific attributes
-        // TODO: are IDs necessary?
+        ///TODO: are IDs necessary?
         if(!elTd.id) {
             elTd.id = this._sId+"-bdcell"+this._nTdCount++;
         }
@@ -4204,6 +4247,16 @@ getContainerEl : function() {
 },
 
 /**
+ * Returns DOM reference to the DataTable's TABLE element.
+ *
+ * @method getTableEl
+ * @return {HTMLElement} Reference to TABLE element.
+ */
+getTableEl : function() {
+    return this._elTable;
+},
+
+/**
  * Returns DOM reference to the DataTable's THEAD element.
  *
  * @method getTheadEl
@@ -4851,7 +4904,6 @@ YAHOO.log("start render","time");
                             this._updateTrEl(allRows[i], allRecords[i]);
                         }
                         if (loopN > 0) {
-                            //this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
@@ -4863,22 +4915,24 @@ YAHOO.log("start render","time");
             });
         }
 
-        // Add more TR elements as necessary
         loopStart = allRows.length; // where to start
         loopEnd = allRecords.length; // where to end
-                        i = 0;
-                            len = loopEnd;
-                            var df = document.createDocumentFragment(),
-                            tr;
-                        for(; i < len; ++i) {
-                            tr = this._addTrEl(allRecords[i]);
-                            tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
-                            df.appendChild(tr);
-                        }
-                        this._elTbody.appendChild(df);
-YAHOO.log("end render","time");
-return;
-/*
+
+        /* Not chained for testing
+        // Add more TR elements as necessary
+        i = 0;
+            len = loopEnd;
+            var df = document.createDocumentFragment(),
+            tr;
+        for(; i < len; ++i) {
+            tr = this._addTrEl(allRecords[i]);
+            tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
+            df.appendChild(tr);
+        }
+        this._elTbody.appendChild(df);*/
+
+
+        // Add more TR elements as necessary
         var nRowsNeeded = (loopEnd - loopStart); // how many needed
         if(nRowsNeeded > 0) {
             this._oChainRender.add({
@@ -4895,7 +4949,6 @@ return;
                         }
                         this._elTbody.appendChild(df);
                         if (loopN > 0) {
-                            //this._syncColWidths();
                         }
                         oArg.nCurrentRow = i;
                     }
@@ -4906,6 +4959,7 @@ return;
                 timeout: (loopN > 0) ? 0 : -1
             });
         }
+/*
 
         this._oChainRender.add({
             method: function(oArg) {
@@ -4976,11 +5030,10 @@ return;
             scope: this,
             timeout: (loopN > 0) ? 0 : -1
         }); 
-        
+*/        
         this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId) {
-                    this._syncColWidths();
                     YAHOO.log("end render","time");
                 }
             },
@@ -4988,7 +5041,7 @@ return;
         });
                     
         this._oChainRender.run();
-*/
+
     }
     // Empty
     else {
@@ -5015,22 +5068,8 @@ destroy : function() {
     
     //TODO: destroy static resizer proxy and column proxy?
     
-    var i;
-    // Destroy ColumnDDs
-    var aTree = this._oColumnSet.tree[0];
-    for(i=0; i<aTree.length; i++) {
-        if(aTree[i]._dd) {
-            aTree[i]._dd = aTree[i]._dd.unreg();
-        }
-    }
-
-    // Destroy ColumnResizers
-    var aKeys = this._oColumnSet.keys;
-    for(i=0; i<aKeys.length; i++) {
-        if(aKeys[i]._ddResizer) {
-            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
-        }
-    }
+    // Destroy ColumnDD and ColumnResizers
+    this._destroyColumnHelpers();
     
     // Destroy Cell Editor
     Ev.purgeElement(this._oCellEditor.container, true);
@@ -5086,7 +5125,8 @@ showTableMessage : function(sHTML, sClassName) {
         Dom.addClass(elCell.firstChild, sClassName);
     }
 
-    this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth+"px";
+    ///TODO: is this still nec? for scrolling DT only?
+    //this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth+"px";
 
     this._elMsgTbody.style.display = "";
 
@@ -5573,7 +5613,9 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
         var sClassname = '.yui-dt-colliner' + oColumn.getId();
         
         // Hide for performance
-        ///this._elTbody.style.display = 'none';
+        if(this._elTbody) {
+            this._elTbody.style.display = 'none';
+        }
         
         rule = DT._oDynStyles[sClassname];
 
@@ -5598,7 +5640,9 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
         } 
         
         // Unhide
-        ///this._elTbody.style.display = '';
+        if(this._elTbody) {
+            this._elTbody.style.display = '';
+        }
     }
 YAHOO.log('end _setColumnWidthDynStyles','time');
     
@@ -5798,7 +5842,7 @@ removeColumn : function(oColumn) {
 
         oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
         this._initColumnSet(aOrigColumnDefs);
-        this._initTheadEls();
+        this._initTheadEl();
 
         this.render();
         this.fireEvent("columnRemoveEvent",{column:oColumn});
@@ -5839,7 +5883,7 @@ insertColumn : function(oColumn, index) {
     var aNewColumnDefs = this._oColumnSet.getDefinitions();
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
-    this._initTheadEls();
+    this._initTheadEl();
     this.render();
     this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
     YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
@@ -6300,7 +6344,6 @@ updateRow : function(row, oData) {
             method: function() {
                 if((this instanceof DT) && this._sId) {
                     this._updateTrEl(elRow, updatedRecord);
-                    //this._oChainSync.run();
                     this.fireEvent("rowUpdateEvent", {record:updatedRecord, oldData:oldData});
                     YAHOO.log("DataTable row updated: Record ID = " + updatedRecord.getId() +
                             ", Record index = " + this.getRecordIndex(updatedRecord) +
@@ -6756,7 +6799,7 @@ onPaginatorChange : function (oState) {
 
 // SELECTION/HIGHLIGHTING
 
-/**
+/*
  * ID string of last highlighted cell element
  *
  * @property _sLastHighlightedTdElId
@@ -6765,7 +6808,7 @@ onPaginatorChange : function (oState) {
  */
 //_sLastHighlightedTdElId : null,
 
-/**
+/*
  * ID string of last highlighted row element
  *
  * @property _sLastHighlightedTrElId
@@ -8914,6 +8957,7 @@ showCellEditor : function(elCell, oRecord, oColumn) {
             var x = Dom.getX(elCell);
             var y = Dom.getY(elCell);
 
+            ///TODO: remove scrolling logic
             // SF doesn't get xy for cells in scrolling table
             // when tbody display is set to block
             if(isNaN(x) || isNaN(y)) {
@@ -9081,14 +9125,6 @@ saveCellEditor : function() {
         // Update the UI
         this.formatCell(this._oCellEditor.cell.firstChild);
         
-        // Bug fix 1764044
-        this._oChainRender.add({
-            method: function() {
-                this._syncColWidths();
-            },
-            scope: this
-        });
-        this._oChainRender.run();
         // Clear out the Cell Editor
         this.resetCellEditor();
 

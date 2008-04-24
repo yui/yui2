@@ -1103,7 +1103,7 @@ YAHOO.util.Sort = {
 YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
     if(oDataTable && oColumn && elTh && elTarget) {
         this.datatable = oDataTable;
-        this.table = oDataTable.getTheadEl().parentNode;
+        this.table = oDataTable.getTableEl();
         this.column = oColumn;
         this.headCell = elTh;
         this.pointer = elTarget;
@@ -1210,7 +1210,7 @@ if(YAHOO.util.DDProxy) {
                 var oColumn = aColumnDefs.splice(this.column.getTreeIndex(),1)[0];
                 aColumnDefs.splice(this.newIndex, 0, oColumn);
                 oDataTable._initColumnSet(aColumnDefs);
-                oDataTable._initTheadEls();
+                oDataTable._initTheadEl();
                 oDataTable.render();
                 oDataTable.fireEvent("columnReorderEvent");
             }
