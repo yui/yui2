@@ -1,15 +1,11 @@
 /* foundational CSS */
 
-/*TODO remove */
-.yui-dt {
-    border-bottom:1px solid transparent;
-}
-
-.yui-dt-noop {
-    border-bottom:none;
-}
-
 /* scrollable */
+.yui-dt-tmp {
+    position:absolute;
+    left:-9000px;
+}
+
 .yui-dt-scrollable .yui-dt-bd {
     overflow:auto;
 }

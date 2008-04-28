@@ -535,6 +535,17 @@ lang.augmentObject(DT, {
     CLASS_RADIO : "yui-dt-radio",
 
     /**
+     * Class name assigned to temporary elements.
+     *
+     * @property DataTable.CLASS_TMP
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-tmp"
+     */
+    CLASS_TMP : "yui-dt-tmp",
+
+    /**
      * Message to display if DataTable has no data.
      *
      * @property DataTable.MSG_EMPTY
@@ -2430,6 +2441,7 @@ _initDataSource : function(oDataSource) {
         var tmpTable = null;
         var tmpContainer = this._elContainer;
         var i=0;
+        ///TODO: this will break if re-initing DS at runtime for SDT
         // Peek in container child nodes to see if TABLE already exists
         if(tmpContainer.hasChildNodes()) {
             var tmpChildren = tmpContainer.childNodes;
@@ -2772,7 +2784,7 @@ _initThEl : function(elTheadCell,oColumn) {
         //TODO: document special keys will get stripped here
         aClasses[aClasses.length] = "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,"");
         
-        aClasses[aClasses.length] = "yui-dt-colliner"+oColumn.getId();
+        aClasses[aClasses.length] = "yui-dt-col"+oColumn.getId();
         
         aClasses[aClasses.length] = DT.CLASS_LINER;
 
@@ -3017,6 +3029,7 @@ _initCellEditor : function() {
     elCellEditor.style.display = "none";
     elCellEditor.tabIndex = 0;
     Dom.addClass(elCellEditor, DT.CLASS_EDITOR);
+    ///TODO: insertbefore
     var elFirstChild = Dom.getFirstChild(document.body);
     if(elFirstChild) {
         elCellEditor = Dom.insertBefore(elCellEditor, elFirstChild);
@@ -3196,7 +3209,7 @@ _getTrTemplateEl : function (oRecord, index) {
             elTd.className = allClasses.join(' ');
             
             
-            elTd.firstChild.className = DT.CLASS_LINER + ' yui-dt-colliner'+oColumn.getId();
+            elTd.firstChild.className = DT.CLASS_LINER + ' yui-dt-col'+oColumn.getId();
 
             // Set Column width for fallback cases
             if(oColumn.width && this._bDynStylesFallback) {
@@ -5610,12 +5623,12 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
     // We have a STYLE node to update
     if(s) {
         // Unique classname for this Column instance
-        var sClassname = '.yui-dt-colliner' + oColumn.getId();
+        var sClassname = '.yui-dt .yui-dt-col' + oColumn.getId();
         
         // Hide for performance
-        if(this._elTbody) {
-            this._elTbody.style.display = 'none';
-        }
+        ///if(this._elTbody) {
+        ///    this._elTbody.style.display = 'none';
+        ///}
         
         rule = DT._oDynStyles[sClassname];
 
@@ -5640,9 +5653,9 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
         } 
         
         // Unhide
-        if(this._elTbody) {
-            this._elTbody.style.display = '';
-        }
+        ///if(this._elTbody) {
+        ///    this._elTbody.style.display = '';
+        ///}
     }
 YAHOO.log('end _setColumnWidthDynStyles','time');
     

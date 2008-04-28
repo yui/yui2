@@ -36,7 +36,6 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     this._oChainSync = new YAHOO.util.Chain();
     this._oChainRender.subscribe("end",this._sync, this, true);
-
 };
 
 var SDT = widget.ScrollingDataTable;
@@ -108,6 +107,24 @@ _elBdColgroup : null,
  * @private
  */
 _elBdThead : null,
+
+/**
+ * Offscreen container to temporarily clone SDT for auto-width calculation.
+ *
+ * @property _elTmpContainer
+ * @type HTMLElement
+ * @private
+ */
+_elTmpContainer : null,
+
+/**
+ * Offscreen TABLE element for auto-width calculation.
+ *
+ * @property _elTmpTable
+ * @type HTMLElement
+ * @private
+ */
+_elTmpTable : null,
 
 /**
  * Sync chain.
@@ -217,6 +234,9 @@ _initDomElements : function(elContainer) {
         
         // Column helpers
         this._initColumnHelpers(this._elThead);
+        
+        // Tmp elements for auto-width calculation
+        this._initTmpEls();
     }
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
             !this._elHdTable || !this._elBdColgroup || !this._elBdThead) {
@@ -227,6 +247,57 @@ _initDomElements : function(elContainer) {
         return true;
     }
 },
+
+/**
+ * Destroy's tmp els used for auto-width calculation.
+ *
+ * @method _destroyTmpEls
+ * @private
+ */
+_destroyTmpEls : function() {
+    var elTmpContainer = this._elTmpContainer;
+    if(elTmpContainer) {
+        Ev.purgeElement(elTmpContainer, true);
+        elTmpContainer.parentNode.removeChild(elTmpContainer);
+        
+        this._elTmpContainer = null;
+        this._elTmpTable = null;
+    }
+},
+
+/**
+ * Resets tmp els back to initial state.
+ *
+ * @method _resetTmpEls
+ * @private
+ */
+_resetTmpEls : function() {
+    var elTmpTable = this._elTmpTable;
+    if(elTmpTable) {
+        Ev.purgeElement(elTmpTable, true);
+        elTmpTable.removeChild(elTmpTable.firstChild); // THEAD
+        elTmpTable.removeChild(elTmpTable.firstChild); // TBODY
+    }
+},
+
+/**
+ * Initializes tmp els for auto-width calculation
+ *
+ * @method _initContainerEl
+ * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
+ * @private
+ */
+_initTmpEls : function() {
+    this._destroyTmpEls();
+
+    // Attach tmp container as first child of body
+    var elTmpContainer = document.createElement('div');
+    elTmpContainer.className = DT.CLASS_DATATABLE + ' ' + DT.CLASS_TMP;
+    var elTmpTable = elTmpContainer.appendChild(document.createElement('table'));
+    this._elTmpTable = elTmpTable;
+    this._elTmpContainer = document.body.insertBefore(elTmpContainer, document.body.firstChild);
+},
+
 
 /**
  * Destroy's the DataTable outer and inner container elements, if available.
@@ -580,6 +651,7 @@ _xupdateTrEl : function(elRow, oRecord) {
  * @private
  */
 _sync : function() {
+    this._oChainSync.stop();
     this._syncColWidths();
     ///TODO: is this still necessary?
     DT._repaintGecko();
@@ -599,84 +671,93 @@ _syncColWidths : function() {
             elRow     = this.getFirstTrEl();
     
         if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-            // Temporarily unsnap container since it causes inaccurate calculations
-            var bUnsnap = false;
-            if(YAHOO.env.ua.gecko || YAHOO.env.ua.opera) {
-                bUnsnap = true;
-                if(this.get("width")) {
-                    this._elHdContainer.style.width = "";
-                    this._elBdContainer.style.width = "";
-                }
-                else {
-                    this._elContainer.style.width = "";
-                }
-            }
-    
-            var i,
+            var i, newWidth, elTmpTd,
                 oColumn,
                 cellsLen = elRow.cells.length;
-            // First time through, reset the widths to get an accurate measure of the TD
-            for(i=0; i<cellsLen; i++) {
-                oColumn = allKeys[i];
-                // Only for Columns without widths 
-                ///TODO: and with a calculated width
-                if(!oColumn.width && !oColumn.hidden && oColumn._bCalculatedWidth) {
-                    this._setColumnWidth(oColumn, "auto");
-                }
-            }
     
+            var elTmpTable = this._elTmpTable;
+            elTmpTable.appendChild(this._elThead.cloneNode(true), elTmpTable.firstChild);
+            elTmpTable.appendChild(this._elTbody.cloneNode(true), elTmpTable.lastChild);
+            var oSelf = this;  
+                             
             // Calculate width for every Column
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
-                var newWidth;
+                if(!oColumn.hidden && !oColumn.width) {
+                    elTmpTd = elTmpTable.lastChild.rows[0].cells[i];
+                    newWidth = Math.max(0, oColumn.minWidth,
+                                elTmpTd.offsetWidth -
+                                (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingLeft"),10)|0) -
+                                (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingRight"),10)|0));
                 
-                // Columns without widths
-                if(!oColumn.width) {
-                    var elTh = oColumn.getThEl();
-                    var elTd = elRow.cells[i];
 
-                    var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                            elTh.firstChild : elTd.firstChild;               
+                    this._oChainSync.add({
+                        method: function(oArg) {
+                            this._setColumnWidth(oArg.oColumn, oArg.sWidth);
+                        },
+                        scope: this,
+                        argument: {
+                            oColumn: oColumn,
+                            sWidth: newWidth + 'px'
+                        }
+                    });
                 
-                    if(elTh.offsetWidth !== elTd.offsetWidth ||
-                        elWider.offsetWidth < oColumn.minWidth) {
-
-                        // Calculate the new width by comparing liner widths
-                        newWidth = Math.max(0, oColumn.minWidth,
-                            elWider.offsetWidth -
-                            (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
-                            
-                        oColumn._bCalculatedWidth = true;
-                    }
-                }
-                // Columns with widths
-                else {
-                    newWidth = oColumn.width;
-                }
-                
-                // Hidden Columns
-                if(oColumn.hidden) {
-                    oColumn._nLastWidth = newWidth;
-                    this._setColumnWidth(oColumn, '1px'); 
-
-                // Update to the new width
-                } else if(newWidth) {
-                    this._setColumnWidth(oColumn, newWidth+'px');
+                    //var elTd = elRow.cells[i];
+                    // Reset the widths to get an accurate measure of the TD oly for Columns without widths 
+                    ///TODO: but with a calculated width
+                    //this._setColumnWidth(oColumn, "auto");
+                    
+                    //var newWidth;
+                    
+                    // Columns without widths
+                    /*if(!oColumn.width) {
+                        var elTh = oColumn.getThEl();
+    
+                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
+                                elTh.firstChild : elTd.firstChild;               
+                    
+                        if(elTh.offsetWidth !== elTd.offsetWidth ||
+                            elWider.offsetWidth < oColumn.minWidth) {
+    
+                            // Calculate the new width by comparing liner widths
+                            newWidth = Math.max(0, oColumn.minWidth,
+                                elWider.offsetWidth -
+                                (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
+                                (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
+                                
+                            oColumn._bCalculatedWidth = true;
+                        }
+                    }*/
+                    // Columns with widths
+                    //else {
+                        //newWidth = oColumn.width;
+                    //}
+                    
+                    // Hidden Columns
+                    /*if(oColumn.hidden) {
+                        oColumn._nLastWidth = newWidth;
+                        this._setColumnWidth(oColumn, '1px'); 
+    
+                    // Update to the new width
+                    } else if(newWidth) {
+                        this._setColumnWidth(oColumn, newWidth+'px');
+                    }*/
                 }
             }
-            
-            // Resnap unsnapped containers
-            if(bUnsnap) {
-                var sWidth = this.get("width");
-                this._elHdContainer.style.width = sWidth;
-                this._elBdContainer.style.width = sWidth;     
-            } 
-
         }
     }
 
-    this._syncScrollPadding();
+
+    this._oChainSync.add({
+        method: function() {
+            this._resetTmpEls();
+            this._syncScrollPadding();
+        },
+        scope: this
+    });
+    
+    this._oChainSync.run();
+
 },
 
 /**
