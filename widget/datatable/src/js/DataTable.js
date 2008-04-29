@@ -5626,9 +5626,9 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
         var sClassname = '.yui-dt .yui-dt-col' + oColumn.getId();
         
         // Hide for performance
-        ///if(this._elTbody) {
-        ///    this._elTbody.style.display = 'none';
-        ///}
+        if(this._elTbody) {
+            this._elTbody.style.display = 'none';
+        }
         
         rule = DT._oDynStyles[sClassname];
 
@@ -5653,9 +5653,9 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
         } 
         
         // Unhide
-        ///if(this._elTbody) {
-        ///    this._elTbody.style.display = '';
-        ///}
+        if(this._elTbody) {
+            this._elTbody.style.display = '';
+        }
     }
 YAHOO.log('end _setColumnWidthDynStyles','time');
     

@@ -685,6 +685,15 @@ YAHOO.widget.Column.prototype = {
     _elResizer : null,
 
     /**
+     * Internal width tracker.
+     *
+     * @property _nWidth
+     * @type Number
+     * @private
+     */
+    _nWidth : null,
+
+    /**
      * For unreg() purposes, a reference to the Column's DragDrop instance.
      *
      * @property _dd

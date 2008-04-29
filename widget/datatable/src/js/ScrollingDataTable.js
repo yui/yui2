@@ -257,7 +257,6 @@ _initDomElements : function(elContainer) {
 _destroyTmpEls : function() {
     var elTmpContainer = this._elTmpContainer;
     if(elTmpContainer) {
-        Ev.purgeElement(elTmpContainer, true);
         elTmpContainer.parentNode.removeChild(elTmpContainer);
         
         this._elTmpContainer = null;
@@ -274,7 +273,6 @@ _destroyTmpEls : function() {
 _resetTmpEls : function() {
     var elTmpTable = this._elTmpTable;
     if(elTmpTable) {
-        Ev.purgeElement(elTmpTable, true);
         elTmpTable.removeChild(elTmpTable.firstChild); // THEAD
         elTmpTable.removeChild(elTmpTable.firstChild); // TBODY
     }
@@ -665,10 +663,12 @@ _sync : function() {
  * @private
  */
 _syncColWidths : function() {
+if(DT.syncClone) {
+YAHOO.log("start clone","time","clone");
     if(this._elTbody.rows.length > 0) {
         // Validate there is at least one row with cells and at least one Column
-        var allKeys   = this._oColumnSet.keys,
-            elRow     = this.getFirstTrEl();
+        var allKeys = this._oColumnSet.keys,
+            elRow = this.getFirstTrEl();
     
         if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
             var i, newWidth, elTmpTd,
@@ -678,18 +678,18 @@ _syncColWidths : function() {
             var elTmpTable = this._elTmpTable;
             elTmpTable.appendChild(this._elThead.cloneNode(true), elTmpTable.firstChild);
             elTmpTable.appendChild(this._elTbody.cloneNode(true), elTmpTable.lastChild);
-            var oSelf = this;  
+            var oSelf = this;
                              
             // Calculate width for every Column
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
-                if(!oColumn.hidden && !oColumn.width) {
+                if(!oColumn.width && !oColumn.hidden) {
                     elTmpTd = elTmpTable.lastChild.rows[0].cells[i];
                     newWidth = Math.max(0, oColumn.minWidth,
-                                elTmpTd.offsetWidth -
-                                (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingLeft"),10)|0) -
-                                (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingRight"),10)|0));
-                
+                            elTmpTd.offsetWidth -
+                            (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingRight"),10)|0));
+
 
                     this._oChainSync.add({
                         method: function(oArg) {
@@ -698,66 +698,86 @@ _syncColWidths : function() {
                         scope: this,
                         argument: {
                             oColumn: oColumn,
-                            sWidth: newWidth + 'px'
+                            sWidth: newWidth+'px'
                         }
                     });
-                
-                    //var elTd = elRow.cells[i];
-                    // Reset the widths to get an accurate measure of the TD oly for Columns without widths 
-                    ///TODO: but with a calculated width
-                    //this._setColumnWidth(oColumn, "auto");
-                    
-                    //var newWidth;
-                    
-                    // Columns without widths
-                    /*if(!oColumn.width) {
-                        var elTh = oColumn.getThEl();
-    
-                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                                elTh.firstChild : elTd.firstChild;               
-                    
-                        if(elTh.offsetWidth !== elTd.offsetWidth ||
-                            elWider.offsetWidth < oColumn.minWidth) {
-    
-                            // Calculate the new width by comparing liner widths
-                            newWidth = Math.max(0, oColumn.minWidth,
-                                elWider.offsetWidth -
-                                (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
-                                (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
-                                
-                            oColumn._bCalculatedWidth = true;
-                        }
-                    }*/
-                    // Columns with widths
-                    //else {
-                        //newWidth = oColumn.width;
-                    //}
-                    
-                    // Hidden Columns
-                    /*if(oColumn.hidden) {
-                        oColumn._nLastWidth = newWidth;
-                        this._setColumnWidth(oColumn, '1px'); 
-    
-                    // Update to the new width
-                    } else if(newWidth) {
-                        this._setColumnWidth(oColumn, newWidth+'px');
-                    }*/
                 }
             }
         }
     }
 
-
     this._oChainSync.add({
         method: function() {
             this._resetTmpEls();
             this._syncScrollPadding();
+            YAHOO.log("end clone","time","clone");
         },
         scope: this
     });
     
     this._oChainSync.run();
+}
+else if(DT.syncSeparate) {
+YAHOO.log("start separate","time","clone");
+    if(this._elTbody.rows.length > 0) {
+        // Validate there is at least one row with cells and at least one Column
+        var allKeys = this._oColumnSet.keys,
+            elRow = this.getFirstTrEl();
+    
+        if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
+            var i, newWidth, elTmpTd,
+                oColumn,
+                cellsLen = elRow.cells.length;
+    
+            // Calculate width for every Column
+            for(i=0; i<cellsLen; i++) {
+                oColumn = allKeys[i];
+                if(!oColumn.width && !oColumn.hidden) {
+                    var elTh = oColumn.getThEl();
+                    var elTd = elRow.cells[i];
+                    //elTmpTd = elTmpTable.lastChild.rows[0].cells[i];
+                    newWidth = Math.max(elTh.offsetWidth, elTd.offsetWidth);
+                    var syncFnc;
+                    if(elTh.offsetWidth > elTd.offsetWidth) {
+                        newWidth -= ((parseInt(Dom.getStyle(elTd.firstChild,"paddingLeft"),10)|0) +
+                            (parseInt(Dom.getStyle(elTd.firstChild,"paddingRight"),10)|0));
+                        syncFnc = function(oArg) {
+                               this._setColumnWidth(oArg.oColumn, oArg.nWidth+'px');
+                        };
+                    }
+                    else if(elTh.offsetWidth < elTd.offsetWidth) {
+                        newWidth -= ((parseInt(Dom.getStyle(elTh.firstChild,"paddingLeft"),10)|0) +
+                            (parseInt(Dom.getStyle(elTh.firstChild,"paddingRight"),10)|0));
+                        syncFnc = function(oArg) {
+                               this._setColumnWidth(oArg.oColumn, oArg.nWidth+'px');
+                        };
+                    }                    
+                
+                    if(syncFnc) {
+                        this._oChainSync.add({
+                            method: syncFnc,
+                            scope: this,
+                            argument: {
+                                oColumn: oColumn,
+                                nWidth: newWidth
+                            }
+                        });
+                    }   
+                }
+            }
+        }
+    }
 
+    this._oChainSync.add({
+        method: function() {
+            this._syncScrollPadding();
+            YAHOO.log("end separate","time","clone");
+        },
+        scope: this
+    });
+    
+    this._oChainSync.run();
+}
 },
 
 /**
