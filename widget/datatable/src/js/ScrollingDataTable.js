@@ -179,7 +179,8 @@ initAttributes : function(oConfigs) {
 
     /**
     * @attribute width
-    * @description Table width for scrollable tables
+    * @description Table width for scrollable tables. Note: When setting width
+    * and height at runtime, please set height first.
     * @type String
     */
     this.setAttributeConfig("width", {
@@ -188,19 +189,22 @@ initAttributes : function(oConfigs) {
         method: function(oParam) {
             this._elHdContainer.style.width = oParam;
             this._elBdContainer.style.width = oParam;            
+            this._syncScrollPadding();
         }
     });
 
     /**
     * @attribute height
-    * @description Table height for scrollable tables
+    * @description Table height for scrollable tables. Note: When setting width
+    * and height at runtime, please set height first.    
     * @type String
     */
     this.setAttributeConfig("height", {
         value: null,
         validator: lang.isString,
         method: function(oParam) {
-            this._elBdContainer.style.height = oParam;       
+            this._elBdContainer.style.height = oParam;    
+            this._syncScrollPadding();   
         }
     });
 },
