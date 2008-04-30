@@ -1962,8 +1962,9 @@ _onClick: function (p_sType, p_aArgs) {
 		Dom = YAHOO.util.Dom,
 		oEvent = p_aArgs[0],
 		oItem = p_aArgs[1],
-		oSubmenu,
 		bInMenuAnchor = false,
+		nGeckoVersion = UA.gecko,
+		oSubmenu,
 		oRoot,
 		sId,
 		sURL,
@@ -2055,7 +2056,12 @@ _onClick: function (p_sType, p_aArgs) {
 				}
 				else {
 	
-					oRoot.hide();
+					if (!(((nGeckoVersion && this.platform == "windows") || 
+						(nGeckoVersion && nGeckoVersion > 1.8)) && (oEvent.button > 0))) {
+				
+						oRoot.hide();
+				
+					}
 				
 				}
 	
