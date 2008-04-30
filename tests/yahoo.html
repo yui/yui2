@@ -373,6 +373,38 @@ are output in the logger to the right. <br />View the source to see how it's don
         },
 
         test_augmentObject: function() {
+
+            var a = {
+                'bool' : false,
+                'num'  : 0,
+                'nul' : null,
+                'undef': undefined,
+                'T'    : 'blabber'
+            };
+
+            var b = {
+                'bool' : 'oops',
+                'num'  : 'oops',
+                'nul' : 'oops',
+                'undef': 'oops',
+                'T'    : 'oops'
+            };
+
+            YAHOO.lang.augmentObject(a,b,false);
+
+            Assert.isFalse((a.bool === 'oops'));
+            Assert.isFalse((a.num === 'oops'));
+            Assert.isFalse((a.nul === 'oops'));
+            Assert.isFalse((a.undef === 'oops'));
+            Assert.isFalse((a.T === 'oops'));
+
+            YAHOO.lang.augmentObject(a,b,true);
+            Assert.isTrue((a.bool === 'oops'));
+            Assert.isTrue((a.num === 'oops'));
+            Assert.isTrue((a.nul === 'oops'));
+            Assert.isTrue((a.undef === 'oops'));
+            Assert.isTrue((a.T === 'oops'));
+
         },
 
         test_augmentProto: function() {
