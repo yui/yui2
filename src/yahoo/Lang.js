@@ -194,7 +194,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             }
         } else { // take everything, overwriting only if the third parameter is true
             for (p in s) { 
-                if (override || !r[p]) {
+                if (override || !(p in r)) {
                     r[p] = s[p];
                 }
             }
