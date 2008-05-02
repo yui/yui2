@@ -54,6 +54,29 @@ YAHOO.tool.TestReporter.prototype = {
 
     //restore missing constructor
     constructor: YAHOO.tool.TestReporter,
+    
+    /**
+     * Convert a date into ISO format.
+     * From Douglas Crockford's json2.js
+     * @param {Date} date The date to convert.
+     * @return {String} An ISO-formatted date string
+     * @method _convertToISOString
+     * @private
+     */    
+    _convertToISOString: function(date){
+        function f(n) {
+            // Format integers to have at least two digits.
+            return n < 10 ? '0' + n : n;
+        }
+
+        return date.getUTCFullYear()   + '-' +
+             f(date.getUTCMonth() + 1) + '-' +
+             f(date.getUTCDate())      + 'T' +
+             f(date.getUTCHours())     + ':' +
+             f(date.getUTCMinutes())   + ':' +
+             f(date.getUTCSeconds())   + 'Z';     
+    
+    },
 
     /**
      * Adds a field to the form that submits the results.
@@ -138,7 +161,7 @@ YAHOO.tool.TestReporter.prototype = {
         //create default fields
         this._fields.results = this.format(results);
         this._fields.useragent = navigator.userAgent;
-        this._fields.timestamp = (new Date()).toLocaleString();
+        this._fields.timestamp = this._convertToISOString(new Date());
 
         //add fields to the form
         for (var prop in this._fields){

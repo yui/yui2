@@ -70,7 +70,7 @@ YAHOO.namespace("tool");
                 throw new YAHOO.tool.TestCase.Wait(args[0], args[1]);
             } else {
                 throw new YAHOO.tool.TestCase.Wait(function(){
-                    YAHOO.util.Assert.fail("wait() called but resume() never called.");
+                    YAHOO.util.Assert.fail("Timeout: wait() called but resume() never called.");
                 }, (YAHOO.lang.isNumber(args[0]) ? args[0] : 10000));
             }            
         },
