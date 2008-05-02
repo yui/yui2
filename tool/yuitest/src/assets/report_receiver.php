@@ -7,7 +7,6 @@
     $results = $_POST['results'];
     $userAgent = $_POST['useragent'];
     $timestamp = $_POST['timestamp'];
-    $duration = $_POST['duration'];
    
     /*
      * Parse the XML into a series of structs. This makes it easier to handle the data
@@ -49,7 +48,7 @@
         switch($element['tag']){
             case 'testsuite':
                 if ($element['type'] == 'open'){
-                    $temp = 'Test Suite: '.$element['attributes']['name'].' (Passed: '.$element['attributes']['passed'].', Failed: '.$element['attributes']['failed'].', Ignored: '.$element['attributes']['ignored'].', Total: '.$element['attributes']['total'].')'; 
+                    $temp = 'Test Suite: '.$element['attributes']['name'].' (Passed: '.$element['attributes']['passed'].', Failed: '.$element['attributes']['failed'].', Ignored: '.$element['attributes']['ignored'].', Total: '.$element['attributes']['total'].', Duration: '.$element['attributes']['duration'].')'; 
                     $data .= str_pad($temp, strlen($temp) + ((int)$element['level']), ' ', STR_PAD_LEFT);
                 }
                 break;
@@ -67,6 +66,8 @@
         $data .= '\n';
         
     }
+    
+    echo $results;
     
     //write to some file
     $handle = fopen("examplefile.txt", "w");

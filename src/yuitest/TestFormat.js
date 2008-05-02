@@ -25,6 +25,10 @@ YAHOO.tool.TestFormat.XML = function(results /*:Object*/) /*:String*/ {
     var l = YAHOO.lang;
     var xml /*:String*/ = "<" + results.type + " name=\"" + results.name.replace(/"/g, "&quot;").replace(/'/g, "&apos;") + "\"";
     
+    if (l.isNumber(results.duration)){
+        xml += " duration=\"" + results.duration + "\"";
+    }
+    
     if (results.type == "test"){
         xml += " result=\"" + results.result + "\" message=\"" + results.message + "\">";
     } else {

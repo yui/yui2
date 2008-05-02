@@ -159,6 +159,7 @@ YAHOO.tool.TestManager = {
         r.failed += results.failed;
         r.ignored += results.ignored;
         r.total += results.total;
+        r.duration += results.duration;
         
         if (results.failed){
             r.failedPages.push(page);
@@ -301,6 +302,7 @@ YAHOO.tool.TestManager = {
             total: 0,
             type: "report",
             name: "YUI Test Results",
+            duration: 0,
             failedPages:[],
             passedPages:[]
             /*

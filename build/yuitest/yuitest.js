@@ -559,6 +559,7 @@ YAHOO.tool.TestRunner = (function(){
                 if (this._cur == this._root){
                     this._cur.results.type = "report";
                     this._cur.results.timestamp = (new Date()).toLocaleString();
+                    this._cur.results.duration = (new Date()) - this._cur.results.duration;
                     this.fireEvent(this.COMPLETE_EVENT, { results: this._cur.results});
                     this._cur = null;
                 } else {
@@ -871,6 +872,9 @@ YAHOO.tool.TestRunner = (function(){
 
             //build the test tree
             runner._buildTestTree();
+            
+            //set when the test started
+            runner._root.results.duration = (new Date()).valueOf();
             
             //fire the begin event
             runner.fireEvent(runner.BEGIN_EVENT);
@@ -2744,6 +2748,7 @@ YAHOO.tool.TestManager = {
         r.failed += results.failed;
         r.ignored += results.ignored;
         r.total += results.total;
+        r.duration += results.duration;
         
         if (results.failed){
             r.failedPages.push(page);
@@ -2886,6 +2891,7 @@ YAHOO.tool.TestManager = {
             total: 0,
             type: "report",
             name: "YUI Test Results",
+            duration: 0,
             failedPages:[],
             passedPages:[]
             /*
@@ -3135,6 +3141,10 @@ YAHOO.tool.TestFormat.XML = function(results /*:Object*/) /*:String*/ {
 
     var l = YAHOO.lang;
     var xml /*:String*/ = "<" + results.type + " name=\"" + results.name.replace(/"/g, "&quot;").replace(/'/g, "&apos;") + "\"";
+    
+    if (l.isNumber(results.duration)){
+        xml += " duration=\"" + results.duration + "\"";
+    }
     
     if (results.type == "test"){
         xml += " result=\"" + results.result + "\" message=\"" + results.message + "\">";

@@ -55,9 +55,9 @@
             "profiler.html",
             "tabview.html",
             "yahoo.html",
-            "yuiloader.html",
-            "yuiloader_config.html",
-            "yuiloader_rollup.html",
+            //"yuiloader.html",
+            //"yuiloader_config.html",
+            //"yuiloader_rollup.html",
             "yuitest.html"
         ]);
 
@@ -70,8 +70,8 @@
             // log("Passed: " + o.passed.join(", "));
             // log("Failed: " + o.failed.join(", "));
             //figure out if you want to report the results
-            if (location.search.length > 0){
-                var params = location.search.substring(1).split("&");
+            //if (location.search.length > 0){
+                /*var params = location.search.substring(1).split("&");
                 var url = null;
                 var format = YAHOO.tool.TestFormat.XML;
                 
@@ -81,13 +81,14 @@
                     } else if (params[i] == "format=json"){
                         format = YAHOO.tool.TestFormat.JSON;
                     }
-                }
+                }*/
                 
-                if (url !== null){
-                    var reporter = new YAHOO.tool.TestReporter(url, format);
+                //if (url !== null){
+                    var url = "http://ue.corp.yahoo.com/nzakas/report.php";
+                    var reporter = new YAHOO.tool.TestReporter(url);
                     reporter.report(o);
-                }
-            }
+                //}
+            //}
             
         });
 
