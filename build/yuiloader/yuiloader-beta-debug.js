@@ -587,7 +587,7 @@ return (o && (typeof o === 'object' || L.isFunction(o))) || false;
             }
         } else { // take everything, overwriting only if the third parameter is true
             for (p in s) { 
-                if (override || !r[p]) {
+                if (override || !(p in r)) {
                     r[p] = s[p];
                 }
             }
@@ -1964,7 +1964,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
         'uploader': {
             'type': 'js',
             'path': 'uploader/uploader-experimental.js',
-            'requires': ['yahoo']
+            'requires': ['element']
         },
 
         'utilities': {

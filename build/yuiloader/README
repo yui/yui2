@@ -1,6 +1,7 @@
 yuiloader - Release Notes
 
-2.6.0
+2.5.2
+  * uploader requires element
   * editer supersedes simpleditor
   * optional dependencies are sorted correctly when present even when
     loadOptional is not specified.
