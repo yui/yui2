@@ -284,7 +284,6 @@ throw new YAHOO.util.ChainedError('one or more subscribers threw an error: ' +
                                   this.lastError.message, errors);
         }
 
-        
         // if (rebuild) {
         //     var newlist=this.,subs=this.subscribers;
         //     for (i=0,len=subs.length; i<len; i=i+1) {
@@ -294,7 +293,7 @@ throw new YAHOO.util.ChainedError('one or more subscribers threw an error: ' +
         //     this.subscribers=newlist;
         // }
 
-        return ret;
+        return (ret !== false);
     },
 
     /**

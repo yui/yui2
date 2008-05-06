@@ -1,6 +1,9 @@
 
 YUI Library - Event - Release Notes
 
+2.5.2
+  * fire() now throws a YAHOO.util.ChainedError if one or more subscribers throw an error.
+
 2.5.1
   * Arrays are once again resized when a listener is removed.
   * onAvailable/onContentReady stop polling when there is nothing to look for.
