@@ -391,7 +391,7 @@
 
 			testToDate : function() {
 				var cal = this.createInstance();
-				cal.selectEvent.subscribe(function() {
+				cal.selectEvent.subscribe(function(type, args) {
 					DateAssert.datesAreEqual(new Date(2007, 10, 01), cal.toDate(args[0]));
 					DateAssert.datesAreEqual(new Date(2007, 10, 27), cal.toDate(args[1]));
 				});
@@ -984,16 +984,16 @@
 
 				ArrayAssert.itemsAreEqual(expectedEvts, actualEvts, "Unexpected event order");
 
-				cal = null;				
+				cal = null;
 			},
-			
+
 			testGetIndex : function() {
 				var c = this.createInstance({pagedate:"10/2007"});
 
 				var cal = (this.isGroupCalTest) ? c.pages[0] : c;
 				Assert.areEqual(0, cal.getCellIndex(new Date(2007, 8, 30)), "OOM not equal"); // OOM
 				Assert.areEqual(14, cal.getCellIndex(new Date(2007, 9, 14)), "In month not equal"); // In month
-				Assert.areEqual(36, cal.getCellIndex(new Date(2007, 10, 5)), "In month other end not equal"); //OOM, other end
+				Assert.areEqual(36, cal.getCellIndex(new Date(2007, 10, 5)), "In month other end not equal"); // OOM, other end
 
 				c = null;
 			}
@@ -1141,11 +1141,9 @@
 
 				cal.select(selStr);
 				cal.render();
-				
+
 				this.assertSelectedDates(cal, [new Date(2007, 3, 9), new Date(2007, 3, 14), new Date(2007, 3, 15), new Date(2007, 3, 21)]);
-				
-				
-				
+
 				cal = null;
 			}, 
 			
