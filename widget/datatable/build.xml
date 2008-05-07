@@ -5,8 +5,8 @@
 
     <dirname property="buildfile.dir" file="${ant.file}" />
     <property environment="env" />
-    <property name="srcdir" value="${env.YUI_SRC_DIR}" />
-    <property name="builddir" value="${env.YUI_BUILD_DIR}" />
+    <property name="srcdir" value="../.." />
+    <property name="builddir" value="../../../tools/builder/componentbuild" />
     
     <property file="${buildfile.dir}/build.properties" />
 
