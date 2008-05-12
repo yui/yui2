@@ -1,5 +1,9 @@
 Calendar Release Notes
 
+*** version 2.5.2 ***
+
++ CalendarGroup toDate method no longer throws javascript exception
+
 *** version 2.5.1 *** 
 
 + Fixed bug with mindate, maxdate being applied incorrectly if 

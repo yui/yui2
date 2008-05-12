@@ -1276,6 +1276,7 @@ YAHOO.lang.augmentProto(YAHOO.widget.CalendarGroup, YAHOO.widget.Calendar, "buil
 																 "hide",
 																 "show",
 																 "toDate",
+																 "_toDate",
 																 "_parseArgs",
 																 "browser");
 

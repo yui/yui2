@@ -920,8 +920,8 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @method setInitialFocus
 	 */
 	setInitialFocus : function() {
-		var el = this.submitEl;
-		var f = this.__getCfg("initialFocus");
+		var el = this.submitEl,
+			f = this.__getCfg("initialFocus");
 
 		if (f && f.toLowerCase) {
 			f = f.toLowerCase();
@@ -929,7 +929,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 				el = this.yearEl;
 				try {
 					this.yearEl.select();
-				} catch (e) {
+				} catch (err) {
 					// Ignore;
 				}
 			} else if (f == "month") {
@@ -940,7 +940,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 		if (el && YAHOO.lang.isFunction(el.focus)) {
 			try {
 				el.focus();
-			} catch (e) {
+			} catch (err) {
 				// TODO: Fall back if focus fails?
 			}
 		}
@@ -1122,9 +1122,9 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @param {Event} e The DOM event being handled
 	 */
 	_handleDirectionKeys : function(e) {
-		var E = YAHOO.util.Event;
-		var KEYS = YAHOO.util.KeyListener.KEY;
-		var NAV = YAHOO.widget.CalendarNavigator;
+		var E = YAHOO.util.Event,
+			KEYS = YAHOO.util.KeyListener.KEY,
+			NAV = YAHOO.widget.CalendarNavigator;
 
 		var value = (this.yearEl.value) ? parseInt(this.yearEl.value, 10) : null;
 		if (isFinite(value)) {
@@ -1153,7 +1153,7 @@ YAHOO.widget.CalendarNavigator.prototype = {
 				E.preventDefault(e);
 				try {
 					this.yearEl.select();
-				} catch(e) {
+				} catch(err) {
 					// Ignore
 				}
 			}
@@ -1169,14 +1169,14 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @param {Event} e The DOM event being handled
 	 */
 	_handleTabKey : function(e) {
-		var E = YAHOO.util.Event;
-		var KEYS = YAHOO.util.KeyListener.KEY;
+		var E = YAHOO.util.Event,
+			KEYS = YAHOO.util.KeyListener.KEY;
 
 		if (E.getCharCode(e) == KEYS.TAB && !e.shiftKey) {
 			try {
 				E.preventDefault(e);
 				this.firstCtrl.focus();
-			} catch (e) {
+			} catch (err) {
 				// Ignore - mainly for focus edge cases
 			}
 		}
@@ -1191,14 +1191,14 @@ YAHOO.widget.CalendarNavigator.prototype = {
 	 * @param {Event} e The DOM event being handled
 	 */
 	_handleShiftTabKey : function(e) {
-		var E = YAHOO.util.Event;
-		var KEYS = YAHOO.util.KeyListener.KEY;
+		var E = YAHOO.util.Event,
+			KEYS = YAHOO.util.KeyListener.KEY;
 
 		if (e.shiftKey && E.getCharCode(e) == KEYS.TAB) {
 			try {
 				E.preventDefault(e);
 				this.lastCtrl.focus();
-			} catch (e) {
+			} catch (err) {
 				// Ignore - mainly for focus edge cases
 			}
 		}
