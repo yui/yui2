@@ -1,5 +1,9 @@
 YUI Library - History - Release Notes
 
+2.5.2 No change.
+
+2.5.1 No change.
+
 2.5.0
 
   * Fixed bug involving the escaping/unescaping of state and module names.
