@@ -1,5 +1,9 @@
 YUI Library - Fonts - Release Notes
 
+Version 2.5.2
+
+  * Added comments regarding font shorthand filter for IE in Quirks Mode.
+
 Version 2.5.1
 
   * No changes.

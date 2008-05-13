@@ -1,6 +1,6 @@
 /*
-	Note: Throughout this file, the *property filter is used to 
-	      give a value to IE that other browsers do not see.	
+	Note: Throughout this file, the *property (star-property) filter is used 
+    to give a value to IE that other browsers do not see.	
 */
 
 /*
@@ -100,9 +100,8 @@
 	.yui-t6 .yui-b {float:right;width:23.0769em;*width:22.50em;}
 	.yui-t6 #yui-main .yui-b {margin-right:24.0769em;*margin-right:23.62em;}
 
-	.yui-t7 #yui-main .yui-b {
-		display:block;margin:0 0 1em 0;
-	}
+	.yui-t7 #yui-main .yui-b {display:block;margin:0 0 1em 0;}
+	
 	#yui-main .yui-b {float:none;width:auto;}
 
 /*
@@ -232,7 +231,7 @@
 	.yui-gb .yui-gb div.first {*margin-left:0;}
 
 	.yui-gc .yui-g .yui-u,
-	.yui-gd .yui-g .yui-u {*width:48.1%;*margin-left:0;}s
+	.yui-gd .yui-g .yui-u {*width:48.1%;*margin-left:0;}
 
 	.yui-gb .yui-gd div.first {width:32%;}
 	.yui-g .yui-gd div.first {_width:29.9%;}

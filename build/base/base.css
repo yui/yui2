@@ -28,6 +28,9 @@ em {
 	/*bringing italics back to the em element*/
 	font-style:italic;
 }
+del {
+	text-decoration:line-through;
+}
 blockquote,ul,ol,dl {
 	/*giving blockquotes and lists room to breath*/
 	margin:1em;
