@@ -1,5 +1,8 @@
 get - Release Notes
 
+2.5.2
+    * No change
+
 2.5.1
     * onFailure callback receives a second parameter containing an error message.
     * Added 'charset' configuration option for inserted nodes.  Default is utf-8.
