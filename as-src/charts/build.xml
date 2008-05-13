@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="YUIChartsSWF" default="build">
+
+	<description>Builds the SWF file used by the YUI Charts Control</description>
+	
+	<property name="flexbin" value="C:/Program Files/Adobe/Flex Builder 3/sdks/3.0.0/bin"/>
+	
+	<property name="lib" value="${basedir}"/>
+	<property name="src" value="${basedir}"/>
+	<property name="output" value="${basedir}/output"/>
+	
+	<target name="build">
+	
+		<!-- use the MXMLC commmand line compiler from the free Flex SDK -->
+		<exec executable="${flexbin}/mxmlc.exe" failonerror="true">
+
+			<!-- start with the classes from the SWC -->
+			<arg line="--library-path+='${lib}'"/>
+			
+			<!-- specify where to output the SWF -->
+			<arg line="--output '${output}/charts.swf'"/>
+
+			<!-- compile the main class -->
+			<arg line="'${src}/Charts.as'"/>
+		</exec>
+	</target>
+	
+</project>

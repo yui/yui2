@@ -5,8 +5,8 @@
 	
 	<property name="flexbin" value="C:/Program Files/Adobe/Flex Builder 3/sdks/2.0.1/bin"/>
 	
-	<property name="lib" value="${basedir}/swc"/>
-	<property name="src" value="${basedir}/as"/>
+	<property name="lib" value="${basedir}"/>
+	<property name="src" value="${basedir}"/>
 	<property name="output" value="${basedir}/output"/>
 	
 	<target name="build">

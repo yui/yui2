@@ -19,16 +19,16 @@
     <property name="flexbin" value="C:/Program Files/Adobe/Flex Builder 3/sdks/3.0.0/bin"/>
     <property name="astra.srcdir" value="../../../flash/ActionScript 3"/>
     <property name="astra.output" value="${component.srcdir}/astra"/>
-    <property name="swc.output" value="${component.srcdir}/swc"/>
+    <property name="swc.output" value="${component.srcdir}/as"/>
     <property name="swf.output" value="${component.srcdir}/swf"/>
 
     <target name="customlocal" description="Charts Override to Build SWF" depends="build-swc">
 
         <!-- Call the build script for the charts SWF -->
         <!-- We're using the same build script we distribute with the library. -->
-        <ant antfile="${component.srcdir}/build.xml">
-            <property name="basedir" value="${component.srcdir}"/>
-            <property name="output" value="${component.builddir}/assets"/>
+        <ant antfile="${component.srcdir}/as/build.xml">
+            <property name="basedir" value="${component.srcdir}/as"/>
+            <property name="output" value="${component.srcdir}/swf"/>
         </ant>
 
     </target>
