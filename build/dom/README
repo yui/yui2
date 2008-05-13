@@ -7,6 +7,9 @@ Dom Release Notes
 
 ----------------------------
 
+*** version 2.5.2 ***
+* no change
+
 *** version 2.5.1 ***
 * getStyle fix for getting computedStyle across documents
 
