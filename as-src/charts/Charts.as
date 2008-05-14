@@ -898,7 +898,7 @@ package
 		
 		protected function chartItemExtraEventHandler(event:MouseEvent):void
 		{
-			var dragEventType:String = "itemDrag";
+			var dragEventType:String = "itemDragEvent";
 			var renderer:ISeriesItemRenderer = this._lastMouseItem;
 			this._lastMouseItem = null;
 			if(event.type == MouseEvent.MOUSE_DOWN)
@@ -921,11 +921,11 @@ package
 				{
 					renderer = null;
 				}
-				dragEventType = "itemDragStart";
+				dragEventType = "itemDragStartEvent";
 			}
 			else if(event.type == MouseEvent.MOUSE_UP)
 			{
-				dragEventType = "itemDragEnd";
+				dragEventType = "itemDragEndEvent";
 				this.stage.removeEventListener(MouseEvent.MOUSE_MOVE, chartItemExtraEventHandler);
 				this.stage.removeEventListener(MouseEvent.MOUSE_UP, chartItemExtraEventHandler);
 			}
