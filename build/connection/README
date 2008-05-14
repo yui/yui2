@@ -4,11 +4,13 @@ Connection Manager Release Notes
 
 * NOTE: File uploads using setForm() does not function as expected in Opera 9.26
 and 9.27.  The file and data upload phase works as expected, however the server
-response cannot be read.  Specifically, document.body.innerHTML in the iframe --
-the transport medium for the upload -- has no content.  There are no workarounds
-at this time.
+response cannot be read.  Specifically, "onload" for an iframe is triggered when
+the iframe is appended into the DOM.  This results in the upload callback being
+fired immediately, before the transaction is complete, and before the response
+data are available.
 
-This condition appears to have been fixed as of Opera 9.50 b2.
+This condition is documented in Opera's bug tracking system: 295719 and appears
+to have been fixed as of Opera 9.50 b2.
 
 *** version 2.5.1 ***
 
@@ -276,6 +278,7 @@ and returns false if the connection object is no longer available.
 *** version 0.9.0 ***
 
 * Initial release
+
 
 
 
