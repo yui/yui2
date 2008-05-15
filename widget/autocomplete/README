@@ -1,5 +1,11 @@
 AutoComplete Release Notes
 
+*** version 2.5.2 ***
+
+* Mac FF no longer submits form on enter-to-select suggestion.
+
+
+
 *** version 2.5.1 ***
 
 * No changes.
