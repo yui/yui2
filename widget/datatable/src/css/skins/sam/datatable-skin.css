@@ -24,6 +24,9 @@
 .yui-skin-sam .yui-dt tr.yui-dt-last th {
     border-bottom:1px solid #7F7F7F;/*  thead bottom border */
 }
+.yui-skin-sam .yui-dt th .yui-dt-liner {
+    white-space:nowrap;
+}
 .yui-skin-sam .yui-dt-liner {
     margin:0;padding:0;
     padding:4px 10px 4px 10px; /* cell padding */
@@ -47,14 +50,22 @@
 
 /* messaging */
 .yui-skin-sam .yui-dt-loading {
+    width:100%;
     background-color:#FFF;
 }
 .yui-skin-sam .yui-dt-empty {
+    width:100%;
     background-color:#FFF;
 }
 .yui-skin-sam .yui-dt-error {
+    width:100%;
     background-color:#FFF;
 }
+
+/* scrolling */
+.yui-skin-sam .yui-dt-scrollable table {border:none;}
+.yui-skin-sam .yui-dt-scrollable .yui-dt-hd {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
+.yui-skin-sam .yui-dt-scrollable .yui-dt-bd {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;background-color:#FFF;}
 
 /* sortable columns */
 .yui-skin-sam thead .yui-dt-sortable {
@@ -73,11 +84,6 @@
 .yui-skin-sam th.yui-dt-desc .yui-dt-liner {
     background:url(dt-arrow-dn.png) no-repeat right; /* sorted header gradient */
 }
-
-/* scrolling */
-.yui-skin-sam .yui-dt-scrollable table {border:none;}
-.yui-skin-sam .yui-dt-scrollable .yui-dt-hd {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
-.yui-skin-sam .yui-dt-scrollable .yui-dt-bd {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
 
 /* editing */
 .yui-dt-editable {

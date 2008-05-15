@@ -762,9 +762,9 @@ YAHOO.widget.Column.prototype = {
      *
      * @property minWidth
      * @type Number
-     * @default 10
+     * @default null
      */
-    minWidth : 10,
+    minWidth : null,
 
     /**
      * True if Column is in hidden state.

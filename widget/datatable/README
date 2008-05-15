@@ -1,5 +1,13 @@
 DataTable Release Notes
 
+*** version 2.6.0 ***
+
+* Column.minWidth default value now null.
+
+* Hidden Columns are now manifested as cell liner elements with display:none.
+
+
+
 *** version 2.5.2 ***
 
 * Paginator now updates recordOffset to the starting index of the last page when

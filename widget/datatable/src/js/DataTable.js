@@ -1,4 +1,4 @@
-(function () {
+    (function () {
 
 var lang   = YAHOO.lang,
     util   = YAHOO.util,
@@ -38,16 +38,17 @@ var lang   = YAHOO.lang,
  * @param oConfigs {object} (optional) Object literal of configuration values.
  */
 YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
+    var DT = widget.DataTable;
+    
     if(oConfigs && oConfigs.scrollable) {
         return new YAHOO.widget.ScrollingDataTable(elContainer,aColumnDefs,oDataSource,oConfigs);
     }
-
-    var DT = widget.DataTable;
     
     // Internal vars
     this._nIndex = DT._nCount;
     this._sId = "yui-dt"+this._nIndex;
     this._oChainRender = new YAHOO.util.Chain();
+    this._oChainRender.subscribe("end",this._onRenderChainEnd, this, true);
 
     // Initialize configs
     this._initConfigs(oConfigs);
@@ -84,6 +85,9 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Call Element's constructor after DOM elements are created
     // but *before* table is populated with data
     DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
+    
+    // Element's constructor must first be called
+    this.subscribe("tableMutationEvent",this._onTableMutationEvent);
 
     // HACK: Set sortedBy values for backward compatibility
     var oSortedBy = this.get("sortedBy");
@@ -701,53 +705,6 @@ lang.augmentObject(DT, {
         }
     
         return copy;
-    },
-
-    /**
-     * Forces Gecko repaint.
-     *
-     * @method _repaintGecko
-     * @el {HTMLElement} (Optional) Element to repaint, otherwise entire document body.
-     * @private
-     * @static     
-     */
-    _repaintGecko : function(el) {
-        if(ua.gecko) {
-            el = el || document.body;
-            var parent = el.parentNode;
-            var nextSibling = el.nextSibling;
-            parent.insertBefore(parent.removeChild(el), nextSibling);
-        }
-    },
-
-    /**
-     * Forces Opera repaint.
-     *
-     * @method _repaintOpera
-     * @private
-     * @static     
-     */
-    _repaintOpera : function() {
-        if(ua.opera) {
-            document.body.style += '';
-        }
-    },
-    
-    /**
-     * Forces Webkit repaint.
-     *
-     * @method _repaintWebkit
-     * @el {HTMLElement} (Optional) Element to repaint, otherwise entire document body.
-     * @private
-     * @static     
-     */
-    _repaintWebkit : function(el) {
-        if(ua.webkit) {
-            el = el || document.body;
-            var parent = el.parentNode;
-            var nextSibling = el.nextSibling;
-            parent.insertBefore(parent.removeChild(el), nextSibling);
-        }
     },
 
     /**
@@ -2344,6 +2301,49 @@ _focusEl : function(el) {
     },0);
 },
 
+/**
+ * Forces Gecko repaint.
+ *
+ * @method _repaintGecko
+ * @el {HTMLElement} (Optional) Element to repaint, otherwise entire document body.
+ * @private
+ */
+_repaintGecko : (ua.gecko) ? 
+    function(el) {
+        el = el || this._elContainer;
+        var parent = el.parentNode;
+        var nextSibling = el.nextSibling;
+        parent.insertBefore(parent.removeChild(el), nextSibling);
+    } : function() {},
+
+/**
+ * Forces Opera repaint.
+ *
+ * @method _repaintOpera
+ * @private 
+ */
+_repaintOpera : (ua.opera) ? 
+    function() {
+        if(ua.opera) {
+            document.body.style += '';
+        }
+    } : function() {} ,
+
+/**
+ * Forces Webkit repaint.
+ *
+ * @method _repaintWebkit
+ * @el {HTMLElement} (Optional) Element to repaint, otherwise entire document body.
+ * @private
+ */
+_repaintWebkit : (ua.webkit) ? 
+    function(el) {
+        el = el || this._elContainer;
+        var parent = el.parentNode;
+        var nextSibling = el.nextSibling;
+        parent.insertBefore(parent.removeChild(el), nextSibling);
+    } : function() {},
+
 
 
 
@@ -2628,7 +2628,6 @@ _initColgroupEl : function(elTable) {
         for(i=0,len=allKeys.length; i<len; i++) {
             oColumn = allKeys[i];
             elCol = elFragment.appendChild(elColTemplate.cloneNode(false));
-            elCol.style.width = oColumn.minWidth + "px";
         }
     
         // Create COLGROUP
@@ -2662,6 +2661,7 @@ _destroyTheadEl : function() {
  * @method _initTheadEl
  * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
  * @param {HTMLElement} Initialized THEAD element. 
+ * @return Initialized THEAD element 
  * @private
  */
 _initTheadEl : function(elTable) {
@@ -2729,7 +2729,7 @@ _initTheadEl : function(elTable) {
                 
                 YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
     
-        ///TODO: try _repaintGecko() instead
+        ///TODO: try _repaintGecko(this._elContainer) instead
         // Bug 1806891
         if(ua.webkit && ua.webkit < 420) {
             var oSelf = this;
@@ -2806,6 +2806,7 @@ _initThEl : function(elTheadCell,oColumn) {
         if(oColumn.hidden) {
             aClasses[aClasses.length] = DT.CLASS_HIDDEN;
             // TODO: scrolling DTs have 2 colgroups...
+            //TODO: pull out into a clearMinWidth function
             this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = ''; // Remove minWidth
         }
         
@@ -3491,6 +3492,29 @@ _setRowStripes : function(row, range) {
 // Private DOM Event Handlers
 //
 /////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Fires tableMutationEvent whenever the render chain ends.
+ *
+ * @method _onRenderChainEnd
+ * @private
+ */
+_onRenderChainEnd : function() {
+    this.fireEvent("tableMutationEvent");
+},
+
+/**
+ * Whenever content is updated (due to data load, dynamic data, etc), calls
+ * minWidth validation.  
+ *
+ * @method _onTableMutationEvent
+ * @param oArgs.column {YAHOO.widget.Column) If mutation occurs only in one Column,
+ * that Column instance.  
+ * @private
+ */
+_onTableMutationEvent : function(oArgs) {
+    this._validateMinWidths((oArgs) ? oArgs.column : null);
+},
 
 /**
  * Handles click events on the DOCUMENT.
@@ -4972,7 +4996,7 @@ YAHOO.log("start render","time");
                 timeout: (loopN > 0) ? 0 : -1
             });
         }
-/*
+
 
         this._oChainRender.add({
             method: function(oArg) {
@@ -5018,7 +5042,7 @@ YAHOO.log("start render","time");
                 }
                 
                 if(this._bInit) {
-                    this._forceGeckoRedraw();
+                    ///this._forceGeckoRedraw();
 
                     this._oChainRender.add({
                         method: function() {
@@ -5043,7 +5067,7 @@ YAHOO.log("start render","time");
             scope: this,
             timeout: (loopN > 0) ? 0 : -1
         }); 
-*/        
+        
         this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId) {
@@ -5137,9 +5161,6 @@ showTableMessage : function(sHTML, sClassName) {
     if(lang.isString(sClassName)) {
         Dom.addClass(elCell.firstChild, sClassName);
     }
-
-    ///TODO: is this still nec? for scrolling DT only?
-    //this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth+"px";
 
     this._elMsgTbody.style.display = "";
 
@@ -5744,6 +5765,51 @@ YAHOO.log('end _setColumnWidthDynFunction','time');
 },
 
 /**
+ * Validates a Column (if given) or else all Columns against given minWidths, if any.
+ *
+ * @method _validateMinWidths
+ * @param oArg.column {YAHOO.widget.Column} Affected Column instance, if available.
+ * @private
+ */
+_validateMinWidths : function(oArg) {
+    var elColgroup = this._elColgroup;
+    var elColgroupClone = elColgroup.cloneNode(true);
+    var bNeedsValidation = false;
+    var allKeys = this._oColumnSet.keys;
+    var elThLiner, oColumn;
+    if(oArg && oArg.column) {
+        oColumn = oArg.column;
+        if(oColumn.minWidth) {
+            elThLiner = oColumn.getThEl().firstChild;
+            if(elThLiner.offsetWidth < oColumn.minWidth) {
+                elColgroupClone.childNodes[oColumn.getKeyIndex()].style.width = 
+                        oColumn.minWidth + 
+                        (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
+                        (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
+                bNeedsValidation = true;
+            }
+        }
+    }
+    else {
+        for(var i=0, l=allKeys.length; i<l; i++) {
+            oColumn = allKeys[i];
+            elThLiner = oColumn.getThEl().firstChild;
+            if(elThLiner.offsetWidth < oColumn.minWidth) {
+                elColgroupClone.childNodes[i].style.width = 
+                        oColumn.minWidth + 
+                        (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
+                        (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
+                bNeedsValidation = true;
+            }
+        }
+    }
+    if(bNeedsValidation) {
+        elColgroup.parentNode.replaceChild(elColgroupClone, elColgroup);
+        this._elColgroup = elColgroupClone;
+    }
+},
+
+/**
  * Hides given Column. NOTE: You cannot hide/show nested Columns. You can only
  * hide/show non-nested Columns, and top-level parent Columns (which will
  * hide/show all children Columns).
@@ -5773,6 +5839,7 @@ hideColumn : function(oColumn) {
             if(thisKeyIndex !== null) {                    
                 // Clear minWidth
                 //TODO: scrolling DTs have 2 colgroups
+                //TODO: pull out into a clearMinWidth function
                 this._elColgroup.childNodes[thisKeyIndex].style.width = ''; 
 
                 // Style the body cells
@@ -5785,7 +5852,7 @@ hideColumn : function(oColumn) {
             YAHOO.log("Column \"" + oColumn.key + "\" hidden", "info", this.toString());
         }
       
-        DT._repaintOpera();
+        this._repaintOpera();
     }
     else {
         YAHOO.log("Could not hide Column \"" + oColumn.key + "\". Only non-nested Columns can be hidden", "warn", this.toString());
@@ -5821,6 +5888,7 @@ showColumn : function(oColumn) {
             if(thisKeyIndex !== null) {
                 // Restore minWidth
                 ///TODO: scrolling DTs have 2 colgroups
+                //TODO: pull out into a restoreMinWidth function
                 this._elColgroup.childNodes[thisKeyIndex].style.width = oColumn.minWidth + 'px';
             
                 // Unstyle the body cells
@@ -9781,6 +9849,12 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      * Fired when the DataTable's view is rendered.
      *
      * @event renderEvent
+     */
+
+    /**
+     * Fired when any of the DataTable's content is changed.
+     *
+     * @event tableMutationEvent
      */
 
     /**

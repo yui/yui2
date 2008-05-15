@@ -34,8 +34,7 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     widget.ScrollingDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
 
-    this._oChainSync = new YAHOO.util.Chain();
-    this._oChainRender.subscribe("end",this._sync, this, true);
+    ///this._sync();
 };
 
 var SDT = widget.ScrollingDataTable;
@@ -67,7 +66,19 @@ lang.augmentObject(SDT, {
      * @final
      * @default "yui-dt-bd"
      */
-    CLASS_BODY : "yui-dt-bd"
+    CLASS_BODY : "yui-dt-bd",
+
+    /**
+     * Color assigned to header filler on scrollable tables when columnFiller
+     * is set to true.
+     *
+     * @property DataTable.CLASS_COLUMN_FILLER_COLOR
+     * @type String
+     * @static
+     * @final
+     * @default "#F2F2F2"
+     */
+    COLOR_COLUMNFILLER : "#F2F2F2"
 });
 
 lang.extend(SDT, DT, {
@@ -80,6 +91,15 @@ lang.extend(SDT, DT, {
  * @private
  */
 _elHdContainer : null,
+
+/**
+ * Fixed header TABLE element.
+ *
+ * @property _elHdTable
+ * @type HTMLElement
+ * @private
+ */
+_elHdTable : null,
 
 /**
  * Container for scrolling body TABLE element.
@@ -125,15 +145,6 @@ _elTmpContainer : null,
  * @private
  */
 _elTmpTable : null,
-
-/**
- * Sync chain.
- *
- * @property _oChainSync
- * @type YAHOO.util.Chain
- * @private
- */
-_oChainSync : null,
 
 /**
  * True if x-scrollbar is currently visible.
@@ -189,7 +200,9 @@ initAttributes : function(oConfigs) {
         method: function(oParam) {
             this._elHdContainer.style.width = oParam;
             this._elBdContainer.style.width = oParam;            
-            this._syncScrollPadding();
+            this._syncScrollX();      
+            this._syncScrollOverhang();
+            ///TODO: is this nec? force gecko redraw
         }
     });
 
@@ -204,7 +217,9 @@ initAttributes : function(oConfigs) {
         validator: lang.isString,
         method: function(oParam) {
             this._elBdContainer.style.height = oParam;    
-            this._syncScrollPadding();   
+            this._syncScrollX();   
+            this._syncScrollY();
+            this._syncScrollOverhang();
         }
     });
 },
@@ -330,6 +345,7 @@ _initContainerEl : function(elContainer) {
         
         // Container for header TABLE
         var elHdContainer = elContainer.appendChild(document.createElement("div"));
+        elHdContainer.style.backgroundColor = SDT.COLOR_COLUMNFILLER;
         Dom.addClass(elHdContainer, SDT.CLASS_HEADER);
         this._elHdContainer = elHdContainer;
     
@@ -515,7 +531,7 @@ _initBdThEl : function(elTheadCell,oColumn) {
  */
 _initThEl : function(elTheadCell,oColumn) {
     this._baseInitThEl(elTheadCell,oColumn);
-    // This is necessary for _syncScrollPadding()
+    // This is necessary for _syncScrollOverhang()
     elTheadCell.id = this._sId+"-thfixed" + oColumn.getId();
 },
 
@@ -625,6 +641,31 @@ _xupdateTrEl : function(elRow, oRecord) {
     return elRow;
 },
 
+/**
+ * Sets focus on the given element.
+ *
+ * @method _focusEl
+ * @param el {HTMLElement} Element.
+ * @private
+ */
+_focusEl : function(el) {
+    el = el || this._elTbody;
+    // http://developer.mozilla.org/en/docs/index.php?title=Key-navigable_custom_DHTML_widgets
+    // The timeout is necessary in both IE and Firefox 1.5, to prevent scripts from doing
+    // strange unexpected things as the user clicks on buttons and other controls.
+    
+    // Bug 1921135: Wrap the whole thing in a setTimeout
+    setTimeout(function() {
+        setTimeout(function() {
+            try {
+                el.focus();
+            }
+            catch(e) {
+            }
+        },0);
+    }, 0);
+},
+
 
 
 
@@ -647,16 +688,26 @@ _xupdateTrEl : function(elRow, oRecord) {
 
 
 /**
+ * Fires tableMutationEvent whenever the render chain ends and executes syncing.
+ *
+ * @method _onRenderChainEnd
+ * @private
+ */
+_onRenderChainEnd : function() {
+    this.fireEvent("tableMutationEvent");
+    this._sync();
+},
+
+/**
  * Post render syncing of Column widths and scroll padding
  *
  * @method _sync
  * @private
  */
 _sync : function() {
-    this._oChainSync.stop();
     this._syncColWidths();
     ///TODO: is this still necessary?
-    DT._repaintGecko();
+    this._repaintGecko(this._elContainer);
 },
 
 /**
@@ -667,209 +718,186 @@ _sync : function() {
  * @private
  */
 _syncColWidths : function() {
-if(DT.syncClone) {
-YAHOO.log("start clone","time","clone");
     if(this._elTbody.rows.length > 0) {
         // Validate there is at least one row with cells and at least one Column
-        var allKeys = this._oColumnSet.keys,
-            elRow = this.getFirstTrEl();
+        var allKeys   = this._oColumnSet.keys,
+            elRow     = this.getFirstTrEl();
     
         if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-            var i, newWidth, elTmpTd,
+            // Temporarily unsnap container since it causes inaccurate calculations
+            if(this.get("width")) {
+                this._elHdContainer.style.width = "";
+                this._elBdContainer.style.width = "";
+            }
+            this._elContainer.style.width = "";
+    
+            var i,
                 oColumn,
                 cellsLen = elRow.cells.length;
-    
-            var elTmpTable = this._elTmpTable;
-            elTmpTable.appendChild(this._elThead.cloneNode(true), elTmpTable.firstChild);
-            elTmpTable.appendChild(this._elTbody.cloneNode(true), elTmpTable.lastChild);
-            var oSelf = this;
-                             
-            // Calculate width for every Column
+            // First time through, reset the widths to get an accurate measure of the TD
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
-                if(!oColumn.width && !oColumn.hidden) {
-                    elTmpTd = elTmpTable.lastChild.rows[0].cells[i];
-                    newWidth = Math.max(0, oColumn.minWidth,
-                            elTmpTd.offsetWidth -
-                            (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(elTmpTd.firstChild,"paddingRight"),10)|0));
-
-
-                    this._oChainSync.add({
-                        method: function(oArg) {
-                            this._setColumnWidth(oArg.oColumn, oArg.sWidth);
-                        },
-                        scope: this,
-                        argument: {
-                            oColumn: oColumn,
-                            sWidth: newWidth+'px'
-                        }
-                    });
+                // Only for Columns without widths
+                if(!oColumn.width) {
+                    this._setColumnWidth(oColumn, "auto","visible");
                 }
             }
-        }
-    }
-
-    this._oChainSync.add({
-        method: function() {
-            this._resetTmpEls();
-            this._syncScrollPadding();
-            YAHOO.log("end clone","time","clone");
-        },
-        scope: this
-    });
-    
-    this._oChainSync.run();
-}
-else if(DT.syncSeparate) {
-YAHOO.log("start separate","time","clone");
-    if(this._elTbody.rows.length > 0) {
-        // Validate there is at least one row with cells and at least one Column
-        var allKeys = this._oColumnSet.keys,
-            elRow = this.getFirstTrEl();
-    
-        if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-            var i, newWidth, elTmpTd,
-                oColumn,
-                cellsLen = elRow.cells.length;
     
             // Calculate width for every Column
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
-                if(!oColumn.width && !oColumn.hidden) {
+                var newWidth = 0;
+                var overflow = 'hidden';
+                
+                // Columns without widths
+                if(!oColumn.width) {
                     var elTh = oColumn.getThEl();
                     var elTd = elRow.cells[i];
-                    //elTmpTd = elTmpTable.lastChild.rows[0].cells[i];
-                    newWidth = Math.max(elTh.offsetWidth, elTd.offsetWidth);
-                    var syncFnc;
-                    if(elTh.offsetWidth > elTd.offsetWidth) {
-                        newWidth -= ((parseInt(Dom.getStyle(elTd.firstChild,"paddingLeft"),10)|0) +
-                            (parseInt(Dom.getStyle(elTd.firstChild,"paddingRight"),10)|0));
-                        syncFnc = function(oArg) {
-                               this._setColumnWidth(oArg.oColumn, oArg.nWidth+'px');
-                        };
-                    }
-                    else if(elTh.offsetWidth < elTd.offsetWidth) {
-                        newWidth -= ((parseInt(Dom.getStyle(elTh.firstChild,"paddingLeft"),10)|0) +
-                            (parseInt(Dom.getStyle(elTh.firstChild,"paddingRight"),10)|0));
-                        syncFnc = function(oArg) {
-                               this._setColumnWidth(oArg.oColumn, oArg.nWidth+'px');
-                        };
-                    }                    
+
+                    var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
+                            elTh.firstChild : elTd.firstChild;               
                 
-                    if(syncFnc) {
-                        this._oChainSync.add({
-                            method: syncFnc,
-                            scope: this,
-                            argument: {
-                                oColumn: oColumn,
-                                nWidth: newWidth
-                            }
-                        });
-                    }   
+                    if(elTh.offsetWidth !== elTd.offsetWidth ||
+                        elWider.offsetWidth < oColumn.minWidth) {
+
+                        // Calculate the new width by comparing liner widths
+                        newWidth = Math.max(0, oColumn.minWidth,
+                            elWider.offsetWidth -
+                            (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
+                            (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
+                    }
+                }
+                // Columns with widths
+                else {
+                    newWidth = oColumn.width;
+                }
+                
+                // Hidden Columns
+                if(oColumn.hidden) {
+                    oColumn._nLastWidth = newWidth;
+                    this._setColumnWidth(oColumn, '1px','hidden'); 
+
+                // Update to the new width
+                } else if (newWidth) {
+                    this._setColumnWidth(oColumn, newWidth+'px', overflow);
                 }
             }
+            
+            // Resnap unsnapped containers
+            var sWidth = this.get("width");
+            this._elHdContainer.style.width = sWidth;
+            this._elBdContainer.style.width = sWidth;     
         }
     }
-
-    this._oChainSync.add({
-        method: function() {
-            this._syncScrollPadding();
-            YAHOO.log("end separate","time","clone");
-        },
-        scope: this
-    });
-    
-    this._oChainSync.run();
-}
+    this._syncScroll();
 },
 
 /**
  * Syncs padding around scrollable tables, including Column header right-padding
  * and container width and height.
  *
- * @method _syncScrollPadding
+ * @method _syncScroll
  * @private
  */
-_syncScrollPadding : function() {
-    var elTbody = this._elTbody,
-        elBdContainer = this._elBdContainer,
-        aLastHeaders, len, prefix, i, elLiner;
-    
-    // IE 6 and 7 only when y-scrolling not enabled
-    if(!this.get("height") && (ua.ie)) {
-        // Snap outer container height to content
-        // but account for x-scrollbar if it is visible
-        if(elTbody.rows.length > 0) {
-            elBdContainer.style.height = 
-                    (elBdContainer.scrollWidth > elBdContainer.offsetWidth) ?
-                    (elTbody.offsetHeight + 19) + "px" : 
-                    elTbody.offsetHeight + "px";
-        }
-        else {
-            elBdContainer.style.height = 
-                    (elBdContainer.scrollWidth > elBdContainer.offsetWidth) ?
-                    (this._elMsgTbody.offsetHeight + 19) + "px" : 
-                    this._elMsgTbody.offsetHeight + "px";
+_syncScroll : function() {
+    this._syncScrollX();
+    this._syncScrollY();
+    this._syncScrollOverhang();
+    if(ua.opera) {
+        // Bug 1925874
+        this._elHdContainer.scrollLeft = this._elBdContainer.scrollLeft;
+        if(!this.get("width")) {
+            // Bug 1926125
+            document.body.style += '';
         }
     }
+},
 
+/**
+ * Snaps container width for y-scrolling tables.
+ *
+ * @method _syncScrollY
+ * @private
+ */
+_syncScrollY : function() {
+    var elTbody = this._elTbody,
+        elBdContainer = this._elBdContainer;
+    
     // X-scrolling not enabled
     if(!this.get("width")) {
         // Snap outer container width to content
         // but account for y-scrollbar if it is visible
         this._elContainer.style.width = 
-                (elBdContainer.scrollHeight > elBdContainer.offsetHeight) ?
+                (elBdContainer.scrollHeight >= elBdContainer.offsetHeight) ?
                 (elTbody.parentNode.offsetWidth + 19) + "px" :
                 //TODO: Can we detect left and right border widths instead of hard coding?
                 (elTbody.parentNode.offsetWidth + 2) + "px";
     }
-    // X-scrolling is enabled and x-scrollbar is visible
-    else if((elBdContainer.scrollWidth > elBdContainer.offsetWidth) ||
-        ((elBdContainer.scrollHeight > elBdContainer.offsetHeight) && (elBdContainer.scrollWidth > elBdContainer.offsetWidth-16))) {
-        // Perform sync routine
-        if(!this._bScrollbarX) {
-            // Add Column header right-padding
-            aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-            len = aLastHeaders.length;
-            prefix = this._sId+"-thfixed";
-            for(i=0; i<len; i++) {
-                //TODO: A better way to get th cell
-                elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                elLiner.style.marginRight = 
-                        (parseInt(Dom.getStyle(elLiner,"marginRight"),10) + 
-                        16) + "px";
-            }
-            
-            // Save state   
-            this._bScrollbarX = true;
-        }
-    }
-    // X-scrollbar enabled but x-scrollbar is not visible
-    else {
-        // Perform sync routine
-        if(this._bScrollbarX) {                 
-            // Remove Column header right-padding                   
-            aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-            len = aLastHeaders.length;
-            prefix = this._sId+"-thfixed";
-            for(i=0; i<len; i++) {
-                //TODO: A better way to get th cell
-                elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-                Dom.setStyle(elLiner,"marginRight","");
-            }
-                                    
-            // Save state
-            this._bScrollbarX = false;
-        }
+},
+
+/**
+ * Snaps container height for x-scrolling tables in IE. Syncs message TBODY width.
+ *
+ * @method _syncScrollX
+ * @private
+ */
+_syncScrollX : function() {
+    var elTbody = this._elTbody,
+        elBdContainer = this._elBdContainer;
+    
+    // IE 6 and 7 only when y-scrolling not enabled
+    if(!this.get("height") && (ua.ie)) {
+        // Snap outer container height to content
+        elBdContainer.style.height = 
+                // but account for x-scrollbar if it is visible
+                (elBdContainer.scrollWidth > elBdContainer.offsetWidth - 2) ?
+                (elTbody.parentNode.offsetHeight + 19) + "px" : 
+                elTbody.parentNode.offsetHeight + "px";
     }
 
     // Sync message tbody
     if(this._elTbody.rows.length === 0) {
-        this._elMsgTbody.parentNode.width = this.getTheadEl().parentNode.offsetWidth;
+        this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth + "px";
     }
     else {
-        this._elMsgTbody.parentNode.width = "";
+        this._elMsgTbody.parentNode.style.width = "";
+    }
+},
+
+/**
+ * Adds/removes Column header overhang.
+ *
+ * @method _syncScrollOverhang
+ * @private
+ */
+_syncScrollOverhang : function() {
+    var elTbody = this._elTbody,
+        elBdContainer = this._elBdContainer,
+        aLastHeaders, len, prefix, i, elLiner;
+
+    // Y-scrollbar is visible
+    if(elBdContainer.scrollHeight > elBdContainer.offsetHeight){
+        // Add Column header overhang
+        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+        len = aLastHeaders.length;
+        prefix = this._sId+"-thfixed";
+        for(i=0; i<len; i++) {
+            //TODO: A better way to get th cell
+            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+            elLiner.parentNode.style.borderRight = "18px solid " + SDT.COLOR_COLUMNFILLER;
+        }
+    }
+    // Y-scrollbar is not visible
+    else {
+        // Remove Column header overhang
+        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+        len = aLastHeaders.length;
+        prefix = this._sId+"-thfixed";
+        for(i=0; i<len; i++) {
+            //TODO: A better way to get th cell
+            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
+            elLiner.parentNode.style.borderRight = "1px solid " + SDT.COLOR_COLUMNFILLER;
+        }
     }
 },
 
@@ -884,6 +912,31 @@ _syncScrollPadding : function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Returns DOM reference to the DataTable's scrolling body container element, if any.
+ *
+ * @method getBdContainerEl
+ * @return {HTMLElement} Reference to DIV element.
+ */
+getBdContainerEl : function() {
+    return this._elBdContainer;
+},
 
 
 /**
@@ -973,9 +1026,8 @@ setColumnWidth : function(oColumn, nWidth) {
             oColumn.width = nWidth;
             
             // Resize the DOM elements
-            //this._oChainSync.stop();
             this._setColumnWidth(oColumn, nWidth+"px");
-            this._syncScrollPadding();
+            this._syncScrollOverhang();
             
             this.fireEvent("columnSetWidthEvent",{column:oColumn,width:nWidth});
             YAHOO.log("Set width of Column " + oColumn + " to " + nWidth + "px", "info", this.toString());
@@ -1164,6 +1216,36 @@ saveCellEditor : function() {
         YAHOO.log("Cell Editor not active to save input", "warn", this.toString());
     }
 },
+
+/**
+ * Displays message within secondary TBODY.
+ *
+ * @method showTableMessage
+ * @param sHTML {String} (optional) Value for innerHTMlang.
+ * @param sClassName {String} (optional) Classname.
+ */
+showTableMessage : function(sHTML, sClassName) {
+    var elCell = this._elMsgTd;
+    if(lang.isString(sHTML)) {
+        elCell.firstChild.innerHTML = sHTML;
+    }
+    if(lang.isString(sClassName)) {
+        Dom.addClass(elCell.firstChild, sClassName);
+    }
+
+    // Needed for SDT only
+    var elThead = this.getTheadEl();
+    var elTable = elThead.parentNode;
+    var newWidth = elTable.offsetWidth;
+    this._elMsgTbody.parentNode.style.width = this.getTheadEl().parentNode.offsetWidth + "px";
+
+    this._elMsgTbody.style.display = "";
+
+    this.fireEvent("tableMsgShowEvent", {html:sHTML, className:sClassName});
+    YAHOO.log("DataTable showing message: " + sHTML, "info", this.toString());
+},
+
+
 
 
 
