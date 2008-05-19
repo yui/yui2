@@ -760,7 +760,7 @@ lang.augmentObject(DT, {
      * @method DataTable.formatTheadCell
      * @param elCellLabel {HTMLElement} The label DIV element within the TH liner.
      * @param oColumn {YAHOO.widget.Column} Column instance.
-     * @param oSelf {DT} DataTable instance.
+     * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
      * @static
      */
     formatTheadCell : function(elCellLabel, oColumn, oSelf) {
@@ -1053,7 +1053,7 @@ lang.augmentObject(DT, {
     },
 
     /**
-     * Handles Pag changeRequest events for static DataSources
+     * Handles Paginator changeRequest events for static DataSources
      * (i.e. DataSources that return all data immediately)
      * @method DataTable.handleSimplePagination
      * @param {object} the requested state of the pagination
@@ -1071,7 +1071,7 @@ lang.augmentObject(DT, {
     },
 
     /**
-     * Handles Pag changeRequest events for dynamic DataSources
+     * Handles Paginator changeRequest events for dynamic DataSources
      * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
      * @method DataTable.handleDataSourcePagination
      * @param {object} the requested state of the pagination
@@ -1103,7 +1103,7 @@ lang.augmentObject(DT, {
      *
      * @method DataTable.editCheckbox
      * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {DT} Reference back to DataTable instance.
+     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
      * @static
      */
     //DT.editCheckbox = function(elContainer, oRecord, oColumn, oEditor, oSelf) 
@@ -1173,7 +1173,7 @@ lang.augmentObject(DT, {
      *
      * @method DataTable.editDate
      * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {DT} Reference back to DataTable instance.
+     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
      * @static
      */
     editDate : function(oEditor, oSelf) {
@@ -1221,7 +1221,7 @@ lang.augmentObject(DT, {
      *
      * @method DataTable.editDropdown
      * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {DT} Reference back to DataTable instance.
+     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
      * @static
      */
     editDropdown : function(oEditor, oSelf) {
@@ -1270,7 +1270,7 @@ lang.augmentObject(DT, {
      *
      * @method DataTable.editRadio
      * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {DT} Reference back to DataTable instance.
+     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
      * @static
      */
     editRadio : function(oEditor, oSelf) {
@@ -1324,7 +1324,7 @@ lang.augmentObject(DT, {
      *
      * @method DataTable.editTextarea
      * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {DT} Reference back to DataTable instance.
+     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
      * @static
      */
     editTextarea : function(oEditor, oSelf) {
@@ -1362,7 +1362,7 @@ lang.augmentObject(DT, {
      *
      * @method DataTable.editTextbox
      * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {DT} Reference back to DataTable instance.
+     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
      * @static
      */
     editTextbox : function(oEditor, oSelf) {
@@ -1599,7 +1599,7 @@ initAttributes : function(oConfigs) {
      * is passed two params, an object literal with the state data and a
      * reference to the DataTable.
      * @type function
-     * @default DT._generateRequest
+     * @default YAHOO.widget.DataTable._generateRequest
      */
     this.setAttributeConfig("generateRequest", {
         value: DT._generateRequest,
@@ -1614,7 +1614,7 @@ initAttributes : function(oConfigs) {
     *     <dt>sortedBy.key</dt>
     *     <dd>{String} Key of sorted Column</dd>
     *     <dt>sortedBy.dir</dt>
-    *     <dd>{String} Initial sort direction, either DT.CLASS_ASC or DT.CLASS_DESC</dd>
+    *     <dd>{String} Initial sort direction, either YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTable.CLASS_DESC</dd>
     * </dl>
     * @type Object | null
     */
@@ -1899,9 +1899,9 @@ initAttributes : function(oConfigs) {
 
     /**
      * @attribute paginationEventHandler
-     * @description For use with Pag pagination.  A
-     * handler function that receives the requestChange event from the
-     * configured paginator.  The handler method will be passed these
+     * @description For use with Paginator pagination.  A
+     * handler function that receives the changeRequest event from the
+     * configured Paginator.  The handler method will be passed these
      * parameters:
      * <ol>
      * <li>oState {Object} - an object literal describing the requested
@@ -1910,10 +1910,10 @@ initAttributes : function(oConfigs) {
      * </ol>
      * 
      * For pagination through dynamic or server side data, assign
-     * DT.handleDataSourcePagination or your own custom
+     * YAHOO.widget.DataTable.handleDataSourcePagination or your own custom
      * handler.
      * @type {function|Object}
-     * @default DT.handleSimplePagination
+     * @default YAHOO.widget.DataTable.handleSimplePagination
      */
     this.setAttributeConfig("paginationEventHandler", {
         value     : DT.handleSimplePagination,
@@ -3349,7 +3349,7 @@ _deleteTrEl : function(row) {
 
 
 /**
- * Assigns the class DT.CLASS_FIRST to the first TR element
+ * Assigns the class YAHOO.widget.DataTable.CLASS_FIRST to the first TR element
  * of the DataTable page and updates internal tracker.
  *
  * @method _setFirstRow
@@ -3372,7 +3372,7 @@ _setFirstRow : function() {
 },
 
 /**
- * Assigns the class DT.CLASS_LAST to the last TR element
+ * Assigns the class YAHOO.widget.DataTable.CLASS_LAST to the last TR element
  * of the DataTable page and updates internal tracker.
  *
  * @method _setLastRow
@@ -3521,7 +3521,7 @@ _onTableMutationEvent : function(oArgs) {
  *
  * @method _onDocumentClick
  * @param e {HTMLEvent} The click event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onDocumentClick : function(e, oSelf) {
@@ -3550,7 +3550,7 @@ _onDocumentClick : function(e, oSelf) {
  *
  * @method _onTableFocus
  * @param e {HTMLEvent} The focus event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTableFocus : function(e, oSelf) {
@@ -3562,7 +3562,7 @@ _onTableFocus : function(e, oSelf) {
  *
  * @method _onTheadFocus
  * @param e {HTMLEvent} The focus event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTheadFocus : function(e, oSelf) {
@@ -3575,7 +3575,7 @@ _onTheadFocus : function(e, oSelf) {
  *
  * @method _onTbodyFocus
  * @param e {HTMLEvent} The focus event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTbodyFocus : function(e, oSelf) {
@@ -3588,7 +3588,7 @@ _onTbodyFocus : function(e, oSelf) {
  *
  * @method _onTableMouseover
  * @param e {HTMLEvent} The mouseover event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTableMouseover : function(e, oSelf) {
@@ -3647,7 +3647,7 @@ _onTableMouseover : function(e, oSelf) {
  *
  * @method _onTableMouseout
  * @param e {HTMLEvent} The mouseout event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTableMouseout : function(e, oSelf) {
@@ -3706,7 +3706,7 @@ _onTableMouseout : function(e, oSelf) {
  *
  * @method _onTableMousedown
  * @param e {HTMLEvent} The mousedown event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTableMousedown : function(e, oSelf) {
@@ -3765,7 +3765,7 @@ _onTableMousedown : function(e, oSelf) {
  *
  * @method _onTableDblclick
  * @param e {HTMLEvent} The dblclick event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTableDblclick : function(e, oSelf) {
@@ -3821,7 +3821,7 @@ _onTableDblclick : function(e, oSelf) {
  *
  * @method _onTheadKeydown
  * @param e {HTMLEvent} The key event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTheadKeydown : function(e, oSelf) {
@@ -3861,7 +3861,7 @@ _onTheadKeydown : function(e, oSelf) {
  *
  * @method _onTbodyKeydown
  * @param e {HTMLEvent} The key event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTbodyKeydown : function(e, oSelf) {
@@ -3918,7 +3918,7 @@ _onTbodyKeydown : function(e, oSelf) {
  *
  * @method _onTableKeypress
  * @param e {HTMLEvent} The key event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTableKeypress : function(e, oSelf) {
@@ -3940,7 +3940,7 @@ _onTableKeypress : function(e, oSelf) {
  *
  * @method _onTheadClick
  * @param e {HTMLEvent} The click event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTheadClick : function(e, oSelf) {
@@ -4008,7 +4008,7 @@ _onTheadClick : function(e, oSelf) {
  *
  * @method _onTbodyClick
  * @param e {HTMLEvent} The click event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  */
 _onTbodyClick : function(e, oSelf) {
@@ -4066,7 +4066,7 @@ _onTbodyClick : function(e, oSelf) {
  *
  * @method _onDropdownChange
  * @param e {HTMLEvent} The change event.
- * @param oSelf {DT} DataTable instance.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
  * @deprecated
  */
@@ -5494,8 +5494,8 @@ getColumnSortDir : function(oColumn) {
  *
  * @method sortColumn
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param sDir {String} (Optional) DT.CLASS_ASC or
- * DT.CLASS_DESC
+ * @param sDir {String} (Optional) YAHOO.widget.DataTable.CLASS_ASC or
+ * YAHOO.widget.DataTable.CLASS_DESC
  */
 sortColumn : function(oColumn, sDir) {
     if(oColumn && (oColumn instanceof YAHOO.widget.Column)) {
@@ -6088,7 +6088,7 @@ getSelectedColumns : function(oColumn) {
 },
 
 /**
- * Assigns the class DT.CLASS_HIGHLIGHTED to cells of the given Column.
+ * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to cells of the given Column.
  * NOTE: You cannot highlight/unhighlight nested Columns. You can only
  * highlight/unhighlight non-nested Columns, and bottom-level key Columns.
  *
@@ -6138,7 +6138,7 @@ highlightColumn : function(column) {
 },
 
 /**
- * Removes the class DT.CLASS_HIGHLIGHTED to cells of the given Column.
+ * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to cells of the given Column.
  * NOTE: You cannot highlight/unhighlight nested Columns. You can only
  * highlight/unhighlight non-nested Columns, and bottom-level key Columns.
  *
@@ -6836,7 +6836,7 @@ formatCell : function(elCell, oRecord, oColumn) {
 // PAGINATION
 
 /**
- * Delegates the Pag changeRequest events to the configured
+ * Delegates the Paginator changeRequest events to the configured
  * handler.
  * @method onPaginatorChange
  * @param {Object} an object literal describing the proposed pagination state
@@ -6946,7 +6946,7 @@ _oAnchorRecord : null,
 _oAnchorCell : null,
 
 /**
- * Convenience method to remove the class DT.CLASS_SELECTED
+ * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
  * from all TR elements on the page.
  *
  * @method _unselectAllTrEls
@@ -8607,7 +8607,7 @@ unselectAllRows : function() {
 },
 
 /**
- * Convenience method to remove the class DT.CLASS_SELECTED
+ * Convenience method to remove the class YAHOO.widget.DataTable.CLASS_SELECTED
  * from all TD elements in the internal tracker.
  *
  * @method _unselectAllTdEls
@@ -8881,7 +8881,7 @@ getLastSelectedCell : function() {
 },
 
 /**
- * Assigns the class DT.CLASS_HIGHLIGHTED to the given row.
+ * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to the given row.
  *
  * @method highlightRow
  * @param row {HTMLElement | String} DOM element reference or ID string.
@@ -8905,7 +8905,7 @@ highlightRow : function(row) {
 },
 
 /**
- * Removes the class DT.CLASS_HIGHLIGHTED from the given row.
+ * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED from the given row.
  *
  * @method unhighlightRow
  * @param row {HTMLElement | String} DOM element reference or ID string.
@@ -8924,7 +8924,7 @@ unhighlightRow : function(row) {
 },
 
 /**
- * Assigns the class DT.CLASS_HIGHLIGHTED to the given cell.
+ * Assigns the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED to the given cell.
  *
  * @method highlightCell
  * @param cell {HTMLElement | String} DOM element reference or ID string.
@@ -8952,7 +8952,7 @@ highlightCell : function(cell) {
 },
 
 /**
- * Removes the class DT.CLASS_HIGHLIGHTED from the given cell.
+ * Removes the class YAHOO.widget.DataTable.CLASS_HIGHLIGHTED from the given cell.
  *
  * @method unhighlightCell
  * @param cell {HTMLElement | String} DOM element reference or ID string.
