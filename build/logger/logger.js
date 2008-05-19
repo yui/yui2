@@ -57,7 +57,6 @@ YAHOO.widget.LogMsg = function(oConfigs) {
         }
     }
 };
-
 /****************************************************************************/
 /****************************************************************************/
 /****************************************************************************/
@@ -146,7 +145,6 @@ YAHOO.widget.LogWriter.prototype.setSource = function(sSource) {
  * @private
  */
 YAHOO.widget.LogWriter.prototype._source = null;
-
 
 
 
@@ -242,7 +240,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.LogReader, {
      * @static
      * @default "<span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>"
      */
-    VERBOSE_TEMPLATE : "<span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>",
+    VERBOSE_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>",
 
     /**
      * Template used for innerHTML of compact entry output.
@@ -250,7 +248,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.LogReader, {
      * @static
      * @default "<p><span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
      */
-    BASIC_TEMPLATE : "<p><span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
+    BASIC_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
 });
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1543,7 +1541,6 @@ YAHOO.widget.LogReader.prototype = {
         oSelf._filterLogs();
     }
 };
-
  /**
  * The Logger widget provides a simple way to read or write log messages in
  * JavaScript code. Integration with the YUI Library's debug builds allow
@@ -2019,6 +2016,5 @@ if(!YAHOO.widget.Logger) {
 
     YAHOO.widget.Logger.log("Logger initialized");
 }
-
 
 YAHOO.register("logger", YAHOO.widget.Logger, {version: "@VERSION@", build: "@BUILD@"});
