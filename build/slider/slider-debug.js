@@ -1495,7 +1495,11 @@ YAHOO.widget.DualSlider = function(minSlider, maxSlider, range, initVals) {
     // we can safely ignore a mousedown on one of the sliders since
     // they share a background
     maxSlider.onMouseDown = function(e) { 
-        YAHOO.util.Event.stopEvent(e); 
+        if (self.minSlider.isLocked()) {
+            self._handleMouseDown(e);
+        } else {
+            YAHOO.util.Event.stopEvent(e); 
+        }
     };
 
     // Fix the drag behavior so that only the active slider
@@ -1751,11 +1755,12 @@ YAHOO.widget.DualSlider.prototype = {
         if (min != this.minVal || max != this.maxVal) {
             changed = true;
 
-            var mint = this.minSlider.thumb;
-            var maxt = this.maxSlider.thumb;
+            var mint = this.minSlider.thumb,
+                maxt = this.maxSlider.thumb,
+                dim  = this.isHoriz ? 'x' : 'y';
 
-            var thumbInnerWidth = this.minSlider.thumbCenterPoint.x +
-                                  this.maxSlider.thumbCenterPoint.x;
+            var thumbInnerWidth = this.minSlider.thumbCenterPoint[dim] +
+                                  this.maxSlider.thumbCenterPoint[dim];
 
             // Establish barriers within the respective other thumb's edge, less
             // the minRange.  Limit to the Slider's range in the case of
@@ -1793,27 +1798,25 @@ YAHOO.widget.DualSlider.prototype = {
      * @private
      */
     selectActiveSlider: function(e) {
-        var min = this.minSlider.getValue(),
-            max = this.maxSlider.getValue(),
+        var min = this.minSlider,
+            max = this.maxSlider,
+            minLocked = min.isLocked(),
+            maxLocked = max.isLocked(),
+            Ev  = YAHOO.util.Event,
             d;
 
-        if (this.isHoriz) {
-            d = YAHOO.util.Event.getPageX(e) - this.minSlider.initPageX -
-                this.minSlider.thumbCenterPoint.x;
+        if (minLocked && !maxLocked) {
+            this.activeSlider = max;
+        } else if (!minLocked && maxLocked) {
+            this.activeSlider = min;
         } else {
-            d = YAHOO.util.Event.getPageY(e) - this.minSlider.initPageY -
-                this.minSlider.thumbCenterPoint.y;
-        }
-                
-        // Below the minSlider thumb.  Move the minSlider thumb
-        if (d < min) {
-            this.activeSlider = this.minSlider;
-        // Above the maxSlider thumb.  Move the maxSlider thumb
-        } else if (d > max) {
-            this.activeSlider = this.maxSlider;
-        // Split the difference between thumbs
-        } else {
-            this.activeSlider = d*2 > max+min ? this.maxSlider : this.minSlider;
+            if (this.isHoriz) {
+                d = Ev.getPageX(e) - min.initPageX - min.thumbCenterPoint.x;
+            } else {
+                d = Ev.getPageY(e) - min.initPageY - min.thumbCenterPoint.y;
+            }
+                    
+            this.activeSlider = d*2 > max.getValue()+min.getValue() ? max : min;
         }
     },
 
