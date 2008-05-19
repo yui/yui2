@@ -90,7 +90,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.LogReader, {
      * @static
      * @default "<span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>"
      */
-    VERBOSE_TEMPLATE : "<span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>",
+    VERBOSE_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>",
 
     /**
      * Template used for innerHTML of compact entry output.
@@ -98,7 +98,7 @@ YAHOO.lang.augmentObject(YAHOO.widget.LogReader, {
      * @static
      * @default "<p><span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
      */
-    BASIC_TEMPLATE : "<p><span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
+    BASIC_TEMPLATE : "<p><span class='{category}'>{label}</span> {totalTime}ms (+{elapsedTime}) {localTime}: {sourceAndDetail}: {message}</p>"
 });
 
 /////////////////////////////////////////////////////////////////////////////
