@@ -49,16 +49,7 @@
 }
 
 /* messaging */
-.yui-skin-sam .yui-dt-loading {
-    width:100%;
-    background-color:#FFF;
-}
-.yui-skin-sam .yui-dt-empty {
-    width:100%;
-    background-color:#FFF;
-}
-.yui-skin-sam .yui-dt-error {
-    width:100%;
+.yui-skin-sam .yui-dt-loading, .yui-skin-sam .yui-dt-empty, .yui-skin-sam .yui-dt-error  {
     background-color:#FFF;
 }
 

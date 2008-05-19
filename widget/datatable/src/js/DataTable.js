@@ -2701,7 +2701,7 @@ _initTheadEl : function(elTable) {
                     oColumn = colTree[i][j];
                     elTheadCell = elTheadRow.appendChild(document.createElement("th"));
                         oColumn._elTh = elTheadCell;
-                    elTheadCell.yuiCellIndex = j;
+                    ///elTheadCell.yuiCellIndex = j;
                     this._initThEl(elTheadCell,oColumn);
                 }
         
@@ -2757,8 +2757,8 @@ _initThEl : function(elTheadCell,oColumn) {
     
     // This is necessary for accessibility
     elTheadCell.id = this._sId+"-th" + oColumn.getId();
-    elTheadCell.yuiColumnKey = colKey;
-    elTheadCell.yuiColumnId = colId;
+    ///elTheadCell.yuiColumnKey = colKey;
+    ///elTheadCell.yuiColumnId = colId;
     elTheadCell.innerHTML = "";
     elTheadCell.rowSpan = oColumn.getRowspan();
     elTheadCell.colSpan = oColumn.getColspan();
@@ -3136,12 +3136,12 @@ _getTrTemplateEl : function (oRecord, index) {
             elTd = td.cloneNode(true);
             
             // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
-            elTd.yuiCellIndex = i;
+            ///elTd.yuiCellIndex = i;
     
             // Add structural attributes, derived from Column
             oColumn = allKeys[i];
-            elTd.yuiColumnKey = oColumn.getKey();
-            elTd.yuiColumnId  = oColumn.getId();
+            ///elTd.yuiColumnKey = oColumn.getKey();
+            ///elTd.yuiColumnId  = oColumn.getId();
             
             // Set the TD's accessibility headers
             allColHeaders = allHeaders[i];
@@ -3280,7 +3280,7 @@ _updateTrEl : function(elTr, oRecord) {
     }
 
     // Update Record ID
-    elTr.yuiRecordId = oRecord.getId();
+    ///elTr.yuiRecordId = oRecord.getId();
     
     // Redisplay the row for reflow
     elTr.style.display = '';
@@ -4566,7 +4566,8 @@ getLastTdEl : function(row) {
 getNextTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var nThisTdIndex = elCell.yuiCellIndex;
+        var nThisTdIndex = elCell.cellIndex;
+        ///var nThisTdIndex = elCell.yuiCellIndex;
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex < elRow.cells.length-1) {
             return elRow.cells[nThisTdIndex+1];
@@ -4593,7 +4594,8 @@ getNextTdEl : function(cell) {
 getPreviousTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
-        var nThisTdIndex = elCell.yuiCellIndex;
+        var nThisTdIndex = elCell.cellIndex;
+        ///var nThisTdIndex = elCell.yuiCellIndex;
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex > 0) {
             return elRow.cells[nThisTdIndex-1];
@@ -4622,7 +4624,8 @@ getAboveTdEl : function(cell) {
     if(elCell) {
         var elPreviousRow = this.getPreviousTrEl(elCell);
         if(elPreviousRow) {
-            return elPreviousRow.cells[elCell.yuiCellIndex];
+            return elPreviousRow.cells[elCell.cellIndex];
+            ///return elPreviousRow.cells[elCell.yuiCellIndex];
         }
     }
     YAHOO.log("Could not get above TD element for cell " + cell, "info", this.toString());
@@ -4642,7 +4645,8 @@ getBelowTdEl : function(cell) {
     if(elCell) {
         var elNextRow = this.getNextTrEl(elCell);
         if(elNextRow) {
-            return elNextRow.cells[elCell.yuiCellIndex];
+            return elNextRow.cells[elCell.cellIndex];
+            ///return elNextRow.cells[elCell.yuiCellIndex];
         }
     }
     YAHOO.log("Could not get below TD element for cell " + cell, "info", this.toString());
@@ -5013,10 +5017,12 @@ YAHOO.log("start render","time");
                             if ((sMode == "standard") || (sMode == "single")) {
                                 // Set SELECTED
                                 for(k=0; k<allSelectedRows.length; k++) {
-                                    if(allSelectedRows[k] === thisRow.yuiRecordId) {
+                                    if(allSelectedRows[k] === this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex)).getId()) {
+                                    ///if(allSelectedRows[k] === thisRow.yuiRecordId) {
                                         Dom.addClass(thisRow, DT.CLASS_SELECTED);
                                         if(j === allRows.length-1) {
-                                            this._oAnchorRecord = this.getRecord(thisRow.yuiRecordId);
+                                            this._oAnchorRecord = this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex));
+                                            ///this._oAnchorRecord = this.getRecord(thisRow.yuiRecordId);
                                         }
                                     }
                                 }
@@ -5027,11 +5033,14 @@ YAHOO.log("start render","time");
                                     var thisCell = thisRow.cells[k];
                                     // Set SELECTED
                                     for(l=0; l<allSelectedCells.length; l++) {
-                                        if((allSelectedCells[l].recordId === thisRow.yuiRecordId) &&
-                                                (allSelectedCells[l].columnId === thisCell.yuiColumnId)) {
+                                        if((allSelectedCells[l].recordId === this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex)).getId()) &&
+                                        ///if((allSelectedCells[l].recordId === thisRow.yuiRecordId) &&
+                                                (allSelectedCells[l].columnId === this.getColumn(thisCell.cellIndex).getId())) {
+                                                ///(allSelectedCells[l].columnId === thisCell.yuiColumnId)) {
                                             Dom.addClass(thisCell, DT.CLASS_SELECTED);
                                             if(k === thisRow.cells.length-1) {
-                                                this._oAnchorCell = {record:this.getRecord(thisRow.yuiRecordId), column:this.getColumnById(thisCell.yuiColumnId)};
+                                                this._oAnchorCell = {record:this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex)), column:this.getColumn(thisCell.cellIndex)};
+                                                ///this._oAnchorCell = {record:this.getRecord(thisRow.yuiRecordId), column:this.getColumnById(thisCell.yuiColumnId)};
                                             }
                                         }
                                     }
@@ -5337,7 +5346,8 @@ getRecord : function(row) {
         // Validate TR element
         var elRow = this.getTrEl(row);
         if(elRow) {
-            oRecord = this._oRecordSet.getRecord(elRow.yuiRecordId);
+            oRecord = this._oRecordSet.getRecord(this.getRecordIndex(elRow.sectionRowIndex));
+            ///oRecord = this._oRecordSet.getRecord(elRow.yuiRecordId);
         }
     }
 
@@ -5413,13 +5423,15 @@ getColumn : function(column) {
         // Validate TD element
         var elCell = this.getTdEl(column);
         if(elCell) {
-            oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
+            oColumn = this._oColumnSet.getColumn(elCell.cellIndex);
+            ///oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
         }
         // Validate TH element
         else {
             elCell = this.getThEl(column);
             if(elCell) {
-                oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
+                oColumn = this._oColumnSet.getColumn.getColumn(elCell.cellIndex);
+                ///oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
             }
         }
     }
@@ -6265,8 +6277,12 @@ addRow : function(oData, index) {
                     this._oChainRender.add({
                         method: function(oArg) {
                             if((this instanceof DT) && this._sId) {
+                                var oRecord = oArg.record;
+                                var recIndex = oArg.recIndex;
                                 var elNewTr = this._addTrEl(oRecord, recIndex);
                                 if(elNewTr) {
+                                    var elNext = (this._elTbody.rows[recIndex]) ? this._elTbody.rows[recIndex] : null;
+                                    this._elTbody.insertBefore(elNewTr, elNext);
                                     this.hideTableMessage();
             
                                     this.fireEvent("rowAddEvent", {record:oRecord});
@@ -6274,6 +6290,7 @@ addRow : function(oData, index) {
                                 }
                             }
                         },
+                        argument: {record: oRecord, recIndex: recIndex},
                         scope: this,
                         timeout: (this.get("renderLoopSize") > 0) ? 0 : -1
                     });
@@ -6737,7 +6754,8 @@ formatCell : function(elCell, oRecord, oColumn) {
         oRecord = this.getRecord(elCell);
     }
     if(!(oColumn instanceof YAHOO.widget.Column)) {
-        oColumn = this._oColumnSet.getColumn(elCell.parentNode.yuiColumnKey);
+        oColumn = this.getColumn(elCell.cellIndex);
+        ///oColumn = this._oColumnSet.getColumn(elCell.parentNode.yuiColumnKey);
     }
 
     if(oRecord && oColumn) {
@@ -8625,7 +8643,8 @@ accept {record}
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnId = elCell.yuiColumnId;
+        var sColumnId = this.getColumn(elCell.cellIndex).getId();
+        ///var sColumnId = elCell.yuiColumnId;
 
         if(oRecord && sColumnId) {
             // Get Record ID
@@ -8652,7 +8671,8 @@ accept {record}
             // Update the UI
             Dom.addClass(elCell, DT.CLASS_SELECTED);
 
-            this.fireEvent("cellSelectEvent", {record:oRecord, column:this.getColumnById(sColumnId), key: elCell.yuiColumnKey, el:elCell});
+            this.fireEvent("cellSelectEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key: this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+            ///this.fireEvent("cellSelectEvent", {record:oRecord, column:this.getColumnById(sColumnId), key: elCell.yuiColumnKey, el:elCell});
             YAHOO.log("Selected " + elCell, "info", this.toString());
             return;
         }
@@ -8672,7 +8692,8 @@ unselectCell : function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnId = elCell.yuiColumnId;
+        var sColumnId = this.getColumn(elCell.cellIndex).getId();
+        ///var sColumnId = elCell.yuiColumnId;
 
         if(oRecord && sColumnId) {
             // Get Record ID
@@ -8691,7 +8712,8 @@ unselectCell : function(cell) {
                     // Update the UI
                     Dom.removeClass(elCell, DT.CLASS_SELECTED);
 
-                    this.fireEvent("cellUnselectEvent", {record:oRecord, column: this.getColumnById(sColumnId), key:elCell.yuiColumnKey, el:elCell});
+                    this.fireEvent("cellUnselectEvent", {record:oRecord, column: this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+                    //this.fireEvent("cellUnselectEvent", {record:oRecord, column: this.getColumnById(sColumnId), key:elCell.yuiColumnKey, el:elCell});
                     YAHOO.log("Unselected " + elCell, "info", this.toString());
                     return;
                 }
@@ -8917,10 +8939,12 @@ highlightCell : function(cell) {
         }*/
 
         var oRecord = this.getRecord(elCell);
-        var sColumnId = elCell.yuiColumnId;
+        var sColumnId = this.getColumn(elCell.cellIndex).getId();
+        //var sColumnId = elCell.yuiColumnId;
         Dom.addClass(elCell,DT.CLASS_HIGHLIGHTED);
         //this._sLastHighlightedTdElId = elCell.id;
-        this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumnById(sColumnId), key:elCell.yuiColumnKey, el:elCell});
+        this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+        ///this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumnById(sColumnId), key:elCell.yuiColumnKey, el:elCell});
         YAHOO.log("Highlighted " + elCell, "info", this.toString());
         return;
     }
@@ -8939,7 +8963,8 @@ unhighlightCell : function(cell) {
     if(elCell) {
         var oRecord = this.getRecord(elCell);
         Dom.removeClass(elCell,DT.CLASS_HIGHLIGHTED);
-        this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumnById(elCell.yuiColumnId), key:elCell.yuiColumnKey, el:elCell});
+        this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
+        ///this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumnById(elCell.yuiColumnId), key:elCell.yuiColumnKey, el:elCell});
         YAHOO.log("Unhighlighted " + elCell, "info", this.toString());
         return;
     }
@@ -9371,8 +9396,10 @@ onEventSortColumn : function(oArgs) {
     var target = oArgs.target;
 
     var el = this.getThEl(target) || this.getTdEl(target);
-    if(el && el.yuiColumnKey) {
-        var oColumn = this.getColumn(el.yuiColumnKey);
+    if(el) {
+    ///if(el && el.yuiColumnKey) {
+        var oColumn = this.getColumn(el.cellIndex);
+        ///var oColumn = this.getColumn(el.yuiColumnKey);
         if(oColumn.sortable) {
             Ev.stopEvent(evt);
             this.sortColumn(oColumn);
@@ -9532,8 +9559,10 @@ onEventFormatCell : function(oArgs) {
     var target = oArgs.target;
 
     var elCell = this.getTdEl(target);
-    if(elCell && elCell.yuiColumnKey) {
-        var oColumn = this.getColumn(elCell.yuiColumnKey);
+    if(elCell) {
+    ///if(elCell && elCell.yuiColumnKey) {
+        var oColumn = this.getColumn(elCell.cellIndex);
+        ///var oColumn = this.getColumn(elCell.yuiColumnKey);
         this.formatCell(elCell.firstChild, this.getRecord(elCell), oColumn);
     }
     else {
