@@ -2691,43 +2691,43 @@ _initTheadEl : function(elTable) {
         // Add TRs to the THEAD
         var colTree = oColumnSet.tree;
         var elTheadCell, id;
-            for(i=0; i<colTree.length; i++) {
-                var elTheadRow = elThead.appendChild(document.createElement("tr"));
-                ///TODO: is this necessary?
-                elTheadRow.id = this._sId+"-hdrow" + i;
-        
-                // ...and create TH cells
-                for(j=0; j<colTree[i].length; j++) {
-                    oColumn = colTree[i][j];
-                    elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-                        oColumn._elTh = elTheadCell;
-                    ///elTheadCell.yuiCellIndex = j;
-                    this._initThEl(elTheadCell,oColumn);
-                }
-        
-                    // Set FIRST/LAST on THEAD rows
-                    if(i === 0) {
-                        Dom.addClass(elTheadRow, DT.CLASS_FIRST);
-                    }
-                    if(i === (colTree.length-1)) {
-                        Dom.addClass(elTheadRow, DT.CLASS_LAST);
-                    }
+        for(i=0; i<colTree.length; i++) {
+            var elTheadRow = elThead.appendChild(document.createElement("tr"));
+            ///TODO: is this necessary?
+            elTheadRow.id = this._sId+"-hdrow" + i;
     
+            // ...and create TH cells
+            for(j=0; j<colTree[i].length; j++) {
+                oColumn = colTree[i][j];
+                elTheadCell = elTheadRow.appendChild(document.createElement("th"));
+                    oColumn._elTh = elTheadCell;
+                ///elTheadCell.yuiCellIndex = j;
+                this._initThEl(elTheadCell,oColumn);
             }
     
-                // Set FIRST/LAST on TH elements using the values in ColumnSet headers array
-                var aFirstHeaders = oColumnSet.headers[0];
-                var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
-                for(i=0; i<aFirstHeaders.length; i++) {
-                    //TODO: A better way to get th cell
-                    Dom.addClass(Dom.get(this._sId+"-th"+aFirstHeaders[i]), DT.CLASS_FIRST);
+                // Set FIRST/LAST on THEAD rows
+                if(i === 0) {
+                    Dom.addClass(elTheadRow, DT.CLASS_FIRST);
                 }
-                for(i=0; i<aLastHeaders.length; i++) {
-                    //TODO: A better way to get th cell
-                    Dom.addClass(Dom.get(this._sId+"-th"+aLastHeaders[i]), DT.CLASS_LAST);
+                if(i === (colTree.length-1)) {
+                    Dom.addClass(elTheadRow, DT.CLASS_LAST);
                 }
-                
-                YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
+
+        }
+
+        // Set FIRST/LAST on edge TH elements using the values in ColumnSet headers array
+        var aFirstHeaders = oColumnSet.headers[0];
+        var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
+        for(i=0; i<aFirstHeaders.length; i++) {
+            //TODO: A better way to get th cell
+            Dom.addClass(Dom.get(this._sId+"-th"+aFirstHeaders[i]), DT.CLASS_FIRST);
+        }
+        for(i=0; i<aLastHeaders.length; i++) {
+            //TODO: A better way to get th cell
+            Dom.addClass(Dom.get(this._sId+"-th"+aLastHeaders[i]), DT.CLASS_LAST);
+        }
+        
+        YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
     
         ///TODO: try _repaintGecko(this._elContainer) instead
         // Bug 1806891
@@ -2766,57 +2766,20 @@ _initThEl : function(elTheadCell,oColumn) {
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
 
-        // Needed for resizer
-        elTheadCellLiner.id = elTheadCell.id + "-liner";
         
-        // Add classes on the liner
-        var aClasses;
-        if(lang.isString(oColumn.className)) {
-            aClasses = [oColumn.className];
-        }
-        else if(lang.isArray(oColumn.className)) {
-            aClasses = oColumn.className;
-        }
-        else {
-            aClasses = [];
-        }
-        
-        //TODO: document special keys will get stripped here
-        aClasses[aClasses.length] = "yui-dt-col-"+colKey.replace(/[^\w\-.:]/g,"");
-        
-        aClasses[aClasses.length] = "yui-dt-col"+oColumn.getId();
-        
-        aClasses[aClasses.length] = DT.CLASS_LINER;
-
-        Dom.addClass(elTheadCellLiner,aClasses.join(" "));
-
-        // Add classes on the label
-        Dom.addClass(elTheadCellLabel,DT.CLASS_LABEL);
-        
-        // Add classes on the cell
-        aClasses = [];
-        if(oColumn.resizeable) {
-            aClasses[aClasses.length] = DT.CLASS_RESIZEABLE;
-        }
-        if(oColumn.sortable) {
-            aClasses[aClasses.length] = DT.CLASS_SORTABLE;
-        }
+        elTheadCellLiner.id = elTheadCell.id + "-liner"; // Needed for resizer
+        elTheadCellLiner.className = DT.CLASS_LINER;
+        elTheadCellLabel.className = DT.CLASS_LABEL;
 
         //Set Column hidden
         if(oColumn.hidden) {
-            aClasses[aClasses.length] = DT.CLASS_HIDDEN;
             // TODO: scrolling DTs have 2 colgroups...
             //TODO: pull out into a clearMinWidth function
             this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = ''; // Remove minWidth
         }
         
-        // Set Column selection on TD
-        if(oColumn.selected) {
-            aClasses[aClasses.length] = DT.CLASS_SELECTED;
-        }
-
-        Dom.addClass(elTheadCell,aClasses.join(" "));
-        
+        elTheadCell.className = this._getColumnClassNames(oColumn);
+                
         // Set Column width for non fallback cases
         if(oColumn.width && !this._bDynStylesFallback) {
             this._setColumnWidthDynStyles(oColumn, oColumn.width + 'px', 'hidden');
@@ -3092,6 +3055,71 @@ _initColumnSort : function() {
 
 // DOM MUTATION FUNCTIONS
 
+/**
+ * Retruns classnames to represent current Column states.
+ * @method _getColumnClassnames 
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param aAddClasses {String[]} An array of additional classnames to add to the
+ * return value.  
+ * @return {String} A String of classnames to be assigned to TH or TD elements
+ * for given Column.  
+ * @private 
+ */
+_getColumnClassNames : function (oColumn, aAddClasses) {
+    var allClasses;
+    
+    // Add CSS classes
+    if(lang.isString(oColumn.className)) {
+        // Single custom class
+        allClasses = [oColumn.className];
+    }
+    else if(lang.isArray(oColumn.className)) {
+        // Array of custom classes
+        allClasses = oColumn.className;
+    }
+    else {
+        // no custom classes
+        allClasses = [];
+    }
+    
+    // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
+    allClasses[allClasses.length] = "yui-dt-col-"+oColumn.getKey().replace(/[^\w\-.:]/g,"");
+    // Column ID
+    allClasses[allClasses.length] = "yui-dt-col"+oColumn.getId();
+
+    var isSortedBy = this.get("sortedBy") || {};
+    // Sorted
+    if(oColumn.key === isSortedBy.key) {
+        allClasses[allClasses.length] = isSortedBy.dir || '';
+    }
+    // Hidden
+    if(oColumn.hidden) {
+        allClasses[allClasses.length] = DT.CLASS_HIDDEN;
+    }
+    // Selected
+    if(oColumn.selected) {
+        allClasses[allClasses.length] = DT.CLASS_SELECTED;
+    }
+    // Sortable
+    if(oColumn.sortable) {
+        allClasses[allClasses.length] = DT.CLASS_SORTABLE;
+    }
+    // Resizeable
+    if(oColumn.resizeable) {
+        allClasses[allClasses.length] = DT.CLASS_RESIZEABLE;
+    }
+    // Editable
+    if(oColumn.editor) {
+        allClasses[allClasses.length] = DT.CLASS_EDITABLE;
+    }
+    
+    // Addtnl classes, including First/Last
+    if(aAddClasses) {
+        allClasses = allClasses.concat(aAddClasses);
+    }
+    
+    return allClasses.join(' ');  
+},
 
 /**
  * Retruns a new TR element template with TD elements classed with current
@@ -3123,14 +3151,11 @@ _getTrTemplateEl : function (oRecord, index) {
             oColumnSet = this._oColumnSet,
             allKeys = oColumnSet.keys,
             allHeaders = oColumnSet.headers,
-            allColHeaders, sHeader, sTdHeaders,
-            oColumn, allClasses, 
-            isSortedBy = this.get("sortedBy"),
-            sortKey = (isSortedBy) ? isSortedBy.key : null,
-            sortClass = (isSortedBy) ? isSortedBy.dir : null,
+            allColHeaders, sHeader, sTdHeaders, oColumn, 
             elTd;
 
-        // Set state for each TD
+        // Set state for each TD;
+        var aAddClasses;
         for(var i=0, keysLen=allKeys.length; i<keysLen; i++) {
             // Clone the TD template
             elTd = td.cloneNode(true);
@@ -3151,66 +3176,21 @@ _getTrTemplateEl : function (oRecord, index) {
             }
             elTd.headers = sTdHeaders;
             
-            //TODO: separate out into setClassNames() for reuse by THs
-    
-            // Add CSS classes
-            if(lang.isString(oColumn.className)) {
-                // Single custom class
-                allClasses = [oColumn.className];
-            }
-            else if(lang.isArray(oColumn.className)) {
-                // Array of custom classes
-                allClasses = oColumn.className;
-            }
-            else {
-                // no custom classes
-                allClasses = [];
-            }
-            
-            // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
-            allClasses[allClasses.length] = "yui-dt-col-"+oColumn.getKey().replace(/[^\w\-.:]/g,"");
-            // Column ID
-            allClasses[allClasses.length] = "yui-dt-col"+oColumn.getId();
-
-            // First TD
+            aAddClasses = [];
+            // First TD?
             if(i === 0) {
-                 allClasses[allClasses.length] = DT.CLASS_FIRST;
+                 aAddClasses = [DT.CLASS_FIRST];
             }
-            // Last TD
+            // Last TD?
             else if(i === (keysLen-1)) {
-                 allClasses[allClasses.length] = DT.CLASS_LAST;
+                 aAddClasses = [DT.CLASS_LAST];
             }
-            // Sorted
-            if(oColumn.key === sortKey) {
-                allClasses[allClasses.length] = sortClass;
-            }
-            // Hidden
-            if(oColumn.hidden) {
-                allClasses[allClasses.length] = DT.CLASS_HIDDEN;
-            }
-            // Selected
-            if(oColumn.selected) {
-                allClasses[allClasses.length] = DT.CLASS_SELECTED;
-            }
-            // Sortable
-            if(oColumn.sortable) {
-                allClasses[allClasses.length] = DT.CLASS_SORTABLE;
-            }
-            // Resizeable
-            if(oColumn.resizeable) {
-                allClasses[allClasses.length] = DT.CLASS_RESIZEABLE;
-            }
-            // Editable
-            if(oColumn.editor) {
-                allClasses[allClasses.length] = DT.CLASS_EDITABLE;
-            }
-            
-            //TODO: apply what to TD vs liner
-            // Apply to TD
-            elTd.className = allClasses.join(' ');
-            
-            
-            elTd.firstChild.className = DT.CLASS_LINER + ' yui-dt-col'+oColumn.getId();
+
+            // Class the TD element
+            elTd.className = this._getColumnClassNames(oColumn, aAddClasses);
+    
+            // Class the liner element
+            elTd.firstChild.className = DT.CLASS_LINER;
 
             // Set Column width for fallback cases
             if(oColumn.width && this._bDynStylesFallback) {
@@ -5430,7 +5410,7 @@ getColumn : function(column) {
         else {
             elCell = this.getThEl(column);
             if(elCell) {
-                oColumn = this._oColumnSet.getColumn.getColumn(elCell.cellIndex);
+                oColumn = this._oColumnSet.getColumn(elCell.cellIndex);
                 ///oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
             }
         }
@@ -5656,7 +5636,7 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
     // We have a STYLE node to update
     if(s) {
         // Unique classname for this Column instance
-        var sClassname = '.yui-dt .yui-dt-col' + oColumn.getId();
+        var sClassname = '.yui-dt-col' + oColumn.getId() + ' .yui-dt-liner';
         
         // Hide for performance
         if(this._elTbody) {
@@ -5852,7 +5832,7 @@ hideColumn : function(oColumn) {
                 // Clear minWidth
                 //TODO: scrolling DTs have 2 colgroups
                 //TODO: pull out into a clearMinWidth function
-                this._elColgroup.childNodes[thisKeyIndex].style.width = ''; 
+                ///this._elColgroup.childNodes[thisKeyIndex].style.width = ''; 
 
                 // Style the body cells
                 for(var j=0;j<l;j++) {

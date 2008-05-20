@@ -2,6 +2,8 @@ DataTable Release Notes
 
 *** version 2.6.0 ***
 
+* ClassNames for Column states now assigned on TH and TD elements, not on liners.
+ 
 * Column.minWidth default value now null.
 
 * Hidden Columns are now manifested as cell liner elements with display:none.
