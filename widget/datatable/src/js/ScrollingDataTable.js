@@ -538,108 +538,15 @@ _initThEl : function(elTheadCell,oColumn) {
 
 
 
-/**
- * Formats all TD elements of given TR element with data from the given Record.
- *
- * @method _updateTrEl
- * @param elRow {HTMLElement} The TR element to update.
- * @param oRecord {YAHOO.widget.Record} The associated Record instance.
- * @return {HTMLElement} DOM reference to the new TR element.
- * @private
- */
-_xupdateTrEl : function(elRow, oRecord) {
-    var oColumnSet = this._oColumnSet,
-        sortKey,
-        sortClass,
-        isSortedBy = this.get("sortedBy"),
-        i,j,len,jlen;
 
-    if(isSortedBy) {
-        sortKey = isSortedBy.key;
-        sortClass = isSortedBy.dir;
-    }
 
-    // Hide the row to prevent constant reflows
-    elRow.style.display = 'none';
-    
-    // Track whether to reaassing first/last classes
-    var bFirstLast = false;
 
-    // Remove extra TD elements
-    while(elRow.childNodes.length > oColumnSet.keys.length) {
-        elRow.removeChild(elRow.firstChild);
-        bFirstLast = true;
-    }
-    // Add more TD elements as needed
-    for (i=elRow.childNodes.length||0, len=oColumnSet.keys.length; i < len; ++i) {
-        this._addTdEl(elRow,oColumnSet.keys[i],i);
-        bFirstLast = true;
-    }
 
-    // Update TD elements with new data
-    for(i=0,len=oColumnSet.keys.length; i<len; ++i) {
-        var oColumn     = oColumnSet.keys[i],
-            elCell      = elRow.childNodes[i],
-            elCellLiner = elCell.firstChild,
-            cellHeaders = '',
-            headerType  = " ";
 
-        // Set the cell's accessibility headers
-        for(j=0,jlen=oColumnSet.headers[i].length; j < jlen; ++j) {
-            cellHeaders += this._sId + "-th" + oColumnSet.headers[i][j] + headerType;
-        }
-        elCell.headers = cellHeaders;
 
-        // Set First/Last on TD if necessary
-        if(bFirstLast) {
-            Dom.removeClass(elCell, DT.CLASS_FIRST);
-            Dom.removeClass(elCell, DT.CLASS_LAST);
-            if(i === 0) {
-                Dom.addClass(elCell, DT.CLASS_FIRST);
-            }
-            else if(i === len-1) {
-                Dom.addClass(elCell, DT.CLASS_LAST);
-            }
-        }
 
-        // Set ASC/DESC on TD
-        if(oColumn.key === sortKey) {
-            Dom.replaceClass(elCell, sortClass === DT.CLASS_ASC ?
-                                     DT.CLASS_DESC : DT.CLASS_ASC, sortClass);
-        } else {
-            Dom.removeClass(elCell, DT.CLASS_ASC);
-            Dom.removeClass(elCell, DT.CLASS_DESC);
-        }
-        
-        // Set Column hidden if appropriate
-        if(oColumn.hidden) {
-            Dom.addClass(elCell, DT.CLASS_HIDDEN);
-        }
-        else {
-            Dom.removeClass(elCell, DT.CLASS_HIDDEN);
-        }
 
-        // Set Column selection on TH
-        if(oColumn.selected) {
-            Dom.addClass(elCell, DT.CLASS_SELECTED);
-        }
-        else {
-            Dom.removeClass(elCell, DT.CLASS_SELECTED);
-        }
 
-        // Set the cell content
-        this.formatCell(elCellLiner, oRecord, oColumn);
-
-    }
-
-    // Update Record ID
-    elRow.yuiRecordId = oRecord.getId();
-    
-    // Redisplay the row for reflow
-    elRow.style.display = '';
-
-    return elRow;
-},
 
 /**
  * Sets focus on the given element.
@@ -900,6 +807,8 @@ _syncScrollOverhang : function() {
         }
     }
 },
+
+
 
 
 

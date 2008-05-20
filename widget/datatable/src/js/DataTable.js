@@ -2767,25 +2767,23 @@ _initThEl : function(elTheadCell,oColumn) {
     var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
 
         
-        elTheadCellLiner.id = elTheadCell.id + "-liner"; // Needed for resizer
-        elTheadCellLiner.className = DT.CLASS_LINER;
-        elTheadCellLabel.className = DT.CLASS_LABEL;
+    elTheadCellLiner.id = elTheadCell.id + "-liner"; // Needed for resizer
+    elTheadCellLiner.className = DT.CLASS_LINER;
+    elTheadCellLabel.className = DT.CLASS_LABEL;
 
-        //Set Column hidden
-        if(oColumn.hidden) {
-            // TODO: scrolling DTs have 2 colgroups...
-            //TODO: pull out into a clearMinWidth function
-            this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = ''; // Remove minWidth
-        }
+    // Clear minWidth on hidden Columns
+    if(oColumn.hidden) {
+        this._clearMinWidth(oColumn);
+    }
         
-        elTheadCell.className = this._getColumnClassNames(oColumn);
-                
-        // Set Column width for non fallback cases
-        if(oColumn.width && !this._bDynStylesFallback) {
-            this._setColumnWidthDynStyles(oColumn, oColumn.width + 'px', 'hidden');
-        }
+    elTheadCell.className = this._getColumnClassNames(oColumn);
+            
+    // Set Column width for non fallback cases
+    if(oColumn.width && !this._bDynStylesFallback) {
+        this._setColumnWidthDynStyles(oColumn, oColumn.width + 'px', 'hidden');
+    }
 
-        DT.formatTheadCell(elTheadCellLabel, oColumn, this);
+    DT.formatTheadCell(elTheadCellLabel, oColumn, this);
 },
 
 /**
@@ -3122,7 +3120,16 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
 },
 
 /**
- * Retruns a new TR element template with TD elements classed with current
+ * Clears TR element template in response to any Column state change.
+ * @method _clearTrTemplateEl
+ * @private 
+ */
+_clearTrTemplateEl : function () {
+    this._elTrTemplate = null;
+},
+
+/**
+ * Returns a new TR element template with TD elements classed with current
  * Column states.
  * @method _getTrTemplateEl 
  * @return {HTMLElement} A TR element to be cloned and added to the DOM.
@@ -5757,7 +5764,8 @@ YAHOO.log('end _setColumnWidthDynFunction','time');
 },
 
 /**
- * Validates a Column (if given) or else all Columns against given minWidths, if any.
+ * Validates a Column (if given) or else all Columns against given minWidths, if any,
+ * and if Column is not hidden nor has a set width. 
  *
  * @method _validateMinWidths
  * @param oArg.column {YAHOO.widget.Column} Affected Column instance, if available.
@@ -5769,9 +5777,10 @@ _validateMinWidths : function(oArg) {
     var bNeedsValidation = false;
     var allKeys = this._oColumnSet.keys;
     var elThLiner, oColumn;
+    // Validate just one Column
     if(oArg && oArg.column) {
         oColumn = oArg.column;
-        if(oColumn.minWidth) {
+        if(!oColumn.hidden && !oColumn.width && oColumn.minWidth) {
             elThLiner = oColumn.getThEl().firstChild;
             if(elThLiner.offsetWidth < oColumn.minWidth) {
                 elColgroupClone.childNodes[oColumn.getKeyIndex()].style.width = 
@@ -5782,16 +5791,19 @@ _validateMinWidths : function(oArg) {
             }
         }
     }
+    // Validate all Columns
     else {
         for(var i=0, l=allKeys.length; i<l; i++) {
             oColumn = allKeys[i];
-            elThLiner = oColumn.getThEl().firstChild;
-            if(elThLiner.offsetWidth < oColumn.minWidth) {
-                elColgroupClone.childNodes[i].style.width = 
-                        oColumn.minWidth + 
-                        (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
-                        (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
-                bNeedsValidation = true;
+            if(!oColumn.hidden && !oColumn.width && oColumn.minWidth) {
+                elThLiner = oColumn.getThEl().firstChild;
+                if(elThLiner.offsetWidth < oColumn.minWidth) {
+                    elColgroupClone.childNodes[i].style.width = 
+                            oColumn.minWidth + 
+                            (parseInt(Dom.getStyle(elThLiner,"paddingLeft"),10)|0) +
+                            (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
+                    bNeedsValidation = true;
+                }
             }
         }
     }
@@ -5799,6 +5811,30 @@ _validateMinWidths : function(oArg) {
         elColgroup.parentNode.replaceChild(elColgroupClone, elColgroup);
         this._elColgroup = elColgroupClone;
     }
+},
+
+/**
+ * Clears minWidth.
+ *
+ * @method _clearMinWidth
+ * @param oColumn {YAHOO.widget.Column} Which Column.
+ * @private
+ */
+_clearMinWidth : function(oColumn) {
+    //TODO: SDT has 2 colgroups
+    this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = '';
+},
+
+/**
+ * Restores minWidth.
+ *
+ * @method _restoreMinWidth
+ * @param oColumn {YAHOO.widget.Column} Which Column.
+ * @private
+ */
+_restoreMinWidth : function(oColumn) {
+    //TODO: SDT has 2 colgroups
+    this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = oColumn.minWidth + 'px';
 },
 
 /**
@@ -5810,7 +5846,6 @@ _validateMinWidths : function(oArg) {
  * @param oColumn {YAHOO.widget.Column} Column instance.
  */
 hideColumn : function(oColumn) {
-    oColumn = this.getColumn(oColumn);
     // Only top-level Columns can get hidden due to issues in FF2 and SF3
     if(oColumn && !oColumn.hidden && oColumn.getTreeIndex() !== null) {
         
@@ -5830,10 +5865,8 @@ hideColumn : function(oColumn) {
             var thisKeyIndex = thisColumn.getKeyIndex();
             if(thisKeyIndex !== null) {                    
                 // Clear minWidth
-                //TODO: scrolling DTs have 2 colgroups
-                //TODO: pull out into a clearMinWidth function
-                ///this._elColgroup.childNodes[thisKeyIndex].style.width = ''; 
-
+                this._clearMinWidth(oColumn);
+                
                 // Style the body cells
                 for(var j=0;j<l;j++) {
                     Dom.addClass(allrows[j].cells[thisKeyIndex],DT.CLASS_HIDDEN);
@@ -5845,6 +5878,7 @@ hideColumn : function(oColumn) {
         }
       
         this._repaintOpera();
+        this._clearTrTemplateEl();
     }
     else {
         YAHOO.log("Could not hide Column \"" + oColumn.key + "\". Only non-nested Columns can be hidden", "warn", this.toString());
@@ -5860,9 +5894,8 @@ hideColumn : function(oColumn) {
  * @param oColumn {YAHOO.widget.Column} Column instance.
  */
 showColumn : function(oColumn) {
-    oColumn = this.getColumn(oColumn);
     // Only top-level Columns can get hidden
-    if(oColumn && oColumn.hidden && oColumn.getTreeIndex() !== null) {
+    if(oColumn && oColumn.hidden && (oColumn.getTreeIndex() !== null)) {
         var allrows = this.getTbodyEl().rows;
         var l = allrows.length;
         var allDescendants = this._oColumnSet.getDescendants(oColumn);
@@ -5879,9 +5912,8 @@ showColumn : function(oColumn) {
             var thisKeyIndex = thisColumn.getKeyIndex();
             if(thisKeyIndex !== null) {
                 // Restore minWidth
-                ///TODO: scrolling DTs have 2 colgroups
-                //TODO: pull out into a restoreMinWidth function
-                this._elColgroup.childNodes[thisKeyIndex].style.width = oColumn.minWidth + 'px';
+                this._restoreMinWidth(oColumn);
+                
             
                 // Unstyle the body cells
                 for(var j=0;j<l;j++) {
@@ -5892,6 +5924,7 @@ showColumn : function(oColumn) {
             this.fireEvent("columnShowEvent",{column:thisColumn});
             YAHOO.log("Column \"" + oColumn.key + "\" shown", "info", this.toString());
         }
+        this._clearTrTemplateEl();
     }
     else {
         YAHOO.log("Could not show Column \"" + oColumn.key + "\". Only non-nested Columns can be shown", "warn", this.toString());
