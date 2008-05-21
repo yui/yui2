@@ -213,6 +213,9 @@ YAHOO.widget.ColumnSet.prototype = {
                         if(oColumn.width && (child.width === undefined)) {
                             child.width = oColumn.width;
                         }
+                        if(oColumn.minWidth && (child.minWidth === undefined)) {
+                            child.minWidth = oColumn.minWidth;
+                        }
                         // Backward compatibility
                         if(oColumn.type && (child.type === undefined)) {
                             child.type = oColumn.type;
