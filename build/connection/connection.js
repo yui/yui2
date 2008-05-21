@@ -534,7 +534,6 @@ YAHOO.util.Connect =
 			this.handleReadyState(o, callback);
 			o.conn.send(postData || '');
 
-
 			// Reset the HTML form data and state properties as
 			// soon as the data are submitted.
 			if(this._isFormSubmit === true){
@@ -1005,7 +1004,6 @@ YAHOO.util.Connect =
 		this._isFormSubmit = true;
 		this._sFormData = this._sFormData.substr(0, this._sFormData.length - 1);
 
-
 		this.initHeader('Content-Type', this._default_form_header);
 
 		return this._sFormData;
@@ -1127,7 +1125,7 @@ YAHOO.util.Connect =
 		this._formNode.setAttribute('method', 'POST');
 		this._formNode.setAttribute('target', frameId);
 
-		if(this._formNode.encoding){
+		if(YAHOO.env.ua.ie){
 			// IE does not respect property enctype for HTML forms.
 			// Instead it uses the property - "encoding".
 			this._formNode.setAttribute('encoding', uploadEncoding);
@@ -1348,7 +1346,6 @@ YAHOO.util.Connect =
 		if(o && o.conn){
 			//dereference the XHR instance.
 			o.conn = null;
-
 
 			//dereference the connection object.
 			o = null;
