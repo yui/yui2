@@ -4972,7 +4972,7 @@ YAHOO.log("start render","time");
                             tr;
                         for(; i < len; ++i) {
                             tr = this._addTrEl(allRecords[i]);
-                            tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
+                            Dom.addClass(tr, (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN);
                             df.appendChild(tr);
                         }
                         this._elTbody.appendChild(df);
@@ -5834,7 +5834,9 @@ _clearMinWidth : function(oColumn) {
  */
 _restoreMinWidth : function(oColumn) {
     //TODO: SDT has 2 colgroups
-    this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = oColumn.minWidth + 'px';
+    if(oColumn.minWidth) {
+        this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = oColumn.minWidth + 'px';
+    }
 },
 
 /**
