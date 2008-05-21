@@ -5561,7 +5561,9 @@ sortColumn : function(oColumn, sDir) {
  * @param nWidth {Number} New width in pixels.
  */
 setColumnWidth : function(oColumn, nWidth) {
-    oColumn = this.getColumn(oColumn);
+    if(!oColumn instanceof YAHOO.widget.Column) {
+        oColumn = this.getColumn(oColumn);
+    }
     if(oColumn) {
         // Validate new width against minimum width
         if(lang.isNumber(nWidth)) {
