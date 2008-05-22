@@ -47,6 +47,7 @@ th.yui-dt-resizeable .yui-dt-liner {
     height:100%;
     cursor:e-resize;
     cursor:col-resize;
+    background-color:#CCC;opacity:0;filter: alpha(opacity=0); /* Bug 1952811: IE transparency z-index */
 }
 .yui-dt-resizerproxy {
     visibility:hidden;
