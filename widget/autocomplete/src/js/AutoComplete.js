@@ -2177,21 +2177,23 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
 
     switch (nKeyCode) {
         case 9: // tab
-            // select an item or clear out
-            if(oSelf._oCurItem) {
-                if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                    if(oSelf._bContainerOpen) {
-                        YAHOO.util.Event.stopEvent(v);
+            if((navigator.userAgent.toLowerCase().indexOf("mac") == -1)) {
+                // select an item or clear out
+                if(oSelf._oCurItem) {
+                    if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
+                        if(oSelf._bContainerOpen) {
+                            YAHOO.util.Event.stopEvent(v);
+                        }
                     }
+                    oSelf._selectItem(oSelf._oCurItem);
                 }
-                oSelf._selectItem(oSelf._oCurItem);
-            }
-            else {
-                oSelf._toggleContainer(false);
+                else {
+                    oSelf._toggleContainer(false);
+                }
             }
             break;
         case 13: // enter
-            if(!YAHOO.env.ua.webkit) {
+            if((navigator.userAgent.toLowerCase().indexOf("mac") == -1)) {
                 if(oSelf._oCurItem) {
                     if(oSelf._nKeyCode != nKeyCode) {
                         if(oSelf._bContainerOpen) {
@@ -2239,13 +2241,20 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
     var nKeyCode = v.keyCode;
 
         //Expose only to Mac browsers, where stopEvent is ineffective on keydown events (bug 790337)
-        if(YAHOO.env.ua.webkit) {
+        if((navigator.userAgent.toLowerCase().indexOf("mac") != -1)) {
             switch (nKeyCode) {
             case 9: // tab
+                // select an item or clear out
                 if(oSelf._oCurItem) {
                     if(oSelf.delimChar && (oSelf._nKeyCode != nKeyCode)) {
-                        YAHOO.util.Event.stopEvent(v);
+                        if(oSelf._bContainerOpen) {
+                            YAHOO.util.Event.stopEvent(v);
+                        }
                     }
+                    oSelf._selectItem(oSelf._oCurItem);
+                }
+                else {
+                    oSelf._toggleContainer(false);
                 }
                 break;
             case 13: // enter
