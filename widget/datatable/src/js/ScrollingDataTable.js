@@ -34,7 +34,7 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     widget.ScrollingDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
 
-    this.subscribe("columnShowEvent",this._syncColWidths);
+    ///this._sync();
 };
 
 var SDT = widget.ScrollingDataTable;
