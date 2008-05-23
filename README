@@ -1,5 +1,20 @@
 YUI Library Release Notes
 
+
+*** version 2.5.2 ***
+
+This update contains the following:
+
+- Patches for DataTable and Menu posted to developer site following the release of 2.5.1 have been incorporated into the build.
+- Provide FireFox 3 compatibility in advance of its release. 
+- Provide Opera 9.5 beta compatibility in advance of its release.
+- DataTable bug fixes in pagination, scrolling, and column handling.
+- Several Rich Text Editor bug fixes.
+- Approximately 15 Source Forge bug fixes.
+
+Please see the README file for each component in the build directory for specific updates since
+version 2.5.1.
+
 *** version 2.5.1 ***
 
 This update contains the following:
