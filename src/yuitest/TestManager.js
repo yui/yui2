@@ -281,7 +281,7 @@ YAHOO.tool.TestManager = {
                 frame.style.visibility = "hidden";
                 frame.style.position = "absolute";
                 document.body.appendChild(frame);
-                this._frame = frame.contentWindow || frame.contentDocument.ownerWindow;
+                this._frame = frame.contentWindow || frame.contentDocument.parentWindow;
             }
             
             //create test logger if not already available
