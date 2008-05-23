@@ -1,3 +1,17 @@
+**** version 2.5.2 ***
+    * Firefox 3
+        * 1898002 - Fixed tabbing issues
+
+    * Internet Explorer
+        * 1898002 - Fixed tabbing issues
+        * 1824259 - [SF 1918308] Rich Text Editor: colouring a word colours the sentence
+
+    * All
+        * 1847813 - [SF 1930871] RTE doesn't load if handleSubmit: false explicitly defined
+        * 1841312 - In the RTE image menu the label for "link Url" and "image URL" aren't the same
+        * Color picker stays active when loses focus (Basic Buttons)
+        * Fixed CSS for toolbar seperators to allow for the groups to float better.
+
 **** version 2.5.1 ***
 
     * Adobe AIR Support
