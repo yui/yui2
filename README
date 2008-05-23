@@ -6,14 +6,15 @@ YUI Library Release Notes
 This update contains the following:
 
 - Patches for DataTable and Menu posted to developer site following the release of 2.5.1 have been incorporated into the build.
-- Provide FireFox 3 compatibility in advance of its release. 
-- Provide Opera 9.5 beta compatibility in advance of its release.
+- FireFox 3 compatibility in advance of its release. 
+- Opera 9.5 beta compatibility in advance of its release.
+- ActionScript source for Charts and Uploader is now included.
+- Charts component now includes support for dynamically created legends, and new chart and series styles.
 - DataTable bug fixes in pagination, scrolling, and column handling.
 - Several Rich Text Editor bug fixes.
 - Approximately 15 Source Forge bug fixes.
 
-Please see the README file for each component in the build directory for specific updates since
-version 2.5.1.
+Please see the README file for each component in the build directory for specific updates since version 2.5.1.
 
 *** version 2.5.1 ***
 
@@ -26,8 +27,7 @@ an unquoted string as quoted which could allow unsafe scripts to be evaled
 lazy-load any part of YUI on-demand
 - over 60 bug fixes
 
-Please see the README file for each component in the build directory for specific updates since
-version 2.5.0.
+Please see the README file for each component in the build directory for specific updates since version 2.5.0.
 
 *** version 2.5.0 ***
 
