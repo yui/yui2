@@ -1215,17 +1215,7 @@ if(YAHOO.util.DDProxy) {
             }
         },
         onDragDrop: function() {
-            if(YAHOO.lang.isNumber(this.newIndex) && (this.newIndex !== this.column.getTreeIndex())) {
-                var oDataTable = this.datatable;
-                oDataTable._oChainRender.stop();
-                var aColumnDefs = oDataTable._oColumnSet.getDefinitions();
-                var oColumn = aColumnDefs.splice(this.column.getTreeIndex(),1)[0];
-                aColumnDefs.splice(this.newIndex, 0, oColumn);
-                oDataTable._initColumnSet(aColumnDefs);
-                oDataTable._initTheadEl();
-                oDataTable.render();
-                oDataTable.fireEvent("columnReorderEvent");
-            }
+            this.datatable.reorderColumn(this.column, this.newIndex);
         },
         endDrag: function() {
             this.newIndex = null;

@@ -34,7 +34,7 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     widget.ScrollingDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
 
-    ///this._sync();
+    this.subscribe("columnShowEvent",this._syncColWidths);
 };
 
 var SDT = widget.ScrollingDataTable;
@@ -235,27 +235,29 @@ initAttributes : function(oConfigs) {
  */
 _initDomElements : function(elContainer) {
     // Outer and inner containers
-    var allContainers = this._initContainerEl(elContainer);
-    if(allContainers) {
+    this._initContainerEl(elContainer);
+    if(this._elContainer && this._elHdContainer && this._elBdContainer) {
         // TABLEs
-        this._initTableEl(allContainers);
+        this._initTableEl();
         
-        // COLGROUPs
-        this._initColgroupEl(this._elHdTable, this._elTable);        
-        
-        // THEADs
-        this._initTheadEl(this._elHdTable, this._elTable);                
-        
-        // Primary TBODY
-        this._elTbody = this._initTbodyEl(this._elTable);
-        // Message TBODY
-        this._elMsgTbody = this._initMsgTbodyEl(this._elTable);
-        
-        // Column helpers
-        this._initColumnHelpers(this._elThead);
-        
-        // Tmp elements for auto-width calculation
-        this._initTmpEls();
+        if(this._elHdTable && this._elTable) {
+            // COLGROUPs
+            this._initColgroupEl(this._elHdTable, this._elTable);        
+            
+            // THEADs
+            this._initTheadEl(this._elHdTable, this._elTable);
+            
+            // Primary TBODY
+            this._initTbodyEl(this._elTable);
+            // Message TBODY
+            this._initMsgTbodyEl(this._elTable);
+            
+            // Column helpers
+            this._initColumnHelpers(this._elThead);
+            
+            // Tmp elements for auto-width calculation
+            this._initTmpEls();
+        }
     }
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
             !this._elHdTable || !this._elBdColgroup || !this._elBdThead) {
@@ -300,7 +302,7 @@ _resetTmpEls : function() {
 /**
  * Initializes tmp els for auto-width calculation
  *
- * @method _initContainerEl
+ * @method _initTmpEls
  * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
  * @private
  */
@@ -337,11 +339,11 @@ _destroyContainerEl : function() {
  * @private
  */
 _initContainerEl : function(elContainer) {
-    elContainer = SDT.superclass._initContainerEl.call(this, elContainer);
+    SDT.superclass._initContainerEl.call(this, elContainer);
     
-    if(elContainer) {
+    if(this._elContainer) {
+        elContainer = this._elContainer; // was constructor input, now is DOM ref
         Dom.addClass(elContainer, DT.CLASS_SCROLLABLE);
-        this._elContainer = elContainer;
         
         // Container for header TABLE
         var elHdContainer = elContainer.appendChild(document.createElement("div"));
@@ -354,24 +356,6 @@ _initContainerEl : function(elContainer) {
         Dom.addClass(elBdContainer, SDT.CLASS_BODY);
         Ev.addListener(elBdContainer, "scroll", this._onScroll, this); // to sync horiz scroll headers
         this._elBdContainer = elBdContainer;
-        
-        return [elContainer, elHdContainer, elBdContainer];
-    }
-},
-
-/**
- * Initializes ScrollingDataTable TABLE elements into the two inner containers.
- *
- * @method _initTableEl
- * @private
- */
-_initTableEl : function(allContainers) {
-    if(allContainers) {
-        // Head TABLE
-        this._destroyHdTableEl();
-        this._elHdTable = this._baseInitTableEl(allContainers[1]);
-        // Body TABLE
-        this._elTable = this._baseInitTableEl(allContainers[2]);  
     }
 },
 
@@ -394,6 +378,24 @@ _destroyHdTableEl : function() {
 },
 
 /**
+ * Initializes ScrollingDataTable TABLE elements into the two inner containers.
+ *
+ * @method _initTableEl
+ * @private
+ */
+_initTableEl : function() {
+    // Head TABLE
+    if(this._elHdContainer) {
+        this._destroyHdTableEl();
+    
+        // Create TABLE
+        this._elHdTable = this._elHdContainer.appendChild(document.createElement("table"));   
+    } 
+    // Body TABLE
+    this._baseInitTableEl(this._elBdContainer);  
+},
+
+/**
  * Initializes ScrollingDataTable COLGROUP elements into the two TABLEs.
  *
  * @method _initColgroupEl
@@ -402,9 +404,10 @@ _destroyHdTableEl : function() {
 _initColgroupEl : function(elHdTable, elBdTable) {
     // Scrolling body COLGROUP
     this._destroyBdColgroupEl();
-    this._elBdColgroup = this._baseInitColgroupEl(elBdTable);
+    this._baseInitColgroupEl(elBdTable);
+    this._elBdColgroup = this._elColgroup;
     // Standard head COLGROUP
-    this._elColgroup = this._baseInitColgroupEl(elHdTable);
+    this._baseInitColgroupEl(elHdTable);
 },
 
 /**
@@ -424,17 +427,68 @@ _destroyBdColgroupEl : function() {
 },
 
 /**
+ * Adds a COL element to COLGROUP at given index.
+ *
+ * @method _insertColgroupColEl
+ * @param index {Number} Index of new COL element.
+ * @private
+ */
+_insertColgroupColEl : function(index) {
+    if(lang.isNumber(index) && this._elColgroup && this._elBdColgroup) {
+        var nextSibling = this._elColgroup.childNodes[index] || null;
+        this._elColgroup.insertBefore(document.createElement("col"), nextSibling);
+        nextSibling = this._elBdColgroup.childNodes[index] || null;
+        this._elBdColgroup.insertBefore(document.createElement("col"), nextSibling);
+    }
+},
+
+/**
+ * Removes a COL element to COLGROUP at given index.
+ *
+ * @method _removeColgroupColEl
+ * @param index {Number} Index of removed COL element.
+ * @private
+ */
+_removeColgroupColEl : function(index) {
+    if(lang.isNumber(index) && this._elColgroup && this._elColgroup.childNodes[index] && this._elBdColgroup && this._elBdColgroup.childNodes[index]) {
+        this._elColgroup.removeChild(this._elColgroup.childNodes[index]);
+        this._elBdColgroup.removeChild(this._elBdColgroup.childNodes[index]);
+    }
+},
+
+/**
+ * Reorders a COL element from old index to new index.
+ *
+ * @method _reorderColgroupColEl
+ * @param index {Number} Index of removed COL element.
+ * @private
+ */
+_reorderColgroupColEl : function(oldIndex, newIndex) {
+    if(lang.isNumber(oldIndex) && lang.isNumber(newIndex) && this._elColgroup && this._elColgroup.childNodes[oldIndex] && this._elBdColgroup && this._elBdColgroup.childNodes[oldIndex]) {
+        var elCol = this._elColgroup.removeChild(this._elColgroup.childNodes[oldIndex]);
+        var nextSibling = this._elColgroup.childNodes[newIndex] || null;
+        this._elColgroup.insertBefore(elCol, nextSibling);
+
+        elCol = this._elBdColgroup.removeChild(this._elBdColgroup.childNodes[oldIndex]);
+        nextSibling = this._elBdColgroup.childNodes[newIndex] || null;
+        this._elBdColgroup.insertBefore(elCol, nextSibling);
+    }
+},
+
+/**
  * Initializes ScrollingDataTable THEAD elements into the two inner containers.
  *
  * @method _initTheadEl
  * @private
  */
 _initTheadEl : function(elHdTable, elBdTable) {
+    elHdTable = elHdTable || this._elHdTable;
+    elBdTable = elBdTable || this._elBdTable;
+    
     // Scrolling body THEAD
-    this._destroyBdTheadEl();
-    this._elBdThead = this._initBdTheadEl(elBdTable);
+    this._initBdTheadEl(elBdTable);
     // Standard head THEAD
-    this._elThead = this._baseInitTheadEl(elHdTable);        
+    this._baseInitTheadEl(elHdTable);
 },
 
 /**
@@ -444,12 +498,12 @@ _initTheadEl : function(elHdTable, elBdTable) {
  * @private
  */
 _destroyBdTheadEl : function() {
-    var elThead = this._elThead;
-    if(elThead) {
-        var elTable = elThead.parentNode;
-        Ev.purgeElement(elThead, true);
-        elTable.removeChild(elThead);
-        this._elThead = null;
+    var elBdThead = this._elBdThead;
+    if(elBdThead) {
+        var elTable = elBdThead.parentNode;
+        Ev.purgeElement(elBdThead, true);
+        elTable.removeChild(elBdThead);
+        this._elBdThead = null;
 
         this._destroyColumnHelpers();
     }
@@ -496,8 +550,8 @@ _initBdTheadEl : function(elTable) {
                 this._initBdThEl(elTheadCell,oColumn,i,j);
             }
         }
+        this._elBdThead = elThead;
         YAHOO.log("Accessibility TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
-        return elThead;
     }
 },
 
@@ -534,6 +588,22 @@ _initThEl : function(elTheadCell,oColumn) {
     // This is necessary for _syncScrollOverhang()
     elTheadCell.id = this._sId+"-thfixed" + oColumn.getId();
 },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -632,7 +702,8 @@ _syncColWidths : function() {
     
         if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
             // Temporarily unsnap container since it causes inaccurate calculations
-            if(this.get("width")) {
+            var sWidth = this.get("width");
+            if(sWidth) {
                 this._elHdContainer.style.width = "";
                 this._elBdContainer.style.width = "";
             }
@@ -642,58 +713,62 @@ _syncColWidths : function() {
                 oColumn,
                 cellsLen = elRow.cells.length;
             // First time through, reset the widths to get an accurate measure of the TD
-            for(i=0; i<cellsLen; i++) {
-                oColumn = allKeys[i];
-                // Only for Columns without widths
-                if(!oColumn.width) {
-                    this._setColumnWidth(oColumn, "auto","visible");
-                }
-            }
+            //for(i=0; i<cellsLen; i++) {
+                ///oColumn = allKeys[i];
+                // Only need to sync non-hidden Columns without set widths
+                ///if(!oColumn.width && !oColumn.hidden) {
+                    ///this._setColumnWidth(oColumn, "auto","visible");
+                ///}
+            ///}
     
-            // Calculate width for every Column
+            // Calculate width for every non-hidden Column without set width
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
-                var newWidth = 0;
-                var overflow = 'hidden';
                 
                 // Columns without widths
-                if(!oColumn.width) {
+                if(!oColumn.width && !oColumn.hidden) {
                     var elTh = oColumn.getThEl();
                     var elTd = elRow.cells[i];
 
-                    var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                            elTh.firstChild : elTd.firstChild;               
                 
-                    if(elTh.offsetWidth !== elTd.offsetWidth ||
-                        elWider.offsetWidth < oColumn.minWidth) {
+                    ///if(elTh.offsetWidth !== elTd.offsetWidth ||
+                    ///    (oColumn.minWidth && (elWider.offsetWidth < oColumn.minWidth))) {
+                    if(elTh.offsetWidth !== elTd.offsetWidth) {
+                        this._setColumnWidth(oColumn, "auto","visible");
+
+                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
+                                elTh.firstChild : elTd.firstChild;               
 
                         // Calculate the new width by comparing liner widths
-                        newWidth = Math.max(0, oColumn.minWidth,
+                        var newWidth = Math.max(0,
                             elWider.offsetWidth -
                             (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
                             (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
+                            
+                        this._setColumnWidth(oColumn, newWidth+'px', 'hidden');
                     }
                 }
                 // Columns with widths
-                else {
-                    newWidth = oColumn.width;
-                }
+                ///else {
+                ///    newWidth = oColumn.width;
+                ///}
                 
                 // Hidden Columns
-                if(oColumn.hidden) {
-                    oColumn._nLastWidth = newWidth;
-                    this._setColumnWidth(oColumn, '1px','hidden'); 
+                ///if(oColumn.hidden) {
+                ///    oColumn._nLastWidth = newWidth;
+                ///    this._setColumnWidth(oColumn, '1px','hidden'); 
 
                 // Update to the new width
-                } else if (newWidth) {
-                    this._setColumnWidth(oColumn, newWidth+'px', overflow);
-                }
+                ///} else if (newWidth) {
+                ///    this._setColumnWidth(oColumn, newWidth+'px', overflow);
+                ///}
             }
             
             // Resnap unsnapped containers
-            var sWidth = this.get("width");
-            this._elHdContainer.style.width = sWidth;
-            this._elBdContainer.style.width = sWidth;     
+            if(sWidth) {
+                this._elHdContainer.style.width = sWidth;
+                this._elBdContainer.style.width = sWidth;
+            } 
         }
     }
     this._syncScroll();

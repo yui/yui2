@@ -1930,10 +1930,8 @@ initAttributes : function(oConfigs) {
         validator: lang.isString,
         method: function(sCaption) {
             // Create CAPTION element
-            if(!this._elCaption) {
-                var bodyTable = this._elTbodyContainer.getElementsByTagName('table')[0];
-                
-                this._elCaption = bodyTable.createCaption();
+            if(!this._elCaption) { 
+                this._elCaption = this._elTable.createCaption();
             }
             // Set CAPTION value
             this._elCaption.innerHTML = sCaption;
@@ -2098,15 +2096,6 @@ _elCaption : null,
 _elColgroup : null,
 
 /**
- * DOM reference to the TABLE element for the DataTable instance.
- *
- * @property _elTable
- * @type HTMLElement
- * @private
- */
-_elTable : null,
-
-/**
  * DOM reference to the THEAD element for the DataTable instance.
  *
  * @property _elThead
@@ -2136,20 +2125,20 @@ _elMsgTbody : null,
 /**
  * DOM reference to the secondary TBODY element's single TR element used to display DataTable messages.
  *
- * @property _elMsgTbodyRow
+ * @property _elMsgTr
  * @type HTMLElement
  * @private
  */
-_elMsgTbodyRow : null,
+_elMsgTr : null,
 
 /**
  * DOM reference to the secondary TBODY element's single TD element used to display DataTable messages.
  *
- * @property _elMsgTbodyCell
+ * @property _elMsgTd
  * @type HTMLElement
  * @private
  */
-_elMsgTbodyCell : null,
+_elMsgTd : null,
 
 /**
  * DataSource instance for the DataTable instance.
@@ -2404,10 +2393,11 @@ _initColumnSet : function(aColumnDefs) {
     if(this._oColumnSet) {
         // First clear _oDynStyles for existing ColumnSet
         for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
-            DT._oDynStyles[".yui-dt-col"+this._oColumnSet.keys[i].getId()] = undefined;
+            DT._oDynStyles[".yui-dt-col"+this._oColumnSet.keys[i].getId()+" .yui-dt-liner"] = undefined;
         }
         
         this._oColumnSet = null;
+        this._clearTrTemplateEl();
     }
     
     if(lang.isArray(aColumnDefs)) {
@@ -2492,19 +2482,18 @@ _initRecordSet : function() {
  */
 _initDomElements : function(elContainer) {
     // Outer container
-    this._elContainer = this._initContainerEl(elContainer);
+    this._initContainerEl(elContainer);
     // TABLE
-    this._elTable = this._initTableEl(this._elContainer);
+    this._initTableEl(this._elContainer);
     // COLGROUP
-    this._elColgroup = this._initColgroupEl(this._elTable);
+    this._initColgroupEl(this._elTable);
     // THEAD
-    this._elThead = this._initTheadEl(this._elTable);
+    this._initTheadEl(this._elTable);
+    
     // Primary TBODY
-    this._elTbody = this._initTbodyEl(this._elTable);
+    this._initTbodyEl(this._elTable);
     // Message TBODY
-    this._elMsgTbody = this._initMsgTbodyEl(this._elTable);  
-    // Column helpers
-    this._initColumnHelpers(this._elThead);  
+    this._initMsgTbodyEl(this._elTable);  
 
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
@@ -2537,7 +2526,6 @@ _destroyContainerEl : function() {
  *
  * @method _initContainerEl
  * @param elContainer {HTMLElement | String} HTML DIV element by reference or ID.
- * @return {HTMLElement} Initialized container element. 
  * @private
  */
 _initContainerEl : function(elContainer) {
@@ -2548,7 +2536,7 @@ _initContainerEl : function(elContainer) {
     elContainer = Dom.get(elContainer);
     if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
         Dom.addClass(elContainer, DT.CLASS_DATATABLE);
-        return elContainer;
+        this._elContainer = elContainer;
     }
 },
 
@@ -2575,7 +2563,6 @@ _destroyTableEl : function() {
  *
  * @method _initTableEl
  * @param elContainer {HTMLElement} Container element into which to create TABLE.
- * @return {HTMLElement} Initialized TABLE element.
  * @private
  */
 _initTableEl : function(elContainer) {
@@ -2584,7 +2571,7 @@ _initTableEl : function(elContainer) {
         this._destroyTableEl();
     
         // Create TABLE
-        return elContainer.appendChild(document.createElement("table"));   
+        this._elTable = elContainer.appendChild(document.createElement("table"));   
     } 
 },
 
@@ -2609,7 +2596,6 @@ _destroyColgroupEl : function() {
  *
  * @method _initColgroupEl
  * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
- * @return {HTMLElement} Initialized COLGROUP element. 
  * @private
  */
 _initColgroupEl : function(elTable) {
@@ -2633,7 +2619,49 @@ _initColgroupEl : function(elTable) {
         // Create COLGROUP
         var elColgroup = elTable.insertBefore(document.createElement("colgroup"), elTable.firstChild);
         elColgroup.appendChild(elFragment);
-        return elColgroup;
+        this._elColgroup = elColgroup;
+    }
+},
+
+/**
+ * Adds a COL element to COLGROUP at given index.
+ *
+ * @method _insertColgroupColEl
+ * @param index {Number} Index of new COL element.
+ * @private
+ */
+_insertColgroupColEl : function(index) {
+    if(lang.isNumber(index)&& this._elColgroup) {
+        var nextSibling = this._elColgroup.childNodes[index] || null;
+        this._elColgroup.insertBefore(document.createElement("col"), nextSibling);
+    }
+},
+
+/**
+ * Removes a COL element to COLGROUP at given index.
+ *
+ * @method _removeColgroupColEl
+ * @param index {Number} Index of removed COL element.
+ * @private
+ */
+_removeColgroupColEl : function(index) {
+    if(lang.isNumber(index) && this._elColgroup && this._elColgroup.childNodes[index]) {
+        this._elColgroup.removeChild(this._elColgroup.childNodes[index]);
+    }
+},
+
+/**
+ * Reorders a COL element from old index to new index.
+ *
+ * @method _reorderColgroupColEl
+ * @param index {Number} Index of removed COL element.
+ * @private
+ */
+_reorderColgroupColEl : function(oldIndex, newIndex) {
+    if(lang.isNumber(oldIndex) && lang.isNumber(newIndex) && this._elColgroup && this._elColgroup.childNodes[oldIndex]) {
+        var elCol = this._elColgroup.removeChild(this._elColgroup.childNodes[oldIndex]);
+        var nextSibling = this._elColgroup.childNodes[newIndex] || null;
+        this._elColgroup.insertBefore(elCol, nextSibling);
     }
 },
 
@@ -2648,10 +2676,9 @@ _destroyTheadEl : function() {
     if(elThead) {
         var elTable = elThead.parentNode;
         Ev.purgeElement(elThead, true);
+        this._destroyColumnHelpers();
         elTable.removeChild(elThead);
         this._elThead = null;
-
-        this._destroyColumnHelpers();
     }
 },
 
@@ -2661,10 +2688,11 @@ _destroyTheadEl : function() {
  * @method _initTheadEl
  * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
  * @param {HTMLElement} Initialized THEAD element. 
- * @return Initialized THEAD element 
  * @private
  */
 _initTheadEl : function(elTable) {
+    elTable = elTable || this._elTable;
+    
     if(elTable) {
         // Destroy previous
         this._destroyTheadEl();
@@ -2700,7 +2728,7 @@ _initTheadEl : function(elTable) {
             for(j=0; j<colTree[i].length; j++) {
                 oColumn = colTree[i][j];
                 elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-                    oColumn._elTh = elTheadCell;
+                oColumn._elTh = elTheadCell;
                 ///elTheadCell.yuiCellIndex = j;
                 this._initThEl(elTheadCell,oColumn);
             }
@@ -2728,7 +2756,7 @@ _initTheadEl : function(elTable) {
         }
         
         YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
-    
+
         ///TODO: try _repaintGecko(this._elContainer) instead
         // Bug 1806891
         if(ua.webkit && ua.webkit < 420) {
@@ -2739,7 +2767,10 @@ _initTheadEl : function(elTable) {
             elThead.style.display = 'none';
         }
         
-        return elThead;
+        this._elThead = elThead;
+        
+        // Column helpers needs _elThead to exist
+        this._initColumnHelpers();  
     }
 },
 
@@ -2896,7 +2927,6 @@ _destroyTbodyEl : function() {
  *
  * @method _initTbodyEl
  * @param elTable {HTMLElement} TABLE element into which to create TBODY .
- * @return {HTMLElement} Initialized TBODY element. 
  * @private
  */
 _initTbodyEl : function(elTable) {
@@ -2930,7 +2960,7 @@ _initTbodyEl : function(elTable) {
             elTbody.hideFocus=true;
         }
 
-        return elTbody;
+        this._elTbody = elTbody;
     }
 },
 
@@ -2960,19 +2990,19 @@ _destroyMsgTbodyEl : function() {
 _initMsgTbodyEl : function(elTable) {
     if(elTable) {
         var elMsgTbody = document.createElement("tbody");
-        var elMsgRow = elMsgTbody.appendChild(document.createElement("tr"));
-        Dom.addClass(elMsgRow,DT.CLASS_FIRST);
-        Dom.addClass(elMsgRow,DT.CLASS_LAST);
-        this._elMsgRow = elMsgRow;
-        var elMsgCell = elMsgRow.appendChild(document.createElement("td"));
-        elMsgCell.colSpan = this._oColumnSet.keys.length;
-        Dom.addClass(elMsgCell,DT.CLASS_FIRST);
-        Dom.addClass(elMsgCell,DT.CLASS_LAST);
-        this._elMsgTd = elMsgCell;
+        var elMsgTr = elMsgTbody.appendChild(document.createElement("tr"));
+        Dom.addClass(elMsgTr,DT.CLASS_FIRST);
+        Dom.addClass(elMsgTr,DT.CLASS_LAST);
+        this._elMsgTr = elMsgTr;
+        var elMsgTd = elMsgTr.appendChild(document.createElement("td"));
+        elMsgTd.colSpan = this._oColumnSet.keys.length;
+        Dom.addClass(elMsgTd,DT.CLASS_FIRST);
+        Dom.addClass(elMsgTd,DT.CLASS_LAST);
+        this._elMsgTd = elMsgTd;
         elMsgTbody = elTable.appendChild(elMsgTbody);
-        var elMsgCellLiner = elMsgCell.appendChild(document.createElement("div"));
-        Dom.addClass(elMsgCellLiner,DT.CLASS_LINER);  
-        return elMsgTbody;
+        var elMsgLiner = elMsgTd.appendChild(document.createElement("div"));
+        Dom.addClass(elMsgLiner,DT.CLASS_LINER);  
+        this._elMsgTbody = elMsgTbody;
     }
 },
 
@@ -3155,10 +3185,7 @@ _getTrTemplateEl : function (oRecord, index) {
 
         // Create TD elements into DOCUMENT FRAGMENT
         var df = document.createDocumentFragment(),
-            oColumnSet = this._oColumnSet,
-            allKeys = oColumnSet.keys,
-            allHeaders = oColumnSet.headers,
-            allColHeaders, sHeader, sTdHeaders, oColumn, 
+            allKeys = this._oColumnSet.keys,
             elTd;
 
         // Set state for each TD;
@@ -3166,45 +3193,10 @@ _getTrTemplateEl : function (oRecord, index) {
         for(var i=0, keysLen=allKeys.length; i<keysLen; i++) {
             // Clone the TD template
             elTd = td.cloneNode(true);
-            
-            // For SF2 cellIndex bug: http://www.webreference.com/programming/javascript/ppk2/3.html
-            ///elTd.yuiCellIndex = i;
-    
-            // Add structural attributes, derived from Column
-            oColumn = allKeys[i];
-            ///elTd.yuiColumnKey = oColumn.getKey();
-            ///elTd.yuiColumnId  = oColumn.getId();
-            
-            // Set the TD's accessibility headers
-            allColHeaders = allHeaders[i];
-            for(var j=0, headersLen=allColHeaders.length; j < headersLen; ++j) {
-                sHeader = this._sId + "-th" + allColHeaders[j] + ' ';
-                sTdHeaders += sHeader;
-            }
-            elTd.headers = sTdHeaders;
-            
-            aAddClasses = [];
-            // First TD?
-            if(i === 0) {
-                 aAddClasses = [DT.CLASS_FIRST];
-            }
-            // Last TD?
-            else if(i === (keysLen-1)) {
-                 aAddClasses = [DT.CLASS_LAST];
-            }
 
-            // Class the TD element
-            elTd.className = this._getColumnClassNames(oColumn, aAddClasses);
-    
-            // Class the liner element
-            elTd.firstChild.className = DT.CLASS_LINER;
-
-            // Set Column width for fallback cases
-            if(oColumn.width && this._bDynStylesFallback) {
-                elTd.firstChild.style.overflow = 'hidden';
-                elTd.firstChild.style.width = oColumn.width + 'px';
-            }
-            
+            // Format the base TD
+            elTd = this._formatTdEl(allKeys[i], elTd, i, (i===keysLen-1));
+                        
             df.appendChild(elTd);
         }
         tr.appendChild(df);
@@ -3212,6 +3204,52 @@ _getTrTemplateEl : function (oRecord, index) {
         return tr;
     }   
 },
+
+/**
+ * Formats a basic TD element.
+ * @method _formatTdEl 
+ * @param oColumn {YAHOO.widget.Column} Associated Column instance. 
+ * @param elTd {HTMLElement} An unformatted TD element.
+ * @param index {Number} Column key index. 
+ * @param isLast {Boolean} True if Column is last key of the ColumnSet.
+ * @return {HTMLElement} A formatted TD element.
+ * @private 
+ */
+_formatTdEl : function (oColumn, elTd, index, isLast) {
+    var oColumnSet = this._oColumnSet;
+    
+    // Set the TD's accessibility headers
+    var allHeaders = oColumnSet.headers,
+        allColHeaders = allHeaders[index],
+        sHeader, sTdHeaders;
+    for(var j=0, headersLen=allColHeaders.length; j < headersLen; j++) {
+        sHeader = this._sId + "-th" + allColHeaders[j] + ' ';
+        sTdHeaders += sHeader;
+    }
+    elTd.headers = sTdHeaders;
+    
+    // Class the TD element
+    var aAddClasses = [];
+    if(index === 0) {
+        aAddClasses[aAddClasses.length] = DT.CLASS_FIRST;
+    }
+    if(isLast) {
+        aAddClasses[aAddClasses.length] = DT.CLASS_LAST;
+    }
+    elTd.className = this._getColumnClassNames(oColumn, aAddClasses);
+
+    // Class the liner element
+    elTd.firstChild.className = DT.CLASS_LINER;
+
+    // Set Column width for fallback cases
+    if(oColumn.width && this._bDynStylesFallback) {
+        elTd.firstChild.style.overflow = 'hidden';
+        elTd.firstChild.style.width = oColumn.width + 'px';
+    }
+    
+    return elTd;
+},
+
 
 /**
  * Create a new TR element for a given Record and appends it with the correct
@@ -5561,7 +5599,7 @@ sortColumn : function(oColumn, sDir) {
  * @param nWidth {Number} New width in pixels.
  */
 setColumnWidth : function(oColumn, nWidth) {
-    if(!oColumn instanceof YAHOO.widget.Column) {
+    if(!(oColumn instanceof YAHOO.widget.Column)) {
         oColumn = this.getColumn(oColumn);
     }
     if(oColumn) {
@@ -5850,6 +5888,9 @@ _restoreMinWidth : function(oColumn) {
  * @param oColumn {YAHOO.widget.Column} Column instance.
  */
 hideColumn : function(oColumn) {
+    if(!(oColumn instanceof YAHOO.widget.Column)) {
+        oColumn = this.getColumn(oColumn);
+    }
     // Only top-level Columns can get hidden due to issues in FF2 and SF3
     if(oColumn && !oColumn.hidden && oColumn.getTreeIndex() !== null) {
         
@@ -5898,6 +5939,9 @@ hideColumn : function(oColumn) {
  * @param oColumn {YAHOO.widget.Column} Column instance.
  */
 showColumn : function(oColumn) {
+    if(!(oColumn instanceof YAHOO.widget.Column)) {
+        oColumn = this.getColumn(oColumn);
+    }
     // Only top-level Columns can get hidden
     if(oColumn && oColumn.hidden && (oColumn.getTreeIndex() !== null)) {
         var allrows = this.getTbodyEl().rows;
@@ -5945,19 +5989,51 @@ showColumn : function(oColumn) {
  * @return oColumn {YAHOO.widget.Column} Removed Column instance.
  */
 removeColumn : function(oColumn) {
-    var nColTreeIndex = oColumn.getTreeIndex();
-    if(nColTreeIndex !== null) {
-        this._oChainRender.stop();
-        var aOrigColumnDefs = this._oColumnSet.getDefinitions();
-
-        oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
-        this._initColumnSet(aOrigColumnDefs);
-        this._initTheadEl();
-
-        this.render();
-        this.fireEvent("columnRemoveEvent",{column:oColumn});
-        YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
-        return oColumn;
+    // Validate Column
+    if(!(oColumn instanceof YAHOO.widget.Column)) {
+        oColumn = this.getColumn(oColumn);
+    }
+    if(oColumn) {
+        var nColTreeIndex = oColumn.getTreeIndex();
+        if(nColTreeIndex !== null) {
+            // Which index
+            var nKeyIndex = oColumn.getKeyIndex();
+            
+            // Remove TH
+            var aOrigColumnDefs = this._oColumnSet.getDefinitions();
+            oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
+            this._initColumnSet(aOrigColumnDefs);
+            this._initTheadEl();
+            this._removeColgroupColEl(nKeyIndex);
+            
+            // Remove TD
+            var allRows = this._elTbody.rows;
+            if(allRows.length > 0) {
+                var loopN = this.get("renderLoopSize"),
+                    loopEnd = allRows.length;
+                this._oChainRender.add({
+                    method: function(oArg) {
+                        if((this instanceof DT) && this._sId) {
+                            var i = oArg.nCurrentRow,
+                                len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length;
+                            for(; i < len; ++i) {
+                                allRows[i].removeChild(allRows[i].cells[nKeyIndex]);
+                            }
+                            oArg.nCurrentRow = i;
+                        }
+                    },
+                    iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
+                    argument: {nCurrentRow:0},
+                    scope: this,
+                    timeout: (loopN > 0) ? 0 : -1
+                });
+                this._oChainRender.run(); 
+            }
+    
+            this.fireEvent("columnRemoveEvent",{column:oColumn});
+            YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
+            return oColumn;
+        }
     }
     YAHOO.log("Could not remove Column \"" + oColumn.key + "\". Only non-nested Columns can be removed", "warn", this.toString());
 },
@@ -5971,6 +6047,7 @@ removeColumn : function(oColumn) {
  * @param oColumn {Object | YAHOO.widget.Column} Object literal Column
  * definition or a Column instance.
  * @param index {Number} (optional) Column key index.
+ * @return oColumn {YAHOO.widget.Column} Inserted Column instance. 
  */
 insertColumn : function(oColumn, index) {
     // Validate Column
@@ -5984,19 +6061,113 @@ insertColumn : function(oColumn, index) {
     
     var oColumnSet = this._oColumnSet;
 
-    // Validate index
+    // Validate index or append new Column to the end of the ColumnSet
     if(!lang.isValue(index) || !lang.isNumber(index)) {
         index = oColumnSet.tree[0].length;
     }
     
-    this._oChainRender.stop();
+    // Add TH
     var aNewColumnDefs = this._oColumnSet.getDefinitions();
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
     this._initTheadEl();
-    this.render();
+    this._insertColgroupColEl(index);
+        
+    // Add TD
+    var allRows = this._elTbody.rows;
+    if(allRows.length > 0) {
+        var loopN = this.get("renderLoopSize"),
+            loopEnd = allRows.length;
+        
+        var elTdTemplate = this._getTrTemplateEl().childNodes[index].cloneNode(true);
+        elTdTemplate = this._formatTdEl(this._oColumnSet.keys[index], elTdTemplate, index, (index===this._oColumnSet.keys.length-1));
+        
+        this._oChainRender.add({
+            method: function(oArg) {
+                if((this instanceof DT) && this._sId) {
+                    var i = oArg.nCurrentRow,
+                        len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
+                        nextSibling;
+                    for(; i < len; ++i) {
+                        nextSibling = allRows[i].childNodes[index] || null;
+                        allRows[i].insertBefore(oArg.elTdTemplate.cloneNode(true), nextSibling);
+                    }
+                    oArg.nCurrentRow = i;
+                }
+            },
+            iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
+            argument: {nCurrentRow:0,elTdTemplate:elTdTemplate},
+            scope: this,
+            timeout: (loopN > 0) ? 0 : -1
+        });
+        this._oChainRender.run(); 
+    }
+
     this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
     YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
+},
+
+/**
+ * Removes given Column and inserts into given index. NOTE: You
+ * can only reorder non-nested Columns and top-level parent Columns. You cannot
+ * reorder a nested Column to an existing parent.
+ *
+ * @method reorderColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param index {Number} New key index.
+ */
+reorderColumn : function(oColumn, index) {
+    // Validate Column and new index
+    if(!(oColumn instanceof YAHOO.widget.Column)) {
+        oColumn = this.getColumn(oColumn);
+    }
+    if(oColumn && YAHOO.lang.isNumber(index)) {
+        var nColTreeIndex = oColumn.getTreeIndex();
+        if(nColTreeIndex !== null) {
+            // Which key indexes
+            var nOldIndex = oColumn.getKeyIndex();
+            
+            // Reorder TH
+            var aColumnDefs = this._oColumnSet.getDefinitions();
+            var oColumnDef = aColumnDefs.splice(nColTreeIndex,1)[0];
+            aColumnDefs.splice(index, 0, oColumnDef);
+            this._initColumnSet(aColumnDefs);
+            this._initTheadEl();
+            this._reorderColgroupColEl(nOldIndex, index);
+            
+            // Reorder TD
+            var allRows = this._elTbody.rows;
+            if(allRows.length > 0) {
+                var loopN = this.get("renderLoopSize"),
+                    loopEnd = allRows.length;
+                this._oChainRender.add({
+                    method: function(oArg) {
+                        if((this instanceof DT) && this._sId) {
+                            var i = oArg.nCurrentRow,
+                                len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
+                                nextSibling, elTd;
+                            for(; i < len; ++i) {
+                                elTd = allRows[i].removeChild(allRows[i].cells[nOldIndex]);
+                                nextSibling = allRows[i].childNodes[index] || null;
+                                allRows[i].insertBefore(elTd, nextSibling);
+                            }
+                            oArg.nCurrentRow = i;
+                        }
+                    },
+                    iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
+                    argument: {nCurrentRow:0},
+                    scope: this,
+                    timeout: (loopN > 0) ? 0 : -1
+                });
+                this._oChainRender.run(); 
+            }
+    
+            this.fireEvent("columnReorderEvent",{column:oColumn});
+            YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
+            return oColumn;
+        }
+    }
+    YAHOO.log("Could not reorder Column \"" + oColumn.key + "\". Only non-nested Columns can be reordered", "warn", this.toString());
 },
 
 /**
@@ -10183,9 +10354,11 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      */
 
     /**
-     * Fired when a ColumnSet is re-initialized due to a Column being drag-reordered.
+     * Fired when a Column is moved to a new index.
      *
      * @event columnReorderEvent
+     * @param oArgs.column {YAHOO.widget.Column} The Column instance.
+     * @param oArgs.oldIndex {Number} The previous index position.
      */
 
     /**
