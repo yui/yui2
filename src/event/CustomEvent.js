@@ -231,7 +231,7 @@ throw new Error("Invalid callback for subscriber to '" + this.type + "'");
 
         // make a copy of the subscribers so that there are
         // no index problems if one subscriber removes another.
-        var subs = this.subscribers.slice();
+        var subs = this.subscribers.slice(), throwErrors = YAHOO.util.Event.throwErrors;
 
         for (i=0; i<len; ++i) {
             var s = subs[i];
@@ -255,16 +255,21 @@ YAHOO.log( this.type + "->" + (i+1) + ": " +  s, "info", "Event" );
                         ret = s.fn.call(scope, param, s.obj);
                     } catch(e) {
                         this.lastError = e;
-                        errors.push(e);
+                        // errors.push(e);
 YAHOO.log(this + " subscriber exception: " + e, "error", "Event");
+                        if (throwErrors) {
+                            throw e;
+                        }
                     }
                 } else {
                     try {
                         ret = s.fn.call(scope, this.type, args, s.obj);
                     } catch(ex) {
                         this.lastError = ex;
-                        errors.push(ex);
 YAHOO.log(this + " subscriber exception: " + ex, "error", "Event");
+                        if (throwErrors) {
+                            throw ex;
+                        }
                     }
                 }
 
@@ -278,20 +283,6 @@ YAHOO.log("Event stopped, sub " + i + " of " + len, "info", "Event");
                 }
             }
         }
-
-        if (this.lastError) {
-throw new YAHOO.util.ChainedError('one or more subscribers threw an error: ' +
-                                  this.lastError.message, errors);
-        }
-
-        // if (rebuild) {
-        //     var newlist=this.,subs=this.subscribers;
-        //     for (i=0,len=subs.length; i<len; i=i+1) {
-        //         // this wasn't doing anything before
-        //         newlist.push(subs[i]);
-        //     }
-        //     this.subscribers=newlist;
-        // }
 
         return (ret !== false);
     },
@@ -421,99 +412,4 @@ YAHOO.util.Subscriber.prototype.toString = function() {
     return "Subscriber { obj: " + this.obj  + 
            ", override: " +  (this.override || "no") + " }";
 };
-
-/**
- * ChainedErrors wrap one or more exceptions thrown by a sub-process.
- *
- * @namespace YAHOO.util
- * @class ChainedError
- * @extends Error
- * @constructor
- * @param message {String} The message to display when the error occurs.
- * @param errors {Error[]} an array containing the wrapped exceptions
- */ 
-YAHOO.util.ChainedError = function (message, errors){
-
-    arguments.callee.superclass.constructor.call(this, message);
-    
-    /*
-     * Error message. Must be duplicated to ensure browser receives it.
-     * @type String
-     * @property message
-     */
-    this.message = message;
-    
-    /**
-     * The name of the error that occurred.
-     * @type String
-     * @property name
-     */
-    this.name = "ChainedError";
-
-    /**
-     * The list of wrapped exception objects
-     * @type Error[]
-     * @property errors
-     */
-    this.errors = errors || [];
-
-    /**
-     * Pointer to the current exception
-     * @type int
-     * @property index
-     * @default 0
-     */
-    this.index = 0;
-};
-
-YAHOO.lang.extend(YAHOO.util.ChainedError, Error, {
-
-    /**
-     * Returns a fully formatted error message.
-     * @method getMessage
-     * @return {String} A string describing the error.
-     */
-    getMessage: function () {
-        return this.message;
-    },
-    
-    /**
-     * Returns a string representation of the error.
-     * @method toString
-     * @return {String} A string representation of the error.
-     */
-    toString: function () {
-        return this.name + ": " + this.getMessage();
-    },
-    
-    /**
-     * Returns a primitive value version of the error. Same as toString().
-     * @method valueOf
-     * @return {String} A primitive value version of the error.
-     */
-    valueOf: function () {
-        return this.toString();
-    },
-
-    /**
-     * Returns the next exception object this instance wraps
-     * @method next
-     * @return {Error} the error that was thrown by the subsystem.
-     */
-    next: function() {
-        var e = this.errors[this.index] || null;
-        this.index++;
-        return e;
-    },
-
-    /**
-     * Append an error object
-     * @method add
-     * @param e {Error} the error object to append
-     */
-    add: function(e) {
-        this.errors.push(e);
-    }
-
-});
 

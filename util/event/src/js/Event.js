@@ -284,6 +284,17 @@ if (!YAHOO.util.Event) {
             DOMReady: false,
 
             /**
+             * Errors thrown by subscribers of custom events are caught
+             * and the error message is written to the debug console.  If
+             * this property is set to true, it will also re-throw the
+             * error.
+             * @property throwErrors
+             * @type boolean
+             * @default false
+             */
+            throwErrors: false,
+
+            /**
              * @method startInterval
              * @static
              * @private
