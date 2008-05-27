@@ -7,6 +7,11 @@ Drag and Drop Release Notes
         to pass over things like an IFRAME without interrupting the drag movement.
             YAHOO.util.DDM.useShim = true;
 
+2.5.2
+    * Fixed iframe src attribute for DDProxy (SSL Error in IE6)
+    * Fixed typos in documentation
+    * Fixed potential Stack Overflow with mousedown threshold
+
 2.5.1
     * No change
 
