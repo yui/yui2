@@ -1,5 +1,13 @@
 DataSource Release Notes
 
+**** version 2.6.0 ****
+
+* Empty responses of TYPE_FLAT no longer return empty string results.
+
+**** version 2.5.2 ****
+
+* No changes.
+
 **** version 2.5.1 ****
 
 * Replaced custom function parsing with parsed/walked value locators for
