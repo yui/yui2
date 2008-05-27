@@ -1,6 +1,13 @@
 AutoComplete Release Notes
 
+*** version 2.6.0 ***
+
+* AutoComplete has a new required dependency on YAHOO.util.DataSource.
+
+
 *** version 2.5.2 ***
+
+* Empty responses of TYPE_FLAT no longer open empty container.
 
 * Mac FF no longer submits form on enter-to-select suggestion.
 
