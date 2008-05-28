@@ -3270,7 +3270,7 @@ _formatTdEl : function (oColumn, elTd, index, isLast) {
  * @return {HTMLElement} The new TR element.  This must be added to the DOM.
  * @private 
  */
-_addTrEl : function (oRecord, index) {
+_addTrEl : function (oRecord) {
     var elTrTemplate = this._getTrTemplateEl();
     
     // Clone the TR template.
@@ -6617,10 +6617,21 @@ addRow : function(oData, index) {
                             if((this instanceof DT) && this._sId) {
                                 var oRecord = oArg.record;
                                 var recIndex = oArg.recIndex;
-                                var elNewTr = this._addTrEl(oRecord, recIndex);
+                                var elNewTr = this._addTrEl(oRecord);
                                 if(elNewTr) {
                                     var elNext = (this._elTbody.rows[recIndex]) ? this._elTbody.rows[recIndex] : null;
                                     this._elTbody.insertBefore(elNewTr, elNext);
+
+                                    // Set FIRST/LAST
+                                    if(recIndex === 0) {
+                                        this._setFirstRow();
+                                    }
+                                    if(elNext === null) {
+                                        this._setLastRow();
+                                    }
+                                    // Set EVEN/ODD
+                                    this._setRowStripes();                           
+                                    
                                     this.hideTableMessage();
             
                                     this.fireEvent("rowAddEvent", {record:oRecord});
@@ -6695,28 +6706,45 @@ addRows : function(aData, index) {
                 this._oChainRender.add({
                     method: function(oArg) {
                         if((this instanceof DT) && this._sId) {
-                            var i = oArg.nCurrentRow,
+                            var aRecords = oArg.aRecords,
+                                i = oArg.nCurrentRow,
                                 j = oArg.nCurrentRecord,
-                                len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd;
+                                len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd,
+                                df = document.createDocumentFragment(),
+                                tr;
                             for(; i < len; ++i,++j) {
-                                this._addTrEl(aRecords[j], i);
+                                df.appendChild(this._addTrEl(aRecords[j]));
                             }
+                            var elNext = (this._elTbody.rows[index]) ? this._elTbody.rows[index] : null;
+                            this._elTbody.insertBefore(df, elNext);
                             oArg.nCurrentRow = i;
                             oArg.nCurrentRecord = j;
                         }
                     },
                     iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-                    argument: {nCurrentRow:recIndex,nCurrentRecord:0},
+                    argument: {nCurrentRow:recIndex,nCurrentRecord:0,aRecords:aRecords},
                     scope: this,
                     timeout: (loopN > 0) ? 0 : -1
                 });
                 this._oChainRender.add({
-                    method: function() {
+                    method: function(oArg) {
+                        var recIndex = oArg.recIndex;
+                        // Set FIRST/LAST
+                        if(recIndex === 0) {
+                            this._setFirstRow();
+                        }
+                        if(recIndex === this._elTbody.rows.length-1) {
+                            this._setLastRow();
+                        }
+                        // Set EVEN/ODD
+                        this._setRowStripes();                           
+
                         this.fireEvent("rowsAddEvent", {records:aRecords});
                         YAHOO.log("Added " + aRecords.length + 
                                 " rows at index " + recIndex +
                                 " with data " + lang.dump(aData), "info", this.toString());
                     },
+                    argument: {recIndex: recIndex},
                     scope: this,
                     timeout: -1 // Needs to run immediately after the DOM insertions above
                 });
