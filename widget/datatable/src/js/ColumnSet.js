@@ -162,7 +162,7 @@ YAHOO.widget.ColumnSet.prototype = {
 
                 // Assign its parent as an attribute, if applicable
                 if(parent) {
-                    oColumn.parent = parent;
+                    oColumn._oParent = parent;
                 }
 
                 // The Column has descendants
@@ -333,8 +333,8 @@ YAHOO.widget.ColumnSet.prototype = {
         // Store header relationships in an array for HEADERS attribute
         var recurseAncestorsForHeaders = function(i, oColumn) {
             headers[i].push(oColumn._sId);
-            if(oColumn.parent) {
-                recurseAncestorsForHeaders(i, oColumn.parent);
+            if(oColumn._oParent) {
+                recurseAncestorsForHeaders(i, oColumn._oParent);
             }
         };
         for(i=0; i<keys.length; i++) {
@@ -934,6 +934,16 @@ YAHOO.widget.Column.prototype = {
     getKey : function() {
         return this.key;
     },
+    
+    /**
+     * Returns Column key which has been sanitized for CSS usage.
+     *
+     * @method getSanitizedKey
+     * @return {String} Sanitized Column key.
+     */
+    getSanitizedKey : function() {
+        return this.getKey().replace(/[^\w\-.:]/g,"");
+    },
 
     /**
      * Public accessor returns Column's current position index within its
@@ -1126,6 +1136,10 @@ YAHOO.widget.ColumnDD = function(oDataTable, oColumn, elTh, elTarget) {
 
         //Set padding to account for children of nested columns
         this.setPadding(10, 0, (this.datatable.getTheadEl().offsetHeight + 10) , 0);
+
+        YAHOO.util.Event.on(window, 'resize', function() {
+            this.initConstraints();
+        }, this, true);
     }
     else {
         YAHOO.log("Column dragdrop could not be created","warn",oDataTable.toString());
@@ -1151,11 +1165,7 @@ if(YAHOO.util.DDProxy) {
     
             //Set the constraints based on the above calculations
             this.setXConstraint(left, right);
-            this.setYConstraint(10, 10);
-            
-            YAHOO.util.Event.on(window, 'resize', function() {
-                this.initConstraints();
-            }, this, true);
+            this.setYConstraint(10, 10);            
         },
         _resizeProxy: function() {
             this.constructor.superclass._resizeProxy.apply(this, arguments);
@@ -1184,34 +1194,42 @@ if(YAHOO.util.DDProxy) {
             }
         },
         onDragOver: function(ev, id) {
-            // Validate target
+            // Validate target as a Column
             var target = this.datatable.getColumn(id);
-            if(target) {
-                var mouseX = YAHOO.util.Event.getPageX(ev),
-                targetX = YAHOO.util.Dom.getX(id),
-                midX = targetX + ((YAHOO.util.Dom.get(id).offsetWidth)/2),
-                currentIndex =  this.column.getTreeIndex(),
-                targetIndex = target.getTreeIndex(),
-                newIndex = targetIndex;
-                
-                
-                if (mouseX < midX) {
-                   YAHOO.util.Dom.setX(this.pointer, targetX);
-                } else {
-                    var thisWidth = parseInt(target.getThEl().offsetWidth, 10);
-                    YAHOO.util.Dom.setX(this.pointer, (targetX + thisWidth));
-                    newIndex++;
+            if(target) {                
+                // Validate target as a top-level parent
+                var targetIndex = target.getTreeIndex();
+                while((targetIndex === null) && target.getParent()) {
+                    target = target.getParent();
+                    targetIndex = target.getTreeIndex();
                 }
-                if (targetIndex > currentIndex) {
-                    newIndex--;
+                if(targetIndex !== null) {
+                    // Are we placing to left or right of target?
+                    var elTarget = target.getThEl();
+                    var newIndex = targetIndex;
+                    var mouseX = YAHOO.util.Event.getPageX(ev),
+                        targetX = YAHOO.util.Dom.getX(elTarget),
+                        midX = targetX + ((YAHOO.util.Dom.get(elTarget).offsetWidth)/2),
+                        currentIndex =  this.column.getTreeIndex();
+                    
+                    if (mouseX < midX) {
+                       YAHOO.util.Dom.setX(this.pointer, targetX);
+                    } else {
+                        var targetWidth = parseInt(elTarget.offsetWidth, 10);
+                        YAHOO.util.Dom.setX(this.pointer, (targetX + targetWidth));
+                        newIndex++;
+                    }
+                    if (targetIndex > currentIndex) {
+                        newIndex--;
+                    }
+                    if(newIndex < 0) {
+                        newIndex = 0;
+                    }
+                    else if(newIndex > this.datatable.getColumnSet().tree[0].length) {
+                        newIndex = this.datatable.getColumnSet().tree[0].length;
+                    }
+                    this.newIndex = newIndex;
                 }
-                if(newIndex < 0) {
-                    newIndex = 0;
-                }
-                else if(newIndex > this.datatable.getColumnSet().tree[0].length) {
-                    newIndex = this.datatable.getColumnSet().tree[0].length;
-                }
-                this.newIndex = newIndex;
             }
         },
         onDragDrop: function() {

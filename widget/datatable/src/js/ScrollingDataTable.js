@@ -34,7 +34,7 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     widget.ScrollingDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
 
-    ///this._sync();
+    this.subscribe("columnShowEvent",this._syncColWidths);
 };
 
 var SDT = widget.ScrollingDataTable;
@@ -117,7 +117,7 @@ _elBdContainer : null,
  * @type HTMLElement
  * @private
  */
-_elBdColgroup : null,
+///_elBdColgroup : null,
 
 /**
  * Body THEAD element.
@@ -242,7 +242,8 @@ _initDomElements : function(elContainer) {
         
         if(this._elHdTable && this._elTable) {
             // COLGROUPs
-            this._initColgroupEl(this._elHdTable, this._elTable);        
+            ///this._initColgroupEl(this._elHdTable, this._elTable);  
+            this._initColgroupEl(this._elHdTable);        
             
             // THEADs
             this._initTheadEl(this._elHdTable, this._elTable);
@@ -252,15 +253,14 @@ _initDomElements : function(elContainer) {
             // Message TBODY
             this._initMsgTbodyEl(this._elTable);
             
-            // Column helpers
-            this._initColumnHelpers(this._elThead);
-            
             // Tmp elements for auto-width calculation
             this._initTmpEls();
         }
     }
+    ///if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
+            ///!this._elHdTable || !this._elBdColgroup || !this._elBdThead) {
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody ||
-            !this._elHdTable || !this._elBdColgroup || !this._elBdThead) {
+            !this._elHdTable || !this._elBdThead) {
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return false;
     }
@@ -372,7 +372,7 @@ _destroyHdTableEl : function() {
         elTable.parentNode.removeChild(elTable);
         
         // A little out of place, but where else can we null out these extra elements?
-        this._elBdColgroup = null;
+        ///this._elBdColgroup = null;
         this._elBdThead = null;
     }
 },
@@ -392,7 +392,7 @@ _initTableEl : function() {
         this._elHdTable = this._elHdContainer.appendChild(document.createElement("table"));   
     } 
     // Body TABLE
-    this._baseInitTableEl(this._elBdContainer);  
+    SDT.superclass._initTableEl.call(this, this._elBdContainer);
 },
 
 /**
@@ -401,22 +401,54 @@ _initTableEl : function() {
  * @method _initColgroupEl
  * @private
  */
-_initColgroupEl : function(elHdTable, elBdTable) {
+/*_initColgroupEl : function(elHdTable, elBdTable) {
     // Scrolling body COLGROUP
     this._destroyBdColgroupEl();
-    this._baseInitColgroupEl(elBdTable);
-    this._elBdColgroup = this._elColgroup;
+    /// Maybe I don't need 2 colgroups
+    this._initBdColgroupEl(elBdTable);
     // Standard head COLGROUP
-    this._baseInitColgroupEl(elHdTable);
-},
+    SDT.superclass._initColgroupEl.call(this, elHdTable);
+},*/
 
 /**
- * Destroy's the DataTable head COLGROUP element, if available.
+ * Initializes COLGROUP and COL elements into the body TABLE for managing minWidth.
+ *
+ * @method _initBdColgroupEl
+ * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
+ * @private
+ */
+/*_initBdColgroupEl : function(elTable) {
+    if(elTable) {
+        // Destroy previous
+        this._destroyBdColgroupEl();
+
+        // Add COLs to DOCUMENT FRAGMENT
+        var allCols = this._aColIds || [],
+            allKeys = this._oColumnSet.keys,
+            i = 0, len = allCols.length,
+            elCol, oColumn,
+            elFragment = document.createDocumentFragment(),
+            elColTemplate = document.createElement("col");
+    
+        for(i=0,len=allKeys.length; i<len; i++) {
+            oColumn = allKeys[i];
+            elCol = elFragment.appendChild(elColTemplate.cloneNode(false));
+        }
+    
+        // Create COLGROUP
+        var elColgroup = elTable.insertBefore(document.createElement("colgroup"), elTable.firstChild);
+        elColgroup.appendChild(elFragment);
+        this._elBdColgroup = elColgroup;
+    }
+},*/
+
+/**
+ * Destroy's the DataTable body COLGROUP element, if available.
  *
  * @method _destroyBdColgroupEl
  * @private
  */
-_destroyBdColgroupEl : function() {
+/*_destroyBdColgroupEl : function() {
     var elColgroup = this._elBdColgroup;
     if(elColgroup) {
         var elTable = elColgroup.parentNode;
@@ -424,7 +456,7 @@ _destroyBdColgroupEl : function() {
         elTable.removeChild(elColgroup);
         this._elBdColgroup = null;
     }
-},
+},*/
 
 /**
  * Adds a COL element to COLGROUP at given index.
@@ -433,14 +465,14 @@ _destroyBdColgroupEl : function() {
  * @param index {Number} Index of new COL element.
  * @private
  */
-_insertColgroupColEl : function(index) {
+/*_insertColgroupColEl : function(index) {
     if(lang.isNumber(index) && this._elColgroup && this._elBdColgroup) {
         var nextSibling = this._elColgroup.childNodes[index] || null;
         this._elColgroup.insertBefore(document.createElement("col"), nextSibling);
         nextSibling = this._elBdColgroup.childNodes[index] || null;
         this._elBdColgroup.insertBefore(document.createElement("col"), nextSibling);
     }
-},
+},*/
 
 /**
  * Removes a COL element to COLGROUP at given index.
@@ -449,31 +481,43 @@ _insertColgroupColEl : function(index) {
  * @param index {Number} Index of removed COL element.
  * @private
  */
-_removeColgroupColEl : function(index) {
+/*_removeColgroupColEl : function(index) {
     if(lang.isNumber(index) && this._elColgroup && this._elColgroup.childNodes[index] && this._elBdColgroup && this._elBdColgroup.childNodes[index]) {
         this._elColgroup.removeChild(this._elColgroup.childNodes[index]);
         this._elBdColgroup.removeChild(this._elBdColgroup.childNodes[index]);
     }
-},
+},*/
 
 /**
- * Reorders a COL element from old index to new index.
+ * Reorders a COL element from old index(es) to new index.
  *
  * @method _reorderColgroupColEl
- * @param index {Number} Index of removed COL element.
+ * @param aKeyIndexes {Number[]} Array of indexes of removed COL element.
+ * @param newIndex {Number} New index. 
  * @private
  */
-_reorderColgroupColEl : function(oldIndex, newIndex) {
-    if(lang.isNumber(oldIndex) && lang.isNumber(newIndex) && this._elColgroup && this._elColgroup.childNodes[oldIndex] && this._elBdColgroup && this._elBdColgroup.childNodes[oldIndex]) {
-        var elCol = this._elColgroup.removeChild(this._elColgroup.childNodes[oldIndex]);
-        var nextSibling = this._elColgroup.childNodes[newIndex] || null;
-        this._elColgroup.insertBefore(elCol, nextSibling);
-
-        elCol = this._elBdColgroup.removeChild(this._elBdColgroup.childNodes[oldIndex]);
-        nextSibling = this._elBdColgroup.childNodes[newIndex] || null;
-        this._elBdColgroup.insertBefore(elCol, nextSibling);
+/*_reorderColgroupColEl : function(aKeyIndexes, newIndex) {
+    if(lang.isArray(aKeyIndexes) && lang.isNumber(newIndex) && this._elColgroup && (this._elColgroup.childNodes.length > aKeyIndexes[aKeyIndexes.length-1])) {
+        var i,
+            tmpCols = [],
+            tmpColsBd = [];
+        // Remove COL
+        for(i=aKeyIndexes.length-1; i>-1; i--) {
+            tmpCols.push(this._elColgroup.removeChild(this._elColgroup.childNodes[aKeyIndexes[i]]));
+            tmpColsBd.push(this._elBdColgroup.removeChild(this._elBdColgroup.childNodes[aKeyIndexes[i]]));
+        }
+        // Insert COL
+        var nextSibling = this._elColgroup.childNodes[newIndex] || null,
+            nextSiblingBd = this._elBdColgroup.childNodes[newIndex] || null;
+        for(i=tmpCols.length-1; i>-1; i--) {
+            this._elColgroup.insertBefore(tmpCols[i], nextSibling);
+            this._elBdColgroup.insertBefore(tmpColsBd[i], nextSiblingBd);
+        }
     }
-},
+},*/
+
+
+
 
 /**
  * Initializes ScrollingDataTable THEAD elements into the two inner containers.
@@ -488,7 +532,7 @@ _initTheadEl : function(elHdTable, elBdTable) {
     // Scrolling body THEAD
     this._initBdTheadEl(elBdTable);
     // Standard head THEAD
-    this._baseInitTheadEl(elHdTable);
+    SDT.superclass._initTheadEl.call(this, elHdTable);
 },
 
 /**
@@ -513,7 +557,7 @@ _destroyBdTheadEl : function() {
  * Initializes body THEAD element.
  *
  * @method _initBdTheadEl
- * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
+ * @param elTable {HTMLElement} TABLE element into which to create THEAD.
  * @return {HTMLElement} Initialized THEAD element. 
  * @private
  */
@@ -523,9 +567,10 @@ _initBdTheadEl : function(elTable) {
         this._destroyBdTheadEl();
 
         ///TODO: append to DOM later
-        var elThead = (this._elBdColgroup) ?
-            elTable.insertBefore(document.createElement("thead"), this._elBdColgroup.nextSibling) :
-            elTable.appendChild(document.createElement("thead"));
+       /// var elThead = (this._elBdColgroup) ?
+            ///elTable.insertBefore(document.createElement("thead"), this._elBdColgroup.nextSibling) :
+            ///elTable.appendChild(document.createElement("thead"));
+       var elThead = elTable.insertBefore(document.createElement("thead"), elTable.firstChild);
         
         var oColumnSet = this._oColumnSet,
             oColumn,
@@ -565,7 +610,7 @@ _initBdTheadEl : function(elTable) {
  */
 _initBdThEl : function(elTheadCell,oColumn) {
     // This is necessary for accessibility
-    elTheadCell.id = this._sId+"-th" + oColumn.getId();
+    elTheadCell.id = this._sId+"-bdth" + oColumn.getId();
     elTheadCell.rowSpan = oColumn.getRowspan();
     elTheadCell.colSpan = oColumn.getColspan();
     
@@ -573,20 +618,6 @@ _initBdThEl : function(elTheadCell,oColumn) {
     var sKey = oColumn.getKey();
     var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
     elTheadCell.innerHTML = sLabel;
-},
-
-/**
- * Populates TH cell for the body THEAD element.
- *
- * @method _initBdThEl
- * @param elTheadCell {HTMLElement} TH cell element reference.
- * @param oColumn {YAHOO.widget.Column} Column object.
- * @private
- */
-_initThEl : function(elTheadCell,oColumn) {
-    this._baseInitThEl(elTheadCell,oColumn);
-    // This is necessary for _syncScrollOverhang()
-    elTheadCell.id = this._sId+"-thfixed" + oColumn.getId();
 },
 
 
@@ -734,7 +765,7 @@ _syncColWidths : function() {
                     ///if(elTh.offsetWidth !== elTd.offsetWidth ||
                     ///    (oColumn.minWidth && (elWider.offsetWidth < oColumn.minWidth))) {
                     if(elTh.offsetWidth !== elTd.offsetWidth) {
-                        this._setColumnWidth(oColumn, "auto","visible");
+                        ///this._setColumnWidth(oColumn, "auto","visible");
 
                         var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
                                 elTh.firstChild : elTd.firstChild;               
@@ -745,7 +776,8 @@ _syncColWidths : function() {
                             (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
                             (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
                             
-                        this._setColumnWidth(oColumn, newWidth+'px', 'hidden');
+                        ///this._setColumnWidth(oColumn, newWidth+'px', 'hidden');
+                        this._setColumnWidth(oColumn, newWidth+'px', 'visible');
                     }
                 }
                 // Columns with widths
@@ -862,9 +894,9 @@ _syncScrollOverhang : function() {
         // Add Column header overhang
         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
         len = aLastHeaders.length;
-        prefix = this._sId+"-thfixed";
+        prefix = this._sId+"-th";
         for(i=0; i<len; i++) {
-            //TODO: A better way to get th cell
+            //TODO: A better way to get all THs along the right edge
             elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
             elLiner.parentNode.style.borderRight = "18px solid " + SDT.COLOR_COLUMNFILLER;
         }
@@ -874,7 +906,7 @@ _syncScrollOverhang : function() {
         // Remove Column header overhang
         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
         len = aLastHeaders.length;
-        prefix = this._sId+"-thfixed";
+        prefix = this._sId+"-th";
         for(i=0; i<len; i++) {
             //TODO: A better way to get th cell
             elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
@@ -883,10 +915,137 @@ _syncScrollOverhang : function() {
     }
 },
 
+/**
+ * Validates a Column (if given) or else all Columns against given minWidths, if any,
+ * and if Column is not hidden nor has a set width. 
+ *
+ * @method _validateMinWidths
+ * @param oArg.column {YAHOO.widget.Column} Affected Column instance, if available.
+ * @private
+ */
+_validateMinWidths : function(oArg) {
+    SDT.superclass._validateMinWidths.call(this, oArg);
+    this._sync();
+},
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Removes given Column. NOTE: You cannot remove nested Columns. You can only remove
+ * non-nested Columns, and top-level parent Columns (which will remove all
+ * children Columns).
+ *
+ * @method removeColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @return oColumn {YAHOO.widget.Column} Removed Column instance.
+ */
+removeColumn : function(oColumn) {
+    // Store scroll pos
+    var hdPos = this._elHdContainer.scrollLeft;
+    var bdPos = this._elBdContainer.scrollLeft;
+    
+    // Call superclass method
+    oColumn = SDT.superclass.removeColumn.call(this, oColumn);
+    
+    // Restore scroll pos
+    this._elHdContainer.scrollLeft = hdPos;
+    this._elBdContainer.scrollLeft = bdPos;
+    
+    return oColumn;
+},
+
+/**
+ * Inserts given Column at the index if given, otherwise at the end. NOTE: You
+ * can only add non-nested Columns and top-level parent Columns. You cannot add
+ * a nested Column to an existing parent.
+ *
+ * @method insertColumn
+ * @param oColumn {Object | YAHOO.widget.Column} Object literal Column
+ * definition or a Column instance.
+ * @param index {Number} (optional) New tree index.
+ * @return oColumn {YAHOO.widget.Column} Inserted Column instance. 
+ */
+insertColumn : function(oColumn, index) {
+    // Store scroll pos
+    var hdPos = this._elHdContainer.scrollLeft;
+    var bdPos = this._elBdContainer.scrollLeft;
+    
+    // Call superclass method
+    var oNewColumn = SDT.superclass.insertColumn.call(this, oColumn, index);
+    
+    // Restore scroll pos
+    this._elHdContainer.scrollLeft = hdPos;
+    this._elBdContainer.scrollLeft = bdPos;
+    
+    return oNewColumn;
+},
+
+/**
+ * Removes given Column and inserts into given tree index. NOTE: You
+ * can only reorder non-nested Columns and top-level parent Columns. You cannot
+ * reorder a nested Column to an existing parent.
+ *
+ * @method reorderColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param index {Number} New tree index.
+ */
+reorderColumn : function(oColumn, index) {
+    // Store scroll pos
+    var hdPos = this._elHdContainer.scrollLeft;
+    var bdPos = this._elBdContainer.scrollLeft;
+    
+    // Call superclass method
+    var oNewColumn = SDT.superclass.reorderColumn.call(this, oColumn, index);
+    
+    // Restore scroll pos
+    this._elHdContainer.scrollLeft = hdPos;
+    this._elBdContainer.scrollLeft = bdPos;
+
+    return oNewColumn;
+},
 
 
 
@@ -1346,11 +1505,5 @@ _onTheadKeydown : function(e, oSelf) {
 
 
 });
-
-// Aliases
-SDT.prototype._baseInitTableEl = DT.prototype._initTableEl;
-SDT.prototype._baseInitColgroupEl = DT.prototype._initColgroupEl;
-SDT.prototype._baseInitTheadEl = DT.prototype._initTheadEl;
-SDT.prototype._baseInitThEl = DT.prototype._initThEl;
 
 })();

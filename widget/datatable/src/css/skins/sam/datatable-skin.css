@@ -21,8 +21,8 @@
     border:none;
     border-right:1px solid #CBCBCB;/*  inner column border */
 }
-.yui-skin-sam .yui-dt tr.yui-dt-last th {
-    border-bottom:1px solid #7F7F7F;/*  thead bottom border */
+.yui-skin-sam .yui-dt tr.yui-dt-first td {
+    border-top:1px solid #7F7F7F;/*  tbody top border */
 }
 .yui-skin-sam .yui-dt th .yui-dt-liner {
     white-space:nowrap;

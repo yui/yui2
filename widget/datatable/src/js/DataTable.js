@@ -2651,17 +2651,26 @@ _removeColgroupColEl : function(index) {
 },
 
 /**
- * Reorders a COL element from old index to new index.
+ * Reorders a COL element from old index(es) to new index.
  *
  * @method _reorderColgroupColEl
- * @param index {Number} Index of removed COL element.
+ * @param aKeyIndexes {Number[]} Array of indexes of removed COL element.
+ * @param newIndex {Number} New index. 
  * @private
  */
-_reorderColgroupColEl : function(oldIndex, newIndex) {
-    if(lang.isNumber(oldIndex) && lang.isNumber(newIndex) && this._elColgroup && this._elColgroup.childNodes[oldIndex]) {
-        var elCol = this._elColgroup.removeChild(this._elColgroup.childNodes[oldIndex]);
+_reorderColgroupColEl : function(aKeyIndexes, newIndex) {
+    if(lang.isArray(aKeyIndexes) && lang.isNumber(newIndex) && this._elColgroup && (this._elColgroup.childNodes.length > aKeyIndexes[aKeyIndexes.length-1])) {
+        var i,
+            tmpCols = [];
+        // Remove COL
+        for(i=aKeyIndexes.length-1; i>-1; i--) {
+            tmpCols.push(this._elColgroup.removeChild(this._elColgroup.childNodes[aKeyIndexes[i]]));
+        }
+        // Insert COL
         var nextSibling = this._elColgroup.childNodes[newIndex] || null;
-        this._elColgroup.insertBefore(elCol, nextSibling);
+        for(i=tmpCols.length-1; i>-1; i--) {
+            this._elColgroup.insertBefore(tmpCols[i], nextSibling);
+        }
     }
 },
 
@@ -3111,9 +3120,9 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     }
     
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
-    allClasses[allClasses.length] = "yui-dt-col-"+oColumn.getKey().replace(/[^\w\-.:]/g,"");
+    allClasses[allClasses.length] = this.getId() + "-col-" +oColumn.getSanitizedKey();
     // Column ID
-    allClasses[allClasses.length] = "yui-dt-col"+oColumn.getId();
+    ///allClasses[allClasses.length] = "yui-dt-col"+oColumn.getId();
 
     var isSortedBy = this.get("sortedBy") || {};
     // Sorted
@@ -5455,7 +5464,13 @@ getColumn : function(column) {
         else {
             elCell = this.getThEl(column);
             if(elCell) {
-                oColumn = this._oColumnSet.getColumn(elCell.cellIndex);
+                // Find by TH el ID
+                var allColumns = this._oColumnSet.flat;
+                for(var i=0, l=allColumns.length; i<l; i++) {
+                    if(allColumns[i].getThEl().id === elCell.id) {
+                        oColumn = allColumns[i];
+                    } 
+                }
                 ///oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
             }
         }
@@ -5683,7 +5698,8 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
     // We have a STYLE node to update
     if(s) {
         // Unique classname for this Column instance
-        var sClassname = '.yui-dt-col' + oColumn.getId() + ' .yui-dt-liner';
+        // Use 
+        var sClassname = "." + this.getId() + "-col-" +oColumn.getSanitizedKey() + " .yui-dt-liner";
         
         // Hide for performance
         if(this._elTbody) {
@@ -5861,7 +5877,6 @@ _validateMinWidths : function(oArg) {
  * @private
  */
 _clearMinWidth : function(oColumn) {
-    //TODO: SDT has 2 colgroups
     this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = '';
 },
 
@@ -5873,7 +5888,6 @@ _clearMinWidth : function(oColumn) {
  * @private
  */
 _restoreMinWidth : function(oColumn) {
-    //TODO: SDT has 2 colgroups
     if(oColumn.minWidth) {
         this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = oColumn.minWidth + 'px';
     }
@@ -5996,43 +6010,76 @@ removeColumn : function(oColumn) {
     if(oColumn) {
         var nColTreeIndex = oColumn.getTreeIndex();
         if(nColTreeIndex !== null) {
-            // Which index
-            var nKeyIndex = oColumn.getKeyIndex();
-            
-            // Remove TH
-            var aOrigColumnDefs = this._oColumnSet.getDefinitions();
-            oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
-            this._initColumnSet(aOrigColumnDefs);
-            this._initTheadEl();
-            this._removeColgroupColEl(nKeyIndex);
-            
-            // Remove TD
-            var allRows = this._elTbody.rows;
-            if(allRows.length > 0) {
-                var loopN = this.get("renderLoopSize"),
-                    loopEnd = allRows.length;
-                this._oChainRender.add({
-                    method: function(oArg) {
-                        if((this instanceof DT) && this._sId) {
-                            var i = oArg.nCurrentRow,
-                                len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length;
-                            for(; i < len; ++i) {
-                                allRows[i].removeChild(allRows[i].cells[nKeyIndex]);
-                            }
-                            oArg.nCurrentRow = i;
-                        }
-                    },
-                    iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-                    argument: {nCurrentRow:0},
-                    scope: this,
-                    timeout: (loopN > 0) ? 0 : -1
-                });
-                this._oChainRender.run(); 
+            // Which key index(es)
+            var i, l,
+                aKeyIndexes = oColumn.getKeyIndex();
+            // Must be a parent Column
+            if(aKeyIndexes === null) {
+                var descKeyIndexes = [];
+                var allDescendants = this._oColumnSet.getDescendants(oColumn);
+                for(i=0, l=allDescendants.length; i<l; i++) {
+                    // Is this descendant a key Column?
+                    var thisKey = allDescendants[i].getKeyIndex();
+                    if(thisKey !== null) {
+                        descKeyIndexes[descKeyIndexes.length] = thisKey;
+                    }
+                }
+                if(descKeyIndexes.length > 0) {
+                    aKeyIndexes = descKeyIndexes;
+                }
             }
-    
-            this.fireEvent("columnRemoveEvent",{column:oColumn});
-            YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
-            return oColumn;
+            // Must be a key Column
+            else {
+                aKeyIndexes = [aKeyIndexes];
+            }
+            
+            if(aKeyIndexes !== null) {
+                // Sort the indexes so we can remove from the right
+                aKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);});
+                
+                // Remove TH
+                var aOrigColumnDefs = this._oColumnSet.getDefinitions();
+                oColumn = aOrigColumnDefs.splice(nColTreeIndex,1)[0];
+                this._initColumnSet(aOrigColumnDefs);
+                this._initTheadEl();
+                
+                // Remove COL
+                for(i=aKeyIndexes.length-1; i>-1; i--) {
+                    this._removeColgroupColEl(aKeyIndexes[i]);
+                }
+                
+                // Remove TD
+                var allRows = this._elTbody.rows;
+                if(allRows.length > 0) {
+                    var loopN = this.get("renderLoopSize"),
+                        loopEnd = allRows.length;
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                var i = oArg.nCurrentRow,
+                                    len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
+                                    aIndexes = oArg.aIndexes,
+                                    j;
+                                for(; i < len; ++i) {
+                                    for(j = aIndexes.length-1; j>-1; j--) {
+                                        allRows[i].removeChild(allRows[i].childNodes[aIndexes[j]]);
+                                    }
+                                }
+                                oArg.nCurrentRow = i;
+                            }
+                        },
+                        iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
+                        argument: {nCurrentRow:0, aIndexes:aKeyIndexes},
+                        scope: this,
+                        timeout: (loopN > 0) ? 0 : -1
+                    });
+                    this._oChainRender.run(); 
+                }
+        
+                this.fireEvent("columnRemoveEvent",{column:oColumn});
+                YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
+                return oColumn;
+            }
         }
     }
     YAHOO.log("Could not remove Column \"" + oColumn.key + "\". Only non-nested Columns can be removed", "warn", this.toString());
@@ -6046,7 +6093,7 @@ removeColumn : function(oColumn) {
  * @method insertColumn
  * @param oColumn {Object | YAHOO.widget.Column} Object literal Column
  * definition or a Column instance.
- * @param index {Number} (optional) Column key index.
+ * @param index {Number} (optional) New tree index.
  * @return oColumn {YAHOO.widget.Column} Inserted Column instance. 
  */
 insertColumn : function(oColumn, index) {
@@ -6059,9 +6106,8 @@ insertColumn : function(oColumn, index) {
         return;
     }
     
-    var oColumnSet = this._oColumnSet;
-
     // Validate index or append new Column to the end of the ColumnSet
+    var oColumnSet = this._oColumnSet;
     if(!lang.isValue(index) || !lang.isNumber(index)) {
         index = oColumnSet.tree[0].length;
     }
@@ -6071,50 +6117,88 @@ insertColumn : function(oColumn, index) {
     aNewColumnDefs.splice(index, 0, oColumn);
     this._initColumnSet(aNewColumnDefs);
     this._initTheadEl();
-    this._insertColgroupColEl(index);
-        
-    // Add TD
-    var allRows = this._elTbody.rows;
-    if(allRows.length > 0) {
-        var loopN = this.get("renderLoopSize"),
-            loopEnd = allRows.length;
-        
-        var elTdTemplate = this._getTrTemplateEl().childNodes[index].cloneNode(true);
-        elTdTemplate = this._formatTdEl(this._oColumnSet.keys[index], elTdTemplate, index, (index===this._oColumnSet.keys.length-1));
-        
-        this._oChainRender.add({
-            method: function(oArg) {
-                if((this instanceof DT) && this._sId) {
-                    var i = oArg.nCurrentRow,
-                        len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
-                        nextSibling;
-                    for(; i < len; ++i) {
-                        nextSibling = allRows[i].childNodes[index] || null;
-                        allRows[i].insertBefore(oArg.elTdTemplate.cloneNode(true), nextSibling);
-                    }
-                    oArg.nCurrentRow = i;
-                }
-            },
-            iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-            argument: {nCurrentRow:0,elTdTemplate:elTdTemplate},
-            scope: this,
-            timeout: (loopN > 0) ? 0 : -1
-        });
-        this._oChainRender.run(); 
+    
+    // Need to refresh the reference
+    oColumnSet = this._oColumnSet;
+    var oNewColumn = oColumnSet.tree[0][index];
+    
+    // Get key index(es) for new Column
+    var i, l,
+        descKeyIndexes = [];
+    var allDescendants = oColumnSet.getDescendants(oNewColumn);
+    for(i=0, l=allDescendants.length; i<l; i++) {
+        // Is this descendant a key Column?
+        var thisKey = allDescendants[i].getKeyIndex();
+        if(thisKey !== null) {
+            descKeyIndexes[descKeyIndexes.length] = thisKey;
+        }
     }
+    
+    if(descKeyIndexes.length > 0) {  
+        // Sort the indexes
+        var newIndex = descKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);})[0];
+        
+        // Add COL
+        for(i=descKeyIndexes.length-1; i>-1; i--) {
+            this._insertColgroupColEl(descKeyIndexes[i]);
+        }
+            
+        // Add TD
+        var allRows = this._elTbody.rows;
+        if(allRows.length > 0) {
+            var loopN = this.get("renderLoopSize"),
+                loopEnd = allRows.length;
+            
+            // Get templates for each new TD
+            var aTdTemplates = [],
+                elTdTemplate;
+            for(i=0, l=descKeyIndexes.length; i<l; i++) {
+                var thisKeyIndex = descKeyIndexes[i];
+                elTdTemplate = this._getTrTemplateEl().childNodes[i].cloneNode(true);
+                elTdTemplate = this._formatTdEl(this._oColumnSet.keys[thisKeyIndex], elTdTemplate, thisKeyIndex, (thisKeyIndex===this._oColumnSet.keys.length-1));
+                aTdTemplates[thisKeyIndex] = elTdTemplate;
+            }
+            
+            this._oChainRender.add({
+                method: function(oArg) {
+                    if((this instanceof DT) && this._sId) {
+                        var i = oArg.nCurrentRow, j,
+                            descKeyIndexes = oArg.descKeyIndexes,
+                            len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
+                            nextSibling;
+                        for(; i < len; ++i) {
+                            nextSibling = allRows[i].childNodes[newIndex] || null;
+                            for(j=descKeyIndexes.length-1; j>-1; j--) {
+                                allRows[i].insertBefore(oArg.aTdTemplates[descKeyIndexes[j]].cloneNode(true), nextSibling);
+                            }
+                        }
+                        oArg.nCurrentRow = i;
+                    }
+                },
+                iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
+                argument: {nCurrentRow:0,aTdTemplates:aTdTemplates,descKeyIndexes:descKeyIndexes},
+                scope: this,
+                timeout: (loopN > 0) ? 0 : -1
+            });
+            this._oChainRender.run(); 
+            return oNewColumn;
+        }
 
-    this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
-    YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
+        this.fireEvent("columnInsertEvent",{column:oColumn,index:index});
+        YAHOO.log("Column \"" + oColumn.key + "\" inserted into index " + index, "info", this.toString());
+    }
 },
 
 /**
- * Removes given Column and inserts into given index. NOTE: You
+ * Removes given Column and inserts into given tree index. NOTE: You
  * can only reorder non-nested Columns and top-level parent Columns. You cannot
  * reorder a nested Column to an existing parent.
  *
  * @method reorderColumn
  * @param oColumn {YAHOO.widget.Column} Column instance.
- * @param index {Number} New key index.
+ * @param index {Number} New tree index.
+ * @return oColumn {YAHOO.widget.Column} Reordered Column instance. 
+ * @return  
  */
 reorderColumn : function(oColumn, index) {
     // Validate Column and new index
@@ -6122,49 +6206,115 @@ reorderColumn : function(oColumn, index) {
         oColumn = this.getColumn(oColumn);
     }
     if(oColumn && YAHOO.lang.isNumber(index)) {
-        var nColTreeIndex = oColumn.getTreeIndex();
-        if(nColTreeIndex !== null) {
-            // Which key indexes
-            var nOldIndex = oColumn.getKeyIndex();
-            
-            // Reorder TH
-            var aColumnDefs = this._oColumnSet.getDefinitions();
-            var oColumnDef = aColumnDefs.splice(nColTreeIndex,1)[0];
-            aColumnDefs.splice(index, 0, oColumnDef);
-            this._initColumnSet(aColumnDefs);
-            this._initTheadEl();
-            this._reorderColgroupColEl(nOldIndex, index);
-            
-            // Reorder TD
-            var allRows = this._elTbody.rows;
-            if(allRows.length > 0) {
-                var loopN = this.get("renderLoopSize"),
-                    loopEnd = allRows.length;
-                this._oChainRender.add({
-                    method: function(oArg) {
-                        if((this instanceof DT) && this._sId) {
-                            var i = oArg.nCurrentRow,
-                                len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
-                                nextSibling, elTd;
-                            for(; i < len; ++i) {
-                                elTd = allRows[i].removeChild(allRows[i].cells[nOldIndex]);
-                                nextSibling = allRows[i].childNodes[index] || null;
-                                allRows[i].insertBefore(elTd, nextSibling);
-                            }
-                            oArg.nCurrentRow = i;
-                        }
-                    },
-                    iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-                    argument: {nCurrentRow:0},
-                    scope: this,
-                    timeout: (loopN > 0) ? 0 : -1
-                });
-                this._oChainRender.run(); 
+        var nOrigTreeIndex = oColumn.getTreeIndex();
+        if((nOrigTreeIndex !== null) && (nOrigTreeIndex !== index)) {
+            // Which key index(es)
+            var i, l,
+                aOrigKeyIndexes = oColumn.getKeyIndex(),
+                allDescendants,
+                descKeyIndexes = [],
+                thisKey;
+            // Must be a parent Column
+            if(aOrigKeyIndexes === null) {
+                allDescendants = this._oColumnSet.getDescendants(oColumn);
+                for(i=0, l=allDescendants.length; i<l; i++) {
+                    // Is this descendant a key Column?
+                    thisKey = allDescendants[i].getKeyIndex();
+                    if(thisKey !== null) {
+                        descKeyIndexes[descKeyIndexes.length] = thisKey;
+                    }
+                }
+                if(descKeyIndexes.length > 0) {
+                    aOrigKeyIndexes = descKeyIndexes;
+                }
             }
-    
-            this.fireEvent("columnReorderEvent",{column:oColumn});
-            YAHOO.log("Column \"" + oColumn.key + "\" removed", "info", this.toString());
-            return oColumn;
+            // Must be a key Column
+            else {
+                aOrigKeyIndexes = [aOrigKeyIndexes];
+            }
+            
+            if(aOrigKeyIndexes !== null) {
+                // Sort the indexes
+                aOrigKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);});
+            
+                // Reorder TH
+                var aColumnDefs = this._oColumnSet.getDefinitions();
+                var oColumnDef = aColumnDefs.splice(nOrigTreeIndex,1)[0];
+                aColumnDefs.splice(index, 0, oColumnDef);
+                this._initColumnSet(aColumnDefs);
+                this._initTheadEl();
+                
+                // Need to refresh the reference
+                var oNewColumn = this._oColumnSet.tree[0][index];
+
+                // What are new key index(es)
+                var aNewKeyIndexes = oNewColumn.getKeyIndex();
+                // Must be a parent Column
+                if(aNewKeyIndexes === null) {
+                    descKeyIndexes = [];
+                    allDescendants = this._oColumnSet.getDescendants(oNewColumn);
+                    for(i=0, l=allDescendants.length; i<l; i++) {
+                        // Is this descendant a key Column?
+                        thisKey = allDescendants[i].getKeyIndex();
+                        if(thisKey !== null) {
+                            descKeyIndexes[descKeyIndexes.length] = thisKey;
+                        }
+                    }
+                    if(descKeyIndexes.length > 0) {
+                        aNewKeyIndexes = descKeyIndexes;
+                    }
+                }
+                // Must be a key Column
+                else {
+                    aNewKeyIndexes = [aNewKeyIndexes];
+                }
+                
+                // Sort the new indexes and grab the first one for the new location
+                var newIndex = aNewKeyIndexes.sort(function(a, b) {return YAHOO.util.Sort.compare(a, b);})[0];
+                
+                // Reorder COL
+                this._reorderColgroupColEl(aOrigKeyIndexes, newIndex);
+                
+                // Reorder TD
+                var allRows = this._elTbody.rows;
+                if(allRows.length > 0) {
+                    var loopN = this.get("renderLoopSize"),
+                        loopEnd = allRows.length;
+                    this._oChainRender.add({
+                        method: function(oArg) {
+                            if((this instanceof DT) && this._sId) {
+                                var i = oArg.nCurrentRow, j, tmpTds, nextSibling,
+                                    len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
+                                    aIndexes = oArg.aIndexes;
+                                // For each row
+                                for(; i < len; ++i) {
+                                    tmpTds = [];
+                                    // Remove each TD
+                                    for(j=aIndexes.length-1; j>-1; j--) {
+                                        tmpTds.push(allRows[i].removeChild(allRows[i].childNodes[aIndexes[j]]));
+                                    }
+                                    nextSibling = allRows[i].childNodes[newIndex] || null;
+                                    // Insert each TD
+                                    for(j=tmpTds.length-1; j>-1; j--) {
+                                        allRows[i].insertBefore(tmpTds[j], nextSibling);
+                                    }                                    
+                                }
+                                oArg.nCurrentRow = i;
+                            }
+                        },
+                        iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
+                        argument: {nCurrentRow:0, aIndexes:aOrigKeyIndexes},
+                        scope: this,
+                        timeout: (loopN > 0) ? 0 : -1
+                    });
+                    this._oChainRender.run(); 
+                }
+        
+                this.fireEvent("columnReorderEvent",{column:oNewColumn});
+                this.fireEvent("tableMutationEvent");
+                YAHOO.log("Column \"" + oNewColumn.key + "\" reordered", "info", this.toString());
+                return oNewColumn;
+            }
         }
     }
     YAHOO.log("Could not reorder Column \"" + oColumn.key + "\". Only non-nested Columns can be reordered", "warn", this.toString());
@@ -9585,9 +9735,7 @@ onEventSortColumn : function(oArgs) {
 
     var el = this.getThEl(target) || this.getTdEl(target);
     if(el) {
-    ///if(el && el.yuiColumnKey) {
-        var oColumn = this.getColumn(el.cellIndex);
-        ///var oColumn = this.getColumn(el.yuiColumnKey);
+        var oColumn = this.getColumn(el);
         if(oColumn.sortable) {
             Ev.stopEvent(evt);
             this.sortColumn(oColumn);
