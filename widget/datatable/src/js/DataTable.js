@@ -2490,10 +2490,11 @@ _initDomElements : function(elContainer) {
     // THEAD
     this._initTheadEl(this._elTable);
     
-    // Primary TBODY
-    this._initTbodyEl(this._elTable);
     // Message TBODY
     this._initMsgTbodyEl(this._elTable);  
+
+    // Primary TBODY
+    this._initTbodyEl(this._elTable);
 
     if(!this._elContainer || !this._elTable || !this._elColgroup ||  !this._elThead || !this._elTbody || !this._elMsgTbody) {
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
@@ -2731,7 +2732,7 @@ _initTheadEl : function(elTable) {
         for(i=0; i<colTree.length; i++) {
             var elTheadRow = elThead.appendChild(document.createElement("tr"));
             ///TODO: is this necessary?
-            elTheadRow.id = this._sId+"-hdrow" + i;
+            ///elTheadRow.id = this._sId+"-hdrow" + i;
     
             // ...and create TH cells
             for(j=0; j<colTree[i].length; j++) {
@@ -2795,8 +2796,7 @@ _initThEl : function(elTheadCell,oColumn) {
     var colKey = oColumn.getKey();
     var colId = oColumn.getId();
     
-    // This is necessary for accessibility
-    elTheadCell.id = this._sId+"-th" + oColumn.getId();
+    elTheadCell.id = this._sId+"-th" + oColumn.getId(); // Needed for accessibility and getColumn by TH
     ///elTheadCell.yuiColumnKey = colKey;
     ///elTheadCell.yuiColumnId = colId;
     elTheadCell.innerHTML = "";
@@ -2944,7 +2944,7 @@ _initTbodyEl : function(elTable) {
         this._destroyTbodyEl();
         
         // Create TBODY
-        var elTbody = elTable.insertBefore(document.createElement("tbody"), this._elMsgTbody);
+        var elTbody = elTable.appendChild(document.createElement("tbody"));
         elTbody.tabIndex = 0;
     
         ///TODO: move to container
@@ -3008,7 +3008,7 @@ _initMsgTbodyEl : function(elTable) {
         Dom.addClass(elMsgTd,DT.CLASS_FIRST);
         Dom.addClass(elMsgTd,DT.CLASS_LAST);
         this._elMsgTd = elMsgTd;
-        elMsgTbody = elTable.appendChild(elMsgTbody);
+        elMsgTbody = elTable.insertBefore(elMsgTbody, this._elTbody);
         var elMsgLiner = elMsgTd.appendChild(document.createElement("div"));
         Dom.addClass(elMsgLiner,DT.CLASS_LINER);  
         this._elMsgTbody = elMsgTbody;
@@ -3026,7 +3026,7 @@ _initCellEditor : function() {
 
     // Attach Cell Editor container element as first child of body
     var elCellEditor = document.createElement("div");
-    elCellEditor.id = this._sId + "-celleditor";
+    elCellEditor.id = this._sId + "-celleditor"; // Needed for blur onclick elsewhere
     elCellEditor.style.display = "none";
     elCellEditor.tabIndex = 0;
     Dom.addClass(elCellEditor, DT.CLASS_EDITOR);
@@ -3276,9 +3276,6 @@ _addTrEl : function (oRecord) {
     // Clone the TR template.
     var elTr = elTrTemplate.cloneNode(true);
     
-    // Set row-specific attributes
-    elTr.id = this._sId+"-bdrow"+this._nTrCount++;
-    
     // Populate content
     return this._updateTrEl(elTr,oRecord);
 },
@@ -3303,11 +3300,15 @@ _updateTrEl : function(elTr, oRecord) {
     for(var i=0,len=allTds.length; i<len; ++i) {
         elTd = allTds[i];
         
+        // Set row-specific attributes
+        ///elTr.id = this._sId+"-bdrow"+this._nTrCount++;
+        elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
+        
         // Set cell-specific attributes
         ///TODO: are IDs necessary?
-        if(!elTd.id) {
-            elTd.id = this._sId+"-bdcell"+this._nTdCount++;
-        }
+        ///if(!elTd.id) {
+            ///elTd.id = this._sId+"-bdcell"+this._nTdCount++;
+        ///}
    
         // Set the cell content
         this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
@@ -3383,6 +3384,21 @@ _deleteTrEl : function(row) {
 
 
 /**
+ * Removes the class YAHOO.widget.DataTable.CLASS_FIRST from the first TR element
+ * of the DataTable page and updates internal tracker.
+ *
+ * @method _setFirstRow
+ * @private
+ */
+_unsetFirstRow : function() {
+    // Remove FIRST
+    if(this._sFirstTrId) {
+        Dom.removeClass(this._sFirstTrId, DT.CLASS_FIRST);
+        this._sFirstTrId = null;
+    }
+},
+
+/**
  * Assigns the class YAHOO.widget.DataTable.CLASS_FIRST to the first TR element
  * of the DataTable page and updates internal tracker.
  *
@@ -3390,19 +3406,28 @@ _deleteTrEl : function(row) {
  * @private
  */
 _setFirstRow : function() {
-    var rowEl = this.getFirstTrEl();
-    if(rowEl) {
-        // Remove FIRST
-        if(this._sFirstTrId) {
-            Dom.removeClass(this._sFirstTrId, DT.CLASS_FIRST);
-        }
+    this._unsetFirstRow();
+    var elTr = this.getFirstTrEl();
+    if(elTr) {
         // Set FIRST
-        Dom.addClass(rowEl, DT.CLASS_FIRST);
-        this._sFirstTrId = rowEl.id;
+        Dom.addClass(elTr, DT.CLASS_FIRST);
+        this._sFirstTrId = elTr.id;
     }
-    else {
-        this._sFirstTrId = null;
-    }
+},
+
+/**
+ * Removes the class YAHOO.widget.DataTable.CLASS_LAST from the last TR element
+ * of the DataTable page and updates internal tracker.
+ *
+ * @method _unsetLastRow
+ * @private
+ */
+_unsetLastRow : function() {
+    // Unassign previous class
+    if(this._sLastTrId) {
+        Dom.removeClass(this._sLastTrId, DT.CLASS_LAST);
+        this._sLastTrId = null;
+    }   
 },
 
 /**
@@ -3413,18 +3438,12 @@ _setFirstRow : function() {
  * @private
  */
 _setLastRow : function() {
-    var rowEl = this.getLastTrEl();
-    if(rowEl) {
-        // Unassign previous class
-        if(this._sLastTrId) {
-            Dom.removeClass(this._sLastTrId, DT.CLASS_LAST);
-        }
+    this._unsetLastRow();
+    var elTr = this.getLastTrEl();
+    if(elTr) {
         // Assign class
-        Dom.addClass(rowEl, DT.CLASS_LAST);
-        this._sLastTrId = rowEl.id;
-    }
-    else {
-        this._sLastTrId = null;
+        Dom.addClass(elTr, DT.CLASS_LAST);
+        this._sLastTrId = elTr.id;
     }
 },
 
@@ -4905,7 +4924,7 @@ render : function() {
 YAHOO.log("start render","time");
 
     this._oChainRender.stop();
-    this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
+    ///this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
     var i, j, k, l, len, allRecords;
@@ -4934,6 +4953,104 @@ YAHOO.log("start render","time");
         allRecords = this._oRecordSet.getRecords();
     }
 
+
+    /* NEW METHOD */
+    // From the top, update in-place existing rows, so as to reuse DOM elements
+    var elTbody = this._elTbody;
+    var nRecordsLength = allRecords.length;
+    if(nRecordsLength > 0) {
+        ///this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
+        
+        // unlooped
+        //this._oChainRender.add({
+        //    method: function(oArg) {
+        //        if((this instanceof DT) && this._sId) {
+        //            var elRow;
+        //            for(var i = allRecords.length-1; i>-1; i--) {
+        //                elRow = Dom.get(allRecords[i].getId());
+        //                elRow = elRow || this._addTrEl(allRecords[i]);
+        //                elTbody.insertBefore(elRow, elTbody.firstChild);
+        //            }
+        //        }
+        //    },
+        //    scope: this
+        //});
+        
+        // So you don't see the borders in random places
+        this._unsetFirstRow();
+        this._unsetLastRow();
+
+        // Set up the looped Chain
+        var loopN = this.get("renderLoopSize");
+        this._oChainRender.add({
+            method: function(oArg) {
+                if((this instanceof DT) && this._sId) {
+                    ///elTbody.style.display = "none";
+                    var i = oArg.nCurrentRecord,
+                        endRecordIndex = ((oArg.nCurrentRecord-oArg.nLoopLength) < -1) ?
+                                -1 : (oArg.nCurrentRecord-oArg.nLoopLength),
+                        elRow;
+                    for(; i>endRecordIndex; i--) {
+                        elRow = Dom.get(allRecords[i].getId());
+                        elRow = elRow || this._addTrEl(allRecords[i]);
+                        elTbody.insertBefore(elRow, elTbody.firstChild);
+                        if(elTbody.rows.length > nRecordsLength) {
+                            elTbody.removeChild(elTbody.lastChild);
+                        }
+                    }
+                    // Set up for the next loop
+                    oArg.nCurrentRecord = i;
+                }
+            },
+            scope: this,
+            iterations: (loopN > 0) ? Math.ceil(nRecordsLength/loopN) : 1,
+            argument: {
+                nCurrentRecord: nRecordsLength-1,  // Start at last Record
+                nLoopLength: (loopN > 0) ? loopN : nRecordsLength
+            },
+            timeout: (loopN > 0) ? 0 : -1
+        });
+        this._oChainRender.add({
+            method: function(oArg) {
+                if((this instanceof DT) && this._sId) {
+                    while(elTbody.rows.length > nRecordsLength) {
+                        elTbody.removeChild(elTbody.lastChild);
+                    }
+                    this._setFirstRow();
+                    this._setLastRow();
+                    this._setRowStripes();
+                    ///elTbody.style.display = "";
+                    this.hideTableMessage();
+
+                    if(this._bInit) {
+                        this._bInit = false;
+                        this.fireEvent("initEvent");
+                        YAHOO.log("DataTable initialized with " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
+                    }
+                    else {
+                        this.fireEvent("renderEvent");
+                        // Backward compatibility
+                        this.fireEvent("refreshEvent");
+                        YAHOO.log("DataTable rendered " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
+                    }
+                
+                    YAHOO.log("end render","time");
+                }
+            },
+            scope: this
+        });
+        this._oChainRender.run();
+    }
+    else {
+        // Remove all rows
+        while(elTbody.hasChildNodes()) {
+            elTbody.deleteRow(-1);
+        }
+
+        this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+    }
+
+    /* ORIGINAL METHOD 
     var elTbody = this._elTbody;
     var allRows = elTbody.rows;
 
@@ -4992,19 +5109,6 @@ YAHOO.log("start render","time");
 
         loopStart = allRows.length; // where to start
         loopEnd = allRecords.length; // where to end
-
-        /* Not chained for testing
-        // Add more TR elements as necessary
-        i = 0;
-            len = loopEnd;
-            var df = document.createDocumentFragment(),
-            tr;
-        for(; i < len; ++i) {
-            tr = this._addTrEl(allRecords[i]);
-            tr.className = (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN;
-            df.appendChild(tr);
-        }
-        this._elTbody.appendChild(df);*/
 
 
         // Add more TR elements as necessary
@@ -5114,7 +5218,7 @@ YAHOO.log("start render","time");
         this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId) {
-                    YAHOO.log("end render","time");
+                   YAHOO.log("end render","time");
                 }
             },
             scope: this
@@ -5131,7 +5235,7 @@ YAHOO.log("start render","time");
         }
 
         this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
-    }
+    }*/
 
 },
 

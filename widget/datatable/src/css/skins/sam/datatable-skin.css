@@ -57,6 +57,7 @@
 .yui-skin-sam .yui-dt-scrollable table {border:none;}
 .yui-skin-sam .yui-dt-scrollable .yui-dt-hd {border-left:1px solid #7F7F7F;border-top:1px solid #7F7F7F;border-right:1px solid #7F7F7F;}
 .yui-skin-sam .yui-dt-scrollable .yui-dt-bd {border-left:1px solid #7F7F7F;border-bottom:1px solid #7F7F7F;border-right:1px solid #7F7F7F;background-color:#FFF;}
+.yui-skin-sam .yui-dt-scrollable tr.yui-dt-last td {border-bottom:1px solid #7F7F7F;}
 
 /* sortable columns */
 .yui-skin-sam thead .yui-dt-sortable {

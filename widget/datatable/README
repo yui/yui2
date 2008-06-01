@@ -2,11 +2,22 @@ DataTable Release Notes
 
 *** version 2.6.0 ***
 
-* ClassNames for Column states now assigned on TH and TD elements, not on liners.
+* Created new subclass ScrollingDataTable.
+
+* In the markup, the primary data TBODY is (once again) before the message TBODY element.
+ 
+* TR element IDs are now assigned with the corresponding Record ID.
+ 
+* Removed unused TD ID assignments.
+
+* All CSS clases representing Column states now assigned directly on TH and TD
+elements, not on liner DIV elements.
  
 * Column.minWidth default value now null.
 
 * Hidden Columns are now manifested as cell liner elements with display:none.
+ 
+* Added bottom border to last TR element in ScrollingDataTables.
 
 
 
