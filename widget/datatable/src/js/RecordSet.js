@@ -702,7 +702,8 @@ YAHOO.lang.augmentProto(RS, util.EventProvider);
  * @param oConfigs {Object} (optional) Object literal of key/value pairs.
  */
 YAHOO.widget.Record = function(oLiteral) {
-    this._sId = "yui-rec" + YAHOO.widget.Record._nCount;
+    this._nCount = YAHOO.widget.Record._nCount;
+    this._sId = "yui-rec" + this._nCount;
     YAHOO.widget.Record._nCount++;
     this._oData = {};
     if(oLiteral && (oLiteral.constructor == Object)) {
@@ -728,6 +729,16 @@ YAHOO.widget.Record = function(oLiteral) {
 YAHOO.widget.Record._nCount = 0;
 
 YAHOO.widget.Record.prototype = {
+    /**
+     * Immutable unique count assigned at instantiation. Remains constant while a
+     * Record's position index can change from sorting.
+     *
+     * @property _nCount
+     * @type Number
+     * @private
+     */
+    _nCount : null,
+
     /**
      * Immutable unique ID assigned at instantiation. Remains constant while a
      * Record's position index can change from sorting.
@@ -758,6 +769,16 @@ YAHOO.widget.Record.prototype = {
     // Public methods
     //
     /////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Returns unique count assigned at instantiation.
+     *
+     * @method getId
+     * @return Number
+     */
+    getCount : function() {
+        return this._nCount;
+    },
 
     /**
      * Returns unique ID assigned at instantiation.

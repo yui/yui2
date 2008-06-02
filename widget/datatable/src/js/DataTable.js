@@ -5720,9 +5720,10 @@ sortColumn : function(oColumn, sDir) {
 
                     // Default sort function
                     function(a, b, desc) {
+                        YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
                         var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
                         if(sorted === 0) {
-                            return YAHOO.util.Sort.compare(a.getId(),b.getId(), desc);
+                            return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
                         }
                         else {
                             return sorted;
