@@ -9,6 +9,13 @@ DataTable Release Notes
 * TR element IDs are now assigned with the corresponding Record ID.
  
 * Removed unused TD ID assignments.
+ 
+* The following APIs have been changed from static class properties to instance
+Attributes, to be set via the initial config or myDataTable.set():
+    - MSG_EMPTY
+    - MSG_ERROR
+    - MSG_LOADING
+    - COLOR_COLUMNFILLER (ScrollingDataTable)
 
 * All CSS clases representing Column states now assigned directly on TH and TD
 elements, not on liner DIV elements.

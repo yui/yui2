@@ -66,19 +66,7 @@ lang.augmentObject(SDT, {
      * @final
      * @default "yui-dt-bd"
      */
-    CLASS_BODY : "yui-dt-bd",
-
-    /**
-     * Color assigned to header filler on scrollable tables when columnFiller
-     * is set to true.
-     *
-     * @property DataTable.CLASS_COLUMN_FILLER_COLOR
-     * @type String
-     * @static
-     * @final
-     * @default "#F2F2F2"
-     */
-    COLOR_COLUMNFILLER : "#F2F2F2"
+    CLASS_BODY : "yui-dt-bd"
 });
 
 lang.extend(SDT, DT, {
@@ -186,8 +174,6 @@ initAttributes : function(oConfigs) {
     oConfigs = oConfigs || {};
     SDT.superclass.initAttributes.call(this, oConfigs);
 
-
-
     /**
     * @attribute width
     * @description Table width for scrollable tables. Note: When setting width
@@ -220,6 +206,20 @@ initAttributes : function(oConfigs) {
             this._syncScrollX();   
             this._syncScrollY();
             this._syncScrollOverhang();
+        }
+    });
+
+    /**
+    * @attribute COLOR_COLUMNFILLER
+    * @description CSS color value assigned to header filler on scrollable tables.  
+    * @type String
+    * @default "#F2F2F2"
+    */
+    this.setAttributeConfig("COLOR_COLUMNFILLER", {
+        value: "#F2F2F2",
+        validator: lang.isString,
+        method: function(oParam) {
+            this._elHdContainer.style.backgroundColor = oParam;
         }
     });
 },
@@ -347,7 +347,6 @@ _initContainerEl : function(elContainer) {
         
         // Container for header TABLE
         var elHdContainer = elContainer.appendChild(document.createElement("div"));
-        elHdContainer.style.backgroundColor = SDT.COLOR_COLUMNFILLER;
         Dom.addClass(elHdContainer, SDT.CLASS_HEADER);
         this._elHdContainer = elHdContainer;
     
@@ -898,7 +897,7 @@ _syncScrollOverhang : function() {
         for(i=0; i<len; i++) {
             //TODO: A better way to get all THs along the right edge
             elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-            elLiner.parentNode.style.borderRight = "18px solid " + SDT.COLOR_COLUMNFILLER;
+            elLiner.parentNode.style.borderRight = "18px solid " + this.get("COLOR_COLUMNFILLER");
         }
     }
     // Y-scrollbar is not visible
@@ -910,7 +909,7 @@ _syncScrollOverhang : function() {
         for(i=0; i<len; i++) {
             //TODO: A better way to get th cell
             elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-            elLiner.parentNode.style.borderRight = "1px solid " + SDT.COLOR_COLUMNFILLER;
+            elLiner.parentNode.style.borderRight = "1px solid " + this.get("COLOR_COLUMNFILLER");
         }
     }
 },

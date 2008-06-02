@@ -86,7 +86,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     }
     
     ///TODO: a better way to set up initial state, esp for DT created in hidden container
-    this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     
     ////////////////////////////////////////////////////////////////////////////
     // Set up Attributes
@@ -148,7 +148,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     }
     // Do not send an initial request at all
     else if(initialLoad === false) {
-        this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
         this._oChainRender.add({
             method: function() {
                 if((this instanceof DT) && this._sId && this._bInit) {
@@ -563,39 +563,6 @@ lang.augmentObject(DT, {
      * @default "yui-dt-tmp"
      */
     CLASS_TMP : "yui-dt-tmp",
-
-    /**
-     * Message to display if DataTable has no data.
-     *
-     * @property DataTable.MSG_EMPTY
-     * @type String
-     * @static
-     * @final
-     * @default "No records found."
-     */
-    MSG_EMPTY : "No records found.",
-
-    /**
-     * Message to display while DataTable is loading data.
-     *
-     * @property DataTable.MSG_LOADING
-     * @type String
-     * @static
-     * @final
-     * @default "Loading data..."
-     */
-    MSG_LOADING : "Loading data...",
-
-    /**
-     * Message to display while DataTable has data error.
-     *
-     * @property DataTable.MSG_ERROR
-     * @type String
-     * @static
-     * @final
-     * @default "Data error."
-     */
-    MSG_ERROR : "Data error.",
 
     /////////////////////////////////////////////////////////////////////////
     //
@@ -2047,6 +2014,39 @@ initAttributes : function(oConfigs) {
          value: 0, 	 
          validator: lang.isNumber 	 
      }); 	 
+
+    /**
+     * @attribute MSG_EMPTY 	 
+     * @description Message to display if DataTable has no data.     
+     * @type String 	 
+     * @default "No records found." 	 
+     */ 	 
+     this.setAttributeConfig("MSG_EMPTY", { 	 
+         value: "No records found.", 	 
+         validator: lang.isString 	 
+     }); 	 
+
+    /**
+     * @attribute MSG_LOADING	 
+     * @description Message to display while DataTable is loading data.
+     * @type String 	 
+     * @default "Loading..." 	 
+     */ 	 
+     this.setAttributeConfig("MSG_LOADING", { 	 
+         value: "Loading...", 	 
+         validator: lang.isString 	 
+     }); 	 
+
+    /**
+     * @attribute MSG_ERROR	 
+     * @description Message to display while DataTable has data error.
+     * @type String 	 
+     * @default "Data error." 	 
+     */ 	 
+     this.setAttributeConfig("MSG_ERROR", { 	 
+         value: "Data error.", 	 
+         validator: lang.isString 	 
+     }); 	 
 },
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2912,6 +2912,7 @@ _destroyColumnHelpers : function() {
  * @private
  */
 _initColumnHelpers : function() {
+///TODO: move draggableColumns functionality to Attribute method
     this._destroyColumnHelpers();
     
     var aTree = this._oColumnSet.tree[0],
@@ -4978,7 +4979,7 @@ render : function() {
 YAHOO.log("start render","time");
 
     this._oChainRender.stop();
-    ///this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
+    ///this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
     var i, j, k, l, len, allRecords;
@@ -5013,7 +5014,7 @@ YAHOO.log("start render","time");
     var elTbody = this._elTbody;
     var nRecordsLength = allRecords.length;
     if(nRecordsLength > 0) {
-        ///this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
+        ///this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
         
         // unlooped
         //this._oChainRender.add({
@@ -5101,7 +5102,7 @@ YAHOO.log("start render","time");
             elTbody.deleteRow(-1);
         }
 
-        this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
     }
 
     /* ORIGINAL METHOD 
@@ -5288,7 +5289,7 @@ YAHOO.log("start render","time");
             elTbody.deleteRow(-1);
         }
 
-        this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
     }*/
 
 },
@@ -7052,7 +7053,7 @@ deleteRow : function(row) {
                     
                                     // Empty body
                                     if(this._elTbody.rows.length === 0) {
-                                        this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+                                        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
                                     }
                                     // Update UI
                                     else {
@@ -7188,7 +7189,7 @@ deleteRows : function(row, count) {
                             method: function() {    
                                 // Empty body
                                 if(this._elTbody.rows.length === 0) {
-                                    this.showTableMessage(DT.MSG_EMPTY, DT.CLASS_EMPTY);
+                                    this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
                                 }
                                 else {
                                     this._setFirstRow();
@@ -9922,7 +9923,7 @@ onEventSortColumn : function(oArgs) {
         var oColumn = this.getColumn(el);
         if(oColumn.sortable) {
             Ev.stopEvent(evt);
-            this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
+            this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
             this.sortColumn(oColumn);
         }
     }
@@ -10179,7 +10180,7 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
     }
     // Error
     else if(ok && oResponse.error) {
-        this.showTableMessage(DT.MSG_ERROR, DT.CLASS_ERROR);
+        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
     }
 },
 
@@ -10220,7 +10221,7 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
     }
     // Error
     else if(ok && oResponse.error) {
-        this.showTableMessage(DT.MSG_ERROR, DT.CLASS_ERROR);
+        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
     }
 },
 
@@ -10270,7 +10271,7 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
     }
     // Error
     else if(ok && oResponse.error) {
-        this.showTableMessage(DT.MSG_ERROR, DT.CLASS_ERROR);
+        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
     }
 },
 
