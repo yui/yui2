@@ -21,10 +21,14 @@ Attributes, to be set via the initial config or myDataTable.set():
 elements, not on liner DIV elements.
  
 * Column.minWidth default value now null.
+ 
+* Removed unused Column._oDefinition private property.
 
 * Hidden Columns are now manifested as cell liner elements with display:none.
  
 * Added bottom border to last TR element in ScrollingDataTables.
+
+
 
 
 

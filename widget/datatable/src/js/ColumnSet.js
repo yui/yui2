@@ -398,21 +398,13 @@ YAHOO.widget.ColumnSet.prototype = {
                 var oColumn = oSelf.getColumnById(currentNode.yuiColumnId);
                 
                 if(oColumn) {    
-                    // Update the definition
-                    currentNode.abbr = oColumn.abbr;
-                    currentNode.className = oColumn.className;
-                    currentNode.editor = oColumn.editor;
-                    currentNode.editorOptions = oColumn.editorOptions;
-                    currentNode.formatter = oColumn.formatter;
-                    currentNode.hidden = oColumn.hidden;
-                    currentNode.key = oColumn.key;
-                    currentNode.label = oColumn.label;
-                    currentNode.minWidth = oColumn.minWidth;
-                    currentNode.resizeable = oColumn.resizeable;
-                    currentNode.selected = oColumn.selected;
-                    currentNode.sortable = oColumn.sortable;
-                    currentNode.sortOptions = oColumn.sortOptions;
-                    currentNode.width = oColumn.width;
+                    // Update the current values
+                    var oDefinition = oColumn.getDefinition();
+                    for(var name in oDefinition) {
+                        if(lang.hasOwnProperty(oDefinition, name)) {
+                            currentNode[name] = oDefinition[name];
+                        }
+                    }
                 }
                             
                 // The Column has descendants
@@ -610,15 +602,6 @@ YAHOO.widget.Column.prototype = {
      * @private
      */
     _sId : null,
-
-    /**
-     * Object literal definition
-     *
-     * @property _oDefinition
-     * @type Object
-     * @private
-     */
-    _oDefinition : null,
 
     /**
      * Reference to Column's current position index within its ColumnSet's keys
@@ -906,7 +889,7 @@ YAHOO.widget.Column.prototype = {
      * @return {Object} Object literal definition.
      */
     getDefinition : function() {
-        var oDefinition = this._oDefinition;
+        var oDefinition = {};
         
         // Update the definition
         oDefinition.abbr = this.abbr;
@@ -918,6 +901,7 @@ YAHOO.widget.Column.prototype = {
         oDefinition.label = this.label;
         oDefinition.minWidth = this.minWidth;
         oDefinition.resizeable = this.resizeable;
+        oDefinition.selected = this.selected;
         oDefinition.sortable = this.sortable;
         oDefinition.sortOptions = this.sortOptions;
         oDefinition.width = this.width;
