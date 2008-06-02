@@ -66,7 +66,20 @@ lang.augmentObject(SDT, {
      * @final
      * @default "yui-dt-bd"
      */
-    CLASS_BODY : "yui-dt-bd"
+    CLASS_BODY : "yui-dt-bd",
+
+    /**
+     * Column filler color set in constructor due to Attribute chicken and egg
+     * problem. Can be customized via COLOR_COLUMFILLER in initial config or
+     * via myDataTable.set().
+     *
+     * @property DataTable.COLOR_COLUMNFILLER
+     * @type String
+     * @static
+     * @final
+     * @default "#F2F2F2"
+     */
+    COLOR_COLUMNFILLER : "#F2F2F2"
 });
 
 lang.extend(SDT, DT, {
@@ -347,6 +360,8 @@ _initContainerEl : function(elContainer) {
         
         // Container for header TABLE
         var elHdContainer = elContainer.appendChild(document.createElement("div"));
+        // Since Attribute is not available at this point in the constructor
+        elHdContainer.style.backgroundColor = this.get("COLOR_COLUMNFILLER") || SDT.COLOR_COLUMNFILLER;
         Dom.addClass(elHdContainer, SDT.CLASS_HEADER);
         this._elHdContainer = elHdContainer;
     
