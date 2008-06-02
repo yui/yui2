@@ -1241,8 +1241,9 @@ lang.augmentObject(DT, {
                 elDropdown.options[j].selected = true;
             }
         }
+        oSelf._oCellEditor.value = elDropdown[elDropdown.selectedIndex].value;
 
-        // Set up a listener on each check box to track the input value
+        // Set up a listener onchange to track the input value
         Ev.addListener(elDropdown, "change",
             function(){
                 oSelf._oCellEditor.value = elDropdown[elDropdown.selectedIndex].value;
@@ -7277,7 +7278,7 @@ formatCell : function(elCell, oRecord, oColumn) {
         oRecord = this.getRecord(elCell);
     }
     if(!(oColumn instanceof YAHOO.widget.Column)) {
-        oColumn = this.getColumn(elCell.cellIndex);
+        oColumn = this.getColumn(elCell.parentNode.cellIndex);
         ///oColumn = this._oColumnSet.getColumn(elCell.parentNode.yuiColumnKey);
     }
 
