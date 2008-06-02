@@ -40,10 +40,16 @@ var lang   = YAHOO.lang,
 YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) {
     var DT = widget.DataTable;
     
+    ////////////////////////////////////////////////////////////////////////////
+    // Backward compatibility for SDT, but prevent infinite loops
+    
     if(oConfigs && oConfigs.scrollable) {
         return new YAHOO.widget.ScrollingDataTable(elContainer,aColumnDefs,oDataSource,oConfigs);
     }
     
+    ////////////////////////////////////////////////////////////////////////////
+    // Initialization
+
     // Internal vars
     this._nIndex = DT._nCount;
     this._sId = "yui-dt"+this._nIndex;
@@ -82,14 +88,14 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     ///TODO: a better way to set up initial state, esp for DT created in hidden container
     this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
     
+    ////////////////////////////////////////////////////////////////////////////
+    // Set up Attributes
+
     // Call Element's constructor after DOM elements are created
     // but *before* table is populated with data
     DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
     
-    // Element's constructor must first be called
-    this.subscribe("tableMutationEvent",this._onTableMutationEvent);
-
-    // HACK: Set sortedBy values for backward compatibility
+    // HACK: Convert sortedBy values for backward compatibility
     var oSortedBy = this.get("sortedBy");
     if(oSortedBy) {
         if(oSortedBy.dir == "desc") {
@@ -99,13 +105,16 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
             this._configs.sortedBy.value.dir = DT.CLASS_ASC;
         }
     }
-
+    
     //HACK: Set the paginator values.  Attribute doesn't afford for merging
     // obj value's keys.  It's all or nothing.  Merge in provided keys.
     if(this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
         // Backward compatibility
         this.updatePaginator(this._oConfigs.paginator);
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Once per instance
 
     // Initialize inline Cell editing
     this._oCellEditor = this._initCellEditor();
@@ -115,10 +124,16 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
 
     // Once per instance
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
+    
+    // Element's constructor must first be called
+    this.subscribe("tableMutationEvent",this._onTableMutationEvent);
 
     DT._nCount++;
     DT._nCurrentCount++;
     
+    ////////////////////////////////////////////////////////////////////////////
+    // Data integration
+
     // Send a simple initial request
     var oCallback = {
         success : this.onDataReturnSetRows,
@@ -758,12 +773,13 @@ lang.augmentObject(DT, {
      * Outputs markup into the given TH based on given Column.
      *
      * @method DataTable.formatTheadCell
-     * @param elCellLabel {HTMLElement} The label DIV element within the TH liner.
+     * @param elCellLabel {HTMLElement} The label SPAN element within the TH liner,
+     * not the liner DIV element.     
      * @param oColumn {YAHOO.widget.Column} Column instance.
      * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
      * @static
      */
-    formatTheadCell : function(elCellLabel, oColumn, oSelf) {
+    formatTheadCell : function(elCellLabel, oColumn, oSelf, oNewSortedBy) {
         var sKey = oColumn.getKey();
         var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
 
@@ -772,6 +788,11 @@ lang.augmentObject(DT, {
             // Calculate the direction
             var sSortClass = oSelf.getColumnSortDir(oColumn);
             var sSortDir = (sSortClass === DT.CLASS_DESC) ? "descending" : "ascending";
+
+            // Bug 1827195, workaround for bug 1969954
+            if(oNewSortedBy && (oColumn.key === oNewSortedBy.key)) {
+                sSortDir = (oNewSortedBy.dir === DT.CLASS_DESC) ? "ascending" : "descending";
+            }
 
             // Generate a unique HREF for visited status
             var sHref = oSelf.getId() + "-sort" + oColumn.getId() + "-" + sSortDir;
@@ -1630,32 +1651,65 @@ initAttributes : function(oConfigs) {
             }
         },
         method: function(oNewSortedBy) {
-            // Remove ASC/DESC from TH
+            // Stash the previous value
             var oOldSortedBy = this.get("sortedBy");
-            if(oOldSortedBy && (oOldSortedBy.constructor == Object) && oOldSortedBy.key) {
-                var oldColumn = this._oColumnSet.getColumn(oOldSortedBy.key);
-                var oldThEl = this.getThEl(oldColumn);
-                Dom.removeClass(oldThEl, DT.CLASS_ASC);
-                Dom.removeClass(oldThEl, DT.CLASS_DESC);
-            }
 
-            // Set ASC/DESC on TH
+            // Remove ASC/DESC from TH
+            var oOldColumn,
+                nOldColumnKeyIndex,
+                oNewColumn,
+                nNewColumnKeyIndex;
+                
+            if(oOldSortedBy && oOldSortedBy.key && oOldSortedBy.dir) {
+                oOldColumn = this._oColumnSet.getColumn(oOldSortedBy.key);
+                nOldColumnKeyIndex = oOldColumn.getKeyIndex();
+                
+                // Remove previous UI from THEAD
+                var elOldTh = oOldColumn.getThEl();
+                Dom.removeClass(elOldTh, oOldSortedBy.dir);
+                DT.formatTheadCell(elOldTh.firstChild.firstChild, oOldColumn, this);
+            }
             if(oNewSortedBy) {
-                var column = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
-                if(column) {
-                    // Backward compatibility
-                    if(oNewSortedBy.dir && ((oNewSortedBy.dir == "asc") ||  (oNewSortedBy.dir == "desc"))) {
-                        var newClass = (oNewSortedBy.dir == "desc") ?
-                                DT.CLASS_DESC :
-                                DT.CLASS_ASC;
-                        Dom.addClass(column.getThEl(), newClass);
-                    }
-                    else {
-                         var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
-                         Dom.addClass(column.getThEl(), sortClass);
-                    }
+                oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
+                nNewColumnKeyIndex = oNewColumn.getKeyIndex();
+
+                // Update THEAD with new UI
+                var elNewTh = oNewColumn.getThEl();
+                // Backward compatibility
+                if(oNewSortedBy.dir && ((oNewSortedBy.dir == "asc") ||  (oNewSortedBy.dir == "desc"))) {
+                    var newClass = (oNewSortedBy.dir == "desc") ?
+                            DT.CLASS_DESC :
+                            DT.CLASS_ASC;
+                    Dom.addClass(elNewTh, newClass);
+                }
+                else {
+                     var sortClass = oNewSortedBy.dir || DT.CLASS_ASC;
+                     Dom.addClass(elNewTh, sortClass);
+                }
+
+                // HACK: Bug 1827195, workaround for bug 1969954.
+                // Since this method runs before the value is set,
+                // the formatTheadCell() function doesn't have access to the new
+                // value yet so I'm going to pass in the new value explicitly.    
+                DT.formatTheadCell(elNewTh.firstChild.firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
+            }
+            
+            // Update TBODY UI
+            this._elTbody.style.display = "none";
+            var allRows = this._elTbody.rows,
+                allCells;
+            for(var i=allRows.length-1; i>-1; i--) {
+                allCells = allRows[i].childNodes;
+                if(allCells[nOldColumnKeyIndex]) {
+                    Dom.removeClass(allCells[nOldColumnKeyIndex], oOldSortedBy.dir);
+                }
+                if(allCells[nNewColumnKeyIndex]) {
+                    Dom.addClass(allCells[nNewColumnKeyIndex], oNewSortedBy.dir);
                 }
             }
+            this._elTbody.style.display = "";
+            
+            this._clearTrTemplateEl();
         }
     });
     
@@ -5624,10 +5678,10 @@ getColumnSortDir : function(oColumn) {
     if(oSortedBy && (oSortedBy.key === oColumn.key)) {
         bSorted = true;
         if(oSortedBy.dir) {
-            sortDir = (oSortedBy.dir == DT.CLASS_ASC) ? DT.CLASS_DESC : DT.CLASS_ASC;
+            sortDir = (oSortedBy.dir === DT.CLASS_ASC) ? DT.CLASS_DESC : DT.CLASS_ASC;
         }
         else {
-            sortDir = (sortDir == DT.CLASS_ASC) ? DT.CLASS_DESC : DT.CLASS_ASC;
+            sortDir = (sortDir === DT.CLASS_ASC) ? DT.CLASS_DESC : DT.CLASS_ASC;
         }
     }
     return sortDir;
@@ -5681,10 +5735,7 @@ sortColumn : function(oColumn, sDir) {
             this._oRecordSet.reverseRecords();
         }
 
-        // Update sortedBy tracker
-        this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});
-
-        // Reset to first page
+        // Reset to first page if paginated
         //TODO: Keep selection in view
         var oPaginator = this.get('paginator');
         if (oPaginator instanceof Pag) {
@@ -5697,10 +5748,10 @@ sortColumn : function(oColumn, sDir) {
             this.updatePaginator({currentPage:1});
         }
 
-        // Update the UI
-        DT.formatTheadCell(oColumn.getThEl().firstChild.firstChild, oColumn, this);
+        // Update UI via sortedBy
         this.render();
-
+        this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});        
+        
         this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
         YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
     }
@@ -9870,6 +9921,7 @@ onEventSortColumn : function(oArgs) {
         var oColumn = this.getColumn(el);
         if(oColumn.sortable) {
             Ev.stopEvent(evt);
+            this.showTableMessage(DT.MSG_LOADING, DT.CLASS_LOADING);
             this.sortColumn(oColumn);
         }
     }
