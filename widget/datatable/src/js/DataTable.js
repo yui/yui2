@@ -2592,6 +2592,8 @@ _initContainerEl : function(elContainer) {
     elContainer = Dom.get(elContainer);
     if(elContainer && elContainer.nodeName && (elContainer.nodeName.toLowerCase() == "div")) {
         Dom.addClass(elContainer, DT.CLASS_DATATABLE);
+        Ev.addListener(elContainer, "focus", this._onTableFocus, this);
+        Ev.addListener(elContainer, "dblclick", this._onTableDblclick, this);
         this._elContainer = elContainer;
     }
 },
@@ -2767,7 +2769,7 @@ _initTheadEl : function(elTable) {
             elTable.insertBefore(document.createElement("thead"), this._elColgroup.nextSibling) :
             elTable.appendChild(document.createElement("thead"));
     
-         ///TODO: Move to container
+        // Set up DOM events for THEAD
         Ev.addListener(elThead, "focus", this._onTheadFocus, this);
         Ev.addListener(elThead, "keydown", this._onTheadKeydown, this);
         Ev.addListener(elThead, "mouseover", this._onTableMouseover, this);
@@ -2775,12 +2777,14 @@ _initTheadEl : function(elTable) {
         Ev.addListener(elThead, "mousedown", this._onTableMousedown, this);
         Ev.addListener(elThead, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elThead, "click", this._onTheadClick, this);
-        Ev.addListener(elTable, "dblclick", this._onTableDblclick, this);
+
+        // Since we can't listen for click and dblclick on the same element...
+        // Attach separately to THEAD and TBODY
+        ///Ev.addListener(elThead, "dblclick", this._onTableDblclick, this);
         
        var oColumnSet = this._oColumnSet,
             oColumn, i,j, l;
         
-    
         // Add TRs to the THEAD
         var colTree = oColumnSet.tree;
         var elTheadCell, id;
@@ -3003,22 +3007,19 @@ _initTbodyEl : function(elTable) {
         var elTbody = elTable.appendChild(document.createElement("tbody"));
         elTbody.tabIndex = 0;
     
-        ///TODO: move to container
-        // Set up DOM events
-        Ev.addListener(this.elContainer, "focus", this._onTableFocus, this);
+        // Set up DOM events for TBODY
         Ev.addListener(elTbody, "focus", this._onTbodyFocus, this);
-    
         Ev.addListener(elTbody, "mouseover", this._onTableMouseover, this);
         Ev.addListener(elTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
-    
         Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
-    
         Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
-    
-        // Since we can't listen for click and dblclick on the same element...
-        Ev.addListener(elTbody.parentNode, "dblclick", this._onTableDblclick, this);
         Ev.addListener(elTbody, "click", this._onTbodyClick, this);
+        
+        // Since we can't listen for click and dblclick on the same element...
+        // Attach separately to THEAD and TBODY
+        ///Ev.addListener(elTbody, "dblclick", this._onTableDblclick, this);
+        
     
         // IE puts focus outline in the wrong place
         if(ua.ie) {
