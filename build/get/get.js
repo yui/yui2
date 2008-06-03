@@ -313,8 +313,9 @@ YAHOO.util.Get = function() {
             for (var i=0; i<l; i=i+1) {
                 h.removeChild(n[i]);
             }
+
+            q.nodes = [];
         }
-        q.nodes = [];
     };
 
     /**
@@ -380,6 +381,7 @@ YAHOO.util.Get = function() {
             n.onreadystatechange = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
+                    this.onreadystatechange = null;
                     f(id, url);
                 }
             };
