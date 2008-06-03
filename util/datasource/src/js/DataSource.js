@@ -129,7 +129,7 @@ TYPE_XML : 4,
 TYPE_TEXT : 5,
 
 /**
- * Type is an HTML TABLE element.
+ * Type is an HTML TABLE element. Data is parsed out of TR elements from all TBODY elements.
  *
  * @property TYPE_HTMLTABLE
  * @type Number
@@ -1324,6 +1324,7 @@ parseJSONData : function(oRequest, oFullResponse) {
 
 /**
  * Overridable method parses an HTML TABLE element reference into a response object.
+ * Data is parsed out of TR elements from all TBODY elements. 
  *
  * @method parseHTMLTableData
  * @param oRequest {Object} Request object.
@@ -1946,7 +1947,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
         var sLiveData = this.liveData;
         var isPost = this.connMethodPost;
         var sMethod = (isPost) ? "POST" : "GET";
-        var sUri = (isPost) ? sLiveData : sLiveData+oRequest;
+        // Validate request
+        var sUri = (isPost || !lang.isValue(oRequest)) ? sLiveData : sLiveData+oRequest;
         var sRequest = (isPost) ? oRequest : null;
 
         // Send the request right away
@@ -1957,8 +1959,9 @@ makeConnection : function(oRequest, oCallback, oCaller) {
         else {
             // Found a request already in progress
             if(oQueue.conn) {
+                var allRequests = oQueue.requests;
                 // Add request to queue
-                oQueue.requests.push({request:oRequest, callback:_xhrCallback});
+                allRequests.push({request:oRequest, callback:_xhrCallback});
 
                 // Interval needs to be started
                 if(!oQueue.interval) {
@@ -1969,13 +1972,14 @@ makeConnection : function(oRequest, oCallback, oCaller) {
                         }
                         else {
                             // Send next request
-                            if(oQueue.requests.length > 0) {
-                                sUri = (isPost) ? sLiveData : sLiveData+oQueue.requests[0].request;
-                                sRequest = (isPost) ? oQueue.requests[0].request : null;
-                                oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, oQueue.requests[0].callback, sRequest);
+                            if(allRequests.length > 0) {
+                                // Validate request
+                                sUri = (isPost || !lang.isValue(allRequests[0].request)) ? sLiveData : sLiveData+allRequests[0].request;
+                                sRequest = (isPost) ? allRequests[0].request : null;
+                                oQueue.conn = oConnMgr.asyncRequest(sMethod, sUri, allRequests[0].callback, sRequest);
 
                                 // Remove request from queue
-                                oQueue.requests.shift();
+                                allRequests.shift();
                             }
                             // No more requests
                             else {
@@ -1997,7 +2001,6 @@ makeConnection : function(oRequest, oCallback, oCaller) {
         // Send null response back to the caller with the error flag on
         DS.issueCallback(oCallback,[oRequest,{error:true}],true,oCaller);
     }
-
 
     return tId;
 }
