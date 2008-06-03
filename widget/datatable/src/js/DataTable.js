@@ -756,8 +756,15 @@ lang.augmentObject(DT, {
             var sSortClass = oSelf.getColumnSortDir(oColumn);
             var sSortDir = (sSortClass === DT.CLASS_DESC) ? "descending" : "ascending";
 
-            // Bug 1827195, workaround for bug 1969954
-            if(oNewSortedBy && (oColumn.key === oNewSortedBy.key)) {
+            // HACK: Bug 1827195, workaround for bug 1969954
+            // Attribute has not yet been set
+            if(oNewSortedBy === null) {
+                // Force the Column's default sort direction
+                sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS.DESC)) ?
+                    "descending" : "ascending";
+
+            }
+            else if(oNewSortedBy && (oColumn.key === oNewSortedBy.key)) {
                 sSortDir = (oNewSortedBy.dir === DT.CLASS_DESC) ? "ascending" : "descending";
             }
 
@@ -1635,7 +1642,7 @@ initAttributes : function(oConfigs) {
                 // Remove previous UI from THEAD
                 var elOldTh = oOldColumn.getThEl();
                 Dom.removeClass(elOldTh, oOldSortedBy.dir);
-                DT.formatTheadCell(elOldTh.firstChild.firstChild, oOldColumn, this);
+                DT.formatTheadCell(elOldTh.firstChild.firstChild, oOldColumn, this, oNewSortedBy);
             }
             if(oNewSortedBy) {
                 oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
@@ -5691,6 +5698,20 @@ getColumnSortDir : function(oColumn) {
 },
 
 /**
+ * Overridable method gives implementers a hook to show loading message before
+ * sorting Column.
+ *
+ * @method doBeforeSortColumn
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param sSortDir {String} YAHOO.widget.DataTable.CLASS_ASC or
+ * YAHOO.widget.DataTable.CLASS_DESC.
+ * @return {Boolean} Return true to continue sorting Column.
+ */
+doBeforeSortColumn : function(oColumn, sSortDir) {
+    return true;
+},
+
+/**
  * Sorts given Column.
  *
  * @method sortColumn
@@ -5710,58 +5731,61 @@ sortColumn : function(oColumn, sDir) {
         }
         
         // Get the sort dir
-        var sortDir = sDir || this.getColumnSortDir(oColumn);
+        var sSortDir = sDir || this.getColumnSortDir(oColumn);
 
         // Do the actual sort
         var oSortedBy = this.get("sortedBy") || {};
         var bSorted = (oSortedBy.key === oColumn.key) ? true : false;
-        if(!bSorted || sDir) {
-            // Is there a custom sort handler function defined?
-            var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                    // Custom sort function
-                    oColumn.sortOptions.sortFunction :
 
-                    // Default sort function
-                    function(a, b, desc) {
-                        YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
-                        var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
-                        if(sorted === 0) {
-                            return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
-                        }
-                        else {
-                            return sorted;
-                        }
-                    };
-
-            this._oRecordSet.sortRecords(sortFnc, ((sortDir == DT.CLASS_DESC) ? true : false));
+        var ok = this.doBeforeSortColumn(oColumn, sSortDir);
+        if(ok) {
+            if(!bSorted || sDir) {
+                // Is there a custom sort handler function defined?
+                var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
+                        // Custom sort function
+                        oColumn.sortOptions.sortFunction :
+    
+                        // Default sort function
+                        function(a, b, desc) {
+                            YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
+                            var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
+                            if(sorted === 0) {
+                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                            }
+                            else {
+                                return sorted;
+                            }
+                        };
+    
+                this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+            }
+            else {
+                this._oRecordSet.reverseRecords();
+            }
+    
+            // Reset to first page if paginated
+            //TODO: Keep selection in view
+            var oPaginator = this.get('paginator');
+            if (oPaginator instanceof Pag) {
+                // TODO : is this server-side op safe?  Will fire changeRequest
+                // event mechanism
+                oPaginator.setPage(1,true);
+            }
+            else if (this.get('paginated')) {
+                // Backward compatibility
+                this.updatePaginator({currentPage:1});
+            }
+    
+            // Update UI via sortedBy
+            this.render();
+            this.set("sortedBy", {key:oColumn.key, dir:sSortDir, column:oColumn});        
+            
+            this.fireEvent("columnSortEvent",{column:oColumn,dir:sSortDir});
+            YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sSortDir + "\"", "info", this.toString());
+            return;
         }
-        else {
-            this._oRecordSet.reverseRecords();
-        }
-
-        // Reset to first page if paginated
-        //TODO: Keep selection in view
-        var oPaginator = this.get('paginator');
-        if (oPaginator instanceof Pag) {
-            // TODO : is this server-side op safe?  Will fire changeRequest
-            // event mechanism
-            oPaginator.setPage(1,true);
-        }
-        else if (this.get('paginated')) {
-            // Backward compatibility
-            this.updatePaginator({currentPage:1});
-        }
-
-        // Update UI via sortedBy
-        this.render();
-        this.set("sortedBy", {key:oColumn.key, dir:sortDir, column:oColumn});        
-        
-        this.fireEvent("columnSortEvent",{column:oColumn,dir:sortDir});
-        YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sortDir + "\"", "info", this.toString());
     }
-    else {
-        YAHOO.log("Could not sort Column \"" + oColumn.key + "\"", "warn", this.toString());
-    }
+    YAHOO.log("Could not sort Column \"" + oColumn.key + "\"", "warn", this.toString());
 },
 
 /**
@@ -9925,7 +9949,6 @@ onEventSortColumn : function(oArgs) {
         var oColumn = this.getColumn(el);
         if(oColumn.sortable) {
             Ev.stopEvent(evt);
-            this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
             this.sortColumn(oColumn);
         }
     }

@@ -401,7 +401,7 @@ YAHOO.widget.ColumnSet.prototype = {
                     // Update the current values
                     var oDefinition = oColumn.getDefinition();
                     for(var name in oDefinition) {
-                        if(lang.hasOwnProperty(oDefinition, name)) {
+                        if(YAHOO.lang.hasOwnProperty(oDefinition, name)) {
                             currentNode[name] = oDefinition[name];
                         }
                     }
