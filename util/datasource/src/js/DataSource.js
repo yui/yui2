@@ -789,10 +789,8 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             oParsedResponse = this.parseTextData(oRequest, oFullResponse);
             break;
         default:
-            //var contentType = oRawResponse.getResponseHeader["Content-Type"];
-            YAHOO.log("Passing along unknown response type", "warn", this.toString());
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
-            oParsedResponse = this.doBeforeParseData(oRequest, oFullResponse);
+            oParsedResponse = this.parseData(oRequest, oFullResponse);
             break;
     }
 
@@ -848,6 +846,30 @@ doBeforeParseData : function(oRequest, oFullResponse) {
  */
 doBeforeCallback : function(oRequest, oFullResponse, oParsedResponse) {
     return oParsedResponse;
+},
+
+/**
+ * Overridable method parses data of generic RESPONSE_TYPE into a response object.
+ *
+ * @method parseData
+ * @param oRequest {Object} Request object.
+ * @param oFullResponse {Object} The full Array from the live database.
+ * @return {Object} Parsed response object with the following properties:<br>
+ *     - results (Array) Array of parsed data results<br>
+ *     - error (Boolean) True if there was an error<br>
+ *     - totalRecords (Number) Total number of records (if available)
+ */
+parseData : function(oRequest, oFullResponse) {
+    if(lang.isValue(oFullResponse)) {
+        var oParsedResponse = {results:oFullResponse};
+        YAHOO.log("Parsed generic data is " +
+                lang.dump(oParsedResponse), "info", this.toString());
+        return oParsedResponse;
+
+    }
+    YAHOO.log("Generic data could not be parsed: " + lang.dump(oFullResponse), 
+            "error", this.toString());
+    return null;
 },
 
 /**
