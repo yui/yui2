@@ -4954,8 +4954,7 @@ getTrIndex : function(row) {
 /**
  * Resets a RecordSet with the given data and populates the page view
  * with the new data. Any previous data, and selection and sort states are
- * cleared. The render method should be called as a separate step in order
- * to update the UI. 
+ * cleared. New data should be added as a separate step. 
  *
  * @method initializeTable
  */
