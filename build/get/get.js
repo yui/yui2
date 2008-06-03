@@ -237,6 +237,13 @@ YAHOO.util.Get = function() {
 
         var url = q.url[0];
 
+        // if the url is undefined, this is probably a trailing comma problem in IE
+        if (!url) {
+            q.url.shift(); 
+            return _next(id);
+        }
+
+
         if (q.type === "script") {
             n = _scriptNode(url, w, q.charset);
         } else {
@@ -341,6 +348,7 @@ YAHOO.util.Get = function() {
             type: type,
             url: url,
             finished: false,
+            aborted: false,
             nodes: []
         });
 
