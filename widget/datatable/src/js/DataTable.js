@@ -4178,7 +4178,7 @@ _onTbodyClick : function(e, oSelf) {
     oSelf.fireEvent("tableClickEvent",{target:(elTarget || oSelf._elContainer),event:e});
 },
 
-/*TODO undeprecate?
+/**
  * Handles change events on SELECT elements within DataTable.
  *
  * @method _onDropdownChange
@@ -4189,8 +4189,6 @@ _onTbodyClick : function(e, oSelf) {
  */
 _onDropdownChange : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
-    //TODO: pass what args?
-    //var value = elTarget[elTarget.selectedIndex].value;
     oSelf.fireEvent("dropdownChangeEvent", {event:e, target:elTarget});
 },
 
@@ -11077,7 +11075,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      * @param oArgs.target {HTMLElement} The CHECKBOX element.
      */
 
-    /*TODO
+    /**
      * Fired when a SELECT element is changed.
      *
      * @event dropdownChangeEvent
