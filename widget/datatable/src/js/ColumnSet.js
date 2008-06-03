@@ -512,7 +512,7 @@ YAHOO.widget.ColumnSet.prototype = {
  */
 YAHOO.widget.Column = function(oConfigs) {
     // Object literal defines Column attributes
-    if(oConfigs && (oConfigs.constructor == Object)) {
+    if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
         for(var sConfig in oConfigs) {
             if(sConfig) {
                 this[sConfig] = oConfigs[sConfig];

@@ -670,10 +670,10 @@ lang.augmentObject(DT, {
             }
             copy = array;
         }
-        else if(o.constructor && (o.constructor == Object)) { 
+        else if(lang.isObject(o)) { 
             for (var x in o){
                 if(lang.hasOwnProperty(o, x)) {
-                    if(lang.isValue(o[x]) && (o[x].constructor == Object) || lang.isArray(o[x])) {
+                    if(lang.isValue(o[x]) && lang.isObject(o[x]) || lang.isArray(o[x])) {
                         copy[x] = DT._cloneObject(o[x]);
                     }
                     else {
@@ -1619,7 +1619,7 @@ initAttributes : function(oConfigs) {
         // TODO: accepted array for nested sorts
         validator: function(oNewSortedBy) {
             if(oNewSortedBy) {
-                return ((oNewSortedBy.constructor == Object) && oNewSortedBy.key);
+                return (lang.isObject(oNewSortedBy) && oNewSortedBy.key);
             }
             else {
                 return (oNewSortedBy === null);
@@ -1727,7 +1727,7 @@ initAttributes : function(oConfigs) {
                 }
                 else {
                     // Backward compatibility
-                    if(oNewPaginator && (oNewPaginator.constructor == Object)) {
+                    if(oNewPaginator && lang.isObject(oNewPaginator)) {
                         // Check for incomplete set of values
                         if((oNewPaginator.rowsPerPage !== undefined) &&
                                 (oNewPaginator.currentPage !== undefined) &&
@@ -6753,7 +6753,7 @@ unhighlightColumn : function(column) {
  * @param index {Number} (optional) RecordSet position index at which to add data.
  */
 addRow : function(oData, index) {
-    if(oData && (oData.constructor == Object)) {
+    if(oData && lang.isObject(oData)) {
         var oRecord = this._oRecordSet.addRecord(oData, index);
         if(oRecord) {
             var recIndex;
@@ -7029,7 +7029,7 @@ deleteRow : function(row) {
             var tracker = this._aSelections || [];
             for(var j=tracker.length-1; j>-1; j--) {
                 if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
-                        ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
+                        (lang.isObject(tracker[j]) && (tracker[j].recordId === sRecordId))) {
                     tracker.splice(j,1);
                 }
             }
@@ -7136,7 +7136,7 @@ deleteRows : function(row, count) {
             var tracker = this._aSelections || [];
             for(var j=tracker.length-1; j>-1; j--) {
                 if((lang.isNumber(tracker[j]) && (tracker[j] === sRecordId)) ||
-                        ((tracker[j].constructor == Object) && (tracker[j].recordId === sRecordId))) {
+                        (lang.isObject(tracker[j]) && (tracker[j].recordId === sRecordId))) {
                     tracker.splice(j,1);
                 }
             }
@@ -9280,7 +9280,7 @@ unselectAllCells: function() {
     // Remove all cells from tracker
     var tracker = this._aSelections || [];
     for(var j=tracker.length-1; j>-1; j--) {
-       if(tracker[j].constructor == Object){
+       if(lang.isObject(tracker[j])){
             tracker.splice(j,1);
         }
     }
@@ -9386,7 +9386,7 @@ getSelectedCells : function() {
     var aSelectedCells = [];
     var tracker = this._aSelections || [];
     for(var j=0; j<tracker.length; j++) {
-       if(tracker[j] && (tracker[j].constructor == Object)){
+       if(tracker[j] && lang.isObject(tracker[j])){
             aSelectedCells.push(tracker[j]);
         }
     }
