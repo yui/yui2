@@ -1334,7 +1334,11 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
     this.dataRequestEvent.fire(this, sQuery);
     YAHOO.log("Sending query \"" + sQuery + "\"", "info", this.toString());
     
-    if(this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_JSARRAY) {
+    // Support for array of strings:
+    // Convert array of strings to array of arrays of strings
+    if((this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_JSARRAY) ||
+    // Convert array of strings embedded within JSON to array of arrays of strings
+    ((this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_JSON) && !this.dataSource.responseSchema.fields)) {
         this.dataSource.doBeforeCallback = this.filterResults;
     }
     
