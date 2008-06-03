@@ -11009,6 +11009,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
      */
 
     /**
+     * Fired when an active Editor's internal value is updated.
+     *
+     * @event editorUpdateEvent
+     * @param oArgs.editor {Object} The Editor object literal.
+     */
+
+    /**
      * Fired when Editor input is reverted.
      *
      * @event editorRevertEvent
