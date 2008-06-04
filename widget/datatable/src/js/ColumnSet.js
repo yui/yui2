@@ -662,6 +662,15 @@ YAHOO.widget.Column.prototype = {
     _elTh : null,
 
     /**
+     * The DOM reference to the associated TH element's liner DIV element.
+     *
+     * @property _elThLiner
+     * @type HTMLElement
+     * @private
+     */
+    _elThLiner : null,
+
+    /**
      * The DOM reference to the associated resizerelement (if any).
      *
      * @property _elResizer
@@ -1000,6 +1009,18 @@ YAHOO.widget.Column.prototype = {
     },
 
     /**
+     * Returns DOM reference to the key TH's liner DIV element. Introduced since
+     * resizeable Columns may have an extra resizer liner, making the DIV liner
+     * not reliably the TH element's first child.               
+     *
+     * @method getThLInerEl
+     * @return {HTMLElement} TH element.
+     */
+    getThLinerEl : function() {
+        return this._elThLiner;
+    },
+
+    /**
      * Returns DOM reference to the resizer element, or null.
      *
      * @method getResizerEl
@@ -1248,9 +1269,11 @@ YAHOO.util.ColumnResizer = function(oDataTable, oColumn, elTh, sHandleId, elProx
         this.datatable = oDataTable;
         this.column = oColumn;
         this.headCell = elTh;
-        this.headCellLiner = elTh.firstChild;
+        this.headCellLiner = oColumn.getThLinerEl();
+        this.resizerLiner = elTh.firstChild;
         this.init(sHandleId, sHandleId, {dragOnly:true, dragElId: elProxy.id});
         this.initFrame(); // Needed for proxy
+        this.resetResizerEl(); // Needed when rowspan > 0
     }
     else {
         YAHOO.log("Column resizer could not be created","warn",oDataTable.toString());
@@ -1275,6 +1298,7 @@ if(YAHOO.util.DD) {
             resizerStyle.right = 0;
             resizerStyle.top = "auto";
             resizerStyle.bottom = 0;
+            resizerStyle.height = this.headCell.offsetHeight+"px";
         },
     
         /////////////////////////////////////////////////////////////////////////////
@@ -1292,7 +1316,7 @@ if(YAHOO.util.DD) {
         onMouseUp : function(e) {
             this.resetResizerEl();
             
-            var el = this.headCell.firstChild;
+            var el = this.headCellLiner;
             var newWidth = el.offsetWidth -
                 (parseInt(YAHOO.util.Dom.getStyle(el,"paddingLeft"),10)|0) -
                 (parseInt(YAHOO.util.Dom.getStyle(el,"paddingRight"),10)|0);
@@ -1307,7 +1331,7 @@ if(YAHOO.util.DD) {
          * @param e {string} The mousedown event
          */
         onMouseDown : function(e) {
-            this.startWidth = this.headCell.firstChild.offsetWidth;
+            this.startWidth = this.headCellLiner.offsetWidth;
             this.startX = YAHOO.util.Event.getXY(e)[0];
             this.nLinerPadding = (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingLeft"),10)|0) +
                     (parseInt(YAHOO.util.Dom.getStyle(this.headCellLiner,"paddingRight"),10)|0);
@@ -1340,7 +1364,9 @@ if(YAHOO.util.DD) {
             if(newX > YAHOO.util.Dom.getX(this.headCellLiner)) {
                 var offsetX = newX - this.startX;
                 var newWidth = this.startWidth + offsetX - this.nLinerPadding;
-                this.datatable.setColumnWidth(this.column, newWidth);
+                if(newWidth > 0) {
+                    this.datatable.setColumnWidth(this.column, newWidth);
+                }
             }
         }
     });

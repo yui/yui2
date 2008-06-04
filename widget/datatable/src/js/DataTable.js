@@ -1642,7 +1642,7 @@ initAttributes : function(oConfigs) {
                 // Remove previous UI from THEAD
                 var elOldTh = oOldColumn.getThEl();
                 Dom.removeClass(elOldTh, oOldSortedBy.dir);
-                DT.formatTheadCell(elOldTh.firstChild.firstChild, oOldColumn, this, oNewSortedBy);
+                DT.formatTheadCell(oOldColumn.getThLinerEl().firstChild, oOldColumn, this, oNewSortedBy);
             }
             if(oNewSortedBy) {
                 oNewColumn = (oNewSortedBy.column) ? oNewSortedBy.column : this._oColumnSet.getColumn(oNewSortedBy.key);
@@ -1666,7 +1666,7 @@ initAttributes : function(oConfigs) {
                 // Since this method runs before the value is set,
                 // the formatTheadCell() function doesn't have access to the new
                 // value yet so I'm going to pass in the new value explicitly.    
-                DT.formatTheadCell(elNewTh.firstChild.firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
+                DT.formatTheadCell(oNewColumn.getThLinerEl().firstChild, oNewColumn, this, oNewSortedBy);  // Bug 1827195
             }
             
             // Update TBODY UI
@@ -2870,12 +2870,13 @@ _initThEl : function(elTheadCell,oColumn) {
     elTheadCell.colSpan = oColumn.getColspan();
     
     var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
-    var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
-
-        
     elTheadCellLiner.id = elTheadCell.id + "-liner"; // Needed for resizer
     elTheadCellLiner.className = DT.CLASS_LINER;
+    oColumn._elThLiner = elTheadCellLiner;
+    
+    var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
     elTheadCellLabel.className = DT.CLASS_LABEL;
+    
 
     // Clear minWidth on hidden Columns
     if(oColumn.hidden) {
@@ -2959,8 +2960,18 @@ _initColumnHelpers : function() {
             if(foundDD) {
                 elTheadCell = oColumn.getThEl();
                 Dom.addClass(elTheadCell, DT.CLASS_RESIZEABLE);
-                var elThLiner = elTheadCell.firstChild;
-                var elThResizer = elThLiner.appendChild(document.createElement("div"));
+                var elThLiner = oColumn.getThLinerEl();
+                
+                // Bug 1915349: So resizer is as tall as TH when rowspan > 1
+                // Create a separate resizer liner with position:relative
+                var elThResizerLiner = elTheadCell.appendChild(document.createElement("div"));
+                elThResizerLiner.className = "yui-dt-resizerliner";///TODO CLASS_RESIZERLINER
+                
+                // Move TH contents into the new resizer liner
+                elThResizerLiner.appendChild(elThLiner);
+                
+                // Create the resizer
+                var elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
                 elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
                 oColumn._elResizer = elThResizer;
                 Dom.addClass(elThResizer,DT.CLASS_RESIZER);
@@ -4777,8 +4788,8 @@ getBelowTdEl : function(cell) {
  * @return {HTMLElement} Reference to TH liner element.
  */
 getThLinerEl : function(theadCell) {
-    var elCell = this.getThEl(theadCell);
-    return elCell.firstChild || null;
+    var oColumn = this.getColumn(theadCell);
+    return (oColumn) ? oColumn.getThLinerEl() : null;
 },
 
 /**
@@ -5951,13 +5962,13 @@ YAHOO.log('start _setColumnWidthDynFunction','time');
         //result in a function declaration like:
         //function (oColumn,sWidth,sOverflow) {
         //    var colIdx = oColumn.getKeyIndex();
-        //    oColumn.getThEl().firstChild.style.overflow =
+        //    oColumn.getThLinerEl().style.overflow =
         //    this._elTbody.rows[0].cells[colIdx].firstChild.style.overflow =
         //    this._elTbody.rows[1].cells[colIdx].firstChild.style.overflow =
         //    ... (for all row indices in this._elTbody.rows.length - 1)
         //    this._elTbody.rows[99].cells[colIdx].firstChild.style.overflow =
         //    sOverflow;
-        //    oColumn.getThEl().firstChild.style.width =
+        //    oColumn.getThLinerEl().style.width =
         //    this._elTbody.rows[0].cells[colIdx].firstChild.style.width =
         //    this._elTbody.rows[1].cells[colIdx].firstChild.style.width =
         //    ... (for all row indices in this._elTbody.rows.length - 1)
@@ -5968,7 +5979,7 @@ YAHOO.log('start _setColumnWidthDynFunction','time');
         var i,j,k;
         var resizerDef = [
             'var colIdx=oColumn.getKeyIndex();',
-            'oColumn.getThEl().firstChild.style.overflow='
+            'oColumn.getThLinerEl().style.overflow='
         ];
         for (i=rowslen-1, j=2; i >= 0; --i) {
             resizerDef[j++] = 'this._elTbody.rows[';
@@ -5976,7 +5987,7 @@ YAHOO.log('start _setColumnWidthDynFunction','time');
             resizerDef[j++] = '].cells[colIdx].firstChild.style.overflow=';
         }
         resizerDef[j] = 'sOverflow;';
-        resizerDef[j+1] = 'oColumn.getThEl().firstChild.style.width=';
+        resizerDef[j+1] = 'oColumn.getThLinerEl().style.width=';
         for (i=rowslen-1, k=j+2; i >= 0; --i) {
             resizerDef[k++] = 'this._elTbody.rows[';
             resizerDef[k++] = i;
@@ -6017,7 +6028,7 @@ _validateMinWidths : function(oArg) {
     if(oArg && oArg.column) {
         oColumn = oArg.column;
         if(!oColumn.hidden && !oColumn.width && oColumn.minWidth) {
-            elThLiner = oColumn.getThEl().firstChild;
+            elThLiner = oColumn.getThLinerEl();
             if(elThLiner.offsetWidth < oColumn.minWidth) {
                 elColgroupClone.childNodes[oColumn.getKeyIndex()].style.width = 
                         oColumn.minWidth + 
@@ -6032,7 +6043,7 @@ _validateMinWidths : function(oArg) {
         for(var i=0, l=allKeys.length; i<l; i++) {
             oColumn = allKeys[i];
             if(!oColumn.hidden && !oColumn.width && oColumn.minWidth) {
-                elThLiner = oColumn.getThEl().firstChild;
+                elThLiner = oColumn.getThLinerEl();
                 if(elThLiner.offsetWidth < oColumn.minWidth) {
                     elColgroupClone.childNodes[i].style.width = 
                             oColumn.minWidth + 

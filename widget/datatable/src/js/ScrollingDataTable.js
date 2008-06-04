@@ -782,7 +782,7 @@ _syncColWidths : function() {
                         ///this._setColumnWidth(oColumn, "auto","visible");
 
                         var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                                elTh.firstChild : elTd.firstChild;               
+                                oColumn.getThLinerEl() : elTd.firstChild;               
 
                         // Calculate the new width by comparing liner widths
                         var newWidth = Math.max(0,
@@ -901,7 +901,7 @@ _syncScrollX : function() {
 _syncScrollOverhang : function() {
     var elTbody = this._elTbody,
         elBdContainer = this._elBdContainer,
-        aLastHeaders, len, prefix, i, elLiner;
+        aLastHeaders, len, prefix, i, elLiner, oColumn;
 
     // Y-scrollbar is visible
     if(elBdContainer.scrollHeight > elBdContainer.offsetHeight){
@@ -911,8 +911,8 @@ _syncScrollOverhang : function() {
         prefix = this._sId+"-th";
         for(i=0; i<len; i++) {
             //TODO: A better way to get all THs along the right edge
-            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-            elLiner.parentNode.style.borderRight = "18px solid " + this.get("COLOR_COLUMNFILLER");
+            oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
+            oColumn.getThEl().style.borderRight = "18px solid " + this.get("COLOR_COLUMNFILLER");
         }
     }
     // Y-scrollbar is not visible
@@ -923,8 +923,8 @@ _syncScrollOverhang : function() {
         prefix = this._sId+"-th";
         for(i=0; i<len; i++) {
             //TODO: A better way to get th cell
-            elLiner = Dom.get(prefix+aLastHeaders[i]).firstChild;
-            elLiner.parentNode.style.borderRight = "1px solid " + this.get("COLOR_COLUMNFILLER");
+            oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
+            oColumn.getThEl().style.borderRight = "1px solid " + this.get("COLOR_COLUMNFILLER");
         }
     }
 },

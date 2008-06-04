@@ -37,7 +37,7 @@
 .yui-dt-hd {
     zoom:1; 
 }
-th.yui-dt-resizeable .yui-dt-liner {
+th.yui-dt-resizeable .yui-dt-resizerliner {
     position:relative;
 }
 .yui-dt-resizer {

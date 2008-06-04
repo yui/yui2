@@ -6,6 +6,10 @@ DataTable Release Notes
 
 * In the markup, the primary data TBODY is (once again) before the message TBODY element.
  
+* Resizeable Columns now create an additional resizer liner DIV element between
+the TH element and the liner DIV element. Implementers are advised to access the 
+liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
+ 
 * TR element IDs are now assigned with the corresponding Record ID.
  
 * Removed unused TD ID assignments.
