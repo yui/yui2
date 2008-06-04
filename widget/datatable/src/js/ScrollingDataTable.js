@@ -543,10 +543,23 @@ _initTheadEl : function(elHdTable, elBdTable) {
     elHdTable = elHdTable || this._elHdTable;
     elBdTable = elBdTable || this._elBdTable;
     
-    // Scrolling body THEAD
+    // Scrolling body's THEAD
     this._initBdTheadEl(elBdTable);
-    // Standard head THEAD
+    // Standard fixed head THEAD
     SDT.superclass._initTheadEl.call(this, elHdTable);
+},
+
+/**
+ * SDT changes ID so as not to duplicate the accessibility TH IDs.
+ *
+ * @method _initThEl
+ * @param elTh {HTMLElement} TH element reference.
+ * @param oColumn {YAHOO.widget.Column} Column object.
+ * @private
+ */
+_initThEl : function(elTh, oColumn) {
+    SDT.superclass._initThEl.call(this, elTh, oColumn);
+    elTh.id = this._sId+"-fixedth" + oColumn.getId(); // Needed for getColumn by TH and ColumnDD
 },
 
 /**
@@ -592,21 +605,16 @@ _initBdTheadEl : function(elTable) {
     
         // Add TRs to the THEADs
         var colTree = oColumnSet.tree;
-        var elTheadCell;
+        var elTh;
         
         for(; i<colTree.length; i++) {
-            var elTheadRow = elThead.appendChild(document.createElement("tr"));
-            ///TODO: is this necessary?
-            //elTheadRow.id = this._sId+"-hdrow" + i + "-a11y";
+            var elTheadTr = elThead.appendChild(document.createElement("tr"));
     
             // ...and create TH cells
             for(; j<colTree[i].length; j++) {
                 oColumn = colTree[i][j];
-                elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-                // This is necessary for accessibility
-                elTheadCell.id = this._sId+"-th" + oColumn.getId();
-                elTheadCell.yuiCellIndex = j;
-                this._initBdThEl(elTheadCell,oColumn,i,j);
+                elTh = elTheadTr.appendChild(document.createElement("th"));
+                this._initBdThEl(elTh,oColumn,i,j);
             }
         }
         this._elBdThead = elThead;
@@ -615,23 +623,22 @@ _initBdTheadEl : function(elTable) {
 },
 
 /**
- * Populates TH cell for the body THEAD element.
+ * Populates TH element for the body THEAD element.
  *
  * @method _initBdThEl
- * @param elTheadCell {HTMLElement} TH cell element reference.
+ * @param elTh {HTMLElement} TH element reference.
  * @param oColumn {YAHOO.widget.Column} Column object.
  * @private
  */
-_initBdThEl : function(elTheadCell,oColumn) {
-    // This is necessary for accessibility
-    elTheadCell.id = this._sId+"-bdth" + oColumn.getId();
-    elTheadCell.rowSpan = oColumn.getRowspan();
-    elTheadCell.colSpan = oColumn.getColspan();
+_initBdThEl : function(elTh, oColumn) {
+    elTh.id = this._sId+"-th" + oColumn.getId(); // Needed for accessibility
+    elTh.rowSpan = oColumn.getRowspan();
+    elTh.colSpan = oColumn.getColspan();
     
     ///TODO: strip links and form elements
     var sKey = oColumn.getKey();
     var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;
-    elTheadCell.innerHTML = sLabel;
+    elTh.innerHTML = sLabel;
 },
 
 
@@ -908,7 +915,7 @@ _syncScrollOverhang : function() {
         // Add Column header overhang
         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
         len = aLastHeaders.length;
-        prefix = this._sId+"-th";
+        prefix = this._sId+"-fixedth";
         for(i=0; i<len; i++) {
             //TODO: A better way to get all THs along the right edge
             oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
@@ -920,7 +927,7 @@ _syncScrollOverhang : function() {
         // Remove Column header overhang
         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
         len = aLastHeaders.length;
-        prefix = this._sId+"-th";
+        prefix = this._sId+"-fixedth";
         for(i=0; i<len; i++) {
             //TODO: A better way to get th cell
             oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));

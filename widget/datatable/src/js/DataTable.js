@@ -235,6 +235,17 @@ lang.augmentObject(DT, {
     CLASS_RESIZER : "yui-dt-resizer",
 
     /**
+     * Class name assigned to resizer liner elements.
+     *
+     * @property DataTable.CLASS_RESIZERLINER
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-resizerliner"
+     */
+    CLASS_RESIZERLINER : "yui-dt-resizerliner",
+
+    /**
      * Class name assigned to resizer proxy elements.
      *
      * @property DataTable.CLASS_RESIZERPROXY
@@ -701,7 +712,6 @@ lang.augmentObject(DT, {
         if(!DT._elColumnDragTarget) {
             // Attach Column drag target element as first child of body
             var elColumnDragTarget = document.createElement('div');
-            elColumnDragTarget.id = "yui-dt-coltarget";
             elColumnDragTarget.className = DT.CLASS_COLTARGET;
             elColumnDragTarget.style.display = "none";
             document.body.insertBefore(elColumnDragTarget, document.body.firstChild);
@@ -723,10 +733,9 @@ lang.augmentObject(DT, {
      */
     _initColumnResizerProxyEl : function() {
         if(!DT._elColumnResizerProxy) {
-
             // Attach Column resizer element as first child of body
             var elColumnResizerProxy = document.createElement("div");
-            elColumnResizerProxy.id = "yui-dt-colresizerproxy";
+            elColumnResizerProxy.id = "yui-dt-colresizerproxy"; // Needed for ColumnResizer
             Dom.addClass(elColumnResizerProxy, DT.CLASS_RESIZERPROXY);
             document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
 
@@ -1188,7 +1197,7 @@ lang.augmentObject(DT, {
             var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
             var calContainer = elContainer.appendChild(document.createElement("div"));
             var calPrefix = oColumn.getColEl();
-            calContainer.id = calPrefix + "-dateContainer";
+            calContainer.id = calPrefix + "-dateContainer"; // Needed for Calendar constructor
             var calendar =
                     new YAHOO.widget.Calendar(calPrefix + "-date",
                     calContainer.id,
@@ -2455,7 +2464,7 @@ _initColumnSet : function(aColumnDefs) {
     if(this._oColumnSet) {
         // First clear _oDynStyles for existing ColumnSet
         for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
-            DT._oDynStyles[".yui-dt-col"+this._oColumnSet.keys[i].getId()+" .yui-dt-liner"] = undefined;
+            DT._oDynStyles[".yui-dt-col"+this._oColumnSet.keys[i].getId()+" ."+DT.CLASS_LINER] = undefined;
         }
         
         this._oColumnSet = null;
@@ -2794,27 +2803,23 @@ _initTheadEl : function(elTable) {
         
         // Add TRs to the THEAD
         var colTree = oColumnSet.tree;
-        var elTheadCell, id;
+        var elTh;
         for(i=0; i<colTree.length; i++) {
-            var elTheadRow = elThead.appendChild(document.createElement("tr"));
-            ///TODO: is this necessary?
-            ///elTheadRow.id = this._sId+"-hdrow" + i;
+            var elTheadTr = elThead.appendChild(document.createElement("tr"));
     
             // ...and create TH cells
             for(j=0; j<colTree[i].length; j++) {
                 oColumn = colTree[i][j];
-                elTheadCell = elTheadRow.appendChild(document.createElement("th"));
-                oColumn._elTh = elTheadCell;
-                ///elTheadCell.yuiCellIndex = j;
-                this._initThEl(elTheadCell,oColumn);
+                elTh = elTheadTr.appendChild(document.createElement("th"));
+                this._initThEl(elTh,oColumn);
             }
     
                 // Set FIRST/LAST on THEAD rows
                 if(i === 0) {
-                    Dom.addClass(elTheadRow, DT.CLASS_FIRST);
+                    Dom.addClass(elTheadTr, DT.CLASS_FIRST);
                 }
                 if(i === (colTree.length-1)) {
-                    Dom.addClass(elTheadRow, DT.CLASS_LAST);
+                    Dom.addClass(elTheadTr, DT.CLASS_LAST);
                 }
 
         }
@@ -2851,31 +2856,31 @@ _initTheadEl : function(elTable) {
 },
 
 /**
- * Populates TH cell as defined by Column.
+ * Populates TH element as defined by Column.
  *
  * @method _initThEl
- * @param elTheadCell {HTMLElement} TH cell element reference.
+ * @param elTh {HTMLElement} TH element reference.
  * @param oColumn {YAHOO.widget.Column} Column object.
  * @private
  */
-_initThEl : function(elTheadCell,oColumn) {
+_initThEl : function(elTh, oColumn) {
+    oColumn._elTh = elTh;
+    
     var colKey = oColumn.getKey();
     var colId = oColumn.getId();
     
-    elTheadCell.id = this._sId+"-th" + oColumn.getId(); // Needed for accessibility and getColumn by TH
-    ///elTheadCell.yuiColumnKey = colKey;
-    ///elTheadCell.yuiColumnId = colId;
-    elTheadCell.innerHTML = "";
-    elTheadCell.rowSpan = oColumn.getRowspan();
-    elTheadCell.colSpan = oColumn.getColspan();
+    elTh.id = this._sId+"-th" + oColumn.getId(); // Needed for accessibility, getColumn by TH, and ColumnDD
+    elTh.innerHTML = "";
+    elTh.rowSpan = oColumn.getRowspan();
+    elTh.colSpan = oColumn.getColspan();
     
-    var elTheadCellLiner = elTheadCell.appendChild(document.createElement("div"));
-    elTheadCellLiner.id = elTheadCell.id + "-liner"; // Needed for resizer
-    elTheadCellLiner.className = DT.CLASS_LINER;
-    oColumn._elThLiner = elTheadCellLiner;
+    var elThLiner = elTh.appendChild(document.createElement("div"));
+    elThLiner.id = elTh.id + "-liner"; // Needed for resizer
+    elThLiner.className = DT.CLASS_LINER;
+    oColumn._elThLiner = elThLiner;
     
-    var elTheadCellLabel = elTheadCellLiner.appendChild(document.createElement("span"));
-    elTheadCellLabel.className = DT.CLASS_LABEL;
+    var elThLabel = elThLiner.appendChild(document.createElement("span"));
+    elThLabel.className = DT.CLASS_LABEL;
     
 
     // Clear minWidth on hidden Columns
@@ -2883,14 +2888,14 @@ _initThEl : function(elTheadCell,oColumn) {
         this._clearMinWidth(oColumn);
     }
         
-    elTheadCell.className = this._getColumnClassNames(oColumn);
+    elTh.className = this._getColumnClassNames(oColumn);
             
     // Set Column width for non fallback cases
     if(oColumn.width && !this._bDynStylesFallback) {
         this._setColumnWidthDynStyles(oColumn, oColumn.width + 'px', 'hidden');
     }
 
-    DT.formatTheadCell(elTheadCellLabel, oColumn, this);
+    DT.formatTheadCell(elThLabel, oColumn, this);
 },
 
 /**
@@ -2931,7 +2936,7 @@ _initColumnHelpers : function() {
     var aTree = this._oColumnSet.tree[0],
         foundDD = (util.DD) ? true : false,
         needDD = false,
-        oColumn, elTheadCell,
+        oColumn, elTh,
         i=0;
     
     ///TODO: converge the following loops
@@ -2943,10 +2948,10 @@ _initColumnHelpers : function() {
         for(; i<this._oColumnSet.tree[0].length; i++) {
             oColumn = this._oColumnSet.tree[0][i];
             if(foundDD) {
-                elTheadCell = oColumn.getThEl();
-                Dom.addClass(elTheadCell, DT.CLASS_DRAGGABLE);
+                elTh = oColumn.getThEl();
+                Dom.addClass(elTh, DT.CLASS_DRAGGABLE);
                 var elDragTarget = DT._initColumnDragTargetEl();
-                oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTheadCell, elDragTarget);
+                oColumn._dd = new YAHOO.widget.ColumnDD(this, oColumn, elTh, elDragTarget);
             }
             else {
                 needDD = true;
@@ -2958,26 +2963,26 @@ _initColumnHelpers : function() {
         oColumn = this._oColumnSet.keys[i];
         if(oColumn.resizeable) {
             if(foundDD) {
-                elTheadCell = oColumn.getThEl();
-                Dom.addClass(elTheadCell, DT.CLASS_RESIZEABLE);
+                elTh = oColumn.getThEl();
+                Dom.addClass(elTh, DT.CLASS_RESIZEABLE);
                 var elThLiner = oColumn.getThLinerEl();
                 
                 // Bug 1915349: So resizer is as tall as TH when rowspan > 1
                 // Create a separate resizer liner with position:relative
-                var elThResizerLiner = elTheadCell.appendChild(document.createElement("div"));
-                elThResizerLiner.className = "yui-dt-resizerliner";///TODO CLASS_RESIZERLINER
+                var elThResizerLiner = elTh.appendChild(document.createElement("div"));
+                elThResizerLiner.className = DT.CLASS_RESIZERLINER;
                 
                 // Move TH contents into the new resizer liner
                 elThResizerLiner.appendChild(elThLiner);
                 
                 // Create the resizer
                 var elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
-                elThResizer.id = this._sId + "-colresizer" + oColumn.getId();
+                elThResizer.id = this._sId + "-colresizer" + oColumn.getId(); // Needed for ColumnResizer
                 oColumn._elResizer = elThResizer;
                 Dom.addClass(elThResizer,DT.CLASS_RESIZER);
                 var elResizerProxy = DT._initColumnResizerProxyEl();
                 oColumn._ddResizer = new YAHOO.util.ColumnResizer(
-                        this, oColumn, elTheadCell, elThResizer.id, elResizerProxy);
+                        this, oColumn, elTh, elThResizer, elResizerProxy);
                 var cancelClick = function(e) {
                     Ev.stopPropagation(e);
                 };
@@ -3101,7 +3106,7 @@ _initCellEditor : function() {
 
     // Attach Cell Editor container element as first child of body
     var elCellEditor = document.createElement("div");
-    elCellEditor.id = this._sId + "-celleditor"; // Needed for blur onclick elsewhere
+    elCellEditor.id = this._sId + "-celleditor"; // Needed to blur onclick elsewhere
     elCellEditor.style.display = "none";
     elCellEditor.tabIndex = 0;
     Dom.addClass(elCellEditor, DT.CLASS_EDITOR);
@@ -3374,23 +3379,11 @@ _updateTrEl : function(elTr, oRecord) {
         elTd;
     for(var i=0,len=allTds.length; i<len; ++i) {
         elTd = allTds[i];
-        
-        // Set row-specific attributes
-        ///elTr.id = this._sId+"-bdrow"+this._nTrCount++;
         elTr.id = oRecord.getId(); // Needed for Record association and tracking of FIRST/LAST
         
-        // Set cell-specific attributes
-        ///TODO: are IDs necessary?
-        ///if(!elTd.id) {
-            ///elTd.id = this._sId+"-bdcell"+this._nTdCount++;
-        ///}
-   
         // Set the cell content
         this.formatCell(allTds[i].firstChild, oRecord, this._oColumnSet.keys[i]);
     }
-
-    // Update Record ID
-    ///elTr.yuiRecordId = oRecord.getId();
     
     // Redisplay the row for reflow
     elTr.style.display = '';
@@ -4693,7 +4686,6 @@ getNextTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
         var nThisTdIndex = elCell.cellIndex;
-        ///var nThisTdIndex = elCell.yuiCellIndex;
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex < elRow.cells.length-1) {
             return elRow.cells[nThisTdIndex+1];
@@ -4721,7 +4713,6 @@ getPreviousTdEl : function(cell) {
     var elCell = this.getTdEl(cell);
     if(elCell) {
         var nThisTdIndex = elCell.cellIndex;
-        ///var nThisTdIndex = elCell.yuiCellIndex;
         var elRow = this.getTrEl(elCell);
         if(nThisTdIndex > 0) {
             return elRow.cells[nThisTdIndex-1];
@@ -4751,7 +4742,6 @@ getAboveTdEl : function(cell) {
         var elPreviousRow = this.getPreviousTrEl(elCell);
         if(elPreviousRow) {
             return elPreviousRow.cells[elCell.cellIndex];
-            ///return elPreviousRow.cells[elCell.yuiCellIndex];
         }
     }
     YAHOO.log("Could not get above TD element for cell " + cell, "info", this.toString());
@@ -4772,7 +4762,6 @@ getBelowTdEl : function(cell) {
         var elNextRow = this.getNextTrEl(elCell);
         if(elNextRow) {
             return elNextRow.cells[elCell.cellIndex];
-            ///return elNextRow.cells[elCell.yuiCellIndex];
         }
     }
     YAHOO.log("Could not get below TD element for cell " + cell, "info", this.toString());
@@ -4801,14 +4790,14 @@ getThLinerEl : function(theadCell) {
  * @return {HTMLElement} Reference to TH element.
  */
 getThEl : function(theadCell) {
-    var elTheadCell;
+    var elTh;
 
     // Validate Column instance
     if(theadCell instanceof YAHOO.widget.Column) {
         var oColumn = theadCell;
-        elTheadCell = oColumn.getThEl();
-        if(elTheadCell) {
-            return elTheadCell;
+        elTh = oColumn.getThEl();
+        if(elTh) {
+            return elTh;
         }
     }
     // Validate HTML element
@@ -4819,16 +4808,16 @@ getThEl : function(theadCell) {
             // Validate TH element
             if(el.nodeName.toLowerCase() != "th") {
                 // Traverse up the DOM to find the corresponding TR element
-                elTheadCell = Dom.getAncestorByTagName(el,"th");
+                elTh = Dom.getAncestorByTagName(el,"th");
             }
             else {
-                elTheadCell = el;
+                elTh = el;
             }
 
             // Make sure the TH is in this THEAD
-            if(elTheadCell && (elTheadCell.parentNode.parentNode == this._elThead)) {
+            if(elTh && (elTh.parentNode.parentNode == this._elThead)) {
                 // Now we can return the TD element
-                return elTheadCell;
+                return elTh;
             }
         }
     }
@@ -5557,7 +5546,6 @@ getRecord : function(row) {
         var elRow = this.getTrEl(row);
         if(elRow) {
             oRecord = this._oRecordSet.getRecord(this.getRecordIndex(elRow.sectionRowIndex));
-            ///oRecord = this._oRecordSet.getRecord(elRow.yuiRecordId);
         }
     }
 
@@ -5634,7 +5622,6 @@ getColumn : function(column) {
         var elCell = this.getTdEl(column);
         if(elCell) {
             oColumn = this._oColumnSet.getColumn(elCell.cellIndex);
-            ///oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
         }
         // Validate TH element
         else {
@@ -5647,7 +5634,6 @@ getColumn : function(column) {
                         oColumn = allColumns[i];
                     } 
                 }
-                ///oColumn = this._oColumnSet.getColumnById(elCell.yuiColumnId);
             }
         }
     }
@@ -5889,8 +5875,7 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
     // We have a STYLE node to update
     if(s) {
         // Unique classname for this Column instance
-        // Use 
-        var sClassname = "." + this.getId() + "-col-" +oColumn.getSanitizedKey() + " .yui-dt-liner";
+        var sClassname = "." + this.getId() + "-col-" +oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
@@ -7312,7 +7297,6 @@ formatCell : function(elCell, oRecord, oColumn) {
     }
     if(!(oColumn instanceof YAHOO.widget.Column)) {
         oColumn = this.getColumn(elCell.parentNode.cellIndex);
-        ///oColumn = this._oColumnSet.getColumn(elCell.parentNode.yuiColumnKey);
     }
 
     if(oRecord && oColumn) {
@@ -9201,7 +9185,6 @@ accept {record}
     if(elCell) {
         var oRecord = this.getRecord(elCell);
         var sColumnId = this.getColumn(elCell.cellIndex).getId();
-        ///var sColumnId = elCell.yuiColumnId;
 
         if(oRecord && sColumnId) {
             // Get Record ID
@@ -9229,7 +9212,6 @@ accept {record}
             Dom.addClass(elCell, DT.CLASS_SELECTED);
 
             this.fireEvent("cellSelectEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key: this.getColumn(elCell.cellIndex).getKey(), el:elCell});
-            ///this.fireEvent("cellSelectEvent", {record:oRecord, column:this.getColumnById(sColumnId), key: elCell.yuiColumnKey, el:elCell});
             YAHOO.log("Selected " + elCell, "info", this.toString());
             return;
         }
@@ -9250,7 +9232,6 @@ unselectCell : function(cell) {
     if(elCell) {
         var oRecord = this.getRecord(elCell);
         var sColumnId = this.getColumn(elCell.cellIndex).getId();
-        ///var sColumnId = elCell.yuiColumnId;
 
         if(oRecord && sColumnId) {
             // Get Record ID
@@ -9270,7 +9251,6 @@ unselectCell : function(cell) {
                     Dom.removeClass(elCell, DT.CLASS_SELECTED);
 
                     this.fireEvent("cellUnselectEvent", {record:oRecord, column: this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
-                    //this.fireEvent("cellUnselectEvent", {record:oRecord, column: this.getColumnById(sColumnId), key:elCell.yuiColumnKey, el:elCell});
                     YAHOO.log("Unselected " + elCell, "info", this.toString());
                     return;
                 }
@@ -9497,11 +9477,9 @@ highlightCell : function(cell) {
 
         var oRecord = this.getRecord(elCell);
         var sColumnId = this.getColumn(elCell.cellIndex).getId();
-        //var sColumnId = elCell.yuiColumnId;
         Dom.addClass(elCell,DT.CLASS_HIGHLIGHTED);
         //this._sLastHighlightedTdElId = elCell.id;
         this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
-        ///this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumnById(sColumnId), key:elCell.yuiColumnKey, el:elCell});
         YAHOO.log("Highlighted " + elCell, "info", this.toString());
         return;
     }
@@ -9521,7 +9499,6 @@ unhighlightCell : function(cell) {
         var oRecord = this.getRecord(elCell);
         Dom.removeClass(elCell,DT.CLASS_HIGHLIGHTED);
         this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});
-        ///this.fireEvent("cellUnhighlightEvent", {record:oRecord, column:this.getColumnById(elCell.yuiColumnId), key:elCell.yuiColumnKey, el:elCell});
         YAHOO.log("Unhighlighted " + elCell, "info", this.toString());
         return;
     }
@@ -10115,9 +10092,7 @@ onEventFormatCell : function(oArgs) {
 
     var elCell = this.getTdEl(target);
     if(elCell) {
-    ///if(elCell && elCell.yuiColumnKey) {
         var oColumn = this.getColumn(elCell.cellIndex);
-        ///var oColumn = this.getColumn(elCell.yuiColumnKey);
         this.formatCell(elCell.firstChild, this.getRecord(elCell), oColumn);
     }
     else {
