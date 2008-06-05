@@ -428,6 +428,12 @@
                         // Test #1: Setting the "maxheight" configuration property via the constructor
 
                         oMenu = new Menu(Dom.generateId(), { maxheight: 100 });
+
+                        for (var i = 0; i < 20; i++) {
+                        
+                            oMenu.addItem("Menu Item " + i);
+                        
+                        }
                         
                         oMenu.render(document.body);
 
