@@ -149,17 +149,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // Do not send an initial request at all
     else if(initialLoad === false) {
         this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
-        this._oChainRender.add({
-            method: function() {
-                if((this instanceof DT) && this._sId && this._bInit) {
-                    this._bInit = false;
-                    this.fireEvent("initEvent");
-                    YAHOO.log("DataTable initialized with no rows", "info", this.toString());
-                }
-            },
-            scope: this
-        });
-        this._oChainRender.run();
     }
     // Send an initial request with a custom payload
     else {
@@ -2073,8 +2062,7 @@ initAttributes : function(oConfigs) {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * True if instance is initialized, so as to fire the initEvent rather than
- * renderEvent.
+ * True if instance is initialized, so as to fire the initEvent after render.
  *
  * @property _bInit
  * @type Boolean
@@ -5013,9 +5001,7 @@ YAHOO.log("start render","time");
     // From the top, update in-place existing rows, so as to reuse DOM elements
     var elTbody = this._elTbody;
     var nRecordsLength = allRecords.length;
-    if(nRecordsLength > 0) {
-        ///this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
-        
+    if(nRecordsLength > 0) {        
         // unlooped
         //this._oChainRender.add({
         //    method: function(oArg) {
@@ -5035,7 +5021,7 @@ YAHOO.log("start render","time");
         this._unsetFirstRow();
         this._unsetLastRow();
 
-        // Set up the looped Chain
+        // Set up the loop Chain to render rows
         var loopN = this.get("renderLoopSize");
         this._oChainRender.add({
             method: function(oArg) {
@@ -5065,6 +5051,8 @@ YAHOO.log("start render","time");
             },
             timeout: (loopN > 0) ? 0 : -1
         });
+        
+        // Post row-render tasks
         this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
@@ -5074,20 +5062,29 @@ YAHOO.log("start render","time");
                     this._setFirstRow();
                     this._setLastRow();
                     this._setRowStripes();
-                    ///elTbody.style.display = "";
                     this.hideTableMessage();
-
+                }
+            },
+            scope: this,
+            timeout: (loopN > 0) ? 0 : -1
+        });
+        
+        // Fire events in separate timeout thread so implementers can
+        // subscribe immediately after the constructor
+        this._oChainRender.add({
+            method: function(oArg) {
+                if((this instanceof DT) && this._sId) {
+                    // Fire initEvent for first render
                     if(this._bInit) {
                         this._bInit = false;
                         this.fireEvent("initEvent");
-                        YAHOO.log("DataTable initialized with " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
                     }
-                    else {
-                        this.fireEvent("renderEvent");
-                        // Backward compatibility
-                        this.fireEvent("refreshEvent");
-                        YAHOO.log("DataTable rendered " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
-                    }
+
+                    // Always fire renderEvent
+                    this.fireEvent("renderEvent");
+                    // Backward compatibility
+                    this.fireEvent("refreshEvent");
+                    YAHOO.log("DataTable rendered " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
                 
                     YAHOO.log("end render","time");
                 }
@@ -10393,13 +10390,13 @@ _handleDataReturnPayload : function (oRequest, oResponse, meta) {
     /////////////////////////////////////////////////////////////////////////////
 
     /**
-     * Fired when the DataTable instance's initialization is complete.
+     * Fired when the DataTable's rows are rendered from an initialized state.
      *
      * @event initEvent
      */
 
     /**
-     * Fired when the DataTable's view is rendered.
+     * Fired when the DataTable's rows are rendered to the DOM.
      *
      * @event renderEvent
      */
