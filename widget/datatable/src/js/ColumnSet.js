@@ -332,7 +332,7 @@ YAHOO.widget.ColumnSet.prototype = {
 
         // Store header relationships in an array for HEADERS attribute
         var recurseAncestorsForHeaders = function(i, oColumn) {
-            headers[i].push(oColumn._sId);
+            headers[i].push(oColumn.getSanitizedKey());
             if(oColumn._oParent) {
                 recurseAncestorsForHeaders(i, oColumn._oParent);
             }
@@ -929,7 +929,8 @@ YAHOO.widget.Column.prototype = {
     },
     
     /**
-     * Returns Column key which has been sanitized for CSS usage.
+     * Returns Column key which has been sanitized for DOM (class and ID) usage
+     * starts with letter, contains only letters, numbers, hyphen, or period.
      *
      * @method getSanitizedKey
      * @return {String} Sanitized Column key.

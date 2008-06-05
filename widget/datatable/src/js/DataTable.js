@@ -778,7 +778,7 @@ lang.augmentObject(DT, {
             }
 
             // Generate a unique HREF for visited status
-            var sHref = oSelf.getId() + "-sort" + oColumn.getId() + "-" + sSortDir;
+            var sHref = oSelf.getId() + "-sort-" + oColumn.getSanitizedKey() + "-" + sSortDir;
             
             // Generate a dynamic TITLE for sort status
             var sTitle = "Click to sort " + sSortDir;
@@ -1001,7 +1001,7 @@ lang.augmentObject(DT, {
         var bChecked = oData;
         bChecked = (bChecked) ? " checked" : "";
         el.innerHTML = "<input type=\"radio\"" + bChecked +
-                " name=\"col" + oColumn.getId() + "-radio\"" +
+                " name=\"col-" + oColumn.getSanitizedKey() + "-radio\"" +
                 " class=\"" + DT.CLASS_RADIO+ "\">";
     },
 
@@ -1196,7 +1196,7 @@ lang.augmentObject(DT, {
         if(YAHOO.widget.Calendar) {
             var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
             var calContainer = elContainer.appendChild(document.createElement("div"));
-            var calPrefix = oColumn.getColEl();
+            var calPrefix = this.getId() + oColumn.getColEl();
             calContainer.id = calPrefix + "-dateContainer"; // Needed for Calendar constructor
             var calendar =
                     new YAHOO.widget.Calendar(calPrefix + "-date",
@@ -1298,7 +1298,7 @@ lang.augmentObject(DT, {
             for(j=0; j<radioOptions.length; j++) {
                 radioValue = lang.isValue(radioOptions[j].label) ?
                         radioOptions[j].label : radioOptions[j];
-                radioId =  oSelf.getId() + "-col" + oColumn.getId() + "-radioeditor" + j;
+                radioId =  oSelf.getId() + "-col-" + oColumn.getSanitizedKey() + "-radioeditor" + j;
                 elContainer.innerHTML += "<input type=\"radio\"" +
                         " name=\"" + oSelf.getId() + "-editor-radio\"" +
                         " value=\"" + radioValue + "\"" +
@@ -1310,7 +1310,7 @@ lang.augmentObject(DT, {
             }
             // Then check one, and assign click handlers
             for(j=0; j<radioOptions.length; j++) {
-                var radioEl = Dom.get(oSelf.getId() + "-col" + oColumn.getId() + "-radioeditor" + j);
+                var radioEl = Dom.get(oSelf.getId() + "-col" + oColumn.getSanitizedKey() + "-radioeditor" + j);
                 if(value === radioEl.value) {
                     radioEl.checked = true;
                     oSelf._focusEl(radioEl);
@@ -2464,7 +2464,7 @@ _initColumnSet : function(aColumnDefs) {
     if(this._oColumnSet) {
         // First clear _oDynStyles for existing ColumnSet
         for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
-            DT._oDynStyles[".yui-dt-col"+this._oColumnSet.keys[i].getId()+" ."+DT.CLASS_LINER] = undefined;
+            DT._oDynStyles["."+this.getId()+"-col"+this._oColumnSet.keys[i].getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
         }
         
         this._oColumnSet = null;
@@ -2864,15 +2864,11 @@ _initTheadEl : function(elTable) {
  * @private
  */
 _initThEl : function(elTh, oColumn) {
-    oColumn._elTh = elTh;
-    
-    var colKey = oColumn.getKey();
-    var colId = oColumn.getId();
-    
-    elTh.id = this._sId+"-th" + oColumn.getId(); // Needed for accessibility, getColumn by TH, and ColumnDD
+    elTh.id = this._sId+"-th-" + oColumn.getSanitizedKey(); // Needed for accessibility, getColumn by TH, and ColumnDD
     elTh.innerHTML = "";
     elTh.rowSpan = oColumn.getRowspan();
     elTh.colSpan = oColumn.getColspan();
+    oColumn._elTh = elTh;
     
     var elThLiner = elTh.appendChild(document.createElement("div"));
     elThLiner.id = elTh.id + "-liner"; // Needed for resizer
@@ -2880,8 +2876,7 @@ _initThEl : function(elTh, oColumn) {
     oColumn._elThLiner = elThLiner;
     
     var elThLabel = elThLiner.appendChild(document.createElement("span"));
-    elThLabel.className = DT.CLASS_LABEL;
-    
+    elThLabel.className = DT.CLASS_LABEL;    
 
     // Clear minWidth on hidden Columns
     if(oColumn.hidden) {
@@ -2977,7 +2972,7 @@ _initColumnHelpers : function() {
                 
                 // Create the resizer
                 var elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
-                elThResizer.id = this._sId + "-colresizer" + oColumn.getId(); // Needed for ColumnResizer
+                elThResizer.id = elTh.id + "-resizer"; // Needed for ColumnResizer
                 oColumn._elResizer = elThResizer;
                 Dom.addClass(elThResizer,DT.CLASS_RESIZER);
                 var elResizerProxy = DT._initColumnResizerProxyEl();
@@ -3201,8 +3196,6 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
     allClasses[allClasses.length] = this.getId() + "-col-" +oColumn.getSanitizedKey();
-    // Column ID
-    ///allClasses[allClasses.length] = "yui-dt-col"+oColumn.getId();
 
     var isSortedBy = this.get("sortedBy") || {};
     // Sorted
@@ -3310,9 +3303,10 @@ _formatTdEl : function (oColumn, elTd, index, isLast) {
     // Set the TD's accessibility headers
     var allHeaders = oColumnSet.headers,
         allColHeaders = allHeaders[index],
-        sHeader, sTdHeaders;
+        sTdHeaders = "",
+        sHeader;
     for(var j=0, headersLen=allColHeaders.length; j < headersLen; j++) {
-        sHeader = this._sId + "-th" + allColHeaders[j] + ' ';
+        sHeader = this._sId + "-th-" + allColHeaders[j] + ' ';
         sTdHeaders += sHeader;
     }
     elTd.headers = sTdHeaders;
@@ -4620,9 +4614,9 @@ getTdEl : function(cell) {
     else if(cell) {
         var oRecord, nColKeyIndex;
 
-        if(lang.isString(cell.columnId) && lang.isString(cell.recordId)) {
+        if(lang.isString(cell.columnKey) && lang.isString(cell.recordId)) {
             oRecord = this.getRecord(cell.recordId);
-            var oColumn = this.getColumnById(cell.columnId);
+            var oColumn = this.getColumnBy(cell.columnKey);
             if(oColumn) {
                 nColKeyIndex = oColumn.getKeyIndex();
             }
@@ -5234,7 +5228,7 @@ YAHOO.log("start render","time");
                                     for(l=0; l<allSelectedCells.length; l++) {
                                         if((allSelectedCells[l].recordId === this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex)).getId()) &&
                                         ///if((allSelectedCells[l].recordId === thisRow.yuiRecordId) &&
-                                                (allSelectedCells[l].columnId === this.getColumn(thisCell.cellIndex).getId())) {
+                                                (allSelectedCells[l].columnKey === this.getColumn(thisCell.cellIndex).getKey())) {
                                                 ///(allSelectedCells[l].columnId === thisCell.yuiColumnId)) {
                                             Dom.addClass(thisCell, DT.CLASS_SELECTED);
                                             if(k === thisRow.cells.length-1) {
@@ -6615,7 +6609,7 @@ highlightColumn : function(column) {
     // Only bottom-level Columns can get highlighted
     if(oColumn && (oColumn.getKeyIndex() !== null)) {
         /*// Make sure previous row is unhighlighted
-        var sId = oColumn.getId();
+        var sId = oColumn.getSanitizedKey();
         var sLastId = this._sLastHighlightedColumnId;
         if(sLastId && (sLastId !== sId)) {
             this.unhighlightColumn(this.getColumn(sLastId));
@@ -7459,7 +7453,7 @@ onPaginatorChange : function (oState) {
 
 /**
  * Array to track row selections (by sRecordId) and/or cell selections
- * (by {recordId:sRecordId, columnId:sColumnId})
+ * (by {recordId:sRecordId, columnKey:sColumnKey})
  *
  * @property _aSelections
  * @type Object[]
@@ -7478,7 +7472,7 @@ _oAnchorRecord : null,
 
 /**
  * Object literal representing cell selection anchor:
- * {recordId:sRecordId, columnId:sColumnId}.
+ * {recordId:sRecordId, columnKey:sColumnKey}.
  *
  * @property _oAnchorCell
  * @type Object
@@ -7532,7 +7526,7 @@ _getSelectionTrigger : function() {
                 oTrigger.recordIndex = nTriggerRecordIndex;
                 oTrigger.el = this.getTdEl(oTriggerCell);
                 oTrigger.trIndex = nTriggerTrIndex;
-                oTrigger.column = this.getColumnById(oTriggerCell.columnId);
+                oTrigger.column = this.getColumn(oTriggerCell.columnKey);
                 oTrigger.colKeyIndex = oTrigger.column.getKeyIndex();
                 oTrigger.cell = oTriggerCell;
                 return oTrigger;
@@ -9184,28 +9178,28 @@ accept {record}
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnId = this.getColumn(elCell.cellIndex).getId();
+        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
 
-        if(oRecord && sColumnId) {
+        if(oRecord && sColumnKey) {
             // Get Record ID
             var tracker = this._aSelections || [];
             var sRecordId = oRecord.getId();
 
             // Remove if there
             for(var j=tracker.length-1; j>-1; j--) {
-               if((tracker[j].recordId === sRecordId) && (tracker[j].columnId === sColumnId)){
+               if((tracker[j].recordId === sRecordId) && (tracker[j].columnKey === sColumnKey)){
                     tracker.splice(j,1);
                     break;
                 }
             }
 
             // Add to the end
-            tracker.push({recordId:sRecordId, columnId:sColumnId});
+            tracker.push({recordId:sRecordId, columnKey:sColumnKey});
 
             // Update trackers
             this._aSelections = tracker;
             if(!this._oAnchorCell) {
-                this._oAnchorCell = {record:oRecord, column:this.getColumnById(sColumnId)};
+                this._oAnchorCell = {record:oRecord, column:this.getColumn(sColumnKey)};
             }
 
             // Update the UI
@@ -9231,16 +9225,16 @@ unselectCell : function(cell) {
 
     if(elCell) {
         var oRecord = this.getRecord(elCell);
-        var sColumnId = this.getColumn(elCell.cellIndex).getId();
+        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
 
-        if(oRecord && sColumnId) {
+        if(oRecord && sColumnKey) {
             // Get Record ID
             var tracker = this._aSelections || [];
             var id = oRecord.getId();
 
             // Is it selected?
             for(var j=tracker.length-1; j>-1; j--) {
-                if((tracker[j].recordId === id) && (tracker[j].columnId === sColumnId)){
+                if((tracker[j].recordId === id) && (tracker[j].columnKey === sColumnKey)){
                     // Remove from tracker
                     tracker.splice(j,1);
 
@@ -9334,10 +9328,10 @@ isSelected : function(o) {
             // Looking for a cell
             else if(o.record && o.column){
                 sRecordId = o.record.getId();
-                var sColumnId = o.column.getId();
+                var sColumnKey = o.column.getKey();
 
                 for(j=tracker.length-1; j>-1; j--) {
-                    if((tracker[j].recordId === sRecordId) && (tracker[j].columnId === sColumnId)){
+                    if((tracker[j].recordId === sRecordId) && (tracker[j].columnKey === sColumnKey)){
                         return true;
                     }
                 }
@@ -9366,7 +9360,7 @@ getSelectedRows : function() {
 
 /**
  * Returns selected cells as an array of object literals:
- *     {recordId:sRecordId, columnId:sColumnId}.
+ *     {recordId:sRecordId, columnKey:sColumnKey}.
  *
  * @method getSelectedCells
  * @return {Object[]} Array of selected cells by Record ID and Column ID.
@@ -9401,7 +9395,7 @@ getLastSelectedRecord : function() {
 
 /**
  * Returns last selected cell as an object literal:
- *     {recordId:sRecordId, columnId:sColumnId}.
+ *     {recordId:sRecordId, columnKey:sColumnKey}.
  *
  * @method getLastSelectedCell
  * @return {Object} Object literal representation of a cell.
@@ -9410,7 +9404,7 @@ getLastSelectedCell : function() {
     var tracker = this._aSelections;
     if(tracker && tracker.length > 0) {
         for(var i=tracker.length-1; i>-1; i--) {
-           if(tracker[i].recordId && tracker[i].columnId){
+           if(tracker[i].recordId && tracker[i].columnKey){
                 return tracker[i];
             }
         }
@@ -9476,7 +9470,7 @@ highlightCell : function(cell) {
         }*/
 
         var oRecord = this.getRecord(elCell);
-        var sColumnId = this.getColumn(elCell.cellIndex).getId();
+        var sColumnKey = this.getColumn(elCell.cellIndex).getKey();
         Dom.addClass(elCell,DT.CLASS_HIGHLIGHTED);
         //this._sLastHighlightedTdElId = elCell.id;
         this.fireEvent("cellHighlightEvent", {record:oRecord, column:this.getColumn(elCell.cellIndex), key:this.getColumn(elCell.cellIndex).getKey(), el:elCell});

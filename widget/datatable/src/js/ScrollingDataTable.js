@@ -112,15 +112,6 @@ _elHdTable : null,
 _elBdContainer : null,
 
 /**
- * Body COLGROUP element.
- *
- * @property _elBdColgroup
- * @type HTMLElement
- * @private
- */
-///_elBdColgroup : null,
-
-/**
  * Body THEAD element.
  *
  * @property _elBdThead
@@ -410,141 +401,19 @@ _initTableEl : function() {
 },
 
 /**
- * Initializes ScrollingDataTable COLGROUP elements into the two TABLEs.
- *
- * @method _initColgroupEl
- * @private
- */
-/*_initColgroupEl : function(elHdTable, elBdTable) {
-    // Scrolling body COLGROUP
-    this._destroyBdColgroupEl();
-    /// Maybe I don't need 2 colgroups
-    this._initBdColgroupEl(elBdTable);
-    // Standard head COLGROUP
-    SDT.superclass._initColgroupEl.call(this, elHdTable);
-},*/
-
-/**
- * Initializes COLGROUP and COL elements into the body TABLE for managing minWidth.
- *
- * @method _initBdColgroupEl
- * @param elTable {HTMLElement} TABLE element into which to create COLGROUP.
- * @private
- */
-/*_initBdColgroupEl : function(elTable) {
-    if(elTable) {
-        // Destroy previous
-        this._destroyBdColgroupEl();
-
-        // Add COLs to DOCUMENT FRAGMENT
-        var allCols = this._aColIds || [],
-            allKeys = this._oColumnSet.keys,
-            i = 0, len = allCols.length,
-            elCol, oColumn,
-            elFragment = document.createDocumentFragment(),
-            elColTemplate = document.createElement("col");
-    
-        for(i=0,len=allKeys.length; i<len; i++) {
-            oColumn = allKeys[i];
-            elCol = elFragment.appendChild(elColTemplate.cloneNode(false));
-        }
-    
-        // Create COLGROUP
-        var elColgroup = elTable.insertBefore(document.createElement("colgroup"), elTable.firstChild);
-        elColgroup.appendChild(elFragment);
-        this._elBdColgroup = elColgroup;
-    }
-},*/
-
-/**
- * Destroy's the DataTable body COLGROUP element, if available.
- *
- * @method _destroyBdColgroupEl
- * @private
- */
-/*_destroyBdColgroupEl : function() {
-    var elColgroup = this._elBdColgroup;
-    if(elColgroup) {
-        var elTable = elColgroup.parentNode;
-        Ev.purgeElement(elColgroup, true);
-        elTable.removeChild(elColgroup);
-        this._elBdColgroup = null;
-    }
-},*/
-
-/**
- * Adds a COL element to COLGROUP at given index.
- *
- * @method _insertColgroupColEl
- * @param index {Number} Index of new COL element.
- * @private
- */
-/*_insertColgroupColEl : function(index) {
-    if(lang.isNumber(index) && this._elColgroup && this._elBdColgroup) {
-        var nextSibling = this._elColgroup.childNodes[index] || null;
-        this._elColgroup.insertBefore(document.createElement("col"), nextSibling);
-        nextSibling = this._elBdColgroup.childNodes[index] || null;
-        this._elBdColgroup.insertBefore(document.createElement("col"), nextSibling);
-    }
-},*/
-
-/**
- * Removes a COL element to COLGROUP at given index.
- *
- * @method _removeColgroupColEl
- * @param index {Number} Index of removed COL element.
- * @private
- */
-/*_removeColgroupColEl : function(index) {
-    if(lang.isNumber(index) && this._elColgroup && this._elColgroup.childNodes[index] && this._elBdColgroup && this._elBdColgroup.childNodes[index]) {
-        this._elColgroup.removeChild(this._elColgroup.childNodes[index]);
-        this._elBdColgroup.removeChild(this._elBdColgroup.childNodes[index]);
-    }
-},*/
-
-/**
- * Reorders a COL element from old index(es) to new index.
- *
- * @method _reorderColgroupColEl
- * @param aKeyIndexes {Number[]} Array of indexes of removed COL element.
- * @param newIndex {Number} New index. 
- * @private
- */
-/*_reorderColgroupColEl : function(aKeyIndexes, newIndex) {
-    if(lang.isArray(aKeyIndexes) && lang.isNumber(newIndex) && this._elColgroup && (this._elColgroup.childNodes.length > aKeyIndexes[aKeyIndexes.length-1])) {
-        var i,
-            tmpCols = [],
-            tmpColsBd = [];
-        // Remove COL
-        for(i=aKeyIndexes.length-1; i>-1; i--) {
-            tmpCols.push(this._elColgroup.removeChild(this._elColgroup.childNodes[aKeyIndexes[i]]));
-            tmpColsBd.push(this._elBdColgroup.removeChild(this._elBdColgroup.childNodes[aKeyIndexes[i]]));
-        }
-        // Insert COL
-        var nextSibling = this._elColgroup.childNodes[newIndex] || null,
-            nextSiblingBd = this._elBdColgroup.childNodes[newIndex] || null;
-        for(i=tmpCols.length-1; i>-1; i--) {
-            this._elColgroup.insertBefore(tmpCols[i], nextSibling);
-            this._elBdColgroup.insertBefore(tmpColsBd[i], nextSiblingBd);
-        }
-    }
-},*/
-
-
-
-
-/**
  * Initializes ScrollingDataTable THEAD elements into the two inner containers.
  *
  * @method _initTheadEl
+ * @param elHdTable {HTMLElement} (optional) Fixed header TABLE element reference.
+ * @param elTable {HTMLElement} (optional) TABLE element reference.
  * @private
  */
-_initTheadEl : function(elHdTable, elBdTable) {
+_initTheadEl : function(elHdTable, elTable) {
     elHdTable = elHdTable || this._elHdTable;
-    elBdTable = elBdTable || this._elBdTable;
+    elTable = elTable || this._elTable;
     
     // Scrolling body's THEAD
-    this._initBdTheadEl(elBdTable);
+    this._initBdTheadEl(elTable);
     // Standard fixed head THEAD
     SDT.superclass._initTheadEl.call(this, elHdTable);
 },
@@ -559,7 +428,7 @@ _initTheadEl : function(elHdTable, elBdTable) {
  */
 _initThEl : function(elTh, oColumn) {
     SDT.superclass._initThEl.call(this, elTh, oColumn);
-    elTh.id = this._sId+"-fixedth" + oColumn.getId(); // Needed for getColumn by TH and ColumnDD
+    elTh.id = this.getId() +"-fixedth-" + oColumn.getSanitizedKey(); // Needed for getColumn by TH and ColumnDD
 },
 
 /**
@@ -593,25 +462,18 @@ _initBdTheadEl : function(elTable) {
         // Destroy previous
         this._destroyBdTheadEl();
 
-        ///TODO: append to DOM later
-       /// var elThead = (this._elBdColgroup) ?
-            ///elTable.insertBefore(document.createElement("thead"), this._elBdColgroup.nextSibling) :
-            ///elTable.appendChild(document.createElement("thead"));
-       var elThead = elTable.insertBefore(document.createElement("thead"), elTable.firstChild);
+        var elThead = elTable.insertBefore(document.createElement("thead"), elTable.firstChild);
         
+        // Add TRs to the THEAD;
         var oColumnSet = this._oColumnSet,
-            oColumn,
-            i=0, j=0;
-    
-        // Add TRs to the THEADs
-        var colTree = oColumnSet.tree;
-        var elTh;
-        
-        for(; i<colTree.length; i++) {
-            var elTheadTr = elThead.appendChild(document.createElement("tr"));
+            colTree = oColumnSet.tree,
+            elTh, elTheadTr, oColumn, i, j, k, l;
+
+        for(i=0, k=colTree.length; i<k; i++) {
+            elTheadTr = elThead.appendChild(document.createElement("tr"));
     
             // ...and create TH cells
-            for(; j<colTree[i].length; j++) {
+            for(j=0, l=colTree[i].length; j<l; j++) {
                 oColumn = colTree[i][j];
                 elTh = elTheadTr.appendChild(document.createElement("th"));
                 this._initBdThEl(elTh,oColumn,i,j);
@@ -631,7 +493,7 @@ _initBdTheadEl : function(elTable) {
  * @private
  */
 _initBdThEl : function(elTh, oColumn) {
-    elTh.id = this._sId+"-th" + oColumn.getId(); // Needed for accessibility
+    elTh.id = this.getId()+"-th-" + oColumn.getSanitizedKey(); // Needed for accessibility
     elTh.rowSpan = oColumn.getRowspan();
     elTh.colSpan = oColumn.getColspan();
     
@@ -915,7 +777,7 @@ _syncScrollOverhang : function() {
         // Add Column header overhang
         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
         len = aLastHeaders.length;
-        prefix = this._sId+"-fixedth";
+        prefix = this._sId+"-fixedth-";
         for(i=0; i<len; i++) {
             //TODO: A better way to get all THs along the right edge
             oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
@@ -927,7 +789,7 @@ _syncScrollOverhang : function() {
         // Remove Column header overhang
         aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
         len = aLastHeaders.length;
-        prefix = this._sId+"-fixedth";
+        prefix = this._sId+"-fixedth-";
         for(i=0; i<len; i++) {
             //TODO: A better way to get th cell
             oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
