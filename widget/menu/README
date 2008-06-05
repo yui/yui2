@@ -1,3 +1,29 @@
+*** version 2.5.2 ***
+
+Fixed the following bugs:
+-------------------------
+
++ Mousing over a Menu instance will no longer result in the JavaScript error "oItem has 
+  no properties"
+
++ When using a custom skin, a Menu instance's width will no longer continue to increase in IE each 
+  time it is displayed.
+
++ Menu no longer blocks the display of the browser's default context menu when right clicking on a 
+  MenuItem instance in Firefox 2 for Windows or Firefox 3.
+
++ Fixed the behavior of the "clicktohide" configuration property so that the property properly 
+  cascades to all submenus when a Menu instance's "position" configuration property is set to 
+  "dynamic".
+
++ Rolled back a change introduced in 2.5.0 that modified the behavior of submenus so that they are 
+  no longer hidden then re-shown when the mouse is moving from a visible submenu back to its parent 
+  MenuItem instance.  This change in 2.5.0 introduced a problem where multiple submenus of a menu
+  could end up being displayed at once.  Currently targeting to restore the behavior introduced in 
+  2.5.0 in 2.6.0.
+
+
+
 *** version 2.5.1 ***
 
 Fixed the following bugs:

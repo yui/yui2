@@ -1723,12 +1723,7 @@ _onMouseOver: function (p_sType, p_aArgs) {
 
         Event.on(this.element, "mousemove", this._onMouseMove, this, true);
 
-
-		if (oItem && !Dom.isAncestor(oItem.element, Event.getRelatedTarget(oEvent))) {
-
-        	this.clearActiveItem();
-        
-        }
+		this.clearActiveItem();
 
 
         if (this.parent && this._nSubmenuHideDelayId) {
@@ -1958,12 +1953,9 @@ _onMouseMove: function (p_oEvent, p_oMenu) {
 */
 _onClick: function (p_sType, p_aArgs) {
 
-	var Event = YAHOO.util.Event,
-		Dom = YAHOO.util.Dom,
-		oEvent = p_aArgs[0],
+	var oEvent = p_aArgs[0],
 		oItem = p_aArgs[1],
 		bInMenuAnchor = false,
-		nGeckoVersion = UA.gecko,
 		oSubmenu,
 		oRoot,
 		sId,
@@ -2046,8 +2038,32 @@ _onClick: function (p_sType, p_aArgs) {
 	
 			if (!oSubmenu) {
 	
-				oRoot = this.getRoot();
+				/*
+					There is an inconsistency between Firefox 2 for Mac OS X and Firefox 2 Windows 
+					regarding the triggering of the display of the browser's context menu and the 
+					subsequent firing of the "click" event. In Firefox for Windows, when the user 
+					triggers the display of the browser's context menu the "click" event also fires 
+					for the document object, even though the "click" event did not fire for the 
+					element that was the original target of the "contextmenu" event. This is unique 
+					to Firefox on Windows. For all other A-Grade browsers, including Firefox 2 for 
+					Mac OS X, the "click" event doesn't fire for the document object. 
+
+					This bug in Firefox 2 for Windows affects Menu as Menu instances listen for 
+					events at the document level and have an internal "click" event handler they 
+					use to hide themselves when clicked. As a result, in Firefox for Windows a 
+					Menu will hide when the user right clicks on a MenuItem to raise the browser's 
+					default context menu, because its internal "click" event handler ends up 
+					getting called.  The following line fixes this bug.
+				*/
+
+				if ((UA.gecko && this.platform == "windows") && oEvent.button > 0) {
 				
+					return;
+				
+				}
+
+				oRoot = this.getRoot();
+
 				if (oRoot instanceof YAHOO.widget.MenuBar || 
 					oRoot.cfg.getProperty("position") == "static") {
 	
@@ -2056,12 +2072,7 @@ _onClick: function (p_sType, p_aArgs) {
 				}
 				else {
 	
-					if (!(((nGeckoVersion && this.platform == "windows") || 
-						(nGeckoVersion && nGeckoVersion > 1.8)) && (oEvent.button > 0))) {
-				
-						oRoot.hide();
-				
-					}
+					oRoot.hide();
 				
 				}
 	
