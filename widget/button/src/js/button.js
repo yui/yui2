@@ -74,6 +74,7 @@
     var Dom = YAHOO.util.Dom,
         Event = YAHOO.util.Event,
         Lang = YAHOO.lang,
+        UA = YAHOO.env.ua,
         Overlay = YAHOO.widget.Overlay,
         Menu = YAHOO.widget.Menu,
     
@@ -114,7 +115,7 @@
     
         if (Lang.isString(p_sType) && Lang.isString(p_sName)) {
         
-            if (YAHOO.env.ua.ie) {
+            if (UA.ie) {
         
                 /*
                     For IE it is necessary to create the element with the 
@@ -828,6 +829,7 @@
         _setLabel: function (p_sLabel) {
 
             this._button.innerHTML = p_sLabel;
+
             
             /*
                 Remove and add the default class name from the root element
@@ -840,21 +842,17 @@
             */
             
             var sClass,
-                me;
+                nGeckoVersion = UA.gecko;
+				
             
-            if (YAHOO.env.ua.gecko && Dom.inDocument(this.get("element"))) {
+            if (nGeckoVersion && nGeckoVersion < 1.9 && Dom.inDocument(this.get("element"))) {
             
-                me = this;
                 sClass = this.CSS_CLASS_NAME;                
 
                 this.removeClass(sClass);
                 
-                window.setTimeout(function () {
-                
-                    me.addClass(sClass);
-                
-                }, 0);
-            
+                Lang.later(0, this, this.addClass, sClass);
+
             }
         
         },
@@ -1431,9 +1429,32 @@
         * @return {Boolean}
         */
         _isSplitButtonOptionKey: function (p_oEvent) {
+
+			var bShowMenu = (p_oEvent.ctrlKey && p_oEvent.shiftKey && 
+								Event.getCharCode(p_oEvent) == 77);
+
+
+			function onKeyPress(p_oEvent) {
+
+				Event.preventDefault(p_oEvent);
+
+				this.removeListener("keypress", onKeyPress);
+			
+			}
+
+
+			/*
+				It is necessary to add a "keypress" event listener to prevent Opera's default
+				browser context menu from appearing when the user presses Ctrl + Shift + M.
+			*/
+
+			if (bShowMenu && UA.opera) {
+
+        		this.on("keypress", onKeyPress);
+
+			}
         
-            return (p_oEvent.ctrlKey && p_oEvent.shiftKey && 
-                Event.getCharCode(p_oEvent) == 77);
+            return bShowMenu;
         
         },
         
@@ -1457,7 +1478,7 @@
             if (oForm) {
         
                 Event.on(oForm, "reset", this._onFormReset, null, this);
-                Event.on(oForm, "submit", this._onFormSubmit, null, this);
+                Event.on(oForm, "submit", this.createHiddenFields, null, this);
         
                 oSrcElement = this.get("srcelement");
         
@@ -1606,6 +1627,11 @@
                             oMenu.align("bl", "tl");
                         
                         }
+						else {
+
+							oMenu.align("tl", "bl");
+
+						}
             
                     }
             
@@ -1649,11 +1675,11 @@
 
             if (Menu && oMenu && (oMenu instanceof Menu)) {
         
-                oMenu.cfg.applyConfig({ context: [oButtonEL, "tl", "bl"],
-                    clicktohide: false,
-                    visible: true });
+                oMenu.cfg.applyConfig({ context: [oButtonEL, "tl", "bl"], clicktohide: false });
                     
                 oMenu.cfg.fireQueue();
+                
+                oMenu.show();
                 
                 oMenu.cfg.setProperty("maxheight", 0);
             
@@ -2896,7 +2922,7 @@
                 }
         
         
-                if (YAHOO.env.ua.ie) {
+                if (UA.ie) {
         
                     bSubmitForm = oForm.fireEvent("onsubmit");
         
@@ -2918,7 +2944,7 @@
                     method as well.
                 */
               
-                if ((YAHOO.env.ua.ie || YAHOO.env.ua.webkit) && bSubmitForm) {
+                if ((UA.ie || UA.webkit) && bSubmitForm) {
         
                     oForm.submit();
                 
