@@ -1,5 +1,7 @@
 package com.yahoo.astra.fl.charts
 {
+	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
+	import com.yahoo.astra.fl.charts.axes.NumericAxis;
 	import com.yahoo.astra.fl.charts.series.BarSeries;
 	
 	import fl.core.UIComponent;
@@ -64,13 +66,19 @@ package com.yahoo.astra.fl.charts
 		 */
 		override protected function configUI():void
 		{
+			if(!this.horizontalAxis)
+			{
+				var numericAxis:NumericAxis = new NumericAxis();
+				this.horizontalAxis = numericAxis;
+			}
+			
+			if(!this.verticalAxis)
+			{
+				var categoryAxis:CategoryAxis = new CategoryAxis();
+				this.verticalAxis = categoryAxis;
+			}
+			
 			super.configUI();
-			
-			var numericAxis:NumericAxis = new NumericAxis();
-			this.horizontalAxis = numericAxis;
-			
-			var categoryAxis:CategoryAxis = new CategoryAxis();
-			this.verticalAxis = categoryAxis;
 		}
 		
 		/**

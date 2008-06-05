@@ -5,7 +5,9 @@
 	import com.yahoo.astra.fl.charts.PieChart;
 	import com.yahoo.astra.fl.charts.legend.LegendItemData;
 	import com.yahoo.astra.fl.charts.skins.RectangleSkin;
+	import com.yahoo.astra.utils.GeomUtil;
 	import com.yahoo.astra.utils.GraphicsUtil;
+	import com.yahoo.astra.utils.NumberUtil;
 	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
@@ -13,6 +15,11 @@
 	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.geom.Point;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 		
 	//--------------------------------------
 	//  Styles
@@ -24,6 +31,24 @@
      * @default [0x729fcf, 0xfcaf3e, 0x73d216, 0xfce94f, 0xad7fa8, 0x3465a4]
      */
     [Style(name="fillColors", type="Array")]
+
+	/**
+     * If true, a label is displayed on each marker. The label text is created
+     * with the labelFunction property of the series. The default label function
+     * sets the label to the percentage value of the item.
+     *
+     * @default false
+     * @see PieSeries#labelFunction
+     */
+    [Style(name="showLabels", type="Boolean")]
+
+	/**
+     * If true, marker labels that overlap previously-created labels will be
+     * hidden to improve readability.
+     *
+     * @default true
+     */
+    [Style(name="hideOverlappingLabels", type="Boolean")]
     
 	/**
 	 * Renders data points as a series of pie-like wedges.
@@ -48,7 +73,11 @@
 				0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
 				0xb8ebff, 0x60558f, 0x737d7e, 0xa64d9a, 0x8e9a9b, 0x803e77
 			],
-			markerSkins: [RectangleSkin]
+			markerSkins: [RectangleSkin],
+			showLabels: false,
+			hideOverlappingLabels: true
+			//see textFormat default style defined in constructor below
+			//works around stylemanager global style bug!
 		};
 		
 		/**
@@ -82,11 +111,34 @@
 		public function PieSeries(data:Object = null)
 		{
 			super(data);
+			//we have to set this as an instance style because textFormat is
+			//defined as a global style in StyleManager, and that takes
+			//precedence over shared/class styles
+			this.setStyle("textFormat", new TextFormat("_sans", 11, 0x000000, true, false, false, "", "", TextFormatAlign.LEFT, 0, 0, 0, 0));
 		}
 		
 	//--------------------------------------
 	//  Properties
 	//--------------------------------------
+		
+		/**
+		 * @private
+		 * The text fields used to display labels over each marker.
+		 */
+		protected var labels:Array = [];
+		
+		/**
+		 * @private
+		 * Holds the labels created by the previous redraw so that they can
+		 * be reused.
+		 */
+		protected var labelsCache:Array;
+		
+		/**
+		 * @private
+		 * Storage for the masks that define the shapes of the markers.
+		 */
+		protected var markerMasks:Array = [];
 		
 		/**
 		 * @private
@@ -175,14 +227,37 @@
 			this._categoryNames = value;
 		}
 		
-		protected var markerMasks:Array = [];
+		/**
+		 * @private
+		 * Storage for the labelFunction property.
+		 */
+		private var _labelFunction:Function = defaultLabelFunction;
+		
+		/**
+		 * A function may be set to determine the text value of the labels.
+		 * 
+		 * <pre>function labelFunction(item:Object):String</pre>
+		 */
+		public function get labelFunction():Function
+		{
+			return this._labelFunction;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set labelFunction(value:Function):void
+		{
+			this._labelFunction = value;
+			this.invalidate();
+		}
 		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
 	
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#clone()
+		 * @inheritDoc
 		 */
 		override public function clone():ISeries
 		{
@@ -237,25 +312,16 @@
 		 */
 		public function itemToPercentage(item:Object):Number
 		{
-			var totalValue:Number = 0;
-			var itemCount:int = this.length;
-			for(var i:int = 0; i < itemCount; i++)
+			var totalValue:Number = this.calculateTotalValue();
+			if(totalValue == 0)
 			{
-				var currentItem:Object = this.dataProvider[i];
-				var value:Number = this.itemToData(currentItem);
-				
-				if(!isNaN(value))
-				{
-					totalValue += value;
-				}
+				return 0;
 			}
-			
-			if(totalValue == 0) return 0;
-			return (this.itemToData(item) / totalValue);
+			return 100 * (this.itemToData(item) / totalValue);
 		}
 		
 		/**
-		 * @copy com.yahoo.astra.fl.charts.series.ICategorySeries#createLegendItemData()
+		 * @inheritDoc
 		 */
 		public function createLegendItemData():Array
 		{
@@ -287,69 +353,20 @@
 			var stylesInvalid:Boolean = this.isInvalid(InvalidationType.STYLES);
 			var sizeInvalid:Boolean = this.isInvalid(InvalidationType.SIZE);
 			var dataInvalid:Boolean = this.isInvalid(InvalidationType.DATA);
+			
 			super.draw();
 			
-			var itemCount:int = this.length;
-			if(!this._previousData || this._previousData.length != this.length)
-			{
-				this._previousData = [];
-				for(var i:int = 0; i < itemCount; i++)
-				{
-					this._previousData.push(0);
-				}
-			}
+			this.drawMarkers(stylesInvalid, sizeInvalid);
 			
-			var markerCount:int = this.markers.length;
-			for(i = 0; i < markerCount; i++)
+			var showLabels:Boolean = this.getStyleValue("showLabels") as Boolean;
+			this.createLabelCache();
+			if(showLabels)
 			{
-				var marker:UIComponent = UIComponent(this.markers[i]);
-				
-				if(stylesInvalid)
-				{
-					this.copyStylesToRenderer(ISeriesItemRenderer(marker), RENDERER_STYLES);
-				}
-				
-				if(sizeInvalid)
-				{
-					marker.width = this.width;
-					marker.height = this.height;
-				}
-				//not really required, but we should validate anyway.
-				this.validateMarker(ISeriesItemRenderer(marker));
+				this.drawLabels();
 			}
+			this.clearLabelCache();
 			
-			//handle animating all the markers in one fell swoop.
-			if(this._animation)
-			{
-				if(this._animation.active)
-				{
-					this._animation.pause();
-				}
-				this._animation.removeEventListener(AnimationEvent.UPDATE, tweenUpdateHandler);
-				this._animation.removeEventListener(AnimationEvent.PAUSE, tweenPauseHandler);
-				this._animation.removeEventListener(AnimationEvent.COMPLETE, tweenCompleteHandler);
-				this._animation = null;
-			}
-			
-			var data:Array = this.dataProviderToArrayOfNumbers();
-			
-			//don't animate on livepreview!
-			if(this.isLivePreview || !this.getStyleValue("animationEnabled"))
-			{
-				this.drawMarkers(data);
-			}
-			else
-			{
-				var animationDuration:int = this.getStyleValue("animationDuration") as int;
-				var animationEasingFunction:Function = this.getStyleValue("animationEasingFunction") as Function;
-				
-				this._animation = new Animation(animationDuration, this._previousData, data);
-				this._animation.addEventListener(AnimationEvent.UPDATE, tweenUpdateHandler);
-				this._animation.addEventListener(AnimationEvent.PAUSE, tweenPauseHandler);
-				this._animation.addEventListener(AnimationEvent.COMPLETE, tweenCompleteHandler);
-				this._animation.easingFunction = animationEasingFunction;
-				this.drawMarkers(this._previousData);
-			}
+			this.beginAnimation();
 		}
 		
 		/**
@@ -400,12 +417,218 @@
 			}
 		}
 		
+		/**
+		 * @private
+		 * The default function called to initialize the text on the marker
+		 * labels.
+		 */
+		protected function defaultLabelFunction(item:Object):String
+		{
+			var percentage:Number = this.itemToPercentage(item);
+			return (percentage < 0.01 ? "< 0.01" : NumberUtil.roundToNearest(percentage, 0.01)) + "%";
+		}
+		
+		/**
+		 * @private
+		 * Draws the markers in this series.
+		 */
+		protected function drawMarkers(stylesInvalid:Boolean, sizeInvalid:Boolean):void
+		{
+			var markerCount:int = this.markers.length;
+			for(var i:int = 0; i < markerCount; i++)
+			{
+				var marker:UIComponent = UIComponent(this.markers[i]);
+				
+				if(stylesInvalid)
+				{
+					this.copyStylesToRenderer(ISeriesItemRenderer(marker), RENDERER_STYLES);
+				}
+				
+				if(sizeInvalid)
+				{
+					marker.width = this.width;
+					marker.height = this.height;
+				}
+				//not really required, but we should validate anyway.
+				this.validateMarker(ISeriesItemRenderer(marker));
+			}
+		}
+		
+		/**
+		 * @private
+		 * Either creates a new label TextField or retrieves one from the
+		 * cache.
+		 */
+		protected function getLabel():TextField
+		{
+			var label:TextField;
+			if(this.labelsCache.length > 0)
+			{
+				label = TextField(this.labelsCache.shift());
+			}
+			else
+			{
+				label = new TextField();
+				label.autoSize = TextFieldAutoSize.LEFT;
+				label.selectable = false;
+				label.mouseEnabled = false;
+				this.addChild(label);
+			}
+			label.visible = true;
+			return label;
+		}
+		
+		/**
+		 * @private
+		 * Updates the label text and positions the labels.
+		 */
+		protected function drawLabels():void
+		{	
+			var textFormat:TextFormat = this.getStyleValue("textFormat") as TextFormat;
+			var embedFonts:Boolean = this.getStyleValue("embedFonts") as Boolean;
+			var hideOverlappingLabels:Boolean = this.getStyleValue("hideOverlappingLabels") as Boolean;
+			
+			var angle:Number = 0;
+			var valueSum:Number = 0;
+			var totalValue:Number = this.calculateTotalValue();
+			var markerCount:int = this.markers.length;
+			for(var i:int = 0; i < markerCount; i++)
+			{
+				var label:TextField = this.getLabel();
+				this.labels.push(label);
+				label.defaultTextFormat = textFormat;
+				label.embedFonts = embedFonts;
+				label.text = this.labelFunction(this.dataProvider[i]);
+				
+				var value:Number = this.itemToData(this.dataProvider[i]);
+				if(totalValue == 0)
+				{
+					angle = 360 / this.length;
+				}
+				else
+				{
+					angle = 360 * ((valueSum + value / 2) / totalValue);
+				}
+				valueSum += value;
+				var halfWidth:Number = this.width / 2;
+				var halfHeight:Number = this.height / 2;
+				var radius:Number = Math.min(halfWidth, halfHeight);
+				var position:Point = Point.polar(2 * radius / 3, -GeomUtil.degreesToRadians(angle));
+				label.x = halfWidth + position.x - label.width / 2;
+				label.y = halfHeight + position.y - label.height / 2;
+				
+				if(hideOverlappingLabels)
+				{
+					for(var j:int = 0; j < i; j++)
+					{
+						var previousLabel:TextField = TextField(this.labels[j]);
+						if(previousLabel.hitTestObject(label))
+						{
+							label.visible = false;
+						}
+					}
+				}
+			}
+		}
+		
+		/**
+		 * Copies a styles from the series to a child through a style map.
+		 * 
+		 * @see copyStylesToChild()
+		 */
+		protected function copyStylesToRenderer(child:ISeriesItemRenderer, styleMap:Object):void
+		{
+			var index:int = this.markers.indexOf(child);
+			var childComponent:UIComponent = child as UIComponent;
+			for(var n:String in styleMap)
+			{
+				var styleValues:Array = this.getStyleValue(styleMap[n]) as Array;
+				//if it doesn't exist, ignore it and go with the defaults for this series
+				if(!styleValues) continue;
+				childComponent.setStyle(n, styleValues[index % styleValues.length])
+			}
+		}
+		
 	//--------------------------------------
 	//  Private Methods
 	//--------------------------------------
 	
 		/**
 		 * @private
+		 * Sets up the animation for the markers.
+		 */
+		private function beginAnimation():void
+		{
+			var itemCount:int = this.length;
+			if(!this._previousData || this._previousData.length != this.length)
+			{
+				this._previousData = [];
+				for(var i:int = 0; i < itemCount; i++)
+				{
+					this._previousData.push(0);
+				}
+			}
+			
+			//handle animating all the markers in one fell swoop.
+			if(this._animation)
+			{
+				if(this._animation.active)
+				{
+					this._animation.pause();
+				}
+				this._animation.removeEventListener(AnimationEvent.UPDATE, tweenUpdateHandler);
+				this._animation.removeEventListener(AnimationEvent.PAUSE, tweenPauseHandler);
+				this._animation.removeEventListener(AnimationEvent.COMPLETE, tweenCompleteHandler);
+				this._animation = null;
+			}
+			
+			var data:Array = this.dataProviderToArrayOfNumbers();
+			
+			//don't animate on livepreview!
+			if(this.isLivePreview || !this.getStyleValue("animationEnabled"))
+			{
+				this.renderMarkerMasks(data);
+			}
+			else
+			{
+				var animationDuration:int = this.getStyleValue("animationDuration") as int;
+				var animationEasingFunction:Function = this.getStyleValue("animationEasingFunction") as Function;
+				
+				this._animation = new Animation(animationDuration, this._previousData, data);
+				this._animation.addEventListener(AnimationEvent.UPDATE, tweenUpdateHandler);
+				this._animation.addEventListener(AnimationEvent.PAUSE, tweenPauseHandler);
+				this._animation.addEventListener(AnimationEvent.COMPLETE, tweenCompleteHandler);
+				this._animation.easingFunction = animationEasingFunction;
+				this.renderMarkerMasks(this._previousData);
+			}
+		}
+	
+		/**
+		 * @private
+		 * Determines the total sum of all values in the data provider.
+		 */
+		private function calculateTotalValue():Number
+		{
+			var totalValue:Number = 0;
+			var itemCount:int = this.length;
+			for(var i:int = 0; i < itemCount; i++)
+			{
+				var currentItem:Object = this.dataProvider[i];
+				var value:Number = this.itemToData(currentItem);
+				
+				if(!isNaN(value))
+				{
+					totalValue += value;
+				}
+			}
+			return totalValue;
+		}
+	
+		/**
+		 * @private
+		 * Retreives all the numeric values from the data provider
+		 * and places them into an Array so that they may be used
+		 * in an animation.
 		 */
 		private function dataProviderToArrayOfNumbers():Array
 		{
@@ -430,7 +653,7 @@
 		 */
 		private function tweenUpdateHandler(event:AnimationEvent):void
 		{
-			this.drawMarkers(event.parameters as Array);
+			this.renderMarkerMasks(event.parameters as Array);
 		}
 		
 		/**
@@ -453,7 +676,7 @@
 		/**
 		 * @private
 		 */
-		private function drawMarkers(data:Array):void
+		private function renderMarkerMasks(data:Array):void
 		{
 			var values:Array = [];
 			var totalValue:Number = 0;
@@ -475,12 +698,18 @@
 			var radius:Number = Math.min(halfWidth, halfHeight);
 			var fillColors:Array = this.getStyleValue("fillColors") as Array;
 			
+			var angle:Number = 0;
 			for(i = 0; i < itemCount; i++)
 			{
 				value = Number(data[i]);
-				var angle:Number;
-				if(totalValue == 0) angle = 360 / data.length;
-				else angle = 360 * (value / totalValue);
+				if(totalValue == 0)
+				{
+					angle = 360 / data.length;
+				}
+				else
+				{
+					angle = 360 * (value / totalValue);
+				}
 				
 				var mask:Shape = this.markerMasks[i] as Shape;
 				mask.graphics.clear();
@@ -494,16 +723,29 @@
 			}
 		}
 		
-		protected function copyStylesToRenderer(child:ISeriesItemRenderer, styleMap:Object):void
+		/**
+		 * @private
+		 * Places all the existing labels in a cache so that they may be reused
+		 * when we redraw the series.
+		 */
+		private function createLabelCache():void
 		{
-			var index:int = this.markers.indexOf(child);
-			var childComponent:UIComponent = child as UIComponent;
-			for(var n:String in styleMap)
+			this.labelsCache = this.labels.concat();
+			this.labels = [];
+		}
+		
+		/**
+		 * @private
+		 * If any labels are left in the cache after we've redrawn, they can be
+		 * removed from the display list.
+		 */
+		private function clearLabelCache():void
+		{
+			var cacheLength:int = this.labelsCache.length;
+			for(var i:int = 0; i < cacheLength; i++)
 			{
-				var styleValues:Array = this.getStyleValue(styleMap[n]) as Array;
-				//if it doesn't exist, ignore it and go with the defaults for this series
-				if(!styleValues) continue;
-				childComponent.setStyle(n, styleValues[index % styleValues.length])
+				var label:TextField = TextField(this.labelsCache.shift());
+				this.removeChild(label);
 			}
 		}
 		

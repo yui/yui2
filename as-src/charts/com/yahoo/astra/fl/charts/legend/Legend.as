@@ -35,6 +35,21 @@ package com.yahoo.astra.fl.charts.legend
     [Style(name="backgroundSkin", type="Class")]
 	
 	/**
+	 * Indicates whether embedded font outlines are used to render the text
+	 * field. If this value is true, Flash Player renders the text field by
+	 * using embedded font outlines. If this value is false, Flash Player
+	 * renders the text field by using device fonts.
+	 * 
+	 * If you set the embedFonts property to true for a text field, you must
+	 * specify a font for that text by using the font property of a TextFormat
+	 * object that is applied to the text field. If the specified font is not
+	 * embedded in the SWF file, the text is not displayed.
+	 * 
+	 * @default false
+     */
+    [Style(name="embedFonts", type="Boolean")]
+	
+	/**
 	 * Provides a visual reference for the series in a Chart component.
 	 * 
 	 * @see com.yahoo.astra.fl.charts.Chart
@@ -57,7 +72,8 @@ package com.yahoo.astra.fl.charts.legend
 			backgroundSkin: "ChartLegendBackground",
 			contentPadding: 6,
 			direction: "vertical",
-			gap: 6
+			gap: 6,
+			embedFonts: false
 		};
 		
 		/**
@@ -66,7 +82,8 @@ package com.yahoo.astra.fl.charts.legend
 		 */
 		private static const ITEM_STYLES:Object =
 		{
-			textFormat: "textFormat"
+			textFormat: "textFormat",
+			embedFonts: "embedFonts"
 		};
 		
 	//--------------------------------------

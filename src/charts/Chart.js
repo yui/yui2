@@ -162,6 +162,15 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 * @private
 	 */
 	_dataTipFunction: null,
+	
+	/**
+	 * Stores references to series labelFunction values created by
+	 * YAHOO.widget.FlashAdapter.createProxyFunction()
+	 * @property _seriesLabelFunctions
+	 * @type Array
+	 * @private
+	 */
+	_seriesLabelFunctions: null,
 
 	/**
 	 * Public accessor to the unique name of the Chart instance.
@@ -566,6 +575,31 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_setSeriesDefs: function(value)
 	{
+		if(this._seriesLabelFunctions)
+		{
+			var count = this._seriesLabelFunctions.length;
+			for(var i = 0; i < count; i++)
+			{
+				YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
+			}
+			this._seriesLabelFunction = null;
+		}
+
+		if(value)
+		{
+			this._seriesLabelFunctions = [];
+			var count = value.length;
+			for(var i = 0; i < count; i++)
+			{
+				var series = value[i];
+				if(series.labelFunction !== null && typeof series.labelFunction == "function")
+				{
+					series.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(series.labelFunction);
+					this._seriesLabelFunctions.push(series.labelFunction);
+				}
+			}
+		}
+	
 		this._seriesDefs = value;
 		this._refreshData();
 	},

@@ -19,7 +19,12 @@ package com.yahoo.astra.utils
 		 */
 		public static function roundToNearest(number:Number, nearest:Number = 1):Number
 		{
-			return Math.round(NumberUtil.roundToPrecision(number / nearest, 10)) * nearest;
+			if(nearest == 0)
+			{
+				return number;
+			}
+			var roundedNumber:Number = Math.round(NumberUtil.roundToPrecision(number / nearest, 10)) * nearest;
+			return NumberUtil.roundToPrecision(roundedNumber, 10);
 		}
 		
 		/**
@@ -34,6 +39,10 @@ package com.yahoo.astra.utils
 		 */
 		public static function roundUpToNearest(number:Number, nearest:Number = 1):Number
 		{
+			if(nearest == 0)
+			{
+				return number;
+			}
 			return Math.ceil(NumberUtil.roundToPrecision(number / nearest, 10)) * nearest;
 		}
 		
@@ -49,6 +58,10 @@ package com.yahoo.astra.utils
 		 */
 		public static function roundDownToNearest(number:Number, nearest:Number = 1):Number
 		{
+			if(nearest == 0)
+			{
+				return number;
+			}
 			return Math.floor(NumberUtil.roundToPrecision(number / nearest, 10)) * nearest;
 		}
 		

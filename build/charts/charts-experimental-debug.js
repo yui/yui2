@@ -825,6 +825,15 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 * @private
 	 */
 	_dataTipFunction: null,
+	
+	/**
+	 * Stores references to series labelFunction values created by
+	 * YAHOO.widget.FlashAdapter.createProxyFunction()
+	 * @property _seriesLabelFunctions
+	 * @type Array
+	 * @private
+	 */
+	_seriesLabelFunctions: null,
 
 	/**
 	 * Public accessor to the unique name of the Chart instance.
@@ -1229,6 +1238,31 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_setSeriesDefs: function(value)
 	{
+		if(this._seriesLabelFunctions)
+		{
+			var count = this._seriesLabelFunctions.length;
+			for(var i = 0; i < count; i++)
+			{
+				YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
+			}
+			this._seriesLabelFunction = null;
+		}
+
+		if(value)
+		{
+			this._seriesLabelFunctions = [];
+			var count = value.length;
+			for(var i = 0; i < count; i++)
+			{
+				var series = value[i];
+				if(series.labelFunction !== null && typeof series.labelFunction == "function")
+				{
+					series.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(series.labelFunction);
+					this._seriesLabelFunctions.push(series.labelFunction);
+				}
+			}
+		}
+	
 		this._seriesDefs = value;
 		this._refreshData();
 	},
@@ -1699,14 +1733,6 @@ YAHOO.widget.Axis.prototype =
 	type: null,
 	
 	/**
-	 * The direction in which the axis is drawn. May be "horizontal" or "vertical".
-	 *
-	 * @property orientation
-	 * @type String
-	 */
-	orientation: "horizontal",
-	
-	/**
 	 * If true, the items on the axis will be drawn in opposite direction.
 	 *
 	 * @property reverse
@@ -1716,20 +1742,12 @@ YAHOO.widget.Axis.prototype =
 	
 	/**
 	 * A string reference to the globally-accessible function that may be called to
-	 * determine each of the label values for this axis.
+	 * determine each of the label values for this axis. Also accepts function references.
 	 *
 	 * @property labelFunction
 	 * @type String
 	 */
-	labelFunction: null,
-	
-	/**
-	 * If true, labels that overlap previously drawn labels on the axis will be hidden.
-	 *
-	 * @property hideOverlappingLabels
-	 * @type Boolean
-	 */
-	hideOverlappingLabels: true
+	labelFunction: null
 };
 
 /**
@@ -2039,8 +2057,31 @@ YAHOO.widget.PieSeries = function()
 YAHOO.lang.extend(YAHOO.widget.PieSeries, YAHOO.widget.Series,
 {
 	type: "pie",
+	
+	/**
+	 * The field used to access the data value from the items from the data source.
+	 *
+	 * @property dataField
+	 * @type String
+	 */
 	dataField: null,
-	categoryField: null
+	
+	/**
+	 * The field used to access the category value from the items from the data source.
+	 *
+	 * @property categoryField
+	 * @type String
+	 */
+	categoryField: null,
+
+	/**
+	 * A string reference to the globally-accessible function that may be called to
+	 * determine each of the label values for this series. Also accepts function references.
+	 *
+	 * @property labelFunction
+	 * @type String
+	 */
+	labelFunction: null
 });
 
 YAHOO.register("charts", YAHOO.widget.Chart, {version: "@VERSION@", build: "@BUILD@"});

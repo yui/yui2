@@ -713,6 +713,15 @@ package
 							case "discontinuousDashLength":
 								UIComponent(series).setStyle("discontinuousDashLength", style.discontinuousDashLength);
 								break;
+							case "showLabels":
+								UIComponent(series).setStyle("showLabels", style.showLabels);
+								break;
+							case "hideOverlappingLabels":
+								UIComponent(series).setStyle("hideOverlappingLabels", style.showLabels);
+								break;
+							case "font":
+								UIComponent(series).setStyle("textFormat", TextFormatSerializer.readTextFormat(style.font))
+								break;
 							default:
 								this.log("Unknown series style: " + styleName);
 						}
@@ -1017,6 +1026,11 @@ package
 			if(styles.showLabels != null)
 			{
 				this.chart.setStyle("show" + axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisLabels", styles.showLabels);
+			}
+			
+			if(styles.hideOverlappingLabels != null)
+			{
+				this.chart.setStyle(axisName.substr(0, 1).toUpperCase() + axisName.substr(1) + "AxisHideOverlappingLabels", styles.hideOverlappingLabels);
 			}
 			
 			if(styles.majorGridLines)

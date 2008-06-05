@@ -34,6 +34,7 @@
     </target>
 
     <target name="prep-source" description="Copies Astra Source Files to source directory">
+        <delete dir="${astra.output}" includeemptydirs="true"/>
         <copy todir="${astra.output}" overwrite="true">
             <fileset dir="${astra.srcdir}">
 
@@ -48,6 +49,7 @@
                 <include name="com/yahoo/astra/layout/**"/> <!-- layout needed for legend -->
                 <include name="com/yahoo/astra/utils/DateUtil.as"/>
                 <include name="com/yahoo/astra/utils/DisplayObjectUtil.as"/>
+                <include name="com/yahoo/astra/utils/GeomUtil.as"/>
                 <include name="com/yahoo/astra/utils/GraphicsUtil.as"/>
                 <include name="com/yahoo/astra/utils/InstanceFactory.as"/>
                 <include name="com/yahoo/astra/utils/NumberUtil.as"/>
@@ -73,7 +75,6 @@
             <arg value="com.yahoo.astra.fl.charts.ColumnChart"/>
             <arg value="com.yahoo.astra.fl.charts.BarChart"/>
             <arg value="com.yahoo.astra.fl.charts.PieChart"/>
-            <arg value="com.yahoo.astra.fl.charts.TimeAxis"/>
             <arg value="com.yahoo.astra.fl.charts.legend.Legend"/>
             <arg value="com.yahoo.astra.utils.JavaScriptUtil"/>
             <arg value="fl.containers.UILoader"/>

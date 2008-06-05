@@ -20,14 +20,6 @@ YAHOO.widget.Axis.prototype =
 	type: null,
 	
 	/**
-	 * The direction in which the axis is drawn. May be "horizontal" or "vertical".
-	 *
-	 * @property orientation
-	 * @type String
-	 */
-	orientation: "horizontal",
-	
-	/**
 	 * If true, the items on the axis will be drawn in opposite direction.
 	 *
 	 * @property reverse
@@ -37,18 +29,10 @@ YAHOO.widget.Axis.prototype =
 	
 	/**
 	 * A string reference to the globally-accessible function that may be called to
-	 * determine each of the label values for this axis.
+	 * determine each of the label values for this axis. Also accepts function references.
 	 *
 	 * @property labelFunction
 	 * @type String
 	 */
-	labelFunction: null,
-	
-	/**
-	 * If true, labels that overlap previously drawn labels on the axis will be hidden.
-	 *
-	 * @property hideOverlappingLabels
-	 * @type Boolean
-	 */
-	hideOverlappingLabels: true
+	labelFunction: null
 };

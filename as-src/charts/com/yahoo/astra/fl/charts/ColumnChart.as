@@ -1,5 +1,6 @@
 package com.yahoo.astra.fl.charts
 {
+	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
 	import com.yahoo.astra.fl.charts.series.ColumnSeries;
 	
 	import fl.core.UIComponent;

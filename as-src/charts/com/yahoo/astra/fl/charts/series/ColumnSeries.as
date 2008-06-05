@@ -3,6 +3,8 @@ package com.yahoo.astra.fl.charts.series
 	import com.yahoo.astra.animation.Animation;
 	import com.yahoo.astra.animation.AnimationEvent;
 	import com.yahoo.astra.fl.charts.*;
+	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
+	import com.yahoo.astra.fl.charts.axes.NumericAxis;
 	import com.yahoo.astra.fl.charts.skins.RectangleSkin;
 	
 	import fl.core.UIComponent;

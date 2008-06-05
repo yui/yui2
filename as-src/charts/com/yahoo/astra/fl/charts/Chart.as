@@ -134,6 +134,21 @@
      * @default true
      */
     [Style(name="animationEnabled", type="Boolean")]
+	
+	/**
+	 * Indicates whether embedded font outlines are used to render the text
+	 * field. If this value is true, Flash Player renders the text field by
+	 * using embedded font outlines. If this value is false, Flash Player
+	 * renders the text field by using device fonts.
+	 * 
+	 * If you set the embedFonts property to true for a text field, you must
+	 * specify a font for that text by using the font property of a TextFormat
+	 * object that is applied to the text field. If the specified font is not
+	 * embedded in the SWF file, the text is not displayed.
+	 * 
+	 * @default false
+     */
+    [Style(name="embedFonts", type="Boolean")]
     
 	/**
 	 * Functionality common to most charts. Generally, a <code>Chart</code> object
@@ -169,7 +184,8 @@
 			dataTipBackgroundSkin: "ChartDataTipBackground",
 			dataTipContentPadding: 6,
 			dataTipTextFormat: new TextFormat("_sans", 11, 0x000000, false, false, false, '', '', TextFormatAlign.LEFT, 0, 0, 0, 0),
-			animationEnabled: true
+			animationEnabled: true,
+			embedFonts: false
 		};
 		
 		/**
@@ -194,7 +210,8 @@
 		{
 			backgroundSkin: "dataTipBackgroundSkin",
 			contentPadding: "dataTipContentPadding",
-			textFormat: "dataTipTextFormat"
+			textFormat: "dataTipTextFormat",
+			embedFonts: "embedFonts"
 		};
 		
 	//--------------------------------------
@@ -249,20 +266,6 @@
 		
 		/**
 		 * @private
-		 * Storage for the contentBounds property.
-		 */
-		protected var _contentBounds:Rectangle = new Rectangle();
-	
-		/**
-		 * @copy com.yahoo.astra.fl.charts.IPlotArea#contentBounds
-		 */
-		public function get contentBounds():Rectangle
-		{
-			return this._contentBounds;
-		}
-		
-		/**
-		 * @private
 		 * Storage for the data property. Saves a copy of the unmodified data.
 		 */
 		private var _dataProvider:Object;
@@ -275,7 +278,7 @@
 		
 		[Inspectable(type=Array)]
 		/**
-		 * The data the chart displays.
+		 * @inheritDoc
 		 */
 		public function get dataProvider():Object
 		{
@@ -301,8 +304,10 @@
 		private var _defaultSeriesType:Class;
 		
 		/**
-		 * When data is encountered where an ISeries is expected, it will be converted
-		 * to this default type. Accepts either a Class or a String referencing a class.
+		 * When raw data (like an Array of Numbers) is encountered where an
+		 * ISeries instance is expected, it will be converted to this default
+		 * type. Accepts either a Class instance or a String referencing a
+		 * fully-qualified class name.
 		 */
 		public function get defaultSeriesType():Object
 		{
@@ -673,7 +678,10 @@
 				var styleValues:Array = this.getStyleValue(styleMap[n]) as Array;
 				
 				//if it doesn't exist, ignore it and go with the defaults for this series
-				if(styleValues == null || styleValues.length == 0) continue;
+				if(styleValues == null || styleValues.length == 0)
+				{
+					continue;
+				}
 				
 				childComponent.setStyle(n, styleValues[index % styleValues.length])
 			}

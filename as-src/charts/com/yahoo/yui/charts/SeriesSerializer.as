@@ -1,9 +1,11 @@
 package com.yahoo.yui.charts
 {
-	import flash.utils.Dictionary;
-	import flash.utils.getQualifiedClassName;
-	import flash.utils.getDefinitionByName;
 	import com.yahoo.astra.fl.charts.series.*;
+	import com.yahoo.astra.utils.JavaScriptUtil;
+	
+	import flash.utils.Dictionary;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	
 	public class SeriesSerializer
 	{
@@ -53,6 +55,7 @@ package com.yahoo.yui.charts
 			else if(input is PieSeries)
 			{
 				series.dataField = PieSeries(input).dataField;
+				series.categoryField = PieSeries(input).categoryField;
 			}
 			return series;
 		}
@@ -77,6 +80,11 @@ package com.yahoo.yui.charts
 			else if(series is PieSeries)
 			{
 				PieSeries(series).dataField = input.dataField;
+				PieSeries(series).categoryField = input.categoryField;
+				if(input.hasOwnProperty("labelFunction"))
+				{
+					PieSeries(series).labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;
+				}
 			}
 			return series;
 		}

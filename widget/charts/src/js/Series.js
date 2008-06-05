@@ -125,6 +125,29 @@ YAHOO.widget.PieSeries = function()
 YAHOO.lang.extend(YAHOO.widget.PieSeries, YAHOO.widget.Series,
 {
 	type: "pie",
+	
+	/**
+	 * The field used to access the data value from the items from the data source.
+	 *
+	 * @property dataField
+	 * @type String
+	 */
 	dataField: null,
-	categoryField: null
+	
+	/**
+	 * The field used to access the category value from the items from the data source.
+	 *
+	 * @property categoryField
+	 * @type String
+	 */
+	categoryField: null,
+
+	/**
+	 * A string reference to the globally-accessible function that may be called to
+	 * determine each of the label values for this series. Also accepts function references.
+	 *
+	 * @property labelFunction
+	 * @type String
+	 */
+	labelFunction: null
 });

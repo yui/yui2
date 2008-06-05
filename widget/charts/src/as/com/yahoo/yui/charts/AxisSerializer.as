@@ -1,10 +1,14 @@
 package com.yahoo.yui.charts
 {
-	import com.yahoo.astra.fl.charts.*;
-	import flash.utils.Dictionary;
-	import flash.utils.getQualifiedClassName;
-	import flash.utils.getDefinitionByName;
+	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
+	import com.yahoo.astra.fl.charts.axes.IAxis;
+	import com.yahoo.astra.fl.charts.axes.NumericAxis;
+	import com.yahoo.astra.fl.charts.axes.TimeAxis;
 	import com.yahoo.astra.utils.JavaScriptUtil;
+	
+	import flash.utils.Dictionary;
+	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
 	
 	public class AxisSerializer
 	{
@@ -55,11 +59,8 @@ package com.yahoo.yui.charts
 		{
 			var AxisType:Class = AxisSerializer.getType(input.type);
 			var axis:IAxis = new AxisType();
-			
 			axis.title = input.title;
-			axis.orientation = input.orientation;
 			axis.reverse = input.reverse;
-			axis.hideOverlappingLabels = input.hideOverlappingLabels;
 			if(input.labelFunction)
 			{
 				axis.labelFunction = JavaScriptUtil.createCallbackFunction(input.labelFunction).callback;

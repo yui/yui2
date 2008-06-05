@@ -1,9 +1,9 @@
 package com.yahoo.yui
 {
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
-	import flash.display.DisplayObject;
 	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.external.ExternalInterface;
@@ -26,6 +26,16 @@ package com.yahoo.yui
 		{
 			super();
 			
+			try
+			{
+				//show error popups
+				ExternalInterface.marshallExceptions = true;
+			}
+			catch(error:Error)
+			{
+				//do nothing, we're in a flash player that properly displays exceptions
+			}
+			
 			this._errorText = new TextField();
 			this._errorText.defaultTextFormat = new TextFormat("_sans", 10, 0xff0000);
 			this._errorText.wordWrap = true;
@@ -36,23 +46,23 @@ package com.yahoo.yui
 			
 			this.addEventListener(Event.ADDED, addedHandler);
 			
-			if(this.stage)
-			{
-				this.stage.addEventListener(Event.RESIZE, stageResizeHandler);
-				this.stage.scaleMode = StageScaleMode.NO_SCALE;
-				this.stage.align = StageAlign.TOP_LEFT;
-			}
-			
 			if(ExternalInterface.available)
 			{
 				this.initializeComponent();
-			
+				
 				var swfReady:Object = {type: "swfReady"};
 				this.dispatchEventToJavaScript(swfReady);
 			}
 			else
 			{
 				throw new IOError("Flash YUIComponent cannot communicate with JavaScript content.");
+			}
+			
+			if(this.stage)
+			{
+				this.stage.addEventListener(Event.RESIZE, stageResizeHandler);
+				this.stage.scaleMode = StageScaleMode.NO_SCALE;
+				this.stage.align = StageAlign.TOP_LEFT;
 			}
 		}
 		
@@ -107,11 +117,11 @@ package com.yahoo.yui
 		 * To be overridden by subclasses to add ExternalInterface callbacks.
 		 */
 		protected function initializeComponent():void
-		{
-			this.elementID = this.loaderInfo.parameters["elementID"];
-			this.javaScriptEventHandler = this.loaderInfo.parameters["eventHandler"];
+		{	
+			this.elementID = this.loaderInfo.parameters.elementID;
+			this.javaScriptEventHandler = this.loaderInfo.parameters.eventHandler;
 			
-			var allowedDomain:String = this.loaderInfo.parameters["allowedDomain"];
+			var allowedDomain:String = this.loaderInfo.parameters.allowedDomain;
 			if(allowedDomain)
 			{
 				Security.allowDomain(allowedDomain);
