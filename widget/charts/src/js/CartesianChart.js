@@ -169,17 +169,29 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setXAxis: function(value)
 	{
-		if(this._xAxisLabelFunction)
+		if(this._xAxisLabelFunction !== null)
 		{
 			YAHOO.widget.FlashAdapter.removeProxyFunction(this._xAxisLabelFunction);
+			this._xAxisLabelFunction = null;
 		}
 		
-		if(value.labelFunction && typeof value.labelFunction == "function")
+		var clonedXAxis = {};
+		for(var prop in value)
 		{
-			value.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value);
-			this._xAxisLabelFunction = value.labelFunction;
+			if(prop == "labelFunction")
+			{
+				if(value.labelFunction != null && typeof value.labelFunction == "function")
+				{
+					clonedXAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					this._xAxisLabelFunction = clonedXAxis.labelFunction;
+				}
+			}
+			else
+			{
+				clonedXAxis[prop] = value[prop];
+			}
 		}
-		this._swf.setHorizontalAxis(value);
+		this._swf.setHorizontalAxis(clonedXAxis);
 	},
 
 	/**
@@ -190,16 +202,28 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setYAxis: function(value)
 	{
-		if(this._yAxisLabelFunction)
+		if(this._yAxisLabelFunction !== null)
 		{
 			YAHOO.widget.FlashAdapter.removeProxyFunction(this._yAxisLabelFunction);
+			this._yAxisLabelFunction = null;
 		}
 
-		if(value.labelFunction && typeof value.labelFunction == "function")
+		var clonedYAxis = {};
+		for(var prop in value)
 		{
-			value.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
-			this._yAxisLabelFunction = value.labelFunction;
+			if(prop == "labelFunction")
+			{
+				if(value.labelFunction !== null && typeof value.labelFunction == "function")
+				{
+					clonedYAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					this._yAxisLabelFunction = clonedYAxis.labelFunction;
+				}
+			}
+			else
+			{
+				clonedYAxis[prop] = value[prop];
+			}
 		}
-		this._swf.setVerticalAxis(value);
+		this._swf.setVerticalAxis(clonedYAxis);
 	}
 });

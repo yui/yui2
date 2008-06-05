@@ -521,9 +521,14 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	{
 		this._initAttributes(this._attributes);
 		this.setAttributes(this._attributes, true);
-		this._attributes = null;
 		
 		this.fireEvent("contentReady");
+	},
+	
+	set: function(name, value)
+	{
+		this._attributes[name] = value;
+		YAHOO.widget.FlashAdapter.superclass.set.call(this, name, value);
 	},
 	
 	/**
@@ -1024,6 +1029,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_loadHandler: function()
 	{
+		this._initialized = false;
 		this._swf.setType(this._type);
 		
 		//set initial styles
@@ -1088,6 +1094,17 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		{
 			var styleChanged = false;
 			
+			if(this._seriesLabelFunctions)
+			{
+				var count = this._seriesLabelFunctions.length;
+				for(var i = 0; i < count; i++)
+				{
+					YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
+				}
+				this._seriesLabelFunction = null;
+			}
+			this._seriesLabelFunctions = [];
+			
 			//make a copy of the series definitions so that we aren't
 			//editing them directly.
 			var dataProvider = [];	
@@ -1105,15 +1122,25 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 					{
 						if(YAHOO.lang.hasOwnProperty(currentSeries, prop))
 						{
-							if(prop == "style" && currentSeries.style !== null)
+							if(prop == "style")
 							{
-								clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
-								styleChanged = true;
-   
-								//we don't want to modify the styles again next time
-								//so null out the style property.
-								currentSeries.style = null;
+								if(currentSeries.style !== null)
+								{
+									clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
+									styleChanged = true;
+								}
 							}
+							
+							else if(prop == "labelFunction")
+							{
+								if(currentSeries.labelFunction !== null &&
+									typeof currentSeries.labelFunction == "function")
+								{
+									clonedSeries.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(currentSeries.labelFunction);
+									this._seriesLabelFunctions.push(clonedSeries.labelFunction);
+								}
+							}
+							
 							else
 							{
 								clonedSeries[prop] = currentSeries[prop];
@@ -1234,31 +1261,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_setSeriesDefs: function(value)
 	{
-		if(this._seriesLabelFunctions)
-		{
-			var count = this._seriesLabelFunctions.length;
-			for(var i = 0; i < count; i++)
-			{
-				YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
-			}
-			this._seriesLabelFunction = null;
-		}
-
-		if(value)
-		{
-			this._seriesLabelFunctions = [];
-			var count = value.length;
-			for(var i = 0; i < count; i++)
-			{
-				var series = value[i];
-				if(series.labelFunction !== null && typeof series.labelFunction == "function")
-				{
-					series.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(series.labelFunction);
-					this._seriesLabelFunctions.push(series.labelFunction);
-				}
-			}
-		}
-	
 		this._seriesDefs = value;
 		this._refreshData();
 	},
@@ -1618,17 +1620,29 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setXAxis: function(value)
 	{
-		if(this._xAxisLabelFunction)
+		if(this._xAxisLabelFunction !== null)
 		{
 			YAHOO.widget.FlashAdapter.removeProxyFunction(this._xAxisLabelFunction);
+			this._xAxisLabelFunction = null;
 		}
 		
-		if(value.labelFunction && typeof value.labelFunction == "function")
+		var clonedXAxis = {};
+		for(var prop in value)
 		{
-			value.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value);
-			this._xAxisLabelFunction = value.labelFunction;
+			if(prop == "labelFunction")
+			{
+				if(value.labelFunction != null && typeof value.labelFunction == "function")
+				{
+					clonedXAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					this._xAxisLabelFunction = clonedXAxis.labelFunction;
+				}
+			}
+			else
+			{
+				clonedXAxis[prop] = value[prop];
+			}
 		}
-		this._swf.setHorizontalAxis(value);
+		this._swf.setHorizontalAxis(clonedXAxis);
 	},
 
 	/**
@@ -1639,17 +1653,29 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 	 */
 	_setYAxis: function(value)
 	{
-		if(this._yAxisLabelFunction)
+		if(this._yAxisLabelFunction !== null)
 		{
 			YAHOO.widget.FlashAdapter.removeProxyFunction(this._yAxisLabelFunction);
+			this._yAxisLabelFunction = null;
 		}
 
-		if(value.labelFunction && typeof value.labelFunction == "function")
+		var clonedYAxis = {};
+		for(var prop in value)
 		{
-			value.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
-			this._yAxisLabelFunction = value.labelFunction;
+			if(prop == "labelFunction")
+			{
+				if(value.labelFunction !== null && typeof value.labelFunction == "function")
+				{
+					clonedYAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
+					this._yAxisLabelFunction = clonedYAxis.labelFunction;
+				}
+			}
+			else
+			{
+				clonedYAxis[prop] = value[prop];
+			}
 		}
-		this._swf.setVerticalAxis(value);
+		this._swf.setVerticalAxis(clonedYAxis);
 	}
 });
 

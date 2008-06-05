@@ -202,9 +202,14 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	{
 		this._initAttributes(this._attributes);
 		this.setAttributes(this._attributes, true);
-		this._attributes = null;
 		
 		this.fireEvent("contentReady");
+	},
+	
+	set: function(name, value)
+	{
+		this._attributes[name] = value;
+		YAHOO.widget.FlashAdapter.superclass.set.call(this, name, value);
 	},
 	
 	/**

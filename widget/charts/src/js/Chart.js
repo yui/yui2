@@ -364,6 +364,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_loadHandler: function()
 	{
+		this._initialized = false;
 		this._swf.setType(this._type);
 		
 		//set initial styles
@@ -429,6 +430,17 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		{
 			var styleChanged = false;
 			
+			if(this._seriesLabelFunctions)
+			{
+				var count = this._seriesLabelFunctions.length;
+				for(var i = 0; i < count; i++)
+				{
+					YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
+				}
+				this._seriesLabelFunction = null;
+			}
+			this._seriesLabelFunctions = [];
+			
 			//make a copy of the series definitions so that we aren't
 			//editing them directly.
 			var dataProvider = [];	
@@ -446,15 +458,25 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 					{
 						if(YAHOO.lang.hasOwnProperty(currentSeries, prop))
 						{
-							if(prop == "style" && currentSeries.style !== null)
+							if(prop == "style")
 							{
-								clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
-								styleChanged = true;
-   
-								//we don't want to modify the styles again next time
-								//so null out the style property.
-								currentSeries.style = null;
+								if(currentSeries.style !== null)
+								{
+									clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
+									styleChanged = true;
+								}
 							}
+							
+							else if(prop == "labelFunction")
+							{
+								if(currentSeries.labelFunction !== null &&
+									typeof currentSeries.labelFunction == "function")
+								{
+									clonedSeries.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(currentSeries.labelFunction);
+									this._seriesLabelFunctions.push(clonedSeries.labelFunction);
+								}
+							}
+							
 							else
 							{
 								clonedSeries[prop] = currentSeries[prop];
@@ -575,31 +597,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_setSeriesDefs: function(value)
 	{
-		if(this._seriesLabelFunctions)
-		{
-			var count = this._seriesLabelFunctions.length;
-			for(var i = 0; i < count; i++)
-			{
-				YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
-			}
-			this._seriesLabelFunction = null;
-		}
-
-		if(value)
-		{
-			this._seriesLabelFunctions = [];
-			var count = value.length;
-			for(var i = 0; i < count; i++)
-			{
-				var series = value[i];
-				if(series.labelFunction !== null && typeof series.labelFunction == "function")
-				{
-					series.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(series.labelFunction);
-					this._seriesLabelFunctions.push(series.labelFunction);
-				}
-			}
-		}
-	
 		this._seriesDefs = value;
 		this._refreshData();
 	},
