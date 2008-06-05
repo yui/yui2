@@ -4,6 +4,11 @@ YUI Library - Cookie Utility - Release Notes
 
   * Beta release
   
+2.5.1
+
+  * Fixed error in parsing routine that incorrectly handled special characters.
+  
 2.6.0
 
-  * Implemented removeSub() method
+  * Implemented removeSub() method.
+  * Fixed parsing error when cookie name has special characters in it (SF 1985549).

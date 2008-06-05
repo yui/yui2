@@ -140,7 +140,7 @@ YAHOO.util.Cookie = {
                     cookieNameValue = cookieParts[i].match(/([^=]+)=/i);
                     if (cookieNameValue instanceof Array){
                         cookieName = decodeURIComponent(cookieNameValue[1]);
-                        cookieValue = decodeValue(cookieParts[i].substring(cookieName.length+1));
+                        cookieValue = decodeValue(cookieParts[i].substring(cookieNameValue[1].length+1));
                     } else {
                         //means the cookie does not have an "=", so treat it as a boolean flag
                         cookieName = decodeURIComponent(cookieParts[i]);

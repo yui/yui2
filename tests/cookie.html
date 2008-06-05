@@ -135,6 +135,16 @@ YAHOO.test.cookie_test = (function(){
             ObjectAssert.hasProperty("l_PD3", cookies, "Cookie 'l_PD3' is missing.");                       
         },
         
+        testParseCookieStringWithEscapedCharactersInCookieName: function(){
+            var cookieName = "something[1]";
+            var cookieValue = "123";
+            var cookieString = encodeURIComponent(cookieName) + "=" + encodeURIComponent(cookieValue);
+            var cookies = YAHOO.util.Cookie._parseCookieString(cookieString);
+            
+            ObjectAssert.hasProperty(cookieName, cookies, "Cookie '" + cookieName + "' is missing.");
+            Assert.areEqual(cookieValue, cookies[cookieName], "Cookie value for '" + cookieName + "' is wrong.");
+        },
+        
         testParseCookieStringIncorrectFormat: function(){
             var cookieString = "SESSION=27bedbdf3d35252d0db07f34d81dcca6; STATS=OK; SCREEN=1280x1024; undefined; ys-bottom-preview=o%3Aheight%3Dn%253A389"
             var cookies = YAHOO.util.Cookie._parseCookieString(cookieString);
@@ -174,7 +184,20 @@ YAHOO.test.cookie_test = (function(){
             Assert.areEqual("d", hash.c, "Hash 'c' should have value 'd'.");
             Assert.areEqual("f", hash.e, "Hash 'e' should have value 'f'.");
             Assert.areEqual("h", hash.g, "Hash 'g' should have value 'h'.");                    
+        },
+        
+        testParseCookieHashComplex : function () {
+            var cookieName = "something[1]";
+            var cookieValue = "123";        
+            var cookieHash = encodeURIComponent(cookieName) + "=" + encodeURIComponent(cookieValue);
+            var hash = YAHOO.util.Cookie._parseCookieHash(cookieHash);
+            
+            ObjectAssert.hasProperty(cookieName, hash, "Hash 'something[1]' is missing.");
+            
+            Assert.areEqual(cookieValue, hash[cookieName], "Hash 'a' should have value 'b'.");
+                    
         }
+        
         
     }));
 
