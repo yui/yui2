@@ -1,4 +1,4 @@
-package com.yahoo.astra.fl.charts
+package com.yahoo.astra.fl.charts.axes
 {
 	/**
 	 * Orientation values available to <code>IAxis</code> objects.

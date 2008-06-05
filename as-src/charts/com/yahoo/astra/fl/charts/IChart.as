@@ -4,13 +4,14 @@ package com.yahoo.astra.fl.charts
 	import flash.geom.Rectangle;
 	import flash.events.IEventDispatcher;
 	import com.yahoo.astra.fl.charts.series.ISeries;
+	import com.yahoo.astra.fl.charts.axes.IAxis;
 	
 	/**
-	 * An interface for a chart with a drawing area.
+	 * Methods and properties expected to be defined by all charts.
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public interface IPlotArea extends IEventDispatcher
+	public interface IChart extends IEventDispatcher
 	{
 		
 	//--------------------------------------
@@ -18,7 +19,25 @@ package com.yahoo.astra.fl.charts
 	//--------------------------------------
 	
 		/**
-		 * The data displayed in the plot area.
+		 * The data to be displayed by the chart. Accepted data types include
+		 * all of the following:
+		 * 
+		 * <ul>
+		 * 	<li>An ISeries instance with its own data provider.</li>
+		 * 	<li>An Array containing ISeries instances</li>
+		 * 	<li>An Array containing Numbers.</li>
+		 * 	<li>An Array containing complex objects.</li>
+		 * 	<li>An XMLList</li>
+		 * 	<li>An Array containing Arrays of Numbers or complex objects.
+		 * </ul>
+		 * 
+		 * <p>Note: When complex objects or XML is used in the data provider,
+		 * developers must define "fields" used to access data used by the chart.
+		 * For instance, CartesianChart exposes <code>horizontalField</code> and
+		 * <code>verticalField</code> properties. PieChart exposes <code>dataField</code>
+		 * and <code>categoryField</code> properties.
+		 * 
+		 * @see com.yahoo.astra.fl.charts.series.ISeries
 		 */
 		function get dataProvider():Object;
 		
@@ -26,23 +45,6 @@ package com.yahoo.astra.fl.charts
 		 * @private
 		 */
 		function set dataProvider(value:Object):void;
-		
-		/**
-		 * When data is encountered where an ISeries is expected, it will be converted
-		 * to this default type.
-		 */
-		function get defaultSeriesType():Object;
-		
-		/**
-		 * @private
-		 */
-		function set defaultSeriesType(value:Object):void;
-		
-		/**
-		 * The <code>Rectangle</code> representing the area where content should be
-		 * drawn within the plot area.
-		 */
-		function get contentBounds():Rectangle;
 		
 	//--------------------------------------
 	//  Methods
