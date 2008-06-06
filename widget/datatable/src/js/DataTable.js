@@ -1,4 +1,4 @@
-    (function () {
+(function () {
 
 var lang   = YAHOO.lang,
     util   = YAHOO.util,
@@ -6107,7 +6107,7 @@ hideColumn : function(oColumn) {
         this._clearTrTemplateEl();
     }
     else {
-        YAHOO.log("Could not hide Column \"" + oColumn.key + "\". Only non-nested Columns can be hidden", "warn", this.toString());
+        YAHOO.log("Could not hide Column \"" + lang.dump(oColumn) + "\". Only non-nested Columns can be hidden", "warn", this.toString());
     }
 },
 
@@ -6156,7 +6156,7 @@ showColumn : function(oColumn) {
         this._clearTrTemplateEl();
     }
     else {
-        YAHOO.log("Could not show Column \"" + oColumn.key + "\". Only non-nested Columns can be shown", "warn", this.toString());
+        YAHOO.log("Could not show Column \"" + lang.dump(oColumn) + "\". Only non-nested Columns can be shown", "warn", this.toString());
     }
 },
 

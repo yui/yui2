@@ -771,30 +771,28 @@ _syncScrollOverhang : function() {
     var elTbody = this._elTbody,
         elBdContainer = this._elBdContainer,
         aLastHeaders, len, prefix, i, elLiner, oColumn;
-
-    // Y-scrollbar is visible
-    if(elBdContainer.scrollHeight > elBdContainer.offsetHeight){
-        // Add Column header overhang
-        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-        len = aLastHeaders.length;
-        prefix = this._sId+"-fixedth-";
-        for(i=0; i<len; i++) {
-            //TODO: A better way to get all THs along the right edge
-            oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
-            oColumn.getThEl().style.borderRight = "18px solid " + this.get("COLOR_COLUMNFILLER");
+        
+    // Overhang should be either 1 (default) or 18px, depending on the location of the right edge of the table
+    var nPadding = 1;
+    
+    // Y-scrollbar is visible, which is when the overhang needs to jut out
+    if(elBdContainer.scrollHeight > elBdContainer.offsetHeight) {
+        // X-scrollbar is also visible, which means the right is jagged, not flush with the Column
+        var nAdjustedOffsetWidth = elBdContainer.offsetWidth - 18; // Account for the y-scrollbar when using the offsetWidth
+        var nScrollWidth = elBdContainer.scrollWidth;
+        if(nScrollWidth >= nAdjustedOffsetWidth) {
+            nPadding = ((nScrollWidth - nAdjustedOffsetWidth) >= 0) ? 18 : 1;
         }
     }
-    // Y-scrollbar is not visible
-    else {
-        // Remove Column header overhang
-        aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
-        len = aLastHeaders.length;
-        prefix = this._sId+"-fixedth-";
-        for(i=0; i<len; i++) {
-            //TODO: A better way to get th cell
-            oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
-            oColumn.getThEl().style.borderRight = "1px solid " + this.get("COLOR_COLUMNFILLER");
-        }
+    
+    // Set Column header overhang
+    aLastHeaders = this._oColumnSet.headers[this._oColumnSet.headers.length-1];
+    len = aLastHeaders.length;
+    prefix = this._sId+"-fixedth-";
+    for(i=0; i<len; i++) {
+        //TODO: A better way to get all THs along the right edge
+        oColumn = this.getColumn(Dom.get(prefix+aLastHeaders[i]));
+        oColumn.getThEl().style.borderRight = nPadding + "px solid " + this.get("COLOR_COLUMNFILLER");
     }
 },
 
