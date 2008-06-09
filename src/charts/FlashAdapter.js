@@ -70,6 +70,15 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	 * @private
 	 */
 	_id: null,
+
+	/**
+	 * Indicates whether the SWF has been initialized and is ready
+	 * to communicate with JavaScript
+	 * @property _initialized
+	 * @type Boolean
+	 * @private
+	 */
+	_initialized: false,
 	
 	/**
 	 * The initializing attributes are stored here until the SWF is ready.
@@ -200,14 +209,18 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	 */
 	_loadHandler: function()
 	{
+		this._initialized = false;
 		this._initAttributes(this._attributes);
 		this.setAttributes(this._attributes, true);
 		
+		this._initialized = true;
 		this.fireEvent("contentReady");
 	},
 	
 	set: function(name, value)
 	{
+		//save all the attributes in case the swf reloads
+		//so that we can pass them in again
 		this._attributes[name] = value;
 		YAHOO.widget.FlashAdapter.superclass.set.call(this, name, value);
 	},

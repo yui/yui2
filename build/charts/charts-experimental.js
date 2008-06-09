@@ -392,6 +392,15 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	 * @private
 	 */
 	_id: null,
+
+	/**
+	 * Indicates whether the SWF has been initialized and is ready
+	 * to communicate with JavaScript
+	 * @property _initialized
+	 * @type Boolean
+	 * @private
+	 */
+	_initialized: false,
 	
 	/**
 	 * The initializing attributes are stored here until the SWF is ready.
@@ -519,14 +528,18 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	 */
 	_loadHandler: function()
 	{
+		this._initialized = false;
 		this._initAttributes(this._attributes);
 		this.setAttributes(this._attributes, true);
 		
+		this._initialized = true;
 		this.fireEvent("contentReady");
 	},
 	
 	set: function(name, value)
 	{
+		//save all the attributes in case the swf reloads
+		//so that we can pass them in again
 		this._attributes[name] = value;
 		YAHOO.widget.FlashAdapter.superclass.set.call(this, name, value);
 	},
@@ -809,15 +822,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 * @private
 	 */
 	_pollingInterval: null,
-	
-	/**
-	 * Indicates whether all attributes have been set and
-	 * the dataSource may be passed to the SWF.
-	 * @property _initialized
-	 * @type Boolean
-	 * @private
-	 */
-	_initialized: false,
 
 	/**
 	 * Stores a reference to the dataTipFunction created by
@@ -1029,7 +1033,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	 */
 	_loadHandler: function()
 	{
-		this._initialized = false;
+		//the type is set separately because it must be first!
 		this._swf.setType(this._type);
 		
 		//set initial styles
@@ -1040,8 +1044,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		}
 		
 		YAHOO.widget.Chart.superclass._loadHandler.call(this);
-		
-		this._initialized = true;
 		
 		if(this._dataSource)
 		{
