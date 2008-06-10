@@ -106,13 +106,6 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         }
     }
     
-    //HACK: Set the paginator values.  Attribute doesn't afford for merging
-    // obj value's keys.  It's all or nothing.  Merge in provided keys.
-    if(this._oConfigs.paginator && !(this._oConfigs.paginator instanceof YAHOO.widget.Paginator)) {
-        // Backward compatibility
-        this.updatePaginator(this._oConfigs.paginator);
-    }
-
     ////////////////////////////////////////////////////////////////////////////
     // Once per instance
 
@@ -1045,52 +1038,6 @@ lang.augmentObject(DT, {
         el.innerHTML = markup;
     },
 
-    /*
-     * Handles Paginator changeRequest events for static DataSources
-     * (i.e. DataSources that return all data immediately)
-     * @method DataTable.handleSimplePagination
-     * @param {object} the requested state of the pagination
-     * @param {DataTable} the DataTable instance
-     * @static     
-     */
-    /*handleSimplePagination : function (oState,self) {
-        // Set the core pagination values silently (the second param)
-        // to avoid looping back through the changeRequest mechanism
-        oState.paginator.setTotalRecords(oState.totalRecords,true);
-        oState.paginator.setStartIndex(oState.recordOffset,true);
-        oState.paginator.setRowsPerPage(oState.rowsPerPage,true);
-
-        self.render();
-    },*/
-
-    /*
-     * Handles Paginator changeRequest events for dynamic DataSources
-     * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
-     * @method DataTable.handleDataSourcePagination
-     * @param {object} the requested state of the pagination
-     * @param {DataTable} the DataTable instance
-     * @static     
-     */
-   /*handleDataSourcePagination : function (oState,self) {
-        var requestedRecords = oState.records[1] - oState.recordOffset;
-
-        // Translate the proposed page state into a DataSource request param
-        var generateRequest = self.get('generateRequest');
-        var request = generateRequest({ pagination : oState }, self);
-
-        var callback = {
-            success : self.onDataReturnSetRows,
-            failure : self.onDataReturnSetRows,
-            argument : {
-                startIndex : oState.recordOffset,
-                pagination : oState
-            },
-            scope : self
-        };
-
-        self._oDataSource.sendRequest(request, callback);
-    },*/
-
     /**
      * Enables CHECKBOX Editor.
      *
@@ -1431,32 +1378,6 @@ lang.augmentObject(DT, {
             return null;
         }
     }
-
-    /**
-     * Translates (proposed) DataTable state data into a form consumable by
-     * DataSource sendRequest as the request parameter.  Use
-     * set('generateRequest', yourFunc) to use a custom function rather than this
-     * one.
-     * @method DataTable._generateRequest
-     * @param oData {Object} Object literal defining the current or proposed state
-     * @param oDataTable {DataTable} Reference to the DataTable instance
-     * @returns {MIXED} Returns appropriate value based on DataSource type
-     * @private
-     * @static     
-     */
-    /*_generateRequest : function (oData, oDataTable) {
-        var request = oData;
-
-        if (oData.pagination) {
-            if (oDataTable._oDataSource.dataType === DS.TYPE_XHR) {
-                request = '?page=' +         oData.pagination.page +
-                          '&recordOffset=' + oData.pagination.recordOffset +
-                          '&rowsPerPage=' +  oData.pagination.rowsPerPage;
-            }
-        }
-        
-        return request;
-    }*/
 });
 
 // Do in separate step so referenced properties are available
@@ -1733,83 +1654,25 @@ initAttributes : function(oConfigs) {
     
     /**
     * @attribute paginator
-    * @description Stores an instance of Pag, or (for
-    * backward compatibility), an object literal of pagination values in the
-    * following form:<br>
-    *   { containers:[], // UI container elements <br>
-    *   rowsPerPage:500, // 500 rows <br>
-    *   currentPage:1,  // page one <br>
-    *   pageLinks:0,    // show all links <br>
-    *   pageLinksStart:1, // first link is page 1 <br>
-    *   dropdownOptions:null, // no dropdown <br>
-    *   links: [], // links elements <br>
-    *   dropdowns: [] } //dropdown elements
-    *
+    * @description An instance of YAHOO.widget.Paginator.
     * @default null
     * @type {Object|YAHOO.widget.Paginator}
     */
     this.setAttributeConfig("paginator", {
-        value : { // Backward compatibility
-            rowsPerPage:500, // 500 rows per page
-            currentPage:1,  // show page one
-            startRecordIndex:0, // start with first Record
-            totalRecords:0, // how many Records total
-            totalPages:0, // how many pages total
-            rowsThisPage:0, // how many rows this page
-            pageLinks:0,    // show all links
-            pageLinksStart:1, // first link is page 1
-            dropdownOptions: null, //no dropdown
-            containers:[], // Paginator container element references
-            dropdowns: [], //dropdown element references,
-            links: [] // links elements
-        },
+        value : null,
         validator : function (oNewPaginator) {
-            if (typeof oNewPaginator === 'object' && oNewPaginator) {
-                if (oNewPaginator instanceof Pag) {
+            if (oNewPaginator && (oNewPaginator instanceof Pag)) {
                     return true;
-                }
-                else {
-                    // Backward compatibility
-                    if(oNewPaginator && lang.isObject(oNewPaginator)) {
-                        // Check for incomplete set of values
-                        if((oNewPaginator.rowsPerPage !== undefined) &&
-                                (oNewPaginator.currentPage !== undefined) &&
-                                (oNewPaginator.startRecordIndex !== undefined) &&
-                                (oNewPaginator.totalRecords !== undefined) &&
-                                (oNewPaginator.totalPages !== undefined) &&
-                                (oNewPaginator.rowsThisPage !== undefined) &&
-                                (oNewPaginator.pageLinks !== undefined) &&
-                                (oNewPaginator.pageLinksStart !== undefined) &&
-                                (oNewPaginator.dropdownOptions !== undefined) &&
-                                (oNewPaginator.containers !== undefined) &&
-                                (oNewPaginator.dropdowns !== undefined) &&
-                                (oNewPaginator.links !== undefined)) {
-
-                            // Validate each value
-                            if(lang.isNumber(oNewPaginator.rowsPerPage) &&
-                                    lang.isNumber(oNewPaginator.currentPage) &&
-                                    lang.isNumber(oNewPaginator.startRecordIndex) &&
-                                    lang.isNumber(oNewPaginator.totalRecords) &&
-                                    lang.isNumber(oNewPaginator.totalPages) &&
-                                    lang.isNumber(oNewPaginator.rowsThisPage) &&
-                                    lang.isNumber(oNewPaginator.pageLinks) &&
-                                    lang.isNumber(oNewPaginator.pageLinksStart) &&
-                                    (lang.isArray(oNewPaginator.dropdownOptions) || lang.isNull(oNewPaginator.dropdownOptions)) &&
-                                    lang.isArray(oNewPaginator.containers) &&
-                                    lang.isArray(oNewPaginator.dropdowns) &&
-                                    lang.isArray(oNewPaginator.links)) {
-                                return true;
-                            }
-                        }
-                    }
-                }
             }
-            return false;
+            else {
+                return false;
+            }
         },
         method : function (oNewPaginator) {
-            // Hook into the pagintor's change event
-            if (oNewPaginator instanceof Pag) {
-                oNewPaginator.subscribe('changeRequest', this.onPaginatorChange, this, true);
+            // Set up Paginator
+            if (oNewPaginator) {
+                // Hook into the Paginator's changeRequest event
+                oNewPaginator.subscribe('changeRequest', this.onPaginatorChangeRequest, this, true);
 
                 // If the paginator has no configured containers, add some
                 var containers = oNewPaginator.getContainerNodes();
@@ -1825,172 +1688,17 @@ initAttributes : function(oConfigs) {
                     this._elContainer.appendChild(c_below);
 
                     containers = [c_above, c_below];
-                    Dom.addClass(containers,
-                                DT.CLASS_PAGINATOR);
+                    Dom.addClass(containers, DT.CLASS_PAGINATOR);
 
                     oNewPaginator.set('containers',containers);
                 }
             }
-        }
-    });
-
-    /**
-    * @attribute paginated
-    * @deprecated No longer used, as long as "paginator" value is an instance of
-    * Paginator class.  
-    */
-    this.setAttributeConfig("paginated", {
-        value: false,
-        validator: lang.isBoolean,
-        method : function (on) {
-            var curVal = this.get('paginated');
-            var i,len;
-            if (on == curVal) {
-                return;
-            }
-
-            var oPaginator  = this.get('paginator');
-            if (!(oPaginator instanceof Pag)) {
-                // Backward compatibility--pagination generated here
-                oPaginator = oPaginator || {
-                    rowsPerPage     : 500,  // 500 rows per page
-                    currentPage     : 1,    // show page one
-                    startRecordIndex: 0,    // start with first Record
-                    totalRecords    : 0,    // how many Records total
-                    totalPages      : 0,    // how many pages total
-                    rowsThisPage    : 0,    // how many rows this page
-                    pageLinks       : 0,    // show all links
-                    pageLinksStart  : 1,    // first link is page 1
-                    dropdownOptions : null, // no dropdown
-                    containers      : [],   // Paginator container element references
-                    dropdowns       : [],   // dropdown element references,
-                    links           : []    // links elements
-                };
-                var aContainerEls = oPaginator.containers;
-
-                // Paginator is enabled
-                if(on) {
-                    // No containers found, create two from scratch
-                    if(aContainerEls.length === 0) {
-                        // One before TABLE
-                        var pag0 = document.createElement("span");
-                        pag0.id = this._sId + "-paginator0";
-                        Dom.addClass(pag0, DT.CLASS_PAGINATOR);
-                        pag0 = this._elContainer.insertBefore(pag0, this._elContainer.firstChild);
-                        aContainerEls.push(pag0);
-
-                        // One after TABLE
-                        var pag1 = document.createElement("span");
-                        pag1.id = this._sId + "-paginator1";
-                        Dom.addClass(pag1, DT.CLASS_PAGINATOR);
-                        pag1 = this._elContainer.appendChild(pag1);
-                        aContainerEls.push(pag1);
-
-                        // (re)set the paginator value directly
-                        oPaginator.containers = aContainerEls;
-                        this._configs.paginator.value= oPaginator;
-                    }
-                    else {
-                        // Show each container
-                        for(i=0; i<aContainerEls.length; i++) {
-                            aContainerEls[i].style.display = "";
-                        }
-                    }
-
-                    // Links are enabled
-                    if(oPaginator.pageLinks > -1) {
-                        var aLinkEls = oPaginator.links;
-                        // No links containers found, create from scratch
-                        if(aLinkEls.length === 0) {
-                            for(i=0; i<aContainerEls.length; i++) {
-                                // Create one links container per Paginator container
-                                var linkEl = document.createElement("span");
-                                linkEl.id = "yui-dt-pagselect"+i;
-                                linkEl = aContainerEls[i].appendChild(linkEl);
-
-                                // Add event listener
-                                //TODO: anon fnc
-                                Ev.addListener(linkEl,"click",this._onPaginatorLinkClick,this);
-
-                                 // Add directly to tracker
-                                this._configs.paginator.value.links.push(linkEl);
-                           }
-                       }
-                    }
-
-                    for(i=0; i<aContainerEls.length; i++) {
-                        // Create one SELECT element per Paginator container
-                        var selectEl = document.createElement("select");
-                        Dom.addClass(selectEl, DT.CLASS_DROPDOWN);
-                        selectEl = aContainerEls[i].appendChild(selectEl);
-                        selectEl.id = "yui-dt-pagselect"+i;
-
-                        // Add event listener
-                        //TODO: anon fnc
-                        Ev.addListener(selectEl,"change",this._onPaginatorDropdownChange,this);
-
-                        // Add DOM reference directly to tracker
-                       this._configs.paginator.value.dropdowns.push(selectEl);
-
-                        // Hide dropdown
-                        if(!oPaginator.dropdownOptions) {
-                            selectEl.style.display = "none";
-                        }
-                    }
-
-                    //TODO: fire paginatorDisabledEvent & add to api doc
-                    YAHOO.log("Paginator enabled", "info", this.toString());
-                }
-                // Pagination is disabled
-                else {
-                    // Containers found
-                    if(aContainerEls.length > 0) {
-                        // Destroy or just hide?
-
-                        // Hide each container
-                        for(i=0; i<aContainerEls.length; i++) {
-                            aContainerEls[i].style.display = "none";
-                        }
-
-                        /*TODO?
-                        // Destroy each container
-                        for(i=0; i<aContainerEls.length; i++) {
-                            Ev.purgeElement(aContainerEls[i], true);
-                            aContainerEls.innerHTML = null;
-                            //TODO: remove container?
-                            // aContainerEls[i].parentNode.removeChild(aContainerEls[i]);
-                        }
-                        */
-                    }
-                    //TODO: fire paginatorDisabledEvent & add to api doc
-                    YAHOO.log("Paginator disabled", "info", this.toString());
-                }
+            // Tear down Paginator
+            else {
+                //TODO
             }
         }
     });
-
-    /*
-    * @attribute paginationEventHandler
-    * @description For use with Paginator pagination.  A
-    * handler function that receives the changeRequest event from the
-    * configured Paginator.  The handler method will be passed these
-    * parameters:
-    * <ol>
-    * <li>oState {Object} - an object literal describing the requested
-    * pagination state</li>
-    * <li>oSelf {DataTable} - The DataTable instance.</li>
-    * </ol>
-    * 
-    * For pagination through dynamic or server side data, assign
-    * YAHOO.widget.DataTable.handleDataSourcePagination or your own custom
-    * handler.
-    * @type {function|Object}
-    * @default YAHOO.widget.DataTable.handleSimplePagination
-    */
-    /*this.setAttributeConfig("paginationEventHandler", {
-        value     : DT.handleSimplePagination,
-        validator : lang.isObject
-    });*/
 
     /**
     * @attribute caption
@@ -2468,22 +2176,11 @@ _repaintWebkit : (ua.webkit) ?
  * @private
  */
 _initConfigs : function(oConfigs) {
-    if(oConfigs) {
-        if(oConfigs.constructor != Object) {
-            oConfigs = null;
-            YAHOO.log("Invalid configs", "warn", this.toString());
-        }
-        // Backward compatibility
-        else if(lang.isBoolean(oConfigs.paginator)) {
-            YAHOO.log("DataTable's paginator model has been revised" +
-            " -- please refer to the documentation for implementation" +
-            " details", "warn", this.toString());
-        }
-        this._oConfigs = oConfigs;
+    if(!oConfigs || !lang.isObject(oConfigs)) {
+        oConfigs = {};
+        YAHOO.log("Invalid configs", "warn", this.toString());
     }
-    else {
-        this._oConfigs = {};
-    }
+    this._oConfigs = oConfigs;
 },
 
 /**
@@ -4882,19 +4579,14 @@ getTrIndex : function(row) {
         if((nRecordIndex > -1) && (nRecordIndex < this._oRecordSet.getLength())) {
             // DataTable is paginated
             var oPaginator = this.get('paginator');
-            if(oPaginator instanceof Pag || this.get('paginated')) {
+            if(oPaginator) {
                 // Get the first and last Record on current page
                 var startRecordIndex = 0,
                     endRecordIndex   = 0;
 
-                if (oPaginator instanceof Pag) {
-                    var rng = oPaginator.getPageRecords();
-                    startRecordIndex = rng[0];
-                    endRecordIndex   = rng[1];
-                } else {
-                    startRecordIndex = oPaginator.startRecordIndex;
-                    endRecordIndex = startRecordIndex + oPaginator.rowsPerPage - 1;
-                }
+                var rng = oPaginator.getPageRecords();
+                startRecordIndex = rng[0];
+                endRecordIndex   = rng[1];
 
                 // This Record is on current page
                 if((nRecordIndex >= startRecordIndex) && (nRecordIndex <= endRecordIndex)) {
@@ -5017,26 +4709,15 @@ YAHOO.log("start render","time");
 
     var i, j, k, l, len, allRecords;
 
-    // Paginator is enabled, show a subset of Records and update Paginator UI
     var oPaginator = this.get('paginator');
-    var bPaginated = oPaginator instanceof Pag || this.get('paginated');
-    if(bPaginated) {
-        if (oPaginator instanceof Pag) {
-            allRecords = this._oRecordSet.getRecords(
-                            oPaginator.getStartIndex(),
-                            oPaginator.getRowsPerPage());
-            oPaginator.render();
-        }
-        else {
-            // Backward compatibility
-            this.updatePaginator();
-            var rowsPerPage = oPaginator.rowsPerPage;
-            var startRecordIndex = (oPaginator.currentPage - 1) * rowsPerPage;
-            allRecords = this._oRecordSet.getRecords(startRecordIndex, rowsPerPage);
-            this.formatPaginators();
-        }
+    // Paginator is enabled, show a subset of Records and update Paginator UI
+    if(oPaginator) {
+        allRecords = this._oRecordSet.getRecords(
+                        oPaginator.getStartIndex(),
+                        oPaginator.getRowsPerPage());
+        oPaginator.render();
     }
-    // Show all records
+    // Not paginated, show all records
     else {
         allRecords = this._oRecordSet.getRecords();
     }
@@ -5551,11 +5232,8 @@ getRecordIndex : function(row) {
 
     if(lang.isNumber(nTrIndex)) {
         var oPaginator = this.get("paginator");
-        if(oPaginator instanceof Pag) {
+        if(oPaginator) {
             return oPaginator.get('recordOffset') + nTrIndex;
-        }
-        else if (this.get('paginated')) {
-            return oPaginator.startRecordIndex + nTrIndex;
         }
         else {
             return nTrIndex;
@@ -5829,13 +5507,9 @@ sortColumn : function(oColumn, sDir) {
         
                 // Reset to first page if paginated
                 var oPaginator = this.get('paginator');
-                if (oPaginator instanceof Pag) {
+                if (oPaginator) {
                     // Set page silently, so as not to fire change event.
                     oPaginator.setPage(1,true);
-                }
-                else if (this.get('paginated')) {
-                    // Backward compatibility
-                    this.updatePaginator({currentPage:1});
                 }
         
                 // Update UI via sortedBy
@@ -6823,24 +6497,15 @@ addRow : function(oData, index) {
             var oPaginator = this.get('paginator');
 
             // Paginated
-            if (oPaginator instanceof Pag || this.get('paginated')) {
-                recIndex = this.getRecordIndex(oRecord);
-                var endRecIndex;
-                if (oPaginator instanceof Pag) {
-                    // Update the paginator's totalRecords
-                    var totalRecords = oPaginator.get('totalRecords');
-                    if (totalRecords !== Pag.VALUE_UNLIMITED) {
-                        oPaginator.set('totalRecords',totalRecords + 1);
-                    }
+            if (oPaginator) {     
+                // Update the paginator's totalRecords
+                var totalRecords = oPaginator.get('totalRecords');
+                if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                    oPaginator.set('totalRecords',totalRecords + 1);
+                }
 
-                    endRecIndex = (oPaginator.getPageRecords())[1];
-                }
-                // Backward compatibility
-                else {
-                    endRecIndex = oPaginator.startRecordIndex +
-                                  oPaginator.rowsPerPage - 1;
-                    this.updatePaginator();
-                }
+                recIndex = this.getRecordIndex(oRecord);
+                var endRecIndex = (oPaginator.getPageRecords())[1];
 
                 // New record affects the view
                 if (recIndex <= endRecIndex) {
@@ -6912,24 +6577,14 @@ addRows : function(aData, index) {
             
             // Paginated
             var oPaginator = this.get('paginator');
-            if (oPaginator instanceof Pag ||
-                this.get('paginated')) {
-                var endRecIndex;
-                if (oPaginator instanceof Pag) {
-                    // Update the paginator's totalRecords
-                    var totalRecords = oPaginator.get('totalRecords');
-                    if (totalRecords !== Pag.VALUE_UNLIMITED) {
-                        oPaginator.set('totalRecords',totalRecords + aRecords.length);
-                    }
-
-                    endRecIndex = (oPaginator.getPageRecords())[1];
+            if (oPaginator) {
+                // Update the paginator's totalRecords
+                var totalRecords = oPaginator.get('totalRecords');
+                if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                    oPaginator.set('totalRecords',totalRecords + aRecords.length);
                 }
-                // Backward compatibility
-                else {
-                    endRecIndex = oPaginator.startRecordIndex +
-                                  oPaginator.rowsPerPage - 1;
-                    this.updatePaginator();
-                }
+    
+                var endRecIndex = (oPaginator.getPageRecords())[1];
 
                 // At least one of the new records affects the view
                 if (recIndex <= endRecIndex) {
@@ -7105,25 +6760,14 @@ deleteRow : function(row) {
                 // If paginated and the deleted row was on this or a prior page, just
                 // re-render
                 var oPaginator = this.get('paginator');
-                if (oPaginator instanceof Pag ||
-                    this.get('paginated')) {
-        
-                    var endRecIndex;
-                    if (oPaginator instanceof Pag) {
-                        // Update the paginator's totalRecords
-                        var totalRecords = oPaginator.get('totalRecords');
-                        if (totalRecords !== Pag.VALUE_UNLIMITED) {
-                            oPaginator.set('totalRecords',totalRecords - 1);
-                        }
-        
-                        endRecIndex = (oPaginator.getPageRecords())[1];
-                    } else {
-                        // Backward compatibility
-                        endRecIndex = oPaginator.startRecordIndex +
-                                      oPaginator.rowsPerPage - 1;
-        
-                        this.updatePaginator();
+                if (oPaginator) {
+                    // Update the paginator's totalRecords
+                    var totalRecords = oPaginator.get('totalRecords');
+                    if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                        oPaginator.set('totalRecords',totalRecords - 1);
                     }
+    
+                    var endRecIndex = (oPaginator.getPageRecords())[1];
         
                     // If the deleted record was on this or a prior page, re-render
                     if (nRecordIndex <= endRecIndex) {
@@ -7131,6 +6775,7 @@ deleteRow : function(row) {
                     }
                     return;
                 }
+                // Not paginated
                 else {
                     if(lang.isNumber(nTrIndex)) {
                         this._oChainRender.add({
@@ -7222,28 +6867,17 @@ deleteRows : function(row, count) {
     
             // Update the UI
             if(aData) {
+                var oPaginator = this.get('paginator');
                 // If paginated and the deleted row was on this or a prior page, just
                 // re-render
-                var oPaginator = this.get('paginator');
-                if (oPaginator instanceof Pag ||
-                    this.get('paginated')) {
-        
-                    var endRecIndex;
-                    if (oPaginator instanceof Pag) {
-                        // Update the paginator's totalRecords
-                        var totalRecords = oPaginator.get('totalRecords');
-                        if (totalRecords !== Pag.VALUE_UNLIMITED) {
-                            oPaginator.set('totalRecords',totalRecords - 1);
-                        }
-        
-                        endRecIndex = (oPaginator.getPageRecords())[1];
-                    } else {
-                        // Backward compatibility
-                        endRecIndex = oPaginator.startRecordIndex +
-                                      oPaginator.rowsPerPage - 1;
-        
-                        this.updatePaginator();
+                if (oPaginator) {
+                    // Update the paginator's totalRecords
+                    var totalRecords = oPaginator.get('totalRecords');
+                    if (totalRecords !== Pag.VALUE_UNLIMITED) {
+                        oPaginator.set('totalRecords',totalRecords - 1);
                     }
+    
+                    var endRecIndex = (oPaginator.getPageRecords())[1];
         
                     // If the lowest deleted record was on this or a prior page, re-render
                     if (lowIndex <= endRecIndex) {
@@ -7251,6 +6885,7 @@ deleteRows : function(row, count) {
                     }
                     return;
                 }
+                // Not paginated
                 else {
                     if(lang.isNumber(nTrIndex)) {
                         // Delete the TR elements starting with highest index
@@ -7447,13 +7082,13 @@ formatCell : function(elCell, oRecord, oColumn) {
 
 /**
  * Responds to new Pagination states. By default, updates the UI to reflect the
- * given page view. If "dynamicData" is true, sends a request to  the DataSource
- * for data for the given page view, using the request from "generateRequest". 
+ * new state. If "dynamicData" is true, sends a request to the DataSource
+ * for data for the given state, using the request from "generateRequest". 
  *  
- * @method onPaginatorChange
- * @param oPaginatorState {Object} An object literal describing the proposed pagination state
+ * @method onPaginatorChangeRequest
+ * @param oPaginatorState {Object} An object literal describing the proposed pagination state.
  */
-onPaginatorChange : function (oPaginatorState) {
+onPaginatorChangeRequest : function (oPaginatorState) {
     // Server-side pagination
     if(this.get("dynamicData")) {
         // Reset the recordOffset to 0, since this is server-side pagination
@@ -10305,25 +9940,12 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
     var ok = this.doBeforeLoadData(sRequest, oResponse, oPayload);
 
     // Data ok to append
-    if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-
-        // Handle the meta && payload
-        //this._handleDataReturnPayload(sRequest, oResponse,
-        //    this._mergeResponseMeta(oPayload, oResponse.meta));
-        //
-        
+    if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {        
         // Append rows
         this.addRows(oResponse.results);
 
         // Update state
         this._handleDataReturnPayload(sRequest, oResponse, oPayload);
-        
-        // Default the Paginator's totalRecords from the RecordSet length
-        //var oPaginator = this.get('paginator');
-        //if (oPaginator && oPaginator instanceof Pag &&
-        //    oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
-        //    oPaginator.set('totalRecords',this._oRecordSet.getLength());
-        //}
     }
     // Error
     else if(ok && oResponse.error) {
@@ -10349,23 +9971,11 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
 
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        //var meta = this._mergeResponseMeta({
-                // backward compatibility
-        //        recordInsertIndex: (oPayload ? oPayload.insertIndex || 0 : 0) },
-        //        oPayload, oResponse.meta);
-
         // Insert rows
         this.addRows(oResponse.results, oResponse.meta.recordInsertIndex || 0);
 
         // Update state
         this._handleDataReturnPayload(sRequest, oResponse, oPayload);
-
-        // Default the Paginator's totalRecords from the RecordSet length
-        //var oPaginator = this.get('paginator');
-        //if (oPaginator && oPaginator instanceof Pag &&
-        //    oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
-        //    oPaginator.set('totalRecords',this._oRecordSet.getLength());
-        //}
     }
     // Error
     else if(ok && oResponse.error) {
@@ -10389,11 +9999,6 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        //var meta = this._mergeResponseMeta({
-                // backward compatibility
-        //        recordStartIndex: oPayload ? oPayload.startIndex : null },
-        //        oPayload, oResponse.meta);
-
         // Update Records
         var oPaginator = this.get('paginator');
         var index = oResponse.recordStartIndex ||
@@ -10413,51 +10018,6 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
     }
 },
 
-/*
- * Merges meta information from the response (as defined in the DataSource's
- * responseSchema.metaFields member) into the payload.  A few magic keys are
- * given special treatment: sortKey and sortDir => sorting.key|dir and all
- * keys paginationFoo => pagination.foo.  Merging is shallow with the exception
- * of the magic keys being added to their respective nested objects.
- *
- * @method _mergeResponseMeta
- * @param * {object} Any number of objects to merge together.  Last in wins.
- * @return {object} A new object containing the combined keys of all objects.
- * @private
- */
-/*_mergeResponseMeta : function () {
-    var meta = {},
-        a = arguments,
-        i = 0,len = a.length,
-        k,o;
-
-    for (; i < len; ++i) {
-        o = a[i];
-        if (lang.isObject(o)) {
-            for (k in o) {
-                if (lang.hasOwnProperty(o,k)) {
-                    if (k.indexOf('pagination') === 0 && k.charAt(10)) {
-                        if (!meta.pagination) {
-                            meta.pagination = {};
-                        }
-                        meta.pagination[k.substr(10,1).toLowerCase()+k.substr(11)] = o[k];
-                    } else if (/^sort(Key|Dir)/.test(k)) {
-                        if (!meta.sorting) {
-                            var curSort = this.get('sortedBy');
-                            meta.sorting = curSort ? { key : curSort.key } : {};
-                        }
-                        meta.sorting[RegExp.$1.toLowerCase()] = o[k];
-                    } else {
-                        meta[k] = o[k];
-                    }
-                }
-            }
-        }
-    }
-
-    return meta;
-},*/
-
 /**
  * Updates the DataTable with state data sent in an onDataReturn* payload
  * @method _handleDataReturnPayload
@@ -10470,7 +10030,7 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
     if(oPayload) {
         // Update with any pagination information
         var oPaginator = this.get('paginator');
-        if (oPaginator instanceof Pag) {
+        if (oPaginator) {
             // Meta field trumps payload totalRecords
             if (!lang.isUndefined(oResponse.meta.totalRecords)) {
                 oPaginator.set('totalRecords',parseInt(oResponse.meta.totalRecords,10)|0);
@@ -11312,301 +10872,6 @@ select : function(els) {
     }
     for(var i=0; i<els.length; i++) {
         this.selectRow(els[i]);
-    }
-},
-
-/**
- * @method updatePaginator
- * @deprecated Use Paginator class APIs.
- */
-updatePaginator : function(oNewValues) {
-    // Complete the set (default if not present)
-    var oValidPaginator = this.get("paginator");
-
-    var nOrigCurrentPage = oValidPaginator.currentPage;
-    for(var param in oNewValues) {
-        if(lang.hasOwnProperty(oValidPaginator, param)) {
-            oValidPaginator[param] = oNewValues[param];
-        }
-    }
-
-    oValidPaginator.totalRecords = this._oRecordSet.getLength();
-    oValidPaginator.rowsThisPage = Math.min(oValidPaginator.rowsPerPage, oValidPaginator.totalRecords);
-    oValidPaginator.totalPages = Math.ceil(oValidPaginator.totalRecords / oValidPaginator.rowsThisPage);
-    if(isNaN(oValidPaginator.totalPages)) {
-        oValidPaginator.totalPages = 0;
-    }
-    if(oValidPaginator.currentPage > oValidPaginator.totalPages) {
-        if(oValidPaginator.totalPages < 1) {
-            oValidPaginator.currentPage = 1;
-        }
-        else {
-            oValidPaginator.currentPage = oValidPaginator.totalPages;
-        }
-    }
-
-    if(oValidPaginator.currentPage !== nOrigCurrentPage) {
-        oValidPaginator.startRecordIndex = (oValidPaginator.currentPage-1)*oValidPaginator.rowsPerPage;
-    }
-
-
-    this.set("paginator", oValidPaginator);
-    return this.get("paginator");
-},
-
-/**
- * @method showPage
- * @deprecated Use Paginator class APIs.
- */
-showPage : function(nPage) {
-    var oPaginator = this.get('paginator');
-    // Validate input
-    if(!lang.isNumber(nPage) || (nPage < 1)) {
-        if (oPaginator instanceof Pag) {
-            if (!oPaginator.hasPage(nPage)) {
-                nPage = 1;
-            }
-        } else if (nPage > oPaginator.totalPages) {
-            nPage = 1;
-        }
-    }
-
-    if (oPaginator instanceof Pag) {
-        oPaginator.setPage(nPage);
-    } else {
-        this.updatePaginator({currentPage:nPage});
-        this.render();
-    }
-},
-
-/**
- * @method formatPaginators
- * @deprecated Use Paginator class APIs.
- */
-formatPaginators : function() {
-    var pag = this.get("paginator");
-    if (pag instanceof Pag) {
-        pag.update();
-        return;
-    }
-
-    var i;
-
-    // For Opera workaround
-    var dropdownEnabled = false;
-
-    // Links are enabled
-    if(pag.pageLinks > -1) {
-        for(i=0; i<pag.links.length; i++) {
-            this.formatPaginatorLinks(pag.links[i], pag.currentPage, pag.pageLinksStart, pag.pageLinks, pag.totalPages);
-        }
-    }
-
-    // Dropdown is enabled
-    for(i=0; i<pag.dropdowns.length; i++) {
-         if(pag.dropdownOptions) {
-            dropdownEnabled = true;
-            this.formatPaginatorDropdown(pag.dropdowns[i], pag.dropdownOptions);
-        }
-        else {
-            pag.dropdowns[i].style.display = "none";
-        }
-    }
-
-    // For Opera artifacting in dropdowns
-    if(dropdownEnabled && ua.opera) {
-        document.body.style += '';
-    }
-    YAHOO.log("Paginators formatted", "info", this.toString());
-},
-
-/**
- * @method formatPaginatorDropdown
- * @deprecated Use Paginator class APIs.
- */
-formatPaginatorDropdown : function(elDropdown, dropdownOptions) {
-    if(elDropdown && (elDropdown.ownerDocument == document)) {
-        // Clear OPTION elements
-        while (elDropdown.firstChild) {
-            elDropdown.removeChild(elDropdown.firstChild);
-        }
-
-        // Create OPTION elements
-        for(var j=0; j<dropdownOptions.length; j++) {
-            var dropdownOption = dropdownOptions[j];
-            var optionEl = document.createElement("option");
-            optionEl.value = (lang.isValue(dropdownOption.value)) ?
-                    dropdownOption.value : dropdownOption;
-            optionEl.innerHTML = (lang.isValue(dropdownOption.text)) ?
-                    dropdownOption.text : dropdownOption;
-            optionEl = elDropdown.appendChild(optionEl);
-        }
-
-        var options = elDropdown.options;
-        // Update dropdown's "selected" value
-        if(options.length) {
-            for(var i=options.length-1; i>-1; i--) {
-                if((this.get("paginator").rowsPerPage + "") === options[i].value) {
-                    options[i].selected = true;
-                }
-            }
-        }
-
-        // Show the dropdown
-        elDropdown.style.display = "";
-        return;
-    }
-    YAHOO.log("Could not update Paginator dropdown " + elDropdown, "error", this.toString());
-},
-
-/**
- * @method formatPaginatorLinks
- * @deprecated Use Paginator class APIs.
- */
-formatPaginatorLinks : function(elContainer, nCurrentPage, nPageLinksStart, nPageLinksLength, nTotalPages) {
-    if(elContainer && (elContainer.ownerDocument == document) &&
-            lang.isNumber(nCurrentPage) && lang.isNumber(nPageLinksStart) &&
-            lang.isNumber(nTotalPages)) {
-        // Set up markup for first/last/previous/next
-        var bIsFirstPage = (nCurrentPage == 1) ? true : false;
-        var bIsLastPage = (nCurrentPage == nTotalPages) ? true : false;
-        var sFirstLinkMarkup = (bIsFirstPage) ?
-                " <span class=\"" + DT.CLASS_DISABLED +
-                " " + DT.CLASS_FIRST + "\">&lt;&lt;</span> " :
-                " <a href=\"#\" class=\"" + DT.CLASS_FIRST + "\">&lt;&lt;</a> ";
-        var sPrevLinkMarkup = (bIsFirstPage) ?
-                " <span class=\"" + DT.CLASS_DISABLED +
-                " " + DT.CLASS_PREVIOUS + "\">&lt;</span> " :
-                " <a href=\"#\" class=\"" + DT.CLASS_PREVIOUS + "\">&lt;</a> " ;
-        var sNextLinkMarkup = (bIsLastPage) ?
-                " <span class=\"" + DT.CLASS_DISABLED +
-                " " + DT.CLASS_NEXT + "\">&gt;</span> " :
-                " <a href=\"#\" class=\"" + DT.CLASS_NEXT + "\">&gt;</a> " ;
-        var sLastLinkMarkup = (bIsLastPage) ?
-                " <span class=\"" + DT.CLASS_DISABLED +
-                " " + DT.CLASS_LAST +  "\">&gt;&gt;</span> " :
-                " <a href=\"#\" class=\"" + DT.CLASS_LAST + "\">&gt;&gt;</a> ";
-
-        // Start with first and previous
-        var sMarkup = sFirstLinkMarkup + sPrevLinkMarkup;
-
-        // Ok to show all links
-        var nMaxLinks = nTotalPages;
-        var nFirstLink = 1;
-        var nLastLink = nTotalPages;
-
-        if(nPageLinksLength > 0) {
-        // Calculate how many links to show
-            nMaxLinks = (nPageLinksStart+nPageLinksLength < nTotalPages) ?
-                    nPageLinksStart+nPageLinksLength-1 : nTotalPages;
-
-            // Try to keep the current page in the middle
-            nFirstLink = (nCurrentPage - Math.floor(nMaxLinks/2) > 0) ? nCurrentPage - Math.floor(nMaxLinks/2) : 1;
-            nLastLink = (nCurrentPage + Math.floor(nMaxLinks/2) <= nTotalPages) ? nCurrentPage + Math.floor(nMaxLinks/2) : nTotalPages;
-
-            // Keep the last link in range
-            if(nFirstLink === 1) {
-                nLastLink = nMaxLinks;
-            }
-            // Keep the first link in range
-            else if(nLastLink === nTotalPages) {
-                nFirstLink = nTotalPages - nMaxLinks + 1;
-            }
-
-            // An even number of links can get funky
-            if(nLastLink - nFirstLink === nMaxLinks) {
-                nLastLink--;
-            }
-      }
-
-        // Generate markup for each page
-        for(var i=nFirstLink; i<=nLastLink; i++) {
-            if(i != nCurrentPage) {
-                sMarkup += " <a href=\"#\" class=\"" + DT.CLASS_PAGE + "\">" + i + "</a> ";
-            }
-            else {
-                sMarkup += " <span class=\"" + DT.CLASS_SELECTED + "\">" + i + "</span>";
-            }
-        }
-        sMarkup += sNextLinkMarkup + sLastLinkMarkup;
-        elContainer.innerHTML = sMarkup;
-        return;
-    }
-    YAHOO.log("Could not format Paginator links", "error", this.toString());
-},
-
-/**
- * @method _onPaginatorLinkClick
- * @private
- * @deprecated Use Paginator class APIs.
- */
-_onPaginatorLinkClick : function(e, oSelf) {
-    // Backward compatibility
-    var elTarget = Ev.getTarget(e);
-    var elTag = elTarget.nodeName.toLowerCase();
-
-    if(oSelf._oCellEditor && oSelf._oCellEditor.isActive) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
-    }
-
-    while(elTarget && (elTag != "table")) {
-        switch(elTag) {
-            case "body":
-                return;
-            case "a":
-                Ev.stopEvent(e);
-                //TODO: after the showPage call, figure out which link
-                //TODO: was clicked and reset focus to the new version of it
-                //TODO: support multiple custom classnames
-                switch(elTarget.className) {
-                    case DT.CLASS_PAGE:
-                        oSelf.showPage(parseInt(elTarget.innerHTML,10));
-                        return;
-                    case DT.CLASS_FIRST:
-                        oSelf.showPage(1);
-                        return;
-                    case DT.CLASS_LAST:
-                        oSelf.showPage(oSelf.get("paginator").totalPages);
-                        return;
-                    case DT.CLASS_PREVIOUS:
-                        oSelf.showPage(oSelf.get("paginator").currentPage - 1);
-                        return;
-                    case DT.CLASS_NEXT:
-                        oSelf.showPage(oSelf.get("paginator").currentPage + 1);
-                        return;
-                }
-                break;
-            default:
-                return;
-        }
-        elTarget = elTarget.parentNode;
-        if(elTarget) {
-            elTag = elTarget.nodeName.toLowerCase();
-        }
-        else {
-            return;
-        }
-    }
-},
-
-/**
- * @method _onPaginatorDropdownChange
- * @private
- * @deprecated Use Paginator class APIs.
- */
-_onPaginatorDropdownChange : function(e, oSelf) {
-    // Backward compatibility
-    var elTarget = Ev.getTarget(e);
-    var newValue = elTarget[elTarget.selectedIndex].value;
-
-    var newRowsPerPage = lang.isValue(parseInt(newValue,10)) ? parseInt(newValue,10) : null;
-    if(newRowsPerPage !== null) {
-        var newStartRecordIndex = (oSelf.get("paginator").currentPage-1) * newRowsPerPage;
-        oSelf.updatePaginator({rowsPerPage:newRowsPerPage, startRecordIndex:newStartRecordIndex});
-        oSelf.render();
-    }
-    else {
-        YAHOO.log("Could not paginate with " + newValue + " rows per page", "error", oSelf.toString());
     }
 },
 

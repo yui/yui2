@@ -4,6 +4,43 @@ DataTable Release Notes
 
 * Created new subclass ScrollingDataTable.
 
+* Pagination and sorting have been reworked to better support dynamically driven
+DataTables. As a result, the following important changes have been made:
+    - Removed backward compatibility support for the "paginated" Attribute and
+   the object literal "paginator" Attribute value. Implementers must use the Paginator
+   class to populate the "paginator" Attribute.
+    - The following APIs have been removed:
+        * "paginationEventHandler" Attribute
+        * handleSimplePagination()
+        * handleDataSourcePagination()        
+        * updatePaginator()
+        * showPage()
+        * formatPaginator()
+        * formatPaginationDropdown()
+        * formatPaginatorLinks()
+    - The following APIs have been added:
+        * "dynamicData" Attribute
+    - The following APIs have been changed:
+        * onPaginatorChange() has been renamed to onPaginatorChangeRequest()
+
+* The following APIs have been changed from static class properties to instance
+Attributes, to be set via the initial config or myDataTable.set():
+    - MSG_EMPTY
+    - MSG_ERROR
+    - MSG_LOADING
+    - COLOR_COLUMNFILLER (ScrollingDataTable)
+    
+* The initEvent will fire when rows are rendered from an initialized state, 
+and the renderEvent will always fire when rows are rendered. This is a slight change
+from prior behavior, when the the renderEvent would *not* fire if the initEvent
+was fired.
+
+* Column.minWidth default value now null.
+ 
+* Removed unused Column._oDefinition private property.
+
+* Hidden Columns are now manifested as cell liner elements with display:none.
+ 
 * In the markup, the primary data TBODY is (once again) before the message TBODY element.
  
 * Resizeable Columns now create an additional resizer liner DIV element between
@@ -14,21 +51,8 @@ liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
  
 * Removed unused TD ID assignments.
  
-* The following APIs have been changed from static class properties to instance
-Attributes, to be set via the initial config or myDataTable.set():
-    - MSG_EMPTY
-    - MSG_ERROR
-    - MSG_LOADING
-    - COLOR_COLUMNFILLER (ScrollingDataTable)
-
 * All CSS clases representing Column states now assigned directly on TH and TD
 elements, not on liner DIV elements.
- 
-* Column.minWidth default value now null.
- 
-* Removed unused Column._oDefinition private property.
-
-* Hidden Columns are now manifested as cell liner elements with display:none.
  
 * Added bottom border to last TR element in ScrollingDataTables.
 
