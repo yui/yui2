@@ -139,7 +139,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         success : this.onDataReturnSetRows,
         failure : this.onDataReturnSetRows,
         scope   : this,
-        argument: {}
+        argument: (this.get("paginator").getState ? {pagination: this.get("paginator").getState()} : {})
     };
     
     var initialLoad = this.get("initialLoad");
@@ -1045,7 +1045,7 @@ lang.augmentObject(DT, {
         el.innerHTML = markup;
     },
 
-    /**
+    /*
      * Handles Paginator changeRequest events for static DataSources
      * (i.e. DataSources that return all data immediately)
      * @method DataTable.handleSimplePagination
@@ -1053,7 +1053,7 @@ lang.augmentObject(DT, {
      * @param {DataTable} the DataTable instance
      * @static     
      */
-    handleSimplePagination : function (oState,self) {
+    /*handleSimplePagination : function (oState,self) {
         // Set the core pagination values silently (the second param)
         // to avoid looping back through the changeRequest mechanism
         oState.paginator.setTotalRecords(oState.totalRecords,true);
@@ -1061,9 +1061,9 @@ lang.augmentObject(DT, {
         oState.paginator.setRowsPerPage(oState.rowsPerPage,true);
 
         self.render();
-    },
+    },*/
 
-    /**
+    /*
      * Handles Paginator changeRequest events for dynamic DataSources
      * such as DataSource.TYPE_XHR or DataSource.TYPE_JSFUNCTION.
      * @method DataTable.handleDataSourcePagination
@@ -1071,7 +1071,7 @@ lang.augmentObject(DT, {
      * @param {DataTable} the DataTable instance
      * @static     
      */
-    handleDataSourcePagination : function (oState,self) {
+   /*handleDataSourcePagination : function (oState,self) {
         var requestedRecords = oState.records[1] - oState.recordOffset;
 
         // Translate the proposed page state into a DataSource request param
@@ -1089,7 +1089,7 @@ lang.augmentObject(DT, {
         };
 
         self._oDataSource.sendRequest(request, callback);
-    },
+    },*/
 
     /**
      * Enables CHECKBOX Editor.
@@ -1430,7 +1430,7 @@ lang.augmentObject(DT, {
             YAHOO.log("Could not validate data " + lang.dump(oData) + " to type Number", "warn", this.toString());
             return null;
         }
-    },
+    }
 
     /**
      * Translates (proposed) DataTable state data into a form consumable by
@@ -1444,7 +1444,7 @@ lang.augmentObject(DT, {
      * @private
      * @static     
      */
-    _generateRequest : function (oData, oDataTable) {
+    /*_generateRequest : function (oData, oDataTable) {
         var request = oData;
 
         if (oData.pagination) {
@@ -1456,7 +1456,7 @@ lang.augmentObject(DT, {
         }
         
         return request;
-    }
+    }*/
 });
 
 // Do in separate step so referenced properties are available
@@ -1583,20 +1583,65 @@ initAttributes : function(oConfigs) {
     this.setAttributeConfig("initialLoad", {
         value: true
     });
-
+    
     /**
-     * @attribute generateRequest
-     * @description A function used to translate proposed DataTable state info
-     * into a value which is then passed to the DataSource's sendRequest method.
-     * This function is called to get the DataTable's initial data as well as
-     * any data changes or requests such as pagination or sorting.  The method
-     * is passed two params, an object literal with the state data and a
-     * reference to the DataTable.
-     * @type function
-     * @default YAHOO.widget.DataTable._generateRequest
-     */
+    * @attribute dynamicData
+    * @description If true, sorting and pagination are relegated to the DataSource
+    * for handling, using the request returned by the "generateRequest" function.
+    * Each new DataSource response blows away all previous Records. False by default, so 
+    * sorting and pagination will be handled directly on the client side, without
+    * causing any new requests for data from the DataSource.
+    * @type Boolean
+    * @default true
+    */
+    this.setAttributeConfig("dynamicData", {
+        value: false,
+        validator: lang.isBoolean
+    });
+
+    /*
+    * @attribute generateRequest
+    * @description A function that converts an object literal of desired DataTable
+    * states into a value which is then passed to the DataSource's sendRequest
+    * method in order to retrieve data for those states. This function is passed
+    * an object literal of state data and a reference to the DataTable instance:
+    *     
+    * <dl>
+    *   <dt>pagination<dt>
+    *   <dd>        
+    *         <dt></dt>
+    *         <dd></dd>
+    *         <dt></dt>
+    *         <dd></dd>
+    *   </dd>
+    *   <dt>sortedBy</dt>
+    *   <dd>                
+    *         <dt>key</dt>
+    *         <dd>{String} Key of sorted Column</dd>
+    *         <dt>dir</dt>
+    *         <dd>{String} Sort direction, either YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTable.CLASS_DESC</dd>
+    *   </dd>
+    *   <dt>self</dt>
+    *   <dd>The DataTable instance</dd>
+    * </dl>
+    * @type function
+    * @default HTMLFunction
+    */
     this.setAttributeConfig("generateRequest", {
-        value: DT._generateRequest,
+        value: function(oState, oSelf) {
+            // Set defaults
+            oState = oState || {pagination:null, sortedBy:null};
+            var sort = (oState.sortedBy) ? oState.sortedBy.key : "id";
+            var dir = (oState.sortedBy) ? oState.sortedBy.dir : YAHOO.widget.DataTable.CLASS_ASC;
+            var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
+            var results = (oState.pagination) ? oState.pagination.rowsPerPage : 25;
+            
+            // Build the request
+            return  "sort=" + sort +
+                    "&dir=" + dir +
+                    "&startIndex=" + startIndex +
+                    "&results=" + results;
+        },
         validator: lang.isFunction
     });
 
@@ -1924,28 +1969,28 @@ initAttributes : function(oConfigs) {
         }
     });
 
-    /**
-     * @attribute paginationEventHandler
-     * @description For use with Paginator pagination.  A
-     * handler function that receives the changeRequest event from the
-     * configured Paginator.  The handler method will be passed these
-     * parameters:
-     * <ol>
-     * <li>oState {Object} - an object literal describing the requested
-     * pagination state</li>
-     * <li>oSelf {DataTable} - The DataTable instance.</li>
-     * </ol>
-     * 
-     * For pagination through dynamic or server side data, assign
-     * YAHOO.widget.DataTable.handleDataSourcePagination or your own custom
-     * handler.
-     * @type {function|Object}
-     * @default YAHOO.widget.DataTable.handleSimplePagination
-     */
-    this.setAttributeConfig("paginationEventHandler", {
+    /*
+    * @attribute paginationEventHandler
+    * @description For use with Paginator pagination.  A
+    * handler function that receives the changeRequest event from the
+    * configured Paginator.  The handler method will be passed these
+    * parameters:
+    * <ol>
+    * <li>oState {Object} - an object literal describing the requested
+    * pagination state</li>
+    * <li>oSelf {DataTable} - The DataTable instance.</li>
+    * </ol>
+    * 
+    * For pagination through dynamic or server side data, assign
+    * YAHOO.widget.DataTable.handleDataSourcePagination or your own custom
+    * handler.
+    * @type {function|Object}
+    * @default YAHOO.widget.DataTable.handleSimplePagination
+    */
+    /*this.setAttributeConfig("paginationEventHandler", {
         value     : DT.handleSimplePagination,
         validator : lang.isObject
-    });
+    });*/
 
     /**
     * @attribute caption
@@ -2009,13 +2054,13 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-     * @attribute renderLoopSize 	 
-     * @description A value greater than 0 enables DOM rendering of rows to be
-     * executed from a non-blocking timeout queue and sets how many rows to be
-     * rendered per timeout. Recommended for very large data sets.     
-     * @type Number 	 
-     * @default 0 	 
-     */ 	 
+    * @attribute renderLoopSize 	 
+    * @description A value greater than 0 enables DOM rendering of rows to be
+    * executed from a non-blocking timeout queue and sets how many rows to be
+    * rendered per timeout. Recommended for very large data sets.     
+    * @type Number 	 
+    * @default 0 	 
+    */ 	 
      this.setAttributeConfig("renderLoopSize", { 	 
          value: 0, 	 
          validator: lang.isNumber 	 
@@ -5667,7 +5712,7 @@ getColumnSortDir : function(oColumn) {
     // What is the Column's default sort direction?
     var sortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir) ? oColumn.sortOptions.defaultDir : DT.CLASS_ASC;
 
-    // Already sorted?
+    // Is the Column currently sorted?
     var bSorted = false;
     var oSortedBy = this.get("sortedBy");
     if(oSortedBy && (oSortedBy.key === oColumn.key)) {
@@ -5718,52 +5763,85 @@ sortColumn : function(oColumn, sDir) {
         // Get the sort dir
         var sSortDir = sDir || this.getColumnSortDir(oColumn);
 
-        // Do the actual sort
+        // Is the Column currently sorted?
         var oSortedBy = this.get("sortedBy") || {};
         var bSorted = (oSortedBy.key === oColumn.key) ? true : false;
 
         var ok = this.doBeforeSortColumn(oColumn, sSortDir);
         if(ok) {
-            if(!bSorted || sDir) {
-                // Is there a custom sort handler function defined?
-                var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
-                        // Custom sort function
-                        oColumn.sortOptions.sortFunction :
-    
-                        // Default sort function
-                        function(a, b, desc) {
-                            YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
-                            var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
-                            if(sorted === 0) {
-                                return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
-                            }
-                            else {
-                                return sorted;
-                            }
-                        };
-    
-                this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+            // Server-side sort
+            if(this.get("dynamicData")) {
+                // Reset record offset, if paginated
+                var oPagState = this.get("paginator").getState ? this.get("paginator").getState() : null;
+                if(oPagState) {
+                    oPagState.recordOffset = 0;
+                }
+                
+                // Translate the proposed page state into a DataSource request param
+                var oNewState = {
+                    pagination : oPagState, // Keep the pag state
+                    sortedBy: { // New sort state
+                        key: oColumn.key,
+                        dir: sSortDir
+                    },
+                    self: this // DataTable instance
+                };
+                var request = this.get("generateRequest")(oNewState);
+        
+                var callback = {
+                    success : this.onDataReturnSetRows,
+                    failure : this.onDataReturnSetRows,
+                    argument : oNewState, // Pass along the new state to the callback
+                    scope : this
+                };
+        
+                // Get the new data from the server
+                this._oDataSource.sendRequest(request, callback);            
             }
+            // Client-side sort
             else {
-                this._oRecordSet.reverseRecords();
-            }
-    
-            // Reset to first page if paginated
-            //TODO: Keep selection in view
-            var oPaginator = this.get('paginator');
-            if (oPaginator instanceof Pag) {
-                // TODO : is this server-side op safe?  Will fire changeRequest
-                // event mechanism
-                oPaginator.setPage(1,true);
-            }
-            else if (this.get('paginated')) {
-                // Backward compatibility
-                this.updatePaginator({currentPage:1});
-            }
-    
-            // Update UI via sortedBy
-            this.render();
-            this.set("sortedBy", {key:oColumn.key, dir:sSortDir, column:oColumn});        
+                // Sort the Records
+                if(!bSorted || sDir) {
+                    // Is there a custom sort handler function defined?
+                    var sortFnc = (oColumn.sortOptions && lang.isFunction(oColumn.sortOptions.sortFunction)) ?
+                            
+                            // Custom sort function
+                            oColumn.sortOptions.sortFunction :
+        
+                            // Default sort function
+                            function(a, b, desc) {
+                                YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
+                                var sorted = YAHOO.util.Sort.compare(a.getData(oColumn.key),b.getData(oColumn.key), desc);
+                                if(sorted === 0) {
+                                    return YAHOO.util.Sort.compare(a.getCount(),b.getCount(), desc); // Bug 1932978
+                                }
+                                else {
+                                    return sorted;
+                                }
+                            };
+        
+                    this._oRecordSet.sortRecords(sortFnc, ((sSortDir == DT.CLASS_DESC) ? true : false));
+                }
+                // Just reverse the Records
+                else {
+                    this._oRecordSet.reverseRecords();
+                }
+        
+                // Reset to first page if paginated
+                var oPaginator = this.get('paginator');
+                if (oPaginator instanceof Pag) {
+                    // Set page silently, so as not to fire change event.
+                    oPaginator.setPage(1,true);
+                }
+                else if (this.get('paginated')) {
+                    // Backward compatibility
+                    this.updatePaginator({currentPage:1});
+                }
+        
+                // Update UI via sortedBy
+                this.render();
+                this.set("sortedBy", {key:oColumn.key, dir:sSortDir, column:oColumn}); 
+            }       
             
             this.fireEvent("columnSortEvent",{column:oColumn,dir:sSortDir});
             YAHOO.log("Column \"" + oColumn.key + "\" sorted \"" + sSortDir + "\"", "info", this.toString());
@@ -7368,15 +7446,47 @@ formatCell : function(elCell, oRecord, oColumn) {
 // PAGINATION
 
 /**
- * Delegates the Paginator changeRequest events to the configured
- * handler.
+ * Responds to new Pagination states. By default, updates the UI to reflect the
+ * given page view. If "dynamicData" is true, sends a request to  the DataSource
+ * for data for the given page view, using the request from "generateRequest". 
+ *  
  * @method onPaginatorChange
- * @param {Object} an object literal describing the proposed pagination state
+ * @param oPaginatorState {Object} An object literal describing the proposed pagination state
  */
-onPaginatorChange : function (oState) {
-    var handler = this.get('paginationEventHandler');
+onPaginatorChange : function (oPaginatorState) {
+    // Server-side pagination
+    if(this.get("dynamicData")) {
+        // Reset the recordOffset to 0, since this is server-side pagination
+        //debugger;
+        
+        // Translate the proposed page state into a DataSource request param
+        var oNewState = {
+            pagination : oPaginatorState, // New pag state
+            sortedBy: this.get("sortedBy"), // Keep the sort state
+            self: this // DataTable instance
+        };
+        var request = this.get("generateRequest")(oNewState);
 
-    handler(oState,this);
+        var callback = {
+            success : this.onDataReturnSetRows,
+            failure : this.onDataReturnSetRows,
+            argument : oNewState, // Pass along the new state to the callback
+            scope : this
+        };
+
+        // Get the new data from the server
+        this._oDataSource.sendRequest(request, callback);
+    }
+    // Client-side pagination
+    else {
+        // Set the core pagination values silently (the second param)
+        // to avoid looping back through the changeRequest mechanism
+        oPaginatorState.paginator.setStartIndex(oPaginatorState.recordOffset,true);
+        oPaginatorState.paginator.setRowsPerPage(oPaginatorState.rowsPerPage,true);
+
+        // Update the UI
+        this.render();
+    }
 },
 
 
@@ -10146,6 +10256,39 @@ onDataReturnInitializeTable : function(sRequest, oResponse, oPayload) {
 },
 
 /**
+ * Receives reponse from DataSource, replaces all existing Records in 
+ * RecordSet, updates TR elements with new data, and updates state UI for 
+ * pagination and sorting from payload data, if necessary. 
+ * @method onDataReturnReplaceRows
+ * @param oRequest {MIXED} Original generated request.
+ * @param oResponse {Object} Response object.
+ * @param oPayload {MIXED} (optional) Additional argument(s)
+ */
+onDataReturnReplaceRows : function(oRequest, oResponse, oPayload) {
+    this.fireEvent("dataReturnEvent", {request:oRequest,response:oResponse,payload:oPayload});
+
+    // Pass data through abstract method for any transformations
+    var ok = this.doBeforeLoadData(oRequest, oResponse, oPayload);
+
+    // Data ok to set
+    if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
+        // Update Records
+        this._oRecordSet.reset();
+        this._oRecordSet.setRecords(oResponse.results);
+        
+        // Update state
+        this._handleDataReturnPayload(oRequest, oResponse, oPayload);
+        
+        // Update UI
+        this.render();    
+    }
+    // Error
+    else if(ok && oResponse.error) {
+        this.showTableMessage(this.get("MSG_ERROR"), DT.CLASS_ERROR);
+    }
+},
+
+/**
  * Callback function receives data from DataSource and appends to an existing
  * DataTable new Records and, if applicable, creates or updates
  * corresponding TR elements.
@@ -10164,18 +10307,23 @@ onDataReturnAppendRows : function(sRequest, oResponse, oPayload) {
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
 
+        // Handle the meta && payload
+        //this._handleDataReturnPayload(sRequest, oResponse,
+        //    this._mergeResponseMeta(oPayload, oResponse.meta));
+        //
+        
+        // Append rows
         this.addRows(oResponse.results);
 
-        // Handle the meta && payload
-        this._handleDataReturnPayload(sRequest, oResponse,
-            this._mergeResponseMeta(oPayload, oResponse.meta));
-
+        // Update state
+        this._handleDataReturnPayload(sRequest, oResponse, oPayload);
+        
         // Default the Paginator's totalRecords from the RecordSet length
-        var oPaginator = this.get('paginator');
-        if (oPaginator && oPaginator instanceof Pag &&
-            oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
-            oPaginator.set('totalRecords',this._oRecordSet.getLength());
-        }
+        //var oPaginator = this.get('paginator');
+        //if (oPaginator && oPaginator instanceof Pag &&
+        //    oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
+        //    oPaginator.set('totalRecords',this._oRecordSet.getLength());
+        //}
     }
     // Error
     else if(ok && oResponse.error) {
@@ -10201,22 +10349,23 @@ onDataReturnInsertRows : function(sRequest, oResponse, oPayload) {
 
     // Data ok to append
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        var meta = this._mergeResponseMeta({
+        //var meta = this._mergeResponseMeta({
                 // backward compatibility
-                recordInsertIndex: (oPayload ? oPayload.insertIndex || 0 : 0) },
-                oPayload, oResponse.meta);
+        //        recordInsertIndex: (oPayload ? oPayload.insertIndex || 0 : 0) },
+        //        oPayload, oResponse.meta);
 
-        this.addRows(oResponse.results, meta.insertIndex);
+        // Insert rows
+        this.addRows(oResponse.results, oResponse.meta.recordInsertIndex || 0);
 
-        // Handle the magic meta values
-        this._handleDataReturnPayload(sRequest,oResponse,meta);
+        // Update state
+        this._handleDataReturnPayload(sRequest, oResponse, oPayload);
 
         // Default the Paginator's totalRecords from the RecordSet length
-        var oPaginator = this.get('paginator');
-        if (oPaginator && oPaginator instanceof Pag &&
-            oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
-            oPaginator.set('totalRecords',this._oRecordSet.getLength());
-        }
+        //var oPaginator = this.get('paginator');
+        //if (oPaginator && oPaginator instanceof Pag &&
+        //    oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
+        //    oPaginator.set('totalRecords',this._oRecordSet.getLength());
+        //}
     }
     // Error
     else if(ok && oResponse.error) {
@@ -10240,32 +10389,22 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
 
     // Data ok to set
     if(ok && oResponse && !oResponse.error && lang.isArray(oResponse.results)) {
-        var oPaginator = this.get('paginator');
-        if (!(oPaginator instanceof Pag)) {
-            oPaginator = null;
-        }
-
-        var meta = this._mergeResponseMeta({
+        //var meta = this._mergeResponseMeta({
                 // backward compatibility
-                recordStartIndex: oPayload ? oPayload.startIndex : null },
-                oPayload, oResponse.meta);
+        //        recordStartIndex: oPayload ? oPayload.startIndex : null },
+        //        oPayload, oResponse.meta);
 
-        if (!lang.isNumber(meta.recordStartIndex)) {
-            // Default to the current page offset if paginating; 0 if not.
-            meta.recordStartIndex = oPaginator && meta.pagination ?
-                meta.pagination.recordOffset || 0 : 0;
-        }
+        // Update Records
+        var oPaginator = this.get('paginator');
+        var index = oResponse.recordStartIndex ||
+            ((oPaginator && oPaginator instanceof Pag && oPayload.pagination && oPayload.pagination.recordOffset) ?
+            oPayload.pagination.recordOffset : 0);
+        this._oRecordSet.setRecords(oResponse.results, index);
 
-        this._oRecordSet.setRecords(oResponse.results, meta.recordStartIndex);
-
-        // Handle the magic meta values
-        this._handleDataReturnPayload(oRequest,oResponse,meta);
-
-        // Default the Paginator's totalRecords from the RecordSet length
-        if (oPaginator && oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
-            oPaginator.set('totalRecords',this._oRecordSet.getLength());
-        }
-
+        // Update state
+        this._handleDataReturnPayload(oRequest, oResponse, oPayload);
+        
+        // Update UI
         this.render();
     }
     // Error
@@ -10274,7 +10413,7 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
     }
 },
 
-/**
+/*
  * Merges meta information from the response (as defined in the DataSource's
  * responseSchema.metaFields member) into the payload.  A few magic keys are
  * given special treatment: sortKey and sortDir => sorting.key|dir and all
@@ -10286,7 +10425,7 @@ onDataReturnSetRows : function(oRequest, oResponse, oPayload) {
  * @return {object} A new object containing the combined keys of all objects.
  * @private
  */
-_mergeResponseMeta : function () {
+/*_mergeResponseMeta : function () {
     var meta = {},
         a = arguments,
         i = 0,len = a.length,
@@ -10317,36 +10456,53 @@ _mergeResponseMeta : function () {
     }
 
     return meta;
-},
+},*/
 
 /**
- * Updates the DataTable with data sent in an onDataReturn* payload
+ * Updates the DataTable with state data sent in an onDataReturn* payload
  * @method _handleDataReturnPayload
  * @param oRequest {MIXED} Original generated request.
  * @param oResponse {Object} Response object.
- * @param meta {MIXED} Argument(s) provided in payload or response meta
+ * @param oPayload {MIXED} State values
  * @private
  */
-_handleDataReturnPayload : function (oRequest, oResponse, meta) {
-    if (meta) {
+_handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
+    if(oPayload) {
         // Update with any pagination information
         var oPaginator = this.get('paginator');
         if (oPaginator instanceof Pag) {
-            if (!lang.isUndefined(meta.totalRecords)) {
-                oPaginator.set('totalRecords',parseInt(meta.totalRecords,10)|0);
+            // Meta field trumps payload totalRecords
+            if (!lang.isUndefined(oResponse.meta.totalRecords)) {
+                oPaginator.set('totalRecords',parseInt(oResponse.meta.totalRecords,10)|0);
+            }
+            // Can we remove?
+            else if (!lang.isUndefined(oPayload.totalRecords)) {
+                oPaginator.set('totalRecords',parseInt(oPayload.totalRecords,10)|0);
+            }
+            
+            // Safety net to sync totalRecords value
+            if(this.get("dynamicData")) {
+                if(oPaginator.get('totalRecords') < this._oRecordSet.getLength()) {
+                    oPaginator.set('totalRecords',this._oRecordSet.getLength());
+                }
+            }
+            else {
+                if(oPaginator.get('totalRecords') !== this._oRecordSet.getLength()) {
+                    oPaginator.set('totalRecords',this._oRecordSet.getLength());
+                }                
             }
 
-            if (lang.isObject(meta.pagination)) {
-                // Set the paginator values in preparation for refresh
-                oPaginator.set('rowsPerPage',meta.pagination.rowsPerPage);
-                oPaginator.set('recordOffset',meta.pagination.recordOffset);
+            // Set the core paginator values in preparation for each render
+            if (lang.isObject(oPayload.pagination)) {
+                oPaginator.set('rowsPerPage',oPayload.pagination.rowsPerPage);
+                oPaginator.set('recordOffset',oPayload.pagination.recordOffset);
             }
         }
 
         // Update with any sorting information
-        if (meta.sorting) {
+        if (oPayload.sortedBy) {
             // Set the sorting values in preparation for refresh
-            this.set('sortedBy', meta.sorting);
+            this.set('sortedBy', oPayload.sortedBy);
         }
     }
 },
@@ -11463,18 +11619,18 @@ onEventEditCell : function(oArgs) {
     YAHOO.log("The method onEventEditCell() has been deprecated" +
         " in favor of onEventShowCellEditor()", "warn", this.toString());
     this.onEventShowCellEditor(oArgs);
-},
+}
 
-/**
+/*
  * @method onDataReturnReplaceRows
  * @deprecated Use onDataReturnInitializeTable.
  */
-onDataReturnReplaceRows : function(sRequest, oResponse) {
+/*onDataReturnReplaceRows : function(sRequest, oResponse) {
     // Backward compatibility
     YAHOO.log("The method onDataReturnReplaceRows() has been deprecated" +
             " in favor of onDataReturnInitializeTable()", "warn", this.toString());
     this.onDataReturnInitializeTable(sRequest, oResponse);
-}
+}*/
 
 /**
  * @event headerRowMouseoverEvent
