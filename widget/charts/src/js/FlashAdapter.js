@@ -149,7 +149,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		//make sure we can communicate with ExternalInterface
 		swfObj.addParam("allowScriptAccess", "always");
 		
-		if(wmode !== null)
+		if(wmode)
 		{
 			swfObj.addParam("wmode", wmode);
 		}
@@ -264,6 +264,20 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		 *		set after Flash Player has been embedded in the page.
 		 * @type String
 		 */
+		 
+		/**
+		 * @attribute altText
+		 * @description The alternative text to provide for screen readers and other assistive technology.
+		 * @type String
+		 */
+		this.getAttributeConfig("altText",
+		{
+			method: this._getAltText
+		});
+		this.setAttributeConfig("altText",
+		{
+			method: this._setAltText
+		});
 		
 		/**
 		 * @attribute swfURL
@@ -286,6 +300,28 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	_getSWFURL: function()
 	{
 		return this._swfURL;
+	},
+	
+	/**
+	 * Getter for altText attribute.
+	 *
+	 * @method _getAltText
+	 * @private
+	 */
+	_getAltText: function()
+	{
+		return this._swf.getAltText();
+	},
+
+	/**
+	 * Setter for altText attribute.
+	 *
+	 * @method _setAltText
+	 * @private
+	 */
+	_setAltText: function(value)
+	{
+		return this._swf.setAltText(value);
 	}
 });
 

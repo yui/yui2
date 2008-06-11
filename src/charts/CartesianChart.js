@@ -180,7 +180,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			if(prop == "labelFunction")
 			{
-				if(value.labelFunction != null && typeof value.labelFunction == "function")
+				if(value.labelFunction !== null && typeof value.labelFunction == "function")
 				{
 					clonedXAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
 					this._xAxisLabelFunction = clonedXAxis.labelFunction;

@@ -6,7 +6,7 @@ package com.yahoo.astra.fl.charts.axes
 	 * Implements some of the most common axis functionality
 	 * to prevent duplicate code in IAxis implementations.
 	 * 
-	 * <p>This class is not meant to be instantiated directly</p>
+	 * <p>This class is not meant to be instantiated directly! It is an abstract base class.</p>
 	 * 
 	 * @author Josh Tynjala
 	 */

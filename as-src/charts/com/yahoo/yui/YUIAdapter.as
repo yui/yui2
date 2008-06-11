@@ -1,5 +1,6 @@
 package com.yahoo.yui
 {
+	import flash.accessibility.AccessibilityProperties;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -109,6 +110,37 @@ package com.yahoo.yui
 		 */
 		private var _errorText:TextField;
 		
+		/**
+		 * @private
+		 * Alternative text for assistive technology.
+		 */
+		private var _altText:String;
+		
+	//--------------------------------------
+	//  Public Methods
+	//--------------------------------------
+		
+		/**
+		 * Gets the alternative text for assistive technology.
+		 */
+		public function getAltText():String
+		{
+			return this._altText;
+		}
+		
+		/**
+		 * Sets the alternative text for assistive technology.
+		 */
+		public function setAltText(value:String):void
+		{
+			this._altText = value;
+			var accProps:AccessibilityProperties = new AccessibilityProperties();
+			accProps.name = this._altText;
+			accProps.forceSimple = true;
+			accProps.noAutoLabeling = true;
+			this.component.accessibilityProperties = accProps;
+		}
+		
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
@@ -126,6 +158,16 @@ package com.yahoo.yui
 			{
 				Security.allowDomain(allowedDomain);
 				this.log("allowing: " + allowedDomain);
+			}
+			
+			try
+			{
+				ExternalInterface.addCallback("getAltText", getAltText);
+				ExternalInterface.addCallback("setAltText", setAltText);
+			}
+			catch(error:SecurityError)
+			{
+				//do nothing. it will be caught somewhere else.
 			}
 		}
 		

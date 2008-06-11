@@ -62,7 +62,8 @@ package com.yahoo.astra.layout
 		 * event when it is inside a layout container, the layout container will
 		 * refresh its layout.</p>
 		 * 
-		 * TODO: add parameters
+		 * @param source		The class that will fire invalidating events (ie. TextField)
+		 * @param events		An Array of event constants (ie. Event.CHANGE)
 		 * 
 		 * @example The following code demonstrates how to specify a set of invalidating events:
 		 * <listing version="3.0">
@@ -143,7 +144,9 @@ package com.yahoo.astra.layout
 		 * fire events for size changes, calling this function will allow
 		 * its size to properly affect its parent layout.
 		 * 
-		 * TODO: add parameters
+		 * @param target		The display object to resize
+		 * @param width			The new width of the display object
+		 * @param height		The new height of the display object
 		 * 
 		 * @example The following code demonstrates how to resize a
 		 * DisplayObject that doesn't fire an event when it resizes:
@@ -163,7 +166,9 @@ package com.yahoo.astra.layout
 		 * to update any property of a DisplayObject and notify its parent layout
 		 * container to refresh if no event normally indicates this is needed.
 		 * 
-		 * TODO: add parameters
+		 * @param target		The display object whose property will be changed
+		 * @param property		The name of the property.
+		 * @param value			The value of the property
 		 * 
 		 * @example The following code demonstrates how to change a
 		 * DisplayObject's property when that DisplayObject doesn't fire an

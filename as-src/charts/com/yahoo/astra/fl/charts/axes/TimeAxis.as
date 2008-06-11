@@ -4,6 +4,12 @@ package com.yahoo.astra.fl.charts.axes
 	import com.yahoo.astra.utils.DateUtil;
 	import com.yahoo.astra.utils.TimeUnit;
 
+	/**
+	 * An axis type representing a date and time range from minimum to maximum
+	 * with major and minor divisions.
+	 * 
+	 * @author Josh Tynjala
+	 */
 	public class TimeAxis extends BaseAxis implements IAxis
 	{
 		
@@ -36,6 +42,9 @@ package com.yahoo.astra.fl.charts.axes
 	//  Constructor
 	//--------------------------------------
 	
+		/**
+		 * Constructor.
+		 */
 		public function TimeAxis()
 		{
 			super();
@@ -265,6 +274,9 @@ package com.yahoo.astra.fl.charts.axes
 	//  Public Methods
 	//--------------------------------------
 	
+		/**
+		 * @inheritDoc
+		 */
 		public function updateScale(data:Array):void
 		{
 			var seriesCount:int = data.length;
@@ -325,6 +337,9 @@ package com.yahoo.astra.fl.charts.axes
 			this.renderer.minorTicks = this.createAxisData(this.minorUnit, this.minorTimeUnit);
 		}
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function valueToLocal(value:Object):Number
 		{
 			var convertedValue:Number = 0;
@@ -375,9 +390,12 @@ package com.yahoo.astra.fl.charts.axes
 	//  Protected Methods
 	//--------------------------------------
 		
+		/**
+		 * @private
+		 * Calculates the best scale.
+		 */
 		protected function resetScale():void
 		{
-			
 			if(!this._minimumSetByUser)
 			{
 				this._minimum = new Date(this._dataMinimum.valueOf());
@@ -393,6 +411,10 @@ package com.yahoo.astra.fl.charts.axes
 			this.calculateMinorUnit();
 		}
 		
+		/**
+		 * @private
+		 * Generates AxisData objects for use by the axis renderer.
+		 */
 		protected function createAxisData(unit:Number, timeUnit:String):Array
 		{
 			if(unit <= 0)
@@ -512,6 +534,10 @@ package com.yahoo.astra.fl.charts.axes
 			return date;
 		}
 		
+		/**
+		 * @private
+		 * Swaps the minimum and maximum values, if needed.
+		 */
 		private function checkMinLessThanMax():void
 		{
 			if(this._minimum.valueOf() > this._maximum.valueOf())
@@ -527,6 +553,10 @@ package com.yahoo.astra.fl.charts.axes
 			}
 		}
 		
+		/**
+		 * @private
+		 * Determines the best major unit.
+		 */
 		private function calculateMajorUnit():void
 		{
 			if(!this._majorTimeUnitSetByUser)
@@ -591,6 +621,10 @@ package com.yahoo.astra.fl.charts.axes
 			//bounds are seperated by an inordinate number of years.
 		}
 		
+		/**
+		 * @private
+		 * Determines the best minor unit.
+		 */
 		private function calculateMinorUnit():void
 		{
 			if(!this._minorTimeUnitSetByUser)
@@ -660,6 +694,10 @@ package com.yahoo.astra.fl.charts.axes
 			}
 		}
 		
+		/**
+		 * @private
+		 * Determines the best time unit.
+		 */
 		private function calculateTimeUnitSize(timeUnit:String):Number
 		{
 			switch(timeUnit)

@@ -85,8 +85,12 @@ deconcept.SWFObject.prototype =
 		var variablePairs = [];
 		var key;
 		var variables = this.getVariables();
-		for(key in variables){
-			variablePairs[variablePairs.length] = key +"="+ variables[key];
+		for(key in variables)
+		{
+			if(variables.hasOwnProperty(key))
+			{
+				variablePairs[variablePairs.length] = key +"="+ variables[key];
+			}
 		}
 		return variablePairs;
 	},
@@ -103,7 +107,13 @@ deconcept.SWFObject.prototype =
 			swfNode = '<embed type="application/x-shockwave-flash" src="'+ this.getAttribute('swf') +'" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'" style="'+ this.getAttribute('style') +'"';
 			swfNode += ' id="'+ this.getAttribute('id') +'" name="'+ this.getAttribute('id') +'" ';
 			params = this.getParams();
-			for(key in params){ swfNode += [key] +'="'+ params[key] +'" '; }
+			for(key in params)
+			{
+				if(params.hasOwnProperty(key))
+				{
+					swfNode += [key] +'="'+ params[key] +'" ';
+				}
+			}
 			pairs = this.getVariablePairs().join("&");
 			if (pairs.length > 0){ swfNode += 'flashvars="'+ pairs +'"'; }
 			swfNode += '/>';
@@ -115,8 +125,12 @@ deconcept.SWFObject.prototype =
 			swfNode = '<object id="'+ this.getAttribute('id') +'" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'" style="'+ this.getAttribute('style') +'">';
 			swfNode += '<param name="movie" value="'+ this.getAttribute('swf') +'" />';
 			params = this.getParams();
-			for(key in params) {
-			 swfNode += '<param name="'+ key +'" value="'+ params[key] +'" />';
+			for(key in params)
+			{
+				if(params.hasOwnProperty(key))
+				{
+					swfNode += '<param name="'+ key +'" value="'+ params[key] +'" />';
+				}
 			}
 			pairs = this.getVariablePairs().join("&");
 			if(pairs.length > 0) {swfNode += '<param name="flashvars" value="'+ pairs +'" />';}
@@ -470,7 +484,7 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		//make sure we can communicate with ExternalInterface
 		swfObj.addParam("allowScriptAccess", "always");
 		
-		if(wmode !== null)
+		if(wmode)
 		{
 			swfObj.addParam("wmode", wmode);
 		}
@@ -583,6 +597,20 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 		 *		set after Flash Player has been embedded in the page.
 		 * @type String
 		 */
+		 
+		/**
+		 * @attribute altText
+		 * @description The alternative text to provide for screen readers and other assistive technology.
+		 * @type String
+		 */
+		this.getAttributeConfig("altText",
+		{
+			method: this._getAltText
+		});
+		this.setAttributeConfig("altText",
+		{
+			method: this._setAltText
+		});
 		
 		/**
 		 * @attribute swfURL
@@ -605,6 +633,28 @@ YAHOO.extend(YAHOO.widget.FlashAdapter, YAHOO.util.AttributeProvider,
 	_getSWFURL: function()
 	{
 		return this._swfURL;
+	},
+	
+	/**
+	 * Getter for altText attribute.
+	 *
+	 * @method _getAltText
+	 * @private
+	 */
+	_getAltText: function()
+	{
+		return this._swf.getAltText();
+	},
+
+	/**
+	 * Setter for altText attribute.
+	 *
+	 * @method _setAltText
+	 * @private
+	 */
+	_setAltText: function(value)
+	{
+		return this._swf.setAltText(value);
 	}
 });
 
@@ -1052,12 +1102,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	},
 
 	/**
-	 * Sends the request to the DataSource.
+	 * Sends (or resends) the request to the DataSource.
 	 *
-	 * @method _refreshData
-	 * @private
+	 * @method refreshData
 	 */
-	_refreshData: function()
+	refreshData: function()
 	{
 		if(!this._initialized)
 		{
@@ -1095,11 +1144,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		else
 		{
 			var styleChanged = false;
-			
+			var i;
 			if(this._seriesLabelFunctions)
 			{
 				var count = this._seriesLabelFunctions.length;
-				for(var i = 0; i < count; i++)
+				for(i = 0; i < count; i++)
 				{
 					YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
 				}
@@ -1112,7 +1161,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 			var dataProvider = [];	
 			var seriesCount = 0;
 			var currentSeries = null;
-			var i = 0;
 			if(this._seriesDefs !== null)
 			{
 				seriesCount = this._seriesDefs.length;
@@ -1202,7 +1250,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setRequest: function(value)
 	{
 		this._request = value;
-		this._refreshData();
+		this.refreshData();
 	},
 
 	/**
@@ -1233,7 +1281,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setDataSource: function(value)
 	{	
 		this._dataSource = value;
-		this._refreshData();
+		this.refreshData();
 	},
 	
 	/**
@@ -1264,7 +1312,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setSeriesDefs: function(value)
 	{
 		this._seriesDefs = value;
-		this._refreshData();
+		this.refreshData();
 	},
 
 	/**
@@ -1330,7 +1378,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setPolling: function(value)
 	{
 		this._pollingInterval = value;
-		this._refreshData();
+		this.refreshData();
 	}
 });
 
@@ -1633,7 +1681,7 @@ YAHOO.lang.extend(YAHOO.widget.CartesianChart, YAHOO.widget.Chart,
 		{
 			if(prop == "labelFunction")
 			{
-				if(value.labelFunction != null && typeof value.labelFunction == "function")
+				if(value.labelFunction !== null && typeof value.labelFunction == "function")
 				{
 					clonedXAxis.labelFunction = YAHOO.widget.FlashAdapter.createProxyFunction(value.labelFunction);
 					this._xAxisLabelFunction = clonedXAxis.labelFunction;

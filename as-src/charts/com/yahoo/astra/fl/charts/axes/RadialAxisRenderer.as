@@ -61,6 +61,9 @@ package com.yahoo.astra.fl.charts.axes
 	//  Constructor
 	//--------------------------------------
 	
+		/**
+		 * Constructor.
+		 */
 		public function RadialAxisRenderer()
 		{
 			super();
@@ -122,32 +125,6 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			this._minorTicks = value;
 			this.invalidate();
-		}
-		
-		/**
-		 * @private
-		 * Storage for the title property.
-		 */
-		private var _title:String = "";
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function get title():String
-		{
-			return this._title;
-		}
-		
-		/**
-		 * @private
-		 */
-		public function set title(value:String):void
-		{
-			if(this._title != value)
-			{
-				this._title = value;
-				this.invalidate();
-			}
 		}
 		
 	//--------------------------------------

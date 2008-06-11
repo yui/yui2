@@ -1,11 +1,13 @@
 package com.yahoo.astra.fl.charts.axes
 {	
+	import com.yahoo.astra.utils.DynamicRegistration;
+	import com.yahoo.astra.utils.GeomUtil;
 	import com.yahoo.astra.utils.NumberUtil;
 	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
 	
-	import flash.events.Event;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -15,6 +17,7 @@ package com.yahoo.astra.fl.charts.axes
 	 * The default axis renderer for a cartesian chart.
 	 * 
 	 * @see com.yahoo.astra.fl.charts.CartesianChart
+	 * @author Josh Tynjala
 	 */
 	public class DefaultAxisRenderer extends UIComponent implements ICartesianAxisRenderer
 	{
@@ -38,6 +41,7 @@ package com.yahoo.astra.fl.charts.axes
 			labelDistance: 2,
 			embedFonts: false,
 			hideOverlappingLabels: true,
+			labelRotation: 0,
 			
 			//title
 			showTitle: true,
@@ -156,6 +160,10 @@ package com.yahoo.astra.fl.charts.axes
 			return this._contentBounds;
 		}
 		
+		/**
+		 * @private
+		 * Storage for the ticks property.
+		 */
 		private var _ticks:Array = [];
 		
 		/**
@@ -166,12 +174,19 @@ package com.yahoo.astra.fl.charts.axes
 			return this._ticks;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function set ticks(value:Array):void
 		{
 			this._ticks = value;
 			this.invalidate(InvalidationType.DATA);
 		}
 		
+		/**
+		 * @private
+		 * Storage for the minorTicks property.
+		 */
 		private var _minorTicks:Array = [];
 		
 		/**
@@ -182,6 +197,9 @@ package com.yahoo.astra.fl.charts.axes
 			return this._minorTicks;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function set minorTicks(value:Array):void
 		{
 			this._minorTicks = value;
@@ -218,15 +236,20 @@ package com.yahoo.astra.fl.charts.axes
 	//  Public Methods
 	//--------------------------------------
 	
+		/**
+		 * @inheritDoc
+		 */
 		public function updateBounds():void
 		{
 			var showLabels:Boolean = this.getStyleValue("showLabels") as Boolean;
 			var labelDistance:Number = this.getStyleValue("labelDistance") as Number;
 			var textFormat:TextFormat = this.getStyleValue("textFormat") as TextFormat;
-			var embedFonts:Boolean = this.getStyleValue("embedFonts") as TextFormat;
+			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
+			var embedFonts:Boolean = this.getStyleValue("embedFonts") as Boolean;
+			labelRotation = Math.max(-90, Math.min(labelRotation, 90));
 			
 			this.createCache();
-			this.updateLabels(this.ticks, showLabels, textFormat, embedFonts);
+			this.updateLabels(this.ticks, showLabels, textFormat, labelDistance, labelRotation, embedFonts);
 			this.clearCache();
 			
 			this.updateTitle();
@@ -238,6 +261,9 @@ package com.yahoo.astra.fl.charts.axes
 	//  Protected Methods
 	//--------------------------------------
 		
+		/**
+		 * @private
+		 */
 		override protected function configUI():void
 		{
 			super.configUI();
@@ -250,6 +276,9 @@ package com.yahoo.astra.fl.charts.axes
 			}
 		}
 		
+		/**
+		 * @private
+		 */
 		override protected function draw():void
 		{
 			this.graphics.clear();
@@ -273,12 +302,15 @@ package com.yahoo.astra.fl.charts.axes
 				}, this);
 			}
 			
+			this.drawAxis();
+			
 			var showLabels:Boolean = this.getStyleValue("showLabels") as Boolean;
 			var labelDistance:Number = this.getStyleValue("labelDistance") as Number;
 			var textFormat:TextFormat = this.getStyleValue("textFormat") as TextFormat;
-			this.drawLabels(this.ticks, showLabels, labelDistance);
-			
-			this.drawAxis();
+			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
+			var embedFonts:Boolean = this.getStyleValue("embedFonts") as Boolean;
+			labelRotation = Math.max(-90, Math.min(labelRotation, 90));
+			this.positionLabels(this.ticks, showLabels, labelDistance, labelRotation, embedFonts);
 			
 			var tickPosition:String = this.getStyleValue("tickPosition") as String;
 			var tickLength:Number = this.getStyleValue("tickLength") as Number;
@@ -295,6 +327,10 @@ package com.yahoo.astra.fl.charts.axes
 			super.draw();	
 		}
 		
+		/**
+		 * @private
+		 * Updates the title text and styles.
+		 */
 		protected function updateTitle():void
 		{
 			var showTitle:Boolean = this.getStyleValue("showTitle") as Boolean;
@@ -318,6 +354,7 @@ package com.yahoo.astra.fl.charts.axes
 		
 		/**
 		 * @private
+		 * Positions the title along the axis.
 		 */
 		protected function positionTitle():void
 		{
@@ -342,6 +379,7 @@ package com.yahoo.astra.fl.charts.axes
 		}
 	
 		/**
+		 * @private
 		 * Draws the axis origin line.
 		 */
 		protected function drawAxis():void
@@ -359,22 +397,26 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				//we round these values because that's what the Flash CS3 components do
 				//with positions
-				var verticalX:Number = Math.round(this.contentBounds.x);
-				var verticalStart:Number = Math.round(this.contentBounds.y);
-				var verticalEnd:Number = Math.round(this.contentBounds.y + this.contentBounds.height);
+				var verticalX:Number = this.contentBounds.x;
+				var verticalStart:Number = this.contentBounds.y;
+				var verticalEnd:Number = this.contentBounds.y + this.contentBounds.height;
 				this.graphics.moveTo(verticalX, verticalStart);
 				this.graphics.lineTo(verticalX, verticalEnd);
 			}
 			else //horizontal
 			{
-				var horizontalY:Number = Math.round(this.contentBounds.y + this.contentBounds.height);
-				var horizontalStart:Number = Math.round(this.contentBounds.x);
-				var horizontalEnd:Number = Math.round(this.contentBounds.x + this.contentBounds.width);
+				var horizontalY:Number = this.contentBounds.y + this.contentBounds.height;
+				var horizontalStart:Number = this.contentBounds.x;
+				var horizontalEnd:Number = this.contentBounds.x + this.contentBounds.width;
 				this.graphics.moveTo(horizontalStart, horizontalY);
 				this.graphics.lineTo(horizontalEnd, horizontalY);
 			}
 		}
 		
+		/**
+		 * @private
+		 * Draws a set of ticks on the axis.
+		 */
 		protected function drawTicks(data:Array, showTicks:Boolean, tickPosition:String,
 			tickLength:Number, tickWeight:Number, tickColor:uint):void
 		{
@@ -404,7 +446,7 @@ package com.yahoo.astra.fl.charts.axes
 				{
 					position += this.contentBounds.x;
 				}
-				position = Math.round(position);
+				position = position;
 				switch(tickPosition)
 				{
 					case TickPosition.OUTSIDE:
@@ -453,59 +495,20 @@ package com.yahoo.astra.fl.charts.axes
 			}
 		}
 		
-		protected function drawLabels(data:Array, showLabels:Boolean, labelDistance:Number):void
-		{	
-			if(!showLabels)
-			{
-				return;
-			}
-			
-			var dataCount:int = data.length;
-			for(var i:int = 0; i < dataCount; i++)
-			{
-				if(this.labelTextFields.length < i)
-				{
-					break;
-				}
-				
-				var axisData:AxisData = AxisData(data[i]);
-				if(isNaN(axisData.position))
-				{
-					//skip bad positions
-					continue;
-				}
-				
-				var position:Number = axisData.position;
-				var label:TextField = TextField(this.labelTextFields[i]);
-				if(this.orientation == AxisOrientation.VERTICAL)
-				{
-					position += this.contentBounds.y;
-					if(showLabels)
-					{
-						label.x = Math.round(this.contentBounds.x - label.width - labelDistance);
-						label.y = Math.round(position - label.height / 2);
-					}
-				}
-				else
-				{
-					position += this.contentBounds.x;
-					if(showLabels)
-					{
-						label.x = Math.round(position - label.width / 2);
-						label.y = Math.round(this.contentBounds.height + labelDistance);
-					}
-				}
-			}
-			
-			this.handleOverlappingLabels();
-		}
-		
+		/**
+		 * @private
+		 * Saves the label TextFields so that they may be reused.
+		 */
 		protected function createCache():void
 		{
 			this._labelCache = this.labelTextFields.concat();
 			this.labelTextFields = [];
 		}
 		
+		/**
+		 * @private
+		 * Removes unused label TextFields.
+		 */
 		protected function clearCache():void
 		{
 			var cacheLength:int = this._labelCache.length;
@@ -516,6 +519,10 @@ package com.yahoo.astra.fl.charts.axes
 			}
 		}
 		
+		/**
+		 * @private
+		 * If labels overlap, some may need to be hidden.
+		 */
 		protected function handleOverlappingLabels():void
 		{
 			var showLabels:Boolean = this.getStyleValue("showLabels");
@@ -527,7 +534,7 @@ package com.yahoo.astra.fl.charts.axes
 			
 			//sort the labels array so that they're in visual order
 			//it doesn't matter if we change the indexes in this Array
-			if(this.orientation == AxisOrientation.VERTICAL)
+			/*if(this.orientation == AxisOrientation.VERTICAL)
 			{
 				//be sure to reverse if we have a vertical orientation
 				//because the axis starts from the bottom
@@ -536,43 +543,54 @@ package com.yahoo.astra.fl.charts.axes
 			else
 			{
 				this.labelTextFields = this.labelTextFields.sortOn("x", Array.NUMERIC);
-			}
+			}*/
 			
+			var labelRotation:Number = this.getStyleValue("labelRotation") as Number;
 			var lastVisibleLabel:TextField;
 			var labelCount:int = this.labelTextFields.length;
 			for(var i:int = 0; i < labelCount; i++)
 			{
-				var label:TextField = TextField(this.labelTextFields[i]);
+				var index:int = labelRotation >= 0 ? i : (labelCount - i - 1);
+				var label:TextField = TextField(this.labelTextFields[index]);
 				label.visible = true;
 				if(lastVisibleLabel)
 				{
-					if(this.orientation == AxisOrientation.VERTICAL)
+					if(this.orientation == AxisOrientation.HORIZONTAL)
 					{
-						if(label.y + label.height > lastVisibleLabel.y)
+						if(labelRotation >= 0)
 						{
-							//keep the last label, and hide the one before it (unless that's the minimum)
-							if(i == labelCount - 1)
-							{
-								lastVisibleLabel.visible = this.labelTextFields.indexOf(lastVisibleLabel) == 0;
-							}
-							else
-							{
-								label.visible = false;
-							}	
+							var xDifference:Number = label.x - lastVisibleLabel.x;
 						}
-					}
-					else
-					{
-						if(lastVisibleLabel.x + lastVisibleLabel.width > label.x)
+						else
 						{
-							//keep the last label, and hide the one before it (unless that's the minimum)
-							if(i == labelCount - 1)
-							{
-								lastVisibleLabel.visible = this.labelTextFields.indexOf(lastVisibleLabel) == 0;
-							}
-							else
+							xDifference = (lastVisibleLabel.x + lastVisibleLabel.textWidth) - (label.x + label.textWidth);
+						}
+						if(lastVisibleLabel.textWidth > xDifference)
+						{
+							var offset:Point = Point.polar(xDifference, GeomUtil.degreesToRadians(labelRotation));
+							if(Math.abs(offset.y) <= label.textHeight)
 							{
 								label.visible = false;
+							}
+						}
+						
+					}
+					else //vertical
+					{
+						if(labelRotation >= 0)
+						{
+							var yDifference:Number = lastVisibleLabel.y - label.y;
+						}
+						else
+						{
+							yDifference = (lastVisibleLabel.y + lastVisibleLabel.textHeight) - (label.y + label.textHeight);
+						}
+						if(lastVisibleLabel.textHeight > yDifference)
+						{
+							offset = Point.polar(yDifference, GeomUtil.degreesToRadians(labelRotation));
+							if(offset.x <= label.textWidth)
+							{
+								//label.visible = false;
 							}
 						}
 					}
@@ -584,7 +602,11 @@ package com.yahoo.astra.fl.charts.axes
 			}
 		}
 		
-		protected function updateLabels(data:Array, showLabels:Boolean, textFormat:TextFormat, embedFonts:Boolean):void
+		/**
+		 * @private
+		 * Creates the labels, sets their text and styles them. Positions the labels too.
+		 */
+		protected function updateLabels(data:Array, showLabels:Boolean, textFormat:TextFormat, labelDistance:Number, labelRotation:Number, embedFonts:Boolean):void
 		{
 			if(!showLabels)
 			{
@@ -595,7 +617,8 @@ package com.yahoo.astra.fl.charts.axes
 			for(var i:int = 0; i < dataCount; i++)
 			{
 				var axisData:AxisData = AxisData(data[i]);
-				if(isNaN(axisData.position))
+				var position:Number = axisData.position;
+				if(isNaN(position))
 				{
 					//skip bad positions
 					continue;
@@ -604,11 +627,96 @@ package com.yahoo.astra.fl.charts.axes
 				var label:TextField = this.getLabel();
 				label.defaultTextFormat = textFormat;
 				label.embedFonts = embedFonts;
+				label.rotation = 0;
 				label.text = axisData.label;
 				this.labelTextFields.push(label);
 			}
+			this.positionLabels(data, showLabels, labelDistance, labelRotation, embedFonts);
 		}
 		
+		/**
+		 * @private
+		 * Positions a set of labels on the axis.
+		 */
+		protected function positionLabels(labels:Array, showLabels:Boolean, labelDistance:Number, labelRotation:Number, embedFonts:Boolean):void
+		{
+			var labelCount:int = this.labelTextFields.length;
+			for(var i:int = 0; i < labelCount; i++)
+			{
+				var label:TextField = TextField(this.labelTextFields[i]);
+				label.rotation = 0;
+				var axisData:AxisData = AxisData(this.ticks[i]);
+				var position:Number = axisData.position;
+				if(this.orientation == AxisOrientation.VERTICAL)
+				{
+					position += this.contentBounds.y;
+					if(showLabels)
+					{
+						label.x = this.contentBounds.x - label.width - labelDistance;
+						label.y = position - label.height / 2;
+					}
+					
+					if(!embedFonts || labelRotation == 0)
+					{
+						//do nothing. already ideally positioned
+					}
+					else if(labelRotation < 90 && labelRotation > 0)
+					{
+						label.x -= (label.height * labelRotation / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+					else if(labelRotation > -90 && labelRotation < 0)
+					{
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+					else if(labelRotation == -90)
+					{
+						label.y -= label.width / 2;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+					else //90
+					{
+						label.y += label.width / 2;
+						label.x -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+				}
+				else //horizontal
+				{
+					position += this.contentBounds.x;
+					if(showLabels)
+					{
+						label.y = this.contentBounds.height + labelDistance;
+					}
+					
+					if(embedFonts && labelRotation > 0)
+					{
+						label.x = position;
+						label.y -= (label.height * labelRotation / 180);
+						DynamicRegistration.rotate(label, new Point(0, label.height / 2), labelRotation);
+					}
+					else if(embedFonts && labelRotation < 0)
+					{
+						label.x = position - label.width;
+						label.y -= (label.height * Math.abs(labelRotation) / 180);
+						DynamicRegistration.rotate(label, new Point(label.width, label.height / 2), labelRotation);
+					}
+					else //labelRotation == 0
+					{
+						label.x = position - label.width / 2;
+					}
+				}
+			}
+			
+			this.handleOverlappingLabels();
+		}
+		
+		/**
+		 * @private
+		 * Either creates a new label TextField or retrieves one from the cache.
+		 */
 		protected function getLabel():TextField
 		{
 			if(this._labelCache.length > 0)
@@ -623,10 +731,12 @@ package com.yahoo.astra.fl.charts.axes
 		}
 		
 		/**
+		 * @private
 		 * Determines the rectangular bounds where data may be drawn within this axis.
 		 */
 		protected function calculateContentBounds():void
 		{
+			var oldContentBounds:Rectangle = this.contentBounds;
 			this._contentBounds = new Rectangle(0, 0, this.width, this.height);
 			
 			var overflowEnabled:Boolean = this.getStyleValue("overflowEnabled");
@@ -635,26 +745,66 @@ package com.yahoo.astra.fl.charts.axes
 				return;
 			}
 			
+			var left:Number = 0;
+			var top:Number = 0;
 			var labelCount:int = this.labelTextFields.length;
-			if(labelCount > 0)
-			{
-				var firstLabel:TextField = this.labelTextFields[0] as TextField;
-				var lastLabel:TextField = this.labelTextFields[this.labelTextFields.length - 1] as TextField;
-			}
-			
-			var maxLabelSize:Number = 0;
 			for(var i:int = 0; i < labelCount; i++)
 			{
 				var label:TextField = TextField(this.labelTextFields[i]);
-				if(this.orientation == AxisOrientation.VERTICAL)
+				if(!label.visible)
 				{
-					maxLabelSize = Math.max(label.width, maxLabelSize);
+					continue;
 				}
-				else
+				var labelBounds:Rectangle = label.getBounds(this);
+				var xLabelOffset:Number = oldContentBounds.x - labelBounds.x;
+				if(xLabelOffset > 0)
 				{
-					maxLabelSize = Math.max(label.height, maxLabelSize);
+					left = Math.max(left, xLabelOffset);
+				}
+				var yLabelOffset:Number = oldContentBounds.y - labelBounds.y;
+				if(yLabelOffset > 0)
+				{
+					top = Math.max(top, yLabelOffset);
 				}
 			}
+			
+			left = Math.min(left, this._contentBounds.width);
+			top = Math.min(top, this._contentBounds.height);
+			this._contentBounds.x += left;
+			this._contentBounds.y += top;
+			this._contentBounds.width -= left;
+			this._contentBounds.height -= top;
+			
+			
+			var right:Number = 0;
+			var bottom:Number = 0;
+			for(i = 0; i < labelCount; i++)
+			{
+				label = TextField(this.labelTextFields[i]);
+				if(!label.visible)
+				{
+					continue;
+				}
+				labelBounds = label.getBounds(this);
+				var xLabelOverflow:Number = (labelBounds.x + labelBounds.width) - (oldContentBounds.x + oldContentBounds.width);
+				if(xLabelOverflow > 0)
+				{
+					right = Math.max(right, xLabelOverflow);
+				}
+				var yLabelOverflow:Number = (labelBounds.y + labelBounds.height) - (oldContentBounds.y + oldContentBounds.height);
+				if(yLabelOverflow > 0)
+				{
+					bottom = Math.max(bottom, yLabelOverflow);
+				}
+			}
+			
+			//don't let the axis calculate a negative size.
+			//this should let it fail gracefully
+			right = Math.min(right, this._contentBounds.width);
+			bottom = Math.min(bottom, this._contentBounds.height);
+			this._contentBounds.width -= right;
+			this._contentBounds.height -= bottom;
+
 			
 			var showTicks:Boolean = this.getStyleValue("showTicks") as Boolean;
 			var showMinorTicks:Boolean = this.getStyleValue("showMinorTicks") as Boolean;
@@ -662,23 +812,8 @@ package com.yahoo.astra.fl.charts.axes
 			var minorTickLength:Number = this.getStyleValue("minorTickLength") as Number;
 			var tickPosition:String = this.getStyleValue("tickPosition") as String;
 			var minorTickPosition:String = this.getStyleValue("minorTickPosition") as String;
-			var labelDistance:Number = this.getStyleValue("labelDistance") as Number;
 			if(this.orientation == AxisOrientation.VERTICAL)
 			{
-				var firstLabelHeight:Number = 0;
-				var lastLabelHeight:Number = 0;
-				if(this.labelTextFields.length > 0)
-				{
-					if(firstLabel.text.length > 0) firstLabelHeight = firstLabel.height;
-					if(lastLabel.text.length > 0) lastLabelHeight = lastLabel.height;
-				}
-				
-				var contentBoundsX:Number = 0;
-				if(this.labelTextFields.length > 0)
-				{
-					contentBoundsX = maxLabelSize + labelDistance;
-				}
-				
 				var tickContentBoundsX:Number = 0;
 				if(showTicks)
 				{
@@ -699,38 +834,12 @@ package com.yahoo.astra.fl.charts.axes
 							tickContentBoundsX = Math.max(tickContentBoundsX, minorTickLength);
 					}
 				}
-				contentBoundsX += tickContentBoundsX;
-				this._contentBounds.x += contentBoundsX;
-				this._contentBounds.width -= contentBoundsX;
-				
-				var contentBoundsY:Number = 0;
-				if(this.labelTextFields.length > 0) contentBoundsY = firstLabelHeight / 2;
-				this._contentBounds.y += contentBoundsY;
-				this._contentBounds.height -=  contentBoundsY;
-				
-				if(this.labelTextFields.length > 0) this._contentBounds.height -= lastLabelHeight / 2
+				tickContentBoundsX = Math.min(tickContentBoundsX, this.contentBounds.width);
+				this._contentBounds.x += tickContentBoundsX;
+				this._contentBounds.width -= tickContentBoundsX;
 			}
 			else
-			{
-				var firstLabelWidth:Number = 0;
-				var lastLabelWidth:Number = 0;
-				if(this.labelTextFields.length > 0)
-				{
-					if(firstLabel.text.length > 0) firstLabelWidth = firstLabel.width;
-					if(lastLabel.text.length > 0) lastLabelWidth = lastLabel.width;
-				}
-				
-				contentBoundsX = 0;
-				if(this.labelTextFields.length > 0) contentBoundsX = firstLabelWidth / 2;
-				this._contentBounds.x += contentBoundsX;
-				this._contentBounds.width -= contentBoundsX;
-				
-				if(this.labelTextFields.length > 0)
-				{
-					this._contentBounds.width -= lastLabelWidth / 2;
-					this._contentBounds.height -= (maxLabelSize + labelDistance);
-				}
-				
+			{	
 				var tickHeight:Number = 0;
 				if(showTicks)
 				{
@@ -753,24 +862,48 @@ package com.yahoo.astra.fl.charts.axes
 					}
 				}
 				
+				tickHeight = Math.min(tickHeight, this.contentBounds.height);
 				this._contentBounds.height -= tickHeight;
 			}
 			
-			
+			//account for the axis title
 			var showTitle:Boolean = this.getStyleValue("showTitle") as Boolean;
-			if(!showTitle || !this.title)
+			if(showTitle && this.title)
 			{
-				return;
+				if(this.orientation == AxisOrientation.VERTICAL)
+				{
+					var titleContentBoundsX:Number = Math.min(this.titleTextField.width, this.contentBounds.width);
+					this._contentBounds.x += titleContentBoundsX;
+					this._contentBounds.width -= titleContentBoundsX;
+				}
+				else
+				{
+					var titleHeight:Number = Math.min(this.titleTextField.height, this.contentBounds.height);
+					this._contentBounds.height -= titleHeight;
+				}
 			}
 			
-			if(this.orientation == AxisOrientation.VERTICAL)
+			//correct for CS3 pixel rounding
+			var oldX:Number = this._contentBounds.x;
+			this._contentBounds.x = Math.round(this._contentBounds.x);
+			if(oldX > this._contentBounds.x)
 			{
-				this._contentBounds.x += this.titleTextField.width;
-				this._contentBounds.width -= this.titleTextField.width;
-			}
+				this._contentBounds.width = Math.floor(this._contentBounds.width);
+			} 
 			else
 			{
-				this._contentBounds.height -= this.titleTextField.height;
+				this._contentBounds.width = Math.ceil(this._contentBounds.width);
+			}
+			
+			var oldY:Number = this._contentBounds.y;
+			this._contentBounds.y = Math.round(this._contentBounds.y);
+			if(oldY > this._contentBounds.y)
+			{
+				this._contentBounds.height = Math.floor(this._contentBounds.height);
+			} 
+			else
+			{
+				this._contentBounds.height = Math.ceil(this._contentBounds.height);
 			}
 		}
 	}

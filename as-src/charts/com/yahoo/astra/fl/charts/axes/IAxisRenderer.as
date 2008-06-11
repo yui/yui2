@@ -9,6 +9,11 @@ package com.yahoo.astra.fl.charts.axes
 	 */
 	public interface IAxisRenderer
 	{
+		
+	//--------------------------------------
+	//  Properties
+	//--------------------------------------
+	
 		/**
 		 * The total length of the axis renderer, in pixels.
 		 */

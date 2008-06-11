@@ -2,8 +2,18 @@ package com.yahoo.astra.fl.charts.axes
 {
 	import flash.geom.Rectangle;
 	
+	/**
+	 * Interface for a cartesian chart's axis renderers.
+	 * 
+	 * @see com.yahoo.astra.fl.charts.CartesianChart
+	 */
 	public interface ICartesianAxisRenderer extends IAxisRenderer
 	{
+		
+	//--------------------------------------
+	//  Properties
+	//--------------------------------------
+	
 		/**
 		 * Determines if the axis is displayed vertically or horizontally.
 		 * 
@@ -33,6 +43,10 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		function get contentBounds():Rectangle;
 		
+	//--------------------------------------
+	//  Methods
+	//--------------------------------------
+	
 		/**
 		 * Calculates the <code>contentBounds</code> value for the axis renderer.
 		 * Seperating this function from the draw method optimizes processing time,

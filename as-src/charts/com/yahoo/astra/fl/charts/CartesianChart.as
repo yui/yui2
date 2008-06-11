@@ -16,6 +16,7 @@ package com.yahoo.astra.fl.charts
 	import fl.core.UIComponent;
 	
 	import flash.display.DisplayObject;
+	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -89,6 +90,17 @@ package com.yahoo.astra.fl.charts
 	 * @default true
 	 */
 	[Style(name="verticalAxisHideOverlappingLabels", type="Boolean")]
+    
+	/** 
+	 * The angle, in degrees, of the labels on the vertical axis. May be a value
+	 * between <code>-90</code> and <code>90</code>. The font must be embedded
+	 * in the SWF and the <code>embedFonts</code> style on the chart must be set
+	 * to <code>true</code> before labels may be rotated. If these conditions
+	 * aren't met, the labels will not be rotated.
+	 * 
+	 * @default 0
+	 */
+	[Style(name="verticalAxisLabelRotation", type="Number")]
     
     //-- Grid Lines - Vertical Axis
     
@@ -299,6 +311,17 @@ package com.yahoo.astra.fl.charts
 	 */
 	[Style(name="horizontalAxisHideOverlappingLabels", type="Boolean")]
     
+	/** 
+	 * The angle, in degrees, of the labels on the horizontal axis. May be a value
+	 * between <code>-90</code> and <code>90</code>. The font must be embedded
+	 * in the SWF and the <code>embedFonts</code> style on the chart must be set
+	 * to <code>true</code> before labels may be rotated. If these conditions
+	 * aren't met, the labels will not be rotated.
+	 * 
+	 * @default 0
+	 */
+	[Style(name="horizontalAxisLabelRotation", type="Number")]
+    
     //-- Grid Lines - Horizontal Axis
     
 	/**
@@ -483,6 +506,7 @@ package com.yahoo.astra.fl.charts
 			horizontalAxisTextFormat: null,
 			horizontalAxisLabelDistance: 2,
 			horizontalAxisHideOverlappingLabels: true,
+			horizontalAxisLabelRotation: 0,
 			
 			//grid lines
 			horizontalAxisGridLinesRenderer: DefaultGridLinesRenderer,
@@ -520,6 +544,7 @@ package com.yahoo.astra.fl.charts
 			verticalAxisTextFormat: null,
 			verticalAxisLabelDistance: 2,
 			verticalAxisHideOverlappingLabels: true,
+			verticalAxisLabelRotation: 0,
 			
 			//grid lines
 			verticalAxisGridLinesRenderer: DefaultGridLinesRenderer,
@@ -555,6 +580,7 @@ package com.yahoo.astra.fl.charts
 			textFormat: "textFormat",
 			embedFonts: "embedFonts",
 			hideOverlappingLabels: "horizontalAxisHideOverlappingLabels",
+			labelRotation: "horizontalAxisLabelRotation",
 			showTitle: "showHorizontalAxisTitle",
 			titleTextFormat: "horizontalAxisTitleTextFormat",
 			labelDistance: "horizontalAxisLabelDistance",
@@ -598,6 +624,7 @@ package com.yahoo.astra.fl.charts
 			textFormat: "textFormat",
 			embedFonts: "embedFonts",
 			hideOverlappingLabels: "verticalAxisHideOverlappingLabels",
+			labelRotation: "verticalAxisLabelRotation",
 			showTitle: "showVerticalAxisTitle",
 			titleTextFormat: "verticalAxisTitleTextFormat",
 			labelDistance: "verticalAxisLabelDistance",
@@ -1185,7 +1212,6 @@ package com.yahoo.astra.fl.charts
 			this.verticalAxisRenderer.title = this.verticalAxis.title;
 			
 			this.updateAxisScalesAndBounds();
-				
 			horizontalAxisRenderer.drawNow();
 			verticalAxisRenderer.drawNow();
 			
@@ -1202,6 +1228,8 @@ package com.yahoo.astra.fl.charts
 			//reset the ticks and minor ticks (start with a clean axis)
 			this.horizontalAxisRenderer.ticks = [];
 			this.horizontalAxisRenderer.minorTicks = [];
+			this.verticalAxisRenderer.ticks = [];
+			this.verticalAxisRenderer.minorTicks = [];
 			
 			/*
 				we need to run this a few times because the axis positions and
@@ -1218,13 +1246,22 @@ package com.yahoo.astra.fl.charts
 				you're probably only running into rounding errors at that point,
 				so there's little reason to continue anyway.
 			*/
-			for(var i:int = 0; i < 3; i++)
+			this.calculateContentBounds();
+			
+			var count:int = 0;
+			do
 			{
-				this.calculateContentBounds();
-				
+				var hOldContentBounds:Rectangle = this.horizontalAxisRenderer.contentBounds.clone();
+				var vOldContentBounds:Rectangle = this.verticalAxisRenderer.contentBounds.clone();
 				this._horizontalAxis.updateScale(this.series);
 				this._verticalAxis.updateScale(this.series);
+				this.calculateContentBounds();
+				count++;
 			}
+			//if count == 10, we're close enough
+			while(count < 10 &&
+				(!hOldContentBounds.equals(this.horizontalAxisRenderer.contentBounds) ||
+				!vOldContentBounds.equals(this.verticalAxisRenderer.contentBounds)))
 		}
 		
 		/**
@@ -1256,16 +1293,17 @@ package com.yahoo.astra.fl.charts
 			var hBottom:Number = horizontalAxisRenderer.height - horizontalBounds.height - horizontalBounds.y;
 			var vRight:Number = verticalAxisRenderer.width - verticalBounds.width - verticalBounds.x;
 			var vBottom:Number = verticalAxisRenderer.height - verticalBounds.height - verticalBounds.y;
+			var contentBottom:Number = Math.max(hBottom, vBottom);
+			var contentRight:Number = Math.max(hRight, vRight);
 			
 			horizontalAxisRenderer.x = contentPadding + this._contentBounds.x - horizontalBounds.x;
 			horizontalAxisRenderer.y = contentPadding + this._contentBounds.y - horizontalBounds.y;
-			horizontalAxisRenderer.width = axisWidth - Math.max(0, vRight - hRight) - (this._contentBounds.x - horizontalBounds.x);
-			horizontalAxisRenderer.height = axisHeight - Math.max(0, vBottom - hBottom) - (this._contentBounds.y - horizontalBounds.y);
-			
+			horizontalAxisRenderer.width = axisWidth - (contentRight - hRight) - (this._contentBounds.x - horizontalBounds.x);
+			horizontalAxisRenderer.height = axisHeight - (contentBottom - hBottom) - (this._contentBounds.y - horizontalBounds.y);
 			verticalAxisRenderer.x = contentPadding + this._contentBounds.x - verticalBounds.x;
 			verticalAxisRenderer.y = contentPadding + this._contentBounds.y - verticalBounds.y;
-			verticalAxisRenderer.width = axisWidth - Math.max(0, hRight - vRight) - (this._contentBounds.x - verticalBounds.x);
-			verticalAxisRenderer.height = axisHeight - Math.max(0, hBottom - vBottom) - (this._contentBounds.y - verticalBounds.y);
+			verticalAxisRenderer.width = axisWidth - (contentRight - vRight) - (this._contentBounds.x - verticalBounds.x);
+			verticalAxisRenderer.height = axisHeight - (contentBottom - vBottom) - (this._contentBounds.y - verticalBounds.y);
 		}
 		
 		/**

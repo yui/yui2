@@ -85,8 +85,12 @@ deconcept.SWFObject.prototype =
 		var variablePairs = [];
 		var key;
 		var variables = this.getVariables();
-		for(key in variables){
-			variablePairs[variablePairs.length] = key +"="+ variables[key];
+		for(key in variables)
+		{
+			if(variables.hasOwnProperty(key))
+			{
+				variablePairs[variablePairs.length] = key +"="+ variables[key];
+			}
 		}
 		return variablePairs;
 	},
@@ -103,7 +107,13 @@ deconcept.SWFObject.prototype =
 			swfNode = '<embed type="application/x-shockwave-flash" src="'+ this.getAttribute('swf') +'" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'" style="'+ this.getAttribute('style') +'"';
 			swfNode += ' id="'+ this.getAttribute('id') +'" name="'+ this.getAttribute('id') +'" ';
 			params = this.getParams();
-			for(key in params){ swfNode += [key] +'="'+ params[key] +'" '; }
+			for(key in params)
+			{
+				if(params.hasOwnProperty(key))
+				{
+					swfNode += [key] +'="'+ params[key] +'" ';
+				}
+			}
 			pairs = this.getVariablePairs().join("&");
 			if (pairs.length > 0){ swfNode += 'flashvars="'+ pairs +'"'; }
 			swfNode += '/>';
@@ -115,8 +125,12 @@ deconcept.SWFObject.prototype =
 			swfNode = '<object id="'+ this.getAttribute('id') +'" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'+ this.getAttribute('width') +'" height="'+ this.getAttribute('height') +'" style="'+ this.getAttribute('style') +'">';
 			swfNode += '<param name="movie" value="'+ this.getAttribute('swf') +'" />';
 			params = this.getParams();
-			for(key in params) {
-			 swfNode += '<param name="'+ key +'" value="'+ params[key] +'" />';
+			for(key in params)
+			{
+				if(params.hasOwnProperty(key))
+				{
+					swfNode += '<param name="'+ key +'" value="'+ params[key] +'" />';
+				}
 			}
 			pairs = this.getVariablePairs().join("&");
 			if(pairs.length > 0) {swfNode += '<param name="flashvars" value="'+ pairs +'" />';}

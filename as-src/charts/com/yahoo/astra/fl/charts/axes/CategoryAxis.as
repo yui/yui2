@@ -2,6 +2,11 @@ package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
 
+	/**
+	 * An axis type representing a set of categories.
+	 * 
+	 * @author Josh Tynjala
+	 */
 	public class CategoryAxis extends BaseAxis implements IAxis
 	{
 		
@@ -9,6 +14,9 @@ package com.yahoo.astra.fl.charts.axes
 	//  Constructor
 	//--------------------------------------
 	
+		/**
+		 * Constructor.
+		 */
 		public function CategoryAxis()
 		{
 		}
@@ -167,6 +175,7 @@ package com.yahoo.astra.fl.charts.axes
 			}
 			this.categoryNames = uniqueCategoryNames.concat();
 		}
+		
 		/**
 		 * @private
 		 * Determines the amount of space provided to each category.

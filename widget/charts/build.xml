@@ -49,6 +49,7 @@
                 <include name="com/yahoo/astra/layout/**"/> <!-- layout needed for legend -->
                 <include name="com/yahoo/astra/utils/DateUtil.as"/>
                 <include name="com/yahoo/astra/utils/DisplayObjectUtil.as"/>
+                <include name="com/yahoo/astra/utils/DynamicRegistration.as"/>
                 <include name="com/yahoo/astra/utils/GeomUtil.as"/>
                 <include name="com/yahoo/astra/utils/GraphicsUtil.as"/>
                 <include name="com/yahoo/astra/utils/InstanceFactory.as"/>

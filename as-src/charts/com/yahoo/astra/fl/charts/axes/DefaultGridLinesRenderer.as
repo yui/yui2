@@ -4,13 +4,21 @@ package com.yahoo.astra.fl.charts.axes
 	
 	import fl.core.UIComponent;
 
+	/**
+	 * Renders grid lines associated with a cartesian axis.
+	 * 
+	 * @author Josh Tynjala
+	 */
 	public class DefaultGridLinesRenderer extends UIComponent implements IGridLinesRenderer
 	{
 		
 	//--------------------------------------
 	//  Constructor
 	//--------------------------------------
-	
+		
+		/**
+		 * Constructor.
+		 */
 		public function DefaultGridLinesRenderer()
 		{
 			super();
@@ -20,13 +28,23 @@ package com.yahoo.astra.fl.charts.axes
 	//  Properties
 	//--------------------------------------
 	
+		/**
+		 * @private
+		 * Storage for the axisRenderer property.
+		 */
 		private var _axisRenderer:IAxisRenderer;
 		
+		/**
+		 * @inheritDoc
+		 */
 		public function get axisRenderer():IAxisRenderer
 		{
 			return this._axisRenderer;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function set axisRenderer(value:IAxisRenderer):void
 		{
 			if(this._axisRenderer != value)
@@ -84,6 +102,9 @@ package com.yahoo.astra.fl.charts.axes
 			super.draw();
 		}
 		
+		/**
+		 * Draws a set of lines based on AxisData positioning.
+		 */
 		protected function drawLines(data:Array, showLines:Boolean, lineWeight:Number, lineColor:uint):void
 		{
 			if(!showLines)

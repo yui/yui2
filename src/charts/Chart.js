@@ -374,12 +374,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	},
 
 	/**
-	 * Sends the request to the DataSource.
+	 * Sends (or resends) the request to the DataSource.
 	 *
-	 * @method _refreshData
-	 * @private
+	 * @method refreshData
 	 */
-	_refreshData: function()
+	refreshData: function()
 	{
 		if(!this._initialized)
 		{
@@ -418,11 +417,11 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		else
 		{
 			var styleChanged = false;
-			
+			var i;
 			if(this._seriesLabelFunctions)
 			{
 				var count = this._seriesLabelFunctions.length;
-				for(var i = 0; i < count; i++)
+				for(i = 0; i < count; i++)
 				{
 					YAHOO.widget.FlashAdapter.removeProxyFunction(this._seriesLabelFunctions[i]);
 				}
@@ -435,7 +434,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 			var dataProvider = [];	
 			var seriesCount = 0;
 			var currentSeries = null;
-			var i = 0;
 			if(this._seriesDefs !== null)
 			{
 				seriesCount = this._seriesDefs.length;
@@ -525,7 +523,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setRequest: function(value)
 	{
 		this._request = value;
-		this._refreshData();
+		this.refreshData();
 	},
 
 	/**
@@ -556,7 +554,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setDataSource: function(value)
 	{	
 		this._dataSource = value;
-		this._refreshData();
+		this.refreshData();
 	},
 	
 	/**
@@ -587,7 +585,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setSeriesDefs: function(value)
 	{
 		this._seriesDefs = value;
-		this._refreshData();
+		this.refreshData();
 	},
 
 	/**
@@ -653,7 +651,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 	_setPolling: function(value)
 	{
 		this._pollingInterval = value;
-		this._refreshData();
+		this.refreshData();
 	}
 });
 
