@@ -132,7 +132,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         success : this.onDataReturnSetRows,
         failure : this.onDataReturnSetRows,
         scope   : this,
-        argument: (this.get("paginator").getState ? {pagination: this.get("paginator").getState()} : {})
+        argument: this.getState()
     };
     
     var initialLoad = this.get("initialLoad");
@@ -3288,7 +3288,37 @@ _setRowStripes : function(row, range) {
     }
 },
 
-
+/**
+ * Assigns the class DT.CLASS_SELECTED to TR and TD elements.
+ *
+ * @method _setSelections
+ * @private
+ */
+_setSelections : function() {
+    // Keep track of selected rows
+    var allSelectedRows = this.getSelectedRows();
+    // Keep track of selected cells
+    var allSelectedCells = this.getSelectedCells();
+    // Anything to select?
+    if((allSelectedRows.length>0) || (allSelectedCells.length > 0)) {
+        var oColumnSet = this._oColumnSet,
+            el;
+        // Loop over each row
+        for(var i=0; i<allSelectedRows.length; i++) {
+            el = Dom.get(allSelectedRows[i]);
+            if(el) {
+                Dom.addClass(el, DT.CLASS_SELECTED);
+            }
+        }
+        // Loop over each cell
+        for(i=0; i<allSelectedCells.length; i++) {
+            el = Dom.get(allSelectedCells[i].recordId);
+            if(el) {
+                Dom.addClass(el.childNodes[oColumnSet.getColumn(allSelectedCells[i].columnKey).getKeyIndex()], DT.CLASS_SELECTED);
+            }
+        }
+    }       
+},
 
 
 
@@ -4061,15 +4091,38 @@ getRecordSet : function() {
  * <dd>Current input value</dd>
  * </dl>
  *
- *
- *
- *
- *
  * @method getCellEditor
  * @return {Object} Cell Editor object literal values.
  */
 getCellEditor : function() {
     return this._oCellEditor;
+},
+
+/**
+ * Returns on object literal representing the DataTable instance's current
+ * state with the following properties:
+ * <dl>
+ * <dt>pagination</dt>
+ * <dd></dd>
+ *
+ * <dt>sortedBy</dt>
+ * <dd></dd>
+ *
+ * <dt>selections</dt>
+ * <dd></dd>
+ * </dd>
+ * </dl>
+ *  
+ * @method getState
+ * @return {Object} DataTable instance state object literal values.
+ */
+getState : function() {
+    return {
+        pagination: this.get("paginator") ? this.get("paginator").getState() : null, //this.get("paginator").getState ? this.get("paginator").getState() : null;
+        sortedBy: this.get("sortedBy"),
+        selectedRows: this.getSelectedRows(),
+        selectedCells: this.getSelectedCells()
+    };
 },
 
 
@@ -4788,6 +4841,7 @@ YAHOO.log("start render","time");
                     this._setFirstRow();
                     this._setLastRow();
                     this._setRowStripes();
+                    this._setSelections();
                     this.hideTableMessage();
                 }
             },
@@ -5449,31 +5503,30 @@ sortColumn : function(oColumn, sDir) {
         if(ok) {
             // Server-side sort
             if(this.get("dynamicData")) {
+                // Get current state
+                var oState = this.getState();
+                
                 // Reset record offset, if paginated
-                var oPagState = this.get("paginator").getState ? this.get("paginator").getState() : null;
-                if(oPagState) {
-                    oPagState.recordOffset = 0;
+                if(oState.pagination) {
+                    oState.pagination.recordOffset = 0;
                 }
                 
-                // Translate the proposed page state into a DataSource request param
-                var oNewState = {
-                    pagination : oPagState, // Keep the pag state
-                    sortedBy: { // New sort state
-                        key: oColumn.key,
-                        dir: sSortDir
-                    },
-                    self: this // DataTable instance
+                // Update sortedBy to new values
+                oState.sortedBy = {
+                    key: oColumn.key,
+                    dir: sSortDir
                 };
-                var request = this.get("generateRequest")(oNewState);
-        
+                
+                // Get the request for the new state
+                var request = this.get("generateRequest")(oState, this);
+
+                // Send request for new data
                 var callback = {
                     success : this.onDataReturnSetRows,
                     failure : this.onDataReturnSetRows,
-                    argument : oNewState, // Pass along the new state to the callback
+                    argument : oState, // Pass along the new state to the callback
                     scope : this
                 };
-        
-                // Get the new data from the server
                 this._oDataSource.sendRequest(request, callback);            
             }
             // Client-side sort
@@ -7091,25 +7144,22 @@ formatCell : function(elCell, oRecord, oColumn) {
 onPaginatorChangeRequest : function (oPaginatorState) {
     // Server-side pagination
     if(this.get("dynamicData")) {
-        // Reset the recordOffset to 0, since this is server-side pagination
-        //debugger;
+        // Get the current state
+        var oState = this.getState();
         
-        // Translate the proposed page state into a DataSource request param
-        var oNewState = {
-            pagination : oPaginatorState, // New pag state
-            sortedBy: this.get("sortedBy"), // Keep the sort state
-            self: this // DataTable instance
-        };
-        var request = this.get("generateRequest")(oNewState);
+        // Update pagination values
+        oState.pagination = oPaginatorState;
 
+        // Get the request for the new state
+        var request = this.get("generateRequest")(oState, this);
+        
+        // Get the new data from the server
         var callback = {
             success : this.onDataReturnSetRows,
             failure : this.onDataReturnSetRows,
-            argument : oNewState, // Pass along the new state to the callback
+            argument : oState, // Pass along the new state to the callback
             scope : this
         };
-
-        // Get the new data from the server
         this._oDataSource.sendRequest(request, callback);
     }
     // Client-side pagination
@@ -8814,9 +8864,6 @@ unselectRow : function(row) {
         var sRecordId = oRecord.getId();
         var index = -1;
 
-        // Remove if found
-        var bFound = false;
-
         // Use Array.indexOf if available...
         if(tracker.indexOf) {
             index = tracker.indexOf(sRecordId);
@@ -8831,11 +8878,8 @@ unselectRow : function(row) {
             }
         }
         if(index > -1) {
-            tracker.splice(index,1);
-        }
-
-        if(bFound) {
             // Update tracker
+            tracker.splice(index,1);
             this._aSelections = tracker;
 
             // Update the UI
@@ -8846,12 +8890,6 @@ unselectRow : function(row) {
 
             return;
         }
-
-        // Update the UI
-        Dom.removeClass(elRow, DT.CLASS_SELECTED);
-
-        this.fireEvent("rowUnselectEvent", {record:oRecord, el:elRow});
-        YAHOO.log("Unselected " + elRow, "info", this.toString());
     }
     YAHOO.log("Could not unselect row " + row, "warn", this.toString());
 },
