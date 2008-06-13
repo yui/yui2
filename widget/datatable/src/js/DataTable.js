@@ -84,10 +84,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
         YAHOO.log("Could not instantiate DataTable due to an invalid DOM elements", "error", this.toString());
         return;
     }
-    
-    ///TODO: a better way to set up initial state, esp for DT created in hidden container
-    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
-    
+        
     ////////////////////////////////////////////////////////////////////////////
     // Set up Attributes
 
@@ -105,6 +102,8 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
             this._configs.sortedBy.value.dir = DT.CLASS_ASC;
         }
     }
+    // Show message as soon as config is available
+    this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     
     ////////////////////////////////////////////////////////////////////////////
     // Once per instance
@@ -119,7 +118,7 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
     
     // Element's constructor must first be called
-    this.subscribe("tableMutationEvent",this._onTableMutationEvent);
+    //this.subscribe("tableMutationEvent",this._onTableMutationEvent);
 
     DT._nCount++;
     DT._nCurrentCount++;
@@ -193,6 +192,28 @@ lang.augmentObject(DT, {
      * @default "yui-dt-label"
      */
     CLASS_LABEL : "yui-dt-label",
+
+    /**
+     * Class name assigned to messaging elements.
+     *
+     * @property DataTable.CLASS_MESSAGE
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-message"
+     */
+    CLASS_MESSAGE : "yui-dt-message",
+
+    /**
+     * Class name assigned to data elements.
+     *
+     * @property DataTable.CLASS_DATA
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-data"
+     */
+    CLASS_DATA : "yui-dt-data",
 
     /**
      * Class name assigned to Column drag target.
@@ -718,7 +739,7 @@ lang.augmentObject(DT, {
             // Attach Column resizer element as first child of body
             var elColumnResizerProxy = document.createElement("div");
             elColumnResizerProxy.id = "yui-dt-colresizerproxy"; // Needed for ColumnResizer
-            Dom.addClass(elColumnResizerProxy, DT.CLASS_RESIZERPROXY);
+            elColumnResizerProxy.className = DT.CLASS_RESIZERPROXY;
             document.body.insertBefore(elColumnResizerProxy, document.body.firstChild);
 
             // Internal tracker of Column resizer proxy
@@ -872,7 +893,7 @@ lang.augmentObject(DT, {
         if(collection.length === 0) {
             // Create SELECT element
             selectEl = document.createElement("select");
-            Dom.addClass(selectEl, DT.CLASS_DROPDOWN);
+            selectEl.className = DT.CLASS_DROPDOWN;
             selectEl = el.appendChild(selectEl);
 
             // Add event listener
@@ -1552,16 +1573,16 @@ initAttributes : function(oConfigs) {
         value: function(oState, oSelf) {
             // Set defaults
             oState = oState || {pagination:null, sortedBy:null};
-            var sort = (oState.sortedBy) ? oState.sortedBy.key : "id";
-            var dir = (oState.sortedBy) ? oState.sortedBy.dir : YAHOO.widget.DataTable.CLASS_ASC;
+            var sort = (oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey();
+            var dir = (oState.sortedBy && oState.sortedBy.dir === DT.CLASS_DESC) ? "desc" : "asc";
             var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
-            var results = (oState.pagination) ? oState.pagination.rowsPerPage : 25;
+            var results = (oState.pagination) ? oState.pagination.rowsPerPage : null;
             
             // Build the request
             return  "sort=" + sort +
                     "&dir=" + dir +
                     "&startIndex=" + startIndex +
-                    "&results=" + results;
+                    ((results !== null) ? "&results=" + results : "");
         },
         validator: lang.isFunction
     });
@@ -2617,7 +2638,10 @@ _initThEl : function(elTh, oColumn) {
             
     // Set Column width for non fallback cases
     if(oColumn.width && !this._bDynStylesFallback) {
-        this._setColumnWidthDynStyles(oColumn, oColumn.width + 'px', 'hidden');
+        // Validate minWidth
+        var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
+                oColumn.minWidth : oColumn.width;
+        this._setColumnWidthDynStyles(oColumn, nWidth + 'px', 'hidden');
     }
 
     DT.formatTheadCell(elThLabel, oColumn, this);
@@ -2703,8 +2727,10 @@ _initColumnHelpers : function() {
                 // Create the resizer
                 var elThResizer = elThResizerLiner.appendChild(document.createElement("div"));
                 elThResizer.id = elTh.id + "-resizer"; // Needed for ColumnResizer
+                elThResizer.className = DT.CLASS_RESIZER;
                 oColumn._elResizer = elThResizer;
-                Dom.addClass(elThResizer,DT.CLASS_RESIZER);
+
+                // Create the resizer proxy, once globally
                 var elResizerProxy = DT._initColumnResizerProxyEl();
                 oColumn._ddResizer = new YAHOO.util.ColumnResizer(
                         this, oColumn, elTh, elThResizer, elResizerProxy);
@@ -2754,6 +2780,7 @@ _initTbodyEl : function(elTable) {
         // Create TBODY
         var elTbody = elTable.appendChild(document.createElement("tbody"));
         elTbody.tabIndex = 0;
+        elTbody.className = DT.CLASS_DATA;
     
         // Set up DOM events for TBODY
         Ev.addListener(elTbody, "focus", this._onTbodyFocus, this);
@@ -2804,18 +2831,17 @@ _destroyMsgTbodyEl : function() {
 _initMsgTbodyEl : function(elTable) {
     if(elTable) {
         var elMsgTbody = document.createElement("tbody");
+        elMsgTbody.className = DT.CLASS_MESSAGE;
         var elMsgTr = elMsgTbody.appendChild(document.createElement("tr"));
-        Dom.addClass(elMsgTr,DT.CLASS_FIRST);
-        Dom.addClass(elMsgTr,DT.CLASS_LAST);
+        elMsgTr.className = DT.CLASS_FIRST + " " + DT.CLASS_LAST;
         this._elMsgTr = elMsgTr;
         var elMsgTd = elMsgTr.appendChild(document.createElement("td"));
         elMsgTd.colSpan = this._oColumnSet.keys.length;
-        Dom.addClass(elMsgTd,DT.CLASS_FIRST);
-        Dom.addClass(elMsgTd,DT.CLASS_LAST);
+        elMsgTd.className = DT.CLASS_FIRST + " " + DT.CLASS_LAST;
         this._elMsgTd = elMsgTd;
         elMsgTbody = elTable.insertBefore(elMsgTbody, this._elTbody);
         var elMsgLiner = elMsgTd.appendChild(document.createElement("div"));
-        Dom.addClass(elMsgLiner,DT.CLASS_LINER);  
+        elMsgLiner.className = DT.CLASS_LINER;
         this._elMsgTbody = elMsgTbody;
     }
 },
@@ -2834,7 +2860,7 @@ _initCellEditor : function() {
     elCellEditor.id = this._sId + "-celleditor"; // Needed to blur onclick elsewhere
     elCellEditor.style.display = "none";
     elCellEditor.tabIndex = 0;
-    Dom.addClass(elCellEditor, DT.CLASS_EDITOR);
+    elCellEditor.className = DT.CLASS_EDITOR;
     ///TODO: insertbefore
     var elFirstChild = Dom.getFirstChild(document.body);
     if(elFirstChild) {
@@ -3056,8 +3082,11 @@ _formatTdEl : function (oColumn, elTd, index, isLast) {
 
     // Set Column width for fallback cases
     if(oColumn.width && this._bDynStylesFallback) {
+        // Validate minWidth
+        var nWidth = (oColumn.minWidth && (oColumn.width < oColumn.minWidth)) ?
+                oColumn.minWidth : oColumn.width;
         elTd.firstChild.style.overflow = 'hidden';
-        elTd.firstChild.style.width = oColumn.width + 'px';
+        elTd.firstChild.style.width = nWidth + 'px';
     }
     
     return elTd;
@@ -3369,16 +3398,17 @@ _setSelections : function() {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Fires tableMutationEvent whenever the render chain ends.
+ * Validates minWidths whenever the render chain ends.
  *
  * @method _onRenderChainEnd
  * @private
  */
 _onRenderChainEnd : function() {
-    this.fireEvent("tableMutationEvent");
+    this._validateMinWidths();
+    this.hideTableMessage();
 },
 
-/**
+/*TODO
  * Whenever content is updated (due to data load, dynamic data, etc), calls
  * minWidth validation.  
  *
@@ -3387,9 +3417,9 @@ _onRenderChainEnd : function() {
  * that Column instance.  
  * @private
  */
-_onTableMutationEvent : function(oArgs) {
-    this._validateMinWidths((oArgs) ? oArgs.column : null);
-},
+//_onTableMutationEvent : function(oArgs) {
+//    this._validateMinWidths((oArgs) ? oArgs.column : null);
+//},
 
 /**
  * Handles click events on the DOCUMENT.
@@ -4757,7 +4787,6 @@ render : function() {
 YAHOO.log("start render","time");
 
     this._oChainRender.stop();
-    ///this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     YAHOO.log("DataTable rendering...", "info", this.toString());
 
     var i, j, k, l, len, allRecords;
@@ -4805,19 +4834,24 @@ YAHOO.log("start render","time");
         this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
-                    ///elTbody.style.display = "none";
                     var i = oArg.nCurrentRecord,
-                        endRecordIndex = ((oArg.nCurrentRecord-oArg.nLoopLength) < -1) ?
-                                -1 : (oArg.nCurrentRecord-oArg.nLoopLength),
-                        elRow;
-                    for(; i>endRecordIndex; i--) {
+                        endRecordIndex = ((oArg.nCurrentRecord+oArg.nLoopLength) > nRecordsLength) ?
+                                nRecordsLength : (oArg.nCurrentRecord+oArg.nLoopLength),
+                        elRow, nextSibling;
+
+                    elTbody.style.display = "none";
+                    
+                    for(; i<endRecordIndex; i++) {
                         elRow = Dom.get(allRecords[i].getId());
                         elRow = elRow || this._addTrEl(allRecords[i]);
-                        elTbody.insertBefore(elRow, elTbody.firstChild);
+                        nextSibling = elTbody.childNodes[i] || null;
+                        elTbody.insertBefore(elRow, nextSibling);
                         if(elTbody.rows.length > nRecordsLength) {
                             elTbody.removeChild(elTbody.lastChild);
                         }
                     }
+                    elTbody.style.display = "";
+                    
                     // Set up for the next loop
                     oArg.nCurrentRecord = i;
                 }
@@ -4825,13 +4859,13 @@ YAHOO.log("start render","time");
             scope: this,
             iterations: (loopN > 0) ? Math.ceil(nRecordsLength/loopN) : 1,
             argument: {
-                nCurrentRecord: nRecordsLength-1,  // Start at last Record
+                nCurrentRecord: 0,//nRecordsLength-1,  // Start at first Record
                 nLoopLength: (loopN > 0) ? loopN : nRecordsLength
             },
             timeout: (loopN > 0) ? 0 : -1
         });
         
-        // Post row-render tasks
+        // Post render tasks
         this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
@@ -4842,7 +4876,6 @@ YAHOO.log("start render","time");
                     this._setLastRow();
                     this._setRowStripes();
                     this._setSelections();
-                    this.hideTableMessage();
                 }
             },
             scope: this,
@@ -5138,7 +5171,7 @@ showTableMessage : function(sHTML, sClassName) {
         elCell.firstChild.innerHTML = sHTML;
     }
     if(lang.isString(sClassName)) {
-        Dom.addClass(elCell.firstChild, sClassName);
+        elCell.className = sClassName;
     }
 
     this._elMsgTbody.style.display = "";
@@ -5527,6 +5560,7 @@ sortColumn : function(oColumn, sDir) {
                     argument : oState, // Pass along the new state to the callback
                     scope : this
                 };
+                this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
                 this._oDataSource.sendRequest(request, callback);            
             }
             // Client-side sort
@@ -5619,13 +5653,15 @@ setColumnWidth : function(oColumn, nWidth) {
  * @method _setColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param sWidth {String} New width value.
+ * @param sOverflow {String} Should be "hidden" when Column width is explicitly
+ * being set to a value, but should be "visible" when Column is meant to auto-fit content.  
  * @private
  */
-_setColumnWidth : function(oColumn, sWidth) {
+_setColumnWidth : function(oColumn, sWidth, sOverflow) {
 ///TODO: blow away the tr template for fallback cases
 YAHOO.log('start _sColumnWidth','time');
     if(oColumn && (oColumn.getKeyIndex() !== null)) {
-        var sOverflow = ((sWidth === '') || (sWidth === 'auto')) ? 'visible' : 'hidden';
+        sOverflow = sOverflow || (((sWidth === '') || (sWidth === 'auto')) ? 'visible' : 'hidden');
     
         // Dynamic style algorithm
         if(!DT._bDynStylesFallback) {
@@ -5792,8 +5828,11 @@ YAHOO.log('end _setColumnWidthDynFunction','time');
 },
 
 /**
- * Validates a Column (if given) or else all Columns against given minWidths, if any,
- * and if Column is not hidden nor has a set width. 
+ * Validates a Column (if given) or else all Columns against given minWidths, if set
+ * *and* if Column is not hidden nor has a set width. If Column's auto-width is less than
+ * its minWidth, then its COL element is styled to the minWidth value. Changes are
+ * first made to a deep clone of the COLGROUP element and then the COLGROUPs are
+ * swapped, so as to prevent multiple redraws.  
  *
  * @method _validateMinWidths
  * @param oArg.column {YAHOO.widget.Column} Affected Column instance, if available.
@@ -6283,7 +6322,7 @@ reorderColumn : function(oColumn, index) {
                 }
         
                 this.fireEvent("columnReorderEvent",{column:oNewColumn});
-                this.fireEvent("tableMutationEvent");
+                //this.fireEvent("tableMutationEvent");
                 YAHOO.log("Column \"" + oNewColumn.key + "\" reordered", "info", this.toString());
                 return oNewColumn;
             }

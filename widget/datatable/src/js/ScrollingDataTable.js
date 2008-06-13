@@ -579,14 +579,15 @@ _focusEl : function(el) {
 
 
 /**
- * Fires tableMutationEvent whenever the render chain ends and executes syncing.
+ * Syncs Column widths whenever the render chain ends.
  *
  * @method _onRenderChainEnd
  * @private
  */
 _onRenderChainEnd : function() {
-    this.fireEvent("tableMutationEvent");
+    // Don't call validateMinWidths from here, since sync() will do it
     this._sync();
+    this.hideTableMessage();
 },
 
 /**
@@ -602,8 +603,9 @@ _sync : function() {
 },
 
 /**
- * Syncs up widths of THs and TDs across all those Columns without width values.
- * Actual adjustment is to the liner DIVs so window resizing will not affect cells. 
+ * Syncs up widths of THs and TDs across all those Columns without width values
+ * while validating minWidth values. Actual adjustment is to the liner DIVs so
+ * window resizing will not affect cells. 
  *
  * @method _syncColWidths
  * @private
@@ -626,57 +628,32 @@ _syncColWidths : function() {
             var i,
                 oColumn,
                 cellsLen = elRow.cells.length;
-            // First time through, reset the widths to get an accurate measure of the TD
-            //for(i=0; i<cellsLen; i++) {
-                ///oColumn = allKeys[i];
-                // Only need to sync non-hidden Columns without set widths
-                ///if(!oColumn.width && !oColumn.hidden) {
-                    ///this._setColumnWidth(oColumn, "auto","visible");
-                ///}
-            ///}
-    
-            // Calculate width for every non-hidden Column without set width
+                
+            // Iterate through all Columns
             for(i=0; i<cellsLen; i++) {
                 oColumn = allKeys[i];
                 
-                // Columns without widths
+                // Only Columns without widths that are not hidden
                 if(!oColumn.width && !oColumn.hidden) {
                     var elTh = oColumn.getThEl();
                     var elTd = elRow.cells[i];
-
                 
-                    ///if(elTh.offsetWidth !== elTd.offsetWidth ||
-                    ///    (oColumn.minWidth && (elWider.offsetWidth < oColumn.minWidth))) {
+                    // Compare auto-widths
                     if(elTh.offsetWidth !== elTd.offsetWidth) {
-                        ///this._setColumnWidth(oColumn, "auto","visible");
-
                         var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
                                 oColumn.getThLinerEl() : elTd.firstChild;               
 
-                        // Calculate the new width by comparing liner widths
+                        // Grab the wider liner width, unless the minWidth is wider
                         var newWidth = Math.max(0,
-                            elWider.offsetWidth -
-                            (parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) -
-                            (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0));
-                            
-                        ///this._setColumnWidth(oColumn, newWidth+'px', 'hidden');
+                            (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
+                            oColumn.minWidth);
+                        
+                        // Set to the wider auto-width
+                        this._elTbody.style.display = "none";
                         this._setColumnWidth(oColumn, newWidth+'px', 'visible');
+                        this._elTbody.style.display = "";
                     }
                 }
-                // Columns with widths
-                ///else {
-                ///    newWidth = oColumn.width;
-                ///}
-                
-                // Hidden Columns
-                ///if(oColumn.hidden) {
-                ///    oColumn._nLastWidth = newWidth;
-                ///    this._setColumnWidth(oColumn, '1px','hidden'); 
-
-                // Update to the new width
-                ///} else if (newWidth) {
-                ///    this._setColumnWidth(oColumn, newWidth+'px', overflow);
-                ///}
             }
             
             // Resnap unsnapped containers
@@ -805,8 +782,8 @@ _syncScrollOverhang : function() {
  * @private
  */
 _validateMinWidths : function(oArg) {
-    SDT.superclass._validateMinWidths.call(this, oArg);
-    this._sync();
+    //SDT.superclass._validateMinWidths.call(this, oArg);
+    //this._sync();
 },
 
 
