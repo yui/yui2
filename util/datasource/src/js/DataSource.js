@@ -693,8 +693,8 @@ makeConnection : function(oRequest, oCallback, oCaller) {
  * <dl>
  *     <dd><dt>tId {Number}</dt> Unique transaction ID</dd>
  *     <dd><dt>results {Array}</dt> Array of parsed data results</dd>
- *     <dd><dt>error {Boolean}</dt> True if there was an error</dd>
- *     <dd><dt>totalRecords {Number}</dt> Total number of records (if available)</dd> 
+ *     <dd><dt>meta {Object}</dt> Object literal of meta values</dd> 
+ *     <dd><dt>error {Boolean}</dt> (optional) True if there was an error</dd>
  * </dl>
  *
  * @method handleResponse
@@ -794,6 +794,17 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             break;
     }
 
+
+    // Clean up for consistent signature
+    oParsedResponse = oParsedResponse || {};
+    if(!oParsedResponse.results) {
+        oParsedResponse.results = [];
+    }
+    if(!oParsedResponse.meta) {
+        oParsedResponse.meta = {};
+    }
+
+    // Success
     if(oParsedResponse && !oParsedResponse.error) {
         // Last chance to touch the raw response or the parsed response
         oParsedResponse = this.doBeforeCallback(oRequest, oFullResponse, oParsedResponse);
@@ -802,14 +813,13 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
         // Cache the response
         this.addToCache(oRequest, oParsedResponse);
     }
+    // Error
     else {
+        // Be sure the error flag is on
+        oParsedResponse.error = true;
         this.fireEvent("dataErrorEvent", {request:oRequest, response: oRawResponse, callback:oCallback, 
                 caller:oCaller, message:DS.ERROR_DATANULL});
         YAHOO.log(DS.ERROR_DATANULL, "error", this.toString());
-        
-        // Be sure the error flag is on
-        oParsedResponse = oParsedResponse || {};
-        oParsedResponse.error = true;
     }
 
     // Send the response back to the caller
@@ -855,13 +865,13 @@ doBeforeCallback : function(oRequest, oFullResponse, oParsedResponse) {
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full Array from the live database.
  * @return {Object} Parsed response object with the following properties:<br>
- *     - results (Array) Array of parsed data results<br>
- *     - error (Boolean) True if there was an error<br>
- *     - totalRecords (Number) Total number of records (if available)
+ *     - results {Array} Array of parsed data results<br>
+ *     - meta {Object} Object literal of meta values<br>
+ *     - error {Boolean} (optional) True if there was an error<br>
  */
 parseData : function(oRequest, oFullResponse) {
     if(lang.isValue(oFullResponse)) {
-        var oParsedResponse = {results:oFullResponse};
+        var oParsedResponse = {results:oFullResponse,meta:{}};
         YAHOO.log("Parsed generic data is " +
                 lang.dump(oParsedResponse), "info", this.toString());
         return oParsedResponse;
