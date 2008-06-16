@@ -2787,6 +2787,7 @@ _initTbodyEl : function(elTable) {
         Ev.addListener(elTbody, "mouseover", this._onTableMouseover, this);
         Ev.addListener(elTbody, "mouseout", this._onTableMouseout, this);
         Ev.addListener(elTbody, "mousedown", this._onTableMousedown, this);
+        Ev.addListener(elTbody, "mouseup", this._onTableMouseup, this);
         Ev.addListener(elTbody, "keydown", this._onTbodyKeydown, this);
         Ev.addListener(elTbody, "keypress", this._onTableKeypress, this);
         Ev.addListener(elTbody, "click", this._onTbodyClick, this);
@@ -3663,6 +3664,65 @@ _onTableMousedown : function(e, oSelf) {
         }
     }
     oSelf.fireEvent("tableMousedownEvent",{target:(elTarget || oSelf._elContainer),event:e});
+},
+
+/**
+ * Handles mouseup events on the DataTable instance.
+ *
+ * @method _onTableMouseup
+ * @param e {HTMLEvent} The mouseup event.
+ * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
+ * @private
+ */
+_onTableMouseup : function(e, oSelf) {
+    var elTarget = Ev.getTarget(e);
+    var elTag = elTarget.nodeName.toLowerCase();
+    var bKeepBubbling = true;
+    while(elTarget && (elTag != "table")) {
+        switch(elTag) {
+            case "body":
+                return;
+            case "a":
+                break;
+            case "td":
+                bKeepBubbling = oSelf.fireEvent("cellMouseupEvent",{target:elTarget,event:e});
+                break;
+            case "span":
+                if(Dom.hasClass(elTarget, DT.CLASS_LABEL)) {
+                    bKeepBubbling = oSelf.fireEvent("theadLabelMouseupEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerLabelMouseupEvent",{target:elTarget,event:e});
+                }
+                break;
+            case "th":
+                bKeepBubbling = oSelf.fireEvent("theadCellMouseupEvent",{target:elTarget,event:e});
+                // Backward compatibility
+                bKeepBubbling = oSelf.fireEvent("headerCellMouseupEvent",{target:elTarget,event:e});
+                break;
+            case "tr":
+                if(elTarget.parentNode.nodeName.toLowerCase() == "thead") {
+                    bKeepBubbling = oSelf.fireEvent("theadRowMouseupEvent",{target:elTarget,event:e});
+                    // Backward compatibility
+                    bKeepBubbling = oSelf.fireEvent("headerRowMouseupEvent",{target:elTarget,event:e});
+                }
+                else {
+                    bKeepBubbling = oSelf.fireEvent("rowMouseupEvent",{target:elTarget,event:e});
+                }
+                break;
+            default:
+                break;
+        }
+        if(bKeepBubbling === false) {
+            return;
+        }
+        else {
+            elTarget = elTarget.parentNode;
+            if(elTarget) {
+                elTag = elTarget.nodeName.toLowerCase();
+            }
+        }
+    }
+    oSelf.fireEvent("tableMouseupEvent",{target:(elTarget || oSelf._elContainer),event:e});
 },
 
 /**
@@ -9420,69 +9480,70 @@ showCellEditor : function(elCell, oRecord, oColumn) {
             elContainer.style.top = y + "px";
 
             // Hook to customize the UI
-            this.doBeforeShowCellEditor(this._oCellEditor);
-
-            //TODO: This is temporarily up here due so elements can be focused
-            // Show Editor
-            elContainer.style.display = "";
-
-            // Handle ESC key
-            Ev.addListener(elContainer, "keydown", function(e, oSelf) {
-                // ESC hides Cell Editor
-                if((e.keyCode == 27)) {
-                    oSelf.cancelCellEditor();
-                    oSelf.focusTbodyEl();
+            var ok = this.doBeforeShowCellEditor(this._oCellEditor);
+            if(ok) {
+                //TODO: This is temporarily up here due so elements can be focused
+                // Show Editor
+                elContainer.style.display = "";
+    
+                // Handle ESC key
+                Ev.addListener(elContainer, "keydown", function(e, oSelf) {
+                    // ESC hides Cell Editor
+                    if((e.keyCode == 27)) {
+                        oSelf.cancelCellEditor();
+                        oSelf.focusTbodyEl();
+                    }
+                    else {
+                        oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
+                    }
+                }, this);
+    
+                // Render Editor markup
+                var fnEditor;
+                if(lang.isString(oColumn.editor)) {
+                    switch(oColumn.editor) {
+                        case "checkbox":
+                            fnEditor = DT.editCheckbox;
+                            break;
+                        case "date":
+                            fnEditor = DT.editDate;
+                            break;
+                        case "dropdown":
+                            fnEditor = DT.editDropdown;
+                            break;
+                        case "radio":
+                            fnEditor = DT.editRadio;
+                            break;
+                        case "textarea":
+                            fnEditor = DT.editTextarea;
+                            break;
+                        case "textbox":
+                            fnEditor = DT.editTextbox;
+                            break;
+                        default:
+                            fnEditor = null;
+                    }
                 }
-                else {
-                    oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
+                else if(lang.isFunction(oColumn.editor)) {
+                    fnEditor = oColumn.editor;
                 }
-            }, this);
-
-            // Render Editor markup
-            var fnEditor;
-            if(lang.isString(oColumn.editor)) {
-                switch(oColumn.editor) {
-                    case "checkbox":
-                        fnEditor = DT.editCheckbox;
-                        break;
-                    case "date":
-                        fnEditor = DT.editDate;
-                        break;
-                    case "dropdown":
-                        fnEditor = DT.editDropdown;
-                        break;
-                    case "radio":
-                        fnEditor = DT.editRadio;
-                        break;
-                    case "textarea":
-                        fnEditor = DT.editTextarea;
-                        break;
-                    case "textbox":
-                        fnEditor = DT.editTextbox;
-                        break;
-                    default:
-                        fnEditor = null;
+    
+                if(fnEditor) {
+                    // Create DOM input elements
+                    fnEditor(this._oCellEditor, this);
+    
+                    // Show Save/Cancel buttons
+                    if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
+                        this.showCellEditorBtns(elContainer);
+                    }
+    
+                    oCellEditor.isActive = true;
+    
+                    //TODO: verify which args to pass
+                    this.fireEvent("editorShowEvent", {editor:oCellEditor});
+                    YAHOO.log("Cell Editor shown for " + elCell, "info", this.toString());
+                    return;
                 }
-            }
-            else if(lang.isFunction(oColumn.editor)) {
-                fnEditor = oColumn.editor;
-            }
-
-            if(fnEditor) {
-                // Create DOM input elements
-                fnEditor(this._oCellEditor, this);
-
-                // Show Save/Cancel buttons
-                if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
-                    this.showCellEditorBtns(elContainer);
-                }
-
-                oCellEditor.isActive = true;
-
-                //TODO: verify which args to pass
-                this.fireEvent("editorShowEvent", {editor:oCellEditor});
-                YAHOO.log("Cell Editor shown for " + elCell, "info", this.toString());
-                return;
             }
         }
     }
@@ -9494,8 +9555,10 @@ showCellEditor : function(elCell, oRecord, oColumn) {
  *
  * @method doBeforeShowCellEditor
  * @param oCellEditor {Object} Cell Editor object literal.
+ * @return {Boolean} Return true to continue showing Cell Editor.
  */
 doBeforeShowCellEditor : function(oCellEditor) {
+    return true;
 },
 
 /**
@@ -10290,6 +10353,15 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
+     * Fired when the DataTable has a mouseup.
+     *
+     * @event tableMouseupEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The DataTable's TABLE element.
+     *
+     */
+
+    /**
      * Fired when the DataTable has a click.
      *
      * @event tableClickEvent
@@ -10347,6 +10419,14 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
+     * Fired when a THEAD row has a mouseup.
+     *
+     * @event theadRowMouseupEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TR element.
+     */
+
+    /**
      * Fired when a THEAD row has a click.
      *
      * @event theadRowClickEvent
@@ -10389,6 +10469,14 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
+     * Fired when a THEAD cell has a mouseup.
+     *
+     * @event theadCellMouseupEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TH element.
+     */
+
+    /**
      * Fired when a THEAD cell has a click.
      *
      * @event theadCellClickEvent
@@ -10426,6 +10514,14 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * Fired when a THEAD label has a mousedown.
      *
      * @event theadLabelMousedownEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The SPAN element.
+     */
+
+    /**
+     * Fired when a THEAD label has a mouseup.
+     *
+     * @event theadLabelMouseupEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The SPAN element.
      */
@@ -10562,6 +10658,14 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
+     * Fired when a row has a mouseup.
+     *
+     * @event rowMouseupEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TR element.
+     */
+
+    /**
      * Fired when a row has a click.
      *
      * @event rowClickEvent
@@ -10675,6 +10779,14 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      * Fired when a cell has a mousedown.
      *
      * @event cellMousedownEvent
+     * @param oArgs.event {HTMLEvent} The event object.
+     * @param oArgs.target {HTMLElement} The TD element.
+     */
+
+    /**
+     * Fired when a cell has a mouseup.
+     *
+     * @event cellMouseupEvent
      * @param oArgs.event {HTMLEvent} The event object.
      * @param oArgs.target {HTMLElement} The TD element.
      */

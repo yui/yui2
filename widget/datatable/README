@@ -35,6 +35,9 @@ and the renderEvent will always fire when rows are rendered. This is a slight ch
 from prior behavior, when the the renderEvent would *not* fire if the initEvent
 was fired.
 
+* For consistency with other doBefore abstract methods, doBeforeShowCellEditor()
+returns true by default, and returns false to cancel showing the cell editor.
+
 * Column.minWidth default value now null.
  
 * Removed unused Column._oDefinition private property.
