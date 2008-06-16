@@ -398,6 +398,8 @@ RS.prototype = {
             }
         }
 
+        this.fireEvent("recordsSetEvent",{records:added,data:aData});
+        // Backward compatibility for bug 1918245
         this.fireEvent("recordsSet",{records:added,data:aData});
         YAHOO.log("Set "+j+" Record(s) at index "+index, "info",
                   this.toString());

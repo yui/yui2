@@ -7222,7 +7222,6 @@ formatCell : function(elCell, oRecord, oColumn) {
 
 
 
-
 // PAGINATION
 
 /**
