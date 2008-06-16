@@ -535,7 +535,7 @@
              * @default The progress indicator (spinner) image
              */
             ITEM_LOADING: "<img " +
-                    "src=\"http://produce.yahoo.com/gopal_v/yui/carousel/img/ajax-loader.gif\" " +
+                    "src=\"../../../img/ajax-loader.gif\" " +
                     "alt=\"Loading\" " +
                     "style=\"margin-top:-32px;position:relative;top:50%;\">",
             
