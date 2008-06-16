@@ -34,7 +34,9 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
 
     widget.ScrollingDataTable.superclass.constructor.call(this, elContainer,aColumnDefs,oDataSource,oConfigs); 
 
-    this.subscribe("columnShowEvent",this._syncColWidths);
+    // Once per instance
+    this.subscribe("columnShowEvent", this._onColumnChange);
+    this.subscribe("editorSaveEvent", this._onColumnChange);
 };
 
 var SDT = widget.ScrollingDataTable;
@@ -577,92 +579,81 @@ _focusEl : function(el) {
 
 
 
-
 /**
- * Syncs Column widths whenever the render chain ends.
+ * Helper functin calculates and sets a validated width for a Column in a ScrollingDataTable.
  *
- * @method _onRenderChainEnd
+ * @method _validateColumnWidth
+ * @param oColumn {YAHOO.widget.Column} Column instance.
+ * @param elTd {HTMLElement} TD element to validate against.
  * @private
  */
-_onRenderChainEnd : function() {
-    // Don't call validateMinWidths from here, since sync() will do it
-    this._sync();
-    this.hideTableMessage();
-},
+_validateColumnWidth : function(oColumn, elTd) {
+    // Only Columns without widths that are not hidden
+    if(!oColumn.width && !oColumn.hidden) {
+        var elTh = oColumn.getThEl();
+        // Unset a calculated auto-width
+        if(oColumn._calculatedWidth) {
+            this._setColumnWidth(oColumn, "auto", "visible");
+        }
+        // Compare auto-widths
+        if(elTh.offsetWidth !== elTd.offsetWidth) {
+            var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
+                    oColumn.getThLinerEl() : elTd.firstChild;               
 
-/**
- * Post render syncing of Column widths and scroll padding
- *
- * @method _sync
- * @private
- */
-_sync : function() {
-    this._syncColWidths();
-    ///TODO: is this still necessary?
-    this._repaintGecko(this._elContainer);
-},
-
-/**
- * Syncs up widths of THs and TDs across all those Columns without width values
- * while validating minWidth values. Actual adjustment is to the liner DIVs so
- * window resizing will not affect cells. 
- *
- * @method _syncColWidths
- * @private
- */
-_syncColWidths : function() {
-    if(this._elTbody.rows.length > 0) {
-        // Validate there is at least one row with cells and at least one Column
-        var allKeys   = this._oColumnSet.keys,
-            elRow     = this.getFirstTrEl();
-    
-        if(allKeys && elRow && (elRow.cells.length === allKeys.length)) {
-            // Temporarily unsnap container since it causes inaccurate calculations
-            var sWidth = this.get("width");
-            if(sWidth) {
-                this._elHdContainer.style.width = "";
-                this._elBdContainer.style.width = "";
-            }
-            this._elContainer.style.width = "";
-    
-            var i,
-                oColumn,
-                cellsLen = elRow.cells.length;
-                
-            // Iterate through all Columns
-            for(i=0; i<cellsLen; i++) {
-                oColumn = allKeys[i];
-                
-                // Only Columns without widths that are not hidden
-                if(!oColumn.width && !oColumn.hidden) {
-                    var elTh = oColumn.getThEl();
-                    var elTd = elRow.cells[i];
-                
-                    // Compare auto-widths
-                    if(elTh.offsetWidth !== elTd.offsetWidth) {
-                        var elWider = (elTh.offsetWidth > elTd.offsetWidth) ?
-                                oColumn.getThLinerEl() : elTd.firstChild;               
-
-                        // Grab the wider liner width, unless the minWidth is wider
-                        var newWidth = Math.max(0,
-                            (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
-                            oColumn.minWidth);
-                        
-                        // Set to the wider auto-width
-                        this._elTbody.style.display = "none";
-                        this._setColumnWidth(oColumn, newWidth+'px', 'visible');
-                        this._elTbody.style.display = "";
-                    }
-                }
-            }
+            // Grab the wider liner width, unless the minWidth is wider
+            var newWidth = Math.max(0,
+                (elWider.offsetWidth -(parseInt(Dom.getStyle(elWider,"paddingLeft"),10)|0) - (parseInt(Dom.getStyle(elWider,"paddingRight"),10)|0)),
+                oColumn.minWidth);
             
-            // Resnap unsnapped containers
-            if(sWidth) {
-                this._elHdContainer.style.width = sWidth;
-                this._elBdContainer.style.width = sWidth;
-            } 
+            // Set to the wider auto-width
+            this._elTbody.style.display = "none";
+            this._setColumnWidth(oColumn, newWidth+'px', 'visible');
+            oColumn._calculatedWidth = newWidth;
+            this._elTbody.style.display = "";
         }
     }
+},
+
+/**
+ * For one or all Columns of a ScrollingDataTable, when Column is not hidden,
+ * and width is not set, syncs widths of header and body cells and 
+ * validates that width against minWidth when necessary.
+ *
+ * @method validateColumnWidths
+ * @param oArg.column {YAHOO.widget.Column} (optional) One Column to validate. If null, all Columns' widths are validated.
+ */
+validateColumnWidths : function(oColumn) {
+    // Validate there is at least one TR with proper TDs
+    var allKeys   = this._oColumnSet.keys,
+        allKeysLength = allKeys.length,
+        elRow     = this.getFirstTrEl();
+    if(allKeys && elRow && (elRow.childNodes.length === allKeysLength)) {
+        // Temporarily unsnap container since it causes inaccurate calculations
+        var sWidth = this.get("width");
+        if(sWidth) {
+            this._elHdContainer.style.width = "";
+            this._elBdContainer.style.width = "";
+        }
+        this._elContainer.style.width = "";
+        
+        //Validate just one Column
+        if(oColumn && lang.isNumber(oColumn.getKeyIndex())) {
+            this._validateColumnWidth(oColumn, elRow.childNodes[oColumn.getKeyIndex()]);
+        }
+        else {
+            // Iterate through all Columns
+            for(var i=0; i<allKeysLength; i++) {
+               this._validateColumnWidth(allKeys[i], elRow.childNodes[i]);
+            }
+        }
+        
+        // Resnap unsnapped containers
+        if(sWidth) {
+            this._elHdContainer.style.width = sWidth;
+            this._elBdContainer.style.width = sWidth;
+        } 
+    }
+    
     this._syncScroll();
 },
 
@@ -772,23 +763,6 @@ _syncScrollOverhang : function() {
         oColumn.getThEl().style.borderRight = nPadding + "px solid " + this.get("COLOR_COLUMNFILLER");
     }
 },
-
-/**
- * Validates a Column (if given) or else all Columns against given minWidths, if any,
- * and if Column is not hidden nor has a set width. 
- *
- * @method _validateMinWidths
- * @param oArg.column {YAHOO.widget.Column} Affected Column instance, if available.
- * @private
- */
-_validateMinWidths : function(oArg) {
-    //SDT.superclass._validateMinWidths.call(this, oArg);
-    //this._sync();
-},
-
-
-
-
 
 
 
@@ -1201,7 +1175,8 @@ saveCellEditor : function() {
         // Bug fix 1764044
         this._oChainRender.add({
             method: function() {
-                this._syncColWidths();
+                /// TODO: still necessary since we are now validating on editorSaveEvent?
+                this.validateColumnWidths();
             },
             scope: this
         });
@@ -1255,6 +1230,38 @@ showTableMessage : function(sHTML, sClassName) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private Custom Event Handlers
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Handles Column mutations
+ *
+ * @method onColumnChange
+ * @param oArgs {Object} Custom Event data.
+ */
+_onColumnChange : function(oArg) {
+    // Figure out which Column changed
+    var oColumn = (oArg.column) ? oArg.column :
+            (oArg.editor) ? oArg.editor.column : null;
+    this.validateColumnWidths(oColumn);
+},
 
 
 

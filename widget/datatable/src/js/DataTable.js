@@ -3404,7 +3404,7 @@ _setSelections : function() {
  * @private
  */
 _onRenderChainEnd : function() {
-    this._validateMinWidths();
+    this.validateColumnWidths();
     this.hideTableMessage();
 },
 
@@ -3418,7 +3418,7 @@ _onRenderChainEnd : function() {
  * @private
  */
 //_onTableMutationEvent : function(oArgs) {
-//    this._validateMinWidths((oArgs) ? oArgs.column : null);
+//    this._validateColumnWidths((oArgs) ? oArgs.column : null);
 //},
 
 /**
@@ -5828,26 +5828,20 @@ YAHOO.log('end _setColumnWidthDynFunction','time');
 },
 
 /**
- * Validates a Column (if given) or else all Columns against given minWidths, if set
- * *and* if Column is not hidden nor has a set width. If Column's auto-width is less than
- * its minWidth, then its COL element is styled to the minWidth value. Changes are
- * first made to a deep clone of the COLGROUP element and then the COLGROUPs are
- * swapped, so as to prevent multiple redraws.  
+ * For one or all Columns, when Column is not hidden, width is not set, and minWidth
+ * is set, validates auto-width against minWidth.
  *
- * @method _validateMinWidths
- * @param oArg.column {YAHOO.widget.Column} Affected Column instance, if available.
- * @private
+ * @method validateColumnWidths
+ * @param oArg.column {YAHOO.widget.Column} (optional) One Column to validate. If null, all Columns' widths are validated.
  */
-_validateMinWidths : function(oArg) {
+validateColumnWidths : function(oColumn) {
     var elColgroup = this._elColgroup;
     var elColgroupClone = elColgroup.cloneNode(true);
     var bNeedsValidation = false;
     var allKeys = this._oColumnSet.keys;
-    var elThLiner, oColumn;
+    var elThLiner;
     // Validate just one Column
-    if(oArg && oArg.column) {
-        oColumn = oArg.column;
-        if(!oColumn.hidden && !oColumn.width && oColumn.minWidth) {
+    if(oColumn && !oColumn.hidden && !oColumn.width && oColumn.minWidth) {
             elThLiner = oColumn.getThLinerEl();
             if(elThLiner.offsetWidth < oColumn.minWidth) {
                 elColgroupClone.childNodes[oColumn.getKeyIndex()].style.width = 
@@ -5856,7 +5850,6 @@ _validateMinWidths : function(oArg) {
                         (parseInt(Dom.getStyle(elThLiner,"paddingRight"),10)|0) + "px";
                 bNeedsValidation = true;
             }
-        }
     }
     // Validate all Columns
     else {
@@ -10961,7 +10954,7 @@ onEventEditCell : function(oArgs) {
     YAHOO.log("The method onEventEditCell() has been deprecated" +
         " in favor of onEventShowCellEditor()", "warn", this.toString());
     this.onEventShowCellEditor(oArgs);
-}
+},
 
 /*
  * @method onDataReturnReplaceRows
@@ -10972,7 +10965,19 @@ onEventEditCell : function(oArgs) {
     YAHOO.log("The method onDataReturnReplaceRows() has been deprecated" +
             " in favor of onDataReturnInitializeTable()", "warn", this.toString());
     this.onDataReturnInitializeTable(sRequest, oResponse);
-}*/
+},*/
+
+/**
+ * @method _syncColWidths
+ * @deprecated Use validateColumnWidths.
+ */
+_syncColWidths : function() {
+    // Backward compatibility
+    YAHOO.log("The method _syncColWidths() has been deprecated" +
+        " in favor of validateColumnWidths()", "warn", this.toString());
+    this.validateColumnWidths();
+}
+
 
 /**
  * @event headerRowMouseoverEvent
