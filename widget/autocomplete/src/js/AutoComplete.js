@@ -2240,6 +2240,12 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             }
             break;
         default:
+            oSelf._oCurItem = null;
+            oSelf._bItemSelected = false;
+            YAHOO.util.Dom.removeClass(oSelf._oCurItem,  oSelf.highlightClassName);
+    
+            oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
+            YAHOO.log("Textbox keyed", "info", oSelf.toString());
             break;
     }
 };
@@ -2297,7 +2303,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyPress = function(v,oSelf) {
 };
 
 /**
- * Handles textbox keyup events that trigger queries.
+ * Handles textbox keyup events to trigger queries.
  *
  * @method _onTextboxKeyUp
  * @param v {HTMLEvent} The keyup event.
@@ -2316,14 +2322,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     // Filter out chars that don't trigger queries
     if(oSelf._isIgnoreKey(nKeyCode) || (sText.toLowerCase() == oSelf._sCurQuery)) {
         return;
-    }
-    else {
-        oSelf._bItemSelected = false;
-        YAHOO.util.Dom.removeClass(oSelf._oCurItem,  oSelf.highlightClassName);
-        oSelf._oCurItem = null;
-
-        oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
-        YAHOO.log("Textbox keyed", "info", oSelf.toString());
     }
 
     // Set timeout on the request
