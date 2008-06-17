@@ -4,7 +4,7 @@
  *
  * @module autocomplete
  * @requires yahoo, dom, event, datasource
- * @optional animation, connection, get
+ * @optional animation
  * @namespace YAHOO.widget
  * @title AutoComplete Widget
  */
@@ -379,6 +379,16 @@ YAHOO.widget.AutoComplete.prototype.useShadow = false;
  */
 YAHOO.widget.AutoComplete.prototype.toString = function() {
     return "AutoComplete " + this._sName;
+};
+
+ /**
+ * Returns true if widget instance is currently focused.
+ *
+ * @method isFocused
+ * @return {Boolean} Returns true if widget instance is currently focused.
+ */
+YAHOO.widget.AutoComplete.prototype.isFocused = function() {
+    return this._bFocused;
 };
 
  /**
@@ -891,7 +901,7 @@ YAHOO.widget.AutoComplete.prototype._elIFrame = null;
  * @type Boolean
  * @private
  */
-YAHOO.widget.AutoComplete.prototype._bFocused = true;
+YAHOO.widget.AutoComplete.prototype._bFocused = false;
 
 /**
  * Animation instance for container expand/collapse.
@@ -1449,7 +1459,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(sQuery, oResponse, oPayload);
 
-    // Data ok
+    // Data ok and instance is still focused (i.e., user hasn't already moved on)
     if(ok && this._bFocused && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
 
         //POPULATE LIST HERE
@@ -2342,9 +2352,10 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
-    oSelf._elTextbox.setAttribute("autocomplete","off");
-    oSelf._bFocused = true;
-    if(!oSelf._bItemSelected) {
+    // Start of a new interaction
+    if(!oSelf._bFocused) {
+        oSelf._elTextbox.setAttribute("autocomplete","off");
+        oSelf._bFocused = true;
         oSelf.textboxFocusEvent.fire(oSelf);
         YAHOO.log("Textbox focused", "info", oSelf.toString());
     }
