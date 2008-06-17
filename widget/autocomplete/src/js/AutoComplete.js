@@ -217,9 +217,6 @@ YAHOO.widget.AutoComplete.prototype.maxResultsDisplayed = 10;
  * Number of seconds to delay before submitting a query request.  If a query
  * request is received before a previous one has completed its delay, the
  * previous request is cancelled and the new request is set to the delay.
- * Implementers should take care when setting this value very low (i.e., less
- * than 0.2) with low latency DataSources and the typeAhead feature enabled, as
- * fast typers may see unexpected behavior.
  *
  * @property queryDelay
  * @type Number
@@ -1633,27 +1630,23 @@ YAHOO.widget.AutoComplete.prototype._textMatchesOption = function() {
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
-    // Don't update if turned off
+    // Don't typeAhead if turned off or is backspace
     if(!this.typeAhead || (this._nKeyCode == 8)) {
         return;
     }
 
     var elTextbox = this._elTextbox;
-    var sValue = this._elTextbox.value; // any saved queries plus what user has typed
-
-    // Don't update with type-ahead if text selection is not supported
-    if(!elTextbox.setSelectionRange && !elTextbox.createTextRange) {
-        return;
+    // Only if text selection is supported
+    if(elTextbox.setSelectionRange && elTextbox.createTextRange) {
+        // Select the portion of text that the user has not typed
+        var nStart = elTextbox.value.length; // any saved queries plus what user has typed
+        this._updateValue(oItem);
+        var nEnd = elTextbox.alue.length;
+        this._selectText(elTextbox,nStart,nEnd);
+        var sPrefill = elTextbox.value.substr(nStart,nEnd);
+        this.typeAheadEvent.fire(this,sQuery,sPrefill);
+        YAHOO.log("Typeahead occured with prefill string \"" + sPrefill + "\"", "info", this.toString());
     }
-
-    // Select the portion of text that the user has not typed
-    var nStart = sValue.length;
-    this._updateValue(oItem);
-    var nEnd = elTextbox.value.length;
-    this._selectText(elTextbox,nStart,nEnd);
-    var sPrefill = elTextbox.value.substr(nStart,nEnd);
-    this.typeAheadEvent.fire(this,sQuery,sPrefill);
-    YAHOO.log("Typeahead occured with prefill string \"" + sPrefill + "\"", "info", this.toString());
 };
 
 /**
