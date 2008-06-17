@@ -1,0 +1,20 @@
+.yui-carousel-container,
+.yui-carousel-vertical-container {
+    margin: 0 auto;
+}
+
+.yui-carousel-content {
+    margin: 0 5px;
+}
+
+.yui-carousel-vertical-container .yui-carousel-content {
+    margin: 5px 0;
+}
+
+.yui-carousel li {
+    height: 75px;
+}
+
+.yui-carousel-vertical li {
+    width: 75px;
+}
