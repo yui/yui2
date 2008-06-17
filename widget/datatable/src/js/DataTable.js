@@ -3407,6 +3407,9 @@ _setSelections : function() {
 _onRenderChainEnd : function() {
     this.validateColumnWidths();
     this.hideTableMessage();
+    if(this._elTbody.rows.length === 0) {
+        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);        
+    }
 },
 
 /*TODO
@@ -4867,30 +4870,17 @@ YAHOO.log("start render","time");
 
     /* NEW METHOD */
     // From the top, update in-place existing rows, so as to reuse DOM elements
-    var elTbody = this._elTbody;
-    var nRecordsLength = allRecords.length;
+    var elTbody = this._elTbody,
+        loopN = this.get("renderLoopSize"),
+        nRecordsLength = allRecords.length;
+    
+    // Table has rows
     if(nRecordsLength > 0) {        
-        // unlooped
-        //this._oChainRender.add({
-        //    method: function(oArg) {
-        //        if((this instanceof DT) && this._sId) {
-        //            var elRow;
-        //            for(var i = allRecords.length-1; i>-1; i--) {
-        //                elRow = Dom.get(allRecords[i].getId());
-        //                elRow = elRow || this._addTrEl(allRecords[i]);
-        //                elTbody.insertBefore(elRow, elTbody.firstChild);
-        //            }
-        //        }
-        //    },
-        //    scope: this
-        //});
-        
         // So you don't see the borders in random places
         this._unsetFirstRow();
         this._unsetLastRow();
 
         // Set up the loop Chain to render rows
-        var loopN = this.get("renderLoopSize");
         this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
@@ -4925,7 +4915,7 @@ YAHOO.log("start render","time");
             timeout: (loopN > 0) ? 0 : -1
         });
         
-        // Post render tasks
+        // Post-render tasks
         this._oChainRender.add({
             method: function(oArg) {
                 if((this instanceof DT) && this._sId) {
@@ -4964,16 +4954,39 @@ YAHOO.log("start render","time");
             },
             scope: this
         });
-        this._oChainRender.run();
     }
+    // Table has no rows
     else {
-        // Remove all rows
-        while(elTbody.hasChildNodes()) {
-            elTbody.deleteRow(-1);
-        }
+        // Set up the loop Chain to delete rows
+        var nTotal = elTbody.rows.length;
+        this._oChainRender.add({
+            method: function(oArg) {
+                if((this instanceof DT) && this._sId) {
+                    var i = oArg.nCurrent,
+                        loopN = oArg.nLoopLength,
+                        nIterEnd = (i - loopN < 0) ? -1 : i - loopN;
 
-        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
+                    elTbody.style.display = "none";
+                    
+                    for(; i>nIterEnd; i--) {
+                        elTbody.deleteRow(-1);
+                    }
+                    elTbody.style.display = "";
+                    
+                    // Set up for the next loop
+                    oArg.nCurrent = i;
+                }
+            },
+            scope: this,
+            iterations: (loopN > 0) ? Math.ceil(nTotal/loopN) : 1,
+            argument: {
+                nCurrent: nTotal, 
+                nLoopLength: (loopN > 0) ? loopN : nTotal
+            },
+            timeout: (loopN > 0) ? 0 : -1
+        });
     }
+    this._oChainRender.run();
 
     /* ORIGINAL METHOD 
     var elTbody = this._elTbody;
@@ -6929,12 +6942,8 @@ deleteRow : function(row) {
                                     var isLast = (nTrIndex == this.getLastTrEl().sectionRowIndex);
                                     this._deleteTrEl(nTrIndex);
                     
-                                    // Empty body
-                                    if(this._elTbody.rows.length === 0) {
-                                        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
-                                    }
-                                    // Update UI
-                                    else {
+                                    // Post-delete tasks
+                                    if(this._elTbody.rows.length > 0) {
                                         // Set FIRST/LAST
                                         if(nTrIndex === 0) {
                                             this._setFirstRow();
@@ -6995,7 +7004,7 @@ deleteRows : function(row, count) {
             }
     
             // Delete Record from RecordSet
-            var highIndex = nRecordIndex+1;
+            var highIndex = nRecordIndex;
             var lowIndex = nRecordIndex;
         
             // Validate count and account for negative value
@@ -7055,11 +7064,8 @@ deleteRows : function(row, count) {
                         });
                         this._oChainRender.add({
                             method: function() {    
-                                // Empty body
-                                if(this._elTbody.rows.length === 0) {
-                                    this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
-                                }
-                                else {
+                                // Post-delete tasks
+                                if(this._elTbody.rows.length > 0) {
                                     this._setFirstRow();
                                     this._setLastRow();
                                     this._setRowStripes();
