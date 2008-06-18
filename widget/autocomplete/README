@@ -4,8 +4,10 @@ AutoComplete Release Notes
 
 * AutoComplete has a new required dependency on YAHOO.util.DataSource.
 
-* In order to eliminate certain race conditions, queryDelay must now be a number
-greater than 0. The default value on queryDelay is now 0.1.
+* In order to eliminate certain race conditions with the typeAhead feature, added
+typeAheadQueryDelay of default 0.2.
+
+* Added DOM event wrapper textboxChangeEvent Custom Event.
 
 
 *** version 2.5.2 ***

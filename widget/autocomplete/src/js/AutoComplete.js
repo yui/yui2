@@ -166,6 +166,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         this.selectionEnforceEvent = new YAHOO.util.CustomEvent("selectionEnforce", this);
         this.containerCollapseEvent = new YAHOO.util.CustomEvent("containerCollapse", this);
         this.textboxBlurEvent = new YAHOO.util.CustomEvent("textboxBlur", this);
+        this.textboxChangeEvent = new YAHOO.util.CustomEvent("textboxChange", this);
         
         // Finish up
         elTextbox.setAttribute("autocomplete","off");
@@ -633,6 +634,7 @@ YAHOO.widget.AutoComplete.prototype.destroy = function() {
     this.selectionEnforceEvent.unsubscribeAll();
     this.containerCollapseEvent.unsubscribeAll();
     this.textboxBlurEvent.unsubscribeAll();
+    this.textboxChangeEvent.unsubscribeAll();
 
     // Unhook DOM events
     YAHOO.util.Event.purgeElement(elInput, true);
@@ -802,6 +804,14 @@ YAHOO.widget.AutoComplete.prototype.containerCollapseEvent = null;
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
  */
 YAHOO.widget.AutoComplete.prototype.textboxBlurEvent = null;
+
+/**
+ * Fired when the input field value has changed when it loses focus.
+ *
+ * @event textboxChangeEvent
+ * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ */
+YAHOO.widget.AutoComplete.prototype.textboxChangeEvent = null;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -984,6 +994,15 @@ YAHOO.widget.AutoComplete.prototype._sCurQuery = null;
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._sSavedQuery = null;
+
+/**
+ * Stores initial input value used to determine if textboxChangeEvent should be fired.
+ *
+ * @property _sInitInputValue
+ * @type String
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._sInitInputValue = null;
 
 /**
  * Pointer to the currently highlighted &lt;li&gt; element in the container.
@@ -2386,6 +2405,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxFocus = function (v,oSelf) {
     if(!oSelf._bFocused) {
         oSelf._elTextbox.setAttribute("autocomplete","off");
         oSelf._bFocused = true;
+        oSelf._sInitInputValue = oSelf._elTextbox.value;
         oSelf.textboxFocusEvent.fire(oSelf);
         YAHOO.log("Textbox focused", "info", oSelf.toString());
     }
@@ -2431,6 +2451,9 @@ YAHOO.widget.AutoComplete.prototype._onTextboxBlur = function (v,oSelf) {
         }
         oSelf._cancelIntervalDetection(oSelf);
         oSelf._bFocused = false;
+        if(oSelf._sInitInputValue !== oSelf._elTextbox.value) {
+            oSelf.textboxChangeEvent.fire(oSelf);
+        }
         oSelf.textboxBlurEvent.fire(oSelf);
         YAHOO.log("Textbox blurred", "info", oSelf.toString());
     }
