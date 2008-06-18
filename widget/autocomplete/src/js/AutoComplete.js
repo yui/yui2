@@ -225,6 +225,16 @@ YAHOO.widget.AutoComplete.prototype.maxResultsDisplayed = 10;
 YAHOO.widget.AutoComplete.prototype.queryDelay = 0.2;
 
 /**
+ * If typeAhead is true, number of seconds to delay before updating input with typeAhead value. This
+ * value should be increased to prevent race conditions in low latency environments.
+ *
+ * @property typeAheadDelay
+ * @type Number
+ * @default 0.2
+ */
+YAHOO.widget.AutoComplete.prototype.typeAheadDelay = 0.2;
+
+/**
  * Class name of a highlighted item within results container.
  *
  * @property highlightClassName
@@ -1014,6 +1024,15 @@ YAHOO.widget.AutoComplete.prototype._nKeyCode = null;
 YAHOO.widget.AutoComplete.prototype._nDelayID = -1;
 
 /**
+ * TypeAhead delay timeout ID.
+ *
+ * @property _nTypeAheadDelayID
+ * @type Number
+ * @private
+ */
+YAHOO.widget.AutoComplete.prototype._nTypeAheadDelayID = -1;
+
+/**
  * Src to iFrame used when useIFrame = true. Supports implementations over SSL
  * as well.
  *
@@ -1068,6 +1087,10 @@ YAHOO.widget.AutoComplete.prototype._initProps = function() {
     var queryDelay = this.queryDelay;
     if(!YAHOO.lang.isNumber(queryDelay) || (queryDelay < 0)) {
         this.queryDelay = 0.2;
+    }
+    var typeAheadDelay = this.typeAheadDelay;
+    if(!YAHOO.lang.isNumber(typeAheadDelay) || (typeAheadDelay < 0)) {
+        this.typeAheadDelay = 0.2;
     }
     var delimChar = this.delimChar;
     if(YAHOO.lang.isString(delimChar) && (delimChar.length > 0)) {
@@ -1635,17 +1658,28 @@ YAHOO.widget.AutoComplete.prototype._typeAhead = function(oItem, sQuery) {
         return;
     }
 
-    var elTextbox = this._elTextbox;
+    var oSelf = this,
+        elTextbox = this._elTextbox;
+        
     // Only if text selection is supported
-    if(elTextbox.setSelectionRange && elTextbox.createTextRange) {
-        // Select the portion of text that the user has not typed
-        var nStart = elTextbox.value.length; // any saved queries plus what user has typed
-        this._updateValue(oItem);
-        var nEnd = elTextbox.alue.length;
-        this._selectText(elTextbox,nStart,nEnd);
-        var sPrefill = elTextbox.value.substr(nStart,nEnd);
-        this.typeAheadEvent.fire(this,sQuery,sPrefill);
-        YAHOO.log("Typeahead occured with prefill string \"" + sPrefill + "\"", "info", this.toString());
+    if(elTextbox.setSelectionRange || elTextbox.createTextRange) {
+        var nTypeAheadDelayID = setTimeout(function() {
+                
+                    // Select the portion of text that the user has not typed
+                    var nStart = elTextbox.value.length; // any saved queries plus what user has typed
+                    oSelf._updateValue(oItem);
+                    var nEnd = elTextbox.value.length;
+                    oSelf._selectText(elTextbox,nStart,nEnd);
+                    var sPrefill = elTextbox.value.substr(nStart,nEnd);
+                    oSelf.typeAheadEvent.fire(oSelf,sQuery,sPrefill);
+                    YAHOO.log("Typeahead occured with prefill string \"" + sPrefill + "\"", "info", oSelf.toString());
+            },(this.typeAheadDelay*1000));
+    
+        if(this._nTypeAheadDelayID != -1) {
+            clearTimeout(this._nTypeAheadDelayID);
+        }
+    
+        this._nTypeAheadDelayID = nTypeAheadDelayID;
     }
 };
 
@@ -2232,10 +2266,15 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
                 oSelf._moveSelection(nKeyCode);
             }
             break;
-        default:
+        default: 
             oSelf._oCurItem = null;
             oSelf._bItemSelected = false;
             YAHOO.util.Dom.removeClass(oSelf._oCurItem,  oSelf.highlightClassName);
+
+            if(oSelf._nTypeAheadDelayID != -1) {
+                clearTimeout(oSelf._nTypeAheadDelayID);
+                oSelf._nTypeAheadDelayID = -1;
+            }
     
             oSelf.textboxKeyEvent.fire(oSelf, nKeyCode);
             YAHOO.log("Textbox keyed", "info", oSelf.toString());
@@ -2318,20 +2357,20 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
     }
 
     // Set timeout on the request
-    if(oSelf.queryDelay > 0) {
-        var nDelayID =
-            setTimeout(function(){oSelf._sendQuery(sText);},(oSelf.queryDelay * 1000));
+    var nDelayID =
+        setTimeout(function(){
+            oSelf._sendQuery(sText);
+        },(oSelf.queryDelay * 1000));
 
-        if(oSelf._nDelayID != -1) {
-            clearTimeout(oSelf._nDelayID);
-        }
-
-        oSelf._nDelayID = nDelayID;
+    if(oSelf._nDelayID != -1) {
+        clearTimeout(oSelf._nDelayID);
     }
-    else {
+
+    oSelf._nDelayID = nDelayID;
+    //else {
         // No delay so send request immediately
-        oSelf._sendQuery(sText);
-    }
+        //oSelf._sendQuery(sText);
+   //}
 };
 
 /**
