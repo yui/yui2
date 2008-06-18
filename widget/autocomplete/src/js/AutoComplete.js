@@ -1146,6 +1146,8 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
     if(this.useShadow && !this._elShadow) {
         var elShadow = document.createElement("div");
         elShadow.className = "yui-ac-shadow";
+        elShadow.style.width = 0;
+        elShadow.style.height = 0;
         this._elShadow = this._elContainer.appendChild(elShadow);
     }
     if(this.useIFrame && !this._elIFrame) {
@@ -1154,8 +1156,8 @@ YAHOO.widget.AutoComplete.prototype._initContainerHelpers = function() {
         elIFrame.frameBorder = 0;
         elIFrame.scrolling = "no";
         elIFrame.style.position = "absolute";
-        elIFrame.style.width = "100%";
-        elIFrame.style.height = "100%";
+        elIFrame.style.width = 0;
+        elIFrame.style.height = 0;
         elIFrame.tabIndex = -1;
         this._elIFrame = this._elContainer.appendChild(elIFrame);
     }
