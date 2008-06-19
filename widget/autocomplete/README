@@ -7,7 +7,7 @@ AutoComplete Release Notes
 * In order to eliminate certain race conditions with the typeAhead feature, added
 typeAheadQueryDelay of default 0.2.
 
-* Added DOM event wrapper textboxChangeEvent Custom Event.
+* Added textboxChangeEvent Custom Event.
 
 
 *** version 2.5.2 ***

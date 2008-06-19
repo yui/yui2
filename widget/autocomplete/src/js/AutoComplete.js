@@ -2301,6 +2301,7 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyDown = function(v,oSelf) {
             YAHOO.log("Textbox keyed", "info", oSelf.toString());
             break;
     }
+    oSelf._nKeyCode = nKeyCode;
 };
 
 /**
@@ -2369,7 +2370,6 @@ YAHOO.widget.AutoComplete.prototype._onTextboxKeyUp = function(v,oSelf) {
 
     var nKeyCode = v.keyCode;
 
-    oSelf._nKeyCode = nKeyCode;
     var sText = this.value; //string in textbox
 
     // Filter out chars that don't trigger queries
