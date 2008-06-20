@@ -1495,124 +1495,120 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
 YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, oPayload) {
     sQuery = oPayload.query || sQuery;
     
-    this.dataReturnEvent.fire(this, sQuery, oResponse.results);
-    
     // Pass data through abstract method for any transformations
     var ok = this.doBeforeLoadData(sQuery, oResponse, oPayload);
 
-    // Data ok and instance is still focused (i.e., user hasn't already moved on)
-    if(ok && this._bFocused && oResponse && !oResponse.error && YAHOO.lang.isArray(oResponse.results)) {
-
-        //POPULATE LIST HERE
-        var isOpera = (YAHOO.env.ua.opera);
-        var contentStyle = this._elContent.style;
-        contentStyle.width = (!isOpera) ? null : "";
-        contentStyle.height = (!isOpera) ? null : "";
-    
-        var sCurQuery = decodeURIComponent(sQuery);
-        this._sCurQuery = sCurQuery;
-        this._bItemSelected = false;
-    
-        if(this._maxResultsDisplayed != this.maxResultsDisplayed) {
-            this._initList();
-        }
-    
-        var aResults = oResponse.results;
-        var nItems = Math.min(aResults.length,this.maxResultsDisplayed);
-        this._nDisplayedItems = nItems;
-        if(nItems > 0) {
-            this._initContainerHelpers();
-            var aItems = this._aListItems;
-            
-            // Fill items with data
-            for(var i = nItems-1; i >= 0; i--) {
-                var oItemi = aItems[i];
-                var oResultItemi = aResults[i];
+    if(ok && !oResponse.error) {
+        this.dataReturnEvent.fire(this, sQuery, oResponse.results);
+        
+        // Instance is still focused (i.e., user hasn't already moved on)
+        if(this._bFocused) {
+            //POPULATE LIST HERE
+            var isOpera = (YAHOO.env.ua.opera);
+            var contentStyle = this._elContent.style;
+            contentStyle.width = (!isOpera) ? null : "";
+            contentStyle.height = (!isOpera) ? null : "";
+        
+            var sCurQuery = decodeURIComponent(sQuery);
+            this._sCurQuery = sCurQuery;
+            this._bItemSelected = false;
+        
+            if(this._maxResultsDisplayed != this.maxResultsDisplayed) {
+                this._initList();
+            }
+        
+            var aResults = oResponse.results;
+            var nItems = Math.min(aResults.length,this.maxResultsDisplayed);
+            this._nDisplayedItems = nItems;
+            if(nItems > 0) {
+                this._initContainerHelpers();
+                var aItems = this._aListItems;
                 
-                // Backward compatibility
-                var key = this.key;
-                // The deprecated formatResult overridable method has been defined by implementer...
-                if(this.formatResult) {
-                    // ...And the results are held in hash not an array and need to be converted back to an array
-                    if(key !== 0) {
-                        var aResultItemi = [];
-                        aResultItemi[0] = oResultItemi[key];
-                        // Add field data to the array
-                        var fields = this.dataSource.responseSchema.fields;
-                        if(YAHOO.lang.isArray(fields)) {
-                            for(var k=1, l=fields.length; k<l; k++) {
-                                aResultItemi[aResultItemi.length] = oResultItemi[fields[k]];
+                // Fill items with data
+                for(var i = nItems-1; i >= 0; i--) {
+                    var oItemi = aItems[i];
+                    var oResultItemi = aResults[i];
+                    
+                    // Backward compatibility
+                    var key = this.key;
+                    // The deprecated formatResult overridable method has been defined by implementer...
+                    if(this.formatResult) {
+                        // ...And the results are held in hash not an array and need to be converted back to an array
+                        if(key !== 0) {
+                            var aResultItemi = [];
+                            aResultItemi[0] = oResultItemi[key];
+                            // Add field data to the array
+                            var fields = this.dataSource.responseSchema.fields;
+                            if(YAHOO.lang.isArray(fields)) {
+                                for(var k=1, l=fields.length; k<l; k++) {
+                                    aResultItemi[aResultItemi.length] = oResultItemi[fields[k]];
+                                }
                             }
+                            // Null fields defined, so pass along entire data object
+                            else {
+                                aResultItemi[1] = oResultItemi;
+                            }
+                            // Call the old method with the newly created array
+                            oItemi.innerHTML = this.formatResult(aResultItemi, sCurQuery);
                         }
-                        // Null fields defined, so pass along entire data object
+                        // ...And the results are already held in an array
                         else {
-                            aResultItemi[1] = oResultItemi;
+                            // Call the old method with the array
+                            oItemi.innerHTML = this.formatResult(oResultItemi, sCurQuery);
                         }
-                        // Call the old method with the newly created array
-                        oItemi.innerHTML = this.formatResult(aResultItemi, sCurQuery);
                     }
-                    // ...And the results are already held in an array
+                    // OK to call the new method with the hash
                     else {
-                        // Call the old method with the array
-                        oItemi.innerHTML = this.formatResult(oResultItemi, sCurQuery);
+                        oItemi.innerHTML = this.formatResultNEW(oResultItemi, sCurQuery);
                     }
+                    
+                    oItemi.style.display = "list-item";
+                    oItemi._sResultKey = oResultItemi[key];
+                    oItemi._oResultData = oResultItemi;
+        
                 }
-                // OK to call the new method with the hash
-                else {
-                    oItemi.innerHTML = this.formatResultNEW(oResultItemi, sCurQuery);
+        
+                // Empty out remaining items if any
+                for(var j = aItems.length-1; j >= nItems ; j--) {
+                    var oItemj = aItems[j];
+                    oItemj.innerHTML = null;
+                    oItemj.style.display = "none";
+                    oItemj._sResultKey = null;
+                    oItemj._oResultData = null;
                 }
+        
+                // Expand the container
+                ok = this.doBeforeExpandContainer(this._elTextbox, this._elContainer, sQuery, aResults);
+                this._toggleContainer(ok);
                 
-                oItemi.style.display = "list-item";
-                oItemi._sResultKey = oResultItemi[key];
-                oItemi._oResultData = oResultItemi;
-    
-            }
-    
-            // Empty out remaining items if any
-            for(var j = aItems.length-1; j >= nItems ; j--) {
-                var oItemj = aItems[j];
-                oItemj.innerHTML = null;
-                oItemj.style.display = "none";
-                oItemj._sResultKey = null;
-                oItemj._oResultData = null;
-            }
-    
-            // Expand the container
-            ok = this.doBeforeExpandContainer(this._elTextbox, this._elContainer, sQuery, aResults);
-            this._toggleContainer(ok);
-            
-            if(this.autoHighlight) {
-                // Go to the first item
-                var oFirstItem = aItems[0];
-                this._toggleHighlight(oFirstItem,"to");
-                this.itemArrowToEvent.fire(this, oFirstItem);
-                YAHOO.log("Arrowed to first item", "info", this.toString());
-                this._typeAhead(oFirstItem,sQuery);
+                if(this.autoHighlight) {
+                    // Go to the first item
+                    var oFirstItem = aItems[0];
+                    this._toggleHighlight(oFirstItem,"to");
+                    this.itemArrowToEvent.fire(this, oFirstItem);
+                    YAHOO.log("Arrowed to first item", "info", this.toString());
+                    this._typeAhead(oFirstItem,sQuery);
+                }
+                else {
+                    this._oCurItem = null;
+                }
             }
             else {
-                this._oCurItem = null;
+                this._toggleContainer(false);
             }
+            
+            // TODO: document that this got moved to the top of the method
+            //oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
+            YAHOO.log("Container populated with list items", "info", this.toString());
+            return;
         }
-        else {
-            this._toggleContainer(false);
-        }
-        
-        // TODO: document that this got moved to the top of the method
-        //oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
-        YAHOO.log("Container populated with list items", "info", this.toString());
-
-
-
-
-        return;
-
     }
     
     // Error
-    if(ok && oResponse.error) {
+    else {
         this.dataErrorEvent.fire(this, sQuery);
     }
-    
+        
     YAHOO.log("Could not populate list", "info", this.toString());    
 };
 
