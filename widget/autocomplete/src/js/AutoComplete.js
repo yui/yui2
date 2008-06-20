@@ -155,6 +155,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         this.dataRequestEvent = new YAHOO.util.CustomEvent("dataRequest", this);
         this.dataReturnEvent = new YAHOO.util.CustomEvent("dataReturn", this);
         this.dataErrorEvent = new YAHOO.util.CustomEvent("dataError", this);
+        this.containerPopulateEvent = new YAHOO.util.CustomEvent("containerPopulate", this);
         this.containerExpandEvent = new YAHOO.util.CustomEvent("containerExpand", this);
         this.typeAheadEvent = new YAHOO.util.CustomEvent("typeAhead", this);
         this.itemMouseOverEvent = new YAHOO.util.CustomEvent("itemMouseOver", this);
@@ -491,7 +492,6 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
         if(sBody) {
                 elBody.innerHTML = sBody;
                 elBody.style.display = "block";
-                elBody.style.display = "block";
         }
         else {
             elBody.innerHTML = "";
@@ -623,6 +623,7 @@ YAHOO.widget.AutoComplete.prototype.destroy = function() {
     this.dataRequestEvent.unsubscribeAll();
     this.dataReturnEvent.unsubscribeAll();
     this.dataErrorEvent.unsubscribeAll();
+    this.containerPopulateEvent.unsubscribeAll();
     this.containerExpandEvent.unsubscribeAll();
     this.typeAheadEvent.unsubscribeAll();
     this.itemMouseOverEvent.unsubscribeAll();
@@ -707,10 +708,20 @@ YAHOO.widget.AutoComplete.prototype.dataReturnEvent = null;
 YAHOO.widget.AutoComplete.prototype.dataErrorEvent = null;
 
 /**
+ * Fired when the results container is populated.
+ *
+ * @event containerPopulateEvent
+ * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ */
+YAHOO.widget.AutoComplete.prototype.containerPopulateEvent = null;
+
+/**
  * Fired when the results container is expanded.
  *
  * @event containerExpandEvent
  * @param oSelf {YAHOO.widget.AutoComplete} The AutoComplete instance.
+ * @param sQuery {String} The query string.
+ * @param aResults {Object[]} Results array.
  */
 YAHOO.widget.AutoComplete.prototype.containerExpandEvent = null;
 
@@ -1576,6 +1587,8 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                     oItemj._sResultKey = null;
                     oItemj._oResultData = null;
                 }
+                
+                this.containerPopulateEvent.fire(this, sQuery, aResults);
         
                 // Expand the container
                 ok = this.doBeforeExpandContainer(this._elTextbox, this._elContainer, sQuery, aResults);
@@ -1596,9 +1609,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
             else {
                 this._toggleContainer(false);
             }
-            
-            // TODO: document that this got moved to the top of the method
-            //oSelf.dataReturnEvent.fire(oSelf, sQuery, aResults);
+
             YAHOO.log("Container populated with list items", "info", this.toString());
             return;
         }
