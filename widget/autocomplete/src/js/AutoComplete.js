@@ -1788,7 +1788,6 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     
     // Clear contents of container
     if(!bShow) {
-        this._elContent.scrollTop = 0;
         var aItems = this._aListItems;
 
         if(aItems && (aItems.length > 0)) {
@@ -1804,12 +1803,15 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         this._oCurItem = null;
         this._nDisplayedItems = 0;
         this._sCurQuery = null;
+        
+        // Container is already closed
+        if(!this._bContainerOpen) {
+            this._elContent.style.display = "none";
+        }
     }
-
-    // Container is already closed
-    if(!bShow && !this._bContainerOpen) {
-        this._elContent.style.display = "none";
-        return;
+    // Prepare container to be shown
+    else {
+        this._elContent.scrollTop = 0; // Bug 1777729
     }
 
     // If animation is enabled...
