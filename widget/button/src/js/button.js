@@ -152,10 +152,10 @@
             }
         
             oInput.value = p_sValue;
-            
-            return oInput;
         
         }
+
+		return oInput;
     
     }
     
@@ -1082,228 +1082,212 @@
                 oItem,
                 i;
         
-        
-            if (!Overlay) {
-        
-                this.logger.log("YAHOO.widget.Overlay dependency not met.", 
-                    "error");
-        
-                return false;
-            
-            }
+
+			function onAppendTo() {
+
+				oMenu.render(oButtonElement.parentNode);
+				
+				this.removeListener("appendTo", onAppendTo);
+			
+			}
 
 
-            if (Menu) {
-            
-                sMenuCSSClassName = Menu.prototype.CSS_CLASS_NAME;
-            
-            }
-        
-        
-            function onAppendTo() {
+			function initMenu() {
+		
+				if (oMenu) {
 
-                oMenu.render(oButtonElement.parentNode);
-                
-                this.removeListener("appendTo", onAppendTo);
-            
-            }
-        
-        
-            function initMenu() {
-        
-                if (oMenu) {
+					Dom.addClass(oMenu.element, this.get("menuclassname"));
+					Dom.addClass(oMenu.element, "yui-" + this.get("type") + "-button-menu");
 
-                    Dom.addClass(oMenu.element, this.get("menuclassname"));
-                    Dom.addClass(oMenu.element, 
-                            "yui-" + this.get("type") + "-button-menu");
+					oMenu.showEvent.subscribe(this._onMenuShow, null, this);
+					oMenu.hideEvent.subscribe(this._onMenuHide, null, this);
+					oMenu.renderEvent.subscribe(this._onMenuRender, null, this);
+		
+		
+					if (Menu && oMenu instanceof Menu) {
+		
+						oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
+						oMenu.subscribe("click", this._onMenuClick, this, true);
+						oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, this, true);
+		
+						oSrcElement = oMenu.srcElement;
+		
+						if (oSrcElement && oSrcElement.nodeName.toUpperCase() == "SELECT") {
+				
+							oSrcElement.style.display = "none";
+							oSrcElement.parentNode.removeChild(oSrcElement);
+		
+						}
+		
+					}
+					else if (Overlay && oMenu instanceof Overlay) {
+		
+						if (!m_oOverlayManager) {
+		
+							m_oOverlayManager = new YAHOO.widget.OverlayManager();
+						
+						}
+						
+						m_oOverlayManager.register(oMenu);
+						
+					}
+		
+		
+					this._menu = oMenu;
 
-                    oMenu.showEvent.subscribe(this._onMenuShow, null, this);
-                    oMenu.hideEvent.subscribe(this._onMenuHide, null, this);
-                    oMenu.renderEvent.subscribe(this._onMenuRender, null, this);
-        
-        
-                    if (Menu && oMenu instanceof Menu) {
-        
-                        oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, 
-                            this, true);
-
-                        oMenu.subscribe("click", this._onMenuClick, 
-                            this, true);
-
-                        oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, 
-                            this, true);
-        
-                        oSrcElement = oMenu.srcElement;
-        
-                        if (oSrcElement && 
-                            oSrcElement.nodeName.toUpperCase() == "SELECT") {
-                
-                            oSrcElement.style.display = "none";
-                            oSrcElement.parentNode.removeChild(oSrcElement);
-        
-                        }
-        
-                    }
-                    else if (Overlay && oMenu instanceof Overlay) {
-        
-                        if (!m_oOverlayManager) {
-        
-                            m_oOverlayManager = 
-                                new YAHOO.widget.OverlayManager();
-                        
-                        }
-                        
-                        m_oOverlayManager.register(oMenu);
-                        
-                    }
-        
-        
-                    this._menu = oMenu;
+		
+					if (!bInstance) {
+		
+						if (bLazyLoad && Menu && !(oMenu instanceof Menu)) {
+		
+							/*
+								Mimic Menu's "lazyload" functionality by adding  
+								a "beforeshow" event listener that renders the 
+								Overlay instance before it is made visible by  
+								the button.
+							*/
+		
+							oMenu.beforeShowEvent.subscribe(this._onOverlayBeforeShow, null, this);
+			
+						}
+						else if (!bLazyLoad) {
+		
+							if (Dom.inDocument(oButtonElement)) {
+		
+								oMenu.render(oButtonElement.parentNode);
+							
+							}
+							else {
+			
+								this.on("appendTo", onAppendTo);
+							
+							}
+						
+						}
+					
+					}
+		
+				}
+		
+			}
 
         
-                    if (!bInstance) {
+            if (Overlay) {
         
-                        if (bLazyLoad && Menu && !(oMenu instanceof Menu)) {
-        
-                            /*
-                                Mimic Menu's "lazyload" functionality by adding  
-                                a "beforeshow" event listener that renders the 
-                                Overlay instance before it is made visible by  
-                                the button.
-                            */
-        
-                            oMenu.beforeShowEvent.subscribe(
-                                this._onOverlayBeforeShow, null, this);
-            
-                        }
-                        else if (!bLazyLoad) {
-        
-                            if (Dom.inDocument(oButtonElement)) {
-        
-                                oMenu.render(oButtonElement.parentNode);
-                            
-                            }
-                            else {
-            
-                                this.on("appendTo", onAppendTo);
-                            
-                            }
-                        
-                        }
-                    
-                    }
-        
-                }
-        
-            }
-        
-        
-            if (p_oMenu && Menu && (p_oMenu instanceof Menu)) {
-        
-                oMenu = p_oMenu;
-                aItems = oMenu.getItems();
-                nItems = aItems.length;
-                bInstance = true;
-        
-        
-                if (nItems > 0) {
-        
-                    i = nItems - 1;
-        
-                    do {
-        
-                        oItem = aItems[i];
-        
-                        if (oItem) {
-        
-                            oItem.cfg.subscribeToConfigEvent("selected", 
-                                this._onMenuItemSelected, 
-                                oItem, 
-                                this);
-        
-                        }
-        
-                    }
-                    while (i--);
-        
-                }
-        
-                initMenu.call(this);
-        
-            }
-            else if (Overlay && p_oMenu && (p_oMenu instanceof Overlay)) {
-        
-                oMenu = p_oMenu;
-                bInstance = true;
-        
-                oMenu.cfg.setProperty("visible", false);
-                oMenu.cfg.setProperty("context", [oButtonElement, "tl", "bl"]);
-        
-                initMenu.call(this);
-        
-            }
-            else if (Menu && Lang.isArray(p_oMenu)) {
-        
-                this.on("appendTo", function () {
-        
-                    oMenu = new Menu(Dom.generateId(), { lazyload: bLazyLoad, 
-                        itemdata: p_oMenu });
-        
-                    initMenu.call(this);
-        
-                });
-        
-            }
-            else if (Lang.isString(p_oMenu)) {
-        
-                oMenuElement = Dom.get(p_oMenu);
-        
-                if (oMenuElement) {
-        
-                    if (Menu && Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
-                        oMenuElement.nodeName.toUpperCase() == "SELECT") {
-            
-                        oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
-            
-                        initMenu.call(this);
-            
-                    }
-                    else if (Overlay) {
-        
-                        oMenu = new Overlay(p_oMenu, { visible: false, 
-                            context: [oButtonElement, "tl", "bl"] });
-            
-                        initMenu.call(this);
-            
-                    }
-        
-                }
-        
-            }
-            else if (p_oMenu && p_oMenu.nodeName) {
-        
-                if (Menu && Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
-                        p_oMenu.nodeName.toUpperCase() == "SELECT") {
-        
-                    oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
-                
-                    initMenu.call(this);
-        
-                }
-                else if (Overlay) {
-        
-                    if (!p_oMenu.id) {
-                    
-                        Dom.generateId(p_oMenu);
-                    
-                    }
-        
-                    oMenu = new Overlay(p_oMenu, { visible: false, 
-                                    context: [oButtonElement, "tl", "bl"] });
-        
-                    initMenu.call(this);
-                
-                }
+				if (Menu) {
+				
+					sMenuCSSClassName = Menu.prototype.CSS_CLASS_NAME;
+				
+				}
+			
+				if (p_oMenu && Menu && (p_oMenu instanceof Menu)) {
+			
+					oMenu = p_oMenu;
+					aItems = oMenu.getItems();
+					nItems = aItems.length;
+					bInstance = true;
+			
+			
+					if (nItems > 0) {
+			
+						i = nItems - 1;
+			
+						do {
+			
+							oItem = aItems[i];
+			
+							if (oItem) {
+			
+								oItem.cfg.subscribeToConfigEvent("selected", 
+									this._onMenuItemSelected, 
+									oItem, 
+									this);
+			
+							}
+			
+						}
+						while (i--);
+			
+					}
+			
+					initMenu.call(this);
+			
+				}
+				else if (Overlay && p_oMenu && (p_oMenu instanceof Overlay)) {
+			
+					oMenu = p_oMenu;
+					bInstance = true;
+			
+					oMenu.cfg.setProperty("visible", false);
+					oMenu.cfg.setProperty("context", [oButtonElement, "tl", "bl"]);
+			
+					initMenu.call(this);
+			
+				}
+				else if (Menu && Lang.isArray(p_oMenu)) {
+			
+					this.on("appendTo", function () {
+			
+						oMenu = new Menu(Dom.generateId(), { lazyload: bLazyLoad, 
+							itemdata: p_oMenu });
+			
+						initMenu.call(this);
+			
+					});
+			
+				}
+				else if (Lang.isString(p_oMenu)) {
+			
+					oMenuElement = Dom.get(p_oMenu);
+			
+					if (oMenuElement) {
+			
+						if (Menu && Dom.hasClass(oMenuElement, sMenuCSSClassName) || 
+							oMenuElement.nodeName.toUpperCase() == "SELECT") {
+				
+							oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
+				
+							initMenu.call(this);
+				
+						}
+						else if (Overlay) {
+			
+							oMenu = new Overlay(p_oMenu, { visible: false, 
+								context: [oButtonElement, "tl", "bl"] });
+				
+							initMenu.call(this);
+				
+						}
+			
+					}
+			
+				}
+				else if (p_oMenu && p_oMenu.nodeName) {
+			
+					if (Menu && Dom.hasClass(p_oMenu, sMenuCSSClassName) || 
+							p_oMenu.nodeName.toUpperCase() == "SELECT") {
+			
+						oMenu = new Menu(p_oMenu, { lazyload: bLazyLoad });
+					
+						initMenu.call(this);
+			
+					}
+					else if (Overlay) {
+			
+						if (!p_oMenu.id) {
+						
+							Dom.generateId(p_oMenu);
+						
+						}
+			
+						oMenu = new Overlay(p_oMenu, { visible: false, 
+										context: [oButtonElement, "tl", "bl"] });
+			
+						initMenu.call(this);
+					
+					}
+				
+				}
             
             }
         
@@ -1397,8 +1381,10 @@
                     this.CHECK_ACTIVATION_KEYS : this.ACTIVATION_KEYS,
         
                 nKeyCodes = aKeyCodes.length,
+                bReturnVal = false,
                 i;
         
+
             if (nKeyCodes > 0) {
         
                 i = nKeyCodes - 1;
@@ -1407,7 +1393,8 @@
         
                     if (p_nKeyCode == aKeyCodes[i]) {
         
-                        return true;
+                        bReturnVal = true;
+                        break;
         
                     }
         
@@ -1415,6 +1402,8 @@
                 while (i--);
             
             }
+            
+            return bReturnVal;
         
         },
         
@@ -1608,7 +1597,8 @@
         
             function sizeAndPositionMenu() {
         
-                var nDisplayRegionHeight = getMenuDisplayRegionHeight();
+                var nDisplayRegionHeight = getMenuDisplayRegionHeight(),
+                	fnReturnVal;
         
         
                 if (nMenuHeight > nDisplayRegionHeight) {
@@ -1662,13 +1652,15 @@
             
                             bMenuFlipped = true;
             
-                            return sizeAndPositionMenu();
+                            fnReturnVal = sizeAndPositionMenu();
             
                         }
                     
                     }
                 
                 }
+        
+        		return fnReturnVal;
         
             }
 
@@ -2198,6 +2190,7 @@
                 oForm,
                 oSrcElement,
                 oElement,
+                bReturnVal,
                 nX;
         
         
@@ -2260,7 +2253,7 @@
     
                 if ((oElement.offsetWidth - this.OPTION_AREA_WIDTH) < nX) {
     
-                    return false;
+                    bReturnVal = false;
                 
                 }
                 else {
@@ -2286,6 +2279,8 @@
                 break;
         
             }
+        
+        	return bReturnVal;
         
         },
         
@@ -2728,7 +2723,8 @@
                 oMenuItem,
                 sName,
                 oValue,
-                oMenuField;
+                oMenuField,
+                oReturnVal;
         
         
             if (oForm && !this.get("disabled")) {
@@ -2824,10 +2820,11 @@
                 
                 }
         
-        
-                return this._hiddenFields;
+        		oReturnVal = this._hiddenFields;
         
             }
+
+			return oReturnVal;
         
         },
         
@@ -2913,9 +2910,7 @@
         
             if (oForm) {
         
-                if (this.get("type") == "submit" || 
-                    (oSrcElement && oSrcElement.type == "submit")) 
-                {
+                if (this.get("type") == "submit" || (oSrcElement && oSrcElement.type == "submit")) {
         
                     m_oSubmitTrigger = this;
                     
@@ -3520,7 +3515,16 @@
         */
         getForm: function () {
         
-            return this._button.form;
+        	var oButton = this._button,
+        		oForm;
+        
+            if (oButton) {
+            
+            	oForm = oButton.form;
+            
+            }
+        
+        	return oForm;
         
         },
         
@@ -3624,7 +3628,7 @@
 		
 			if (this.DOM_EVENTS[sType] && this.get("disabled")) {
 		
-				return;
+				return false;
 		
 			}
 		
@@ -3855,13 +3859,7 @@
     */
     YAHOO.widget.Button.getButton = function (p_sId) {
 
-        var oButton = m_oButtons[p_sId];
-
-        if (oButton) {
-        
-            return oButton;
-        
-        }
+		return m_oButtons[p_sId];
 
     };
     

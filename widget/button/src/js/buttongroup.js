@@ -592,9 +592,9 @@
         
                 this.logger.log("Button " + oButton.get("id") + " added.");
         
-                return oButton;
-        
             }
+
+			return oButton;
         
         },
         
@@ -643,18 +643,12 @@
                         }
                     
                     }
-        
-                    if (aButtons.length > 0) {
-        
-                        this.logger.log(aButtons.length + " buttons added.");
-        
-                        return aButtons;
-        
-                    }
                 
                 }
         
             }
+
+			return aButtons;
         
         },
         
@@ -716,11 +710,7 @@
         */
         getButton: function (p_nIndex) {
         
-            if (Lang.isNumber(p_nIndex)) {
-        
-                return this._buttons[p_nIndex];
-        
-            }
+            return this._buttons[p_nIndex];
         
         },
         
