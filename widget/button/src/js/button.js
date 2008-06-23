@@ -1877,8 +1877,7 @@
         
             var sType,
                 oElement,
-                nX,
-                me;
+                nX;
         
         
             function onMouseUp() {
@@ -1951,13 +1950,7 @@
         
                 if (sType == "split" || sType == "menu") {
 
-                    me = this;
-        
-                    this._hideMenuTimerId = window.setTimeout(function () {
-                    
-                        me.on("mouseup", onMouseUp);
-                    
-                    }, 250);
+                    this._hideMenuTimer = Lang.later(250, this, this.on, ["mouseup", onMouseUp]);
         
                 }
         
@@ -1975,12 +1968,13 @@
         */
         _onMouseUp: function (p_oEvent) {
         
-            var sType = this.get("type");
+            var sType = this.get("type"),
+            	oHideMenuTimer = this._hideMenuTimer;
         
         
-            if (this._hideMenuTimerId) {
-        
-                window.clearTimeout(this._hideMenuTimerId);
+            if (oHideMenuTimer) {
+  
+  				oHideMenuTimer.cancel();
         
             }
         
@@ -2301,13 +2295,7 @@
                 reference immediately after appending the field, it is null.
             */
         
-            var me = this;
-        
-            window.setTimeout(function () {
-        
-                me._addListenersToForm();
-        
-            }, 0);
+            Lang.later(0, this, this._addListenersToForm);
         
         },
         
