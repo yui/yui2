@@ -1148,12 +1148,28 @@ parseXMLData : function(oRequest, oFullResponse) {
                 // ...or in a node
                 else {
                     var xmlNode = result.getElementsByTagName(key);
-                    if(xmlNode && xmlNode.item(0) && xmlNode.item(0).firstChild) {
+                    if(xmlNode && xmlNode.item(0) && xmlNode.item(0)) {
                         data = xmlNode.item(0).firstChild.nodeValue;
+                        var item = xmlNode.item(0);
+                        // For IE, then DOM...
+                        data = (item.text) ? item.text : (item.textContent) ? item.textContent : null;
+                        // ...then fallback, but check for multiple child nodes
+                        if(!data) {
+                            var datapieces = [];
+                            for(var j=0, l=item.childNodes.length; j<l; j++) {
+                                if(item.childNodes[j].nodeValue) {
+                                    datapieces[datapieces.length] = item.childNodes[j].nodeValue;
+                                }
+                            }
+                            if(datapieces.length > 0) {
+                                data = datapieces.join("");
+                            }
+                        }
                     }
-                    else {
-                           data = "";
-                    }
+                }
+                // Safety net
+                if(data === null) {
+                       data = "";
                 }
                 // Backward compatibility
                 if(!field.parser && field.converter) {
