@@ -412,8 +412,8 @@
             oConfig,
             oElement;
     
-        if (arguments.length == 1 && !Lang.isString(p_oElement) && 
-            !p_oElement.nodeName) {
+
+        if (arguments.length == 1 && !Lang.isString(p_oElement) && !p_oElement.nodeName) {
     
             if (!p_oElement.id) {
     
@@ -430,9 +430,7 @@
             this.logger.log("No source HTML element.  Building the button " +
                     "using the set of configuration attributes.");
     
-            fnSuperClass.call(this, 
-                (this.createButtonElement(p_oElement.type)),
-                p_oElement);
+            fnSuperClass.call(this, (this.createButtonElement(p_oElement.type)), p_oElement);
     
         }
         else {
@@ -452,8 +450,7 @@
                     
                     }
     
-                    this.logger = new YAHOO.widget.LogWriter(
-                                        "Button " + oConfig.attributes.id);
+                    this.logger = new YAHOO.widget.LogWriter("Button " + oConfig.attributes.id);
                 
                     this.logger.log("Building the button using an existing " + 
                             "HTML element as a source element.");
@@ -470,13 +467,11 @@
                                 "as is.  Creating a new HTML element for " + 
                                 "the button.");
                 
-                        oConfig.element = 
-                            this.createButtonElement(oConfig.attributes.type);
+                        oConfig.element = this.createButtonElement(oConfig.attributes.type);
                 
                     }
                 
-                    fnSuperClass.call(this, oConfig.element, 
-                        oConfig.attributes);
+                    fnSuperClass.call(this, oConfig.element, oConfig.attributes);
     
                 }
     
@@ -503,8 +498,7 @@
                 }
     
     
-                this.logger = new YAHOO.widget.LogWriter(
-                    "Button " + oConfig.attributes.id);
+                this.logger = new YAHOO.widget.LogWriter("Button " + oConfig.attributes.id);
     
                 this.logger.log("Building the button using an existing HTML " + 
                     "element as a source element.");
@@ -520,8 +514,7 @@
                     this.logger.log("Source element could not be used as is." +
                             "  Creating a new HTML element for the button.");
             
-                    oConfig.element = 
-                        this.createButtonElement(oConfig.attributes.type);
+                    oConfig.element = this.createButtonElement(oConfig.attributes.type);
             
                 }
             
@@ -2967,7 +2960,7 @@
                 oSrcElement = p_oAttributes.srcelement,
                 oButton = p_oElement.getElementsByTagName(sNodeName)[0],
                 oInput;
-        
+
 
             if (!oButton) {
 
@@ -2986,25 +2979,69 @@
             }
 
             this._button = oButton;
+
+
+            YAHOO.widget.Button.superclass.init.call(this, p_oElement, p_oAttributes);
+
+
+			var sId = this.get("id"),
+				sButtonId = sId + "-button";
+
+
+        	oButton.id = sButtonId;
+
+
+			var aLabels,
+				oLabel;
+
+
+        	var hasLabel = function (element) {
+        	
+				return (element.htmlFor === sId);
+
+        	};
+
+
+			var setLabel = function () {
+
+				oLabel.setAttribute((UA.ie ? "htmlFor" : "for"), sButtonId);
+			
+			};
+
+
+			if (oSrcElement && this.get("type") != "link") {
+
+				aLabels = Dom.getElementsBy(hasLabel, "label");
+
+				if (Lang.isArray(aLabels) && aLabels.length > 0) {
+				
+					oLabel = aLabels[0];
+				
+				}
+
+			}
         
 
-            YAHOO.widget.Button.superclass.init.call(this, p_oElement, 
-                p_oAttributes);
+            m_oButtons[sId] = this;
         
-        
-            m_oButtons[this.get("id")] = this;
-        
-        
+
             this.addClass(this.CSS_CLASS_NAME);
-            
             this.addClass("yui-" + this.get("type") + "-button");
         
             Event.on(this._button, "focus", this._onFocus, null, this);
             this.on("mouseover", this._onMouseOver);
             this.on("click", this._onClick);
-            this.on("appendTo", this._onAppendTo);
             
+            if (oLabel) {
+            
+				this.on("appendTo", setLabel);     
+            
+            }
+            
+            this.on("appendTo", this._onAppendTo);
+       
         
+
             var oContainer = this.get("container"),
                 oElement = this.get("element"),
                 bElInDoc = Dom.inDocument(oElement),
