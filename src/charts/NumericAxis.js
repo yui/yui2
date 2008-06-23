@@ -57,6 +57,14 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @type Boolean
 	 */
 	snapToUnits: true,
+	
+	/**
+	 * Series that are stackable will only stack when this value is set to true.
+	 *
+	 * @property stackingEnabled
+	 * @type Boolean
+	 */
+	stackingEnabled: false,
 
 	/**
 	 * If true, and the bounds are calculated automatically, either the minimum or

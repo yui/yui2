@@ -11,24 +11,28 @@ package com.yahoo.yui.charts
 	{
 		
 	//--------------------------------------
-	//  Class Properties
+	//  Static Properties
 	//--------------------------------------
 	
-		private static var shortNameToSeriesTypeHash:Object = {bar: BarSeries, column: ColumnSeries, line: LineSeries, pie: PieSeries};
-		private static var seriesTypeToShortNameHash:Dictionary = new Dictionary();
-	
-	//--------------------------------------
-	//  Class Methods
-	//--------------------------------------
+		private static var shortNameToSeriesTypeHash:Object = {};
+		shortNameToSeriesTypeHash[ChartSerializer.BAR] = BarSeries;
+		shortNameToSeriesTypeHash[ChartSerializer.COLUMN] = ColumnSeries;
+		shortNameToSeriesTypeHash[ChartSerializer.LINE] = LineSeries;
+		shortNameToSeriesTypeHash[ChartSerializer.PIE] = PieSeries;
+		shortNameToSeriesTypeHash[ChartSerializer.STACK_BAR] = StackedBarSeries; 
+		shortNameToSeriesTypeHash[ChartSerializer.STACK_COLUMN] = StackedColumnSeries;
 		
-		private static function initializeSeriesTypes():void
-		{
-			seriesTypeToShortNameHash[BarSeries] = "bar";
-			seriesTypeToShortNameHash[ColumnSeries] = "column";
-			seriesTypeToShortNameHash[LineSeries] = "line";
-			seriesTypeToShortNameHash[PieSeries] = "pie";
-		}
-		initializeSeriesTypes();
+		private static var seriesTypeToShortNameHash:Dictionary = new Dictionary(true);
+		seriesTypeToShortNameHash[BarSeries] = ChartSerializer.BAR;
+		seriesTypeToShortNameHash[ColumnSeries] = ChartSerializer.COLUMN;
+		seriesTypeToShortNameHash[LineSeries] = ChartSerializer.LINE;
+		seriesTypeToShortNameHash[PieSeries] = ChartSerializer.PIE;
+		seriesTypeToShortNameHash[StackedBarSeries] = ChartSerializer.STACK_BAR;
+		seriesTypeToShortNameHash[StackedColumnSeries] = ChartSerializer.STACK_COLUMN;
+	
+	//--------------------------------------
+	//  Static Methods
+	//--------------------------------------
 		
 		public static function shortNameToSeriesType(name:String):Class
 		{
@@ -42,7 +46,10 @@ package com.yahoo.yui.charts
 		
 		public static function writeSeries(input:ISeries):Object
 		{
-			if(!input) return null;
+			if(!input)
+			{
+				return null;
+			}
 			
 			var type:String = seriesTypeToShortNameHash[getDefinitionByName(getQualifiedClassName(input))];
 			var series:Object = {type: type, data: input.dataProvider, displayName: input.displayName};
@@ -62,7 +69,10 @@ package com.yahoo.yui.charts
 		
 		public static function readSeries(input:Object, series:ISeries = null):ISeries
 		{
-			if(!input || !input.type) return null;
+			if(!input || !input.type)
+			{
+				return null;
+			}
 			
 			if(!series)
 			{

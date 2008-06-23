@@ -72,5 +72,13 @@ YAHOO.lang.extend(YAHOO.widget.TimeAxis, YAHOO.widget.Axis,
 	 * @property snapToUnits
 	 * @type Boolean
 	 */
-	snapToUnits: true
+	snapToUnits: true,
+
+	/**
+	 * Series that are stackable will only stack when this value is set to true.
+	 *
+	 * @property stackingEnabled
+	 * @type Boolean
+	 */
+	stackingEnabled: false
 });

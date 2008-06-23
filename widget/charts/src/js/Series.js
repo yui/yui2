@@ -151,3 +151,37 @@ YAHOO.lang.extend(YAHOO.widget.PieSeries, YAHOO.widget.Series,
 	 */
 	labelFunction: null
 });
+
+/**
+ * StackedBarSeries class for the YUI Charts widget.
+ *
+ * @namespace YAHOO.widget
+ * @class StackedBarSeries
+ * @constructor
+ */
+YAHOO.widget.StackedBarSeries = function() 
+{
+	YAHOO.widget.StackedBarSeries.superclass.constructor.call(this);
+};
+
+YAHOO.lang.extend(YAHOO.widget.StackedBarSeries, YAHOO.widget.CartesianSeries,
+{
+	type: "stackbar"
+});
+
+/**
+ * StackedColumnSeries class for the YUI Charts widget.
+ *
+ * @namespace YAHOO.widget
+ * @class StackedColumnSeries
+ * @constructor
+ */
+YAHOO.widget.StackedColumnSeries = function() 
+{
+	YAHOO.widget.StackedColumnSeries.superclass.constructor.call(this);
+};
+
+YAHOO.lang.extend(YAHOO.widget.StackedColumnSeries, YAHOO.widget.CartesianSeries,
+{
+	type: "stackcolumn"
+});

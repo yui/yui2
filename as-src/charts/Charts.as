@@ -21,6 +21,7 @@ package
 	import flash.events.MouseEvent;
 	import flash.external.ExternalInterface;
 	import flash.text.TextFormat;
+	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 
 	[SWF(backgroundColor=0xffffff)]
@@ -203,7 +204,7 @@ package
 			
 			this.chart.legend = this.legend;
 			
-			this.log("Type set to \"" + value + "\"");
+			this.log("Type set to \"" + this.type + "\"");
 		}
 		
 		public function setDataProvider(value:Array):void
@@ -216,8 +217,9 @@ package
 				var dataFromJavaScript:Object = value[i];
 				var currentData:ISeries = this.chart.dataProvider[i] as ISeries;
 				var seriesType:Class = SeriesSerializer.shortNameToSeriesType(dataFromJavaScript.type ? dataFromJavaScript.type : this.type);
+				
 				var series:ISeries;
-				if(currentData is seriesType)
+				if(currentData && getDefinitionByName(getQualifiedClassName(currentData)) == seriesType)
 				{
 					//reuse the series if possible because we want animation
 					series = SeriesSerializer.readSeries(dataFromJavaScript, currentData);

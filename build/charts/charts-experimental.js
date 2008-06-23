@@ -1782,6 +1782,42 @@ YAHOO.widget.BarChart = function(containerId, dataSource, attributes)
 YAHOO.lang.extend(YAHOO.widget.BarChart, YAHOO.widget.CartesianChart);
 
 /**
+ * StackedColumnChart class for the YUI Charts widget.
+ *
+ * @namespace YAHOO.widget
+ * @class StackedColumnChart
+ * @uses YAHOO.widget.CartesianChart
+ * @constructor
+ * @param containerId {HTMLElement} Container element for the Flash Player instance.
+ * @param dataSource {YAHOO.util.DataSource} DataSource instance.
+ * @param attributes {object} (optional) Object literal of configuration values.
+ */
+YAHOO.widget.StackedColumnChart = function(containerId, dataSource, attributes)
+{
+	YAHOO.widget.StackedColumnChart.superclass.constructor.call(this, "stackcolumn", containerId, dataSource, attributes);
+};
+
+YAHOO.lang.extend(YAHOO.widget.StackedColumnChart, YAHOO.widget.CartesianChart);
+
+/**
+ * StackedBarChart class for the YUI Charts widget.
+ *
+ * @namespace YAHOO.widget
+ * @class StackedBarChart
+ * @uses YAHOO.widget.CartesianChart
+ * @constructor
+ * @param containerId {HTMLElement} Container element for the Flash Player instance.
+ * @param dataSource {YAHOO.util.DataSource} DataSource instance.
+ * @param attributes {object} (optional) Object literal of configuration values.
+ */
+YAHOO.widget.StackedBarChart = function(containerId, dataSource, attributes)
+{
+	YAHOO.widget.StackedBarChart.superclass.constructor.call(this, "stackbar", containerId, dataSource, attributes);
+};
+
+YAHOO.lang.extend(YAHOO.widget.StackedBarChart, YAHOO.widget.CartesianChart);
+
+/**
  * Defines a CartesianChart's vertical or horizontal axis.
  *
  * @namespace YAHOO.widget
@@ -1879,6 +1915,14 @@ YAHOO.lang.extend(YAHOO.widget.NumericAxis, YAHOO.widget.Axis,
 	 * @type Boolean
 	 */
 	snapToUnits: true,
+	
+	/**
+	 * Series that are stackable will only stack when this value is set to true.
+	 *
+	 * @property stackingEnabled
+	 * @type Boolean
+	 */
+	stackingEnabled: false,
 
 	/**
 	 * If true, and the bounds are calculated automatically, either the minimum or
@@ -1972,7 +2016,15 @@ YAHOO.lang.extend(YAHOO.widget.TimeAxis, YAHOO.widget.Axis,
 	 * @property snapToUnits
 	 * @type Boolean
 	 */
-	snapToUnits: true
+	snapToUnits: true,
+
+	/**
+	 * Series that are stackable will only stack when this value is set to true.
+	 *
+	 * @property stackingEnabled
+	 * @type Boolean
+	 */
+	stackingEnabled: false
 });
 
 /**
@@ -2152,6 +2204,40 @@ YAHOO.lang.extend(YAHOO.widget.PieSeries, YAHOO.widget.Series,
 	 * @type String
 	 */
 	labelFunction: null
+});
+
+/**
+ * StackedBarSeries class for the YUI Charts widget.
+ *
+ * @namespace YAHOO.widget
+ * @class StackedBarSeries
+ * @constructor
+ */
+YAHOO.widget.StackedBarSeries = function() 
+{
+	YAHOO.widget.StackedBarSeries.superclass.constructor.call(this);
+};
+
+YAHOO.lang.extend(YAHOO.widget.StackedBarSeries, YAHOO.widget.CartesianSeries,
+{
+	type: "stackbar"
+});
+
+/**
+ * StackedColumnSeries class for the YUI Charts widget.
+ *
+ * @namespace YAHOO.widget
+ * @class StackedColumnSeries
+ * @constructor
+ */
+YAHOO.widget.StackedColumnSeries = function() 
+{
+	YAHOO.widget.StackedColumnSeries.superclass.constructor.call(this);
+};
+
+YAHOO.lang.extend(YAHOO.widget.StackedColumnSeries, YAHOO.widget.CartesianSeries,
+{
+	type: "stackcolumn"
 });
 
 YAHOO.register("charts", YAHOO.widget.Chart, {version: "@VERSION@", build: "@BUILD@"});

@@ -17,20 +17,19 @@ package com.yahoo.yui.charts
 	//  Class Properties
 	//--------------------------------------
 	
-		private static var shortNameToType:Object = {numeric: NumericAxis, category: CategoryAxis, time: TimeAxis};
-		private static var typeToShortName:Dictionary = new Dictionary();
+		private static var shortNameToType:Object = {};
+		shortNameToType.numeric = NumericAxis;
+		shortNameToType.category = CategoryAxis;
+		shortNameToType.time = TimeAxis;
+		
+		private static var typeToShortName:Dictionary = new Dictionary(true);
+		typeToShortName[NumericAxis] = "numeric";
+		typeToShortName[CategoryAxis] = "category";
+		typeToShortName[TimeAxis] = "time";
 		
 	//--------------------------------------
-	//  Class Methods
+	//  Static Methods
 	//--------------------------------------
-	
-		private static function initializeTypes():void
-		{
-			typeToShortName[NumericAxis] = "numeric";
-			typeToShortName[CategoryAxis] = "category";
-			typeToShortName[TimeAxis] = "time";
-		}
-		initializeTypes();
 		
 		public static function getShortName(input:Object):String
 		{
@@ -88,6 +87,7 @@ package com.yahoo.yui.charts
 				numericAxis.snapToUnits = input.snapToUnits;
 				numericAxis.alwaysShowZero = input.alwaysShowZero;
 				numericAxis.scale = input.scale;
+				numericAxis.stackingEnabled = input.stackingEnabled;
 			}
 			else if(axis is TimeAxis)
 			{
@@ -117,6 +117,7 @@ package com.yahoo.yui.charts
 					timeAxis.minorTimeUnit = input.minorTimeUnit;
 				}
 				timeAxis.snapToUnits = input.snapToUnits;
+				timeAxis.stackingEnabled = input.stackingEnabled;
 			}
 			else if(axis is CategoryAxis)
 			{

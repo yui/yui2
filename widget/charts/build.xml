@@ -76,6 +76,8 @@
             <arg value="com.yahoo.astra.fl.charts.ColumnChart"/>
             <arg value="com.yahoo.astra.fl.charts.BarChart"/>
             <arg value="com.yahoo.astra.fl.charts.PieChart"/>
+            <arg value="com.yahoo.astra.fl.charts.StackedColumnChart"/>
+            <arg value="com.yahoo.astra.fl.charts.StackedBarChart"/>
             <arg value="com.yahoo.astra.fl.charts.legend.Legend"/>
             <arg value="com.yahoo.astra.utils.JavaScriptUtil"/>
             <arg value="fl.containers.UILoader"/>
