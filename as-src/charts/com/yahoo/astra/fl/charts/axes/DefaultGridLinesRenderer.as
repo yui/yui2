@@ -93,7 +93,9 @@ package com.yahoo.astra.fl.charts.axes
 			
 			var lineWeight:int = this.getStyleValue("lineWeight") as int;
 			var lineColor:uint = this.getStyleValue("lineColor") as uint;
-			this.drawLines(lines, showLines, lineWeight, lineColor);
+			var fillColors:Array = this.getStyleValue("fillColors") as Array;
+			var fillAlphas:Array = this.getStyleValue("fillAlphas") as Array;
+			this.drawLines(lines, showLines, lineWeight, lineColor, fillColors, fillAlphas);
 			
 			var minorLineWeight:int = this.getStyleValue("minorLineWeight") as int;
 			var minorLineColor:uint = this.getStyleValue("minorLineColor") as uint;
@@ -105,15 +107,9 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * Draws a set of lines based on AxisData positioning.
 		 */
-		protected function drawLines(data:Array, showLines:Boolean, lineWeight:Number, lineColor:uint):void
-		{
-			if(!showLines)
-			{
-				return;
-			}
-			
-			this.graphics.lineStyle(lineWeight, lineColor);
-			
+		protected function drawLines(data:Array, showLines:Boolean, lineWeight:Number, lineColor:uint, fillColors:Array = null, fillAlphas:Array = null):void
+		{	
+			var lastPosition:Number;
 			var renderer:ICartesianAxisRenderer = ICartesianAxisRenderer(this.axisRenderer);
 			var dataCount:int = data.length;
 			for(var i:int = 0; i < dataCount; i++)
@@ -128,15 +124,44 @@ package com.yahoo.astra.fl.charts.axes
 				var position:Number = axisData.position;
 				if(renderer.orientation == AxisOrientation.VERTICAL)
 				{
-					this.graphics.moveTo(0, position);
-					this.graphics.lineTo(Math.round(renderer.contentBounds.width), position);
+					if(!isNaN(lastPosition) && fillColors && fillColors.length > 0)
+					{
+						var color:uint = fillColors[(i - 1) % fillColors.length];
+						var alpha:Number = (fillAlphas && fillAlphas.length > 0) ? fillAlphas[(i - 1) % fillAlphas.length] : 1;
+						this.graphics.lineStyle(0, 0, 0);
+						this.graphics.beginFill(color, alpha);
+						this.graphics.drawRect(0, lastPosition, renderer.contentBounds.width, position - lastPosition);
+						this.graphics.endFill();
+					}
 					
+					if(showLines)
+					{
+						this.graphics.lineStyle(lineWeight, lineColor);
+						this.graphics.moveTo(0, position);
+						this.graphics.lineTo(renderer.contentBounds.width, position);
+					}
 				}
 				else
 				{
-					this.graphics.moveTo(position, 0);
-					this.graphics.lineTo(position, Math.round(renderer.contentBounds.height));
+					if(!isNaN(lastPosition) && fillColors && fillColors.length > 0)
+					{
+						color = fillColors[(i - 1) % fillColors.length];
+						alpha = (fillAlphas && fillAlphas.length > 0) ? fillAlphas[(i - 1) % fillAlphas.length] : 1;
+						this.graphics.lineStyle(0, 0, 0);
+						this.graphics.beginFill(color, alpha);
+						this.graphics.drawRect(lastPosition, 0, position - lastPosition, renderer.contentBounds.height);
+						this.graphics.endFill();
+					}
+					
+					if(showLines)
+					{
+						this.graphics.lineStyle(lineWeight, lineColor);
+						this.graphics.moveTo(position, 0);
+						this.graphics.lineTo(position, renderer.contentBounds.height);
+					}
 				}
+				
+				lastPosition = position;
 			}
 		}
 	}

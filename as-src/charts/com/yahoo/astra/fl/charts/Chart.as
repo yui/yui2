@@ -18,7 +18,6 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.utils.getDefinitionByName;
@@ -351,6 +350,8 @@
 			//we have no way to tell if the user chose a particular series' type or not anyway.
 		}
 		
+		private var _lastDataTipRenderer:ISeriesItemRenderer;
+		
 		/**
 		 * @private
 		 * Storage for the dataTipFunction property.
@@ -578,7 +579,10 @@
 			}
 			
 			//if it's not an array, we have bad data, so ignore it
-			if(!(modifiedData is Array)) return;
+			if(!(modifiedData is Array))
+			{
+				return;
+			}
 			
 			arrayData = modifiedData as Array;
 			
@@ -699,7 +703,36 @@
 			return "";
 		}
 		
-		private var _lastDataTipRenderer:ISeriesItemRenderer;
+		/**
+		 * @private
+		 * Passes data to the data tip.
+		 */
+		protected function refreshDataTip():void
+		{
+			var item:Object = this._lastDataTipRenderer.data;
+			var series:ISeries = this._lastDataTipRenderer.series;
+			var index:int = series.itemRendererToIndex(this._lastDataTipRenderer);
+			
+			var dataTipText:String = "";
+			if(this.dataTipFunction != null)
+			{
+				dataTipText = this.dataTipFunction(item, index, series);
+			}
+			
+			var dataTipRenderer:IDataTipRenderer = this.dataTip as IDataTipRenderer;
+			dataTipRenderer.text = dataTipText;
+			dataTipRenderer.data = item;
+			
+			this.setChildIndex(this.dataTip, this.numChildren - 1);
+			if(this.dataTip is UIComponent)
+			{
+				UIComponent(this.dataTip).drawNow();
+			}
+		}
+		
+	//--------------------------------------
+	//  Protected Event Handlers
+	//--------------------------------------
 		
 		/**
 		 * @private
@@ -728,31 +761,28 @@
 			this.dataTip.visible = false;
 		}
 		
-		protected function refreshDataTip():void
+	//--------------------------------------
+	//  Private Methods
+	//--------------------------------------
+		
+		/**
+		 * @private
+		 * Determines the position for the data tip based on the mouse position
+		 * and the bounds of the chart. Attempts to keep the data tip within the
+		 * chart bounds so that it isn't hidden by any other display objects.
+		 */
+		private function mousePositionToDataTipPosition():Point
 		{
-			var item:Object = this._lastDataTipRenderer.data;
-			var series:ISeries = this._lastDataTipRenderer.series;
-			var index:int = series.itemRendererToIndex(this._lastDataTipRenderer);
-			
-			var dataTipText:String = "";
-			if(this.dataTipFunction != null)
-			{
-				dataTipText = this.dataTipFunction(item, index, series);
-			}
-			
-			var dataTipRenderer:IDataTipRenderer = this.dataTip as IDataTipRenderer;
-			dataTipRenderer.text = dataTipText;
-			dataTipRenderer.data = item;
-			
-			this.setChildIndex(this.dataTip, this.numChildren - 1);
-			if(this.dataTip is UIComponent)
-			{
-				UIComponent(this.dataTip).drawNow();
-			}
+			var position:Point = new Point();
+			position.x = this.mouseX + 2;
+			position.x = Math.min(this.width - this.dataTip.width, position.x);
+			position.y = this.mouseY - this.dataTip.height - 2;
+			position.y = Math.max(0, position.y);
+			return position;
 		}
 		
 	//--------------------------------------
-	//  Private Methods
+	//  Private Event Handlers
 	//--------------------------------------
 		
 		/**
@@ -777,22 +807,6 @@
 			var position:Point = this.mousePositionToDataTipPosition();
 			this.dataTip.x = position.x;
 			this.dataTip.y = position.y;
-		}
-		
-		/**
-		 * @private
-		 * Determines the position for the data tip based on the mouse position
-		 * and the bounds of the chart. Attempts to keep the data tip within the
-		 * chart bounds so that it isn't hidden by any other display objects.
-		 */
-		private function mousePositionToDataTipPosition():Point
-		{
-			var position:Point = new Point();
-			position.x = this.mouseX + 2;
-			position.x = Math.min(this.width - this.dataTip.width, position.x);
-			position.y = this.mouseY - this.dataTip.height - 2;
-			position.y = Math.max(0, position.y);
-			return position;
 		}
 	
 	}

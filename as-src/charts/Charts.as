@@ -49,53 +49,97 @@ package
 	//--------------------------------------
 	
 		/**
-		 * @private (protected)
+		 * @private
 		 * A reference to the chart instance.
 		 */
 		protected var chart:Chart;
 		
+		/**
+		 * @private
+		 * The type of the chart specified by setType().
+		 */
+		protected var type:String;
+		
+		/**
+		 * @private
+		 * A reference to the legend instance.
+		 */
 		protected var legend:Legend;
 		
+		/**
+		 * @private
+		 * Storage for the legendDisplay property.
+		 */
 		protected var _legendDisplay:String = "none";
 		
+		/**
+		 * @private
+		 * Specifies the location of the legend, or "none" if the legend
+		 * is not to be displayed.
+		 */
 		public function get legendDisplay():String
 		{
 			return this._legendDisplay;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function set legendDisplay(value:String):void
 		{
 			this._legendDisplay = value;
 			this.refreshComponentSize();
 		}
 		
+		/**
+		 * @private
+		 * Storage for the spacing property.
+		 */
 		protected var _spacing:Number = 6;
 		
+		/**
+		 * @private
+		 * The spacing between the chart and other objects, such as the legend.
+		 */
 		public function get spacing():Number
 		{
 			return this._spacing;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function set spacing(value:Number):void
 		{
 			this._spacing = value;
 			this.refreshComponentSize();
 		}
 		
+		/**
+		 * @private
+		 * Storage for the padding property.
+		 */
 		protected var _padding:Number = 10;
 		
+		/**
+		 * @private
+		 * The padding around the chart, in pixels.
+		 */
 		public function get padding():Number
 		{
 			return this._padding;
 		}
 		
+		/**
+		 * @private
+		 */
 		public function set padding(value:Number):void
 		{
 			this._padding = value;
 		}
 		
 		/**
-		 * @private (protected)
+		 * @private
 		 */
 		protected var backgroundAndBorder:BackgroundAndBorder;
 		
@@ -136,7 +180,8 @@ package
 				this.chart.removeEventListener(MouseEvent.MOUSE_DOWN, chartItemExtraEventHandler);
 			}
 			
-			var ChartType:Class = ChartSerializer.getType(value);
+			this.type = value;
+			var ChartType:Class = ChartSerializer.getType(this.type);
 			var chart:Chart = new ChartType();
 			chart.setStyle("contentPadding", 0);
 			chart.setStyle("backgroundSkin", Sprite);
@@ -161,7 +206,7 @@ package
 			this.log("Type set to \"" + value + "\"");
 		}
 		
-		public function setDataProvider(value:Array, styleChanged:Boolean = false):void
+		public function setDataProvider(value:Array):void
 		{
 			var dataProvider:Array = [];
 			var seriesCount:int = value.length;
@@ -170,7 +215,7 @@ package
 			{
 				var dataFromJavaScript:Object = value[i];
 				var currentData:ISeries = this.chart.dataProvider[i] as ISeries;
-				var seriesType:Class = SeriesSerializer.shortNameToSeriesType(dataFromJavaScript.type);
+				var seriesType:Class = SeriesSerializer.shortNameToSeriesType(dataFromJavaScript.type ? dataFromJavaScript.type : this.type);
 				var series:ISeries;
 				if(currentData is seriesType)
 				{
@@ -202,10 +247,7 @@ package
 			this.chart.drawNow();
 			
 			//set the styles for the series
-			if(styleChanged)
-			{
-				this.setSeriesStyles(seriesStyles);
-			}
+			this.setSeriesStyles(seriesStyles);
 			
 			this.refreshComponentSize();
 		}

@@ -3,15 +3,16 @@
 	import com.yahoo.astra.animation.Animation;
 	import com.yahoo.astra.animation.AnimationEvent;
 	import com.yahoo.astra.fl.charts.*;
-	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
-	import com.yahoo.astra.fl.charts.axes.NumericAxis;
+	import com.yahoo.astra.fl.charts.axes.IAxis;
+	import com.yahoo.astra.fl.charts.axes.IClusteringAxis;
+	import com.yahoo.astra.fl.charts.axes.IOriginAxis;
 	import com.yahoo.astra.fl.charts.skins.RectangleSkin;
+	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	
 	import fl.core.UIComponent;
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
-	import flash.utils.Dictionary;
 
 	/**
 	 * Renders data points as a series of horizontal bars.
@@ -33,89 +34,10 @@
 			markerSkin: RectangleSkin,
 			markerSize: 18
 		};
-	
-		/**
-		 * @private
-		 * Holds an array of ColumnSeries objects for each plot area in which they appear.
-		 */
-		private static var seriesInCharts:Dictionary = new Dictionary();
 		
 	//--------------------------------------
 	//  Class Methods
 	//--------------------------------------
-	
-		/**
-		 * @private
-		 * When a BarSeries is added to a Chart, it should be registered with that Chart.
-		 * This allows it to determine proper positioning since bar positions depend on other bars.
-		 */
-		private static function registerSeries(chart:Chart, series:BarSeries):void
-		{
-			var bars:Array = seriesInCharts[chart];
-			if(!bars)
-			{
-				bars = [];
-				seriesInCharts[chart] = bars;
-			}
-			
-			bars.push(series);
-		}
-		
-		/**
-		 * @private
-		 * When a BarSeries is removed from its parent Chart, it should be unregistered.
-		 */
-		private static function unregisterSeries(chart:Chart, series:BarSeries):void
-		{
-			var bars:Array = seriesInCharts[chart];
-			if(bars)
-			{
-				var index:int = bars.indexOf(series);
-				if(index >= 0) bars.splice(index, 1);
-			}
-		}
-		
-		/**
-		 * @private
-		 * Returns the number of BarSeries objects appearing in a particular Chart.
-		 * This value may be used to determine the position of the series.
-		 */
-		public static function getSeriesCount(chart:Chart):int
-		{
-			var bars:Array = seriesInCharts[chart];
-			if(bars) return bars.length;
-			return 0;
-		}
-		
-		/**
-		 * @private
-		 * Returns the index of a BarSeries within an Chart.
-		 * This value may be used to determine the position of the series.
-		 */
-		private static function seriesToIndex(chart:Chart, series:BarSeries):int
-		{
-			var bars:Array = seriesInCharts[chart];
-			if(bars)
-			{
-				return bars.indexOf(series);
-			}
-			return -1;
-		}
-		
-		/**
-		 * @private
-		 * Returns the BarSeries at the specified index within an Chart.
-		 */
-		private static function indexToSeries(chart:Chart, index:int):BarSeries
-		{
-			var bars:Array = seriesInCharts[chart];
-			if(bars)
-			{
-				return bars[index];
-			}
-			
-			return null;
-		}
 			
 		/**
 		 * @copy fl.core.UIComponent#getStyleDefinition()
@@ -147,33 +69,13 @@
 		 * The Animation instance that controls animation in this series.
 		 */
 		private var _animation:Animation;
-		
-		/**
-		 * @private
-		 */
-		override public function set chart(value:Chart):void
-		{	
-			if(this.chart != value)
-			{
-				if(this.chart) unregisterSeries(this.chart, this);
-				super.chart = value;
-				if(this.chart)
-				{	
-					if(!(this.chart is CartesianChart))
-					{
-						throw new Error("Objects of type BarSeries may only be added to a CartesianChart.");
-					}
-					registerSeries(this.chart, this);
-				}
-			}
-		}
 	
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
 	
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#clone()
+		 * @inheritDoc
 		 */
 		override public function clone():ISeries
 		{
@@ -208,42 +110,42 @@
 			this.graphics.clear();
 			
 			//if we don't have data, let's get out of here
-			if(!this.dataProvider) return;
-			
-			this.graphics.lineStyle(1, 0x0000ff);
-			
-			//we know our chart is a cartesian chart. if it isn't we'll have thrown an error!
-			var cartesianChart:CartesianChart = this.chart as CartesianChart;
-			
-			//detect the axes (one must be numeric)
-			var numericAxis:NumericAxis = cartesianChart.horizontalAxis as NumericAxis;
-			var categoryAxis:CategoryAxis = cartesianChart.verticalAxis as CategoryAxis;
-			if(!categoryAxis)
+			if(!this.dataProvider)
 			{
-				throw new Error("To use a BarSeries object, the vertical axis of the chart it appears within must be a CategoryAxis.");
 				return;
 			}
 			
-			//variables we need in the loop (and shouldn't look up a gazillion times)
-			var originPosition:Number = numericAxis.valueToLocal(numericAxis.origin);
-			var seriesIndex:int = seriesToIndex(this.chart, this);
-			var markerSize:Number = this.getStyleValue("markerSize") as Number;
-			var fillColor:uint = this.getStyleValue("fillColor") as uint;
-			var maximumAllowedMarkerSize:Number = this.height / categoryAxis.categoryNames.length / getSeriesCount(this.chart);
-			//we need to use floor because CS3 UIComponents round the position
-			markerSize = Math.floor(Math.min(maximumAllowedMarkerSize, markerSize));
+			this.graphics.lineStyle(1, 0x0000ff);
+			
+			//grab the axes
+			var cartesianChart:CartesianChart = this.chart as CartesianChart;
+			var valueAxis:IOriginAxis = cartesianChart.horizontalAxis as IOriginAxis;
+			var otherAxis:IAxis = cartesianChart.verticalAxis;
+			if(!valueAxis)
+			{
+				throw new Error("To use a BarSeries object, the horizontal axis of the chart it appears within must be an IOriginAxis.");
+				return;
+			}
+			
+			var markerSizes:Array = [];
+			var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
+			var totalMarkerSize:Number = this.calculateTotalMarkerSize(otherAxis, markerSizes);
+			var seriesIndex:int = allSeriesOfType.indexOf(this);
+			var markerSize:Number = markerSizes[seriesIndex] as Number;
+			var yOffset:Number = this.calculateYOffset(valueAxis, otherAxis, markerSizes, totalMarkerSize, allSeriesOfType);
 			
 			var startValues:Array = [];
 			var endValues:Array = [];
 			var itemCount:int = this.length;
 			for(var i:int = 0; i < itemCount; i++)
 			{
-				var item:Object = this.dataProvider[i];
-				var position:Point = cartesianChart.dataToLocal(item, this);
+				var originValue:Object = this.calculateOriginValue(i, valueAxis, allSeriesOfType);
+				var originPosition:Number = valueAxis.valueToLocal(originValue);
 				
+				var position:Point = IChart(this.chart).itemToPosition(this, i);
 				var marker:DisplayObject = this.markers[i] as DisplayObject;
 				
-				marker.y = position.y;
+				marker.y = position.y + yOffset;
 				marker.height = markerSize;
 				
 				//if we have a bad position, don't display the marker
@@ -306,13 +208,104 @@
 			}
 		}
 		
-		protected function tweenUpdateHandler(event:AnimationEvent):void
+		/**
+		 * @private
+		 * Determines the maximum possible marker size for the containing chart.
+		 */
+		protected function calculateMaximumAllowedMarkerSize(axis:IAxis):Number
 		{
-			var data:Array = event.parameters as Array;
-			this.drawMarkers(data);
+			if(axis is IClusteringAxis)
+			{
+				var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
+				return (this.height / IClusteringAxis(axis).clusterCount) / allSeriesOfType.length;
+			}
+			return Number.POSITIVE_INFINITY;
 		}
 		
-		protected function drawMarkers(data:Array):void
+		/**
+		 * @private
+		 * Determines the marker size for a series.
+		 */
+		protected function calculateMarkerSize(series:ISeries, axis:IAxis):Number
+		{
+			var markerSize:Number = UIComponentUtil.getStyleValue(UIComponent(series), "markerSize") as Number;
+			var maximumAllowedMarkerSize:Number = this.calculateMaximumAllowedMarkerSize(axis);
+			markerSize = Math.min(maximumAllowedMarkerSize, markerSize);
+			
+			//we need to use floor because CS3 UIComponents round the position
+			markerSize = Math.floor(markerSize);
+			return markerSize;
+		}
+		
+		/**
+		 * @private
+		 * Calculates the sum of the chart's series marker sizes.
+		 */
+		protected function calculateTotalMarkerSize(axis:IAxis, sizes:Array):Number
+		{
+			var totalMarkerSize:Number = 0;
+			var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
+			var seriesCount:int = allSeriesOfType.length;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var series:BarSeries = BarSeries(allSeriesOfType[i]);
+				var markerSize:Number = this.calculateMarkerSize(series, axis);
+				sizes.push(markerSize);
+				if(axis is IClusteringAxis)
+				{
+					totalMarkerSize += markerSize;
+				}
+				else
+				{
+					totalMarkerSize = Math.max(totalMarkerSize, markerSize);
+				}
+			}
+			return totalMarkerSize;
+		}
+		
+		/**
+		 * @private
+		 * Calculates the y offset caused by clustering.
+		 */
+		protected function calculateYOffset(valueAxis:IOriginAxis, otherAxis:IAxis, markerSizes:Array, totalMarkerSize:Number, allSeriesOfType:Array):Number
+		{
+			var seriesIndex:int = allSeriesOfType.indexOf(this);
+			
+			//special case for axes that allow clustering
+			if(otherAxis is IClusteringAxis)
+			{
+				var yOffset:Number = 0;
+				for(var i:int = 0; i < seriesIndex; i++)
+				{
+					yOffset += markerSizes[i] as Number;
+				}
+				//center based on the sum of all marker sizes
+				return -(totalMarkerSize / 2) + yOffset;
+			}
+			
+			//center based on the marker size of this series
+			return -(markerSizes[seriesIndex] as Number) / 2;
+		}
+		
+		/**
+		 * @private
+		 * Determines the origin of the column. Either the axis origin or the
+		 * stacked value.
+		 */
+		protected function calculateOriginValue(index:int, axis:IOriginAxis, allSeriesOfType:Array):Object
+		{
+			return axis.origin;
+		}
+		
+	//--------------------------------------
+	//  Private Methods
+	//--------------------------------------
+		
+		/**
+		 * @private
+		 * Draws the markers. Used with animation.
+		 */
+		private function drawMarkers(data:Array):void
 		{
 			var itemCount:int = this.length;
 			for(var i:int = 0; i < itemCount; i++)
@@ -325,9 +318,23 @@
 				
 				if(marker is UIComponent) 
 				{
-					(marker as UIComponent).drawNow();
+					UIComponent(marker).drawNow();
 				}
 			}
+		}
+		
+	//--------------------------------------
+	//  Private Event Handlers
+	//--------------------------------------
+		
+		/**
+		 * @private
+		 * Draws the markers every time the tween updates.
+		 */
+		private function tweenUpdateHandler(event:AnimationEvent):void
+		{
+			var data:Array = event.parameters as Array;
+			this.drawMarkers(data);
 		}
 		
 	}

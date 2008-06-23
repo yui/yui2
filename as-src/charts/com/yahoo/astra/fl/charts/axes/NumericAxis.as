@@ -1,7 +1,10 @@
 package com.yahoo.astra.fl.charts.axes
 {
 	import com.yahoo.astra.fl.charts.series.ISeries;
+	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	import com.yahoo.astra.utils.NumberUtil;
+	
+	import flash.utils.Dictionary;
 	
 	/**
 	 * An axis type representing a numeric range from minimum to maximum
@@ -9,7 +12,7 @@ package com.yahoo.astra.fl.charts.axes
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public class NumericAxis extends BaseAxis implements IAxis
+	public class NumericAxis extends BaseAxis implements IAxis, IOriginAxis, IStackingAxis
 	{
 		
 	//--------------------------------------
@@ -180,14 +183,12 @@ package com.yahoo.astra.fl.charts.axes
 		{
 			this._minorUnit = value;
 			this._minorUnitSetByUser = !isNaN(value);
-	}
+		}
 		
 		/**
-		 * The value of the origin. Depends on the scale type.
-		 * Note: This value may not be the "true" origin value. It may be the
-		 * minimum or maximum value if the "true" origin is not visible.
+		 * @inheritDoc
 		 */
-		public function get origin():Number
+		public function get origin():Object
 		{
 			var origin:Number = 0;
 			if(this.scale == ScaleType.LOGARITHMIC)
@@ -198,6 +199,28 @@ package com.yahoo.astra.fl.charts.axes
 			origin = Math.max(origin, this.minimum);
 			origin = Math.min(origin, this.maximum);
 			return origin;
+		}
+		
+		/**
+		 * @private
+		 * Storage for the stackingEnabled property.
+		 */
+		private var _stackingEnabled:Boolean = false;
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get stackingEnabled():Boolean
+		{
+			return this._stackingEnabled;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set stackingEnabled(value:Boolean):void
+		{
+			this._stackingEnabled = value;
 		}
 	
 		/**
@@ -334,6 +357,34 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
+		public function stack(top:Object, ...rest:Array):Object
+		{
+			var numericValue:Number = Number(top);
+			var negative:Boolean = false;
+			if(numericValue < 0)
+			{
+				negative = true;
+			}
+			
+			var restCount:int = rest.length;
+			for(var i:int = 0; i < restCount; i++)
+			{
+				var currentValue:Number = Number(rest[i]);
+				if(negative && currentValue < 0)
+				{
+					numericValue += currentValue;
+				}
+				else if(!negative && currentValue > 0)
+				{
+					numericValue += currentValue;
+				}
+			}
+			return numericValue;
+		}
+	
+		/**
+		 * @inheritDoc
+		 */
 		public function updateScale(data:Array):void
 		{
 			var seriesCount:int = data.length;
@@ -351,27 +402,11 @@ package com.yahoo.astra.fl.charts.axes
 						continue;
 					}
 					
-					if(item is Number)
-					{
-						var value:Number = item as Number;
-					}
-					else
-					{
-						var dataField:String = this.chart.axisAndSeriesToField(this, series);
-						if(dataField && item.hasOwnProperty(dataField))
-						{
-							if(item[dataField] === null)
-							{
-								continue;
-							}
-							value = Number(item[dataField]);
-						}
-					}
-					
-					//skip bad data
+					//automatically calculates stacked values
+					var value:Number = this.chart.itemToAxisValue(series, j, this) as Number;
 					if(isNaN(value))
 					{
-						continue;
+						continue; //skip bad data
 					}
 					
 					//don't let bad data propogate

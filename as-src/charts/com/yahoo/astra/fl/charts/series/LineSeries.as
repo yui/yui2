@@ -103,7 +103,7 @@
 	//--------------------------------------
 	
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#clone()
+		 * @inheritDoc
 		 */
 		override public function clone():ISeries
 		{
@@ -137,7 +137,10 @@
 			
 			this.graphics.clear();
 			
-			if(!this.dataProvider) return;
+			if(!this.dataProvider)
+			{
+				return;
+			}
 			
 			var markerSize:Number = this.getStyleValue("markerSize") as Number;
 			
@@ -146,8 +149,7 @@
 			var itemCount:int = this.length;
 			for(var i:int = 0; i < itemCount; i++)
 			{
-				var item:Object = this.dataProvider[i];
-				var position:Point = CartesianChart(this.chart).dataToLocal(item, this);
+				var position:Point = CartesianChart(this.chart).itemToPosition(this, i);
 				
 				var marker:DisplayObject = this.markers[i] as DisplayObject;
 				var ratio:Number = marker.width / marker.height;
@@ -278,7 +280,11 @@
 						
 						//if line between the last point and this point is within
 						//the series bounds, draw it, otherwise, only move to the new point.
-						if(lineBounds.intersects(seriesBounds))
+						if(lineBounds.intersects(seriesBounds) ||
+							yPosition == seriesBounds.y ||
+							yPosition == seriesBounds.y + seriesBounds.height ||
+							xPosition == seriesBounds.x ||
+							xPosition == seriesBounds.x + seriesBounds.width)
 						{
 							this.graphics.lineTo(xPosition, yPosition);
 						}

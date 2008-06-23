@@ -1,10 +1,9 @@
 package com.yahoo.astra.fl.charts.series
 {
-	import flash.display.DisplayObject;
-	import flash.events.IEventDispatcher;
-	import flash.geom.Point;
 	import com.yahoo.astra.fl.charts.Chart;
-	import com.yahoo.astra.fl.charts.series.ISeriesItemRenderer;
+	import com.yahoo.astra.fl.charts.IChart;
+	
+	import flash.events.IEventDispatcher;
 	
 	//--------------------------------------
 	//  Events
@@ -33,12 +32,12 @@ package com.yahoo.astra.fl.charts.series
 		/**
 		 * The chart in which this series appears.
 		 */
-		function get chart():Chart;
+		function get chart():Object;
 		
 		/**
 		 * @private
 		 */
-		function set chart(value:Chart):void;
+		function set chart(value:Object):void;
 		
 		/**
 		 * The data provider for this series. Accepts <code>Array</code> or <code>XMLList</code> objects.

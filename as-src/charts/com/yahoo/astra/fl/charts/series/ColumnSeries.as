@@ -3,9 +3,11 @@ package com.yahoo.astra.fl.charts.series
 	import com.yahoo.astra.animation.Animation;
 	import com.yahoo.astra.animation.AnimationEvent;
 	import com.yahoo.astra.fl.charts.*;
-	import com.yahoo.astra.fl.charts.axes.CategoryAxis;
-	import com.yahoo.astra.fl.charts.axes.NumericAxis;
+	import com.yahoo.astra.fl.charts.axes.IAxis;
+	import com.yahoo.astra.fl.charts.axes.IClusteringAxis;
+	import com.yahoo.astra.fl.charts.axes.IOriginAxis;
 	import com.yahoo.astra.fl.charts.skins.RectangleSkin;
+	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	
 	import fl.core.UIComponent;
 	
@@ -22,7 +24,7 @@ package com.yahoo.astra.fl.charts.series
 	{
 		
 	//--------------------------------------
-	//  Class Variables
+	//  Static Variables
 	//--------------------------------------
 	
 		/**
@@ -33,89 +35,10 @@ package com.yahoo.astra.fl.charts.series
 			markerSkin: RectangleSkin,
 			markerSize: 18
 		};
-	
-		/**
-		 * @private
-		 * Holds an array of ColumnSeries objects for each plot area in which they appear.
-		 */
-		private static var seriesInCharts:Dictionary = new Dictionary();
 		
 	//--------------------------------------
-	//  Class Methods
+	//  Static Methods
 	//--------------------------------------
-	
-		/**
-		 * @private
-		 * When a column series is added to a Chart, it should be registered with that Chart.
-		 * This allows it to determine proper positioning since column positions depend on other columns.
-		 */
-		private static function registerSeries(chart:Chart, series:ColumnSeries):void
-		{
-			var columns:Array = seriesInCharts[chart];
-			if(!columns)
-			{
-				columns = [];
-				seriesInCharts[chart] = columns;
-			}
-			
-			columns.push(series);
-		}
-		
-		/**
-		 * @private
-		 * When a column series is removed from its parent Chart, it should be unregistered.
-		 */
-		private static function unregisterSeries(chart:Chart, series:ColumnSeries):void
-		{
-			var columns:Array = seriesInCharts[chart];
-			if(columns)
-			{
-				var index:int = columns.indexOf(series);
-				if(index >= 0) columns.splice(index, 1);
-			}
-		}
-		
-		/**
-		 * @private
-		 * Returns the number of ColumnSeries objects appearing in a particular Chart.
-		 * This value may be used to determine the position of the series.
-		 */
-		public static function getSeriesCount(chart:Chart):int
-		{
-			var columns:Array = seriesInCharts[chart];
-			if(columns) return columns.length;
-			return 0;
-		}
-		
-		/**
-		 * @private
-		 * Returns the index of a ColumnSeries within a plot area.
-		 * This value may be used to determine the position of the series.
-		 */
-		private static function seriesToIndex(chart:Chart, series:ColumnSeries):int
-		{
-			var columns:Array = seriesInCharts[chart];
-			if(columns)
-			{
-				return columns.indexOf(series);
-			}
-			return -1;
-		}
-		
-		/**
-		 * @private
-		 * Returns the ColumnSeries at the specified index within a plot area.
-		 */
-		private static function indexToSeries(chart:Chart, index:int):ColumnSeries
-		{
-			var columns:Array = seriesInCharts[chart];
-			if(columns)
-			{
-				return columns[index];
-			}
-			
-			return null;
-		}
 			
 		/**
 		 * @copy fl.core.UIComponent#getStyleDefinition()
@@ -124,7 +47,6 @@ package com.yahoo.astra.fl.charts.series
 		{
 			return mergeStyles(defaultStyles, Series.getStyleDefinition());
 		}
-		
 		
 	//--------------------------------------
 	//  Constructor
@@ -147,33 +69,13 @@ package com.yahoo.astra.fl.charts.series
 		 * The Animation instance that controls animation in this series.
 		 */
 		private var _animation:Animation;
-	
-		/**
-		 * @private
-		 */
-		override public function set chart(value:Chart):void
-		{
-			if(this.chart != value)
-			{
-				if(this.chart) unregisterSeries(this.chart, this);
-				super.chart = value;
-				if(this.chart)
-				{
-					if(!(this.chart is CartesianChart))
-					{
-						throw new Error("Objects of type ColumnSeries may only be added to a CartesianChart.");
-					}
-					registerSeries(this.chart, this);
-				}
-			}
-		}
 		
 	//--------------------------------------
 	//  Public Methods
 	//--------------------------------------
 	
 		/**
-		 * @copy com.yahoo.astra.fl.charts.ISeries#clone()
+		 * @inheritDoc
 		 */
 		override public function clone():ISeries
 		{
@@ -206,38 +108,40 @@ package com.yahoo.astra.fl.charts.series
 			super.draw();
 			
 			//if we don't have data, let's get out of here
-			if(!this.dataProvider) return;
-			
-			var cartesianChart:CartesianChart = this.chart as CartesianChart;
-			
-			//grab the axes
-			var valueAxis:NumericAxis = cartesianChart.verticalAxis as NumericAxis;
-			var categoryAxis:CategoryAxis = cartesianChart.horizontalAxis as CategoryAxis;
-			if(!categoryAxis)
+			if(!this.dataProvider)
 			{
-				throw new Error("To use a ColumnSeries object, the horizontal axis of the chart it appears within must be a CategoryAxis.");
 				return;
 			}
 			
-			//variables we need in the loop (and shouldn't look up a gazillion times)
-			var originPosition:Number = valueAxis.valueToLocal(valueAxis.origin);
-			var seriesIndex:int = seriesToIndex(this.chart, this);
-			var markerSize:Number = this.getStyleValue("markerSize") as Number;
-			var maximumAllowedMarkerSize:Number = (this.width / categoryAxis.categoryNames.length) / getSeriesCount(this.chart);
-			//we need to use floor because CS3 UIComponents round the position
-			markerSize = Math.floor(Math.min(maximumAllowedMarkerSize, markerSize));
+			//grab the axes
+			var cartesianChart:CartesianChart = this.chart as CartesianChart;
+			var valueAxis:IOriginAxis = cartesianChart.verticalAxis as IOriginAxis;
+			var otherAxis:IAxis = cartesianChart.horizontalAxis;
+			if(!valueAxis)
+			{
+				throw new Error("To use a ColumnSeries object, the vertical axis of the chart it appears within must be an IOriginAxis.");
+				return;
+			}
+			
+			var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, cartesianChart);
+			var markerSizes:Array = [];
+			var totalMarkerSize:Number = this.calculateTotalMarkerSize(otherAxis, markerSizes);
+			var seriesIndex:int = allSeriesOfType.indexOf(this);
+			var markerSize:Number = markerSizes[seriesIndex] as Number;
+			var xOffset:Number = this.calculateXOffset(valueAxis, otherAxis, markerSizes, totalMarkerSize, allSeriesOfType);
 			
 			var startValues:Array = [];
 			var endValues:Array = [];
 			var itemCount:int = this.length;
 			for(var i:int = 0; i < itemCount; i++)
 			{
-				var item:Object = this.dataProvider[i];
-				var position:Point = cartesianChart.dataToLocal(item, this);
+				var originValue:Object = this.calculateOriginValue(i, valueAxis, allSeriesOfType);
+				var originPosition:Number = valueAxis.valueToLocal(originValue);
 				
+				var position:Point = IChart(this.chart).itemToPosition(this, i);
 				var marker:DisplayObject = this.markers[i] as DisplayObject;
 				
-				marker.x = position.x;
+				marker.x = position.x + xOffset;
 				
 				marker.width = markerSize;
 				
@@ -301,13 +205,104 @@ package com.yahoo.astra.fl.charts.series
 			}
 		}
 		
-		protected function tweenUpdateHandler(event:AnimationEvent):void
+		/**
+		 * @private
+		 * Calculates the x offset caused by clustering.
+		 */
+		protected function calculateXOffset(valueAxis:IOriginAxis, otherAxis:IAxis, markerSizes:Array, totalMarkerSize:Number, allSeriesOfType:Array):Number
 		{
-			var data:Array = event.parameters as Array;
-			this.drawMarkers(data);
+			var seriesIndex:int = allSeriesOfType.indexOf(this);
+			
+			//special case for axes that allow clustering
+			if(otherAxis is IClusteringAxis)
+			{
+				var xOffset:Number = 0;
+				for(var i:int = 0; i < seriesIndex; i++)
+				{
+					xOffset += markerSizes[i] as Number;
+				}
+				//center based on the sum of all marker sizes
+				return -(totalMarkerSize / 2) + xOffset;
+			}
+			
+			//center based on the marker size of this series
+			return -(markerSizes[seriesIndex] as Number) / 2;
 		}
 		
-		protected function drawMarkers(data:Array):void
+		/**
+		 * @private
+		 * Calculates the sum of the chart's series marker sizes.
+		 */
+		protected function calculateTotalMarkerSize(axis:IAxis, sizes:Array):Number
+		{
+			var totalMarkerSize:Number = 0;
+			var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
+			var seriesCount:int = allSeriesOfType.length;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var series:ColumnSeries = ColumnSeries(allSeriesOfType[i]);
+				var markerSize:Number = this.calculateMarkerSize(series, axis);
+				sizes.push(markerSize);
+				if(axis is IClusteringAxis)
+				{
+					totalMarkerSize += markerSize;
+				}
+				else
+				{
+					totalMarkerSize = Math.max(totalMarkerSize, markerSize);
+				}
+			}
+			return totalMarkerSize;
+		}
+		
+		/**
+		 * @private
+		 * Determines the marker size for a series.
+		 */
+		protected function calculateMarkerSize(series:ISeries, axis:IAxis):Number
+		{
+			var markerSize:Number = UIComponentUtil.getStyleValue(UIComponent(series), "markerSize") as Number;
+			var maximumAllowedMarkerSize:Number = this.calculateMaximumAllowedMarkerSize(axis);
+			
+			markerSize = Math.min(maximumAllowedMarkerSize, markerSize);
+			//we need to use floor because CS3 UIComponents round the position
+			markerSize = Math.floor(markerSize);
+			return markerSize;
+		}
+		
+		/**
+		 * @private
+		 * Determines the maximum possible marker size for the containing chart.
+		 */
+		protected function calculateMaximumAllowedMarkerSize(axis:IAxis):Number
+		{
+			if(axis is IClusteringAxis)
+			{
+				var allSeriesOfType:Array = ChartUtil.findSeriesOfType(this, this.chart as IChart);
+				return (this.width / IClusteringAxis(axis).clusterCount) / allSeriesOfType.length;
+			}
+			return Number.POSITIVE_INFINITY;
+		}
+		
+		/**
+		 * @private
+		 * Determines the origin of the column. Either the axis origin or the
+		 * stacked value.
+		 */
+		protected function calculateOriginValue(index:int, axis:IOriginAxis, allSeriesOfType:Array):Object
+		{
+			return axis.origin;
+		}
+		
+	//--------------------------------------
+	//  Private Methods
+	//--------------------------------------
+		
+		/**
+		 * @private
+		 * Draws the markers. Used with animation.
+		 */
+		private function drawMarkers(data:Array):void
 		{
 			var itemCount:int = this.length;
 			for(var i:int = 0; i < itemCount; i++)
@@ -320,9 +315,23 @@ package com.yahoo.astra.fl.charts.series
 				
 				if(marker is UIComponent) 
 				{
-					(marker as UIComponent).drawNow();
+					UIComponent(marker).drawNow();
 				}
 			}
+		}
+		
+	//--------------------------------------
+	//  Private Event Handlers
+	//--------------------------------------
+	
+		/**
+		 * @private
+		 * Draws the markers every time the tween updates.
+		 */
+		private function tweenUpdateHandler(event:AnimationEvent):void
+		{
+			var data:Array = event.parameters as Array;
+			this.drawMarkers(data);
 		}
 		
 	}

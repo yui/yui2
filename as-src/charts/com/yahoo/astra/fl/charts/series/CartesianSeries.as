@@ -2,6 +2,8 @@ package com.yahoo.astra.fl.charts.series
 {
 	import com.yahoo.astra.fl.charts.legend.LegendItemData;
 	
+	import fl.core.InvalidationType;
+	
 	import flash.events.Event;
 
 	/**
@@ -54,6 +56,7 @@ package com.yahoo.astra.fl.charts.series
 			{
 				this._horizontalField = value;
 				this.dispatchEvent(new Event("dataChange"));
+				this.invalidate(InvalidationType.DATA);
 			}
 		}
 		
@@ -80,6 +83,7 @@ package com.yahoo.astra.fl.charts.series
 			{
 				this._verticalField = value;
 				this.dispatchEvent(new Event("dataChange"));
+				this.invalidate(InvalidationType.DATA);
 			}
 		}
 	

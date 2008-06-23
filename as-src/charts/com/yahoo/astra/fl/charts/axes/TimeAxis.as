@@ -10,7 +10,7 @@ package com.yahoo.astra.fl.charts.axes
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public class TimeAxis extends BaseAxis implements IAxis
+	public class TimeAxis extends BaseAxis implements IAxis, IStackingAxis
 	{
 		
 	//--------------------------------------
@@ -235,6 +235,28 @@ package com.yahoo.astra.fl.charts.axes
 			this._minorTimeUnit = value;
 			this._minorTimeUnitSetByUser = value != null;
 		}
+		
+		/**
+		 * @private
+		 * Storage for the stackingEnabled property.
+		 */
+		private var _stackingEnabled:Boolean = false;
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get stackingEnabled():Boolean
+		{
+			return this._stackingEnabled;
+		}
+		
+		/**
+		 * @private
+		 */
+		public function set stackingEnabled(value:Boolean):void
+		{
+			this._stackingEnabled = value;
+		}
 	
 		/**
 		 * @private
@@ -277,6 +299,20 @@ package com.yahoo.astra.fl.charts.axes
 		/**
 		 * @inheritDoc
 		 */
+		public function stack(top:Object, ...rest:Array):Object
+		{
+			var value:Number = this.valueToNumber(top);
+			var restCount:int = rest.length;
+			for(var i:int = 0; i < restCount; i++)
+			{
+				value += this.valueToNumber(rest[i]);
+			}
+			return value;
+		}
+	
+		/**
+		 * @inheritDoc
+		 */
 		public function updateScale(data:Array):void
 		{
 			var seriesCount:int = data.length;
@@ -286,35 +322,28 @@ package com.yahoo.astra.fl.charts.axes
 			{
 				var series:ISeries = ISeries(data[i]);
 				var seriesLength:int = series.length;
-				var dataField:String = this.chart.axisAndSeriesToField(this, series);
 				for(var j:int = 0; j < seriesLength; j++)
 				{
 					var item:Object = series.dataProvider[j];
-					var value:Number = NaN;
-					if(dataField && item.hasOwnProperty(dataField))
-					{
-						item = item[dataField];
-					}
+					var value:Object = this.chart.itemToAxisValue(series, j, this);
+					var numericValue:Number = this.valueToNumber(value);
 					
-					if(item is Date)
+					if(isNaN(min))
 					{
-						value = (item as Date).valueOf();
-					}
-					else if(item is Number)
-					{
-						value = item as Number;
+						min = numericValue;
 					}
 					else
 					{
-						value = new Date(item.toString()).valueOf();
+						min = Math.min(min, numericValue);
 					}
-					//skip bad data
-					if(isNaN(value)) continue;
-					
-					if(isNaN(min)) min = value;
-					else min = Math.min(min, value);
-					if(isNaN(max)) max = value;
-					else max = Math.max(max, value);
+					if(isNaN(max))
+					{
+						max = numericValue;
+					}
+					else
+					{
+						max = Math.max(max, numericValue);
+					}
 				}
 			}
 			
@@ -342,17 +371,9 @@ package com.yahoo.astra.fl.charts.axes
 		 */
 		public function valueToLocal(value:Object):Number
 		{
-			var convertedValue:Number = 0;
-			if(value is Date)
-			{
-				convertedValue = (value as Date).valueOf();
-			}
-			else(!(value is Number))
-			{
-				convertedValue = new Date(value.toString()).valueOf();
-			}
+			var numericValue:Number = this.valueToNumber(value);
 			
-			var position:Number = (convertedValue - this.minimum.valueOf()) * this.positionMultiplier;
+			var position:Number = (numericValue - this.minimum.valueOf()) * this.positionMultiplier;
 			if(this.reverse)
 			{
 				position = this.renderer.length - position;
@@ -369,15 +390,8 @@ package com.yahoo.astra.fl.charts.axes
 			var text:String = value.toString();
 			if(this.labelFunction != null)
 			{
-				if(value is Number)
-				{
-					value = new Date(value);
-				}
-				else if(!(value is Date))
-				{
-					value = new Date(text);
-				}
-				text = this.labelFunction(value, this.majorTimeUnit);
+				var numericValue:Number = this.valueToNumber(value);
+				text = this.labelFunction(new Date(numericValue), this.majorTimeUnit);
 			}			
 			if(text == null)
 			{
@@ -389,6 +403,29 @@ package com.yahoo.astra.fl.charts.axes
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
+		
+		/**
+		 * @private
+		 * Converts one of the accepted values to a Number that can be
+		 * used for position calculation.
+		 */
+		protected function valueToNumber(value:Object):Number
+		{
+			var convertedValue:Number = 0;
+			if(value is Date)
+			{
+				convertedValue = (value as Date).valueOf();
+			}
+			else if(!(value is Number))
+			{
+				convertedValue = new Date(value.toString()).valueOf();
+			}
+			else
+			{
+				convertedValue = value as Number;
+			}
+			return convertedValue;
+		}
 		
 		/**
 		 * @private

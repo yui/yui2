@@ -416,7 +416,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 		}
 		else
 		{
-			var styleChanged = false;
 			var i;
 			if(this._seriesLabelFunctions)
 			{
@@ -450,7 +449,6 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 								if(currentSeries.style !== null)
 								{
 									clonedSeries.style = YAHOO.lang.JSON.stringify(currentSeries.style);
-									styleChanged = true;
 								}
 							}
 							
@@ -491,7 +489,7 @@ YAHOO.extend(YAHOO.widget.Chart, YAHOO.widget.FlashAdapter,
 				var series = {type: this._type, dataProvider: response.results};
 				dataProvider.push(series);
 			}
-			this._swf.setDataProvider(dataProvider, styleChanged);
+			this._swf.setDataProvider(dataProvider);
 		}
 	},
 

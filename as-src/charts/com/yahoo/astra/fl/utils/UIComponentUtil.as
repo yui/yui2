@@ -2,8 +2,13 @@ package com.yahoo.astra.fl.utils
 {
 	import com.yahoo.astra.utils.InstanceFactory;
 	
+	import fl.core.UIComponent;
+	import fl.managers.StyleManager;
+	
 	import flash.display.DisplayObject;
 	import flash.utils.getDefinitionByName;
+	import flash.utils.getQualifiedClassName;
+	import flash.utils.getQualifiedSuperclassName;
 	
 	/**
 	 * Utility functions for use with UIComponents.
@@ -46,7 +51,7 @@ package com.yahoo.astra.fl.utils
 			var classDef:Object = null;
 			try
 			{
-				classDef = flash.utils.getDefinitionByName(input.toString());
+				classDef = getDefinitionByName(input.toString());
 			}
 			catch(e:Error)
 			{
@@ -59,12 +64,93 @@ package com.yahoo.astra.fl.utils
 					// Nothing
 				}
 			}
-
 			if(classDef == null)
 			{
 				return null;
 			}
 			return (new classDef()) as DisplayObject;
+		}
+		
+		/**
+		 * Gets the class of an object. If the object is a DisplayObject,
+		 * may retrieve the class from the containing app domain.
+		 */
+		public static function getClassDefinition(target:Object):Class
+		{
+			if(target is Class)
+			{ 
+				return target as Class;
+			}
+			try
+			{
+				return getDefinitionByName(getQualifiedClassName(target)) as Class;
+			}
+			catch (e:Error)
+			{
+				if(target is DisplayObject)
+				{
+					try
+					{
+						return target.loaderInfo.applicationDomain.getDefinition(getQualifiedClassName(target)) as Class;
+					}
+					catch(e:Error)
+					{
+						//nothing
+					}
+				}
+			}
+			return null;
+		}
+		
+		/**
+		 * Works like getStyleValue() on UIComponent, except it makes component
+		 * and shared styles available globally rather than just in the component's
+		 * class.
+		 */
+		public static function getStyleValue(target:UIComponent, styleName:String):Object
+		{
+			var value:Object = target.getStyle(styleName);
+			value = value ? value : StyleManager.getComponentStyle(target, styleName);
+			if(value)
+			{
+				return value;
+			}
+			var classDef:Class = UIComponentUtil.getClassDefinition(target);
+			var defaultStyles:Object;
+			
+			//borrowed from fl.managers.StyleManager
+			// Walk the inheritance chain looking for a default styles object.
+			while(defaultStyles == null)
+			{
+				// Trick the strict compiler.
+				if(classDef["getStyleDefinition"] != null)
+				{
+					defaultStyles = classDef["getStyleDefinition"]();
+					break;
+				}
+				try
+				{
+					classDef = target.loaderInfo.applicationDomain.getDefinition(getQualifiedSuperclassName(classDef)) as Class;
+				}
+				catch(err:Error)
+				{
+					try
+					{
+						classDef = getDefinitionByName(getQualifiedSuperclassName(classDef)) as Class;
+					}
+					catch (e:Error)
+					{
+						defaultStyles = UIComponent.getStyleDefinition();
+						break;
+					}
+				}
+			}
+				
+			if(defaultStyles.hasOwnProperty(styleName))
+			{
+				return defaultStyles[styleName];
+			}
+			return null;
 		}
 
 	}

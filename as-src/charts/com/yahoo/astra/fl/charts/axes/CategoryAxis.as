@@ -7,7 +7,7 @@ package com.yahoo.astra.fl.charts.axes
 	 * 
 	 * @author Josh Tynjala
 	 */
-	public class CategoryAxis extends BaseAxis implements IAxis
+	public class CategoryAxis extends BaseAxis implements IAxis, IClusteringAxis
 	{
 		
 	//--------------------------------------
@@ -71,6 +71,14 @@ package com.yahoo.astra.fl.charts.axes
 				}
 				this._categoryNames = names;
 			}
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get clusterCount():int
+		{
+			return this.categoryNames.length;
 		}
 		
 	//--------------------------------------
@@ -145,26 +153,10 @@ package com.yahoo.astra.fl.charts.axes
 					continue;
 				}
 				
-				// determine the field for this axis
-				var dataField:String = this.chart.axisAndSeriesToField(this, series);
-				
 				var seriesLength:int = series.length;
 				for(var j:int = 0; j < seriesLength; j++)
 				{
-					var item:Object = series.dataProvider[j];
-					if(!item)
-					{
-						//skip bad data
-						continue;
-					}
-					
-					var category:Object = j.toString(); //default: use the index
-					if(item.hasOwnProperty(dataField))
-					{
-						//if we have a category field, use it
-						//make sure the value is a string
-						category = item[dataField].toString();
-					}
+					var category:Object = this.chart.itemToAxisValue(series, j, this);
 					
 					//names must be unique
 					if(uniqueCategoryNames.indexOf(category) < 0)

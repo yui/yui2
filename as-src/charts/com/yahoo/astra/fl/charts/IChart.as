@@ -1,10 +1,10 @@
 package com.yahoo.astra.fl.charts
 {
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
-	import flash.events.IEventDispatcher;
-	import com.yahoo.astra.fl.charts.series.ISeries;
 	import com.yahoo.astra.fl.charts.axes.IAxis;
+	import com.yahoo.astra.fl.charts.series.ISeries;
+	
+	import flash.events.IEventDispatcher;
+	import flash.geom.Point;
 	
 	/**
 	 * Methods and properties expected to be defined by all charts.
@@ -28,7 +28,7 @@ package com.yahoo.astra.fl.charts
 		 * 	<li>An Array containing Numbers.</li>
 		 * 	<li>An Array containing complex objects.</li>
 		 * 	<li>An XMLList</li>
-		 * 	<li>An Array containing Arrays of Numbers or complex objects.
+		 * 	<li>An Array containing Arrays of Numbers or complex objects.</li>
 		 * </ul>
 		 * 
 		 * <p>Note: When complex objects or XML is used in the data provider,
@@ -36,6 +36,10 @@ package com.yahoo.astra.fl.charts
 		 * For instance, CartesianChart exposes <code>horizontalField</code> and
 		 * <code>verticalField</code> properties. PieChart exposes <code>dataField</code>
 		 * and <code>categoryField</code> properties.
+		 * 
+		 * <p>The chart will automatically convert the input data to an Array of
+		 * ISeries objects. Don't access <code>dataProvider</code> if you intend
+		 * to retreive the data in its original form.
 		 * 
 		 * @see com.yahoo.astra.fl.charts.series.ISeries
 		 */
@@ -53,37 +57,20 @@ package com.yahoo.astra.fl.charts
 		/**
 		 * Calculates the position of a data point along the axis.
 		 * 
-		 * @param data		The data used to determine the position
-		 * @param series	The series in which the data appears.
-		 * @return			The display position in pixels on the axis
+		 * @param series		The series in which the data appears.
+		 * @param itemIndex		The index of the item within the series.
+		 * @return				The display position in pixels on the axis
 		 */
-		function dataToLocal(data:Object, series:ISeries):Point;
+		function itemToPosition(series:ISeries, itemIndex:int):Point;
 		
 		/**
-		 * Returns the property field corresponding to the input axis.
+		 * Retreives the value of an item on one of the chart's axes.
 		 * 
-		 * @param axis		an IAxis object appearing in this plot area
-		 * @return			the property field to retrieve data for the input axis
+		 * @param series		The series in which the item appears.
+		 * @param itemIndex		The index of the item within the series.
+		 * @param axis			The axis for which to extract the value.
+		 * @return				The value of the item on the axis. Most likely a field on the axis.
 		 */
-		function axisToField(axis:IAxis):String;
-		
-		/**
-		 * Returns the axis corresponding to the input data field.
-		 * 
-		 * @param field		a data field corresponding to one of this plot area's axes.
-		 * @return			the axis correpsonding to the input data field.
-		 */
-		function fieldToAxis(field:String):IAxis;
-		
-		/**
-		 * Determines the field used to access data for the input axis and series.
-		 * The field may be the chart's default value, or the overridden value
-		 * from the input series.
-		 * 
-		 * @param axis			an IAxis object
-		 * @param series		an ISeries object that may have custom data fields
-		 * @return				the field associated with this axis for the input series
-		 */
-		function axisAndSeriesToField(axis:IAxis, series:ISeries):String;
+		function itemToAxisValue(series:ISeries, itemIndex:int, axis:IAxis, stack:Boolean = true):Object;
 	}
 }

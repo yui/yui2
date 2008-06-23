@@ -7,16 +7,18 @@ package com.yahoo.astra.fl.charts
 	import com.yahoo.astra.fl.charts.axes.IAxis;
 	import com.yahoo.astra.fl.charts.axes.ICartesianAxisRenderer;
 	import com.yahoo.astra.fl.charts.axes.IGridLinesRenderer;
+	import com.yahoo.astra.fl.charts.axes.IStackingAxis;
 	import com.yahoo.astra.fl.charts.axes.NumericAxis;
 	import com.yahoo.astra.fl.charts.axes.TimeAxis;
 	import com.yahoo.astra.fl.charts.series.CartesianSeries;
 	import com.yahoo.astra.fl.charts.series.ISeries;
+	import com.yahoo.astra.fl.charts.series.IStackedSeries;
+	import com.yahoo.astra.fl.utils.UIComponentUtil;
 	
 	import fl.core.InvalidationType;
 	import fl.core.UIComponent;
 	
 	import flash.display.DisplayObject;
-	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
@@ -101,6 +103,24 @@ package com.yahoo.astra.fl.charts
 	 * @default 0
 	 */
 	[Style(name="verticalAxisLabelRotation", type="Number")]
+    
+    //-- Grid - Vertical Axis
+    
+	/**
+	 * An Array of <code>uint</code> color values that is used to draw
+	 * alternating fills between the vertical axis' grid lines.
+	 * 
+	 * @default []
+	 */
+	[Style(name="verticalAxisGridFillColors", type="Array")]
+    
+	/**
+	 * An Array of alpha values (in the range of 0 to 1) that is used to draw
+	 * alternating fills between the vertical axis' grid lines.
+	 * 
+	 * @default []
+	 */
+	[Style(name="verticalAxisGridFillAlphas", type="Array")]
     
     //-- Grid Lines - Vertical Axis
     
@@ -322,6 +342,24 @@ package com.yahoo.astra.fl.charts
 	 */
 	[Style(name="horizontalAxisLabelRotation", type="Number")]
     
+    //-- Grid - Horizontal Axis
+    
+	/**
+	 * An Array of <code>uint</code> color values that is used to draw
+	 * alternating fills between the horizontal axis' grid lines.
+	 * 
+	 * @default []
+	 */
+	[Style(name="horizontalAxisGridFillColors", type="Array")]
+    
+	/**
+	 * An Array of alpha values (in the range of 0 to 1) that is used to draw
+	 * alternating fills between the horizontal axis' grid lines.
+	 * 
+	 * @default []
+	 */
+	[Style(name="horizontalAxisGridFillAlphas", type="Array")]
+    
     //-- Grid Lines - Horizontal Axis
     
 	/**
@@ -516,6 +554,8 @@ package com.yahoo.astra.fl.charts
 			horizontalAxisMinorGridLineWeight: 1,
 			horizontalAxisMinorGridLineColor: 0xeeeeec,
 			showHorizontalAxisMinorGridLines: false,
+			horizontalAxisGridFillColors: [],
+			horizontalAxisGridFillAlphas: [],
 			
 			//ticks
 			showHorizontalAxisTicks: false,
@@ -554,6 +594,8 @@ package com.yahoo.astra.fl.charts
 			verticalAxisMinorGridLineWeight: 1,
 			verticalAxisMinorGridLineColor: 0xeeeeec,
 			showVerticalAxisMinorGridLines: false,
+			verticalAxisGridFillColors: [],
+			verticalAxisGridFillAlphas: [],
 			
 			//ticks
 			showVerticalAxisTicks: true,
@@ -577,19 +619,23 @@ package com.yahoo.astra.fl.charts
 			showAxis: "showHorizontalAxis",
 			axisWeight: "horizontalAxisWeight",
 			axisColor: "horizontalAxisColor",
+			
 			textFormat: "textFormat",
 			embedFonts: "embedFonts",
 			hideOverlappingLabels: "horizontalAxisHideOverlappingLabels",
 			labelRotation: "horizontalAxisLabelRotation",
-			showTitle: "showHorizontalAxisTitle",
-			titleTextFormat: "horizontalAxisTitleTextFormat",
 			labelDistance: "horizontalAxisLabelDistance",
 			showLabels: "showHorizontalAxisLabels",
+			
+			showTitle: "showHorizontalAxisTitle",
+			titleTextFormat: "horizontalAxisTitleTextFormat",
+			
 			tickWeight: "horizontalAxisTickWeight",
 			tickColor: "horizontalAxisTickColor",
 			tickLength: "horizontalAxisTickLength",
 			tickPosition: "horizontalAxisTickPosition",
 			showTicks: "showHorizontalAxisTicks",
+
 			minorTickWeight: "horizontalAxisMinorTickWeight",
 			minorTickColor: "horizontalAxisMinorTickColor",
 			minorTickLength: "horizontalAxisMinorTickLength",
@@ -607,9 +653,13 @@ package com.yahoo.astra.fl.charts
 			lineWeight: "horizontalAxisGridLineWeight",
 			lineColor: "horizontalAxisGridLineColor",
 			showLines: "showHorizontalAxisGridLines",
+			
 			minorLineWeight: "horizontalAxisMinorGridLineWeight",
 			minorLineColor: "horizontalAxisMinorGridLineColor",
-			showMinorLines: "showHorizontalAxisMinorGridLines"
+			showMinorLines: "showHorizontalAxisMinorGridLines",
+			
+			fillColors: "horizontalAxisGridFillColors",
+			fillAlphas: "horizontalAxisGridFillAlphas"
 		}
 		
 		/**
@@ -621,19 +671,23 @@ package com.yahoo.astra.fl.charts
 			showAxis: "showVerticalAxis",
 			axisWeight: "verticalAxisWeight",
 			axisColor: "verticalAxisColor",
+			
 			textFormat: "textFormat",
 			embedFonts: "embedFonts",
 			hideOverlappingLabels: "verticalAxisHideOverlappingLabels",
 			labelRotation: "verticalAxisLabelRotation",
-			showTitle: "showVerticalAxisTitle",
-			titleTextFormat: "verticalAxisTitleTextFormat",
 			labelDistance: "verticalAxisLabelDistance",
 			showLabels: "showVerticalAxisLabels",
+			
+			showTitle: "showVerticalAxisTitle",
+			titleTextFormat: "verticalAxisTitleTextFormat",
+			
 			tickWeight: "verticalAxisTickWeight",
 			tickColor: "verticalAxisTickColor",
 			tickLength: "verticalAxisTickLength",
 			tickPosition: "verticalAxisTickPosition",
 			showTicks: "showVerticalAxisTicks",
+			
 			minorTickWeight: "verticalAxisMinorTickWeight",
 			minorTickColor: "verticalAxisMinorTickColor",
 			minorTickLength: "verticalAxisMinorTickLength",
@@ -651,9 +705,13 @@ package com.yahoo.astra.fl.charts
 			lineWeight: "verticalAxisGridLineWeight",
 			lineColor: "verticalAxisGridLineColor",
 			showLines: "showVerticalAxisGridLines",
+			
 			minorLineWeight: "verticalAxisMinorGridLineWeight",
 			minorLineColor: "verticalAxisMinorGridLineColor",
-			showMinorLines: "showVerticalAxisMinorGridLines"
+			showMinorLines: "showVerticalAxisMinorGridLines",
+			
+			fillColors: "verticalAxisGridFillColors",
+			fillAlphas: "verticalAxisGridFillAlphas"
 		}
 		
 	//--------------------------------------
@@ -976,85 +1034,48 @@ package com.yahoo.astra.fl.charts
 		/**
 		 * @inheritDoc
 		 */
-		public function axisToField(axis:IAxis):String
+		public function itemToPosition(series:ISeries, itemIndex:int):Point
 		{
-			if(axis == this.horizontalAxis)
-			{
-				return this.horizontalField;
-			}
-			else if(axis == this.verticalAxis)
-			{
-				return this.verticalField;
-			}
-			return null;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function axisAndSeriesToField(axis:IAxis, series:ISeries):String
-		{
-			var cartesianSeries:CartesianSeries = series as CartesianSeries;
-			var field:String = this.axisToField(axis);
-			var renderer:ICartesianAxisRenderer = this.axisToAxisRenderer(axis);
-			if(renderer.orientation == AxisOrientation.VERTICAL && cartesianSeries.verticalField)
-			{
-				field = cartesianSeries.verticalField;
-			}
-			else if(renderer.orientation == AxisOrientation.HORIZONTAL && cartesianSeries.horizontalField)
-			{
-				field = cartesianSeries.horizontalField;
-			}
+			var horizontalValue:Object = this.itemToAxisValue(series, itemIndex, this.horizontalAxis);
+			var xPosition:Number = this.horizontalAxis.valueToLocal(horizontalValue);
 			
-			return field;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function fieldToAxis(field:String):IAxis
-		{
-			if(field == this.horizontalField)
-			{
-				return this.horizontalAxis;
-			}
-			else if(field == this.verticalField)
-			{
-				return this.verticalAxis;
-			}
-			return null;
-		}
-		
-		/**
-		 * @inheritDoc
-		 */
-		public function axisToAxisRenderer(axis:IAxis):ICartesianAxisRenderer
-		{
-			if(axis == this.horizontalAxis)
-			{
-				return this.horizontalAxisRenderer;
-			}
-			else if(axis == this.verticalAxis)
-			{
-				return this.verticalAxisRenderer;
-			}
-			return null;
-		}
-	
-		/**
-		 * @inheritDoc
-		 */
-		public function dataToLocal(data:Object, series:ISeries):Point
-		{
-			var horizontalField:String = this.axisAndSeriesToField(this.horizontalAxis, series);
-			var horizontalValue:Object = data[horizontalField];
-			var xPosition:Number = this._horizontalAxis.valueToLocal(horizontalValue);
-			
-			var verticalField:String = this.axisAndSeriesToField(this.verticalAxis, series);
-			var verticalValue:Object = data[verticalField];
-			var yPosition:Number = this._verticalAxis.valueToLocal(verticalValue);
+			var verticalValue:Object = this.itemToAxisValue(series, itemIndex, this.verticalAxis);
+			var yPosition:Number = this.verticalAxis.valueToLocal(verticalValue);
 			
 			return new Point(xPosition, yPosition);
+		}
+		
+		/**
+		 * @private
+		 */
+		public function itemToAxisValue(series:ISeries, itemIndex:int, axis:IAxis, stack:Boolean = true):Object
+		{
+			if(!stack || !ChartUtil.isStackingAllowed(axis, series))
+			{
+				var item:Object = series.dataProvider[itemIndex];
+				var valueField:String = this.axisAndSeriesToField(axis, series);
+				return item[valueField];
+			}
+			
+			var type:Class = UIComponentUtil.getClassDefinition(series);
+			var stackAxis:IStackingAxis = IStackingAxis(axis);
+			var stackValue:Object;
+			var allSeriesOfType:Array = ChartUtil.findSeriesOfType(series, this);
+			var seriesIndex:int = allSeriesOfType.indexOf(series);
+			var values:Array = [];
+			for(var i:int = 0; i <= seriesIndex; i++)
+			{
+				var stackedSeries:IStackedSeries = IStackedSeries(allSeriesOfType[i]);
+				item = stackedSeries.dataProvider[itemIndex];
+				valueField = this.axisAndSeriesToField(stackAxis, stackedSeries);
+				values.unshift(item[valueField]);
+			}
+			
+			if(values.length > 0)
+			{
+				stackValue = stackAxis.stack.apply(stackAxis, values);
+			}
+			return stackValue;
 		}
 		
 	//--------------------------------------
@@ -1088,6 +1109,137 @@ package com.yahoo.astra.fl.charts
 			}
 			
 			this.updateLegend();
+		}
+		
+		/**
+		 * @private
+		 * Make sure no numeric points exist. Convert to objects compatible with the axes.
+		 */
+		override protected function refreshSeries():void
+		{
+			super.refreshSeries();
+			
+			var numericAxis:IAxis = this.horizontalAxis;
+			var otherAxis:IAxis = this.verticalAxis;
+			if(this.verticalAxis is NumericAxis)
+			{
+				numericAxis = this.verticalAxis;
+				otherAxis = this.horizontalAxis;
+			}
+						
+			var seriesCount:int = this.series.length;
+			for(var i:int = 0; i < seriesCount; i++)
+			{
+				var currentSeries:ISeries = this.series[i] as ISeries;
+				
+				var numericField:String = this.axisAndSeriesToField(numericAxis, currentSeries);
+				var otherField:String = this.axisAndSeriesToField(otherAxis, currentSeries);
+				
+				var seriesLength:int = currentSeries.length;
+				for(var j:int = 0; j < seriesLength; j++)
+				{
+					var item:Object = currentSeries.dataProvider[j];
+					if(!isNaN(Number(item)))
+					{
+						//if we only have a number, then it is safe to convert
+						//to a default type for a category chart.
+						//if it's not a number, then the user is expected to update
+						//the x and y fields so that the plot area knows how to handle it.
+						var point:Object = {};
+						point[numericField] = item;
+						
+						//we assume it's a category axis
+						if(this._explicitCategoryNames && this._explicitCategoryNames.length > 0)
+						{
+							point[otherField] = this.categoryNames[j];
+						}
+						else point[otherField] = j;
+						currentSeries.dataProvider[j] = point;
+					}
+				}
+			}
+		}
+		
+		/**
+		 * @private
+		 * Creates the default axes. Without user intervention, the x-axis is a category
+		 * axis and the y-axis is a numeric axis.
+		 */
+		override protected function configUI():void
+		{
+			super.configUI();
+			
+			//by default, the x axis is for categories. other types of charts will need
+			//to override this if they need a numeric or other type of axis
+			if(!this.horizontalAxis)
+			{
+				var categoryAxis:CategoryAxis = new CategoryAxis();
+				this.horizontalAxis = categoryAxis;
+			}
+			
+			if(!this.horizontalAxisRenderer)
+			{
+				var RendererClass:Class = this.getStyleValue("horizontalAxisRenderer") as Class;
+				this.horizontalAxisRenderer = new RendererClass(AxisOrientation.HORIZONTAL);
+				this.addChild(DisplayObject(this.horizontalAxisRenderer));
+				this.horizontalAxis.renderer = this.horizontalAxisRenderer;
+			}
+			
+			if(!this.verticalAxis)
+			{
+				var numericAxis:NumericAxis = new NumericAxis();
+				numericAxis.stackingEnabled = true;
+				this.verticalAxis = numericAxis;
+			}
+			
+			if(!this.verticalAxisRenderer)
+			{
+				RendererClass = this.getStyleValue("verticalAxisRenderer") as Class;
+				this.verticalAxisRenderer = new RendererClass(AxisOrientation.VERTICAL);
+				this.addChild(DisplayObject(this.verticalAxisRenderer));
+				this.verticalAxis.renderer = this.verticalAxisRenderer;
+			}
+		}
+		
+		/**
+		 * @private
+		 * Determines the text that will appear on the data tip.
+		 */
+		override protected function defaultDataTipFunction(item:Object, index:int, series:ISeries):String
+		{
+			var text:String = super.defaultDataTipFunction(item, index, series);
+			if(text.length > 0)
+			{
+				text += "\n";
+			}
+			
+			var categoryAxis:CategoryAxis = this.verticalAxis as CategoryAxis;
+			var otherAxis:IAxis = this.horizontalAxis;
+			if(!categoryAxis)
+			{
+				categoryAxis = this.horizontalAxis as CategoryAxis;
+				otherAxis = this.verticalAxis;
+			}
+			
+			//if we have a category axis, the category is always displayed first
+			if(categoryAxis)
+			{
+				var categoryValue:Object = this.itemToAxisValue(series, index, categoryAxis, false);
+				text += categoryAxis.valueToLabel(categoryValue) + "\n";
+				
+				var otherValue:Object = this.itemToAxisValue(series, index, otherAxis, false);
+				text += otherAxis.valueToLabel(otherValue) + "\n";
+			}
+			//otherwise, display the horizontal axis value first
+			else
+			{
+				var horizontalValue:Object = this.itemToAxisValue(series, index, this.horizontalAxis, false);
+				text += horizontalAxis.valueToLabel(horizontalValue) + "\n";
+				
+				var verticalValue:Object = this.itemToAxisValue(series, index, this.verticalAxis, false);
+				text += verticalAxis.valueToLabel(verticalValue) + "\n";
+			}
+			return text;
 		}
 	
 		/**
@@ -1342,149 +1494,71 @@ package com.yahoo.astra.fl.charts
 		}
 		
 		/**
-		 * @private
-		 * Make sure no numeric points exist. Convert to objects compatible with the axes.
+		 * @inheritDoc
 		 */
-		override protected function refreshSeries():void
+		protected function axisAndSeriesToField(axis:IAxis, series:ISeries):String
 		{
-			super.refreshSeries();
+			var cartesianSeries:CartesianSeries = series as CartesianSeries;
+			var field:String = this.axisToField(axis);
+			var renderer:ICartesianAxisRenderer = this.axisToAxisRenderer(axis);
+			if(renderer.orientation == AxisOrientation.VERTICAL && cartesianSeries.verticalField)
+			{
+				field = cartesianSeries.verticalField;
+			}
+			else if(renderer.orientation == AxisOrientation.HORIZONTAL && cartesianSeries.horizontalField)
+			{
+				field = cartesianSeries.horizontalField;
+			}
 			
-			var numericAxis:IAxis = this.horizontalAxis;
-			var otherAxis:IAxis = this.verticalAxis;
-			if(this.verticalAxis is NumericAxis)
+			return field;
+		}
+	
+		/**
+		 * @inheritDoc
+		 */
+		protected function axisToField(axis:IAxis):String
+		{
+			if(axis == this.horizontalAxis)
 			{
-				numericAxis = this.verticalAxis;
-				otherAxis = this.horizontalAxis;
+				return this.horizontalField;
 			}
-						
-			var seriesCount:int = this.series.length;
-			for(var i:int = 0; i < seriesCount; i++)
+			else if(axis == this.verticalAxis)
 			{
-				var currentSeries:ISeries = this.series[i] as ISeries;
-				
-				var numericField:String = this.axisAndSeriesToField(numericAxis, currentSeries);
-				var otherField:String = this.axisAndSeriesToField(otherAxis, currentSeries);
-				
-				var seriesLength:int = currentSeries.length;
-				for(var j:int = 0; j < seriesLength; j++)
-				{
-					var item:Object = currentSeries.dataProvider[j];
-					if(!isNaN(Number(item)))
-					{
-						//if we only have a number, then it is safe to convert
-						//to a default type for a category chart.
-						//if it's not a number, then the user is expected to update
-						//the x and y fields so that the plot area knows how to handle it.
-						var point:Object = {};
-						point[numericField] = item;
-						
-						//we assume it's a category axis
-						if(this._explicitCategoryNames && this._explicitCategoryNames.length > 0)
-						{
-							point[otherField] = this.categoryNames[j];
-						}
-						else point[otherField] = j;
-						currentSeries.dataProvider[j] = point;
-					}
-				}
+				return this.verticalField;
 			}
+			return null;
 		}
 		
 		/**
-		 * @private
-		 * Creates the default axes. Without user intervention, the x-axis is a category
-		 * axis and the y-axis is a numeric axis.
+		 * @inheritDoc
 		 */
-		override protected function configUI():void
+		protected function fieldToAxis(field:String):IAxis
 		{
-			super.configUI();
-			
-			//by default, the x axis is for categories. other types of charts will need
-			//to override this if they need a numeric or other type of axis
-			if(!this.horizontalAxis)
+			if(field == this.horizontalField)
 			{
-				var categoryAxis:CategoryAxis = new CategoryAxis();
-				this.horizontalAxis = categoryAxis;
+				return this.horizontalAxis;
 			}
-			
-			if(!this.horizontalAxisRenderer)
+			else if(field == this.verticalField)
 			{
-				var RendererClass:Class = this.getStyleValue("horizontalAxisRenderer") as Class;
-				this.horizontalAxisRenderer = new RendererClass(AxisOrientation.HORIZONTAL);
-				this.addChild(DisplayObject(this.horizontalAxisRenderer));
-				this.horizontalAxis.renderer = this.horizontalAxisRenderer;
+				return this.verticalAxis;
 			}
-			
-			if(!this.verticalAxis)
-			{
-				var numericAxis:NumericAxis = new NumericAxis();
-				this.verticalAxis = numericAxis;
-			}
-			
-			if(!this.verticalAxisRenderer)
-			{
-				RendererClass = this.getStyleValue("verticalAxisRenderer") as Class;
-				this.verticalAxisRenderer = new RendererClass(AxisOrientation.VERTICAL);
-				this.addChild(DisplayObject(this.verticalAxisRenderer));
-				this.verticalAxis.renderer = this.verticalAxisRenderer;
-			}
+			return null;
 		}
 		
 		/**
-		 * @private
-		 * Determines the text that will appear on the data tip.
+		 * Finds the renderer for the specified axis.
 		 */
-		override protected function defaultDataTipFunction(item:Object, index:int, series:ISeries):String
+		protected function axisToAxisRenderer(axis:IAxis):ICartesianAxisRenderer
 		{
-			var text:String = super.defaultDataTipFunction(item, index, series);
-			if(text.length > 0) text += "\n";
-			
-			//if we have a category axis, display the category
-			var categoryAxis:CategoryAxis = this.verticalAxis as CategoryAxis;
-			var categoryField:String = this.axisAndSeriesToField(this.verticalAxis, series);
-			var otherAxis:IAxis = this.horizontalAxis;
-			if(!categoryAxis)
+			if(axis == this.horizontalAxis)
 			{
-				categoryAxis = this.horizontalAxis as CategoryAxis;
-				categoryField = this.axisAndSeriesToField(this.horizontalAxis, series);
-				otherAxis = this.verticalAxis;
+				return this.horizontalAxisRenderer;
 			}
-			if(categoryAxis)
+			else if(axis == this.verticalAxis)
 			{
-				var category:Object = null;
-				if(item.hasOwnProperty(categoryField))
-				{
-					category = item[categoryField];
-				}
-				else if(this.categoryNames && this.categoryNames.length > index)
-				{
-					category = this.categoryNames[index];
-				}
-				else category = index;
-				text += categoryAxis.valueToLabel(category) + "\n";
-				
-				var otherField:String = this.axisAndSeriesToField(otherAxis, series);
-				if(item.hasOwnProperty(otherField))
-				{
-					text += otherAxis.valueToLabel(item[otherField]);
-				}
-				else text += item;
+				return this.verticalAxisRenderer;
 			}
-			else
-			{
-				var horizontalField:String = this.axisAndSeriesToField(this.horizontalAxis, series);
-				if(item.hasOwnProperty(horizontalField))
-				{
-					text += horizontalAxis.valueToLabel(item[horizontalField]) + "\n";
-				}
-				
-				var verticalField:String = this.axisAndSeriesToField(this.verticalAxis, series);
-				if(item.hasOwnProperty(verticalField))
-				{
-					text += verticalAxis.valueToLabel(item[verticalField]) + "\n";
-				}
-			}
-			return text;
+			return null;
 		}
 	}
 }
