@@ -3609,8 +3609,7 @@
             Event.purgeElement(this._button);
             Event.removeListener(document, "mouseup", this._onDocumentMouseUp);
             Event.removeListener(document, "keyup", this._onDocumentKeyUp);
-            Event.removeListener(document, "mousedown", 
-                this._onDocumentMouseDown);
+            Event.removeListener(document, "mousedown", this._onDocumentMouseDown);
         
         
             var oForm = this.getForm();
@@ -3711,15 +3710,7 @@
                  YUI submit button
             */
     
-            oPrecedingSubmitButton,
-            
-    
-            /*
-                 The form's first, enabled HTML submit button that follows a 
-                 YUI button
-            */
-            
-            oFollowingSubmitButton; 
+            oPrecedingSubmitButton; 
     
     
         function isSubmitButton(p_oElement) {
@@ -3734,17 +3725,10 @@
             
                 if (p_oElement.type == "submit" && !p_oElement.disabled) {
                     
-                    if (!bFormContainsYUIButtons && 
-                        !oPrecedingSubmitButton) {
+                    if (!bFormContainsYUIButtons && !oPrecedingSubmitButton) {
 
                         oPrecedingSubmitButton = p_oElement;
 
-                    }
-                    
-                    if (oYUISubmitButton && !oFollowingSubmitButton) {
-                    
-                        oFollowingSubmitButton = p_oElement;
-                    
                     }
                 
                 }
@@ -3768,10 +3752,8 @@
 
                             oSrcElement = oButton.get("srcelement");
     
-                            if (!oYUISubmitButton &&
-                                (oButton.get("type") == "submit" || 
-                                (oSrcElement && oSrcElement.type == "submit"))) 
-                            {
+                            if (!oYUISubmitButton && (oButton.get("type") == "submit" || 
+                                (oSrcElement && oSrcElement.type == "submit"))) {
 
                                 oYUISubmitButton = oButton;
                             
@@ -3792,8 +3774,7 @@
     
         if (nCharCode == 13 && ((sNodeName == "INPUT" && (sType == "text" || 
             sType == "password" || sType == "checkbox" || sType == "radio" || 
-            sType == "file")) || sNodeName == "SELECT"))
-        {
+            sType == "file")) || sNodeName == "SELECT")) {
     
             Dom.getElementsBy(isSubmitButton, "*", this);
     
@@ -3811,19 +3792,13 @@
             }
             else if (!oPrecedingSubmitButton && oYUISubmitButton) {
     
-                if (oFollowingSubmitButton) {
+				/*
+					Need to call "preventDefault" to ensure that the form doesn't end up getting
+					submitted twice.
+				*/
     
-                    /*
-                        Need to call "preventDefault" to ensure that 
-                        the name and value of the regular submit button 
-                        following the YUI button doesn't get added to the 
-                        form's data set when it is submitted.
-                    */
-    
-                    Event.preventDefault(p_oEvent);
-                
-                }
-    
+    			Event.preventDefault(p_oEvent);
+    	
                 oYUISubmitButton.submitForm();
     
             }
