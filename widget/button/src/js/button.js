@@ -763,7 +763,7 @@
         * @type String
         */
         SPLITBUTTON_DEFAULT_TITLE: ("Menu collapsed.  Click inside option " + 
-            "region or press Ctrl + Shift + M to show the menu."),
+            "region or press down arrow key to show the menu."),
         
         
         /**
@@ -1412,30 +1412,30 @@
         */
         _isSplitButtonOptionKey: function (p_oEvent) {
 
-			var bShowMenu = (p_oEvent.ctrlKey && p_oEvent.shiftKey && 
-								Event.getCharCode(p_oEvent) == 77);
+			var bShowMenu = (Event.getCharCode(p_oEvent) == 40);
 
 
-			function onKeyPress(p_oEvent) {
+			var onKeyPress = function (p_oEvent) {
 
 				Event.preventDefault(p_oEvent);
 
 				this.removeListener("keypress", onKeyPress);
 			
+			};
+
+
+			// Prevent the browser from scrolling the window
+			if (bShowMenu) {
+
+				if (UA.opera) {
+	
+					this.on("keypress", onKeyPress);
+	
+				}
+
+				Event.preventDefault(p_oEvent);
 			}
 
-
-			/*
-				It is necessary to add a "keypress" event listener to prevent Opera's default
-				browser context menu from appearing when the user presses Ctrl + Shift + M.
-			*/
-
-			if (bShowMenu && UA.opera) {
-
-        		this.on("keypress", onKeyPress);
-
-			}
-        
             return bShowMenu;
         
         },
@@ -2172,8 +2172,6 @@
         */
         _onClick: function (p_oEvent) {
         
-
-        
             var sType = this.get("type"),
                 sTitle,
                 oForm,
@@ -2183,8 +2181,6 @@
                 nX;
         
 
-
-        
             switch (sType) {
         
             case "radio":
@@ -2587,8 +2583,7 @@
             
             var oItem = p_aArgs[0];
         
-            oItem.cfg.subscribeToConfigEvent("selected", 
-                this._onMenuItemSelected, oItem, this);
+            oItem.cfg.subscribeToConfigEvent("selected", this._onMenuItemSelected, oItem, this);
         
         },
         
