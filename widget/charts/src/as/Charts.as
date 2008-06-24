@@ -644,7 +644,6 @@ package
 		
 		public function setSeriesStyles(styles:Array):void
 		{
-			var defaultPointSkins:Array = [CircleSkin, DiamondSkin, RectangleSkin, TriangleSkin];
 			var defaultSeriesColors:Array =
 					[0x00b8bf, 0x8dd5e7, 0xedff9f, 0xffa928, 0xc0fff6, 0xd00050,
 					0xc6c6c6, 0xc3eafb, 0xfcffad, 0xcfff83, 0x444444, 0x4d95dd,
@@ -678,7 +677,7 @@ package
 				var defaultSkin:Object = RectangleSkin;
 				if(series is LineSeries)
 				{
-					defaultSkin = defaultPointSkins[i % defaultPointSkins.length];
+					defaultSkin = CircleSkin;
 				}
 				else if(series is PieSeries)
 				{
