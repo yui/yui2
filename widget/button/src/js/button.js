@@ -3064,16 +3064,16 @@
         
                 if (Lang.isString(oContainer)) {
         
-                    Event.onContentReady(oContainer, function () {
-        
-                        this.appendTo(oContainer);
-                    
-                    }, null, this);
+                    Event.onContentReady(oContainer, this.appendTo, oContainer, this);
         
                 }
                 else {
         
-                    this.appendTo(oContainer);
+        			this.on("init", function () {
+        			
+        				Lang.later(0, this, this.appendTo, oContainer);
+        			
+        			});
         
                 }
         
@@ -3107,6 +3107,12 @@
             }
         
             this.logger.log("Initialization completed.");
+        
+
+			this.fireEvent("init", {
+				type: "init",
+				target: this
+			});        
         
         },
         
