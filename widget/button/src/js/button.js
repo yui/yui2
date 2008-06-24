@@ -2172,6 +2172,8 @@
         */
         _onClick: function (p_oEvent) {
         
+
+        
             var sType = this.get("type"),
                 sTitle,
                 oForm,
@@ -2180,6 +2182,8 @@
                 bReturnVal,
                 nX;
         
+
+
         
             switch (sType) {
         
@@ -2206,8 +2210,12 @@
                 break;
     
             case "submit":
+
+				if (p_oEvent.returnValue !== false) {
     
-                this.submitForm();
+                	this.submitForm();
+                
+                }
             
                 break;
     
@@ -3710,7 +3718,9 @@
                  YUI submit button
             */
     
-            oPrecedingSubmitButton; 
+            oPrecedingSubmitButton,
+            
+            oEvent; 
     
     
         function isSubmitButton(p_oElement) {
@@ -3798,9 +3808,32 @@
 				*/
     
     			Event.preventDefault(p_oEvent);
-    	
-                oYUISubmitButton.submitForm();
-    
+
+
+				if (UA.ie) {
+				
+					oYUISubmitButton.get("element").fireEvent("onclick");
+				
+				}
+				else {
+
+					oEvent = document.createEvent("HTMLEvents");
+					oEvent.initEvent("click", true, true);
+			
+
+					if (UA.gecko < 1.9) {
+					
+						oYUISubmitButton.fireEvent("click", oEvent);
+					
+					}
+					else {
+
+						oYUISubmitButton.get("element").dispatchEvent(oEvent);
+					
+					}
+  
+                }
+
             }
             
         }
