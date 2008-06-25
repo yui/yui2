@@ -3521,146 +3521,165 @@ _setMaxHeight: function (p_sType, p_aArgs, p_nMaxHeight) {
 */
 configMaxHeight: function (p_sType, p_aArgs, p_oMenu) {
 
-    var nMaxHeight = p_aArgs[0],
-        oElement = this.element,
-        oBody = this.body,
-        oHeader = this.header,
-        oFooter = this.footer,
-        fnMouseOver = this._onScrollTargetMouseOver,
-        fnMouseOut = this._onScrollTargetMouseOut,
-        nMinScrollHeight = this.cfg.getProperty("minscrollheight"),
+    var nMaxHeight,
+        oElement,
+        oBody,
+        oHeader,
+        oFooter,
+        fnMouseOver,
+        fnMouseOut,
+        nMinScrollHeight,
         nHeight,
         nOffsetWidth,
         sWidth;
 
 
-    if (nMaxHeight !== 0 && nMaxHeight < nMinScrollHeight) {
-    
-        nMaxHeight = nMinScrollHeight;
-    
-    }
-
-
-    if (this.lazyLoad && !oBody) {
-
-        this.renderEvent.unsubscribe(this._setMaxHeight);
-    
-        if (nMaxHeight > 0) {
-
-            this.renderEvent.subscribe(this._setMaxHeight, nMaxHeight, this);
-
-        }
-
-        return;
-    
-    }
-
-
-    Dom.setStyle(oBody, "height", "");
-    Dom.removeClass(oBody, "yui-menu-body-scrolled");
-
-
-    /*
-        There is a bug in gecko-based browsers where an element whose 
-        "position" property is set to "absolute" and "overflow" property is set 
-        to "hidden" will not render at the correct width when its 
-        offsetParent's "position" property is also set to "absolute."  It is 
-        possible to work around this bug by specifying a value for the width 
-        property in addition to overflow.
-
-		In IE it is also necessary to give the Menu a width when the scrollbars are 
-		rendered to prevent the Menu from rendering with a width that is 100% of
-		the browser viewport.
-    */
-
-	var bSetWidth = ((UA.gecko && this.parent && this.parent.parent && 
-        this.parent.parent.cfg.getProperty("position") == "dynamic") || UA.ie);
-
-
-    if (bSetWidth) {
-
-		if (!this.cfg.getProperty("width")) {
-
-			nOffsetWidth = oElement.offsetWidth;
+	if (this.getItems().length > 0) {
 	
-			/*
-				Measuring the difference of the offsetWidth before and after
-				setting the "width" style attribute allows us to compute the 
-				about of padding and borders applied to the element, which in 
-				turn allows us to set the "width" property correctly.
-			*/
-			
-			oElement.style.width = nOffsetWidth + "px";
-	
-			sWidth = (nOffsetWidth - (oElement.offsetWidth - nOffsetWidth)) + "px";
-	
-			this.cfg.setProperty("width", sWidth);
-		
-		}
-
-    }
-
-
-    if (!oHeader && !oFooter) {
-
-        this.setHeader("&#32;");
-        this.setFooter("&#32;");
-
+		nMaxHeight = p_aArgs[0];
+        oElement = this.element;
+        oBody = this.body;
         oHeader = this.header;
         oFooter = this.footer;
-
-        Dom.addClass(oHeader, "topscrollbar");
-        Dom.addClass(oFooter, "bottomscrollbar");
-        
-        oElement.insertBefore(oHeader, oBody);
-        oElement.appendChild(oFooter);
-    
-    }
+        fnMouseOver = this._onScrollTargetMouseOver;
+        fnMouseOut = this._onScrollTargetMouseOut;
+        nMinScrollHeight = this.cfg.getProperty("minscrollheight");
 
 
-    nHeight = (nMaxHeight - (oHeader.offsetHeight + oHeader.offsetHeight));
-
-
-    if (nHeight > 0 && (oBody.offsetHeight > nMaxHeight)) {
-
-        Dom.addClass(oBody, "yui-menu-body-scrolled");
-        Dom.setStyle(oBody, "height", (nHeight + "px"));
-
-        Event.on(oHeader, "mouseover", fnMouseOver, this, true);
-        Event.on(oHeader, "mouseout", fnMouseOut, this, true);
-        Event.on(oFooter, "mouseover", fnMouseOver, this, true);
-        Event.on(oFooter, "mouseout", fnMouseOut, this, true);
-
-        this._disableScrollHeader();
-        this._enableScrollFooter();
-
-    }
-    else if (oHeader && oFooter) {
-
-		if (bSetWidth) {
-
-			this.cfg.setProperty("width", "");
+		if (nMaxHeight !== 0 && nMaxHeight < nMinScrollHeight) {
+		
+			nMaxHeight = nMinScrollHeight;
 		
 		}
+	
+	
+		if (this.lazyLoad && !oBody) {
+	
+			this.renderEvent.unsubscribe(this._setMaxHeight);
+		
+			if (nMaxHeight > 0) {
+	
+				this.renderEvent.subscribe(this._setMaxHeight, nMaxHeight, this);
+	
+			}
+	
+		}
+		else {
+		
+			Dom.setStyle(oBody, "height", "");
+			Dom.removeClass(oBody, "yui-menu-body-scrolled");
+		
+		
+			/*
+				There is a bug in gecko-based browsers where an element whose 
+				"position" property is set to "absolute" and "overflow" property is set 
+				to "hidden" will not render at the correct width when its 
+				offsetParent's "position" property is also set to "absolute."  It is 
+				possible to work around this bug by specifying a value for the width 
+				property in addition to overflow.
+		
+				In IE it is also necessary to give the Menu a width when the scrollbars are 
+				rendered to prevent the Menu from rendering with a width that is 100% of
+				the browser viewport.
+			*/
+		
+			var bSetWidth = ((UA.gecko && this.parent && this.parent.parent && 
+				this.parent.parent.cfg.getProperty("position") == "dynamic") || UA.ie);
+		
+		
+			if (bSetWidth) {
+		
+				if (!this.cfg.getProperty("width")) {
+		
+					nOffsetWidth = oElement.offsetWidth;
+			
+					/*
+						Measuring the difference of the offsetWidth before and after
+						setting the "width" style attribute allows us to compute the 
+						about of padding and borders applied to the element, which in 
+						turn allows us to set the "width" property correctly.
+					*/
+					
+					oElement.style.width = nOffsetWidth + "px";
+			
+					sWidth = (nOffsetWidth - (oElement.offsetWidth - nOffsetWidth)) + "px";
+			
+					this.cfg.setProperty("width", sWidth);
+				
+				}
+		
+			}
+		
+		
+			if (!oHeader && !oFooter) {
+		
+				this.setHeader("&#32;");
+				this.setFooter("&#32;");
+		
+				oHeader = this.header;
+				oFooter = this.footer;
+		
+				Dom.addClass(oHeader, "topscrollbar");
+				Dom.addClass(oFooter, "bottomscrollbar");
+				
+				oElement.insertBefore(oHeader, oBody);
+				oElement.appendChild(oFooter);
+			
+			}
+		
+		
+			nHeight = (nMaxHeight - (oHeader.offsetHeight + oHeader.offsetHeight));
+		
+		
+			if (nHeight > 0 && (oBody.offsetHeight > nMaxHeight)) {
+		
+				Dom.addClass(oBody, "yui-menu-body-scrolled");
+				Dom.setStyle(oBody, "height", (nHeight + "px"));
+		
+				Event.on(oHeader, "mouseover", fnMouseOver, this, true);
+				Event.on(oHeader, "mouseout", fnMouseOut, this, true);
+				Event.on(oFooter, "mouseover", fnMouseOver, this, true);
+				Event.on(oFooter, "mouseout", fnMouseOut, this, true);
+		
+				this._disableScrollHeader();
+				this._enableScrollFooter();
+		
+			}
+			else if (oHeader && oFooter) {
+		
+				if (bSetWidth) {
+		
+					this.cfg.setProperty("width", "");
+				
+				}
+		
+		
+				this._enableScrollHeader();
+				this._enableScrollFooter();
+		
+				Event.removeListener(oHeader, "mouseover", fnMouseOver);
+				Event.removeListener(oHeader, "mouseout", fnMouseOut);
+				Event.removeListener(oFooter, "mouseover", fnMouseOver);
+				Event.removeListener(oFooter, "mouseout", fnMouseOut);
+		
+				oElement.removeChild(oHeader);
+				oElement.removeChild(oFooter);
+		
+				this.header = null;
+				this.footer = null;
+			
+			}
+		
+			this.cfg.refireEvent("iframe");
 
-
-        this._enableScrollHeader();
-        this._enableScrollFooter();
-
-        Event.removeListener(oHeader, "mouseover", fnMouseOver);
-        Event.removeListener(oHeader, "mouseout", fnMouseOut);
-        Event.removeListener(oFooter, "mouseover", fnMouseOver);
-        Event.removeListener(oFooter, "mouseout", fnMouseOut);
-
-        oElement.removeChild(oHeader);
-        oElement.removeChild(oFooter);
-
-        this.header = null;
-        this.footer = null;
-    
-    }
-
-    this.cfg.refireEvent("iframe");
+		}
+	
+	}
+	else {
+	
+		this.cfg.setProperty("maxheight", 0, true);
+	
+	}
 
 },
 
