@@ -2583,7 +2583,7 @@
             
             var oItem = p_aArgs[0];
         
-            oItem.cfg.subscribeToConfigEvent("selected", this._onMenuItemSelected, oItem, this);
+           	oItem.cfg.subscribeToConfigEvent("selected", this._onMenuItemSelected, oItem, this);
         
         },
         
@@ -2604,6 +2604,8 @@
         
             if (oItem) {
         
+				this.set("selectedMenuItem", oItem);
+
                 oSrcElement = this.get("srcelement");
             
                 if (oSrcElement && oSrcElement.type == "submit") {
@@ -2701,14 +2703,16 @@
         
             var oForm = this.getForm(),
                 oButtonField,
-                sType,     
+                sType,
                 bCheckable,
                 oMenu,
                 oMenuItem,
-                sName,
+                sButtonName,
                 oValue,
                 oMenuField,
-                oReturnVal;
+                oReturnVal,
+				sMenuFieldName,
+				oMenuSrcElement;
         
         
             if (oForm && !this.get("disabled")) {
@@ -2721,11 +2725,8 @@
                 
                     this.logger.log("Creating hidden field.");
         
-                    oButtonField = createInputElement(
-                                    (bCheckable ? sType : "hidden"),
-                                    this.get("name"),
-                                    this.get("value"),
-                                    this.get("checked"));
+                    oButtonField = createInputElement((bCheckable ? sType : "hidden"),
+                                    this.get("name"), this.get("value"), this.get("checked"));
             
             
                     if (oButtonField) {
@@ -2750,38 +2751,36 @@
         
                     this.logger.log("Creating hidden field for menu.");
         
-                    oMenuField = oMenu.srcElement;
                     oMenuItem = this.get("selectedMenuItem");
 
                     if (oMenuItem) {
 
-                        if (oMenuField && 
-                            oMenuField.nodeName.toUpperCase() == "SELECT") {
-            
-                            oForm.appendChild(oMenuField);
-                            oMenuField.selectedIndex = oMenuItem.index;
-            
-                        }
-                        else {
-            
-                            oValue = (oMenuItem.value === null || 
-                                        oMenuItem.value === "") ? 
-                                        oMenuItem.cfg.getProperty("text") : 
-                                        oMenuItem.value;
-            
-                            sName = this.get("name");
-            
-                            if (oValue && sName) {
-            
-                                oMenuField = createInputElement("hidden", 
-                                                    (sName + "_options"),
-                                                    oValue);
-            
-                                oForm.appendChild(oMenuField);
-            
-                            }
-            
-                        }  
+						oValue = (oMenuItem.value === null || oMenuItem.value === "") ? 
+									oMenuItem.cfg.getProperty("text") : oMenuItem.value;
+
+						sButtonName = this.get("name");
+						
+						oMenuSrcElement = oMenu.srcElement;
+
+
+						if (oMenuSrcElement && oMenuSrcElement.nodeName.toUpperCase() == "SELECT") {
+						
+							sMenuFieldName = oMenuSrcElement.name;
+						
+						}
+						else if (sButtonName) {
+
+							sMenuFieldName = (sButtonName + "_options");
+						
+						}
+						
+
+						if (oValue && sMenuFieldName) {
+		
+							oMenuField = createInputElement("hidden", sMenuFieldName, oValue);
+							oForm.appendChild(oMenuField);
+		
+						}
                     
                     }
         
