@@ -1545,7 +1545,8 @@
                 nScrollTop = Dom.getDocumentScrollTop(),
                 nMenuMinScrollHeight,
                 nMenuHeight,
-                oMenuShadow;
+                oMenuShadow,
+                bMenuHasItems = (Menu && (oMenu instanceof Menu) && oMenu.getItems().length > 0);
     
     
             if (nScrollTop) {
@@ -1556,8 +1557,7 @@
         
         
             var nTopRegion = nButtonY,
-                nBottomRegion = (Dom.getViewportHeight() - 
-                    (nButtonY + oButtonEL.offsetHeight));
+                nBottomRegion = (Dom.getViewportHeight() - (nButtonY + oButtonEL.offsetHeight));
         
 
             /*
@@ -1596,13 +1596,17 @@
         
                 if (nMenuHeight > nDisplayRegionHeight) {
         
-                    nMenuMinScrollHeight = oMenu.cfg.getProperty("minscrollheight");
+                    nMenuMinScrollHeight = 
+                    	bMenuHasItems ? oMenu.cfg.getProperty("minscrollheight") : nMenuHeight;
         
         
                     if (nDisplayRegionHeight > nMenuMinScrollHeight) {
         
-                        oMenu.cfg.setProperty("maxheight", 
-                                    nDisplayRegionHeight);
+        				if (bMenuHasItems) {
+
+                        	oMenu.cfg.setProperty("maxheight", nDisplayRegionHeight);
+
+                        }
             
         
                         if (bMenuFlipped) {
@@ -1630,16 +1634,13 @@
                                  to the original size and position.
                             */
         
-                            oMenu.cfg.setProperty("context", 
-                                [oButtonEL, "tl", "bl"], true);
-
+                            oMenu.cfg.setProperty("context", [oButtonEL, "tl", "bl"], true);
                             oMenu.align("tl", "bl");
                             
                         }
                         else {
             
-                            oMenu.cfg.setProperty("context", 
-                                [oButtonEL, "bl", "tl"], true);
+                            oMenu.cfg.setProperty("context", [oButtonEL, "bl", "tl"], true);
 
                             oMenu.align("bl", "tl");
             
@@ -1666,7 +1667,11 @@
                 
                 oMenu.show();
                 
-                oMenu.cfg.setProperty("maxheight", 0);
+				if (bMenuHasItems) {
+
+                	oMenu.cfg.setProperty("maxheight", 0);
+                
+                }
             
                 oMenu.align("tl", "bl");
         
@@ -1700,28 +1705,11 @@
         
                 oMenu.show();
                 oMenu.align("tl", "bl");
-                
-                var nDisplayRegionHeight = getMenuDisplayRegionHeight();
 
                 nMenuHeight = oMenu.element.offsetHeight;
 
+                sizeAndPositionMenu();
 
-                if (nDisplayRegionHeight < nMenuHeight) {
-
-                    oMenu.align("bl", "tl");
-
-                    bMenuFlipped = true;
-
-                    nDisplayRegionHeight = getMenuDisplayRegionHeight();
-
-                    if (nDisplayRegionHeight < nMenuHeight) {
-
-                        oMenu.align("tl", "bl");
-                    
-                    }
-
-                }
-        
             }
         
         },
