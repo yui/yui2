@@ -252,12 +252,12 @@ var D = YAHOO.util.Dom,
                     this.set('wrap', true);
                     break;
             }
-            if (this.get('wrap')) {
+            if (this.get('wrap') === true) {
                 this._wrap = document.createElement('div');
                 this._wrap.id = this.get('element').id + '_wrap';
                 this._wrap.className = this.CSS_WRAP;
-                D.setStyle(this._wrap, 'width', this.get('width'));
-                D.setStyle(this._wrap, 'height', this.get('height'));
+                D.setStyle(this._wrap, 'width', this.get('width') + 'px');
+                D.setStyle(this._wrap, 'height', this.get('height') + 'px');
                 D.setStyle(this._wrap, 'z-index', this.getStyle('z-index'));
                 this.setStyle('z-index', 0);
                 var pos = D.getStyle(this.get('element'), 'position');
@@ -579,8 +579,10 @@ var D = YAHOO.util.Dom,
             this._resizeEvent = null;
             this._currentHandle = null;
             
-            this.set('height', this._cache.height, true);
-            this.set('width', this._cache.width, true);
+            if (!this.get('animate')) {
+                this.set('height', this._cache.height, true);
+                this.set('width', this._cache.width, true);
+            }
 
             this.fireEvent('endResize', { ev: 'endResize', target: this, height: this._cache.height, width: this._cache.width, top: this._cache.top, left: this._cache.left });
         },
@@ -1256,7 +1258,9 @@ var D = YAHOO.util.Dom,
                 validator: YAHOO.lang.isBoolean,
                 method: function(u) {
                     for (var i in this._dds) {
-                        this._dds[i].useShim = u;
+                        if (Lang.hasOwnProperty(this._dds, i)) {
+                            this._dds[i].useShim = u;
+                        }
                     }
                     if (this.dd) {
                         this.dd.useShim = u;
@@ -1446,9 +1450,9 @@ var D = YAHOO.util.Dom,
             this.setAttributeConfig('animateEasing', {
                 value: attr.animateEasing || function() {
                     var easing = false;
-                    try {
+                    if (YAHOO.util.Easing && YAHOO.util.Easing.easeOut) {
                         easing = YAHOO.util.Easing.easeOut;
-                    } catch (e) {}
+                    }
                     return easing;
                 }()
             });
