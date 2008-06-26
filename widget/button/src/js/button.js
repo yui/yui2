@@ -1098,7 +1098,8 @@
 		
 		
 					if (Menu && oMenu instanceof Menu) {
-		
+
+						oMenu.cfg.setProperty("minscrollheight", this.get("menuminscrollheight"));
 						oMenu.keyDownEvent.subscribe(this._onMenuKeyDown, this, true);
 						oMenu.subscribe("click", this._onMenuClick, this, true);
 						oMenu.itemAddedEvent.subscribe(this._onMenuItemAdded, this, true);
@@ -1545,8 +1546,7 @@
                 nScrollTop = Dom.getDocumentScrollTop(),
                 nMenuMinScrollHeight,
                 nMenuHeight,
-                oMenuShadow,
-                bMenuHasItems = (Menu && (oMenu instanceof Menu) && oMenu.getItems().length > 0);
+                oMenuShadow;
     
     
             if (nScrollTop) {
@@ -1591,6 +1591,8 @@
             function sizeAndPositionMenu() {
         
                 var nDisplayRegionHeight = getMenuDisplayRegionHeight(),
+                	bMenuHasItems = 
+                		(Menu && (oMenu instanceof Menu) && oMenu.getItems().length > 0),
                 	fnReturnVal;
         
         
@@ -1666,15 +1668,11 @@
                 oMenu.cfg.fireQueue();
                 
                 oMenu.show();
-                
-				if (bMenuHasItems) {
 
-                	oMenu.cfg.setProperty("maxheight", 0);
-                
-                }
+				oMenu.cfg.setProperty("maxheight", this.get("menumaxheight"));
             
                 oMenu.align("tl", "bl");
-        
+
         
                 /*
                     Stop the propagation of the event so that the MenuManager 
@@ -3402,6 +3400,40 @@
                 writeOnce: true
         
             });        
+
+
+			/**
+			* @config minscrollheight
+			* @description Number defining the minimum threshold for the "menumaxheight" 
+			* configuration attribute.  When set this attribute is automatically applied 
+			* to all submenus.
+			* @default 90
+			* @type Number
+			*/
+            this.setAttributeConfig("menuminscrollheight", {
+        
+                value: (oAttributes.menuminscrollheight || 90),
+                validator: Lang.isNumber
+        
+            });
+
+
+            /**
+            * @attribute menumaxheight
+			* @description Number defining the maximum height (in pixels) for a menu's 
+			* body element (<code>&#60;div class="bd"&#60;</code>).  Once a menu's body 
+			* exceeds this height, the contents of the body are scrolled to maintain 
+			* this value.  This value cannot be set lower than the value of the 
+			* "minscrollheight" configuration property.
+            * @type Number
+            * @default 0
+            */
+            this.setAttributeConfig("menumaxheight", {
+        
+                value: (oAttributes.menumaxheight || 0),
+                validator: Lang.isNumber
+        
+            });
 
 
             /**
