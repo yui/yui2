@@ -1,6 +1,5 @@
 ﻿package com.yahoo.astra.fl.charts.series
 {
-	import com.yahoo.astra.fl.charts.Chart;
 	import com.yahoo.astra.fl.charts.events.ChartEvent;
 	
 	import fl.core.InvalidationType;
@@ -37,7 +36,7 @@
 	/**
 	 * The base color used by objects displayed in this series.
 	 */
-    [Style(name="fillColor", type="Color")]
+    [Style(name="fillColor", type="uint")]
     
 	/**
 	 * The Class used to instantiate each marker's skin.
@@ -47,7 +46,12 @@
 	/**
 	 * The size, in pixels, of each marker.
 	 */
-    [Style(name="markerSize", type="Class")]
+    [Style(name="markerSize", type="Number")]
+    
+	/**
+	 * The alpha value from 0.0 to 1.0 to use for drawing the markers.
+	 */
+    [Style(name="markerAlpha", type="Number")]
 
 	/**
 	 * Functionality common to most series. Generally, a <code>Series</code> object
@@ -71,6 +75,7 @@
 			markerSkin: Shape, //an empty display object
 			fillColor: 0x00b8bf,
 			markerSize: 10,
+			markerAlpha: 1.0,
 			animationEnabled: true,
 			animationEasingFunction: fl.transitions.easing.Strong.easeOut,
 			animationDuration: 500
@@ -402,6 +407,7 @@
 			{
 				marker = ISeriesItemRenderer(this.markers[i]);
 				marker.data = this.dataProvider[i];
+				DisplayObject(marker).alpha = this.getStyleValue("markerAlpha") as Number;
 				this.copyStylesToChild(UIComponent(marker), RENDERER_STYLES);
 			}
 		}

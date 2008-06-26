@@ -3,6 +3,7 @@
 	import com.yahoo.astra.animation.Animation;
 	import com.yahoo.astra.animation.AnimationEvent;
 	import com.yahoo.astra.fl.charts.*;
+	import com.yahoo.astra.fl.charts.axes.NumericAxis;
 	import com.yahoo.astra.fl.charts.skins.CircleSkin;
 	import com.yahoo.astra.utils.GraphicsUtil;
 	
@@ -39,6 +40,20 @@
      * @default 10
      */
     [Style(name="discontinuousDashLength", type="Number")]
+	
+	/**
+     * If true, the series will include a fill under the line, extending to the axis.
+     *
+     * @default false
+     */
+    [Style(name="showAreaFill", type="Boolean")]
+	
+	/**
+     * The alpha value of the area fill.
+     *
+     * @default 0.6
+     */
+    [Style(name="areaFillAlpha", type="Number")]
     
 	/**
 	 * Renders data points as a series of connected line segments.
@@ -61,7 +76,9 @@
 			lineWeight: 3,
 			connectPoints: true,
 			connectDiscontinuousPoints: false,
-			discontinuousDashLength: 10
+			discontinuousDashLength: 10,
+			showAreaFill: false,
+			areaFillAlpha: 0.6
 		};
 		
 	//--------------------------------------
@@ -208,22 +225,39 @@
 			}
 		}
 		
+		/**
+		 * @private
+		 */
 		private function tweenUpdateHandler(event:AnimationEvent):void
 		{
 			this.drawMarkers(event.parameters as Array);
 		}
 		
+		/**
+		 * @private
+		 */
 		private function drawMarkers(data:Array):void
 		{
-			var lineWeight:int = this.getStyleValue("lineWeight") as int;
+			var primaryIsVertical:Boolean = true;
+			var primaryAxis:NumericAxis = CartesianChart(this.chart).verticalAxis as NumericAxis;
+			if(!primaryAxis)
+			{
+				primaryIsVertical = false;
+				primaryAxis = CartesianChart(this.chart).horizontalAxis as NumericAxis;
+			}
+			
+			var originPosition:Number = primaryAxis.valueToLocal(primaryAxis.origin);
+			
 			var fillColor:uint = this.getStyleValue("fillColor") as uint;
-			var connectPoints:Boolean = this.getStyleValue("connectPoints") as Boolean;
 			var connectDiscontinuousPoints:Boolean = this.getStyleValue("connectDiscontinuousPoints") as Boolean;
 			var discontinuousDashLength:Number = this.getStyleValue("discontinuousDashLength") as Number;
+			var showAreaFill:Boolean = this.getStyleValue("showAreaFill") as Boolean;
 			
 			this.graphics.clear();
-			this.graphics.lineStyle(lineWeight, fillColor);
+			this.setPrimaryLineStyle();
+			this.beginAreaFill(showAreaFill, fillColor);
 			
+			var firstValidPosition:Point;
 			var lastValidPosition:Point;
 			
 			//used to determine if the data must be drawn
@@ -243,15 +277,14 @@
 					marker.x = xPosition - marker.width / 2;
 					marker.y = yPosition - marker.height / 2;
 					
-					if(!connectPoints)
-					{
-						continue;
-					}
-					
 					if(lastValidPosition && !lastMarkerValid && connectDiscontinuousPoints)
 					{
+						this.setPrimaryLineStyle(connectDiscontinuousPoints);
+			
 						//draw a discontinuous line from the last valid position and the new valid position
 						GraphicsUtil.drawDashedLine(this.graphics, lastValidPosition.x, lastValidPosition.y, xPosition, yPosition, discontinuousDashLength, discontinuousDashLength);
+						
+						this.setPrimaryLineStyle();
 					}
 					else if(!lastValidPosition || (!lastMarkerValid && !connectDiscontinuousPoints))
 					{
@@ -288,13 +321,91 @@
 						{
 							this.graphics.lineTo(xPosition, yPosition);
 						}
-						else this.graphics.moveTo(xPosition, yPosition);						
+						else
+						{
+							this.graphics.moveTo(xPosition, yPosition);
+						}						
 					}
 					lastMarkerValid = true;
 					lastValidPosition = new Point(xPosition, yPosition);
+					if(!firstValidPosition)
+					{
+						firstValidPosition = lastValidPosition.clone();
+					}
 				}
-				else lastMarkerValid = false;
+				else
+				{
+					this.closeAreaFill(primaryIsVertical, originPosition, firstValidPosition, lastValidPosition);
+					this.setPrimaryLineStyle();
+					this.beginAreaFill(showAreaFill, fillColor);
+					lastMarkerValid = false;
+					firstValidPosition = null;
+				}
 			}
+			
+			if(showAreaFill)
+			{
+				this.closeAreaFill(primaryIsVertical, originPosition, firstValidPosition, lastValidPosition);
+			}
+		}
+		
+		/**
+		 * @private
+		 * Begins drawing an area fill.
+		 */
+		private function beginAreaFill(showAreaFill:Boolean, color:uint):void
+		{
+			if(!showAreaFill)
+			{
+				return;
+			}
+			
+			var areaFillAlpha:Number = this.getStyleValue("areaFillAlpha") as Number;
+			this.graphics.beginFill(color, areaFillAlpha);
+		}
+		
+		/**
+		 * @private
+		 * Sets the line style when connecting points. The forceColor flag
+		 * will use the color even when the connectPoints style is set to false.
+		 * This is used primarily to allow connectDiscontinousPoints to work
+		 * when connectPoints is false.
+		 */
+		private function setPrimaryLineStyle(forceColor:Boolean = false):void
+		{
+			var connectPoints:Boolean = this.getStyleValue("connectPoints") as Boolean;
+			if(!connectPoints && !forceColor)
+			{
+				this.graphics.lineStyle(0, 0, 0);
+				return;
+			}
+			
+			var lineWeight:int = this.getStyleValue("lineWeight") as int;
+			var fillColor:uint = this.getStyleValue("fillColor") as uint;
+			this.graphics.lineStyle(lineWeight, fillColor);
+		}
+		
+		/**
+		 * @private
+		 * Closes an area fill. Called after the full line is drawn. May also be
+		 * called when bad data is encountered.
+		 */
+		private function closeAreaFill(vertical:Boolean, origin:Number, firstValidPosition:Point, lastValidPosition:Point):void
+		{
+			this.graphics.lineStyle(0, 0, 0);
+			if(vertical)
+			{
+				this.graphics.lineTo(lastValidPosition.x, origin);
+				this.graphics.lineTo(firstValidPosition.x, origin);
+				this.graphics.lineTo(firstValidPosition.x, firstValidPosition.y);
+			}
+			else
+			{
+				this.graphics.lineTo(origin, lastValidPosition.y);
+				this.graphics.lineTo(origin, firstValidPosition.y);
+				this.graphics.lineTo(firstValidPosition.x, firstValidPosition.y);
+			}
+			this.graphics.endFill();
 		}
 		
 	}

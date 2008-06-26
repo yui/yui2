@@ -29,7 +29,197 @@ package com.yahoo.astra.fl.charts
 	//  Styles
 	//--------------------------------------
 	
-	//-- Vertical Axis
+	/**
+	 * An object containing style values to be passed to the vertical axis
+	 * renderer. The available styles are listed with the class that is used as the
+	 * axis renderer.
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * {
+	 * 	showTicks: true,
+	 * 	tickWeight: 1,
+	 * 	tickColor: 0x999999,
+	 * 	showMinorTicks: true,
+	 * 	minorTickWeight: 1,
+	 * 	minorTickColor: 0xcccccc
+	 * }
+	 * </listing>
+	 * 
+	 * <p><strong>Note:</strong> Previously, all styles for the axis renderers
+	 * were listed as individual styles on the chart, but since it is possible
+	 * to use a renderer class that has completely different styles than the
+	 * default renderer, we need to deprecate the previous method to allow
+	 * maximum flexibility when new or custom renderers are added.</p>
+	 * 
+	 * <p>The old styles still exist, and legacy code will continue to work
+	 * for the time being. However, it is recommended that you begin porting
+	 * code to the new system as soon as possible.</p>
+	 * 
+	 * <p>For the vertical axis, you should use the following method to set
+	 * styles at runtime:</p>
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * chart.setVerticalAxisStyle("showTicks", false);
+	 * </listing>
+	 * 
+	 * @see setVerticalAxisStyle()
+	 * @see com.yahoo.astra.fl.charts.axes.DefaultAxisRenderer
+	 */
+	[Style(name="verticalAxisStyles", type="Object")]
+    
+	/**
+	 * The class used to instantiate the visual representation of the vertical
+	 * axis.
+	 * 
+	 * @default DefaultAxisRenderer
+	 * @see com.yahoo.astra.fl.charts.axes.DefaultAxisRenderer
+	 */
+	[Style(name="verticalAxisRenderer", type="Class")]
+	
+	/**
+	 * An object containing style values to be passed to the horizontal axis
+	 * renderer. The available styles are listed with the class that is used as the
+	 * axis renderer.
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * {
+	 * 	showTicks: true,
+	 * 	tickWeight: 1,
+	 * 	tickColor: 0x999999,
+	 * 	showMinorTicks: true,
+	 * 	minorTickWeight: 1,
+	 * 	minorTickColor: 0xcccccc
+	 * }
+	 * </listing>
+	 * 
+	 * <p><strong>Note:</strong> Previously, all styles for the grid lines
+	 * renderer were listed as individual styles on the chart, but since it is
+	 * possible to use a renderer class that has completely different styles
+	 * than the default renderer, we need to deprecate the previous
+	 * method to allow maximum flexibility when new or custom renderers are
+	 * added.</p>
+	 * 
+	 * <p>The old styles still exist, and legacy code will continue to work
+	 * for the time being. However, it is recommended that you begin porting
+	 * code to the new system as soon as possible.</p>
+	 * 
+	 * <p>For the horizontal axis, you should use the following method to set
+	 * styles at runtime:</p>
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * chart.setHorizontalAxisStyle("showTicks", false);
+	 * </listing>
+	 * 
+	 * @see setHorizontalAxisStyle()
+	 * @see com.yahoo.astra.fl.charts.axes.DefaultAxisRenderer
+	 */
+	[Style(name="horizontalAxisStyles", type="Object")]
+    
+	/**
+	 * The class used to instantiate the visual representation of the horizontal
+	 * axis.
+	 * 
+	 * @default DefaultAxisRenderer
+	 * @see com.yahoo.astra.fl.charts.axes.DefaultAxisRenderer
+	 */
+	[Style(name="horizontalAxisRenderer", type="Class")]
+	
+	/**
+	 * An object containing style values to be passed to the vertical axis grid
+	 * lines renderer. The available styles are listed with the class that is used as the
+	 * grid lines renderer.
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * {
+	 * 	showLines: true,
+	 * 	lineWeight: 1,
+	 * 	lineColor: 0x999999,
+	 * 	showMinorLines: false
+	 * }
+	 * </listing>
+	 * 
+	 * <p><strong>Note:</strong> Previously, all styles for the grid lines were listed as individual
+	 * styles on the chart, but since it is possible to use a renderer class
+	 * that has completely different styles, we need to deprecate the previous
+	 * method to allow maximum flexibility when new or custom renderers are
+	 * added.</p>
+	 * 
+	 * <p>The old styles still exist, and legacy code will continue to work
+	 * for the time being. However, it is recommended that you begin porting
+	 * code to the new system as soon as possible.</p>
+	 * 
+	 * <p>For the vertical axis grid lines, you should use the following method to set
+	 * styles at runtime:</p>
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * chart.setVerticalAxisGridLinesStyle("lineColor", 0x999999);
+	 * </listing>
+	 * 
+	 * @see setVerticalAxisGridLinesStyle()
+	 * @see com.yahoo.astra.fl.charts.axes.DefaultGridLinesRenderer
+	 */
+	[Style(name="verticalAxisGridLinesStyles", type="Object")]
+    
+	/**
+	 * The class used to instantiate the vertical axis grid lines.
+	 * 
+	 * @default DefaultGridLinesRenderer
+	 * @see com.yahoo.astra.fl.charts.axes.DefaultGridLinesRenderer
+	 */
+	[Style(name="verticalAxisGridLinesRenderer", type="Class")]
+	
+	/**
+	 * An object containing style values to be passed to the horizontal axis grid
+	 * lines renderer. The available styles are listed with the class that is used as the
+	 * grid lines renderer.
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * {
+	 * 	showLines: true,
+	 * 	lineWeight: 1,
+	 * 	lineColor: 0x999999,
+	 * 	showMinorLines: false
+	 * }
+	 * </listing>
+	 * 
+	 * <p><strong>Note:</strong> Previously, all styles for the grid lines were listed as individual
+	 * styles on the chart, but since it is possible to use a renderer class
+	 * that has completely different styles, we need to deprecate the previous
+	 * method to allow maximum flexibility when new or custom renderers are
+	 * added.</p>
+	 * 
+	 * <p>The old styles still exist, and legacy code will continue to work
+	 * for the time being. However, it is recommended that you begin porting
+	 * code to the new system as soon as possible.</p>
+	 * 
+	 * <p>For the horizontal axis grid lines, you should use the following method to set
+	 * styles at runtime:</p>
+	 * 
+	 * @example
+	 * <listing version="3.0">
+	 * chart.setHorizontalAxisGridLinesStyle("lineColor", 0x999999);
+	 * </listing>
+	 * 
+	 * @see setHorizontalAxisGridLinesStyle()
+	 * @see com.yahoo.astra.fl.charts.axes.DefaultGridLinesRenderer
+	 */
+	[Style(name="horizontalAxisGridLinesStyles", type="Object")]
+    
+	/**
+	 * The class used to instantiate the horizontal axis grid lines.
+	 * 
+	 * @default DefaultGridLinesRenderer
+	 */
+	[Style(name="horizontalAxisGridLinesRenderer", type="Class")]
+	
+	//-- DEPRECATED Vertical Axis styles
     
 	/**
 	 * If false, the vertical axis is not drawn. Titles, labels, ticks, and grid
@@ -37,20 +227,15 @@ package com.yahoo.astra.fl.charts
 	 * item if nothing should be drawn.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showVerticalAxis", type="Boolean")]
-    
-	/**
-	 * The class used to instantiate the vertical axis.
-	 * 
-	 * @default DefaultAxisRenderer
-	 */
-	[Style(name="verticalAxisRenderer", type="Class")]
     
 	/**
 	 * The line weight, in pixels, for the vertical axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisWeight", type="int")]
     
@@ -58,6 +243,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the vertical axis.
 	 * 
 	 * @default #888a85
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisColor", type="uint")]
     
@@ -67,6 +253,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, labels will be displayed on the vertical axis.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showVerticalAxisLabels", type="Boolean")]
     
@@ -74,6 +261,7 @@ package com.yahoo.astra.fl.charts
 	 * The distance, in pixels, between a label and the vertical axis.
 	 * 
 	 * @default 2
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisLabelDistance", type="Number")]
     
@@ -82,6 +270,7 @@ package com.yahoo.astra.fl.charts
 	 * the <code>textFormat</code> style will be used.
 	 * 
 	 * @default null
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisTextFormat", type="TextFormat")]
     
@@ -90,6 +279,7 @@ package com.yahoo.astra.fl.charts
 	 * hidden. The first and last labels on the axis will always be drawn.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisHideOverlappingLabels", type="Boolean")]
     
@@ -101,6 +291,7 @@ package com.yahoo.astra.fl.charts
 	 * aren't met, the labels will not be rotated.
 	 * 
 	 * @default 0
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisLabelRotation", type="Number")]
     
@@ -111,6 +302,7 @@ package com.yahoo.astra.fl.charts
 	 * alternating fills between the vertical axis' grid lines.
 	 * 
 	 * @default []
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisGridFillColors", type="Array")]
     
@@ -119,22 +311,17 @@ package com.yahoo.astra.fl.charts
 	 * alternating fills between the vertical axis' grid lines.
 	 * 
 	 * @default []
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisGridFillAlphas", type="Array")]
     
-    //-- Grid Lines - Vertical Axis
-    
-	/**
-	 * The class used to instantiate the vertical axis grid lines.
-	 * 
-	 * @default DefaultGridLinesRenderer
-	 */
-	[Style(name="verticalAxisGridLinesRenderer", type="Class")]
+    //-- DEPRECATED Grid Lines styles - Vertical Axis
     
 	/**
 	 * If true, grid lines will be displayed on the vertical axis.
 	 * 
 	 * @default false
+	 * @deprecated
 	 */
 	[Style(name="showVerticalAxisGridLines", type="Boolean")]
     
@@ -142,6 +329,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the grid lines on the vertical axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisGridLineWeight", type="int")]
     
@@ -149,6 +337,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the grid lines on the vertical axis.
 	 * 
 	 * @default #babdb6
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisGridLineColor", type="uint")]
     
@@ -158,6 +347,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, minor grid lines will be displayed on the vertical axis.
 	 * 
 	 * @default false
+	 * @deprecated
 	 */
 	[Style(name="showVerticalAxisMinorGridLines", type="Boolean")]
     
@@ -165,6 +355,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the minor grid lines on the vertical axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisMinorGridLineWeight", type="int")]
     
@@ -172,6 +363,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the minor grid lines on the vertical axis.
 	 * 
 	 * @default #eeeeec
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisMinorGridLineColor", type="uint")]
     
@@ -181,6 +373,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, ticks will be displayed on the vertical axis.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showVerticalAxisTicks", type="Boolean")]
     
@@ -188,6 +381,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the ticks on the vertical axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisTickWeight", type="int")]
     
@@ -195,6 +389,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the ticks on the vertical axis.
 	 * 
 	 * @default #888a85
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisTickColor", type="uint")]
     
@@ -202,6 +397,7 @@ package com.yahoo.astra.fl.charts
 	 * The length, in pixels, of the ticks on the vertical axis.
 	 * 
 	 * @default 4
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisTickLength", type="Number")]
 	
@@ -209,7 +405,8 @@ package com.yahoo.astra.fl.charts
 	 * The position of the ticks on the vertical axis.
 	 * 
 	 * @default "cross"
-	 * @see com.yahoo.astra.fl.charts.TickPosition
+	 * @see com.yahoo.astra.fl.charts.axes.TickPosition
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisTickPosition", type="String")]
     
@@ -219,6 +416,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, ticks will be displayed on the vertical axis at minor positions.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showVerticalAxisMinorTicks", type="Boolean")]
 	
@@ -226,6 +424,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the minor ticks on the vertical axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisMinorTickWeight", type="int")]
     
@@ -233,6 +432,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the minor ticks on the vertical axis.
 	 * 
 	 * @default #888a85
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisMinorTickColor", type="uint")]
     
@@ -240,6 +440,7 @@ package com.yahoo.astra.fl.charts
 	 * The length of the minor ticks on the vertical axis.
 	 * 
 	 * @default 3
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisMinorTickLength", type="Number")]
 	
@@ -247,7 +448,8 @@ package com.yahoo.astra.fl.charts
 	 * The position of the minor ticks on the vertical axis.
 	 * 
 	 * @default "outside"
-	 * @see com.yahoo.astra.fl.charts.TickPosition
+	 * @see com.yahoo.astra.fl.charts.axes.TickPosition
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisMinorTickPosition", type="String")]
 	
@@ -257,6 +459,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, the vertical axis title will be displayed.
 	 * 
 	 * @default 2
+	 * @deprecated
 	 */
 	[Style(name="showVerticalAxisTitle", type="Boolean")]
 	
@@ -264,10 +467,11 @@ package com.yahoo.astra.fl.charts
 	 * The TextFormat object to use to render the vertical axis title label.
      *
      * @default TextFormat("_sans", 11, 0x000000, false, false, false, '', '', TextFormatAlign.LEFT, 0, 0, 0, 0)
+	 * @deprecated
 	 */
 	[Style(name="verticalAxisTitleTextFormat", type="TextFormat")]
 	
-	//-- Horizontal Axis
+	//-- DEPRECATED Horizontal Axis styles
     
 	/**
 	 * If false, the horizontal axis is not drawn. Titles, labels, ticks, and grid
@@ -275,20 +479,15 @@ package com.yahoo.astra.fl.charts
 	 * item if nothing should be drawn.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showHorizontalAxis", type="Boolean")]
-    
-	/**
-	 * The class used to instantiate the horizontal axis.
-	 * 
-	 * @default DefaultAxisRenderer
-	 */
-	[Style(name="horizontalAxisRenderer", type="Class")]
     
 	/**
 	 * The line weight, in pixels, for the horizontal axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisWeight", type="int")]
     
@@ -296,6 +495,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the horizontal axis.
 	 * 
 	 * @default #888a85
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisColor", type="uint")]
     
@@ -305,6 +505,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, labels will be displayed on the horizontal axis.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showHorizontalAxisLabels", type="Boolean")]
     
@@ -312,6 +513,7 @@ package com.yahoo.astra.fl.charts
 	 * The distance, in pixels, between a label and the horizontal axis.
 	 * 
 	 * @default 2
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisLabelDistance", type="Number")]
     
@@ -320,6 +522,7 @@ package com.yahoo.astra.fl.charts
 	 * the <code>textFormat</code> style will be used.
 	 * 
 	 * @default null
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisTextFormat", type="TextFormat")]
     
@@ -328,6 +531,7 @@ package com.yahoo.astra.fl.charts
 	 * hidden. The first and last labels on the axis will always be drawn.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisHideOverlappingLabels", type="Boolean")]
     
@@ -339,6 +543,7 @@ package com.yahoo.astra.fl.charts
 	 * aren't met, the labels will not be rotated.
 	 * 
 	 * @default 0
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisLabelRotation", type="Number")]
     
@@ -349,6 +554,7 @@ package com.yahoo.astra.fl.charts
 	 * alternating fills between the horizontal axis' grid lines.
 	 * 
 	 * @default []
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisGridFillColors", type="Array")]
     
@@ -357,22 +563,17 @@ package com.yahoo.astra.fl.charts
 	 * alternating fills between the horizontal axis' grid lines.
 	 * 
 	 * @default []
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisGridFillAlphas", type="Array")]
     
-    //-- Grid Lines - Horizontal Axis
-    
-	/**
-	 * The class used to instantiate the horizontal axis grid lines.
-	 * 
-	 * @default DefaultGridLinesRenderer
-	 */
-	[Style(name="horizontalAxisGridLinesRenderer", type="Class")]
+    //-- DEPRECATED Grid Lines - Horizontal Axis
     
 	/**
 	 * If true, grid lines will be displayed on the horizontal axis.
 	 * 
 	 * @default false
+	 * @deprecated
 	 */
 	[Style(name="showHorizontalAxisGridLines", type="Boolean")]
     
@@ -380,6 +581,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the grid lines on the horizontal axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisGridLineWeight", type="int")]
     
@@ -387,6 +589,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the grid lines on the horizontal axis.
 	 * 
 	 * @default #babdb6
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisGridLineColor", type="uint")]
     
@@ -396,6 +599,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, minor grid lines will be displayed on the horizontal axis.
 	 * 
 	 * @default false
+	 * @deprecated
 	 */
 	[Style(name="showHorizontalAxisMinorGridLines", type="Boolean")]
     
@@ -403,6 +607,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the minor grid lines on the horizontal axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisMinorGridLineWeight", type="int")]
     
@@ -410,6 +615,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the minor grid lines on the horizontal axis.
 	 * 
 	 * @default #eeeeec
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisMinorGridLineColor", type="uint")]
     
@@ -419,6 +625,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, ticks will be displayed on the horizontal axis.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showHorizontalAxisTicks", type="Boolean")]
     
@@ -426,6 +633,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the ticks on the horizontal axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisTickWeight", type="int")]
     
@@ -433,6 +641,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the ticks on the horizontal axis.
 	 * 
 	 * @default #888a85
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisTickColor", type="uint")]
     
@@ -440,6 +649,7 @@ package com.yahoo.astra.fl.charts
 	 * The length, in pixels, of the ticks on the horizontal axis.
 	 * 
 	 * @default 4
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisTickLength", type="Number")]
 	
@@ -447,7 +657,8 @@ package com.yahoo.astra.fl.charts
 	 * The position of the ticks on the horizontal axis.
 	 * 
 	 * @default "cross"
-	 * @see com.yahoo.astra.fl.charts.TickPosition
+	 * @see com.yahoo.astra.fl.charts.axes.TickPosition
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisTickPosition", type="String")]
     
@@ -457,6 +668,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, ticks will be displayed on the horizontal axis at minor positions.
 	 * 
 	 * @default true
+	 * @deprecated
 	 */
 	[Style(name="showHorizontalAxisMinorTicks", type="Boolean")]
 	
@@ -464,6 +676,7 @@ package com.yahoo.astra.fl.charts
 	 * The line weight, in pixels, for the minor ticks on the horizontal axis.
 	 * 
 	 * @default 1
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisMinorTickWeight", type="int")]
     
@@ -471,6 +684,7 @@ package com.yahoo.astra.fl.charts
 	 * The line color for the minor ticks on the horizontal axis.
 	 * 
 	 * @default #888a85
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisMinorTickColor", type="uint")]
     
@@ -478,6 +692,7 @@ package com.yahoo.astra.fl.charts
 	 * The length of the minor ticks on the horizontal axis.
 	 * 
 	 * @default 3
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisMinorTickLength", type="Number")]
 	
@@ -485,7 +700,8 @@ package com.yahoo.astra.fl.charts
 	 * The position of the minor ticks on the horizontal axis.
 	 * 
 	 * @default "outside"
-	 * @see com.yahoo.astra.fl.charts.TickPosition
+	 * @see com.yahoo.astra.fl.charts.axes.TickPosition
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisMinorTickPosition", type="String")]
 	
@@ -495,6 +711,7 @@ package com.yahoo.astra.fl.charts
 	 * If true, the horizontal axis title will be displayed.
 	 * 
 	 * @default 2
+	 * @deprecated
 	 */
 	[Style(name="showHorizontalAxisTitle", type="Boolean")]
 	
@@ -502,6 +719,7 @@ package com.yahoo.astra.fl.charts
 	 * The TextFormat object to use to render the horizontal axis title label.
      *
      * @default TextFormat("_sans", 11, 0x000000, false, false, false, '', '', TextFormatAlign.LEFT, 0, 0, 0, 0)
+	 * @deprecated
 	 */
 	[Style(name="horizontalAxisTitleTextFormat", type="TextFormat")]
 	
@@ -529,9 +747,21 @@ package com.yahoo.astra.fl.charts
 		 */
 		private static var defaultStyles:Object = 
 		{
+			horizontalAxisStyles: {},
+			horizontalAxisGridLinesStyles: {},
+			horizontalAxisRenderer: DefaultAxisRenderer,
+			horizontalAxisGridLinesRenderer: DefaultGridLinesRenderer,
+			
+			verticalAxisStyles: {},
+			verticalAxisGridLinesStyles: {},
+			verticalAxisRenderer: DefaultAxisRenderer,
+			verticalAxisGridLinesRenderer: DefaultGridLinesRenderer,
+			
+			//DEPRECATED BELOW THIS POINT!
+			//(to be removed in a future version)
+			
 			//axis
 			showHorizontalAxis: true,
-			horizontalAxisRenderer: DefaultAxisRenderer,
 			horizontalAxisWeight: 1,
 			horizontalAxisColor: 0x888a85,
 			
@@ -547,7 +777,6 @@ package com.yahoo.astra.fl.charts
 			horizontalAxisLabelRotation: 0,
 			
 			//grid lines
-			horizontalAxisGridLinesRenderer: DefaultGridLinesRenderer,
 			horizontalAxisGridLineWeight: 1,
 			horizontalAxisGridLineColor: 0xbabdb6,
 			showHorizontalAxisGridLines: false,
@@ -571,7 +800,6 @@ package com.yahoo.astra.fl.charts
 			
 			//axis
 			showVerticalAxis: true,
-			verticalAxisRenderer: DefaultAxisRenderer,
 			verticalAxisWeight: 1,
 			verticalAxisColor: 0x888a85,
 			
@@ -587,7 +815,6 @@ package com.yahoo.astra.fl.charts
 			verticalAxisLabelRotation: 0,
 			
 			//grid lines
-			verticalAxisGridLinesRenderer: DefaultGridLinesRenderer,
 			showVerticalAxisGridLines: true,
 			verticalAxisGridLineWeight: 1,
 			verticalAxisGridLineColor: 0xbabdb6,
@@ -1078,6 +1305,38 @@ package com.yahoo.astra.fl.charts
 			return stackValue;
 		}
 		
+		/**
+		 * Sets a style on the horizontal axis.
+		 */
+		public function setHorizontalAxisStyle(name:String, value:Object):void
+		{
+			this.setComplexStyle("horizontalAxisStyles", name, value);
+		}
+		
+		/**
+		 * Sets a style on the vertical axis.
+		 */
+		public function setVerticalAxisStyle(name:String, value:Object):void
+		{
+			this.setComplexStyle("verticalAxisStyles", name, value);
+		}
+		
+		/**
+		 * Sets a style on the horizontal axis grid lines.
+		 */
+		public function setHorizontalAxisGridLinesStyle(name:String, value:Object):void
+		{
+			this.setComplexStyle("horizontalAxisGridLinesStyles", name, value);
+		}
+		
+		/**
+		 * Sets a style on the vertical axis grid lines.
+		 */
+		public function setVerticalAxisGridLinesStyle(name:String, value:Object):void
+		{
+			this.setComplexStyle("verticalAxisGridLinesStyles", name, value);
+		}
+		
 	//--------------------------------------
 	//  Protected Methods
 	//--------------------------------------
@@ -1139,7 +1398,7 @@ package com.yahoo.astra.fl.charts
 				for(var j:int = 0; j < seriesLength; j++)
 				{
 					var item:Object = currentSeries.dataProvider[j];
-					if(!isNaN(Number(item)))
+					if(item is Number || !isNaN(Number(item)))
 					{
 						//if we only have a number, then it is safe to convert
 						//to a default type for a category chart.
@@ -1285,6 +1544,7 @@ package com.yahoo.astra.fl.charts
 			this.horizontalAxisRenderer = new RendererClass(AxisOrientation.HORIZONTAL);
 			this.addChild(DisplayObject(this.horizontalAxisRenderer));
 			this.copyStylesToChild(UIComponent(this.horizontalAxisRenderer), CartesianChart.HORIZONTAL_AXIS_STYLES);
+			this.copyStyleObjectToChild(UIComponent(this.horizontalAxisRenderer), this.getStyleValue("horizontalAxisStyles"));
 			var horizontalAxisTextFormat:TextFormat = this.getStyleValue("horizontalAxisTextFormat") as TextFormat;
 			if(horizontalAxisTextFormat)
 			{
@@ -1300,6 +1560,7 @@ package com.yahoo.astra.fl.charts
 			this.verticalAxisRenderer = new RendererClass(AxisOrientation.VERTICAL);
 			this.addChild(DisplayObject(this.verticalAxisRenderer));
 			this.copyStylesToChild(UIComponent(verticalAxisRenderer), CartesianChart.VERTICAL_AXIS_STYLES);
+			this.copyStyleObjectToChild(UIComponent(this.verticalAxisRenderer), this.getStyleValue("verticalAxisStyles"));
 			var verticalAxisTextFormat:TextFormat = this.getStyleValue("verticalAxisTextFormat") as TextFormat;
 			if(verticalAxisTextFormat)
 			{
@@ -1317,6 +1578,7 @@ package com.yahoo.astra.fl.charts
 			this.horizontalGridLines.axisRenderer = this.horizontalAxisRenderer;
 			this.addChild(DisplayObject(this.horizontalGridLines));
 			this.copyStylesToChild(UIComponent(this.horizontalGridLines), CartesianChart.HORIZONTAL_GRID_LINES_STYLES);
+			this.copyStyleObjectToChild(UIComponent(this.horizontalGridLines), this.getStyleValue("horizontalAxisGridLinesStyles")); 
 			
 			if(this.verticalGridLines)
 			{
@@ -1327,6 +1589,7 @@ package com.yahoo.astra.fl.charts
 			this.verticalGridLines.axisRenderer = this.verticalAxisRenderer;
 			this.addChild(DisplayObject(this.verticalGridLines));
 			this.copyStylesToChild(UIComponent(this.verticalGridLines), CartesianChart.VERTICAL_GRID_LINES_STYLES);
+			this.copyStyleObjectToChild(UIComponent(this.verticalGridLines), this.getStyleValue("verticalAxisGridLinesStyles")); 
 		}
 		
 		/**
@@ -1492,9 +1755,40 @@ package com.yahoo.astra.fl.charts
 				verticalGridLines.drawNow();
 			}
 		}
+		 
+		 /**
+		  * @private
+		  */
+		 protected function setComplexStyle(complexName:String, subStyleName:String, subStyleValue:Object):void
+		 {
+			var container:Object = this.getStyleValue(complexName);
+			var copy:Object = {};
+			for(var prop:String in container)
+			{
+				copy[prop] = container[prop];
+			}
+			copy[subStyleName] = subStyleValue;
+			this.setStyle(complexName, copy);
+		 } 
 		
 		/**
-		 * @inheritDoc
+		 * @private
+		 */
+		protected function copyStyleObjectToChild(child:UIComponent, styles:Object):void
+		{
+			if(!child)
+			{
+				return;
+			}
+			
+			for(var prop:String in styles)
+			{
+				child.setStyle(prop, styles[prop]);
+			}
+		}
+		
+		/**
+		 * @private
 		 */
 		protected function axisAndSeriesToField(axis:IAxis, series:ISeries):String
 		{
@@ -1514,7 +1808,7 @@ package com.yahoo.astra.fl.charts
 		}
 	
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		protected function axisToField(axis:IAxis):String
 		{
@@ -1530,7 +1824,7 @@ package com.yahoo.astra.fl.charts
 		}
 		
 		/**
-		 * @inheritDoc
+		 * @private
 		 */
 		protected function fieldToAxis(field:String):IAxis
 		{
@@ -1546,6 +1840,7 @@ package com.yahoo.astra.fl.charts
 		}
 		
 		/**
+		 * @private
 		 * Finds the renderer for the specified axis.
 		 */
 		protected function axisToAxisRenderer(axis:IAxis):ICartesianAxisRenderer

@@ -12,6 +12,163 @@ package com.yahoo.astra.fl.charts.axes
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
+	
+	//--------------------------------------
+	//  Styles
+	//--------------------------------------
+    
+    //-- Axis
+    
+	/**
+	 * If false, the axis is not drawn. Titles, labels, ticks, and grid
+	 * lines may still be drawn, however, so you must specifically hide each
+	 * item if nothing should be drawn.
+	 * 
+	 * @default true
+	 */
+	[Style(name="showAxis", type="Boolean")]
+    
+	/**
+	 * The line weight, in pixels, for the axis.
+	 * 
+	 * @default 1
+	 */
+	[Style(name="axisWeight", type="int")]
+    
+	/**
+	 * The line color for the axis.
+	 * 
+	 * @default #888a85
+	 */
+	[Style(name="axisColor", type="uint")]
+    
+    //-- Labels
+    
+	/**
+	 * If true, labels will be displayed on the axis.
+	 * 
+	 * @default true
+	 */
+	[Style(name="showLabels", type="Boolean")]
+    
+	/**
+	 * The distance, in pixels, between a label and the axis.
+	 * 
+	 * @default 2
+	 */
+	[Style(name="labelDistance", type="Number")]
+    
+	/** 
+	 * If true, labels that overlap previously drawn labels on the axis will be
+	 * hidden. The first and last labels on the axis will always be drawn.
+	 * 
+	 * @default true
+	 */
+	[Style(name="hideOverlappingLabels", type="Boolean")]
+    
+	/** 
+	 * The angle, in degrees, of the labels on the axis. May be a value
+	 * between <code>-90</code> and <code>90</code>. The font must be embedded
+	 * in the SWF and the <code>embedFonts</code> style on the chart must be set
+	 * to <code>true</code> before labels may be rotated. If these conditions
+	 * aren't met, the labels will not be rotated.
+	 * 
+	 * @default 0
+	 */
+	[Style(name="labelRotation", type="Number")]
+	
+	//-- Ticks
+    
+	/**
+	 * If true, ticks will be displayed on the axis.
+	 * 
+	 * @default true
+	 */
+	[Style(name="showTicks", type="Boolean")]
+    
+	/**
+	 * The line weight, in pixels, for the ticks on the axis.
+	 * 
+	 * @default 1
+	 */
+	[Style(name="tickWeight", type="int")]
+    
+	/**
+	 * The line color for the ticks on the axis.
+	 * 
+	 * @default #888a85
+	 */
+	[Style(name="tickColor", type="uint")]
+    
+	/**
+	 * The length, in pixels, of the ticks on the axis.
+	 * 
+	 * @default 4
+	 */
+	[Style(name="tickLength", type="Number")]
+	
+	/**
+	 * The position of the ticks on the axis.
+	 * 
+	 * @default "cross"
+	 * @see TickPosition
+	 */
+	[Style(name="tickPosition", type="String")]
+    
+    //-- Minor ticks
+    
+	/**
+	 * If true, ticks will be displayed on the axis at minor positions.
+	 * 
+	 * @default true
+	 */
+	[Style(name="showMinorTicks", type="Boolean")]
+	
+	/**
+	 * The line weight, in pixels, for the minor ticks on the axis.
+	 * 
+	 * @default 1
+	 */
+	[Style(name="minorTickWeight", type="int")]
+    
+	/**
+	 * The line color for the minor ticks on the axis.
+	 * 
+	 * @default #888a85
+	 */
+	[Style(name="minorTickColor", type="uint")]
+    
+	/**
+	 * The length of the minor ticks on the axis.
+	 * 
+	 * @default 3
+	 */
+	[Style(name="minorTickLength", type="Number")]
+	
+	/**
+	 * The position of the minor ticks on the axis.
+	 * 
+	 * @default "outside"
+	 * @see com.yahoo.astra.fl.charts.TickPosition
+	 */
+	[Style(name="minorTickPosition", type="String")]
+	
+	//-- Title
+	
+	/**
+	 * If true, the axis title will be displayed.
+	 * 
+	 * @default 2
+	 */
+	[Style(name="showTitle", type="Boolean")]
+	
+	/**
+	 * The TextFormat object to use to render the axis title label.
+     *
+     * @default TextFormat("_sans", 11, 0x000000, false, false, false, '', '', TextFormatAlign.LEFT, 0, 0, 0, 0)
+	 */
+	[Style(name="titleTextFormat", type="TextFormat")]
 
 	/**
 	 * The default axis renderer for a cartesian chart.
@@ -43,9 +200,6 @@ package com.yahoo.astra.fl.charts.axes
 			hideOverlappingLabels: true,
 			labelRotation: 0,
 			
-			//title
-			showTitle: true,
-			
 			//ticks
 			showTicks: true,
 			tickWeight: 1,
@@ -58,7 +212,11 @@ package com.yahoo.astra.fl.charts.axes
 			minorTickWeight: 1,
 			minorTickColor: 0x888a85,
 			minorTickLength: 3,
-			minorTickPosition: TickPosition.OUTSIDE
+			minorTickPosition: TickPosition.OUTSIDE,
+			
+			//title
+			showTitle: true,
+			titleTextFormat: new TextFormat("_sans", 11, 0x000000, false, false, false, "", "", TextFormatAlign.LEFT, 0, 0, 0, 0)
 		};
 		
 	//--------------------------------------
