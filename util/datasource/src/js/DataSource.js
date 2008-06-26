@@ -807,7 +807,7 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
     // Success
     if(oParsedResponse && !oParsedResponse.error) {
         // Last chance to touch the raw response or the parsed response
-        oParsedResponse = this.doBeforeCallback(oRequest, oFullResponse, oParsedResponse);
+        oParsedResponse = this.doBeforeCallback(oRequest, oFullResponse, oParsedResponse, oCallback);
         this.fireEvent("responseParseEvent", {request:oRequest,
                 response:oParsedResponse, callback:oCallback, caller:oCaller});
         // Cache the response
@@ -835,9 +835,11 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
  * @method doBeforeParseData
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full response from the live database.
+ * @param oCallback {Object} The callback object.  
  * @return {Object} Full response for parsing.
+  
  */
-doBeforeParseData : function(oRequest, oFullResponse) {
+doBeforeParseData : function(oRequest, oFullResponse, oCallback) {
     return oFullResponse;
 },
 
@@ -852,9 +854,10 @@ doBeforeParseData : function(oRequest, oFullResponse) {
  * @param oRequest {Object} Request object.
  * @param oFullResponse {Object} The full response from the live database.
  * @param oParsedResponse {Object} The parsed response to return to calling object.
+ * @param oCallback {Object} The callback object. 
  * @return {Object} Parsed response object.
  */
-doBeforeCallback : function(oRequest, oFullResponse, oParsedResponse) {
+doBeforeCallback : function(oRequest, oFullResponse, oParsedResponse, oCallback) {
     return oParsedResponse;
 },
 
@@ -1130,7 +1133,6 @@ parseXMLData : function(oRequest, oFullResponse) {
     }
     // Loop through each result
     else {
-
         oParsedResponse.results = [];
         for(i = xmlList.length-1; i >= 0 ; --i) {
             var result = xmlList.item(i);
@@ -2081,42 +2083,5 @@ util.DataSource = function(oLiveData, oConfigs) {
 
 // Copy static members to DataSource class
 lang.augmentObject(util.DataSource, DS);
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Backwards compatibility
-//
-/////////////////////////////////////////////////////////////////////////////
-
-widget.DS_JSArray = util.LocalDataSource;
-
-widget.DS_JSFunction = util.FunctionDataSource;
-
-widget.DS_XHR = function(sScriptURI, aSchema, oConfigs) {
-    var DS = new util.XHRDataSource(sScriptURI, oConfigs);
-    DS._aSchema = aSchema;
-    return DS;
-};
-
-widget.DS_ScriptNode = function(sScriptURI, aSchema, oConfigs) {
-    var DS = new util.ScriptNodeDataSource(sScriptURI, oConfigs);
-    DS._aSchema = aSchema;
-    return DS;
-};
-
-YAHOO.widget.DS_XHR.TYPE_JSON = YAHOO.util.DataSourceBase.TYPE_JSON;
-YAHOO.widget.DS_XHR.TYPE_XML = YAHOO.util.DataSourceBase.TYPE_XML;
-YAHOO.widget.DS_XHR.TYPE_FLAT = YAHOO.util.DataSourceBase.TYPE_TEXT;
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Deprecation Notes
-//
-/////////////////////////////////////////////////////////////////////////////
-
-// widget.DS.scriptQueryParam
-// widget.DS.scriptQueryAppend
-// widget.DS_ScriptNode.scriptCallbackParam
-
 
 })();
