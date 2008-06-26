@@ -68,7 +68,11 @@ YAHOO.util.DragDropMgr = function() {
         _createShim: function() {
             var s = document.createElement('div');
             s.id = 'yui-ddm-shim';
-            document.body.appendChild(s);
+            if (document.body.firstChild) {
+                document.body.insertBefore(s, document.body.firstChild);
+            } else {
+                document.body.appendChild(s);
+            }
             s.style.display = 'none';
             s.style.backgroundColor = 'red';
             s.style.position = 'absolute';
@@ -497,9 +501,13 @@ YAHOO.util.DragDropMgr = function() {
          */
         _remove: function(oDD) {
             for (var g in oDD.groups) {
-                if (g && this.ids[g][oDD.id]) {
-                    delete this.ids[g][oDD.id];
+                if (g) {
+                    var item = this.ids[g];
+                    if (item && item[oDD.id]) {
+                        delete item[oDD.id];
+                    }
                 }
+                
             }
             delete this.handleIds[oDD.id];
         },
@@ -2392,16 +2400,19 @@ YAHOO.util.DragDrop.prototype = {
 
 
         // firing the mousedown events prior to calculating positions
-        var b4Return = this.b4MouseDown(e);
+        var b4Return = this.b4MouseDown(e),
+        b4Return2 = true;
+
         if (this.events.b4MouseDown) {
-            b4Return = this.fireEvent('b4MouseDownEvent', e);
+            b4Return2 = this.fireEvent('b4MouseDownEvent', e);
         }
-        var mDownReturn = this.onMouseDown(e);
+        var mDownReturn = this.onMouseDown(e),
+            mDownReturn2 = true;
         if (this.events.mouseDown) {
-            mDownReturn = this.fireEvent('mouseDownEvent', e);
+            mDownReturn2 = this.fireEvent('mouseDownEvent', e);
         }
 
-        if ((b4Return === false) || (mDownReturn === false)) {
+        if ((b4Return === false) || (mDownReturn === false) || (b4Return2 === false) || (mDownReturn2 === false)) {
             return;
         }
 
@@ -3337,7 +3348,7 @@ YAHOO.extend(YAHOO.util.DDProxy, YAHOO.util.DD, {
             if (YAHOO.env.ua.ie) {
                 //Only needed for Internet Explorer
                 var ifr = document.createElement('iframe');
-                ifr.setAttribute('src', 'about:blank');
+                ifr.setAttribute('src', 'javascript: false;');
                 ifr.setAttribute('scrolling', 'no');
                 ifr.setAttribute('frameborder', '0');
                 div.insertBefore(ifr, div.firstChild);

@@ -69,7 +69,11 @@ YAHOO.util.DragDropMgr = function() {
             YAHOO.log('Creating Shim Element', 'info', 'DragDropMgr');
             var s = document.createElement('div');
             s.id = 'yui-ddm-shim';
-            document.body.appendChild(s);
+            if (document.body.firstChild) {
+                document.body.insertBefore(s, document.body.firstChild);
+            } else {
+                document.body.appendChild(s);
+            }
             s.style.display = 'none';
             s.style.backgroundColor = 'red';
             s.style.position = 'absolute';
@@ -503,10 +507,13 @@ YAHOO.util.DragDropMgr = function() {
          */
         _remove: function(oDD) {
             for (var g in oDD.groups) {
-                if (g && this.ids[g][oDD.id]) {
-                    delete this.ids[g][oDD.id];
-                    //YAHOO.log("NEW LEN " + this.ids.length, "warn");
+                if (g) {
+                    var item = this.ids[g];
+                    if (item && item[oDD.id]) {
+                        delete item[oDD.id];
+                    }
                 }
+                
             }
             delete this.handleIds[oDD.id];
         },
