@@ -144,24 +144,28 @@
          * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
          */
         get: function(el) {
-            if (el && (el.nodeType || el.item)) { // Node, or NodeList
-                return el;
-            }
+            if (el) {
+                if (el.nodeType || el.item) { // Node, or NodeList
+                    return el;
+                }
 
-            if (YAHOO.lang.isString(el) || !el) { // id or null
-                return document.getElementById(el);
-            }
-            
-            if (el.length !== undefined) { // array-like 
-                var c = [];
-                for (var i = 0, len = el.length; i < len; ++i) {
-                    c[c.length] = Y.Dom.get(el[i]);
+                if (typeof el === 'string') { // id
+                    return document.getElementById(el);
                 }
                 
-                return c;
+                if ('length' in el) { // array-like 
+                    var c = [];
+                    for (var i = 0, len = el.length; i < len; ++i) {
+                        c[c.length] = Y.Dom.get(el[i]);
+                    }
+                    
+                    return c;
+                }
+
+                return el; // some other object, just pass it back
             }
 
-            return el; // some other object, just pass it back
+            return null;
         },
     
         /**
@@ -487,7 +491,7 @@
                 el.className = el.className.replace(re, ' ' + newClassName + ' ');
 
                 if ( this.hasClass(el, oldClassName) ) { // in case of multiple adjacent
-                    this.replaceClass(el, oldClassName, newClassName);
+                    this.removeClass(el, oldClassName);
                 }
 
                 el.className = YAHOO.lang.trim(el.className); // remove any trailing spaces
