@@ -42,7 +42,7 @@ returns true by default, and returns false to cancel showing the cell editor.
  
 * Removed unused Column._oDefinition private property.
 
-* Hidden Columns are now manifested as cell liner elements with display:none.
+* Hidden Columns are now manifested as cell liner elements with display:none to prevent content from being visible.
  
 * In the markup, the primary data TBODY is (once again) before the message TBODY element.
  

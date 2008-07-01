@@ -691,11 +691,11 @@ _syncScrollY : function() {
     // X-scrolling not enabled
     if(!this.get("width")) {
         // Snap outer container width to content
-        // but account for y-scrollbar if it is visible
         this._elContainer.style.width = 
                 (elBdContainer.scrollHeight >= elBdContainer.offsetHeight) ?
-                (elTbody.parentNode.offsetWidth + 19) + "px" :
-                //TODO: Can we detect left and right border widths instead of hard coding?
+                // but account for y-scrollbar if it is visible
+                (elTbody.parentNode.offsetWidth + 18) + "px" :
+                // no y-scrollbar, just borders
                 (elTbody.parentNode.offsetWidth + 2) + "px";
     }
 },
@@ -716,7 +716,7 @@ _syncScrollX : function() {
         elBdContainer.style.height = 
                 // but account for x-scrollbar if it is visible
                 (elBdContainer.scrollWidth > elBdContainer.offsetWidth - 2) ?
-                (elTbody.parentNode.offsetHeight + 19) + "px" : 
+                (elTbody.parentNode.offsetHeight + 18) + "px" : 
                 elTbody.parentNode.offsetHeight + "px";
     }
 
@@ -744,13 +744,9 @@ _syncScrollOverhang : function() {
     var nPadding = 1;
     
     // Y-scrollbar is visible, which is when the overhang needs to jut out
-    if(elBdContainer.scrollHeight > elBdContainer.offsetHeight) {
+    if(elBdContainer.scrollHeight > elBdContainer.clientHeight) {
         // X-scrollbar is also visible, which means the right is jagged, not flush with the Column
-        var nAdjustedOffsetWidth = elBdContainer.offsetWidth - 18; // Account for the y-scrollbar when using the offsetWidth
-        var nScrollWidth = elBdContainer.scrollWidth;
-        if(nScrollWidth >= nAdjustedOffsetWidth) {
-            nPadding = ((nScrollWidth - nAdjustedOffsetWidth) >= 0) ? 18 : 1;
-        }
+        nPadding = (elBdContainer.scrollWidth > elBdContainer.clientWidth)? 18 : 1;
     }
     
     // Set Column header overhang

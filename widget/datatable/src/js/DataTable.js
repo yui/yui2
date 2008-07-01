@@ -2335,6 +2335,7 @@ _initDomElements : function(elContainer) {
  */
 _destroyContainerEl : function() {
     if(this._elContainer) {
+        Dom.removeClass(this._elContainer, DT.CLASS_DATATABLE);
         Ev.purgeElement(this._elContainer, true);
         this._elContainer.innerHTML = "";
         this._elContainer = null;
@@ -5914,7 +5915,7 @@ validateColumnWidths : function(oColumn) {
     var allKeys = this._oColumnSet.keys;
     var elThLiner;
     // Validate just one Column
-    if(oColumn && !oColumn.hidden && !oColumn.width && oColumn.minWidth) {
+    if(oColumn && !oColumn.hidden && !oColumn.width && oColumn.minWidth && (oColumn.getKeyIndex() !== null)) {
             elThLiner = oColumn.getThLinerEl();
             if(elThLiner.offsetWidth < oColumn.minWidth) {
                 elColgroupClone.childNodes[oColumn.getKeyIndex()].style.width = 
@@ -5954,7 +5955,9 @@ validateColumnWidths : function(oColumn) {
  * @private
  */
 _clearMinWidth : function(oColumn) {
-    this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = '';
+    if(oColumn.getKeyIndex() !== null) {
+        this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = '';
+    }
 },
 
 /**
@@ -5965,7 +5968,7 @@ _clearMinWidth : function(oColumn) {
  * @private
  */
 _restoreMinWidth : function(oColumn) {
-    if(oColumn.minWidth) {
+    if(oColumn.minWidth && (oColumn.getKeyIndex() !== null)) {
         this._elColgroup.childNodes[oColumn.getKeyIndex()].style.width = oColumn.minWidth + 'px';
     }
 },
