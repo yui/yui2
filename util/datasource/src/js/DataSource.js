@@ -782,7 +782,7 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             oParsedResponse = this.parseXMLData(oRequest, oFullResponse);
             break;
         case DS.TYPE_TEXT:
-            if(xhr && oRawResponse.responseText) {
+            if(xhr && lang.isString(oRawResponse.responseText)) {
                 oFullResponse = oRawResponse.responseText;
             }
             oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
