@@ -1739,6 +1739,7 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'carousel/carousel-min.js',
             'requires': ['element'],
+            'optional': ['animation'],
             'skinnable': true
         },
 

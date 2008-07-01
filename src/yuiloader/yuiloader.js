@@ -86,6 +86,7 @@
             'type': 'js',
             'path': 'carousel/carousel-min.js',
             'requires': ['element'],
+            'optional': ['animation'],
             'skinnable': true
         },
 
