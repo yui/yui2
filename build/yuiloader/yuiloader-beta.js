@@ -441,7 +441,8 @@ var L = YAHOO.lang,
      * @return {boolean} the result
      */
     isFunction: function(o) {
-        return typeof o === 'function';
+        // return ((typeof o === 'function' && o.apply) || false);
+        return !!(typeof o === 'function' && o.apply);
     },
         
     /**
@@ -1217,6 +1218,13 @@ YAHOO.util.Get = function() {
 
         var url = q.url[0];
 
+        // if the url is undefined, this is probably a trailing comma problem in IE
+        if (!url) {
+            q.url.shift(); 
+            return _next(id);
+        }
+
+
         if (q.type === "script") {
             n = _scriptNode(url, w, q.charset);
         } else {
@@ -1293,8 +1301,9 @@ YAHOO.util.Get = function() {
             for (var i=0; i<l; i=i+1) {
                 h.removeChild(n[i]);
             }
+
+            q.nodes = [];
         }
-        q.nodes = [];
     };
 
     /**
@@ -1320,6 +1329,7 @@ YAHOO.util.Get = function() {
             type: type,
             url: url,
             finished: false,
+            aborted: false,
             nodes: []
         });
 
@@ -1360,6 +1370,7 @@ YAHOO.util.Get = function() {
             n.onreadystatechange = function() {
                 var rs = this.readyState;
                 if ("loaded" === rs || "complete" === rs) {
+                    this.onreadystatechange = null;
                     f(id, url);
                 }
             };
@@ -1721,6 +1732,13 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
             'type': 'js',
             'path': 'calendar/calendar-min.js',
             'requires': ['event', 'dom'],
+            'skinnable': true
+        },
+
+        'carousel': {
+            'type': 'js',
+            'path': 'carousel/carousel-min.js',
+            'requires': ['element'],
             'skinnable': true
         },
 
@@ -3075,11 +3093,11 @@ YAHOO.register("get", YAHOO.util.Get, {version: "@VERSION@", build: "@BUILD@"});
          *        complete.
          */
         sandbox: function(o, type) {
-            if (o) {
+            // if (o) {
                 // YAHOO.log("sandbox: " + lang.dump(o, 1) + ", " + type);
-            } else {
+            // } else {
                 // YAHOO.log("sandbox: " + this.toString() + ", " + type);
-            }
+            // }
 
             this._config(o);
 

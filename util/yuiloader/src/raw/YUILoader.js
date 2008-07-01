@@ -1100,11 +1100,11 @@
          *        complete.
          */
         sandbox: function(o, type) {
-            if (o) {
+            // if (o) {
                 // YAHOO.log("sandbox: " + lang.dump(o, 1) + ", " + type);
-            } else {
+            // } else {
                 // YAHOO.log("sandbox: " + this.toString() + ", " + type);
-            }
+            // }
 
             this._config(o);
 

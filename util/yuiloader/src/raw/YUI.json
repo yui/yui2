@@ -48,6 +48,13 @@
             'skinnable': true
         },
 
+        'carousel': {
+            'type': 'js',
+            'path': 'carousel/carousel-min.js',
+            'requires': ['element'],
+            'skinnable': true
+        },
+
         'charts': {
             'type': 'js',
             'path': 'charts/charts-experimental-min.js',

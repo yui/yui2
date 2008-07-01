@@ -58,4 +58,13 @@ yuiloader - Release Notes
      it was looking for "skin.override".
 
 2.3.0
-   * Initial release
+   * Initial release.  YUILoader can dynamically load the optimized list of dependencies
+     for a given set of requirements.  It is designed to be the only YUI component you
+     need on your page in order to get the library running.  It includes the pieces of YUI
+     that it requires to work.  If you are using yuiloader.js, then you don't need the
+     following:
+
+     yahoo.js
+     get.js
+     
+
