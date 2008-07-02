@@ -196,6 +196,13 @@ YAHOO.test.cookie_test = (function(){
             
             Assert.areEqual(cookieValue, hash[cookieName], "Hash 'a' should have value 'b'.");
                     
+        },
+        
+        testParseCookieHashEmpty: function(){
+            var hash = YAHOO.util.Cookie._parseCookieHash("");
+            
+            Assert.isFalse("" in hash, "Hash shouldn't have an empty string property.");
+        
         }
         
         

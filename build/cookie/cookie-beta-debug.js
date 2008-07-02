@@ -99,13 +99,15 @@ YAHOO.util.Cookie = {
      */
     _parseCookieHash : function (text /*:String*/) /*:Object*/ {
     
-        var hashParts /*:Array*/ = text.split("&");
-        var hashPart /*:Array*/ = null;
-        var hash /*:Object*/ = new Object();
+        var hashParts /*:Array*/ = text.split("&"),
+            hashPart /*:Array*/ = null,
+            hash /*:Object*/ = new Object();
         
-        for (var i=0, len=hashParts.length; i < len; i++){
-            hashPart = hashParts[i].split("=");
-            hash[decodeURIComponent(hashPart[0])] = decodeURIComponent(hashPart[1]);
+        if (text.length > 0){
+            for (var i=0, len=hashParts.length; i < len; i++){
+                hashPart = hashParts[i].split("=");
+                hash[decodeURIComponent(hashPart[0])] = decodeURIComponent(hashPart[1]);
+            }
         }
         
         return hash;
