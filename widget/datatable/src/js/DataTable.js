@@ -92,30 +92,15 @@ YAHOO.widget.DataTable = function(elContainer,aColumnDefs,oDataSource,oConfigs) 
     // but *before* table is populated with data
     DT.superclass.constructor.call(this, this._elContainer, this._oConfigs);
     
-    // HACK: Convert sortedBy values for backward compatibility
-    var oSortedBy = this.get("sortedBy");
-    if(oSortedBy) {
-        if(oSortedBy.dir == "desc") {
-            this._configs.sortedBy.value.dir = DT.CLASS_DESC;
-        }
-        else if(oSortedBy.dir == "asc") {
-            this._configs.sortedBy.value.dir = DT.CLASS_ASC;
-        }
-    }
     // Show message as soon as config is available
     this.showTableMessage(this.get("MSG_LOADING"), DT.CLASS_LOADING);
     
     ////////////////////////////////////////////////////////////////////////////
     // Once per instance
+    this._initEvents();
 
     // Initialize inline Cell editing
     this._oCellEditor = this._initCellEditor();
-    
-    // Initialize Column sort
-    this._initColumnSort();
-
-    // Once per instance
-    YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
     
     // Element's constructor must first be called
     //this.subscribe("tableMutationEvent",this._onTableMutationEvent);
@@ -1681,44 +1666,10 @@ initAttributes : function(oConfigs) {
     */
     this.setAttributeConfig("paginator", {
         value : null,
-        validator : function (oNewPaginator) {
-            if (oNewPaginator && (oNewPaginator instanceof Pag)) {
-                    return true;
-            }
-            else {
-                return false;
-            }
+        validator : function (val) {
+            return val === null || val instanceof Pag;
         },
-        method : function (oNewPaginator) {
-            // Set up Paginator
-            if (oNewPaginator) {
-                // Hook into the Paginator's changeRequest event
-                oNewPaginator.subscribe('changeRequest', this.onPaginatorChangeRequest, this, true);
-
-                // If the paginator has no configured containers, add some
-                var containers = oNewPaginator.getContainerNodes();
-                if (!containers.length) {
-                    // Build the container nodes
-                    var c_above = document.createElement('div');
-                    c_above.id = this._sId + "-paginator0";
-                    this._elContainer.insertBefore(c_above,this._elContainer.firstChild);
-
-                    // ...and one below the table
-                    var c_below = document.createElement('div');
-                    c_below.id = this._sId + "-paginator1";
-                    this._elContainer.appendChild(c_below);
-
-                    containers = [c_above, c_below];
-                    Dom.addClass(containers, DT.CLASS_PAGINATOR);
-
-                    oNewPaginator.set('containers',containers);
-                }
-            }
-            // Tear down Paginator
-            else {
-                //TODO
-            }
-        }
+        method : function () { this._updatePaginator.apply(this,arguments); }
     });
 
     /**
@@ -2880,6 +2831,28 @@ _initCellEditor : function() {
     return oCellEditor;
 },
 
+/**
+ * Initialize internal event listeners
+ *
+ * @method _initEvents
+ * @private
+ */
+_initEvents : function () {
+    // Initialize Column sort
+    this._initColumnSort();
+
+    // Add the document level click listener
+    YAHOO.util.Event.addListener(document, "click", this._onDocumentClick, this);
+
+    this.subscribe('paginatorChange',function () {
+        this._handlePaginatorChange.apply(this,arguments);
+    });
+
+    this.subscribe('initEvent',function () {
+        this.renderPaginator();
+    });
+},
+
 /** 	 
   * Initializes Column sorting. 	 
   * 	 
@@ -2888,6 +2861,17 @@ _initCellEditor : function() {
   */ 	 
 _initColumnSort : function() {
     this.subscribe("theadCellClickEvent", this.onEventSortColumn); 	 
+
+    // HACK: Convert sortedBy values for backward compatibility
+    var oSortedBy = this.get("sortedBy");
+    if(oSortedBy) {
+        if(oSortedBy.dir == "desc") {
+            this._configs.sortedBy.value.dir = DT.CLASS_DESC;
+        }
+        else if(oSortedBy.dir == "asc") {
+            this._configs.sortedBy.value.dir = DT.CLASS_ASC;
+        }
+    }
 }, 	 
  
 
@@ -4861,7 +4845,6 @@ YAHOO.log("start render","time");
         allRecords = this._oRecordSet.getRecords(
                         oPaginator.getStartIndex(),
                         oPaginator.getRowsPerPage());
-        oPaginator.render();
     }
     // Not paginated, show all records
     else {
@@ -7232,6 +7215,125 @@ formatCell : function(elCell, oRecord, oColumn) {
 
 
 // PAGINATION
+/**
+ * Method executed during set() operation for the "paginator" attribute.
+ * Adds and/or severs event listeners between DataTable and Paginator
+ *
+ * @method _updatePaginator
+ * @param newPag {Paginator} Paginator instance (or null) for DataTable to use
+ * @private
+ */
+_updatePaginator : function (newPag) {
+    var oldPag = this.get('paginator');
+    if (oldPag && newPag !== oldPag) {
+        oldPag.unsubscribe('changeRequest', this.onPaginatorChangeRequest, this, true);
+    }
+    if (newPag) {
+        newPag.subscribe('changeRequest', this.onPaginatorChangeRequest, this, true);
+    }
+},
+
+/**
+ * Update the UI infrastructure in response to a "paginator" attribute change.
+ *
+ * @method _handlePaginatorChange
+ * @param e {Object} Change event object containing keys 'type','newValue',
+ *                   and 'prevValue'
+ * @private
+ */
+_handlePaginatorChange : function (e) {
+    if (e.prevValue === e.newValue) { return; }
+
+    var newPag     = e.newValue,
+        oldPag     = e.prevValue,
+        containers = this._defaultPaginatorContainers();
+
+    if (oldPag) {
+        if (oldPag.getContainerNodes()[0] == containers[0]) {
+            oldPag.set('containers',[]);
+        }
+        oldPag.destroy();
+
+        // Convenience: share the default containers if possible.
+        // Otherwise, remove the default containers from the DOM.
+        if (containers[0]) {
+            if (newPag && !newPag.getContainerNodes().length) {
+                newPag.set('containers',containers);
+            } else {
+                // No new Paginator to use existing containers, OR new
+                // Paginator has configured containers.
+                for (var i = containers.length - 1; i >= 0; --i) {
+                    if (containers[i]) {
+                        containers[i].parentNode.removeChild(containers[i]);
+                    }
+                }
+            }
+        }
+    }
+
+    if (!this._bInit) {
+        this.render();
+
+    }
+
+    if (newPag) {
+        this.renderPaginator();
+    }
+
+},
+
+/**
+ * Returns the default containers used for Paginators.  If create param is
+ * passed, the containers will be created and added to the DataTable container.
+ *
+ * @method _defaultPaginatorContainers
+ * @param create {boolean} Create the default containers if not found
+ * @private
+ */
+_defaultPaginatorContainers : function (create) {
+    var above_id = this._sId + '-paginator0',
+        below_id = this._sId + '-paginator1',
+        above    = Dom.get(above_id),
+        below    = Dom.get(below_id);
+
+    if (create && (!above || !below)) {
+        // One above and one below the table
+        if (!above) {
+            above    = document.createElement('div');
+            above.id = above_id;
+            Dom.addClass(above, DT.CLASS_PAGINATOR);
+
+            this._elContainer.insertBefore(above,this._elContainer.firstChild);
+        }
+
+        if (!below) {
+            below    = document.createElement('div');
+            below.id = below_id;
+            Dom.addClass(below, DT.CLASS_PAGINATOR);
+
+            this._elContainer.appendChild(below);
+        }
+    }
+
+    return [above,below];
+},
+
+/**
+ * Renders the Paginator to the DataTable UI
+ *
+ * @method renderPaginator
+ */
+renderPaginator : function () {
+    var pag = this.get("paginator");
+    if (!pag) { return; }
+
+    // Add the containers if the Paginator is not configured with containers
+    if (!pag.getContainerNodes().length) {
+        pag.set('containers',this._defaultPaginatorContainers(true));
+    }
+
+    pag.render();
+},
 
 /**
  * Responds to new Pagination states. By default, updates the UI to reflect the
