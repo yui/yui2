@@ -2,7 +2,8 @@ DataTable Release Notes
 
 *** version 2.6.0 ***
 
-* Created new subclass ScrollingDataTable.
+* Created new subclass ScrollingDataTable. Created new classes CellEditor,
+BaseCellEditor, and associated subclasses.
 
 * Pagination and sorting have been reworked to better support dynamically driven
 DataTables. As a result, the following important changes have been made:
@@ -58,6 +59,8 @@ liner DIV elements via Column.getThLinerEl() rather than TH.firstChild.
 elements, not on liner DIV elements.
  
 * Added bottom border to last TR element in ScrollingDataTables.
+ 
+* Added updateCell method.
 
 
 

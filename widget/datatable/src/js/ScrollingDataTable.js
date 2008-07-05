@@ -580,7 +580,7 @@ _focusEl : function(el) {
 
 
 /**
- * Helper functin calculates and sets a validated width for a Column in a ScrollingDataTable.
+ * Helper function calculates and sets a validated width for a Column in a ScrollingDataTable.
  *
  * @method _validateColumnWidth
  * @param oColumn {YAHOO.widget.Column} Column instance.
@@ -799,7 +799,15 @@ _syncScrollOverhang : function() {
 
 
 
-
+/**
+ * Returns DOM reference to the DataTable's scrolling body container element, if any.
+ *
+ * @method getBdContainerEl
+ * @return {HTMLElement} Reference to DIV element.
+ */
+getBdContainerEl : function() {
+    return this._elBdContainer;
+},
 
 /**
  * Removes given Column. NOTE: You cannot remove nested Columns. You can only remove
@@ -875,109 +883,6 @@ reorderColumn : function(oColumn, index) {
     return oNewColumn;
 },
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- * Returns DOM reference to the DataTable's scrolling body container element, if any.
- *
- * @method getBdContainerEl
- * @return {HTMLElement} Reference to DIV element.
- */
-getBdContainerEl : function() {
-    return this._elBdContainer;
-},
-
-
-/**
- * Nulls out the entire DataTable instance and related objects, removes attached
- * event listeners, and clears out DOM elements inside the container. After
- * calling this method, the instance reference should be expliclitly nulled by
- * implementer, as in myDataTable = null. Use with caution!
- *
- * @method destroy
- */
-destroy : function() {
-    this._oChainRender.stop();
-    
-    //TODO: destroy static resizer proxy and column proxy?
-    
-    var i;
-    // Destroy ColumnDDs
-    var aTree = this._oColumnSet.tree[0];
-    for(i=0; i<aTree.length; i++) {
-        if(aTree[i]._dd) {
-            aTree[i]._dd = aTree[i]._dd.unreg();
-        }
-    }
-
-    // Destroy ColumnResizers
-    var aKeys = this._oColumnSet.keys;
-    for(i=0; i<aKeys.length; i++) {
-        if(aKeys[i]._ddResizer) {
-            aKeys[i]._ddResizer = aKeys[i]._ddResizer.unreg();
-        }
-    }
-    
-    // Destroy Cell Editor
-    Ev.purgeElement(this._oCellEditor.container, true);
-    document.body.removeChild(this._oCellEditor.container);
-
-    var instanceName = this.toString();
-    var elContainer = this._elContainer;
-
-    // Unhook custom events
-    this._oRecordSet.unsubscribeAll();
-    this.unsubscribeAll();
-
-    // Unhook DOM events
-    Ev.purgeElement(elContainer, true);
-    Ev.removeListener(document, "click", this._onDocumentClick);
-
-    // Remove DOM elements
-    elContainer.innerHTML = "";
-
-    // Null out objects
-    for(var param in this) {
-        if(lang.hasOwnProperty(this, param)) {
-            this[param] = null;
-        }
-    }
-    
-    // Clean up static values
-    DT._nCurrentCount--;
-    
-    if(DT._nCurrentCount < 1) {
-        if(DT._elDynStyleNode) {
-            document.getElementsByTagName('head')[0].removeChild(DT._elDynStyleNode);
-            DT._elDynStyleNode = null;
-        }
-    }
-
-    YAHOO.log("DataTable instance destroyed: " + instanceName);
-},
-
 /**
  * Sets given Column to given pixel width. If new width is less than minimum
  * width, sets to minimum width. Updates oColumn.width value.
@@ -1008,187 +913,6 @@ setColumnWidth : function(oColumn, nWidth) {
     YAHOO.log("Could not set width of Column " + oColumn + " to " + nWidth + "px", "warn", this.toString());
 },
 
-
-/**
- * Shows Cell Editor for given cell.
- *
- * @method showCellEditor
- * @param elCell {HTMLElement | String} Cell to edit.
- * @param oRecord {YAHOO.widget.Record} (Optional) Record instance.
- * @param oColumn {YAHOO.widget.Column} (Optional) Column instance.
- */
-showCellEditor : function(elCell, oRecord, oColumn) {
-    elCell = Dom.get(elCell);
-
-    if(elCell && (elCell.ownerDocument === document)) {
-        if(!oRecord || !(oRecord instanceof YAHOO.widget.Record)) {
-            oRecord = this.getRecord(elCell);
-        }
-        if(!oColumn || !(oColumn instanceof YAHOO.widget.Column)) {
-            oColumn = this.getColumn(elCell);
-        }
-        if(oRecord && oColumn) {
-            var oCellEditor = this._oCellEditor;
-
-            // Clear previous Editor
-            if(oCellEditor.isActive) {
-                this.cancelCellEditor();
-            }
-
-            // Editor not defined
-            if(!oColumn.editor) {
-                return;
-            }
-
-            // Update Editor values
-            oCellEditor.cell = elCell;
-            oCellEditor.record = oRecord;
-            oCellEditor.column = oColumn;
-            oCellEditor.validator = (oColumn.editorOptions &&
-                    lang.isFunction(oColumn.editorOptions.validator)) ?
-                    oColumn.editorOptions.validator : null;
-            oCellEditor.value = oRecord.getData(oColumn.key);
-            oCellEditor.defaultValue = null;
-
-            // Move Editor
-            var elContainer = oCellEditor.container;
-            var x = Dom.getX(elCell);
-            var y = Dom.getY(elCell);
-
-            // SF doesn't get xy for cells in scrolling table
-            // when tbody display is set to block
-            if(isNaN(x) || isNaN(y)) {
-                x = elCell.offsetLeft + // cell pos relative to table
-                        Dom.getX(this._elTbody.parentNode) - // plus table pos relative to document
-                        this._elTbody.scrollLeft; // minus tbody scroll
-                y = elCell.offsetTop + // cell pos relative to table
-                        Dom.getY(this._elTbody.parentNode) - // plus table pos relative to document
-                        this._elTbody.scrollTop + // minus tbody scroll
-                        this._elThead.offsetHeight; // account for fixed THEAD cells
-            }
-
-            elContainer.style.left = x + "px";
-            elContainer.style.top = y + "px";
-
-            // Hook to customize the UI
-            this.doBeforeShowCellEditor(this._oCellEditor);
-
-            //TODO: This is temporarily up here due so elements can be focused
-            // Show Editor
-            elContainer.style.display = "";
-
-            // Handle ESC key
-            Ev.addListener(elContainer, "keydown", function(e, oSelf) {
-                // ESC hides Cell Editor
-                if((e.keyCode == 27)) {
-                    oSelf.cancelCellEditor();
-                    oSelf.focusTbodyEl();
-                }
-                else {
-                    oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
-                }
-            }, this);
-
-            // Render Editor markup
-            var fnEditor;
-            if(lang.isString(oColumn.editor)) {
-                switch(oColumn.editor) {
-                    case "checkbox":
-                        fnEditor = DT.editCheckbox;
-                        break;
-                    case "date":
-                        fnEditor = DT.editDate;
-                        break;
-                    case "dropdown":
-                        fnEditor = DT.editDropdown;
-                        break;
-                    case "radio":
-                        fnEditor = DT.editRadio;
-                        break;
-                    case "textarea":
-                        fnEditor = DT.editTextarea;
-                        break;
-                    case "textbox":
-                        fnEditor = DT.editTextbox;
-                        break;
-                    default:
-                        fnEditor = null;
-                }
-            }
-            else if(lang.isFunction(oColumn.editor)) {
-                fnEditor = oColumn.editor;
-            }
-
-            if(fnEditor) {
-                // Create DOM input elements
-                fnEditor(this._oCellEditor, this);
-
-                // Show Save/Cancel buttons
-                if(!oColumn.editorOptions || !oColumn.editorOptions.disableBtns) {
-                    this.showCellEditorBtns(elContainer);
-                }
-
-                oCellEditor.isActive = true;
-
-                //TODO: verify which args to pass
-                this.fireEvent("editorShowEvent", {editor:oCellEditor});
-                YAHOO.log("Cell Editor shown for " + elCell, "info", this.toString());
-                return;
-            }
-        }
-    }
-    YAHOO.log("Could not show Cell Editor for " + elCell, "warn", this.toString());
-},
-
-/**
- * Saves Cell Editor input to Record.
- *
- * @method saveCellEditor
- */
-saveCellEditor : function() {
-    if(this._oCellEditor.isActive) {
-        var newData = this._oCellEditor.value;
-        // Copy the data to pass to the event
-        var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
-
-        // Validate input data
-        if(this._oCellEditor.validator) {
-            newData = this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData, this._oCellEditor);
-            if(newData === null ) {
-                this.resetCellEditor();
-                this.fireEvent("editorRevertEvent",
-                        {editor:this._oCellEditor, oldData:oldData, newData:newData});
-                YAHOO.log("Could not save Cell Editor input due to invalid data " +
-                        lang.dump(newData), "warn", this.toString());
-                return;
-            }
-        }
-        // Update the Record
-        this._oRecordSet.updateRecordValue(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
-        // Update the UI
-        this.formatCell(this._oCellEditor.cell.firstChild);
-        
-        // Bug fix 1764044
-        this._oChainRender.add({
-            method: function() {
-                /// TODO: still necessary since we are now validating on editorSaveEvent?
-                this.validateColumnWidths();
-            },
-            scope: this
-        });
-        this._oChainRender.run();
-        // Clear out the Cell Editor
-        this.resetCellEditor();
-
-        this.fireEvent("editorSaveEvent",
-                {editor:this._oCellEditor, oldData:oldData, newData:newData});
-        YAHOO.log("Cell Editor input saved", "info", this.toString());
-    }
-    else {
-        YAHOO.log("Cell Editor not active to save input", "warn", this.toString());
-    }
-},
-
 /**
  * Displays message within secondary TBODY.
  *
@@ -1216,17 +940,6 @@ showTableMessage : function(sHTML, sClassName) {
     this.fireEvent("tableMsgShowEvent", {html:sHTML, className:sClassName});
     YAHOO.log("DataTable showing message: " + sHTML, "info", this.toString());
 },
-
-
-
-
-
-
-
-
-
-
-
 
 
 

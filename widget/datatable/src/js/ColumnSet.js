@@ -706,6 +706,15 @@ YAHOO.widget.Column.prototype = {
      */
     _ddResizer : null,
 
+    /**
+     * For tracking and cleanup, a reference to the Column's CellEditorInstance.
+     *
+     * @property _oCellEditor
+     * @type YAHOO.widget.CellEditor
+     * @private
+     */
+    _oCellEditor : null,
+
     /////////////////////////////////////////////////////////////////////////////
     //
     // Public member variables
