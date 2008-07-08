@@ -455,8 +455,8 @@ toString : function() {
  *
  * @method getCachedResponse
  * @param oRequest {Object} Request object.
- * @param oCallback {Function} Handler function to receive the response.
- * @param oCaller {Object} The Calling object that is making the request.
+ * @param oCallback {Object} Callback object.
+ * @param oCaller {Object} (deprecated) Use callback object.
  * @return {Object} Cached response object or null.
  */
 getCachedResponse : function(oRequest, oCallback, oCaller) {
@@ -496,6 +496,9 @@ getCachedResponse : function(oRequest, oCallback, oCaller) {
                             // Add as newest
                             this.addToCache(oRequest, oResponse);
                         }
+                        
+                        // Add a cache flag
+                        oResponse.cached = true;
                         break;
                     }
                 }
@@ -648,6 +651,7 @@ sendRequest : function(oRequest, oCallback, oCaller) {
         return null;
     }
 
+
     // Not in cache, so forward request to live data
     YAHOO.log("Making connection to live data for \"" + oRequest + "\"", "info", this.toString());
     return this.makeConnection(oRequest, oCallback, oCaller);
@@ -695,6 +699,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
  *     <dd><dt>results {Array}</dt> Array of parsed data results</dd>
  *     <dd><dt>meta {Object}</dt> Object literal of meta values</dd> 
  *     <dd><dt>error {Boolean}</dt> (optional) True if there was an error</dd>
+ *     <dd><dt>cached {Boolean}</dt> (optional) True if response was cached</dd>
  * </dl>
  *
  * @method handleResponse
