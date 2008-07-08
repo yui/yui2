@@ -1944,30 +1944,31 @@ YAHOO.widget.AutoComplete.prototype._selectText = function(elTextbox, nStart, nE
  * @private
  */
 YAHOO.widget.AutoComplete.prototype._toggleContainerHelpers = function(bShow) {
-    var bFireEvent = false;
     var width = this._elContent.offsetWidth + "px";
     var height = this._elContent.offsetHeight + "px";
 
     if(this.useIFrame && this._elIFrame) {
-        bFireEvent = true;
         if(bShow) {
             this._elIFrame.style.width = width;
             this._elIFrame.style.height = height;
+            YAHOO.log("Iframe expanded", "info", this.toString());
         }
         else {
             this._elIFrame.style.width = 0;
             this._elIFrame.style.height = 0;
+            YAHOO.log("Iframe collapsed", "info", this.toString());
         }
     }
     if(this.useShadow && this._elShadow) {
-        bFireEvent = true;
         if(bShow) {
             this._elShadow.style.width = width;
             this._elShadow.style.height = height;
+            YAHOO.log("Shadow expanded", "info", this.toString());
         }
         else {
-           this._elShadow.style.width = 0;
+            this._elShadow.style.width = 0;
             this._elShadow.style.height = 0;
+            YAHOO.log("Shadow collapsed", "info", this.toString());
         }
     }
 };
@@ -1991,7 +1992,6 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     // Reset states
     if(!bShow) {
         this._toggleHighlight(this._elCurListItem,"from");
-        this._toggleContainerHelpers(bShow);
         this._nDisplayedItems = 0;
         this._sCurQuery = null;
         
@@ -2006,7 +2006,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     var oAnim = this._oAnim;
     if(oAnim && oAnim.getEl() && (this.animHoriz || this.animVert)) {
         if(oAnim.isAnimated()) {
-            oAnim.stop();
+            oAnim.stop(true);
         }
 
         // Clone container to grab current size offscreen
@@ -2015,7 +2015,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
         oClone.style.top = "-9000px";
         oClone.style.width = "";
         oClone.style.height = "";
-        oClone.style.display = "block";
+        oClone.style.display = "";
 
         // Current size of the container is the EXPANDED size
         var wExp = oClone.offsetWidth;
@@ -2050,6 +2050,7 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     		oAnim.onComplete.unsubscribeAll();
 
             if(bShow) {
+                oSelf._toggleContainerHelpers(true);
                 oSelf.containerExpandEvent.fire(oSelf);
                 YAHOO.log("Container expanded", "info", oSelf.toString());
             }
@@ -2058,11 +2059,11 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
                 oSelf.containerCollapseEvent.fire(oSelf);
                 YAHOO.log("Container collapsed", "info", oSelf.toString());
             }
-            oSelf._toggleContainerHelpers(bShow);
      	};
 
         // Display container and animate it
-        this._elContent.style.display = "block";
+        this._toggleContainerHelpers(false); // Bug 1424486: Be early to hide, late to show;
+        this._elContent.style.display = "";
         oAnim.onComplete.subscribe(onAnimComplete);
         oAnim.animate();
         this._bContainerOpen = bShow;
@@ -2070,16 +2071,17 @@ YAHOO.widget.AutoComplete.prototype._toggleContainer = function(bShow) {
     // Else don't animate, just show or hide
     else {
         if(bShow) {
-            this._elContent.style.display = "block";
+            this._elContent.style.display = "";
+            this._toggleContainerHelpers(true);
             this.containerExpandEvent.fire(this);
             YAHOO.log("Container expanded", "info", this.toString());
         }
         else {
+            this._toggleContainerHelpers(false);
             this._elContent.style.display = "none";
             this.containerCollapseEvent.fire(this);
             YAHOO.log("Container collapsed", "info", this.toString());
         }
-        this._toggleContainerHelpers(bShow);
         this._bContainerOpen = bShow;
    }
 
