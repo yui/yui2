@@ -1354,8 +1354,7 @@ MenuItem.prototype = {
             already been specified.
         */
 
-        if (this._oOnclickAttributeValue && 
-            (this._oOnclickAttributeValue != oObject)) {
+        if (this._oOnclickAttributeValue && (this._oOnclickAttributeValue != oObject)) {
 
             this.clickEvent.unsubscribe(this._oOnclickAttributeValue.fn, 
                                 this._oOnclickAttributeValue.obj);
@@ -1369,8 +1368,8 @@ MenuItem.prototype = {
             typeof oObject.fn == "function") {
             
             this.clickEvent.subscribe(oObject.fn, 
-                ((!YAHOO.lang.isUndefined(oObject.obj)) ? oObject.obj : this), 
-                oObject.scope);
+                (("obj" in oObject) ? oObject.obj : this), 
+                (("scope" in oObject) ? oObject.scope : null) );
 
             this._oOnclickAttributeValue = oObject;
 
@@ -1679,12 +1678,12 @@ MenuItem.prototype = {
             aItemGroups,
             oNextItem,
             nNextGroupIndex,
-            aNextGroup;
+            aNextGroup,
+            returnVal;
 
         function getNextArrayItem(p_aArray, p_nStartIndex) {
 
-            return p_aArray[p_nStartIndex] || 
-                getNextArrayItem(p_aArray, (p_nStartIndex+1));
+            return p_aArray[p_nStartIndex] || getNextArrayItem(p_aArray, (p_nStartIndex+1));
 
         }
 
@@ -1721,11 +1720,13 @@ MenuItem.prototype = {
     
             }
     
-            return (oNextItem.cfg.getProperty("disabled") || 
+            returnVal = (oNextItem.cfg.getProperty("disabled") || 
                 oNextItem.element.style.display == "none") ? 
                 oNextItem.getNextEnabledSibling() : oNextItem;
 
         }
+        
+        return returnVal;
 
     },
 
@@ -1741,12 +1742,12 @@ MenuItem.prototype = {
             aItemGroups,
             oPreviousItem,
             nPreviousGroupIndex,
-            aPreviousGroup;
+            aPreviousGroup,
+            returnVal;
 
         function getPreviousArrayItem(p_aArray, p_nStartIndex) {
 
-            return p_aArray[p_nStartIndex] ||  
-                getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
+            return p_aArray[p_nStartIndex] || getPreviousArrayItem(p_aArray, (p_nStartIndex-1));
 
         }
 
@@ -1790,11 +1791,13 @@ MenuItem.prototype = {
     
             }
 
-            return (oPreviousItem.cfg.getProperty("disabled") || 
+            returnVal = (oPreviousItem.cfg.getProperty("disabled") || 
                 oPreviousItem.element.style.display == "none") ? 
                 oPreviousItem.getPreviousEnabledSibling() : oPreviousItem;
 
         }
+        
+        return returnVal;
 
     },
 
@@ -1816,21 +1819,19 @@ MenuItem.prototype = {
 
             try {
 
-                if (YAHOO.env.ua.ie && !document.hasFocus()) {
+                if (!(YAHOO.env.ua.ie && !document.hasFocus())) {
                 
-                    return;
+					if (oActiveItem) {
+		
+						oActiveItem.blurEvent.fire();
+		
+					}
+	
+					oAnchor.focus();
+					
+					me.focusEvent.fire();
                 
                 }
-
-                if (oActiveItem) {
-    
-                    oActiveItem.blurEvent.fire();
-    
-                }
-
-                oAnchor.focus();
-                
-                me.focusEvent.fire();
 
             }
             catch(e) {

@@ -42,11 +42,15 @@ YAHOO.widget.MenuBar = function(p_oElement, p_oConfig) {
 */
 function checkPosition(p_sPosition) {
 
+	var returnVal = false;
+
     if (typeof p_sPosition == "string") {
 
-        return ("dynamic,static".indexOf((p_sPosition.toLowerCase())) != -1);
+        returnVal = ("dynamic,static".indexOf((p_sPosition.toLowerCase())) != -1);
 
     }
+    
+    return returnVal;
 
 }
 

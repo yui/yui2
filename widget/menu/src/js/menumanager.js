@@ -95,7 +95,8 @@
         */
         function getMenuRootElement(p_oElement) {
         
-            var oParentNode;
+            var oParentNode,
+            	returnVal;
     
             if (p_oElement && p_oElement.tagName) {
             
@@ -107,23 +108,21 @@
     
                     // Check if the DIV is the inner "body" node of a menu
 
-                    if (
-                        (
+                    if ((
                             Dom.hasClass(p_oElement, "hd") ||
                             Dom.hasClass(p_oElement, "bd") ||
                             Dom.hasClass(p_oElement, "ft")
                         ) && 
                         oParentNode && 
                         oParentNode.tagName && 
-                        oParentNode.tagName.toUpperCase() == "DIV") 
-                    {
+                        oParentNode.tagName.toUpperCase() == "DIV") {
                     
-                        return oParentNode;
+                        returnVal = oParentNode;
                     
                     }
                     else {
                     
-                        return p_oElement;
+                        returnVal = p_oElement;
                     
                     }
                 
@@ -131,7 +130,9 @@
 
                 case "LI":
     
-                    return p_oElement;
+                    returnVal = p_oElement;
+                    
+                    break;
 
                 default:
     
@@ -139,7 +140,7 @@
     
                     if (oParentNode) {
                     
-                        return getMenuRootElement(oParentNode);
+                        returnVal = getMenuRootElement(oParentNode);
                     
                     }
                 
@@ -148,6 +149,8 @@
                 }
     
             }
+            
+            return returnVal;
             
         }
     
@@ -559,7 +562,7 @@
     
                     sId = p_oMenu.id;
         
-                    if (m_oMenus[sId] == p_oMenu) {
+                    if ((sId in m_oMenus) && (m_oMenus[sId] == p_oMenu)) {
 
                         // Unregister each menu item
 
@@ -591,7 +594,7 @@
                              visible menus
                         */
 
-                        if (m_oVisibleMenus[sId] == p_oMenu) {
+                        if ((sId in m_oVisibleMenus) && (m_oVisibleMenus[sId] == p_oMenu)) {
             
                             delete m_oVisibleMenus[sId];
                             
@@ -688,14 +691,16 @@
             * @return {YAHOO.widget.Menu}
             */
             getMenu: function (p_sId) {
-    
-                var oMenu = m_oMenus[p_sId];
-        
-                if (oMenu) {
                 
-                    return oMenu;
+                var returnVal;
                 
-                }
+                if (p_sId in m_oMenus) {
+                
+					returnVal = m_oMenus[p_sId];
+				
+				}
+            
+            	return returnVal;
             
             },
     
@@ -710,13 +715,15 @@
             */
             getMenuItem: function (p_sId) {
     
-                var oItem = m_oItems[p_sId];
-        
-                if (oItem) {
-                
-                    return oItem;
-                
-                }
+    			var returnVal;
+    
+    			if (p_sId in m_oItems) {
+    
+					returnVal = m_oItems[p_sId];
+				
+				}
+				
+				return returnVal;
             
             },
 
@@ -738,11 +745,11 @@
                     aItems,
                     oNode,
                     oItem,
-                    sId;
+                    sId,
+                    returnVal;
     
 
-                if (oUL && oUL.tagName && 
-                    oUL.tagName.toUpperCase() == "UL") {
+                if (oUL && oUL.tagName && oUL.tagName.toUpperCase() == "UL") {
 
                     oNode = oUL.firstChild;
 
@@ -772,13 +779,15 @@
 
                         if (aItems.length > 0) {
 
-                            return aItems;
+                            returnVal = aItems;
                         
                         }
 
                     }
                 
                 }
+
+				return returnVal;
             
             },
 
@@ -803,12 +812,16 @@
             * @return {YAHOO.widget.Menu}
             */
             getFocusedMenu: function () {
+
+				var returnVal;
     
                 if (m_oFocusedMenuItem) {
     
-                    return (m_oFocusedMenuItem.parent.getRoot());
+                    returnVal = m_oFocusedMenuItem.parent.getRoot();
                 
                 }
+    
+    			return returnVal;
     
             },
     

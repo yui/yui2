@@ -55,11 +55,15 @@ YAHOO.widget.Menu = function (p_oElement, p_oConfig) {
 */
 function checkPosition(p_sPosition) {
 
+	var returnVal = false;
+
     if (typeof p_sPosition == "string") {
 
-        return ("dynamic,static".indexOf((p_sPosition.toLowerCase())) != -1);
+        returnVal = ("dynamic,static".indexOf((p_sPosition.toLowerCase())) != -1);
 
     }
+
+	return returnVal;
 
 }
 
@@ -944,20 +948,24 @@ _getFirstEnabledItem: function () {
 
     var aItems = this.getItems(),
         nItems = aItems.length,
-        oItem;
+        oItem,
+        returnVal;
     
+
     for(var i=0; i<nItems; i++) {
 
         oItem = aItems[i];
 
-        if (oItem && !oItem.cfg.getProperty("disabled") && 
-            oItem.element.style.display != "none") {
+        if (oItem && !oItem.cfg.getProperty("disabled") && oItem.element.style.display != "none") {
 
-            return oItem;
+            returnVal = oItem;
+            break;
 
         }
     
     }
+    
+    return returnVal;
     
 },
 
@@ -986,14 +994,16 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
         oGroupItem,
         bAppend,
         oNextItemSibling,
-        nItemIndex;
+        nItemIndex,
+        returnVal;
+
 
     function getNextItemSibling(p_aArray, p_nStartIndex) {
 
-        return (p_aArray[p_nStartIndex] || getNextItemSibling(p_aArray, 
-                (p_nStartIndex+1)));
+        return (p_aArray[p_nStartIndex] || getNextItemSibling(p_aArray, (p_nStartIndex+1)));
 
     }
+
 
     if (p_oItem instanceof this.ITEM_TYPE) {
 
@@ -1060,21 +1070,18 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
                 if (bAppend && (!oGroupItem.element.parentNode || 
                         oGroupItem.element.parentNode.nodeType == 11)) {
         
-                    this._aListElements[nGroupIndex].appendChild(
-                        oGroupItem.element);
+                    this._aListElements[nGroupIndex].appendChild(oGroupItem.element);
     
                 }
                 else {
     
-                    oNextItemSibling = getNextItemSibling(aGroup, 
-                        (p_nItemIndex+1));
+                    oNextItemSibling = getNextItemSibling(aGroup, (p_nItemIndex+1));
     
                     if (oNextItemSibling && (!oGroupItem.element.parentNode || 
                             oGroupItem.element.parentNode.nodeType == 11)) {
             
                         this._aListElements[nGroupIndex].insertBefore(
-                                oGroupItem.element, 
-                                oNextItemSibling.element);
+                                oGroupItem.element, oNextItemSibling.element);
         
                     }
     
@@ -1097,7 +1104,7 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
                 this.itemAddedEvent.fire(oGroupItem);
                 this.changeContentEvent.fire();
 
-                return oGroupItem;
+                returnVal = oGroupItem;
     
             }
 
@@ -1113,11 +1120,9 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
 
             if (oGroupItem) {
     
-                if (!Dom.isAncestor(this._aListElements[nGroupIndex], 
-                        oGroupItem.element)) {
+                if (!Dom.isAncestor(this._aListElements[nGroupIndex], oGroupItem.element)) {
     
-                    this._aListElements[nGroupIndex].appendChild(
-                        oGroupItem.element);
+                    this._aListElements[nGroupIndex].appendChild(oGroupItem.element);
     
                 }
     
@@ -1148,13 +1153,15 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
                 this.itemAddedEvent.fire(oGroupItem);
                 this.changeContentEvent.fire();
 
-                return oGroupItem;
+                returnVal = oGroupItem;
     
             }
     
         }
 
     }
+    
+    return returnVal;
     
 },
 
@@ -1229,15 +1236,14 @@ _removeItemFromGroupByIndex: function (p_nGroupIndex, p_nItemIndex) {
 
             this.itemRemovedEvent.fire(oItem);
             this.changeContentEvent.fire();
-
-
-            // Return a reference to the item that was removed
-        
-            return oItem;
     
         }
 
     }
+
+	// Return a reference to the item that was removed
+
+	return oItem;
     
 },
 
@@ -1258,6 +1264,7 @@ _removeItemFromGroupByValue: function (p_nGroupIndex, p_oItem) {
     var aGroup = this._getItemGroup(p_nGroupIndex),
         nItems,
         nItemIndex,
+        returnVal,
         i;
 
     if (aGroup) {
@@ -1279,18 +1286,19 @@ _removeItemFromGroupByValue: function (p_nGroupIndex, p_oItem) {
                 }
         
             }
-            while(i--);
+            while (i--);
         
             if (nItemIndex > -1) {
         
-                return (this._removeItemFromGroupByIndex(p_nGroupIndex, 
-                            nItemIndex));
+                returnVal = this._removeItemFromGroupByIndex(p_nGroupIndex, nItemIndex);
         
             }
     
         }
     
     }
+    
+    return returnVal;
 
 },
 
@@ -1336,7 +1344,7 @@ _updateItemProperties: function (p_nGroupIndex) {
             }
     
         }
-        while(i--);
+        while (i--);
 
 
         if (oLI) {
@@ -1360,7 +1368,8 @@ _updateItemProperties: function (p_nGroupIndex) {
 */
 _createItemGroup: function (p_nIndex) {
 
-    var oUL;
+    var oUL,
+    	returnVal;
 
     if (!this._aItemGroups[p_nIndex]) {
 
@@ -1370,9 +1379,11 @@ _createItemGroup: function (p_nIndex) {
 
         this._aListElements[p_nIndex] = oUL;
 
-        return this._aItemGroups[p_nIndex];
+        returnVal = this._aItemGroups[p_nIndex];
 
     }
+    
+    return returnVal;
 
 },
 
@@ -1387,9 +1398,17 @@ _createItemGroup: function (p_nIndex) {
 */
 _getItemGroup: function (p_nIndex) {
 
-    var nIndex = ((typeof p_nIndex == "number") ? p_nIndex : 0);
+    var nIndex = Lang.isNumber(p_nIndex) ? p_nIndex : 0,
+    	aGroups = this._aItemGroups,
+    	returnVal;
 
-    return this._aItemGroups[nIndex];
+	if (nIndex in aGroups) {
+
+	    returnVal = aGroups[nIndex];
+
+	}
+	
+	return returnVal;
 
 },
 
@@ -1696,13 +1715,6 @@ _enableScrollFooter: function () {
 */
 _onMouseOver: function (p_sType, p_aArgs) {
 
-    if (this._bStopMouseEventHandlers) {
-    
-        return false;
-    
-    }
-
-
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
         oTarget = Event.getTarget(oEvent),
@@ -1714,104 +1726,107 @@ _onMouseOver: function (p_sType, p_aArgs) {
         oSubmenu;
 
 
-    if (!this._bHandledMouseOverEvent && (oTarget == this.element || 
-        Dom.isAncestor(this.element, oTarget))) {
-
-        // Menu mouseover logic
-
-        this._nCurrentMouseX = 0;
-
-        Event.on(this.element, "mousemove", this._onMouseMove, this, true);
-
-		this.clearActiveItem();
-
-
-        if (this.parent && this._nSubmenuHideDelayId) {
-
-            window.clearTimeout(this._nSubmenuHideDelayId);
-
-            this.parent.cfg.setProperty("selected", true);
-
-            oParentMenu = this.parent.parent;
-
-            oParentMenu._bHandledMouseOutEvent = true;
-            oParentMenu._bHandledMouseOverEvent = false;
-
-        }
-
-
-        this._bHandledMouseOverEvent = true;
-        this._bHandledMouseOutEvent = false;
+    if (!this._bStopMouseEventHandlers) {
     
-    }
-
-
-    if (oItem && !oItem.handledMouseOverEvent && 
-        !oItem.cfg.getProperty("disabled") && 
-        (oTarget == oItem.element || Dom.isAncestor(oItem.element, oTarget))) {
-
-        // Menu Item mouseover logic
-
-        nShowDelay = this.cfg.getProperty("showdelay");
-        bShowDelay = (nShowDelay > 0);
-
-
-        if (bShowDelay) {
-        
-            this._cancelShowDelay();
-        
-        }
-
-
-        oActiveItem = this.activeItem;
+		if (!this._bHandledMouseOverEvent && (oTarget == this.element || 
+				Dom.isAncestor(this.element, oTarget))) {
+	
+			// Menu mouseover logic
+	
+			this._nCurrentMouseX = 0;
+	
+			Event.on(this.element, "mousemove", this._onMouseMove, this, true);
+	
+			this.clearActiveItem();
+	
+	
+			if (this.parent && this._nSubmenuHideDelayId) {
+	
+				window.clearTimeout(this._nSubmenuHideDelayId);
+	
+				this.parent.cfg.setProperty("selected", true);
+	
+				oParentMenu = this.parent.parent;
+	
+				oParentMenu._bHandledMouseOutEvent = true;
+				oParentMenu._bHandledMouseOverEvent = false;
+	
+			}
+	
+	
+			this._bHandledMouseOverEvent = true;
+			this._bHandledMouseOutEvent = false;
+		
+		}
+	
+	
+		if (oItem && !oItem.handledMouseOverEvent && !oItem.cfg.getProperty("disabled") && 
+			(oTarget == oItem.element || Dom.isAncestor(oItem.element, oTarget))) {
+	
+			// Menu Item mouseover logic
+	
+			nShowDelay = this.cfg.getProperty("showdelay");
+			bShowDelay = (nShowDelay > 0);
+	
+	
+			if (bShowDelay) {
+			
+				this._cancelShowDelay();
+			
+			}
+	
+	
+			oActiveItem = this.activeItem;
+		
+			if (oActiveItem) {
+		
+				oActiveItem.cfg.setProperty("selected", false);
+		
+			}
+	
+	
+			oItemCfg = oItem.cfg;
+		
+			// Select and focus the current menu item
+		
+			oItemCfg.setProperty("selected", true);
+	
+	
+			if (this.hasFocus()) {
+			
+				oItem.focus();
+			
+			}
+	
+	
+			if (this.cfg.getProperty("autosubmenudisplay")) {
+	
+				// Show the submenu this menu item
+	
+				oSubmenu = oItemCfg.getProperty("submenu");
+			
+				if (oSubmenu) {
+			
+					if (bShowDelay) {
+	
+						this._execShowDelay(oSubmenu);
+			
+					}
+					else {
+	
+						oSubmenu.show();
+	
+					}
+	
+				}
+	
+			}                        
+	
+			oItem.handledMouseOverEvent = true;
+			oItem.handledMouseOutEvent = false;
+	
+		}
     
-        if (oActiveItem) {
-    
-            oActiveItem.cfg.setProperty("selected", false);
-    
-        }
-
-
-        oItemCfg = oItem.cfg;
-    
-        // Select and focus the current menu item
-    
-        oItemCfg.setProperty("selected", true);
-
-
-        if (this.hasFocus()) {
-        
-            oItem.focus();
-        
-        }
-
-
-        if (this.cfg.getProperty("autosubmenudisplay")) {
-
-            // Show the submenu this menu item
-
-            oSubmenu = oItemCfg.getProperty("submenu");
-        
-            if (oSubmenu) {
-        
-                if (bShowDelay) {
-
-                    this._execShowDelay(oSubmenu);
-        
-                }
-                else {
-
-                    oSubmenu.show();
-
-                }
-
-            }
-
-        }                        
-
-        oItem.handledMouseOverEvent = true;
-        oItem.handledMouseOutEvent = false;
-
     }
 
 },
@@ -1827,13 +1842,6 @@ _onMouseOver: function (p_sType, p_aArgs) {
 */
 _onMouseOut: function (p_sType, p_aArgs) {
 
-    if (this._bStopMouseEventHandlers) {
-    
-        return false;
-    
-    }
-
-
     var oEvent = p_aArgs[0],
         oItem = p_aArgs[1],
         oRelatedTarget = Event.getRelatedTarget(oEvent),
@@ -1844,78 +1852,78 @@ _onMouseOut: function (p_sType, p_aArgs) {
         nShowDelay;
 
 
-    if (oItem && !oItem.cfg.getProperty("disabled")) {
-
-        oItemCfg = oItem.cfg;
-        oSubmenu = oItemCfg.getProperty("submenu");
-
-
-        if (oSubmenu && (oRelatedTarget == oSubmenu.element ||
-                Dom.isAncestor(oSubmenu.element, oRelatedTarget))) {
-
-            bMovingToSubmenu = true;
-
-        }
-
-
-        if (!oItem.handledMouseOutEvent && ((oRelatedTarget != oItem.element &&  
-            !Dom.isAncestor(oItem.element, oRelatedTarget)) || 
-            bMovingToSubmenu)) {
-
-            // Menu Item mouseout logic
-
-            if (!bMovingToSubmenu) {
-
-                oItem.cfg.setProperty("selected", false);
-
-
-                if (oSubmenu) {
-
-                    nSubmenuHideDelay = 
-                        this.cfg.getProperty("submenuhidedelay");
-
-                    nShowDelay = this.cfg.getProperty("showdelay");
-
-                    if (!(this instanceof YAHOO.widget.MenuBar) && 
-                        nSubmenuHideDelay > 0 && 
-                        nShowDelay >= nSubmenuHideDelay) {
-
-                        this._execSubmenuHideDelay(oSubmenu, 
-                                Event.getPageX(oEvent),
-                                nSubmenuHideDelay);
-
-                    }
-                    else {
-
-                        oSubmenu.hide();
-
-                    }
-
-                }
-
-            }
-
-
-            oItem.handledMouseOutEvent = true;
-            oItem.handledMouseOverEvent = false;
+    if (!this._bStopMouseEventHandlers) {
     
-        }
+		if (oItem && !oItem.cfg.getProperty("disabled")) {
+	
+			oItemCfg = oItem.cfg;
+			oSubmenu = oItemCfg.getProperty("submenu");
+	
+	
+			if (oSubmenu && (oRelatedTarget == oSubmenu.element ||
+					Dom.isAncestor(oSubmenu.element, oRelatedTarget))) {
+	
+				bMovingToSubmenu = true;
+	
+			}
+	
+	
+			if (!oItem.handledMouseOutEvent && ((oRelatedTarget != oItem.element &&  
+				!Dom.isAncestor(oItem.element, oRelatedTarget)) || bMovingToSubmenu)) {
+	
+				// Menu Item mouseout logic
+	
+				if (!bMovingToSubmenu) {
+	
+					oItem.cfg.setProperty("selected", false);
+	
+	
+					if (oSubmenu) {
+	
+						nSubmenuHideDelay = this.cfg.getProperty("submenuhidedelay");
+	
+						nShowDelay = this.cfg.getProperty("showdelay");
+	
+						if (!(this instanceof YAHOO.widget.MenuBar) && nSubmenuHideDelay > 0 && 
+							nShowDelay >= nSubmenuHideDelay) {
+	
+							this._execSubmenuHideDelay(oSubmenu, Event.getPageX(oEvent),
+									nSubmenuHideDelay);
+	
+						}
+						else {
+	
+							oSubmenu.hide();
+	
+						}
+	
+					}
+	
+				}
+	
+	
+				oItem.handledMouseOutEvent = true;
+				oItem.handledMouseOverEvent = false;
+		
+			}
+	
+		}
 
-    }
 
-
-    if (!this._bHandledMouseOutEvent && ((oRelatedTarget != this.element &&  
-        !Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
-
-        // Menu mouseout logic
-
-        Event.removeListener(this.element, "mousemove", this._onMouseMove);
-
-        this._nCurrentMouseX = Event.getPageX(oEvent);
-
-        this._bHandledMouseOutEvent = true;
-        this._bHandledMouseOverEvent = false;
-
+		if (!this._bHandledMouseOutEvent && ((oRelatedTarget != this.element &&  
+			!Dom.isAncestor(this.element, oRelatedTarget)) || bMovingToSubmenu)) {
+	
+			// Menu mouseout logic
+	
+			Event.removeListener(this.element, "mousemove", this._onMouseMove);
+	
+			this._nCurrentMouseX = Event.getPageX(oEvent);
+	
+			this._bHandledMouseOutEvent = true;
+			this._bHandledMouseOverEvent = false;
+	
+		}
+    
     }
 
 },
@@ -1932,13 +1940,11 @@ _onMouseOut: function (p_sType, p_aArgs) {
 */
 _onMouseMove: function (p_oEvent, p_oMenu) {
 
-    if (this._bStopMouseEventHandlers) {
+    if (!this._bStopMouseEventHandlers) {
     
-        return false;
+	    this._nCurrentMouseX = Event.getPageX(p_oEvent);
     
     }
-
-    this._nCurrentMouseX = Event.getPageX(p_oEvent);
 
 },
 
@@ -2056,23 +2062,21 @@ _onClick: function (p_sType, p_aArgs) {
 					getting called.  The following line fixes this bug.
 				*/
 
-				if ((UA.gecko && this.platform == "windows") && oEvent.button > 0) {
+				if (!((UA.gecko && this.platform == "windows") && oEvent.button > 0)) {
 				
-					return;
-				
-				}
-
-				oRoot = this.getRoot();
-
-				if (oRoot instanceof YAHOO.widget.MenuBar || 
-					oRoot.cfg.getProperty("position") == "static") {
+					oRoot = this.getRoot();
 	
-					oRoot.clearActiveItem();
-	
-				}
-				else {
-	
-					oRoot.hide();
+					if (oRoot instanceof YAHOO.widget.MenuBar || 
+						oRoot.cfg.getProperty("position") == "static") {
+		
+						oRoot.clearActiveItem();
+		
+					}
+					else {
+		
+						oRoot.hide();
+					
+					}
 				
 				}
 	
@@ -2693,7 +2697,7 @@ _onBeforeRender: function (p_sType, p_aArgs) {
             i++;
 
         }
-        while(i < nListElements);
+        while (i < nListElements);
 
     }
 
@@ -4014,20 +4018,23 @@ positionOffScreen: function () {
 getRoot: function () {
 
     var oItem = this.parent,
-        oParentMenu;
+        oParentMenu,
+        returnVal;
 
     if (oItem) {
 
         oParentMenu = oItem.parent;
 
-        return oParentMenu ? oParentMenu.getRoot() : this;
+        returnVal = oParentMenu ? oParentMenu.getRoot() : this;
 
     }
     else {
     
-        return this;
+        returnVal = this;
     
     }
+    
+    return returnVal;
 
 },
 
@@ -4102,7 +4109,7 @@ setItemGroupTitle: function (p_sGroupTitle, p_nGroupIndex) {
             }
 
         }
-        while(i--);
+        while (i--);
 
 
         if (nFirstIndex !== null) {
@@ -4135,11 +4142,7 @@ setItemGroupTitle: function (p_sGroupTitle, p_nGroupIndex) {
 */
 addItem: function (p_oItem, p_nGroupIndex) {
 
-    if (p_oItem) {
-
-        return this._addItemToGroup(p_nGroupIndex, p_oItem);
-        
-    }
+	return this._addItemToGroup(p_nGroupIndex, p_oItem);
 
 },
 
@@ -4160,7 +4163,9 @@ addItems: function (p_aItems, p_nGroupIndex) {
     var nItems,
         aItems,
         oItem,
-        i;
+        i,
+        returnVal;
+
 
     if (Lang.isArray(p_aItems)) {
 
@@ -4180,8 +4185,7 @@ addItems: function (p_aItems, p_nGroupIndex) {
                 }
                 else {
     
-                    aItems[aItems.length] = 
-                        this._addItemToGroup(p_nGroupIndex, oItem);
+                    aItems[aItems.length] = this._addItemToGroup(p_nGroupIndex, oItem);
                 
                 }
 
@@ -4192,11 +4196,13 @@ addItems: function (p_aItems, p_nGroupIndex) {
 
         if (aItems.length) {
         
-            return aItems;
+            returnVal = aItems;
         
         }
 
     }
+
+	return returnVal;
 
 },
 
@@ -4218,11 +4224,7 @@ addItems: function (p_aItems, p_nGroupIndex) {
 */
 insertItem: function (p_oItem, p_nItemIndex, p_nGroupIndex) {
     
-    if (p_oItem) {
-
-        return this._addItemToGroup(p_nGroupIndex, p_oItem, p_nItemIndex);
-
-    }
+	return this._addItemToGroup(p_nGroupIndex, p_oItem, p_nItemIndex);
 
 },
 
@@ -4240,7 +4242,8 @@ insertItem: function (p_oItem, p_nItemIndex, p_nGroupIndex) {
 */
 removeItem: function (p_oObject, p_nGroupIndex) {
 
-    var oItem;
+    var oItem,
+    	returnVal;
     
     if (typeof p_oObject != "undefined") {
 
@@ -4264,11 +4267,13 @@ removeItem: function (p_oObject, p_nGroupIndex) {
                 " Index: " + oItem.index + ", " + 
                 " Group Index: " + oItem.groupIndex);
 
-            return oItem;
+            returnVal = oItem;
 
         }
 
     }
+
+	return returnVal;
 
 },
 
@@ -4282,16 +4287,19 @@ getItems: function () {
 
     var aGroups = this._aItemGroups,
         nGroups,
+        returnVal,
         aItems = [];
+
 
     if (Lang.isArray(aGroups)) {
 
         nGroups = aGroups.length;
 
-        return ((nGroups == 1) ? aGroups[0] : 
-                    (Array.prototype.concat.apply(aItems, aGroups)));
+        returnVal = ((nGroups == 1) ? aGroups[0] : (Array.prototype.concat.apply(aItems, aGroups)));
 
     }
+
+	return returnVal;
 
 },
 
@@ -4320,7 +4328,8 @@ getItemGroups: function () {
 */
 getItem: function (p_nItemIndex, p_nGroupIndex) {
     
-    var aGroup;
+    var aGroup,
+    	returnVal;
     
     if (typeof p_nItemIndex == "number") {
 
@@ -4328,11 +4337,13 @@ getItem: function (p_nItemIndex, p_nGroupIndex) {
 
         if (aGroup) {
 
-            return aGroup[p_nItemIndex];
+            returnVal = aGroup[p_nItemIndex];
         
         }
 
     }
+    
+    return returnVal;
     
 },
 
@@ -4427,7 +4438,7 @@ clearContent: function () {
             }
         
         }
-        while(i--);
+        while (i--);
 
     }
 
