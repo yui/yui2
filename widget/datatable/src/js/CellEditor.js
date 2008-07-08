@@ -16,7 +16,6 @@ var lang   = YAHOO.lang,
  *
  * @namespace YAHOO.widget
  * @class CellEditor
- * @uses YAHOO.util.EventProvider 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 
@@ -25,55 +24,17 @@ var lang   = YAHOO.lang,
  */
 widget.BaseCellEditor = function(oDataTable, elCell, sType, oConfigs) {
     this._sId = "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    
-    // Validate DataTable
-    if(oDataTable instanceof YAHOO.widget.DataTable) {
-        this.dataTable = oDataTable;
-    }
-    else {
-        YAHOO.log("Could not create CellEditor due to invalid DataTable","error",this.toString());
-        return;
-    }
-    
-    // Validate cell
-    elCell = oDataTable.getTdEl(elCell);
-    if(elCell) {
-        this.cell = elCell;
-        
-        // Validate Column
-        var oColumn = oDataTable.getColumn(elCell);
-        if(oColumn && oColumn.editor) {
-            this.column = oColumn;
-        }
-        else {
-            YAHOO.log("Could not create CellEditor due to invalid Column","error",this.toString());
-            return;
-        }
+    this.type = sType;
 
-        // Validate Record
-        var oRecord = oDataTable.getRecord(elCell);
-        if(oRecord) {
-            this.record = oRecord;
-        }
-        else {
-            YAHOO.log("Could not create CellEditor due to invalid Record","error",this.toString());
-            return;
-        }
-       
-        // Object literal defines CellEditor configs
-        if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
-            for(var sConfig in oConfigs) {
-                if(sConfig) {
-                    this[sConfig] = oConfigs[sConfig];
-                }
-            }
-        }
-
+    // Validate inputs
+    var ok = this._init.apply(this, arguments);
+    if(ok) {        
         // Draw UI
         this.render();
     }
+
     else {
-        YAHOO.log("Could not create CellEditor due to invalid cell", "error", this.toString());
+        YAHOO.log("CellEditor not initialized","error",this.toString());
     }
 };
 
@@ -126,6 +87,74 @@ _sId : null,
 
 
 
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Private methods
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Initialization sequence
+ *
+ * @method _init
+ * @return {Boolean} True if successful
+ * @private   
+ */
+_init : function(oDataTable, elCell, sType, oConfigs) {
+    // Validate DataTable
+    if(oDataTable instanceof YAHOO.widget.DataTable) {
+        this.dataTable = oDataTable;
+    }
+    else {
+        YAHOO.log("Could not create CellEditor due to invalid DataTable","error",this.toString());
+        return false;
+    }    
+    
+    // Validate cell
+    elCell = oDataTable.getTdEl(elCell);
+    if(elCell) {
+        this.cell = elCell;
+    }
+    else {
+        YAHOO.log("Could not create CellEditor due to invalid cell","error",this.toString());
+        return false;
+    }
+
+    // Validate Column
+    var oColumn = oDataTable.getColumn(elCell);
+    if(oColumn && oColumn.editor) {
+        this.column = oColumn;
+    }
+    else {
+        YAHOO.log("Could not create CellEditor due to invalid Column","error",this.toString());
+        return false;
+    }
+
+    // Validate Record
+    var oRecord = oDataTable.getRecord(elCell);
+    if(oRecord) {
+        this.record = oRecord;
+    }
+    else {
+        YAHOO.log("Could not create CellEditor due to invalid Record","error",this.toString());
+        return false;
+    }
+
+    // Object literal defines CellEditor configs
+    if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
+        for(var sConfig in oConfigs) {
+            if(sConfig) {
+                this[sConfig] = oConfigs[sConfig];
+            }
+        }
+    }
+    
+    return true;
+},
 
 
 
@@ -282,6 +311,7 @@ getId : function() {
  * @method destroy
  */
 destroy : function() {
+    this.column._oCellEditor = null;
     var elContainer = this.container;
     Ev.purgeElement(elContainer, true);
     elContainer.parentNode.removeChild(elContainer);
@@ -295,6 +325,7 @@ destroy : function() {
 render : function() {
     // Attach Cell Editor container element as first child of body
     var elContainer = document.createElement("div");
+    elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
     elContainer.style.display = "none";
     elContainer.tabIndex = 0;
     elContainer.className = DT.CLASS_EDITOR;
@@ -308,9 +339,7 @@ render : function() {
             oSelf.cancel();
             ///oSelf.focusTbodyEl();
         }
-        else {
-            ///oSelf.fireEvent("editorKeydownEvent", {editor:oSelf._oCellEditor, event:e});
-        }
+        oSelf.dataTable.fireEvent("editorKeydownEvent", {editor:this, event:e});
     }, this);
     
     this.renderForm();
@@ -393,31 +422,17 @@ move : function() {
 },
 
 /**
- * Overridable abstract method to customize Cell Editor UI.
- *
- * @method doBeforeShowCellEditor
- * @param oCellEditor {YAHOO.widget.CellEditor} CellEditor instance.
- * @return {Boolean} Return true to continue showing CellEditor.
- */
-doBeforeShow : function(oCellEditor) {
-    return true;
-},
-
-/**
  * Displays CellEditor UI in the correct position.
  *
  * @method save
  */
 show : function() {
     this.resetForm();
-    var ok = this.doBeforeShow(this);
-    if(ok) {
-        this.isActive = true;
-        this.container.style.display = "";
-        this.focus();
-        ///this.fireEvent("editorShowEvent", {editor:oCellEditor});
-        YAHOO.log("CellEditor shown", "info", this.toString());
-    }   
+    this.isActive = true;
+    this.container.style.display = "";
+    this.focus();
+    this.dataTable.fireEvent("editorShowEvent", {editor:this});
+    YAHOO.log("CellEditor shown", "info", this.toString()); 
 },
 
 /**
@@ -434,8 +449,8 @@ save : function() {
         newValue = this.validator.call(this.dataTable, newValue, this.value, this);
         if(newValue === null ) {
             this.resetForm();
-            this.fireEvent("editorRevertEvent",
-                    {editor:this._oCellEditor, oldData:this.value, newData:newValue});
+            this.dataTable.fireEvent("editorRevertEvent",
+                    {editor:this, oldData:this.value, newData:newValue});
             YAHOO.log("Could not save Cell Editor input due to invalid data " +
                     lang.dump(newValue), "warn", this.toString());
             return;
@@ -450,8 +465,8 @@ save : function() {
     this.isActive = false;
     this.dataTable._oCellEditor =  null;
     
-    this.fireEvent("editorSaveEvent",
-            {editor:this._oCellEditor, oldData:this.value, newData:newValue});
+    this.dataTable.fireEvent("editorSaveEvent",
+            {editor:this, oldData:this.value, newData:newValue});
     YAHOO.log("Cell Editor input saved", "info", this.toString());
 },
 
@@ -465,8 +480,7 @@ cancel : function() {
         this.container.style.display = "none";
         this.isActive = false;
         this.dataTable._oCellEditor =  null;
-        //TODO: preserve values for the event?
-        ///this.fireEvent("editorCancelEvent", {editor:this._oCellEditor});
+        this.dataTable.fireEvent("editorCancelEvent", {editor:this});
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
     else {
@@ -511,8 +525,6 @@ getInputValue : function() {
 }
 
 };
-
-lang.augmentProto(BCE, YAHOO.util.EventProvider);
 
 
 
@@ -693,16 +705,19 @@ renderForm : function() {
             allCheckboxes[allCheckboxes.length] = this.container.childNodes[j*2];
         }
         this.checkboxes = allCheckboxes;
-    }
 
-    /*TODO
-    if(this.disableBtns) {
-        Ev.addListener(this.container, "blur", function(v){
-            // Save on "blur"
-            this.save();
-        }, this, true);        
+        /*TODO
+        if(this.disableBtns) {
+            Ev.addListener(this.container, "blur", function(v){
+                // Save on "blur"
+                this.save();
+            }, this, true);        
+        }
+        */
     }
-    */
+    else {
+        YAHOO.log("Could not find checkboxOptions", "error", this.toString());
+    }
 },
 
 /**
@@ -813,10 +828,9 @@ renderForm : function() {
     // Calendar widget
     if(YAHOO.widget.Calendar) {
         var calContainer = this.container.appendChild(document.createElement("div"));
-        var calPrefix = this.getId() + this.column.getColEl();
-        calContainer.id = calPrefix + "-dateContainer"; // Needed for Calendar constructor
+        calContainer.id = this.getId() + "-dateContainer"; // Needed for Calendar constructor
         var calendar =
-                new YAHOO.widget.Calendar(calPrefix + "-date",
+                new YAHOO.widget.Calendar(this.getId() + "-date",
                 calContainer.id);
         calendar.render();
         calContainer.style.cssFloat = "none";
@@ -827,18 +841,20 @@ renderForm : function() {
         }
         
         this.calendar = calendar;
-    }
 
-    /*TODO save on select
-    if(this.disableBtns) {
-        Ev.addListener(elDropdown, "blur", function(v){
-            // Save on "blur"
-            this.save();
-        }, this, true);        
+        /*TODO save on select
+        if(this.disableBtns) {
+            Ev.addListener(elDropdown, "blur", function(v){
+                // Save on "blur"
+                this.save();
+            }, this, true);        
+        }
+        */
     }
-    */
+    else {
+        YAHOO.log("Could not find YUI Calendar", "error", this.toString());
+    }
     
-    YAHOO.log("Could not find YUI Calendar", "error", this.toString());
 },
 
 /**
@@ -1079,6 +1095,10 @@ renderForm : function() {
             }, this, true);
         }
     }
+    else {
+        YAHOO.log("Could not find radioOptions", "error", this.toString());
+    }
+
 },
 
 /**
@@ -1276,7 +1296,6 @@ renderForm : function() {
     }
     elTextbox.type = "text";
     elTextbox.style.width = this.cell.offsetWidth + "px";
-    //elTextbox.style.height = "1em";
     this.textbox = elTextbox;
 
     // Save on enter

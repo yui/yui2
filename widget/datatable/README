@@ -3,8 +3,18 @@ DataTable Release Notes
 *** version 2.6.0 ***
 
 * Created new subclass ScrollingDataTable. Created new classes CellEditor,
-BaseCellEditor, and associated subclasses.
-
+BaseCellEditor, and associated subclasses. As a result, the following API changes
+have been made:
+   - DataTable.editCheckbox is no longer supported. The CheckboxCellEditor class should be used instead.
+   - DataTable.editDate is no longer supported. The DateCellEditor class should be used instead.
+   - DataTable.editDropdown is no longer supported. The DropdownCellEditor class should be used instead.
+   - DataTable.editRadio is no longer supported. The RadioCellEditor class should be used instead.
+   - DataTable.editTextarea is no longer supported. The TextareaCellEditor class should be used instead.
+   - DataTable.editTextbox is no longer supported. The TextboxCellEditor class should be used instead.
+   - editorUpdateEvent is no longer supported.
+   - showCellEditorBtns() is no longer supported. The CellEditor method renderBtns() should be used instead.
+   - resetCellEditor() renamed to destroyCellEditor().
+   
 * Pagination and sorting have been reworked to better support dynamically driven
 DataTables. As a result, the following important changes have been made:
     - Removed backward compatibility support for the "paginated" Attribute and

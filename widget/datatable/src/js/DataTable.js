@@ -245,7 +245,7 @@ lang.augmentObject(DT, {
     CLASS_RESIZERPROXY : "yui-dt-resizerproxy",
 
     /**
-     * Class name assigned to Editor container elements.
+     * Class name assigned to CellEditor container elements.
      *
      * @property DataTable.CLASS_EDITOR
      * @type String
@@ -1046,323 +1046,6 @@ lang.augmentObject(DT, {
         var markup = "<input type=\"text\" value=\"" + value + "\">";
         el.innerHTML = markup;
     },
-
-    /**
-     * Enables CHECKBOX Editor.
-     *
-     * @method DataTable.editCheckbox
-     * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
-     * @static
-     */
-    //DT.editCheckbox = function(elContainer, oRecord, oColumn, oEditor, oSelf) 
-    /*editCheckbox : function(oEditor, oSelf) {
-        var elCell = oEditor.cell;
-        var oRecord = oEditor.record;
-        var oColumn = oEditor.column;
-        var elContainer = oEditor.container;
-        var aCheckedValues = oEditor.value;
-        if(!lang.isArray(aCheckedValues)) {
-            aCheckedValues = [aCheckedValues];
-        }
-
-        // Checkboxes
-        if(oColumn.editorOptions && lang.isArray(oColumn.editorOptions.checkboxOptions)) {
-            var checkboxOptions = oColumn.editorOptions.checkboxOptions;
-            var checkboxValue, checkboxId, elLabel, j, k;
-            // First create the checkbox buttons in an IE-friendly way
-            for(j=0; j<checkboxOptions.length; j++) {
-                checkboxValue = lang.isValue(checkboxOptions[j].label) ?
-                        checkboxOptions[j].label : checkboxOptions[j];
-                checkboxId =  oSelf.getId() + "-editor-checkbox" + j;
-                elContainer.innerHTML += "<input type=\"checkbox\"" +
-                        " name=\"" + oSelf.getId() + "-editor-checkbox\"" +
-                        " value=\"" + checkboxValue + "\"" +
-                        " id=\"" +  checkboxId + "\">";
-                // Then create the labels in an IE-friendly way
-                elLabel = elContainer.appendChild(document.createElement("label"));
-                elLabel.htmlFor = checkboxId;
-                elLabel.innerHTML = checkboxValue;
-            }
-            var aCheckboxEls = [];
-            var checkboxEl;
-            // Loop through checkboxes to check them
-            for(j=0; j<checkboxOptions.length; j++) {
-                checkboxEl = Dom.get(oSelf.getId() + "-editor-checkbox" + j);
-                aCheckboxEls.push(checkboxEl);
-                for(k=0; k<aCheckedValues.length; k++) {
-                    if(checkboxEl.value === aCheckedValues[k]) {
-                        checkboxEl.checked = true;
-                    }
-                }
-                // Focus the first checkbox
-                if(j===0) {
-                    oSelf._focusEl(checkboxEl);
-                }
-            }
-            // Loop through checkboxes to assign click handlers
-            for(j=0; j<checkboxOptions.length; j++) {
-                checkboxEl = Dom.get(oSelf.getId() + "-editor-checkbox" + j);
-                Ev.addListener(checkboxEl, "click", function(){
-                    var aNewValues = [];
-                    for(var m=0; m<aCheckboxEls.length; m++) {
-                        if(aCheckboxEls[m].checked) {
-                            aNewValues.push(aCheckboxEls[m].value);
-                        }
-                    }
-                    oSelf._oCellEditor.value = aNewValues;
-                    oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
-                });
-            }
-        }
-    },*/
-
-    /**
-     * Enables Date Editor.
-     *
-     * @method DataTable.editDate
-     * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
-     * @static
-     */
-    /*editDate : function(oEditor, oSelf) {
-        var elCell = oEditor.cell;
-        var oRecord = oEditor.record;
-        var oColumn = oEditor.column;
-        var elContainer = oEditor.container;
-        var value = oEditor.value;
-        
-        // Set a default
-        if(!(value instanceof Date)) {
-            value = oEditor.defaultValue || new Date();
-        }
-
-        // Calendar widget
-        if(YAHOO.widget.Calendar) {
-            var selectedValue = (value.getMonth()+1)+"/"+value.getDate()+"/"+value.getFullYear();
-            var calContainer = elContainer.appendChild(document.createElement("div"));
-            var calPrefix = this.getId() + oColumn.getColEl();
-            calContainer.id = calPrefix + "-dateContainer"; // Needed for Calendar constructor
-            var calendar =
-                    new YAHOO.widget.Calendar(calPrefix + "-date",
-                    calContainer.id,
-                    {selected:selectedValue, pagedate:value});
-            calendar.render();
-            calContainer.style.cssFloat = "none";
-
-            if(ua.ie) {
-                var calFloatClearer = elContainer.appendChild(document.createElement("br"));
-                calFloatClearer.style.clear = "both";
-            }
-
-            calendar.selectEvent.subscribe(function(type, args, obj) {
-                oSelf._oCellEditor.value = new Date(args[0][0][0], args[0][0][1]-1, args[0][0][2]);
-                oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
-            });
-        }
-        else {
-            //TODO;
-        }
-    },*/
-
-    /**
-     * Enables SELECT Editor.
-     *
-     * @method DataTable.editDropdown
-     * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
-     * @static
-     */
-    /*editDropdown : function(oEditor, oSelf) {
-        var elCell = oEditor.cell;
-        var oRecord = oEditor.record;
-        var oColumn = oEditor.column;
-        var elContainer = oEditor.container;
-        var value = oEditor.value;
-        
-        // Set a default
-        if(!lang.isValue(value)) {
-            value = oEditor.defaultValue;
-        }
-
-
-        // Textbox
-        var elDropdown = elContainer.appendChild(document.createElement("select"));
-        var dropdownOptions = (oColumn.editorOptions && lang.isArray(oColumn.editorOptions.dropdownOptions)) ?
-                oColumn.editorOptions.dropdownOptions : [];
-        for(var j=0; j<dropdownOptions.length; j++) {
-            var dropdownOption = dropdownOptions[j];
-            var elOption = document.createElement("option");
-            elOption.value = (lang.isValue(dropdownOption.value)) ?
-                    dropdownOption.value : dropdownOption;
-            elOption.innerHTML = (lang.isValue(dropdownOption.text)) ?
-                    dropdownOption.text : dropdownOption;
-            elOption = elDropdown.appendChild(elOption);
-            if(value === elDropdown.options[j].value) {
-                elDropdown.options[j].selected = true;
-            }
-        }
-        oSelf._oCellEditor.value = elDropdown[elDropdown.selectedIndex].value;
-
-        // Set up a listener onchange to track the input value
-        Ev.addListener(elDropdown, "change",
-            function(){
-                oSelf._oCellEditor.value = elDropdown[elDropdown.selectedIndex].value;
-                oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
-        });
-
-        // Focus the dropdown
-        oSelf._focusEl(elDropdown);
-    },*/
-
-    /**
-     * Enables INPUT TYPE=RADIO Editor.
-     *
-     * @method DataTable.editRadio
-     * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
-     * @static
-     */
-    /*editRadio : function(oEditor, oSelf) {
-        var elCell = oEditor.cell;
-        var oRecord = oEditor.record;
-        var oColumn = oEditor.column;
-        var elContainer = oEditor.container;
-        var value = oEditor.value;
-
-        // Set a default
-        if(!lang.isValue(value)) {
-            value = oEditor.defaultValue;
-        }
-
-        // Radios
-        if(oColumn.editorOptions && lang.isArray(oColumn.editorOptions.radioOptions)) {
-            var radioOptions = oColumn.editorOptions.radioOptions;
-            var radioValue, radioId, elLabel, j;
-            // First create the radio buttons in an IE-friendly way
-            for(j=0; j<radioOptions.length; j++) {
-                radioValue = lang.isValue(radioOptions[j].label) ?
-                        radioOptions[j].label : radioOptions[j];
-                radioId =  oSelf.getId() + "-col-" + oColumn.getSanitizedKey() + "-radioeditor" + j;
-                elContainer.innerHTML += "<input type=\"radio\"" +
-                        " name=\"" + oSelf.getId() + "-editor-radio\"" +
-                        " value=\"" + radioValue + "\"" +
-                        " id=\"" +  radioId + "\">";
-                // Then create the labels in an IE-friendly way
-                elLabel = elContainer.appendChild(document.createElement("label"));
-                elLabel.htmlFor = radioId;
-                elLabel.innerHTML = radioValue;
-            }
-            // Then check one, and assign click handlers
-            for(j=0; j<radioOptions.length; j++) {
-                var radioEl = Dom.get(oSelf.getId() + "-col" + oColumn.getSanitizedKey() + "-radioeditor" + j);
-                if(value === radioEl.value) {
-                    radioEl.checked = true;
-                    oSelf._focusEl(radioEl);
-                }
-                Ev.addListener(radioEl, "click",
-                    function(){
-                        oSelf._oCellEditor.value = this.value;
-                        oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
-                });
-            }
-        }
-    },*/
-
-    /**
-     * Enables TEXTAREA Editor.
-     *
-     * @method DataTable.editTextarea
-     * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
-     * @static
-     */
-    /*editTextarea : function(oEditor, oSelf) {
-       var elCell = oEditor.cell;
-       var oRecord = oEditor.record;
-       var oColumn = oEditor.column;
-       var elContainer = oEditor.container;
-       var value = oEditor.value;
-
-        // Set a default
-        if(!lang.isValue(value)) {
-            value = oEditor.defaultValue || "";
-        }
-
-        // Textarea
-        var elTextarea = elContainer.appendChild(document.createElement("textarea"));
-        elTextarea.style.width = elCell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
-        elTextarea.style.height = "3em"; //(parseInt(elCell.offsetHeight,10)) + "px";
-        elTextarea.value = value;
-
-        // Set up a listener on each check box to track the input value
-        Ev.addListener(elTextarea, "keyup", function(){
-            //TODO: set on a timeout
-            oSelf._oCellEditor.value = elTextarea.value;
-            oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
-        });
-
-        // Select the text
-        elTextarea.focus();
-        elTextarea.select();
-    },*/
-
-    /**
-     * Enables INPUT TYPE=TEXT Editor.
-     *
-     * @method DataTable.editTextbox
-     * @param oEditor {Object} Object literal representation of Editor values.
-     * @param oSelf {YAHOO.wiget.DataTable} Reference back to DataTable instance.
-     * @static
-     */
-    /*editTextbox : function(oEditor, oSelf) {
-       var elCell = oEditor.cell;
-       var oRecord = oEditor.record;
-       var oColumn = oEditor.column;
-       var elContainer = oEditor.container;
-       var value = oEditor.value;
-
-        // Set a default
-        if(!lang.isValue(value)) {
-            value = oEditor.defaultValue || "";
-        }
-
-        // Textbox
-        var elTextbox;
-        // Bug 1802582: SF3/Mac needs a form element wrapping the input
-        if(ua.webkit>420) {
-            elTextbox = elContainer.appendChild(document.createElement("form")).appendChild(document.createElement("input"));
-        }
-        else {
-            elTextbox = elContainer.appendChild(document.createElement("input"));
-        }
-        elTextbox.type = "text";
-        elTextbox.style.width = elCell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
-        //elTextbox.style.height = "1em"; //(parseInt(elCell.offsetHeight,10)) + "px";
-        elTextbox.value = value;
-
-        // Bug: 1802582 Set up a listener on each textbox to track on keypress
-        // since SF/OP can't preventDefault on keydown
-        Ev.addListener(elTextbox, "keypress", function(v){
-            // Prevent form submit
-            // Save on "enter"
-            if((v.keyCode === 13)) {
-                YAHOO.util.Event.preventDefault(v);
-                oSelf.saveCellEditor();
-            }
-        });
-
-        // Set up a listener on each textbox to track the input value
-        Ev.addListener(elTextbox, "keyup", function(v){
-            // Update the tracker value
-            oSelf._oCellEditor.value = elTextbox.value;
-            oSelf.fireEvent("editorUpdateEvent",{editor:oSelf._oCellEditor});
-        });
-
-        // Select the text
-        elTextbox.focus();
-        elTextbox.select();
-    },*/
 
     /**
      * Validates data value to type Number, doing type conversion as
@@ -2811,38 +2494,6 @@ _initMsgTbodyEl : function(elTable) {
 },
 
 /**
- * Creates HTML markup for Cell Editor.
- *
- * @method _initCellEditorEl
- * @private
- */
-_initCellEditor : function() {
-    /*// TODO: destroy previous instances
-
-    // Attach Cell Editor container element as first child of body
-    var elCellEditor = document.createElement("div");
-    elCellEditor.id = this._sId + "-celleditor"; // Needed to blur onclick elsewhere
-    elCellEditor.style.display = "none";
-    elCellEditor.tabIndex = 0;
-    elCellEditor.className = DT.CLASS_EDITOR;
-    ///TODO: insertbefore
-    var elFirstChild = Dom.getFirstChild(document.body);
-    if(elFirstChild) {
-        elCellEditor = Dom.insertBefore(elCellEditor, elFirstChild);
-    }
-    else {
-        elCellEditor = document.body.appendChild(elCellEditor);
-    }
-    
-    // Internal tracker of Cell Editor values
-    var oCellEditor = {};
-    oCellEditor.container = elCellEditor;
-    oCellEditor.value = null;
-    oCellEditor.isActive = false;
-    return oCellEditor;*/
-},
-
-/**
  * Initialize internal event listeners
  *
  * @method _initEvents
@@ -3442,10 +3093,10 @@ _onDocumentClick : function(e, oSelf) {
         // handlers below rather than by the TABLE click handler directly.
         if(oSelf._oCellEditor) {
             var elContainer = oSelf._oCellEditor.container;
-            // Only if the click was not within the Cell Editor container
+            // Only if the click was not within the CellEditor container
             if(!Dom.isAncestor(elContainer, elTarget) &&
                     (elContainer.id !== elTarget.id)) {
-                oSelf._oCellEditor.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+                oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
             }
         }
     }
@@ -3849,7 +3500,7 @@ _onTbodyKeydown : function(e, oSelf) {
     }
     
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
     var elTarget = Ev.getTarget(e);
@@ -3909,9 +3560,9 @@ _onTableKeypress : function(e, oSelf) {
  * @private
  */
 _onTheadClick : function(e, oSelf) {
-    // Always blur the cell editor
+    // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
     var elTarget = Ev.getTarget(e);
@@ -3977,9 +3628,9 @@ _onTheadClick : function(e, oSelf) {
  * @private
  */
 _onTbodyClick : function(e, oSelf) {
-    // Always blur the cell editor
+    // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
     }
 
     // Fire Custom Events
@@ -4033,7 +3684,6 @@ _onTbodyClick : function(e, oSelf) {
  * @param e {HTMLEvent} The change event.
  * @param oSelf {YAHOO.wiget.DataTable} DataTable instance.
  * @private
- * @deprecated
  */
 _onDropdownChange : function(e, oSelf) {
     var elTarget = Ev.getTarget(e);
@@ -4792,7 +4442,7 @@ initializeTable : function() {
  * @method render
  */
 render : function() {
-YAHOO.log("start render","time");
+//YAHOO.log("start render","time");
 
     this._oChainRender.stop();
     YAHOO.log("DataTable rendering...", "info", this.toString());
@@ -4893,7 +4543,7 @@ YAHOO.log("start render","time");
                     this.fireEvent("refreshEvent");
                     YAHOO.log("DataTable rendered " + nRecordsLength + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
                 
-                    YAHOO.log("end render","time");
+                    //YAHOO.log("end render","time");
                 }
             },
             scope: this
@@ -4931,194 +4581,6 @@ YAHOO.log("start render","time");
         });
     }
     this._oChainRender.run();
-
-    /* ORIGINAL METHOD 
-    var elTbody = this._elTbody;
-    var allRows = elTbody.rows;
-
-    // Should have rows
-    if(lang.isArray(allRecords) && (allRecords.length > 0)) {
-        // Keep track of selected rows
-        var allSelectedRows = this.getSelectedRows();
-        // Keep track of selected cells
-        var allSelectedCells = this.getSelectedCells();
-        // Anything to reinstate?
-        var bReselect = (allSelectedRows.length>0) || (allSelectedCells.length > 0);
-
-        // Remove extra rows from the bottom so as to preserve ID order
-        while(elTbody.hasChildNodes() && (allRows.length > allRecords.length)) {
-            elTbody.removeChild(allRows[allRows.length-1]); // Bug 1831689
-        }
-
-        // Unselect all TR and TD elements in the UI
-        if(bReselect) {
-            this._unselectAllTrEls();
-            this._unselectAllTdEls();
-        }
-
-        this.hideTableMessage();
-
-        // How many rows to work with each loop
-        var loopN = this.get("renderLoopSize");
-        var loopStart,
-            loopEnd;
-        
-        // From the top, update in-place existing rows, so as to reuse DOM elements
-        if(allRows.length > 0) {
-            loopEnd = allRows.length; // End at last row
-            this._oChainRender.add({
-                method: function(oArg) {
-                    if((this instanceof DT) && this._sId) {
-                        var i = oArg.nCurrentRow,
-                            // Must reference allRows.length instead of loopEnd
-                            // here because loopEnd is reused below outside
-                            // this closure.
-                            len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length;
-                        for(; i < len; ++i) {
-                            this._updateTrEl(allRows[i], allRecords[i]);
-                        }
-                        if (loopN > 0) {
-                        }
-                        oArg.nCurrentRow = i;
-                    }
-                },
-                iterations: (loopN > 0) ? Math.ceil(loopEnd/loopN) : 1,
-                argument: {nCurrentRow:0}, // Start at first row
-                scope: this,
-                timeout: (loopN > 0) ? 0 : -1
-            });
-        }
-
-        loopStart = allRows.length; // where to start
-        loopEnd = allRecords.length; // where to end
-
-
-        // Add more TR elements as necessary
-        var nRowsNeeded = (loopEnd - loopStart); // how many needed
-        if(nRowsNeeded > 0) {
-            this._oChainRender.add({
-                method: function(oArg) {
-                    if((this instanceof DT) && this._sId) {
-                        var i = oArg.nCurrentRow,
-                            len = loopN > 0 ? Math.min(i + loopN,loopEnd) : loopEnd,
-                            df = document.createDocumentFragment(),
-                            tr;
-                        for(; i < len; ++i) {
-                            tr = this._addTrEl(allRecords[i]);
-                            Dom.addClass(tr, (i%2) ? DT.CLASS_ODD : DT.CLASS_EVEN);
-                            df.appendChild(tr);
-                        }
-                        this._elTbody.appendChild(df);
-                        if (loopN > 0) {
-                        }
-                        oArg.nCurrentRow = i;
-                    }
-                },
-                iterations: (loopN > 0) ? Math.ceil(nRowsNeeded/loopN) : 1,
-                argument: {nCurrentRow:loopStart}, // start at last row
-                scope: this,
-                timeout: (loopN > 0) ? 0 : -1
-            });
-        }
-
-
-        this._oChainRender.add({
-            method: function(oArg) {
-                if((this instanceof DT) && this._sId) {
-                    this._setFirstRow();
-                    this._setLastRow();
-
-                    // Reinstate selected and sorted classes
-                    if(bReselect) {
-                        // Loop over each row
-                        for(j=0; j<allRows.length; j++) {
-                            var thisRow = allRows[j];
-                            var sMode = this.get("selectionMode");
-                            if ((sMode == "standard") || (sMode == "single")) {
-                                // Set SELECTED
-                                for(k=0; k<allSelectedRows.length; k++) {
-                                    if(allSelectedRows[k] === this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex)).getId()) {
-                                    ///if(allSelectedRows[k] === thisRow.yuiRecordId) {
-                                        Dom.addClass(thisRow, DT.CLASS_SELECTED);
-                                        if(j === allRows.length-1) {
-                                            this._oAnchorRecord = this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex));
-                                            ///this._oAnchorRecord = this.getRecord(thisRow.yuiRecordId);
-                                        }
-                                    }
-                                }
-                            }
-                            else {
-                                // Loop over each cell
-                                for(k=0; k<thisRow.cells.length; k++) {
-                                    var thisCell = thisRow.cells[k];
-                                    // Set SELECTED
-                                    for(l=0; l<allSelectedCells.length; l++) {
-                                        if((allSelectedCells[l].recordId === this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex)).getId()) &&
-                                        ///if((allSelectedCells[l].recordId === thisRow.yuiRecordId) &&
-                                                (allSelectedCells[l].columnKey === this.getColumn(thisCell.cellIndex).getKey())) {
-                                                ///(allSelectedCells[l].columnId === thisCell.yuiColumnId)) {
-                                            Dom.addClass(thisCell, DT.CLASS_SELECTED);
-                                            if(k === thisRow.cells.length-1) {
-                                                this._oAnchorCell = {record:this.getRecord(this.getRecordIndex(thisRow.sectionRowIndex)), column:this.getColumn(thisCell.cellIndex)};
-                                                ///this._oAnchorCell = {record:this.getRecord(thisRow.yuiRecordId), column:this.getColumnById(thisCell.yuiColumnId)};
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                if(this._bInit) {
-                    ///this._forceGeckoRedraw();
-
-                    this._oChainRender.add({
-                        method: function() {
-                            if((this instanceof DT) && this._sId && this._bInit) {
-                                this._bInit = false;
-                                this.fireEvent("initEvent");
-                                YAHOO.log("DataTable initialized with " + allRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
-                            }
-                        },
-                        scope: this
-                    });
-                    this._oChainRender.run();
-                }
-                else {
-                    this.fireEvent("renderEvent");
-                    // Backward compatibility
-                    this.fireEvent("refreshEvent");
-                    YAHOO.log("DataTable rendered " + allRecords.length + " of " + this._oRecordSet.getLength() + " rows", "info", this.toString());
-                }
-            
-            },
-            scope: this,
-            timeout: (loopN > 0) ? 0 : -1
-        }); 
-        
-        this._oChainRender.add({
-            method: function() {
-                if((this instanceof DT) && this._sId) {
-                   YAHOO.log("end render","time");
-                }
-            },
-            scope: this
-        });
-                    
-        this._oChainRender.run();
-
-    }
-    // Empty
-    else {
-        // Remove all rows
-        while(elTbody.hasChildNodes()) {
-            elTbody.deleteRow(-1);
-        }
-
-        this.showTableMessage(this.get("MSG_EMPTY"), DT.CLASS_EMPTY);
-    }*/
-
 },
 
 /**
@@ -5130,6 +4592,9 @@ YAHOO.log("start render","time");
  * @method destroy
  */
 destroy : function() {
+    // Store for later
+    var instanceName = this.toString();
+
     this._oChainRender.stop();
     
     //TODO: destroy static resizer proxy and column proxy?
@@ -5137,18 +4602,20 @@ destroy : function() {
     // Destroy ColumnDD and ColumnResizers
     this._destroyColumnHelpers();
     
-    // TODO: Destroy all Cell Editors
-    Ev.purgeElement(this._oCellEditor.getContainerEl(), true);
-    document.body.removeChild(this._oCellEditor.getContainerEl());
-
-    var instanceName = this.toString();
-    var elContainer = this._elContainer;
+    // Destroy all CellEditors
+    for(var i=0, l=this._oColumnSet.flat.length; i<l; i++) {
+        if(this._oColumnSet.flat[i]._oCellEditor) {
+            this._oColumnSet.flat[i]._oCellEditor.destroy();
+            this._oColumnSet.flat[i]._oCellEditor = null;
+        }
+    }
 
     // Unhook custom events
     this._oRecordSet.unsubscribeAll();
     this.unsubscribeAll();
 
     // Unhook DOM events
+    var elContainer = this._elContainer;
     Ev.purgeElement(elContainer, true);
     Ev.removeListener(document, "click", this._onDocumentClick);
 
@@ -5676,7 +5143,7 @@ setColumnWidth : function(oColumn, nWidth) {
  */
 _setColumnWidth : function(oColumn, sWidth, sOverflow) {
 ///TODO: blow away the tr template for fallback cases
-YAHOO.log('start _sColumnWidth','time');
+//YAHOO.log("start _sColumnWidth","time");
     if(oColumn && (oColumn.getKeyIndex() !== null)) {
         sOverflow = sOverflow || (((sWidth === '') || (sWidth === 'auto')) ? 'visible' : 'hidden');
     
@@ -5692,7 +5159,7 @@ YAHOO.log('start _sColumnWidth','time');
     else {
         YAHOO.log("Could not set width of unknown Column " + oColumn + " to " + sWidth, "warn", this.toString());
     }
-    YAHOO.log('end _sColumnWidth','time');
+    //YAHOO.log("end _sColumnWidth","time");
 },
 
 /**
@@ -5709,7 +5176,7 @@ YAHOO.log('start _sColumnWidth','time');
  * @private
  */
 _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
-YAHOO.log('start _setColumnWidthDynStyles','time');
+//YAHOO.log("start _setColumnWidthDynStyles","time");
     var s = DT._elDynStyleNode,
         rule;
     
@@ -5758,7 +5225,7 @@ YAHOO.log('start _setColumnWidthDynStyles','time');
             this._elTbody.style.display = '';
         }
     }
-YAHOO.log('end _setColumnWidthDynStyles','time');
+//YAHOO.log("end _setColumnWidthDynStyles","time");
     
     // That was not a success, we must call the fallback routine
     if(!rule) {
@@ -5778,7 +5245,7 @@ YAHOO.log('end _setColumnWidthDynStyles','time');
  * @private
  */
 _setColumnWidthDynFunction : function(oColumn, sWidth, sOverflow) {
-YAHOO.log('start _setColumnWidthDynFunction','time');
+//YAHOO.log("start _setColumnWidthDynFunction","time");
     ///TODO: why is this here?
     if(sWidth == 'auto') {
         sWidth = ''; 
@@ -5841,7 +5308,7 @@ YAHOO.log('start _setColumnWidthDynFunction','time');
         resizerFn.call(this,oColumn,sWidth,sOverflow);
         ///this._elTbody.style.display = '';
     }
-YAHOO.log('end _setColumnWidthDynFunction','time');
+//YAHOO.log("end _setColumnWidthDynFunction","time");
 },
 
 /**
@@ -6221,7 +5688,6 @@ insertColumn : function(oColumn, index) {
  * @param oColumn {YAHOO.widget.Column} Column instance.
  * @param index {Number} New tree index.
  * @return oColumn {YAHOO.widget.Column} Reordered Column instance. 
- * @return  
  */
 reorderColumn : function(oColumn, index) {
     // Validate Column and new index
@@ -9539,7 +9005,7 @@ unhighlightCell : function(cell) {
 // INLINE EDITING
 
 /**
- * Activates and shows CellEditor for the given cell while deactivating and
+ * Activates and shows CellEditor instance for the given cell while deactivating and
  * canceling previous CellEditor. It is baked into DataTable that only one CellEditor
  * can be active at any given time. 
  *
@@ -9564,106 +9030,35 @@ showCellEditor : function(elCell) {
             }
             oCellEditor.setCell(elCell);
             oCellEditor.move();
-            oCellEditor.show();
-            this._oCellEditor = oCellEditor;
+            var ok = this.doBeforeShowCellEditor(oCellEditor);
+            if(ok) {
+                oCellEditor.show();
+                this._oCellEditor = oCellEditor;
+            }
         }
     }
 },
 
 /**
- * Overridable abstract method to customize Cell Editor UI.
+ * Overridable abstract method to customize CellEditor before showing.
  *
  * @method doBeforeShowCellEditor
- * @param oCellEditor {Object} Cell Editor object literal.
- * @return {Boolean} Return true to continue showing Cell Editor.
+ * @param oCellEditor {Object} CellEditor instance.
+ * @return {Boolean} Return true to continue showing CellEditor.
  */
 doBeforeShowCellEditor : function(oCellEditor) {
     return true;
 },
 
-/*
- * Adds Save/Cancel buttons to Cell Editor.
- *
- * @method showCellEditorBtns
- * @param elContainer {HTMLElement} Cell Editor container.
- */
-/*showCellEditorBtns : function(elContainer) {
-    // Buttons
-    var elBtnsDiv = elContainer.appendChild(document.createElement("div"));
-    Dom.addClass(elBtnsDiv, DT.CLASS_BUTTON);
-
-    // Save button
-    var elSaveBtn = elBtnsDiv.appendChild(document.createElement("button"));
-    Dom.addClass(elSaveBtn, DT.CLASS_DEFAULT);
-    elSaveBtn.innerHTML = "OK";
-    Ev.addListener(elSaveBtn, "click", function(oArgs, oSelf) {
-        oSelf.onEventSaveCellEditor(oArgs, oSelf);
-        oSelf.focusTbodyEl();
-    }, this, true);
-
-    // Cancel button
-    var elCancelBtn = elBtnsDiv.appendChild(document.createElement("button"));
-    elCancelBtn.innerHTML = "Cancel";
-    Ev.addListener(elCancelBtn, "click", function(oArgs, oSelf) {
-        oSelf.onEventCancelCellEditor(oArgs, oSelf);
-        oSelf.focusTbodyEl();
-    }, this, true);
-},*/
-
 /**
- * Clears Cell Editor of all state and UI.
- *
- * @method resetCellEditor
- */
-
-resetCellEditor : function() {
-    var elContainer = this._oCellEditor.container;
-    elContainer.style.display = "none";
-    Ev.purgeElement(elContainer, true);
-    elContainer.innerHTML = "";
-    this._oCellEditor.value = null;
-    this._oCellEditor.isActive = false;
-    
-},
-
-/**
- * Saves Cell Editor input to Record.
+ * Saves active CellEditor input to Record and upates DOM UI.
  *
  * @method saveCellEditor
  */
 saveCellEditor : function() {
-/*    if(this._oCellEditor.isActive) {
-        var newData = this._oCellEditor.value;
-        // Copy the data to pass to the event
-        var oldData = YAHOO.widget.DataTable._cloneObject(this._oCellEditor.record.getData(this._oCellEditor.column.key));
-
-        // Validate input data
-        if(this._oCellEditor.validator) {
-            newData = this._oCellEditor.value = this._oCellEditor.validator.call(this, newData, oldData, this._oCellEditor);
-            if(newData === null ) {
-                this.resetCellEditor();
-                this.fireEvent("editorRevertEvent",
-                        {editor:this._oCellEditor, oldData:oldData, newData:newData});
-                YAHOO.log("Could not save Cell Editor input due to invalid data " +
-                        lang.dump(newData), "warn", this.toString());
-                return;
-            }
-        }
-        // Update the Record
-        this._oRecordSet.updateRecordValue(this._oCellEditor.record, this._oCellEditor.column.key, this._oCellEditor.value);
-        // Update the UI
-        this.formatCell(this._oCellEditor.cell.firstChild);
-        
-        // Clear out the Cell Editor
-        this.resetCellEditor();
-
-        this.fireEvent("editorSaveEvent",
-                {editor:this._oCellEditor, oldData:oldData, newData:newData});
-        YAHOO.log("Cell Editor input saved", "info", this.toString());
-    }
-    else {
-        YAHOO.log("Cell Editor not active to save input", "warn", this.toString());
-    }*/
+    if(this._oCellEditor) {
+        this._oCellEditor.save();
+    }   
 },
 
 /**
@@ -9674,22 +9069,20 @@ saveCellEditor : function() {
 cancelCellEditor : function() {
     if(this._oCellEditor) {
         this._oCellEditor.cancel();
-        //TODO: preserve values for the event?
-        YAHOO.log("Cell Editor input canceled", "info", this.toString());
+        YAHOO.log("CellEditor input canceled", "info", this.toString());
     }
-    else {
-        YAHOO.log("Cell Editor not active to cancel input", "warn", this.toString());
-    }
-    
-    /*if(this._oCellEditor.isActive) {
-        this.resetCellEditor();
-        //TODO: preserve values for the event?
-        this.fireEvent("editorCancelEvent", {editor:this._oCellEditor});
-        YAHOO.log("Cell Editor input canceled", "info", this.toString());
-    }
-    else {
-        YAHOO.log("Cell Editor not active to cancel input", "warn", this.toString());
-    }*/
+},
+
+/**
+ * Destroys active CellEditor instance and UI.
+ *
+ * @method destroyCellEditor
+ */
+destroyCellEditor : function() {
+    if(this._oCellEditor) {
+        this._oCellEditor.destroy();
+        this._oCellEditor = null;
+    }   
 },
 
 
@@ -10916,13 +10309,6 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
-     * Fired when an active Editor's internal value is updated.
-     *
-     * @event editorUpdateEvent
-     * @param oArgs.editor {Object} The Editor object literal.
-     */
-
-    /**
      * Fired when Editor input is reverted.
      *
      * @event editorRevertEvent
@@ -11030,6 +10416,30 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
 // Deprecated APIs
 //
 /////////////////////////////////////////////////////////////////////////////
+  
+/*
+ * @method showCellEditorBtns
+ * @deprecated Use CellEditor.renderBtns() 
+ */
+showCellEditorBtns : function(elContainer) {
+    YAHOO.log("The method showCellEditorBtns() has been removed." +
+            " Please refer to the CellEditor method renderBtns()", "warn", this.toString());
+},
+
+/**
+ * @method resetCellEditor
+ * @deprecated Use destroyCellEditor 
+ */
+resetCellEditor : function() {
+    YAHOO.log("The method resetCellEditor() has been renamed" +
+            " to destroyCellEditor()", "warn", this.toString());
+    return this.destroyCellEditor();    
+},
+
+/**
+ * @event editorUpdateEvent
+ * deprecated No longer supported.     
+ */
 
 /**
  * @method getBody
@@ -11102,17 +10512,6 @@ onEventEditCell : function(oArgs) {
     this.onEventShowCellEditor(oArgs);
 },
 
-/*
- * @method onDataReturnReplaceRows
- * @deprecated Use onDataReturnInitializeTable.
- */
-/*onDataReturnReplaceRows : function(sRequest, oResponse) {
-    // Backward compatibility
-    YAHOO.log("The method onDataReturnReplaceRows() has been deprecated" +
-            " in favor of onDataReturnInitializeTable()", "warn", this.toString());
-    this.onDataReturnInitializeTable(sRequest, oResponse);
-},*/
-
 /**
  * @method _syncColWidths
  * @deprecated Use validateColumnWidths.
@@ -11123,7 +10522,6 @@ _syncColWidths : function() {
         " in favor of validateColumnWidths()", "warn", this.toString());
     this.validateColumnWidths();
 }
-
 
 /**
  * @event headerRowMouseoverEvent
@@ -11208,5 +10606,46 @@ _syncColWidths : function() {
  * @deprecated Use onDataReturnSetRows
  */
 DT.prototype.onDataReturnSetRecords = DT.prototype.onDataReturnSetRows;
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Deprecated static APIs
+//
+/////////////////////////////////////////////////////////////////////////////
+/**
+ * @method DataTable.editCheckbox
+ * @deprecated  Use YAHOO.widget.CheckboxCellEditor.
+ */
+DT.editCheckbox = function() {};
+
+/**
+ * @method DataTable.editDate
+ * @deprecated Use YAHOO.widget.DateCellEditor.
+ */
+DT.editDate = function() {};
+
+/**
+ * @method DataTable.editDropdown
+ * @deprecated Use YAHOO.widget.DropdownCellEditor.
+ */
+DT.editDropdown = function() {};
+
+/**
+ * @method DataTable.editRadio
+ * @deprecated Use YAHOO.widget.RadioCellEditor.
+ */
+DT.editRadio = function() {};
+
+/**
+ * @method DataTable.editTextarea
+ * @deprecated Use YAHOO.widget.TextareaCellEditor
+ */
+DT.editTextarea = function() {};
+
+/**
+ * @method DataTable.editTextbox
+ * @deprecated Use YAHOO.widget.TextboxCellEditor
+ */
+DT.editTextbox= function() {};
 
 })();
