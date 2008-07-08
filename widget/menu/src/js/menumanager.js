@@ -657,7 +657,7 @@
             * @method getVisible
             * @description Returns a collection of all visible menus registered
             * with the menu manger.
-            * @return {Array}
+            * @return {Object}
             */
             getVisible: function () {
             
@@ -670,7 +670,7 @@
             * @method getMenus
             * @description Returns a collection of all menus registered with the 
             * menu manger.
-            * @return {Array}
+            * @return {Object}
             */
             getMenus: function () {
     
