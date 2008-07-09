@@ -4,10 +4,17 @@ AutoComplete Release Notes
 
 * AutoComplete has a new required dependency on YAHOO.util.DataSource,
 and the class YAHOO.widget.DataSource has been deprecated. As a result,
-the following APIs have been changed:
-   - YAHOO.widget.DataSource.queryMatchCase has been replaced with YAHOO.widget.AutoComplete.queryMatchCase
-   - YAHOO.widget.DataSource.queryMatchContains has been replaced with YAHOO.widget.AutoComplete.queryMatchContains
-   - YAHOO.widget.DataSource.queryMatchSubset has been replaced with YAHOO.widget.AutoComplete.queryMatchSubset
+the following YAHOO.widget.DataSource properties have been ported to YAHOO.widget.AutoComplete:
+   - queryMatchCase
+   - queryMatchContains
+   - queryMatchSubset
+
+* The YAHOO.widget.DS_XHR properties scriptQueryParam and scriptQueryAppend
+have been deprecated in favor of the new customizeable YAHOO.widget.AutoComplete
+method generateRequest.
+
+* The YAHOO.widget.DS_XHR property responseStripAfter has been deprecated in favor
+of the new customizeable YAHOO.util.DataSource method doBeforeParseData.
 
 * Now always fires either dataReturnEvent or dataErrorEvent upon a DataSource
 response, whether container opens or not due to instance losing focus. 

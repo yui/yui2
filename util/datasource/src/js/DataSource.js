@@ -2,17 +2,31 @@
 
 var lang   = YAHOO.lang,
     util   = YAHOO.util,
-    widget = YAHOO.widget,
-    ua     = YAHOO.env.ua,
-    
-    Dom    = util.Dom,
     Ev     = util.Event;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DataSourceBase constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+/**
+ * The DataSource utility provides a common configurable interface for widgets to
+ * access a variety of data, from JavaScript arrays to online database servers.
+ *
+ * @module datasource
+ * @requires yahoo, event
+ * @optional json, get, connection 
+ * @title DataSource Utility
+ */
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * Base class for the YUI DataSource utility.
+ *
+ * @namespace YAHOO.util
+ * @class DataSourceBase
+ * @constructor
+ * @param oLiveData {HTMLElement}  Pointer to live data.
+ * @param oConfigs {object} (optional) Object literal of configuration values.
+ */
 util.DataSourceBase = function(oLiveData, oConfigs) {
     if(!oLiveData) {
         YAHOO.log("Could not instantiate DataSource due to invalid live database",
@@ -141,7 +155,7 @@ TYPE_HTMLTABLE : 6,
 /**
  * Type is hosted on a server via a dynamic script node.
  *
- * @property TYPE_HTMLTABLE
+ * @property TYPE_SCRIPTNODE
  * @type Number
  * @final
  * @default 7
@@ -1528,12 +1542,21 @@ lang.augmentProto(DS, util.EventProvider);
  */
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// LocalDataSource constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
 
+/**
+ * LocalDataSource class for in-memory data structs including JavaScript arrays,
+ * JavaScript object literals (JSON), XML documents, and HTML tables.
+ *
+ * @namespace YAHOO.util
+ * @class LocalDataSource
+ * @extends DataSourceBase 
+ * @constructor
+ * @param oLiveData {HTMLElement}  Pointer to live data.
+ * @param oConfigs {object} (optional) Object literal of configuration values.
+ */
 util.LocalDataSource = function(oLiveData, oConfigs) {
     if(YAHOO.lang.isArray(oLiveData)) { // array
         this.dataType = DS.TYPE_JSARRAY;
@@ -1561,12 +1584,32 @@ lang.extend(util.LocalDataSource, DS);
 // Copy static members to LocalDataSource class
 lang.augmentObject(util.LocalDataSource, DS);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FunctionDataSource constructor
-//
-/////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+
+
+
+
+
+
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * FunctionDataSource class for JavaScript functions.
+ *
+ * @namespace YAHOO.util
+ * @class FunctionDataSource
+ * @extends DataSourceBase  
+ * @constructor
+ * @param oLiveData {HTMLElement}  Pointer to live data.
+ * @param oConfigs {object} (optional) Object literal of configuration values.
+ */
 util.FunctionDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_JSFUNCTION;
     this.responseType = DS.TYPE_JSARRAY;
@@ -1610,12 +1653,33 @@ makeConnection : function(oRequest, oCallback, oCaller) {
 // Copy static members to FunctionDataSource class
 lang.augmentObject(util.FunctionDataSource, DS);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ScriptNodeDataSource constructor
-//
-/////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+
+
+
+
+
+
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * ScriptNodeDataSource class for accessing remote data via the YUI Get Utility. 
+ *
+ * @namespace YAHOO.util
+ * @class ScriptNodeDataSource
+ * @requires Get
+ * @extends DataSourceBase  
+ * @constructor
+ * @param oLiveData {HTMLElement}  Pointer to live data.
+ * @param oConfigs {object} (optional) Object literal of configuration values.
+ */
 util.ScriptNodeDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_SCRIPTNODE;
     
@@ -1792,12 +1856,35 @@ callbacks : []
 
 });
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// XHRDataSource constructor
-//
-/////////////////////////////////////////////////////////////////////////////
 
+
+
+
+
+
+
+
+
+
+
+
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * XHRDataSource class for accessing remote data via the YUI Connection Manager
+ * Utility
+ *
+ * @namespace YAHOO.util
+ * @class XHRDataSource
+ * @requires Connection
+ * @extends DataSourceBase  
+ * @constructor
+ * @param oLiveData {HTMLElement}  Pointer to live data.
+ * @param oConfigs {object} (optional) Object literal of configuration values.
+ */
 util.XHRDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_XHR;
     
@@ -2065,11 +2152,32 @@ makeConnection : function(oRequest, oCallback, oCaller) {
 // Copy static members to XHRDataSource class
 lang.augmentObject(util.XHRDataSource, DS);
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DataSource constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * Factory class for creating a DataSource subclass instance.
+ *
+ * @namespace YAHOO.util
+ * @class DataSource
+ * @requires Get
+ * @constructor
+ * @param oLiveData {HTMLElement}  Pointer to live data.
+ * @param oConfigs {object} (optional) Object literal of configuration values.
+ */
 util.DataSource = function(oLiveData, oConfigs) {
     // Point to one of the subclasses
     if(YAHOO.lang.isString(oLiveData)) { // string -> xhr

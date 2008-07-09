@@ -25,8 +25,6 @@ YAHOO.widget.DS_XHR.TYPE_XML = YAHOO.util.DataSourceBase.TYPE_XML;
 YAHOO.widget.DS_XHR.TYPE_FLAT = YAHOO.util.DataSourceBase.TYPE_TEXT;
 
 // TODO:
-// widget.DS.scriptQueryParam
-// widget.DS.scriptQueryAppend
 // widget.DS_ScriptNode.scriptCallbackParam
 
 
@@ -158,7 +156,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         (this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_JSON)) {
             this.applyLocalFilter = true;
         }
-
+        
         // Set any config params passed in to override defaults
         if(oConfigs && (oConfigs.constructor == Object)) {
             for(var sConfig in oConfigs) {
@@ -633,7 +631,7 @@ YAHOO.widget.AutoComplete.prototype.setBody = function(sBody) {
 /*
 * A function that converts an AutoComplete query into a value which is then
 * passed to the DataSource's sendRequest method in order to retrieve data for 
-* the query. Implementers can customize this method for custom request generation.
+* the query. Implementers can customize this method for custom request syntaxes.
 * 
 * @method generateRequest
 * @param sQuery {String} Query string
@@ -699,6 +697,22 @@ YAHOO.widget.AutoComplete.prototype.getSubsetMatches = function(sQuery) {
     }
     return null;
 };
+
+/**
+ * Executed by DataSource (within DataSource scope) to handle responseStripAfter cleanup.
+ *
+ * @method preparseRawResponse
+ * @param sQuery {String} Query string.
+ * @return {Object} oParsedResponse or null. 
+ */
+YAHOO.widget.AutoComplete.prototype.preparseRawResponse = function(oRequest, oFullResponse, oCallback) {
+    var nEnd = ((this.responseStripAfter !== "") && (oFullResponse.indexOf)) ?
+        oFullResponse.indexOf(this.responseStripAfter) : -1;
+    if(nEnd != -1) {
+        oFullResponse = oFullResponse.substring(0,nEnd);
+    }
+    return oFullResponse;
+},
 
 /**
  * Executed by DataSource (within DataSource scope) to filter results through a
@@ -1681,6 +1695,9 @@ YAHOO.widget.AutoComplete.prototype._sendQuery = function(sQuery) {
         }
     }
     
+    if(this.responseStripAfter) {
+        this.dataSource.doBeforeParseData = this.preparseRawResponse;
+    }
     if(this.applyLocalFilter) {
         this.dataSource.doBeforeCallback = this.filterResults;
     }
@@ -2778,10 +2795,16 @@ YAHOO.widget.AutoComplete.prototype._onWindowUnload = function(v,oSelf) {
 // Deprecated for Backwards Compatibility
 //
 /////////////////////////////////////////////////////////////////////////////
+/**
+ * @method doBeforeSendQuery
+ * @deprecated Use generateRequest.
+ */
+YAHOO.widget.AutoComplete.prototype.doBeforeSendQuery = function(sQuery) {
+    return this.generateRequest(sQuery);
+};
 
 /**
  * @method getListItems
- * @return {HTMLElement[]} Array of &lt;li&gt; elements within the results container.
  * @deprecated Use getListEl().childNodes.
  */
 YAHOO.widget.AutoComplete.prototype.getListItems = function() {
@@ -2791,16 +2814,6 @@ YAHOO.widget.AutoComplete.prototype.getListItems = function() {
         allListItemEls[i] = els[i];
     }
     return allListItemEls;
-};
-
-/**
- * Overridable method gives implementers access to the query before it gets sent.
- *
- * @method doBeforeSendQuery
- * @deprecated Use generateRequest.
- */
-YAHOO.widget.AutoComplete.prototype.doBeforeSendQuery = function(sQuery) {
-    return this.generateRequest(sQuery);
 };
 
 
