@@ -27,8 +27,7 @@
 */
 YAHOO.widget.ContextMenu = function(p_oElement, p_oConfig) {
 
-    YAHOO.widget.ContextMenu.superclass.constructor.call(this, 
-            p_oElement, p_oConfig);
+    YAHOO.widget.ContextMenu.superclass.constructor.call(this, p_oElement, p_oConfig);
 
 };
 
@@ -187,6 +186,7 @@ init: function(p_oElement, p_oConfig) {
 
     }
     
+    this.hideEvent.subscribe(this._clearContextEventTarget);
     
     this.initEvent.fire(ContextMenu);
     
@@ -203,8 +203,7 @@ initEvents: function() {
 
     // Create custom events
 
-    this.triggerContextMenuEvent = 
-        this.createEvent(EVENT_TYPES.TRIGGER_CONTEXT_MENU);
+    this.triggerContextMenuEvent = this.createEvent(EVENT_TYPES.TRIGGER_CONTEXT_MENU);
 
     this.triggerContextMenuEvent.signature = YAHOO.util.CustomEvent.LIST;
 
@@ -225,6 +224,17 @@ cancel: function() {
 
 // Private methods
 
+/**
+* @method _clearContextEventTarget
+* @description Resets the contextEventTarget property to null when the ContextMenu is hidden.
+* @private
+*/
+_clearContextEventTarget: function () {
+
+	this.contextEventTarget = null;
+
+},
+
 
 /**
 * @method _removeEventHandlers
@@ -242,13 +252,11 @@ _removeEventHandlers: function() {
 
     if (oTrigger) {
 
-        Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, 
-            this._onTriggerContextMenu);    
+        Event.removeListener(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu);    
         
         if(YAHOO.env.ua.opera) {
         
-            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, 
-                this._onTriggerClick);
+            Event.removeListener(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick);
     
         }
 
@@ -461,8 +469,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
             support the "contextmenu" event
         */ 
   
-        Event.on(oTrigger, EVENT_TYPES.CONTEXT_MENU, 
-            this._onTriggerContextMenu, this, true);
+        Event.on(oTrigger, EVENT_TYPES.CONTEXT_MENU, this._onTriggerContextMenu, this, true);
 
 
         /*
@@ -472,8 +479,7 @@ configTrigger: function(p_sType, p_aArgs, p_oMenu) {
 
         if(YAHOO.env.ua.opera) {
         
-            Event.on(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick, 
-                this, true);
+            Event.on(oTrigger, EVENT_TYPES.CLICK, this._onTriggerClick, this, true);
 
         }
 
