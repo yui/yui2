@@ -4433,7 +4433,7 @@ clearContent: function () {
 
                 }
                 
-                this.removeItem(oItem);
+                this.removeItem(oItem, oItem.groupIndex);
 
             }
         
