@@ -3029,6 +3029,7 @@ _onParentMenuConfigChange: function (p_sType, p_aArgs, p_oSubmenu) {
         case "classname":
         case "scrollincrement":
         case "minscrollheight":
+        case "monitorresize":
 
             p_oSubmenu.cfg.setProperty(sPropertyName, oPropertyValue);
                 
@@ -3076,7 +3077,9 @@ _onParentMenuRender: function (p_sType, p_aArgs, p_oSubmenu) {
             
             minscrollheight: oParentCfg.getProperty("minscrollheight"),
             
-            iframe: oParentCfg.getProperty("iframe")
+            iframe: oParentCfg.getProperty("iframe"),
+            
+            monitorresize: oParentCfg.getProperty("monitorresize")
 
         },
         
