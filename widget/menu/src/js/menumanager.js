@@ -77,9 +77,6 @@
         m_oFocusedMenuItem = null;
     
     
-        var m_oLogger = new YAHOO.widget.LogWriter("MenuManager");
-    
-    
     
         // Private methods
     
@@ -398,18 +395,16 @@
     
                 m_oVisibleMenus[sId] = this;
                 
-                m_oLogger.log(
-                            this + 
-                            " added to the collection of visible menus.");
+                YAHOO.log(this + " added to the collection of visible menus.", 
+                	"info", "MenuManager");
             
             }
             else if (m_oVisibleMenus[sId]) {
             
                 delete m_oVisibleMenus[sId];
                 
-                m_oLogger.log( 
-                            this + 
-                            " removed from the collection of visible menus.");
+                YAHOO.log(this + " removed from the collection of visible menus.", 
+                	"info", "MenuManager");
             
             }
         
@@ -448,7 +443,7 @@
                 
                 p_oMenuItem.destroyEvent.unsubscribe(onItemDestroy);
     
-                m_oLogger.log(p_oMenuItem + " successfully unregistered.");
+                YAHOO.log(p_oMenuItem + " successfully unregistered.", "info", "MenuManager");
     
             }
 
@@ -479,7 +474,7 @@
         
                     oItem.destroyEvent.subscribe(onItemDestroy);
         
-                    m_oLogger.log(oItem + " successfully registered.");
+                    YAHOO.log(oItem + " successfully registered.", "info", "MenuManager");
         
                 }
     
@@ -525,7 +520,7 @@
     
                         m_bInitializedEventHandlers = true;
                         
-                        m_oLogger.log("DOM event handlers initialized.");
+                        YAHOO.log("DOM event handlers initialized.", "info", "MenuManager");
             
                     }
             
@@ -539,7 +534,7 @@
                     p_oMenu.focusEvent.subscribe(onMenuFocus);
                     p_oMenu.blurEvent.subscribe(onMenuBlur);
         
-                    m_oLogger.log(p_oMenu + " successfully registered.");
+                    YAHOO.log(p_oMenu + " successfully registered.", "info", "MenuManager");
         
                 }
         
@@ -586,7 +581,7 @@
 
                         delete m_oMenus[sId];
             
-                        m_oLogger.log(p_oMenu + " successfully unregistered.");
+                        YAHOO.log(p_oMenu + " successfully unregistered.", "info", "MenuManager");
         
 
                         /*
@@ -598,8 +593,8 @@
             
                             delete m_oVisibleMenus[sId];
                             
-                            m_oLogger.log(p_oMenu + " unregistered from the" + 
-                                        " collection of visible menus.");
+                            YAHOO.log(p_oMenu + " unregistered from the" + 
+                                        " collection of visible menus.", "info", "MenuManager");
        
                         }
 

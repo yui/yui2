@@ -649,9 +649,7 @@ init: function (p_oElement, p_oConfig) {
 
                 this.beforeInitEvent.fire(Menu);
 
-                this.logger = new YAHOO.widget.LogWriter(this.toString());
-
-                this.logger.log("Source element: " + this.srcElement.tagName);
+                YAHOO.log("Source element: " + this.srcElement.tagName, "info", this.toString());
     
             break;
     
@@ -673,9 +671,7 @@ init: function (p_oElement, p_oConfig) {
 
                 this.beforeInitEvent.fire(Menu);
 
-                this.logger = new YAHOO.widget.LogWriter(this.toString());
-
-                this.logger.log("Source element: " + this.srcElement.tagName);
+				YAHOO.log("Source element: " + this.srcElement.tagName, "info", this.toString());
 
             break;
 
@@ -694,10 +690,7 @@ init: function (p_oElement, p_oConfig) {
 
         this.beforeInitEvent.fire(Menu);
 
-        this.logger = new YAHOO.widget.LogWriter(this.toString());
-
-        this.logger.log("No source element found.  " +
-            "Created element with id: " + this.id);
+		YAHOO.log("No source element found.  Created element with id: " + this.id, "info", this.toString());
 
     }
 
@@ -837,7 +830,7 @@ _initSubTree: function () {
     
         oNode = null;
     
-        this.logger.log("Searching DOM for items to initialize.");
+        YAHOO.log("Searching DOM for items to initialize.", "info", this.toString());
     
 
         if (sSrcElementTagName) {
@@ -851,8 +844,8 @@ _initSubTree: function () {
         
                     if (nListElements > 0) {
         
-                        this.logger.log("Found " + nListElements + 
-                            " item groups to initialize.");
+        				YAHOO.log("Found " + nListElements + " item groups to initialize.", 
+        							"info", this.toString());
         
                         i = nListElements - 1;
         
@@ -862,17 +855,17 @@ _initSubTree: function () {
             
                             if (oNode) {
 
-                                this.logger.log("Scanning " + 
+                                YAHOO.log("Scanning " + 
                                     aListElements[i].childNodes.length + 
-                                    " child nodes for items to initialize.");
+                                    " child nodes for items to initialize.", "info", this.toString());
             
                                 do {
                 
                                     if (oNode && oNode.tagName && 
                                         oNode.tagName.toUpperCase() == "LI") {
                 
-                                        this.logger.log("Initializing " + 
-                                            oNode.tagName + " node.");
+                                        YAHOO.log("Initializing " + 
+                                            oNode.tagName + " node.", "info", this.toString());
         
                                         this.addItem(new this.ITEM_TYPE(oNode, 
                                                     { parent: this }), i);
@@ -893,9 +886,9 @@ _initSubTree: function () {
         
                 case "SELECT":
         
-                    this.logger.log("Scanning " +  
+                    YAHOO.log("Scanning " +  
                         oSrcElement.childNodes.length + 
-                        " child nodes for items to initialize.");
+                        " child nodes for items to initialize.", "info", this.toString());
         
                     oNode = oSrcElement.firstChild;
         
@@ -908,8 +901,8 @@ _initSubTree: function () {
                                 case "OPTGROUP":
                                 case "OPTION":
             
-                                    this.logger.log("Initializing " +  
-                                        oNode.tagName + " node.");
+                                    YAHOO.log("Initializing " +  
+                                        oNode.tagName + " node.", "info", this.toString());
             
                                     this.addItem(
                                             new this.ITEM_TYPE(
@@ -1096,10 +1089,10 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
                 
                 this._updateItemProperties(nGroupIndex);
         
-                this.logger.log("Item inserted." + 
+                YAHOO.log("Item inserted." + 
                     " Text: " + oGroupItem.cfg.getProperty("text") + ", " + 
                     " Index: " + oGroupItem.index + ", " + 
-                    " Group Index: " + oGroupItem.groupIndex);
+                    " Group Index: " + oGroupItem.groupIndex, "info", this.toString());
 
                 this.itemAddedEvent.fire(oGroupItem);
                 this.changeContentEvent.fire();
@@ -1144,10 +1137,10 @@ _addItemToGroup: function (p_nGroupIndex, p_oItem, p_nItemIndex) {
         
                 }
 
-                this.logger.log("Item added." + 
+                YAHOO.log("Item added." + 
                     " Text: " + oGroupItem.cfg.getProperty("text") + ", " + 
                     " Index: " + oGroupItem.index + ", " + 
-                    " Group Index: " + oGroupItem.groupIndex);
+                    " Group Index: " + oGroupItem.groupIndex, "info", this.toString());
         
 
                 this.itemAddedEvent.fire(oGroupItem);
@@ -4262,10 +4255,10 @@ removeItem: function (p_oObject, p_nGroupIndex) {
 
             oItem.destroy();
 
-            this.logger.log("Item removed." + 
+            YAHOO.log("Item removed." + 
                 " Text: " + oItem.cfg.getProperty("text") + ", " + 
                 " Index: " + oItem.index + ", " + 
-                " Group Index: " + oItem.groupIndex);
+                " Group Index: " + oItem.groupIndex, "info", this.toString());
 
             returnVal = oItem;
 
@@ -4497,7 +4490,7 @@ destroy: function () {
 
     Menu.superclass.destroy.call(this);
     
-    this.logger.log("Destroyed.");
+    YAHOO.log("Destroyed.", "info", this.toString());
 
 },
 
