@@ -163,6 +163,16 @@ TYPE_HTMLTABLE : 6,
 TYPE_SCRIPTNODE : 7,
 
 /**
+ * Type is local.
+ *
+ * @property TYPE_LOCAL
+ * @type Number
+ * @final
+ * @default 8
+ */
+TYPE_LOCAL : 8,
+
+/**
  * Error message for invalid dataresponses.
  *
  * @property ERROR_DATAINVALID
@@ -408,8 +418,16 @@ maxCacheEntries : 0,
 liveData : null,
 
 /**
- * Where the live data is held.
- *
+ * Where the live data is held:
+ * 
+ * <dl>  
+ *    <dt>TYPE_UNKNOWN</dt>
+ *    <dt>TYPE_LOCAL</dt>
+ *    <dt>TYPE_XHR</dt>
+ *    <dt>TYPE_SCRIPTNODE</dt>
+ *    <dt>TYPE_FUNCTION</dt>
+ * </dl> 
+ *  
  * @property dataType
  * @type Number
  * @default YAHOO.util.DataSourceBase.TYPE_UNKNOWN
@@ -418,14 +436,22 @@ liveData : null,
 dataType : DS.TYPE_UNKNOWN,
 
 /**
- * Format of response.
+ * Format of response:
+ *  
+ * <dl>  
+ *    <dt>TYPE_UNKNOWN</dt>
+ *    <dt>TYPE_JSARRAY</dt>
+ *    <dt>TYPE_JSON</dt>
+ *    <dt>TYPE_XML</dt>
+ *    <dt>TYPE_TEXT</dt>
+ *    <dt>TYPE_HTMLTABLE</dt> 
+ * </dl> 
  *
  * @property responseType
  * @type Number
  * @default YAHOO.util.DataSourceBase.TYPE_JSON
  */
-// changing from TYPE_UNKNOWN for backward compatibility to YAHOO.widget.DataSource
-responseType : DS.TYPE_JSON,
+responseType : DS.TYPE_JSON, // changing from TYPE_UNKNOWN for backward compatibility to YAHOO.widget.DataSource
 
 /**
  * Response schema object literal takes a combination of the following properties:
@@ -503,12 +529,11 @@ getCachedResponse : function(oRequest, oCallback, oCaller) {
                         
                         // Refresh the position of the cache hit
                         if(i < nCacheLength-1) {
-                            YAHOO.log("Refreshing cache position of the response for \"" +  oRequest + "\"", "info", this.toString());
                             // Remove element from its original location
                             aCache.splice(i,1);
-                            YAHOO.log("Cleared from cache the response for \"" +  oRequest + "\"", "info", this.toString());
                             // Add as newest
                             this.addToCache(oRequest, oResponse);
+                            YAHOO.log("Refreshed cache position of the response for \"" +  oRequest + "\"", "info", this.toString());
                         }
                         
                         // Add a cache flag
@@ -736,7 +761,7 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             if(xhr && oRawResponse.responseText) {
                 oFullResponse = oRawResponse.responseText; 
             }
-            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
+            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseArrayData(oRequest, oFullResponse);
             break;
         case DS.TYPE_JSON:
@@ -783,32 +808,32 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
             catch(e) {
             }
 
-            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
+            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseJSONData(oRequest, oFullResponse);
             break;
         case DS.TYPE_HTMLTABLE:
             if(xhr && oRawResponse.responseText) {
                 oFullResponse = oRawResponse.responseText;
             }
-            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
+            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseHTMLTableData(oRequest, oFullResponse);
             break;
         case DS.TYPE_XML:
             if(xhr && oRawResponse.responseXML) {
                 oFullResponse = oRawResponse.responseXML;
             }
-            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
+            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseXMLData(oRequest, oFullResponse);
             break;
         case DS.TYPE_TEXT:
             if(xhr && lang.isString(oRawResponse.responseText)) {
                 oFullResponse = oRawResponse.responseText;
             }
-            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
+            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseTextData(oRequest, oFullResponse);
             break;
         default:
-            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse);
+            oFullResponse = this.doBeforeParseData(oRequest, oFullResponse, oCallback);
             oParsedResponse = this.parseData(oRequest, oFullResponse);
             break;
     }
@@ -1558,21 +1583,22 @@ lang.augmentProto(DS, util.EventProvider);
  * @param oConfigs {object} (optional) Object literal of configuration values.
  */
 util.LocalDataSource = function(oLiveData, oConfigs) {
+    this.dataType = DS.TYPE_LOCAL;
+    
     if(YAHOO.lang.isArray(oLiveData)) { // array
-        this.dataType = DS.TYPE_JSARRAY;
         this.responseType = DS.TYPE_JSARRAY;
     }
     else if(oLiveData.nodeType && oLiveData.nodeType == 9) { // xml
-        this.dataType = DS.TYPE_XML;
         this.responseType = DS.TYPE_XML;
     }
     else if(oLiveData.nodeName && (oLiveData.nodeName.toLowerCase() == "table")) { // table
-        this.dataType = DS.TYPE_HTMLTABLE;
         this.responseType = DS.TYPE_HTMLTABLE;
     }    
     else if(YAHOO.lang.isObject(oLiveData)) { // json
-        this.dataType = DS.TYPE_JSON;
         this.responseType = DS.TYPE_JSON;
+    }
+    else if(YAHOO.lang.isString(oLiveData)) { // text
+        this.responseType = DS.TYPE_TEXT;
     }
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
@@ -2179,12 +2205,22 @@ lang.augmentObject(util.XHRDataSource, DS);
  * @param oConfigs {object} (optional) Object literal of configuration values.
  */
 util.DataSource = function(oLiveData, oConfigs) {
-    // Point to one of the subclasses
-    if(YAHOO.lang.isString(oLiveData)) { // string -> xhr
+    oConfigs = oConfigs || {};
+    
+    // Point to one of the subclasses -- strings are overloaded so we should look for dataType
+    if(oConfigs.dataType == DS.TYPE_SCRIPTNODE) {
+        lang.augmentObject(util.DataSource, util.XHRDataSource);
+        return new util.XHRDataSource(oLiveData, oConfigs);            
+    }
+    else if(oConfigs.dataType == DS.TYPE_LOCAL) {
+        lang.augmentObject(util.DataSource, util.LocalDataSource);
+        return new util.XHRDataSource(oLiveData, oConfigs);            
+    }
+    else if(YAHOO.lang.isString(oLiveData)) { // strings default to xhr
         lang.augmentObject(util.DataSource, util.XHRDataSource);
         return new util.XHRDataSource(oLiveData, oConfigs);
     }
-    else if(YAHOO.lang.isFunction(oLiveData)) { // function
+    else if(YAHOO.lang.isFunction(oLiveData)) {
         lang.augmentObject(util.DataSource, util.FunctionDataSource);
         return new util.FunctionDataSource(oLiveData, oConfigs);
     }

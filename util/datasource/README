@@ -7,6 +7,7 @@ DataSource Release Notes
 Implementers should access this value of using metaFields.
 * XML parsing has been updated for support of CDATA sections and long text values
 split into multiple nodes.
+* Now passing oCallback object to doBeforeCallback() and doBeforeParseData() methods.
 
 **** version 2.5.2 ****
 
