@@ -1551,7 +1551,7 @@ lang.augmentProto(DS, util.EventProvider);
  */
 
 /**
- * Fired when an error is encountered with the live data source.
+ * Fired when a data error is encountered.
  *
  * @event dataErrorEvent
  * @param oArgs.request {Object} The request object.
@@ -1722,21 +1722,13 @@ lang.extend(util.ScriptNodeDataSource, DS, {
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Alias to YUI Get Utility, to allow implementers to customize the utility.
+ * Alias to YUI Get Utility, to allow implementers to use a custom class.
  *
  * @property getUtility
  * @type Object
  * @default YAHOO.util.Get
  */
 getUtility : util.Get,
-
-/**
- * URI to the script that returns data.
- *
- * @property scriptURI
- * @type String
- */
-scriptURI : null,
 
 /**
  * Defines request/response management in the following manner:
@@ -1760,7 +1752,7 @@ asyncMode : "allowAll",
 /**
  * Callback string parameter name sent to the remote script. By default,
  * requests are sent to
- * &#60;scriptURI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
+ * &#60;URI&#62;?&#60;scriptCallbackParam&#62;=callbackFunction
  *
  * @property scriptCallbackParam
  * @type String
@@ -1927,7 +1919,7 @@ lang.extend(util.XHRDataSource, DS, {
 /////////////////////////////////////////////////////////////////////////////
 
  /**
- * Alias to YUI Connection Manager, to allow implementers to customize the utility.
+ * Alias to YUI Connection Manager, to allow implementers to use a custom class.
  *
  * @property connMgr
  * @type Object
@@ -1936,8 +1928,7 @@ lang.extend(util.XHRDataSource, DS, {
 connMgr: null,
 
  /**
- * If data is accessed over XHR via Connection Manager, this setting defines
- * request/response management in the following manner:
+ * Defines request/response management in the following manner:
  * <dl>
  *     <dt>queueRequests</dt>
  *     <dd>If a request is already in progress, wait until response is returned
@@ -1963,8 +1954,7 @@ connMgr: null,
 connXhrMode: "allowAll",
 
  /**
- * If data is accessed over XHR via Connection Manager, true if data should be
- * sent via POST, otherwise data will be sent via GET.
+ * True if data is to be sent via POST. By default, data will be sent via GET.
  *
  * @property connMethodPost
  * @type Boolean
@@ -1973,9 +1963,8 @@ connXhrMode: "allowAll",
 connMethodPost: false,
 
  /**
- * If data is accessed over XHR via Connection Manager, the connection timeout
- * defines how many  milliseconds the XHR connection will wait for a server
- * response. Any non-zero value will enable the Connection utility's
+ * The connection timeout defines how many  milliseconds the XHR connection will
+ * wait for a server response. Any non-zero value will enable the Connection Manager's
  * Auto-Abort feature.
  *
  * @property connTimeout
