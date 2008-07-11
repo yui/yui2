@@ -152,8 +152,7 @@ YAHOO.widget.AutoComplete = function(elInput,elContainer,oDataSource,oConfigs) {
         }
 
         // Default applyLocalFilter setting is to enable for local sources
-        if((this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_JSARRAY) ||
-        (this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_JSON)) {
+        if(this.dataSource.dataType === YAHOO.util.DataSourceBase.TYPE_LOCAL) {
             this.applyLocalFilter = true;
         }
         
@@ -680,21 +679,21 @@ YAHOO.widget.AutoComplete.prototype.sendQuery = function(sQuery) {
  * @return {Object} oParsedResponse or null. 
  */
 YAHOO.widget.AutoComplete.prototype.getSubsetMatches = function(sQuery) {
+    var subQuery, oCachedResponse;
     // Loop through substrings of each cached element's query property...
     for(var i = sQuery.length; i >= this.minQueryLength ; i--) {
-        var subQuery = this.generateRequest(sQuery.substr(0,i));
+        subQuery = this.generateRequest(sQuery.substr(0,i));
         this.dataRequestEvent.fire(this, subQuery);
         YAHOO.log("Searching for query subset \"" + subQuery + "\" in cache", "info", this.toString());
         
         // If a substring of the query is found in the cache
-        var oCachedResponse = this.dataSource.getCachedResponse(subQuery);
+        oCachedResponse = this.dataSource.getCachedResponse(subQuery);
         if(oCachedResponse) {
-            YAHOO.log("Found subset match for query \"" + subQuery + "\": " + YAHOO.lang.dump(oCachedResponse), "info", this.toString());
-            var oSubsetResponse = this.filterResults.apply(this.dataSource, [sQuery, oCachedResponse, oCachedResponse, {scope:this}]);
-            this.dataSource.addToCache(this.generateRequest(sQuery), oSubsetResponse);
-            return oSubsetResponse;
+            YAHOO.log("Found match for query subset \"" + subQuery + "\": " + YAHOO.lang.dump(oCachedResponse), "info", this.toString());
+            return this.filterResults.apply(this.dataSource, [sQuery, oCachedResponse, oCachedResponse, {scope:this}]);
         }
     }
+    YAHOO.log("Did not find subset match for query subset \"" + sQuery + "\"" , "info", this.toString());
     return null;
 };
 
@@ -712,7 +711,7 @@ YAHOO.widget.AutoComplete.prototype.preparseRawResponse = function(oRequest, oFu
         oFullResponse = oFullResponse.substring(0,nEnd);
     }
     return oFullResponse;
-},
+};
 
 /**
  * Executed by DataSource (within DataSource scope) to filter results through a
@@ -729,14 +728,17 @@ YAHOO.widget.AutoComplete.prototype.preparseRawResponse = function(oRequest, oFu
 YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullResponse, oParsedResponse, oCallback) {
     // Only if a query string is available to match against
     if(sQuery && sQuery !== "") {
+        // First make a copy of the oParseResponse
+        oParsedResponse = YAHOO.widget.AutoComplete._cloneObject(oParsedResponse);
+        
         var oAC = oCallback.scope,
             oDS = this,
-            allResults = oParsedResponse.results, // the array of original results
+            allResults = oParsedResponse.results, // the array of results
             filteredResults = [], // container for filtered results
             bMatchFound = false,
             bMatchCase = (oDS.queryMatchCase || oAC.queryMatchCase), // backward compat
             bMatchContains = (oDS.queryMatchContains || oAC.queryMatchContains); // backward compat
-
+            
         // Ignore case
         if(!bMatchCase) {
             sQuery = sQuery.toLowerCase();
@@ -783,7 +785,7 @@ YAHOO.widget.AutoComplete.prototype.filterResults = function(sQuery, oFullRespon
             }
         }
         oParsedResponse.results = filteredResults;
-        YAHOO.log("Filtered " + filteredResults.length + " results: " + YAHOO.lang.dump(filteredResults), "info", this.toString());
+        YAHOO.log("Filtered " + filteredResults.length + " results against query \""  + sQuery + "\": " + YAHOO.lang.dump(filteredResults), "info", this.toString());
     }
     else {
         YAHOO.log("Could not filter results against query : " + sQuery, "info", this.toString());
@@ -1795,7 +1797,7 @@ YAHOO.widget.AutoComplete.prototype._populateList = function(sQuery, oResponse, 
                     }
 
                     // The matching value, including backward compatibility for array format and safety net
-                    elListItem._sResultMatch = (YAHOO.lang.isArray(oResult)) ? oResult[0] : (oResult[sMatchKey] || "");
+                    elListItem._sResultMatch = (YAHOO.lang.isString(oResult)) ? oResult : (YAHOO.lang.isArray(oResult)) ? oResult[0] : (oResult[sMatchKey] || "");
                     elListItem._oResultData = oResult; // Additional data
                     elListItem.innerHTML = this.formatResult(oResult, sCurQuery, elListItem._sResultMatch);
                     elListItem.style.display = "";
@@ -2815,5 +2817,56 @@ YAHOO.widget.AutoComplete.prototype.getListItems = function() {
     }
     return allListItemEls;
 };
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Private static methods
+//
+/////////////////////////////////////////////////////////////////////////
+
+/**
+ * Clones object literal or array of object literals.
+ *
+ * @method AutoComplete._cloneObject
+ * @param o {Object} Object.
+ * @private
+ * @static     
+ */
+YAHOO.widget.AutoComplete._cloneObject = function(o) {
+    if(!YAHOO.lang.isValue(o)) {
+        return o;
+    }
+    
+    var copy = {};
+    
+    if(YAHOO.lang.isFunction(o)) {
+        copy = o;
+    }
+    else if(YAHOO.lang.isArray(o)) {
+        var array = [];
+        for(var i=0,len=o.length;i<len;i++) {
+            array[i] = YAHOO.widget.AutoComplete._cloneObject(o[i]);
+        }
+        copy = array;
+    }
+    else if(YAHOO.lang.isObject(o)) { 
+        for (var x in o){
+            if(YAHOO.lang.hasOwnProperty(o, x)) {
+                if(YAHOO.lang.isValue(o[x]) && YAHOO.lang.isObject(o[x]) || YAHOO.lang.isArray(o[x])) {
+                    copy[x] = YAHOO.widget.AutoComplete._cloneObject(o[x]);
+                }
+                else {
+                    copy[x] = o[x];
+                }
+            }
+        }
+    }
+    else {
+        copy = o;
+    }
+
+    return copy;
+};
+
 
 
