@@ -9,9 +9,10 @@ the following YAHOO.widget.DataSource properties have been ported to YAHOO.widge
    - queryMatchContains
    - queryMatchSubset
 
-* The YAHOO.widget.DS_XHR properties scriptQueryParam and scriptQueryAppend
-have been deprecated in favor of the new customizeable YAHOO.widget.AutoComplete
-method generateRequest.
+* The following YAHOO.widget.DS_XHR properties have been deprecated in favor of
+the new customizeable YAHOO.widget.AutoComplete method generateRequest:
+   - scriptQueryParam
+   - scriptQueryAppend
 
 * The YAHOO.widget.DS_XHR property responseStripAfter has been deprecated in favor
 of the new customizeable YAHOO.util.DataSource method doBeforeParseData.
