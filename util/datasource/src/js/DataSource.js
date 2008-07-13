@@ -451,7 +451,7 @@ dataType : DS.TYPE_UNKNOWN,
  * @type Number
  * @default YAHOO.util.DataSourceBase.TYPE_JSON
  */
-responseType : DS.TYPE_JSON, // changing from TYPE_UNKNOWN for backward compatibility to YAHOO.widget.DataSource
+responseType : DS.TYPE_UNKNOWN, // changing from TYPE_UNKNOWN for backward compatibility to YAHOO.widget.DataSource
 
 /**
  * Response schema object literal takes a combination of the following properties:
@@ -755,6 +755,39 @@ handleResponse : function(oRequest, oRawResponse, oCallback, oCaller, tId) {
     var xhr = (this.dataType == DS.TYPE_XHR) ? true : false;
     var oParsedResponse = null;
     var oFullResponse = oRawResponse;
+    
+    // Try to sniff data type if it has not been defined
+    if(this.responseType === DS.TYPE_UNKNOWN) {
+        var ctype = (oRawResponse.getResponseHeader) ? oRawResponse.getResponseHeader["Content-Type"] : null;
+        if(ctype) {
+            if(ctype.indexOf("text/xml") > -1) { // xml
+                this.responseType = DS.TYPE_XML;
+            }
+            else if(ctype.indexOf("application/json") > -1) { // json
+                this.responseType = DS.TYPE_JSON;
+            }
+            else if(ctype.indexOf("text/plain") > -1) { // text
+                this.responseType = DS.TYPE_TEXT;
+            }
+        }
+        else {
+            if(YAHOO.lang.isArray(oRawResponse)) { // array
+                this.responseType = DS.TYPE_JSARRAY;
+            }
+            else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+                this.responseType = DS.TYPE_XML;
+            }
+            else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
+                this.responseType = DS.TYPE_HTMLTABLE;
+            }    
+            else if(YAHOO.lang.isObject(oRawResponse)) { // json
+                this.responseType = DS.TYPE_JSON;
+            }
+            else if(YAHOO.lang.isString(oRawResponse)) { // text
+                this.responseType = DS.TYPE_TEXT;
+            }
+        }
+    }
 
     switch(this.responseType) {
         case DS.TYPE_JSARRAY:
@@ -1121,7 +1154,6 @@ parseTextData : function(oRequest, oFullResponse) {
  */
 parseXMLData : function(oRequest, oFullResponse) {
     var bError = false,
-        // TODO: Backwards compatibility
         schema = this.responseSchema,
         oParsedResponse = {meta:{}},
         xmlList = null,
@@ -1638,7 +1670,7 @@ lang.augmentObject(util.LocalDataSource, DS);
  */
 util.FunctionDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_JSFUNCTION;
-    this.responseType = DS.TYPE_JSARRAY;
+    //this.responseType = DS.TYPE_JSARRAY;
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
@@ -1670,6 +1702,25 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     // forward the return value to the handler
     var oRawResponse = this.liveData(oRequest);
     
+    // Try to sniff data type if it has not been defined
+    if(this.responseType === DS.TYPE_UNKNOWN) {
+        if(YAHOO.lang.isArray(oRawResponse)) { // array
+            this.responseType = DS.TYPE_JSARRAY;
+        }
+        else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+            this.responseType = DS.TYPE_XML;
+        }
+        else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
+            this.responseType = DS.TYPE_HTMLTABLE;
+        }    
+        else if(YAHOO.lang.isObject(oRawResponse)) { // json
+            this.responseType = DS.TYPE_JSON;
+        }
+        else if(YAHOO.lang.isString(oRawResponse)) { // text
+            this.responseType = DS.TYPE_TEXT;
+        }
+    }
+
     this.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
     return tId;
 }
@@ -1708,6 +1759,7 @@ lang.augmentObject(util.FunctionDataSource, DS);
  */
 util.ScriptNodeDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_SCRIPTNODE;
+    //this.responseType = DS.TYPE_JSON;
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
@@ -1780,7 +1832,8 @@ generateRequestCallback : function(id) {
 },
 
 /**
- * TODO: Overriding method passes query and callback to Get Utility?
+ * Overriding method passes query to Get Utility. The returned
+ * response is then forwarded to the handleResponse function.
  *
  * @method makeConnection
  * @param oRequest {Object} Request object.
@@ -1807,6 +1860,26 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     util.ScriptNodeDataSource.callbacks[id] = function(oRawResponse) {
         if((oSelf.asyncMode !== "ignoreStaleResponses")||
                 (id === util.ScriptNodeDataSource.callbacks.length-1)) { // Must ignore stale responses
+                
+            // Try to sniff data type if it has not been defined
+            if(oSelf.responseType === DS.TYPE_UNKNOWN) {
+                if(YAHOO.lang.isArray(oRawResponse)) { // array
+                    oSelf.responseType = DS.TYPE_JSARRAY;
+                }
+                else if(oRawResponse.nodeType && oRawResponse.nodeType == 9) { // xml
+                    oSelf.responseType = DS.TYPE_XML;
+                }
+                else if(oRawResponse.nodeName && (oRawResponse.nodeName.toLowerCase() == "table")) { // table
+                    oSelf.responseType = DS.TYPE_HTMLTABLE;
+                }    
+                else if(YAHOO.lang.isObject(oRawResponse)) { // json
+                    oSelf.responseType = DS.TYPE_JSON;
+                }
+                else if(YAHOO.lang.isString(oRawResponse)) { // text
+                    oSelf.responseType = DS.TYPE_TEXT;
+                }
+            }
+
             oSelf.handleResponse(oRequest, oRawResponse, oCallback, oCaller, tId);
         }
         else {
@@ -1905,6 +1978,7 @@ callbacks : []
  */
 util.XHRDataSource = function(oLiveData, oConfigs) {
     this.dataType = DS.TYPE_XHR;
+    this.connMgr = this.connMgr || util.Connect;
     
     this.constructor.superclass.constructor.call(this, oLiveData, oConfigs); 
 };
@@ -1980,7 +2054,7 @@ connTimeout: 0,
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Overriding method passes query to Connection manager. The returned
+ * Overriding method passes query to Connection Manager. The returned
  * response is then forwarded to the handleResponse function.
  *
  * @method makeConnection
@@ -1999,7 +2073,7 @@ makeConnection : function(oRequest, oCallback, oCaller) {
     // pass the request in as a URL query and
     // forward the response to the handler
     var oSelf = this;
-    var oConnMgr = this.connMgr || util.Connect;
+    var oConnMgr = this.connMgr;
     var oQueue = this._oQueue;
 
     /**
@@ -2025,13 +2099,27 @@ makeConnection : function(oRequest, oCallback, oCaller) {
             YAHOO.log(DS.ERROR_DATANULL, "error", this.toString());
 
             // Send error response back to the caller with the error flag on
-            // TODO: should this send oResponse, considering the fork?
             DS.issueCallback(oCallback,[oRequest, {error:true}], true, oCaller);
 
             return null;
         }
         // Forward to handler
         else {
+            // Try to sniff data type if it has not been defined
+            if(this.responseType === DS.TYPE_UNKNOWN) {
+                var ctype = (oResponse.getResponseHeader) ? oResponse.getResponseHeader["Content-Type"] : null;
+                if(ctype) {
+                    if(ctype.indexOf("text/xml") > -1) { // xml
+                        this.responseType = DS.TYPE_XML;
+                    }
+                    else if(ctype.indexOf("application/json") > -1) { // json
+                        this.responseType = DS.TYPE_JSON;
+                    }
+                    else if(ctype.indexOf("text/plain") > -1) { // text
+                        this.responseType = DS.TYPE_TEXT;
+                    }
+                }
+            }
             this.handleResponse(oRequest, oResponse, oCallback, oCaller, tId);
         }
     };
