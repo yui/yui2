@@ -428,6 +428,12 @@ var Dom = YAHOO.util.Dom,
         _setBackgroundPosition: function(l, t) {
             var bl = parseInt(Dom.getStyle(this._resize.get('element'), 'borderLeftWidth'), 10);
             var bt = parseInt(Dom.getStyle(this._resize.get('element'), 'borderTopWidth'), 10);
+            if (isNaN(bl)) {
+                bl = 0;
+            }
+            if (isNaN(bt)) {
+                bt = 0;
+            }
             var mask = this._resize.getWrapEl().firstChild;
             var pos = (l - bl) + 'px ' + (t - bt) + 'px';
             this._resizeMaskEl.style.backgroundPosition = pos;
