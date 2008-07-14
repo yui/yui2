@@ -976,8 +976,8 @@ parseData : function(oRequest, oFullResponse) {
 parseArrayData : function(oRequest, oFullResponse) {
     if(lang.isArray(oFullResponse)) {
         var results = [],
-            i,
-            rec;
+            i, j,
+            rec, field, data;
         
         // Parse for fields
         if(lang.isArray(this.responseSchema.fields)) {
@@ -1001,9 +1001,9 @@ parseArrayData : function(oRequest, oFullResponse) {
                 var oResult = {};
                 rec = oFullResponse[i];
                 if (typeof rec === 'object') {
-                    for(var j=fields.length-1; j>-1; j--) {
-                        var field = fields[j];
-                        var data = arrType ? rec[j] : rec[field.key];
+                    for(j=fields.length-1; j>-1; j--) {
+                        field = fields[j];
+                        data = arrType ? rec[j] : rec[field.key];
 
                         if (parsers[field.key]) {
                             data = parsers[field.key].call(this,data);
@@ -1017,12 +1017,29 @@ parseArrayData : function(oRequest, oFullResponse) {
                         oResult[field.key] = data;
                     }
                 }
+                else if (lang.isString(rec)) {
+                    for(j=fields.length-1; j>-1; j--) {
+                        field = fields[j];
+                        data = rec;
+
+                        if (parsers[field.key]) {
+                            data = parsers[field.key].call(this,data);
+                        }
+
+                        // Safety measure
+                        if(data === undefined) {
+                            data = null;
+                        }
+
+                        oResult[field.key] = data;
+                    }                
+                }
                 results[i] = oResult;
             }    
         }
         // Return entire data set
         else {
-            // Why is this needed?
+            //TODO: Why is this needed?
             /*for(i=oFullResponse.length-1; i>-1; i--) {
                 rec = oFullResponse[i];
                 if (!lang.isArray(rec) && (typeof rec !== 'object')) {

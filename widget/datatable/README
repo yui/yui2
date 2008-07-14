@@ -17,9 +17,7 @@ have been made:
    
 * Pagination and sorting have been reworked to better support dynamically driven
 DataTables. As a result, the following important changes have been made:
-    - Removed backward compatibility support for the "paginated" Attribute and
-   the object literal "paginator" Attribute value. Implementers must use the Paginator
-   class to populate the "paginator" Attribute.
+    - Removed support for "magic meta" fields
     - The following APIs have been removed:
         * "paginationEventHandler" Attribute
         * handleSimplePagination()
@@ -33,6 +31,9 @@ DataTables. As a result, the following important changes have been made:
         * "dynamicData" Attribute
     - The following APIs have been changed:
         * onPaginatorChange() has been renamed to onPaginatorChangeRequest()
+    - Removed backward compatibility support for the "paginated" Attribute and
+   the object literal "paginator" Attribute value. Implementers must use the Paginator
+   class to populate the "paginator" Attribute.
 
 * The following APIs have been changed from static class properties to instance
 Attributes, to be set via the initial config or myDataTable.set():

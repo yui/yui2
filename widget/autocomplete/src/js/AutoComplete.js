@@ -428,9 +428,7 @@ YAHOO.widget.AutoComplete.prototype.forceSelection = false;
 YAHOO.widget.AutoComplete.prototype.allowBrowserAutocomplete = true;
 
 /**
- * Whether or not the results container should always be displayed.
- * Enabling this feature displays the container when the widget is instantiated
- * and prevents the toggling of the container to a collapsed state.
+ * Enabling this feature prevents the toggling of the container to a collapsed state. 
  *
  * @property alwaysShowContainer
  * @type Boolean
