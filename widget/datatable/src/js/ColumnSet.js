@@ -146,17 +146,9 @@ YAHOO.widget.ColumnSet.prototype = {
                 // Instantiate a new Column for each node
                 var oColumn = new YAHOO.widget.Column(currentNode);
                 
-                // Assign unique ID to Column and cross-reference it back to the
-                // original object literal definition
-                currentNode.yuiColumnId = oColumn._sId = YAHOO.widget.Column._nCount + "";
+                // Cross-reference Column ID back to the original object literal definition
+                currentNode.yuiColumnId = oColumn._sId;
                 
-                // Assign a key if not found
-                if(!YAHOO.lang.isValue(oColumn.key)) {
-                    oColumn.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
-                }
-                // Increment counter
-                YAHOO.widget.Column._nCount++;
-
                 // Add the new Column to the flat list
                 flat.push(oColumn);
 
@@ -511,6 +503,8 @@ YAHOO.widget.ColumnSet.prototype = {
  * @param oConfigs {Object} Object literal of definitions.
  */
 YAHOO.widget.Column = function(oConfigs) {
+    this._sId = "yui-col" + YAHOO.widget.Column._nCount;
+    
     // Object literal defines Column attributes
     if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
         for(var sConfig in oConfigs) {
@@ -518,7 +512,16 @@ YAHOO.widget.Column = function(oConfigs) {
                 this[sConfig] = oConfigs[sConfig];
             }
         }
-   }
+    }
+
+    // Assign a key if not found
+    if(!YAHOO.lang.isValue(this.key)) {
+        this.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
+    }
+    
+    // Increment counter
+    YAHOO.widget.Column._nCount++;
+
     // Backward compatibility
     if(this.width && !YAHOO.lang.isNumber(this.width)) {
         this.width = null;

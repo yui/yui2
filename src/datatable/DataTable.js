@@ -1868,12 +1868,12 @@ _initColumnSet : function(aColumnDefs) {
             oColumn = this._oColumnSet.keys[i];
             DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
-                //oColumn.editor.unsubscribe("showEvent", this._onEditorShowEvent, this, true);
-                //oColumn.editor.unsubscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
-                //oColumn.editor.unsubscribe("revertEvent", this._onEditorRevertEvent, this, true);
-                //oColumn.editor.unsubscribe("saveEvent", this._onEditorSaveEvent, this, true);
-                //oColumn.editor.unsubscribe("cancelEvent", this._onEditorCancelEvent, this, true);
-                //oColumn.editor.unsubscribe("blurEvent", this._onEditorBlurEvent, this, true);
+                oColumn.editor.unsubscribe("showEvent", this._onEditorShowEvent);
+                oColumn.editor.unsubscribe("keydownEvent", this._onEditorKeydownEvent);
+                oColumn.editor.unsubscribe("revertEvent", this._onEditorRevertEvent);
+                oColumn.editor.unsubscribe("saveEvent", this._onEditorSaveEvent);
+                oColumn.editor.unsubscribe("cancelEvent", this._onEditorCancelEvent);
+                oColumn.editor.unsubscribe("blurEvent", this._onEditorBlurEvent);
             }
         }
         
@@ -1898,11 +1898,11 @@ _initColumnSet : function(aColumnDefs) {
         oColumn = allKeys[i];
         if(oColumn.editor) {
             oColumn.editor.subscribe("showEvent", this._onEditorShowEvent);
-            oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
-            oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent, this, true);
-            oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent, this, true);
-            oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent, this, true);
-            oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent, this, true);
+            oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent);
+            oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent);
+            oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent);
+            oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent);
+            oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent);
         }
     }
 },
@@ -2651,6 +2651,7 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     // Resizeable
     if(oColumn.resizeable) {
         allClasses[allClasses.length] = DT.CLASS_RESIZEABLE;
+        allClasses[allClasses.length] = this.getId() + "-" +oColumn.getId();
     }
     // Editable
     if(oColumn.editor) {
@@ -3126,7 +3127,7 @@ _onDocumentClick : function(e, oSelf) {
             // Only if the click was not within the CellEditor container
             if(!Dom.isAncestor(elContainer, elTarget) &&
                     (elContainer.id !== elTarget.id)) {
-                oSelf._oCellEditor.fireEvent("blurEvent");
+                oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
             }
         }
     }
@@ -3530,7 +3531,7 @@ _onTbodyKeydown : function(e, oSelf) {
     }
     
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent");
+        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
     }
 
     var elTarget = Ev.getTarget(e);
@@ -3592,7 +3593,7 @@ _onTableKeypress : function(e, oSelf) {
 _onTheadClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent");
+        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
     }
 
     var elTarget = Ev.getTarget(e);
@@ -3660,7 +3661,7 @@ _onTheadClick : function(e, oSelf) {
 _onTbodyClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent");
+        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
     }
 
     // Fire Custom Events
@@ -5221,7 +5222,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
     // We have a STYLE node to update
     if(s) {
         // Unique classname for this Column instance
-        var sClassname = "." + this.getId() + "-col-" +oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
+        var sClassname = "." + this.getId() + "-" + oColumn.getId() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
@@ -9117,54 +9118,60 @@ destroyCellEditor : function() {
  * Passes through showEvent of the active CellEditor.
  *
  * @method _onEditorShowEvent
+ * @param oArgs {Object}  Custom Event args.
  */
-_onEditorShowEvent : function(a, b, c) {
-    this.fireEvent("editorShowEvent");
+_onEditorShowEvent : function(oArgs) {
+    this.fireEvent("editorShowEvent", oArgs);
 },
 
 /**
  * Passes through keydownEvent of the active CellEditor.
+ * @param oArgs {Object}  Custom Event args. 
  *
  * @method _onEditorKeydownEvent
  */
-_onEditorKeydownEvent : function(a, b, c) {
-    this.fireEvent("editorKeydownEvent");
+_onEditorKeydownEvent : function(oArgs) {
+    this.fireEvent("editorKeydownEvent", oArgs);
 },
 
 /**
  * Passes through revertEvent of the active CellEditor.
  *
  * @method _onEditorRevertEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorRevertEvent : function(a, b, c) {
-    this.fireEvent("editorRevertEvent");
+_onEditorRevertEvent : function(oArgs) {
+    this.fireEvent("editorRevertEvent", oArgs);
 },
 
 /**
  * Passes through saveEvent of the active CellEditor.
  *
  * @method _onEditorSaveEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorSaveEvent : function(a, b, c) {
-    this.fireEvent("editorSaveEvent");
+_onEditorSaveEvent : function(oArgs) {
+    this.fireEvent("editorSaveEvent", oArgs);
 },
 
 /**
  * Passes through cancelEvent of the active CellEditor.
  *
  * @method _onEditorCancelEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorCancelEvent : function(a, b, c) {
-    this.fireEvent("editorCancelEvent");
+_onEditorCancelEvent : function(oArgs) {
+    this.fireEvent("editorCancelEvent", oArgs);
 },
 
 /**
  * Passes through blurEvent of the active CellEditor.
  *
  * @method _onEditorBlurEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorBlurEvent : function(a, b, c) {
-    this.fireEvent("editorBlurEvent");
+_onEditorBlurEvent : function(oArgs) {
+    this.fireEvent("editorBlurEvent", oArgs);
 },
 
 

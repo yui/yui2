@@ -309,17 +309,9 @@ YAHOO.widget.ColumnSet.prototype = {
                 // Instantiate a new Column for each node
                 var oColumn = new YAHOO.widget.Column(currentNode);
                 
-                // Assign unique ID to Column and cross-reference it back to the
-                // original object literal definition
-                currentNode.yuiColumnId = oColumn._sId = YAHOO.widget.Column._nCount + "";
+                // Cross-reference Column ID back to the original object literal definition
+                currentNode.yuiColumnId = oColumn._sId;
                 
-                // Assign a key if not found
-                if(!YAHOO.lang.isValue(oColumn.key)) {
-                    oColumn.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
-                }
-                // Increment counter
-                YAHOO.widget.Column._nCount++;
-
                 // Add the new Column to the flat list
                 flat.push(oColumn);
 
@@ -674,6 +666,8 @@ YAHOO.widget.ColumnSet.prototype = {
  * @param oConfigs {Object} Object literal of definitions.
  */
 YAHOO.widget.Column = function(oConfigs) {
+    this._sId = "yui-col" + YAHOO.widget.Column._nCount;
+    
     // Object literal defines Column attributes
     if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
         for(var sConfig in oConfigs) {
@@ -681,7 +675,16 @@ YAHOO.widget.Column = function(oConfigs) {
                 this[sConfig] = oConfigs[sConfig];
             }
         }
-   }
+    }
+
+    // Assign a key if not found
+    if(!YAHOO.lang.isValue(this.key)) {
+        this.key = "yui-dt-col" + YAHOO.widget.Column._nCount;
+    }
+    
+    // Increment counter
+    YAHOO.widget.Column._nCount++;
+
     // Backward compatibility
     if(this.width && !YAHOO.lang.isNumber(this.width)) {
         this.width = null;
@@ -6338,12 +6341,12 @@ _initColumnSet : function(aColumnDefs) {
             oColumn = this._oColumnSet.keys[i];
             DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
             if(oColumn.editor) {
-                //oColumn.editor.unsubscribe("showEvent", this._onEditorShowEvent, this, true);
-                //oColumn.editor.unsubscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
-                //oColumn.editor.unsubscribe("revertEvent", this._onEditorRevertEvent, this, true);
-                //oColumn.editor.unsubscribe("saveEvent", this._onEditorSaveEvent, this, true);
-                //oColumn.editor.unsubscribe("cancelEvent", this._onEditorCancelEvent, this, true);
-                //oColumn.editor.unsubscribe("blurEvent", this._onEditorBlurEvent, this, true);
+                oColumn.editor.unsubscribe("showEvent", this._onEditorShowEvent);
+                oColumn.editor.unsubscribe("keydownEvent", this._onEditorKeydownEvent);
+                oColumn.editor.unsubscribe("revertEvent", this._onEditorRevertEvent);
+                oColumn.editor.unsubscribe("saveEvent", this._onEditorSaveEvent);
+                oColumn.editor.unsubscribe("cancelEvent", this._onEditorCancelEvent);
+                oColumn.editor.unsubscribe("blurEvent", this._onEditorBlurEvent);
             }
         }
         
@@ -6368,11 +6371,11 @@ _initColumnSet : function(aColumnDefs) {
         oColumn = allKeys[i];
         if(oColumn.editor) {
             oColumn.editor.subscribe("showEvent", this._onEditorShowEvent);
-            oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
-            oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent, this, true);
-            oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent, this, true);
-            oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent, this, true);
-            oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent, this, true);
+            oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent);
+            oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent);
+            oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent);
+            oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent);
+            oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent);
         }
     }
 },
@@ -7121,6 +7124,7 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     // Resizeable
     if(oColumn.resizeable) {
         allClasses[allClasses.length] = DT.CLASS_RESIZEABLE;
+        allClasses[allClasses.length] = this.getId() + "-" +oColumn.getId();
     }
     // Editable
     if(oColumn.editor) {
@@ -7596,7 +7600,7 @@ _onDocumentClick : function(e, oSelf) {
             // Only if the click was not within the CellEditor container
             if(!Dom.isAncestor(elContainer, elTarget) &&
                     (elContainer.id !== elTarget.id)) {
-                oSelf._oCellEditor.fireEvent("blurEvent");
+                oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
             }
         }
     }
@@ -8000,7 +8004,7 @@ _onTbodyKeydown : function(e, oSelf) {
     }
     
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent");
+        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
     }
 
     var elTarget = Ev.getTarget(e);
@@ -8062,7 +8066,7 @@ _onTableKeypress : function(e, oSelf) {
 _onTheadClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent");
+        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
     }
 
     var elTarget = Ev.getTarget(e);
@@ -8130,7 +8134,7 @@ _onTheadClick : function(e, oSelf) {
 _onTbodyClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf._oCellEditor.fireEvent("blurEvent");
+        oSelf._oCellEditor.fireEvent("blurEvent", {editor: oSelf._oCellEditor});
     }
 
     // Fire Custom Events
@@ -9691,7 +9695,7 @@ _setColumnWidthDynStyles : function(oColumn, sWidth, sOverflow) {
     // We have a STYLE node to update
     if(s) {
         // Unique classname for this Column instance
-        var sClassname = "." + this.getId() + "-col-" +oColumn.getSanitizedKey() + " ." + DT.CLASS_LINER;
+        var sClassname = "." + this.getId() + "-" + oColumn.getId() + " ." + DT.CLASS_LINER;
         
         // Hide for performance
         if(this._elTbody) {
@@ -13587,54 +13591,60 @@ destroyCellEditor : function() {
  * Passes through showEvent of the active CellEditor.
  *
  * @method _onEditorShowEvent
+ * @param oArgs {Object}  Custom Event args.
  */
-_onEditorShowEvent : function(a, b, c) {
-    this.fireEvent("editorShowEvent");
+_onEditorShowEvent : function(oArgs) {
+    this.fireEvent("editorShowEvent", oArgs);
 },
 
 /**
  * Passes through keydownEvent of the active CellEditor.
+ * @param oArgs {Object}  Custom Event args. 
  *
  * @method _onEditorKeydownEvent
  */
-_onEditorKeydownEvent : function(a, b, c) {
-    this.fireEvent("editorKeydownEvent");
+_onEditorKeydownEvent : function(oArgs) {
+    this.fireEvent("editorKeydownEvent", oArgs);
 },
 
 /**
  * Passes through revertEvent of the active CellEditor.
  *
  * @method _onEditorRevertEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorRevertEvent : function(a, b, c) {
-    this.fireEvent("editorRevertEvent");
+_onEditorRevertEvent : function(oArgs) {
+    this.fireEvent("editorRevertEvent", oArgs);
 },
 
 /**
  * Passes through saveEvent of the active CellEditor.
  *
  * @method _onEditorSaveEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorSaveEvent : function(a, b, c) {
-    this.fireEvent("editorSaveEvent");
+_onEditorSaveEvent : function(oArgs) {
+    this.fireEvent("editorSaveEvent", oArgs);
 },
 
 /**
  * Passes through cancelEvent of the active CellEditor.
  *
  * @method _onEditorCancelEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorCancelEvent : function(a, b, c) {
-    this.fireEvent("editorCancelEvent");
+_onEditorCancelEvent : function(oArgs) {
+    this.fireEvent("editorCancelEvent", oArgs);
 },
 
 /**
  * Passes through blurEvent of the active CellEditor.
  *
  * @method _onEditorBlurEvent
+ * @param oArgs {Object}  Custom Event args.  
  */
-_onEditorBlurEvent : function(a, b, c) {
-    this.fireEvent("editorBlurEvent");
+_onEditorBlurEvent : function(oArgs) {
+    this.fireEvent("editorBlurEvent", oArgs);
 },
 
 
@@ -16318,19 +16328,17 @@ var lang   = YAHOO.lang,
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
 widget.BaseCellEditor = function(sType, oConfigs) {
-    this._sId = "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
+    this._sId = this._sId || "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
     this.type = sType;
-
+    
     // Validate inputs
-    var ok = this._init(oConfigs);
-    if(ok) {        
-        // Draw UI
-        this.render();
-    }
-
-    else {
-        YAHOO.log("CellEditor not initialized","error",this.toString());
-    }
+    this._initConfigs(oConfigs); 
+    
+    // Create Custom Events
+    this._initEvents();
+             
+    // Draw UI
+    this.render();
 };
 
 var BCE = widget.BaseCellEditor;
@@ -16393,13 +16401,12 @@ _sId : null,
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Initialization sequence
+ * Initialize configs.
  *
- * @method _init
- * @return {Boolean} True if successful
+ * @method _initConfigs
  * @private   
  */
-_init : function(oConfigs) {
+_initConfigs : function(oConfigs) {
     // Object literal defines CellEditor configs
     if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
         for(var sConfig in oConfigs) {
@@ -16408,10 +16415,22 @@ _init : function(oConfigs) {
             }
         }
     }
-    
-    return true;
 },
 
+/**
+ * Initialize Custom Events.
+ *
+ * @method _initEvents
+ * @private   
+ */
+_initEvents : function() {
+    this.createEvent("showEvent");
+    this.createEvent("keydownEvent");
+    this.createEvent("revertEvent");
+    this.createEvent("saveEvent");
+    this.createEvent("cancelEvent");
+    this.createEvent("blurEvent");
+},
 
 
 
@@ -16717,23 +16736,24 @@ show : function() {
  */
 save : function() {
     // Get new value
-    var newValue = this.getInputValue();
+    var inputValue = this.getInputValue();
+    var validValue = inputValue;
     
     // Validate new value
     if(this.validator) {
-        newValue = this.validator.call(this.dataTable, newValue, this.value, this);
-        if(newValue === null ) {
+        validValue = this.validator.call(this.dataTable, inputValue, this.value, this);
+        if(validValue === null ) {
             this.resetForm();
             this.fireEvent("revertEvent",
-                    {editor:this, oldData:this.value, newData:newValue});
+                    {editor:this, oldData:this.value, newData:inputValue});
             YAHOO.log("Could not save Cell Editor input due to invalid data " +
-                    lang.dump(newValue), "warn", this.toString());
+                    lang.dump(inputValue), "warn", this.toString());
             return;
         }
     }
     
     // Update new value
-    this.dataTable.updateCell(this.record, this.column, newValue);
+    this.dataTable.updateCell(this.record, this.column, validValue);
     
     // Hide CellEditor
     this.container.style.display = "none";
@@ -16741,7 +16761,7 @@ save : function() {
     this.dataTable._oCellEditor =  null;
     
     this.fireEvent("saveEvent",
-            {editor:this, oldData:this.value, newData:newValue});
+            {editor:this, oldData:this.value, newData:validValue});
     YAHOO.log("Cell Editor input saved", "info", this.toString());
 },
 
