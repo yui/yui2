@@ -498,7 +498,11 @@ _initBdThEl : function(elTh, oColumn) {
     elTh.id = this.getId()+"-th-" + oColumn.getSanitizedKey(); // Needed for accessibility
     elTh.rowSpan = oColumn.getRowspan();
     elTh.colSpan = oColumn.getColspan();
-    
+    // Assign abbr attribute
+    if(oColumn.abbr) {
+        elTh.abbr = oColumn.abbr;
+    }
+
     ///TODO: strip links and form elements
     var sKey = oColumn.getKey();
     var sLabel = lang.isValue(oColumn.label) ? oColumn.label : sKey;

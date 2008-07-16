@@ -2289,7 +2289,7 @@ lang.augmentObject(util.XHRDataSource, DS);
 /****************************************************************************/
 
 /**
- * Factory class for creating a DataSource subclass instance.
+ * Factory class for creating a BaseDataSource subclass instance.
  *
  * @namespace YAHOO.util
  * @class DataSource

@@ -662,7 +662,10 @@ lang.augmentObject(DT, {
         
         var copy = {};
         
-        if(lang.isFunction(o)) {
+        if(o instanceof YAHOO.widget.BaseCellEditor) {
+            copy = o;
+        }
+        else if(lang.isFunction(o)) {
             copy = o;
         }
         else if(lang.isArray(o)) {
@@ -760,7 +763,7 @@ lang.augmentObject(DT, {
             // Attribute has not yet been set
             if(oNewSortedBy === null) {
                 // Force the Column's default sort direction
-                sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS.DESC)) ?
+                sSortDir = (oColumn.sortOptions && oColumn.sortOptions.defaultDir && (oColumn.sortOptions.defaultDir === DT.CLASS_DESC)) ?
                     "descending" : "ascending";
 
             }
@@ -1161,103 +1164,6 @@ initAttributes : function(oConfigs) {
     });
 
     /**
-    * @attribute initialRequest
-    * @description Defines the initial request that gets sent to the DataSource
-    * during initialization. Value is ignored if initialLoad is set to any value
-    * other than true.    
-    * @type MIXED
-    * @default null
-    */
-    this.setAttributeConfig("initialRequest", {
-        value: null
-    });
-
-    /**
-    * @attribute initialLoad
-    * @description Determines whether or not to load data at instantiation. By
-    * default, will trigger a sendRequest() to the DataSource and pass in the
-    * request defined by initialRequest. If set to false, data will not load
-    * at instantiation. Alternatively, implementers who wish to work with a 
-    * custom payload may pass in an object literal with the following values:
-    *     
-    *    <dl>
-    *      <dt>request (MIXED)</dt>
-    *      <dd>Request value.</dd>
-    *
-    *      <dt>argument (MIXED)</dt>
-    *      <dd>Custom data that will be passed through to the callback function.</dd>
-    *    </dl>
-    *
-    *                    
-    * @type Boolean | Object
-    * @default true
-    */
-    this.setAttributeConfig("initialLoad", {
-        value: true
-    });
-    
-    /**
-    * @attribute dynamicData
-    * @description If true, sorting and pagination are relegated to the DataSource
-    * for handling, using the request returned by the "generateRequest" function.
-    * Each new DataSource response blows away all previous Records. False by default, so 
-    * sorting and pagination will be handled directly on the client side, without
-    * causing any new requests for data from the DataSource.
-    * @type Boolean
-    * @default true
-    */
-    this.setAttributeConfig("dynamicData", {
-        value: false,
-        validator: lang.isBoolean
-    });
-
-    /*
-    * @attribute generateRequest
-    * @description A function that converts an object literal of desired DataTable
-    * states into a value which is then passed to the DataSource's sendRequest
-    * method in order to retrieve data for those states. This function is passed
-    * an object literal of state data and a reference to the DataTable instance:
-    *     
-    * <dl>
-    *   <dt>pagination<dt>
-    *   <dd>        
-    *         <dt></dt>
-    *         <dd></dd>
-    *         <dt></dt>
-    *         <dd></dd>
-    *   </dd>
-    *   <dt>sortedBy</dt>
-    *   <dd>                
-    *         <dt>key</dt>
-    *         <dd>{String} Key of sorted Column</dd>
-    *         <dt>dir</dt>
-    *         <dd>{String} Sort direction, either YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTable.CLASS_DESC</dd>
-    *   </dd>
-    *   <dt>self</dt>
-    *   <dd>The DataTable instance</dd>
-    * </dl>
-    * @type function
-    * @default HTMLFunction
-    */
-    this.setAttributeConfig("generateRequest", {
-        value: function(oState, oSelf) {
-            // Set defaults
-            oState = oState || {pagination:null, sortedBy:null};
-            var sort = (oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey();
-            var dir = (oState.sortedBy && oState.sortedBy.dir === DT.CLASS_DESC) ? "desc" : "asc";
-            var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
-            var results = (oState.pagination) ? oState.pagination.rowsPerPage : null;
-            
-            // Build the request
-            return  "sort=" + sort +
-                    "&dir=" + dir +
-                    "&startIndex=" + startIndex +
-                    ((results !== null) ? "&results=" + results : "");
-        },
-        validator: lang.isFunction
-    });
-
-    /**
     * @attribute sortedBy
     * @description Object literal provides metadata for initial sort values if
     * data will arrive pre-sorted:
@@ -1430,6 +1336,103 @@ initAttributes : function(oConfigs) {
          value: 0, 	 
          validator: lang.isNumber 	 
      }); 	 
+
+    /*
+    * @attribute generateRequest
+    * @description A function that converts an object literal of desired DataTable
+    * states into a value which is then passed to the DataSource's sendRequest
+    * method in order to retrieve data for those states. This function is passed
+    * an object literal of state data and a reference to the DataTable instance:
+    *     
+    * <dl>
+    *   <dt>pagination<dt>
+    *   <dd>        
+    *         <dt></dt>
+    *         <dd></dd>
+    *         <dt></dt>
+    *         <dd></dd>
+    *   </dd>
+    *   <dt>sortedBy</dt>
+    *   <dd>                
+    *         <dt>key</dt>
+    *         <dd>{String} Key of sorted Column</dd>
+    *         <dt>dir</dt>
+    *         <dd>{String} Sort direction, either YAHOO.widget.DataTable.CLASS_ASC or YAHOO.widget.DataTable.CLASS_DESC</dd>
+    *   </dd>
+    *   <dt>self</dt>
+    *   <dd>The DataTable instance</dd>
+    * </dl>
+    * @type function
+    * @default HTMLFunction
+    */
+    this.setAttributeConfig("generateRequest", {
+        value: function(oState, oSelf) {
+            // Set defaults
+            oState = oState || {pagination:null, sortedBy:null};
+            var sort = (oState.sortedBy) ? oState.sortedBy.key : oSelf.getColumnSet().keys[0].getKey();
+            var dir = (oState.sortedBy && oState.sortedBy.dir === DT.CLASS_DESC) ? "desc" : "asc";
+            var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
+            var results = (oState.pagination) ? oState.pagination.rowsPerPage : null;
+            
+            // Build the request
+            return  "sort=" + sort +
+                    "&dir=" + dir +
+                    "&startIndex=" + startIndex +
+                    ((results !== null) ? "&results=" + results : "");
+        },
+        validator: lang.isFunction
+    });
+
+    /**
+    * @attribute initialRequest
+    * @description Defines the initial request that gets sent to the DataSource
+    * during initialization. Value is ignored if initialLoad is set to any value
+    * other than true.    
+    * @type MIXED
+    * @default null
+    */
+    this.setAttributeConfig("initialRequest", {
+        value: null
+    });
+
+    /**
+    * @attribute initialLoad
+    * @description Determines whether or not to load data at instantiation. By
+    * default, will trigger a sendRequest() to the DataSource and pass in the
+    * request defined by initialRequest. If set to false, data will not load
+    * at instantiation. Alternatively, implementers who wish to work with a 
+    * custom payload may pass in an object literal with the following values:
+    *     
+    *    <dl>
+    *      <dt>request (MIXED)</dt>
+    *      <dd>Request value.</dd>
+    *
+    *      <dt>argument (MIXED)</dt>
+    *      <dd>Custom data that will be passed through to the callback function.</dd>
+    *    </dl>
+    *
+    *                    
+    * @type Boolean | Object
+    * @default true
+    */
+    this.setAttributeConfig("initialLoad", {
+        value: true
+    });
+    
+    /**
+    * @attribute dynamicData
+    * @description If true, sorting and pagination are relegated to the DataSource
+    * for handling, using the request returned by the "generateRequest" function.
+    * Each new DataSource response blows away all previous Records. False by default, so 
+    * sorting and pagination will be handled directly on the client side, without
+    * causing any new requests for data from the DataSource.
+    * @type Boolean
+    * @default true
+    */
+    this.setAttributeConfig("dynamicData", {
+        value: false,
+        validator: lang.isBoolean
+    });
 
     /**
      * @attribute MSG_EMPTY 	 
@@ -1637,7 +1640,7 @@ _oColumnSet : null,
 _oRecordSet : null,
 
 /**
- * Current CellEditor instance for the DataTable instance.
+ * The active CellEditor instance for the DataTable instance.
  *
  * @property _oCellEditor
  * @type YAHOO.widget.CellEditor
@@ -1844,7 +1847,6 @@ _repaintWebkit : (ua.webkit) ?
 _initConfigs : function(oConfigs) {
     if(!oConfigs || !lang.isObject(oConfigs)) {
         oConfigs = {};
-        YAHOO.log("Invalid configs", "warn", this.toString());
     }
     this._oConfigs = oConfigs;
 },
@@ -1857,10 +1859,22 @@ _initConfigs : function(oConfigs) {
  * @private
  */
 _initColumnSet : function(aColumnDefs) {
+    var oColumn, i, l;
+    
     if(this._oColumnSet) {
-        // First clear _oDynStyles for existing ColumnSet
-        for(var i=0, l=this._oColumnSet.keys.length; i<l; i++) {
-            DT._oDynStyles["."+this.getId()+"-col"+this._oColumnSet.keys[i].getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
+        // First clear _oDynStyles for existing ColumnSet and
+        // uregister CellEditor Custom Events
+        for(i=0, l=this._oColumnSet.keys.length; i<l; i++) {
+            oColumn = this._oColumnSet.keys[i];
+            DT._oDynStyles["."+this.getId()+"-col"+oColumn.getSanitizedKey()+" ."+DT.CLASS_LINER] = undefined;
+            if(oColumn.editor) {
+                //oColumn.editor.unsubscribe("showEvent", this._onEditorShowEvent, this, true);
+                //oColumn.editor.unsubscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
+                //oColumn.editor.unsubscribe("revertEvent", this._onEditorRevertEvent, this, true);
+                //oColumn.editor.unsubscribe("saveEvent", this._onEditorSaveEvent, this, true);
+                //oColumn.editor.unsubscribe("cancelEvent", this._onEditorCancelEvent, this, true);
+                //oColumn.editor.unsubscribe("blurEvent", this._onEditorBlurEvent, this, true);
+            }
         }
         
         this._oColumnSet = null;
@@ -1878,7 +1892,19 @@ _initColumnSet : function(aColumnDefs) {
         "warn", this.toString());
     }
 
-
+    // Register CellEditor Custom Events
+    var allKeys = this._oColumnSet.keys;
+    for(i=0, l=allKeys.length; i<l; i++) {
+        oColumn = allKeys[i];
+        if(oColumn.editor) {
+            oColumn.editor.subscribe("showEvent", this._onEditorShowEvent);
+            oColumn.editor.subscribe("keydownEvent", this._onEditorKeydownEvent, this, true);
+            oColumn.editor.subscribe("revertEvent", this._onEditorRevertEvent, this, true);
+            oColumn.editor.subscribe("saveEvent", this._onEditorSaveEvent, this, true);
+            oColumn.editor.subscribe("cancelEvent", this._onEditorCancelEvent, this, true);
+            oColumn.editor.subscribe("blurEvent", this._onEditorBlurEvent, this, true);
+        }
+    }
 },
 
 /**
@@ -2226,11 +2252,11 @@ _initTheadEl : function(elTable) {
         var aLastHeaders = oColumnSet.headers[oColumnSet.headers.length-1];
         for(i=0; i<aFirstHeaders.length; i++) {
             //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th"+aFirstHeaders[i]), DT.CLASS_FIRST);
+            Dom.addClass(Dom.get(this._sId+"-th-"+aFirstHeaders[i]), DT.CLASS_FIRST);
         }
         for(i=0; i<aLastHeaders.length; i++) {
             //TODO: A better way to get th cell
-            Dom.addClass(Dom.get(this._sId+"-th"+aLastHeaders[i]), DT.CLASS_LAST);
+            Dom.addClass(Dom.get(this._sId+"-th-"+aLastHeaders[i]), DT.CLASS_LAST);
         }
         
         YAHOO.log("TH cells for " + this._oColumnSet.keys.length + " keys created","info",this.toString());
@@ -2275,6 +2301,10 @@ _initThEl : function(elTh, oColumn) {
     var elThLabel = elThLiner.appendChild(document.createElement("span"));
     elThLabel.className = DT.CLASS_LABEL;    
 
+    // Assign abbr attribute
+    if(oColumn.abbr) {
+        elTh.abbr = oColumn.abbr;
+    }
     // Clear minWidth on hidden Columns
     if(oColumn.hidden) {
         this._clearMinWidth(oColumn);
@@ -2599,7 +2629,7 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     }
     
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
-    allClasses[allClasses.length] = this.getId() + "-col-" +oColumn.getSanitizedKey();
+    allClasses[allClasses.length] = "yui-dt-col-" +oColumn.getSanitizedKey();
 
     var isSortedBy = this.get("sortedBy") || {};
     // Sorted
@@ -2856,7 +2886,7 @@ _deleteTrEl : function(row) {
  * Removes the class YAHOO.widget.DataTable.CLASS_FIRST from the first TR element
  * of the DataTable page and updates internal tracker.
  *
- * @method _setFirstRow
+ * @method _unsetFirstRow
  * @private
  */
 _unsetFirstRow : function() {
@@ -3096,7 +3126,7 @@ _onDocumentClick : function(e, oSelf) {
             // Only if the click was not within the CellEditor container
             if(!Dom.isAncestor(elContainer, elTarget) &&
                     (elContainer.id !== elTarget.id)) {
-                oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+                oSelf._oCellEditor.fireEvent("blurEvent");
             }
         }
     }
@@ -3500,7 +3530,7 @@ _onTbodyKeydown : function(e, oSelf) {
     }
     
     if(oSelf._oCellEditor) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        oSelf._oCellEditor.fireEvent("blurEvent");
     }
 
     var elTarget = Ev.getTarget(e);
@@ -3562,7 +3592,7 @@ _onTableKeypress : function(e, oSelf) {
 _onTheadClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        oSelf._oCellEditor.fireEvent("blurEvent");
     }
 
     var elTarget = Ev.getTarget(e);
@@ -3630,7 +3660,7 @@ _onTheadClick : function(e, oSelf) {
 _onTbodyClick : function(e, oSelf) {
     // This blurs the CellEditor
     if(oSelf._oCellEditor) {
-        oSelf.fireEvent("editorBlurEvent", {editor:oSelf._oCellEditor});
+        oSelf._oCellEditor.fireEvent("blurEvent");
     }
 
     // Fire Custom Events
@@ -9018,22 +9048,20 @@ showCellEditor : function(elCell) {
     if(elCell) {
         var oColumn = this.getColumn(elCell);
         if(oColumn && oColumn.editor) {
-            // Clean up current CellEditor
+            // Clean up active CellEditor
             if(this._oCellEditor) {
                 this._oCellEditor.cancel();
             }
-            // Get or create CellEditor
-            var oCellEditor = oColumn._oCellEditor;
-            if(!oCellEditor) {
-                oCellEditor = new YAHOO.widget.CellEditor(this, elCell, oColumn.editor, oColumn.editorOptions);
-                oColumn._oCellEditor = oCellEditor;
-            }
-            oCellEditor.setCell(elCell);
-            oCellEditor.move();
-            var ok = this.doBeforeShowCellEditor(oCellEditor);
+            // Get CellEditor
+            var oCellEditor = oColumn.editor;
+            var ok = oCellEditor.attach(this, elCell);
             if(ok) {
-                oCellEditor.show();
-                this._oCellEditor = oCellEditor;
+                oCellEditor.move();
+                ok = this.doBeforeShowCellEditor(oCellEditor);
+                if(ok) {
+                    oCellEditor.show();
+                    this._oCellEditor = oCellEditor;
+                }
             }
         }
     }
@@ -9043,7 +9071,7 @@ showCellEditor : function(elCell) {
  * Overridable abstract method to customize CellEditor before showing.
  *
  * @method doBeforeShowCellEditor
- * @param oCellEditor {Object} CellEditor instance.
+ * @param oCellEditor {YAHOO.widget.CellEditor} The CellEditor instance.
  * @return {Boolean} Return true to continue showing CellEditor.
  */
 doBeforeShowCellEditor : function(oCellEditor) {
@@ -9062,7 +9090,7 @@ saveCellEditor : function() {
 },
 
 /**
- * Cancels Cell Editor.
+ * Cancels active CellEditor.
  *
  * @method cancelCellEditor
  */
@@ -9084,6 +9112,62 @@ destroyCellEditor : function() {
         this._oCellEditor = null;
     }   
 },
+
+/**
+ * Passes through showEvent of the active CellEditor.
+ *
+ * @method _onEditorShowEvent
+ */
+_onEditorShowEvent : function(a, b, c) {
+    this.fireEvent("editorShowEvent");
+},
+
+/**
+ * Passes through keydownEvent of the active CellEditor.
+ *
+ * @method _onEditorKeydownEvent
+ */
+_onEditorKeydownEvent : function(a, b, c) {
+    this.fireEvent("editorKeydownEvent");
+},
+
+/**
+ * Passes through revertEvent of the active CellEditor.
+ *
+ * @method _onEditorRevertEvent
+ */
+_onEditorRevertEvent : function(a, b, c) {
+    this.fireEvent("editorRevertEvent");
+},
+
+/**
+ * Passes through saveEvent of the active CellEditor.
+ *
+ * @method _onEditorSaveEvent
+ */
+_onEditorSaveEvent : function(a, b, c) {
+    this.fireEvent("editorSaveEvent");
+},
+
+/**
+ * Passes through cancelEvent of the active CellEditor.
+ *
+ * @method _onEditorCancelEvent
+ */
+_onEditorCancelEvent : function(a, b, c) {
+    this.fireEvent("editorCancelEvent");
+},
+
+/**
+ * Passes through blurEvent of the active CellEditor.
+ *
+ * @method _onEditorBlurEvent
+ */
+_onEditorBlurEvent : function(a, b, c) {
+    this.fireEvent("editorBlurEvent");
+},
+
+
 
 
 
@@ -9403,10 +9487,9 @@ onEventShowCellEditor : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to save Cell Editor input.
+ * Overridable custom event handler to save active CellEditor input.
  *
  * @method onEventSaveCellEditor
- * @param oArgs.editor {Object} Cell Editor object literal.
  */
 onEventSaveCellEditor : function(oArgs) {
     if(this._oCellEditor) {
@@ -9415,10 +9498,9 @@ onEventSaveCellEditor : function(oArgs) {
 },
 
 /**
- * Overridable custom event handler to cancel Cell Editor.
+ * Overridable custom event handler to cancel active CellEditor.
  *
  * @method onEventCancelCellEditor
- * @param oArgs.editor {Object} Cell Editor object literal.
  */
 onEventCancelCellEditor : function(oArgs) {
     if(this._oCellEditor) {
@@ -10294,50 +10376,50 @@ _handleDataReturnPayload : function (oRequest, oResponse, oPayload) {
      */
 
     /**
-     * Fired when an Editor is activated.
+     * Fired when a CellEditor is shown.
      *
      * @event editorShowEvent
-     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
      */
 
     /**
-     * Fired when an active Editor has a keydown.
+     * Fired when a CellEditor has a keydown.
      *
      * @event editorKeydownEvent
-     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
      * @param oArgs.event {HTMLEvent} The event object.
      */
 
     /**
-     * Fired when Editor input is reverted.
+     * Fired when a CellEditor input is reverted.
      *
      * @event editorRevertEvent
-     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
      * @param oArgs.newData {Object} New data value from form input field.
      * @param oArgs.oldData {Object} Old data value.
      */
 
     /**
-     * Fired when Editor input is saved.
+     * Fired when a CellEditor input is saved.
      *
      * @event editorSaveEvent
-     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
      * @param oArgs.newData {Object} New data value from form input field.
      * @param oArgs.oldData {Object} Old data value.
      */
 
     /**
-     * Fired when Editor input is canceled.
+     * Fired when a CellEditor input is canceled.
      *
      * @event editorCancelEvent
-     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
      */
 
     /**
-     * Fired when an active Editor has a blur.
+     * Fired when a CellEditor has a blur event.
      *
      * @event editorBlurEvent
-     * @param oArgs.editor {Object} The Editor object literal.
+     * @param oArgs.editor {YAHOO.widget.CellEditor} The CellEditor instance.
      */
 
 

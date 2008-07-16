@@ -9,25 +9,28 @@ var lang   = YAHOO.lang,
     Ev     = util.Event,
     
     DT     = widget.DataTable;
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
     
 /**
  * The BaseCellEditor class provides base functionality common to all inline cell
  * editors for a DataTable widget.
  *
  * @namespace YAHOO.widget
- * @class CellEditor
+ * @class BaseCellEditor
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 
  * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
-widget.BaseCellEditor = function(oDataTable, elCell, sType, oConfigs) {
+widget.BaseCellEditor = function(sType, oConfigs) {
     this._sId = "yui-ceditor" + YAHOO.widget.BaseCellEditor._nCount++;
     this.type = sType;
 
     // Validate inputs
-    var ok = this._init.apply(this, arguments);
+    var ok = this._init(oConfigs);
     if(ok) {        
         // Draw UI
         this.render();
@@ -104,46 +107,7 @@ _sId : null,
  * @return {Boolean} True if successful
  * @private   
  */
-_init : function(oDataTable, elCell, sType, oConfigs) {
-    // Validate DataTable
-    if(oDataTable instanceof YAHOO.widget.DataTable) {
-        this.dataTable = oDataTable;
-    }
-    else {
-        YAHOO.log("Could not create CellEditor due to invalid DataTable","error",this.toString());
-        return false;
-    }    
-    
-    // Validate cell
-    elCell = oDataTable.getTdEl(elCell);
-    if(elCell) {
-        this.cell = elCell;
-    }
-    else {
-        YAHOO.log("Could not create CellEditor due to invalid cell","error",this.toString());
-        return false;
-    }
-
-    // Validate Column
-    var oColumn = oDataTable.getColumn(elCell);
-    if(oColumn && oColumn.editor) {
-        this.column = oColumn;
-    }
-    else {
-        YAHOO.log("Could not create CellEditor due to invalid Column","error",this.toString());
-        return false;
-    }
-
-    // Validate Record
-    var oRecord = oDataTable.getRecord(elCell);
-    if(oRecord) {
-        this.record = oRecord;
-    }
-    else {
-        YAHOO.log("Could not create CellEditor due to invalid Record","error",this.toString());
-        return false;
-    }
-
+_init : function(oConfigs) {
     // Object literal defines CellEditor configs
     if(oConfigs && YAHOO.lang.isObject(oConfigs)) {
         for(var sConfig in oConfigs) {
@@ -155,6 +119,7 @@ _init : function(oDataTable, elCell, sType, oConfigs) {
     
     return true;
 },
+
 
 
 
@@ -311,7 +276,8 @@ getId : function() {
  * @method destroy
  */
 destroy : function() {
-    this.column._oCellEditor = null;
+    this.unsubscribeAll();
+    this.column.editor = null;
     var elContainer = this.container;
     Ev.purgeElement(elContainer, true);
     elContainer.parentNode.removeChild(elContainer);
@@ -320,10 +286,10 @@ destroy : function() {
 /**
  * Renders DOM elements and attaches event listeners.
  *
- * @method save
+ * @method render
  */
 render : function() {
-    // Attach Cell Editor container element as first child of body
+    // Render Cell Editor container element as first child of body
     var elContainer = document.createElement("div");
     elContainer.id = this.getId() + "-container"; // Needed for tracking blur event
     elContainer.style.display = "none";
@@ -339,7 +305,7 @@ render : function() {
             oSelf.cancel();
             ///oSelf.focusTbodyEl();
         }
-        oSelf.dataTable.fireEvent("editorKeydownEvent", {editor:this, event:e});
+        oSelf.fireEvent("keydownEvent", {editor:this, event:e});
     }, this);
     
     this.renderForm();
@@ -377,18 +343,35 @@ renderBtns : function() {
 },
 
 /**
- * Set CellEditor to reference a new cell.
+ * Attach CellEditor for a new interaction.
  *
- * @method update
+ * @method attach
  */
-setCell : function(elCell) {
-    // Validate cell
-    elCell = this.dataTable.getTdEl(elCell);
-    if(elCell) {
-        this.cell = elCell;
-        this.record = this.dataTable.getRecord(elCell);
-        this.value = this.record.getData(this.column.getKey()) || this.defaultValue;
+attach : function(oDataTable, elCell) {
+    // Validate 
+    if(oDataTable instanceof YAHOO.widget.DataTable) {
+        this.dataTable = oDataTable;
+        
+        // Validate cell
+        elCell = oDataTable.getTdEl(elCell);
+        if(elCell) {
+            this.cell = elCell;
+
+            // Validate Column
+            var oColumn = oDataTable.getColumn(elCell);
+            if(oColumn) {
+                this.column = oColumn;
+                
+                // Validate Record
+                this.record = oDataTable.getRecord(elCell);
+                this.value = this.record.getData(this.column.getKey()) || this.defaultValue;
+                
+                return true;
+            }            
+        }
     }
+    YAHOO.log("Could not attach CellEditor","error",this.toString());
+    return false;
 },
 
 /**
@@ -424,14 +407,14 @@ move : function() {
 /**
  * Displays CellEditor UI in the correct position.
  *
- * @method save
+ * @method show
  */
 show : function() {
     this.resetForm();
     this.isActive = true;
     this.container.style.display = "";
     this.focus();
-    this.dataTable.fireEvent("editorShowEvent", {editor:this});
+    this.fireEvent("showEvent", {editor:this});
     YAHOO.log("CellEditor shown", "info", this.toString()); 
 },
 
@@ -449,7 +432,7 @@ save : function() {
         newValue = this.validator.call(this.dataTable, newValue, this.value, this);
         if(newValue === null ) {
             this.resetForm();
-            this.dataTable.fireEvent("editorRevertEvent",
+            this.fireEvent("revertEvent",
                     {editor:this, oldData:this.value, newData:newValue});
             YAHOO.log("Could not save Cell Editor input due to invalid data " +
                     lang.dump(newValue), "warn", this.toString());
@@ -465,7 +448,7 @@ save : function() {
     this.isActive = false;
     this.dataTable._oCellEditor =  null;
     
-    this.dataTable.fireEvent("editorSaveEvent",
+    this.fireEvent("saveEvent",
             {editor:this, oldData:this.value, newData:newValue});
     YAHOO.log("Cell Editor input saved", "info", this.toString());
 },
@@ -480,7 +463,7 @@ cancel : function() {
         this.container.style.display = "none";
         this.isActive = false;
         this.dataTable._oCellEditor =  null;
-        this.dataTable.fireEvent("editorCancelEvent", {editor:this});
+        this.fireEvent("cancelEvent", {editor:this});
         YAHOO.log("CellEditor canceled", "info", this.toString());
     }
     else {
@@ -500,7 +483,7 @@ renderForm : function() {
 /**
  * Resets CellEditor UI to initial state.
  *
- * @method reset
+ * @method resetForm
  */
 resetForm : function() {
     // To be implemented by subclass
@@ -509,7 +492,7 @@ resetForm : function() {
 /**
  * Sets focus in CellEditor.
  *
- * @method save
+ * @method focus
  */
 focus : function() {
     // To be implemented by subclass
@@ -526,112 +509,88 @@ getInputValue : function() {
 
 };
 
-
-
-
-
-
-
+lang.augmentProto(BCE, util.EventProvider);
 
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// XXXCellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
-
-widget.XXXCellEditor = function(oDataTable, elCell, sType, oConfigs) {
-    this._sId = "yui-xxxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, oDataTable, elCell, sType, oConfigs); 
-};
-
-// XXXCellEditor extends BaseCellEditor
-lang.extend(widget.XXXCellEditor, BCE, {
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// XXXCellEditor public properties
-//
-/////////////////////////////////////////////////////////////////////////////
-/**
- * Reference to XXX element.
- *
- * @property XXX
- * @type HTMLElement
- */
-xxx : null,
-
-/**
- * Default value.
- *
- * @property defaultValue
- * @type xxx
- * @default null
- */
-defaultValue : null,
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// XXXCellEditor public methods
+// Custom Events
 //
 /////////////////////////////////////////////////////////////////////////////
 
 /**
- * Render a form with input(s) type=xxx.
+ * Fired when a CellEditor is shown.
  *
- * @method renderForm
+ * @event showEvent
  */
-renderForm : function() {
-    // To be implemented by subclass
-},
 
 /**
- * Resets XXXCellEditor UI to initial state.
+ * Fired when a CellEditor has a keydown.
  *
- * @method reset
+ * @event keydownEvent
+ * @param oArgs.event {HTMLEvent} The event object.
  */
-resetForm : function() {
-    // To be implemented by subclass
-},
 
 /**
- * Sets focus in XXXCellEditor.
+ * Fired when a CellEditor input is reverted.
  *
- * @method save
+ * @event revertEvent
+ * @param oArgs.newData {Object} New data value from form input field.
+ * @param oArgs.oldData {Object} Old data value.
  */
-focus : function() {
-    // To be impmlemented by subclass
-},
 
 /**
- * Retrieves input value from XXXCellEditor.
+ * Fired when a CellEditor input is saved.
  *
- * @method getInputValue
+ * @event saveEvent
+ * @param oArgs.newData {Object} New data value from form input field.
+ * @param oArgs.oldData {Object} Old data value.
  */
-getInputValue : function() {
-    // To be implemented by subclass
-}
 
-});
+/**
+ * Fired when a CellEditor input is canceled.
+ *
+ * @event cancelEvent
+ */
 
-// Copy static members to XXXCellEditor class
-lang.augmentObject(widget.XXXCellEditor, BCE);
+/**
+ * Fired when a CellEditor has a blur event.
+ *
+ * @event blurEvent
+ */
 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CheckboxCellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
 
-widget.CheckboxCellEditor = function(oDataTable, elCell, sType, oConfigs) {
+
+
+
+
+
+
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+    
+/**
+ * The CheckboxCellEditor class provides functionality for inline editing
+ * DataTable cell data with checkboxes.
+ *
+ * @namespace YAHOO.widget
+ * @class CheckboxCellEditor
+ * @constructor
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
+ * @param elCell {HTMLElement} TD element. 
+ * @param sType {String} Editor type.
+ * @param oConfigs {Object} (Optional) Object literal of configs.
+ */
+widget.CheckboxCellEditor = function(oConfigs) {
     this._sId = "yui-checkboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, oDataTable, elCell, sType, oConfigs); 
+    this.constructor.superclass.constructor.call(this, "checkbox", oConfigs); 
 };
 
 // CheckboxCellEditor extends BaseCellEditor
@@ -723,7 +682,7 @@ renderForm : function() {
 /**
  * Resets CheckboxCellEditor UI to initial state.
  *
- * @method reset
+ * @method resetForm
  */
 resetForm : function() {
     // Normalize to array
@@ -743,7 +702,7 @@ resetForm : function() {
 /**
  * Sets focus in CheckboxCellEditor.
  *
- * @method save
+ * @method focus
  */
 focus : function() {
     this.checkboxes[0].focus();
@@ -776,15 +735,25 @@ lang.augmentObject(widget.CheckboxCellEditor, BCE);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DateCellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
-
-widget.DateCellEditor = function(oDataTable, elCell, sType, oConfigs) {
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+    
+/**
+ * The DataCellEditor class provides functionality for inline editing
+ * DataTable cell data with a YUI Calendar.
+ *
+ * @namespace YAHOO.widget
+ * @class DateCellEditor
+ * @constructor
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
+ * @param elCell {HTMLElement} TD element. 
+ * @param sType {String} Editor type.
+ * @param oConfigs {Object} (Optional) Object literal of configs.
+ */
+widget.DateCellEditor = function(oConfigs) {
     this._sId = "yui-dateceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, oDataTable, elCell, sType, oConfigs); 
+    this.constructor.superclass.constructor.call(this, "date", oConfigs); 
 };
 
 // CheckboxCellEditor extends BaseCellEditor
@@ -860,7 +829,7 @@ renderForm : function() {
 /**
  * Resets DateCellEditor UI to initial state.
  *
- * @method reset
+ * @method resetForm
  */
 resetForm : function() {
     var value = this.value;
@@ -872,7 +841,7 @@ resetForm : function() {
 /**
  * Sets focus in DateCellEditor.
  *
- * @method save
+ * @method focus
  */
 focus : function() {
     // To be impmlemented by subclass
@@ -900,15 +869,23 @@ lang.augmentObject(widget.DateCellEditor, BCE);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// DropdownCellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
-
-widget.DropdownCellEditor = function(oDataTable, elCell, sType, oConfigs) {
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+    
+/**
+ * The DropdownCellEditor class provides functionality for inline editing
+ * DataTable cell data a SELECT element.
+ *
+ * @namespace YAHOO.widget
+ * @class DropdownCellEditor
+ * @constructor
+ * @param sType {String} Editor type.
+ * @param oConfigs {Object} (Optional) Object literal of configs.
+ */
+widget.DropdownCellEditor = function(oConfigs) {
     this._sId = "yui-dropdownceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, oDataTable, elCell, sType, oConfigs); 
+    this.constructor.superclass.constructor.call(this, "dropdown", oConfigs); 
 };
 
 // DropdownCellEditor extends BaseCellEditor
@@ -941,31 +918,32 @@ dropdown : null,
  */
 renderForm : function() {
     var elDropdown = this.container.appendChild(document.createElement("select"));
-    var dropdownOptions = (this.column.editorOptions && lang.isArray(this.column.editorOptions.dropdownOptions)) ?
-            this.column.editorOptions.dropdownOptions : [];
-    for(var i=0, j=dropdownOptions.length; i<j; i++) {
-        var dropdownOption = dropdownOptions[i];
-        var elOption = document.createElement("option");
-        elOption.value = (lang.isValue(dropdownOption.value)) ?
-                dropdownOption.value : dropdownOption;
-        elOption.innerHTML = (lang.isValue(dropdownOption.text)) ?
-                dropdownOption.text : dropdownOption;
-        elOption = elDropdown.appendChild(elOption);
-    }
     this.dropdown = elDropdown;
     
-    // Save on blur
-    if(this.disableBtns) {
-        Ev.addListener(elDropdown, "blur", function(v){
-            this.save();
-        }, this, true);        
+    if(lang.isArray(this.dropdownOptions)) {
+        for(var i=0, j=this.dropdownOptions.length; i<j; i++) {
+            var dropdownOption = this.dropdownOptions[i];
+            var elOption = document.createElement("option");
+            elOption.value = (lang.isValue(dropdownOption.value)) ?
+                    dropdownOption.value : dropdownOption;
+            elOption.innerHTML = (lang.isValue(dropdownOption.text)) ?
+                    dropdownOption.text : dropdownOption;
+            elOption = elDropdown.appendChild(elOption);
+        }
+        
+        // Save on blur
+        if(this.disableBtns) {
+            Ev.addListener(elDropdown, "change", function(v){
+                this.save();
+            }, this, true);        
+        }
     }
 },
 
 /**
  * Resets DropdownCellEditor UI to initial state.
  *
- * @method reset
+ * @method resetForm
  */
 resetForm : function() {
     for(var i=0, j=this.dropdown.options.length; i<j; i++) {
@@ -978,7 +956,7 @@ resetForm : function() {
 /**
  * Sets focus in DropdownCellEditor.
  *
- * @method save
+ * @method focus
  */
 focus : function() {
     this.dataTable._focusEl(this.dropdown);
@@ -1003,15 +981,25 @@ lang.augmentObject(widget.DropdownCellEditor, BCE);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// RadioCellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
-
-widget.RadioCellEditor = function(oDataTable, elCell, sType, oConfigs) {
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+    
+/**
+ * The RadioCellEditor class provides functionality for inline editing
+ * DataTable cell data with radio buttons.
+ *
+ * @namespace YAHOO.widget
+ * @class RadioCellEditor
+ * @constructor
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
+ * @param elCell {HTMLElement} TD element. 
+ * @param sType {String} Editor type.
+ * @param oConfigs {Object} (Optional) Object literal of configs.
+ */
+widget.RadioCellEditor = function(oConfigs) {
     this._sId = "yui-radioceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, oDataTable, elCell, sType, oConfigs); 
+    this.constructor.superclass.constructor.call(this, "radio", oConfigs); 
 };
 
 // RadioCellEditor extends BaseCellEditor
@@ -1033,7 +1021,7 @@ radios : null,
 /**
  * Array of radio values.
  *
- * @property radios
+ * @property radioOptions
  * @type String[]
  */
 radioOptions : null,
@@ -1104,7 +1092,7 @@ renderForm : function() {
 /**
  * Resets RadioCellEditor UI to initial state.
  *
- * @method reset
+ * @method resetForm
  */
 resetForm : function() {
     for(var i=0, j=this.radios.length; i<j; i++) {
@@ -1119,7 +1107,7 @@ resetForm : function() {
 /**
  * Sets focus in RadioCellEditor.
  *
- * @method save
+ * @method focus
  */
 focus : function() {
     for(var i=0, j=this.radios.length; i<j; i++) {
@@ -1153,15 +1141,25 @@ lang.augmentObject(widget.RadioCellEditor, BCE);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// TextareaCellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
-
-widget.TextareaCellEditor = function(oDataTable, elCell, sType, oConfigs) {
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+    
+/**
+ * The TextareaCellEditor class provides functionality for inline editing
+ * DataTable cell data with a TEXTAREA element.
+ *
+ * @namespace YAHOO.widget
+ * @class TextareaCellEditor
+ * @constructor
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
+ * @param elCell {HTMLElement} TD element. 
+ * @param sType {String} Editor type.
+ * @param oConfigs {Object} (Optional) Object literal of configs.
+ */
+widget.TextareaCellEditor = function(oConfigs) {
     this._sId = "yui-textareaceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, oDataTable, elCell, sType, oConfigs); 
+    this.constructor.superclass.constructor.call(this, "textarea", oConfigs); 
 };
 
 // TextareaCellEditor extends BaseCellEditor
@@ -1194,8 +1192,6 @@ textarea : null,
  */
 renderForm : function() {
     var elTextarea = this.container.appendChild(document.createElement("textarea"));
-    elTextarea.style.width = this.cell.offsetWidth + "px"; //(parseInt(elCell.offsetWidth,10)) + "px";
-    elTextarea.style.height = "3em"; //(parseInt(elCell.offsetHeight,10)) + "px";
     this.textarea = elTextarea;
 
     // Save on blur
@@ -1208,9 +1204,20 @@ renderForm : function() {
 },
 
 /**
+ * Moves TextareaCellEditor UI to a cell.
+ *
+ * @method move
+ */
+move : function() {
+    this.textarea.style.width = this.cell.offsetWidth + "px";
+    this.textarea.style.height = "3em";
+    YAHOO.widget.TextareaCellEditor.superclass.move.call(this);
+},
+
+/**
  * Resets TextareaCellEditor UI to initial state.
  *
- * @method reset
+ * @method resetForm
  */
 resetForm : function() {
     this.textarea.value = this.value;
@@ -1219,7 +1226,7 @@ resetForm : function() {
 /**
  * Sets focus in TextareaCellEditor.
  *
- * @method save
+ * @method focus
  */
 focus : function() {
     this.textarea.focus();
@@ -1248,15 +1255,25 @@ lang.augmentObject(widget.TextareaCellEditor, BCE);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// TextboxCellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
-
-widget.TextboxCellEditor = function(oDataTable, elCell, sType, oConfigs) {
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+    
+/**
+ * The TextboxCellEditor class provides functionality for inline editing
+ * DataTable cell data with an INPUT TYPE=TEXT element.
+ *
+ * @namespace YAHOO.widget
+ * @class TextboxCellEditor
+ * @constructor
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
+ * @param elCell {HTMLElement} TD element. 
+ * @param sType {String} Editor type.
+ * @param oConfigs {Object} (Optional) Object literal of configs.
+ */
+widget.TextboxCellEditor = function(oConfigs) {
     this._sId = "yui-textboxceditor" + YAHOO.widget.BaseCellEditor._nCount++;
-    this.constructor.superclass.constructor.call(this, oDataTable, elCell, sType, oConfigs); 
+    this.constructor.superclass.constructor.call(this, "textbox", oConfigs); 
 };
 
 // TextboxCellEditor extends BaseCellEditor
@@ -1295,7 +1312,6 @@ renderForm : function() {
         elTextbox = this.container.appendChild(document.createElement("input"));
     }
     elTextbox.type = "text";
-    elTextbox.style.width = this.cell.offsetWidth + "px";
     this.textbox = elTextbox;
 
     // Save on enter
@@ -1318,9 +1334,19 @@ renderForm : function() {
 },
 
 /**
+ * Moves TextboxCellEditor UI to a cell.
+ *
+ * @method move
+ */
+move : function() {
+    this.textbox.style.width = this.cell.offsetWidth + "px";
+    YAHOO.widget.TextboxCellEditor.superclass.move.call(this);
+},
+
+/**
  * Resets TextboxCellEditor UI to initial state.
  *
- * @method reset
+ * @method resetForm
  */
 resetForm : function() {
     this.textbox.value = this.value;
@@ -1329,7 +1355,7 @@ resetForm : function() {
 /**
  * Sets focus in TextboxCellEditor.
  *
- * @method save
+ * @method focus
  */
 focus : function() {
     this.textbox.focus();
@@ -1349,6 +1375,8 @@ getInputValue : function() {
 
 // Copy static members to TextboxCellEditor class
 lang.augmentObject(widget.TextboxCellEditor, BCE);
+
+
 
 
 
@@ -1375,32 +1403,28 @@ DT.Editors = {
     textbox  : widget.TextboxCellEditor
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CellEditor constructor
-//
-/////////////////////////////////////////////////////////////////////////////
-
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+    
 /**
- * The CellEditor class provides full functionality for inline cell editing within a
- * DataTable widget.
+ * Factory class for creating a BaseCellEditor subclass instance.
  *
  * @namespace YAHOO.widget
  * @class CellEditor
  * @constructor
- * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
- * @param elCell {HTMLElement} TD element. 
+ * @param oDataTable {YAHOO.widget.DataTable} DataTable instance.
  * @param sType {String} Editor type.
  * @param oConfigs {Object} (Optional) Object literal of configs.
  */
-widget.CellEditor = function(oDataTable, elCell, sType, oConfigs) {
+widget.CellEditor = function(sType, oConfigs) {
     // Point to one of the subclasses
     if(sType && DT.Editors[sType]) {
         lang.augmentObject(BCE, DT.Editors[sType]);
-        return new DT.Editors[sType](oDataTable, elCell, sType, oConfigs);
+        return new DT.Editors[sType](oConfigs);
     }
     else {
-        return new BCE(oDataTable, elCell, null, oConfigs);
+        return new BCE(null, oConfigs);
     }
 };
 

@@ -781,7 +781,7 @@ YAHOO.widget.Record.prototype = {
     /**
      * Returns unique count assigned at instantiation.
      *
-     * @method getId
+     * @method getCount
      * @return Number
      */
     getCount : function() {

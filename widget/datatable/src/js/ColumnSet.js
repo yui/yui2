@@ -524,6 +524,10 @@ YAHOO.widget.Column = function(oConfigs) {
         this.width = null;
         YAHOO.log("The Column property width must be a number", "warn", this.toString());
     }
+    if(this.editor && YAHOO.lang.isString(this.editor)) {
+        this.editor = new YAHOO.widget.CellEditor(this.editor, this.editorOptions);
+        YAHOO.log("The Column property editor must be an instance of YAHOO.widget.CellEditor", "warn", this.toString());
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -706,15 +710,6 @@ YAHOO.widget.Column.prototype = {
      */
     _ddResizer : null,
 
-    /**
-     * For tracking and cleanup, a reference to the Column's CellEditorInstance.
-     *
-     * @property _oCellEditor
-     * @type YAHOO.widget.CellEditor
-     * @private
-     */
-    _oCellEditor : null,
-
     /////////////////////////////////////////////////////////////////////////////
     //
     // Public member variables
@@ -805,20 +800,12 @@ YAHOO.widget.Column.prototype = {
     formatter : null,
 
     /**
-     * Defines an editor function, otherwise Column is not editable.
+     * A CellEditor instance, otherwise Column is not editable.     
      *
      * @property editor
-     * @type String || HTMLFunction
+     * @type YAHOO.widget.CellEditor
      */
     editor : null,
-
-    /**
-     * Defines editor options for Column in an object literal of param:value pairs.
-     *
-     * @property editorOptions
-     * @type Object
-     */
-    editorOptions : null,
 
     /**
      * True if Column is resizeable, false otherwise. The Drag & Drop Utility is
@@ -913,7 +900,7 @@ YAHOO.widget.Column.prototype = {
         oDefinition.abbr = this.abbr;
         oDefinition.className = this.className;
         oDefinition.editor = this.editor;
-        oDefinition.editorOptions = this.editorOptions;
+        oDefinition.editorOptions = this.editorOptions; //TODO: deprecated
         oDefinition.formatter = this.formatter;
         oDefinition.key = this.key;
         oDefinition.label = this.label;
@@ -1381,3 +1368,15 @@ if(YAHOO.util.DD) {
         }
     });
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Deprecated
+//
+/////////////////////////////////////////////////////////////////////////////
+
+/**
+ * @property editorOptions
+ * @deprecated Pass configs directly to CellEditor constructor. 
+ */
+
