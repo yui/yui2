@@ -19,6 +19,7 @@ var lang   = YAHOO.lang,
  *
  * @namespace YAHOO.widget
  * @class BaseCellEditor
+ * @uses YAHOO.util.EventProvider 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 

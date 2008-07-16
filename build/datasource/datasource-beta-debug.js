@@ -227,6 +227,7 @@ _nTransactionId : 0,
 /**
  * Executes a configured callback.  For object literal callbacks, the third
  * param determines whether to execute the success handler or failure handler.
+ *  
  * @method issueCallback
  * @param callback {Function|Object} the callback to execute
  * @param params {Array} params to be passed to the callback method
@@ -1626,7 +1627,7 @@ lang.augmentProto(DS, util.EventProvider);
  *
  * @namespace YAHOO.util
  * @class LocalDataSource
- * @extends DataSourceBase 
+ * @extends YAHOO.util.DataSourceBase 
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
@@ -1680,7 +1681,7 @@ lang.augmentObject(util.LocalDataSource, DS);
  *
  * @namespace YAHOO.util
  * @class FunctionDataSource
- * @extends DataSourceBase  
+ * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
@@ -1768,8 +1769,7 @@ lang.augmentObject(util.FunctionDataSource, DS);
  *
  * @namespace YAHOO.util
  * @class ScriptNodeDataSource
- * @requires Get
- * @extends DataSourceBase  
+ * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
@@ -1987,8 +1987,7 @@ callbacks : []
  *
  * @namespace YAHOO.util
  * @class XHRDataSource
- * @requires Connection
- * @extends DataSourceBase  
+ * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
@@ -2293,7 +2292,6 @@ lang.augmentObject(util.XHRDataSource, DS);
  *
  * @namespace YAHOO.util
  * @class DataSource
- * @requires Get
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
