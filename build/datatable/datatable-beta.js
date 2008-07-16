@@ -7010,6 +7010,9 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
         allClasses = [];
     }
     
+    // Hook for setting with via dynamic style
+    allClasses[allClasses.length] = this.getId() + "-" +oColumn.getId();
+
     // Column key - minus any chars other than "A-Z", "a-z", "0-9", "_", "-", ".", or ":"
     allClasses[allClasses.length] = "yui-dt-col-" +oColumn.getSanitizedKey();
 
@@ -7033,7 +7036,6 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     // Resizeable
     if(oColumn.resizeable) {
         allClasses[allClasses.length] = DT.CLASS_RESIZEABLE;
-        allClasses[allClasses.length] = this.getId() + "-" +oColumn.getId();
     }
     // Editable
     if(oColumn.editor) {
@@ -16104,6 +16106,7 @@ var lang   = YAHOO.lang,
  *
  * @namespace YAHOO.widget
  * @class BaseCellEditor
+ * @uses YAHOO.util.EventProvider 
  * @constructor
  * @param oDataTable {YAHOO.widget.DataTable} DataTable instance. 
  * @param elCell {HTMLElement} TD element. 

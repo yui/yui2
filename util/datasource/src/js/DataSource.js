@@ -22,7 +22,7 @@ var lang   = YAHOO.lang,
  * Base class for the YUI DataSource utility.
  *
  * @namespace YAHOO.util
- * @class DataSourceBase
+ * @class YAHOO.util.DataSourceBase
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
@@ -1626,7 +1626,7 @@ lang.augmentProto(DS, util.EventProvider);
  * JavaScript object literals (JSON), XML documents, and HTML tables.
  *
  * @namespace YAHOO.util
- * @class LocalDataSource
+ * @class YAHOO.util.LocalDataSource
  * @extends YAHOO.util.DataSourceBase 
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -1680,7 +1680,7 @@ lang.augmentObject(util.LocalDataSource, DS);
  * FunctionDataSource class for JavaScript functions.
  *
  * @namespace YAHOO.util
- * @class FunctionDataSource
+ * @class YAHOO.util.FunctionDataSource
  * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -1768,7 +1768,7 @@ lang.augmentObject(util.FunctionDataSource, DS);
  * ScriptNodeDataSource class for accessing remote data via the YUI Get Utility. 
  *
  * @namespace YAHOO.util
- * @class ScriptNodeDataSource
+ * @class YAHOO.util.ScriptNodeDataSource
  * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -1986,7 +1986,7 @@ callbacks : []
  * Utility
  *
  * @namespace YAHOO.util
- * @class XHRDataSource
+ * @class YAHOO.util.XHRDataSource
  * @extends YAHOO.util.DataSourceBase  
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
@@ -2291,7 +2291,7 @@ lang.augmentObject(util.XHRDataSource, DS);
  * Factory class for creating a BaseDataSource subclass instance.
  *
  * @namespace YAHOO.util
- * @class DataSource
+ * @class YAHOO.util.DataSource
  * @constructor
  * @param oLiveData {HTMLElement}  Pointer to live data.
  * @param oConfigs {object} (optional) Object literal of configuration values.
